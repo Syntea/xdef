@@ -1,0 +1,2 @@
+<!DOCTYPE root SYSTEM "file:notexisting.file" >
+<root a="a"/>

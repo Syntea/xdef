@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xd:def xd:name="t018"
+    xmlns:tns="http://b"
+    xd:root="tns:elem"
+    xmlns:a="http://a">
+    <xd:declaration>
+      type attr2_Type1{parse: int(0, 20);}
+    </xd:declaration>
+    <xd:declaration>
+      type attr2_Type{parse: int(2, 10);}
+    </xd:declaration>
+    <tns:elem>
+      <xd:sequence xd:script="occurs 1">
+        <a:a1 xd:script="occurs 1; ref t018_1#a:a1"/>
+        <a:a2 xd:script="occurs 1; ref t018_1#a:a2"/>
+        <a3 xd:script="occurs 1"
+          attr1="optional string()"
+          tns:attr2="optional attr2_Type1()"/>
+      </xd:sequence>
+    </tns:elem>
+  </xd:def>
+  <xd:def xd:name="t018_1"
+    xmlns:tns="http://a"
+    xd:root="tns:a1 | tns:a2"
+    xmlns:a="http://b">
+    <tns:a1 attr1="optional string()"
+      a:attr2="optional attr2_Type()"/>
+    <tns:a2 tns:attr1="optional string()"
+      a:attr2="optional attr2_Type()"/>
+  </xd:def>
+</xd:collection>

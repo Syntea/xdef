@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Staff>
+    <Manager sex="male">
+        <Name>John</Name>
+        <Surname>Doe</Surname>
+        <Salary>50000</Salary>
+    </Manager>
+    <Worker sex="male">
+        <Name>Joe</Name>
+        <Surname>Smith</Surname>
+        <Description>Not so good worker</Description>
+    </Worker>
+</Staff>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="M1RT"
+  xd:root="SouborM1RT">
+  <xd:declaration>
+    type KodStavuVozidlaCR_Type{parse: string(1);}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumPosledniEvidZmeny_XdDatetime_Type{parse: string() &amp;
+    regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])");}
+  </xd:declaration>
+  <ZmenaStavuVO_ZmenaStavuVO_type_cType Pcv="required int()"
+    KodStavuVozidlaCR="required KodStavuVozidlaCR_Type()"
+    DatumPosledniEvidZmeny="required DatumPosledniEvidZmeny_XdDatetime_Type()"/>
+  <SouborM1RT Davka="required string()"
+    ZeDne="required string()">
+    <xd:sequence xd:script="occurs 1">
+      <ZmenaStavuVO xd:script="occurs 0..*; ref ZmenaStavuVO_ZmenaStavuVO_type_cType"/>
+    </xd:sequence>
+  </SouborM1RT>
+</xd:def>

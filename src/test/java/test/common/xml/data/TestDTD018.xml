@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "TestDTD018.dtd">
+<root
+n1 = "
+
+xyz"
+n2 = "&d;&d;A&a;&#x20;&a;B&da;"
+n3 = "&#xd;&#xd;A&#xa;&#xa;B&#xd;&#xa;"
+nn1 = "
+
+xyz"
+nn2 = "&d;&d;A&a;&#x20;&a;B&da;"
+nn3 = "&#xd;&#xd;A&#xa;&#xa;B&#xd;&#xa;"
+a1 = "
+
+xyz"
+a2 = "&d;&d;A&a;&#x20;&a;B&da;"
+a3 = "&#xd;&#xd;A&#xa;&#xa;B&#xd;&#xa;"
+/>

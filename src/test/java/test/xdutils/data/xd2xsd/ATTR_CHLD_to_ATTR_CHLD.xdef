@@ -1,0 +1,23 @@
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="main" root="Staff">
+
+    <Person sex="string">
+        <Name>string(1,30)</Name>
+        <Surname>string(1,50)</Surname>
+    </Person>
+
+    <Manager xd:script="ref Person"
+             department="string(1,30)">
+        <Salary>int(8_000, 100_000)</Salary>
+    </Manager>
+
+    <Staff>
+        <xd:mixed>
+            <Manager xd:script="ref Manager; occurs *" />
+            <Worker xd:script="ref Person; occurs *"
+                    workerId="int">
+                <Description>string(1,1000)</Description>
+            </Worker>
+        </xd:mixed>
+    </Staff>
+
+</xd:def>

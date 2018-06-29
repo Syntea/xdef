@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xdef:def
+   xmlns:xdef   = "http://www.syntea.cz/xdef/2.0"
+   xdef:name    = "DefSystem"
+   xdef:root    = "DefSystem" 
+   impl-classes = "cz.syntea.common.load.MyChkParser"
+   xdef:script  = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces"
+   impl-version = "2.5.0.0"
+   impl-date    = "19.09.2006">
+
+   <DefSystem                   xdef:script="occurs 1; finally output('DefSystem')"
+      KodSystemu                ="required string(1,4)"
+      System                    ="required string(1,50)"
+      Mode                      ="required enum('STD','TST')"
+      KodPartnera               ="required num(1,7)"
+      Verze                     ="required string(1,15)"
+      ZeDne                     ="required xdatetime('dd.MM.yyyy')" >
+
+      <DefSubsystems            xdef:script="occurs 1; finally output('DefSubsystem')">
+         <DefSubsystem          xdef:script="occurs 1.."
+            KodSubsystemu       ="required string(1,4)"
+            Subsystem           ="required string(1,50)"
+            Verze               ="required string(1,15)"
+            ZeDne               ="required xdatetime('dd.MM.yyyy')" />
+      </DefSubsystems>
+
+      <DefChannelTypes          xdef:script="occurs 1; finally output('DefTypKanalu')">
+         <DefTypKanalu          xdef:script="occurs 1.."
+            TypKanalu           ="required string(2,3)"
+            KontrolaPosloupnosti="required enum('A','N')"
+            SmerPredani         ="required enum('I','O','IO','OI','X')"
+            FormatNazvuSouboru  ="optional string(1,30)"
+            PopisKanalu         ="required string(1,50)"
+            Disable             ="required enum('A','N')"
+            Verze               ="required string(1,15)"
+            ZeDne               ="required xdatetime('dd.MM.yyyy')" >
+
+            <DefParam           xdef:script="occurs 0..; ref DefParam" />
+
+            <DefDruhSouboru     xdef:script="occurs 0.."
+               DruhSouboru      ="required string(3,30)"
+               SmerSouboru      ="required enum('I','O','IO','X')"
+               PopisDruhuSouboru="required string(1,50)"
+               XdefRoot         ="optional string(1,255)"
+               JavaClass        ="optional string(1,255)"
+               TypSouboru       ="required enum('DATA','ATTACH')" />
+
+         </DefTypKanalu>
+      </DefChannelTypes>
+
+      <DefPartnerClasses        xdef:script= "occurs 1; finally output('DefPartnerClass')">
+         <DefPartnerClass       xdef:script="occurs 1.."
+            PartnerClass        ="required string(1,20)"
+            PopisPartnerClass   ="required string(1,50)" />
+      </DefPartnerClasses>
+
+      <DefPartners              xdef:script="occurs 1; finally output('DefPartner')">
+         <DefPartner            xdef:script="occurs 1.."
+            KodPartnera         ="required num(1,7)"
+            PartnerClass        ="required string(1,20)"
+            PartnerElement      ="required string(1,30)"
+            NazevPartnera       ="required string(1,50)" />
+      </DefPartners>
+
+      <DefChannels              xdef:script="occurs 1; finally output('DefKanal')">
+         <DefKanal              xdef:script="occurs 1.."
+            TypKanalu           ="required string(2,3)"
+            KodPartneraLocal    ="required num(1,7)"
+            KodPartneraRemote   ="required num(1,7)"
+            Disable             ="required enum('A','N')" />
+      </DefChannels>
+
+      <DefPrograms              xdef:script="occurs 1; finally output('DefProgram')">
+         <DefProgram            xdef:script="occurs 1.."
+            Program             ="required string(1,50)"
+            TypProgramu         ="required enum('P','S','L')"
+            Verze               ="required string(1,15)"
+            ZeDne               ="required xdatetime('dd.MM.yyyy')"
+            Instalace           ="optional xdatetime('dd.MM.yyyy HH:mm:ss')"
+            JavaClass           ="optional string(1,255)"
+            Disable             ="required enum('A','N')" />
+      </DefPrograms>
+
+      <DefPoints                xdef:script="occurs 1; finally output('DefMisto')">
+         <DefMisto              xdef:script="occurs 1.."
+            Misto               ="required string(1,255)"
+            Fronta              ="optional string(1,30)"
+            Adresar             ="optional string(1,255)"
+            FormatMista         ="optional enum('PIPE','XML','CODA','DBF','TLT')"
+            SouborExt           ="optional string(1,10)"
+            Rozhrani            ="required enum('A','N')"
+            KodSubsystemu       ="required string(1,4)"
+            JavaClass           ="optional string(1,255)"
+            Disable             ="required enum('A','N')" />
+      </DefPoints>
+
+      <DefActivities            xdef:script="occurs 1; finally output('DefAktivita')">
+         <DefAktivita           xdef:script="occurs 1.."
+            Misto               ="required string(1,255)"
+            Program             ="required string(1,50)"
+            TypRizeni           ="required enum('S','A','M','C','X')"
+            Disable             ="required enum('A','N')">
+
+            <DefParam           xdef:script="occurs 0..; ref DefParam" />
+         </DefAktivita>
+      </DefActivities>
+
+      <DefArchivations          xdef:script="occurs 1; finally output('DefArchivace')">
+         <DefArchivace          xdef:script="occurs 1.."
+            Archivace           ="required string(1,10)" />
+      </DefArchivations>
+
+      <DefFileFormats           xdef:script="occurs 1; finally output('DefFormatSouboru')">
+         <DefFormatSouboru      xdef:script="occurs 1.."
+            FormatSouboru       ="required string(1,5)"
+            PopisFormatuSouboru ="required string(1,50)" />
+      </DefFileFormats>
+
+      <DefFlows                 xdef:script="occurs 1; finally output('DefTok')">
+         <DefTok                xdef:script="occurs 1.."
+            TokPrace            ="required string(1,50)"
+            SmerToku            ="required enum('I','O','IO','X')"
+            TypKanalu           ="required string(2,3)"
+            StartBod            ="required string(1,255)"
+            Disable             ="required enum('A','N')">
+
+            <DefSet             xdef:script="occurs 0..; ref DefSet" />
+
+            <DefMsg             xdef:script = "occurs 0.."
+               MsgName          = "required string(1,50)"
+               MsgMethod        = "required enum('SYN','ASY','REQ','CTL')"
+               MsgLogging       = "required enum('A','N')"
+               MsgTime          = "optional int()"
+               JavaClass        = "optional string(1,255)"
+               MsgPopis         = "optional string(1,255)" />
+
+            <DefBod             xdef:script="occurs 1.."
+               Misto            ="required string(1,255)">
+
+               <DefSoubor       xdef:script="occurs 0.."
+                  DruhSouboru   ="required string(3,30)"
+                  Occurs        = "required enum('1','0..1','0..','1..')"
+                  Archivace     = "required string(1,10)" />
+
+               <DefSet          xdef:script="occurs 0..; ref DefSet" />
+             </DefBod>
+         </DefTok>
+      </DefFlows>
+
+   </DefSystem>
+
+   <DefParam
+      Param                      ="required string(1,50)"
+      TypParam                   ="required string(1,50)" />
+
+   <DefSet                       xdef:script="ref DefParam"
+      Hodnota                    ="required string(1,255)" />
+
+</xdef:def>

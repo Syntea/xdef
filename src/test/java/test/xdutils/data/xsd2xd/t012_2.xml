@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elem xmlns:pk="http://a"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="t012.xsd">
+  <pk:a1 atr1="a"/>
+</elem>

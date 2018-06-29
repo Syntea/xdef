@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<panovnici>
+  <panovnik>
+    <jmeno>Přemysl Otakar II.</jmeno>
+    <tituly>
+      <titul>král český</titul>
+    </tituly>
+   <panoval>
+      <od>1253</od>
+      <do>1278</do>
+    </panoval>
+    <smrt>V bitvě na Moravském poli</smrt>
+  </panovnik>
+  <panovnik>
+    <jmeno>Karel IV.</jmeno>
+    <tituly>
+      <titul>král český</titul>
+      <titul>král římský</titul>
+      <titul>císař Svaté říše římské</titul>
+    </tituly>
+    <manzelky>
+      <manzelka>Blanka z Valois</manzelka>
+      <manzelka>Anna Faltská</manzelka>
+      <manzelka>Anna Svídnická</manzelka>
+      <manzelka>Alžběta Pomořanská</manzelka>
+    </manzelky>
+    <panoval>
+      <od>1346</od>
+      <do>1378</do>
+    </panoval>
+    <smrt>Pravděpodobně na zápal plic.</smrt>
+  </panovnik>
+</panovnici>

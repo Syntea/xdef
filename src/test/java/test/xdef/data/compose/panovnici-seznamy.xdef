@@ -1,0 +1,18 @@
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root = 'HTML'>
+<HTML>
+  <HEAD/>
+  <BODY>
+    <h2>create 'Seznam panovníků'</h2>
+    <xd:sequence occurs = "*" create = "from('//panovnik')">
+      create from('jmeno/text()');
+      <br/>
+    </xd:sequence>
+    <h2>create 'Seznam jejich známých manželek'</h2>
+    <xd:sequence occurs = "*" create = "from('//panovnik/manzelky/manzelka')">
+	  create from('./text()') + 
+	  (from('@puvod').toString() != '' ? ' rozená ' + from('@puvod') : ' ');
+      <br/>
+    </xd:sequence>
+  </BODY>
+</HTML>
+</xd:def>

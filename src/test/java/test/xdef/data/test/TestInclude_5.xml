@@ -1,0 +1,13 @@
+<ws:definitions
+          xmlns:ws            ='http://schema.xmlsoap.org/wsdl/'
+          xmlns:vp            ='http://docs.oasis-open.org/wsbpel/2.0/varprop'
+          xmlns:pl            ='http://docs.oasis-open.org/wsbpel/2.0/plnktype'
+          xmlns:sp            ='http://schemas.xmlsoap.org/soap/http'
+          xmlns:wfsq          ='http://www.syntea.cz/xbpel/GAMqueue/2007/07'
+          targetNamespace     ='bla'
+          name                ='blabla'>
+  <messages>
+    <message/>
+    <message/>
+  </messages>
+</ws:definitions>				

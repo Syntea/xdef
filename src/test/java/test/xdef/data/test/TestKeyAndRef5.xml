@@ -1,0 +1,36 @@
+<A>
+   <Pracovnik UserID='JNOVAK'   Jmeno='Josef Novak'/>
+   <Pracovnik UserID='KVOPICKA' Jmeno='Karel Vopicka'/>
+   <Pracovnik UserID='VPOULA'   Jmeno='Vaclav Poula'/>
+   <Projekt KodProjektu='ALFA' NazevProjektu='Projekt ALFA'>
+     <Tym UserID='JNOVAK'/>
+     <Tym UserID='KVOPICKA'/>
+     <Tym UserID='VPOULA'/>
+   </Projekt>
+   <Projekt KodProjektu='BETA' NazevProjektu='Projekt BETA'>
+     <Tym UserID='JNOVAK'/>
+   </Projekt>
+   <Projekt KodProjektu='GAMA' NazevProjektu='Projekt GAMA'>
+     <Tym UserID='KVOPICKA'/>
+     <Tym UserID='JNOVAK'/>
+   </Projekt>
+   <AktivitaProjekt KodProjektu='ALFA'>
+      <AktivitaPracovnik UserID='KVOPICKA'>
+         <Aktivita Datum='2016-06-15' DobaHodiny='2'/>
+      </AktivitaPracovnik>
+      <AktivitaPracovnik UserID='JNOVAK'>
+         <Aktivita Datum='2016-06-15' DobaHodiny='2'/>
+         <Aktivita Datum='2016-06-15' DobaHodiny='6'/>
+      </AktivitaPracovnik>
+   </AktivitaProjekt>
+   <AktivitaProjekt KodProjektu='BETA'>
+      <AktivitaPracovnik UserID='JNOVAK'>
+         <Aktivita Datum='2016-06-15' DobaHodiny='4'/>
+      </AktivitaPracovnik>
+   </AktivitaProjekt>
+   <AktivitaProjekt KodProjektu='GAMA'>
+      <AktivitaPracovnik UserID='KVOPICKA'>
+         <Aktivita Datum='2016-06-15' DobaHodiny='2'/>
+      </AktivitaPracovnik>
+   </AktivitaProjekt>
+</A>

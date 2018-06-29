@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="Windows-1250"?>
+<!DOCTYPE root SYSTEM "TestDTD000_1.dtd">
+<root att="'>&e;x&e;>'">>'x&e;y&e;z'></root>

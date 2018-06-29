@@ -1,0 +1,113 @@
+/******************************************************************************/
+/* Generated codes                                                            */
+/******************************************************************************/
+%define $MINUS:     $push('MINUS')
+%define $NOT:       $push('NOT')
+%define $NEG:       $push('NEG')
+%define $ADD:       $push('ADD')
+%define $SUB:       $push('SUB')
+%define $OR:        $push('OR')
+%define $XOR:       $push('XOR')
+%define $AND:       $push('AND')
+%define $MUL:       $push('MUL')
+%define $DIV:       $push('DIV')
+%define $MOD:       $push('MOD')
+%define $LSH:       $push('LSH')
+%define $RSH:       $push('RSH')
+%define $RRSH:      $push('RRSH')
+%define $PROC:      $push('PROC')
+%define $FUN:       $push('FUN')
+%define $PLIST:     $push('PLIST')
+%define $PARAM:     $push('PARAM')
+%define $IDREF:     $push('IDREF')
+%define $CLEARSTCK: $push('CLEARSTCK')
+%define $GT:        $push('GT')
+%define $LT:        $push('LT')
+%define $GE:        $push('GE')
+%define $LE:        $push('LE')
+%define $EQ:        $push('EQ')
+%define $NE:        $push('NE')
+%define $INCBEFORE: $push('INCBEFORE')
+%define $DECBEFORE: $push('DECBEFORE')
+%define $INCAFTER:  $push('INCAFTER')
+%define $DECAFTER:  $push('DECAFTER')
+%define $ASS:       $push('ASS')
+%define $ASSADD:    $push('ASSADD')
+%define $ASSSUB:    $push('ASSSUB')
+%define $ASSMUL:    $push('ASSMUL')
+%define $ASSDIV:    $push('ASSDIV')
+%define $ASSMOD:    $push('ASSMOD')
+%define $ASSAND:    $push('ASSAND')
+%define $ASSXOR:    $push('ASSXOR')
+%define $ASSOR:     $push('ASSOR')
+%define $ASSLSH:    $push('ASSLSH')
+%define $ASSRSH:    $push('ASSRSH')
+%define $ASSRRSH:   $push('ASSRRSH')
+
+%define $BOOLEAN:   $push('BOOLEAN')
+%define $INT:       $push('INT')
+%define $FLOAT:     $push('FLOAT')
+%define $STRING:    $push('STRING')
+
+%define $TOBOOLEAN: $push('TOBOOLEAN')
+%define $TOINT:     $push('TOINT')
+%define $TOFLOAT:   $push('TOFLOAT')
+%define $TOSTRING:  $push('TOSTRING')
+%define $TONAME:    $push('TONAME')
+
+%define $PUSH:      $push /*put parsed source to the internal stack. */
+%define $POS:       $pos /* put actual source position to the internal stack. */
+
+/******************************************************************************/
+/* BNF grammar rules                                                          */
+/******************************************************************************/
+
+comment  ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
+S        ::= ( [#9#10#13 ]+ | comment )*
+boolean  ::= $TOBOOLEAN ("true" | "false") $PUSH
+string   ::= $TOSTRING ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $PUSH
+             
+integer  ::= $TOINT [0-9]+ $PUSH
+float    ::= $TOFLOAT [0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
+             | [eE] [-+]? [0-9]+ | "." [0-9]+) $PUSH
+keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch" 
+  | "case" | "for" | "return" | "try" | "catch" | "throw" | "finally"
+  | "true" | "false"
+name     ::= $TONAME ($JavaName - keyword) $PUSH
+expr     ::= S bor
+bor      ::= bxor (S "|" bxor $OR)*
+bxor     ::= band (S "^" band $XOR)*
+band     ::= equal (S "&" equal $AND)*
+equal    ::= relation (S "==" relation $EQ | S "!=" relation $NE)*
+relation ::= shift (S "<" shift $LT | S ">" shift $GT
+             | S "<=" shift $LE | S ">=" shift $GE)*
+shift    ::= add (S "<<" add $LSH | S ">>" add $RSH 
+             | S ">>>" add $RRSH)*
+add      ::= mul (S "+" mul $ADD | S "-" mul $SUB)*
+mul      ::= term (S "*" S term $MUL | S "/" S term $DIV
+             | S "%" S term $MOD)*
+refName  ::= name S $IDREF
+term     ::= (name "++" $INCAFTER S | name "--" $DECAFTER S
+             | "++" name $INCBEFORE S | "--" name $DECBEFORE S
+             | S "-" value $MINUS) | (S "!" value $NOT)
+             | (S "~" value $NEG)
+             | S ( "+" )? value
+value    ::= S (const | function | name $IDREF | "(" S expr S ")") S
+const    ::= float | integer | boolean | string
+function ::= name params $FUN 
+params   ::= S "(" S $PLIST ( expr $PARAM (S "," S expr $PARAM )* )?
+             S ")"
+assign   ::= name S ("=" expr $ASS | "+=" expr $ASSADD 
+             | "-=" expr $ASSSUB | "*=" expr $ASSMUL
+             | "/=" expr $ASSDIV | "%=" expr $ASSMOD
+             | "&=" expr $ASSAND | "^=" expr $ASSXOR
+             | "|=" expr $ASSOR | "<<=" expr $ASSLSH
+             | ">>=" expr $ASSRSH | ">>>=" expr $ASSRRSH)
+method   ::= name params $PROC
+type     ::= "boolean" $BOOLEAN | "int" $INT | "float" $FLOAT | "String" $STRING 
+declItem ::= name ( S "=" S expr $ASS)?
+vardecl  ::= type S declItem (S "," S declItem)*
+command  ::= S ($POS (vardecl | method | assign) $CLEARSTCK S)? ";"
+program  ::= command+ S
+
+/******************************************************************************/

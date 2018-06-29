@@ -1,0 +1,169 @@
+/*
+ * File: TestExternalVariables.java
+ * Copyright 2006 Syntea.
+ *
+ * This file may be copied, modified and distributed only in accordance
+ * with the terms of the limited licence contained in the accompanying
+ * file LICENSE.TXT.
+ *
+ * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
+ * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
+ * prislusnych prav.
+ */
+package test.xdef;
+
+import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.XDDocument;
+import cz.syntea.xdef.XDPool;
+import java.io.StringWriter;
+
+/** Test getXComponentVariable/setVariable
+ * @author Vaclav Trojan
+ */
+public final class TestExternalVariables extends Tester {
+
+	public TestExternalVariables() {super();}
+
+	@Override
+	/** Run test and print error information. */
+	final public void test() {
+		String xml;
+		String xdef;
+		XDPool xp;
+		XDDocument xd;
+		StringWriter strw;
+		ArrayReporter reporter = new ArrayReporter();
+		String s;
+		try {//compilation error
+			compile(
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    external String i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{external final String j=\"\"; out(i);}'/>\n"+
+"\n"+
+"</xd:def>");
+			fail("Error not recognized");
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF411") < 0) {
+				fail(ex);
+			}
+		}
+		try {//compilation error
+			compile(
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"  <A xd:script='var external int i;finally{i = 1; out(i);}'/>\n"+
+"\n"+
+"</xd:def>");
+			fail("Error not recognized");
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF411") < 0) {
+				fail(ex);
+			}
+		}
+		try {//compilation error
+			compile(
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    external String i;\n"+
+"    external String j = i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"</xd:def>");
+			fail("Error not recognized");
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF120") < 0) {
+				fail(ex);
+			}
+		}
+		try {//dynamic errors
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    external String i;\n"+
+"    String j = i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml = "<a/>";
+			xd.setStdOut(strw = new StringWriter());
+			xd.xparse(xml, reporter);
+			xd.setVariable("i", "1");
+			xd.xparse(xml, reporter);
+			xd.setVariable("i","2"); //now variable is 2
+			xd.xparse(xml, reporter);
+			assertNoErrors(reporter);
+			strw.close();
+			assertEq("truetrue1falsetrue2falsetrue", strw.toString());
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    external final String i;\n"+
+"    String j = i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			xd = xp.createXDDocument();
+			xd.setStdOut(strw = new StringWriter());
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			strw.close();
+			assertEq(strw.toString(),"truetrue");
+			xd = xp.createXDDocument();
+			xd.setStdOut(strw = new StringWriter());
+			xd.setVariable("i", "1");
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			try {
+				xd.setVariable("i", "2"); //throws exception - variable is fixed
+				fail("error not reported");
+			} catch (Exception ex) {
+				s = ex.getMessage();
+				if (s == null || s.indexOf("XDEF562") < 0) {
+					fail(ex);
+				}
+			}
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			strw.close();
+			//variable i remains unchaged
+			assertEq(strw.toString(),"1false1false1false1false");
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    external final String i;\n"+
+"    String j = i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			xd = xp.createXDDocument();
+			xd.setStdOut(strw = new StringWriter());
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			strw.close();
+			assertEq(strw.toString(),"truetrue");
+			xd = xp.createXDDocument();
+			xd.setStdOut(strw = new StringWriter());
+			xd.setVariable("#i", "1");
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(0, xd.getVariable("#i").intValue());
+		} catch (Exception ex) {fail(ex);}
+	}
+
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+/*#if DEBUG*#/
+		Tester.setGenObjFile(true);
+/*#end*/
+		if (runTest() != 0) {System.exit(1);}
+	}
+}

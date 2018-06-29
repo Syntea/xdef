@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def  xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  name="t099"
+  root="root">
+  <root>
+    <integer xd:script="occurs 1..*">
+      required int()
+    </integer>
+    <isbn xd:script="occurs 1..*">
+      required regex('[0-9]{10}') | NMTOKEN()
+    </isbn>
+    <list xd:script="occurs 1..*">
+      required list(%item=int(-10,10))
+    </list>
+  </root>
+</xd:def>

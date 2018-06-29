@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="CisloTP_Xdpic_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z][a-zA-Z]\d\d\d\d\d\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VIN_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="26"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SPZ_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodTridySPZ_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KodDruhuVozidlaCR_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KodStavuVozidlaCR_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="ZnackaModelText_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="37"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="BarvaText_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ZdvihovyObjem_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VykonMotoru_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CelkovaHmotnost_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PocetMistCelkem_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodOkresuEvidence_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PoverenaObec_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="MiraShody_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="PotvrzeneVO_PotvrzeneVO_type">
+    <xs:sequence>
+      <xs:element name="VozidloCR"
+        type="M1_common_VozidloCR_type"/>
+    </xs:sequence>
+    <xs:attribute name="Pcv"
+      type="xs:long"
+      use="required"/>
+    <xs:attribute name="IdZmenaVozidlaPS"
+      type="xs:long"
+      use="required"/>
+    <xs:attribute name="MiraShody"
+      type="MiraShody_user_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="M1_common_VozidloCR_type">
+    <xs:attribute name="CisloTP"
+      type="CisloTP_Xdpic_Type"
+      use="optional"/>
+    <xs:attribute name="VIN"
+      type="VIN_Type"
+      use="required"/>
+    <xs:attribute name="SPZ"
+      type="SPZ_Type"
+      use="required"/>
+    <xs:attribute name="KodTridySPZ"
+      type="KodTridySPZ_user_Type"
+      use="required"/>
+    <xs:attribute name="KodDruhuVozidlaCR"
+      type="KodDruhuVozidlaCR_user_Type"
+      use="required"/>
+    <xs:attribute name="KodStavuVozidlaCR"
+      type="KodStavuVozidlaCR_user_Type"
+      use="optional"/>
+    <xs:attribute name="ZnackaModelText"
+      type="ZnackaModelText_Type"
+      use="required"/>
+    <xs:attribute name="BarvaText"
+      type="BarvaText_Type"
+      use="optional"/>
+    <xs:attribute name="RokDoProvozu"
+      type="xs:gYear"
+      use="optional"/>
+    <xs:attribute name="ZdvihovyObjem"
+      type="ZdvihovyObjem_Type"
+      use="optional"/>
+    <xs:attribute name="VykonMotoru"
+      type="VykonMotoru_Type"
+      use="optional"/>
+    <xs:attribute name="CelkovaHmotnost"
+      type="CelkovaHmotnost_Type"
+      use="optional"/>
+    <xs:attribute name="PocetMistCelkem"
+      type="PocetMistCelkem_Type"
+      use="optional"/>
+    <xs:attribute name="KodOkresuEvidence"
+      type="KodOkresuEvidence_user_Type"
+      use="required"/>
+    <xs:attribute name="PoverenaObec"
+      type="PoverenaObec_user_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:element name="SouborM1RS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PotvrzeneVO"
+          type="PotvrzeneVO_PotvrzeneVO_type"
+          minOccurs="0"
+          maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="Davka"
+        type="xs:string"
+        use="required"/>
+      <xs:attribute name="ZeDne"
+        type="xs:string"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

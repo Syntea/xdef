@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Dates>
+    
+    <Date1>01-1-24 0:2:8</Date1>
+    <Date1>45-1-24 0:2:8.15</Date1>
+    <Date1>45-1-24 0:2:8 +01:00</Date1>
+    <Date1>45-1-24 0:2:8.15 +01:00</Date1>
+
+    <Date2>1900-Mar-25</Date2>
+    <Date2>2000-Jan-08 00:02:08</Date2>
+    <Date2>2015-Feb-15 23:59:59 CEST</Date2>
+
+    <Date3>1:15 AM 089 2000 AD</Date3>
+    <Date3>12:5 PM 321 1900 BC</Date3>
+
+    <Date4>Wednesday, 5 of January 2011</Date4>
+    <Date4>Friday, 31 of December 2010</Date4>
+
+    <Date5>01.01.2000</Date5>
+    <Date5>2000-1-1</Date5>
+
+</Dates>

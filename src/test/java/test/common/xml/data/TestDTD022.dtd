@@ -1,0 +1,6 @@
+<!ELEMENT root (a)+ >
+<!ELEMENT a EMPTY >
+<!ATTLIST a def  ID     #IMPLIED 
+            ref  IDREF  #IMPLIED
+            refs IDREFS #IMPLIED
+            token (A | 12 | :- | B) ";">

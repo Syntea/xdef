@@ -1,0 +1,113 @@
+<wsdl:definitions name = "WleWsdl"
+  targetNamespace = "http://www.syntea.cz/wsdl/bpel/wle"
+  xmlns           = "http://www.syntea.cz/wsdl/bpel/wle"
+  xmlns:tns       = "http://www.syntea.cz/wsdl/bpel/wle"
+  xmlns:soap      = "http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl      = "http://schemas.xmlsoap.org/wsdl/" >
+
+  <wsdl:types>
+    <xd:def xmlns:xd  = "http://www.syntea.cz/xdef/2.0"
+      xd:name         = "BpelWle"
+      impl-version    = "0.0.1"
+      impl-date       = "21.2.2007">
+
+      <WLTaskInsert xd:script="ref WLE_common#WLTaskInsert" />
+      <WLTaskInsertResponse xd:script="ref WLE_common#WLTaskInsertResponse" />
+
+      <WLTaskDone xd:script="ref WLE_common#WLTaskDone" />
+      <WLTaskDoneResponse xd:script="ref WLE_common#WLTaskDoneResponse" />
+
+      <WLTaskCancel xd:script="ref WLE_common#WLTaskCancel" />
+      <WLTaskCancelResponse xd:script="ref WLE_common#WLTaskCancelResponse" />
+
+      <WFTaskEnd xd:script="ref WLE_common#WFTaskEnd" />
+      <WFTaskEndResponse xd:script="ref WLE_common#WFTaskEndResponse" />
+    </xd:def>
+  </wsdl:types>
+
+  <wsdl:message name="WLTaskInsertMsg">
+    <wsdl:part name="request" element="BpelWle#WLTaskInsert"/>
+  </wsdl:message>
+  <wsdl:message name="WLTaskInsertResponseMsg">
+    <wsdl:part name="response" element="BpelWle#WLTaskInsertResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="WLTaskDoneMsg">
+    <wsdl:part name="request" element="BpelWle#WLTaskDone"/>
+  </wsdl:message>
+  <wsdl:message name="WLTaskDoneResponseMsg">
+    <wsdl:part name="response" element="BpelWle#WLTaskDoneResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="WLTaskCancelMsg">
+    <wsdl:part name="request" element="BpelWle#WLTaskCancel"/>
+  </wsdl:message>
+  <wsdl:message name="WLTaskCancelResponseMsg">
+    <wsdl:part name="response" element="BpelWle#WLTaskCancelResponse"/>
+  </wsdl:message>
+
+  <wsdl:message name="WLTaskEndMsg">
+    <wsdl:part name="request" element="BpelWle#WLTaskEnd"/>
+  </wsdl:message>
+  <wsdl:message name="WLTaskEndResponseMsg">
+    <wsdl:part name="response" element="BpelWle#WLTaskEndResponse"/>
+  </wsdl:message>
+
+  <wsdl:portType name="WlePt">
+    <wsdl:operation name="WLTaskInsertOp">
+      <wsdl:input  name="WLTaskInsert"           message="tns:WLTaskInsertMsg"/>
+      <wsdl:output name="WLTaskInsertResponse"
+        message="tns:WLTaskInsertResponseMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="WLTaskDoneOp">
+      <wsdl:input  name="WLTaskDone"             message="tns:WLTaskDoneMsg"/>
+      <wsdl:output name="WLTaskDoneResponse"
+        message="tns:WLTaskDoneResponseMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="WLTaskCancelOp">
+      <wsdl:input  name="WLTaskCancel"           message="tns:WLTaskCancelMsg"/>
+      <wsdl:output name="WLWLTaskCancelResponse"
+        message="tns:WLTaskCancelResponseMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="WLTaskEndOp">
+      <wsdl:output name="WLTaskEndResponse"
+        message="tns:WLTaskEndResponseMsg"/>
+      <wsdl:input  name="WLTaskEnd"              message="tns:WLTaskEndMsg"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="WleB" type="tns:WlePt">
+    <soap:binding style="document"
+      transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WLTaskInsertOp">
+      <soap:operation soapAction=""/>
+      <wsdl:input> <soap:body use="literal"/></wsdl:input>
+        <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="WLTaskDoneOp">
+      <soap:operation soapAction=""/>
+        <wsdl:input> <soap:body use="literal"/></wsdl:input>
+        <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="WLTaskCancelOp">
+      <soap:operation soapAction=""/>
+      <wsdl:input> <soap:body use="literal"/></wsdl:input>
+        <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="WLTaskEndOp">
+      <soap:operation soapAction=""/>
+        <wsdl:output><soap:body use="literal"/></wsdl:output>
+      <wsdl:input> <soap:body use="literal"/></wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="WleService">
+    <wsdl:port name="WlePort" binding="tns:WleB">
+      <soap:address location="http://www.syntea.cz/wle" />
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>

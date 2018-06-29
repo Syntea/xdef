@@ -1,0 +1,15 @@
+<!ENTITY % Adjustment-Class "Adjustment">
+
+<!ENTITY % ListOfAdjustments-Content "(%Adjustment-Class;)+">
+<!ELEMENT %Adjustment-Class; (ListOfAdjustments?)>
+
+<!ATTLIST %Adjustment-Class; x CDATA "y">
+
+
+<!ELEMENT ListOfAdjustments  (%ListOfAdjustments-Content;)>
+<!ENTITY % ListOfAdjustments-Attrs "">
+<!ENTITY % ListOfAdjustments-Dtypes "">
+<!ATTLIST ListOfAdjustments  %ListOfAdjustments-Attrs;
+     a-dtype CDATA 
+    #FIXED '%ListOfAdjustments-Dtypes;'>
+<!ATTLIST ListOfAdjustments  xmlns CDATA #FIXED 'XCBL30.sox'>

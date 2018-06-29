@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="t004"
+  xd:root="a">
+  <xd:declaration>
+    type a_Type{parse: string(1, 8);}
+  </xd:declaration>
+  <xd:declaration>
+    type c_Type{parse: int(1, 8);}
+  </xd:declaration>
+  <xd:declaration>
+    type b_Type{parse: string(1, 8);}
+  </xd:declaration>
+  <a a="optional a_Type()">
+    <xd:mixed xd:script="occurs 0..1">
+      <b xd:script="occurs 1"
+        b="optional b_Type()">
+        optional int()
+      </b>
+      <c xd:script="occurs 1"
+        c="optional c_Type()">
+        optional int()
+      </c>
+    </xd:mixed>
+  </a>
+</xd:def>

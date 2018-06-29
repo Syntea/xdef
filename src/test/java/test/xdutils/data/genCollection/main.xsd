@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://example.com/HumanResources"
+    schemaLocation="ext_1.xsd"/>
+  <xs:complexType name="main_FirmWorkers_cType">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="Worker">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="a:ext_1_Person_cType">
+              <xs:attribute name="workerId"
+                type="xs:int"
+                use="required">
+                <xs:annotation>
+                  <xs:documentation>
+                    int
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FirmWorkers" type="main_FirmWorkers_cType"/>
+</xs:schema>

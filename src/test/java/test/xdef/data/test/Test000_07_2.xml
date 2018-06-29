@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Envelope encodingStyle="http://pis.ckp.cz/soap/encoding">
+	<Header>
+		<asd/>
+	</Header>
+	<Body>
+		<NajdiPojistitele xmlns:p="http://pis.ckp.cz/soap/ps">
+			<SPZ>1A22334</SPZ>
+			<Datum>2.6.2006</Datum>
+		</NajdiPojistitele>
+	</Body>
+</Envelope>

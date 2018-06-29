@@ -1,0 +1,121 @@
+<HTML>
+<BODY>
+Provides classes for processing of XML data with X-definitions. For any kind
+of usage it is necessary first to create the object
+{@link cz.syntea.xdef.XDPool} which should contain all X-definitions referred
+by given application.
+<p>There are several typical usage models of X-definition tools.</p>
+The most frequented model is the "parsing" one. In this model the processor
+validates and processes input data represented by XML source document. The
+advantage of this mode is the ability to process XML files of unlimited size.
+If it is used correctly the option "forget" in X-definitions the size of
+input data may be many gigabytes and it is not limited by the size of
+internal memory available to the Java virtual machine. The speed of
+processor is typically over 1 megabyte per second. The method which provides
+this mode is {@link cz.syntea.xdef.XDDocument#xparse(java.io.File,
+cz.syntea.xdef.sys.ReportWriter)}.
+<p>
+Similar way of processing is the mode, when the XML document is available to
+the processor in the form of object of the <tt>org.w3c.dom.Document</tt>
+or <tt><i>org.w3c.dom.Element</i></tt> type. The input data are processed
+by recursive walking in the DOM tree. The size of the input data are limited
+by the available memory. The method which provides this mode is
+{@link cz.syntea.xdef.XDDocument#xparse(org.w3c.dom.Node,
+cz.syntea.xdef.sys.ReportWriter)}.
+</p>
+The third one mode of processing is more focused to transform a XML document
+to the required form. In this mode, similarly like in the above mode,
+the input data are in the form of the <tt><i>org.w3c.dom.Document</i></tt>
+or <tt><i>org.w3c.dom.Element</i></tt> type. However, unlikely to
+the previous mode in this case the input data are not validated but it is
+created the new XML document according to given X-definition (see
+{@link cz.syntea.xdef.XDDocument#xcreate(String,
+cz.syntea.xdef.sys.ReportWriter)} or
+{@link cz.syntea.xdef.XDDocument#xcreate(javax.xml.namespace.QName,
+cz.syntea.xdef.sys.ReportWriter)}.
+	<h2><tt>XDefPool</tt></h2>
+<p> Contains pool of X-definitions compiled from the source (see
+	{@link cz.syntea.xdef.XDBuilder}).</p>
+<p><b>Example:</b></p>
+<pre><tt>
+ //Prepare X-definition file
+File xdef = new File("./src/example/Example1.xdef");
+
+// Create XDPool
+XDPool xp = XDFactory.compileXD(System.getProperties(), xdef); //create XDefPool
+  ...
+</tt></pre>
+<h2><tt>ChkDocument</tt></h2>
+<p> Validates XML source data (see
+	{@link cz.syntea.xdef.XDDocument#xparse(java.io.File,
+	cz.syntea.xdef.sys.ReportWriter)}).</p>
+<p/><b>Example:</b>
+<pre><tt>
+//Prepare files with source X-definition and XML documenrt
+File xdef = new File("./src/example/Example1.xdef");
+File xmlData = new File("./src/example/Example1.xml");
+
+// 1. Create XDPool
+XDPool xp = XDFactory.compileXD(System.getProperties(), xdef); //create XDefPool
+
+//2. create XDDocument with X-definition.
+XDDocument xdoc = xp.createXDDocument(name_of_X-definition);
+ArrayReporter reporter = new ArrayReporter();
+xdoc.xparse(xmlData, reporter); //validate and process data
+
+// 3. test if an error was reported
+if (reporter.errorWarnings()) {
+	reporter.printReports(System.err); // print error messages
+} else { // no errors
+	System.out.println("No errors detected");
+}
+</tt></pre>
+<p> Generates XML data from source data (see
+	{@link cz.syntea.xdef.XDDocument#xcreate(String,
+	cz.syntea.xdef.sys.ReportWriter)} or
+	{@link cz.syntea.xdef.XDDocument#xcreate(javax.xml.namespace.QName,
+	cz.syntea.xdef.sys.ReportWriter)} and
+	{@link cz.syntea.xdef.XDDocument#getElement()}).
+</p>
+<p/>
+<b>Example:</b>
+<pre><tt>
+//Prepare files with source X-definition and XML documenrt
+File xdef = new File("./src/example/Example4.xdef");
+File xmlData = new File("./src/example/Example4.xml");
+
+// 1. Create XDPool
+XDPool xp = XDFactory.compileXD(System.getProperties(), xdef); //create XDefPool
+
+//2. create XDDocument with X-definition.
+XDDocument xdoc = xp.createXDDocument(name_of_X-definition);
+
+//3 parse source XML (and set values of variables).
+ArrayReporter reporter = new ArrayReporter();
+xdoc.xparse(xmlData, reporter); //validate and process data
+if (reporter.errorWarnings()) {
+	reporter.printReports(System.err); // print error messages
+	throw new RuntimeException("errors in " + xmldata);
+}
+//now ChkDocument contains parsed element and also there are
+//assigned values to variables.
+
+//4. Set to ChkDocument parsed source element.
+xdoc.setSourceContext(xdoc.getElement());
+
+//5. create result
+reporter.clear();
+xdoc.xcreate("http://www.w3.org/1999/xhtml", "html", reporter);
+
+//6. get created element
+Element element = chkDoc.getElement();
+
+//7. test error and print it!
+if (reporter.errorWarnings()) {
+	reporter.printReports(System.err); // print error messages
+} else {
+	System.out.println(KXmlUtils.nodeToString(element, true));
+}
+</tt></pre>
+</BODY>
+</HTML>

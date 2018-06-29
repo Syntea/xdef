@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="aa_list_Type">
+    <xs:list itemType="aa_Type"/>
+  </xs:simpleType>
+  <xs:simpleType name="aa_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1000"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="a">
+    <xs:complexType>
+      <xs:attribute name="aa"
+        type="aa_list_Type"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

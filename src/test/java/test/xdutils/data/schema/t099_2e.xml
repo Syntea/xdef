@@ -1,0 +1,19 @@
+<root
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="t099.xsd">
+  <integer>-16777216</integer>
+  <integer>+016777216</integer>
+  <integer>16777216</integer>
+  <integer>1</integer>
+  <integer>0</integer>
+  <integer>+1</integer>
+  <integer>+0</integer>
+  <integer>-1</integer>
+  <integer>-0</integer>
+  <isbn>1234567890</isbn>
+  <isbn>TBD</isbn>
+  <isbn>NA</isbn>
+  <list> A </list>
+  <list>A B</list>
+  <list>A B C</list>
+</root>

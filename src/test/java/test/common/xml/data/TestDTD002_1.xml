@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM 'TestDTD002.dtd'>
+<root>
+  <child key = "B1"/>
+  <child key = " B2 "/>
+  <child ref = "B1"/>
+  <child ref = "B1  B2"/>
+  <child name = " A1?  "/>
+  <child names = "A1"/>
+  <child names = "A1 A2  A3 "/>
+  <child notation = "N1 "/>
+  <child notation = " N2"/>
+	<child notation = "N2">a.txt</child>
+	<child notation = "N3"></child>
+</root>

@@ -1,0 +1,13 @@
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0" 
+  xd:name = "Test"
+  xd:root = "note" >
+
+  <note>
+    <to>required string()</to>
+    <from>required string()</from>
+    <heading>required string()</heading>
+    <body>required string()</body>
+    <date>required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm')</date>
+  </note>
+
+</xd:def>

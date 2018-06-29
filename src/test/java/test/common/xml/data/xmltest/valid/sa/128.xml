@@ -1,0 +1,6 @@
+<!DOCTYPE doc [
+<!ELEMENT doc (#PCDATA|foo)*>
+<!ELEMENT foo EMPTY>
+<!ENTITY e "&lt;![CDATA[<foo/>]]&gt;">
+]>
+<doc>&e;</doc>

@@ -1,0 +1,9 @@
+﻿
+<!--
+    Document   : testCharset2.xml
+    Created on : 14.9.2005, 15:26
+    Author     : Trojan
+    Description:
+        Purpose of the document is test of charset UTF-8.
+-->
+<root text = "ěščřžýáíéóďťňúůĚŠČŘŽÝÁÍÉÓĎŤŇÚŮ" >ěščřžýáíéóďťňúůĚŠČŘŽÝÁÍÉÓĎŤŇÚŮ</root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xd:def xd:name="t014_3"
+    xmlns:tns="http://d"
+    xd:root="tns:a4">
+    <tns:a4 atr1="optional string()"/>
+  </xd:def>
+  <xd:def xd:name="t014_2"
+    xmlns:tns="http://c"
+    xd:root="tns:a2">
+    <tns:a2 atr1="optional string()"/>
+  </xd:def>
+  <xd:def xd:name="t014"
+    xmlns:tns="http://b"
+    xd:root="tns:elem"
+    xmlns:a="http://a"
+    xmlns:b="http://c"
+    xmlns:c="http://d">
+    <tns:elem>
+      <xd:sequence xd:script="occurs 1">
+        <a:a1 xd:script="occurs 1; ref t014_1#a:a1"/>
+        <b:a2 xd:script="occurs 1; ref t014_2#b:a2"/>
+        <a3 xd:script="occurs 1"
+          atr1="optional string()"/>
+        <c:a4 xd:script="occurs 1; ref t014_3#c:a4"/>
+      </xd:sequence>
+    </tns:elem>
+  </xd:def>
+  <xd:def xd:name="t014_1"
+    xmlns:tns="http://a"
+    xd:root="tns:a1">
+    <tns:a1 atr1="optional string()"/>
+  </xd:def>
+</xd:collection>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
+         xd:name      =  "main"
+         xd:root      =  "Staff"
+         xd:classes   =  "" >
+
+     <Person>
+         <Name>string(1,30)</Name>
+         <Surname>string(1,50)</Surname>
+     </Person>
+
+    <Manager xd:script="ref Person"
+     department="string(1,30)" />
+
+     <Staff>
+         <xd:mixed>
+             <Manager xd:script="ref Manager; occurs *" />
+             <Worker    xd:script="ref Person; occurs *"
+                        workerId="int" />
+         </xd:mixed>
+     </Staff>
+
+</xd:def>

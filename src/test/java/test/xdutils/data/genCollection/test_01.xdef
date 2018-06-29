@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+
+    Document   : test_01.xdef
+    Created on : 10.1.2011, 11:15:24
+    Author     : Alexandrov Ilia
+    Description: XDefinition containing nested type declarations.
+
+-->
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
+        name      =  "main"
+        root      =  "Root" >
+
+    <Root>
+        <xd:mixed>
+            <Test01>xs:int</Test01>
+            <Test02>xs:int()</Test02>
+            <Test03>xs:int(%minInclusive=0, %maxInclusive=100)</Test03>
+            <Test04>xs:list(%item=xs:int)</Test04>
+            <Test05>xs:list(%item=xs:int())</Test05>
+            <Test06>xs:list(%item=xs:int(%minInclusive=0, %maxInclusive=100), %length=3)</Test06>
+            <Test08>xs:union(%item=[xs:int, xs:string])</Test08>
+            <Test09>xs:union(%item=[xs:int(), xs:string(%minLength=1, %maxLength=30)])</Test09>
+            <Test10>xs:union(%item=[xs:int(%minInclusive=0, %maxInclusive=100), xs:string(%minLength=1, %maxLength=30)])</Test10>
+            <Test11>xs:union(%item=[xs:list(%item=xs:int(%minInclusive=0, %maxInclusive=100), %length=3), xs:string(%minLength=1, %maxLength=30)])</Test11>
+        </xd:mixed>
+    </Root>
+
+</xd:def>

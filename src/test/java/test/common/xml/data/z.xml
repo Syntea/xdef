@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is source for testing of indenting -->
+<!DOCTYPE xd:def [
+  <!ENTITY jmeno "required string(5,30)">
+  <!ENTITY plat "optional int(1000,99999)">
+  <!ENTITY v "fixed '20'">]>
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="osoba"
+  xd:root="osoba">
+<!-- This is source for testing of indenting -->
+  <xd:variable>
+    String $data = 'Pan reditel';
+    String $x = 'nobody';
+    String $dnes = '1.1.1999';
+  </xd:variable>
+
+  <osoba funkce="required"
+    jmeno="required string(5,30)"
+    plat="optional int(1000,99999)"
+    v="fixed '20'">
+    required eq($data); onFalse {clearReports(); setText($x);} onAbsence setText($x);
+    <podrizeny jmeno="required"
+      xd:script="occurs 0..2"/>
+
+  </osoba>
+
+  <AdresaCE KodOkresu="optional num(4)"
+    PSC="required string(5); onAbsence setText('0')"
+    Obec="optional string(1,30)"
+    Ulice="optional string(1,30)"
+    CisloOrientacni="required int(0,32767); onAbsence setText('0')"
+    ZnakDomu="optional string(1)"
+    CisloPopisne="required int(0,32767); onAbsence setText('0')"
+    DruhCislaDomu="required string(1); onAbsence setText('P')"/>
+
+</xd:def>

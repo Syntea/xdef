@@ -1,0 +1,4 @@
+<!ENTITY e "entity e" >
+<!ELEMENT root EMPTY>
+<!ATTLIST root a CDATA #IMPLIED>
+

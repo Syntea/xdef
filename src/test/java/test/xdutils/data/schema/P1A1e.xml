@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<SouborP1A  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:schemaLocation='P1A.xsd'>
+            <NovaPS>
+                    <Pojistnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Pojistnik>
+                    <Provozovatel>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Provozovatel>
+                    <Vlastnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Vlastnik>
+                    <VozidloSmlouvy>
+                            <Vozidlo CisloTP="" VIN="" SPZ="" DruhVozidla="" ZnackaText="" ModelText="" KodModeluVozidla="" RokDoProvozu="" BarvaText="" ZdvihovyObjem="" VykonMotoru="" CisloMotoru="" CelkovaHmotnost="" PocetMistCelkem=""></Vozidlo>
+                        </VozidloSmlouvy>
+                    <DobaPojisteni PojisteniOd="" PojisteniDo=""></DobaPojisteni>
+                    <ZelenaKarta CisloZK="" PlatnostZKOd="" PlatnostZKDo="" DatumZneplatneni=""></ZelenaKarta>
+                    <ZdrojovaSmlouva KodPojistitele="" CisloSmlouvy="" PoradiVozidla="" CisloDokladuPojisteni="" KontrolaNositele=""></ZdrojovaSmlouva>
+                </NovaPS>
+            <NovaPS>
+                    <Pojistnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Pojistnik>
+                    <Provozovatel>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Provozovatel>
+                    <Vlastnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Vlastnik>
+                    <VozidloSmlouvy>
+                            <Vozidlo CisloTP="" VIN="" SPZ="" DruhVozidla="" ZnackaText="" ModelText="" KodModeluVozidla="" RokDoProvozu="" BarvaText="" ZdvihovyObjem="" VykonMotoru="" CisloMotoru="" CelkovaHmotnost="" PocetMistCelkem=""></Vozidlo>
+                        </VozidloSmlouvy>
+                    <DobaPojisteni PojisteniOd="" PojisteniDo=""></DobaPojisteni>
+                    <ZelenaKarta CisloZK="" PlatnostZKOd="" PlatnostZKDo="" DatumZneplatneni=""></ZelenaKarta>
+                    <ZdrojovaSmlouva KodPojistitele="" CisloSmlouvy="" PoradiVozidla="" CisloDokladuPojisteni="" KontrolaNositele=""></ZdrojovaSmlouva>
+                </NovaPS>
+            <NovaPS>
+                    <Pojistnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Pojistnik>
+                    <Provozovatel>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Provozovatel>
+                    <Vlastnik>
+                            <Adresa Ulice="" CisloDomu="" Obec="" Okres="" Stat="" PSC=""></Adresa>
+                        </Vlastnik>
+                    <VozidloSmlouvy>
+                            <Vozidlo CisloTP="" VIN="" SPZ="" DruhVozidla="" ZnackaText="" ModelText="" KodModeluVozidla="" RokDoProvozu="" BarvaText="" ZdvihovyObjem="" VykonMotoru="" CisloMotoru="" CelkovaHmotnost="" PocetMistCelkem=""></Vozidlo>
+                        </VozidloSmlouvy>
+                    <DobaPojisteni PojisteniOd="" PojisteniDo=""></DobaPojisteni>
+                    <ZelenaKarta CisloZK="" PlatnostZKOd="" PlatnostZKDo="" DatumZneplatneni=""></ZelenaKarta>
+                    <ZdrojovaSmlouva KodPojistitele="" CisloSmlouvy="" PoradiVozidla="" CisloDokladuPojisteni="" KontrolaNositele=""></ZdrojovaSmlouva>
+                </NovaPS>
+
+</SouborP1A>

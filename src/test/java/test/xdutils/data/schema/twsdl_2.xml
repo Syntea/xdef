@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:b="http://ws.koop.cz/B1A/2008/01" s:encodingStyle="http://www.syntea.cz/koop/encoding">
+  <s:Header>
+    <b:User s:mustUnderstand="1" IdentUser="jnovak"/>
+    <b:Request s:mustUnderstand="1" IdentZpravy="43" Mode="STD"/>
+  </s:Header>
+  <s:Body>
+    <b:Get_NositelPSP>
+      <b:CilovaSmlouva  KodPojistitele="0034" CisloSmlouvy="3030331580" PoradiVozidla="1" />
+    </b:Get_NositelPSP>
+  </s:Body>
+</s:Envelope>

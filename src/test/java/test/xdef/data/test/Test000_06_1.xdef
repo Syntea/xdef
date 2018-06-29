@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<xd:def xmlns:xd   = "http://www.syntea.cz/xdef/2.0"
+   xd:script = "options ignoreEmptyAttributes"
+   xd:classes = "test.xdef.Test000"
+   xd:name    = "RegistraceSU_"
+   xd:root    = "RegistraceSU_" >
+   <RegistraceSU_ xd:script = "ref L1_common_#SUId" />
+</xd:def>

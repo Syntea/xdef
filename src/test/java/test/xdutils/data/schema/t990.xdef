@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="t990"
+    root="a">
+  <a xd:script="options nillable"
+    xd:text="required int(1,100)"/>
+</xd:def>

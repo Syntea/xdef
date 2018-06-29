@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xd:def xd:name="t012_1"
+    xmlns:tns="http://a"
+    xd:root="tns:a1">
+    <tns:a1 atr1="optional string()"/>
+  </xd:def>
+  <xd:def xd:name="t012"
+    xd:root="elem"
+    xmlns:a="http://a">
+    <elem>
+      <xd:sequence xd:script="occurs 1">
+        <a:a1 xd:script="occurs 1; ref t012_1#a:a1"/>
+      </xd:sequence>
+    </elem>
+  </xd:def>
+</xd:collection>

@@ -1,0 +1,1 @@
+Request|AuthData|Answer|Fault|Ping|PingFlow|ZacatekDavky|KonecDavky|Get_AllDN|Get_ComplexDN|Get_DN|Get_ListDN|Get_PrilohaDN|PingStatus|AllDN|ListDN|PrilohaDN|ZaznamDN

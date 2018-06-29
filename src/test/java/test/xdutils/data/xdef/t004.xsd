@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="a_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="c_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="b_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="a">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="b">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:long">
+                <xs:attribute name="b"
+                  type="b_Type"
+                  use="optional"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="c">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:long">
+                <xs:attribute name="c"
+                  type="c_Type"
+                  use="optional"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute name="a"
+        type="a_Type"
+        use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

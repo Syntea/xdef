@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="t019"
+  xd:root="a">
+  <xd:declaration>
+    type c_Type{parse: int(1, 100);}
+  </xd:declaration>
+  <xd:declaration>
+    type b_Type{parse: string(1, 100);}
+  </xd:declaration>
+  <a>
+    <xd:sequence xd:script="occurs 1">
+      <b xd:script="occurs 1">
+        required string(1, 100)
+      </b>
+      <c xd:script="occurs 1">
+        required int(1, 100)
+      </c>
+    </xd:sequence>
+  </a>
+</xd:def>

@@ -1,0 +1,18 @@
+<A>
+  <Zeme Nazev = 'CZ'>
+    <Pracoviste>
+      <Obec Nazev ='Mala'>
+        <Ulice Nazev ='Kratka'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+      </Obec>
+    </Pracoviste>
+    <Zamestnanci>
+      <Zamestnanec ID ='1' Jmeno='Jan' Prijmeni ='Novak'>
+        <Pracoviste Obec ='Mala' Ulice  ='Kratka' Objekt ='4'/>
+     </Zamestnanec>
+    </Zamestnanci>
+  </Zeme>
+</A>

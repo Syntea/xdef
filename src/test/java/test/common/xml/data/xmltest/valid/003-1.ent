@@ -1,0 +1,4 @@
+<!ELEMENT doc EMPTY>
+<!NOTATION nota SYSTEM "003-2.ent">
+<!ENTITY e SYSTEM "003-2.ent" NDATA nota>
+<!ATTLIST doc a 

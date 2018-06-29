@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<project
+    xmlns             ="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>cz.syntea.common.xdef</groupId>
+    <artifactId>syntea-common-xdef3</artifactId>
+    <version>3.1.4.1</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
+    <packaging>jar</packaging>
+    
+    <name>syntea-common-xdef3</name>
+    <!-- ve formatovani java.util.Properties, vklada se do properties-souboru -->
+    <description>XDefinice 3.1</description>
+    
+    <properties>
+        <release.date>2018-06-14</release.date>
+        
+        <projectId>cz.syntea.common.xdef</projectId>
+        <!-- <svnRepo>cz/syntea/skp/pp</svnRepo> -->
+        <!-- odkaz do hlavniho(root) adresare projektu -->
+        <main.basedir>${project.basedir}/..</main.basedir>
+        <project.build.sourceEncoding>cp1250</project.build.sourceEncoding>
+        
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <jdk.version>1.6</jdk.version>
+        <jdk.vendor>sun</jdk.vendor>
+        
+        <saxon-he.version>9.7.0-18</saxon-he.version>
+        <derby.version>10.12.1.1</derby.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <testng.version>6.8.21</testng.version>
+    </properties>
+    
+    <dependencies>
+        <!-- syntea -->
+        <!-- nic -->
+        
+        <!-- treti strany -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${saxon-he.version}</version>
+            <classifier>xqj</classifier>
+        </dependency>
+        
+        <!-- pro test -->
+        <!-- treti strany -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${saxon-he.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+        
+        <!-- logovani -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- test -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>cz/syntea/common/xdef/sys/pominfo/pominfo.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        
+        <plugins>
+            <!-- Automatically write version with timestamp to manifest file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Version>${project.version}</Build-Version>
+                            <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
+                            <Implementation-Title>${project.groupId}:${project.artifactId}:${project.version}</Implementation-Title>
+                            <Implementation-Vendor>Syntea software group a.s.</Implementation-Vendor>
+                            <Comment>${project.description}</Comment>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            
+            <!-- vse zabalit do jednoho spustitelneho jar-souboru --><!--
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.0.0.M2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>standalone</classifier>
+                            <mainClass>cz.syntea.skp.pp.statistika.SkpPpStatistika</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>1.1</version>
+                
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>${jdk.version}</version>
+                            <vendor>${jdk.vendor}</vendor>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+        <profile>
+            <id>javadoc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.3</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sources</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>    
+    
+    <distributionManagement>
+        <repository>
+            <id>private</id>
+            <url>${mrmUrl}/private</url>
+        </repository>
+        <snapshotRepository>
+            <id>private-snapshot</id>
+            <url>${mrmUrl}/private-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
+    <!--
+    <scm>
+        <connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
+        <developerConnection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</developerConnection>
+    </scm>
+    -->
+    
+</project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<SouborD5 KodUtvaruPolicie="123456"
+xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+xsi:noNamespaceSchemaLocation='D5.xsd'
+RokDN="1990"
+CisloDN="12345"
+CJ="abcd"
+Poradi="25"
+PlatnostOd="01.05.2000"/>

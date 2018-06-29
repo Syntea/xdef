@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.w3schools.com"
+  xmlns:a="http://www.w3schools.com"
+  elementFormDefault="qualified"
+  xmlns:b="http://www.w3ctest.com">
+  <xs:import namespace="http://www.w3ctest.com"
+    schemaLocation="t011_1.xsd"/>
+  <xs:element name="note">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="b:to"/>
+        <xs:element name="from"
+          type="xs:string"/>
+        <xs:element ref="b:heading"/>
+        <xs:element name="body"
+          type="xs:string"/>
+      </xs:sequence>
+      <xs:attribute name="att1"
+        type="xs:string"
+        use="required"/>
+      <xs:attribute name="att2"
+        type="xs:string"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

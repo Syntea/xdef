@@ -1,0 +1,8 @@
+<a>
+  <xi:include xmlns:xi = 'http://www.w3.org/2001/XInclude'
+              parse='xml'
+              href = 'xxx.xxx' >
+    <xi:fallback>file 'xxx.xxx' not exists</xi:fallback>
+
+  </xi:include>
+</a>

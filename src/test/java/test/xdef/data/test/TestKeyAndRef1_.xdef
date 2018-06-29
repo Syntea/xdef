@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xd:def xd:classes ="cz.syntea.xd.impl.ext.XExtUtils"
+   xd:name    ="WSDL"
+   xd:root    ="wsdl:definitions"
+   xmlns:xd   ="http://www.syntea.cz/xdef/2.0"
+   xmlns:wsdl ="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap ="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:http ="http://schemas.xmlsoap.org/wsdl/http/"
+   xmlns:mime ="http://schemas.xmlsoap.org/wsdl/mime/"
+   xmlns:plnk ="http://docs.oasis-opem.org/wsbpel/2.0/plnktype/"
+   xmlns:vprop="http://docs.oasis-opem.org/wsbpel/2.0/varprop/" >
+
+<xd:declaration>
+  uniqueSet kMSG       {pMSG',      'msgName      boundQname');
+  uniqueSet kPART      {pPART',     'msgName      boundQname, partName NCname');
+  uniqueSet kPTTYPE    {pPTTYPE',   'ptName       boundQname');
+  uniqueSet kOPERATION {pOPERATION','ptName       boundQname, opName NCname');
+  uniqueSet kOPFAULT   {pOPFAULT',  'opName       boundQname, opFaultName NCname');
+  uniqueSet kBINDING   {pBINDING',  'bindingName  boundQname');
+  uniqueSet kSERVICE   {pSERVICE',  'serviceName  boundQname');
+  uniqueSet kPORT      {pPORT',     'portName     boundQname');
+  uniqueSet kPARTNER   {pPARTNER',  'partnerName  boundQname');
+  uniqueSet kPROPERTY  {pPROPERTY', 'propertyName boundQname');
+</xd:declaration>	
+	
+  <wsdl:definitions
+
+	name                            ="optional NCName()"
+	targetNamespace                 ="required uri()">
+
+     <wsdl:documentation   xd:script="occurs 0..; ref wsdl:documentation"/>
+     <wsdl:types           xd:script="occurs 0..1; ref wsdl:types"/> <!-- 0..1 ??? NEVIM ??? -->
+     <wsdl:message         xd:script="occurs 0..; ref wsdl:message"/>
+     <wsdl:portType        xd:script="occurs 0..; ref wsdl:portType"/>
+     <wsdl:binding         xd:script="occurs 0..; ref wsdl:binding"/>
+     <wsdl:service         xd:script="occurs 0..; ref wsdl:service"/>
+     <plnk:partnerLinkType xd:script="occurs 0..; ref plnk:partnerLinkType"/>
+     <vprop:property       xd:script="occurs 0..; ref vprop:property"/>
+     <vprop:propertyAlias  xd:script="occurs 0..; ref vprop:propertyAlias"/>
+  </wsdl:definitions>
+
+  <!-- DOCUMENTATIONS -->
+  <wsdl:documentation>
+      required string();
+      <xd:any xd:script="occurs 0..; options moreElements, moreText, moreAttributes" />
+  </wsdl:documentation>
+
+  <!-- TYPES -->
+  <wsdl:types>
+     <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+     <xd:any             xd:script="occurs 0..; options moreElements, moreText, moreAttributes" />
+  </wsdl:types>
+
+  <!-- MESSAGES -->
+  <wsdl:message
+          name           ="required key('kMSG','msgName') AAND keyItem('kPART','msgName')">
+     <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+     <wsdl:part          xd:script="occurs 0..; finally clearItem('kPART','partName')"
+          name           ="required key('kPART','partName')"
+          type           ="optional string()"
+          element        ="optional string()"
+     />
+  </wsdl:message>
+
+  <!-- PORTTYPES -->
+  <wsdl:portType xd:script="finally clear('kOPFAULT')"
+          name   ="required key('kPTTYPE','ptName') AAND keyItem('kOPERATION','ptName')">
+     <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+     <wsdl:operation xd:script="occurs 1..; finally clearItem( 'kOPERATION','opName')"
+          name       ="required key('kOPERATION, ','opName') AAND keyItem('kOPFAULT','opName')">
+
+        <xd:choice>
+           <xd:sequence>
+              <wsdl:input
+                name    ="optional NCName()"
+                message ="required ptr('pMSG','msgName')"/>
+
+              <wsdl:output xd:script="occurs 0..1"
+                name       ="optional NCName()"
+                message    ="required ptr('pMSG','msgName')"/>
+
+              <wsdl:fault xd:script="occurs 0.."
+                name      ="required key('kOPFAULT','opFaultName')"
+                message   ="required ptr('pMSG','msgName')"/>
+           </xd:sequence>
+
+           <xd:sequence>
+              <wsdl:output
+                name    ="optional NCName()"
+                message ="required ptr('pMSG','msgName')"/>
+
+              <wsdl:input xd:script="occurs 0..1"
+                name      ="optional NCName()"
+                message   ="required ptr('pMSG','msgName')"/>
+
+              <wsdl:fault xd:script="occurs 0.."
+                name      ="required key('kOPFAULT','opFaultName')"
+                message   ="required ptr('pMSG','msgName')"/>
+           </xd:sequence>
+        </xd:choice>
+
+     </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- BINDINGS -->
+  <wsdl:binding
+          name ="required key('kBINDING','bindingName')"
+          type ="required ptr('pPTTYPE','ptName') AAND ptrItem('pOPERATION','ptName')">
+    <wsdl:documentation xd:script="occurs 0..;  ref wsdl:documentation"/>
+
+    <xd:choice>
+         <!-- BINDINGS-HTTP -->
+         <xd:sequence>
+          <http:binding verb ="required list('GET','POST')"/>
+          <wsdl:operation xd:script="occurs 1.."
+                name      ="required ptr('pOPERATION','opName')">
+            <http:operation location ="optional uri()"/>
+
+            <wsdl:input xd:script="occurs 0..1">
+              <xd:choice>
+                <http:urlEncoded/>
+                <http:urlReplacement/>
+              </xd:choice>
+            </wsdl:input>
+
+            <wsdl:output xd:script="occurs 0..1">
+              <xd:choice>
+                <mime:content xd:script="occurs 1..; ref mime:content"/>
+                <mime:mimeXml xd:script="occurs 1;   ref mime:mimeXml"/>
+                <mime:multipartRelated xd:script="occurs 1;   ref mime:multipartRelated"/>
+              </xd:choice>
+            </wsdl:output>
+
+            <wsdl:fault   xd:script="occurs 0..">
+              <soap:fault xd:script="occurs 1;   ref soap:fault"/>
+            </wsdl:fault>
+          </wsdl:operation>
+         </xd:sequence>
+
+         <!-- BINDINGS-SOAP -->
+         <xd:sequence>
+          <soap:binding
+                 transport ="fixed 'http://schemas.xmlsoap.org/soap/http'"
+                 style     ="required list('rpc','document')"/>
+           <wsdl:operation xd:script="occurs 1.."
+                 name      ="required ptr('pOPERATION','opName') AAND ptrItem('pOPFAULT','opName')">
+             <soap:operation xd:script="occurs 0..1"
+                 soapAction  ="optional uri()"
+                 style       ="optional list('rpc','document')"/>
+             <xd:choice>
+               <xd:sequence>
+                  <wsdl:input>
+                  <soap:body   xd:script="occurs 1;   ref soap:body"/>
+                  <soap:header xd:script="occurs 0..; ref soap:header"/>
+                  </wsdl:input>
+                  <wsdl:output xd:script="occurs 0..1">
+                  <soap:body   xd:script="occurs 1;   ref soap:body"/>
+                  <soap:header xd:script="occurs 0..; ref soap:header"/>
+                  </wsdl:output>
+                  <wsdl:fault xd:script="occurs 0..">
+                  <soap:fault xd:script="occurs 1;   ref soap:fault"/>
+                  </wsdl:fault>
+               </xd:sequence>
+               <xd:sequence>
+                  <wsdl:output>
+                    <soap:body   xd:script="occurs 1;   ref soap:body"/>
+                    <soap:header xd:script="occurs 0..; ref soap:header"/>
+                  </wsdl:output>
+                  <wsdl:input    xd:script="occurs 0..1">
+                    <soap:body   xd:script="occurs 1;   ref soap:body"/>
+                    <soap:header xd:script="occurs 0..; ref soap:header"/>
+                  </wsdl:input>
+                  <wsdl:fault   xd:script="occurs 0..">
+                    <soap:fault xd:script="occurs 1;   ref soap:fault"/>
+                  </wsdl:fault>
+               </xd:sequence>
+             </xd:choice>
+           </wsdl:operation>
+         </xd:sequence>
+    </xd:choice>
+  </wsdl:binding>
+
+  <mime:content part ="optional  NCName()
+    /* ptrSpecial('pPART') musí odvodit jméno zprávy z porttype a operation*/"
+                type ="optional list('text/xml','text/*')"
+  />
+
+  <mime:mimeXml part ="optional  NCName() 
+     /* ptrSpecial('pPART') musí odvodit jméno zprávy z porttype a operation */"
+  />
+
+  <mime:multipartRelated>
+    <mime:part xd:script="occurs 0..">
+      <mime:content xd:script="occurs 0..;  ref mime:content" />
+    </mime:part>
+  </mime:multipartRelated>
+
+  <soap:body use          ="required list('literal','encoded')"
+             parts        ="optional NCName()
+              /* trSpecial('kPART') musí odvodit jméno zprávy*/"
+             encodingStyle="optional uri()"
+             namespace    ="optional uri()"/>
+
+  <soap:header xd:script    ="finally ptrFinally('pPART')"
+               use          ="required list('literal','encoded')"
+               message      ="required ptr('pMSG','msgName') AAND
+                              ptrItem('pPART','msgName')"
+               part         ="required ptrItem('pPART','partName')"
+               encodingStyle="optional uri()"
+               namespace    ="optional uri()">
+
+    <soap:headerfault xd:script    ="finally ptrFinally ('pPART')"
+                      use          ="required list('literal','encoded')"
+                      message      ="required ptr('pMSG','msgName') AAND
+                                     ptrItem('pPART','msgName')"
+                      part         ="required ptrItem('pPART','partName')"
+                      encodingStyle="optional uri()"
+                      namespace    ="optional uri()"/>
+  </soap:header>
+
+  <soap:fault use       ="required list('literal','encoded')"
+          name          ="optional ptr('pOPFAULT','opFaultName')"
+          encodingStyle ="optional uri()"
+          namespace     ="optional uri()"/>
+
+  <!-- SERVICES -->
+  <wsdl:service name ="required key('kSERVICE','serviceName')">
+    <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+    <wsdl:port name    ="required key('kPORT','portName')"
+               binding ="required ptr('pBINDING','bindingName')">
+      <xd:choice>
+        
+        <!-- PORTS-HTTP -->
+        <xd:sequence>
+            <http:address location="required uri()" />
+        </xd:sequence>
+
+        <!-- PORTS-SOAP -->
+        <xd:sequence>
+            <soap:address location="required uri()" />
+        </xd:sequence>
+      </xd:choice>
+    </wsdl:port>
+  </wsdl:service>
+
+  <!-- PARTNERLINKTYPES -->
+  <plnk:partnerLinkType name="required key('kPARTNER','partnerName')">
+     <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+     <plnk:role xd:script ="occurs 1..2"
+                name      ="required NCName()"
+                portType  ="required string()"/>
+  </plnk:partnerLinkType>
+
+  <!-- PROPERTIES -->
+  <vprop:property name   ="required key('kPROPERTY','propertyName')"
+                  type   ="optional string()"
+                  element="optional string()">
+     <wsdl:documentation xd:script="occurs 0..;  ref wsdl:documentation"/>
+  </vprop:property>
+
+  <!-- ALIAS -->
+  <vprop:propertyAlias xd:script="finally ptrFinally('pPART')"
+                       propertyName="required key('pPROPERTY','propertyName')"
+                       messageType ="optional ptr('pMSG','msgName') AAND
+                                     ptrItem('pPART','msgName')"
+                       part        ="optional ptr('pPART','partName')"
+                       type        ="optional string()"
+                       element     ="optional string()">
+     <wsdl:documentation xd:script="occurs 0..; ref wsdl:documentation"/>
+     <vprop:query xd:script    ="occurs 0.."
+                  queryLanguage="optional uri()">
+     </vprop:query>
+  </vprop:propertyAlias>
+
+</xd:def>
