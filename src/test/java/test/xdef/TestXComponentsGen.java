@@ -20,6 +20,7 @@ import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXNode;
+import cz.syntea.xdef.sys.SUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -790,7 +791,16 @@ public class TestXComponentsGen {
 	 * @param args the command line arguments.
 	 */
 	public static void main(String... args) {
-		if (args == null || args.length == 0) {args = new String[]{"test/"};}
+		if (args == null || args.length == 0) {
+			File f = new File("test/");
+			if (!f.isDirectory()) {
+				f = new File("src/test/java/");
+				if (!f.isDirectory()) {
+					throw new RuntimeException("Test directory is missing");
+				}
+			}
+			args = new String[]{f.getAbsolutePath()};
+		}
 		String dir = args[0].replace('\\', '/');
 		File f = new File(dir);
 		if (!f.isDirectory()) {

@@ -1,5 +1,7 @@
 package test;
 
+import cz.syntea.xdef.sys.RegisterReportTables;
+import java.io.File;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
@@ -87,6 +89,20 @@ public class TestAll {
      * @param args
      */
     public static void main(String... args) {
+		String s = 
+			new File("src/main/java/cz/syntea/xdef/msg/").getAbsolutePath();
+		s = s.replace('\\', '/');
+		if (!s.endsWith("/")) {
+			s += '/';
+		}
+		System.out.println(s);		
+		RegisterReportTables.main(new String[] {
+				"-i", s + "*.properties",
+				"-c", "windows-1250",
+				"-p", "cz.syntea.xdef.msg",
+				"-o", s,
+				"-r"});
+			System.out.println("Report classes generated to " + s);
         //mainTest();
         mainTestNG();
     }

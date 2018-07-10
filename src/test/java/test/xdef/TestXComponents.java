@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
 public final class TestXComponents extends Tester {
 
     //DEBUG
-	//private static final XDPool XP = test.xdef.component.Pool.getXDPool();
+	private static final XDPool XP = test.xdef.component.Pool.getXDPool();
 
 	public TestXComponents() {super();}
 
@@ -61,7 +61,7 @@ public final class TestXComponents extends Tester {
 	@Override
 	/** Run test and print error information. */
 	final public void test() {
-/*DEBUG
+//*DEBUG
 		String xml;
 		Element el;
 		XDDocument xd;
@@ -773,7 +773,7 @@ public final class TestXComponents extends Tester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String source = FUtils.readString(
-				new File("test/test/xdef/component/Y13.java"));
+				new File(getSourceDir(), "component/Y13.java"));
 			if (source.indexOf("public static class B ") > 0) {
 				fail("Error Y13: "
 					+ "class test.xdef.component.Y13.A.B was generated.");
@@ -1002,7 +1002,7 @@ public final class TestXComponents extends Tester {
 			assertEq(p.toXml(), el);
 			assertEq("", checkXPos(p));
 		} catch (Exception ex) {fail(ex);}
-*/
+//*/
 	}
 
 	/** Run test
