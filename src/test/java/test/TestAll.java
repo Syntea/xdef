@@ -89,6 +89,7 @@ public class TestAll {
      * @param args
      */
     public static void main(String... args) {
+		/*
 		String s = 
 			new File("src/main/java/cz/syntea/xdef/msg/").getAbsolutePath();
 		s = s.replace('\\', '/');
@@ -97,12 +98,13 @@ public class TestAll {
 		}
 		System.out.println(s);		
 		RegisterReportTables.main(new String[] {
-				"-i", s + "*.properties",
-				"-c", "windows-1250",
-				"-p", "cz.syntea.xdef.msg",
-				"-o", s,
-				"-r"});
-			System.out.println("Report classes generated to " + s);
+			"-i", s + "*.properties",
+			"-c", "windows-1250",
+			"-p", "cz.syntea.xdef.msg",
+			"-o", s,
+			"-r"});
+		System.out.println("Report classes generated to " + s);
+		*/
         //mainTest();
         mainTestNG();
     }
