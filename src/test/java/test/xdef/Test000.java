@@ -49,7 +49,7 @@ public final class Test000 extends Tester {
 
 	public Test000() {
 		super();
-/*#if DEBUG*/
+/*#if DEBUG*#/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

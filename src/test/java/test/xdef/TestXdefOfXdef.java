@@ -29,7 +29,7 @@ public final class TestXdefOfXdef extends Tester {
 
 	public TestXdefOfXdef() {
 		super();
-/*#if DEBUG*/
+/*#if DEBUG*#/
 		setChkSyntax(false); // here it MUST be false!
 		setGenObjFile(true);
 /*#end*/
@@ -230,7 +230,7 @@ public final class TestXdefOfXdef extends Tester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-/*#if DEBUG*/
+/*#if DEBUG*#/
 			xml = genCollection(
 				dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
 			assertNoErrorwarnings(parse(xml), xml);
