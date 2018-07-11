@@ -836,12 +836,12 @@ public abstract class STester {
 			.getResource(_className.replace('.', '/') + ".class");
 		s = new File( url.getFile()).getAbsolutePath().replace('\\', '/');
 		String cname = _className.replace('.', '/');
-		i = s.indexOf("/build/web/WEB-INF/classes/" + cname);
+		i = s.indexOf("/target/web/WEB-INF/classes/" + cname);
 		if (i >= 0) {
 			s = s.substring(0, i + 1);
 			_sourceName = s + "src/java/" + cname + ".java";
 		} else {
-			i = s.indexOf("/build/classes/" + cname);
+			i = s.indexOf("/target/test-classes/" + cname);
 			if (i < 0) {
 				i = s.indexOf("/temp/classes/" + cname);
 				if (i < 0) {
@@ -853,7 +853,7 @@ public abstract class STester {
 				}
 			}
 			s = s.substring(0, i + 1);
-			_sourceName = s + "src/"+ cname + ".java";
+			_sourceName = s + "src/test/java/"+ cname + ".java";
 		}
 		f = new File(_sourceName);
 		_homeDir = s;
@@ -861,7 +861,7 @@ public abstract class STester {
 			_sourceName = s + "test/" + cname + ".java";
 			f = new File(_sourceName);
 			if (!f.exists()) {
-				if (s.endsWith("/build/test/")) {
+				if (s.endsWith("/target/test/")) {
 					_homeDir = s.substring(0, s.length() - 11);
 					s = _homeDir + "test/";
 				}
