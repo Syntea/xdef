@@ -33,10 +33,15 @@ import org.w3c.dom.Element;
  */
 public final class TestXComponents extends Tester {
 
-    //DEBUG
 	private static final XDPool XP = test.xdef.component.Pool.getXDPool();
 
-	public TestXComponents() {super();}
+	public TestXComponents() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private static void genXPosList(final XComponent xc, StringBuilder sb) {
 		sb.append(xc.xGetXPos()).append('\n');
@@ -61,7 +66,6 @@ public final class TestXComponents extends Tester {
 	@Override
 	/** Run test and print error information. */
 	final public void test() {
-//*DEBUG
 		String xml;
 		Element el;
 		XDDocument xd;
@@ -1002,16 +1006,12 @@ public final class TestXComponents extends Tester {
 			assertEq(p.toXml(), el);
 			assertEq("", checkXPos(p));
 		} catch (Exception ex) {fail(ex);}
-//*/
 	}
 
 	/** Run test
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

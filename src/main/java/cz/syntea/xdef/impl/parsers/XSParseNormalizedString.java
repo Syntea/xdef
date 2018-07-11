@@ -59,7 +59,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 /*
 The lexical space of xsd:normalizedString is unconstrained (any valid XML
 character may be used). Its value space is the set of strings after whitespace
-replacement—i.e., after any occurrence of #x9 (tab), #xA (linefeed), and #xD
+replacementâ€”i.e., after any occurrence of #x9 (tab), #xA (linefeed), and #xD
 (carriage return) have been replaced by an occurrence of #x20 (space) without
 any whitespace collapsing.
 

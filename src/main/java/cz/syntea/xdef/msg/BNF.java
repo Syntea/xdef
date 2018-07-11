@@ -13,7 +13,7 @@ public interface BNF {
 	static final String[] BNF = {"001","002","003","004","005","006","007",
 	"008","009","010","011","012","013","014","015","016","017","018","019",
 	"020","021","022","023","024","025","026","027","028","029","030","031",
-	"032","033","034","035","036","037","038","039","040","901","902","903",
+	"032","033","034","035","036","038","039","040","901","902","903",
 	"_DESCRIPTION","_LANGUAGE"};
 	/** BNF grammar not exists&amp;{#SYS000} */
 	public static final long BNF001 = 120717312L;
@@ -87,22 +87,20 @@ public interface BNF {
 	public static final long BNF035 = 120717346L;
 	/** Item is null */
 	public static final long BNF036 = 120717347L;
-	/** Parameter of method &amp;{0} is expected */
-	public static final long BNF037 = 120717348L;
 	/** No parameters are declared in method &amp;{0} */
-	public static final long BNF038 = 120717349L;
+	public static final long BNF038 = 120717348L;
 	/** Illegal type of alias parameter: &amp;{0} */
-	public static final long BNF039 = 120717350L;
+	public static final long BNF039 = 120717349L;
 	/** Illegal BNF runtime code: &amp;{0} */
-	public static final long BNF040 = 120717351L;
+	public static final long BNF040 = 120717350L;
 	/** Rule "&amp;{0}" does not exist&amp;{#SYS000} */
-	public static final long BNF901 = 120717352L;
+	public static final long BNF901 = 120717351L;
 	/** Exception in external method "&amp;{0}" (rule &amp;{1}): &amp;{2}&amp;{#SYS000} */
-	public static final long BNF902 = 120717353L;
+	public static final long BNF902 = 120717352L;
 	/** External method "&amp;{0}" (rule &amp;{1}) should be static or set user object&amp;{#SYS000} */
-	public static final long BNF903 = 120717354L;
+	public static final long BNF903 = 120717353L;
 	/** Messages for BNF grammar */
-	public static final long BNF_DESCRIPTION = 120717355L;
+	public static final long BNF_DESCRIPTION = 120717354L;
 	/** English */
-	public static final long BNF_LANGUAGE = 120717356L;
+	public static final long BNF_LANGUAGE = 120717355L;
 }

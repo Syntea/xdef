@@ -24,7 +24,13 @@ import org.w3c.dom.Element;
  */
 public final class TestUserMethods extends Tester {
 
-	public TestUserMethods() {super();}
+	public TestUserMethods() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -204,9 +210,6 @@ public final class TestUserMethods extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 

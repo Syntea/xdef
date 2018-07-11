@@ -269,8 +269,8 @@ public class XScriptParser extends StringParser
 		ILLEGAL_SYM + ";illegal;" +
 		OCCURS_SYM + ";occurs;" +
 		ON_TRUE_SYM + ";onTrue;" +
-		ON_FALSE_SYM + ";onError;" + //alias of onFalse
 		ON_FALSE_SYM + ";onFalse;" +
+		ON_FALSE_SYM + ";onError;" + //alias of onFalse
 		ON_ABSENCE_SYM + ";onAbsence;" +
 		DEFAULT_SYM + ";default;" +
 		ON_EXCESS_SYM + ";onExcess;" +
@@ -868,8 +868,8 @@ public class XScriptParser extends StringParser
 			case '~':
 				return _sym = ch;
 			case '\'':
-			case '"': //literal
-				readLiteral(ch);
+			case '"': // string literal
+				readStringLiteral(ch);
 				return _sym = CONSTANT_SYM;
 			case '0':
 			case '1':
@@ -1162,15 +1162,11 @@ public class XScriptParser extends StringParser
 					setParsedString(s);
 					try {
 						_parsedValue = new DefDecimal(s);
-					} catch (Exception ex) {
-						error(XDEF.XDEF409); //Decimal number error
-						_parsedValue = new DefDecimal(0);
-					}
-					return;
-				} else {
-					error(XDEF.XDEF409); //Decimal number error
-					_parsedValue = new DefDecimal(0);
+						return;
+					} catch (Exception ex) {}
 				}
+				error(XDEF.XDEF409); //Decimal number error
+				_parsedValue = new DefDecimal(0);
 				return;
 			}
 			long j = 0L;
@@ -1317,7 +1313,7 @@ public class XScriptParser extends StringParser
 	/** Read literal. Result is saved to _parsedString.
 	 * @param delimiter first character.
 	 */
-	private void readLiteral(final char delimiter) {
+	private void readStringLiteral(final char delimiter) {
 		int pos = getIndex();
 		StringBuilder sb = new StringBuilder();
 		while (true) {
@@ -1356,8 +1352,8 @@ public class XScriptParser extends StringParser
 						c = '\t';
 						incBufIndex();
 						break;
-					case '\'':  // single quote
-					case '"':   // double quote
+					case '\'':  // apostroph
+					case '"':   // quote
 					case '\\':  // backslash
 						incBufIndex();
 						break;
@@ -1416,9 +1412,9 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Parse occurrence interval.
-	 * OccurrenceInterval::= "?" | "*" | "+" | "required"
+	 * OccurrenceInterval ::= "?" | "*" | "+" | "required"
 	 *    | "unlimited" | "illegal" | "ignore"
-	 *    | IntegerLiteral [".." [IntegerLiteral]]
+	 *    | IntegerLiteral [ ".." [IntegerLiteral]]
 	 * @param occ Container of occurrence.
 	 * @return true if occurrence interval was parsed
 	 */
@@ -1956,7 +1952,7 @@ public class XScriptParser extends StringParser
 		// find keyword ID
 		int i = KEYWORDS.indexOf(";" + sym + ";");
 		if (i >= 0) {
-			i++;
+			i += 3;
 			return KEYWORDS.substring(i, KEYWORDS.indexOf(';', i));//get keyword
 		}
 		return String.valueOf(sym);

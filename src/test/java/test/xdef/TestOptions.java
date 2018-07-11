@@ -25,7 +25,13 @@ import org.w3c.dom.Element;
  */
 public final class TestOptions extends Tester {
 
-	public TestOptions() {super();}
+	public TestOptions() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -1674,9 +1680,6 @@ public final class TestOptions extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

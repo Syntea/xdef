@@ -26,7 +26,8 @@
   type groupScript XDScript.rule('ElementScript');
   type groupModelScript XDScript.rule('ElementScript');
   type Occurrence XDScript.rule('Occurrence');
-  type elementCreateExpression XDScript.rule('ElementCreateSection');
+  type elementCreateSection XDScript.rule('ElementCreateSection');
+  type elementCreateCode XDScript.rule('ElementCreateCode');
   type xdIdentifier XDScript.rule('Identifier');
   type xposition XDScript.rule('XPosition');
   type booleanLiteral XDScript.rule('BooleanLiteral');
@@ -46,12 +47,13 @@
   <xd:BNFGrammar name = "XDScript">
 <![CDATA[
 /******************************************************************************/
-/* Generate codes                                                             */
+/* Generatied codes                                                           */
 /******************************************************************************/
-%define $PUS: $push       /* put parsed source to internal stack. */
-%define $POS: $pos        /* put actual source position to internal stack. */
+%define $PUS: $push()     /* put parsed source to internal stack. */
+%define $INF: $info()     /* put actual source position to internal stack. */
 
 %define $OPA: $push('OPA') /* assignment operation */
+%define $AVE: $push('AVE') /* assigned value in expression */
 %define $OPU: $push('OPU') /* unary operators */
 %define $OP1: $push('OP1') /* operators level 1 */
 %define $OP2: $push('OP2') /* operators level 2 */
@@ -63,6 +65,9 @@
 %define $NUL: $push('NUL') /* null */
 %define $NEW: $push('NEW') /* new */
 %define $VRF: $push('VRF') /* variable reference */
+%define $MET: $push('MET') /* method name (before parameter list) */
+%define $PAR: $push('PAR') /* method parameter */
+%define $CAL: $push('CAL') /* method call (end of parameter list) */
 %define $NMI: $push('NMI') /* integer number */
 %define $NMF: $push('NMF') /* floating point number */
 %define $TRU: $push('TRU') /* true */
@@ -79,17 +84,29 @@
 %define $FIX: $push('FIX') /* "fixed" value occurrence */
 
 %define $ELE: $push('ELE') /* script of "xd:script" of element */
-%define $OCC: $push('OCC') /* Occurrence */
+%define $OCC: $push('OCC') /* occurrence */
+
+%define $SDM: $push('SDM') /* start of declared method */
+%define $VOI: $push('VOI') /* void type of declared method */
+%define $EDP: $push('EDP') /* end of declared method parameters */
+%define $EDM: $push('EDM') /* end of declared method */
 
 /******************************************************************************/
 /* BNF grammar rules                                                          */
 /******************************************************************************/
 
 Letter ::= $letter
+
 Char ::= $xmlChar
+
 WhiteSpace ::= [#9#10#13 ]
-Comment ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
-S ::= ( WhiteSpace | Comment )+
+
+Comment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+
+S ::= (WhiteSpace | Comment)+
+
+SemicolonOrSourceEnd ::= S? (";" S? | $eos)
+/* Here at the end of the parsed source text the semicolon is not required. */
 
 /******************************************************************************/ 
 /* Base symbols                                                               */
@@ -105,47 +122,49 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE"
   | "LSH" | "RSH" | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG"
   | "OOR" | "AAND"
-  | "true" | "false"
+  | "true" | "false" | "implements" | "extends"
+  | "onFalse"
   
 PredefinedConstant ::= "$PI" | "$E" | "$MAXINT" | "$MININT" | "$MINFLOAT"
   | "$MAXFLOAT" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY"
 
 Digit ::= [0-9]
 
-Identifier ::= ((BaseIdentifier ( ':' BaseIdentifier)? ) - Keyword)
+Identifier ::= BaseIdentifier - Keyword
+/*Identifier ::= (BaseIdentifier (':' BaseIdentifier)? ) - Keyword*/
 
-BaseIdentifier ::= (( Letter | "_" | "$")  ( Letter | Digit | "_" )*)
+BaseIdentifier ::= ((Letter | "_" | "$")  (Letter | Digit | "_")* )
 
-RawIdentifier ::= ( Letter | "_")  ( Letter | Digit | "_" )*
+RawIdentifier ::= (Letter | "_")  (Letter | Digit | "_")*
 
-QualifiedIdentifier ::= BaseIdentifier ( "." BaseIdentifier )+ | BaseIdentifier
+QualifiedIdentifier ::= BaseIdentifier ("." BaseIdentifier)+ | BaseIdentifier
 
 BooleanLiteral ::= ($TRU "true" | $FAL "false")
 
-DecimalInteger ::= ( Digit ("_")* )+
+DecimalInteger ::= ("_"* Digit+)+ ("_")*
 
 HexaDigit ::= Digit | [a-fA-F]
 
-IntegerLiteral ::= $NMI ( ( "0" [Dd] )? DecimalInteger
-  | "0" [Xx] (HexaDigit ("_")* )+ ) $PUS
+IntegerLiteral ::= $NMI (("0" [Dd])? DecimalInteger
+  | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $PUS
 /* Inside a number specification it is possible to insert the character "_".
   This character does not influence the value of the number, it just makes 
   a number more readable. E.g. the number 123456789 you can be written
   as 123_456_789 (or 0x0f123456 as 0x0f_12_34_56). */
 
-FloatLiteral ::= $NMF (DecimalInteger ( "." DecimalInteger Exponent? 
-  | Exponent)) $PUS 
+FloatLiteral ::= $NMF (("0" [Dd]) DecimalInteger "." DecimalInteger? )
+  | ((DecimalInteger ("." DecimalInteger Exponent? | Exponent))) $PUS 
 
 Exponent ::= [Ee] [-+]? [0-9]+
 
 NumberLiteral ::= FloatLiteral | IntegerLiteral
 
-SpecChar ::= "\" ("\" | '"' | "'" | "n" | "r" | "t" ) | UnicodeCharSpecification
+SpecChar ::= "\" ("\" | '"' | "'" | "n" | "r" | "t") | UnicodeCharSpecification
 
 UnicodeCharSpecification ::= "\u" HexaDigit{4}
 
-StringLiteral ::= $STR ("'" ( "''" | [^'\] | SpecChar)* "'" |
-  '"' ( '""' | [^"\] | SpecChar)* '"') $PUS
+StringLiteral ::= $STR ("'" ("''" | [^'\] | SpecChar)* "'" |
+  '"' ('""' | [^"\] | SpecChar)* '"') $PUS
   /* The opening and closing delimiter must be either """ or "'". The occurrence
      of this delimiter inside of literal can be recorded as double delimiter or
      in the form of SpecChar. */
@@ -165,8 +184,8 @@ XDefName ::= XMLName
 XModelName ::= XMLName
 
 XPosition ::= (XDefName? "#")? XModelName
-  ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex? )*
-  ("/" ( XAttrReference | XTextReference ) )?
+  ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex?)*
+  ("/" (XAttrReference | XTextReference))?
 
 XPositionIndex ::= "[" Digit+ "]"
 
@@ -178,49 +197,51 @@ XAttrReference ::= "@" XMLName
 
 XTextReference ::= "$text" XPositionIndex?
 
-RootList ::= S? RootSpecification ( S? "|" S? RootSpecification )* S?
+RootList ::= S? RootSpecification (S? "|" S? RootSpecification)* S?
   /* all rootspecification in the list must be unique */
 
 RootSpecification ::= XPosition | "*"
 
-MethodListItem ::= Identifier S? 
+ExternalType ::= QualifiedIdentifier (S?"[" S? "]")?
+
+MethodListItem ::= ExternalType S? 
   QualifiedIdentifier S? "(" S? MethodListItemParamList? S? ")" S?
-  ( "as" S? Identifier )?
+  ("as" S? Identifier)?
   
-MethodListItemParamList ::= QualifiedIdentifier (S?"[" S? "]")?
-  (S? "," S? QualifiedIdentifier (S?"[" S? "]")?)*
+MethodListItemParamList ::= ExternalType
+  (S? "," S? QualifiedIdentifier (S?"[" S? "]")? )*
 
 MacroReference ::= "${" S? XMLName S? MacroParams? S? "}"
 
-MacroParams ::= "(" S? Identifier ( S? "," S? Identifier)* S? ")"
+MacroParams ::= "(" S? Identifier (S? "," S? Identifier)* S? ")"
 
 /******************************************************************************/
 /* Script expression                                                          */
 /******************************************************************************/
 
-Expression ::= Expr1 (S? "?" S? Expression S? ":" S? Expression )?
+Expression ::= Expr1 (S? "?" S? Expression S? ":" S? Expression)?
 
-OperatorLevel_1 ::= $OP1 ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $PUS
+OperatorLevel_1 ::= $OP2 ("AND" | "AAND" | "&&" | "&") $PUS
 
-Expr1 ::= Expr2 (S? OperatorLevel_1 S? Expr2 )*
+Expr1 ::= Expr2 (S? OperatorLevel_1 S? Expr2)*
 
-OperatorLevel_2 ::= $OP2 ("AND" | "AAND" | "&&" | "&") $PUS
+OperatorLevel_2 ::= $OP1 ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $PUS
 
-Expr2 ::= Expr3 (S?  OperatorLevel_2 S? Expr3 )*
+Expr2 ::= Expr3 (S?  OperatorLevel_2 S? Expr3)*
 
 OperatorLevel_3 ::= $OP3 ("LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE"
   | "<=" | "GE" | ">=" | "!=" | "NE" | "<<" | "LSH" | ">>" | "RSH" | ">>>"
   | "RRSH") $PUS
 
-Expr3 ::= Expr4 (S? OperatorLevel_3 S? Expr4 )*
+Expr3 ::= Expr4 (S? OperatorLevel_3 S? Expr4)*
 
 OperatorLevel_4 ::= $OP4 ("*" | "/" | "%") $PUS
 
-Expr4 ::= Expr5 (S? OperatorLevel_4 S? Expr5 )*
+Expr4 ::= Expr5 (S? OperatorLevel_4 S? Expr5)*
 
 OperatorLevel_5 ::= $OP5 ("+" | "-") $PUS
 
-Expr5 ::= Expr (S? OperatorLevel_5 S? Expr )*
+Expr5 ::= Expr (S? OperatorLevel_5 S? Expr)*
 
 Expr ::= (UnaryOperator S? | CastRequest S?)*
   (Value | Literal | "(" S? Expression S? ")") (S? "." S? Method)?
@@ -233,40 +254,47 @@ UnaryOperator ::= "+" | $OPU ("-" | "!" | "NOT" | "~") $PUS
 
 TypeIdentifier ::= $TYP ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
-  | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser"
-  | "ParseResult" | "AnyValue") $PUS
+  | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
+  | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "AnyValue"
+  | "Output" | "Input" | "NamedValue" ) $PUS
 
-Value ::= Constructor | "null" $NUL | $CON PredefinedConstant $PUS | Increment
+Value ::= (Constructor | "null" $NUL | $CON PredefinedConstant $PUS | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName
+  | $AVE AssignmentStatement) (S? "." S? Method)?
 
 Constructor ::= "new" $NEW S TypeIdentifier S? "(" S? ParameterList? S? ")"
   | NamedValue | ContainerValue
 
 NamedValue ::= KeyName S? "=" S? Expression
 
-ContainerValueStart ::= (NamedValue (S? "," S? NamedValue)*) | Expression
+ContainerValueStart ::= (NamedValue (S? "," S? NamedValue)* ) | Expression
 
-ContainerValue ::= "[" S? (ContainerValueStart (S? "," S? Expression)*)? S? "]"
+ContainerValue ::= "[" S? (ContainerValueStart (S? "," S? Expression)* )? S? "]"
 
 KeyParameterReference ::= KeyName
 
-Method ::= $VRF (QualifiedIdentifier - Keyword) $PUS S? ("(" S? ParameterList? S? ")")?
+Method ::= $MET (SchemaTypeName | (QualifiedIdentifier - Keyword)) $PUS
+  S? ("(" S? ParameterList? S? ")")? $CAL
+
+SchemaTypeName ::= "xs:" Identifier
 
 Increment ::= ("++" $INB | "--" $DEB) S? VariableReference 
   | $INA VariableReference S? "++" | $DEA VariableReference S? "--"
   /* The variable must be declared as an integer or a float */
 
-ParameterList ::= (Expression) (S? "," S? Expression)*
+Parameter ::= Expression $PAR
+
+ParameterList ::= Parameter (S? "," S? Parameter)*
 
 VariableReference ::= $VRF (Identifier - TypeIdentifier) $PUS
 
-MethodDeclaration ::=
-  ( "void" | TypeIdentifier ) S MethodName S? ParameterListDeclaration S? Block
+MethodDeclaration ::= $SDM ("void" $VOI | TypeIdentifier)
+  S DeclaredMethodName S? ParameterListDeclaration S? Block $EDM
 
-MethodName ::= QualifiedIdentifier
+DeclaredMethodName ::= Identifier $PUS
 
 ParameterListDeclaration ::=
-  "(" S? ( SeqParameter (S? "," S? SeqParameter )* )? ")"
+  "(" S? (SeqParameter (S? "," S? SeqParameter)* )? ")" $EDP
 
 SeqParameter ::= TypeIdentifier S ParameterName
 
@@ -284,22 +312,23 @@ StatementExpression ::= Expression
 
 Statement ::= S? (Statement1 | Statement2)
 
-Statement1 ::= Block | SwitchStatement | TryStatement 
+Statement1 ::= (Block | SwitchStatement | TryStatement) 
 
-Statement2 ::= ( IfStatement | ForStatement | WhileStatement | DoStatement
+Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement
   | ReturnStatement | ThrowStatement | BreakStatement | ContinueStatement
-  | Method | Increment | AssignmentStatement S? ";" ) | EmptyStatement
+  | Method | Increment | AssignmentStatement S? (";" S? | $eos)? )
+  $INF | EmptyStatement
 
 EmptyStatement ::= ";"
 
-StatementSequence ::= ( S? VariableDeclaration S? ";" | Statement)*
+StatementSequence ::= (S? VariableDeclaration S? ";" S? | Statement)*
 
 Block ::= "{" StatementSequence S? "}"
-
+ 
 SimpleStatement ::= S? (Statement1 | (Statement2? S? ";" S?)) | EmptyStatement
 
 IfStatement ::=
-  "if" ParentalExpression SimpleStatement ( S? "else" S? SimpleStatement)?
+  "if" ParentalExpression SimpleStatement (S? "else" S? SimpleStatement)?
   /* Result of ParentalExpression must be boolean. */
 
 ForStatement ::= "for" S? "(" S?  ForInit? S? ";" S? 
@@ -341,21 +370,21 @@ BreakStatement ::= "break" (S? Identifier)?
 
 ContinueStatement ::= "continue" (S? Identifier)?
 
-AssignmentStatement ::= Identifier S? ((AssignmentOperator S? Expression) |
+AssignmentStatement ::= (Identifier S? ((AssignmentOperator S? Expression) |
  (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) |
-  S? AssignmentOperator S? Expression
+  S? AssignmentOperator S? Expression)
 
 AssignmentOperator ::= $OPA (("|" | "^" | "+" | "-" | "*" | "/" | "&"
   | "%" | "<<" | ">>>" | ">>")? "=") $PUS
 
-VariableDeclaration ::= ("final" $FIN S | "external" $EXT S )*
+VariableDeclaration ::= ("final" $FIN S | "external" $EXT S)*
   TypeIdentifier S VariableDeclarator (S? "," VariableDeclarator)*
 
 VariableDeclarator ::= S? (AssignmentStatement | Identifier)
 
-Occurrence ::= $POS $OCC ("required" | "optional" | "ignore" | "illegal" | "*"
+Occurrence ::= $INF $OCC ("required" | "optional" | "ignore" | "illegal" | "*"
   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?" |
-  (IntegerLiteral (S? ".." (S? ( "*" | IntegerLiteral))? )?))))
+  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))))
   /* The value of the second IntegerLiteral (after "..")  must be greater or
      equal to the first one. */
 
@@ -368,7 +397,7 @@ ExplicitCode ::= Block
 /******************************************************************************/
 
 XdefScript ::=
-  S? ( XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError | XdefOptions )* S?
+  (S? (XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError | XdefOptions)* S?)?
   /* Each item can be specified only once. */
 
 XdefInitSection ::= "init" S Statement
@@ -379,7 +408,7 @@ XdefOnXmlError ::= "onXmlError" S Statement
 
 XdefOptions ::= "options" S XdefOptionsList
 
-XdefOptionsList ::= XdefOptionItem ( S? "," S? XdefOptionItem )*
+XdefOptionsList ::= XdefOptionItem (S? "," S? XdefOptionItem)*
   /* Each item can be specified only once. */
 
 XdefOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
@@ -401,70 +430,81 @@ XdefOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
 /* Script of text nodes and attributes                                        */
 /******************************************************************************/
 
-AttributeScript ::= ValueScript S?
+AttributeScript ::= ValueScript
 
-ValueScript ::= ValueExecutivePart*
+ValueScript ::= (ValueExecutivePart* S?)?
 
-ValueExecutivePart::= S? ( ValueValidationSection | ValueInitSection
+ValueExecutivePart::= "$$$script:"? S? (ValueValidationSection | ValueInitSection
   | ValueOnTrueSection | ValueOnErrorSection | ValueOnAbsenceSection
   | ValueDefaultSection | ValueCreateSection | ValueFinallySection
-  | AttributeOptions | Reference | S | ";" ) S?
+  | ValueMatchSection | AttributeOptions | Reference | S | ";") S?
   /* Each item can be specified only once. */
 
 ValueValidationSection ::= "fixed" S (Expression | Block)
   | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
 
-CheckValueSpecification ::= ExplicitCode | Expression | TypeMethodName
-  /* Expression or ExplicitCode must return a value of boolean type. */
+CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
+  /* ExplicitCode must return a value of boolean type or ParseResult. */
+
+ValidationExpression ::= Expression
+  /* Result of ValidationExpression must be a boolean or ParseResult type. */
 
 TypeMethodName ::= Identifier
 
-ValueInitSection ::= "init" S? ( ExplicitCode | Statement )
+ValueMatchSection ::= "match" S? (Expression | ExplicitCode)
+  /* Expression nebo ExplicitCode must here return a value of boolean type. */
+
+ValueInitSection ::= "init" S? (ExplicitCode | Statement)
+
+ValueOnTrueSection ::= "onTrue" S? (ExplicitCode | Statement)
   /* If Method or ExplicitCode returns a value, it will be ignored. */
 
-ValueOnTrueSection ::= "onTrue" S? ( ExplicitCode | Statement )
-  /* If Method or ExplicitCode returns a value, it will be ignored. */
+ValueOnErrorSection ::= ("onError" | "onFalse") S? (ExplicitCode | Statement)
 
-ValueOnErrorSection ::= "onError" S? ( ExplicitCode | Statement )
-  /* If Method or ExplicitCode returns a value, it will be ignored. */
+ValueOnAbsenceSection ::= "onAbsence" S (ExplicitCode | Statement)
 
-ValueOnAbsenceSection ::= "onAbsence" S ( ExplicitCode | Statement )
-  /* If Method or ExplicitCode returns a value, it will be ignored. */
+ValueCreateSection ::= "create" S? (ExplicitCode | ValueCreateExpression)
+  /* ExplicitCode must return a value of String type. */
 
-ValueCreateSection ::= "create" S? ( ExplicitCode | Expression )
-  /* Expression nebo ExplicitCode must return the value of String. */
+ValueCreateExpression ::= Expression
+  /* ValueCreateExpression must return a value of String type. */
 
-ValueDefaultSection ::= "default" S? ( ExplicitCode | Expression )
+ValueDefaultSection ::= "default" S? (ExplicitCode | Expression)
   /* Expression nebo ExplicitCode must return the value of the String. */
 
-ValueFinallySection ::= "finally" S? ( ExplicitCode | Statement )
-  /* If Method or ExplicitCode returns a value, it will be ignored. */
+ValueFinallySection ::= "finally" S? (ExplicitCode | Statement)
 
 AttributeOptions ::= ValueOptions
 
 ValueOptions ::= "options" S? ValueOptionsList
 
-ValueOptionsList ::=  ValueOption ( S? "," S? ValueOption )*
+ValueOptionsList ::=  ValueOption (S? "," S? ValueOption)*
   /* Each item can be specified only once. */
 
 ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
   | "setTextUpperCase" | "setTextLowerCase" | "trimText" | "noTrimText"
-  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
+  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "cdata"
   | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
-  
+  | "ignoreEmptyAttributes" | "acceptEmptyAttributes"
+  | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "preserveTextCase"
+
 /******************************************************************************/
 /* Script of elements                                                         */
 /******************************************************************************/
 
-ElementScript ::= $POS $ELE ElementExecutivePart* S?
+ElementScript ::= $INF $ELE ElementExecutivePart* S?
 
-ElementExecutivePart ::= S? ( Occurrence | ElementVarSection
-  | ElementMatchSection| ElementInitSection | ElementOnAbsenceSection
-  | ElementOnExcessSection | ElementCreateSection | ElementFinallySection
-  | ElementOptions | Reference | ElementForgetSection | ElementOnStartSection |
-  S | ";" )
+ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
+  | ElementVarSection | ElementMatchSection | ElementInitSection
+  | ElementOnAbsenceSection | ElementOnExcessSection | ElementCreateSection
+  | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
+  | ElementOnStartSection | ElementStructureCompare | ";")
+  
+  
   /* Each item can be specified only once. 
    * If the occurrence is not specified, the implicite value is "required" */
+
+TemplateSection ::= "template"
 
 ElementVarSection ::= "var" S? 
   (("{"(S? ElementVarSectionItem S?)* "}") | ElementVarSectionItem S?)
@@ -473,8 +513,8 @@ ElementVarSectionItem ::= TypeDeclaration | VariableDeclaration S? ";"  | S? ";"
 
 ElementInitSection ::= "init" S? Statement?
 
-ElementMatchSection ::= "match" S? ( Expression | ExplicitCode )
-  /* Expression nebo ExplicitCode must return value of boolean. */
+ElementMatchSection ::= "match" S? (Expression | ExplicitCode)
+  /* Expression nebo ExplicitCode must here return a value of boolean type. */
 
 ElementOnStartSection ::= "onStartElement" S? Statement?
 
@@ -482,16 +522,20 @@ ElementOnExcessSection ::= "onExcess" S? Statement?
 
 ElementOnAbsenceSection ::= "onAbsence" S? Statement?
 
-ElementCreateSection ::= "create" S? (Expression | ExplicitCode)
+ElementCreateSection ::= "create" ElementCreateCode
+
+ElementCreateCode ::= S? (Expression | ExplicitCode) S? 
   /* Expression nebo ExplicitCode must return value of Container or Element. */
 
 ElementFinallySection ::= "finally" S? Statement?
 
 ElementForgetSection ::= "forget"
 
+ElementStructureCompare ::= ("implements" | "uses") S XPosition
+
 ElementOptions ::= "options" S? ElementOptionsList
 
-ElementOptionsList ::=  ElementOptionItem ( S?  "," S? ElementOptionItem )*
+ElementOptionsList ::=  ElementOptionItem (S?  "," S? ElementOptionItem)*
   /* Each item can be specified only once. */
 
 ElementOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
@@ -503,113 +547,116 @@ ElementOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
   | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr"
   | "trimText" | "noTrimText" | "resolveEntities" | "ignoreEntities"
   | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
+  | "preserveTextCase" | "acceptOther" | "ignoreOther"
   | "nillable" | "noNillable"
 
 /******************************************************************************/
 /* Script of the declaration part                                             */
 /******************************************************************************/
 
-DeclarationScript ::= (S? ( TypeDeclaration | ExternalMethodDeclaration
-  | VariableDeclaration S? ";" | MethodDeclaration | ";" ) )* S?
+DeclarationScript ::= (S? (TypeDeclaration | ExternalMethodDeclaration
+  | VariableDeclaration | MethodDeclaration | ";"))* S?
 
-TypeDeclaration ::= ( "type" S Identifier S?
-  ( (Identifier (S? "," S? Identifier)* S? ";" S?) | TypeDeclarationBody ) )
-  | ("uniqueSet" S Identifier S?  UniqueSetDeclarationBody )
+TypeDeclaration ::= ("type" S Identifier S?
+  ((Identifier (S? "," S? Identifier)* S? ";" S? )
+  | TypeDeclarationBody)) | UniqueSetDeclaration
 
 TypeDeclarationBody ::= Expression
   /* Expression or ExplicitCode must return value of boolean or ParseResult.*/
 
-ExternalMethodDeclaration ::= "external" S "method" 
-  (S MethodListItem S? ";" )?
-  | (S? "{" S? ( MethodListItem (S? ";" S? MethodListItem ?)* )? "}" )
+ExternalMethodDeclaration ::= "external" S "method"
+  ( S? "{" S? (MethodListItem S? ";" S? )* MethodListItem? S? ";"? S? "}"
+  | (S MethodListItem) ) S? ";"?
 
-UniqueSetDeclarationBody ::= ("{" S? Identifier S? ":" S? "?"? S? Expression
-  (S? ";" S? S? Identifier S? ":" S? "?"? S? Expression)? S? ";"? S? "}")
-  | Expression
+UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
+
+UniqueSetDeclarationBody ::= ("{" S? UniqueSetDeclarationItem
+  (S? ";" S? UniqueSetDeclarationItem)* S? (";" S?)? "}") | Method
   /* Expression or ExplicitCode must return value of boolean or ParseResult.*/
 
-/******************************************************************************/ 
+UniqueSetDeclarationItem ::= S? Identifier
+  (S? ":" S? (("?" | "optional") S? )? Method )?
+
+/******************************************************************************/
 /* BNF grammar                                                                */
 /******************************************************************************/
 
-BNFGrammar ::= S? BNFMethodDeclarationSection? S? BNFRules S?
+BNFGrammar ::= S? BNFMethodDeclarationSection? BNFRules S?
 
 BNFMethodDeclarationSection ::= BNFMethodDeclaration (S? BNFMethodDeclaration)*
 
 BNFRuleName ::= RawIdentifier
 
-BNFExternalRuleName ::= "$" BNFRuleName
+BNFDefinedMethodName ::= "$" (BNFRuleName | Digit+)
 
-BNFRuleReference ::= BNFExternalRuleName | BNFRuleName
+BNFRuleDecl ::= S? BNFRuleName S? "::=" S? 
 
-BNFMethodDeclaration ::= "%define" S BNFExternalRuleName S ":"
- S "$" QualifiedIdentifier BNFMethodparameters?
+BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
 
-BNFMethodparameters ::= "(" S? BNFMethodparameter
- (S? "," S? BNFMethodparameter)* S? ")"
+BNFMethodDeclaration ::= "%define" S BNFDefinedMethodName S? ":"
+  S ("$" QualifiedIdentifier | BNFDefinedMethodName) S? BNFMethodparameters?
+
+BNFMethodparameters ::= "(" S?
+  (BNFMethodparameter (S? "," S? BNFMethodparameter)* ) ? S? ")"
 
 BNFMethodparameter ::= Digit+ | BNFTerminalSymbol
 
-BNFTerminalSymbol ::= "'" (Char - "'")* "'" | '"' (Char - '"')* '"' 
-  | BNFHexaChracter (S? BNFHexaChracter)*
+BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"' 
+  | (BNFHexaChracter (S? BNFHexaChracter)* )
 
-BNFHexaChracter ::= "#x" HexaDigit+
+BNFHexaChracter ::= "#" HexaDigit+
 
-BNFRules ::= BNFRule (S BNFRule)*
+BNFRules ::= BNFRule (BNFRule)*
 
-BNFRule ::= BNFRuleName S? "::=" S? BNFExpression
+BNFRule ::= BNFRuleDecl BNFExpression
 
-BNFQuantificator ::= S? ("+" | "*" | "?" | BNFExplicitQuantificator)
+BNFQuantifier ::= S? ("+" | "*" | "?" | BNFExplicitQuantifier)
 
-BNFExplicitQuantificator ::= "{" S? Digit+ (S? "," S? Digit+)? S? "}" 
+BNFExplicitQuantifier ::= "{" S? Digit+ (S? "," S? Digit+)? S? "}" 
 
-BNFExpression ::= ( "(" S? BNFExpression  S? ")" (S? BNFQuantificator)?
-  | BNFRestriction | BNFSelection | BNFSequence ) - ( BNFRuleName S? "::=" )
+BNFSet ::= "[" ("^"? Char - "]")* "]" BNFQuantifier?
 
-BNFSet ::= "[" BNFSetBody "]"
+BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference) BNFQuantifier?
+  | BNFParentalExpr
 
-BNFSetBody ::= ("^"? Char - "]")+
+BNFParentalExpr ::= "(" S? BNFExpr S? ")" S? BNFQuantifier?
 
-BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference)
-  (S? BNFQuantificator)?
+BNFSequence ::= BNFTerm (S? BNFTerm)* 
 
-BNFSequence ::= BNFTerm ( S BNFExpression )*
+BNFRestriction ::= BNFSequence (S? "-" S? BNFTerm)?
 
-BNFRestriction ::= BNFTerm S? "-" S? BNFExpression
+BNFExpr ::= BNFRestriction (S? "|" S? BNFRestriction)*
 
-BNFSelection ::= BNFTerm ( S? "|" S? BNFExpression )+
+BNFExpression ::= (BNFExpr S?)+ 
 
-/***************************************************************************** 
-* XComponent
-******************************************************************************/
+/******************************************************************************/ 
+/* XComponent                                                                 */
+/******************************************************************************/
 
-JavaTypeName ::= '<' S? $JavaQName (S? JavaTypeName )?
-     (S? "," S?  JavaTypeName)* S? '>'
+JavaTypeName ::= '<' S? $JavaQName (S? JavaTypeName)?
+  (S? "," S?  JavaTypeName)* S? '>'
 
-JavaTypedQName ::= $JavaQName ( S? JavaTypeName )?
+JavaTypedQName ::= $JavaQName (S? JavaTypeName)?
 
-/*JavaTypeName ::= '<' $JavaQName JavaTypeName* ("," JavaTypeName)* '>'
-
-JavaTypedQName ::= $JavaQName JavaTypedQName?*/
-
-XCComponent ::= S? ( XCComponentCommand
- (S? ";" S? XCComponentCommand?)* ) 
+XCComponent ::= S? (XCComponentCommand
+  (S? ";" S? XCComponentCommand?)* )
 
 XCComponentCommand ::= (XCBind | XCClass | XCEnum | XCInterface | XCRef)
 
-XCBind ::= "%bind" S XMLName ( S "%with" S $JavaQName )? S XCLink
+XCBind ::= "%bind" S XMLName (S "%with" S $JavaQName)? S XCLink
 
-XCClass ::= "%class" S JavaTypedQName (S "extends" S JavaTypedQName )?
-  (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)*)?
+XCClass ::= "%class" S JavaTypedQName (S "extends" S JavaTypedQName)?
+  (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)* )?
   (S "%interface" S JavaTypedQName)? S XCLink
 
 XCEnum ::= "%enum" S JavaTypedQName S (Identifier? "#")? XMLName
 
 XCInterface ::= "%interface" S $JavaQName S XCLink
 
-XCRef ::= "%ref" S JavaTypedQName S XCLink
+XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
+  | ("%enum" S JavaTypedQName S (Identifier? "#")? XMLName))
 
-XCLink ::= "%link" S ("*" /*any*/ | XPosition)
+XCLink ::= "%link" S ("*" | XPosition)
 
 ]]>
   </xd:BNFGrammar>

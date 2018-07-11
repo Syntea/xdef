@@ -20,7 +20,6 @@ import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.sys.SUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class TestXComponentsGen {
 "</xd:def>\n"+
 "<xd:def name='A' root='A'>\n"+
 "  <xd:declaration> type XY enum('XX','YY');\n"+
-"    type flt xs:float(); type dat xdatetime('yyyy-MM-dd');\n"+
+"    type flt float(); type dat xdatetime('yyyy-MM-dd');\n"+
 "    uniqueSet uflt flt; uniqueSet udat dat;\n"+
 "  </xd:declaration>\n"+
 "  <A a='string' dec='?dec(5,2)'>\n"+
@@ -824,8 +823,8 @@ public class TestXComponentsGen {
 			// generate from xp the class containing the XDPool
 			XDFactory.genXDPoolClass(xp, dir, "test.xdef.component.Pool", null);
 			// generate XComponents from xp
-			ArrayReporter reporter =
-				GenXComponent.genXComponent(xp, dir, null, false, false, true);
+			ArrayReporter reporter = GenXComponent.genXComponent(
+				xp, dir,"UTF-8", false, false, true);
 			// should generate warning XCOMPONENT037 on xdef Y19
 			if (reporter.getWarningCount() != 1
 				|| !reporter.printToString().contains("W XDEF377")

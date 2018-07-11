@@ -30,6 +30,11 @@ public interface BNFRule {
 	 */
 	public String getParsedString();
 
+	/** Get position of parsed part of string by this rule.
+	 * @return position of parsed part by this rule.
+	 */
+	public int getParsedPosition();
+
 	/** Parse string assigned to SParser by this rule.
 	 * @param parser SParser containing string and position from which parsing
 	 * will be started.

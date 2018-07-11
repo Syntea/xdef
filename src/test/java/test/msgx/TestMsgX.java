@@ -24,7 +24,6 @@ import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.proc.XXElement;
 import java.io.StringWriter;
 import java.util.Properties;
-
 import org.w3c.dom.Element;
 
 
@@ -914,7 +913,7 @@ public final class TestMsgX extends STester {
 		_outbf = null;
 	}
 
-    /** Run test
+	/** Run test
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {

@@ -31,7 +31,13 @@ import cz.syntea.xdef.sys.SUtils;
  */
 public final class TestErrors extends Tester {
 
-	public TestErrors() {super();}
+	public TestErrors() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(false); // here it MUST be false!
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private void printReport(final Report report, final String data) {
 		System.out.flush();
@@ -653,6 +659,85 @@ public final class TestErrors extends Tester {
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try {
+			xml =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"external method\n"+ //*
+" void test.xdef.TestExtenalMethods.x(XXElement,, XDContainer, XDContainer);\n"+
+"  Container p = null, q = null, r = null, s = null, t = null;\n"+
+"</xd:declaration>\n"+
+"  <a a = \"string; finally {x(p,q);}\">\n"+
+"  </a>\n"+
+"</xd:def>";
+			reporter.clear();
+			xb = XDFactory.getXDBuilder(null);
+			xb.setReporter(reporter);
+			xb.setSource(xml);
+			xb.compileXD();
+			if (reporter.errorWarnings()) {
+				assertEq("", chkReport(reporter, "XDEF412", "4", "48", null));
+				assertEq("", chkReport(reporter, "XDEF443", "7", "34", null));
+			}
+			reporter.clear();
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' name='a' root='root'>\n"+
+"<root>\n"+
+"  <A xd:script='2..3'/>\n"+
+"  <A/>\n"+
+"</root>\n"+
+"</xd:def>";
+			reporter.clear();
+			xb = XDFactory.getXDBuilder(null);
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			if (reporter.errorWarnings()) {
+				assertEq("", chkReport(reporter, "XDEF235", "4", "4", null));
+			}
+			reporter.clear();
+		} catch (Exception ex) {fail(ex);}
+		try {//test incorrect key parameter (see %0)
+			xml =
+"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<a a='decimal(%0,1)'/>\n"+
+"</xd:def>";
+			reporter.clear();
+			xb = XDFactory.getXDBuilder(null);
+			xb.setReporter(reporter);
+			xb.setSource(xml);
+			xb.compileXD();
+			if (reporter.errorWarnings()) {
+				assertEq("", chkReport(reporter, "XDEF106", "2", "15", null));
+				assertEq("", chkReport(reporter, "XDEF106", "2", "18", null));
+				assertEq("", chkReport(reporter, "XDEF410", "2", "18", null));
+				assertEq("", chkReport(reporter, "XDEF410", "2", "18", null));
+			}
+			reporter.clear();
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xml = // check illegal text
+"<x:def xmlns:x ='" + XDEFNS + "' root ='a'>\n"+
+"<a a = \"required eq('a')\">\n"+
+"here is an illegal text\n"+
+"</a>\n"+
+"</x:def>";
+			reporter.clear();
+			xb = XDFactory.getXDBuilder(null);
+			xb.setReporter(reporter);
+			xb.setSource(xml);
+			xb.compileXD();
+			if (reporter.errorWarnings()) {
+				assertEq("", chkReport(reporter, "XDEF424", "3", "6", null));
+				assertEq("", chkReport(reporter, "XDEF410", "3", "6", null));
+				assertEq("", chkReport(reporter, "XDEF422", "3", "12", null));
+				assertEq("", chkReport(reporter, "XDEF422", "3", "20", null));
+				assertEq("", chkReport(reporter, "XDEF424", "3", "20", null));
+			}
+			reporter.clear();
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -735,16 +820,15 @@ public final class TestErrors extends Tester {
 			assertEq("", chkReport(reporter, "XDEF424", "12", "1", null));
 			assertEq("", chkReport(reporter, "XDEF424", "12", "1", null));
 			assertNull(reporter.getReport(), reporter.printToString());
-		} catch (Exception ex) {fail(ex);}
-		try { //test error reporting
-			rw = new ArrayReporter();
+			//test error reporting
+			reporter.clear();
 			xb = XDFactory.getXDBuilder(props);
 			xb.setExternals(getClass());
-			xb.setReporter(rw);
+			xb.setReporter(reporter);
 			xb.setSource(dataDir + "test/TestErrors3.xdef");
 			xp = xb.compileXD();
-			if (rw.errorWarnings()) {
-				ReportReader rr = rw.getReportReader();
+			if (reporter.errorWarnings()) {
+				ReportReader rr = reporter.getReportReader();
 				while ((report = rr.getReport()) != null) {
 					printReport(report,	dataDir+"test/TestErrors3.xdef");
 				}
@@ -753,8 +837,6 @@ public final class TestErrors extends Tester {
 				assertEq("XDEF501", reporter.getReport().getMsgID());
 				assertNull(reporter.getReport(), reporter.printToString());
 			}
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -775,8 +857,152 @@ public final class TestErrors extends Tester {
 			} else {
 				fail("Error not reported");
 			}
-		} catch (Exception ex) {fail(ex);}
-		try {
+			xdef =
+"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def root='a'>\n"+
+"  /* comment */\n"+	//ok
+"  <a/>\n"+
+"  blabla\n"+			//error
+"</xd:def>\n"+
+"</xd:collection>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF260", "4", "7", null));
+			xdef = // variablecompilation error
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    external String i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{external final String j=\"\"; out(i);}'/>\n"+
+"\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF411", "5", "25", null));
+			xdef = // variable ompilation error
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"  <A xd:script='var external int i;finally{i = 1; out(i);}'/>\n"+
+"\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF411", "2", "21", null));
+			xdef = // variable ompilation error
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    external String i;\n"+
+"    external String j = i;\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF120", "4", "23", null));
+			xdef = //test empty sequence
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
+"   <xd:sequence> </xd:sequence>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
+"   <xd:mixed> </xd:mixed>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
+			xdef = //test empty mixed
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
+"   <xd:mixed> <b/> <b/> </xd:mixed>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF234", "3", "21", null));
+			xdef = //test empty choice
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
+"   <xd:choice> </xd:choice>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
+			xdef = //test repeated items in choice
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
+"   <xd:choice> <b/> <b/> </xd:choice>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF234", "3", "22", null));
+			xdef = // test incompatible casting.
+"<xd:def xmlns:xd='" + XDEFNS + "' root=\"a\">\n"+
+"  <a a='string' xd:script='finally outln(toString((boolean)(String) @a))'/>\n"+
+"</xd:def>\n";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF457", "2", "71", null));
+			xdef = //Incorrect fixed value
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<a v=\"int; fixed '2.0'\"/>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF481", "2", "18", null));
+			xdef = // test errors
+"<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
+"<macTest  xd:script = \"finally ${text}; options trim;\"/>\n"+
+"<xd:macro name = \"text\">\n"+
+"out('Volání makra text má tvar:\n\44{text}')</xd:macro>\n"+
+"</xd:def>";
+			xb = XDFactory.getXDBuilder(props);
+			reporter.clear();
+			xb.setReporter(reporter);
+			xb.setSource(xdef);
+			xb.compileXD();
+			assertEq("", chkReport(reporter, "XDEF486", "2", "39", null));
+
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
 			String[] xdefs = new String[] {

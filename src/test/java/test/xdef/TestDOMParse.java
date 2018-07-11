@@ -31,7 +31,13 @@ import org.w3c.dom.Element;
  */
 public final class TestDOMParse extends Tester {
 
-	public TestDOMParse() {super();}
+	public TestDOMParse() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -262,9 +268,6 @@ public final class TestDOMParse extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

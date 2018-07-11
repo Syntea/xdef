@@ -806,7 +806,6 @@ final class CompileCode extends CompileBase {
 						}
 					}
 				}
-
 			}
 		}
 		if (m == null) {
@@ -2385,7 +2384,7 @@ final class CompileCode extends CompileBase {
 						XDBNFGrammar g = (XDBNFGrammar) v;
 						String ruleName = getCodeItem(_cstack[_sp]).toString();
 						XDBNFRule r = g.getRule(ruleName);
-						if (r.ruleValue() == null) {
+						if (r == null || r.ruleValue() == null) {
 							//BNF rule '&{0}' not exists
 							_parser.error(XDEF.XDEF108, ruleName);
 						}

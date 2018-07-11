@@ -28,7 +28,6 @@ import cz.syntea.xdef.XDValueType;
  */
 public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	private final BNFRule _rule;
-//	DefBNFGrammar _grammar;
 
 	/** Creates a new empty instance of BNFRule.*/
 	public DefBNFRule() {_rule = null;}
@@ -63,8 +62,8 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 			return new DefParseResult(s);
 		}
 		DefParseResult result = new DefParseResult();
-		//Value doesn't fit to BNF rule '&{0}'
-		result.error(XDEF.XDEF566, _rule.getName());
+		//Value doesn't fit to BNF rule '&{0} at position &{1}'
+		result.error(XDEF.XDEF566, _rule.getName(), _rule.getParsedPosition());
 		return result;
 	}
 
@@ -73,6 +72,12 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 
 	@Override
 	public BNFRule ruleValue() {return _rule;}
+
+	@Override
+	public String getParsedString() {return _rule.getParsedString();}
+
+	@Override
+	public int getParsedPosition() {return _rule.getParsedPosition();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface

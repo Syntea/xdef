@@ -56,7 +56,7 @@
 %define $TONAME:    $push('TONAME')
 
 %define $PUSH:      $push /*put parsed source to the internal stack. */
-%define $POS:       $pos /* put actual source position to the internal stack. */
+%define $INF:       $info /* put actual source position to the internal stack.*/
 
 /******************************************************************************/
 /* BNF grammar rules                                                          */
@@ -107,7 +107,7 @@ method   ::= name params $PROC
 type     ::= "boolean" $BOOLEAN | "int" $INT | "float" $FLOAT | "String" $STRING 
 declItem ::= name ( S "=" S expr $ASS)?
 vardecl  ::= type S declItem (S "," S declItem)*
-command  ::= S ($POS (vardecl | method | assign) $CLEARSTCK S)? ";"
+command  ::= S ($INF (vardecl | method | assign) $CLEARSTCK S)? ";"
 program  ::= command+ S
 
 /******************************************************************************/

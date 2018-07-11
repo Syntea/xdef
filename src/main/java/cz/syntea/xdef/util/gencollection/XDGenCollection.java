@@ -559,7 +559,7 @@ public class XDGenCollection {
 	/** Canonize script and generate type table.
 	 * @param script script source.
 	 * @param defName name of actual X-definition.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param isValue if true the script describes a value of an attribute or
 	 * of a text node.
 	 * @return canonized script.
@@ -571,14 +571,15 @@ public class XDGenCollection {
 		XScriptParser sp = new XScriptParser(false, null);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, XDConstants.XD20_ID);
-		return new XDParsedScript(sp, isValue).getCanonizedScript(false);
+		XDParsedScript xp = new XDParsedScript(sp, isValue);
+		return xp.getCanonizedScript(removeActions);
 	}
 
 	/** Changes all XD:text elements to text nodes.
 	 * @param el inspected element
 	 * @param xdUri name space of X-definitions.
 	 * @param defName name of actual X-definition.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 */
 	private static void canonizeXDText(final Element el,
 		final String xdUri,
@@ -592,8 +593,8 @@ public class XDGenCollection {
 				if (!a.getName().startsWith("xmlns")) {
 					boolean isValue = !"script".equals(a.getLocalName())
 						|| !xdUri.equals(a.getNamespaceURI());
-					String s = canonizeScript(
-						a.getValue(), defName, removeActions, isValue);
+					String s = canonizeScript(a.getValue(),
+						defName, removeActions, isValue);
 					a.setValue(s);
 				}
 			}
@@ -692,7 +693,7 @@ public class XDGenCollection {
 
 	/** Changes all XD:text elements to text nodes.
 	 * @param xdef element with a X-definition.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the
 	 * reference there exists an attribute redefining type or occurrence
 	 * (important for XML schema generation).
@@ -712,7 +713,7 @@ public class XDGenCollection {
 	/** Reads all X-definitions in collection and changes XD:text elements
 	 * to text nodes.
 	 * @param collection Collection of X-definitions.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the
 	 * reference there exists an attribute redefining type or occurrence
 	 * (important for XML schema generation).
@@ -976,7 +977,15 @@ public class XDGenCollection {
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		XDBuilder xf = XDFactory.getXDBuilder(props);
 		xf.setSource(sources);
-		return xf.compileXD();
+		try {
+			return xf.compileXD();
+		} catch (RuntimeException ex) {
+for (String s: sources)	{
+System.out.println(s);
+}
+				throw ex;
+		}
+
 	}
 
 	/** Check if given file contains correct X-definition.
@@ -1101,7 +1110,7 @@ public class XDGenCollection {
 	/** Create collection element from sources.
 	 * @param sources array of source paths, wildcards are permitted.
 	 * @param resolvemacros if true then macros are resolved.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the
 	 * reference there exists an attribute to redefine type or occurrence
 	 * (important for XML schema generation).
@@ -1126,6 +1135,7 @@ public class XDGenCollection {
 			try {
 				chkXdef(sources);
 			} catch (RuntimeException ex) {
+System.err.println(sources);
 				throw ex;
 			}
 			XDGenCollection x = new XDGenCollection();
@@ -1163,7 +1173,7 @@ public class XDGenCollection {
 	/** Create collection element from sources.
 	 * @param files array of source files.
 	 * @param resolvemacros if true then macros are resolved.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the
 	 * reference there exists an attribute redefining type or occurrence
 	 * (important for XML schema generation).
@@ -1211,7 +1221,7 @@ public class XDGenCollection {
 	/** Create collection element from sources.
 	 * @param urls array of source urls.
 	 * @param resolvemacros if true then macros are resolved.
-	 * @param removeActions if true all irrelevant actions are removed.
+	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the
 	 * reference there exists an attribute redefining type or occurrence
 	 * (important for XML schema generation).

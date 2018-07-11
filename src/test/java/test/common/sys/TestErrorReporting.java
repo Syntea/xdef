@@ -29,6 +29,8 @@ import cz.syntea.xdef.sys.ReportReader;
  */
 public class TestErrorReporting extends STester {
 
+	public TestErrorReporting() {super();}
+
 	public void printReport(Report report, String data) {
 		System.out.flush();
 		System.err.flush();

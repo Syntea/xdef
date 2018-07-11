@@ -33,6 +33,14 @@ import org.w3c.dom.NodeList;
  */
 public final class TestDatabase extends Tester {
 
+	public TestDatabase() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
+
 	private static final String TABLE_A = "ta";
 	private static final String TABLE_B = "tb";
 	private static final String ATTR_A = "a";
@@ -575,7 +583,7 @@ public final class TestDatabase extends Tester {
 "  TITLE='Proc svet nemluvi esperantem'>\n"+
 "    <Author>Vaclav Trojan</Author>\n"+
 "    <Author>Jiri Meska</Author>\n"+
-"    <Author>Jiri Kamenicky½</Author>\n"+
+"    <Author>Jiri KamenickyË</Author>\n"+
 "  </Book>\n"+
 "  <Book TITLE='Koran' ISBN='9345478191'/>\n"+
 "</Books>";
@@ -691,7 +699,7 @@ public final class TestDatabase extends Tester {
 	"<Author>Karel Capek</Author></Book>"+
 	"<Book TITLE=\"Proc svet nemluvi esperantem\"\n"+
 	"ISBN=\"8345678191\" EDITOR=\"XML Prague\" ISSUED=\"2007\">"+
-	"<Author>Jiri Kamenicky½</Author>"+
+	"<Author>Jiri KamenickyË</Author>"+
 	"<Author>Jiri Meska</Author>"+
 	"<Author>Vaclav Trojan</Author>"+
 	"</Book>"+
@@ -879,9 +887,6 @@ public final class TestDatabase extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

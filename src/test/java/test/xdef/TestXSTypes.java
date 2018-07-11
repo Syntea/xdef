@@ -58,7 +58,13 @@ import javax.xml.validation.SchemaFactory;
  */
 public final class TestXSTypes extends Tester {
 
-	public TestXSTypes() {super();}
+	public TestXSTypes() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private String _msg = "";
 	private XDPool _xd;
@@ -765,19 +771,7 @@ public final class TestXSTypes extends Tester {
 		StringWriter strw;
 		Report rep;
 		String s;
-//if(true)return;
-		try {//test incorrect key parameter (see %0)
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
-"<a a='decimal(%0,1)'/>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF106") < 0) {
-				fail(ex);
-			}
-		}
+		boolean chkSyntax = getChkSyntax();
 		try {
 			//external method with keyparams
 			xdef =
@@ -1188,12 +1182,14 @@ public final class TestXSTypes extends Tester {
 //                          TESTING string
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("string(%maxInclusive='asdf')"), _msg);
 		assertTrue(checkFail("string(%maxExclusive='qwer')"), _msg);
 		assertTrue(checkFail("string(%minInclusive='zxcv')"), _msg);
 		assertTrue(checkFail("string(%minExclusive='tyui')"), _msg);
 		assertTrue(checkFail("string(%fractionDigits='3')"), _msg);
 		assertTrue(checkFail("string(%totalDigits='6')"), _msg);
+		setChkSyntax(chkSyntax);
 
 		// testing correct values
 		assertTrue(prepare("string()"), _msg);
@@ -1296,6 +1292,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING normalizedstring
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("normalizedString(%maxInclusive='asdf')"),_msg);
 		assertTrue(checkFail("normalizedString(%maxExclusive='qwer')"),_msg);
 		assertTrue(checkFail("normalizedString(%minInclusive='zxcv')"),_msg);
@@ -1303,6 +1300,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("normalizedString(%fractionDigits='3')"), _msg);
 		assertTrue(checkFail("normalizedString(%totalDigits='6')"), _msg);
 		assertTrue(checkFail("normalizedString(%whiteSpace='preserve')"), _msg);
+		setChkSyntax(chkSyntax);
 
 		// testing correct values
 		assertTrue(prepare("normalizedString(%whiteSpace='collapse')"),_msg);
@@ -1412,6 +1410,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING anyURI
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("anyURI(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("anyURI(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("anyURI(%minExclusive='1')"), _msg);
@@ -1421,6 +1420,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("anyURI(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("anyURI(%fractionDigits='2')"), _msg);
 		assertTrue(prepare("anyURI(%whiteSpace='collapse')"), _msg);
+		setChkSyntax(chkSyntax);
 
 		// testing correct values
 		assertTrue(prepare("anyURI"), _msg);
@@ -1462,6 +1462,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING boolean
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("boolean(%enumeration=['1', 'false']"), _msg);
 		assertTrue(checkFail("boolean(%length='1')"), _msg);
 		assertTrue(checkFail("boolean(%minLength='1')"), _msg);
@@ -1474,6 +1475,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("boolean(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("boolean(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("boolean(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
 		// testing fixed facets
 		assertTrue(prepare("boolean(%whiteSpace='collapse')"), _msg);
 
@@ -1509,6 +1511,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING decimal
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("decimal(%length='1')"), _msg);
 		assertTrue(checkFail("decimal(%minLength='1')"), _msg);
 		assertTrue(checkFail("decimal(%maxLength='1')"), _msg);
@@ -1518,6 +1521,8 @@ public final class TestXSTypes extends Tester {
 			"decimal(%minInclusive='1',%minExclusive='1')"), _msg);
 		assertTrue(checkFail(
 			"decimal(%minInclusive='1',%maxInclusive='0')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("decimal(%whiteSpace='collapse')"), _msg);
 
@@ -1609,6 +1614,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING integer
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("integer(%length='1')"), _msg);
 		assertTrue(checkFail("integer(%minLength='1')"), _msg);
 		assertTrue(checkFail("integer(%maxLength='1')"), _msg);
@@ -1620,6 +1626,8 @@ public final class TestXSTypes extends Tester {
 			"integer(%minInclusive='1',%maxInclusive='0')"), _msg);
 // This is not recognized by SCHEMA
 //		assertTrue(checkFail("integer(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("integer(%whiteSpace='collapse')"), _msg);
 
@@ -1688,6 +1696,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING negativeInteger
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("negativeInteger(%length='1')"), _msg);
 		assertTrue(checkFail("negativeInteger(%minLength='1')"), _msg);
 		assertTrue(checkFail("negativeInteger(%maxLength='1')"), _msg);
@@ -1699,6 +1708,8 @@ public final class TestXSTypes extends Tester {
 			"negativeInteger(%minInclusive='-1',%maxInclusive='-2')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("negativeInteger(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("negativeInteger(%whiteSpace='collapse')"), _msg);
 
@@ -1761,6 +1772,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING byte
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("byte(%length='1')"), _msg);
 		assertTrue(checkFail("byte(%minLength='1')"), _msg);
 		assertTrue(checkFail("byte(%maxLength='1')"), _msg);
@@ -1772,6 +1784,8 @@ public final class TestXSTypes extends Tester {
 			"byte(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("byte(%fractionDigits='0')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("byte(%whiteSpace='collapse')"), _msg);
 
@@ -1849,6 +1863,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING short
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("short(%length='1')"), _msg);
 		assertTrue(checkFail("short(%minLength='1')"), _msg);
 		assertTrue(checkFail("short(%maxLength='1')"), _msg);
@@ -1860,6 +1875,8 @@ public final class TestXSTypes extends Tester {
 			"short(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("short(%fractionDigits='0')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("short(%whiteSpace='collapse')"), _msg);
 
@@ -1923,6 +1940,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING int
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("xs:int(%length='1')"), _msg);
 		assertTrue(checkFail("xs:int(%minLength='1')"), _msg);
 		assertTrue(checkFail("xs:int(%maxLength='1')"), _msg);
@@ -1934,6 +1952,7 @@ public final class TestXSTypes extends Tester {
 			"xs:int(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("xs:int(%fractionDigits='0')"), _msg);
+
 		// testing fixed facets
 		assertTrue(prepare("xs:int(%whiteSpace='collapse')"), _msg);
 
@@ -1993,11 +2012,13 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parse("-000000000011"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parseFail("111"), _msg);
+		setChkSyntax(chkSyntax);
 
 //------------------------------------------------------------------------------
 //                          TESTING unsignedInt
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("unsignedInt(%length='1')"), _msg);
 		assertTrue(checkFail("unsignedInt(%minLength='1')"), _msg);
 		assertTrue(checkFail("unsignedInt(%maxLength='1')"), _msg);
@@ -2009,6 +2030,8 @@ public final class TestXSTypes extends Tester {
 			"unsignedInt(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("unsignedInt(%fractionDigits='0')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("unsignedInt(%whiteSpace='collapse')"), _msg);
 
@@ -2073,6 +2096,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING long
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("long(%length='1')"), _msg);
 		assertTrue(checkFail("long(%minLength='1')"), _msg);
 		assertTrue(checkFail("long(%maxLength='1')"), _msg);
@@ -2084,6 +2108,8 @@ public final class TestXSTypes extends Tester {
 			"long(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("long(%fractionDigits='0')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("long(%whiteSpace='collapse')"), _msg);
 
@@ -2165,6 +2191,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING float
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("float(%length='1')"), _msg);
 		assertTrue(checkFail("float(%minLength='1')"), _msg);
 		assertTrue(checkFail("float(%maxLength='1')"), _msg);
@@ -2172,6 +2199,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("float(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("float(%fractionDigits='1')"), _msg);
 		assertTrue(checkFail("float(%totalDigits='1')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal facets
 		assertTrue(prepare("float(%whiteSpace='collapse')"), _msg);
 
@@ -2286,6 +2315,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("double(%length='1')"), _msg);
 		assertTrue(checkFail("double(%minLength='1')"), _msg);
 		assertTrue(checkFail("double(%maxLength='1')"), _msg);
@@ -2293,6 +2323,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("double(%totalDigits='1')"), _msg);
 		assertTrue(checkFail("double(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("double(%whiteSpace='replace')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal facets
 		assertTrue(prepare("double(%whiteSpace='collapse')"), _msg);
 
@@ -2412,6 +2444,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("date(%length='1')"), _msg);
 		assertTrue(checkFail("date(%minLength='1')"), _msg);
 		assertTrue(checkFail("date(%maxLength='1')"), _msg);
@@ -2419,6 +2452,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("date(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("date(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("date(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal default
 		assertTrue(prepare("date(%whiteSpace='collapse')"), _msg);
 
@@ -2572,6 +2607,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING time
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("time(%length='1')"), _msg);
 		assertTrue(checkFail("time(%minLength='1')"), _msg);
 		assertTrue(checkFail("time(%maxLength='1')"), _msg);
@@ -2579,6 +2615,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("time(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("time(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("time(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("time(%whiteSpace='collapse')"), _msg);
 
@@ -2693,6 +2731,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING dateTime
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("dateTime(%length='1')"), _msg);
 		assertTrue(checkFail("dateTime(%minLength='1')"), _msg);
 		assertTrue(checkFail("dateTime(%maxLength='1')"), _msg);
@@ -2700,6 +2739,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("dateTime(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("dateTime(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("dateTime(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal facets
 		assertTrue(prepare("dateTime(%whiteSpace='collapse')"), _msg);
 
@@ -2870,6 +2911,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING gDay
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("gDay(%length='1')"), _msg);
 		assertTrue(checkFail("gDay(%minLength='1')"), _msg);
 		assertTrue(checkFail("gDay(%maxLength='1')"), _msg);
@@ -2877,6 +2919,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("gDay(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gDay(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gDay(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal default
 		assertTrue(prepare("gDay(%whiteSpace='collapse')"), _msg);
 
@@ -2999,6 +3043,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("gMonth(%length='1')"), _msg);
 		assertTrue(checkFail("gMonth(%minLength='1')"), _msg);
 		assertTrue(checkFail("gMonth(%maxLength='1')"), _msg);
@@ -3006,6 +3051,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("gMonth(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gMonth(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gMonth(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
 
 		// testing correct values
 		assertTrue(prepare("gMonth"), _msg);
@@ -3081,6 +3127,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING gMonthDay
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("gMonthDay(%length='1')"), _msg);
 		assertTrue(checkFail("gMonthDay(%minLength='1')"), _msg);
 		assertTrue(checkFail("gMonthDay(%maxLength='1')"), _msg);
@@ -3088,6 +3135,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("gMonthDay(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gMonthDay(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gMonthDay(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal default
 		assertTrue(prepare("gMonthDay(%whiteSpace='collapse')"), _msg);
 
@@ -3197,6 +3246,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING gYear
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("gYear(%length='1')"), _msg);
 		assertTrue(checkFail("gYear(%minLength='1')"), _msg);
 		assertTrue(checkFail("gYear(%maxLength='1')"), _msg);
@@ -3204,6 +3254,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("gYear(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gYear(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gYear(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal default
 		assertTrue(prepare("gYear(%whiteSpace='collapse')"), _msg);
 
@@ -3285,6 +3337,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING gYearMonth
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("gYearMonth(%length='1')"), _msg);
 		assertTrue(checkFail("gYearMonth(%minLength='1')"), _msg);
 		assertTrue(checkFail("gYearMonth(%maxLength='1')"), _msg);
@@ -3292,6 +3345,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("gYearMonth(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gYearMonth(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gYearMonth(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// test legal default
 		assertTrue(prepare("gYearMonth(%whiteSpace='collapse')"), _msg);
 
@@ -3372,6 +3427,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("duration(%length='1')"), _msg);
 		assertTrue(checkFail("duration(%minLength='10')"), _msg);
 		assertTrue(checkFail("duration(%maxLength='20')"), _msg);
@@ -3379,6 +3435,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("duration(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("duration(%fractionDigits='5')"), _msg);
 		assertTrue(checkFail("duration(%totalDigits='10')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("duration(%whiteSpace='collapse')"), _msg);
 
@@ -3548,8 +3606,8 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 //                          TESTING NOTATION
 //------------------------------------------------------------------------------
-/**/
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("NOTATION(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NOTATION(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NOTATION(%minExclusive='1')"), _msg);
@@ -3558,7 +3616,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("NOTATION(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NOTATION(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NOTATION(%fractionDigits='2')"), _msg);
-/**/
+		setChkSyntax(chkSyntax);
 
 /**
 		// testing correct values
@@ -3620,6 +3678,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("token(%maxInclusive='asdf')"), _msg);
 		assertTrue(checkFail("token(%maxExclusive='qwer')"), _msg);
 		assertTrue(checkFail("token(%minInclusive='zxcv')"), _msg);
@@ -3628,6 +3687,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("token(%totalDigits='6')"), _msg);
 		assertTrue(checkFail("token(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("token(%whiteSpace='replace')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("token(%whiteSpace='collapse')"), _msg);
 
@@ -3692,6 +3753,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("language(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("language(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("language(%minExclusive='1')"), _msg);
@@ -3700,6 +3762,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("language(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("language(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("language(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("language(%whiteSpace='collapse')"), _msg);
 
@@ -3751,6 +3815,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("NMTOKEN(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%minExclusive='1')"), _msg);
@@ -3759,6 +3824,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("NMTOKEN(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("NMTOKEN(%whiteSpace='collapse')"), _msg);
 
@@ -3818,6 +3885,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("NMTOKENS(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%minExclusive='1')"), _msg);
@@ -3826,6 +3894,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("NMTOKENS(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("NMTOKENS(%whiteSpace='collapse')"), _msg);
 
@@ -3893,6 +3963,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("Name(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("Name(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("Name(%minExclusive='1')"), _msg);
@@ -3901,6 +3972,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("Name(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("Name(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("Name(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("Name(%whiteSpace='collapse')"), _msg);
 
@@ -3958,6 +4031,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING NCName
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("NCName(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NCName(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NCName(%minExclusive='1')"), _msg);
@@ -3966,6 +4040,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("NCName(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NCName(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NCName(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("NCName(%whiteSpace='collapse')"), _msg);
 
@@ -4019,6 +4095,7 @@ public final class TestXSTypes extends Tester {
 //                          TESTING base64Binary
 //------------------------------------------------------------------------------
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("base64Binary(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("base64Binary(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("base64Binary(%minExclusive='1')"), _msg);
@@ -4027,6 +4104,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("base64Binary(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("base64Binary(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("base64Binary(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("base64Binary(%whiteSpace='collapse')"), _msg);
 
@@ -4084,6 +4163,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("hexBinary(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("hexBinary(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("hexBinary(%minExclusive='1')"), _msg);
@@ -4092,6 +4172,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("hexBinary(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("hexBinary(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("hexBinary(%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("hexBinary(%whiteSpace='collapse')"), _msg);
 
@@ -4142,6 +4224,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail(
 			"union(%item=[boolean, short],%minInclusive='1')"), _msg);
 		assertTrue(checkFail(
@@ -4160,6 +4243,7 @@ public final class TestXSTypes extends Tester {
 			"union(%item=[boolean, short],%totalDigits='2')"), _msg);
 		assertTrue(checkFail(
 			"union(%item=[boolean,short],%fractionDigits='2')"), _msg);
+		setChkSyntax(chkSyntax);
 
 		// testing correct values
 		assertTrue(prepare("union(%item=[boolean, short])"), _msg);
@@ -4206,6 +4290,7 @@ public final class TestXSTypes extends Tester {
 //------------------------------------------------------------------------------
 
 		// testing illegal facets
+		setChkSyntax(false);
 		assertTrue(checkFail("list(%item=short,%minInclusive='1')"),_msg);
 		assertTrue(checkFail("list(%item=short,%maxInclusive='1')"),_msg);
 		assertTrue(checkFail("list(%item=short,%minExclusive='1')"),_msg);
@@ -4214,6 +4299,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("list(%item=short,%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("list(%item=short,%totalDigits='2')"), _msg);
 		assertTrue(checkFail("list(%item=short,%fractionDigits=2)"),_msg);
+		setChkSyntax(chkSyntax);
+
 		// testing fixed facets
 		assertTrue(prepare("list(%item=short,%whiteSpace='collapse')"),_msg);
 
@@ -4451,6 +4538,7 @@ public final class TestXSTypes extends Tester {
 			"http://schemas.snowboard-info.com/EndorsementSearch.xsd") < 0,
 			s);
 		assertNoErrorwarnings(reporter);
+		setChkSyntax(false);
 		// expressions
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -4709,9 +4797,6 @@ public final class TestXSTypes extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

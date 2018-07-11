@@ -26,7 +26,13 @@ import org.w3c.dom.Element;
  */
 public final class TestTemplate extends Tester {
 
-	public TestTemplate() {super();}
+	public TestTemplate() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -440,13 +446,13 @@ public final class TestTemplate extends Tester {
 "<xd:def xmlns:xd='" + XDEFNS + "'\n"+
 " name = 'Example' root = 'html' xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html>\n"+
-"<head xd:script='template'><title>Panovníci èeskıch zemí</title></head>\n"+
+"<head xd:script='template'><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>\n"+
 "<body>\n"+
 "  <table border=\"create 'border'\">\n"+
 "<tr xd:script='template'>"+
-"<td>Panovník</td>"+
-"<td>vládl od</td>"+
-"<td>vládl do</td>"+
+"<td>PanovnÃ­k</td>"+
+"<td>vlÃ¡dl od</td>"+
+"<td>vlÃ¡dl do</td>"+
 "<td>po dobu</td>"+
 "</tr>\n"+
 "    <tr xd:script=\"*;create from('//panovnik').sort('panoval/od/text()')\">\n"+
@@ -464,13 +470,13 @@ public final class TestTemplate extends Tester {
 "</xd:def>";
 			xml =
 "<panovnici>\n"+
-"  <panovnik><jmeno>Tomáš Garrigue Masaryk</jmeno>\n"+
+"  <panovnik><jmeno>TomÃ¡Å¡ Garrigue Masaryk</jmeno>\n"+
 "   <panoval titul=\"prezident\"><od>1918</od><do>1935</do></panoval>\n"+
 "  </panovnik>\n"+
-"  <panovnik rod=\"pøemyslovec\"><jmeno>Václav I.</jmeno>\n"+
-"    <panoval titul=\"král èeskı\"><od>1230</od><do>1253</do></panoval>\n"+
+"  <panovnik rod=\"pÅ™emyslovec\"><jmeno>VÃ¡clav I.</jmeno>\n"+
+"    <panoval titul=\"krÃ¡l ÄeskÃ½\"><od>1230</od><do>1253</do></panoval>\n"+
 "  </panovnik>\n"+
-"  <panovnik><jmeno>Václav Klaus</jmeno>\n"+
+"  <panovnik><jmeno>VÃ¡clav Klaus</jmeno>\n"+
 "   <panoval titul=\"prezident\"><od>2003</od></panoval>\n"+
 "  </panovnik>\n"+
 "</panovnici>";
@@ -478,27 +484,27 @@ public final class TestTemplate extends Tester {
 				new QName("http://www.w3.org/1999/xhtml", "html"),
 				reporter, xml, null, null),
 "<html xmlns=\"http://www.w3.org/1999/xhtml\">"+
-"<head><title>Panovníci èeskıch zemí</title></head>"+
+"<head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>"+
 "<body><table border=\"border\">"+
 "<tr>"+
-"<td>Panovník</td>"+
-"<td>vládl od</td>"+
-"<td>vládl do</td>"+
+"<td>PanovnÃ­k</td>"+
+"<td>vlÃ¡dl od</td>"+
+"<td>vlÃ¡dl do</td>"+
 "<td>po dobu</td>"+
 "</tr>"+
-"<tr><td>Václav I.</td><td>1230</td><td>1253</td><td>23</td></tr>"+
-"<tr><td>Tomáš Garrigue Masaryk</td><td>1918</td><td>1935</td><td>17</td></tr>"+
-"<tr><td>Václav Klaus</td><td>2003</td><td/><td/></tr>"+
+"<tr><td>VÃ¡clav I.</td><td>1230</td><td>1253</td><td>23</td></tr>"+
+"<tr><td>TomÃ¡Å¡ Garrigue Masaryk</td><td>1918</td><td>1935</td><td>17</td></tr>"+
+"<tr><td>VÃ¡clav Klaus</td><td>2003</td><td/><td/></tr>"+
 "</table></body></html>");
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html>\n"+
-"   <head xd:script='template'><title>Panovníci èeskıch zemí</title></head>\n"+
+"   <head xd:script='template'><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>\n"+
 "<body xd:script='template'>"+
 "<table border=\"border\">"+
-"<tr><td>Panovník</td></tr>"+
+"<tr><td>PanovnÃ­k</td></tr>"+
 "<tr xd:script='$$$script:*;\n"+
 "       create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
 "         <td>create from('jmeno/text()')</td>\n"+
@@ -512,26 +518,26 @@ public final class TestTemplate extends Tester {
 "  <panovnik><jmeno>Neznamy</jmeno>\n"+
 "   <panoval><od>3000</od></panoval>\n"+
 "  </panovnik>\n"+
-"  <panovnik><jmeno>Václav Havel</jmeno>\n"+
+"  <panovnik><jmeno>VÃ¡clav Havel</jmeno>\n"+
 "   <panoval><od>1989</od><do>2003</do></panoval>\n"+
 "  </panovnik>\n"+
-"  <panovnik><jmeno>Pøemysl Otakar I.</jmeno>\n"+
+"  <panovnik><jmeno>PÅ™emysl Otakar I.</jmeno>\n"+
 "    <panoval><od>1192</od><do>1193</do></panoval>\n"+
 "  </panovnik>\n"+
 "</panovnici>\n";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
 			s = "<html xmlns=\"http://www.w3.org/1999/xhtml\">"+
-				"<head><title>Panovníci èeskıch zemí</title></head>"+
+				"<head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>"+
 				"<body><table border=\"border\">"+
-				"<tr><td>Panovník</td></tr>"+
-				"<tr><td>Pøemysl Otakar I.</td></tr>"+
-				"<tr><td>Václav Havel</td></tr>"+
+				"<tr><td>PanovnÃ­k</td></tr>"+
+				"<tr><td>PÅ™emysl Otakar I.</td></tr>"+
+				"<tr><td>VÃ¡clav Havel</td></tr>"+
 				"<tr><td>Neznamy</td></tr>"+
 				"</table>"+
 				"</body>"+
 				"</html>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xd.setXDContext(xml);
 			assertEq(s, create(xd,
 				new QName("http://www.w3.org/1999/xhtml", "html"), reporter));
 			assertNoErrorwarnings(reporter);
@@ -539,10 +545,10 @@ public final class TestTemplate extends Tester {
 "<xd:def xmlns:xd='" + XDEFNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html xd:script='template'>"+
-"<head><title>Panovníci èeskıch zemí</title></head>"+
+"<head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>"+
 "<body>"+
 "<table border=\"border\">"+
-"<tr><td>Panovník</td></tr>"+
+"<tr><td>PanovnÃ­k</td></tr>"+
 "<tr xd:script='$$$script:*;\n"+
 "           create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
 "         <td>create from('jmeno/text()')</td>\n"+
@@ -562,10 +568,10 @@ public final class TestTemplate extends Tester {
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<xd:declaration>external Element source</xd:declaration>\n"+
 "<html xd:script='template'>\n"+
-"  <head><title>Panovníci èeskıch zemí</title></head>\n"+
+"  <head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>\n"+
 "  <body>\n"+
 "    <table border=\"border\">\n"+
-"      <tr><td>Panovník</td></tr>\n"+
+"      <tr><td>PanovnÃ­k</td></tr>\n"+
 "      <tr xd:script='$$$script:*;\n"+
 "           create from(source,\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
 "         <td>create from('jmeno/text()')</td>\n"+
@@ -577,19 +583,20 @@ public final class TestTemplate extends Tester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.setVariable("source", xml);
-			assertEq(s, create(xd,
+			assertEq(s,
+				create(xd,
 				new QName("http://www.w3.org/1999/xhtml", "html"), reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "'\n"+
-"        xmlns='http://www.w3.org/1999/xhtml'"+
+"        xmlns='http://www.w3.org/1999/xhtml'\n"+
 "        script='options noTrimAttr,noTrimText'>\n"+
 "<xd:declaration>external Element source</xd:declaration>\n"+
 "<html xd:script='template'>\n"+
-"  <head><title>Panovníci èeskıch zemí</title></head>\n"+
+"  <head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>\n"+
 "  <body>\n"+
 "    <table border=\"border\">\n"+
-"      <tr><td>Panovník</td></tr>\n"+
+"      <tr><td>PanovnÃ­k</td></tr>\n"+
 "      <tr xd:script=\"$$$script:*;\n"+
 "           create from(source,'//panovnik').sort('panoval/od/text()')\">\n"+
 "         <td>create from('jmeno/text()')</td>\n"+
@@ -601,23 +608,24 @@ public final class TestTemplate extends Tester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.setVariable("source", xml);
-			assertEq(create(xd,
-				new QName("http://www.w3.org/1999/xhtml","html"),reporter),
-"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"+
-"  <head><title>Panovníci èeskıch zemí</title></head>\n"+
+			xml = "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"+
+"  <head><title>PanovnÃ­ci ÄeskÃ½ch zemÃ­</title></head>\n"+
 "  <body>\n"+
 "    <table border=\"border\">\n"+
-"      <tr><td>Panovník</td></tr>\n"+
+"      <tr><td>PanovnÃ­k</td></tr>\n"+
 "      <tr>\n"+
-"        <td>Pøemysl Otakar I.</td>\n"+
+"        <td>PÅ™emysl Otakar I.</td>\n"+
 "      </tr><tr>\n"+
-"        <td>Václav Havel</td>\n"+
+"        <td>VÃ¡clav Havel</td>\n"+
 "      </tr><tr>\n"+
 "        <td>Neznamy</td>\n"+
 "       </tr>\n"+
 "    </table>\n"+
 "  </body>\n"+
-"</html>");
+"</html>";
+			el = create(xd,
+				new QName("http://www.w3.org/1999/xhtml", "html"), reporter);
+			assertEq(el, xml);
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
@@ -626,9 +634,6 @@ public final class TestTemplate extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

@@ -30,7 +30,7 @@ public class TestAll {
 	public static int runTests(String[] args) {
 		PrintStream log = null;
 		try {
-			log = new PrintStream(new FileOutputStream("run/output/testUtils.log"));
+			log = new PrintStream(new FileOutputStream("testUtils.log"));
 		} catch (Exception ex) {
 			log = null;
 		}
@@ -57,7 +57,7 @@ public class TestAll {
 		return result;
 	}
 
-    /** Run all available tests in this package
+	/** Run all available tests in this package
 	 * @param args list of of arguments
 	 */
 	public static void main(String... args) {

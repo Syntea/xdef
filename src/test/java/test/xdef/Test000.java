@@ -27,6 +27,8 @@ import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.proc.XXNode;
+import cz.syntea.xdef.sys.ReportReader;
+import cz.syntea.xdef.sys.ReportWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,13 +41,19 @@ import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Properties;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.sys.ReportReader;
-import cz.syntea.xdef.sys.ReportWriter;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
 public final class Test000 extends Tester {
+
+	public Test000() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private static int _myError = 0;
 
@@ -364,7 +372,7 @@ public final class Test000 extends Tester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a a=\"string(1,8);onTrue{if (!'1'.equals(toString(@a)))error('แ');}\"/>\n"+
+"  <a a=\"string(1,8);onTrue{if (!'1'.equals(toString(@a)))error('รก');}\"/>\n"+
 "</xd:def>";
 			xml = "<a a=\"1\"/>";
 			assertFalse(test(xdef, xml, "",'P'));
@@ -1047,7 +1055,7 @@ public final class Test000 extends Tester {
 "  void pp() {out(','+tab('a', 'b')+','+test.xdef.Test002.tab('a','b'));}\n"+
 "</xd:declaration>\n"+
 "</xd:def>\n";
-			compile(xdef);
+			XDFactory.compileXD(null, xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
 			s = ex.getMessage();
@@ -1276,9 +1284,6 @@ public final class Test000 extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

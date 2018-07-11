@@ -14,7 +14,6 @@ package test.common.bnf;
 
 import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.StringParser;
 import java.io.File;
 
@@ -78,7 +77,7 @@ public class TestXML extends STester {
 "<![CDATA[\n"+
 "external Element base; /*V tomto elementu je nase databaze. */\n"+
 "\n"+
-"/*Pridame do databaze novy element “Misto”pokud jeste neexistuje*/\n"+
+"/*Pridame do databaze novy element â€œMistoâ€pokud jeste neexistuje*/\n"+
 "void addMisto(String misto) {\n"+
 "  if (xpath('Misto[@name=\"' + misto + '\"]',  base).getLength() == 0) {\n"+
 "    Element e = new Element('Misto');\n"+
@@ -89,7 +88,7 @@ public class TestXML extends STester {
 "  }\n"+
 "}\n"+
 "\n"+
-"/*Pridame do databaze do prislusneho elementu Misto novy element “Udaj”.\n"+
+"/*Pridame do databaze do prislusneho elementu Misto novy element â€œUdajâ€.\n"+
 "   Pokud misto neexistuje nebo udaj jiz existuje , ohlasime chybu.*/\n"+
 "void addUdaj(String misto, String od) {\n"+
 "   Element e = getElement();\n"+

@@ -25,7 +25,13 @@ import cz.syntea.xdef.proc.XXElement;
  */
 public final class TestUserQuery extends Tester {
 
-	public TestUserQuery() {super();}
+	public TestUserQuery() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -582,9 +588,6 @@ public final class TestUserQuery extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

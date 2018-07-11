@@ -35,4 +35,8 @@ public interface XDBNFRule extends XDValue {
 
 	public BNFRule ruleValue();
 
+	public String getParsedString();
+
+	public int getParsedPosition();
+
 }

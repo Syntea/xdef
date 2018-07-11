@@ -21,6 +21,14 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestDTDTypes extends Tester {
 
+	public TestDTDTypes() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
+
 	@Override
 	final public void test() {
 		String xdef, xml;
@@ -60,11 +68,11 @@ public final class TestDTDTypes extends Tester {
 			} else {
 				assertEq("XDEF819", rep.getMsgID(), rep.toString());
 			}
-//xs:ID
+//ID
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
 "  <a>\n"+
-"    <b xd:script='*' a='required xs:ID'/>\n"+
+"    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -99,8 +107,8 @@ public final class TestDTDTypes extends Tester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
 "  <a>\n"+
-"    <a xd:script='*' a='required xs:IDREF'/>\n"+
-"    <b xd:script='*' a='required xs:ID'/>\n"+
+"    <a xd:script='*' a='required IDREF'/>\n"+
+"    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -117,7 +125,7 @@ public final class TestDTDTypes extends Tester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
 "  <a>\n"+
-"    <b xd:script='*' a='required xs:ID'/>\n"+
+"    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
@@ -161,8 +169,8 @@ public final class TestDTDTypes extends Tester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
 "  <a>\n"+
-"    <a xd:script='*' a='required xs:IDREFS'/>\n"+
-"    <b xd:script='*' a='required xs:ID'/>\n"+
+"    <a xd:script='*' a='required IDREFS'/>\n"+
+"    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -214,7 +222,7 @@ public final class TestDTDTypes extends Tester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
 "  <a>\n"+
-"    <b xd:script='*' a='required xs:ID'/>\n"+
+"    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
@@ -268,10 +276,10 @@ public final class TestDTDTypes extends Tester {
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
 			}
-//xs:NMTOKEN
+//NMTOKEN
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
-"  <a a = 'required xs:NMTOKEN'/>\n"+
+"  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
@@ -323,10 +331,10 @@ public final class TestDTDTypes extends Tester {
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
-//xs:NMTOKENS
+//NMTOKENS
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
-"  <a a = 'required xs:NMTOKENS'/>\n"+
+"  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
@@ -386,10 +394,10 @@ public final class TestDTDTypes extends Tester {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
 			}
 //			}
-//xs:ENTITY
+//ENTITY
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
-"  <a a = 'required xs:ENTITY'/>\n"+
+"  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "",
@@ -460,10 +468,10 @@ public final class TestDTDTypes extends Tester {
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
-//xs:ENTITIES
+//ENTITIES
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
-"  <a a = 'required xs:ENTITIES'/>\n"+
+"  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "",
@@ -500,7 +508,7 @@ public final class TestDTDTypes extends Tester {
 //Test NOTATION
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
-"  <a a = 'required xs:NOTATION'/>\n"+
+"  <a a = 'required NOTATION'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "",
@@ -642,9 +650,6 @@ public final class TestDTDTypes extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

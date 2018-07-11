@@ -44,6 +44,8 @@ import java.util.TimeZone;
  */
 public class TestSUtils extends STester {
 
+	public TestSUtils() {super();}
+
 	private static String displayDate(Calendar c) {
 		int rawoffset = c.get(Calendar.ZONE_OFFSET);
 		int offset = rawoffset >= 0 ? rawoffset : - rawoffset;
@@ -60,6 +62,13 @@ public class TestSUtils extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+		String javaVersion = System.getProperty("java.version");
+		if (javaVersion != null) {
+			String[] ss = javaVersion.split("\\.");
+			javaVersion = ss[0] + '.' + ss[1];
+		} else {
+			javaVersion = "1.6";
+		}
 		try {
 			String s, s1, s2;
 			StringParser p;
@@ -133,21 +142,21 @@ public class TestSUtils extends STester {
 			assertEq("May", p.getParsedSDatetime().formatDate( "{L(en)}MMM"));
 			assertEq("Mai", p.getParsedSDatetime().formatDate( "{L(de)}MMM"));
 			s = p.getParsedSDatetime().formatDate("{L(cs,CZ)}MMM");
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			assertEq("V",s);
-/*#else*#/
-			assertEq("Kvì",s);
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				assertEq("V",s);
+			} else {
+				assertEq("KvÄ›",s);
+			}
 			assertEq("Po", p.getParsedSDatetime().formatDate("{L(cs,CZ)}EEE"));
 			assertEq("may", p.getParsedSDatetime().formatDate(
 				"{L(es,ES,Traditional_WIN)}MMM"));
 			assertEq("may", p.getParsedSDatetime().formatDate(
 				"{z(America/Los_Angeles)L(es,ES,Traditional_WIN)}MMM"));
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			s = "Po, 2004 V. 31 235943+01:00";
-/*#else*#/
-			s = "Po, 2004 Kvì. 31 235943+01:00";
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				s = "Po, 2004 V. 31 235943+01:00";
+			} else {
+				s = "Po, 2004 KvÄ›. 31 235943+01:00";
+			}
 			s1 = "{L(cs,CZ)}E, yyyy MMM. dd HHmmssZ";
 			p = new StringParser(s);
 			if (!p.isDatetime(s1) ||
@@ -155,11 +164,11 @@ public class TestSUtils extends STester {
 				fail("parse/format date 3: " +
 					p.getParsedSDatetime().formatDate(s1));
 			}
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			s = "Pondìlí, 2004 kvìten 31 235943+01:00";
-/*#else*#/
-			s = "Pondìlí, 2004 kvìtna 31 235943+01:00";
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				s = "PondÄ›lÃ­, 2004 kvÄ›ten 31 235943+01:00";
+			} else {
+				s = "PondÄ›lÃ­, 2004 kvÄ›tna 31 235943+01:00";
+			}
 			s1 = "{L(cs,CZ)}EEEE, yyyy MMMM dd HHmmssZ";
 			p = new StringParser(s);
 			if (!p.isDatetime(s1) ||
@@ -1026,20 +1035,22 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-				assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
-/*#else*#/
-				assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
-/*#end*/
-					equals(s2), s2);
+				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				} else {
+					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				}
+
 			} else {
 				fail();
 			}
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			s = "Po, 23. leden 2006";
-/*#else*#/
-			s = "Po, 23. ledna 2006";
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				s = "Po, 23. leden 2006";
+			} else {
+				s = "Po, 23. ledna 2006";
+			}
 			p = new StringParser(s);
 			s1 = "{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y|" +
 				"{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y";
@@ -1051,20 +1062,21 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-				assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
-/*#else*#/
-				assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
-/*#end*/
-					equals(s2), s2);
+				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				} else {
+					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				}
 			} else {
 				fail();
 			}
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			s = "Po, 23. leden 2006";
-/*#else*#/
-			s = "Po, 23. ledna 2006";
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				s = "Po, 23. leden 2006";
+			} else {
+				s = "Po, 23. ledna 2006";
+			}
 			p = new StringParser(s);
 			s1 = "{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y|" +
 				"{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y";
@@ -1076,12 +1088,13 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-				assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
-/*#else*#/
-				assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
-/*#end*/
-					equals(s2), s2);
+				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				} else {
+					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
+						equals(s2), s2);
+				}
 			} else {
 				fail();
 			}
@@ -1108,11 +1121,11 @@ public class TestSUtils extends STester {
 			} else {
 				fail();
 			}
-/*#if (JAVA_1.6 | JAVA_1.7)*/
-			s = "12/VI/1961";
-/*#else*#/
-			s = "12/Èer/1961";
-/*#end*/
+			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				s = "12/VI/1961";
+			} else {
+				s = "12/ÄŒer/1961";
+			}
 			p = new StringParser(s);
 			s1 = "d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y";
 			if (p.isDatetime(s1) && p.eos()) {

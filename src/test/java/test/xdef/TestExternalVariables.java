@@ -22,7 +22,13 @@ import java.io.StringWriter;
  */
 public final class TestExternalVariables extends Tester {
 
-	public TestExternalVariables() {super();}
+	public TestExternalVariables() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -34,48 +40,6 @@ public final class TestExternalVariables extends Tester {
 		StringWriter strw;
 		ArrayReporter reporter = new ArrayReporter();
 		String s;
-		try {//compilation error
-			compile(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
-"    external String i;\n"+
-"  </xd:declaration>\n"+
-"  <a xd:script='finally{external final String j=\"\"; out(i);}'/>\n"+
-"\n"+
-"</xd:def>");
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF411") < 0) {
-				fail(ex);
-			}
-		}
-		try {//compilation error
-			compile(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
-"  <A xd:script='var external int i;finally{i = 1; out(i);}'/>\n"+
-"\n"+
-"</xd:def>");
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF411") < 0) {
-				fail(ex);
-			}
-		}
-		try {//compilation error
-			compile(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
-"    external String i;\n"+
-"    external String j = i;\n"+
-"  </xd:declaration>\n"+
-"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
-"</xd:def>");
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF120") < 0) {
-				fail(ex);
-			}
-		}
 		try {//dynamic errors
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -161,9 +125,6 @@ public final class TestExternalVariables extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

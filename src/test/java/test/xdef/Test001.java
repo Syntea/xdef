@@ -14,7 +14,6 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
@@ -26,6 +25,14 @@ import org.w3c.dom.Element;
  * @author Vaclav Trojan
  */
 public final class Test001  extends Tester {
+
+	public Test001() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run tests and print error information. */
@@ -1015,7 +1022,7 @@ public final class Test001  extends Tester {
 "<xd:declaration>\n"+
 "external Element base; /*V tomto elementu je nase databaze. */\n"+
 "\n"+
-"/*Pridame do databaze novy element “Misto”pokud jeste neexistuje*/\n"+
+"/*Pridame do databaze novy element â€œMistoâ€pokud jeste neexistuje*/\n"+
 "void addMisto(String misto) {\n"+
 "  if (xpath('Misto[@name=\"' + misto + '\"]', base).getLength() == 0) {\n"+
 "    Element e = new Element('Misto');\n"+
@@ -1026,7 +1033,7 @@ public final class Test001  extends Tester {
 "  }\n"+
 "}\n"+
 "\n"+
-"/*Pridame do databaze do prislusneho elementu Misto novy element “Udaj”.\n"+
+"/*Pridame do databaze do prislusneho elementu Misto novy element â€œUdajâ€.\n"+
 "   Pokud misto neexistuje nebo udaj jiz existuje , ohlasime chybu.*/\n"+
 "void addUdaj(String misto, String od) {\n"+
 "   Element e = getElement();\n"+
@@ -1050,17 +1057,17 @@ public final class Test001  extends Tester {
 "   name='string; /*update Base/misto*/'/>\n"+
 "<Udaj xd:script='finally addUdaj((String) @misto, (String) @od)'\n"+
 "   misto='string'\n"+
-"   hodnota='xs:float'\n"+//40
-"   od='xs:dateTime'\n"+
-"   do='xs:dateTime'/>\n"+
+"   hodnota='float'\n"+//40
+"   od='dateTime'\n"+
+"   do='dateTime'/>\n"+
 "\n"+
 "<Base>\n"+
 "  <Misto xd:script='*;'\n"+
 "    name='ID'>\n"+
 "    <Udaj xd:script='*'\n"+
-"      hodnota='xs:float'\n"+
-"      od='xs:dateTime'\n"+
-"      do='xs:dateTime'/>\n"+//50
+"      hodnota='float'\n"+
+"      od='dateTime'\n"+
+"      do='dateTime'/>\n"+//50
 "  </Misto>\n"+
 "</Base>\n"+
 "</xd:def>";
@@ -1144,9 +1151,6 @@ public final class Test001  extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

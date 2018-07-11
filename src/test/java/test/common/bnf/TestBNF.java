@@ -26,13 +26,15 @@ import java.util.Stack;
  * @author Vaclav Trojan
  */
 public class TestBNF extends STester {
+
+	public TestBNF() {super();}
+
 	private final Stack<Object> _stack = new Stack<Object>();
 	private final Stack<Object> _opers = new Stack<Object>();
 	private final HashMap<Object, Object> _variables =
 		new HashMap<Object, Object>();
 	private String _s;
 	private Object _result;
-	public TestBNF() {super();}
 
 	private String parse(BNFGrammar grammar, String name, String source) {
 		try {
@@ -279,9 +281,9 @@ public class TestBNF extends STester {
 		_stack.push(p.getParsedString());
 		return true;
 	}
-	
+
 	public static boolean yyy(BNFExtMethod p) {
-		String s = p.getRuleName() + ":" + p.getParsedString() 
+		String s = p.getRuleName() + ":" + p.getParsedString()
 			+ ",p:" + p.getSPosition().getIndex();
 		Object o = p.setUserObject(s);
 		if (o != null) {
@@ -293,102 +295,78 @@ public class TestBNF extends STester {
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void test() {
-		String bnf, data;
-		BNFGrammar grammar, grammar1, bnfOfBnf;
+		String bnf;
+		BNFGrammar g, g1;
 		try {
-			bnf = FUtils.readString(new File(getDataDir() + "TestBNF.bnf"),
-				"UTF-8");
-			bnfOfBnf = BNFGrammar.compile(bnf);
-			bnf = "x ::= a";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= a /*x*/ b";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= ([a-bA-Z] - 'Y')+";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= ([^a-bA-Z] 'Y')+";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= 'aZ'";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= \"aZ\"";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "/*x*/x ::= /*x*/\"abc\"/*x*/y ::= 'abc' /*x*/";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= 'a' y ::= 'b' z ::= x";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= ( 'a'+ | (b c) {1,5}) + ";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "x ::= ( 'a'+  (b c) { 1, 5 } ) + ";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "intList ::= integer (S? \",\" S? integer)*";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "S ::= ( a - b )";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "S ::= ( a | b )+";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "SignedIntegerLiteral ::= (\"+\" | \"-\")?";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "NumberLiteral ::= DecimalInteger\n" +
-				"( '.' DecimalInteger )? ( 'E' [-+]? DecimalInteger )?";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-			bnf = "L::='a'/*E*/";
-			assertEq(bnf, parse(bnfOfBnf, "BNFGrammar", bnf));
-//			source = FUtils.readString(new File(getDataDir() + "TestBNF_1.bnf"),
-//				"UTF-8");
-//			assertEq(source, parse(bnfOfBnf, "BNFGrammar", source));
-////////////////////////////////////////////////////////////////////////////////
-			grammar = BNFGrammar.compile("x ::= $JavaName");
-			assertEq("a1", parse(grammar, "x", "a1"));
-			grammar = BNFGrammar.compile("x ::= $JavaQName");
-			assertEq("a.b", parse(grammar, "x", "a.b"));
-			assertEq("ab", parse(grammar, "x", "ab"));
-			grammar = BNFGrammar.compile("x ::= 'a' $anyChar");
-			assertEq("ax", parse(grammar, "x", "ax"));
-			assertTrue(parse(grammar, "x", "a").indexOf("x failed, ") >= 0);
-			assertTrue(parse(grammar, "x", "bb").indexOf("x failed, ") >= 0);
-			grammar = BNFGrammar.compile("x ::= 'a' $anyChar*");
-			assertEq("a", parse(grammar, "x", "a"));
-			assertNull(grammar.getAndClearParsedObjects());
-			assertEq("ax", parse(grammar, "x", "ax"));
-			assertEq("axy", parse(grammar, "x", "axy"));
-			assertTrue(parse(grammar, "x", "b").indexOf("x failed, ") >= 0);
-			assertTrue(parse(grammar, "x", "bb").indexOf("x failed, ") >= 0);
+			g = BNFGrammar.compile( "C::= $xmlChar B::= \"'\"");
+			assertEq("'", parse(g, "B", "'"));
+			g = BNFGrammar.compile("x ::= $JavaName");
+			assertEq("a1", parse(g, "x", "a1"));
+			g = BNFGrammar.compile("x::=$JavaQName");
+			assertEq("a.b", parse(g, "x", "a.b"));
+			assertEq("ab", parse(g, "x", "ab"));
+			g = BNFGrammar.compile("x ::= 'a' $anyChar");
+			assertEq("ax", parse(g, "x", "ax"));
+			assertTrue(parse(g, "x", "a").indexOf("x failed, ") >= 0);
+			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
+			g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
+			assertEq("a", parse(g, "x", "a"));
+			assertNull(g.getAndClearParsedObjects());
+			assertEq("ax", parse(g, "x", "ax"));
+			assertEq("axy", parse(g, "x", "axy"));
+			assertTrue(parse(g, "x", "b").indexOf("x failed, ") >= 0);
+			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
+			g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
+			assertEq("a", parse(g, "x", "abc"));
+			assertNull(g.getAndClearParsedObjects());
+			g = BNFGrammar.compile("%define $x: $stop(123) x ::= 'a' $x 'b' ");
+			assertEq("a", parse(g, "x", "abc"));
+			assertEq("STOP 123", (String) g.getAndClearParsedObjects()[0]);
+			g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
+			assertEq("a", parse(g, "x", "abc"));
+			assertEq("STOP 1,\"x\"", (String) g.getAndClearParsedObjects()[0]);
 			bnf =
-"XMLName ::= $xmlName\n"+
+"S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
+" RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?" +
+"Reference::=\"ref\"S RefName";
+			g = BNFGrammar.compile(bnf);
+			assertEq("#A", parse(g, "RefName", "#A"));
+			assertEq("A", parse(g, "RefName", "A"));
+			assertEq("A#B", parse(g, "RefName", "A#B"));
+			bnf =
 "S ::= $whitespace+\n"+
-"RefName ::= XMLName | XMLName? \"#\" XMLName\n" +
-"RootList ::= S? (RefName | \"*\") (S? \"|\" S? (RefName | \"*\"))* S?\n" +
-"Reference ::= \"ref\" S RefName";
-			grammar = BNFGrammar.compile(bnf);
-			data = "#A";
-			assertEq(data, parse(grammar, "RefName", data));
-			data = "A";
-			assertEq(data, parse(grammar, "RefName", data));
-			data = "A#B";
-			assertEq(data, parse(grammar, "RefName", data));
+"ElementLink ::= (\"implements\" | \"uses\")  S XPosition\n" +
+"XPosition ::= (XDefName? \"#\")? XModelName\n" +
+"  (\"/\" XMLName)*\n" +
+"XMLName ::= $xmlName\n"+
+"XDefName ::= XMLName\n" +
+"XModelName ::= XMLName";
+			g = BNFGrammar.compile(bnf);
+			assertEq("implements #A", parse(g, "ElementLink", "implements #A"));
+			assertEq("implements A", parse(g, "ElementLink", "implements A"));
+			assertEq("uses A#B", parse(g, "ElementLink", "uses A#B"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf =
 "%define $x: $test.common.bnf.TestBNF.xxx\n"+
 "digit ::= [0-9]" +
 "signedInteger::= [-+]? digit+ $x\n"+
 "signedIntegers::= signedInteger (',' signedInteger)*\n";
-			grammar = BNFGrammar.compile(bnf);
-			grammar.setUserObject(this);
-			data = "-12345,3";
-			assertEq(data, parse(grammar, "signedIntegers", data));
+			g = BNFGrammar.compile(bnf);
+			g.setUserObject(this);
+			assertEq("-12345,3", parse(g, "signedIntegers", "-12345,3"));
 			assertEq(2, _stack.size());
 			assertEq("3", _stack.pop());
 			assertEq("-12345", _stack.pop());
-			assertTrue(grammar.isEOS());
-			data = "-12345,++3";
-			grammar = BNFGrammar.compile(bnf);
-			grammar.setUserObject(this);
+			assertTrue(g.isEOS());
+			g = BNFGrammar.compile(bnf);
+			g.setUserObject(this);
 			_stack.clear();
-			if (!grammar.parse(data, "signedIntegers")) {
+			if (!g.parse("-12345,++3", "signedIntegers")) {
 				fail(_stack.toString());
 			} else {
-				assertFalse(grammar.isEOS());
-				assertEq("-12345", grammar.getParsedString());
-				assertEq(",++3", grammar.getUnparsedSourceBuffer());
+				assertFalse(g.isEOS());
+				assertEq("-12345", g.getParsedString());
+				assertEq(",++3", g.getUnparsedSourceBuffer());
 				assertEq(1, _stack.size());
 				assertEq("-12345", _stack.pop());
 			}
@@ -398,13 +376,12 @@ public class TestBNF extends STester {
 "digit ::= [0-9]" +
 "signedInteger::= [-+]? digit+ $x\n"+
 "signedIntegers::= signedInteger (',' signedInteger)*\n";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "-12345,3";
-			grammar.setUserObject(null);
-			assertTrue(grammar.parse(data,"signedIntegers"));
-			assertEq(data, grammar.getParsedString());
+			g = BNFGrammar.compile(null, bnf, null);
+			g.setUserObject(null);
+			assertTrue(g.parse("-12345,3","signedIntegers"));
+			assertEq("-12345,3", g.getParsedString());
 			assertEq("signedInteger:-12345,p:0\nsignedInteger:3,p:7",
-				grammar.getUserObject());
+				g.getUserObject());
 			bnf =
 "M      ::= [#9#10#13 ]*   /*skip white spaces*/\n" +
 "OD     ::= M \",\" M      /*separator of values*/\n" +
@@ -431,31 +408,21 @@ public class TestBNF extends STester {
 "WPrd1  ::= WPrd (OD (MPrd1 | YPrd))?\n" +
 "MPrd1  ::= MPrd (OD YPrd)?\n" +
 "r ::= (MinPrd1 | HPrd1 | DPrd1 | WPrd1 | MPrd1 | YPrd?)?\n";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "2H";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(09:00)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(10:00),W(1,2,3,4,5,6)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(14:45,20:00),W(1,2,3,4,5)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(11:00),W(1)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "1W(2)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(12:00),W(-1)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(12:00),M(-1)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "D(07:00),M(20)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "M(3)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "M(9)";
-			assertEq(data, parse(grammar, "r" , data));
-			data = "M(31)";
-			assertEq(data, parse(grammar, "r" , data));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("2H", parse(g, "r" , "2H"));
+			assertEq("D(09:00)", parse(g, "r" , "D(09:00)"));
+			assertEq("D(10:00),W(1,2,3,4,5,6)",
+				parse(g, "r" , "D(10:00),W(1,2,3,4,5,6)"));
+			assertEq("D(14:45,20:00),W(1,2,3,4,5)",
+				parse(g, "r" , "D(14:45,20:00),W(1,2,3,4,5)"));
+			assertEq("D(11:00),W(1)", parse(g, "r" , "D(11:00),W(1)"));
+			assertEq("1W(2)", parse(g, "r" , "1W(2)"));
+			assertEq("D(12:00),W(-1)", parse(g, "r" , "D(12:00),W(-1)"));
+			assertEq("D(12:00),M(-1)", parse(g, "r" , "D(12:00),M(-1)"));
+			assertEq("D(07:00),M(20)", parse(g, "r" , "D(07:00),M(20)"));
+			assertEq("M(3)", parse(g, "r" , "M(3)"));
+			assertEq("M(9)", parse(g, "r" , "M(9)"));
+			assertEq("M(31)", parse(g, "r" , "M(31)"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf =
 "S ::= ' '*\n"+
@@ -466,58 +433,45 @@ public class TestBNF extends STester {
 "RawIdentifier ::= ( Letter | '_')  ( Letter | Digit | '_' | '-' | ':')*\n"+
 "QIdentifier ::= RawIdentifier('.'RawIdentifier)+ | RawIdentifier\n"+
 "X ::= QIdentifier ((S? '.' S?) Identifier)? (S? '(' S? ')')? S? '?'\n";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "a ?";
-			assertEq(data, parse(grammar, "X", data));
-			data = "a:b-c.d ?";
-			assertEq(data, parse(grammar, "X", data));
-			data = "a:b-c.d.e() ?";
-			assertEq(data, parse(grammar, "X", data));
-			data = "a:b-c.d. e ( ) ?";
-			assertEq(data, parse(grammar, "X", data));
-			data = "a:b-c.d .e ( ) ?";
-			assertEq(data, parse(grammar, "X", data));
-			data = "a:b-c.d . e ( ) ?";
-			assertEq(data, parse(grammar, "X", data));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("a ?", parse(g, "X", "a ?"));
+			assertEq("a:b-c.d ?", parse(g, "X", "a:b-c.d ?"));
+			assertEq("a:b-c.d.e() ?", parse(g, "X", "a:b-c.d.e() ?"));
+			assertEq("a:b-c.d. e ( ) ?", parse(g, "X", "a:b-c.d. e ( ) ?"));
+			assertEq("a:b-c.d .e ( ) ?", parse(g, "X", "a:b-c.d .e ( ) ?"));
+			assertEq("a:b-c.d . e ( ) ?", parse(g, "X", "a:b-c.d . e ( ) ?"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf = FUtils.readString(
 				new File(getDataDir() + "TestXPath2.bnf"), "windows-1250");
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "a/b";
-			assertEq(data, parse(grammar, "XPath", data));
-			data = "/a/b";
-			assertEq(data, parse(grammar, "XPath", data));
-			data = "/*";
-			assertEq(data, parse(grammar, "XPath", data));
-			data = "/*[@a]";
-			assertEq(data, parse(grammar, "XPath", data));
-			data = "/*[@a='1']/text()";
-			assertEq(data, parse(grammar, "XPath", data));
-			data = "//a/text()";
-			assertEq(data, parse(grammar, "XPath", data));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("a/b", parse(g, "XPath", "a/b"));
+			assertEq("/a/b", parse(g, "XPath", "/a/b"));
+			assertEq("/*", parse(g, "XPath", "/*"));
+			assertEq("/*[@a]", parse(g, "XPath", "/*[@a]"));
+			assertEq("/*[@a='1']/text()", parse(g,"XPath","/*[@a='1']/text()"));
+			assertEq("//a/text()", parse(g, "XPath", "//a/text()"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf = "Comment ::= \"/*\" ( [^*]+ | \"*\" [^/] )* \"*/\"\n"+
 			"S ::= ( ' ' | Comment )+\n"+
 			"A ::= S? 'X' S?";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "X /*jmeno - znaky*/  ";
-			assertEq("X /*jmeno - znaky*/  ", parse(grammar, "A" , data));
-
-			bnf = "A ::= (B - ']]>')*\n" +
-				"B ::= [#x20-#xD7FF]";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "C ]]>";
-			assertEq("C ", parse(grammar, "A" , data));
-
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("X /*jmeno - znaky*/  ",
+				parse(g, "A" , "X /*jmeno - znaky*/  "));
+			bnf = "A::=B-C*C::='c'B::=[a-z]";
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("b", parse(g, "A" , "b"));
+			assertFalse(g.parse("c", "A"));
+			bnf = "A::=(B-']]>')*B::=[#x20-#xD7FF]";
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("C ", parse(g, "A" , "C ]]>"));
 			bnf = "A ::= '<!--' ((B - '-') | ('-' (B - '-')))* '-->'\n" +
 				"B ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD]";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			data = "<!-- c - C -->";
-			assertEq(data, parse(grammar, "A" , data));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("<!-- c - C -->", parse(g, "A" , "<!-- c - C -->"));
 			bnf =
 "%define $value:         $test.common.bnf.TestBNF.myValue\n"+
 "%define $operator:      $test.common.bnf.TestBNF.myOperator\n"+
-"%define $mypush:          $test.common.bnf.TestBNF.myPushOperator\n"+
+"%define $mypush:        $test.common.bnf.TestBNF.myPushOperator\n"+
 "%define $assign:        $test.common.bnf.TestBNF.myPushOperator('=')\n"+
 "%define $unaryOperator: $test.common.bnf.TestBNF.myUnaryOperator\n"+
 "%define $unaryMinus:    $test.common.bnf.TestBNF.myPushOperator(',-')\n"+
@@ -547,129 +501,119 @@ public class TestBNF extends STester {
 "testMethod::=$mytest\n"+
 "S ::= [#9#10#13 ]* /*skipped white spaces*/\n"+
 "boolean::= ('true' | 'false')\n"+
-"string::= \"'\" (\"''\" | [^']+)+ \"'\" |\n" +
-"          '\"' ('\"\"' | [^\"]+)+ '\"'\n"+
+"string::= \"'\" (\"''\" | [^']+)+ \"'\" | '\"' ('\"\"' | [^\"]+)+ '\"'\n"+
 "integer ::= [0-9]+\n"+
-"float ::= [0-9]+ ('.' [0-9]+ ('E' [-+]? [0-9]+ )? |\n" +
-"          'E' [-+]? [0-9]+ )\n"+
+"float ::= [0-9]+ ('.' [0-9]+ ('E' [-+]? [0-9]+ )? | 'E' [-+]? [0-9]+ )\n"+
 "identifier::= [a-zA-Z][a-zA-Z0-0]*\n"+
 "e::= expression $exec\n"+
 "expression::= S simpleExpr\n"+
 "simpleExpr::= factor S ( [-+]$operator S factor $mypush)*\n"+
 "factor::= term S ( [*/]$operator S term $mypush)*\n"+
 "term::= S ('-'  S value $unaryMinus) | ('+'? S) value\n"+
-"value::= ('(' S expression S ')') |\n" +
-"       ((float | integer | boolean | string | identifier) $value)\n"+
+"value::= ('(' S expression S ')')\n" +
+"  | ((float | integer | boolean | string | identifier) $value)\n"+
 "assignment::= identifier  $value S '=' $assign e\n"+
 "statement::= S? (assignment  S)? ';' \n"+
 "program::= statement+ \n"+
 "";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			assertEq("x=x-555.1", parse(grammar, "assignment", "x=x-555.1;"));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("x=x-555.1", parse(g, "assignment", "x=x-555.1;"));
 			assertEq(443.9, _result, printStack());
-			assertEq("a", parse(grammar, "set1", "a"));
-			data = parse(grammar, "set1", "b");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("^", parse(grammar, "set2", "^"));
-			assertEq("\"", parse(grammar, "set2", "\""));
-			assertEq("#", parse(grammar, "set2", "#"));
-			data = parse(grammar, "set2a", "^");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar, "set2a", "\"");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar, "set2a", "#");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("?", parse(grammar, "set2a", "?"));
-			assertEq("-", parse(grammar, "set3", "-"));
-			assertEq("^", parse(grammar, "set3", "^"));
-			assertEq("#", parse(grammar, "set3", "#"));
-			assertEq("_", parse(grammar, "set3", "_"));
-			assertTrue(parse(grammar, "set3a", "-").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "^").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "#").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "_").startsWith("set3a failed"));
-			assertEq("a", parse(grammar, "set3a", "a"));
-			data = parse(grammar, "set3a", "");
-			assertTrue(data.indexOf("failed, eos;") >= 0, data);
-			assertEq("AAA", parse(grammar, "quantif1", "AAA"));
-			assertEq("AAA", parse(grammar, "quantif1", "AAAA"));
-			assertEq("AAA", parse(grammar, "quantif2", "AAA"));
-			assertEq("AAAA", parse(grammar, "quantif2", "AAAA"));
-			assertEq("AAAA", parse(grammar, "quantif2", "AAAAA"));
-			assertEq("AAA", parse(grammar, "quantif3", "AAA"));
-			assertEq("AAAA", parse(grammar, "quantif3", "AAAA"));
-			assertEq("AAAAA", parse(grammar, "quantif3", "AAAAA"));
-			data = parse(grammar, "quantif1", "AA");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("", parse(grammar, "testMethod", ""));
+			assertEq("a", parse(g, "set1", "a"));
+			assertFalse(g.parse("b", "set1"));
+			assertEq("^", parse(g, "set2", "^"));
+			assertEq("\"", parse(g, "set2", "\""));
+			assertEq("#", parse(g, "set2", "#"));
+			assertFalse(g.parse("^", "set2a"));
+			assertFalse(g.parse("\"", "set2a"));
+			assertFalse(g.parse("#", "set2a"));
+			assertEq("?", parse(g, "set2a", "?"));
+			assertEq("-", parse(g, "set3", "-"));
+			assertEq("^", parse(g, "set3", "^"));
+			assertEq("#", parse(g, "set3", "#"));
+			assertEq("_", parse(g, "set3", "_"));
+			assertTrue(parse(g, "set3a", "-").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "^").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "#").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "_").startsWith("set3a failed"));
+			assertEq("a", parse(g, "set3a", "a"));
+			assertFalse(g.parse("", "set3a"));
+			assertEq("AAA", parse(g, "quantif1", "AAA"));
+			assertEq("AAA", parse(g, "quantif1", "AAAA"));
+			assertEq("AAA", parse(g, "quantif2", "AAA"));
+			assertEq("AAAA", parse(g, "quantif2", "AAAA"));
+			assertEq("AAAA", parse(g, "quantif2", "AAAAA"));
+			assertEq("AAA", parse(g, "quantif3", "AAA"));
+			assertEq("AAAA", parse(g, "quantif3", "AAAA"));
+			assertEq("AAAAA", parse(g, "quantif3", "AAAAA"));
+			assertFalse(g.parse("AA", "quantif1"));
+			assertEq("", parse(g, "testMethod", ""));
 			assertEq("test(123,a\"\n\\)", _s);
-			assertEq(" \t \n ",parse(grammar, "S", " \t \n -123  456"));
-			assertEq("", parse(grammar, "S")); //nothing parsed
-			assertEq("  ", parse(grammar, "S", "  "));
-			assertEq("\t", parse(grammar, "tabelator", "\txxx"));
-			assertEq("-123",parse(grammar, "e", "-123"));
+			assertEq(" \t \n ",parse(g, "S", " \t \n -123  456"));
+			assertEq("", parse(g, "S")); //nothing parsed
+			assertEq("  ", parse(g, "S", "  "));
+			assertEq("\t", parse(g, "tabelator", "\t blabla \n"));
+			assertEq("-123",parse(g, "e", "-123"));
 			assertEq(-123, _result, printStack());
-			assertEq("456", parse(grammar, "e", "456"));
+			assertEq("456", parse(g, "e", "456"));
 			assertEq(456, _result, printStack());
-			assertEq("\n\n  -\n123+\t456",
-				parse(grammar, "e", "\n\n  -\n123+\t456"));
+			assertEq("\n\n  -\n123+\t456", parse(g, "e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(-44, _result, printStack());
 			assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(44, _result, printStack());
-			assertEq("1", parse(grammar, "e", "1"));
+			assertEq("1", parse(g, "e", "1"));
 			assertEq(1, _result, printStack());
-			assertEq("+1", parse(grammar, "e", "+1"));
+			assertEq("+1", parse(g, "e", "+1"));
 			assertEq(1, _result, printStack());
-			assertEq("-1", parse(grammar, "e", "-1"));
+			assertEq("-1", parse(g, "e", "-1"));
 			assertEq(-1, _result, printStack());
-			assertEq("-(-1)", parse(grammar, "e", "-(-1)"));
+			assertEq("-(-1)", parse(g, "e", "-(-1)"));
 			assertEq(1, _result, printStack());
-			assertEq("+(-1)", parse(grammar, "e", "+(-1)"));
+			assertEq("+(-1)", parse(g, "e", "+(-1)"));
 			assertEq(-1, _result, printStack());
-			assertEq("-(+1)", parse(grammar, "e", "-(+1)"));
+			assertEq("-(+1)", parse(g, "e", "-(+1)"));
 			assertEq(-1, _result, printStack());
-			assertEq("+(-(((1))))", parse(grammar, "e", "+(-(((1))))"));
+			assertEq("+(-(((1))))", parse(g, "e", "+(-(((1))))"));
 			assertEq(-1, _result, printStack());
-			assertEq("1-x", parse(grammar, "e", "1-x"));
+			assertEq("1-x", parse(g, "e", "1-x"));
 			assertEq(-998, _result, printStack());
-			assertEq("x-1", parse(grammar, "e", "x-1"));
+			assertEq("x-1", parse(g, "e", "x-1"));
 			assertEq(998, _result, printStack());
-			assertEq("\"x-1\"", parse(grammar, "e", "\"x-1\""));
+			assertEq("\"x-1\"", parse(g, "e", "\"x-1\""));
 			assertEq("x-1", _result, printStack());
-			assertEq("'x-\"1'", parse(grammar, "e", "'x-\"1'"));
+			assertEq("'x-\"1'", parse(g, "e", "'x-\"1'"));
 			assertEq("x-\"1", _result, printStack());
-			assertEq("x=x-555", parse(grammar, "assignment", "x=x-555;"));
+			assertEq("x=x-555", parse(g, "assignment", "x=x-555;"));
 			assertEq(444, _result, printStack());
-			assertEq(";", parse(grammar, "program",	"; xxx"));
-			assertEq("x=x", parse(grammar, "assignment", "x=x"));
+			assertEq(";", parse(g, "program",	"; xxx"));
+			assertEq("x=x", parse(g, "assignment", "x=x"));
 			assertEq(999, _variables.get("x"));
-			assertEq("x=-x", parse(grammar, "assignment", "x=-x"));
+			assertEq("x=-x", parse(g, "assignment", "x=-x"));
 			assertEq(-999, _variables.get("x"));
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar, "program",
-				"i=x-555;\nj=5; j = i - j; xxx"));
+			assertEq("i=x-555;\nj=5; j = i - j;",
+				parse(g, "program", "i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-			assertEq("x=x-555.1", parse(grammar, "assignment", "x=x-555.1;"));
+			assertEq("x=x-555.1", parse(g, "assignment", "x=x-555.1;"));
 			assertEq(443.9, _result, printStack());
-			assertEq("x=2.14E-2", parse(grammar, "assignment", "x=2.14E-2;"));
+			assertEq("x=2.14E-2", parse(g, "assignment", "x=2.14E-2;"));
 			assertEq(2.14E-2, _result, printStack());
 			assertEq(2.14E-2, _variables.get("x"));
-			assertEq("x='ab'+1+2", parse(grammar, "assignment", "x='ab'+1+2"));
+			assertEq("x='ab'+1+2", parse(g, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
 			assertEq("ab12", _variables.get("x"));
-			assertEq("x='a'+1.0E+1",
-				parse(grammar, "assignment", "x='a'+1.0E+1"));
+			assertEq("x='a'+1.0E+1", parse(g, "assignment", "x='a'+1.0E+1"));
 			assertEq("a10.0", _result, printStack());
 			assertEq("a10.0", _variables.get("x"));
 			assertEq("x=1.0+1.0E-1+'a'",
-				parse(grammar, "assignment", "x=1.0+1.0E-1+'a'"));
+				parse(g, "assignment", "x=1.0+1.0E-1+'a'"));
 			assertEq("1.1a", _result, printStack());
 			assertEq("1.1a", _variables.get("x"));
-			assertEq("x=true", parse(grammar, "assignment", "x=true"));
+			assertEq("x=true", parse(g, "assignment", "x=true"));
 			assertEq(Boolean.TRUE, _result, printStack());
 			assertEq(Boolean.TRUE, _variables.get("x"));
 ////////////////////////////////////////////////////////////////////////////////
@@ -695,47 +639,35 @@ public class TestBNF extends STester {
 "myInteger1 ::= $myInteger1\n"+
 "myInteger2 ::= $integer\n"+
 "";
-			grammar1 = BNFGrammar.compile(grammar, bnf, null);
-			assertEq("a", parse(grammar1, "set1", "a"));
-			assertEq("x='ab'+1+2", parse(grammar1, "assignment", "x='ab'+1+2"));
+			g1 = BNFGrammar.compile(g, bnf, null);
+			assertEq("a", parse(g1, "set1", "a"));
+			assertEq("x='ab'+1+2", parse(g1, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar1, "program",
+			assertEq("i=x-555;\nj=5; j = i - j;", parse(g1, "program",
 				"i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-
-			assertEq("AB", parse(grammar1, "rule1a", "AB"));
-			assertEq("CD", parse(grammar1, "rule1a", "CD"));
-			assertEq("AB", parse(grammar1, "rule1b", "AB"));
-			assertEq("CD", parse(grammar1, "rule1b", "CD"));
-			assertEq("cd", parse(grammar1, "lid", "cd"));
-			assertEq("abc", parse(grammar1, "lid", "abc"));
-			data = parse(grammar1, "lid", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd23", parse(grammar1, "lid1a", "cd23"));
-			assertEq("cd23", parse(grammar1, "lid1b", "cd23"));
-			data = parse(grammar1, "lid1a", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "de12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd", parse(grammar1, "lid2a", "cd"));
-			assertEq("23", parse(grammar1, "lid2b", "23"));
-			data = parse(grammar1, "lid2a", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2a", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("xy", parse(grammar1, "lid3", "xy"));
-			data = parse(grammar1, "lid3", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid3", "cd");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-//          grammar1.display(System.out, false);
+			assertEq("AB", parse(g1, "rule1a", "AB"));
+			assertEq("CD", parse(g1, "rule1a", "CD"));
+			assertEq("AB", parse(g1, "rule1b", "AB"));
+			assertEq("CD", parse(g1, "rule1b", "CD"));
+			assertEq("cd", parse(g1, "lid", "cd"));
+			assertEq("abc", parse(g1, "lid", "abc"));
+			assertFalse(g1.parse("ab", "lid"));
+			assertEq("cd23", parse(g1, "lid1a", "cd23"));
+			assertEq("cd23", parse(g1, "lid1b", "cd23"));
+			assertFalse(g1.parse("ab12", "lid1a"));
+			assertFalse(g1.parse("ab12", "lid1b"));
+			assertFalse(g1.parse("de12", "lid1b"));
+			assertEq("cd", parse(g1, "lid2a", "cd"));
+			assertEq("23", parse(g1, "lid2b", "23"));
+			assertFalse(g1.parse("ab", "lid2a"));
+			assertFalse(g1.parse("12", "lid2a"));
+			assertFalse(g1.parse("12", "lid2b"));
+			assertFalse(g1.parse("ab", "lid2b"));
+			assertEq("xy", parse(g1, "lid3", "xy"));
+			assertFalse(g1.parse("ab", "lid3"));
+			assertFalse(g1.parse("cd", "lid3"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf =
 "%define $myDatetime: $datetime(\"d.M.yyyy\")\n" +
@@ -773,16 +705,17 @@ public class TestBNF extends STester {
 "testMethod ::= $mytest \n" +
 "S ::= [#9#10#13 ]* \n" +
 "boolean ::= ( \"true\" | \"false\" ) \n" +
-"string ::= ( \"'\" ( \"''\" | [^']+ )+ \"'\" | #34 ( (#34 #34) | [^\"]+ )+ #34 ) \n" +
+"string ::= (\"'\" (\"''\" | [^']+)+ \"'\" | #34 ((#34 #34) | [^\"]+)+ #34)\n" +
 "integer ::= [0-9]+ \n" +
-"float ::= [0-9]+ ( \".\" [0-9]+ ( \"E\" [-+]? [0-9]+ )? | \"E\" [-+]? [0-9]+ ) \n" +
+"float ::= [0-9]+ (\".\" [0-9]+ (\"E\" [-+]? [0-9]+)? | \"E\" [-+]? [0-9]+)\n" +
 "identifier ::= [a-zA-Z] [a-zA-Z0-0]* \n" +
 "e ::= expression $exec \n" +
 "expression ::= S simpleExpr \n" +
 "simpleExpr ::= factor S ( [-+] $operator S factor $mypush )* \n" +
 "factor ::= term S ( [*/] $operator S term $mypush )* \n" +
 "term ::= ( S \"-\" S value $unaryMinus | \"+\"? S value ) \n" +
-"value ::= ( \"(\" S expression S \")\" | ( float | integer | boolean | string | identifier ) $value ) \n" +
+"value ::= ( \"(\" S expression S \")\" | ( float | integer | boolean\n"+
+"  | string | identifier ) $value ) \n" +
 "assignment ::= identifier $value S \"=\" $assign e \n" +
 "statement ::= S? ( assignment S )? \";\" \n" +
 "program ::= statement+ \n" +
@@ -801,132 +734,111 @@ public class TestBNF extends STester {
 "myInteger1 ::= $myInteger1 \n" +
 "myInteger2 ::= $integer \n" +
 "";
-			grammar = BNFGrammar.compile(null, bnf, null);
-			assertEq("a", parse(grammar, "set1", "a"));
-			data = parse(grammar, "set1", "b");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("^", parse(grammar, "set2", "^"));
-			assertEq("\"", parse(grammar, "set2", "\""));
-			assertEq("#", parse(grammar, "set2", "#"));
-			data = parse(grammar, "set2a", "^");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar, "set2a", "\"");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar, "set2a", "#");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("?", parse(grammar, "set2a", "?"));
-			assertEq("-", parse(grammar, "set3", "-"));
-			assertEq("^", parse(grammar, "set3", "^"));
-			assertEq("#", parse(grammar, "set3", "#"));
-			assertEq("_", parse(grammar, "set3", "_"));
-			assertTrue(parse(grammar, "set3a", "-").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "^").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "#").startsWith("set3a failed"));
-			assertTrue(parse(grammar, "set3a", "_").startsWith("set3a failed"));
-			assertEq("a", parse(grammar, "set3a", "a"));
-			data = parse(grammar, "set3a", "");
-			assertTrue(data.indexOf("failed, eos;") >= 0, data);
-			assertEq("", parse(grammar, "testMethod", ""));
+			g = BNFGrammar.compile(null, bnf, null);
+			assertEq("a", parse(g, "set1", "a"));
+			assertFalse(g.parse("b", "set1"));
+			assertEq("^", parse(g, "set2", "^"));
+			assertEq("\"", parse(g, "set2", "\""));
+			assertEq("#", parse(g, "set2", "#"));
+			assertFalse(g.parse("^", "set2a"));
+			assertFalse(g.parse("\"", "set2a"));
+			assertFalse(g.parse("#", "set2a"));
+			assertEq("?", parse(g, "set2a", "?"));
+			assertEq("-", parse(g, "set3", "-"));
+			assertEq("^", parse(g, "set3", "^"));
+			assertEq("#", parse(g, "set3", "#"));
+			assertEq("_", parse(g, "set3", "_"));
+			assertTrue(parse(g, "set3a", "-").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "^").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "#").startsWith("set3a failed"));
+			assertTrue(parse(g, "set3a", "_").startsWith("set3a failed"));
+			assertEq("a", parse(g, "set3a", "a"));
+			assertFalse(g1.parse("", "set3a"));
+			assertEq("", parse(g, "testMethod", ""));
 			assertEq("test(123,a\"\n\\)", _s);
-			assertEq(" \t \n ",parse(grammar, "S", " \t \n -123  456"));
-			assertEq("", parse(grammar, "S")); //nothing parsed
-			assertEq("\t", parse(grammar, "tabelator", "\txxx"));
-			assertEq("-123",parse(grammar, "e", "-123"));
+			assertEq(" \t \n ",parse(g, "S", " \t \n -123  456"));
+			assertEq("", parse(g, "S")); //nothing parsed
+			assertEq("\t", parse(g, "tabelator", "\txxx"));
+			assertEq("-123",parse(g, "e", "-123"));
 			assertEq(-123, _result, printStack());
-			assertEq("456", parse(grammar, "e", "456"));
+			assertEq("456", parse(g, "e", "456"));
 			assertEq(456, _result, printStack());
-			assertEq("\n\n  -\n123+\t456",
-				parse(grammar, "e", "\n\n  -\n123+\t456"));
+			assertEq("\n\n  -\n123+\t456", parse(g, "e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(-44, _result, printStack());
 			assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(44, _result, printStack());
-			assertEq("-1", parse(grammar, "e", "-1"));
+			assertEq("-1", parse(g, "e", "-1"));
 			assertEq(-1, _result, printStack());
-			assertEq("+1", parse(grammar, "e", "+1"));
+			assertEq("+1", parse(g, "e", "+1"));
 			assertEq(1, _result, printStack());
-			assertEq("1-x", parse(grammar, "e", "1-x"));
+			assertEq("1-x", parse(g, "e", "1-x"));
 			assertEq(-998, _result, printStack());
-			assertEq("x-1", parse(grammar, "e", "x-1"));
+			assertEq("x-1", parse(g, "e", "x-1"));
 			assertEq(998, _result, printStack());
-			assertEq("x=x-555", parse(grammar, "assignment", "x=x-555;"));
+			assertEq("x=x-555", parse(g, "assignment", "x=x-555;"));
 			assertEq(444, _result, printStack());
-			assertEq(";", parse(grammar, "program",	"; xxx"));
-			assertEq("x=x", parse(grammar, "assignment", "x=x"));
+			assertEq(";", parse(g, "program",	"; xxx"));
+			assertEq("x=x", parse(g, "assignment", "x=x"));
 			assertEq(999, _variables.get("x"));
-			assertEq("x=-x", parse(grammar, "assignment", "x=-x"));
+			assertEq("x=-x", parse(g, "assignment", "x=-x"));
 			assertEq(-999, _variables.get("x"));
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar, "program",
+			assertEq("i=x-555;\nj=5; j = i - j;", parse(g, "program",
 				"i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-			assertEq("x=x-555.1", parse(grammar, "assignment", "x=x-555.1;"));
+			assertEq("x=x-555.1", parse(g, "assignment", "x=x-555.1;"));
 			assertEq(443.9, _result, printStack());
-			assertEq("x=2.14E-2", parse(grammar, "assignment", "x=2.14E-2;"));
+			assertEq("x=2.14E-2", parse(g, "assignment", "x=2.14E-2;"));
 			assertEq(2.14E-2, _result, printStack());
 			assertEq(2.14E-2, _variables.get("x"));
-			assertEq("x='ab'+1+2", parse(grammar, "assignment", "x='ab'+1+2"));
+			assertEq("x='ab'+1+2", parse(g, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
 			assertEq("ab12", _variables.get("x"));
-			assertEq("x='a'+1.0E+1",
-				parse(grammar, "assignment", "x='a'+1.0E+1"));
+			assertEq("x='a'+1.0E+1", parse(g, "assignment", "x='a'+1.0E+1"));
 			assertEq("a10.0", _result, printStack());
 			assertEq("a10.0", _variables.get("x"));
 			assertEq("x=1.0+1.0E-1+'a'",
-				parse(grammar, "assignment", "x=1.0+1.0E-1+'a'"));
+				parse(g, "assignment", "x=1.0+1.0E-1+'a'"));
 			assertEq("1.1a", _result, printStack());
 			assertEq("1.1a", _variables.get("x"));
-			assertEq("x=true", parse(grammar, "assignment", "x=true"));
+			assertEq("x=true", parse(g, "assignment", "x=true"));
 			assertEq(Boolean.TRUE, _result, printStack());
 			assertEq(Boolean.TRUE, _variables.get("x"));
-			assertEq("a", parse(grammar, "set1", "a"));
-
-			assertEq("AB", parse(grammar, "rule1a", "AB"));
-			assertEq("CD", parse(grammar, "rule1a", "CD"));
-			assertEq("AB", parse(grammar, "rule1b", "AB"));
-			assertEq("CD", parse(grammar, "rule1b", "CD"));
-			assertEq("cd", parse(grammar, "lid", "cd"));
-			data = parse(grammar, "lid", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd23", parse(grammar, "lid1a", "cd23"));
-			assertEq("cd23", parse(grammar, "lid1b", "cd23"));
-			data = parse(grammar, "lid1a", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid1b", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid1b", "de12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd", parse(grammar, "lid2a", "cd"));
-			assertEq("23", parse(grammar, "lid2b", "23"));
-			data = parse(grammar, "lid2a", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid2b", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid2a", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid2b", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("xy", parse(grammar, "lid3", "xy"));
-			data = parse(grammar, "lid3", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar, "lid3", "cd");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("123", parse(grammar, "myInteger2", "123"));
-			assertEq("123", parse(grammar, "myInteger", "123"));
-			data = parse(grammar, "myInteger", "x123");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertTrue(parse(grammar,
+			assertEq("a", parse(g, "set1", "a"));
+			assertEq("AB", parse(g, "rule1a", "AB"));
+			assertEq("CD", parse(g, "rule1a", "CD"));
+			assertEq("AB", parse(g, "rule1b", "AB"));
+			assertEq("CD", parse(g, "rule1b", "CD"));
+			assertEq("cd", parse(g, "lid", "cd"));
+			assertFalse(g1.parse("ab", "lid"));
+			assertEq("cd23", parse(g, "lid1a", "cd23"));
+			assertEq("cd23", parse(g, "lid1b", "cd23"));
+			assertFalse(g1.parse("ab12", "lid1b"));
+			assertFalse(g1.parse("de12", "lid1b"));
+			assertEq("cd", parse(g, "lid2a", "cd"));
+			assertEq("23", parse(g, "lid2b", "23"));
+			assertFalse(g1.parse("ab", "lid2a"));
+			assertFalse(g1.parse("12", "lid2a"));
+			assertFalse(g1.parse("ab", "lid2b"));
+			assertFalse(g1.parse("12", "lid2b"));
+			assertEq("xy", parse(g, "lid3", "xy"));
+			assertFalse(g1.parse("ab", "lid3"));
+			assertFalse(g1.parse("cd", "lid3"));
+			assertEq("123", parse(g, "myInteger2", "123"));
+			assertEq("123", parse(g, "myInteger", "123"));
+			assertFalse(g1.parse("x123", "myInteger"));
+			assertTrue(parse(g,
 				"myInteger1", "123").indexOf("greater then max") > 0);
-			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(grammar,
+			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(g,
 				"testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
-			assertEq("2.12.1945", parse(grammar, "myDatetime", "2.12.1945"));
+			assertEq("2.12.1945", parse(g, "myDatetime", "2.12.1945"));
 			assertEq("1.1.1990, 6.12.1945",
-				parse(grammar, "mydate", "1.1.1990, 6.12.1945"));
+				parse(g, "mydate", "1.1.1990, 6.12.1945"));
 ////////////////////////////////////////////////////////////////////////////////
-
 			// BNF extension
 			bnf =
 "myDuration ::= $duration (S? $duration)* \n"+
@@ -937,346 +849,298 @@ public class TestBNF extends STester {
 "nmtoken ::= $nmToken \n"+
 "nmtokens ::= nmtoken (S nmtoken)*\n"+
 "";
-			grammar1 = BNFGrammar.compile(grammar, bnf, null);
-			assertEq("a", parse(grammar1, "set1", "a"));
-			data = parse(grammar1, "set1", "b");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("^", parse(grammar1, "set2", "^"));
-			assertEq("\"", parse(grammar1, "set2", "\""));
-			assertEq("#", parse(grammar1, "set2", "#"));
-			data = parse(grammar1, "set2a", "^");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "\"");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "#");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("?", parse(grammar1, "set2a", "?"));
-			assertEq("-", parse(grammar1, "set3", "-"));
-			assertEq("^", parse(grammar1, "set3", "^"));
-			assertEq("#", parse(grammar1, "set3", "#"));
-			assertEq("_", parse(grammar1, "set3", "_"));
-			assertTrue(parse(grammar1,"set3a", "-").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "^").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "#").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "_").startsWith("set3a failed"));
-			assertEq("a", parse(grammar1, "set3a", "a"));
-			data = parse(grammar1, "set3a", "");
-			assertTrue(data.indexOf("failed, eos;") >= 0, data);
-			assertEq("AAA", parse(grammar1, "quantif1", "AAA"));
-			assertEq("AAA", parse(grammar1, "quantif1", "AAAA"));
-			assertEq("AAA", parse(grammar1, "quantif2", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAAA"));
-			assertEq("AAA", parse(grammar1, "quantif3", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif3", "AAAA"));
-			assertEq("AAAAA", parse(grammar1, "quantif3", "AAAAA"));
-			data = parse(grammar1, "quantif1", "AA");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("", parse(grammar1, "testMethod", ""));
+			g1 = BNFGrammar.compile(g, bnf, null);
+			assertEq("a", parse(g1, "set1", "a"));
+			assertFalse(g1.parse("b", "set1"));
+			assertFalse(g1.parse("b", "set1"));
+			assertEq("^", parse(g1, "set2", "^"));
+			assertEq("\"", parse(g1, "set2", "\""));
+			assertEq("#", parse(g1, "set2", "#"));
+			assertFalse(g1.parse("^", "set2a"));
+			assertFalse(g1.parse("\"", "set2a"));
+			assertFalse(g1.parse("#", "set2a"));
+			assertEq("?", parse(g1, "set2a", "?"));
+			assertEq("-", parse(g1, "set3", "-"));
+			assertEq("^", parse(g1, "set3", "^"));
+			assertEq("#", parse(g1, "set3", "#"));
+			assertEq("_", parse(g1, "set3", "_"));
+			assertTrue(parse(g1,"set3a", "-").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "^").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "#").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "_").startsWith("set3a failed"));
+			assertEq("a", parse(g1, "set3a", "a"));
+			assertFalse(g1.parse("", "set3a"));
+			assertEq("AAA", parse(g1, "quantif1", "AAA"));
+			assertEq("AAA", parse(g1, "quantif1", "AAAA"));
+			assertEq("AAA", parse(g1, "quantif2", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAAA"));
+			assertEq("AAA", parse(g1, "quantif3", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif3", "AAAA"));
+			assertEq("AAAAA", parse(g1, "quantif3", "AAAAA"));
+			assertFalse(g1.parse("AA", "quantif1"));
+			assertEq("", parse(g1, "testMethod", ""));
 			assertEq("test(123,a\"\n\\)", _s);
-			assertEq(" \t \n ",parse(grammar1, "S", " \t \n -123  456"));
-			assertEq("", parse(grammar1, "S")); //nothing parsed
-			assertEq("\t", parse(grammar1, "tabelator", "\txxx"));
-			assertEq("\n\n  -\n123+\t456",
-				parse(grammar1, "e", "\n\n  -\n123+\t456"));
+			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
+			assertEq("", parse(g1, "S")); //nothing parsed
+			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq("\n\n  -\n123+\t456",parse(g1, "e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(-44, _result, printStack());
 			assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar1, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g1, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(44, _result, printStack());
-			assertEq("-1", parse(grammar, "e", "-1"));
+			assertEq("-1", parse(g, "e", "-1"));
 			assertEq(-1, _result, printStack());
-			assertEq("+1", parse(grammar, "e", "+1"));
+			assertEq("+1", parse(g, "e", "+1"));
 			assertEq(1, _result, printStack());
-			assertEq("1-x", parse(grammar1, "e", "1-x"));
+			assertEq("1-x", parse(g1, "e", "1-x"));
 			assertEq(-998, _result, printStack());
-			assertEq("x-1", parse(grammar1, "e", "x-1"));
+			assertEq("x-1", parse(g1, "e", "x-1"));
 			assertEq(998, _result, printStack());
-			assertEq("x=x-555", parse(grammar1, "assignment", "x=x-555;"));
+			assertEq("x=x-555", parse(g1, "assignment", "x=x-555;"));
 			assertEq(444, _result, printStack());
-			assertEq(";", parse(grammar1, "program",	"; xxx"));
-			assertEq("x=x", parse(grammar1, "assignment", "x=x"));
+			assertEq(";", parse(g1, "program",	"; xxx"));
+			assertEq("x=x", parse(g1, "assignment", "x=x"));
 			assertEq(999, _variables.get("x"));
-			assertEq("x=-x", parse(grammar1, "assignment", "x=-x"));
+			assertEq("x=-x", parse(g1, "assignment", "x=-x"));
 			assertEq(-999, _variables.get("x"));
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar1, "program",
+			assertEq("i=x-555;\nj=5; j = i - j;", parse(g1, "program",
 				"i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-			assertEq("x=x-555.1", parse(grammar1, "assignment", "x=x-555.1;"));
+			assertEq("x=x-555.1", parse(g1, "assignment", "x=x-555.1;"));
 			assertEq(443.9, _result, printStack());
-			assertEq("x=2.14E-2", parse(grammar1, "assignment", "x=2.14E-2;"));
+			assertEq("x=2.14E-2", parse(g1, "assignment", "x=2.14E-2;"));
 			assertEq(2.14E-2, _result, printStack());
 			assertEq(2.14E-2, _variables.get("x"));
-			assertEq("x='ab'+1+2", parse(grammar1, "assignment", "x='ab'+1+2"));
+			assertEq("x='ab'+1+2", parse(g1, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
 			assertEq("ab12", _variables.get("x"));
 			assertEq("x='a'+1.0E+1",
-				parse(grammar1, "assignment", "x='a'+1.0E+1"));
+				parse(g1, "assignment", "x='a'+1.0E+1"));
 			assertEq("a10.0", _result, printStack());
 			assertEq("a10.0", _variables.get("x"));
 			assertEq("x=1.0+1.0E-1+'a'",
-				parse(grammar1, "assignment", "x=1.0+1.0E-1+'a'"));
+				parse(g1, "assignment", "x=1.0+1.0E-1+'a'"));
 			assertEq("1.1a", _result, printStack());
 			assertEq("1.1a", _variables.get("x"));
-			assertEq("x=true", parse(grammar1, "assignment", "x=true"));
+			assertEq("x=true", parse(g1, "assignment", "x=true"));
 			assertEq(Boolean.TRUE, _result, printStack());
 			assertEq(Boolean.TRUE, _variables.get("x"));
-			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(grammar,
-				"testBuildIn",
-				"123 3.14 1999-01-02T23:10:54+01:00"));
-			assertEq("2.12.1945", parse(grammar, "myDatetime", "2.12.1945"));
-
-			assertEq("2.12.1945", parse(grammar1, "myDatetime", "2.12.1945"));
+			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(g,
+				"testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
+			assertEq("2.12.1945", parse(g, "myDatetime", "2.12.1945"));
+			assertEq("2.12.1945", parse(g1, "myDatetime", "2.12.1945"));
 			assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-				parse(grammar1, "myDuration",
+				parse(g1, "myDuration",
 					"P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
-			assertEq("null", "" + grammar1.popObject());
-			assertEq("a-b c:d.e f1",parse(grammar1,"xmlnames", "a-b c:d.e f1"));
+			assertEq("null", "" + g1.popObject());
+			assertEq("a-b c:d.e f1",parse(g1,"xmlnames", "a-b c:d.e f1"));
 			assertEq("a-b c:d.e f1 123",
-				parse(grammar1, "nmtokens", "a-b c:d.e f1 123"));
-			assertEq("123", parse(grammar1, "nmtokens", "123"));
-			assertEq("a", parse(grammar1, "set1", "a"));
-			assertEq("x='ab'+1+2", parse(grammar1, "assignment", "x='ab'+1+2"));
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar1, "program",
-				"i=x-555;\nj=5; j = i - j; xxx"));
+				parse(g1, "nmtokens", "a-b c:d.e f1 123"));
+			assertEq("123", parse(g1, "nmtokens", "123"));
+			assertEq("a", parse(g1, "set1", "a"));
+			assertEq("x='ab'+1+2", parse(g1, "assignment", "x='ab'+1+2"));
+			assertEq("i=x-555;\nj=5; j = i - j;",
+				parse(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-
-			assertEq("AB", parse(grammar1, "rule1a", "AB"));
-			assertEq("CD", parse(grammar1, "rule1a", "CD"));
-			assertEq("AB", parse(grammar1, "rule1b", "AB"));
-			assertEq("CD", parse(grammar1, "rule1b", "CD"));
-			assertEq("cd", parse(grammar1, "lid", "cd"));
-			data = parse(grammar1, "lid", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd23", parse(grammar1, "lid1a", "cd23"));
-			assertEq("cd23", parse(grammar1, "lid1b", "cd23"));
-			data = parse(grammar1, "lid1a", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "de12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd", parse(grammar1, "lid2a", "cd"));
-			assertEq("23", parse(grammar1, "lid2b", "23"));
-			data = parse(grammar1, "lid2a", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2a", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("xy", parse(grammar1, "lid3", "xy"));
-			data = parse(grammar1, "lid3", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid3", "cd");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
+			assertEq("AB", parse(g1, "rule1a", "AB"));
+			assertEq("CD", parse(g1, "rule1a", "CD"));
+			assertEq("AB", parse(g1, "rule1b", "AB"));
+			assertEq("CD", parse(g1, "rule1b", "CD"));
+			assertEq("cd", parse(g1, "lid", "cd"));
+			assertFalse(g1.parse("ab", "lid"));
+			assertEq("cd23", parse(g1, "lid1a", "cd23"));
+			assertEq("cd23", parse(g1, "lid1b", "cd23"));
+			assertFalse(g1.parse("ab12", "lid1a"));
+			assertFalse(g1.parse("ab12", "lid1b"));
+			assertFalse(g1.parse("de12", "lid1b"));
+			assertEq("cd", parse(g1, "lid2a", "cd"));
+			assertEq("23", parse(g1, "lid2b", "23"));
+			assertFalse(g1.parse("ab", "lid2b"));
+			assertFalse(g1.parse("12", "lid2a"));
+			assertFalse(g1.parse("12", "lid2b"));
+			assertEq("xy", parse(g1, "lid3", "xy"));
+			assertFalse(g1.parse("ab", "lid3"));
+			assertFalse(g1.parse("cd", "lid3"));
 			assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-				parse(grammar1, "myDuration",
+				parse(g1, "myDuration",
 					"P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
-			assertEq("a-b c:d.e f1",
-				parse(grammar1, "xmlnames", "a-b c:d.e f1"));
+			assertEq("a-b c:d.e f1", parse(g1, "xmlnames", "a-b c:d.e f1"));
 			assertEq("a-b c:d.e f1 123",
-				parse(grammar1, "nmtokens", "a-b c:d.e f1 123"));
-			assertEq("123", parse(grammar1, "nmtokens", "123"));
+				parse(g1, "nmtokens", "a-b c:d.e f1 123"));
+			assertEq("123", parse(g1, "nmtokens", "123"));
 			assertEq("1.1.1990, 6.12.1945",
-				parse(grammar, "mydate", "1.1.1990, 6.12.1945"));
-			grammar1 = BNFGrammar.compile(null, grammar1.toString(), null);
-			assertEq("a", parse(grammar1, "set1", "a"));
-			data = parse(grammar1, "set1", "b");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("^", parse(grammar1, "set2", "^"));
-			assertEq("\"", parse(grammar1, "set2", "\""));
-			assertEq("#", parse(grammar1, "set2", "#"));
-			data = parse(grammar1, "set2a", "^");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "\"");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "#");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("?", parse(grammar1, "set2a", "?"));
-			assertEq("-", parse(grammar1, "set3", "-"));
-			assertEq("^", parse(grammar1, "set3", "^"));
-			assertEq("#", parse(grammar1, "set3", "#"));
-			assertEq("_", parse(grammar1, "set3", "_"));
-			assertTrue(parse(grammar1,"set3a", "-").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "^").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "#").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "_").startsWith("set3a failed"));
-			assertEq("a", parse(grammar1, "set3a", "a"));
-			data = parse(grammar1, "set3a", "");
-			assertTrue(data.indexOf("failed, eos;") >= 0, data);
-			assertEq("AAA", parse(grammar1, "quantif1", "AAA"));
-			assertEq("AAA", parse(grammar1, "quantif1", "AAAA"));
-			assertEq("AAA", parse(grammar1, "quantif2", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAAA"));
-			assertEq("AAA", parse(grammar1, "quantif3", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif3", "AAAA"));
-			assertEq("AAAAA", parse(grammar1, "quantif3", "AAAAA"));
-			data = parse(grammar1, "quantif1", "AA");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("", parse(grammar1, "testMethod", ""));
+				parse(g, "mydate", "1.1.1990, 6.12.1945"));
+			g1 = BNFGrammar.compile(null, g1.toString(), null);
+			assertEq("a", parse(g1, "set1", "a"));
+			assertFalse(g1.parse("b", "set1"));
+			assertEq("^", parse(g1, "set2", "^"));
+			assertEq("\"", parse(g1, "set2", "\""));
+			assertEq("#", parse(g1, "set2", "#"));
+			assertFalse(g1.parse("^", "set2a"));
+			assertFalse(g1.parse("\"", "set2a"));
+			assertFalse(g1.parse("#", "set2a"));
+			assertEq("?", parse(g1, "set2a", "?"));
+			assertEq("-", parse(g1, "set3", "-"));
+			assertEq("^", parse(g1, "set3", "^"));
+			assertEq("#", parse(g1, "set3", "#"));
+			assertEq("_", parse(g1, "set3", "_"));
+			assertTrue(parse(g1,"set3a", "-").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "^").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "#").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "_").startsWith("set3a failed"));
+			assertEq("a", parse(g1, "set3a", "a"));
+			assertFalse(g1.parse("", "set3a"));
+			assertEq("AAA", parse(g1, "quantif1", "AAA"));
+			assertEq("AAA", parse(g1, "quantif1", "AAAA"));
+			assertEq("AAA", parse(g1, "quantif2", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAAA"));
+			assertEq("AAA", parse(g1, "quantif3", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif3", "AAAA"));
+			assertEq("AAAAA", parse(g1, "quantif3", "AAAAA"));
+			assertFalse(g1.parse("AA", "quantif1"));
+			assertEq("", parse(g1, "testMethod", ""));
 			assertEq("test(123,a\"\n\\)", _s);
-			assertEq(" \t \n ",parse(grammar1, "S", " \t \n -123  456"));
-			assertEq("", parse(grammar1, "S")); //nothing parsed
-			assertEq("\t", parse(grammar1, "tabelator", "\txxx"));
-			assertEq("\n\n  -\n123+\t456",
-				parse(grammar1, "e", "\n\n  -\n123+\t456"));
+			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
+			assertEq("", parse(g1, "S")); //nothing parsed
+			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq("\n\n  -\n123+\t456", parse(g1,"e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-				parse(grammar1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+				parse(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
 			assertEq(-44, _result, printStack());
 			assertEq("+(123-5*(3-2+6))/2",
-				parse(grammar1, "e", "+(123-5*(3-2+6))/2::"));
+				parse(g1, "e", "+(123-5*(3-2+6))/2::"));
 			assertEq(44, _result, printStack());
-			assertEq("1-x", parse(grammar1, "e", "1-x"));
+			assertEq("1-x", parse(g1, "e", "1-x"));
 			assertEq(-998, _result, printStack());
-			assertEq("x-1", parse(grammar1, "e", "x-1"));
+			assertEq("x-1", parse(g1, "e", "x-1"));
 			assertEq(998, _result, printStack());
-			assertEq("x=x-555", parse(grammar1, "assignment", "x=x-555;"));
+			assertEq("x=x-555", parse(g1, "assignment", "x=x-555;"));
 			assertEq(444, _result, printStack());
-			assertEq(";", parse(grammar1, "program", "; xxx"));
-			assertEq("x=x", parse(grammar1, "assignment", "x=x"));
+			assertEq(";", parse(g1, "program", "; xxx"));
+			assertEq("x=x", parse(g1, "assignment", "x=x"));
 			assertEq(999, _variables.get("x"));
-			assertEq("x=-x", parse(grammar1, "assignment", "x=-x"));
+			assertEq("x=-x", parse(g1, "assignment", "x=-x"));
 			assertEq(-999, _variables.get("x"));
-			assertEq("i=x-555;\nj=5; j = i - j;", parse(grammar1, "program",
+			assertEq("i=x-555;\nj=5; j = i - j;", parse(g1, "program",
 				"i=x-555;\nj=5; j = i - j; xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-			assertEq("x=x-555.1", parse(grammar1, "assignment", "x=x-555.1;"));
+			assertEq("x=x-555.1", parse(g1, "assignment", "x=x-555.1;"));
 			assertEq(443.9, _result, printStack());
-			assertEq("x=2.14E-2", parse(grammar1, "assignment", "x=2.14E-2;"));
+			assertEq("x=2.14E-2", parse(g1, "assignment", "x=2.14E-2;"));
 			assertEq(2.14E-2, _result, printStack());
 			assertEq(2.14E-2, _variables.get("x"));
-			assertEq("x='ab'+1+2", parse(grammar1, "assignment", "x='ab'+1+2"));
+			assertEq("x='ab'+1+2", parse(g1, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
 			assertEq("ab12", _variables.get("x"));
-			assertEq("x='a'+1.0E+1",
-				parse(grammar1, "assignment", "x='a'+1.0E+1"));
+			assertEq("x='a'+1.0E+1", parse(g1, "assignment", "x='a'+1.0E+1"));
 			assertEq("a10.0", _result, printStack());
 			assertEq("a10.0", _variables.get("x"));
 			assertEq("x=1.0+1.0E-1+'a'",
-				parse(grammar1, "assignment", "x=1.0+1.0E-1+'a'"));
+				parse(g1, "assignment", "x=1.0+1.0E-1+'a'"));
 			assertEq("1.1a", _result, printStack());
 			assertEq("1.1a", _variables.get("x"));
-			assertEq("x=true", parse(grammar1, "assignment", "x=true"));
+			assertEq("x=true", parse(g1, "assignment", "x=true"));
 			assertEq(true, _result, printStack());
 			assertEq(true, _variables.get("x"));
-			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(grammar,
-				"testBuildIn",
-				"123 3.14 1999-01-02T23:10:54+01:00"));
-			assertEq("2.12.1945", parse(grammar, "myDatetime", "2.12.1945"));
+			assertEq("123 3.14 1999-01-02T23:10:54+01:00", parse(g,
+				"testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
+			assertEq("2.12.1945", parse(g, "myDatetime", "2.12.1945"));
 			assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-				parse(grammar1, "myDuration",
+				parse(g1, "myDuration",
 					"P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
-			assertEq("a-b c:d.e f1",parse(grammar1,"xmlnames", "a-b c:d.e f1"));
+			assertEq("a-b c:d.e f1",parse(g1,"xmlnames", "a-b c:d.e f1"));
 			assertEq("a-b c:d.e f1 123",
-				parse(grammar1, "nmtokens", "a-b c:d.e f1 123"));
-			assertEq("123", parse(grammar1, "nmtokens", "123"));
-			assertEq("a", parse(grammar1, "set1", "a"));
-			assertEq("x='ab'+1+2", parse(grammar1, "assignment", "x='ab'+1+2"));
+				parse(g1, "nmtokens", "a-b c:d.e f1 123"));
+			assertEq("123", parse(g1, "nmtokens", "123"));
+			assertEq("a", parse(g1, "set1", "a"));
+			assertEq("x='ab'+1+2", parse(g1, "assignment", "x='ab'+1+2"));
 			assertEq("ab12", _result, printStack());
-			assertEq("i=x-555;j=5;j=i-j;", 
-				parse(grammar1, "program", "i=x-555;j=5;j=i-j;xxx"));
+			assertEq("i=x-555;j=5;j=i-j;",
+				parse(g1, "program", "i=x-555;j=5;j=i-j;xxx"));
 			assertEq(444, _variables.get("i"));
 			assertEq(439, _variables.get("j"));
-			assertEq("AB", parse(grammar1, "rule1a", "AB"));
-			assertEq("CD", parse(grammar1, "rule1a", "CD"));
-			assertEq("AB", parse(grammar1, "rule1b", "AB"));
-			assertEq("CD", parse(grammar1, "rule1b", "CD"));
-			assertEq("cd", parse(grammar1, "lid", "cd"));
-			data = parse(grammar1, "lid", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd23", parse(grammar1, "lid1a", "cd23"));
-			assertEq("cd23", parse(grammar1, "lid1b", "cd23"));
-			data = parse(grammar1, "lid1a", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "ab12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid1b", "de12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("cd", parse(grammar1, "lid2a", "cd"));
-			assertEq("23", parse(grammar1, "lid2b", "23"));
-			data = parse(grammar1, "lid2a", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2a", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid2b", "12");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("xy", parse(grammar1, "lid3", "xy"));
-			data = parse(grammar1, "lid3", "ab");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			data = parse(grammar1, "lid3", "cd");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
+			assertEq("AB", parse(g1, "rule1a", "AB"));
+			assertEq("CD", parse(g1, "rule1a", "CD"));
+			assertEq("AB", parse(g1, "rule1b", "AB"));
+			assertEq("CD", parse(g1, "rule1b", "CD"));
+			assertEq("cd", parse(g1, "lid", "cd"));
+			assertFalse(g1.parse("ab", "lid"));
+			assertEq("cd23", parse(g1, "lid1a", "cd23"));
+			assertEq("cd23", parse(g1, "lid1b", "cd23"));
+			assertFalse(g1.parse("ab12", "lid1a"));
+			assertFalse(g1.parse("ab12", "lid1b"));
+			assertFalse(g1.parse("de12", "lid1b"));
+			assertEq("cd", parse(g1, "lid2a", "cd"));
+			assertEq("23", parse(g1, "lid2b", "23"));
+			assertFalse(g1.parse("ab", "lid2a"));
+			assertFalse(g1.parse("ab", "lid2b"));
+			assertFalse(g1.parse("12", "lid2a"));
+			assertFalse(g1.parse("12", "lid2b"));
+			assertEq("xy", parse(g1, "lid3", "xy"));
+			assertFalse(g1.parse("ab", "lid3"));
+			assertFalse(g1.parse("cd", "lid3"));
 			assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-				parse(grammar1, "myDuration",
+				parse(g1, "myDuration",
 					"P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
-			assertEq("a-b c:d.e f1",
-				parse(grammar1, "xmlnames", "a-b c:d.e f1"));
+			assertEq("a-b c:d.e f1", parse(g1, "xmlnames", "a-b c:d.e f1"));
 			assertEq("a-b c:d.e f1 123",
-				parse(grammar1, "nmtokens", "a-b c:d.e f1 123"));
-			assertEq("123", parse(grammar1, "nmtokens", "123"));
-			assertEq("a", parse(grammar1, "set1", "a"));
-			data = parse(grammar1, "set1", "b");
-			assertTrue(data.indexOf("failed, ") >= 0, data);
-			assertEq("^", parse(grammar1, "set2", "^"));
-			assertEq("\"", parse(grammar1, "set2", "\""));
-			assertEq("#", parse(grammar1, "set2", "#"));
-			data = parse(grammar1, "set2a", "^");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "\"");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			data = parse(grammar1, "set2a", "#");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("?", parse(grammar1, "set2a", "?"));
-			assertEq("-", parse(grammar1, "set3", "-"));
-			assertEq("^", parse(grammar1, "set3", "^"));
-			assertEq("#", parse(grammar1, "set3", "#"));
-			assertEq("_", parse(grammar1, "set3", "_"));
-			assertTrue(parse(grammar1,"set3a", "-").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "^").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "#").startsWith("set3a failed"));
-			assertTrue(parse(grammar1,"set3a", "_").startsWith("set3a failed"));
-			assertEq("a", parse(grammar1, "set3a", "a"));
-			data = parse(grammar1, "set3a", "");
-			assertTrue(data.indexOf("failed, eos;") >= 0, data);
-			assertEq("AAA", parse(grammar1, "quantif1", "AAA"));
-			assertEq("AAA", parse(grammar1, "quantif1", "AAAA"));
-			assertEq("AAA", parse(grammar1, "quantif2", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAA"));
-			assertEq("AAAA", parse(grammar1, "quantif2", "AAAAA"));
-			assertEq("AAA", parse(grammar1, "quantif3", "AAA"));
-			assertEq("AAAA", parse(grammar1, "quantif3", "AAAA"));
-			assertEq("AAAAA", parse(grammar1, "quantif3", "AAAAA"));
-			data = parse(grammar1, "quantif1", "AA");
-			assertTrue(data.indexOf("failed,") >= 0, data);
-			assertEq("", parse(grammar1, "testMethod", ""));
+				parse(g1, "nmtokens", "a-b c:d.e f1 123"));
+			assertEq("123", parse(g1, "nmtokens", "123"));
+			assertEq("a", parse(g1, "set1", "a"));
+			assertFalse(g1.parse("b", "set1"));
+			assertEq("^", parse(g1, "set2", "^"));
+			assertEq("\"", parse(g1, "set2", "\""));
+			assertEq("#", parse(g1, "set2", "#"));
+			assertFalse(g1.parse("^", "set2a"));
+			assertFalse(g1.parse("\"", "set2a"));
+			assertFalse(g1.parse("#", "set2a"));
+			assertEq("?", parse(g1, "set2a", "?"));
+			assertEq("-", parse(g1, "set3", "-"));
+			assertEq("^", parse(g1, "set3", "^"));
+			assertEq("#", parse(g1, "set3", "#"));
+			assertEq("_", parse(g1, "set3", "_"));
+			assertTrue(parse(g1,"set3a", "-").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "^").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "#").startsWith("set3a failed"));
+			assertTrue(parse(g1,"set3a", "_").startsWith("set3a failed"));
+			assertEq("a", parse(g1, "set3a", "a"));
+			assertFalse(g1.parse("", "set3a"));
+			assertEq("AAA", parse(g1, "quantif1", "AAA"));
+			assertEq("AAA", parse(g1, "quantif1", "AAAA"));
+			assertEq("AAA", parse(g1, "quantif2", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAA"));
+			assertEq("AAAA", parse(g1, "quantif2", "AAAAA"));
+			assertEq("AAA", parse(g1, "quantif3", "AAA"));
+			assertEq("AAAA", parse(g1, "quantif3", "AAAA"));
+			assertEq("AAAAA", parse(g1, "quantif3", "AAAAA"));
+			assertFalse(g1.parse("AA", "quantif1"));
+			assertEq("", parse(g1, "testMethod", ""));
 			assertEq("test(123,a\"\n\\)", _s);
-			assertEq(" \t \n ",parse(grammar1, "S", " \t \n -123  456"));
-			assertEq("", parse(grammar1, "S")); //nothing parsed
-			assertEq("\t", parse(grammar1, "tabelator", "\txxx"));
-			assertEq(";", parse(grammar1, "program",	"; xxx"));
-			assertEq("a", parse(grammar1, "set1", "a"));
-			assertEq("123", parse(grammar1, "myInteger", "123"));
-			assertEq("2.12.1945", parse(grammar1, "myDatetime", "2.12.1945"));
+			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
+			assertEq("", parse(g1, "S")); //nothing parsed
+			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq(";", parse(g1, "program",	"; xxx"));
+			assertEq("a", parse(g1, "set1", "a"));
+			assertEq("123", parse(g1, "myInteger", "123"));
+			assertEq("2.12.1945", parse(g1, "myDatetime", "2.12.1945"));
 			assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-				parse(grammar1, "myDuration",
+				parse(g1, "myDuration",
 					"P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
-			assertEq("a-b c:d.e f1",parse(grammar1,"xmlnames", "a-b c:d.e f1"));
+			assertEq("a-b c:d.e f1",parse(g1,"xmlnames", "a-b c:d.e f1"));
 			assertEq("a-b c:d.e f1 123",
-				parse(grammar1, "nmtokens", "a-b c:d.e f1 123"));
-			assertEq("123", parse(grammar1, "nmtokens", "123"));
+				parse(g1, "nmtokens", "a-b c:d.e f1 123"));
+			assertEq("123", parse(g1, "nmtokens", "123"));
 			assertEq("1.1.1990, 6.12.1945",
-				parse(grammar, "mydate", "1.1.1990, 6.12.1945"));
-			
+				parse(g, "mydate", "1.1.1990, 6.12.1945"));
 		} catch (Exception ex) {
 			fail(ex);
 		}

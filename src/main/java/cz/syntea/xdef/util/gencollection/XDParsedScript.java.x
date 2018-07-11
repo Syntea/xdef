@@ -30,9 +30,9 @@ public class XDParsedScript {
 	/** Parsed "$$$script" or empty string.*/
 	public String _script = "";
 	/** Parsed template or empty string.*/
-	public String _template = "";
+	public String _template = ""; 
 	/** Parsed var section or empty string.*/
-	public String _var = "";
+	public String _var = ""; 
 	/** Parsed options (source string).*/
 	public String _options = "";
 	/** Parsed _onTrue action (source string).*/
@@ -80,24 +80,22 @@ public class XDParsedScript {
 			sp.nextSymbol();
 		}
 		while (sp._sym != XScriptParser.NOCHAR) {
-			if (!isSectionName(sp)) {
-				if (sp.isOccurrence(_xOccurrence)) {
-					if (_isValue) {
-						parseTypeSection(sp);
-					}
+			if (sp.isOccurrence(_xOccurrence)) {
+				if (_isValue) {
+					parseTypeSection(sp);
+				}
+				continue;
+			} else if (_isValue) {
+				if (sp._sym == XScriptParser.IDENTIFIER_SYM
+					|| sp._sym == XScriptParser.LPAR_SYM) {
+					parseTypeSection(sp);
 					continue;
-				} else if (_isValue) {
-					if (sp._sym == XScriptParser.IDENTIFIER_SYM
-						|| sp._sym == XScriptParser.LPAR_SYM) {
-						parseTypeSection(sp);
-						continue;
-					} else if (sp._sym == XScriptParser.CONSTANT_SYM &&
-						sp._parsedValue.getItemId()==XScriptParser.XD_STRING) {
-						_xOccurrence.setFixed();
-						_default = '\'' + sp._parsedValue.toString() + '\'';
-						sp.nextSymbol();
-						continue;
-					}
+				} else if (sp._sym == XScriptParser.CONSTANT_SYM &&
+					sp._parsedValue.getItemId()==XScriptParser.XD_STRING) {
+					_xOccurrence.setFixed();
+					_default = '\'' + sp._parsedValue.toString() + '\'';
+					sp.nextSymbol();
+					continue;
 				}
 			}
 			char sym = sp._sym;
@@ -165,9 +163,6 @@ public class XDParsedScript {
 					}
 					sp.nextSymbol();
 					continue;
-				case XScriptParser.VAR_SYM:
-					_var = parseScriptSection(sp);
-					continue;
 				case XScriptParser.FORGET_SYM:
 					_forget = "forget";
 //					continue;
@@ -178,10 +173,11 @@ public class XDParsedScript {
 	}
 
 	/** Get canonized form of script.
-	 * @param removeActions if true all actions except validation are removed.
+	 * @param actions if true script will return the actions, otherwise
+	 * only occurrence, validation, option and reference.
 	 * @return string with canonized script.
 	 */
-	final String getCanonizedScript(final boolean removeActions) {
+	public final String getCanonizedScript(final boolean actions) {
 		String result = getxOccurrence().toString(_isValue);
 		if (_xOccurrence.isFixed()) {
 			if (_type != null && !_type.isEmpty()) {
@@ -206,51 +202,60 @@ public class XDParsedScript {
 		if (!_script.isEmpty()) {
 			result = _script + result;
 		}
-		result = addSection(result, "ref ", _reference);
-		result = addSection(result, "match ", _match);
-		result = addSection(result, "init ", _init);
-		result = addSection(result, "options ", _options);
-		if (removeActions) { //only validation
+		String sep = result.isEmpty() ? "" : ";";
+		if (!_reference.isEmpty()) {
+			result += sep + "ref " + _reference;
+			sep = ";";
+		}
+		if (!_match.isEmpty()) {
+			result += sep + "match " + _match;
+		}
+		if (!getOptions().isEmpty()) {
+			result += sep + "options " + getOptions();
+		}
+		if (!actions) { //only validation
 			return result;
 		}
-		if (!_var.isEmpty()) {
-			String s = !_var.endsWith(";") && !_var.endsWith("}") ? ";" : "";
-			result = "var " + _var + s + result;
+		if (!_init.isEmpty()) {
+			result = sep + _init + ";init " + result;
 		}
-		result = addSection(result, "onTrue ", _onTrue);
-		result = addSection(result, "onFalse ", _onFalse);
-		result = addSection(result, "onAbsence ", _onAbsence);
-		result = addSection(result, "onExcess ", _onExcess);
-		result = addSection(result, "onIllegalAttr ", _onIllegalAttr);
-		result = addSection(result, "create ", _create);
-		result = addSection(result, "finally ", _finally);
-		result = addSection(result, "forget ", _forget);
-		return result;
-	}
-
-	private static String addSection(final String result,
-		final String name,
-		final String content) {
-		if (!content.isEmpty()) {
-			String s =
-				!result.endsWith(";") && !result.endsWith("}") ? ";" : "";
-			return result + s + name + content;
+		if (!getOnTrue().isEmpty()) {
+			result += ";onTrue " + getOnTrue();
+		}
+		if (!getOnFalse().isEmpty()) {
+			result += ";onFalse " + getOnFalse();
+		}
+		if (!getOnAbsence().isEmpty()) {
+			result += ";onAbsence " + getOnAbsence();
+		}
+		if (!getOnExcess().isEmpty()) {
+			result += ";onExcess " + getOnExcess();
+		}
+		if (!getOnIllegalAttr().isEmpty()) {
+			result += ";onIllegalAttr " + getOnIllegalAttr();
+		}
+		if (!_create.isEmpty()) {
+			result += ";create " + _create;
+		}
+		if (!_finally.isEmpty()) {
+			result += ";finaly " + _finally;
+		}
+		if (!_forget.isEmpty()) {
+			result += ";forget";
 		}
 		return result;
 	}
 
 	private static String symToString(final XScriptParser sp) {
 		switch (sp._sym) {
-			case XScriptParser.NOT_SYM:
-				return "!";
 			case XScriptParser.AND_SYM:
 				return " AND ";
 			case XScriptParser.AAND_SYM:
 				return " AAND ";
 			case XScriptParser.OR_SYM:
-				return "|";
+				return " OR ";
 			case XScriptParser.OOR_SYM:
-				return "||";
+				return " OOR ";
 			case XScriptParser.GT_SYM:
 				return " GT ";
 			case XScriptParser.GE_SYM:
@@ -260,9 +265,9 @@ public class XDParsedScript {
 			case XScriptParser.LE_SYM:
 				return " LE ";
 			case XScriptParser.EQ_SYM:
-				return "==";
+				return " == ";
 			case XScriptParser.NE_SYM:
-				return "!=";
+				return " != ";
 			case XScriptParser.ASSGN_SYM:
 				return "=";
 			case XScriptParser.MUL_SYM:
@@ -270,20 +275,13 @@ public class XDParsedScript {
 			case XScriptParser.DIV_SYM:
 				return "/";
 			case XScriptParser.COLON_SYM:
-				return ":";
+				return " : ";
 			case XScriptParser.MOD_SYM:
 				return "%";
 			case XScriptParser.PLUS_SYM:
 				return "+";
-			case XScriptParser.MINUS_SYM:
-				return "-";
-			case XScriptParser.INC_SYM:
-				return "++";
-			case XScriptParser.DEC_SYM:
-				return "--";
-			case XScriptParser.TYPE_SYM:
-			case XScriptParser.UNIQUE_SET_SYM:
-			case XScriptParser.CASE_SYM:
+//			case XScriptParser.MINUS_SYM:
+//				return " - ";
 			case XScriptParser.RETURN_SYM:
 			case XScriptParser.THROW_SYM:
 			case XScriptParser.NEW_SYM:
@@ -297,32 +295,6 @@ public class XDParsedScript {
 		}
 	}
 
-	private static boolean isSectionName(final XScriptParser sp) {
-		switch (sp._sym) {
-			case XScriptParser.DEFAULT_SYM:
-				return true;
-			case XScriptParser.CREATE_SYM:
-			case XScriptParser.FINALLY_SYM:
-			case XScriptParser.FIXED_SYM:
-			case XScriptParser.FORGET_SYM:
-			case XScriptParser.INIT_SYM:
-			case XScriptParser.MATCH_SYM:
-			case XScriptParser.ON_ABSENCE_SYM:
-			case XScriptParser.ON_EXCESS_SYM:
-			case XScriptParser.ON_FALSE_SYM:
-			case XScriptParser.ON_ILLEGAL_ATTR_SYM:
-			case XScriptParser.ON_ILLEGAL_ELEMENT_SYM:
-			case XScriptParser.ON_ILLEGAL_ROOT_SYM:
-			case XScriptParser.ON_ILLEGAL_TEXT_SYM:
-			case XScriptParser.ON_START_ELEMENT_SYM:
-			case XScriptParser.ON_TRUE_SYM:
-			case XScriptParser.ON_XML_ERROR_SYM:
-			case XScriptParser.VAR_SYM:
-				return true;
-		}
-		return false;
-	}
-
 	/** Parse type section.
 	 * @param sp script parser.
 	 * @return string with canonized script.
@@ -331,26 +303,21 @@ public class XDParsedScript {
 		if (sp._sym == XScriptParser.BEG_SYM) {
 			sp.nextSymbol();
 			_type = "{";
-			while (sp._sym != XScriptParser.END_SYM
-				&& sp._sym != XScriptParser.NOCHAR
-				&& !isSectionName(sp)) {
+			while (sp._sym != XScriptParser.END_SYM &&
+				sp._sym != XScriptParser.NOCHAR) {
 				_type += parseScriptSection(sp);
-				if (sp._sym == XScriptParser.SEMICOLON_SYM) {
-					sp.nextSymbol();
-					_type += ';';
-				}
+				_type += ';';
 			}
 			if (sp._sym == XScriptParser.END_SYM) {
 				sp.nextSymbol();
-				_type += "}";
 			}
+			_type += "}";
 		} else {
 			_type = "";
 			StringBuilder sb = new StringBuilder();
 			boolean spaceNeeded = false;
-			while (sp._sym != XScriptParser.NOCHAR
-				&& sp._sym != XScriptParser.SEMICOLON_SYM
-				&& !isSectionName(sp)) {
+			while (sp._sym != XScriptParser.NOCHAR &&
+				sp._sym != XScriptParser.SEMICOLON_SYM) {
 				switch (sp._sym) {
 					case XScriptParser.IDENTIFIER_SYM:
 						if (spaceNeeded) {
@@ -372,10 +339,21 @@ public class XDParsedScript {
 							spaceNeeded = true;
 						}
 						break;
+//					case XScriptParser.AND_SYM:
+//					case XScriptParser.AAND_SYM:
+//					case XScriptParser.OR_SYM:
+//					case XScriptParser.OOR_SYM:
+//						if (spaceNeeded) {
+//							sb.append(' '); //must be separated by space
+//						}
+//						spaceNeeded = true;
 					default:
 						spaceNeeded = false;
 						sb.append(symToString(sp));
 				}
+				sp.nextSymbol();
+			}
+			if (sp._sym == XScriptParser.SEMICOLON_SYM) {
 				sp.nextSymbol();
 			}
 			_type += sb.toString();
@@ -388,140 +366,42 @@ public class XDParsedScript {
 	 */
 	private static String parseScriptSection(final XScriptParser sp) {
 		StringBuilder sb = new StringBuilder();
-		if (sp._sym == XScriptParser.TRY_SYM) {
-			sb.append("try ");
-			sp.nextSymbol();
-			sb.append(parseScriptSection(sp));
-			if (sp._sym == XScriptParser.END_SYM) {
-				sb.append("}");
-				sp.nextSymbol();
-			}
-			if (sp._sym == XScriptParser.CATCH_SYM) {
-				sb.append("catch");
-				sp.nextSymbol();
-				sb.append(parseScriptSection(sp));
-				if (sp._sym == XScriptParser.END_SYM) {
-					sb.append("}");
-					sp.nextSymbol();
-				}
-				if (sp._sym == XScriptParser.BEG_SYM) {
-					sb.append(parseScriptSection(sp));
-				}
-			}
-			return sb.toString();
-		} else if (sp._sym == XScriptParser.SWITCH_SYM) {
-			sp.nextSymbol();
-			sb.append("switch" + parseScriptSection(sp));
-			if (sp._sym == XScriptParser.BEG_SYM) {
-				sb.append("{");
-				sp.nextSymbol();
-				for (;;) {
-					if (sp._sym == XScriptParser.CASE_SYM) {
-						sp.nextSymbol();
-						sb.append("case ").append(parseScriptSection(sp));
-						sb.append(parseScriptSection(sp));
-					} else if (sp._sym == XScriptParser.DEFAULT_SYM) {
-						sp.nextSymbol();
-						if (sp._sym == XScriptParser.COLON_SYM) {
-							sp.nextSymbol();
-						}
-						sb.append("default:").append(parseScriptSection(sp));
-					} else {
-						break;
-					}
-				}
-				if (sp._sym == XScriptParser.END_SYM) {
-					sp.nextSymbol();
-					sb.append("}");
-				}
-			}
-			return sb.toString();
-		} else if (sp._sym == XScriptParser.IF_SYM) {
-			sb.append("if");
-			sp.nextSymbol();
-			sb.append(parseScriptSection(sp));
-			if (sp._sym == XScriptParser.END_SYM) {
-				sb.append("}");
-				sp.nextSymbol();
-			}
-		}
 		if (sp._sym == XScriptParser.BEG_SYM) {
 			sp.nextSymbol();
 			sb.append("{");
 			while (sp._sym != XScriptParser.END_SYM &&
 				sp._sym != XScriptParser.NOCHAR) {
-				if (isSectionName(sp)) {
-					return sb.toString();
-				}
-				if (sp._sym == XScriptParser.TRY_SYM) {
-					sb.append(parseScriptSection(sp));
-				} else if (sp._sym == XScriptParser.IF_SYM) {
-					sb.append(parseScriptSection(sp));
-				} else if (sp._sym == XScriptParser.SWITCH_SYM) {
-					sb.append(parseScriptSection(sp));
-				}
+				sb.append(parseScriptSection(sp));
 				if (sp._sym == XScriptParser.BEG_SYM) {
-					sb.append("{");
-					sp.nextSymbol();
 					sb.append(parseScriptSection(sp));
-					if (sp._sym == XScriptParser.END_SYM) {
-						sb.append("}");
-						sp.nextSymbol();
-					}
 				} else {
-					sb.append(parseScriptSection(sp));
+					sb.append(';');
 				}
 			}
 			if (sp._sym == XScriptParser.END_SYM) {
 				sb.append("}");
 				sp.nextSymbol();
-			}
-			if (isSectionName(sp)) {
-				return sb.toString();
-			}
-			if (sp._sym == XScriptParser.RETURN_SYM) {
-				sb.append(parseScriptSection(sp));
-				if (sp._sym == XScriptParser.END_SYM) {
-					sb.append("}");
+				if (sp._sym == XScriptParser.CATCH_SYM) {
+					sb.append("catch");
 					sp.nextSymbol();
+					sb.append(parseScriptSection(sp));
+				} else if (sp._sym == XScriptParser.RETURN_SYM) {
+					sb.append(parseScriptSection(sp));
+					if (sp._sym == XScriptParser.END_SYM) {
+						sb.append("}");
+//						sp.nextSymbol();
+					}
 				}
+
 			}
 			return sb.toString();
 		} else {
 			boolean spaceNeeded = false;
 			while (sp._sym != XScriptParser.NOCHAR
-				&& sp._sym != XScriptParser.END_SYM
-				&& sp._sym != XScriptParser.SEMICOLON_SYM
-				&& !isSectionName(sp)) {
+				&& sp._sym != XScriptParser.SEMICOLON_SYM) {
 				switch (sp._sym) {
 					case XScriptParser.BEG_SYM:
-						return sb.toString();
-					case XScriptParser.IF_SYM:
-					case XScriptParser.TRY_SYM:
-						if (spaceNeeded) {
-							sb.append(' ');
-						}
-						sb.append(symToString(sp));
-						return sb.toString();
-					case XScriptParser.SWITCH_SYM:
-						if (spaceNeeded) {
-							sb.append(' ');
-						}
-						sb.append(symToString(sp));
-						return sb.toString();
-					case XScriptParser.CASE_SYM:
-						if (spaceNeeded) {
-							sb.append(' ');
-						}
-						sb.append(symToString(sp));
-						return sb.toString();
-					case XScriptParser.RETURN_SYM:
-					case XScriptParser.ELSE_SYM:
-						if (spaceNeeded) {
-							sb.append(' ');
-						}
-						sb.append(symToString(sp));
-						spaceNeeded = true;
+						sb.append(parseScriptSection(sp));
 						break;
 					case XScriptParser.IDENTIFIER_SYM:
 						if (spaceNeeded) {
@@ -550,6 +430,12 @@ public class XDParsedScript {
 						sb.append('@').append(sp._idName);
 						spaceNeeded = true;
 						break;
+					case XScriptParser.TRY_SYM:
+						if (spaceNeeded) {
+							sb.append(' ');
+						}
+						sb.append(symToString(sp));
+						break;
 					case XScriptParser.CATCH_SYM:
 						if (spaceNeeded) {
 							sb.append(' ');
@@ -562,9 +448,7 @@ public class XDParsedScript {
 				}
 				sp.nextSymbol();
 			}
-			if (sp._sym == XScriptParser.SEMICOLON_SYM
-				|| sp._sym == XScriptParser.END_SYM) {
-				sb.append(symToString(sp));
+			if (sp._sym == XScriptParser.SEMICOLON_SYM) {
 				sp.nextSymbol();
 			}
 			return sb.toString();
@@ -646,16 +530,16 @@ public class XDParsedScript {
 		sp.setSource(new SBuffer(script), defName, XDConstants.XD20_ID);
 		return new XDParsedScript(sp, isValue);
 	}
-//
-//	/** Get required part of the script of a node in the canonized form.
-//	 * @param n Node.
-//	 * @param actions if true the script will return actions, otherwise
-//	 * only occurrence, validation, option and reference.
-//	 * @return string with canonized form of the script from the node.
-//	 */
-//	public static final String getScript(final Node n, final boolean actions) {
-//		return getXdScript(n).getCanonizedScript(actions);
-//	}
+
+	/** Get required part of the script of a node in the canonized form.
+	 * @param n Node.
+	 * @param actions if true the script will return actions, otherwise
+	 * only occurrence, validation, option and reference.
+	 * @return string with canonized form of the script from the node.
+	 */
+	public static final String getScript(final Node n, final boolean actions) {
+		return getXdScript(n).getCanonizedScript(actions);
+	}
 
 	/** @return the _xOccurrence */
 	public final XOccurrence getxOccurrence() {return _xOccurrence;}

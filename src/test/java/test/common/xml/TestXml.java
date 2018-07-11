@@ -166,7 +166,7 @@ public class TestXml extends STester  {
 	}
 
 	private void testWriter(String provider) {
-		String s = "Kùò " + (char)9 + (char)13 + " úpìl";
+		String s = "KÅ¯Åˆ " + (char)9 + (char)13 + " ÃºpÄ›l";
 		DOMImplementation di;
 		Document doc;
 		Element el;
@@ -200,11 +200,11 @@ public class TestXml extends STester  {
 				s = buffer.toString();
 			}
 			s = s.trim();
-			if (!("<root atr=\"Kùò &#9;&#13; úpìl\">" +
-				"Kùò " + (char)9 + "&#13; úpìl</root>").equals(s) &&
+			if (!("<root atr=\"KÅ¯Åˆ &#9;&#13; ÃºpÄ›l\">" +
+				"KÅ¯Åˆ " + (char)9 + "&#13; ÃºpÄ›l</root>").equals(s) &&
 				//ignore case if there is hexacecimal reprezentation
-				!("<root atr=\"kùò &#x9;&#xd; úpìl\">" +
-				"kùò "+(char)9+"&#xd; úpìl</root>").equals(s.toLowerCase())) {
+				!("<root atr=\"kÅ¯Åˆ &#x9;&#xd; ÃºpÄ›l\">" +
+				"kÅ¯Åˆ "+(char)9+"&#xd; ÃºpÄ›l</root>").equals(s.toLowerCase())) {
 				fail("'" + s + "', provider = " + provider);
 			}
 		} catch (Exception ex) {
@@ -223,9 +223,9 @@ public class TestXml extends STester  {
 				doc = db.parse(is);
 			}
 			el = doc.getDocumentElement();
-			assertEq("Kùò "+(char)9+(char)13+" úpìl", el.getAttribute("atr"),
+			assertEq("KÅ¯Åˆ "+(char)9+(char)13+" ÃºpÄ›l", el.getAttribute("atr"),
 				provider);
-			assertEq("Kùò "+(char)9+(char)13+" úpìl",
+			assertEq("KÅ¯Åˆ "+(char)9+(char)13+" ÃºpÄ›l",
 				el.getChildNodes().item(0).getNodeValue(), provider);
 		} catch (Exception ex) {
 			fail(ex);

@@ -431,7 +431,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			spos = getLastPosition();
 			int i;
 			if ((i = name.lastIndexOf('.')) <= 0) {
-				error(XDEF.XDEF424, name); //Undefined variable '&{0}'
+				if (!_g._ignoreUnresolvedExternals) {
+					error(XDEF.XDEF424, name); //Undefined variable '&{0}'
+				}
 				_g.setUnDefItem();
 				return false;
 			}
@@ -971,8 +973,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							operator==PLUS_SYM ? ADD_R : SUB_R), -1);
 					}
 				} else {
-					//Value of type '&{0}' expected
-					error(XDEF.XDEF423, "number");
+					if (!_g._ignoreUnresolvedExternals
+						|| (xType != XD_UNDEF && yType != XD_UNDEF)) {
+						//Value of type '&{0}' expected
+						error(XDEF.XDEF423, "number");
+					}
 					_g.addCode(new CodeOp(XD_FLOAT, ADD_R), -1);
 				}
 			}

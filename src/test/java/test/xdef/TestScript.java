@@ -28,7 +28,13 @@ import cz.syntea.xdef.proc.XXData;
  */
 public final class TestScript extends Tester {
 
-	public TestScript() {super();}
+	public TestScript() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private boolean _result = false;
 
@@ -625,8 +631,8 @@ public final class TestScript extends Tester {
 		test("010599",
 			"setResult(eq(toString(parseDate('99-5-1','yy-M-d'),'ddMMyy')));");
 		test("","{Datetime d = parseDate('2005-03-01T14:48:40.352');"+
-			"String s = 'datum: 01/03/2005, èas: 14:48:40.352';" +
-			"String m='\\'datum: \\'dd/MM/yyyy\\', èas: \\'HH:mm:ss.SSS';" +
+			"String s = 'datum: 01/03/2005, Äas: 14:48:40.352';" +
+			"String m='\\'datum: \\'dd/MM/yyyy\\', Äas: \\'HH:mm:ss.SSS';" +
 			"setResult(toString(d,m) == s);}");
 		test("2008",
 			"setResult(eq(toString(parseDate('2008','yyyy'),'yyyy')));");
@@ -809,11 +815,11 @@ public final class TestScript extends Tester {
 		test("1990", "{setResult(!xs:gYear(%minInclusive=1999));}");
 		test("1990", "{setResult(!xs:gYear(%minInclusive=1999).parse());}");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr("+1.21","onTrue setResult(true); required xs:decimal;"
+		testAttr("+1.21","onTrue setResult(true); required decimal;"
 			+ " onFalse setResult(false); ");
-//		testAttr("+1.21","onTrue setResult(true); required xs:decimal(3);"
+//		testAttr("+1.21","onTrue setResult(true); required decimal(3);"
 //			+ " onFalse setResult(false); ");
-//		testAttr("+1.21","onTrue setResult(true); required xs:decimal(3,2);"
+//		testAttr("+1.21","onTrue setResult(true); required decimal(3,2);"
 //			+ " onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr("ahoj","required {String i = 'nazdar'; String j = 'ahoj';" +
@@ -828,7 +834,6 @@ public final class TestScript extends Tester {
 		testAttr("hoj","required {String i = 'nazdar'; String j = 'ahoj';" +
 			" return enumi(i,j);} onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-
 		_printCode = true;
 		_printCode = false;
 		testAttr("ahoj","required; onTrue setResult(true);"
@@ -921,11 +926,8 @@ public final class TestScript extends Tester {
 		testAttr("-abc-",
 			"onTrue {setResult(translate(getText(),'ab-','BA') EQ 'BAc');}"
 			+ "required string(); onFalse setResult(false); ");
-/*#if !DOTNET */
-		//this test works in DOTNET; however, it is just too slow so we skip it
 		testAttr("//X/y","onTrue setResult(true); required file();"
 			+ " onFalse setResult(false); ");
-/*#end*/
 		testAttr("Sun, 18 Nov 2001 23:42:39 +0100",
 			"onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
@@ -1183,9 +1185,6 @@ public final class TestScript extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

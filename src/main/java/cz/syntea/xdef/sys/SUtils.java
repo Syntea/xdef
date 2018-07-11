@@ -961,7 +961,7 @@ public class SUtils extends FUtils {
 	 * the argument p by the character on the same position in the argument q.
 	 * If no character is on the position of q then this character is removed.
 	 * <p>Examples:</p>
-	 * <p>translate(“bcr”,“abc”,”ABa”) returns “Bar”.</p>
+	 * <p>translate(â€œbcrâ€,â€œabcâ€,â€ABaâ€) returns â€œBarâ€.</p>
 	 * <p>translate("-abc-","ab-","BA") returns "BAc".</p>
 	 * @param s source string.
 	 * @param p string with characters to be replaced.

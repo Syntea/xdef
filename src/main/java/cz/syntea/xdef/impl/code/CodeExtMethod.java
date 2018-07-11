@@ -58,7 +58,7 @@ public class CodeExtMethod extends CodeI1 {
 	 * @return true if both objects are equal.
 	 */
 	public boolean equals(final XDValue o) {
-		if (o == null || !(o instanceof CodeExtMethod)) {
+		if (_extMethod == null || o == null || !(o instanceof CodeExtMethod)) {
 			return false;
 		}
 		CodeExtMethod x = (CodeExtMethod) o;

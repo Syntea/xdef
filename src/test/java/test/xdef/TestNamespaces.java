@@ -21,7 +21,13 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestNamespaces extends Tester {
 
-	public TestNamespaces() {super();}
+	public TestNamespaces() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	public void test() {
@@ -166,9 +172,6 @@ public final class TestNamespaces extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 

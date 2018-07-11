@@ -18,8 +18,6 @@ import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDBNFGrammar;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueAbstract;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
@@ -104,6 +102,9 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 
 	@Override
 	public DefBNFRule getRule(final String name) {
+		if (_value == null) {
+			return null;
+		}
 		return new DefBNFRule(_value.getRule(name));
 	}
 

@@ -24,7 +24,13 @@ import org.w3c.dom.Element;
  */
 public final class TestGroups extends Tester {
 
-	public TestGroups() {super();}
+	public TestGroups() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -43,20 +49,6 @@ public final class TestGroups extends Tester {
 ////////////////////////////////////////////////////////////////////////////////
 // sequence
 ////////////////////////////////////////////////////////////////////////////////
-		try {
-			xdef = //test empty sequence
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:sequence> </xd:sequence>\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Not reported: empty group");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF325") < 0) {
-				fail(ex);
-			}
-		}
 		try {
 			xdef = // Test choice in sequence
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -190,7 +182,7 @@ public final class TestGroups extends Tester {
 			parse(xp, null, "<a><q/><p/><b/><c/></a>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
-			//nemìlo by hlasit dvakrat
+			//nemÄ›lo by hlasit dvakrat
 			assertTrue(reporter.printToString().contains("XDEF520"),
 				reporter.printToString());
 			parse(xp, null, "<a><p/><p/><b/><c/></a>", reporter);
@@ -360,35 +352,6 @@ public final class TestGroups extends Tester {
 ////////////////////////////////////////////////////////////////////////////////
 // mixed
 ////////////////////////////////////////////////////////////////////////////////
-
-		try {//test empty mixed
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:mixed> </xd:mixed>\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Not reported: empty group");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF325") < 0) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef = //test empty mixed
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:mixed> <b/> <b/> </xd:mixed>\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Not reported: Ambiguous group");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF234") < 0) {
-				fail(ex);
-			}
-		}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -785,35 +748,6 @@ public final class TestGroups extends Tester {
 ////////////////////////////////////////////////////////////////////////////////
 // choice
 ////////////////////////////////////////////////////////////////////////////////
-
-		try {//test empty choice
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:choice> </xd:choice>\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Not reported: empty group");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF325") < 0) {
-				fail(ex);
-			}
-		}
-		try {//test repeated items in choice
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:choice> <b/> <b/> </xd:choice>\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Not reported: empty group");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF234") < 0) {
-				fail(ex);
-			}
-		}
 		try {// Test any in choice
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -2464,9 +2398,6 @@ public final class TestGroups extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

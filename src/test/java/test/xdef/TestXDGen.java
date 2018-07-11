@@ -24,7 +24,14 @@ import cz.syntea.xdef.sys.ReportWriter;
  * @author Vaclav Trojan
  */
 public class TestXDGen extends Tester {
-	public TestXDGen() {super();}
+
+	public TestXDGen() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private ReportWriter genXDef(String xml) throws Exception{
 		return genXDef(xml, false);
@@ -143,9 +150,6 @@ public class TestXDGen extends Tester {
 			assertNoErrors(genXDef(dataDir + "Test000_rus_3.xml"));
 			assertNoErrors(genXDef(dataDir + "Test000_rus_4.xml"));
 			assertNoErrors(genXDef(dataDir + "Test000_rus_5.xml"));
-///*#if !JAVAX*#/
-//			assertNoErrors(genXDef(dataDir + "Test000_rus_6.xml"));
-///*#end*/
 			assertNoErrors(genXDef(dataDir + "Test002_3.xml"));
 			assertNoErrors(genXDef(dataDir + "Test002_5.xml"));
 			assertNoErrors(genXDef(dataDir + "Test002_6.xml"));
@@ -158,9 +162,6 @@ public class TestXDGen extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

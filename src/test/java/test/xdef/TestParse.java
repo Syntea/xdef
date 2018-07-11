@@ -51,7 +51,13 @@ import cz.syntea.xdef.proc.XXData;
  */
 public final class TestParse extends Tester {
 
-	public TestParse() {super();}
+	public TestParse() {
+		super();
+/*#if DEBUG*#/
+//		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private static int _myX;
 
@@ -73,6 +79,7 @@ public final class TestParse extends Tester {
 		StringWriter strw;
 		String tempDir = getTempDir();
 		_myX = 1;
+		boolean chkSyntax = getChkSyntax();
 		try {//no source
 			XDFactory.compileXD(null, (Object[]) new File[0]);
 			fail("Error not recognized");
@@ -104,21 +111,6 @@ public final class TestParse extends Tester {
 "/*comment*/\n"+
 "</xd:def>");
 		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef = // check illegal text
-"<x:def xmlns:x ='" + XDEFNS + "' root ='a'>\n"+
-"<a a = \"required eq('a')\">\n"+
-"here is an illegal text\n"+
-"</a>\n"+
-"</x:def>";
-			compile(xdef);
-			fail("Error not thrown");
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (s == null || s.indexOf("XDEF424") < 0) {
-				fail(ex);
-			}
-		}
 		try {
 			xdef = // check in the onIllegalRoot
 "<x:def xmlns:x ='" + XDEFNS + "' root ='a'"+
@@ -206,52 +198,33 @@ public final class TestParse extends Tester {
 				"<a:x xmlns:a='a'><a:y xmlns:a='a'/><y/>t<z a='a'/></a:x>");
 			xdef = //test of exception in external method.
 "<xd:def xmlns:xd='" + XDEFNS + "' xd:root='a'>" +
-"    <a xd:script='finally myError()' />" +
+"    <a xd:script='finally test.xdef.TestParse.myError()' />" +
 "</xd:def>";
-			parse(compile(xdef, getClass()), "", "<a/>", reporter);
+			parse(xdef, "", "<a/>", reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			if(!reporter.errorWarnings()) {
-				fail("error not reported");
+				fail(ex);
 			} else {
-				rep = reporter.getReport();
-				if (rep == null) {
-					fail("report missing");
-				} else {
-					assertEq("XDEF569", rep.getMsgID());
-				}
+				assertEq("XDEF569", reporter.getReport().getMsgID());
 			}
 		}
 		try { //test of exception in external method.
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' xd:root='a'>" +
-"<xd:declaration>int i = myError();</xd:declaration>\n"+
+"<xd:declaration>\n"+
+	"external method long test.xdef.TestParse.myError();\n"+
+	"int i = myError();\n"+
+"</xd:declaration>\n"+
 "    <a/>" +
 "</xd:def>";
-			parse(compile(xdef, getClass()), "", "<a/>", reporter);
+			parse(xdef, "", "<a/>", reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			if(!reporter.errorWarnings()) {
-				fail("error not reported");
-			} else {
-				rep = reporter.getReport();
-				if (rep == null) {
-					fail("report missing");
-				} else {
-					assertEq("XDEF569", rep.getMsgID());
-				}
-			}
-		}
-		try {//check incompatible casting.
-			compile(
-"<xd:def xmlns:xd='" + XDEFNS + "' root=\"a\">\n"+
-"  <a a='string' xd:script='finally outln(toString((boolean)(String) @a))'/>\n"+
-"</xd:def>\n");
-			fail("Error not thrown");
-		} catch (Exception ex) {
-			//Incompatible types
-			if ((s = ex.getMessage()) == null || s.indexOf("XDEF457") < 0) {
 				fail(ex);
+			} else {
+				assertEq("XDEF569", reporter.getReport().getMsgID());
 			}
 		}
 		try {//check empty attribute in model
@@ -281,7 +254,7 @@ public final class TestParse extends Tester {
 			assertNoErrorwarnings(reporter);
 			xdef = //check type expression
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'>\n"+
-"<A a=\"(eq('abc') | eq('xyz')) AAND xs:string(2, 50);\"/>\n"+
+"<A a=\"(eq('abc') | eq('xyz')) AAND string(2, 50);\"/>\n"+
 "</xd:def>";
 			xml = "<A a='abc'/>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
@@ -467,7 +440,7 @@ public final class TestParse extends Tester {
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a='xx'><x>xxx</x><x>xxxx</x></a>", reporter);
 			assertErrors(reporter);
-			xdef = // test fromat, printf
+			xdef = // test format, printf
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration> Locale loc = new Locale('cs', 'CZ'); </xd:declaration>\n"+
 "<a xd:script=\"finally {String s = '%d,%2.1f';\n"+
@@ -501,7 +474,7 @@ public final class TestParse extends Tester {
 "         case 'MD5': return true;\n"+
 "         case 'CRC': return true;\n"+
 "       }\n"+
-"       return error('Chybn˝ typ: ' + s);\n"+
+"       return error('Chybn√Ω typ: ' + s);\n"+
 "     }\n"+
 "     boolean myCheckInt() {\n"+
 "       try {\n"+
@@ -664,8 +637,8 @@ public final class TestParse extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		try {//check typ of fixed value
-			xdef =
+		try {
+			xdef = //check typ of fixed value
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<a v=\"float; fixed '2.0'\"/>\n"+
 "</xd:def>";
@@ -675,35 +648,7 @@ public final class TestParse extends Tester {
 			assertNoErrors(reporter);
 			assertEq("<a v='2.0'/>", parse(xdef, "", "<a v='20'/>", reporter));
 			assertErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<a v=\"int; fixed '2.0'\"/>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if (!ex.getMessage().contains("XDEF481")) { //Incorrect fixed value
-				fail(ex);
-			}
-		}
-		try {//check comments are ignored and if not allowed text is recognized
-			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
-"<xd:def root='a'>\n"+
-"  /* comment */\n"+	//ok
-"  <a/>\n"+
-"  blabla\n"+			//error
-"</xd:def>\n"+
-"</xd:collection>";
-			compile(xdef);
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (s == null ||
-				s.indexOf("XDEF260") < 0) {
-				fail(ex);
-			}
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {//ignoreEmptyAttributes
 			xdef = //errors
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -1291,22 +1236,23 @@ public final class TestParse extends Tester {
 "</xd:def>";
 			xml =
 "<messages>\n"+
-"  <XDEF500 ces=\"&amp;{line}{; ¯·dka=}&amp;{column}{;"
+"  <XDEF500 ces=\"&amp;{line}{; ≈ô√°dka=}&amp;{column}{;"
 		+ " sloupec=}&amp;{sysId}{; zdroj='}{'}\"/>\n"+
-"  <XDEF501 ces=\"V˝skyt nepovolenÈho elementu '&amp;{child}'&amp;{xpath}{"
+"  <XDEF501 ces=\"V√Ωskyt nepovolen√©ho elementu '&amp;{child}'&amp;{xpath}{"
 		+ " v }&amp;{#XDEF500}\"/>\n"+
-"  <XDEF502 ces=\"Element '&amp;{child}' nenÌ definov·n jako 'root'{ v }"
+"  <XDEF502 ces=\"Element '&amp;{child}' nen√≠ definov√°n jako 'root'{ v }"
 		+ "&amp;{#XDEF500}\"/>\n"+
 "</messages>";
 			xp = compile(xdef);
 			parse(xp, "a", xml, reporter);
 			s = reporter.printToString().trim();
-			assertTrue(s.indexOf("XDEF500&{line}{; ¯·dka=}&{column}{;"
+			assertTrue(s.indexOf("XDEF500&{line}{; ≈ô√°dka=}&{column}{;"
 				+ " sloupec=}&{sysId}{; zdroj='}{'}") == 0 &&
-				s.indexOf("XDEF501V˝skyt nepovolenÈho elementu '&{child}"
+				s.indexOf("XDEF501V√Ωskyt nepovolen√©ho elementu '&{child}"
 				+ "'&{xpath}{ v }&{#XDEF500}") > 0 &&
-				s.endsWith("XDEF502Element '&{child}' nenÌ definov·n jako "
+				s.endsWith("XDEF502Element '&{child}' nen√≠ definov√°n jako "
 				+ "'root'{ v }&{#XDEF500}"), s);
+			//macro
 			xdef =
 "<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
 "<xd:def name='messages' root='messages' script='options ${mac#opt}'>\n"+
@@ -1322,20 +1268,20 @@ public final class TestParse extends Tester {
 "</xd:collection>\n";
 			xml =
 "<messages>\n"+
-"  <XDEF500 ces=\"&amp;{line}{; ¯·dka=}&amp;{column}{; sloupec=}&amp;{sysId}"+
+"  <X00 ces=\"&amp;{line}{; ≈ô√°dka=}&amp;{column}{; sloupec=}&amp;{sysId}"+
 "{; zdroj='}{'}\"/>\n"+
-"  <XDEF501 ces=\"V˝skyt nepovolenÈho elementu '&amp;{child}'&amp;{xpath}"+
- "{ v }&amp;{#XDEF500}\"/>\n"+
-"  <XDEF502 ces=\"Element '&amp;{child}' nenÌ definov·n jako 'root'"+
-"{ v }&amp;{#XDEF500}\"/>\n"+
+"  <X01 ces=\"V√Ωskyt nepovolen√©ho elementu '&amp;{child}'&amp;{xpath}"+
+ "{ v }&amp;{#X00}\"/>\n"+
+"  <X02 ces=\"Element '&amp;{child}' nen√≠ definov√°n jako 'root'"+
+"{ v }&amp;{#X00}\"/>\n"+
 "</messages>\n";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			parse(xp, "messages", xml, null, strw, null, null);
 			assertEq(
-"XDEF500 &{LINE}{; ÿ¡DKA=}&{COLUMN}{; SLOUPEC=}&{SYSID}{; ZDROJ='}{'}\n"+
-"XDEF501 V›SKYT NEPOVOLEN…HO ELEMENTU '&{CHILD}'&{XPATH}{ V }&{#XDEF500}\n"+
-"XDEF502 ELEMENT '&{CHILD}' NENÕ DEFINOV¡N JAKO 'ROOT'{ V }&{#XDEF500}\n",
+"X00 &{LINE}{; ≈ò√ÅDKA=}&{COLUMN}{; SLOUPEC=}&{SYSID}{; ZDROJ='}{'}\n"+
+"X01 V√ùSKYT NEPOVOLEN√âHO ELEMENTU '&{CHILD}'&{XPATH}{ V }&{#X00}\n"+
+"X02 ELEMENT '&{CHILD}' NEN√ç DEFINOV√ÅN JAKO 'ROOT'{ V }&{#X00}\n",
 				strw.toString());
 			//macro
 			xdef =
@@ -1407,12 +1353,12 @@ public final class TestParse extends Tester {
 "<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 "<macTest xd:script='finally ${text}; options trimText;'/>\n"+
 "<xd:macro name='text'\n"+
-"  >out('Vol·nÌ makra text m· tvar: \\u0024{text}')</xd:macro>\n"+
+"  >out('Vol√°n√≠ makra text m√° tvar: \\u0024{text}')</xd:macro>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			parse(xp, "a", "<macTest/>", null, strw, null, null);
-			assertEq("Vol·nÌ makra text m· tvar: ${text}", strw.toString());
+			assertEq("Vol√°n√≠ makra text m√° tvar: ${text}", strw.toString());
 			xdef =
 "<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 "<macTest xd:script='finally ${m1}${m2}; options trimText;'/>\n"+
@@ -1456,23 +1402,6 @@ public final class TestParse extends Tester {
 			strw = new StringWriter();
 			parse(xp, "a", "<macTest/>", null, strw, null, null);
 			assertEq("m1", strw.toString());
-			// test errors
-			xdef =
-"<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
-"<macTest  xd:script = \"finally ${text}; options trim;\"/>\n"+
-"<xd:macro name = \"text\">\n"+
-"out('Vol·nÌ makra text m· tvar:\n\44{text}')</xd:macro>\n"+
-"</xd:def>";
-			compile(xdef);
-			assertErrors(reporter);
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (s.indexOf("SYS012") < 0 || s.indexOf("XDEF486") < 0 ||
-				s.indexOf("XDEF426") < 0 || s.indexOf("XDEF433") < 0) {
-				fail(ex);
-			}
-		}
-		try {
 			xdef =
 "<xd:def name='a' root='txt' xmlns:xd='" + XDEFNS + "'>\n"+
 "<txt xd:script = \"options trimText;\">\n"+
@@ -1814,7 +1743,7 @@ public final class TestParse extends Tester {
 			xdef = //test sequence methods (init, finally)
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a>\n"+
-"    <xd:sequence init=\"outln('start')\" finally=\"outln('end')\">\n"+
+"    <xd:sequence script=\"init outln('start'); finally outln('end')\">\n"+
 "      <b xd:script='occurs 1..*'/>\n"+
 "      <c/>\n"+
 "    </xd:sequence>\n"+
@@ -2173,7 +2102,7 @@ public final class TestParse extends Tester {
 "   <xd:any xd:script='ref def'/>\n"+
 " </x>\n"+
 "</xd:def>";
-			xp = compile(xdef); //vytvo¯eni ze zdroju
+			xp = compile(xdef); //vytvo≈ôeni ze zdroju
 			xml ="<f a='a' name='b' script='c'><b/></f>";
 			strw = new StringWriter();
 			parse(xp, "", xml, reporter, strw, null, null);
@@ -2265,7 +2194,7 @@ public final class TestParse extends Tester {
 			xdef = //X-definition ver 3.1 //////////////////////////////////////
 "<xd:def xmlns:xd='" + KXmlConstants.XDEF31_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  external method XDParser test.xdef.TestParse.licheCislo()\n"+
+"  external method XDParser test.xdef.TestParse.licheCislo();\n"+
 "</xd:declaration>\n"+
 "  <a a='licheCislo'/>\n"+
 "</xd:def>\n";
@@ -2276,7 +2205,7 @@ public final class TestParse extends Tester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <xd:declaration>external Parser licheCislo</xd:declaration>\n"+
+"  <xd:declaration>external Parser licheCislo;</xd:declaration>\n"+
 "  <a a='licheCislo()'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -2507,32 +2436,12 @@ public final class TestParse extends Tester {
 			xml = "<a x='1' />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-
-			//test ver 20 and 31 in collection
 			xp = compile(
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
-"<xd:def xd:name='X' xd:root='A' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
-"<A a='string()'>"+
-"  <B xd:script='+; ref X#R'/>"+
-"</A>"+
-"<R r='optional string()'/>"+
-"</xd:def>"+
-"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
-"<B b='string()'/>"+
-"</xd:def>"+
-"</xd:collection>");
-			xml = "<A a='x'><B r='y'/></A>";
-			assertEq(xml, parse(xp, "X", xml, reporter));
-			assertNoErrors(reporter);
-			xml = "<B b='y'/>";
-			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertNoErrors(reporter);
-			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n" +
 "<xd:declaration scope = 'local'>\n" +
 "  int i = - 0x_ff_ff_ff_ff_ff_ff_ff__ff_;\n" +
 "  float x = -1_1_.2_30_e2;\n" +
-"  NamedValue nv = %x:y..n-v=%y=%z=-0d123__456_890_999_000_333.;\n" +
+"  NamedValue nv = %x:y..n-v=%y=%z=-0d123__456_890_999_000_333.0;\n" +
 "  ParseResult p() {\n"	+
 "    String s = getText();\n" +
 "    ParseResult p;\n" +
@@ -2558,12 +2467,12 @@ public final class TestParse extends Tester {
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"i=1,j=123,x=-1123.0,%x:y..n-v=%y=%z=-123456890999000333");
+				"i=1,j=123,x=-1123.0,%x:y..n-v=%y=%z=-123456890999000333.0");
 			strw = new StringWriter();
 			assertEq(xml, create(xp, "", "A", reporter, xml, strw, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"i=1,j=123,x=-1123.0,%x:y..n-v=%y=%z=-123456890999000333");
+				"i=1,j=123,x=-1123.0,%x:y..n-v=%y=%z=-123456890999000333.0");
 			xdef = // types in different declarations
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a' >\n" +
 "<xd:declaration>\n" +
@@ -2603,6 +2512,29 @@ public final class TestParse extends Tester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {
+			//test ver 20 and 31 in collection
+			setChkSyntax(false);
+			xp = compile(
+"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
+"<xd:def xd:name='X' xd:root='A' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
+"<A a='string()'>"+
+"  <B xd:script='+; ref X#R'/>"+
+"</A>"+
+"<R r='optional string()'/>"+
+"</xd:def>"+
+"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
+"<B b='string()'/>"+
+"</xd:def>"+
+"</xd:collection>");
+			xml = "<A a='x'><B r='y'/></A>";
+			assertEq(xml, parse(xp, "X", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<B b='y'/>";
+			assertEq(xml, parse(xp, "Y", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		setChkSyntax(chkSyntax);
 		setProperty(XDConstants.XDPROPERTY_VALIDATE,
 			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
 		resetProperties();
@@ -2722,9 +2654,6 @@ public final class TestParse extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

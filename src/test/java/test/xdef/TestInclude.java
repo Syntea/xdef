@@ -26,7 +26,13 @@ import java.io.StringWriter;
  */
 public final class TestInclude extends Tester {
 
-	public TestInclude() {super();}
+	public TestInclude() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -229,9 +235,6 @@ public final class TestInclude extends Tester {
 			} catch (SRuntimeException ex) {
 				s = ex.getMessage();
 				if (s == null ||
-//					s.indexOf("XDEF307") < 0 ||
-//					s.indexOf("wsdefinitions#ws:definitions") < 0 ||
-//					s.indexOf("xxx.xxx") < 0 || s.indexOf("yyy.yyy") < 0 ||
 					s.indexOf("XML308") < 0 && s.indexOf("XML075") < 0) {
 					fail(ex);
 				}
@@ -248,9 +251,6 @@ public final class TestInclude extends Tester {
 			} catch (SRuntimeException ex) {
 				s = ex.getReport().getModification();
 				if (s == null ||
-//					s.indexOf("wsdefinitions#ws:definitions") < 0 ||
-//					s.indexOf("XML308") < 0 ||
-//					s.indexOf("xxx.xxx") < 0 || s.indexOf("yyy.yyy") < 0) {
 					s.indexOf("XML308") < 0 && s.indexOf("XML075") < 0) {
 					fail(ex);
 				}
@@ -304,7 +304,6 @@ public final class TestInclude extends Tester {
 			assertTrue(reporter.errors() &&
 				reporter.printToString().indexOf("XML309") > 0);
 			xdef = dataDir + "TestInclude_9_1.xdef";
-//D:/cvs/DEV/java/xdef/test/test/xdef/data/TestInclude_9_1.xdef
 			// not allowed from properties
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
@@ -349,9 +348,6 @@ public final class TestInclude extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

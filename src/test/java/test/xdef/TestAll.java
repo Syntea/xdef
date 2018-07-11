@@ -32,7 +32,7 @@ public class TestAll {
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
-			fis = new FileOutputStream("run/output/testXdef.log");
+			fis = new FileOutputStream("testXdef.log");
 			log = new PrintStream(fis);
 		} catch (Exception ex) {
 			if (fis != null) {
@@ -42,11 +42,6 @@ public class TestAll {
 			}
 			log = null;
 		}
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#else*/
-		Tester.setGenObjFile(false);
-/*#end*/
 		STester[] tests = new STester[] {
 			new Test000(),
 			new Test001(),
@@ -97,7 +92,7 @@ public class TestAll {
 		return result;
 	}
 
-    /** Run test
+	/** Run test
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {

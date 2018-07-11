@@ -886,7 +886,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						result = n;
 						sb.append(n.getNodeValue());
 						for (;;) {
-							//concatenate adjacent text nodesù skip comments, PI
+							//concatenate adjacent text nodesÅ¯ skip comments, PI
 							n = n.getNextSibling();
 							if (n != null) {
 								switch (n.getNodeType()) {

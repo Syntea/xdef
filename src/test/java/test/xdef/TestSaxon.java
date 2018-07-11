@@ -25,7 +25,13 @@ import org.w3c.dom.Element;
  */
 public class TestSaxon extends Tester {
 
-	public TestSaxon() {super();}
+	public TestSaxon() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private void testNoSaxon() {
 		String xdef, xml;
@@ -227,42 +233,42 @@ public class TestSaxon extends Tester {
 "<les>\n"+
 "\n"+
 "  <zvirata>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"vedleJahody\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>kralovna</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"vedleJahody\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>samec</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"vedleJahody\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>samec</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"vedleJahody\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>vojak</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"podSmrkem\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>kralovna</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"podSmrkem\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>vojak</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"podSmrkem\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>vojak</kasta>\n"+
 "    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
+"    <hmyz celed=\"mravencovitÃ­\"\n"+
 "      mraveniste=\"podSmrkem\">\n"+
 "      <rod>mravenec</rod>\n"+
 "      <kasta>vojak</kasta>\n"+
@@ -297,9 +303,6 @@ public class TestSaxon extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

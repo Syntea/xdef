@@ -3095,7 +3095,7 @@ public final class CompileXdefPool extends XDefReader
 					} else if (selectorKind==XNode.XMSEQUENCE && i > 0
 						&& xel._childNodes[i-1].getKind() == XNode.XMTEXT
 						&& ((XData) xel._childNodes[i-1])._match < 0) {
-						//Ambiguous X-definition: text node can´t follow
+						//Ambiguous X-definition: text node canÂ´t follow
 						// previous text node
 						error(x.getSPosition(), XDEF.XDEF239);
 						notReported = false;

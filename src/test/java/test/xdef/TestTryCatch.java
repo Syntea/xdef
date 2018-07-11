@@ -22,7 +22,13 @@ import java.io.StringWriter;
  */
 public final class TestTryCatch extends Tester {
 
-	public TestTryCatch() {super();}
+	public TestTryCatch() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -72,9 +78,6 @@ public final class TestTryCatch extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 

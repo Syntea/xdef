@@ -24,7 +24,13 @@ import org.w3c.dom.Element;
  */
 public class TestJSON extends Tester {
 
-	public TestJSON() {super();}
+	public TestJSON() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private boolean check(final String source) {
 		String xdef = null;
@@ -140,7 +146,7 @@ if (true) return;
 "  xmlns:js=\"http://www.syntea.cz/json/1.0\"\n"+
 "  xmlns:xd='" + XDEFNS + "'>\n"+
 "  <js:array>\n"+
-"    xs:list(%length=2,%item=jvalue())\n"+
+"    list(%length=2,%item=jvalue())\n"+
 "  </js:array>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -319,9 +325,6 @@ if (true) return;
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

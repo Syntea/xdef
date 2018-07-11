@@ -45,6 +45,14 @@ import cz.syntea.xdef.XDValueType;
  */
 public final class TestXDService extends Tester {
 
+	public TestXDService() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
+
 	@Override
 	/** Run test and print error information. */
 	final public void test() {
@@ -110,13 +118,13 @@ public final class TestXDService extends Tester {
 	"<Book ISBN='9345678199' TITLE='Bible'/>"+
 	"<Book ISBN='9345478191' TITLE='Koran'/>"+
 	"<Book ISBN='230567819' ISSUED='1935' TITLE='Krakatit'>"+
-		"<Author>Karel Èapek</Author>"+
+		"<Author>Karel ÄŒapek</Author>"+
 	"</Book>"+
 	"<Book EDITOR='XML Prague' ISBN='8345678191' ISSUED='2007'\n"+
-		"TITLE='Proè svìt nemluví esperantem'>"+
-		"<Author>Jiøí Kamenický</Author>"+
-		"<Author>Jiøí Mìska</Author>"+
-		"<Author>Václav Trojan</Author>"+
+		"TITLE='ProÄ svÄ›t nemluvÃ­ esperantem'>"+
+		"<Author>JiÅ™Ã­ KamenickÃ½</Author>"+
+		"<Author>JiÅ™Ã­ MÄ›ska</Author>"+
+		"<Author>VÃ¡clav Trojan</Author>"+
 	"</Book>"+
 	"<Book EDITOR='HarperCollins Publishers' ISBN='12345678' ISSUED='2008'\n"+
 		"TITLE=\"The Last Theorem\">"+
@@ -468,9 +476,6 @@ public final class TestXDService extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

@@ -42,7 +42,13 @@ public final class TestExtenalMethods extends Tester {
 	private int _m9 = 0;
 	private int _m10 = 0;
 
-	public TestExtenalMethods() {super();}
+	public TestExtenalMethods() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	final public static void m1(final XXNode x) {
 		((TestExtenalMethods) x.getUserObject())._m1 = 1;
@@ -595,7 +601,6 @@ public final class TestExtenalMethods extends Tester {
 			assertEq(_m8, 3);
 			assertEq(_m9, 9);
 			assertEq(_m10, 3);
-
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
 "  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
@@ -613,25 +618,6 @@ public final class TestExtenalMethods extends Tester {
 			assertEq(_m9, 9);
 			assertEq(_m10, 3);
 		} catch (Exception ex) {fail(ex);}
-		try {// method declaration has double comma
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method\n"+ //*
-"   void test.xdef.TestExtenalMethods.x(XXElement,, XDContainer, XDContainer);\n"+
-"  Container p = null, q = null, r = null, s = null, t = null;\n"+
-"</xd:declaration>\n"+
-"  <a a = \"string; finally {x(p,q);}\">\n"+
-"  </a>\n"+
-"</xd:def>";
-			compile(xdef);
-			fail("Error not recognized");
-		} catch (Exception ex) {
-			if ((s=ex.getMessage()) == null ||
-				s.indexOf("XDEF412") < 0) {
-				fail(ex);
-			}
-		}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -700,9 +686,6 @@ public final class TestExtenalMethods extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 

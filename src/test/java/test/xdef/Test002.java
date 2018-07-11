@@ -15,7 +15,6 @@ package test.xdef;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlConstants;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -40,6 +39,14 @@ import cz.syntea.xdef.proc.XXData;
  * @author Vaclav Trojan
  */
 public final class Test002 extends Tester {
+
+	public Test002() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	private static int _errorCount;
 	private static int _errorCode;
@@ -763,18 +770,7 @@ public final class Test002 extends Tester {
 "</a>\n"+
 "</xd:def>", "", xml, reporter));
 			assertNoErrors(reporter);
-			compile(// this will be error!
-"<xd:def xmlns:xd='" + XDEFNS + "' name='a' root='root'>\n"+
-"<root>\n"+
-"  <A xd:script='2..3'/>\n"+
-"  <A/>\n"+
-"</root>\n"+
-"</xd:def>");
-			fail("Exception not thrown. Ambiguous X-Definition.");
-		} catch (SRuntimeException ex) {
-			s = ex.getMessage();
-			assertTrue(s.indexOf("XDEF235") >= 0);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {
 			XDBuilder xb = XDFactory.getXDBuilder(null);
 			xb.setSource(
@@ -886,7 +882,7 @@ public final class Test002 extends Tester {
 			// test expression in validation section
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<a a='xs:float OR xs:int OR xs:boolean'></a>"+
+"<a a='float OR int OR boolean'></a>"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a a='3.14'/>", reporter);
@@ -896,10 +892,10 @@ public final class Test002 extends Tester {
 			parse(xp, "", "<a a='true'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<a a='X'/>", reporter);
-			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn· hodnota
+			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn√° hodnota
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<a a='xs:float OOR xs:int OOR xs:boolean'></a>"+
+"<a a='float OOR int OOR boolean'></a>"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a a='3.14'/>", reporter);
@@ -909,7 +905,7 @@ public final class Test002 extends Tester {
 			parse(xp, "", "<a a='true'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<a a='X'/>", reporter);
-			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn· hodnota
+			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn√° hodnota
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a a='float OR int OR boolean'></a>"+
@@ -922,7 +918,7 @@ public final class Test002 extends Tester {
 			parse(xp, "", "<a a='true'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<a a='X'/>", reporter);
-			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn· hodnota
+			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn√° hodnota
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a a='float OOR int OOR boolean'></a>"+
@@ -935,7 +931,7 @@ public final class Test002 extends Tester {
 			parse(xp, "", "<a a='true'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<a a='X'/>", reporter);
-			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn· hodnota
+			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybn√° hodnota
 			// test getXPos
 			xdef =
 "<x:def xmlns:x='" + XDEFNS + "' root='a'>\n"+
@@ -1645,9 +1641,6 @@ public final class Test002 extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

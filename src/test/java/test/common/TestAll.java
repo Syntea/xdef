@@ -15,7 +15,6 @@ package test.common;
 import cz.syntea.xdef.sys.STester;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-
 import test.common.bnf.TestBNF;
 import test.common.bnf.TestExpr;
 import test.common.bnf.TestXML;
@@ -47,7 +46,7 @@ public class TestAll {
 	public static int runTests(String... args) {
 		PrintStream log;
 		try {
-			log = new PrintStream(new FileOutputStream("run/output/testCommon.log"));
+			log = new PrintStream(new FileOutputStream("testCommon.log"));
 		} catch (Exception ex) {
 			log = null;
 		}
@@ -92,8 +91,8 @@ public class TestAll {
 		}
 		return result;
 	}
-	
-    /** Run all available tests in this package.
+
+	/** Run all available tests in this package.
 	 * @param args The array of arguments (not used).
 	 */
 	public static void main(String... args) {

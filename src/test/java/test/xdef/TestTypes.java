@@ -26,7 +26,13 @@ import cz.syntea.xdef.XDContainer;
  */
 public final class TestTypes extends Tester {
 
-	public TestTypes() {super();}
+	public TestTypes() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -48,10 +54,10 @@ public final class TestTypes extends Tester {
 "  Container w = null;\n"+
 "  void x(Container c) {\n"+
 "    if (t == null) {\n"+
-"      t += 't'\n"+
+"      t += 't';\n"+
 "    }\n"+
 "    if (v == null) {\n"+
-"      t += 'u'\n"+
+"      t += 'u';\n"+
 "    }\n"+
 "    AnyValue a = c.getNamedItem('a');\n"+
 "    if (a.valueType() == $INT) {\n"+
@@ -269,7 +275,7 @@ public final class TestTypes extends Tester {
 "    <b/>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xp = compile(xdef); //vytvoøeni ze zdroju
+			xp = compile(xdef); //vytvoÅ™eni ze zdroju
 			strw = new StringWriter();
 			parse(xp, "", "<a><b/></a>", reporter, strw, null, null);
 			assertNoErrorwarnings(reporter);
@@ -369,9 +375,6 @@ public final class TestTypes extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 

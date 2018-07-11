@@ -43,7 +43,13 @@ import cz.syntea.xdef.proc.XXData;
  */
 final public class TestCompose extends Tester {
 
-	public TestCompose() {super();}
+	public TestCompose() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -1582,7 +1588,7 @@ final public class TestCompose extends Tester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' name='a' root='a'>\n"+
 "  <a>\n"+
-"    <xd:sequence init=\"outln('start')\" finally=\"outln('end')\">\n"+
+"    <xd:sequence xd:script= \"init outln('start'); finally outln('end')\">\n"+
 "      <b xd:script = 'occurs 0..*; create ctx(3)'/>\n"+
 "      <c xd:script = 'create ctx()'/>\n"+
 "    </xd:sequence>\n"+
@@ -2782,9 +2788,6 @@ final public class TestCompose extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

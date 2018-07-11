@@ -1994,8 +1994,8 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public final static boolean isLeapYear(final int year) {
 //		if ((year modulo 4 is 0) and (year modulo 100 is not 0))
-//			  or (year modulo 400 is 0)
-//    		then true
+//			Â Â or (year modulo 400 is 0)
+//Â Â Â Â 		then true
 //			else false
 		return ((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0;
 	}

@@ -270,7 +270,7 @@
       <Sidlo xd:script = "occurs 0..1; ref Adresa" />
    </Firma>
 
-   <Adresa Ulice           = "optional xs:string(1, 99999)"
+   <Adresa Ulice           = "optional string(1, 99999)"
            CisloOrientacni = "optional string()"
            CisloPopisne    = "optional string()"
            Obec            = "optional string()"

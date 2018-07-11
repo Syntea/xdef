@@ -25,7 +25,13 @@ import org.w3c.dom.Node;
  */
 public final class TestKeyAndRef extends Tester {
 
-	public TestKeyAndRef() {super();}
+	public TestKeyAndRef() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	public static String boundQName(final XXData data) {
 		String s = data.getTextValue();
@@ -452,27 +458,27 @@ public final class TestKeyAndRef extends Tester {
 			xml =
 "<Zeme jmeno=\"CS\">\n"+
 "  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouhá\">\n"+
+"    <Ulice nazev=\"DlouhÃ¡\">\n"+
 "      <Dum cislo=\"1\"/> \n"+
 "      <Dum cislo=\"3\"/> \n"+
 "    </Ulice>\n"+
 "  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"3\" />\n"+
+"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"DlouhÃ¡\" Dum=\"1\" />\n"+
+"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"DlouhÃ¡\" Dum=\"3\" />\n"+
 "</Zeme>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml =
 "<Zeme jmeno=\"CS\">\n"+
 "  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouhá\">\n"+
+"    <Ulice nazev=\"DlouhÃ¡\">\n"+
 "      <Dum cislo=\"1\"/> \n"+
 "      <Dum cislo=\"3\"/> \n"+
 "    </Ulice>\n"+
 "  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"3\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"5\" />\n"+
+"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"DlouhÃ¡\" Dum=\"1\" />\n"+
+"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"DlouhÃ¡\" Dum=\"3\" />\n"+
+"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"DlouhÃ¡\" Dum=\"5\" />\n"+
 "</Zeme>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
@@ -748,9 +754,6 @@ public final class TestKeyAndRef extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

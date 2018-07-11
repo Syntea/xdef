@@ -27,7 +27,13 @@ import org.w3c.dom.Element;
  */
 public final class TestXmlWriter extends Tester {
 
-	public TestXmlWriter() {super();}
+	public TestXmlWriter() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -111,9 +117,6 @@ public final class TestXmlWriter extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

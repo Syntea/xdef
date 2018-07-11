@@ -22,6 +22,8 @@ import cz.syntea.xdef.sys.STester;
  */
 public class TestJSON2 extends STester {
 
+	public TestJSON2() {super();}
+
 	private static boolean check(String el, String json) {
 		return TestJSON.check(el, json);
 	}

@@ -18,7 +18,13 @@ import cz.syntea.xdef.XDPool;
 /** Test BNF.*/
 public final class TestBNF extends Tester {
 
-	public TestBNF() {super();}
+	public TestBNF() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -370,9 +376,6 @@ public final class TestBNF extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

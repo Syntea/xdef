@@ -29,8 +29,7 @@ import cz.syntea.xdef.impl.code.DefBNFRule;
 import cz.syntea.xdef.impl.code.DefContainer;
 import cz.syntea.xdef.XDContainer;
 
-/**
- *
+/** Parse BNF
  * @author Vaclav Trojan
  */
 public class XDParseBNF extends XDParserAbstract {

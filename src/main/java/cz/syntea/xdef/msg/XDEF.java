@@ -147,13 +147,13 @@ public interface XDEF {
 	public static final long XDEF237 = 31159025717L;
 	/** Ambiguous X-definition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
 	public static final long XDEF238 = 31159025718L;
-	/** Ambiguous X-definition: text node can´t follow provious text node&amp;{#SYS000} */
+	/** Ambiguous X-definition: text node canÂ´t follow provious text node&amp;{#SYS000} */
 	public static final long XDEF239 = 31159025719L;
 	/** Attribute 'metaNamespace' must contain a valid URI&amp;{#SYS000} */
 	public static final long XDEF253 = 31159025720L;
 	/** Attribute '&amp;{0}' not allowed here&amp;{#SYS000} */
 	public static final long XDEF254 = 31159025721L;
-	/** X-definition or X-collection excpected&amp;{#SYS000} */
+	/** X-definition or X-collection expected&amp;{#SYS000} */
 	public static final long XDEF255 = 31159025722L;
 	/** NameSpace of X-definitions is required for this element&amp;{#SYS000} */
 	public static final long XDEF256 = 31159025723L;
@@ -549,7 +549,7 @@ public interface XDEF {
 	public static final long XDEF564 = 31159025918L;
 	/** Too many iterator items for &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF565 = 31159025919L;
-	/** Value doesn't fit to BNF rule '&amp;{0}'&amp;{#SYS000} */
+	/** Value doesn't fit to BNF rule '&amp;{0}' at position &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF566 = 31159025920L;
 	/** Script error: BNF rule '&amp;{0}' not exists&amp;{#SYS000} */
 	public static final long XDEF567 = 31159025921L;

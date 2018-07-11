@@ -27,6 +27,8 @@ import java.util.TimeZone;
  */
 public class TestSParser extends STester {
 
+	public TestSParser() {super();}
+
 	@Override
 	/** Run test and print error information. */
 	public void test() {

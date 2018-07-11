@@ -1,4 +1,5 @@
 package test.xdef;
+
 public class TestXComponents_Y04 {
 	private String _One;
 	public String getJedna() {return _One;}

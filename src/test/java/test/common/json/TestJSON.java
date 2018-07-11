@@ -29,6 +29,8 @@ import org.w3c.dom.NodeList;
  */
 public class TestJSON extends STester {
 
+	public TestJSON() {super();}
+
 	private static NodeList trimText(Element el) {
 		NodeList nl = el.getChildNodes();
 		for (int i = nl.getLength() - 1; i >=0 ; i--) {

@@ -30,6 +30,8 @@ import java.util.Arrays;
  */
 public class TestObjectWriter extends STester {
 
+	public TestObjectWriter() {super();}
+
 	String test(Object obj) {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

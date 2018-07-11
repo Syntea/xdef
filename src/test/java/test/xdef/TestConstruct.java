@@ -25,7 +25,13 @@ import cz.syntea.xdef.proc.XXElement;
  */
 public final class TestConstruct extends Tester {
 
-	public TestConstruct() {super();}
+	public TestConstruct() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	@Override
 	final public void test() {
@@ -119,10 +125,6 @@ public final class TestConstruct extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

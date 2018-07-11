@@ -20,7 +20,13 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestImplementsAndUses extends Tester {
 
-	public TestImplementsAndUses() {super();}
+	public TestImplementsAndUses() {
+		super();
+/*#if DEBUG*#/
+		setChkSyntax(true);
+		setGenObjFile(true);
+/*#end*/
+	}
 
 	final public static boolean x() {return true;}
 	final public static boolean y() {return true;}
@@ -33,6 +39,8 @@ public final class TestImplementsAndUses extends Tester {
 		String s;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
+		boolean	chkSyntax = getChkSyntax();
+		setChkSyntax(false);
 // test error reporting
 		try {
 			xdef =
@@ -254,6 +262,7 @@ public final class TestImplementsAndUses extends Tester {
 			}
 		}
 // test no errors
+		setChkSyntax(chkSyntax);
 		try {
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
@@ -318,17 +327,17 @@ public final class TestImplementsAndUses extends Tester {
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:def name='X'>\n"+
-"<A xd:script='ref X' a='xs:int(1,2); onTrue outln()'/>\n"+
+"<A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
 "<X xd:script=\"create [%a='a','b'].toElement()\"\n"+
 "   a='enum(1,2)'> <B/> enum('A', 'B') <C/></X>\n"+
 "</xd:def>\n"+
 "<xd:def name='Y' root='A'>\n"+
 "<A xd:script=\"finally outln('x'); implements X#A\"\n"+
-"   a='xs:int(1,2)'><B/> enum('A', 'B')  <C/></A>\n"+
+"   a='int(1,2)'><B/> enum('A', 'B')  <C/></A>\n"+
 "<X xd:script='ref X#X' a='enum(2,3)'/>\n"+
 "<root>\n"+
 "  <A xd:script=\"finally outln('x'); implements X#A\"\n"+
-"     a='xs:int(1,2)'><B/> enum('A', 'B') <C/></A>\n"+
+"     a='int(1,2)'><B/> enum('A', 'B') <C/></A>\n"+
 "</root>\n"+
 "<boot xd:script=\"finally outln('y'); uses Y#root; ref root\">\n"+
 "</boot>\n"+
@@ -338,17 +347,17 @@ public final class TestImplementsAndUses extends Tester {
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:def name='X'>\n"+
-"<A xd:script='ref X' a='xs:int(1,2); onTrue outln()'/>\n"+
+"<A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
 "<X xd:script=\"create [%a='a','b'].toElement()\"\n"+
 "   a='enum(1,2)'> <B/> enum('A', 'B') <C/></X>\n"+
 "</xd:def>\n"+
 "<xd:def name='Y' root='A'>\n"+
 "<A xd:script=\"finally outln('x'); implements X#A\"\n"+
-"   a='xs:int(1,2)'><B/> enum('A', 'B') <C/></A>\n"+
+"   a='int(1,2)'><B/> enum('A', 'B') <C/></A>\n"+
 "<X xd:script='ref X#X' a='enum(2,3)'/>\n"+
 "<root>\n"+
 "  <A xd:script=\"finally outln('x'); implements X#A\"\n"+
-"     a='xs:int(1,2)'> <B/> enum('A', 'B') <C/></A>\n"+
+"     a='int(1,2)'> <B/> enum('A', 'B') <C/></A>\n"+
 "</root>\n"+
 "<Y>\n"+
 " <P xd:script=\"*; finally outln('x'); uses X#A\"\n"+
@@ -382,6 +391,7 @@ public final class TestImplementsAndUses extends Tester {
 "</xd:def>";
 			compile(xdef);
 // external method
+			setChkSyntax(false); // follows comparing of external method
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:def name='X'>\n"+
@@ -389,10 +399,11 @@ public final class TestImplementsAndUses extends Tester {
 "</xd:def>\n"+
 "<xd:def name='Y' root='A'>\n"+
 "<A xd:script=\"implements X#A\"\n"+
-"  a='x; finally outln()'/>\n"+
+"  a='x(); finally outln()'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
 			compile(xdef, getClass());
+			setChkSyntax(chkSyntax);
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<B a='x();'/>\n"+
@@ -449,7 +460,7 @@ public final class TestImplementsAndUses extends Tester {
 "  />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef);
+			compile(xdef);
 			xdef =
 "<xd:collection xmlns:xd = '" + XDEFNS + "' >\n"+
 "<xd:def xd:name = \"A\" > \n"+
@@ -475,7 +486,7 @@ public final class TestImplementsAndUses extends Tester {
 "  />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef);
+			compile(xdef);
 //BNF
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
@@ -496,9 +507,6 @@ public final class TestImplementsAndUses extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

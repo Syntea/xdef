@@ -14,6 +14,7 @@ package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
+import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
 import java.io.File;
@@ -25,12 +26,14 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
-import test.xdef.Tester;
 
 /** Test of parsing and executions of expressions an assignment commands.
  * @author Vaclav Trojan
  */
-public class TestExpr extends Tester {
+public class TestExpr extends STester {
+
+	public TestExpr() {super();}
+
 	/* Value types. */
 	private static final int TYPE_VOID = 0;
 	private static final int TYPE_BOOLEAN = 1;
@@ -38,16 +41,16 @@ public class TestExpr extends Tester {
 	private static final int TYPE_FLOAT = 3;
 	private static final int TYPE_STRING = 4;
 	private static final int TYPE_UNDEF = 5;
-	
+
 	/** Switch to print generated code. */
 	private static boolean _displayCode = false;
 	/** used to get printed text. */
 	private static ByteArrayOutputStream _byteArray;
 	/** used for printing. */
 	private static PrintStream _out;
-	
+
 	/** Map of variables. */
-	private final Map<String, Object> _variables = 
+	private final Map<String, Object> _variables =
 		new TreeMap<String, Object>();
 
 	/** Get value of a variable.
@@ -80,7 +83,7 @@ public class TestExpr extends Tester {
 			return "Exception " + ex;
 		}
 	}
-	
+
 	/** Parse source data according the rule "expr" from given BNF grammar.
 	 * Compare parsed result with the expected value from argument.
 	 * @param expected expected result.
@@ -99,7 +102,7 @@ public class TestExpr extends Tester {
 		}
 		Object result = execute(code, _variables);
 		if (result == null) {
-			return "No result: null";		
+			return "No result: null";
 		}
 		if (expected.equals(result.toString())) {
 			return "";
@@ -135,8 +138,8 @@ public class TestExpr extends Tester {
 		/** Level of operator */
 		final int _level;
 		/** String value of operator.*/
-		final String _operator; 
-		
+		final String _operator;
+
 		/** Create this object from code item. */
 		Operator(String code) {
 			char ch;
@@ -154,20 +157,20 @@ public class TestExpr extends Tester {
 				|| "EQ".equals(code) || "NE".equals(code)) {
 				_level = 1; // comparing;
 				ch = code.charAt(0);
-				_operator = ch == 'E' ? "==" 
+				_operator = ch == 'E' ? "=="
 					: ch == 'N' ? "!="
-					: ch == 'L' ? code.charAt(1) == 'T' ? "<" : "<=" 
+					: ch == 'L' ? code.charAt(1) == 'T' ? "<" : "<="
 					: code.charAt(1) == 'T' ? ">" : ">=";
 			} else if ("AND".equals(code) || "OR".equals(code)
 				|| "XOR".equals(code)) {
 				ch = code.charAt(0);
 				_level = 2;
-				_operator = ch == 'A' ? " & " : ch == 'O' ? "|" : "^"; 
+				_operator = ch == 'A' ? " & " : ch == 'O' ? "|" : "^";
 			} else if (code.endsWith("SH")) { // shifts
 				_level = 3;
 				ch = code.charAt(0);
-				_operator = ch == 'L' ? "<<" 
-					: code.charAt(1) == 'S' ? ">>" : ">>>"; 
+				_operator = ch == 'L' ? "<<"
+					: code.charAt(1) == 'S' ? ">>" : ">>>";
 			} else if ("ADD".equals(code) || "SUB".equals(code)) {
 				_level = 4;
 				ch = code.charAt(0);
@@ -182,12 +185,12 @@ public class TestExpr extends Tester {
 				_operator = "";
 			}
 		}
-	
+
 		private int getLevel() {return _level;}
-		
+
 		private String getOperator() {return _operator;}
 	}
-	
+
 	/** Contains information about the stack item. */
 	private static class SourceItem {
 		String _s;
@@ -202,8 +205,8 @@ public class TestExpr extends Tester {
 		private int getType() {return _type;}
 		private void setType(int type) {_type = type;}
 	}
-		
-	/** Create Java code from generated code. 
+
+	/** Create source code from generated code.
 	 * @param code the generated code.
 	 * @return String with Java code.
 	 */
@@ -212,10 +215,10 @@ public class TestExpr extends Tester {
 		Stack<Stack<SourceItem>> stackOfStack = new Stack<Stack<SourceItem>>();
 		StringBuilder result = new StringBuilder();
 		Map<String, SourceItem> variables = new TreeMap<String, SourceItem>();
-		
+
 		for (int i = start; i < code.length; i++) {
 			String item = code[i].toString();
-			if (item.startsWith("Rule: ")) { // parsed position
+			if (item.startsWith("info: ")) { // parsed position
 				continue;
 			}
 ///// operators. ///////////////////////////////////////////////////////////////
@@ -266,7 +269,7 @@ public class TestExpr extends Tester {
 					val.setType(type);
 					variables.put(name, val);
 					val = new SourceItem(new String[] {
-						"", "boolean", "int", "float", "String"}[type] 
+						"", "boolean", "int", "float", "String"}[type]
 						+ " " + name);
 					val.setType(type);
 					stack.push(val);
@@ -286,7 +289,7 @@ public class TestExpr extends Tester {
 				if (len > 0) {
 					s.append(params.get(0).getString()); // parameter
 					for (int j = 1; j < len; j++) { // more parameters
-						s.append(", ").append(params.get(j).getString()); 
+						s.append(", ").append(params.get(j).getString());
 					}
 				}
 				s.append(')');
@@ -330,8 +333,8 @@ public class TestExpr extends Tester {
 		}
 		return result.toString().trim();
 	}
-	
-	/** Execute generated code. 
+
+	/** Execute generated code.
 	 * @param code the generated code.
 	 * @param variables variable table.
 	 * @return result of execution (or null).
@@ -344,10 +347,9 @@ public class TestExpr extends Tester {
 			_byteArray = new ByteArrayOutputStream();
 			_out = new PrintStream(_byteArray, true, "UTF-8");
 		} catch (UnsupportedEncodingException ex) {/* never happens */}
-		
 		for (int i = 0; i < code.length; i++) {
 			String item = code[i].toString();
-			if (item.startsWith("Rule: ")) { // parsed position
+			if (item.startsWith("info: ")) { // parsed position
 				continue;
 			}
 			if ("TOINT".equals(item)) {
@@ -389,35 +391,35 @@ public class TestExpr extends Tester {
 			} else if ("IDREF".equals(item)) { // reference to object name
 				stack.push(variables.get(stack.pop().toString()));
 			} else if ("AND".equals(item) || "OR".equals(item)
-				|| "XOR".equals(item)) { // operators & | ~ 
+				|| "XOR".equals(item)) { // operators & | ~
 				Object y = stack.pop();
 				Object x = stack.pop();
 				if (x instanceof Boolean &&
 					y instanceof Boolean) { // logical operation
-					stack.push("AND".equals(item) ? (Boolean) x && (Boolean) y 
+					stack.push("AND".equals(item) ? (Boolean) x && (Boolean) y
 						: "OR".equals(item) ? (Boolean) x || (Boolean) y
 						: (Boolean) x ^ (Boolean) y);
 				} else if (x instanceof Long &&
 					y instanceof Long) { // bitwise operation
-					stack.push("AND".equals(item) ? (Long) x & (Long) y 
+					stack.push("AND".equals(item) ? (Long) x & (Long) y
 						: "OR".equals(item) ? (Long) x | (Long) y
 						: (Long) x ^ (Long) y);
 				} else {
-					return Report.error("","Error: Operand types " 
+					return Report.error("","Error: Operand types "
 						+ x.getClass() + "," + y.getClass());
 				}
 			} else if ("LSH".equals(item) || "RSH".equals(item)
-				|| "RRSH".equals(item)) { // operators << >> >>> 
+				|| "RRSH".equals(item)) { // operators << >> >>>
 				Object y = stack.pop();
 				Object x = stack.pop();
 				if (x instanceof Long && y instanceof Long) {
 					long xx = (Long) x;
 					long yy = (Long) y;
-					y = "LSH".equals(item) ? xx << yy 
+					y = "LSH".equals(item) ? xx << yy
 						: "RSH".equals(item) ? xx >> yy : xx >>> yy;
 					stack.push(y);
 				} else {
-					return Report.error("","Error: Operand types " 
+					return Report.error("","Error: Operand types "
 						+ x.getClass() + "," + y.getClass());
 				}
 			} else if ("ADD".equals(item)) { // +
@@ -464,7 +466,7 @@ public class TestExpr extends Tester {
 				if (x instanceof Long && y instanceof Long) {
 					stack.push(x.longValue() % y.longValue());
 				} else {
-					return Report.error("","Error: Operand types " 
+					return Report.error("","Error: Operand types "
 						+ x.getClass() + "," + y.getClass());
 				}
 			} else if ("GT".equals(item) || "LT".equals(item)
@@ -476,27 +478,27 @@ public class TestExpr extends Tester {
 				if (x instanceof Long && y instanceof Long) {
 					long xx = (Long) x;
 					long yy = (Long) y;
-					z = "GT".equals(item) ? xx > yy 
+					z = "GT".equals(item) ? xx > yy
 						: "LT".equals(item) ? xx < yy
-						: "GE".equals(item) ? xx >= yy 
+						: "GE".equals(item) ? xx >= yy
 						: "LE".equals(item) ? xx <= yy
 						: "EQ".equals(item) ? xx == yy : xx != yy;
 				} else if (x instanceof Number && y instanceof Number) {
 					double xx = ((Number) x).doubleValue();
 					double yy = ((Number) y).doubleValue();
-					z = "GT".equals(item) ? xx > yy 
+					z = "GT".equals(item) ? xx > yy
 						: "LT".equals(item) ? xx < yy
-						: "GE".equals(item) ? xx >= yy 
+						: "GE".equals(item) ? xx >= yy
 						: "LE".equals(item) ? xx <= yy
 						: "EQ".equals(item) ? xx == yy : xx != yy;
 				} else if (x instanceof Boolean&& y instanceof Boolean){
 					boolean xx = (Boolean) x;
 					boolean yy = (Boolean) y;
-					z = "EQ".equals(item) ? xx == yy 
+					z = "EQ".equals(item) ? xx == yy
 						: "NE".equals(item) ? xx != yy : null;
 				}
 				if (z == null) {
-					return Report.error("","Error: Operand types " 
+					return Report.error("","Error: Operand types "
 						+ x.getClass() + "," + x.getClass());
 				}
 				stack.push(z);
@@ -512,7 +514,7 @@ public class TestExpr extends Tester {
 					} else {
 						stack.push(x);
 						x = (Long) x + ("INCAFTER".equals(item) ? 1 : -1);
-						variables.put(name, x);								
+						variables.put(name, x);
 					}
 				} else if (x instanceof Double) {
 					if ("INCBEFORE".equals(item) || "DECBEFORE".equals(item)){
@@ -522,10 +524,10 @@ public class TestExpr extends Tester {
 					} else {
 						stack.push(x);
 						x = (Double) x + ("INCAFTER".equals(item) ? 1 : -1);
-						variables.put(name, x);								
+						variables.put(name, x);
 					}
 				} else {
-					return Report.error("","Error: Operand type " 
+					return Report.error("","Error: Operand type "
 						+ x.getClass());
 				}
 			} else if ("ASS".equals(item)) { // assignment
@@ -611,7 +613,7 @@ public class TestExpr extends Tester {
 				Object x = stack.pop();
 				PredefinedMethod y =  (PredefinedMethod) stack.peek();
 				y.add(x);
-			} else if ("PROC".equals(item) || "FUN".equals(item)) { 
+			} else if ("PROC".equals(item) || "FUN".equals(item)) {
 				// procedure or function
 				PredefinedMethod x = (PredefinedMethod) stack.pop();
 				if ("FUN".equals(item)) {
@@ -624,25 +626,25 @@ public class TestExpr extends Tester {
 					}
 				} else {
 					x.invoke();
-				}					
+				}
 			} else if ("CLEARSTCK".equals(item)) {  // clear stack
 				stack.clear();
 			} else {
 				return Report.error("", "Unknown code: " + item);
-			}			
+			}
 		}
 		return stack.isEmpty() ? null : stack.pop();
 	}
-	
+
 	/** Predefined method. */
 	private static final class PredefinedMethod extends ArrayList<Object> {
 		private final String _name; // name of method
-		
+
 		private PredefinedMethod(final String name) {
 			super();
 			_name = name.intern();
 		}
-		
+
 		private Object invoke() {
 			if (isEmpty()) { // no parameters
 				if ("random".equals(_name)) {
@@ -723,7 +725,7 @@ public class TestExpr extends Tester {
 					_out.printf(o1.toString(), toArray());
 					return null;
 				} else if (size() == 2) {
-					Object o2 = get(1);		
+					Object o2 = get(1);
 					if (o1 instanceof Long && o2 instanceof Long) {
 						if ("min".equals(_name)) {
 							return Math.min(((Long) o1), ((Long) o2));
@@ -751,7 +753,7 @@ public class TestExpr extends Tester {
 			throw new RuntimeException("Unknown method: " + _name);
 		}
 	}
-	
+
 	/** Get string with the printable form of generated code.
 	 * @param code generated stack.
 	 * @return string with printable form of generated stack.
@@ -760,8 +762,8 @@ public class TestExpr extends Tester {
 		final DecimalFormat numFormat =	new DecimalFormat("0000 ");
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < code.length; i++) {
-			sb.append(numFormat.format(i)).
-				append("\"").append(code[i].toString()).append("\"\n");
+			sb.append(numFormat.format(i))
+				.append("\"").append(code[i].toString()).append("\"\n");
 		}
 		return sb.toString();
 	}
@@ -771,7 +773,7 @@ public class TestExpr extends Tester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		BNFGrammar g = BNFGrammar.compile(null, 
+		BNFGrammar g = BNFGrammar.compile(null,
 			new File(getDataDir() + "TestExpr.bnf"), null);
 		g.setUserObject(this);
 		try {
@@ -806,7 +808,7 @@ public class TestExpr extends Tester {
 
 			assertEq("", prog(g, "i=~(~1);"));
 			assertEq(1, getVar("i"));
-			
+
 			assertEq("", prog(g, "i=8; i=i<< 2;"));
 			assertEq(32, getVar("i"));
 			assertEq("", prog(g, "j ='abc'+empty()/*x*/; k=j+'d';"));
@@ -839,7 +841,7 @@ public class TestExpr extends Tester {
 
 			assertEq("", prog(g, "i = ''''''; j = i + (5 *3);"));
 			assertEq("''15", getVar("j"));
-			
+
 			assertEq("", prog(g, "i = 'x''y';"));
 			assertEq("x'y", getVar("i"));
 
@@ -851,7 +853,7 @@ public class TestExpr extends Tester {
 
 			assertEq("", prog(g, "i = '\"x\"'; j = i + (5 *3);"));
 			assertEq("\"x\"15", getVar("j"));
-			
+
 			assertEq("", prog(g, "i = 'abc'; j = (5 *3) + i;"));
 			assertEq("abc", getVar("i"));
 			assertEq("15abc", getVar("j"));
@@ -888,28 +890,28 @@ public class TestExpr extends Tester {
 
 			assertEq("", prog(g, "i = 3.15 == sin(0);"));
 			assertEq(false, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = 8; i = i << 2;"));
 			assertEq(32, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = 8; i <<= 2;"));
 			assertEq(32, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = 8; i = i >> 2;"));
 			assertEq(2, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = 8; i >>= 2;"));
 			assertEq(2, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = -8; i = i >> 2;"));
 			assertEq(-2, getVar("i"));
-						
+
 			assertEq("", prog(g, "i = -8; i = i >>> 2;"));
 			assertEq(-8L >>> 2, getVar("i"));
 
 			assertEq("", prog(g, "i = -8; i >>>= 2;"));
 			assertEq(-8L >>> 2, getVar("i"));
-			
+
 			assertEq("", prog(g, "i = 3==3.0;"));
 			assertEq(true, getVar("i"));
 
@@ -964,7 +966,7 @@ public class TestExpr extends Tester {
 			assertEq(8, getVar("l"));
 			assertEq(8.5, getVar("m"));
 
-			assertEq("", prog(g, 
+			assertEq("", prog(g,
 				"i = true; j = false; k = i == j; m = i != j;\n" +
 				"o = 1; p = 0; q = o > p; r = 1.0; s = 2.0; t = r <= s;"));
 			assertEq(true, getVar("i"));
@@ -976,12 +978,12 @@ public class TestExpr extends Tester {
 
 			assertEq("", prog(g, "i=sin(3.14);"));
 			assertEq(Math.sin(3.14), getVar("i"));
-			
+
 			assertEq("", prog(g, "i=1*2+-(1+1);"));
 			assertEq(0, getVar("i"));
 
 			assertEq("", prog(g, "sin(3.14);"));
-						
+
 			assertEq("", prog(g, "float i; i = 0.0; i += sin(3.14);"));
 			assertEq(Math.sin(3.14), getVar("i"));
 
@@ -1004,9 +1006,6 @@ public class TestExpr extends Tester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/*#if DEBUG*#/
-		Tester.setGenObjFile(true);
-/*#end*/
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

@@ -38,8 +38,7 @@ public class TestGenCollection extends STester {
 + "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef}, true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
-			el1 =
-				(Element) el.getChildNodes().item(0).getChildNodes().item(0);
+			el1 = (Element) el.getChildNodes().item(0).getChildNodes().item(0);
 			assertEq("mtest", el1.getNodeName());
 			el1 = (Element) el1.getChildNodes().item(0).getChildNodes().item(0);
 			assertEq("adam", el1.getNodeName());
@@ -93,7 +92,6 @@ public class TestGenCollection extends STester {
 			el1 = GenCollection.genCollection(
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			xdef =
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
 " <A f=\"'abc'\" />\n" +
