@@ -72,7 +72,7 @@ public class TestReport extends STester {
 			assertEq(s, "E XML075: XML chyba");
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
-		String dataDir = getHomeDir() + "src/test/common/sys/";
+		String dataDir = getHomeDir() + "src/test/java/test/common/sys/";
 		if (!new File(dataDir + "ABC_ces.properties").exists()) {
 			dataDir = getHomeDir() + "test/test/common/sys/";
 		}
