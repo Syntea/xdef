@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 
 Name: cz/syntea/xdef
-Comment: Created date 2018-07-02
-Implementation-Version: 3.1.004.003
+Comment: Created date 2018-07-11
+Implementation-Version: 3.1.004.002
 Specification-Version: 3.1
 Java-Version: jdk1.6
 Implementation-Vendor-Id: Syntea.cz

@@ -79,20 +79,23 @@ public final class TestXdefOfXdef extends Tester {
 "  </A>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name = \"XDDecl\">\n"+
 "  <xd:BNFGrammar name=\"xscript\"><![CDATA[L::='a'/*E*/]]></xd:BNFGrammar>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
-			xml =
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
+			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:declaration>\n"+
 "  uniqueSet id1 {t: string(); s: int;};\n"+
-"  uniqueSet id1 string\n"+
+"  uniqueSet id2 string\n"+
 "</xd:declaration>\n"+
-"</xd:def>";
+"</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
-			xml =
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
+			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:declaration>\n"+
 "  String t = ((String)1.5).substring(1);\n"+
@@ -100,8 +103,9 @@ public final class TestXdefOfXdef extends Tester {
 "<a xd:script = \"*;\n"+
 "    create {return (getElementName() == 'B') ? null : null;}\n"+
 "    \"/>\n"+
-"</xd:def>";
+"</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 		xml = genCollection(
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n" +
 "<a b=\"\n" +
@@ -119,6 +123,7 @@ public final class TestXdefOfXdef extends Tester {
 " \"/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml =
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:declaration>\n"+
@@ -127,16 +132,19 @@ public final class TestXdefOfXdef extends Tester {
 "<a xd:script=\"*; create {return (getElementName()=='B')?null :null;}\"/>\n"+
 "</xd:def>";
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xdef:def xmlns:xdef='http://www.syntea.cz/xdef/3.1' name='a' root='Field'>\n"+
 "<Field Name='required an() /* no semicolon*/'/>\n"+
 "</xdef:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/3.1' root='A'>\n"+
 "  <A xd:script=\"match @x==''; options acceptEmptyAttributes\" x=''/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:collection xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
@@ -167,11 +175,13 @@ public final class TestXdefOfXdef extends Tester {
 "</xd:def>\n"+
 "</xd:collection>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' name = \"XDDecl\">  \n"+
 "  <xd:BNFGrammar name=\"xscript\"><![CDATA[L::='a'/*E*/]]></xd:BNFGrammar>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n"+
 "<xd:declaration>\n"+
@@ -181,6 +191,7 @@ public final class TestXdefOfXdef extends Tester {
 "<A a ='required an();'/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
 /*#if DEBUG*#/
 			xml = genCollection(
@@ -192,6 +203,7 @@ public final class TestXdefOfXdef extends Tester {
 "  <a a=\"fixed {return 'abc';}\" />\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -200,6 +212,7 @@ public final class TestXdefOfXdef extends Tester {
 "<a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a | b | m/n | x'>\n"+
 "   <xd:any xd:name='x' b='int()' />\n"+
@@ -209,6 +222,7 @@ public final class TestXdefOfXdef extends Tester {
 "   </b>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 
 //// V teto Xdefinici je <xd:def xmlns:xd = "METAXDef" ...
 //			xml = dataDir + "TestXdefOfXdef*.xdef";

@@ -979,11 +979,8 @@ public class XDGenCollection {
 		xf.setSource(sources);
 		try {
 			return xf.compileXD();
-		} catch (RuntimeException ex) {
-for (String s: sources)	{
-System.out.println(s);
-}
-				throw ex;
+		} catch (SRuntimeException ex) {
+			throw ex;
 		}
 
 	}
@@ -1132,12 +1129,7 @@ System.out.println(s);
 				throw new SRuntimeException(
 					"Unavailable source with X-definition");
 			}
-			try {
-				chkXdef(sources);
-			} catch (RuntimeException ex) {
-System.err.println(sources);
-				throw ex;
-			}
+			chkXdef(sources);
 			XDGenCollection x = new XDGenCollection();
 			x.parse(sources);
 			for (int i = 0; i < x._includeList.size(); i++) {

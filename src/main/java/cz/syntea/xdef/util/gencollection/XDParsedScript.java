@@ -170,9 +170,6 @@ public class XDParsedScript {
 					continue;
 				case XScriptParser.FORGET_SYM:
 					_forget = "forget";
-//					continue;
-//				case XScriptParser.REF_SYM:
-//				default:
 			}
 		}
 	}
@@ -232,9 +229,9 @@ public class XDParsedScript {
 		final String name,
 		final String content) {
 		if (!content.isEmpty()) {
-			String s =
-				!result.endsWith(";") && !result.endsWith("}") ? ";" : "";
-			return result + s + name + content;
+			return result
+				+ (!result.endsWith(";") && !result.endsWith("}") ? ";" : "")
+				+ name + content;
 		}
 		return result;
 	}
@@ -283,10 +280,6 @@ public class XDParsedScript {
 				return "--";
 			case XScriptParser.TYPE_SYM:
 			case XScriptParser.UNIQUE_SET_SYM:
-			case XScriptParser.CASE_SYM:
-			case XScriptParser.RETURN_SYM:
-			case XScriptParser.THROW_SYM:
-			case XScriptParser.NEW_SYM:
 			case XScriptParser.ON_ABSENCE_SYM:
 			case XScriptParser.ON_TRUE_SYM:
 			case XScriptParser.ON_EXCESS_SYM:
@@ -411,7 +404,7 @@ public class XDParsedScript {
 			return sb.toString();
 		} else if (sp._sym == XScriptParser.SWITCH_SYM) {
 			sp.nextSymbol();
-			sb.append("switch" + parseScriptSection(sp));
+			sb.append("switch").append(parseScriptSection(sp));
 			if (sp._sym == XScriptParser.BEG_SYM) {
 				sb.append("{");
 				sp.nextSymbol();
@@ -515,14 +508,6 @@ public class XDParsedScript {
 						}
 						sb.append(symToString(sp));
 						return sb.toString();
-					case XScriptParser.RETURN_SYM:
-					case XScriptParser.ELSE_SYM:
-						if (spaceNeeded) {
-							sb.append(' ');
-						}
-						sb.append(symToString(sp));
-						spaceNeeded = true;
-						break;
 					case XScriptParser.IDENTIFIER_SYM:
 						if (spaceNeeded) {
 							sb.append(' ');
@@ -541,6 +526,18 @@ public class XDParsedScript {
 						} else {
 							sb.append(sp._parsedValue.toString());
 						}
+						spaceNeeded = true;
+						break;
+					case XScriptParser.THROW_SYM:
+					case XScriptParser.NEW_SYM:
+					case XScriptParser.NULL_SYM:
+					case XScriptParser.RETURN_SYM:
+					case XScriptParser.ELSE_SYM:
+					case XScriptParser.COLON_SYM:
+						if (spaceNeeded) {
+							sb.append(' ');
+						}
+						sb.append(symToString(sp));
 						spaceNeeded = true;
 						break;
 					case XScriptParser.ATCHAR_SYM:
@@ -620,17 +617,12 @@ public class XDParsedScript {
 			}
 			n1 = n1.getParentNode();
 		}
-		String s;
-		if (n.getNodeType() == Node.ELEMENT_NODE) {
-			s = XDGenCollection.getXdefAttr(
-				(Element) n, xdUri, "script", false);
-		} else {
-			s = n.getNodeValue();
-		}
-		if (s == null || (s = s.trim()).length() == 0) {
-			return null;
-		}
-		return getXdScript(s, defName, isValue);
+		String s = (n.getNodeType() == Node.ELEMENT_NODE)
+			? XDGenCollection.getXdefAttr(
+				(Element) n, xdUri, "script", false)
+			: n.getNodeValue();
+		return s == null || (s = s.trim()).length() == 0
+			? null : getXdScript(s, defName, isValue);
 	}
 
 	/** Create XdParsedScript object from the script.
@@ -646,16 +638,6 @@ public class XDParsedScript {
 		sp.setSource(new SBuffer(script), defName, XDConstants.XD20_ID);
 		return new XDParsedScript(sp, isValue);
 	}
-//
-//	/** Get required part of the script of a node in the canonized form.
-//	 * @param n Node.
-//	 * @param actions if true the script will return actions, otherwise
-//	 * only occurrence, validation, option and reference.
-//	 * @return string with canonized form of the script from the node.
-//	 */
-//	public static final String getScript(final Node n, final boolean actions) {
-//		return getXdScript(n).getCanonizedScript(actions);
-//	}
 
 	/** @return the _xOccurrence */
 	public final XOccurrence getxOccurrence() {return _xOccurrence;}

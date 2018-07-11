@@ -8,7 +8,7 @@
     
     <groupId>cz.syntea.common.xdef</groupId>
     <artifactId>syntea-common-xdef3</artifactId>
-    <version>3.1.4.1</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
+    <version>3.1.4.2</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
     <packaging>jar</packaging>
     
     <name>syntea-common-xdef3</name>
@@ -16,7 +16,7 @@
     <description>XDefinice 3.1</description>
     
     <properties>
-        <release.date>2018-06-14</release.date>
+        <release.date>2018-07-11</release.date>
         
         <projectId>cz.syntea.common.xdef</projectId>
         <!-- <svnRepo>cz/syntea/skp/pp</svnRepo> -->
