@@ -1972,7 +1972,7 @@ public class TestKDOMBuilder extends STester {
 			builder.setValidating(false);
 			builder.setIgnoringComments(false);
 			builder.setXIncludeAware(true);
-			doc = builder.parse(getDataDir() + "TestInclude01_1.xml");
+			doc = builder.parse(getDataDir() + "testInclude01_1.xml");
 			el = doc.getDocumentElement();
 			assertEq("a", el.getNodeName());
 			nl = el.getChildNodes();
