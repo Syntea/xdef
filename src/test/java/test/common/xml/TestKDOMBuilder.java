@@ -1990,8 +1990,7 @@ public class TestKDOMBuilder extends STester {
 				fail("Error not thrown");
 			} catch (Exception ex) { 
 				s = ex.getMessage();
-				if (!s.contains("include failed")
-					&& !s.contains("'include' failed")) {
+				if (!s.contains("XML404")) {
 					fail(ex);
 				}
 			}
