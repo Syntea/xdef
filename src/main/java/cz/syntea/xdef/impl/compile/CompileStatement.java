@@ -532,6 +532,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 				return true;
 			}
+			if (_g._ignoreUnresolvedExternals) {
+				_g.setUnDefItem();
+				return true;
+			}
 			//Unknown method: '&{0}'
 			error(spos, XDEF.XDEF443, cName+'.'+methodName);
 			return false;

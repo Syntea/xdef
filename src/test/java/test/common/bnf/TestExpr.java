@@ -778,7 +778,6 @@ public class TestExpr extends STester {
 		g.setUserObject(this);
 		try {
 			String s;
-			_displayCode = false;
 			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
 			assertEq("", expr("abcdef", g, "'abc' + 'def'"));
 			assertEq("", expr("25abc", g, "((3+2)*5)+'abc'"));
@@ -788,6 +787,7 @@ public class TestExpr extends STester {
 			assertEq("", expr("false", g, "!true"));
 			assertEq("", expr("true", g, "true | false"));
 			assertEq("", expr("false", g, "true&false"));
+			assertEq("", expr("true", g, "true | false"));
 			assertEq("", expr("true", g, "! (true & false)"));
 			assertEq("", expr("1abc", g, "( (3 + 3)/5 ) + \"abc\" "));
 			assertEq("", expr("1.26abc", g, "((3 + 3.3)/5) + 'abc'"));

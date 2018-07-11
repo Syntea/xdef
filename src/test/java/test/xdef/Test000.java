@@ -49,7 +49,7 @@ public final class Test000 extends Tester {
 
 	public Test000() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/
@@ -443,7 +443,7 @@ public final class Test000 extends Tester {
 			}
 			//mytest5
 			xdef = dataDir + "Test000_02.xdef";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			strw = new StringWriter();
 			xml = dataDir + "Test000_02.xml";
 			parse(xp, "test", xml, reporter, strw, null, null);
@@ -1230,12 +1230,12 @@ public final class Test000 extends Tester {
 			return s + ")";
 		}
 	}
-	public static String b(XXNode c, XDValue... x) {return d(x);}
-	public static String bx(XDValue... x) {return "b" + d(x);}
+	public static String b(XXNode c, XDValue[] x) {return d(x);}
+	public static String bx(XDValue[] x) {return "b" + d(x);}
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects for Matej2
 ////////////////////////////////////////////////////////////////////////////////
-	public static void fail(XXNode c, XDValue... p) {}
+	public static void fail(XXNode c, XDValue[] p) {}
 	public static void setErr(XXNode c, XDValue... p) {_myError++;}
 	public static boolean unknown(XXNode c, XDValue[] e) {return false;}
 	public static boolean known(XXNode c, XDValue... e) {return true;}

@@ -29,7 +29,7 @@ public final class TestXdefOfXdef extends Tester {
 
 	public TestXdefOfXdef() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(false); // here it MUST be false!
 		setGenObjFile(true);
 /*#end*/
@@ -72,6 +72,43 @@ public final class TestXdefOfXdef extends Tester {
 			}
 		}
 		try { //check xdefinition of xdefinitions
+			xml = genCollection(
+"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
+"<xd:declaration>\n"+
+" external method String x.b(XXNode, XDValue[]);\n"+	
+"</xd:declaration>\n"+	
+" <a xd:script = \"\n" +
+"    var{\n" +
+"        int iii = 1;\n" +
+"        uniqueSet id1 {t: string()};\n" +
+"        int jjj = 2;\n" +
+"        type cislo int();\n" +
+"        uniqueSet id2 {t: cislo;}\n" +
+"        type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n" +
+"        uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')}\n" +
+"    }\n" +
+"    finally {\n" +
+"      id1.CLEAR();\n" +
+"      for (int i = 0; i LT b.size(); i++) {\n" +
+"        b.setAt(i,i);\n" +
+"      }\n" +
+"    }\"\n" +
+"    rc = \"required rodneCislo()\" >\n" +
+"  <b a = \"optional id1.t.IDREF()\"\n" +
+"      b = \"optional cislo();\"\n" +
+"      c = \"optional datum();\"/>\n" +
+"  <c xd:script = \"occurs 1..; finally id2.CLEAR()\"\n" +
+"     stamp = \"required id3.t.ID()\" >\n" +
+"     <d xd:script = \"occurs 1..\"\n" +
+"        a1 = \"required id1.t.ID()\" \n" +
+"        a2 = \"optional id2.t.ID()\"/>\n" +
+"     <e a3 = \"required id2.t.IDREF()\"/>\n" +
+"  </c>\n" +
+"  <f a4 = \"required id1.t.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n" +
+" </a>\n" +
+"</xd:def>");
+			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root = \"#A\">\n"+
 "  <A>\n"+
@@ -193,7 +230,7 @@ public final class TestXdefOfXdef extends Tester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			xml = genCollection(
 				dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
 			assertNoErrorwarnings(parse(xml), xml);
@@ -227,9 +264,7 @@ public final class TestXdefOfXdef extends Tester {
 //// V teto Xdefinici je <xd:def xmlns:xd = "METAXDef" ...
 //			xml = dataDir + "TestXdefOfXdef*.xdef";
 //			assertNoErrorwarnings(parse(xml), xml);
-
 /*#end*/
-
 		} catch (Exception ex) {fail(ex);}
 	}
 

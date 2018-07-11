@@ -86,7 +86,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
 		setProperty(XDConstants.XDPROPERTY_SPECDATES,
 			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
 			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
 /*#end*/
@@ -346,6 +346,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		}
 		fail(swr.toString());
 	}
+	
 	private static String genCollection(final String... sources) {
 		try {
 			Element el = XDGenCollection.genCollection(sources,
@@ -353,7 +354,13 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 				true, //removeActions
 				false);
 			return KXmlUtils.nodeToString(el, true);
-		} catch (Exception ex) {
+//			String xml = KXmlUtils.nodeToString(el, true);
+//			return KXmlUtils.nodeToString(XDGenCollection.genCollection(
+//				new String[]{xml},
+//				true, //resolvemacros
+//				true, //removeActions
+//				false), true);
+	} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 			return "";
 		}

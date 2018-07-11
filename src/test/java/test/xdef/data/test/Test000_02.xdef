@@ -3,6 +3,7 @@
 <xd:def xd:name="test1">
  <xd:declaration>
 <![CDATA[
+  external method String test.xdef.Test000.b(XXNode, XDValue[]);	
   Bytes b = new Bytes(16);
   boolean rodneCislo() {
     String s = getText();
