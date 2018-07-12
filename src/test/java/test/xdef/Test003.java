@@ -31,7 +31,6 @@ import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.StringWriter;
 import org.w3c.dom.Element;
 import java.io.FileOutputStream;
 import java.io.FileReader;
