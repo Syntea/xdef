@@ -651,6 +651,7 @@ public class GenXDefinition implements KXmlConstants {
 					!arg.startsWith("-")) {
 					outFile = new File(arg);
 					i++;
+					continue;
 				} else {
 					throw new RuntimeException(info
 						+ "After parameter '-o' is expected an output file");
