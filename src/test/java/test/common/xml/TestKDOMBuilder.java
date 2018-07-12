@@ -750,7 +750,9 @@ public class TestKDOMBuilder extends STester {
 				assertEq("text 1,text 2", el.getTextContent());
 			} catch (Exception ex) {
 				s = ex.getMessage(); // Internet not available?
-				if (s == null || !s.contains("java.net.UnknownHostException")) {
+				if (s == null || 
+					!(s.contains("java.net.UnknownHostException")
+						|| s.contains("java.net.ConnectException"))) {
 					fail(ex); // other error!
 				}
 			}
@@ -766,8 +768,8 @@ public class TestKDOMBuilder extends STester {
 				assertEq("%pe", el.getAttribute("a3"));
 				assertEq("text 1,text 2", el.getTextContent());
 			} catch (Exception ex) {
-				s = ex.getMessage(); // Internet not available?
-				if (s == null || !s.contains("java.net.UnknownHostException")) {
+				if (s == null || !(s.contains("java.net.UnknownHostException")
+					|| s.contains("java.net.ConnectException"))) {
 					fail(ex); // other error!
 				}
 			}
