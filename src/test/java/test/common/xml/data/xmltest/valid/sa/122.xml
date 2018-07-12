@@ -1,8 +1,0 @@
-<!DOCTYPE doc [
-<!ELEMENT doc (#PCDATA|foo)*>
-<!ELEMENT foo (#PCDATA)>
-<!ATTLIST foo a CDATA #IMPLIED>
-<!ENTITY d "aaa&#60;foo a = 'aa'></foo>bbb">
-<!ENTITY e "&d;xxx&#60;foo a = 'xx'></foo>yyy">
-]>
-<doc>&e;</doc>

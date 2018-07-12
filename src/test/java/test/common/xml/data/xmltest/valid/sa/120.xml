@@ -1,7 +1,0 @@
-<!DOCTYPE doc [
-<!ELEMENT doc (#PCDATA|foo)*>
-<!ELEMENT foo (#PCDATA)>
-<!ATTLIST doc a CDATA #IMPLIED>
-<!ENTITY e "_&#60;foo>&#60;/foo>&#60;foo/>">
-]>
-<doc>x&e;y</doc>
