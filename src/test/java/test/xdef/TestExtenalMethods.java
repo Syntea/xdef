@@ -44,7 +44,7 @@ public final class TestExtenalMethods extends Tester {
 
 	public TestExtenalMethods() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

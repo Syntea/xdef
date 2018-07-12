@@ -27,7 +27,7 @@ public class TestSaxon extends Tester {
 
 	public TestSaxon() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

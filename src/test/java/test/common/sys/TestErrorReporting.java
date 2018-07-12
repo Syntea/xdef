@@ -38,7 +38,7 @@ public class TestErrorReporting extends STester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-/*#if (DEBUG) *#/
+/*#if (DEBUG) */
 		ArrayReporter reporter = new ArrayReporter();
 		reporter.putReport(report);
 		printReports(reporter, data);
@@ -46,7 +46,7 @@ public class TestErrorReporting extends STester {
 	}
 
 	public void printReports(ReportReader reporter, String data) {
-/*#if (DEBUG) *#/
+/*#if (DEBUG) */
 		System.out.flush();
 		System.err.flush();
 		ReportPrinter.printListing(new PrintWriter(System.out),

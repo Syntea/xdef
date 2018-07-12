@@ -1,7 +1,5 @@
 package test;
 
-import cz.syntea.xdef.sys.RegisterReportTables;
-import java.io.File;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
@@ -19,16 +17,7 @@ public class TestAll {
         
         a.assertEquals(test.common. TestAll. runTests(args0), 0);
     }
-    
-    /** run TestAll in test.msgx */
-    //@Test
-    public static void testMsgX() {
-        final Assertion  a     = new Assertion();
-        final String[]   args0 = {};
         
-        a.assertEquals(test.msgx.   TestMsgX.runTest (args0), 0);
-    }
-    
     /** run TestAll in test.xdef */
     @Test
     public static void testXdef() {
@@ -77,7 +66,6 @@ public class TestAll {
     /** spusti zdejsi testy primo */
     public static void mainTest() {
         try { testCommon();  } catch (Exception e) { System.err.println(e.getMessage()); }
-        //try { testMsgX();    } catch (Exception e) { System.err.println(e.getMessage()); }
         try { testXdef();    } catch (Exception e) { System.err.println(e.getMessage()); }
         try { testXDUtils(); } catch (Exception e) { System.err.println(e.getMessage()); }
     }

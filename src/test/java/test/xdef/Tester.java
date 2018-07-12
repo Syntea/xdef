@@ -346,7 +346,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		}
 		fail(swr.toString());
 	}
-	
+
 	private static String genCollection(final String... sources) {
 		try {
 			Element el = XDGenCollection.genCollection(sources,
@@ -374,10 +374,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		final ArrayReporter reporter,
 		final char mode) throws Exception { // 'P' => parse, 'C' => create
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-			}
+			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
 		XDBuilder xb = XDFactory.getXDBuilder(_props);
@@ -427,13 +424,8 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		final String stdout,
 		final Class<?>... exts) {
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-			}
+			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
-			for (String x: xdef) {
-			}
 		}
 		boolean error = false;
 		System.err.flush();
@@ -506,13 +498,6 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	final public XDPool compile(final InputStream source,
 		final String pathname,
 		final Class<?>... obj) {
-//		if (_chkSyntax) {
-//			if (_xdOfxd == null) {
-//				_xdOfxd = XDFactory.compileXD(null,
-//					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-//			}
-//			_xdOfxd.createXDDocument().xparse(source, null);
-//		}
 		return checkExtObjects(XDFactory.compileXD(
 			_props, source, pathname, obj));
 	}
@@ -525,36 +510,27 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	}
 
 	final public XDPool compile(final URL[] source, final Class<?>... obj) {
-//		if (_chkSyntax) {
-//			if (_xdOfxd == null) {
-//				_xdOfxd = XDFactory.compileXD(null,
-//					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-//			}
-//			for (URL xdef: source) {
-//				_xdOfxd.createXDDocument().xparse(xdef, null);
-//			}
-//		}
 		return checkExtObjects(XDFactory.compileXD(_props, source, obj));
 	}
 
 	final public XDPool compile(final URL url, final Class<?>... obj) {
-//		if (_chkSyntax) {
-//			if (_xdOfxd == null) {
-//				_xdOfxd = XDFactory.compileXD(null,
-//					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-//			}
-//			_xdOfxd.createXDDocument().xparse(source, null);
-//		}
 		return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
 	}
 
+	private void genXdOfXd() {
+		if (_xdOfxd == null) {
+			String dir = "test/test/xdef/data/test/";
+			File f = new File(dir);
+			if (!f.exists() || !f.isDirectory()) {
+				dir = "src/test/java/test/xdef/data/test/";
+			}
+			_xdOfxd = XDFactory.compileXD(null,dir+"TestXdefOfXdef*.xdef");
+		}
+	}
 
 	final public XDPool compile(final File[] files, final Class... obj) {
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-			}
+			genXdOfXd();
 			String[] sources = new String[files.length];
 			for (int i = 0; i < sources.length; i++) {
 				sources[i] = files[i].getAbsolutePath();
@@ -566,10 +542,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	final public XDPool compile(final File file, final Class... obj) {
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef", obj);
-			}
+			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(
 				genCollection(file.getAbsolutePath()), null);
 		}
@@ -578,10 +551,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-			}
+			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
@@ -590,10 +560,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
 		if (_chkSyntax) {
-			if (_xdOfxd == null) {
-				_xdOfxd = XDFactory.compileXD(null,
-					"test/test/xdef/data/test/TestXdefOfXdef*.xdef");
-			}
+			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));

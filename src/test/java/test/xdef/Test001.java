@@ -28,7 +28,7 @@ public final class Test001  extends Tester {
 
 	public Test001() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

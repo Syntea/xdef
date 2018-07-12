@@ -33,7 +33,7 @@ public final class TestErrors extends Tester {
 
 	public TestErrors() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(false); // here it MUST be false!
 		setGenObjFile(true);
 /*#end*/
@@ -46,7 +46,7 @@ public final class TestErrors extends Tester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-/*#if (DEBUG)*#/
+/*#if (DEBUG)*/
 		ArrayReporter reporter = new ArrayReporter();
 		reporter.putReport(report);
 		printReports(reporter, data);

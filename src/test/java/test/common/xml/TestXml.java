@@ -247,7 +247,7 @@ public class TestXml extends STester  {
 	/** Run test and print error information. */
 	public void test() {
 		try {
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			test("javax");
 /*#end*/
 		} catch (Error ex) {

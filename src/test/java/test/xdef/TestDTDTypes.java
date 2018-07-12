@@ -23,7 +23,7 @@ public final class TestDTDTypes extends Tester {
 
 	public TestDTDTypes() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

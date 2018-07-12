@@ -29,7 +29,7 @@ public final class TestXdefOfXdef extends Tester {
 
 	public TestXdefOfXdef() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(false); // here it MUST be false!
 		setGenObjFile(true);
 /*#end*/
@@ -75,8 +75,8 @@ public final class TestXdefOfXdef extends Tester {
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
 "<xd:declaration>\n"+
-" external method String x.b(XXNode, XDValue[]);\n"+	
-"</xd:declaration>\n"+	
+" external method String x.b(XXNode, XDValue[]);\n"+
+"</xd:declaration>\n"+
 " <a xd:script = \"\n" +
 "    var{\n" +
 "        int iii = 1;\n" +
@@ -230,11 +230,11 @@ public final class TestXdefOfXdef extends Tester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-/*#if DEBUG*#/
-			xml = genCollection(
-				dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), xml);
+/*#if DEBUG*/
+//			xml = genCollection(
+//				dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
+//			assertNoErrorwarnings(parse(xml), xml);
+//			assertNoErrorwarnings(parse(xml), xml);
 			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+

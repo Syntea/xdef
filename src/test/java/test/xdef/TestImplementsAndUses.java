@@ -22,7 +22,7 @@ public final class TestImplementsAndUses extends Tester {
 
 	public TestImplementsAndUses() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

@@ -33,7 +33,7 @@ public final class TestDOMParse extends Tester {
 
 	public TestDOMParse() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

@@ -29,7 +29,7 @@ public final class TestXmlWriter extends Tester {
 
 	public TestXmlWriter() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

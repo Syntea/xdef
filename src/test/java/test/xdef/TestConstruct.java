@@ -27,7 +27,7 @@ public final class TestConstruct extends Tester {
 
 	public TestConstruct() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

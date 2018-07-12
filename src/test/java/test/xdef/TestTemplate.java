@@ -28,7 +28,7 @@ public final class TestTemplate extends Tester {
 
 	public TestTemplate() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

@@ -27,7 +27,7 @@ public final class TestUserQuery extends Tester {
 
 	public TestUserQuery() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

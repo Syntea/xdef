@@ -28,7 +28,7 @@ public final class TestTypes extends Tester {
 
 	public TestTypes() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

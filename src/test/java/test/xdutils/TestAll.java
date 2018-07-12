@@ -46,9 +46,9 @@ public class TestAll {
 		};
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package xdutils",
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			true, args);
-/*#else*/
+/*#else*#/
 			false, args);
 /*#end*/
 		if (log!= null) {

@@ -26,7 +26,7 @@ public class TestJSON extends Tester {
 
 	public TestJSON() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

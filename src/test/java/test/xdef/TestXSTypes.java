@@ -33,7 +33,7 @@ import cz.syntea.xdef.XDParserAbstract;
 import cz.syntea.xdef.XDParseResult;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.impl.compile.XScriptParser;
 import java.io.IOException;
@@ -60,7 +60,7 @@ public final class TestXSTypes extends Tester {
 
 	public TestXSTypes() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/
@@ -68,7 +68,7 @@ public final class TestXSTypes extends Tester {
 
 	private String _msg = "";
 	private XDPool _xd;
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 	private String _xml = "";
 	private String _xdef = "";
 	private boolean _result = false;
@@ -635,7 +635,7 @@ public final class TestXSTypes extends Tester {
 			fail(ex);
 			return;
 		}
-/*#else*/
+/*#else*#/
 	private boolean chkXDef(final String result, final String xml) {
 		boolean fits = true;
 		try {
@@ -1196,7 +1196,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parse("Hello World!"), _msg);
 
 		// testing errors
-/*#if !SCHEMA*/
+/*#if !SCHEMA*#/
 		assertFalse(parse(""), _msg); //schema accepts empty string!!!
 /*#end*/
 
@@ -1255,7 +1255,7 @@ public final class TestXSTypes extends Tester {
 
 		assertTrue(prepare("string(%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("   Hello   world!  "), _msg);
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(parse("     ", ""), _msg);
 /*#end*/
 
@@ -1266,7 +1266,7 @@ public final class TestXSTypes extends Tester {
 
 		assertTrue(prepare(
 			"string(%whiteSpace='collapse',%length='0')"), _msg);
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(parse(""), _msg);
 		assertTrue(parse("    "), _msg);//should return empty string
 /*#end*/
@@ -1278,7 +1278,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("  ab  "), _msg);
 		assertTrue(parseFail("    "), _msg);
 
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(prepare(
 			"string(%whiteSpace='collapse',%minLength='0')"), _msg);
 		assertTrue(parse("    ", ""), _msg); //should return text value null
@@ -1309,7 +1309,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parse("Hello World!"), _msg);
 
 		// testing errors
-/*#if !SCHEMA*/
+/*#if !SCHEMA*#/
 		assertTrue(parseFail(""), _msg); //schema accepts empty string???
 /*#end*/
 
@@ -1377,7 +1377,7 @@ public final class TestXSTypes extends Tester {
 
 		assertTrue(prepare("normalizedString(%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("   Hello   world!  "), _msg);
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(parse("     ", ""), _msg);
 /*#end*/
 
@@ -1388,7 +1388,7 @@ public final class TestXSTypes extends Tester {
 
 		assertTrue(prepare(
 			"normalizedString(%whiteSpace='collapse',%length='0')"), _msg);
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(parse(""), _msg);
 		assertTrue(parse("    "), _msg);//should return empty string
 /*#end*/
@@ -1400,7 +1400,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("  ab  "), _msg);
 		assertTrue(parseFail("    "), _msg);
 
-/*#if DEBUG & SCHEMA*#/
+/*#if DEBUG & SCHEMA*/
 		assertTrue(prepare(
 			"normalizedString(%whiteSpace='collapse',%minLength='0')"),_msg);
 		assertTrue(parse("    ", ""), _msg); //should return text value null
@@ -3525,7 +3525,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("P1YT"), _msg);
 		assertTrue(parseFail("1Y1M"), _msg);
 		assertTrue(parseFail("R5/P1Y"), _msg);
-/*#if !SCHEMA*/
+/*#if !SCHEMA*#/
 		assertTrue(parseFail("PT.456S"), _msg); //schema in java 1.6 not fails
 /*#end*/
 		assertTrue(parseFail("P1MT"), _msg);

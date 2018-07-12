@@ -37,7 +37,7 @@ public final class TestXComponents extends Tester {
 
 	public TestXComponents() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

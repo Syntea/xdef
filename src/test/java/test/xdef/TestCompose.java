@@ -45,7 +45,7 @@ final public class TestCompose extends Tester {
 
 	public TestCompose() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

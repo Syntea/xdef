@@ -747,7 +747,7 @@ public class TestKDOMBuilder extends STester {
 				assertEq("a1", el.getAttribute("a1"));
 				assertEq("a2", el.getAttribute("a2"));
 				assertEq("%pe", el.getAttribute("a3"));
-				assertEq("text 1,text 2", el.getTextContent());			
+				assertEq("text 1,text 2", el.getTextContent());
 			} catch (Exception ex) {
 				s = ex.getMessage(); // Internet not available?
 				if (s == null || !s.contains("java.net.UnknownHostException")) {
@@ -1988,7 +1988,7 @@ public class TestKDOMBuilder extends STester {
 			try {
 				builder.parse(getDataDir() + "TestInclude02.xml");
 				fail("Error not thrown");
-			} catch (Exception ex) { 
+			} catch (Exception ex) {
 				s = ex.getMessage();
 				if (s == null || !s.contains("XML404")) {
 					fail(ex);

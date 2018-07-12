@@ -20,7 +20,7 @@ public final class TestBNF extends Tester {
 
 	public TestBNF() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

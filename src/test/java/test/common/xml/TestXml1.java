@@ -164,7 +164,7 @@ public class TestXml1 extends STester  {
 	/** Run test and print error information. */
 	public void test() {
 		try {
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			test("javax");
 /*#end*/
 			test("syntea");

@@ -26,7 +26,7 @@ public final class TestUserMethods extends Tester {
 
 	public TestUserMethods() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

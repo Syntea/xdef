@@ -39,7 +39,7 @@ public final class TestDebug extends Tester {
 
 	public TestDebug() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

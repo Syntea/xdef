@@ -53,7 +53,7 @@ public final class TestParse extends Tester {
 
 	public TestParse() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 //		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

@@ -3355,7 +3355,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				s += "[" + i + "]: " + _localVariables[i] + "\n";
 			}
 		}
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		java.io.ByteArrayOutputStream bs = new java.io.ByteArrayOutputStream();
 		java.io.PrintStream ps = new java.io.PrintStream(bs);
 		cz.syntea.xdef.impl.code.CodeDisplay.displayCode(_code, ps);

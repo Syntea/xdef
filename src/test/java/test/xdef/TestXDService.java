@@ -47,7 +47,7 @@ public final class TestXDService extends Tester {
 
 	public TestXDService() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

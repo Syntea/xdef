@@ -24,7 +24,7 @@ public final class TestExternalVariables extends Tester {
 
 	public TestExternalVariables() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

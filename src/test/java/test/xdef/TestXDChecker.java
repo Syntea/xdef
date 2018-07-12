@@ -27,7 +27,7 @@ public class TestXDChecker extends Tester {
 
 	public TestXDChecker() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

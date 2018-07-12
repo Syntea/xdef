@@ -27,7 +27,7 @@ public final class TestOptions extends Tester {
 
 	public TestOptions() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

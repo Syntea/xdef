@@ -69,15 +69,15 @@ public class TestXdScript extends STester {
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);
 			g = BNFGrammar.compile(null, bnfOfBNF, null);
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			g = BNFGrammar.compile(null, g.toString(), null);
-/*#end*/			
+/*#end*/
 /*labels not implemented yet*
 			s = "{loop : while ( true ) continue loop ;}";
 			assertEq(s, parse(grammar, "Block", s));
 			s = "{loop : while ( true ) break loop ;}";
 			assertEq(s, parse(grammar, "Block", s));
-/*labels not implemented yet*/			
+/*labels not implemented yet*/
 			s = "( x() == 'B' )";
 			assertEq(s, parse(g, "Expression", s));
 			s = "void x(int a) {out();}";
@@ -146,7 +146,7 @@ public class TestXdScript extends STester {
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s = " Locale loc = new Locale('cs', 'CZ'); ";
 			assertEq(s, parse(g, "DeclarationScript", s));
-			s = 
+			s =
 "  int i = - 0x_ff_ff_ff_ff_ff_ff_ff__ff_;\n" +
 "  float x = -1_1_.2_30_e2;\n" +
 "  NamedValue nv = %x:y..n-v=%y=%z=-0d123__456_890_999_000_333.0;\n";
@@ -208,20 +208,20 @@ public class TestXdScript extends STester {
 			s = "required false;onTrue x();onError{i=1;j=2;}finally outln();";
 			assertEq(s, parse(g, "AttributeScript", s));
 			s = "match @a:a; + int(); options acceptQualifiedAttr";
-			assertEq(s, parse(g, "AttributeScript", s));		
+			assertEq(s, parse(g, "AttributeScript", s));
 			s = "create {return (getElementName() == 'B') ? null : null;}";
 			assertEq(s, parse(g, "AttributeScript", s));
 			s = "required string(3,3)AND(eq('abc')|eq('xyz'))";
 			assertEq(s, parse(g, "AttributeScript", s));
-			s = 
+			s =
 "required {if (eq('nazdar'))\n"+
 " {return parseDate('2000-5-1T20:43+01:00').isLeapYear();} return false;}\n"+
-"onFalse setResult(false); onTrue setResult(true);";				
+"onFalse setResult(false); onTrue setResult(true);";
 			assertEq(s, parse(g, "AttributeScript", s));
 			s = "optional setResult(eq(s));finally {String s='???';int i=0;"
 				+ "switch(i){case 1:break;case 2:break;case 3:s='12';}}";
 			assertEq(s, parse(g, "AttributeScript", s));
-			
+
 			s = "x(1, 10, %min=3, %max='4')";
 			assertEq(s, parse(g, "Method", s));
 			s = "x(1, 10, %enumeration=[3,[5,7]])";
@@ -243,17 +243,17 @@ public class TestXdScript extends STester {
 			assertEq(s, parse(g, "ElementScript", s));
 			s = "ref SODContainer#SODContainer; init $phase = 'Template'";
 			assertEq(s, parse(g, "ElementScript", s));
-			
+
 			s = "X#Y/@Z";
 			assertEq(s, parse(g, "XPosition", s));
 			s = "X#Y/$mixed[1]/A[22]/@Z";
 			assertEq(s, parse(g, "XPosition", s));
 			s = "X#Y/$mixed[1]/A[22]/$text[1]";
 			assertEq(s, parse(g, "XPosition", s));
-			s = 
+			s =
 "external method String test.xdef.TestExtenalMethods_2.m35(XXElement, int);\n"+
 "external method {\n"+
-"void test.xdef.TestExtenalMethods_1.m00() as m;\n"+				
+"void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
 "byte[] test.xdef.TestExtenalMethods_2.m20();\n"+
 "String test.xdef.TestExtenalMethods_2.m20(byte[]);\n"+
 "String test.xdef.TestExtenalMethods_2.m35(XXElement, int)\n"+
@@ -269,7 +269,7 @@ public class TestXdScript extends STester {
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "MethodListItem", s));
 //			printCode(g);
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			s = g.toString();
 			assertEq(s, parse(g, "BNFGrammar", s));
 			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));

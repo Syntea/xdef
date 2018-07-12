@@ -317,7 +317,7 @@ public final class XdefToXsd {
 				}
 				if (i + 1 < args.length) {
 					schemaPrefix = args[++i];
-				}				
+				}
 			} else if ("-se".equals(arg)) {
 				if (schemaFileExt != null) {
 					throw new RuntimeException("XML schema file name"
@@ -325,7 +325,7 @@ public final class XdefToXsd {
 				}
 				if (i + 1 < args.length) {
 					schemaFileExt = args[++i];
-				}				
+				}
 			} else {
 				throw new RuntimeException("Incorrect argument: arg\n" + info1);
 			}

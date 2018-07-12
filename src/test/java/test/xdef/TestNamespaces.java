@@ -23,7 +23,7 @@ public final class TestNamespaces extends Tester {
 
 	public TestNamespaces() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

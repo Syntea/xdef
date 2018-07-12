@@ -30,7 +30,7 @@ public final class TestScript extends Tester {
 
 	public TestScript() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/

@@ -58,7 +58,7 @@ public class TestAll {
 			new TestSUtils(),
 //			new TestLock(),
 			new TestObjectWriter(),
-/*#if DEBUG*#/
+/*#if DEBUG*/
 //			new TestLargeReportTable(),
 //			new TestLargeReportTags(),
 /*#end*/
@@ -81,9 +81,9 @@ public class TestAll {
 		};
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package common",
-/*#if DEBUG*#/
+/*#if DEBUG*/
 			true, args);
-/*#else*/
+/*#else*#/
 			false, args);
 /*#end*/
 		if (log != null) {

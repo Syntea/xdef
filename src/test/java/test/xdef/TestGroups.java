@@ -26,7 +26,7 @@ public final class TestGroups extends Tester {
 
 	public TestGroups() {
 		super();
-/*#if DEBUG*#/
+/*#if DEBUG*/
 		setChkSyntax(true);
 		setGenObjFile(true);
 /*#end*/
