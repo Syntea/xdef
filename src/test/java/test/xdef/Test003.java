@@ -226,24 +226,24 @@ public final class Test003 extends Tester {
 			float duration=((float)((System.currentTimeMillis() - t) / 1000.0));
 			DecimalFormat df = new DecimalFormat("0.00");
 			long datalen = new File(xml).length();
-			durationInfo = "data "
+			durationInfo = "Big XML: "
 				+ df.format(((float) datalen / 1000.0))
 				+ "KB/" + df.format(duration)
-				+ "s (" + df.format((datalen / 1000.0)/duration) + "KB/s)";
+				+ "s (" + df.format((datalen / 1000.0)/duration) + "KB/s);";
 			setResultInfo(durationInfo);
 		} catch (Exception ex) {fail(ex);}
 /*#end*/
-		try {
-			// X-definition referred from XML
-			reporter.clear();
-			xd = XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
-			assertNoErrors(reporter);
-		} catch(Exception ex) {fail(ex);}
 		try {
 			reporter.clear();
 			xp = compile(dataDir + "TestChkParser1_1.xdef");
 			xd = xp.createXDDocument("CKP");
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
+			assertNoErrors(reporter);
+		} catch(Exception ex) {fail(ex);}
+		try {
+			// X-definition referred from XML
+			reporter.clear();
+			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
 			assertNoErrors(reporter);
 		} catch(Exception ex) {fail(ex);}
 		try {
@@ -263,7 +263,8 @@ public final class Test003 extends Tester {
 			xp = compile(dataDir + "SouborD1A.xdef");
 //			DisplayCode.displayXArchive(xPool);
 			duration= (float) ((System.currentTimeMillis() - t) / 1000.0);
-			durationInfo += "compile " + df.format(duration) + "s";
+			durationInfo += "D1A: compile "
+				+ df.format(duration) + "s";
 			fw = new FileOutputStream(tempDir + "SouborD1A.err");
 			rw = new FileReportWriter(fw);
 			xd = xp.createXDDocument("SouborD1A");
@@ -284,7 +285,7 @@ public final class Test003 extends Tester {
 			long datalen = new File(dataDir + "SouborD1A.xml").length();
 			durationInfo += "; data "+ df.format(((float) datalen / 1000.0)) +
 				"KB/" + df.format(duration) +
-				"s (" + df.format((datalen / 1000.0)/duration) + "KB/s)";
+				"s (" + df.format((datalen / 1000.0)/duration) + "KB/s);";
 			isr = new InputStreamReader(new FileInputStream(
 				dataDir + "SouborD1A.xml"));
 			fw.close();
