@@ -158,7 +158,6 @@ public final class Test003 extends Tester {
 /*#end*/
 	}
 
-
 	@Override
 	/** Run tests. */
 	final public void test() {
@@ -170,19 +169,12 @@ public final class Test003 extends Tester {
 		FileOutputStream fw;
 		ReportWriter rw;
 		InputStreamReader isr;
-		Report report;
-		Report rep;
 		Element el;
-		String s;
-		StringWriter strw;
 		final String dataDir = getDataDir() + "test/";
 		String tempDir = getTempDir();
 		String durationInfo = "";
-		if (tempDir == null) {
-			fail("Temporary directory is missing, test canceled");
-			return;
-		}
 		Report.setLanguage("en"); //localize
+/*#if DEBUG*/
 		try {
 			xml = getDataDir() + "long.xml.big";
 			FileOutputStream longfile = new FileOutputStream(xml);
@@ -241,7 +233,9 @@ public final class Test003 extends Tester {
 				+ "s (" + df.format((datalen / 1000.0)/duration) + "KB/s)";
 			setResultInfo(durationInfo);
 		} catch (Exception ex) {fail(ex);}
+/*#end*/
 		try {
+			// X-definition referred from XML
 			reporter.clear();
 			xd = XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
 			assertNoErrors(reporter);
@@ -252,9 +246,7 @@ public final class Test003 extends Tester {
 			xd = xp.createXDDocument("CKP");
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
 			assertNoErrors(reporter);
-		} catch(Exception ex) {
-			fail(ex);
-		}
+		} catch(Exception ex) {fail(ex);}
 		try {
 			_count = 0;
 			long t;
@@ -346,9 +338,7 @@ public final class Test003 extends Tester {
 				fail("nonstatic result 673/" + _xx);
 			}
 			fr.close();
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {
 			String defFile = dataDir + "SouborD1A_.xdef";
 			setProperty("xdef.externalmode", "both");
@@ -410,16 +400,12 @@ public final class Test003 extends Tester {
 //				count++;
 //			}
 //			fr.close();
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		setResultInfo(durationInfo);
 		if (getFailCount() == 0) {
 			try {
 				FUtils.deleteAll(tempDir, true);
-			} catch (Exception ex) {
-				fail(ex);
-			}
+			} catch (Exception ex) {fail(ex);}
 		}
 	}
 
