@@ -647,8 +647,8 @@ public class GenXDefinition implements KXmlConstants {
 					throw new RuntimeException(info
 						+ "Redefinition of output file '-o'");
 				}
-				if (++i < args.length && (arg = args[i]) != null &&
-					!arg.startsWith("-")) {
+				if (++i < args.length && (arg = args[i]) != null
+					&& !arg.startsWith("-")) {
 					outFile = new File(arg);
 					i++;
 					continue;

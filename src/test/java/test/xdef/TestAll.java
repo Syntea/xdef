@@ -46,6 +46,7 @@ public class TestAll {
 			new Test000(),
 			new Test001(),
 			new Test002(),
+			new Test003(),
 			new TestBNF(),
 			new TestCompose(),
 			new TestConstruct(),
