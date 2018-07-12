@@ -52,8 +52,8 @@ public class XsdToXdef {
 	 * X-definition version as X-definition 2.0, debug mode is set to off and
 	 * reporter is set to print reports to System.err print stream.
 	 */
-	private XsdToXdef(String xdefPrefix,
-		PrintStream out) {
+	private XsdToXdef(final String xdefPrefix,
+		final PrintStream out) {
 		_xdefPrefix = xdefPrefix == null ? "xd" : xdefPrefix;
 		_schemaVersion = SCHEMA1_0;
 		_reporter = new Reporter(new FileReportWriter(
@@ -70,10 +70,10 @@ public class XsdToXdef {
 	 * @throws RuntimeException cant find X-definition generator implementation.
 	 * @throws IOException if cannot create collection file.
 	 */
-	public static void genCollection(URL schemaURL,
-		String collectionFileName,
-		String xdefPrefix,
-		PrintStream out)
+	public static final void genCollection(final URL schemaURL,
+		final String collectionFileName,
+		final String xdefPrefix,
+		final PrintStream out)
 		throws RuntimeException, IllegalArgumentException, IOException {
 		if (collectionFileName == null || "".equals(collectionFileName)) {
 			throw new IllegalArgumentException("Collection file name is empty");
@@ -95,10 +95,10 @@ public class XsdToXdef {
 	 * @throws RuntimeException cant find X-definition generator implementation.
 	 * @throws IOException if cannot create collection file.
 	 */
-	public static void genCollection(String schemaFilePath,
-		String collectionFileName,
-		String xdefPrefix,
-		PrintStream out) throws MalformedURLException, RuntimeException,
+	public static final void genCollection(final String schemaFilePath,
+		final String collectionFileName,
+		final String xdefPrefix,
+		final PrintStream out) throws MalformedURLException, RuntimeException,
 		IllegalArgumentException, IOException {
 		if (schemaFilePath == null || "".equals(schemaFilePath)) {
 			throw new IllegalArgumentException("Schema file path is empty");
@@ -114,9 +114,9 @@ public class XsdToXdef {
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws MalformedURLException url can not be created.
 	 */
-	public static void genCollection(String schemaFilePath,
-		String xdefPrefix,
-		PrintStream out)
+	public static final void genCollection(final String schemaFilePath,
+		final String xdefPrefix,
+		final PrintStream out)
 		throws MalformedURLException {
 		URL url = new URL("file", "", schemaFilePath);
 		genCollection(url, xdefPrefix, out);
@@ -128,10 +128,10 @@ public class XsdToXdef {
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 */
-	public static void genCollection(URL schemaURL,
-		String xdefPrefix,
-		PrintStream out) {
-		XsdToXdef c = new XsdToXdef(xdefPrefix, out);
+	public static final void genCollection(final URL schemaURL,
+		final String xdefPrefix,
+		final PrintStream out) {
+		final XsdToXdef c = new XsdToXdef(xdefPrefix, out);
 		c.checkSchema(schemaURL);
 		c.getXdefGenerator(schemaURL, false).printCollection();
 	}
@@ -147,10 +147,10 @@ public class XsdToXdef {
 	 * generator.
 	 * @throws IOException if cannot create X-definition files.
 	 */
-	public static void genXdefFiles(URL schemaURL,
-		String directoryName,
-		String xdefPrefix,
-		PrintStream out) throws IOException {
+	public static final void genXdefFiles(final URL schemaURL,
+		final String directoryName,
+		final String xdefPrefix,
+		final PrintStream out) throws IOException {
 		if (directoryName == null || "".equals(directoryName)) {
 			throw new IllegalArgumentException("Directory name is empty");
 		}
@@ -172,10 +172,10 @@ public class XsdToXdef {
 	 * @throws IllegalArgumentException not a valid schema at given path.
 	 * @throws IOException if cannot create X-definition files.
 	 */
-	public static void genXdefFiles(String schemaFilePath,
-		String directoryName,
-		String xdefPrefix,
-		PrintStream out) throws MalformedURLException, IOException {
+	public static final void genXdefFiles(final String schemaFilePath,
+		final String directoryName,
+		final String xdefPrefix,
+		final PrintStream out) throws MalformedURLException, IOException {
 		if (schemaFilePath == null || "".equals(schemaFilePath)) {
 			throw new IllegalArgumentException("Schema file path is empty");
 		}
@@ -188,7 +188,8 @@ public class XsdToXdef {
 	 * @param separetely XML Schema file as X-definiiton file.
 	 * @throws RuntimeException no proper implementation.
 	 */
-	private Convertor getXdefGenerator(URL schemaURL, boolean separately) {
+	private Convertor getXdefGenerator(final URL schemaURL,
+		final boolean separately) {
 		if (_schemaVersion == SCHEMA1_0) {
 			return new Schema_1_0_Processor(
 				_xdefPrefix, _reporter, schemaURL, separately);
@@ -201,7 +202,7 @@ public class XsdToXdef {
 	 * @param path path of directory.
 	 * @throws IllegalArgumentException given path is illegal.
 	 */
-	private void checkOutputDirectoryPath(String path) {
+	private void checkOutputDirectoryPath(final String path) {
 		File dir = new File(path);
 		if (dir.exists() && !dir.isDirectory()) {
 			throw new IllegalArgumentException(
@@ -213,7 +214,7 @@ public class XsdToXdef {
 	 * @param path file path.
 	 * @throws IllegalArgumentException file path is illegal.
 	 */
-	private void checkOutputFilePath(String path) {
+	private void checkOutputFilePath(final String path) {
 		File f = new File(path);
 		if (f.exists() && !f.isFile()) {
 			throw new IllegalArgumentException("Given file path is not valid");
@@ -225,7 +226,7 @@ public class XsdToXdef {
 	 * @return Schema validator.
 	 * @throws IllegalArgumentException not a valid schema file url.
 	 */
-	private Validator checkSchema(URL url) {
+	private Validator checkSchema(final URL url) {
 		try {
 			File schemaFile = new File(url.getPath());
 			if (!schemaFile.exists()) {
@@ -259,19 +260,18 @@ public class XsdToXdef {
 	 * <li>-?, -h, --help help</li>
 	 * </ul>
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		String info =
 "Using XsdToXdef: \n"
-+ "-in, --input <PATH> input main schema location \n"
-+ "-out, --output <PATH> output file or directory name \n"
-+ "-s, --separated every schema to standalone xdefinition file \n"
-+ "-p, --xdefPrefix <PREFIX> prefix for xdefinition nodes \n"
-+ "-l, --logFile <PATH> log file name \n"
-+ "-?, -h, --help help";
++ "-in, --input <PATH> input main schema location\n"
++ "-out, --output <PATH> output file or directory name\n"
++ "-s, --separated every schema to standalone xdefinition file\n"
++ "-p, --xdefPrefix <PREFIX> prefix of X-Definition namespace\n"
++ "-l, --logFile <PATH> log file name\n"
++ "-h, --help help";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Parameters missing!\n" + info);
 		}
-
 		final StringBuilder err = new StringBuilder();
 		boolean valueGetMode = false;
 		String input = null;

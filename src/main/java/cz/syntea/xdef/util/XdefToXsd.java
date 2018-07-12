@@ -52,11 +52,11 @@ public final class XdefToXsd {
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
 	 */
-	public static void genSchema(String xdef,
-		String outputDir,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out) {
+	public final static void genSchema(final String xdef,
+		final String outputDir,
+		final String schemaPrefix,
+		final String schemaFileExt,
+		final PrintStream out) {
 		XdDoc xdDoc;
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
@@ -87,10 +87,10 @@ public final class XdefToXsd {
 	 * @param out where print information messages (if null System.out).
 	 * @return map of schema file names and DOM Documents.
 	 */
-	public static Map<?,?> genSchema(String xdef,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out) {
+	public final static Map<?,?> genSchema(final String xdef,
+		final String schemaPrefix,
+		final String schemaFileExt,
+		final PrintStream out) {
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
 		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
@@ -109,13 +109,13 @@ public final class XdefToXsd {
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
 	 */
-	public static void genSchema(File xdef,
-		String outputDir,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out) {
+	public final static void genSchema(final File xdef,
+		final String outputDir,
+		final String schemaPrefix,
+		final String schemaFileExt,
+		final PrintStream out) {
 		genSchema(xdef.getAbsolutePath(),
-			outputDir, schemaPrefix, schemaFileExt,out);
+			outputDir, schemaPrefix, schemaFileExt, out);
 	}
 
 	/** Generates XML Schema from given X-definition files and saves schema
@@ -131,13 +131,13 @@ public final class XdefToXsd {
 	 * @param out where print information messages (if null System.out).
 	 * @throws Exception if an error occurs.
 	 */
-	public static void genSchema(File[] xdefs,
-		String outputDir,
-		String xdName,
-		String model,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out) throws Exception {
+	public final static void genSchema(final File[] xdefs,
+		final String outputDir,
+		final String xdName,
+		final String model,
+		final String schemaPrefix,
+		final String schemaFileExt,
+		final PrintStream out) throws Exception {
 		String[] srcs = new String[xdefs.length];
 		for (int i = 0; i < xdefs.length; i++) {
 			File f = xdefs[i];
@@ -161,14 +161,15 @@ public final class XdefToXsd {
 	 * @param out where print information messages (if null System.out).
 	 * @throws Exception if an error occurs.
 	 */
-	public static void genSchema(String[] xdefs,
-		String outputDir,
-		String xdName,
-		String model,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out) throws Exception {
+	public final static void genSchema(final String[] xdefs,
+		final String outputDir,
+		final String xdName,
+		final String model,
+		final String schemaPrefix,
+		final String schemaFileExt,
+		final PrintStream out) throws Exception {
 		Element collection;
+		String xdMode = model;
 		if (xdefs.length == 1) {
 			collection = KXmlUtils.parseXml(xdefs[0]).getDocumentElement();
 		} else {
@@ -202,8 +203,8 @@ public final class XdefToXsd {
 				if (!name.equals(xdName)) {
 					continue;
 				}
-				if (model == null) {
-					model = xdName;
+				if (xdMode == null) {
+					xdMode = xdName;
 				}
 				a = el.getAttributeNode("root");
 				if (a == null) {
@@ -212,19 +213,19 @@ public final class XdefToXsd {
 				}
 				if (a == null) {
 					el.setAttributeNS(
-						KXmlConstants.XDEF_INSTANCE_NS_URI, "root", model);
+						KXmlConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);
 				} else {
 					String value = a.getValue();
 					StringTokenizer st = new StringTokenizer(value, " |");
 					boolean found = false;
 					while (st.hasMoreTokens()) {
 						name = st.nextToken();
-						if (model.equals(name)) {
+						if (xdMode.equals(name)) {
 							found = true;
 						}
 					}
 					if (!found) {
-						a.setValue(value + " | " + model);
+						a.setValue(value + " | " + xdMode);
 					}
 				}
 			}
@@ -240,36 +241,40 @@ public final class XdefToXsd {
 	 * <li>-o output directory.</li>
 	 * <li>-m name of root model (optional).</li>
 	 * <li>-x name of X-definition (optional).</li>
+	 * <li>-sp prefix of XML schema namespace (optional, default is "xs").</li>
+	 * <li>-se extension of schema file (optional, default is "xsd").</li>
 	 * <li>-?, -h, help</li>
 	 * </ul>
 	 */
-	public static void main(String... args) {
+	public final static void main(final String... args) {
 		ArrayList<String> source = new ArrayList<String>();
 		String outputDir = null;
 		String xdName = null;
 		String model = null;
-		String schemaPrefix = "xs";
-		String schemaFileExt = "xsd";
+		String schemaPrefix = null;
+		String schemaFileExt = null;
 		PrintStream out = System.out;
-		String info =
+		final String info =
 "Using XdefToXsd: \n"
-+ "-i <PATH> list of input sources with X-definitions\n"
-+ "-o <PATH> output directory \n"
-+ "-m name of root model (optional)\n"
-+ "-x name of X-definition (optional)\n"
-+ "-?, -h,  help";
++ "-i  <PATH> list of input sources with X-definitions\n"
++ "-o  <PATH> output directory\n"
++ "-m  name of root model (optional)\n"
++ "-x  name of X-definition (optional)\n"
++ "-sp prefix of XML schema namespace (optional, default is \"xs\")\n"
++ "-se extension of schema file (optional, default is \"xsd\")";
+		final String info1 = info + "\n-h  help";
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Parameters missing!\n" + info);
+			throw new RuntimeException("Parameters missing!\n" + info1);
 		}
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			if ("-h".equals(arg) || "-?".equals(arg)) {
+			if ("-h".equals(arg)) {
 				System.out.println(info);
 				return;
 			} else if ("-i".equals(arg)) {
 				if (!source.isEmpty()) {
 					throw new RuntimeException(
-						"Input files already set\n" + info);
+						"Input files already set\n" + info1);
 				}
 				while (i + 1 < args.length) {
 					if (args[i+1] == null || args[i+1].startsWith("-")) {
@@ -279,12 +284,12 @@ public final class XdefToXsd {
 				}
 				if (source.isEmpty()) {
 					throw new RuntimeException(
-						"No input files specified\n" + info);
+						"No input files specified\n" + info1);
 				}
 			} else if ("-o".equals(arg)) {
 				if (outputDir != null) {
 					throw new RuntimeException(
-						"Output directory is already set\n" + info);
+						"Output directory is already set\n" + info1);
 				}
 				if (i + 1 < args.length) {
 					outputDir = args[++i];
@@ -292,7 +297,7 @@ public final class XdefToXsd {
 			} else if ("-m".equals(arg)) {
 				if (model != null) {
 					throw new RuntimeException(
-						"Model name is already set\n" + info);
+						"Model name is already set\n" + info1);
 				}
 				if (i + 1 < args.length) {
 					model = args[++i];
@@ -300,22 +305,44 @@ public final class XdefToXsd {
 			} else if ("-x".equals(arg)) {
 				if (xdName != null) {
 					throw new RuntimeException(
-						"X-definition name is already set\n" + info);
+						"X-definition name is already set\n" + info1);
 				}
 				if (i + 1 < args.length) {
 					xdName = args[++i];
 				}
+			} else if ("-sp".equals(arg)) {
+				if (schemaPrefix != null) {
+					throw new RuntimeException("XML schema"
+						+ " namespace prefix is already set\n" + info1);
+				}
+				if (i + 1 < args.length) {
+					schemaPrefix = args[++i];
+				}				
+			} else if ("-se".equals(arg)) {
+				if (schemaFileExt != null) {
+					throw new RuntimeException("XML schema file name"
+						+ " extension is already set\n" + info1);
+				}
+				if (i + 1 < args.length) {
+					schemaFileExt = args[++i];
+				}				
 			} else {
-				throw new RuntimeException("Incorrect argument: arg\n" + info);
+				throw new RuntimeException("Incorrect argument: arg\n" + info1);
 			}
 		}
 		// validating input file
 		if (source.isEmpty()) {
-			throw new RuntimeException("No input file specified\n" + info);
+			throw new RuntimeException("No input file specified\n" + info1);
 		}
 		//validating output file
 		if (outputDir == null) {
-			throw new RuntimeException("Output directory is missing\n" + info);
+			throw new RuntimeException("Output directory is missing\n" + info1);
+		}
+		if (schemaPrefix == null) {
+			schemaPrefix = "xs";
+		}
+		if (schemaFileExt == null) {
+			schemaFileExt = "xsd";
 		}
 		try {
 			XdefToXsd.genSchema(

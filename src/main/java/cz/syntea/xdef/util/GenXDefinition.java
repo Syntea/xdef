@@ -293,7 +293,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * @return String with X-definition.
 	 * @throws Exception if an error occurs.
 	 */
-	public static Element genXdef(final String source) throws Exception {
+	public static final Element genXdef(final String source) throws Exception {
 		return genXdef(KXmlUtils.parseXml(source).getDocumentElement());
 	}
 
@@ -301,7 +301,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * @param elem XML element.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
-	public static Element genXdef(final Element elem) {
+	public static final Element genXdef(final Element elem) {
 		Element newElem = (Element) elem.cloneNode(true);
 		newElem.normalize();
 		KXmlUtils.trimTextNodes(newElem, true);
@@ -312,7 +312,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * @param data Object from which we'll create a X-definition.
 	 * @return element with X-definition.
 	 */
-	public static Element genXDefinition(final Element data) {
+	public static final Element genXDefinition(final Element data) {
 		Element elem = (Element) data.cloneNode(true);
 		canonizeXML(elem);
 		Element rootDef = elem.getOwnerDocument().getImplementation()
@@ -336,7 +336,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * concatenate adjacent text nodes.
 	 * @param elem element to be canonized.
 	 */
-	private static void canonizeXML(Node elem) {
+	private static void canonizeXML(final Node elem) {
 		final NodeList nl = elem.getChildNodes();
 		for (int i = nl.getLength() - 1; i >= 0; i--) {
 			Node n = nl.item(i);
@@ -567,7 +567,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * @param encoding name of character encoding.
 	 * @throws IOException if an error occurs.
 	 */
-	public static void genXdef(final String source,
+	public static final void genXdef(final String source,
 		final String outFile,
 		final String encoding) throws IOException {
 		final KDOMBuilder kb = new KDOMBuilder();
@@ -582,7 +582,7 @@ public class GenXDefinition implements KXmlConstants {
 	 * @param encoding name of character encoding.
 	 * @throws IOException if an error occurs.
 	 */
-	public static void genXdef(final File source,
+	public static final void genXdef(final File source,
 		final File outFile, final String encoding) throws IOException {
 		final KDOMBuilder kb = new KDOMBuilder();
 		final Document doc = kb.parse(source);
@@ -598,13 +598,13 @@ public class GenXDefinition implements KXmlConstants {
 	 * <li><tt><b>-e encoding</b> ... </tt>character set name of output</li>
 	 * </ul>
 	 */
-	public static void main(String... args) {
+	public static final void main(String... args) {
 		final String info =
 "GenXDefinition - generate X-definitions from given XML.\n" +
 "Usage: -i input_file -o output file [-e encoding]\n"+
-"  -i input      file intput file\n" +
-"  -o output     file\n" +
-"  -e encoding   name of character set\n"+
+"  -i input    file intput file\n" +
+"  -o output   file\n" +
+"  -e encoding name of character set encoding\n"+
 "\n(c)2008 Syntea Software group\n";
 		if (args.length < 2) {
 			if (args.length == 1
