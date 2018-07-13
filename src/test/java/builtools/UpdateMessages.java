@@ -38,7 +38,7 @@ public class UpdateMessages {
 		out.mkdir();
 		RegisterReportTables.main(new String[] {
 			"-i", msgSourceDir + "*.properties",
-			"-c", "windows-1250",
+			"-c", "UTF-8",
 			"-p", "cz.syntea.xdef.msg",
 			"-o", out.getAbsolutePath(),
 			"-r"});

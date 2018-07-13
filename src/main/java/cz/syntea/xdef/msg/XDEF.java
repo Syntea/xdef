@@ -147,7 +147,7 @@ public interface XDEF {
 	public static final long XDEF237 = 31159025717L;
 	/** Ambiguous X-definition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
 	public static final long XDEF238 = 31159025718L;
-	/** Ambiguous X-definition: text node can´t follow provious text node&amp;{#SYS000} */
+	/** Ambiguous X-definition: text node canÂ´t follow provious text node&amp;{#SYS000} */
 	public static final long XDEF239 = 31159025719L;
 	/** Attribute 'metaNamespace' must contain a valid URI&amp;{#SYS000} */
 	public static final long XDEF253 = 31159025720L;
