@@ -9,9 +9,6 @@ public interface JSON {
 	static final String JSON_DEFAULT_LANGUAGE = "eng";
 	/** List of supported languages or registred message tables. */
 	static final String[] JSON_LANGUAGES = {"ces", "eng", "slk"};
-	/** Report identifiers (without prefix). */
-	static final String[] JSON = {"001","002","003","004","005","006","007",
-	"008","009","010","011","012","013","014","_DESCRIPTION","_LANGUAGE"};
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;
 	/** "&amp;{0}" expected&amp;{#SYS000} */

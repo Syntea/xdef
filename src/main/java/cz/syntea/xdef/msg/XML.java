@@ -9,10 +9,6 @@ public interface XML {
 	static final String XML_DEFAULT_LANGUAGE = "eng";
 	/** List of supported languages or registred message tables. */
 	static final String[] XML_LANGUAGES = {"ces", "eng", "slk"};
-	/** Report identifiers (without prefix). */
-	static final String[] XML = {"005","014","024","041","047","053","075",
-	"080","090","099","201","305","306","308","309","402","403","404","405",
-	"505","506","601","602","802","_DESCRIPTION","_LANGUAGE"};
 	/** Unexpected end of source&amp;{#SYS000} */
 	public static final long XML005 = 1170407424L;
 	/** Whitespace expected after "&amp;{0}"&amp;{#SYS000} */

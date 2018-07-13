@@ -9,12 +9,6 @@ public interface BNF {
 	static final String BNF_DEFAULT_LANGUAGE = "eng";
 	/** List of supported languages or registred message tables. */
 	static final String[] BNF_LANGUAGES = {"ces", "eng", "slk"};
-	/** Report identifiers (without prefix). */
-	static final String[] BNF = {"001","002","003","004","005","006","007",
-	"008","009","010","011","012","013","014","015","016","017","018","019",
-	"020","021","022","023","024","025","026","027","028","029","030","031",
-	"032","033","034","035","036","038","039","040","901","902","903",
-	"_DESCRIPTION","_LANGUAGE"};
 	/** BNF grammar not exists&amp;{#SYS000} */
 	public static final long BNF001 = 120717312L;
 	/** Unclosed comment&amp;{#SYS000} */

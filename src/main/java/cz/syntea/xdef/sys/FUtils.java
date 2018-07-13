@@ -15,6 +15,7 @@ package cz.syntea.xdef.sys;
 import cz.syntea.xdef.msg.SYS;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -1518,16 +1519,6 @@ public class FUtils {
 
 	/** Get array of existing files represented by given argument. The argument
 	 * can either represent one concrete file or it can represent a set of files
-	 * with wildcards '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildName file name (wildcards are accepted) .
-	 * @return array of existing files according to argument.
-	 */
-	public static File[] getFileGroup(final String wildName) {
-		return getFileGroup(wildName, false);
-	}
-
-	/** Get array of existing files represented by given argument. The argument
-	 * can either represent one concrete file or it can represent a set of files
 	 * with wildcards '*' and/or '?'.
 	 * @param wildName file name (wildcards are accepted) .
 	 * @param caseInsensitive if true then name comparing is case insensitive.
@@ -1549,6 +1540,16 @@ public class FUtils {
 			dir = new File(getActualPath());
 		}
 		return dir.listFiles(new NameWildCardFilter(wn, caseInsensitive));
+	}
+
+	/** Get array of existing files represented by given argument. The argument
+	 * can either represent one concrete file or it can represent a set of files
+	 * with wildcards '*' and/or '?'. Comparing is case sensitive.
+	 * @param wildName file name (wildcards are accepted) .
+	 * @return array of existing files according to argument.
+	 */
+	public static File[] getFileGroup(final String wildName) {
+		return getFileGroup(wildName, false);
 	}
 
 	/** Get array of existing files represented by given argument array. The
@@ -1584,6 +1585,127 @@ public class FUtils {
 		File[] result = new File[arr.size()];
 		arr.toArray(result);
 		return result;
+	}
+
+	/** Append text of message to the StringBuilder.
+	 * @param sb the StringBuilder.
+	 * @param msg message to be added.
+	 */
+	private static void addMessage(final StringBuilder sb, final String msg) {
+		if (sb.length() > 0) {
+			sb.append('\n');
+		}
+		sb.append(msg);
+	}
+
+	/** Update directories. If a file from the directory "fromDir" not exists
+	 * in the directory "toDir" or if it is different it is replaced by contents
+	 * of the file "fromDir". If the parameter extension is not null or
+	 * an empty string only files with given extension are updated.
+	 * If "subdirs" argument is true also subdirectories are updated.
+	 * If deleteOther argument is true then all files in "toDir" which not
+	 * exist in "fromDir" are deleted.
+	 * @param fromDir the directory from which the files are updated in "toDir".
+	 * @param toDir  the directory where files are updated.
+	 * @param extension file extension filter or null.
+	 * @param subdirs if true also subdirectories are updated.
+	 * @param deleteOther if true then all files in "toDir" which not
+	 * exist in "fromDir" are deleted.
+	 * @return string with reports about changes. If no changes were made
+	 * then returns an empty string.
+	 * @throws Exception if an error occurs.
+	 */
+	public static final String updateDirectories(final File fromDir,
+		final File toDir,
+		final String extension,
+		final boolean subdirs,
+		final boolean deleteOther) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		File[] toFiles;
+		if (extension != null && !extension.isEmpty()) {
+			FileFilter javaFiles = new ExtensionFileFilter(extension);
+			toFiles = toDir.listFiles(javaFiles);
+		} else {
+			toFiles = toDir.listFiles();
+		}
+		File[] fromFiles;
+		if (extension != null && !extension.isEmpty()) {
+			FileFilter javaFiles = new ExtensionFileFilter(extension);
+			fromFiles = fromDir.listFiles(javaFiles);
+		} else {
+			fromFiles = fromDir.listFiles();
+		}
+		if (deleteOther) {
+			// delete files in toDir
+			for (File f: toFiles) {
+				String name = f.getName();
+				File toFile = new File(fromDir, name);
+				if (!new File(fromDir, name).exists()) {
+					FUtils.deleteFile(toFile);
+					addMessage(sb, "Deleted: " + toFile.getAbsolutePath());
+				}
+			}
+		}
+		// replace or add files from fromDir to toDir
+		for (File f: fromFiles) {
+			String name = f.getName();
+			File oldf = new File(toDir, name);
+			if (oldf.exists()) {
+				if (FUtils.compareFile(f, oldf) != -1L) {
+					FUtils.copyToFile(f, oldf);
+					addMessage(sb, "Replaced: " + oldf.getAbsolutePath());
+				}
+			} else {
+				FUtils.copyToFile(f, oldf);
+				addMessage(sb, "Added: " + oldf.getAbsolutePath());
+			}
+		}
+		if (subdirs) {
+			toFiles = toDir.listFiles();
+			fromFiles = fromDir.listFiles();
+			if (deleteOther) {
+				// delete directories in toDir
+				for (File f: toFiles) {
+					if (f.isDirectory()) {
+						String name = f.getName();
+						File toFile = new File(fromDir, name);
+						if (toFile.exists() && toFile.isDirectory()) {
+							FUtils.deleteAll(toFile, true);
+							addMessage(sb, "Deleted dir: "
+								+ toFile.getAbsolutePath());
+						}
+					}
+				}
+				for (File f: fromFiles) {
+					if (f.isDirectory()) {
+						String name = f.getName();
+						File toFile = new File(toDir, name);
+						if (toFile.exists() && !toFile.isDirectory()) {
+							//Can't create directory: &{0}
+							throw new SException(SYS.SYS020,
+								toFile.getAbsolutePath()
+									+ " exists and it is not directory!");
+						} else {
+							if (!toFile.exists()) {
+								if (!toFile.mkdir()) {
+									//Can't create directory: &{0}
+									throw new SException(SYS.SYS020, toFile);
+								} else {
+									addMessage(sb, "Creatted dir: "
+										+ toFile.getAbsolutePath());
+								}
+							}
+							sb.append(updateDirectories(f,
+								toFile,
+								extension,
+								subdirs,
+								deleteOther));
+						}
+					}
+				}
+			}
+		}
+		return sb.toString();
 	}
 
 	/** Store files given by list to zip archive file. Entries of list are

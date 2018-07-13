@@ -609,24 +609,6 @@ public class RegisterReportTables {
 				 }
 			}
 			out.write("};\n");
-			out.write(
-"\t/** Report identifiers (without prefix). */\n"+
-"\tstatic final String[] " + table.getPrefix() + " = {");
-			int linelen = 26 + table.getPrefix().length() + 4;
-			for (int i = 0; i < table._ids.length; i++) {
-				if (i > 0 && i < msgs.size()) {
-					out.write(",");
-					linelen++;
-				}
-				String id = table._ids[i];
-				if (linelen + id.length() > 76) {
-					out.write("\n\t");//new line
-					linelen = 4;
-				}
-				out.write("\"" + id + "\"");
-				linelen += id.length() + 2;
-			}
-			out.write("};\n");
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
 				String s = table.getReportText(id);
