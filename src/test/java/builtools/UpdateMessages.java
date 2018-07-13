@@ -10,7 +10,6 @@
 package builtools;
 
 import cz.syntea.xdef.sys.FUtils;
-import static cz.syntea.xdef.sys.FUtils.deleteAll;
 import cz.syntea.xdef.sys.RegisterReportTables;
 import java.io.File;
 
@@ -30,7 +29,7 @@ public class UpdateMessages {
 		}
 		File temp = new File("temp");
 		temp.mkdir();
-		deleteAll(temp, true);
+		FUtils.deleteAll(temp, true);
 		temp.mkdir();
 		String msgPath = msgDir.getAbsolutePath();
 		msgPath = msgPath.replace('\\', '/');
@@ -38,7 +37,7 @@ public class UpdateMessages {
 			msgPath += '/';
 		}
 		RegisterReportTables.main(new String[] {
-			"-i", msgSourceDir + "*.properties",
+			"-i", msgPath + "*.properties",
 			"-c", "UTF-8",
 			"-p", "cz.syntea.xdef.msg",
 			"-o", temp.getAbsolutePath(),
@@ -49,7 +48,7 @@ public class UpdateMessages {
 		} else {
 			System.out.println(msg);
 		}
-		deleteAll(temp, true);
+		FUtils.deleteAll(temp, true);
 	}
 	
 }
