@@ -191,11 +191,7 @@ public final class Test003 extends Tester {
 "     skákal přes louže\n " +
 "     <proč>jen tak</proč>\n " +
 " </kůň>\r\n").getBytes("windows-1250");
-//			long num = 30000; // 6 Mbytes
-//			long num = 50000; // 10 Mbytes
-			long num = 100000; // 20 Mbytes
-//			long num = 1000000; // 200 Mbytes
-//			long num = 5000000; // 1000 Mbytes
+			long num = 50000; // 10 Mbytes
 			for (int i = 0; i < num; i++) {
 				longfile.write(child);
 			}
