@@ -38,7 +38,7 @@ public class UpdateMessages {
 			msgPath += '/';
 		}
 		RegisterReportTables.main(new String[] {
-			"-i", msgPath + "*.properties",
+			"-i", msgSourceDir + "*.properties",
 			"-c", "UTF-8",
 			"-p", "cz.syntea.xdef.msg",
 			"-o", temp.getAbsolutePath(),
