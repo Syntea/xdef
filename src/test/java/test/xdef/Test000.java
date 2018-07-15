@@ -47,19 +47,13 @@ import org.w3c.dom.Element;
  */
 public final class Test000 extends Tester {
 
-	public Test000() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public Test000() {super();}
 
 	private static int _myError = 0;
 
 	@Override
 	/** Run tests and print error information. */
-	final public void test() {
+	public void test() {
 		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
@@ -1212,6 +1206,8 @@ public final class Test000 extends Tester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

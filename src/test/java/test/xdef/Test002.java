@@ -40,13 +40,7 @@ import cz.syntea.xdef.proc.XXData;
  */
 public final class Test002 extends Tester {
 
-	public Test002() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public Test002() {super();}
 
 	private static int _errorCount;
 	private static int _errorCode;
@@ -78,7 +72,7 @@ public final class Test002 extends Tester {
 
 	@Override
 	/** Run tests. */
-	final public void test() {
+	public void test() {
 		String xdef;
 		String xml;
 		XDPool xp;
@@ -1635,6 +1629,8 @@ public final class Test002 extends Tester {
 			assertNoErrors(reporter);
 /**/
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

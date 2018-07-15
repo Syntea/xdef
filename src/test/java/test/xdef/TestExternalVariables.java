@@ -22,17 +22,11 @@ import java.io.StringWriter;
  */
 public final class TestExternalVariables extends Tester {
 
-	public TestExternalVariables() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestExternalVariables() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		String xml;
 		String xdef;
 		XDPool xp;
@@ -119,6 +113,8 @@ public final class TestExternalVariables extends Tester {
 			assertNoErrors(reporter);
 			assertEq(0, xd.getVariable("#i").intValue());
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

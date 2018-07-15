@@ -26,16 +26,10 @@ import org.w3c.dom.Element;
  */
 public final class TestTemplate extends Tester {
 
-	public TestTemplate() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestTemplate() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		String xdef;
 		ArrayReporter reporter  = new ArrayReporter();
 		XDPool xp;
@@ -628,6 +622,8 @@ public final class TestTemplate extends Tester {
 			assertEq(el, xml);
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

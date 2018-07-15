@@ -368,7 +368,6 @@ public class TestKXmlUtils extends STester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-//		cz.syntea.common.xml.KXmlUtils.setDOMImplementation("javax",true,true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

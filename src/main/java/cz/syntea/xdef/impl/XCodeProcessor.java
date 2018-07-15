@@ -498,6 +498,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			XVariableTable vartab =
 				(XVariableTable) _xd.getXDPool().getVariableTable();
 			for (int i = 0; i < _globalVariables.length; i++) {
+				XVariable xvar = vartab.getXVariable(i);
 				XDValue val = _globalVariables[i];
 				if (val != null && !val.isNull()) {
 					short itemId = val.getItemId();
@@ -513,7 +514,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						case CompileBase.XD_STATEMENT:
 						case CompileBase.XD_RESULTSET:
 							// close all not external database objects
-							if (!vartab.getXVariable(i).isExternal()) {
+							if (xvar != null && !xvar.isExternal()) {
 								if (itemId == XD_SERVICE) {
 									((XDService) val).close();
 								} else if (itemId == XD_STATEMENT) {
@@ -523,9 +524,24 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 								}
 							}
 							break;
-						case CompileBase.XD_OUPUT:
-							((DefOutStream) val).flush(); // flush outStreams
+						case CompileBase.XD_INPUT:
+							if (xvar != null && !xvar.isExternal()
+								&& xvar.getName().equals("$stdIn")) {
+								// close local inStreams
+								((DefInStream) val).close();
+							}
 							break;
+						case CompileBase.XD_OUPUT:
+							if (xvar != null
+								&& xvar.getName().equals("$stdOut")
+								&& xvar.getName().equals("$stdErr")
+								&& !xvar.isExternal()) {
+								// close local outStream
+								((DefOutStream) val).close();
+							} else {
+								// the external outstream will be just flushed
+								((DefOutStream) val).flush();// flush outStreams
+							}
 					}
 				}
 			}

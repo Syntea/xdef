@@ -1,5 +1,5 @@
 /*
- * File: TestChkParser.java
+ * File: TestParse.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -51,18 +51,12 @@ import cz.syntea.xdef.proc.XXData;
  */
 public final class TestParse extends Tester {
 
-	public TestParse() {
-		super();
-/*#if DEBUG*/
-//		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestParse() {super();}
 
 	private static int _myX;
 
 	@Override
-	final public void test() {
+	public void test() {
 		Report.setLanguage("en"); //localize
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
@@ -1623,7 +1617,6 @@ public final class TestParse extends Tester {
 				parse(xp, null, xml, reporter, strw, null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(), "0ABCDE");
-
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 " <a\n"+
@@ -1656,7 +1649,6 @@ public final class TestParse extends Tester {
 			xml = "<a a='x'/>";
 			el = parse(xp, "", xml, reporter);
 			assertEq("<a a='bac'/>", el);
-
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
 "<root attr='required string()'\n"+
@@ -2534,10 +2526,8 @@ public final class TestParse extends Tester {
 			assertEq(xml, parse(xp, "Y", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		setChkSyntax(chkSyntax);
-		setProperty(XDConstants.XDPROPERTY_VALIDATE,
-			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
-		resetProperties();
+
+		resetTester();
 		new File(tempDir + "vystup.txt").delete();
 	}
 

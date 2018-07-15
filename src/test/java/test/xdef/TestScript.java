@@ -28,13 +28,7 @@ import cz.syntea.xdef.proc.XXData;
  */
 public final class TestScript extends Tester {
 
-	public TestScript() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestScript() {super();}
 
 	private boolean _result = false;
 
@@ -228,7 +222,7 @@ public final class TestScript extends Tester {
 	}
 
 	@Override
-	final public void test() {
+	public void test() {
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
@@ -1179,6 +1173,8 @@ public final class TestScript extends Tester {
 		xp = compile(xdef);
 		xp.createXDDocument().xparse("<a/>", reporter);
 		assertNoErrorwarnings(reporter);
+
+		resetTester();
 	}
 
 	/** Run test

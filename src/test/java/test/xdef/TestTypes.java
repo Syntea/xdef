@@ -26,17 +26,11 @@ import cz.syntea.xdef.XDContainer;
  */
 public final class TestTypes extends Tester {
 
-	public TestTypes() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestTypes() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		Element el;
@@ -222,7 +216,7 @@ public final class TestTypes extends Tester {
 				parse(xp, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + XDEFNS + "'>\n"+
@@ -369,6 +363,8 @@ public final class TestTypes extends Tester {
 			assertEq("y-M-d", c.getXDNamedItemValue("format").stringValue());
 			assertEq("d.M.y", c.getXDNamedItemValue("outFormat").stringValue());
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

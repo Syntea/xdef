@@ -25,13 +25,7 @@ import org.w3c.dom.Node;
  */
 public final class TestKeyAndRef extends Tester {
 
-	public TestKeyAndRef() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestKeyAndRef() {super();}
 
 	public static String boundQName(final XXData data) {
 		String s = data.getTextValue();
@@ -55,7 +49,7 @@ public final class TestKeyAndRef extends Tester {
 	}
 
 	@Override
-	final public void test() {
+	public void test() {
 		String xdef;
 		String s;
 		String xml;
@@ -744,10 +738,8 @@ public final class TestKeyAndRef extends Tester {
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
-		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-		setProperty(XDConstants.XDPROPERTY_SPECDATES,
-			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+
+		resetTester();
 	}
 
 	/** Run test

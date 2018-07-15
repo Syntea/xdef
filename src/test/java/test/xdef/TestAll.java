@@ -81,12 +81,7 @@ public class TestAll {
 			new TestXmlWriter(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef",
-/*#if DEBUG*/
-			true, args);
-/*#else*#/
-			false, args);
-/*#end*/
+			tests, "package xdef", Tester.getDebugMode(), args);
 		if (log != null) {
 			log.close();
 		}
@@ -97,7 +92,6 @@ public class TestAll {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-//		Tester.chkXDSyntax = true;
 		if (runTests(args) > 0) {System.exit(1);}
 	}
 }

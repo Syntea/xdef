@@ -58,13 +58,7 @@ import javax.xml.validation.SchemaFactory;
  */
 public final class TestXSTypes extends Tester {
 
-	public TestXSTypes() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXSTypes() {super();}
 
 	private String _msg = "";
 	private XDPool _xd;
@@ -628,11 +622,12 @@ public final class TestXSTypes extends Tester {
 	}
 
 	@Override
-	final public void test() {
+	public void test() {
 		try {
 			init();
 		} catch (Exception ex) {
 			fail(ex);
+			resetTester();
 			return;
 		}
 /*#else*#/
@@ -4755,6 +4750,8 @@ public final class TestXSTypes extends Tester {
 		setProperty("xdef.maxyear", String.valueOf(year + 200));
 		setProperty("xdef.specdates",
 			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+
+		resetTester();
 	}
 
 	public static String tst(XXElement xe, String s) {

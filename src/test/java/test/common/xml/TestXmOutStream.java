@@ -22,8 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- *
+/** Test XmOutStream.
  * @author Vaclav Trojan <vaclav.trojan@syntea.cz>
  */
 public class TestXmOutStream extends STester {

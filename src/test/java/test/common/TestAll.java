@@ -31,6 +31,7 @@ import test.common.xml.TestKDOMBuilder;
 import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
+import test.xdef.Tester;
 
 /** Run all available tests for package cz.syntea.common.
  * @author Vaclav Trojan
@@ -56,12 +57,7 @@ public class TestAll {
 			new TestErrorReporting(),
 			new TestSParser(),
 			new TestSUtils(),
-//			new TestLock(),
 			new TestObjectWriter(),
-/*#if DEBUG*/
-//			new TestLargeReportTable(),
-//			new TestLargeReportTags(),
-/*#end*/
 			// JSON
 			new TestJSON(),
 			new TestJSON1(),
@@ -80,12 +76,7 @@ public class TestAll {
 			new TestXdScript(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package common",
-/*#if DEBUG*/
-			true, args);
-/*#else*#/
-			false, args);
-/*#end*/
+			tests, "package common", Tester.getDebugMode(), args);
 		if (log != null) {
 			log.close();
 		}
@@ -96,7 +87,6 @@ public class TestAll {
 	 * @param args The array of arguments (not used).
 	 */
 	public static void main(String... args) {
-//		cz.syntea.common.xml.KXmlUtils.setDOMImplementation("javax",true,true);
 		if (runTests(args) > 0) {System.exit(1);}
 	}
 }

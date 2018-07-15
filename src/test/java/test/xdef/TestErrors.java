@@ -31,13 +31,7 @@ import cz.syntea.xdef.sys.SUtils;
  */
 public final class TestErrors extends Tester {
 
-	public TestErrors() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(false); // here it MUST be false!
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestErrors() {super(); setChkSyntax(false);}
 
 	private void printReport(final Report report, final String data) {
 		System.out.flush();
@@ -46,11 +40,9 @@ public final class TestErrors extends Tester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-/*#if (DEBUG)*/
 		ArrayReporter reporter = new ArrayReporter();
 		reporter.putReport(report);
 		printReports(reporter, data);
-/*#end*/
 	}
 
 	private static String chkReport(final ReportReader reporter,
@@ -87,7 +79,7 @@ public final class TestErrors extends Tester {
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
@@ -97,7 +89,7 @@ public final class TestErrors extends Tester {
 		} catch (Error ex) {
 			fail(ex);
 		}
-		resetProperties();
+		resetTester();
 	}
 
 	/** Compile the source.
@@ -1034,6 +1026,8 @@ public final class TestErrors extends Tester {
 				assertNull(reporter.getReport(), reporter.printToString());
 			}
 		} catch (Exception ex) { fail(ex); }
+
+		resetTester();
 	}
 
 	final public static void matchFault() {}

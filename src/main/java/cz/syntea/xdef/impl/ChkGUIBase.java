@@ -147,6 +147,8 @@ class ChkGUIBase {
 		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 			@Override
 			public void componentResized(java.awt.event.ComponentEvent evt) {
+				_frame.setSize(_width, _height);
+/**
 				int height = evt.getComponent().getHeight();
 				int width = evt.getComponent().getWidth();
 				if (width < 300 || height < 200) {
@@ -156,10 +158,10 @@ class ChkGUIBase {
 					if (height < 200) {
 						height = 200;
 					}
-					_frame.setSize(_width, _height);
 				}
 				_width = width;
 				_height = height;
+/**/
 			}
 		});
 		_infoArea.setFont(FONT_TEXT);
@@ -248,17 +250,17 @@ class ChkGUIBase {
 	}
 
 	/** Close GUI: dispose window and remove allocated objects.
-	 * @param ask if true, then it is shown the message that program finished.
+	 * @param ask message to be displayed or null.
 	 */
-	void closeGUI(boolean ask) {
+	void closeGUI(String ask) {
 		if (_frame != null) {
 			_frame.setVisible(true);
-			if (ask) {
-				JOptionPane.showMessageDialog(_frame, "Program finished");
-			}
 			_frame.setVisible(false);
 			for (Component component: _frame.getComponents()) {
 				component.setEnabled(false);
+			}
+			if (ask != null) {
+				JOptionPane.showMessageDialog(_frame, ask);
 			}
 			do {_frame.dispose();} while(_frame.isActive());
 			_frame.setEnabled(false);

@@ -605,7 +605,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 	@Override
 	/** Close debugger */
 	public void closeDebugger() {
-		closeGUI(true); // show mesage the trogram finished
+		closeGUI("Program finished"); // show mesage the trogram finished
 		_debugMode = false;
 		_opened = false;
 		_in = null;

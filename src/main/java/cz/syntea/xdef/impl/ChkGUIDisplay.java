@@ -26,6 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -69,8 +70,8 @@ class ChkGUIDisplay extends ChkGUIBase {
 	}
 
 	/** Open the GUI.
-	 * @param xp
-	 * @param err
+	 * @param xp XDPool.
+	 * @param err error reporter.
 	 * @return if true the GUI was finished else recompile is supposed.
 	 */
 	final boolean setGUI(final XPool xp, final ArrayReporter err) {
@@ -97,7 +98,8 @@ class ChkGUIDisplay extends ChkGUIBase {
 			_actionFinished = true; // value MUST be true for next action!
 			return false;
 		}
-		closeGUI(false); // do not show message that program finished.
+//		closeGUI("XDPool was compiled"); // show message that SDPool compiled.
+		closeGUI(null);
 		_undo = null;
 		_selectSource = _removeSource = null;
 		_positions = null;

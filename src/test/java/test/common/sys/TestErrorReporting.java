@@ -22,6 +22,7 @@ import cz.syntea.xdef.sys.StringParser;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import cz.syntea.xdef.sys.ReportReader;
+import test.xdef.Tester;
 
 /** TestReport
  *
@@ -38,23 +39,23 @@ public class TestErrorReporting extends STester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-/*#if (DEBUG) */
-		ArrayReporter reporter = new ArrayReporter();
-		reporter.putReport(report);
-		printReports(reporter, data);
-/*#end*/
+		if (Tester.getDebugMode()) {
+			ArrayReporter reporter = new ArrayReporter();
+			reporter.putReport(report);
+			printReports(reporter, data);
+		}
 	}
 
 	public void printReports(ReportReader reporter, String data) {
-/*#if (DEBUG) */
-		System.out.flush();
-		System.err.flush();
-		ReportPrinter.printListing(new PrintWriter(System.out),
-			new StringReader(data),
-			reporter, null, 80, true, null); //lineNumbers
-		System.err.flush();
-		System.out.flush();
-/*#end*/
+		if (Tester.getDebugMode()) {
+			System.out.flush();
+			System.err.flush();
+			ReportPrinter.printListing(new PrintWriter(System.out),
+				new StringReader(data),
+				reporter, null, 80, true, null); //lineNumbers
+			System.err.flush();
+			System.out.flush();
+		}
 	}
 
 	@Override

@@ -26,17 +26,11 @@ import org.w3c.dom.Element;
  */
 public final class Test001  extends Tester {
 
-	public Test001() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public Test001() {super();}
 
 	@Override
 	/** Run tests and print error information. */
-	final public void test() {
+	public void test() {
 		String xdef, xml;
 		Element el;
 		XDPool xp;
@@ -1141,6 +1135,8 @@ public final class Test001  extends Tester {
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	private static Element removeNs(final Element e) {

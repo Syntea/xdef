@@ -25,17 +25,11 @@ import cz.syntea.xdef.proc.XXElement;
  */
 public final class TestUserQuery extends Tester {
 
-	public TestUserQuery() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestUserQuery() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		String xdef;
@@ -298,6 +292,8 @@ public final class TestUserQuery extends Tester {
 				"<book cover=\"gold\"><title>Klaus</title></book>" +
 				"</test>", KXmlUtils.nodeToString(el));
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	//Note query is here ignored (simulated). It is just created an

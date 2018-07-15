@@ -15,6 +15,7 @@ package test.xdutils;
 import cz.syntea.xdef.sys.STester;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import test.xdef.Tester;
 
 /** Run all available tests for package cz.syntea.xd.
  * @author Vaclav Trojan
@@ -28,7 +29,7 @@ public class TestAll {
 	 * @return number of errors.
 	 */
 	public static int runTests(String[] args) {
-		PrintStream log = null;
+		PrintStream log;
 		try {
 			log = new PrintStream(new FileOutputStream("testUtils.log"));
 		} catch (Exception ex) {
@@ -45,12 +46,7 @@ public class TestAll {
 			new TestGenDTD(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdutils",
-/*#if DEBUG*/
-			true, args);
-/*#else*#/
-			false, args);
-/*#end*/
+			tests, "package xdutils", Tester.getDebugMode(), args);
 		if (log!= null) {
 			log.close();
 		}

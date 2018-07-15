@@ -27,20 +27,13 @@ import org.w3c.dom.Element;
  */
 public final class TestXmlWriter extends Tester {
 
-	public TestXmlWriter() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXmlWriter() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		String xdef;
 		String xml;
-		String s;
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
@@ -111,6 +104,8 @@ public final class TestXmlWriter extends Tester {
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
 		new File(tempDir + "x.xml").delete();
+
+		resetTester();
 	}
 
 	/** Run test

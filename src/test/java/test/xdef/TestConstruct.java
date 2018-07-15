@@ -25,16 +25,10 @@ import cz.syntea.xdef.proc.XXElement;
  */
 public final class TestConstruct extends Tester {
 
-	public TestConstruct() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestConstruct() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		Report.setLanguage("en"); //localize
 		System.getProperties().setProperty("xdef.warnings", "true");
 		System.getProperties().setProperty("xdef.extmode", "new");
@@ -119,6 +113,8 @@ public final class TestConstruct extends Tester {
 "<y:A000 x:a=\"Toto je zprava\" y:b=\"This is message\"/>"+
 "</x:root>");
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

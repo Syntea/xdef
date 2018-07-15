@@ -48,7 +48,7 @@ public class TestAll {
             Throwable ex = result.getThrowable();
             if (ex != null) {
                 System.err.println(id + ":");
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             } else {
                 System.err.println(id + ": failure without exception!");
             }
