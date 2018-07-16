@@ -1587,20 +1587,36 @@ public class FUtils {
 		return result;
 	}
 
-	/** Append text of message to the StringBuilder.
-	 * @param sb the StringBuilder.
-	 * @param msg message to be added.
+	/** Update directories. If a file from the directory "fromDir" not exists
+	 * in the directory "toDir" or if it is different it is replaced by contents
+	 * of the file from "fromDir". If the parameter extension is not null or
+	 * an empty string only files with given extension are updated.
+	 * If "subdirs" argument is true also subdirectories are updated.
+	 * If deleteOther argument is true then all files in "toDir" which not
+	 * exist in "fromDir" are deleted.
+	 * @param fromDir the directory path from which the files are updated
+	 * in "toDir".
+	 * @param toDir the directory path where files are updated.
+	 * @param extension file extension filter or null.
+	 * @param subdirs if true also subdirectories are updated.
+	 * @param deleteOther if true then all files in "toDir" which not
+	 * exist in "fromDir" are deleted.
+	 * @return string with reports about changes. If no changes were made
+	 * then returns an empty string.
+	 * @throws Exception if an error occurs.
 	 */
-	private static void addMessage(final StringBuilder sb, final String msg) {
-		if (sb.length() > 0) {
-			sb.append('\n');
-		}
-		sb.append(msg);
+	public static final String updateDirectories(final String fromDir,
+		final String toDir,
+		final String extension,
+		final boolean subdirs,
+		final boolean deleteOther) throws Exception {
+		return updateDirectories(new File (fromDir),
+			new File (toDir), extension, subdirs, deleteOther);
 	}
 
 	/** Update directories. If a file from the directory "fromDir" not exists
 	 * in the directory "toDir" or if it is different it is replaced by contents
-	 * of the file "fromDir". If the parameter extension is not null or
+	 * of the file from "fromDir". If the parameter extension is not null or
 	 * an empty string only files with given extension are updated.
 	 * If "subdirs" argument is true also subdirectories are updated.
 	 * If deleteOther argument is true then all files in "toDir" which not
@@ -1621,43 +1637,91 @@ public class FUtils {
 		final boolean subdirs,
 		final boolean deleteOther) throws Exception {
 		StringBuilder sb = new StringBuilder();
-		File[] toFiles;
-		if (extension != null && !extension.isEmpty()) {
-			FileFilter javaFiles = new ExtensionFileFilter(extension);
-			toFiles = toDir.listFiles(javaFiles);
-		} else {
-			toFiles = toDir.listFiles();
+		updateDirectories(fromDir, toDir, extension, subdirs, deleteOther, sb);
+		return sb.toString();
+	}
+
+	/** Append text of message to the StringBuilder.
+	 * @param sb the StringBuilder.
+	 * @param msg message to be added.
+	 */
+	private static void addMessage(final StringBuilder sb, final String msg) {
+		if (sb.length() > 0) {
+			sb.append('\n');
 		}
-		File[] fromFiles;
-		if (extension != null && !extension.isEmpty()) {
-			FileFilter javaFiles = new ExtensionFileFilter(extension);
-			fromFiles = fromDir.listFiles(javaFiles);
-		} else {
-			fromFiles = fromDir.listFiles();
+		sb.append(msg);
+	}
+
+	/** Check file name with extension. If the file extension is not correct
+	 * return null;
+	 * @param f the file to be checked.
+	 * @param extension file extension or null.
+	 * @return file name or null if file extension not fits to the extension.
+	 */
+	private static String chkExtension(final File f, final String extension) {
+		String name = f.getName();
+		if (f.isFile()) {
+			if (extension == null || extension.isEmpty()
+				|| name.endsWith('.' + extension)) {
+				return name;
+			}
 		}
+		return null;
+	}
+
+	private static void updateDirectories(final File fromDir,
+		final File toDir,
+		final String extension,
+		final boolean subdirs,
+		final boolean deleteOther,
+		StringBuilder sb) throws Exception {
+		checkDir(fromDir, false);
+		if (!toDir.exists()) {
+			checkDir(toDir, true);
+			addMessage(sb, "Creatted dir: " + toDir.getAbsolutePath());
+		} else {
+			checkDir(toDir, true);
+		}
+		File[] toFiles = toDir.listFiles();
+		File[] fromFiles = fromDir.listFiles();
 		if (deleteOther) {
-			// delete files in toDir
 			for (File f: toFiles) {
-				String name = f.getName();
-				File toFile = new File(fromDir, name);
-				if (!new File(fromDir, name).exists()) {
-					FUtils.deleteFile(toFile);
-					addMessage(sb, "Deleted: " + toFile.getAbsolutePath());
+				// delete files in toDir which not exist in fromDir.
+				if (f.isFile()) {
+					String name = chkExtension(f, extension);
+					if (name != null) {
+						File g = new File(fromDir, name);
+						if (!g.exists()) {
+							addMessage(sb, "Deleted: " + f.getAbsolutePath());
+							FUtils.deleteFile(f);
+						}
+					}
 				}
 			}
 		}
 		// replace or add files from fromDir to toDir
 		for (File f: fromFiles) {
-			String name = f.getName();
-			File oldf = new File(toDir, name);
-			if (oldf.exists()) {
-				if (FUtils.compareFile(f, oldf) != -1L) {
-					FUtils.copyToFile(f, oldf);
-					addMessage(sb, "Replaced: " + oldf.getAbsolutePath());
+			String name = chkExtension(f, extension);
+			if (name != null) {
+				File g = new File(toDir, name);
+				if (g.exists()) {
+					if (g.isDirectory()) {
+						if (deleteOther) {
+							deleteAll(g, true);
+							addMessage(sb, "deleted dir: "+g.getAbsolutePath());
+							FUtils.copyToFile(f, g);
+							addMessage(sb, "Added: " + g.getAbsolutePath());
+						}
+					} else {
+						if (compareFile(f, g) != -1L) {
+							FUtils.copyToFile(f, g);
+							addMessage(sb, "Replaced: " + g.getAbsolutePath());
+						}
+					}
+				} else {
+					FUtils.copyToFile(f, g);
+					addMessage(sb, "Added: " + g.getAbsolutePath());
 				}
-			} else {
-				FUtils.copyToFile(f, oldf);
-				addMessage(sb, "Added: " + oldf.getAbsolutePath());
 			}
 		}
 		if (subdirs) {
@@ -1668,44 +1732,40 @@ public class FUtils {
 				for (File f: toFiles) {
 					if (f.isDirectory()) {
 						String name = f.getName();
-						File toFile = new File(fromDir, name);
-						if (toFile.exists() && toFile.isDirectory()) {
-							FUtils.deleteAll(toFile, true);
+						File g = new File(fromDir, name);
+						if (!g.exists() || !g.isDirectory()) {
+							FUtils.deleteAll(f, true);
 							addMessage(sb, "Deleted dir: "
-								+ toFile.getAbsolutePath());
-						}
-					}
-				}
-				for (File f: fromFiles) {
-					if (f.isDirectory()) {
-						String name = f.getName();
-						File toFile = new File(toDir, name);
-						if (toFile.exists() && !toFile.isDirectory()) {
-							//Can't create directory: &{0}
-							throw new SException(SYS.SYS020,
-								toFile.getAbsolutePath()
-									+ " exists and it is not directory!");
-						} else {
-							if (!toFile.exists()) {
-								if (!toFile.mkdir()) {
-									//Can't create directory: &{0}
-									throw new SException(SYS.SYS020, toFile);
-								} else {
-									addMessage(sb, "Creatted dir: "
-										+ toFile.getAbsolutePath());
-								}
-							}
-							sb.append(updateDirectories(f,
-								toFile,
-								extension,
-								subdirs,
-								deleteOther));
+								+ f.getAbsolutePath());
 						}
 					}
 				}
 			}
+			for (File f: fromFiles) {
+				if (f.isDirectory()) {
+					String name = f.getName();
+					File g = new File(toDir, name);
+					if (g.exists() && !g.isDirectory()) {
+						if (deleteOther) {
+							deleteFile(f);
+						} else {
+							//Can't create directory: &{0}
+							throw new SException(SYS.SYS020,
+								g.getAbsolutePath()
+									+ " exists and it is not directory!");
+						}
+					} else {
+						if (!g.exists()) {
+							checkDir(g, true);
+							addMessage(sb,
+								"Creatted dir: " + g.getAbsolutePath());
+						}
+						updateDirectories(
+							f, g, extension, subdirs, deleteOther, sb);
+					}
+				}
+			}
 		}
-		return sb.toString();
 	}
 
 	/** Store files given by list to zip archive file. Entries of list are
