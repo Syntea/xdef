@@ -29,7 +29,7 @@ public class TestAll {
     /** prepare tests */
     @BeforeTest
     public static void beforeTests() {
-        Tester.setDebugMode(false);
+        Tester.setDebugMode(true);
     }
 
     /** run TestAll in test.common */
@@ -37,7 +37,7 @@ public class TestAll {
     public static void testCommon() {
         final Assertion  a     = new Assertion();
         final String[]   args0 = {};
-        a.assertEquals(test.common. TestAll. runTests(args0), 0);
+        a.assertEquals(test.common.TestAll.runTests(args0), 0);
     }
         
     /** run TestAll in test.xdef */
@@ -45,7 +45,7 @@ public class TestAll {
     public static void testXdef() {
         final Assertion  a     = new Assertion();
         final String[]   args0 = {};        
-        a.assertEquals(test.xdef.   TestAll. runTests(args0), 0);
+        a.assertEquals(test.xdef.TestAll.runTests(args0), 0);
     }
     
     /** run TestAll in test.xdutil */
@@ -53,7 +53,7 @@ public class TestAll {
     public static void testXDUtils() {
         final Assertion  a     = new Assertion();
         final String[]   args0 = {};
-        a.assertEquals(test.xdutils.TestAll. runTests(args0), 0);
+        a.assertEquals(test.xdutils.TestAll.runTests(args0), 0);
     }
 
     
@@ -94,7 +94,9 @@ public class TestAll {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        try { testXDUtils(); } catch (Exception e) {
+        try {
+            testXDUtils();
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
