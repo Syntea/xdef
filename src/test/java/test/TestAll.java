@@ -20,6 +20,7 @@ import test.xdef.Tester;
 public class TestAll {
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
+		System.out.println("ahoj");
 		Tester.setDebugMode(false);
 		test.common.TestAll.runTests(args);
 		test.xdef.TestAll.runTests(args);
