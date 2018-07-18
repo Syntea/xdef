@@ -94,10 +94,10 @@
     <build>
         <resources>
             <resource>
-				<directory>src/main/java</directory>
+                <directory>src/main/java</directory>
             </resource>
             <resource>
-				<directory>src/main/resources</directory>
+                <directory>src/main/resources</directory>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
