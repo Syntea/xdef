@@ -43,16 +43,10 @@ import cz.syntea.xdef.proc.XXData;
  */
 final public class TestCompose extends Tester {
 
-	public TestCompose() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestCompose() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		Report rep;
 		XDPool xp;
 		XDDocument xd;
@@ -2614,11 +2608,12 @@ final public class TestCompose extends Tester {
 			assertEq(xml, create(xd, "a", reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		if (getFailCount() == 0) {
-			try {
-				FUtils.deleteAll(tempDir, true);
-			} catch (Exception ex) {fail(ex);}
-		}
+
+		try {
+			FUtils.deleteAll(tempDir, true);
+		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

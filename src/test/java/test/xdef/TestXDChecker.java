@@ -25,13 +25,7 @@ import java.util.Arrays;
  */
 public class TestXDChecker extends Tester {
 
-	public TestXDChecker() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXDChecker() {super();}
 
 	public static boolean typX(XXData xdata) {
 		return "xxx".equals(xdata .getTextValue());
@@ -89,6 +83,8 @@ public class TestXDChecker extends Tester {
 		assertTrue(x.errors(), "Error not recognized");
 		x = chk.checkType("? int()", null);
 		assertFalse(x.errors());
+
+		resetTester();
 	}
 
 	/** Run test

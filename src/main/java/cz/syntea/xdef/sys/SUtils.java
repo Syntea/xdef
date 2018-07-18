@@ -39,6 +39,23 @@ import java.util.TreeMap;
  */
 public class SUtils extends FUtils {
 
+	/** Version of Java runtime as the integer composed from the string where
+	 * the integer part is multiplied by 100 and subversion part is added.
+	 * E.g. "1.6" is converted to 106. The build version is ignored.
+	 */
+	public static final int JAVA_VERSION;
+
+	static {
+		String javaVersion = System.getProperty("java.version");
+		if (javaVersion != null) {
+			String[] ss = javaVersion.split("\\.");
+			JAVA_VERSION = Integer.parseInt(ss[0])* 100
+				+ Integer.parseInt(ss[1]);
+		} else {
+			JAVA_VERSION = 106;
+		}
+	}
+
 	/** Don't allow user to instantiate this class. */
 	private SUtils() {}
 
@@ -1305,10 +1322,9 @@ public class SUtils extends FUtils {
 	 * @return a <tt>Process</tt> object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String [] cmdarray)
+	public static final Process execute(final String... cmdarray)
 		throws Exception {
 		return execute(cmdarray,
 			null, null, System.out, System.err, null, true);
 	}
-
 }

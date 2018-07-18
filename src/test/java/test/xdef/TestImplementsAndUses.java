@@ -20,20 +20,14 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestImplementsAndUses extends Tester {
 
-	public TestImplementsAndUses() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestImplementsAndUses() {super();}
 
 	final public static boolean x() {return true;}
 	final public static boolean y() {return true;}
 
 	@Override
 	/** Run test and print error information.*/
-	final public void test() {
+	public void test() {
 		String xdef;
 		String xml;
 		String s;
@@ -501,6 +495,8 @@ public final class TestImplementsAndUses extends Tester {
 "</xd:collection>";
 			compile(xdef);
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

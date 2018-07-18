@@ -66,6 +66,12 @@ public interface XDConstants extends SConstants {
 	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
 	/** Value "false" of property "xdef.debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
+	/** Value "showResult" of property "xdef.debug" */
+	public static final String XDPROPERTYVALUE_DEBUG_SHOWRESULT = "showResult";
+	/** Property defines stream used for debug output (default is stdOut). */
+	public static final String XDPROPERTY_DEBUG_OUT = "xdef.debug.out";
+	/** Property defines stream used for debug input (default is stdIn). */
+	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
 
 	/** Property defines debug mode (default is false).*/
 	public static final String XDPROPERTY_DISPLAY = "xdef.display";
@@ -75,12 +81,6 @@ public interface XDConstants extends SConstants {
 	public static final String XDPROPERTYVALUE_DISPLAY_ERRORS = "errors";
 	/** Value "false" of property "xdef.display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_FALSE = "false";
-
-	/** Property defines stream used for debug output (default is stdOut). */
-	public static final String XDPROPERTY_DEBUG_OUT = "xdef.debug.out";
-
-	/** Property defines stream used for debug input (default is stdIn). */
-	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
 
 	/** Property defines validation of attribute names (default is false). */
 	public static final String XDPROPERTY_VALIDATE = "xdef.validate";

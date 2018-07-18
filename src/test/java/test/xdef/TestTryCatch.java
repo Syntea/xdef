@@ -22,17 +22,11 @@ import java.io.StringWriter;
  */
 public final class TestTryCatch extends Tester {
 
-	public TestTryCatch() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestTryCatch() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -72,6 +66,7 @@ public final class TestTryCatch extends Tester {
 			assertTrue((s = strw.toString()).indexOf("E: Hi") >= 0, s);
 		} catch (Exception ex) {fail(ex);}
 
+		resetTester();
 	}
 
 	/** Run test

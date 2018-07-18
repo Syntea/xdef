@@ -36,6 +36,12 @@ public interface XDPool {
 	public static final byte DISPLAY_ERRORS = 1;
 	/** Display mode false (do not display). */
 	public static final byte DISPLAY_FALSE = 0;
+	/** Debug mode true (i.e. display always). */
+	public static final byte DEBUG_TRUE = 1;
+	/** Debug mode showResult. */
+	public static final byte DEBUG_SHOWRESULT = 1;
+	/** Debug mode false. */
+	public static final byte DEBUG_FALSE = 0;
 
 	/** Get version information.
 	 * @return version information.
@@ -148,6 +154,11 @@ public interface XDPool {
 	 * @return value of debug mode.
 	 */
 	public boolean isDebugMode();
+
+	/** Check if show result mode is set for debug mode.
+	 * @return true if show result mode is set.
+	 */
+	public boolean isDebugShowResult();
 
 	/** Check if unresolved externals will be ignored.
 	 * @return true if unresolved externals will be ignored.

@@ -45,17 +45,11 @@ import cz.syntea.xdef.XDValueType;
  */
 public final class TestXDService extends Tester {
 
-	public TestXDService() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXDService() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		try {
 			//Create object with database connection
 			String url = "jdbc:derby://localhost:1527/sample;";
@@ -94,6 +88,8 @@ public final class TestXDService extends Tester {
 			service.close();
 			// Print created element
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	class MyService extends XDValueAbstract implements XDService {

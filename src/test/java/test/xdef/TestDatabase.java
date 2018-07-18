@@ -33,13 +33,7 @@ import org.w3c.dom.NodeList;
  */
 public final class TestDatabase extends Tester {
 
-	public TestDatabase() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestDatabase() {super();}
 
 	private static final String TABLE_A = "ta";
 	private static final String TABLE_B = "tb";
@@ -202,7 +196,7 @@ public final class TestDatabase extends Tester {
 	}
 
 	@Override
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		String xml;
@@ -876,11 +870,11 @@ public final class TestDatabase extends Tester {
 		// clean environment created and used for testing database
 		cleanDBEnv(tempDir);
 		// in case of none test failures remove the temporary and test data
-		if (getFailCount() == 0) {
-			try {
-				FUtils.deleteAll(tempDir, true);
-			} catch (Exception ex) {fail(ex);}
-		}
+		try {
+			FUtils.deleteAll(tempDir, true);
+		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

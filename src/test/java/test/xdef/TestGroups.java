@@ -24,18 +24,11 @@ import org.w3c.dom.Element;
  */
 public final class TestGroups extends Tester {
 
-	public TestGroups() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestGroups() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
-
+	public void test() {
 		String xdef;
 		String xml;
 		String s;
@@ -2392,6 +2385,8 @@ public final class TestGroups extends Tester {
 			parse(xdef, "SODContainer_Template", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

@@ -25,13 +25,7 @@ import cz.syntea.xdef.sys.ReportWriter;
  */
 public class TestXDGen extends Tester {
 
-	public TestXDGen() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXDGen() {super();}
 
 	private ReportWriter genXDef(String xml) throws Exception{
 		return genXDef(xml, false);
@@ -61,7 +55,7 @@ public class TestXDGen extends Tester {
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		final String dataDir = getDataDir() + "test/";
 		try {
 			assertNoErrors(genXDef("<a></a>"));
@@ -156,6 +150,8 @@ public class TestXDGen extends Tester {
 //			assertNoErrors(genXDef(dataDir + "TestErrors3.xml"));
 //			assertNoErrors(genXDef(dataDir + ""));
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

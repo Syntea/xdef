@@ -26,26 +26,20 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 
 /** Test of checking of DOM object.
- *
  * @author  Vaclav Trojan
  */
 public final class TestDOMParse extends Tester {
 
-	public TestDOMParse() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestDOMParse() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		try {
 			test1();
 		} catch (Error ex) {
 			fail(ex);
 		}
+		resetTester();
 	}
 
 	private void test1() {
@@ -261,7 +255,6 @@ public final class TestDOMParse extends Tester {
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-
 	}
 
 	/** Run test

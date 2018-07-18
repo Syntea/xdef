@@ -18,17 +18,11 @@ import cz.syntea.xdef.XDPool;
 /** Test BNF.*/
 public final class TestBNF extends Tester {
 
-	public TestBNF() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestBNF() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -370,6 +364,8 @@ public final class TestBNF extends Tester {
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

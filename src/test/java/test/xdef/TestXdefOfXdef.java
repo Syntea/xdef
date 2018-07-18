@@ -29,10 +29,7 @@ public final class TestXdefOfXdef extends Tester {
 
 	public TestXdefOfXdef() {
 		super();
-/*#if DEBUG*/
 		setChkSyntax(false); // here it MUST be false!
-		setGenObjFile(true);
-/*#end*/
 	}
 
 	final public ArrayReporter parse(final String xml) {
@@ -230,27 +227,27 @@ public final class TestXdefOfXdef extends Tester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-/*#if DEBUG*/
-//			xml = genCollection(
-//				dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
-//			assertNoErrorwarnings(parse(xml), xml);
-//			assertNoErrorwarnings(parse(xml), xml);
-			xml = genCollection(
+			if (getDebugMode()) {
+//				xml = genCollection(
+//					dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
+//				assertNoErrorwarnings(parse(xml), xml);
+//				assertNoErrorwarnings(parse(xml), xml);
+				xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+				assertNoErrorwarnings(parse(xml), xml);
+				assertNoErrorwarnings(parse(xml), genCollection(xml));
+				xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
 "</xd:declaration>\n"+
 "<a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+				assertNoErrorwarnings(parse(xml), xml);
+				assertNoErrorwarnings(parse(xml), genCollection(xml));
+				xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a | b | m/n | x'>\n"+
 "   <xd:any xd:name='x' b='int()' />\n"+
 "   <xd:mixed xd:name='m'> <n/> <o/> </xd:mixed>\n"+
@@ -258,14 +255,16 @@ public final class TestXdefOfXdef extends Tester {
 "     <xd:any xd:script='ref x' b='int()' />\n"+
 "   </b>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
+				assertNoErrorwarnings(parse(xml), xml);
+				assertNoErrorwarnings(parse(xml), genCollection(xml));
 
 //// V teto Xdefinici je <xd:def xmlns:xd = "METAXDef" ...
-//			xml = dataDir + "TestXdefOfXdef*.xdef";
-//			assertNoErrorwarnings(parse(xml), xml);
-/*#end*/
+//				xml = dataDir + "TestXdefOfXdef*.xdef";
+//				assertNoErrorwarnings(parse(xml), xml);
+			}
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

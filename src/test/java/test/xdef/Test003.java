@@ -38,11 +38,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import org.w3c.dom.Document;
+import static test.xdef.Tester.getDebugMode;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
 public final class Test003 extends Tester {
+
+	public Test003() {super();}
+
 	static int _count = 0;
 	boolean _myErrFlg;
 	int _xx;
@@ -149,17 +153,9 @@ public final class Test003 extends Tester {
 
 	public static void konecZaznamu(final XDValue[] params)	{_count++;}
 
-	public Test003() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
-
 	@Override
 	/** Run tests. */
-	final public void test() {
+	public void test() {
 		String xdef;
 		String xml;
 		XDPool xp;
@@ -173,62 +169,63 @@ public final class Test003 extends Tester {
 		String tempDir = getTempDir();
 		String durationInfo = "";
 		Report.setLanguage("en"); //localize
-/*#if DEBUG*/
-		try {
-			xml = getDataDir() + "long.xml.big";
-			FileOutputStream longfile = new FileOutputStream(xml);
-			longfile.write(
-				"<?xml version = \"1.0\" encoding = \"windows-1250\"?>\r\n".
-				getBytes("windows-1250"));
-			longfile.write("<koně>\r\n".getBytes("windows-1250"));
-			byte[] child = (
-"  <kůň jaký = \"úplně šílený nóbl žluťoučký kůň\"\r\n" +
-"    kde = \"louže\"\r\n" +
-"    barva = \"žluťoučký\"\r\n" +
-"    co = \"kůň\"\r\n" +
-"    nějaký = \"nóbl\">\r\n" +
-"     <kam>daleko</kam>\n " +
-"     skákal přes louže\n " +
-"     <proč>jen tak</proč>\n " +
-" </kůň>\r\n").getBytes("windows-1250");
-			long num = 50000; // 10 Mbytes
-			for (int i = 0; i < num; i++) {
-				longfile.write(child);
-			}
-			longfile.write("</koně>\r\n".getBytes("windows-1250"));
-			longfile.close();
-			xdef =
-"<xd:def xmlns:xd='" + test.xdef.Tester.XDEFNS + "' xd:root=\"koně\">\n"+
-"\n"+
-"  <koně>\n"+
-"    <kůň xd:script = \"occurs *; forget\"\n" +
-"      jaký = \"eq('úplně šílený nóbl žluťoučký kůň')\"\n" +
-"      kde = \"string\"\n" +
-"      barva = \"an\"\n" +
-"      co = \"string(3)\"\n" +
-"      nějaký = \"string(4)\">\n" +
-"      <kam>pic('AAAAAA')</kam>\n" +
-"       string(10,999); fixed 'skákal přes louže'\n" +
-"      <proč>string(7,%pattern=['j.*'])</proč>\n" +
-"    </kůň>\n"+
-"  </koně>\n"+
-"\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			//parse created file and get time of processing
-			xd = xp.createXDDocument();
-			long t = System.currentTimeMillis();
-			xd.xparse(xml, null);
-			float duration=((float)((System.currentTimeMillis() - t) / 1000.0));
-			DecimalFormat df = new DecimalFormat("0.00");
-			long datalen = new File(xml).length();
-			durationInfo = "Big XML: "
-				+ df.format(((float) datalen / 1000.0))
-				+ "KB/" + df.format(duration)
-				+ "s (" + df.format((datalen / 1000.0)/duration) + "KB/s);";
-			setResultInfo(durationInfo);
-		} catch (Exception ex) {fail(ex);}
-/*#end*/
+		if (Tester.getDebugMode()) {
+			try {
+				xml = getDataDir() + "long.xml.big";
+				FileOutputStream longfile = new FileOutputStream(xml);
+				longfile.write(
+					"<?xml version = \"1.0\" encoding = \"windows-1250\"?>\r\n".
+					getBytes("windows-1250"));
+				longfile.write("<koně>\r\n".getBytes("windows-1250"));
+				byte[] child = (
+	"  <kůň jaký = \"úplně šílený nóbl žluťoučký kůň\"\r\n" +
+	"    kde = \"louže\"\r\n" +
+	"    barva = \"žluťoučký\"\r\n" +
+	"    co = \"kůň\"\r\n" +
+	"    nějaký = \"nóbl\">\r\n" +
+	"     <kam>daleko</kam>\n " +
+	"     skákal přes louže\n " +
+	"     <proč>jen tak</proč>\n " +
+	" </kůň>\r\n").getBytes("windows-1250");
+				long num = 50000; // 10 Mbytes
+				for (int i = 0; i < num; i++) {
+					longfile.write(child);
+				}
+				longfile.write("</koně>\r\n".getBytes("windows-1250"));
+				longfile.close();
+				xdef =
+	"<xd:def xmlns:xd='" + test.xdef.Tester.XDEFNS + "' xd:root=\"koně\">\n"+
+	"\n"+
+	"  <koně>\n"+
+	"    <kůň xd:script = \"occurs *; forget\"\n" +
+	"      jaký = \"eq('úplně šílený nóbl žluťoučký kůň')\"\n" +
+	"      kde = \"string\"\n" +
+	"      barva = \"an\"\n" +
+	"      co = \"string(3)\"\n" +
+	"      nějaký = \"string(4)\">\n" +
+	"      <kam>pic('AAAAAA')</kam>\n" +
+	"       string(10,999); fixed 'skákal přes louže'\n" +
+	"      <proč>string(7,%pattern=['j.*'])</proč>\n" +
+	"    </kůň>\n"+
+	"  </koně>\n"+
+	"\n"+
+	"</xd:def>";
+				xp = compile(xdef);
+				//parse created file and get time of processing
+				xd = xp.createXDDocument();
+				long t = System.currentTimeMillis();
+				xd.xparse(xml, null);
+				float duration =
+					((float)((System.currentTimeMillis() - t) / 1000.0));
+				DecimalFormat df = new DecimalFormat("0.00");
+				long datalen = new File(xml).length();
+				durationInfo = "Big XML: "
+					+ df.format(((float) datalen / 1000.0))
+					+ "KB/" + df.format(duration)
+					+ "s (" + df.format((datalen / 1000.0)/duration) + "KB/s);";
+				setResultInfo(durationInfo);
+			} catch (Exception ex) {fail(ex);}
+		}
 		try {
 			reporter.clear();
 			xp = compile(dataDir + "TestChkParser1_1.xdef");
@@ -397,12 +394,12 @@ public final class Test003 extends Tester {
 //			}
 //			fr.close();
 		} catch (Exception ex) {fail(ex);}
-		setResultInfo(durationInfo);
-		if (getFailCount() == 0) {
-			try {
-				FUtils.deleteAll(tempDir, true);
-			} catch (Exception ex) {fail(ex);}
-		}
+
+		try {
+			FUtils.deleteAll(tempDir, true);
+		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

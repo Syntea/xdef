@@ -25,17 +25,11 @@ import org.w3c.dom.Element;
  */
 public final class TestOptions extends Tester {
 
-	public TestOptions() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestOptions() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		String xdef;
@@ -1651,29 +1645,9 @@ public final class TestOptions extends Tester {
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
 			assertEq("<a><![CDATA[t1]]><b/><![CDATA[1]]></a>",strw.toString());
-/*xx*
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"  <a xd:script='var int i;'\n"+
-"    xd:textcontent='+ string(); create ++i; option cdata;'>\n"+
-"    string; option cdata; create 't1';\n"+
-"    <b/>\n"+
-"  </a>\n"+
-"</xd:def>";
-			xd = compile(xdef).createXDDocument();
-			el = create(xd, "a", reporter);
-			assertNoErrors(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
-				null, //encoding
-				el,
-				null, //indentStep
-				false, //canonical
-				false, //removeIgnorableWhiteSpaces
-				true); //comments
-			assertEq("<a><![CDATA[t1]]><b/><![CDATA[1]]></a>",strw.toString());
-/*xx*/
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

@@ -24,13 +24,7 @@ import org.w3c.dom.Element;
  */
 public class TestJSON extends Tester {
 
-	public TestJSON() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestJSON() {super();}
 
 	private boolean check(final String source) {
 		String xdef = null;
@@ -319,6 +313,8 @@ if (true) return;
 "    }\n"+
 "  }\n"+
 "}"));
+
+		resetTester();
 	}
 
 	/** Run test

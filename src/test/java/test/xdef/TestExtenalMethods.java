@@ -35,20 +35,14 @@ import cz.syntea.xdef.XDValueID;
  */
 public final class TestExtenalMethods extends Tester {
 
+	public TestExtenalMethods() {super();}
+
 	private int _m1 = 0;
 	private long _m2 = 0;
 	private int _m7 = 0;
 	private int _m8 = 0;
 	private int _m9 = 0;
 	private int _m10 = 0;
-
-	public TestExtenalMethods() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
 
 	final public static void m1(final XXNode x) {
 		((TestExtenalMethods) x.getUserObject())._m1 = 1;
@@ -154,7 +148,7 @@ public final class TestExtenalMethods extends Tester {
 
 	@Override
 	/** Run tests and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		String xdef, xml;

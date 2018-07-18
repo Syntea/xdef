@@ -24,20 +24,12 @@ import org.w3c.dom.Element;
  */
 public final class TestUserMethods extends Tester {
 
-	public TestUserMethods() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestUserMethods() {super();}
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		XDPool xp;
-		XDDocument xd;
-		Element el;
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
 		StringWriter strw;
@@ -204,6 +196,8 @@ public final class TestUserMethods extends Tester {
 			assertEq(strw.toString(),
 				"ia sa iSQ ib sb fb ix sx fx fSQ id sd fd fa ");
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

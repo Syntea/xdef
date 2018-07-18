@@ -21,16 +21,10 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestDTDTypes extends Tester {
 
-	public TestDTDTypes() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestDTDTypes() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		String xdef, xml;
 		XDPool	xp;
 		ArrayReporter reporter = new ArrayReporter();
@@ -644,6 +638,8 @@ public final class TestDTDTypes extends Tester {
 				fail("Error not reported");
 			}
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

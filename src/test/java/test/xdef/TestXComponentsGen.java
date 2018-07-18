@@ -20,8 +20,8 @@ import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXNode;
+import cz.syntea.xdef.sys.FUtils;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -787,30 +787,31 @@ public class TestXComponentsGen {
 	}
 
 	/** Generate XComponents from XDPool.
-	 * @param args the command line arguments.
+	 * @param args not used.
 	 */
 	public static void main(String... args) {
-		if (args == null || args.length == 0) {
-			File f = new File("test/");
-			if (!f.isDirectory()) {
-				f = new File("src/test/java/");
-				if (!f.isDirectory()) {
-					throw new RuntimeException("Test directory is missing");
-				}
-			}
-			args = new String[]{f.getAbsolutePath()};
+		File f = new File("temp");
+		f.mkdir();
+		String dir = f.getAbsolutePath().replace('\\', '/');
+		if (!dir.endsWith("/")) {
+			dir += '/';
 		}
-		String dir = args[0].replace('\\', '/');
-		File f = new File(dir);
 		if (!f.isDirectory()) {
 			System.err.println('\"' + dir + "\" is not directory");
 			return;
 		}
+		File g = new File("test");
+		if (!g.exists() || !g.isDirectory()) {
+			g = new File("src/test/java");
+			if (!g.isDirectory()) {
+				throw new RuntimeException("Test directory is missing");
+			}
+		}
+		String xcDir = g.getAbsolutePath().replace('\\', '/');
+		if (!xcDir.endsWith("/")) {
+			xcDir += '/';
+		}
 		// generate XCDPool from sources
-		String source = new File(dir,
-			"test/xdef/data/test/TestXComponent_Z.xdef").getAbsolutePath();
-		XDPool xp = XDFactory.compileXD(null, XDEF, source);
-//		xp.displayCode();
 		try {
 			// force following classes to be compiled!
 			TestXComponents_C.class.getClass();
@@ -820,6 +821,9 @@ public class TestXComponentsGen {
 			TestXComponents_Y06DomainContainer.class.getClass();
 			TestXComponents_Y06XCDomain.class.getClass();
 			TestXComponents_Y07Operation.class.getClass();
+			String source = new File(xcDir,
+				"test/xdef/data/test/TestXComponent_Z.xdef").getAbsolutePath();
+			XDPool xp = XDFactory.compileXD(null, XDEF, source);
 			// generate from xp the class containing the XDPool
 			XDFactory.genXDPoolClass(xp, dir, "test.xdef.component.Pool", null);
 			// generate XComponents from xp
@@ -831,7 +835,20 @@ public class TestXComponentsGen {
 				|| !reporter.printToString().contains("Y19#A/B/B_1/C/B")) {
 				System.err.println("Warning XDEF377 not reported.");
 			}
-			System.out.println("XComponents generated.");
-		} catch (IOException ex) {ex.printStackTrace(System.err);}
+			String msg = FUtils.updateDirectories(
+				new File(f, "test/xdef/component"),
+				new File(g, "test/xdef/component"),
+				null, // all extensions
+				true, // delete others
+				true); // process subdirectories
+			if (msg.isEmpty()) {
+				System.out.println("X-component data was not changed");
+			} else {
+				System.out.println(msg);
+				System.out.println("X-component data created");
+			}
+
+			FUtils.deleteAll(f, true); // delete temp directory
+		} catch (Exception ex) {ex.printStackTrace(System.err);}
 	}
 }

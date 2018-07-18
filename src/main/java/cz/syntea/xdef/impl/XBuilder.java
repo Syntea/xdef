@@ -142,9 +142,7 @@ public final class XBuilder implements XDBuilder {
 	/** Set external classes with external methods.
 	 * @param ext array of classes with external methods.
 	 */
-	public void setExternals(Class<?>... ext) {
-		_xp._compiler.setExternals((Object[]) ext);
-	}
+	public void setExternals(Class<?>... ext) {_xp._compiler.setExternals(ext);}
 
 	@Override
 	/** Set reporter. This method is should be used only for incremental
@@ -194,6 +192,7 @@ public final class XBuilder implements XDBuilder {
 				&& (result.getDisplayMode() == XPool.DISPLAY_ERRORS
 				 || result.isDebugMode());
 			if (display) {
+				Class<?>[] externals = p.getExternals(); //save external classes
 				ChkGUIDisplay edit = new ChkGUIDisplay();
 				ArrayReporter ar = (ArrayReporter) reporter;
 				for (;;) {
@@ -201,8 +200,7 @@ public final class XBuilder implements XDBuilder {
 					if (edit.setGUI(result, ar)) {
 						break;
 					}
-					result = new XPool(
-						result.getProperties(),null, result.getExtObjects());
+					result = new XPool(result.getProperties(),null, externals);
 					for (Map.Entry<String, XSourceItem> e: map.entrySet()) {
 						String key = e.getKey();
 						XSourceItem src = e.getValue();

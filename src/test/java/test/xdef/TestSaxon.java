@@ -25,13 +25,7 @@ import org.w3c.dom.Element;
  */
 public class TestSaxon extends Tester {
 
-	public TestSaxon() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestSaxon() {super();}
 
 	private void testNoSaxon() {
 		String xdef, xml;
@@ -291,12 +285,13 @@ public class TestSaxon extends Tester {
 	}
 
 	@Override
-	final public void test() {
+	public void test() {
 		if (!DefXQueryExpr.isXQueryImplementation()) {
 			testNoSaxon();
 		} else {
 			testSaxon();
 		}
+		resetTester();
 	}
 
 	/**

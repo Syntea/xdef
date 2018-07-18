@@ -37,16 +37,10 @@ import cz.syntea.xdef.XDValueID;
  */
 public final class TestDebug extends Tester {
 
-	public TestDebug() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestDebug() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		Report.setLanguage("en"); //localize
 		String xdef;
 		XDPool xp;
@@ -404,7 +398,7 @@ public final class TestDebug extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 	}
 
 	/** Run test

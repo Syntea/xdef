@@ -26,16 +26,10 @@ import java.io.StringWriter;
  */
 public final class TestInclude extends Tester {
 
-	public TestInclude() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestInclude() {super();}
 
 	@Override
-	final public void test() {
+	public void test() {
 		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
@@ -44,7 +38,7 @@ public final class TestInclude extends Tester {
 		StringWriter sw;
 		String s;
 		Report report;
-		resetProperties();
+		resetTester();
 		final String dataDir = getDataDir() + "test/";
 		try {
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
@@ -54,7 +48,7 @@ public final class TestInclude extends Tester {
 			xml = dataDir + "TestInclude_5.xml";
 			parse(xp, "wsdefinitions", xml);
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {
 			//xd:include in XDefinition header
 			xdef =
@@ -118,7 +112,7 @@ public final class TestInclude extends Tester {
 			}
 			assertEq("bf", strw.toString());
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {//xinclude
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "' name='test' root='a'>\n"+
@@ -159,7 +153,7 @@ public final class TestInclude extends Tester {
 				fail(ex);
 			}
 		}
-		resetProperties();
+		resetTester();
 		try {// xinclude
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
@@ -195,7 +189,7 @@ public final class TestInclude extends Tester {
 				fail(ex);
 			}
 		}
-//		resetProperties();
+//		resetTester();
 		try {
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
@@ -215,7 +209,7 @@ public final class TestInclude extends Tester {
 				parse(xp, "test", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
@@ -224,7 +218,7 @@ public final class TestInclude extends Tester {
 			xml = dataDir + "TestInclude_5.xml";
 			parse(xp, "wsdefinitions", xml);
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
@@ -240,7 +234,7 @@ public final class TestInclude extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {// once more with ignoreEntities
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
@@ -256,7 +250,7 @@ public final class TestInclude extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {
 			setProperty(XDConstants.XDPROPERTY_VALIDATE,
 				XDConstants.XDPROPERTYVALUE_VALIDATE_TRUE);
@@ -270,7 +264,7 @@ public final class TestInclude extends Tester {
 			parse(xp, "A", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+		resetTester();
 		try {
 			//test Include default (not allowed)
 			xdef =
@@ -291,7 +285,7 @@ public final class TestInclude extends Tester {
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			resetProperties();
+			resetTester();
 			xp = compile(xdef);
 			 // from program
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
@@ -318,7 +312,7 @@ public final class TestInclude extends Tester {
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			resetProperties();
+			resetTester();
 			xp = compile(xdef);
 			 // from program
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
@@ -341,7 +335,8 @@ public final class TestInclude extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetProperties();
+
+		resetTester();
 	}
 
 	/** Run test

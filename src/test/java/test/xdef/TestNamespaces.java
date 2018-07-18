@@ -21,13 +21,7 @@ import cz.syntea.xdef.XDPool;
  */
 public final class TestNamespaces extends Tester {
 
-	public TestNamespaces() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestNamespaces() {super();}
 
 	@Override
 	public void test() {
@@ -166,6 +160,8 @@ public final class TestNamespaces extends Tester {
 				fail(rep.toString());
 			}
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test

@@ -35,13 +35,7 @@ public final class TestXComponents extends Tester {
 
 	private static final XDPool XP = test.xdef.component.Pool.getXDPool();
 
-	public TestXComponents() {
-		super();
-/*#if DEBUG*/
-		setChkSyntax(true);
-		setGenObjFile(true);
-/*#end*/
-	}
+	public TestXComponents() {super();}
 
 	private static void genXPosList(final XComponent xc, StringBuilder sb) {
 		sb.append(xc.xGetXPos()).append('\n');
@@ -65,7 +59,7 @@ public final class TestXComponents extends Tester {
 
 	@Override
 	/** Run test and print error information. */
-	final public void test() {
+	public void test() {
 		String xml;
 		Element el;
 		XDDocument xd;
@@ -162,8 +156,6 @@ public final class TestXComponents extends Tester {
 			p.gett().set$value(time);
 			assertEq(p.geti().get$value(), 3);
 			assertEq(date, p.getd().get$value());
-//			p.getd1().setd(new SDatetime("2016-01-01T01:01:01"));
-//			p.getd1().set$value(new SDatetime("2016-01-011T01:01:01"));
 			el = p.toXml();
 			assertEq(el,
 "<A a='a' dec = '123.45'>"+
@@ -619,7 +611,6 @@ public final class TestXComponents extends Tester {
 "  <c a='4.1' b='4.3.1999'/>\n"+
 "  <d a='4.1' b='4.3.1999'/>\n"+
 "</A>";
-//			xd = XP.createXDDocument();
 			test.xdef.component.P p = (test.xdef.component.P)
 				parseXC(XP, "P", xml, null, reporter);
 			assertNoErrors(reporter);
@@ -1006,6 +997,8 @@ public final class TestXComponents extends Tester {
 			assertEq(p.toXml(), el);
 			assertEq("", checkXPos(p));
 		} catch (Exception ex) {fail(ex);}
+
+		resetTester();
 	}
 
 	/** Run test
