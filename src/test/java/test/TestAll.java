@@ -80,7 +80,7 @@ public class TestAll {
         }
     }
 
-    /** Run all test directly. */
+    /** Run all test directly */
     public static void mainTest() {
         beforeTests();
         
