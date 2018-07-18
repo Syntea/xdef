@@ -1,3 +1,4 @@
+/**
 <HTML><BODY>
 	Contains interfaces for processing of X-definitions and
 	the factory for compilation of X-definitions and creation of some important
@@ -124,3 +125,5 @@ if (xdoc.errorWarnings()) {
 </li>
 </UL>
 </BODY></HTML>
+*/
+package cz.syntea.xdef;
