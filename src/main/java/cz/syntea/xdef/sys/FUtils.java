@@ -1586,7 +1586,7 @@ public class FUtils {
 		arr.toArray(result);
 		return result;
 	}
-	
+
 	/** Update directories. If a file from the directory "fromDir" not exists
 	 * in the directory "toDir" or if it is different it is replaced by contents
 	 * of the file from "fromDir". If the parameter extension is not null or
@@ -1613,7 +1613,7 @@ public class FUtils {
 		return updateDirectories(new File (fromDir),
 			new File (toDir), extension, subdirs, deleteOther);
 	}
-	
+
 	/** Update directories. If a file from the directory "fromDir" not exists
 	 * in the directory "toDir" or if it is different it is replaced by contents
 	 * of the file from "fromDir". If the parameter extension is not null or
@@ -1668,7 +1668,7 @@ public class FUtils {
 		}
 		return null;
 	}
-	
+
 	private static void updateDirectories(final File fromDir,
 		final File toDir,
 		final String extension,
@@ -1717,7 +1717,7 @@ public class FUtils {
 							FUtils.copyToFile(f, g);
 							addMessage(sb, "Replaced: " + g.getAbsolutePath());
 						}
-					} 
+					}
 				} else {
 					FUtils.copyToFile(f, g);
 					addMessage(sb, "Added: " + g.getAbsolutePath());

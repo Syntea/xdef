@@ -136,7 +136,8 @@ public final class CompileXdefPool extends XDefReader
 	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Array of thesaurus sources. */
 	private final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
-
+	/** External classes. */
+	private Class<?>[] _extClasses;
 	/** Creates a new instance of XDefCompiler
 	 * @param xp The XDefPool object.
 	 * @param reporter The reporter.
@@ -145,7 +146,7 @@ public final class CompileXdefPool extends XDefReader
 	 */
 	public CompileXdefPool(final XDPool xp,
 		final ReportWriter reporter,
-		final Object[] extClasses,
+		final Class<?>[] extClasses,
 		final Map<String, XDefinition> xdefs) {
 		super(reporter);
 		ClassLoader classLoader =
@@ -180,12 +181,18 @@ public final class CompileXdefPool extends XDefReader
 		_unknownCounter = 0;
 	}
 
+	/** Get external classes used in x-definition methods.
+	 * @return array of objects.
+	 */
+	public Class<?>[] getExternals() {return _extClasses;}
+
 	/** Set User objects. This method is just to keep compatibility with
 	 * previous versions.
 	 * @param extObjects array of objects.
 	 */
-	public void setExternals(final Object... extObjects) {
+	public void setExternals(final Class<?>... extObjects) {
 		_codeGenerator.setExternals(extObjects);
+		_extClasses = _codeGenerator.getExternals();
 	}
 
 	/** Set class loader. The class loader must be set before setting sources.
@@ -1123,7 +1130,7 @@ public final class CompileXdefPool extends XDefReader
 				if (_codeGenerator._extClasses.length == 0) {
 					Class<?>[] exts = new Class<?>[ht.values().size()];
 					ht.values().toArray(exts);
-					_codeGenerator.setExternals((Object[]) exts);
+					_codeGenerator.setExternals(exts);
 				}
 			}
 			if ((sval = pnode.getXdefAttr("component", false, true)) != null) {

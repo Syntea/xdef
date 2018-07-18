@@ -1305,10 +1305,9 @@ public class SUtils extends FUtils {
 	 * @return a <tt>Process</tt> object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String [] cmdarray)
+	public static final Process execute(final String... cmdarray)
 		throws Exception {
 		return execute(cmdarray,
 			null, null, System.out, System.err, null, true);
 	}
-
 }

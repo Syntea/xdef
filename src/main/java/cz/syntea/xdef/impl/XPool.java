@@ -62,93 +62,93 @@ import cz.syntea.xdef.sys.ReportWriter;
 public final class XPool implements XDPool {
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
-	/** XDPool version. */
+	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
-	/** Last compatible build number. */
-	private static final int XD_MIN_BUILD = 1;
+	/** Last compatible build number.*/
+	private static final int XD_MIN_BUILD = 2;
 
-	/** Flag if warnings should be checked. */
+	/** Flag if warnings should be checked.*/
 	private final boolean _chkWarnings;
-	/** Switch to allow/restrict DOCTYPE in XML. */
+	/** Switch to allow/restrict DOCTYPE in XML.*/
 	private final boolean _illegalDoctype;
-	/** Switch to allow/restrict includes in XML. */
+	/** Switch to allow/restrict includes in XML.*/
 	private final boolean _resolveIncludes;
 	/** flag to be set validation of names references in parsed/created nodes.*/
 	private final boolean _validate;
-	/** Debug mode flag. */
-	private final boolean _debugMode;
-	/** DisplayMode. */
+	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
+	private final byte _debugMode;
+	/** DisplayMode.*/
 	private final byte _displayMode;
 	/** flag unresolved externals to be ignored.*/
 	private final boolean _ignoreUnresolvedExternals;
-	/** Switch XML parser ignores unresolved entities (e.g. file not found). */
+	/** Switch XML parser ignores unresolved entities (e.g. file not found).*/
 	private final boolean _ignoreUnresolvedEntities;
-	/** Switch if location details will be generated. */
+	/** Switch if location details will be generated.*/
 	private final boolean _locationdetails;
-	/** Global variables description block. */
+	/** Global variables description block.*/
 	// valid date parameters
-	/** Maximal accepted value of the year. */
+	/** Maximal accepted value of the year.*/
 	private final int _maxYear;
-	/** Minimal accepted value of the year. */
+	/** Minimal accepted value of the year.*/
 	private final int _minYear;
-	/** List of dates to be accepted out of interval _minYear.._maxYear. */
+	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private final SDatetime _specialDates[];
-	/** External objects. */
-	private final Class<?>[] _extObjects;
-	/** Properties. */
+	/** External objects.*/
+	private final Class<?>[] _extClasses;
+	/** Properties.*/
 	private final Properties _props;
-	/** Global variable table */
+	/** Global variable table.*/
 	private XVariableTable _variables;
-	/** Max. stack length. */
+	/** Max. stack length.*/
 	private int _stackLen;
-	/** Address of code initialization. */
+	/** Address of code initialization.*/
 	private int _init;
-	/** Size of global variables table */
+	/** Size of global variables table.*/
 	private int _globalVariablesSize;
-	/** Maximum size of local variables table. */
+	/** Maximum size of local variables table.*/
 	private int _localVariablesMaxSize;
-	/** Counter of string sources. */
+	/** Counter of string sources.*/
 	private int _stringItem = 0;
-	/** Counter of stream sources. */
+	/** Counter of stream sources.*/
 	private int _streamItem = 0;
-	/** debug information. */
+	/** debug information.*/
 	private XDebugInfo _debugInfo;
-	/** SQId generator. */
+	/** SQId generator.*/
 	private int _sqId = 1;
 	/** Generated code of XDPool. */
 	private XDValue[] _code;
-	/** Components. */
+	/** Components.*/
 	private Map<String, String> _components;
-	/** Binds. */
+	/** Binds.*/
 	private Map<String, String> _binds;
-	/** Enumerations. */
+	/** Enumerations.*/
 	private Map<String, String> _enums;
 
 	/** Thesaurus of terms in different languages.*/
 	Thesaurus _thesaurus = null;
-	/** Table of definitions */
+	/** Table of definitions.*/
 	final Map<String, XDefinition> _xdefs;
-	/** Table of source objects */
+	/** Table of source objects.*/
 	final Map<String, XSourceItem> _sourcesMap;
-	/** Reporter writer. */
+	/** Reporter writer.*/
 	ReportWriter _reporter;
-	/** CompileXdefPool for definitions. */
+	/** CompileXdefPool for definitions.*/
 	CompileXdefPool _compiler;
 
-	/** Create the instance of XDPool with flags and options. */
-	private XPool(boolean debugMode,
-		boolean illegalDoctype,
-		boolean ignoreUnresolvedEntities,
-		boolean ignoreUnresolvedExternals,
-		boolean locationdetails,
-		boolean validate,
-		boolean chkWarnings,
-		boolean resolveIncludes,
-		byte displayMode,
-		int minYear,
-		int maxYear,
-		SDatetime[] specialDates,
-		Class<?>[] extObjects) {
+	/** Create the instance of XDPool with flags and options.*/
+	private XPool(final byte debugMode,
+		final boolean illegalDoctype,
+		final boolean ignoreUnresolvedEntities,
+		final boolean ignoreUnresolvedExternals,
+		final boolean locationdetails,
+		final boolean validate,
+		final boolean chkWarnings,
+		final boolean resolveIncludes,
+		final byte displayMode,
+		final int minYear,
+		final int maxYear,
+		final SDatetime[] specialDates,
+		final Class<?>[] extClasses) {
 		_debugMode = debugMode;
 		_displayMode = displayMode;
 		_illegalDoctype = illegalDoctype;
@@ -164,30 +164,31 @@ public final class XPool implements XDPool {
 		_props = null;
 		_xdefs = new TreeMap<String, XDefinition>();
 		_sourcesMap = new TreeMap<String, XSourceItem>();
-		_extObjects = extObjects;
+		_extClasses = extClasses;
 	}
 
 	/** Creates instance of XDefPool with properties, external objects and
 	 * reporter.
 	 * @param props Properties or <tt>null</tt>.
-	 * @param extObjects The array of objects where are available methods
+	 * @param extClasses The array of classes where are available methods
 	 * referred from definitions.
 	 * @param reporter report writer or <tt>null</tt>.
 	 */
 	XPool(final Properties props,
 		final ReportWriter reporter,
-		final Class<?>... extObjects) {
-		_extObjects = extObjects;
+		final Class<?>... extClasses) {
+		_extClasses = extClasses;
 		_reporter = reporter;
 		_xdefs = new TreeMap<String, XDefinition>();
 		_sourcesMap = new TreeMap<String, XSourceItem>();
 		_props = props != null ? props : SManager.getProperties();
 		// Set values of properties
 		//debug mode
-		_debugMode = readProperty(_props, XDConstants.XDPROPERTY_DEBUG,
-			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_TRUE,
-				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE},
-				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE) == 0;
+		_debugMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DEBUG,
+			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE,
+				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE,
+				XDConstants.XDPROPERTYVALUE_DEBUG_SHOWRESULT},
+				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 		//showErrors display mode
 		_displayMode = (byte) readProperty(_props,
 			XDConstants.XDPROPERTY_DISPLAY,
@@ -201,7 +202,6 @@ public final class XPool implements XDPool {
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
-/*XXX*/
 		_ignoreUnresolvedEntities =
 			readProperty(_props,
 				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
@@ -209,7 +209,6 @@ public final class XPool implements XDPool {
 				XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_TRUE,
 				XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE},
 			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE) == 0;
-/*XXX*/
 		//ignore undefined external objects
 		_ignoreUnresolvedExternals = readProperty(_props,
 			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -243,7 +242,7 @@ public final class XPool implements XDPool {
 		_specialDates = readPropertySpecDates(_props);
 		_compiler = new CompileXdefPool(this,
 			_reporter!= null ? _reporter : new ArrayReporter(),
-			_extObjects,
+			_extClasses,
 			_xdefs);
 	}
 
@@ -632,7 +631,7 @@ public final class XPool implements XDPool {
 	 */
 	final int getSqId() {return ++_sqId;}
 
-	final Class<?>[] getExtObjects() {return _extObjects;}
+	final Class<?>[] getExtObjects() {return _extClasses;}
 
 	/** Check if version from argument is compatible with this object.
 	 * @return true if version is compatible.
@@ -749,17 +748,15 @@ public final class XPool implements XDPool {
 		_init = init;
 	}
 
-	public final void setVariables(final XVariableTable variables) {
-		_variables = variables;
-	}
+	public final void setVariables(final XVariableTable v) {_variables = v;}
 
 	/** Get global variable of given name.
 	 * @param name name of global variable.
 	 * @return XMVariable object of the global variable or <tt>null</tt>.
 	 */
 	final XVariable getVariable(final String name) {
-		return _variables != null ?
-			(XVariable) _variables.getVariable(name) : null;
+		return _variables != null
+			? (XVariable) _variables.getVariable(name) : null;
 	}
 
 	/** Get X-definition of given name from the pool or nameless X-definition
@@ -805,9 +802,7 @@ public final class XPool implements XDPool {
 	/** Get names of global variables.
 	 * @return array of names of global variables.
 	 */
-	final String[] getVariableNames() {
-		return _variables.getVariableNames();
-	}
+	final String[] getVariableNames() {return _variables.getVariableNames();}
 
 	/** Set class loader.
 	 * @param loader class loader.
@@ -831,8 +826,7 @@ public final class XPool implements XDPool {
 	 * @return created XPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public static XPool readXDPool(final InputStream input)
-		throws IOException {
+	public static XPool readXDPool(final InputStream input) throws IOException {
 		GZIPInputStream in = new GZIPInputStream(input);
 		XDReader xr = new XDReader(in);
 		if (XD_MAGIC_ID != xr.readShort()) {
@@ -844,7 +838,7 @@ public final class XPool implements XDPool {
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "Version error: " + ver);
 		}
-		boolean debugMode = xr.readBoolean();
+		byte debugMode = xr.readByte();
 		boolean illegalDoctype = xr.readBoolean();
 		boolean ignoreUnresolvedEntities = xr.readBoolean();
 		boolean ignoreUnresolvedExternals = xr.readBoolean();
@@ -1145,7 +1139,13 @@ public final class XPool implements XDPool {
 	/** Check if debug mode is set on.
 	 * @return value of debug mode.
 	 */
-	public boolean isDebugMode() {return _debugMode;}
+	public boolean isDebugMode() {return _debugMode > 0;}
+
+	@Override
+	/** Check if show result mode is set for debug mode.
+	 * @return true if show result mode is set.
+	 */
+	public boolean isDebugShowResult() {return _debugMode > 1;}
 
 	@Override
 	/** Get display mode.
@@ -1358,7 +1358,7 @@ public final class XPool implements XDPool {
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		xw.writeString(getVersionInfo()); //XDef verze
-		xw.writeBoolean(_debugMode);
+		xw.writeByte(_debugMode);
 		xw.writeBoolean(_illegalDoctype);
 		xw.writeBoolean(_ignoreUnresolvedEntities);
 		xw.writeBoolean(_ignoreUnresolvedExternals);
@@ -1374,17 +1374,10 @@ public final class XPool implements XDPool {
 		for (int i = 0; i < len; i++) {
 			xw.writeSDatetime(_specialDates[i]);
 		}
-		len = _extObjects == null ? 0 : _extObjects.length;
+		len = _extClasses == null ? 0 : _extClasses.length;
 		xw.writeLength(len);
 		for (int i = 0; i < len; i++) {
-			Object o = _extObjects[i];
-			String s;
-			if (o instanceof Class) {
-				s = ((Class) o).getName();
-			} else {//this will be probably error!!!
-				s = o.getClass().getName();
-			}
-			xw.writeString(s);
+			xw.writeString(_extClasses[i].getName());
 		}
 		if (_thesaurus == null) {
 			xw.writeLength(0);

@@ -31,19 +31,15 @@ import cz.syntea.xdef.proc.XXElement;
 import cz.syntea.xdef.XDParser;
 import cz.syntea.xdef.XDParserAbstract;
 import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.impl.compile.XScriptParser;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import cz.syntea.xdef.sys.SBuffer;
+import cz.syntea.xdef.impl.compile.XScriptParser;
 import cz.syntea.xdef.sys.SUtils;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
@@ -51,6 +47,10 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 /** Test schema and structured types.
  * @author Vaclav Trojan
@@ -65,33 +65,10 @@ public final class TestXSTypes extends Tester {
 	private String _xdef = "";
 	private boolean _result = false;
 	private String _params;
-
-	private DocumentBuilderFactory _builderFactory;
-	private DocumentBuilder _builder;
-	private Validator _validator;
-	private String _schema = "";
-	private ErrorHandler _errHandler = new ErrorHandler() {
-		@Override
-		final public void warning(final SAXParseException x)
-			throws SAXException{setMesage(x);}
-		@Override
-		final public void error(final SAXParseException x)
-			throws SAXException {setMesage(x);}
-		@Override
-		final public void fatalError(final SAXParseException x)
-			throws SAXException {setMesage(x);}
-	};
-	private final EntityResolver _entityResolver =  new EntityResolver() {
-		@Override
-		final public InputSource resolveEntity(final String publicId,
-			final String systemId) throws SAXException, IOException {
-			return new InputSource(new StringReader(_schema));
-		}
-	};
-
 	private boolean chkSchema(final String result) {
-		if (_schema == null || _schema.isEmpty()) {
-			return true; //do not check schema if it is not available
+		//do net check schema if not debug mode or if schema is not available
+		if (!Tester.getDebugMode() || _schema == null) {
+			return true; 
 		}
 		//error handler to be assigned to builder and validator
 		//we nead to set resolver for builder to assign the schema
@@ -147,34 +124,52 @@ public final class TestXSTypes extends Tester {
 		}
 		return _result;
 	}
-
+	private DocumentBuilderFactory _builderFactory;
+	private DocumentBuilder _builder;
+	private Validator _validator;
+	private String _schema = "";
 	private void setMesage(SAXParseException x) {
 		String s = "SCHEMA: " + x.getMessage() + "\n";
 		if (_msg.indexOf(s) < 0) {//if it was not yet reported
 			_msg += s;
 		}
 	}
+	private ErrorHandler _errHandler = new ErrorHandler() {
+		@Override
+		final public void warning(final SAXParseException x)
+			throws SAXException{setMesage(x);}
+		@Override
+		final public void error(final SAXParseException x)
+			throws SAXException {setMesage(x);}
+		@Override
+		final public void fatalError(final SAXParseException x)
+			throws SAXException {setMesage(x);}
+	};
+	private final EntityResolver _entityResolver =  new EntityResolver() {
+		@Override
+		final public InputSource resolveEntity(final String publicId,
+			final String systemId) throws SAXException, IOException {
+			return new InputSource(new StringReader(_schema));
+		}
+	};
 
 	private void init() throws Exception {
-		if (Tester.getDebugMode()) {
-			_builderFactory = DocumentBuilderFactory.newInstance();
-			_builderFactory.setAttribute(
-				"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-				"http://www.w3.org/2001/XMLSchema");
-			_builderFactory.setCoalescing(true);
-			_builderFactory.setNamespaceAware(true);
-			_builderFactory.setExpandEntityReferences(true);
-			_builderFactory.setIgnoringComments(true);
-			_builderFactory.setIgnoringElementContentWhitespace(true);
-			_builderFactory.setValidating(true);
-			_builder = _builderFactory.newDocumentBuilder();
-			_builder.setErrorHandler(_errHandler);
-			_builder.setEntityResolver(_entityResolver);
-		}
+		_builderFactory = DocumentBuilderFactory.newInstance();
+		_builderFactory.setAttribute(
+			"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+		_builderFactory.setCoalescing(true);
+		_builderFactory.setNamespaceAware(true);
+		_builderFactory.setExpandEntityReferences(true);
+		_builderFactory.setIgnoringComments(true);
+		_builderFactory.setIgnoringElementContentWhitespace(true);
+		_builderFactory.setValidating(true);
+		_builder = _builderFactory.newDocumentBuilder();
+		_builder.setErrorHandler(_errHandler);
+		_builder.setEntityResolver(_entityResolver);
 	}
 
-	private static void readString(final XScriptParser p,
-		final StringBuffer sb) {
+	private static void readString(final XScriptParser p, final StringBuffer sb){
 		if (p._sym == XScriptParser.MINUS_SYM) {
 			sb.append('-');
 			p.nextSymbol();
@@ -430,6 +425,10 @@ public final class TestXSTypes extends Tester {
 	}
 
 	private static String genSchema(final String params) {
+		//do not generate schema if not debug mode
+		if (Tester.getDebugMode()) {
+			return null; 
+		}
 		StringBuffer sb = new StringBuffer(
 "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
 "<xs:simpleType name='mytype'>\n");
@@ -535,20 +534,13 @@ public final class TestXSTypes extends Tester {
 			return false;
 		}
 		boolean result = true;
-		if (Tester.getDebugMode()) {
-			if (_msg.indexOf("SCHEMA: ") < 0) {
-				_msg = "Not recognized by SCHEMA:\n"+ _msg;
-				result = false;
-			}
-			if (_msg.indexOf("XDEF: ") < 0) {
-				_msg = "Not recognized by XDEF:\n"+ _msg;
-				result = false;
-			}
-		} else {
-			if (_msg.indexOf("XDEF: ") < 0) {
-				_msg = "Not recognized by XDEF:\n"+ _msg;
-				result = false;
-			}
+		if (_msg.indexOf("SCHEMA: ") < 0) {
+			_msg = "Not recognized by SCHEMA:\n"+ _msg;
+			result = false;
+		}
+		if (_msg.indexOf("XDEF: ") < 0) {
+			_msg = "Not recognized by XDEF:\n"+ _msg;
+			result = false;
 		}
 		return result;
 	}
@@ -556,11 +548,10 @@ public final class TestXSTypes extends Tester {
 	private boolean prepare(final String params) {
 		_params = params;
 		_msg = "";
-		_schema = "";
 		boolean result = true;
-		if (Tester.getDebugMode()) {
+		_schema = genSchema(_params);
+		if (_schema != null) {
 			try {
-				_schema = genSchema(_params);
 				SchemaFactory factory = SchemaFactory.newInstance(
 					"http://www.w3.org/2001/XMLSchema");
 				Schema schema = factory.newSchema(
@@ -604,8 +595,7 @@ public final class TestXSTypes extends Tester {
 		_xml = data == null ? null :
 ("<a xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
 " xsi:noNamespaceSchemaLocation=\"dummy\" a=\""+data+"\"\n>"+data+"</a>");
-		return Tester.getDebugMode()
-			? chkSchema(result) & chkXDef(result) : chkXDef(result);
+		return chkSchema(result) & chkXDef(result);
 	}
 
 	private boolean parse(final String data) {
@@ -1079,7 +1069,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parse("Hello World!"), _msg);
 
 		// testing errors
-		if (!Tester.getDebugMode()) {
+		if (!Tester.getDebugMode()) { //schema accepts empty string!!!
 			assertFalse(parse(""), _msg); //schema accepts empty string!!!
 		}
 
@@ -1141,7 +1131,6 @@ public final class TestXSTypes extends Tester {
 		if (Tester.getDebugMode()) {
 			assertTrue(parse("     ", ""), _msg);
 		}
-
 		assertTrue(prepare(
 			"string(%whiteSpace='collapse',%minLength='1')"), _msg);
 		assertTrue(parse("  a  "), _msg);
@@ -1191,9 +1180,8 @@ public final class TestXSTypes extends Tester {
 		assertTrue(prepare("normalizedString(%whiteSpace='replace')"),_msg);
 		assertTrue(parse("Hello World!"), _msg);
 
-		if (!Tester.getDebugMode()) {
-//			assertTrue(parseFail(""), _msg); //schema accepts empty string???
-		}
+		// testing errors
+//		assertTrue(parseFail(""), _msg); //schema accepts empty string???
 
 		// testing facets
 		assertTrue(prepare(
@@ -2364,9 +2352,9 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("2000-13-01"), _msg);
 		assertTrue(parseFail("2000-00-01"), _msg);
 		assertTrue(parseFail("2000-01-32"), _msg);
-//		assertTrue(parseFail("2000-02-29"), _msg); //schema not fails!
 		assertTrue(parseFail("2000-01-00"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+//		assertTrue(parseFail("2000-02-29"), _msg); //schema not fails!
+		if (!Tester.getDebugMode()) {
 			assertTrue(parseFail("2000-01-01 +10:00"), _msg); //schema not fails
 			assertTrue(parseFail("2000-01-01 -10:00"), _msg); //schema not fails
 			assertTrue(parseFail("2000-01-01-14:50"), _msg); //schema not fails
@@ -3408,7 +3396,9 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("P1YT"), _msg);
 		assertTrue(parseFail("1Y1M"), _msg);
 		assertTrue(parseFail("R5/P1Y"), _msg);
-//		assertTrue(parseFail("PT.456S"), _msg);//schema not fails
+		if (SUtils.JAVA_VERSION > 106) {
+			assertTrue(parseFail("PT.456S"), _msg);//schema in java 16 not fails
+		}
 		assertTrue(parseFail("P1MT"), _msg);
 		assertTrue(parseFail("P1W"), _msg);
 
@@ -3499,6 +3489,60 @@ public final class TestXSTypes extends Tester {
 		assertTrue(checkFail("NOTATION(%fractionDigits='2')"), _msg);
 		setChkSyntax(chkSyntax);
 
+/**
+		// testing correct values
+		assertTrue(prepare("NOTATION(%enumeration=['a','b'])"), _msg);
+		assertTrue(prepare("NOTATION"), _msg);
+		assertTrue(parse("a"), _msg);
+		assertTrue(parse("b"), _msg);
+		assertTrue(parse("ab"), _msg);
+		assertTrue(parse("0123456789abcdef"), _msg);
+		assertTrue(parse(" aB\t"), _msg);
+		assertTrue(parse("1234"), _msg);
+		assertTrue(parse("00"), _msg);
+		assertTrue(parse("  \t\n\r0000000000000000000000\t\n\r  "), _msg);
+		assertTrue(parse("a:b"), _msg);
+		assertTrue(parse("a:b:c"), _msg);
+		assertTrue(parse(":"), _msg);
+		assertTrue(parse(":::"), _msg);
+		assertTrue(parse("_"), _msg);
+		assertTrue(parse("-"), _msg);
+		assertTrue(parse("."), _msg);
+		assertTrue(parse("_a_"), _msg);
+		assertTrue(parse(".ab"), _msg);
+		assertTrue(parse("-ab"), _msg);
+		assertTrue(parse("ab."), _msg);
+		assertTrue(parse("ab-"), _msg);
+
+		// testing errors
+		assertTrue(parseFail(""), _msg);
+		assertTrue(parseFail(" "), _msg);
+		assertTrue(parseFail("a b"), _msg);
+		assertTrue(parseFail("a?b"), _msg);
+		assertTrue(parseFail("a=b"), _msg);
+		assertTrue(parseFail("$"), _msg);
+		assertTrue(parseFail("$a"), _msg);
+		assertTrue(parseFail("a$"), _msg);
+
+		// testing facets
+		assertTrue(prepare("NOTATION(%length='2')"), _msg);
+		assertTrue(parse("ab"), _msg);
+		assertTrue(parseFail("a"), _msg);
+		assertTrue(parseFail("abc"), _msg);
+
+		assertTrue(prepare("NOTATION(%enumeration=['a.cz','b.cz'])"), _msg);
+		assertTrue(parse("a.cz"), _msg);
+		assertTrue(parse("b.cz"), _msg);
+		assertTrue(parse("\na.cz\t"), _msg);
+		assertTrue(parseFail("c.cz"), _msg);
+
+		assertTrue(prepare(
+			"NOTATION(%pattern=['ffff','[a-z]+\\\\.cz'])"), _msg);
+		assertTrue(parse("ffff"), _msg);
+		assertTrue(parse("b.cz"), _msg);
+		assertTrue(parseFail("a.cz b.cz"), _msg);
+		assertTrue(parseFail("a.b.cz"), _msg);
+/**/
 
 //------------------------------------------------------------------------------
 //                          TESTING token
@@ -3526,6 +3570,11 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parse("Hello World! ", "Hello World!"), _msg);
 		assertTrue(parse("\nx\t\r "), _msg);
 
+		// testing errors
+//		if (SUtils.JAVA_VERSION > 106) {
+//			assertTrue(parseFail("x\ty"), _msg); //schema error not recognizes
+//			assertTrue(parseFail(""), _msg); //schema error not recognizes
+//		}
 		// testing facets
 		assertTrue(prepare("token(%enumeration=['Hello', 'world'])"), _msg);
 		assertTrue(parse("Hello"), _msg);

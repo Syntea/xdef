@@ -94,8 +94,8 @@ final class CompileCode extends CompileBase {
 	int _localVariablesLastIndex;
 	/** Highest reached index to local variables. */
 	int _localVariablesMaxIndex;
-	/** Array of external objects. */
-	private Object[] _extObjects;
+//	/** Array of external objects. */
+//	private Object[] _extObjects;
 	/** Switch to ignore unresolved externals */
 	boolean _ignoreUnresolvedExternals;
 	/** Mode of external method interface: 0 - both modes, 1 - old, 2 - new. */
@@ -138,12 +138,12 @@ final class CompileCode extends CompileBase {
 	private boolean _ignoreExternalMethods;
 
 	/** Creates a new instance of GenCodeObj.
-	 * @param extObjects Array of external classes and/or objects.
+	 * @param extClasses Array of external classes.
 	 * @param externalMode id of mode external methods (old=1, new=2, both=0).
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
-	CompileCode(final Object[] extObjects,
+	CompileCode(final Class<?>[] extClasses,
 		final int externalMode,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
@@ -166,7 +166,7 @@ final class CompileCode extends CompileBase {
 		_localVariablesLastIndex = -1;
 		_localVariablesMaxIndex = -1;
 		_mode = NO_MODE;
-		setExternals(extObjects); //external classes and/or objects
+		setExternals(extClasses); //external classes and/or objects
 		_init = _initEnd = -1;
 		//predefined global variables
 		CompileVariable var = new CompileVariable("$stdOut",
@@ -326,41 +326,18 @@ final class CompileCode extends CompileBase {
 		return sb.append(')').toString();
 	}
 
-	private void setExtObj(final Object obj, final ArrayList<Object> ar) {
-		Object o;
-		if ((o  = obj) == null){
-			return;
-		}
-		Class<?> clazz;
-		if (o instanceof Class) {
-			clazz = (Class) o;
-			o = null;
-		} else {
-			clazz = o.getClass();
-		}
-		if (ar.indexOf(clazz) >= 0)	{
-			return; //already is in the list
-		}
-		ar.add(clazz);
-		ar.add(o == null ? clazz : o);
-	}
-
-	/** Set external objects/classes.
-	 * @param extObjects Array of external objects/classes.
+	/** Get external classes.
+	 * @return array of external classes.
 	 */
-	final void setExternals(final Object... extObjects) {
-		Object[] extObj = extObjects == null ? new Object[0] : extObjects;
-		ArrayList<Object> ar = new ArrayList<Object>();
-		for (Object o: extObj) {
-			setExtObj(o, ar);
-		}
-		_extClasses = new Class<?>[ar.size()/2];
-		_extObjects = new Object[ar.size()/2];
-		for (int i=0; i < _extClasses.length; i++) {
-			_extClasses[i] = (Class) ar.get(i * 2);
-			Object obj = ar.get(i * 2 + 1);
-			_extObjects[i] = obj == _extClasses[i] ? null : obj;
-		}
+	final Class<?>[] getExternals() {return _extClasses;}
+
+	/** Set external classes.
+	 * @param extObjects Array of external classes.
+	 */
+	final void setExternals(final Class<?>... extObjects) {
+		Class<?>[] extObj = extObjects == null ? new Class<?>[0] : extObjects;
+		_extClasses = new Class<?>[extObj.length];
+		System.arraycopy(extObj, 0, _extClasses, 0, extObj.length);
 	}
 
 	/** Check if given identifier refers to a variable.
@@ -1537,7 +1514,8 @@ final class CompileCode extends CompileBase {
 					method = findExternalMethod(name,
 						numPar,
 						_extClasses[i],
-						_extObjects[i]);
+						null);
+//						_extObjects[i]);
 					if (method != null) {
 						break;
 					}

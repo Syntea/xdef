@@ -848,7 +848,7 @@ public class TestXComponentsGen {
 				System.out.println("X-component data created");
 			}
 
-			FUtils.deleteAll(f, true); // delete temp directory			
+			FUtils.deleteAll(f, true); // delete temp directory
 		} catch (Exception ex) {ex.printStackTrace(System.err);}
 	}
 }
