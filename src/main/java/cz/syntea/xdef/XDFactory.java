@@ -140,7 +140,7 @@ public final class XDFactory {
 		}
 	}
 
-	/** Creates XDPool from source.
+	/** Compile XDPool from source.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of sources, source pairs or external classes.
 	 * @return generated XDPool.

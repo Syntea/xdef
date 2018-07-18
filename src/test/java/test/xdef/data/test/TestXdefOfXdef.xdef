@@ -211,7 +211,7 @@ MethodListItem ::= ExternalType S?
 MethodListItemParamList ::= ExternalType
   (S? "," S? QualifiedIdentifier (S?"[" S? "]")? )*
 
-MacroReference ::= "${" S? XMLName S? MacroParams? S? "}"
+MacroReference ::= "$" "{" S? XMLName S? MacroParams? S? "}"
 
 MacroParams ::= "(" S? Identifier (S? "," S? Identifier)* S? ")"
 

@@ -491,68 +491,19 @@ public class XDGenCollection {
 				}
 			}
 		}
-		if (!resolve) {
-			return;
-		}
-		for (int i = 0; i < nl.getLength(); i++) {
-			Element def = (Element) nl.item(i);
-			String xdUri = def.getNamespaceURI();
-			NodeList macs = KXmlUtils.getChildElementsNS(def, xdUri, "macro");
-			int len;
-			if (macs != null && (len = macs.getLength()) > 0) {
-				for (int j = 0; j < len; j++) {
-					def.removeChild(macs.item(j));
+		if (resolve) {
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element def = (Element) nl.item(i);
+				String xdUri = def.getNamespaceURI();
+				NodeList macs =
+					KXmlUtils.getChildElementsNS(def, xdUri, "macro");
+				int len;
+				if (macs != null && (len = macs.getLength()) > 0) {
+					for (int j = 0; j < len; j++) {
+						def.removeChild(macs.item(j));
+					}
 				}
 			}
-		}
-		for (int i = 0; i < nl.getLength(); i++) {
-			Element def = (Element) nl.item(i);
-			String defName =
-				getXdefAttr(def, def.getNamespaceURI(), "name", false);
-			expandMacros(def, defName, macros);
-		}
-	}
-
-	/** Expand all macros in given element and its attributes and child nodes.
-	 * @param el Element in which macros are expanded.
-	 * @param defName name of actual X-definition.
-	 * @param macros HashMasp with macros.
-	 */
-	public static void expandMacros(final Element el,
-		final String defName,
-		final HashMap<String, XScriptMacro> macros) {
-		NodeList nl = el.getChildNodes();
-		XScriptParser sp = new XScriptParser(false, macros);
-		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
-			switch (n.getNodeType()) {
-				case Node.CDATA_SECTION_NODE: {
-					CDATASection c = (CDATASection) n;
-					sp._actDefName = defName;
-					sp.setSourceBuffer(c.getData());
-					sp.expandMacros();
-					c.setData(sp.getSourceBuffer());
-					continue;
-				}
-				case Node.TEXT_NODE: {
-					Text c = (Text) n;
-					sp._actDefName = defName;
-					sp.setSourceBuffer(c.getData());
-					sp.expandMacros();
-					c.setData(sp.getSourceBuffer());
-					continue;
-				}
-				case Node.ELEMENT_NODE:
-					expandMacros((Element) n, defName, macros);
-			}
-		}
-		NamedNodeMap nm = el.getAttributes();
-		for (int i = 0; nm != null && i < nm.getLength(); i++) {
-			Attr a = (Attr) nm.item(i);
-			sp._actDefName = defName;
-			sp.setSourceBuffer(a.getValue());
-			sp.expandMacros();
-			a.setValue(sp.getSourceBuffer());
 		}
 	}
 

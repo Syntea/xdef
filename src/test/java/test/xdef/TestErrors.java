@@ -332,7 +332,7 @@ public final class TestErrors extends Tester {
 "<xd:def xmlns:xd='" + XDEFNS + "'\n"+								//01
 "     xd:root='root'\n"+											//02
 "     xd:name='test'>\n"+											//03
-"   <xd:macro name = 'mm'>if('1'==(t='1'))s='2';else t='3';</xd:macro>\n"+	//04
+"   <xd:macro name = 'mm'>if('1'==(t='1'))s='2';else t='3';</xd:macro>\n"+
 "   <xd:macro name = 'n'>if('1' == (</xd:macro>\n"+					//05
 "   <xd:declaration>void test() {int i=1; String s='';\n"+			//06
 "    if('1' == (t='1')) s+=2; else t+=0;\n"+						//07 <==
@@ -438,6 +438,7 @@ public final class TestErrors extends Tester {
 			assertEq("", chkReport(reporter, "XDEF212", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "7", null, null));
 			assertEq("", chkReport(reporter, "XML075", "10", "8", null));
+			assertEq("", chkReport(reporter, "XDEF483", "5", "8", null));
 			assertEq("", chkReport(reporter, "XDEF254", "2", "24", null));
 			assertEq("", chkReport(reporter, "XDEF254", "3", "24", null));
 			assertEq("", chkReport(reporter, "XDEF254", "4", "24", null));
@@ -986,7 +987,7 @@ public final class TestErrors extends Tester {
 "<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 "<macTest  xd:script = \"finally ${text}; options trim;\"/>\n"+
 "<xd:macro name = \"text\">\n"+
-"out('Volání makra text má tvar:\n\44{text}')</xd:macro>\n"+
+"outln('Macro call is:\n${text}');</xd:macro>\n"+
 "</xd:def>";
 			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
@@ -994,7 +995,8 @@ public final class TestErrors extends Tester {
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF486", "2", "39", null));
-
+			assertEq("", chkReport(reporter, "XDEF426", "2", "32", null));
+			assertEq("", chkReport(reporter, "XDEF433", "2", "49", null));
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
 			String[] xdefs = new String[] {
