@@ -39,6 +39,23 @@ import java.util.TreeMap;
  */
 public class SUtils extends FUtils {
 
+	/** Version of Java runtime as the integer composed from the string where
+	 * the integer part is multiplied by 100 and subversion part is added.
+	 * E.g. "1.6" is converted to 106. The build version is ignored.
+	 */
+	public static final int JAVA_VERSION;
+
+	static {
+		String javaVersion = System.getProperty("java.version");
+		if (javaVersion != null) {
+			String[] ss = javaVersion.split("\\.");
+			JAVA_VERSION = Integer.parseInt(ss[0])* 100
+				+ Integer.parseInt(ss[1]);
+		} else {
+			JAVA_VERSION = 106;
+		}
+	}
+
 	/** Don't allow user to instantiate this class. */
 	private SUtils() {}
 
