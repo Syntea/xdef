@@ -18,10 +18,6 @@
     <properties>
         <release.date>2018-07-11</release.date>
         
-        <projectId>cz.syntea.xdefinice-OSS</projectId>
-        <!-- <svnRepo>cz/syntea/skp/pp</svnRepo> -->
-        <!-- odkaz do hlavniho(root) adresare projektu syntea-xdefinice-OSS -->
-        <main.basedir>${project.basedir}/..</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
         <maven.compiler.target>1.6</maven.compiler.target>
