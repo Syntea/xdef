@@ -6,14 +6,14 @@
 >
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>cz.syntea.xdefinice</groupId>
-    <artifactId>syntea-xdefinice-OSS</artifactId>
+    <groupId>cz.syntea.xdefinition</groupId>
+    <artifactId>syntea-xdefinition-OSS</artifactId>
     <version>3.1.4.2</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
     <packaging>jar</packaging>
     
-    <name>syntea-xdefinice-OSS</name>
+    <name>syntea-xdefinition-OSS</name>
     <!-- ve formatovani java.util.Properties, vklada se do properties-souboru -->
-    <description>XDefinice 3.1</description>
+    <description>XDefinition 3.1 (Open Source Software)</description>
     
     <properties>
         <release.date>2018-07-11</release.date>
@@ -30,6 +30,10 @@
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <testng.version>6.8.21</testng.version>
+        
+        <projectId>syntea-xdefinition-OSS</projectId>
+        <!-- odkaz do hlavniho(root) adresare projektu -->
+        <main.basedir>${project.basedir}/..</main.basedir>
     </properties>
     
     <dependencies>
@@ -126,25 +130,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            
-            <!-- vse zabalit do jednoho spustitelneho jar-souboru --><!--
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.0.0.M2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>standalone</classifier>
-                            <mainClass>cz.syntea.skp.pp.statistika.SkpPpStatistika</mainClass>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
