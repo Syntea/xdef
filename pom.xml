@@ -198,6 +198,8 @@
         </profile>
     </profiles>    
     
+    <!-- treti testovaci komentar - nekonfliktni, automaticky zmergovatelny (doufam) -->
+    
     <distributionManagement>
         <repository>
             <id>private</id>
