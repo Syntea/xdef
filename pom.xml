@@ -229,6 +229,8 @@
         </snapshotRepository>
     </distributionManagement>
     
+    <!-- druhy testovaci komentar - nekonfliktni, automaticky zmergovatelny (doufam) -->
+    
     <!--
     <scm>
         <connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
