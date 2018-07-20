@@ -20,7 +20,7 @@
         
         <projectId>cz.syntea.xdefinice-OSS</projectId>
         <!-- <svnRepo>cz/syntea/skp/pp</svnRepo> -->
-        <!-- odkaz do hlavniho(root) adresare projektu -->
+        <!-- odkaz do hlavniho(root) adresare projektu syntea-xdefinice-OSS -->
         <main.basedir>${project.basedir}/..</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
