@@ -19,7 +19,6 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
-import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.xml.KParsedAttr;
 import cz.syntea.xdef.xml.KParsedElement;
 import java.io.ByteArrayInputStream;

@@ -119,8 +119,8 @@ public interface XDBuilder {
 	 */
 	public void setReporter(ReportWriter reporter);
 
-	/** Build XDefPool from prepared sources.
-	 * @return created XDefPool.
+	/** Compile XDefPool from prepared sources.
+	 * @return compiled XDefPool.
 	 */
 	public XDPool compileXD();
 

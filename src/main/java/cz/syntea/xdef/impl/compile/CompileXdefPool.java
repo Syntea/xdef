@@ -73,6 +73,7 @@ import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDContainer;
 import cz.syntea.xdef.impl.XPool;
 import cz.syntea.xdef.XDValueID;
+import static cz.syntea.xdef.sys.SParser.NOCHAR;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.util.HashMap;
 
@@ -1396,10 +1397,8 @@ public final class CompileXdefPool extends XDefReader
 		}
 	}
 
-	/** Prepare list of declared macros.
-	 * @return Map with declared macros.
-	 */
-	public final Map<String, XScriptMacro> prepareMacros() {
+	/** Prepare list of declared macros and expand macros. */
+	private void prepareMacros() {
 		// doParse of definitions from include list
 		for (int i = 0; i < _includeList.size(); i++) {
 			Object o = _includeList.get(i);
@@ -1409,7 +1408,6 @@ public final class CompileXdefPool extends XDefReader
 				parseFile((File) o);
 			}
 		}
-		ReportWriter reporter = getReportWriter();
 		for (int i = 0;  i < _xdefNames.size(); i++) {
 			String defName = _xdefNames.get(i);
 			PNode def = _xdefNodes.get(i);
@@ -1435,14 +1433,20 @@ public final class CompileXdefPool extends XDefReader
 			}
 			def.removeChildNodes(macros); // remove all macros
 		}
-		//reset
-		_scriptCompiler.setReportWriter(reporter);
-		return _macros;
-	}
-
-	/** First step: expand macros and compile declarations. */
-	private void precompile() {
+		// expand macros
 		ReportWriter reporter = getReportWriter();
+		for (int i = 0;  i < _xdefNames.size(); i++) {
+			PNode p = _xdefNodes.get(i);
+			p.expandMacros(reporter, _xdefNames.get(i));
+		}		
+	}
+	
+	/** First step: prepare and expand macros and compile declarations. */
+	private void precompile() {
+		prepareMacros();
+		ReportWriter reporter = getReportWriter();
+		// set reporter to the compiler of script
+		_scriptCompiler.setReportWriter(reporter);		
 		_scriptCompiler.initCompilation(CompileBase.GLOBAL_MODE, XD_VOID);
 		compileMehodsAndClassesAttrs();
 		// Move all declarations of BNF grammars and variables from the
@@ -2349,9 +2353,7 @@ public final class CompileXdefPool extends XDefReader
 			//Attempt to recompile compiled pool
 			throw new SRuntimeException(XDEF.XDEF203);
 		}
-		prepareMacros();
-		//compile definitions and groups.
-		precompile();
+		precompile(); //compile definitions and groups.
 		for (int ii = 0;  ii < _xdefNames.size(); ii++) {
 			compileXdefHeader(ii, xdp);
 		}
@@ -3454,11 +3456,292 @@ public final class CompileXdefPool extends XDefReader
 			}
 			return name;
 		}
+		
+		private boolean isXScriptName(StringParser p) {
+			if (p.getXmlCharType(_xmlVersion1) != StringParser.XML_CHAR_NAME_START) {
+				return false;
+			}
+			StringBuilder sb = new StringBuilder(String.valueOf(p.peekChar()));
+			char c;
+			boolean wasColon = false;
+			while (StringParser.getXmlCharType(c = p.getCurrentChar(), _xmlVersion1) ==
+				StringParser.XML_CHAR_NAME_START ||
+				(c >= '0' && c <= '9') || (!wasColon && c == ':')) {
+				if (c == ':') { // we allow one colon inside the name
+					wasColon = true;
+					c = p.nextChar();
+					if (p.getXmlCharType(_xmlVersion1) != StringParser.XML_CHAR_NAME_START) {
+						p.setBufIndex(p.getIndex() - 1);  // must follow name, ignore ':'
+						break;
+					}
+					sb.append(':');
+				}
+				sb.append(c);
+				p.nextChar();
+			}
+			p.setParsedString(sb.toString());
+			return true;
+		}
+		
+		private static final int MAX_NESTED_MACRO = 100;
+		
+		/** Parse macro references in the source text.
+		 * @param nestingLevel level of nested reference (to prevent cycle).
+		 * @param p String parser.
+		 * @return string with expanded macro references.
+		 */
+		private String parseMacro(int nestingLevel,
+			final StringParser p,
+			final String actDefName) throws SRuntimeException {
+			if (nestingLevel >= MAX_NESTED_MACRO) {
+				macError(0, XDEF.XDEF486); //Too many nested macros
+				return null;
+			}
+			if (!isXScriptName(p)) {
+				 //Macro name error
+				macError(nestingLevel, XDEF.XDEF484);
+				return null;
+			}
+			String macName = p.getParsedString();
+			if (p.isChar('#')) {
+				if (!isXScriptName(p)) {
+					//Macro name error
+					macError(nestingLevel, XDEF.XDEF484);
+					return null;
+				}
+				macName += '#' + p.getParsedString();
+			} else {
+				macName = actDefName + '#' + macName;
+			}
+			XScriptMacro macro = _macros.get(macName);
+			if (macro == null) {
+				//Macro '&{0}' doesn't exist
+				macError(nestingLevel, XDEF.XDEF483,macName);
+				return null;
+			}
+			String[] params = null;
+			StringBuilder sb;
+			String s, s1;
+			StringParser p1;
+			int ndx;
+			int level;
+			p.skipSpaces();
+			if (p.isChar('(')) { // parameters
+				p.skipSpaces();
+				while (isXScriptName(p)) {
+					String parName = p.getParsedString();
+					int index = macro.getParamNames().indexOf(parName);
+					if (index < 0) {
+						//Unknown parameter '&{0}' of macro '&{1}'
+						macError(nestingLevel, XDEF.XDEF497, parName, macName);
+						return null;
+					}
+					p.skipSpaces();
+					if (!p.isChar('=')) {
+						 //'&{0}' expected
+						macError(nestingLevel, XDEF.XDEF410, "=");
+						return null;
+					}
+					p.skipSpaces();
+					char delimiter;
+					if ((delimiter = p.isOneOfChars("'\"")) == NOCHAR) {
+						//String specification expected
+						macError(nestingLevel, XDEF.XDEF493);
+						return null;
+					}
+					// parse the string constant, but we copy all escapes
+					sb = new StringBuilder();
+					for(;;) {
+						if (!p.chkBufferIndex()) {
+							//Unclosed string specification
+							macError(nestingLevel, XDEF.XDEF403);
+							return null;
+						}
+						char c;
+						if ((c = p.peekChar()) == delimiter) {
+							break;
+						}
+						if (c == '\\') {
+							if (!p.chkBufferIndex()) {
+								//Unclosed string specification
+								macError(nestingLevel,XDEF.XDEF403);
+								return null;
+							}
+							c = p.peekChar();
+						}
+						sb.append(c);
+					}
+					if (index >= 0) {
+						if (params == null) {
+							params = new String[macro.getParamValues().length];
+							System.arraycopy(macro.getParamValues(),
+								0, params, 0, params.length);
+						}
+						s = sb.toString();
+						level = nestingLevel;
+						while ((ndx = s.indexOf("${")) >= 0) {
+							p1 = new StringParser(s.substring(ndx));
+							p1.nextChar(); p1.nextChar(); //pos + 2
+							s1 = parseMacro(++level, p1, actDefName);
+							if (s1 == null) {
+								return null;
+							}
+							sb = new StringBuilder(s.substring(0,ndx));
+							sb.append(s1);
+							if (!p1.eos()) {
+								sb.append(p1.getBufferPartFrom(p1.getIndex()));
+							}
+							s = sb.toString();
+							sb.setLength(0);
+						}
+						params[index] = s;
+					}
+					p.skipSpaces();
+					if (p.isChar(',')) {
+						p.skipSpaces();
+					} else {
+						break;
+					}
+				}
+				if (!p.isChar(')')) {
+					 //'&{0}' expected
+					macError(nestingLevel, XDEF.XDEF410, ")");
+					return null;
+				}
+			}
+			if (!p.isChar('}')) {
+				//'&{0}' expected
+				macError(nestingLevel, XDEF.XDEF410, "}");
+				return null;
+			}
+			if (params == null) {
+				params = macro.getParamValues();
+			}
+			s = macro.expand(params);
+			level = nestingLevel;
+			while ((ndx = s.indexOf("${")) >= 0) {
+				p1 = new StringParser(s.substring(ndx));
+				p1.nextChar(); p1.nextChar(); //pos + 2
+				s1 = parseMacro(++level, p1, actDefName);
+				if (s1 == null) {
+					return null;
+				}
+				sb = new StringBuilder(s.substring(0,ndx));
+				sb.append(s1);
+				if (!p1.eos()) {
+					sb.append(p1.getBufferPartFrom(p1.getIndex()));
+				}
+				s = sb.toString();
+			}
+			return s;
+		}
 
+		/** Report macro error with modification.
+		 * @param level nesting level.
+		 * @param id registered message ID.
+		 * @param mod Message modification parameters.
+		 */
+		private void macError(final int level,
+			final long id,
+			final Object... mod) {
+			if (level > 1) {
+				return;
+			}
+			if (level == 1) {
+				//Error in nested macro
+				throw new SRuntimeException(XDEF.XDEF498);
+			} else {
+				throw new SRuntimeException(id, mod);
+			}
+		}
+
+		/** Expands all macro references in the source buffer. */
+		private void expandMacros(final SBuffer sb,
+			final StringParser p,
+			final String actDefName) {
+			// Save original position
+			int ndx;
+			if ((ndx = sb.getString().lastIndexOf("${")) < 0 ||
+				ndx + 3 >= sb.getString().length()) {
+				return; //no macro
+			}
+			p.setSourceBuffer(sb);
+			int savedPos = p.getIndex();
+			long savedLine = p.getLineNumber();
+			long savedStartLine = p.getStartLine();
+			long savedFilePos = p.getFilePos();
+			//Expand macro references (backward from the end of buffer).
+			try {
+			do {
+				p.setBufIndex(ndx + 2);
+				// Parse macro
+				String replacement = parseMacro(0, p, actDefName);
+				if (replacement == null) {
+					break; //an error detected, finish
+				}
+				// Replace the macro reference with result
+				p.changeBuffer(ndx, p.getIndex() - ndx, replacement, true);
+				// check if the new macro occurred after this replacement
+				int level = 1;
+				while (--ndx >= 0 && p.getCharAtPos(ndx) == '$' &&
+					replacement.startsWith("{")) {
+					// A new nested macro occurred after this replacement
+					// Set parser positinon at the macro
+					if (ndx + 2 < p.getEndBufferIndex()) {
+						p.setBufIndex(ndx + 2);
+					} else {
+						p.setEos();
+					}
+					// Parse macro
+					replacement = parseMacro(level++, p, actDefName);
+					if (replacement == null) {
+						break; //an error detected, finish
+					}
+					// Replace the macro reference with result
+					p.changeBuffer(ndx, p.getIndex() - ndx, replacement, true);
+					if (!p.chkBufferIndex()) {
+						p.setEos();
+					}
+				}
+			} while ((ndx = p.getSourceBuffer().lastIndexOf("${")) >= 0 &&
+				ndx + 3 < p.getEndBufferIndex());
+			} catch (SRuntimeException ex) {
+				p.putReport(ex.getReport());				
+			}
+			//reset parser to original position
+			p.setLineNumber(savedLine);
+			p.setStartLine(savedStartLine);
+			p.setFilePos(savedFilePos);
+			p.setBufIndex(savedPos);		
+			sb.setPosition(p);
+			sb.setString(p.getSourceBuffer());
+ 		}
+
+		private void expandMacros(final ReportWriter reporter,
+			final String actDefName) {
+			StringParser p = new StringParser();
+			p.setLineInfoFlag(true);
+			p.setReportWriter(reporter);
+			for (AttrValue x: _attrs) {
+				if (x._value.getString().indexOf("${") >= 0) {
+					expandMacros(x._value, p, actDefName);
+				}
+			}
+			if (_value != null) {
+				String s = _value.getString();
+				int ndx = s.lastIndexOf("${");
+				if (ndx >= 0) {
+					expandMacros(_value, p, actDefName);
+				}
+			}
+			for (PNode x: _childNodes) {
+				x.expandMacros(reporter, actDefName);
+			}
+		}
+		
 		@Override
 		public String toString() {
 			return "PNode: " + _name.getString();
 		}
 	}
-
 }

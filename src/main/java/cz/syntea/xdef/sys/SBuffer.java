@@ -81,6 +81,11 @@ public class SBuffer extends SPosition {
 	 * @return string with the value of buffer.
 	 */
 	public final String getString() {return _source;}
+	
+	/** Set string to buffer.
+	 * @param s string to be set.
+	 */
+	public final void setString(final String s) {_source = s;}
 
 	@Override
 	public String toString() {return super.toString() + ";\n" + _source;}

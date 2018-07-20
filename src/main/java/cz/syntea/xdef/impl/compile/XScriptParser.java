@@ -426,83 +426,10 @@ public class XScriptParser extends StringParser
 		_xdVersion = xdVersion;
 		if(source != null) {
 			setSourceBuffer(source);
-			expandMacros();
 		} else {
 			setSourceBuffer("");
 		}
 		setLastPosition();
-	}
-
-	/** Expands all macro references in the source buffer. */
-	public final void expandMacros() {
-		int ndx;
-		if ((ndx = getSourceBuffer().lastIndexOf("${")) < 0 ||
-			ndx + 3 >= getEndBufferIndex()) {
-			return; //no macro
-		}
-		// Save original position
-		int savedPos = getIndex();
-		long savedLine = getLineNumber();
-		long savedStartLine = getStartLine();
-		long savedFilePos = getFilePos();
-		//Scan macro references (backward from the end of buffer) and expand.
-		do {
-			setBufIndex(ndx + 2);
-			// Parse macro
-			String replacement = parseMacro(0, this);
-			if (replacement == null) {
-				break; //an error detected, finish
-			}
-			// Replace the macro reference with result
-			changeBuffer(ndx, getIndex() - ndx, replacement, true);
-			// check if the new macro occurred after this replacement
-			int level = 1;
-			while (--ndx >= 0 && getCharAtPos(ndx) == '$' &&
-				replacement.startsWith("{")) {
-				// A new nested macro occurred after this replacement
-				// Set parser positinon at the macro
-				if (ndx + 2 < getEndBufferIndex()) {
-					setBufIndex(ndx + 2);
-				} else {
-					setEos();
-				}
-				// Parse macro
-				replacement = parseMacro(level++, this);
-				if (replacement == null) {
-					break; //an error detected, finish
-				}
-				// Replace the macro reference with result
-				changeBuffer(ndx, getIndex() - ndx, replacement, true);
-				if (!chkBufferIndex()) {
-					setEos();
-				}
-			}
-		} while ((ndx = getSourceBuffer().lastIndexOf("${")) >= 0 &&
-			ndx + 3 < getEndBufferIndex());
-		//reset parser to original position
-		setLineNumber(savedLine);
-		setStartLine(savedStartLine);
-		setFilePos(savedFilePos);
-		setBufIndex(savedPos);
-	}
-
-	/** Report macro error with modification.
-	 * @param level nesting level.
-	 * @param id registered message ID.
-	 * @param mod Message modification parameters.
-	 */
-	private void macError(final int level,
-		final long id,
-		final Object... mod) {
-		if (level > 1) {
-			return;
-		}
-		setLastPosition(); //set position for error reporting
-		if (level == 1) {
-			error(XDEF.XDEF498); //Error in nested macro
-		} else {
-			error(id, mod);
-		}
 	}
 
 	/** Parse script name. Name must start with letter or '_' and continue
@@ -535,161 +462,13 @@ public class XScriptParser extends StringParser
 		return true;
 	}
 
-	/** Parse macro references in the source text.
-	 * @param nestingLevel level of nested reference (to prevent cycle).
-	 * @param p String parser.
-	 * @return string with expanded macro references.
-	 */
-	private String parseMacro(int nestingLevel, final StringParser p) {
-		if (nestingLevel >= MAX_NESTED_MACRO) {
-			macError(0, XDEF.XDEF486); //Too many nested macros
-			return null;
-		}
-		if (!isXScriptName(p)) {
-			macError(nestingLevel, XDEF.XDEF484); //Macro name error
-			return null;
-		}
-		String macName = p.getParsedString();
-		if (p.isChar('#')) {
-			if (!isXScriptName(p)) {
-				macError(nestingLevel, XDEF.XDEF484); //Macro name error
-				return null;
-			}
-			macName += '#' + p.getParsedString();
-		} else {
-			macName = _actDefName + '#' + macName;
-		}
-		XScriptMacro macro = _macros.get(macName);
-		if (macro == null) {
-			//Macro '&{0}' doesn't exist
-			macError(nestingLevel, XDEF.XDEF483,macName);
-			return null;
-		}
-		String[] params = null;
-		StringBuilder sb;
-		String s, s1;
-		StringParser p1;
-		int ndx;
-		int level;
-		p.skipSpaces();
-		if (p.isChar('(')) { // parameters
-			p.skipSpaces();
-			while (isXScriptName(p)) {
-				String parName = p.getParsedString();
-				int index = macro.getParamNames().indexOf(parName);
-				if (index < 0) {
-					//Unknown parameter '&{0}' of macro '&{1}'
-					macError(nestingLevel, XDEF.XDEF497, parName, macName);
-					return null;
-				}
-				p.skipSpaces();
-				if (!p.isChar('=')) {
-					macError(nestingLevel, XDEF.XDEF410, "="); //'&{0}' expected
-					return null;
-				}
-				p.skipSpaces();
-				char delimiter;
-				if ((delimiter = p.isOneOfChars("'\"")) == NOCHAR) {
-					//String specification expected
-					macError(nestingLevel, XDEF.XDEF493);
-					return null;
-				}
-				// here we parse the string constant, but we copy all escapes
-				sb = new StringBuilder();
-				for(;;) {
-					if (!p.chkBufferIndex()) {
-						//Unclosed string specification
-						macError(nestingLevel, XDEF.XDEF403);
-						return null;
-					}
-					char c;
-					if ((c = p.peekChar()) == delimiter) {
-						break;
-					}
-					if (c == '\\') {
-						if (!p.chkBufferIndex()) {
-							//Unclosed string specification
-							macError(nestingLevel, XDEF.XDEF403);
-							return null;
-						}
-						c = p.peekChar();
-					}
-					sb.append(c);
-				}
-				if (index >= 0) {
-					if (params == null) {
-						params = new String[macro.getParamValues().length];
-						System.arraycopy(
-							macro.getParamValues(),0,params,0,params.length);
-					}
-					s = sb.toString();
-					level = nestingLevel;
-					while ((ndx = s.indexOf("${")) >= 0) {
-						p1 = new StringParser(s.substring(ndx));
-						p1.nextChar(); p1.nextChar(); //pos + 2
-						s1 = parseMacro(++level, p1);
-						if (s1 == null) {
-							return null;
-						}
-						sb = new StringBuilder(s.substring(0,ndx));
-						sb.append(s1);
-						if (!p1.eos()) {
-							sb.append(p1.getBufferPartFrom(p1.getIndex()));
-						}
-						s = sb.toString();
-						sb.setLength(0);
-					}
-					params[index] = s;
-				}
-				p.skipSpaces();
-				if (p.isChar(',')) {
-					p.skipSpaces();
-				} else {
-					break;
-				}
-			}
-			if (!p.isChar(')')) {
-				macError(nestingLevel, XDEF.XDEF410, ")"); //'&{0}' expected
-				return null;
-			}
-		}
-		if (!p.isChar('}')) {
-			macError(nestingLevel, XDEF.XDEF410, "}");//'&{0}' expected
-			return null;
-		}
-		if (params == null) {
-			params = macro.getParamValues();
-		}
-		s = macro.expand(params);
-		level = nestingLevel;
-		while ((ndx = s.indexOf("${")) >= 0) {
-			p1 = new StringParser(s.substring(ndx));
-			p1.nextChar(); p1.nextChar(); //pos + 2
-			s1 = parseMacro(++level, p1);
-			if (s1 == null) {
-				return null;
-			}
-			sb = new StringBuilder(s.substring(0,ndx));
-			sb.append(s1);
-			if (!p1.eos()) {
-				sb.append(p1.getBufferPartFrom(p1.getIndex()));
-			}
-			s = sb.toString();
-		}
-		return s;
-	}
-
 	/** Set last position for error reporting. */
-	final void setLastPosition() {
-		_lastSPos = new SPosition(this);
-	}
+	final void setLastPosition() {_lastSPos = new SPosition(this);}
 
 	/** Get last position for error reporting.
 	 * @return source position.
 	 */
-	public final SPosition getLastPosition() {
-		return _lastSPos;
-	}
+	public final SPosition getLastPosition() {return _lastSPos;}
 
 	/** Skip all white spaces and comments. */
 	public final void skipBlanksAndComments() {
