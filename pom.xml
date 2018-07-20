@@ -210,6 +210,8 @@
         </snapshotRepository>
     </distributionManagement>
     
+    <!-- normalni zmena v dev-sisma-c2 -->
+    
     <!--
     <scm>
         <connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
