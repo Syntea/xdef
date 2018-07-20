@@ -199,8 +199,6 @@
         </profile>
     </profiles>    
     
-    <!-- treti testovaci komentar - nekonfliktni, automaticky zmergovatelny (doufam) -->
-    
     <distributionManagement>
         <repository>
             <id>private</id>
@@ -212,17 +210,11 @@
         </snapshotRepository>
     </distributionManagement>
     
-    <!-- druhy testovaci komentar - nekonfliktni, automaticky zmergovatelny (doufam) -->
-    
     <!--
     <scm>
         <connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
         <developerConnection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</developerConnection>
     </scm>
     -->
-    
-    <!-- ctvrty testovaci komentar - nekonfliktni, automaticky zmergovatelny (doufam) -->
-    
-    <!-- testovaci komentar vseho druhu - nekonfliktni, automaticky zmergovatelny (doufam) -->
     
 </project>
