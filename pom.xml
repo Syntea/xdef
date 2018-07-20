@@ -6,19 +6,19 @@
 >
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>cz.syntea.common.xdef</groupId>
-    <artifactId>syntea-common-xdef3</artifactId>
+    <groupId>cz.syntea.xdefinice</groupId>
+    <artifactId>syntea-xdefinice-OSS</artifactId>
     <version>3.1.4.2</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
     <packaging>jar</packaging>
     
-    <name>syntea-common-xdef3</name>
+    <name>syntea-xdefinice-OSS</name>
     <!-- ve formatovani java.util.Properties, vklada se do properties-souboru -->
     <description>XDefinice 3.1</description>
     
     <properties>
         <release.date>2018-07-11</release.date>
         
-        <projectId>cz.syntea.common.xdef</projectId>
+        <projectId>cz.syntea.xdefinice-OSS</projectId>
         <!-- <svnRepo>cz/syntea/skp/pp</svnRepo> -->
         <!-- odkaz do hlavniho(root) adresare projektu -->
         <main.basedir>${project.basedir}/..</main.basedir>
