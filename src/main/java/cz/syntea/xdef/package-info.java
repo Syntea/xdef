@@ -1,4 +1,5 @@
 /**
+<HTML><BODY>
 	Contains interfaces for processing of X-definitions and
 	the factory for compilation of X-definitions and creation of some important
 	objects used in X-definitions.
@@ -123,5 +124,6 @@ if (xdoc.errorWarnings()) {
 	see: {@link cz.syntea.xdef.util.GenXDefinition#main(String[])}.
 </li>
 </UL>
+</BODY></HTML>
 */
 package cz.syntea.xdef;
