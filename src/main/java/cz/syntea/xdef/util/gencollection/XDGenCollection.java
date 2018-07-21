@@ -365,6 +365,7 @@ public class XDGenCollection {
 					}
 					_includeList.add(url.toExternalForm());
 				} catch (Exception ex) {
+					throw new RuntimeException(ex);
 				}
 			} else {
 				File[] list = SUtils.getFileGroup(sourcePath + s);
