@@ -71,15 +71,13 @@ final class CompileXScript extends CompileStatement {
 	 * @param g The code generator.
 	 * @param xmlVer1 true if version of XML document is "1.1".
 	 * @param nsPrefixes array with name space prefixes.
-	 * @param macros The table of macros.
 	 * @param clsLoader The Class loader (used for external objects).
 	 */
 	CompileXScript(final CompileCode g,
 		final boolean xmlVer1,
 		final Map<String, Integer> nsPrefixes,
-		final Map<String, XScriptMacro> macros,
 		final ClassLoader clsLoader) {
-		super(g, xmlVer1, CompileBase.NO_MODE, nsPrefixes, macros, clsLoader);
+		super(g, xmlVer1, CompileBase.NO_MODE, nsPrefixes, clsLoader);
 	}
 
 	/** Compile external methods list from XDef header. */

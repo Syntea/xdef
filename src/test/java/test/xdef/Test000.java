@@ -395,13 +395,15 @@ public final class Test000 extends Tester {
 				new ByteArrayInputStream(xpOut.toByteArray());
 			xp = XDFactory.readXDPool(xpIn);
 			xpIn.close();
+			setProperty(XDConstants.XDPROPERTY_DOCTYPE,
+				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
-//			assertNoErrors(reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			//XML099 = DOCTYPE is set as not allowed&
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
+		resetProperties();
 //		try { //test ignoring of DTD.
 //			xdef = dataDir + "Test000_01.xdef";
 //			xp = compile(xdef);

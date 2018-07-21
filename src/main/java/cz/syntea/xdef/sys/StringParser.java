@@ -1330,34 +1330,6 @@ public class StringParser extends SReporter implements SParser {
 		return _parserStack == null ? 0 : _parserStack.size();
 	}
 
-//	/** Get parser saved object.
-//	 * @return parser saved object.
-//	 */
-//	public final SParserSavedObject getParserSavedObject() {
-//		return _savedObject;
-//	}
-//
-//	/** Save old parser and set new source buffer.
-//	 * @param source a source buffer.
-//	 * @param savedObject a SParserSavedObject with saved parameters or null.
-//	*/
-//	public final void pushSourceBuffer(final SBuffer source,
-//		final SParserSavedObject savedObject) {
-//		pushParser(savedObject);
-//		setIndex(0);
-//		setBuffer(source.getString());
-//		setFilePos(source.getFilePos() + source.getIndex());
-//		setLineNumber(source.getLineNumber());
-//		setStartLine(source.getStartLine());
-//		setSysId(source.getSysId());
-//		if (isLineInfoFlag()) {
-//			cloneModificationInfo(source);
-//		} else {
-//			clearModificationInfo();
-//		}
-//		setBufIndex(0);
-//	}
-
 	/** Save old parser and set new source buffer.
 	 * @param reader The reader.
 	 * @param pos Starting position of the file.
@@ -1389,8 +1361,6 @@ public class StringParser extends SReporter implements SParser {
 		final SParserSavedObject savedObject) {
 		pushSourceReader(reader, 0, null, sourceName, savedObject);
 	}
-
-////////////////////////////////////////////////////////////////////////////////
 
 	/** Set the parser to create detailed line positions. By default
 	 * the value of this is set to false.
@@ -1430,6 +1400,11 @@ public class StringParser extends SReporter implements SParser {
 			return -1;
 		}
 	}
+
+	/** Get length of source buffer.
+	 * @return length of source buffer.
+	 */
+	public int getBufLength() {return _endPos;}
 
 	@Override
 	/** Prepare character from the next position.

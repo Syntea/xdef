@@ -55,8 +55,31 @@ import java.lang.reflect.Modifier;
  * @author Vaclav Trojan
  */
 class CompileStatement extends XScriptParser implements CodeTable {
-	/** The limit for number of parameters of methods. */
-	static final int MAX_PARAMS = 255;
+	/** Operators level 1. */
+	private static final String OP_L1 =
+		new String(new char[]{MUL_SYM, DIV_SYM, MOD_SYM});
+	/** Operators level 2. */
+	private static final String OP_L2 =
+		new String(new char[]{PLUS_SYM, MINUS_SYM});
+	/** Operators level 3. */
+	private static final String OP_L3 =
+		new String(new char[]{EQ_SYM, NE_SYM, LE_SYM, GE_SYM,
+		 LT_SYM, GT_SYM, LSH_SYM, RSH_SYM, RRSH_SYM,});
+	/** Operators level 4. */
+	private static final String OP_L4 =
+		new String(new char[]{AND_SYM, AAND_SYM});
+	/** Operators level 5. */
+	private static final String OP_L5 =
+		new String(new char[]{OR_SYM, XOR_SYM, OOR_SYM});
+	/** Unary operators. */
+	private static final String OP_UNARY =
+		new String(new char[]{NEG_SYM, NOT_SYM, PLUS_SYM, MINUS_SYM});
+	/** Assignment operators */
+	private static final String OP_ASSGN =
+		new String(new char[]{ASSGN_SYM, LSH_EQ_SYM, RSH_EQ_SYM, RRSH_EQ_SYM,
+		 MUL_EQ_SYM, DIV_EQ_SYM, MOD_EQ_SYM, AND_EQ_SYM, PLUS_EQ_SYM,
+		 MINUS_EQ_SYM, OR_EQ_SYM, XOR_EQ_SYM});
+
 	/** Code generator */
 	final CompileCode _g;
 	/** Saved block information. */
@@ -85,16 +108,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param xmlVersion1 true if version of XML document is "1.1".
 	 * @param mode The compilation mode.
 	 * @param nsPrefixes array with name space prefixes.
-	 * @param macros The table of macros.
 	 * @param classLoader The Class loader (used for external objects).
 	 */
 	CompileStatement(final CompileCode g,
 		final boolean xmlVersion1,
 		final byte mode,
 		final Map<String, Integer> nsPrefixes,
-		final Map<String, XScriptMacro> macros,
 		final ClassLoader classLoader) {
-		super(xmlVersion1, macros);
+		super(xmlVersion1);
 		_g = g;
 		_g._nsPrefixes = nsPrefixes;
 		_g._sp = -1;

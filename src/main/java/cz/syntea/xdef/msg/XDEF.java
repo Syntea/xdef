@@ -143,11 +143,11 @@ public interface XDEF {
 	public static final long XDEF263 = 31159025729L;
 	/** If occurrence is specified it can't be changed by specification of 'empty'&amp;{#SYS000} */
 	public static final long XDEF264 = 31159025730L;
-	/** Node '&amp;{0}' from '&amp;{1}' NameSpace is not allowed here&amp;{#SYS000} */
+	/** Node '&amp;{0}' from the name space of X-definition is not allowed here&amp;{#SYS000} */
 	public static final long XDEF265 = 31159025731L;
 	/** Class &amp;{0} is not available&amp;{#SYS000} */
 	public static final long XDEF267 = 31159025732L;
-	/** X-definition '&amp;{0}' doesn't exist */
+	/** X-definition &amp;{0}{'}{' }does not exist */
 	public static final long XDEF269 = 31159025733L;
 	/** Can't compare different XDPool objects&amp;{#SYS000} */
 	public static final long XDEF281 = 31159025734L;
@@ -411,7 +411,7 @@ public interface XDEF {
 	public static final long XDEF484 = 31159025863L;
 	/** Variable type can't be 'void'&amp;{#SYS000} */
 	public static final long XDEF485 = 31159025864L;
-	/** Too many nested macros&amp;{#SYS000} */
+	/** Too many nested macro call&amp;{#SYS000} */
 	public static final long XDEF486 = 31159025865L;
 	/** Variable or method declaration expected&amp;{#SYS000} */
 	public static final long XDEF487 = 31159025866L;

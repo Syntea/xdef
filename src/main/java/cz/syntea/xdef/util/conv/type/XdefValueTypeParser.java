@@ -82,7 +82,7 @@ public final class XdefValueTypeParser {
 		if (type.length() == 0) {
 			throw new IllegalArgumentException("Given type string is empty");
 		}
-		_p = new XScriptParser(true, null);
+		_p = new XScriptParser(true);
 		_p.setSource(new SBuffer(type), null, XDConstants.XD20_ID);
 		_b = new StringBuffer();
 	}

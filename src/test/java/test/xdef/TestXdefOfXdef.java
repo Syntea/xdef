@@ -69,6 +69,30 @@ public final class TestXdefOfXdef extends Tester {
 			}
 		}
 		try { //check xdefinition of xdefinitions
+//			xml = genCollection(
+//"<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
+//"<macTest xd:script=\"finally {${text}; x();} options trimText;\"/>\n"+
+//"<xd:macro name=\"text\">\n"+
+//"outln('Macro call is:\\n{text}')</xd:macro>\n"+
+//"<xd:declaration>\n"+
+//"   void x() {${text};}\n"+
+//"</xd:declaration>\n"+
+//"</xd:def>");
+//			assertNoErrorwarnings(parse(xml), xml);
+//			assertNoErrorwarnings(parse(xml), genCollection(xml));
+//			XDPool xd = compile(xml);
+//			xd.createXDDocument("a").xparse("<macTest/>", null);
+//if (true) return;
+			xml = genCollection(
+"<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/2.0' name = 'a' root = 'foo'"+
+"   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
+"  <foo xd:script = \"finally out('f')\">\n"+
+"    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
+"  </foo>\n"+
+"</xd:def>");
+			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
+			
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
 "<xd:declaration>\n"+

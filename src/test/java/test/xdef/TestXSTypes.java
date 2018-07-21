@@ -433,7 +433,7 @@ public final class TestXSTypes extends Tester {
 		StringBuffer sb = new StringBuffer(
 "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
 "<xs:simpleType name='mytype'>\n");
-		XScriptParser p = new XScriptParser(false, null);
+		XScriptParser p = new XScriptParser(false);
 		p.setSource(new SBuffer(params), null, XDConstants.XD20_ID);
 		p.nextSymbol();
 		genSchemaType(p, "  ", sb);

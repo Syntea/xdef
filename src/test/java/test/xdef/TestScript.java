@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDDocument;
@@ -561,6 +562,10 @@ public final class TestScript extends Tester {
 		test("--12-32", "{setResult(!gMonthDay());}");
 		test("--02-30", "{setResult(!gMonthDay());}");
 		test("--0230", "{setResult(!gMonthDay());}");
+		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
+		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
+		setProperty(XDConstants.XDPROPERTY_SPECDATES,
+			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 		test("1999", "{setResult(gYear());}");
 		test("999", "{setResult(!gYear());}");
 		test("2999", "{setResult(!gYear());}");
@@ -605,6 +610,7 @@ public final class TestScript extends Tester {
 		test("01.03.1699", "{setResult(!xdatetime('dd.MM.yyyy'));}");
 		test("01.03.2999", "{setResult(!xdatetime('dd.MM.yyyy'));}");
 		test("01.03.1999", "{setResult(xdatetime('d.M.y'));}"); //???
+		resetProperties();
 		test("","setResult(myCheck(pow(5,6) + 1 + 5,2,3,'haha'));");
 		test("","setResult(myCheck5(pow(5,6) + 1 + 5,2,3,'haha') != 3"
 			+ "? false: true);");

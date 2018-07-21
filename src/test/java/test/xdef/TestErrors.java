@@ -149,6 +149,7 @@ public final class TestErrors extends Tester {
 " <SouborY1A\n"+											//03
 "    Davka=\"This is not script!\"\n"+						//04 <=
 "    ZeDne=\"required\" > \n"+								//05
+//"\n"+														//06
 " This is not script!\n"+									//06 <=
 " </SouborY1A>\n"+											//07
 "</xd:def>\n";												//08
@@ -1028,6 +1029,14 @@ public final class TestErrors extends Tester {
 				assertNull(reporter.getReport(), reporter.printToString());
 			}
 		} catch (Exception ex) { fail(ex); }
+		try {
+			compile(dataDir + "bla/blabla.xdef");
+			fail("Error not recognized");
+		} catch (Exception ex) {
+			if (ex.toString().indexOf("XDEF903") < 0) {
+				fail(ex);
+			}
+		}
 
 		resetTester();
 	}

@@ -18,6 +18,7 @@ import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
+import java.io.File;
 import java.io.StringWriter;
 
 /** Test of attribute "include" in header of XDefinition and of "xi:include"
@@ -38,17 +39,13 @@ public final class TestInclude extends Tester {
 		StringWriter sw;
 		String s;
 		Report report;
-		resetTester();
-		final String dataDir = getDataDir() + "test/";
-		try {
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-			xdef = dataDir + "TestInclude_5.xdef";
-			xp = compile(xdef);
-			xml = dataDir + "TestInclude_5.xml";
-			parse(xp, "wsdefinitions", xml);
-		} catch (Exception ex) {fail(ex);}
-		resetTester();
+		String dataDir = new File(getDataDir(), "test").getAbsolutePath()
+			.replace('\\', '/');
+		if (!dataDir.endsWith("/")) {
+			dataDir += '/';
+		}
+		setChkSyntax(true);
+		boolean chkSyntax = getChkSyntax();
 		try {
 			//xd:include in XDefinition header
 			xdef =
@@ -112,7 +109,6 @@ public final class TestInclude extends Tester {
 			}
 			assertEq("bf", strw.toString());
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
 		try {//xinclude
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "' name='test' root='a'>\n"+
@@ -122,8 +118,6 @@ public final class TestInclude extends Tester {
 "    </b>\n"+
 "  </a>\n"+
 "</xdef:def>";
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_1_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
@@ -153,7 +147,6 @@ public final class TestInclude extends Tester {
 				fail(ex);
 			}
 		}
-		resetTester();
 		try {// xinclude
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
@@ -165,8 +158,6 @@ public final class TestInclude extends Tester {
 "    </b>\n"+
 "  </a>\n"+
 "</xdef:def>";
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_3_1.xml";
 			parse(xp, "test", xml, reporter);
@@ -189,7 +180,6 @@ public final class TestInclude extends Tester {
 				fail(ex);
 			}
 		}
-//		resetTester();
 		try {
 			xdef =
 "<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
@@ -201,29 +191,24 @@ public final class TestInclude extends Tester {
 "    </b>\n"+
 "  </a>\n"+
 "</xdef:def>";
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_4_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
 				parse(xp, "test", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
 		try {
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
+			setChkSyntax(false);
 			xdef = dataDir + "TestInclude_5.xdef";
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_5.xml";
 			parse(xp, "wsdefinitions", xml);
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
+		setChkSyntax(chkSyntax);
 		try {
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xdef = dataDir + "TestInclude_6.xdef";
 			try {
+				setChkSyntax(false);
 				compile(xdef);
 				fail("Exception not thrown");
 			} catch (SRuntimeException ex) {
@@ -234,12 +219,11 @@ public final class TestInclude extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
+		setChkSyntax(chkSyntax);
 		try {// once more with ignoreEntities
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xdef = dataDir + "TestInclude_7.xdef";
 			try {
+				setChkSyntax(false);
 				compile(xdef);
 				fail("Exception not thrown");
 			} catch (SRuntimeException ex) {
@@ -250,12 +234,10 @@ public final class TestInclude extends Tester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
+		setChkSyntax(chkSyntax);
 		try {
 			setProperty(XDConstants.XDPROPERTY_VALIDATE,
 				XDConstants.XDPROPERTYVALUE_VALIDATE_TRUE);
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(dataDir + "TestInclude_8.xdef");
 			xml = dataDir + "TestInclude_8.xml";
 			parse(xp, "A", xml, reporter);
@@ -264,7 +246,8 @@ public final class TestInclude extends Tester {
 			parse(xp, "A", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		resetTester();
+		setProperty(XDConstants.XDPROPERTY_VALIDATE,
+				XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
 		try {
 			//test Include default (not allowed)
 			xdef =
@@ -285,11 +268,8 @@ public final class TestInclude extends Tester {
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			resetTester();
 			xp = compile(xdef);
 			 // from program
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
@@ -299,8 +279,6 @@ public final class TestInclude extends Tester {
 				reporter.printToString().indexOf("XML309") > 0);
 			xdef = dataDir + "TestInclude_9_1.xdef";
 			// not allowed from properties
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
 			xp = compile(xdef);
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errors() &&
@@ -312,11 +290,8 @@ public final class TestInclude extends Tester {
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			resetTester();
 			xp = compile(xdef);
 			 // from program
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 //			xp.setResolveIncludes(true); //resove
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -326,14 +301,6 @@ public final class TestInclude extends Tester {
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errors() &&
 				reporter.printToString().indexOf("XML309") > 0);
-			try {
-				compile(dataDir + "bla/blabla.xdef");
-				fail("Error not recognized");
-			} catch (Exception ex) {
-				if (ex.toString().indexOf("XDEF903") < 0) {
-					fail(ex);
-				}
-			}
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
@@ -345,5 +312,4 @@ public final class TestInclude extends Tester {
 	public static void main(String... args) {
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

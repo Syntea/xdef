@@ -154,8 +154,13 @@ public final class TestTypes extends Tester {
 			xd = compile(xdef).createXDDocument();
 			xd.xparse("<a/>", reporter);
 			assertNoErrorwarnings(reporter);
-			assertEq("nullnullnullnullnull",
-				xd.getVariable("t").toString());
+			assertEq("nullnullnullnullnull", xd.getVariable("t").toString());
+
+///////////// Check date limits ////////////////////////////////////////////////
+			setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
+			setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
+			setProperty(XDConstants.XDPROPERTY_SPECDATES,
+				"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 			xdef =  //test limits in datetime
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<a>\n"+
@@ -183,11 +188,9 @@ public final class TestTypes extends Tester {
 			assertEq("<a><b a=\"31.12.3000\" b=\"30001231100000\"/></a>",
 				parse(xp, null, xml, reporter));
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
-			setProperty(XDConstants.XDPROPERTY_MINYEAR,
-				String.valueOf(Integer.MIN_VALUE));
-			setProperty(XDConstants.XDPROPERTY_MAXYEAR,
-				String.valueOf(Integer.MAX_VALUE));
-			setProperty(XDConstants.XDPROPERTY_SPECDATES, "");
+			resetProperties();
+////////////////////////////////////////////////////////////////////////////////
+
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.checkDateLegal(false);

@@ -634,7 +634,7 @@ public class XDParsedScript {
 	public static final XDParsedScript getXdScript(final String script,
 		final String defName,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser(false, null); //no macros!
+		XScriptParser sp = new XScriptParser(false);
 		sp.setSource(new SBuffer(script), defName, XDConstants.XD20_ID);
 		return new XDParsedScript(sp, isValue);
 	}

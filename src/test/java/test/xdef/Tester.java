@@ -69,33 +69,44 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		_genObj = _debugMode;
 	}
 
+	public final void resetProperties() {
+		setProperty(XDConstants.XDPROPERTY_DOCTYPE,
+			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
+		if (_debugMode) {
+			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
+				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
+		} else {
+			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
+				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE);
+		}
+		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
+			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
+		setProperty(XDConstants.XDPROPERTY_ENV_GET,
+			XDConstants.XDPROPERTYVALUE_ENV_GET_TRUE);
+		setProperty(XDConstants.XDPROPERTY_WARNINGS,
+			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+		setProperty(XDConstants.XDPROPERTY_DEBUG,
+			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+		setProperty(XDConstants.XDPROPERTY_DEBUG_OUT, null);
+		setProperty(XDConstants.XDPROPERTY_DEBUG_IN, null);
+		setProperty(XDConstants.XDPROPERTY_DISPLAY,
+			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
+		setProperty(XDConstants.XDPROPERTY_VALIDATE,
+			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
+		setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
+		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
+		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
+		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
+			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
+	}
+
 	public final void resetTester() {
 		_props.clear();
 		_chkSyntax = _debugMode;
 		_genObj = _debugMode;
-		setProperty(XDConstants.XDPROPERTY_DISPLAY,
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		setProperty(XDConstants.XDPROPERTY_DEBUG,
-			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
-		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
-			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
-//		int yr = new java.util.GregorianCalendar().get(
-//			java.util.GregorianCalendar.YEAR);
-//		setProperty(XDConstants.XDPROPERTY_MINYEAR,	String.valueOf(yr - 200));
-//		setProperty(XDConstants.XDPROPERTY_MAXYEAR,	String.valueOf(yr + 200));
-		setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
-		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-		setProperty(XDConstants.XDPROPERTY_SPECDATES,
-			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-		if (_debugMode) {
-			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
-				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
-		}
 		setChkSyntax(false);
+		resetProperties();
 	}
 
 	public final Properties getProperties() {return _props;}
