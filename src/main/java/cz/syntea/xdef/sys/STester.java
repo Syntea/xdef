@@ -853,31 +853,37 @@ public abstract class STester {
 		} else {
 			i = s.indexOf("/build/classes/" + cname);
 			if (i < 0) {
-				i = s.indexOf("/temp/classes/" + cname);
+				i = s.indexOf("/target/test-classes/" + cname);
 				if (i < 0) {
-					i = s.indexOf("/classes/" + cname);
+					i = s.indexOf("/temp/classes/" + cname);
 					if (i < 0) {
-						_timeStamp = System.currentTimeMillis();
-						return; //no homeDir, dataDir, sourceDir
+						i = s.indexOf("/classes/" + cname);
+						if (i < 0) {
+							_timeStamp = System.currentTimeMillis();
+							return; //no homeDir, dataDir, sourceDir
+						}
 					}
 				}
 			}
 			s = s.substring(0, i + 1);
 			_sourceName = s + "src/"+ cname + ".java";
 		}
-		f = new File(_sourceName);
 		_homeDir = s;
-		if (!f.exists()) {
+		if (!new File(_sourceName).exists()) {
 			_sourceName = s + "test/" + cname + ".java";
-			f = new File(_sourceName);
-			if (!f.exists()) {
+			if (!new File(_sourceName).exists()) {
 				if (s.endsWith("/build/test/")) {
 					_homeDir = s.substring(0, s.length() - 11);
 					s = _homeDir + "test/";
+					_sourceName = s + cname + ".java";
+				} else {
+					_sourceName = s + "src/test/java/" + cname + ".java";
+					if (!new File(_sourceName).exists()) {
+						_timeStamp = System.currentTimeMillis();
+						return;
+					}					
 				}
-				_sourceName = s + cname + ".java";
-				f = new File(_sourceName);
-				if (!f.exists()) {
+				if (!new File(_sourceName).exists()) {
 					_timeStamp = System.currentTimeMillis();
 					return;
 				}

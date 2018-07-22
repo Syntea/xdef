@@ -1,7 +1,7 @@
 /*
  * Copyright 2010 Syntea software group a.s. All rights reserved.
  *
- * File: VerboseTest.java, created 2010-03-27.
+ * File: FullTestAll.java, created 2010-03-27.
  *
  * This file may be used, copied, modified and distributed only in accordance
  * with the terms of the limited licence contained in the accompanying
@@ -17,7 +17,7 @@ import test.xdef.Tester;
 /** Execute all tests verbose.
  * @author Vaclav Trojan
  */
-public class VerboseTest {
+public class FullTestAll {
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
 		Tester.setFulltestMode(true);
