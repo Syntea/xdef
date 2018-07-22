@@ -857,7 +857,7 @@ public final class DefContainer extends XDValueAbstract
 		if (n == null || n.length() == 0) {
 			XDValue v;
 			if (getXDNamedItemsNumber() == 1 &&	getXDItemsNumber() <= 1
-				&& StringParser.chkXMLName(_map[0].getName(), false)
+				&& StringParser.chkXMLName(_map[0].getName(), (byte) 10)
 				&& ((v = _map[0].getValue()) == null || v.isNull()
 				|| v.getItemId() == XD_CONTAINER)) {
 				c = v == null || v.isNull() ? new DefContainer()

@@ -660,10 +660,10 @@ public final class Test000 extends Tester {
 			assertEq(el, dataDir + "Test000_06_out.xml");
 			assertNoErrors(reporter, dataDir + "Test000_06_out.xml");
 			//Igor
-//			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef");
-//			xp = XDFactory.compileXD(null, files, getClass());
-//			parse(xp, "SoapRequestB1", dataDir + "Test000_08.xml", reporter);
-//			assertErrors(reporter);
+			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef");
+			xp = XDFactory.compileXD(null, files, getClass());
+			parse(xp, "SoapRequestB1", dataDir + "Test000_08.xml", reporter);
+			assertErrors(reporter);
 			//Igor2
 			_myError = 0;
 			xdef = dataDir + "Test000_07.xdef";

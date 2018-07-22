@@ -81,7 +81,7 @@ public class TestAll {
 			new TestXmlWriter(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef", Tester.getDebugMode(), args);
+			tests, "package xdef", Tester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

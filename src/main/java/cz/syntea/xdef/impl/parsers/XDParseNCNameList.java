@@ -116,7 +116,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 	}
 
 	XDValue parse(final XXNode xnode, final StringParser parser) {
-		if (!parser.isNCName(false)) {
+		if (!parser.isNCName((byte) 10)) {
 			return null;
 		}
 		return new DefString(parser.getParsedString());

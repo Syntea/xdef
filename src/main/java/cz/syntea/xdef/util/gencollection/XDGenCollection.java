@@ -307,12 +307,12 @@ public class XDGenCollection {
 			sourcePath = "";
 		} else {
 			String file = "file:/";
-			sourcePath = source.startsWith(file) 
-				? source.substring(file.length()): source;	
+			sourcePath = source.startsWith(file)
+				? source.substring(file.length()): source;
 			File f = new File(sourcePath);
 			sourcePath = f.getParentFile().getAbsolutePath();
 			sourcePath += File.separator;
-		}		
+		}
 		String uri = getXDNodeNS(root);
 		if ("collection".equals(root.getLocalName())
 			&& (KXmlConstants.XDEF20_NS_URI.equals(uri)
@@ -531,7 +531,8 @@ public class XDGenCollection {
 		final String defName,
 		final HashMap<String, XScriptMacro> macros) {
 		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
-			"1.1".equals(el.getOwnerDocument().getXmlVersion()),
+			"1.1".equals(el.getOwnerDocument().getXmlVersion())
+				? (byte) 11 : (byte) 10,
 			macros,
 			new ArrayReporter());
 		NodeList nl = el.getChildNodes();
@@ -577,7 +578,7 @@ public class XDGenCollection {
 		final String defName,
 		final boolean removeActions,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser(false);
+		XScriptParser sp = new XScriptParser((byte) 10);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, XDConstants.XD20_ID);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);

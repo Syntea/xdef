@@ -105,17 +105,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Creates a new instance of CommandCompiler
 	 * @param g The code generator.
-	 * @param xmlVersion1 true if version of XML document is "1.1".
+	 * @param xmlVersion 10 -> ""1.0, 11 -> "1.1".
 	 * @param mode The compilation mode.
 	 * @param nsPrefixes array with name space prefixes.
 	 * @param classLoader The Class loader (used for external objects).
 	 */
 	CompileStatement(final CompileCode g,
-		final boolean xmlVersion1,
+		final byte xmlVersion,
 		final byte mode,
 		final Map<String, Integer> nsPrefixes,
 		final ClassLoader classLoader) {
-		super(xmlVersion1);
+		super(xmlVersion);
 		_g = g;
 		_g._nsPrefixes = nsPrefixes;
 		_g._sp = -1;
@@ -193,7 +193,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 */
 	private boolean namedValueConstructor(final ParamList plist) {
 		String name;
-		if (!isXMLName(_xmlVersion1)) {
+		if (!isXMLName(_xmlVersion)) {
 			errorAndSkip(XDEF.XDEF106, //Keyword parameter expected
 				new String(new char[] {RPAR_SYM,
 				SEMICOLON_SYM, BEG_SYM, END_SYM, COMMA_SYM, ASSGN_SYM}));
@@ -2799,7 +2799,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				_g._spMax = 0;
 				short paramType;
 				if (_sym == MOD_SYM) { // key paramater
-					if (isXMLName(false)) {
+					if (isXMLName((byte) 10)) {
 						if (keyParams == null) {
 							keyParams = new DefContainer();
 						}

@@ -55,7 +55,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 //	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
 	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
-	public static boolean _debugMode = false;
+	public static boolean _fulltestMode = false;
 
 	private boolean _genObj = false;
 	private final Properties _props = new Properties();
@@ -65,14 +65,14 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	public Tester() {
 		super();
 		resetTester();
-		_chkSyntax = _debugMode;
-		_genObj = _debugMode;
+		_chkSyntax = _fulltestMode;
+		_genObj = _fulltestMode;
 	}
 
 	public final void resetProperties() {
 		setProperty(XDConstants.XDPROPERTY_DOCTYPE,
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
-		if (_debugMode) {
+		if (_fulltestMode) {
 			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
 				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
 		} else {
@@ -103,8 +103,8 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	public final void resetTester() {
 		_props.clear();
-		_chkSyntax = _debugMode;
-		_genObj = _debugMode;
+		_chkSyntax = _fulltestMode;
+		_genObj = _fulltestMode;
 		setChkSyntax(false);
 		resetProperties();
 	}
@@ -115,9 +115,11 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	public final boolean getChkSyntax() {return _chkSyntax;}
 
-	public final static boolean getDebugMode() {return _debugMode;}
+	public final static boolean getFulltestMode() {return _fulltestMode;}
 
-	public final static void setDebugMode(boolean debug) {_debugMode = debug;}
+	public final static void setFulltestMode(boolean fulltest) {
+		_fulltestMode = fulltest;
+	}
 
 	public final void setProperty(final String key, final String value) {
 		if (value == null) {

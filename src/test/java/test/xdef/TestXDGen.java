@@ -16,9 +16,9 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.util.GenXDefinition;
 import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportWriter;
+import cz.syntea.xdef.util.GenXDefinition;
 
 /** Generation of XDefinition from XML
  * @author Vaclav Trojan

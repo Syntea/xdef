@@ -20,7 +20,7 @@ import test.xdef.Tester;
 public class VerboseTest {
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		Tester.setDebugMode(true);
+		Tester.setFulltestMode(true);
 		test.common.TestAll.runTests(args);
 		test.xdef.TestAll.runTests(args);
 		test.xdutils.TestAll.runTests(args);

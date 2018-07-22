@@ -437,7 +437,7 @@ public class JSONUtil implements KXmlConstants {
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
 		sb.append(isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, false)
+			|| StringParser.getXmlCharType(ch, (byte) 10)
 				!= StringParser.XML_CHAR_NAME_START ? toXmlChar(ch) : ch);
 		boolean firstcolon = true;
 		for (int i = 1; i < s.length(); i++) {
@@ -447,7 +447,7 @@ public class JSONUtil implements KXmlConstants {
 			} else if (ch == ':' && firstcolon) {
 				firstcolon = false;
 				sb.append(':');
-			} else if (StringParser.getXmlCharType(ch, false) >
+			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
 				StringParser.XML_CHAR_COLON) {
 				sb.append(ch);
 			} else {

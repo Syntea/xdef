@@ -210,8 +210,8 @@ public class XScriptParser extends StringParser
 	public char _sym;
 	/** Parsed unary minus. */
 	public boolean _unaryMinus;
-	/** True if and only if version of XML document is 1.0.*/
-	public boolean _xmlVersion1;
+	/** XML version (10 -> "1.0", 11 -> "1.1" )*/
+	public byte _xmlVersion;
 	/** Saved position of last symbol (for error reports) */
 	private SPosition _lastSPos;
 
@@ -367,12 +367,12 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Creates a new instance of ScriptParser.
-	 * @param xmlVersion1 true if version of XML document is "1.1".
+	 * @param xmlVersion 10 -> "1.0", 11 -> "1.1".
 	 */
-	public XScriptParser(final boolean xmlVersion1) {
+	public XScriptParser(final byte xmlVersion) {
 		super();
 		super.setLineInfoFlag(true); // generate line information
-		_xmlVersion1 = xmlVersion1;
+		_xmlVersion = xmlVersion;
 		_actDefName = "";
 //		_lastPos=0;idName=null;_parsedValue=null;_unaryMinus=false;// Java makes
 	}
@@ -547,7 +547,7 @@ public class XScriptParser extends StringParser
 				}
 				return _sym = ch;
 			case '@': {
-				if (!isXMLName(_xmlVersion1)) {
+				if (!isXMLName(_xmlVersion)) {
 					error(XDEF.XDEF402); //Name of attribute expected
 				}
 				_idName = getParsedString();
@@ -608,7 +608,7 @@ public class XScriptParser extends StringParser
 				if (!(wasDollar = ch == '$')) {
 					setBufIndex(getIndex() - 1);
 				}
-				if (!isXMLName(_xmlVersion1)) {
+				if (!isXMLName(_xmlVersion)) {
 					return _sym = UNDEF_SYM;
 				}
 				String s =
@@ -739,7 +739,7 @@ public class XScriptParser extends StringParser
 		String result = getParsedString();
 		int pos = getIndex();
 		if (isToken("/@")) {
-			if (!isXMLName(true)) {
+			if (!isXMLName(_xmlVersion)) {
 				error(XDEF.XDEF328);//Reference specification expected
 				return false;
 			}
@@ -767,7 +767,7 @@ public class XScriptParser extends StringParser
 		String xdName = _actDefName;
 		if (isChar('*') && !isChar('#')) {
 			modelName = "*";
-		} else if (isXMLName(true)) {
+		} else if (isXMLName(_xmlVersion)) {
 			modelName = getParsedString();
 		} else {
 			modelName = "";
@@ -776,10 +776,10 @@ public class XScriptParser extends StringParser
 			xdName = modelName;
 			if (isChar('*') && !isChar('/')) {
 				modelName = "*";
-			} else if (isXMLName(true)) {
+			} else if (isXMLName(_xmlVersion)) {
 				modelName = getParsedString();
 				if (isChar('!')) {
-					if (isXMLName(true)) {
+					if (isXMLName(_xmlVersion)) {
 						modelName += '!' + getParsedString();
 					}
 				}
@@ -791,7 +791,7 @@ public class XScriptParser extends StringParser
 			return false;
 		}
 		if (isChar('!')) {
-			if (isXMLName(true)) {
+			if (isXMLName(_xmlVersion)) {
 				modelName += '!' + getParsedString();
 			} else {
 				error(XDEF.XDEF104); //Name of model expected
@@ -810,7 +810,7 @@ public class XScriptParser extends StringParser
 					pos = getIndex();
 				}
 			}
-			if ((wasText = isToken("$text")) || isXMLName(true)
+			if ((wasText = isToken("$text")) || isXMLName(_xmlVersion)
 				|| isOneOfTokens("$mixed", "$choice", "$sequence") >= 0) {
 				if (isChar('[')) {
 					if (isInteger()&& isChar(']')) {
@@ -826,7 +826,7 @@ public class XScriptParser extends StringParser
 					continue;
 				}
 			} else if (isChar('@')) {
-				if (isXMLName(true)) {
+				if (isXMLName(_xmlVersion)) {
 					break;
 				}
 			}

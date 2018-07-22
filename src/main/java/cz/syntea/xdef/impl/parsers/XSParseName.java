@@ -33,7 +33,7 @@ public class XSParseName extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isXMLName(false)) {
+		if (!parser.isXMLName((byte) 10)) {
 			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
 			return;
 		}

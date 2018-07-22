@@ -61,15 +61,13 @@ public class SReporter extends SPosition {
 	/** Get report writer.
 	 * @return Report writer associated with this reporter or <tt>null</tt>.
 	 */
-	public final ReportWriter getReportWriter() {
-		return _reportWriter;
-	}
+	public final ReportWriter getReportWriter() {return _reportWriter;}
 
 	/** Set report writer.
-	 * @param reportWriter SReporter to be associated with this generator.
+	 * @param reporter SReporter to be associated with this generator.
 	 */
-	public final void setReportWriter(final ReportWriter reportWriter){
-		_reportWriter = reportWriter;
+	public final void setReportWriter(final ReportWriter reporter) {
+		_reportWriter = reporter;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

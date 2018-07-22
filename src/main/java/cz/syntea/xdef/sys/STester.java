@@ -271,7 +271,17 @@ public abstract class STester {
 	 * is finished).
 	 * @param info the string with result information.
 	 */
-	public final void setResultInfo(final String info) {_resultInfo = info;}
+	public final void setResultInfo(final String info) {
+		if (info != null && !info.isEmpty())
+			if (_resultInfo == null || _resultInfo.isEmpty()) {
+				_resultInfo = info;
+			} else {
+				if (!_resultInfo.endsWith("\n")) {
+					_resultInfo += "\n";
+				}
+				_resultInfo += info;
+			}
+	}
 
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
@@ -836,12 +846,12 @@ public abstract class STester {
 			.getResource(_className.replace('.', '/') + ".class");
 		s = new File( url.getFile()).getAbsolutePath().replace('\\', '/');
 		String cname = _className.replace('.', '/');
-		i = s.indexOf("/target/web/WEB-INF/classes/" + cname);
+		i = s.indexOf("/build/web/WEB-INF/classes/" + cname);
 		if (i >= 0) {
 			s = s.substring(0, i + 1);
 			_sourceName = s + "src/java/" + cname + ".java";
 		} else {
-			i = s.indexOf("/target/test-classes/" + cname);
+			i = s.indexOf("/build/classes/" + cname);
 			if (i < 0) {
 				i = s.indexOf("/temp/classes/" + cname);
 				if (i < 0) {
@@ -853,7 +863,7 @@ public abstract class STester {
 				}
 			}
 			s = s.substring(0, i + 1);
-			_sourceName = s + "src/test/java/"+ cname + ".java";
+			_sourceName = s + "src/"+ cname + ".java";
 		}
 		f = new File(_sourceName);
 		_homeDir = s;
@@ -861,7 +871,7 @@ public abstract class STester {
 			_sourceName = s + "test/" + cname + ".java";
 			f = new File(_sourceName);
 			if (!f.exists()) {
-				if (s.endsWith("/target/test/")) {
+				if (s.endsWith("/build/test/")) {
 					_homeDir = s.substring(0, s.length() - 11);
 					s = _homeDir + "test/";
 				}

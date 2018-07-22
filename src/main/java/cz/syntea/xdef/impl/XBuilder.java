@@ -36,9 +36,9 @@ import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.impl.compile.CompileXdefPool;
+import cz.syntea.xdef.impl.compile.CompileXDPool;
 //import cz.syntea.xd.impl.compile.CompileParser;
-//import cz.syntea.xd.impl.compile.CompileXdefPool;
+//import cz.syntea.xd.impl.compile.CompileXDPool;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -183,7 +183,7 @@ public final class XBuilder implements XDBuilder {
 			throw new SRuntimeException(XDEF.XDEF901);
 		}
 		_xp = null;
-		CompileXdefPool p = result._compiler;
+		CompileXDPool p = result._compiler;
 		result._compiler = null;
 		if (result._reporter == null) {
 			p.compileXPool(result);

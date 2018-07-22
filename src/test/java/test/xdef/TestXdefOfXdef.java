@@ -92,7 +92,7 @@ public final class TestXdefOfXdef extends Tester {
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			
+
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -251,7 +251,7 @@ public final class TestXdefOfXdef extends Tester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-			if (getDebugMode()) {
+			if (getFulltestMode()) {
 //				xml = genCollection(
 //					dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
 //				assertNoErrorwarnings(parse(xml), xml);

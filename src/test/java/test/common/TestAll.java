@@ -76,7 +76,7 @@ public class TestAll {
 			new TestXdScript(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package common", Tester.getDebugMode(), args);
+			tests, "package common", Tester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

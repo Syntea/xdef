@@ -140,8 +140,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		xb.setSource(
 			"<xd:collection xmlns:xd='"+KXmlConstants.XDEF31_NS_URI+"'/>");
 		XPool xp = xb.build();
-		XDefinition xd =
-			new XDefinition("#", xp, KXmlConstants.XDEF31_NS_URI, null);
+		XDefinition xd = new XDefinition("#",
+			xp, KXmlConstants.XDEF31_NS_URI, null, (byte) 20);
 		xp._xdefs.put("#", xd);
 		//create dummy X-definition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);

@@ -33,7 +33,7 @@ public class XSParseNMTOKEN extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		String token = p.nextToken();
-		if (!StringParser.chkNMToken(token, false)) {
+		if (!StringParser.chkNMToken(token, (byte) 10)) {
 			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
 			return;
 		}

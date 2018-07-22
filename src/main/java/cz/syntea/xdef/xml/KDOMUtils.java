@@ -1593,8 +1593,10 @@ public class KDOMUtils {
 		} else {
 			m = n;
 		}
-		boolean xmlVersion1 = n.getOwnerDocument() == null
-			? false : "1.1".equals(n.getOwnerDocument().getXmlVersion());
+		byte xmlVersion = n.getOwnerDocument() == null
+			? (byte) 10
+			: "1.1".equals(n.getOwnerDocument().getXmlVersion())
+				? (byte) 11 : 10;
 		final StringParser p = new StringParser();
 		p.setSourceBuffer(xpos);
 		if (p.isChar('/')) {
@@ -1605,7 +1607,7 @@ public class KDOMUtils {
 				}
 				m = x;
 			}
-			if (p.isXMLName(xmlVersion1)) {
+			if (p.isXMLName(xmlVersion)) {
 				String name = p.getParsedString();
 				if (p.isChar('[') && p.isInteger() && p.isChar(']')) {
 					if (Integer.parseInt(p.getParsedString()) != 1) {
@@ -1634,16 +1636,16 @@ public class KDOMUtils {
 				}
 			}
 		}
-		return resolveXPosition(m, p, context, xmlVersion1);
+		return resolveXPosition(m, p, context, xmlVersion);
 	}
 
 	private static Node resolveXPosition(final Node n,
 		final StringParser p,
 		final NamespaceContext context,
-		final boolean xmlVersion1) {
+		final byte xmlVersion) {
 		if (p.isChar('/')) {
 			final boolean isAttr = p.isChar('@');
-			if (p.isXMLName(xmlVersion1)) {
+			if (p.isXMLName(xmlVersion)) {
 				String name = p.getParsedString();
 				if (isAttr) {
 					if (n.getNodeType() != Node.ELEMENT_NODE) {
@@ -1685,7 +1687,7 @@ public class KDOMUtils {
 						final short type = m.getNodeType();
 						if ((type == Node.TEXT_NODE ||
 							type == Node.CDATA_SECTION_NODE) && --i == 0) {
-							return resolveXPosition(m, p, context, xmlVersion1);
+							return resolveXPosition(m, p, context, xmlVersion);
 						}
 					} else if (m.getNodeType() == Node.ELEMENT_NODE) {
 						int ndx;
@@ -1696,7 +1698,7 @@ public class KDOMUtils {
 							}
 							if (name.equals(m.getNodeName()) && --i == 0) {
 								return resolveXPosition(
-									m, p, context, xmlVersion1);
+									m, p, context, xmlVersion);
 							}
 						} else {
 							final String u =
@@ -1709,13 +1711,13 @@ public class KDOMUtils {
 								name.substring(ndx + 1).equals(localName)
 								&& u.equals(m.getNamespaceURI()) && --i == 0) {
 									return resolveXPosition(
-										m, p, context, xmlVersion1);
+										m, p, context, xmlVersion);
 							}
 						}
 					}
 				}
 			}
-		} else if (p.isChar('@') && p.isXMLName(xmlVersion1)) {
+		} else if (p.isChar('@') && p.isXMLName(xmlVersion)) {
 			if (n.getNodeType() != Node.ELEMENT_NODE) {
 				return null;
 			}

@@ -72,7 +72,7 @@ public class TestReport extends STester {
 			assertEq(s, "E XML075: XML chyba");
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
-		String dataDir = getHomeDir() + "src/test/java/test/common/sys/";
+		String dataDir = getHomeDir() + "src/test/common/sys/";
 		if (!new File(dataDir + "ABC_ces.properties").exists()) {
 			dataDir = getHomeDir() + "test/test/common/sys/";
 		}
@@ -104,9 +104,6 @@ public class TestReport extends STester {
 			reporter.clear();
 			SManager.setProperty(XDConstants.REPORTTABLE_FILE + "ABC",
 				dataDir + "ABC_*.properties");
-//			SManager.addReports(readProperties(dataDir + "ABC_eng.properties"));
-//			SManager.addReports(readProperties(dataDir + "ABC_ces.properties"));
-//			SManager.addReports(readProperties(dataDir + "ABC_deu.properties"));
 			s = Report.getReportText("ABC_LANGUAGE", "deu");
 			assertEq("deutsch", s);
 			s = Report.getReportText("ABC_DESCRIPTION", "deu");

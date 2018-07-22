@@ -1,5 +1,5 @@
 /*
- * File: CompileXdefPool.java
+ * File: CompileXDPool.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -57,17 +57,25 @@ import cz.syntea.xdef.impl.XPool;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.xml.KXmlConstants;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /** Provide compiling of X-definitions from source data.
  * @author Vaclav Trojan
  */
-public final class CompileXdefPool extends PreCompiler
+public final class CompileXDPool extends PreCompiler
 	implements CodeTable, XDValueID {
-
-////////////////////////////////////////////////////////////////////////////////
 
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
+	/** Table of definitions */
+	private final Map<String, XDefinition> _xdefs;
+	/** Actual node stack. */
+	private final ArrayList<XNode> _nodeList;
+	/** Array of component sources. */
+	final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
+	/** The script compiler. */
+	private final CompileXScript _scriptCompiler;
 	/** External classes. */
 	private Class<?>[] _extClasses;
 
@@ -77,15 +85,28 @@ public final class CompileXdefPool extends PreCompiler
 	 * @param extClasses The external classes.
 	 * @param xdefs Table of X-definitions.
 	 */
-	public CompileXdefPool(final XDPool xp,
+	public CompileXDPool(final XDPool xp,
 		final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final Map<String, XDefinition> xdefs) {
-		super(reporter, extClasses, xdefs,
+		super(reporter,
+			extClasses,
 			xp.getDisplayMode(),
 			xp.isDebugMode(),
 			xp.isIgnoreUnresolvedExternals());
+		_xdefs = xdefs;
+		_nodeList = new ArrayList<XNode>();
+		ClassLoader classLoader =Thread.currentThread().getContextClassLoader();
+		_codeGenerator._extClasses = extClasses;
+		_scriptCompiler = new CompileXScript(_codeGenerator,
+			(byte) 10, _predefinedNSPrefixes, classLoader);
+		_scriptCompiler.setReportWriter(reporter);
 	}
+
+	/** Get precompiled X-definitions (list of PNodes).
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPrecompiledXdefs() {return _xdefNodes;}
 
 	/** Get external classes used in x-definition methods.
 	 * @return array of objects.
@@ -361,8 +382,9 @@ public final class CompileXdefPool extends PreCompiler
 	private void compileMehodsAndClassesAttrs() {
 		for (int i = 0; i < _xdefNames.size(); i++) {
 			PNode pnode = _xdefNodes.get(i);
-			SBuffer sval;
-			if ((sval = pnode.getXdefAttr("methods", false, true)) != null
+			SBuffer sval =
+				pnode.getXdefAttr("methods", false, true, getReportWriter());
+			if (sval!= null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
 					reportDeprecated(sval,
@@ -376,7 +398,8 @@ public final class CompileXdefPool extends PreCompiler
 				_scriptCompiler.compileExtMethods(
 					_scriptCompiler._actDefName, false);
 			}
-			if ((sval = pnode.getXdefAttr("classes", false, true)) != null
+			sval = pnode.getXdefAttr("classes", false, true, getReportWriter());
+			if (sval != null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
 					reportDeprecated(sval,
@@ -413,7 +436,9 @@ public final class CompileXdefPool extends PreCompiler
 					_codeGenerator.setExternals(exts);
 				}
 			}
-			if ((sval = pnode.getXdefAttr("component", false, true)) != null) {
+			sval =
+				pnode.getXdefAttr("component", false, true, getReportWriter());
+			if (sval != null) {
 				_scriptCompiler.setSource(sval,
 					_xdefNames.get(i),
 					pnode._xdVersion,
@@ -428,7 +453,8 @@ public final class CompileXdefPool extends PreCompiler
 	 * @return true if the attribute "scope" is "local".
 	 */
 	private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
-		SBuffer scope = nodei.getXdefAttr("scope", false, removeAttr);
+		SBuffer scope =
+			nodei.getXdefAttr("scope", false, removeAttr, getReportWriter());
 		boolean local = false;
 		if (scope != null) {
 			String s = scope.getString();
@@ -437,7 +463,7 @@ public final class CompileXdefPool extends PreCompiler
 				//Attribute "scope" in selfstanding declaration section
 				//can be only "global"
 				error(scope, XDEF.XDEF221);
-				nodei.getXdefAttr("scope", false, true);
+				nodei.getXdefAttr("scope", false, true, getReportWriter());
 				return false;
 			} else if (!local  && !"global".equals(s)) {
 				//Incorrect attribute "scope" in declaration section: &{0}
@@ -542,11 +568,11 @@ public final class CompileXdefPool extends PreCompiler
 			for (PNode nodei: thesaurus) {
 				_scriptCompiler.compileThesaurus(nodei._value,
 					nodei._xdef == null ? null : nodei._xdef.getName(),
-					nodei.getXdefAttr("language", true, true),
-					nodei.getXdefAttr("default", false, true),
+					nodei.getXdefAttr("language", true, true,getReportWriter()),
+					nodei.getXdefAttr("default", false, true,getReportWriter()),
 					xp,
 					languages);
-				reportNotAllowedAttrs(nodei);
+				reportNotAllowedAttrs(nodei, getReportWriter());
 			}
 			if (!languages .isEmpty()) {
 				String[] langs = new String[languages .size()];
@@ -636,12 +662,13 @@ public final class CompileXdefPool extends PreCompiler
 
 	private void compileBNFGrammar(final PNode nodei, final boolean remove) {
 		String defName = nodei._xdef == null ? null : nodei._xdef.getName();
-		SBuffer sName = nodei.getXdefAttr("name", true, remove);
+		SBuffer sName =
+			nodei.getXdefAttr("name", true, remove, getReportWriter());
 		if (sName == null) {
 			return; //required name is missing.
 		}
 		_scriptCompiler.compileBNFGrammar(sName,
-			nodei.getXdefAttr("extends", false, remove),
+			nodei.getXdefAttr("extends", false, remove, getReportWriter()),
 			nodei._value,
 			defName,
 			isLocalScope(nodei, remove),
@@ -664,7 +691,7 @@ public final class CompileXdefPool extends PreCompiler
 					} else { //declarations
 						compileDeclaration(nodei, true);
 					}
-					reportNotAllowedAttrs(nodei);
+					reportNotAllowedAttrs(nodei, getReportWriter());
 				}
 			}
 		}
@@ -709,7 +736,7 @@ public final class CompileXdefPool extends PreCompiler
 					"thesaurus".equals(nodeName) ||
 					"component".equals(nodeName) ||
 					"BNFGrammar".equals(nodeName)) {
-					chkNestedElements(nodei);
+					chkNestedElements(nodei, getReportWriter());
 					if ("thesaurus".equals(nodeName)) {
 						_thesaurus.add(nodei);
 					} else if ("BNFGrammar".equals(nodeName)) {
@@ -725,8 +752,8 @@ public final class CompileXdefPool extends PreCompiler
 					// connected the X-definition to the PNode we create a
 					// dumy one just to store a X-definition name (we nead it
 					// to be able to compile declaration blocks).
-					nodei._xdef =
-						new XDefinition(_xdefNames.get(i), null, null, null);
+					nodei._xdef = new XDefinition(_xdefNames.get(i),
+						null, null, null, nodei._xmlVersion);
 					// remove this node from the X-definition PNode
 					def._childNodes.remove(j);
 				}
@@ -769,10 +796,10 @@ public final class CompileXdefPool extends PreCompiler
 			defName = name.substring(0,i);
 			name = name.substring(i+1);
 		}
-		if (!chkDefName(defName)) {
+		if (!chkDefName(defName, xdef.getXmlVersion())) {
 			return null;
 		}
-		if (!StringParser.chkNCName(name, _xmlVersion1)) {
+		if (!StringParser.chkNCName(name, xdef.getXmlVersion())) {
 			return null;
 		}
 		return defName + '#' + name;
@@ -820,7 +847,7 @@ public final class CompileXdefPool extends PreCompiler
 			xel = (XElement) xNode;
 			xtxt = null;
 			//compile first script - we must recognize template!
-			AttrValue pattr = pnode.getAttrNS("script", NS_XDEF_INDEX);
+			PAttr pattr = pnode.getAttrNS("script", NS_XDEF_INDEX);
 			if (pattr != null) {
 				_scriptCompiler.setSource(pattr._value,
 					defName, pnode._xdVersion, pnode._nsPrefixes);
@@ -840,7 +867,7 @@ public final class CompileXdefPool extends PreCompiler
 		} else {
 			return;
 		}
-		for (AttrValue pattr: pnode._attrs) {
+		for (PAttr pattr: pnode._attrs) {
 			String key = pattr._name;
 			SBuffer sval = pattr._value;
 			_scriptCompiler.setSource(sval,
@@ -951,13 +978,14 @@ public final class CompileXdefPool extends PreCompiler
 		}
 		newNode.setUnspecified();
 		newNode.setSPosition(copySPosition(pnode._name));
-		SBuffer ref = pnode.getXdefAttr("ref", false, true);
+		SBuffer ref = pnode.getXdefAttr("ref", false, true, getReportWriter());
 		newNode.setXDPosition(xdef.getXDPosition()+'$'+pnode._name.getString()+
 			(ref != null ? "("+ref.getString()+")" : ""));
 		short kind = newNode.getKind();
 		if (kind==XNode.XMCHOICE||kind==XNode.XMMIXED||kind==XNode.XMSEQUENCE) {
-			SBuffer sval;
-			if ((sval = pnode.getXdefAttr("script", false, true)) != null) {
+			SBuffer sval =
+				pnode.getXdefAttr("script", false, true, getReportWriter());
+			if (sval != null) {
 				_scriptCompiler.setSource(sval,
 					_scriptCompiler._actDefName,
 					pnode._xdVersion,
@@ -972,7 +1000,8 @@ public final class CompileXdefPool extends PreCompiler
 					ref = s;
 				}
 			} else {
-				if ((sval = pnode.getXdefAttr("init", false, true)) != null) {
+				sval = pnode.getXdefAttr("init", false, true,getReportWriter());
+				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						pnode._xdVersion,
@@ -982,7 +1011,9 @@ public final class CompileXdefPool extends PreCompiler
 						XD_VOID,
 						XScriptParser.INIT_SYM));
 				}
-				if ((sval = pnode.getXdefAttr("occurs", false, true)) != null) {
+				sval = pnode.getXdefAttr(
+					"occurs", false, true, getReportWriter());
+				if (sval != null) {
 					if (kind == XNode.XMMIXED) {
 						reportDeprecated(pnode._name, "occurs","script");
 					}
@@ -1001,7 +1032,9 @@ public final class CompileXdefPool extends PreCompiler
 						 error(sval, XDEF.XDEF425); //Script error
 					}
 				}
-				if ((sval = pnode.getXdefAttr("finally", false, true)) != null){
+				sval = pnode.getXdefAttr(
+					"finally", false, true, getReportWriter());
+				if (sval != null){
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						pnode._xdVersion,
@@ -1011,17 +1044,22 @@ public final class CompileXdefPool extends PreCompiler
 						XD_VOID,
 						XScriptParser.FINALLY_SYM));
 				}
-				if ((sval = pnode.getXdefAttr("create", false, true)) != null) {
+				sval = pnode.getXdefAttr(
+					"create", false, true, getReportWriter());
+				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
-					newNode.setComposeCode(_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
+					newNode.setComposeCode(
+						_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
 						XD_ANY,
 						XScriptParser.CREATE_SYM));
 				}
-				if ((sval = pnode.getXdefAttr("match", false, true)) != null) {
+				sval = pnode.getXdefAttr(
+					"match", false, true, getReportWriter());
+				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						pnode._xdVersion,
@@ -1032,7 +1070,8 @@ public final class CompileXdefPool extends PreCompiler
 						XScriptParser.MATCH_SYM));
 				}
 			}
-			if ((sval = pnode.getXdefAttr("empty", false, true)) != null) {
+			sval = pnode.getXdefAttr("empty", false, true, getReportWriter());
+			if (sval != null) {
 				String s = sval.getString().trim();
 				if (s.length() > 0) {
 					if (newNode.isSpecified()) {//specified
@@ -1067,7 +1106,7 @@ public final class CompileXdefPool extends PreCompiler
 				}
 			}
 		}
-		reportNotAllowedAttrs(pnode);
+		reportNotAllowedAttrs(pnode, getReportWriter());
 		if (!newNode.isSpecified()) {
 			if (ref != null) {
 				newNode.setUnspecified();
@@ -1171,7 +1210,7 @@ public final class CompileXdefPool extends PreCompiler
 			(xel = (XElement) parentNode)._template) {
 			if (pnode._nsindex == NS_XDEF_INDEX) {
 				if ("text".equals(pnode._localName)) {
-					chkNestedElements(pnode);
+					chkNestedElements(pnode, getReportWriter());
 					sval = pnode._value;
 					if (xel._trimText == 'T' || xel._textWhiteSpaces == 'T') {
 						if (sval.getString().trim().length() == 0) {
@@ -1254,7 +1293,7 @@ public final class CompileXdefPool extends PreCompiler
 		} else if (pnode._nsindex == NS_XDEF_INDEX) {
 			String name = pnode._localName;
 			if ("data".equals(name) || "text".equals(name)) {
-				chkNestedElements(pnode);
+				chkNestedElements(pnode, getReportWriter());
 				if ("data".equals(name)) {
 					reportDeprecated(pnode._name, "data", "text");
 				}
@@ -1262,7 +1301,8 @@ public final class CompileXdefPool extends PreCompiler
 					new XData("$text", null, xdef.getXDPool(), XNode.XMTEXT);
 				xtext.setSPosition(copySPosition(pnode._name));
 				newNode = xtext;
-				sval = pnode.getXdefAttr("script", false, true);
+				sval = pnode.getXdefAttr(
+					"script", false, true, getReportWriter());
 				if (sval != null) {
 					reportDeprecated(sval, "<xd:text xd:script=...",
 						"script declared as a text value of model");
@@ -1282,13 +1322,13 @@ public final class CompileXdefPool extends PreCompiler
 					_scriptCompiler.setSourceBuffer("optional string()");
 					_scriptCompiler.compileDataScript(xtext);
 				}
-				reportNotAllowedAttrs(pnode);
+				reportNotAllowedAttrs(pnode, getReportWriter());
 			} else if ("list".equals(name) || "includeChildNodes".equals(name)){
 				if ("includeChildNodes".equals(name)) {
 					reportDeprecated(_actPNode._name,
 						"includeChildNodes", "list");
 				}
-				chkNestedElements(pnode);
+				chkNestedElements(pnode, getReportWriter());
 				if (level == 1) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
@@ -1398,19 +1438,20 @@ public final class CompileXdefPool extends PreCompiler
 		String defName = _xdefNames.get(ii);
 		PNode pnode = _xdefNodes.get(ii);
 		_scriptCompiler._actDefName = defName;
-		XDefinition def =
-			new XDefinition(defName, xdp, pnode._nsURI, pnode._name);
+		XDefinition def = new XDefinition(defName,
+			xdp, pnode._nsURI, pnode._name, pnode._xmlVersion);
 		pnode._xdef = def;
 		for (Entry<String, Integer> e: pnode._nsPrefixes.entrySet()) {
 			def._namespaces.put(e.getKey(),
 				_codeGenerator._namespaceURIs.get(e.getValue()));
 		}
-		SBuffer sval = pnode.getXdefAttr("script", false, true);
+		SBuffer sval = pnode.getXdefAttr(
+			"script", false, true, getReportWriter());
 		if (sval != null) {
 			_scriptCompiler.setSource(sval, defName, def.getXDVersion());
 			_scriptCompiler.compileXDHeader(def);
 		}
-		sval = pnode.getXdefAttr("root", false, true);
+		sval = pnode.getXdefAttr("root", false, true, getReportWriter());
 		if (sval != null) {
 			_scriptCompiler.setSource(sval,
 				defName, pnode._xdVersion, pnode._nsPrefixes);
@@ -1464,8 +1505,9 @@ public final class CompileXdefPool extends PreCompiler
 				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
 			}
 		}
+
 		//process attributes of XDefinition
-		for (AttrValue pattr:  pnode._attrs) {
+		for (PAttr pattr:  pnode._attrs) {
 			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
 				def._properties.put(pattr._name.substring(5),
 					pattr._value.getString());
@@ -1508,7 +1550,7 @@ public final class CompileXdefPool extends PreCompiler
 //				}
 				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					AttrValue v = nodei.getAttrNS("name", NS_XDEF_INDEX);
+					PAttr v = nodei.getAttrNS("name", NS_XDEF_INDEX);
 					if (v == null) {
 						gname = null;
 						//Required attribute '&{0}' is missing
@@ -1518,7 +1560,8 @@ public final class CompileXdefPool extends PreCompiler
 						nodei._attrs.remove(v);
 					}
 				} else {
-					gname = nodei.getXdefAttr("name", true, true);
+					gname = nodei.getXdefAttr(
+						"name", true, true, getReportWriter());
 				}
 				if (gname != null) { //we create dummy element
 					String dname = gname.getString() + '$' + name;
@@ -2442,11 +2485,11 @@ public final class CompileXdefPool extends PreCompiler
 	/** Clear adopted forgets.
 	 * @param xel XElement.
 	 * @param clear adopted clear flag.
-	 * @param hs hashset with nodes.
+	 * @param hs set with nodes.
 	 */
 	private void clearAdoptedForgets(final XElement xel,
 		final boolean clear,
-		final HashSet<XNode> hs) {
+		final Set<XNode> hs) {
 		hs.add(xel);
 		boolean clr = clear | xel._clearAdoptedForgets == 'T';
 		boolean newChildNodes = false;

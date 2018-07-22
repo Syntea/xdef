@@ -25,23 +25,23 @@ public class XScriptMacroResolver extends StringParser {
 	private static final int MAX_NESTED_MACRO = 64;
 
 	private final String _actDefName;
-	private final boolean _xmlVersion1;
+	private final byte _xmlVersion;
 	private final Map<String, XScriptMacro> _macros;
 
 	public XScriptMacroResolver(final String actDefName,
-		final boolean xmlVersion1,
+		final byte xmlVersion,
 		final Map<String, XScriptMacro> macros,
 		final ReportWriter reporter) {
 		super();
 		setLineInfoFlag(true);
 		setReportWriter(reporter);
-		_xmlVersion1 = xmlVersion1;
+		_xmlVersion = xmlVersion;
 		_macros = macros;
 		_actDefName = actDefName;
 	}
 
 	private boolean isXScriptName(final StringParser p) {
-		if (p.getXmlCharType(_xmlVersion1)
+		if (p.getXmlCharType(_xmlVersion)
 			!= StringParser.XML_CHAR_NAME_START) {
 			return false;
 		}
@@ -49,12 +49,12 @@ public class XScriptMacroResolver extends StringParser {
 		char c;
 		boolean wasColon = false;
 		while (StringParser.getXmlCharType(c = p.getCurrentChar(),
-			_xmlVersion1) == StringParser.XML_CHAR_NAME_START
+			_xmlVersion) == StringParser.XML_CHAR_NAME_START
 			|| (c >= '0' && c <= '9') || (!wasColon && c == ':')) {
 			if (c == ':') { // we allow one colon inside the name
 				wasColon = true;
 				c = p.nextChar();
-				if (p.getXmlCharType(_xmlVersion1)
+				if (p.getXmlCharType(_xmlVersion)
 					!= StringParser.XML_CHAR_NAME_START) {
 					// must follow name, ignore ':'
 					p.setBufIndex(p.getIndex() - 1);
@@ -304,15 +304,15 @@ public class XScriptMacroResolver extends StringParser {
 	 * is specified
 	 * @param reporter reporter where to write errors.
 	 * @param macros map with macro definitions
-	 * @param xmlVersion1 version of XML (true if "1.0").
+	 * @param xmlVersion version of XML (10 -> "1.0", 11 -> "1.0").
 	 */
 	public static void expandMacros(final SBuffer sb,
 		final String actDefName,
 		final ReportWriter reporter,
-		final boolean xmlVersion1,
+		final byte xmlVersion,
 		final Map<String, XScriptMacro> macros) {
 		XScriptMacroResolver p =
-			new XScriptMacroResolver(actDefName, xmlVersion1, macros, reporter);
+			new XScriptMacroResolver(actDefName, xmlVersion, macros, reporter);
 		p.expandMacros(sb);
 	}
 

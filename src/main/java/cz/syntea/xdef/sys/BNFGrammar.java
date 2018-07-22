@@ -1775,19 +1775,20 @@ public final class BNFGrammar {
 				case INL_HEXDATA: //hexdata
 					return isHexdata();
 				case INL_XMLNAME: //xmlname
-					return _p.isXMLName(false);
+					return _p.isXMLName((byte) 10);
 				case INL_NCNAME: //ncname
-					return _p.isNCName(false);
+					return _p.isNCName((byte) 10);
 				case INL_NMTOKEN: //nmtoken
-					return _p.isNMToken(false);
+					return _p.isNMToken((byte) 10);
 				case INL_XMLCHAR: //xmlchar
-					return _p.isXMLChar(false) != SParser.NOCHAR;
+					return _p.isXMLChar((byte) 10) != SParser.NOCHAR;
 				case INL_WHITESPACE: //whitespace
 					return _p.isXMLWhitespaceChar() != SParser.NOCHAR;
 				case INL_XMLNAMESTARTCHAR: //xmlNamestartchar
-					return _p.isXMLNamestartChar(false) != SParser.NOCHAR;
+					return _p.isXMLNamestartChar((byte) 10) != SParser.NOCHAR;
 				case INL_XMLNAMEEXTCHAR: //xmlNameExtchar
-					return _p.isXMLNameExtensionChar(false) != SParser.NOCHAR;
+					return
+						_p.isXMLNameExtensionChar((byte) 10) != SParser.NOCHAR;
 				case INL_CLEAR: //clearParsedObjects
 					_parsedObjects = null;
 					return true;

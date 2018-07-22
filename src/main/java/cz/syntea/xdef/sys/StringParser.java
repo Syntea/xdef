@@ -4038,23 +4038,22 @@ public class StringParser extends SReporter implements SParser {
 	 * <p>XML_CHAR_COLON .. ':' (4)</p>
 	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)</p>
 	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)</p>
-	 *
-	 * @param version1 if true then character set is checked according to
-	 * XML version "1.1".
+	 * 
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return type of character.
 	 */
-	public final byte getXmlCharType(final boolean version1) {
-		return version1 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
+	public final byte getXmlCharType(final byte xmlVersion) {
+		return xmlVersion == (byte) 11 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
 	/** Parse Nmtoken.
 	 * [7] Nmtoken::= (NameChar)+
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return true if rule passed.
 	 */
-	public final boolean isNMToken(final boolean xmlVersion) {
+	public final boolean isNMToken(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) < XML_CHAR_COLON) {
 			return false;
 		}
@@ -4084,10 +4083,10 @@ public class StringParser extends SReporter implements SParser {
 	 * [4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
 	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
 	 *     | CombiningChar | Extender
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return true if NCNname was recognized.
 	 */
-	public final boolean isNCName(final boolean xmlVersion) {
+	public final boolean isNCName(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START) {
 			return false;
 		}
@@ -4114,10 +4113,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name and save result to _parsedString.
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
-	 * @return true if actual input is XML name.
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @return true if XMLName was parsed.
 	 */
-	public final boolean isXMLName(final boolean xmlVersion) {
+	public final boolean isXMLName(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START &&
 			_ch != ':') {
 			return false;
@@ -4155,10 +4154,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse valid XML character.
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return parsed character or ENDCHAR.
 	 */
-	public final char isXMLChar(final boolean xmlVersion) {
+	public final char isXMLChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) == 0) {
 			return NOCHAR;
 		}
@@ -4183,10 +4182,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name start character.
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return parsed character or ENDCHAR.
 	 */
-	public final char isXMLNamestartChar(final boolean xmlVersion) {
+	public final char isXMLNamestartChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START) {
 			return NOCHAR;
 		}
@@ -4196,10 +4195,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name extension character.
-	 * @param xmlVersion false .. "1.0", true .. "1.1"
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return parsed character or ENDCHAR.
 	 */
-	public final char isXMLNameExtensionChar(final boolean xmlVersion) {
+	public final char isXMLNameExtensionChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_EXT) {
 			return NOCHAR;
 		}
@@ -4209,11 +4208,11 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Get XML character table.
-	 * @param xmlVersion false: XML version 1.0, true: XML version 1.1.
+	 * @param xmlVersion1 false: XML version 1.0, true: XML version 1.1.
 	 * @return character table (byte[65536]).
 	 */
-	protected final byte[] getXMLCharTab(final boolean xmlVersion) {
-		if (xmlVersion) {
+	protected final byte[] getXMLCharTab(final boolean xmlVersion1) {
+		if (xmlVersion1) {
 			return XML_CHARTAB1;
 		}
 		return XML_CHARTAB0;
@@ -4617,7 +4616,7 @@ public class StringParser extends SReporter implements SParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Check if argument is a whitespace - static version of {@link
-	 * StringParser#getXmlCharType(boolean)}.
+	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
 	 * @return <tt>true</tt> is only if argument is a whitespace.
 	 */
@@ -4626,75 +4625,71 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Get type of character - static version of {@link
-	 * StringParser#getXmlCharType(boolean)}.
+	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
-	 * @param version1 if true then character set is checked according to
-	 * XML version "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return type of character.
 	 */
 	public static final byte getXmlCharType(final char ch,
-		final boolean version1) {
-		return version1 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
+		final byte xmlVersion) {
+		return xmlVersion == (byte) 11 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
 	}
 
-	/** Parse NCName - static version of {@link StringParser#isNCName(boolean)}.
+	/** Parse NCName - static version of {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
-	 * @param version1 if true then character set is checked according to
-	 * XML version "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return true if the argument passes the rule.
 	 */
 	public static final boolean chkNCName(final String name,
-		final boolean version1) {
+		final byte xmlVersion) {
 		int max;
 		if (name == null || (max = name.length()) == 0 ||
-			getXmlCharType(name.charAt(0), version1) != XML_CHAR_NAME_START) {
+			getXmlCharType(name.charAt(0), xmlVersion) != XML_CHAR_NAME_START) {
 			return false;
 		}
 		int i = 0;
 		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), version1) >= XML_CHAR_NAME_START) {}
+			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_NAME_START){}
 		return i == max;
 	}
 
 	/** Parse NCName - static version of {
 	 * @param name string to be checked.
-	 * @param version1 if true then character set is checked according to
-	 * XML version "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return true if the argument passes the rule.
-	 * {@link StringParser#isXMLName(boolean)}.
+	 * {@link StringParser#isXMLName(byte)}.
 	 */
 	public static final boolean chkXMLName(final String name,
-		final boolean version1) {
+		final byte xmlVersion) {
 		int max;
 		byte type;
 		if (name == null || (max = name.length()) == 0 ||
-			(type = getXmlCharType(name.charAt(0), version1)) !=
+			(type = getXmlCharType(name.charAt(0), xmlVersion)) !=
 			XML_CHAR_NAME_START && type != XML_CHAR_COLON) {
 			return false;
 		}
 		int i = 0;
 		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), version1) >= XML_CHAR_COLON) {}
+			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_COLON) {}
 		return i == max;
 	}
 
 	/** Parse NCName - static version of {
 	 * @param name string to be checked.
-	 * @param version1 if true then character set is checked according to
-	 * XML version "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
 	 * @return true if the argument passes the rule.
-	 * {@link StringParser#isNMToken(boolean)}.
+	 * {@link StringParser#isNMToken(byte)}.
 	 */
 	public static final boolean chkNMToken(final String name,
-		final boolean version1) {
+		final byte xmlVersion) {
 		int max;
 		if (name == null || (max = name.length()) == 0 ||
-			getXmlCharType(name.charAt(0), version1) < XML_CHAR_COLON) {
+			getXmlCharType(name.charAt(0),  xmlVersion) < XML_CHAR_COLON) {
 			return false;
 		}
 		int i = 0;
 		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), version1) >= XML_CHAR_COLON) {}
+			getXmlCharType(name.charAt(i),  xmlVersion) >= XML_CHAR_COLON) {}
 		return i == max;
 	}
 

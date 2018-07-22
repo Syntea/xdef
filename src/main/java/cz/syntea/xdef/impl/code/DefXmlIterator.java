@@ -140,7 +140,7 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 			return null;
 		}
 		String s = name.startsWith("@") ? name.substring(1) : name;
-		if (StringParser.chkXMLName(s, true)) {
+		if (StringParser.chkXMLName(s, (byte) 10)) {
 			int i;
 			Node n;
 			if ((i = s.indexOf(':')) < 0) {

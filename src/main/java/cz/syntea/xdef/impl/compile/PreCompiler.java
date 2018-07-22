@@ -11,13 +11,12 @@ package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.impl.XDefinition;
-import cz.syntea.xdef.impl.XNode;
 import cz.syntea.xdef.impl.ext.XExtUtils;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.msg.XML;
 import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
@@ -37,7 +36,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -73,30 +71,23 @@ public class PreCompiler extends XDefReader {
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new TreeMap<String, XScriptMacro>();
-	/** Actual node stack. */
-	final ArrayList<XNode> _nodeList;
 	/** Table of NameSpace prefixes. */
-	final Map<String, Integer> _predefinedNSPrefixes;
-	/** Table of definitions */
-	final Map<String, XDefinition> _xdefs;
-	/** Code generator. */
-	final CompileCode _codeGenerator;
-	/** The script compiler. */
-	final CompileXScript _scriptCompiler;
+	final static Map<String, Integer> _predefinedNSPrefixes
+		= new TreeMap<String, Integer>();
 	/** Display mode */
 	final byte _displayMode;
 	/** Array of thesaurus sources. */
 	final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
+	/** Array of BNF sources. */
 	final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
+	/** Array of declaration sources. */
 	final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
-	final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
+
+	/** Code generator. */
+	final CompileCode _codeGenerator;
 
 	/** Actual node */
 	PNode _actPNode;
-	/** True if and only if version of XML document is 1.0.*/
-	boolean _xmlVersion1;
-	/** counter of unknown objects. */
-	int _unknownCounter;
 
 	private Element _includeElement;
 	/** The nesting level of XML node. */
@@ -105,29 +96,30 @@ public class PreCompiler extends XDefReader {
 	/** Creates a new instance of XDefCompiler
 	 * @param reporter The reporter.
 	 * @param extClasses The external classes.
-	 * @param xdefs Table of X-definitions.
 	 * @param displayMode display mode: .
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
 	public PreCompiler(final ReportWriter reporter,
 		final Class<?>[] extClasses,
-		final Map<String, XDefinition> xdefs,
 		final byte displayMode,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 		super(reporter);
-		_xdefs = xdefs;
 		_xdefNames = new ArrayList<String>();
 		_xdefNodes = new ArrayList<PNode>();
 		_sourceFiles = new ArrayList<Object>();
 		_includeList = new ArrayList<Object>();
-		_nodeList = new ArrayList<XNode>();
-		_predefinedNSPrefixes = new TreeMap<String, Integer>();
 		/** DisplayMode. */
 		_displayMode = displayMode;
-		_codeGenerator = new CompileCode(extClasses,
-			2, debugMode, ignoreUnresolvedExternals);
+		 //"xml"
+		_predefinedNSPrefixes.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
+		//"xmlns",
+		_predefinedNSPrefixes.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
+		_codeGenerator = new CompileCode(
+			null, 2, debugMode, ignoreUnresolvedExternals);
+//		_codeGenerator._parser = new XScriptParser(false);
+//		_codeGenerator._parser.setReportWriter(reporter);
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
 		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
@@ -139,21 +131,17 @@ public class PreCompiler extends XDefReader {
 			NS_XML_INDEX);
 		_predefinedNSPrefixes.put(XMLConstants.XMLNS_ATTRIBUTE, //"xmlns",
 			NS_XMLNS_INDEX);
-		ClassLoader classLoader =Thread.currentThread().getContextClassLoader();
-		_scriptCompiler = new CompileXScript(_codeGenerator,
-			_xmlVersion1, _predefinedNSPrefixes, classLoader);
-		_scriptCompiler.setReportWriter(getReportWriter());
-		_unknownCounter = 0;
 	}
 
 	/** Report about not legal attributes. All allowed attributes should be
 	 * processed and removed.
 	 * @param pnode node to be checked.
 	 */
-	final void reportNotAllowedAttrs(final PNode pnode) {
-		for (AttrValue attr: pnode._attrs) {
-			//Attribute '&{0}' not allowed here
-			error(attr._value, XDEF.XDEF254, attr._name);
+	final static void reportNotAllowedAttrs(final PNode pnode,
+		final ReportWriter reporter) {
+		for (PAttr attr: pnode._attrs) {
+			attr._value.putReport( //Attribute '&{0}' not allowed here
+				Report.error(XDEF.XDEF254, attr._name), reporter);
 		}
 		pnode._attrs.clear();
 	}
@@ -167,7 +155,6 @@ public class PreCompiler extends XDefReader {
 	 * the list of attributes.
 	 */
 	public void elementStart(final KParsedElement parsedElem) {
-		_xmlVersion1 = "1.1".equals(getXmlVersion());
 		String qName = parsedElem.getParsedName();
 		if (_includeElement == null) {
 			if (_actPNode != null && _actPNode._value != null &&
@@ -177,7 +164,8 @@ public class PreCompiler extends XDefReader {
 			_actPNode = new PNode(qName,
 				parsedElem.getParsedNameSourcePosition(),
 				_actPNode,
-				_actPNode==null? (byte) 0 : _actPNode._xdVersion);
+				_actPNode==null? (byte) 0 : _actPNode._xdVersion,
+				"1.1".equals(getXmlVersion()) ? (byte) 11 : (byte) 10);
 		}
 		String elemPrefix;
 		String elemLocalName;
@@ -227,7 +215,6 @@ public class PreCompiler extends XDefReader {
 					}
 				}
 				_actPNode._xdVersion = ver;
-				_codeGenerator._parser._xdVersion = ver;
 				_codeGenerator._namespaceURIs.add(0, projectNS);
 			} else {
 				_codeGenerator._namespaceURIs.add(0, uri);
@@ -253,7 +240,7 @@ public class PreCompiler extends XDefReader {
 			} else if ("collection".equals(elemLocalName) &&
 				key.startsWith("impl-")) {//continue; ignore, just documentation
 			} else {
-				AttrValue item = new AttrValue(key,
+				PAttr item = new PAttr(key,
 					new SBuffer(value, ka.getPosition()), null, -1);
 				if ((ndx = key.indexOf(':')) >= 0) {
 					String prefix = key.substring(0, ndx);
@@ -311,12 +298,12 @@ public class PreCompiler extends XDefReader {
 						nsuri, _actPNode._name.getString());
 					_includeElement.appendChild(el);
 				}
-				for (AttrValue aval: _actPNode._attrs) {
+				for (PAttr aval: _actPNode._attrs) {
 					if (aval._nsindex < 0) {
 						el.setAttribute(aval._name, aval._value.getString());
 					} else {
-						el.setAttributeNS(_codeGenerator.
-							_namespaceURIs.get(aval._nsindex),
+						el.setAttributeNS(
+							_codeGenerator._namespaceURIs.get(aval._nsindex),
 							aval._name,
 							aval._value.getString());
 					}
@@ -329,7 +316,7 @@ public class PreCompiler extends XDefReader {
 		if (_level == -1) {
 			if ("collection".equals(elemLocalName)) {
 				processIncludeList();
-				reportNotAllowedAttrs(_actPNode);
+				reportNotAllowedAttrs(_actPNode, getReportWriter());
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _listBNF.add(_actPNode);
@@ -344,14 +331,15 @@ public class PreCompiler extends XDefReader {
 					error(_actPNode._name, XDEF.XDEF259);//X-definition expected
 				}
 				_level++;
-				String defName = _actPNode.getNameAttr(false, true);
+				String defName =
+					_actPNode.getNameAttr(false, true, getReportWriter());
 				if (defName == null) {
 					defName = "";
 				}
 				processIncludeList();
 				if (_xdefNames.contains(defName)) {
 					if (defName.length() == 0) {
-						//Only one X-definition in a collection may be
+						//Only one X-definition in the compiled XDPool may be
 						//without name
 						error(_actPNode._name, XDEF.XDEF212);
 					} else {
@@ -449,14 +437,16 @@ public class PreCompiler extends XDefReader {
 		}
 		if (_actPNode._nsindex == NS_XDEF_INDEX &&
 			"def".equals(_actPNode._localName)) {
-			_scriptCompiler.setSourceBuffer(_actPNode._value);
-			_scriptCompiler._xdVersion = _actPNode._xdVersion;
+			XScriptParser xparser = new XScriptParser(_actPNode._xmlVersion);
+			xparser.setLineInfoFlag(true);
+			xparser.setReportWriter(getReportWriter());
+			xparser.setSourceBuffer(_actPNode._value);
 			// it still may be a comment
-			if (_scriptCompiler.nextSymbol() != XScriptParser.NOCHAR) {
+			if (xparser.nextSymbol() != XScriptParser.NOCHAR) {
 				//Text value is not allowed here
 				lightError(_actPNode._value, XDEF.XDEF260);
 			}
-			_actPNode._value = null; //prevent repeated message
+			_actPNode._value = null;//prevent repeated message, remove this text
 		}
 	}
 
@@ -470,7 +460,10 @@ public class PreCompiler extends XDefReader {
 			}
 		}
 		PNode p = new PNode(name,
-			new SPosition(_actPNode._value), _actPNode,  _actPNode._xdVersion);
+			new SPosition(_actPNode._value),
+			_actPNode,
+			_actPNode._xdVersion,
+			_actPNode._xmlVersion);
 		p._nsURI = _codeGenerator._namespaceURIs.get(NS_XDEF_INDEX);
 		p._nsindex = NS_XDEF_INDEX;
 		p._localName = "text";
@@ -487,9 +480,12 @@ public class PreCompiler extends XDefReader {
 			genTextNode();
 			return;
 		}
-		_scriptCompiler.setSourceBuffer(_actPNode._value);
-		if (_scriptCompiler.nextSymbol() == XScriptParser.NOCHAR) {
-			_actPNode._value = null;
+		XScriptParser xparser = new XScriptParser(_actPNode._xmlVersion);
+		xparser.setLineInfoFlag(true);
+		xparser.setReportWriter(getReportWriter());
+		xparser.setSourceBuffer(_actPNode._value);
+		if (xparser.nextSymbol() == XScriptParser.NOCHAR) {
+			_actPNode._value = null; // remove this text
 			return;
 		}
 		if (_actPNode._nsindex == NS_XDEF_INDEX) {
@@ -666,9 +662,10 @@ public class PreCompiler extends XDefReader {
 	}
 
 	/** Process include list from header of X-definition. */
-	final void processIncludeList() {
+	private void processIncludeList() {
 		/** let's check some attributes of X-definition.*/
-		SBuffer include = _actPNode.getXdefAttr("include", false, true);
+		SBuffer include = _actPNode.getXdefAttr(
+			"include", false, true, getReportWriter());
 		processIncludeList(include, _includeList,
 			_actPNode._name.getSysId(), getReportWriter());
 	}
@@ -769,24 +766,25 @@ public class PreCompiler extends XDefReader {
 	 * @param name name of X-definition
 	 * @return true if the name of X-definition is OK.
 	 */
-	final static boolean chkDefName(final String name) {
+	final static boolean chkDefName(final String name, byte xmlVersion) {
 		if (name.length() == 0) {
 			return true; //nameless is also name
 		}
-		if (StringParser.getXmlCharType(name.charAt(0), false) !=
+		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) !=
 			StringParser.XML_CHAR_NAME_START) {
 			return false;
 		}
 		char c;
 		boolean wasColon = false;
 		for (int i = 1; i < name.length(); i++) {
-			if (StringParser.getXmlCharType(c = name.charAt(i), false) !=
+			if (StringParser.getXmlCharType(c = name.charAt(i),  xmlVersion) !=
 				StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
 				if (!wasColon && c == ':') { // we allow one colon inside name
 					wasColon = true;
-					if (i + 1 < name.length() &&
-						(StringParser.getXmlCharType(name.charAt(++i), false)
-						!= StringParser.XML_CHAR_NAME_START)){//must follow name
+					if (i + 1 < name.length()
+						&& StringParser.getXmlCharType(
+							name.charAt(++i), xmlVersion)
+						!= StringParser.XML_CHAR_NAME_START){//must follow name
 						continue;
 					}
 				}
@@ -797,10 +795,11 @@ public class PreCompiler extends XDefReader {
 	}
 
 	/** Check if the node has no nested child nodes. */
-	final void chkNestedElements(final PNode pnode) {
+	final static void chkNestedElements(final PNode pnode,
+		ReportWriter reporter) {
 		for (PNode p: pnode._childNodes) {
 			//Nested child elements are not allowed here
-			error(p._name, XDEF.XDEF219);
+			p._name.putReport(Report.error(XDEF.XDEF219), reporter);
 		}
 	}
 
@@ -821,19 +820,20 @@ public class PreCompiler extends XDefReader {
 			ArrayList<PNode> macros = def.getXDefChildNodes("macro");
 			for (PNode macro : macros) {
 				Map<String, String> params = new TreeMap<String, String>();
-				chkNestedElements(macro);
-				for (AttrValue val : macro._attrs) {
+				chkNestedElements(macro, getReportWriter());
+				for (PAttr val : macro._attrs) {
 					params.put(val._name, val._value.getString());
 				}
 				XScriptMacro m = new XScriptMacro(
-					macro.getNameAttr(true, true),
+					macro.getNameAttr(true, true, getReportWriter()),
 					defName,
 					params,
 					macro._value,
-					_scriptCompiler.getReportWriter());
+					getReportWriter());
 				if (_macros.containsKey(m.getName())) {
 					//Macro '&{0}' redefinition
-					_scriptCompiler.error(XDEF.XDEF482, m.getName());
+					Report rep = Report.error(XDEF.XDEF482, m.getName());
+					macro._name.putReport(rep, getReportWriter());
 				} else {
 					_macros.put(m.getName(), m);
 				}
@@ -847,253 +847,19 @@ public class PreCompiler extends XDefReader {
 			p.expandMacros(reporter, _xdefNames.get(i), _macros);
 		}
 	}
-	
+
 	public final ArrayList<PNode> getXDefinitionList() {
 		return _xdefNodes;
 	}
-	
-	public final ArrayList<PNode> getThesaurusList() {
-		return _thesaurus;
-	}
-	
-	public final ArrayList<PNode> getComponentList() {
-		return _listComponent;
-	}
-	
-	public final ArrayList<PNode> getDeclarationList() {
-		return _listDecl;
-	}
-	
-	public final ArrayList<PNode> getBNFList() {
-		return _listBNF;
-	}
 
-	/** The object value of attribute.*/
-	public final static class AttrValue {
-		final String _name; //qualified name of the attribute
-		String _localName; //Local name of the attribute
-		final SBuffer _value; //Value of attribute
-		int _nsindex; //Index to the namespace id (-1 in no namespace)
-		String _nsURI;  //namespace URI
+//	public final ArrayList<PNode> getThesaurusList() {
+//		return _thesaurus;
+//	}
+//
+//	public final ArrayList<PNode> getComponentList() {return _listComponent;}
+//
+//	public final ArrayList<PNode> getDeclarationList() {return _listDecl;}
+//
+//	public final ArrayList<PNode> getBNFList() {return _listBNF;}
 
-		/** Create new instance of AttrValue.
-		 * @param name the quoted name of attribute.
-		 * @param value the SBuffer object with the value of attribute.
-		 */
-		private AttrValue(final String name,
-			final SBuffer value,
-			final String nsURI,
-			final int nsindex) {
-			_name = name;
-			_localName = null;
-			_nsURI = nsURI;
-			_nsindex = nsindex;
-			_value = value;
-		}
-
-		@Override
-		/** Check another attribute if it is equal to this one. We consider
-		 * two attributes equal if both local names and name spaces are equal.
-		 * @param o The object to be compared.
-		 */
-		public boolean equals(final Object o) {
-			if (o == null || !(o instanceof AttrValue)) {
-				return false;
-			}
-			AttrValue attr = (AttrValue) o;
-			return _localName.equals(attr._localName) &&
-				_nsindex == attr._nsindex;
-		}
-		@Override
-		/** Returns hash code of the object. */
-		public int hashCode() {
-			int hash = 89 * 7 + _localName.hashCode();
-			return 89 * hash + _nsindex;
-		}
-		@Override
-		public String toString() {
-			return _name + "=" + _value;
-		}
-	}
-
-	/** Object with the parsed node. */
-	public final class PNode {
-		final List<AttrValue> _attrs; //attributes
-		final List<PNode> _childNodes; //child nodes
-		final Map<String, Integer> _nsPrefixes; // namespace prefixes
-		final SBuffer _name; //qualified name of node
-		String _localName;  //local name of node
-		String _nsURI;  //namespace URI
-		final PNode _parent; //parent node
-		int _level; //nesting level of this node
-		SBuffer _value; //String node assigned to this node
-		int _nsindex; //namespace index of this node
-		XDefinition _xdef;  //XDefinition associated with this node
-		byte _xdVersion;  // version of X-definion
-		boolean _template;  //template
-
-		/** Creates a new instance of PNode.
-		 * @param name The node name.
-		 * @param position The position in the source text.
-		 * @param parent The parent node.
-		 */
-		PNode(final String name,
-			final SPosition position,
-			final PNode parent,
-			final byte xdversion) {
-			_name = new SBuffer(name, position);
-			_childNodes = new ArrayList<PNode>();
-			_attrs = new ArrayList<AttrValue>();
-			_nsPrefixes = new TreeMap<String, Integer>();
-			_xdVersion = xdversion;
-			if (parent == null) {
-				_nsPrefixes.putAll(_predefinedNSPrefixes);
-				_template = false;
-			} else {
-				_template = parent._template;
-				_nsPrefixes.putAll(parent._nsPrefixes);
-			}
-			_parent = parent;
-			_nsindex = -1;
-//			_level = 0; // java makes it
-//			_value = null; // java makes it
-//			_def = null; // java makes it
-		}
-
-		/** Get list of child nodes of given name (not recursive).
-		 * @param name The name.
-		 * @return the list of child nodes of given name.
-		 */
-		final ArrayList<PNode> getXDefChildNodes(final String name) {
-			ArrayList<PNode> result = new ArrayList<PNode>();
-			for (PNode node : _childNodes) {
-				if (node._nsindex == 0 && node._localName.equals(name)) {
-					result.add(node);
-				}
-			}
-			return result;
-		}
-
-		/** Remove child nodes.
-		 * @param list The list of nodes to be removed.
-		 */
-		final void removeChildNodes(final ArrayList<PNode> list) {
-			_childNodes.removeAll(list);
-		}
-
-		/** Get attribute of given name with X=definition name space.
-		 * If required attribute doesn't exist return null.
-		 * @param localName key name of attribute.
-		 * @param nsIndex The index of name space (0 == XDEF).
-		 * @return the object SParsedData with the attribute value or null.
-		 */
-		final AttrValue getAttrNS(final String localName, final int nsIndex) {
-			AttrValue xattr = null;
-			for (AttrValue a : _attrs) {
-				if (localName.equals(a._localName) && a._nsindex == nsIndex) {
-					xattr = a;
-				}
-			}
-			return xattr;
-		}
-
-		/** Get attribute of given name with or without name space prefix from
-		 * node. The attribute is removed from the list. If the argument
-		 * required is set to true put error message that required attribute
-		 * is missing.
-		 * @param localName The local name of attribute.
-		 * @param required if true the attribute is required.
-		 * @param remove if true the attribute is removed.
-		 * @return the object SParsedData with the attribute value or null.
-		 */
-		final SBuffer getXdefAttr(final String localName,
-			final boolean required,
-			final boolean remove) {
-			AttrValue attr = null;
-			AttrValue xattr = null;
-			for (AttrValue a : _attrs) {
-				if (localName.equals(a._localName) && a._nsindex <= 0) {
-					if (a._nsindex == 0) {
-						xattr = a;
-					} else {
-						attr = a;
-					}
-				}
-			}
-			if (xattr != null && attr != null) {
-				//The attribute '&{0}' can't be specified simultanously
-				//with and without namespace
-				error(attr._value, XDEF.XDEF230, localName);
-			} else if (xattr == null) {
-				xattr = attr;
-			}
-			if (xattr == null) {
-				if (required) {
-					//Required attribute '&{0}' is missing
-					error(_name, XDEF.XDEF323, "xd:" + localName);
-				}
-				return null;
-			} else {
-				if (remove) {
-					_attrs.remove(xattr);
-				}
-				return xattr._value;
-			}
-		}
-
-		/** Get "name" (or "prefix:name") of node.
-		 * If the argument required is set to true put error message that
-		 * required attribute is missing.
-		 * @param required if true the attribute is required.
-		 * @param remove if true the attribute is removed.
-		 * @return the name or null.
-		 */
-		final String getNameAttr(final boolean required,
-			final boolean remove) {
-			SBuffer sval = getXdefAttr("name", required, remove);
-			if (sval == null) {
-				return required ? ("__UNKNOWN__" + _unknownCounter++) : null;
-			}
-			String name = sval.getString().trim();
-			if (name == null || name.length() == 0) {
-				error(sval, XDEF.XDEF258); //Incorrect name
-				return "__UNKNOWN__" + _unknownCounter++;
-			}
-			if (!chkDefName(name)) {
-				error(sval, XDEF.XDEF258); //Incorrect name
-				return "__UNKNOWN__" + _unknownCounter++;
-			}
-			return name;
-		}
-
-		void expandMacros(final ReportWriter reporter,
-			final String actDefName,
-			final Map<String, XScriptMacro> macros) {
-			if ("macro".equals(_localName) &&
-				(KXmlConstants.XDEF20_NS_URI.equals(_nsURI)
-				|| KXmlConstants.XDEF31_NS_URI.equals(_nsURI))) {
-				return; // do not process macro definitions
-			}
-			XScriptMacroResolver p = new XScriptMacroResolver(
-				actDefName, _xmlVersion1, macros, reporter);
-			for (AttrValue x: _attrs) {
-				if (x._value.getString().indexOf("${") >= 0) {
-					p.expandMacros(x._value);
-				}
-			}
-			if (_value != null) {
-				String s = _value.getString();
-				int ndx = s.lastIndexOf("${");
-				if (ndx >= 0) {
-					p.expandMacros(_value);
-				}
-			}
-			for (PNode x: _childNodes) {
-				x.expandMacros(reporter, actDefName, macros);
-			}
-		}
-
-		@Override
-		public String toString() {return "PNode: " + _name.getString();}
-	}
 }

@@ -449,7 +449,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		if (!p.isChar('%')) {
 			return false;
 		}
-		p.isNCName(false);
+		p.isNCName((byte) 10);
 		p.isChar(';');
 		return true;
 	}
@@ -474,7 +474,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	 */
 	private static boolean isCP(final SeqItemList seq, StringParser p) {
 		char c;
-		if (p.isXMLName(false)) {
+		if (p.isXMLName((byte) 10)) {
 			seq.add(new SeqItemRef(p.getParsedString(), p.isOneOfChars("?*+")));
 			return true;
 		} else if (p.isChar('(')) {//choice or seq
@@ -550,7 +550,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					childList._type = SeqItem.MIXED;
 					while (p.isChar('|')) {
 						isDeclSep(p);
-						if (p.isXMLName(false)) {
+						if (p.isXMLName((byte) 10)) {
 							childList.add(new SeqItemRef(p.getParsedString(),'*'));
 							skipDeclSep(p);
 						}
