@@ -849,8 +849,9 @@ public abstract class STester {
 					if (i < 0) {
 						i = s.indexOf("/classes/" + cname);
 						if (i < 0) {
+							_sourceName = null;
 							_timeStamp = System.currentTimeMillis();
-							return; //no homeDir, dataDir, sourceDir
+							return; //no homeDir, dataDir, sourceDir, sourceName
 						}
 					}
 				}
@@ -869,11 +870,13 @@ public abstract class STester {
 				} else {
 					_sourceName = s + "src/test/java/" + cname + ".java";
 					if (!new File(_sourceName).exists()) {
+						_sourceName = null;
 						_timeStamp = System.currentTimeMillis();
 						return;
 					}
 				}
 				if (!new File(_sourceName).exists()) {
+					_sourceName = null;
 					_timeStamp = System.currentTimeMillis();
 					return;
 				}

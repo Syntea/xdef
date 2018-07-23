@@ -57,7 +57,6 @@ import cz.syntea.xdef.impl.XPool;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.xml.KXmlConstants;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 /** Provide compiling of X-definitions from source data.
@@ -99,14 +98,9 @@ public final class CompileXDPool extends PreCompiler
 		ClassLoader classLoader =Thread.currentThread().getContextClassLoader();
 		_codeGenerator._extClasses = extClasses;
 		_scriptCompiler = new CompileXScript(_codeGenerator,
-			(byte) 10, _predefinedNSPrefixes, classLoader);
+			(byte) 10, PREDEFINED_PREFIXES, classLoader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
-
-	/** Get precompiled X-definitions (list of PNodes).
-	 * @return array with PNodes.
-	 */
-	public List<PNode> getPrecompiledXdefs() {return _xdefNodes;}
 
 	/** Get external classes used in x-definition methods.
 	 * @return array of objects.

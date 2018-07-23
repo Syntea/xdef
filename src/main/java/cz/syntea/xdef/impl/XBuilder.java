@@ -37,6 +37,7 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.impl.compile.CompileXDPool;
+import cz.syntea.xdef.impl.compile.PreCompiler;
 //import cz.syntea.xd.impl.compile.CompileParser;
 //import cz.syntea.xd.impl.compile.CompileXDPool;
 import java.io.File;
@@ -51,7 +52,7 @@ import cz.syntea.xdef.sys.ReportWriter;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
-public final class XBuilder implements XDBuilder {
+public class XBuilder implements XDBuilder {
 
 	private XPool _xp;
 
@@ -157,13 +158,18 @@ public final class XBuilder implements XDBuilder {
 		_xp._reporter = reporter;
 	}
 
+	/** Get compiler.
+	 * @return created XDefPool.
+	 */
+	public CompileXDPool getCompiler() {
+		return _xp._compiler;
+	}
+
 	@Override
 	/** Build XDefPool from prepared sources.
 	 * @return created XDefPool.
 	 */
-	public XDPool compileXD() {
-		return build();
-	}
+	public XDPool compileXD() {return build();}
 
 	@Override
 	/** Set class loader. The class loader must be set before setting sources.

@@ -10,7 +10,6 @@
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.impl.XDefinition;
-import static cz.syntea.xdef.impl.compile.PreCompiler._predefinedNSPrefixes;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import static cz.syntea.xdef.impl.compile.PreCompiler.PREDEFINED_PREFIXES;
 
 /**
  *
@@ -28,19 +28,19 @@ import java.util.TreeMap;
  */
 /** Object with the parsed precompiled node. */
 public final class PNode {
-	final List<PAttr> _attrs; //attributes
-	final List<PNode> _childNodes; //child nodes
+	public final List<PAttr> _attrs; //attributes
+	public final List<PNode> _childNodes; //child nodes
 	final Map<String, Integer> _nsPrefixes; // namespace prefixes
-	final SBuffer _name; //qualified name of node
-	String _localName;  //local name of node
-	String _nsURI;  //namespace URI
+	public final SBuffer _name; //qualified name of node
+	public String _localName;  //local name of node
+	public String _nsURI;  //namespace URI
 	final PNode _parent; //parent node
 	int _level; //nesting level of this node
-	SBuffer _value; //String node assigned to this node
+	public SBuffer _value; //String node assigned to this node
 	int _nsindex; //namespace index of this node
 	XDefinition _xdef;  //XDefinition associated with this node
-	byte _xdVersion;  // version of X-definion
-	byte _xmlVersion;  // version of xml
+	public byte _xdVersion;  // version of X-definion
+	public byte _xmlVersion;  // version of xml
 	boolean _template;  //template
 
 	/** Creates a new instance of PNode.
@@ -62,7 +62,7 @@ public final class PNode {
 		_xdVersion = xdVersion;
 		_xmlVersion = xmlVersion;
 		if (parent == null) {
-			_nsPrefixes.putAll(_predefinedNSPrefixes);
+			_nsPrefixes.putAll(PREDEFINED_PREFIXES);
 			_template = false;
 		} else {
 			_template = parent._template;
@@ -77,8 +77,8 @@ public final class PNode {
 	 * @param name The name.
 	 * @return the list of child nodes of given name.
 	 */
-	final ArrayList<PNode> getXDefChildNodes(final String name) {
-		ArrayList<PNode> result = new ArrayList<PNode>();
+	public final List<PNode> getXDefChildNodes(final String name) {
+		List<PNode> result = new ArrayList<PNode>();
 		for (PNode node : _childNodes) {
 			if (node._nsindex == 0 && node._localName.equals(name)) {
 				result.add(node);
@@ -100,7 +100,7 @@ public final class PNode {
 	 * @param nsIndex The index of name space (0 == XDEF).
 	 * @return the object SParsedData with the attribute value or null.
 	 */
-	final PAttr getAttrNS(final String localName, final int nsIndex) {
+	public final PAttr getAttrNS(final String localName, final int nsIndex) {
 		PAttr xattr = null;
 		for (PAttr a : _attrs) {
 			if (localName.equals(a._localName) && a._nsindex == nsIndex) {
@@ -185,7 +185,7 @@ public final class PNode {
 		return name;
 	}
 
-	void expandMacros(final ReportWriter reporter,
+	public void expandMacros(final ReportWriter reporter,
 		final String actDefName,
 		final Map<String, XScriptMacro> macros) {
 		if ("macro".equals(_localName) &&

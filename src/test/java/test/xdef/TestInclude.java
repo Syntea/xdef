@@ -44,7 +44,7 @@ public final class TestInclude extends Tester {
 		if (!dataDir.endsWith("/")) {
 			dataDir += '/';
 		}
-		boolean chkSyntax = getChkSyntax();	
+		boolean chkSyntax = getChkSyntax();
 		try {
 			//xd:include in XDefinition header
 			xdef =
@@ -94,11 +94,11 @@ public final class TestInclude extends Tester {
 				fail(sw.toString());
 			}
 			assertEq("bf", strw.toString());
-		} catch (Exception ex) {fail(ex);}		
+		} catch (Exception ex) {fail(ex);}
 		try {
 			//xi:include in collection
 			xdef =
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>\n"+				
+"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>\n"+
 "<xd:def name = 'a' root = 'foo'>\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
@@ -106,7 +106,7 @@ public final class TestInclude extends Tester {
 "</xd:def>\n"+
 "<xi:include xmlns:xi = 'http://www.w3.org/2001/XInclude'\n" +
 "   href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
-"</xd:collection>";				
+"</xd:collection>";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			xml = "<foo/>";
@@ -125,8 +125,8 @@ public final class TestInclude extends Tester {
 				ReportPrinter.printListing(sw, xml, reporter, true);
 				fail(sw.toString());
 			}
-			assertEq("bf", strw.toString());			
-		} catch (Exception ex) {fail(ex);}		
+			assertEq("bf", strw.toString());
+		} catch (Exception ex) {fail(ex);}
 		try {
 			//include attribute in collection
 			xdef =

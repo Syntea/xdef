@@ -15,17 +15,19 @@ import cz.syntea.xdef.sys.SBuffer;
  * @author Trojan
  */
 public final class PAttr {
-	final String _name; //qualified name of the attribute
-	String _localName; //Local name of the attribute
-	final SBuffer _value; //Value of attribute
+	public final String _name; //qualified name of the attribute
+	public String _localName; //Local name of the attribute
+	public final SBuffer _value; //Value of attribute
 	int _nsindex; //Index to the namespace id (-1 in no namespace)
-	String _nsURI;  //namespace URI
+	public String _nsURI;  //namespace URI
 
 	/** Create new instance of AttrValue.
 	 * @param name the quoted name of attribute.
+	 * @param nsURI namespace.
+	 * @param nsindex index to namespace list.
 	 * @param value the SBuffer object with the value of attribute.
 	 */
-	public PAttr(final String name,
+	PAttr(final String name,
 		final SBuffer value,
 		final String nsURI,
 		final int nsindex) {
@@ -58,5 +60,5 @@ public final class PAttr {
 	}
 
 	@Override
-	public String toString() {return _name + "=" + _value;}
+	public String toString() {return _name + "=" + _value.getString();}
 }

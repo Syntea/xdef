@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -62,7 +63,7 @@ public class PreCompiler extends XDefReader {
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1; //5
 	/** Table of names of parsed X-definitions. */
 	final ArrayList<String> _xdefNames;
-	/** Created nodes. */
+	/** PNodes with parsed source items. */
 	final ArrayList<PNode> _xdefNodes;
 	/** Source files table - to prevent to doParse the source twice. */
 	final ArrayList<Object> _sourceFiles;
@@ -72,16 +73,18 @@ public class PreCompiler extends XDefReader {
 	private final Map<String, XScriptMacro> _macros =
 		new TreeMap<String, XScriptMacro>();
 	/** Table of NameSpace prefixes. */
-	final static Map<String, Integer> _predefinedNSPrefixes
-		= new TreeMap<String, Integer>();
+	final static Map<String, Integer>
+		PREDEFINED_PREFIXES = new TreeMap<String, Integer>();
 	/** Display mode */
 	final byte _displayMode;
-	/** Array of thesaurus sources. */
+	/** Array of thesaurus sources item. */
 	final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
 	/** Array of BNF sources. */
 	final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
-	/** Array of declaration sources. */
+	/** Array of declaration source items. */
 	final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
+	/** Array of collection source items. */
+	final ArrayList<PNode> _listCollection = new ArrayList<PNode>();
 
 	/** Code generator. */
 	final CompileCode _codeGenerator;
@@ -113,9 +116,9 @@ public class PreCompiler extends XDefReader {
 		/** DisplayMode. */
 		_displayMode = displayMode;
 		 //"xml"
-		_predefinedNSPrefixes.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
+		PREDEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
 		//"xmlns",
-		_predefinedNSPrefixes.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
+		PREDEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
 		_codeGenerator = new CompileCode(
 			null, 2, debugMode, ignoreUnresolvedExternals);
 //		_codeGenerator._parser = new XScriptParser(false);
@@ -127,10 +130,6 @@ public class PreCompiler extends XDefReader {
 		_codeGenerator._namespaceURIs.add(KXmlConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add(//schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-		_predefinedNSPrefixes.put(XMLConstants.XML_NS_PREFIX, //"xml"
-			NS_XML_INDEX);
-		_predefinedNSPrefixes.put(XMLConstants.XMLNS_ATTRIBUTE, //"xmlns",
-			NS_XMLNS_INDEX);
 	}
 
 	/** Report about not legal attributes. All allowed attributes should be
@@ -317,6 +316,7 @@ public class PreCompiler extends XDefReader {
 			if ("collection".equals(elemLocalName)) {
 				processIncludeList();
 				reportNotAllowedAttrs(_actPNode, getReportWriter());
+				_listCollection.add(_actPNode);
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _listBNF.add(_actPNode);
@@ -817,7 +817,7 @@ public class PreCompiler extends XDefReader {
 		for (int i = 0;  i < _xdefNames.size(); i++) {
 			String defName = _xdefNames.get(i);
 			PNode def = _xdefNodes.get(i);
-			ArrayList<PNode> macros = def.getXDefChildNodes("macro");
+			List<PNode> macros = def.getXDefChildNodes("macro");
 			for (PNode macro : macros) {
 				Map<String, String> params = new TreeMap<String, String>();
 				chkNestedElements(macro, getReportWriter());
@@ -852,14 +852,29 @@ public class PreCompiler extends XDefReader {
 		return _xdefNodes;
 	}
 
-//	public final ArrayList<PNode> getThesaurusList() {
-//		return _thesaurus;
-//	}
-//
-//	public final ArrayList<PNode> getComponentList() {return _listComponent;}
-//
-//	public final ArrayList<PNode> getDeclarationList() {return _listDecl;}
-//
-//	public final ArrayList<PNode> getBNFList() {return _listBNF;}
+	/** Get precompiled sources (PNodes) of X-definition items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPXDefs() {return _xdefNodes;}
+
+	/** Get precompiled sources (PNodes) of Thesaurus items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPThesaurus() {return _thesaurus;}
+
+	/** Get precompiled sources (PNodes) of collection items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPCollection() {return _listCollection;}
+
+	/** Get precompiled sources (PNodes) of declaration items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPDeclaration() {return _listDecl;}
+
+	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPBNF() {return _listBNF;}
 
 }
