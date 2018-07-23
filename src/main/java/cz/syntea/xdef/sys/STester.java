@@ -565,9 +565,7 @@ public abstract class STester {
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public void assertEq(Element a1, Element a2) {
-		assertEq(a1, a2, null);
-	}
+	public void assertEq(Element a1, Element a2) {assertEq(a1, a2, null);}
 
 	/** Check elements are equal (text nodes are trimmed).
 	 * @param a1 first value.
@@ -632,7 +630,6 @@ public abstract class STester {
 			}
 		} else if (a1 instanceof byte[] && a2 instanceof byte[]) {
 			return Arrays.equals((byte[]) a1, (byte[]) a2);
-/*xx*/
 		} else if (a1 instanceof boolean[] && a2 instanceof boolean[]) {
 			return Arrays.equals((boolean[]) a1, (boolean[]) a2);
 		} else if (a1 instanceof char[] && a2 instanceof char[]) {
@@ -649,7 +646,6 @@ public abstract class STester {
 			return Arrays.equals((double[]) a1, (double[]) a2);
 		} else if (a1 instanceof Object[] && a2 instanceof Object[]) {
 			return Arrays.equals((Object[]) a1, (Object[]) a2);
-/*xx*/
 		}
 		return a1.equals(a2);
 	}
@@ -658,9 +654,7 @@ public abstract class STester {
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
 	 */
-	public final void assertNull(final Object a) {
-		assertNull(a, null);
-	}
+	public final void assertNull(final Object a) {assertNull(a, null);}
 
 	/** Check if the argument is <tt>null</tt>. If not then invoke the method
 	 * <tt>fail</tt>.
@@ -677,9 +671,7 @@ public abstract class STester {
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
 	 */
-	public final void assertTrue(final boolean a) {
-		assertFalse(!a, null);
-	}
+	public final void assertTrue(final boolean a) {assertFalse(!a, null);}
 
 	/** Check if the argument <tt>a</tt> is <tt>true</tt>. If not then invoke
 	 * the method <tt>fail</tt> with the argument msg.
@@ -694,9 +686,7 @@ public abstract class STester {
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for false.
 	 */
-	public final void assertFalse(final boolean a) {
-		assertFalse(a, null);
-	}
+	public final void assertFalse(final boolean a) {assertFalse(a, null);}
 
 	/** Check if the argument <tt>a</tt> is <tt>false</tt>. If not then invoke
 	 * the method <tt>fail</tt> with the argument msg.
@@ -881,7 +871,7 @@ public abstract class STester {
 					if (!new File(_sourceName).exists()) {
 						_timeStamp = System.currentTimeMillis();
 						return;
-					}					
+					}
 				}
 				if (!new File(_sourceName).exists()) {
 					_timeStamp = System.currentTimeMillis();
@@ -909,10 +899,7 @@ public abstract class STester {
 		} else {
 			_dataDir = s;
 		}
-		s =  _homeDir + "temp/";
-		if (f.exists() && f.isDirectory()) {
-			_tempDir = s;
-		}
+		_tempDir =  _homeDir + "temp/";
 		_timeStamp = System.currentTimeMillis();
 	}
 
