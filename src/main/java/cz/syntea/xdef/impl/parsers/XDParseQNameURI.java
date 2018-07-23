@@ -66,8 +66,8 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		Element el = _elem == null ? xnode.getElement() : _elem;
-		boolean xmlVersion1 =
-			"1.1".equals(el.getOwnerDocument().getXmlVersion());
+		byte xmlVersion1 = "1.1".equals(el.getOwnerDocument().getXmlVersion())
+			? (byte) 11 : (byte) 10;
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parser.isXMLName(xmlVersion1)) {
 			p.error(XDEF.XDEF546); //QName expected
@@ -83,7 +83,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 	}
 
 	XDValue parse(final XXNode xnode, final StringParser parser) {
-		if (!parser.isNCName(false)) {
+		if (!parser.isNCName((byte) 10)) {
 			return null;
 		}
 		return new DefString(parser.getParsedString());

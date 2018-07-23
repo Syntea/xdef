@@ -62,13 +62,6 @@ public class TestSUtils extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		String javaVersion = System.getProperty("java.version");
-		if (javaVersion != null) {
-			String[] ss = javaVersion.split("\\.");
-			javaVersion = ss[0] + '.' + ss[1];
-		} else {
-			javaVersion = "1.6";
-		}
 		try {
 			String s, s1, s2;
 			StringParser p;
@@ -142,7 +135,7 @@ public class TestSUtils extends STester {
 			assertEq("May", p.getParsedSDatetime().formatDate( "{L(en)}MMM"));
 			assertEq("Mai", p.getParsedSDatetime().formatDate( "{L(de)}MMM"));
 			s = p.getParsedSDatetime().formatDate("{L(cs,CZ)}MMM");
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				assertEq("V",s);
 			} else {
 				assertEq("Kvě",s);
@@ -152,7 +145,7 @@ public class TestSUtils extends STester {
 				"{L(es,ES,Traditional_WIN)}MMM"));
 			assertEq("may", p.getParsedSDatetime().formatDate(
 				"{z(America/Los_Angeles)L(es,ES,Traditional_WIN)}MMM"));
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				s = "Po, 2004 V. 31 235943+01:00";
 			} else {
 				s = "Po, 2004 Kvě. 31 235943+01:00";
@@ -164,7 +157,7 @@ public class TestSUtils extends STester {
 				fail("parse/format date 3: " +
 					p.getParsedSDatetime().formatDate(s1));
 			}
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				s = "Pondělí, 2004 květen 31 235943+01:00";
 			} else {
 				s = "Pondělí, 2004 května 31 235943+01:00";
@@ -1035,7 +1028,7 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				if (SUtils.JAVA_VERSION <= 107) {
 					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				} else {
@@ -1046,7 +1039,7 @@ public class TestSUtils extends STester {
 			} else {
 				fail();
 			}
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				s = "Po, 23. leden 2006";
 			} else {
 				s = "Po, 23. ledna 2006";
@@ -1062,7 +1055,7 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				if (SUtils.JAVA_VERSION <= 107) {
 					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				} else {
@@ -1072,7 +1065,7 @@ public class TestSUtils extends STester {
 			} else {
 				fail();
 			}
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				s = "Po, 23. leden 2006";
 			} else {
 				s = "Po, 23. ledna 2006";
@@ -1088,7 +1081,7 @@ public class TestSUtils extends STester {
 					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-				if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+				if (SUtils.JAVA_VERSION <= 107) {
 					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				} else {
@@ -1121,7 +1114,7 @@ public class TestSUtils extends STester {
 			} else {
 				fail();
 			}
-			if ("1.6".equals(javaVersion) || "1.7".equals(javaVersion)) {
+			if (SUtils.JAVA_VERSION <= 107) {
 				s = "12/VI/1961";
 			} else {
 				s = "12/Čer/1961";

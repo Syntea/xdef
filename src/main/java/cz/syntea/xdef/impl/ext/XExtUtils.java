@@ -65,9 +65,9 @@ public final class XExtUtils {
 	 */
 	public final static String getQnameNSUri(final String qname,
 		final Element elem) {
-		boolean xmlVersion1 =
-			"1.1".equals(elem.getOwnerDocument().getXmlVersion());
-		if (!StringParser.chkXMLName(qname, xmlVersion1)) {
+		byte xmlVersion = "1.1".equals(elem.getOwnerDocument().getXmlVersion())
+			? (byte) 11 : 10;
+		if (!StringParser.chkXMLName(qname, xmlVersion)) {
 			return "";
 		}
 		String prefix;

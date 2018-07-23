@@ -13,10 +13,7 @@
 package test.common.xml;
 
 import cz.syntea.xdef.sys.STester;
-import cz.syntea.xdef.xml.KDOMBuilder;
-import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;

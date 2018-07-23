@@ -75,7 +75,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		DefContainer val = new DefContainer();
 		p.setParsedValue(val);
 		String token = p.nextToken();
-		if (token == null || !StringParser.chkXMLName(token, false)) {
+		if (token == null || !StringParser.chkXMLName(token, (byte) 10)) {
 			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
 			return;
 		}
@@ -87,7 +87,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 			}
 			int pos = p.getIndex();
 			token = p.nextToken();
-			if (token != null && StringParser.chkXMLName(token, false)) {
+			if (token != null && StringParser.chkXMLName(token, (byte) 10)) {
 				sb.append(' ').append(token);
 				val.addXDItem(new DefString(token));
 			} else {

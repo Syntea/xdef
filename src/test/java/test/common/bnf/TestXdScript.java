@@ -70,7 +70,7 @@ public class TestXdScript extends STester {
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);
 			g = BNFGrammar.compile(null, bnfOfBNF, null);
-			if (Tester.getDebugMode()) {
+			if (Tester.getFulltestMode()) {
 				g = BNFGrammar.compile(null, g.toString(), null);
 			}
 /*labels not implemented yet*
@@ -270,7 +270,7 @@ public class TestXdScript extends STester {
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "MethodListItem", s));
 //			printCode(g);
-			if (Tester.getDebugMode()) {
+			if (Tester.getFulltestMode()) {
 				s = g.toString();
 				assertEq(s, parse(g, "BNFGrammar", s));
 				assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));

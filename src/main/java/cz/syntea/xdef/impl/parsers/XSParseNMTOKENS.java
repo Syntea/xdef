@@ -35,7 +35,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isNMToken(false)) {
+		if (!parser.isNMToken((byte) 10)) {
 			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
 			return;
 		}
@@ -44,7 +44,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		DefContainer val = new DefContainer();
 		val.addXDItem(new DefString(s));
 		while (parser.isSpaces() && !parser.eos()) {
-			if (!parser.isNMToken(false)) {
+			if (!parser.isNMToken((byte) 10)) {
 				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
 				return;
 			}

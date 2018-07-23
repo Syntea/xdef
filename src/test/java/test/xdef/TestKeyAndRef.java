@@ -29,9 +29,10 @@ public final class TestKeyAndRef extends Tester {
 
 	public static String boundQName(final XXData data) {
 		String s = data.getTextValue();
-		boolean xmlVersion1 = "1.1".equals(
-			data.getElement().getOwnerDocument().getXmlVersion());
-		if (!StringParser.chkNCName(s, xmlVersion1)) {
+		byte xmlVersion =
+			"1.1".equals(data.getElement().getOwnerDocument().getXmlVersion())
+			? (byte) 11 : (byte) 10;
+		if (!StringParser.chkNCName(s, xmlVersion)) {
 			return null;
 		}
 		Element e = data.getElement();

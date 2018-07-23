@@ -1686,7 +1686,7 @@ final class CompileCode extends CompileBase {
 		String s = getCodeItem(constPar).toString();
 		int ix = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		String name = s.substring(ix);
-		ix = StringParser.chkXMLName(name,false) ?
+		ix = StringParser.chkXMLName(name, (byte) 10) ?
 			name.indexOf("::") < 0 ? ix : -1 : -1;
 		if (ix < 0) {
 			return false;

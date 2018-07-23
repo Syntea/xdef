@@ -395,13 +395,15 @@ public final class Test000 extends Tester {
 				new ByteArrayInputStream(xpOut.toByteArray());
 			xp = XDFactory.readXDPool(xpIn);
 			xpIn.close();
+			setProperty(XDConstants.XDPROPERTY_DOCTYPE,
+				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
-//			assertNoErrors(reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			//XML099 = DOCTYPE is set as not allowed&
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
+		resetProperties();
 //		try { //test ignoring of DTD.
 //			xdef = dataDir + "Test000_01.xdef";
 //			xp = compile(xdef);
@@ -658,10 +660,10 @@ public final class Test000 extends Tester {
 			assertEq(el, dataDir + "Test000_06_out.xml");
 			assertNoErrors(reporter, dataDir + "Test000_06_out.xml");
 			//Igor
-//			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef");
-//			xp = XDFactory.compileXD(null, files, getClass());
-//			parse(xp, "SoapRequestB1", dataDir + "Test000_08.xml", reporter);
-//			assertErrors(reporter);
+			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef");
+			xp = XDFactory.compileXD(null, files, getClass());
+			parse(xp, "SoapRequestB1", dataDir + "Test000_08.xml", reporter);
+			assertErrors(reporter);
 			//Igor2
 			_myError = 0;
 			xdef = dataDir + "Test000_07.xdef";

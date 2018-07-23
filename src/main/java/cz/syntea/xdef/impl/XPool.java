@@ -29,9 +29,8 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.util.GenXDefinition;
 import cz.syntea.xdef.impl.code.CodeDisplay;
-import cz.syntea.xdef.impl.compile.CompileXdefPool;
+import cz.syntea.xdef.impl.compile.CompileXDPool;
 import cz.syntea.xdef.model.XMDebugInfo;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMElement;
@@ -65,7 +64,7 @@ public final class XPool implements XDPool {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
 	/** Last compatible build number.*/
-	private static final int XD_MIN_BUILD = 2;
+	private static final int XD_MIN_BUILD = 3;
 
 	/** Flag if warnings should be checked.*/
 	private final boolean _chkWarnings;
@@ -132,8 +131,8 @@ public final class XPool implements XDPool {
 	final Map<String, XSourceItem> _sourcesMap;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
-	/** CompileXdefPool for definitions.*/
-	CompileXdefPool _compiler;
+	/** CompileXDPool for definitions.*/
+	CompileXDPool _compiler;
 
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
@@ -240,7 +239,7 @@ public final class XPool implements XDPool {
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
-		_compiler = new CompileXdefPool(this,
+		_compiler = new CompileXDPool(this,
 			_reporter!= null ? _reporter : new ArrayReporter(),
 			_extClasses,
 			_xdefs);
@@ -314,7 +313,7 @@ public final class XPool implements XDPool {
 			}
 		}
 		//Incorrect property value: &{0}
-		_compiler.error(SYS.SYS082, key + "=" + value);
+		_compiler.getReportWriter().error(SYS.SYS082, key + "=" + value);
 		return 0; // default value
 	}
 
@@ -349,8 +348,7 @@ public final class XPool implements XDPool {
 						sid = source.substring(1, source.length()-2) + "def";
 					}
 					if (src != null) { // Generate a X-definition from XML
-						src = KXmlUtils.nodeToString(
-							GenXDefinition.genXdef(src), true);
+						src = KXmlUtils.nodeToString(GenXDef.genXdef(src), true);
 						setSource(src, sid);
 						return;
 					}
@@ -362,7 +360,7 @@ public final class XPool implements XDPool {
 		String s = sourceId;
 		if (source == null || source.length() == 0) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903, sourceId);
+			_compiler.getReportWriter().error(XDEF.XDEF903, sourceId);
 			return;
 		}
 		try {
@@ -381,7 +379,7 @@ public final class XPool implements XDPool {
 				if (files == null || files.length == 0) {
 					_sourcesMap.put(source, new XSourceItem(source));
 					//X-definition source is missing or null&{0}{: }
-					_compiler.error(XDEF.XDEF903, source);
+					_compiler.getReportWriter().error(XDEF.XDEF903, source);
 					return;
 				}
 				setSource(files);
@@ -393,11 +391,12 @@ public final class XPool implements XDPool {
 				ex = e;
 			}
 			if (ex instanceof SThrowable) {
-				_compiler.putReport(((SThrowable) ex).getReport());
+				_compiler.getReportWriter().putReport(
+					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.error(XDEF.XDEF903, s);
-				_compiler.error(SYS.SYS036, ex);//Program exception&{0}{: }
+				_compiler.getReportWriter().error(XDEF.XDEF903, s);
+				_compiler.getReportWriter().error(SYS.SYS036, ex);//Program exception&{0}{: }
 			}
 		}
 	}
@@ -416,7 +415,7 @@ public final class XPool implements XDPool {
 	final void setSource(final String[] sources, final String[] sourceIds) {
 		if (sources == null || sources.length == 0) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		for (int i = 0; i < sources.length; i++) {
@@ -431,7 +430,7 @@ public final class XPool implements XDPool {
 	final void setSource(final File source) {
 		if (source == null) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		try {
@@ -440,12 +439,13 @@ public final class XPool implements XDPool {
 			_compiler.parseFile(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
-				_compiler.putReport(((SThrowable) ex).getReport());
+				_compiler.getReportWriter().putReport(
+					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.error(XDEF.XDEF903, source);
+				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
-				_compiler.error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
 		}
 	}
@@ -456,7 +456,7 @@ public final class XPool implements XDPool {
 	final void setSource(final File[] sources) {
 		if (sources == null || sources.length == 0) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		for (int i = 0; i < sources.length; i++) {
@@ -470,7 +470,7 @@ public final class XPool implements XDPool {
 	final void setSource(final URL source) {
 		if (source == null) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		try {
@@ -478,12 +478,13 @@ public final class XPool implements XDPool {
 			_compiler.parseURL(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
-				_compiler.putReport(((SThrowable) ex).getReport());
+				_compiler.getReportWriter().putReport(
+					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.error(XDEF.XDEF903, source);
+				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
-				_compiler.error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
 		}
 	}
@@ -494,7 +495,7 @@ public final class XPool implements XDPool {
 	final void setSource(final URL[] sources) {
 		if (sources == null || sources.length == 0) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		for (int i = 0; i < sources.length; i++) {
@@ -514,7 +515,7 @@ public final class XPool implements XDPool {
 		}
 		if (source == null) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903, s);
+			_compiler.getReportWriter().error(XDEF.XDEF903, s);
 			return;
 		}
 		try {
@@ -527,12 +528,13 @@ public final class XPool implements XDPool {
 			}
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
-				_compiler.putReport(((SThrowable) ex).getReport());
+				_compiler.getReportWriter().putReport(
+					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.error(XDEF.XDEF903, source);
+				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
-				_compiler.error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
 		}
 	}
@@ -546,7 +548,7 @@ public final class XPool implements XDPool {
 		final String sourceIds[]) {
 		if (sources == null || sources.length == 0) {
 			//X-definition source is missing or null&{0}{: }
-			_compiler.error(XDEF.XDEF903);
+			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
 		for (int i = 0; i < sources.length; i++) {

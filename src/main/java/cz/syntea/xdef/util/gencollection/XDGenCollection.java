@@ -24,7 +24,9 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.impl.compile.XScriptMacro;
+import cz.syntea.xdef.impl.compile.XScriptMacroResolver;
 import cz.syntea.xdef.impl.compile.XScriptParser;
+import cz.syntea.xdef.sys.ArrayReporter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
@@ -300,19 +302,23 @@ public class XDGenCollection {
 		_xdParser = new XdParser(_doc, source);
 		_xdParser.parseDocument();
 		Element root = _xdParser._root;
-		String file = "file:/";
-		String sourcePath =
-			source.startsWith(file) ? source.substring(file.length()): source;
-		File f = new File(sourcePath);
-		sourcePath = f.getParentFile().getAbsolutePath();
-		sourcePath += File.separator;
+		String sourcePath;
+		if (source.startsWith("<")) {
+			sourcePath = "";
+		} else {
+			String file = "file:/";
+			sourcePath = source.startsWith(file)
+				? source.substring(file.length()): source;
+			File f = new File(sourcePath);
+			sourcePath = f.getParentFile().getAbsolutePath();
+			sourcePath += File.separator;
+		}
 		String uri = getXDNodeNS(root);
 		if ("collection".equals(root.getLocalName())
 			&& (KXmlConstants.XDEF20_NS_URI.equals(uri)
 			|| KXmlConstants.XDEF31_NS_URI.equals(uri))) {
 			if (_collection == null) {
 				genCollection(uri);
-				_collection.setNodeValue(file);
 			}
 			processIncludeList(root, sourcePath);
 			NodeList nl = root.getChildNodes();
@@ -359,10 +365,11 @@ public class XDGenCollection {
 					}
 					_includeList.add(url.toExternalForm());
 				} catch (Exception ex) {
+					throw new RuntimeException(ex);
 				}
 			} else {
 				File[] list = SUtils.getFileGroup(sourcePath + s);
-				for (int i = 0; i < list.length; i++) {
+				for (int i = 0; list != null && i < list.length; i++) {
 					try {
 						String fname = list[i].getCanonicalPath();
 						if (list[i].canRead() && !_includeList.contains(fname)){
@@ -446,9 +453,10 @@ public class XDGenCollection {
 	 * @param macros HashMap with macros.
 	 * @param resolve swith if macros will be expanded and removed.
 	 */
-	public static void processMacros(final Element collection,
+	private static void processMacros(final Element collection,
 		final HashMap<String, XScriptMacro> macros,
 		final boolean resolve) {
+/**/
 		NodeList nl = collection.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
@@ -504,6 +512,57 @@ public class XDGenCollection {
 					}
 				}
 			}
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element def = (Element) nl.item(i);
+				String defName =
+					getXdefAttr(def, def.getNamespaceURI(), "name", false);
+				expandMacros(def, defName, macros);
+			}
+		}
+/**/
+		}
+
+	/** Expand all macros in given element and its attributes and child nodes.
+	 * @param el Element in which macros are expanded.
+	 * @param defName name of actual X-definition.
+	 * @param macros HashMasp with macros.
+	 */
+	private static void expandMacros(final Element el,
+		final String defName,
+		final HashMap<String, XScriptMacro> macros) {
+		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
+			"1.1".equals(el.getOwnerDocument().getXmlVersion())
+				? (byte) 11 : (byte) 10,
+			macros,
+			new ArrayReporter());
+		NodeList nl = el.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+			switch (n.getNodeType()) {
+				case Node.CDATA_SECTION_NODE: {
+					CDATASection c = (CDATASection) n;
+					SBuffer sb = new SBuffer(c.getData());
+					mr.expandMacros(sb);
+					c.setData(sb.getString());
+					continue;
+				}
+				case Node.TEXT_NODE: {
+					Text c = (Text) n;
+					SBuffer sb = new SBuffer(c.getData());
+					mr.expandMacros(sb);
+					c.setData(sb.getString());
+					continue;
+				}
+				case Node.ELEMENT_NODE:
+					expandMacros((Element) n, defName, macros);
+			}
+		}
+		NamedNodeMap nm = el.getAttributes();
+		for (int i = 0; nm != null && i < nm.getLength(); i++) {
+			Attr a = (Attr) nm.item(i);
+			SBuffer sb = new SBuffer(a.getValue());
+			mr.expandMacros(sb);
+			a.setValue(sb.getString());
 		}
 	}
 
@@ -519,7 +578,7 @@ public class XDGenCollection {
 		final String defName,
 		final boolean removeActions,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser(false, null);
+		XScriptParser sp = new XScriptParser((byte) 10);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, XDConstants.XD20_ID);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
@@ -756,7 +815,6 @@ public class XDGenCollection {
 			if (u1 == null) {
 				result.setAttribute(ak.getName(), ak.getValue());
 			} else {
-
 				result.setAttributeNS(u1, ak.getName(), ak.getValue());
 			}
 		}
@@ -1101,7 +1159,8 @@ public class XDGenCollection {
 				}
 			}
 			if (!found) {
-				throw new SRuntimeException("Unvailable X-definition");
+				//XDEF269=X-definition &{0}{'}{' }doesn't exist
+				throw new SRuntimeException(XDEF.XDEF269);
 			}
 			if (removeActions) {
 				for (int i = 0; i < nl.getLength(); i++) {
@@ -1128,7 +1187,8 @@ public class XDGenCollection {
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
 		if (files == null || files.length == 0) {
-			throw new SRuntimeException("Unvailable file with X-definition");
+			//XDEF269=X-definition &{0}{'}{' }doesn't exist
+			throw new SRuntimeException(XDEF.XDEF269);
 		}
 		XDPool xp = chkXdef(files);
 		XDGenCollection x = new XDGenCollection();
@@ -1150,7 +1210,8 @@ public class XDGenCollection {
 			}
 		}
 		if (!found) {
-			throw new SRuntimeException("Unvailable X-definition");
+			//XDEF269=X-definition &{0}{'}{' }doesn't exist
+			throw new SRuntimeException(XDEF.XDEF269);
 		}
 		if (removeActions) {
 			for (int i = 0; i < nl.getLength(); i++) {

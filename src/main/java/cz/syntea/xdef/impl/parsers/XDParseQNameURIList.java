@@ -57,8 +57,8 @@ public class XDParseQNameURIList extends XDParseNCNameList {
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser parser) {
 		Element el = _elem == null ? xnode.getElement() : _elem;
-		boolean xmlVersion1 =
-			"1.1".equals(el.getOwnerDocument().getXmlVersion());
+		byte xmlVersion1 = "1.1".equals(el.getOwnerDocument().getXmlVersion())
+			? (byte) 11 : (byte) 10;
 		int pos = parser.getIndex();
 		if (!parser.isXMLName(xmlVersion1)) {
 			parser.error(XDEF.XDEF546); //QName expected

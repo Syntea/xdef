@@ -43,6 +43,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public Map<String, String> _namespaces = new TreeMap<String, String>();
 	/** Version of X-definition (XDConstants.XD20_ID or XDConstants.XD31_ID). */
 	private byte _xdVersion;
+	/** Version of XML from which the X-definition was created. */
+	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Actions on Document
@@ -60,14 +62,17 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @param xdp XPool object.
 	 * @param nsURI Name space URI of X-definition.
 	 * @param sourcePosition source position of X-definition.
+	 * @param xmlVersion XML version of X-definition source.
 	 */
 	public XDefinition(final String name,
 		final XDPool xdp,
 		final String nsURI,
-		final SPosition sourcePosition) {
+		final SPosition sourcePosition,
+		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
 		_xdVersion = KXmlConstants.XDEF20_NS_URI.equals(nsURI)
 			? XDConstants.XD20_ID : XDConstants.XD31_ID;
+		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;
 		_xElements = new ArrayList<XElement>();
 		_rootSelection = new TreeMap<String, XNode>();
@@ -212,6 +217,12 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 */
 	public byte getXDVersion() {return _xdVersion;}
 
+	@Override
+	/** Get XML version of X-definition source.
+	 * @return XML version of X-definition source ("1.0" -> 10, "1.1" -> 11).
+	 */
+	public byte getXmlVersion() {return _xmlVersion;}
+
 	/** Add new XElement as model.
 	 * @param newModel XElement
 	 * @return <tt>true</tt> if and only if the new model was added
@@ -335,6 +346,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		xw.writeSPosition(_sourcePosition);
 		writeXCodeDescriptor(xw);
 		xw.writeByte(_xdVersion);
+		xw.writeByte(_xmlVersion);
 		xw.writeInt(_onIllegalRoot);
 		xw.writeInt(_onXmlError);
 		int len = _properties == null ? 0 : _properties.size();
@@ -369,9 +381,10 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		}
 		String name = xr.readString();
 		String nsUri = xr.readString();
-		XDefinition x = new XDefinition(name, xp, nsUri, sourcePos);
+		XDefinition x = new XDefinition(name, xp, nsUri, sourcePos, (byte) 0);
 		x.readXCodeDescriptor(xr);
 		x._xdVersion = xr.readByte();
+		x._xmlVersion = xr.readByte();
 		x._onIllegalRoot = xr.readInt();
 		x._onXmlError = xr.readInt();
 		int len = xr.readLength(); //properties

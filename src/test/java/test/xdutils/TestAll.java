@@ -46,7 +46,7 @@ public class TestAll {
 			new TestGenDTD(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdutils", Tester.getDebugMode(), args);
+			tests, "package xdutils", Tester.getFulltestMode(), args);
 		if (log!= null) {
 			log.close();
 		}

@@ -28,7 +28,7 @@ public class XDParseQNameList extends XDParseNCNameList {
 	}
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
-		if (!p.isXMLName(false)) {
+		if (!p.isXMLName((byte) 10)) {
 			return null;
 		}
 		return new DefString(p.getParsedString());

@@ -198,33 +198,6 @@ public class XScriptParser extends StringParser
 	public static final char XMLWRITER_ID_SYM = (char) (BASE_ID + XD_XMLWRITER);
 	public static final char OBJECT_ID_SYM = (char) (BASE_ID + XD_OBJECT);
 
-	/** Operators level 1. */
-	public static final String OP_L1 =
-		new String(new char[]{MUL_SYM, DIV_SYM, MOD_SYM});
-	/** Operators level 2. */
-	public static final String OP_L2 =
-		new String(new char[]{PLUS_SYM, MINUS_SYM});
-	/** Operators level 3. */
-	public static final String OP_L3 =
-		new String(new char[]{EQ_SYM, NE_SYM, LE_SYM, GE_SYM,
-		 LT_SYM, GT_SYM, LSH_SYM, RSH_SYM, RRSH_SYM,});
-	/** Operators level 4. */
-	public static final String OP_L4 =
-		new String(new char[]{AND_SYM, AAND_SYM});
-	/** Operators level 5. */
-	public static final String OP_L5 =
-		new String(new char[]{OR_SYM, XOR_SYM, OOR_SYM});
-	/** Unary operators. */
-	public static final String OP_UNARY =
-		new String(new char[]{NEG_SYM, NOT_SYM, PLUS_SYM, MINUS_SYM});
-	/** Assignment operators */
-	public static final String OP_ASSGN =
-		new String(new char[]{ASSGN_SYM, LSH_EQ_SYM, RSH_EQ_SYM, RRSH_EQ_SYM,
-		 MUL_EQ_SYM, DIV_EQ_SYM, MOD_EQ_SYM, AND_EQ_SYM, PLUS_EQ_SYM,
-		 MINUS_EQ_SYM, OR_EQ_SYM, XOR_EQ_SYM});
-	/** String with white space chars. */
-	public static final String SPACECHARS = "\n\t\r ";
-
 	/** Name of actual X-definition. */
 	public String _actDefName;
 	/** Version of X-definition (see XD2_0, XD3_1). */
@@ -237,8 +210,8 @@ public class XScriptParser extends StringParser
 	public char _sym;
 	/** Parsed unary minus. */
 	public boolean _unaryMinus;
-	/** True if and only if version of XML document is 1.0.*/
-	public boolean _xmlVersion1;
+	/** XML version (10 -> "1.0", 11 -> "1.1" )*/
+	public byte _xmlVersion;
 	/** Saved position of last symbol (for error reports) */
 	private SPosition _lastSPos;
 
@@ -393,20 +366,14 @@ public class XScriptParser extends StringParser
 		BASESYMBOLTABLE.put(UNDEF_SYM, "UNDEFINED SYMBOL");
 	}
 
-	/** Table of macros. */
-	private final Map<String, XScriptMacro> _macros;
-
 	/** Creates a new instance of ScriptParser.
-	 * @param xmlVersion1 true if version of XML document is "1.1".
-	 * @param macros The table of macros.
+	 * @param xmlVersion 10 -> "1.0", 11 -> "1.1".
 	 */
-	public XScriptParser(final boolean xmlVersion1,
-		final Map<String, XScriptMacro> macros) {
+	public XScriptParser(final byte xmlVersion) {
 		super();
 		super.setLineInfoFlag(true); // generate line information
-		_xmlVersion1 = xmlVersion1;
+		_xmlVersion = xmlVersion;
 		_actDefName = "";
-		_macros = macros == null ? new TreeMap<String, XScriptMacro>() : macros;
 //		_lastPos=0;idName=null;_parsedValue=null;_unaryMinus=false;// Java makes
 	}
 
@@ -432,36 +399,6 @@ public class XScriptParser extends StringParser
 		setLastPosition();
 	}
 
-	/** Parse script name. Name must start with letter or '_' and continue
-	 * with letters, digits or '_'. Inside the script name may be one colon.
-	 * @return true if name was recognized.
-	 */
-	private boolean isXScriptName(StringParser p) {
-		if (p.getXmlCharType(_xmlVersion1) != XML_CHAR_NAME_START) {
-			return false;
-		}
-		StringBuilder sb = new StringBuilder(String.valueOf(p.peekChar()));
-		char c;
-		boolean wasColon = false;
-		while (getXmlCharType(c = p.getCurrentChar(), _xmlVersion1) ==
-			XML_CHAR_NAME_START ||
-			(c >= '0' && c <= '9') || (!wasColon && c == ':')) {
-			if (c == ':') { // we allow one colon inside the name
-				wasColon = true;
-				c = p.nextChar();
-				if (p.getXmlCharType(_xmlVersion1) != XML_CHAR_NAME_START) {
-					p.setBufIndex(getIndex() - 1);  // must follow name, ignore ':'
-					break;
-				}
-				sb.append(':');
-			}
-			sb.append(c);
-			p.nextChar();
-		}
-		p.setParsedString(sb.toString());
-		return true;
-	}
-
 	/** Set last position for error reporting. */
 	final void setLastPosition() {_lastSPos = new SPosition(this);}
 
@@ -477,12 +414,13 @@ public class XScriptParser extends StringParser
 		}
 		for (;;) {
 			char ch;
-			if (SPACECHARS.indexOf(ch = getCurrentChar()) >= 0) {
+			if ("\n\t\r ".indexOf(ch = getCurrentChar()) >= 0) {
 				if (ch == '\n') {
 					setNewLine();
 				}
-				while (incBufIndex() > 0 &&
-					SPACECHARS.indexOf(ch = getCurrentChar()) >= 0) {}
+				while (incBufIndex() >= 0 &&
+					"\n\t\r ".indexOf(ch = getCurrentChar()) >= 0) {
+				}
 			}
 			if (ch != '/' || getIndex() + 1 >= getEndBufferIndex() ||
 				((ch = getCharAtPos(getIndex() + 1)) != '*' && ch != '/')) {
@@ -609,7 +547,7 @@ public class XScriptParser extends StringParser
 				}
 				return _sym = ch;
 			case '@': {
-				if (!isXMLName(_xmlVersion1)) {
+				if (!isXMLName(_xmlVersion)) {
 					error(XDEF.XDEF402); //Name of attribute expected
 				}
 				_idName = getParsedString();
@@ -670,7 +608,7 @@ public class XScriptParser extends StringParser
 				if (!(wasDollar = ch == '$')) {
 					setBufIndex(getIndex() - 1);
 				}
-				if (!isXMLName(_xmlVersion1)) {
+				if (!isXMLName(_xmlVersion)) {
 					return _sym = UNDEF_SYM;
 				}
 				String s =
@@ -801,7 +739,7 @@ public class XScriptParser extends StringParser
 		String result = getParsedString();
 		int pos = getIndex();
 		if (isToken("/@")) {
-			if (!isXMLName(true)) {
+			if (!isXMLName(_xmlVersion)) {
 				error(XDEF.XDEF328);//Reference specification expected
 				return false;
 			}
@@ -829,7 +767,7 @@ public class XScriptParser extends StringParser
 		String xdName = _actDefName;
 		if (isChar('*') && !isChar('#')) {
 			modelName = "*";
-		} else if (isXMLName(true)) {
+		} else if (isXMLName(_xmlVersion)) {
 			modelName = getParsedString();
 		} else {
 			modelName = "";
@@ -838,10 +776,10 @@ public class XScriptParser extends StringParser
 			xdName = modelName;
 			if (isChar('*') && !isChar('/')) {
 				modelName = "*";
-			} else if (isXMLName(true)) {
+			} else if (isXMLName(_xmlVersion)) {
 				modelName = getParsedString();
 				if (isChar('!')) {
-					if (isXMLName(true)) {
+					if (isXMLName(_xmlVersion)) {
 						modelName += '!' + getParsedString();
 					}
 				}
@@ -853,7 +791,7 @@ public class XScriptParser extends StringParser
 			return false;
 		}
 		if (isChar('!')) {
-			if (isXMLName(true)) {
+			if (isXMLName(_xmlVersion)) {
 				modelName += '!' + getParsedString();
 			} else {
 				error(XDEF.XDEF104); //Name of model expected
@@ -872,7 +810,7 @@ public class XScriptParser extends StringParser
 					pos = getIndex();
 				}
 			}
-			if ((wasText = isToken("$text")) || isXMLName(true)
+			if ((wasText = isToken("$text")) || isXMLName(_xmlVersion)
 				|| isOneOfTokens("$mixed", "$choice", "$sequence") >= 0) {
 				if (isChar('[')) {
 					if (isInteger()&& isChar(']')) {
@@ -888,7 +826,7 @@ public class XScriptParser extends StringParser
 					continue;
 				}
 			} else if (isChar('@')) {
-				if (isXMLName(true)) {
+				if (isXMLName(_xmlVersion)) {
 					break;
 				}
 			}
@@ -1736,6 +1674,7 @@ public class XScriptParser extends StringParser
 		}
 		return String.valueOf(sym);
 	}
+
 	/** Put error message that the actual symbol is not allowed here.
 	 * @param sym The symbol id.
 	 */
@@ -1755,24 +1694,28 @@ public class XScriptParser extends StringParser
 			nextSymbol();
 		}
 	}
+
 	@Override
 	public void warning(final String id,
 		final String msg,
 		final Object... mod) {
 		putReportOnLastPos(Report.warning(id, msg, mod));
 	}
+
 	@Override
 	public void lightError(final String id,
 		final String msg,
 		final Object... mod) {
 		putReportOnLastPos(Report.lightError(id, msg, mod));
 	}
+
 	@Override
 	public void error(final String id,
 		final String msg,
 		final Object... mod) {
 		putReportOnLastPos(Report.error(id, msg, mod));
 	}
+
 	@Override
 	/** Put warning message.
 	 * @param registeredID registered message ID.
@@ -1781,6 +1724,7 @@ public class XScriptParser extends StringParser
 	public void warning(final long registeredID, final Object... mod){
 		putReportOnLastPos(Report.warning(registeredID, mod));
 	}
+
 	@Override
 	/** Put light error message.
 	 * @param registeredID registered message ID.
@@ -1797,7 +1741,7 @@ public class XScriptParser extends StringParser
 	public void error(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.error(registeredID, mod));
 	}
-////////////////////////////////////////////////////////////////////////////////
+
 	/** Put report with saved last position.
 	 * @param typ type of message.
 	 * @param id Message id.
@@ -1831,4 +1775,5 @@ public class XScriptParser extends StringParser
 		final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
 	}
+
 }

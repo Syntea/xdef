@@ -67,7 +67,7 @@ public interface XDEF {
 	public static final long XDEF203 = 31159025691L;
 	/** Overflow of compiler internal stack&amp;{#SYS000} */
 	public static final long XDEF204 = 31159025692L;
-	/** Only one X-definition in a collection may be without name&amp;{#SYS000} */
+	/** Only one X-definition in the XDPool may be without name&amp;{#SYS000} */
 	public static final long XDEF212 = 31159025693L;
 	/** Reference to element model expected&amp;{#SYS000} */
 	public static final long XDEF213 = 31159025694L;
@@ -127,9 +127,9 @@ public interface XDEF {
 	public static final long XDEF254 = 31159025721L;
 	/** X-definition or X-collection expected&amp;{#SYS000} */
 	public static final long XDEF255 = 31159025722L;
-	/** NameSpace of X-definitions is required for this element&amp;{#SYS000} */
+	/** Namespace of X-definitions is required for this element&amp;{#SYS000} */
 	public static final long XDEF256 = 31159025723L;
-	/** NameSpace for prefix '&amp;{0}' is undefined&amp;{#SYS000} */
+	/** Namespace for prefix '&amp;{0}' is undefined&amp;{#SYS000} */
 	public static final long XDEF257 = 31159025724L;
 	/** Incorrect name&amp;{#SYS000} */
 	public static final long XDEF258 = 31159025725L;
@@ -143,11 +143,11 @@ public interface XDEF {
 	public static final long XDEF263 = 31159025729L;
 	/** If occurrence is specified it can't be changed by specification of 'empty'&amp;{#SYS000} */
 	public static final long XDEF264 = 31159025730L;
-	/** Node '&amp;{0}' from '&amp;{1}' NameSpace is not allowed here&amp;{#SYS000} */
+	/** Node '&amp;{0}' from the namespace of X-definition is not allowed here&amp;{#SYS000} */
 	public static final long XDEF265 = 31159025731L;
 	/** Class &amp;{0} is not available&amp;{#SYS000} */
 	public static final long XDEF267 = 31159025732L;
-	/** X-definition '&amp;{0}' doesn't exist */
+	/** X-definition &amp;{0}{'}{' }does not exist */
 	public static final long XDEF269 = 31159025733L;
 	/** Can't compare different XDPool objects&amp;{#SYS000} */
 	public static final long XDEF281 = 31159025734L;
@@ -163,7 +163,7 @@ public interface XDEF {
 	public static final long XDEF286 = 31159025739L;
 	/** Occurrence differs: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF287 = 31159025740L;
-	/** NameSpace differs: &amp;{0}&amp;{#SYS000} */
+	/** Namespace differs: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF288 = 31159025741L;
 	/** Names differs: &amp;{0}, &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF289 = 31159025742L;
@@ -179,7 +179,7 @@ public interface XDEF {
 	public static final long XDEF320 = 31159025747L;
 	/** Self reference is not allowed&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF321 = 31159025748L;
-	/** Element from NameSpace of X-definitions is not allowed here&amp;{#SYS000} */
+	/** Element from Namespace of X-definitions is not allowed here&amp;{#SYS000} */
 	public static final long XDEF322 = 31159025749L;
 	/** Required attribute '&amp;{0}' is missing&amp;{#SYS000} */
 	public static final long XDEF323 = 31159025750L;
@@ -411,7 +411,7 @@ public interface XDEF {
 	public static final long XDEF484 = 31159025863L;
 	/** Variable type can't be 'void'&amp;{#SYS000} */
 	public static final long XDEF485 = 31159025864L;
-	/** Too many nested macros&amp;{#SYS000} */
+	/** Too many nested macro call&amp;{#SYS000} */
 	public static final long XDEF486 = 31159025865L;
 	/** Variable or method declaration expected&amp;{#SYS000} */
 	public static final long XDEF487 = 31159025866L;

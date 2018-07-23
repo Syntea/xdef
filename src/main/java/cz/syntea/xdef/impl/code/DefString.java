@@ -63,7 +63,7 @@ public final class DefString extends XDValueAbstract {
 					sb.append("\\\\");
 					break;
 				default:
-					if (StringParser.getXmlCharType(c, false) == 0) {
+					if (StringParser.getXmlCharType(c, (byte) 10) == 0) {
 						sb.append(c); //TODO ???
 					} else {
 						sb.append(c);

@@ -89,7 +89,8 @@ public class KXpathExpr {
 		int ndx = _source.charAt(0) == '@' ? 1 :
 			_source.startsWith("self::") ? 6 : 0;
 		String s = _source.substring(ndx);
-		return s.indexOf("::")<0 && StringParser.chkXMLName(s,false) ? ndx : -1;
+		return s.indexOf("::") < 0
+			&& StringParser.chkXMLName(s, (byte) 10) ? ndx : -1;
 	}
 
 	/** Creates a new instance of KXpathExpr

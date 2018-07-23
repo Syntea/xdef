@@ -81,7 +81,7 @@ public class SBuffer extends SPosition {
 	 * @return string with the value of buffer.
 	 */
 	public final String getString() {return _source;}
-	
+
 	/** Set string to buffer.
 	 * @param s string to be set.
 	 */

@@ -29,7 +29,7 @@ public class TestAll {
     /** prepare tests */
     @BeforeTest
     public static void beforeTests() {
-        Tester.setDebugMode(false);
+        Tester.setFulltestMode(false);
     }
 
     /** run TestAll in test.common */

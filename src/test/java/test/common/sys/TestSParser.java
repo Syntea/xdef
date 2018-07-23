@@ -10,13 +10,13 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-
 package test.common.sys;
 
 import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.StringParser;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -533,8 +533,8 @@ public class TestSParser extends STester {
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,
 					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
 			}
-			java.text.SimpleDateFormat sdf =
-				new java.text.SimpleDateFormat("d/M/yyyy HH:mm:ss.S z");
+			SimpleDateFormat sdf =
+				new SimpleDateFormat("d/M/yyyy HH:mm:ss.S z");
 			s = "11/10/2005 17:56:46.395 CESTXYZ";
 			p = new StringParser(s);
 			if (!p.isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
@@ -543,11 +543,9 @@ public class TestSParser extends STester {
 				assertTrue(p.isToken("XYZ"), p.getUnparsedBufferPart());
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
-/*#if !(DOTNET)*/
 				TimeZone tz = c.getTimeZone();
 				assertEq("CEST",
 					tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
-/*#end*/
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,
 					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
 			}

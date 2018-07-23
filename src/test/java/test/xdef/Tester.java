@@ -55,7 +55,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 //	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
 	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
-	public static boolean _debugMode = false;
+	public static boolean _fulltestMode = false;
 
 	private boolean _genObj = false;
 	private final Properties _props = new Properties();
@@ -65,37 +65,48 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	public Tester() {
 		super();
 		resetTester();
-		_chkSyntax = _debugMode;
-		_genObj = _debugMode;
+		_chkSyntax = _fulltestMode;
+		_genObj = _fulltestMode;
+	}
+
+	public final void resetProperties() {
+		setProperty(XDConstants.XDPROPERTY_DOCTYPE,
+			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
+		if (_fulltestMode) {
+			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
+				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
+		} else {
+			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
+				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE);
+		}
+		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
+			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
+		setProperty(XDConstants.XDPROPERTY_ENV_GET,
+			XDConstants.XDPROPERTYVALUE_ENV_GET_TRUE);
+		setProperty(XDConstants.XDPROPERTY_WARNINGS,
+			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+		setProperty(XDConstants.XDPROPERTY_DEBUG,
+			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+		setProperty(XDConstants.XDPROPERTY_DEBUG_OUT, null);
+		setProperty(XDConstants.XDPROPERTY_DEBUG_IN, null);
+		setProperty(XDConstants.XDPROPERTY_DISPLAY,
+			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
+		setProperty(XDConstants.XDPROPERTY_VALIDATE,
+			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
+		setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
+		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
+		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
+		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
+			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
 	}
 
 	public final void resetTester() {
 		_props.clear();
-		_chkSyntax = _debugMode;
-		_genObj = _debugMode;
-		setProperty(XDConstants.XDPROPERTY_DISPLAY,
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		setProperty(XDConstants.XDPROPERTY_DEBUG,
-			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
-		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
-			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
-//		int yr = new java.util.GregorianCalendar().get(
-//			java.util.GregorianCalendar.YEAR);
-//		setProperty(XDConstants.XDPROPERTY_MINYEAR,	String.valueOf(yr - 200));
-//		setProperty(XDConstants.XDPROPERTY_MAXYEAR,	String.valueOf(yr + 200));
-		setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
-		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-		setProperty(XDConstants.XDPROPERTY_SPECDATES,
-			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-		if (_debugMode) {
-			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
-				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
-		}
+		_chkSyntax = _fulltestMode;
+		_genObj = _fulltestMode;
 		setChkSyntax(false);
+		resetProperties();
 	}
 
 	public final Properties getProperties() {return _props;}
@@ -104,9 +115,11 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 
 	public final boolean getChkSyntax() {return _chkSyntax;}
 
-	public final static boolean getDebugMode() {return _debugMode;}
+	public final static boolean getFulltestMode() {return _fulltestMode;}
 
-	public final static void setDebugMode(boolean debug) {_debugMode = debug;}
+	public final static void setFulltestMode(boolean fulltest) {
+		_fulltestMode = fulltest;
+	}
 
 	public final void setProperty(final String key, final String value) {
 		if (value == null) {
