@@ -37,7 +37,6 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.impl.compile.CompileXDPool;
-import cz.syntea.xdef.impl.compile.PreCompiler;
 //import cz.syntea.xd.impl.compile.CompileParser;
 //import cz.syntea.xd.impl.compile.CompileXDPool;
 import java.io.File;

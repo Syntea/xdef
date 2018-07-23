@@ -95,6 +95,8 @@ public class PreCompiler extends XDefReader {
 	private Element _includeElement;
 	/** The nesting level of XML node. */
 	private int _level;
+	/** The nesting level of XML node. */
+	boolean _macrosProcessed;
 
 	/** Creates a new instance of XDefCompiler
 	 * @param reporter The reporter.
@@ -130,6 +132,7 @@ public class PreCompiler extends XDefReader {
 		_codeGenerator._namespaceURIs.add(KXmlConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add(//schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+		_macrosProcessed = false;
 	}
 
 	/** Report about not legal attributes. All allowed attributes should be
@@ -805,6 +808,9 @@ public class PreCompiler extends XDefReader {
 
 	/** Prepare list of declared macros and expand macro references. */
 	public final void prepareMacros() {
+		if (_macrosProcessed) {
+			return;
+		}
 		// doParse of definitions from include list
 		for (int i = 0; i < _includeList.size(); i++) {
 			Object o = _includeList.get(i);
@@ -846,6 +852,7 @@ public class PreCompiler extends XDefReader {
 			PNode p = _xdefNodes.get(i);
 			p.expandMacros(reporter, _xdefNames.get(i), _macros);
 		}
+		_macrosProcessed = true;
 	}
 
 	public final ArrayList<PNode> getXDefinitionList() {
@@ -853,7 +860,7 @@ public class PreCompiler extends XDefReader {
 	}
 
 	/** Get precompiled sources (PNodes) of X-definition items.
-	 * @return array with PNodes.
+	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefNodes;}
 
@@ -877,4 +884,10 @@ public class PreCompiler extends XDefReader {
 	 */
 	public final List<PNode> getPBNF() {return _listBNF;}
 
+	/** Get array with names of X-definitions. The index on a name is equal to
+	 * the intem in the arra of X-detinition nodes.
+	 * @return array with names of X-definitions.
+	 */
+	public final List<String> getXDefNames() {return _xdefNames;}
+	
 }
