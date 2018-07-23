@@ -8,7 +8,7 @@
     
     <groupId>cz.syntea.xdefinition</groupId>
     <artifactId>syntea-xdefinition-OSS</artifactId>
-    <version>3.1.4.2</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
+    <version>3.1.4.4</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
     <packaging>jar</packaging>
     
     <name>syntea-xdefinition-OSS</name>
@@ -16,7 +16,7 @@
     <description>XDefinition 3.1 (Open Source Software)</description>
     
     <properties>
-        <release.date>2018-07-11</release.date>
+        <release.date>2018-07-23</release.date>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
