@@ -76,7 +76,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Table of definitions */
 	private final Map<String, XDefinition> _xdefs;
-	
+
 	/** Source files table - to prevent to doParse the source twice. */
 	private final List<Object> _sources;
 	/** PNodes with parsed source items. */
@@ -95,7 +95,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final ArrayList<XNode> _nodeList;
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
-	
+
 	/** External classes. */
 	private Class<?>[] _extClasses;
 	/** Code generator. */
@@ -118,7 +118,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
 		_nodeList = new ArrayList<XNode>();
-		
+
 		_codeGenerator = _precomp.getCodeGenerator();
 		_sources = _precomp.getSources();
 		_xdefPNodes = _precomp.getPXDefs();
@@ -127,7 +127,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listDecl = _precomp.getPDeclarations();
 		_listCollection = _precomp.getPCollections();
 		_listComponent = _precomp.getPComponents();
-		
+
 		ClassLoader classLoader =
 			Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,

@@ -20,12 +20,12 @@ public interface PPreCompiler {
 	 * @return the code generator.
 	 */
 	public CompileCode getCodeGenerator();
-	
+
 	/** Get sources of X-defintions.
 	 * @return array with sources of X-defintions.
 	 */
 	public List<Object> getSources();
-	
+
 	/** Get precompiled sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
 	 */
@@ -58,7 +58,7 @@ public interface PPreCompiler {
 
 	/** Prepare list of declared macros and expand macro references. */
 	public void prepareMacros();
-	
+
 	/** Get report writer.
 	 * @return the report writer.
 	 */

@@ -82,7 +82,7 @@ public class XPreCompiler extends XDefReader implements PPreCompiler {
 	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
-	
+
 	/** Actual node */
 	private PNode _actPNode;
 	/** Display mode */
@@ -886,13 +886,13 @@ public class XPreCompiler extends XDefReader implements PPreCompiler {
 	 * @return the code generator.
 	 */
 	public CompileCode getCodeGenerator() {return _codeGenerator;}
-	
+
 	@Override
 	/** Get sources of X-defintions.
 	 * @return array with sources of X-defintions.
 	 */
 	public List<Object> getSources() {return _sources;}
-	
+
 	@Override
 	/** Get precompiled sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
@@ -928,5 +928,5 @@ public class XPreCompiler extends XDefReader implements PPreCompiler {
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPBNFs() {return _listBNF;}
-	
+
 }
