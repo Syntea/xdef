@@ -7,6 +7,7 @@
 /overlays/
 /target/
 /nbproject/
+/nbactions.xml
 /local/
 /.classpath
 /.project
