@@ -797,18 +797,26 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Get report writer.
+	 * @return the report writer.
+	 */
 	public final ReportWriter getReportWriter() {return _reporter;}
 
+	/** Set report writer.
+	 * @param x the report writer to be set.
+	 */
 	public final void setReportWriter(final ReportWriter x) {_reporter = x;}
 
-	/** Put error message.
+	/** Put fatal error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
 	 */
-	public final void error(final SPosition pos, final long registeredID) {
-		putReport(pos, Report.error(registeredID));
+	public void fatal(final SPosition pos,
+		final long registeredID,
+		final Object... mod) {
+		putReport(pos, Report.fatal(registeredID, mod));
 	}
-
 	/** Put error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
@@ -823,9 +831,12 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 	/** Put ligthError message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final SPosition pos, final long registeredID) {
-		putReport(pos, Report.lightError(registeredID));
+	public final void lightError(final SPosition pos,
+		final long registeredID,
+		final Object... mod) {
+		putReport(pos, Report.lightError(registeredID, mod));
 	}
 
 	/** Put error message.

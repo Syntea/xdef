@@ -36,9 +36,9 @@ public final class PNode {
 	public XDefinition _xdef;  //XDefinition associated with this node
 	public SBuffer _value; //String node assigned to this node
 	public final PNode _parent; //parent PNode
-	
+
 	final Map<String, Integer> _nsPrefixes; // namespace prefixes
-	
+
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template

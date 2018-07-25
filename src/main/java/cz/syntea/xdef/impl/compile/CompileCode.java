@@ -60,7 +60,7 @@ import cz.syntea.xdef.impl.code.DefLocale;
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
  */
-final class CompileCode extends CompileBase {
+public final class CompileCode extends CompileBase {
 
 	/** Internal stack size. */
 	private final static int STACK_SIZE = 512; //20 for tests is enough!

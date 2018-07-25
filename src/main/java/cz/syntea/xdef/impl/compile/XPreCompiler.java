@@ -49,7 +49,7 @@ import org.w3c.dom.Node;
 /** Reads source X-definitions and prepares list of PNodes with X-definitions.
  * @author Trojan
  */
-public class XPreCompiler extends XDefReader {
+public class XPreCompiler extends XDefReader implements PPreCompiler {
 	/** index of NameSpace of X-definitions. */
 	static final int NS_XDEF_INDEX = 0;
 	/** index of NameSpace of XML. */
@@ -65,27 +65,28 @@ public class XPreCompiler extends XDefReader {
 	/** Table of NameSpace prefixes. */
 	static final Map<String, Integer> PREDEFINED_PREFIXES =
 		new TreeMap<String, Integer>();
-	
+
 	/** PNodes with parsed source items. */
-	final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
+	private final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
 	/** Source files table - to prevent to doParse the source twice. */
-	final ArrayList<Object> _sourceFiles = new ArrayList<Object>();
-	/** Display mode */
-	final byte _displayMode;
+	private final ArrayList<Object> _sources = new ArrayList<Object>();
 	/** Array of thesaurus sources item. */
-	final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
+	private final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
 	/** Array of BNF sources. */
-	final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
+	private final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
 	/** Array of declaration source items. */
-	final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
+	private final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
 	/** Array of collection source items. */
-	final ArrayList<PNode> _listCollection = new ArrayList<PNode>();
+	private final ArrayList<PNode> _listCollection = new ArrayList<PNode>();
 	/** Array of component sources. */
-	final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
+	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Code generator. */
-	final CompileCode _codeGenerator;
+	private final CompileCode _codeGenerator;
+	
 	/** Actual node */
-	PNode _actPNode;
+	private PNode _actPNode;
+	/** Display mode */
+	private final byte _displayMode;
 	/** includes. */
 	private Element _includeElement;
 	/** The nesting level of XML node. */
@@ -93,7 +94,7 @@ public class XPreCompiler extends XDefReader {
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
 	/** Include list of URL's. */
-	private final ArrayList<Object> _includeList = new ArrayList<Object>();	
+	private final ArrayList<Object> _includeList = new ArrayList<Object>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new TreeMap<String, XScriptMacro>();
@@ -321,7 +322,7 @@ public class XPreCompiler extends XDefReader {
 			} else if ("declaration".equals(elemLocalName)) {
 				_level++;
 				_listDecl.add(0, _actPNode);
-			} else if ("component".equals(elemLocalName)) {				
+			} else if ("component".equals(elemLocalName)) {
 				_level++;
 				_listComponent.add(0, _actPNode);
 			} else {
@@ -376,7 +377,7 @@ public class XPreCompiler extends XDefReader {
 			_level++;
 			_actPNode._parent._childNodes.add(_actPNode);
 		}
-//		if (_level == 1 && "declaration".equals(elemLocalName)) {				
+//		if (_level == 1 && "declaration".equals(elemLocalName)) {
 //			_listDecl.add(0, _actPNode);
 //		}
 
@@ -544,7 +545,7 @@ public class XPreCompiler extends XDefReader {
 	 * @param source The source string with definitions.
 	 */
 	public final void parseString(final String source) {
-		if (_sourceFiles.indexOf(source) >= 0 || source.length() == 0) {
+		if (_sources.indexOf(source) >= 0 || source.length() == 0) {
 			return;  //we ignore already declared or empty strings
 		}
 		if (source.charAt(0) == '<') {
@@ -564,12 +565,12 @@ public class XPreCompiler extends XDefReader {
 	 * @param srcName pathname of source (URL or an identifying name or null).
 	 */
 	public final void parseString(final String source, final String srcName) {
-		if (_sourceFiles.indexOf(source) >= 0 || source.length() == 0) {
+		if (_sources.indexOf(source) >= 0 || source.length() == 0) {
 			return;  //we ignore already declared or empty strings
 		}
 		char c;
 		if ((c = source.charAt(0)) <= ' ' || c == '<') {
-			_sourceFiles.add(source);
+			_sources.add(source);
 			try {
 				parseStream(new ByteArrayInputStream(source.getBytes("UTF-8")),
 					srcName);
@@ -598,12 +599,12 @@ public class XPreCompiler extends XDefReader {
 	public final void parseFile(final File file) {
 		try {
 			URL url = file.toURI().toURL();
-			for (Object o: _sourceFiles) {
+			for (Object o: _sources) {
 				if (o instanceof URL && url.equals(o)) {
 					return; //found in list
 				}
 			}
-			_sourceFiles.add(url);
+			_sources.add(url);
 			parseStream(new FileInputStream(file), url.toExternalForm());
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -621,10 +622,10 @@ public class XPreCompiler extends XDefReader {
 	 * <tt>null</tt>.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
-		if (_sourceFiles.contains(in)) {
+		if (_sources.contains(in)) {
 			return;
 		}
-		_sourceFiles.add(in);
+		_sources.add(in);
 		_sysId = srcName;
 		_level = -1;
 		_actPNode = null;
@@ -663,13 +664,13 @@ public class XPreCompiler extends XDefReader {
 			getReportWriter().error(XDEF.XDEF902, "null");
 			return;
 		}
-		for (Object o: _sourceFiles) {
+		for (Object o: _sources) {
 			if (o instanceof URL && url.equals((URL) o)) {
 				return; //prevents to doParse the source twice.
 			}
 		}
 		String srcName = url.toExternalForm();
-		_sourceFiles.add(srcName);
+		_sources.add(srcName);
 		try {
 			parseStream(url.openStream(), srcName);
 		} catch (RuntimeException ex) {
@@ -879,5 +880,53 @@ public class XPreCompiler extends XDefReader {
 		}
 		_macrosProcessed = true;
 	}
+
+	@Override
+	/** Get code generator.
+	 * @return the code generator.
+	 */
+	public CompileCode getCodeGenerator() {return _codeGenerator;}
+	
+	@Override
+	/** Get sources of X-defintions.
+	 * @return array with sources of X-defintions.
+	 */
+	public List<Object> getSources() {return _sources;}
+	
+	@Override
+	/** Get precompiled sources (PNodes) of X-definition items.
+	 * @return array with PNodes with X-definitions.
+	 */
+	public List<PNode> getPXDefs() {return _xdefPNodes;}
+
+	@Override
+	/** Get precompiled sources (PNodes) of Thesaurus items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPThesaurusList() {return _thesaurus;}
+
+	@Override
+	/** Get precompiled sources (PNodes) of collection items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPCollections() {return _listCollection;}
+
+	@Override
+	/** Get precompiled sources (PNodes) of declaration items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPDeclarations() {return _listDecl;}
+
+	@Override
+	/** Get precompiled sources (PNodes) of components items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPComponents() {return _listComponent;}
+
+	@Override
+	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPBNFs() {return _listBNF;}
 	
 }
