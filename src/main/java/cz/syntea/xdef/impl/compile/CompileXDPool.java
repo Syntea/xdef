@@ -56,23 +56,28 @@ import cz.syntea.xdef.XDContainer;
 import cz.syntea.xdef.impl.XPool;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.xml.KXmlConstants;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /** Provide compiling of X-definitions from source data.
  * @author Vaclav Trojan
  */
-public final class CompileXDPool extends PreCompiler
-	implements CodeTable, XDValueID {
+public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
+	
+	/** PreCompiler instance.  */
+	private final PreCompiler _precomp;
+		
 	/** Table of definitions */
 	private final Map<String, XDefinition> _xdefs;
 	/** Actual node stack. */
 	private final ArrayList<XNode> _nodeList;
-	/** Array of component sources. */
-	final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
 	/** External classes. */
@@ -88,17 +93,18 @@ public final class CompileXDPool extends PreCompiler
 		final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final Map<String, XDefinition> xdefs) {
-		super(reporter,
+		_precomp = new PreCompiler(reporter,
 			extClasses,
 			xp.getDisplayMode(),
 			xp.isDebugMode(),
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
 		_nodeList = new ArrayList<XNode>();
-		ClassLoader classLoader =Thread.currentThread().getContextClassLoader();
-		_codeGenerator._extClasses = extClasses;
-		_scriptCompiler = new CompileXScript(_codeGenerator,
-			(byte) 10, PREDEFINED_PREFIXES, classLoader);
+		ClassLoader classLoader =
+			Thread.currentThread().getContextClassLoader();
+		_scriptCompiler = new CompileXScript(_precomp._codeGenerator,
+			(byte) 10, 
+			PreCompiler.PREDEFINED_PREFIXES, classLoader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
@@ -112,8 +118,8 @@ public final class CompileXDPool extends PreCompiler
 	 * @param extObjects array of objects.
 	 */
 	public void setExternals(final Class<?>... extObjects) {
-		_codeGenerator.setExternals(extObjects);
-		_extClasses = _codeGenerator.getExternals();
+		_precomp._codeGenerator.setExternals(extObjects);
+		_extClasses = _precomp._codeGenerator.getExternals();
 	}
 
 	/** Set class loader. The class loader must be set before setting sources.
@@ -130,6 +136,104 @@ public final class CompileXDPool extends PreCompiler
 		return _scriptCompiler.getClassLoader();
 	}
 
+	public final ReportWriter getReportWriter() {
+		return _precomp.getReportWriter();
+	}
+	
+	public final void setReportWriter(ReportWriter reporter) {
+		_precomp.setReportWriter(reporter);
+	}
+	
+	/** Parse string and addAttr it to the set of X-definitions.
+	 * @param source source string with X-definitions.
+	 * @param srcName pathname of source (URL or an identifying name or null).
+	 */
+	public final void parseString(final String source, final String srcName) {
+		_precomp.parseString(source, srcName);
+	}
+
+	/** Parse file with source X-definition and addAttr it to the set
+	 * of definitions.
+	 * @param file The file with with X-definitions.
+	 */
+	public final void parseFile(final File file) {
+		_precomp.parseFile(file);
+	}
+	
+	/** Parse InputStream source X-definition and addAttr it to the set
+	 * of definitions.
+	 * @param in input stream with the X-definition.
+	 * @param srcName name of source data used in reporting (SysId) or
+	 * <tt>null</tt>.
+	 */
+	public final void parseStream(final InputStream in, final String srcName) {
+		_precomp.parseStream(in, srcName);
+	}
+
+	/** Parse data with source X-definition given by URL and addAttr it
+	 * to the set of X-definitions.
+	 * @param url URL of the file with the X-definition.
+	 */
+	public final void parseURL(final URL url) {
+		_precomp.parseURL(url);
+	}
+
+	/** Get precompiled sources (PNodes) of X-definition items.
+	 * @return array with PNodes with X-definitions.
+	 */
+	public List<PNode> getPXDefs() {return _precomp._xdefPNodes;}
+
+	/** Get precompiled sources (PNodes) of Thesaurus items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPThesauruses() {return _precomp._thesaurus;}
+
+	/** Get precompiled sources (PNodes) of collection items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPCollections() {
+		return _precomp._listCollection;
+	}
+
+	/** Get precompiled sources (PNodes) of declaration items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPDeclarations() {return _precomp._listDecl;}
+	
+	/** Get precompiled sources (PNodes) of components items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPComponents() {return _precomp._listComponent;}
+
+	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	 * @return array with PNodes.
+	 */
+	public final List<PNode> getPBNFs() {return _precomp._listBNF;}
+	
+	/** Prepare list of declared macros and expand macro references. */
+	public final void prepareMacros() {
+		_precomp.prepareMacros();
+	}
+	
+	/** Put error message.
+	 * @param pos SPosition
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	private void error(final SPosition pos,
+		final long registeredID,
+		final Object... mod) {
+		_precomp.error(pos, registeredID, mod);
+	}
+
+	/** Put error to compiler reporter.
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	private void error(final long registeredID, final Object... mod) {
+		_precomp.error(registeredID, mod);
+	}
+		
 	/** Add node to parent.
 	 * @param parentNode The node where the new node will be added.
 	 * @param xNode The node to be added.
@@ -147,7 +251,8 @@ public final class CompileXDPool extends PreCompiler
 				((XElement) xNode).setXDNamespaceContext(
 					_scriptCompiler._g.getXDNamespaceContext());
 			} else if (nodeKind == XNode.XMTEXT) {
-				error(pos, XDEF.XDEF260); //Text value not allowed here
+				 //Text value not allowed here
+				error(pos, XDEF.XDEF260);
 			}
 		} else {
 			XElement parentXel;
@@ -190,7 +295,7 @@ public final class CompileXDPool extends PreCompiler
 		final String symbol,
 		final String replace) {
 		//&{0} is deprecated. Please use &{1} instead
-		warning(spos, XDEF.XDEF998, symbol, replace);
+		_precomp.warning(spos, XDEF.XDEF998, symbol, replace);
 	}
 
 	void compileComponentDeclaration() {
@@ -201,7 +306,7 @@ public final class CompileXDPool extends PreCompiler
 			}
 			int ndx;
 			if (!_scriptCompiler.isChar('%')) {
-				error(XDEF.XDEF356, //'&{0}' expected
+				_precomp.error(XDEF.XDEF356, //'&{0}' expected
 					"\"%class\",\"%interface\",\"%bind\",\"%ref\",\"%enum\"");
 				if (_scriptCompiler.findCharAndSkip(';')) {
 					continue;
@@ -226,7 +331,8 @@ public final class CompileXDPool extends PreCompiler
 				String enumClass = result.substring(6, ndx);
 				SBuffer sbf = new SBuffer(enumClass, spos);
 				String enumTypeName = result.substring(ndx+1);
-				if (_codeGenerator._enums.put(enumTypeName, sbf) != null) {
+				if (_precomp._codeGenerator._enums.put(enumTypeName, sbf)
+					!= null) {
 					_scriptCompiler.error(//Duplicity of enumeration &{0}
 						spos, XDEF.XDEF379, enumTypeName);
 				}
@@ -236,7 +342,8 @@ public final class CompileXDPool extends PreCompiler
 					new StringTokenizer(result.substring(ndx+7), "\t\n\r ,");
 				SBuffer sbf = new SBuffer(result.substring(6, ndx), spos);
 				while(st.hasMoreTokens()) {
-					if (_codeGenerator._binds.put(st.nextToken(), sbf)!=null) {
+					if (_precomp._codeGenerator._binds.put(st.nextToken(), sbf)
+						!= null) {
 						_scriptCompiler.error(spos,//Duplicity of reference &{0}
 							XDEF.XDEF355, sbf.getString());
 					}
@@ -249,11 +356,11 @@ public final class CompileXDPool extends PreCompiler
 				String xdName = modelName.substring(0, ndx);
 				modelName = modelName.substring(ndx + 1);
 				String model = xdName + '#' + modelName;
-				SBuffer s = _codeGenerator._components.put(
+				SBuffer s = _precomp._codeGenerator._components.put(
 					model, new SBuffer(className, spos));
 				if (s != null) {
 					//Duplicate declaration of &{0}
-					error(spos, XDEF.XDEF351, "interface;"+model);
+					_precomp.error(spos, XDEF.XDEF351, "interface;"+model);
 				}
 				_scriptCompiler.skipBlanksAndComments();
 				_scriptCompiler.isChar(';');
@@ -286,46 +393,47 @@ public final class CompileXDPool extends PreCompiler
 					}
 				}
 				String model = xdName + '#' + modelName;
-				SBuffer s = _codeGenerator._components.get(model);
+				SBuffer s = _precomp._codeGenerator._components.get(model);
 				if (s != null) {
 					String t = s.getString();
 					if (result.startsWith("%class ")
 						&& t.startsWith("interface ")) {
 						if (result.indexOf(" %interface ") > 0) {
 							//Duplicate declaration of &{0}
-							error(spos, XDEF.XDEF351,
+							_precomp.error(spos, XDEF.XDEF351,
 								"interface;"+model);
 						} else {
 							t = result.substring(7) + ' ' + t;
 							s = new SBuffer(t, spos);
-							_codeGenerator._components.put(model, s);
+							_precomp._codeGenerator._components.put(model, s);
 						}
 					} else if (result.startsWith("%interface ")) {
 						if (t.contains(" interface ")) {
 							//Duplicate declaration of &{0}
-							error(spos, XDEF.XDEF351,
+							_precomp.error(spos, XDEF.XDEF351,
 								"interface;"+model);
 						} else {
 							t += ' ' + result.substring(1);
 							s = new SBuffer(t, s);
-							_codeGenerator._components.put(model, s);
+							_precomp._codeGenerator._components.put(model, s);
 						}
 					} else {
-						s = _codeGenerator._components.get(model);
+						s = _precomp._codeGenerator._components.get(model);
 						if (s != null) {
 							if (!s.getString().startsWith("interface ")) {
 								//Duplicate declaration of &{0}
-								error(s, XDEF.XDEF351, model);
+								_precomp.error(s, XDEF.XDEF351, model);
 								//Duplicate declaration of &{0}
-								error(spos, XDEF.XDEF351, model);
+								_precomp.error(spos, XDEF.XDEF351, model);
 								// do not repeat this message
-								_codeGenerator._components.remove(model);
+								_precomp._codeGenerator._components.remove(
+									model);
 							}
 						}
 					}
 				} else {
 					for (Entry<String, SBuffer> e:
-						_codeGenerator._components.entrySet()) {
+						_precomp._codeGenerator._components.entrySet()) {
 						String cn = e.getValue().getString();
 						ndx = cn.indexOf(" extends ");
 						if (ndx > 0) {
@@ -342,7 +450,7 @@ public final class CompileXDPool extends PreCompiler
 						if (className.equals(cn) && !model.equals(e.getKey())) {
 							//Duplicate declaration of class &{0}
 							// for XComponent &{1}
-							error(spos, XDEF.XDEF352, className, model);
+							_precomp.error(spos, XDEF.XDEF352, className,model);
 						}
 					}
 					if (!className.contains(" implements ")
@@ -351,12 +459,12 @@ public final class CompileXDPool extends PreCompiler
 					} else {
 						className += extension.substring(12);
 					}
-					s = _codeGenerator._components.put(
+					s = _precomp._codeGenerator._components.put(
 						model, new SBuffer(className, spos));
 					if (s != null && !className.equals(s.getString())) {
 						//Duplicate declaration of class &{0}
 						// for XComponent &{1}
-						error(spos, XDEF.XDEF352, className, model);
+						_precomp.error(spos, XDEF.XDEF352, className, model);
 					}
 				}
 			}
@@ -374,12 +482,12 @@ public final class CompileXDPool extends PreCompiler
 	}
 
 	private void compileMehodsAndClassesAttrs() {
-		for (int i = 0; i < _xdefNames.size(); i++) {
-			PNode pnode = _xdefNodes.get(i);
+		for (int i = 0; i < _precomp._xdefPNodes.size(); i++) {
+			PNode pnode = _precomp._xdefPNodes.get(i);
 			SBuffer sval =
 				pnode.getXdefAttr("methods", false, true, getReportWriter());
 			if (sval!= null
-				&& !_codeGenerator._ignoreUnresolvedExternals) {
+				&& !_precomp._codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
 					reportDeprecated(sval,
 					"Attribute \"methods\"",
@@ -394,7 +502,7 @@ public final class CompileXDPool extends PreCompiler
 			}
 			sval = pnode.getXdefAttr("classes", false, true, getReportWriter());
 			if (sval != null
-				&& !_codeGenerator._ignoreUnresolvedExternals) {
+				&& !_precomp._codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
 					reportDeprecated(sval,
 					"Attribute \"classes\"",
@@ -402,7 +510,7 @@ public final class CompileXDPool extends PreCompiler
 				}
 				String value = sval.getString();
 				Map<String, Class<?>> ht = new TreeMap<String, Class<?>>();
-				for (Class<?> clazz : _codeGenerator._extClasses) {
+				for (Class<?> clazz : _precomp._codeGenerator._extClasses) {
 					ht.put(clazz.getName(), clazz);
 				}
 				StringTokenizer st = new StringTokenizer(value," \t\r\n,;");
@@ -420,21 +528,20 @@ public final class CompileXDPool extends PreCompiler
 							ht.put(clazz.getName(), clazz);
 						} else {
 							//Class &{0} is not available
-							error(sval, XDEF.XDEF267, clsname);
+							_precomp.error(sval, XDEF.XDEF267, clsname);
 						}
 					}
 				}
-				if (_codeGenerator._extClasses.length == 0) {
+				if (_precomp._codeGenerator._extClasses.length == 0) {
 					Class<?>[] exts = new Class<?>[ht.values().size()];
 					ht.values().toArray(exts);
-					_codeGenerator.setExternals(exts);
+					_precomp._codeGenerator.setExternals(exts);
 				}
 			}
-			sval =
-				pnode.getXdefAttr("component", false, true, getReportWriter());
+			sval = pnode.getXdefAttr("component", false,true,getReportWriter());
 			if (sval != null) {
 				_scriptCompiler.setSource(sval,
-					_xdefNames.get(i),
+					pnode._xdef.getName(),
 					pnode._xdVersion,
 					pnode._nsPrefixes);
 				compileComponentDeclaration();
@@ -447,8 +554,8 @@ public final class CompileXDPool extends PreCompiler
 	 * @return true if the attribute "scope" is "local".
 	 */
 	private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
-		SBuffer scope =
-			nodei.getXdefAttr("scope", false, removeAttr, getReportWriter());
+		SBuffer scope = nodei.getXdefAttr("scope",
+			false, removeAttr, getReportWriter());
 		boolean local = false;
 		if (scope != null) {
 			String s = scope.getString();
@@ -477,14 +584,15 @@ public final class CompileXDPool extends PreCompiler
 	 */
 	private void preCompileDeclarations() {
 		// now not generate code of external methods, make them undefined
-		_codeGenerator.setIgnoreExternalMethods(true);
+		_precomp._codeGenerator.setIgnoreExternalMethods(true);
 		// first process BNFGrammar declarations, then declaration sections.
-		for (ArrayList<PNode> list = _listBNF; list != null;
-			list = list == _listBNF ? _listDecl : null) {
+		for (ArrayList<PNode> list = _precomp._listBNF; list != null;
+			list = list == _precomp._listBNF ? _precomp._listDecl : null) {
 			int len;
 			if ((len = list.size()) > 0) {
-				int size = _codeGenerator._globalVariables.size();
-				int lastOffset =_codeGenerator._globalVariables.getLastOffset();
+				int size = _precomp._codeGenerator._globalVariables.size();
+				int lastOffset =
+					_precomp._codeGenerator._globalVariables.getLastOffset();
 				for (int n = 0; ; n++) {
 					int errndx = -1;
 					// now we check items from the list. We break the cycle when
@@ -494,7 +602,7 @@ public final class CompileXDPool extends PreCompiler
 					for (int i = 0; i < len; i++) {
 						PNode nodei = list.get(i);
 						// name of X-definition
-						if (list == _listBNF) { //BNFs
+						if (list == _precomp._listBNF) { //BNFs
 							compileBNFGrammar(nodei, false);
 						} else { //declarations
 							compileDeclaration(nodei, false);
@@ -509,7 +617,7 @@ public final class CompileXDPool extends PreCompiler
 								//XDEF443 ... Unknown method &{0}
 								if ("XDEF424".equals(report.getMsgID())
 									|| ("XDEF443".equals(report.getMsgID())
-									&& list == _listDecl)) {
+									&& list == _precomp._listDecl)) {
 									errndx = i; //set index of this item
 									break;
 								}
@@ -527,7 +635,7 @@ public final class CompileXDPool extends PreCompiler
 						//we must now compile all items not compiled yet
 						for (int i = errndx + 1; i < len; i++) {
 							PNode nodei = list.get(i);
-							if (list == _listBNF) { //BNFs
+							if (list == _precomp._listBNF) { //BNFs
 								compileBNFGrammar(nodei, false);
 							} else { //declarations
 								compileDeclaration(nodei, false);
@@ -536,8 +644,9 @@ public final class CompileXDPool extends PreCompiler
 						break;
 					}
 					//initRecompilation
-					_codeGenerator._globalVariables.resetTo(size, lastOffset);
-					_codeGenerator.reInit(); //clear the generated code
+					_precomp._codeGenerator._globalVariables.resetTo(
+						size, lastOffset);
+					_precomp._codeGenerator.reInit(); //clear the generated code
 					_scriptCompiler.initCompilation(
 						CompileBase.GLOBAL_MODE, XD_VOID);
 					//move the node with error to the end of list and try again
@@ -546,7 +655,7 @@ public final class CompileXDPool extends PreCompiler
 			}
 		}
 		// set normal generation of code of external methods
-		_codeGenerator.setIgnoreExternalMethods(false);
+		_precomp._codeGenerator.setIgnoreExternalMethods(false);
 	}
 
 	/** Compile thesaurus.
@@ -566,7 +675,7 @@ public final class CompileXDPool extends PreCompiler
 					nodei.getXdefAttr("default", false, true,getReportWriter()),
 					xp,
 					languages);
-				reportNotAllowedAttrs(nodei, getReportWriter());
+				_precomp.reportNotAllowedAttrs(nodei);
 			}
 			if (!languages .isEmpty()) {
 				String[] langs = new String[languages .size()];
@@ -685,7 +794,7 @@ public final class CompileXDPool extends PreCompiler
 					} else { //declarations
 						compileDeclaration(nodei, true);
 					}
-					reportNotAllowedAttrs(nodei, getReportWriter());
+					_precomp.reportNotAllowedAttrs(nodei);
 				}
 			}
 		}
@@ -699,13 +808,6 @@ public final class CompileXDPool extends PreCompiler
 
 	/** First step: prepare and expand macros and compile declarations. */
 	private void precompile() {
-//		// remove PNodes with macros
-//		for (int i = 0;  i < _xdefNames.size(); i++) {
-//			PNode def = _xdefNodes.get(i);
-//			ArrayList<PNode> macros = def.getXDefChildNodes("macro");
-//			def.removeChildNodes(macros); // remove all items with macros
-//		}
-//
 		ReportWriter reporter = getReportWriter();
 		// set reporter to the compiler of script
 		_scriptCompiler.setReportWriter(reporter);
@@ -714,15 +816,15 @@ public final class CompileXDPool extends PreCompiler
 		// Move all declarations of BNF grammars and variables from the
 		// list of X-definitions to the separated lists of variable declarations
 		// and of BNF grammar declarations.
-		for (int i = 0; i < _xdefNodes.size(); i++) {
-			PNode def = _xdefNodes.get(i);
+		for (int i = 0; i < _precomp._xdefPNodes.size(); i++) {
+			PNode def = _precomp._xdefPNodes.get(i);
 			// since we are removing childnodes from X-definition we must
 			// process the childnodes list downwards!
 			// However, we insert the item to the first position of the created
 			// list to assure the original sequence of items in the X-definition.
 			for (int j = def._childNodes.size() - 1;  j >= 0; j--) {
 				PNode nodei = def._childNodes.get(j);
-				if (nodei._nsindex != NS_XDEF_INDEX) {
+				if (nodei._nsindex != PreCompiler.NS_XDEF_INDEX) {
 					continue;
 				}
 				String nodeName = nodei._localName;
@@ -730,29 +832,37 @@ public final class CompileXDPool extends PreCompiler
 					"thesaurus".equals(nodeName) ||
 					"component".equals(nodeName) ||
 					"BNFGrammar".equals(nodeName)) {
-					chkNestedElements(nodei, getReportWriter());
+					_precomp.chkNestedElements(nodei);
 					if ("thesaurus".equals(nodeName)) {
-						_thesaurus.add(nodei);
+						if (nodei._value != null &&
+							nodei._value.getString().length() > 0) {// not empty
+							_precomp._thesaurus.add(nodei);
+						}
 					} else if ("BNFGrammar".equals(nodeName)) {
-						_listBNF.add(0, nodei);
+						_precomp._listBNF.add(0, nodei);
 					} else if ("component".equals(nodeName)) {
 						if (nodei._value != null &&
-							nodei._value.getString().length() > 0) // not empty
-						_listComponent.add(0, nodei);
+							nodei._value.getString().length() > 0) {// not empty
+							_precomp._listComponent.add(0, nodei);
+						}
 					} else {
-						_listDecl.add(0, nodei);
+						if (nodei._value != null &&
+							nodei._value.getString().length() > 0) {// not empty
+							_precomp._listDecl.add(0, nodei);
+						}
 					}
-					// This is the nasty trick! Because there is not yet
-					// connected the X-definition to the PNode we create a
-					// dumy one just to store a X-definition name (we nead it
-					// to be able to compile declaration blocks).
-					nodei._xdef = new XDefinition(_xdefNames.get(i),
-						null, null, null, nodei._xmlVersion);
+					nodei._xdef = def._xdef;
 					// remove this node from the X-definition PNode
 					def._childNodes.remove(j);
 				}
 			}
 		}
+//		// remove PNodes with macros
+//		for (int i = 0;  i < _xdefNames.size(); i++) {
+//			PNode def = _xdefPNodes.get(i);
+//			ArrayList<PNode> macros = def.getXDefChildNodes("macro");
+//			def.removeChildNodes(macros); // remove all items with macros
+//		}
 		//we set a temporary reporter which we throw out.
 		_scriptCompiler.setReportWriter(new ArrayReporter());
 		//Compile declarations and we throw errors out. Due to this trick after
@@ -768,14 +878,15 @@ public final class CompileXDPool extends PreCompiler
 		//After compilation the nodes containing declarations are removed
 		//from the tree.
 		setReportWriter(reporter);//reset original reporter
-		_codeGenerator._debugInfo = new XDebugInfo();
+		_precomp._codeGenerator._debugInfo = new XDebugInfo();
 		_scriptCompiler.setReportWriter(reporter); //reset original reporter
-		_codeGenerator.reInit(); //clear the generated code
+		_precomp._codeGenerator.reInit(); //clear the generated code
 		_scriptCompiler.initCompilation(CompileBase.GLOBAL_MODE, XD_VOID);
 		// now compile all: BNF gramars, declarations, components, thesaurus
-		compileDeclarations(_listBNF, _listDecl, _listComponent);
+		compileDeclarations(_precomp._listBNF,
+			_precomp._listDecl, _precomp._listComponent);
 		// clear all postdefines (should be already dleared, but who knows?)
-		_codeGenerator.clearPostdefines();
+		_precomp._codeGenerator.clearPostdefines();
 	}
 
 	/** Add the name of X-definition if it is not yet there. */
@@ -790,7 +901,7 @@ public final class CompileXDPool extends PreCompiler
 			defName = name.substring(0,i);
 			name = name.substring(i+1);
 		}
-		if (!chkDefName(defName, xdef.getXmlVersion())) {
+		if (!PreCompiler.chkDefName(defName, xdef.getXmlVersion())) {
 			return null;
 		}
 		if (!StringParser.chkNCName(name, xdef.getXmlVersion())) {
@@ -841,7 +952,7 @@ public final class CompileXDPool extends PreCompiler
 			xel = (XElement) xNode;
 			xtxt = null;
 			//compile first script - we must recognize template!
-			PAttr pattr = pnode.getAttrNS("script", NS_XDEF_INDEX);
+			PAttr pattr = pnode.getAttrNS("script", PreCompiler.NS_XDEF_INDEX);
 			if (pattr != null) {
 				_scriptCompiler.setSource(pattr._value,
 					defName, pnode._xdVersion, pnode._nsPrefixes);
@@ -868,7 +979,7 @@ public final class CompileXDPool extends PreCompiler
 				_scriptCompiler._actDefName,
 				pnode._xdVersion,
 				pnode._nsPrefixes);
-			if (pattr._nsindex == NS_XDEF_INDEX) {
+			if (pattr._nsindex == PreCompiler.NS_XDEF_INDEX) {
 				String localName = pattr._localName;
 				if ("script".equals(localName)) {
 					if (isAttlist) {
@@ -1078,7 +1189,7 @@ public final class CompileXDPool extends PreCompiler
 					if (kind != XNode.XMMIXED) {
 						//Attribute 'empty' is allowed only in the group
 						//'xd:mixed'
-						lightError(pnode._name, XDEF.XDEF263);
+						_precomp.lightError(pnode._name, XDEF.XDEF263);
 						newNode.setOccurrence(0, 1);
 					} else {
 						newNode.setEmptyDeclared(true);
@@ -1088,7 +1199,7 @@ public final class CompileXDPool extends PreCompiler
 					if (kind != XNode.XMMIXED) {
 						//Attribute 'empty' is allowed only in the group
 						//'xd:mixed'
-						lightError(pnode._name, XDEF.XDEF263);
+						_precomp.lightError(pnode._name, XDEF.XDEF263);
 						newNode.setOccurrence(1, 1);
 					} else {
 						newNode.setEmptyDeclared(false);
@@ -1100,7 +1211,7 @@ public final class CompileXDPool extends PreCompiler
 				}
 			}
 		}
-		reportNotAllowedAttrs(pnode, getReportWriter());
+		_precomp.reportNotAllowedAttrs(pnode);
 		if (!newNode.isSpecified()) {
 			if (ref != null) {
 				newNode.setUnspecified();
@@ -1202,9 +1313,9 @@ public final class CompileXDPool extends PreCompiler
 		XElement xel;
 		if (parentKind == XNode.XMELEMENT &&
 			(xel = (XElement) parentNode)._template) {
-			if (pnode._nsindex == NS_XDEF_INDEX) {
+			if (pnode._nsindex == PreCompiler.NS_XDEF_INDEX) {
 				if ("text".equals(pnode._localName)) {
-					chkNestedElements(pnode, getReportWriter());
+					_precomp.chkNestedElements(pnode);
 					sval = pnode._value;
 					if (xel._trimText == 'T' || xel._textWhiteSpaces == 'T') {
 						if (sval.getString().trim().length() == 0) {
@@ -1243,7 +1354,7 @@ public final class CompileXDPool extends PreCompiler
 //						_scriptCompiler.genTemplateData(newPI, xel);
 //					}
 //					newNode = newPI;
-				} else if ("comment".equals(_actPNode._localName)) { //TODO
+				} else if ("comment".equals(pnode._localName)) { //TODO
 					sval = pnode._value;
 					XComment xcomment = new XComment(xdef.getXDPool());
 					xcomment.setSPosition(copySPosition(sval));
@@ -1284,10 +1395,10 @@ public final class CompileXDPool extends PreCompiler
 				_scriptCompiler.genTemplateElement(xel, parentNode);
 				newNode = xel;
 			}
-		} else if (pnode._nsindex == NS_XDEF_INDEX) {
+		} else if (pnode._nsindex == PreCompiler.NS_XDEF_INDEX) {
 			String name = pnode._localName;
 			if ("data".equals(name) || "text".equals(name)) {
-				chkNestedElements(pnode, getReportWriter());
+				_precomp.chkNestedElements(pnode);
 				if ("data".equals(name)) {
 					reportDeprecated(pnode._name, "data", "text");
 				}
@@ -1316,13 +1427,13 @@ public final class CompileXDPool extends PreCompiler
 					_scriptCompiler.setSourceBuffer("optional string()");
 					_scriptCompiler.compileDataScript(xtext);
 				}
-				reportNotAllowedAttrs(pnode, getReportWriter());
+				_precomp.reportNotAllowedAttrs(pnode);
 			} else if ("list".equals(name) || "includeChildNodes".equals(name)){
 				if ("includeChildNodes".equals(name)) {
-					reportDeprecated(_actPNode._name,
+					reportDeprecated(pnode._name,
 						"includeChildNodes", "list");
 				}
-				chkNestedElements(pnode, getReportWriter());
+				_precomp.chkNestedElements(pnode);
 				if (level == 1) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
@@ -1425,19 +1536,18 @@ public final class CompileXDPool extends PreCompiler
 	}
 
 	/** Compile header attributes of xd:def and xd:collection.
-	 * @param ii index of item.
+	 * @param pnode PNode item.
 	 * @param xdp defPool.
 	 */
-	private void compileXdefHeader(final int ii, final XDPool xdp) {
-		String defName = _xdefNames.get(ii);
-		PNode pnode = _xdefNodes.get(ii);
+	private void compileXdefHeader(final PNode pnode, final XDPool xdp) {
+		String defName = pnode._xdef.getName();
 		_scriptCompiler._actDefName = defName;
 		XDefinition def = new XDefinition(defName,
 			xdp, pnode._nsURI, pnode._name, pnode._xmlVersion);
 		pnode._xdef = def;
 		for (Entry<String, Integer> e: pnode._nsPrefixes.entrySet()) {
 			def._namespaces.put(e.getKey(),
-				_codeGenerator._namespaceURIs.get(e.getValue()));
+				_precomp._codeGenerator._namespaceURIs.get(e.getValue()));
 		}
 		SBuffer sval = pnode.getXdefAttr(
 			"script", false, true, getReportWriter());
@@ -1517,17 +1627,17 @@ public final class CompileXDPool extends PreCompiler
 		_xdefs.put(def.getName(), def);
 	}
 
-	private void compileXDefinition(final int ii) {
-		PNode pnode = _xdefNodes.get(ii);
-		String defName = _xdefNames.get(ii);
+	private void compileXDefinition(final PNode pnode) {
+		XDefinition def = pnode._xdef;
+		String defName = def.getName();
 		String actDefName = _scriptCompiler._actDefName;
 		_scriptCompiler._actDefName = defName;
-		XDefinition def = pnode._xdef;
 		_nodeList.add(0,def);
 		//compile xmodels
 		for (PNode nodei: pnode._childNodes) {
 			String name = nodei._localName;
-			if (nodei._nsindex == NS_XDEF_INDEX && ("choice".equals(name) ||
+			if (nodei._nsindex == PreCompiler.NS_XDEF_INDEX
+				&& ("choice".equals(name) ||
 				"mixed".equals(name) || "sequence".equals(name) ||
 //				"text".equals(name) ||
 //				"PI".equals(name) || //TODO
@@ -1544,7 +1654,7 @@ public final class CompileXDPool extends PreCompiler
 //				}
 				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					PAttr v = nodei.getAttrNS("name", NS_XDEF_INDEX);
+					PAttr v = nodei.getAttrNS("name",PreCompiler.NS_XDEF_INDEX);
 					if (v == null) {
 						gname = null;
 						//Required attribute '&{0}' is missing
@@ -1607,19 +1717,17 @@ public final class CompileXDPool extends PreCompiler
 			//Attempt to recompile compiled pool
 			throw new SRuntimeException(XDEF.XDEF203);
 		}
-		prepareMacros(); // find macro definitions and resolve macro calls
+		_precomp.prepareMacros(); // find macro definitions and resolve macro calls
 		precompile(); //compile definitions and groups.
-		for (int ii = 0;  ii < _xdefNames.size(); ii++) {
-			compileXdefHeader(ii, xdp);
+		for (PNode p: _precomp._xdefPNodes) {
+			compileXdefHeader(p, xdp);
 		}
-		for (int ii = 0;  ii < _xdefNames.size(); ii++) {
-			compileXDefinition(ii);
+		for (PNode p: _precomp._xdefPNodes) {
+			compileXDefinition(p);
 		}
 		//just let GC do the job;
-		_xdefNames.clear();
-		_xdefNodes.clear();
-		_sourceFiles.clear();
-		_includeList.clear();
+		_precomp._xdefPNodes.clear();
+		_precomp._sourceFiles.clear();
 		_nodeList.clear();
 		boolean result = true;
 		//check integrity of all XDefinitions
@@ -1670,30 +1778,31 @@ public final class CompileXDPool extends PreCompiler
 						result = false;
 					}
 				} catch(SRuntimeException ex) {
-					putReport(ex.getReport());
+					_precomp.putReport(ex.getReport());
 					result = false;
 					break;
 				}
 				d._rootSelection = rootSelection;
 			}
 		}
-		compileThesaurus(_thesaurus, xdp); // compile thesaurus
+		compileThesaurus(_precomp._thesaurus, xdp); // compile thesaurus
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
 		} else {
 			try {
 				// set code to xdp
-				((XPool) xdp).setCode(_codeGenerator._code,
-					_codeGenerator._globalVariables.getLastOffset() + 1,
-					_codeGenerator._localVariablesMaxIndex + 1,
-					_codeGenerator._spMax + 1,
-					_codeGenerator._init,
-					_codeGenerator._parser._xdVersion,
-					_codeGenerator._thesaurus);
+				((XPool) xdp).setCode(_precomp._codeGenerator._code,
+					_precomp._codeGenerator._globalVariables.getLastOffset()+1,
+					_precomp._codeGenerator._localVariablesMaxIndex + 1,
+					_precomp._codeGenerator._spMax + 1,
+					_precomp._codeGenerator._init,
+					_precomp._codeGenerator._parser._xdVersion,
+					_precomp._codeGenerator._thesaurus);
 				XVariableTable variables = new XVariableTable(0);
 
 				// set variables to xdp
-				for (XMVariable xv: _codeGenerator._globalVariables.toArray()) {
+				for (XMVariable xv:
+					_precomp._codeGenerator._globalVariables.toArray()) {
 					CompileVariable v = (CompileVariable) xv;
 					v.setValue(null); //Clear assigned value
 					v.clearPostdefs();//Clear postdefs (should be already clear)
@@ -1702,8 +1811,9 @@ public final class CompileXDPool extends PreCompiler
 				((XPool) xdp).setVariables(variables);
 
 				// set debug info to xdp
-				if (_codeGenerator._debugInfo != null) {
-					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
+				if (_precomp._codeGenerator._debugInfo != null) {
+					((XPool) xdp).setDebugInfo(
+						_precomp._codeGenerator._debugInfo);
 				}
 
 				// set X-components to xdp
@@ -1711,7 +1821,7 @@ public final class CompileXDPool extends PreCompiler
 				// create map of components
 				Map<String, String> x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
-					_codeGenerator._components.entrySet()) {
+					_precomp._codeGenerator._components.entrySet()) {
 					XMNode xn = (XMElement) xdp.findModel(e.getKey());
 					if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
 						SBuffer sbf = e.getValue();
@@ -1740,7 +1850,7 @@ public final class CompileXDPool extends PreCompiler
 
 				x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
-					_codeGenerator._binds.entrySet()) {
+					_precomp._codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(e.getKey());
 					if (xn == null || xn.getKind() != XMNode.XMELEMENT
 						&& xn.getKind() != XMNode.XMATTRIBUTE
@@ -1759,7 +1869,7 @@ public final class CompileXDPool extends PreCompiler
 						// Check if all binds conneted to the same class
 						// have the same type.
 						for (Map.Entry<String, SBuffer> f:
-							_codeGenerator._binds.entrySet()) {
+							_precomp._codeGenerator._binds.entrySet()) {
 							if (!e.getKey().equals(f.getKey()) &&
 								e.getValue().getString().equals(
 									f.getValue().getString())) {
@@ -1787,20 +1897,21 @@ public final class CompileXDPool extends PreCompiler
 
 				x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
-					_codeGenerator._enums.entrySet()) {
+					_precomp._codeGenerator._enums.entrySet()) {
 					String name = e.getKey();
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
 						name.substring(0, ndx);
 					}
-					CompileVariable var = _codeGenerator.getVariable(name);
+					CompileVariable var =
+						_precomp._codeGenerator.getVariable(name);
 					SBuffer cls = e.getValue(); // name of class
 					if (var == null) {
 						//Enumeration &{0} is not declared as typ&
 						error(cls, XDEF.XDEF380, name);
 					} else {
-						XDValue xv =
-							_codeGenerator._code.get(var.getParseMethodAddr());
+						XDValue xv = _precomp._codeGenerator._code.get(
+							var.getParseMethodAddr());
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
 							if (!name.equals(p.getDeclaredName())) {
@@ -1868,17 +1979,17 @@ public final class CompileXDPool extends PreCompiler
 					xref.putTargetError(getReportWriter());
 				} else {
 					SPosition spos = xref.getSPosition();
-					_sysId = spos.getSysId();
+					_precomp._sysId = spos.getSysId();
 					if (errs) { // previous errors were reported
 						//Comparing of models is skipped due to previous errors
-						putReport(Report.lightError(XDEF.XDEF229));
+						_precomp.putReport(Report.lightError(XDEF.XDEF229));
 					} else {
 						ArrayReporter rp = xel2.compareModel(
 							(XElement) xref._parent, xref.getKind()==1);
 						if (rp != null) {
 							Report rep;
 							while((rep = rp.getReport()) != null) {
-								putReport(rep);
+								_precomp.putReport(rep);
 							}
 						}
 					}

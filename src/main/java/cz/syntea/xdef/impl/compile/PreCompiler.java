@@ -11,6 +11,7 @@ package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.impl.XDefinition;
 import cz.syntea.xdef.impl.ext.XExtUtils;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
@@ -61,20 +62,14 @@ public class PreCompiler extends XDefReader {
 	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1; //4
 	/** index of NameSpace of XML Schema. */
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1; //5
-	/** Table of names of parsed X-definitions. */
-	final ArrayList<String> _xdefNames;
-	/** PNodes with parsed source items. */
-	final ArrayList<PNode> _xdefNodes;
-	/** Source files table - to prevent to doParse the source twice. */
-	final ArrayList<Object> _sourceFiles;
-	/** Include list of URL's. */
-	final ArrayList<Object> _includeList;
-	/** List of macro definitions. */
-	private final Map<String, XScriptMacro> _macros =
-		new TreeMap<String, XScriptMacro>();
 	/** Table of NameSpace prefixes. */
-	final static Map<String, Integer>
-		PREDEFINED_PREFIXES = new TreeMap<String, Integer>();
+	static final Map<String, Integer> PREDEFINED_PREFIXES =
+		new TreeMap<String, Integer>();
+	
+	/** PNodes with parsed source items. */
+	final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
+	/** Source files table - to prevent to doParse the source twice. */
+	final ArrayList<Object> _sourceFiles = new ArrayList<Object>();
 	/** Display mode */
 	final byte _displayMode;
 	/** Array of thesaurus sources item. */
@@ -85,23 +80,28 @@ public class PreCompiler extends XDefReader {
 	final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
 	/** Array of collection source items. */
 	final ArrayList<PNode> _listCollection = new ArrayList<PNode>();
-
+	/** Array of component sources. */
+	final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Code generator. */
 	final CompileCode _codeGenerator;
-
 	/** Actual node */
 	PNode _actPNode;
-
+	/** includes. */
 	private Element _includeElement;
 	/** The nesting level of XML node. */
 	private int _level;
 	/** The nesting level of XML node. */
-	boolean _macrosProcessed;
+	private boolean _macrosProcessed;
+	/** Include list of URL's. */
+	private final ArrayList<Object> _includeList = new ArrayList<Object>();	
+	/** List of macro definitions. */
+	private final Map<String, XScriptMacro> _macros =
+		new TreeMap<String, XScriptMacro>();
 
 	/** Creates a new instance of XDefCompiler
 	 * @param reporter The reporter.
-	 * @param extClasses The external classes.
-	 * @param displayMode display mode: .
+	 * @param extClasses The array with external classes declared by user.
+	 * @param displayMode display mode: 0 .. false, 1 .. true, 2 .. errors
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
@@ -111,20 +111,13 @@ public class PreCompiler extends XDefReader {
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 		super(reporter);
-		_xdefNames = new ArrayList<String>();
-		_xdefNodes = new ArrayList<PNode>();
-		_sourceFiles = new ArrayList<Object>();
-		_includeList = new ArrayList<Object>();
-		/** DisplayMode. */
 		_displayMode = displayMode;
 		 //"xml"
 		PREDEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
 		//"xmlns",
 		PREDEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
-		_codeGenerator = new CompileCode(
-			null, 2, debugMode, ignoreUnresolvedExternals);
-//		_codeGenerator._parser = new XScriptParser(false);
-//		_codeGenerator._parser.setReportWriter(reporter);
+		_codeGenerator = new CompileCode(extClasses,
+			2, debugMode, ignoreUnresolvedExternals);
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
 		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
@@ -135,15 +128,14 @@ public class PreCompiler extends XDefReader {
 		_macrosProcessed = false;
 	}
 
-	/** Report about not legal attributes. All allowed attributes should be
-	 * processed and removed.
+	/** Report not legal attributes. All allowed attributes should be
+	 * processed and removed. Not legal attributes generates an error message.
 	 * @param pnode node to be checked.
 	 */
-	final static void reportNotAllowedAttrs(final PNode pnode,
-		final ReportWriter reporter) {
+	final void reportNotAllowedAttrs(final PNode pnode) {
 		for (PAttr attr: pnode._attrs) {
-			attr._value.putReport( //Attribute '&{0}' not allowed here
-				Report.error(XDEF.XDEF254, attr._name), reporter);
+			 //Attribute '&{0}' not allowed here
+			error(attr._value, XDEF.XDEF254, attr._name);
 		}
 		pnode._attrs.clear();
 	}
@@ -220,7 +212,7 @@ public class PreCompiler extends XDefReader {
 				_codeGenerator._namespaceURIs.add(0, projectNS);
 			} else {
 				_codeGenerator._namespaceURIs.add(0, uri);
-				//X-definition or X-collection excpected
+				//X-definition or X-collection expected
 				error(_actPNode._name, XDEF.XDEF255);
 			}
 		}
@@ -318,7 +310,7 @@ public class PreCompiler extends XDefReader {
 		if (_level == -1) {
 			if ("collection".equals(elemLocalName)) {
 				processIncludeList();
-				reportNotAllowedAttrs(_actPNode, getReportWriter());
+				reportNotAllowedAttrs(_actPNode);
 				_listCollection.add(_actPNode);
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
@@ -329,6 +321,9 @@ public class PreCompiler extends XDefReader {
 			} else if ("declaration".equals(elemLocalName)) {
 				_level++;
 				_listDecl.add(0, _actPNode);
+			} else if ("component".equals(elemLocalName)) {				
+				_level++;
+				_listComponent.add(0, _actPNode);
 			} else {
 				if (!"def".equals(elemLocalName)) {
 					error(_actPNode._name, XDEF.XDEF259);//X-definition expected
@@ -339,46 +334,67 @@ public class PreCompiler extends XDefReader {
 				if (defName == null) {
 					defName = "";
 				}
+				// Because there is not yet connected an X-definition to
+				// the PNode we create a dumy one in fact just to store
+				// the X-definition name (we nead it to be able to compile
+				// internal declarations, BNGGrammars, components and
+				// thesaurus items).
+				_actPNode._xdef = new XDefinition(defName,
+					null, null, null, _actPNode._xmlVersion);
 				processIncludeList();
-				if (_xdefNames.contains(defName)) {
-					if (defName.length() == 0) {
-						//Only one X-definition in the compiled XDPool may be
-						//without name
-						error(_actPNode._name, XDEF.XDEF212);
-					} else {
-						//X-definition '&{0}' already exists
-						error(_actPNode._name, XDEF.XDEF303, defName);
+				// check duplicate of X-definition
+				for (PNode p: _xdefPNodes) {
+					if (defName.equals(p._xdef.getName())) {
+						if (defName.length() == 0) {
+							//Only one X-definition in the compiled XDPool
+							// may be without name
+							error(_actPNode._name, XDEF.XDEF212);
+						} else {
+							//X-definition '&{0}' already exists
+							error(_actPNode._name, XDEF.XDEF303, defName);
+						}
+						defName = null;
+//						String s = null;
+//						for (int count = 1; s == null; count++) {
+//							s = defName + "_DUPLICATED_NAME_" + count;
+//							for (PNode q: _xdefPNodes) {
+//								if (s.equals(q. _xdef.getName())) {
+//									s = null;
+//									break;
+//								}
+//							}
+//						}
+//						defName = s;
 					}
-				} else {
-					_xdefNames.add(defName);
-					_xdefNodes.add(_actPNode);
+				}
+				if (defName != null) {
+//					_xdefNames.add(defName);
+					_xdefPNodes.add(_actPNode);
 				}
 			}
 		} else {
 			_level++;
 			_actPNode._parent._childNodes.add(_actPNode);
 		}
+//		if (_level == 1 && "declaration".equals(elemLocalName)) {				
+//			_listDecl.add(0, _actPNode);
+//		}
+
 	}
 
 	@Override
 	/** This method is invoked when parser reaches the end of element. */
 	public void elementEnd() {
 		if (_includeElement != null) {
-			String href = null;
-			String parse = null;
 			String ns = _includeElement.getPrefix();
-			String uri = _includeElement.getNamespaceURI();
 			ns = ns == null || ns.length() == 0 ? "xmlns" : "xmlns:" + ns;
 			NamedNodeMap nm = _includeElement.getAttributes();
 			if (nm.getLength() > 0) { //other attributes
 				for (int i = 0; i < nm.getLength(); i++) {
 					Node n = nm.item(i);
 					String name = n.getNodeName();
-					if ("href".equals(name)) {
-						href = _includeElement.getAttribute("href");
-					} else if ("parse".equals(name)) {
-						parse = _includeElement.getAttribute("parse");
-					} else if (!ns.equals(name)) {
+					if (!"href".equals(name) && !"parse".equals(name)
+						&& !ns.equals(name)) {
 						//Xinclude - unknown attribute &{0}
 						error(_actPNode._name, XML.XML305, n.getNodeName());
 					}
@@ -543,9 +559,9 @@ public class PreCompiler extends XDefReader {
 		}
 	}
 
-	/** Parse string and addAttr it to the set of definitions.
-	 * @param source source string with definitions.
-	 * @param srcName name of source (URL).
+	/** Parse string and addAttr it to the set of X-definitions.
+	 * @param source source string with X-definitions.
+	 * @param srcName pathname of source (URL or an identifying name or null).
 	 */
 	public final void parseString(final String source, final String srcName) {
 		if (_sourceFiles.indexOf(source) >= 0 || source.length() == 0) {
@@ -567,17 +583,17 @@ public class PreCompiler extends XDefReader {
 		}
 	}
 
-	/** Parse file with source definition and addAttr it to the set
+	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
-	 * @param fileName The name of the file with with definitions.
+	 * @param fileName pathname of file with with X-definitions.
 	 */
 	public final void parseFile(final String fileName) {
 		parseFile(new File(fileName));
 	}
 
-	/** Parse file with source definition and addAttr it to the set
+	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
-	 * @param file The file with with definitions.
+	 * @param file The file with with X-definitions.
 	 */
 	public final void parseFile(final File file) {
 		try {
@@ -598,9 +614,9 @@ public class PreCompiler extends XDefReader {
 		}
 	}
 
-	/** Parse file with source definition and addAttr it to the set
+	/** Parse InputStream source X-definition and addAttr it to the set
 	 * of definitions.
-	 * @param in The input stream with the definition.
+	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or
 	 * <tt>null</tt>.
 	 */
@@ -637,9 +653,9 @@ public class PreCompiler extends XDefReader {
 		_actPNode = null; //just let gc to do the job
 	}
 
-	/** Parse data with source definition given by URL and addAttr it
-	 * to the set of definitions.
-	 * @param url The URL pointing to file with the definition.
+	/** Parse data with source X-definition given by URL and addAttr it
+	 * to the set of X-definitions.
+	 * @param url URL of the file with the X-definition.
 	 */
 	public final void parseURL(final URL url) {
 		if (url == null) {
@@ -798,11 +814,10 @@ public class PreCompiler extends XDefReader {
 	}
 
 	/** Check if the node has no nested child nodes. */
-	final static void chkNestedElements(final PNode pnode,
-		ReportWriter reporter) {
+	final void chkNestedElements(final PNode pnode) {
 		for (PNode p: pnode._childNodes) {
 			//Nested child elements are not allowed here
-			p._name.putReport(Report.error(XDEF.XDEF219), reporter);
+			error(p._name, XDEF.XDEF219);
 		}
 	}
 
@@ -820,13 +835,12 @@ public class PreCompiler extends XDefReader {
 				parseFile((File) o);
 			}
 		}
-		for (int i = 0;  i < _xdefNames.size(); i++) {
-			String defName = _xdefNames.get(i);
-			PNode def = _xdefNodes.get(i);
-			List<PNode> macros = def.getXDefChildNodes("macro");
+		for (PNode xd: _xdefPNodes) {
+			String defName = xd._xdef.getName();
+			List<PNode> macros = xd.getXDefChildNodes("macro");
 			for (PNode macro : macros) {
 				Map<String, String> params = new TreeMap<String, String>();
-				chkNestedElements(macro, getReportWriter());
+				chkNestedElements(macro);
 				for (PAttr val : macro._attrs) {
 					params.put(val._name, val._value.getString());
 				}
@@ -848,46 +862,22 @@ public class PreCompiler extends XDefReader {
 		}
 		// expand macros
 		ReportWriter reporter = getReportWriter();
-		for (int i = 0;  i < _xdefNames.size(); i++) {
-			PNode p = _xdefNodes.get(i);
-			p.expandMacros(reporter, _xdefNames.get(i), _macros);
+		for (PNode p: _xdefPNodes) {
+			p.expandMacros(reporter, p._xdef.getName(), _macros);
+		}
+		for (PNode p: _thesaurus) {
+			p.expandMacros(reporter, null, _macros);
+		}
+		for (PNode p: _listBNF) {
+			p.expandMacros(reporter, null, _macros);
+		}
+		for (PNode p: _listDecl) {
+			p.expandMacros(reporter, null, _macros);
+		}
+		for (PNode p: _listComponent) {
+			p.expandMacros(reporter, null, _macros);
 		}
 		_macrosProcessed = true;
 	}
-
-	public final ArrayList<PNode> getXDefinitionList() {
-		return _xdefNodes;
-	}
-
-	/** Get precompiled sources (PNodes) of X-definition items.
-	 * @return array with PNodes with X-definitions.
-	 */
-	public List<PNode> getPXDefs() {return _xdefNodes;}
-
-	/** Get precompiled sources (PNodes) of Thesaurus items.
-	 * @return array with PNodes.
-	 */
-	public final List<PNode> getPThesaurus() {return _thesaurus;}
-
-	/** Get precompiled sources (PNodes) of collection items.
-	 * @return array with PNodes.
-	 */
-	public final List<PNode> getPCollection() {return _listCollection;}
-
-	/** Get precompiled sources (PNodes) of declaration items.
-	 * @return array with PNodes.
-	 */
-	public final List<PNode> getPDeclaration() {return _listDecl;}
-
-	/** Get precompiled sources (PNodes) of BNF Grammar items.
-	 * @return array with PNodes.
-	 */
-	public final List<PNode> getPBNF() {return _listBNF;}
-
-	/** Get array with names of X-definitions. The index on a name is equal to
-	 * the intem in the arra of X-detinition nodes.
-	 * @return array with names of X-definitions.
-	 */
-	public final List<String> getXDefNames() {return _xdefNames;}
 	
 }
