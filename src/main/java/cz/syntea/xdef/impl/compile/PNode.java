@@ -20,27 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import static cz.syntea.xdef.impl.compile.PreCompiler.PREDEFINED_PREFIXES;
 
-/**
- *
+/** Contains information about parsed source item.
  * @author Trojan
  */
 /** Object with the parsed precompiled node. */
 public final class PNode {
 	public final List<PAttr> _attrs; //attributes
 	public final List<PNode> _childNodes; //child nodes
-	final Map<String, Integer> _nsPrefixes; // namespace prefixes
 	public final SBuffer _name; //qualified name of node
 	public String _localName;  //local name of node
 	public String _nsURI;  //namespace URI
-	final PNode _parent; //parent node
-	int _level; //nesting level of this node
-	public SBuffer _value; //String node assigned to this node
-	int _nsindex; //namespace index of this node
-	XDefinition _xdef;  //XDefinition associated with this node
 	public byte _xdVersion;  // version of X-definion
 	public byte _xmlVersion;  // version of xml
+	public XDefinition _xdef;  //XDefinition associated with this node
+	public SBuffer _value; //String node assigned to this node
+	public final PNode _parent; //parent PNode
+	
+	final Map<String, Integer> _nsPrefixes; // namespace prefixes
+	
+	int _level; //nesting level of this node
+	int _nsindex; //namespace index of this node
 	boolean _template;  //template
 
 	/** Creates a new instance of PNode.
@@ -62,7 +62,7 @@ public final class PNode {
 		_xdVersion = xdVersion;
 		_xmlVersion = xmlVersion;
 		if (parent == null) {
-			_nsPrefixes.putAll(PREDEFINED_PREFIXES);
+			_nsPrefixes.putAll(XPreCompiler.PREDEFINED_PREFIXES);
 			_template = false;
 		} else {
 			_template = parent._template;
@@ -177,7 +177,7 @@ public final class PNode {
 			sval.putReport(Report.error(XDEF.XDEF258), reporter);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
-		if (!PreCompiler.chkDefName(name, _xmlVersion)) {
+		if (!XPreCompiler.chkDefName(name, _xmlVersion)) {
 			 //Incorrect name
 			sval.putReport(Report.error(XDEF.XDEF258), reporter);
 			return "__UNKNOWN_INCORRECT_NAME_";
