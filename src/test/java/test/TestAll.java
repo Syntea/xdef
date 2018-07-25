@@ -41,7 +41,7 @@ public class TestAll {
     }
         
     /** run TestAll in test.xdef */
-    @Test
+    @Test(dependsOnMethods = {"testCommon"})
     public static void testXdef() {
         final Assertion  a     = new Assertion();
         final String[]   args0 = {};        
@@ -49,7 +49,7 @@ public class TestAll {
     }
     
     /** run TestAll in test.xdutil */
-    @Test
+    @Test(dependsOnMethods = {"testXdef"})
     public static void testXDUtils() {
         final Assertion  a     = new Assertion();
         final String[]   args0 = {};
@@ -86,15 +86,7 @@ public class TestAll {
         
         try {
             testCommon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        try {
             testXdef();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        try {
             testXDUtils();
         } catch (Exception e) {
             System.err.println(e.getMessage());
