@@ -71,8 +71,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
 	
-	/** PreCompiler instance.  */
-	private final PreCompiler _precomp;
+	/** XPreCompiler instance.  */
+	private final XPreCompiler _precomp;
 		
 	/** Table of definitions */
 	private final Map<String, XDefinition> _xdefs;
@@ -93,7 +93,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final Map<String, XDefinition> xdefs) {
-		_precomp = new PreCompiler(reporter,
+		_precomp = new XPreCompiler(reporter,
 			extClasses,
 			xp.getDisplayMode(),
 			xp.isDebugMode(),
@@ -104,7 +104,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_precomp._codeGenerator,
 			(byte) 10, 
-			PreCompiler.PREDEFINED_PREFIXES, classLoader);
+			XPreCompiler.PREDEFINED_PREFIXES, classLoader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
@@ -824,7 +824,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			// list to assure the original sequence of items in the X-definition.
 			for (int j = def._childNodes.size() - 1;  j >= 0; j--) {
 				PNode nodei = def._childNodes.get(j);
-				if (nodei._nsindex != PreCompiler.NS_XDEF_INDEX) {
+				if (nodei._nsindex != XPreCompiler.NS_XDEF_INDEX) {
 					continue;
 				}
 				String nodeName = nodei._localName;
@@ -901,7 +901,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			defName = name.substring(0,i);
 			name = name.substring(i+1);
 		}
-		if (!PreCompiler.chkDefName(defName, xdef.getXmlVersion())) {
+		if (!XPreCompiler.chkDefName(defName, xdef.getXmlVersion())) {
 			return null;
 		}
 		if (!StringParser.chkNCName(name, xdef.getXmlVersion())) {
@@ -952,7 +952,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xel = (XElement) xNode;
 			xtxt = null;
 			//compile first script - we must recognize template!
-			PAttr pattr = pnode.getAttrNS("script", PreCompiler.NS_XDEF_INDEX);
+			PAttr pattr = pnode.getAttrNS("script", XPreCompiler.NS_XDEF_INDEX);
 			if (pattr != null) {
 				_scriptCompiler.setSource(pattr._value,
 					defName, pnode._xdVersion, pnode._nsPrefixes);
@@ -979,7 +979,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler._actDefName,
 				pnode._xdVersion,
 				pnode._nsPrefixes);
-			if (pattr._nsindex == PreCompiler.NS_XDEF_INDEX) {
+			if (pattr._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 				String localName = pattr._localName;
 				if ("script".equals(localName)) {
 					if (isAttlist) {
@@ -1313,7 +1313,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		XElement xel;
 		if (parentKind == XNode.XMELEMENT &&
 			(xel = (XElement) parentNode)._template) {
-			if (pnode._nsindex == PreCompiler.NS_XDEF_INDEX) {
+			if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 				if ("text".equals(pnode._localName)) {
 					_precomp.chkNestedElements(pnode);
 					sval = pnode._value;
@@ -1395,7 +1395,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.genTemplateElement(xel, parentNode);
 				newNode = xel;
 			}
-		} else if (pnode._nsindex == PreCompiler.NS_XDEF_INDEX) {
+		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 			String name = pnode._localName;
 			if ("data".equals(name) || "text".equals(name)) {
 				_precomp.chkNestedElements(pnode);
@@ -1636,7 +1636,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//compile xmodels
 		for (PNode nodei: pnode._childNodes) {
 			String name = nodei._localName;
-			if (nodei._nsindex == PreCompiler.NS_XDEF_INDEX
+			if (nodei._nsindex == XPreCompiler.NS_XDEF_INDEX
 				&& ("choice".equals(name) ||
 				"mixed".equals(name) || "sequence".equals(name) ||
 //				"text".equals(name) ||
@@ -1654,7 +1654,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				}
 				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					PAttr v = nodei.getAttrNS("name",PreCompiler.NS_XDEF_INDEX);
+					PAttr v = nodei.getAttrNS("name",XPreCompiler.NS_XDEF_INDEX);
 					if (v == null) {
 						gname = null;
 						//Required attribute '&{0}' is missing

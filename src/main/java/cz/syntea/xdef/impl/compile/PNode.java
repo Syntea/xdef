@@ -62,7 +62,7 @@ public final class PNode {
 		_xdVersion = xdVersion;
 		_xmlVersion = xmlVersion;
 		if (parent == null) {
-			_nsPrefixes.putAll(PreCompiler.PREDEFINED_PREFIXES);
+			_nsPrefixes.putAll(XPreCompiler.PREDEFINED_PREFIXES);
 			_template = false;
 		} else {
 			_template = parent._template;
@@ -177,7 +177,7 @@ public final class PNode {
 			sval.putReport(Report.error(XDEF.XDEF258), reporter);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
-		if (!PreCompiler.chkDefName(name, _xmlVersion)) {
+		if (!XPreCompiler.chkDefName(name, _xmlVersion)) {
 			 //Incorrect name
 			sval.putReport(Report.error(XDEF.XDEF258), reporter);
 			return "__UNKNOWN_INCORRECT_NAME_";

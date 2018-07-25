@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 Syntea software group a.s. All rights reserved.
  *
- * File: PreCompiler.java, created 2018-07-21.
+ * File: XPreCompiler.java, created 2018-07-21.
  *
  * This file may be used, copied, modified and distributed only in accordance
  * with the terms of the limited licence contained in the accompanying
@@ -49,7 +49,7 @@ import org.w3c.dom.Node;
 /** Reads source X-definitions and prepares list of PNodes with X-definitions.
  * @author Trojan
  */
-public class PreCompiler extends XDefReader {
+public class XPreCompiler extends XDefReader {
 	/** index of NameSpace of X-definitions. */
 	static final int NS_XDEF_INDEX = 0;
 	/** index of NameSpace of XML. */
@@ -105,7 +105,7 @@ public class PreCompiler extends XDefReader {
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
-	public PreCompiler(final ReportWriter reporter,
+	public XPreCompiler(final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final byte displayMode,
 		final boolean debugMode,
