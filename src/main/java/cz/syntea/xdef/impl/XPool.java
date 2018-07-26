@@ -639,6 +639,17 @@ public final class XPool implements XDPool {
 	 * @return true if version is compatible.
 	 */
 	private static boolean isCompatibleVersion(final String versionInfo) {
+//		String[] verNums = XD_VERSION.split("\\.");
+//		if (verNums.length == 4) {
+//			if (verNums[0].startsWith("XD")) {
+//				verNums[0] = verNums[0].substring(2);
+//				long x = 0L;
+//				for (int i = 0; i < verNums.length; i++) {
+//					x = x * 1000 + Integer.parseInt(verNums[i]);
+//				}
+//System.out.println("x = " + x);
+//			}
+//		}
 		int j = XD_VERSION.indexOf('.');
 		if (j < 0 || versionInfo == null || versionInfo.length() <= j ||
 			versionInfo.charAt(j) != '.' ||
