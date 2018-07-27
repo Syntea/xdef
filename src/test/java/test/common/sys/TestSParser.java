@@ -545,11 +545,11 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
+				if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
+					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
 						TimeZone.SHORT));
 				} else {
-					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
+					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
 						TimeZone.SHORT));
 				}
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,

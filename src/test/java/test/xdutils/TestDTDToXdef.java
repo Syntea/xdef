@@ -133,9 +133,9 @@ public class TestDTDToXdef extends STester {
 		xmlData = "<tutorial>text</tutorial>";
 		test(dtdData, "tutorial", xmlData, display);
 
+// START fails in Java 1.9 /////////////////////////////////////////////////////
+if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
-if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-// runs only in Java 1.8 or lower //////////////////////////////////////////////
 		dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
@@ -482,8 +482,8 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 "  <EEE/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-// end only in Java 1.8 or lower ///////////////////////////////////////////////
 }
+// END - fails in Java 1.9 ///////////////////////////////////////////////////// 
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT TVSCHEDULE (CHANNEL+)>\n"+

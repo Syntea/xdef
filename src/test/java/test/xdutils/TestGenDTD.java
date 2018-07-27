@@ -176,5 +176,4 @@ public class TestGenDTD extends STester {
 	public static void main(String... args) {
 		runTest();
 	}
-
 }
