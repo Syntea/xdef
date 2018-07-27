@@ -2366,7 +2366,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("2000-01-32"), _msg);
 //		assertTrue(parseFail("2000-02-29"), _msg); //schema not fails!
 		assertTrue(parseFail("2000-01-00"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("2000-01-01 +10:00"), _msg); //schema not fails
 			assertTrue(parseFail("2000-01-01 -10:00"), _msg); //schema not fails
 			assertTrue(parseFail("2000-01-01-14:50"), _msg); //schema not fails
@@ -2658,7 +2658,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("2000-01-01"), _msg);
 		assertTrue(parseFail("2000-01-01T00:00:00-15:00"), _msg);
 		assertTrue(parseFail("2000-01-01T00:00:00+15:00"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("2000-01-01T00:00:00-14:01"), _msg); //schema
 			assertTrue(parseFail("2000-01-01T00:00:00+14:01"), _msg); //schema
 			assertTrue(parseFail("2000-01-01 T00:00:00+14:00"), _msg);//schema
@@ -2819,7 +2819,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("01"), _msg);
 		assertTrue(parseFail("---001"), _msg);
 		assertTrue(parseFail("32"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("---18+14:01"), _msg); //schema
 			assertTrue(parseFail("---12-14:01"), _msg); //schema
 		}
@@ -2952,7 +2952,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("--01+15:00"), _msg);
 		assertTrue(parseFail("--13"), _msg);
 		assertTrue(parseFail("--05+05"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("--12-14:01"), _msg); //schema
 			assertTrue(parseFail("--12+14:01"), _msg); //schema
 		}
@@ -3045,7 +3045,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("--1-01"), _msg);
 		assertTrue(parseFail("--02-30"), _msg);
 		assertTrue(parseFail("--01-01+15:00"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("--12-18+14:01"), _msg); //schema
 			assertTrue(parseFail("--12-01-14:01"), _msg); //schema
 		}
@@ -3161,7 +3161,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("+1234"), _msg);
 		assertTrue(parseFail("+2000"), _msg);
 		assertTrue(parseFail("2000z"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("2000-14:01"), _msg); //schema
 			assertTrue(parseFail("2000+14:01"), _msg); //schema
 		}
@@ -3253,7 +3253,7 @@ public final class TestXSTypes extends Tester {
 		assertTrue(parseFail("-0-01"), _msg);
 		assertTrue(parseFail("+1234-12"), _msg);
 		assertTrue(parseFail("2001-01+15:00"), _msg);
-		if (SUtils.JAVA_VERSION > 106) {
+		if (SUtils.JAVA_RUNTIME_VERSION_ID > 106) {
 			assertTrue(parseFail("2000-01-14:01"), _msg); //schema
 			assertTrue(parseFail("2000-01+14:01"), _msg); //schema
 		}

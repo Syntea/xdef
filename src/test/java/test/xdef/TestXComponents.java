@@ -104,8 +104,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>";
 			test.xdef.component.A p = (test.xdef.component.A)
@@ -145,8 +145,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>");
 			p.geti().set$value((long) 3);
@@ -170,8 +170,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>");
 			assertEq("", checkXPos(p));
@@ -190,8 +190,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>");
 			p.setdec(new BigDecimal("456.01"));
@@ -208,8 +208,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>");
 			p.setdec(new BigDecimal("123.45"));
@@ -226,8 +226,8 @@ public final class TestXComponents extends Tester {
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200 (CEST)'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200 (CEST)"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
+"Thu, 15 Oct 2009 01:02:04 +0200"+
 "</d2>"+
 "</A>");
 			el = XComponentUtil.toXml(p, XP.createXDDocument("B"), "A");

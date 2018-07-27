@@ -15,6 +15,7 @@ package test.common.sys;
 import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
+import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -544,8 +545,13 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				assertEq("CEST",
-					tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
+				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
+					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
+						TimeZone.SHORT));
+				} else {
+					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
+						TimeZone.SHORT));
+				}
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,
 					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
 			}

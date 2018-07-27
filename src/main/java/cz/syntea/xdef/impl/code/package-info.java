@@ -1,5 +1,5 @@
-/**
- * This package contains contains implementation of the Syntea X-definition
- * processor.
+/**	The source code in this package is used when XML data is used in the
+ * implementation of Syntea X-definition engine. It is NOT designed for common
+ * user.
  */
 package cz.syntea.xdef.impl.code;

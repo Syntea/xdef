@@ -43,17 +43,38 @@ public class SUtils extends FUtils {
 	 * the integer part is multiplied by 100 and subversion part is added.
 	 * E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
-	public static final int JAVA_VERSION;
+	public static final int JAVA_RUNTIME_VERSION_ID;
+	/** The string with the last part of Java VM version information.
+	 * E.g. if vresion infromation is "1.6.0_45" it will be "0_45".
+	 */
+	public static final String JAVA_RUNTIME_BUILD;
 
 	static {
-		String javaVersion = System.getProperty("java.version");
-		if (javaVersion != null) {
-			String[] ss = javaVersion.split("\\.");
-			JAVA_VERSION = Integer.parseInt(ss[0])* 100
-				+ Integer.parseInt(ss[1]);
-		} else {
-			JAVA_VERSION = 106;
+		String s;
+		try {
+			s = Runtime.class.getPackage().getImplementationVersion();
+			if (s == null) {
+				Class<?> cls = Runtime.class; 
+				java.lang.reflect.Method m = cls.getDeclaredMethod("version");
+				Object o = m.invoke(null);
+				cls = o.getClass();
+				m = cls.getDeclaredMethod("version");
+				s = m.invoke(null).toString();
+			}
+		} catch (Exception ex) {
+			s = System.getProperty("java.version");
 		}
+		String[] ss = s.split("\\.");
+		JAVA_RUNTIME_VERSION_ID = Integer.parseInt(ss[0]) * 100
+			+ Integer.parseInt(ss[1]);
+		s = "";
+		for (int i = 2; i < ss.length; i++) {
+			if (!s.isEmpty()) {
+				s += '.';
+			}
+			s += ss[i];
+		}
+		JAVA_RUNTIME_BUILD = s;
 	}
 
 	/** Don't allow user to instantiate this class. */

@@ -22,6 +22,7 @@ import cz.syntea.xdef.util.GenDTD2XDEF;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.util.DTDToXdef;
 import java.io.File;
 import org.w3c.dom.Element;
@@ -131,7 +132,10 @@ public class TestDTDToXdef extends STester {
 		test(dtdData, "tutorial", xmlData, display);
 		xmlData = "<tutorial>text</tutorial>";
 		test(dtdData, "tutorial", xmlData, display);
+
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
+// runs only in Java 1.8 or lower //////////////////////////////////////////////
 		dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
@@ -462,7 +466,6 @@ public class TestDTDToXdef extends STester {
 "  </AAA>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-/* */
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA*|(BBB*,(CCC|(DDD,EEE+)*|FFF?), AAA*))? >\n" +
@@ -479,6 +482,8 @@ public class TestDTDToXdef extends STester {
 "  <EEE/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
+// end only in Java 1.8 or lower ///////////////////////////////////////////////
+}
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT TVSCHEDULE (CHANNEL+)>\n"+
