@@ -38,6 +38,21 @@ public final class PAttr {
 		_value = value;
 	}
 
+	/** Get node name.
+	 * @return node name.
+	 */
+	public final String getName() {return _name;}
+
+	/** Get node namespace.
+	 * @return node namespace.
+	 */
+	public final String getNamespace() {return _nsURI;}
+
+	/** Get list of child nodes.
+	 * @return list of child nodes.
+	 */
+	public final SBuffer getValue() {return _value;}
+
 	@Override
 	/** Check another attribute if it is equal to this one. We consider
 	 * two attributes equal if both local names and name spaces are equal.
@@ -61,4 +76,5 @@ public final class PAttr {
 
 	@Override
 	public String toString() {return _name + "=" + _value.getString();}
+
 }

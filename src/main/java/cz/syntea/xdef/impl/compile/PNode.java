@@ -10,8 +10,6 @@
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.impl.XDefinition;
-import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
@@ -26,19 +24,19 @@ import java.util.TreeMap;
  */
 /** Object with the parsed precompiled node. */
 public final class PNode {
-	public final List<PAttr> _attrs; //attributes
-	public final List<PNode> _childNodes; //child nodes
-	public final SBuffer _name; //qualified name of node
-	public String _localName;  //local name of node
-	public String _nsURI;  //namespace URI
-	public byte _xdVersion;  // version of X-definion
-	public byte _xmlVersion;  // version of xml
-	public XDefinition _xdef;  //XDefinition associated with this node
-	public SBuffer _value; //String node assigned to this node
-	public final PNode _parent; //parent PNode
+	final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
+	final List<PNode> _childNodes = new ArrayList<PNode>(); //child nodes
+	final SBuffer _name; //qualified name of node
+	String _localName;  //local name of node
+	String _nsURI;  //namespace URI
+	byte _xdVersion;  // version of X-definion
+	byte _xmlVersion;  // version of xml
+	XDefinition _xdef;  //XDefinition associated with this node
+	SBuffer _value; //String node assigned to this node
+	final PNode _parent; //parent PNode
 
-	final Map<String, Integer> _nsPrefixes; // namespace prefixes
-
+	// namespace prefixes
+	final Map<String, Integer> _nsPrefixes = new TreeMap<String, Integer>();
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template
@@ -56,9 +54,6 @@ public final class PNode {
 		final byte xdVersion,
 		final byte xmlVersion) {
 		_name = new SBuffer(name, position);
-		_childNodes = new ArrayList<PNode>();
-		_attrs = new ArrayList<PAttr>();
-		_nsPrefixes = new TreeMap<String, Integer>();
 		_xdVersion = xdVersion;
 		_xmlVersion = xmlVersion;
 		if (parent == null) {
@@ -73,19 +68,45 @@ public final class PNode {
 //       java makes it: _level = 0; _value = null; _def = null;
 	}
 
-	/** Get list of child nodes of given name (not recursive).
-	 * @param name The name.
-	 * @return the list of child nodes of given name.
+	/** Get node name (as SBufer).
+	 * @return node name (as SBufer).
 	 */
-	public final List<PNode> getXDefChildNodes(final String name) {
-		List<PNode> result = new ArrayList<PNode>();
-		for (PNode node : _childNodes) {
-			if (node._nsindex == 0 && node._localName.equals(name)) {
-				result.add(node);
-			}
-		}
-		return result;
-	}
+	public final SBuffer getName() {return _name;}
+
+	/** Get namsepace index of the node .
+	 * @return node name (as SBufer).
+	 */
+	public final int getNSIndex() {return _nsindex;}
+
+	/** Get node namespace.
+	 * @return node namespace.
+	 */
+	public final String getNamespace() {return _nsURI;}
+
+	/** Get list of attributes.
+	 * @return list of attributes.
+	 */
+	public final List<PAttr> getAttrs() {return _attrs;}
+
+	/** Get list of child nodes.
+	 * @return list of child nodes.
+	 */
+	public final List<PNode> getChildNodes() {return _childNodes;}
+
+	/** Get text value of PNode.
+	 * @return text value of PNode or null.
+	 */
+	public final SBuffer getValue() {return _value;}
+
+	/** Get version of the X-Definition.
+	 * @return version of the X-Definition ("2.0" .. 20, "3.1" .. 31 ).
+	 */
+	public final byte getXdefVersion() {return _xdVersion;}
+
+	/** Get version of the XML document.
+	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11 ).
+	 */
+	public final byte getXMLVersion() {return _xmlVersion;}
 
 	/** Remove child nodes.
 	 * @param list The list of nodes to be removed.
@@ -100,7 +121,7 @@ public final class PNode {
 	 * @param nsIndex The index of name space (0 == XDEF).
 	 * @return the object SParsedData with the attribute value or null.
 	 */
-	public final PAttr getAttrNS(final String localName, final int nsIndex) {
+	final PAttr getAttrNS(final String localName, final int nsIndex) {
 		PAttr xattr = null;
 		for (PAttr a : _attrs) {
 			if (localName.equals(a._localName) && a._nsindex == nsIndex) {
@@ -108,81 +129,6 @@ public final class PNode {
 			}
 		}
 		return xattr;
-	}
-
-	/** Get attribute of given name with or without name space prefix from
-	 * node. The attribute is removed from the list. If the argument
-	 * required is set to true put error message that required attribute
-	 * is missing.
-	 * @param localName The local name of attribute.
-	 * @param required if true the attribute is required.
-	 * @param remove if true the attribute is removed.
-	 * @return the object SParsedData with the attribute value or null.
-	 */
-	final SBuffer getXdefAttr(final String localName,
-		final boolean required,
-		final boolean remove,
-		final ReportWriter reporter) {
-		PAttr attr = null;
-		PAttr xattr = null;
-		for (PAttr a : _attrs) {
-			if (localName.equals(a._localName) && a._nsindex <= 0) {
-				if (a._nsindex == 0) {
-					xattr = a;
-				} else {
-					attr = a;
-				}
-			}
-		}
-		if (xattr != null && attr != null) {
-			//The attribute '&{0}' can't be specified simultanously
-			//with and without namespace
-			attr._value.putReport(
-				Report.error(XDEF.XDEF230, localName), reporter);
-		} else if (xattr == null) {
-			xattr = attr;
-		}
-		if (xattr == null) {
-			if (required) {
-				//Required attribute '&{0}' is missing
-				_name.putReport(
-					Report.error(XDEF.XDEF323, "xd:"+localName), reporter);
-			}
-			return null;
-		} else {
-			if (remove) {
-				_attrs.remove(xattr);
-			}
-			return xattr._value;
-		}
-	}
-
-	/** Get "name" (or "prefix:name") of node.
-	 * If the argument required is set to true put error message that
-	 * required attribute is missing.
-	 * @param required if true the attribute is required.
-	 * @param remove if true the attribute is removed.
-	 * @return the name or null.
-	 */
-	final String getNameAttr(final boolean required,
-		final boolean remove,
-		final ReportWriter reporter) {
-		SBuffer sval = getXdefAttr("name", required, remove, reporter);
-		if (sval == null) {
-			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
-		}
-		String name = sval.getString().trim();
-		if (name == null || name.length() == 0) {
-			//Incorrect name
-			sval.putReport(Report.error(XDEF.XDEF258), reporter);
-			return "__UNKNOWN_ATTRIBUTE_NAME_";
-		}
-		if (!XPreCompiler.chkDefName(name, _xmlVersion)) {
-			 //Incorrect name
-			sval.putReport(Report.error(XDEF.XDEF258), reporter);
-			return "__UNKNOWN_INCORRECT_NAME_";
-		}
-		return name;
 	}
 
 	public void expandMacros(final ReportWriter reporter,

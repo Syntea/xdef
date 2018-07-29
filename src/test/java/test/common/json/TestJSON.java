@@ -17,6 +17,7 @@ package test.common.json;
 import cz.syntea.xdef.sys.JSONUtil;
 import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SException;
+import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
 import org.w3c.dom.Element;
@@ -191,80 +192,68 @@ public class TestJSON extends STester {
 	}
 
 	static boolean chkj(String json, String el) {
-		try {
-			Object o1 = JSONUtil.parseJSON(json);
-			Element e = JSONUtil.jsonToXml(o1);
-//			System.out.println("===\n"+JSONUtil.toJSONString(o1, true));
-			Object o2 = JSONUtil.xmlToJson(e);
-			if (!JSONUtil.jsonEqual(o1, o2)) {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nJ2: " + JSONUtil.toJSONString(o2)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\njs: " + json + "\nel: " + el);
-				return false;
-			}
-			Element f = JSONUtil.jsonToXml(o2);
-			if (equalJElems(e, f) && equalJElems(f, el)) {
-				return true;
-			} else {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nJ2: " + JSONUtil.toJSONString(o2)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\nE2: " + KXmlUtils.nodeToString(f)
-					+ "\njs: " + json + "\nel: " + el);
-				return false;
-			}
-		} catch (SException ex) {//incorrect JSON
-			System.err.println(json);
-			ex.printStackTrace(System.err);
+		Object o1 = JSONUtil.parseJSON(json);
+		Element e = JSONUtil.jsonToXml(o1);
+//		System.out.println("===\n"+JSONUtil.toJSONString(o1, true));
+		Object o2 = JSONUtil.xmlToJson(e);
+		if (!JSONUtil.jsonEqual(o1, o2)) {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nJ2: " + JSONUtil.toJSONString(o2)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\njs: " + json + "\nel: " + el);
+			return false;
 		}
-		return false;
+		Element f = JSONUtil.jsonToXml(o2);
+		if (equalJElems(e, f) && equalJElems(f, el)) {
+			return true;
+		} else {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nJ2: " + JSONUtil.toJSONString(o2)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\nE2: " + KXmlUtils.nodeToString(f)
+				+ "\njs: " + json + "\nel: " + el);
+			return false;
+		}
 	}
 
 	static boolean chkx(String el, String json) {
-		try {
-			Element e = KXmlUtils.parseXml(el).getDocumentElement();
-			Object o1 = JSONUtil.xmlToJson(e);
-			Element f = JSONUtil.jsonToXml(o1);
-			if (!equalJElems(e, f)) {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\nE2: " + KXmlUtils.nodeToString(f)
-					+ "\njs: " + json + "\nel: " + el);
-				return true;
-			}
-			Object o2 = JSONUtil.xmlToJson(f);
-			if (!JSONUtil.jsonEqual(o2, JSONUtil.parseJSON(json))) {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nJ2: " + JSONUtil.toJSONString(o2)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\nE2: " + KXmlUtils.nodeToString(f)
-					+ "\njs: " + json + "\nel: " + el);
-				return true;
-			}
-			if (!JSONUtil.jsonEqual(o1, o2)) {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nJ2: " + JSONUtil.toJSONString(o2)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\nE2: " + KXmlUtils.nodeToString(f)
-					+ "\njs: " + json + "\nel: " + el);
-				return true;
-			}
-			if (equalJElems(f, el)) {
-				return true;
-			} else {
-				System.err.println("J1: " + JSONUtil.toJSONString(o1)
-					+ "\nJ2: " + JSONUtil.toJSONString(o2)
-					+ "\nEl: " + KXmlUtils.nodeToString(e)
-					+ "\nE2: " + KXmlUtils.nodeToString(f)
-					+ "\njs: " + json + "\nel: " + el);
-				return false;
-			}
-		} catch (SException ex) {//incorrect JSON
-			System.err.println(json);
-			ex.printStackTrace(System.err);
+		Element e = KXmlUtils.parseXml(el).getDocumentElement();
+		Object o1 = JSONUtil.xmlToJson(e);
+		Element f = JSONUtil.jsonToXml(o1);
+		if (!equalJElems(e, f)) {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\nE2: " + KXmlUtils.nodeToString(f)
+				+ "\njs: " + json + "\nel: " + el);
+			return true;
 		}
-		return false;
+		Object o2 = JSONUtil.xmlToJson(f);
+		if (!JSONUtil.jsonEqual(o2, JSONUtil.parseJSON(json))) {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nJ2: " + JSONUtil.toJSONString(o2)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\nE2: " + KXmlUtils.nodeToString(f)
+				+ "\njs: " + json + "\nel: " + el);
+			return true;
+		}
+		if (!JSONUtil.jsonEqual(o1, o2)) {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nJ2: " + JSONUtil.toJSONString(o2)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\nE2: " + KXmlUtils.nodeToString(f)
+				+ "\njs: " + json + "\nel: " + el);
+			return true;
+		}
+		if (equalJElems(f, el)) {
+			return true;
+		} else {
+			System.err.println("J1: " + JSONUtil.toJSONString(o1)
+				+ "\nJ2: " + JSONUtil.toJSONString(o2)
+				+ "\nEl: " + KXmlUtils.nodeToString(e)
+				+ "\nE2: " + KXmlUtils.nodeToString(f)
+				+ "\njs: " + json + "\nel: " + el);
+			return false;
+		}
 	}
 
 	static boolean check(String s) {

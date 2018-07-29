@@ -54,7 +54,7 @@ public class SUtils extends FUtils {
 		try {
 			s = Runtime.class.getPackage().getImplementationVersion();
 			if (s == null) {
-				Class<?> cls = Runtime.class; 
+				Class<?> cls = Runtime.class;
 				java.lang.reflect.Method m = cls.getDeclaredMethod("version");
 				Object o = m.invoke(null);
 				cls = o.getClass();

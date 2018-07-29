@@ -570,6 +570,8 @@ public final class Test002 extends Tester {
 			if (_errorCount != 1 || _errorCode != 4202) {
 				fail("ErrorCount:"+_errorCount+", errorCode:"+_errorCode);
 			}
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a a1=\"optional unknown() OOR pic('AA999999'); onFalse out('ERR1')\"\n"+
@@ -746,7 +748,7 @@ public final class Test002 extends Tester {
 			if ((s = ex.getMessage()) == null) {
 				fail(ex);
 			} else {
-				// parts of error messages that should be in the exception message
+				// parts of error messages that should be in the message
 				assertTrue(s.indexOf("oti(String)")>=0, ex.getMessage());
 				assertTrue(s.indexOf("ofi(int,String,String)")>=0);
 				assertTrue(s.indexOf("ext(Container,Element)")>=0);

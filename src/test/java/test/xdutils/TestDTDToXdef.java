@@ -483,7 +483,7 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
 }
-// END - fails in Java 1.9 ///////////////////////////////////////////////////// 
+// END - fails in Java 1.9 /////////////////////////////////////////////////////
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT TVSCHEDULE (CHANNEL+)>\n"+

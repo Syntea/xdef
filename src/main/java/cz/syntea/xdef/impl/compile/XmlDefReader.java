@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 Syntea software group a.s. All rights reserved.
  *
- * File: XDefReader.java, created 2018-04-13.
+ * File: XmlDefReader.java, created 2018-04-13.
  *
  * This file may be used, copied, modified and distributed only in accordance
  * with the terms of the limited licence contained in the accompanying
@@ -49,7 +49,7 @@ import org.xml.sax.ext.DeclHandler;
  * line and position information (including attribute values).
  * @author trojan
  */
-abstract class XDefReader extends DomBaseHandler implements DeclHandler {
+abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	private int _lev;
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private ReportWriter _reporter;
@@ -115,7 +115,7 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 		private final Locator _locator;
 		private final Map<String, String> _entities;
 
-		private HandlerInfo(final XDefReader h,
+		private HandlerInfo(final XmlDefReader h,
 			final XAbstractReader mr) {
 			_mr = h.getReader();
 			_xr = h.getXMLReader();
@@ -143,7 +143,7 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 			h._entities = new TreeMap<String, String>(_entities);
 		}
 
-		private void resetHandler(XDefReader h) {
+		private void resetHandler(XmlDefReader h) {
 			h.setReader(_mr);
 			h.setXMLReader(_xr);
 			h.setInputSource(_is);
@@ -160,7 +160,7 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 	/** Prepares instance of XDefReader.
 	 * @param reporter report writer or null.
 	 */
-	XDefReader(ReportWriter reporter) {
+	public XmlDefReader(ReportWriter reporter) {
 		super();
 		_reporter = reporter == null ?  new ArrayReporter() : reporter;
 		_entities = new TreeMap<String, String>();
@@ -218,7 +218,8 @@ abstract class XDefReader extends DomBaseHandler implements DeclHandler {
 			try {
 				SAXParser sp = SPF.newSAXParser();
 				xr = sp.getXMLReader();
-				xr.setProperty("http://xml.org/sax/properties/declaration-handler",
+				xr.setProperty(
+					"http://xml.org/sax/properties/declaration-handler",
 					this);
 			} catch (Exception ex) {
 				throw new RuntimeException("Parse configuration error", ex);

@@ -72,7 +72,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private static final int MAX_REFERENCE = 4096;
 
 	/** XPreCompiler instance.  */
-	private final XPreCompiler _precomp;
+	private final PreCompiler _precomp;
 
 	/** Table of definitions */
 	private final Map<String, XDefinition> _xdefs;
@@ -502,8 +502,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private void compileMehodsAndClassesAttrs() {
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);
-			SBuffer sval =
-				pnode.getXdefAttr("methods", false, true, getReportWriter());
+			SBuffer sval = _precomp.getXdefAttr(pnode,
+				"methods", false, true);
 			if (sval!= null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
@@ -518,7 +518,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.compileExtMethods(
 					_scriptCompiler._actDefName, false);
 			}
-			sval = pnode.getXdefAttr("classes", false, true, getReportWriter());
+			sval = _precomp.getXdefAttr(pnode, "classes", false, true);
 			if (sval != null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XDConstants.XD31_ID) {
@@ -556,7 +556,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator.setExternals(exts);
 				}
 			}
-			sval = pnode.getXdefAttr("component", false,true,getReportWriter());
+			sval = _precomp.getXdefAttr(pnode, "component", false, true);
 			if (sval != null) {
 				_scriptCompiler.setSource(sval,
 					pnode._xdef.getName(),
@@ -572,8 +572,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * @return true if the attribute "scope" is "local".
 	 */
 	private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
-		SBuffer scope = nodei.getXdefAttr("scope",
-			false, removeAttr, getReportWriter());
+		SBuffer scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
 		boolean local = false;
 		if (scope != null) {
 			String s = scope.getString();
@@ -582,7 +581,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				//Attribute "scope" in selfstanding declaration section
 				//can be only "global"
 				error(scope, XDEF.XDEF221);
-				nodei.getXdefAttr("scope", false, true, getReportWriter());
+				_precomp.getXdefAttr(nodei, "scope", false, true);
 				return false;
 			} else if (!local  && !"global".equals(s)) {
 				//Incorrect attribute "scope" in declaration section: &{0}
@@ -689,8 +688,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			for (PNode nodei: thesaurus) {
 				_scriptCompiler.compileThesaurus(nodei._value,
 					nodei._xdef == null ? null : nodei._xdef.getName(),
-					nodei.getXdefAttr("language", true, true,getReportWriter()),
-					nodei.getXdefAttr("default", false, true,getReportWriter()),
+					_precomp.getXdefAttr(nodei, "language", true, true),
+					_precomp.getXdefAttr(nodei, "default", false, true),
 					xp,
 					languages);
 				_precomp.reportNotAllowedAttrs(nodei);
@@ -783,13 +782,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	private void compileBNFGrammar(final PNode nodei, final boolean remove) {
 		String defName = nodei._xdef == null ? null : nodei._xdef.getName();
-		SBuffer sName =
-			nodei.getXdefAttr("name", true, remove, getReportWriter());
+		SBuffer sName = _precomp.getXdefAttr(nodei, "name", true, remove);
 		if (sName == null) {
 			return; //required name is missing.
 		}
 		_scriptCompiler.compileBNFGrammar(sName,
-			nodei.getXdefAttr("extends", false, remove, getReportWriter()),
+			_precomp.getXdefAttr(nodei, "extends", false, remove),
 			nodei._value,
 			defName,
 			isLocalScope(nodei, remove),
@@ -1100,13 +1098,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		newNode.setUnspecified();
 		newNode.setSPosition(copySPosition(pnode._name));
-		SBuffer ref = pnode.getXdefAttr("ref", false, true, getReportWriter());
+		SBuffer ref = _precomp.getXdefAttr(pnode, "ref", false, true);
 		newNode.setXDPosition(xdef.getXDPosition()+'$'+pnode._name.getString()+
 			(ref != null ? "("+ref.getString()+")" : ""));
 		short kind = newNode.getKind();
 		if (kind==XNode.XMCHOICE||kind==XNode.XMMIXED||kind==XNode.XMSEQUENCE) {
 			SBuffer sval =
-				pnode.getXdefAttr("script", false, true, getReportWriter());
+				_precomp.getXdefAttr(pnode, "script", false, true);
 			if (sval != null) {
 				_scriptCompiler.setSource(sval,
 					_scriptCompiler._actDefName,
@@ -1122,7 +1120,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					ref = s;
 				}
 			} else {
-				sval = pnode.getXdefAttr("init", false, true,getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "init", false, true);
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
@@ -1133,8 +1131,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						XD_VOID,
 						XScriptParser.INIT_SYM));
 				}
-				sval = pnode.getXdefAttr(
-					"occurs", false, true, getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "occurs", false, true);
 				if (sval != null) {
 					if (kind == XNode.XMMIXED) {
 						reportDeprecated(pnode._name, "occurs","script");
@@ -1154,20 +1151,19 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						 error(sval, XDEF.XDEF425); //Script error
 					}
 				}
-				sval = pnode.getXdefAttr(
-					"finally", false, true, getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "finally", false, true);
 				if (sval != null){
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
-					newNode.setFinallyCode(_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
+					newNode.setFinallyCode(_scriptCompiler.compileSection(
+						CompileBase.ELEMENT_MODE,
 						XD_VOID,
 						XScriptParser.FINALLY_SYM));
 				}
-				sval = pnode.getXdefAttr(
-					"create", false, true, getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "create", false, true);
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
@@ -1179,8 +1175,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						XD_ANY,
 						XScriptParser.CREATE_SYM));
 				}
-				sval = pnode.getXdefAttr(
-					"match", false, true, getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "match", false, true);
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
@@ -1192,7 +1187,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						XScriptParser.MATCH_SYM));
 				}
 			}
-			sval = pnode.getXdefAttr("empty", false, true, getReportWriter());
+			sval = _precomp.getXdefAttr(pnode, "empty", false, true);
 			if (sval != null) {
 				String s = sval.getString().trim();
 				if (s.length() > 0) {
@@ -1423,8 +1418,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					new XData("$text", null, xdef.getXDPool(), XNode.XMTEXT);
 				xtext.setSPosition(copySPosition(pnode._name));
 				newNode = xtext;
-				sval = pnode.getXdefAttr(
-					"script", false, true, getReportWriter());
+				sval = _precomp.getXdefAttr(pnode, "script", false, true);
 				if (sval != null) {
 					reportDeprecated(sval, "<xd:text xd:script=...",
 						"script declared as a text value of model");
@@ -1566,13 +1560,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			def._namespaces.put(e.getKey(),
 				_codeGenerator._namespaceURIs.get(e.getValue()));
 		}
-		SBuffer sval = pnode.getXdefAttr(
-			"script", false, true, getReportWriter());
+		SBuffer sval = _precomp.getXdefAttr(pnode, "script", false, true);
 		if (sval != null) {
 			_scriptCompiler.setSource(sval, defName, def.getXDVersion());
 			_scriptCompiler.compileXDHeader(def);
 		}
-		sval = pnode.getXdefAttr("root", false, true, getReportWriter());
+		sval = _precomp.getXdefAttr(pnode, "root", false, true);
 		if (sval != null) {
 			_scriptCompiler.setSource(sval,
 				defName, pnode._xdVersion, pnode._nsPrefixes);
@@ -1681,8 +1674,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						nodei._attrs.remove(v);
 					}
 				} else {
-					gname = nodei.getXdefAttr(
-						"name", true, true, getReportWriter());
+					gname = _precomp.getXdefAttr(nodei, "name", true, true);
 				}
 				if (gname != null) { //we create dummy element
 					String dname = gname.getString() + '$' + name;
@@ -1992,9 +1984,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				XElement xel2 = xref.getTarget();
 				if (xel2 == null) { //Unresolved reference
 					xref.putTargetError(getReportWriter());
-				} else {
+					} else {
 					SPosition spos = xref.getSPosition();
-					_precomp._sysId = spos.getSysId();
+					_precomp.setSystemId(spos.getSysId());
 					if (errs) { // previous errors were reported
 						//Comparing of models is skipped due to previous errors
 						_precomp.putReport(Report.lightError(XDEF.XDEF229));

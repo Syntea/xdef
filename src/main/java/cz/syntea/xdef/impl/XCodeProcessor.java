@@ -498,8 +498,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			XVariableTable vartab =
 				(XVariableTable) _xd.getXDPool().getVariableTable();
 			for (int i = 0; i < _globalVariables.length; i++) {
-				XVariable xvar = vartab.getXVariable(i);
 				XDValue val = _globalVariables[i];
+				XVariable xvar = vartab.getXVariable(i);
 				if (val != null && !val.isNull()) {
 					short itemId = val.getItemId();
 					switch (itemId) {
@@ -542,6 +542,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 								// the external outstream will be just flushed
 								((DefOutStream) val).flush();// flush outStreams
 							}
+							break;
 					}
 				}
 			}

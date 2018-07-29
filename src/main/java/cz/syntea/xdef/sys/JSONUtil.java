@@ -58,7 +58,6 @@ public class JSONUtil implements KXmlConstants {
 	/** This field is internally used. */
 	public final KNamespace _ns = new KNamespace();
 
-/*xx*/
 	public int _n = 0;
 
 	/** This method is internally used. */
@@ -76,7 +75,6 @@ public class JSONUtil implements KXmlConstants {
 			throw new SRuntimeException(SYS.SYS066,	"Namespace nesting: "+_n);
 		}
 	}
-/*xx*/
 
 	/** Create instance of JSONUtil object (used only internally). */
 	public JSONUtil() {}
@@ -101,11 +99,6 @@ public class JSONUtil implements KXmlConstants {
 		 */
 		private JParser(final SParser p) {_p = p;}
 
-		/** Create instance of JSON parser build with reader,
-		 * @param in reader with source data,
-		 */
-		private JParser(final Reader in) {this(new StringParser(in, null));}
-
 		/** Create modification string with source position.
 		 * @return modification string with source position.
 		 */
@@ -122,13 +115,13 @@ public class JSONUtil implements KXmlConstants {
 
 		/** Read JSON value.
 		 * @return parsed value: List, Map, String, Number, Boolean or null.
-		 * @throws SException is an error occurs.
+		 * @throws SRuntimeException is an error occurs.
 		 */
-		private Object readValue() throws SException {
+		private Object readValue() throws SRuntimeException {
 			if (_p.eos()) {
 				System.err.println(_p.getSourceBuffer());
 				//unexpected eof
-				throw new SException(JSON.JSON007, genPosMod());
+				throw new SRuntimeException(JSON.JSON007, genPosMod());
 			}
 			if (_p.isChar('{')) { // Map
 				Map<String, Object> result = new TreeMap<String, Object>();
@@ -144,7 +137,7 @@ public class JSONUtil implements KXmlConstants {
 						_p.isSpaces();
 						if (!_p.isChar(':')) {
 							// ":" expected
-							throw new SException(JSON.JSON002, ":",
+							throw new SRuntimeException(JSON.JSON002, ":",
 								genPosMod());
 						}
 						_p.isSpaces();
@@ -159,9 +152,9 @@ public class JSONUtil implements KXmlConstants {
 						}
 					} else {
 						System.err.println(_p.getParsedBufferPartFrom(0));
-						System.err.println("===\n" + _p.getUnparsedBufferPart());
+						System.err.println("===\n"+_p.getUnparsedBufferPart());
 						// String with name of item expected
-						throw new SException(JSON.JSON004, genPosMod());
+						throw new SRuntimeException(JSON.JSON004, genPosMod());
 					}
 				}
 			} else if (_p.isChar('[')) {
@@ -195,7 +188,7 @@ public class JSONUtil implements KXmlConstants {
 								int y = hexDigit(_p.peekChar());
 								if (y < 0) {
 									// hexadecimal digit expected
-									throw new SException(JSON.JSON005,
+									throw new SRuntimeException(JSON.JSON005,
 										genPosMod());
 								}
 								x = (x << 4) + y;
@@ -207,7 +200,7 @@ public class JSONUtil implements KXmlConstants {
 								sb.append("\"\\/\b\f\n\r\t".charAt(i));
 							} else {
 								 // Incorrect control character in string
-								throw new SException(JSON.JSON006,
+								throw new SRuntimeException(JSON.JSON006,
 									genPosMod());
 							}
 						}
@@ -216,7 +209,7 @@ public class JSONUtil implements KXmlConstants {
 					}
 				}
 				// end of string ('"') is missing
-				throw new SException(JSON.JSON001, genPosMod());
+				throw new SRuntimeException(JSON.JSON001, genPosMod());
 			} else if (_p.isToken("null")) {
 				return null;
 			} else if (_p.isToken("true")) {
@@ -237,16 +230,16 @@ public class JSONUtil implements KXmlConstants {
 				} else {
 					if (minus) {
 						// number expected
-						throw new SException(JSON.JSON003, genPosMod());
+						throw new SRuntimeException(JSON.JSON003, genPosMod());
 					} else {
 						//JSON value expected
-						throw new SException(JSON.JSON010, genPosMod());
+						throw new SRuntimeException(JSON.JSON010, genPosMod());
 					}
 				}
 				if (s.charAt(0) == '0' && s.length() > 1 &&
 					Character.isDigit(s.charAt(1))) {
 						// Illegal leading zero in number
-						throw new SException(JSON.JSON014, genPosMod());
+						throw new SRuntimeException(JSON.JSON014, genPosMod());
 				}
 				return n;
 			}
@@ -254,35 +247,35 @@ public class JSONUtil implements KXmlConstants {
 
 		/** Parse source data.
 		 * @return parsed JSON object.
-		 * @throws SException if an error occurs,
+		 * @throws SRuntimeException if an error occurs,
 		 */
-		private Object parse() throws SException {
+		private Object parse() throws SRuntimeException {
 			_p.isSpaces();
 			char c = _p.getCurrentChar();
 			if (c != '{' && c != '[' ) {
 				// JSON object or array expected"
-				throw new SException(JSON.JSON009, genPosMod());
+				throw new SRuntimeException(JSON.JSON009, genPosMod());
 			}
 			Object result = readValue();
 			_p.isSpaces();
 			if (!_p.eos()) {
 				//Text after JSON not allowed
-				throw new SException(JSON.JSON008, genPosMod());
+				throw new SRuntimeException(JSON.JSON008, genPosMod());
 			}
 			return result;
 		}
-
 	}
 
 	/** Parse JSON document from input source data.
 	 * The source data may be either file pathname or URL or JSON source.
 	 * @param source file pathname or URL or string with JSON source.
 	 * @return parsed JSON object.
-	 * @throws SException if an error occurs.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseJSON(final String source) throws SException{
+	public static final Object parseJSON(final String source)
+		throws SRuntimeException{
 		if (source.charAt(0) == '{' || source.charAt(0) == '[') {
-			return new JParser(new StringParser(source)).parse();
+			return parseJSON(new StringParser(source));
 		}
 		InputStream in;
 		try {
@@ -293,9 +286,9 @@ public class JSONUtil implements KXmlConstants {
 			try {
 				in = new FileInputStream(
 					FUtils.checkFile(new File(source), false));
-			} catch (IOException x) {
+			} catch (Exception x) {
 				/*IO error detected on &{0}&{1}{, reason: }*/
-				throw new SException(SYS.SYS034, source, x);
+				throw new SRuntimeException(SYS.SYS034, source, x);
 			}
 		}
 		Object result = parseJSON(in);
@@ -303,9 +296,19 @@ public class JSONUtil implements KXmlConstants {
 			in.close();
 		} catch (IOException x) {
 			/*IO error detected on &{0}&{1}{, reason: }*/
-			throw new SException(SYS.SYS034, source, x);
+			throw new SRuntimeException(SYS.SYS034, source, x);
 		}
 		return result;
+	}
+
+	/** Parse JSON document with StringParser.
+	 * @param parser StringParser with input data.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static final Object parseJSON(StringParser parser)
+		throws SRuntimeException{
+		return new JParser(parser).parse();
 	}
 
 	/** Parse JSON document from input source data.
@@ -313,15 +316,29 @@ public class JSONUtil implements KXmlConstants {
 	 * character reader reading data from UTF-8 character set.
 	 * @param in input data.
 	 * @return parsed JSON object.
-	 * @throws SException if an error occurs.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseJSON(final InputStream in)throws SException{
+	public static final Object parseJSON(final InputStream in)
+		throws SRuntimeException {
+		return parseJSON(in, null);
+	}
+
+	/** Parse JSON document from input source data.
+	 * The input data are in InputStream. The input stream is instanced as
+	 * character reader reading data from UTF-8 character set.
+	 * @param in input data.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static final Object parseJSON(final InputStream in,
+		final String sysid) throws SRuntimeException{
 		try {
 			int i = in.read(); //1st byte from input stream
 			int j = in.read(); //2nd byte from input stream
 			if (j < 0) {//EOF
 				// JSON object or array expected"
-				throw new SException(JSON.JSON009, "&{line}1&{column}1");
+				throw new SRuntimeException(JSON.JSON009, "&{line}1&{column}1");
 			}
 			String s;
 			Reader reader;
@@ -334,12 +351,13 @@ public class JSONUtil implements KXmlConstants {
 				int l = in.read();
 				if (l < 0) {//EOF
 					// JSON object or array expected"
-					throw new SException(JSON.JSON009, "&{line}1&{column}1");
+					throw new SRuntimeException(JSON.JSON009,
+						"&{line}1&{column}1");
 				}
 				if (i == 0 && j == 0 && k == 0) {
 					if (l == 0) {//EOF
 						// JSON object or array expected"
-						throw new SException(JSON.JSON009,
+						throw new SRuntimeException(JSON.JSON009,
 							"&{line}1&{column}1");
 					}
 					// 00 00 00 xx  UTF-32BE
@@ -358,6 +376,9 @@ public class JSONUtil implements KXmlConstants {
 			}
 			StringParser p = new StringParser();
 			p.setSourceReader(reader, 0L, s);
+			if (sysid != null && !sysid.isEmpty()) {
+				p.setSysId(sysid);
+			}
 			return new JParser(p).parse();
 		} catch (Exception ex) { // never happens
 			ex.printStackTrace(System.err);
@@ -368,30 +389,46 @@ public class JSONUtil implements KXmlConstants {
 	/** Parse source URL to JSON.
 	 * @param in source URL
 	 * @return parsed JSON object.
-	 * @throws SException if an error occurs,
+	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Object parseJSON(final URL in) throws SException {
+	public static final Object parseJSON(final URL in) throws SRuntimeException {
 		try {
 			URLConnection u = in.openConnection();
 			InputStream is = u.getInputStream();
 			try {
-				return parseJSON(is);
+				return parseJSON(is, in.toExternalForm());
 			} finally {
 				is.close();
 			}
 		} catch (IOException ex) {
 			//URL &{0} error: &{1}{; }
-			throw new SException(SYS.SYS076,in.toExternalForm(), ex);
+			throw new SRuntimeException(SYS.SYS076,in.toExternalForm(), ex);
 		}
 	}
 
 	/** Parse source data from reader to JSON.
 	 * @param in reader with source data.
 	 * @return parsed JSON object.
-	 * @throws SException if an error occurs,
+	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Object parseJSON(final Reader in) throws SException {
-		return new JParser(in).parse();
+	public static final Object parseJSON(final Reader in)
+		throws SRuntimeException {
+		return parseJSON(in, null);
+	}
+
+	/** Parse source data from reader to JSON.
+	 * @param in reader with source data.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public static final Object parseJSON(final Reader in,
+		final String sysid) throws SRuntimeException {
+		StringParser parser = new StringParser(in, null);
+		if (sysid != null && !sysid.isEmpty()) {
+			parser.setSysId(sysid);
+		}
+		return parseJSON(parser);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
