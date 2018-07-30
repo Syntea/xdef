@@ -36,6 +36,8 @@ public interface XdNames {
 	public static final String ATTR = "attr";
 	/** X-definition <code>declaration</code> element local name.*/
 	public static final String DECLARATION = "declaration";
+    /** X-definition <code>macro</code> element local name.*/
+    public static final String MACRO = "macro";
 	/** X-definition <code>any</code> element local name.*/
 	public static final String ANY = "any";
 	/** X-definition <code>choice</code> element local name.*/

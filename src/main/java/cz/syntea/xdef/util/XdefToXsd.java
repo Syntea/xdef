@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
@@ -61,7 +62,7 @@ public final class XdefToXsd {
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
 		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
-		String sFileExt = schemaFileExt == null ? "xsd" : schemaPrefix;
+		String sFileExt = schemaFileExt == null ? "xsd" : schemaFileExt;
 		try {
 			xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
 		} catch (Exception ex) {
@@ -87,14 +88,14 @@ public final class XdefToXsd {
 	 * @param out where print information messages (if null System.out).
 	 * @return map of schema file names and DOM Documents.
 	 */
-	public final static Map<?,?> genSchema(final String xdef,
+	public final static Map<String, Document> genSchema(final String xdef,
 		final String schemaPrefix,
 		final String schemaFileExt,
 		final PrintStream out) {
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
 		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
-		String sFileExt = schemaFileExt == null ? "xsd" : schemaPrefix;
+		String sFileExt = schemaFileExt == null ? "xsd" : schemaFileExt;
 		XdDoc xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
 		Convertor convertor = Convertor.getConvertor(
 			xdDoc, SCHEMA_VERSION, sPrefix, reporter, sFileExt);

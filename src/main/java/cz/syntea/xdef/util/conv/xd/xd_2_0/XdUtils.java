@@ -117,12 +117,24 @@ public final class XdUtils {
 	 * <tt>declaration</tt> element.
 	 */
 	public static boolean isDeclaration(final Node node) {
-		String uri = node.getParentNode().getNamespaceURI();
 		return Util.isElement(node,
 			KXmlConstants.XDEF20_NS_URI, XdNames.DECLARATION)
 			|| Util.isElement(node,
 				KXmlConstants.XDEF31_NS_URI, XdNames.DECLARATION);
 	}
+
+    /** Returns <tt>true</tt> if given node is a valid X-macro
+     * <tt>macro</tt> element.
+     * @param node node to test.
+     * @return <tt>true</tt> if given node is a valid X-macro
+     * <tt>macro</tt> element.
+     */
+    public static boolean isMacro(final Node node) {
+        return Util.isElement(node,
+            KXmlConstants.XDEF20_NS_URI, XdNames.MACRO)
+            || Util.isElement(node,
+                KXmlConstants.XDEF31_NS_URI, XdNames.MACRO);
+    }
 
 	/** Returns <tt>true</tt> if given model is declared as root model.
 	 * @param element model element.
@@ -373,6 +385,8 @@ public final class XdUtils {
 			} else if (isSequence(model)) {
 				String name = getGroupName(model);
 				return new XdGroup(xdDef, name, XdGroup.GroupType.SEQUENCE);
+			} else if (isMacro(model)) {
+			    return null;
 			}
 		} else {
 			return new XdElem(

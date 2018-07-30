@@ -124,7 +124,9 @@ public final class XdDoc_2_0 extends XdDoc {
 			Element model = (Element) models.item(i);
 			try {
 				XdModel xdModel = XdUtils.createXdModel(model);
-				_xdModels.put(xdModel, model);
+				if (xdModel != null) {
+					_xdModels.put(xdModel, model);
+				}
 			} catch (Exception ex) {
 				throw new RuntimeException(
 					"Error during cretaing model representation", ex);

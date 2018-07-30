@@ -150,7 +150,7 @@ public final class XdefValueTypeParser {
 				}
 				buffer(b, parsed.getTypeString());
 				typeRead = true;
-			} else if (isOR()) {
+			} else if (isOR() || isAND()) {
 				if (!typeRead) {
 					throwEx("Expecting type declaration after operator");
 				}
@@ -1035,6 +1035,9 @@ public final class XdefValueTypeParser {
 				return Symbol.LSQ;
 			case XScriptParser.MOD_SYM:
 				return Symbol.MOD;
+			case XScriptParser.AND_SYM:
+			case XScriptParser.AAND_SYM:
+				return Symbol.AND;
 			case XScriptParser.OR_SYM:
 			case XScriptParser.OOR_SYM:
 				return Symbol.OR;
@@ -1094,6 +1097,9 @@ public final class XdefValueTypeParser {
 	/** Returns <code>true</code> if actual symbol is OR operator symbol. */
 	private boolean isOR() {return Symbol.OR.equals(_actSym);}
 
+	/** Returns <code>true</code> if actual symbol is AND operator symbol. */
+	private boolean isAND() {return Symbol.AND.equals(_actSym);}
+	
 	/** Adds actual symbol value to given buffer.
 	 * @param builder buffer.
 	 */
@@ -1184,6 +1190,7 @@ public final class XdefValueTypeParser {
 		private static final Symbol LSQ = new Symbol(SYMBOL, "[");
 		private static final Symbol MOD = new Symbol(SYMBOL, "%");
 		private static final Symbol OR = new Symbol(SYMBOL, "OR");
+		private static final Symbol AND = new Symbol(SYMBOL, "AND");
 		private static final Symbol RPAR = new Symbol(SYMBOL, ")");
 		private static final Symbol RSQ = new Symbol(SYMBOL, "]");
 /*VT*/

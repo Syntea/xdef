@@ -559,6 +559,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					if (XdUtils.isModel(element)) {
 						XsdCType xsdCType = (XsdCType) _models.get(
 							XdUtils.createXdModel(element));
+						if (xsdCType == null) {
+							break;
+						}
 						Element cTypeElem = _xsdDoc.getModels().get(xsdCType);
 						String sTypeName;
 						if ((sTypeName = xsdCType.getSType()) != null) {
@@ -643,6 +646,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					if (XdUtils.isModel(element)) {
 						XsdCType xsdCType = (XsdCType) _models.get(
 							XdUtils.createXdModel(element));
+						if (xsdCType == null) {
+							break;
+						}
 						cTypeElem = _xsdDoc.getModels().get(xsdCType);
 						if ((sTypeName = xsdCType.getSType()) != null) {
 							sTypeName = XsdUtils.getRefQName(
