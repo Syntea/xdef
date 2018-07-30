@@ -24,9 +24,9 @@ import org.w3c.dom.Element;
 /** Test of BNF of JSON.
  * @author Vaclav Trojan
  */
-public class TestJSON extends STester {
+public class TestBNFJSON extends STester {
 
-	public TestJSON() {super();}
+	public TestBNFJSON() {super();}
 
 	Document _doc;
 	StringParser _p;
@@ -344,9 +344,7 @@ public class TestJSON extends STester {
 //			s = KXmlUtils.nodeToString(el, true);
 //			System.out.println(s);
 
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test

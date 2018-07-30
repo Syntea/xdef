@@ -9,7 +9,6 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-
 package test.common.xml;
 
 import cz.syntea.xdef.sys.STester;

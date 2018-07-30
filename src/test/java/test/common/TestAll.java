@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import test.common.bnf.TestBNF;
 import test.common.bnf.TestExpr;
+import test.common.bnf.TestBNFJSON;
 import test.common.bnf.TestXML;
 import test.common.bnf.TestXdScript;
 import test.common.json.TestJSON;
@@ -71,7 +72,7 @@ public class TestAll {
 			// BNF
 			new TestBNF(),
 			new TestExpr(),
-			new TestJSON(),
+			new TestBNFJSON(),
 			new TestXML(),
 			new TestXdScript(),
 		};
