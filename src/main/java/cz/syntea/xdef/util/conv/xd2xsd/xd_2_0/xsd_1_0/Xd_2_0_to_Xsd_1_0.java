@@ -104,6 +104,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				"Given X-definition model is already being processed");
 		}
 		_procModel.push(xdModel);
+		
 		switch (xdModel.getType()) {
 			case XdModel.Type.DECLARATION:
 				processDecl((XdDecl) xdModel);
@@ -229,7 +230,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				Element attrDecl = _xsdDoc.addAttributeDecl(schemaContext,
 					attrProps.getDefault(), attrProps.getFixed(),
 					name, null, null, attrProps.getUse(), null);
-				//todo resolve type
+				//TODO: resolve type
 				//TypeResolver.addAttrType(attrDecl, attrProps.getType(),
 				//  _xsdDoc, _xdDoc, _models);
 				_typeResolver.resolveAttrType(attrProps.getType(), attrDecl);
@@ -240,7 +241,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					Element attrDecl = _xsdDoc.addAttributeDecl(schemaContext,
 						attrProps.getDefault(), attrProps.getFixed(), name,
 						null, null, attrProps.getUse(), true);
-					//todo resolve type
+					//TODO: resolve type
 					_typeResolver.resolveAttrType(
 						attrProps.getType(), attrDecl);
 				} else {
@@ -273,7 +274,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			Element attrElem = _xsdDoc.addAttributeDecl(extSchemaElem,
 				attrProps.getDefault(), attrProps.getFixed(), attrName,
 				null, null, null, null);
-			//todo resolve type
+			//TODO: resolve type
 			//TypeResolver.addAttrType(
 			//	attrElem, attrProps.getType(), _xsdDoc, _xdDoc, _models);
 			_typeResolver.resolveAttrType(attrProps.getType(), attrElem);
@@ -302,7 +303,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			Element attrElem = _xsdDoc.addAttributeDecl(extSchemaElem,
 				attrProps.getDefault(), attrProps.getFixed(), attrName,
 				null, null, null, null);
-			//todo resolve type
+			//TODO: resolve type
 			_typeResolver.resolveAttrType(attrProps.getType(), attrElem);
 			//get attr ref string
 			String attrRef = _xsdDoc.getQName(
@@ -339,7 +340,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				if (XdNames.ATTR.equals(attrName)) {
 					processAttr(attr, schemaContext);
 				} else {
-					//todo
+					//TODO:
 				}
 			}
 		}
@@ -375,7 +376,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					//process any declaration
 					processAny(child, schemaContext);
 				} else {
-					//todo
+					//TODO:
 				}
 			} else {
 				//process element
@@ -554,7 +555,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				}
 				//element type is text only
 				case XdElem.ElemType.TEXT: {
-					//todo parse text value
+					//TODO: parse text value
 					ValueType elemSType = getElementSimpleType(element);
 					if (XdUtils.isModel(element)) {
 						XsdCType xsdCType = (XsdCType) _models.get(
@@ -637,9 +638,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					processChildren(element, seqElem);
 					break;
 				}
-				//element type is text and attrbiutes
+				//element type is text and attributes
 				case XdElem.ElemType.TEXT_ATTR: {
-					//todo resolve type and add simple content
+					//TODO: resolve type and add simple content
 					Element cTypeElem;
 					String sTypeName;
 					ValueType elemSType = getElementSimpleType(element);
@@ -732,7 +733,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					processChildren(element, seqElem);
 					break;
 				}
-				//element type is text, attrbiutes and children
+				//element type is text, attributes and children
 				case XdElem.ElemType.TEXT_ATTR_CHLD: {
 					Element cTypeElem;
 					if (XdUtils.isModel(element)) {
@@ -766,98 +767,32 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			switch (elemType) {
 				//element type is empty
 				case XdElem.ElemType.EMPTY: {
+					if (XdUtils.isModel(element)) {
+						//set as extension type
+						extendElement(element, schemaContext, refXdElem, false, false, false);
+					} else {
+						//set type attribute
+						setElementCType(schemaContext, refXdElem);
+					}
+					
 					switch (refElemType) {
 						//element type is empty
-						case XdElem.ElemType.EMPTY: {
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.EMPTY:
 						//element type is text only
-						case XdElem.ElemType.TEXT: {
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.TEXT:
 						//element type is attributes only
-						case XdElem.ElemType.ATTR: {
-							//todo add extension with complex content
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.ATTR:
 						//element type is children only
-						case XdElem.ElemType.CHLD: {
-							//todo add extension with complex content
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
-						//element type is text and attrbiutes
-						case XdElem.ElemType.TEXT_ATTR: {
-							//todo add extension with simple content
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.CHLD:
+						//element type is text and attributes
+						case XdElem.ElemType.TEXT_ATTR:
 						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD: {
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.ATTR_CHLD:
 						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD: {
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
-							break;
-						}
+						case XdElem.ElemType.TEXT_CHLD:
 						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD: {
-							//current element is a model
-							if (XdUtils.isModel(element)) {
-								//todo
-							} else {
-								//set type attribute
-								setElementCType(schemaContext, refXdElem);
-							}
+						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
-						}
 						default: {
 							throw new RuntimeException(
 								"Given element type is unknown");
@@ -876,13 +811,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.ATTR:
 						//element type is children only
 						case XdElem.ElemType.CHLD:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is attributes and children
 						case XdElem.ElemType.ATTR_CHLD:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						default: {
@@ -899,11 +834,11 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.EMPTY:
 						//element type is text only
 						case XdElem.ElemType.TEXT:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						//element type is attributes only
@@ -938,11 +873,11 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.EMPTY:
 						//element type is text only
 						case XdElem.ElemType.TEXT:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						//element type is attributes only
@@ -967,7 +902,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					}
 				}
 				break;
-				//element type is text and attrbiutes
+				//element type is text and attributes
 				case XdElem.ElemType.TEXT_ATTR: {
 					switch (refElemType) {
 						//element type is empty
@@ -978,13 +913,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.ATTR:
 						//element type is children only
 						case XdElem.ElemType.CHLD:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is attributes and children
 						case XdElem.ElemType.ATTR_CHLD:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD: {
 							break;
 						}
@@ -1002,11 +937,11 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.EMPTY:
 						//element type is text only
 						case XdElem.ElemType.TEXT:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						//element type is children only
@@ -1045,13 +980,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.ATTR:
 						//element type is children only
 						case XdElem.ElemType.CHLD:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is attributes and children
 						case XdElem.ElemType.ATTR_CHLD:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						default: {
@@ -1061,7 +996,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					}
 				}
 				break;
-				//element type is text, attrbiutes and children
+				//element type is text, attributes and children
 				case XdElem.ElemType.TEXT_ATTR_CHLD: {
 					switch (refElemType) {
 						//element type is empty
@@ -1072,13 +1007,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 						case XdElem.ElemType.ATTR:
 						//element type is children only
 						case XdElem.ElemType.CHLD:
-						//element type is text and attrbiutes
+						//element type is text and attributes
 						case XdElem.ElemType.TEXT_ATTR:
 						//element type is attributes and children
 						case XdElem.ElemType.ATTR_CHLD:
 						//element type is text and children
 						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attrbiutes and children
+						//element type is text, attributes and children
 						case XdElem.ElemType.TEXT_ATTR_CHLD:
 							break;
 						default: {
@@ -1247,9 +1182,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param schemaContext schema context element to process.
 	 */
 	private void processMixed(final Element mixed, Element schemaContext) {
-		Occurrence mixedOcc = XdUtils.getOccurrence(mixed);
-		//todo resolve ref
-		//todo resolve mixed occurrence
+		//Occurrence mixedOcc = XdUtils.getOccurrence(mixed);
+		//TODO: resolve ref
+		//TODO: resolve mixed occurrence
 		Element seqElem = _xsdDoc.addSequenceDecl(schemaContext, null, null);
 		Element choiceElem =
 			_xsdDoc.addChoiceDecl(seqElem, 0, Occurrence.UNBOUNDED);
@@ -1263,7 +1198,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param schemaContext schema context element to add declaration to.
 	 */
 	private void processSequence(final Element sequence, Element schemaContext){
-		//todo resolve ref
+		//TODO: resolve ref
 		Occurrence seqOccurrence = XdUtils.getOccurrence(sequence);
 		Element xsdSeqElem = _xsdDoc.addSequenceDecl(schemaContext,
 			seqOccurrence.getMinOccurs(), seqOccurrence.getMaxOccurs());

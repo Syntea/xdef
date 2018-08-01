@@ -475,9 +475,9 @@ public final class Util {
 					"Could not create folder with given path");
 			}
 		}
-		Iterator it = schemas.entrySet().iterator();
+		Iterator<Entry<String, Document>> it = schemas.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry entry = (Entry) it.next();
+			Entry<String, Document> entry = it.next();
 			String fName =
 				new File(path, (String) entry.getKey()).getAbsolutePath();
 			try {

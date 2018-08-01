@@ -25,6 +25,7 @@ import cz.syntea.xdef.util.conv.type.domain.XsdUnion;
 import cz.syntea.xdef.util.conv.xd.doc.XdDoc_2_0;
 import cz.syntea.xdef.util.conv.xd.xd_2_0.XdUtils;
 import cz.syntea.xdef.util.conv.xd.xd_2_0.domain.XdDecl;
+import cz.syntea.xdef.util.conv.xd.xd_2_0.domain.XdModel;
 import cz.syntea.xdef.util.conv.xsd.doc.XsdDoc_1_0;
 import cz.syntea.xdef.util.conv.xsd.xsd_1_0.XsdNames;
 import cz.syntea.xdef.util.conv.xsd.xsd_1_0.XsdUtils;
@@ -95,11 +96,11 @@ public class XdefValueTypeResolver {
 		UNCONVERTIBLEXDTYPES.add(XdefBase.URL_LIST);
 	}
 
-	private final XdDoc_2_0 _xdDoc;
+	private final XdDoc_2_0  _xdDoc;
 	private final XsdDoc_1_0 _xsdDoc;
 
 	/** XdModel as key and XsdModel as value model map. */
-	private final Map _xdModelXsdModelMap;
+	private final Map<XdModel, XsdModel> _xdModelXsdModelMap;
 
 	/** Creates instance of type resolver.
 	 * @param xdDoc X-definition document representation.
@@ -110,15 +111,15 @@ public class XdefValueTypeResolver {
 	 */
 	public XdefValueTypeResolver(XdDoc_2_0 xdDoc,
 		XsdDoc_1_0 xsdDoc,
-		Map xdModelXsdModelMap) {
+		Map<XdModel, XsdModel> xdModelXsdModelMap) {
 		if (xdDoc == null) {
 			throw new NullPointerException("X-definition document is null");
 		}
 		if (xdModelXsdModelMap == null) {
 			throw new NullPointerException("Given models map is null");
 		}
-		_xdDoc = xdDoc;
-		_xsdDoc = xsdDoc;
+		_xdDoc              = xdDoc;
+		_xsdDoc             = xsdDoc;
 		_xdModelXsdModelMap = xdModelXsdModelMap;
 	}
 
@@ -531,8 +532,8 @@ public class XdefValueTypeResolver {
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
 				if (paramCount == 1 || paramCount == 2) {
 					String mask = (String) xdefType.getParams().get(0);
-					Set regexes = DatetimeMaskAnalyzer.getRegexes(mask);
-					Iterator it = regexes.iterator();
+					Set<String> regexes = DatetimeMaskAnalyzer.getRegexes(mask);
+					Iterator<String> it = regexes.iterator();
 					while (it.hasNext()) {
 						String regex = (String) it.next();
 						_xsdDoc.addFacet(restrElem,
@@ -867,7 +868,7 @@ public class XdefValueTypeResolver {
 				if (paramCount == 0) {
 					throwUnexpectedParams(base, paramCount);
 				}
-				List params = xdefType.getParams();
+				List<String> params = xdefType.getParams();
 				for (int i = 0; i < params.size(); i++) {
 					String param = (String) params.get(i);
 					_xsdDoc.addFacet(restrElem,
@@ -881,7 +882,7 @@ public class XdefValueTypeResolver {
 				if (paramCount == 0) {
 					throwUnexpectedParams(base, paramCount);
 				}
-				List params = xdefType.getParams();
+				List<String> params = xdefType.getParams();
 				for (int i = 0; i < params.size(); i++) {
 					String param = (String) params.get(i);
 					_xsdDoc.addFacet(restrElem,
@@ -1090,9 +1091,9 @@ public class XdefValueTypeResolver {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
 				if (paramCount == 1) {
-					Set tokenSet =
-						getTokens((String) xdefType.getParams().get(0));
-					Iterator it = tokenSet.iterator();
+					Set<String> tokenSet =
+						getTokens(xdefType.getParams().get(0));
+					Iterator<String> it = tokenSet.iterator();
 					while (it.hasNext()) {
 						String token = (String) it.next();
 						_xsdDoc.addFacet(restrElem,
@@ -1107,9 +1108,9 @@ public class XdefValueTypeResolver {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
 				if (paramCount == 1) {
-					Set tokenSet =
+					Set<String> tokenSet =
 						getTokens((String) xdefType.getParams().get(0));
-					Iterator it = tokenSet.iterator();
+					Iterator<String> it = tokenSet.iterator();
 					while (it.hasNext()) {
 						String token = (String) it.next();
 						_xsdDoc.addFacet(restrElem,
@@ -1233,22 +1234,22 @@ public class XdefValueTypeResolver {
 				_xsdDoc.getSchemaTypeQName(xsdType.getXdefBase().getName());
 			restrElem = _xsdDoc.addRestrictionDecl(sTypeElem, baseTypeName);
 		} else {
-			//todo
+			//TODO:
 			//addType(restrElem,null,xsdType.getBase(),_xsdDoc,xdDoc,models);
 			restrElem = _xsdDoc.addRestrictionDecl(sTypeElem, null);
 		}
 		//resolve restrictions
-		Set enums = xsdType.getEnumerations();
-		Iterator it = enums.iterator();
+		Set<String> enums = xsdType.getEnumerations();
+		Iterator<String> it = enums.iterator();
 		while (it.hasNext()) {
-			String enumeration = (String) it.next();
+			String enumeration = it.next();
 			_xsdDoc.addFacet(restrElem,
 				XsdFacet.ENUMERATION.getXsdName(), enumeration);
 		}
-		Set patterns = xsdType.getPatterns();
+		Set<String> patterns = xsdType.getPatterns();
 		it = patterns.iterator();
 		while (it.hasNext()) {
-			String pattern = (String) it.next();
+			String pattern = it.next();
 			_xsdDoc.addFacet(restrElem, XsdFacet.PATTERN.getXsdName(), pattern);
 		}
 		if (xsdType.getFractionDigits() != null) {
@@ -1328,17 +1329,17 @@ public class XdefValueTypeResolver {
 		Element restrElem = _xsdDoc.addRestrictionDecl(sTypeElem, null);
 		Element listSTypeElem = _xsdDoc.addSimpleTypeDecl(restrElem, null);
 		addList(xsdList, listSTypeElem);
-		Set enums = xsdList.getEnumerations();
-		Iterator it = enums.iterator();
+		Set<String> enums = xsdList.getEnumerations();
+		Iterator<String> it = enums.iterator();
 		while (it.hasNext()) {
-			String enumeration = (String) it.next();
+			String enumeration = it.next();
 			_xsdDoc.addFacet(
 				restrElem, XsdFacet.ENUMERATION.getXsdName(), enumeration);
 		}
-		Set patterns = xsdList.getPatterns();
+		Set<String> patterns = xsdList.getPatterns();
 		it = patterns.iterator();
 		while (it.hasNext()) {
-			String pattern = (String) it.next();
+			String pattern = it.next();
 			_xsdDoc.addFacet(restrElem, XsdFacet.PATTERN.getXsdName(), pattern);
 		}
 		if (xsdList.getLength() != null) {
@@ -1398,10 +1399,10 @@ public class XdefValueTypeResolver {
 		_xsdDoc.addDocumentation(sTypeElem, xsdUnion.getTypeString());
 		Element unionElem = _xsdDoc.addUnionDecl(sTypeElem, null);
 		StringBuilder sb = new StringBuilder();
-		Set memberTypes = xsdUnion.getMemberTypes();
-		Iterator it = memberTypes.iterator();
+		Set<ValueType> memberTypes = xsdUnion.getMemberTypes();
+		Iterator<ValueType> it = memberTypes.iterator();
 		while (it.hasNext()) {
-			ValueType type = (ValueType) it.next();
+			ValueType type = it.next();
 			String qName = getTypeQName(type, sTypeElem);
 			if (qName != null) {
 				if (sb.length() > 0) {
@@ -1431,7 +1432,7 @@ public class XdefValueTypeResolver {
 	}
 
 	private void addOtherTypeToSType(Other otherType, Element sTypeElem) {
-		//todo add documentation
+		//TODO: add documentation
 		_xsdDoc.addDocumentation(sTypeElem, otherType.getTypeString());
 		_xsdDoc.addRestrictionDecl(sTypeElem,
 			getOtherTypeQName(otherType, sTypeElem));

@@ -145,13 +145,17 @@ public final class XdUtils {
 			return false;
 		}
 		Element defElem = (Element) element.getParentNode();
-		String roots =
-			Util.getAttrValue(defElem, defElem.getNamespaceURI(),XdNames.ROOT);
+		String  roots   = null;
+		try {
+			roots = Util.getAttrValue(defElem, defElem.getNamespaceURI(), XdNames.ROOT);
+		} catch (IllegalArgumentException ex) { /*empty - leaves roots == null*/ }
+		
 		if (roots == null || roots.length() == 0) {
 			return false;
 		}
+		
 		String elemNsURI = element.getNamespaceURI();
-		String elemName = element.getLocalName();
+		String elemName  = element.getLocalName();
 
 		StringTokenizer st = new StringTokenizer(roots, "|");
 		while (st.hasMoreTokens()) {
@@ -480,7 +484,7 @@ public final class XdUtils {
 	 * child text nodes declaration.
 	 */
 	private static boolean hasText(Element element) {
-		//todo resolve text existence
+		//TODO: resolve text existence
 		//attribute xd:text is present
 		if (Util.hasAttrDecl(element, KXmlConstants.XDEF20_NS_URI, XdNames.TEXT)
 			|| Util.hasAttrDecl(element, KXmlConstants.XDEF31_NS_URI,

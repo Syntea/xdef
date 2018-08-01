@@ -94,15 +94,15 @@ public final class XdefValueTypeParser {
 			&& ((XsdRestricted) t).getXdefBase() != null
 			&& "int".equals(((XsdRestricted) t).getXdefBase().getName())) {
 			XsdRestricted tt = (XsdRestricted) t;
-			Set enums = tt.getEnumerations();
+			Set<String> enums = tt.getEnumerations();
 			String min = tt.getMinInclusive();
 			String max = tt.getMaxInclusive();
 			if (!enums.isEmpty() || min != null || max != null) {
 				boolean toLong = false;
 				long l;
-				for (Object o : enums) {
+				for (String o : enums) {
 					try {
-						l = Long.parseLong("" + o);
+						l = Long.parseLong(o);
 						if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
 							toLong = true; // -> xs.long
 							break;
@@ -414,7 +414,7 @@ public final class XdefValueTypeParser {
 			}
 			readSym();
 			if (isEos()) {
-				//todo chyba - necekany konec
+				//TODO: chyba - necekany konec
 				//throw new TypeParserException("Unexpected end of string",_b);
 			}
 		}
@@ -642,6 +642,7 @@ public final class XdefValueTypeParser {
 	 * @param b
 	 * @return X-definition list type object.
 	 */
+	@SuppressWarnings("unused")
 	private XdefList parseXdefList(StringBuffer b) {
 		XdefList xdefList = new XdefList();
 		readSym(); // (
@@ -1124,6 +1125,8 @@ public final class XdefValueTypeParser {
 	/** Exception thrown during parsing. */
 	private static class ParserException extends RuntimeException {
 
+		private static final long serialVersionUID = -2582190224833320816L;
+		
 		/** Exception message. */
 		private final String _message;
 		/** Parsed string. */

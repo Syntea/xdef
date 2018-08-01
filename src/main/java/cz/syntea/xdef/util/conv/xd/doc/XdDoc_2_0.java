@@ -194,6 +194,6 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** X-definition def representation to element map getter.
 	 * @return X-definition def (XdDef) representation to element (Element) map.
 	 */
-	public Map getXdDefs() {return _xdDefs;}
+	public Map<XdDef, Element> getXdDefs() { return _xdDefs; }
 
 }

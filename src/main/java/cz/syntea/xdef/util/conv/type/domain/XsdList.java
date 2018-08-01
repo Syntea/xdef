@@ -120,7 +120,7 @@ public class XsdList extends ValueType implements
 	}
 
 	@Override
-	public Set getPatterns() {
+	public Set<String> getPatterns() {
 		return _pattern.getPatterns();
 	}
 	@Override
@@ -128,7 +128,7 @@ public class XsdList extends ValueType implements
 		_pattern.addPattern(pattern);
 	}
 	@Override
-	public Set getEnumerations() {
+	public Set<String> getEnumerations() {
 		return _enums.getEnumerations();
 	}
 	@Override

@@ -102,11 +102,14 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @throws RuntimeErrorException if X-definition model is unknown type or
 	 * if schema container is unknown type.
 	 */
-	private Map<XdModel, XsdModel> initModels(Map xdModels, Map schemas) {
+	private Map<XdModel, XsdModel> initModels(
+		Map<XdModel, Element> 			xdModels,
+		Map<XdDef, XsdSchemaContainer> 	schemas
+	) {
 		Map<XdModel, XsdModel> ret = new HashMap<XdModel, XsdModel>();
-		Iterator it = xdModels.keySet().iterator();
+		Iterator<XdModel> it = xdModels.keySet().iterator();
 		while (it.hasNext()) {
-			XdModel xdModel = (XdModel) it.next();
+			XdModel xdModel = it.next();
 			XdDef xdDef = xdModel.getDef();
 			XsdSchemaContainer container =
 				(XsdSchemaContainer) schemas.get(xdDef);
@@ -258,14 +261,16 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @return map of X-definition representation (XdDef) to schema container
 	 * (XsdSchemaContainer).
 	 */
-	private Map<XdDef, XsdSchemaContainer> initSchemas(Map xdDefs) {
+	private Map<XdDef, XsdSchemaContainer> initSchemas(
+		Map<XdDef, Element> xdDefs
+	) {
 		Map<XdDef, XsdSchemaContainer> ret =
 			new HashMap<XdDef, XsdSchemaContainer>();
-		Iterator it = xdDefs.entrySet().iterator();
+		Iterator<Entry<XdDef, Element>> it = xdDefs.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry entry = (Entry) it.next();
-			Set namespaces = XdUtils.getModelsNS((Element) entry.getValue());
-			XdDef xdDef = (XdDef) entry.getKey();
+			Entry<XdDef, Element> entry = it.next();
+			Set<String> namespaces = XdUtils.getModelsNS(entry.getValue());
+			XdDef xdDef = entry.getKey();
 			String defName = xdDef.getName();
 			XsdSchemaContainer xsdSchemaContainer;
 			if (namespaces.size() > 1) {
@@ -276,9 +281,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 					new XsdSchema(getSchemaFileName(defName), null);
 				XsdSchemaSet schemaSet = new XsdSchemaSet(mainSchema);
 				int namespaceCount = 1;
-				Iterator it2 = namespaces.iterator();
+				Iterator<String> it2 = namespaces.iterator();
 				while (it2.hasNext()) {
-					String namespace = (String) it2.next();
+					String namespace = it2.next();
 					if (namespace.length() == 0) {
 						continue;
 					}
@@ -894,7 +899,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		if (maxOccurs != null && maxOccurs != 1) {
 			setMaxOccurs(groupDecl, maxOccurs);
 		}
-		//todo insert before attribute groups
+		//TODO: insert before attribute groups
 		if (!XsdUtils.isSchema(parent)) {
 			insertBeforeAttributes(parent, groupDecl);
 		} else {

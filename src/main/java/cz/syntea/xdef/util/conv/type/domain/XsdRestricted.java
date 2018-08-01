@@ -93,13 +93,13 @@ public class XsdRestricted extends ValueType
 	 */
 	public XsdBase getXdefBase() {return _xdefBase;}
 	@Override
-	public Set getEnumerations() {return _enum.getEnumerations();}
+	public Set<String> getEnumerations() {return _enum.getEnumerations();}
 	@Override
 	public void addEnumeration(String enumeration) {
 		_enum.addEnumeration(enumeration);
 	}
 	@Override
-	public Set getPatterns() { return _pattern.getPatterns();}
+	public Set<String> getPatterns() { return _pattern.getPatterns();}
 	@Override
 	public void addPattern(String pattern) {_pattern.addPattern(pattern);}
 	@Override

@@ -16,6 +16,8 @@ import cz.syntea.xdef.sys.SReporter;
 import cz.syntea.xdef.util.conv.Util;
 import java.util.Map;
 
+import org.w3c.dom.Document;
+
 /** Represents any XML Schema document.
  * @author Ilia Alexandrov
  */
@@ -80,5 +82,5 @@ public abstract class XsdDoc {
 	 * document as value.
 	 * @return map of all generated schema file names (String) and documents.
 	 */
-	public abstract Map getSchemaDocuments();
+	public abstract Map<String, Document> getSchemaDocuments();
 }
