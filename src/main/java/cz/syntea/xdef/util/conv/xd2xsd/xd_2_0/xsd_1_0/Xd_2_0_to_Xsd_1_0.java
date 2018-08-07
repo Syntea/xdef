@@ -759,273 +759,14 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				}
 			}
 		} else {
-			//get ref element
-			Element refElem = _xdDoc.getXdModels().get(refXdElem);
-			//get ref element full type
-			int refElemType = _xdDoc.getElemType(refElem);
-			//element type switch
-			switch (elemType) {
-				//element type is empty
-				case XdElem.ElemType.EMPTY: {
-					if (XdUtils.isModel(element)) {
-						//set as extension type
-						extendElement(element, schemaContext, refXdElem, false, false, false);
-					} else {
-						//set type attribute
-						setElementCType(schemaContext, refXdElem);
-					}
-					
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-					break;
-				}
-				//element type is text only
-				case XdElem.ElemType.TEXT: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-					break;
-				}
-				//element type is attributes only
-				case XdElem.ElemType.ATTR: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						//element type is attributes only
-						case XdElem.ElemType.ATTR: {
-							extendElement(element,
-								schemaContext, refXdElem, true, false, false);
-							break;
-						}
-						//element type is children only
-						case XdElem.ElemType.CHLD: {
-							extendElement(element,
-								schemaContext, refXdElem, true, false, false);
-							break;
-						}
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD: {
-							extendElement(element,
-								schemaContext, refXdElem, true, false, false);
-							break;
-						}
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-					break;
-				}
-				//element type is children only
-				case XdElem.ElemType.CHLD: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-							extendElement(element,
-								schemaContext, refXdElem, false, true, false);
-							break;
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-							extendElement(element,
-								schemaContext, refXdElem, false, true, false);
-							break;
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-							extendElement(element, schemaContext, refXdElem,
-								false, true, false);
-							break;
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-				}
-				break;
-				//element type is text and attributes
-				case XdElem.ElemType.TEXT_ATTR: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD: {
-							break;
-						}
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-				}
-				break;
-				//element type is attributes and children
-				case XdElem.ElemType.ATTR_CHLD: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						//element type is children only
-						case XdElem.ElemType.CHLD: {
-							extendElement(element,
-								schemaContext, refXdElem, true, true, false);
-							break;
-						}
-						//element type is attributes only
-						case XdElem.ElemType.ATTR: {
-							extendElement(element,
-								schemaContext, refXdElem, true, true, false);
-							break;
-						}
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD: {
-							extendElement(element,
-								schemaContext, refXdElem, true, true, false);
-							break;
-						}
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-				}
-				break;
-				//element type is text and children
-				case XdElem.ElemType.TEXT_CHLD: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-				}
-				break;
-				//element type is text, attributes and children
-				case XdElem.ElemType.TEXT_ATTR_CHLD: {
-					switch (refElemType) {
-						//element type is empty
-						case XdElem.ElemType.EMPTY:
-						//element type is text only
-						case XdElem.ElemType.TEXT:
-						//element type is attributes only
-						case XdElem.ElemType.ATTR:
-						//element type is children only
-						case XdElem.ElemType.CHLD:
-						//element type is text and attributes
-						case XdElem.ElemType.TEXT_ATTR:
-						//element type is attributes and children
-						case XdElem.ElemType.ATTR_CHLD:
-						//element type is text and children
-						case XdElem.ElemType.TEXT_CHLD:
-						//element type is text, attributes and children
-						case XdElem.ElemType.TEXT_ATTR_CHLD:
-							break;
-						default: {
-							throw new RuntimeException(
-								"Given element type is unknown");
-						}
-					}
-				}
-				break;
-				default: {
-					throw new RuntimeException("Given element type is unknown");
-				}
+			if (elemType == XdElem.ElemType.EMPTY &&
+				!XdUtils.isModel(element)
+			) {
+				//set type attribute
+				setElementCType(schemaContext, refXdElem);
+			} else {
+				//set as extension type
+				extendElement(element, schemaContext, refXdElem);
 			}
 		}
 	}
@@ -1037,19 +778,43 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param procAttrs
 	 * @param procChld
 	 */
-	private void extendElement(Element element,
+	private void extendElement(
+		Element element,
 		Element schemaContext,
-		XdElem refXdElem,
-		boolean procAttrs,
-		boolean procChld,
-		boolean mixed) {
+		XdElem refXdElem
+	) {
 		Element cTypeElem;
 		if (XdUtils.isModel(element)) {
 			cTypeElem = getXdElemCType(element);
 		} else {
 			cTypeElem = _xsdDoc.addComplexTypeDecl(schemaContext, null, null);
 		}
-		Element extension = addComplexContExtension(cTypeElem, refXdElem,mixed);
+		
+		int     elemType  = XdUtils.getElemType(element);
+		boolean procAttrs = false;
+		boolean procChld  = false;
+		//TODO:
+		boolean mixed     = false;
+		
+		switch (elemType) {
+			case XdElem.ElemType.ATTR:
+			case XdElem.ElemType.TEXT_ATTR:
+			case XdElem.ElemType.ATTR_CHLD:
+			case XdElem.ElemType.TEXT_ATTR_CHLD:
+				procAttrs = true;
+				break;
+		}
+
+		switch (elemType) {
+			case XdElem.ElemType.CHLD:
+			case XdElem.ElemType.ATTR_CHLD:
+			case XdElem.ElemType.TEXT_CHLD:
+			case XdElem.ElemType.TEXT_ATTR_CHLD:
+				procChld = true;
+				break;
+		}
+		
+		Element extension = addComplexContExtension(cTypeElem, refXdElem, mixed);
 		if (procAttrs) {
 			processAttributes(element, extension);
 		}
