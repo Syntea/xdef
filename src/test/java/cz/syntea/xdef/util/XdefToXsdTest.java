@@ -178,7 +178,7 @@ public class XdefToXsdTest {
 	
 	
 	
-	/** launch tests standalone */
+	//launch tests standalone
 	public static void main(String... args) throws Exception {
 		XdefToXsdTest.L1XdefToXsdTest();
 	}
