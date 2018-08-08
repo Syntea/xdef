@@ -30,6 +30,12 @@ import cz.syntea.xdef.xml.KXmlUtils;
 
 public class XdefToXsdTest {
 	
+	
+	/**
+	 * tests conversion xdef <-> xsd for example "L1-protocol"
+	 * (conversion xsd -> xdef is malfunctional)
+	 * @throws Exception
+	 */
 	@Test
 	public static void L1XdefToXsdTest() throws Exception {
 		
@@ -172,14 +178,14 @@ public class XdefToXsdTest {
 	
 	
 	
-	//launch tests standalone
+	/** launch tests standalone */
 	public static void main(String... args) throws Exception {
 		XdefToXsdTest.L1XdefToXsdTest();
 	}
 	
 	
 	
-	
+	/** logger */
 	private static final Logger logger = LoggerFactory.getLogger(
 		XdefToXsdTest.class
 	);
