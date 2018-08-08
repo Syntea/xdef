@@ -793,7 +793,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		int     elemType  = XdUtils.getElemType(element);
 		boolean procAttrs = false;
 		boolean procChld  = false;
-		//TODO:
+		//TODO: mixed is unused and set to false only for now
 		boolean mixed     = false;
 		
 		switch (elemType) {
