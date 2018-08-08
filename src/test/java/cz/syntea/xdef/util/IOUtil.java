@@ -39,10 +39,10 @@ public class IOUtil {
 	 * @throws IOException if error occurs
 	 */
 	public static void copyFile(
-		InputStream srcStream,
+		InputStream  srcStream,
 		OutputStream destStream
-	) throws IOException
-	{
+	) throws IOException {
+
 		byte[] buf = new byte[fileBufferSize];
 		int len;
 		
@@ -56,8 +56,10 @@ public class IOUtil {
 	}
 	
 	/** see {@link #copyFile(InputStream, OutputStream)} */
-	public static void copyFile(Reader srcStream, Writer destStream)
-		throws IOException {
+	public static void copyFile(
+		Reader srcStream,
+		Writer destStream
+	) throws IOException {
 		char[] buf = new char[fileBufferSize];
 		int len;
 		
@@ -125,8 +127,8 @@ public class IOUtil {
 	
 	
 	/** default charset */
-	public static final Charset	charset			= Charset.forName("UTF-8");
+	public static final Charset	charset        = Charset.forName("UTF-8");
 	/** default size of the bufferu for manipulation with files */
-	private static final int	fileBufferSize	= 32768;
+	private static final int    fileBufferSize = 32768;
 	
 }
