@@ -110,7 +110,7 @@ public class XdefToXsdTest {
 			XsdToXdef.genCollection(xsdMain.getPath(), xdefGenCol.getPath(),
 				"xd", null);
 			
-			//xdef-validation of L1batch throw regenerated xdef
+			//xdef-validation of L1batch by regenerated xdef
 			//------------------------------------------------------------------
 			XDBuilder  xdb2   = XDFactory.getXDBuilder(null);
 			xdb2.setSource(xdefGenCol);
