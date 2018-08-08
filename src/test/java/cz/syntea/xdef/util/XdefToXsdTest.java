@@ -1,7 +1,6 @@
 package cz.syntea.xdef.util;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,19 +40,14 @@ public class XdefToXsdTest {
 		
 		final Assertion a = new Assertion();
 		
-		//load list of source xdef of L1-protokol
+		//load list of source xdef of L1-protokol, must not contain any "forget"
 		//------------------------------------------------------------------
 		List<String>      xdefSrcList = new ArrayList<String>();
-		List<InputStream> xdefNFList  = new ArrayList<InputStream>();
 		for (String xdefRsrc : L1XdefRsrcList) {
 			xdefSrcList.add(IOUtil.copyFile(
 				XdefToXsdTest.class.getResourceAsStream(exampleL1Pkg + "/L1/"
 				+ xdefRsrc))
 			);
-			//package L1NF: contains xdef of L1-protocol with
-			//no "forget" attributes
-			xdefNFList .add(XdefToXsdTest.class.getResourceAsStream(
-				exampleL1Pkg + "/L1NF/" + xdefRsrc));
 		}
 		
 		final File   outDir        = new File("run/output/junit-test/xdef2xsd");
@@ -72,7 +66,7 @@ public class XdefToXsdTest {
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
 		XDBuilder xdb = XDFactory.getXDBuilder(null);
-		xdb.setSource(xdefNFList.toArray(new InputStream[0]), null);
+		xdb.setSource(xdefSrcList.toArray(new String[0]));
 		xdb.setExternals(L1A_ChkParser_dummy.class);
 		XDPool	xdp = xdb.compileXD();
 		

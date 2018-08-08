@@ -14,22 +14,22 @@
       ZeDne        = "required">
 
       <xd:mixed>
-         <RegistraceSU   xd:script= "forget; occurs 0..; ref RegistraceSU#RegistraceSU"/>
-         <ZmenaSU        xd:script= "forget; occurs 0..; ref ZmenaSU#ZmenaSU"/>
-         <UzavreniSU     xd:script= "forget; occurs 0..; ref UzavreniSU#UzavreniSU"/>
-         <ReaktivaceSU   xd:script= "forget; occurs 0..; ref ReaktivaceSU#ReaktivaceSU"/>
-         <ZruseniSU      xd:script= "forget; occurs 0..; ref ZruseniSU#ZruseniSU"/>
-         <NovaIdentSU    xd:script= "forget; occurs 0..; ref NovaIdentSU#NovaIdentSU"/>
-         <RegistracePU   xd:script= "forget; occurs 0..; ref RegistracePU#RegistracePU"/>
-         <ZmenaPU        xd:script= "forget; occurs 0..; ref ZmenaPU#ZmenaPU"/>
-         <UzavreniPU     xd:script= "forget; occurs 0..; ref UzavreniPU#UzavreniPU"/>
-         <ReaktivacePU   xd:script= "forget; occurs 0..; ref ReaktivacePU#ReaktivacePU"/>
-         <ZruseniPU      xd:script= "forget; occurs 0..; ref ZruseniPU#ZruseniPU"/>
-         <NovaIdentPU    xd:script= "forget; occurs 0..; ref NovaIdentPU#NovaIdentPU"/>
-         <Naroky         xd:script= "forget; occurs 0..; ref Naroky#Naroky"/>
-         <ZruseniNaroku  xd:script= "forget; occurs 0..; ref ZruseniNaroku#ZruseniNaroku"/>
-         <Regres         xd:script= "forget; occurs 0..; ref Regres#Regres"/>
-         <DotazSU        xd:script= "forget; occurs 0..; ref DotazSU#DotazSU"/>
+         <RegistraceSU   xd:script= "occurs 0..; ref RegistraceSU#RegistraceSU"/>
+         <ZmenaSU        xd:script= "occurs 0..; ref ZmenaSU#ZmenaSU"/>
+         <UzavreniSU     xd:script= "occurs 0..; ref UzavreniSU#UzavreniSU"/>
+         <ReaktivaceSU   xd:script= "occurs 0..; ref ReaktivaceSU#ReaktivaceSU"/>
+         <ZruseniSU      xd:script= "occurs 0..; ref ZruseniSU#ZruseniSU"/>
+         <NovaIdentSU    xd:script= "occurs 0..; ref NovaIdentSU#NovaIdentSU"/>
+         <RegistracePU   xd:script= "occurs 0..; ref RegistracePU#RegistracePU"/>
+         <ZmenaPU        xd:script= "occurs 0..; ref ZmenaPU#ZmenaPU"/>
+         <UzavreniPU     xd:script= "occurs 0..; ref UzavreniPU#UzavreniPU"/>
+         <ReaktivacePU   xd:script= "occurs 0..; ref ReaktivacePU#ReaktivacePU"/>
+         <ZruseniPU      xd:script= "occurs 0..; ref ZruseniPU#ZruseniPU"/>
+         <NovaIdentPU    xd:script= "occurs 0..; ref NovaIdentPU#NovaIdentPU"/>
+         <Naroky         xd:script= "occurs 0..; ref Naroky#Naroky"/>
+         <ZruseniNaroku  xd:script= "occurs 0..; ref ZruseniNaroku#ZruseniNaroku"/>
+         <Regres         xd:script= "occurs 0..; ref Regres#Regres"/>
+         <DotazSU        xd:script= "occurs 0..; ref DotazSU#DotazSU"/>
       </xd:mixed>
    </SouborL1A>
 
