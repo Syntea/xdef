@@ -1,8 +1,8 @@
 /*
  * Copyright 2018 Syntea software group a.s. All rights reserved.
- * 
+ *
  * File: GenXDefinition.java, created 2018-07-22.
- * 
+ *
  * This file may be used, copied, modified and distributed only in accordance
  * with the terms of the limited licence contained in the accompanying
  * file LICENSE.TXT.
@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
  * @author Vaclav Trojan
  */
 public class GenXDefinition {
-	
+
 	/** Prevent create an instance of this class.*/
 	private GenXDefinition() {}
 
@@ -41,7 +41,7 @@ public class GenXDefinition {
 	public static final Element genXdef(final String source) throws Exception {
 		return genXdef(KXmlUtils.parseXml(source).getDocumentElement());
 	}
-	
+
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param elem XML element.
 	 * @return org.w3c.dom.Document object with X-definition.
@@ -49,7 +49,7 @@ public class GenXDefinition {
 	public static final Element genXdef(final Element elem) {
 		return GenXDef.genXdef(elem);
 	}
-	
+
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param source name of input file or string with source XML.
 	 * @param outFile name of output file.
@@ -64,7 +64,7 @@ public class GenXDefinition {
 		KXmlUtils.writeXml(outFile,
 			encoding, genXdef(doc.getDocumentElement()), true, true);
 	}
-	
+
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param source input file with source XML.
 	 * @param outFile output file.
@@ -177,5 +177,5 @@ public class GenXDefinition {
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}
-	}	
+	}
 }

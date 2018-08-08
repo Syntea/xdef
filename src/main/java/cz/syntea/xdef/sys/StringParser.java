@@ -4038,7 +4038,7 @@ public class StringParser extends SReporter implements SParser {
 	 * <p>XML_CHAR_COLON .. ':' (4)</p>
 	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)</p>
 	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)</p>
-	 * 
+	 *
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return type of character.
 	 */

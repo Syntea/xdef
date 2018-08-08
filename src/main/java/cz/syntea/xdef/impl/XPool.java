@@ -59,12 +59,12 @@ import cz.syntea.xdef.sys.ReportWriter;
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool {
-	/** Magic ID.*/
-	private static final short XD_MAGIC_ID = 0x7653;
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
-	/** Last compatible build number.*/
-	private static final int XD_MIN_BUILD = 3;
+	/** Last compatible version of XDPool.*/
+	private static final long XD_MIN_VERSION = 301004004L; // 3.1.004.004
+	/** Magic ID.*/
+	private static final short XD_MAGIC_ID = 0x7653;
 
 	/** Flag if warnings should be checked.*/
 	private final boolean _chkWarnings;
@@ -396,7 +396,8 @@ public final class XPool implements XDPool {
 			} else {
 				//X-definition source is missing or null&{0}{: }
 				_compiler.getReportWriter().error(XDEF.XDEF903, s);
-				_compiler.getReportWriter().error(SYS.SYS036, ex);//Program exception&{0}{: }
+				//Program exception&{0}{: }
+				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
 		}
 	}
@@ -635,33 +636,6 @@ public final class XPool implements XDPool {
 
 	final Class<?>[] getExtObjects() {return _extClasses;}
 
-	/** Check if version from argument is compatible with this object.
-	 * @return true if version is compatible.
-	 */
-	private static boolean isCompatibleVersion(final String versionInfo) {
-		int j = XD_VERSION.indexOf('.');
-		if (j < 0 || versionInfo == null || versionInfo.length() <= j ||
-			versionInfo.charAt(j) != '.' ||
-			!versionInfo.startsWith(XD_VERSION.substring(0, j))) {
-			return false;
-		}
-		int i = ++j;
-		j = XD_VERSION.indexOf('.', i);
-		// 0
-		if (j < 0 || versionInfo.length() <= j ||versionInfo.charAt(j) != '.' ||
-			!XD_VERSION.substring(i,j).equals(versionInfo.substring(i,j))) {
-			return false; //XD3.1
-		}
-		i = ++j;
-		j = XD_VERSION.indexOf('.', i);
-		// version
-		if (j < 0 || versionInfo.length()<=j || versionInfo.charAt(j)!='.' ||
-			!XD_VERSION.substring(i,j).equals(versionInfo.substring(i,j))) {
-			return false; //xdp 2.0
-		}
-		return Integer.parseInt(versionInfo.substring(j+1)) >= XD_MIN_BUILD;
-	}
-
 	/** Get default X-definition (no named) from the pool.
 	 * @return X-definition or <tt>null</tt> if definition doesn't exist.
 	 */
@@ -836,7 +810,19 @@ public final class XPool implements XDPool {
 			throw new SIOException(SYS.SYS039, "Incorrect file format");
 		}
 		String ver = xr.readString(); //XDefPool version
-		if (!isCompatibleVersion(ver)) {
+		try {
+			// check if version is compatible with this implementation
+			String[] verParts = ver.split("\\."); // verion parts
+			if (verParts.length == 4 && verParts[0].startsWith("XD")) {
+				long x = Integer.parseInt(verParts[0].substring(2)) * 100
+					+ Integer.parseInt(verParts[1]);
+				x = x * 1000 + Integer.parseInt(verParts[2]);
+				x = x * 1000 + Integer.parseInt(verParts[3]);
+				if (x < XD_MIN_VERSION) {
+					throw new Exception("Version error");
+				}
+			}
+		} catch (Exception ex) {
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "Version error: " + ver);
 		}

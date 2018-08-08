@@ -45,8 +45,7 @@ public class UpdateMessages {
 			String msg = 
 				FUtils.updateDirectories(temp, dir, "java", true, false);
 			if (msg.isEmpty()) {
-				System.out.println(
-					"Nothing changed in registered report files");
+				System.out.println("Nothing changed in report files");
 			} else {
 				System.out.println(msg); // print changes
 			}

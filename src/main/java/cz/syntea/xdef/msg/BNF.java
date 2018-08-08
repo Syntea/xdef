@@ -39,62 +39,54 @@ public interface BNF {
 	public static final long BNF014 = 120717325L;
 	/** Undefined external method "&amp;{0}"&amp;{#SYS000} */
 	public static final long BNF015 = 120717326L;
-	/** Expected float, integer or quoted string&amp;{#SYS000} */
-	public static final long BNF016 = 120717327L;
 	/** BNF rule expected&amp;{#SYS000} */
-	public static final long BNF017 = 120717328L;
+	public static final long BNF017 = 120717327L;
 	/** BNF Syntax error&amp;{#SYS000} */
-	public static final long BNF018 = 120717329L;
+	public static final long BNF018 = 120717328L;
 	/** Redefinition of rule "&amp;{0}"&amp;{#SYS000} */
-	public static final long BNF019 = 120717330L;
+	public static final long BNF019 = 120717329L;
 	/** Number of occurrence expected&amp;{#SYS000} */
-	public static final long BNF020 = 120717331L;
+	public static final long BNF020 = 120717330L;
 	/** Alias argument must start with "$"&amp;{#SYS000} */
-	public static final long BNF021 = 120717332L;
+	public static final long BNF021 = 120717331L;
 	/** Alias specification error&amp;{#SYS000} */
-	public static final long BNF022 = 120717333L;
+	public static final long BNF022 = 120717332L;
 	/** Expected BNF command section&amp;{#SYS000} */
-	public static final long BNF023 = 120717334L;
+	public static final long BNF023 = 120717333L;
 	/** Expected ")"&amp;{#SYS000} */
-	public static final long BNF024 = 120717335L;
+	public static final long BNF024 = 120717334L;
 	/** BNF Item expected&amp;{#SYS000} */
-	public static final long BNF025 = 120717336L;
+	public static final long BNF025 = 120717335L;
 	/** Undefined rule reference: "&amp;{0}"&amp;{#SYS000} */
-	public static final long BNF026 = 120717337L;
+	public static final long BNF026 = 120717336L;
 	/** Maximum numeric value of character is 65535 */
-	public static final long BNF027 = 120717338L;
+	public static final long BNF027 = 120717337L;
 	/** Maximal occurrence must be greater or equal to the minimum&amp;{#SYS000} */
-	public static final long BNF028 = 120717339L;
+	public static final long BNF028 = 120717338L;
 	/** End character "}" of occurrence specification expected&amp;{#SYS000} */
-	public static final long BNF029 = 120717340L;
+	public static final long BNF029 = 120717339L;
 	/** Empty sequence&amp;{#SYS000} */
-	public static final long BNF030 = 120717341L;
+	public static final long BNF030 = 120717340L;
 	/** After alias name "&amp;{0}" is expected ":"&amp;{#SYS000} */
-	public static final long BNF031 = 120717342L;
+	public static final long BNF031 = 120717341L;
 	/** Alias name "&amp;{0}" is predefined */
-	public static final long BNF032 = 120717343L;
-	/** "$" follows incorrect number */
-	public static final long BNF033 = 120717344L;
-	/** Unknown item: &amp;{0} */
-	public static final long BNF034 = 120717345L;
+	public static final long BNF032 = 120717342L;
 	/** Internal loop */
-	public static final long BNF035 = 120717346L;
+	public static final long BNF035 = 120717343L;
 	/** Item is null */
-	public static final long BNF036 = 120717347L;
+	public static final long BNF036 = 120717344L;
 	/** No parameters are declared in method &amp;{0} */
-	public static final long BNF038 = 120717348L;
-	/** Illegal type of alias parameter: &amp;{0} */
-	public static final long BNF039 = 120717349L;
+	public static final long BNF038 = 120717345L;
 	/** Illegal BNF runtime code: &amp;{0} */
-	public static final long BNF040 = 120717350L;
+	public static final long BNF040 = 120717346L;
 	/** Rule "&amp;{0}" does not exist&amp;{#SYS000} */
-	public static final long BNF901 = 120717351L;
+	public static final long BNF901 = 120717347L;
 	/** Exception in external method "&amp;{0}" (rule &amp;{1}): &amp;{2}&amp;{#SYS000} */
-	public static final long BNF902 = 120717352L;
+	public static final long BNF902 = 120717348L;
 	/** External method "&amp;{0}" (rule &amp;{1}) should be static or set user object&amp;{#SYS000} */
-	public static final long BNF903 = 120717353L;
+	public static final long BNF903 = 120717349L;
 	/** Messages for BNF grammar */
-	public static final long BNF_DESCRIPTION = 120717354L;
+	public static final long BNF_DESCRIPTION = 120717350L;
 	/** English */
-	public static final long BNF_LANGUAGE = 120717355L;
+	public static final long BNF_LANGUAGE = 120717351L;
 }

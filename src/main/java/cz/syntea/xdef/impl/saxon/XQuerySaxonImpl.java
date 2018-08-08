@@ -1,7 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2009 Syntea software group a.s. All rights reserved.
+ *
+ * File: XQuerySaxonImpl.java
+ *
+ * This file may be used, copied, modified and distributed only in accordance
+ * with the terms of the limited license contained in the accompanying
+ * file LICENSE.TXT.
+ *
+ * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
+ * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
+ *
  */
 package cz.syntea.xdef.impl.saxon;
 

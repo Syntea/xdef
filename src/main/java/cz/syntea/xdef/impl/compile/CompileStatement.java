@@ -2936,7 +2936,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer lang,
 		final SBuffer deflt,
 		final XDPool xp,
-		final ArrayList<Map<String,String>> languages) {
+		final List<Map<String,String>> languages) {
 		setSource(source, defName, XDConstants.XD31_ID, null);
 		if (lang == null) {
 			error(XDEF.XDEF410, "language");//'&{0}' expected

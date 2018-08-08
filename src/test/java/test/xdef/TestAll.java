@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-/** Run all available tests for package cz.syntea.xd.
+/** Run all tests of this package.
  * @author Vaclav Trojan
  */
 public class TestAll {
