@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<SouborL1A  Davka="374" ZeDne="20140616151740">
+<RegistraceSU IdentZaznamu="1" CisloSU="1234567890" DatumCasSU="201406061645" DatumCasOznameniSU="201406081239" StavSetreniPolicie="N" LikvidacniTitul="POV" RozhodnaUdalost="A" DatumUcinnosti="201406081239">
+   <Misto>
+   <Adresa Okres="PRAHA 9" Stat="CZ"/>
+   SSSSSSSS 1/2
+   </Misto>
+   <VozidloPojistnika PoradiVozidlaSU="1">
+   <Smlouva CisloSmlouvy="123456789" PoradiVozidla="1" DruhPojisteni="POV">
+   </Smlouva>
+   </VozidloPojistnika>
+   <VozidloUcastnika PoradiVozidlaSU="4">
+   <VozidloPS>
+   <Vozidlo SPZ="1A11779" MPZ="???" VIN="AA0AXXGCDA3Y54427" DruhVozidla="03" ZnackaText="FORD" ModelText="NEUVEDEN" KodModeluVozidla="2628">
+   </Vozidlo>
+   </VozidloPS>
+   </VozidloUcastnika>
+</RegistraceSU>
+<DotazSU IdentZaznamu="1A" CisloSU="1234581383" Hist="A" />
+
+<Naroky IdentZaznamu="2" CisloSU="1234081383" DatumUcinnosti="201406081239" >
+   <RezervaSU TypSkody="B" Zmena="35000" Rezerva="35000" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="2A" CisloSU="2014081383" Hist="A" />
+
+<Naroky IdentZaznamu="3" CisloSU="1234081383" DatumUcinnosti="201406081239" >
+   <RezervaSU TypSkody="C" Zmena="300" Rezerva="300" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="3A" CisloSU="1234081383" Hist="A" />
+
+<RegistracePU IdentZaznamu="4" CisloSU="1234081383" CisloPU="1234081383/4" DatumUcinnosti="201406091627" >
+   <Poskozeny Jmeno="FFFFFFFFFF" Prijmeni="GGGGGGG" RC="521127333" StatPrislusnost="CZ">
+   <Adresa  Ulice="MMMMMMMMMMMM" CisloDomu="1111/22" Obec="PRAHA 6" Stat="CZ" PSC="16000"/>
+   </Poskozeny>
+</RegistracePU>
+<DotazSU IdentZaznamu="4A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="5" CisloSU="1234081383" DatumUcinnosti="201406091627" >
+   <RezervaSU TypSkody="B" Zmena="35000" Rezerva="70000" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="5A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="6" CisloSU="1234081383" DatumUcinnosti="201406091627" >
+   <RezervaSU TypSkody="B" Zmena="-35000" Rezerva="35000" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="6A" CisloSU="1234081383" Hist="A" />
+
+<ZmenaSU IdentZaznamu="7" CisloSU="1234081383" DatumCasSU="201406061645" DatumCasOznameniSU="201406080000" StavSetreniPolicie="N" LikvidacniTitul="POV" RozhodnaUdalost="A" DatumUcinnosti="201406251430" >
+   <Misto>
+   <Adresa Okres="PRAHA 9" Stat="CZ"/>
+   SSSSSSSSS 111/4
+   </Misto>
+   <VozidloPojistnika PoradiVozidlaSU="1">
+   <Smlouva CisloSmlouvy="123589894" PoradiVozidla="1" DruhPojisteni="POV">
+   </Smlouva>
+   </VozidloPojistnika>
+   <VozidloUcastnika PoradiVozidlaSU="4">
+   <VozidloPS>
+   <Vozidlo SPZ="1A11779" MPZ="???" VIN="AA0AXXGCDA3Y54427" DruhVozidla="03" ZnackaText="FORD" ModelText="NEUVEDEN" KodModeluVozidla="2628">
+   </Vozidlo>
+   </VozidloPS>
+   <SkodaVozidla Kvadrant="L">
+   </SkodaVozidla>
+   </VozidloUcastnika>
+   </ZmenaSU>
+<DotazSU IdentZaznamu="7A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="8" CisloSU="1234081383" CisloPU="1234081383/4" PoradiVozidlaSU="4" DatumUcinnosti="201406251430" >
+   <RezervaSU TypSkody="B" Zmena="-8130" Rezerva="26870" Mena="CZK"/>
+   <PlneniPU TypSkody="B1" Platba="8130" Vyplaceno="8130" Mena="CZK" Ucet="0234579163/0800"/>
+</Naroky>
+<DotazSU IdentZaznamu="8A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="9" CisloSU="1234081383" DatumUcinnosti="201406251434" >
+   <RezervaSU TypSkody="B" Zmena="-26870" Rezerva="0" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="9A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="10" CisloSU="1234081383" DatumUcinnosti="201406251434" >
+   <RezervaSU TypSkody="C" Zmena="-300" Rezerva="0" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="10A" CisloSU="1234081383" Hist="A" />
+
+<UzavreniPU IdentZaznamu="11" CisloSU="1234081383" CisloPU="1234081383/4" DatumUcinnosti="201406251434" >
+   <Poskozeny Jmeno="FFFFFFFFFF" Prijmeni="AAAAAAA" RC="521127333" StatPrislusnost="CZ">
+   <Adresa  Ulice="MMMMMMMMMMMM" CisloDomu="1111/11" Obec="PRAHA 6" Stat="CZ" PSC="16000"/>
+   </Poskozeny>
+</UzavreniPU>
+<DotazSU IdentZaznamu="11A" CisloSU="1234081383" Hist="A" />
+
+<UzavreniSU IdentZaznamu="12" CisloSU="1234081383" KodDuvoduUzavreni="L" DatumUcinnosti="201406251434" />
+<DotazSU IdentZaznamu="12A" CisloSU="1234081383" Hist="A" />
+
+<ReaktivaceSU IdentZaznamu="13" CisloSU="1234081383" DatumCasSU="201406061645" DatumCasOznameniSU="201406080000" StavSetreniPolicie="N" LikvidacniTitul="POV" RozhodnaUdalost="A" DatumUcinnosti="201407231700" >
+   <Misto>
+   <Adresa Okres="PRAHA 9" Stat="CZ"/>
+   SSSSSSSSS 111/4
+   </Misto>
+   <VozidloPojistnika PoradiVozidlaSU="1">
+   <Smlouva CisloSmlouvy="123589894" PoradiVozidla="1" DruhPojisteni="POV">
+   </Smlouva>
+   </VozidloPojistnika>
+   <VozidloUcastnika PoradiVozidlaSU="4">
+   <VozidloPS>
+   <Vozidlo SPZ="1A23779" MPZ="???" VIN="XX0XXXGCDA3Y54427" DruhVozidla="03" ZnackaText="FORD" ModelText="NEUVEDEN" KodModeluVozidla="2628">
+   </Vozidlo>
+   </VozidloPS>
+   <SkodaVozidla Kvadrant="L">
+   </SkodaVozidla>
+   </VozidloUcastnika>
+</ReaktivaceSU>
+<DotazSU IdentZaznamu="13A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="14" CisloSU="1234081383" DatumUcinnosti="201407231700" >
+   <RezervaSU TypSkody="C" Zmena="33,22" Rezerva="33,22" Mena="CZK"/>
+</Naroky>
+<DotazSU IdentZaznamu="14A" CisloSU="1234081383" Hist="A" />
+
+<Naroky IdentZaznamu="15" CisloSU="1234081383" DatumUcinnosti="201407231700" >
+   <RezervaSU TypSkody="C" Zmena="-33,22" Rezerva="0" Mena="CZK"/>
+   <PlneniSU TypSkody="C3" Platba="33,22" Vyplaceno="33,22" Mena="CZK" Ucet="12348021/0100"/>
+</Naroky>
+<DotazSU IdentZaznamu="15A" CisloSU="1234081383" Hist="A" />
+
+<UzavreniSU IdentZaznamu="16" CisloSU="1234081383" KodDuvoduUzavreni="L" DatumUcinnosti="201407231700" />
+<DotazSU IdentZaznamu="16A" CisloSU="1234081383" Hist="A" />
+
+<ZruseniSU IdentZaznamu="17" CisloSU="1234081383" DatumUcinnosti="201407231700" />
+<DotazSU IdentZaznamu="17A" CisloSU="1234081383" Hist="A" />
+
+</SouborL1A>
