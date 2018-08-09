@@ -1652,14 +1652,8 @@ public final class GenXComponent {
 "\t * @return string with encoded byte array.\n"+
 "\t */\n"+
 "\tprivate static String encodeBase64(byte[] b) {\n"+
-"\t\ttry {\n"+
 "\t\t\treturn new String(cz.syntea.xdef.sys.SUtils.encodeBase64(b),\n"+
-"\t\t\t\t\"UTF-8\");\n"+
-"\t\t} catch (Exception ex) {\n"+
-"\t\t\t// Never should happen\n"+
-"\t\t\tthrow new cz.syntea.xdef.sys.SRuntimeException(\n"+
-"\t\t\t\t\"Internal error: Base64 encoding\");\n"+
-"\t\t}\n"+
+"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));\n"+
 "\t}\n";
 			}
 			if ((byteArrayEncoding & 2) != 0) { //hex
@@ -1680,14 +1674,8 @@ public final class GenXComponent {
 "\t * @return string with encoded byte array.\n"+
 "\t */\n") : "")+
 "\tprivate static String encodeHex(byte[] b) {\n"+
-"\t\ttry {\n"+
-"\t\t\treturn new String(cz.syntea.xdef.sys.SUtils.encodeHex(b),\n"+
-"\t\t\t\t\"UTF-8\");\n"+
-"\t\t} catch (Exception ex) {\n"+
-"\t\t\t// Never should happen\n"+
-"\t\t\tthrow new cz.syntea.xdef.sys.SRuntimeException(\n"+
-"\t\t\t\t\"Internal error: hex encoding\");\n"+
-"\t\t}\n"+
+"\t\treturn new String(cz.syntea.xdef.sys.SUtils.encodeHex(b),\n"+
+"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));\n"+
 "\t}\n";
 			}
 		}

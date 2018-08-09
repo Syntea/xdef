@@ -62,7 +62,7 @@ public final class XPool implements XDPool {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004004L; // 3.1.004.004
+	private static final long XD_MIN_VERSION = 301004003L; // 3.1.004.003
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 
@@ -365,7 +365,7 @@ public final class XPool implements XDPool {
 		}
 		try {
 			char c;
-			if ((c = source.charAt(0)) == '<' || c <= ' ') {
+			if ((c = source.charAt(0)) == '<' || c == '[') {
 				if (s == null || (s = sourceId.trim()).length() == 0) {
 					s = "String_"+ (++_stringItem);
 				}

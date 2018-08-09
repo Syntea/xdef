@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -523,7 +524,8 @@ public class RegisterReportTables {
 		 */
 		final static Properties readProperties(final InputStream inStream) {
 			try {
-				InputStreamReader in = new InputStreamReader(inStream, "UTF-8");
+				InputStreamReader in = new InputStreamReader(inStream,
+					Charset.forName("UTF-8"));
 				try {
 					Properties props = new Properties();
 					props.load(in);

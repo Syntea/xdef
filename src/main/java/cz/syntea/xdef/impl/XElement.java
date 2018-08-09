@@ -29,6 +29,7 @@ import cz.syntea.xdef.model.XMElement;
 import cz.syntea.xdef.model.XMNode;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -885,7 +886,8 @@ public final class XElement extends XCodeDescriptor
 			xw.close();
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(baos.toByteArray());
-			xe._digest = new String(SUtils.encodeHex(md.digest()), "UTF-8");
+			xe._digest = new String(
+				SUtils.encodeHex(md.digest()), Charset.forName("UTF-8"));
 		} catch (Exception ex) {
 			//Internal error&{0}{: }
 			throw new SRuntimeException(SYS.SYS066, ex.getMessage());

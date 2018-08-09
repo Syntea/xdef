@@ -15,11 +15,12 @@ package test.xdutils;
 import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.XDValue;
+import cz.syntea.xdef.proc.XXElement;
 import cz.syntea.xdef.util.GenCollection;
 import java.io.File;
 import java.util.Properties;
@@ -32,7 +33,10 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import cz.syntea.xdef.sys.ReportWriter;
+import static cz.syntea.xdef.sys.STester.runTest;
 import cz.syntea.xdef.util.XdefToXsd;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /** Test XDefinition to schema conversion.
  * @author Ilia Alexandrov
@@ -115,9 +119,12 @@ public class TestXd2XsdConv extends STester {
 		}
 		try {
 			Properties props = new Properties();
-//TODO			props.put("xdef.warnings", "true");
-//			props.put("xdef.warnings", "false");
+			props.put("xdef.warnings", "true");
 			XDPool xdPool = XDFactory.compileXD(props, _xdefFile);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			xdPool.writeXDPool(out);
+			xdPool = XDFactory.readXDPool(
+				new ByteArrayInputStream(out.toByteArray()));
 			if (!xdPool.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
 					"Could not find main definition in XDefinition file!",
@@ -127,7 +134,7 @@ public class TestXd2XsdConv extends STester {
 			}
 			_chkDoc = xdPool.createXDDocument(MAIN_DEF_NAME);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			ex.printStackTrace(System.err);
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
 			return false;
@@ -156,7 +163,7 @@ public class TestXd2XsdConv extends STester {
 					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
-			ex.printStackTrace();
+			ex.printStackTrace(System.err);
 			setMessage(new ErrMessage(
 				"Could not convert given XDefinition file!", _xdefFile, ex));
 			return false;
@@ -174,7 +181,7 @@ public class TestXd2XsdConv extends STester {
 			Schema schema = _xsdFactory.newSchema(mainSchema);
 			_validator = schema.newValidator();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			ex.printStackTrace(System.err);
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
@@ -210,7 +217,7 @@ public class TestXd2XsdConv extends STester {
 		try {
 			_validator.validate(source);
 		} catch (IOException ioex) {
-			ioex.printStackTrace();
+			ioex.printStackTrace(System.err);
 			setMessage(new ErrMessage("Could not read from XML file stream!",
 				xmlFile, ioex));
 			return false;
@@ -223,7 +230,7 @@ public class TestXd2XsdConv extends STester {
 			} catch (Exception exx) {}
 			System.err.println("============");
 			displayFiles(_tempDir);
-			sex.printStackTrace();
+			sex.printStackTrace(System.err);
 			setMessage(new ErrMessage(
 				"Error during validating XML file by schema!", xmlFile, sex));
 			return false;
@@ -401,12 +408,77 @@ public class TestXd2XsdConv extends STester {
 		assertTrue(parse("B1_Common_valid_1"), popMessage());
 		assertTrue(parse("B1_Common_valid_2"), popMessage());
 
+		assertTrue(prepare("Sisma"), popMessage());
+		assertTrue(parse("Sisma"), popMessage());
+
+		assertTrue(prepare("Sisma3_1"), popMessage());
+		assertTrue(parse("Sisma"), popMessage());
+
 		try {
 			FUtils.deleteAll(_tempDir, true);
-		} catch (SException ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException("Could not delete temporary files!", ex);
 		}
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods for the test Sisma
+////////////////////////////////////////////////////////////////////////////////
+	public static void initParams(XXElement chkElem) {}
+
+	public static void setErr(XXElement chkElem, XDValue[] params) {}
+
+	public static boolean tab(XXElement chkEl, XDValue[] params) {return true;}
+
+	public static void chkOpt_RC_ifEQ(XXElement chkElem, XDValue[] params) {}
+
+	public static void dateDavka(XXElement chkElem, XDValue[] params) {}
+
+	public static void chk_dec_nonNegative(XXElement chkEl, XDValue[] params) {}
+
+	public static void chk_RC_DatNar_ifEQ(XXElement chkEl, XDValue[] params) {}
+
+	public static void setDefault_ifEx(XXElement chkElem, XDValue[] params) {}
+
+	public static void emptySubjHasAddr(XXElement chkElem, XDValue[] params) {}
+
+	public static String getIdOsoba(XXElement chkElem) { return "1"; }
+
+	public static void protocol(XXElement chkElem, String role, long idXxx) {}
+
+	public static void protocol(XXElement chkElem, String role, String ident) {}
+
+	public static void outputIVR(XXElement chkElem, XDValue[] params) {}
+
+	public static String getKodPartnera() { return "1"; }
+
+	public static void chkEQ_PojistitelFuze(XXElement chkEl, XDValue[] params){}
+
+	public static void chk_Poj_NeexElement(XXElement chkEl, XDValue[] params) {}
+
+	public static void chkOpt_IC_ifEQ(XXElement chkElem, XDValue[] params) {}
+
+	public static void hasElement_if(XXElement chkElem, XDValue[] params) {}
+
+	public static void subjekt_OsobaOrFirma(XXElement chkEl, XDValue[] params){}
+
+	public static String getIdSubjekt(XXElement chkElem) { return "1"; }
+
+	public static void notEmptyMisto(XXElement chkElem, XDValue[] params) {}
+
+	public static void equal(XXElement chkElem, XDValue[] params) {}
+
+	public static void chkOpt_CisloTP_ifEQ(XXElement chkEl, XDValue[] params) {}
+
+	public static String getIdVozidlo(XXElement chkElem) { return "1"; }
+
+	public static boolean kvadrant(XXElement chkElem) { return true; }
+
+	public static void chk_TypMinusPlneni_Platba(XXElement chkEl,
+		XDValue[] params) {}
+
+	public static boolean fil0(XXElement chkEl, XDValue[] params) {return true;}
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Run test
 	 * @param args ignored

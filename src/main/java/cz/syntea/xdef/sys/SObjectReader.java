@@ -17,6 +17,7 @@ import cz.syntea.xdef.msg.SYS;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 
 /** Provides reading of SObjects to output stream.
  * @author Vaclav Trojan
@@ -123,7 +124,8 @@ public class SObjectReader {
 
 	public final String readString() throws IOException {
 		byte[] bytes = readBytes();
-		return bytes == null ? null : new String(bytes, "UTF-8");
+		return bytes == null
+			? null : new String(bytes, Charset.forName("UTF-8"));
 	}
 
 	public final SPosition readSPosition() throws IOException {

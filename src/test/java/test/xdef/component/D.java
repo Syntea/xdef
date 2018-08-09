@@ -109,14 +109,8 @@ public class D implements cz.syntea.xdef.component.XComponent{
    * @return string with encoded byte array.
    */
   private static String encodeBase64(byte[] b) {
-    try {
       return new String(cz.syntea.xdef.sys.SUtils.encodeBase64(b),
-        "UTF-8");
-    } catch (Exception ex) {
-      // Never should happen
-      throw new cz.syntea.xdef.sys.SRuntimeException(
-        "Internal error: Base64 encoding");
-    }
+      java.nio.charset.Charset.forName("UTF-8"));
   }
   private static byte[] decodeHex(String s) {
     try {
@@ -126,14 +120,8 @@ public class D implements cz.syntea.xdef.component.XComponent{
     }
   }
   private static String encodeHex(byte[] b) {
-    try {
-      return new String(cz.syntea.xdef.sys.SUtils.encodeHex(b),
-        "UTF-8");
-    } catch (Exception ex) {
-      // Never should happen
-      throw new cz.syntea.xdef.sys.SRuntimeException(
-        "Internal error: hex encoding");
-    }
+    return new String(cz.syntea.xdef.sys.SUtils.encodeHex(b),
+      java.nio.charset.Charset.forName("UTF-8"));
   }
   public D() {}
   public D(cz.syntea.xdef.component.XComponent p,

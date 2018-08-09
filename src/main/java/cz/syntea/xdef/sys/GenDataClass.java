@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 /** Provides generation of Java source class containing data from argument
  * (see method genClass).
@@ -130,7 +131,8 @@ public class GenDataClass {
 				if (BLOCKLEN + offset < codeLen) {
 					w.write(s);
 					w.write(new String(SUtils.encodeBase64(
-						data, offset, BLOCKLEN, false), "UTF-8"));
+						data, offset, BLOCKLEN, false),
+						Charset.forName("UTF-8")));
 					w.write("\";}");
 					if (subclassIndex > 0) {
 						w.write("}");
@@ -141,7 +143,8 @@ public class GenDataClass {
 				} else if (offset < codeLen) {
 					w.write(s);
 					w.write(new String(SUtils.encodeBase64(
-						data, offset, codeLen - offset, false), "UTF-8"));
+						data, offset, codeLen - offset, false),
+						Charset.forName("UTF-8")));
 					offset = codeLen;
 					w.write("\";}");
 					if (subclassIndex > 0) {

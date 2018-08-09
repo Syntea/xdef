@@ -104,7 +104,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				"Given X-definition model is already being processed");
 		}
 		_procModel.push(xdModel);
-		
+
 		switch (xdModel.getType()) {
 			case XdModel.Type.DECLARATION:
 				processDecl((XdDecl) xdModel);
@@ -789,13 +789,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		} else {
 			cTypeElem = _xsdDoc.addComplexTypeDecl(schemaContext, null, null);
 		}
-		
+
 		int     elemType  = XdUtils.getElemType(element);
 		boolean procAttrs = false;
 		boolean procChld  = false;
 		//TODO: mixed is unused and set to false only for now
 		boolean mixed     = false;
-		
+
 		switch (elemType) {
 			case XdElem.ElemType.ATTR:
 			case XdElem.ElemType.TEXT_ATTR:
@@ -813,7 +813,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				procChld = true;
 				break;
 		}
-		
+
 		Element extension = addComplexContExtension(cTypeElem, refXdElem, mixed);
 		if (procAttrs) {
 			processAttributes(element, extension);

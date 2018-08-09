@@ -75,7 +75,7 @@ public abstract class DomBaseHandler
 	/////////////////////////////////////////////////////////////
 
 	public final void doParse(final InputStream in, final String sysId)
-		throws IOException, SAXException {
+		throws Exception {
 		XInputStream myInputStream = new XInputStream(in);
 		XReader myReader = new XReader(myInputStream);
 		myReader.setHandler(this);
@@ -84,7 +84,7 @@ public abstract class DomBaseHandler
 	}
 
 	public final void doParse(final XReader myReader)
-		throws IOException, SAXException {
+		throws Exception {
 		InputSource is = new InputSource();
 		is.setSystemId(myReader.getSysId());
 		is.setCharacterStream(myReader);

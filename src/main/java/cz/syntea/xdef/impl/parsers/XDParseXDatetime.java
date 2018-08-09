@@ -24,7 +24,7 @@ import cz.syntea.xdef.impl.code.DefDate;
 import cz.syntea.xdef.impl.code.DefString;
 import cz.syntea.xdef.XDContainer;
 
-/** Parser of X-Script "datetime" type.
+/** Parser of X-Script "xdatetime" type.
  * @author Vaclav Trojan
  */
 public class XDParseXDatetime extends XSAbstractParseComparable {

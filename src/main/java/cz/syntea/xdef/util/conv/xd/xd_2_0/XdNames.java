@@ -36,8 +36,8 @@ public interface XdNames {
 	public static final String ATTR = "attr";
 	/** X-definition <code>declaration</code> element local name.*/
 	public static final String DECLARATION = "declaration";
-    /** X-definition <code>macro</code> element local name.*/
-    public static final String MACRO = "macro";
+	/** X-definition <code>macro</code> element local name.*/
+	public static final String MACRO = "macro";
 	/** X-definition <code>any</code> element local name.*/
 	public static final String ANY = "any";
 	/** X-definition <code>choice</code> element local name.*/
@@ -48,6 +48,8 @@ public interface XdNames {
 	public static final String SEQUENCE = "sequence";
 	/** X-definition <code>text</code> attribute local name.*/
 	public static final String TEXT = "text";
+	/** X-definition <code>textcontent</code> attribute local name.*/
+	public static final String TEXTCONTENT = "textcontent";
 	/** X-definition <code>required</code> occurrence.*/
 	public static final String REQUIRED = "required";
 	/** X-definition <code>optional</code> occurrence.*/

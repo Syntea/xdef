@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.TreeSet;
 import java.util.Properties;
 import java.util.Set;
@@ -832,7 +833,8 @@ public final class SManager implements SConstants {
 				Class<?> c = Class.forName(packageName + '.' + s);
 				InputStream input =
 					c.getResourceAsStream(tableName+".properties");
-				InputStreamReader in = new InputStreamReader(input, "UTF-8");
+				InputStreamReader in =
+					new InputStreamReader(input, Charset.forName("UTF-8"));
 				Properties props = new Properties();
 				props.load(in);
 				in.close();

@@ -105,6 +105,31 @@ public interface PreCompiler {
 	 */
 	public void chkNestedElements(final PNode pnode);
 
+	/** Get namespace URI on given position.
+	 * @param i position
+	 * @return uri on this position or null.
+	 */
+	public String getNSURI(final int i);
+
+	/** Get namespace URI on given position.
+	 * @param i position
+	 * @return uri on this position or null.
+	 */
+	public int getNSURIIndex(final String uri);
+
+	/** Set URI on given index.
+	 * @param i index where to set.
+	 * @param uri URI to set.
+	 * @return original URI or null.
+	 */
+	public String setURIOnIndex(final int i, final String uri);
+
+	/** Set URI. If the URI already exists just return the index
+	 * @param uri URI to be set.
+	 * @return index of uri.
+	 */
+	public int setNSURI(final String uri);
+
 	/** Report not legal attributes. All allowed attributes should be
 	 * processed and removed. Not legal attributes generates an error message.
 	 * @param pnode node to be checked.

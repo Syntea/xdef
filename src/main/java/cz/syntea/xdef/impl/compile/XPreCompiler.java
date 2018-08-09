@@ -9,6 +9,7 @@
  */
 package cz.syntea.xdef.impl.compile;
 
+import cz.syntea.xdef.impl.xml.XInputStream;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -17,14 +18,18 @@ import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
 import cz.syntea.xdef.sys.SRuntimeException;
+import cz.syntea.xdef.sys.SThrowable;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlConstants;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +88,8 @@ public class XPreCompiler implements PreCompiler {
 	private final PreReaderXML _xmlReader;
 	/** Reader of X-definitions in the form of JSON. */
 	private final PreReaderJSON _jsonReader;
+	/** Reporter used for error messages. */
+	private ReportWriter _reporter;
 
 	/** Creates a new instance of XDefCompiler
 	 * @param reporter The reporter.
@@ -96,8 +103,6 @@ public class XPreCompiler implements PreCompiler {
 		final byte displayMode,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
-		_xmlReader = new PreReaderXML(reporter, this);
-		_jsonReader = new PreReaderJSON(reporter, this);
 		_displayMode = displayMode;
 		 //"xml"
 		PREDEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
@@ -113,6 +118,51 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add(//schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
 		_macrosProcessed = false;
+		_reporter = reporter == null ? new ArrayReporter() : reporter;
+		_xmlReader = new PreReaderXML(this);
+		_jsonReader = new PreReaderJSON(this);
+	}
+
+	@Override
+	/** Get namespace URI on given position.
+	 * @param i position
+	 * @return uri on this position or null.
+	 */
+	public String getNSURI(final int i) {
+		return _codeGenerator._namespaceURIs.get(i);
+	}
+
+	@Override
+	/** Get namespace URI on given position.
+	 * @param i position
+	 * @return uri on this position or null.
+	 */
+	public int getNSURIIndex(final String uri) {
+		return _codeGenerator._namespaceURIs.indexOf(uri);
+	}
+
+	@Override
+	/** Set URI. If the URI already exists just return the index
+	 * @param uri URI to be set.
+	 * @return index of uri.
+	 */
+	public int setNSURI(final String uri) {
+		int i = _codeGenerator._namespaceURIs.indexOf(uri);
+		if (i >= 0) {
+			return i;
+		}
+		_codeGenerator._namespaceURIs.add(uri);
+		return _codeGenerator._namespaceURIs.size() - 1;
+	}
+
+	@Override
+	/** Set URI on given index.
+	 * @param i index where to set.
+	 * @param uri URI to set.
+	 * @return original URI or null.
+	 */
+	public String setURIOnIndex(final int i, final String uri) {
+		return _codeGenerator._namespaceURIs.set(i, uri);
 	}
 
 	@Override
@@ -207,36 +257,72 @@ public class XPreCompiler implements PreCompiler {
 	@Override
 	/** Parse string and addAttr it to the set of definitions.
 	 * @param source The source string with definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseString(final String source) {
-		_xmlReader.parseString(source);
+		parseString(source, null);
 	}
 
 	@Override
 	/** Parse string and addAttr it to the set of X-definitions.
 	 * @param source source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseString(final String source, final String srcName) {
-		_xmlReader.parseString(source, srcName);
+		File f = new File(source);
+		if (source.length() > 0 && !f.exists()
+			&& (source.charAt(0) == '[' || source.charAt(0) == '{')) {
+			ByteArrayInputStream baos = new ByteArrayInputStream(
+				source.getBytes(Charset.forName("UTF-8")));
+			_jsonReader.parseStream(baos, srcName);
+		} else if (source.length() > 0 && !f.exists()
+			&& source.charAt(0) == '<') {
+			ByteArrayInputStream baos = new ByteArrayInputStream(
+				source.getBytes(Charset.forName("UTF-8")));
+			_xmlReader.parseStream(baos, srcName);
+		} else {
+			parseFile(f);
+		}
 	}
 
 	@Override
 	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param fileName pathname of file with with X-definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final String fileName) {
-		_xmlReader.parseFile(fileName);
+		parseFile(new File(fileName));
 	}
 
 	@Override
 	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param file The file with with X-definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final File file) {
-		_xmlReader.parseFile(file);
+		try {
+			URL url = file.toURI().toURL();
+			for (Object o: getSources()) {
+				if (o instanceof URL && url.equals(o)) {
+					return; //found in list
+				}
+			}
+			getSources().add(url);
+			InputStream in = new FileInputStream(file);
+			parseStream(in, url.toExternalForm());
+			in.close();
+		} catch (Exception ex) {
+			if (ex instanceof RuntimeException) {
+				throw (RuntimeException) ex;
+			}
+			if (ex instanceof SThrowable) {
+				throw new SRuntimeException(((SThrowable) ex).getReport());
+			}
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
 	}
 
 	@Override
@@ -245,18 +331,50 @@ public class XPreCompiler implements PreCompiler {
 	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or
 	 * <tt>null</tt>.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
-		_xmlReader.parseStream(in, srcName);
+		try {
+			XInputStream myInputStream = new XInputStream(in);
+			byte[] buf = myInputStream.getparsedBytes();
+			for (byte x: buf) {
+				if (x != 0) {
+					if ('[' == (char) x || '{' == (char) x) {
+						_jsonReader.parseStream(myInputStream, srcName);
+					} else {
+						_xmlReader.parseStream(myInputStream, srcName);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			if (ex instanceof RuntimeException) {
+				throw (RuntimeException) ex;
+			}
+			if (ex instanceof SThrowable) {
+				throw new SRuntimeException(((SThrowable) ex).getReport());
+			}
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
 	}
 
 	@Override
 	/** Parse data with source X-definition given by URL and addAttr it
 	 * to the set of X-definitions.
 	 * @param url URL of the file with the X-definition.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseURL(final URL url) {
-		_xmlReader.parseURL(url);
+		try {
+			parseStream(url.openStream(), url.toExternalForm());
+		} catch (Exception ex) {
+			if (ex instanceof RuntimeException) {
+				throw (RuntimeException) ex;
+			}
+			if (ex instanceof SThrowable) {
+				throw new SRuntimeException(((SThrowable) ex).getReport());
+			}
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
 	}
 
 	/** Process include list from header of X-definition. */
@@ -525,17 +643,13 @@ public class XPreCompiler implements PreCompiler {
 	/** Get report writer.
 	 * @return the report writer.
 	 */
-	public final ReportWriter getReportWriter() {
-		return _xmlReader.getReportWriter();
-	}
+	public final ReportWriter getReportWriter() {return _reporter;}
 
 	@Override
 	/** Set report writer.
 	 * @param x the report writer to be set.
 	 */
-	public final void setReportWriter(final ReportWriter x) {
-		_xmlReader.setReportWriter(x);
-	}
+	public final void setReportWriter(final ReportWriter x) {_reporter = x;}
 
 	/** Get display mode.
 	 * @return display mode (see XDPool.DISPLAY_FALSE,

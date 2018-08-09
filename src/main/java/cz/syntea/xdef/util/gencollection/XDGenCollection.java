@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -191,7 +192,7 @@ public class XDGenCollection {
 				InputSource is;
 				if (_pathname.charAt(0) == '<') {
 					is = new InputSource(new ByteArrayInputStream(
-						_pathname.getBytes("UTF-8")));
+						_pathname.getBytes(Charset.forName("UTF-8"))));
 					is.setSystemId("STRING");
 				} else {
 					is = new InputSource(_pathname);

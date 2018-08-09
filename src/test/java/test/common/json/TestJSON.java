@@ -16,8 +16,6 @@ package test.common.json;
 
 import cz.syntea.xdef.sys.JSONUtil;
 import cz.syntea.xdef.sys.STester;
-import cz.syntea.xdef.sys.SException;
-import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
 import org.w3c.dom.Element;
@@ -408,6 +406,9 @@ public class TestJSON extends STester {
 		assertTrue(check("{\"a\":{\"z\":null,\"y\":true,\"x\":1}}"));
 		assertTrue(check("<a x='1'/>"));
 ////////////////////////////////////////////////////////////////////////////////
+//		System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(
+//			"test/test/common/json/personnel1_o.xml"), true));
+// http://convertjson.com/json-to-xml.htm
 	}
 
 	/** Run test

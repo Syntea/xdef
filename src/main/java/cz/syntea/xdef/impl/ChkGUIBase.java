@@ -98,6 +98,8 @@ class ChkGUIBase {
 	SourcePos[] _positions;
 	/** XDPool object.*/
 	XPool _xdpool;
+	/** Object used for wait/notify.*/
+	final Object _waitobj = new Object();
 
 	/** Create empty instance of GUI. */
 	ChkGUIBase() {}
@@ -144,34 +146,33 @@ class ChkGUIBase {
 		_sourcePositionInfo = new JLabel();	// position information
 		_infoArea = new JTextArea(); //errors or trace information
 		_frame.setVisible(false);
+/**/
 		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 			@Override
 			public void componentResized(java.awt.event.ComponentEvent evt) {
 				_frame.setSize(_width, _height);
-/**
-				int height = evt.getComponent().getHeight();
-				int width = evt.getComponent().getWidth();
-				if (width < 300 || height < 200) {
-					if (width < 300) {
-						width = 300;
-					}
-					if (height < 200) {
-						height = 200;
-					}
-				}
-				_width = width;
-				_height = height;
-/**/
+//				int height = evt.getComponent().getHeight();
+//				int width = evt.getComponent().getWidth();
+//				if (width < 300 || height < 200) {
+//					if (width < 300) {
+//						width = 300;
+//					}
+//					if (height < 200) {
+//						height = 200;
+//					}
+//				}
+//				_width = width;
+//				_height = height;
 			}
 		});
+/**/
 		_infoArea.setFont(FONT_TEXT);
 		_infoArea.setBackground(COLOR_INFO);
 		_infoArea.setForeground(Color.BLUE);
 		_lineNumberArea.setFont(FONT_TEXT);
 		_sourcePositionInfo.setForeground(COLOR_POSITION);
 		_sourcePositionInfo.setFont(FONT_POSITIONINFO);
-//		_sourcePositionInfo.setToolTipText(
-//			"Position of cursor in source window.");
+//		_sourcePositionInfo.setToolTipText("Cursor position in source window.");
 		_sourceArea.setFont(FONT_TEXT);
 		_sourceArea.addCaretListener(new CaretListener() {
 			@Override
@@ -338,13 +339,13 @@ class ChkGUIBase {
 		_sourcePane.repaint();
 	}
 
-	/** Wait for event finished. */
-	synchronized void waitFrame() {
-		try {this.wait();} catch (Exception ex) {}
+	/** Wait event finished. */
+	void waitFrame() {
+		synchronized(_waitobj) {try {_waitobj.wait();} catch (Exception ex) {}}
 	}
 
 	/** Notify event action performed. */
-	synchronized void notifyFrame() {notifyAll();}
+	void notifyFrame() {synchronized(_waitobj) {_waitobj.notifyAll();}}
 
 	/** Find position in the array of positions.
 	 * @param spos line position to be found.

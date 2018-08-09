@@ -617,7 +617,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		if (name != null && name.length() != 0) {
 			addAttr(cTypeDecl, XsdNames.NAME, name);
 		}
-		//resolvin mixed
+		//resolving mixed
 		if (mixed != null && mixed != false) {
 			addAttr(cTypeDecl, XsdNames.MIXED, "true");
 		}

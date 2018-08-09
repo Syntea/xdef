@@ -41,7 +41,7 @@ import org.w3c.dom.Text;
  */
 public class XdefDocument implements Convertor {
 
-	/** Prefix of X-defintion nodes. */
+	/** Prefix of X-definition nodes. */
 	private final String _xdefPrefix;
 	/** Every X-definition as file. */
 	private final boolean _separately;
@@ -543,7 +543,9 @@ public class XdefDocument implements Convertor {
 		String ref = "ref ";
 		//adding xdefiniiton name
 		if (xdefName != null && !"".equals(xdefName)) {
+/*VT*/
 			ref += xdefName + '#';
+/*VT*/
 		}
 		//adding prefix
 		if (namespaceURI != null && !"".equals(namespaceURI)) {

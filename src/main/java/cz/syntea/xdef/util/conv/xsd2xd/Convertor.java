@@ -17,7 +17,6 @@ import java.util.Set;
 import org.w3c.dom.Document;
 
 /** Describes interface for getting and writing generated X-definitions.
- *
  * @author Alexandrov
  */
 public interface Convertor {
@@ -55,4 +54,5 @@ public interface Convertor {
 	 * method.
 	 */
 	Set getXdefDocuments() throws IllegalStateException;
+
 }

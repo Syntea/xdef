@@ -53,14 +53,17 @@ public class Schema_1_0_Processor extends Processor {
 	 */
 	public Schema_1_0_Processor(String xdefPrefix, Reporter reporter,
 		URL rootSchemaURL, boolean separately) {
-		super(rootSchemaURL);
+/*VT*/
+		super(rootSchemaURL, KXmlConstants.XDEF31_NS_URI, xdefPrefix);
+/*VT*/
+		_xdef = new XdefDocument(_schemaElements,
+			xdefPrefix, KXmlConstants.XDEF31_NS_URI, separately);
 		_xdefPrefix = xdefPrefix;
 		_reporter = reporter;
 		_separately = separately;
-		_xdef = new XdefDocument(_schemaElements,
-			xdefPrefix, KXmlConstants.XDEF31_NS_URI, _separately);
 		processSchemaElements(_xdef.getXdefElements());
 	}
+
 	@Override
 	protected void processAll(Element allElement, Element parentXdefElement) {
 		Element element = ProcessMethods.processObjectGroup(allElement,

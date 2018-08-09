@@ -201,7 +201,7 @@ final class ChkParser extends DomBaseHandler {
 			throw new SRuntimeException(SYS.SYS024, "null");
 		}
 		String s = source.trim();
-		if (s.charAt(0) == '<') {
+		if (s.length() > 0 && s.charAt(0) == '<') {
 			try {
 				_sysId = "STRING";
 				_in = new ByteArrayInputStream(source.getBytes("UTF8"));

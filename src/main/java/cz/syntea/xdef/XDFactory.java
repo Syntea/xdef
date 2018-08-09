@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SConstants;
+import java.nio.charset.Charset;
 
 /** Provides generation of {@link cz.syntea.xdef.XDPool} from source
  * X-definitions. You can modify properties of compilation by parameters from
@@ -469,7 +470,8 @@ public final class XDFactory {
 			w.append(
 "\t\t\treturn xdp = XDFactory.readXDPool(new ByteArrayInputStream(\n"+
 "\t\t\t\tSUtils.decodeBase64(\"")
-					.append(new String(SUtils.encodeBase64(data,false), "UTF-8"))
+					.append(new String(SUtils.encodeBase64(data,false),
+						Charset.forName("UTF-8")))
 					.append("\")));\n"+
 "\t\t} catch (Exception ex) {\n"+
 "\t\t\tthrow new RuntimeException(ex);\n"+
@@ -480,7 +482,7 @@ public final class XDFactory {
 "\t\t\tbyte[] b = new byte["+codeLen+"];\n"+
 "\t\t\tSystem.arraycopy(SUtils.decodeBase64(\"")
 				.append(new String(SUtils.encodeBase64(data,
-					0, BLOCKLEN, false), "UTF-8"))
+					0, BLOCKLEN, false), Charset.forName("UTF-8")))
 				.append("\"), 0, b, 0, "+BLOCKLEN+");\n");
 			int offset = BLOCKLEN;
 			for (int i = 1; offset < codeLen; i++, offset += BLOCKLEN) {
@@ -503,8 +505,8 @@ public final class XDFactory {
 "private static String x(){return\"";
 				if (BLOCKLEN + offset < codeLen) {
 					w.append(s)
-						.append(new String(SUtils.encodeBase64(
-							data, offset, BLOCKLEN, false), "UTF-8"))
+						.append(new String(SUtils.encodeBase64(data,
+							offset, BLOCKLEN, false), Charset.forName("UTF-8")))
 						.append("\";}");
 					if (subclassIndex > 0) {
 						w.write('}');
@@ -514,8 +516,9 @@ public final class XDFactory {
 					offset += BLOCKLEN;
 				} else if (offset < codeLen) {
 					w.append(s)
-						.append(new String(SUtils.encodeBase64(
-							data, offset, codeLen-offset, false), "UTF-8"))
+						.append(new String(SUtils.encodeBase64(data,
+							offset, codeLen-offset, false),
+							Charset.forName("UTF-8")))
 						.append("\";}");
 					offset = codeLen;
 					if (subclassIndex > 0) {
