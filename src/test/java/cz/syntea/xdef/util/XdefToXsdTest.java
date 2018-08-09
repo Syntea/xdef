@@ -142,6 +142,13 @@ public class XdefToXsdTest {
 
 	
 	
+	//launch tests standalone
+	public static void main(String... args) throws Exception {
+		XdefToXsdTest.L1XdefToXsdTest();
+	}
+	
+	
+	
 	/** main package of example "L1protocol" */
 	private static final String   exampleL1Pkg   = "L1protocol";
 	/** testing xml-data in example "L1protocol" */
@@ -169,13 +176,6 @@ public class XdefToXsdTest {
 		"ZruseniPU.xdef",
 		"ZruseniSU.xdef"
 	};
-	
-	
-	
-	//launch tests standalone
-	public static void main(String... args) throws Exception {
-		XdefToXsdTest.L1XdefToXsdTest();
-	}
 	
 	
 	
