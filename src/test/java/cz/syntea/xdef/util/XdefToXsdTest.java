@@ -40,9 +40,22 @@ public class XdefToXsdTest {
 		
 		final Assertion a = new Assertion();
 		
+		final File   outDir        = new File("run/output/junit-test/xdef2xsd");
+		final File   xsdGenDir     = new File(outDir,       "xsd-gen");
+		final File   xdefGenDir    = new File(outDir,       "xdef-gen");
+		final File   xdefGenCol    = new File(xdefGenDir,   "L1col.xdef");
+		final File   l1batchXVDir  = new File(outDir,       "L1batchXV");
+		final File   l1batchXVFile = new File(l1batchXVDir, "L1batchXV.xml");
+		final String mainName      = "SouborL1A";
+		final File   xsdMain       = new File(xsdGenDir,    mainName + ".xsd");
+		
+		xsdGenDir   .mkdirs();
+		xdefGenDir  .mkdirs();
+		l1batchXVDir.mkdirs();
+		
 		//load list of source xdef of L1-protokol, must not contain any "forget"
 		//------------------------------------------------------------------
-		List<String>      xdefSrcList = new ArrayList<String>();
+		List<String> xdefSrcList = new ArrayList<String>();
 		for (String xdefRsrc : L1XdefRsrcList) {
 			xdefSrcList.add(IOUtil.copyFile(
 				XdefToXsdTest.class.getResourceAsStream(exampleL1Pkg + "/L1/"
@@ -50,30 +63,31 @@ public class XdefToXsdTest {
 			);
 		}
 		
-		final File   outDir        = new File("run/output/junit-test/xdef2xsd");
-		final File   xsdGenDir     = new File(outDir,       "xsd-gen");
-		final File   xdefGenDir    = new File(outDir,       "xdef-gen");
-		final File   xdefGenCol    = new File(xdefGenDir,   "L1col.xdef");
-		final File   L1batchXVDir  = new File(outDir,       "L1batchXV");
-		final File   L1batchXVFile = new File(L1batchXVDir, "L1batchXV.xml");
-		final String mainName      = "SouborL1A";
-		final File   xsdMain       = new File(xsdGenDir,    mainName + ".xsd");
-		
-		xsdGenDir   .mkdirs();
-		xdefGenDir  .mkdirs();
-		L1batchXVDir.mkdirs();
-		
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
 		XDBuilder xdb = XDFactory.getXDBuilder(null);
 		xdb.setSource(xdefSrcList.toArray(new String[0]));
 		xdb.setExternals(L1A_ChkParser_dummy.class);
-		XDPool	xdp = xdb.compileXD();
+		XDPool    xdp = xdb.compileXD();
 		
 		XDDocument xddoc     = xdp.createXDDocument(mainName);
-		Element    L1batchXV = xddoc.xparse(XdefToXsdTest.class
-		                       .getResourceAsStream(L1batchRsrc), null);
-		KXmlUtils.writeXml(L1batchXVFile, L1batchXV);
+		Element    l1batchXV = xddoc.xparse(
+			XdefToXsdTest.class.getResourceAsStream(L1batchRsrc),
+			null
+		);
+		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
+		
+		//test of l1batch size after xdef-validation
+		//it should holds at least: #l1batch/2 < #l1batchXV
+		//if it fails then l1batchXV was cut accidentally
+		//------------------------------------------------------------
+		boolean l1sizeTest = 
+			IOUtil.copyFile(
+				XdefToXsdTest.class.getResourceAsStream(L1batchRsrc)
+			).length() / 2
+			< IOUtil.copyFile(l1batchXVFile).length()
+		;
+		a.assertEquals(l1sizeTest, true);
 		
 		//generate xml-schema from xdef to directory xsdGenDir
 		//------------------------------------------------------------------
@@ -92,7 +106,7 @@ public class XdefToXsdTest {
 		);
 		Schema        xsdCol   = schFact.newSchema(xsdSrcAr);
 
-		Source    L1batch   = new StreamSource(L1batchXVFile);
+		Source    L1batch   = new StreamSource(l1batchXVFile);
 		Validator validator = xsdCol.newValidator();
 		validator.validate(L1batch);
 		
@@ -129,7 +143,7 @@ public class XdefToXsdTest {
 			//xdef-validation
 			XDDocument    xddoc2   = xdp2.createXDDocument(mainName);
 			ArrayReporter reporter = new ArrayReporter();
-			xddoc2.xparse(L1batchXVFile, reporter);
+			xddoc2.xparse(l1batchXVFile, reporter);
 			
 			if (reporter.errorWarnings()) {
 				String msg =
