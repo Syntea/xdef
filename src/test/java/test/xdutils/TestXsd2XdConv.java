@@ -370,6 +370,8 @@ public class TestXsd2XdConv extends STester {
 		assertTrue(prepare("typeTestSchema"), popMessage());
 		assertTrue(parse("typeTest_valid_1"), popMessage());
 
+//		assertTrue(prepare("typeTestSchema"), popMessage());
+
 		try {
 			FUtils.deleteAll(_tempDir, true);
 		} catch (SException ex) {

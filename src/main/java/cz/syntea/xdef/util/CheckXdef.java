@@ -16,7 +16,6 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDFactory;
 import java.util.ArrayList;
 import java.util.Properties;
