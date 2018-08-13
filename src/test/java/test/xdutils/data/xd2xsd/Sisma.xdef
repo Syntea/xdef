@@ -5,8 +5,8 @@
    impl-date    = "13.02.2014">
 
    <xd:macro name="Options">setAttrUpperCase,ignoreEntities,ignoreTextWhiteSpaces,ignoreAttrWhiteSpaces,trimAttr,trimText</xd:macro>
-   <xd:macro name="DATE">xdatetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd')</xd:macro>
-   <xd:macro name="DATETIME">xdatetime('{ss00}yyyyMMddHHmm|{ss00}dd.MM.yyyy HH:mm','yyyyMMddHHmmss')</xd:macro>
+   <xd:macro name="DATE">datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd')</xd:macro>
+   <xd:macro name="DATETIME">datetime('{ss00}yyyyMMddHHmm|{ss00}dd.MM.yyyy HH:mm','yyyyMMddHHmmss')</xd:macro>
 
    <xd:macro name="PROTOCOL">protocol("SU",from('@CisloSU')+'/'+getKodPartnera())</xd:macro>
    <xd:macro name="SET_STATUS1">Context c = xpath('AnswerId'); Element e = c.getElement(0); e.setAttr('Status', getStatus())</xd:macro>
@@ -109,7 +109,7 @@
       <GPS                     xd:script = "occurs 0..1; ref GPS"/>
       <Adresa                  xd:script = "occurs 0..1; ref Adresa"/>
       <Vozovka                 xd:script = "occurs 0..1; ref Vozovka"/>
-      <xd:text>                optional string(1,512)</xd:text>
+        optional string(1,512)
    </Misto>
 
    <Vozidlo                    xd:script = "finally {
@@ -129,7 +129,7 @@
       ZnackaText               = "optional string(1,30);                                           onFalse setErr(4208)"
       ModelText                = "optional string(1,40);                                           onFalse setErr(4208)"
       KodModeluVozidla         = "optional tab('CC_ModelVozidla','KodModeluVozidla');              onFalse setErr(4225)"
-      RokDoProvozu             = "optional xdatetime('yyyy');                                      onFalse setErr(4208)"
+      RokDoProvozu             = "optional datetime('yyyy');                                      onFalse setErr(4208)"
       BarvaText                = "optional string(1,20);                                           onFalse setErr(4208)"
    />
 

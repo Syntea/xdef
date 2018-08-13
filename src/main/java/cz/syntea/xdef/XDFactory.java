@@ -141,6 +141,52 @@ public final class XDFactory {
 		}
 	}
 
+	/** Compile XDPool from sources.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of strings with X-definition file names.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final String[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (String s : params) {
+			setParam(builder, s);
+		}
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from source.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of URLs with X-definition sources.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final URL[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (URL u : params) {
+			setParam(builder, u);
+		}
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from sources.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of files with X-definition sources.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final File[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (File f : params) {
+			setParam(builder, f);
+		}
+		return builder.compileXD();
+	}
+
+
 	/** Compile XDPool from source.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of sources, source pairs or external classes.
@@ -148,7 +194,8 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final Object... params) 	throws SRuntimeException {
+		final Object... params)
+		throws SRuntimeException {
 		if (params == null || params.length == 0) {
 			throw new SRuntimeException(XDEF.XDEF903);
 		}

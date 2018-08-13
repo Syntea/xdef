@@ -55,6 +55,7 @@ public class TestXd2XsdConv extends STester {
 	private XDDocument _chkDoc;
 	private boolean _prepared = false;
 	private ErrMessage _errMessage;
+	private Properties _props = new Properties();
 
 	private void init() {
 //        _conv = new XdefToXsd();
@@ -118,9 +119,7 @@ public class TestXd2XsdConv extends STester {
 			return false;
 		}
 		try {
-			Properties props = new Properties();
-			props.put("xdef.warnings", "true");
-			XDPool xdPool = XDFactory.compileXD(props, _xdefFile);
+			XDPool xdPool = XDFactory.compileXD(_props, _xdefFile);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			xdPool.writeXDPool(out);
 			xdPool = XDFactory.readXDPool(
@@ -314,12 +313,8 @@ public class TestXd2XsdConv extends STester {
 	@Override
 	public void test() {
 		init();
-
-//// Two global components with the same name;
-//// http://example.com/FirmHierarchy,Position
-//		assertTrue(prepare("multiXdefTest"), popMessage());
-//		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
-//if(true)return;
+		
+		_props.put("xdef.warnings", "true");
 
 		assertTrue(prepare("basicTest"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
@@ -408,9 +403,11 @@ public class TestXd2XsdConv extends STester {
 		assertTrue(parse("B1_Common_valid_1"), popMessage());
 		assertTrue(parse("B1_Common_valid_2"), popMessage());
 
+		_props.put("xdef.warnings", "false"); // do not check deprecated 
 		assertTrue(prepare("Sisma"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
 
+		_props.put("xdef.warnings", "true");//check full validity of 3.1 version
 		assertTrue(prepare("Sisma3_1"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
 
@@ -422,61 +419,35 @@ public class TestXd2XsdConv extends STester {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Methods for the test Sisma
+// External methods for the test Sisma
 ////////////////////////////////////////////////////////////////////////////////
 	public static void initParams(XXElement chkElem) {}
-
 	public static void setErr(XXElement chkElem, XDValue[] params) {}
-
 	public static boolean tab(XXElement chkEl, XDValue[] params) {return true;}
-
 	public static void chkOpt_RC_ifEQ(XXElement chkElem, XDValue[] params) {}
-
 	public static void dateDavka(XXElement chkElem, XDValue[] params) {}
-
 	public static void chk_dec_nonNegative(XXElement chkEl, XDValue[] params) {}
-
 	public static void chk_RC_DatNar_ifEQ(XXElement chkEl, XDValue[] params) {}
-
 	public static void setDefault_ifEx(XXElement chkElem, XDValue[] params) {}
-
 	public static void emptySubjHasAddr(XXElement chkElem, XDValue[] params) {}
-
 	public static String getIdOsoba(XXElement chkElem) { return "1"; }
-
 	public static void protocol(XXElement chkElem, String role, long idXxx) {}
-
 	public static void protocol(XXElement chkElem, String role, String ident) {}
-
 	public static void outputIVR(XXElement chkElem, XDValue[] params) {}
-
 	public static String getKodPartnera() { return "1"; }
-
 	public static void chkEQ_PojistitelFuze(XXElement chkEl, XDValue[] params){}
-
 	public static void chk_Poj_NeexElement(XXElement chkEl, XDValue[] params) {}
-
 	public static void chkOpt_IC_ifEQ(XXElement chkElem, XDValue[] params) {}
-
 	public static void hasElement_if(XXElement chkElem, XDValue[] params) {}
-
 	public static void subjekt_OsobaOrFirma(XXElement chkEl, XDValue[] params){}
-
 	public static String getIdSubjekt(XXElement chkElem) { return "1"; }
-
 	public static void notEmptyMisto(XXElement chkElem, XDValue[] params) {}
-
 	public static void equal(XXElement chkElem, XDValue[] params) {}
-
 	public static void chkOpt_CisloTP_ifEQ(XXElement chkEl, XDValue[] params) {}
-
 	public static String getIdVozidlo(XXElement chkElem) { return "1"; }
-
 	public static boolean kvadrant(XXElement chkElem) { return true; }
-
 	public static void chk_TypMinusPlneni_Platba(XXElement chkEl,
 		XDValue[] params) {}
-
 	public static boolean fil0(XXElement chkEl, XDValue[] params) {return true;}
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -46,8 +46,9 @@ import org.w3c.dom.Element;
  */
 class PreReaderJSON implements PreReader {
 
-	/** includes. */
-	private Element _includeElement;
+//	/** includes. */
+//	private Element _includeElement;
+
 	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
 
@@ -100,7 +101,7 @@ class PreReaderJSON implements PreReader {
 			URL url = file.toURI().toURL();
 			for (Object o: _pcomp.getSources()) {
 				if (o instanceof URL && url.equals(o)) {
-					return; //found in list
+					return; // nothing parse, found in the list of sources
 				}
 			}
 			_pcomp.getSources().add(url);
@@ -122,25 +123,13 @@ class PreReaderJSON implements PreReader {
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
-		if (_pcomp.getSources().contains(in)) {
-			return;
-		}
-		_pcomp.getSources().add(in);
-		try {
-			doParse(in, srcName);
-		} catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
-		} catch (Exception ex) {
-			if (_pcomp.getDispalyMode() > XDPool.DISPLAY_FALSE) {
-				if (!(ex instanceof SThrowable)) {
-					_pcomp.error(SYS.SYS066, //Internal error&{0}{: }
-						"when parsing document\n" + ex);
-				}
-			} else {
-				if (ex instanceof SThrowable &&
-					"SYS012".equals(((SThrowable) ex).getMsgID())) {
-					throw (SRuntimeException) ex; //Errors detected&{0}{: }
+		if (!_pcomp.getSources().contains(in)) {
+			_pcomp.getSources().add(in);
+			try {
+				doParse(in, srcName);
+			} catch (Exception ex) {
+				if (ex instanceof SThrowable) {
+					throw new SRuntimeException(((SThrowable) ex).getReport());
 				} else {
 					//Internal error: &{0}
 					throw new SRuntimeException(SYS.SYS066,
@@ -588,7 +577,7 @@ class PreReaderJSON implements PreReader {
 		return null;
 	}
 
-	private JObject getJAttr(final JMap map,
+	private JString getJAttr(final JMap map,
 		final String name,
 		final boolean remove) {
 		JString jname = new JString(new SBuffer(name));
@@ -601,7 +590,35 @@ class PreReaderJSON implements PreReader {
 				throw new RuntimeException("String expected");
 			}
 		}
-		return o;
+		return (JString) o;
+	}
+
+	private JString getXDAttrWithOrWithotPrefix(final JMap map,
+		final String prefix,
+		final String name,
+		final boolean remove) {
+		JString jname = new JString(new SBuffer(name));
+		JObject o = map.get(jname);
+		if (o != null) {
+			if (remove) {
+				map.remove(jname);
+			}
+			if (o.getType() != 'S') {
+				throw new RuntimeException("String expected");
+			}
+		} else {
+			jname = new JString(new SBuffer(prefix + ':' + name));
+			o = map.get(jname);
+			if (o != null) {
+				if (remove) {
+					map.remove(jname);
+				}
+				if (o.getType() != 'S') {
+					throw new RuntimeException("String expected");
+				}
+			}
+		}
+		return (JString) o;
 	}
 
 	private PAttr setPAttr(final PNode pnode,
@@ -610,9 +627,9 @@ class PreReaderJSON implements PreReader {
 		final boolean alsoNoPrefixed,
 		final boolean remove) {
 		int ndx = name.indexOf(':');
-		JObject o = getJAttr(map, name, remove);
+		JString o = getJAttr(map, name, remove);
 		if (o != null) {
-			SBuffer sbf = ((JString) o).getValue();
+			SBuffer sbf = o.getValue();
 			PAttr pattr = new PAttr(name, sbf, null, 0);
 			if (ndx > 0) {
 				pattr._localName = name.substring(ndx + 1);
@@ -645,6 +662,13 @@ class PreReaderJSON implements PreReader {
 		return pn;
 	}
 
+	/** Generate declaration node to X-definition.
+	 * @param list value of declaration.
+	 * @param name
+	 * @param decl
+	 * @param parent
+	 * @param level
+	 */
 	private void genXDDeclaration(final JList list,
 		final String name,
 		final JMap decl,
@@ -666,20 +690,54 @@ class PreReaderJSON implements PreReader {
 		} else {
 			pn._value = ((JString) jo).getValue();
 		}
+		jo = decl.get(new JString(new SBuffer(name)));
+		if (jo.getType() == 'M') {
+			copyAttrs(pn, (JMap) jo);
+		}
+		pn._xdef = parent._xdef;
 		parent._childNodes.add(pn);
+		_pcomp.getPDeclarations().add(pn);
 	}
 
+	/** Generate a X-definition group.
+	 * @param list list of child nodes.
+	 * @param name name of group.
+	 * @param decl Map with attributes.
+	 * @param parent the node where will be generated the item as a child node.
+	 * @param level nesting level.
+	 */
 	private void genXDGroup(final JList list,
+		final String xdPrefix,
 		final String name,
 		final JMap decl,
 		final PNode parent,
 		final int level) {
 		int ndx = name.indexOf(':');
-		String xdPrefix = name.substring(0, ndx);
 		PNode pn = createXdefPNode(parent,
 			xdPrefix, name.substring(ndx + 1),list.getPosition());
-
+		JObject jo = decl.get(new JString(new SBuffer(name)));
+		if (jo.getType() == 'M') {
+			copyAttrs(pn, (JMap) jo);
+		}
+		for (int i = 1; i < list.size(); i++) {
+			jo = list.get(i);
+			if (jo.getType() == 'A') {
+				JList jl = (JList) jo;
+				jo = jl.get(0);
+				if (jo.getType() == 'M') {
+					genChild(jl, xdPrefix, pn, level + 1);
+				}
+			}
+		}
 	}
+
+	/** Generate XDef item to parent node.
+	 * @param list of child nodes.
+	 * @param xdPrefix prefix of X-definition
+	 * @param decl map of parameters.
+	 * @param parent the node where will be generated the item as a child node.
+	 * @param level nesting level.
+	 */
 	private void genItem(JList list,
 		String xdPrefix,
 		JMap decl,
@@ -723,7 +781,7 @@ class PreReaderJSON implements PreReader {
 				}
 				if (name.endsWith(":mixed") || name.endsWith(":choice")
 					|| name.endsWith(":sequence") || name.endsWith(":list")) {
-					genXDGroup(list, name, decl, parent, level);
+					genXDGroup(list, xdPrefix, name, decl, parent, level);
 				}
 			} else if (!name.startsWith(xdPrefix + ':')) {
 				genModel(list, x, decl, parent, level);
@@ -731,14 +789,18 @@ class PreReaderJSON implements PreReader {
 		}
 	}
 
-	private void addNode(PNode parent,
+	/** Add PNode child.
+	 * @param pnode to this node add child.
+	 * @param child node to be added.
+	 */
+	private void addNode(PNode pnode,
 		PNode child) {
 		String name = child._name.getString();
 		int ndx = name.indexOf(':');
 		child._localName = ndx > 0 ? name.substring(ndx + 1) : name;
-		child._xdVersion = parent._xdVersion;
-		child._xmlVersion = parent._xmlVersion;
-		parent._childNodes.add(child);
+		child._xdVersion = pnode._xdVersion;
+		child._xmlVersion = pnode._xmlVersion;
+		pnode._childNodes.add(child);
 	}
 
 	private void genModel(final JList list,
@@ -782,7 +844,7 @@ class PreReaderJSON implements PreReader {
 
 	private void copyAttrs(PNode pNode, JMap pars) {
 		PAttr patt;
-		JObject jo;
+		JString jo;
 		// set xmlns attributes
 		if ((jo = getJAttr(pars, "xmlns", false)) != null
 			&& jo.getType() == 'S') {
@@ -811,8 +873,7 @@ class PreReaderJSON implements PreReader {
 			pNode._nsPrefixes.put(ns, ndx);
 		}
 		// set other attributes
-		JString[] attNames = new JString[pars.size()];
-		pars.keySet().toArray(attNames);
+		JString[] attNames = pars.keySet().toArray(new JString[0]);
 		for (JString x: attNames) {
 			setPAttr(pNode, pars, x._val.getString(), false, true);
 		}
@@ -852,13 +913,12 @@ class PreReaderJSON implements PreReader {
 					jl.getPosition(), null, (byte) 31, (byte) 10);
 				pNode._localName = "def";
 				JMap pars;
-				if (jo.getType() == 'M') {
+				if (jo.getType() == 'M') { // map
 					pars = (JMap) jo;
-					jo = getJAttr(pars, "xmlns:" + prefix, false);
-					if (jo == null || jo.getType() != 'S'
-						|| !KXmlConstants.XDEF31_NS_URI.equals(
-							(js = (JString) jo).getString())) {
-						throw new RuntimeException("Incorrect namespace: " + js);
+					js = getJAttr(pars, "xmlns:" + prefix, false);
+					if (js == null
+						|| !KXmlConstants.XDEF31_NS_URI.equals(js.getString())){
+						throw new RuntimeException("Incorrect namespace: "+js);
 					}
 					//remove this attribute from pars
 					pars.remove(new JString(new SBuffer("xmlns:" + prefix)));
@@ -890,45 +950,23 @@ class PreReaderJSON implements PreReader {
 					for (int i = 1; i < jl.size(); i++) {
 						JObject jx = jl.get(i);
 						if (jx.getType() == 'L') {
-							genChild((JList) jx, prefix, pNode, 0);
+							genChild((JList) jx, prefix, pNode, 1);
 						} else if (jx.getType() == 'M') {
-
+//							genChild((JList) jx, prefix, pNode, 0);
 						} else {
 							throw new RuntimeException("Model expected");
 						}
 					}
 				}
-			} else if (jparsed.getType() == 'A') {
-
 			} else {
 				throw new RuntimeException("Not correct JDefinition");
 			}
 			for (PNode p: _pcomp.getPXDefs()) {
 				if (defName.equals(p._xdef.getName())) {
-					if (defName.length() == 0) {
-						//Only one X-definition in the compiled XDPool
-						// may be without name
-//						error(_actPNode._name, XDEF.XDEF212);
-					} else {
-						//X-definition '&{0}' already exists
-//						error(_actPNode._name, XDEF.XDEF303, defName);
-					}
 					defName = null;
-//					String s = null;
-//					for (int count = 1; s == null; count++) {
-//						s = defName + "_DUPLICATED_NAME_" + count;
-//						for (PNode q: _xdefPNodes) {
-//							if (s.equals(q. _xdef.getName())) {
-//								s = null;
-//								break;
-//							}
-//						}
-//					}
-//					defName = s;
 				}
 			}
 			if (defName != null && pNode != null) {
-//				_xdefNames.add(defName);
 				_pcomp.getPXDefs().add(pNode);
 			}
 		} catch (SRuntimeException ex) {
@@ -936,43 +974,5 @@ class PreReaderJSON implements PreReader {
 		}
 		parser.closeReader();
 	}
-//
-//	private static void displayPNode(final PNode p, final String indent) {
-//		System.out.print(indent + "<" + p.getName().getString());
-//		boolean notfirst = false;
-//		for (PAttr a: p.getAttrs()) {
-//			if (notfirst) {
-//				System.out.println(indent + "   ");
-//			} else {
-//				System.out.print(" ");
-//				notfirst = true;
-//			}
-//			System.out.print(a._name + "=" + a._value.getString().trim());
-//		}
-//		System.out.println(">");
-//		if (p.getValue() != null && !p.getValue().getString().trim().isEmpty()){
-//			System.out.println(indent + "   PNode value="
-//				+ p.getValue().getString().trim());
-//		}
-//		for (PNode x: p.getChildNodes()) {
-//			displayPNode(x, indent + "   ");
-//		}
-//		System.out.println(indent + "</" + p.getName().getString() + ">");
-//	}
-//
-//	public static void main(String ... a) {
-//		ArrayReporter reporter = new ArrayReporter();
-//		PreReaderJSON p = new PreReaderJSON(reporter, null);
-//		String source =
-//"[{\"xd:def\":\"test\", \"root\":\"A\", \"script\":\"options xxx\", \"implVersion\":\"1.2.3\"}\n"+
-//" [\n" +
-//"   {\"xd:declaration\": \"var = 1;\", \"scope\": \"local\"}\n" +
-//"   [{\"A\": null}]\n" +
-//" ]\n" +
-//"]";
-//		p.doParse(new ByteArrayInputStream(source.getBytes(
-//			Charset.forName("UTF-8"))), "String");
-//
-//	}
 
 }
