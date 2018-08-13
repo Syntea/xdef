@@ -116,7 +116,7 @@ public class XdefToXsdTest {
 		
 		//FIXME: following test fails - there is a bug in the tool 
 		//       XsdToXdef.genCollection()
-		boolean run = false;
+		boolean run = true;
 		if (run) {
 			//feedback generation of xdef from the genrated xml-schema
 			//to directory xdefGenDir

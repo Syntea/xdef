@@ -384,7 +384,7 @@ public class TestXsd2XdConv extends STester {
 		assertTrue(prepare("typeTestSchema"), popMessage());
 		assertTrue(parse("typeTest_valid_1"), popMessage());
 
-		// test Sisma
+		// test Sisma (mixed="true, recursive reference")
 		assertTrue(prepare("Sisma_RegistraceSU"), popMessage());
 		assertTrue(parse("Sisma_RegistaceSU"), popMessage());
 
