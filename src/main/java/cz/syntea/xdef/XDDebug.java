@@ -20,8 +20,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
-/** Interface fro debug mode.
- *
+/** Interface for debug mode.
  * @author Vaclav Trojan
  */
 public interface XDDebug {

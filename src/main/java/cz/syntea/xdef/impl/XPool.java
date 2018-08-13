@@ -127,12 +127,12 @@ public final class XPool implements XDPool {
 	Thesaurus _thesaurus = null;
 	/** Table of definitions.*/
 	final Map<String, XDefinition> _xdefs;
-	/** Table of source objects.*/
-	final Map<String, XSourceItem> _sourcesMap;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
 	CompileXDPool _compiler;
+	/** Table of source objects.*/
+	final Map<String, XDSourceItem> _sourcesMap;
 
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
@@ -162,7 +162,7 @@ public final class XPool implements XDPool {
 		_specialDates = specialDates;
 		_props = null;
 		_xdefs = new TreeMap<String, XDefinition>();
-		_sourcesMap = new TreeMap<String, XSourceItem>();
+		_sourcesMap = new TreeMap<String, XDSourceItem>();
 		_extClasses = extClasses;
 	}
 
@@ -179,7 +179,7 @@ public final class XPool implements XDPool {
 		_extClasses = extClasses;
 		_reporter = reporter;
 		_xdefs = new TreeMap<String, XDefinition>();
-		_sourcesMap = new TreeMap<String, XSourceItem>();
+		_sourcesMap = new TreeMap<String, XDSourceItem>();
 		_props = props != null ? props : SManager.getProperties();
 		// Set values of properties
 		//debug mode
@@ -369,7 +369,7 @@ public final class XPool implements XDPool {
 				if (s == null || (s = sourceId.trim()).length() == 0) {
 					s = "String_"+ (++_stringItem);
 				}
-				_sourcesMap.put(s, new XSourceItem(source));
+				_sourcesMap.put(s, new XDSourceItem(source));
 				_compiler.parseString(source, s);
 			} else if (source.startsWith("//") ||
 				(source.indexOf(":/") > 2 && source.indexOf(":/") < 7)) {
@@ -377,7 +377,7 @@ public final class XPool implements XDPool {
 			} else {
 				File[] files = SUtils.getFileGroup(source);
 				if (files == null || files.length == 0) {
-					_sourcesMap.put(source, new XSourceItem(source));
+					_sourcesMap.put(source, new XDSourceItem(source));
 					//X-definition source is missing or null&{0}{: }
 					_compiler.getReportWriter().error(XDEF.XDEF903, source);
 					return;
@@ -386,7 +386,7 @@ public final class XPool implements XDPool {
 			}
 		} catch (Exception ex) {
 			try {
-				_sourcesMap.put(s, new XSourceItem(source.trim()));
+				_sourcesMap.put(s, new XDSourceItem(source.trim()));
 			} catch (Exception e) {
 				ex = e;
 			}
@@ -436,7 +436,7 @@ public final class XPool implements XDPool {
 		}
 		try {
 			_sourcesMap.put(source.toURI().toASCIIString(),
-				new XSourceItem(source));
+				new XDSourceItem(source));
 			_compiler.parseFile(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
@@ -475,7 +475,7 @@ public final class XPool implements XDPool {
 			return;
 		}
 		try {
-			_sourcesMap.put(source.toExternalForm(), new XSourceItem(source));
+			_sourcesMap.put(source.toExternalForm(), new XDSourceItem(source));
 			_compiler.parseURL(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
@@ -520,7 +520,7 @@ public final class XPool implements XDPool {
 			return;
 		}
 		try {
-			XSourceItem xsi = new XSourceItem(source);
+			XDSourceItem xsi = new XDSourceItem(source);
 			_sourcesMap.put(s, xsi);
 			if (xsi._source != null && xsi._source.length() > 0) {
 				_compiler.parseString(xsi._source, s);
@@ -658,7 +658,7 @@ public final class XPool implements XDPool {
 			_sourcesMap.clear();
 		} else {
 			for (String key: _sourcesMap.keySet()) {
-				XSourceItem xsi = _sourcesMap.get(key);
+				XDSourceItem xsi = _sourcesMap.get(key);
 				xsi._active = false;
 				xsi._pos = 0;
 				if (xsi._source != null) {
@@ -957,7 +957,7 @@ public final class XPool implements XDPool {
 		len = xr.readInt();
 		for (int i = 0; i < len; i++) {
 			String key = xr.readString();
-			xp._sourcesMap.put(key, XSourceItem.readXSourceItem(xr));
+			xp._sourcesMap.put(key, XDSourceItem.readXDSourceItem(xr));
 		}
 		if ("DebugInfo".equals(xr.readString())) {
 			xp._debugInfo = XDebugInfo.readXDebugInfo(xr);
@@ -1326,6 +1326,12 @@ public final class XPool implements XDPool {
 	public SDatetime[] getSpecialDates() {return _specialDates;}
 
 	@Override
+	/** Get map of source items of compiled X-definitions.
+	 * @return map of source items of compiled X-definitions.
+	 */
+	public Map<String, XDSourceItem> getXDSourcesMap() {return _sourcesMap;}
+
+	@Override
 	/** Write this XDPool to output stream.
 	 * @param f where to write.
 	 * @throws IOException if an error occurs.
@@ -1451,9 +1457,9 @@ public final class XPool implements XDPool {
 		} else {
 			len = _sourcesMap.size();
 			xw.writeInt(len);
-			for (Map.Entry<String, XSourceItem> entry: _sourcesMap.entrySet()) {
+			for (Map.Entry<String, XDSourceItem> entry: _sourcesMap.entrySet()){
 				xw.writeString(entry.getKey());
-				entry.getValue().writeXSourceItem(xw);
+				entry.getValue().writeXDSourceItem(xw);
 			}
 		}
 		if (_debugInfo == null) {
@@ -1466,4 +1472,5 @@ public final class XPool implements XDPool {
 		gout.finish();
 		gout.close();
 	}
+
 }

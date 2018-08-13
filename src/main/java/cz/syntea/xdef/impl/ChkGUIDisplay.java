@@ -12,6 +12,7 @@
  */
 package cz.syntea.xdef.impl;
 
+import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SUtils;
@@ -37,7 +38,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 /** Provides GUI for editing of sources of X-definitions. */
-class ChkGUIDisplay extends ChkGUIBase {
+class ChkGUIDisplay extends ChkGUIBase implements XDGUI {
 	/** Limit of undo events in text area. */
 	private static final int UNDO_LIMIT = 256;
 	/** UNDO manager of source window. */
@@ -68,13 +69,15 @@ class ChkGUIDisplay extends ChkGUIBase {
 		});
 	}
 
+	@Override
 	/** Open the GUI.
 	 * @param xp XDPool.
 	 * @param err error reporter.
 	 * @return if true the GUI was finished else recompile is supposed.
 	 */
-	final boolean setGUI(final XPool xp, final ArrayReporter err) {
+	public final boolean setGUI(final XDPool xp, final ArrayReporter err) {
 		_xdpool = xp;
+		_sources = xp.getXDSourcesMap();
 		if (_sourceItem == null) { // first
 			initSourceMap();
 			initSourceWindow();
@@ -113,12 +116,12 @@ class ChkGUIDisplay extends ChkGUIBase {
 		if (_sourceID == null) {
 			String key = null;
 			if (_sourceID != null
-				&& _xdpool._sourcesMap.containsKey(_sourceID)) {
+				&& _sources.containsKey(_sourceID)) {
 				key = _sourceID;
 				_sourceID = null;
 			} else {
-				for (String x: _xdpool._sourcesMap.keySet()) {
-					if (_xdpool._sourcesMap.get(x)._active) {
+				for (String x: _sources.keySet()) {
+					if (_sources.get(x)._active) {
 						key = x;
 						break;
 					}
@@ -136,7 +139,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 			if (key != null) {
 				setSource(key);
 			} else  {
-				setSource(_xdpool._sourcesMap.keySet().iterator().next());
+				setSource(_sources.keySet().iterator().next());
 			}
 			_sourceArea.setCaretPosition(
 				_sourceItem._pos >= 0 ? _sourceItem._pos : 0);
@@ -374,7 +377,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 				if (retval == JFileChooser.APPROVE_OPTION) {
 					File f = jf.getSelectedFile();
 					if (f != null && f.exists()) {
-						for (XSourceItem src: _xdpool._sourcesMap.values()) {
+						for (XDSourceItem src: _sources.values()) {
 							try {
 							if (src._url != null
 								&& src._url.equals(f.toURI().toURL())) {
@@ -385,9 +388,9 @@ class ChkGUIDisplay extends ChkGUIBase {
 							} catch (Exception ex) {}
 						}
 						try {
-							XSourceItem src = new XSourceItem(f);
+							XDSourceItem src = new XDSourceItem(f);
 							String key = f.getAbsolutePath();
-							_xdpool._sourcesMap.put(key, src);
+							_sources.put(key, src);
 							initSourceItem(key, src);
 							if (_sourceItem != null) {
 								_sourceItem._pos =
@@ -464,7 +467,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 
 	/** Prepare menu items connected with more sources. */
 	private void prepareSourceMenuItems() {
-		if (_xdpool._sourcesMap != null && _xdpool._sourcesMap.size() > 1) {
+		if (_sources != null && _sources.size() > 1) {
 			// Select source item
 			_selectSource.setMnemonic((int) 'S');
 			ActionListener alistener = new ActionListener() {
@@ -474,7 +477,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 					setSource(jc.getText());
 				}
 			};
-			for (String key: _xdpool._sourcesMap.keySet()) {
+			for (String key: _sources.keySet()) {
 				JMenuItem ji = new JMenuItem(key);
 				ji.addActionListener(alistener);
 				_selectSource.add(ji);
@@ -485,7 +488,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JMenuItem jc = (JMenuItem) e.getSource();
-					XSourceItem item = _xdpool._sourcesMap.remove(jc.getText());
+					XDSourceItem item = _sources.remove(jc.getText());
 					updateSourceItem();
 					prepareSourceMenuItems();
 					if (item == _sourceItem) {
@@ -497,7 +500,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 					notifyFrame();
 				}
 			};
-			for (String key: _xdpool._sourcesMap.keySet()) {
+			for (String key: _sources.keySet()) {
 				JMenuItem ji = new JMenuItem(key);
 				ji.addActionListener(alistener);
 				_removeSource.add(ji);
@@ -544,7 +547,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 			_undo.discardAllEdits();
 			return;
 		}
-		XSourceItem newSrc = _xdpool._sourcesMap.get(sourceID);
+		XDSourceItem newSrc = _sources.get(sourceID);
 		if (!sourceID.equals(_sourceID) || newSrc == null ||
 			newSrc._source == null || newSrc._source.length() == 0) {
 			if (updateSourceItem() && _sourceItem._url != null
@@ -555,10 +558,10 @@ class ChkGUIDisplay extends ChkGUIBase {
 			if (newSrc == null) {
 				try {
 					URL u = new URL(sourceID);
-					newSrc = _xdpool._sourcesMap.get(u.toExternalForm());
+					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());
-						newSrc = _xdpool._sourcesMap.get(
+						newSrc = _sources.get(
 							f.getAbsolutePath().replace('\\','/'));
 						if (newSrc == null) {
 							return;
@@ -586,7 +589,7 @@ class ChkGUIDisplay extends ChkGUIBase {
 	/** Save source text from XDefSourceItem to a file.
 	 * @param src XDefSourceItem object.
 	 */
-	private void saveSource(XSourceItem src) {
+	private void saveSource(XDSourceItem src) {
 		updateSourceItem();
 		JFileChooser jf = new JFileChooser();
 		if (src._url != null && "file".equals(src._url.getProtocol())) {

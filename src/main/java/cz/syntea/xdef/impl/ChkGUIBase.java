@@ -12,6 +12,7 @@
  */
 package cz.syntea.xdef.impl;
 
+import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.impl.xml.XInputStream;
 import cz.syntea.xdef.sys.SUtils;
 import java.awt.BorderLayout;
@@ -91,13 +92,15 @@ class ChkGUIBase {
 	JTextArea _infoArea;
 
 	/** Actual source item. */
-	XSourceItem _sourceItem;
+	XDSourceItem _sourceItem;
 	/** Name of actual source item. */
 	String _sourceID;
 	/** Array of position information.*/
 	SourcePos[] _positions;
 	/** XDPool object.*/
-	XPool _xdpool;
+	XDPool _xdpool;
+	/** Map with source items.*/
+	Map<String, XDSourceItem> _sources;
 	/** Object used for wait/notify.*/
 	final Object _waitobj = new Object();
 
@@ -200,15 +203,15 @@ class ChkGUIBase {
 
 	/** Initialize map with source items. */
 	void initSourceMap() {
-		for (Map.Entry<String, XSourceItem> e: _xdpool._sourcesMap.entrySet()) {
-			XSourceItem src = e.getValue();
+		for (Map.Entry<String, XDSourceItem> e: _sources.entrySet()) {
+			XDSourceItem src = e.getValue();
 			String key = e.getKey();
 			initSourceItem(key, src);
 		}
 	}
 
 	/** Initialize the source item. */
-	void initSourceItem(final String key, final XSourceItem src) {
+	void initSourceItem(final String key, final XDSourceItem src) {
 		if (src._source != null) return;
 		InputStream is = null;
 		for (;;) {

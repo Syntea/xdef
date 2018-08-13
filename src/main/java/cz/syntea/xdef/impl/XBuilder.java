@@ -199,17 +199,17 @@ public class XBuilder implements XDBuilder {
 				 || result.isDebugMode());
 			if (display) {
 				Class<?>[] externals = p.getExternals(); //save external classes
-				ChkGUIDisplay edit = new ChkGUIDisplay();
+				XDGUI edit = new ChkGUIDisplay();
 				ArrayReporter ar = (ArrayReporter) reporter;
 				for (;;) {
-					Map<String, XSourceItem> map = result._sourcesMap;
+					Map<String, XDSourceItem> map = result._sourcesMap;
 					if (edit.setGUI(result, ar)) {
 						break;
 					}
 					result = new XPool(result.getProperties(),null, externals);
-					for (Map.Entry<String, XSourceItem> e: map.entrySet()) {
+					for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
 						String key = e.getKey();
-						XSourceItem src = e.getValue();
+						XDSourceItem src = e.getValue();
 						if (src._source != null) {
 							result.setSource(src._source, key);
 							result._sourcesMap.put(key, src);

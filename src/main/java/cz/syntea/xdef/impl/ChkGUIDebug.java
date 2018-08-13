@@ -184,7 +184,8 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 	 * @param xp XDPool object
 	 */
 	ChkGUIDebug(final Properties props, final XDPool xp) {
-		_xdpool = (XPool) xp;
+		_xdpool = xp;
+		_sources = xp.getXDSourcesMap();
 		init(props);
 	}
 
@@ -258,12 +259,12 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		initInfoArea();
 		initMenuBar();
 		String key = null;
-		if (_sourceID != null && _xdpool._sourcesMap.containsKey(_sourceID)) {
+		if (_sourceID != null && _sources.containsKey(_sourceID)) {
 			key = _sourceID;
 			_sourceID = null;
 		} else {
-			for (String x: _xdpool._sourcesMap.keySet()) {
-				if (_xdpool._sourcesMap.get(x)._active) {
+			for (String x: _sources.keySet()) {
+				if (_sources.get(x)._active) {
 					key = x;
 					break;
 				}
@@ -272,8 +273,8 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		if (key != null) {
 			setSource(key);
 		} else  {
-			if (_xdpool._sourcesMap != null && !_xdpool._sourcesMap.isEmpty()) {
-				setSource(_xdpool._sourcesMap.keySet().iterator().next());
+			if (_sources != null && !_sources.isEmpty()) {
+				setSource(_sources.keySet().iterator().next());
 			}
 		}
 		_frame.pack();
@@ -306,7 +307,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 //		if (si == null || si.getAddr() != xsi.getAddr()) {
 //			si = xsi;
 //		}
-		XSourceItem xi = _xdpool._sourcesMap.get(si.getSysId());
+		XDSourceItem xi = _sources.get(si.getSysId());
 		String txt;
 		if (xi == null || (txt = xi._source) == null || si.getAddr() < 0) {
 			return null;
@@ -399,7 +400,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 					SourcePos spos = new SourcePos(txt, pos, _sourceID);
 					StopAddr sa = createStopAddr(spos);
 					if (sa != null) {
-						XSourceItem xi = _xdpool._sourcesMap.get(sa._sourceID);
+						XDSourceItem xi = _sources.get(sa._sourceID);
 						if (xi == null || !_sourceID.equals(_sourceID)) {
 							return;
 						}
@@ -472,7 +473,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		JMenu jp;
 
 		// Select source item (if more sources then one)
-		if (_xdpool._sourcesMap.size() > 1) {
+		if (_sources.size() > 1) {
 			jp = new JMenu("Select Source...");
 			jp.setMnemonic((int) 'S');
 			ActionListener ssl = new ActionListener() {
@@ -482,7 +483,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 					setSource(jc.getText());
 				}
 			};
-			for (String key: _xdpool._sourcesMap.keySet()) {
+			for (String key: _sources.keySet()) {
 				ji = new JMenuItem(key);
 				ji.addActionListener(ssl);
 				jp.add(ji);
@@ -540,17 +541,17 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 	 * @param sourceID name of source item.
 	 */
 	private void setSource(String sourceID) {
-		XSourceItem newSrc = _xdpool._sourcesMap.get(sourceID);
+		XDSourceItem newSrc = _sources.get(sourceID);
 		if (!sourceID.equals(_sourceID) || newSrc._source == null
 			|| newSrc._source.length() == 0) {
 			_sourceID = sourceID;
 			if (newSrc == null) {
 				try {
 					URL u = new URL(sourceID);
-					newSrc = _xdpool._sourcesMap.get(u.toExternalForm());
+					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());
-						newSrc = _xdpool._sourcesMap.get(
+						newSrc = _sources.get(
 							f.getAbsolutePath().replace('\\','/'));
 					}
 				} catch (Exception ex) {
@@ -1069,7 +1070,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		for (XMStatementInfo x: si) {
 			int i = x.getAddr();
 			if (i >= addr) {
-				XSourceItem xsi = _xdpool._sourcesMap.get(x.getSysId());
+				XDSourceItem xsi = _sources.get(x.getSysId());
 				if (xsi == null) {
 					setStopAddr(new StopAddr(addr));
 				} else {

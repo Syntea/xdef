@@ -13,39 +13,38 @@
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.xml.XInputStream;
-import cz.syntea.xdef.impl.xml.XReader;
 import cz.syntea.xdef.sys.SUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-/** XDefEditor data.
+/** Contains information about X-definition source item.
  * @author Vaclav Trojan
  */
-final class XSourceItem {
+public final class XDSourceItem {
 	/** The URL if source item is file (may be null. */
-	URL _url;
+	public URL _url;
 	/** Encoding of data of this item. */
-	String _encoding;
+	public String _encoding;
 	/** String containing source item text (may be null). */
-	String _source;
+	public String _source;
 	/** True if the text of this source item was changed. */
-	boolean _changed;
+	public boolean _changed;
 	/** True if the text of this source item was saved. */
-	boolean _saved;
+	public boolean _saved;
 	/** True if this source item is active. */
-	boolean _active;
-	/** Actual position to text of this item when the window is changed. */
-	int _pos = -1;
+	public boolean _active;
+	/** Actual position to text of this item when the window is closed. */
+	public int _pos = -1;
 
 	/** Create new empty instance. */
-	private XSourceItem() {}
+	private XDSourceItem() {}
 
 	/** Create new instance of this object from argument.
 	 * @param o may be file, URL or string with the text.
 	 */
-	XSourceItem(Object o) throws Exception {
+	XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
 			_url = ((File) o).toURI().toURL();
 		} else if (o instanceof URL) {
@@ -64,14 +63,14 @@ final class XSourceItem {
 		}
 	}
 
-	void writeXSourceItem(XDWriter xw) throws IOException {
+	void writeXDSourceItem(XDWriter xw) throws IOException {
 		xw.writeString(_url == null ? null : _url.toExternalForm());
 		xw.writeString(_encoding);
 		xw.writeString(_source);
 	}
 
-	static XSourceItem readXSourceItem(XDReader xr) throws IOException {
-		XSourceItem result = new XSourceItem();
+	static XDSourceItem readXDSourceItem(XDReader xr) throws IOException {
+		XDSourceItem result = new XDSourceItem();
 		String s = xr.readString();
 		if (s != null) {
 			result._url = new URL(s);
