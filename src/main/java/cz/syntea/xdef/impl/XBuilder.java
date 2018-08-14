@@ -200,22 +200,27 @@ public class XBuilder implements XDBuilder {
 				&& (result.getDisplayMode() == XPool.DISPLAY_ERRORS
 				 || result.isDebugMode());
 			if (display) {
-				XEditor edit;
 				Class<?>[] externals = p.getExternals(); //save external classes
 				ArrayReporter ar = (ArrayReporter) reporter;
-				if (result.getDebugEditor() == null) {
-					edit = new ChkGUIDebug(null, result).getXEditor();
-				} else {
-					try {
-						String debugEditor = result.getDebugEditor();
+				XEditor edit = null;
+				try {
+					String debugEditor = result.getDebugEditor();
+					if (debugEditor != null) {
 						Class<?> cls = Class.forName(debugEditor);
 						Constructor<?> c = cls.getDeclaredConstructor(
 							Properties.class, XDPool.class);
-						XDDebug debugger = (XDDebug) c.newInstance(null, result);
-						edit =  debugger.getXEditor();
-					} catch (Exception ex) {
-						edit = new ChkGUIDebug(null, result).getXEditor();
+						XDDebug debugger = (XDDebug) c.newInstance(null,result);
+						edit = debugger.getXEditor();
 					}
+				} catch (Exception ex) {
+					edit = null;
+					// Class with the external debug editor &{0}{"}{"}
+					// is not available.
+					throw new SRuntimeException(
+						XDEF.XDEF850, ex, result.getDebugEditor());
+				}
+				if (edit == null) {
+					edit = new ChkGUIDebug(null, result).getXEditor();
 				}
 				for (;;) {
 					Map<String, XDSourceItem> map = result._sourcesMap;

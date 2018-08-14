@@ -175,5 +175,5 @@ public interface XDDebug {
 	 * @return editor of X-definition sources.
 	 */
 	public XEditor getXEditor();
-	
+
 }

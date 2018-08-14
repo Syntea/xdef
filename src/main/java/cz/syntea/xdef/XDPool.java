@@ -227,5 +227,5 @@ public interface XDPool {
 	 * will be used).
 	 */
 	public String getDebugEditor();
-	
+
 }

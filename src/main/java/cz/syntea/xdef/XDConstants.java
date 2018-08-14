@@ -37,7 +37,7 @@ public interface XDConstants extends SConstants {
 	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
 	/** Property defines debug editor class name.*/
 	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef.debugeditor";
-	
+
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
 	public static final String XDPROPERTY_DOCTYPE = "xdef.doctype";
 	/** Value "false" of property "xdef.doctype" */

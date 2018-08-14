@@ -95,9 +95,11 @@ import javax.xml.xpath.XPathVariableResolver;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SManager;
 import cz.syntea.xdef.XDContainer;
+import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
 import cz.syntea.xdef.impl.code.DefLocale;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
 
 /** Provides processor engine of script code.
@@ -369,8 +371,26 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			"true".equals(_props.getProperty("xdef.debug"));
 		if (_debug) {
 			if (_debugger == null) {
-				//default debugger
-				_debugger = new ChkGUIDebug(getProperties(), xp);
+				String debugEditor = xp.getDebugEditor();
+				if (debugEditor == null) {
+				} else {
+					try {
+						Class<?> cls = Class.forName(debugEditor);
+						Constructor<?> c = cls.getDeclaredConstructor(
+							Properties.class, XDPool.class);
+						_debugger = (XDDebug) c.newInstance(null, xp);
+					} catch (Exception ex) {
+						_debugger = null; // will be used the default debugger
+						// Class with the external debug editor &{0}{"}{"}
+						// is not available.
+						throw new SRuntimeException(
+							XDEF.XDEF850, ex, debugEditor);
+					}
+				}
+				if (_debugger == null) {
+					//default debugger
+					_debugger = new ChkGUIDebug(getProperties(), xp);
+				}
 			}
 			_debugInfo = xp.getDebugInfo();
 		}
