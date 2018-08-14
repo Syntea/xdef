@@ -222,4 +222,10 @@ public interface XDPool {
 	 */
 	public Map<String, XDSourceItem> getXDSourcesMap();
 
+	/** Get debug editor class name.
+	 * @return debug editor class name (if null. the default debug editor
+	 * will be used).
+	 */
+	public String getDebugEditor();
+	
 }

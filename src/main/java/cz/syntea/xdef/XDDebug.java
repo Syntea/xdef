@@ -19,6 +19,7 @@ import cz.syntea.xdef.model.XMDebugInfo;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Properties;
+import cz.syntea.xdef.impl.XEditor;
 
 /** Interface for debug mode.
  * @author Vaclav Trojan
@@ -170,4 +171,9 @@ public interface XDDebug {
 	 */
 	public void removeXpos(String xpos);
 
+	/** Get editor of X-definition sources.
+	 * @return editor of X-definition sources.
+	 */
+	public XEditor getXEditor();
+	
 }

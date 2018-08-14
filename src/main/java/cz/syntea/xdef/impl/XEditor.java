@@ -17,16 +17,16 @@ package cz.syntea.xdef.impl;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 
-/** Interface for display mode module.
+/** Interface for X-definition editor.
  * @author Vaclav Trojan
  */
-public interface XDGUI {
+public interface XEditor {
 
 	/** Open the GUI.
 	 * @param xp XDPool.
 	 * @param err error reporter.
 	 * @return if true the GUI was finished else recompile is supposed.
 	 */
-	public boolean setGUI(final XDPool xp, final ArrayReporter err);
+	public boolean setXEditor(final XDPool xp, final ArrayReporter err);
 
 }

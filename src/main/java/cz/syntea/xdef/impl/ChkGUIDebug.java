@@ -100,6 +100,16 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		"help/Help/F1",							// DBG_HELP
 	};
 
+	/** Create instance for debug GUI.
+	 * @param props properties used for initialization.
+	 * @param xp XDPool object
+	 */
+	public ChkGUIDebug(final Properties props, final XDPool xp) {
+		_xdpool = xp;
+		_sources = xp.getXDSourcesMap();
+		init(props);
+	}
+
 	/** Get command ID.
 	 * @param cmd String with command.
 	 * @return command ID.
@@ -178,16 +188,6 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 	private String[] _xposItems = null; // List of stop addresses.
 	private InputStream _in; // input in command line mode
 	private PrintStream _out; // output in command line mode
-
-	/** Create instance for debug GUI.
-	 * @param props properties used for initialization.
-	 * @param xp XDPool object
-	 */
-	ChkGUIDebug(final Properties props, final XDPool xp) {
-		_xdpool = xp;
-		_sources = xp.getXDSourcesMap();
-		init(props);
-	}
 
 	/** Initialize this debug GUI object.
 	 * @param xp XDPool of running X-definition process.
@@ -1196,5 +1196,13 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 				}
 			}
 		}
+	}
+
+	@Override
+	/** Get editor of X-definition sources.
+	 * @return editor of X-definition sources.
+	 */
+	public XEditor getXEditor() {
+		return new ChkGUIDisplay();
 	}
 }

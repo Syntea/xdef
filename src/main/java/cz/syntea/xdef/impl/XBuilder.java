@@ -33,6 +33,7 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDBuilder;
+import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
@@ -47,6 +48,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.lang.reflect.Constructor;
 
 /** Builder of XPool.
  * @author Vaclav Trojan
@@ -198,12 +200,26 @@ public class XBuilder implements XDBuilder {
 				&& (result.getDisplayMode() == XPool.DISPLAY_ERRORS
 				 || result.isDebugMode());
 			if (display) {
+				XEditor edit;
 				Class<?>[] externals = p.getExternals(); //save external classes
-				XDGUI edit = new ChkGUIDisplay();
 				ArrayReporter ar = (ArrayReporter) reporter;
+				if (result.getDebugEditor() == null) {
+					edit = new ChkGUIDebug(null, result).getXEditor();
+				} else {
+					try {
+						String debugEditor = result.getDebugEditor();
+						Class<?> cls = Class.forName(debugEditor);
+						Constructor<?> c = cls.getDeclaredConstructor(
+							Properties.class, XDPool.class);
+						XDDebug debugger = (XDDebug) c.newInstance(null, result);
+						edit =  debugger.getXEditor();
+					} catch (Exception ex) {
+						edit = new ChkGUIDebug(null, result).getXEditor();
+					}
+				}
 				for (;;) {
 					Map<String, XDSourceItem> map = result._sourcesMap;
-					if (edit.setGUI(result, ar)) {
+					if (edit.setXEditor(result, ar)) {
 						break;
 					}
 					result = new XPool(result.getProperties(),null, externals);

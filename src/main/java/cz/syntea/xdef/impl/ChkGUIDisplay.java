@@ -38,7 +38,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 /** Provides GUI for editing of sources of X-definitions. */
-class ChkGUIDisplay extends ChkGUIBase implements XDGUI {
+class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 	/** Limit of undo events in text area. */
 	private static final int UNDO_LIMIT = 256;
 	/** UNDO manager of source window. */
@@ -75,7 +75,7 @@ class ChkGUIDisplay extends ChkGUIBase implements XDGUI {
 	 * @param err error reporter.
 	 * @return if true the GUI was finished else recompile is supposed.
 	 */
-	public final boolean setGUI(final XDPool xp, final ArrayReporter err) {
+	public final boolean setXEditor(final XDPool xp, final ArrayReporter err) {
 		_xdpool = xp;
 		_sources = xp.getXDSourcesMap();
 		if (_sourceItem == null) { // first

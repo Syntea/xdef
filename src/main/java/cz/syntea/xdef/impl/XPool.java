@@ -72,10 +72,12 @@ public final class XPool implements XDPool {
 	private final boolean _illegalDoctype;
 	/** Switch to allow/restrict includes in XML.*/
 	private final boolean _resolveIncludes;
-	/** flag to be set validation of names references in parsed/created nodes.*/
-	private final boolean _validate;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private final byte _debugMode;
+	/** flag to be set validation of names references in parsed/created nodes.*/
+	private final boolean _validate;
+	/** Debug editor class name.*/
+	private final String _debugEditor;
 	/** DisplayMode.*/
 	private final byte _displayMode;
 	/** flag unresolved externals to be ignored.*/
@@ -136,6 +138,7 @@ public final class XPool implements XDPool {
 
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
+		final String debugEditor,
 		final boolean illegalDoctype,
 		final boolean ignoreUnresolvedEntities,
 		final boolean ignoreUnresolvedExternals,
@@ -149,6 +152,7 @@ public final class XPool implements XDPool {
 		final SDatetime[] specialDates,
 		final Class<?>[] extClasses) {
 		_debugMode = debugMode;
+		_debugEditor = debugEditor;
 		_displayMode = displayMode;
 		_illegalDoctype = illegalDoctype;
 		_ignoreUnresolvedEntities = ignoreUnresolvedEntities;
@@ -195,6 +199,7 @@ public final class XPool implements XDPool {
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
 				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
+		_debugEditor = _props.getProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR);
 		//set DOCTYPE illegal
 		_illegalDoctype =
 			readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
@@ -827,6 +832,7 @@ public final class XPool implements XDPool {
 			throw new SIOException(SYS.SYS039, "Version error: " + ver);
 		}
 		byte debugMode = xr.readByte();
+		String debugEditor = xr.readString();
 		boolean illegalDoctype = xr.readBoolean();
 		boolean ignoreUnresolvedEntities = xr.readBoolean();
 		boolean ignoreUnresolvedExternals = xr.readBoolean();
@@ -854,6 +860,7 @@ public final class XPool implements XDPool {
 			}
 		}
 		XPool xp = new XPool(debugMode,
+			debugEditor,
 			illegalDoctype,
 			ignoreUnresolvedEntities,
 			ignoreUnresolvedExternals,
@@ -1332,6 +1339,13 @@ public final class XPool implements XDPool {
 	public Map<String, XDSourceItem> getXDSourcesMap() {return _sourcesMap;}
 
 	@Override
+	/** Get debug editor class name.
+	 * @return debug editor class name (if null. the default debug editor
+	 * will be used).
+	 */
+	public String getDebugEditor() {return _debugEditor;}
+
+	@Override
 	/** Write this XDPool to output stream.
 	 * @param f where to write.
 	 * @throws IOException if an error occurs.
@@ -1353,6 +1367,7 @@ public final class XPool implements XDPool {
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		xw.writeString(getVersionInfo()); //XDef verze
 		xw.writeByte(_debugMode);
+		xw.writeString(_debugEditor);
 		xw.writeBoolean(_illegalDoctype);
 		xw.writeBoolean(_ignoreUnresolvedEntities);
 		xw.writeBoolean(_ignoreUnresolvedExternals);
