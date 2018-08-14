@@ -22,14 +22,14 @@
         
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
-        <jdk.version>1.6</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
         
         <saxon-he.version>9.7.0-18</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <testng.version>6.8.21</testng.version>
+        <testng.version>6.14.3</testng.version>
         
         <projectId>syntea-xdefinition-OSS</projectId>
         <!-- odkaz do hlavniho(root) adresare projektu -->
@@ -54,7 +54,7 @@
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
             <version>${saxon-he.version}</version>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
@@ -74,8 +74,20 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>        
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
+		<dependency>
+		    <groupId>com.github.sbabcoc</groupId>
+		    <artifactId>logback-testng</artifactId>
+		    <version>1.0.0</version>
+		    <scope>runtime</scope>
+		    <exclusions>
+		    	<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
         
         <!-- junit-test -->
         <dependency>
