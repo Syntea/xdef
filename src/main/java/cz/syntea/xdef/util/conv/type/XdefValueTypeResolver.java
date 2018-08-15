@@ -262,7 +262,10 @@ public class XdefValueTypeResolver {
 		try {
 			type = XdefValueTypeParser.parse(typeDecl);
 		} catch (Exception ex) {
-			throw new RuntimeException("Could not parse type!", ex);
+/*VT*/
+			return;
+//			throw new RuntimeException("Could not parse type!", ex);
+/*VT*/
 		}
 		XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
 		Element sTypeElem = (Element) _xsdDoc.getModels().get(model);

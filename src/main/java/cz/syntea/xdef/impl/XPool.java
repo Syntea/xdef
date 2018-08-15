@@ -62,7 +62,7 @@ public final class XPool implements XDPool {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004004L; // 3.1.004.004
+	private static final long XD_MIN_VERSION = 301004003L; // 3.1.004.003
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 
@@ -72,10 +72,12 @@ public final class XPool implements XDPool {
 	private final boolean _illegalDoctype;
 	/** Switch to allow/restrict includes in XML.*/
 	private final boolean _resolveIncludes;
-	/** flag to be set validation of names references in parsed/created nodes.*/
-	private final boolean _validate;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private final byte _debugMode;
+	/** flag to be set validation of names references in parsed/created nodes.*/
+	private final boolean _validate;
+	/** Debug editor class name.*/
+	private final String _debugEditor;
 	/** DisplayMode.*/
 	private final byte _displayMode;
 	/** flag unresolved externals to be ignored.*/
@@ -127,15 +129,16 @@ public final class XPool implements XDPool {
 	Thesaurus _thesaurus = null;
 	/** Table of definitions.*/
 	final Map<String, XDefinition> _xdefs;
-	/** Table of source objects.*/
-	final Map<String, XSourceItem> _sourcesMap;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
 	CompileXDPool _compiler;
+	/** Table of source objects.*/
+	final Map<String, XDSourceItem> _sourcesMap;
 
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
+		final String debugEditor,
 		final boolean illegalDoctype,
 		final boolean ignoreUnresolvedEntities,
 		final boolean ignoreUnresolvedExternals,
@@ -149,6 +152,7 @@ public final class XPool implements XDPool {
 		final SDatetime[] specialDates,
 		final Class<?>[] extClasses) {
 		_debugMode = debugMode;
+		_debugEditor = debugEditor;
 		_displayMode = displayMode;
 		_illegalDoctype = illegalDoctype;
 		_ignoreUnresolvedEntities = ignoreUnresolvedEntities;
@@ -162,7 +166,7 @@ public final class XPool implements XDPool {
 		_specialDates = specialDates;
 		_props = null;
 		_xdefs = new TreeMap<String, XDefinition>();
-		_sourcesMap = new TreeMap<String, XSourceItem>();
+		_sourcesMap = new TreeMap<String, XDSourceItem>();
 		_extClasses = extClasses;
 	}
 
@@ -179,7 +183,7 @@ public final class XPool implements XDPool {
 		_extClasses = extClasses;
 		_reporter = reporter;
 		_xdefs = new TreeMap<String, XDefinition>();
-		_sourcesMap = new TreeMap<String, XSourceItem>();
+		_sourcesMap = new TreeMap<String, XDSourceItem>();
 		_props = props != null ? props : SManager.getProperties();
 		// Set values of properties
 		//debug mode
@@ -195,6 +199,7 @@ public final class XPool implements XDPool {
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
 				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
+		_debugEditor = _props.getProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR);
 		//set DOCTYPE illegal
 		_illegalDoctype =
 			readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
@@ -365,11 +370,11 @@ public final class XPool implements XDPool {
 		}
 		try {
 			char c;
-			if ((c = source.charAt(0)) == '<' || c <= ' ') {
+			if ((c = source.charAt(0)) == '<' || c == '[') {
 				if (s == null || (s = sourceId.trim()).length() == 0) {
 					s = "String_"+ (++_stringItem);
 				}
-				_sourcesMap.put(s, new XSourceItem(source));
+				_sourcesMap.put(s, new XDSourceItem(source));
 				_compiler.parseString(source, s);
 			} else if (source.startsWith("//") ||
 				(source.indexOf(":/") > 2 && source.indexOf(":/") < 7)) {
@@ -377,7 +382,7 @@ public final class XPool implements XDPool {
 			} else {
 				File[] files = SUtils.getFileGroup(source);
 				if (files == null || files.length == 0) {
-					_sourcesMap.put(source, new XSourceItem(source));
+					_sourcesMap.put(source, new XDSourceItem(source));
 					//X-definition source is missing or null&{0}{: }
 					_compiler.getReportWriter().error(XDEF.XDEF903, source);
 					return;
@@ -386,7 +391,7 @@ public final class XPool implements XDPool {
 			}
 		} catch (Exception ex) {
 			try {
-				_sourcesMap.put(s, new XSourceItem(source.trim()));
+				_sourcesMap.put(s, new XDSourceItem(source.trim()));
 			} catch (Exception e) {
 				ex = e;
 			}
@@ -436,7 +441,7 @@ public final class XPool implements XDPool {
 		}
 		try {
 			_sourcesMap.put(source.toURI().toASCIIString(),
-				new XSourceItem(source));
+				new XDSourceItem(source));
 			_compiler.parseFile(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
@@ -475,7 +480,7 @@ public final class XPool implements XDPool {
 			return;
 		}
 		try {
-			_sourcesMap.put(source.toExternalForm(), new XSourceItem(source));
+			_sourcesMap.put(source.toExternalForm(), new XDSourceItem(source));
 			_compiler.parseURL(source);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
@@ -520,7 +525,7 @@ public final class XPool implements XDPool {
 			return;
 		}
 		try {
-			XSourceItem xsi = new XSourceItem(source);
+			XDSourceItem xsi = new XDSourceItem(source);
 			_sourcesMap.put(s, xsi);
 			if (xsi._source != null && xsi._source.length() > 0) {
 				_compiler.parseString(xsi._source, s);
@@ -658,7 +663,7 @@ public final class XPool implements XDPool {
 			_sourcesMap.clear();
 		} else {
 			for (String key: _sourcesMap.keySet()) {
-				XSourceItem xsi = _sourcesMap.get(key);
+				XDSourceItem xsi = _sourcesMap.get(key);
 				xsi._active = false;
 				xsi._pos = 0;
 				if (xsi._source != null) {
@@ -827,6 +832,7 @@ public final class XPool implements XDPool {
 			throw new SIOException(SYS.SYS039, "Version error: " + ver);
 		}
 		byte debugMode = xr.readByte();
+		String debugEditor = xr.readString();
 		boolean illegalDoctype = xr.readBoolean();
 		boolean ignoreUnresolvedEntities = xr.readBoolean();
 		boolean ignoreUnresolvedExternals = xr.readBoolean();
@@ -854,6 +860,7 @@ public final class XPool implements XDPool {
 			}
 		}
 		XPool xp = new XPool(debugMode,
+			debugEditor,
 			illegalDoctype,
 			ignoreUnresolvedEntities,
 			ignoreUnresolvedExternals,
@@ -957,7 +964,7 @@ public final class XPool implements XDPool {
 		len = xr.readInt();
 		for (int i = 0; i < len; i++) {
 			String key = xr.readString();
-			xp._sourcesMap.put(key, XSourceItem.readXSourceItem(xr));
+			xp._sourcesMap.put(key, XDSourceItem.readXDSourceItem(xr));
 		}
 		if ("DebugInfo".equals(xr.readString())) {
 			xp._debugInfo = XDebugInfo.readXDebugInfo(xr);
@@ -1326,6 +1333,19 @@ public final class XPool implements XDPool {
 	public SDatetime[] getSpecialDates() {return _specialDates;}
 
 	@Override
+	/** Get map of source items of compiled X-definitions.
+	 * @return map of source items of compiled X-definitions.
+	 */
+	public Map<String, XDSourceItem> getXDSourcesMap() {return _sourcesMap;}
+
+	@Override
+	/** Get debug editor class name.
+	 * @return debug editor class name (if null. the default debug editor
+	 * will be used).
+	 */
+	public String getDebugEditor() {return _debugEditor;}
+
+	@Override
 	/** Write this XDPool to output stream.
 	 * @param f where to write.
 	 * @throws IOException if an error occurs.
@@ -1347,6 +1367,7 @@ public final class XPool implements XDPool {
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		xw.writeString(getVersionInfo()); //XDef verze
 		xw.writeByte(_debugMode);
+		xw.writeString(_debugEditor);
 		xw.writeBoolean(_illegalDoctype);
 		xw.writeBoolean(_ignoreUnresolvedEntities);
 		xw.writeBoolean(_ignoreUnresolvedExternals);
@@ -1451,9 +1472,9 @@ public final class XPool implements XDPool {
 		} else {
 			len = _sourcesMap.size();
 			xw.writeInt(len);
-			for (Map.Entry<String, XSourceItem> entry: _sourcesMap.entrySet()) {
+			for (Map.Entry<String, XDSourceItem> entry: _sourcesMap.entrySet()){
 				xw.writeString(entry.getKey());
-				entry.getValue().writeXSourceItem(xw);
+				entry.getValue().writeXDSourceItem(xw);
 			}
 		}
 		if (_debugInfo == null) {
@@ -1466,4 +1487,5 @@ public final class XPool implements XDPool {
 		gout.finish();
 		gout.close();
 	}
+
 }

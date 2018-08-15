@@ -10,23 +10,16 @@
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.impl.XDefinition;
-import cz.syntea.xdef.impl.ext.XExtUtils;
+import cz.syntea.xdef.msg.JSON;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.msg.XML;
-import cz.syntea.xdef.sys.JSONUtil;
-import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.SThrowable;
 import cz.syntea.xdef.sys.StringParser;
-import cz.syntea.xdef.xml.KParsedAttr;
-import cz.syntea.xdef.xml.KParsedElement;
 import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,461 +27,63 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import java.util.Map.Entry;
+import javax.xml.XMLConstants;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from JSON source data.
  * @author Trojan
  */
-class PreReaderJSON {
+class PreReaderJSON implements PreReader {
 
-	/** Actual node */
-	private PNode _actPNode;
-	/** includes. */
-	private Element _includeElement;
-	/** The nesting level of XML node. */
-	private int _level;
-	/** Pre compiler of X-definitions. */
+//	/** includes. */
+//	private Element _includeElement;
+
+	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
-	/** Pre compiler of X-definitions. */
-	private final ReportWriter _reporter;
 
 	/** Creates a new instance of XDefCompiler
-	 * @param reporter reporter.
 	 * @param pcomp pre compiler.
 	 */
-	PreReaderJSON(final ReportWriter reporter,
-		XPreCompiler pcomp) {
-		_reporter = reporter;
+	PreReaderJSON(XPreCompiler pcomp) {
 		_pcomp = pcomp;
 	}
 
-	/** This method is called after all attributes of the current element
-	 * attribute list was reached. The implementation may check the list of
-	 * attributes and to invoke appropriate actions. The method is invoked
-	 * when parser reaches the end of the attribute list.
-	 * @param parsedElem contains name of the element, name space URI and
-	 * the list of attributes.
-	 */
-	private void elementStart(final KParsedElement parsedElem) {
-		String qName = parsedElem.getParsedName();
-		if (_includeElement == null) {
-			if (_actPNode != null && _actPNode._value != null &&
-				_actPNode._value.getString().length() > 0) {
-				processText();
-			}
-			_actPNode = new PNode(qName,
-				parsedElem.getParsedNameSourcePosition(),
-				_actPNode,
-				_actPNode==null? (byte) 0 : _actPNode._xdVersion,
-				(byte) 10);
-		}
-		String elemPrefix;
-		String elemLocalName;
-		int ndx;
-		if ((ndx = qName.indexOf(':')) >= 0) {
-			elemPrefix = qName.substring(0, ndx);
-			_actPNode._localName = elemLocalName = qName.substring(ndx + 1);
-		} else {
-			elemPrefix = "";
-			_actPNode._localName = elemLocalName = qName;
-		}
-		_actPNode._nsURI = parsedElem.getParsedNSURI();
-		if (_level == -1) {
-			_pcomp.getCodeGenerator()._namespaceURIs.remove(0);
-			String uri = parsedElem.getParsedNSURI();
-			if ("def".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)
-				|| "declaration".equals(elemLocalName)
-				|| "BNFGrammar".equals(elemLocalName)
-				|| "collection".equals(elemLocalName))  {
-				String projectNS; // = XDConstants.XDEF20_NS_URI;
-				KParsedAttr ka;
-				byte ver;
-				if ((ka = parsedElem.getAttrNS(
-					KXmlConstants.XDEF20_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(
-						KXmlConstants.XDEF31_NS_URI, "metaNamespace")) != null){
-					projectNS = ka.getValue().trim();
-					ver=KXmlConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						 ? XDConstants.XD31_ID : XDConstants.XD20_ID;
-					if (XExtUtils.uri(projectNS).errors()) {
-						//Attribute 'metaNamespace' must contain a valid URI
-						_pcomp.error(ka.getPosition(), XDEF.XDEF253);
-					}
-					parsedElem.remove(ka);
-				} else {
-					if (KXmlConstants.XDEF20_NS_URI.equals(uri)
-						|| KXmlConstants.XDEF31_NS_URI.equals(uri)) {
-						ver = KXmlConstants.XDEF31_NS_URI.equals(uri)
-							? XDConstants.XD31_ID : XDConstants.XD20_ID;
-						projectNS = uri;
-					} else {
-						//Namespace of X-definitions is required
-						_pcomp.error(_actPNode._name, XDEF.XDEF256);
-						projectNS = KXmlConstants.XDEF31_NS_URI;
-						ver = XDConstants.XD31_ID;
-					}
-				}
-				_actPNode._xdVersion = ver;
-				_pcomp.getCodeGenerator()._namespaceURIs.add(0, projectNS);
-			} else {
-				_pcomp.getCodeGenerator()._namespaceURIs.add(0, uri);
-				//X-definition or X-collection expected
-				_pcomp.error(_actPNode._name, XDEF.XDEF255);
-			}
-		}
-		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
-			KParsedAttr ka = parsedElem.getAttr(i);
-			String key = ka.getName();
-			String value = ka.getValue();
-			if (key.startsWith("xmlns")) { //addAttr namespace URI to the list.
-				int nsndx = _pcomp.getCodeGenerator()._namespaceURIs.indexOf(
-					value.trim());
-				if (nsndx < 0) {
-					nsndx = _pcomp.getCodeGenerator()._namespaceURIs.size();
-					_pcomp.getCodeGenerator()._namespaceURIs.add(value.trim());
-				}
-				if (key.length() == 5) { //default prefix
-					_actPNode._nsPrefixes.put("", nsndx);
-				} else if (key.charAt(5) == ':') { //prefix name
-					_actPNode._nsPrefixes.put(key.substring(6), nsndx);
-				}
-			} else if ("collection".equals(elemLocalName) &&
-				key.startsWith("impl-")) {//continue; ignore, just documentation
-			} else {
-				PAttr item = new PAttr(key,
-					new SBuffer(value, ka.getPosition()), null, -1);
-				if ((ndx = key.indexOf(':')) >= 0) {
-					String prefix = key.substring(0, ndx);
-					item._localName = key.substring(ndx + 1);
-					Integer nsndx = _actPNode._nsPrefixes.get(prefix);
-					if (nsndx == null) {
-						String u;
-						if ((u = ka.getNamespaceURI()) != null) {
-							int x = _pcomp.getCodeGenerator()
-								._namespaceURIs.indexOf(u);
-							if (x < 0) {
-								nsndx = _pcomp.getCodeGenerator()
-									._namespaceURIs.size();
-								_pcomp.getCodeGenerator()
-									._namespaceURIs.add(u);
-							} else {
-								nsndx = x;
-							}
-							_actPNode._nsPrefixes.put(prefix, nsndx);
-						}
-					}
-					if (nsndx != null) {
-						item._nsURI =
-							_pcomp.getCodeGenerator()._namespaceURIs.get(nsndx);
-						if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
-							&& "script".equals(item._localName)) {
-							StringParser p = new StringParser(
-								new SBuffer(value, ka.getPosition()));
-							p.skipSpaces();
-							if (p.isToken("template")) {
-								p.skipSpaces();
-								if (!p.eos() && !p.isChar(';')) {
-									_pcomp.error(p, XDEF.XDEF425);//Script error
-								}
-								_actPNode._template = true;
-							}
-						}
-					} else {
-						item._nsindex = -1;
-					}
-				} else {
-					item._localName = key;
-					item._nsindex = -1;
-				}
-				_actPNode._attrs.add(item);
-			}
-		}
-		Integer nsuriIndex = _actPNode._nsPrefixes.get(elemPrefix);
-		if (nsuriIndex != null) {
-			int urindx;
-			if (((urindx = nsuriIndex) == XPreCompiler.NS_XINCLUDE_INDEX)) {
-				String nsuri =
-					_pcomp.getCodeGenerator()._namespaceURIs.get(urindx);
-				Element el;
-				if (_includeElement == null) {
-					el = _includeElement = KXmlUtils.newDocument(nsuri,
-						_actPNode._name.getString(), null).getDocumentElement();
-				} else {
-					el = _includeElement.getOwnerDocument().createElementNS(
-						nsuri, _actPNode._name.getString());
-					_includeElement.appendChild(el);
-				}
-				for (PAttr aval: _actPNode._attrs) {
-					if (aval._nsindex < 0) {
-						el.setAttribute(aval._name, aval._value.getString());
-					} else {
-						el.setAttributeNS(
-							_pcomp.getCodeGenerator()._namespaceURIs.get(
-								aval._nsindex),
-							aval._name,
-							aval._value.getString());
-					}
-				}
-				return;
-			} else {
-				_actPNode._nsindex = urindx;
-			}
-		}
-		if (_level == -1) {
-			if ("collection".equals(elemLocalName)) {
-				_pcomp.processIncludeList(_actPNode);
-				_pcomp.reportNotAllowedAttrs(_actPNode);
-				_pcomp.getPCollections().add(_actPNode);
-			} else if ("BNFGrammar".equals(elemLocalName)) {
-				_level++;
-				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("thesaurus".equals(elemLocalName)) {
-				_level++;
-				_pcomp.getPThesaurusList().add(_actPNode);
-			} else if ("declaration".equals(elemLocalName)) {
-				_level++;
-				_pcomp.getPDeclarations().add(0, _actPNode);
-			} else if ("component".equals(elemLocalName)) {
-				_level++;
-				_pcomp.getPComponents().add(0, _actPNode);
-			} else {
-				if (!"def".equals(elemLocalName)) {
-					//X-definition expected
-					_pcomp.error(_actPNode._name, XDEF.XDEF259);
-				}
-				_level++;
-				String defName = getNameAttr(_actPNode, false, true);
-				if (defName == null) {
-					defName = "";
-				}
-				// Because there is not yet connected an X-definition to
-				// the PNode we create a dumy one in fact just to store
-				// the X-definition name (we nead it to be able to compile
-				// internal declarations, BNGGrammars, components and
-				// thesaurus items).
-				_actPNode._xdef = new XDefinition(defName,
-					null, null, null, _actPNode._xmlVersion);
-				_pcomp.processIncludeList(_actPNode);
-				// check duplicate of X-definition
-				for (PNode p: _pcomp.getPXDefs()) {
-					if (defName.equals(p._xdef.getName())) {
-						if (defName.length() == 0) {
-							//Only one X-definition in the compiled XDPool
-							// may be without name
-							_pcomp.error(_actPNode._name, XDEF.XDEF212);
-						} else {
-							//X-definition '&{0}' already exists
-							_pcomp.error(_actPNode._name, XDEF.XDEF303, defName);
-						}
-						defName = null;
-					}
-				}
-				if (defName != null) {
-					_pcomp.getPXDefs().add(_actPNode);
-				}
-			}
-		} else {
-			_level++;
-			_actPNode._parent._childNodes.add(_actPNode);
-		}
-	}
-
-	/** Get "name" (or "prefix:name") of node.
-	 * If the argument required is set to true put error message that
-	 * required attribute is missing.
-	 * @param pnode PNode where the attribute "name" is required.
-	 * @param required if true the attribute is required.
-	 * @param remove if true the attribute is removed.
-	 * @return the name or null.
-	 */
-	private String getNameAttr(final PNode pnode,
-		final boolean required,
-		final boolean remove) {
-		SBuffer sval = _pcomp.getXdefAttr(pnode, "name", required, remove);
-		if (sval == null) {
-			// if required do not return null!
-			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
-		}
-		String name = sval.getString();
-		if (name.length() == 0) {
-			//Incorrect name
-			_pcomp.error(sval, XDEF.XDEF258);
-			return "__UNKNOWN_ATTRIBUTE_NAME_";
-		}
-		if (!PreReaderJSON.chkDefName(name, pnode._xmlVersion)) {
-			_pcomp.error(sval, XDEF.XDEF258); //Incorrect name
-			return "__UNKNOWN_INCORRECT_NAME_";
-		}
-		return name;
-	}
-
-	/** This method is invoked when parser reaches the end of element. */
-	private void elementEnd() {
-		if (_includeElement != null) {
-			String ns = _includeElement.getPrefix();
-			ns = ns == null || ns.length() == 0 ? "xmlns" : "xmlns:" + ns;
-			NamedNodeMap nm = _includeElement.getAttributes();
-			if (nm.getLength() > 0) { //other attributes
-				for (int i = 0; i < nm.getLength(); i++) {
-					Node n = nm.item(i);
-					String name = n.getNodeName();
-					if (!"href".equals(name) && !"parse".equals(name)
-						&& !ns.equals(name)) {
-						//Xinclude - unknown attribute &{0}
-						_pcomp.error(_actPNode._name, XML.XML305, n.getNodeName());
-					}
-				}
-			}
-			_includeElement = null;
-			_actPNode = _actPNode._parent;
-			return;
-		}
-		if (_actPNode._value != null &&
-			_actPNode._value.getString().length() > 0) {
-			processText();
-		}
-		_level--;
-		_actPNode = _actPNode._parent;
-	}
-
-	/** New text value of current element parsed.
-	 * @param text SBuffer with value of text node.
-	 */
-	private void text(final SBuffer text) {
-		if (_includeElement != null) {
-			return;
-		}
-		if (_actPNode._template && _level > 0 &&
-			_actPNode._nsindex != XPreCompiler.NS_XDEF_INDEX) {
-			SBuffer sval = null;
-			if (text != null) {
-				sval = new SBuffer(text.getString(), text);
-			}
-			if (_actPNode._value == null) {
-				_actPNode._value = sval;
-			} else {
-				_actPNode._value.appendToBuffer(sval);
-			}
-			return;
-		}
-		if (text == null) {
-			return; // no string
-		}
-		String s = text.getString();
-		int len = s.length() - 1;
-		while (len >= 0 && s.charAt(len) <= ' ') {
-			len--;
-		}
-		if (len < 0) {
-			return; // empty string
-		}
-		SBuffer sb =new SBuffer(s, text);
-		if (_actPNode._value == null) {
-			_actPNode._value = sb;
-		} else {
-			if (_actPNode._value == null) {
-				_actPNode._value = sb;
-			} else {
-				_actPNode._value.appendToBuffer(sb);
-			}
-		}
-		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX &&
-			"def".equals(_actPNode._localName)) {
-			XScriptParser xparser = new XScriptParser(_actPNode._xmlVersion);
-			xparser.setLineInfoFlag(true);
-			xparser.setReportWriter(_pcomp.getReportWriter());
-			xparser.setSourceBuffer(_actPNode._value);
-			// it still may be a comment
-			if (xparser.nextSymbol() != XScriptParser.NOCHAR) {
-				//Text value is not allowed here
-				_pcomp.lightError(_actPNode._value, XDEF.XDEF260);
-			}
-			_actPNode._value = null;//prevent repeated message, remove this text
-		}
-	}
-
-	/** Generate text node */
-	private void genTextNode() {
-		String name = "";
-		for (String prefix : _actPNode._nsPrefixes.keySet()) {
-			if (_actPNode._nsPrefixes.get(prefix)==XPreCompiler.NS_XDEF_INDEX) {
-				name = prefix + ":text";
-				break;
-			}
-		}
-		PNode p = new PNode(name,
-			new SPosition(_actPNode._value),
-			_actPNode,
-			_actPNode._xdVersion,
-			_actPNode._xmlVersion);
-		p._nsURI = _pcomp.getCodeGenerator()._namespaceURIs.get(
-			XPreCompiler.NS_XDEF_INDEX);
-		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
-		p._localName = "text";
-		p._value = _actPNode._value;
-		_actPNode._value = null;
-		_level++;
-		_actPNode._childNodes.add(p);
-		_level--;
-	}
-
-	private void processText() {
-		if (_actPNode._template && _level > 0
-			&& _actPNode._nsindex != XPreCompiler.NS_XDEF_INDEX) {
-			genTextNode();
-			return;
-		}
-		XScriptParser xparser = new XScriptParser(_actPNode._xmlVersion);
-		xparser.setLineInfoFlag(true);
-		xparser.setReportWriter(_pcomp.getReportWriter());
-		xparser.setSourceBuffer(_actPNode._value);
-		if (xparser.nextSymbol() == XScriptParser.NOCHAR) {
-			_actPNode._value = null; // remove this text
-			return;
-		}
-		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("text".equals(_actPNode._localName) ||
-				"BNFGrammar".equals(_actPNode._localName) ||
-				"thesaurus".equals(_actPNode._localName) ||
-				"declaration".equals(_actPNode._localName) ||
-				"component".equals(_actPNode._localName) ||
-				"macro".equals(_actPNode._localName)) {
-				return; //text is processed in the pnode
-			} else if (!"mixed".equals(_actPNode._localName) &&
-				!"choice".equals(_actPNode._localName) &&
-				!"list".equals(_actPNode._localName) &&
-//				!"PI".equals(_actPNode._localName) && //TODO
-//				!"comment".equals(_actPNode._localName) && //TODO
-//				!"document".equals(_actPNode._localName) && //TODO
-//				!"value".equals(_actPNode._localName) && //TODO
-//				!"attlist".equals(_actPNode._localName) && //TODO
-				!"sequence".equals(_actPNode._localName) &&
-				!"any".equals(_actPNode._localName)) {
-				//Text value is not allowed here
-				_pcomp.lightError(_actPNode._value, XDEF.XDEF260);
-				_actPNode._value = null; //prevent repeated message
-				return;
-			}
-		}
-		if (_level == 0) {
-			//Text value not allowed here
-			_pcomp.lightError(_actPNode._value, XDEF.XDEF260);
-			_actPNode._value = null; //prevent repeated message
-		} else {
-			genTextNode(); //generate text node
-		}
-	}
+//
+//	/** Generate text node */
+//	private void genTextNode(PNode pnode) {
+//		String name = "";
+//		for (String prefix : pnode._nsPrefixes.keySet()) {
+//			if (pnode._nsPrefixes.get(prefix)==XPreCompiler.NS_XDEF_INDEX) {
+//				name = prefix + ":text";
+//				break;
+//			}
+//		}
+//		PNode p = new PNode(name,
+//			new SPosition(pnode._value),
+//			pnode,
+//			pnode._xdVersion,
+//			pnode._xmlVersion);
+//		p._nsURI = _nsURIs.get(XPreCompiler.NS_XDEF_INDEX);
+//		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
+//		p._localName = "text";
+//		p._value = pnode._value;
+//		pnode._value = null;
+//		pnode._childNodes.add(p);
+//	}
 
 	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param fileName pathname of file with with X-definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final String fileName) {
 		parseFile(new File(fileName));
@@ -497,13 +92,14 @@ class PreReaderJSON {
 	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param file The file with with X-definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final File file) {
 		try {
 			URL url = file.toURI().toURL();
 			for (Object o: _pcomp.getSources()) {
 				if (o instanceof URL && url.equals(o)) {
-					return; //found in list
+					return; // nothing parse, found in the list of sources
 				}
 			}
 			_pcomp.getSources().add(url);
@@ -522,29 +118,16 @@ class PreReaderJSON {
 	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or
 	 * <tt>null</tt>.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
-		if (_pcomp.getSources().contains(in)) {
-			return;
-		}
-		_pcomp.getSources().add(in);
-		_level = -1;
-		_actPNode = null;
-		try {
-			doParse(in, srcName);
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			_actPNode = null; //just let gc to do the job
-			if (_pcomp.getDispalyMode() > XDPool.DISPLAY_FALSE) {
-				if (!(ex instanceof SThrowable)) {
-					_pcomp.error(SYS.SYS066, //Internal error&{0}{: }
-						"when parsing document\n" + ex);
-				}
-			} else {
-				if (ex instanceof SThrowable &&
-					"SYS012".equals(((SThrowable) ex).getMsgID())) {
-					throw (SRuntimeException) ex; //Errors detected&{0}{: }
+		if (!_pcomp.getSources().contains(in)) {
+			_pcomp.getSources().add(in);
+			try {
+				doParse(in, srcName);
+			} catch (Exception ex) {
+				if (ex instanceof SThrowable) {
+					throw new SRuntimeException(((SThrowable) ex).getReport());
 				} else {
 					//Internal error: &{0}
 					throw new SRuntimeException(SYS.SYS066,
@@ -552,7 +135,6 @@ class PreReaderJSON {
 				}
 			}
 		}
-		_actPNode = null; //just let gc to do the job
 	}
 
 	/** Parse data with source X-definition given by URL and addAttr it
@@ -560,11 +142,6 @@ class PreReaderJSON {
 	 * @param url URL of the file with the X-definition.
 	 */
 	public final void parseURL(final URL url) {
-		if (url == null) {
-			//Can't read X-definition from the file &{0}
-			_pcomp.error(XDEF.XDEF902, "null");
-			return;
-		}
 		for (Object o: _pcomp.getSources()) {
 			if (o instanceof URL && url.equals((URL) o)) {
 				return; //prevents to doParse the source twice.
@@ -588,11 +165,11 @@ class PreReaderJSON {
 	 */
 	final static boolean chkDefName(final String name, byte xmlVersion) {
 		if (name.length() == 0) {
-			return true; //nameless is also name
+			return true; // empty name is also a name of X-definition
 		}
 		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) !=
 			StringParser.XML_CHAR_NAME_START) {
-			return false;
+			return false; // must start with MXL start name
 		}
 		char c;
 		boolean wasColon = false;
@@ -616,38 +193,27 @@ class PreReaderJSON {
 
 	/** Parse string and addAttr it to the set of definitions.
 	 * @param source The source string with definitions.
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseString(final String source) {
-		if (_pcomp.getSources().indexOf(source) >= 0 || source.length() == 0){
-			return;  //we ignore already declared or empty strings
-		}
-		if (source.charAt(0) == '<') {
-			parseString(source, "STRING");
-		} else {
-			try {
-				URL u = new URL(source);
-				parseURL(u);
-			} catch (Exception ex) {
-				parseFile(new File(source));
-			}
-		}
+		parseString(source, null);
 	}
 
 	/** Parse string and addAttr it to the set of X-definitions.
 	 * @param source source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
+	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseString(final String source, final String srcName) {
-		if (_pcomp.getSources().indexOf(source) >= 0
-			|| source.length() == 0) {
+		if (_pcomp.getSources().indexOf(source) >= 0 || source.length() == 0) {
 			return;  //we ignore already declared or empty strings
 		}
 		char c;
-		if ((c = source.charAt(0)) <= ' ' || c == '<') {
+		if ((c = source.charAt(0)) == '[' || c == '{') {
 			_pcomp.getSources().add(source);
 			try {
-				parseStream(new ByteArrayInputStream(source.getBytes("UTF-8")),
-					srcName);
+				parseStream(new ByteArrayInputStream(
+					source.getBytes(Charset.forName("UTF-8"))), srcName);
 			} catch (RuntimeException ex) {
 				throw ex;
 			} catch (Exception ex) {
@@ -658,27 +224,748 @@ class PreReaderJSON {
 		}
 	}
 
-	private void doParse(final InputStream in, final String srcName) {
-		Reader reader = new InputStreamReader(in,
-			Charset.availableCharsets().get("UTF-8"));
+	@Override
+	/** Parse source input stream.
+	 * @param in input stream with source data.
+	 * @param sysId system ID of source data.
+	 * @throws RutimeException if an error occurs.
+	 */
+	public final void doParse(final InputStream in, final String srcName) {
+		Reader reader = new InputStreamReader(in, Charset.forName("UTF-8"));
 		doParse(reader, srcName);
 	}
 
-	final void doParse(final Reader reader, final String srcName) {
-		StringParser parser = new StringParser(reader, _reporter);
+
+	/** JSON parser */
+	private static final class JParser {
+
+		/** parser used for parsing of source. */
+		private final StringParser _p;
+
+		/** Create instance of JSON parser build with reader,
+		 * @param p parser of source data,
+		 */
+		private JParser(final StringParser p) {_p = p;}
+
+		/** Check if argument is a hexadecimal digit. */
+		private static int hexDigit(final char ch) {
+			int i = "0123456789abcdefABCDEF".indexOf(ch);
+			return i >= 16 ? i - 6 : i;
+		}
+
+		/** Create modification string with source position.
+		 * @return modification string with source position.
+		 */
+		private String genPosMod() {
+			if (_p instanceof StringParser) {
+				StringParser p = (StringParser) _p;
+				return "&{line}" + p.getLineNumber()
+					+ "&{column}" + p.getColumnNumber()
+					+ "&{sysId}" + p.getSysId();
+			} else {
+				return null;
+			}
+		}
+
+		/** Read JSON value.
+		 * @return parsed value: List, Map, String, Number, Boolean or null.
+		 * @throws SRuntimeException is an error occurs.
+		 */
+		private JObject readValue() throws SRuntimeException {
+			if (_p.eos()) {
+				//unexpected eof
+				throw new SRuntimeException(JSON.JSON007, genPosMod());
+			}
+			SPosition spos = _p.getPosition();
+			if (_p.isChar('{')) { // Map
+				JMap result = new JMap(spos);
+				_p.isSpaces();
+				if (_p.isChar('}')) {
+					return result;
+				}
+				for (;;) {
+					JObject o = readValue();
+					if (o != null && o.getType() == 'S') {
+						 // parse JSON named pair
+						JString name = (JString) o;
+						_p.isSpaces();
+						if (!_p.isChar(':')) {
+							// ":" expected
+							throw new SRuntimeException(JSON.JSON002, ":",
+								genPosMod());
+						}
+						_p.isSpaces();
+						result.put(name, readValue());
+						_p.isSpaces();
+						if (_p.isChar('}')) {
+							_p.isSpaces();
+							return result;
+						}
+						if (_p.isChar(',')) {
+							_p.isSpaces();
+						}
+					} else {
+						// String with name of item expected
+						throw new SRuntimeException(JSON.JSON004, genPosMod());
+					}
+				}
+			} else if (_p.isChar('[')) {
+				JList result = new JList(spos);
+				_p.isSpaces();
+				if (_p.isChar(']')) {
+					return result;
+				}
+				for(;;) {
+					result.add(readValue());
+					_p.isSpaces();
+					if (_p.isChar(']')) {
+						return result;
+					}
+					if (_p.isChar(',')) {
+						_p.isSpaces();
+					}
+				}
+			} else if (_p.isChar('"')) { // string
+				spos = _p.getPosition();
+				StringBuilder sb = new StringBuilder();
+				while (!_p.eos()) {
+					if (_p.isToken("\"\"")) {
+						sb.append('"');
+					} else if (_p.isChar('"')) {
+						String s = sb.toString();
+						return new JString(new SBuffer(s, spos));
+					} else if (_p.isChar('\\')) {
+						char c = _p.peekChar();
+						if (c == 'u') {
+							int x = 0;
+							for (int j = 1; j < 4; j++) {
+								int y = hexDigit(_p.peekChar());
+								if (y < 0) {
+									// hexadecimal digit expected
+									throw new SRuntimeException(JSON.JSON005,
+										genPosMod());
+								}
+								x = (x << 4) + y;
+							}
+							sb.append((char) x);
+						} else {
+							int i = "\"\\/bfnrt".indexOf(c);
+							if (i >= 0) {
+								sb.append("\"\\/\b\f\n\r\t".charAt(i));
+							} else {
+								 // Incorrect control character in string
+								throw new SRuntimeException(JSON.JSON006,
+									genPosMod());
+							}
+						}
+					} else {
+						sb.append(_p.peekChar());
+					}
+				}
+				// end of string ('"') is missing
+				throw new SRuntimeException(JSON.JSON001, genPosMod());
+			} else if (_p.isToken("null")) {
+				return new JNull(spos);
+			} else if (_p.isToken("true")) {
+				return new JBoolean(new SBuffer("true", spos));
+			} else if (_p.isToken("false")) {
+				return new JBoolean(new SBuffer("false", spos));
+			} else {
+				boolean minus = _p.isChar('-');
+				int pos = _p.getIndex();
+				Number n;
+				String s;
+				if (_p.isFloat()) {
+					s = _p.getBufferPart(pos, _p.getIndex());
+					n = new BigDecimal((minus ? "-" : "") + s);
+				} else if (_p.isInteger()) {
+					s = _p.getBufferPart(pos, _p.getIndex());
+					n = new BigInteger((minus ? "-" : "") + s);
+				} else {
+					if (minus) {
+						// number expected
+						throw new SRuntimeException(JSON.JSON003, genPosMod());
+					} else {
+						//JSON value expected
+						throw new SRuntimeException(JSON.JSON010, genPosMod());
+					}
+				}
+				if (s.charAt(0) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(1))) {
+						// Illegal leading zero in number
+						throw new SRuntimeException(JSON.JSON014, genPosMod());
+				}
+				return new JNumber(new SBuffer(s, spos), n);
+			}
+		}
+
+		/** Parse source data.
+		 * @return parsed JSON object.
+		 * @throws SRuntimeException if an error occurs,
+		 */
+		private JObject parse() throws SRuntimeException {
+			_p.isSpaces();
+			char c = _p.getCurrentChar();
+			if (c != '{' && c != '[' ) {
+				// JSON object or array expected"
+				throw new SRuntimeException(JSON.JSON009, genPosMod());
+			}
+			JObject result = readValue();
+			_p.isSpaces();
+			if (!_p.eos()) {
+				//Text after JSON not allowed
+				throw new SRuntimeException(JSON.JSON008, genPosMod());
+			}
+			return result;
+		}
+	}
+
+	private interface JObject {
+
+		public SPosition getPosition();
+
+		public char getType();
+
+		@Override
+		public int hashCode();
+
+		@Override
+		public boolean equals(Object o);
+	}
+
+	private static class JString implements JObject {
+
+		private final SBuffer _val;
+
+		JString(SBuffer val) {_val = val;}
+
+		@Override
+		public SPosition getPosition() {return _val;}
+
+		@Override
+		public char getType() {return 'S';}
+
+		public SBuffer getValue() {return _val;}
+
+		public String getString() {return _val.getString();}
+
+		@Override
+		public int hashCode() {return _val.getString().hashCode();}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof JString) {
+				return _val.getString().equals(((JString) o)._val.getString());
+			}
+			return false;
+		}
+	}
+
+	private static class JNumber implements JObject {
+
+		private final SBuffer _val;
+
+		private final Number _n;
+
+		JNumber(SBuffer val, Number n) {_val = val; _n = n;}
+
+		@Override
+		public SPosition getPosition() {return _val;}
+
+		@Override
+		public char getType() {return 'N';}
+
+		public SBuffer getValue() {return _val;}
+
+		public Number getNumber() {return _n;}
+
+		@Override
+		public int hashCode() {return _n.hashCode();}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof JNumber) {
+				return _n.equals(((JNumber) o)._n);
+			}
+			return false;
+		}
+	}
+
+	private static class JBoolean implements JObject {
+
+		private final SBuffer _val;
+
+		JBoolean(SBuffer val) {_val = val;}
+
+		@Override
+		public SPosition getPosition() {return _val;}
+
+		@Override
+		public char getType() {return 'B';}
+
+		public boolean getValue() {return "true".equals(_val.getString());}
+	}
+
+	private static class JNull implements JObject {
+
+		private final SBuffer _val;
+
+		JNull(SPosition val) {_val = new SBuffer("null", val);}
+
+		@Override
+
+		public SPosition getPosition() {return _val;}
+
+		@Override
+		public char getType() {return '_';}
+
+		@Override
+		public int hashCode() {return 1;}
+
+		@Override
+		public boolean equals(Object o) {return (o instanceof JNull);}
+	}
+
+	private static class JMap extends HashMap<JString, JObject>
+		implements JObject {
+
+		private final SPosition _spos;
+
+		private JMap(SPosition spos) {
+			super();
+			_spos = spos;
+		}
+
+		@Override
+		public SPosition getPosition() {return _spos;}
+
+		@Override
+		public char getType() {return 'M';}
+	}
+
+	private static class JList extends ArrayList<JObject> implements JObject {
+
+		private final SPosition _spos;
+
+		private JList(SPosition spos) {
+			super();
+			_spos = spos;
+		}
+
+		@Override
+		public SPosition getPosition() {return _spos;}
+
+		@Override
+		public char getType() {return 'L';}
+
+	}
+////////////////////////////////////////////////////////////////////////////////
+	private Entry<JString, JObject> getJAttrWithPrefix(final JMap map,
+		final String prefix,
+		final boolean remove) {
+		for (Entry<JString, JObject> e: map.entrySet()) {
+			if (e.getKey().getString().startsWith(prefix + ':')
+				&& e.getValue().getType() == 'S') {
+				if (remove) {
+					map.remove(e.getKey());
+				}
+				return e;
+			}
+		}
+		return null;
+	}
+
+	private JString getJAttr(final JMap map,
+		final String name,
+		final boolean remove) {
+		JString jname = new JString(new SBuffer(name));
+		JObject o = map.get(jname);
+		if (o != null) {
+			if (remove) {
+				map.remove(jname);
+			}
+			if (o.getType() != 'S') {
+				throw new RuntimeException("String expected");
+			}
+		}
+		return (JString) o;
+	}
+
+	private JString getXDAttrWithOrWithotPrefix(final JMap map,
+		final String prefix,
+		final String name,
+		final boolean remove) {
+		JString jname = new JString(new SBuffer(name));
+		JObject o = map.get(jname);
+		if (o != null) {
+			if (remove) {
+				map.remove(jname);
+			}
+			if (o.getType() != 'S') {
+				throw new RuntimeException("String expected");
+			}
+		} else {
+			jname = new JString(new SBuffer(prefix + ':' + name));
+			o = map.get(jname);
+			if (o != null) {
+				if (remove) {
+					map.remove(jname);
+				}
+				if (o.getType() != 'S') {
+					throw new RuntimeException("String expected");
+				}
+			}
+		}
+		return (JString) o;
+	}
+
+	private PAttr setPAttr(final PNode pnode,
+		final JMap map,
+		final String name,
+		final boolean alsoNoPrefixed,
+		final boolean remove) {
+		int ndx = name.indexOf(':');
+		JString o = getJAttr(map, name, remove);
+		if (o != null) {
+			SBuffer sbf = o.getValue();
+			PAttr pattr = new PAttr(name, sbf, null, 0);
+			if (ndx > 0) {
+				pattr._localName = name.substring(ndx + 1);
+				pattr._nsURI = KXmlConstants.XDEF31_NS_URI;
+				pattr._nsindex = _pcomp.getNSURIIndex(pattr._nsURI);
+			} else {
+				pattr._localName = name;
+				pattr._nsURI = null;
+				pattr._nsindex = -1;
+			}
+			pnode._attrs.add(pattr);
+			return pattr;
+		}
+		if (ndx > 0 && alsoNoPrefixed) {
+			return setPAttr(pnode,
+				map, name.substring(ndx + 1), alsoNoPrefixed, remove);
+		}
+		return null;
+	}
+
+	private static PNode createXdefPNode(final PNode parent,
+		final String xdPrefix,
+		final String localName,
+		final SPosition spos) {
+		PNode pn = new PNode(xdPrefix + ":" + localName,
+			spos, parent, (byte) 31, (byte) 10);
+		pn._localName = localName;
+		pn._nsURI = KXmlConstants.XDEF31_NS_URI;
+		pn._xdVersion = XDConstants.XD31_ID;
+		return pn;
+	}
+
+	/** Generate declaration node to X-definition.
+	 * @param list value of declaration.
+	 * @param name
+	 * @param decl
+	 * @param parent
+	 * @param level
+	 */
+	private void genXDDeclaration(final JList list,
+		final String name,
+		final JMap decl,
+		final PNode parent,
+		final int level) {
+		int ndx = name.indexOf(':');
+		String xdPrefix = name.substring(0, ndx);
+		if (level > 1) {
+			throw new RuntimeException("xd:declaration not allowe here");
+		}
+		if (list.size() < 2) {
+			throw new RuntimeException("empty declaration");
+		}
+		PNode pn =
+			createXdefPNode(parent, xdPrefix, "declaration",list.getPosition());
+		JObject jo = list.get(1);
+		if (jo.getType() != 'S') {
+			throw new RuntimeException("Must be string!");
+		} else {
+			pn._value = ((JString) jo).getValue();
+		}
+		jo = decl.get(new JString(new SBuffer(name)));
+		if (jo.getType() == 'M') {
+			copyAttrs(pn, (JMap) jo);
+		}
+		pn._xdef = parent._xdef;
+		parent._childNodes.add(pn);
+		_pcomp.getPDeclarations().add(pn);
+	}
+
+	/** Generate a X-definition group.
+	 * @param list list of child nodes.
+	 * @param name name of group.
+	 * @param decl Map with attributes.
+	 * @param parent the node where will be generated the item as a child node.
+	 * @param level nesting level.
+	 */
+	private void genXDGroup(final JList list,
+		final String xdPrefix,
+		final String name,
+		final JMap decl,
+		final PNode parent,
+		final int level) {
+		int ndx = name.indexOf(':');
+		PNode pn = createXdefPNode(parent,
+			xdPrefix, name.substring(ndx + 1),list.getPosition());
+		JObject jo = decl.get(new JString(new SBuffer(name)));
+		if (jo.getType() == 'M') {
+			copyAttrs(pn, (JMap) jo);
+		}
+		for (int i = 1; i < list.size(); i++) {
+			jo = list.get(i);
+			if (jo.getType() == 'A') {
+				JList jl = (JList) jo;
+				jo = jl.get(0);
+				if (jo.getType() == 'M') {
+					genChild(jl, xdPrefix, pn, level + 1);
+				}
+			}
+		}
+	}
+
+	/** Generate XDef item to parent node.
+	 * @param list of child nodes.
+	 * @param xdPrefix prefix of X-definition
+	 * @param decl map of parameters.
+	 * @param parent the node where will be generated the item as a child node.
+	 * @param level nesting level.
+	 */
+	private void genItem(JList list,
+		String xdPrefix,
+		JMap decl,
+		PNode parent,
+		int level) {
+		List<JString> params = new ArrayList<JString>();
+		Map<String, String> prefixes = new HashMap<String, String>();
+		for (JString x: decl.keySet()) {
+			String name = x.getValue().getString();
+			if (name.startsWith("xmlns")) {
+				JObject jo = decl.get(x);
+				if (jo.getType() == 'S') {
+					String s = ((JString) jo).getValue().getString();
+					int ndx = name.indexOf(':');
+					String prefix;
+					if (ndx > 0) {
+						if (ndx == 5) {
+							prefix = name.substring(6);
+						} else {
+							throw new RuntimeException("Incorrect xmlns");
+						}
+					} else {
+						prefix = "";
+					}
+					prefixes.put(prefix, s);
+				} else {
+					throw new RuntimeException("Name expected");
+				}
+			} else {
+				params.add(x);
+			}
+		}
+		if (params.isEmpty()) {
+			throw new RuntimeException("no named item");
+		}
+		for (JString x: params) {
+			String name = x.getValue().getString();
+			if (name.startsWith(xdPrefix + ':')) {
+				if (name.endsWith(":declaration")) {
+					genXDDeclaration(list, name, decl, parent, level);
+				}
+				if (name.endsWith(":mixed") || name.endsWith(":choice")
+					|| name.endsWith(":sequence") || name.endsWith(":list")) {
+					genXDGroup(list, xdPrefix, name, decl, parent, level);
+				}
+			} else if (!name.startsWith(xdPrefix + ':')) {
+				genModel(list, x, decl, parent, level);
+			}
+		}
+	}
+
+	/** Add PNode child.
+	 * @param pnode to this node add child.
+	 * @param child node to be added.
+	 */
+	private void addNode(PNode pnode,
+		PNode child) {
+		String name = child._name.getString();
+		int ndx = name.indexOf(':');
+		child._localName = ndx > 0 ? name.substring(ndx + 1) : name;
+		child._xdVersion = pnode._xdVersion;
+		child._xmlVersion = pnode._xmlVersion;
+		pnode._childNodes.add(child);
+	}
+
+	private void genModel(final JList list,
+		final JString name,
+		final JMap decl,
+		final PNode parent,
+		final int level) {
+		String modelName = name.getValue().getString();
+		PNode pn = new PNode(modelName, name._val, parent,
+			parent._xdVersion, parent._xmlVersion);
+		int ndx = modelName.indexOf(':');
+		String modelPrefix;
+		if (ndx > 0) {
+			modelPrefix = modelName.substring(0, ndx);
+			pn._localName = modelName.substring(ndx + 1);
+		} else {
+			modelPrefix = "";
+			pn._localName = modelName;
+		}
+		int nsndx = parent._nsPrefixes.get(modelPrefix);
+		pn._nsindex = nsndx;
+		pn._nsURI = _pcomp.getNSURI(nsndx);
+		addNode(parent, pn);
+	}
+
+	private void genChild(final JList list,
+		final String xdPrefix,
+		final PNode parent,
+		final int level) {
+		JObject jo = list.get(0);
+		if (jo.getType() == 'M') {
+			JMap decl = (JMap) jo;
+			if (decl.isEmpty()) {
+				throw new RuntimeException("Empty map");
+			}
+			genItem(list, xdPrefix, decl, parent, level);
+		} else {
+			throw new RuntimeException("List expected");
+		}
+	}
+
+	private void copyAttrs(PNode pNode, JMap pars) {
+		PAttr patt;
+		JString jo;
+		// set xmlns attributes
+		if ((jo = getJAttr(pars, "xmlns", false)) != null
+			&& jo.getType() == 'S') {
+			patt = new PAttr("xmlns",
+				((JString) jo).getValue(),
+				XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+				XPreCompiler.NS_XMLNS_INDEX);
+			patt._localName = "xmlns";
+			pNode._attrs.add(patt);
+			getJAttr(pars, "xmlns", true);
+			int ndx = _pcomp.setNSURI(
+				((JString) jo).getValue().getString());
+			pNode._nsPrefixes.put("", ndx);
+		}
+		Entry<JString, JObject> e;
+		while ((e = getJAttrWithPrefix(pars,"xmlns",true)) != null){
+			String name = e.getKey().getString();
+			patt = new PAttr(name,
+				((JString) jo).getValue(),
+				XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+				XPreCompiler.NS_XMLNS_INDEX);
+			String ns = patt._localName = name.substring(6);
+			pNode._attrs.add(patt);
+			int ndx = _pcomp.setNSURI(
+				((JString) jo).getValue().getString());
+			pNode._nsPrefixes.put(ns, ndx);
+		}
+		// set other attributes
+		JString[] attNames = pars.keySet().toArray(new JString[0]);
+		for (JString x: attNames) {
+			setPAttr(pNode, pars, x._val.getString(), false, true);
+		}
+	}
+
+	private void doParse(final Reader reader, final String srcName) {
+		StringParser parser = new StringParser(reader,_pcomp.getReportWriter());
 		parser.setSysId(srcName);
 		try {
-			Object o = JSONUtil.parseJSON(parser);
-			if (o instanceof Map) {
-				Map map = (Map) o;
-				if (map.size() == 1) {
-					Map.Entry x =
-						(Map.Entry) map.entrySet().iterator().next();
-					String name = (String) x.getKey();
-					int ndx = name.indexOf(':');
-					String prefix  = ndx > 0 ? name.substring(0, ndx) : "";
-					String localName = ndx > 0 ? name.substring(ndx + 1) : name;
+			JParser jparser = new JParser(parser);
+			JObject jparsed = jparser.parse();
+			String defName = null;
+			PNode pNode = null;
+			if (jparsed.getType() == 'L') {
+				JList jl = (JList) jparsed;
+				if (jl.isEmpty()) {
+					throw new RuntimeException("Empty list");
 				}
+				JObject jo =  jl.get(0);
+				if (jo.getType() != 'M') {
+					throw new RuntimeException("Map expected");
+				}
+				JMap jm = (JMap) jl.get(0);
+				JString js = null;
+				for (JString x: jm.keySet()) {
+					String name = x.getValue().getString();
+					if (name.endsWith(":def")) {
+						js = x;
+					}
+				}
+				if (js == null) {
+					throw new RuntimeException("XDef missing");
+				}
+				String prefix = js.getValue().getString().split(":")[0];
+				jo = jm.get(js);
+				pNode = new PNode(prefix + ":def",
+					jl.getPosition(), null, (byte) 31, (byte) 10);
+				pNode._localName = "def";
+				JMap pars;
+				if (jo.getType() == 'M') { // map
+					pars = (JMap) jo;
+					js = getJAttr(pars, "xmlns:" + prefix, false);
+					if (js == null
+						|| !KXmlConstants.XDEF31_NS_URI.equals(js.getString())){
+						throw new RuntimeException("Incorrect namespace: "+js);
+					}
+					//remove this attribute from pars
+					pars.remove(new JString(new SBuffer("xmlns:" + prefix)));
+					pNode._nsURI = KXmlConstants.XDEF31_NS_URI;
+					pNode._xdVersion = XDConstants.XD31_ID;
+					_pcomp.setURIOnIndex(0, pNode._nsURI);
+					int nsndx = 0;
+					pNode._nsPrefixes.put(prefix, nsndx);
+						pNode._xdef = new XDefinition(defName,
+							null, null, null, pNode._xmlVersion);
+					pNode._nsindex = nsndx;
+					pNode._xdef = new XDefinition(defName,
+							null, null, null, pNode._xmlVersion);
+					PAttr patt = new PAttr("xmlns:" + prefix,
+						js.getValue(),
+						XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+						XPreCompiler.NS_XMLNS_INDEX);
+					patt._localName = prefix;
+					pNode._attrs.add(patt);
+					// copy other attributes to pNode (xmlns:j was processed)
+					copyAttrs(pNode, pars);
+					// get name of X-definition
+					patt = pNode.getAttrNS("name", -1);
+					if (patt == null) {
+						patt = pNode.getAttrNS("name", 0);
+					}
+					defName = (patt != null) ? patt._value.getString() : "";
+					// process models and child nodes
+					for (int i = 1; i < jl.size(); i++) {
+						JObject jx = jl.get(i);
+						if (jx.getType() == 'L') {
+							genChild((JList) jx, prefix, pNode, 1);
+						} else if (jx.getType() == 'M') {
+//							genChild((JList) jx, prefix, pNode, 0);
+						} else {
+							throw new RuntimeException("Model expected");
+						}
+					}
+				}
+			} else {
+				throw new RuntimeException("Not correct JDefinition");
+			}
+			for (PNode p: _pcomp.getPXDefs()) {
+				if (defName.equals(p._xdef.getName())) {
+					defName = null;
+				}
+			}
+			if (defName != null && pNode != null) {
+				_pcomp.getPXDefs().add(pNode);
 			}
 		} catch (SRuntimeException ex) {
 			throw new SRuntimeException(ex.getReport());

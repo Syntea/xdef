@@ -29,6 +29,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -119,7 +120,6 @@ public class JSONUtil implements KXmlConstants {
 		 */
 		private Object readValue() throws SRuntimeException {
 			if (_p.eos()) {
-				System.err.println(_p.getSourceBuffer());
 				//unexpected eof
 				throw new SRuntimeException(JSON.JSON007, genPosMod());
 			}
@@ -151,8 +151,6 @@ public class JSONUtil implements KXmlConstants {
 							_p.isSpaces();
 						}
 					} else {
-						System.err.println(_p.getParsedBufferPartFrom(0));
-						System.err.println("===\n"+_p.getUnparsedBufferPart());
 						// String with name of item expected
 						throw new SRuntimeException(JSON.JSON004, genPosMod());
 					}
@@ -345,7 +343,7 @@ public class JSONUtil implements KXmlConstants {
 			if (i > 0 && j > 0) {
 				// xx xx xx xx  UTF-8
 				s = String.valueOf((char) i) + (char)j;
-				reader = new InputStreamReader(in, "UTF-8");
+				reader = new InputStreamReader(in, Charset.forName("UTF-8"));
 			} else {
 				int k = in.read();
 				int l = in.read();

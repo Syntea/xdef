@@ -14,6 +14,7 @@ package cz.syntea.xdef.util.conv.xsd2xd.xdef_2_0;
 
 import cz.syntea.xdef.sys.SReporter;
 import cz.syntea.xdef.msg.XDEF;
+import cz.syntea.xdef.util.conv.xd.xd_2_0.XdNames;
 import cz.syntea.xdef.util.conv.xsd.xsd_1_0.XsdUtils;
 import cz.syntea.xdef.util.conv.xsd2xd.schema_1_0.Processor;
 import cz.syntea.xdef.util.conv.xsd2xd.util.DOMUtils;
@@ -148,7 +149,14 @@ public class ProcessMethods {
 		XdefDocument xdef) {
 		String name = complexTypeElement.getAttribute("name");
 		String namespace = Utils.getNamespace(complexTypeElement);
-		return xdef.addElement(xdefContextElement, namespace, name + "_cType");
+/*VT*/
+		String s = name.endsWith("_cType") ? name : (name + "_cType");
+		Element result = xdef.addElement(xdefContextElement, namespace, s);
+		if ("true".equals(complexTypeElement.getAttribute("mixed"))) {
+			xdef.addXdefAttr(result, "text", "occurs * string();");
+		}
+		return result;
+/*VT*/
 	}
 
 	/** Processes given <tt>simpleType</tt> element and adds declaration
@@ -288,8 +296,14 @@ public class ProcessMethods {
 					//declaration is complex type
 					if (Utils.COMPLEX_TYPE.equals(decl.getType())) {
 						//setting ref string
-						element.setRef(xdef.getRefString(schemaURLStack.peek(),
-							xdefContextElement, decl) + "_cType");
+/*VT*/
+						String s = xdef.getRefString(schemaURLStack.peek(),
+							xdefContextElement, decl);
+						if (!s.endsWith("_cType")) {
+							s += "_cType";
+						}
+						element.setRef(s);
+/*VT*/
 						//declaration is simple type
 					} else {
 						//getting type declaration
@@ -741,10 +755,18 @@ public class ProcessMethods {
 				//declaration is complex type declaration
 			} else {
 				//adding ref expression to xdef context element
+/*VT*/
+				String declName = decl.getName();
+				if (!declName.endsWith("_cType")) {
+					declName += "_cType";
+				}
 				xdef.addRefExpression(xdefContextElement,
 					(decl.getSchemaURL().equals(schemaURLStack.peek())
-						? "" : xdef.getNameFromURL(decl.getSchemaURL())),
-					decl.getNamespace(), decl.getName() + "_cType");
+						? "" : xdef.getXdefName(decl.getSchemaURL())),
+					decl.getNamespace(), declName);
+//						? "" : xdef.getNameFromURL(decl.getSchemaURL())),
+//					decl.getNamespace(), decl.getName() + "_cType");
+/*VT*/
 			}
 		}
 	}

@@ -13,21 +13,22 @@
 package test.xdutils;
 
 import cz.syntea.xdef.sys.STester;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.NullReportWriter;
-import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.XsdToXdef;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import cz.syntea.xdef.sys.ReportWriter;
 
 /** Tests schema to XDefinition conversion.
  * @author Alexandrov
@@ -35,7 +36,7 @@ import cz.syntea.xdef.sys.ReportWriter;
 public class TestXsd2XdConv extends STester {
 
 	private XDDocument _chkDoc;
-	private ReportWriter _repWriter;
+	private ArrayReporter _repWriter;
 	private File _dataDir;
 	private File _tempDir;
 	private ErrMessage _errMessage;
@@ -46,16 +47,16 @@ public class TestXsd2XdConv extends STester {
 	private void init() {
 		_xsdFactory =
 			SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-		_repWriter = new NullReportWriter(false);
+		_repWriter = new ArrayReporter();
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Data directory does not exists or is not a directory");
+				"Data directory does not exist or it is not a directory");
 		}
 		_dataDir = new File(dataDir.getAbsolutePath(),"xsd2xd");
 		if (!_dataDir.exists() || !_dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Xsd2xd directory does not exists or is not a directory");
+				"Xsd2xd directory does not exist or it is not a directory");
 		}
 		File tempDir = new File(getTempDir());
 		if (!tempDir.exists()) {
@@ -84,7 +85,7 @@ public class TestXsd2XdConv extends STester {
 		File schemaFile = new File(_dataDir.getAbsolutePath(),testName+".xsd");
 		if (!schemaFile.exists() || !schemaFile.isFile()) {
 			setMessage(
-				new ErrMessage("Schema file does not exists or is not a file",
+				new ErrMessage("Schema file does not exist or it is not a file",
 				schemaFile, null));
 			return false;
 		}
@@ -111,12 +112,18 @@ public class TestXsd2XdConv extends STester {
 		File xdefFile = new File(xdefFileName);
 		if (!xdefFile.exists() || !xdefFile.isFile()) {
 			setMessage(new ErrMessage(
-				"Generated XDefinition file does not exists or is not a file",
+				"Generated XDefinition file does not exist or it is not a file",
 				xdefFile, null));
 			return false;
 		}
 		try {
-			XDPool xdPool = XDFactory.compileXD(null, xdefFile);
+			Properties props = new Properties();
+			props.put("xdef.warnings", "true");
+			XDPool xdPool = XDFactory.compileXD(props, xdefFile);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			xdPool.writeXDPool(out);
+			xdPool = XDFactory.readXDPool(
+				new ByteArrayInputStream(out.toByteArray()));
 			if (!xdPool.exists(testName)) {
 				setMessage(new ErrMessage(
 					"Main XDefinition is missing", xdefFile, null));
@@ -157,7 +164,8 @@ public class TestXsd2XdConv extends STester {
 		_chkDoc.xparse(xmlFile, _repWriter);
 		if (_repWriter.errors()) {
 			setMessage(new ErrMessage(
-				"Given XML file IS NOT VALID against XDefinition",
+				"Given XML file IS NOT VALID against XDefinition\n"
+					+ _repWriter.printToString(),
 				xmlFile, null));
 			return false;
 		}
@@ -351,6 +359,12 @@ public class TestXsd2XdConv extends STester {
 		assertTrue(prepare("t020"), popMessage());
 		assertTrue(parse("t020"), popMessage());
 
+		assertTrue(prepare("t021a"), popMessage());
+		assertTrue(parse("t021"), popMessage());
+
+		assertTrue(prepare("t021b"), popMessage());
+		assertTrue(parse("t021"), popMessage());
+
 		assertTrue(prepare("t990"), popMessage());
 		assertTrue(parse("t990"), popMessage());
 		assertTrue(parse("t990_1"), popMessage());
@@ -363,21 +377,25 @@ public class TestXsd2XdConv extends STester {
 		assertTrue(prepare("test_00015"), popMessage());
 		assertTrue(parse("test_00015_data"), popMessage());
 
-		//my tests
+		// my tests
 		assertTrue(prepare("basicTestSchema"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
 
 		assertTrue(prepare("typeTestSchema"), popMessage());
 		assertTrue(parse("typeTest_valid_1"), popMessage());
 
+		// test Sisma (mixed="true, recursive reference")
+		assertTrue(prepare("Sisma_RegistraceSU"), popMessage());
+		assertTrue(parse("Sisma_RegistaceSU"), popMessage());
+
 		try {
 			FUtils.deleteAll(_tempDir, true);
-		} catch (SException ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException("Could not delete temporary files", ex);
 		}
    }
 
-		/** Run test
+	/** Run test
 	 * @param args ignored
 	 */
    public static void main(String... args) {

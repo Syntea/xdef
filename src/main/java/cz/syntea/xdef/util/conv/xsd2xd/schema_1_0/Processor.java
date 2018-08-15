@@ -14,6 +14,7 @@ package cz.syntea.xdef.util.conv.xsd2xd.schema_1_0;
 
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.util.conv.xsd2xd.Convertor;
+import cz.syntea.xdef.util.conv.xsd2xd.xdef_2_0.XdefDocument;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -33,12 +34,22 @@ public abstract class Processor implements Convertor {
 	protected final Map<URL, Element> _schemaElements;
 	/** Stack of URLs of currently processing schema elements (URL). */
 	protected final Stack<URL> _schemaURLStack = new Stack<URL>();
+/*VT*/
+	/** Stack of URLs of currently processing schema elements (URL). */
+	protected final String _xdURI;
+	/** Stack of URLs of currently processing schema elements (URL). */
+	protected final String _xdPrefix;
+/*VT*/
 
 	/** Creates instance with root schema at given URL. Initializes all schema
 	 * elements.
 	 * @param rootSchemaURL URL of root schema.
 	 */
-	public Processor(URL rootSchemaURL) {
+	public Processor(URL rootSchemaURL, String xdURI, String xdPrefix) {
+/*VT*/
+		_xdPrefix = xdPrefix;
+		_xdURI = xdURI;
+/*VT*/
 		try {
 			String urlString = rootSchemaURL.toExternalForm();
 //			String replaced = urlString.replace('\\', '/');
@@ -191,6 +202,14 @@ public abstract class Processor implements Convertor {
 		Element xdefContextElement) {
 		NodeList children = KXmlUtils.getChildElements(schemaItem);
 		for (int i = 0; i < children.getLength(); i++) {
+/*VT*/
+		if ("true".equals(schemaItem.getAttribute("mixed"))) {
+			String attName = (_xdPrefix != null && !_xdPrefix.isEmpty())
+				? _xdPrefix + ":text" : "text";
+			xdefContextElement.setAttributeNS(_xdURI,
+				attName,"occurs * string();");
+		}
+/*VT*/
 			Element element = (Element) children.item(i);
 			processSchemaItem(element, xdefContextElement);
 		}
@@ -211,16 +230,16 @@ public abstract class Processor implements Convertor {
 			Map.Entry<URL, Element> entry = i.next();
 			if (!_schemaURLStack.isEmpty()) {
 				throw new RuntimeException("Illegal state of currently "
-						+ " processing schema URLs stack!");
+					+ " processing schema URLs stack!");
 			}
 			_schemaURLStack.push(entry.getKey());
 			resolveDebugURL((URL) entry.getKey());
 			processSchema((Element) entry.getValue(),
-					(Element) xdefElements.get(entry.getKey()));
+				(Element) xdefElements.get(entry.getKey()));
 			resolveDebugEnd();
 			if (_schemaURLStack.size() != 1) {
 				throw new RuntimeException("Illegal state of currently "
-						+ " processing schema URLs stack!");
+					+ " processing schema URLs stack!");
 			}
 			_schemaURLStack.pop();
 		}

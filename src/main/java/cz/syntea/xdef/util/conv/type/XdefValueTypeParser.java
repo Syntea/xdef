@@ -1100,7 +1100,7 @@ public final class XdefValueTypeParser {
 
 	/** Returns <code>true</code> if actual symbol is AND operator symbol. */
 	private boolean isAND() {return Symbol.AND.equals(_actSym);}
-	
+
 	/** Adds actual symbol value to given buffer.
 	 * @param builder buffer.
 	 */
@@ -1126,7 +1126,7 @@ public final class XdefValueTypeParser {
 	private static class ParserException extends RuntimeException {
 
 		private static final long serialVersionUID = -2582190224833320816L;
-		
+
 		/** Exception message. */
 		private final String _message;
 		/** Parsed string. */

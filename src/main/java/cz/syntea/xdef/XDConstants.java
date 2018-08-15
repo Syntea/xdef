@@ -23,6 +23,21 @@ import cz.syntea.xdef.sys.SConstants;
  */
 public interface XDConstants extends SConstants {
 
+	/** Property defines debug mode (default is false).*/
+	public static final String XDPROPERTY_DEBUG = "xdef.debug";
+	/** Value "true" of property "xdef.debug" */
+	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
+	/** Value "false" of property "xdef.debug" */
+	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
+	/** Value "showResult" of property "xdef.debug" */
+	public static final String XDPROPERTYVALUE_DEBUG_SHOWRESULT = "showResult";
+	/** Property defines stream used for debug output (default is stdOut). */
+	public static final String XDPROPERTY_DEBUG_OUT = "xdef.debug.out";
+	/** Property defines stream used for debug input (default is stdIn). */
+	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
+	/** Property defines debug editor class name.*/
+	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef.debugeditor";
+
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
 	public static final String XDPROPERTY_DOCTYPE = "xdef.doctype";
 	/** Value "false" of property "xdef.doctype" */
@@ -59,19 +74,6 @@ public interface XDConstants extends SConstants {
 	public static final String XDPROPERTYVALUE_WARNINGS_TRUE = "true";
 	/** Value "false" of property "xdef.debug" */
 	public static final String XDPROPERTYVALUE_WARNINGS_FALSE = "false";
-
-	/** Property defines debug mode (default is false).*/
-	public static final String XDPROPERTY_DEBUG = "xdef.debug";
-	/** Value "true" of property "xdef.debug" */
-	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
-	/** Value "false" of property "xdef.debug" */
-	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
-	/** Value "showResult" of property "xdef.debug" */
-	public static final String XDPROPERTYVALUE_DEBUG_SHOWRESULT = "showResult";
-	/** Property defines stream used for debug output (default is stdOut). */
-	public static final String XDPROPERTY_DEBUG_OUT = "xdef.debug.out";
-	/** Property defines stream used for debug input (default is stdIn). */
-	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
 
 	/** Property defines debug mode (default is false).*/
 	public static final String XDPROPERTY_DISPLAY = "xdef.display";

@@ -33,10 +33,13 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDBuilder;
+import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.impl.compile.CompileXDPool;
+import cz.syntea.xdef.impl.debug.ChkGUIDebug;
+import cz.syntea.xdef.impl.debug.XEditor;
 //import cz.syntea.xd.impl.compile.CompileParser;
 //import cz.syntea.xd.impl.compile.CompileXDPool;
 import java.io.File;
@@ -47,6 +50,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.lang.reflect.Constructor;
 
 /** Builder of XPool.
  * @author Vaclav Trojan
@@ -199,17 +203,36 @@ public class XBuilder implements XDBuilder {
 				 || result.isDebugMode());
 			if (display) {
 				Class<?>[] externals = p.getExternals(); //save external classes
-				ChkGUIDisplay edit = new ChkGUIDisplay();
 				ArrayReporter ar = (ArrayReporter) reporter;
+				XEditor edit = null;
+				try {
+					String debugEditor = result.getDebugEditor();
+					if (debugEditor != null) {
+						Class<?> cls = Class.forName(debugEditor);
+						Constructor<?> c = cls.getDeclaredConstructor(
+							Properties.class, XDPool.class);
+						XDDebug debugger = (XDDebug) c.newInstance(null,result);
+						edit = debugger.getXEditor();
+					}
+				} catch (Exception ex) {
+					edit = null;
+					// Class with the external debug editor &{0}{"}{"}
+					// is not available.
+					throw new SRuntimeException(
+						XDEF.XDEF850, ex, result.getDebugEditor());
+				}
+				if (edit == null) {
+					edit = new ChkGUIDebug(null, result).getXEditor();
+				}
 				for (;;) {
-					Map<String, XSourceItem> map = result._sourcesMap;
-					if (edit.setGUI(result, ar)) {
+					Map<String, XDSourceItem> map = result._sourcesMap;
+					if (edit.setXEditor(result, ar)) {
 						break;
 					}
 					result = new XPool(result.getProperties(),null, externals);
-					for (Map.Entry<String, XSourceItem> e: map.entrySet()) {
+					for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
 						String key = e.getKey();
-						XSourceItem src = e.getValue();
+						XDSourceItem src = e.getValue();
 						if (src._source != null) {
 							result.setSource(src._source, key);
 							result._sourcesMap.put(key, src);

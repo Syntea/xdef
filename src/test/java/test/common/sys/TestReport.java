@@ -28,10 +28,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 /** Test reporter.
- * @author Vaclav Trojan
+ * @author  Vaclav Trojan
  */
 public class TestReport extends STester {
 
@@ -42,7 +43,8 @@ public class TestReport extends STester {
 	}
 
 	private static Properties readProperties(InputStream is) throws Exception {
-		return readProperties(new InputStreamReader(is, "UTF-8"));
+		return readProperties(new InputStreamReader(is,
+			Charset.forName("UTF-8")));
 	}
 
 	private static Properties readProperties(Reader in) throws Exception {
@@ -72,6 +74,13 @@ public class TestReport extends STester {
 			assertEq(s, "E XML075: XML chyba");
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
+		String dataDir = getSourceDir();
+		if (!new File(dataDir + "ABC_ces.properties").exists()) {
+			if (!new File(dataDir + "ABC_ces.properties").exists()) {
+				throw new RuntimeException("Report files are not available: "
+					+ dataDir);
+			}
+		}
 		try {
 			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
 			s = "\n\na a\n b\n\n";
@@ -97,13 +106,7 @@ public class TestReport extends STester {
 			assertEq("česky", s);
 			s = Report.getReportText("XML_LANGUAGE", "eng");
 			assertEq("English", s);
-		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
-		try {
-			String dataDir = getSourceDir();
-			if (!new File(dataDir + "ABC_ces.properties").exists()) {
-				throw new RuntimeException("not available properties files");
-			}
+			reporter.clear();
 			SManager.setProperty(XDConstants.REPORTTABLE_FILE + "ABC",
 				dataDir + "ABC_*.properties");
 			s = Report.getReportText("ABC_LANGUAGE", "deu");
@@ -174,9 +177,6 @@ public class TestReport extends STester {
 			s = Report.text(null, "Message&{position}",
 				"&{This} tag is not prezent in source").toString();
 			assertEq("Message", s);
-		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
-		try {
 			s = Report.text("ABC008", null,
 				"&{line}1&{col}2&{source}d:\\temp\\a.a").toString();
 			assertEq("Message line = 1 column = 2 source = 'd:\\temp\\a.a'", s);
@@ -238,7 +238,6 @@ public class TestReport extends STester {
 			assertEq("Chyba", Report.text("ABC009", null).toString("ces"));
 			assertEq("Error", Report.text("ABC009", null).toString("eng"));
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {
 			//declare file with messages
 //			SManager.setLanguage("ces");
@@ -263,7 +262,6 @@ public class TestReport extends STester {
 				" ABC009: '" + Report.text("ABC009", null) + '\'';
 			assertEq("english ABC009: 'Chyba'", s);
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {
 			File f = File.createTempFile("report", "tmp");
 			f.deleteOnExit();
@@ -348,7 +346,6 @@ public class TestReport extends STester {
 			fr.close();
 			f.delete();
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {//check registered tables
 			r = Report.error("123", "par &{p} par &{q}",
 				"&{p}&{#456{a&{b}{:}{,}}{&{b}bc}}&{q}q");
@@ -421,7 +418,6 @@ public class TestReport extends STester {
 			assertEq("2", r.getParameter("q"));
 			assertEq("3", r.getParameter("r"));
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {//check registered tables
 			assertEq("eng", SManager.getDefaultLanguage());
 			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "en");
@@ -454,6 +450,7 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS013).toString("deu");
 			assertEq("Too many errors", s);
 		} catch (Exception ex) {fail(ex);}
+		new File(getTempDir()).delete();
 	}
 
 	/** Run test
@@ -462,5 +459,4 @@ public class TestReport extends STester {
 	public static void main(String... args) {
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

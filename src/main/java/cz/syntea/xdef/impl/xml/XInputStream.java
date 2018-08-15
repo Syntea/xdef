@@ -79,7 +79,6 @@ public class XInputStream extends InputStream {
 						break;
 					}
 				}
-			} else {
 			}
 		}
 		String val = getXMLDeclParam("encoding", s);
@@ -95,6 +94,7 @@ public class XInputStream extends InputStream {
 	public final String getXMLVersion() {return _version;}
 	public final boolean getXMLStandalone() {return _standalone;}
 	public final InputStream getInputStream() {return _len == 0 ? _in : this;}
+	public final byte[] getparsedBytes() {return _buf;}
 
 	/** Get XMLDecl parameter.
 	 * @param paramName
@@ -215,13 +215,13 @@ public class XInputStream extends InputStream {
 		} else if (i1 == 0 && i2 == 0) {
 			return (i3 == 0xFE && i4 == 0xFF) ? "04UTF-32BE"  //BOM 1234
 				: (i3 == 0xFF && i4 == 0xFE) ? "04X-ISO-10646-UCS-4-2143" //BOM
-				: (i3 == '<' && i4 == 0) ? "44X-ISO-10646-UCS-4-2143" //00<0
-				: (i3 == 0 && i4=='<') ? "44UTF-32BE" // 000<
+				: (i3 != 0 && i4 == 0) ? "44X-ISO-10646-UCS-4-2143" //00<0
+				: (i3 == 0 && i4 != 0) ? "44UTF-32BE" // 000<
 				: "41UTF-8"; // other
-		} else if (i1 == 0 && i2 == '<') {
+		} else if (i1 == 0 && i2 != 0) {
 			return (i3 == 0 && i4 == 0) ? "44X-ISO-10646-UCS-4-3412" //0<00
 				: "42UTF-16BE";
-		} else if (i1 == '<' && i2 == 0) {
+		} else if (i1 != 0 && i2 == 0) {
 			return (i3 == 0 && i4 == 0) ? "44UTF-32LE" : "42UTF-16LE";
 		} else if (i1 == 0x4C && i2 == 0x6F && i3 == 0xA7 && i4 == 0x94) {
 			return "41CP037"; // EBCDIC ("<?xm")

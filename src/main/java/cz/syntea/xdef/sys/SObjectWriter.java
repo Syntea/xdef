@@ -16,6 +16,7 @@ package cz.syntea.xdef.sys;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 
 /** Provides writing of SObjects to output stream.
  * @author Vaclav Trojan
@@ -102,7 +103,7 @@ public class SObjectWriter {
 
 	synchronized public final void writeString(final String x)
 		throws IOException {
-		writeBytes((x == null) ? null : x.getBytes("UTF-8"));
+		writeBytes((x == null) ? null : x.getBytes(Charset.forName("UTF-8")));
 	}
 
 	synchronized public final void writeSPosition(final SPosition x)

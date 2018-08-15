@@ -20,8 +20,8 @@ public interface SConstants {
 	// Note that build version and build date are authomaticaly generated!
 	/** Build version of software (3.1.004.004). */
 	public static final String BUILD_VERSION = "3.1.004.004";
-	/** Date of build version (2018-07-23). */
-	public static final String BUILD_DATE = "2018-07-23";
+	/** Date of build version (2018-07-30). */
+	public static final String BUILD_DATE = "2018-07-30";
 	/** Prefix of property names for setting of message table files. */
 	public static final String REPORTTABLE_FILE = "syn.msg.";
 	/** Name of property for setting language of messages. */

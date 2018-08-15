@@ -18,7 +18,7 @@
             -->
             <contains_1 xd:script="occurs *">contains('abc')</contains_1>
             <containsi_1 xd:script="occurs *">containsi('AbC')</containsi_1>
-            <datetime_1 xd:script="occurs *">datetime('yyyy-mm-dd')</datetime_1>
+            <datetime_1 xd:script="occurs *">xdatetime('yyyy-mm-dd')</datetime_1>
             <dateYMDhms xd:script="occurs *">dateYMDhms</dateYMDhms>
             <dec xd:script="occurs *">dec</dec>
             <dec_1 xd:script="occurs *">dec(5)</dec_1>
@@ -58,7 +58,7 @@
             <int_2 xd:script="occurs *">int(0,100)</int_2>
             <enum_n xd:script="occurs *">enum('abc', 'def')</enum_n>
             <enumi_n xd:script="occurs *">enumi('aBc', 'DeF')</enumi_n>
-            <ListOf_m xd:script="occurs *">ListOf(int(1,10))</ListOf_m>
+            <ListOf_m xd:script="occurs *">list(int(1,10))</ListOf_m>
             <tokens_1 xd:script="occurs *">tokens('abc|def')</tokens_1>
             <tokensi_1 xd:script="occurs *">tokensi('abc |def')</tokensi_1>
             <MD5 xd:script="occurs *">MD5</MD5>

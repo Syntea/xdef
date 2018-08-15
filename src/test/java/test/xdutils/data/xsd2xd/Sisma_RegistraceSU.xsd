@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="Sisma_common.xsd"/>
+  <xs:complexType name="RegistraceSU_RegistraceSU_cType">
+    <xs:complexContent>
+      <xs:extension base="L1_common_SU_cType"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="RegistraceSU"
+    type="RegistraceSU_RegistraceSU_cType"/>
+</xs:schema>

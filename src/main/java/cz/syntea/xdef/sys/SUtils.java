@@ -45,7 +45,7 @@ public class SUtils extends FUtils {
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
 	/** The string with the last part of Java VM version information.
-	 * E.g. if vresion infromation is "1.6.0_45" it will be "0_45".
+	 * E.g. if version information is "1.6.0_45" it will be "0_45".
 	 */
 	public static final String JAVA_RUNTIME_BUILD;
 

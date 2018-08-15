@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SConstants;
+import java.nio.charset.Charset;
 
 /** Provides generation of {@link cz.syntea.xdef.XDPool} from source
  * X-definitions. You can modify properties of compilation by parameters from
@@ -140,6 +141,52 @@ public final class XDFactory {
 		}
 	}
 
+	/** Compile XDPool from sources.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of strings with X-definition file names.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final String[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (String s : params) {
+			setParam(builder, s);
+		}
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from source.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of URLs with X-definition sources.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final URL[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (URL u : params) {
+			setParam(builder, u);
+		}
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from sources.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of files with X-definition sources.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final File[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		for (File f : params) {
+			setParam(builder, f);
+		}
+		return builder.compileXD();
+	}
+
+
 	/** Compile XDPool from source.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of sources, source pairs or external classes.
@@ -147,7 +194,8 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final Object... params) 	throws SRuntimeException {
+		final Object... params)
+		throws SRuntimeException {
 		if (params == null || params.length == 0) {
 			throw new SRuntimeException(XDEF.XDEF903);
 		}
@@ -469,7 +517,8 @@ public final class XDFactory {
 			w.append(
 "\t\t\treturn xdp = XDFactory.readXDPool(new ByteArrayInputStream(\n"+
 "\t\t\t\tSUtils.decodeBase64(\"")
-					.append(new String(SUtils.encodeBase64(data,false), "UTF-8"))
+					.append(new String(SUtils.encodeBase64(data,false),
+						Charset.forName("UTF-8")))
 					.append("\")));\n"+
 "\t\t} catch (Exception ex) {\n"+
 "\t\t\tthrow new RuntimeException(ex);\n"+
@@ -480,7 +529,7 @@ public final class XDFactory {
 "\t\t\tbyte[] b = new byte["+codeLen+"];\n"+
 "\t\t\tSystem.arraycopy(SUtils.decodeBase64(\"")
 				.append(new String(SUtils.encodeBase64(data,
-					0, BLOCKLEN, false), "UTF-8"))
+					0, BLOCKLEN, false), Charset.forName("UTF-8")))
 				.append("\"), 0, b, 0, "+BLOCKLEN+");\n");
 			int offset = BLOCKLEN;
 			for (int i = 1; offset < codeLen; i++, offset += BLOCKLEN) {
@@ -503,8 +552,8 @@ public final class XDFactory {
 "private static String x(){return\"";
 				if (BLOCKLEN + offset < codeLen) {
 					w.append(s)
-						.append(new String(SUtils.encodeBase64(
-							data, offset, BLOCKLEN, false), "UTF-8"))
+						.append(new String(SUtils.encodeBase64(data,
+							offset, BLOCKLEN, false), Charset.forName("UTF-8")))
 						.append("\";}");
 					if (subclassIndex > 0) {
 						w.write('}');
@@ -514,8 +563,9 @@ public final class XDFactory {
 					offset += BLOCKLEN;
 				} else if (offset < codeLen) {
 					w.append(s)
-						.append(new String(SUtils.encodeBase64(
-							data, offset, codeLen-offset, false), "UTF-8"))
+						.append(new String(SUtils.encodeBase64(data,
+							offset, codeLen-offset, false),
+							Charset.forName("UTF-8")))
 						.append("\";}");
 					offset = codeLen;
 					if (subclassIndex > 0) {

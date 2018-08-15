@@ -16,7 +16,6 @@ import cz.syntea.xdef.impl.ext.XExtUtils;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.msg.XML;
-import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SBuffer;
 import cz.syntea.xdef.sys.SPosition;
 import cz.syntea.xdef.sys.SRuntimeException;
@@ -26,12 +25,7 @@ import cz.syntea.xdef.xml.KParsedAttr;
 import cz.syntea.xdef.xml.KParsedElement;
 import cz.syntea.xdef.xml.KXmlConstants;
 import cz.syntea.xdef.xml.KXmlUtils;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -40,7 +34,7 @@ import org.w3c.dom.Node;
  * from XML source data.
  * @author Trojan
  */
-class PreReaderXML extends XmlDefReader {
+class PreReaderXML extends XmlDefReader implements PreReader {
 
 	/** Actual node */
 	private PNode _actPNode;
@@ -49,15 +43,14 @@ class PreReaderXML extends XmlDefReader {
 	/** The nesting level of XML node. */
 	private int _level;
 
+	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
 
 	/** Creates a new instance of XDefCompiler
-	 * @param reporter reporter.
 	 * @param pcomp pre compiler.
 	 */
-	PreReaderXML(final ReportWriter reporter,
-		XPreCompiler pcomp) {
-		super(reporter);
+	PreReaderXML(final XPreCompiler pcomp) {
+		super();
 		_pcomp = pcomp;
 	}
 
@@ -94,7 +87,6 @@ class PreReaderXML extends XmlDefReader {
 		}
 		_actPNode._nsURI = parsedElem.getParsedNSURI();
 		if (_level == -1) {
-			_pcomp.getCodeGenerator()._namespaceURIs.remove(0);
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
 				|| "thesaurus".equals(elemLocalName)
@@ -130,9 +122,9 @@ class PreReaderXML extends XmlDefReader {
 					}
 				}
 				_actPNode._xdVersion = ver;
-				_pcomp.getCodeGenerator()._namespaceURIs.add(0, projectNS);
+				_pcomp.setURIOnIndex(0, projectNS);
 			} else {
-				_pcomp.getCodeGenerator()._namespaceURIs.add(0, uri);
+				_pcomp.setURIOnIndex(0, uri);
 				//X-definition or X-collection expected
 				error(_actPNode._name, XDEF.XDEF255);
 			}
@@ -142,12 +134,7 @@ class PreReaderXML extends XmlDefReader {
 			String key = ka.getName();
 			String value = ka.getValue();
 			if (key.startsWith("xmlns")) { //addAttr namespace URI to the list.
-				int nsndx = _pcomp.getCodeGenerator()._namespaceURIs.indexOf(
-					value.trim());
-				if (nsndx < 0) {
-					nsndx = _pcomp.getCodeGenerator()._namespaceURIs.size();
-					_pcomp.getCodeGenerator()._namespaceURIs.add(value.trim());
-				}
+				int nsndx = _pcomp.setNSURI(value.trim());
 				if (key.length() == 5) { //default prefix
 					_actPNode._nsPrefixes.put("", nsndx);
 				} else if (key.charAt(5) == ':') { //prefix name
@@ -163,24 +150,14 @@ class PreReaderXML extends XmlDefReader {
 					item._localName = key.substring(ndx + 1);
 					Integer nsndx = _actPNode._nsPrefixes.get(prefix);
 					if (nsndx == null) {
-						String u;
-						if ((u = ka.getNamespaceURI()) != null) {
-							int x = _pcomp.getCodeGenerator()
-								._namespaceURIs.indexOf(u);
-							if (x < 0) {
-								nsndx = _pcomp.getCodeGenerator()
-									._namespaceURIs.size();
-								_pcomp.getCodeGenerator()
-									._namespaceURIs.add(u);
-							} else {
-								nsndx = x;
-							}
+						String u = ka.getNamespaceURI();
+						if (u != null) {
+							nsndx = _pcomp.setNSURI(u);
 							_actPNode._nsPrefixes.put(prefix, nsndx);
 						}
 					}
 					if (nsndx != null) {
-						item._nsURI =
-							_pcomp.getCodeGenerator()._namespaceURIs.get(nsndx);
+						item._nsURI = _pcomp.getNSURI(nsndx);
 						if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
 							&& "script".equals(item._localName)) {
 							StringParser p = new StringParser(
@@ -208,8 +185,7 @@ class PreReaderXML extends XmlDefReader {
 		if (nsuriIndex != null) {
 			int urindx;
 			if (((urindx = nsuriIndex) == XPreCompiler.NS_XINCLUDE_INDEX)) {
-				String nsuri =
-					_pcomp.getCodeGenerator()._namespaceURIs.get(urindx);
+				String nsuri = _pcomp.getNSURI(urindx);
 				Element el;
 				if (_includeElement == null) {
 					el = _includeElement = KXmlUtils.newDocument(nsuri,
@@ -223,9 +199,7 @@ class PreReaderXML extends XmlDefReader {
 					if (aval._nsindex < 0) {
 						el.setAttribute(aval._name, aval._value.getString());
 					} else {
-						el.setAttributeNS(
-							_pcomp.getCodeGenerator()._namespaceURIs.get(
-								aval._nsindex),
+						el.setAttributeNS(_pcomp.getNSURI(aval._nsindex),
 							aval._name,
 							aval._value.getString());
 					}
@@ -437,8 +411,7 @@ class PreReaderXML extends XmlDefReader {
 			_actPNode,
 			_actPNode._xdVersion,
 			_actPNode._xmlVersion);
-		p._nsURI = _pcomp.getCodeGenerator()._namespaceURIs.get(
-			XPreCompiler.NS_XDEF_INDEX);
+		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
 		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
 		p._localName = "text";
 		p._value = _actPNode._value;
@@ -495,37 +468,6 @@ class PreReaderXML extends XmlDefReader {
 		}
 	}
 
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
-	 * @param fileName pathname of file with with X-definitions.
-	 */
-	public final void parseFile(final String fileName) {
-		parseFile(new File(fileName));
-	}
-
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
-	 * @param file The file with with X-definitions.
-	 */
-	public final void parseFile(final File file) {
-		try {
-			URL url = file.toURI().toURL();
-			for (Object o: _pcomp.getSources()) {
-				if (o instanceof URL && url.equals(o)) {
-					return; //found in list
-				}
-			}
-			_pcomp.getSources().add(url);
-			parseStream(new FileInputStream(file), url.toExternalForm());
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (IOException ex) {
-			//Can't read X-definition from the file &{0}
-			throw new SRuntimeException(XDEF.XDEF902,
-				(file == null ? (String) null : file.getAbsolutePath()));
-		}
-	}
-
 	/** Parse InputStream source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param in input stream with the X-definition.
@@ -541,6 +483,7 @@ class PreReaderXML extends XmlDefReader {
 		_level = -1;
 		_actPNode = null;
 		try {
+			setReportWriter(_pcomp.getReportWriter());
 			doParse(in, srcName);
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -563,33 +506,6 @@ class PreReaderXML extends XmlDefReader {
 			}
 		}
 		_actPNode = null; //just let gc to do the job
-	}
-
-	/** Parse data with source X-definition given by URL and addAttr it
-	 * to the set of X-definitions.
-	 * @param url URL of the file with the X-definition.
-	 */
-	public final void parseURL(final URL url) {
-		if (url == null) {
-			//Can't read X-definition from the file &{0}
-			getReportWriter().error(XDEF.XDEF902, "null");
-			return;
-		}
-		for (Object o: _pcomp.getSources()) {
-			if (o instanceof URL && url.equals((URL) o)) {
-				return; //prevents to doParse the source twice.
-			}
-		}
-		String srcName = url.toExternalForm();
-		_pcomp.getSources().add(srcName);
-		try {
-			parseStream(url.openStream(), srcName);
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			//Can't read X-definition from the file &{0}
-			throw new SRuntimeException(XDEF.XDEF902, srcName);
-		}
 	}
 
 	/** Check if the name of X-definition is OK.
@@ -622,50 +538,6 @@ class PreReaderXML extends XmlDefReader {
 			}
 		}
 		return true;
-	}
-
-	/** Parse string and addAttr it to the set of definitions.
-	 * @param source The source string with definitions.
-	 */
-	public final void parseString(final String source) {
-		if (_pcomp.getSources().indexOf(source) >= 0 || source.length() == 0) {
-			return;  //we ignore already declared or empty strings
-		}
-		if (source.charAt(0) == '<') {
-			parseString(source, "STRING");
-		} else {
-			try {
-				URL u = new URL(source);
-				parseURL(u);
-			} catch (Exception ex) {
-				parseFile(new File(source));
-			}
-		}
-	}
-
-	/** Parse string and addAttr it to the set of X-definitions.
-	 * @param source source string with X-definitions.
-	 * @param srcName pathname of source (URL or an identifying name or null).
-	 */
-	public final void parseString(final String source, final String srcName) {
-		if (_pcomp.getSources().indexOf(source) >= 0
-			|| source.length() == 0) {
-			return;  //we ignore already declared or empty strings
-		}
-		char c;
-		if ((c = source.charAt(0)) <= ' ' || c == '<') {
-			_pcomp.getSources().add(source);
-			try {
-				parseStream(new ByteArrayInputStream(source.getBytes("UTF-8")),
-					srcName);
-			} catch (RuntimeException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		} else {
-			parseFile(source);
-		}
 	}
 
 }

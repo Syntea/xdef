@@ -157,12 +157,16 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		}
 	}
 
-	/** Prepares instance of XDefReader.
-	 * @param reporter report writer or null.
+	/** Create the instance of XDefReader with the internal ArrayReporter. */
+	public XmlDefReader() {
+		this(new ArrayReporter());
+	}
+	/** Create the instance of XDefReader with reporter.
+	 * @param reporter report writer.
 	 */
 	public XmlDefReader(ReportWriter reporter) {
 		super();
-		_reporter = reporter == null ?  new ArrayReporter() : reporter;
+		_reporter = reporter;
 		_entities = new TreeMap<String, String>();
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
@@ -193,12 +197,14 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		setReader(mr);
 		return new InputSource(mr);
 	}
+
 	@Override
 	public final void popReader() {
 		if (!_stackReader.empty()) {
 			_stackReader.pop().resetHandler(this);
 		}
 	}
+
 	@Override
 	/** Parse X-definition source.
 	 * @param is InputSource with XML data.
@@ -273,6 +279,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * the list of attributes.
 	 */
 	abstract void elementStart(final KParsedElement parsedElem);
+
 	/** This method is invoked when parser reaches the end of element. */
 	abstract void elementEnd();
 
@@ -426,12 +433,13 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	/////////////////////////////////////////////////////////////
 	// ContentHandler
 	/////////////////////////////////////////////////////////////
-	// implemented in DomBaseHandler:
-	//     void setDocumentLocator(Locator x)
-	//     public void enDocument()
-	//     public void startPrefixMapping(final String prefix, final String uri)
-	//     public void endPrefixMapping(final String prefix)
-	//     public void skippedEntity(final String name)
+	// in the abstract class DomBaseHandler are implemented mdethods:
+	//   - void setDocumentLocator(Locator x)
+	//   - public void enDocument()
+	//   - public void startPrefixMapping(final String prefix, final String uri)
+	//   - public void endPrefixMapping(final String prefix)
+	//   - public void skippedEntity(final String name)
+	// Foolews methods to be implemented:
 	@Override
 	public void startDocument() throws SAXException {}
 
@@ -543,56 +551,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				_text.appendToBuffer(new SBuffer(s, sp));
 			}
 		}
-	}
-
-	private void parseText(final XAbstractReader mr) {
-		for(;;) {
-			if (mr.scanPI() >= 0 || mr.scanComment() >= 0) {
-				continue;
-			}
-			SPosition sp = mr.getSPosition();
-			int pos;
-			if ((pos = mr.scanCDATA()) >= 0) {
-				sp.setFilePos(sp.getFilePos() + 9);
-				String s = mr.getBufPart(pos + 9, mr.getPos()-3);
-				appendText(sp, resolveReferences(sp, s, 0));
-			} else if ((pos = mr.scanEntity()) >= 0) {
-				String en = mr.getBufPart(pos + 1, mr.getPos() - 1);
-				String s = _entities.get(en);
-				if (s != null) { // should be always
-					appendText(sp, s);
-					if (s.indexOf('\n') >= 0) {
-						int len = en.length() + 2;
-						int newLen = s.length();
-//						int p = _text.getString().length() - newLen + 1;
-						int p = _text.getString().length();
-						_text.updatePositions(p, len, newLen, true);
-					}
-				}
-			} else if ((pos = mr.scanText()) >= 0) {
-				String s = mr.getBufPart(pos, mr.getPos());
-				appendText(sp, resolveReferences(sp, s, 1));
-			} else {
-				break;
-			}
-		}
-	}
-
-	/** Find attribute in the list.
-	 * @param list list of parsed attributes.
-	 * @param n name of attribute.
-	 * @return found item or null.
-	 */
-	private static Object[] findAttr(final List<Object[]> list, final String n){
-		if (list != null) {
-			for (int i = 1; i < list.size(); i++) {
-				Object[] item = list.get(i);
-				if (n.equals(item[0])) {
-					return item;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -797,23 +755,79 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+// Private methods:
+////////////////////////////////////////////////////////////////////////////////
+
+	private void parseText(final XAbstractReader mr) {
+		for(;;) {
+			if (mr.scanPI() >= 0 || mr.scanComment() >= 0) {
+				continue;
+			}
+			SPosition sp = mr.getSPosition();
+			int pos;
+			if ((pos = mr.scanCDATA()) >= 0) {
+				sp.setFilePos(sp.getFilePos() + 9);
+				String s = mr.getBufPart(pos + 9, mr.getPos()-3);
+				appendText(sp, resolveReferences(sp, s, 0));
+			} else if ((pos = mr.scanEntity()) >= 0) {
+				String en = mr.getBufPart(pos + 1, mr.getPos() - 1);
+				String s = _entities.get(en);
+				if (s != null) { // should be always
+					appendText(sp, s);
+					if (s.indexOf('\n') >= 0) {
+						int len = en.length() + 2;
+						int newLen = s.length();
+//						int p = _text.getString().length() - newLen + 1;
+						int p = _text.getString().length();
+						_text.updatePositions(p, len, newLen, true);
+					}
+				}
+			} else if ((pos = mr.scanText()) >= 0) {
+				String s = mr.getBufPart(pos, mr.getPos());
+				appendText(sp, resolveReferences(sp, s, 1));
+			} else {
+				break;
+			}
+		}
+	}
+
+	/** Find attribute in the list.
+	 * @param list list of parsed attributes.
+	 * @param n name of attribute.
+	 * @return found item or null.
+	 */
+	private static Object[] findAttr(final List<Object[]> list, final String n){
+		if (list != null) {
+			for (int i = 1; i < list.size(); i++) {
+				Object[] item = list.get(i);
+				if (n.equals(item[0])) {
+					return item;
+				}
+			}
+		}
+		return null;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// methods called from PreReaderXML
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Get report writer.
 	 * @return the report writer.
 	 */
-	public final ReportWriter getReportWriter() {return _reporter;}
+	final ReportWriter getReportWriter() {return _reporter;}
 
 	/** Set report writer.
 	 * @param x the report writer to be set.
 	 */
-	public final void setReportWriter(final ReportWriter x) {_reporter = x;}
+	final void setReportWriter(final ReportWriter x) {_reporter = x;}
 
 	/** Put fatal error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(final SPosition pos,
+	final void fatal(final SPosition pos,
 		final long registeredID,
 		final Object... mod) {
 		putReport(pos, Report.fatal(registeredID, mod));
@@ -823,7 +837,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final SPosition pos,
+	final void error(final SPosition pos,
 		final long registeredID,
 		final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
@@ -834,7 +848,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final SPosition pos,
+	final void lightError(final SPosition pos,
 		final long registeredID,
 		final Object... mod) {
 		putReport(pos, Report.lightError(registeredID, mod));
@@ -845,7 +859,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final SPosition pos,
+	final void warning(final SPosition pos,
 		final long registeredID,
 		final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
@@ -855,7 +869,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param pos SPosition
 	 * @param rep Report.
 	 */
-	public final void putReport(final SPosition pos, final Report rep) {
+	final void putReport(final SPosition pos, final Report rep) {
 		pos.putReport(rep, _reporter);
 	}
 
@@ -863,14 +877,14 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final long registeredID, final Object... mod) {
+	final void error(final long registeredID, final Object... mod) {
 		_reporter.error(registeredID, mod);
 	}
 
 	/** Put report to compiler reporter.
 	 * @param rep Report.
 	 */
-	public final void putReport(final Report rep) {
+	final void putReport(final Report rep) {
 		_reporter.putReport(rep);
 	}
 

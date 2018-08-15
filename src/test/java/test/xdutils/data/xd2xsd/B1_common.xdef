@@ -86,7 +86,7 @@
          Rezerva             ="optional int(0,9_999_999_999)"
          Plneni              ="optional int(0,99_999_999_999)">
     <Agr                   xd:script="occurs 1.."
-         Rok                 ="required datetime('yyyy')"
+         Rok                 ="required xdatetime('yyyy')"
          PS                  ="required int(1,999_999)"
          SpravovanePS        ="optional int(1,999_999)"
          SU                  ="optional int(1,999_999)"

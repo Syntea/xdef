@@ -43,7 +43,6 @@ public interface KXmlConstants {
 		"http://www.syntea.cz/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Deprecated
 	/** Reserved namespace prefix of XML W3C.
 	 * @deprecated use javax.xml.XMLConstants.XML_NS_PREFIX instead.
