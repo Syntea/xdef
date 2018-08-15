@@ -738,6 +738,50 @@ public final class TestKeyAndRef extends Tester {
 			assertEq(dataDir + "TestKeyAndRef7.xml",
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
 			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='Test' >\n" +
+" <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
+" <Test>\n" +
+"   <A xd:script='*' a='s.ID()'/>\n" +
+"   <uA xd:script='*' a='s.CHKID()'/>\n" +
+" </Test>\n" +
+"</xd:def>";
+			xml =
+"<Test>\n" +
+"   <A a='1'/>\n" +
+"   <uA a='1'/>\n" +
+"   <uA a='2'/>\n" + // must be error
+"   <uA a='2'/>\n" + // must be error
+" </Test>";
+			parse(xdef, "", xml, reporter);
+			assertEq(2, reporter.getErrorCount());
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='Test' >\n" +
+" <xd:declaration>\n" +
+"    type at   int();\n" +
+"    type bt   string();\n" +
+"    uniqueSet s2 {a: at(); b: bt()};\n" +
+" </xd:declaration>\n" +
+" <Test>\n" +
+"   <A xd:script='*' a='s2.a()'>\n" +
+"     <B xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
+"   </A>\n" +
+"   <uA xd:script='*' a='s2.a()'>\n" +
+"     <uB xd:script='*; finally s2.CHKID()' b='s2.b()' />\n" +
+"   </uA>\n" +
+" </Test>\n" +
+"</xd:def>";
+			xml =
+"<Test>\n" +
+"   <A a='1'><B b='B1'/></A>\n" +
+"   <uA a='1'>\n" +
+"     <uB b='B1'/>\n" +
+"     <uB b='B3'/>\n" + // must be error
+"     <uB b='B3'/>\n" + // must be error
+"   </uA>\n" +
+" </Test>";
+			parse(xdef, "", xml, reporter);
+			assertEq(2, reporter.getErrorCount());
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

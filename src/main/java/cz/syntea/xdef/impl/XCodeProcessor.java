@@ -3302,6 +3302,19 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					chkNode._parseResult.putReport(rep);
 				}
 			}
+		} else if (code == UNIQUESET_CHKID || code == UNIQUESET_M_CHKID) {
+			if (!dt.hasId()) {
+				String modif = (dt.getName() != null ? dt.getName()+" " : "")
+					+ dt.getKeyValues();
+				//Unique value "&{0}" was not set
+				Report rep = Report.error(XDEF.XDEF522, modif);
+				updateReport(rep, chkNode);
+				if (chkNode._parseResult == null) {
+					_reporter.putReport(rep);
+				} else {
+					chkNode._parseResult.putReport(rep);
+				}
+			}
 		} else {
 			ArrayReporter list = dt.chkId();
 			if (list != null) {

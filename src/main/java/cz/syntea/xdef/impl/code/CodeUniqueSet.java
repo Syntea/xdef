@@ -108,7 +108,14 @@ public final class CodeUniqueSet extends XDValueAbstract {
 		return null;
 	}
 
-	/** Check if parsed already exists in the map.
+	/** Check if id already exists in the map.
+	 * @return true if id exists, otherwise return false.
+	 */
+	public boolean hasId() {
+		return _map.get(getKeyValues()) != null;
+	}
+
+	/** Check if id already exists in the map.
 	 * @return null if id exists, otherwise return ArrayReporter with pending
 	 * reports.
 	 */

@@ -10,7 +10,6 @@
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.impl.XDefinition;
 import cz.syntea.xdef.msg.JSON;
 import cz.syntea.xdef.msg.SYS;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.XMLConstants;
-import org.w3c.dom.Element;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from JSON source data.
