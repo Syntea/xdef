@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Main Suite" verbose="10">
+	<groups>
+		<!--
+		<dependencies>
+			<group name="xdef"    depends-on="common"/>
+			<group name="xdutils" depends-on="xdef"/>
+			<group name="other"   depends-on="xdutils"/>
+		</dependencies>
+		-->
+	</groups>
+	
+	<test name="Main Tests">
+		<packages>
+			<package name="test.*"/>
+			<package name="cz.syntea.xdef.*"/>
+		</packages>
+	</test>
+	
+	<listeners ></listeners>
+</suite>

@@ -102,6 +102,9 @@
         <resources>
             <resource>
                 <directory>src/main/java</directory>
+                <includes>
+                    <include>cz/syntea/xdef/msg/*.properties</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
@@ -109,7 +112,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>cz/syntea/common/xdef/sys/pominfo/pominfo.properties</include>
+                    <include>cz/syntea/xdef/sys/config/pominfo.properties</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -158,14 +161,6 @@
                             <vendor>${jdk.vendor}</vendor>
                         </jdk>
                     </toolchains>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
         </plugins>

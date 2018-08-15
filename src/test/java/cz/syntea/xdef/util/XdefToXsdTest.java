@@ -1,6 +1,7 @@
 package cz.syntea.xdef.util;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +23,13 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.SRuntimeException;
+import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.L1protocol.L1A_ChkParser_dummy;
 import cz.syntea.xdef.xml.KXmlUtils;
 
 
+
+@Test(groups = "other")
 public class XdefToXsdTest {
 	
 	
@@ -40,7 +43,7 @@ public class XdefToXsdTest {
 		
 		final Assertion a = new Assertion();
 		
-		final File   outDir        = new File("run/output/junit-test/xdef2xsd");
+		final File   outDir        = new File("target/test-output/data-tmp/xdef2xsd");
 		final File   xsdGenDir     = new File(outDir,       "xsd-gen");
 		final File   xdefGenDir    = new File(outDir,       "xdef-gen");
 		final File   xdefGenCol    = new File(xdefGenDir,   "L1col.xdef");
@@ -53,28 +56,37 @@ public class XdefToXsdTest {
 		xdefGenDir  .mkdirs();
 		l1batchXVDir.mkdirs();
 		
+		ArrayReporter reporter = new ArrayReporter();
+		
 		//load list of source xdef of L1-protokol, must not contain any "forget"
 		//------------------------------------------------------------------
-		List<String> xdefSrcList = new ArrayList<String>();
+		List<URL>    xdefSrcList  = new ArrayList<URL>();
+		List<String> xdefSrcSList = new ArrayList<String>();
 		for (String xdefRsrc : L1XdefRsrcList) {
-			xdefSrcList.add(IOUtil.copyFile(
-				XdefToXsdTest.class.getResourceAsStream(exampleL1Pkg + "/L1/"
-				+ xdefRsrc))
-			);
+			URL xdef = XdefToXsdTest.class.getResource(exampleL1Pkg + "/L1/"
+				+ xdefRsrc);
+			a.assertNotNull(xdef); //resrc-xdef must exist
+			xdefSrcList.add(xdef);
+			xdefSrcSList.add(FUtils.readString(xdef.openStream(), encoding));
 		}
 		
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
 		XDBuilder xdb = XDFactory.getXDBuilder(null);
-		xdb.setSource(xdefSrcList.toArray(new String[0]));
+		xdb.setSource(xdefSrcList.toArray(new URL[0]));
 		xdb.setExternals(L1A_ChkParser_dummy.class);
+		reporter.clear();
+		xdb.setReporter(reporter);
 		XDPool    xdp = xdb.compileXD();
+		//XDPool    xdp = TesterSt.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
+		TesterSt.assertNoErrors(reporter);
 		
 		XDDocument xddoc     = xdp.createXDDocument(mainName);
-		Element    l1batchXV = xddoc.xparse(
-			XdefToXsdTest.class.getResourceAsStream(L1batchRsrc),
-			null
-		);
+		URL        L1batch   = XdefToXsdTest.class.getResource(L1batchRsrc);
+		a.assertNotNull(L1batch); //resrc-xdef must exist
+		reporter.clear();
+		Element    l1batchXV = xddoc.xparse(L1batch, reporter);
+		TesterSt.assertNoErrors(reporter);
 		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
 		
 		//test of l1batch size after xdef-validation
@@ -82,17 +94,17 @@ public class XdefToXsdTest {
 		//if it fails then l1batchXV was cut accidentally
 		//------------------------------------------------------------
 		boolean l1sizeTest = 
-			IOUtil.copyFile(
+			FUtils.readString(
 				XdefToXsdTest.class.getResourceAsStream(L1batchRsrc)
 			).length() / 2
-			< IOUtil.copyFile(l1batchXVFile).length()
+			< FUtils.readString(l1batchXVFile).length()
 		;
 		a.assertEquals(l1sizeTest, true);
 		
 		//generate xml-schema from xdef to directory xsdGenDir
 		//------------------------------------------------------------------
 		XdefToXsd.genSchema(
-			xdefSrcList.toArray(new String[0]),
+			xdefSrcSList.toArray(new String[0]),
 			xsdGenDir.getPath(),
 			mainName, mainName,
 			"xs", "xsd", null
@@ -106,9 +118,9 @@ public class XdefToXsdTest {
 		);
 		Schema        xsdCol   = schFact.newSchema(xsdSrcAr);
 
-		Source    L1batch   = new StreamSource(l1batchXVFile);
+		Source    L1batchXV   = new StreamSource(l1batchXVFile);
 		Validator validator = xsdCol.newValidator();
-		validator.validate(L1batch);
+		validator.validate(L1batchXV);
 		
 		//result of the xml-schema-validation: VALID (it means no exception)
 		//------------------------------------------------------------------
@@ -116,7 +128,7 @@ public class XdefToXsdTest {
 		
 		//FIXME: following test fails - there is a bug in the tool 
 		//       XsdToXdef.genCollection()
-		boolean run = false;
+		boolean run = true;
 		if (run) {
 			//feedback generation of xdef from the genrated xml-schema
 			//to directory xdefGenDir
@@ -126,34 +138,39 @@ public class XdefToXsdTest {
 			
 			//xdef-validation of L1batch by regenerated xdef
 			//------------------------------------------------------------------
-			XDBuilder  xdb2   = XDFactory.getXDBuilder(null);
+			XDBuilder xdb2 = XDFactory.getXDBuilder(null);
 			xdb2.setSource(xdefGenCol);
 			xdb2.setExternals(L1A_ChkParser_dummy.class);
-			XDPool xdp2;
+			reporter.clear();
+			xdb2.setReporter(reporter);
+			XDPool    xdp2 = xdb2.compileXD();
+			//XDPool    xdp2 = TesterSt.compile(xdefGenCol, L1A_ChkParser_dummy.class);
+			TesterSt.assertNoErrors(reporter);
 			
-			try {
-				//compilation of xdef
-				xdp2 = xdb2.compileXD();
-			} catch (SRuntimeException ex) {
-				logger.error("compilation of the regenerated xdef failed, " +
-					"exception:\n" + ex.getMessage());
-				throw ex;
-			}
-	
 			//xdef-validation
-			XDDocument    xddoc2   = xdp2.createXDDocument(mainName);
-			ArrayReporter reporter = new ArrayReporter();
+			XDDocument xddoc2 = xdp2.createXDDocument(mainName);
+			reporter.clear();
 			xddoc2.xparse(l1batchXVFile, reporter);
-			
-			if (reporter.errorWarnings()) {
-				String msg =
-					"xdef-validation failed:\n" + reporter.printToString();
-				logger.error(msg);
-				throw new Exception(msg);
-			}
+			TesterSt.assertNoErrors(reporter);
 		}
+		
+		logger.info("OK");
 	}
 
+	
+	
+	@Test
+	public static void ignoredTest() throws Exception {
+		
+	}
+	
+	
+	
+	@Test
+	public static void emptyTest() throws Exception {
+		logger.info("OK - empty test");
+	}
+	
 	
 	
 	//launch tests standalone
@@ -168,6 +185,8 @@ public class XdefToXsdTest {
 	/** testing xml-data in example "L1protocol" */
 	private static final String   L1batchRsrc    =
 		exampleL1Pkg + "/data/L1batch-0008L199991400374A.xml";
+	/** default file-encoding */
+	private static final String   encoding    = "UTF-8";
 	/** seznam xdefinic definujicich L1-protokol */
 	private static final String[] L1XdefRsrcList = {
 		"!L1Macros.xdef",

@@ -14,11 +14,19 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
+import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringWriter;
+
+import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 
 /** Class for testing (miscellaneous).
@@ -28,6 +36,36 @@ public final class Test001  extends Tester {
 
 	public Test001() {super();}
 
+	@Test(groups = "xdef")
+	public static void testSt() {
+		final Assertion a = new Assertion();
+		
+		PrintStream log;
+		FileOutputStream fis = null;
+		try {
+			fis = new FileOutputStream("testXdef.log");
+			log = new PrintStream(fis);
+		} catch (Exception ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
+			log = null;
+		}
+		STester[] tests = new STester[] {
+			new Test001()
+		};
+		int result = STester.runTests(System.out, System.err, log,
+			tests, "test xdef.Test001", Tester.getFulltestMode());
+		
+		if (log != null) {
+			log.close();
+		}
+		
+		a.assertEquals(result,  0);
+	}
+	
 	@Override
 	/** Run tests and print error information. */
 	public void test() {
