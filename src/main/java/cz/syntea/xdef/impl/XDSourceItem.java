@@ -43,6 +43,7 @@ public final class XDSourceItem {
 
 	/** Create new instance of this object from argument.
 	 * @param o may be file, URL or string with the text.
+	 * @throws Exception if an error occurs.
 	 */
 	public XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
@@ -63,13 +64,13 @@ public final class XDSourceItem {
 		}
 	}
 
-	void writeXDSourceItem(XDWriter xw) throws IOException {
+	public void writeXDSourceItem(XDWriter xw) throws IOException {
 		xw.writeString(_url == null ? null : _url.toExternalForm());
 		xw.writeString(_encoding);
 		xw.writeString(_source);
 	}
 
-	static XDSourceItem readXDSourceItem(XDReader xr) throws IOException {
+	public static XDSourceItem readXDSourceItem(XDReader xr) throws IOException{
 		XDSourceItem result = new XDSourceItem();
 		String s = xr.readString();
 		if (s != null) {
