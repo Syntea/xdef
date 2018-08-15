@@ -53,7 +53,7 @@ import org.w3c.dom.NodeList;
  * X-definition. This code is nasty, should be written better.
  * @author Vaclav Trojan
  */
-final class ChkElement extends ChkNode implements XXElement, XXData {
+public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Text value (of actual text node or attribute). It is used
 	 * for communication with the XScript interpreter.
 	 * Important note: it should be cleared after invocation of

@@ -19,7 +19,7 @@ import cz.syntea.xdef.model.XMDebugInfo;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Properties;
-import cz.syntea.xdef.impl.XEditor;
+import cz.syntea.xdef.impl.debug.XEditor;
 
 /** Interface for debug mode.
  * @author Vaclav Trojan

@@ -10,7 +10,7 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-package cz.syntea.xdef.impl;
+package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -21,11 +21,13 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
+import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.proc.XXNode;
 import cz.syntea.xdef.impl.code.CodeTable;
 import cz.syntea.xdef.model.XMDebugInfo;
 import cz.syntea.xdef.model.XMStatementInfo;
 import cz.syntea.xdef.model.XMVariable;
+import cz.syntea.xdef.proc.XXData;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -55,7 +57,7 @@ import javax.swing.text.StyledDocument;
 import cz.syntea.xdef.sys.ReportWriter;
 
 /** Provides debugging tool for X-definition. */
-class ChkGUIDebug extends ChkGUIBase implements XDDebug {
+public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 
 	private boolean _closed = false;
 	private boolean _debugMode = true;
@@ -206,7 +208,7 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		openGUI(); // GUI mode
 
 		// Initialize SWING objects
-		_xdpool = (XPool) xp;
+		_xdpool = xp;
 		_sourceArea.setEditable(false);
 		_frame.addWindowListener(new WindowListener() {
 			@Override
@@ -796,9 +798,6 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 			} else {
 				setSource(spos._sysId);
 			}
-//			if (addLinePosition(spos)) {
-//				setLineNumberArea();
-//			}
 			_sourcePositionInfo.setText(stmtInfo);
 			markStopAddresses();
 			setCaretPositionToSource(spos);
@@ -966,26 +965,21 @@ class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 					continue;
 				}
 				case DBG_SHOWTEXT:
-				case DBG_SETTEXT: {
-					ChkElement xelem = (ChkElement) xnode;
-					byte type = xelem.getXXType();
-					((ChkElement) xnode).setXXType((byte) 'T');
+				case DBG_SETTEXT:
 					if (command == DBG_SHOWTEXT) {
-						display("'" + xelem.getTextValue() + "'");
+						display("'" + ((XXData) xnode).getTextValue() + "'");
 					} else {
 						if (_out != null) {
 							display("value: ");
-							xelem.setTextValue(readLine());
+							((XXData) xnode).setTextValue(readLine());
 						} else {
-							xelem.setTextValue(JOptionPane.showInputDialog(
-								_frame,"Set value"));
+							((XXData) xnode).setTextValue(
+								JOptionPane.showInputDialog(_frame,"Set value"));
 						}
 					}
-					xelem.setXXType(type);
 					continue;
-				}
 				case DBG_SHOWCONTEXT: {
-					XDValue val = ((ChkElement) xnode).getXDContext();
+					XDValue val = xnode.getXDContext();
 					display("" + val);
 					continue;
 				}

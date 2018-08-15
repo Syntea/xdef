@@ -12,7 +12,7 @@
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
  *
  */
-package cz.syntea.xdef.impl;
+package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;

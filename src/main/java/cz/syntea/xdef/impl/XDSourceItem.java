@@ -44,7 +44,7 @@ public final class XDSourceItem {
 	/** Create new instance of this object from argument.
 	 * @param o may be file, URL or string with the text.
 	 */
-	XDSourceItem(Object o) throws Exception {
+	public XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
 			_url = ((File) o).toURI().toURL();
 		} else if (o instanceof URL) {

@@ -10,9 +10,10 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-package cz.syntea.xdef.impl;
+package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SUtils;

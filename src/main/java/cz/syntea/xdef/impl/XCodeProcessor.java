@@ -99,6 +99,7 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
 import cz.syntea.xdef.impl.code.DefLocale;
+import cz.syntea.xdef.impl.debug.ChkGUIDebug;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 
