@@ -28,6 +28,8 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+
+
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
  */
@@ -94,7 +96,6 @@ public final class TestKeyAndRef extends Tester {
 		XDPool xp;
 		final String dataDir = getDataDir() + "test/";
 		try {
-/*VT6*/
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>uniqueSet u {x:int()}</xd:declaration>\n"+
@@ -241,7 +242,6 @@ public final class TestKeyAndRef extends Tester {
 			assertTrue(reporter.errorWarnings()
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
-/*VT6*/
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
 "  <A xd:script='var {uniqueSet v {p: int(1,3); q: optional string};}'>\n"+
@@ -268,7 +268,6 @@ public final class TestKeyAndRef extends Tester {
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF523".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
-/*VT6*/
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
 "<xd:declaration scope='local'>uniqueSet v {x: int(1,3)}</xd:declaration>\n"+
@@ -370,7 +369,6 @@ public final class TestKeyAndRef extends Tester {
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
-/*VT6*/
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
 "<A xd:script='var {type i int(1,3);uniqueSet v {p:i;q:? string(1,9)};}'>\n"+
@@ -790,7 +788,7 @@ public final class TestKeyAndRef extends Tester {
 "   <B a='2'/>\n" + // must be error
 " </Test>";
 			parse(xdef, "", xml, reporter);
-			assertEq(2, reporter.getErrorCount());
+			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Test' >\n" +
 " <xd:declaration>\n" +
@@ -817,7 +815,7 @@ public final class TestKeyAndRef extends Tester {
 "   </B>\n" +
 " </Test>";
 			parse(xdef, "", xml, reporter);
-			assertEq(2, reporter.getErrorCount());
+			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = 
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
@@ -854,7 +852,9 @@ public final class TestKeyAndRef extends Tester {
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF522")
 				&& s.contains("/Test/uA[1]/uB[1]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"));
+				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
+				reporter);
+					
 			xdef = 
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
@@ -880,7 +880,8 @@ public final class TestKeyAndRef extends Tester {
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF522")
 				&& s.contains("/Test/uA[1]/uB[1]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"));
+				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
+				reporter);
 			xdef = 
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
@@ -905,8 +906,9 @@ public final class TestKeyAndRef extends Tester {
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF522")
-				&& s.contains("/Test/uA[1]/uB[1]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"));
+				&& s.contains("/Test/uA[1]/uB[2]")
+				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]/@c"),
+				reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
