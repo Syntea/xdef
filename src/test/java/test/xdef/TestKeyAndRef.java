@@ -13,10 +13,18 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
+import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -49,6 +57,36 @@ public final class TestKeyAndRef extends Tester {
 		return null;
 	}
 
+	@Test(groups = "xdef")
+	public static void testSt() {
+		final Assertion a = new Assertion();
+		
+		PrintStream log;
+		FileOutputStream fis = null;
+		try {
+			fis = new FileOutputStream("testXdef.log");
+			log = new PrintStream(fis);
+		} catch (Exception ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
+			log = null;
+		}
+		STester[] tests = new STester[] {
+			new TestKeyAndRef()
+		};
+		int result = STester.runTests(System.out, System.err, log,
+			tests, "test xdef.TestKeyAndRef", Tester.getFulltestMode());
+		
+		if (log != null) {
+			log.close();
+		}
+		
+		a.assertEquals(result,  0);
+	}
+	
 	@Override
 	public void test() {
 		String xdef;

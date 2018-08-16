@@ -7,7 +7,7 @@
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
-			<!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%-5thread][%-logger{40} %4line]%message%n</pattern> -->
+			<!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%-5thread][%-40logger{40} %4line]%message%n</pattern> -->
 		</encoder>
 	</appender>
 
@@ -15,25 +15,26 @@
 	<appender name="TestNG"
 		class="com.github.sbabcoc.logback.testng.ReporterAppender">
 		<encoder>
-			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
+			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message</pattern>
+			<!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%-5thread][%-40logger{40} %4line]%message</pattern> -->
 		</encoder>
 	</appender>
 
-	<!-- log to file --><!--
+	<!-- log to file -->
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
 		<file>target/test-output/test.log</file>
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
 		</encoder>
 	</appender>
-	-->
 
 	<!-- loggers -->
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="TestNG" />
-		<!-- <appender-ref ref="FILE"/> -->
+		<appender-ref ref="FILE"/>
 	</root>
 
-	<!-- <logger name="cz.syntea.xdef" level="DEBUG" /> -->
+	<logger name="cz.syntea.xdef" level="DEBUG"/>
+	<logger name="test" level="DEBUG"/>
 </configuration>

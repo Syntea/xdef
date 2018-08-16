@@ -18,9 +18,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 
-import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
@@ -63,31 +61,22 @@ public class XdefToXsdTest {
 		List<URL>    xdefSrcList  = new ArrayList<URL>();
 		List<String> xdefSrcSList = new ArrayList<String>();
 		for (String xdefRsrc : L1XdefRsrcList) {
-			URL xdef = XdefToXsdTest.class.getResource(exampleL1Pkg + "/L1/"
-				+ xdefRsrc);
-			a.assertNotNull(xdef); //resrc-xdef must exist
+			URL xdef = TesterSt.getResrc(XdefToXsdTest.class,
+				exampleL1Pkg + "/L1/" + xdefRsrc);
 			xdefSrcList.add(xdef);
 			xdefSrcSList.add(FUtils.readString(xdef.openStream(), encoding));
 		}
 		
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
-		XDBuilder xdb = XDFactory.getXDBuilder(null);
-		xdb.setSource(xdefSrcList.toArray(new URL[0]));
-		xdb.setExternals(L1A_ChkParser_dummy.class);
-		reporter.clear();
-		xdb.setReporter(reporter);
-		XDPool    xdp = xdb.compileXD();
-		//XDPool    xdp = TesterSt.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
-		TesterSt.assertNoErrors(reporter);
+		XDPool xdp = TesterSt.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
 		
 		XDDocument xddoc     = xdp.createXDDocument(mainName);
-		URL        L1batch   = XdefToXsdTest.class.getResource(L1batchRsrc);
-		a.assertNotNull(L1batch); //resrc-xdef must exist
+		URL        L1batch   = TesterSt.getResrc(XdefToXsdTest.class, L1batchRsrc);
 		reporter.clear();
 		Element    l1batchXV = xddoc.xparse(L1batch, reporter);
-		TesterSt.assertNoErrors(reporter);
 		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
+		TesterSt.assertNoErrors(reporter);
 		
 		//test of l1batch size after xdef-validation
 		//it should holds at least: #l1batch/2 < #l1batchXV
@@ -126,56 +115,56 @@ public class XdefToXsdTest {
 		//------------------------------------------------------------------
 		a.assertEquals(true, true);
 		
-		//FIXME: following test fails - there is a bug in the tool 
-		//       XsdToXdef.genCollection()
-		boolean run = true;
-		if (run) {
-			//feedback generation of xdef from the genrated xml-schema
-			//to directory xdefGenDir
-			//------------------------------------------------------------------
-			XsdToXdef.genCollection(xsdMain.getPath(), xdefGenCol.getPath(),
-				"xd", null);
-			
-			//xdef-validation of L1batch by regenerated xdef
-			//------------------------------------------------------------------
-			XDBuilder xdb2 = XDFactory.getXDBuilder(null);
-			xdb2.setSource(xdefGenCol);
-			xdb2.setExternals(L1A_ChkParser_dummy.class);
-			reporter.clear();
-			xdb2.setReporter(reporter);
-			XDPool    xdp2 = xdb2.compileXD();
-			//XDPool    xdp2 = TesterSt.compile(xdefGenCol, L1A_ChkParser_dummy.class);
-			TesterSt.assertNoErrors(reporter);
-			
-			//xdef-validation
-			XDDocument xddoc2 = xdp2.createXDDocument(mainName);
-			reporter.clear();
-			xddoc2.xparse(l1batchXVFile, reporter);
-			TesterSt.assertNoErrors(reporter);
-		}
+		//feedback generation of xdef from the genrated xml-schema
+		//to directory xdefGenDir
+		//------------------------------------------------------------------
+		XsdToXdef.genCollection(xsdMain.getPath(), xdefGenCol.getPath(),
+			"xd", null);
 		
-		logger.info("OK");
+		//xdef-validation of L1batch by regenerated xdef
+		//------------------------------------------------------------------
+		XDPool xdp2 = TesterSt.compile(xdefGenCol, L1A_ChkParser_dummy.class);
+		
+		//xdef-validation
+		XDDocument xddoc2 = xdp2.createXDDocument(mainName);
+		reporter.clear();
+		xddoc2.xparse(l1batchXVFile, reporter);
+		TesterSt.assertNoErrors(reporter);
+		
+		logger.info("OK - L1XdefToXsdTest");
 	}
 
 	
 	
-	@Test
-	public static void ignoredTest() throws Exception {
-		
+	@Test(enabled = false)
+	public static void ignoredTest() {
+		logger.info("OK - ignored test");
+	}
+	
+	
+	
+	@SuppressWarnings("unused")
+	private static void notTest() {
+		logger.info("OK - it isn't test");
 	}
 	
 	
 	
 	@Test
-	public static void emptyTest() throws Exception {
+	public static void emptyTest() {
 		logger.info("OK - empty test");
 	}
 	
 	
 	
-	//launch tests standalone
-	public static void main(String... args) throws Exception {
-		XdefToXsdTest.L1XdefToXsdTest();
+	@Test
+	public static void faillingTest() throws Exception {
+		logger.info("start - failling test");
+		boolean run = true;
+		if (run) {
+			throw new Exception("fake failure");
+		}
+		logger.info("OK - failling test");
 	}
 	
 	
@@ -216,5 +205,12 @@ public class XdefToXsdTest {
 	private static final Logger logger = LoggerFactory.getLogger(
 		XdefToXsdTest.class
 	);
+
+	
+	
+	/** launch tests standalone */
+	public static void main(String... args) throws Exception {
+		XdefToXsdTest.L1XdefToXsdTest();
+	}
 
 }
