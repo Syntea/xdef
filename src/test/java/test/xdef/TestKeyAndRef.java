@@ -23,8 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -59,8 +59,6 @@ public final class TestKeyAndRef extends Tester {
 
 	@Test(groups = "xdef")
 	public static void testSt() {
-		final Assertion a = new Assertion();
-		
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -84,7 +82,7 @@ public final class TestKeyAndRef extends Tester {
 			log.close();
 		}
 		
-		a.assertEquals(result,  0);
+		Assert.assertEquals(result,  0);
 	}
 	
 	@Override

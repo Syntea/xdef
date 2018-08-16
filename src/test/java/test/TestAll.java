@@ -17,14 +17,16 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.TestNG;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
 import test.xdef.Tester;
+
+
 
 /** Execute all tests fast.
  * @author Vaclav Trojan
@@ -51,22 +53,19 @@ public class TestAll {
 	/** run TestAll in test.common */
 	@Test(groups = "common")
 	public static void testCommon() {
-		final Assertion a = new Assertion();
-		a.assertEquals(test.common.TestAll.runTests(new String[0]), 0);
+		Assert.assertEquals(test.common.TestAll.runTests(new String[0]), 0);
 	}
 	
 	/** run TestAll in test.xdef */
 	@Test(groups = "xdef")
 	public static void testXdef() {
-		final Assertion a = new Assertion();
-		a.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
+		Assert.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
 	
 	/** run TestAll in test.xdutil */
 	@Test(groups = "xdutils")
 	public static void testXDUtils() {
-		final Assertion a = new Assertion();
-		a.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
+		Assert.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}
 	
 	

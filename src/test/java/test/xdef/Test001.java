@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 
 /** Class for testing (miscellaneous).
@@ -38,8 +38,6 @@ public final class Test001  extends Tester {
 
 	@Test(groups = "xdef")
 	public static void testSt() {
-		final Assertion a = new Assertion();
-		
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -63,7 +61,7 @@ public final class Test001  extends Tester {
 			log.close();
 		}
 		
-		a.assertEquals(result,  0);
+		Assert.assertEquals(result,  0);
 	}
 	
 	@Override

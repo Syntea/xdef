@@ -14,8 +14,8 @@ import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import org.w3c.dom.Element;
 
 import cz.syntea.xdef.XDDocument;
@@ -38,8 +38,6 @@ public class XdefToXsdTest {
 	 */
 	@Test
 	public static void L1XdefToXsdTest() throws Exception {
-		
-		final Assertion a = new Assertion();
 		
 		final File   outDir        = new File("target/test-output/data-tmp/xdef2xsd");
 		final File   xsdGenDir     = new File(outDir,       "xsd-gen");
@@ -88,7 +86,7 @@ public class XdefToXsdTest {
 			).length() / 2
 			< FUtils.readString(l1batchXVFile).length()
 		;
-		a.assertEquals(l1sizeTest, true);
+		Assert.assertEquals(l1sizeTest, true);
 		
 		//generate xml-schema from xdef to directory xsdGenDir
 		//------------------------------------------------------------------
@@ -113,7 +111,7 @@ public class XdefToXsdTest {
 		
 		//result of the xml-schema-validation: VALID (it means no exception)
 		//------------------------------------------------------------------
-		a.assertEquals(true, true);
+		Assert.assertEquals(true, true);
 		
 		//feedback generation of xdef from the genrated xml-schema
 		//to directory xdefGenDir

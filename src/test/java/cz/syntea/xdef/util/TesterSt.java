@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.asserts.Assertion;
+import org.testng.Assert;
 import org.w3c.dom.Element;
 
 import cz.syntea.xdef.XDFactory;
@@ -43,15 +43,13 @@ public class TesterSt {
 	
 	
 	public static void assertNoErrors(final ReportWriter reporter) {
-		final Assertion a = new Assertion();
-		
 		if (reporter.errorWarnings()) {
 			String msg = "XDef-reporter:\n" +
 				reporter.getReportReader().printToString() + "\n";
 			
 			if (reporter.errors()) {
 				logger.error(msg);
-				a.assertTrue(false, msg);
+				Assert.assertTrue(false, msg);
 			} else {
 				logger.warn(msg);
 			}
