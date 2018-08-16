@@ -24,6 +24,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.L1protocol.L1A_ChkParser_dummy;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.TesterSt;
 
 
 

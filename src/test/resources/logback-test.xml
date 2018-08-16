@@ -3,7 +3,7 @@
 
 	<!-- appenders -->
 	<!-- log to std-output -->
-	<appender name="STDOUT"
+	<appender name="stdout"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
@@ -12,7 +12,7 @@
 	</appender>
 
 	<!-- log to testNG reporter -->
-	<appender name="TestNG"
+	<appender name="testNG"
 		class="com.github.sbabcoc.logback.testng.ReporterAppender">
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message</pattern>
@@ -21,7 +21,7 @@
 	</appender>
 
 	<!-- log to file -->
-	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+	<appender name="file" class="ch.qos.logback.core.FileAppender">
 		<file>target/test-output/test.log</file>
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
@@ -30,11 +30,11 @@
 
 	<!-- loggers -->
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
-		<appender-ref ref="TestNG" />
-		<appender-ref ref="FILE"/>
+		<appender-ref ref="stdout" />
+		<appender-ref ref="testNG" />
+		<appender-ref ref="file"/>
 	</root>
 
 	<logger name="cz.syntea.xdef" level="DEBUG"/>
-	<logger name="test" level="DEBUG"/>
+	<logger name="test"           level="DEBUG"/>
 </configuration>

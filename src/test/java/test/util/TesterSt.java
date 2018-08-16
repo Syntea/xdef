@@ -1,4 +1,4 @@
-package cz.syntea.xdef.util;
+package test.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
