@@ -24,7 +24,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.L1protocol.L1A_ChkParser_dummy;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.TesterSt;
+import test.util.TestUtil;
 
 
 
@@ -60,7 +60,7 @@ public class XdefToXsdTest {
 		List<URL>    xdefSrcList  = new ArrayList<URL>();
 		List<String> xdefSrcSList = new ArrayList<String>();
 		for (String xdefRsrc : L1XdefRsrcList) {
-			URL xdef = TesterSt.getResrc(XdefToXsdTest.class,
+			URL xdef = TestUtil.getResrc(XdefToXsdTest.class,
 				exampleL1Pkg + "/L1/" + xdefRsrc);
 			xdefSrcList.add(xdef);
 			xdefSrcSList.add(FUtils.readString(xdef.openStream(), encoding));
@@ -68,14 +68,14 @@ public class XdefToXsdTest {
 		
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
-		XDPool xdp = TesterSt.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
+		XDPool xdp = TestUtil.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
 		
 		XDDocument xddoc     = xdp.createXDDocument(mainName);
-		URL        L1batch   = TesterSt.getResrc(XdefToXsdTest.class, L1batchRsrc);
+		URL        L1batch   = TestUtil.getResrc(XdefToXsdTest.class, L1batchRsrc);
 		reporter.clear();
 		Element    l1batchXV = xddoc.xparse(L1batch, reporter);
 		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
-		TesterSt.assertNoErrors(reporter);
+		TestUtil.assertNoErrors(reporter);
 		
 		//test of l1batch size after xdef-validation
 		//it should holds at least: #l1batch/2 < #l1batchXV
@@ -122,13 +122,13 @@ public class XdefToXsdTest {
 		
 		//xdef-validation of L1batch by regenerated xdef
 		//------------------------------------------------------------------
-		XDPool xdp2 = TesterSt.compile(xdefGenCol, L1A_ChkParser_dummy.class);
+		XDPool xdp2 = TestUtil.compile(xdefGenCol, L1A_ChkParser_dummy.class);
 		
 		//xdef-validation
 		XDDocument xddoc2 = xdp2.createXDDocument(mainName);
 		reporter.clear();
 		xddoc2.xparse(l1batchXVFile, reporter);
-		TesterSt.assertNoErrors(reporter);
+		TestUtil.assertNoErrors(reporter);
 		
 		logger.info("OK - L1XdefToXsdTest");
 	}

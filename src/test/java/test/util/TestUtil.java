@@ -23,7 +23,7 @@ import test.xdef.Tester;
 
 
 
-public class TesterSt {
+public class TestUtil {
 	
 	
 	public static URL getResrc(Class<?> clazz, String name) {
@@ -59,16 +59,16 @@ public class TesterSt {
 	
 	
 	public static XDPool compile(final URL[] urls, final Class<?>... obj) {
-		return TesterSt.checkExtObjects(XDFactory.compileXD(_props, urls, obj));
+		return TestUtil.checkExtObjects(XDFactory.compileXD(_props, urls, obj));
 	}
 	
 	public static XDPool compile(final File file, final Class<?>... obj) throws Exception {
 		if (Tester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(
-				TesterSt.genCollection(file.getAbsolutePath()), null);
+				TestUtil.genCollection(file.getAbsolutePath()), null);
 		}
 		
-		return TesterSt.checkExtObjects(XDFactory.compileXD(_props, file, obj));
+		return TestUtil.checkExtObjects(XDFactory.compileXD(_props, file, obj));
 	}
 
 	
@@ -138,7 +138,7 @@ public class TesterSt {
 	private static final XDPool     _xdOfxd = genXdOfXd();
 	/** logger */
 	private static final Logger     logger  = LoggerFactory.getLogger(
-		TesterSt.class
+		TestUtil.class
 	);
 
 }
