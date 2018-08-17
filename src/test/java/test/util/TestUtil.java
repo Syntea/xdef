@@ -19,7 +19,6 @@ import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.xdef.Tester;
 
 
 
@@ -42,16 +41,33 @@ public class TestUtil {
 	
 	
 	
-	public static String getErrors(final ReportWriter reporter) {
+	/**
+	 * @param reporter
+	 * @return see {@link #reportErrors(ReportWriter, String)}
+	 */
+	public static String reportErrors(final ReportWriter reporter) {
+		return reportErrors(reporter, null);
+	}
+	
+	/**
+	 * @param reporter given reporter
+	 * @param msg user message to be added to report-message
+	 * @return report-message. If reporter doesn't contain errors then null
+	 */
+	public static String reportErrors(
+		final ReportWriter reporter,
+		final String       msg
+	) {
 		if (reporter.errorWarnings()) {
-			String msg = "XDef-reporter:\n" +
+			String msg2 =
+				(msg != null ? msg.toString().trim() + "\n" : "") +
+				"XDef-reporter:\n" +
 				reporter.getReportReader().printToString() + "\n";
 			
 			if (reporter.errors()) {
-				logger.error(msg);
-				return msg;
+				return msg2;
 			} else {
-				logger.warn(msg);
+				logger.warn(msg2);
 			}
 		}
 		
@@ -60,74 +76,92 @@ public class TestUtil {
 	
 	
 	
-	/** Check equality of elements.
+	/**
 	 * @param act actual value.
 	 * @param exp expected value.
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(final String act, final Element exp) {
-		assertEq(KXmlUtils.parseXml(act).getDocumentElement(), exp);
+	public static String reportDiff(final String act, final Element exp) {
+		return reportDiff(KXmlUtils.parseXml(act).getDocumentElement(), exp);
 	}
 
-	/** Check equality of elements.
+	/**
 	 * @param act actual value.
 	 * @param exp expected value.
-	 * @param msg message to be printed or null.
+	 * @param msg user message to be added to diff-message
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(final String act,
+	public static String reportDiff(
+		final String act,
 		final Element exp,
-		final String msg) {
-		assertEq(KXmlUtils.parseXml(act).getDocumentElement(), exp, msg);
+		final String msg
+	) {
+		return reportDiff(KXmlUtils.parseXml(act).getDocumentElement(), exp, msg);
 	}
 
-	/** Check equality of elements.
+	/**
 	 * @param act actual value.
 	 * @param exp expected value.
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(final Element act, final String exp) {
-		assertEq(act, KXmlUtils.parseXml(exp).getDocumentElement());
+	public static String reportDiff(final Element act, final String exp) {
+		return reportDiff(act, KXmlUtils.parseXml(exp).getDocumentElement());
 	}
 
-	/** Check equality of elements.
+	/**
 	 * @param act actual value.
 	 * @param exp expected value.
-	 * @param msg message to be printed or null.
+	 * @param msg user message to be added to diff-message
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(final Element act,
+	public static String reportDiff(
+		final Element act,
 		final String exp,
-		final String msg) {
-		assertEq(act, KXmlUtils.parseXml(exp).getDocumentElement(), msg);
+		final String msg
+	) {
+		return reportDiff(act, KXmlUtils.parseXml(exp).getDocumentElement(), msg);
 	}
 
-	/** Check equality of elements.
-	 * @param act first value.
-	 * @param exp expected value.
-	 */
-	public static void assertEq(Element act, Element exp) {assertEq(act, exp, null);}
-
-	/** Check elements are equal (text nodes are trimmed).
+	/**
 	 * @param act actual value.
 	 * @param exp expected value.
-	 * @param msg message to be printed or null.
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(final Element act,
-		final Element exp,
-		final String msg) {
-		assertEq(act, exp, msg, true);
+	public static String reportDiff(Element act, Element exp) {
+		return reportDiff(act, exp, null);
 	}
-	
-	/** Check equality of elements.
-	 * @param act first value
-	 * @param exp expected value
-	 * @param msg message to be printed or null.
-	 * @param trim whether trim
+
+	/**
+	 * @param act actual value.
+	 * @param exp expected value.
+	 * @param msg user message to be added to diff-message
+	 * @return diff-message. If args equal then null
 	 */
-	public static void assertEq(
+	public static String reportDiff(
 		final Element act,
 		final Element exp,
-		final Object msg,
+		final String msg
+	) {
+		return reportDiff(act, exp, msg, true);
+	}
+	
+	/**
+	 * @param act actual value.
+	 * @param exp expected value.
+	 * @param msg user message to be added to diff-message
+	 * @param trim whether trim
+	 * @return diff-message. If args equal then null
+	 */
+	public static String reportDiff(
+		final Element act,
+		final Element exp,
+		final String msg,
 		final boolean trim
 	) {
-		assertNoErrors(KXmlUtils.compareElements(act, exp, true, null));
+		return reportErrors(
+			KXmlUtils.compareElements(act, exp, true, null),
+			msg
+		);
 	}
 	
 	
@@ -137,7 +171,7 @@ public class TestUtil {
 	}
 	
 	public static XDPool compile(final File file, final Class<?>... obj) throws Exception {
-		if (Tester.getFulltestMode()) {
+		if (XDefTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(file.getPath()), null);
 		}
 		
@@ -145,19 +179,30 @@ public class TestUtil {
 	}
 
 	public static XDPool compile(final String xdef, final Class<?>... obj) {
-		if (Tester.getFulltestMode()) {
+		if (XDefTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
 
 	public static XDPool compile(String[] xdefs, final Class<?>... obj) {
-		if (Tester.getFulltestMode()) {
+		if (XDefTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
 
+	
+	
+	/**
+	 * @param reporter
+	 * @return cleared given reporter
+	 */
+	public static ReportWriter clear(ReportWriter reporter) {
+		reporter.clear();
+		return reporter;
+	}
+		
 	
 	
 	public static Element parse(
@@ -166,9 +211,6 @@ public class TestUtil {
 		final String xml,
 		final ReportWriter reporter
 	) {
-		if (reporter != null) {
-			reporter.clear();
-		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
 		Element result = xd.xparse(xml, reporter);
@@ -181,9 +223,6 @@ public class TestUtil {
 		final Element el,
 		final ReportWriter reporter
 	) {
-		if (reporter != null) {
-			reporter.clear();
-		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
 		Element result = xd.xparse(el, reporter);
@@ -209,7 +248,7 @@ public class TestUtil {
 	
 	
 	public static XDPool checkExtObjects(final XDPool xp) {
-		if (!Tester.getFulltestMode()) { return xp; }
+		if (!XDefTester.getFulltestMode()) { return xp; }
 		
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -252,7 +291,8 @@ public class TestUtil {
 	}
 	
 	
-    public  static final String     XDEFNS  = Tester.XDEFNS;
+    public  static final String     XDEFNS         = XDefTester.XDEFNS;
+    public  static final File       dataTmpRootDir = new File("target/test-output/data-tmp");
     
 	private static       Properties _props  = new Properties();
 	private static final XDPool     _xdOfxd = genXdOfXd();

@@ -10,7 +10,7 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-package test.xdef;
+package test.util;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -51,7 +51,7 @@ import javax.xml.namespace.QName;
 /** Support of tests.
  * @author Vaclav Trojan
  */
-public abstract class Tester extends cz.syntea.xdef.sys.STester {
+public abstract class XDefTester extends STester {
 //	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
 	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
@@ -62,7 +62,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	private boolean _chkSyntax;
 
 	/** Creates a new instance of TestAbstract */
-	public Tester() {
+	public XDefTester() {
 		super();
 		resetTester();
 		_chkSyntax = _fulltestMode;

@@ -12,13 +12,14 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.XsdToXdef;
+import test.util.STester;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

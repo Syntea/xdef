@@ -14,6 +14,7 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
@@ -22,7 +23,7 @@ import org.w3c.dom.Element;
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
  */
-public final class TestUserMethods extends Tester {
+public final class TestUserMethods extends XDefTester {
 
 	public TestUserMethods() {super();}
 

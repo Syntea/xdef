@@ -14,13 +14,13 @@
 
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.STester;
 import cz.syntea.xdef.util.PrettyXdef;
 import java.io.File;
 import cz.syntea.xdef.sys.ReportWriter;

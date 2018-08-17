@@ -20,6 +20,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDocument;
@@ -29,63 +30,28 @@ import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.proc.XXNode;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.sys.STester;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Properties;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test000 extends Tester {
+public final class Test000 extends XDefTester {
 
 	public Test000() {super();}
 
 	private static int _myError = 0;
 
-	@Test(groups = "xdef")
-	public static void testSt() {
-		PrintStream log;
-		FileOutputStream fis = null;
-		try {
-			fis = new FileOutputStream("testXdef.log");
-			log = new PrintStream(fis);
-		} catch (Exception ex) {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (IOException x) {}
-			}
-			log = null;
-		}
-		STester[] tests = new STester[] {
-			new Test000()
-		};
-		int result = STester.runTests(System.out, System.err, log,
-			tests, "test xdef.Test000", Tester.getFulltestMode());
-		
-		if (log != null) {
-			log.close();
-		}
-		
-		Assert.assertEquals(result,  0);
-	}
-	
 	@Override
 	/** Run tests and print error information. */
 	public void test() {

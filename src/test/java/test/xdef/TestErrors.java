@@ -25,11 +25,12 @@ import java.util.Properties;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SUtils;
+import test.util.XDefTester;
 
 /** Test of reporting of script errors.
  * @author Vaclav Trojan
  */
-public final class TestErrors extends Tester {
+public final class TestErrors extends XDefTester {
 
 	public TestErrors() {super(); setChkSyntax(false);}
 

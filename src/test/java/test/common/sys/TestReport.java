@@ -15,13 +15,14 @@ package test.common.sys;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XML;
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FileReportReader;
 import cz.syntea.xdef.sys.FileReportWriter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SManager;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.STester;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;

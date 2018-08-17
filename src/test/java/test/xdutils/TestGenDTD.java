@@ -13,9 +13,10 @@
 
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.util.GenDTD;
+import test.util.STester;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

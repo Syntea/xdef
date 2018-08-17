@@ -12,8 +12,13 @@
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
  *
  */
-package cz.syntea.xdef.sys;
+package test.util;
 
+import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.Report;
+import cz.syntea.xdef.sys.ReportPrinter;
+import cz.syntea.xdef.sys.ReportReader;
+import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
@@ -21,11 +26,15 @@ import java.text.DecimalFormat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Arrays;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -1183,4 +1192,33 @@ public abstract class STester {
 		return runTests(out, err, log, tests, info, true, args);
 	}
 
+	@Test(groups = "STester")
+	public void runUnitTest() {
+		PrintStream log;
+		FileOutputStream fis = null;
+		try {
+			fis = new FileOutputStream("testXdef.log");
+			log = new PrintStream(fis);
+		} catch (Exception ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
+			log = null;
+		}
+		STester[] tests = new STester[] {
+			this
+		};
+		int result = STester.runTests(System.out, System.err, log,
+			tests, "test-class " + getClass().getName(),
+			XDefTester.getFulltestMode());
+		
+		if (log != null) {
+			log.close();
+		}
+		
+		Assert.assertEquals(result,  0);
+	}
+	
 }

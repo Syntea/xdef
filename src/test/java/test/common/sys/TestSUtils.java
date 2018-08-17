@@ -13,13 +13,14 @@
 
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
+import test.util.STester;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;

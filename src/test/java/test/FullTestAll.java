@@ -12,7 +12,7 @@
  */
 package test;
 
-import test.xdef.Tester;
+import test.util.XDefTester;
 
 /** Execute all tests verbose.
  * @author Vaclav Trojan
@@ -20,7 +20,7 @@ import test.xdef.Tester;
 public class FullTestAll {
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		Tester.setFulltestMode(true);
+		XDefTester.setFulltestMode(true);
 		test.common.TestAll.runTests(args);
 		test.xdef.TestAll.runTests(args);
 		test.xdutils.TestAll.runTests(args);

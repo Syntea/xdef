@@ -14,7 +14,7 @@
  */
 package test.common.json;
 
-import cz.syntea.xdef.sys.STester;
+import test.util.STester;
 
 /** Test JSON tools.
  * @author trojan

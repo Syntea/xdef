@@ -14,7 +14,7 @@ import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
+import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
@@ -24,7 +24,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.L1protocol.L1A_ChkParser_dummy;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.TestUtil;
+import static test.util.TestUtil.*;
 
 
 
@@ -60,7 +60,7 @@ public class XdefToXsdTest {
 		List<URL>    xdefSrcList  = new ArrayList<URL>();
 		List<String> xdefSrcSList = new ArrayList<String>();
 		for (String xdefRsrc : L1XdefRsrcList) {
-			URL xdef = TestUtil.getResrc(XdefToXsdTest.class,
+			URL xdef = getResrc(XdefToXsdTest.class,
 				exampleL1Pkg + "/L1/" + xdefRsrc);
 			xdefSrcList.add(xdef);
 			xdefSrcSList.add(FUtils.readString(xdef.openStream(), encoding));
@@ -68,14 +68,14 @@ public class XdefToXsdTest {
 		
 		//xdef-validation of source xml-data to update data by xdef
 		//------------------------------------------------------------------
-		XDPool xdp = TestUtil.compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
+		XDPool xdp = compile(xdefSrcList.toArray(new URL[0]), L1A_ChkParser_dummy.class);
 		
 		XDDocument xddoc     = xdp.createXDDocument(mainName);
-		URL        L1batch   = TestUtil.getResrc(XdefToXsdTest.class, L1batchRsrc);
+		URL        L1batch   = getResrc(XdefToXsdTest.class, L1batchRsrc);
 		reporter.clear();
 		Element    l1batchXV = xddoc.xparse(L1batch, reporter);
 		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
-		TestUtil.assertNoErrors(reporter);
+		assertNull(reportErrors(reporter));
 		
 		//test of l1batch size after xdef-validation
 		//it should holds at least: #l1batch/2 < #l1batchXV
@@ -87,7 +87,7 @@ public class XdefToXsdTest {
 			).length() / 2
 			< FUtils.readString(l1batchXVFile).length()
 		;
-		Assert.assertEquals(l1sizeTest, true);
+		assertEquals(l1sizeTest, true);
 		
 		//generate xml-schema from xdef to directory xsdGenDir
 		//------------------------------------------------------------------
@@ -112,7 +112,7 @@ public class XdefToXsdTest {
 		
 		//result of the xml-schema-validation: VALID (it means no exception)
 		//------------------------------------------------------------------
-		Assert.assertEquals(true, true);
+		assertEquals(true, true);
 		
 		//feedback generation of xdef from the genrated xml-schema
 		//to directory xdefGenDir
@@ -122,13 +122,13 @@ public class XdefToXsdTest {
 		
 		//xdef-validation of L1batch by regenerated xdef
 		//------------------------------------------------------------------
-		XDPool xdp2 = TestUtil.compile(xdefGenCol, L1A_ChkParser_dummy.class);
+		XDPool xdp2 = compile(xdefGenCol, L1A_ChkParser_dummy.class);
 		
 		//xdef-validation
 		XDDocument xddoc2 = xdp2.createXDDocument(mainName);
 		reporter.clear();
 		xddoc2.xparse(l1batchXVFile, reporter);
-		TestUtil.assertNoErrors(reporter);
+		assertNull(reportErrors(reporter));
 		
 		logger.info("OK - L1XdefToXsdTest");
 	}
@@ -150,8 +150,8 @@ public class XdefToXsdTest {
 	
 	
 	@Test
-	public static void emptyTest() {
-		logger.info("OK - empty test");
+	public void emptyTest() {
+		logger.info("OK - empty test, in class: " + getClass().getName());
 	}
 	
 	

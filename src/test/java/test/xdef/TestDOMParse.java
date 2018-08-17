@@ -18,6 +18,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
@@ -28,7 +29,7 @@ import org.w3c.dom.Element;
 /** Test of checking of DOM object.
  * @author  Vaclav Trojan
  */
-public final class TestDOMParse extends Tester {
+public final class TestDOMParse extends XDefTester {
 
 	public TestDOMParse() {super();}
 

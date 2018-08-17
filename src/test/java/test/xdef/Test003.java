@@ -28,6 +28,8 @@ import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
+
 import java.io.File;
 import java.io.FileInputStream;
 import org.w3c.dom.Element;
@@ -41,7 +43,7 @@ import org.w3c.dom.Document;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test003 extends Tester {
+public final class Test003 extends XDefTester {
 
 	public Test003() {super();}
 
@@ -220,10 +222,10 @@ public final class Test003 extends Tester {
 			isr.close();
 			lst.close();
 		} catch (Exception ex) {fail(ex);}
-		if (Tester.getFulltestMode()) {
+		if (XDefTester.getFulltestMode()) {
 			try { // test big XML
 				xdef =
-	"<xd:def xmlns:xd='" + test.xdef.Tester.XDEFNS + "' xd:root=\"koně\">\n"+
+	"<xd:def xmlns:xd='" + test.util.XDefTester.XDEFNS + "' xd:root=\"koně\">\n"+
 	"\n"+
 	"  <koně>\n"+
 	"    <kůň xd:script = \"occurs *; forget\"\n" +

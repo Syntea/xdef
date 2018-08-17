@@ -19,6 +19,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
@@ -28,16 +29,27 @@ import cz.syntea.xdef.model.XMDebugInfo;
 import cz.syntea.xdef.model.XMStatementInfo;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+
+import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
 /** Provides testing of XDef debug mode.
  * @author Trojan
  */
-public final class TestDebugGUI extends Tester {
+public final class TestDebugGUI extends XDefTester {
 
 	public TestDebugGUI() {super(); setChkSyntax(false);}
 
 
+	
+	@Test(groups = "xdef", enabled = false)
+	@Override
+	public void runUnitTest() {
+		super.runUnitTest();
+	}
+	
+	
+	
 	@Override
 	public void test() {
 		Report.setLanguage("en"); //localize

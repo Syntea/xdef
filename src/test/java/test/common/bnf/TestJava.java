@@ -12,10 +12,13 @@
  */
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
+import test.util.STester;
+
 import java.io.File;
+
+import org.testng.annotations.Test;
 
 /** Test of BNF.
  * @author Vaclav Trojan
@@ -45,6 +48,14 @@ public class TestJava extends STester {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+	@Test(groups = "common", enabled = false)
+	@Override
+	public void runUnitTest() {
+		super.runUnitTest();
+	}
+	
+	
+	
 	@Override
 	public void test() {
 		String s;

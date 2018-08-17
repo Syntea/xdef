@@ -14,12 +14,13 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDPool;
 
 /** Test of references with NameSpace.
  * @author Vaclav Trojan
  */
-public final class TestNamespaces extends Tester {
+public final class TestNamespaces extends XDefTester {
 
 	public TestNamespaces() {super();}
 

@@ -14,6 +14,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
@@ -23,7 +24,7 @@ import org.w3c.dom.Element;
 /** Test of text options and text values.
  * @author Vaclav Trojan
  */
-public final class TestOptions extends Tester {
+public final class TestOptions extends XDefTester {
 
 	public TestOptions() {super();}
 

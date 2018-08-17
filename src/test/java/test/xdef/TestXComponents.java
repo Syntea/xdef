@@ -17,6 +17,7 @@ import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.component.XComponentUtil;
 import cz.syntea.xdef.component.XJUtil;
@@ -31,7 +32,7 @@ import org.w3c.dom.Element;
 /** Test XComponents.
  * @author Vaclav Trojan
  */
-public final class TestXComponents extends Tester {
+public final class TestXComponents extends XDefTester {
 
 	private static final XDPool XP = test.xdef.component.Pool.getXDPool();
 

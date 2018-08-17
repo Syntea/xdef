@@ -12,12 +12,13 @@
  */
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFExtMethod;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.StringParser;
+import test.util.STester;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Stack;

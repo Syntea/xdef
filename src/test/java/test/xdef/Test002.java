@@ -18,6 +18,7 @@ import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlConstants;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDocument;
@@ -38,7 +39,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test002 extends Tester {
+public final class Test002 extends XDefTester {
 
 	public Test002() {super();}
 

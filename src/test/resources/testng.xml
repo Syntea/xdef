@@ -6,8 +6,10 @@
 	<test name="Trojan's Tests">
 		<groups>
 			<dependencies>
+				<!--
 				<group name="xdef"    depends-on="common"/>
 				<group name="xdutils" depends-on="xdef"/>
+				-->
 				<!-- <group name="other"   depends-on="xdutils"/> -->
 			</dependencies>
 		</groups>

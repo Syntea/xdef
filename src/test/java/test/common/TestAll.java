@@ -12,7 +12,6 @@
  */
 package test.common;
 
-import cz.syntea.xdef.sys.STester;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import test.common.bnf.TestBNF;
@@ -32,7 +31,8 @@ import test.common.xml.TestKDOMBuilder;
 import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
-import test.xdef.Tester;
+import test.util.STester;
+import test.util.XDefTester;
 
 /** Run all available tests for package cz.syntea.common.
  * @author Vaclav Trojan
@@ -77,7 +77,7 @@ public class TestAll {
 			new TestXdScript(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package common", Tester.getFulltestMode(), args);
+			tests, "package common", XDefTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

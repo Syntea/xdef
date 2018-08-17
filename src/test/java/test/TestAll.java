@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import test.xdef.Tester;
+import test.util.XDefTester;
 
 
 
@@ -37,7 +37,7 @@ public class TestAll {
 	@BeforeSuite
 	@Parameters("fullTestMode")
 	public static void beforeSuite(boolean fullTestMode) {
-		Tester.setFulltestMode(fullTestMode);
+		XDefTester.setFulltestMode(fullTestMode);
 		
 		logger.info("tests initialized");
 	}
@@ -51,19 +51,19 @@ public class TestAll {
 	
 	
 	/** run TestAll in test.common */
-	@Test(groups = "common")
+	@Test(groups = "common", enabled = false)
 	public static void testCommon() {
 		Assert.assertEquals(test.common.TestAll.runTests(new String[0]), 0);
 	}
 	
 	/** run TestAll in test.xdef */
-	@Test(groups = "xdef")
+	@Test(groups = "xdef", enabled = false)
 	public static void testXdef() {
 		Assert.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
 	
 	/** run TestAll in test.xdutil */
-	@Test(groups = "xdutils")
+	@Test(groups = "xdutils", enabled = false)
 	public static void testXDUtils() {
 		Assert.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}

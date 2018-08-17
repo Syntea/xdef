@@ -12,10 +12,10 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.STester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
@@ -33,8 +33,10 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import cz.syntea.xdef.sys.ReportWriter;
-import static cz.syntea.xdef.sys.STester.runTest;
 import cz.syntea.xdef.util.XdefToXsd;
+
+import static test.util.STester.runTest;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 

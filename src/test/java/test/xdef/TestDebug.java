@@ -18,6 +18,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
@@ -35,7 +36,7 @@ import cz.syntea.xdef.XDValueID;
 /** TestDebug provides testing of debug mode.
  * @author Trojan
  */
-public final class TestDebug extends Tester {
+public final class TestDebug extends XDefTester {
 
 	public TestDebug() {super();}
 

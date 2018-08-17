@@ -13,9 +13,10 @@
 
 package test.common.xml;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.xml.KXpathExpr;
+import test.util.STester;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;

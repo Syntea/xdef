@@ -13,27 +13,22 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.StringParser;
+import test.util.XDefTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-
+import static test.util.STester.runTest;
+import static test.util.XDefTester.XDEFNS;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
  */
-public final class TestKeyAndRef extends Tester {
+public final class TestKeyAndRef extends XDefTester {
 
 	public TestKeyAndRef() {super();}
 
@@ -59,34 +54,6 @@ public final class TestKeyAndRef extends Tester {
 		return null;
 	}
 
-	@Test(groups = "xdef")
-	public static void testSt() {
-		PrintStream log;
-		FileOutputStream fis = null;
-		try {
-			fis = new FileOutputStream("testXdef.log");
-			log = new PrintStream(fis);
-		} catch (Exception ex) {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (IOException x) {}
-			}
-			log = null;
-		}
-		STester[] tests = new STester[] {
-			new TestKeyAndRef()
-		};
-		int result = STester.runTests(System.out, System.err, log,
-			tests, "test xdef.TestKeyAndRef", Tester.getFulltestMode());
-		
-		if (log != null) {
-			log.close();
-		}
-		
-		Assert.assertEquals(result,  0);
-	}
-	
 	@Override
 	public void test() {
 		String xdef;

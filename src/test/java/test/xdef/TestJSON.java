@@ -15,6 +15,7 @@ package test.xdef;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.JSONUtil;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.XDefTester;
 import cz.syntea.xdef.component.XJUtil;
 import cz.syntea.xdef.XDPool;
 import org.w3c.dom.Element;
@@ -22,7 +23,7 @@ import org.w3c.dom.Element;
 /** Test of parsing of JSON objects with XDefinition.
  * @author Vaclav Trojan
  */
-public class TestJSON extends Tester {
+public class TestJSON extends XDefTester {
 
 	public TestJSON() {super();}
 

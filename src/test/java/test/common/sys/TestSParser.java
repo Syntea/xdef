@@ -12,11 +12,12 @@
  */
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
+import test.util.STester;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

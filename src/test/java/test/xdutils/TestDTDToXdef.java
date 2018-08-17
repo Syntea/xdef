@@ -13,11 +13,11 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.xml.KXmlUtils;
+import test.util.STester;
 import cz.syntea.xdef.util.GenDTD2XDEF;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
