@@ -12,7 +12,12 @@
  */
 package test.xdef;
 
+import static org.testng.Assert.*;
 import static test.util.TestUtil.*;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
@@ -23,17 +28,15 @@ import test.util.TestUtil;
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
  */
+@Test(groups = "xdef")
 public final class TestKeyAndRefNT {
 
-	public void test() {
-		String xdef;
-		String s;
-		String xml;
-		ArrayReporter reporter = new ArrayReporter();
-		XDPool xp;
-		final String dataDir = getDataDir() + "test/";
-		try {
-			xdef =
+	private static final String dataDir = getDataDir() + "test/";
+	
+	public static void test001() {
+		final SoftAssert a = new SoftAssert();
+		
+		final String xdef =
 "<xd:def xmlns:xd='" + TestUtil.XDEFNS + "' root='a'>\n"+
 "<xd:declaration>uniqueSet u {x:int()}</xd:declaration>\n"+
 "<a>\n"+
@@ -41,16 +44,26 @@ public final class TestKeyAndRefNT {
 "  <c x='u.x.ID' y='u.x.ID'/>\n"+
 "</a>\n"+
 "</xd:def>\n";
-			xp  = compile(xdef);
-			xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
-			Assert.assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 1
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
-			xdef =
+	
+		ArrayReporter reporter = new ArrayReporter();
+		XDPool        xp       = compile(xdef001);
+		
+		String xml1 = "<a><b z='1 2'/><c x='1' y='2'/></a>";
+		
+		assertEq(xml1, parse(xp, "", xml1, reporter));
+		a.assertNull(getErrors(reporter));
+		
+		String xml2 = "<a><b z='1 3'/><c x='1' y='2'/></a>";
+		assertEq(xml2, parse(xp, "", xml2, reporter));
+		assertTrue(
+			reporter.getErrorCount() == 1
+			&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			reporter.printToString()
+		);
+	}
+		
+	public static void test002() {
+		String xdef =
 "<xd:def xmlns:xd='" + TestUtil.XDEFNS + "' root='a'>\n"+
 "<xd:declaration scope='local'>uniqueSet u {x: int()}</xd:declaration>\n"+
 "<a>\n"+
@@ -58,17 +71,23 @@ public final class TestKeyAndRefNT {
 "  <c z='u.x.CHKIDS'/>\n"+
 "</a>\n"+
 "</xd:def>\n";
-			xp = compile(xdef);
-			xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
-			// uniqueSet declared as variable of model.
-			xdef =
+		xp = compile(xdef);
+		xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
+		assertEq(xml, parse(xp, "", xml, reporter));
+		assertNoErrors(reporter);
+		xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
+		
+		assertEq(xml, parse(xp, "", xml, reporter));
+		assertTrue(
+			reporter.errorWarnings()
+			&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			reporter.printToString()
+		);
+	}
+	
+	{
+		// uniqueSet declared as variable of model.
+		xdef =
 "<xd:def xmlns:xd='" + TestUtil.XDEFNS + "' root='A'>\n"+
 "<A>\n"+
 "  <a xd:script='var uniqueSet v {x:int()}; occurs *'>\n"+

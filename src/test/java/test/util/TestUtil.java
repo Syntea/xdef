@@ -10,7 +10,6 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.w3c.dom.Element;
 
 import cz.syntea.xdef.XDDocument;
@@ -43,86 +42,98 @@ public class TestUtil {
 	
 	
 	
-	public static void assertNoErrors(final ReportWriter reporter) {
+	public static String getErrors(final ReportWriter reporter) {
 		if (reporter.errorWarnings()) {
 			String msg = "XDef-reporter:\n" +
 				reporter.getReportReader().printToString() + "\n";
 			
 			if (reporter.errors()) {
 				logger.error(msg);
-				Assert.assertTrue(false, msg);
+				return msg;
 			} else {
 				logger.warn(msg);
 			}
 		}
+		
+		return null;
 	}
 	
 	
 	
-	public static void assertEq(final String a1, final Element a2) {
-		assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2);
+	/** Check equality of elements.
+	 * @param act actual value.
+	 * @param exp expected value.
+	 */
+	public static void assertEq(final String act, final Element exp) {
+		assertEq(KXmlUtils.parseXml(act).getDocumentElement(), exp);
 	}
 
-	/** Check elements.
-	 * @param a1 first value.
-	 * @param a2 second value.
+	/** Check equality of elements.
+	 * @param act actual value.
+	 * @param exp expected value.
 	 * @param msg message to be printed or null.
 	 */
-	public static void assertEq(final String a1,
-		final Element a2,
+	public static void assertEq(final String act,
+		final Element exp,
 		final String msg) {
-		assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2, msg);
+		assertEq(KXmlUtils.parseXml(act).getDocumentElement(), exp, msg);
 	}
 
-	/** Check elements.
-	 * @param a1 first value.
-	 * @param a2 second value.
+	/** Check equality of elements.
+	 * @param act actual value.
+	 * @param exp expected value.
 	 */
-	public static void assertEq(final Element a1, final String a2) {
-		assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement());
+	public static void assertEq(final Element act, final String exp) {
+		assertEq(act, KXmlUtils.parseXml(exp).getDocumentElement());
 	}
 
-	/** Check elements.
-	 * @param a1 first value.
-	 * @param a2 second value.
+	/** Check equality of elements.
+	 * @param act actual value.
+	 * @param exp expected value.
 	 * @param msg message to be printed or null.
 	 */
-	public static void assertEq(final Element a1,
-		final String a2,
+	public static void assertEq(final Element act,
+		final String exp,
 		final String msg) {
-		assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement(), msg);
+		assertEq(act, KXmlUtils.parseXml(exp).getDocumentElement(), msg);
 	}
 
-	/** Check elements.
-	 * @param a1 first value.
-	 * @param a2 second value.
+	/** Check equality of elements.
+	 * @param act first value.
+	 * @param exp expected value.
 	 */
-	public static void assertEq(Element a1, Element a2) {assertEq(a1, a2, null);}
+	public static void assertEq(Element act, Element exp) {assertEq(act, exp, null);}
 
 	/** Check elements are equal (text nodes are trimmed).
-	 * @param a1 first value.
-	 * @param a2 second value.
+	 * @param act actual value.
+	 * @param exp expected value.
 	 * @param msg message to be printed or null.
 	 */
-	public static void assertEq(final Element a1,
-		final Element a2,
+	public static void assertEq(final Element act,
+		final Element exp,
 		final String msg) {
-		assertEq(a1, a2, msg, true);
+		assertEq(act, exp, msg, true);
 	}
-
+	
+	/** Check equality of elements.
+	 * @param act first value
+	 * @param exp expected value
+	 * @param msg message to be printed or null.
+	 * @param trim whether trim
+	 */
 	public static void assertEq(
-		final Element a1,
-		final Element a2,
+		final Element act,
+		final Element exp,
 		final Object msg,
 		final boolean trim
 	) {
-		assertNoErrors(KXmlUtils.compareElements(a1, a2, true, null));
+		assertNoErrors(KXmlUtils.compareElements(act, exp, true, null));
 	}
 	
 	
 	
 	public static XDPool compile(final URL[] urls, final Class<?>... obj) {
-		return TestUtil.checkExtObjects(XDFactory.compileXD(_props, urls, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, urls, obj));
 	}
 	
 	public static XDPool compile(final File file, final Class<?>... obj) throws Exception {
@@ -130,7 +141,7 @@ public class TestUtil {
 			_xdOfxd.createXDDocument().xparse(genCollection(file.getPath()), null);
 		}
 		
-		return TestUtil.checkExtObjects(XDFactory.compileXD(_props, file, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, file, obj));
 	}
 
 	public static XDPool compile(final String xdef, final Class<?>... obj) {
