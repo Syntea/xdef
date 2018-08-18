@@ -14,6 +14,9 @@ package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.xml.KXmlUtils;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,26 +43,22 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Create new empty ArrayReporter. */
 	public ArrayReporter() {
 		super();
-//		_errors = 0;
-//		_lastErrors = 0;
-//		_warnings = 0;
-//		_fatals = 0;
-//		_index = 0;
 		_lastErrorReport = -1;
+//		_errors, _lastErrors,_warnings,_fatals,_index = 0; // sets Java
 	}
 
 	@Override
 	/** Set language (ISO-639 or ISO-639-2). This method has no effect here.
 	 * @param language language id (ISO-639).
 	 */
-	public void setLanguage(final String language) {}
+	public final void setLanguage(final String language) {}
 
 	@Override
 	/** Appends the specified report to the end of this list.
 	 * @param report report to be appended to this list.
 	 * @return <tt>true</tt> (as per the general contract of Collection.add).
 	 */
-	public boolean add(final Report report) {
+	public final boolean add(final Report report) {
 		putReport(report);
 		return true;
 	}
@@ -69,7 +68,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param c collection of reports.
 	 * @return <tt>true</tt> if something was added.
 	 */
-	public boolean addAll(final Collection<? extends Report> c) {
+	public final boolean addAll(final Collection<? extends Report> c) {
 		int len = c.size();
 		for (Report r: c) {
 			putReport(r);
@@ -80,7 +79,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Appends reports from the specified ArrayReporter to this list.
 	 * @param ar ArrayReporter with reports.
 	 */
-	public void addReports(ArrayReporter ar) {
+	public final void addReports(final ArrayReporter ar) {
 		for (Report r: ar) {
 			putReport(r);
 		}
@@ -90,7 +89,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Put the report to the list.
 	 * @param report The report.
 	 */
-	public void putReport(final Report report) {
+	public final void putReport(final Report report) {
 		super.add(report);
 		switch (report.getType()) {
 			case Report.ERROR:
@@ -115,7 +114,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @return <tt>true</tt> if the object was found and removed, otherwise
 	 * return false.
 	 */
-	public boolean removeReport(final Report msg) {
+	public final boolean removeReport(final Report msg) {
 		if (msg == null || super.isEmpty()) {
 			return true;
 		}
@@ -158,7 +157,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Write string to reporter.
 	 * @param str String to be written.
 	 */
-	public void writeString(final String str) {
+	public final void writeString(final String str) {
 		super.add(Report.string(null, str));
 	}
 
@@ -167,7 +166,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @return last error report (or <tt>null</tt> if last report is not
 	 * available).
 	 */
-	public Report getLastErrorReport() {
+	public final Report getLastErrorReport() {
 		return _lastErrorReport < 0 ? null : get(_lastErrorReport);
 	}
 
@@ -176,12 +175,12 @@ public class ArrayReporter extends ArrayList<Report>
 	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
 	 * the report has already been written to the report file.
 	 */
-	public void clearLastErrorReport() {_lastErrorReport = -1;}
+	public final void clearLastErrorReport() {_lastErrorReport = -1;}
 
 	@Override
 	/** Clear counters of fatal errors, errors and warnings.
 	 */
-	public void clearCounters() {
+	public final void clearCounters() {
 		_errors = 0;
 		_warnings = 0;
 		_fatals = 0;
@@ -194,13 +193,13 @@ public class ArrayReporter extends ArrayList<Report>
 	 * &lt; 0 || index &gt;= size())</tt>.
 	 */
 	@Override
-	public Report get(int index) {return super.get(index);}
+	public final Report get(final int index) {return super.get(index);}
 
 	@Override
 	/** Get next report from the list or null.
 	 * @return The report or null.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		if (_index < super.size()) {
 			return super.get(_index++);
 		}
@@ -214,17 +213,17 @@ public class ArrayReporter extends ArrayList<Report>
 	 * report file and resets it to read mode.
 	 * @return The report reader or <tt>null</tt>.
 	 */
-	public ReportReader getReportReader() {
+	public final ReportReader getReportReader() {
 		_index = 0;
 		return this;
 	}
 
 	/** Returns report reader for reading from the start point. */
-	public void reset() {_index = 0;}
+	public final void reset() {_index = 0;}
 
 	@Override
 	/** Clear all report items. */
-	public void clear() {
+	public final void clear() {
 		super.clear();
 		_warnings = 0;
 		_errors = 0;
@@ -234,11 +233,19 @@ public class ArrayReporter extends ArrayList<Report>
 		_lastErrorReport = -1;
 	}
 
+	/** Clear this ArrayReporter and return it.
+	 * @return this ArrayReporter.
+	 */
+	public final ArrayReporter clearArrayReporter() {
+		clear();
+		return this;
+	}
+
 	@Override
 	/** Get size of the list of reports.
 	 * @return Number of report items.
 	 */
-	public int size() {return super.size();}
+	public final int size() {return super.size();}
 
 	@Override
 	/** Put fatal item.
@@ -247,7 +254,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(final String id, final String msg, final Object... mod) {
+	public final void fatal(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
@@ -256,7 +265,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(long registeredID, Object... mod) {
+	public final void fatal(long registeredID, Object... mod) {
 		putReport(Report.fatal(registeredID, mod));
 	}
 
@@ -267,7 +276,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final String id, final String msg, final Object... mod) {
+	public final void error(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
@@ -276,7 +287,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(long registeredID, Object... mod) {
+	public final void error(long registeredID, Object... mod) {
 		putReport(Report.error(registeredID, mod));
 	}
 
@@ -287,8 +298,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void lighterror(final String id,
-		final String msg, final Object... mod) {
+	public final void lighterror(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
@@ -297,7 +309,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(long registeredID, Object... mod) {
+	public final void lightError(long registeredID, Object... mod) {
 		putReport(Report.lightError(registeredID, mod));
 	}
 
@@ -308,7 +320,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final String id, final String msg, final Object... mod){
+	public final void warning(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.warning(id, msg, mod));
 	}
 
@@ -317,7 +331,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(long registeredID, Object... mod) {
+	public final void warning(final long registeredID, final Object... mod) {
 		putReport(Report.warning(registeredID, mod));
 	}
 
@@ -328,7 +342,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(final String id, final String msg, final Object... mod) {
+	public final void audit(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
@@ -337,7 +353,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(long registeredID, Object... mod) {
+	public final void audit(final long registeredID, final Object... mod) {
 		putReport(Report.audit(registeredID, mod));
 	}
 
@@ -348,7 +364,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void message(final String id, final String msg, final Object... mod){
+	public final void message(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
@@ -357,7 +375,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void mesage(long registeredID, Object... mod) {
+	public final void mesage(final long registeredID, final Object... mod) {
 		putReport(Report.message(registeredID, mod));
 	}
 
@@ -368,7 +386,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(final String id, final String msg, final Object... mod) {
+	public final void info(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
@@ -377,7 +397,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(long registeredID, Object... mod) {
+	public final void info(final long registeredID, final Object... mod) {
 		putReport(Report.info(registeredID, mod));
 	}
 
@@ -388,7 +408,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(final String id, final String msg, final Object... mod) {
+	public final void text(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
@@ -397,7 +419,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(long registeredID, Object... mod) {
+	public final void text(final long registeredID, final Object... mod) {
 		putReport(Report.text(registeredID, mod));
 	}
 
@@ -408,7 +430,9 @@ public class ArrayReporter extends ArrayList<Report>
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(final String id, final String msg, final Object... mod) {
+	public final void string(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
@@ -417,7 +441,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod The modification string of report text.
 	 */
-	public void string(long registeredID, Object... mod) {
+	public final void string(final long registeredID, final Object... mod) {
 		putReport(Report.string(registeredID, mod));
 	}
 
@@ -425,43 +449,45 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Get number of fatal items.
 	 * @return Number of fatal errors.
 	 */
-	public int getFatalErrorCount() {return _fatals;}
+	public final int getFatalErrorCount() {return _fatals;}
 
 	@Override
 	/** Get number of error items.
 	 * @return Number of errors.
 	 */
-	public int getErrorCount() {return _errors + _lightErrors;}
+	public final int getErrorCount() {return _errors + _lightErrors;}
 
 	@Override
 	/** Get number of light error items.
 	 * @return The number of light errors.
 	 */
-	public int getLightErrorCount() {return _lightErrors;}
+	public final int getLightErrorCount() {return _lightErrors;}
 
 	@Override
 	/** Get number of warning items.
 	 * @return Number of warnings.
 	 */
-	public int getWarningCount() {return _warnings;}
+	public final int getWarningCount() {return _warnings;}
 
 	@Override
 	/** Check if fatal errors were generated.
 	 * @return true is errors reports are present.
 	 */
-	public boolean fatals() {return _fatals != 0;}
+	public final boolean fatals() {return _fatals != 0;}
 
 	@Override
 	/** Check if errors and/or fatal errors were generated.
 	 * @return <i>true</i> if and only if exists fatal errors.
 	 */
-	public boolean errors() {return (_fatals + _errors + _lightErrors) != 0;}
+	public final boolean errors() {
+		return (_fatals + _errors + _lightErrors) != 0;
+	}
 
 	@Override
 	/** return true if warnings or errors reports are present.
 	 * @return <i>true</i> if fatals, errors or warning exists.
 	 */
-	public boolean errorWarnings() {
+	public final boolean errorWarnings() {
 		return (_warnings + _lightErrors + _errors + _fatals) != 0;
 	}
 
@@ -471,7 +497,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * exception with the  list of error reports (max. MAX_REPORTS reports).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
-	public void checkAndThrowErrorWarnings() throws SRuntimeException {
+	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (errorWarnings()) {
 			throwReports(true);
 		}
@@ -483,7 +509,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * error reports (max. MAX_REPORTS reports).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public void checkAndThrowErrors() throws SRuntimeException {
+	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (errors()) {
 			throwReports(false);
 		}
@@ -495,7 +521,8 @@ public class ArrayReporter extends ArrayList<Report>
 	 * otherwise only errors.
 	 * @throws SRuntimeException with reports.
 	 */
-	private void throwReports(boolean warnings) throws SRuntimeException {
+	private final void throwReports(final boolean warnings)
+		throws SRuntimeException {
 		_index = 0;
 		StringBuilder sb = new StringBuilder();
 		Report rep;
@@ -527,17 +554,17 @@ public class ArrayReporter extends ArrayList<Report>
 
 	@Override
 	/* Close stream - resets intput to start. */
-	public void close() {_index = 0;}
+	public final void close() {_index = 0;}
 
 	@Override
 	/** Flush report writer - nothing to do for ArrayReporter. */
-	public void flush() {}
+	public final void flush() {}
 
 	@Override
 	/** Write reports to String (in actual language).
 	 * @return the String with reports.
 	 */
-	public String printToString() {
+	public final String printToString() {
 		return printToString(null);
 	}
 
@@ -546,7 +573,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param language language id (ISO-639).
 	 * @return the String with reports.
 	 */
-	public String printToString(final String language) {
+	public final String printToString(final String language) {
 		StringBuilder result = new StringBuilder();
 		_index = 0;
 		Report rep;
@@ -569,7 +596,8 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param language language id (ISO-639).
 	 * @param out The PrintStream where reports are printed.
 	 */
-	public void printReports(PrintStream out, String language) {
+	public final void printReports(final PrintStream out,
+		final String language) {
 		Report rep;
 		_index = 0;
 		while ((rep = getReport()) != null) {
@@ -582,7 +610,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Write reports to output stream.
 	 * @param out The PrintWriter where reports are printed.
 	 */
-	public void printReports(final PrintStream out) {
+	public final void printReports(final PrintStream out) {
 		Report rep;
 		_index = 0;
 		while ((rep = getReport()) != null) {
@@ -592,6 +620,70 @@ public class ArrayReporter extends ArrayList<Report>
 	}
 
 	@Override
-	public String toString() {return printToString();}
+	public final String toString() {return printToString();}
+
+	/** Write reports from this reporter to a file.
+	 * @param filename name of the file where to write reports.
+	 */
+	public final void writeReportsToFile(final String filename) {
+		writeReportsToFile(new File(filename));
+	}
+
+	/** Write reports from this reporter to a file
+	 * @param file where to write
+	 */
+	public final void writeReportsToFile(final File file) {
+		FileReportWriter frw = new FileReportWriter(file);
+		Report rep;
+		reset();
+		while((rep = getReport()) != null) {
+			frw.putReport(rep);
+		}
+		frw.close();
+	}
+
+	/** Write reports from this reporter to the InputStreamReader.
+	 * @param out OutputStreamWriter where to write,
+	 */
+	public final void writeReportsToStream(final OutputStreamWriter out) {
+		FileReportWriter frw = new FileReportWriter(out);
+		Report rep;
+		reset();
+		while((rep = getReport()) != null) {
+			frw.putReport(rep);
+		}
+	}
+
+	/** Add to this reporter data from the file.
+	 * @param filename name of the file with reports to be added.
+	 * @throws Exception if an error occurs.
+	 */
+	public void addReportsFromFile(final String filename) throws Exception {
+		addReportsFromFile(new File(filename));
+	}
+
+	/** Add to this reporter data from the file.
+	 * @param file the file with reports to be added.
+	 * @throws Exception if an error occurs.
+	 */
+	public void addReportsFromFile(final File file) throws Exception {
+		FileReportReader frr = new FileReportReader(file);
+		Report rep;
+		while((rep = frr.getReport()) != null) {
+			putReport(rep);
+		}
+		frr.close();
+	}
+
+	/** Add to this reporter data from the stream.
+	 * @param in the stream with reports to be added.
+	 */
+	public void addReportsFromStream(final InputStreamReader in) {
+		FileReportReader frr = new FileReportReader(in);
+		Report rep;
+		while((rep = frr.getReport()) != null) {
+			putReport(rep);
+		}
+	}
 
 }

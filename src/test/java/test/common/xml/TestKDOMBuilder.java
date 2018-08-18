@@ -36,9 +36,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.UserDataHandler;
 
-/**
- * TestKDOMBuilder
- *
+/** Test KDOMBuilder.
  * @author  Vaclav Trojan
  */
 public class TestKDOMBuilder extends STester {
@@ -739,44 +737,6 @@ public class TestKDOMBuilder extends STester {
 			builder.setExpandEntityReferences(false);
 			builder.setCoalescing(false);
 			builder.setValidating(true);
-			data = "http://xdef.syntea.cz/tutorial/test/TestDTD001.xml";
-			try {//test XML from URL
-				doc = builder.parse(new URL(data));
-				el = doc.getDocumentElement();
-				assertEq("a1", el.getAttribute("a1"));
-				assertEq("a2", el.getAttribute("a2"));
-				assertEq("%pe", el.getAttribute("a3"));
-				assertEq("text 1,text 2", el.getTextContent());
-			} catch (Exception ex) {
-				s = ex.getMessage(); // Internet not available?
-				if (s == null || 
-					(!s.contains("java.net.UnknownHostException")
-						&& !s.contains("java.net.ConnectException"))) {
-					fail(ex); // other error!
-				}
-			}
-			data =
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-"<!DOCTYPE root SYSTEM 'http://xdef.syntea.cz/tutorial/test/TestDTD001.dtd'>\n"+
-"<root a1=\"a1\" >&t1;,&t2;</root>";
-			try {//test XML from URL
-				doc = builder.parse(data);
-				el = doc.getDocumentElement();
-				assertEq("a1", el.getAttribute("a1"));
-				assertEq("a2", el.getAttribute("a2"));
-				assertEq("%pe", el.getAttribute("a3"));
-				assertEq("text 1,text 2", el.getTextContent());
-			} catch (Exception ex) {
-				s = ex.getMessage(); // Internet not available?
-				if (s == null || !(s.contains("java.net.UnknownHostException")
-					|| s.contains("java.net.ConnectException"))) {
-					fail(ex); // other error!
-				}
-			}
-			builder = new KDOMBuilder();
-			builder.setExpandEntityReferences(false);
-			builder.setCoalescing(false);
-			builder.setValidating(true);
 			data = "<!-- t1 -->\n" +
 				"<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n" +
 				"<!ENTITY e2 \"&e1;<b>?</b>e\">\n"+
@@ -1098,8 +1058,38 @@ public class TestKDOMBuilder extends STester {
 			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
 			s = el.getPrefix();
 			assertTrue(s == null || ":".equals(s), s); //java: null, syntea: ":"
+		} catch (Exception ex) {fail(ex);}
+		try {//test XML from URL (internet connection required))
+			builder = new KDOMBuilder();
+			builder.setExpandEntityReferences(false);
+			builder.setCoalescing(false);
+			builder.setValidating(true);
+			data = "http://xdef.syntea.cz/tutorial/test/TestDTD001.xml";
+			doc = builder.parse(new URL(data));
+			el = doc.getDocumentElement();
+			assertEq("a1", el.getAttribute("a1"));
+			assertEq("a2", el.getAttribute("a2"));
+			assertEq("%pe", el.getAttribute("a3"));
+			assertEq("text 1,text 2", el.getTextContent());
+			data =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+"<!DOCTYPE root SYSTEM 'http://xdef.syntea.cz/tutorial/test/TestDTD001.dtd'>\n"+
+"<root a1=\"a1\" >&t1;,&t2;</root>";
+			doc = builder.parse(data);
+			el = doc.getDocumentElement();
+			assertEq("a1", el.getAttribute("a1"));
+			assertEq("a2", el.getAttribute("a2"));
+			assertEq("%pe", el.getAttribute("a3"));
+			assertEq("text 1,text 2", el.getTextContent());
 		} catch (Exception ex) {
-			fail(ex);
+			s = ex.getMessage(); // Internet not available?
+			if (s == null || (!s.contains("java.net.UnknownHostException")
+				&& !s.contains("java.net.ConnectException"))) {
+				fail(ex); // other error!
+			} else {
+				setResultInfo(
+					"(Internet connection is not available, not tested.)");
+			}
 		}
 		try {// test DOCTYPE declared in an external file.
 			builder = new KDOMBuilder();
@@ -1537,10 +1527,10 @@ public class TestKDOMBuilder extends STester {
 "  a='&#60;&#62;'>&#60;&#62;<![CDATA[]]&#62;]]&gt;]]>&lt;&gt;abc</doc>\n"+
 "<!-- c -->";
 			doc = builder.parse(data);
-				assertEq(" <a x='1'>t1<b/>t2</a> ",
-					doc.getFirstChild().getNodeValue());
-				assertEq(doc.getFirstChild().getNextSibling().getNodeType(),
-					Node.DOCUMENT_TYPE_NODE);
+			assertEq(" <a x='1'>t1<b/>t2</a> ",
+				doc.getFirstChild().getNodeValue());
+			assertEq(doc.getFirstChild().getNextSibling().getNodeType(),
+				Node.DOCUMENT_TYPE_NODE);
 			el = doc.getDocumentElement();
 			assertEq("<>", el.getAttribute("a"));
 			assertEq("<>]]&#62;]]&gt;<>abc", el.getTextContent());
