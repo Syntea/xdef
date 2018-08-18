@@ -587,13 +587,15 @@ public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 
 	@Override
 	/** Open debugger.
+/	 * @param props Properties or null.
 	 * @param xp XDPool.
 	 */
-	public void openDebugger(XDPool xp) {
+	public void openDebugger(Properties props, XDPool xp) {
 		if (xp == null || !xp.isDebugMode()
 			|| xp.getDisplayMode() == XDPool.DISPLAY_FALSE) {
 			return;
 		}
+		init(props);
 		if (!_opened) {
 			initGUI(xp);
 		}
@@ -615,11 +617,10 @@ public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		_out = null;
 	}
 
-	@Override
 	/** set defaults according to Properties.
 	 * @param props Properties or null.
 	 */
-	public final void init(final Properties props) {
+	private void init(final Properties props) {
 		_in = null;
 		_out = null;
 		String s = props != null ?

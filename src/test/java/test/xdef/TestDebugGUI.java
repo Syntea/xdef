@@ -2,7 +2,6 @@
  * Copyright 2015 Syntea software group a.s.
  *
  * File: TestDebugGUI.java, created 2015-04-20.
- * Package: mytest.xdef
  *
  * This file may be used, copied, modified and distributed only in accordance
  * with the terms of the limited license contained in the accompanying
@@ -30,13 +29,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import org.w3c.dom.Element;
 
-/** Provides testing of XDef debug mode.
+/** Provides testing of XDef debug mode and editing in display mode.
  * @author Trojan
  */
 public final class TestDebugGUI extends Tester {
 
 	public TestDebugGUI() {super(); setChkSyntax(false);}
-
 
 	@Override
 	public void test() {
@@ -50,16 +48,25 @@ public final class TestDebugGUI extends Tester {
 		XDOutput out;
 		String s;
 		Element el;
-		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
-			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
-//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-		setProperty(XDConstants.XDPROPERTY_DISPLAY,
-			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);
+
+		// set external editor
+		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, "xdplugin.XdPlugin");
+
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
+			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
 		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
 			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+		
+////////////////////////////////////////////////////////////////////////////////
+//		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
+//			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
+//		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, // xdef editor
+//			"cz.syntea.xdef.impl.debug.ChkGUIDisplay"); // class name
+//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);
+////////////////////////////////////////////////////////////////////////////////
 		try {
 			// XScript breakpoints
 			xdef =
@@ -302,7 +309,6 @@ public final class TestDebugGUI extends Tester {
 						xd.getDocument().getDocumentElement()));
 				}
 			}
-//			if (true) return;
 		} catch (Exception ex) {
 			fail(ex);
 		}

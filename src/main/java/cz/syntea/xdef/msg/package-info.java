@@ -17,4 +17,3 @@
  * {@link cz.syntea.xdef.msg.SYS}.
  * </p>
  */
-package cz.syntea.xdef.msg;

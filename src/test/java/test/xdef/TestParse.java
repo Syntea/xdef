@@ -185,8 +185,8 @@ public final class TestParse extends Tester {
 			xdef =  // test Contex constructor and conversion to element
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<a xd:script=\"+; finally {\n"+
-"   Container c = [%a:x=[%xmlns:a='a',[%a:y=[]],[%y=null],'t',[%z=[%a='a']]]];\n"+
-"   returnElement(c.toElement().toContainer().toElement());}\"/>\n"+
+" Container c = [%a:x=[%xmlns:a='a',[%a:y=[]],[%y=null],'t',[%z=[%a='a']]]];\n"+
+"  returnElement(c.toElement().toContainer().toElement());}\"/>\n"+
 "</xd:def>";
 			assertEq(parse(xdef, null, "<a/>", reporter),
 				"<a:x xmlns:a='a'><a:y xmlns:a='a'/><y/>t<z a='a'/></a:x>");

@@ -38,6 +38,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.util.Properties;
 
 /** ChkDOMParser
  * @author  Vaclav Trojan
@@ -294,11 +295,12 @@ class ChkDOMParser extends SReporter {
 			_chkDoc._node = null;
 			_chkDoc._element = null;
 			XCodeProcessor scp = _chkDoc._scp;
+			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
 			_chkDoc.init(chkDoc._xdef,
 				(Document) _chkDoc.getDocument().cloneNode(false),
 				chkDoc._reporter,
-				scp.getProperties(),
+				props,
 				chkDoc._userObject);
 			_chkDoc._scp = scp;
 			_doc = _chkDoc._doc;
@@ -307,7 +309,7 @@ class ChkDOMParser extends SReporter {
 			setLineNumber(-1);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				// open debugger
-				_chkDoc.getDebugger().openDebugger(_chkDoc.getXDPool());
+				_chkDoc.getDebugger().openDebugger(props, _chkDoc.getXDPool());
 			}
 			_chkDoc._scp.initscript(); //Initialize variables and methods
 			_text = new StringBuilder();

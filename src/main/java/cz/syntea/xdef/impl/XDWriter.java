@@ -71,7 +71,7 @@ public class XDWriter extends SObjectWriter {
 	/** Creates a new instance of XDWriter.
 	 * @param out Output stream where data of XD objects will be written.
 	 */
-	XDWriter(OutputStream out) {super(out);}
+	public XDWriter(OutputStream out) {super(out);}
 
 	private void writeBNF(final DefBNFGrammar y) throws IOException {
 		writeInt(y.getParam());

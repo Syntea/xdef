@@ -257,7 +257,7 @@ class ChkGUIBase {
 	/** Close GUI: dispose window and remove allocated objects.
 	 * @param ask message to be displayed or null.
 	 */
-	void closeGUI(String ask) {
+	public void closeGUI(String ask) {
 		if (_frame != null) {
 			_frame.setVisible(true);
 			_frame.setVisible(false);
@@ -267,9 +267,12 @@ class ChkGUIBase {
 			if (ask != null) {
 				JOptionPane.showMessageDialog(_frame, ask);
 			}
-			do {_frame.dispose();} while(_frame.isActive());
 			_frame.setEnabled(false);
 			_frame.removeAll();
+			_frame.dispose();
+			while(_frame.isActive()) {
+				_frame.dispose();
+			}
 			_menuBar = null;
 			_sourceArea = null;
 			_lineNumberArea = null;

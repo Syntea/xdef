@@ -33,12 +33,11 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.impl.compile.CompileXDPool;
-import cz.syntea.xdef.impl.debug.ChkGUIDebug;
+import cz.syntea.xdef.impl.debug.ChkGUIDisplay;
 import cz.syntea.xdef.impl.debug.XEditor;
 //import cz.syntea.xd.impl.compile.CompileParser;
 //import cz.syntea.xd.impl.compile.CompileXDPool;
@@ -164,9 +163,7 @@ public class XBuilder implements XDBuilder {
 	/** Get compiler.
 	 * @return created XDefPool.
 	 */
-	public CompileXDPool getCompiler() {
-		return _xp._compiler;
-	}
+	public CompileXDPool getCompiler() {return _xp._compiler;}
 
 	@Override
 	/** Build XDefPool from prepared sources.
@@ -204,32 +201,30 @@ public class XBuilder implements XDBuilder {
 			if (display) {
 				Class<?>[] externals = p.getExternals(); //save external classes
 				ArrayReporter ar = (ArrayReporter) reporter;
-				XEditor edit = null;
+				XEditor xeditor = null;
 				try {
-					String debugEditor = result.getDebugEditor();
-					if (debugEditor != null) {
-						Class<?> cls = Class.forName(debugEditor);
-						Constructor<?> c = cls.getDeclaredConstructor(
-							Properties.class, XDPool.class);
-						XDDebug debugger = (XDDebug) c.newInstance(null,result);
-						edit = debugger.getXEditor();
+					String xdefEditor = result.getXdefEditor();
+					if (xdefEditor != null) {
+						Class<?> cls = Class.forName(xdefEditor);
+						Constructor<?> c = cls.getDeclaredConstructor();
+						c.setAccessible(true);
+						xeditor = (XEditor) c.newInstance();
 					}
 				} catch (Exception ex) {
-					edit = null;
+					xeditor = null;
 					// Class with the external debug editor &{0}{"}{"}
 					// is not available.
 					throw new SRuntimeException(
-						XDEF.XDEF850, ex, result.getDebugEditor());
+						XDEF.XDEF850, ex, result.getXdefEditor());
 				}
-				if (edit == null) {
-					edit = new ChkGUIDebug(null, result).getXEditor();
+				if (xeditor == null) {
+					xeditor = new ChkGUIDisplay();
 				}
-				for (;;) {
+				while(!xeditor.setXEditor(result, ar)) {
+					// compile again
 					Map<String, XDSourceItem> map = result._sourcesMap;
-					if (edit.setXEditor(result, ar)) {
-						break;
-					}
 					result = new XPool(result.getProperties(),null, externals);
+					// update source map (something might be changed)
 					for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
 						String key = e.getKey();
 						XDSourceItem src = e.getValue();
@@ -240,10 +235,11 @@ public class XBuilder implements XDBuilder {
 							result.setSource(src._url);
 						}
 					}
+					// compile again
 					p = result._compiler;
 					p.compileXPool(result);
-					result._compiler = null;
 					ar = (ArrayReporter) p.getReportWriter();
+					result._compiler = null;
 				}
 			}
 			if (result.isChkWarnings()) {

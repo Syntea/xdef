@@ -17,10 +17,8 @@ import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
-import static cz.syntea.xdef.sys.STester.runTest;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import static test.xdef.Tester.XDEFNS;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
@@ -780,7 +778,7 @@ public final class TestKeyAndRef extends Tester {
 " </Test>";
 			parse(xdef, "", xml, reporter);
 			assertEq(2, reporter.getErrorCount(), reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
 "    type at   int();\n" +
@@ -801,7 +799,7 @@ public final class TestKeyAndRef extends Tester {
 " <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xml = 
+			xml =
 "<Test>\n" +
 "   <A a=\"1\">\n" +
 "     <B b=\"B1\" c=\"Y\"/>\n" +
@@ -818,8 +816,8 @@ public final class TestKeyAndRef extends Tester {
 				&& s.contains("/Test/uA[1]/uB[1]")
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
 				reporter);
-					
-			xdef = 
+
+			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
 "    type at   int();\n" +
@@ -846,7 +844,7 @@ public final class TestKeyAndRef extends Tester {
 				&& s.contains("/Test/uA[1]/uB[1]")
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
 				reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
 "    type at   int();\n" +

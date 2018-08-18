@@ -691,7 +691,8 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 		return create(compile(xdef), defName, el, name, param, obj, reporter);
 	}
 
-	/** Compose a new XML document from the specified data.
+	/**
+	 Compose a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
 	 * @param defName X-Definition name, or null if it is not specified.
 	 * @param el Element as X-Definition context or null.

@@ -52,6 +52,8 @@ public final class TestDebug extends Tester {
 		String s;
 		PrintStream ps;
 		Element el;
+		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, // debug editor
+			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
 		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
 			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
 //		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display

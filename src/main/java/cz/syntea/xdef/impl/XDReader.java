@@ -77,7 +77,7 @@ public class XDReader extends SObjectReader {
 	/** Creates a new instance of XDReader.
 	 * @param in Input stream with data of XD objects
 	 */
-	XDReader(InputStream in) {super(in);}
+	public XDReader(InputStream in) {super(in);}
 
 	private static Class<?> getClassForName(String name) throws IOException {
 		//first check primitive type names

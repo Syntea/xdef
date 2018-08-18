@@ -744,7 +744,7 @@ final class ChkParser extends DomBaseHandler {
 				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES, props);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
-				_chkDoc.getDebugger().openDebugger(xdp);
+				_chkDoc.getDebugger().openDebugger(props, xdp);
 			}
 			_chkDoc._scp.initscript(); //Initialize variables and methods
 			_isDTD = true;

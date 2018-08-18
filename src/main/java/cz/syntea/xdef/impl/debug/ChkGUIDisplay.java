@@ -39,7 +39,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 /** Provides GUI for editing of sources of X-definitions. */
-class ChkGUIDisplay extends ChkGUIBase implements XEditor {
+public class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 	/** Limit of undo events in text area. */
 	private static final int UNDO_LIMIT = 256;
 	/** UNDO manager of source window. */
@@ -50,7 +50,7 @@ class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 	private boolean _actionFinished = true;
 
 	/** Create instance of GUI to display sources of X-definitions. */
-	ChkGUIDisplay() {
+	public ChkGUIDisplay() {
 		openGUI();
 		_frame.addWindowListener(new WindowListener() {
 			@Override
@@ -108,6 +108,14 @@ class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 		_positions = null;
 		_actionFinished = true;
 		return true;
+	}
+
+	@Override
+	/** Close XEditor.
+	 * @param msg text of message to be shown. If null no message is shown.
+	 */
+	public void closeXEditor(String msg) {
+		closeGUI(msg);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

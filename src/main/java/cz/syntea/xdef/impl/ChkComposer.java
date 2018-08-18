@@ -207,6 +207,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				&& _rootChkElement._scp.getDebugger() != null) {
 				// open debugger
 				_rootChkElement._scp.getDebugger().openDebugger(
+					_rootChkElement._scp.getProperties(),
 					_rootChkElement._rootChkDocument.getXDPool());
 			}
 			chkDoc._scp.initscript(); //Initialize variables and methods
