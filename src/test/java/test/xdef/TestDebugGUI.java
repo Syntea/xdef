@@ -58,7 +58,7 @@ public final class TestDebugGUI extends Tester {
 			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
-		
+
 ////////////////////////////////////////////////////////////////////////////////
 //		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
 //			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name

@@ -20,7 +20,14 @@ import cz.syntea.xdef.model.XMOccurrence;
  *
  * @author Trojan
  */
-public class XOccurrence implements XOccurrenceInterface {
+public class XOccurrence implements XMOccurrence {
+	/** Object is accepted but ignored. */
+	static final int IGNORE = -1;
+	/** Object is illegal. */
+	static final int ILLEGAL = -2;
+	/** Object is undefined. */
+	static final int UNDEFINED = -3;
+
 	/** Minimum. */
 	private int _min;
 	/** Maximum. */
@@ -101,62 +108,6 @@ public class XOccurrence implements XOccurrenceInterface {
 	public final int maxOccurs() {return _max;}
 
 	@Override
-	/** Set min occurrence.
-	 * @param min value of minimal occurrence.
-	 */
-	public final void setMinOccur(final int min) {_min = min;}
-
-	@Override
-	/** Set max occurrence.
-	 * @param max value of maximal occurrence.
-	 */
-	public final void setMaxOccur(final int max) {_max = max;}
-
-	@Override
-	/** Set occurrence values.
-	 * @param occ occurrence object from which values are imported.
-	 */
-	public final void setOccurrence(final XMOccurrence occ) {
-		_min = occ.minOccurs();
-		_max = occ.maxOccurs();
-	}
-
-	@Override
-	/** Set occurrence from parameters.
-	 * @param min minimum.
-	 * @param max maximum.
-	 */
-	public void setOccurrence(int min, int max) {_min = min; _max = max;}
-
-	@Override
-	/** Set value of occurrence as illegal. */
-	public final void setIllegal() {_min = ILLEGAL; _max = 0;}
-
-	@Override
-	/** Set value of occurrence as ignored. */
-	public final void setIgnore() {_min = IGNORE; _max=Integer.MAX_VALUE;}
-
-	@Override
-	/** Set value of occurrence as fixed. */
-	public final void setFixed() {_min = FIXED; _max = 1;}
-
-	@Override
-	/** Set value of occurrence as required. */
-	public final void setRequired() {_min = _max = 1;}
-
-	@Override
-	/** Set value of occurrence as optional. */
-	public final void setOptional() {_min = 0; _max = 1;}
-
-	@Override
-	/** Set value of occurrence as unspecified. */
-	public final void setUnspecified() {_min = UNDEFINED; _max = 0;}
-
-	@Override
-	/** Set value of occurrence as unbounded. */
-	public final void setUnbounded() {_min = 0; _max = Integer.MAX_VALUE;}
-
-	@Override
 	/** Return true if value of occurrence had been specified.
 	 * @return <tt>true</tt> if and only if occurrence is specified.
 	 */
@@ -210,6 +161,31 @@ public class XOccurrence implements XOccurrenceInterface {
 		return _min > 0 && _max == Integer.MAX_VALUE;
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String toString() {return toString(true);}
+
+	@Override
+	public int hashCode() {return 31 * (_min + 217) + _max;} //217 == 7 * 31
+
+	@Override
+	public boolean equals(final Object o) {
+		return (o instanceof XMOccurrence) ? equals((XMOccurrence) o) : false;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods added to XMOccurrence
+////////////////////////////////////////////////////////////////////////////////
+	/** Compare with other XMOccurrence.
+	 * @param x XMOccurrence to be compared.
+	 * @return true if and only if the occurrence value from the argument x is
+	 * equal to this object.
+	 */
+	public boolean equals(final XMOccurrence x) {
+		return _min == x.minOccurs() && _max == x.maxOccurs();
+	}
+
 	/** Get string with canonized form of occurrence specification.
 	 * @param isValue if <tt>true</tt> the script describes a value of
 	 * an attribute or of a text node, otherwise it is form of en element
@@ -234,17 +210,49 @@ public class XOccurrence implements XOccurrenceInterface {
 		}
 	}
 
-	@Override
-	public String toString() {return toString(true);}
-	@Override
-	public int hashCode() {return 31 * (_min + 217) + _max;} //217 == 7 * 31
-	@Override
-	public boolean equals(final Object o) {
-		return (o instanceof XMOccurrence) ? equals((XMOccurrence) o) : false;
+	/** Set min occurrence.
+	 * @param min value of minimal occurrence.
+	 */
+	public final void setMinOccur(final int min) {_min = min;}
+
+	/** Set max occurrence.
+	 * @param max value of maximal occurrence.
+	 */
+	public final void setMaxOccur(final int max) {_max = max;}
+
+	/** Set occurrence values.
+	 * @param occ occurrence object from which values are imported.
+	 */
+	public final void setOccurrence(final XMOccurrence occ) {
+		_min = occ.minOccurs();
+		_max = occ.maxOccurs();
 	}
 
-	public boolean equals(final XMOccurrence x) {
-		return _min == x.minOccurs() && _max == x.maxOccurs();
-	}
+	/** Set occurrence from parameters.
+	 * @param min minimum.
+	 * @param max maximum.
+	 */
+	public void setOccurrence(int min, int max) {_min = min; _max = max;}
+
+	/** Set value of occurrence as illegal. */
+	public final void setIllegal() {_min = ILLEGAL; _max = 0;}
+
+	/** Set value of occurrence as ignored. */
+	public final void setIgnore() {_min = IGNORE; _max=Integer.MAX_VALUE;}
+
+	/** Set value of occurrence as fixed. */
+	public final void setFixed() {_min = FIXED; _max = 1;}
+
+	/** Set value of occurrence as required. */
+	public final void setRequired() {_min = _max = 1;}
+
+	/** Set value of occurrence as optional. */
+	public final void setOptional() {_min = 0; _max = 1;}
+
+	/** Set value of occurrence as unspecified. */
+	public final void setUnspecified() {_min = UNDEFINED; _max = 0;}
+
+	/** Set value of occurrence as unbounded. */
+	public final void setUnbounded() {_min = 0; _max = Integer.MAX_VALUE;}
 
 }
