@@ -133,9 +133,9 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Get namespace URI on given position.
-	 * @param i position
-	 * @return uri on this position or null.
+	/** Get namespace URI index of given uri.
+	 * @param uri uri to he found.
+	 * @return index of uri from argument.
 	 */
 	public int getNSURIIndex(final String uri) {
 		return _codeGenerator._namespaceURIs.indexOf(uri);

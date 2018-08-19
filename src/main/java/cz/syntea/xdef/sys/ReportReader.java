@@ -51,4 +51,9 @@ public interface ReportReader {
 	 */
 	public String printToString(String language);
 
+	/** Write reports from this reporter reader to report writer.
+	 * @param reporter OutputStreamWriter where to write,
+	 */
+	public void writeReports(final ReportWriter reporter);
+
 }

@@ -250,4 +250,9 @@ public interface ReportWriter {
 	 */
 	public void checkAndThrowErrorWarnings() throws SRuntimeException;
 
+	/** Add to this reporter reports from report reader.
+	 * @param reporter report reader with reports to be added.
+	 */
+	public void addReports(final ReportReader reporter);
+
 }

@@ -16,6 +16,8 @@ import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.impl.XDWriter;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.FileReportReader;
+import cz.syntea.xdef.sys.FileReportWriter;
 import cz.syntea.xdef.sys.SRuntimeException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,13 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-/** Provides tools fro connecting an external editor to X-definitions.
+/** Provides tools fro connecting the external editors of X-definitions.
  * @author Trojan
  */
 public abstract class ExternalXDEditor implements XEditor {
 
 	@Override
-	/** Open the GUI.
+	/** Open the graphical user interface.
 	 * @param xp XDPool.
 	 * @param err error reporter.
 	 * @return if true the GUI was finished else recompile is supposed.
@@ -46,7 +48,9 @@ public abstract class ExternalXDEditor implements XEditor {
 
 			// write data to files
 			xpool.writeXDPool(poolFile);
-			reporter.writeReportsToFile(reportFile);
+			FileReportWriter frw = new FileReportWriter(reportFile);
+			reporter.writeReports(frw);
+			frw.close();
 
 			// we need file names to pass as parameters (see "main"  method)
 			String defPool = poolFile.getAbsolutePath();
@@ -122,7 +126,9 @@ public abstract class ExternalXDEditor implements XEditor {
 		File reps = new File(reports);
 		reps.deleteOnExit(); // we do not need this file more.
 		ArrayReporter ar = new ArrayReporter();
-		ar.addReportsFromFile(reps);
+		FileReportReader frr = new FileReportReader(reps);
+		ar.addReports(frr);
+		frr.close();
 		reps.delete();
 		return ar;
 	}

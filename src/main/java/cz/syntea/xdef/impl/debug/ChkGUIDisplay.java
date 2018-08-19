@@ -322,7 +322,7 @@ public class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 				errRows = 5;
 			}
 			if (maxlen >= 110) { //too long line
-				errRows--; // add line for horizontal scroll bar
+				errRows++; // add line for horizontal scroll bar
 			}
 
 			if (errRows == 1) {

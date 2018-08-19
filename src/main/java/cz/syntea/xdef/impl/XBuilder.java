@@ -189,67 +189,69 @@ public class XBuilder implements XDBuilder {
 		_xp = null;
 		CompileXDPool p = result._compiler;
 		result._compiler = null;
-		if (result._reporter == null) {
-			p.compileXPool(result);
-			ReportWriter reporter = p.getReportWriter();
-			boolean display = result.getDisplayMode() == XPool.DISPLAY_TRUE
-				|| reporter.errorWarnings()
-				&& (result.getDisplayMode() == XPool.DISPLAY_ERRORS
-				 || result.isDebugMode());
-			if (display) {
-				Class<?>[] externals = p.getExternals(); //save external classes
-				ArrayReporter ar = (ArrayReporter) reporter;
-				XEditor xeditor = null;
-				try {
-					String xdefEditor = result.getXdefEditor();
-					if (xdefEditor != null) {
-						Class<?> cls = Class.forName(xdefEditor);
-						Constructor<?> c = cls.getDeclaredConstructor();
-						c.setAccessible(true);
-						xeditor = (XEditor) c.newInstance();
-					}
-				} catch (Exception ex) {
-					xeditor = null;
-					// Class with the external debug editor &{0}{"}{"}
-					// is not available.
-					throw new SRuntimeException(
-						XDEF.XDEF850, ex, result.getXdefEditor());
+		ReportWriter userReporter = result._reporter; // user's reporter
+		result._reporter = null;
+//		if (result._reporter == null
+//			|| result._reporter instanceof ArrayReporter) {
+		p.compileXPool(result);
+		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
+		byte displayMode = result.getDisplayMode();
+		boolean display = displayMode == XPool.DISPLAY_TRUE
+			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));
+		if (display) {
+			Class<?>[] externals = p.getExternals(); //save external classes
+			ArrayReporter ar = (ArrayReporter) reporter;
+			XEditor xeditor = null;
+			try {
+				String xdefEditor = result.getXdefEditor();
+				if (xdefEditor != null) {
+					Class<?> cls = Class.forName(xdefEditor);
+					Constructor<?> c = cls.getDeclaredConstructor();
+					c.setAccessible(true);
+					xeditor = (XEditor) c.newInstance();
 				}
-				if (xeditor == null) {
-					xeditor = new ChkGUIDisplay();
-				}
-				while(!xeditor.setXEditor(result, ar)) {
-					// compile again
-					Map<String, XDSourceItem> map = result._sourcesMap;
-					result = new XPool(result.getProperties(),null, externals);
-					// update source map (something might be changed)
-					for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
-						String key = e.getKey();
-						XDSourceItem src = e.getValue();
-						if (src._source != null) {
-							result.setSource(src._source, key);
-							result._sourcesMap.put(key, src);
-						} else if (src._url != null) {
-							result.setSource(src._url);
-						}
-					}
-					// compile again
-					p = result._compiler;
-					p.compileXPool(result);
-					ar = (ArrayReporter) p.getReportWriter();
-					result._compiler = null;
-				}
+			} catch (Exception ex) {
+				xeditor = null;
+				// Class with the external debug editor &{0}{"}{"}
+				// is not available.
+				throw new SRuntimeException(
+					XDEF.XDEF850, ex, result.getXdefEditor());
 			}
+			if (xeditor == null) {
+				xeditor = new ChkGUIDisplay();
+			}
+			while(!xeditor.setXEditor(result, ar)) {
+				// compile again
+				Map<String, XDSourceItem> map = result._sourcesMap;
+				result = new XPool(result.getProperties(),null, externals);
+				// update source map (something might be changed)
+				for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
+					String key = e.getKey();
+					XDSourceItem src = e.getValue();
+					if (src._source != null) {
+						result.setSource(src._source, key);
+						result._sourcesMap.put(key, src);
+					} else if (src._url != null) {
+						result.setSource(src._url);
+					}
+				}
+				// compile again
+				p = result._compiler;
+				p.compileXPool(result);
+				ar = (ArrayReporter) p.getReportWriter();
+				result._compiler = null;
+			}
+		}
+		if (userReporter == null) {
 			if (result.isChkWarnings()) {
 				p.getReportWriter().checkAndThrowErrorWarnings();
 			} else {
 				p.getReportWriter().checkAndThrowErrors();
 			}
-		} else {
-			try {
-				p.compileXPool(result);
-			} catch (Exception ex) {
-				result._reporter.putReport(new Report(ex));
+		} else if (reporter != userReporter) {
+			Report rep;
+			while ((rep = reporter.getReport()) != null) {
+				userReporter.putReport(rep);
 			}
 		}
 		result.clearSourcesMap(!result.isDebugMode());

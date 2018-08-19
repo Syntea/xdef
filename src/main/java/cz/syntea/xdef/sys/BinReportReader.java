@@ -47,22 +47,27 @@ public class BinReportReader implements ReportReader {
 	}
 
 	@Override
-	public final void printReports(final PrintStream out) {
-	}
+	public final void printReports(final PrintStream out) {}
 
 	@Override
 	public final void printReports(final PrintStream out,
-		final String language) {
-	}
+		final String language) {}
 
 	@Override
-	public final String printToString() {
-		return null;
-	}
+	public final String printToString() {return null;}
 
 	@Override
-	public final String printToString(final String language) {
-		return null;
+	public final String printToString(final String language) {return null;}
+
+	@Override
+	/** Write reports from this reporter reader to report writer.
+	 * @param reporter OutputStreamWriter where to write,
+	 */
+	public void writeReports(final ReportWriter reporter) {
+		Report rep;
+		while((rep = getReport()) != null) {
+			reporter.putReport(rep);
+		}
 	}
 
 }

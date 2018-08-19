@@ -14,9 +14,6 @@ package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.xml.KXmlUtils;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -521,8 +518,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * otherwise only errors.
 	 * @throws SRuntimeException with reports.
 	 */
-	private final void throwReports(final boolean warnings)
-		throws SRuntimeException {
+	private void throwReports(final boolean warnings) throws SRuntimeException {
 		_index = 0;
 		StringBuilder sb = new StringBuilder();
 		Report rep;
@@ -622,66 +618,24 @@ public class ArrayReporter extends ArrayList<Report>
 	@Override
 	public final String toString() {return printToString();}
 
-	/** Write reports from this reporter to a file.
-	 * @param filename name of the file where to write reports.
+	@Override
+	/** Add to this reporter reports from report reader.
+	 * @param reporter report reader with reports to be added.
 	 */
-	public final void writeReportsToFile(final String filename) {
-		writeReportsToFile(new File(filename));
-	}
-
-	/** Write reports from this reporter to a file
-	 * @param file where to write
-	 */
-	public final void writeReportsToFile(final File file) {
-		FileReportWriter frw = new FileReportWriter(file);
+	public final void writeReports(final ReportWriter reporter) {
 		Report rep;
-		reset();
 		while((rep = getReport()) != null) {
-			frw.putReport(rep);
-		}
-		frw.close();
-	}
-
-	/** Write reports from this reporter to the InputStreamReader.
-	 * @param out OutputStreamWriter where to write,
-	 */
-	public final void writeReportsToStream(final OutputStreamWriter out) {
-		FileReportWriter frw = new FileReportWriter(out);
-		Report rep;
-		reset();
-		while((rep = getReport()) != null) {
-			frw.putReport(rep);
+			reporter.putReport(rep);
 		}
 	}
 
-	/** Add to this reporter data from the file.
-	 * @param filename name of the file with reports to be added.
-	 * @throws Exception if an error occurs.
+	@Override
+	/** Add to this reporter reports from report reader.
+	 * @param reporter report reader with reports to be added.
 	 */
-	public void addReportsFromFile(final String filename) throws Exception {
-		addReportsFromFile(new File(filename));
-	}
-
-	/** Add to this reporter data from the file.
-	 * @param file the file with reports to be added.
-	 * @throws Exception if an error occurs.
-	 */
-	public void addReportsFromFile(final File file) throws Exception {
-		FileReportReader frr = new FileReportReader(file);
+	public final void addReports(final ReportReader reporter) {
 		Report rep;
-		while((rep = frr.getReport()) != null) {
-			putReport(rep);
-		}
-		frr.close();
-	}
-
-	/** Add to this reporter data from the stream.
-	 * @param in the stream with reports to be added.
-	 */
-	public void addReportsFromStream(final InputStreamReader in) {
-		FileReportReader frr = new FileReportReader(in);
-		Report rep;
-		while((rep = frr.getReport()) != null) {
+		while((rep = reporter.getReport()) != null) {
 			putReport(rep);
 		}
 	}
