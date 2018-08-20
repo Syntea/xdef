@@ -1819,12 +1819,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							((xatt._ignoreEmptyAttributes == 'A'
 								|| xatt._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
-							|| xatt._ignoreEmptyAttributes == 0 &&
-							(_xElement._ignoreEmptyAttributes == 'A'
+							|| xatt._ignoreEmptyAttributes == 0
+							&& (_xElement._ignoreEmptyAttributes == 'A'
 								||_xElement._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
-							|| _xElement._ignoreEmptyAttributes == 0 &&
-							(_rootChkDocument._ignoreEmptyAttributes == 'A'
+							|| _xElement._ignoreEmptyAttributes == 0
+							&& (_rootChkDocument._ignoreEmptyAttributes == 'A'
 								|| _rootChkDocument._ignoreEmptyAttributes=='P'
 								&& xatt.isOptional()))) {
 							//accept empty attributes

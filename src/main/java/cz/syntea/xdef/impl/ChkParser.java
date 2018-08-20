@@ -874,7 +874,7 @@ final class ChkParser extends DomBaseHandler {
 					try {
 						XBuilder xb = new XBuilder(null);
 						xb.setSource(u);
-						xdp = xb.build();
+						xdp = (XPool) xb.compileXD();
 					} catch (Exception ex) {
 						//In X-definition are errors&{0}{: }
 						_sReporter.putReport(ka.getPosition(),

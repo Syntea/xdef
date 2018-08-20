@@ -171,9 +171,12 @@ public abstract class XNode implements XMNode {
 	}
 
 	//to be overriden!
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {}
+	public abstract void writeXNode(XDWriter xw, ArrayList<XNode> list)
+		throws IOException;
 
-	static XNode readXNode(XDReader xr, XDefinition xd, ArrayList<XNode> list)
+	final static XNode readXNode(final XDReader xr,
+		final XDefinition xd,
+		final ArrayList<XNode> list)
 		throws IOException {
 		short kind = xr.readShort();
 		switch (kind) {

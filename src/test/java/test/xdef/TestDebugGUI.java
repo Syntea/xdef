@@ -13,7 +13,6 @@
  */
 package test.xdef;
 
-import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -21,7 +20,6 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.sys.ReportWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Properties;

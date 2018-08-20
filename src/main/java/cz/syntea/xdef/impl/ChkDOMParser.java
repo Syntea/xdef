@@ -289,7 +289,7 @@ class ChkDOMParser extends SReporter {
 		 * @return The ChkDocument object.
 		 * @throws SRuntimeException if an error occurs.
 		 */
-		final void xvalidate(final ChkDocument chkDoc,
+		private void xvalidate(final ChkDocument chkDoc,
 			final Element sourceElem) {
 			_chkDoc = chkDoc;
 			_chkDoc._node = null;

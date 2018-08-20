@@ -42,12 +42,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param type The type id.
 	 * @return The type name or null.
 	 */
-	private static String getTypeAbbrev(final short type) {
+	private final static String getTypeAbbrev(final short type) {
 		return "(" + getTypeName(type) + ")";
 	}
 
 
-	public static String codeToString(final XDValue item) {
+	public final static String codeToString(final XDValue item) {
 		if (item == null) {
 			return "null";
 		}
@@ -168,7 +168,9 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		}
 	}
 
-	private static String printOption(String s, String name, byte value) {
+	private static String printOption(final String s,
+		final String name,
+		final byte value) {
 		if (value == 0) {
 			return s;
 		}
@@ -306,9 +308,9 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		out.println();
 	}
 
-	public static void displayDefNode(final XNode xn,
+	public final static void displayDefNode(final XNode xn,
 		final PrintStream out,
-		Set<XNode> processed) {
+		final Set<XNode> processed) {
 		if (!processed.add(xn)) {
 			switch (xn.getKind()) {
 				case XNode.XMATTRIBUTE:
@@ -382,7 +384,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param code array of script code.
 	 * @param out PrintStream where pool is printed.
 	 */
-	public static void displayCode(final XDValue[] code, PrintStream out) {
+	public final static void displayCode(final XDValue[] code,
+		final PrintStream out) {
 		java.text.NumberFormat nf = new java.text.DecimalFormat("00000");
 		if (code != null) {
 			for (int i = 0; i < code.length; i++) {
@@ -395,7 +398,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param xp XDPool object.
 	 * @param out PrintStream where debug information is printed.
 	 */
-	public static void displayDebugInfo(final XDPool xp, PrintStream out) {
+	public final static void displayDebugInfo(final XDPool xp,
+		final PrintStream out) {
 		XDebugInfo di = (XDebugInfo) xp.getDebugInfo();
 		if (di == null) {
 			out.println("No debug information");
@@ -414,7 +418,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param code code number.
 	 * @return name of code from code number.
 	 */
-	public static String getCodeName(short code) {
+	public final static String getCodeName(final short code) {
 		if (code < CodeTable.LAST_CODE) {
 			final Field[] codetable = CodeTable.class.getDeclaredFields();
 			for (int i = 0; i < codetable.length; i++) {
@@ -436,7 +440,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param codename name of code.
 	 * @return code number.
 	 */
-	public static short getCodeNumber(String codename) {
+	public final static short getCodeNumber(final String codename) {
 		final Field[] codetable = CodeTable.class.getDeclaredFields();
 		for (int i = 0; i < codetable.length; i++) {
 			Field f = codetable[i];
@@ -456,7 +460,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param type type number.
 	 * @return name of type from type number.
 	 */
-	public static String getTypeName(short type) {
+	public final static String getTypeName(final short type) {
 		switch (type) {
 			case CompileBase.PARSEITEM_VALUE:
 				return "#key item";
@@ -475,5 +479,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param name type name.
 	 * @return number of type from type name.
 	 */
-	static short getTypeId(String name) {return CompileBase.getTypeId(name);}
+	final static short getTypeId(final String name) {
+		return CompileBase.getTypeId(name);
+	}
 }

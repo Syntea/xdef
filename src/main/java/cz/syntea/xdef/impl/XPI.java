@@ -42,15 +42,18 @@ public class XPI extends XData {
 //		setSPosition(x.getSPosition());
 //		setXDPosition(x.getXDPosition());
 //	}
-
+//
 	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
+		 //TODO!
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
 		writeXCodeDescriptor(xw);
 	}
 
-	static XPI readXPI(XDReader xr, XDefinition xd) throws IOException {
+	final static XPI readXPI(final XDReader xr, final XDefinition xd)
+		throws IOException {
 		String name = xr.readString();
 		String uri = xr.readString();
 		XPI x = new XPI(name, xd.getXDPool());

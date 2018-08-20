@@ -71,16 +71,16 @@ final class ChkComposer extends SReporter implements XDValueID {
 	}
 
 	/** Set attributes from Container to element (only when not exists).
-	 * @param el Element where to set attributes.
+	 * @param e Element where to set attributes.
 	 * @param c Container.
 	 * @return updated element.
 	 */
-	private static Element attrsToElement(final Element el, final XDContainer c) {
+	private static Element attrsToElement(final Element e, final XDContainer c){
 		if (c.getXDNamedItemsNumber() > 0) {
 			XDNamedValue[] ni = c.getXDNamedItems();
 			for (XDNamedValue nv: ni) {
 				try {
-					if (!el.hasAttribute(nv.getName())) {
+					if (!e.hasAttribute(nv.getName())) {
 						XDValue v = nv.getValue();
 						if (v != null && !v.isNull()) {
 							if (v.getItemId() == XD_CONTAINER) {
@@ -89,21 +89,21 @@ final class ChkComposer extends SReporter implements XDValueID {
 									for (XDNamedValue x: xv.getXDNamedItems()){
 										if (x.getValue() != null
 											&& !x.getValue().isNull()) {
-											el.setAttribute(x.getName(),
+											e.setAttribute(x.getName(),
 												x.getValue().stringValue());
 										}
 									}
 								}
 
 							} else {
-								el.setAttribute(nv.getName(), v.toString());
+								e.setAttribute(nv.getName(), v.toString());
 							}
 						}
 					}
 				} catch (Exception ex) {}
 			}
 		}
-		return el;
+		return e;
 	}
 
 	/** Create result from container.
@@ -1323,11 +1323,11 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 */
 	private static boolean createGroup(final ChkElement chkEl,
 		final XData xtxt,
-		Element sourceEl,
-		Element savedSource,
-		int defIndex,
-		Node lastNode,
-		Object savedUserObj) {
+		final Element sourceEl,
+		final Element savedSource,
+		final int defIndex,
+		final Node lastNode,
+		final Object savedUserObj) {
 		chkEl._actDefIndex = -1;
 		int oldnextDefIndex = chkEl._nextDefIndex;
 		createChildNodes(chkEl,

@@ -64,13 +64,14 @@ public final class XDSourceItem {
 		}
 	}
 
-	public void writeXDSourceItem(XDWriter xw) throws IOException {
+	public final void writeXDSourceItem(final XDWriter xw) throws IOException {
 		xw.writeString(_url == null ? null : _url.toExternalForm());
 		xw.writeString(_encoding);
 		xw.writeString(_source);
 	}
 
-	public static XDSourceItem readXDSourceItem(XDReader xr) throws IOException{
+	public final static XDSourceItem readXDSourceItem(final XDReader xr)
+		throws IOException{
 		XDSourceItem result = new XDSourceItem();
 		String s = xr.readString();
 		if (s != null) {

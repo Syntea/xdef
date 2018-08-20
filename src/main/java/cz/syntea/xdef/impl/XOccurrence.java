@@ -182,7 +182,7 @@ public class XOccurrence implements XMOccurrence {
 	 * @return true if and only if the occurrence value from the argument x is
 	 * equal to this object.
 	 */
-	public boolean equals(final XMOccurrence x) {
+	public final boolean equals(final XMOccurrence x) {
 		return _min == x.minOccurs() && _max == x.maxOccurs();
 	}
 
@@ -232,7 +232,10 @@ public class XOccurrence implements XMOccurrence {
 	 * @param min minimum.
 	 * @param max maximum.
 	 */
-	public void setOccurrence(int min, int max) {_min = min; _max = max;}
+	public final void setOccurrence(final int min,
+		final int max) {
+		_min = min; _max = max;
+	}
 
 	/** Set value of occurrence as illegal. */
 	public final void setIllegal() {_min = ILLEGAL; _max = 0;}

@@ -12,6 +12,7 @@
  */
 package cz.syntea.xdef.impl.compile;
 
+import cz.syntea.xdef.impl.XDWriter;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SPosition;
@@ -24,7 +25,10 @@ import cz.syntea.xdef.impl.XSelector;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMElement;
 import cz.syntea.xdef.model.XMNode;
+import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -254,4 +258,12 @@ final class CompileReference extends XNode {
 	public int getOnIllegalElementCode() {return -1;} //not supported here
 	@Override
 	public int getVarinitCode() {return -1;} //not supported here
+
+	@Override
+	public final void writeXNode(final XDWriter xw, final ArrayList<XNode> list)
+		throws IOException {
+		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
+			"this method can't be called here");
+	}
+
 }

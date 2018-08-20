@@ -63,25 +63,27 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	/** Get text value of this node.
 	 * @return The name of node.
 	 */
-	public String getTextValue() {return _parent.getTextValue();}
+	public final String getTextValue() {return _parent.getTextValue();}
 
 	@Override
 	/** Set text value to this node.
 	 * @param text the text value to be set.
 	 */
-	public void setTextValue(String text) {_parent.setTextValue( text);}
+	public final void setTextValue(String text) {_parent.setTextValue( text);}
 
 	@Override
 	/** Get parsed result of an attribute or text node.
 	 * @return parsed result of an attribute or text node.
 	 */
-	public XDParseResult getParseResult() {return _parent.getParseResult();}
+	public final XDParseResult getParseResult() {
+		return _parent.getParseResult();
+	}
 
 	@Override
 	/** Get XDDocument.
 	 * @return XDDocument.
 	 */
-	public XDDocument getXDDocument() {return _parent.getXDDocument();}
+	public final XDDocument getXDDocument() {return _parent.getXDDocument();}
 
 	@Override
 	/** Get XDPool.
@@ -93,58 +95,60 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	/** Get root XXElement.
 	 * @return root XXElement node.
 	 */
-	public XXElement getRootXXElement() {return _parent.getRootXXElement();}
+	public final XXElement getRootXXElement() {
+		return _parent.getRootXXElement();
+	}
 
 	@Override
 	/** Get actual associated XXElement.
 	 * @return root XXElement node.
 	 */
-	public XXElement getXXElement()  {return _parent;}
+	public final XXElement getXXElement()  {return _parent;}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get ChkElement assigned to this node.
 	 * @return ChkElement assigned to this node.
 	 */
-	ChkElement getChkElement() {return _parent;}
+	final ChkElement getChkElement() {return _parent;}
 
 	/** Get Element value assigned to this node.
 	 * @return Element value assigned to this node.
 	 */
-	Element getElemValue() {return _parent.getElemValue();}
+	final Element getElemValue() {return _parent.getElemValue();}
 
 	/** Assign Element value to this node.
 	 * @param elem Element value to be assigned to this node.
 	 */
-	void setElemValue(Element elem) {_parent.setElemValue(elem);}
+	final void setElemValue(final Element elem) {_parent.setElemValue(elem);}
 
 	@Override
 	/** Get model of the processed data object.
 	 * @return model of the processed data object.
 	 */
-	public XMData getXMData() {return _xDataModel;}
+	public final XMData getXMData() {return _xDataModel;}
 
 	@Override
 	/** Get namespace context of the parent element.
 	 * @return namespace context of the parent element.
 	 */
-	public KNamespace getXXNamespaceContext() {
+	public final KNamespace getXXNamespaceContext() {
 		return _parent.getXXNamespaceContext();
 	}
 
 	@Override
-	public String getXXName() {return _xDataModel.getName();}
+	public final String getXXName() {return _xDataModel.getName();}
 
 	@Override
-	public String getXXNSURI() {return _xDataModel.getNSUri();}
+	public final String getXXNSURI() {return _xDataModel.getNSUri();}
 
 	@Override
-	public Object getUserObject() {
+	public final Object getUserObject() {
 		return _userObject != null ? _userObject : _parent.getUserObject();
 	}
 
 	@Override
-	public void setUserObject(Object obj) {_userObject = obj;}
+	public final void setUserObject(Object obj) {_userObject = obj;}
 
 	@Override
 	/** Set named user object.
@@ -152,7 +156,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	 * @param obj user object.
 	 * @return previous value of the object or <tt>null</tt>.
 	 */
-	public Object setUserObject(String id, Object obj) {
+	public final Object setUserObject(final String id, final Object obj) {
 		return _parent.setUserObject(id, obj);
 	}
 
@@ -161,7 +165,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	public Object removeUserObject(String id) {
+	public final Object removeUserObject(final String id) {
 		return _parent.removeUserObject(id);
 	}
 
@@ -170,183 +174,210 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	public Object getUserObject(String id) {
+	public final Object getUserObject(final String id) {
 		return _parent.getUserObject(id);
 	}
 
 	@Override
-	public String getXPos() {return _parent.getXPos();}
+	public final String getXPos() {return _parent.getXPos();}
 
 	@Override
 	/** Get source position.
 	 * @return source position or <tt>null</tt> if position is not available.
 	 */
-	public SPosition getSPosition() {return _parent.getSPosition();}
+	public final SPosition getSPosition() {return _parent.getSPosition();}
 
 	@Override
-	public XXNode getParent() {return _parent;}
+	public final XXNode getParent() {return _parent;}
 
 	@Override
-	public XXNode[] getChildXXNodes() {return null;}
+	public final XXNode[] getChildXXNodes() {return null;}
 
 	@Override
-	public XMElement getXMElement() {return _parent.getXMElement();}
+	public final XMElement getXMElement() {return _parent.getXMElement();}
 
 	@Override
-	public String getXDPosition() {return _parent.getXDPosition();}
+	public final String getXDPosition() {return _parent.getXDPosition();}
 
 	@Override
-	public XMDefinition getXMDefinition() {return _parent.getXMDefinition();}
+	public final XMDefinition getXMDefinition() {
+		return _parent.getXMDefinition();
+	}
 
 	@Override
-	public String[] getVariableNames() {return _parent.getVariableNames();}
+	public final String[] getVariableNames() {
+		return _parent.getVariableNames();
+	}
 
 	@Override
-	public XDValue getVariable(String name) {return _parent.getVariable(name);}
+	public final XDValue getVariable(String name) {
+		return _parent.getVariable(name);
+	}
 
 	@Override
-	public void setVariable(String name, long value) {
+	public final void setVariable(final String name, final long value) {
 		_parent.setVariable(name, value);
 	}
 
 	@Override
-	public void setVariable(String name, double value) {
+	public final void setVariable(final String name, final double value) {
 		_parent.setVariable(name, value);
 	}
 
 	@Override
-	public void setVariable(String name, boolean value) {
+	public final void setVariable(final String name, final boolean value) {
 		_parent.setVariable(name, value);
 	}
 
 	@Override
-	public void setVariable(String name, Object value) {
+	public final void setVariable(final String name, final Object value) {
 		_parent.setVariable(name, value);
 	}
 
 	@Override
-	public SReporter getReporter() {return _parent.getReporter();}
+	public final SReporter getReporter() {return _parent.getReporter();}
 
 	@Override
-	public ReportWriter getReportWriter() {
+	public final ReportWriter getReportWriter() {
 		return _parent.getReportWriter();
 	}
 
 	@Override
-	public boolean errorWarnings() {return _parent.errorWarnings();}
+	public final boolean errorWarnings() {return _parent.errorWarnings();}
 
 	@Override
-	public boolean errors() {return _parent.errors();}
+	public final boolean errors() {return _parent.errors();}
 
 	@Override
-	public ArrayReporter getTemporaryReporter() {
+	public final ArrayReporter getTemporaryReporter() {
 		return _parent.getTemporaryReporter();
 	}
 
 	@Override
-	public ArrayReporter setTemporaryReporter(ArrayReporter reporter) {
+	public final ArrayReporter setTemporaryReporter(
+		final ArrayReporter reporter) {
 		return _parent.setTemporaryReporter(reporter);
 	}
 
 	@Override
-	public void clearTemporaryReporter() {_parent.clearTemporaryReporter();}
+	public final void clearTemporaryReporter() {
+		_parent.clearTemporaryReporter();
+	}
 
 	@Override
-	public boolean removeTemporaryReport(Report rep) {
+	public final boolean removeTemporaryReport(final Report rep) {
 		return _parent.removeTemporaryReport(rep);
 	}
 
 	@Override
-	public boolean copyTemporaryReports() {
+	public final boolean copyTemporaryReports() {
 		return _parent.copyTemporaryReports();
 	}
 
 	@Override
-	public void putTemporaryReport(Report message) {
+	public final void putTemporaryReport(final Report message) {
 		_parent.putTemporaryReport(message);
 	}
 
 	@Override
-	public boolean chkTemporaryErrors() {return _parent.chkTemporaryErrors();}
+	public final boolean chkTemporaryErrors() {
+		return _parent.chkTemporaryErrors();
+	}
 
 	@Override
-	public void fatal(String id, String msg, Object... modif) {
+	public final void fatal(final String id,
+		final String msg,
+		final Object... modif) {
 		_parent.fatal(id, msg, modif);
 	}
 
 	@Override
-	public void error(String id, String msg, Object... modif) {
+	public final void error(final String id,
+		final String msg,
+		final Object... modif) {
 		_parent.error(id, msg, modif);
 	}
 
 	@Override
-	public void warning(String id, String msg, Object... modif) {
+	public final void warning(final String id,
+		final String msg,
+		final Object... modif) {
 		_parent.warning(id, msg, modif);
 	}
 
 	@Override
-	public void fatal(long id, Object... modif) {_parent.fatal(id, modif);}
+	public final void fatal(final long id, final Object... modif) {
+		_parent.fatal(id, modif);
+	}
 
 	@Override
-	public void error(long id, Object... modif) {_parent.error(id, modif);}
+	public final void error(final long id, final Object... modif) {
+		_parent.error(id, modif);
+	}
 
 	@Override
-	public void warning(long id, Object... modif) {_parent.warning(id, modif);}
+	public final void warning(final long id, final Object... modif) {
+		_parent.warning(id, modif);
+	}
 
 	@Override
-	public void putReport(Report report) {_parent.putReport(report);}
+	public final void putReport(final Report report){_parent.putReport(report);}
 
 	@Override
-	public XPathFunctionResolver getXXFunctionResolver() {
+	public final XPathFunctionResolver getXXFunctionResolver() {
 		return _parent.getXXFunctionResolver();
 	}
 
 	@Override
-	public XPathVariableResolver getXXVariableResolver() {
+	public final XPathVariableResolver getXXVariableResolver() {
 		return _parent.getXXVariableResolver();
 	}
 
 	@Override
-	public XDValue getXDContext() {return _parent.getXDContext();}
+	public final XDValue getXDContext() {return _parent.getXDContext();}
 
 	@Override
-	public void setXDContext(XDContainer xdc) {_parent.setXDContext(xdc);}
+	public final void setXDContext(XDContainer xdc) {_parent.setXDContext(xdc);}
 
 	@Override
-	public void setXDContext(XDResultSet xdc) {_parent.setXDContext(xdc);}
+	public final void setXDContext(final XDResultSet xdc) {
+		_parent.setXDContext(xdc);
+	}
 
 	@Override
-	public void setXDContext(Node node) {_parent.setXDContext(node);}
+	public final void setXDContext(final Node node){_parent.setXDContext(node);}
 
 	@Override
 	/** Set source element as context for create mode.
 	 * @param source string with pathname, URL or source of XML node.
 	 */
-	public void setXDContext(String source) {_parent.setXDContext(source);}
+	public final void setXDContext(final String source) {
+		_parent.setXDContext(source);
+	}
 
 	@Override
 	public abstract short getItemId();
 
 	@Override
-	public XDValue cloneItem() {return this;}
+	public final XDValue cloneItem() {return this;}
 
 	@Override
-	public String stringValue() {
+	public final String stringValue() {
 		return _node == null ? null : _node.getNodeValue();
 	}
 
 	@Override
-	public Node getXMLNode() {return _node;}
+	public final Node getXMLNode() {return _node;}
 
 	@Override
-	public Element getElement() {return _parent.getElement();}
+	public final Element getElement() {return _parent.getElement();}
 
 	@Override
 	/** Get table with references to an object (used internally in the
 	 * processor of XScript).
 	 * @return table with references to an object or <tt>null</tt>.
 	 */
-	public Map<Object, ArrayReporter> getIdRefTable() {
+	public final Map<Object, ArrayReporter> getIdRefTable() {
 		return _parent.getIdRefTable();
 	}
 
@@ -354,18 +385,20 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	/** Get actual model.
 	 * @return actual model.
 	 */
-	public XMNode getXMNode() {return _parent.getXMNode();}
+	public final XMNode getXMNode() {return _parent.getXMNode();}
 
 	@Override
 	/** Get XComponent.
 	 * @return The XComponent object (may be <tt>null</tt>).
 	 */
-	public XComponent getXComponent() {return _parent.getXComponent();}
+	public final XComponent getXComponent() {return _parent.getXComponent();}
 
 	@Override
 	/** Set XComponent.
 	 * @param x XComponent object.
 	 */
-	public void setXComponent(XComponent x) {_parent.setXComponent(x);}
+	public final void setXComponent(final XComponent x) {
+		_parent.setXComponent(x);
+	}
 
 }

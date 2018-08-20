@@ -657,7 +657,9 @@ public final class XPool implements XDPool {
 	/** Set list of XComponent binds.
 	 * @param p list of XComponents binds.
 	 */
-	public final void setXComponentBinds(Map<String, String> p){_binds=p;}
+	public final void setXComponentBinds(final Map<String, String> p){
+		_binds = p;
+	}
 
 	/** Clear source map.
 	 * @param fully if true then all items are deleted.
@@ -800,12 +802,14 @@ public final class XPool implements XDPool {
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
-	public final void setXComponentEnums(Map<String, String> p){_enums=p;}
+	public final void setXComponentEnums(final Map<String, String> p){
+		_enums = p;
+	}
 
 	/** Get array with code of XDPool.
 	 * @return array with code of XDPool.
 	 */
-	public XDValue[] getCode() {return _code;}
+	public final XDValue[] getCode() {return _code;}
 
 	/** Read XPool from input stream.
 	 * @param input where to read.
@@ -1015,7 +1019,7 @@ public final class XPool implements XDPool {
 	/** Get version information.
 	 * @return version information.
 	 */
-	public String getVersionInfo() {return XD_VERSION;}
+	public final String getVersionInfo() {return XD_VERSION;}
 
 	@Override
 	/** Get array with all XMDefinitions from this XDPool.
@@ -1051,7 +1055,7 @@ public final class XPool implements XDPool {
 	 * @param xdpos position of XModel in XDPool.
 	 * @return XMNode representing model or null if model was nod found.
 	 */
-	public XMNode findModel(String xdpos) {
+	public final XMNode findModel(final String xdpos) {
 		int ndx = xdpos.indexOf('#'), ndx1;
 		String xdName, path, s;
 		if (ndx >= 0) {
@@ -1141,25 +1145,25 @@ public final class XPool implements XDPool {
 	/** Check if debug mode is set on.
 	 * @return value of debug mode.
 	 */
-	public boolean isDebugMode() {return _debugMode > 0;}
+	public final boolean isDebugMode() {return _debugMode > 0;}
 
 	@Override
 	/** Check if show result mode is set for debug mode.
 	 * @return true if show result mode is set.
 	 */
-	public boolean isDebugShowResult() {return _debugMode > 1;}
+	public final boolean isDebugShowResult() {return _debugMode > 1;}
 
 	@Override
 	/** Get display mode.
 	 * @return display mode.
 	 */
-	public byte getDisplayMode(){return _displayMode;}
+	public final byte getDisplayMode(){return _displayMode;}
 
 	@Override
 	/** Check if unresolved externals will be ignored.
 	 * @return true if unresolved externals will be ignored.
 	 */
-	public boolean isIgnoreUnresolvedExternals() {
+	public final boolean isIgnoreUnresolvedExternals() {
 		return _ignoreUnresolvedExternals;
 	}
 
@@ -1167,7 +1171,7 @@ public final class XPool implements XDPool {
 	/** Get the ignoreUnresolvedEntities switch.
 	 * @return the resolveIncludes switch.
 	 */
-	public boolean isIgnoreUnresolvedEntities() {
+	public final boolean isIgnoreUnresolvedEntities() {
 		return _ignoreUnresolvedEntities;
 	}
 
@@ -1211,23 +1215,23 @@ public final class XPool implements XDPool {
 
 	@Override
 	/** Display XDPool on System.out. */
-	public void display() {display(System.out);}
+	public final void display() {display(System.out);}
 
 	@Override
 	/** Display code of XDPool on System.out. */
-	public void displayCode() {displayCode(System.out);}
+	public final void displayCode() {displayCode(System.out);}
 
 	@Override
 	/** Display debugging information of XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
-	public void displayDebugInfo(PrintStream out) {
+	public final void displayDebugInfo(final PrintStream out) {
 		CodeDisplay.displayDebugInfo(this, out);
 	}
 
 	@Override
 	/** Display debugging information of XDPool on System.out. */
-	public void displayDebugInfo() {displayDebugInfo(System.out);}
+	public final void displayDebugInfo() {displayDebugInfo(System.out);}
 
 	final Properties getProperties() {return _props;}
 
@@ -1271,19 +1275,19 @@ public final class XPool implements XDPool {
 	/** Get debug information or null.
 	 * @return debug information object.
 	 */
-	public XMDebugInfo getDebugInfo() {return _debugInfo;}
+	public final XMDebugInfo getDebugInfo() {return _debugInfo;}
 
 	@Override
 	/** Get switch if the parser allows XML XInclude.
 	 * @return true if the parser allows XInclude.
 	 */
-	public boolean isResolveIncludes() {return _resolveIncludes;}
+	public final boolean isResolveIncludes() {return _resolveIncludes;}
 
 	@Override
 	/** Get the switch if XML parser will generate detailed location reports.
 	 * @return the location details switch.
 	 */
-	public boolean isLocationsdetails() {return _locationdetails;}
+	public final boolean isLocationsdetails() {return _locationdetails;}
 
 	@Override
 	/** Get switch if the parser do not allow DOCTYPE.
@@ -1302,69 +1306,71 @@ public final class XPool implements XDPool {
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */
-	public final Map<String, String> getXComponents(){return _components;}
+	public final Map<String, String> getXComponents() {return _components;}
 
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
-	public final void setXComponents(Map<String, String> p){_components=p;}
+	public final void setXComponents(Map<String, String> p) {_components=p;}
 
 	@Override
 	/** Get list of XComponent binds.
 	 * @return list of XComponent binds.
 	 */
-	public final Map<String, String> getXComponentBinds(){return _binds;}
+	public final Map<String, String> getXComponentBinds() {return _binds;}
 
 	@Override
 	/** Get list of XComponent enumerations.
 	 * @return list of XComponent enumerations.
 	 */
-	public Map<String, String> getXComponentEnums(){return _enums;}
+	public Map<String, String> getXComponentEnums() {return _enums;}
 
 	@Override
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
 	 */
-	public int getMinYear() {return _minYear;}
+	public final int getMinYear() {return _minYear;}
 
 	@Override
 	/** Get maximum valid year of date (or Integer.MIN if not set).
 	 * @return maximum valid year (Integer.MIN if not set).
 	 */
-	public int getMaxYear()  {return _maxYear;}
+	public final int getMaxYear()  {return _maxYear;}
 
 	@Override
 	/** Get array of dates to be accepted out of interval minYear..maxYear.
 	 * @return array with special values of valid dates.
 	 */
-	public SDatetime[] getSpecialDates() {return _specialDates;}
+	public final SDatetime[] getSpecialDates() {return _specialDates;}
 
 	@Override
 	/** Get map of source items of compiled X-definitions.
 	 * @return map of source items of compiled X-definitions.
 	 */
-	public Map<String, XDSourceItem> getXDSourcesMap() {return _sourcesMap;}
+	public final Map<String, XDSourceItem> getXDSourcesMap() {
+		return _sourcesMap;
+	}
 
 	@Override
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null. the default debug editor
 	 * will be used).
 	 */
-	public String getDebugEditor() {return _debugEditor;}
+	public final String getDebugEditor() {return _debugEditor;}
 
 	@Override
 	/** Get class name of the editor of X-definition.
 	 * @return class name of the editor of X-definition which
 	 * will be used).
 	 */
-	public String getXdefEditor() {return _xdefEditor;}
+	public final String getXdefEditor() {return _xdefEditor;}
 
 	@Override
 	/** Write this XDPool to output stream.
 	 * @param f where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	public void writeXDPool(File f) throws IOException {
+	public final void writeXDPool(final File f) throws IOException {
 		OutputStream out = new FileOutputStream(f);
 		writeXDPool(out);
 		out.close();
@@ -1375,7 +1381,7 @@ public final class XPool implements XDPool {
 	 * @param out where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	public final void writeXDPool(final OutputStream out) throws IOException{
+	public final void writeXDPool(final OutputStream out) throws IOException {
 		GZIPOutputStream gout = new GZIPOutputStream(out);
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID

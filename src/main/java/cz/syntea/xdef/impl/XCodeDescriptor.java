@@ -200,13 +200,9 @@ public abstract class XCodeDescriptor extends XNode {
 	 * @param xnode The node to be added.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void addNode(final XNode xnode) {
-		//Internal error: &{0}
-		throw new SRuntimeException(SYS.SYS066,
-			"Attempt to add node to ScriptCodeDescriptor");
-	}
+	abstract public void addNode(final XNode xnode);
 
-	void writeXCodeDescriptor(XDWriter xw) throws IOException {
+	final void writeXCodeDescriptor(XDWriter xw) throws IOException {
 		xw.writeShort(getKind());
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
@@ -272,7 +268,7 @@ public abstract class XCodeDescriptor extends XNode {
 		xw.writeString(getXDPosition());
 	}
 
-	void readXCodeDescriptor(XDReader xr) throws IOException {
+	final void readXCodeDescriptor(final XDReader xr) throws IOException {
 		// kind, namespace UR name already processed in the upper class
 		////////////////////////////////////////////////////////////////////////
 		// Occurrence
@@ -332,75 +328,75 @@ public abstract class XCodeDescriptor extends XNode {
 	/** Initialize code or -1.
 	 * @return address of initialize code.
 	 */
-	public int getInitCode() {return _init;}
+	public final int getInitCode() {return _init;}
 	@Override
 	/** Finally code or -1.
 	 * @return address of finally code or -1.
 	 */
-	public int getFinallyCode() {return _finaly;}
+	public final int getFinallyCode() {return _finaly;}
 	@Override
 	/** Match code or -1.
 	 * @return address of match code or -1.
 	 */
-	public int getMatchCode() {return _match;}
+	public final int getMatchCode() {return _match;}
 	@Override
 	/** Compose action code or -1.
 	 * @return address of compose action code or -1.
 	 */
-	public int getComposeCode() {return _compose;}
+	public final int getComposeCode() {return _compose;}
 	@Override
 	/** Check value of attribute or text node code or -1.
 	 * @return address of code of check value method or -1.
 	 */
-	public int getCheckCode() {return _check;}
+	public final int getCheckCode() {return _check;}
 	@Override
 	/** Type check passed code or -1.
 	 * @return address of check passed method code or -1.
 	 */
-	public int getOnTrueCode() {return _onTrue;}
+	public final int getOnTrueCode() {return _onTrue;}
 	@Override
 	/** Type check failed code or -1.
 	 * @return address of failed method code or -1.
 	 */
-	public int getOnFalseCode() {return _onFalse;}
+	public final int getOnFalseCode() {return _onFalse;}
 	@Override
 	/** If text object is missing code or -1.
 	 * @return address of text object is missing code or -1.
 	 */
-	public int getDefltCode() {return _deflt;}
+	public final int getDefltCode() {return _deflt;}
 	@Override
 	/** On start of element (all source attributes are accessible) code or -1.
 	 * @return address of on start of element method code or -1
 	 */
-	public int getOnStartElementCode() {return _onStartElement;}
+	public final int getOnStartElementCode() {return _onStartElement;}
 	@Override
 	/** OnAbsence code or -1.
 	 * @return address of onAbsence code or -1.
 	 */
-	public int getOnAbsenceCode() {return _onAbsence;}
+	public final int getOnAbsenceCode() {return _onAbsence;}
 	@Override
 	/** OnExcess  code or -1.
 	 * @return address of onExcess  code or -1.
 	 */
-	public int getOnExcessCode() {return _onExcess;}
+	public final int getOnExcessCode() {return _onExcess;}
 	@Override
 	/** Occurrence of illegal attribute code or -1.
 	 * @return address of occurrence of illegal attribute code or -1.
 	 */
-	public int getOnIllegalAttrCode() {return _onIllegalAttr;}
+	public final int getOnIllegalAttrCode() {return _onIllegalAttr;}
 	@Override
 	/** Occurrence of illegal text node code or -1.
 	 * @return address of occurrence of illegal text node code or -1.
 	 */
-	public int getOnIllegalTextCode() {return _onIllegalText;}
+	public final int getOnIllegalTextCode() {return _onIllegalText;}
 	@Override
 	/** occurrence of illegal element code or -1.
 	 * @return address of occurrence of illegal element code or -1.
 	 */
-	public int getOnIllegalElementCode() {return _onIllegalElement;}
+	public final int getOnIllegalElementCode() {return _onIllegalElement;}
 	@Override
 	/** Variables initialization code or -1.
 	 * @return address of variables initialization code or -1.
 	 */
-	public int getVarinitCode() {return _varinit;}
+	public final int getVarinitCode() {return _varinit;}
 }

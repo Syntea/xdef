@@ -53,7 +53,7 @@ import java.util.Locale;
 /** Provides writing of XD objects to OutputStream.
  * @author Vaclav Trojan
  */
-public class XDWriter extends SObjectWriter {
+public final class XDWriter extends SObjectWriter {
 
 	static final byte ID_CODEOP = 0;
 	static final byte ID_CODEI1 = 1;
@@ -94,7 +94,7 @@ public class XDWriter extends SObjectWriter {
 	 * @param x the object to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	void writeXD(final XDValue x) throws IOException {
+	final void writeXD(final XDValue x) throws IOException {
 		if (x == null) {
 			writeShort((short) -1);
 			return;

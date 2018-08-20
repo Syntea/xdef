@@ -97,11 +97,13 @@ public class XSelectorEnd extends XNode {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 	}
 
-	static XSelectorEnd readXSelectorEnd(XDReader xr) throws IOException {
+	final static XSelectorEnd readXSelectorEnd(final XDReader xr)
+		throws IOException {
 		xr.readShort();
 		return new XSelectorEnd();
 	}

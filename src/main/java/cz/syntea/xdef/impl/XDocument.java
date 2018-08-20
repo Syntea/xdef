@@ -144,7 +144,8 @@ public final class XDocument extends XCodeDescriptor implements XMDocument {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
 		if (list.indexOf(this) < 1) {
 			list.add(this);
 		}
@@ -180,9 +181,9 @@ public final class XDocument extends XCodeDescriptor implements XMDocument {
 		}
 	}
 
-	static XDocument readXDocument(XDReader xr,
-		XDefinition xd,
-		ArrayList<XNode> list)
+	final static XDocument readXDocument(final XDReader xr,
+		final XDefinition xd,
+		final ArrayList<XNode> list)
 		throws IOException {
 		String name = xr.readString();
 		String namespaceURI = xr.readString();

@@ -37,19 +37,22 @@ public class XComment extends XData implements XMNode {
 //		setSPosition(x.getSPosition());
 //		setXDPosition(x.getXDPosition());
 //	}
-
+//
+//	@Override
+//	/** Get XMDefinition assigned to this node.
+//	 * @return root XMDefintion node.
+//	 */
+//	public XMDefinition getXMDefinition() {return null;} //TODO!
+//
 	@Override
-	/** Get XMDefinition assigned to this node.
-	 * @return root XMDefintion node.
-	 */
-	public XMDefinition getXMDefinition() {return null;} //TODO!
-
-	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
+		 //TODO!
 		writeXCodeDescriptor(xw);
 	}
 
-	static XComment readXComment(XDReader xr, XDefinition xd)
+	final static XComment readXComment(final XDReader xr,
+		final XDefinition xd)
 		throws IOException {
 //		xr.readString(); // NS URI
 //		xr.readString(); // name
