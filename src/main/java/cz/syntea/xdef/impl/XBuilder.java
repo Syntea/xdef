@@ -241,6 +241,12 @@ public class XBuilder implements XDBuilder {
 				ar = (ArrayReporter) p.getReportWriter();
 				result._compiler = null;
 			}
+			if (userReporter == null && result.isChkWarnings()
+				&& !reporter.errors()) {
+				// because warnings were already dispalyed we clear reporter to
+				// prevent to throw an exception if only warnings are reported.
+				reporter.clear();
+			}
 		}
 		if (userReporter == null) {
 			if (result.isChkWarnings()) {

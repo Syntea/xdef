@@ -73,6 +73,10 @@ class ChkGUIBase {
 	/** Menu bar of frame. */
 	JMenuBar _menuBar;
 	/** Width of frame. */
+	int _xpos;
+	/** Height of frame. */
+	int _ypos;
+	/** Width of frame. */
 	int _width;
 	/** Height of frame. */
 	int _height;
@@ -133,14 +137,18 @@ class ChkGUIBase {
 		StyleConstants.setBackground(STYLE_WHITE, COLOR_SOURCE);
 
 		// GUI variables
-		_width = 870; //default width of frame
-		_height = 600; //default height of frame
-//		_width = 900; //default width of frame
-//		_height = 596; //default height of frame
+		_xpos = 10; // default x position of frame
+		_ypos = 10; // default y position of frame
+		_width = 1400; //default width of frame
+		_height = 1000; //default height of frame
+//		_width = 870; //default width of frame
+//		_height = 600; //default height of frame
 		_positions = new SourcePos[0];
 
 		// GUI SWING components
 		_frame = new JFrame();
+		_frame.setVisible(false);
+		_frame.setBounds(_xpos, _ypos, _width, _height);
 		_menuBar = new JMenuBar();
 		_sourceArea = new JTextPane();		// source window
 		_sourceArea.setBackground(COLOR_SOURCE);
@@ -149,7 +157,6 @@ class ChkGUIBase {
 		_lineNumberArea.setEditable(false);
 		_sourcePositionInfo = new JLabel();	// position information
 		_infoArea = new JTextArea(); //errors or trace information
-		_frame.setVisible(false);
 /**/
 		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 			@Override
@@ -199,7 +206,6 @@ class ChkGUIBase {
 		jsp = new JScrollPane();
 		jsp.getViewport().add(_infoArea);
 		_frame.add(jsp, BorderLayout.AFTER_LAST_LINE);
-		_frame.setSize(_width, _height);
 	}
 
 	/** Initialize map with source items. */

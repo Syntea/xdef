@@ -102,7 +102,7 @@ public class ChkGUIDisplay extends ChkGUIBase implements XEditor {
 			return false;
 		}
 //		closeGUI("XDPool was compiled"); // show message that SDPool compiled.
-		closeGUI(null);
+		closeXEditor(null);
 		_undo = null;
 		_selectSource = _removeSource = null;
 		_positions = null;

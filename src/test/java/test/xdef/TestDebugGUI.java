@@ -163,13 +163,18 @@ public final class TestDebugGUI extends Tester {
 				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 //			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 //				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+
+/* *
 			XDBuilder xb = XDFactory.getXDBuilder(props);
-//			ReportWriter frw = new FileReportWriter("C:/temp/rep.rep");
-			ReportWriter frw = new ArrayReporter();
+			ReportWriter frw = new FileReportWriter("C:/temp/rep.rep");
+//			ReportWriter frw = new ArrayReporter();
 			xb.setReporter(frw);
 			xb.setSource(xdef, "Test1");
 			xp = xb.compileXD();
 System.out.println(frw.getReportReader().printToString());
+/* */
+			xp = compile(xdef);
+/* */
 			xd = xp.createXDDocument();
 			baos = new ByteArrayOutputStream();
 			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);

@@ -281,7 +281,7 @@ public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 		}
 		_frame.pack();
 		_frame.setLocationByPlatform(true);
-		_frame.setSize(_width, _height);
+		_frame.setBounds(_xpos, _ypos, _width, _height);
 		_sourceArea.setCaretPosition(
 			_sourceItem._pos>=0 ? _sourceItem._pos : 0);
 		_sourceArea.requestFocus();
