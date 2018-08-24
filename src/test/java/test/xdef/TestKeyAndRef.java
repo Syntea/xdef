@@ -19,11 +19,9 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
 
+import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import static test.util.STester.runTest;
-import static test.util.XDefTester.XDEFNS;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
@@ -54,6 +52,11 @@ public final class TestKeyAndRef extends XDefTester {
 		return null;
 	}
 
+	@Test(groups = "xdef")
+	public void runUnitTest() {
+		super.runUnitTest();
+	}
+	
 	@Override
 	public void test() {
 		String xdef;

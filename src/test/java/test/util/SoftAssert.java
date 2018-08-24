@@ -1,6 +1,5 @@
 package test.util;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import org.testng.asserts.Assertion;
@@ -34,20 +33,19 @@ public class SoftAssert extends Assertion {
 		if (!m_errors.isEmpty()) {
 			StringBuilder sb = new StringBuilder(
 				"The following asserts failed:");
-			boolean first = true;
+			
 			for (Map.Entry<AssertionError, IAssert<?>> ae : m_errors.entrySet()) {
-				if (first) {
-					first = false;
-				} else {
-					sb.append(",");
-				}
-				sb.append("\n\t");
-				sb.append(ae.getKey().getMessage());
-				sb.append("\nStack Trace :");
-				sb.append(Arrays.toString(ae.getKey().getStackTrace())
-					.replaceAll(",", "\n"));
+				sb.append("\n--------------------\n");
+				sb.append("Message:\n");
+				sb.append(ae.getKey().getMessage() + "\n");
+				sb.append("Stacktrace:\n");
+				sb.append(TestUtil.exceptionStackTrace(ae.getKey()));
 			}
+			
+			sb.append("\n---- end of assertion failed list ----");
+			
 			throw new AssertionError(sb.toString());
 		}
 	}
+
 }

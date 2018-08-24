@@ -41,6 +41,8 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Properties;
+
+import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
 /** Class for testing (miscellaneous).
@@ -52,6 +54,11 @@ public final class Test000 extends XDefTester {
 
 	private static int _myError = 0;
 
+	@Test(groups = "xdef")
+	public void runUnitTest() {
+		super.runUnitTest();
+	}
+	
 	@Override
 	/** Run tests and print error information. */
 	public void test() {

@@ -12,20 +12,16 @@
  */
 package test.xdef;
 
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
 import static test.util.TestUtil.compile;
-import static test.util.TestUtil.dataTmpRootDir;
 import static test.util.TestUtil.parse;
 import static test.util.TestUtil.reportDiff;
 import static test.util.TestUtil.reportErrors;
-
-import java.io.File;
 
 import org.testng.annotations.Test;
 
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
+import test.util.SoftAssert;
 import test.util.TestUtil;
 
 
@@ -35,12 +31,14 @@ import test.util.TestUtil;
 @Test(groups = "xdef")
 public final class TestKeyAndRefNT {
 
-	@SuppressWarnings("unused")
-	private static final File dataDir = new File(dataTmpRootDir, "keyAndRef");
-
-	
-	
-	private static final String xdef001 =
+	public void test() {
+		SoftAssert    a = new SoftAssert();
+		String        xdef;
+		XDPool        xp;
+		String        xml;
+		ArrayReporter reporter = new ArrayReporter();
+		
+		xdef =
 "<xd:def xmlns:xd='" + TestUtil.XDEFNS + "' root='a'>\n"+
 "<xd:declaration>uniqueSet u {x:int()}</xd:declaration>\n"+
 "<a>\n"+
@@ -48,27 +46,23 @@ public final class TestKeyAndRefNT {
 "  <c x='u.x.ID' y='u.x.ID'/>\n"+
 "</a>\n"+
 "</xd:def>\n";
-	private final XDPool xp001 = compile(xdef001);
+		xp = compile(xdef);
 	
-	public void test001a() {
-		ArrayReporter reporter = new ArrayReporter();
-		String xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
-		assertNull(reportDiff(parse(xp001, "", xml, reporter), xml));
-		assertNull(reportErrors(reporter));
-	}
-	
-	public void test001b() {
-		ArrayReporter reporter = new ArrayReporter();
-		String xml2 = "<a><b z='1 3'/><c x='1' y='2'/></a>";
-		assertNull(reportDiff(parse(xp001, "", xml2, reporter), xml2));
-		assertTrue(
+		xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
+		reporter.clear();
+		a.assertNull(reportDiff(parse(xp, "", xml, reporter), xml));
+		a.assertNull(reportErrors(reporter));
+		
+		xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
+		reporter.clear();
+		a.assertNull(reportDiff(parse(xp, "", xml, reporter), xml));
+		a.assertTrue(
 			reporter.getErrorCount() == 1
 			&& "XDEF522".equals(reporter.getReport().getMsgID()),
 			reporter.printToString()
 		);
-	}
 		
-	private static final String xdef002 =
+		xdef =
 "<xd:def xmlns:xd='" + TestUtil.XDEFNS + "' root='a'>\n"+
 "<xd:declaration scope='local'>uniqueSet u {x: int()}</xd:declaration>\n"+
 "<a>\n"+
@@ -76,24 +70,23 @@ public final class TestKeyAndRefNT {
 "  <c z='u.x.CHKIDS'/>\n"+
 "</a>\n"+
 "</xd:def>\n";
-	private final XDPool xp002 = compile(xdef002);
+		xp = compile(xdef);
 	
-	public void test002a() {
-		ArrayReporter reporter = new ArrayReporter();
-		String xml1 = "<a><b x='1' y='2'/><c z='1 2'/></a>";
-		assertNull(reportDiff(xml1, parse(xp002, "", xml1, reporter)));
-		assertNull(reportErrors(reporter));
-	}
-	
-	public void test002b() {
-		ArrayReporter reporter = new ArrayReporter();
-		String xml2 = "<a><b x='1' y='2'/><c z='1 3'/></a>";
-		assertNull(reportDiff(xml2, parse(xp002, "", xml2, reporter)));
-		assertTrue(
+		xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
+		reporter.clear();
+		a.assertNull(reportDiff(xml, parse(xp, "", xml, reporter)));
+		a.assertNull(reportErrors(reporter));
+		
+		xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
+		reporter.clear();
+		a.assertNull(reportDiff(xml, parse(xp, "", xml, reporter)));
+		a.assertTrue(
 			reporter.errorWarnings()
 			&& "XDEF522".equals(reporter.getReport().getMsgID()),
 			reporter.printToString()
 		);
+		
+		a.assertAll();
 	}
 	
 //	{

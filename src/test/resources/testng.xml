@@ -3,7 +3,7 @@
 <suite name="Main Suite" verbose="4" group-by-instances="true" parallel="none" thread-count="4">
 	<parameter name="fullTestMode" value="false"/>
 	
-	<test name="Trojan's Tests">
+	<test name="Main Test">
 		<groups>
 			<dependencies>
 				<!--
@@ -17,11 +17,6 @@
 		<packages>
 			<package name="test.*"/>
 			<package name="cz.syntea.xdef.*"/>
-		</packages>
-	</test>
-	
-	<test name="Sisma's Tests">
-		<packages>
 		</packages>
 	</test>
 </suite>
