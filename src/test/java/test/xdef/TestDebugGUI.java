@@ -13,18 +13,21 @@
  */
 package test.xdef;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Properties;
+
+import org.testng.annotations.Test;
+import org.w3c.dom.Element;
+
 import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import test.util.XDefTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Properties;
-import org.w3c.dom.Element;
+import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.Report;
+import test.util.XDefTester;
 
 /** Provides testing of XDef debug mode and editing in display mode.
  * @author Trojan
@@ -33,6 +36,11 @@ public final class TestDebugGUI extends XDefTester {
 
 	public TestDebugGUI() {super(); setChkSyntax(false);}
 
+	@Test(groups = "xdef", enabled = false)
+	public void runUnitTest() {
+		super.runUnitTest();
+	}
+	
 	@Override
 	public void test() {
 		Report.setLanguage("en"); //localize
