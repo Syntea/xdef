@@ -72,14 +72,15 @@ import cz.syntea.xdef.impl.code.DefLocale;
 /** Provides reading of XD objects from InputStream.
  * @author Vaclav Trojan
  */
-public class XDReader extends SObjectReader {
+public final class XDReader extends SObjectReader {
 
 	/** Creates a new instance of XDReader.
 	 * @param in Input stream with data of XD objects
 	 */
-	XDReader(InputStream in) {super(in);}
+	public XDReader(InputStream in) {super(in);}
 
-	private static Class<?> getClassForName(String name) throws IOException {
+	private static Class<?> getClassForName(final String name)
+		throws IOException {
 		//first check primitive type names
 		if ("boolean".equals(name)) {
 			return java.lang.Boolean.TYPE;
@@ -143,7 +144,7 @@ public class XDReader extends SObjectReader {
 	 * @return the XD object constructed from input stream.
 	 * @throws IOException if an error occurs.
 	 */
-	XDValue readXD() throws IOException {
+	final XDValue readXD() throws IOException {
 		short code = readShort();
 		if (code < 0) {
 			if (code == -1) {

@@ -62,7 +62,7 @@ public class XVariableTable implements XMVariableTable {
 	 * @param v variable to be added.
 	 * @return true if variable was added.
 	 */
-	public boolean addVariable(final XVariable v) {
+	public final boolean addVariable(final XVariable v) {
 		String name = v.getName();
 		for (int i = 0; i < _size; i++) {
 			if (name.equals(_variables[i].getName())) {
@@ -189,10 +189,12 @@ public class XVariableTable implements XMVariableTable {
 	/** Set last variable offset.
 	 * @param lastOffset last variable offset.
 	 */
-	public final void setLastOffset(int lastOffset) {_lastOffset = lastOffset;}
+	public final void setLastOffset(final int lastOffset) {
+		_lastOffset = lastOffset;
+	}
 
 	/** Set parent of the variable table. */
-	void setParent(XVariableTable p) {
+	final void setParent(final XVariableTable p) {
 		_parent = p;
 	}
 
@@ -200,7 +202,7 @@ public class XVariableTable implements XMVariableTable {
 	 * @param xw the XDWriter.
 	 * @throws IOException if an error occurs.
 	 */
-	void writeXD(final XDWriter xw) throws IOException {
+	final void writeXD(final XDWriter xw) throws IOException {
 		XVariable[] variables = (XVariable[]) toArray();
 		xw.writeInt(_sqId);
 		xw.writeLength(variables.length);
@@ -214,7 +216,7 @@ public class XVariableTable implements XMVariableTable {
 	 * @return variable table.
 	 * @throws IOException if an error occurs.
 	 */
-	static XVariableTable readXD(final XDReader xr) throws IOException {
+	final static XVariableTable readXD(final XDReader xr) throws IOException {
 		XVariableTable result = new XVariableTable(xr.readInt());
 		int len = xr.readLength();
 		for (int i = 0; i < len; i++) {

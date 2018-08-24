@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import cz.syntea.xdef.XDContainer;
 import cz.syntea.xdef.XDValueID;
+import cz.syntea.xdef.msg.SYS;
+import cz.syntea.xdef.sys.SRuntimeException;
 
 /** Implementation of the model of attributes or text nodes.
  * @author Vaclav Trojan
@@ -62,16 +64,21 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get XMDefinition assigned to this node.
 	 * @return root XMDefintion node.
 	 */
-	public XMDefinition getXMDefinition() {return null;} //TODO!
+	public final XMDefinition getXMDefinition() {return null;} //TODO!
 
 	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	// can't be final, can be overwritten!
+	public void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
 		xw.writeShort(_baseType);
 		xw.writeString(_valueTypeName);
 	}
 
-	static XData readXData(XDReader xr, short kind, XDefinition xd)
+	// can't be final, can be overwritten!
+	static XData readXData(final XDReader xr,
+		final short kind,
+		final XDefinition xd)
 		throws IOException {
 		String name = xr.readString();
 		String uri = xr.readString();
@@ -83,7 +90,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	}
 
 	@Override
-	public XDParseResult validate(String value) {
+	public final XDParseResult validate(final String value) {
 		return null;
 	}
 
@@ -92,7 +99,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @return string with value specified as default or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public String getDefaultValue() {
+	public final String getDefaultValue() {
 		if (_deflt < 0) {
 			return null;
 		}
@@ -111,7 +118,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @return string with value specified as fixed or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public String getFixedValue() {
+	public final String getFixedValue() {
 		if (_onAbsence < 0) {
 			return null;
 		}
@@ -141,7 +148,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @return string array with values specified as enumeration or return
 	 * <tt>null</tt> if specified type is not enumeration of string values.
 	 */
-	public String[] getEnumerationValues() {
+	public final String[] getEnumerationValues() {
 		if (_check < 0) {
 			return null;
 		}
@@ -211,24 +218,24 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get type of value.
 	 * @return type ID of data value.
 	 */
-	public short getBaseType() {return _baseType;}
+	public final short getBaseType() {return _baseType;}
 
 	@Override
 	/** Get type name of value.
 	 * @return type name of data value.
 	 */
-	public String getValueTypeName() {return _valueTypeName;}
+	public final String getValueTypeName() {return _valueTypeName;}
 
 	@Override
 	/** Get parser used for parsing of value.
 	 * @return XDParser or null if parser is not available.
 	 */
-	public XDValue getParseMethod() {
+	public final XDValue getParseMethod() {
 		XDValue[] xv = ((XPool) getXDPool()).getCode();
 		return getParseMethod(xv);
 	}
 
-	public XDValue getParseMethod(XDValue[] xv) {
+	public final XDValue getParseMethod(final XDValue[] xv) {
 		int xs = _check; //start of code
 		if (xs < 0) {
 			return null;
@@ -289,7 +296,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get parameters of parsing method.
 	 * @return XDParser or null if parser is not available.
 	 */
-	public XDContainer getParseParams() {
+	public final XDContainer getParseParams() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
 			? ((XDParser) p).getNamedParams() : new DefContainer();
@@ -299,7 +306,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get type of parsed value.
 	 * @return value from cz.syntea.xd.XDValueTypes.
 	 */
-	public short getParserType() {
+	public final short getParserType() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
 			? ((XDParser) p).parsedType() : getBaseType();
@@ -309,7 +316,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get datetime mask from the model parser.
 	 * @return mask of datetime type or <tt>null</tt>.
 	 */
-	public String getDateMask() {
+	public final String getDateMask() {
 		XDValue p = getParseMethod();
 		if (p != null && p.getItemId()==XDValueID.XD_PARSER) {
 			XDParser y = (XDParser) p;
@@ -356,7 +363,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	/** Get name parser (i.e. "base64Binary" or "hexBinary").
 	 * @return name of parser or empty string.
 	 */
-	public String getParserName() {
+	public final String getParserName() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
 			? ((XDParser) p).parserName() : "";
@@ -366,8 +373,19 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @param valueType ID of data value type.
 	 * @param valueTypeName Name of data value type.
 	 */
-	public void setValueType(short valueType, String valueTypeName) {
+	public final void setValueType(final short valueType,
+		final String valueTypeName) {
 		_baseType = valueType;
 		_valueTypeName = valueTypeName;
+	}
+
+	@Override
+	/** Add node as child.
+	 * @param xnode The node to be added.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final void addNode(final XNode xnode) {
+		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
+			"Attempt to add node to ScriptCodeDescriptor");
 	}
 }

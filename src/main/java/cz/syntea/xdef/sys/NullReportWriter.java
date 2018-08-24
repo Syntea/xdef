@@ -50,11 +50,11 @@ public class NullReportWriter implements ReportWriter {
 	/** Set language (ISO-639 or ISO-639-2). This method has no effect here.
 	 * @param language language id (ISO-639).
 	 */
-	public void setLanguage(final String language) {}
+	public final void setLanguage(final String language) {}
 
 	@Override
 	/** Clear the report file - ignored for this implementation. */
-	public void clear() {
+	public final void clear() {
 		clearCounters();
 		_size = 0;
 		_lastErrorReport = null;
@@ -62,7 +62,7 @@ public class NullReportWriter implements ReportWriter {
 
 	@Override
 	/** Clear counters of fatal errors, errors and warnings. */
-	public void clearCounters() {
+	public final void clearCounters() {
 		_errors = 0;
 		_lightErrors = 0;
 		_warnings = 0;
@@ -73,7 +73,7 @@ public class NullReportWriter implements ReportWriter {
 	/** Check if warnings and/or errors and/or fatal errors were generated.
 	 * @return true is warnings or errors reports are present.
 	 */
-	public boolean errorWarnings() {
+	public final boolean errorWarnings() {
 		return _fatals + _errors + _lightErrors + _warnings != 0;
 	}
 
@@ -81,58 +81,60 @@ public class NullReportWriter implements ReportWriter {
 	/** Check if errors and/or fatal errors were generated.
 	 * @return true is errors reports are present.
 	 */
-	public boolean errors() {return _fatals + _errors + _lightErrors != 0;}
+	public final boolean errors() {
+		return _fatals + _errors + _lightErrors != 0;
+	}
 
 	@Override
 	/** Check if fatal errors were generated.
 	 * @return true is errors reports are present.
 	 */
-	public boolean fatals() {return _fatals != 0;}
+	public final boolean fatals() {return _fatals != 0;}
 
 	@Override
 	/** Get number of error items.
 	 * @return The number of generated errors.
 	 */
-	public int getErrorCount() {return _lightErrors + _errors;}
+	public final int getErrorCount() {return _lightErrors + _errors;}
 
 	@Override
 	/** Get number of light error items.
 	 * @return The number of light errors.
 	 */
-	public int getLightErrorCount() {return _lightErrors;}
+	public final int getLightErrorCount() {return _lightErrors;}
 
 	@Override
 	/** Get number of fatal items.
 	 * @return The number of generated fatal errors.
 	 */
-	public int getFatalErrorCount() {return _fatals;}
+	public final int getFatalErrorCount() {return _fatals;}
 
 	@Override
 	/** Get last error report.
 	 * @return last error report (or <tt>null</tt> if last report is not
 	 * available).
 	 */
-   public Report getLastErrorReport() {return _lastErrorReport;}
+   public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
 	/** Clear last error report. If last report has been available it will be
 	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
 	 * the report has already been written to the report file.
 	 */
-	public void clearLastErrorReport() {_lastErrorReport = null;}
+	public final void clearLastErrorReport() {_lastErrorReport = null;}
 
 	@Override
 	/** Returns <tt>null</tt> for this implementation.
 	 *
 	 * @return The value <tt>null</tt>.
 	 */
-	public ReportReader getReportReader() {return null;}
+	public final ReportReader getReportReader() {return null;}
 
 	@Override
 	/** Get number of warning items.
 	 * @return The number of generated warnings.
 	 */
-	public int getWarningCount() {return _warnings;}
+	public final int getWarningCount() {return _warnings;}
 
 	@Override
 	/** Put the report - ignored if the type of msg argument is not error,
@@ -142,7 +144,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param msg The report.
 	 * @throws SRuntimeException with message if msg is ERROR, LIGHT or FATAL.
 	 */
-	public void putReport(final Report msg) {
+	public final void putReport(final Report msg) {
 		_size++;
 		switch (msg.getType()) {
 			case Report.FATAL:
@@ -174,7 +176,7 @@ public class NullReportWriter implements ReportWriter {
 	/** Get total number of reports.
 	 * @return The number of generated reports.
 	 */
-	public int size() {return _size;}
+	public final int size() {return _size;}
 
 	@Override
 	/** Put fatal item.
@@ -183,7 +185,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(final String id, final String msg, final Object... mod) {
+	public final void fatal(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
@@ -192,7 +196,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(long registeredID, Object... mod) {
+	public final void fatal(final long registeredID, final Object... mod) {
 		putReport(Report.fatal(registeredID, mod));
 	}
 
@@ -203,7 +207,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final String id, final String msg, final Object... mod) {
+	public final void error(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
@@ -212,7 +218,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(long registeredID, Object... mod) {
+	public final void error(final long registeredID, final Object... mod) {
 		putReport(Report.error(registeredID, mod));
 	}
 
@@ -223,8 +229,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void lighterror(final String id,
-		final String msg, final Object... mod) {
+	public final void lighterror(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
@@ -233,7 +240,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(long registeredID, Object... mod) {
+	public final void lightError(final long registeredID, final Object... mod) {
 		putReport(Report.lightError(registeredID, mod));
 	}
 
@@ -244,7 +251,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final String id, final String msg, final Object... mod){
+	public final void warning(final String id,
+		final String msg,
+		final Object... mod){
 		putReport(Report.warning(id, msg, mod));
 	}
 
@@ -253,7 +262,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(long registeredID, Object... mod) {
+	public final void warning(final long registeredID, final Object... mod) {
 		putReport(Report.warning(registeredID, mod));
 	}
 
@@ -264,7 +273,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(final String id, final String msg, final Object... mod) {
+	public final void audit(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
@@ -273,7 +284,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(long registeredID, Object... mod) {
+	public final void audit(final long registeredID, final Object... mod) {
 		putReport(Report.audit(registeredID, mod));
 	}
 
@@ -284,7 +295,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void message(final String id, final String msg, final Object... mod){
+	public final void message(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
@@ -293,7 +306,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void mesage(long registeredID, Object... mod) {
+	public final void mesage(final long registeredID, final Object... mod) {
 		putReport(Report.message(registeredID, mod));
 	}
 
@@ -304,7 +317,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(final String id, final String msg, final Object... mod) {
+	public final void info(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
@@ -313,7 +328,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(long registeredID, Object... mod) {
+	public final void info(final long registeredID, final Object... mod) {
 		putReport(Report.info(registeredID, mod));
 	}
 
@@ -324,7 +339,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(final String id, final String msg, final Object... mod) {
+	public final void text(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
@@ -333,7 +350,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(long registeredID, Object... mod) {
+	public final void text(final long registeredID, final Object... mod) {
 		putReport(Report.text(registeredID, mod));
 	}
 
@@ -344,7 +361,9 @@ public class NullReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(final String id, final String msg, final Object... mod) {
+	public final void string(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
@@ -353,7 +372,7 @@ public class NullReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(long registeredID, Object... mod) {
+	public final void string(final long registeredID, final Object... mod) {
 		putReport(Report.string(registeredID, mod));
 	}
 
@@ -361,7 +380,7 @@ public class NullReportWriter implements ReportWriter {
 	/** Write string to reporter  - ignored for this implementation.
 	 * @param str String to be written.
 	 */
-	public void writeString(final String str) {}
+	public final void writeString(final String str) {}
 
 	@Override
 	/** Check error reports are present in the report writer. Return normally if
@@ -369,7 +388,7 @@ public class NullReportWriter implements ReportWriter {
 	 * error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public void checkAndThrowErrors() throws SRuntimeException {
+	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (errors()) {
 			throwReports(false);
 		}
@@ -381,7 +400,7 @@ public class NullReportWriter implements ReportWriter {
 	 * exception with the  list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
-	public void checkAndThrowErrorWarnings() throws SRuntimeException {
+	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (errorWarnings()) {
 			throwReports(true);
 		}
@@ -393,7 +412,7 @@ public class NullReportWriter implements ReportWriter {
 	 * otherwise display only errors.
 	 * @throws SRuntimeException with reports.
 	 */
-	private void throwReports(boolean warnings) throws SRuntimeException {
+	private void throwReports(final boolean warnings) throws SRuntimeException {
 		ArrayReporter r = new ArrayReporter();
 		r.putReport(getLastErrorReport());
 		if (r.isEmpty()) {
@@ -427,10 +446,21 @@ public class NullReportWriter implements ReportWriter {
 
 	@Override
 	/** Close report writer - ignored for this implementation. */
-	public void close() {}
+	public final void close() {}
 
 	@Override
 	/** Flush report writer - ignored for this implementation. */
-	public void flush() {}
+	public final void flush() {}
+
+	@Override
+	/** Add to this reporter reports from report reader.
+	 * @param reporter report reader with reports to be added.
+	 */
+	public final void addReports(final ReportReader reporter) {
+		Report rep;
+		while((rep = reporter.getReport()) != null) {
+			putReport(rep);
+		}
+	}
 
 }

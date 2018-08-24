@@ -225,7 +225,8 @@ public class XSelector extends XNode implements XMSelector {
 	public XMDefinition getXMDefinition() {return null;}
 
 	@Override
-	void writeXNode(XDWriter xw, ArrayList<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 		xw.writeInt(minOccurs());
 		xw.writeInt(maxOccurs());

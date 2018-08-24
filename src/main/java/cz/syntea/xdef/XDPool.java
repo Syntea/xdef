@@ -228,4 +228,10 @@ public interface XDPool {
 	 */
 	public String getDebugEditor();
 
+	/** Get class name of the editor of X-definition.
+	 * @return class name of the editor of X-definition which
+	 * will be used).
+	 */
+	public String getXdefEditor();
+
 }

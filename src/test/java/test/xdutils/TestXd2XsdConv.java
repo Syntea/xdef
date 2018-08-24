@@ -313,7 +313,7 @@ public class TestXd2XsdConv extends STester {
 	@Override
 	public void test() {
 		init();
-		
+
 		_props.put("xdef.warnings", "true");
 
 		assertTrue(prepare("basicTest"), popMessage());
@@ -403,7 +403,7 @@ public class TestXd2XsdConv extends STester {
 		assertTrue(parse("B1_Common_valid_1"), popMessage());
 		assertTrue(parse("B1_Common_valid_2"), popMessage());
 
-		_props.put("xdef.warnings", "false"); // do not check deprecated 
+		_props.put("xdef.warnings", "false"); // do not check deprecated
 		assertTrue(prepare("Sisma"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
 

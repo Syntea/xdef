@@ -249,7 +249,7 @@ public class FileReportWriter implements ReportWriter {
 	 * the reporter output is printed as a text to the output stream.
 	 * @param language language id (ISO-639).
 	 */
-	public void setLanguage(final String language) {
+	public final void setLanguage(final String language) {
 		_language = SUtils.getISO3Language(language);
 	}
 
@@ -257,7 +257,7 @@ public class FileReportWriter implements ReportWriter {
 	/** Put the report to the list.
 	 * @param report The report.
 	 */
-	public void putReport(final Report report) {
+	public final void putReport(final Report report) {
 		_size++;
 		if (_xmlFormat) {
 			_out.write(report.toXmlString());
@@ -293,7 +293,7 @@ public class FileReportWriter implements ReportWriter {
 	/** Write string to reporter.
 	 * @param str String to be written.
 	 */
-	public void writeString(final String str) {
+	public final void writeString(final String str) {
 		putReport(Report.string(null, str));
 	}
 
@@ -302,7 +302,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @return last error report (or <tt>null</tt> if last report is not
 	 * available).
 	 */
-	public Report getLastErrorReport() {return _lastErrorReport;}
+	public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
 	/** Clear last error report. If last report has been available it will be
@@ -314,7 +314,7 @@ public class FileReportWriter implements ReportWriter {
 	@Override
 	/** Clear counters of fatal errors, errors and warnings.
 	 */
-	public void clearCounters() {
+	public final void clearCounters() {
 		_errors = 0;
 		_lightErrors = 0;
 		_warnings = 0;
@@ -326,7 +326,7 @@ public class FileReportWriter implements ReportWriter {
 	 * Also last error report is cleared.
 	 * throws SRuntimeException if it is not possible to clear reports.
 	 */
-	public void clear() {
+	public final void clear() {
 		if (_file == null) {
 			//Report writer: report file can't be cleared.
 			throw new SRuntimeException(SYS.SYS046);
@@ -347,7 +347,7 @@ public class FileReportWriter implements ReportWriter {
 	/** Get size of the list of reports.
 	 * @return The number of items.
 	 */
-	public int size() {return _size;}
+	public final int size() {return _size;}
 
 	@Override
 	/** Put fatal item.
@@ -356,7 +356,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(final String id, final String msg, final Object... mod) {
+	public final void fatal(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
@@ -365,7 +367,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(long registeredID, Object... mod) {
+	public final void fatal(final long registeredID, final Object... mod) {
 		putReport(Report.fatal(registeredID, mod));
 	}
 
@@ -376,7 +378,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final String id, final String msg, final Object... mod) {
+	public final void error(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
@@ -385,7 +389,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(long registeredID, Object... mod) {
+	public final void error(final long registeredID, final Object... mod) {
 		putReport(Report.error(registeredID, mod));
 	}
 
@@ -396,8 +400,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void lighterror(final String id,
-		final String msg, final Object... mod) {
+	public final void lighterror(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
@@ -406,7 +411,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(long registeredID, Object... mod) {
+	public final void lightError(final long registeredID, final Object... mod) {
 		putReport(Report.lightError(registeredID, mod));
 	}
 
@@ -417,7 +422,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final String id, final String msg, final Object... mod){
+	public final void warning(final String id,
+		final String msg,
+		final Object... mod){
 		putReport(Report.warning(id, msg, mod));
 	}
 
@@ -426,7 +433,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(long registeredID, Object... mod) {
+	public final void warning(final long registeredID, final Object... mod) {
 		putReport(Report.warning(registeredID, mod));
 	}
 
@@ -437,7 +444,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(final String id, final String msg, final Object... mod) {
+	public final void audit(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
@@ -446,7 +455,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(long registeredID, Object... mod) {
+	public final void audit(final long registeredID, final Object... mod) {
 		putReport(Report.audit(registeredID, mod));
 	}
 
@@ -457,7 +466,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void message(final String id, final String msg, final Object... mod){
+	public final void message(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
@@ -466,7 +477,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void mesage(long registeredID, Object... mod) {
+	public final void mesage(final long registeredID, final Object... mod) {
 		putReport(Report.message(registeredID, mod));
 	}
 
@@ -477,7 +488,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(final String id, final String msg, final Object... mod) {
+	public final void info(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
@@ -486,7 +499,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(long registeredID, Object... mod) {
+	public final void info(final long registeredID, final Object... mod) {
 		putReport(Report.info(registeredID, mod));
 	}
 
@@ -497,7 +510,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(final String id, final String msg, final Object... mod) {
+	public final void text(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
@@ -506,7 +521,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(long registeredID, Object... mod) {
+	public final void text(final long registeredID, final Object... mod) {
 		putReport(Report.text(registeredID, mod));
 	}
 
@@ -517,7 +532,9 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(final String id, final String msg, final Object... mod) {
+	public final void string(final String id,
+		final String msg,
+		final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
@@ -526,7 +543,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(long registeredID, Object... mod) {
+	public final void string(final long registeredID, final Object... mod) {
 		putReport(Report.string(registeredID, mod));
 	}
 
@@ -534,43 +551,43 @@ public class FileReportWriter implements ReportWriter {
 	/** Get number of fatal items.
 	 * @return The number of fatal error items.
 	 */
-	public int getFatalErrorCount() {return _fatals;}
+	public final int getFatalErrorCount() {return _fatals;}
 
 	@Override
 	/** Get number of error items.
 	 * @return The number of error items.
 	 */
-	public int getErrorCount() {return _lightErrors + _errors;}
+	public final int getErrorCount() {return _lightErrors + _errors;}
 
 	@Override
 	/** Get number of light error items.
 	 * @return The number of light errors.
 	 */
-	public int getLightErrorCount() {return _lightErrors;}
+	public final int getLightErrorCount() {return _lightErrors;}
 
 	@Override
 	/** Get number of warning items.
 	 * @return The number of warning items.
 	 */
-	public int getWarningCount() {return _warnings;}
+	public final int getWarningCount() {return _warnings;}
 
 	@Override
 	/** return true if fatal reports are present.
 	 * @return <i>true</i> if and only if exists fatal errors.
 	 */
-	public boolean fatals() {return _fatals != 0;}
+	public final boolean fatals() {return _fatals != 0;}
 
 	@Override
 	/** Check if errors and/or fatal errors were generated.
 	 * @return <i>true</i> if fatal or error items are present.
 	 */
-	public boolean errors() {return _fatals + _lightErrors + _errors != 0;}
+	public final boolean errors() {return _fatals + _lightErrors + _errors!=0;}
 
 	@Override
 	/** Check if warnings and/or errors and/or fatal errors were generated.
 	 * @return <i>true</i> if fatal or error or warning items are present.
 	 */
-	public boolean errorWarnings() {
+	public final boolean errorWarnings() {
 		return _fatals + _errors + _lightErrors + _warnings != 0;
 	}
 
@@ -581,7 +598,7 @@ public class FileReportWriter implements ReportWriter {
 	 * @throws SRuntimeException SYS045 Can't get report reader from this
 	 * report writer.
 	 */
-	public ReportReader getReportReader() {
+	public final ReportReader getReportReader() {
 		close();
 		if (_file == null || !_xmlFormat) {
 			return null;
@@ -597,7 +614,7 @@ public class FileReportWriter implements ReportWriter {
 
 	@Override
 	/** Close report writer. */
-	public void close() {
+	public final void close() {
 		if (_file == null) {
 			_out.flush();
 		} else {
@@ -607,7 +624,7 @@ public class FileReportWriter implements ReportWriter {
 
 	@Override
 	/** Flush report writer. */
-	public void flush() {_out.flush();}
+	public final void flush() {_out.flush();}
 
 	@Override
 	/** Check error reports are present in the report writer. Return normally if
@@ -615,7 +632,7 @@ public class FileReportWriter implements ReportWriter {
 	 * error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public void checkAndThrowErrors() throws SRuntimeException {
+	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (errors()) {
 			throwReports(false);
 		}
@@ -627,7 +644,7 @@ public class FileReportWriter implements ReportWriter {
 	 * exception with the  list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
-	public void checkAndThrowErrorWarnings() throws SRuntimeException {
+	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (errorWarnings()) {
 			throwReports(true);
 		}
@@ -639,7 +656,7 @@ public class FileReportWriter implements ReportWriter {
 	 * otherwise display only errors.
 	 * @throws SRuntimeException with reports.
 	 */
-	private void throwReports(boolean warnings) throws SRuntimeException {
+	private void throwReports(final boolean warnings) throws SRuntimeException {
 		ReportReader reader = null;
 		try {
 			reader = getReportReader();
@@ -679,6 +696,17 @@ public class FileReportWriter implements ReportWriter {
 	}
 
 	@Override
-	public String toString() {return "FileReportWriter";}
+	public final String toString() {return "FileReportWriter";}
+
+	@Override
+	/** Add to this reporter reports from report reader.
+	 * @param reporter report reader with reports to be added.
+	 */
+	public final void addReports(final ReportReader reporter) {
+		Report rep;
+		while((rep = reporter.getReport()) != null) {
+			putReport(rep);
+		}
+	}
 
 }

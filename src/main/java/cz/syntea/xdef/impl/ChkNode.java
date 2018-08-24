@@ -177,7 +177,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param obj user object.
 	 * @return previous value of the object or <tt>null</tt>.
 	 */
-	public Object setUserObject(String id, Object obj) {
+	public final Object setUserObject(final String id, final Object obj) {
 		return _scp.setUserObject(id, obj);
 	}
 
@@ -186,7 +186,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	public Object removeUserObject(String id) {
+	public Object removeUserObject(final String id) {
 		return _scp.removeUserObject(id);
 	}
 
@@ -195,7 +195,9 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	public Object getUserObject(String id) {return _scp.getUserObject(id);}
+	public final Object getUserObject(final String id) {
+		return _scp.getUserObject(id);
+	}
 
 	@Override
 	/** Return parent node.
@@ -264,7 +266,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return null;
 	}
 
-	void debugXPos(char action) {
+	final void debugXPos(final char action) {
 		if (_scp.isDebugMode()) {
 			if (_scp.getDebugger().hasXPos(action + _xPos)) {
 				_scp.getDebugger().debug(this, null, -1, -1, null, null,
@@ -277,7 +279,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set value from argument as context for create mode.
 	 * @param xdc context to be set (create mode).
 	 */
-	public void setXDContext(XDContainer xdc) {
+	public final void setXDContext(final XDContainer xdc) {
 		if (xdc != null && xdc.getXDItemsNumber() == 1 &&
 			xdc.getXDItem(0).getItemId() == XD_ELEMENT) {
 			_sourceElem = xdc.getXDItem(0).getElement();
@@ -313,7 +315,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set source element as context for create mode.
 	 * @param source string with pathname, URL or source of XML node.
 	 */
-	public void setXDContext(String source) {
+	public final void setXDContext(final String source) {
 		setXDContext(KXmlUtils.parseXml(source));
 	}
 
@@ -376,7 +378,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
-	public void setVariable(final String name, final Object value) {
+	public final void setVariable(final String name, final Object value) {
 		if (value instanceof XDValue) {
 			setVariable(name, (XDValue) value);
 			return;
@@ -534,7 +536,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
-	public void setVariable(String name, boolean value) {
+	public final void setVariable(final String name, final boolean value) {
 		XVariable xv = findVariable(name);
 		if (xv.isFinal() && _scp.getVariable(name) != null) {
 			//Variable '&{0}' is 'final'; the value can't be assigned
@@ -674,31 +676,24 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param name name of variable.
 	 * @param val value to be stored.
 	 */
-	void storeModelVariable(final String name, final XDValue val) {
-		//Internal error&{0}{: }
-		throw new SRuntimeException(SYS.SYS066, "Unknown variable "+name);
-	}
+	abstract void storeModelVariable(final String name, final XDValue val);
 
 	/** Store  model variable.
 	 * @param name name of variable.
 	 * @return loaded value.
 	 */
-	XDValue loadModelVariable(final String name) {
-		//Internal error&{0}{: }
-		throw new SRuntimeException(SYS.SYS066,
-			"Unknown 'model' variable "+name);
-	}
+	abstract XDValue loadModelVariable(final String name);
 
 	@Override
 	public abstract KNamespace getXXNamespaceContext();
 
 	@Override
-	public XPathFunctionResolver getXXFunctionResolver() {
+	public final XPathFunctionResolver getXXFunctionResolver() {
 		return _scp._functionResolver;
 	}
 
 	@Override
-	public XPathVariableResolver getXXVariableResolver() {
+	public final XPathVariableResolver getXXVariableResolver() {
 		return _scp._variableResolver;
 	}
 
@@ -776,7 +771,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	final void setXPos(final String xPath) {_xPos = xPath;}
 
 	@Override
-	public String stringValue() {return "XXNode " + getXXName();}
+	public final String stringValue() {return "XXNode " + getXXName();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods for reporting
@@ -856,7 +851,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Check if temporary reporter has errors.
 	 * @return true if temporary reporter has errors.
 	 */
-	public boolean chkTemporaryErrors() {
+	public final boolean chkTemporaryErrors() {
 		return _scp.getTemporaryReporter().errors();
 	}
 
@@ -875,9 +870,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get SReporter of XDDocument.
 	 * @return SReporter of XDDocument..
 	 */
-	public final SReporter getReporter() {
-		return _rootChkDocument._reporter;
-	}
+	public final SReporter getReporter() {return _rootChkDocument._reporter;}
 
 	@Override
 	/** Check if errors, fatal errors, light errors or warnings were reported.
@@ -893,9 +886,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return <tt>true</tt> if errors, fatal errors or light errors were
 	 * reported.
 	 */
-	public boolean errors() {
-		return _rootChkDocument._reporter.errors();
-	}
+	public boolean errors() {return _rootChkDocument._reporter.errors();}
 
 	@Override
 	/** Put fatal error message with modification parameters.
@@ -994,13 +985,13 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get model of the processed object.
 	 * @return model of the processed object (XMElement).
 	 */
-	public XMElement getXMElement() {return _xElement;}
+	public final XMElement getXMElement() {return _xElement;}
 
 	@Override
 	/** Get XDPosition of the processed element.
 	 * @return XDPosition of the processed element.
 	 */
-	public String getXDPosition() {
+	public final String getXDPosition() {
 		String result = _xElement == null ? null : _xElement.getXDPosition();
 		return result == null ? "" : result;
 	}
@@ -1013,9 +1004,10 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get array of XXNodes or null.
 	 * @return array of XXNodes or null.
 	 */
-	public XXNode[] getChildXXNodes() {return null;}
+	abstract public XXNode[] getChildXXNodes();
 
-	ArrayList<ChkElement> getChkChildNodes() {return null;}
+	// can't be final this method is overriden!
+	abstract ArrayList<ChkElement> getChkChildNodes();
 
 	@Override
 	/** Get parsed result of an attribute or text node.
@@ -1028,7 +1020,7 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * processor of XScript).
 	 * @return table with references to an object or <tt>null</tt>.
 	 */
-	public Map<Object, ArrayReporter> getIdRefTable() {
+	public final Map<Object, ArrayReporter> getIdRefTable() {
 		return _scp.getIdRefTable();
 	}
 

@@ -139,7 +139,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		xb.setExternals(extObjects);
 		xb.setSource(
 			"<xd:collection xmlns:xd='"+KXmlConstants.XDEF31_NS_URI+"'/>");
-		XPool xp = xb.build();
+		XPool xp = (XPool) xb.compileXD();
 		XDefinition xd = new XDefinition("#",
 			xp, KXmlConstants.XDEF31_NS_URI, null, (byte) 20);
 		xp._xdefs.put("#", xd);
@@ -164,7 +164,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	/** Initialize object. */
-	void init(final XDefinition xd,
+	final void init(final XDefinition xd,
 		final Document doc,
 		final SReporter reporter,
 		final Properties props,
@@ -192,12 +192,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get create mode/process mode.
 	 * @return true if and only if create mode is running.
 	 */
-	public boolean isCreateMode() {return _createMode;}
+	public final boolean isCreateMode() {return _createMode;}
 
 	/** Set create mode.
 	 * @param createMode true if create mode is running.
 	 */
-	void setCreateMode(boolean createMode) {_createMode = createMode;}
+	final void setCreateMode(boolean createMode) {_createMode = createMode;}
 
 	@Override
 	/** Create root check element for given name.
@@ -238,7 +238,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * the root list otherwise it is found the XElement model.
 	 * @return The ChkElement object.
 	 */
-	ChkElement createRootChkElement(final Element element,
+	final ChkElement createRootChkElement(final Element element,
 		final boolean checkRoot) {
 		String name = element.getNodeName();
 		String nsURI = element.getNamespaceURI();
@@ -477,10 +477,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 // implementation of XDDocument
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public short getItemId() {return XX_DOCUMENT;}
+	public final short getItemId() {return XX_DOCUMENT;}
 
 	@Override
-	public XDValueType getItemType() {return XDValueType.XXDOCUMENT;}
+	public final XDValueType getItemType() {return XDValueType.XXDOCUMENT;}
 
 	@Override
 	/** Set properties.
@@ -497,7 +497,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param value value of property or null. If the value is null the property
 	 * is removed from properties.
 	 */
-	public void setProperty(final String key, final String value) {
+	public final void setProperty(final String key, final String value) {
 		_scp.setProperty(key, value);
 	}
 
@@ -511,7 +511,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Set root model for this document model.
 	 * @param xmel model to be set.
 	 */
-	public void setRootModel(final XMElement xmel) {
+	public final void setRootModel(final XMElement xmel) {
 		_xElement = (XElement) xmel;
 	}
 
@@ -526,7 +526,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final String xmlData,
+	public final XComponent parseXComponent(final String xmlData,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
@@ -546,7 +546,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final File xmlData,
+	public final XComponent parseXComponent(final File xmlData,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
@@ -566,7 +566,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final URL xmlData,
+	public final XComponent parseXComponent(final URL xmlData,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
@@ -586,7 +586,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final InputStream xmlData,
+	public final XComponent parseXComponent(final InputStream xmlData,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		return parseXComponent(xmlData, xClass, null, reporter);
@@ -604,7 +604,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final InputStream xmlData,
+	public final XComponent parseXComponent(final InputStream xmlData,
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
@@ -625,7 +625,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent parseXComponent(final Node xmlData,
+	public final XComponent parseXComponent(final Node xmlData,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
@@ -780,7 +780,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public Element xcreate(final String nsUri,
+	public final Element xcreate(final String nsUri,
 		final String name,
 		final ReportWriter reporter) throws SRuntimeException {
 		_reporter = new SReporter(reporter);
@@ -801,7 +801,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public Element xcreate(QName qname, ReportWriter reporter)
+	public final Element xcreate(final QName qname, final ReportWriter reporter)
 		throws SRuntimeException {
 		return xcreate(qname.getNamespaceURI(), qname.getLocalPart(), reporter);
 	}
@@ -873,7 +873,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final void setStreamWriter(final OutputStream out,
 		final String encoding,
 		final boolean writeDocumentHeader) throws IOException {
-		_scp.setXmlStreamWriter(new DefXmlWriter(out,encoding,writeDocumentHeader));
+		_scp.setXmlStreamWriter(
+			new DefXmlWriter(out,encoding,writeDocumentHeader));
 	}
 
 	@Override
@@ -886,7 +887,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final void setStreamWriter(final Writer out,
 		final String encoding,
 		final boolean writeDocumentHeader) {
-		_scp.setXmlStreamWriter(new DefXmlWriter(out,encoding,writeDocumentHeader));
+		_scp.setXmlStreamWriter(
+			new DefXmlWriter(out,encoding,writeDocumentHeader));
 	}
 
 	@Override
@@ -969,13 +971,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get name of actual node.
 	 * @return The name of node.
 	 */
-	public String getNodeName() {return "#document";}
+	public final String getNodeName() {return "#document";}
 
 	@Override
 	/** Get namespace URI of actual node.
 	 * @return namespace URI or <tt>null</tt>.
 	 */
-	public String getNodeURI() {return null;}
+	public final String getNodeURI() {return null;}
 
 	/** Get text value of this node.
 	 * @return The name of node.
@@ -1077,13 +1079,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param x array with special values of valid dates.
 	 */
 	public final void setSpecialDates(final SDatetime[] x) {_specialDates = x;}
-
 	@Override
 	/** Set if year of date will be checked for interval minYear..maxYear.
 	 * @param x if true year of date will be checked.
 	 */
 	public final void checkDateLegal(final boolean x){_stopCheckDateLegal = !x;}
-
 	@Override
 	/** Print reports to PrintStream.
 	 * @param out PrintStream where reports are printed.
@@ -1091,7 +1091,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final void printReports(final java.io.PrintStream out) {
 		getReportWriter().getReportReader().printReports(out);
 	}
-
 	@Override
 	/** Get actual source language used for thesaurus.
 	 * @return string with actual language.
@@ -1100,7 +1099,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return _sourceLanguageID < 0 ? null
 		: ((XPool) getXDPool())._thesaurus.getLanguages()[_sourceLanguageID];
 	}
-
 	@Override
 	/** Set actual source language used for thesaurus.
 	 * @param language string with language or null.
@@ -1122,7 +1120,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			throw new SRuntimeException(XDEF.XDEF142, ""+language);
 		}
 	}
-
 	@Override
 	/** Get actual destination language used for thesaurus.
 	 * @return string with actual language.
@@ -1132,7 +1129,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: ((XPool) getXDPool())
 			._thesaurus.getLanguages()[_destLanguageID];
 	}
-
 	@Override
 	/** Set actual destination language used for thesaurus.
 	 * @param language string with language or null.
@@ -1154,6 +1150,26 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			//specified in thesaurus
 			throw new SRuntimeException(XDEF.XDEF143, ""+language);
 		}
+	}
+
+	@Override
+	/** Store  model variable.
+	 * @param name name of variable.
+	 * @return loaded value.
+	 */
+	final XDValue loadModelVariable(final String name) {
+		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
+			"Unknown 'model' variable "+name);
+	}
+
+	@Override
+	/** Store model variable.
+	 * @param name name of variable.
+	 * @param val value to be stored.
+	 */
+	final void storeModelVariable(final String name, final XDValue val) {
+		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
+			"Unknown variable "+name);
 	}
 
 }

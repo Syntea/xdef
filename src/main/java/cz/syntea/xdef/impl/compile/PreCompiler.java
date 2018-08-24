@@ -111,9 +111,9 @@ public interface PreCompiler {
 	 */
 	public String getNSURI(final int i);
 
-	/** Get namespace URI on given position.
-	 * @param i position
-	 * @return uri on this position or null.
+	/** Get namespace URI index of given uri.
+	 * @param uri uri to he found.
+	 * @return index of uri from argument.
 	 */
 	public int getNSURIIndex(final String uri);
 

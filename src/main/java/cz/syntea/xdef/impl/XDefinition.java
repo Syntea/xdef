@@ -22,6 +22,7 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.Thesaurus;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMElement;
+import cz.syntea.xdef.sys.SRuntimeException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -140,7 +141,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Get source position of this X-definition.
 	 * @return source ID of this X-definition..
 	 */
-	public SPosition getSourcePosition() {return _sourcePosition;}
+	public final SPosition getSourcePosition() {return _sourcePosition;}
 
 	@Override
 	/** Get all Element models from this X-definition.
@@ -215,13 +216,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * (see {@link cz.syntea.xd.XDConstants#XD2_0}
 	 * or {@link cz.syntea.xd.XDConstants#XD3_1}).
 	 */
-	public byte getXDVersion() {return _xdVersion;}
+	public final byte getXDVersion() {return _xdVersion;}
 
 	@Override
 	/** Get XML version of X-definition source.
 	 * @return XML version of X-definition source ("1.0" -> 10, "1.1" -> 11).
 	 */
-	public byte getXmlVersion() {return _xmlVersion;}
+	public final byte getXmlVersion() {return _xmlVersion;}
 
 	/** Add new XElement as model.
 	 * @param newModel XElement
@@ -314,7 +315,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return <tt>true</tt> if and only if the compared object is an
 	 * X-definition and if the name of it is equal to this.
 	 */
-	public boolean equals(final Object o) {
+	public final boolean equals(final Object o) {
 		if (o instanceof String) {
 			return getName().equals((String)o);
 		}
@@ -323,7 +324,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	public int hashCode() {return getName().hashCode();}
+	public final int hashCode() {return getName().hashCode();}
 
 	@Override
 	/** Get implementation properties of X-definition.
@@ -341,7 +342,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	final void writeXNode(final XDWriter xw,
+	public final void writeXNode(final XDWriter xw,
 		final ArrayList<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
 		writeXCodeDescriptor(xw);
@@ -371,9 +372,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		}
 	}
 
-	static XDefinition readXDefinition(XDReader xr,
-		XPool xp,
-		ArrayList<XNode> list) throws IOException {
+	final static XDefinition readXDefinition(final XDReader xr,
+		final XPool xp,
+		final ArrayList<XNode> list) throws IOException {
 		SPosition sourcePos = xr.readSPosition();
 		if (xr.readShort() != XNode.XMDEFINITION) {//must be X-definition
 			//SObject reader: incorrect format of data&{0}{: }
@@ -405,5 +406,15 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			x._xElements.add(XElement.readXElement(xr, x, list));
 		}
 		return x;
+	}
+
+	@Override
+	/** Add node as child.
+	 * @param xnode The node to be added.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final void addNode(final XNode xnode) {
+		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
+			"Attempt to add node to ScriptCodeDescriptor");
 	}
 }

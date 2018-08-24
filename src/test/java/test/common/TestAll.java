@@ -67,7 +67,6 @@ public class TestAll {
 			new TestXml(),
 			new TestKDOMBuilder(),
 			new TestKXmlUtils(),
-			new TestKDOMBuilder(),
 			new TestXmOutStream(),
 			// BNF
 			new TestBNF(),

@@ -33,15 +33,12 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.impl.compile.CompileXDPool;
-import cz.syntea.xdef.impl.debug.ChkGUIDebug;
+import cz.syntea.xdef.impl.debug.ChkGUIDisplay;
 import cz.syntea.xdef.impl.debug.XEditor;
-//import cz.syntea.xd.impl.compile.CompileParser;
-//import cz.syntea.xd.impl.compile.CompileXDPool;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -64,7 +61,7 @@ public class XBuilder implements XDBuilder {
 	 * @param extObjects The array of classes where are available methods
 	 * referred from definitions (may be <tt>null</tt>).
 	 */
-	public XBuilder(Properties props, final Class<?>... extObjects) {
+	public XBuilder(final Properties props, final Class<?>... extObjects) {
 		_xp = new XPool(props, null, extObjects);
 	}
 
@@ -78,7 +75,7 @@ public class XBuilder implements XDBuilder {
 	 * @param sourceId name of source source data corresponding to
 	 * the argument source (may be null).
 	 */
-	public void setSource(final String source, final String sourceId) {
+	public final void setSource(final String source, final String sourceId) {
 		_xp.setSource(source, sourceId);
 	}
 
@@ -90,7 +87,7 @@ public class XBuilder implements XDBuilder {
 	 * of files.
 	 * @param sources The string with sources.
 	 */
-	public void setSource(final String... sources) {
+	public final void setSource(final String... sources) {
 		_xp.setSource(sources, null);
 	}
 
@@ -105,7 +102,8 @@ public class XBuilder implements XDBuilder {
 	 * the sources argument (any item or even this argument
 	 * may be <tt>null</tt>).
 	 */
-	public void setSource(final String[] sources, final String[] sourceIds) {
+	public final void setSource(final String[] sources,
+		final String[] sourceIds) {
 		_xp.setSource(sources, sourceIds);
 	}
 
@@ -113,22 +111,22 @@ public class XBuilder implements XDBuilder {
 	/** Add files with source data of  X-definitions or collections.
 	 * @param sources array of files with sources.
 	 */
-	public void setSource(final File... sources) {_xp.setSource(sources);}
+	public final void setSource(final File... sources) {_xp.setSource(sources);}
 
 	@Override
 	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
 	 */
-	public void setSource(final URL... sources) {_xp.setSource(sources);}
+	public final void setSource(final URL... sources) {_xp.setSource(sources);}
 
 	@Override
 	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
-	 * @param sourceId array of names of source source data corresponding to
-	 * streams from the argument sources (any item or even this argument
+	 * @param sourceId name of source source data corresponding to
+	 * stream from the argument sources (any item or even this argument
 	 * may be <tt>null</tt>).
 	 */
-	public void setSource(final InputStream source, final String sourceId) {
+	public final void setSource(final InputStream source, final String sourceId) {
 		_xp.setSource(source, sourceId);
 	}
 
@@ -138,7 +136,7 @@ public class XBuilder implements XDBuilder {
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument (any item may be null).
 	 */
-	public void setSource(final InputStream sources[],
+	public final void setSource(final InputStream sources[],
 		final String sourceIds[]) {
 		_xp.setSource(sources, sourceIds);
 	}
@@ -147,14 +145,16 @@ public class XBuilder implements XDBuilder {
 	/** Set external classes with external methods.
 	 * @param ext array of classes with external methods.
 	 */
-	public void setExternals(Class<?>... ext) {_xp._compiler.setExternals(ext);}
+	public final void setExternals(final Class<?>... ext) {
+		_xp._compiler.setExternals(ext);
+	}
 
 	@Override
 	/** Set reporter. This method is should be used only for incremental
 	 * message reporting. The reporter must be set before setting sources.
 	 * @param reporter the reporter to be set to this builder.
 	 */
-	public void setReporter(final ReportWriter reporter) {
+	public final void setReporter(final ReportWriter reporter) {
 		if (reporter != null) {
 			_xp._compiler.setReportWriter(reporter);
 		}
@@ -164,28 +164,13 @@ public class XBuilder implements XDBuilder {
 	/** Get compiler.
 	 * @return created XDefPool.
 	 */
-	public CompileXDPool getCompiler() {
-		return _xp._compiler;
-	}
+	public final CompileXDPool getCompiler() {return _xp._compiler;}
 
 	@Override
 	/** Build XDefPool from prepared sources.
 	 * @return created XDefPool.
 	 */
-	public XDPool compileXD() {return build();}
-
-	@Override
-	/** Set class loader. The class loader must be set before setting sources.
-	 * @param loader class loader.
-	 */
-	public void setClassLoader(final ClassLoader loader) {
-		_xp._compiler.setClassLoader(loader);
-	}
-
-	/** Build XPool from prepared sources.
-	 * @return created XPool.
-	 */
-	final XPool build() {
+	public final XDPool compileXD() {
 		XPool result;
 		if ((result = _xp) == null || result._compiler == null) {
 			//XDefPool object was already built
@@ -194,72 +179,87 @@ public class XBuilder implements XDBuilder {
 		_xp = null;
 		CompileXDPool p = result._compiler;
 		result._compiler = null;
-		if (result._reporter == null) {
-			p.compileXPool(result);
-			ReportWriter reporter = p.getReportWriter();
-			boolean display = result.getDisplayMode() == XPool.DISPLAY_TRUE
-				|| reporter.errorWarnings()
-				&& (result.getDisplayMode() == XPool.DISPLAY_ERRORS
-				 || result.isDebugMode());
-			if (display) {
-				Class<?>[] externals = p.getExternals(); //save external classes
-				ArrayReporter ar = (ArrayReporter) reporter;
-				XEditor edit = null;
-				try {
-					String debugEditor = result.getDebugEditor();
-					if (debugEditor != null) {
-						Class<?> cls = Class.forName(debugEditor);
-						Constructor<?> c = cls.getDeclaredConstructor(
-							Properties.class, XDPool.class);
-						XDDebug debugger = (XDDebug) c.newInstance(null,result);
-						edit = debugger.getXEditor();
-					}
-				} catch (Exception ex) {
-					edit = null;
-					// Class with the external debug editor &{0}{"}{"}
-					// is not available.
-					throw new SRuntimeException(
-						XDEF.XDEF850, ex, result.getDebugEditor());
+		ReportWriter userReporter = result._reporter; // user's reporter
+		result._reporter = null;
+//		if (result._reporter == null
+//			|| result._reporter instanceof ArrayReporter) {
+		p.compileXPool(result);
+		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
+		byte displayMode = result.getDisplayMode();
+		boolean display = displayMode == XPool.DISPLAY_TRUE
+			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));
+		if (display) {
+			Class<?>[] externals = p.getExternals(); //save external classes
+			ArrayReporter ar = (ArrayReporter) reporter;
+			XEditor xeditor = null;
+			try {
+				String xdefEditor = result.getXdefEditor();
+				if (xdefEditor != null) {
+					Class<?> cls = Class.forName(xdefEditor);
+					Constructor<?> c = cls.getDeclaredConstructor();
+					c.setAccessible(true);
+					xeditor = (XEditor) c.newInstance();
 				}
-				if (edit == null) {
-					edit = new ChkGUIDebug(null, result).getXEditor();
-				}
-				for (;;) {
-					Map<String, XDSourceItem> map = result._sourcesMap;
-					if (edit.setXEditor(result, ar)) {
-						break;
-					}
-					result = new XPool(result.getProperties(),null, externals);
-					for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
-						String key = e.getKey();
-						XDSourceItem src = e.getValue();
-						if (src._source != null) {
-							result.setSource(src._source, key);
-							result._sourcesMap.put(key, src);
-						} else if (src._url != null) {
-							result.setSource(src._url);
-						}
-					}
-					p = result._compiler;
-					p.compileXPool(result);
-					result._compiler = null;
-					ar = (ArrayReporter) p.getReportWriter();
-				}
+			} catch (Exception ex) {
+				xeditor = null;
+				// Class with the external debug editor &{0}{"}{"}
+				// is not available.
+				throw new SRuntimeException(
+					XDEF.XDEF850, ex, result.getXdefEditor());
 			}
+			if (xeditor == null) {
+				xeditor = new ChkGUIDisplay();
+			}
+			while(!xeditor.setXEditor(result, ar)) {
+				// compile again
+				Map<String, XDSourceItem> map = result._sourcesMap;
+				result = new XPool(result.getProperties(),null, externals);
+				// update source map (something might be changed)
+				for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
+					String key = e.getKey();
+					XDSourceItem src = e.getValue();
+					if (src._source != null) {
+						result.setSource(src._source, key);
+						result._sourcesMap.put(key, src);
+					} else if (src._url != null) {
+						result.setSource(src._url);
+					}
+				}
+				// compile again
+				p = result._compiler;
+				p.compileXPool(result);
+				ar = (ArrayReporter) p.getReportWriter();
+				result._compiler = null;
+			}
+			if (userReporter == null && result.isChkWarnings()
+				&& !reporter.errors()) {
+				// because warnings were already dispalyed we clear reporter to
+				// prevent to throw an exception if only warnings are reported.
+				reporter.clear();
+			}
+		}
+		if (userReporter == null) {
 			if (result.isChkWarnings()) {
 				p.getReportWriter().checkAndThrowErrorWarnings();
 			} else {
 				p.getReportWriter().checkAndThrowErrors();
 			}
-		} else {
-			try {
-				p.compileXPool(result);
-			} catch (Exception ex) {
-				result._reporter.putReport(new Report(ex));
+		} else if (reporter != userReporter) {
+			Report rep;
+			while ((rep = reporter.getReport()) != null) {
+				userReporter.putReport(rep);
 			}
 		}
 		result.clearSourcesMap(!result.isDebugMode());
 		return result;
+	}
+
+	@Override
+	/** Set class loader. The class loader must be set before setting sources.
+	 * @param loader class loader.
+	 */
+	public final void setClassLoader(final ClassLoader loader) {
+		_xp._compiler.setClassLoader(loader);
 	}
 
 	/** Parse XML with X-definition declared in source input stream.
@@ -268,7 +268,7 @@ public class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDDocument xparse(final InputStream source,
+	public final static XDDocument xparse(final InputStream source,
 		final ReportWriter reporter) throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument(new Class<?>[0], null);
 		chkdoc.xparse(source, null, reporter);
@@ -281,7 +281,7 @@ public class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDDocument xparse(final String source,
+	public final static XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument(new Class<?>[0], null);
 		chkdoc.xparse(source, reporter);
@@ -296,12 +296,12 @@ public class XBuilder implements XDBuilder {
 	 * @param source source X-definition ()
 	 * @return created XDPool object.
 	 */
-	static XPool build(final Properties props,
+	static final XPool build(final Properties props,
 		final Class<?>[] extObjects,
 		final URL source) {
 		XBuilder xb = new XBuilder(props, extObjects);
 		xb.setSource(source);
-		return xb.build();
+		return (XPool) xb.compileXD();
 	}
 
 	/** Create XDValue object.
@@ -323,7 +323,7 @@ public class XBuilder implements XDBuilder {
 	 * @throws RuntimeException if the object from argument is not possible
 	 * to convert to XDValue object.
 	 */
-	public static XDValue createXDValue(final Object obj) {
+	public final static XDValue createXDValue(final Object obj) {
 		if (obj == null) {
 			return new DefNull();
 		} else if (obj instanceof XDValue) {

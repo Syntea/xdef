@@ -167,7 +167,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** XPath function resolver. */
 	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
 		@Override
-		public XPathFunction resolveFunction(QName functionName, int arity) {
+		public XPathFunction resolveFunction(final QName functionName,
+			final int arity) {
 			return null;
 		}
 	};
@@ -175,7 +176,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** XPath variable resolver. */
 	XPathVariableResolver _variableResolver = new XPathVariableResolver() {
 		@Override
-		public final Object resolveVariable(QName qname) {
+		public final Object resolveVariable(final QName qname) {
 			String name = qname.toString();
 			String uri;
 			if ((uri = qname.getNamespaceURI()) == null || uri.length() == 0) {
@@ -208,7 +209,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	};
 
 	/** Get root XDefinition. */
-	XDefinition getXDefinition() {return _xd;}
+	final XDefinition getXDefinition() {return _xd;}
 
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd XDefinition.
@@ -263,7 +264,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	 * @param value value of property or null. If the value is null the property
 	 * is removed from properties.
 	 */
-	public void setProperty(final String key, final String value) {
+	public final void setProperty(final String key, final String value) {
 		if ("xdef.debug".equals(key)) {
 			_debug = "true".equals(value);
 		}
@@ -457,7 +458,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		return false;
 	}
 
-	final void closeResultSet(XDResultSet x) {
+	final void closeResultSet(final XDResultSet x) {
 		if (x != null && !x.isClosed() && !isInInGlobals(x)) {
 			x.close();
 		}
@@ -466,7 +467,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Close items in final list (if present).
 	 * @param finalList array of items in final list or null.
 	 */
-	final void closeFinalList(ArrayList<XDValue> finalList) {
+	final void closeFinalList(final ArrayList<XDValue> finalList) {
 		// if final list not exists, do nothing
 		if (finalList == null) {
 			return;
@@ -615,7 +616,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Set XML output stream.
 	 *  @param stream XML output stream to be set.
 	 */
-	final void setXmlStreamWriter(XDXmlOutStream stream) {_outWriter = stream;}
+	final void setXmlStreamWriter(final XDXmlOutStream stream) {
+		_outWriter = stream;
+	}
 
 	/** Get XML output stream.
 	 *  @return the XML output stream.
@@ -659,13 +662,13 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		}
 	}
 
-	private void putError(ChkNode chkNode, long id) {
+	private void putError(final ChkNode chkNode, final long id) {
 		putReport(chkNode, Report.error(id));
 	}
-	private void putError(ChkNode chkNode, long id, String mod) {
+	private void putError(final ChkNode chkNode,final long id,final String mod){
 		putReport(chkNode, Report.error(id, mod));
 	}
-	private void putReport(ChkNode chkNode, Report rep) {
+	private void putReport(final ChkNode chkNode, final Report rep) {
 		updateReport(rep, chkNode);
 		_reporter.putReport(rep);
 	}
@@ -3234,7 +3237,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	 * @param chkNode processed XXNode.
 	 * @return new program counter of catch block.
 	 */
-	private int genDefException(int pc, Throwable ex, XXNode xNode) {
+	private int genDefException(final int pc,
+		final Throwable ex,
+		final XXNode xNode) {
 //		_catchItem.setThrownAddr(pc);
 		int result = _catchItem.getCatchAddr();
 		_localVariables = _catchItem.getVariables();
@@ -3346,7 +3351,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	 * @param obj user object.
 	 * @return previous value of the object or <tt>null</tt>.
 	 */
-	Object setUserObject(String id, Object obj) {
+	final Object setUserObject(final String id, final Object obj) {
 		return _userObjects.put(id, obj);
 	}
 
@@ -3354,13 +3359,17 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	Object removeUserObject(String id) {return _userObjects.remove(id);}
+	final Object removeUserObject(final String id) {
+		return _userObjects.remove(id);
+	}
 
 	/** Get named user object.
 	 * @param id identifier of the object.
 	 * @return value of the object or <tt>null</tt>.
 	 */
-	public Object getUserObject(String id) {return _userObjects.get(id);}
+	public final Object getUserObject(final String id) {
+		return _userObjects.get(id);
+	}
 
 	/** This method is revoked if an exception is thrown when x-script
 	 * is processed and process X-definition is to be finished with fatal error.
@@ -3506,7 +3515,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		@Override
 		public final short getItemId() {return XDValueID.XD_ANY;}
 		@Override
-		public XDValueType getItemType() {return XDValueType.OBJECT;}
+		public final XDValueType getItemType() {return XDValueType.OBJECT;}
 
 		////////////////////////////////////////////////////////////////////////
 		// XDCallItem methods

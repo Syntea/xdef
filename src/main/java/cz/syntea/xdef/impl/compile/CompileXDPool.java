@@ -2307,7 +2307,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				continue;
 			}
 			result &= resolveReference(y, level+1,
-				ingnoreOccurrence && xel.minOccurs() != XOccurrence.UNDEFINED,
+				ingnoreOccurrence && xel.isSpecified(),
 				hs);
 			int leny = y._childNodes.length;
 			boolean isList = y.getName().endsWith("!list");

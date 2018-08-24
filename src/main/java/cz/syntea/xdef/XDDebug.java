@@ -76,15 +76,11 @@ public interface XDDebug {
 	/** Event "onExcess" in selector. */
 	public static final char SELECTORONEXCESS = 'p';
 
-	/** Set input and output streams from Properties.
-	 * @param props Properties or null.
-	 */
-	public void init(Properties props);
-
 	/** Open debugger.
+	 * @param props Properties or null.
 	 * @param xp XDPool.
 	 */
-	public void openDebugger(XDPool xp);
+	public void openDebugger(Properties props, XDPool xp);
 
 	/** Close debugger */
 	public void closeDebugger();

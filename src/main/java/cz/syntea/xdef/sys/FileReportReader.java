@@ -171,7 +171,7 @@ public class FileReportReader implements ReportReader {
 	 * @return The report or null.
 	 * @throws SRuntimeException if error occurs.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		if (_parser != null) {
 			if (_parser.eos()) {
 				close();
@@ -262,7 +262,7 @@ public class FileReportReader implements ReportReader {
 
 	@Override
 	/* Close the stream. */
-	public void close() {
+	public final void close() {
 		if (_reader != null) {
 			try {
 				_reader.close();
@@ -279,7 +279,7 @@ public class FileReportReader implements ReportReader {
 	/** Write reports to String.
 	 * @return the String with reports.
 	 */
-	public String printToString() {
+	public final String printToString() {
 		return printToString(null);
 	}
 
@@ -288,7 +288,7 @@ public class FileReportReader implements ReportReader {
 	 * @param language language id (ISO-639).
 	 * @return the String with reports.
 	 */
-	public String printToString(final String language) {
+	public final String printToString(final String language) {
 		StringBuilder sb = new StringBuilder();
 		Report rep;
 		boolean wasFirst = false;
@@ -303,27 +303,40 @@ public class FileReportReader implements ReportReader {
 		}
 		return sb.toString();
 	}
+
 	@Override
 	/** Write reports to output stream.
 	 * @param out The PrintStream where reports are printed.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void printReports(final PrintStream out) {
+	public final void printReports(final PrintStream out) {
 		Report rep;
 		while ((rep = getReport()) != null) {
 			out.println(rep.toString());
 		}
 	}
+
 	@Override
 	/** Write reports to output stream.
 	 * @param out The PrintStream where reports are printed.
 	 * @param language language id (ISO-639).
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void printReports(final PrintStream out, final String language) {
+	public final void printReports(final PrintStream out,final String language){
 		Report rep;
 		while ((rep = getReport()) != null) {
 			out.println(rep.toString(language));
+		}
+	}
+
+	@Override
+	/** Write reports from this reporter reader to report writer.
+	 * @param reporter OutputStreamWriter where to write,
+	 */
+	public final void writeReports(final ReportWriter reporter) {
+		Report rep;
+		while((rep = getReport()) != null) {
+			reporter.putReport(rep);
 		}
 	}
 

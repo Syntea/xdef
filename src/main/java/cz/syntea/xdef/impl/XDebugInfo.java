@@ -41,7 +41,7 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @param varTable local variables table.
 	 * @return index of debug info item or -1.
 	 */
-	public int addInfo(SPosition spos,
+	public final int addInfo(final SPosition spos,
 		final String defName,
 		final int codeAdr,
 		final XVariable[] varTable) {
@@ -99,7 +99,7 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @param addr code address.
 	 * @return XMStatementInfo object.
 	 */
-	public XMStatementInfo getStatementInfo(int addr) {
+	public final XMStatementInfo getStatementInfo(final int addr) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo si = _statementList.get(i);
 			if (addr >= si.getAddr()) {
@@ -117,7 +117,7 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @return array XMStatementInfo objects (if no statement information
 	 * is found the array is empty).
 	 */
-	public XMStatementInfo[] getStatementInfo(final long line,
+	public final XMStatementInfo[] getStatementInfo(final long line,
 		final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo x = _statementList.get(i);
@@ -150,10 +150,10 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @param xdName name of X-definition (may be null).
 	 * @return XMStatementInfo object or null.
 	 */
-	public XMStatementInfo getStatementInfo(long line,
-		long column,
-		String sysId,
-		String xdName) {
+	public final XMStatementInfo getStatementInfo(final long line,
+		final long column,
+		final String sysId,
+		final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo inf = _statementList.get(i);
 			String n1 = inf.getXDName();
@@ -209,7 +209,7 @@ public class XDebugInfo implements XMDebugInfo {
 	/** Get array of all statement information objects.
 	 * @return array of XMStatementInfo objects.
 	 */
-	public XMStatementInfo[] getStatementInfo() {
+	public final XMStatementInfo[] getStatementInfo() {
 		XStatementInfo[] result = new XStatementInfo[_statementList.size()];
 		_statementList.toArray(result);
 		return result;
@@ -237,7 +237,7 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @param si XMStatementInfo object or null.
 	 * @return previous XMStatementInfo object before argument or null.
 	 */
-	public XMStatementInfo prevStatementInfo(XMStatementInfo si) {
+	public final XMStatementInfo prevStatementInfo(final XMStatementInfo si) {
 		if (si != null) {
 			for (int i = 0; i < _statementList.size(); i++) {
 				if (si == _statementList.get(i)) {
@@ -248,7 +248,7 @@ public class XDebugInfo implements XMDebugInfo {
 		return null;
 	}
 
-	void writeXD(XDWriter xw) throws IOException {
+	final void writeXD(final XDWriter xw) throws IOException {
 		int size = _varTables == null ? 0 :_varTables.length;
 		xw.writeInt(size);
 		for (int i = 0; i < size; i++) {
@@ -284,7 +284,8 @@ public class XDebugInfo implements XMDebugInfo {
 			column, spos, xdName, codeAdr, varTableIndex);
 	}
 
-	static XDebugInfo readXDebugInfo(XDReader xr) throws IOException {
+	final static XDebugInfo readXDebugInfo(final XDReader xr)
+		throws IOException {
 		XDebugInfo xdi = new XDebugInfo();
 		int size = xr.readInt();
 		XVariable[][] tab = new XVariable[size][0];
@@ -360,7 +361,8 @@ public class XDebugInfo implements XMDebugInfo {
 			}
 		}
 
-		private boolean equalVartab(XMVariable[] tab1, XMVariable[] tab2) {
+		private boolean equalVartab(final XMVariable[] tab1,
+			final XMVariable[] tab2) {
 			int size = tab1.length;
 			if (tab2.length != size) {
 				return false;
@@ -373,7 +375,7 @@ public class XDebugInfo implements XMDebugInfo {
 			return true;
 		}
 
-		private int getVartabIndex(XVariable[] varTable) {
+		private int getVartabIndex(final XVariable[] varTable) {
 			if (varTable == null || varTable.length == 0) {
 				return 0;
 			}
@@ -389,29 +391,29 @@ public class XDebugInfo implements XMDebugInfo {
 			return old.length;
 		}
 		@Override
-		public String getSysId() {return _sysId;}
+		public final String getSysId() {return _sysId;}
 		@Override
-		public long getColumn() {return _column;}
+		public final long getColumn() {return _column;}
 		@Override
-		public long getLine() {return _line;}
+		public final long getLine() {return _line;}
 		@Override
-		public long getEndColumn() {return _end_column;}
+		public final long getEndColumn() {return _end_column;}
 		@Override
-		public void updateEndPos(long line, long column) {
+		public final void updateEndPos(final long line, final long column) {
 			_end_line = line;
 			_end_column = column;
 		}
 		@Override
-		public long getEndLine() {return _end_line;}
+		public final long getEndLine() {return _end_line;}
 		@Override
-		public int getAddr() {return _codeAdr;}
+		public final int getAddr() {return _codeAdr;}
 		@Override
 		/** Get name of X-definition.
 		 * @return name of X-definition.
 		 */
-		public String getXDName() {return _xdName;}
+		public final String getXDName() {return _xdName;}
 		@Override
-		public XMVariable[] getLocalVariables() {
+		public final XMVariable[] getLocalVariables() {
 			return _varTableIndex < 0 ? null : _varTables[_varTableIndex];
 		}
 		@Override
@@ -419,7 +421,7 @@ public class XDebugInfo implements XMDebugInfo {
 			return (int) (11*_codeAdr + 7*(_line + 5*(_column+_varTableIndex)));
 		}
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 			if (obj == null || !(obj instanceof XStatementInfo)) {
 				return false;
 			}
@@ -451,7 +453,7 @@ public class XDebugInfo implements XMDebugInfo {
 			return s;
 		}
 
-		boolean posIn(long line, long column) {
+		final boolean posIn(final long line, final long column) {
 			if (_end_line == -1) {
 				return line == _line
 					&& column >= _column  && column <= _column+2;
@@ -465,11 +467,11 @@ public class XDebugInfo implements XMDebugInfo {
 			return line <= _end_line;
 		}
 
-		int comparePos(XStatementInfo x) {
+		final int comparePos(final XStatementInfo x) {
 			return comparePos(x._line, x._column);
 		}
 
-		int comparePos(long line, long column) {
+		final int comparePos(final long line, final long column) {
 			if (_line < line) {
 				return -1;
 			}

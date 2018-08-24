@@ -43,8 +43,7 @@ public class GenXDef implements KXmlConstants {
 		}
 	}
 
-	private static class XModel {
-		final private String _name;
+	private static class XModel {final private String _name;
 		final private String _nsuri;
 		private final Map<String, XAtt> _atts = new TreeMap<String, XAtt>();
 		private final List<XModel> _models = new ArrayList<XModel>();
