@@ -8,11 +8,11 @@
 	
 	<groupId>cz.syntea.xdefinition</groupId>
 	<artifactId>syntea-xdefinition-OSS</artifactId>
-	<version>3.1.4.4</version><!-- se zmenou version zmenit take pom.xml/project/properties/release.date nize -->
+	<version>3.1.4.4</version><!-- when changed, change also pom.xml/project/properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
 	<name>syntea-xdefinition-OSS</name>
-	<!-- ve formatovani java.util.Properties, vklada se do properties-souboru -->
+	<!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
 	<description>XDefinition 3.1 (Open Source Software)</description>
 	
 	<properties>
@@ -30,17 +30,10 @@
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.2.3</logback.version>
 		<testng.version>6.14.3</testng.version>
-		
-		<projectId>syntea-xdefinition-OSS</projectId>
-		<!-- odkaz do hlavniho(root) adresare projektu -->
-		<main.basedir>${project.basedir}/..</main.basedir>
 	</properties>
 	
 	<dependencies>
-		<!-- syntea -->
-		<!-- nic -->
-		
-		<!-- treti strany -->
+		<!-- third parties -->
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>Saxon-HE</artifactId>
@@ -48,13 +41,23 @@
 			<classifier>xqj</classifier>
 		</dependency>
 		
-		<!-- pro test -->
-		<!-- treti strany -->
+		<!-- test-phase -->
+		<!-- ========== -->
+		
+		<!-- core -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- third parties -->
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>Saxon-HE</artifactId>
 			<version>${saxon-he.version}</version>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -63,7 +66,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- logovani -->
+		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -73,14 +76,14 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>        
-			<scope>runtime</scope>
+			<version>${logback.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.sbabcoc</groupId>
 			<artifactId>logback-testng</artifactId>
 			<version>1.0.0</version>
-			<scope>runtime</scope>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>ch.qos.logback</groupId>
@@ -89,13 +92,6 @@
 			</exclusions>
 		</dependency>
 		
-		<!-- junit-test -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${testng.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	
 	<build>
