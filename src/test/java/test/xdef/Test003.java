@@ -222,10 +222,10 @@ public final class Test003 extends XDefTester {
 			isr.close();
 			lst.close();
 		} catch (Exception ex) {fail(ex);}
-		if (XDefTester.getFulltestMode()) {
+		if (getFulltestMode()) {
 			try { // test big XML
 				xdef =
-	"<xd:def xmlns:xd='" + test.util.XDefTester.XDEFNS + "' xd:root=\"koně\">\n"+
+	"<xd:def xmlns:xd='" + XDEFNS + "' xd:root=\"koně\">\n"+
 	"\n"+
 	"  <koně>\n"+
 	"    <kůň xd:script = \"occurs *; forget\"\n" +

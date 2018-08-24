@@ -35,8 +35,6 @@ import org.xml.sax.SAXException;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.util.XdefToXsd;
 
-import static test.util.STester.runTest;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
