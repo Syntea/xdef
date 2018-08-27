@@ -32,7 +32,7 @@ public class XDParseCHKID extends XSParseQName {
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
 			result.error(XDEF.XDEF573, //Null value of &{0}"
-				"xnode; in XSParseENTITY.check(parser, xnode);");
+				"xnode in XDParseCHKID.finalCheck(parser, xnode);");
 			return;
 		}
 		String id = result.getSourceBuffer();

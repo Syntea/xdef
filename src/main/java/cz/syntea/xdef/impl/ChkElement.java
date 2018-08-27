@@ -13,7 +13,7 @@
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefBoolean;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
@@ -26,6 +26,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueType;
 import cz.syntea.xdef.proc.XXData;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
@@ -54,6 +56,7 @@ import org.w3c.dom.NodeList;
  * @author Vaclav Trojan
  */
 public final class ChkElement extends ChkNode implements XXElement, XXData {
+
 	/** Text value (of actual text node or attribute). It is used
 	 * for communication with the XScript interpreter.
 	 * Important note: it should be cleared after invocation of
@@ -104,6 +107,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private XComponent _xComponent;
 	/** Model of the processed data object.*/
 	XMData _xdata;
+
+	/** The set containing marked unique sets. */
+	final Set<CodeUniqueset> _markedUniqueSets =
+		new HashSet<CodeUniqueset>();
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
 	 * @param xelement The definition of element.
@@ -1506,13 +1513,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Get maximal index of definition in the list.
 	 * @return Max index of definition list.
 	 */
-	public final int getDefinitionMaxIndex() {return _defList.length;}
+	final int getDefinitionMaxIndex() {return _defList.length;}
 
 	/** Add the new attribute to the current element.
 	 * @param att The object with attribute.
 	 * @return <tt>true</tt> if attribute was created according to definition.
 	 */
-	public final boolean newAttribute(final Attr att) {
+	final boolean newAttribute(final Attr att) {
 		_node = att;
 		boolean result = addAttributeNS(att.getNamespaceURI(),
 			att.getName(), att.getValue());
@@ -1673,27 +1680,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				"&{xpath}" + _xPos + "&{xdpos}" + getXDPosition());
 			return false;
 		}
-		XData xatt;
-		if (nsURI != null) {
-/*THESAURUS*/
-			xatt = getXAttr(nsURI, qname);
-/*THESAURUS*
-			int ndx = qname.indexOf(':');
-			xatt = _xElement.getDefAttrNS(nsURI, qname.substring(ndx + 1));
-			if (xatt == null && nsURI.equals(_element.getNamespaceURI())) {
-				XData xa =_xElement.getDefAttr(qname.substring(ndx + 1));
-				if (xa != null && xa._acceptQualifiedAttr == 'T') {
-					xatt = xa;
-				}
-			}
-/*THESAURUS*/
-		} else {
-/*THESAURUS*/
-			xatt = getXAttr(qname);
-/*THESAURUS*
-			xatt = _xElement.getDefAttr(qname);
-/*THESAURUS*/
-		}
+		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
 		if (xatt == null) {
 			xatt = _xElement.getDefAttr("$attr", -1); // any attr
 		}
@@ -2824,6 +2811,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Destruct ChkElement. */
 	private void closeChkElement() {//just let's gc do the job
 		_scp.closeFinalList(getFinalList()); // close objects from final list
+		for (CodeUniqueset x: _markedUniqueSets) {
+			String s = x.checkNotMarked(this);
+			if (!s.isEmpty()) {
+				//Not referred keys found in the uniqueSet &{0}&{1}{: }
+				error(XDEF.XDEF821, x.getName(), s);
+			}
+
+		}
 		if (_scp.getXmlStreamWriter() != null) {
 			//write the end of element if XML stream writer exists.
 			try {
@@ -2858,7 +2853,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (x != null && !x.isNull()
 					&& (x.getItemId() == CompileBase.UNIQUESET_VALUE
 					|| x.getItemId() == CompileBase.UNIQUESET_M_VALUE)) {
-					CodeUniqueSet y = (CodeUniqueSet)x;
+					CodeUniqueset y = (CodeUniqueset)x;
 					y.checkAndClear(_scp.getTemporaryReporter());
 				}
 				_variables[i] = null;
@@ -3366,6 +3361,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		 *	XML source.
 		 */
 		int addCount() {return ++_counter;}
+	}
+
+	public final void addMarkedUniqueset(XDUniqueset us) {
+		CodeUniqueset x = (CodeUniqueset) us;
+		_markedUniqueSets.add(x);
+		x.setMarker(this);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

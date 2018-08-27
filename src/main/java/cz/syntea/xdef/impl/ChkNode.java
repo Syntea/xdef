@@ -24,7 +24,6 @@ import cz.syntea.xdef.impl.code.DefLong;
 import cz.syntea.xdef.impl.code.DefDate;
 import cz.syntea.xdef.impl.code.DefElement;
 import cz.syntea.xdef.impl.code.DefDouble;
-import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;

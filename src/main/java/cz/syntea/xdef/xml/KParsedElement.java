@@ -68,7 +68,7 @@ public class KParsedElement {
 	/** Add attribute to the list.
 	 * @param item parsed attribute.
 	 * @return true if attribute was added.
-		 */
+	 */
 	public boolean addAttr(KParsedAttr item) {
 		if (_list == null) {
 			_list = new KParsedAttr[STEP];
@@ -115,16 +115,20 @@ public class KParsedElement {
 	}
 
 	/** Get attribute with given raw name from the list.
-	 * @param nsURI namespace URI.
-	 * @param localname local name.
+	 * @param nsURI name space URI.
+	 * @param name local name or qualified name.
 	 * @return attribute with given name or <tt>null</tt>.
 	 */
-	public KParsedAttr getAttrNS(final String nsURI, final String localname) {
+	public KParsedAttr getAttrNS(final String nsURI, final String name) {
 		int i;
-		if ((i = indexOfNS(nsURI, localname)) >= 0) {
-			return _list[i];
+		if (nsURI == null) {
+			i = indexOf(name);
+		} else {
+			i = name.indexOf(':');
+			String localname = i <= 0 ? name : name.substring(i + 1);
+			i = indexOfNS(nsURI, localname);
 		}
-		return null;
+		return i >= 0 ? _list[i] : null;
 	}
 
 	/** Get index of attribute with given raw name in the list.

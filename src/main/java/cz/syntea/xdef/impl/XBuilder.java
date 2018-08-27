@@ -56,7 +56,7 @@ public class XBuilder implements XDBuilder {
 
 	private XPool _xp;
 
-	/** Creates instance of XDefBuilder with properties and external objects.
+	/** Creates instance of XDBuilder with properties and external objects.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param extObjects The array of classes where are available methods
 	 * referred from definitions (may be <tt>null</tt>).
@@ -162,18 +162,18 @@ public class XBuilder implements XDBuilder {
 	}
 
 	/** Get compiler.
-	 * @return created XDefPool.
+	 * @return created XDPool.
 	 */
 	public final CompileXDPool getCompiler() {return _xp._compiler;}
 
 	@Override
-	/** Build XDefPool from prepared sources.
-	 * @return created XDefPool.
+	/** Build XDPool from prepared sources.
+	 * @return created XDPool.
 	 */
 	public final XDPool compileXD() {
-		XPool result;
-		if ((result = _xp) == null || result._compiler == null) {
-			//XDefPool object was already built
+		XPool result = _xp;
+		if (result == null || result._compiler == null) {
+			//XDPool object was already created
 			throw new SRuntimeException(XDEF.XDEF901);
 		}
 		_xp = null;

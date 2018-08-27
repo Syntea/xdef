@@ -13,6 +13,8 @@
  */
 package cz.syntea.xdef.impl.ext;
 
+import cz.syntea.xdef.XDBuilder;
+import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.BNFGrammar;
@@ -40,10 +42,17 @@ import java.util.StringTokenizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import cz.syntea.xdef.XDContainer;
+import cz.syntea.xdef.XDDocument;
+import cz.syntea.xdef.XDFactory;
+import cz.syntea.xdef.XDParser;
+import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValueID;
+import cz.syntea.xdef.impl.XPool;
+import cz.syntea.xdef.impl.code.CodeTable;
 import cz.syntea.xdef.impl.code.DefDate;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SUtils;
+import java.util.Properties;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -75,6 +84,7 @@ public final class XExtUtils {
 		prefix = (ndx = qname.indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
 		return getNSUri(prefix, elem);
 	}
+
 	/** Get name space URI of given prefix from the context of an element.
 	 * @param pfx string with the prefix.
 	 * @param elem the element.
@@ -97,9 +107,11 @@ public final class XExtUtils {
 			el = (Element) n;
 		}
 	}
+
 	public final static String getXPos(final XXNode xnode) {
 		return xnode.getXPos();
 	}
+
 	public final static String getXDPosition(final XXNode xnode) {
 		return xnode.getXMNode().getXDPosition();
 	}
@@ -117,9 +129,11 @@ public final class XExtUtils {
 		}
 		return pr;
 	}
+
 	public final static XDParseResult file(final XXData chkel) {
 		return file(chkel.getTextValue().trim());
 	}
+
 	private static XDParseResult fileList(final String s) {
 		XDParseResult pr = new DefParseResult(s);
 		StringTokenizer st = new StringTokenizer(s, ", \n\t\r"); // TODO space?
@@ -151,9 +165,11 @@ public final class XExtUtils {
 		}
 		return pr;
 	}
+
 	public final static XDParseResult url(final XXData chkel) {
 		return url(chkel.getTextValue());
 	}
+
 	public final static XDParseResult urlList(final XXData data) {
 		String s = data.getTextValue().trim();
 		XDParseResult pr;
@@ -181,9 +197,11 @@ public final class XExtUtils {
 		} while (st.hasMoreTokens());
 		return new DefParseResult(s, val);
 	}
+
 	public final static XDParseResult fileList(final XXData data) {
 		return fileList(data.getTextValue());
 	}
+
 	public final static XDParseResult uri(final String uri) {
 		String s = uri.trim();
 		XDParseResult pr = new DefParseResult(s.trim());
@@ -197,9 +215,11 @@ public final class XExtUtils {
 		}
 		return pr;
 	}
+
 	public final static XDParseResult uri(final XXData data) {
 		return uri(data.getTextValue().trim());
 	}
+
 	private static XDParseResult uriList(final String s) {
 		XDParseResult pr;
 		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
@@ -226,9 +246,11 @@ public final class XExtUtils {
 		} while (st.hasMoreTokens());
 		return new DefParseResult(t, val);
 	}
+
 	public final static XDParseResult uriList(final XXData data) {
 		return uriList(data.getTextValue());
 	}
+
 	private static XDParseResult email(final String email) {
 		//TODO this is just primitive test, implement syntax RFC2822!
 		String s = email.trim();
@@ -243,9 +265,11 @@ public final class XExtUtils {
 		}
 		return pr;
 	}
+
 	public final static XDParseResult email(final XXData data) {
 		return email(data.getTextValue());
 	}
+
 	private static XDParseResult emailList(final String s) {
 		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
 		if (!st.hasMoreTokens()) {
@@ -274,6 +298,7 @@ public final class XExtUtils {
 	public final static XDParseResult emailList(final XXData data) {
 		return emailList(data.getTextValue());
 	}
+
 	public final static XDParseResult checkBNF(final XXData data) {
 		String s = data.getTextValue();
 		XDParseResult pr = new DefParseResult(s);
@@ -288,6 +313,42 @@ public final class XExtUtils {
 		return pr;
 	}
 
+	public static XDParseResult xdType(XXData xdata) {
+		String s = xdata.getTextValue();
+		XDParseResult result = new DefParseResult(s);
+		try {
+			String xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A'>" +
+"<xd:declaration>" +
+"Parser x=" + xdata.getTextValue() + ";"+
+"</xd:declaration>" +
+"<A/>" +
+"</xd:def>";
+			Properties props = new Properties();
+			if (xdata.getXDPool().isChkWarnings()) {
+				props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
+					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+			}
+			XDPool xp = XDFactory.compileXD(props, xdef);
+			XDValue[] code  =((XPool) xp).getCode();
+			if (code.length == 3 && code[0].getCode() == 0
+				&& code[0].getItemId() == XDValueID.XD_PARSER
+				&& code[1].getCode() == CodeTable.ST_GLOBAL
+				&& code[2].getCode() == CodeTable.STOP_OP) {
+				result.setParsedValue(code[0]);
+				return result;
+			}
+			XDDocument xd = xp.createXDDocument();
+			xd.xparse("<A/>", null);
+			XDParser x = (XDParser) xd.getVariable("x");
+			result.setParsedValue(x);
+		} catch (Exception ex) {
+			// Value "&{0}" is not a valid value type specification
+			result.error(XDEF.XDEF817, s);
+		}
+		return result;
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.
 ////////////////////////////////////////////////////////////////////////////////
@@ -295,10 +356,29 @@ public final class XExtUtils {
 	public final static void cancel() {
 		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
 	}
+
 	public final static void cancel(final String msg) {
 		 //X-definition canceled&{0}{; }
 		throw new SError(Report.error(XDEF.XDEF906, msg));
 	}
+
+	public final static byte[] parseBase64(final String s) {
+		try {
+			return SUtils.decodeBase64(s);
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+
+	public final static byte[] parseHex(final String s) {
+		try {
+			return SUtils.decodeHex(s);
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////
 	public final static Element getParentContextElement(final XXElement xElem) {
 		XDValue val = ((XXElement) xElem.getParent()).getXDContext();
 		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {
@@ -306,6 +386,7 @@ public final class XExtUtils {
 		}
 		return val.getElement();
 	}
+
 	public final static Element getParentContextElement(final XXElement xElem,
 		final long level) {
 		if (level == 0) {
@@ -328,6 +409,7 @@ public final class XExtUtils {
 		}
 		return null;
 	}
+
 	public final static XDContainer fromParent(final XXElement elem,
 		final String expr){
 		XDValue val = elem.getParent().getXDContext();
@@ -341,10 +423,12 @@ public final class XExtUtils {
 			elem.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
+
 	public final static XDContainer fromParentContext(final XXElement e,
 		final String x) {
 		return fromParent(e, x);
 	}
+
 	public final static XDContainer fromRoot(final XXNode xElem,
 		final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
@@ -358,10 +442,12 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
+
 	public final static XDContainer fromRootContext(final XXNode xElem,
 		final String expr) {
 		return fromRoot(xElem, expr);
 	}
+
 	public final static XDContainer fromRoot(final XXElement xElem,
 		final String expr,
 		final Element elem) {
@@ -371,12 +457,16 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
+
 	public static XDContainer fromRootContext(final XXElement xElem,
 		final String expr,
 		final Element elem) {
 		return fromRoot(xElem, expr, elem);
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// datetime
+////////////////////////////////////////////////////////////////////////////////
 	public final static int getMaxYear(XXNode xnode) {
 		return xnode.getXDPool().getMaxYear();
 	}
@@ -405,22 +495,6 @@ public final class XExtUtils {
 			dates[i] = c.getXDItem(i).datetimeValue();
 		}
 		xnode.getXDDocument().setSpecialDates(dates);
-	}
-
-	public final static byte[] parseBase64(final String s) {
-		try {
-			return SUtils.decodeBase64(s);
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-
-	public final static byte[] parseHex(final String s) {
-		try {
-			return SUtils.decodeHex(s);
-		} catch (Exception ex) {
-			return null;
-		}
 	}
 
 	public final static SDatetime parseEmailDate(final String x) {
@@ -591,7 +665,9 @@ public final class XExtUtils {
 	public final static BigDecimal multiply(final BigDecimal a, final double b){
 		return a.multiply(new BigDecimal(b));
 	}
-	public final static BigDecimal negate(final BigDecimal a) {return a.negate();}
+	public final static BigDecimal negate(final BigDecimal a) {
+		return a.negate();
+	}
 	public final static BigDecimal plus(final BigDecimal a) {return a.plus();}
 	public final static BigDecimal pow(final BigDecimal a, final long b) {
 		return a.pow((int) b);
@@ -603,7 +679,7 @@ public final class XExtUtils {
 	public final static BigDecimal remainder(final BigDecimal a, final long b) {
 		return a.remainder(new BigDecimal(b));
 	}
-	public final static BigDecimal remainder(final BigDecimal a, final double b) {
+	public final static BigDecimal remainder(final BigDecimal a,final double b){
 		return a.remainder(new BigDecimal(b));
 	}
 	public final static BigDecimal round(final BigDecimal a) {
@@ -630,5 +706,6 @@ public final class XExtUtils {
 		return a.subtract(new BigDecimal(b));
 	}
 	public final static BigDecimal ulp(final BigDecimal a) {return a.ulp();}
+////////////////////////////////////////////////////////////////////////////////
 
 }

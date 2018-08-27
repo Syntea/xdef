@@ -39,9 +39,9 @@ import cz.syntea.xdef.impl.code.DefDouble;
 import cz.syntea.xdef.impl.code.DefLong;
 import cz.syntea.xdef.impl.code.DefNamedValue;
 import cz.syntea.xdef.impl.code.DefNull;
-import cz.syntea.xdef.impl.code.CodeParseItem;
+import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefString;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.XVariable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -612,6 +612,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 									_g.topToBool(); // force conversion!
 									break;
 								}
+							case XD_PARSER:
 							case XD_STRING:
 							case XD_DECIMAL:
 							case XD_INT:
@@ -3533,7 +3534,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			error(XDEF.XDEF450, name);//Redefinition of variable '&{0}'
 			name = CompileBase.genErrId(); // "UNDEF$$$";
 		}
-		List<CodeParseItem> keyItems = new ArrayList<CodeParseItem>();
+		List<CodeUniquesetParseItem> keyItems = new ArrayList<CodeUniquesetParseItem>();
 		CodeI1 jmp = null;
 		switch (nextSymbol()) {
 			case IDENTIFIER_SYM: { // type method
@@ -3665,7 +3666,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (keySize == 0) {
 			return; // an error should be reported in the code above.
 		}
-		CodeParseItem[] keys = keyItems.toArray(new CodeParseItem[keySize]);
+		CodeUniquesetParseItem[] keys = keyItems.toArray(new CodeUniquesetParseItem[keySize]);
 		boolean namedKey = keys[0].getParseName() != null;
 		CompileVariable var = _g.addVariable(name,
 			namedKey ? CompileBase.UNIQUESET_M_VALUE : varType, varKind);
@@ -3673,14 +3674,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		var.setParseResultType(keys[0].getParsedType());
 		if (varType == CompileBase.UNIQUESET_VALUE) {
 			CodeI1 lastStop = varKind == 'G' ? _g.getLastStop() : null;
-			CodeUniqueSet u = CodeUniqueSet.newInstance(keys, name);
+			CodeUniqueset u = new CodeUniqueset(keys, name);
 			var.setValue(new DefLong(0));
 			if (namedKey) {
 				var.setValue(new DefLong(-1));
 				var.setParseMethodAddr(-1);
 				var.setParseResultType(CompileBase.XD_UNDEF);
 				for (int i = 0; i < keys.length; i++) {
-					CodeParseItem key = keys[i];
+					CodeUniquesetParseItem key = keys[i];
 					String keyName = key.getParseName();
 					CompileVariable x = new CompileVariable(name+"."+keyName,
 						CompileBase.UNIQUESET_KEY_VALUE,
@@ -3709,12 +3710,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 	}
 
-	private boolean setKeyItem(final List<CodeParseItem> keyItems,
+	private boolean setKeyItem(final List<CodeUniquesetParseItem> keyItems,
 		final String name,
 		final int addr,
 		final short parsedType,
 		final boolean optional) {
-		for (CodeParseItem item: keyItems) {
+		for (CodeUniquesetParseItem item: keyItems) {
 			if (name == null || name.isEmpty()) {
 				if (item.getParseName() == null) {
 					return false;
@@ -3723,7 +3724,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return false;
 			}
 		}
-		keyItems.add(new CodeParseItem(name==null||name.isEmpty() ? null : name,
+		keyItems.add(new CodeUniquesetParseItem(name==null||name.isEmpty() ? null : name,
 			addr, keyItems.size(), parsedType,optional));
 		return true;
 	}
@@ -3762,6 +3763,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					_g.addCode(new CodeI1(XD_PARSERESULT, BNFRULE_PARSE, 1), 0);
 					_g.genStop();
 					break;
+				case XD_ANY:
 				case XD_PARSER: {
 					_g.addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 					_g.genStop();

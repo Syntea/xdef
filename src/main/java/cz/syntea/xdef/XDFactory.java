@@ -83,8 +83,23 @@ public final class XDFactory {
 	 * see {@link cz.syntea.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
-	public static XDBuilder getXDBuilder(Properties props) {
-		return new cz.syntea.xdef.impl.XBuilder(props);
+	public static XDBuilder getXDBuilder(final Properties props) {
+		return getXDBuilder(props, null);
+	}
+
+	/** Creates instance of XDBuilder with properties.
+	 * @param props Properties or <tt>null</tt> -
+	 * see {@link cz.syntea.xdef.XDConstants}.
+	 * @param reporter the ReportWriter to be used for error reporting.
+	 * @return created XDBuilder.
+	 */
+	public static XDBuilder getXDBuilder(final Properties props,
+		final ReportWriter reporter) {
+		XDBuilder result = new cz.syntea.xdef.impl.XBuilder(props);
+		if (reporter != null) {
+			result.setReporter(reporter);
+		}
+		return result;
 	}
 
 
@@ -186,7 +201,6 @@ public final class XDFactory {
 		return builder.compileXD();
 	}
 
-
 	/** Compile XDPool from source.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of sources, source pairs or external classes.
@@ -196,15 +210,31 @@ public final class XDFactory {
 	public static XDPool compileXD(final Properties props,
 		final Object... params)
 		throws SRuntimeException {
+		return compileXD((ReportWriter) null, props, params);
+	}
+
+	/** Compile XDPool from source.
+	 * @param reporter the ReportWriter to be used for error reporting.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of sources, source pairs or external classes.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final ReportWriter reporter,
+		final Properties props,
+		final Object... params)
+		throws SRuntimeException {
 		if (params == null || params.length == 0) {
 			throw new SRuntimeException(XDEF.XDEF903);
 		}
-		XDBuilder builder = getXDBuilder(props);
+		XDBuilder builder = getXDBuilder(props, reporter);
 		for (Object o : params) {
 			setParam(builder, o);
 		}
 		return builder.compileXD();
 	}
+
+
 
 	/** Read the serialized XDPool from the input stream.
 	 * @param stream input stream with X-definition.

@@ -38,17 +38,17 @@ public class CompileBase implements CodeTable, XDValueID {
 	// Non public Value types
 	////////////////////////////////////////////////////////////////////////////
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//46
+	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//49
 	/** Value of PARSEITEM. */
-	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//47
+	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//50
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = PARSEITEM_VALUE + 1;		//48
+	public static final short UNIQUESET_VALUE = PARSEITEM_VALUE + 1;		//51
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_M_VALUE = UNIQUESET_VALUE + 1;		//49
+	public static final short UNIQUESET_M_VALUE = UNIQUESET_VALUE + 1;		//52
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//50
+	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//53
 	/** Number of types + 1 (attribute ref, undefined type). */
-	static final short MAX_VALUE_ID = UNIQUESET_KEY_VALUE + 1;				//51
+	public static final short MAX_VALUE_ID = UNIQUESET_KEY_VALUE + 1;		//54
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -137,6 +137,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_RESULTSET, "ResultSet", cz.syntea.xdef.XDResultSet.class);
 		setType(XM_MODEL, "XModel", null);
 		setType(XD_NAMEDVALUE, "NamedValue", cz.syntea.xdef.XDNamedValue.class);
+		setType(XD_UNIQUESET, "uniqueSet", cz.syntea.xdef.XDUniqueset.class);
 		setType(XD_XMLWRITER, "XmlOutStream",
 			cz.syntea.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
@@ -190,6 +191,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_STATEMENT) + ";XDStatement;" +
 			((char) XD_RESULTSET) + ";XDResultSet;" +
 			((char) XD_NAMEDVALUE) + ";XDNamedItem;" +
+			((char) XD_UNIQUESET) + ";XDUniqueset;" +
 			((char) XD_XMLWRITER) + ";XDXmlOutStream;";
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1124,6 +1126,8 @@ public class CompileBase implements CodeTable, XDValueID {
 // PARSER
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_PARSER;
+//		method(ti, genInternalMethod(NEW_PARSER, XD_PARSER,
+//			ANY_MODE, 1, 1, XD_STRING), "#");
 		method(ti, genInternalMethod(PARSE_OP, XD_PARSERESULT,
 			ANY_MODE, 1, 2, XD_PARSER, XD_STRING), "parse", "?check");
 
@@ -1376,6 +1380,14 @@ public class CompileBase implements CodeTable, XDValueID {
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "NEWKEY");
 		method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_VOID,
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "CLEAR");
+		method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID,
+			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "checkUnref");
+		method(ti, genInternalMethod(UNIQUESET_SETVALUE, XD_VOID,
+			(byte) (ELEMENT_MODE + TEXT_MODE), 1, 3,
+			UNIQUESET_M_VALUE, XD_STRING,XD_ANY),"setNamedValue");
+		method(ti, genInternalMethod(UNIQUESET_GETVALUE, XD_ANY,
+			(byte) (ELEMENT_MODE + TEXT_MODE), 1, 2,
+			UNIQUESET_M_VALUE, XD_STRING), "getNamedValue");
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)
@@ -1618,7 +1630,8 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @param name name of method.
 	 * @return InternalMethod object.
 	 */
-	static InternalMethod getTypeMethod(final short type, final String name) {
+	public final static InternalMethod getTypeMethod(final short type,
+		final String name) {
 		Map<String, InternalMethod> hm = METHODS[type];
 		return hm == null ? null : hm.get(name);
 	}
@@ -1652,7 +1665,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @param name of parser.
 	 * @return instance of object of parser with given name.
 	 */
-	public static XDParser getParser(final String name) {
+	public static final XDParser getParser(final String name) {
 		try {
 			return (XDParser)
 				((Constructor)PARSERS.get(name)).newInstance(NULLPARLIST);
@@ -1665,7 +1678,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @param type The type id.
 	 * @return The type name or null.
 	 */
-	public static String getTypeName(final short type) {
+	public static final String getTypeName(final short type) {
 		return type >= 0 && type < TYPENAMES.length
 			? TYPENAMES[type] : "UNDEF_VALUE";
 	}
@@ -1675,7 +1688,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Description item of an internal method. */
-	final static class InternalMethod {
+	public final static class InternalMethod {
 		/** Code of the method.*/
 		private final short _code;
 		/** Minimal number of parameters.*/

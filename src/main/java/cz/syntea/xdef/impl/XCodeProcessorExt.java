@@ -47,6 +47,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDException;
 import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.XDParser;
 import cz.syntea.xdef.XDReport;
 import cz.syntea.xdef.XDService;
 import cz.syntea.xdef.XDValue;
@@ -1141,6 +1142,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XX_ATTR:
 									case XX_TEXT:
 									case XD_PARSER:
+									case XD_UNIQUESET:
+									case XD_UNIQUESETITEM:
 										pars[j + k] = stack[i];
 										break;
 									default:
@@ -1251,6 +1254,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								break;
 							case XD_OBJECT:
 								stack[++sp] = (DefObject) o;
+								break;
+							case XD_PARSER:
+								stack[++sp] = (XDParser) o;
+								break;
+							case XD_PARSERESULT:
+								stack[++sp] = (XDParseResult) o;
 								break;
 							case XD_ANY:
 								stack[++sp] = (XDValue) o;

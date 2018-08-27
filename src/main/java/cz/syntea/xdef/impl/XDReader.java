@@ -25,7 +25,7 @@ import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefSQLResultSet;
 import cz.syntea.xdef.impl.code.DefOutStream;
 import cz.syntea.xdef.impl.code.DefSQLStatement;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefBytes;
 import cz.syntea.xdef.impl.code.DefObject;
 import cz.syntea.xdef.impl.code.DefDate;
@@ -36,7 +36,7 @@ import cz.syntea.xdef.impl.code.DefString;
 import cz.syntea.xdef.impl.code.DefXQueryExpr;
 import cz.syntea.xdef.impl.code.DefRegex;
 import cz.syntea.xdef.impl.code.DefElement;
-import cz.syntea.xdef.impl.code.CodeParseItem;
+import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefNull;
 import cz.syntea.xdef.impl.code.DefBNFRule;
 import cz.syntea.xdef.msg.SYS;
@@ -251,14 +251,16 @@ public final class XDReader extends SObjectReader {
 					case CompileBase.UNIQUESET_VALUE:
 					case CompileBase.UNIQUESET_M_VALUE: {
 						int len = readLength();
-						CodeParseItem[] keys = new CodeParseItem[len];
+						CodeUniquesetParseItem[] keys =
+							new CodeUniquesetParseItem[len];
 						if (len > 0) {
 							for (int i = 0; i < len; i++) {
-								keys[i] = new CodeParseItem(readString(),
+								keys[i] =
+									new CodeUniquesetParseItem(readString(),
 									readInt(), i, readShort(), readBoolean());
 							}
 						}
-						return CodeUniqueSet.newInstance(keys, readString());
+						return new CodeUniqueset(keys, readString());
 					}
 					case XDValueID.XD_SERVICE:
 						return new DefSQLService();

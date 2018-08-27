@@ -611,30 +611,36 @@ public interface XDEF {
 	public static final long XDEF814 = 31159025963L;
 	/** Length of value of '&amp;{0}' is too long&amp;{#SYS000} */
 	public static final long XDEF815 = 31159025964L;
-	/** Value of enumeration for 'eq' must be just one{#SYS000} */
+	/** Value of enumeration for 'eq' must be just one&amp;{#SYS000} */
 	public static final long XDEF816 = 31159025965L;
+	/** "&amp;{0}" is not a valid value type&amp;{#SYS000} */
+	public static final long XDEF817 = 31159025966L;
 	/** Range of values of year of date must be from &amp;{0} to &amp;{1}'&amp;{#SYS000} */
-	public static final long XDEF818 = 31159025966L;
+	public static final long XDEF818 = 31159025967L;
 	/** Value must be unique&amp;{0}{: }&amp;{#SYS000} */
-	public static final long XDEF819 = 31159025967L;
+	public static final long XDEF819 = 31159025968L;
+	/** Value of type "Parser" expected&amp;{0}{, found: }&amp;{#SYS000} */
+	public static final long XDEF820 = 31159025969L;
+	/** Not referred keys found in the uniqueSet &amp;{0}&amp;{1}{: }&amp;{#SYS000} */
+	public static final long XDEF821 = 31159025970L;
 	/** Class with the external debug editor &amp;{0}{"}{"} is not available.  */
-	public static final long XDEF850 = 31159025968L;
+	public static final long XDEF850 = 31159025971L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159025969L;
+	public static final long XDEF901 = 31159025972L;
 	/** Can't read X-definition&amp;{0}{: } */
-	public static final long XDEF902 = 31159025970L;
+	public static final long XDEF902 = 31159025973L;
 	/** X-definition source is missing or null&amp;{0}{: } */
-	public static final long XDEF903 = 31159025971L;
+	public static final long XDEF903 = 31159025974L;
 	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159025972L;
+	public static final long XDEF905 = 31159025975L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159025973L;
+	public static final long XDEF906 = 31159025976L;
 	/** Type declaration format "{parse: xxx}" is deprecated; please use just xxx&amp;{#SYS000} */
-	public static final long XDEF997 = 31159025974L;
+	public static final long XDEF997 = 31159025977L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025975L;
+	public static final long XDEF998 = 31159025978L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025976L;
+	public static final long XDEF_DESCRIPTION = 31159025979L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159025977L;
+	public static final long XDEF_LANGUAGE = 31159025980L;
 }

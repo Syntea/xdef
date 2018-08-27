@@ -18,10 +18,10 @@ package cz.syntea.xdef.sys;
  */
 public interface SConstants {
 	// Note that build version and build date are authomaticaly generated!
-	/** Build version of software (3.1.004.005). */
-	public static final String BUILD_VERSION = "3.1.004.005";
-	/** Date of build version (2018-08-15). */
-	public static final String BUILD_DATE = "2018-08-15";
+	/** Build version of software (3.1.004.006). */
+	public static final String BUILD_VERSION = "3.1.004.006";
+	/** Date of build version (2018-08-27). */
+	public static final String BUILD_DATE = "2018-08-27";
 	/** Prefix of property names for setting of message table files. */
 	public static final String REPORTTABLE_FILE = "syn.msg.";
 	/** Name of property for setting language of messages. */

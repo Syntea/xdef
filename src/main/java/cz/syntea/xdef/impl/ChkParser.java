@@ -26,6 +26,7 @@ import cz.syntea.xdef.xml.KParsedAttr;
 import cz.syntea.xdef.xml.KParsedElement;
 import cz.syntea.xdef.impl.xml.DomBaseHandler;
 import cz.syntea.xdef.impl.xml.XAbstractReader;
+import cz.syntea.xdef.model.XMData;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XML;
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -63,38 +64,9 @@ import org.xml.sax.XMLReader;
  * @author Vaclav Trojan
  */
 final class ChkParser extends DomBaseHandler {
-
-	/** The allocation unit for node list. */
-	private static final int NODELIST_ALLOC_UNIT = 8;
-	/** The nested level of parsed object.*/
-	private int _level;
-	/** The root ChkDocument. */
-	private ChkDocument _chkDoc;
-	/** The actual ChkElement node. */
-	private ChkElement _actNode;
-	/** Actual w3c.dom.Element. */
-	private Element _element;
-	/** List of active node path. */
-	private ChkElement[] _nodeList;
-	/** Root document. */
-	private Document _doc;
-	/** The cumulated text. */
-	private SBuffer _text;
-	private final Stack<HandlerInfo> _stackReader = new Stack<HandlerInfo>();
-	private Map<String, String> _entities;
-	private InputStream _in;
-	private SReporter _sReporter;
-	public SPosition _elemLocator;
-	private boolean _genPositionsX;
-	private boolean _illegalDoctype;
-	private boolean _resolveIncludes;
-	private boolean _locationDetails;
-/*XXX*/
-	private boolean _ignoreEntities;
-/*XXX*/
-
+	/** SAXParserFactory used in this class. */
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
-	static {
+	static { // set features to SAXParserFactory.
 		try {
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
@@ -107,14 +79,44 @@ final class ChkParser extends DomBaseHandler {
 			SPF.setFeature("http://xml.org/sax/features/string-interning",
 				true);
 			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
-			SPF.setFeature(
+			SPF.setFeature( // do not create xml:base attributes
 				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false); // do not create xml:base attributes
+				false);
 			SPF.setSchema(null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
+	/** Allocation unit for node list. */
+	private static final int NODELIST_ALLOC_UNIT = 8;
+	/** Nested level of parsed object.*/
+	private int _level;
+	/** Root ChkDocument. */
+	private ChkDocument _chkDoc;
+	/** Actual ChkElement node. */
+	private ChkElement _chkEl;
+	/** Actual w3c.dom.Element. */
+	private Element _element;
+	/** Stack of active node path. */
+	private ChkElement[] _chkElemStack;
+	/** Root document. */
+	private Document _doc;
+	/** Cumulated text. */
+	private SBuffer _text;
+	/** Input stream with XML data.*/
+	private InputStream _in;
+	/** Reporter for error messages. */
+	private SReporter _sReporter;
+	/** XML source position. */
+	public SPosition _elemLocator;
+
+	private final Stack<HandlerInfo> _stackReader = new Stack<HandlerInfo>();
+	private Map<String, String> _entities;
+	private boolean _genPositionsX;
+	private boolean _illegalDoctype;
+	private boolean _resolveIncludes;
+	private boolean _locationDetails;
+	private boolean _ignoreEntities;
 
 	private static class HandlerInfo {
 		private final XAbstractReader _mr;
@@ -176,8 +178,7 @@ final class ChkParser extends DomBaseHandler {
 		_entities.put("apos", "'");
 		_entities.put("quot", "\"");
 		_resolveIncludes = true;
-//		_illegalDoctype = false; // java makes it
-//		_ignoreEntities = false; // java makes it
+//		_illegalDoctype = _ignoreEntities = false; // java makes it
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
@@ -313,7 +314,7 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	/////////////////////////////////////////////////////////////
-	// implementation of EntityResolver
+	// Implementation of EntityResolver
 	/////////////////////////////////////////////////////////////
 
 	@Override
@@ -356,7 +357,7 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	/////////////////////////////////////////////////////////////
-	// implementation of ContentHandler
+	// Implementation of ContentHandler
 	/////////////////////////////////////////////////////////////
 
 	// implemented DomBaseHandler:
@@ -562,7 +563,7 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	/////////////////////////////////////////////////////////////
-	// implementation of LexicalHandler
+	// Implementation of LexicalHandler
 	/////////////////////////////////////////////////////////////
 	@Override
 	public void startDTD(String name, String publicId, String systemId) {
@@ -606,7 +607,7 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	/////////////////////////////////////////////////////////////
-	// implementation of ErrorHandler
+	// Implementation of ErrorHandler
 	/////////////////////////////////////////////////////////////
 
 	private SPosition getPos(final SAXParseException x) {
@@ -716,8 +717,8 @@ final class ChkParser extends DomBaseHandler {
 	void xparse(ChkDocument chkDoc) {
 		try {
 			_level = -1;
-			_nodeList = new ChkElement[NODELIST_ALLOC_UNIT];
-			_actNode = null;
+			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
+			_chkEl = null;
 			_chkDoc = chkDoc;
 			_chkDoc._node = null;
 			_chkDoc._element = null;
@@ -766,8 +767,8 @@ final class ChkParser extends DomBaseHandler {
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
-			_actNode = null;
-			_nodeList = null;
+			_chkEl = null;
+			_chkElemStack = null;
 		} catch (SError e) {
 			if ("XDEF906".equals(e.getMsgID())) {
 				throw e; //X-definition canceled
@@ -791,7 +792,7 @@ final class ChkParser extends DomBaseHandler {
 			SPosition myPos = new SPosition(_sReporter); //save position
 			//set position of text
 			_sReporter.setPosition(_text);
-			_actNode.addText(_text.getString());
+			_chkEl.addText(_text.getString());
 			//set saved position
 			_sReporter.setPosition(myPos);
 			_text = null;
@@ -963,32 +964,42 @@ final class ChkParser extends DomBaseHandler {
 				//X-definition is not specified
 				throw new SRuntimeException(XDEF.XDEF550);
 			}
-			_actNode = _chkDoc.createRootChkElement(_element, true);
+			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
-			_actNode = _actNode.createChkElement(_element);
+			_chkEl = _chkEl.createChkElement(_element);
 		}
-		if (_level >= _nodeList.length) { //increase nodelist
+		if (_level >= _chkElemStack.length) { //increase nodelist
 			ChkElement[] newList =
-				new ChkElement[_nodeList.length + NODELIST_ALLOC_UNIT];
-			System.arraycopy(_nodeList, 0, newList, 0, _nodeList.length);
-			_nodeList = newList;
+				new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
+			System.arraycopy(_chkElemStack, 0, newList, 0, _chkElemStack.length);
+			_chkElemStack = newList;
 		}
-		_nodeList[_level] = _actNode;
+		_chkElemStack[_level] = _chkEl;
+		for (XMData x: _chkEl.getXMElement().getAttrs()) {
+			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
+			if (ka != null) {
+				if (_locationDetails) {
+					_sReporter.setPosition(ka.getPosition());
+				}
+				_chkEl.newAttribute(
+					_element.getAttributeNode(ka.getName()));
+				ka.setValue(null);
+			}
+		}
+		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
+			KParsedAttr ka = parsedElem.getAttr(i);
+			if (ka.getValue() != null) {
+				if (_locationDetails) {
+					_sReporter.setPosition(ka.getPosition());
+				}
+				_chkEl.newAttribute(
+					_element.getAttributeNode(ka.getName()));
+			}
+		}
 		if (_locationDetails) {
-			for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
-				KParsedAttr ka = parsedElem.getAttr(i);
-				_sReporter.setPosition(ka.getPosition());
-				_actNode.newAttribute(_element.getAttributeNode(ka.getName()));
-			}
 			_sReporter.setPosition(_elemLocator);
-		} else {
-			_sReporter.setPosition(_elemLocator);
-			for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
-				KParsedAttr ka = parsedElem.getAttr(i);
-				_actNode.newAttribute(_element.getAttributeNode(ka.getName()));
-			}
 		}
-		_actNode.checkElement();
+		_chkEl.checkElement();
 	}
 
 	private String getExternalId(final SBuffer val) {
@@ -1031,10 +1042,10 @@ final class ChkParser extends DomBaseHandler {
 
 	/** This method is invoked when parser reached the end of element. */
 	private void elementEnd() {
-		_nodeList[_level--] = null; //let's gc do the job
-		_actNode.addElement();
+		_chkElemStack[_level--] = null; //let's gc do the job
+		_chkEl.addElement();
 		if (_level >= 0) {
-			_actNode = _nodeList[_level];
+			_chkEl = _chkElemStack[_level];
 		}
 	}
 }

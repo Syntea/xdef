@@ -74,6 +74,12 @@ public enum XDValueType {
 	PARSERESULT,
 	/** Named value. */
 	NAMEDVALUE,
+	/** XDUniqueset. */
+	UNIQUESET,
+	/** XDUniqueset key item. */
+	UNIQUESETITEM,
+	/** XDUniqueset key parse item. */
+	XDUNIQUESETPARSEITEM,
 	/** XML stream writer. */
 	XMLWRITER,
 	/** Any value (may be null). */

@@ -27,6 +27,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDInput;
 import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.model.XMData;
 import cz.syntea.xdef.model.XMDefinition;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -38,6 +39,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /** ChkDOMParser
@@ -49,6 +52,7 @@ class ChkDOMParser extends SReporter {
 	private ChkDocument _chkDoc;
 	/** Element to be processed. */
 	private Element _elem;
+	private boolean _locationDetails;
 
 	/** This prevents the user to create instance of ChkDOMParser. */
 	private ChkDOMParser() {}
@@ -87,16 +91,16 @@ class ChkDOMParser extends SReporter {
 		private void processElement(final ChkElement parentNode,
 			final Element sourceElem) {
 			String ns = sourceElem.getNamespaceURI();
-			NamedNodeMap attrs = sourceElem.getAttributes();
-			int maxAttr = attrs.getLength();
+			NamedNodeMap atrs = sourceElem.getAttributes();
+			int maxAttr = atrs.getLength();
 			String elementName = sourceElem.getNodeName();
 			String xdefInstancePrefix = "";
 			String xdefInstanceNSAttr = "";
-			ChkElement actNode;
+			ChkElement chkEl;
 			if (parentNode == null) {
 				for (int i=0; i < maxAttr; i++) {
-					String name = attrs.item(i).getNodeName();
-					String val = attrs.item(i).getNodeValue();
+					String name = atrs.item(i).getNodeName();
+					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
 						if (KXmlConstants.NS_XDEF_2_0_INSTANCE.equals(val)
 							|| KXmlConstants.XDEF_INSTANCE_NS_URI.equals(val)) {
@@ -233,33 +237,41 @@ class ChkDOMParser extends SReporter {
 						}
 					}
 				}
-				actNode = _chkDoc.createRootChkElement(
+				chkEl = _chkDoc.createRootChkElement(
 					_doc.createElementNS(ns, elementName), true);
-				for (int i = 0; i < maxAttr; i++) {
-					Attr attr = (Attr) attrs.item(i);
-					String key = attr.getNodeName();
-					if (key.startsWith(xdefInstancePrefix + ":") ||
-						xdefInstanceNSAttr.equals(key)) {
-						continue;
-					}
-					actNode.newAttribute(attr);
-				}
 			} else {
-				actNode = parentNode.createChkElement(
+				chkEl = parentNode.createChkElement(
 					_doc.createElementNS(ns, elementName));
-				for (int i = 0; i < maxAttr; i++) {
-					Attr attr = (Attr) attrs.item(i);
-					actNode.newAttribute(attr);
+			}
+			List<Attr> atrs1 = new ArrayList<Attr>(); // list of processed atrs
+			// Process atrributes which have model
+			for (XMData x: chkEl.getXMElement().getAttrs()) {
+				String uri = x.getNSUri();
+				Attr att = uri == null
+					? (Attr) atrs.getNamedItem(x.getName())
+					: (Attr) atrs.getNamedItemNS(uri,
+						x.getQName().getLocalPart());
+				if (att != null) {
+					chkEl.newAttribute(att);
+					atrs1.add(att);
 				}
 			}
-			actNode.checkElement();
+			// Process remaining atrributes
+			for (int i = 0, max = atrs.getLength(); i < max; i++) {
+				Attr attr = (Attr) atrs.item(i);
+				if (atrs1.contains(attr)) {
+					continue; // already processed
+				}
+				chkEl.newAttribute(attr);
+			}
+			chkEl.checkElement();
 			NodeList nl = sourceElem.getChildNodes();
 			for (int i = 0, nodeMax = nl.getLength(); i < nodeMax; i++) {
 				Node item = nl.item(i);
 				switch (item.getNodeType()) {
 					case Node.COMMENT_NODE:
-						addText(actNode);
-						actNode.addComment(item.getNodeValue());
+						addText(chkEl);
+						chkEl.addComment(item.getNodeValue());
 						continue;
 					case Node.CDATA_SECTION_NODE:
 					case Node.TEXT_NODE:
@@ -270,15 +282,15 @@ class ChkDOMParser extends SReporter {
 							item, false, false, false));
 						continue;
 					case Node.ELEMENT_NODE:
-						addText(actNode);
-						processElement(actNode, (Element) item);
+						addText(chkEl);
+						processElement(chkEl, (Element) item);
 						continue;
 					case Node.PROCESSING_INSTRUCTION_NODE:
-						addText(actNode);
+						addText(chkEl);
 				}
 			}
-			addText(actNode);
-			actNode.addElement();
+			addText(chkEl);
+			chkEl.addElement();
 			if (parentNode == null) { //root element finished!
 				_chkDoc.endDocument();
 			}

@@ -62,7 +62,7 @@ public final class XPool implements XDPool {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004004L; // 3.1.004.004
+	private static final long XD_MIN_VERSION = 301004005L; // 3.1.004.005
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 
@@ -174,7 +174,7 @@ public final class XPool implements XDPool {
 		_extClasses = extClasses;
 	}
 
-	/** Creates instance of XDefPool with properties, external objects and
+	/** Creates instance of XDPool with properties, external objects and
 	 * reporter.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param extClasses The array of classes where are available methods
@@ -823,7 +823,7 @@ public final class XPool implements XDPool {
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "Incorrect file format");
 		}
-		String ver = xr.readString(); //XDefPool version
+		String ver = xr.readString(); //XDPool version
 		try {
 			// check if version is compatible with this implementation
 			String[] verParts = ver.split("\\."); // verion parts
@@ -1201,7 +1201,7 @@ public final class XPool implements XDPool {
 	}
 
 	@Override
-	/** Print code from XDefPool.
+	/** Print code from XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
 	public final void display(final PrintStream out) {
@@ -1377,7 +1377,7 @@ public final class XPool implements XDPool {
 	}
 
 	@Override
-	/** Write this XDefPool to stream.
+	/** Write this XDPool to stream.
 	 * @param out where to write.
 	 * @throws IOException if an error occurs.
 	 */
@@ -1385,7 +1385,7 @@ public final class XPool implements XDPool {
 		GZIPOutputStream gout = new GZIPOutputStream(out);
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
-		xw.writeString(getVersionInfo()); //XDef verze
+		xw.writeString(getVersionInfo()); //XD verze
 		xw.writeByte(_debugMode);
 		xw.writeString(_debugEditor);
 		xw.writeString(_xdefEditor);

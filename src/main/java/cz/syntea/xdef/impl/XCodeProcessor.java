@@ -23,14 +23,14 @@ import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.impl.code.DefElement;
 import cz.syntea.xdef.impl.code.DefLong;
 import cz.syntea.xdef.impl.code.DefDouble;
-import cz.syntea.xdef.impl.code.CodeParseItem;
+import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefDecimal;
 import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefOutStream;
 import cz.syntea.xdef.impl.code.DefNull;
 import cz.syntea.xdef.impl.code.DefBNFRule;
 import cz.syntea.xdef.impl.code.DefBytes;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefObject;
 import cz.syntea.xdef.impl.code.DefInStream;
 import cz.syntea.xdef.impl.code.DefDate;
@@ -528,7 +528,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						case CompileBase.UNIQUESET_VALUE:
 						case CompileBase.UNIQUESET_M_VALUE: {
 							// pending references
-							CodeUniqueSet pt = (CodeUniqueSet) val;
+							CodeUniqueset pt = (CodeUniqueset) val;
 							result &= pt.checkAndClear(_reporter);
 							break;
 						}
@@ -1507,24 +1507,21 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case UNIQUESET_NEWINSTANCE: {
 					CodeXD x = (CodeXD) item;
-					CodeUniqueSet u = (CodeUniqueSet) x.getParam2();
-					_stack[++sp] = CodeUniqueSet.newInstance(
-						u.getParsedKeys(), u.getName());
+					CodeUniqueset u = (CodeUniqueset) x.getParam2();
+					_stack[++sp] = new CodeUniqueset(
+						u.getParsedItems(), u.getName());
 					continue;
 				}
 				case UNIQUESET_M_NEWKEY: {
-					CodeUniqueSet dt = (CodeUniqueSet) _stack[sp--];
-					for (CodeParseItem pi : dt.getParsedKeys()) {
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp--];
+					for (CodeUniquesetParseItem pi : dt.getParsedItems()) {
 						pi.setParsedObject(null);
 					}
 					continue;
 				}
-				case UNIQUESET_KEY_LOAD: {
-					int index = item.getParam();
-					CodeUniqueSet dt = (CodeUniqueSet) _stack[sp];
-					dt.setKeyIndex(index);
+				case UNIQUESET_KEY_LOAD:
+					((CodeUniqueset) _stack[sp]).setKeyIndex(item.getParam());
 					continue;
-				}
 				case UNIQUESET_ID:
 				case UNIQUESET_SET:
 				case UNIQUESET_IDREF:
@@ -1538,14 +1535,14 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_KEY_IDREF:
 				case UNIQUESET_KEY_CHKID:
 				case UNIQUESET_KEY_SETKEY: {
-					CodeUniqueSet dt = (CodeUniqueSet) _stack[sp];
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					if (code != UNIQUESET_ID && code != UNIQUESET_IDREF
 						&& code != UNIQUESET_CHKID && code != UNIQUESET_SET) {
 						dt.setKeyIndex(item.getParam());
 					}
 					if (code != UNIQUESET_M_CHKID && code != UNIQUESET_M_IDREF
 						&& code != UNIQUESET_M_SET && code != UNIQUESET_M_ID) {
-						CodeUniqueSet assumed = execUniqueParser(dt,sp,chkNode);
+						CodeUniqueset assumed = execUniqueParser(dt,sp,chkNode);
 						_stack[sp] = chkNode._parseResult;
 						if (code == UNIQUESET_KEY_SETKEY ||
 							chkNode._parseResult.errors()) {
@@ -1560,7 +1557,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
-					CodeUniqueSet dt = (CodeUniqueSet) _stack[sp];
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					dt.setKeyIndex(item.getParam());
 					String s = chkNode.getTextValue();
 					StringTokenizer st = new StringTokenizer(s = s.trim());
@@ -1598,17 +1595,34 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				case UNIQUESET_KEY_NEWKEY: {
-					CodeUniqueSet dt = (CodeUniqueSet) _stack[sp];
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					_stack[sp--] = null;
-					CodeParseItem[] o = dt.getParsedKeys();
+					CodeUniquesetParseItem[] o = dt.getParsedItems();
 					o[item.getParam()].setParsedObject(null);
 					continue;
 				}
 				case UNIQUESET_CLOSE:
 					/** Report unresolved Id references and clear list. */
 					_stack[sp] = new DefBoolean(
-						((CodeUniqueSet) _stack[sp]).checkAndClear(_reporter));
+						((CodeUniqueset) _stack[sp]).checkAndClear(_reporter));
 					continue;
+				case UNIQUESET_CHEKUNREF: {
+					CodeUniqueset x = (CodeUniqueset) _stack[sp--];
+					x.setMarker(chkNode);
+					chkNode._markedUniqueSets.add(x);
+					continue;
+				}
+				case UNIQUESET_SETVALUE: {
+					XDValue value = _stack[sp--];
+					String name = _stack[sp--].toString();
+					((CodeUniqueset) _stack[sp--]).setNamedValue(name, value);
+					continue;
+				}
+				case UNIQUESET_GETVALUE: {
+					String name = _stack[sp--].toString();
+					_stack[sp] = ((CodeUniqueset) _stack[sp]).getNamedValue(name);
+					continue;
+				}
 				case DEFAULT_ERROR: //DEFAULT_ERROR_CODE puts message
 					putError(chkNode, XDEF.XDEF515);//Value error
 					_stack[++sp] = new DefBoolean(false); //returns always false
@@ -2494,18 +2508,18 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						xdef = _xd;
 					}
 					Map<Object, ArrayReporter> idrefTable = _idrefTable;
-					Map<Integer, CodeUniqueSet> idrefTables =
-						new TreeMap<Integer, CodeUniqueSet>();
+					Map<Integer, CodeUniqueset> idrefTables =
+						new TreeMap<Integer, CodeUniqueset>();
 					_idrefTable = null;
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
 						if ((xv = _globalVariables[j]) != null &&
 							xv.getItemId() == CompileBase.UNIQUESET_VALUE) {
-							CodeUniqueSet x = (CodeUniqueSet)xv;
+							CodeUniqueset x = (CodeUniqueset)xv;
 							idrefTables.put(j, x);
-							_globalVariables[j] = CodeUniqueSet.newInstance(
-								x.getParsedKeys(), x.getName());
+							_globalVariables[j] = new CodeUniqueset(
+								x.getParsedItems(), x.getName());
 						}
 					}
 					Element elem = ChkComposer.compose(_reporter,
@@ -2513,7 +2527,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					_idrefTable = idrefTable;
 					// restore all unique
 					for (Integer j : idrefTables.keySet()) {
-						CodeUniqueSet x = idrefTables.get(j);
+						CodeUniqueset x = idrefTables.get(j);
 						_globalVariables[j] = x;
 					}
 					if (elem == null) {
@@ -2777,8 +2791,14 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case PARSE_OP: {
 					String s = item.getParam() == 1
 						? chkNode.getTextValue() : _stack[sp--].toString();
-					XDParseResult result =
-						((XDParser) _stack[sp]).check(chkNode, s);
+					XDParseResult result;
+					if (_stack[sp]==null || !(_stack[sp] instanceof XDParser)) {
+						result = new DefParseResult(s);
+						//Value of type "Parser" expected&{0}{, found: }
+						result.error(XDEF.XDEF820, _stack[sp]);
+					} else {
+						result = ((XDParser) _stack[sp]).check(chkNode, s);
+					}
 					if (result.matches()) {
 						if (item.getParam() == 1) {
 							chkNode.setTextValue(result.getSourceBuffer());
@@ -3255,14 +3275,14 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		return result;
 	}
 
-	private CodeUniqueSet execUniqueParser(final CodeUniqueSet dt,
+	private CodeUniqueset execUniqueParser(final CodeUniqueset dt,
 		final int sp,
 		final ChkElement chkElem) {
 		XDValue[] stack = new XDValue[sp];
 		System.arraycopy(_stack, 0, stack, 0, sp);
 		XDValue x = exec(dt.getParseMethod(), chkElem);
 		XDParseResult y;
-		CodeUniqueSet result = null;
+		CodeUniqueset result = null;
 		switch (x.getItemId()) {
 			case XD_BOOLEAN:
 				y =	new DefParseResult(chkElem.getTextValue());
@@ -3275,25 +3295,25 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				break;
 			case CompileBase.UNIQUESET_VALUE:
 			case CompileBase.UNIQUESET_M_VALUE:
-				result = (CodeUniqueSet) x;
+				result = (CodeUniqueset) x;
 			default:
 				y = chkElem._parseResult;
-				if (x instanceof CodeUniqueSet) {
-					CodeUniqueSet z = (CodeUniqueSet) x;
+				if (x instanceof CodeUniqueset) {
+					CodeUniqueset z = (CodeUniqueset) x;
 					if (z != dt) {
-						z.getParsedKeys()[z.getKeyIndex()].setParsedObject(
+						z.getParsedItems()[z.getKeyItemIndex()].setParsedObject(
 							y.getParsedValue());
 					}
 				}
 		}
 		chkElem._parseResult = y;
-		dt.getParseKeyItem(dt.getKeyIndex()).setParsedObject(
+		dt.getParseKeyItem(dt.getKeyItemIndex()).setParsedObject(
 			y.getParsedValue());
 		System.arraycopy(stack, 0, _stack, 0, sp);
 		return result;
 	}
 
-	private void execUniqueOperation(final CodeUniqueSet dt,
+	private void execUniqueOperation(final CodeUniqueset dt,
 		final ChkNode chkNode,
 		final int code) {
 		if (code==UNIQUESET_ID || code==UNIQUESET_SET
@@ -3311,7 +3331,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		} else if (code == UNIQUESET_CHKID || code == UNIQUESET_M_CHKID) {
 			if (!dt.hasId()) {
 				String modif = (dt.getName() != null ? dt.getName()+" " : "")
-					+ dt.getKeyValues();
+					+ dt.printActualKey();
 				//Unique value "&{0}" was not set
 				Report rep = Report.error(XDEF.XDEF522, modif);
 				updateReport(rep, chkNode);
@@ -3325,7 +3345,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			ArrayReporter list = dt.chkId();
 			if (list != null) {
 				String modif = (dt.getName()!=null ? dt.getName()+" " : "")
-					+ dt.getKeyValues();
+					+ dt.printActualKey();
 				//Unique value "&{0}" was not set
 				Report rep = Report.error(XDEF.XDEF522, modif);
 				updateReport(rep, chkNode);
@@ -3473,10 +3493,16 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Call method block. */
 	private static final class CallItem extends XDValueAbstract
 		implements XDCallItem {
+
+		/** Stack (local variables) of parent node. */
 		private XDValue[] _parentLocalVariables;
+		/** Parent call item. */
 		private final CallItem _parent;
+		/** Return address, */
 		private final int _returnAddr;
+		/** Debug step mode. */
 		private final int _step;
+		/** Counter of nesting. */
 		private int _nestCount;
 
 		/** Create the instance of call method block.
@@ -3514,6 +3540,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final short getItemId() {return XDValueID.XD_ANY;}
+
 		@Override
 		public final XDValueType getItemType() {return XDValueType.OBJECT;}
 
@@ -3522,8 +3549,10 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final XDCallItem getParentCallItem() {return _parent;}
+
 		@Override
 		public final int getDebugMode() {return _step;}
+
 		@Override
 		public final int getReturnAddr() {return _returnAddr;}
 	}
