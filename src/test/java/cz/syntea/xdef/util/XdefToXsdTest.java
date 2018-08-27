@@ -1,5 +1,10 @@
 package cz.syntea.xdef.util;
 
+import static test.util.Assert.assertEquals;
+import static test.util.Assert.assertNoErrors;
+import static test.util.TestUtil.compile;
+import static test.util.TestUtil.getResrc;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,7 +19,6 @@ import javax.xml.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 
@@ -24,7 +28,6 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.L1protocol.L1A_ChkParser_dummy;
 import cz.syntea.xdef.xml.KXmlUtils;
-import static test.util.TestUtil.*;
 
 
 
@@ -75,7 +78,7 @@ public class XdefToXsdTest {
 		reporter.clear();
 		Element    l1batchXV = xddoc.xparse(L1batch, reporter);
 		KXmlUtils.writeXml(l1batchXVFile, l1batchXV);
-		assertNull(reportErrors(reporter));
+		assertNoErrors(reporter);
 		
 		//test of l1batch size after xdef-validation
 		//it should holds at least: #l1batch/2 < #l1batchXV
@@ -128,7 +131,7 @@ public class XdefToXsdTest {
 		XDDocument xddoc2 = xdp2.createXDDocument(mainName);
 		reporter.clear();
 		xddoc2.xparse(l1batchXVFile, reporter);
-		assertNull(reportErrors(reporter));
+		assertNoErrors(reporter);
 		
 		logger.info("OK - L1XdefToXsdTest");
 	}

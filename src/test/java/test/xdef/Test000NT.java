@@ -12,11 +12,10 @@
  */
 package test.xdef;
 
-import static org.testng.Assert.assertNull;
+import static test.util.Assert.assertEquals;
 import static test.util.TestUtil.XDEFNS;
 import static test.util.TestUtil.compile;
 import static test.util.TestUtil.parse;
-import static test.util.TestUtil.reportDiff;
 
 import org.testng.annotations.Test;
 
@@ -35,7 +34,7 @@ public class Test000NT {
 		
 		String xml = "<?A A?><root><?B B?></root><?C C?>";
 		String exp = "<root><?B B?></root>";
-		assertNull(reportDiff(parse(compile(xdef), "", xml, null), exp));
+		assertEquals(parse(compile(xdef), "", xml, null), exp);
 	}
 	
 	public static void test002() {
@@ -44,7 +43,7 @@ public class Test000NT {
 " <a a='finally if (!toString(12).equals(\"12\")) error(toString(12));'/>\n"+
 "</xd:def>";
 		String xml = "<a a='x' />";
-		assertNull(reportDiff(parse(compile(xdef), "", xml, null), xml));
+		assertEquals(parse(compile(xdef), "", xml, null), xml);
 	}
 	
 	public static void test003() {
@@ -54,7 +53,7 @@ public class Test000NT {
 "       error(toString(from(\"@a\")));'/>\n"+
 "</xd:def>";
 		String xml = "<a a='x' />";
-		assertNull(reportDiff(parse(compile(xdef), "", xml, null), xml));
+		assertEquals(parse(compile(xdef), "", xml, null), xml);
 	}
 	
 	

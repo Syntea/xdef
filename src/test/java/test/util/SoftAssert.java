@@ -2,7 +2,6 @@ package test.util;
 
 import java.util.Map;
 
-import org.testng.asserts.Assertion;
 import org.testng.asserts.IAssert;
 import org.testng.collections.Maps;
 

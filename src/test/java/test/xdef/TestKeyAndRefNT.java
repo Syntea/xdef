@@ -14,8 +14,6 @@ package test.xdef;
 
 import static test.util.TestUtil.compile;
 import static test.util.TestUtil.parse;
-import static test.util.TestUtil.reportDiff;
-import static test.util.TestUtil.reportErrors;
 
 import org.testng.annotations.Test;
 
@@ -50,12 +48,12 @@ public final class TestKeyAndRefNT {
 	
 		xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
 		reporter.clear();
-		a.assertNull(reportDiff(parse(xp, "", xml, reporter), xml));
-		a.assertNull(reportErrors(reporter));
+		a.assertEquals(parse(xp, "", xml, reporter), xml);
+		a.assertNoErrors(reporter);
 		
 		xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
 		reporter.clear();
-		a.assertNull(reportDiff(parse(xp, "", xml, reporter), xml));
+		a.assertEquals(parse(xp, "", xml, reporter), xml);
 		a.assertTrue(
 			reporter.getErrorCount() == 1
 			&& "XDEF522".equals(reporter.getReport().getMsgID()),
@@ -74,12 +72,12 @@ public final class TestKeyAndRefNT {
 	
 		xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
 		reporter.clear();
-		a.assertNull(reportDiff(xml, parse(xp, "", xml, reporter)));
-		a.assertNull(reportErrors(reporter));
+		a.assertEquals(xml, parse(xp, "", xml, reporter));
+		a.assertNoErrors(reporter);
 		
 		xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
 		reporter.clear();
-		a.assertNull(reportDiff(xml, parse(xp, "", xml, reporter)));
+		a.assertEquals(xml, parse(xp, "", xml, reporter));
 		a.assertTrue(
 			reporter.errorWarnings()
 			&& "XDEF522".equals(reporter.getReport().getMsgID()),

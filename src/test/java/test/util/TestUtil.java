@@ -3,6 +3,8 @@ package test.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -15,7 +17,9 @@ import org.w3c.dom.Element;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.ReportWriter;
+import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -25,146 +29,69 @@ import cz.syntea.xdef.xml.KXmlUtils;
 public class TestUtil {
 	
 	
-	public static URL getResrc(Class<?> clazz, String name) {
-		URL url = clazz.getResource(name);
-		
-		if (url == null) {
-			String msg = "resource not found: class=" + clazz.getName() + ", name=" + name;
-			logger.debug(msg);
-			throw new RuntimeException(msg);
+    /**
+     * @param clazz root class of the resource
+     * @param name name of the resource
+     * @return URL of the resource clazz/name
+     * @throws CommonBaseIOExc when doesn't exist
+     */
+    public static URL getResrc(Class<?> clazz, String name) {
+        URL url = clazz.getResource(name);
+        
+        if (url == null) {
+            String msg = "resource not found: class=" + clazz.getName() + ", name=" + name;
+            logger.debug(msg);
+            throw new RuntimeException(msg);
+        }
+        
+        logger.debug("resource found: class=" + clazz.getName() + ", name=" + name);
+        
+        return url;
+    }
+    
+    /**
+     * @param clazz root class of the resource
+     * @param name name of the resource
+     * @return stream of the resource clazz/name, viz {@link #getResrc(Class, String)}
+     * @throws CommonBaseIOExc when couldn't open stream
+     */
+    public static InputStream getResrcIS(Class<?> clazz, String name) {
+        try {
+            return getResrc(clazz, name).openStream();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+	
+    /**
+     * @param clazz root class of the resource
+     * @param name name of the resource
+     * @return stream of the resource clazz/name, viz {@link #getResrc(Class, String)}
+     * @throws CommonBaseIOExc when couldn't open stream
+     */
+    public static String getResrcStr(Class<?> clazz, String name) {
+        try {
+			return FUtils.readString(getResrcIS(clazz, name));
+		} catch (SException ex) {
+            throw new RuntimeException(ex);
 		}
-		
-		logger.debug("resource found: class=" + clazz.getName() + ", name=" + name);
-		
-		return url;
-	}
-	
-	
-	
-	/**
-	 * @param reporter
-	 * @return see {@link #reportErrors(ReportWriter, String)}
-	 */
-	public static String reportErrors(final ReportWriter reporter) {
-		return reportErrors(reporter, null);
-	}
-	
-	/**
-	 * @param reporter given reporter
-	 * @param msg user message to be added to report-message
-	 * @return report-message. If reporter doesn't contain errors then null
-	 */
-	public static String reportErrors(
-		final ReportWriter reporter,
-		final String       msg
-	) {
-		if (reporter.errorWarnings()) {
-			String msg2 =
-				(msg != null ? msg.toString().trim() + "\n" : "") +
-				"XDef-reporter:\n" +
-				reporter.getReportReader().printToString() + "\n";
-			
-			if (reporter.errors()) {
-				return msg2;
-			} else {
-				logger.warn(msg2);
-			}
+    }
+    
+    
+    
+    public static void setProperty(final String key, final String value) {
+		if (value == null) {
+			_props.remove(key);
+		} else {
+			_props.setProperty(key, value);
 		}
-		
-		return null;
 	}
 	
 	
 	
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(final String act, final Element exp) {
-		return reportDiff(KXmlUtils.parseXml(act).getDocumentElement(), exp);
+	public static XDPool compile(final URL url, final Class<?>... obj) {
+		return checkExtObjects(XDFactory.compileXD(_props, url, obj));
 	}
-
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @param msg user message to be added to diff-message
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(
-		final String act,
-		final Element exp,
-		final String msg
-	) {
-		return reportDiff(KXmlUtils.parseXml(act).getDocumentElement(), exp, msg);
-	}
-
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(final Element act, final String exp) {
-		return reportDiff(act, KXmlUtils.parseXml(exp).getDocumentElement());
-	}
-
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @param msg user message to be added to diff-message
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(
-		final Element act,
-		final String exp,
-		final String msg
-	) {
-		return reportDiff(act, KXmlUtils.parseXml(exp).getDocumentElement(), msg);
-	}
-
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(Element act, Element exp) {
-		return reportDiff(act, exp, null);
-	}
-
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @param msg user message to be added to diff-message
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(
-		final Element act,
-		final Element exp,
-		final String msg
-	) {
-		return reportDiff(act, exp, msg, true);
-	}
-	
-	/**
-	 * @param act actual value.
-	 * @param exp expected value.
-	 * @param msg user message to be added to diff-message
-	 * @param trim whether trim
-	 * @return diff-message. If args equal then null
-	 */
-	public static String reportDiff(
-		final Element act,
-		final Element exp,
-		final String msg,
-		final boolean trim
-	) {
-		return reportErrors(
-			KXmlUtils.compareElements(act, exp, true, null),
-			msg
-		);
-	}
-	
-	
 	
 	public static XDPool compile(final URL[] urls, final Class<?>... obj) {
 		return checkExtObjects(XDFactory.compileXD(_props, urls, obj));
@@ -199,7 +126,10 @@ public class TestUtil {
 	 * @return cleared given reporter
 	 */
 	public static ReportWriter clear(ReportWriter reporter) {
-		reporter.clear();
+		if (reporter != null) {
+			reporter.clear();
+		}
+		
 		return reporter;
 	}
 		
@@ -208,12 +138,24 @@ public class TestUtil {
 	public static Element parse(
 		final XDPool xp,
 		final String defName,
+		final URL xml,
+		final ReportWriter reporter
+	) {
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		Element result = xd.xparse(xml, clear(reporter));
+		return result;
+	}
+
+	public static Element parse(
+		final XDPool xp,
+		final String defName,
 		final String xml,
 		final ReportWriter reporter
 	) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(xml, reporter);
+		Element result = xd.xparse(xml, clear(reporter));
 		return result;
 	}
 
@@ -225,10 +167,19 @@ public class TestUtil {
 	) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(el, reporter);
+		Element result = xd.xparse(el, clear(reporter));
 		return result;
 	}
 
+	public static Element parse(
+		final String xp,
+		final String defName,
+		final String xml,
+		final ReportWriter reporter
+	) {
+		return parse(compile(xp), defName, xml, reporter);
+	}
+	
 	
 	
 	private static String genCollection(final String... sources) {
@@ -291,14 +242,17 @@ public class TestUtil {
 	}
 	
 	
-    public  static final String     XDEFNS         = XDefTester.XDEFNS;
+    
+	public  static final String     XDEFNS         = XDefTester.XDEFNS;
+    public  static final String     dataDir        = "data/";
     public  static final File       dataTmpRootDir = new File("target/test-output/data-tmp");
     
-	private static       Properties _props  = new Properties();
-	private static final XDPool     _xdOfxd = genXdOfXd();
+	private static       Properties _props         = new Properties();
+	private static final XDPool     _xdOfxd        = genXdOfXd();
+	
 	/** logger */
-	private static final Logger     logger  = LoggerFactory.getLogger(
+	private static final Logger     logger         = LoggerFactory.getLogger(
 		TestUtil.class
 	);
-
+	
 }
