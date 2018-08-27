@@ -872,6 +872,107 @@ public final class TestKeyAndRef extends Tester {
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]/@c"),
 				reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {
+ // check xdType
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n" +
+"  <xd:declaration>\n" +
+"    uniqueSet u {a: string();}\n" +
+"    Container c = [u];\n"+
+"  </xd:declaration>\n" +
+"  <A xd:script='var Parser x = null;'>\n" +
+"    <B b='xdType(); onTrue x = getParsedValue();'/>\n" +
+"    <C c='x()'/>\n" + // parser is x
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml ="<A><B b='int()'/><C c='99'/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml ="<A><B b='int'/><C c='abc'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 1
+				&& reporter.printToString().contains("XDEF809"), reporter);
+			xml ="<A><B b='int(1,2)'/><C c='1'/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml ="<A><B b='int(1,2)'/><C c='0'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 1
+				&& reporter.printToString().contains("XDEF813"), reporter);
+			xml ="<A><B b='int(1,2)'/><C c='3'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 1
+				&& reporter.printToString().contains("XDEF813"), reporter);
+			xml ="<A><B b='ynt(1,2)'/><C c='3'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF817")
+				&&  s.contains("XDEF820"), reporter);
+			xml ="<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml ="<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 1
+				&& reporter.printToString().contains("XDEF809"), reporter);
+			xml = "<A><B b='xdattime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF817")
+				&&  s.contains("XDEF820"), reporter);
+			String propwarning = getProperties().getProperty(
+				XDConstants.XDPROPERTY_WARNINGS);
+			setProperty(XDConstants.XDPROPERTY_WARNINGS,
+				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+			xml ="<A><B b='datetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
+			parse(xp, "", xml, reporter); // datetime must be xdatetime
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF817")
+				&&  s.contains("XDEF820"), reporter);
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, propwarning);
+// test uniqueSet setValue, getValoue
+// and order of attribute processing in X-definition
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <xd:declaration>\n" +
+"    uniqueSet u {a: string();}\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <DefParams>\n" +
+"       <Param xd:script='*;'\n" +
+"          Name='u.a.ID();'\n" +
+"          Type='xdType(); onTrue u.setNamedValue(\"x\",getParsedValue());'/>\n" +
+"    </DefParams>\n" +
+"    <Params xd:script=\"*; init u.checkUnref()\">\n" +
+"       <Param xd:script='*;'\n" +
+"              Name='u.a.CHKID();'\n" +
+"              Value='u.getNamedValue(\"x\")'/>\n" +
+"    </Params>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<A>\n" +
+"  <DefParams>\n" +
+"    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
+"    <Param Type=\"dec()\" Name=\"Vyska\" />\n" +
+"    <Param Name=\"DatumNarozeni\" Type=\"xdatetime('dd.MM.yyyy')\"/>\n" +
+"  </DefParams>\n" +
+"  <Params>\n" +
+"    <Param Name=\"Jmeno\" Value=\"Jan\"/>\n" +
+"    <Param Name=\"Vyska\" Value=\"14.8\"/>\n" +
+"    <Param Name=\"DatumNarozeni\" Value=\"01.02.1987\"/>\n" +
+"</Params>\n" +
+" <Params>\n" +
+"    <Param Value=\"14.8\" Name=\"Vyska\"/>\n" +
+"</Params>\n" +
+"</A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 1
+				&& (s = reporter.printToString()).contains("DatumNarozeni")
+				&& s.contains("Jmeno"), reporter);
+		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
 	}

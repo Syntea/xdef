@@ -1119,9 +1119,7 @@ public final class Test001  extends Tester {
 			assertNoErrors(reporter);
 			assertEq(el, xml);
 			reporter.clear();
-			el = xd.xparse(base, reporter);
-			assertNoErrors(reporter);
-			assertEq(el,
+			assertEq(xd.xparse(base, reporter),
 "<Base>"+
 "<Misto name='A'>"+
 	"<Udaj hodnota='1.5' od='2012-10-01T10:00:00' do='2012-10-01T11:00:00'/>"+
@@ -1132,6 +1130,7 @@ public final class Test001  extends Tester {
 "</Misto>"+
 "<Misto name='C'/>"+
 "</Base>");
+			assertNoErrors(reporter);
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
 		} catch (Exception ex) {fail(ex);}

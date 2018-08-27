@@ -574,8 +574,8 @@ public final class TestErrors extends Tester {
 			}
 			reporter.reset();
 			assertEq("",chkReport(reporter, "XDEF809", "10", "39", null));
-			assertEq("",chkReport(reporter, "XDEF809", "11", "39", null));
 			assertEq("",chkReport(reporter, "XDEF814", "12", "39", null));
+			assertEq("",chkReport(reporter, "XDEF809", "11", "39", null));
 			assertEq("",chkReport(reporter, "XDEF526", "18", "54", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 			xdef = //check if error is only one

@@ -716,6 +716,8 @@ public final class TestScript extends Tester {
 		test("aBcD", "{setResult(!contains('ab'));}");
 		test("aBcD", "{setResult(containsi('AB'));}");
 		test("aBcD", "{setResult(!containsi('xy'));}");
+		// Test regular expression (XML schema expression is conterted
+		// jo Java form)
 		test("", "{Regex r = new Regex('(\\\\d{1,2})(:(\\\\d{1,2}))?');"
 			+ "String s='5:34'; RegexResult x=r.getMatcher(s);"
 			+ "boolean b=x.matches(); int i=x.groupCount(); b=b AND (i==4);"
@@ -799,21 +801,22 @@ public final class TestScript extends Tester {
 			+ "if (b){b= x.group(0)=='H'; b=b AND (x.group(1)==null);}"
 			+ "b=b AND (x.group(2)=='H');"
 			+ "setResult(b);}");
-		test("", "{Parser p = xs:gYear(%minInclusive=1999);\n"
+////////////////////////////////////////////////////////////////////////////////
+		// XML schema gYear
+		test("", "{Parser p = gYear(%minInclusive=1999);\n"
 			+ "setResult(p.parse('1999'));}");
-		test("", "{Parser p = xs:gYear(%minInclusive=1999);\n"
+		test("", "{Parser p = gYear(%minInclusive=1999);\n"
 			+ "setResult(!p.parse('1998'));}");
-		test("", "{Parser p = xs:gYear(%minInclusive=1999);\n"
+		test("", "{Parser p = gYear(%minInclusive=1999);\n"
 			+ "ParseResult r = p.parse('1999');\n"
 			+ "setResult(r.matches());}");
-		test("", "{Parser p = xs:gYear(%minInclusive=1999);\n"
+		test("", "{Parser p = gYear(%minInclusive=1999);\n"
 			+ "ParseResult r = p.parse('1998');\n"
 			+ "setResult(!r.matches());}");
-////////////////////////////////////////////////////////////////////////////////
-		test("1999", "{setResult(xs:gYear(%minInclusive=1999));}");
-		test("1999", "{setResult(xs:gYear(%minInclusive=1999).parse());}");
-		test("1990", "{setResult(!xs:gYear(%minInclusive=1999));}");
-		test("1990", "{setResult(!xs:gYear(%minInclusive=1999).parse());}");
+		test("1999", "{setResult(gYear(%minInclusive=1999));}");
+		test("1999", "{setResult(gYear(%minInclusive=1999).parse());}");
+		test("1990", "{setResult(!gYear(%minInclusive=1999));}");
+		test("1990", "{setResult(!gYear(%minInclusive=1999).parse());}");
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr("+1.21","onTrue setResult(true); required decimal;"
 			+ " onFalse setResult(false); ");
@@ -880,8 +883,7 @@ public final class TestScript extends Tester {
 			+ " onFalse setResult(false); ");
 		testAttr("+0,21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0000000000.21",
-			"onTrue setResult(true); required dec(3,2);"
+		testAttr("+0000000000.21", "onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
 		testAttr("+00000000001.21",
 			"onTrue setResult(true); required dec(3,2);"
@@ -954,7 +956,7 @@ public final class TestScript extends Tester {
 			+ " onFalse setResult(false); ");
 		testAttr("http://pes.eunet.cz","onTrue setResult(true); required url();"
 			+ " onFalse setResult(false); ");
-		_printCode = true;
+//		_printCode = true;
 		_printCode = false;
 		testCheckMethod("ahoj",
 			"boolean m(){setResult(true); return true;}", "m()");

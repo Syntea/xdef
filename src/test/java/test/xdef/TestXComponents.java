@@ -83,8 +83,6 @@ public final class TestXComponents extends Tester {
 			assertEq("99", ((TestXComponents_B) q)._sId);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, q.toXml());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
 			parseXC(XP, "A", xml, null, reporter);
 			assertTrue(reporter.errors());
@@ -245,11 +243,10 @@ public final class TestXComponents extends Tester {
 			}
 			assertEq("", checkXPos(p));
 			el = XComponentUtil.toXml(p, XP.createXDDocument("B"), "A");
-			q =	(test.xdef.TestXComponents_B)
-				parseXC(XP, "B", el, null, null);
+			q =	(test.xdef.TestXComponents_B) parseXC(XP, "B", el, null, null);
 			assertEq(q.toXml(), xml);
 			xd = XP.createXDDocument("B");
-			xd.xparse(el, null);
+			assertEq(xd.xparse(el, null), xml);
 			q = parseXC(xd, el, null, null);
 			assertEq(q.toXml(), xml);
 			try {
@@ -624,7 +621,6 @@ public final class TestXComponents extends Tester {
 "  <c a='3.1' b='4.3.1999'/>\n"+
 "  <d a='4.1' b='4.3.1999'/>\n"+
 "</A>";
-//			xd = XP.createXDDocument();
 			p = (test.xdef.component.P)
 				parseXC(XP, "P", xml, null, reporter);
 			assertErrors(reporter);
