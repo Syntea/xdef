@@ -33,7 +33,7 @@ import java.util.Set;
  * assigned user value etc.)
  * @author Vaclav Trojan
  */
-public final class CodeUniqueSet extends XDValueAbstract implements XDUniqueset{
+public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 
 	/** Map of values. */
 	private final Map<Object, UniquesetItem> _map;
@@ -53,7 +53,7 @@ public final class CodeUniqueSet extends XDValueAbstract implements XDUniqueset{
 	 * will be created.
 	 * @param name name of unique set object.
 	 */
-	public CodeUniqueSet(final CodeUniquesetParseItem[] parseItems,
+	public CodeUniqueset(final CodeUniquesetParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
 		_type = parseItems.length > 1
