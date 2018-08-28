@@ -1,5 +1,5 @@
 /*
- * File: CodeUniqueset.java
+ * File: CodeUniqueSet.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -33,7 +33,7 @@ import java.util.Set;
  * assigned user value etc.)
  * @author Vaclav Trojan
  */
-public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
+public final class CodeUniqueSet extends XDValueAbstract implements XDUniqueset{
 
 	/** Map of values. */
 	private final Map<Object, UniquesetItem> _map;
@@ -48,12 +48,12 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
-	/** Creates a new instance of CodeUniqueset.
+	/** Creates a new instance of CodeUniqueSet.
 	 * @param parseItems CodeUniquesetKey array from which the new instance
 	 * will be created.
-	 * @param name name of UniqueSet.
+	 * @param name name of unique set object.
 	 */
-	public CodeUniqueset(final CodeUniquesetParseItem[] parseItems,
+	public CodeUniqueSet(final CodeUniquesetParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
 		_type = parseItems.length > 1
@@ -367,16 +367,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		private Set<Object> _referenced;
 		/** Assigned named values to this item. */
 		private Map<String, XDValue> _assignedValues;
-//
-//		/** Constructor of UniquesetItem.
-//		 * @param key unique set key.
-//		 * @param assignedValues Map with assigned named values to this item.
-//		 */
-//		private UniquesetItem(final CodeUniquesetKey key,
-//			final Map<String, XDValue> assignedValues) {
-//			_key = key;
-//			_assignedValues = assignedValues;
-//		}
 
 		/** Constructor of UniquesetItem.
 		 * @param key unique set key.

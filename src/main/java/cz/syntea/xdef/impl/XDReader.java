@@ -25,7 +25,7 @@ import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefSQLResultSet;
 import cz.syntea.xdef.impl.code.DefOutStream;
 import cz.syntea.xdef.impl.code.DefSQLStatement;
-import cz.syntea.xdef.impl.code.CodeUniqueset;
+import cz.syntea.xdef.impl.code.CodeUniqueSet;
 import cz.syntea.xdef.impl.code.DefBytes;
 import cz.syntea.xdef.impl.code.DefObject;
 import cz.syntea.xdef.impl.code.DefDate;
@@ -229,6 +229,9 @@ public final class XDReader extends SObjectReader {
 					case XDValueID.XD_PARSER: {//STRING_PARSER
 						String declaredName = readString();
 						String name = readString();
+						if (declaredName == null && name == null) {
+							return new DefNull(XDValueID.XD_PARSER);
+						}
 						XDContainer pars = (XDContainer) readXD();
 						XDParser y = CompileBase.getParser(name);
 						try {
@@ -260,7 +263,7 @@ public final class XDReader extends SObjectReader {
 									readInt(), i, readShort(), readBoolean());
 							}
 						}
-						return new CodeUniqueset(keys, readString());
+						return new CodeUniqueSet(keys, readString());
 					}
 					case XDValueID.XD_SERVICE:
 						return new DefSQLService();

@@ -41,7 +41,7 @@ import cz.syntea.xdef.impl.code.DefNamedValue;
 import cz.syntea.xdef.impl.code.DefNull;
 import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefString;
-import cz.syntea.xdef.impl.code.CodeUniqueset;
+import cz.syntea.xdef.impl.code.CodeUniqueSet;
 import cz.syntea.xdef.impl.XVariable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -3674,7 +3674,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		var.setParseResultType(keys[0].getParsedType());
 		if (varType == CompileBase.UNIQUESET_VALUE) {
 			CodeI1 lastStop = varKind == 'G' ? _g.getLastStop() : null;
-			CodeUniqueset u = new CodeUniqueset(keys, name);
+			CodeUniqueSet u = new CodeUniqueSet(keys, name);
 			var.setValue(new DefLong(0));
 			if (namedKey) {
 				var.setValue(new DefLong(-1));
