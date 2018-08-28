@@ -4,12 +4,12 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.util.GenCollection;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import java.io.File;
 import org.w3c.dom.Element;
+import test.utils.STester;
 
 /** Test for the XdCollection. */
 public class TestGenCollection extends STester {

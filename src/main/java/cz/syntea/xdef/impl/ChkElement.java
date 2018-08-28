@@ -13,7 +13,7 @@
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefBoolean;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XDEF;
@@ -109,8 +109,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	XMData _xdata;
 
 	/** The set containing marked unique sets. */
-	final Set<CodeUniqueSet> _markedUniqueSets =
-		new HashSet<CodeUniqueSet>();
+	final Set<CodeUniqueset> _markedUniqueSets =
+		new HashSet<CodeUniqueset>();
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
 	 * @param xelement The definition of element.
@@ -2811,7 +2811,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Destruct ChkElement. */
 	private void closeChkElement() {//just let's gc do the job
 		_scp.closeFinalList(getFinalList()); // close objects from final list
-		for (CodeUniqueSet x: _markedUniqueSets) {
+		for (CodeUniqueset x: _markedUniqueSets) {
 			String s = x.checkNotMarked(this);
 			if (!s.isEmpty()) {
 				//Not referred keys found in the uniqueSet &{0}&{1}{: }
@@ -2853,7 +2853,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (x != null && !x.isNull()
 					&& (x.getItemId() == CompileBase.UNIQUESET_VALUE
 					|| x.getItemId() == CompileBase.UNIQUESET_M_VALUE)) {
-					CodeUniqueSet y = (CodeUniqueSet)x;
+					CodeUniqueset y = (CodeUniqueset)x;
 					y.checkAndClear(_scp.getTemporaryReporter());
 				}
 				_variables[i] = null;
@@ -3364,7 +3364,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	public final void addMarkedUniqueset(XDUniqueset us) {
-		CodeUniqueSet x = (CodeUniqueSet) us;
+		CodeUniqueset x = (CodeUniqueset) us;
 		_markedUniqueSets.add(x);
 		x.setMarker(this);
 	}

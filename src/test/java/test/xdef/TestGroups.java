@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDDocument;
@@ -22,7 +23,7 @@ import org.w3c.dom.Element;
 /** Test of groups (repeated items, nesting).
  * @author Vaclav Trojan
  */
-public final class TestGroups extends Tester {
+public final class TestGroups extends XDTester {
 
 	public TestGroups() {super();}
 

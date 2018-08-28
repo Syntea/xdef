@@ -11,7 +11,6 @@
  */
 package test.common.xml;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -35,6 +34,7 @@ import org.w3c.dom.Text;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.UserDataHandler;
+import test.utils.STester;
 
 /** Test KDOMBuilder.
  * @author  Vaclav Trojan

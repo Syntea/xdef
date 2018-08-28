@@ -13,7 +13,6 @@
 
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SException;
@@ -37,6 +36,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+import test.utils.STester;
 
 /** Test the class SUtils.
  * @author Vaclav Trojan

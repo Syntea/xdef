@@ -1,5 +1,5 @@
 /*
- * File: Tester.java
+ * File: XDTester.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -10,7 +10,7 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-package test.xdef;
+package test.utils;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -47,11 +47,12 @@ import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import javax.xml.namespace.QName;
+import test.utils.STester;
 
 /** Support of tests.
  * @author Vaclav Trojan
  */
-public abstract class Tester extends cz.syntea.xdef.sys.STester {
+public abstract class XDTester extends STester {
 //	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
 	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
@@ -62,7 +63,7 @@ public abstract class Tester extends cz.syntea.xdef.sys.STester {
 	private boolean _chkSyntax;
 
 	/** Creates a new instance of TestAbstract */
-	public Tester() {
+	public XDTester() {
 		super();
 		resetTester();
 		_chkSyntax = _fulltestMode;

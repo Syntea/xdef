@@ -14,6 +14,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.XDStatement;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
@@ -43,7 +44,7 @@ import cz.syntea.xdef.XDValueType;
  *
  * @author Vaclav Trojan
  */
-public final class TestXDService extends Tester {
+public final class TestXDService extends XDTester {
 
 	public TestXDService() {super();}
 

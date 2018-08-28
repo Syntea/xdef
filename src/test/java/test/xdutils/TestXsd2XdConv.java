@@ -12,7 +12,6 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
@@ -29,6 +28,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
+import test.utils.STester;
 
 /** Tests schema to XDefinition conversion.
  * @author Alexandrov
@@ -384,7 +384,7 @@ public class TestXsd2XdConv extends STester {
 		assertTrue(prepare("typeTestSchema"), popMessage());
 		assertTrue(parse("typeTest_valid_1"), popMessage());
 
-		// test Sisma (mixed="true, recursive reference")
+		// test Sisma
 		assertTrue(prepare("Sisma_RegistraceSU"), popMessage());
 		assertTrue(parse("Sisma_RegistaceSU"), popMessage());
 

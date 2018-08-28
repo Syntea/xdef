@@ -12,7 +12,6 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FileReportReader;
 import cz.syntea.xdef.sys.Report;
@@ -23,7 +22,7 @@ import cz.syntea.xdef.util.XValidate;
 import java.io.File;
 import java.io.FileOutputStream;
 import cz.syntea.xdef.sys.ReportReader;
-import java.util.Properties;
+import test.utils.STester;
 
 /** TestValidate.
  * @author Vaclav Trojan

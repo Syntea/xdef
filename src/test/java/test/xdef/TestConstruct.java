@@ -13,6 +13,7 @@
 
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDDocument;
@@ -23,7 +24,7 @@ import cz.syntea.xdef.proc.XXElement;
  *
  * @author  Vaclav Trojan
  */
-public final class TestConstruct extends Tester {
+public final class TestConstruct extends XDTester {
 
 	public TestConstruct() {super();}
 

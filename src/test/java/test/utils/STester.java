@@ -12,8 +12,9 @@
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
  *
  */
-package cz.syntea.xdef.sys;
+package test.utils;
 
+import cz.syntea.xdef.sys.*;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.CharArrayWriter;
 import java.io.PrintStream;

@@ -13,7 +13,6 @@
 
 package test.common.xml;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.xml.KXpathExpr;
 import java.io.ByteArrayInputStream;
@@ -28,6 +27,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import cz.syntea.xdef.sys.ReportWriter;
+import test.utils.STester;
 
 /** TestKXmlUtils
  * @author  Vaclav Trojan

@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.FileReportReader;
@@ -45,7 +46,7 @@ import org.w3c.dom.Element;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test000 extends Tester {
+public final class Test000 extends XDTester {
 
 	public Test000() {super();}
 

@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlConstants;
 import cz.syntea.xdef.XDBuilder;
@@ -33,7 +34,7 @@ import cz.syntea.xdef.XDValueID;
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
  */
-public final class TestExtenalMethods extends Tester {
+public final class TestExtenalMethods extends XDTester {
 
 	public TestExtenalMethods() {super();}
 

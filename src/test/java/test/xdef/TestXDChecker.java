@@ -14,6 +14,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.util.XDChecker;
 import cz.syntea.xdef.XDParseResult;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 /**
  * @author Vaclav Trojan
  */
-public class TestXDChecker extends Tester {
+public class TestXDChecker extends XDTester {
 
 	public TestXDChecker() {super();}
 

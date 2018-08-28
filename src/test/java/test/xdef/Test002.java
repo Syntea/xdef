@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
@@ -38,7 +39,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test002 extends Tester {
+public final class Test002 extends XDTester {
 
 	public Test002() {super();}
 

@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
@@ -20,7 +21,7 @@ import java.io.StringWriter;
  * @author Vaclav Trojan
  *
  */
-public final class TestTryCatch extends Tester {
+public final class TestTryCatch extends XDTester {
 
 	public TestTryCatch() {super();}
 

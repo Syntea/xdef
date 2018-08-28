@@ -13,6 +13,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -28,7 +29,7 @@ import org.w3c.dom.Element;
 /** Provides testing of XDef debug mode and editing in display mode.
  * @author Trojan
  */
-public final class TestDebugGUI extends Tester {
+public final class TestDebugGUI extends XDTester {
 
 	public TestDebugGUI() {super(); setChkSyntax(false);}
 

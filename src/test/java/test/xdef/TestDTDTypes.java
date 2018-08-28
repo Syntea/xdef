@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDPool;
@@ -19,7 +20,7 @@ import cz.syntea.xdef.XDPool;
 /** Test of attribute processing and match expression; test DTD types.
  * @author Vaclav Trojan
  */
-public final class TestDTDTypes extends Tester {
+public final class TestDTDTypes extends XDTester {
 
 	public TestDTDTypes() {super();}
 

@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -35,7 +36,7 @@ import cz.syntea.xdef.XDValueID;
 /** TestDebug provides testing of debug mode.
  * @author Trojan
  */
-public final class TestDebug extends Tester {
+public final class TestDebug extends XDTester {
 
 	public TestDebug() {super();}
 

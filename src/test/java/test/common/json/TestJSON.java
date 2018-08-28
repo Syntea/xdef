@@ -15,13 +15,13 @@
 package test.common.json;
 
 import cz.syntea.xdef.sys.JSONUtil;
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import test.utils.STester;
 
 /** Test JSON tools.
  * @author trojan

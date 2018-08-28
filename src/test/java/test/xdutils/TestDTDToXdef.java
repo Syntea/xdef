@@ -13,7 +13,6 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.SException;
@@ -26,6 +25,7 @@ import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.util.DTDToXdef;
 import java.io.File;
 import org.w3c.dom.Element;
+import test.utils.STester;
 
 /** Test of conversion of DTD to X-definition.
  * @author Vaclav Trojan

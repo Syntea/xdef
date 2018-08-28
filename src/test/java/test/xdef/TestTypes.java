@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDDocument;
@@ -24,7 +25,7 @@ import cz.syntea.xdef.XDContainer;
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
  */
-public final class TestTypes extends Tester {
+public final class TestTypes extends XDTester {
 
 	public TestTypes() {super();}
 

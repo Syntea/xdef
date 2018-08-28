@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.XDDocument;
@@ -31,7 +32,7 @@ import org.w3c.dom.NodeList;
 /** Test of X-Definition relational database processing.
  * @author Vaclav Trojan
  */
-public final class TestDatabase extends Tester {
+public final class TestDatabase extends XDTester {
 
 	public TestDatabase() {super();}
 

@@ -13,7 +13,6 @@
  */
 package test.common.xml;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlOutStream;
 import java.io.StringWriter;
@@ -21,6 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import test.utils.STester;
 
 /** Test XmOutStream.
  * @author Vaclav Trojan <vaclav.trojan@syntea.cz>

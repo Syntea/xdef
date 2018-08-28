@@ -14,7 +14,6 @@ package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
 import java.io.File;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
+import test.utils.STester;
 
 /** Test of parsing and executions of expressions an assignment commands.
  * @author Vaclav Trojan

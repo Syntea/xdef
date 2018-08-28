@@ -12,10 +12,10 @@
  */
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import java.io.File;
+import test.utils.STester;
 
 /** Simple XML grammar test.
  * @author Vaclav Trojan

@@ -1,5 +1,5 @@
 /*
- * File: CodeUniqueSet.java
+ * File: CodeUniqueset.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -48,7 +48,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
-	/** Creates a new instance of CodeUniqueSet.
+	/** Creates a new instance of CodeUniqueset.
 	 * @param parseItems CodeUniquesetKey array from which the new instance
 	 * will be created.
 	 * @param name name of unique set object.

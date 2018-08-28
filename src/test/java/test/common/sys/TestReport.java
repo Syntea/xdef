@@ -15,7 +15,6 @@ package test.common.sys;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.msg.XML;
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FileReportReader;
 import cz.syntea.xdef.sys.FileReportWriter;
@@ -30,6 +29,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.Properties;
+import test.utils.STester;
 
 /** Test reporter.
  * @author  Vaclav Trojan

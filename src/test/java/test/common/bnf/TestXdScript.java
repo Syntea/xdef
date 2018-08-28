@@ -12,18 +12,17 @@
  */
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.File;
 import org.w3c.dom.Element;
-import test.xdef.Tester;
+import test.utils.XDTester;
 
 /** Test XDefinition script.
  * @author Vaclav Trojan
  */
-public class TestXdScript extends STester {
+public class TestXdScript extends XDTester {
 
 	public TestXdScript() {super();}
 
@@ -70,7 +69,7 @@ public class TestXdScript extends STester {
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);
 			g = BNFGrammar.compile(null, bnfOfBNF, null);
-			if (Tester.getFulltestMode()) {
+			if (XDTester.getFulltestMode()) {
 				g = BNFGrammar.compile(null, g.toString(), null);
 			}
 /*labels not implemented yet*
@@ -270,7 +269,7 @@ public class TestXdScript extends STester {
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "MethodListItem", s));
 //			printCode(g);
-			if (Tester.getFulltestMode()) {
+			if (XDTester.getFulltestMode()) {
 				s = g.toString();
 				assertEq(s, parse(g, "BNFGrammar", s));
 				assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));

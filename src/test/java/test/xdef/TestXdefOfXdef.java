@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDFactory;
@@ -24,7 +25,7 @@ import org.w3c.dom.Element;
 /** Test of X-definitions by X-definition.
  * @author Vaclav Trojan
  */
-public final class TestXdefOfXdef extends Tester {
+public final class TestXdefOfXdef extends XDTester {
 	private static XDPool XP;
 
 	public TestXdefOfXdef() {

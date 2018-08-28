@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
@@ -25,7 +26,7 @@ import java.io.StringWriter;
  * in XML data.
  * @author Vaclav Trojan
  */
-public final class TestInclude extends Tester {
+public final class TestInclude extends XDTester {
 
 	public TestInclude() {super();}
 

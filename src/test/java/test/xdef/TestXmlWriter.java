@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
@@ -25,7 +26,7 @@ import org.w3c.dom.Element;
 /** TestDebug provides testing of XML writer.
  * @author Trojan
  */
-public final class TestXmlWriter extends Tester {
+public final class TestXmlWriter extends XDTester {
 
 	public TestXmlWriter() {super();}
 

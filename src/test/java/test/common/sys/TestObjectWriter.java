@@ -13,7 +13,6 @@
 
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SObjectReader;
 import cz.syntea.xdef.sys.SObjectWriter;
 import cz.syntea.xdef.sys.SDatetime;
@@ -23,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import test.utils.STester;
 
 /** TestReport
  *

@@ -13,6 +13,7 @@
 
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
@@ -28,7 +29,7 @@ import org.w3c.dom.Element;
 /** Test of checking of DOM object.
  * @author  Vaclav Trojan
  */
-public final class TestDOMParse extends Tester {
+public final class TestDOMParse extends XDTester {
 
 	public TestDOMParse() {super();}
 

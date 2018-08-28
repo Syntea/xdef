@@ -12,7 +12,6 @@
  */
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -33,10 +32,10 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import cz.syntea.xdef.sys.ReportWriter;
-import static cz.syntea.xdef.sys.STester.runTest;
 import cz.syntea.xdef.util.XdefToXsd;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import test.utils.STester;
 
 /** Test XDefinition to schema conversion.
  * @author Ilia Alexandrov

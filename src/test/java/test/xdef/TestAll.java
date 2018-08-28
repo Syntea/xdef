@@ -12,10 +12,11 @@
  */
 package test.xdef;
 
-import cz.syntea.xdef.sys.STester;
+import test.utils.XDTester;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import test.utils.STester;
 
 /** Run all tests of this package.
  * @author Vaclav Trojan
@@ -81,7 +82,7 @@ public class TestAll {
 			new TestXmlWriter(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef", Tester.getFulltestMode(), args);
+			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

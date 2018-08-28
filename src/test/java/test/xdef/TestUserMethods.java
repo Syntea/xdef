@@ -13,6 +13,7 @@
 
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
@@ -22,7 +23,7 @@ import org.w3c.dom.Element;
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
  */
-public final class TestUserMethods extends Tester {
+public final class TestUserMethods extends XDTester {
 
 	public TestUserMethods() {super();}
 

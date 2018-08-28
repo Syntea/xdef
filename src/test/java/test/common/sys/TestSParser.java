@@ -12,7 +12,6 @@
  */
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SUtils;
@@ -21,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import test.utils.STester;
 
 /** Test of simple parser.
  * @author Vaclav Trojan

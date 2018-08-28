@@ -14,6 +14,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import org.w3c.dom.Element;
@@ -23,7 +24,7 @@ import cz.syntea.xdef.util.GenXDefinition;
 /** Generation of XDefinition from XML
  * @author Vaclav Trojan
  */
-public class TestXDGen extends Tester {
+public class TestXDGen extends XDTester {
 
 	public TestXDGen() {super();}
 

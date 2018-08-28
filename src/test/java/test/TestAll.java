@@ -18,8 +18,7 @@ import org.testng.TestNG;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
-
-import test.xdef.Tester;
+import test.utils.XDTester;
 
 /** Execute all tests fast.
  * @author Vaclav Trojan
@@ -29,7 +28,7 @@ public class TestAll {
     /** prepare tests */
     @BeforeTest
     public static void beforeTests() {
-        Tester.setFulltestMode(false);
+        XDTester.setFulltestMode(false);
     }
 
     /** run TestAll in test.common */

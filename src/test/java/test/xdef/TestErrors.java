@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
@@ -29,7 +30,7 @@ import cz.syntea.xdef.sys.SUtils;
 /** Test of reporting of script errors.
  * @author Vaclav Trojan
  */
-public final class TestErrors extends Tester {
+public final class TestErrors extends XDTester {
 
 	public TestErrors() {super(); setChkSyntax(false);}
 

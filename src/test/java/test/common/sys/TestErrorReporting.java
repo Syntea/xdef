@@ -13,7 +13,6 @@
 
 package test.common.sys;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
@@ -22,7 +21,8 @@ import cz.syntea.xdef.sys.StringParser;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import cz.syntea.xdef.sys.ReportReader;
-import test.xdef.Tester;
+import test.utils.XDTester;
+import test.utils.STester;
 
 /** TestReport
  *
@@ -39,7 +39,7 @@ public class TestErrorReporting extends STester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-		if (Tester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			ArrayReporter reporter = new ArrayReporter();
 			reporter.putReport(report);
 			printReports(reporter, data);
@@ -47,7 +47,7 @@ public class TestErrorReporting extends STester {
 	}
 
 	public void printReports(ReportReader reporter, String data) {
-		if (Tester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			System.out.flush();
 			System.err.flush();
 			ReportPrinter.printListing(new PrintWriter(System.out),

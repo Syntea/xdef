@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.Report;
@@ -41,7 +42,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Test of x-definition composition mode.
  * @author Vaclav Trojan
  */
-final public class TestCompose extends Tester {
+final public class TestCompose extends XDTester {
 
 	public TestCompose() {super();}
 

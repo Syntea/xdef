@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.FileReportReader;
@@ -49,7 +50,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Test of parsing of source XML according to XDefinition.
  * @author Vaclav Trojan
  */
-public final class TestParse extends Tester {
+public final class TestParse extends XDTester {
 
 	public TestParse() {super();}
 

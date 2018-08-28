@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
@@ -23,7 +24,7 @@ import cz.syntea.xdef.proc.XXElement;
 /** Test of using external methods (such as query) in create mode.
  * @author Vaclav Trojan
  */
-public final class TestUserQuery extends Tester {
+public final class TestUserQuery extends XDTester {
 
 	public TestUserQuery() {super();}
 

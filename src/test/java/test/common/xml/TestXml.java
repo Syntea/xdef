@@ -12,7 +12,6 @@
  */
 package test.common.xml;
 
-import cz.syntea.xdef.sys.STester;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -26,6 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import test.utils.STester;
 
 /** Test XML writer.
  * @author Vaclav Trojan

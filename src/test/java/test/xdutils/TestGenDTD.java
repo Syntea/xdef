@@ -13,7 +13,6 @@
 
 package test.xdutils;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.util.GenDTD;
 import java.io.ByteArrayOutputStream;
@@ -25,6 +24,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+import test.utils.STester;
 
 /** Test of generation of DTD from XDefinition.
  * @author Vaclav Trojan

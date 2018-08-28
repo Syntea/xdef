@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SUtils;
@@ -24,7 +25,7 @@ import org.w3c.dom.Element;
 /** Test template
  * @author Vaclav Trojan
  */
-public final class TestTemplate extends Tester {
+public final class TestTemplate extends XDTester {
 
 	public TestTemplate() {super();}
 

@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
@@ -23,7 +24,7 @@ import org.w3c.dom.Element;
 /** Test of text options and text values.
  * @author Vaclav Trojan
  */
-public final class TestOptions extends Tester {
+public final class TestOptions extends XDTester {
 
 	public TestOptions() {super();}
 

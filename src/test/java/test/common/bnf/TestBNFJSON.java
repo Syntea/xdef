@@ -12,7 +12,6 @@
  */
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.STester;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.SParser;
 import cz.syntea.xdef.sys.StringParser;
@@ -20,6 +19,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import test.utils.STester;
 
 /** Test of BNF of JSON.
  * @author Vaclav Trojan

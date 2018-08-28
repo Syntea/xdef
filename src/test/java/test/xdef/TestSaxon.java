@@ -12,6 +12,7 @@
  */
 package test.xdef;
 
+import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
@@ -23,7 +24,7 @@ import org.w3c.dom.Element;
 /** Test versions with Saxon and without Saxon implementation.
  * @author Vaclav Trojan
  */
-public class TestSaxon extends Tester {
+public class TestSaxon extends XDTester {
 
 	public TestSaxon() {super();}
 
