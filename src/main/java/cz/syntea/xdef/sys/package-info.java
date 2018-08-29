@@ -115,18 +115,5 @@
  * {@link cz.syntea.xdef.sys.SObjectReader}.
  * <p>For generation of unique IDs you can use for multi VM</p>
  *
- * <H2><code>STester</code></H2>
- *
- * <UL>
- *
- * <li>
- * STester is the abstract class which provides tools for testing.
- * This class requires following structure of directories:
- * <p><code>build/classes src/javaSource_dataDir[/dataDir] or
- * test/javaSource_dataDir[/dataDir]</code>
- * <p>See {@link cz.syntea.xdef.sys.STester}.</p>
- * </li>
- *
- * </UL>
  */
 package cz.syntea.xdef.sys;
