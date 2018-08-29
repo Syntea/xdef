@@ -75,10 +75,10 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 "</a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
-			xml = "<a><b z='1 2'/><c x='1' y='3'/></a>";
+			xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertNoErrors(reporter);
-			xml = "<a><b z='1 3'/><c x='1' y='3'/></a>";
+			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertTrue(reporter.getErrorCount() == 1
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
