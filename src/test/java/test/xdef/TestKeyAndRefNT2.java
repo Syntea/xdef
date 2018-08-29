@@ -12,12 +12,8 @@
  */
 package test.xdef;
 
-import static test.util.TestUtil.XDEFNS;
-import static test.util.TestUtil.compile;
-import static test.util.TestUtil.getResrcStr;
 import static test.util.TestUtil.getResrc;
-import static test.util.TestUtil.parse;
-import static test.util.TestUtil.setProperty;
+import static test.util.TestUtil.getResrcStr;
 
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
@@ -30,11 +26,12 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.StringParser;
 import test.util.SoftAssert;
 import test.util.TestUtil;
+import test.util.XDTesterNT;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
  */
-public final class TestKeyAndRefNT2 {
+public final class TestKeyAndRefNT2 extends XDTesterNT {
 
 	public static String boundQName(final XXData data) {
 		String s = data.getTextValue();
@@ -59,7 +56,7 @@ public final class TestKeyAndRefNT2 {
 	}
 
 	@Test(groups = "xdef")
-	public static void test() {
+	public void test() {
 		SoftAssert a = new SoftAssert();
 		
 		String xdef;
@@ -78,10 +75,10 @@ public final class TestKeyAndRefNT2 {
 "</a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
-			xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
+			xml = "<a><b z='1 2'/><c x='1' y='3'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertNoErrors(reporter);
-			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
+			xml = "<a><b z='1 3'/><c x='1' y='3'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertTrue(reporter.getErrorCount() == 1
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
@@ -701,7 +698,7 @@ public final class TestKeyAndRefNT2 {
 			a.assertNoErrors(reporter);
 /*#end*/
 
-			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef2.xdef"));
+			xp = compile(TestUtil.getResrc(clazz, dataDir + "TestKeyAndRef2.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef2.xml"),
 				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef2.xml"),reporter));
 			a.assertNoErrors(reporter);
@@ -890,6 +887,6 @@ public final class TestKeyAndRefNT2 {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-		test();
+		new TestKeyAndRefNT2().test();
 	}
 }
