@@ -199,7 +199,7 @@ public final class DefNull extends XDValueAbstract {
 			case XD_RESULTSET: // XDResultSet value
 				return new DefSQLResultSet();
 			case CompileBase.UNIQUESET_VALUE: // UNIQUESET value
-				return new CodeUniqueSet(new CodeUniquesetParseItem[0], "null");
+				return new CodeUniqueset(new CodeUniquesetParseItem[0], "null");
 			case CompileBase.PARSEITEM_VALUE: // ParseItem value
 				return new CodeUniquesetParseItem();
 		}

@@ -16,7 +16,7 @@ package cz.syntea.xdef.impl;
 import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefBNFRule;
 import cz.syntea.xdef.impl.code.DefXPathExpr;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefRegex;
 import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.impl.code.DefBNFGrammar;
@@ -217,7 +217,7 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					case CompileBase.UNIQUESET_VALUE:
 					case CompileBase.UNIQUESET_M_VALUE: {
-						CodeUniqueSet y = (CodeUniqueSet) x;
+						CodeUniqueset y = (CodeUniqueset) x;
 						CodeUniquesetParseItem[] keys = y.getParsedItems();
 						writeLength(keys.length);
 						for (CodeUniquesetParseItem key : keys) {

@@ -25,7 +25,7 @@ import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefSQLResultSet;
 import cz.syntea.xdef.impl.code.DefOutStream;
 import cz.syntea.xdef.impl.code.DefSQLStatement;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefBytes;
 import cz.syntea.xdef.impl.code.DefObject;
 import cz.syntea.xdef.impl.code.DefDate;
@@ -263,7 +263,7 @@ public final class XDReader extends SObjectReader {
 									readInt(), i, readShort(), readBoolean());
 							}
 						}
-						return new CodeUniqueSet(keys, readString());
+						return new CodeUniqueset(keys, readString());
 					}
 					case XDValueID.XD_SERVICE:
 						return new DefSQLService();

@@ -16,7 +16,7 @@ package cz.syntea.xdef.impl.parsers;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.impl.code.CodeUniqueSet;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.proc.XXNode;
 
 /** Parser of Schema "IDREF" type.
@@ -34,7 +34,7 @@ public class XSParseIDREF extends XSParseQName {
 				"xnode; in XSParseENTITY.check(parser, xnode);");
 			return;
 		}
-		CodeUniqueSet tab = (CodeUniqueSet) xnode.getIdRefTable();
+		CodeUniqueset tab = (CodeUniqueset) xnode.getIdRefTable();
 		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
 		ArrayReporter a = tab.chkId();
 		if (a != null) {
