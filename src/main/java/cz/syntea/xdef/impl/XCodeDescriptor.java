@@ -12,7 +12,6 @@
  */
 package cz.syntea.xdef.impl;
 
-import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.XDPool;
 import java.io.IOException;

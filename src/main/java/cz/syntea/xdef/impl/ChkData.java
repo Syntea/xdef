@@ -33,13 +33,13 @@ import cz.syntea.xdef.model.XMData;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMElement;
 import cz.syntea.xdef.model.XMNode;
-import java.util.Map;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDContainer;
+import cz.syntea.xdef.XDUniqueset;
 
 /** Contains data from X-definition or it can be used as a base
  * for construction of XML objects according to a X-definition.
@@ -373,15 +373,6 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	public final Element getElement() {return _parent.getElement();}
 
 	@Override
-	/** Get table with references to an object (used internally in the
-	 * processor of XScript).
-	 * @return table with references to an object or <tt>null</tt>.
-	 */
-	public final Map<Object, ArrayReporter> getIdRefTable() {
-		return _parent.getIdRefTable();
-	}
-
-	@Override
 	/** Get actual model.
 	 * @return actual model.
 	 */
@@ -400,5 +391,12 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	public final void setXComponent(final XComponent x) {
 		_parent.setXComponent(x);
 	}
+
+	@Override
+	/** Get default table with references IDS (used internally in the
+	 * processor of XScript).
+	 * @return default table with references IDS or <tt>null</tt>.
+	 */
+	public final XDUniqueset getIdRefTable() {return _parent.getIdRefTable();}
 
 }

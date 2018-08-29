@@ -15,10 +15,9 @@
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.impl.code.CodeUniqueSet;
 import cz.syntea.xdef.proc.XXNode;
-import java.util.Map;
 
 /** Parser of Schema "SET" type.
  * @author Vaclav Trojan
@@ -36,16 +35,9 @@ public class XDParseSET extends XSParseQName {
 				"xnode; in XSParseENTITY.check(parser, xnode);");
 			return;
 		}
-		String id = result.getSourceBuffer();
-		Map<Object, ArrayReporter> tab = xnode.getIdRefTable();
-		ArrayReporter a = tab.get(id);
-		if (a == null) {// new item
-			tab.put(id, new ArrayReporter());  // set item to table
-		} else {
-			if (a.isEmpty()) {
-				a.clear(); //clear unresolved references
-			}
-		}
+		CodeUniqueSet tab = (CodeUniqueSet) xnode.getIdRefTable();
+		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
+		tab.setId();
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

@@ -16,8 +16,10 @@ package cz.syntea.xdef.impl.parsers;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.impl.code.CodeUniqueSet;
 import cz.syntea.xdef.proc.XXNode;
-import java.util.Map;
+import cz.syntea.xdef.sys.Report;
+import cz.syntea.xdef.sys.SReporter;
 
 /** Parser of Schema "IDREF" type.
  * @author Vaclav Trojan
@@ -35,13 +37,18 @@ public class XDParseCHKID extends XSParseQName {
 				"xnode in XDParseCHKID.finalCheck(parser, xnode);");
 			return;
 		}
-		String id = result.getSourceBuffer();
-		Map<Object, ArrayReporter> tab = xnode.getIdRefTable();
-		ArrayReporter a = tab.get(id);
-		if ((a == null || a.size() > 0)) {
-			//Missing an element with identifier '&{0}'
-			result.error(XDEF.XDEF522, id+"&{xpath}"+xnode.getXPos()
-			+ "&{xdpos}" + xnode.getXDPosition());
+		CodeUniqueSet tab = (CodeUniqueSet) xnode.getIdRefTable();
+		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
+		ArrayReporter a = tab.chkId();
+		if (a != null) {
+			SReporter reporter = xnode.getReporter();
+			result.error(XDEF.XDEF522, result.getParsedString()
+				+"&{xpath}"+xnode.getXPos()
+				+ "&{xdpos}" + xnode.getXDPosition());
+			Report rep;
+			while((rep = a.getReport()) != null) {
+				reporter.putReport(rep);
+			}
 		}
 	}
 	@Override

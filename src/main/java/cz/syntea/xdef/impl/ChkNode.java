@@ -63,6 +63,7 @@ import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDContainer;
+import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.impl.code.DefLocale;
 import java.util.Locale;
 
@@ -1015,12 +1016,10 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public XDParseResult getParseResult() {return _parseResult;}
 
 	@Override
-	/** Get table with references to an object (used internally in the
+	/** Get default table with references IDS (used internally in the
 	 * processor of XScript).
-	 * @return table with references to an object or <tt>null</tt>.
+	 * @return default table with references IDS or <tt>null</tt>.
 	 */
-	public final Map<Object, ArrayReporter> getIdRefTable() {
-		return _scp.getIdRefTable();
-	}
+	public final XDUniqueset getIdRefTable() {return _scp.getIdRefTable();}
 
 }

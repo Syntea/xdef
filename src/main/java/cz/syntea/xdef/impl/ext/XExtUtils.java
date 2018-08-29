@@ -13,7 +13,6 @@
  */
 package cz.syntea.xdef.impl.ext;
 
-import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;

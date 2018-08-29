@@ -61,7 +61,7 @@ public final class TestDTDTypes extends XDTester {
 			if (rep == null) {
 				fail("Error not recognized");
 			} else {
-				assertEq("XDEF819", rep.getMsgID(), rep.toString());
+				assertEq("XDEF523", rep.getMsgID(), rep.toString());
 			}
 //ID
 			xdef =
@@ -78,7 +78,7 @@ public final class TestDTDTypes extends XDTester {
 			if (rep == null) {
 				fail("Error not recognized");
 			} else {
-				assertEq("XDEF819", rep.getMsgID(), rep.toString());
+				assertEq("XDEF523", rep.getMsgID(), rep.toString());
 			}
 //IDREF
 			xdef =

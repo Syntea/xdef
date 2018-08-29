@@ -32,11 +32,11 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDParseResult;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDResultSet;
+import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.XDValue;
 
 /** Interface of models in X-definition.
- *
- * @author Vaclav Trojan
+* @author Vaclav Trojan
  */
 public interface XXNode extends XDValue {
 
@@ -337,11 +337,11 @@ public interface XXNode extends XDValue {
 	 */
 	public void setXDContext(String source);
 
-	/** Get table with references to an object (used internally in the
+	/** Get table with references assigned to an object (used internally in the
 	 * processor of XScript).
 	 * @return table with references to an object or <tt>null</tt>.
 	 */
-	public Map<Object, ArrayReporter> getIdRefTable();
+	public XDUniqueset getIdRefTable();
 
 	/** Get actual model.
 	 * @return actual model.

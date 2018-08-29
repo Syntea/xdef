@@ -15,10 +15,9 @@ package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.impl.code.CodeUniqueSet;
 import cz.syntea.xdef.proc.XXNode;
-import java.util.Map;
 
 /** Parser of Schema "IDREF" type.
  * @author Vaclav Trojan
@@ -35,25 +34,15 @@ public class XSParseIDREF extends XSParseQName {
 				"xnode; in XSParseENTITY.check(parser, xnode);");
 			return;
 		}
-		String id = result.getSourceBuffer();
-		Map<Object, ArrayReporter> tab = xnode.getIdRefTable();
-		ArrayReporter a = tab.get(id);
-		boolean err = false;
-		if (a == null) {
-			tab.put(id, a = new ArrayReporter()); //new item
-			err = true;
-		} else if (a.size() > 0) {
-			err = true;
-		}
-		if (err) {
-			//Missing an element with identifier '&{0}'
-			Report rep = Report.error(XDEF.XDEF522,
-				id + "&{xpath}" + xnode.getXPos()
-				+ "&{xdpos}" + xnode.getXDPosition());
-			xnode.getReporter().genPositionInfo(rep);
-			a.putReport(rep);
+		CodeUniqueSet tab = (CodeUniqueSet) xnode.getIdRefTable();
+		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
+		ArrayReporter a = tab.chkId();
+		if (a != null) {
+			//Unique value "&{0}" was not set
+			a.error(XDEF.XDEF522, result.getParsedValue());
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }
