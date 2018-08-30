@@ -1142,8 +1142,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XX_ATTR:
 									case XX_TEXT:
 									case XD_PARSER:
-									case XD_UNIQUESET:
-									case XD_UNIQUESETITEM:
 										pars[j + k] = stack[i];
 										break;
 									default:

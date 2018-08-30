@@ -1540,6 +1540,9 @@ public final class CompileCode extends CompileBase {
 	 * @return name of the unknown method or null.
 	 */
 	final String genMethod(final String name, final int numPar) {
+if ("uflt".equals(name)) {
+	System.out.println(name);
+}
 		String extName = name + typeList(numPar);
 		if (extName.indexOf('?') >= 0) {
 			//don't process searching of method with undefined parameter

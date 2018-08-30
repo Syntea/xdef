@@ -39,7 +39,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDContainer;
-import cz.syntea.xdef.XDUniqueset;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 
 /** Contains data from X-definition or it can be used as a base
  * for construction of XML objects according to a X-definition.
@@ -58,6 +58,12 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 		_parent = parent;
 		_node = node;
 	}
+
+	/** Get default table with references IDS (used internally in the
+	 * processor of XScript).
+	 * @return default table with references IDS or <tt>null</tt>.
+	 */
+	public final CodeUniqueset getIdRefTable() {return _parent.getIdRefTable();}
 
 	@Override
 	/** Get text value of this node.
@@ -391,12 +397,5 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	public final void setXComponent(final XComponent x) {
 		_parent.setXComponent(x);
 	}
-
-	@Override
-	/** Get default table with references IDS (used internally in the
-	 * processor of XScript).
-	 * @return default table with references IDS or <tt>null</tt>.
-	 */
-	public final XDUniqueset getIdRefTable() {return _parent.getIdRefTable();}
 
 }

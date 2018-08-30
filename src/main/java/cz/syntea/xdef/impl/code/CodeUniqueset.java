@@ -1,5 +1,5 @@
 /*
- * File: CodeUniqueSet.java
+ * File: CodeUniqueset.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -12,7 +12,6 @@
  */
 package cz.syntea.xdef.impl.code;
 
-import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -33,7 +32,7 @@ import java.util.Set;
  * assigned user value etc.)
  * @author Vaclav Trojan
  */
-public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
+public final class CodeUniqueset extends XDValueAbstract {
 
 	/** Map of values. */
 	private final Map<Object, UniquesetItem> _map;
@@ -43,8 +42,8 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 	private final CodeUniquesetParseItem[] _parseItems;
 	/** Name of this uniqueSet. */
 	private final String _name;
-	/** Type of this object (UNIQUESET_VALUE or UNIQUESET_M_VALUE). */
-	private final short _type;
+//	/** Type of this object (UNIQUESET_VALUE or UNIQUESET_M_VALUE). */
+//	private final short _type;
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
@@ -56,8 +55,8 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 	public CodeUniqueset(final CodeUniquesetParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
-		_type = parseItems.length > 1
-			? CompileBase.UNIQUESET_M_VALUE : CompileBase.UNIQUESET_VALUE;
+//		_type = parseItems.length > 1
+//			? CompileBase.UNIQUESET_M_VALUE : CompileBase.UNIQUESET_VALUE;
 		_parseItems = parseItems;
 		_name = name;
 	}
@@ -141,13 +140,11 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 // Implementation of XDUniqueset interface.
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get name of this uniqueSet.
 	 * @return name of this uniqueSet.
 	 */
 	public final String getName() {return _name;}
 
-	@Override
 	/** Write error reports to reporter and clear map.
 	 * @param reporter report writer.
 	 * @return true if reporter was empty.
@@ -171,7 +168,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		return result;
 	}
 
-	@Override
 	/** Get address of parsing method.
 	 * @return the address of code.
 	 */
@@ -179,13 +175,11 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		return _keyIndex!=-1 ? _parseItems[_keyIndex].getParseMethodAddr() : -1;
 	}
 
-	@Override
 	/** Get key part index of the actual item.
 	 * @return actual key index.
 	 */
 	public final int getKeyItemIndex() {return _keyIndex;}
 
-	@Override
 	/** Set object as marker.
 	 * @param marker Object which is used for markers.
 	 * @return true if the marker is new in the set of makers.
@@ -194,7 +188,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		return _markers.add(marker);
 	}
 
-	@Override
 	/** Check if all item are marked with given object in this unique set.
 	 * @param marker Object used as marker.
 	 * @return list unmarked keys in this unique set or return the empty string.
@@ -214,7 +207,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		return s;
 	}
 
-	@Override
 	/** Set named named value assigned to to the actual unique set item.
 	 * If the key not exists this method does nothing.
 	 * @param name name of value.
@@ -227,7 +219,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		}
 	}
 
-	@Override
 	/** Get named named value assigned to the actual unique set item.
 	 * If the key not exists this method returns null.
 	 * @param name name of value.
@@ -238,7 +229,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 		return uso == null ? null : uso.getValue(name);
 	}
 
-	@Override
 	/** Get printable form of actual value of the key.
 	 * @return printable form of actual value of the key.
 	 */
@@ -252,7 +242,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 	/** Get type id of this object.
 	 * @return The type id of this object.
 	 */
-	public final short getItemId() {return _type;}
+	public final short getItemId() {return CompileBase.UNIQUESET_M_VALUE;}
 
 	@Override
 	/** Get ID of the type of value
@@ -262,9 +252,10 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueset{
 
 	@Override
 	public String toString() {
-		String result = (_type == CompileBase.UNIQUESET_VALUE
-			? "UNIQUESET: " : "UNIQUESET_M: ") + _name
-			+ ", size=" + _map.size() + ", ";
+//		String result = (_type == CompileBase.UNIQUESET_VALUE
+//			? "UNIQUESET: " : "UNIQUESET_M: ") + _name
+//			+ ", size=" + _map.size() + ", ";
+		String result = "UNIQUESET: " + _name;
 		if (_parseItems.length > 1) {
 			result += "keys:";
 			for (int i = 0; i < _parseItems.length; i++) {

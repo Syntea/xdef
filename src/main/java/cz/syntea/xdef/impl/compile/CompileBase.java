@@ -38,17 +38,17 @@ public class CompileBase implements CodeTable, XDValueID {
 	// Non public Value types
 	////////////////////////////////////////////////////////////////////////////
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//49
+	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//46
 	/** Value of PARSEITEM. */
-	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//50
+	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//47
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = PARSEITEM_VALUE + 1;		//51
+	public static final short UNIQUESET_VALUE = PARSEITEM_VALUE + 1;		//48
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_M_VALUE = UNIQUESET_VALUE + 1;		//52
+	public static final short UNIQUESET_M_VALUE = UNIQUESET_VALUE + 1;		//49
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//53
+	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//50
 	/** Number of types + 1 (attribute ref, undefined type). */
-	public static final short MAX_VALUE_ID = UNIQUESET_KEY_VALUE + 1;		//54
+	public static final short MAX_VALUE_ID = UNIQUESET_KEY_VALUE + 1;		//51
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -137,7 +137,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_RESULTSET, "ResultSet", cz.syntea.xdef.XDResultSet.class);
 		setType(XM_MODEL, "XModel", null);
 		setType(XD_NAMEDVALUE, "NamedValue", cz.syntea.xdef.XDNamedValue.class);
-		setType(XD_UNIQUESET, "uniqueSet", cz.syntea.xdef.XDUniqueset.class);
 		setType(XD_XMLWRITER, "XmlOutStream",
 			cz.syntea.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
@@ -191,7 +190,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_STATEMENT) + ";XDStatement;" +
 			((char) XD_RESULTSET) + ";XDResultSet;" +
 			((char) XD_NAMEDVALUE) + ";XDNamedItem;" +
-			((char) XD_UNIQUESET) + ";XDUniqueset;" +
 			((char) XD_XMLWRITER) + ";XDXmlOutStream;";
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1333,21 +1331,21 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // UNIQUESET (key, keyref)
 ////////////////////////////////////////////////////////////////////////////////
-		ti = UNIQUESET_VALUE;
-		method(ti, genInternalMethod(UNIQUESET_ID, XD_PARSERESULT,//check ID
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE, XD_PARSERESULT), "ID");
-		method(ti, genInternalMethod(UNIQUESET_SET, XD_PARSERESULT,
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "SET");
-		method(ti, genInternalMethod(UNIQUESET_IDREF, XD_PARSERESULT,
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE), "IDREF");
-		method(ti, genInternalMethod(UNIQUESET_IDREFS, XD_PARSERESULT,
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "IDREFS");
-		method(ti, genInternalMethod(UNIQUESET_CHKID, XD_PARSERESULT,
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "CHKID");
-		method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT,
-			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "CHKIDS");
-		method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_BOOLEAN,
-			ELEMENT_MODE, 1, 1, UNIQUESET_VALUE), "CLEAR");
+//		ti = UNIQUESET_VALUE;
+//		method(ti, genInternalMethod(UNIQUESET_ID, XD_PARSERESULT,//check ID
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE, XD_PARSERESULT), "ID");
+//		method(ti, genInternalMethod(UNIQUESET_SET, XD_PARSERESULT,
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "SET");
+//		method(ti, genInternalMethod(UNIQUESET_IDREF, XD_PARSERESULT,
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE), "IDREF");
+//		method(ti, genInternalMethod(UNIQUESET_IDREFS, XD_PARSERESULT,
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "IDREFS");
+//		method(ti, genInternalMethod(UNIQUESET_CHKID, XD_PARSERESULT,
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "CHKID");
+//		method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT,
+//			TEXT_MODE, 1, 2, UNIQUESET_VALUE,XD_PARSERESULT), "CHKIDS");
+//		method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_BOOLEAN,
+//			ELEMENT_MODE, 1, 1, UNIQUESET_VALUE), "CLEAR");
 
 ////////////////////////////////////////////////////////////////////////////////
 // UNIQUESET_KEY_VALUE (part of key list)
@@ -1361,6 +1359,9 @@ public class CompileBase implements CodeTable, XDValueID {
 			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "IDREF");
 		method(ti, genInternalMethod(UNIQUESET_KEY_CHKID, XD_PARSERESULT,
 			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "CHKID");
+		// following two methods
+		method(ti, genInternalMethod(UNIQUESET_IDREFS, XD_PARSERESULT,
+			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "IDREFS");
 		method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT,
 			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE,XD_PARSERESULT), "CHKIDS");
 

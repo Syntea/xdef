@@ -476,6 +476,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					yType = -1;
 				}
 			}
+			code = -1;
 			code = "ID".equals(methodName) ? UNIQUESET_ID
 				: "IDREF".equals(methodName) ? UNIQUESET_IDREF
 				: "CHKID".equals(methodName) ? UNIQUESET_CHKID
@@ -3534,7 +3535,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			error(XDEF.XDEF450, name);//Redefinition of variable '&{0}'
 			name = CompileBase.genErrId(); // "UNDEF$$$";
 		}
-		List<CodeUniquesetParseItem> keyItems = new ArrayList<CodeUniquesetParseItem>();
+		List<CodeUniquesetParseItem> keyItems =
+			new ArrayList<CodeUniquesetParseItem>();
 		CodeI1 jmp = null;
 		switch (nextSymbol()) {
 			case IDENTIFIER_SYM: { // type method
@@ -3666,11 +3668,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (keySize == 0) {
 			return; // an error should be reported in the code above.
 		}
-		CodeUniquesetParseItem[] keys = keyItems.toArray(new CodeUniquesetParseItem[keySize]);
+		CodeUniquesetParseItem[] keys =
+			keyItems.toArray(new CodeUniquesetParseItem[keySize]);
 		boolean namedKey = keys[0].getParseName() != null;
 		CompileVariable var = _g.addVariable(name,
 			namedKey ? CompileBase.UNIQUESET_M_VALUE : varType, varKind);
 		var.setParseMethodAddr(keys[0].getParseMethodAddr());
+if ("uflt".equals(name)) {
+	System.out.println(name);
+}
 		var.setParseResultType(keys[0].getParsedType());
 		if (varType == CompileBase.UNIQUESET_VALUE) {
 			CodeI1 lastStop = varKind == 'G' ? _g.getLastStop() : null;
@@ -3724,7 +3730,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return false;
 			}
 		}
-		keyItems.add(new CodeUniquesetParseItem(name==null||name.isEmpty() ? null : name,
+		keyItems.add(new CodeUniquesetParseItem(
+			name==null||name.isEmpty() ? null : name,
 			addr, keyItems.size(), parsedType,optional));
 		return true;
 	}

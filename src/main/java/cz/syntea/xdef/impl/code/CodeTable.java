@@ -712,8 +712,6 @@ public interface CodeTable {
 	static final short UNIQUESET_KEY_CHKID = UNIQUESET_KEY_IDREF + 1;
 	/** Set key part (setKey) (error if key part was declared). */
 	static final short UNIQUESET_KEY_SETKEY = UNIQUESET_KEY_CHKID + 1;
-//	/** Set key part from parsed value. */
-//	static final short UNIQUESET_ASSUME =UNIQUESET_KEY_SETKEY + 1;
 	/** Set key with key part (error if key already exists). */
 	static final short UNIQUESET_KEY_ID = UNIQUESET_KEY_SETKEY + 1;
 	/** Set Id value (ID) (no errors) */

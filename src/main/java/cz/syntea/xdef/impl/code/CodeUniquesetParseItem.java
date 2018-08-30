@@ -12,7 +12,6 @@
  */
 package cz.syntea.xdef.impl.code;
 
-import cz.syntea.xdef.XDUniquesetParseItem;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueAbstract;
 import cz.syntea.xdef.impl.compile.CompileBase;
@@ -22,8 +21,7 @@ import cz.syntea.xdef.XDValueType;
 /** Implements uniqueSet parse item.
  * @author Vaclav Trojan
  */
-public final class CodeUniquesetParseItem extends XDValueAbstract
-	implements XDUniquesetParseItem {
+public final class CodeUniquesetParseItem extends XDValueAbstract {
 
 	/** Address of check method. */
 	private final int _parseMethodAddr;
@@ -73,19 +71,16 @@ public final class CodeUniquesetParseItem extends XDValueAbstract
 // Implementation of XDUniquesetParseItem interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get address of parsing method.
 	 * @return the address of code.
 	 */
 	public final int getParseMethodAddr() {return _parseMethodAddr;}
 
-	@Override
 	/** Get parsed type.
 	 * @return the type id.
 	 */
 	public final short getParsedType() {return _itemType;}
 
-	@Override
 	/** Get parsed type.
 	 * @return the type id.
 	 */
@@ -96,7 +91,6 @@ public final class CodeUniquesetParseItem extends XDValueAbstract
 	 */
 	public final void setParsedObject(XDValue value) {_itemValue = value;}
 
-	@Override
 	/** Check if this item is optional or required.
 	 * @return true if this item is required.
 	 */

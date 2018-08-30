@@ -22,7 +22,6 @@ import cz.syntea.xdef.xml.KNamespace;
 import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMNode;
-import java.util.Map;
 import org.w3c.dom.Node;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
@@ -32,7 +31,6 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDParseResult;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDResultSet;
-import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.XDValue;
 
 /** Interface of models in X-definition.
@@ -336,12 +334,6 @@ public interface XXNode extends XDValue {
 	 * @param source string with pathname, URL or source of XML node.
 	 */
 	public void setXDContext(String source);
-
-	/** Get table with references assigned to an object (used internally in the
-	 * processor of XScript).
-	 * @return table with references to an object or <tt>null</tt>.
-	 */
-	public XDUniqueset getIdRefTable();
 
 	/** Get actual model.
 	 * @return actual model.

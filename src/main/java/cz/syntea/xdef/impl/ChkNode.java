@@ -58,19 +58,18 @@ import java.io.File;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Map;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDContainer;
-import cz.syntea.xdef.XDUniqueset;
+import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefLocale;
 import java.util.Locale;
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
  */
-abstract class ChkNode extends XDValueAbstract implements XXNode {
+public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	/** The name of element model. */
 	final String _name;
@@ -255,6 +254,33 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setStdIn(final XDInput in) {_scp.setStdIn(in);}
 
+	/** Get default table with references IDS (used internally in the
+	 * processor of XScript).
+	 * @return default table with references IDS or <tt>null</tt>.
+	 */
+	public final CodeUniqueset getIdRefTable() {return _scp.getIdRefTable();}
+
+	/** Set source element as context for create mode.
+	 * @param sourceElem source element to be set (create mode).
+	 */
+	public final void setCreateContext(final Element sourceElem) {
+		_sourceElem = sourceElem;
+	}
+
+	/** Get actual source context for create mode.
+	 * @return source context or <tt>null</tt> if not available.
+	 */
+	public final Object getCreateContext() {return _sourceElem;}
+
+	final void debugXPos(final char action) {
+		if (_scp.isDebugMode()) {
+			if (_scp.getDebugger().hasXPos(action + _xPos)) {
+				_scp.getDebugger().debug(this, null, -1, -1, null, null,
+					getXDPool().getDebugInfo(), null, (byte) 0);
+			}
+		}
+	}
+
 	@Override
 	/** Get actual source context for create mode.
 	 * @return source context or <tt>null</tt> if not available.
@@ -264,15 +290,6 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return new DefElement(_sourceElem);
 		}
 		return null;
-	}
-
-	final void debugXPos(final char action) {
-		if (_scp.isDebugMode()) {
-			if (_scp.getDebugger().hasXPos(action + _xPos)) {
-				_scp.getDebugger().debug(this, null, -1, -1, null, null,
-					getXDPool().getDebugInfo(), null, (byte) 0);
-			}
-		}
 	}
 
 	@Override
@@ -318,18 +335,6 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setXDContext(final String source) {
 		setXDContext(KXmlUtils.parseXml(source));
 	}
-
-	/** Set source element as context for create mode.
-	 * @param sourceElem source element to be set (create mode).
-	 */
-	public final void setCreateContext(final Element sourceElem) {
-		_sourceElem = sourceElem;
-	}
-
-	/** Get actual source context for create mode.
-	 * @return source context or <tt>null</tt> if not available.
-	 */
-	public final Object getCreateContext() {return _sourceElem;}
 
 	@Override
 	/** Get names of variables.
@@ -1014,12 +1019,5 @@ abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return parsed result of an attribute or text node.
 	 */
 	public XDParseResult getParseResult() {return _parseResult;}
-
-	@Override
-	/** Get default table with references IDS (used internally in the
-	 * processor of XScript).
-	 * @return default table with references IDS or <tt>null</tt>.
-	 */
-	public final XDUniqueset getIdRefTable() {return _scp.getIdRefTable();}
 
 }

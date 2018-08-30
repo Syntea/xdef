@@ -42,7 +42,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param type The type id.
 	 * @return The type name or null.
 	 */
-	private final static String getTypeAbbrev(final short type) {
+	private static String getTypeAbbrev(final short type) {
 		return "(" + getTypeName(type) + ")";
 	}
 

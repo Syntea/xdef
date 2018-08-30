@@ -15,6 +15,7 @@ package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.impl.ChkNode;
 import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.proc.XXNode;
 import cz.syntea.xdef.sys.Report;
@@ -35,7 +36,7 @@ public class XSParseID extends XSParseQName {
 				"xnode; in XSParseENTITY.check(parser, xnode);");
 			return;
 		}
-		CodeUniqueset tab = (CodeUniqueset) xnode.getIdRefTable();
+		CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
 		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
 		Report rep = tab.setId();
 		if (rep != null) {

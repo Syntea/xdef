@@ -26,7 +26,6 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.component.XComponent;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.XDUniqueset;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueType;
 import cz.syntea.xdef.proc.XXData;
@@ -3362,10 +3361,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		int addCount() {return ++_counter;}
 	}
 
-	public final void addMarkedUniqueset(XDUniqueset us) {
-		CodeUniqueset x = (CodeUniqueset) us;
-		_markedUniqueSets.add(x);
-		x.setMarker(this);
+	/** Mark unique set with this instance of ChkElement.
+	 * @param us unique set.
+	 */
+	public final void addMarkedUniqueset(CodeUniqueset us) {
+		_markedUniqueSets.add(us);
+		us.setMarker(this);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
