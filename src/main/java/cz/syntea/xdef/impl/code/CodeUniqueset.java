@@ -42,8 +42,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 	private final CodeUniquesetParseItem[] _parseItems;
 	/** Name of this uniqueSet. */
 	private final String _name;
-//	/** Type of this object (UNIQUESET_VALUE or UNIQUESET_M_VALUE). */
-//	private final short _type;
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
@@ -55,8 +53,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public CodeUniqueset(final CodeUniquesetParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
-//		_type = parseItems.length > 1
-//			? CompileBase.UNIQUESET_M_VALUE : CompileBase.UNIQUESET_VALUE;
 		_parseItems = parseItems;
 		_name = name;
 	}
@@ -252,9 +248,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 	@Override
 	public String toString() {
-//		String result = (_type == CompileBase.UNIQUESET_VALUE
-//			? "UNIQUESET: " : "UNIQUESET_M: ") + _name
-//			+ ", size=" + _map.size() + ", ";
 		String result = "UNIQUESET: " + _name;
 		if (_parseItems.length > 1) {
 			result += "keys:";

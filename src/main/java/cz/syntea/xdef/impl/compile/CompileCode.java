@@ -1540,9 +1540,6 @@ public final class CompileCode extends CompileBase {
 	 * @return name of the unknown method or null.
 	 */
 	final String genMethod(final String name, final int numPar) {
-if ("uflt".equals(name)) {
-	System.out.println(name);
-}
 		String extName = name + typeList(numPar);
 		if (extName.indexOf('?') >= 0) {
 			//don't process searching of method with undefined parameter
@@ -1612,7 +1609,7 @@ if ("uflt".equals(name)) {
 	 * @param numPar Number of parameters (types of parameters are in stack).
 	 */
 	final boolean internalMethod(final String name, final int numPar) {
-		InternalMethod imethod = getTypeMethod(MAX_VALUE_ID, name);
+		InternalMethod imethod = getTypeMethod(NOTYPE_VALUE_ID, name);
 		if (imethod == null) {
 			return false;
 		}
@@ -1659,7 +1656,7 @@ if ("uflt".equals(name)) {
 				return true;
 			}
 		}
-		if (xType < 0 || xType >= MAX_VALUE_ID) {
+		if (xType < 0 || xType >= NOTYPE_VALUE_ID) {
 			return false;
 		}
 		InternalMethod imethod = getTypeMethod(xType, name);
@@ -1785,7 +1782,7 @@ if ("uflt".equals(name)) {
 					par1typ != XD_CONTAINER && par1typ != XD_PARSER) {
 					reportDeprecated("list", "enum");
 					genInternalMethod("enum",
-						npar, getTypeMethod(MAX_VALUE_ID, "enum"));
+						npar, getTypeMethod(NOTYPE_VALUE_ID, "enum"));
 					return;
 				}
 				XDParser p =
@@ -2148,14 +2145,14 @@ if ("uflt".equals(name)) {
 				break;
 			case GET_ELEMENT:
 				if (npar > 0) {//getElement(list, index)
-					method = getTypeMethod(MAX_VALUE_ID, "#getElement");
+					method = getTypeMethod(NOTYPE_VALUE_ID, "#getElement");
 					code = method.getCode();
 					resultType = method.getResultType();
 				}
 				break;
 			case CONTEXT_GETTEXT:
 				if (npar == 0) {//getText()
-					method = getTypeMethod(MAX_VALUE_ID, "#getValue");
+					method = getTypeMethod(NOTYPE_VALUE_ID, "#getValue");
 					code = method.getCode();
 					resultType = method.getResultType();
 				}

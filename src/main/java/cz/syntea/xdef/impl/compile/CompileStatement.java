@@ -298,7 +298,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (_sym == MUL_SYM && _g._sp - sp == 1
 					&& _g._tstack[_g._sp] == XD_INT
 					&& (m = CompileCode
-						.getTypeMethod(CompileBase.MAX_VALUE_ID,name)) != null
+						.getTypeMethod(CompileBase.NOTYPE_VALUE_ID,name)) != null
 					&& m.getResultType() == XD_PARSER
 					&& m.getParsedResult() == XD_STRING
 					&& (sqn = m.getSqParamNames()) != null
@@ -2853,8 +2853,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 				if (_sym == IDENTIFIER_SYM) {
 					String pname = _idName;
-					if (CompileBase.getTypeMethod(
-						CompileBase.MAX_VALUE_ID, pname) != null) {
+					if (CompileBase.getTypeMethod(CompileBase.NOTYPE_VALUE_ID,
+						pname) != null) {
 						error(XDEF.XDEF419); //Name of parameter expected
 					} else {
 						if (paramNames.indexOf(pname) >= 0) {
@@ -3674,9 +3674,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CompileVariable var = _g.addVariable(name,
 			namedKey ? CompileBase.UNIQUESET_M_VALUE : varType, varKind);
 		var.setParseMethodAddr(keys[0].getParseMethodAddr());
-if ("uflt".equals(name)) {
-	System.out.println(name);
-}
 		var.setParseResultType(keys[0].getParsedType());
 		if (varType == CompileBase.UNIQUESET_VALUE) {
 			CodeI1 lastStop = varKind == 'G' ? _g.getLastStop() : null;

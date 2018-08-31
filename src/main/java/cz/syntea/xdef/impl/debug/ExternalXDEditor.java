@@ -52,11 +52,11 @@ public abstract class ExternalXDEditor implements XEditor {
 	public boolean setXEditor(final XDPool xpool, final ArrayReporter reporter){
 		try {
 			// prepare files containing the xpool and reporter
-			File poolFile = File.createTempFile("defPool", "dp");
+			File poolFile = File.createTempFile("defPool", ".dp");
 			poolFile.deleteOnExit();
-			File reportFile = File.createTempFile("reports", "rep");
+			File reportFile = File.createTempFile("reports", ".rep");
 			reportFile.deleteOnExit();
-			File resultFile = File.createTempFile("result", "txt");
+			File resultFile = File.createTempFile("result", ".txt");
 			resultFile.deleteOnExit();
 
 			// write data to files

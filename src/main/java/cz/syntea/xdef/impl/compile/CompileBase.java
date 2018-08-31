@@ -42,13 +42,13 @@ public class CompileBase implements CodeTable, XDValueID {
 	/** Value of PARSEITEM. */
 	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//47
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = PARSEITEM_VALUE + 1;		//48
-	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_M_VALUE = UNIQUESET_VALUE + 1;		//49
+	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//48
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//50
-	/** Number of types + 1 (attribute ref, undefined type). */
-	public static final short MAX_VALUE_ID = UNIQUESET_KEY_VALUE + 1;		//51
+	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//49
+	/** Value of UNIQUESET. */
+	public static final short UNIQUESET_VALUE = UNIQUESET_KEY_VALUE + 1;	//50
+	/** attribute ref, undefined type and methods which are not above a type. */
+	public static final short NOTYPE_VALUE_ID = UNIQUESET_VALUE + 1;		//51
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -78,15 +78,15 @@ public class CompileBase implements CodeTable, XDValueID {
 	//Value types
 	////////////////////////////////////////////////////////////////////////////
 	/** Array of classes corresponding to implemented types. */
-	private final static String[] TYPENAMES = new String[MAX_VALUE_ID];
+	private final static String[] TYPENAMES = new String[NOTYPE_VALUE_ID];
 	/** Table of type names and type IDs.*/
 	private static final String TYPEIDS;
 	/** Array of classes corresponding to implemented types. */
-	private final static Class<?>[] TYPECLASSES = new Class<?>[MAX_VALUE_ID];
+	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
 	@SuppressWarnings ("unchecked")
 	private static final Map<String, InternalMethod>[] METHODS =
-		(Map<String, InternalMethod>[]) new Map[MAX_VALUE_ID + 1];
+		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
 		new TreeMap<String, Constructor<?>>();
@@ -616,7 +616,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
-		short ti = MAX_VALUE_ID; // no base methods
+		short ti = NOTYPE_VALUE_ID; // no base methods
 		method(ti, genInternalMethod(ADD_COMMENT_NODE, XD_VOID, TEXT_MODE,
 			1, 1, XD_STRING), "addComment");
 //		method(ti, genInternalMethod(ADD_PI_NODE, XD_VOID,
@@ -1438,8 +1438,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		try {
 			Constructor<?> c = ((Class<?>) clazz).getConstructor(NULLCLASSLIST);
 			Map<String, InternalMethod> hm;
-			if ((hm = METHODS[MAX_VALUE_ID]) == null) {
-				METHODS[MAX_VALUE_ID] = hm =
+			if ((hm = METHODS[NOTYPE_VALUE_ID]) == null) {
+				METHODS[NOTYPE_VALUE_ID] = hm =
 					new TreeMap<String, InternalMethod>();
 			}
 			for (int i = 0; i < names.length; i++) {
@@ -1606,7 +1606,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @return The type Id or -1.
 	 */
 	public static short getTypeId(final String name) {
-		for (short i = 0; i < MAX_VALUE_ID; i++) {
+		for (short i = 0; i < NOTYPE_VALUE_ID; i++) {
 			if (name.equals(TYPENAMES[i])) {
 				return i;
 			}
@@ -1622,7 +1622,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		if (name == null) {
 			return XD_STRING;
 		}
-		InternalMethod m = getTypeMethod(MAX_VALUE_ID, name);
+		InternalMethod m = getTypeMethod(NOTYPE_VALUE_ID, name);
 		return (m == null) ? XD_STRING : m.getParsedResult();
 	}
 
