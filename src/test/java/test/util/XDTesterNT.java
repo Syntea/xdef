@@ -379,6 +379,19 @@ public abstract class XDTesterNT {
 		}
 	}
 
+	private static String genCollection(final URL... sources) {
+		try {
+			Element el = XDGenCollection.genCollection(sources,
+				true, //resolvemacros
+				true, //removeActions
+				false);
+			return KXmlUtils.nodeToString(el, true);
+		} catch (Exception ex) {
+			logger.error(TestUtil.exceptionStackTrace(ex));
+			return "";
+		}
+	}
+	
 	final public Element test(final Class<?>[] objs,
 		final String xdef,
 		final String data,
@@ -560,7 +573,7 @@ public abstract class XDTesterNT {
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
 		if (_chkSyntax) {
 			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
+			_xdOfxd.createXDDocument().xparse(genCollection(TestUtil.getResrc(getClass(), xdef)), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
@@ -569,7 +582,11 @@ public abstract class XDTesterNT {
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
 		if (_chkSyntax) {
 			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
+			URL[] sources = new URL[xdefs.length];
+			for (int i = 0; i < sources.length; i++) {
+				sources[i] = TestUtil.getResrc(getClass(), xdefs[i]);
+			}
+			_xdOfxd.createXDDocument().xparse(genCollection(sources), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
@@ -835,7 +852,7 @@ public abstract class XDTesterNT {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(xml, reporter);
+		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
 		return result;
 	}
 
@@ -886,7 +903,7 @@ public abstract class XDTesterNT {
 		final String xml) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(xml, null);
+		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), null);
 		return result;
 	}
 
@@ -909,7 +926,7 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Element result = xd.xparse(xml, reporter);
+		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
 		return result;
 	}
 
@@ -982,7 +999,7 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		xd.xparse(xml, reporter);
+		xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
 		if (strw != null) {
 			try {
 				strw.close();

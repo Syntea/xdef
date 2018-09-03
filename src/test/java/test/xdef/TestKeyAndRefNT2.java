@@ -65,7 +65,8 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 		ArrayReporter reporter = new ArrayReporter();
 		XDPool xp;
 		final String dataDir = TestUtil.dataDir + "test/";
-			
+		
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>uniqueSet u {x:int()}</xd:declaration>\n"+
@@ -92,10 +93,10 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 "</a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
-			xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
+			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertNoErrors(reporter);
-			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
+			xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertTrue(reporter.errorWarnings()
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
@@ -605,7 +606,11 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 "</Zeme>";
 			a.assertEquals(xml, parse(xp, "", xml, reporter));
 			a.assertNoErrors(reporter);
+		} catch (Exception ex) {
+			a.assertNull(TestUtil.exceptionStackTrace(ex));
+		}
 		
+		try { // test a.d.NEWKEY()
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a xd:script='finally a.ID()' a='a.d(); finally a.d.NEWKEY()' >\n"+
@@ -690,7 +695,11 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 			s = reporter.printToString();
 			a.assertTrue(reporter.getErrorCount() == 1 &&
 				s.indexOf("xpath=/a/Adresa[2]") > 0, s);
-
+		} catch (Exception ex) {
+			a.assertNull(ex);
+		}
+		
+		try {
 /*#if EXTKEY*#/
 			xp = compile(dataDir + "TestKeyAndRef1.xdef");
 			a.assertEquals(dataDir + "TestKeyAndRef1.xml",
@@ -700,37 +709,37 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 
 			xp = compile(TestUtil.getResrc(clazz, dataDir + "TestKeyAndRef2.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef2.xml"),
-				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef2.xml"),reporter));
+				parse(xp, "", dataDir + "TestKeyAndRef2.xml",reporter));
 			a.assertNoErrors(reporter);
 
 			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef3.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef3.xml"),
-				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef3.xml"), reporter));
+				parse(xp, "", dataDir + "TestKeyAndRef3.xml", reporter));
 			a.assertNoErrors(reporter);
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef3_1.xml"),
-				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef3_1.xml"), reporter));
+				parse(xp, "", dataDir + "TestKeyAndRef3_1.xml", reporter));
 			a.assertNoErrors(reporter);
 
 			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef4.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef4.xml"),
-				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef4.xml"), reporter));
+				parse(xp, "", dataDir + "TestKeyAndRef4.xml", reporter));
 			a.assertNoErrors(reporter);
-			parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef4_1.xml"), reporter);
+			parse(xp, "", dataDir + "TestKeyAndRef4_1.xml", reporter);
 			a.assertTrue(reporter.getErrorCount()==1
 				&& reporter.printToString().indexOf("XDEF522")>0,
 				"Error Not recognized; " + reporter.printToString());
-			parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef4_2.xml"), reporter);
+			parse(xp, "", dataDir + "TestKeyAndRef4_2.xml", reporter);
 			a.assertTrue(reporter.getErrorCount()==1
 				&& reporter.printToString().indexOf("XDEF522")>0,
 				"Error Not recognized; " + reporter.printToString());
 			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef5.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef5.xml"),
-				parse(xp, "", getResrc(clazz, dataDir + "TestKeyAndRef5.xml"), reporter));
+				parse(xp, "", dataDir + "TestKeyAndRef5.xml", reporter));
 			a.assertNoErrors(reporter);
 
 			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef6.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef6.xml"),
-				parse(xp, "" , getResrc(clazz, dataDir + "TestKeyAndRef6.xml"), reporter));
+				parse(xp, "" , dataDir + "TestKeyAndRef6.xml", reporter));
 			a.assertNoErrors(reporter);
 
 			setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
@@ -738,7 +747,7 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 			setProperty(XDConstants.XDPROPERTY_SPECDATES, null);
 			xp = compile(getResrc(clazz, dataDir + "TestKeyAndRef7.xdef"));
 			a.assertEquals(getResrcStr(clazz, dataDir + "TestKeyAndRef7.xml"),
-				parse(xp, "Mondial" , getResrc(clazz, dataDir + "TestKeyAndRef7.xml"), reporter));
+				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml", reporter));
 			a.assertNoErrors(reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Test' >\n" +
@@ -877,6 +886,9 @@ public final class TestKeyAndRefNT2 extends XDTesterNT {
 				&& s.contains("/Test/uA[1]/uB[2]")
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]/@c"),
 				reporter.toString());
+		} catch (Exception ex) {
+			a.assertNull(ex);
+		}
 
 		a.assertAll();
 	}
