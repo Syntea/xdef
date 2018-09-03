@@ -9,10 +9,12 @@ import cz.syntea.xdef.util.GenCollection;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import java.io.File;
 import org.w3c.dom.Element;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test for the XdCollection. */
-public class TestGenCollection extends STester {
+public class TestGenCollection extends XDTester {
+	
+	public TestGenCollection() {super();}
 
 	@Override
 	/** Test */
@@ -76,7 +78,6 @@ public class TestGenCollection extends STester {
 			el1 = GenCollection.genCollection(
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			xdef =
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
 " <A f=\"optional int; default 1\" />\n" +
@@ -159,6 +160,7 @@ public class TestGenCollection extends STester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 }

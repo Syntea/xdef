@@ -476,14 +476,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					yType = -1;
 				}
 			}
-			code = -1;
 			code = "ID".equals(methodName) ? UNIQUESET_ID
 				: "IDREF".equals(methodName) ? UNIQUESET_IDREF
 				: "CHKID".equals(methodName) ? UNIQUESET_CHKID
 				: "IDREFS".equals(methodName) ? UNIQUESET_IDREFS
 				: "CHKIDS".equals(methodName) ? UNIQUESET_CHKIDS
 				: "SET".equals(methodName) ? UNIQUESET_SET : -1;
-			if (numPar<=1 && CompileBase.UNIQUESET_VALUE==xType	&& code >=0) {
+//if (CompileBase.UNIQUESET_VALUE==xType || CompileBase.UNIQUESET_M_VALUE==xType){
+//System.out.println(methodName + "; " + code +  "; "
+//	+ (CompileBase.UNIQUESET_VALUE==xType ? "uniqueSet" : "uniqueSet M"));
+//}
+			if (numPar<=1 && CompileBase.UNIQUESET_VALUE==xType && code >=0) {
 				if (yType != -1) {
 					_g.genPop();
 				}
@@ -502,12 +505,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					var.getValue().intValue(), var.getParseMethodAddr()));
 				_g._tstack[_g._sp] = CompileBase.XD_PARSERESULT;
 				return true;
+			} else if (_g.genClassMethod(methodName, numPar)) {
+				return true;
 			}
-			if (!_g.genClassMethod(methodName, numPar)) {
-				error(spos, XDEF.XDEF443, methodName); //Unknown method: '&{0}'
-				return false;
-			}
-			return true;
+			error(spos, XDEF.XDEF443, methodName); //Unknown method: '&{0}'
+			return false;
 		}
 		try {
 			Class<?> clazz = Class.forName(name, false, _classLoader);
@@ -3515,6 +3517,53 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 	}
 
+	private boolean uniquesetVar() {
+		short xType = (nextSymbol() == IDENTIFIER_SYM) ?
+			CompileBase.getTypeId(_idName) : -1;
+		if (xType <= 0) {
+			//Expected type identifier of variable
+			errorAndSkip(XDEF.XDEF458, String.valueOf(END_SYM));
+			return false;
+		}
+		if (nextSymbol() == IDENTIFIER_SYM) {
+System.out.println(CompileBase.getTypeName(xType) + " " + _idName + "; ");
+		} else {
+			//Name of named item expected
+			errorAndSkip(XDEF.XDEF418, String.valueOf(END_SYM));
+			return false;
+		}
+		return true;
+	}
+//	private boolean uniqueSetNamedKey(final byte varKind,
+//		final short varType,
+//		final String keyName,
+//		final CodeI1 jmp) {
+//		if (varType == CompileBase.PARSEITEM_VALUE) { // type
+//			if (!"parse".equals(keyName)) {
+//				//'&{0}' expected
+//				errorAndSkip(XDEF.XDEF410,
+//					String.valueOf(END_SYM), "parse");
+//				return false;
+//			} else {
+//				//Type declaration format "{parse: xxx}" is deprecated.
+//				//Please use just xxx.
+//				if (_xdVersion == 31) {
+//					error(XDEF.XDEF997);
+//				} else {
+//					warning(XDEF.XDEF997);
+//				}
+//			}
+//			keyName = "";
+//		} else if (keyName == null) {
+//			//Name of named item expected
+//			errorAndSkip(XDEF.XDEF418, String.valueOf(END_SYM));
+//			return;
+//		}
+//		if (varKind == 'X') {
+//			_g.addJump(jmp);
+//		}
+//	}
+
 	/** Compile check type as a method or uniqueSet.
 	 * @param varKind variable kind ('G' .. global or 'X' .. model).
 	 */
@@ -3565,12 +3614,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
 				}
+				addr = compileCheckMethod("");
 				if (rVar!=null && (rVar.getType()==CompileBase.UNIQUESET_VALUE
 					|| rVar.getType() == CompileBase.PARSEITEM_VALUE)) {
-					addr = compileCheckMethod("");
 					type = rVar.getParseResultType();
 				} else {
-					addr = compileCheckMethod("");
 					type = XD_STRING;
 					if (addr + 2 == _g._lastCodeIndex
 						&& varType == CompileBase.PARSEITEM_VALUE) {
@@ -3651,12 +3699,20 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					keyName = _idName;
 					ndx = keyName.lastIndexOf(':');
 				}
+				while (_sym == VAR_SYM) { // named items
+					if (uniquesetVar()) {
+						if (nextSymbol() == SEMICOLON_SYM) {
+							nextSymbol();
+						} else {
+							break;
+						}
+					}
+				}
 				checkSymbol(END_SYM);
 				break;
 			}
 			default:
-				// Expected section 'parse' of declaration 'type'
-				// or 'uniqueSet'
+				// Expected declaration 'type' or 'uniqueSet'
 				errorAndSkip(XDEF.XDEF489,String.valueOf(END_SYM));
 				_g.addVariable(name, varType, varKind);
 				return;

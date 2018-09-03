@@ -218,7 +218,7 @@ public final class TestDebug extends XDTester {
 			xd.getDebugger().setOutDebug(ps);
 			xd.xparse(xml, null);
 			ps.close();
-			assertTrue(bos1.toString().startsWith("TRACE /a/b[1]; pc=3; \"1\""),
+			assertTrue(bos1.toString().startsWith("TRACE /a/b[1];"),
 				bos1.toString());
 			out.close();
 			assertEq("", baos.toString());
@@ -257,8 +257,7 @@ public final class TestDebug extends XDTester {
 			xd.xparse(xml, null);
 			ps.close();
 			s = bos1.toString();
-			assertTrue(s.startsWith(
-				"TRACE /SouborY1A/a[1]; pc=6; \"._OK._\";"), s);
+			assertTrue(s.startsWith("TRACE /SouborY1A/a[1];"), s);
 			out.close();
 			s = baos.toString();
 			assertTrue(("len=1, typ=" + XDValueID.XD_ATTR +
@@ -376,8 +375,10 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			s = baos.toString();
 			s = SUtils.modifyString(s, "\r", "");
-			assertEq("TRACE /a/@a; pc=7; \"1.0.0\"; \n"+
-				"TRACE /a/@a; pc=32; \"2.0.0\"; \n", s);
+			assertTrue(s.indexOf("TRACE /a/@a;") == 0
+				&& s.indexOf("TRACE /a/@a;", 1) > 0
+				&& s.indexOf("; \"1.0.0\";") > 0
+				&& s.indexOf("; \"2.0.0\";") > 0, s);
 			if (reporter.errors()) {
 				s = reporter.getReport().getMsgID();
 				assertTrue("XDEF515".equals(s) || "XDEF809".equals(s), s);
@@ -410,6 +411,7 @@ public final class TestDebug extends XDTester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

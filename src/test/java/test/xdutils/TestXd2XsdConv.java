@@ -35,13 +35,15 @@ import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.util.XdefToXsd;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test XDefinition to schema conversion.
  * @author Ilia Alexandrov
  */
-public class TestXd2XsdConv extends STester {
+public class TestXd2XsdConv extends XDTester {
 
+	public TestXd2XsdConv() {super();}
+	
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
 //    private XdefToXsd _conv;
@@ -454,6 +456,7 @@ public class TestXd2XsdConv extends STester {
 	 * @param args ignored
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 }

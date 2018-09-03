@@ -22,16 +22,14 @@ import cz.syntea.xdef.util.XValidate;
 import java.io.File;
 import java.io.FileOutputStream;
 import cz.syntea.xdef.sys.ReportReader;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** TestValidate.
  * @author Vaclav Trojan
  */
-public class TestValidate extends STester {
+public class TestValidate extends XDTester {
 
-	public TestValidate(){
-		super();
-	}
+	public TestValidate() {super();}
 
 	@Override
 	/** Run test and print error information. */
@@ -126,6 +124,7 @@ public class TestValidate extends STester {
 	 * @param args ignored
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 

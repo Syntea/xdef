@@ -18,7 +18,7 @@ package cz.syntea.xdef;
  */
 public interface XDValueID {
 	/** "void" value. */
-	public static final short XD_VOID = 0;
+	public static final short XD_VOID = 0; // must be 0!
 	/** Int value (implemented as long). */
 	public static final short XD_INT = XD_VOID + 1; // 1
 	/** Boolean value ID. */

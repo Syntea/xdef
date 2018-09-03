@@ -373,6 +373,7 @@ public final class TestBNF extends XDTester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

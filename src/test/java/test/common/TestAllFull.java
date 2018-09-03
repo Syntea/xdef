@@ -1,5 +1,5 @@
 /*
- * File: TestAll.java
+ * File: TestAllFull.java
  *
  * Copyright 2007 Syntea software group a.s.
  *
@@ -34,12 +34,13 @@ import test.common.xml.TestXml;
 import test.utils.XDTester;
 import test.utils.STester;
 
-/** Run all available basic tests for package cz.syntea.xdef.sys.
+/** Run all available tests for package cz.syntea.xdef.sys with all features
+ * of the tester.
  * @author Vaclav Trojan
  */
-public class TestAll {
+public class TestAllFull {
 
-	TestAll() {}
+	TestAllFull() {}
 
 	/** Run all available tests in this package.
 	 * @param args The array of arguments.
@@ -87,6 +88,7 @@ public class TestAll {
 	 * @param args The array of arguments (not used).
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		if (runTests(args) > 0) {System.exit(1);}
 	}
 }

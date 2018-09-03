@@ -23,9 +23,9 @@ public interface SConstants {
 	/** Date of build version (2018-08-31). */
 	public static final String BUILD_DATE = "2018-08-31";
 	/** Prefix of property names for setting of message table files. */
-	public static final String REPORTTABLE_FILE = "xdef.msg.";
+	public static final String XDPROPERTY_MSGTABLE = "xdef.msg.";
 	/** Name of property for setting language of messages. */
-	public static final String REPORT_LANGUAGE = "xdef.language";
+	public static final String XDPROPERTY_MSGLANGUAGE = "xdef.language";
 	/** Compiler Java version. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";

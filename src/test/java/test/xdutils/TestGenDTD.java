@@ -24,16 +24,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test of generation of DTD from XDefinition.
  * @author Vaclav Trojan
  */
-public class TestGenDTD extends STester {
+public class TestGenDTD extends XDTester {
 
 	MyHandler _handler;
 
-	public TestGenDTD() {_handler = new MyHandler();}
+	public TestGenDTD() {super(); _handler = new MyHandler();}
 
 	@Override
 	/** Run test and print error information. */
@@ -174,6 +174,7 @@ public class TestGenDTD extends STester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 }

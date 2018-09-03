@@ -138,7 +138,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** X-definition from which processor was created. */
 	private XDefinition _xd;
 	/** Global variables:<p>
-	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn.</p>
+	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn.
+	 * 3 $IDParser$, 4 $IDuniqueSet$
+	 * </p>
 	 * Follows global variables from DefPool.
 	 */
 	private XDValue[] _globalVariables;
@@ -279,8 +281,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		} else {
 			_props.setProperty(key, value);
 		}
-		if (key.startsWith(SManager.REPORTTABLE_FILE)
-			|| key.startsWith(SManager.REPORT_LANGUAGE)) {
+		if (key.startsWith(SManager.XDPROPERTY_MSGTABLE)
+			|| key.startsWith(SManager.XDPROPERTY_MSGLANGUAGE)) {
 			SManager.setProperty(key, value);
 		}
 	}
@@ -425,6 +427,16 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				new DefOutStream(System.err) : new DefOutStream(rw);
 			_globalVariables[2] = in == null ?
 					new DefInStream(System.in, false) : in;
+			_globalVariables[3] = CompileBase.getParser("QName");
+			 CodeUniquesetParseItem[] parseItems =
+				 new CodeUniquesetParseItem[] {
+					 new CodeUniquesetParseItem(null, //name
+						 -1, // chkAddr,
+						 0, // itemIndex,
+						 XD_STRING, // parsedType,
+						 true) // optional
+					};
+			_globalVariables[4] = new CodeUniqueset(parseItems,	"");
 			_initialized1 = true;
 		}
 		_initialized2 = false; //initialize global variables at execution
@@ -3434,7 +3446,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				s += "[" + i + "]: " + _localVariables[i] + "\n";
 			}
 		}
-/*#if DEBUG*/
+/*#if DEBUG*#/
 		java.io.ByteArrayOutputStream bs = new java.io.ByteArrayOutputStream();
 		java.io.PrintStream ps = new java.io.PrintStream(bs);
 		cz.syntea.xdef.impl.code.CodeDisplay.displayCode(_code, ps);

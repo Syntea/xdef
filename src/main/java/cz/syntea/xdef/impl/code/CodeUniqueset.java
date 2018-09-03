@@ -249,6 +249,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 	@Override
 	public String toString() {
 		String result = "UNIQUESET: " + _name;
+		UniquesetItem uso = _map.get(getKeyValue());
+		result += " actual key: ";
 		if (_parseItems.length > 1) {
 			result += "keys:";
 			for (int i = 0; i < _parseItems.length; i++) {
@@ -257,6 +259,14 @@ public final class CodeUniqueset extends XDValueAbstract {
 			}
 		} else {
 			result += "key" + _parseItems[0];
+		}
+		if (uso != null && uso._assignedValues != null
+			&& !uso._assignedValues.isEmpty()) {
+			result += " (values: ";
+			for (String key: uso._assignedValues.keySet()) {
+				result += key+"=" + uso._assignedValues.get(key) + ";";
+			}
+			result += ")";
 		}
 		return result;
 	}
@@ -338,7 +348,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 			}
 			return false;
 		}
-
 	}
 
 	/** Implements the item of unique set. */

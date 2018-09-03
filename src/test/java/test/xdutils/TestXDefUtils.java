@@ -19,13 +19,13 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.util.GenCollection;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test of xdef utilities.
  *
  * @author  trojan
  */
-public class TestXDefUtils extends STester {
+public class TestXDefUtils extends XDTester {
 
 	public TestXDefUtils() {super();}
 
@@ -87,6 +87,7 @@ public class TestXDefUtils extends STester {
 	 * @param args ignored
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 

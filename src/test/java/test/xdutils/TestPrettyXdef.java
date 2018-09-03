@@ -11,7 +11,6 @@
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  *
  */
-
 package test.xdutils;
 
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -23,14 +22,14 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.util.PrettyXdef;
 import java.io.File;
 import cz.syntea.xdef.sys.ReportWriter;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test pretty indentation of XDefinition.
  * @author Trojan
  */
-public class TestPrettyXdef extends STester {
+public class TestPrettyXdef extends XDTester {
 
-	public TestPrettyXdef() {}
+	public TestPrettyXdef() {super();}
 
 	@Override
 	public void test() {
@@ -94,6 +93,7 @@ public class TestPrettyXdef extends STester {
 	 * @param args ignored
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 

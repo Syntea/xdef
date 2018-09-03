@@ -472,7 +472,8 @@ public final class TestXDService extends XDTester {
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

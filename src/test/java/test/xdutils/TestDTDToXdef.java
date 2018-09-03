@@ -18,19 +18,17 @@ import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.util.GenDTD2XDEF;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.util.DTDToXdef;
 import java.io.File;
 import org.w3c.dom.Element;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Test of conversion of DTD to X-definition.
  * @author Vaclav Trojan
  */
-public class TestDTDToXdef extends STester {
+public class TestDTDToXdef extends XDTester {
 
 	public TestDTDToXdef() {super();}
 
@@ -57,7 +55,7 @@ public class TestDTDToXdef extends STester {
 			}
 			XDPool xdp;
 			try {
-				xdp = XDFactory.compileXD(null, KXmlUtils.nodeToString(elxd, true));
+				xdp = compile(KXmlUtils.nodeToString(elxd, true));
 			} catch (Exception e) {
 				fail(e);
 				fail(KXmlUtils.nodeToString(elxd, true));
@@ -65,8 +63,7 @@ public class TestDTDToXdef extends STester {
 			}
 			try {
 				ArrayReporter reporter = new ArrayReporter();
-				XDDocument chkdoc = xdp.createXDDocument(root);
-				chkdoc.xparse(data, reporter);
+				parse(xdp, root, data, reporter);
 				reporter.checkAndThrowErrorWarnings();
 				if ((display & 4) == 4) {
 					System.out.println("====================================");
@@ -671,6 +668,7 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 

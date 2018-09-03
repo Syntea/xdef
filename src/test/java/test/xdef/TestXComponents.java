@@ -115,11 +115,12 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, el);
 			assertEq("/A/d[1]/$text", p.getd().xposOf$value());
 			assertEq(p.getd().get$value().toString(), "2013-09-14");
-			assertTrue(p.getd().get$value().equals(p.getd().dateOf$value()));
-			assertTrue(
-				p.getd().get$value().equals(p.getd().timestampOf$value()));
-			assertTrue(
-				p.getd().get$value().equals(p.getd().calendarOf$value()));
+			assertTrue(p.getd().get$value().getTime().equals(
+				p.getd().dateOf$value()));
+			assertTrue(p.getd().get$value().getTime().equals(
+				p.getd().timestampOf$value()));
+			assertTrue(p.getd().get$value().getCalendar().equals(
+				p.getd().calendarOf$value()));
 			assertEq(p.geti().get$value().toString(), "1");
 			assertEq(p.gett().get$value().toString(), "10:20:30");
 			p.geti().set$value(new Long(2));
@@ -1001,7 +1002,8 @@ public final class TestXComponents extends XDTester {
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
 		if (runTest() != 0) {System.exit(1);}
 	}
 }

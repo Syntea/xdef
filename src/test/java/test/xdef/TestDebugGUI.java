@@ -323,6 +323,7 @@ System.out.println(frw.getReportReader().printToString());
 	 * @param args The parameter is ignored.
 	 */
 	final public static void main(final String[] args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

@@ -15,10 +15,8 @@ package test.xdef;
 
 import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
-import org.w3c.dom.Element;
 
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
@@ -204,7 +202,8 @@ public final class TestUserMethods extends XDTester {
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
 		if (runTest() != 0) {System.exit(1);}
 	}
 

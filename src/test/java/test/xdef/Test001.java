@@ -1010,7 +1010,8 @@ public final class Test001  extends XDTester {
 			if (test(xdef, xml, "", 'P', "<a><b/><b/><b/>OK1<c/></a>", "")) {
 				fail();
 			} else {
-				el = test(xdef, xml, "", null, reporter, 'P', null);
+				assertEq("<a><b/><b/><b/>OK1<c/></a>",
+					test(xdef, xml, "", null, reporter, 'P', null));
 			}
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Misto|Udaj|Base'>\n"+
@@ -1147,6 +1148,7 @@ public final class Test001  extends XDTester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 

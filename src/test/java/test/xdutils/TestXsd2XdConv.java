@@ -28,13 +28,15 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import test.utils.STester;
+import test.utils.XDTester;
 
 /** Tests schema to XDefinition conversion.
  * @author Alexandrov
  */
-public class TestXsd2XdConv extends STester {
+public class TestXsd2XdConv extends XDTester {
 
+	public TestXsd2XdConv() {super();}
+	
 	private XDDocument _chkDoc;
 	private ArrayReporter _repWriter;
 	private File _dataDir;
@@ -399,6 +401,7 @@ public class TestXsd2XdConv extends STester {
 	 * @param args ignored
 	 */
    public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		runTest();
 	}
 }

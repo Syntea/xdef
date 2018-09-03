@@ -181,6 +181,26 @@ public final class CompileCode extends CompileBase {
 			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G');
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
+/*UNS*/
+		var = new CompileVariable("$IDParser$", // use only internally
+			XD_PARSER,
+			_globalVariables.getNextOffset(),
+			(byte) 'G');
+		var.setInitialized(true);  // prevent to report errors
+		_globalVariables.addVariable(var);
+		var = new CompileVariable("$IDuniqueSet$", // use only internally
+			CompileBase.UNIQUESET_M_VALUE,
+			_globalVariables.getNextOffset(),
+			(byte) 'G');
+		var.setInitialized(true); // prevent to report errors
+//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
+//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
+//		genStop();
+		_globalVariables.addVariable(var);
+//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
+//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
+//		genStop();
+/*UNS*/
 		_globalPredefSize = _globalVariables.getLastOffset();
 	}
 
@@ -206,6 +226,11 @@ public final class CompileCode extends CompileBase {
 				v.setInitialized(false);
 			}
 		}
+/*UNS*/
+//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 0));
+//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
+//		genStop();
+/*UNS*/
 	}
 
 	/** Set XScriptParser. */
@@ -1549,11 +1574,16 @@ public final class CompileCode extends CompileBase {
 			return null;
 		}
 		CompileVariable var = getVariable(name);
-		if (var != null && (var.getType() == UNIQUESET_VALUE ||
-			var.getType() == PARSEITEM_VALUE && numPar == 0)) {//check type ID
+		if (var != null && (var.getType() == UNIQUESET_VALUE
+			&& var.getCodeAddr() == -1
+			|| var.getType() == PARSEITEM_VALUE && numPar == 0)){//check type ID
 			//unique type, unique value
 			CodeI1 operator = new CodeI1(XD_BOOLEAN,
 				CALL_OP, var.getParseMethodAddr());
+//if (var.getType() == UNIQUESET_VALUE) {
+////	var.setCodeAddr(_lastCodeIndex);
+//System.out.println("CODEADDR: " + var.getCodeAddr());
+//}
 			addCode(operator, 1);
 			//Unknown method: '&{0}'
 			return numPar != 0 ? name : null;

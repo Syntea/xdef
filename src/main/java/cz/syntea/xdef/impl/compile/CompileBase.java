@@ -45,10 +45,11 @@ public class CompileBase implements CodeTable, XDValueID {
 	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//48
 	/** Value type: reference to attribute; used by compiler. */
 	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//49
-	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = UNIQUESET_KEY_VALUE + 1;	//50
 	/** attribute ref, undefined type and methods which are not above a type. */
-	public static final short NOTYPE_VALUE_ID = UNIQUESET_VALUE + 1;		//51
+	public static final short NOTYPE_VALUE_ID = UNIQUESET_KEY_VALUE + 1;	//51
+
+	/** Value of UNIQUESET. */
+	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;	//50
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -142,7 +143,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_LOCALE, "Locale", Locale.class);
 		setType(XD_ANY, "AnyValue", cz.syntea.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
-		setType(UNIQUESET_VALUE, "uniqueSet", null);
+		setType(UNIQUESET_M_VALUE, "uniqueSet", null);
 		// Table of type names and typeIds
 		TYPEIDS = ((char) XD_VOID) + ";void;" +
 			((char) XD_ANY) + ";XDValue;" +
@@ -1354,7 +1355,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(UNIQUESET_KEY_ID, XD_PARSERESULT,
 			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "ID");
 		method(ti, genInternalMethod(UNIQUESET_KEY_SET, XD_PARSERESULT,
-			TEXT_MODE, 1, 2,UNIQUESET_VALUE, XD_PARSERESULT), "SET");
+			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "SET");
 		method(ti, genInternalMethod(UNIQUESET_KEY_IDREF, XD_PARSERESULT,
 			TEXT_MODE, 1, 2, UNIQUESET_KEY_VALUE, XD_PARSERESULT), "IDREF");
 		method(ti, genInternalMethod(UNIQUESET_KEY_CHKID, XD_PARSERESULT,

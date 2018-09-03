@@ -82,7 +82,7 @@ public class TestReport extends STester {
 			}
 		}
 		try {
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
 			s = "\n\na a\n b\n\n";
 			assertEq(s, Report.string(null, s).toString());
 			s = "\n\na a\n b\n\n";
@@ -94,12 +94,12 @@ public class TestReport extends STester {
 			s = "Mod: &{p}";
 			assertEq("Mod: P", Report.text("XYZ01", s, "&{p}P").toString());
 			assertEq("?", Report.text("ABC001", "?").toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE,
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE,
 				"ara"); //arabic is not available
 			s = Report.text("SYS012","?","").toString();
 			assertEq("Errors detected: ", s);
 			//SManager.setLanguage("cs");
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "cs");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			s = Report.text("SYS012", "?", "").toString();
 			assertEq("Při zpracování se vyskytly chyby: ", s);
 			s = Report.text("XML_LANGUAGE", null).toString();
@@ -107,7 +107,7 @@ public class TestReport extends STester {
 			s = Report.getReportText("XML_LANGUAGE", "eng");
 			assertEq("English", s);
 			reporter.clear();
-			SManager.setProperty(XDConstants.REPORTTABLE_FILE + "ABC",
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE + "ABC",
 				dataDir + "ABC_*.properties");
 			s = Report.getReportText("ABC_LANGUAGE", "deu");
 			assertEq("deutsch", s);
@@ -119,26 +119,26 @@ public class TestReport extends STester {
 			assertNull(s); //not defined in eng
 			s = Report.getReportText("ABC014", "deu");
 			assertNull(s); //not defined in deu
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "cs");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			assertEq("Testovací zpráva", Report.text("ABC001", "?").toString());
 			assertEq("TAB: \t, NL: \n, CR: \r.",
 				Report.text("ABC013","?").toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "en");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "en");
 			assertEq("Testing report", Report.text("ABC001","?").toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "de");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "de");
 			assertEq("Test Nachricht", Report.text("ABC001", "?").toString());
 			assertEq("Etwas: nichts!",
 				Report.text("ABC003","?","&{n}nichts").toString());
 			assertEq("Test Nachricht: Etwas", Report.text(
 				"ABC001","?","&{msg}&{#ABC003}").toString());
 			SManager.removeReportTables("ABC");
-			SManager.setProperty(XDConstants.REPORTTABLE_FILE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
 				"ABC_ces", dataDir + "ABC_ces.properties");
-			SManager.setProperty(XDConstants.REPORTTABLE_FILE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
 				"ABC_eng", dataDir + "ABC_eng.properties");
-			SManager.setProperty(XDConstants.REPORTTABLE_FILE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
 				"ABC_deu", dataDir + "ABC_deu.properties");
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "cs");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			assertEq("Testovací zpráva: x",
 				Report.text("ABC001","?","&{msg}x").toString());
 			assertEq("Testovací zpráva: Cosi", Report.text(
@@ -155,9 +155,9 @@ public class TestReport extends STester {
 				"ABC001","?","&{msg}&{#ABC003}").toString("deu"));
 			assertEq("Testing report: Something", Report.text(
 				"ABC001","?","&{msg}&{#ABC003}").toString("rus"));
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "de");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "de");
 			assertEq("Test Nachricht", Report.text("ABC001","?","").toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "eng");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
 			s = Report.text("SYS012","?","   ").toString();
 			assertEq("Errors detected:    ", s);
 			s = Report.text("ABC001", "?").toString();
@@ -180,7 +180,7 @@ public class TestReport extends STester {
 			s = Report.text("ABC008", null,
 				"&{line}1&{col}2&{source}d:\\temp\\a.a").toString();
 			assertEq("Message line = 1 column = 2 source = 'd:\\temp\\a.a'", s);
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
 			s = Report.text("SYS012","?","").toString();
 			assertEq("Při zpracování se vyskytly chyby: ", s);
 			s = Report.text("ABC001","?").toString();
@@ -241,7 +241,7 @@ public class TestReport extends STester {
 		try {
 			//declare file with messages
 //			SManager.setLanguage("ces");
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
 			s = Report.getReportText("ABC_LANGUAGE", "ces") +
 				" ABC009: '" +
 				Report.text("ABC009", null).toString("ces") + '\'';
@@ -255,7 +255,7 @@ public class TestReport extends STester {
 				Report.text("ABC009", null).toString("eng") + '\'';
 			assertEq("english ABC009: 'Error'", s);
 			//set language (if it differs from the default one)
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
 			s = " ABC009: '" + Report.text("ABC009", null) + '\'';
 			assertEq(" ABC009: 'Chyba'", s);
 			s = Report.text("ABC_LANGUAGE", null).toString("eng") +
@@ -362,11 +362,11 @@ public class TestReport extends STester {
 			r = Report.error("123", "par &{p} par &{q}",
 				"&{p}&{#456{a&{b}{:}{,}}{}}&{q}q");
 			assertEq("E 123: par a par q", r.toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "eng");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
 			r = Report.error("123", "par &{p}, par &{q}",
 				"&{p}&{#ABC001}&{q}q");
 			assertEq("E 123: par Testing report, par q", r.toString());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "ces");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
 			r = Report.error("123", "par &{p}, par &{q}",
 				"&{p}&{#ABC001}&{q}q");
 			assertEq("E 123: par Testovací zpráva, par q", r.toString());
@@ -420,10 +420,10 @@ public class TestReport extends STester {
 		} catch (Exception ex) {fail(ex);}
 		try {//check registered tables
 			assertEq("eng", SManager.getDefaultLanguage());
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "en");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "en");
 			s = Report.text(SYS.SYS012).toString();
 			assertEq("Errors detected", s);
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "cs");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			s = Report.text(SYS.SYS012, "").toString();
 			assertEq("Při zpracování se vyskytly chyby: ", s);
 			s = Report.text(SYS.SYS012, "").toString("eng");
@@ -436,7 +436,7 @@ public class TestReport extends STester {
 			assertEq("English", s);
 			s = Report.getReportText(XML.XML_LANGUAGE, null);
 			assertTrue(s.indexOf("esky") > 0, s);
-			SManager.setProperty(XDConstants.REPORT_LANGUAGE, "en");
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "en");
 			s = Report.getReportText(XML.XML_LANGUAGE, null);
 			assertEq("English", s);
 			Properties props = readProperties(new StringReader(
