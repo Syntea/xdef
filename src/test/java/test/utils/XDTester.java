@@ -1,5 +1,5 @@
 /*
- * File: Tester.java
+ * File: XDTester.java
  *
  * Copyright 2007 Syntea software group a.s.
  *

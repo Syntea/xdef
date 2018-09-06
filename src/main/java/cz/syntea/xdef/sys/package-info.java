@@ -114,5 +114,6 @@
  * {@link cz.syntea.xdef.sys.SObjectWriter} and you car read them by
  * {@link cz.syntea.xdef.sys.SObjectReader}.
  * <p>For generation of unique IDs you can use for multi VM</p>
+ *
  */
 package cz.syntea.xdef.sys;

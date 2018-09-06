@@ -975,7 +975,7 @@ public abstract class STester {
 		StackTraceElement[] st = new Throwable().getStackTrace();
 		int i = 0;
 		while (i < st.length && st[i].getClassName().equals(
-			"cz.syntea.xdef.sys.STester")) {
+			"test.utils.STester")) {
 			i++;
 		}
 		className = st[i].getClassName();
