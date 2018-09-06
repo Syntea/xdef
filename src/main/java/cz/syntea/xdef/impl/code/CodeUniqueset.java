@@ -34,11 +34,11 @@ import java.util.Set;
  */
 public final class CodeUniqueset extends XDValueAbstract {
 
-	/** Map of values. */
+	/** Map of key values. */
 	private final Map<Object, UniquesetItem> _map;
 	/** Set of markers. */
 	private final Set<Object> _markers = new HashSet<Object>();
-	/** Create "null" object. */
+	/** Array with parse items. */
 	private final CodeUniquesetParseItem[] _parseItems;
 	/** Name of this uniqueSet. */
 	private final String _name;
@@ -105,7 +105,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		}
 		if (uso._references.isEmpty()) {
 			//Value must be unique&{0}{: }
-			return Report.error(XDEF.XDEF523, (_name!=null ? _name+" " : "")
+			return Report.error(XDEF.XDEF523, (_name!=null ? _name+ " " : "")
 				+ keyValue);
 		}
 		uso._references.clear();
@@ -193,8 +193,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 		if (_markers.contains(marker)) {
 			for (UniquesetItem uso : _map.values()) {
 				if (!uso.checkAndRemoveMarked(marker)) {
-				if (!s.isEmpty()) {
-						s += "; ";
+					if (!s.isEmpty()) {
+						s += ", ";
 					}
 					s += uso._key.toString();
 				}
@@ -222,7 +222,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final XDValue getNamedValue(final String name) {
 		UniquesetItem uso = _map.get(getKeyValue());
-		return uso == null ? null : uso.getValue(name);
+		XDValue result = uso == null ? null : uso.getValue(name);
+		return result == null ? new DefNull() : result;
 	}
 
 	/** Get printable form of actual value of the key.
@@ -250,7 +251,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public String toString() {
 		String result = "UNIQUESET: " + _name;
 		UniquesetItem uso = _map.get(getKeyValue());
-		result += " actual key: ";
+		result += ", actual key: ";
 		if (_parseItems.length > 1) {
 			result += "keys:";
 			for (int i = 0; i < _parseItems.length; i++) {
@@ -350,7 +351,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		}
 	}
 
-	/** Implements the item of unique set. */
+	/** Implements the item of unique set item. */
 	private static final class UniquesetItem {
 		/** Key of unique set. */
 		private final CodeUniquesetKey _key;
@@ -404,7 +405,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		 * @return the value or null.
 		 */
 		private XDValue getValue(final String name) {
-			return (_assignedValues==null) ? null : _assignedValues.get(name);
+			return _assignedValues ==null ? null : _assignedValues.get(name);
 		}
 	}
 }

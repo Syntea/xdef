@@ -47,6 +47,7 @@ public class TestAllFull {
 	 * @return  error code (number of errors).
 	 */
 	public static int runTests(String... args) {
+		XDTester.setFulltestMode(true);
 		PrintStream log;
 		try {
 			log = new PrintStream(new FileOutputStream("testCommon.log"));

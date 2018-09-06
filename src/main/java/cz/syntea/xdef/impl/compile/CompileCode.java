@@ -94,8 +94,6 @@ public final class CompileCode extends CompileBase {
 	int _localVariablesLastIndex;
 	/** Highest reached index to local variables. */
 	int _localVariablesMaxIndex;
-//	/** Array of external objects. */
-//	private Object[] _extObjects;
 	/** Switch to ignore unresolved externals */
 	boolean _ignoreUnresolvedExternals;
 	/** Mode of external method interface: 0 - both modes, 1 - old, 2 - new. */
@@ -147,8 +145,7 @@ public final class CompileCode extends CompileBase {
 		final int externalMode,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
-//		_spMax = 0; //java makes it
-//		_parser = null; //java makes it
+//		_spMax = 0; _parser = null; //java makes it
 		_ignoreUnresolvedExternals = ignoreUnresolvedExternals;
 		_externalMode = externalMode;
 		_debugMode = debugMode;
@@ -884,16 +881,21 @@ public final class CompileCode extends CompileBase {
 	 * @return false if variable not exists.
 	 */
 	final boolean genLD(final String name) {
-		CompileVariable var;
-		if ((var = getVariable(name)) == null) {
-			return false;
-		}
+		CompileVariable var = getVariable(name);
+		return var == null ? false : genLD(var);
+	}
+
+	/** Add code for load variable.
+	 * @param name The name of local variable.
+	 * @return false if variable not exists.
+	 */
+	final boolean genLD(CompileVariable var) {
 		short xType = var.getType();
-		if (var.getType() == UNIQUESET_KEY_VALUE) {
+		if (xType == UNIQUESET_KEY_VALUE) {
 			return false;
 		}
 		if (!var.isInitialized()) {
-			if (var.getType() != PARSEITEM_VALUE) {
+			if (xType != PARSEITEM_VALUE) {
 				//Variable '&{0}' might be not initialized
 				_parser.error(XDEF.XDEF464, var.getName());
 			}
@@ -921,7 +923,7 @@ public final class CompileCode extends CompileBase {
 			_spMax = _sp;
 		}
 		_tstack[_sp] = xType;
-		if (var.isConstant()) {
+		if (xType != CompileBase.UNIQUESET_NAMED_VALUE && var.isConstant()) {
 			addCode(var.getValue().cloneItem());
 			_cstack[_sp] = _lastCodeIndex;
 		} else {
@@ -1580,10 +1582,6 @@ public final class CompileCode extends CompileBase {
 			//unique type, unique value
 			CodeI1 operator = new CodeI1(XD_BOOLEAN,
 				CALL_OP, var.getParseMethodAddr());
-//if (var.getType() == UNIQUESET_VALUE) {
-////	var.setCodeAddr(_lastCodeIndex);
-//System.out.println("CODEADDR: " + var.getCodeAddr());
-//}
 			addCode(operator, 1);
 			//Unknown method: '&{0}'
 			return numPar != 0 ? name : null;

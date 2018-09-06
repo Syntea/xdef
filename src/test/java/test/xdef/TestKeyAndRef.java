@@ -771,50 +771,62 @@ public final class TestKeyAndRef extends XDTester {
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
 			assertNoErrors(reporter);
 			xdef = // test CHIID
-"<xd:def xmlns:xd='" + XDEFNS + "' root='Test' >\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' >\n" +
 " <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
-" <Test>\n" +
-"   <A xd:script='*' a='s.ID()'/>\n" +
-"   <B xd:script='*' a='s.CHKID()'/>\n" +
-" </Test>\n" +
+" <A><a xd:script='*' a='s.ID()'/><b xd:script='*' a='s.CHKID()'/></A>\n" +
 "</xd:def>";
 			xml =
-"<Test>\n" +
-"   <A a='1'/>\n" +
-"   <B a='1'/>\n" +
-"   <B a='2'/>\n" + // must be error
-"   <B a='2'/>\n" + // must be error
-" </Test>";
+"<A>\n" +
+"   <a a='1'/>\n" +
+"   <b a='1'/>\n" +
+"   <b a='2'/>\n" + // must be error
+"   <b a='2'/>\n" + // must be error
+"</A>";
 			parse(xdef, "", xml, reporter);
 			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = // test CHIID
-"<xd:def xmlns:xd='" + XDEFNS + "' root='Test' >\n" +
-" <xd:declaration>\n" +
-"    type at   int();\n" +
-"    type bt   string();\n" +
-"    uniqueSet s2 {a: at(); b: bt()};\n" +
-" </xd:declaration>\n" +
-" <Test>\n" +
-"   <A xd:script='*' a='s2.a()'>\n" +
-"     <B xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
-"   </A>\n" +
-"   <B xd:script='*' a='s2.a()'>\n" +
-"     <C xd:script='*; finally s2.CHKID()' b='s2.b()' />\n" +
-"   </B>\n" +
-" </Test>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' >\n" +
+"<xd:declaration>\n" +
+" type a int(); type b string(); uniqueSet s2 {a: a(); b: b()};\n" +
+"</xd:declaration>\n" +
+" <A>\n" +
+"   <a xd:script='*' a='s2.a()'>\n" +
+"     <b xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
+"   </a>\n" +
+"   <b xd:script='*' a='s2.a()'>\n" +
+"     <c xd:script='*; finally s2.CHKID()' b='s2.b()' />\n" +
+"   </b>\n" +
+" </A>\n" +
 "</xd:def>";
 			xml =
-"<Test>\n" +
-"   <A a='1'><B b='B1'/></A>\n" +
-"   <B a='1'>\n" +
-"     <C b='B1'/>\n" +
-"     <C b='B3'/>\n" + // must be error
-"     <C b='B3'/>\n" + // must be error
-"   </B>\n" +
-" </Test>";
+"<A>\n" +
+"   <a a='1'><b b='B1'/></a>\n" +
+"   <b a='1'>\n" +
+"     <c b='B1'/>\n" +
+"     <c b='B3'/>\n" + // must be error
+"     <c b='B3'/>\n" + // must be error
+"   </b>\n" +
+" </A>";
 			parse(xdef, "", xml, reporter);
 			assertEq(2, reporter.getErrorCount(), reporter);
-			xdef =
+			xdef = //test CHIID
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"A\" >\n" +
+"<xd:declaration> uniqueSet u {a: string();} </xd:declaration>\n" +
+"<A><a xd:script='*' b='u.a.ID()'/><b xd:script='*' b='u.a.CHKID()'/></A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<A>\n" +
+"  <a b='1'/>\n" +
+"  <b b='1'/>\n" +
+"  <b b='2'/>\n" + // must be error
+"  <b b='2'/>\n" + // must be error
+"</A>";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("/A/b[2]/@b")
+				&& s.contains("/A/b[3]/@b"), reporter);
+			xdef = //test CHIID-
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Test\" >\n" +
 " <xd:declaration>\n" +
 "    type at   int();\n" +
@@ -971,18 +983,18 @@ public final class TestKeyAndRef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
 "  <xd:declaration>\n" +
-"    uniqueSet u {a: string();}\n" +
+"    uniqueSet u {a: string(); var Parser x;}\n" +
 "  </xd:declaration>\n" +
 "  <A>\n" +
 "    <DefParams>\n" +
 "       <Param xd:script='*;'\n" +
 "          Name='u.a.ID();'\n" +
-"          Type='xdType(); onTrue u.setNamedValue(\"x\",getParsedValue());'/>\n" +
+"          Type='xdType(); onTrue u.x = getParsedValue();'/>\n" +
 "    </DefParams>\n" +
 "    <Params xd:script=\"*; init u.checkUnref()\">\n" +
 "       <Param xd:script='*;'\n" +
 "              Name='u.a.CHKID();'\n" +
-"              Value='u.getNamedValue(\"x\")'/>\n" +
+"              Value='u.x'/>\n" +
 "    </Params>\n" +
 "  </A>\n" +
 "</xd:def>";
@@ -1000,13 +1012,14 @@ public final class TestKeyAndRef extends XDTester {
 "    <Param Name=\"DatumNarozeni\" Value=\"01.02.1987\"/>\n" +
 "  </Params>\n" +
 "  <Params>\n" +
-"    <Param Value=\"14.8\" Name=\"Vyska\"/>\n" +
+"    <Param Value=\"14.8a\" Name=\"Vyska\"/>\n" +
 "  </Params>\n" +
 "</A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 1
-				&& (s = reporter.printToString()).contains("DatumNarozeni")
-				&& s.contains("Jmeno"), reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF804")
+				&& s.contains("XDEF524")
+				&& s.contains("DatumNarozeni") && s.contains("Jmeno"),reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

@@ -116,7 +116,7 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "case" | "for" | "return" | "def" | "try" | "catch" | "throw" | "finally"
   | "external" | "new" | "fixed" | "required" | "optional" | "ignore"
   | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default"
-  | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText"
+  | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
   | "onIllegalElement" | "onIllegalRoot" | "create" | "init" | "options"
   | "ref" | "match" | "final" | "forget" | "template" | "type" | "uniqueSet"
   | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE"
@@ -570,13 +570,16 @@ ExternalMethodDeclaration ::= "external" S "method"
 
 UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
 
-UniqueSetDeclarationBody ::= ("{" S? UniqueSetDeclarationItem
-  (S? ";" S? UniqueSetDeclarationItem)* S? (";" S?)? "}") | Method
-  /* Expression or ExplicitCode must return value of boolean or ParseResult.*/
+UniqueSetDeclarationBody ::=
+  ("{" S? UniqueSetKey (S? ";" S? UniqueSetKey)* (S? ";" S? UniqueSetVar)* S?
+  (";" S?)? "}") | Method
+  /* Expression or ExplicitCode must return value of boolean or ParseResult.
+  */
+  
+UniqueSetKey ::= S? Identifier (S? ":" S? (("?" | "optional") S? )? Method )?
 
-UniqueSetDeclarationItem ::= S? Identifier
-  (S? ":" S? (("?" | "optional") S? )? Method )?
-
+UniqueSetVar ::= S? "var" S TypeIdentifier S Identifier
+      
 /******************************************************************************/
 /* BNF grammar                                                                */
 /******************************************************************************/

@@ -43,7 +43,7 @@ import test.utils.XDTester;
 public class TestXd2XsdConv extends XDTester {
 
 	public TestXd2XsdConv() {super();}
-	
+
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
 //    private XdefToXsd _conv;

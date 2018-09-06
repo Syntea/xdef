@@ -36,7 +36,7 @@ import test.utils.XDTester;
 public class TestXsd2XdConv extends XDTester {
 
 	public TestXsd2XdConv() {super();}
-	
+
 	private XDDocument _chkDoc;
 	private ArrayReporter _repWriter;
 	private File _dataDir;

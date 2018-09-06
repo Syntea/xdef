@@ -13,7 +13,7 @@ import test.utils.XDTester;
 
 /** Test for the XdCollection. */
 public class TestGenCollection extends XDTester {
-	
+
 	public TestGenCollection() {super();}
 
 	@Override

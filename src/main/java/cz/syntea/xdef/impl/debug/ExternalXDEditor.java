@@ -31,6 +31,7 @@ import java.util.Map;
 public abstract class ExternalXDEditor implements XEditor {
 
 	/** Execute the external editor of X-definitions (must be implemented).
+	 * The external editor MUST return the file with the result information.
 	 * @param defPool filename of the file with XDPool.
 	 * @param reports filename of the file with reports written by compiler.
 	 * @param resultInfo the file name of the file where the external editor
@@ -58,6 +59,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			reportFile.deleteOnExit();
 			File resultFile = File.createTempFile("result", ".txt");
 			resultFile.deleteOnExit();
+			resultFile.delete();
 
 			// write data to files
 			xpool.writeXDPool(poolFile);
@@ -72,7 +74,12 @@ public abstract class ExternalXDEditor implements XEditor {
 			// the result information
 			String resultInfo = resultFile.getAbsolutePath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
-
+			// wait max. 2 hours for the resultFile (14400 = 2*2*3600)
+			for (int i = 0; i < 14400 && !waitForFileExists(resultFile); i++) {}
+			if (!resultFile.exists() || !resultFile.canRead()) {
+				throw new RuntimeException(
+					"No response from the external editor");
+			}
 			// Read result information from the result file.
 			FileInputStream fis = new FileInputStream(resultFile);
 			XDReader xr = new XDReader(fis);
@@ -85,16 +92,30 @@ public abstract class ExternalXDEditor implements XEditor {
 				String key = xr.readString();
 				sources.put(key, XDSourceItem.readXDSourceItem(xr));
 			}
-			// delete unnecessary files (for sure)
+			xr.close();
+			// delete all created files (for sure)
 			poolFile.delete();
 			reportFile.delete();
 			resultFile.delete();
 			return editingFinished;
 		} catch (Exception ex) {
 			//Internal error&{0}{: }
-			throw new SRuntimeException(
-				SYS.SYS066, ex.getCause(), ex.getMessage());
+			throw new SRuntimeException(SYS.SYS066, ex.getCause(), ex);
 		}
+	}
+
+	/** Wait 0.5 sec for the file exists.
+	 * @param f the checked file.
+	 * @return true if the file exists.
+	 * @throws InterruptedException if the task was interrupted.
+	 */
+	private static boolean waitForFileExists(final File f)
+		throws InterruptedException {
+		if (f.exists() && f.canRead()) {
+			return true;
+		}
+		synchronized(f) {f.wait(500);} // 0.5 SEC
+		return f.exists() && f.canRead();
 	}
 
 	@Override
@@ -149,9 +170,15 @@ public abstract class ExternalXDEditor implements XEditor {
 	public final static void genResultFile(final String fileName,
 		final boolean editingFinished,
 		final Map<String, XDSourceItem> sourceItems) throws Exception {
-		File resultFile = new File(fileName);
-		// write the result information to the the result file.
-		XDWriter xw = new XDWriter(new FileOutputStream(resultFile));
+		// create the tmp file
+		File tmpFile = new File(fileName+".tmp");
+		// for sure, it should be not an already existing file
+		for (int i = 1; tmpFile.exists(); i++) {
+			tmpFile = new File(fileName+".tmp" + i);
+		}
+		tmpFile.deleteOnExit();
+		// write the result information to the the tmp file.
+		XDWriter xw = new XDWriter(new FileOutputStream(tmpFile));
 		// write editingFinished value
 		xw.writeBoolean(editingFinished);
 		// write sourcemap (because it might be changed!)
@@ -166,6 +193,21 @@ public abstract class ExternalXDEditor implements XEditor {
 			}
 		}
 		xw.close();
+		// rename the tmp file to the result file
+		tmpFile.createNewFile(); // ??? this is nonsense!!! ???
+		File resultFile = new File(fileName); // the result file
+		resultFile.delete();
+		int count = 0;
+		for (; !tmpFile.renameTo(resultFile) && count < 100; count++) {
+			synchronized(tmpFile) {
+				tmpFile.wait(100); // wait 0.1 sec
+			}
+		}
+		if (count >= 100) { // error: not renamed even after 10 sec
+			throw new RuntimeException("Can't rename file: "
+				+ tmpFile.getAbsolutePath()
+				+ "\nto: "+resultFile.getAbsolutePath());
+		}
 	}
 
 }

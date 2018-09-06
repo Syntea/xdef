@@ -31,6 +31,7 @@ public class TestAllFull {
 	 * @return number of errors.
 	 */
 	public static int runTests(String[] args) {
+		XDTester.setFulltestMode(true);
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {

@@ -136,9 +136,13 @@ public class TestXdScript extends XDTester {
 			s = "  String t = ((String) 1.5 ) . subtring(1);";
 			assertEq(s, parse(g, "DeclarationScript", s));
 //			printCode(g);
-			s = "  uniqueSet u flt;\n";
+			s = "  uniqueSet u flt ;\n";
 			assertEq(s, parse(g, "DeclarationScript", s));
-			s = "  uniqueSet u {x: flt; y : optional flt;}\n";
+			s = " uniqueSet u { x: flt ; y : optional flt ; }\n";
+			assertEq(s, parse(g, "DeclarationScript", s));			
+			s = "uniqueSet u{x:flt;y:?flt;}\n";
+			assertEq(s, parse(g, "DeclarationScript", s));			
+			s = "uniqueSet u {a:string();b:int();var Parser x;var Parser y;}";
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s =
 "type XY enum('XX','YY'); type flt float();\n" +
@@ -250,6 +254,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XPosition", s));
 			s = "X#Y/$mixed[1]/A[22]/$text[1]";
 			assertEq(s, parse(g, "XPosition", s));
+			
 			s =
 "external method String test.xdef.TestExtenalMethods_2.m35(XXElement, int);\n"+
 "external method {\n"+

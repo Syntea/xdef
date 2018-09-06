@@ -46,7 +46,7 @@ public final class TestDebugGUI extends XDTester {
 		String s;
 		Element el;
 
-//		// set external editor
+		// set external editor
 //		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, "xdplugin.XdPlugin");
 
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display

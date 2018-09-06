@@ -45,11 +45,13 @@ public class CompileBase implements CodeTable, XDValueID {
 	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//48
 	/** Value type: reference to attribute; used by compiler. */
 	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//49
+	/** Named value of UNIQUESET. */
+	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//50
 	/** attribute ref, undefined type and methods which are not above a type. */
-	public static final short NOTYPE_VALUE_ID = UNIQUESET_KEY_VALUE + 1;	//51
+	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//51
 
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;	//50
+	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//52
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -1384,12 +1386,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "CLEAR");
 		method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID,
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "checkUnref");
-		method(ti, genInternalMethod(UNIQUESET_SETVALUE, XD_VOID,
-			(byte) (ELEMENT_MODE + TEXT_MODE), 1, 3,
-			UNIQUESET_M_VALUE, XD_STRING,XD_ANY),"setNamedValue");
-		method(ti, genInternalMethod(UNIQUESET_GETVALUE, XD_ANY,
-			(byte) (ELEMENT_MODE + TEXT_MODE), 1, 2,
-			UNIQUESET_M_VALUE, XD_STRING), "getNamedValue");
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)

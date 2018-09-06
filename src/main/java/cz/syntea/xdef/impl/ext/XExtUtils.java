@@ -106,13 +106,21 @@ public final class XExtUtils {
 			el = (Element) n;
 		}
 	}
-
-	public final static String getXPos(final XXNode xnode) {
-		return xnode.getXPos();
-	}
-
+	public final static String getXPos(final XXNode x) {return x.getXPos();}
 	public final static String getXDPosition(final XXNode xnode) {
 		return xnode.getXMNode().getXDPosition();
+	}
+	public static long getSourceLine(final XXNode xnode) {
+		return xnode.getSPosition().getLineNumber();
+	}
+	public static long getSourceColumn(final XXNode xnode) {
+		return xnode.getSPosition().getColumnNumber();
+	}
+	public static String getSysId(final XXNode xnode) {
+		return xnode.getSPosition().getSysId();
+	}
+	public static String getSourcePosition(final XXNode xnode) {
+		return "" + xnode.getSPosition();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

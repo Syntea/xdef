@@ -828,7 +828,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				case TO_STRING:
-					if (_stack[sp].getItemId() != XD_STRING) {
+					if (_stack[sp] == null) {
+						_stack[sp] = new DefString(_stack[sp].toString());
+					} else if (_stack[sp].getItemId() != XD_STRING) {
 						_stack[sp] = new DefString(_stack[sp].toString());
 					}
 					continue;
@@ -1623,15 +1625,14 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					chkNode._markedUniqueSets.add(x);
 					continue;
 				}
-				case UNIQUESET_SETVALUE: {
-					XDValue value = _stack[sp--];
-					String name = _stack[sp--].toString();
-					((CodeUniqueset) _stack[sp--]).setNamedValue(name, value);
+				case UNIQUESET_SETVALUEX: {
+					CodeUniqueset u = (CodeUniqueset) _stack[sp--];
+					u.setNamedValue(((CodeS1)item).stringValue(), _stack[sp--]);
 					continue;
 				}
-				case UNIQUESET_GETVALUE: {
-					String name = _stack[sp--].toString();
-					_stack[sp] = ((CodeUniqueset) _stack[sp]).getNamedValue(name);
+				case UNIQUESET_GETVALUEX: {
+					CodeUniqueset u = (CodeUniqueset) _stack[sp];
+					_stack[sp] = u.getNamedValue(((CodeS1)item).stringValue());
 					continue;
 				}
 				case DEFAULT_ERROR: //DEFAULT_ERROR_CODE puts message
@@ -3318,8 +3319,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 		}
 		chkElem._parseResult = y;
-		dt.getParseKeyItem(dt.getKeyItemIndex()).setParsedObject(
-			y.getParsedValue());
+		dt.getParseKeyItem(
+			dt.getKeyItemIndex()).setParsedObject(y.getParsedValue());
 		System.arraycopy(stack, 0, _stack, 0, sp);
 		return result;
 	}
@@ -3339,7 +3340,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					chkNode._parseResult.putReport(rep);
 				}
 			}
-		} else if (code == UNIQUESET_CHKID || code == UNIQUESET_M_CHKID) {
+		} else if (code == UNIQUESET_CHKID || code == UNIQUESET_M_CHKID
+			|| code == UNIQUESET_KEY_CHKID) {
 			if (!dt.hasId()) {
 				String modif = (dt.getName() != null ? dt.getName()+" " : "")
 					+ dt.printActualKey();

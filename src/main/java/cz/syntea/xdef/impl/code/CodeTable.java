@@ -732,12 +732,12 @@ public interface CodeTable {
 	static final short UNIQUESET_CLOSE = UNIQUESET_M_NEWKEY + 1;
 	/** Check unresolved Id references and clear unique set (CLEAR, close). */
 	static final short UNIQUESET_CHEKUNREF = UNIQUESET_CLOSE + 1;
-	/** Set value to the key of unique set. */
-	static final short UNIQUESET_SETVALUE = UNIQUESET_CHEKUNREF + 1;
-	/** Set value to the key of unique set. */
-	static final short UNIQUESET_GETVALUE = UNIQUESET_SETVALUE + 1;
+	/** Set named value to the key of unique set. */
+	static final short UNIQUESET_SETVALUEX = UNIQUESET_CHEKUNREF + 1;
+	/** Get named value to the key of unique set. */
+	static final short UNIQUESET_GETVALUEX = UNIQUESET_SETVALUEX + 1;
 	/** Check unresolved Id references and clear unique set (CLEAR, close). */
-	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUE + 1;
+	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUEX + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//Object

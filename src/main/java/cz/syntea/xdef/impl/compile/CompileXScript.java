@@ -527,9 +527,12 @@ final class CompileXScript extends CompileStatement {
 				break;
 			}
 			case TYPE_SYM:
+				// compile type or unique;
+				compileType((byte) 'X', false);
+				break;
 			case UNIQUE_SET_SYM: {
 				// compile type or unique;
-				compileTypeOrUniqueset((byte) 'X', false);
+				compileUniqueset((byte) 'X', false);
 				break;
 			}
 			default:
