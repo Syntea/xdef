@@ -241,7 +241,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	
-	<!--
+	<!-- 
 	<scm>
 		<connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
 		<developerConnection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</developerConnection>
