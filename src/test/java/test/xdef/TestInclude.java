@@ -16,7 +16,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SRuntimeException;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import java.io.File;
@@ -26,7 +26,7 @@ import java.io.StringWriter;
  * in XML data.
  * @author Vaclav Trojan
  */
-public final class TestInclude extends XDefTester {
+public final class TestInclude extends XDTester {
 
 	public TestInclude() {super();}
 

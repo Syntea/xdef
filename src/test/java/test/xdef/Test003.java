@@ -28,7 +28,7 @@ import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +43,7 @@ import org.w3c.dom.Document;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test003 extends XDefTester {
+public final class Test003 extends XDTester {
 
 	public Test003() {super();}
 

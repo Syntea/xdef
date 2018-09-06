@@ -14,7 +14,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.impl.code.DefXQueryExpr;
@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
 /** Test versions with Saxon and without Saxon implementation.
  * @author Vaclav Trojan
  */
-public class TestSaxon extends XDefTester {
+public class TestSaxon extends XDTester {
 
 	public TestSaxon() {super();}
 

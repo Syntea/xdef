@@ -13,11 +13,11 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDPool;
 
 /** Test BNF.*/
-public final class TestBNF extends XDefTester {
+public final class TestBNF extends XDTester {
 
 	public TestBNF() {super();}
 

@@ -16,7 +16,7 @@ import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.SParser;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.File;
 import org.w3c.dom.Document;

@@ -20,7 +20,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 import cz.syntea.xdef.util.PrettyXdef;
 import java.io.File;
 import cz.syntea.xdef.sys.ReportWriter;

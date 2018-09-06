@@ -14,7 +14,7 @@ package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.File;
 

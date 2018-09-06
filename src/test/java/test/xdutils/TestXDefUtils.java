@@ -16,7 +16,7 @@ package test.xdutils;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 import cz.syntea.xdef.util.GenCollection;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

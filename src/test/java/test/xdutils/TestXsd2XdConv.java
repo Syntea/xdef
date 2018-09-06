@@ -18,7 +18,7 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.util.XsdToXdef;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

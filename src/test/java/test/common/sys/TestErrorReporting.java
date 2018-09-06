@@ -18,11 +18,12 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SPosition;
 import cz.syntea.xdef.sys.StringParser;
+import test.utils.STester;
+import test.utils.XDTester;
+
 import java.io.PrintWriter;
 import java.io.StringReader;
 import cz.syntea.xdef.sys.ReportReader;
-import test.util.STester;
-import test.util.XDefTester;
 
 /** TestReport
  *
@@ -39,7 +40,7 @@ public class TestErrorReporting extends STester {
 			report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			ArrayReporter reporter = new ArrayReporter();
 			reporter.putReport(report);
 			printReports(reporter, data);
@@ -47,7 +48,7 @@ public class TestErrorReporting extends STester {
 	}
 
 	public void printReports(ReportReader reporter, String data) {
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			System.out.flush();
 			System.err.flush();
 			ReportPrinter.printListing(new PrintWriter(System.out),

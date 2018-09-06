@@ -14,7 +14,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.FUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
@@ -32,7 +32,7 @@ import org.w3c.dom.NodeList;
 /** Test of X-Definition relational database processing.
  * @author Vaclav Trojan
  */
-public final class TestDatabase extends XDefTester {
+public final class TestDatabase extends XDTester {
 
 	public TestDatabase() {super();}
 

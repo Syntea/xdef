@@ -30,7 +30,7 @@ import cz.syntea.xdef.sys.SUnsupportedOperationException;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.xml.KXpathExpr;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.impl.code.DefElement;
 import cz.syntea.xdef.impl.code.DefString;
 import org.w3c.dom.Document;
@@ -44,7 +44,7 @@ import cz.syntea.xdef.XDValueType;
  *
  * @author Vaclav Trojan
  */
-public final class TestXDService extends XDefTester {
+public final class TestXDService extends XDTester {
 
 	public TestXDService() {super();}
 

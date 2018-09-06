@@ -27,12 +27,12 @@ import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
-import test.util.XDefTester;
+import test.utils.XDTester;
 
 /** Provides testing of XDef debug mode and editing in display mode.
  * @author Trojan
  */
-public final class TestDebugGUI extends XDefTester {
+public final class TestDebugGUI extends XDTester {
 
 	public TestDebugGUI() {super(); setChkSyntax(false);}
 

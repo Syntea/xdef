@@ -8,9 +8,9 @@
  * This class requires following structure of directories:
  * <p><code>build/classes src/javaSource_dataDir[/dataDir] or
  * test/javaSource_dataDir[/dataDir]</code>
- * <p>See {@link test.util.STester}.</p>
+ * <p>See {@link test.utils.STester}.</p>
  * </li>
  *
  * </UL>
  */
-package test.util;
+package test.utils;

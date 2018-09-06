@@ -19,7 +19,7 @@ import cz.syntea.xdef.sys.SException;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

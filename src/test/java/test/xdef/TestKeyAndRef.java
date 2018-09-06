@@ -14,7 +14,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.StringParser;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
@@ -26,7 +26,7 @@ import org.w3c.dom.Node;
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
  */
-public final class TestKeyAndRef extends XDefTester {
+public final class TestKeyAndRef extends XDTester {
 
 	public TestKeyAndRef() {super();}
 

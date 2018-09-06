@@ -14,7 +14,7 @@ package test.common.xml;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.File;
 import java.net.URL;

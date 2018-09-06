@@ -15,7 +15,7 @@ package test.xdef;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.util.GregorianCalendar;
@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /** Test template
  * @author Vaclav Trojan
  */
-public final class TestTemplate extends XDefTester {
+public final class TestTemplate extends XDTester {
 
 	public TestTemplate() {super();}
 

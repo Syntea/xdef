@@ -16,7 +16,7 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDContainer;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
@@ -56,7 +56,7 @@ import org.xml.sax.SAXParseException;
 /** Test schema and structured types.
  * @author Vaclav Trojan
  */
-public final class TestXSTypes extends XDefTester {
+public final class TestXSTypes extends XDTester {
 
 	public TestXSTypes() {super();}
 
@@ -157,7 +157,7 @@ public final class TestXSTypes extends XDefTester {
 	}
 
 	private void init() throws Exception {
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			_builderFactory = DocumentBuilderFactory.newInstance();
 			_builderFactory.setAttribute(
 				"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
@@ -536,7 +536,7 @@ public final class TestXSTypes extends XDefTester {
 			return false;
 		}
 		boolean result = true;
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			if (_msg.indexOf("SCHEMA: ") < 0) {
 				_msg = "Not recognized by SCHEMA:\n"+ _msg;
 				result = false;
@@ -559,7 +559,7 @@ public final class TestXSTypes extends XDefTester {
 		_msg = "";
 		_schema = "";
 		boolean result = true;
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			try {
 				_schema = genSchema(_params);
 				SchemaFactory factory = SchemaFactory.newInstance(
@@ -605,7 +605,7 @@ public final class TestXSTypes extends XDefTester {
 		_xml = data == null ? null :
 ("<a xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
 " xsi:noNamespaceSchemaLocation=\"dummy\" a=\""+data+"\"\n>"+data+"</a>");
-		return XDefTester.getFulltestMode()
+		return XDTester.getFulltestMode()
 			? chkSchema(result) & chkXDef(result) : chkXDef(result);
 	}
 
@@ -1080,7 +1080,7 @@ public final class TestXSTypes extends XDefTester {
 		assertTrue(parse("Hello World!"), _msg);
 
 		// testing errors
-		if (!XDefTester.getFulltestMode()) {
+		if (!XDTester.getFulltestMode()) {
 			assertFalse(parse(""), _msg); //schema accepts empty string!!!
 		}
 
@@ -1139,7 +1139,7 @@ public final class TestXSTypes extends XDefTester {
 
 		assertTrue(prepare("string(%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("   Hello   world!  "), _msg);
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(parse("     ", ""), _msg);
 		}
 
@@ -1150,7 +1150,7 @@ public final class TestXSTypes extends XDefTester {
 
 		assertTrue(prepare(
 			"string(%whiteSpace='collapse',%length='0')"), _msg);
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(parse(""), _msg);
 			assertTrue(parse("    "), _msg);//should return empty string
 		}
@@ -1162,7 +1162,7 @@ public final class TestXSTypes extends XDefTester {
 		assertTrue(parseFail("  ab  "), _msg);
 		assertTrue(parseFail("    "), _msg);
 
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(prepare(
 				"string(%whiteSpace='collapse',%minLength='0')"), _msg);
 			assertTrue(parse("    ", ""), _msg); //should return text value null
@@ -1192,7 +1192,7 @@ public final class TestXSTypes extends XDefTester {
 		assertTrue(prepare("normalizedString(%whiteSpace='replace')"),_msg);
 		assertTrue(parse("Hello World!"), _msg);
 
-		if (!XDefTester.getFulltestMode()) {
+		if (!XDTester.getFulltestMode()) {
 //			assertTrue(parseFail(""), _msg); //schema accepts empty string???
 		}
 
@@ -1260,7 +1260,7 @@ public final class TestXSTypes extends XDefTester {
 
 		assertTrue(prepare("normalizedString(%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("   Hello   world!  "), _msg);
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(parse("     ", ""), _msg);
 		}
 
@@ -1271,7 +1271,7 @@ public final class TestXSTypes extends XDefTester {
 
 		assertTrue(prepare(
 			"normalizedString(%whiteSpace='collapse',%length='0')"), _msg);
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(parse(""), _msg);
 			assertTrue(parse("    "), _msg);//should return empty string
 		}
@@ -1283,7 +1283,7 @@ public final class TestXSTypes extends XDefTester {
 		assertTrue(parseFail("  ab  "), _msg);
 		assertTrue(parseFail("    "), _msg);
 
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			assertTrue(prepare(
 				"normalizedString(%whiteSpace='collapse',%minLength='0')"),
 				_msg);

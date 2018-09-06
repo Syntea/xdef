@@ -13,7 +13,7 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
@@ -21,7 +21,7 @@ import java.io.StringWriter;
 /** Test getXComponentVariable/setVariable
  * @author Vaclav Trojan
  */
-public final class TestExternalVariables extends XDefTester {
+public final class TestExternalVariables extends XDTester {
 
 	public TestExternalVariables() {super();}
 

@@ -12,7 +12,7 @@
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
  *
  */
-package test.util;
+package test.utils;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -1212,7 +1212,7 @@ public abstract class STester {
 		};
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "test-class " + getClass().getName(),
-			XDefTester.getFulltestMode());
+			XDTester.getFulltestMode());
 		
 		if (log != null) {
 			log.close();

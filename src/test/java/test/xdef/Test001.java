@@ -15,7 +15,7 @@ package test.xdef;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test001  extends XDefTester {
+public final class Test001  extends XDTester {
 
 	public Test001() {super();}
 

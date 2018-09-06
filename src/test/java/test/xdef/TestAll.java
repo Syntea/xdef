@@ -16,8 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import test.util.STester;
-import test.util.XDefTester;
+import test.utils.STester;
+import test.utils.XDTester;
 
 /** Run all tests of this package.
  * @author Vaclav Trojan
@@ -83,7 +83,7 @@ public class TestAll {
 			new TestXmlWriter(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef", XDefTester.getFulltestMode(), args);
+			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

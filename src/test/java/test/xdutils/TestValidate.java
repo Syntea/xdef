@@ -19,7 +19,7 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.util.XValidate;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.File;
 import java.io.FileOutputStream;

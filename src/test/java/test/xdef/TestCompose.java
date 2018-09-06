@@ -17,7 +17,7 @@ import cz.syntea.xdef.sys.FUtils;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.xml.KXpathExpr;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
@@ -42,7 +42,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Test of x-definition composition mode.
  * @author Vaclav Trojan
  */
-final public class TestCompose extends XDefTester {
+final public class TestCompose extends XDTester {
 
 	public TestCompose() {super();}
 

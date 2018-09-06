@@ -14,7 +14,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
 /** Test of groups (repeated items, nesting).
  * @author Vaclav Trojan
  */
-public final class TestGroups extends XDefTester {
+public final class TestGroups extends XDTester {
 
 	public TestGroups() {super();}
 

@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import test.util.XDefTester;
+import test.utils.XDTester;
 
 
 
@@ -37,7 +37,7 @@ public class TestAll {
 	@BeforeSuite
 	@Parameters("fullTestMode")
 	public static void beforeSuite(boolean fullTestMode) {
-		XDefTester.setFulltestMode(fullTestMode);
+		XDTester.setFulltestMode(fullTestMode);
 		
 		logger.info("tests initialized");
 	}

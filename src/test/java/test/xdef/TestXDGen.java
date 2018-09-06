@@ -16,7 +16,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 
 import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportWriter;
@@ -25,7 +25,7 @@ import cz.syntea.xdef.util.GenXDefinition;
 /** Generation of XDefinition from XML
  * @author Vaclav Trojan
  */
-public class TestXDGen extends XDefTester {
+public class TestXDGen extends XDTester {
 
 	public TestXDGen() {super();}
 

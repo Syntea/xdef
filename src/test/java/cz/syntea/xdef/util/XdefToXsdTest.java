@@ -1,9 +1,9 @@
 package cz.syntea.xdef.util;
 
-import static test.util.Assert.assertEquals;
-import static test.util.Assert.assertNoErrors;
-import static test.util.TestUtil.compile;
-import static test.util.TestUtil.getResrc;
+import static test.utils.Assert.assertEquals;
+import static test.utils.Assert.assertNoErrors;
+import static test.utils.TestUtil.compile;
+import static test.utils.TestUtil.getResrc;
 
 import java.io.File;
 import java.net.URL;

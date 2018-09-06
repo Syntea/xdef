@@ -26,7 +26,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import test.util.STester;
+import test.utils.STester;
 
 /** Test XML writer.
  * @author Vaclav Trojan

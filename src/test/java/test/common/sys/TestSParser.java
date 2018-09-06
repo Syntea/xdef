@@ -16,7 +16,7 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
-import test.util.STester;
+import test.utils.STester;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

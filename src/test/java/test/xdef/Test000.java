@@ -20,7 +20,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDocument;
@@ -48,7 +48,7 @@ import org.w3c.dom.Element;
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
  */
-public final class Test000 extends XDefTester {
+public final class Test000 extends XDTester {
 
 	public Test000() {super();}
 

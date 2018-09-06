@@ -21,7 +21,7 @@ import cz.syntea.xdef.sys.FileReportWriter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SManager;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.File;
 import java.io.FileInputStream;

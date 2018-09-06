@@ -1,4 +1,4 @@
-package test.util;
+package test.utils;
 
 import org.testng.asserts.IAssert;
 import org.w3c.dom.Element;

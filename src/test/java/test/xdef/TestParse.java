@@ -20,7 +20,7 @@ import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlConstants;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDBuilder;
 import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDocument;
@@ -50,7 +50,7 @@ import cz.syntea.xdef.proc.XXData;
 /** Test of parsing of source XML according to XDefinition.
  * @author Vaclav Trojan
  */
-public final class TestParse extends XDefTester {
+public final class TestParse extends XDTester {
 
 	public TestParse() {super();}
 

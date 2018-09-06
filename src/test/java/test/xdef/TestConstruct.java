@@ -15,7 +15,7 @@ package test.xdef;
 
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.ReportWriter;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXElement;
@@ -24,7 +24,7 @@ import cz.syntea.xdef.proc.XXElement;
  *
  * @author  Vaclav Trojan
  */
-public final class TestConstruct extends XDefTester {
+public final class TestConstruct extends XDTester {
 
 	public TestConstruct() {super();}
 

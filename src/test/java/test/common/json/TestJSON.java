@@ -17,7 +17,7 @@ package test.common.json;
 import cz.syntea.xdef.sys.JSONUtil;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
-import test.util.STester;
+import test.utils.STester;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;

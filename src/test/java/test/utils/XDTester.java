@@ -10,11 +10,30 @@
  * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
  * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
-package test.util;
+package test.utils;
 
+import cz.syntea.xdef.msg.XDEF;
+import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.FUtils;
+import cz.syntea.xdef.sys.Report;
+import cz.syntea.xdef.sys.ReportPrinter;
+import cz.syntea.xdef.sys.SRuntimeException;
+import cz.syntea.xdef.xml.KXmlConstants;
+import cz.syntea.xdef.xml.KXmlUtils;
+import cz.syntea.xdef.component.XComponent;
+import cz.syntea.xdef.XDBuilder;
+import cz.syntea.xdef.XDConstants;
+import cz.syntea.xdef.XDDocument;
+import cz.syntea.xdef.XDFactory;
+import cz.syntea.xdef.XDOutput;
+import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.model.XMDefinition;
+import cz.syntea.xdef.model.XMElement;
+import cz.syntea.xdef.impl.code.DefOutStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -23,39 +42,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Properties;
-
-import javax.xml.namespace.QName;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
-
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.component.XComponent;
-import cz.syntea.xdef.impl.code.DefOutStream;
-import cz.syntea.xdef.model.XMDefinition;
-import cz.syntea.xdef.model.XMElement;
-import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
-import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.xml.KXmlUtils;
+import javax.xml.namespace.QName;
 
 /** Support of tests.
  * @author Vaclav Trojan
  */
-public abstract class XDTesterNT {
+public abstract class XDTester extends STester {
 //	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
 	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
@@ -66,8 +62,11 @@ public abstract class XDTesterNT {
 	private boolean _chkSyntax;
 
 	/** Creates a new instance of TestAbstract */
-	public XDTesterNT() {
+	public XDTester() {
+		super();
 		resetTester();
+		_chkSyntax = _fulltestMode;
+		_genObj = _fulltestMode;
 	}
 
 	public final void resetProperties() {
@@ -140,7 +139,9 @@ public abstract class XDTesterNT {
 		final OutputStream out,
 		final ReportWriter reporter,
 		final char mode,
-		final Class<?>[] exts) {
+		final Class[] exts) {
+		System.out.flush();
+		System.err.flush();
 		try {
 			InputStream[] xdin = new InputStream[xdefs.length];
 			for (int i = 0; i <xdefs.length; i++) {
@@ -153,8 +154,11 @@ public abstract class XDTesterNT {
 			Element result = test(xdin, in, name, out, reporter, mode, exts);
 			return result;
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			fail(ex);
 		}
+		System.err.flush();
+		System.out.flush();
+		return null;
 	}
 
 	final public Element test(final String xdef,
@@ -163,7 +167,7 @@ public abstract class XDTesterNT {
 		final OutputStream out,
 		final ReportWriter reporter,
 		final char mode,
-		final Class<?>[] exts) {
+		final Class[] exts) {
 		return test(new String[] {xdef}, data, name, out, reporter, mode, exts);
 	}
 
@@ -289,8 +293,9 @@ public abstract class XDTesterNT {
 				return result;
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			fail(ex);
 		}
+		return null;
 	}
 
 	/* if reporter is not null checking of result of data proecessin is
@@ -300,7 +305,7 @@ public abstract class XDTesterNT {
 		final String name,
 		final OutputStream os,
 		final ReportWriter reporter,
-		final Class<?>[] exts) {
+		final Class[] exts) {
 		return test(new InputStream[]{xn}, data, name, os, reporter, exts);
 	}
 
@@ -311,7 +316,7 @@ public abstract class XDTesterNT {
 		final String name,
 		final OutputStream os,
 		final ReportWriter reporter,
-		final Class<?>[] exts) {
+		final Class[] exts) {
 		try {
 			ReportWriter myreporter = reporter;
 			if (reporter == null) {
@@ -325,16 +330,17 @@ public abstract class XDTesterNT {
 					ReportReader rri = myreporter.getReportReader();
 					ReportPrinter.printListing(sw,
 						new java.io.InputStreamReader(data), rri, true);
-					throw new RuntimeException(sw.toString());
+					fail(sw.toString());
 				}
 				if (result == null) {
-					throw new RuntimeException("got null result");
+					fail("got null result");
 				}
 			}
 			return result;
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			fail(ex);
 		}
+		return null;
 	}
 
 	final public void checkResult(final Element el, final String expected) {
@@ -345,11 +351,12 @@ public abstract class XDTesterNT {
 	}
 
 	final public void checkResult(final Element el, final Element expected) {
-		//TODO: almost same as compare elements, used only once, to replace by assertEquals
 		ReportWriter rw = KXmlUtils.compareElements(el, expected);
 		if (!rw.errorWarnings()) {
 			return;
 		}
+		System.err.flush();
+		System.out.flush();
 		StringWriter swr = new StringWriter();
 		Report rep;
 		ReportReader rri = rw.getReportReader();
@@ -357,7 +364,7 @@ public abstract class XDTesterNT {
 			swr.write(rep.toString());
 			swr.write('\n');
 		}
-		throw new RuntimeException(swr.toString());
+		fail(swr.toString());
 	}
 
 	private static String genCollection(final String... sources) {
@@ -373,27 +380,13 @@ public abstract class XDTesterNT {
 //				true, //resolvemacros
 //				true, //removeActions
 //				false), true);
-		} catch (Exception ex) {
-			logger.error(TestUtil.exceptionStackTrace(ex));
+	} catch (Exception ex) {
+			ex.printStackTrace(System.err);
 			return "";
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private static String genCollection(final URL... sources) {
-		try {
-			Element el = XDGenCollection.genCollection(sources,
-				true, //resolvemacros
-				true, //removeActions
-				false);
-			return KXmlUtils.nodeToString(el, true);
-		} catch (Exception ex) {
-			logger.error(TestUtil.exceptionStackTrace(ex));
-			return "";
-		}
-	}
-	
-	final public Element test(final Class<?>[] objs,
+	final public Element test(final Class[] objs,
 		final String xdef,
 		final String data,
 		final String name,
@@ -455,24 +448,27 @@ public abstract class XDTesterNT {
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
 		boolean error = false;
+		System.err.flush();
+		System.out.flush();
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ArrayReporter reporter = new ArrayReporter();
 			Element el = test(xdef, data, name, bos, reporter, mode, exts);
 			if (reporter.errors()) {
 				error = true;
-				logger.info(ReportPrinter.printListing(data, reporter));
+				ReportPrinter.printListing(System.out, data, reporter, true);
 			}
 			if (result == null) {
 				if (el != null) {
 					error = true;
-					logger.error("Fails expected null, got:");
-					logger.error(KXmlUtils.nodeToString(el, true));
+					System.err.println("Fails expected null, got:");
+					System.err.println(KXmlUtils.nodeToString(el, true));
 				}
 			} else {
 				if (el == null) {
 					error = true;
-					logger.error("Fails! Expected:\n" + result + "\n got null");
+					System.err.println("Fails! Expected:\n"
+						+ result + "\n got null");
 				} else {
 					Element expected =
 						KXmlUtils.parseXml(result).getDocumentElement();
@@ -480,8 +476,8 @@ public abstract class XDTesterNT {
 						KXmlUtils.compareElements(el, expected);
 					if (rw.errorWarnings()) {
 						error = true;
-						logger.error(rw.getReportReader().printToString());
-						logger.error("Fails! Expected:\n"
+						rw.getReportReader().printReports(System.err);
+						System.err.println("Fails! Expected:\n"
 							+ result + "\n got:\n"
 							+ KXmlUtils.nodeToString(el, false));
 					}
@@ -490,16 +486,18 @@ public abstract class XDTesterNT {
 			String s = bos.toString("UTF-8");
 			if (!s.equals(stdout)) {
 				error = true;
-				logger.error("========== Standard output ===========\n");
-				logger.error("Len expected: " + stdout.length()
+				System.err.println("========== Standard output ===========\n");
+				System.err.println("Len expected: " + stdout.length()
 					 + ", len returned: " + s.length());
-				logger.error("Incorrect Output! Expected:\n" + stdout
+				System.err.println("Incorrect Output! Expected:\n" + stdout
 					+ "\ngot:\n" + s);
 			}
 		} catch (Exception ex) {
 			error = true;
-			throw new RuntimeException(ex);
+			fail(ex);
 		}
+		System.err.flush();
+		System.out.flush();
 		return error;
 	}
 
@@ -550,7 +548,7 @@ public abstract class XDTesterNT {
 		}
 	}
 
-	final public XDPool compile(final File[] files, final Class<?>... obj) {
+	final public XDPool compile(final File[] files, final Class... obj) {
 		if (_chkSyntax) {
 			genXdOfXd();
 			String[] sources = new String[files.length];
@@ -562,7 +560,7 @@ public abstract class XDTesterNT {
 		return checkExtObjects(XDFactory.compileXD(_props, files, obj));
 	}
 
-	final public XDPool compile(final File file, final Class<?>... obj) {
+	final public XDPool compile(final File file, final Class... obj) {
 		if (_chkSyntax) {
 			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(
@@ -572,33 +570,20 @@ public abstract class XDTesterNT {
 	}
 
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
-		String source = xdef.startsWith("<") ?
-			xdef :
-			TestUtil.getResrcStr(getClass(), xdef)
-		;
-		
 		if (_chkSyntax) {
 			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(source), null);
+			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
-		return checkExtObjects(XDFactory.compileXD(_props, source, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
 
 
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
-		String[] sources = new String[xdefs.length];
-		for (int i = 0; i < sources.length; i++) {
-			sources[i] = xdefs[i].startsWith("<") ?
-				xdefs[i] :
-				TestUtil.getResrcStr(getClass(), xdefs[i])
-			;
-		}
-		
 		if (_chkSyntax) {
 			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(sources), null);
+			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
 		}
-		return checkExtObjects(XDFactory.compileXD(_props, sources, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
 
 	final public String createListnig(final String data,
@@ -862,7 +847,7 @@ public abstract class XDTesterNT {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = parse2(xd, xml, reporter);
+		Element result = xd.xparse(xml, reporter);
 		return result;
 	}
 
@@ -913,7 +898,7 @@ public abstract class XDTesterNT {
 		final String xml) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = parse2(xd, xml, null);
+		Element result = xd.xparse(xml, null);
 		return result;
 	}
 
@@ -936,7 +921,7 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Element result = parse2(xd, xml, reporter);
+		Element result = xd.xparse(xml, reporter);
 		return result;
 	}
 
@@ -1009,27 +994,16 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		parse2(xd, xml, reporter);
+		xd.xparse(xml, reporter);
 		if (strw != null) {
 			try {
 				strw.close();
 			} catch (Exception ex) {
-				logger.error(ex.toString());
+				System.err.println(ex.toString());
 			}
 		}
 		Element result = xd.getElement();
 		return result;
-	}
-	
-	final private Element parse2(
-		XDDocument xd,
-		String xml,
-		ReportWriter reporter
-	) {
-		return xml.startsWith("<") ?
-			xd.xparse(xml, reporter) :
-			xd.xparse(TestUtil.getResrc(getClass(), xml), reporter)
-		;
 	}
 
 	final public Element parse(final String xdef,
@@ -1044,15 +1018,18 @@ public abstract class XDTesterNT {
 
 	final public void printReports(final ReportReader reporter,
 		final String data) {
+		System.out.flush();
 		if (data.charAt(0) == '<') {
-			logger.error(ReportPrinter.printListing(data, reporter));
+			ReportPrinter.printListing(System.err, data, reporter, true);
 		} else {
 			try {
-				logger.error(ReportPrinter.printListing(data, reporter));
+				ReportPrinter.printListing(System.err,
+					new FileReader(data), reporter, true);
 			} catch (Exception ex) {
-				logger.error(TestUtil.exceptionStackTrace(ex));
+				ex.printStackTrace(System.err);
 			}
 		}
+		System.err.flush();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1060,7 +1037,7 @@ public abstract class XDTesterNT {
 	public final XComponent parseXC(final XDPool xp,
 		final String name,
 		final String xml,
-		final Class<?> clazz,
+		final Class clazz,
 		final ArrayReporter reporter) {
 		return parseXC(xp.createXDDocument(name), xml, clazz, reporter);
 	}
@@ -1068,14 +1045,14 @@ public abstract class XDTesterNT {
 	public final XComponent parseXC(final XDPool xp,
 		final String name,
 		final Element el,
-		final Class<?> clazz,
+		final Class clazz,
 		final ArrayReporter reporter) {
 		return parseXC(xp.createXDDocument(name), el, clazz, reporter);
 	}
 
 	public final XComponent parseXC(final XDDocument xd,
 		final String xml,
-		final Class<?> clazz,
+		final Class clazz,
 		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
@@ -1086,17 +1063,12 @@ public abstract class XDTesterNT {
 
 	public final static XComponent parseXC(final XDDocument xd,
 		final Element el,
-		final Class<?> clazz,
+		final Class clazz,
 		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
 		return xd.parseXComponent(el, clazz, reporter);
 	}
-
-	
-	
-	/** logger */
-	private static final Logger logger = LoggerFactory.getLogger(XDTesterNT.class);
 
 }

@@ -15,8 +15,8 @@ package test.xdutils;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import test.util.STester;
-import test.util.XDefTester;
+import test.utils.STester;
+import test.utils.XDTester;
 
 /** Run all available tests for package cz.syntea.xd.
  * @author Vaclav Trojan
@@ -47,7 +47,7 @@ public class TestAll {
 			new TestGenDTD(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdutils", XDefTester.getFulltestMode(), args);
+			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {
 			log.close();
 		}

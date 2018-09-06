@@ -13,13 +13,13 @@
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
-import test.util.XDefTester;
+import test.utils.XDTester;
 import cz.syntea.xdef.XDPool;
 
 /** Test "implements" and "uses".
  * @author Vaclav Trojan
  */
-public final class TestImplementsAndUses extends XDefTester {
+public final class TestImplementsAndUses extends XDTester {
 
 	public TestImplementsAndUses() {super();}
 

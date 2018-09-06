@@ -14,7 +14,7 @@
  */
 package test.common.json;
 
-import test.util.STester;
+import test.utils.STester;
 
 /** Test JSON tools.
  *

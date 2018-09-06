@@ -1,4 +1,4 @@
-package test.util;
+package test.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -98,7 +98,7 @@ public class TestUtil {
 	}
 	
 	public static XDPool compile(final File file, final Class<?>... obj) throws Exception {
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(file.getPath()), null);
 		}
 		
@@ -106,14 +106,14 @@ public class TestUtil {
 	}
 
 	public static XDPool compile(final String xdef, final Class<?>... obj) {
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
 
 	public static XDPool compile(String[] xdefs, final Class<?>... obj) {
-		if (XDefTester.getFulltestMode()) {
+		if (XDTester.getFulltestMode()) {
 			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
@@ -199,7 +199,7 @@ public class TestUtil {
 	
 	
 	public static XDPool checkExtObjects(final XDPool xp) {
-		if (!XDefTester.getFulltestMode()) { return xp; }
+		if (!XDTester.getFulltestMode()) { return xp; }
 		
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -243,7 +243,7 @@ public class TestUtil {
 	
 	
     
-	public  static final String     XDEFNS         = XDefTester.XDEFNS;
+	public  static final String     XDEFNS         = XDTester.XDEFNS;
     public  static final String     dataDir        = "data/";
     public  static final File       dataTmpRootDir = new File("target/test-output/data-tmp");
     

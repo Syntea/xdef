@@ -15,7 +15,7 @@ package test.common.sys;
 
 import cz.syntea.xdef.sys.SObjectReader;
 import cz.syntea.xdef.sys.SObjectWriter;
-import test.util.STester;
+import test.utils.STester;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import java.io.ByteArrayInputStream;

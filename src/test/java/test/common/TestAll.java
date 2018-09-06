@@ -31,8 +31,8 @@ import test.common.xml.TestKDOMBuilder;
 import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
-import test.util.STester;
-import test.util.XDefTester;
+import test.utils.STester;
+import test.utils.XDTester;
 
 /** Run all available tests for package cz.syntea.common.
  * @author Vaclav Trojan
@@ -76,7 +76,7 @@ public class TestAll {
 			new TestXdScript(),
 		};
 		int result = STester.runTests(System.out, System.err, log,
-			tests, "package common", XDefTester.getFulltestMode(), args);
+			tests, "package common", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

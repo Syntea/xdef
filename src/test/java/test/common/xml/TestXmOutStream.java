@@ -15,7 +15,7 @@ package test.common.xml;
 
 import cz.syntea.xdef.xml.KDOMBuilder;
 import cz.syntea.xdef.xml.KXmlOutStream;
-import test.util.STester;
+import test.utils.STester;
 
 import java.io.StringWriter;
 import org.w3c.dom.Document;

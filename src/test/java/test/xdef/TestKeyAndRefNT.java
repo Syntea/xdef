@@ -12,7 +12,7 @@
  */
 package test.xdef;
 
-import static test.util.TestUtil.getResrcStr;
+import static test.utils.TestUtil.getResrcStr;
 
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
@@ -23,9 +23,9 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.StringParser;
-import test.util.SoftAssert;
-import test.util.TestUtil;
-import test.util.XDTesterNT;
+import test.utils.SoftAssert;
+import test.utils.TestUtil;
+import test.utils.XDTesterNT;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
