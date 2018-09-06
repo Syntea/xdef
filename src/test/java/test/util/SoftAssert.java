@@ -26,19 +26,19 @@ public class SoftAssert extends Assertion {
 			onAssertFailure(a, ex);
 			m_errors.put(ex, a);
 			
-			String   exST = TestUtil.exceptionStackTrace(ex);
-			String[] exAr = exST.split("\n");
+			String   exST        = TestUtil.exceptionStackTrace(ex);
+			String[] exSTAr      = exST.split("\n");
 			String   matchString = "at " + getClass().getName() + ".doAssert";
 			int j = -1;
-			for (int i = 0; i < exAr.length; i++) {
-				if (exAr[i].contains(matchString)) {
+			for (int i = 0; i < exSTAr.length; i++) {
+				if (exSTAr[i].contains(matchString)) {
 					j = i;
 					break;
 				}
 			}
 			
-			if (j >= 0) {
-				logger.error(ex.getMessage() + "\n" + exAr[j + 2]);
+			if (j >= 0 && j + 2 < exSTAr.length) {
+				logger.error(ex.getMessage() + "\n" + exSTAr[j + 2]);
 			} else {
 				logger.error(ex.getMessage() + "\n" + exST);
 			}
@@ -54,8 +54,6 @@ public class SoftAssert extends Assertion {
 			
 			for (Map.Entry<AssertionError, IAssert<?>> ae : m_errors.entrySet()) {
 				sb.append("\n--------------------\n");
-				sb.append("Message:\n");
-				sb.append(ae.getKey().getMessage() + "\n");
 				sb.append("Stacktrace:\n");
 				sb.append(TestUtil.exceptionStackTrace(ae.getKey()));
 			}

@@ -40,7 +40,7 @@ public class TestUtil {
         
         if (url == null) {
             String msg = "resource not found: class=" + clazz.getName() + ", name=" + name;
-            logger.debug(msg);
+            logger.error(msg);
             throw new RuntimeException(msg);
         }
         

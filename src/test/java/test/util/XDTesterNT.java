@@ -379,6 +379,7 @@ public abstract class XDTesterNT {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static String genCollection(final URL... sources) {
 		try {
 			Element el = XDGenCollection.genCollection(sources,
@@ -571,24 +572,33 @@ public abstract class XDTesterNT {
 	}
 
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
+		String source = xdef.startsWith("<") ?
+			xdef :
+			TestUtil.getResrcStr(getClass(), xdef)
+		;
+		
 		if (_chkSyntax) {
 			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(TestUtil.getResrc(getClass(), xdef)), null);
+			_xdOfxd.createXDDocument().xparse(genCollection(source), null);
 		}
-		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, source, obj));
 	}
 
 
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
+		String[] sources = new String[xdefs.length];
+		for (int i = 0; i < sources.length; i++) {
+			sources[i] = xdefs[i].startsWith("<") ?
+				xdefs[i] :
+				TestUtil.getResrcStr(getClass(), xdefs[i])
+			;
+		}
+		
 		if (_chkSyntax) {
 			genXdOfXd();
-			URL[] sources = new URL[xdefs.length];
-			for (int i = 0; i < sources.length; i++) {
-				sources[i] = TestUtil.getResrc(getClass(), xdefs[i]);
-			}
 			_xdOfxd.createXDDocument().xparse(genCollection(sources), null);
 		}
-		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, sources, obj));
 	}
 
 	final public String createListnig(final String data,
@@ -852,7 +862,7 @@ public abstract class XDTesterNT {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
+		Element result = parse2(xd, xml, reporter);
 		return result;
 	}
 
@@ -903,7 +913,7 @@ public abstract class XDTesterNT {
 		final String xml) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), null);
+		Element result = parse2(xd, xml, null);
 		return result;
 	}
 
@@ -926,7 +936,7 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Element result = xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
+		Element result = parse2(xd, xml, reporter);
 		return result;
 	}
 
@@ -999,7 +1009,7 @@ public abstract class XDTesterNT {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		xd.xparse(TestUtil.getResrc(getClass(), xml), reporter);
+		parse2(xd, xml, reporter);
 		if (strw != null) {
 			try {
 				strw.close();
@@ -1009,6 +1019,17 @@ public abstract class XDTesterNT {
 		}
 		Element result = xd.getElement();
 		return result;
+	}
+	
+	final private Element parse2(
+		XDDocument xd,
+		String xml,
+		ReportWriter reporter
+	) {
+		return xml.startsWith("<") ?
+			xd.xparse(xml, reporter) :
+			xd.xparse(TestUtil.getResrc(getClass(), xml), reporter)
+		;
 	}
 
 	final public Element parse(final String xdef,
