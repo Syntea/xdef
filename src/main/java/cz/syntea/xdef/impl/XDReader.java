@@ -36,7 +36,6 @@ import cz.syntea.xdef.impl.code.DefString;
 import cz.syntea.xdef.impl.code.DefXQueryExpr;
 import cz.syntea.xdef.impl.code.DefRegex;
 import cz.syntea.xdef.impl.code.DefElement;
-import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefNull;
 import cz.syntea.xdef.impl.code.DefBNFRule;
 import cz.syntea.xdef.msg.SYS;
@@ -254,13 +253,16 @@ public final class XDReader extends SObjectReader {
 					case CompileBase.UNIQUESET_VALUE:
 					case CompileBase.UNIQUESET_M_VALUE: {
 						int len = readLength();
-						CodeUniquesetParseItem[] keys =
-							new CodeUniquesetParseItem[len];
+						CodeUniqueset.ParseItem[] keys =
+							new CodeUniqueset.ParseItem[len];
 						if (len > 0) {
 							for (int i = 0; i < len; i++) {
-								keys[i] =
-									new CodeUniquesetParseItem(readString(),
-									readInt(), i, readShort(), readBoolean());
+								keys[i] = new CodeUniqueset.ParseItem(
+									readString(),
+									readInt(),
+									i,
+									readShort(),
+									readBoolean());
 							}
 						}
 						return new CodeUniqueset(keys, readString());

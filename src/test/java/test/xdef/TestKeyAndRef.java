@@ -983,7 +983,7 @@ public final class TestKeyAndRef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
 "  <xd:declaration>\n" +
-"    uniqueSet u {a: string(); var Parser x;}\n" +
+"    uniqueSet u {a: string(); var Parser x, int y;}\n" +
 "  </xd:declaration>\n" +
 "  <A>\n" +
 "    <DefParams>\n" +

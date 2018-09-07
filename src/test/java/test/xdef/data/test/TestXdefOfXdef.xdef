@@ -571,14 +571,15 @@ ExternalMethodDeclaration ::= "external" S "method"
 UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
 
 UniqueSetDeclarationBody ::=
-  ("{" S? UniqueSetKey (S? ";" S? UniqueSetKey)* (S? ";" S? UniqueSetVar)* S?
-  (";" S?)? "}") | Method
+  ("{" S? UniqueSetKey (S?";"S? (UniqueSetVar|UniqueSetKey))* (S?";"S?)? S? "}")
+  | (Method UniqueSetVar?)
   /* Expression or ExplicitCode must return value of boolean or ParseResult.
   */
   
-UniqueSetKey ::= S? Identifier (S? ":" S? (("?" | "optional") S? )? Method )?
+UniqueSetKey ::= S? Identifier (S?":"S? (("?" | "optional") S? )? Method )?
 
 UniqueSetVar ::= S? "var" S TypeIdentifier S Identifier
+  (S? "," S? TypeIdentifier S Identifier)*
       
 /******************************************************************************/
 /* BNF grammar                                                                */

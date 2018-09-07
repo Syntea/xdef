@@ -23,7 +23,6 @@ import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.impl.code.DefElement;
 import cz.syntea.xdef.impl.code.DefLong;
 import cz.syntea.xdef.impl.code.DefDouble;
-import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefDecimal;
 import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefOutStream;
@@ -428,9 +427,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			_globalVariables[2] = in == null ?
 					new DefInStream(System.in, false) : in;
 			_globalVariables[3] = CompileBase.getParser("QName");
-			 CodeUniquesetParseItem[] parseItems =
-				 new CodeUniquesetParseItem[] {
-					 new CodeUniquesetParseItem(null, //name
+			 CodeUniqueset.ParseItem[] parseItems =
+				 new CodeUniqueset.ParseItem[] {
+					 new CodeUniqueset.ParseItem(null, //name
 						 -1, // chkAddr,
 						 0, // itemIndex,
 						 XD_STRING, // parsedType,
@@ -636,9 +635,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 
 	final CodeUniqueset getIdRefTable() {
 		if (_idrefTable == null) {
-			 CodeUniquesetParseItem[] parseItems =
-				 new CodeUniquesetParseItem[] {
-					 new CodeUniquesetParseItem(null, //name
+			 CodeUniqueset.ParseItem[] parseItems =
+				 new CodeUniqueset.ParseItem[] {
+					 new CodeUniqueset.ParseItem(null, //name
 						 -1, // chkAddr,
 						 0, // itemIndex,
 						 XD_STRING, // parsedType,
@@ -1527,7 +1526,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 				case UNIQUESET_M_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp--];
-					for (CodeUniquesetParseItem pi : dt.getParsedItems()) {
+					for (CodeUniqueset.ParseItem pi : dt.getParsedItems()) {
 						pi.setParsedObject(null);
 					}
 					continue;
@@ -1610,7 +1609,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_KEY_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					_stack[sp--] = null;
-					CodeUniquesetParseItem[] o = dt.getParsedItems();
+					CodeUniqueset.ParseItem[] o = dt.getParsedItems();
 					o[item.getParam()].setParsedObject(null);
 					continue;
 				}
