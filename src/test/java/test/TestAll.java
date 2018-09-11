@@ -13,6 +13,8 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.testng.Assert;
@@ -55,12 +57,12 @@ public class TestAll {
     
     /**Run tests with TestNG */
     private static void mainTestNG() {
-		List<String> suiteList = new ArrayList<String>();
-		suiteList.add("src/test/resources/testng.xml");
+		String[] suiteList = {
+			"src/test/resources/testng.xml"
+		};
 		
 		TestNG testNG = new TestNG();
-		testNG.setTestSuites(suiteList);
-		//testNG.setTestClasses(new Class<?>[] {TestAll.class});
+		testNG.setTestSuites(Arrays.asList(suiteList));
 		testNG.setOutputDirectory("target/test-output/report");
 		testNG.run();
     }
