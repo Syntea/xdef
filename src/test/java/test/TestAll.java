@@ -54,7 +54,7 @@ public class TestAll {
     
     
     /**Run tests with TestNG */
-    public static void mainTestNG() {
+    private static void mainTestNG() {
 		List<String> suiteList = new ArrayList<String>();
 		suiteList.add("src/test/resources/testng.xml");
 		
@@ -66,7 +66,8 @@ public class TestAll {
     }
 
     /** Run all test directly */
-    public static void mainTest() {
+    @SuppressWarnings("unused")
+	private static void mainTest() {
         beforeTests();
         
         testCommon();
