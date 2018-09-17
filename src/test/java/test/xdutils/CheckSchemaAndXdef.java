@@ -1,16 +1,3 @@
-/*
- * Copyright 2006 Syntea software group a.s.
- *
- * File: CheckSchemaAndXdef.java
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdutils;
 
 import cz.syntea.xdef.sys.SUtils;

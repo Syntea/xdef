@@ -169,7 +169,7 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"30DF54F2693948DBE26A18ED6A8A268D".equals(
+    if (!"937D65C5FF7BC9717024FF8F456967A9".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

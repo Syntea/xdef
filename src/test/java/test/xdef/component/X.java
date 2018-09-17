@@ -413,7 +413,7 @@ public static class E implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9CEB6BE91909A009A01270F4786C762F".equals(
+    if (!"B11C69578B6DDBB7A9F563C3DC58938E".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

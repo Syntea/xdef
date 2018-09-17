@@ -1,21 +1,7 @@
-/*
- * Copyright 2015 Syntea software group a.s.
- *
- * File: TestDebugGUI.java, created 2015-04-20.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package test.xdef;
 
 import test.utils.XDTester;
 import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
@@ -39,7 +25,6 @@ public final class TestDebugGUI extends XDTester {
 		String xdef;
 		XDPool xp;
 		String xml;
-		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		ByteArrayOutputStream baos;
 		XDOutput out;
@@ -156,24 +141,18 @@ public final class TestDebugGUI extends XDTester {
 "</xd:def>";
 			xml = "<a a='1'> <b/></a>";
 			Properties props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-			props.setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
-				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-//			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
-//				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+			props.setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef.display
+//				XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
+				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
+//				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
+			props.setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef.debug
+//				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
+				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
+			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef.warnings
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
+//				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
 
-/* *
-			XDBuilder xb = XDFactory.getXDBuilder(props);
-			ReportWriter frw = new FileReportWriter("C:/temp/rep.rep");
-//			ReportWriter frw = new ArrayReporter();
-			xb.setReporter(frw);
-			xb.setSource(xdef, "Test1");
-			xp = xb.compileXD();
-System.out.println(frw.getReportReader().printToString());
-/* */
 			xp = compile(xdef);
-/* */
 			xd = xp.createXDDocument();
 			baos = new ByteArrayOutputStream();
 			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);

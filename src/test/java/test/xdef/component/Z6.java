@@ -114,7 +114,7 @@ public class Z6 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0AE2E33020639C07FEC6CF4D70DA598E".equals(
+    if (!"E899C4BB77874F323CCF525EF9754AB9".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

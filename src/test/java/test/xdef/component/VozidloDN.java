@@ -53,7 +53,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostZKOd);
   }
   public String getPojisteniText() {return _PojisteniText;}
-  public Long getPojistneHPKc() {return _PojistneHPKc;}
+  public Integer getPojistneHPKc() {return _PojistneHPKc;}
   public cz.syntea.xdef.sys.SDatetime getRokVyroby() {return _RokVyroby;}
   public java.util.Date dateOfRokVyroby() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_RokVyroby);
@@ -124,7 +124,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
   public void setPojisteniText(String x) {_PojisteniText = x;}
-  public void setPojistneHPKc(Long x) {_PojistneHPKc = x;}
+  public void setPojistneHPKc(Integer x) {_PojistneHPKc = x;}
   public void setRokVyroby(cz.syntea.xdef.sys.SDatetime x) {_RokVyroby = x;}
   public void setRokVyroby(java.util.Date x) {
     _RokVyroby=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -298,7 +298,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"939DFD736F5213FD74465A6F9006AD71".equals(
+    if (!"C46901B3CA22A36AA0CC722F7FDD7E20".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -318,7 +318,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
   private cz.syntea.xdef.sys.SDatetime _PlatnostZKDo;
   private cz.syntea.xdef.sys.SDatetime _PlatnostZKOd;
   private String _PojisteniText;
-  private Long _PojistneHPKc;
+  private Integer _PojistneHPKc;
   private cz.syntea.xdef.sys.SDatetime _RokVyroby;
   private String _SPZ;
   private String _StavBrzd;
@@ -374,7 +374,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText"))
       setPojisteniText(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc"))
-      setPojistneHPKc(parseResult.getParsedValue().longValue());
+      setPojistneHPKc(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby"))
       setRokVyroby(parseResult.getParsedValue().datetimeValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ"))
@@ -489,7 +489,7 @@ public static class Drzitel implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

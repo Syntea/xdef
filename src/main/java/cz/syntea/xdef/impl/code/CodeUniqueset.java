@@ -1,15 +1,3 @@
-/*
- * File: CodeUniqueset.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -452,7 +440,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 			_parseMethodAddr = chkAddr;
 			_itemType = parsedType;
 			_optional = optional;
-			_name = name == null ? null : name.intern();
+			_name = name;
 			_itemIndex = itemIndex;
 			// _itemValue = null; // java mekes it
 		}
@@ -502,7 +490,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		@Override
 		public String toString() {
 			return "[" + _itemIndex + "]"
-				+ (_name != null ? ":" +_name : "") + "=" + _itemValue;
+				+ (!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue;
 		}
 
 		@Override
@@ -518,30 +506,18 @@ public final class CodeUniqueset extends XDValueAbstract {
 		public final boolean isNull() {return _parseMethodAddr == -1;}
 
 		@Override
-		public int hashCode() {
-			return 3 * _parseMethodAddr + _name == null ? 0 : _name.hashCode();
-		}
+		public int hashCode() {return _name.hashCode();}
 
 		@Override
 		public boolean equals(final Object arg) {
-			 return arg instanceof CodeUniqueset.ParseItem
-				 ? equals((ParseItem) arg) : false;
+			 return arg instanceof XDValue
+				 ? equals((XDValue) arg) : false;
 		}
 
 		@Override
 		public final boolean equals(final XDValue arg) {
-			return arg.getItemId() == CompileBase.PARSEITEM_VALUE ?
-				false : equals((ParseItem)arg);
-		}
-
-		/** Check whether some other CodeUniquesetParseItem object is "equal to"
-		 * this one.
-		 * @param arg other CodeUniquesetParseItem to which is to be compared.
-		 * @return always <tt>false</tt>.
-		 */
-		private boolean equals(final ParseItem x) {
-			return _parseMethodAddr == _parseMethodAddr &&
-				_name == null ? x._name == null : _name.equals(x._name);
+			return arg.getItemId() != CompileBase.PARSEITEM_VALUE ?
+				false : _name.equals(((ParseItem)arg)._name);
 		}
 
 		////////////////////////////////////////////////////////////////////////

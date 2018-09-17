@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: DefXQueryExpr.java, created 2009-08-07.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.SYS;
@@ -32,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
+import java.math.BigInteger;
 
 /** Contains compiled XPath expression.
  * @author Vaclav Trojan
@@ -164,6 +152,8 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	public double doubleValue() {return 0;}
 	@Override
 	public BigDecimal decimalValue() {return null;}
+	@Override
+	public BigInteger integerValue() {return null;}
 	@Override
 	public boolean booleanValue() {return false;}
 	@Override

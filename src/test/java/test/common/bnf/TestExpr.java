@@ -1,15 +1,3 @@
-/*
- * File: TestExpr.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu4
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;

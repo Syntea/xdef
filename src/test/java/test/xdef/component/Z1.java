@@ -14,7 +14,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfPlatnostOd() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostOd);
   }
-  public Long getSeqRec() {return _SeqRec;}
+  public Integer getSeqRec() {return _SeqRec;}
   public String getVerze() {return _Verze;}
   public Z2 getProtokol() {return _Protokol;}
   public Z7 getRozhodnutiDN() {return _RozhodnutiDN;}
@@ -40,7 +40,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   public void setPlatnostOd(java.util.Calendar x) {
     _PlatnostOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setSeqRec(Long x) {_SeqRec = x;}
+  public void setSeqRec(Integer x) {_SeqRec = x;}
   public void setVerze(String x) {_Verze = x;}
   public void setProtokol(Z2 x) {
     if (x != null && x.xGetXPos() == null)
@@ -221,7 +221,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"F9DDF5713E93E887062B13E0C31A4D01".equals(
+    if (!"7433043803A7E244ED58DBD7C11E92A5".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -229,7 +229,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   }
   private String _KrajPolicie;
   private cz.syntea.xdef.sys.SDatetime _PlatnostOd;
-  private Long _SeqRec;
+  private Integer _SeqRec;
   private String _Verze;
   private Z2 _Protokol;
   private Z7 _RozhodnutiDN;
@@ -264,7 +264,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd"))
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec"))
-      setSeqRec(parseResult.getParsedValue().longValue());
+      setSeqRec(parseResult.getParsedValue().intValue());
     else setVerze(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -405,7 +405,7 @@ public static class VyliceniDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

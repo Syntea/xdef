@@ -1,9 +1,9 @@
 package test.xdef;
 
 public class TestXComponents_Y08 {
-	Long idFlow;
-	public Long getIdFlow() {return idFlow;}
-	protected void setIdFlow(Long idFlow) {
+	private Integer idFlow;
+	public Integer getIdFlow() {return idFlow;}
+	protected void setIdFlow(Integer idFlow) {
 		this.idFlow = idFlow == null ? null : idFlow + 1;
 	}
 }

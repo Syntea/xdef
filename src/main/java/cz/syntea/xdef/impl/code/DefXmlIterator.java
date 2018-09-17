@@ -1,16 +1,3 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XMLIterator.java, created 2010-09-01.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -33,7 +20,9 @@ import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
 import cz.syntea.xdef.sys.StringParser;
 
-/** Implementation of XDResultSet from XML source. */
+/** Implementation of XDResultSet from XML source.
+ * @author Vaclav Trojan
+ */
 public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 
 	private String _xpath;

@@ -1,17 +1,3 @@
-/*
- * Copyright 2016 Syntea software group a.s. All rights reserved.
- *
- * File: XDParseSET.java, created 2016-10-30.
- * Package: cz.syntea.xd.impl.parsers
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -20,7 +6,7 @@ import cz.syntea.xdef.impl.ChkNode;
 import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.proc.XXNode;
 
-/** Parser of Schema "SET" type.
+/** Parser of X-script "SET" type.
  * @author Vaclav Trojan
  */
 public class XDParseSET extends XSParseQName {

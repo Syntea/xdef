@@ -86,7 +86,7 @@ public class H implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"2B2C76EDC9525638894E1C895468863C".equals(
+    if (!"DC695910CFD55CFFB0960AE826066C86".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -330,7 +330,7 @@ public static class b$User implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BA30E67C0F4A68CEA2993A19F42798AB".equals(
+    if (!"19C5E1E7F3A6DB1F531D85A96588C269".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -367,13 +367,13 @@ public static class b$User implements cz.syntea.xdef.component.XComponent{
 public static class b$Request implements cz.syntea.xdef.component.XComponent{
   public String getIdentZpravy() {return _IdentZpravy;}
   public String getMode() {return _Mode;}
-  public Long getReqMsgId() {return _ReqMsgId;}
+  public Integer getReqMsgId() {return _ReqMsgId;}
   public String gets$understand() {return _s$understand;}
   public String getxmlns$s() {return "soap";}
   public String getxmlns$b() {return "request";}
   public void setIdentZpravy(String x) {_IdentZpravy = x;}
   public void setMode(String x) {_Mode = x;}
-  public void setReqMsgId(Long x) {_ReqMsgId = x;}
+  public void setReqMsgId(Integer x) {_ReqMsgId = x;}
   public void sets$understand(String x) {_s$understand = x;}
   public String xposOfIdentZpravy(){return XD_XPos + "/@IdentZpravy";}
   public String xposOfMode(){return XD_XPos + "/@Mode";}
@@ -453,7 +453,7 @@ public static class b$Request implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B29B7DDC73C0CBF3D79F1D391D739502".equals(
+    if (!"AD5A979298DB843DF22113C14A12A424".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -461,7 +461,7 @@ public static class b$Request implements cz.syntea.xdef.component.XComponent{
   }
   private String _IdentZpravy;
   private String _Mode;
-  private Long _ReqMsgId;
+  private Integer _ReqMsgId;
   private String _s$understand;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -481,7 +481,7 @@ public static class b$Request implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@Mode"))
       setMode(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@ReqMsgId"))
-      setReqMsgId(parseResult.getParsedValue().longValue());
+      setReqMsgId(parseResult.getParsedValue().intValue());
     else sets$understand(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -693,7 +693,7 @@ public static class b$PingFlow implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B5B6224CF2935D8C48D119BE0092A170".equals(
+    if (!"20BF9229AD6BC33FADA402CCB23D9A61".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

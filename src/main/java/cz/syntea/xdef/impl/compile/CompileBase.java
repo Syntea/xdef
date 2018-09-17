@@ -1,15 +1,3 @@
-/*
- * File: CompileBase.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.XDContainer;
@@ -38,20 +26,20 @@ public class CompileBase implements CodeTable, XDValueID {
 	// Non public Value types
 	////////////////////////////////////////////////////////////////////////////
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//46
+	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//47
 	/** Value of PARSEITEM. */
-	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//47
+	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//48
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//48
+	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//49
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//49
+	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//50
 	/** Named value of UNIQUESET. */
-	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//50
+	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//51
 	/** attribute ref, undefined type and methods which are not above a type. */
-	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//51
+	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//52
 
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//52
+	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//53
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -111,6 +99,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_VOID, "void", Void.TYPE);
 		setType(XD_INT, "int", Long.TYPE);
 		setType(XD_DECIMAL, "Decimal", java.math.BigDecimal.class);
+		setType(XD_BIGINTEGER, "BigInteger", java.math.BigInteger.class);
 		setType(XD_BOOLEAN, "boolean", Boolean.TYPE);
 		setType(XD_FLOAT, "float", Double.TYPE);
 		setType(XD_STRING, "String", String.class);
@@ -158,6 +147,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_INT) + ";byte;" +
 			((char) XD_INT) + ";Byte;" +
 			((char) XD_DECIMAL) + ";BigDecimal;" +
+			((char) XD_BIGINTEGER) + ";BigInteger;" +
 			((char) XD_FLOAT) + ";double;" +
 			((char) XD_FLOAT) + ";float;" +
 			((char) XD_FLOAT) + ";Double;" +
@@ -296,10 +286,10 @@ public class CompileBase implements CodeTable, XDValueID {
 				new DefString("collapse")));
 		parser(im,cz.syntea.xdef.impl.parsers.XSParseByte.class,
 			"byte", "xs:byte");
-		parser(im,cz.syntea.xdef.impl.parsers.XSParseInt.class, "xs:int");
 		parser(im,cz.syntea.xdef.impl.parsers.XSParseInteger.class,
 			"integer", "xs:integer");
-		parser(im,cz.syntea.xdef.impl.parsers.XDParseInt.class, "int");
+		parser(im,cz.syntea.xdef.impl.parsers.XSParseInt.class,
+			"int", "xs:int");
 		parser(im,cz.syntea.xdef.impl.parsers.XSParseLong.class,
 			"long", "xs:long");
 		parser(im,cz.syntea.xdef.impl.parsers.XSParseNegativeInteger.class,

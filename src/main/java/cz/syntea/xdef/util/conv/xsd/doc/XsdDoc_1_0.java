@@ -1,15 +1,3 @@
-/*
- * File: XsdDoc_1_0.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xsd.doc;
 
 import cz.syntea.xdef.sys.SReporter;
@@ -53,7 +41,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Schema models (XsdModel) to elements (Element) mapping. */
 	private final Map<XsdModel, Element> _models =
 		new HashMap<XsdModel, Element>();
-	/** Schema representation (XsdSchema) to schema element (Element) mapping. */
+	/** Schema representation (XsdSchema) to schema element (Element) mapping.*/
 	private final Map<XsdSchema, Element> _schemas =
 		new HashMap<XsdSchema, Element>();
 	/** Map of external namespace (String) to (XsdSchema) mapping. */

@@ -1,15 +1,3 @@
-/*
- * File: ChkGUIDebug.java
- *
- * Copyright 2013 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -56,10 +44,11 @@ import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 import cz.syntea.xdef.sys.ReportWriter;
 
-/** Provides debugging tool for X-definition. */
-public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
+/** Provides debugging tool for X-definition.
+ * @author Vaclav Trojan
+ */
+public class ChkGUIDebug extends GUIBase implements XDDebug {
 
-	private boolean _closed = false;
 	private boolean _debugMode = true;
 	private boolean _opened = false;
 
@@ -205,7 +194,7 @@ public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 			}
 			return;
 		}
-		openGUI(); // GUI mode
+		openGUI(10, 10, 1200, 700); // GUI mode
 
 		// Initialize SWING objects
 		_xdpool = xp;
@@ -1198,6 +1187,6 @@ public class ChkGUIDebug extends ChkGUIBase implements XDDebug {
 	 * @return editor of X-definition sources.
 	 */
 	public XEditor getXEditor() {
-		return new ChkGUIDisplay();
+		return new ChkGUIDisplay(_xpos, _ypos, _width, _height);
 	}
 }

@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSAbstractParser.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -131,9 +118,19 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 * @return relevant object.
 	 */
 	public XDValue iObject(final XXNode xnode, final Object x) {
-		if (x instanceof XDValue
-			&& ((XDValue) x).getItemId() == parsedType()) {
-			return (XDValue) x;
+		if (x == null) {
+			//Value of &{0} can't be null
+			throw new SRuntimeException(XDEF.XDEF819, parserName());
+		}
+		if (x instanceof XDValue) {
+			XDValue y = (XDValue) x;
+			if (y.isNull()) {
+				//Value of &{0} can't be null
+				throw new SRuntimeException(XDEF.XDEF819, parserName());
+			}
+			if (y.getItemId() == parsedType()) {
+				return y;
+			}
 		}
 		XDParseResult p = new DefParseResult(x.toString());
 		parseObject(xnode, p);

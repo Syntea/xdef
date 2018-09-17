@@ -1,15 +1,3 @@
-/*
- * File: Test001.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -67,7 +55,7 @@ public final class Test001  extends XDTester {
 				"false\nxxxx\nxxxx\ntext: orig1\ntext: \n"));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Book'>\n"+
-"<Book isbn = \"int(0, 9999999999)\"\n"+
+"<Book isbn = \"int(0, 999999999)\"\n"+
 "      published  = \"? gYear()\"\n " +
 "      xd:script = \"finally outln('isbn: ' + @isbn + '; ' + getElementText());\"> \n"+
 "  string();\n"+

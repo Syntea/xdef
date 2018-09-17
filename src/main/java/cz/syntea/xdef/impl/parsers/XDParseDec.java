@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XDParseDec.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -22,55 +9,12 @@ import cz.syntea.xdef.impl.code.DefDecimal;
  * either '.' or ','
  * @author Vaclav Trojan
  */
-public class XDParseDec extends XSAbstractParseComparable {
+//public class XDParseDec extends XSAbstractParseComparable {
+public class XDParseDec extends XSParseDecimal {
 	private static final String ROOTBASENAME = "dec";
-	private long _totalDigits;
-	private long _fractionDigits;
 
-	public XDParseDec() {
-		super();
-		_whiteSpace = 'c';
-		_totalDigits = _fractionDigits = -1;
-	}
+	public XDParseDec() {super();}
 
-	@Override
-	public  void initParams() {
-		_whiteSpace = 'c';
-		_patterns = null;
-		_enumeration = null;
-		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
-		_fractionDigits = _totalDigits = -1;
-	}
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
-			ENUMERATION +
-//			WHITESPACE + //fixed to collapse
-			MAXINCLUSIVE +
-			MAXEXCLUSIVE +
-			MININCLUSIVE +
-			MINEXCLUSIVE +
-			TOTALDIGITS +
-			FRACTIONDIGITS +
-//			LENGTH +
-//			MAXLENGTH +
-//			MINLENGTH +
-//			NORMALIZE +
-//			SEPARATOR +
-//			ITEM +
-//			BASE +
-			0;
-	}
-	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
-	@Override
-	public void setTotalDigits(long x) { _totalDigits = x; }
-	@Override
-	public long getTotalDigits() { return _totalDigits; }
-	@Override
-	public void setFractionDigits(long x) {_fractionDigits = x;}
-	@Override
-	public long getFractionDigits() {return _fractionDigits;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -139,7 +83,6 @@ public class XDParseDec extends XSAbstractParseComparable {
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
 

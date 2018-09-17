@@ -1,16 +1,3 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: AbstractXDValue.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef;
 
 import cz.syntea.xdef.msg.SYS;
@@ -20,6 +7,7 @@ import cz.syntea.xdef.sys.SIllegalArgumentException;
 import cz.syntea.xdef.sys.SUnsupportedOperationException;
 //import cz.syntea.xd.impl.compile.CodeTable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -57,6 +45,8 @@ public abstract class XDValueAbstract implements XDValue {
 	public double doubleValue() {return 0.0;}
 	@Override
 	public BigDecimal decimalValue() {return null;}
+	@Override
+	public BigInteger integerValue() {return null;}
 	@Override
 	public boolean booleanValue() {return false;}
 	@Override

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.xdutils;
 
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -11,7 +7,9 @@ import java.io.File;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
 
-/** Test for the XdCollection. */
+/** Test for the XdCollection.
+ * @author Vaclav Trojan
+ */
 public class TestGenCollection extends XDTester {
 
 	public TestGenCollection() {super();}

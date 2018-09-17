@@ -1,4 +1,4 @@
-<xd:collection  xmlns:xd="http://www.syntea.cz/xdef/3.1">
+<xd:collection  xmlns:xd="http://www.syntea.cz/xdef/2.0">
 
 <xd:def xd:name = "L1"
    impl-version = "2013_09.1"

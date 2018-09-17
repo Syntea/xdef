@@ -1,16 +1,3 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: DefNamedValue.java.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.SYS;
@@ -25,7 +12,6 @@ import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
 
 /** Implementation of XDNamedValue (key, value)
- *
  * @author Vaclav Trojan
  */
 public final class DefNamedValue extends XDValueAbstract

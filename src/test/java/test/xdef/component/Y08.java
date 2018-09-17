@@ -99,7 +99,7 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements cz.syntea.xdef
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setIdFlow(parseResult.getParsedValue().longValue());
+    setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)
@@ -185,7 +185,7 @@ public static class Domain implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"34B14343077458D4B84B26CE3B7E8903".equals(
+    if (!"D418163F032D19ED4963296738035CDE".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

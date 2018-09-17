@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: ExternalXDEditor.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDFactory;
@@ -26,7 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /** Provides tools for connection of an external editor of X-definitions.
- * @author Trojan
+ * @author Vaclav Trojan
  */
 public abstract class ExternalXDEditor implements XEditor {
 
@@ -194,7 +185,6 @@ public abstract class ExternalXDEditor implements XEditor {
 		}
 		xw.close();
 		// rename the tmp file to the result file
-		tmpFile.createNewFile(); // ??? this is nonsense!!! ???
 		File resultFile = new File(fileName); // the result file
 		resultFile.delete();
 		int count = 0;

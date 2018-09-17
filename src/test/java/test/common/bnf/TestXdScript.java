@@ -1,15 +1,3 @@
-/*
- * File: TestBNF.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
@@ -142,7 +130,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "DeclarationScript", s));			
 			s = "uniqueSet u{x:flt;y:?flt;}\n";
 			assertEq(s, parse(g, "DeclarationScript", s));			
-			s = "uniqueSet u {a:string();b:int();var Parser x;var Parser y;}";
+			s = "uniqueSet u {a:string();b:int(); var Parser x, Parser y}";
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s =
 "type XY enum('XX','YY'); type flt float();\n" +

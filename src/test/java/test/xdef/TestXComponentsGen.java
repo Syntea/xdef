@@ -1,17 +1,3 @@
-/*
- * Copyright 2013 Syntea software group a.s. All rights reserved.
- *
- * File: TestXComponentsGen.java, created 2013-09-21.
- * Package: test.xdef
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package test.xdef;
 
 import cz.syntea.xdef.sys.ArrayReporter;
@@ -68,8 +54,8 @@ public class TestXComponentsGen {
 "  %class test.xdef.component.ZvireDN %link SouborD1A#ZvireDN;\n"+
 "  %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;\n"+//030
 "  %class test.xdef.component.A %link A#A;\n"+
-"  %ref test.xdef.TestXComponents_W.W %link A#A/W;\n"+
-"  %ref test.xdef.TestXComponents_B %link B#A;\n"+
+"\n"+
+"  %class test.xdef.component.B %link B#A;\n"+
 "  %class test.xdef.component.C extends test.xdef.TestXComponents_C\n"+
 "         %link C#Town;\n"+
 "  %class test.xdef.component.C1 implements test.xdef.component.CI\n"+
@@ -86,7 +72,7 @@ public class TestXComponentsGen {
 "  <A a='string' dec='?dec(5,2)'>\n"+
 "    <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>\n"+
 "    <Y xd:script='*'>?num</Y>\n"+
-"    <i xd:script='?'>int;</i>\n"+//050
+"    <i xd:script='?'>integer();</i>\n"+//050
 "    <f xd:script='?'>uflt()</f>\n"+
 "    <d xd:script='?'>udat()</d>\n"+
 "    <t xd:script='?'>xdatetime('HH:mm:ss')</t>\n"+

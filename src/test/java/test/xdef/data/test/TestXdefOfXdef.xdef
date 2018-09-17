@@ -430,15 +430,18 @@ XdefOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
 /* Script of text nodes and attributes                                        */
 /******************************************************************************/
 
-AttributeScript ::= ValueScript
+AttributeScript ::= (ValueExecutivePart* S?)?
 
 ValueScript ::= (ValueExecutivePart* S?)?
 
-ValueExecutivePart::= "$$$script:"? S? (ValueValidationSection | ValueInitSection
-  | ValueOnTrueSection | ValueOnErrorSection | ValueOnAbsenceSection
-  | ValueDefaultSection | ValueCreateSection | ValueFinallySection
-  | ValueMatchSection | AttributeOptions | Reference | S | ";") S?
+ValueExecutivePart ::= "$$$script:"? S? 
+  (ValueValidationSection | ValueInitSection | ValueOnTrueSection
+  | ValueOnErrorSection | ValueOnAbsenceSection | ValueDefaultSection
+  | ValueCreateSection | ValueFinallySection | ValueMatchSection
+  | AttributeOptions | Reference | AttributeOnStartSection | S | ";") S?
   /* Each item can be specified only once. */
+
+AttributeOnStartSection ::= "onStartElement" S? Statement?
 
 ValueValidationSection ::= "fixed" S (Expression | Block)
   | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
@@ -571,16 +574,17 @@ ExternalMethodDeclaration ::= "external" S "method"
 UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
 
 UniqueSetDeclarationBody ::=
-  ("{" S? UniqueSetKey (S?";"S? (UniqueSetVar|UniqueSetKey))* (S?";"S?)? S? "}")
-  | (Method UniqueSetVar?)
-  /* Expression or ExplicitCode must return value of boolean or ParseResult.
-  */
-  
+  ("{" UniqueSetItem (S?";" UniqueSetItem)* (S?";"S?)? S? "}") | Method
+  /* The method must be a parser. */
+
+UniqueSetItem ::= S? (UniqueSetVar | UniqueSetKey)
+
 UniqueSetKey ::= S? Identifier (S?":"S? (("?" | "optional") S? )? Method )?
+  /* The method must be a parser. */
 
 UniqueSetVar ::= S? "var" S TypeIdentifier S Identifier
   (S? "," S? TypeIdentifier S Identifier)*
-      
+
 /******************************************************************************/
 /* BNF grammar                                                                */
 /******************************************************************************/

@@ -1,15 +1,3 @@
-/*
- * File: ValueRestrImpl.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.type.domain.restr;
 
 /** Skeletal implementation of value restricted type.
@@ -17,38 +5,22 @@ package cz.syntea.xdef.util.conv.type.domain.restr;
  */
 public class ValueRestrImpl implements ValueRestricted {
 
-	/**
-	 * Minimal exclusive value.
-	 */
+	/** Minimal exclusive value. */
 	private String _minExclusive;
-	/**
-	 * Minimal inclusive value.
-	 */
+	/** Minimal inclusive value. */
 	private String _minInclusive;
-	/**
-	 * Maximal inclusive value.
-	 */
+	/** Maximal inclusive value. */
 	private String _maxInclusive;
-	/**
-	 * Maximal exclusive value.
-	 */
+	/** Maximal exclusive value. */
 	private String _maxExclusive;
 	@Override
-	public String getMinExclusive() {
-		return _minExclusive;
-	}
+	public String getMinExclusive() {return _minExclusive;}
 	@Override
-	public String getMinInclusive() {
-		return _minInclusive;
-	}
+	public String getMinInclusive() {return _minInclusive;}
 	@Override
-	public String getMaxInclusive() {
-		return _maxInclusive;
-	}
+	public String getMaxInclusive() {return _maxInclusive;}
 	@Override
-	public String getMaxExclusive() {
-		return _maxExclusive;
-	}
+	public String getMaxExclusive() {return _maxExclusive;}
 	@Override
 	public void setMinExclusive(String minExclusive) {
 		if (minExclusive == null || minExclusive.length() == 0) {
@@ -104,17 +76,21 @@ public class ValueRestrImpl implements ValueRestricted {
 
 	@Override
 	public int hashCode() {
-		int hash = (this._minExclusive != null ? this._minExclusive.hashCode() : 0);
-		hash = 29 * hash + (this._minInclusive != null ? this._minInclusive.hashCode() : 0);
-		hash = 29 * hash + (this._maxInclusive != null ? this._maxInclusive.hashCode() : 0);
-		hash = 29 * hash + (this._maxExclusive != null ? this._maxExclusive.hashCode() : 0);
+		int hash = (this._minExclusive != null
+			? this._minExclusive.hashCode() : 0);
+		hash = 29 * hash + (this._minInclusive != null
+			? this._minInclusive.hashCode() : 0);
+		hash = 29 * hash + (this._maxInclusive != null
+			? this._maxInclusive.hashCode() : 0);
+		hash = 29 * hash + (this._maxExclusive != null
+			? this._maxExclusive.hashCode() : 0);
 		return hash;
 	}
 	@Override
 	public String toString() {
 		return "ValueRestrImpl[minExclusive='" + _minExclusive + "', "
-				+ "minInclusive='" + _minInclusive + "', "
-				+ "maxInclusive='" + _maxInclusive + "', "
-				+ "maxExclusive='" + _maxExclusive + "']";
+			+ "minInclusive='" + _minInclusive + "', "
+			+ "maxInclusive='" + _maxInclusive + "', "
+			+ "maxExclusive='" + _maxExclusive + "']";
 	}
 }

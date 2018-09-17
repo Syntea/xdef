@@ -1,16 +1,3 @@
-/*
- * File: XBuilder.java.
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefDuration;
@@ -208,7 +195,8 @@ public class XBuilder implements XDBuilder {
 					XDEF.XDEF850, ex, result.getXdefEditor());
 			}
 			if (xeditor == null) {
-				xeditor = new ChkGUIDisplay();
+				// create editor with the default screen position.
+				xeditor = new ChkGUIDisplay(10, 10, 1200, 700);
 			}
 			while(!xeditor.setXEditor(result, ar)) {
 				// compile again
@@ -231,12 +219,12 @@ public class XBuilder implements XDBuilder {
 				ar = (ArrayReporter) p.getReportWriter();
 				result._compiler = null;
 			}
-			if (userReporter == null && result.isChkWarnings()
-				&& !reporter.errors()) {
-				// because warnings were already dispalyed we clear reporter to
-				// prevent to throw an exception if only warnings are reported.
-				reporter.clear();
-			}
+//			if (userReporter == null && result.isChkWarnings()
+//				&& !reporter.errors()) {
+//				// because warnings were already dispalyed we clear reporter to
+//				// prevent to throw an exception if only warnings are reported.
+////				reporter.clear();
+//			}
 		}
 		if (userReporter == null) {
 			if (result.isChkWarnings()) {

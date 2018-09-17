@@ -1,15 +1,3 @@
-/*
- * Copyright 2007 Syntea software group a.s.
- *
- * File: GenCollection.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util;
 
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -189,7 +177,8 @@ public class GenCollection {
 					continue;
 				} else {
 					throw new RuntimeException(
-					"After parameter '-e' is expected an encoding name\n"+info);
+						"After parameter '-e' is expected an encoding name\n"
+							+ info);
 				}
 			}
 			throw new RuntimeException(

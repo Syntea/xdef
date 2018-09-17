@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: PNode.java, created 2018-07-22.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.compile;
 
 import cz.syntea.xdef.impl.XDefinition;

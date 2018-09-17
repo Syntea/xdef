@@ -1,15 +1,3 @@
-/*
- * File: TestBNF.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFExtMethod;
@@ -298,7 +286,7 @@ public class TestBNF extends STester {
 		String bnf;
 		BNFGrammar g, g1;
 		try {
-			g = BNFGrammar.compile( "C::= $xmlChar B::= \"'\"");
+			g = BNFGrammar.compile("C::= $xmlChar B::= \"'\"");
 			assertEq("'", parse(g, "B", "'"));
 			g = BNFGrammar.compile("x ::= $JavaName");
 			assertEq("a1", parse(g, "x", "a1"));

@@ -1,16 +1,3 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XDConstants.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef;
 
 import cz.syntea.xdef.sys.SConstants;
@@ -18,7 +5,6 @@ import cz.syntea.xdef.sys.SConstants;
 /** Constants used by X-definition builder. The constants with the name with the
  * prefix "XDPROPERTY" are names of properties. The constants with the name with
  * the prefix XDPROPERTYVALUE are valid values of respective property.
- *
  * @author Vaclav Trojan
  */
 public interface XDConstants extends SConstants {

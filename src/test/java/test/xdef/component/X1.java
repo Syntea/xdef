@@ -86,7 +86,7 @@ public class X1 extends test.xdef.TestXComponentsGen implements cz.syntea.xdef.c
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"FA619AC323FF4B03927BAC6FDA563C3E".equals(
+    if (!"8E85C8C5920B35432FE3204B272A3D41".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -201,7 +201,7 @@ public static class A implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"33E5D056F26CE528E00B04EB1489E9FF".equals(
+    if (!"589B1B05289C3450C1FC8DD0A217FCDB".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

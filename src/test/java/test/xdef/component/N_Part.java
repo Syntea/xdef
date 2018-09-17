@@ -3,9 +3,9 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class N_Part implements test.xdef.component.N_i,java.io.Serializable,cz.syntea.xdef.component.XComponent{
-  public Long getOne() {return _One;}
+  public Integer getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(Long x) {_One = x;}
+  public void setOne(Integer x) {_One = x;}
   public void setTwo(String x) {_Two = x;}
   public String xposOfOne(){return XD_XPos + "/@One";}
   public String xposOfTwo(){return XD_XPos + "/@Two";}
@@ -76,13 +76,13 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,cz.s
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"322AE10F6BBBB7D6BAC411FD5E22DE81".equals(
+    if (!"2353328558846B911C4D193895ACD0D9".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _One;
+  private Integer _One;
   private String _Two;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -98,7 +98,7 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,cz.s
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     if (xx.getXMNode().getXDPosition().endsWith("/@One"))
-      setOne(parseResult.getParsedValue().longValue());
+      setOne(parseResult.getParsedValue().intValue());
     else setTwo(parseResult.getParsedValue().stringValue());
   }
   @Override

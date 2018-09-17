@@ -3,9 +3,9 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y16a implements cz.syntea.xdef.component.XComponent{
-  public Long gety() {return _y;}
+  public Integer gety() {return _y;}
   public String getxmlns$x() {return "x.int";}
-  public void sety(Long x) {_y = x;}
+  public void sety(Integer x) {_y = x;}
   public String xposOfy(){return XD_XPos + "/@y";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -80,7 +80,7 @@ public class Y16a implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _y;
+  private Integer _y;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "x:x";
@@ -94,7 +94,7 @@ public class Y16a implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    sety(parseResult.getParsedValue().longValue());
+    sety(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)

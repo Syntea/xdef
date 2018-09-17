@@ -1,16 +1,3 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: DefXmlWriter.java, created 2010-10-15.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.SYS;
@@ -34,6 +21,7 @@ import org.w3c.dom.Node;
 import cz.syntea.xdef.XDContainer;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
+import java.math.BigInteger;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan
@@ -152,6 +140,8 @@ public class DefXmlWriter extends KXmlOutStream
 	public double doubleValue() {return 0.0;}
 	@Override
 	public BigDecimal decimalValue() {return null;}
+	@Override
+	public BigInteger integerValue() {return null;}
 	@Override
 	public boolean booleanValue() {return false;}
 	@Override

@@ -46,8 +46,8 @@
 
  <Request
          KodPartnera     ="required tab('VR_DefPartner','KodPartnera');         onFalse setErr(4225); onAbsence setErr(4202)"
-         IdentZpravy     ="required int(1,9_999_999_999);                       onFalse setErr(4208); onAbsence setErr(4202)"
-         RefMsgID        ="optional int(1,9_999_999_999);                       onFalse setErr(4208)"
+         IdentZpravy     ="required long(1,9_999_999_999);                      onFalse setErr(4208); onAbsence setErr(4202)"
+         RefMsgID        ="optional long(1,9_999_999_999);                      onFalse setErr(4208)"
  />
 
  <Set_MultiPrenosPSP     xd:script="ref Set_PrenosPSP" />

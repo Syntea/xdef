@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSParseLong.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -81,14 +68,14 @@ public class XSParseLong extends XSAbstractParseComparable {
 			val = Long.parseLong(sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
 			//Value of '&{0}' is out of range'
-			p.error(XDEF.XDEF806, parserName());
+			p.error(XDEF.XDEF806, s);
 			return;
 		}
 		p.setParsedValue(new DefLong(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
 				//Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813,parserName(), "totalDigits");
+				p.error(XDEF.XDEF813, s, "totalDigits");
 				return;
 			}
 		}
@@ -99,4 +86,5 @@ public class XSParseLong extends XSAbstractParseComparable {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_INT;}
+
 }

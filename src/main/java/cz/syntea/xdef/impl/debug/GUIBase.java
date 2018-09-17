@@ -1,15 +1,3 @@
-/*
- * File: ChkGUIBase.java
- *
- * Copyright 2013 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDPool;
@@ -20,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,8 +28,10 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-/** Base of Swing frame for GUI. */
-class ChkGUIBase {
+/** Base of Swing frame for GUI.
+ * @author Vaclav Trojan
+ */
+public class GUIBase {
 
 	/** Font used for source and information area. */
 	Font FONT_TEXT;
@@ -69,51 +60,56 @@ class ChkGUIBase {
 	Style STYLE_WHITE;
 
 	/** The frame. */
-	JFrame _frame;
+	public JFrame _frame;
 	/** Menu bar of frame. */
-	JMenuBar _menuBar;
-	/** Width of frame. */
+	public JMenuBar _menuBar;
+	/** Horizontal position. */
 	int _xpos;
-	/** Height of frame. */
+	/** Vertical position. */
 	int _ypos;
 	/** Width of frame. */
-	int _width;
+	public int _width;
 	/** Height of frame. */
-	int _height;
+	public int _height;
 	// Source window
 	/** Source pane. */
 	JPanel _sourcePane;
 	/** Source window. */
-	JTextPane _sourceArea;
+	public JTextPane _sourceArea;
 	/** Line numbers. */
 	JTextPane _lineNumberArea;
 
 	// Position information
 	/** Information about caret position in source area. */
-	JLabel _sourcePositionInfo;
+	public JLabel _sourcePositionInfo;
 
 	// Informaton text window
 	/** Information window. */
 	JTextArea _infoArea;
 
 	/** Actual source item. */
-	XDSourceItem _sourceItem;
+	public XDSourceItem _sourceItem;
 	/** Name of actual source item. */
-	String _sourceID;
+	public String _sourceID;
 	/** Array of position information.*/
 	SourcePos[] _positions;
 	/** XDPool object.*/
 	XDPool _xdpool;
 	/** Map with source items.*/
-	Map<String, XDSourceItem> _sources;
+	public Map<String, XDSourceItem> _sources;
 	/** Object used for wait/notify.*/
-	final Object _waitobj = new Object();
+	private final Object _waitobj = new Object();
 
 	/** Create empty instance of GUI. */
-	ChkGUIBase() {}
+	public GUIBase() {}
 
-	/** Initialize GUI.*/
-	final void openGUI() {
+	/** Initialize GUI with the screen position.
+	 * @param x X position of the left corner of the screen.
+	 * @param y Y position of the left corner of the screen.
+	 * @param width width of the screen.
+	 * @param height height of the screen.
+	 */
+	public final void openGUI(int x, int y, int width, int height) {
 		// GUI fonts, colors and styles
 		FONT_TEXT = new Font("monospaced", Font.BOLD, 14);
 		FONT_POSITIONINFO = new Font("monospaced", Font.BOLD, 15)
@@ -137,10 +133,12 @@ class ChkGUIBase {
 		StyleConstants.setBackground(STYLE_WHITE, COLOR_SOURCE);
 
 		// GUI variables
-		_xpos = 10; // default x position of frame
-		_ypos = 10; // default y position of frame
-		_width = 1400; //default width of frame
-		_height = 1000; //default height of frame
+		_xpos = x; // default x position of frame
+		_ypos = y; // default y position of frame
+//		_width = 1400; //default width of frame
+//		_height = 1000; //default height of frame
+		_width = width; //default width of frame
+		_height = height; //default height of frame
 //		_width = 870; //default width of frame
 //		_height = 600; //default height of frame
 		_positions = new SourcePos[0];
@@ -148,7 +146,6 @@ class ChkGUIBase {
 		// GUI SWING components
 		_frame = new JFrame();
 		_frame.setVisible(false);
-		_frame.setBounds(_xpos, _ypos, _width, _height);
 		_menuBar = new JMenuBar();
 		_sourceArea = new JTextPane();		// source window
 		_sourceArea.setBackground(COLOR_SOURCE);
@@ -157,26 +154,6 @@ class ChkGUIBase {
 		_lineNumberArea.setEditable(false);
 		_sourcePositionInfo = new JLabel();	// position information
 		_infoArea = new JTextArea(); //errors or trace information
-/**/
-		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
-			@Override
-			public void componentResized(java.awt.event.ComponentEvent evt) {
-				_frame.setSize(_width, _height);
-//				int height = evt.getComponent().getHeight();
-//				int width = evt.getComponent().getWidth();
-//				if (width < 300 || height < 200) {
-//					if (width < 300) {
-//						width = 300;
-//					}
-//					if (height < 200) {
-//						height = 200;
-//					}
-//				}
-//				_width = width;
-//				_height = height;
-			}
-		});
-/**/
 		_infoArea.setFont(FONT_TEXT);
 		_infoArea.setBackground(COLOR_INFO);
 		_infoArea.setForeground(Color.BLUE);
@@ -206,10 +183,33 @@ class ChkGUIBase {
 		jsp = new JScrollPane();
 		jsp.getViewport().add(_infoArea);
 		_frame.add(jsp, BorderLayout.AFTER_LAST_LINE);
+/* *
+		_frame.setBounds(_xpos, _ypos, _width, _height);
+		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
+			@Override
+			public void componentResized(java.awt.event.ComponentEvent evt) {
+				Rectangle r = _frame.getBounds();
+				System.out.println(r + "\nevt=" + evt.getSource());
+				_frame.setSize(_width, _height);
+//				int height = evt.getComponent().getHeight();
+//				int width = evt.getComponent().getWidth();
+//				if (width < 300 || height < 200) {
+//					if (width < 300) {
+//						width = 300;
+//					}
+//					if (height < 200) {
+//						height = 200;
+//					}
+//				}
+//				_width = width;
+//				_height = height;
+			}
+		});
+/* */
 	}
 
 	/** Initialize map with source items. */
-	void initSourceMap() {
+	public final void initSourceMap() {
 		for (Map.Entry<String, XDSourceItem> e: _sources.entrySet()) {
 			XDSourceItem src = e.getValue();
 			String key = e.getKey();
@@ -217,8 +217,11 @@ class ChkGUIBase {
 		}
 	}
 
-	/** Initialize the source item. */
-	void initSourceItem(final String key, final XDSourceItem src) {
+	/** Initialize the source item.
+	 * @param key name of source item.
+	 * @param src contains information about the source item.
+	 */
+	public final void initSourceItem(final String key, final XDSourceItem src) {
 		if (src._source != null) return;
 		InputStream is = null;
 		for (;;) {
@@ -265,8 +268,12 @@ class ChkGUIBase {
 	 */
 	public void closeGUI(String ask) {
 		if (_frame != null) {
-			_frame.setVisible(true);
 			_frame.setVisible(false);
+			Rectangle r = _frame.getBounds();
+			_xpos = r.x;
+			_ypos = r.y;
+			_width = r.width;
+			_height = r.height;
 			for (Component component: _frame.getComponents()) {
 				component.setEnabled(false);
 			}
@@ -353,12 +360,16 @@ class ChkGUIBase {
 	}
 
 	/** Wait event finished. */
-	void waitFrame() {
+	public final void waitFrame() {
 		synchronized(_waitobj) {try {_waitobj.wait();} catch (Exception ex) {}}
 	}
 
 	/** Notify event action performed. */
-	void notifyFrame() {synchronized(_waitobj) {_waitobj.notifyAll();}}
+	public final void notifyFrame() {
+		synchronized(_waitobj) {
+			_waitobj.notifyAll();
+		}
+	}
 
 	/** Find position in the array of positions.
 	 * @param spos line position to be found.

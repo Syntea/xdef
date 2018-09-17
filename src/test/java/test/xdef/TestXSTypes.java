@@ -1,15 +1,3 @@
-/*
- * File: TestXSTypes.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -4578,6 +4566,17 @@ public final class TestXSTypes extends XDTester {
 		setProperty("xdef.maxyear", String.valueOf(year + 200));
 		setProperty("xdef.specdates",
 			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+		xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"<A a='int()' b='int()'/>\n"+
+"</xd:def>";
+		xp = compile(xdef);
+		xml ="<A a='2147483647' b='-2147483648' />";
+		assertEq(xml, parse(xp, "", xml, reporter));
+		assertNoErrors(reporter);
+		xml ="<A a='2147483648' b='-2147483649' />";
+		parse(xp, "", xml, reporter);
+		assertEq(2, reporter.getErrorCount());
 
 		resetTester();
 	}

@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: XAbstractReader.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.xml;
 
 import cz.syntea.xdef.sys.SPosition;
@@ -15,9 +6,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author trojan
+/** provide abstract class for implementation of readres.
+ * @author Vaclav Trojan
  */
 public abstract class XAbstractReader extends Reader {
 	XHandler _handler;

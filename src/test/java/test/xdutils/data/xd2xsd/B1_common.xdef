@@ -83,15 +83,15 @@
          SpravovanePS        ="optional int(1,999_999)"
          DobaPojisteni       ="required int(0,99_999_999)"
          SU                  ="optional int(1,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)">
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)">
     <Agr                   xd:script="occurs 1.."
          Rok                 ="required xdatetime('yyyy')"
          PS                  ="required int(1,999_999)"
          SpravovanePS        ="optional int(1,999_999)"
          SU                  ="optional int(1,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)">
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)">
       <Detail              xd:script="occurs 1..; ref Detail"/>
     </Agr>
   </PSPAgr>
@@ -109,15 +109,15 @@
          SpravovanePS        ="optional int(1,999_999)"
          DobaPojisteni       ="required int(0,99_999_999)"
          SU                  ="optional int(1,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)">
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)">
     <Agr365                xd:script="occurs 1.."
          Rok365              ="required enum('0', '-1', '-2', '-3')"
          PS                  ="required int(1,999_999)"
          SpravovanePS        ="optional int(1,999_999)"
          SU                  ="optional int(1,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)">
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)">
       <Detail              xd:script="occurs 1..; ref Detail"/>
     </Agr365>
   </PSPAgr365>
@@ -176,16 +176,16 @@
          SpravovanePS        ="optional int(1,999_999)"
          DobaPojisteni       ="required int(0,99_999_999)"
          SU                  ="optional int(0,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)">
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)">
    <SubDetail              xd:script="occurs 0.."
          Kategorie           ="required /*tab('BM_Kategorie','Kategorie')*/"
          PS                  ="required int(1,999_999)"
          SpravovanePS        ="optional int(1,999_999)"
          DobaPojisteni       ="required int(0,99_999_999)"
          SU                  ="optional int(0,999_999)"
-         Rezerva             ="optional int(0,9_999_999_999)"
-         Plneni              ="optional int(0,99_999_999_999)"
+         Rezerva             ="optional long(0,9_999_999_999)"
+         Plneni              ="optional long(0,99_999_999_999)"
    />
  </Detail>
 

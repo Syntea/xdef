@@ -71,7 +71,7 @@ public class Y13B implements test.xdef.component.Y13C,cz.syntea.xdef.component.X
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AE1DF54F585CD3D219E17310E279D072".equals(
+    if (!"49D26E11679567C23DC19D92544EF22F".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

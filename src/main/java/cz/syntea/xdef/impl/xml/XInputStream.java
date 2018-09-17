@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: XInputStream.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.xml;
 
 import java.io.ByteArrayOutputStream;
@@ -14,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /** Input stream used in SAX parser.
- * @author trojan
+ * @author Vaclav Trojan
  */
 public class XInputStream extends InputStream {
 	private final InputStream _in;

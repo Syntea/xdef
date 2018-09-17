@@ -3,10 +3,10 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z5 implements cz.syntea.xdef.component.XComponent{
-  public Long getIC() {return _IC;}
+  public Integer getIC() {return _IC;}
   public String getNazevFirmy() {return _NazevFirmy;}
   public Z9 getSidlo() {return _Sidlo;}
-  public void setIC(Long x) {_IC = x;}
+  public void setIC(Integer x) {_IC = x;}
   public void setNazevFirmy(String x) {_NazevFirmy = x;}
   public void setSidlo(Z9 x) {
     if (x != null && x.xGetXPos() == null)
@@ -89,13 +89,13 @@ public class Z5 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BDDC546D2837142C6C6C0F3ABF047D81".equals(
+    if (!"4938D1BE66E12B4C269ECE167D90C9E0".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _IC;
+  private Integer _IC;
   private String _NazevFirmy;
   private Z9 _Sidlo;
   private cz.syntea.xdef.component.XComponent XD_Parent;
@@ -114,7 +114,7 @@ public class Z5 implements cz.syntea.xdef.component.XComponent{
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     if (xx.getXMNode().getXDPosition().endsWith("/@IC"))
-      setIC(parseResult.getParsedValue().longValue());
+      setIC(parseResult.getParsedValue().intValue());
     else setNazevFirmy(parseResult.getParsedValue().stringValue());
   }
   @Override

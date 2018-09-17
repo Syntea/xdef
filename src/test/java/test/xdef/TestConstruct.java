@@ -1,16 +1,3 @@
-/*
- * File: TestConstruct.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
-
 package test.xdef;
 
 import test.utils.XDTester;
@@ -21,7 +8,6 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXElement;
 
 /** Test of construction of element from the program.
- *
  * @author  Vaclav Trojan
  */
 public final class TestConstruct extends XDTester {

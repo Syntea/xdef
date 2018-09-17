@@ -7,10 +7,10 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
   public String getAlkoholKrev() {return _AlkoholKrev;}
   public String getOznSegmentu() {return _OznSegmentu;}
   public String getPachatel() {return _Pachatel;}
-  public Long getPokutaKc() {return _PokutaKc;}
+  public Integer getPokutaKc() {return _PokutaKc;}
   public String getPokutaZapl() {return _PokutaZapl;}
   public String getPoskozeny() {return _Poskozeny;}
-  public Long getPraxeRizeni() {return _PraxeRizeni;}
+  public Integer getPraxeRizeni() {return _PraxeRizeni;}
   public String getTypUcastnika() {return _TypUcastnika;}
   public String getZdravPojistovna() {return _ZdravPojistovna;}
   public String getZraneni() {return _Zraneni;}
@@ -27,10 +27,10 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
   public void setAlkoholKrev(String x) {_AlkoholKrev = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
   public void setPachatel(String x) {_Pachatel = x;}
-  public void setPokutaKc(Long x) {_PokutaKc = x;}
+  public void setPokutaKc(Integer x) {_PokutaKc = x;}
   public void setPokutaZapl(String x) {_PokutaZapl = x;}
   public void setPoskozeny(String x) {_Poskozeny = x;}
-  public void setPraxeRizeni(Long x) {_PraxeRizeni = x;}
+  public void setPraxeRizeni(Integer x) {_PraxeRizeni = x;}
   public void setTypUcastnika(String x) {_TypUcastnika = x;}
   public void setZdravPojistovna(String x) {_ZdravPojistovna = x;}
   public void setZraneni(String x) {_Zraneni = x;}
@@ -192,7 +192,7 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"F4281C60BED900790297CE04395CFF47".equals(
+    if (!"0B1FF45E0EB6E84AA76C1C1417E84960".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -202,10 +202,10 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
   private String _AlkoholKrev;
   private String _OznSegmentu;
   private String _Pachatel;
-  private Long _PokutaKc;
+  private Integer _PokutaKc;
   private String _PokutaZapl;
   private String _Poskozeny;
-  private Long _PraxeRizeni;
+  private Integer _PraxeRizeni;
   private String _TypUcastnika;
   private String _ZdravPojistovna;
   private String _Zraneni;
@@ -242,13 +242,13 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@Pachatel"))
       setPachatel(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaKc"))
-      setPokutaKc(parseResult.getParsedValue().longValue());
+      setPokutaKc(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaZapl"))
       setPokutaZapl(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@Poskozeny"))
       setPoskozeny(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@PraxeRizeni"))
-      setPraxeRizeni(parseResult.getParsedValue().longValue());
+      setPraxeRizeni(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@TypUcastnika"))
       setTypUcastnika(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna"))
@@ -377,7 +377,7 @@ public static class PoruseniZakProvoz implements cz.syntea.xdef.component.XCompo
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -487,7 +487,7 @@ public static class PoruseniZakPrest implements cz.syntea.xdef.component.XCompon
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -597,7 +597,7 @@ public static class PoruseniZakTrest implements cz.syntea.xdef.component.XCompon
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -707,7 +707,7 @@ public static class PoruseniZakOst implements cz.syntea.xdef.component.XComponen
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -817,7 +817,7 @@ public static class Vazba implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

@@ -3,9 +3,9 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implements cz.syntea.xdef.component.XComponent{
-  public Long getIdFlow() {return _IdFlow;}
+  public Integer getIdFlow() {return _IdFlow;}
   public Y07Smlouva.Domain getDomain() {return _Domain;}
-  public void setIdFlow(Long x) {_IdFlow = x;}
+  public void setIdFlow(Integer x) {_IdFlow = x;}
   public void setDomain(Y07Smlouva.Domain x) {_Domain = x;}
   public String xposOfIdFlow(){return XD_XPos + "/@IdFlow";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -87,7 +87,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _IdFlow;
+  private Integer _IdFlow;
   private Y07Smlouva.Domain _Domain;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -104,7 +104,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setIdFlow(parseResult.getParsedValue().longValue());
+    setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx) {
@@ -198,7 +198,7 @@ public static class Domain implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"34B14343077458D4B84B26CE3B7E8903".equals(
+    if (!"D418163F032D19ED4963296738035CDE".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

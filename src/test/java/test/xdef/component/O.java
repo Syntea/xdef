@@ -5,14 +5,14 @@ package test.xdef.component;
 public class O implements cz.syntea.xdef.component.XComponent{
   public java.util.List<O.B> listOfB() {return _B;}
   public java.util.List<O.C> listOfC() {return _C;}
-  public java.util.List<Long> listOf$value() {return _$value;}
+  public java.util.List<Integer> listOf$value() {return _$value;}
   public void addB(O.B x) {
     if (x!=null) _B.add(x);
   }
   public void addC(O.C x) {
     if (x!=null) _C.add(x);
   }
-  public void add$value(Long x) {
+  public void add$value(Integer x) {
     if (x!=null) _$value.add(x);
   }
   public String xposOf$value(){return XD_XPos + "/$text";}
@@ -99,7 +99,7 @@ public class O implements cz.syntea.xdef.component.XComponent{
   }
   private final java.util.List<O.B> _B = new java.util.ArrayList<O.B>();
   private final java.util.List<O.C> _C = new java.util.ArrayList<O.C>();
-  private final java.util.List<Long> _$value = new java.util.ArrayList<Long>();
+  private final java.util.List<Integer> _$value = new java.util.ArrayList<Integer>();
   private StringBuilder _$$value= new StringBuilder();
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -114,7 +114,7 @@ public class O implements cz.syntea.xdef.component.XComponent{
   public void xSetText(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     _$$value.append((char) XD_ndx++);
-    listOf$value().add(parseResult.getParsedValue().longValue());
+    listOf$value().add(parseResult.getParsedValue().intValue());
   }
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,

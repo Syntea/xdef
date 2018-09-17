@@ -73,7 +73,7 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"867B1973FE95E9A58B7965C635897284".equals(
+    if (!"8BE503F9D2FE84E7FED4540CA9FAEEF9".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

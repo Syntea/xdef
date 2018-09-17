@@ -4,8 +4,8 @@
 package test.xdef.component;
 
 public interface N_i extends cz.syntea.xdef.component.XComponent {
-  public Long getOne();
-  public void setOne(Long x);
+  public Integer getOne();
+  public void setOne(Integer x);
   public String xposOfOne();
   public String getTwo();
   public void setTwo(String x);

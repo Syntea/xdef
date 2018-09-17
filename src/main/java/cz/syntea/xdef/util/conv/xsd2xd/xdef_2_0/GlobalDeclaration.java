@@ -1,15 +1,3 @@
-/*
- * File: GlobalDeclaration.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xsd2xd.xdef_2_0;
 
 import cz.syntea.xdef.util.conv.xsd2xd.schema_1_0.Utils;
@@ -25,7 +13,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /** Represents global declaration of XML schema item.
- *
  * @author Alexandrov
  */
 public class GlobalDeclaration {

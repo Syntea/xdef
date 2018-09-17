@@ -1,15 +1,3 @@
-/*
- * File: Expression.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xsd.xsd_1_0.type.domain;
 
 import java.util.ArrayList;
@@ -17,7 +5,6 @@ import java.util.Iterator;
 
 /** Represents expression, that contains one or more methods, joined by specified operand
  * (&amp; - AND as default).
- *
  * @author Alexandrov
  */
 public class Expression {

@@ -81,7 +81,7 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,cz.syntea.xde
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"F8179BD2F281AD939F26A7355D1E3F60".equals(
+    if (!"33318A2BEE9C592E4C854F31F0AB51D1".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

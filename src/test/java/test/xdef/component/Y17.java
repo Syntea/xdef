@@ -129,8 +129,8 @@ public class Y17 implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class b_1 implements cz.syntea.xdef.component.XComponent{
-  public Long geta() {return _a;}
-  public void seta(Long x) {_a = x;}
+  public Integer geta() {return _a;}
+  public void seta(Integer x) {_a = x;}
   public String xposOfa(){return XD_XPos + "/@a";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -202,7 +202,7 @@ public static class b_1 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _a;
+  private Integer _a;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";
@@ -216,7 +216,7 @@ public static class b_1 implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    seta(parseResult.getParsedValue().longValue());
+    seta(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)
@@ -380,7 +380,7 @@ public static class b_2 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"C25DB86AA8B610BE1006F6396E4D7905".equals(
+    if (!"3FD1F11567211E62C52BDDE4A553A65B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

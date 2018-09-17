@@ -1,15 +1,3 @@
-/*
- * File: XOccurrence.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.sys.StringParser;
@@ -17,7 +5,6 @@ import cz.syntea.xdef.model.XMOccurrence;
 
 /** Contains minimum and maximum occurrence requirement.
  *  deprecated - will be not public in future versions
- *
  * @author Trojan
  */
 public class XOccurrence implements XMOccurrence {

@@ -1,15 +1,3 @@
-/*
- * File: ChkDocument.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefOutStream;
@@ -211,13 +199,18 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final String qname,
 		final boolean checkRoot) {
 		String uri = nsURI == null || nsURI.length() == 0 ? null : nsURI;
-		Element root = _doc.createElementNS(uri, qname);
-		if (uri != null) {
-			String s = root.getPrefix();
-			root.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				(s != null && s.length() > 0) ? "xmlns:" + s : "xmlns", nsURI);
+		try {
+			Element root = _doc.createElementNS(uri, qname);
+			if (uri != null) {
+				String s = root.getPrefix();
+				root.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+					(s != null && s.length()>0) ? "xmlns:"+s : "xmlns", nsURI);
+			}
+			return createRootChkElement(root, checkRoot);
+		} catch (Exception ex) {
+			 //Can'create root element
+			throw new SRuntimeException(XDEF.XDEF103, ex);
 		}
-		return createRootChkElement(root, checkRoot);
 	}
 
 	@Override

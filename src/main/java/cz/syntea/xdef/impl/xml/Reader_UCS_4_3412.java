@@ -1,18 +1,9 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: MyReader.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.xml;
 
 import java.io.InputStream;
 
 /** Reader of X-ISO-10646-UCS-4-2143 or X-ISO-10646-UCS-4-3412 charset.
- * @author trojan
+ * @author Vaclav Trojan
  */
 class Reader_UCS_4_3412 extends Reader_UCS_4_xxxx {
 

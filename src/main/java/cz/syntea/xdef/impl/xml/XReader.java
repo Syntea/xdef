@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: XReader.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.xml;
 
 import java.io.IOException;
@@ -15,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 /** Implementation of a reader which supports connection with MyHandler.
- * @author trojan
+ * @author Vaclav Trojan
  */
 public class XReader extends XAbstractReader {
 

@@ -76,7 +76,7 @@ public class C1 implements test.xdef.component.CI,cz.syntea.xdef.component.XComp
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"93B0D661BE827844D24282AA14C12E07".equals(
+    if (!"8EA042D963067A1B2F493D56301DFF1A".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

@@ -1,16 +1,3 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: SConstants.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.sys;
 
 /** Constants (build date and version, java version, XML library).
@@ -18,10 +5,10 @@ package cz.syntea.xdef.sys;
  */
 public interface SConstants {
 	// Note that build version and build date are authomaticaly generated!
-	/** Build version of software (3.1.004.006). */
-	public static final String BUILD_VERSION = "3.1.004.006";
-	/** Date of build version (2018-08-31). */
-	public static final String BUILD_DATE = "2018-08-31";
+	/** Build version of software (3.1.004.007). */
+	public static final String BUILD_VERSION = "3.1.004.007";
+	/** Date of build version (2018-09-17). */
+	public static final String BUILD_DATE = "2018-09-17";
 	/** Prefix of property names for setting of message table files. */
 	public static final String XDPROPERTY_MSGTABLE = "xdef.msg.";
 	/** Name of property for setting language of messages. */

@@ -1,15 +1,3 @@
-/*
- * File: PatternRestrImpl.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.type.domain.restr;
 
 import java.util.HashSet;
@@ -21,9 +9,7 @@ import java.util.Set;
  */
 public class PatternRestImpl implements PatternRestricted {
 
-	/**
-	 * Set of patterns.
-	 */
+	/** Set of patterns. */
 	private final Set<String> _paterns = new HashSet<String>();
 
 	@Override
@@ -34,9 +20,7 @@ public class PatternRestImpl implements PatternRestricted {
 		_paterns.add(pattern);
 	}
 	@Override
-	public Set<String> getPatterns() {
-		return _paterns;
-	}
+	public Set<String> getPatterns() {return _paterns;}
 
 	@Override
 	public boolean equals(Object obj) {

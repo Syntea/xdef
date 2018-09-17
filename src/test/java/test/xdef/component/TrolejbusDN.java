@@ -8,7 +8,7 @@ public class TrolejbusDN implements cz.syntea.xdef.component.XComponent{
   public String getEvidCislo() {return _EvidCislo;}
   public String getKodPojistitele() {return _KodPojistitele;}
   public String getLinka() {return _Linka;}
-  public Long getLinkaPoradi() {return _LinkaPoradi;}
+  public Integer getLinkaPoradi() {return _LinkaPoradi;}
   public String getNazevPojistitele() {return _NazevPojistitele;}
   public String getOznSegmentu() {return _OznSegmentu;}
   public String getPojisteniText() {return _PojisteniText;}
@@ -23,7 +23,7 @@ public class TrolejbusDN implements cz.syntea.xdef.component.XComponent{
   public void setEvidCislo(String x) {_EvidCislo = x;}
   public void setKodPojistitele(String x) {_KodPojistitele = x;}
   public void setLinka(String x) {_Linka = x;}
-  public void setLinkaPoradi(Long x) {_LinkaPoradi = x;}
+  public void setLinkaPoradi(Integer x) {_LinkaPoradi = x;}
   public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
   public void setPojisteniText(String x) {_PojisteniText = x;}
@@ -153,7 +153,7 @@ public class TrolejbusDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"3CD1843A9AC76C080F1B00507F934F7D".equals(
+    if (!"A92B865CB8863367123917EE43184194".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -164,7 +164,7 @@ public class TrolejbusDN implements cz.syntea.xdef.component.XComponent{
   private String _EvidCislo;
   private String _KodPojistitele;
   private String _Linka;
-  private Long _LinkaPoradi;
+  private Integer _LinkaPoradi;
   private String _NazevPojistitele;
   private String _OznSegmentu;
   private String _PojisteniText;
@@ -200,7 +200,7 @@ public class TrolejbusDN implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@Linka"))
       setLinka(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@LinkaPoradi"))
-      setLinkaPoradi(parseResult.getParsedValue().longValue());
+      setLinkaPoradi(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele"))
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
@@ -311,7 +311,7 @@ public static class Vlastnik implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

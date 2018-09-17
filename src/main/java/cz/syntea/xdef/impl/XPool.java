@@ -1,15 +1,3 @@
-/*
- * File: XPool.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -62,7 +50,7 @@ public final class XPool implements XDPool {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + SConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004005L; // 3.1.004.005
+	private static final long XD_MIN_VERSION = 301004006L; // 3.1.004.005
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 

@@ -1,15 +1,3 @@
-/*
- * File: Test002.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -326,9 +314,9 @@ public final class Test003 extends XDTester {
 				fr.close();
 				isr.close();
 				lst.close();
-				assertTrue(rw.getErrorCount() == 361 && _count == 221,
-					"expected errors/count: 361/221, found " +
-						"detected: " + rw.getErrorCount() + "/" + _count);
+				assertTrue(rw.getErrorCount() == 362 && _count == 221,
+					"expected errors/count: 362/221, found "
+					+ "detected: " + rw.getErrorCount() + "/" + _count);
 				assertTrue(_myErrFlg, "myErr not invoked");
 				assertEq(_xx, 673, "nonstatic result 673/" + _xx);
 				// Same data, this time called as validation

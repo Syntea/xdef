@@ -1,35 +1,16 @@
-/*
- * File: XdGroup.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xd.xd_2_0.domain;
 
 /** Represents node group model.
- *
  * @author Ilia Alexandrov
- * @version 1.0.0
  */
 public final class XdGroup extends XdModel {
 
-	/**
-	 * Hashcode.
-	 */
+	/** Hashcode. */
 	private int _hashCode = 0;
-	/**
-	 * Group model type.
-	 */
+	/** Group model type. */
 	private final int _type;
 
 	/** Creates instance of X-definition node group model.
-	 *
 	 * @param def model Xdefiniton.
 	 * @param name group name.
 	 * @param type group type.
@@ -44,7 +25,6 @@ public final class XdGroup extends XdModel {
 	}
 
 	/** Group type getter.
-	 *
 	 * @return group type.
 	 */
 	public int getGroupType() {
@@ -87,22 +67,14 @@ public final class XdGroup extends XdModel {
 				+ "type='" + _type + "']";
 	}
 
-	/** Group type id.
-	 *
-	 */
+	/** Group type id. */
 	public static interface GroupType {
 
-		/**
-		 * Group <code>choice</code> type id.
-		 */
+		/** Group <code>choice</code> type id. */
 		public static final int CHOICE = 1;
-		/**
-		 * Group <code>mixed</code> type id.
-		 */
+		/** Group <code>mixed</code> type id. */
 		public static final int MIXED = CHOICE + 1;
-		/**
-		 * Group <code>sequence</code> type id.
-		 */
+		/** Group <code>sequence</code> type id. */
 		public static final int SEQUENCE = MIXED + 1;
 	}
 }

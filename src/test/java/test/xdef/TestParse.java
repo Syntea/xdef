@@ -1,15 +1,3 @@
-/*
- * File: TestParse.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -105,6 +93,88 @@ public final class TestParse extends XDTester {
 "  </a>\n"+
 "/*comment*/\n"+
 "</xd:def>");
+			xdef = // check the sequence of processing of attributes
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='onTrue out(@a)' b='onTrue out(@b)' c='onTrue out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='finally out(@a)' b='finally out(@b)' c='finally out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='init out(@a)' b='init out(@b)' c='init out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+//			xdef = // check the sequence of processed attribute
+//"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+//"  <A a='onStartElement out(@a)'\n" +
+//"     b='onStartElement out(@b)'\n" +
+//"     c='onStartElement out(@c)' />\n" +
+//"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef = // check in the onIllegalRoot

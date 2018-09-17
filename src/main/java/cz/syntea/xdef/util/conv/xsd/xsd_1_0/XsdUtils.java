@@ -1,15 +1,3 @@
-/*
- * File: XsdUtils.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xsd.xsd_1_0;
 
 import cz.syntea.xdef.util.conv.Util;
@@ -26,14 +14,10 @@ import org.w3c.dom.NodeList;
  */
 public final class XsdUtils {
 
-	/** Private constructor.
-	 *
-	 */
-	private XsdUtils() {
-	}
+	/** Private constructor. */
+	private XsdUtils() {}
 
 	/** Creates external schema name according to given external schema counter.
-	 *
 	 * @param extSchemaCounter counter of external schemas.
 	 * @return external schema name.
 	 */
@@ -42,7 +26,6 @@ public final class XsdUtils {
 	}
 
 	/** Creates external group name according to given external group counter.
-	 *
 	 * @param extGroupCounter external group counter.
 	 * @return external group name.
 	 */
@@ -52,7 +35,6 @@ public final class XsdUtils {
 
 	/** Creates external attribute group name according to given external
 	 * atribute group counter.
-	 *
 	 * @param extAttrGrpCounter counter of external attribute groups.
 	 * @return external attribute group name.
 	 */
@@ -62,7 +44,6 @@ public final class XsdUtils {
 
 	/** Creates external simple type name according to given element local name
 	 * and external simple name counter.
-	 *
 	 * @param elemLocalName element local name.
 	 * @param counter simple type name counter.
 	 * @return external simple type name.
@@ -72,7 +53,6 @@ public final class XsdUtils {
 	}
 
 	/** Creates schema name of group declarations according to given def name.
-	 *
 	 * @param defName def name.
 	 * @return schema name of group declarations.
 	 */
@@ -82,7 +62,6 @@ public final class XsdUtils {
 	}
 
 	/** Creates schema name of simple type declartions according to given def name.
-	 *
 	 * @param defName def name.
 	 * @return schema name of simple type declartions.
 	 */
@@ -93,7 +72,6 @@ public final class XsdUtils {
 
 	/** Creates schema name of element declaration according to given def name
 	 * and element name.
-	 *
 	 * @param defName def name.
 	 * @param elemName element name.
 	 * @return schema name of element declaration.
@@ -106,7 +84,6 @@ public final class XsdUtils {
 
 	/** Creates full simple type name according to given XDefinition name and
 	 * simple type name.
-	 *
 	 * @param defName XDefinition name.
 	 * @param sTypeName simple type name.
 	 * @return full simple type name.
@@ -119,7 +96,6 @@ public final class XsdUtils {
 
 	/** Creates full group name according to given XDefinition name, group name
 	 * and group type.
-	 *
 	 * @param defName XDefinition name.
 	 * @param groupName group name.
 	 * @param groupType group type.
@@ -136,7 +112,6 @@ public final class XsdUtils {
 
 	/** Creates full complex type name according to given XDefinition name and
 	 * complex type name.
-	 *
 	 * @param defName XDefinition name.
 	 * @param cTypeName complex type name.
 	 * @return full complex type name.
@@ -149,7 +124,6 @@ public final class XsdUtils {
 
 	/** Creates full simple type name according to given XDefinition name and
 	 * model name.
-	 *
 	 * @param defName XDefinition name.
 	 * @param modelName model name.
 	 * @return full simple type name;
@@ -161,7 +135,6 @@ public final class XsdUtils {
 	}
 
 	/** Checks given string.
-	 *
 	 * @param string string to check.
 	 * @throws NullPointerException if given string is <tt>null</tt>.
 	 * @throws IllegalArgumentException if given string is empty.
@@ -177,7 +150,6 @@ public final class XsdUtils {
 
 	/** Returns external schema declaration (<tt>import</tt> or <tt>include</tt>)
 	 * element of given external schema file name in given main schema element.
-	 *
 	 * @param mainSchema main schema element to search in.
 	 * @param extSchemaFileName external schema file name to search for.
 	 * @return external schema declaration or <tt>null</tt> if given schema does
@@ -212,7 +184,6 @@ public final class XsdUtils {
 
 	/** Returns qualified name of model contained in given schema element
 	 * and has given local name.
-	 *
 	 * @param schema schema element.
 	 * @param modelName model name.
 	 * @return qualfied reference name.
@@ -228,7 +199,6 @@ public final class XsdUtils {
 	/** Returns XML Schema <tt>annotation</tt> child element of given schema
 	 * context element or <tt>null</tt> if given context element has no
 	 * <tt>annotation</tt> element as child element.
-	 *
 	 * @param schemaContextElem schema context element.
 	 * @return child <tt>annotation</tt> element or <tt>null</tt>.
 	 */
@@ -246,7 +216,6 @@ public final class XsdUtils {
 
 	/** Returns <tt>true</tt> if given node is valid XML Schema <tt>schema</tt>
 	 * element.
-	 *
 	 * @param node node to test.
 	 * @return <tt>true</tt> if given node is valid XML Schema <tt>schema</tt>
 	 * element.
@@ -257,7 +226,6 @@ public final class XsdUtils {
 
 	/** Returns <tt>true</tt> if given node is a valid schema <tt>complexType</tt>
 	 * declaration element.
-	 *
 	 * @param node node to test.
 	 * @return <tt>true</tt> if given node is a valid schema <tt>complexType</tt>
 	 * declaration element.
@@ -267,7 +235,6 @@ public final class XsdUtils {
 	}
 
 	/** Gets ancestor <tt>schema</tt> element of given node.
-	 *
 	 * @param node schema descendant node.
 	 * @return ancestor <tt>schema</tt> element.
 	 * @throws NullPointerException if given node is <tt>null</tt>.
@@ -297,7 +264,6 @@ public final class XsdUtils {
 
 	/** Gets <tt>targetNamesapce</tt> attribute value of given <tt>schema</tt>
 	 * element.
-	 *
 	 * @param schema <tt>schema</tt> eleemnt to get target namesapce from.
 	 * @return target namespace URI or <tt>null</tt> if given schema does not
 	 * contain <tt>targetNamespace</tt> attribute.
@@ -322,7 +288,6 @@ public final class XsdUtils {
 
 	/** Gets <tt>targetNamespace</tt> attribute value of ancestor <tt>schema</tt>
 	 * element of given schema context element.
-	 *
 	 * @param schemaContext schema context element.
 	 * @return <tt>targetNamespace</tt> attribute value.
 	 * @throws NullPointerException if given schema context element is <tt>null</tt>.
@@ -337,7 +302,6 @@ public final class XsdUtils {
 
 	/** Returns <tt>true</tt> if given schema context element contains
 	 * <tt>attribute</tt> declaration element with given attribute name.
-	 *
 	 * @param schemaContext schema context element to search in.
 	 * @param attrLocalName attribute local name.
 	 * @return <tt>true</tt> if given schema context element contains
@@ -349,7 +313,6 @@ public final class XsdUtils {
 
 	/** Returns <tt>true</tt> if given schema context element contains
 	 * <tt>element</tt> declaration element with given name.
-	 *
 	 * @param schemaContext schema context element to search in.
 	 * @param elementLocalName element local name.
 	 * @return <tt>true</tt> if given schema context element contains
@@ -362,7 +325,6 @@ public final class XsdUtils {
 
 	/** Returns <tt>true</tt> if given schema context element contains
 	 * declaration of given type and with given local name.
-	 *
 	 * @param schemaContext schema context element to search in.
 	 * @param nodeType node declaration type to search.
 	 * @param localName node local name.
@@ -402,238 +364,144 @@ public final class XsdUtils {
 	}
 
 	/** Representation of an element.
-	 *
 	 * @author Alexandrov
 	 */
 	public static class ElemProps {
 
-		/**
-		 * Name of element.
-		 */
+		/** Name of element. */
 		private String _name;
-		/**
-		 * Namespace of element.
-		 */
+		/** Namespace of element. */
 		private String _namespace;
-		/**
-		 * String containing refference to another element.
-		 */
+		/** String containing refference to another element. */
 		private String _ref;
-		/**
-		 * Fixed value of element.
-		 */
+		/** Fixed value of element. */
 		private String _fixed;
-		/**
-		 * Default value of element.
-		 */
+		/** Default value of element. */
 		private String _default;
-		/**
-		 * ElemProps occurrence string.
-		 */
+		/** ElemProps occurrence string. */
 		private String _occurrence;
-		/**
-		 * Declaration of text node.
-		 */
+		/** Declaration of text node. */
 		private String _text;
-		/**
-		 * Is nillable.
-		 */
+		/** Is nillable. */
 		private boolean _nillable = false;
-		/**
-		 * Any type switch.
-		 */
+		/** Any type switch. */
 		private boolean _isAnyType = false;
 
-		/** Creates empty element.
-		 *
-		 */
-		public ElemProps() {
-		}
+		/** Creates empty element. */
+		public ElemProps() {}
 
 		/** ElemProps default value getter.
-		 *
 		 * @return default value or null.
 		 */
-		public String getDefault() {
-			return _default;
-		}
+		public String getDefault() {return _default;}
 
 		/** ElemProps default value setter.
-		 *
 		 * @param defaultValue element default value.
 		 */
-		public void setDefault(String defaultValue) {
-			_default = defaultValue;
-		}
+		public void setDefault(String defaultValue) {_default = defaultValue;}
 
 		/** ElemProps fixed value getter.
-		 *
 		 * @return fixed value or null.
 		 */
-		public String getFixed() {
-			return _fixed;
-		}
+		public String getFixed() {return _fixed;}
 
 		/** ElemProps fixed value setter.
-		 *
 		 * @param fixed fixed value.
 		 */
-		public void setFixed(String fixed) {
-			_fixed = fixed;
-		}
+		public void setFixed(String fixed) {_fixed = fixed;}
 
 		/** ElemProps local name getter.
-		 *
 		 * @return local name of element.
 		 */
-		public String getName() {
-			return _name;
-		}
+		public String getName() {return _name;}
 
 		/** ElemProps local name setter.
-		 *
 		 * @param name local name of element.
 		 */
-		public void setName(String name) {
-			_name = name;
-		}
+		public void setName(String name) {_name = name;}
 
 		/** ElemProps namespace getter.
-		 *
 		 * @return element namespace or null.
 		 */
-		public String getNamespace() {
-			return _namespace;
-		}
+		public String getNamespace() {return _namespace;}
 
 		/** ElemProps namespace setter.
-		 *
 		 * @param namespace element namesapce.
 		 */
-		public void setNamespace(String namespace) {
-			_namespace = namespace;
-		}
+		public void setNamespace(String namespace) {_namespace = namespace;}
 
 		/** Nillable swith getter.
-		 *
 		 * @return nillable switch value.
 		 */
-		public boolean isNillable() {
-			return _nillable;
-		}
+		public boolean isNillable() {return _nillable;}
 
 		/** Nillable swith setter.
-		 *
 		 * @param nillable nillable swith value.
 		 */
-		public void setNillable(boolean nillable) {
-			_nillable = nillable;
-		}
+		public void setNillable(boolean nillable) {_nillable = nillable;}
 
 		/** ElemProps occurrence string getter.
-		 *
 		 * @return element occurrence string or null.
 		 */
-		public String getOccurrence() {
-			return _occurrence;
-		}
+		public String getOccurrence() {return _occurrence;}
 
 		/** ElemProps occurrence string setter.
-		 *
 		 * @param occurrence element occurrence string.
 		 */
-		public void setOccurrence(String occurrence) {
-			_occurrence = occurrence;
-		}
+		public void setOccurrence(String occurrence) {_occurrence = occurrence;}
 
 		/** ElemProps ref string getter.
-		 *
 		 * @return ref string or null.
 		 */
-		public String getRef() {
-			return _ref;
-		}
+		public String getRef() {return _ref;}
 
 		/** ElemProps ref string setter.
-		 *
 		 * @param ref ref string.
 		 */
-		public void setRef(String ref) {
-			_ref = ref;
-		}
+		public void setRef(String ref) {_ref = ref;}
 
 		/** ElemProps text content declaration getter.
-		 *
 		 * @return text content declaration string or null.
 		 */
-		public String getText() {
-			return _text;
-		}
+		public String getText() {return _text;}
 
 		/** ElemProps text content declaration setter.
-		 *
 		 * @param text content declaration string.
 		 */
-		public void setText(String text) {
-			_text = text;
-		}
+		public void setText(String text) {_text = text;}
 
 		/** Any type switch value getter.
-		 *
 		 * @return any type switch value.
 		 */
-		public boolean isAnyType() {
-			return _isAnyType;
-		}
+		public boolean isAnyType() {return _isAnyType;}
 
 		/** Any type switch value setter.
-		 *
 		 * @param isAnyType any type switch value.
 		 */
-		public void setAnyType(boolean isAnyType) {
-			_isAnyType = isAnyType;
-		}
+		public void setAnyType(boolean isAnyType) {_isAnyType = isAnyType;}
 	}
 
 	/** Representation of an attribute.
-	 *
 	 * @author Alexandrov
 	 */
 	public static class AttrProps {
-
-		/**
-		 * AttrProps name.
-		 */
+		/** AttrProps name. */
 		private String _name;
-		/**
-		 * AttrProps namespace.
-		 */
+		/** AttrProps namespace. */
 		private String _namespace;
-		/**
-		 * AttrProps value type.
-		 */
+		/** AttrProps value type. */
 		private String _type = "string(0, $MAXINT)";
-		/**
-		 * AttrProps default value.
-		 */
+		/** AttrProps default value. */
 		private String _default;
-		/**
-		 * AttrProps fixed value.
-		 */
+		/** AttrProps fixed value. */
 		private String _fixed;
-		/**
-		 * AttrProps occurrence.
-		 */
+		/** AttrProps occurrence. */
 		private String _use = "optional";
 
-		/** Creates empty attribute representation object.
-		 *
-		 */
-		public AttrProps() {
-		}
+		/** Creates empty attribute representation object. */
+		public AttrProps() {}
 
 		/** Default attribute value setter.
-		 *
 		 * @param defaultValue default attribute value.
 		 */
 		public void setDefault(String defaultValue) {
@@ -642,91 +510,58 @@ public final class XsdUtils {
 		}
 
 		/** Fixed attribute value setter.
-		 *
 		 * @param fixed fixed attribute value.
 		 */
-		public void setFixed(String fixed) {
-			_fixed = fixed;
-		}
+		public void setFixed(String fixed) {_fixed = fixed;}
 
 		/** AttrProps name setter.
-		 *
 		 * @param name name of attribute
 		 */
-		public void setName(String name) {
-			_name = name;
-		}
+		public void setName(String name) {_name = name;}
 
 		/** AttrProps namespace setter.
-		 *
 		 * @param namespace attribute namespace.
 		 */
-		public void setNamespace(String namespace) {
-			_namespace = namespace;
-		}
+		public void setNamespace(String namespace) {_namespace = namespace;}
 
 		/** AttrProps type declaration setter.
-		 *
 		 * @param type attribute type declaration.
 		 */
-		public void setType(String type) {
-			_type = type;
-		}
+		public void setType(String type) {_type = type;}
 
 		/** Use declaration setter.
-		 *
 		 * @param use use declaration.
 		 */
-		public void setUse(String use) {
-			_use = use;
-		}
+		public void setUse(String use) {_use = use;}
 
 		/** Default value getter.
-		 *
 		 * @return default value or null.
 		 */
-		public String getDefault() {
-			return _default;
-		}
+		public String getDefault() {return _default;}
 
 		/** Fixed value getter.
-		 *
 		 * @return fixed value or null.
 		 */
-		public String getFixed() {
-			return _fixed;
-		}
+		public String getFixed() {return _fixed;}
 
 		/** AttrProps name getter.
-		 *
 		 * @return name of attribute.
 		 */
-		public String getName() {
-			return _name;
-		}
+		public String getName() {return _name;}
 
 		/** AttrProps namespace getter.
-		 *
 		 * @return namespace of attribute.
 		 */
-		public String getNamespace() {
-			return _namespace;
-		}
+		public String getNamespace() {return _namespace;}
 
 		/** AttrProps type getter.
-		 *
 		 * @return type declaration of attribute.
 		 */
-		public String getType() {
-			return _type;
-		}
+		public String getType() {return _type;}
 
 		/** AttrProps occurrence getter.
-		 *
 		 * @return occurrence declaration.
 		 */
-		public String getUse() {
-			return _use;
-		}
+		public String getUse() {return _use;}
 	}
 }

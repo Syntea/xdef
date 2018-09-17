@@ -3,8 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y03PartTwo implements cz.syntea.xdef.component.XComponent{
-  public Long getOne() {return _One;}
-  public void setOne(Long x) {_One = x;}
+  public Integer getOne() {return _One;}
+  public void setOne(Integer x) {_One = x;}
   public String xposOfOne(){return XD_XPos + "/@One";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -77,7 +77,7 @@ public class Y03PartTwo implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _One;
+  private Integer _One;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PartTwo";
@@ -91,7 +91,7 @@ public class Y03PartTwo implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setOne(parseResult.getParsedValue().longValue());
+    setOne(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)

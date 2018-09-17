@@ -1,17 +1,3 @@
-/*
- * Copyright 2015 Syntea software group a.s. All rights reserved.
- *
- * File: XDParseBNF.java, created 2015-03-03.
- * Package: cz.syntea.xd.impl.parsers-
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.BNF;
@@ -114,9 +100,7 @@ public class XDParseBNF extends XDParserAbstract {
 		return map;
 	}
 	@Override
-	public String parserName() {
-		return ROOTBASENAME;
-	}
+	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
 

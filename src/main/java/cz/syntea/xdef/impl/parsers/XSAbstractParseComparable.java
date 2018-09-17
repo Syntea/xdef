@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSAbstractParseComparable.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -18,6 +5,7 @@ import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SIllegalArgumentException;
 import cz.syntea.xdef.XDParseResult;
 import cz.syntea.xdef.XDValue;
+import cz.syntea.xdef.sys.SRuntimeException;
 
 /** Abstract parser of comparable values.
  * @author Vaclav Trojan
@@ -44,23 +32,36 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return 'c';}
 	@Override
-	public void setMinExclusive(XDValue x) { _minExcl = iObject(null, x); }
-	@Override
 	public XDValue getMinExclusive() { return _minExcl; }
-	@Override
-	public void setMaxExclusive(XDValue x) { _maxExcl = iObject(null, x); }
 	@Override
 	public XDValue getMaxExclusive() { return _maxExcl; }
 	@Override
-	public void setMinInclusive(XDValue x) { _minIncl = iObject(null, x); }
-	@Override
 	public XDValue getMinInclusive() { return _minIncl; }
-	@Override
-	public void setMaxInclusive(XDValue x) { _maxIncl = iObject(null, x); }
 	@Override
 	public XDValue getMaxInclusive() {return _maxIncl;}
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+	/** Check value of range specification (override if necessary).
+	 * @param x value of range specification.
+	 * @throws SRuntimeException if value is incorrect.
+	 */
+	public void checkValue(final XDValue x) {}
+	@Override
+	public void setMinExclusive(XDValue x) {
+		checkValue(_minExcl = iObject(null, x));
+	}
+	@Override
+	public void setMaxExclusive(XDValue x) {
+		checkValue(_maxExcl = iObject(null, x));
+	}
+	@Override
+	public void setMinInclusive(XDValue x) {
+		checkValue(_minIncl = iObject(null, x));
+	}
+	@Override
+	public void setMaxInclusive(XDValue x) {
+		checkValue(_maxIncl = iObject(null, x));
+	}
 	@Override
 	public void setEnumeration(Object[] o) {
 		_enumeration = null;
@@ -73,6 +74,7 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	protected void checkComparable(XDParseResult p) {
 		if (p.matches()) {
 			XDValue val = p.getParsedValue();

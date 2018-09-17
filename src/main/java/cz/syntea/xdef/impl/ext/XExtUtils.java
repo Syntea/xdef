@@ -1,16 +1,3 @@
-/*
- * Copyright 2006 Syntea software group a.s.
- *
- * File: XExtUtils.java
- *
- * This file may be copied modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENSE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package cz.syntea.xdef.impl.ext;
 
 import cz.syntea.xdef.XDConstants;

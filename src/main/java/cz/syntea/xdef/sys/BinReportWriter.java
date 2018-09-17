@@ -1,24 +1,10 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: BinReportWriter.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.io.OutputStream;
 
-/**
- * Writer of binary form of report data.
+/** Writer of binary form of report data.
  * @author Vaclav Trojan
  */
 public class BinReportWriter implements ReportWriter {
