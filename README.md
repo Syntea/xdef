@@ -10,11 +10,16 @@ Predelane pomocne tridy:
     * Assertion.java - rozsireni testNG-assert o nova porovnani
     * SoftAssert.java - rozsireni testNG-assert o nova porovnani
     * TestUtil.java - pomocne nase metody
-    * STester.java - jen pridana metoda runUnitTest(), aby se kazda puvodni unit-test-trida tvarila jako samostatny test
+    * STester.java - jen pridana metoda runUnitTest(), aby se kazda puvodni
+      unit-test-trida tvarila jako samostatny test
     * XDTesterNT.java - cca plne zmodernizovana XDTester.java
 
 Priklady zmodernizovanych testu:
   * test.xdef.TestKeyAndRefNT.java
+
+Dalsi navrhy na zlepseni:
+  * slo by to jeste lepe pomoci @TestFactory nebo @DataSource, ale to by uz
+    vyzadovalo mnohem vetsi prepsani kodu 
 
 Konfigurace:
   * pom.xml - pluginy maven-surefire-plugin
