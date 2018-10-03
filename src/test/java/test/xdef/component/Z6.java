@@ -3,6 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z6 implements cz.syntea.xdef.component.XComponent{
+  public String getTypDokladu() {return _TypDokladu;}
+  public String getOpravneni() {return _Opravneni;}
   public String getCisloDokladu() {return _CisloDokladu;}
   public cz.syntea.xdef.sys.SDatetime getDatumVydani() {return _DatumVydani;}
   public java.util.Date dateOfDatumVydani() {
@@ -15,9 +17,9 @@ public class Z6 implements cz.syntea.xdef.component.XComponent{
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumVydani);
   }
   public String getMistoVydani() {return _MistoVydani;}
-  public String getOpravneni() {return _Opravneni;}
   public String getStatVydani() {return _StatVydani;}
-  public String getTypDokladu() {return _TypDokladu;}
+  public void setTypDokladu(String x) {_TypDokladu = x;}
+  public void setOpravneni(String x) {_Opravneni = x;}
   public void setCisloDokladu(String x) {_CisloDokladu = x;}
   public void setDatumVydani(cz.syntea.xdef.sys.SDatetime x) {_DatumVydani = x;}
   public void setDatumVydani(java.util.Date x) {
@@ -30,15 +32,13 @@ public class Z6 implements cz.syntea.xdef.component.XComponent{
     _DatumVydani=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
   public void setMistoVydani(String x) {_MistoVydani = x;}
-  public void setOpravneni(String x) {_Opravneni = x;}
   public void setStatVydani(String x) {_StatVydani = x;}
-  public void setTypDokladu(String x) {_TypDokladu = x;}
+  public String xposOfTypDokladu(){return XD_XPos + "/@TypDokladu";}
+  public String xposOfOpravneni(){return XD_XPos + "/@Opravneni";}
   public String xposOfCisloDokladu(){return XD_XPos + "/@CisloDokladu";}
   public String xposOfDatumVydani(){return XD_XPos + "/@DatumVydani";}
   public String xposOfMistoVydani(){return XD_XPos + "/@MistoVydani";}
-  public String xposOfOpravneni(){return XD_XPos + "/@Opravneni";}
   public String xposOfStatVydani(){return XD_XPos + "/@StatVydani";}
-  public String xposOfTypDokladu(){return XD_XPos + "/@TypDokladu";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -83,18 +83,18 @@ public class Z6 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getTypDokladu() != null)
+      el.setAttribute("TypDokladu", getTypDokladu());
+    if (getOpravneni() != null)
+      el.setAttribute("Opravneni", getOpravneni());
     if (getCisloDokladu() != null)
       el.setAttribute("CisloDokladu", getCisloDokladu());
     if (getDatumVydani() != null)
       el.setAttribute("DatumVydani", getDatumVydani().formatDate("d.M.yyyy"));
     if (getMistoVydani() != null)
       el.setAttribute("MistoVydani", getMistoVydani());
-    if (getOpravneni() != null)
-      el.setAttribute("Opravneni", getOpravneni());
     if (getStatVydani() != null)
       el.setAttribute("StatVydani", getStatVydani());
-    if (getTypDokladu() != null)
-      el.setAttribute("TypDokladu", getTypDokladu());
     return el;
   }
   @Override
@@ -120,12 +120,12 @@ public class Z6 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _TypDokladu;
+  private String _Opravneni;
   private String _CisloDokladu;
   private cz.syntea.xdef.sys.SDatetime _DatumVydani;
   private String _MistoVydani;
-  private String _Opravneni;
   private String _StatVydani;
-  private String _TypDokladu;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Doklad";

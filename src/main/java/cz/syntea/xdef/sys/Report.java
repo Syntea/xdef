@@ -1,5 +1,6 @@
 package cz.syntea.xdef.sys;
 
+import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.RegisterReportTables.ReportTable;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -889,9 +890,9 @@ public class Report {
 	public static Report buildInfo() {
 		//Compiled: &{c}, build version: &{v}, date: &{d}
 		return Report.info(SYS.SYS010,
-			"&{c}" + SConstants.JAVA_VERSION +
-			"&{v}" + SConstants.BUILD_VERSION +
-			"&{d}" + SConstants.BUILD_DATE);
+			"&{c}" + XDConstants.JAVA_VERSION +
+			"&{v}" + XDConstants.BUILD_VERSION +
+			"&{d}" + XDConstants.BUILD_DATE);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

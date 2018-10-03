@@ -3,33 +3,33 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z9 implements cz.syntea.xdef.component.XComponent{
+  public String getUlice() {return _Ulice;}
   public String getCisloOrientacni() {return _CisloOrientacni;}
   public String getCisloPopisne() {return _CisloPopisne;}
   public String getObec() {return _Obec;}
-  public String getOkres() {return _Okres;}
   public String getPSC() {return _PSC;}
+  public String getOkres() {return _Okres;}
   public String getStat() {return _Stat;}
   public String getTelefon1() {return _Telefon1;}
   public String getTelefon2() {return _Telefon2;}
-  public String getUlice() {return _Ulice;}
+  public void setUlice(String x) {_Ulice = x;}
   public void setCisloOrientacni(String x) {_CisloOrientacni = x;}
   public void setCisloPopisne(String x) {_CisloPopisne = x;}
   public void setObec(String x) {_Obec = x;}
-  public void setOkres(String x) {_Okres = x;}
   public void setPSC(String x) {_PSC = x;}
+  public void setOkres(String x) {_Okres = x;}
   public void setStat(String x) {_Stat = x;}
   public void setTelefon1(String x) {_Telefon1 = x;}
   public void setTelefon2(String x) {_Telefon2 = x;}
-  public void setUlice(String x) {_Ulice = x;}
+  public String xposOfUlice(){return XD_XPos + "/@Ulice";}
   public String xposOfCisloOrientacni(){return XD_XPos + "/@CisloOrientacni";}
   public String xposOfCisloPopisne(){return XD_XPos + "/@CisloPopisne";}
   public String xposOfObec(){return XD_XPos + "/@Obec";}
-  public String xposOfOkres(){return XD_XPos + "/@Okres";}
   public String xposOfPSC(){return XD_XPos + "/@PSC";}
+  public String xposOfOkres(){return XD_XPos + "/@Okres";}
   public String xposOfStat(){return XD_XPos + "/@Stat";}
   public String xposOfTelefon1(){return XD_XPos + "/@Telefon1";}
   public String xposOfTelefon2(){return XD_XPos + "/@Telefon2";}
-  public String xposOfUlice(){return XD_XPos + "/@Ulice";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -74,24 +74,24 @@ public class Z9 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getUlice() != null)
+      el.setAttribute("Ulice", getUlice());
     if (getCisloOrientacni() != null)
       el.setAttribute("CisloOrientacni", getCisloOrientacni());
     if (getCisloPopisne() != null)
       el.setAttribute("CisloPopisne", getCisloPopisne());
     if (getObec() != null)
       el.setAttribute("Obec", getObec());
-    if (getOkres() != null)
-      el.setAttribute("Okres", getOkres());
     if (getPSC() != null)
       el.setAttribute("PSC", getPSC());
+    if (getOkres() != null)
+      el.setAttribute("Okres", getOkres());
     if (getStat() != null)
       el.setAttribute("Stat", getStat());
     if (getTelefon1() != null)
       el.setAttribute("Telefon1", getTelefon1());
     if (getTelefon2() != null)
       el.setAttribute("Telefon2", getTelefon2());
-    if (getUlice() != null)
-      el.setAttribute("Ulice", getUlice());
     return el;
   }
   @Override
@@ -117,15 +117,15 @@ public class Z9 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _Ulice;
   private String _CisloOrientacni;
   private String _CisloPopisne;
   private String _Obec;
-  private String _Okres;
   private String _PSC;
+  private String _Okres;
   private String _Stat;
   private String _Telefon1;
   private String _Telefon2;
-  private String _Ulice;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Adresa";

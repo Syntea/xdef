@@ -77,7 +77,8 @@ public abstract class ExternalXDEditor implements XEditor {
 			// read flag if editing was finished
 			boolean editingFinished = xr.readBoolean();
 			int len = xr.readInt();
-			Map<String, XDSourceItem> sources = xpool.getXDSourcesMap();
+			Map<String, XDSourceItem> sources =
+				xpool.getXDSourceInfo().getMap();
 			// read and update source map
 			for (int i = 0; i < len; i++) {
 				String key = xr.readString();

@@ -95,7 +95,7 @@ public class TestReport extends STester {
 			s = Report.getReportText("XML_LANGUAGE", "eng");
 			assertEq("English", s);
 			reporter.clear();
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE + "ABC",
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES + "ABC",
 				dataDir + "ABC_*.properties");
 			s = Report.getReportText("ABC_LANGUAGE", "deu");
 			assertEq("deutsch", s);
@@ -120,11 +120,11 @@ public class TestReport extends STester {
 			assertEq("Test Nachricht: Etwas", Report.text(
 				"ABC001","?","&{msg}&{#ABC003}").toString());
 			SManager.removeReportTables("ABC");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_ces", dataDir + "ABC_ces.properties");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_eng", dataDir + "ABC_eng.properties");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_deu", dataDir + "ABC_deu.properties");
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			assertEq("Testovací zpráva: x",

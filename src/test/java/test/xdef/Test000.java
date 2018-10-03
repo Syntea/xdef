@@ -393,13 +393,13 @@ public final class Test000 extends XDTester {
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
 		resetProperties();
-//		try { //test ignoring of DTD.
-//			xdef = dataDir + "Test000_01.xdef";
-//			xp = compile(xdef);
-//			xml = dataDir + "Test000_01.xml";
-//			parse(xp, "root", xml, reporter);
-//			assertNoErrors(reporter);
-//		} catch (Exception ex) {fail(ex);}
+		try { //test ignoring of DTD.
+			xdef = dataDir + "Test000_01.xdef";
+			xp = compile(xdef);
+			xml = dataDir + "Test000_01.xml";
+			parse(xp, "root", xml, reporter);
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {  //test DTD fail
 			xdef = dataDir + "Test000_01_1.xdef";
 			xml = dataDir + "Test000_01.xml";

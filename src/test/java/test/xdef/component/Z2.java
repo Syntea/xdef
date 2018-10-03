@@ -3,6 +3,17 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z2 implements cz.syntea.xdef.component.XComponent{
+  public String getKodUtvaruPolicie() {return _KodUtvaruPolicie;}
+  public cz.syntea.xdef.sys.SDatetime getRokDN() {return _RokDN;}
+  public java.util.Date dateOfRokDN() {
+    return cz.syntea.xdef.sys.SDatetime.getDate(_RokDN);
+  }
+  public java.sql.Timestamp timestampOfRokDN() {
+    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_RokDN);
+  }
+  public java.util.Calendar calendarOfRokDN() {
+    return cz.syntea.xdef.sys.SDatetime.getCalendar(_RokDN);
+  }
   public String getCisloDN() {return _CisloDN;}
   public String getCisloJednaciDN() {return _CisloJednaciDN;}
   public cz.syntea.xdef.sys.SDatetime getDatumCasOznameni() {return _DatumCasOznameni;}
@@ -15,19 +26,19 @@ public class Z2 implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumCasOznameni() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumCasOznameni);
   }
-  public String getKodUtvaruPolicie() {return _KodUtvaruPolicie;}
   public String getNazevDN() {return _NazevDN;}
-  public cz.syntea.xdef.sys.SDatetime getRokDN() {return _RokDN;}
-  public java.util.Date dateOfRokDN() {
-    return cz.syntea.xdef.sys.SDatetime.getDate(_RokDN);
-  }
-  public java.sql.Timestamp timestampOfRokDN() {
-    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_RokDN);
-  }
-  public java.util.Calendar calendarOfRokDN() {
-    return cz.syntea.xdef.sys.SDatetime.getCalendar(_RokDN);
-  }
   public String getZpracovatel() {return _Zpracovatel;}
+  public void setKodUtvaruPolicie(String x) {_KodUtvaruPolicie = x;}
+  public void setRokDN(cz.syntea.xdef.sys.SDatetime x) {_RokDN = x;}
+  public void setRokDN(java.util.Date x) {
+    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setRokDN(java.sql.Timestamp x) {
+    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setRokDN(java.util.Calendar x) {
+    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
   public void setCisloDN(String x) {_CisloDN = x;}
   public void setCisloJednaciDN(String x) {_CisloJednaciDN = x;}
   public void setDatumCasOznameni(cz.syntea.xdef.sys.SDatetime x) {_DatumCasOznameni = x;}
@@ -40,25 +51,14 @@ public class Z2 implements cz.syntea.xdef.component.XComponent{
   public void setDatumCasOznameni(java.util.Calendar x) {
     _DatumCasOznameni=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setKodUtvaruPolicie(String x) {_KodUtvaruPolicie = x;}
   public void setNazevDN(String x) {_NazevDN = x;}
-  public void setRokDN(cz.syntea.xdef.sys.SDatetime x) {_RokDN = x;}
-  public void setRokDN(java.util.Date x) {
-    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setRokDN(java.sql.Timestamp x) {
-    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setRokDN(java.util.Calendar x) {
-    _RokDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
   public void setZpracovatel(String x) {_Zpracovatel = x;}
+  public String xposOfKodUtvaruPolicie(){return XD_XPos + "/@KodUtvaruPolicie";}
+  public String xposOfRokDN(){return XD_XPos + "/@RokDN";}
   public String xposOfCisloDN(){return XD_XPos + "/@CisloDN";}
   public String xposOfCisloJednaciDN(){return XD_XPos + "/@CisloJednaciDN";}
   public String xposOfDatumCasOznameni(){return XD_XPos + "/@DatumCasOznameni";}
-  public String xposOfKodUtvaruPolicie(){return XD_XPos + "/@KodUtvaruPolicie";}
   public String xposOfNazevDN(){return XD_XPos + "/@NazevDN";}
-  public String xposOfRokDN(){return XD_XPos + "/@RokDN";}
   public String xposOfZpracovatel(){return XD_XPos + "/@Zpracovatel";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -104,18 +104,18 @@ public class Z2 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getKodUtvaruPolicie() != null)
+      el.setAttribute("KodUtvaruPolicie", getKodUtvaruPolicie());
+    if (getRokDN() != null)
+      el.setAttribute("RokDN", getRokDN().formatDate("yyyy"));
     if (getCisloDN() != null)
       el.setAttribute("CisloDN", getCisloDN());
     if (getCisloJednaciDN() != null)
       el.setAttribute("CisloJednaciDN", getCisloJednaciDN());
     if (getDatumCasOznameni() != null)
       el.setAttribute("DatumCasOznameni", getDatumCasOznameni().formatDate("d.M.yyyy H:mm"));
-    if (getKodUtvaruPolicie() != null)
-      el.setAttribute("KodUtvaruPolicie", getKodUtvaruPolicie());
     if (getNazevDN() != null)
       el.setAttribute("NazevDN", getNazevDN());
-    if (getRokDN() != null)
-      el.setAttribute("RokDN", getRokDN().formatDate("yyyy"));
     if (getZpracovatel() != null)
       el.setAttribute("Zpracovatel", getZpracovatel());
     return el;
@@ -143,12 +143,12 @@ public class Z2 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _KodUtvaruPolicie;
+  private cz.syntea.xdef.sys.SDatetime _RokDN;
   private String _CisloDN;
   private String _CisloJednaciDN;
   private cz.syntea.xdef.sys.SDatetime _DatumCasOznameni;
-  private String _KodUtvaruPolicie;
   private String _NazevDN;
-  private cz.syntea.xdef.sys.SDatetime _RokDN;
   private String _Zpracovatel;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;

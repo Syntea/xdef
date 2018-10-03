@@ -9,6 +9,7 @@ import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.XDDebug;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.XDValue;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.proc.XXNode;
 import cz.syntea.xdef.impl.code.CodeTable;
@@ -97,7 +98,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 */
 	public ChkGUIDebug(final Properties props, final XDPool xp) {
 		_xdpool = xp;
-		_sources = xp.getXDSourcesMap();
+		_si = new XDSourceInfo();
+		_si.copyFrom(xp.getXDSourceInfo());
+		_sources = _si.getMap();
+		_windowName = "Debug X-definition:";
 		init(props);
 	}
 
@@ -184,6 +188,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param xp XDPool of running X-definition process.
 	 */
 	private void initGUI(final XDPool xp) {
+		// Initialize SWING objects
+		_xdpool = xp;
 		_opened = true;
 		if (_out != null || _in != null) { // command line mode
 			if (_in == null) {
@@ -194,10 +200,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 			return;
 		}
-		openGUI(10, 10, 1200, 700); // GUI mode
-
-		// Initialize SWING objects
-		_xdpool = xp;
+		openGUI(xp.getXDSourceInfo()); // GUI mode
 		_sourceArea.setEditable(false);
 		_frame.addWindowListener(new WindowListener() {
 			@Override
@@ -270,7 +273,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 		_frame.pack();
 		_frame.setLocationByPlatform(true);
-		_frame.setBounds(_xpos, _ypos, _width, _height);
+		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
 		_sourceArea.setCaretPosition(
 			_sourceItem._pos>=0 ? _sourceItem._pos : 0);
 		_sourceArea.requestFocus();
@@ -517,6 +520,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_debugMode = false;
+//				updateSourceItem();
 				_frame.dispose();
 			}
 		});
@@ -553,7 +557,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				_sourceItem._pos = _sourceArea.getCaretPosition();
 				_sourceItem._active = false;
 			}
-			_frame.setTitle(sourceID);
+			_frame.setTitle((_windowName != null ? _windowName + " " : "")
+				+ sourceID);
 			_sourceArea.setVisible(false);
 			_sourceArea.setFocusable(false);
 			_sourceArea.setText(newSrc._source);
@@ -599,7 +604,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	@Override
 	/** Close debugger */
 	public void closeDebugger() {
-		closeGUI(null); // do not show mesage the trogram finished
+		closeGUI(); // do not show mesage the trogram finished
 		_debugMode = false;
 		_opened = false;
 		_in = null;
@@ -1187,6 +1192,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @return editor of X-definition sources.
 	 */
 	public XEditor getXEditor() {
-		return new ChkGUIDisplay(_xpos, _ypos, _width, _height);
+		XDSourceInfo si = _xdpool == null
+			? new XDSourceInfo() : _xdpool.getXDSourceInfo();
+		return new ChkGUIDisplay(si);
 	}
 }

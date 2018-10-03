@@ -1,6 +1,7 @@
 package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.sys.ArrayReporter;
 import java.awt.BorderLayout;
@@ -11,6 +12,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 /** Provides GUI for editing of sources of X-definitions.
@@ -19,13 +21,9 @@ import javax.swing.KeyStroke;
 public class ChkGUIDisplay extends GUIScreen implements XEditor {
 
 	/** Create the instance of GUI to display sources of X-definitions.
-	 * @param x X position of the left corner of the screen.
-	 * @param y Y position of the left corner of the screen.
-	 * @param width width of the screen.
-	 * @param height height of the screen.
+	 * @param si source info.
 	 */
-	public ChkGUIDisplay(int x, int y, int width, int height) {
-		super(x, y, width, height);}
+	public ChkGUIDisplay(final XDSourceInfo si) {super(si);}
 
 	@Override
 	/** Open GUI.
@@ -36,37 +34,29 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	 * will be opened again.
 	 */
 	public final boolean setXEditor(final XDPool xp, final ArrayReporter err) {
+		_windowName = "Edit X-definition: ";
+		_frame.setVisible(false);
 		_xdpool = xp;
-		_sources = xp.getXDSourcesMap();
+		_sources = xp.getXDSourceInfo().getMap();
 		if (_sourceItem == null) { // first
 			initSourceMap();
 			initSourceWindow();
 			_sourceItem = null;
 			_undo.setLimit(UNDO_LIMIT);
-			initInfoArea(err);
 			initMenuBar();
 			setInitialSource();
-			_frame.pack();
-			_frame.setBounds(_xpos, _ypos, _width, _height);
-			_frame.setVisible(true);
-			_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
-				@Override
-				public void componentResized(java.awt.event.ComponentEvent evt){
-					Rectangle r = _frame.getBounds();
-					_xpos = r.x;
-					_ypos = r.y;
-					_width = r.width;
-					_height = r.height;
-				}
-			});
-		} else {
-//			_frame.setSize(_width, _height);
-//			_frame.pack();
-			initInfoArea(err);
-			setLineNumberArea();
-			_frame.setBounds(_xpos, _ypos, _width, _height);
 		}
+		initInfoArea(err);
+		setLineNumberArea();
+		_frame.pack();
+		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
+		_frame.setVisible(true);
 		waitFrame();
+		Rectangle r = _frame.getBounds();
+		_si._xpos = r.x;
+		_si._ypos = r.y;
+		_si._width = r.width;
+		_si._height = r.height;
 		if (!_actionFinished) {
 			_actionFinished = true; // value MUST be true for next action!
 			return false;
@@ -76,10 +66,13 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	}
 
 	@Override
-	/** Close XEditor.
-	 * @param msg text of message to be shown. If null no message is shown.
-	 */
-	public void closeXEditor(String msg) {closeEdit(msg);}
+	/** Close XEditor. */
+	public void closeXEditor(String msg) {
+		closeEdit();
+		if (msg != null && !msg.isEmpty()) {
+			JOptionPane.showMessageDialog(null, msg);
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -115,13 +108,15 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 					if (f != null && f.exists()) {
 						for (XDSourceItem src: _sources.values()) {
 							try {
-							if (src._url != null
-								&& src._url.equals(f.toURI().toURL())) {
-								_actionFinished = false;
-								notifyFrame();
-								break;
+								if (src._url != null
+									&& src._url.equals(f.toURI().toURL())) {
+									_actionFinished = false;
+									notifyFrame();
+									break;
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace(System.err);
 							}
-							} catch (Exception ex) {}
 						}
 						try {
 							XDSourceItem src = new XDSourceItem(f);
@@ -189,6 +184,13 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		ji.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if ( _sourceItem != null && _sourceItem._changed) {
+					String s;
+					if (_sourceArea == null || (s=_sourceArea.getText()) == null
+						|| s.equals(_sourceItem._source)){
+						_sourceItem._changed = false;
+					}
+				}
 				_actionFinished = true;
 				notifyFrame();
 			}

@@ -10,11 +10,14 @@ import cz.syntea.xdef.sys.FUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import test.utils.STester;
+import static test.utils.STester.runTest;
+import test.utils.XDTester;
 
 /** Generate XComponents Java source files.
  * @author Vaclav Trojan
  */
-public class TestXComponentsGen {
+public class TestXComponentsGen extends STester {
 
 	XComponent _X, _Y, _G;
 
@@ -772,10 +775,9 @@ public class TestXComponentsGen {
 		if (x != null) {_YYY.addAll(x);}
 	}
 
-	/** Generate XComponents from XDPool.
-	 * @param args not used.
-	 */
-	public static void main(String... args) {
+	@Override
+	/** Run test and print error information. */
+	public void test() {
 		File f = new File("temp");
 		f.mkdir();
 		String dir = f.getAbsolutePath().replace('\\', '/');
@@ -807,8 +809,8 @@ public class TestXComponentsGen {
 			TestXComponents_Y06DomainContainer.class.getClass();
 			TestXComponents_Y06XCDomain.class.getClass();
 			TestXComponents_Y07Operation.class.getClass();
-			String source = new File(xcDir,
-				"test/xdef/data/test/TestXComponent_Z.xdef").getAbsolutePath();
+			String source = new File(getDataDir()+
+				"test/TestXComponent_Z.xdef").getAbsolutePath();
 			XDPool xp = XDFactory.compileXD(null, XDEF, source);
 			// generate from xp the class containing the XDPool
 			XDFactory.genXDPoolClass(xp, dir, "test.xdef.component.Pool", null);
@@ -835,6 +837,14 @@ public class TestXComponentsGen {
 			}
 
 			FUtils.deleteAll(f, true); // delete temp directory
-		} catch (Exception ex) {ex.printStackTrace(System.err);}
+		} catch (Exception ex) {fail(ex);}
+	}
+
+	/** Generate XComponents from XDPool.
+	 * @param args not used.
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(false);
+		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

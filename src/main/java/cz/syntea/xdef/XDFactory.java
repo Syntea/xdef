@@ -20,7 +20,7 @@ import java.util.Properties;
 import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.sys.SConstants;
+import cz.syntea.xdef.XDConstants;
 import java.nio.charset.Charset;
 
 /** Provides generation of {@link cz.syntea.xdef.XDPool} from source
@@ -62,7 +62,7 @@ public final class XDFactory {
 	 * @return version of this implementation of X-definition.
 	 */
 	public static String getXDVersion() {
-		return SConstants.BUILD_VERSION + " (" + SConstants.BUILD_DATE + "]";
+		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + "]";
 	}
 
 	/** Creates instance of XDBuilder with properties.

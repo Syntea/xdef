@@ -3,18 +3,18 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y11Op implements cz.syntea.xdef.component.XComponent{
-  public String getM() {return _M;}
   public String getN() {return _N;}
+  public String getM() {return _M;}
   public java.util.List<Y11Op.Co> listOfCo() {return _Co;}
   public Y11Op.Y getY() {return _Y;}
-  public void setM(String x) {_M = x;}
   public void setN(String x) {_N = x;}
+  public void setM(String x) {_M = x;}
   public void addCo(Y11Op.Co x) {
     if (x!=null) _Co.add(x);
   }
   public void setY(Y11Op.Y x) {_Y = x;}
-  public String xposOfM(){return XD_XPos + "/@M";}
   public String xposOfN(){return XD_XPos + "/@N";}
+  public String xposOfM(){return XD_XPos + "/@M";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -59,10 +59,10 @@ public class Y11Op implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getM() != null)
-      el.setAttribute("M", getM());
     if (getN() != null)
       el.setAttribute("N", getN());
+    if (getM() != null)
+      el.setAttribute("M", getM());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -96,8 +96,8 @@ public class Y11Op implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _M;
   private String _N;
+  private String _M;
   private final java.util.List<Y11Op.Co> _Co = new java.util.ArrayList<Y11Op.Co>();
   private Y11Op.Y _Y;
   private cz.syntea.xdef.component.XComponent XD_Parent;

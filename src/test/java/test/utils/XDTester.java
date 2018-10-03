@@ -528,11 +528,7 @@ public abstract class XDTester extends STester {
 
 	private void genXdOfXd() {
 		if (_xdOfxd == null) {
-			String dir = "test/test/xdef/data/test/";
-			File f = new File(dir);
-			if (!f.exists() || !f.isDirectory()) {
-				dir = "src/test/java/test/xdef/data/test/";
-			}
+			String dir = getDataDir() + "test/";
 			_xdOfxd = XDFactory.compileXD(null,dir+"TestXdefOfXdef*.xdef");
 		}
 	}

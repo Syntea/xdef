@@ -3,14 +3,14 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class PredmetDN implements cz.syntea.xdef.component.XComponent{
-  public String getDruhPredmetu() {return _DruhPredmetu;}
-  public String getNazevPredmetu() {return _NazevPredmetu;}
   public String getOznSegmentu() {return _OznSegmentu;}
+  public String getNazevPredmetu() {return _NazevPredmetu;}
+  public String getDruhPredmetu() {return _DruhPredmetu;}
   public Z3 getSkoda() {return _Skoda;}
   public PredmetDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setDruhPredmetu(String x) {_DruhPredmetu = x;}
-  public void setNazevPredmetu(String x) {_NazevPredmetu = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
+  public void setNazevPredmetu(String x) {_NazevPredmetu = x;}
+  public void setDruhPredmetu(String x) {_DruhPredmetu = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#PredmetDN/$mixed/Skoda");
@@ -21,9 +21,9 @@ public class PredmetDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vlastnik", null, "SouborD1A#PredmetDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
-  public String xposOfDruhPredmetu(){return XD_XPos + "/@DruhPredmetu";}
-  public String xposOfNazevPredmetu(){return XD_XPos + "/@NazevPredmetu";}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
+  public String xposOfNazevPredmetu(){return XD_XPos + "/@NazevPredmetu";}
+  public String xposOfDruhPredmetu(){return XD_XPos + "/@DruhPredmetu";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -68,12 +68,12 @@ public class PredmetDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getDruhPredmetu() != null)
-      el.setAttribute("DruhPredmetu", getDruhPredmetu());
-    if (getNazevPredmetu() != null)
-      el.setAttribute("NazevPredmetu", getNazevPredmetu());
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
+    if (getNazevPredmetu() != null)
+      el.setAttribute("NazevPredmetu", getNazevPredmetu());
+    if (getDruhPredmetu() != null)
+      el.setAttribute("DruhPredmetu", getDruhPredmetu());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -107,9 +107,9 @@ public class PredmetDN implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _DruhPredmetu;
-  private String _NazevPredmetu;
   private String _OznSegmentu;
+  private String _NazevPredmetu;
+  private String _DruhPredmetu;
   private Z3 _Skoda;
   private PredmetDN.Vlastnik _Vlastnik;
   private cz.syntea.xdef.component.XComponent XD_Parent;

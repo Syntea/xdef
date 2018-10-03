@@ -6,7 +6,6 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SBuffer;
-import cz.syntea.xdef.sys.SConstants;
 import cz.syntea.xdef.sys.SError;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDParseResult;
@@ -49,8 +48,8 @@ public final class XExtUtils {
 	private XExtUtils() {}
 
 	public final static String getVersionInfo() {
-		return SConstants.BUILD_VERSION + " " +
-			SConstants.BUILD_DATE + " (" + SConstants.JAVA_VERSION + ")";
+		return XDConstants.BUILD_VERSION + " " +
+			XDConstants.BUILD_DATE + " (" + XDConstants.JAVA_VERSION + ")";
 	}
 
 	/**	Get name space URI of qualified name.

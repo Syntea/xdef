@@ -631,22 +631,24 @@ public interface XDEF {
 	public static final long XDEF821 = 31159025973L;
 	/** Class with the external debug editor &amp;{0}{"}{"} is not available.  */
 	public static final long XDEF850 = 31159025974L;
+	/** GUIEditor can't write XML data to file &amp;{0}. */
+	public static final long XDEF851 = 31159025975L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159025975L;
+	public static final long XDEF901 = 31159025976L;
 	/** Can't read X-definition&amp;{0}{: } */
-	public static final long XDEF902 = 31159025976L;
+	public static final long XDEF902 = 31159025977L;
 	/** X-definition source is missing or null&amp;{0}{: } */
-	public static final long XDEF903 = 31159025977L;
+	public static final long XDEF903 = 31159025978L;
 	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159025978L;
+	public static final long XDEF905 = 31159025979L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159025979L;
+	public static final long XDEF906 = 31159025980L;
 	/** Type declaration format "{parse: xxx}" is deprecated; please use just xxx&amp;{#SYS000} */
-	public static final long XDEF997 = 31159025980L;
+	public static final long XDEF997 = 31159025981L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025981L;
+	public static final long XDEF998 = 31159025982L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025982L;
+	public static final long XDEF_DESCRIPTION = 31159025983L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159025983L;
+	public static final long XDEF_LANGUAGE = 31159025984L;
 }

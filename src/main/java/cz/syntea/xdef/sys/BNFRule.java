@@ -15,6 +15,11 @@ public interface BNFRule {
 	 */
 	public String getParsedString();
 
+	/** Get array of objects created by this rule.
+	 * @return array of objects created by this rule or null.
+	 */
+	public Object[] getParsedObjects();
+
 	/** Get position of parsed part of string by this rule.
 	 * @return position of parsed part by this rule.
 	 */

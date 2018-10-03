@@ -3,6 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class B implements cz.syntea.xdef.component.XComponent{
+  public Integer getid() {return _id;}
+  public Double getnum() {return _num;}
   public cz.syntea.xdef.sys.SDatetime getdate() {return _date;}
   public java.util.Date dateOfdate() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_date);
@@ -13,9 +15,6 @@ public class B implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfdate() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_date);
   }
-  public Integer getid() {return _id;}
-  public String getname() {return _name;}
-  public Double getnum() {return _num;}
   public cz.syntea.xdef.sys.SDatetime gettime() {return _time;}
   public java.util.Date dateOftime() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_time);
@@ -26,6 +25,9 @@ public class B implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOftime() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_time);
   }
+  public String getname() {return _name;}
+  public void setid(Integer x) {_id = x;}
+  public void setnum(Double x) {_num = x;}
   public void setdate(cz.syntea.xdef.sys.SDatetime x) {_date = x;}
   public void setdate(java.util.Date x) {
     _date=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -36,9 +38,6 @@ public class B implements cz.syntea.xdef.component.XComponent{
   public void setdate(java.util.Calendar x) {
     _date=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setid(Integer x) {_id = x;}
-  public void setname(String x) {_name = x;}
-  public void setnum(Double x) {_num = x;}
   public void settime(cz.syntea.xdef.sys.SDatetime x) {_time = x;}
   public void settime(java.util.Date x) {
     _time=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -49,11 +48,12 @@ public class B implements cz.syntea.xdef.component.XComponent{
   public void settime(java.util.Calendar x) {
     _time=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public String xposOfdate(){return XD_XPos + "/@date";}
+  public void setname(String x) {_name = x;}
   public String xposOfid(){return XD_XPos + "/@id";}
-  public String xposOfname(){return XD_XPos + "/@name";}
   public String xposOfnum(){return XD_XPos + "/@num";}
+  public String xposOfdate(){return XD_XPos + "/@date";}
   public String xposOftime(){return XD_XPos + "/@time";}
+  public String xposOfname(){return XD_XPos + "/@name";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -98,16 +98,16 @@ public class B implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getdate() != null)
-      el.setAttribute("date", getdate().formatDate("yyyy-MM-dd"));
     if (getid() != null)
       el.setAttribute("id", String.valueOf(getid()));
-    if (getname() != null)
-      el.setAttribute("name", getname());
     if (getnum() != null)
       el.setAttribute("num", String.valueOf(getnum()));
+    if (getdate() != null)
+      el.setAttribute("date", getdate().formatDate("yyyy-MM-dd"));
     if (gettime() != null)
       el.setAttribute("time", gettime().formatDate("HH:mm:ss"));
+    if (getname() != null)
+      el.setAttribute("name", getname());
     return el;
   }
   @Override
@@ -133,11 +133,11 @@ public class B implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private cz.syntea.xdef.sys.SDatetime _date;
   private Integer _id;
-  private String _name;
   private Double _num;
+  private cz.syntea.xdef.sys.SDatetime _date;
   private cz.syntea.xdef.sys.SDatetime _time;
+  private String _name;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";

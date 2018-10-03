@@ -1,12 +1,12 @@
 <Project>
-  <XDefinition>test/test/xdutils/data/GUI/validate/xdef.xml</XDefinition>
+  <XDefinition>resources/test/xdutils/data/GUI/validate/xdef.xml</XDefinition>
   <Property Name = "xdef.warnings" Value = "true"/>
   <Property Name = "xdef.display" Value = "true"/>
   <Property Name = "xdef.debug" Value = "true"/>
   <Execute XDName = "test" Mode = "validate" DisplayResult = "true">
     <Var Name="xyz">Toto je test</Var>
-    <Input>test/test/xdutils/data/GUI/validate/data.xml</Input>
-    <SaveResult File = "test/test/xdutils/data/GUI/validate/result1.xml" />
+    <Input>resources/test/xdutils/data/GUI/validate/data.xml</Input>
+    <SaveResult File = "resources/test/xdutils/data/GUI/validate/result1.xml" />
   </Execute>
 </Project>
 

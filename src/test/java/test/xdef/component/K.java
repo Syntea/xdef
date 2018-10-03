@@ -134,8 +134,8 @@ public class K implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class c implements cz.syntea.xdef.component.XComponent{
-  public String getCislo() {return _Cislo;}
   public String getKod() {return _Kod;}
+  public String getCislo() {return _Cislo;}
   public cz.syntea.xdef.sys.SDatetime getRok() {return _Rok;}
   public java.util.Date dateOfRok() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_Rok);
@@ -146,8 +146,8 @@ public static class c implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfRok() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_Rok);
   }
-  public void setCislo(String x) {_Cislo = x;}
   public void setKod(String x) {_Kod = x;}
+  public void setCislo(String x) {_Cislo = x;}
   public void setRok(cz.syntea.xdef.sys.SDatetime x) {_Rok = x;}
   public void setRok(java.util.Date x) {
     _Rok=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -158,8 +158,8 @@ public static class c implements cz.syntea.xdef.component.XComponent{
   public void setRok(java.util.Calendar x) {
     _Rok=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public String xposOfCislo(){return XD_XPos + "/@Cislo";}
   public String xposOfKod(){return XD_XPos + "/@Kod";}
+  public String xposOfCislo(){return XD_XPos + "/@Cislo";}
   public String xposOfRok(){return XD_XPos + "/@Rok";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -204,10 +204,10 @@ public static class c implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    if (getCislo() != null)
-      el.setAttribute("Cislo", getCislo());
     if (getKod() != null)
       el.setAttribute("Kod", getKod());
+    if (getCislo() != null)
+      el.setAttribute("Cislo", getCislo());
     if (getRok() != null)
       el.setAttribute("Rok", getRok().formatDate("yy"));
     return el;
@@ -235,8 +235,8 @@ public static class c implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _Cislo;
   private String _Kod;
+  private String _Cislo;
   private cz.syntea.xdef.sys.SDatetime _Rok;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;

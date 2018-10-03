@@ -6,11 +6,15 @@ import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.impl.debug.GUIScreen;
 import cz.syntea.xdef.model.XMDefinition;
 import cz.syntea.xdef.model.XMElement;
+import cz.syntea.xdef.msg.SYS;
+import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.sys.ArrayReporter;
+import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.xml.KXmlUtils;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -18,13 +22,17 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.TreeMap;
+import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.xml.namespace.QName;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -39,74 +47,57 @@ public class GUIEditor extends GUIScreen {
 	 * @param width width of the screen.
 	 * @param height height of the screen.
 	 */
-	private GUIEditor(int x, int y, int width, int height) {
-		super(x, y, width, height);
-	}
+	private GUIEditor(final XDSourceInfo si) {super(si);}
 
 	private static final XDPool PROJECTXDPOOL;
 
 	static {
 		String xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Project\">\n" +
-"\n" +
 "  <Project>\n" +
-"\n" +
 "    <xd:mixed>\n" +
-"\n" +
 "      <!-- Add a class to classpath -->\n" +
-"      <XDefinition xd:script = \"+\">\n" +
+"      <XDefinition xd:script=\"+\">\n" +
 "        string();\n" +
 "      </XDefinition>\n" +
-"\n" +
 "      <!-- Set property -->\n" +
-"      <Property xd:script = \"*;\"\n" +
-"        Name = \"string();\"\n" +
-"        Value = \"string()\" />\n" +
-"\n" +
+"      <Property xd:script=\"*\"\n" +
+"        Name=\"string();\"\n" +
+"        Value=\"string()\" />\n" +
 "      <!-- If the \"Execute\" elements are specified the compied XDPool\n" +
 "        is executed according to the desciged parameters. -->\n" +
-"      <Execute xd:script = \"*; ref Execute\"/>\n" +
-"\n" +
+"      <Execute xd:script=\"*; ref Execute\"/>\n" +
 "    </xd:mixed>\n" +
-"\n" +
 "  </Project>\n" +
 "\n" +
 "  <Execute\n" +
-"    XDName = \"? string(0, 1000);\"\n" +
-"    Mode = \"? enum('construct', 'validate');\"\n" +
-"    DisplayResult = \"? enum('true', 'false'); \" >\n" +
-"\n" +
+"    XDName=\"? string(1, 1000);\"\n" +
+"    Mode=\"? enum('construct', 'validate');\"\n" +
+"    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
-"\n" +
 "      <!-- If the \"Var\" elements are specified the specified\n" +
 "        variables are set to the X-definition processor. -->\n" +
-"      <Var  xd:script = \"*;\" Name = \"string();\">\n" +
+"      <Var xd:script=\"*\" Name=\"string();\">\n" +
 "        string();\n" +
 "      </Var>\n" +
-"\n" +
 "      <!-- If the \"Context\" element is specified the context\n" +
 "        is set to the X-definition processor. -->\n" +
-"      <Context xd:script = \"?;\" Edit = \"? enum('true', 'false');\" >\n" +
+"      <Context xd:script=\"?\" Edit=\"? enum('true', 'false');\" >\n" +
 "        string();\n" +
 "      </Context>\n" +
-"\n" +
 "      <!-- If the \"Input\" element is specified the input data\n" +
 "        is set to the X-definition processor. -->\n" +
-"      <Input xd:script = \"?;\" Edit = \"? enum('true', 'false');\">\n" +
+"      <Input xd:script=\"?\" Edit=\"? enum('true', 'false');\">\n" +
 "        string();\n" +
 "      </Input>\n" +
-"\n" +
 "      <!-- If the \"SaveResult\" element is specified the result\n" +
 "        element will be saved to the specified file. -->\n" +
-"      <SaveResult xd:script = \"?\"\n" +
-"        Indent = \"? string();\"\n" +
-"        Encoding = \"? string();\"\n" +
-"        File = \"string();\" />\n" +
-"\n" +
+"      <SaveResult xd:script=\"?\"\n" +
+"        Indent=\"? string();\"\n" +
+"        Encoding=\"? string();\"\n" +
+"        File=\"string();\" />\n" +
 "    </xd:mixed>\n" +
-"\n" +
 "  </Execute>\n" +
-"\n" +
 "</xd:def>";
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
@@ -167,8 +158,10 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
-	private void initMenuBar() {
+	private void initMenuBar(final String runMenu) {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
+		fileMenu.getActionMap().remove("Compile");
+		_sourceArea.getActionMap().remove("Compile");
 		JMenuItem ji;
 		// Save as... menu item
 		ji = new JMenuItem("Save as...");
@@ -186,6 +179,22 @@ public class GUIEditor extends GUIScreen {
 			}
 		});
 		fileMenu.add(ji);
+		if (runMenu != null) {
+			fileMenu.addSeparator();
+			ji = new JMenuItem(runMenu);
+			ji.setAccelerator(KeyStroke.getKeyStroke("F9"));
+			ji.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (((JMenuItem)e.getSource()).isEnabled()) {
+						updateSourceItem();
+						_actionFinished = false;
+						notifyFrame();
+					}
+				}
+			});
+		}
+		fileMenu.add(ji);
 		fileMenu.addSeparator();
 		// Exit menu item
 		ji = new JMenuItem("Exit");
@@ -194,6 +203,14 @@ public class GUIEditor extends GUIScreen {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_actionFinished = true;
+				if (_sourceItem != null && _sourceItem._changed) {
+					String s;
+					if (_sourceArea == null
+						|| (s = _sourceArea.getText()) == null
+						|| s.equals(_sourceItem._source)){
+						_sourceItem._changed = false;
+					}
+				}
 				notifyFrame();
 			}
 		});
@@ -201,121 +218,221 @@ public class GUIEditor extends GUIScreen {
 		// Source position info
 		_menuBar.add(_sourcePositionInfo, BorderLayout.EAST);
 		_frame.setJMenuBar(_menuBar);
+		_sourceArea.getActionMap().remove("Compile");
+		if (runMenu != null) {
+			_sourceArea.getActionMap().put(runMenu,
+				new AbstractAction(runMenu){
+				@Override
+				public void actionPerformed(ActionEvent evt) {
+					updateSourceItem();
+					_actionFinished = false;
+					notifyFrame();
+				}
+			});
+		}
 		_sourceArea.setCaretPosition(0);
 	}
 
-	private void display( final ArrayReporter err,
-		final String msg, final Object obj) throws Exception {
-
-		_sources = new TreeMap<String, XDSourceItem>();
+	private void display(final ArrayReporter err,
+		final String msg,
+		final Object obj,
+		XDSourceInfo si,
+		boolean editable,
+		String runMenu) throws Exception {
+		_windowName = msg;
+		_si = si;
 		XDSourceItem xsi = new XDSourceItem(obj);
+		_sources = _si.getMap();
+		_sources.clear();
+		String sourceId;
+		if (obj instanceof File) {
+			sourceId = ((File) obj).getAbsolutePath();
+		} else if (obj instanceof String) {
+			sourceId = "STRING";
+		} else if (obj instanceof URL) {
+			sourceId = ((URL) obj).toExternalForm();
+		} else {
+			sourceId = obj.getClass().getName();
+		}
+		_sources.put(sourceId, xsi);
 		_sourceItem = null;
-		_sources.put(msg, xsi);
 		initSourceMap();
 		initSourceWindow();
 		setInitialSource();
+		initMenuBar(runMenu);
 		if (err != null) {
-			_sourceItem = xsi;
 			initInfoArea(err);
 		}
-		initMenuBar();
+		setLineNumberArea();
+		if (!editable) {
+			_sourceArea.setEditable(false);
+			_infoArea.setRows(0);
+			_infoArea.setVisible(false);
+		}
 		_frame.pack();
-		_frame.setBounds(10, 10, 1200, 700);
+		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
 		_frame.setVisible(true);
 		waitFrame();
-		closeEdit(null);
+		si._xpos = _frame.getX();
+		si._ypos = _frame.getY();
+		si._width = _frame.getWidth();
+		si._height = _frame.getHeight();
+		closeEdit();
 	}
 
 	private static void displayString(final String msg,
-		final String s) throws Exception {
-		new GUIEditor(10, 10, 1200, 700).display(null, msg, s);
+		final String s,
+		final XDSourceInfo si) throws Exception {
+		GUIEditor ge = new GUIEditor(si);
+		ge.display(null, msg, s, si, false, null);
 	}
 
-	private static void editXml(
-		final ArrayReporter err,
+	private static void editXml(final ArrayReporter err,
 		final String msg,
-		final String fileName) throws Exception {
-		new GUIEditor(10, 10, 1200, 700).display(
-			err, msg + fileName, new File(fileName));
+		final Object o,
+		final XDSourceInfo si,
+		final String runMenu) throws Exception {
+		new GUIEditor(si).display(err, msg, o, si, true, runMenu);
+	}
+
+	/** Read input data or context.
+	 * @param e element with data description.
+	 * @param si Source information.
+	 * @return string with data.
+	 * @throws Exception if an error occurs.
+	 */
+	private static String getData(final Element e, final XDSourceInfo si)
+		throws Exception {
+		if (e == null) {
+			return null;
+		}
+		String data = e.getTextContent().trim();
+		if (data != null) {
+			if ("true".equals(e.getAttribute("Edit"))) {
+				if (data.startsWith("<")) {
+					editXml(null,"Input data: ", data, si, "Save");
+				} else {
+					editXml(null, "Input data: ", data, si,null);
+				}
+				XDSourceItem x = si.getMap().values().iterator().next();
+				if (x._changed && !data.equals(x._source.trim())){
+					data = x._source.trim();
+//					if (JOptionPane.showConfirmDialog(null,
+//						"Data changed. Do you want to save the file?",
+//						null, JOptionPane.OK_CANCEL_OPTION) == 0) {
+////TODO save the file
+//					}
+					e.setTextContent(data);
+				}
+			}
+		}
+		return data;
+	}
+
+	/** Update list of XDefinitions in the project (assure the sequence
+	 * from the map in XDSourceInfo).
+	 * @param project project XML.
+	 * @param si XDSourceInfo object.
+	 */
+	private static void updateXdefList(final Element project,
+		final XDSourceInfo si) {
+		NodeList nl = project.getElementsByTagName("XDefinition");
+		for (int i = 0; i < nl.getLength(); i++) {
+			project.removeChild(nl.item(i));
+		}
+		Document doc = project.getOwnerDocument();
+		for (String x: si.getMap().keySet()) {
+			XDSourceItem xsi = si.getMap().get(x);
+			String s;
+			if (xsi._url != null) {
+				s = xsi._url.toExternalForm();
+			} else {
+				s = xsi._source;
+			}
+			Element e = doc.createElement("XDefinition");
+			e.setTextContent(s);
+			project.appendChild(e);
+		}
 	}
 
 	/** Run project with GUIEditor.
 	 * @param src source with the project.
-	 *
 	 */
 	public static final void runEditor(final String src) {
 		try {
+			Element e;
 			// Create element with project according to X-definition
 			XDDocument pxd = PROJECTXDPOOL.createXDDocument();
 			Element project = pxd.xparse(src, null);
+			Element originalProject = (Element) project.cloneNode(true);
 			NodeList nl;
-
 			// set properties
 			nl = project.getElementsByTagName("Property");
 			Properties props = new Properties();
 			for (int i = 0; i < nl.getLength(); i++) {
-				Element e = (Element) nl.item(i);
+				e = (Element) nl.item(i);
 				props.setProperty(e.getAttribute("Name"),
 					e.getAttribute("Value"));
 			}
-
 			// get X-definition sources
 			nl = project.getElementsByTagName("XDefinition");
 			ArrayList<String> axdefs = new ArrayList<String>();
 			for (int i = 0; i < nl.getLength(); i++) {
-				Element e = (Element) nl.item(i);
+				e = (Element) nl.item(i);
 				String t = e.getTextContent().trim();
 				if (t != null && !t.isEmpty()) {
 					axdefs.add(t);
 				}
 			}
-
 			// compile X-definitions
 			XDBuilder xb = XDFactory.getXDBuilder(props);
 			xb.setSource(axdefs.toArray(new String[axdefs.size()]));
 			XDPool xp = xb.compileXD();
-
+			XDSourceInfo si = xp.getXDSourceInfo();
+			boolean changed = false;
+			for (String x: si.getMap().keySet()) {
+				XDSourceItem xsi = si.getMap().get(x);
+				changed |= xsi._changed;
+			}
+			if (changed) {
+				updateXdefList(project, si); //Update X-definitions elements
+			}
 			// execute project
 			nl = project.getElementsByTagName("Execute");
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element exe = (Element) nl.item(i);
+				// get name of X-definition
 				String xdName = exe.getAttribute("XDName").trim();
-				NodeList nl1 = exe.getElementsByTagName("Input");
-				String data = null;
-				if (nl1.getLength() == 1) {
-					Element e = (Element) nl1.item(0);
-					data = e.getTextContent().trim();
-					if ("true".equals(e.getAttribute("Edit"))) {
-						editXml(null, "Input data: ", data);
-					}
-				}
+				// get inpout data
+				e = KXmlUtils.firstElementChild(exe, "Input");
+				String data = getData(e, si);
+				// create XDDocument
 				XDDocument xd = xp.createXDDocument(xdName);
-				nl1 = KXmlUtils.getChildElements(exe, "Var");
+				NodeList nl1 = KXmlUtils.getChildElements(exe, "Var");
+				// set variables
 				for (int j = 0; j < nl1.getLength(); j++) {
-					Element e = (Element) nl1.item(j);
+					e = (Element) nl1.item(j);
 					String varName = e.getAttribute("Name");
 					String value = e.getTextContent();
 					xd.setVariable(varName, value);
 				}
-				nl1 = exe.getElementsByTagName("Context");
-				if (nl1.getLength() == 1) {
-					Element e = (Element) nl1.item(0);
-					String context = e.getTextContent().trim();
-					if (context != null && !context.isEmpty()) {
-						if ("true".equals(e.getAttribute("Edit"))) {
-							editXml(null, "Context data: ", context);
-						}
-					}
+				// set context
+				e = KXmlUtils.firstElementChild(exe,"Context");
+				String context = getData(e, si);
+				if (context != null) {
 					xd.setXDContext(context);
 				}
 				Element result;
 				ArrayReporter reporter = new ArrayReporter();
+				// set properties
+				xd.setProperties(props);
+				// set stdout
 				StringWriter strw = new StringWriter();
 				XDOutput stdout =
 					XDFactory.createXDOutput(new PrintWriter(strw), false);
-				xd.setProperties(props);
 				xd.setStdOut(stdout);
-				if ("construct".equals(exe.getAttribute("Mode"))) {
+				String mode = exe.getAttribute("Mode");
+				if ("construct".equals(mode)) { // run construction mode
 					String name;
 					String uri;
 					XMDefinition def =  xp.getXMDefinition();
@@ -334,56 +451,102 @@ public class GUIEditor extends GUIScreen {
 						}
 					}
 					result = xd.xcreate(new QName(uri, name), reporter);
-				} else {
+				} else {  // run validation mode
 					result = xd.xparse(data, reporter);
+				}
+				// set bounds of the window from previous steps
+				if (xd.getXDPool().getXDSourceInfo() != si) {
+					XDSourceInfo si1 = xd.getXDPool().getXDSourceInfo();
+					si1._xpos = si._xpos;
+					si1._ypos = si._ypos;
+					si1._width = si._width;
+					si1._height = si._height;
+					si = si1;
 				}
 				stdout.close();
 				if (reporter.errorWarnings()) {
-					File f = new File(data);
-					if (data == null || !f.isFile()
-						|| !f.exists() || !f.canRead()) {
-						displayString("ERROR", reporter.printToString());
-					} else {
-						editXml(reporter,
-							"ERROR"
-							+ (reporter.getErrorCount()
-								+ reporter.getWarningCount() > 1 ? "S" : "")
-							+ " IN: ",
-							data);
+					if (data != null && "validate".equals(mode)) {
+						// show result
+						File f = new File(data);
+						if (data.startsWith("<") && !f.isFile()) {
+							editXml(reporter, "ERROR:", data, si,
+								"Input data changed, run again?");
+						} else {
+							editXml(reporter, "ERROR:", f, si, null);
+						}
+						XDSourceItem x = si.getMap().values().iterator().next();
+						if (x._changed) {
+							data = x._source;
+							if (JOptionPane.showConfirmDialog(null,
+								"Input data changed, run again?",
+								null, JOptionPane.OK_CANCEL_OPTION) == 0) {
+								i--;
+								e = KXmlUtils.firstElementChild(exe, "Input");
+								e.setTextContent(data);
+								continue;
+							}
+						}
+					} else { // error, sixpaly result
+						displayString("ERROR:", reporter.printToString(), si);
 					}
-				} else {
-					nl1 = exe.getElementsByTagName("SaveResult");
-					if (nl1.getLength() >= 1) {
-						Element e = (Element) nl1.item(0);
-						String name = e.getAttribute("File").trim();
-						boolean indent =
-							"true".equals(e.getAttribute("Indent"));
-						String encoding = e.getAttribute("Encoding");
-						if (encoding.isEmpty()) {
-							encoding = "UTF-8";
-						}
-						try {
-							KXmlUtils.writeXml(
-								new File(name), encoding, result, indent, true);
-						} catch (Exception ex) {
-							throw new RuntimeException("Can't write result to "
-								+ name);
-						}
+				}
+				e = KXmlUtils.firstElementChild(exe, "SaveResult");
+				if (e != null) { // save result XML
+					String name = e.getAttribute("File").trim();
+					boolean indent =
+						"true".equals(e.getAttribute("Indent"));
+					String encoding = e.getAttribute("Encoding");
+					if (encoding.isEmpty()) {
+						encoding = "UTF-8";
+					}
+					try {
+						KXmlUtils.writeXml(
+							new File(name), encoding, result, indent, true);
+					} catch (Exception ex) {
+						//GUIEditor can't write XML data to file &{0}
+						JOptionPane.showMessageDialog(null,
+							Report.error(XDEF.XDEF851,name).toString());
 					}
 				}
 				if ("true".equals(exe.getAttribute("DisplayResult"))) {
-					String s = "";
+					// display result XML
+					String s = result == null
+						? "" : KXmlUtils.nodeToString(result, true);
 					if (!strw.toString().isEmpty()) {
-						s += "SYSTEM OUTPUT:\n" + strw.toString() + "\n"
-							+ "\n";
+						s += s.isEmpty() ? "" : "\n\n";
+						s += "=== System.out ===\n" + strw.toString();
 					}
-					displayString("Result of processing",
-						s + "RESULT XML ELEMENT:\n"
-							+ KXmlUtils.nodeToString(result, true));
+					if (!s.isEmpty()) {
+						displayString("Result of processing:", s, si);
+					}
+				}
+			}
+			ArrayReporter ar = new ArrayReporter();
+			KXmlUtils.compareElements(project, originalProject, true, ar);
+			if (!"OK".equals(ar.printToString())) {
+				// if something changed in the project ask to save it
+				JFileChooser jf = new JFileChooser();
+				jf.setDialogTitle(
+					"Project changed. Do you want to save the project?");
+				jf.setToolTipText("Save THE PROJECT to a file");
+				int retval = jf.showSaveDialog(null);
+				jf.setEnabled(false);
+				if (retval == JFileChooser.APPROVE_OPTION) {
+					try {
+						File f = jf.getSelectedFile();
+						KXmlUtils.writeXml(f, "UTF-8", project, true, true);
+					} catch (Exception ex) {
+						ex.printStackTrace(System.err);
+						JOptionPane.showMessageDialog(null,//Can't write
+							Report.error(SYS.SYS036,"Can't write data to file: "
+								+ jf.getSelectedFile() + "\n" + ex));
+					}
 				}
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException("Unexpected exception in GUIEditor", ex);
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,//Program exception &{0}
+				Report.error(SYS.SYS036, ex.toString()).toString());
 		}
 	}
 
@@ -418,9 +581,6 @@ public class GUIEditor extends GUIScreen {
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result XML data\n";
 		if (args == null || args.length == 0) {
-//			args = new String[] {"-p",
-//				"test/test/xdef/data/validate/project.xml"};
-//				"test/test/xdef/data/construct/project.xml"};
 			System.err.println("No parameters.\n" + info);
 			return;
 		}
@@ -477,7 +637,7 @@ public class GUIEditor extends GUIScreen {
 				continue;
 			}
 			if ("-editInput".equals(arg)) {
-				if (debug != null) {
+				if (editInput != null) {
 					System.err.println(
 						"Redefinition of parameter \"-editInput\"\n" + info);
 					return;
@@ -502,41 +662,75 @@ public class GUIEditor extends GUIScreen {
 		switch (param) {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
-					msg += "Missing X-definition\n";
+					xdefs.add(
+"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"HTML\">\n" +
+"&lt;HTML>\n" +
+"  &lt;HEAD>&lt;TITLE> create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
+"  &lt;BODY>\n" +
+"    &lt;h1>\n" +
+"      create \"Hello! Today is \" + now().toString(\"EEEE, d. MMMM GG yyyy, hh:mm a.\");\n" +
+"    &lt;/h1>\n" +
+"    &lt;h2>\n" +
+"      create \"This is an example of compose mode.\";\n" +
+"    &lt;/h2>\n" +
+"    &lt;i xd:script=\"*; create from('//i');\">\n" +
+"      create from(\"@x\");\n" +
+"      &lt;br/>\n" +
+"    &lt;/i>\n" +
+"  &lt;/BODY>\n" +
+"&lt;/HTML>\n" +
+"&lt;/xd:def>");
+					if (displayResult == null) {
+						displayResult = "true";
+					}
 				}
-				src += "  <Execute Mode = \"create\"";
+				if (dataPath == null) {
+					debug = editInput = displayResult = "true";
+					dataPath =
+"&lt;x>\n  &lt;i x=\"Hello\"/>\n  &lt;i x=\"World!\"/>\n&lt;/x>";
+				}
+				src += "  <Execute Mode = \"construct\"";
 				if (displayResult != null) {
 					src += " DisplayResult = \"true\"";
 				}
 				src += ">\n";
-				if (dataPath != null) {
-					src += "    <Context";
-					if (editInput!= null) {
-						src += " Edit='true'";
-					}
-					src += ">" + dataPath + "</Context>\n";
+				src += "    <Context";
+				if (editInput!= null) {
+					src += " Edit='true'";
 				}
+				src += ">" + dataPath + "</Context>\n";
 				src += "  </Execute>\n";
 				break;
 			}
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
-					msg += "Missing X-definition\n";
+					xdefs.add(
+"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"root\">\n" +
+"  &lt;root a=\"int();\" >\n" +
+"    &lt;b xd:script=\"*\" >\n" +
+"      ? string(2,3);\n" +
+"    &lt;/b>\n" +
+"  &lt;/root>\n" +
+"&lt;/xd:def>");
+					if (displayResult == null) {
+						displayResult = "true";
+					}
+				}
+				if (dataPath == null) {
+					dataPath =
+"&lt;root a=\"1\">\n  &lt;b>xyz&lt;/b>\n&lt;/root>";
+					debug = editInput = displayResult = "true";
 				}
 				src += "  <Execute Mode = \"validate\"";
 				if (displayResult != null) {
 					src += " DisplayResult = \"true\"";
 				}
 				src += ">\n";
-				if (dataPath == null) {
-					msg += "Missing input data\n\n";
-				} else {
-					src += "    <Input";
-					if (editInput!= null) {
-						src += " Edit='true'";
-					}
-					src += ">" + dataPath + "</Input>\n";
+				src += "    <Input";
+				if (editInput!= null) {
+					src += " Edit='true'";
 				}
+				src += ">" + dataPath + "</Input>\n";
 				src += "  </Execute>\n";
 				break;
 			}
@@ -545,6 +739,7 @@ public class GUIEditor extends GUIScreen {
 			System.err.println(msg +	"\n" + info);
 			return;
 		}
+		// XDefinitions
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}

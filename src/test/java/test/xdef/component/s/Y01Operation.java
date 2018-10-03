@@ -3,15 +3,15 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component.s;
 public class Y01Operation implements test.xdef.component.s.Y01Part,cz.syntea.xdef.component.XComponent{
+  public String getx() {return _x;}
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public String getx() {return _x;}
+  public void setx(String x) {_x = x;}
   public void setOne(String x) {_One = x;}
   public void setTwo(String x) {_Two = x;}
-  public void setx(String x) {_x = x;}
+  public String xposOfx(){return XD_XPos + "/@x";}
   public String xposOfOne(){return XD_XPos + "/@One";}
   public String xposOfTwo(){return XD_XPos + "/@Two";}
-  public String xposOfx(){return XD_XPos + "/@x";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -56,12 +56,12 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,cz.syntea.xde
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getx() != null)
+      el.setAttribute("x", getx());
     if (getOne() != null)
       el.setAttribute("One", getOne());
     if (getTwo() != null)
       el.setAttribute("Two", getTwo());
-    if (getx() != null)
-      el.setAttribute("x", getx());
     return el;
   }
   @Override
@@ -87,9 +87,9 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,cz.syntea.xde
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _x;
   private String _One;
   private String _Two;
-  private String _x;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Operation";

@@ -168,8 +168,6 @@ public class XBuilder implements XDBuilder {
 		result._compiler = null;
 		ReportWriter userReporter = result._reporter; // user's reporter
 		result._reporter = null;
-//		if (result._reporter == null
-//			|| result._reporter instanceof ArrayReporter) {
 		p.compileXPool(result);
 		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
 		byte displayMode = result.getDisplayMode();
@@ -196,19 +194,25 @@ public class XBuilder implements XDBuilder {
 			}
 			if (xeditor == null) {
 				// create editor with the default screen position.
-				xeditor = new ChkGUIDisplay(10, 10, 1200, 700);
+				xeditor = new ChkGUIDisplay(result.getXDSourceInfo());
 			}
 			while(!xeditor.setXEditor(result, ar)) {
+				XDSourceInfo is = result.getXDSourceInfo();
+				Map<String, XDSourceItem> map = is.getMap();
 				// compile again
-				Map<String, XDSourceItem> map = result._sourcesMap;
 				result = new XPool(result.getProperties(),null, externals);
-				// update source map (something might be changed)
+				XDSourceInfo is1 = result.getXDSourceInfo();
+				// update source info (something might be changed)
+				is1._xpos = is._xpos;
+				is1._ypos = is._ypos;
+				is1._width = is._width;
+				is1._height = is._height;
 				for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
 					String key = e.getKey();
 					XDSourceItem src = e.getValue();
 					if (src._source != null) {
 						result.setSource(src._source, key);
-						result._sourcesMap.put(key, src);
+						result.getXDSourceInfo().getMap().put(key, src);
 					} else if (src._url != null) {
 						result.setSource(src._url);
 					}
@@ -219,12 +223,6 @@ public class XBuilder implements XDBuilder {
 				ar = (ArrayReporter) p.getReportWriter();
 				result._compiler = null;
 			}
-//			if (userReporter == null && result.isChkWarnings()
-//				&& !reporter.errors()) {
-//				// because warnings were already dispalyed we clear reporter to
-//				// prevent to throw an exception if only warnings are reported.
-////				reporter.clear();
-//			}
 		}
 		if (userReporter == null) {
 			if (result.isChkWarnings()) {

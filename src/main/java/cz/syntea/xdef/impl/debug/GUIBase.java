@@ -1,6 +1,7 @@
 package cz.syntea.xdef.impl.debug;
 
 import cz.syntea.xdef.XDPool;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.impl.xml.XInputStream;
 import cz.syntea.xdef.sys.SUtils;
@@ -8,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,15 +63,8 @@ public class GUIBase {
 	public JFrame _frame;
 	/** Menu bar of frame. */
 	public JMenuBar _menuBar;
-	/** Horizontal position. */
-	int _xpos;
-	/** Vertical position. */
-	int _ypos;
-	/** Width of frame. */
-	public int _width;
-	/** Height of frame. */
-	public int _height;
-	// Source window
+	/** Source info (source map and window rectangle parameters). */
+	public XDSourceInfo _si;
 	/** Source pane. */
 	JPanel _sourcePane;
 	/** Source window. */
@@ -85,10 +78,12 @@ public class GUIBase {
 
 	// Informaton text window
 	/** Information window. */
-	JTextArea _infoArea;
+	public JTextArea _infoArea;
 
 	/** Actual source item. */
 	public XDSourceItem _sourceItem;
+	/** Window name. */
+	public String _windowName;
 	/** Name of actual source item. */
 	public String _sourceID;
 	/** Array of position information.*/
@@ -104,12 +99,9 @@ public class GUIBase {
 	public GUIBase() {}
 
 	/** Initialize GUI with the screen position.
-	 * @param x X position of the left corner of the screen.
-	 * @param y Y position of the left corner of the screen.
-	 * @param width width of the screen.
-	 * @param height height of the screen.
+	 * @param si source info.
 	 */
-	public final void openGUI(int x, int y, int width, int height) {
+	public final void openGUI(final XDSourceInfo si) {
 		// GUI fonts, colors and styles
 		FONT_TEXT = new Font("monospaced", Font.BOLD, 14);
 		FONT_POSITIONINFO = new Font("monospaced", Font.BOLD, 15)
@@ -133,15 +125,12 @@ public class GUIBase {
 		StyleConstants.setBackground(STYLE_WHITE, COLOR_SOURCE);
 
 		// GUI variables
-		_xpos = x; // default x position of frame
-		_ypos = y; // default y position of frame
-//		_width = 1400; //default width of frame
-//		_height = 1000; //default height of frame
-		_width = width; //default width of frame
-		_height = height; //default height of frame
-//		_width = 870; //default width of frame
-//		_height = 600; //default height of frame
+		si._xpos = si._xpos < 0 ? 10 : si._xpos; // x position of frame
+		si._ypos = si._ypos < 0 ? 10 : si._ypos; // y position of frame
+		si._width = si._width < 0 ? 1200 : si._width;//width
+		si._height = si._height < 0 ? 700 : si._height;//height
 		_positions = new SourcePos[0];
+		_si = si;
 
 		// GUI SWING components
 		_frame = new JFrame();
@@ -160,7 +149,6 @@ public class GUIBase {
 		_lineNumberArea.setFont(FONT_TEXT);
 		_sourcePositionInfo.setForeground(COLOR_POSITION);
 		_sourcePositionInfo.setFont(FONT_POSITIONINFO);
-//		_sourcePositionInfo.setToolTipText("Cursor position in source window.");
 		_sourceArea.setFont(FONT_TEXT);
 		_sourceArea.addCaretListener(new CaretListener() {
 			@Override
@@ -183,8 +171,26 @@ public class GUIBase {
 		jsp = new JScrollPane();
 		jsp.getViewport().add(_infoArea);
 		_frame.add(jsp, BorderLayout.AFTER_LAST_LINE);
+//		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
+//			@Override
+//			public void componentMoved(java.awt.event.ComponentEvent evt){
+//				Rectangle r = _frame.getBounds();
+//				_si._xpos = r.x;
+//				_si._ypos = r.y;
+//				_si._width = r.width;
+//				_si._height = r.height;
+//			}
+//			@Override
+//			public void componentResized(java.awt.event.ComponentEvent evt){
+//				Rectangle r = _frame.getBounds();
+//				_si._xpos = r.x;
+//				_si._ypos = r.y;
+//				_si._width = r.width;
+//				_si._height = r.height;
+//			}
+//		});
+		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
 /* *
-		_frame.setBounds(_xpos, _ypos, _width, _height);
 		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 			@Override
 			public void componentResized(java.awt.event.ComponentEvent evt) {
@@ -263,22 +269,32 @@ public class GUIBase {
 		}
 	}
 
-	/** Close GUI: dispose window and remove allocated objects.
-	 * @param ask message to be displayed or null.
+	/** Update actual source item.
+	 * @return true if source item was updated.
 	 */
-	public void closeGUI(String ask) {
+	public final boolean updateSourceItem() {
+		String s;
+		if (_sourceArea == null || _sourceItem == null ||
+			(s = _sourceArea.getText())==null || s.equals(_sourceItem._source)){
+			return false;
+		}
+		_sourceItem._pos = _sourceArea.getCaretPosition();
+		_sourceItem._changed = true;
+		_sourceItem._source = s;
+		_sourceItem._pos = _sourceArea.getCaretPosition();
+		return true;
+	}
+
+	/** Close GUI: dispose window and remove allocated objects. */
+	public void closeGUI() {
 		if (_frame != null) {
 			_frame.setVisible(false);
-			Rectangle r = _frame.getBounds();
-			_xpos = r.x;
-			_ypos = r.y;
-			_width = r.width;
-			_height = r.height;
+			_si._xpos = _frame.getX();
+			_si._ypos = _frame.getY();
+			_si._width = _frame.getWidth();
+			_si._height = _frame.getHeight();
 			for (Component component: _frame.getComponents()) {
 				component.setEnabled(false);
-			}
-			if (ask != null) {
-				JOptionPane.showMessageDialog(_frame, ask);
 			}
 			_frame.setEnabled(false);
 			_frame.removeAll();
@@ -295,6 +311,7 @@ public class GUIBase {
 			_sourceItem = null;
 			_xdpool = null;
 			_sourceID = null;
+			_windowName = null;
 		}
 	}
 
@@ -309,7 +326,7 @@ public class GUIBase {
 		if (spos._line == 1) {
 			textPos = (int) spos._column - 1;
 		} else {
-			String source =_sourceArea.getText();
+			String source = _sourceArea.getText();
 			textPos = -1;
 			int n = 1;
 			int i = 0;
@@ -328,7 +345,7 @@ public class GUIBase {
 	}
 
 	/** Set line numbers to line number area.*/
-	void setLineNumberArea() {
+	public void setLineNumberArea() {
 		String t = _sourceArea.getText();
 		_lineNumberArea.setFocusable(false);
 		_lineNumberArea.setVisible(false);
@@ -337,18 +354,18 @@ public class GUIBase {
 		StyledDocument sdoc = _lineNumberArea.getStyledDocument();
 		for (int n = 1, pos = 0, offset = 0; pos >= 0;
 			pos = t.indexOf('\n', pos+1), n++) {
-			Style stype = STYLE_NORMAL;
+			Style style = STYLE_NORMAL;
 			// mark line (errors, breakpoints etc)
 			for (int j = 0; j < _positions.length; j++) {
-				if (_sourceID.equals(_positions[j]._sysId) &&
-					_positions[j]._line == n) {
-					stype = STYLE_ERROR;
+				SourcePos spos = _positions[j];
+				if (_sourceID.equals(spos._sysId) && spos._line == n) {
+					style = STYLE_ERROR;
 					break;
 				}
 			}
 			String s = String.format("%3d\n", n);
 			try {
-				sdoc.insertString(offset, s, stype);
+				sdoc.insertString(offset, s, style);
 			} catch (Exception ex) {ex.printStackTrace(System.err);}
 			offset += s.length();
 		}
@@ -361,14 +378,18 @@ public class GUIBase {
 
 	/** Wait event finished. */
 	public final void waitFrame() {
-		synchronized(_waitobj) {try {_waitobj.wait();} catch (Exception ex) {}}
+		synchronized(_waitobj) {try {
+			_waitobj.wait();
+			_si._xpos = _frame.getX();
+			_si._ypos = _frame.getY();
+			_si._width = _frame.getWidth();
+			_si._height = _frame.getHeight();
+		} catch (Exception ex) {}}
 	}
 
 	/** Notify event action performed. */
 	public final void notifyFrame() {
-		synchronized(_waitobj) {
-			_waitobj.notifyAll();
-		}
+		synchronized(_waitobj) {_waitobj.notifyAll();}
 	}
 
 	/** Find position in the array of positions.
@@ -471,17 +492,17 @@ public class GUIBase {
 		 */
 		SourcePos(String source, int pos) {
 			_pos = pos;
-			int newi = source.indexOf('\n');
-			int oldi = -1;
+			int newpos = source.indexOf('\n');
+			int oldpos = -1;
 			int line = 1;
-			while (newi <= pos) {
-				newi = source.indexOf('\n', oldi + 1);
-				if (newi < 0 || pos <= newi) break;
-				oldi = newi;
+			while (newpos <= pos) {
+				newpos = source.indexOf('\n', oldpos + 1);
+				if (newpos < 0 || pos <= newpos) break;
+				oldpos = newpos;
 				line++;
 			}
 			_line = line;
-			_column = pos - oldi;
+			_column = pos - oldpos;
 		}
 
 		/** Create object and compute position in source text
@@ -513,13 +534,15 @@ public class GUIBase {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null || !(obj instanceof SourcePos)) return false;
+			if (obj == null || !(obj instanceof SourcePos)) {
+				return false;
+			}
 			SourcePos x = (SourcePos) obj;
-			if (_sysId == null)
-				return x._sysId == null
-					&& _line == x._line && _column == x._column;
+			if (_sysId == null) {
+				return x._sysId==null && _line==x._line && _column==x._column;
+			}
 			return _sysId.equals(x._sysId)
-				&& _line == x._line && _column == x._column;
+				&& _line==x._line && _column==x._column;
 		}
 
 		@Override
@@ -529,8 +552,9 @@ public class GUIBase {
 		 */
 		public int compareTo(SourcePos x) {
 			if (_sysId.equals(x._sysId)) {
-				if (_pos >= 0 && x._pos >= 0)
+				if (_pos >= 0 && x._pos >= 0) {
 					return (_pos == x._pos) ? 0	: (_pos < x._pos) ? -1 : 1;
+				}
 				if (_line < x._line) return -1;
 				if (_line > x._line) return 1;
 				if (_column > x._column) return 1;

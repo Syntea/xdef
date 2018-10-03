@@ -36,6 +36,7 @@ public final class TestXComponents extends XDTester {
 			}
 		}
 	}
+
 	private static String checkXPos(final XComponent xc) {
 		StringBuilder sb = new StringBuilder();
 		genXPosList(xc,sb);
@@ -58,21 +59,6 @@ public final class TestXComponents extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		final String dataDir = getDataDir() + "test/";
 		try {
-//			String xdef =
-//"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
-//"  <A id = \"? int\"\n"+
-//"    num = \"? float\"\n"+
-//"    date = \"? xdatetime('yyyy-MM-dd')\"\n"+
-//"    time = \"? xdatetime('HH:mm:ss')\"\n"+
-//"    name = \"? string\"/>\n"+
-//"</xd:def>";
-//			XDPool xp = compile(xdef);
-//			xml = "<A id='99' date='2013-09-01' time='11:21:31' name='John'/>";
-//			q = parseXC(xp, "", xml, TestXComponents_B.class,reporter);
-//			assertEq("", checkXPos(q));
-//			assertEq("99", ((TestXComponents_B) q)._sId);
-//			assertNoErrorwarnings(reporter);
-//			assertEq(xml, q.toXml());
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
 			parseXC(XP, "A", xml, null, reporter);
 			assertTrue(reporter.errors());

@@ -268,7 +268,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		} else {
 			_props.setProperty(key, value);
 		}
-		if (key.startsWith(SManager.XDPROPERTY_MSGTABLE)
+		if (key.startsWith(SManager.XDPROPERTY_MESSAGES)
 			|| key.startsWith(SManager.XDPROPERTY_MSGLANGUAGE)) {
 			SManager.setProperty(key, value);
 		}

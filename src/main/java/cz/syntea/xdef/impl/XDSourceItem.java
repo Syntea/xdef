@@ -52,12 +52,21 @@ public final class XDSourceItem {
 		}
 	}
 
+	/** Write this XDSourceItem object.
+	 * @param xw Writer where to write
+	 * @throws IOException if an error occurs.
+	 */
 	public final void writeXDSourceItem(final XDWriter xw) throws IOException {
 		xw.writeString(_url == null ? null : _url.toExternalForm());
 		xw.writeString(_encoding);
 		xw.writeString(_source);
 	}
 
+	/** Read XDSourceItem object from XDReader.
+	 * @param xr XDReader containing XDSourceItem object
+	 * @return XDSourceItem object
+	 * @throws IOException if an error occurs.
+	 */
 	public final static XDSourceItem readXDSourceItem(final XDReader xr)
 		throws IOException{
 		XDSourceItem result = new XDSourceItem();

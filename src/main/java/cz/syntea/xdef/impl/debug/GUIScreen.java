@@ -1,5 +1,6 @@
 package cz.syntea.xdef.impl.debug;
 
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.impl.XDSourceItem;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
@@ -36,13 +37,10 @@ public class GUIScreen extends GUIBase {
 	public boolean _actionFinished = true;
 
 	/** Create instance of the screen to display the sources of X-definitions.
-	 * @param x X position of the left corner of the screen.
-	 * @param y Y position of the left corner of the screen.
-	 * @param width width of the screen.
-	 * @param height height of the screen.
+	 * @param si source info.
 	 */
-	public GUIScreen(int x, int y, int width, int height) {
-		openGUI(x, y, width, height);
+	public GUIScreen(final XDSourceInfo si) {
+		openGUI(si);
 		_frame.addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent e) {}
@@ -174,7 +172,6 @@ public class GUIScreen extends GUIBase {
 			if (maxlen >= 110) { //too long line
 				errRows++; // add line for horizontal scroll bar
 			}
-
 			if (errRows == 1) {
 				errRows = 2;
 			}
@@ -199,7 +196,7 @@ public class GUIScreen extends GUIBase {
 				}});
 		} else {
 			_positions = new SourcePos[0];
-			_infoArea.setText("No errors found");
+			_infoArea.setText("No errors");
 			errRows = 1;
 		}
 		_infoArea.setRows(errRows);
@@ -275,7 +272,7 @@ public class GUIScreen extends GUIBase {
 			public void actionPerformed(ActionEvent evt) {
 				updateSourceItem();
 				if (_sourceItem!=null
-					&& _sourceItem._changed&&_sourceItem._url==null) {
+					&& _sourceItem._changed && _sourceItem._url==null) {
 					_sourceItem._source = _sourceArea.getText();
 					_sourceItem._saved = true;
 				}
@@ -293,22 +290,6 @@ public class GUIScreen extends GUIBase {
 			KeyStroke.getKeyStroke("control S"), "Save");
 	}
 
-	/** Update actual source item.
-	 * @return true if source item was updated.
-	 */
-	public final boolean updateSourceItem() {
-		String s;
-		if (_sourceArea == null || _sourceItem == null ||
-			(s = _sourceArea.getText())==null || s.equals(_sourceItem._source)){
-			return false;
-		}
-		_sourceItem._pos = _sourceArea.getCaretPosition();
-		_sourceItem._changed = true;
-		_sourceItem._source = s;
-		_sourceItem._pos = _sourceArea.getCaretPosition();
-		return true;
-	}
-
 	/** Set source area (from error information positions array).
 	 * @param index the index of _sourceNames array.
 	 */
@@ -320,9 +301,10 @@ public class GUIScreen extends GUIBase {
 	 * @param sourceID name of source item.
 	 */
 	public final void setSource(String sourceID) {
-		if (sourceID == null) {
+		if (sourceID == null || sourceID.isEmpty()) {
 			_sourceID = null;
-			_frame.setTitle("UNKNOWN SOURCE");
+			_frame.setTitle((_windowName != null ? _windowName + " " : "")
+				+ "UNKNOWN SOURCE");
 			_sourceArea.setText(null);
 			_sourceArea.setEditable(false);
 			_undo.discardAllEdits();
@@ -354,14 +336,16 @@ public class GUIScreen extends GUIBase {
 				_sourceItem._pos = _sourceArea.getCaret().getDot();
 				_sourceItem._active = false;
 			}
-			_frame.setTitle(sourceID);
+			_frame.setTitle((_windowName != null
+				? _windowName + " " : "") + sourceID);
 			_undo.discardAllEdits();
 			_undo.setLimit(UNDO_LIMIT);
 			_sourceArea.setText(newSrc._source);
-			_sourceArea.setEditable(true);
 			setLineNumberArea();
 			_sourceArea.setCaretPosition(newSrc._pos >= 0 ? newSrc._pos : 0);
 			_sourceArea.requestFocus();
+			_undo.die();
+			_sourceArea.setEditable(true);
 			newSrc._active = true;
 		}
 		_sourceItem = newSrc;
@@ -392,11 +376,9 @@ public class GUIScreen extends GUIBase {
 		}
 	}
 
-	/** Close GUI: dispose window and remove allocated objects.
-	 * @param ask message to be displayed or null.
-	 */
-	public void closeEdit(String ask) {
-		closeGUI(ask);
+	/** Close GUI: dispose window and remove allocated objects. */
+	public void closeEdit() {
+		closeGUI();
 		_undo = null;
 		_selectSource = _removeSource = null;
 		_positions = null;

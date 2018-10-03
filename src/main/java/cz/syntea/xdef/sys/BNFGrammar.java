@@ -162,14 +162,10 @@ public final class BNFGrammar {
 	 */
 	public final boolean isEOS() {return _p.eos();}
 
-	/** Get array of parsed objects and clear it.
-	 * @return o array of parsed objects or <tt>null</tt>.
+	/** Get array with parsed objects.
+	 * @return array with parsed objects or <tt>null</tt>.
 	 */
-	public final Object[] getAndClearParsedObjects() {
-		Object[] result = _parsedObjects;
-		_parsedObjects = null;
-		return result;
-	}
+	public final Object[] getParsedObjects() {return  _parsedObjects;}
 
 	/** Clear array of parsed objects. */
 	public final void clearParsedObjects() {_parsedObjects = null;}
@@ -218,6 +214,7 @@ public final class BNFGrammar {
 	 */
 	public final boolean parse(final String name) {
 		_actRule = _rootRule = (BNFRuleObj) getRule(name);
+		_parsedObjects = null;
 		return parse();
 	}
 
@@ -682,6 +679,12 @@ public final class BNFGrammar {
 				throw new StackOverflowError(sb.toString());
 			}
 		}
+
+		@Override
+		/** Get array of objects created by this rule.
+		 * @return array of objects created by this rule or null.
+		 */
+		public Object[] getParsedObjects() {return _parsedObjects;}
 
 		@Override
 		/** Parse string assigned to SParser by this rule.

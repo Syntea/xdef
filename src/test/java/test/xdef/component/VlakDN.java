@@ -3,17 +3,17 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class VlakDN implements cz.syntea.xdef.component.XComponent{
-  public String getDruhSoupravy() {return _DruhSoupravy;}
   public String getOznSegmentu() {return _OznSegmentu;}
-  public String getSpoj() {return _Spoj;}
   public String getTypSoupravy() {return _TypSoupravy;}
+  public String getSpoj() {return _Spoj;}
+  public String getDruhSoupravy() {return _DruhSoupravy;}
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VlakDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setDruhSoupravy(String x) {_DruhSoupravy = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
-  public void setSpoj(String x) {_Spoj = x;}
   public void setTypSoupravy(String x) {_TypSoupravy = x;}
+  public void setSpoj(String x) {_Spoj = x;}
+  public void setDruhSoupravy(String x) {_DruhSoupravy = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VlakDN/$mixed/Skoda");
@@ -29,10 +29,10 @@ public class VlakDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vlastnik", null, "SouborD1A#VlakDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
-  public String xposOfDruhSoupravy(){return XD_XPos + "/@DruhSoupravy";}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfSpoj(){return XD_XPos + "/@Spoj";}
   public String xposOfTypSoupravy(){return XD_XPos + "/@TypSoupravy";}
+  public String xposOfSpoj(){return XD_XPos + "/@Spoj";}
+  public String xposOfDruhSoupravy(){return XD_XPos + "/@DruhSoupravy";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -77,14 +77,14 @@ public class VlakDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getDruhSoupravy() != null)
-      el.setAttribute("DruhSoupravy", getDruhSoupravy());
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
-    if (getSpoj() != null)
-      el.setAttribute("Spoj", getSpoj());
     if (getTypSoupravy() != null)
       el.setAttribute("TypSoupravy", getTypSoupravy());
+    if (getSpoj() != null)
+      el.setAttribute("Spoj", getSpoj());
+    if (getDruhSoupravy() != null)
+      el.setAttribute("DruhSoupravy", getDruhSoupravy());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -119,10 +119,10 @@ public class VlakDN implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _DruhSoupravy;
   private String _OznSegmentu;
-  private String _Spoj;
   private String _TypSoupravy;
+  private String _Spoj;
+  private String _DruhSoupravy;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private VlakDN.Vlastnik _Vlastnik;

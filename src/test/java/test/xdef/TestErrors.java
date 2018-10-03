@@ -12,7 +12,6 @@ import java.io.CharArrayWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 import cz.syntea.xdef.sys.ReportReader;
-import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.sys.SUtils;
 
 /** Test of reporting of script errors.
@@ -126,7 +125,6 @@ public final class TestErrors extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Report rep;
 		Report report;
-		ReportWriter rw;
 		StringWriter strw;
 		CharArrayWriter caw;
 		try {// check of error reporting - script in value is not valid
@@ -138,7 +136,6 @@ public final class TestErrors extends XDTester {
 " <SouborY1A\n"+											//03
 "    Davka=\"This is not script!\"\n"+						//04 <=
 "    ZeDne=\"required\" > \n"+								//05
-//"\n"+														//06
 " This is not script!\n"+									//06 <=
 " </SouborY1A>\n"+											//07
 "</xd:def>\n";												//08
@@ -563,8 +560,8 @@ public final class TestErrors extends XDTester {
 			}
 			reporter.reset();
 			assertEq("",chkReport(reporter, "XDEF809", "10", "39", null));
-			assertEq("",chkReport(reporter, "XDEF814", "12", "39", null));
 			assertEq("",chkReport(reporter, "XDEF809", "11", "39", null));
+			assertEq("",chkReport(reporter, "XDEF814", "12", "39", null));
 			assertEq("",chkReport(reporter, "XDEF526", "18", "54", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 			xdef = //check if error is only one

@@ -3,17 +3,17 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
+  public String getOznSegmentu() {return _OznSegmentu;}
+  public String getTypUcastnika() {return _TypUcastnika;}
+  public Integer getPraxeRizeni() {return _PraxeRizeni;}
   public String getAlkoholDech() {return _AlkoholDech;}
   public String getAlkoholKrev() {return _AlkoholKrev;}
-  public String getOznSegmentu() {return _OznSegmentu;}
-  public String getPachatel() {return _Pachatel;}
+  public String getZraneni() {return _Zraneni;}
+  public String getZdravPojistovna() {return _ZdravPojistovna;}
   public Integer getPokutaKc() {return _PokutaKc;}
   public String getPokutaZapl() {return _PokutaZapl;}
+  public String getPachatel() {return _Pachatel;}
   public String getPoskozeny() {return _Poskozeny;}
-  public Integer getPraxeRizeni() {return _PraxeRizeni;}
-  public String getTypUcastnika() {return _TypUcastnika;}
-  public String getZdravPojistovna() {return _ZdravPojistovna;}
-  public String getZraneni() {return _Zraneni;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public Z4 getOsoba() {return _Osoba;}
   public Z5 getFirma() {return _Firma;}
@@ -23,17 +23,17 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
   public UcastnikDN.PoruseniZakTrest getPoruseniZakTrest() {return _PoruseniZakTrest;}
   public UcastnikDN.PoruseniZakOst getPoruseniZakOst() {return _PoruseniZakOst;}
   public UcastnikDN.Vazba getVazba() {return _Vazba;}
+  public void setOznSegmentu(String x) {_OznSegmentu = x;}
+  public void setTypUcastnika(String x) {_TypUcastnika = x;}
+  public void setPraxeRizeni(Integer x) {_PraxeRizeni = x;}
   public void setAlkoholDech(String x) {_AlkoholDech = x;}
   public void setAlkoholKrev(String x) {_AlkoholKrev = x;}
-  public void setOznSegmentu(String x) {_OznSegmentu = x;}
-  public void setPachatel(String x) {_Pachatel = x;}
+  public void setZraneni(String x) {_Zraneni = x;}
+  public void setZdravPojistovna(String x) {_ZdravPojistovna = x;}
   public void setPokutaKc(Integer x) {_PokutaKc = x;}
   public void setPokutaZapl(String x) {_PokutaZapl = x;}
+  public void setPachatel(String x) {_Pachatel = x;}
   public void setPoskozeny(String x) {_Poskozeny = x;}
-  public void setPraxeRizeni(Integer x) {_PraxeRizeni = x;}
-  public void setTypUcastnika(String x) {_TypUcastnika = x;}
-  public void setZdravPojistovna(String x) {_ZdravPojistovna = x;}
-  public void setZraneni(String x) {_Zraneni = x;}
   public void setJinaSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#UcastnikDN/$mixed/JinaSkoda");
@@ -81,17 +81,17 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vazba", null, "SouborD1A#UcastnikDN/$mixed/Vazba");
     _Vazba = x;
   }
+  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
+  public String xposOfTypUcastnika(){return XD_XPos + "/@TypUcastnika";}
+  public String xposOfPraxeRizeni(){return XD_XPos + "/@PraxeRizeni";}
   public String xposOfAlkoholDech(){return XD_XPos + "/@AlkoholDech";}
   public String xposOfAlkoholKrev(){return XD_XPos + "/@AlkoholKrev";}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfPachatel(){return XD_XPos + "/@Pachatel";}
+  public String xposOfZraneni(){return XD_XPos + "/@Zraneni";}
+  public String xposOfZdravPojistovna(){return XD_XPos + "/@ZdravPojistovna";}
   public String xposOfPokutaKc(){return XD_XPos + "/@PokutaKc";}
   public String xposOfPokutaZapl(){return XD_XPos + "/@PokutaZapl";}
+  public String xposOfPachatel(){return XD_XPos + "/@Pachatel";}
   public String xposOfPoskozeny(){return XD_XPos + "/@Poskozeny";}
-  public String xposOfPraxeRizeni(){return XD_XPos + "/@PraxeRizeni";}
-  public String xposOfTypUcastnika(){return XD_XPos + "/@TypUcastnika";}
-  public String xposOfZdravPojistovna(){return XD_XPos + "/@ZdravPojistovna";}
-  public String xposOfZraneni(){return XD_XPos + "/@Zraneni";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -136,28 +136,28 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getOznSegmentu() != null)
+      el.setAttribute("OznSegmentu", getOznSegmentu());
+    if (getTypUcastnika() != null)
+      el.setAttribute("TypUcastnika", getTypUcastnika());
+    if (getPraxeRizeni() != null)
+      el.setAttribute("PraxeRizeni", String.valueOf(getPraxeRizeni()));
     if (getAlkoholDech() != null)
       el.setAttribute("AlkoholDech", getAlkoholDech());
     if (getAlkoholKrev() != null)
       el.setAttribute("AlkoholKrev", getAlkoholKrev());
-    if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
-    if (getPachatel() != null)
-      el.setAttribute("Pachatel", getPachatel());
+    if (getZraneni() != null)
+      el.setAttribute("Zraneni", getZraneni());
+    if (getZdravPojistovna() != null)
+      el.setAttribute("ZdravPojistovna", getZdravPojistovna());
     if (getPokutaKc() != null)
       el.setAttribute("PokutaKc", String.valueOf(getPokutaKc()));
     if (getPokutaZapl() != null)
       el.setAttribute("PokutaZapl", getPokutaZapl());
+    if (getPachatel() != null)
+      el.setAttribute("Pachatel", getPachatel());
     if (getPoskozeny() != null)
       el.setAttribute("Poskozeny", getPoskozeny());
-    if (getPraxeRizeni() != null)
-      el.setAttribute("PraxeRizeni", String.valueOf(getPraxeRizeni()));
-    if (getTypUcastnika() != null)
-      el.setAttribute("TypUcastnika", getTypUcastnika());
-    if (getZdravPojistovna() != null)
-      el.setAttribute("ZdravPojistovna", getZdravPojistovna());
-    if (getZraneni() != null)
-      el.setAttribute("Zraneni", getZraneni());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -198,17 +198,17 @@ public class UcastnikDN implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _OznSegmentu;
+  private String _TypUcastnika;
+  private Integer _PraxeRizeni;
   private String _AlkoholDech;
   private String _AlkoholKrev;
-  private String _OznSegmentu;
-  private String _Pachatel;
+  private String _Zraneni;
+  private String _ZdravPojistovna;
   private Integer _PokutaKc;
   private String _PokutaZapl;
+  private String _Pachatel;
   private String _Poskozeny;
-  private Integer _PraxeRizeni;
-  private String _TypUcastnika;
-  private String _ZdravPojistovna;
-  private String _Zraneni;
   private Z3 _JinaSkoda;
   private Z4 _Osoba;
   private Z5 _Firma;

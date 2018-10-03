@@ -252,14 +252,14 @@ public static class s$Header implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class b$User implements cz.syntea.xdef.component.XComponent{
-  public String getIdentUser() {return _IdentUser;}
   public String gets$understand() {return _s$understand;}
+  public String getIdentUser() {return _IdentUser;}
   public String getxmlns$s() {return "soap";}
   public String getxmlns$b() {return "request";}
-  public void setIdentUser(String x) {_IdentUser = x;}
   public void sets$understand(String x) {_s$understand = x;}
-  public String xposOfIdentUser(){return XD_XPos + "/@IdentUser";}
+  public void setIdentUser(String x) {_IdentUser = x;}
   public String xposOfs$understand(){return XD_XPos + "/@s$understand";}
+  public String xposOfIdentUser(){return XD_XPos + "/@IdentUser";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -303,10 +303,10 @@ public static class b$User implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    if (getIdentUser() != null)
-      el.setAttribute("IdentUser", getIdentUser());
     if (gets$understand() != null)
       el.setAttributeNS("soap", "s:understand", gets$understand());
+    if (getIdentUser() != null)
+      el.setAttribute("IdentUser", getIdentUser());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -336,8 +336,8 @@ public static class b$User implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _IdentUser;
   private String _s$understand;
+  private String _IdentUser;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:User";
@@ -365,20 +365,20 @@ public static class b$User implements cz.syntea.xdef.component.XComponent{
 // </editor-fold>
 }
 public static class b$Request implements cz.syntea.xdef.component.XComponent{
-  public String getIdentZpravy() {return _IdentZpravy;}
-  public String getMode() {return _Mode;}
-  public Integer getReqMsgId() {return _ReqMsgId;}
   public String gets$understand() {return _s$understand;}
+  public String getIdentZpravy() {return _IdentZpravy;}
+  public Integer getReqMsgId() {return _ReqMsgId;}
+  public String getMode() {return _Mode;}
   public String getxmlns$s() {return "soap";}
   public String getxmlns$b() {return "request";}
-  public void setIdentZpravy(String x) {_IdentZpravy = x;}
-  public void setMode(String x) {_Mode = x;}
-  public void setReqMsgId(Integer x) {_ReqMsgId = x;}
   public void sets$understand(String x) {_s$understand = x;}
-  public String xposOfIdentZpravy(){return XD_XPos + "/@IdentZpravy";}
-  public String xposOfMode(){return XD_XPos + "/@Mode";}
-  public String xposOfReqMsgId(){return XD_XPos + "/@ReqMsgId";}
+  public void setIdentZpravy(String x) {_IdentZpravy = x;}
+  public void setReqMsgId(Integer x) {_ReqMsgId = x;}
+  public void setMode(String x) {_Mode = x;}
   public String xposOfs$understand(){return XD_XPos + "/@s$understand";}
+  public String xposOfIdentZpravy(){return XD_XPos + "/@IdentZpravy";}
+  public String xposOfReqMsgId(){return XD_XPos + "/@ReqMsgId";}
+  public String xposOfMode(){return XD_XPos + "/@Mode";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -422,14 +422,14 @@ public static class b$Request implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    if (getIdentZpravy() != null)
-      el.setAttribute("IdentZpravy", getIdentZpravy());
-    if (getMode() != null)
-      el.setAttribute("Mode", getMode());
-    if (getReqMsgId() != null)
-      el.setAttribute("ReqMsgId", String.valueOf(getReqMsgId()));
     if (gets$understand() != null)
       el.setAttributeNS("soap", "s:understand", gets$understand());
+    if (getIdentZpravy() != null)
+      el.setAttribute("IdentZpravy", getIdentZpravy());
+    if (getReqMsgId() != null)
+      el.setAttribute("ReqMsgId", String.valueOf(getReqMsgId()));
+    if (getMode() != null)
+      el.setAttribute("Mode", getMode());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -459,10 +459,10 @@ public static class b$Request implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _IdentZpravy;
-  private String _Mode;
-  private Integer _ReqMsgId;
   private String _s$understand;
+  private String _IdentZpravy;
+  private Integer _ReqMsgId;
+  private String _Mode;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:Request";

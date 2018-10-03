@@ -9,7 +9,6 @@ import cz.syntea.xdef.XDOutput;
 import cz.syntea.xdef.XDPool;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Properties;
 import org.w3c.dom.Element;
 
 /** Provides testing of XDef debug mode and editing in display mode.
@@ -33,20 +32,16 @@ public final class TestDebugGUI extends XDTester {
 
 		// set external editor
 //		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, "xdplugin.XdPlugin");
-
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
-			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
-
-//		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
-//			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
-//		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, // xdef editor
-//			"cz.syntea.xdef.impl.debug.ChkGUIDisplay"); // class name
-//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef.display
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
+			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
+		setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef.debug
+//			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
+			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef.warnings
+//			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
+			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
 //		try {
 //			// XScript breakpoints
 //			xdef =
@@ -140,18 +135,6 @@ public final class TestDebugGUI extends XDTester {
 "</a>\n"+
 "</xd:def>";
 			xml = "<a a='1'> <b/></a>";
-			Properties props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef.display
-//				XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
-				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
-//				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
-			props.setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef.debug
-//				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
-				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
-			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef.warnings
-				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
-//				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
-
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			baos = new ByteArrayOutputStream();

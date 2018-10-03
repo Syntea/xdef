@@ -163,6 +163,20 @@ public abstract class STester {
 	 */
 	public final String getTempDir() {
 		if (_homeDir != null) {
+//			try {
+//				File f = File.createTempFile("temp", "");
+//				_tempDir = f.getParentFile().getAbsolutePath().replace('\\', '/');
+//				if (!_tempDir.endsWith("/")) {
+//					_tempDir += '/';
+//				}
+//				f = new File(_tempDir +"a.tmp");
+//				FileOutputStream fs = new FileOutputStream(f);
+//				fs.write('x');
+//				fs.close();				
+//				return _tempDir;
+//			} catch (Exception ex) {
+//				ex.printStackTrace();
+//			}
 			_tempDir = _homeDir + "temp/";
 			File tempDir = new File(_tempDir);
 			if (!tempDir.exists()) {
@@ -173,8 +187,8 @@ public abstract class STester {
 			}
 			return _tempDir;
 		} else {
-			  throw new RuntimeException(
-				  "Home directory doesn't exist or isn't accessible");
+			throw new RuntimeException(
+				"Home directory doesn't exist or isn't accessible");
 		}
 	}
 
@@ -259,7 +273,7 @@ public abstract class STester {
 	 * @param info the string with result information.
 	 */
 	public final void setResultInfo(final String info) {
-		if (info != null && !info.isEmpty())
+		if (info != null && !info.isEmpty()) {
 			if (_resultInfo == null || _resultInfo.isEmpty()) {
 				_resultInfo = info;
 			} else {
@@ -268,6 +282,7 @@ public abstract class STester {
 				}
 				_resultInfo += info;
 			}
+		}
 	}
 
 	/** Increase error counter and write the information to the error stream.
@@ -876,18 +891,25 @@ public abstract class STester {
 			_timeStamp = System.currentTimeMillis();
 			return;
 		}
-		s = _homeDir + "test/data/";
-		f = new File(s);
-		if (!f.exists() || !f.isDirectory()) {
-			s = _sourceDir + "data/";
-			f = new File(s);
+		if (_sourceDir.contains("src/test/java/test/")
+			&& (f = new File(s = SUtils.modifyString(_sourceDir,
+			"src/test/java/test/" ,
+			"src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else if (_sourceDir.contains("/test/test/")
+			&& (f = new File(s = SUtils.modifyString(
+			_sourceDir, "test/test/" ,
+			"resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else {
+			f = new File(s = _homeDir + "test/data/");
 			if (!f.exists() || !f.isDirectory()) {
-				_dataDir = null;
+				s = _sourceDir + "data/";
+				f = new File(s);
+				_dataDir = (!f.exists() || !f.isDirectory()) ? null : s;
 			} else {
 				_dataDir = s;
 			}
-		} else {
-			_dataDir = s;
 		}
 		_tempDir =  _homeDir + "temp/";
 		_timeStamp = System.currentTimeMillis();

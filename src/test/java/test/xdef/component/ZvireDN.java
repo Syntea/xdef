@@ -3,14 +3,14 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class ZvireDN implements cz.syntea.xdef.component.XComponent{
-  public String getDruhZvirete() {return _DruhZvirete;}
-  public String getNazevZvirete() {return _NazevZvirete;}
   public String getOznSegmentu() {return _OznSegmentu;}
+  public String getNazevZvirete() {return _NazevZvirete;}
+  public String getDruhZvirete() {return _DruhZvirete;}
   public Z3 getSkoda() {return _Skoda;}
   public ZvireDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setDruhZvirete(String x) {_DruhZvirete = x;}
-  public void setNazevZvirete(String x) {_NazevZvirete = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
+  public void setNazevZvirete(String x) {_NazevZvirete = x;}
+  public void setDruhZvirete(String x) {_DruhZvirete = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#ZvireDN/$mixed/Skoda");
@@ -21,9 +21,9 @@ public class ZvireDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vlastnik", null, "SouborD1A#ZvireDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
-  public String xposOfDruhZvirete(){return XD_XPos + "/@DruhZvirete";}
-  public String xposOfNazevZvirete(){return XD_XPos + "/@NazevZvirete";}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
+  public String xposOfNazevZvirete(){return XD_XPos + "/@NazevZvirete";}
+  public String xposOfDruhZvirete(){return XD_XPos + "/@DruhZvirete";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -68,12 +68,12 @@ public class ZvireDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getDruhZvirete() != null)
-      el.setAttribute("DruhZvirete", getDruhZvirete());
-    if (getNazevZvirete() != null)
-      el.setAttribute("NazevZvirete", getNazevZvirete());
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
+    if (getNazevZvirete() != null)
+      el.setAttribute("NazevZvirete", getNazevZvirete());
+    if (getDruhZvirete() != null)
+      el.setAttribute("DruhZvirete", getDruhZvirete());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -107,9 +107,9 @@ public class ZvireDN implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _DruhZvirete;
-  private String _NazevZvirete;
   private String _OznSegmentu;
+  private String _NazevZvirete;
+  private String _DruhZvirete;
   private Z3 _Skoda;
   private ZvireDN.Vlastnik _Vlastnik;
   private cz.syntea.xdef.component.XComponent XD_Parent;

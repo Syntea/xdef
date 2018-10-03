@@ -30,7 +30,7 @@ public class TestXdScript extends XDTester {
 	}
 
 	private static void printCode(final BNFGrammar g) {
-		Object[] o = g.getAndClearParsedObjects();
+		Object[] o = g.getParsedObjects();
 		if (o == null) {
 			System.out.println("ParsedObjects = null");
 			return;
@@ -51,6 +51,7 @@ public class TestXdScript extends XDTester {
 		try {
 			File f = new File(getDataDir()).getParentFile().getParentFile()
 				.getParentFile().getParentFile();
+System.out.println(f.getAbsolutePath());			
 			f = new File(f, "test/xdef/data/test/TestXdefOfXdef.xdef");
 			Element e = KXmlUtils.parseXml(f).getDocumentElement();
 			e = KXmlUtils.firstElementChildNS(

@@ -299,20 +299,20 @@ public class TestBNF extends STester {
 			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
 			g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
 			assertEq("a", parse(g, "x", "a"));
-			assertNull(g.getAndClearParsedObjects());
+			assertNull(g.getParsedObjects());
 			assertEq("ax", parse(g, "x", "ax"));
 			assertEq("axy", parse(g, "x", "axy"));
 			assertTrue(parse(g, "x", "b").indexOf("x failed, ") >= 0);
 			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
 			g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
 			assertEq("a", parse(g, "x", "abc"));
-			assertNull(g.getAndClearParsedObjects());
+			assertNull(g.getParsedObjects());
 			g = BNFGrammar.compile("%define $x: $stop(123) x ::= 'a' $x 'b' ");
 			assertEq("a", parse(g, "x", "abc"));
-			assertEq("STOP 123", (String) g.getAndClearParsedObjects()[0]);
+			assertEq("STOP 123", (String) g.getParsedObjects()[0]);
 			g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
 			assertEq("a", parse(g, "x", "abc"));
-			assertEq("STOP 1,\"x\"", (String) g.getAndClearParsedObjects()[0]);
+			assertEq("STOP 1,\"x\"", (String) g.getParsedObjects()[0]);
 			bnf =
 "S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
 " RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?" +

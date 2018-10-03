@@ -3,7 +3,6 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z8 implements cz.syntea.xdef.component.XComponent{
-  public String getCisloPopisne() {return _CisloPopisne;}
   public cz.syntea.xdef.sys.SDatetime getDatumCasDN() {return _DatumCasDN;}
   public java.util.Date dateOfDatumCasDN() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_DatumCasDN);
@@ -24,14 +23,14 @@ public class Z8 implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumCasDoDN() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumCasDoDN);
   }
-  public String getHlavniPricina() {return _HlavniPricina;}
   public String getKodOkresu() {return _KodOkresu;}
   public String getObec() {return _Obec;}
-  public String getPricina() {return _Pricina;}
-  public String getSkodaTisKc() {return _SkodaTisKc;}
   public String getUlice() {return _Ulice;}
+  public String getCisloPopisne() {return _CisloPopisne;}
+  public String getSkodaTisKc() {return _SkodaTisKc;}
+  public String getHlavniPricina() {return _HlavniPricina;}
+  public String getPricina() {return _Pricina;}
   public Z8.Misto getMisto() {return _Misto;}
-  public void setCisloPopisne(String x) {_CisloPopisne = x;}
   public void setDatumCasDN(cz.syntea.xdef.sys.SDatetime x) {_DatumCasDN = x;}
   public void setDatumCasDN(java.util.Date x) {
     _DatumCasDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -52,26 +51,27 @@ public class Z8 implements cz.syntea.xdef.component.XComponent{
   public void setDatumCasDoDN(java.util.Calendar x) {
     _DatumCasDoDN=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setHlavniPricina(String x) {_HlavniPricina = x;}
   public void setKodOkresu(String x) {_KodOkresu = x;}
   public void setObec(String x) {_Obec = x;}
-  public void setPricina(String x) {_Pricina = x;}
-  public void setSkodaTisKc(String x) {_SkodaTisKc = x;}
   public void setUlice(String x) {_Ulice = x;}
+  public void setCisloPopisne(String x) {_CisloPopisne = x;}
+  public void setSkodaTisKc(String x) {_SkodaTisKc = x;}
+  public void setHlavniPricina(String x) {_HlavniPricina = x;}
+  public void setPricina(String x) {_Pricina = x;}
   public void setMisto(Z8.Misto x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Misto", null, "SouborD1A#ObjStrankaDN/Misto");
     _Misto = x;
   }
-  public String xposOfCisloPopisne(){return XD_XPos + "/@CisloPopisne";}
   public String xposOfDatumCasDN(){return XD_XPos + "/@DatumCasDN";}
   public String xposOfDatumCasDoDN(){return XD_XPos + "/@DatumCasDoDN";}
-  public String xposOfHlavniPricina(){return XD_XPos + "/@HlavniPricina";}
   public String xposOfKodOkresu(){return XD_XPos + "/@KodOkresu";}
   public String xposOfObec(){return XD_XPos + "/@Obec";}
-  public String xposOfPricina(){return XD_XPos + "/@Pricina";}
-  public String xposOfSkodaTisKc(){return XD_XPos + "/@SkodaTisKc";}
   public String xposOfUlice(){return XD_XPos + "/@Ulice";}
+  public String xposOfCisloPopisne(){return XD_XPos + "/@CisloPopisne";}
+  public String xposOfSkodaTisKc(){return XD_XPos + "/@SkodaTisKc";}
+  public String xposOfHlavniPricina(){return XD_XPos + "/@HlavniPricina";}
+  public String xposOfPricina(){return XD_XPos + "/@Pricina";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -116,24 +116,24 @@ public class Z8 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getCisloPopisne() != null)
-      el.setAttribute("CisloPopisne", getCisloPopisne());
     if (getDatumCasDN() != null)
       el.setAttribute("DatumCasDN", getDatumCasDN().formatDate("d.M.yyyy H:mm"));
     if (getDatumCasDoDN() != null)
       el.setAttribute("DatumCasDoDN", getDatumCasDoDN().formatDate("d.M.yyyy H:mm"));
-    if (getHlavniPricina() != null)
-      el.setAttribute("HlavniPricina", getHlavniPricina());
     if (getKodOkresu() != null)
       el.setAttribute("KodOkresu", getKodOkresu());
     if (getObec() != null)
       el.setAttribute("Obec", getObec());
-    if (getPricina() != null)
-      el.setAttribute("Pricina", getPricina());
-    if (getSkodaTisKc() != null)
-      el.setAttribute("SkodaTisKc", getSkodaTisKc());
     if (getUlice() != null)
       el.setAttribute("Ulice", getUlice());
+    if (getCisloPopisne() != null)
+      el.setAttribute("CisloPopisne", getCisloPopisne());
+    if (getSkodaTisKc() != null)
+      el.setAttribute("SkodaTisKc", getSkodaTisKc());
+    if (getHlavniPricina() != null)
+      el.setAttribute("HlavniPricina", getHlavniPricina());
+    if (getPricina() != null)
+      el.setAttribute("Pricina", getPricina());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -166,15 +166,15 @@ public class Z8 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _CisloPopisne;
   private cz.syntea.xdef.sys.SDatetime _DatumCasDN;
   private cz.syntea.xdef.sys.SDatetime _DatumCasDoDN;
-  private String _HlavniPricina;
   private String _KodOkresu;
   private String _Obec;
-  private String _Pricina;
-  private String _SkodaTisKc;
   private String _Ulice;
+  private String _CisloPopisne;
+  private String _SkodaTisKc;
+  private String _HlavniPricina;
+  private String _Pricina;
   private Z8.Misto _Misto;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;

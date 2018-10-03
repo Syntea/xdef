@@ -619,12 +619,13 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue(),sp);
 			parsedElem.addAttr(att);
 		}
-		for (int i = 0; i < atts.getLength(); i++) {
-			String name = atts.getQName(i);
-			Object[] item = findAttr(list, name);
+		for (int i = 1; i < list.size(); i++) {
+			Object[] item = list.get(i);
+			String name = (String) item[0];
 			SPosition sp = item != null ? (SPosition) item[1] : null;
+			int j = atts.getIndex(name);
 			KParsedAttr att = new KParsedAttr(
-				atts.getURI(i), name, atts.getValue(i), sp);
+				atts.getURI(j), name, atts.getValue(j), sp);
 			if (item != null) {
 				String s = (String) item[2];
 				s = resolveReferences(sp, s, 2);

@@ -84,7 +84,7 @@ public class TestExpr extends STester {
 		if (!source.equals(s)) {
 			return "Error parsed: " + s;
 		}
-		Object[] code = grammar.getAndClearParsedObjects();
+		Object[] code = grammar.getParsedObjects();
 		if (_displayCode) {
 			System.out.println(codeToString(code));
 		}
@@ -108,12 +108,12 @@ public class TestExpr extends STester {
 		if (!source.equals(result)) {
 			return result;
 		}
-		Object[] code = grammar.getAndClearParsedObjects();
+		Object[] code = grammar.getParsedObjects();
 		if (_displayCode) {
 			System.out.println(codeToString(code));
 		}
 		parse(grammar, "program", toSource(code, 0));
-		code = grammar.getAndClearParsedObjects();
+		code = grammar.getParsedObjects();
 		execute(code, _variables);
 		try {
 			return SUtils.modifyString(_byteArray.toString("UTF-8"),"\r\n","\n");

@@ -125,17 +125,17 @@ public class Y18 implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class C implements cz.syntea.xdef.component.XComponent{
+  public String gete() {return _e;}
   public String getc() {return _c;}
   public String getd() {return _d;}
-  public String gete() {return _e;}
   public String getx() {return _x;}
+  public void sete(String x) {_e = x;}
   public void setc(String x) {_c = x;}
   public void setd(String x) {_d = x;}
-  public void sete(String x) {_e = x;}
   public void setx(String x) {_x = x;}
+  public String xposOfe(){return XD_XPos + "/@e";}
   public String xposOfc(){return XD_XPos + "/@c";}
   public String xposOfd(){return XD_XPos + "/@d";}
-  public String xposOfe(){return XD_XPos + "/@e";}
   public String xposOfx(){return XD_XPos + "/$text";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -180,12 +180,12 @@ public static class C implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
+    if (gete() != null)
+      el.setAttribute("e", gete());
     if (getc() != null)
       el.setAttribute("c", getc());
     if (getd() != null)
       el.setAttribute("d", getd());
-    if (gete() != null)
-      el.setAttribute("e", gete());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -220,9 +220,9 @@ public static class C implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _e;
   private String _c;
   private String _d;
-  private String _e;
   private String _x;
   private char _$x= (char) -1;
   private cz.syntea.xdef.component.XComponent XD_Parent;

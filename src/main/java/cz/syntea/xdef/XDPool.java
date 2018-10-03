@@ -1,6 +1,6 @@
 package cz.syntea.xdef;
 
-import cz.syntea.xdef.impl.XDSourceItem;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.model.XMDebugInfo;
 import cz.syntea.xdef.model.XMDefinition;
@@ -204,20 +204,21 @@ public interface XDPool {
 	 */
 	public SDatetime[] getSpecialDates();
 
-	/** Get map of source items of compiled X-definitions.
-	 * @return map of source items of compiled X-definitions.
+	/** Get the object with the map of source items of compiled X-definitions
+	 * and with editing information.
+	 * @return object with the map of source items of compiled X-definitions
+	 * and with editing information.
 	 */
-	public Map<String, XDSourceItem> getXDSourcesMap();
+	public XDSourceInfo getXDSourceInfo();
 
 	/** Get debug editor class name.
-	 * @return debug editor class name (if null. the default debug editor
+	 * @return debug editor class name (if null the default debug editor
 	 * will be used).
 	 */
 	public String getDebugEditor();
 
 	/** Get class name of the editor of X-definition.
-	 * @return class name of the editor of X-definition which
-	 * will be used).
+	 * @return class name of the editor of X-definition which will be used).
 	 */
 	public String getXdefEditor();
 
