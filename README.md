@@ -1,25 +1,25 @@
-Popis a ucel teto vetve
-=======================
+Popis a ucel vetve "dev-newTests-20180906"
+==========================================
 
-Tato vetev ukazuje, jak zmodernizovat unit-testy, a to pomoci knihovny "TestNG".
-Pro logovani se pouziva knihovna "logback".
+Tato větev ukazuje, jak zmodernizovat unit-testy, a to pomocí knihovny "TestNG".
+Pro logovaní se používá knihovna "logback".
 
-Predelane pomocne tridy:
+Předělané pomocné třídy:
   * test.utils
-    * Assert.java - rozsireni testNG-assert o nova porovnani
-    * Assertion.java - rozsireni testNG-assert o nova porovnani
-    * SoftAssert.java - rozsireni testNG-assert o nova porovnani
-    * TestUtil.java - pomocne nase metody
-    * STester.java - jen pridana metoda runUnitTest(), aby se kazda puvodni
-      unit-test-trida tvarila jako samostatny test
-    * XDTesterNT.java - cca plne zmodernizovana XDTester.java
+    * Assert.java - rozšíření testNG-assert o nová porovnání
+    * Assertion.java - rozšíření testNG-assert o nová porovnání
+    * SoftAssert.java - rozšíření testNG-assert o nová porovnání
+    * TestUtil.java - pomocné naše metody
+    * STester.java - jen přidaná metoda runUnitTest(), aby se každá původní
+      unit-test-třída tvářila jako samostatný test
+    * XDTesterNT.java - cca plně zmodernizovaná XDTester.java
 
-Priklady zmodernizovanych testu:
+Příklady zmodernizovaných testů:
   * test.xdef.TestKeyAndRefNT.java
 
-Dalsi navrhy na zlepseni:
-  * slo by to jeste lepe pomoci @TestFactory nebo @DataSource, ale to by uz
-    vyzadovalo mnohem vetsi prepsani kodu 
+Další návrhy na zlepšení:
+  * šlo by to ještě lépe pomocí @TestFactory nebo @DataSource, ale to by už
+    vyžadovalo mnohem větší přepsání kódu 
 
 Konfigurace:
   * pom.xml - pluginy maven-surefire-plugin
