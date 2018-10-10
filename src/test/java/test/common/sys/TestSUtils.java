@@ -1595,7 +1595,7 @@ public class TestSUtils extends STester {
 			r = StringParser.checkDateFormat("{L(de)Z+0100H1m99L(*)}" +
 				"'Hello, today is 'EEEE, d. MMMM GG yyyy.");
 			if (r == null) {
-				fail("error not recognized");
+				fail("error not reported");
 			} else {
 				assertEq("SYS062", r.getMsgID());
 			}
@@ -1603,31 +1603,31 @@ public class TestSUtils extends STester {
 				"z(America/New_York)Z+01:00H1m59L(*)}" +
 				"EEEE.d[.MMMM[.GG[.yyyy]][z]|{L(*)}yyyy");
 			if (r == null) {
-				fail("error not recognized");
+				fail("error not reported");
 			} else {
 				assertEq("SYS064", r.getMsgID());
 			}
 			r = StringParser.checkDateFormat("{M30000}");
 			if (r == null) {
-				fail("Error not recognized");
+				fail("Error not reported");
 			}
 			r = StringParser.checkDateFormat("yyy");
 			if (r != null) {
 				assertEq("SYS059", r.getMsgID());
 			} else {
-				fail("Error not recognized");
+				fail("Error not reported");
 			}
 			r = StringParser.checkDateFormat("'abc'yyy");
 			if (r != null) {
 				assertEq("SYS059", r.getMsgID());
 			} else {
-				fail("Error not recognized");
+				fail("Error not reported");
 			}
 			r = StringParser.checkDateFormat("'abcyyy");
 			if (r != null) {
 				assertEq("SYS049", r.getMsgID());
 			} else {
-				fail("Error not recognized");
+				fail("Error not reported");
 			}
 			r = StringParser.checkDateFormat("''yyyy");
 			assertEq(r, null);
@@ -1658,7 +1658,7 @@ public class TestSUtils extends STester {
 			r = StringParser.checkDateFormat("{z(Asia/Tel_Aviv)L(he,CZ,Win)" +
 				"Z+01:00m59H1}EEEE.d[|.MMMM[.GG[.yyyy]]][z]|{L(*)}yyyy");
 			if (r == null) {
-				fail("error not recognized");
+				fail("error not reported");
 			} else {
 				assertEq("SYS078", r.getMsgID());
 			}

@@ -64,13 +64,13 @@ public final class TestParse extends XDTester {
 		_myX = 1;
 		try {//no source
 			XDFactory.compileXD(null, (Object[]) new File[0]);
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
 		try {//no source
 			XDFactory.compileXD(null, "myxxx.xdef");
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
@@ -176,7 +176,6 @@ public final class TestParse extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
 			assertEq("abc", strw.toString());
-//===============
 			xdef = // check the sequence of processing of attributes
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
 "  <A b='onTrue out(@b)' c='onTrue out(@c)' a='onTrue out(@a)' />\n" +
@@ -223,9 +222,7 @@ public final class TestParse extends XDTester {
 "     c='onStartElement out(@c)'\n" +
 "     a='onStartElement out(@a)' />\n" +
 "</xd:def>";
-//TODO
-//			xd = compile(xdef);
-			xd = XDFactory.compileXD(getProperties(),xdef).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xml = "<A a='a' b='b' c='c' />";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -241,6 +238,18 @@ public final class TestParse extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
 			assertEq("bca", strw.toString());
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' xmlns:a='a.a' >\n" +
+"  <A a:b='finally out(@a:a)'\n" +
+"     a:a='finally out(@a:b)'\n" +
+"     a:c='finally out(@a:c)'/>\n"+
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A xmlns:x='a.a' x:c='c' x:a='a' x:b='b' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef = // check in the onIllegalRoot
@@ -1943,7 +1952,7 @@ public final class TestParse extends XDTester {
 "   </U>\n"+
 "</xd:def>").getBytes())}, new String[]{dataDir + "U.xdef"});
 			xb.compileXD();
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch(Exception ex) {
 			s = ex.getMessage();
 			if (s == null) {
@@ -2193,7 +2202,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, el);
 			xml = "<a><b a='123456'/></a>";
 			el = parse(xp, "",  xml, reporter);
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			assertEq(xml, el);
 			xml = "<a><b a=''/><b a=''/></a>"; //empty attribute is not checked!
 			el = parse(xp, "",  xml, reporter);
@@ -2201,14 +2210,14 @@ public final class TestParse extends XDTester {
 			assertEq(xml, el);
 			xml = "<a><b a='12'/></a>";
 			assertEq(xml, parse(xp, "",  xml, reporter));
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			xml = "<a><b a='123'/></a>";
 			el = parse(xp, "",  xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			xml = "<a><b a='123'/><b a='123'/></a>";
 			el = parse(xp, "",  xml, reporter);
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			assertEq(xml, el);
 
 			xdef = // test reference to xd:any

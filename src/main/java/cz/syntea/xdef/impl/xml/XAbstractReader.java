@@ -448,7 +448,6 @@ public abstract class XAbstractReader extends Reader {
 	}
 
 	public final SPosition getSPosition() {
-//		return new SPosition(_pos, _line, _startLine, _filePos, _sysId);
 		return new SPosition(0, _line, _startLine, _filePos + _pos, _sysId);
 	}
 
@@ -460,7 +459,8 @@ public abstract class XAbstractReader extends Reader {
 		_sysId = p.getSysId();
 	}
 
-	// markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment
+	// markupdecl ::= elementdecl | AttlistDecl | EntityDecl
+	//                | NotationDecl | PI | Comment
 	private int scanMarkupDecl() {
 		int result;
 		if ((result = scanPEReference()) >= 0
@@ -509,18 +509,22 @@ public abstract class XAbstractReader extends Reader {
 	// EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
 	// EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
 	// Misc ::= Comment | PI | S
-	// doctypedecl ::= '<!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+	// doctypedecl ::= '<!DOCTYPE' S Name
+	//             (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
 	// DeclSep ::= PEReference | S
 	// PEReference ::= '%' Name ';'
 	// intSubset ::= (markupdecl | DeclSep)*
-	// markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment
+	// markupdecl ::= elementdecl | AttlistDecl | EntityDecl
+	//            | NotationDecl | PI | Comment
 	// extSubset ::= TextDecl? extSubsetDecl
 	// extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
-	// SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+	// SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
+	//        | ('"' ('yes' | 'no') '"'))
 	// STag ::= '<' Name (S Attribute)* S? '>'
 	// Attribute ::= Name Eq AttValue
 	// ETag ::= '</' Name S? '>'
-	// content ::= CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*
+	// content ::= CharData? ((element | Reference | CDSect
+	//         | PI | Comment) CharData?)*
 	// EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
 	// elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
 	// contentspec ::= 'EMPTY' | 'ANY' | Mixed | children

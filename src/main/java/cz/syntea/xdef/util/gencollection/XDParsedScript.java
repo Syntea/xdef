@@ -39,6 +39,8 @@ public class XDParsedScript {
 	public String _default = "";
 	/** Parsed finally action (source string).*/
 	public String _finally = "";
+	/** Parsed onStartElement action (source string).*/
+	public String _onStartElement = "";
 	/** Parsed match action (source string).*/
 	public String _match = "";
 	/** Parsed forget (source string).*/
@@ -138,6 +140,9 @@ public class XDParsedScript {
 				case XScriptParser.FINALLY_SYM:
 					_finally = parseScriptSection(sp);
 					continue;
+				case XScriptParser.ON_START_ELEMENT_SYM:
+					_onStartElement = parseScriptSection(sp);
+					continue;
 				case XScriptParser.MATCH_SYM:
 					_match = parseScriptSection(sp);
 					continue;
@@ -202,6 +207,7 @@ public class XDParsedScript {
 		}
 		result = addSection(result, "onTrue ", _onTrue);
 		result = addSection(result, "onFalse ", _onFalse);
+		result = addSection(result, "onStartElement", _onStartElement);
 		result = addSection(result, "onAbsence ", _onAbsence);
 		result = addSection(result, "onExcess ", _onExcess);
 		result = addSection(result, "onIllegalAttr ", _onIllegalAttr);

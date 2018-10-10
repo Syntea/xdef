@@ -161,15 +161,13 @@ public final class Test003 extends XDTester {
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
 			assertNoErrors(reporter);
 		} catch(Exception ex) {fail(ex);}
-		try {
-			// X-definition referred from XML
+		try {// X-definition referred from XML
 			reporter.clear();
 			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
 			assertNoErrors(reporter);
 		} catch(Exception ex) {fail(ex);}
 		try {
 			String defFile = dataDir + "SouborD1A_.xdef";
-			setProperty("xdef.externalmode", "both");
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(defFile);

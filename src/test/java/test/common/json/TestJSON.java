@@ -346,7 +346,7 @@ public class TestJSON extends STester {
 		// Check error reporting
 		try {
 			JSONUtil.parseJSON("[00]"); // more leading zeroes
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			if (ex.toString().indexOf("JSON014") < 0) {
 				fail(ex);

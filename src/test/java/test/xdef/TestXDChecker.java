@@ -67,7 +67,7 @@ public class TestXDChecker extends XDTester {
 		x = chk.checkType("int()", "10");
 		assertTrue(10 == x.getParsedValue().intValue());
 		x = chk.checkType("int()", null);
-		assertTrue(x.errors(), "Error not recognized");
+		assertTrue(x.errors(), "Error not reported");
 		x = chk.checkType("? int()", null);
 		assertFalse(x.errors());
 

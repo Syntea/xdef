@@ -501,7 +501,7 @@ public final class TestXSTypes extends XDTester {
 						if (_msg.length() > 0) {
 							_msg += "\n";
 						}
-						_msg += "XDEF: Error not recognized";
+						_msg += "XDEF: Error not reported";
 						fits = false;
 					}
 				}
@@ -659,7 +659,7 @@ public final class TestXSTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a a='2'/>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 
 		//test combine seq and key params
@@ -670,7 +670,7 @@ public final class TestXSTypes extends XDTester {
 		parse(xdef, "", "<a a='abc'/>", reporter);
 		assertNoErrorwarnings(reporter);
 		parse(xdef, "", "<a a='abcd'/>", reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)'\n"+
@@ -694,7 +694,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='2'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//decimal, base decimal
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' name = 'test' root = 'a'>\n"+
@@ -709,7 +709,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='2'/>";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared type parser
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -726,10 +726,10 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='xyz' />";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2' />";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared simplified version
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -747,13 +747,13 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='3'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a='xyz'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared parser
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -771,7 +771,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='3'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared parser
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -788,7 +788,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='3'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union, declared items, base.
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -807,13 +807,13 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='xyz' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with base
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -835,7 +835,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a=' 1 2' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//model variable.
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
@@ -888,10 +888,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), reporter.printToString());
 		xml = "<a a=' efg ' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a='' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with the a list item
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -916,10 +916,10 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a=' 7 ' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' true 1 ' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with the sequence item
 		xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
@@ -942,13 +942,13 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='   true        2    ' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' xyz ' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 
 		//gYear - invoked in if command (see method "check").
 		xdef =
@@ -964,7 +964,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='2010'/>";
 		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 
 		//sequence
 		xdef =
@@ -984,7 +984,7 @@ public final class TestXSTypes extends XDTester {
 		xp = compile(xdef);
 		xml = "<a a=' 1 2 3' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xml = "<a a=' 1 2' />";
 		parse(xp, "", xml, reporter);
 		assertNoErrorwarnings(reporter);
@@ -1006,7 +1006,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		xml = "<a a='false 1' />";
 		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not recognized");
+		assertTrue(reporter.errorWarnings(), "Error not reported");
 		// string
 		xdef = //whiteSpace=preserve (option trimAttr)
 "<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'>\n"+

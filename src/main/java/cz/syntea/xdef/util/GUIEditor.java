@@ -544,7 +544,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			ex.printStackTrace(System.err);
 			JOptionPane.showMessageDialog(null,//Program exception &{0}
 				Report.error(SYS.SYS036, ex.toString()).toString());
 		}

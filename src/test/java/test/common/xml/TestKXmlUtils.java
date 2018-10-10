@@ -76,7 +76,7 @@ public class TestKXmlUtils extends STester {
 			assertEq("<?xml version=\"1.0\"?>\n<a>]]&gt;</a>", s);
 			try {
 				KXmlUtils.parseXml("<a>]]></a>");
-				fail("error not recognized");
+				fail("error not reported");
 			} catch (Exception ex) {
 				if (ex.getMessage().indexOf("XML053") < 0 &&
 					ex.getMessage().indexOf("XML403") < 0) {

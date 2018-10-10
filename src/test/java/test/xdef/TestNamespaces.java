@@ -43,13 +43,13 @@ public final class TestNamespaces extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a = 'A' b = 'b' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a='A' a='a'><c:a xmlns:c='B' c='C'/></a:a>";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -78,13 +78,13 @@ public final class TestNamespaces extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a = 'A' b = 'b' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a='A' a='a'><c:a xmlns:c='B' c='C'/></a:a>";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

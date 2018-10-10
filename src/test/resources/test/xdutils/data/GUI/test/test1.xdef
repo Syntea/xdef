@@ -10,7 +10,8 @@
       i += ',i=' + k + ',' + j;
       j++;
       k = null;
-      outln('MyPause')    }
+      outln('MyPause')
+    }
   </x:declaration>
 
   <a>

@@ -409,7 +409,7 @@ public class TestSParser extends STester {
 			if (p.isDatetime("yyyyMMdd")) {
 				assertTrue(p.eos());
 				d = p.getParsedSDatetime();
-				assertFalse(d.chkDatetime(), "Error not recognized, day = 0!");
+				assertFalse(d.chkDatetime(), "Error not reported, day = 0!");
 			}
 			p = new StringParser("2005-11-20T18:49");
 			assertTrue(p.isDatetime("yyyy-MM-ddTHH:mm[:ss][Z]|dd.MM.yyyy"));
@@ -417,7 +417,7 @@ public class TestSParser extends STester {
 			assertTrue(p.isDatetime("yyyy-MM-ddTHH:mm[:ss][Z]|dd.MM.yyyy"));
 			p = new StringParser("20/11/2005");
 			assertFalse(p.isDatetime("yyyy-MM-ddTHH:mm[:ss][Z]|dd.MM.yyyy"),
-				"Error not recognized");
+				"Error not reported");
 			p = new StringParser("20/11/2005");
 			assertTrue(p.isDatetime(
 				"yyyy-MM-ddTHH:mm[:ss][Z]|dd.MM.yyyy|dd/MM/yyyy"));

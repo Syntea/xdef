@@ -55,20 +55,19 @@ public final class Test000 extends XDTester {
 		final String dataDir = getDataDir() + "test/";
 		final String tempDir = getTempDir();
 		try {
-			//processing instructions
-			xdef =
+			xdef = //processing instructions
 "<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
 "<root/>\n"+
 "</xd:def>";
 			xml = "<?A A?><root><?B B?></root><?C C?>";
 			assertFalse(test(xdef,xml,"",'P',"<root><?B B?></root>",""));
 			assertNoErrors(reporter);
-			// method toString(obj)
+			//toString(obj) method
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 " <a a='finally if (!toString(12).equals(\"12\")) error(toString(12));'/>\n"+
 "</xd:def>";
-			xml = "<a a='x' />";
+			xml = "<a a='x'/>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -88,21 +87,21 @@ public final class Test000 extends XDTester {
 "         error(toString(from(\"@a\")));'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
-			// declaration of variables in different XDefinitions
+			// declaration of variables in different XDefinitions in collection
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "' impl-ver='1.0'>\n"+
 "<xd:def xd:name='z'>\n"+
-"<xd:declaration scope = 'global'>int k = 1; int j = k;</xd:declaration>\n"+
+"  <xd:declaration scope = 'global'> int k = 1; int j = k; </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='test' xd:root = 'aaa' >\n"+
-"<aaa xd:script=\"finally {h(); if (k != 1) outln('error');}\"/>\n"+
-"<xd:declaration scope = 'global'>\n"+
-"  int i = 0;\n"+
-"  void h() {\n"+
-"    if (i != 0) outln('error');\n"+
-"    if (k != 1) outln('error');\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"  <aaa xd:script=\"finally {h(); if (k != 1) outln('error');}\"/>\n"+
+"  <xd:declaration scope = 'global'>\n"+
+"    int i = 0;\n"+
+"    void h() {\n"+
+"      if (i != 0) outln('error');\n"+
+"      if (k != 1) outln('error');\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
 			xml = "<aaa/>";
@@ -254,13 +253,11 @@ public final class Test000 extends XDTester {
 "       Label      = 'Jmeno osoby'\n"+
 "       LabelShort = 'Jmeno'\n"+
 "       Type       = 'String'>\n"+
-"   <ValueCheck>\n"+
-"      <Precission ValueLength = '10'/>\n"+
-"   </ValueCheck>\n"+
+"   <ValueCheck><Precission ValueLength = '10'/></ValueCheck>\n"+
 "</Field>";
 			parse(xdef, "", xml, reporter);
 			assertNoErrors(reporter);
-			xdef = //test of recursion
+			xdef = //test of recursion in X-definition
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a x='optional int();' y='optional string()'>\n"+
 "    <b xd:script='occurs 0..'/>\n"+
@@ -311,15 +308,15 @@ public final class Test000 extends XDTester {
 				"Person Mary Brown earns 2500\n"+
 				"Number of people = 2, average salary = 18750.0\n"));
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='XXX'>\n"+
-"  <XXX>\n"+
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
 "    <AAA xd:script=\"occurs 0..\" xd:text=\"* string()\">\n"+
 "      <CCC xd:script=\"occurs 0..\"/>\n"+
 "    </AAA>\n"+
-"  </XXX>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml =
-"<XXX>" +
+"<a>" +
   "<AAA>" +
 	"<CCC/>" +
   "</AAA>" +
@@ -339,19 +336,18 @@ public final class Test000 extends XDTester {
 	"<CCC/>" +
 	"text2" +
   "</AAA>" +
-"</XXX>";
+"</a>";
 			assertFalse(test(xdef, xml, "",'P'));
-			//test of occurrence in sequence
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='XXX'>\n"+
-"  <XXX>\n"+
+			xdef = //test of occurrence in sequence
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
 "    <xd:sequence occurs='0..'>\n"+
 "      <AAA/>\n"+
 "      <BBB/>\n"+
 "    </xd:sequence>\n"+
-"  </XXX>\n"+
+"  </a>\n"+
 "</xd:def>";
-			xml = "<XXX><AAA/><BBB/><AAA/><BBB/></XXX>";
+			xml = "<a><AAA/><BBB/><AAA/><BBB/></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -368,8 +364,7 @@ public final class Test000 extends XDTester {
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
 		} catch (Exception ex) {fail(ex);}
-		try { //test ignoring of DTD.
-			//test switch illegal DOCTYPE.
+		try { //test ignoring of DTD - test switch illegal DOCTYPE.
 			xdef = dataDir + "Test000_01.xdef";
 			xml = dataDir + "Test000_01.xml";
 			Properties props = new Properties();
@@ -426,7 +421,6 @@ public final class Test000 extends XDTester {
 				org.w3c.dom.Node n = nm.getNamedItem("e");
 				assertFalse(n == null, "missing entity");
 			}
-			//mytest5
 			xdef = dataDir + "Test000_02.xdef";
 			xp = compile(xdef);
 			strw = new StringWriter();
@@ -547,14 +541,13 @@ public final class Test000 extends XDTester {
 			assertEq("<Complex ver='1.0'><inside Program='abcd' Kanal='22'"
 				+ " Prg='xyz' Vysledek='OK' IdProces='123' Verze='2.0'/>"
 				+ "<x>test</x></Complex>", el);
-			//russian
 			parse(dataDir + "Test000_03.xdef", //recursive reference, unique set
 				"", dataDir + "Test000_03.xml", reporter);
 			assertNoErrors(reporter);
 			parse(dataDir + "Test000_04.xdef",
 				"", dataDir + "Test000_04.xml", reporter);
 			assertNoErrors(reporter);
-			parse(dataDir + "Test000_rus.xdef",
+			parse(dataDir + "Test000_rus.xdef", //test encoding - russian
 				"test", dataDir + "Test000_rus.xml", reporter);
 			assertNoErrors(reporter);
 			parse(dataDir + "Test000_rus_1.xdef",
@@ -584,8 +577,8 @@ public final class Test000 extends XDTester {
 "    CisloTP    = \"optional unknown() OR pic('AA999999');\" />\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef, getClass());
-			xml = "<Vozidlo SPZ=\"ZA384CP\" VIN=\"VF1C066MG19952957\" "+
-				"CisloTP=\"SB746826\"/>";
+			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
+				"CisloTP='SB746826'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter, xml);
 		} catch (Exception ex) {fail(ex);}
@@ -660,7 +653,7 @@ public final class Test000 extends XDTester {
 			xml = dataDir + "Test000_07_1.xml";
 			parse(xp,"XDefSOAP", xml, reporter);
 			if (!reporter.errors()) {
-				fail("Error not found");
+				fail("Error not reported");
 			} else {
 				if (reporter.getErrorCount() != 4) {
 					assertNoErrors(reporter, xml);
@@ -673,7 +666,7 @@ public final class Test000 extends XDTester {
 			xml = dataDir + "Test000_07_2.xml";
 			parse(xp,"XDefSOAP", xml, reporter);
 			if (!reporter.errors()) {
-				fail("Error not found");
+				fail("Error not reported");
 			} else {
 				if (reporter.getErrorCount() != 3) {
 					assertNoErrors(reporter, xml);

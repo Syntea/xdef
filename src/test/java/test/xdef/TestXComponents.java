@@ -212,7 +212,7 @@ public final class TestXComponents extends XDTester {
 				p.setdec(new BigDecimal("456.001"));
 				el = p.toXml();
 				XP.createXDDocument("A").xparse(el, null);
-				fail("Error not detected" + el);
+				fail("Error not reported" + el);
 			} catch (Exception ex) {
 				if (ex.getMessage().indexOf("xpath=/A/@dec") < 0) {
 					fail(ex);
@@ -229,7 +229,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(q.toXml(), xml);
 			try {
 				XComponentUtil.getVariable(p, "nazdar");
-				fail("Error not detected");
+				fail("Error not reported");
 			} catch (Exception ex) {
 				if (ex.getMessage().indexOf("nazdar") < 0) {
 					fail(ex);

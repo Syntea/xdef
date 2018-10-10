@@ -461,7 +461,7 @@ public final class TestKeyAndRef extends XDTester {
 "</A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.printToString().indexOf("XDEF523") > 0,
-				"Error not recognized; " + reporter.printToString());
+				"Error not reported; " + reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Zeme'>\n"+
 "<xd:declaration scope='local'>\n"+

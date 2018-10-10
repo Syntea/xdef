@@ -1,5 +1,6 @@
 package test.xdef;
 
+import cz.syntea.xdef.XDDocument;
 import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -8,6 +9,7 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 import org.w3c.dom.Element;
 
 /** Test of X-definitions by X-definition.
@@ -59,6 +61,19 @@ public final class TestXdefOfXdef extends XDTester {
 		}
 		try { //check xdefinition of xdefinitions
 //			xml = genCollection(
+//"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+//"  <A b='onStartElement out(@b)'/>\n" +
+//"</xd:def>");
+//			assertNoErrorwarnings(parse(xml), xml);
+//			assertNoErrorwarnings(parse(xml), genCollection(xml));
+//			XDDocument xd = compile(xml).createXDDocument();
+//			xml = "<A a='a' b='b' c='c' />";
+//			StringWriter strw = new StringWriter();
+//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+//			xd.xparse(xml, null);
+//			assertEq("bca", strw.toString());
+if (true) return;
+//			xml = genCollection(
 //"<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 //"<macTest xd:script=\"finally {${text}; x();} options trimText;\"/>\n"+
 //"<xd:macro name=\"text\">\n"+
@@ -82,6 +97,12 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 
+			xml = genCollection(
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A b='onStartElement out(@b)'/>\n" +
+"</xd:def>");
+			assertNoErrorwarnings(parse(xml), xml);
+			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
 "<xd:declaration>\n"+

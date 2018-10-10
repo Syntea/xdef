@@ -13,6 +13,6 @@
     <Var Name="xyz">Toto je druhy test</Var>
     <Context>resources/test/xdutils/data/GUI/test/context.xml</Context>
     <Input>resources/test/xdutils/data/GUI/test/data.xml</Input>
-    <SaveResult Indent = "true" Encoding="windows-1250" File = "test/test/xdutils/data/GUI/test/result2.xml"/>
+    <SaveResult Indent = "true" Encoding="windows-1250" File = "resources/test/xdutils/data/GUI/test/result2.xml"/>
   </Execute>
 </Project>
