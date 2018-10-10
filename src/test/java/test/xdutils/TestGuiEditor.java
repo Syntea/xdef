@@ -25,8 +25,8 @@ public class TestGuiEditor  extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 //		test(new String[] {"-p", dataDir + "validate/project.xml"});
 //		test(new String[] {"-p", dataDir + "construct/project.xml"});
-		test(new String[] {"-p", dataDir + "test/project.xml"});
-//		test(new String[] {"-v"});
+//		test(new String[] {"-p", dataDir + "test/project.xml"});
+		test(new String[] {"-v"});
 //		test(new String[] {"-p", "C:/temp/project.xml"});
 //		test(new String[] {"-c"});
 //		test(new String[] {
