@@ -69,7 +69,8 @@ public final class BNFGrammar {
 		"tokens", 				//35
 		"info",  				//36
 		"eos",  				//37
-		"stop",  				//38
+		"rule",  				//38
+		"stop",  				//39
 	};
 
 	/** Inline methods code identifiers. */
@@ -111,7 +112,8 @@ public final class BNFGrammar {
 	private static final int INL_TOKENS = INL_JAVAQNAME + 1;
 	private static final int INL_INFO = INL_TOKENS + 1;
 	private static final int INL_EOS = INL_INFO + 1;
-	private static final int INL_STOP = INL_EOS + 1;
+	private static final int INL_RULENAME = INL_EOS + 1;
+	private static final int INL_STOP = INL_RULENAME + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -1828,6 +1830,9 @@ public final class BNFGrammar {
 					return _p.isOneOfTokens((String[]) _param) >= 0;
 				case INL_EOS:
 					return _p.eos();
+				case INL_RULENAME:
+					pushObject(_actRule._name);
+					return true;
 				case INL_STOP: {
 					if (_param != null) {
 						pushObject("STOP " + _param);

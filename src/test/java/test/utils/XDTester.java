@@ -528,8 +528,18 @@ public abstract class XDTester extends STester {
 
 	private void genXdOfXd() {
 		if (_xdOfxd == null) {
-			String dir = getDataDir() + "test/";
-			_xdOfxd = XDFactory.compileXD(null,dir+"TestXdefOfXdef*.xdef");
+			try {
+				URL urls[] = new URL[] {ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
+					ClassLoader.getSystemResource(
+					"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
+				};
+				_xdOfxd = XDFactory.compileXD(null, urls);
+			} catch (Exception ex) {
+				new RuntimeException("XdefOfXdef is not available", ex);
+			}
 		}
 	}
 

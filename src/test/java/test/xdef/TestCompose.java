@@ -2565,6 +2565,17 @@ final public class TestCompose extends XDTester {
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);
 			assertEq("<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><j/><j/></a>", el);
 			assertNoErrors(reporter);
+			xdef = // child node is xd:any
+"<xd:def xmlns:xd = '" + XDEFNS + "'>\n"+
+" <a xd:script='finally {returnElement((Element) getElement().getChidNodes().item(0));}'>\n" +
+" <xd:any xd:script='options moreAttributes, moreElements, moreText;\n" +
+"                    create from(\"/a_/a/*\");' />\n" +
+" </a>\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xd.setXDContext("<a_><a><b d='abc'><c/></b></a></a_>");
+			assertEq("<b d='abc'><c/></b>", xd.xcreate("a", reporter));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

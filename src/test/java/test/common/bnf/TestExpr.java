@@ -245,10 +245,10 @@ public class TestExpr extends STester {
 				SourceItem x = stack.peek();
 				x.setString(x.getString()
 					+ (item.startsWith("INC") ? "++" : "--"));
-			} else if ("BOOLEAN".equals(item) || "INT".equals(item)
-				|| "FLOAT".equals(item) || "STRING".equals(item)) { // type decl
+			} else if ("boolean".equals(item) || "int".equals(item)
+				|| "float".equals(item) || "String".equals(item)) { // type decl
 				char ch = item.charAt(0);
-				if (i + 2 < code.length && "TONAME".equals(code[i + 1])) {
+				if (i + 2 < code.length && "name".equals(code[i + 1])) {
 					String name = code[i += 2].toString();
 					int type = ch == 'B' ? TYPE_BOOLEAN
 						: ch == 'I' ? TYPE_INT
@@ -262,13 +262,13 @@ public class TestExpr extends STester {
 					val.setType(type);
 					stack.push(val);
 				}
-			} else if ("PLIST".equals(item)) { // parameter list
+			} else if ("paramList".equals(item)) { // parameter list
 				stackOfStack.push(stack);
 				stackOfStack.push(new Stack<SourceItem>());
 				stack = new Stack<SourceItem>();
-			} else if ("PARAM".equals(item)) { // parameter
+			} else if ("param".equals(item)) { // parameter
 				stackOfStack.peek().push(stack.pop());
-			} else if ("PROC".equals(item) || "FUN".equals(item)) {
+			} else if ("method".equals(item) || "function".equals(item)) {
 				Stack<SourceItem> params = stackOfStack.pop();
 				stack = stackOfStack.pop();
 				StringBuilder s = // set "name("
@@ -282,28 +282,28 @@ public class TestExpr extends STester {
 				}
 				s.append(')');
 				stack.push(new SourceItem(s.toString()));
-			} else if ("TOINT".equals(item)) {
+			} else if ("intConst".equals(item)) {
 				SourceItem x = new SourceItem(code[++i].toString());
 				x.setType(TYPE_INT);
 				stack.push(x);
-			} else if ("TOFLOAT".equals(item)) {
+			} else if ("fltConst".equals(item)) {
 				SourceItem x = new SourceItem(code[++i].toString());
 				x.setType(TYPE_FLOAT);
 				stack.push(x);
-			} else if ("TOBOOLEAN".equals(item)) {
+			} else if ("boolConst".equals(item)) {
 				SourceItem x = new SourceItem(code[++i].toString());
 				x.setType(TYPE_BOOLEAN);
 				stack.push(x);
-			} else if ("TOSTRING".equals(item)) {
+			} else if ("strConst".equals(item)) {
 				String s = code[++i].toString();
 				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_STRING);
 				stack.push(x);
-			} else if ("TONAME".equals(item)) {
+			} else if ("name".equals(item)) {
 				stack.push(new SourceItem(code[++i].toString()));
 ////////////////////////////////////////////////////////////////////////////////
-			} else if ("IDREF".equals(item)) { // reference to variable name
-			} else if ("CLEARSTCK".equals(item)) {  // clear stack
+			} else if ("idRef".equals(item)) { // reference to variable name
+			} else if ("command".equals(item)) {  // clear stack
 				result.append(stack.pop().getString()).append(";\n");
 				if (!stack.empty()) {
 					result.append(Report.error("",
@@ -340,24 +340,24 @@ public class TestExpr extends STester {
 			if (item.startsWith("info: ")) { // parsed position
 				continue;
 			}
-			if ("TOINT".equals(item)) {
+			if ("intConst".equals(item)) {
 				stack.push(new Long(code[++i].toString()));
-			} else if ("TOFLOAT".equals(item)) {
+			} else if ("fltConst".equals(item)) {
 				stack.push(new Double(code[++i].toString()));
-			} else if ("TOBOOLEAN".equals(item)) {
+			} else if ("boolConst".equals(item)) {
 				stack.push("true".equals(code[++i].toString()));
-			} else if ("TOSTRING".equals(item)) {
+			} else if ("strConst".equals(item)) {
 				String s = code[++i].toString();
 				String delimiter = String.valueOf(s.charAt(0));
 				s = s.substring(1, s.length() - 1);
 				s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
 				stack.push(s);
-			} else if ("TONAME".equals(item)) {
+			} else if ("name".equals(item)) {
 				stack.push(code[++i].toString());
-			} else if ("BOOLEAN".equals(item) || "INT".equals(item)
-				|| "FLOAT".equals(item) || "STRING".equals(item)) { // type decl
+			} else if ("boolean".equals(item) || "int".equals(item)
+				|| "float".equals(item) || "String".equals(item)) { // type decl
 				char ch = item.charAt(0);
-				if (i + 2 < code.length && "TONAME".equals(code[i + 1])) {
+				if (i + 2 < code.length && "name".equals(code[i + 1])) {
 					String name = code[i += 2].toString();
 					int type = ch == 'B' ? TYPE_BOOLEAN
 						: ch == 'I' ? TYPE_INT
@@ -376,7 +376,7 @@ public class TestExpr extends STester {
 				stack.push(!((Boolean) stack.pop()));
 			} else if ("NEG".equals(item)) { // unary operator bitwise ~
 				stack.push( ~ (Long) stack.pop());
-			} else if ("IDREF".equals(item)) { // reference to object name
+			} else if ("idRef".equals(item)) { // reference to object name
 				stack.push(variables.get(stack.pop().toString()));
 			} else if ("AND".equals(item) || "OR".equals(item)
 				|| "XOR".equals(item)) { // operators & | ~
@@ -595,16 +595,16 @@ public class TestExpr extends STester {
 						: "ASSRSH".equals(item) ? yy >> xx : yy >>> xx;
 				}
 				variables.put(name, y);
-			} else if ("PLIST".equals(item)) { // parameter list
+			} else if ("paramList".equals(item)) { // parameter list
 				stack.push(new PredefinedMethod(stack.pop().toString()));
-			} else if ("PARAM".equals(item)) { // parameter
+			} else if ("param".equals(item)) { // parameter
 				Object x = stack.pop();
 				PredefinedMethod y =  (PredefinedMethod) stack.peek();
 				y.add(x);
-			} else if ("PROC".equals(item) || "FUN".equals(item)) {
+			} else if ("method".equals(item) || "function".equals(item)) {
 				// procedure or function
 				PredefinedMethod x = (PredefinedMethod) stack.pop();
-				if ("FUN".equals(item)) {
+				if ("function".equals(item)) {
 					Object y = x.invoke();
 					if (y != null) {
 						stack.push(y);
@@ -615,7 +615,7 @@ public class TestExpr extends STester {
 				} else {
 					x.invoke();
 				}
-			} else if ("CLEARSTCK".equals(item)) {  // clear stack
+			} else if ("command".equals(item)) {  // clear stack
 				stack.clear();
 			} else {
 				return Report.error("", "Unknown code: " + item);

@@ -207,7 +207,7 @@ public class XDParsedScript {
 		}
 		result = addSection(result, "onTrue ", _onTrue);
 		result = addSection(result, "onFalse ", _onFalse);
-		result = addSection(result, "onStartElement", _onStartElement);
+		result = addSection(result, "onStartElement ", _onStartElement);
 		result = addSection(result, "onAbsence ", _onAbsence);
 		result = addSection(result, "onExcess ", _onExcess);
 		result = addSection(result, "onIllegalAttr ", _onIllegalAttr);
@@ -410,7 +410,7 @@ public class XDParsedScript {
 						if (sp._sym == XScriptParser.COLON_SYM) {
 							sp.nextSymbol();
 						}
-						sb.append("default:").append(parseScriptSection(sp));
+						sb.append("default: ").append(parseScriptSection(sp));
 					} else {
 						break;
 					}

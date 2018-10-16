@@ -1,6 +1,5 @@
 package test.xdef;
 
-import cz.syntea.xdef.XDDocument;
 import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -9,7 +8,7 @@ import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
+import java.net.URL;
 import org.w3c.dom.Element;
 
 /** Test of X-definitions by X-definition.
@@ -47,46 +46,27 @@ public final class TestXdefOfXdef extends XDTester {
 	public void test() {
 		String xml;
 		final String dataDir = getDataDir() + "test/";
-		if (XP == null) {
-			XP = compile(dataDir + "TestXdefOfXdef*.xdef");
-			ByteArrayOutputStream out;
-			try {
-				out = new ByteArrayOutputStream();
-				XP.writeXDPool(out);
-				XP = XDFactory.readXDPool(
-					new ByteArrayInputStream(out.toByteArray()));
-			} catch (Exception ex) {
-				throw new RuntimeException("Error when serialized", ex);
-			}
-		}
 		try { //check xdefinition of xdefinitions
-//			xml = genCollection(
-//"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
-//"  <A b='onStartElement out(@b)'/>\n" +
-//"</xd:def>");
-//			assertNoErrorwarnings(parse(xml), xml);
-//			assertNoErrorwarnings(parse(xml), genCollection(xml));
-//			XDDocument xd = compile(xml).createXDDocument();
-//			xml = "<A a='a' b='b' c='c' />";
-//			StringWriter strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			xd.xparse(xml, null);
-//			assertEq("bca", strw.toString());
-if (true) return;
-//			xml = genCollection(
-//"<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
-//"<macTest xd:script=\"finally {${text}; x();} options trimText;\"/>\n"+
-//"<xd:macro name=\"text\">\n"+
-//"outln('Macro call is:\\n{text}')</xd:macro>\n"+
-//"<xd:declaration>\n"+
-//"   void x() {${text};}\n"+
-//"</xd:declaration>\n"+
-//"</xd:def>");
-//			assertNoErrorwarnings(parse(xml), xml);
-//			assertNoErrorwarnings(parse(xml), genCollection(xml));
-//			XDPool xd = compile(xml);
-//			xd.createXDDocument("a").xparse("<macTest/>", null);
-//if (true) return;
+			if (XP == null) {
+				URL[] sources = new URL[] {
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
+				};
+				XP = compile(sources);
+				ByteArrayOutputStream out;
+				try {
+					out = new ByteArrayOutputStream();
+					XP.writeXDPool(out);
+					XP = XDFactory.readXDPool(
+						new ByteArrayInputStream(out.toByteArray()));
+				} catch (Exception ex) {
+					throw new RuntimeException("Error when serialized", ex);
+				}
+			}
 			xml = genCollection(
 "<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/2.0' name = 'a' root = 'foo'"+
 "   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
@@ -96,7 +76,6 @@ if (true) return;
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
-
 			xml = genCollection(
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'/>\n" +
@@ -109,21 +88,17 @@ if (true) return;
 " external method String x.b(XXNode, XDValue[]);\n"+
 "</xd:declaration>\n"+
 " <a xd:script = \"\n" +
-"    var{\n" +
-"        int iii = 1;\n" +
-"        uniqueSet id1 {t: string()};\n" +
-"        int jjj = 2;\n" +
-"        type cislo int();\n" +
-"        uniqueSet id2 {t: cislo;}\n" +
-"        type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n" +
-"        uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')}\n" +
-"    }\n" +
-"    finally {\n" +
-"      id1.CLEAR();\n" +
-"      for (int i = 0; i LT b.size(); i++) {\n" +
-"        b.setAt(i,i);\n" +
-"      }\n" +
-"    }\"\n" +
+"    var { int iii = 1;\n" +
+"          uniqueSet id1 {t: string()};\n" +
+"          int jjj = 2;\n" +
+"          type cislo int();\n" +
+"          uniqueSet id2 {t: cislo;}\n" +
+"          type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n" +
+"          uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')}\n" +
+"        }\n" +
+"    finally { id1.CLEAR();\n" +
+"              for (int i = 0; i LT b.size(); i++) b.setAt(i,i);\n" +
+"            }\"\n" +
 "    rc = \"required rodneCislo()\" >\n" +
 "  <b a = \"optional id1.t.IDREF()\"\n" +
 "      b = \"optional cislo();\"\n" +
@@ -166,45 +141,31 @@ if (true) return;
 			xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:declaration>\n"+
-"  String t = ((String)1.5).substring(1);\n"+
+"  String t=((String)1.5).substring(1);\n"+
 "</xd:declaration>\n"+
-"<a xd:script = \"*;\n"+
-"    create {return (getElementName() == 'B') ? null : null;}\n"+
-"    \"/>\n"+
+"<a xd:script=\"*;create{return (getElementName()=='B') ? null : null;}\"/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
-		xml = genCollection(
+			xml = genCollection(
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n" +
-"<a b=\"\n" +
-"   optional\n" +
-"   {\n" +
-"      int i=1;\n" +
-"      switch(i) {\n" +
-"        case 1: {i=2;}\n" +
-"        default: {return true;}\n" +
-"      }\n" +
-"     return true;\n" +
-"   }\n" +
+"<a b=\"optional { int i=1;\n" +
+"                  switch(i) {\n" +
+"                     case 1: i=2;\n" +
+"                     default: return true;\n" +
+"                  }\n" +
+"                  return true;\n" +
+"                }\n" +
 "	default 'abc';\n" +
-"   finally outln();\n" +
-" \"/>\n" +
+"   finally outln();\"/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml =
 "<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
-"<xd:declaration>\n"+
-"  String t = ((String)1.5).substring(1);\n"+
-"</xd:declaration>\n"+
-"<a xd:script=\"*; create {return (getElementName()=='B')?null :null;}\"/>\n"+
+"  <xd:declaration> String t = ((String)1.5).substring(1); </xd:declaration>\n"+
+"  <a xd:script=\"*; create getElementName()=='B' ? null : null;\"/>\n"+
 "</xd:def>";
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
-"<xdef:def xmlns:xdef='http://www.syntea.cz/xdef/3.1' name='a' root='Field'>\n"+
-"<Field Name='required an() /* no semicolon*/'/>\n"+
-"</xdef:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
@@ -228,18 +189,15 @@ if (true) return;
 "       return i;\n"+
 "     }\n"+
 "  </xd:declaration>\n"+
-"\n"+
 "  <xd:BNFGrammar name = \"$base\">\n"+
 "    integer  ::= [0-9]+\n"+
 "    S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "  </xd:BNFGrammar>\n"+
-"\n"+
 "  <xd:BNFGrammar name = \"$rrr\" extends = \"$base\" >\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
-"\n"+
 "</xd:def>\n"+
 "</xd:collection>");
 			assertNoErrorwarnings(parse(xml), xml);
@@ -253,20 +211,15 @@ if (true) return;
 			xml = genCollection(
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n"+
 "<xd:declaration>\n"+
-" external method boolean a.b.a ( int ) ;\n"+
-" type an a( 2 )\n"+ // here is intentionaly missing the semicolon
+" external method boolean a.b.a(int);\n"+
+" type an a(2)\n"+ // here is intentionaly missing the semicolon
 "</xd:declaration>\n"+
-"<A a ='required an();'/>\n"+
+"<A a='required an();'/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 ////////////////////////////////////////////////////////////////////////////////
-			if (getFulltestMode()) {
-//				xml = genCollection(
-//					dataDir+ "../../../../mytest/xdef/data/SouborD1A.xdef");
-//				assertNoErrorwarnings(parse(xml), xml);
-//				assertNoErrorwarnings(parse(xml), xml);
-				xml = genCollection(
+			if (getFulltestMode()) {xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+
 "</xd:def>");
@@ -274,10 +227,10 @@ if (true) return;
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 				xml = genCollection(
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
-"</xd:declaration>\n"+
-"<a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
+"  <xd:declaration>\n"+
+"    external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
+"  </xd:declaration>\n"+
+"  <a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");
 				assertNoErrorwarnings(parse(xml), xml);
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
@@ -292,7 +245,7 @@ if (true) return;
 				assertNoErrorwarnings(parse(xml), xml);
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 
-//// V teto Xdefinici je <xd:def xmlns:xd = "METAXDef" ...
+////				In this X-definition is <xd:def xmlns:xd = "METAXDef" ...
 //				xml = dataDir + "TestXdefOfXdef*.xdef";
 //				assertNoErrorwarnings(parse(xml), xml);
 			}

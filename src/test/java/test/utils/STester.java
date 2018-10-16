@@ -899,6 +899,11 @@ public abstract class STester {
 		} else if (_sourceDir.contains("/test/test/")
 			&& (f = new File(s = SUtils.modifyString(
 			_sourceDir, "test/test/" ,
+			"test/resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else if (_sourceDir.contains("/test/test/")
+			&& (f = new File(s = SUtils.modifyString(
+			_sourceDir, "test/test/" ,
 			"resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else {

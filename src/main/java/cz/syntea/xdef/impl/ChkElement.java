@@ -2069,11 +2069,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					root._element = el2;
 				} else if ((el1 = _parent.getElement()) != null) {
 					Document doc = _element.getOwnerDocument();
-					if (doc == el2.getOwnerDocument()) {
-						el1.replaceChild(el2, _element);
-					} else {
-						el2 = (Element) doc.importNode(el2, true);
-						el1.replaceChild(el2,_element);
+					Document doc1 = el1.getOwnerDocument();
+					if (doc != doc1) {
+						el1 = (Element) doc.importNode(el1, true);
+					}
+					if (el2 != doc1.getDocumentElement()) {
+						Document doc2 = el2.getOwnerDocument();
+						if (doc != doc2) {
+							el2 = (Element) doc.importNode(el2, true);
+						}
+						if (el2 != doc1.getDocumentElement()) {
+							el1.replaceChild(el2, _element);
+						}
 					}
 				}
 			}

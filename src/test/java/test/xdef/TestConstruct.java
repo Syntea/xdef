@@ -2,7 +2,6 @@ package test.xdef;
 
 import test.utils.XDTester;
 import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXElement;
@@ -22,7 +21,6 @@ public final class TestConstruct extends XDTester {
 		System.getProperties().setProperty("xdef.debug", "false");
 		XDPool xp;
 		XDDocument xd;
-		ReportWriter rw;
 		String xdef;
 		XXElement rootChkel, chkel;
 		try {

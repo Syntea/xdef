@@ -3,7 +3,7 @@ package test.common.bnf;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
-import java.io.File;
+import java.net.URL;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
 
@@ -49,11 +49,9 @@ public class TestXdScript extends XDTester {
 		String s;
 		BNFGrammar g;
 		try {
-			File f = new File(getDataDir()).getParentFile().getParentFile()
-				.getParentFile().getParentFile();
-System.out.println(f.getAbsolutePath());			
-			f = new File(f, "test/xdef/data/test/TestXdefOfXdef.xdef");
-			Element e = KXmlUtils.parseXml(f).getDocumentElement();
+			URL u =	ClassLoader.getSystemResource(
+				"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef");
+			Element e = KXmlUtils.parseXml(u).getDocumentElement();
 			e = KXmlUtils.firstElementChildNS(
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);

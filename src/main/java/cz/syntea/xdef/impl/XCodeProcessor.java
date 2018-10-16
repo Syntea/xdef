@@ -1968,10 +1968,15 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					if (_stack[sp].getItemId() == XD_ELEMENT){
 						el = ((DefElement) _stack[sp--]).getElement();
 					} else {
-						XDContainer c = (XDContainer) _stack[sp--];
-						el = (c.getXDItemsNumber() > 0
-							&& c.getXDItem(0).getItemId() == XD_ELEMENT)
-							? c.getXDItem(0).getElement() : null;
+						XDValue x = _stack[sp--];
+						if (x == null || x.isNull()) {
+							el = null;
+						} else {
+							XDContainer c = (XDContainer) x;
+							el = (c.getXDItemsNumber() > 0
+								&& c.getXDItem(0).getItemId() == XD_ELEMENT)
+								? c.getXDItem(0).getElement() : null;
+						}
 					}
 					if (el == null) {
 						//Required element is missing in setElement method

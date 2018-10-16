@@ -1070,7 +1070,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 									chkEl.incRefNum();
 								}
 							}
-							chkEl._element.removeChild(el);
+							try {
+								chkEl._element.removeChild(el);
+							} catch (Exception ex) {} //??? ignore exception
 						}
 					} else { //result here is not null!
 						if (result.isNull()) {
