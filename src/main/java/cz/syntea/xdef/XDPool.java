@@ -10,13 +10,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Map;
 
 /** Provides the interface to object containing compiled code of set of
  * X-definitions. You can create from XDPool the XDDocument.
  * @author Vaclav Trojan
  */
-public interface XDPool {
+public interface XDPool extends Serializable {
 
 	/** Display mode true (i.e. display always). */
 	public static final byte DISPLAY_TRUE = 2;

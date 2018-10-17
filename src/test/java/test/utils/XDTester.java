@@ -34,8 +34,9 @@ import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.xml.namespace.QName;
-import test.utils.STester;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -224,10 +225,12 @@ public abstract class XDTester extends STester {
 		if (!_genObj) {return xp;}
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			xp.writeXDPool(baos);
-			baos.close();
-			return XDFactory.readXDPool(
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp);
+			oos.close();
+			ObjectInputStream ois = new ObjectInputStream(
 				new ByteArrayInputStream(baos.toByteArray()));
+			return (XDPool) ois.readObject();
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
@@ -532,7 +535,7 @@ public abstract class XDTester extends STester {
 				URL urls[] = new URL[] {ClassLoader.getSystemResource(
 						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
 					ClassLoader.getSystemResource(
-					"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+						"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
 						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
 				};

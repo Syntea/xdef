@@ -41,11 +41,16 @@ import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import cz.syntea.xdef.sys.ReportWriter;
+import java.io.Serializable;
 
 /** Implementation of the XDPool containing the set of X-definitions.
  * @author Vaclav Trojan
  */
-public final class XPool implements XDPool {
+public final class XPool implements XDPool, Serializable {
+	
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = 8989562310121457897L;
+	
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
@@ -54,39 +59,39 @@ public final class XPool implements XDPool {
 	private static final short XD_MAGIC_ID = 0x7653;
 
 	/** Flag if warnings should be checked.*/
-	private final boolean _chkWarnings;
+	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
-	private final boolean _illegalDoctype;
+	private boolean _illegalDoctype;
 	/** Switch to allow/restrict includes in XML.*/
-	private final boolean _resolveIncludes;
+	private boolean _resolveIncludes;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
-	private final byte _debugMode;
+	private byte _debugMode;
 	/** flag to be set validation of names references in parsed/created nodes.*/
-	private final boolean _validate;
+	private boolean _validate;
 	/** Class name of debug editor.*/
-	private final String _debugEditor;
+	private String _debugEditor;
 	/** Class name of X-definition editor.*/
-	private final String _xdefEditor;
+	private String _xdefEditor;
 	/** DisplayMode.*/
-	private final byte _displayMode;
+	private byte _displayMode;
 	/** flag unresolved externals to be ignored.*/
-	private final boolean _ignoreUnresolvedExternals;
+	private boolean _ignoreUnresolvedExternals;
 	/** Switch XML parser ignores unresolved entities (e.g. file not found).*/
-	private final boolean _ignoreUnresolvedEntities;
+	private boolean _ignoreUnresolvedEntities;
 	/** Switch if location details will be generated.*/
-	private final boolean _locationdetails;
+	private boolean _locationdetails;
 	/** Global variables description block.*/
 	// valid date parameters
 	/** Maximal accepted value of the year.*/
-	private final int _maxYear;
+	private int _maxYear;
 	/** Minimal accepted value of the year.*/
-	private final int _minYear;
+	private int _minYear;
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
-	private final SDatetime _specialDates[];
+	private SDatetime _specialDates[];
 	/** External objects.*/
-	private final Class<?>[] _extClasses;
+	private Class<?>[] _extClasses;
 	/** Properties.*/
-	private final Properties _props;
+	private Properties _props;
 	/** Global variable table.*/
 	private XVariableTable _variables;
 	/** Max. stack length.*/
@@ -113,18 +118,20 @@ public final class XPool implements XDPool {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
+	/** Table of source objects.*/
+	private XDSourceInfo _sourceInfo = new XDSourceInfo();
 
 	/** Thesaurus of terms in different languages.*/
 	Thesaurus _thesaurus = null;
 	/** Table of definitions.*/
-	final Map<String, XDefinition> _xdefs = new TreeMap<String, XDefinition>();
+	Map<String, XDefinition> _xdefs = new TreeMap<String, XDefinition>();
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
 	CompileXDPool _compiler;
-	/** Table of source objects.*/
-	final private XDSourceInfo _sourceInfo = new XDSourceInfo();
 
+	private XPool() {}
+	
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
 		final String debugEditor,
@@ -808,6 +815,7 @@ public final class XPool implements XDPool {
 			throw new SIOException(SYS.SYS039, "Incorrect file format");
 		}
 		String ver = xr.readString(); //XDPool version
+		XPool xp = new XPool();
 		try {
 			// check if version is compatible with this implementation
 			String[] verParts = ver.split("\\."); // verion parts
@@ -823,51 +831,36 @@ public final class XPool implements XDPool {
 		} catch (Exception ex) {
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "Version error: " + ver);
-		}
-		byte debugMode = xr.readByte();
-		String debugEditor = xr.readString();
-		String xdefEditor = xr.readString();
-		boolean illegalDoctype = xr.readBoolean();
-		boolean ignoreUnresolvedEntities = xr.readBoolean();
-		boolean ignoreUnresolvedExternals = xr.readBoolean();
-		boolean locationdetails =  xr.readBoolean();
-		boolean validate = xr.readBoolean();
-		boolean chkWarnings = xr.readBoolean();
-		boolean resolveIncludes = xr.readBoolean();
-		byte displayMode = xr.readByte();
-		int minYear = xr.readInt();
-		int maxYear = xr.readInt();
+		}		
+		xp._debugMode = xr.readByte();
+		xp._debugEditor = xr.readString();
+		xp._xdefEditor = xr.readString();
+		xp._illegalDoctype = xr.readBoolean();
+		xp._ignoreUnresolvedEntities = xr.readBoolean();
+		xp._ignoreUnresolvedExternals = xr.readBoolean();
+		xp._locationdetails =  xr.readBoolean();
+		xp._validate = xr.readBoolean();
+		xp._chkWarnings = xr.readBoolean();
+		xp._resolveIncludes = xr.readBoolean();
+		xp._displayMode = xr.readByte();
+		xp._minYear = xr.readInt();
+		xp._maxYear = xr.readInt();
 		int len = xr.readLength();
-		SDatetime[] specialDates = new SDatetime[len];
+		xp._specialDates = new SDatetime[len];
 		for (int i = 0; i < len; i++) {
-			specialDates[i] = xr.readSDatetime();
+			xp._specialDates[i] = xr.readSDatetime();
 		}
 		len = xr.readLength();
-		Class<?>[] extObjects = new Class<?>[len];
+		xp._extClasses = new Class<?>[len];
 		for (int i = 0; i < len; i++) {
 			try {
-				extObjects[i] = Class.forName(xr.readString(),
+				xp._extClasses[i] = Class.forName(xr.readString(),
 					false, Thread.currentThread().getContextClassLoader());
 			} catch (ClassNotFoundException ex) {
 				//SObject reader: incorrect format of data&{0}{: }
 				throw new SIOException(SYS.SYS039, ex);
 			}
 		}
-		XPool xp = new XPool(debugMode,
-			debugEditor,
-			xdefEditor,
-			illegalDoctype,
-			ignoreUnresolvedEntities,
-			ignoreUnresolvedExternals,
-			locationdetails,
-			validate,
-			chkWarnings,
-			resolveIncludes,
-			displayMode,
-			minYear,
-			maxYear,
-			specialDates,
-			extObjects);
 		len = xr.readLength();
 		if (len > 0) {
 			String[] languages = new String[len];
@@ -1495,6 +1488,50 @@ public final class XPool implements XDPool {
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		gout.finish();
 		gout.close();
+	}
+	
+	private void writeObject(java.io.ObjectOutputStream out)
+		throws IOException {
+		writeXDPool(out);
+	}
+	
+	private void readObject(java.io.ObjectInputStream in)
+		throws IOException, ClassNotFoundException {
+		XPool x = readXDPool(in);
+		_binds = x._binds;
+		_chkWarnings = x._chkWarnings;
+		_code = x._code;
+		_compiler = x._compiler;
+		_components = x._components;
+		_debugEditor = x._debugEditor;
+		_debugInfo = x._debugInfo;
+		_debugMode = x._debugMode;
+		_displayMode = x._displayMode;
+		_enums = x._enums;
+		_extClasses = x._extClasses;
+		_globalVariablesSize = x._globalVariablesSize;
+		_ignoreUnresolvedEntities = x._ignoreUnresolvedEntities;
+		_ignoreUnresolvedExternals = x._ignoreUnresolvedExternals;
+		_illegalDoctype = x._illegalDoctype;
+		_init = x._init;
+		_localVariablesMaxSize = x._localVariablesMaxSize;
+		_locationdetails = x._locationdetails;
+		_maxYear = x._maxYear;
+		_minYear = x._maxYear;
+		_props = x._props;
+		_reporter = x._reporter;
+		_resolveIncludes = x._resolveIncludes;
+		_sourceInfo = x._sourceInfo;
+		_specialDates = x._specialDates;
+		_sqId = x._sqId;
+		_stackLen = x._stackLen;
+		_streamItem = x._streamItem;
+		_stringItem = x._stringItem;
+		_thesaurus = x._thesaurus;
+		_validate = x._validate;
+		_variables = x._variables;
+		_xdefEditor = x._xdefEditor;
+		_xdefs = x._xdefs;
 	}
 
 }
