@@ -49,7 +49,7 @@ import java.io.Serializable;
 public final class XPool implements XDPool, Serializable {
 	
 	/** This constant is used in the ObjectStream reader/writer. */
-	private static final long serialVersionUID = 8989562310121457897L;
+	private static final long serialVersionUID = -4736745770531753457L;
 	
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
