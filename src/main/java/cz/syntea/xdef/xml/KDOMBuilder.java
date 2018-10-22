@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
-import java.net.URLDecoder;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -469,31 +468,17 @@ public class KDOMBuilder extends DocumentBuilder {
 			//Invalid file name: '&{0}'
 			throw new SRuntimeException(SYS.SYS065, source);
 		}
-		char c;
 		Document doc = null;
-		if (source.startsWith("//")) {
-			URL url;
-			try {
-				url = new URL(URLDecoder.decode(source,
-					System.getProperties().getProperty("file.encoding")));
-				doc = parse(url);
-			} catch (Exception ex) {
-				//URL &{0} error: &{1}{; }
-				putReport(Report.error(SYS.SYS076, source, ex));
-				//Error while reading XML document: &{0}
-				putReport(Report.fatal(XML.XML403, ex));
-			}
-		} else if ((c = source.charAt(0)) > ' '	&& c != '<') {
-			doc = parse(new File(source));
-		} else {
+		if (source.charAt(0) == '<') {
 			checkBuilder();
 			try {
-				doc = _xBuilder.parse(
-					new InputSource(new StringReader(source)));
+				doc =_xBuilder.parse(new InputSource(new StringReader(source)));
 			} catch (Exception ex) {
 				//Error while reading XML document: &{0}
 				putReport(Report.fatal(XML.XML403, ex));
 			}
+		} else {
+			doc = parse(new File(source));
 		}
 		if (_reporter != null) {
 			_reporter.checkAndThrowErrors();
