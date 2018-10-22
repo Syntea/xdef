@@ -50,13 +50,13 @@ public final class XPool implements XDPool, Serializable {
 
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -4736745770531753457L;
+	/** Magic ID.*/
+	private static final short XD_MAGIC_ID = 0x7653;
 
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
 	private static final long XD_MIN_VERSION = 301004009L; // 3.1.004.009
-	/** Magic ID.*/
-	private static final short XD_MAGIC_ID = 0x7653;
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -1483,7 +1483,7 @@ public final class XPool implements XDPool, Serializable {
 			for (int i = reflist.size() -1; i >= 0; i--) {
 				XElement xe = reflist.get(i);
 				XMNode xm;
-				if (xe.isReference() && 
+				if (xe.isReference() &&
 					(xm=xe.getXDPool().findModel(xe.getReferencePos()))!=null) {
 					XElement xe1 = (XElement) xm;
 					if (xe1._childNodes != null) {

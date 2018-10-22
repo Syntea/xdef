@@ -206,7 +206,7 @@ public final class BNFGrammar {
 	 * @param out Printer where to print the tracer information or null.
 	 */
 	public final void trace(final PrintStream out) {_traceOut = out;}
-	
+
 	/** Parse text given by parser with given rule.
 	 * @param p parser.
 	 * @param name rule name.
@@ -699,7 +699,7 @@ public final class BNFGrammar {
 				}
 				if (_traceOut != null) {
 					try {
-						_traceOut.println(_name + "; pos=" 
+						_traceOut.println(_name + "; pos="
 							+ _pos.getIndex() + "; false");
 						_traceOut.flush();
 					} catch (Exception ex) {}
