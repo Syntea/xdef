@@ -6,7 +6,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
-import javax.xml.soap.Node;
+import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 /** Test of text options and text values.
@@ -25,7 +25,6 @@ public final class TestOptions extends XDTester {
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
-		String s;
 		StringWriter strw;
 		try {
 			// trimAttr, trimText

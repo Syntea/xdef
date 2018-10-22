@@ -1,0 +1,136 @@
+/*001*/ c_printable ::= #x9 | #xA | #xD | [#x20-#x7E]  /* 8 bit */
+          | #x85 | [#xA0-#xD7FF] | [#xE000-#xFFFD]     /* 16 bit */
+/*          | [#x10000-#x10FFFF]                         /* 32 bit */
+/*002 nb_json ::= #x9 | [#x20-#x10FFFF] */
+/*002*/ nb_json ::= #x9 | [#x20-#xFFFF]
+/*003*/ c_byte_order_mark ::= #xFEFF
+/*004*/ c_sequence_entry ::= "-"
+/*015*/ c_tag ::= "!"
+/*019*/ c_double_quote ::= '"' /* “"” (#x22, double quote) */
+/*020*/ c_directive ::= "%"
+/*021* c_reserved ::= "@" | "`"
+   /* The “@” (#x40, at) and "`" (#x60, grave accent) are reserved for future */ 
+/*022* c_indicator ::= "-" | "?" | ":" | "," | "[" | "]" | "{" | "}"
+          | "#" | "&" | "*" | "!" | "|" | ">" | "'" | '"' | "%" | "@" | "`" 
+/*023*/ c_flow_indicator ::= "," | "[" | "]" | "{" | "}"
+/*024*/ b_line_feed ::= #xA         /* LF */
+/*025*/ b_carriage_return ::= #xD   /* CR */ 
+/*026*/ b_char ::= b_line_feed | b_carriage_return
+/*027*/ nb_char ::= c_printable - (b_char | c_byte_order_mark)
+/*028*/ b_break ::=  ( b_carriage_return b_line_feed ) /* DOS, Windows */
+          | b_carriage_return                          /* MacOS upto 9.x */
+          | b_line_feed                                /* UNIX, MacOS X */ 
+/*029* b_as_line_feed ::= b_break
+/*030*/ b_non_content ::= b_break
+/*031* s_space ::= #x20 /* SP */ 
+/*032* s_tab ::= #x9  /* TAB */ 
+/*033*/ s_white ::= #x20 | #x9
+/*034*/ ns_char ::= nb_char - s_white
+/*035*/ ns_dec_digit ::= [0-9]
+/*036*/ ns_hex_digit ::= ns_dec_digit | [A-F] | [a-f]
+/*037*/ ns_ascii_letter ::= [A-Z] | [a-z] 
+/*038*/ ns_word_char ::= ns_dec_digit | ns_ascii_letter | "-"
+/*039*/ ns_uri_char ::= "%" ns_hex_digit ns_hex_digit | ns_word_char | "#"
+          | ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" | "$" | ","
+          | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")" | "[" | "]"
+/*040*/ ns_tag_char ::= ns_uri_char - ("!" | c_flow_indicator)
+/*041*/ c_escape ::= "\"
+/*042*/ ns_esc_null ::= "0" /* Escaped null (#x0) */
+/*043*/ ns_esc_bell ::= "a" /* Escaped bell (#x7) */
+/*044*/ ns_esc_backspace ::= "b" /* Escaped backspace (#x7) */
+/*045*/ ns_esc_horizontal_tab ::= "t" | #x9 /* Escaped horizontal tab (#x9) */
+/*046*/ ns_esc_line_feed ::= "n" /* Escaped line fees (#x0A) */
+/*047*/ ns_esc_vertical_tab ::= "v" /* Escaped vertical tab (#x0B) */
+/*048*/ ns_esc_form_feed ::= "f" /* Escaped form feed (#x0C) */
+/*049*/ ns_esc_carriage_return ::= "r" /* Escaped carriage return (#x0D) */
+/*050*/ ns_esc_escape ::= "e" /* Escaped escape (#x1B) */
+/*051*/ ns_esc_space ::= #x20 /* Escaped space (#x20) character */
+/*052*/ ns_esc_double_quote ::= '"' /* #x22*/
+/*053*/ ns_esc_slash ::= "/" /* Escaped slash (#x2F), for JSON compatibility. */
+/*054*/ ns_esc_backslash ::= "\" /* Escaped back slash (#x5C) */
+/*055*/ ns_esc_next_line ::= "N" /*Escaped Unicode next line (#x85) character.*/ 
+/*056*/ ns_esc_non_breaking_space ::= "_" 
+          /* Escaped Unicode non-breaking space (#xA0) character. */
+/*057*/ ns_esc_line_separator ::= "L"
+          /* Escaped Unicode line separator (#x2028) character. */
+/*058*/ ns_esc_paragraph_separator ::= "P" 
+          /* Escaped Unicode paragraph separator (#x2029) character. */
+/*059*/ ns_esc_8_bit ::= "x" ns_hex_digit {2}
+          /* Escaped 8-bit Unicode character. */
+/*060*/ ns_esc_16_bit ::= "u" ns_hex_digit {4}
+          /* Escaped 16-bit Unicode character. */
+/*061*/ ns_esc_32_bit ::= "U" {8} 
+          /* Escaped 32-bit Unicode character. */
+/*062*/ c_ns_esc_char ::= "\" /* any escapr character */
+          ( c_escape | ns_esc_null | ns_esc_bell | ns_esc_backspace
+          | ns_esc_horizontal_tab | ns_esc_line_feed
+          | ns_esc_vertical_tab | ns_esc_form_feed
+          | ns_esc_carriage_return | ns_esc_escape | ns_esc_space
+          | ns_esc_double_quote | ns_esc_slash | ns_esc_backslash
+          | ns_esc_next_line | ns_esc_non_breaking_space
+          | ns_esc_line_separator | ns_esc_paragraph_separator
+          | ns_esc_8_bit | ns_esc_16_bit | ns_esc_32_bit )
+/*066*/ s_separate_in_line ::= s_white* /* Start of line */
+/*072*/ b_as_space ::= b_break 
+/*075*/ c_nb_comment_text ::= "#" nb_char*
+/*076*/ b_comment ::= b_non_content | $eos /* End of file */ 
+/*077*/ s_b_comment ::= ( s_separate_in_line c_nb_comment_text? )? b_comment
+/*078*/ l_comment ::= s_separate_in_line c_nb_comment_text b_comment
+/*079*/ s_l_comments ::= ( s_b_comment? | b_break? ) l_comment* 
+/*          (b_break s_l_comments)* */
+/*082*/ l_directive ::= "%" ( ns_yaml_directive | ns_tag_directive
+          | ns_reserved_directive ) s_l_comments
+/*083*/ ns_reserved_directive ::= ns_directive_name
+          ( s_separate_in_line ns_directive_parameter )* 
+/*084*/ ns_directive_name ::= ns_char+
+/*085*/ ns_directive_parameter ::= ns_char+
+/*086*/ ns_yaml_directive ::= "YAML" s_separate_in_line ns_yaml_version  
+/*087*/ ns_yaml_version ::= ns_dec_digit+ "." ns_dec_digit+
+/*088*/ ns_tag_directive ::= "TAG" s_separate_in_line c_tag_handle
+          s_separate_in_line ns_tag_prefix
+/*089*/ c_tag_handle ::= c_named_tag_handle | c_secondary_tag_handle
+          | c_primary_tag_handle
+/*090*/ c_primary_tag_handle ::= "!"
+/*091*/ c_secondary_tag_handle ::= "!!"
+/*092*/ c_named_tag_handle ::= "!" ns_word_char+ "!"
+/*093*/ ns_tag_prefix ::= c_ns_local_tag_prefix | ns_global_tag_prefix
+/*094*/ c_ns_local_tag_prefix ::= "!" ns_uri_char+
+/*095*/ ns_global_tag_prefix ::= ns_uri_char+
+/*097*/ c_ns_tag_property ::= c_verbatim_tag | c_ns_shorthand_tag
+          | c_non_specific_tag
+/*098*/ c_verbatim_tag ::= "!<" ns_uri_char+ ">"
+/*099*/ c_ns_shorthand_tag ::= c_tag_handle ns_tag_char+ 
+/*100*/ c_non_specific_tag ::= "!"
+/*101*/ c_ns_anchor_propert::= "&" ns_anchor_name
+/*102*/ ns_anchor_char ::= ns_char - c_flow_indicator 
+/*103*/ ns_anchor_name ::= ns_anchor_char+ 
+/*104*/ c_ns_alias_node ::= "*" ns_anchor_name
+/*105*/ e_scalar ::= $eos? /* Empty */
+/*106*/ e_node ::= e_scalar
+/*107*/ nb_double_char ::= c_ns_esc_char | ( nb_json - "\" - '"' ) 
+/*108*/ ns_double_char ::= nb_double_char - s_white
+/*111*/ nb_double_one_line::= nb_double_char*
+/*117*/ c_quoted_quote::= "''" 
+/*118*/ nb_single_char ::= c_quoted_quote | ( nb_json - "'" ) 
+/*119*/ ns_single_char ::= nb_single_char - s_white 
+/*122*/ nb_single_one_line ::= nb_single_char*
+/*123*/ nb_ns_single_in_line ::= ( s_white* ns_single_char )* 
+/*128*/ ns_plain_safe_out ::= ns_char 
+/*129*/ ns_plain_safe_in ::= ns_char - c_flow_indicator 
+/*202*/ l_document_prefix ::= c_byte_order_mark? l_comment
+/*203*/ c_directives_end ::= "---" 
+/*204*/ c_document_end ::= "..." 
+/*205*/ l_document_suffix ::= c_document_end s_l_comments 
+/*206*/ c_forbidden ::= /* Start of line */
+          ( c_directives_end | c_document_end )
+          ( b_char | s_white | $eos /* End of file */ )
+/*207*  l-bare-document ::= s-l+block-node(-1,block-in)
+  /* Excluding c-forbidden content */
+/*208*/ l_explicit_document ::= c_directives_end
+          ( /* l_bare_document | */ ( e_node s_l_comments ) )
+/*209*/ l_directive_document ::= l_directive+ l_explicit_document
+/*210*/ l_any_document ::= l_directive_document
+          | l_explicit_document /* | l_bare_document */
+/*211*/ l_yaml_stream ::= l_document_prefix* l_any_document?
+          ( l_document_suffix* l_document_prefix* l_any_document?
+          | l_document_prefix* l_explicit_document? )

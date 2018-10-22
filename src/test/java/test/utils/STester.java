@@ -83,6 +83,7 @@ public abstract class STester {
 	public STester() {}
 
 	private void printlnOut(final String s) {
+		flushErr();
 		_out.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
@@ -96,6 +97,7 @@ public abstract class STester {
 	}
 
 	private void printErr(final String s) {
+		flushOut();
 		_err.print(s);
 		if (_outStream != null) {
 			_outStream.print(s);
@@ -103,6 +105,7 @@ public abstract class STester {
 	}
 
 	private void printlnErr(final String s) {
+		flushOut();
 		_err.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
@@ -332,8 +335,6 @@ public abstract class STester {
 			}
 			text = _name + " fail\n" + text;
 		}
-		flushOut();
-		flushErr();
 		_errors++;
 		// in Java 1.3 is not avalable the method Throwable.getStackTrace()
 		// so we grab the information from printStackTrace and we create
@@ -370,7 +371,9 @@ public abstract class STester {
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is <tt>null</tt> the message is ignored.
 	 */
-	public final void fail() {putErrInfo("*");}
+	public final void fail() {
+		putErrInfo("*");
+	}
 
 	/** Increase error counter and write information of given object.
 	 * If the print stream is <tt>null</tt> the message is ignored.

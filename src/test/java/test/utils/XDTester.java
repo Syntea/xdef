@@ -232,6 +232,7 @@ public abstract class XDTester extends STester {
 				new ByteArrayInputStream(baos.toByteArray()));
 			return (XDPool) ois.readObject();
 		} catch(RuntimeException e) {
+			e.printStackTrace();
 			throw e;
 		} catch(Exception e) {
 			throw new RuntimeException(e.getMessage(), e);

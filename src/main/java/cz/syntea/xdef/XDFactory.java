@@ -20,7 +20,6 @@ import java.util.Properties;
 import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.XDConstants;
 import java.nio.charset.Charset;
 
 /** Provides generation of {@link cz.syntea.xdef.XDPool} from source

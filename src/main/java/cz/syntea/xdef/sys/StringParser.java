@@ -1958,7 +1958,15 @@ public class StringParser extends SReporter implements SParser {
 		if (findToken(token)) {
 			int x = getIndex() + token.length();
 			setIndex(x);
-			_ch = x < _endPos || readNextBuffer() ? _source.charAt(x) : NOCHAR;
+			if ( x >= _endPos) {
+				readNextBuffer();
+				if ( x >= _endPos) {
+					_ch =  NOCHAR;
+					setIndex(_endPos);
+					return true;
+				}
+			}
+			_ch = _source.charAt(x);
 			return true;
 		}
 		return false;

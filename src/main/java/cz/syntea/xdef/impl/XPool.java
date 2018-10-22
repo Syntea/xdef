@@ -47,14 +47,14 @@ import java.io.Serializable;
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool, Serializable {
-	
+
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -4736745770531753457L;
-	
+
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004006L; // 3.1.004.005
+	private static final long XD_MIN_VERSION = 301004009L; // 3.1.004.009
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 
@@ -118,20 +118,24 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-	/** Table of source objects.*/
-	private XDSourceInfo _sourceInfo = new XDSourceInfo();
 
 	/** Thesaurus of terms in different languages.*/
 	Thesaurus _thesaurus = null;
-	/** Table of definitions.*/
-	Map<String, XDefinition> _xdefs = new TreeMap<String, XDefinition>();
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
 	CompileXDPool _compiler;
 
-	private XPool() {}
-	
+	/** Table of definitions.*/
+	Map<String, XDefinition> _xdefs;
+	/** Table of source objects.*/
+	private XDSourceInfo _sourceInfo;
+
+	private XPool() {
+		_xdefs = new TreeMap<String, XDefinition>();
+		_sourceInfo = new XDSourceInfo();
+	}
+
 	/** Create the instance of XDPool with flags and options.*/
 	private XPool(final byte debugMode,
 		final String debugEditor,
@@ -148,6 +152,7 @@ public final class XPool implements XDPool, Serializable {
 		final int maxYear,
 		final SDatetime[] specialDates,
 		final Class<?>[] extClasses) {
+		this();
 		_debugMode = debugMode;
 		_debugEditor = debugEditor;
 		_xdefEditor = xdefEditor;
@@ -176,6 +181,7 @@ public final class XPool implements XDPool, Serializable {
 	XPool(final Properties props,
 		final ReportWriter reporter,
 		final Class<?>... extClasses) {
+		this();
 		_extClasses = extClasses;
 		_reporter = reporter;
 		_props = props != null ? props : SManager.getProperties();
@@ -802,194 +808,6 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final XDValue[] getCode() {return _code;}
 
-	/** Read XPool from input stream.
-	 * @param input where to read.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XPool readXDPool(final InputStream input) throws IOException {
-		GZIPInputStream in = new GZIPInputStream(input);
-		XDReader xr = new XDReader(in);
-		if (XD_MAGIC_ID != xr.readShort()) {
-			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Incorrect file format");
-		}
-		String ver = xr.readString(); //XDPool version
-		XPool xp = new XPool();
-		try {
-			// check if version is compatible with this implementation
-			String[] verParts = ver.split("\\."); // verion parts
-			if (verParts.length == 4 && verParts[0].startsWith("XD")) {
-				long x = Integer.parseInt(verParts[0].substring(2)) * 100
-					+ Integer.parseInt(verParts[1]);
-				x = x * 1000 + Integer.parseInt(verParts[2]);
-				x = x * 1000 + Integer.parseInt(verParts[3]);
-				if (x < XD_MIN_VERSION) {
-					throw new Exception("Version error");
-				}
-			}
-		} catch (Exception ex) {
-			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Version error: " + ver);
-		}		
-		xp._debugMode = xr.readByte();
-		xp._debugEditor = xr.readString();
-		xp._xdefEditor = xr.readString();
-		xp._illegalDoctype = xr.readBoolean();
-		xp._ignoreUnresolvedEntities = xr.readBoolean();
-		xp._ignoreUnresolvedExternals = xr.readBoolean();
-		xp._locationdetails =  xr.readBoolean();
-		xp._validate = xr.readBoolean();
-		xp._chkWarnings = xr.readBoolean();
-		xp._resolveIncludes = xr.readBoolean();
-		xp._displayMode = xr.readByte();
-		xp._minYear = xr.readInt();
-		xp._maxYear = xr.readInt();
-		int len = xr.readLength();
-		xp._specialDates = new SDatetime[len];
-		for (int i = 0; i < len; i++) {
-			xp._specialDates[i] = xr.readSDatetime();
-		}
-		len = xr.readLength();
-		xp._extClasses = new Class<?>[len];
-		for (int i = 0; i < len; i++) {
-			try {
-				xp._extClasses[i] = Class.forName(xr.readString(),
-					false, Thread.currentThread().getContextClassLoader());
-			} catch (ClassNotFoundException ex) {
-				//SObject reader: incorrect format of data&{0}{: }
-				throw new SIOException(SYS.SYS039, ex);
-			}
-		}
-		len = xr.readLength();
-		if (len > 0) {
-			String[] languages = new String[len];
-			for (int i = 0; i < len; i++) {
-				languages[i] = xr.readString();
-			}
-			XThesaurusImpl t = new XThesaurusImpl(languages);
-			len = xr.readLength(); // number of aliases
-			for (int i = 0; i < len; i++) {
-				String base = xr.readString();
-				for (int j = 0; j < languages.length; j++) {
-					t.setItem(base, j, xr.readString());
-				}
-			}
-			xp._thesaurus = t;
-		}
-		len = xr.readLength();
-		xp._components = new TreeMap<String, String>();
-		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
-			xp._components.put(s, xr.readString());
-		}
-		len = xr.readLength();
-		xp._binds = new TreeMap<String, String>();
-		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
-			xp._binds.put(s, xr.readString());
-		}
-		len = xr.readLength();
-		xp._enums = new TreeMap<String, String>();
-		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
-			xp._enums.put(s, xr.readString());
-		}
-		ArrayList<XNode> list = new ArrayList<XNode>();
-		len = xr.readLength();
-		xp._code = new XDValue[len];
-		for (int i = 0; i < len; i++) {
-			try {
-				xp._code[i] = xr.readXD();
-			} catch (Exception ex) {
-				//SObject reader: incorrect format of data&{0}{: }
-				throw new SIOException(SYS.SYS039,
-					ex, "code["+i+"] "+ex+";"+xp._code[i]);
-			}
-		}
-		xp._variables = XVariableTable.readXD(xr);
-		xp._stackLen = xr.readLength();
-		xp._init = xr.readInt();
-		xp._globalVariablesSize = xr.readInt();
-		xp._localVariablesMaxSize = xr.readInt();
-		len = xr.readLength();
-		for(int i = 0; i < len; i++) {
-			try {
-			xp._xdefs.put(xr.readString(),
-				XDefinition.readXDefinition(xr, xp, list));
-			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
-			}
-		}
-		//solve root selections - references to models!
-		for (int i = 0; i < len; i++) {
-			String name = xr.readString();
-			XDefinition xd = xp.getDefinition(name);
-			int len1 = xr.readLength();
-			for (int j = 0; j < len1; j++) {
-				String key = xr.readString();
-				XNode ref;
-				if ("*".equals(key)) {
-					XElement xe = new XElement("$any", null, xd);
-					xe._moreAttributes = 'T';
-					xe._moreElements = 'T';
-					xe.setOccurrence(0, Integer.MAX_VALUE);
-					xe.setXDPosition(xd.getXDPosition() + "*");
-					ref = xe;
-				} else {
-					String refDefName = xr.readString();
-					XDefinition refXd = xp.getDefinition(refDefName);
-					String refName = xr.readString();
-					String refUri = xr.readString();
-					ref = refXd.getXElement(refName, refUri);
-					if (ref == null) {
-						ref = (XNode) xp.findModel(key);
-					}
-				}
-				xd._rootSelection.put(key, ref);
-			}
-		}
-		xp._sourceInfo.copyFrom(XDSourceInfo.readXDSourceInfo(xr));
-//		len = xr.readInt();
-//		for (int i = 0; i < len; i++) {
-//			String key = xr.readString();
-//			xp._sourceInfo.getMap().put(
-//				key, XDSourceItem.readXDSourceItem(xr));
-//		}
-		if ("DebugInfo".equals(xr.readString())) {
-			xp._debugInfo = XDebugInfo.readXDebugInfo(xr);
-		}
-		if (XD_MAGIC_ID != xr.readShort()) {
-			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Incorrect file format");
-		}
-		in.close();
-		ArrayList<XElement> reflist = new ArrayList<XElement>();
-		HashSet<XElement> refset = new HashSet<XElement>();
-		for(XDefinition xd: xp._xdefs.values()) {
-			for (XMElement xe: xd.getModels()) {
-				checkModel(reflist, refset, (XElement) xe);
-			}
-		}
-		refset.clear();
-		while(reflist.size() > 0) {
-			for (int i = reflist.size() -1; i >= 0; i--) {
-				XElement xe = reflist.get(i);
-				XMNode xn;
-				if (xe.isReference() && (xn=xe.getXDPool()
-					.findModel(xe.getReferencePos()))!=null) {
-					XElement xe1 = (XElement) xn;
-					if (xe1._childNodes != null) {
-						xe._childNodes = xe1._childNodes;
-						xe._attrs = xe1._attrs;
-						reflist.remove(i);
-					}
-				}
-			}
-		}
-		return xp;
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XDPool
 ////////////////////////////////////////////////////////////////////////////////
@@ -1489,49 +1307,203 @@ public final class XPool implements XDPool, Serializable {
 		gout.finish();
 		gout.close();
 	}
-	
+
 	private void writeObject(java.io.ObjectOutputStream out)
 		throws IOException {
 		writeXDPool(out);
 	}
-	
+
 	private void readObject(java.io.ObjectInputStream in)
 		throws IOException, ClassNotFoundException {
-		XPool x = readXDPool(in);
-		_binds = x._binds;
-		_chkWarnings = x._chkWarnings;
-		_code = x._code;
-		_compiler = x._compiler;
-		_components = x._components;
-		_debugEditor = x._debugEditor;
-		_debugInfo = x._debugInfo;
-		_debugMode = x._debugMode;
-		_displayMode = x._displayMode;
-		_enums = x._enums;
-		_extClasses = x._extClasses;
-		_globalVariablesSize = x._globalVariablesSize;
-		_ignoreUnresolvedEntities = x._ignoreUnresolvedEntities;
-		_ignoreUnresolvedExternals = x._ignoreUnresolvedExternals;
-		_illegalDoctype = x._illegalDoctype;
-		_init = x._init;
-		_localVariablesMaxSize = x._localVariablesMaxSize;
-		_locationdetails = x._locationdetails;
-		_maxYear = x._maxYear;
-		_minYear = x._maxYear;
-		_props = x._props;
-		_reporter = x._reporter;
-		_resolveIncludes = x._resolveIncludes;
-		_sourceInfo = x._sourceInfo;
-		_specialDates = x._specialDates;
-		_sqId = x._sqId;
-		_stackLen = x._stackLen;
-		_streamItem = x._streamItem;
-		_stringItem = x._stringItem;
-		_thesaurus = x._thesaurus;
-		_validate = x._validate;
-		_variables = x._variables;
-		_xdefEditor = x._xdefEditor;
-		_xdefs = x._xdefs;
+		xpRead(in);
 	}
 
+	private void xpRead(final InputStream input) throws IOException {
+		_xdefs = new TreeMap<String, XDefinition>();
+		_sourceInfo = new XDSourceInfo();
+		GZIPInputStream in = new GZIPInputStream(input);
+		XDReader xr = new XDReader(in);
+		if (XD_MAGIC_ID != xr.readShort()) {
+			//SObject reader: incorrect format of data&{0}{: }
+			throw new SIOException(SYS.SYS039, "Incorrect file format");
+		}
+		String ver = xr.readString(); //XDPool version
+		try {
+			// check if version is compatible with this implementation
+			String[] verParts = ver.split("\\."); // verion parts
+			if (verParts.length == 4 && verParts[0].startsWith("XD")) {
+				long x = Integer.parseInt(verParts[0].substring(2)) * 100
+					+ Integer.parseInt(verParts[1]);
+				x = x * 1000 + Integer.parseInt(verParts[2]);
+				x = x * 1000 + Integer.parseInt(verParts[3]);
+				if (x < XD_MIN_VERSION) {
+					throw new Exception("Version error");
+				}
+			}
+		} catch (Exception ex) {
+			//SObject reader: incorrect format of data&{0}{: }
+			throw new SIOException(SYS.SYS039, ex, "Version error: " + ver);
+		}
+		_debugMode = xr.readByte();
+		_debugEditor = xr.readString();
+		_xdefEditor = xr.readString();
+		_illegalDoctype = xr.readBoolean();
+		_ignoreUnresolvedEntities = xr.readBoolean();
+		_ignoreUnresolvedExternals = xr.readBoolean();
+		_locationdetails =  xr.readBoolean();
+		_validate = xr.readBoolean();
+		_chkWarnings = xr.readBoolean();
+		_resolveIncludes = xr.readBoolean();
+		_displayMode = xr.readByte();
+		_minYear = xr.readInt();
+		_maxYear = xr.readInt();
+		int len = xr.readLength();
+		_specialDates = new SDatetime[len];
+		for (int i = 0; i < len; i++) {
+			_specialDates[i] = xr.readSDatetime();
+		}
+		len = xr.readLength();
+		_extClasses = new Class<?>[len];
+		for (int i = 0; i < len; i++) {
+			try {
+				_extClasses[i] = Class.forName(xr.readString(),
+					false, Thread.currentThread().getContextClassLoader());
+			} catch (ClassNotFoundException ex) {
+				//SObject reader: incorrect format of data&{0}{: }
+				throw new SIOException(SYS.SYS039, ex);
+			}
+		}
+		len = xr.readLength();
+		if (len > 0) {
+			String[] languages = new String[len];
+			for (int i = 0; i < len; i++) {
+				languages[i] = xr.readString();
+			}
+			XThesaurusImpl t = new XThesaurusImpl(languages);
+			len = xr.readLength(); // number of aliases
+			for (int i = 0; i < len; i++) {
+				String base = xr.readString();
+				for (int j = 0; j < languages.length; j++) {
+					t.setItem(base, j, xr.readString());
+				}
+			}
+			_thesaurus = t;
+		}
+		len = xr.readLength();
+		_components = new TreeMap<String, String>();
+		for (int i = 0; i < len; i++) {
+			String s = xr.readString();
+			_components.put(s, xr.readString());
+		}
+		len = xr.readLength();
+		_binds = new TreeMap<String, String>();
+		for (int i = 0; i < len; i++) {
+			String s = xr.readString();
+			_binds.put(s, xr.readString());
+		}
+		len = xr.readLength();
+		_enums = new TreeMap<String, String>();
+		for (int i = 0; i < len; i++) {
+			String s = xr.readString();
+			_enums.put(s, xr.readString());
+		}
+		ArrayList<XNode> list = new ArrayList<XNode>();
+		len = xr.readLength();
+		_code = new XDValue[len];
+		for (int i = 0; i < len; i++) {
+			try {
+				_code[i] = xr.readXD();
+			} catch (Exception ex) {
+				//SObject reader: incorrect format of data&{0}{: }
+				throw new SIOException(SYS.SYS039,
+					ex, "code["+i+"]; " + _code[i]);
+			}
+		}
+		_variables = XVariableTable.readXD(xr);
+		_stackLen = xr.readLength();
+		_init = xr.readInt();
+		_globalVariablesSize = xr.readInt();
+		_localVariablesMaxSize = xr.readInt();
+		_xdefs = new TreeMap<String, XDefinition>();
+		len = xr.readLength();
+		for(int i = 0; i < len; i++) {
+			try {
+				_xdefs.put(xr.readString(),
+					XDefinition.readXDefinition(xr, this, list));
+			} catch (Exception ex) {
+				//SObject reader: incorrect format of data&{0}{: }
+				throw new SIOException(SYS.SYS039, ex);
+			}
+		}
+		//solve root selections - references to models!
+		for (int i = 0; i < len; i++) {
+			String name = xr.readString();
+			XDefinition xd = getDefinition(name);
+			int len1 = xr.readLength();
+			for (int j = 0; j < len1; j++) {
+				String key = xr.readString();
+				XNode ref;
+				if ("*".equals(key)) {
+					XElement xe = new XElement("$any", null, xd);
+					xe._moreAttributes = 'T';
+					xe._moreElements = 'T';
+					xe.setOccurrence(0, Integer.MAX_VALUE);
+					xe.setXDPosition(xd.getXDPosition() + "*");
+					ref = xe;
+				} else {
+					String refDefName = xr.readString();
+					XDefinition refXd = getDefinition(refDefName);
+					String refName = xr.readString();
+					String refUri = xr.readString();
+					ref = refXd.getXElement(refName, refUri);
+					if (ref == null) {
+						ref = (XNode) findModel(key);
+					}
+				}
+				xd._rootSelection.put(key, ref);
+			}
+		}
+		_sourceInfo.copyFrom(XDSourceInfo.readXDSourceInfo(xr));
+		if ("DebugInfo".equals(xr.readString())) {
+			_debugInfo = XDebugInfo.readXDebugInfo(xr);
+		}
+		if (XD_MAGIC_ID != xr.readShort()) {
+			//SObject reader: incorrect format of data&{0}{: }
+			throw new SIOException(SYS.SYS039, "Incorrect file format");
+		}
+		ArrayList<XElement> reflist = new ArrayList<XElement>();
+		HashSet<XElement> refset = new HashSet<XElement>();
+		for(XDefinition xd: _xdefs.values()) {
+			for (XMElement xe: xd.getModels()) {
+				checkModel(reflist, refset, (XElement) xe);
+			}
+		}
+		refset.clear();
+		while(reflist.size() > 0) {
+			for (int i = reflist.size() -1; i >= 0; i--) {
+				XElement xe = reflist.get(i);
+				XMNode xm;
+				if (xe.isReference() && 
+					(xm=xe.getXDPool().findModel(xe.getReferencePos()))!=null) {
+					XElement xe1 = (XElement) xm;
+					if (xe1._childNodes != null) {
+						xe._childNodes = xe1._childNodes;
+						xe._attrs = xe1._attrs;
+						reflist.remove(i);
+					}
+				}
+			}
+		}
+	}
+
+	/** Read XPool from input stream.
+	 * @param input where to read.
+	 * @return created XPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public static XPool readXDPool(final InputStream input) throws IOException {
+		XPool xp = new XPool();
+		xp.xpRead(input);
+		return xp;
+	}
 }
