@@ -910,18 +910,18 @@ public final class Test000 extends XDTester {
 "</xd:def>\n"+
 "</xd:collection>";
 			xml =
-" <s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>\n"+
+"<s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>\n"+
 "   <s:Header>\n"+
 "     <b:User IdentUser='string 1,32'/>\n"+
 "     <b:Request s:understand='true'\n"+
 "       IdentZpravy='string 1,32' ReqMsgId='123' Mode='TST'/>\n"+
 "   </s:Header>\n"+
 "   <s:Body><b:PingFlow Flow='B1'/></s:Body>\n"+
-" </s:Envelope>\n";
+"</s:Envelope>\n";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			assertEq(
-" <s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>"+
+"<s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>"+
 "<s:Header>"+
 "<b:User IdentUser='string 1,32' s:understand='true'/>"+
 "<b:Request s:understand='true'\n"+

@@ -872,7 +872,7 @@ public final class TestParse extends XDTester {
 "  </xd:choice>\n"+
 "</root>\n"+
 "</xd:def>");
-			xml = " <root><a/></root>";
+			xml = "<root><a/></root>";
 			el = parse(xp, "", xml, reporter);
 			if (reporter.getErrorCount() != 1 ||
 				!"XDEF527".equals(reporter.getReport().getMsgID())) {
@@ -2640,7 +2640,7 @@ public final class TestParse extends XDTester {
 " <a paramCode='xx()' />\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xml = " <a paramCode='xx'/>";
+			xml = "<a paramCode='xx'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
