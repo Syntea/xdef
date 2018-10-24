@@ -3,7 +3,6 @@ package test.common.bnf;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import java.io.File;
-import java.io.OutputStreamWriter;
 import test.utils.STester;
 
 /** Test of BNF.
@@ -56,7 +55,7 @@ public class TestYaml extends STester {
 			s = 
 "%TAG !e! tag:example.com,2000:app/\n" +
 "---\n" +
-"- !e!foo \"bar\"\n";
+"!e!foo \"bar\"\n";
 			g.trace(System.err);
 			assertEq(s, parse(g, "l_yaml_stream", s));
 			s = 
