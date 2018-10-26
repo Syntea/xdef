@@ -39,6 +39,7 @@ import java.lang.reflect.Constructor;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation") // see setReporter method
 public class XBuilder implements XDBuilder {
 
 	private XPool _xp;
@@ -49,7 +50,23 @@ public class XBuilder implements XDBuilder {
 	 * referred from definitions (may be <tt>null</tt>).
 	 */
 	public XBuilder(final Properties props, final Class<?>... extObjects) {
+		this(null, props, extObjects);
+	}
+
+	/** Creates instance of XDBuilder with properties and external objects.
+	 * @param reporter ReportWriter or <tt>null</tt>.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param extObjects The array of classes where are available methods
+	 * referred from definitions (may be <tt>null</tt>).
+	 */
+	public XBuilder(final ReportWriter reporter,
+		final Properties props,
+		final Class<?>... extObjects) {
 		_xp = new XPool(props, null, extObjects);
+		if (reporter != null) {
+			_xp._compiler.setReportWriter(reporter);
+		}
+		_xp._reporter = reporter;
 	}
 
 	@Override
@@ -140,6 +157,7 @@ public class XBuilder implements XDBuilder {
 	/** Set reporter. This method is should be used only for incremental
 	 * message reporting. The reporter must be set before setting sources.
 	 * @param reporter the reporter to be set to this builder.
+	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
 	 */
 	public final void setReporter(final ReportWriter reporter) {
 		if (reporter != null) {

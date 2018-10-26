@@ -9,13 +9,14 @@ keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "true" | "false"
 
 /* Constant values */
-boolConst ::= ("true" | "false") $rule $push
-strConst  ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule $push
-intConst  ::= [0-9]+ $rule $push
+boolConst ::= ("true" | "false") $rule
+strConst  ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule
+intConst  ::= [0-9]+ $rule
 fltConst  ::= ([0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
-             | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule $push
+             | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
+
 /* Identifiers */
-name     ::= ($JavaName - keyword) $rule $push
+name     ::= ($JavaName - keyword) $rule
 idRef    ::= name S $rule /* name which refers to an object */
 
 /* Operators */
@@ -56,6 +57,7 @@ ASSLSH    ::= "<<=" expr $rule
 ASSRSH    ::= ">>=" expr $rule
 ASSRRSH   ::= ">>>=" expr $rule
 
+/* expression */
 expr     ::= S bxor OR*
 bxor     ::= band XOR*
 band     ::= equal AND*
@@ -71,11 +73,13 @@ const    ::= fltConst | intConst | boolConst | strConst
 function ::= name paramList $rule
 param    ::= expr $rule
 paramList::= S "(" S $rule ( param (S "," S param )* )? S ")"
+
+/* Statements */
 assign   ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
              | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
-method   ::= name paramList $rule
-type     ::= ("boolean" | "int" | "float" | "String") $push
 declItem ::= name (ASS)?
+type     ::= ("boolean" | "int" | "float" | "String") $rule
+method   ::= name paramList $rule
 vardecl  ::= type S declItem (S "," S declItem)*
 command  ::= S ($info (vardecl | method | assign) S $rule)? ";"
 program  ::= command+ S

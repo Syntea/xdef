@@ -98,9 +98,8 @@ public final class TestErrors extends XDTester {
 		final String[] xdef,
 		final Class<?>... cls) {
 			ArrayReporter rw = new ArrayReporter();
-			XDBuilder xb = XDFactory.getXDBuilder(props);
+			XDBuilder xb = XDFactory.getXDBuilder(rw, props);
 			xb.setExternals(cls);
-			xb.setReporter(rw);
 			xb.setSource(xdef);
 			xb.compileXD();
 			return rw;
@@ -608,8 +607,7 @@ public final class TestErrors extends XDTester {
 "  <a a=\"string; finally {x(p,q);}\"/>\n"+
 "</xd:def>";
 			reporter.clear();
-			xb = XDFactory.getXDBuilder(null);
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, null);
 			xb.setSource(xml);
 			xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -627,8 +625,7 @@ public final class TestErrors extends XDTester {
 "</a>\n"+
 "</xd:def>";
 			reporter.clear();
-			xb = XDFactory.getXDBuilder(null);
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, null);
 			xb.setSource(xdef);
 			xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -642,8 +639,7 @@ public final class TestErrors extends XDTester {
 "<a a='decimal(%0,1)'/>\n"+
 "</xd:def>";
 			reporter.clear();
-			xb = XDFactory.getXDBuilder(null);
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, null);
 			xb.setSource(xml);
 			xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -664,8 +660,7 @@ public final class TestErrors extends XDTester {
 "</a>\n"+											//04
 "</x:def>";											//05
 			reporter.clear();
-			xb = XDFactory.getXDBuilder(null);
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, null);
 			xb.setSource(xml);
 			xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -758,9 +753,8 @@ public final class TestErrors extends XDTester {
 			assertNull(reporter.getReport(), reporter.printToString());
 			//test error reporting
 			reporter.clear();
-			xb = XDFactory.getXDBuilder(props);
+			xb = XDFactory.getXDBuilder(reporter,props);
 			xb.setExternals(getClass());
-			xb.setReporter(reporter);
 			xb.setSource(dataDir + "test/TestErrors3.xdef");
 			xp = xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -801,9 +795,8 @@ public final class TestErrors extends XDTester {
 "  blabla\n"+									//05
 "</xd:def>\n"+									//06
 "</xd:collection>";								//07
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF260", "4", "7", null));
@@ -816,9 +809,8 @@ public final class TestErrors extends XDTester {
 "  </xd:declaration>\n"+												//05
 "  <a xd:script='finally{external final String j=\"\"; out(i);}'/>\n"+	//05<=
 "</xd:def>";															//06
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF411", "5", "25", null));
@@ -826,9 +818,8 @@ public final class TestErrors extends XDTester {
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a xd:script='var external int i; finally{i = 1; out(i);}'/>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF411", "2", "21", null));
@@ -840,9 +831,8 @@ public final class TestErrors extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script='finally{out(i + (i == null) + j + (j == null));}'/>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF120", "4", "23", null));
@@ -852,9 +842,8 @@ public final class TestErrors extends XDTester {
 "   <xd:sequence> </xd:sequence>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
@@ -864,9 +853,8 @@ public final class TestErrors extends XDTester {
 "   <xd:mixed> </xd:mixed>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
@@ -876,9 +864,8 @@ public final class TestErrors extends XDTester {
 "   <xd:mixed> <b/> <b/> </xd:mixed>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF234", "3", "21", null));
@@ -888,9 +875,8 @@ public final class TestErrors extends XDTester {
 "   <xd:choice> </xd:choice>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF325", "3", "5", null));
@@ -900,9 +886,8 @@ public final class TestErrors extends XDTester {
 "   <xd:choice> <b/> <b/> </xd:choice>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF234", "3", "22", null));
@@ -910,9 +895,8 @@ public final class TestErrors extends XDTester {
 "<xd:def xmlns:xd='" + XDEFNS + "' root=\"a\">\n"+
 "  <a a='string' xd:script='finally outln(toString((boolean)(String) @a))'/>\n"+
 "</xd:def>\n";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter,props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF457", "2", "71", null));
@@ -920,9 +904,8 @@ public final class TestErrors extends XDTester {
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a v=\"int; fixed '2.0'\"/>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF481", "2", "20", null));
@@ -932,9 +915,8 @@ public final class TestErrors extends XDTester {
 "<xd:macro name=\"text\">\n"+
 "outln('Macro call is:\n${text}');</xd:macro>\n"+
 "</xd:def>";
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdef);
 			xb.compileXD();
 			assertEq("", chkReport(reporter, "XDEF486", "2", "37", null));
@@ -950,9 +932,8 @@ public final class TestErrors extends XDTester {
 "<test2/>\n"+															//05
 "</xd:def>"};															//06
 			String[] names = new String[] {"xd1", "xd2"};//<=(XDEf903 xd1, xd2)
-			xb = XDFactory.getXDBuilder(props);
 			reporter.clear();
-			xb.setReporter(reporter);
+			xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setSource(xdefs);
 			xb.setSource(names);
 			xb.compileXD();

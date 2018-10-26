@@ -49,9 +49,9 @@
 /******************************************************************************/
 /* BNF grammar rules                                                          */
 /*                                                                            */
-/* Note the inline BNF methods "$rule" and "$push" are used to generate code  */
-/* for the compiler of X-definitions. To understand the syntax you can simply */
-/* ignore them.                                                                 */
+/* Note the inline BNF method "$rule" is used to generate code for the        */
+/* compiler of X-definitions. To understand the syntax you can simply         */
+/* ignore them.                                                               */
 /******************************************************************************/
 
 Letter ::= $letter /* any letter.*/
@@ -87,7 +87,7 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
 
 /* Predefined constants */
 PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
-  "$PI" |"$E" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY" | "null") $rule $push
+  "$PI" |"$E" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY" | "null") $rule
 
 Identifier ::= BaseIdentifier - Keyword
   /* Identifier ::= (BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
@@ -98,19 +98,19 @@ RawIdentifier ::= (Letter | "_")  (Letter | Digit | "_")*
 
 QualifiedIdentifier ::= BaseIdentifier ("." BaseIdentifier)+ | BaseIdentifier
 
-BooleanLiteral ::= ("true" | "false") $rule $push
+BooleanLiteral ::= ("true" | "false") $rule
 
 DecimalInteger ::= ("_"* Digit+)+ ("_")*
 
 IntegerLiteral ::= (("0" [Dd])? DecimalInteger
-  | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $rule $push
+  | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $rule
   /* Inside a number specification it is possible to insert the character "_".
     This character does not influence the value of the number, it just makes 
     a number more readable. E.g. the number 123456789 you can be written
     as 123_456_789 (or 0x0f123456 as 0x0f_12_34_56). */
 
 FloatLiteral ::= (("0" [Dd]) DecimalInteger "." DecimalInteger? )
-  | ((DecimalInteger ("." DecimalInteger Exponent? | Exponent))) $rule $push 
+  | ((DecimalInteger ("." DecimalInteger Exponent? | Exponent))) $rule
 
 Exponent ::= [Ee] [-+]? [0-9]+
 
@@ -121,7 +121,7 @@ SpecChar ::= "\" ("\" | '"' | "'" | "n" | "r" | "t") | UnicodeCharSpecification
 UnicodeCharSpecification ::= "\u" HexaDigit{4}
 
 StringLiteral ::= ("'" ("''" | [^'\] | SpecChar)* "'" |
-  '"' ('""' | [^"\] | SpecChar)* '"') $rule $push
+  '"' ('""' | [^"\] | SpecChar)* '"') $rule
   /* The opening and closing delimiter must be either """ or "'". The occurrence
      of this delimiter inside of literal can be recorded as double delimiter or
      in the form of SpecChar. */
@@ -178,25 +178,25 @@ MacroParams ::= "(" S? Identifier (S? "," S? Identifier)* S? ")"
 
 Expression ::= Expr1 (S? "?" S? Expression S? ":" S? Expression)?
 
-OperatorLevel_1 ::= ("AND" | "AAND" | "&&" | "&") $rule $push
+OperatorLevel_1 ::= ("AND" | "AAND" | "&&" | "&") $rule
 
 Expr1 ::= Expr2 (S? OperatorLevel_1 S? Expr2)*
 
-OperatorLevel_2 ::= ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $rule $push
+OperatorLevel_2 ::= ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $rule
 
 Expr2 ::= Expr3 (S?  OperatorLevel_2 S? Expr3)*
 
 OperatorLevel_3 ::= ("LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE"
   | "<=" | "GE" | ">=" | "!=" | "NE" | "<<" | "LSH" | ">>" | "RSH" | ">>>"
-  | "RRSH") $rule $push
+  | "RRSH") $rule
 
 Expr3 ::= Expr4 (S? OperatorLevel_3 S? Expr4)*
 
-OperatorLevel_4 ::= ("*" | "/" | "%") $rule $push
+OperatorLevel_4 ::= ("*" | "/" | "%") $rule
 
 Expr4 ::= Expr5 (S? OperatorLevel_4 S? Expr5)*
 
-OperatorLevel_5 ::= ("+" | "-") $rule $push
+OperatorLevel_5 ::= ("+" | "-") $rule
 
 Expr5 ::= Expr (S? OperatorLevel_5 S? Expr)*
 
@@ -207,13 +207,13 @@ ConstantExpression ::= Literal /* ConstantExpression must be a Literal. */
 
 CastRequest ::= S? "(" S? $rule TypeIdentifier S? ")" S?
 
-UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule $push
+UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule
 
 TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "AnyValue"
-  | "Output" | "Input" | "NamedValue" ) $rule $push
+  | "Output" | "Input" | "NamedValue" ) $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName
@@ -231,13 +231,13 @@ ContainerValue ::= "[" S? (ContainerValueStart (S? "," S? Expression)* )? S? "]"
 
 KeyParameterReference ::= KeyName
 
-Method ::= $rule (SchemaTypeName | (QualifiedIdentifier - Keyword)) $push
+Method ::= (SchemaTypeName | (QualifiedIdentifier - Keyword)) $rule
   S? ParameterList?
 
 SchemaTypeName ::= "xs:" Identifier
 
-incAfter ::= ("++" | "--") S? $rule $push  VariableReference
-incBefore ::= VariableReference S? ("++" | "--") S? $rule $push  
+incAfter ::= ("++" | "--") S? $rule VariableReference
+incBefore ::= VariableReference S? ("++" | "--") S? $rule
 
 Increment ::= incAfter | incBefore
   /* The type VariableReference must be an integer or a float */
@@ -246,12 +246,12 @@ Parameter ::= Expression $rule
 
 ParameterList ::= "(" S? (Parameter (S? "," S? Parameter)* S?)? ")" $rule
 
-VariableReference ::= $rule (Identifier - TypeIdentifier) $push
+VariableReference ::= (Identifier - TypeIdentifier) $rule
 
-MethodDeclaration ::= $rule ("void" $push | TypeIdentifier)
+MethodDeclaration ::= ("void" | TypeIdentifier) $rule
   S DeclaredMethodName S? ParameterListDeclaration S? Block
 
-DeclaredMethodName ::= Identifier $push
+DeclaredMethodName ::= Identifier $rule
 
 ParameterListDeclaration ::=
   "(" S? (SeqParameter (S? "," S? SeqParameter)* )? ")" $rule
@@ -291,7 +291,7 @@ IfStatement ::=
   "if" ParentalExpression SimpleStatement (S? "else" S? SimpleStatement)?
   /* Result of ParentalExpression must be boolean. */
 
-ForStatement ::= "for" $push S? "(" S? ForInit? S? ";" S? 
+ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S? 
   ForBooleanExpression? S? ";" S? ForStep? S? ")" S? SimpleStatement
 
 ForBooleanExpression ::= $rule Expression
@@ -316,10 +316,10 @@ SwitchStatement ::=
      switch statement only once. */
 
 SwitchBlockStatementVariant ::=
-   S? (DeaultVariant | CaseVariant) S? ":" S? StatementSequence?
+   S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
   /* Type  of ConstantExpression must be integer. */
 
-DeaultVariant ::= "default" S? $rule
+DefaultVariant ::= "default" S? $rule
 
 CaseVariant ::= "case" S?  $rule ConstantExpression
 
@@ -346,19 +346,19 @@ AssignmentStatement ::= (Identifier S? ((AssignmentOperator S? Expression) |
  (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) |
   S? AssignmentOperator S? Expression)
 
-AssignmentOperator ::= $rule (("|" | "^" | "+" | "-" | "*" | "/" | "&"
-  | "%" | "<<" | ">>>" | ">>")? "=") $push
+AssignmentOperator ::= (("|" | "^" | "+" | "-" | "*" | "/" | "&"
+  | "%" | "<<" | ">>>" | ">>")? "=") $rule
 
-VariableModifier ::= ("final" | "external") $rule $push S
+VariableModifier ::= ("final" | "external") $rule S
 
 VariableDeclaration ::= VariableModifier*
   TypeIdentifier S VariableDeclarator (S? "," VariableDeclarator)*
 
 VariableDeclarator ::= S? (AssignmentStatement | Identifier)
 
-Occurrence ::= $info $rule ("required" | "optional" | "ignore" | "illegal" | "*"
+Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?" |
-  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? )))) $push
+  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? )))) $rule
   /* The value of the second IntegerLiteral (after "..")  must be greater or
      equal to the first one. */
 
@@ -417,9 +417,9 @@ ValueExecutivePart ::= "$$$script:"? S?
 
 AttributeOnStartSection ::= "onStartElement" S? Statement?
 
-FixedModitier ::= "fixed" S $rule
+FixedModifier ::= "fixed" S $rule
 
-ValueValidationSection ::= FixedModitier (Expression | Block)
+ValueValidationSection ::= FixedModifier (Expression | Block)
   | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
@@ -471,7 +471,7 @@ ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
 /* Script of elements                                                         */
 /******************************************************************************/
 
-ElementScript ::= $info $push ElementExecutivePart* S?
+ElementScript ::= $info ElementExecutivePart* S?
 
 ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
   | ElementVarSection | ElementMatchSection | ElementInitSection

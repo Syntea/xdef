@@ -71,7 +71,9 @@ public final class BNFGrammar {
 		"info",  				//36
 		"eos",  				//37
 		"rule",  				//38
-		"stop",  				//39
+		"true",  				//39
+		"false",  				//40
+		"stop",  				//41
 	};
 
 	/** Inline methods code identifiers. */
@@ -113,8 +115,10 @@ public final class BNFGrammar {
 	private static final int INL_TOKENS = INL_JAVAQNAME + 1;
 	private static final int INL_INFO = INL_TOKENS + 1;
 	private static final int INL_EOS = INL_INFO + 1;
-	private static final int INL_RULENAME = INL_EOS + 1;
-	private static final int INL_STOP = INL_RULENAME + 1;
+	private static final int INL_RULE = INL_EOS + 1;
+	private static final int INL_TRUE = INL_RULE + 1;
+	private static final int INL_FALSE = INL_TRUE + 1;
+	private static final int INL_STOP = INL_FALSE + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -690,8 +694,9 @@ public final class BNFGrammar {
 				if (_item.perform()) {
 					if (_traceOut != null) {
 						try {
-							_traceOut.println(_name+"; pos="
-								+ _pos.getIndex() + "; true");
+							_traceOut.println(_name+"; ("
+								+ _pos.getIndex() + "," + _p.getIndex()
+								+ "); true");
 							_traceOut.flush();
 						} catch (Exception ex) {}
 					}
@@ -699,7 +704,7 @@ public final class BNFGrammar {
 				}
 				if (_traceOut != null) {
 					try {
-						_traceOut.println(_name + "; pos="
+						_traceOut.println(_name + "; "
 							+ _pos.getIndex() + "; false");
 						_traceOut.flush();
 					} catch (Exception ex) {}
@@ -1873,8 +1878,13 @@ public final class BNFGrammar {
 					return _p.isOneOfTokens((String[]) _param) >= 0;
 				case INL_EOS:
 					return _p.eos();
-				case INL_RULENAME:
-					pushObject(_actRule._name);
+				case INL_RULE:
+					pushObject(_actRule._name + " " +
+						_actRule._pos.getIndex() + " " + _p.getIndex());
+					return true;
+				case INL_TRUE:
+					return true;
+				case INL_FALSE:
 					return true;
 				case INL_STOP: {
 					if (_param != null) {

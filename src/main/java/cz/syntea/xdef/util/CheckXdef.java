@@ -26,8 +26,7 @@ public class CheckXdef {
 		ReportWriter reporter = new ArrayReporter();
 		try {
 			Properties props = new Properties();
-			XDBuilder xb = XDFactory.getXDBuilder(props);
-			xb.setReporter(reporter);
+			XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
 			xb.setExternals(ext);
 			xb.setSource(sources);
 			xb.compileXD();

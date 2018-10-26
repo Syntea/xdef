@@ -44,14 +44,14 @@ public class TestYaml extends STester {
 		try {
 			g = BNFGrammar.compile(new File(getDataDir() + "TestYaml.bnf"));
 //System.out.println(g);
-			s = 
-"# This stream contains no\n" +
-"# documents, only comments.\n";
-			g.trace(null);
-			assertEq(s, parse(g, "s_l_comments", s));
-			s = "%TAG !e! tag:example.com,2000:app/\n";
-			g.trace(null);
-			assertEq(s, parse(g, "l_directive", s));
+//			s = 
+//"# This stream contains no\n" +
+//"# documents, only comments.\n";
+//			g.trace(null);
+//			assertEq(s, parse(g, "s_l_comments", s));
+//			s = "%TAG !e! tag:example.com,2000:app/\n";
+//			g.trace(null);
+//			assertEq(s, parse(g, "l_directive", s));
 			s = 
 "%TAG !e! tag:example.com,2000:app/\n" +
 "---\n" +

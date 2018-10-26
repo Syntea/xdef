@@ -83,11 +83,10 @@ public class XDChecker {
 		ArrayReporter ar = new ArrayReporter();
 		XDParseResult result;
 		try {
-			XDBuilder xb = XDFactory.getXDBuilder(_properties);
+			XDBuilder xb = XDFactory.getXDBuilder(ar, _properties);
 			if (_classes != null && _classes.length > 0) {
 				xb.setExternals(_classes);
 			}
-			xb.setReporter(ar);
 			String xdef =
 "<x:def xmlns:x='"+ KXmlConstants.XDEF31_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {

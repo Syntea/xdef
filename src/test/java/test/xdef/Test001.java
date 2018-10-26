@@ -7,6 +7,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 
@@ -1123,6 +1124,36 @@ public final class Test001  extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
+		} catch (Exception ex) {fail(ex);}
+		try {
+			// check compiling if source items have assignment of sourceId
+			Object[] p1 = new Object[] {
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' name='A' >\n" +
+"  <A/>\n" +
+"</xd:def>",
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='B' name='B' >\n" +
+"  <B/>\n" +
+"</xd:def>",
+			new ByteArrayInputStream((
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='C' name='C' >\n" +
+"  <C/>\n" +
+"</xd:def>").getBytes("UTF-8"))
+			};
+			String[] p2 = new String[] {
+				"AA",
+				"AB",
+				"AC"
+			};
+			xp = XDFactory.compileXD(null, p1, p2);
+			xml = "<A/>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<B/>";
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<C/>";
+			assertEq(xml, parse(xp, "C", xml, reporter));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
