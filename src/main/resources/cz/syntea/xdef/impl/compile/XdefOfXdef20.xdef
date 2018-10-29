@@ -18,7 +18,6 @@
         QualifiedIdentifier)*)? S?
       MethodList ::= (S? MethodListItem (S? ';' S? MethodListItem)*)? S? ';'? ",
     XDScript);
-
   type classList v20BNF.rule('ClassList');
   type methodList v20BNF.rule('MethodList');
 </xd:declaration>
@@ -31,7 +30,10 @@
     methods        = "optional methodList; options acceptQualifiedAttr"
     metaNamespace  = "optional uri; options acceptQualifiedAttr">
 
-	  <XD2.0:def xd:script = "occurs +; ref XD2.0:def" />
+    <xd:mixed>
+      <XD2.0:def xd:script = "occurs *; ref XD2.0:def" />
+      <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
+    </xd:mixed>
 
   </XD2.0:collection>
     
@@ -70,30 +72,44 @@
       <XD2.0:component xd:script = "occurs *">
          required xcomponent;
       </XD2.0:component>
+	  
+      <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
 
       <xd:choice occurs = "*">
+
           <XD2.0:choice xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:choiceDef"
             name = "required QName; options acceptQualifiedAttr" />
+
           <XD2.0:mixed xd:script="occurs *;
                             match @name || @XD2.0:name; ref XD2.0:mixedDef" 
             name = "required QName; options acceptQualifiedAttr" />
+
           <XD2.0:sequence xd:script="occurs *;
                             match @name || @XD2.0:name; ref XD2.0:sequenceDef"
             name = "required QName; options acceptQualifiedAttr" />
+
           <XD2.0:list xd:script="occurs *;
                             match @name || @XD2.0:name; ref XD2.0:listDef" 
             name = "required QName; options acceptQualifiedAttr" />
+
           <XD2.0:any xd:script="occurs *;
                             match @name || @XD2.0:name; ref XD2.0:anyDef"
             name = "required QName; options acceptQualifiedAttr" />
 
           <xd:any xd:script = "occurs *; ref xelement" />
+		  
           optional valueScript;
+		  
       </xd:choice>
     </xd:mixed>
 
   </XD2.0:def>
+ 
+  <XD2.0:thesaurus language="languageId()"
+      default="optional yesNo()">
+    optional thesaurus();
+  </XD2.0:thesaurus>
 
   <!-- model elementu -->
   <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes" 

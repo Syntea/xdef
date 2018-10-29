@@ -33,7 +33,10 @@
   type booleanLiteral XDScript.rule('BooleanLiteral');
   type bnfGrammar XDScript.rule('BNFGrammar');
   type xcomponent XDScript.rule('XCComponent');
-
+  type languageId XDScript.rule('LanguageId');
+  type yesNo XDScript.rule('YesNo');
+  type thesaurus XDScript.rule('Thesaurus');
+	
   /** Check element name and namespace URI (used in the match section) */
   boolean xdName(String name) {
     return getElementLocalName() EQ name AND getNamespaceURI() EQ NS;
@@ -91,6 +94,10 @@ PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
 
 Identifier ::= BaseIdentifier - Keyword
   /* Identifier ::= (BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
+
+LanguageId ::= [a-z] {2,3}
+
+YesNo ::= "yes" | "no"
 
 BaseIdentifier ::= ((Letter | "_" | "$")  (Letter | Digit | "_")* )
 
@@ -641,6 +648,8 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
   | ("%enum" S JavaTypedQName S (Identifier? "#")? XMLName))
 
 XCLink ::= "%link" S ("*" | XPosition)
+
+Thesaurus ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
 ]]>
   </xd:BNFGrammar>

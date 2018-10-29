@@ -260,6 +260,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XCComponent", s));
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "MethodListItem", s));
+			s = "";
 //			printCode(g);
 			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
 			s = g.toString();

@@ -1128,22 +1128,13 @@ public final class Test001  extends XDTester {
 		try {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' name='A' >\n" +
-"  <A/>\n" +
-"</xd:def>",
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='B' name='B' >\n" +
-"  <B/>\n" +
-"</xd:def>",
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' name='A'><A/></xd:def>",
+"<xd:def xmlns:xd='" + XDEFNS + "' root='B' name='B'><B/></xd:def>",
 			new ByteArrayInputStream((
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='C' name='C' >\n" +
-"  <C/>\n" +
-"</xd:def>").getBytes("UTF-8"))
+"<xd:def xmlns:xd='" + XDEFNS + "' root='C' name='C'><C/></xd:def>")
+				.getBytes("UTF-8"))
 			};
-			String[] p2 = new String[] {
-				"AA",
-				"AB",
-				"AC"
-			};
+			String[] p2 = new String[] {"AA", "AB", "AC"};
 			xp = XDFactory.compileXD(null, p1, p2);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
@@ -1155,6 +1146,23 @@ public final class Test001  extends XDTester {
 			assertEq(xml, parse(xp, "C", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {
+			// check compiling if source items have assignment of sourceId
+			Object[] p1 = new Object[] {
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' name='A'><A a='x'/></xd:def>",
+"<xd:def xmlns:xd='" + XDEFNS + "' root='B' name='B'><B a='x'/></xd:def>",
+			new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + XDEFNS + "' root='C' name='C'><C a='x'/></xd:def>")
+				.getBytes("UTF-8"))
+			};
+			String[] p2 = new String[] {"AA", "AB", "AC"};
+			XDFactory.compileXD(null, p1, p2);
+		} catch (Exception ex) {
+			String s = ex.getMessage();
+			if (!s.contains("AA") || !s.contains("AB") || !s.contains("AC")) {
+				fail(ex); // not present "AA" or "AB" or "AC"
+			}
+		}
 
 		resetTester();
 	}

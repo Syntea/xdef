@@ -1102,7 +1102,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		XPool xp = (XPool) getXDPool();
 		if (xp._thesaurus == null) {
 			//Can't set language of input &{0} because thesaurus is not declared
-			throw new SRuntimeException(XDEF.XDEF140, ""+language);
+			throw new SRuntimeException(XDEF.XDEF140, language);
 		}
 		try {
 			_sourceLanguageID = language == null
@@ -1110,7 +1110,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} catch (Exception ex) {
 			//Can't set language of input &{0} because this language is not
 			//specified in thesaurus
-			throw new SRuntimeException(XDEF.XDEF142, ""+language);
+			throw new SRuntimeException(XDEF.XDEF142, language);
 		}
 	}
 	@Override
@@ -1133,7 +1133,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		if (xp._thesaurus == null) {
 			//Can't set language of output &{0} because thesaurus is not
 			//declared
-			throw new SRuntimeException(XDEF.XDEF141, ""+language);
+			throw new SRuntimeException(XDEF.XDEF141, language);
 		}
 		try {
 			_destLanguageID = language == null
@@ -1141,7 +1141,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} catch (Exception ex) {
 			//Can't set language of output &{0} because this language is not
 			//specified in thesaurus
-			throw new SRuntimeException(XDEF.XDEF143, ""+language);
+			throw new SRuntimeException(XDEF.XDEF143, language);
 		}
 	}
 

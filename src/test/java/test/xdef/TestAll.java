@@ -57,6 +57,7 @@ public class TestAll {
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),
+			new TestThesaurus(),
 			new TestTryCatch(),
 			new TestTypes(),
 			new TestUserMethods(),

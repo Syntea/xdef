@@ -2379,7 +2379,6 @@ String digest = xe.getDigest();
 		boolean javadoc = false;
 		boolean jaxb = false;
 		String xpClassName = null;
-		String xpFileName = null;
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];

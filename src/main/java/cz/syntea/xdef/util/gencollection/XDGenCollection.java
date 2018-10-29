@@ -58,6 +58,8 @@ public class XDGenCollection {
 	private final ArrayList<String> _includeList;
 	/** List of parsed sources */
 	private final ArrayList<String> _parsedList;
+	/** List of thesaurus. */
+	private final ArrayList<Element> _thesaurusList;
 	/** List of macro definitions. */
 	private final HashMap<String, XScriptMacro> _macros;
 	/** Actual name space URI of X-definition. */
@@ -197,6 +199,7 @@ public class XDGenCollection {
 		_defNames = new ArrayList<String>();
 		_includeList = new ArrayList<String>();
 		_parsedList = new ArrayList<String>();
+		_thesaurusList = new ArrayList<Element>();
 		_macros = new HashMap<String, XScriptMacro>();
 		_xdParser = null;
 		_doc = KXmlUtils.newDocument();
@@ -217,28 +220,31 @@ public class XDGenCollection {
 		if (uri == null) {
 			return null;
 		}
-		Element def = (Element) node.cloneNode(true);
-		if (!"def".equals(def.getLocalName())) {
-			return null;
+		Element el = (Element) node.cloneNode(true);
+		if ("thesaurus".equals(el.getLocalName())) {
+			_thesaurusList.add(el);
+			_collection.appendChild(el);
+		} else if ("def".equals(el.getLocalName())) {
+			String root = getXdefAttr(el, uri, "root", true);
+			if (root.length() > 0) {
+				el.setAttribute("root", root); //canonize root attribute.
+			}
+			String name = getXdefAttr(el, uri, "name", true);
+			if (name.length() > 0) {
+				el.setAttribute("name", name); //canonize name attribute.
+			}
+			String s = getXdefAttr(el, uri, "messages", true);
+			if (s.length() > 0) {
+				el.setAttribute("messages", s); //canonize name attribute.
+			}
+			if (_defNames.indexOf(name) >= 0) {
+				return null; //X-definition exists
+			}
+			_defNames.add(name);
+			_collection.appendChild(el);
+			return el;
 		}
-		String root = getXdefAttr(def, uri, "root", true);
-		if (root.length() > 0) {
-			def.setAttribute("root", root); //canonize root attribute.
-		}
-		String name = getXdefAttr(def, uri, "name", true);
-		if (name.length() > 0) {
-			def.setAttribute("name", name); //canonize name attribute.
-		}
-		String s = getXdefAttr(def, uri, "messages", true);
-		if (s.length() > 0) {
-			def.setAttribute("messages", s); //canonize name attribute.
-		}
-		if (_defNames.indexOf(name) >= 0) {
-			return null; //X-definition exists
-		}
-		_defNames.add(name);
-		_collection.appendChild(def);
-		return def;
+		return null;
 	}
 
 	private void parse(File[] files) throws Exception {
@@ -672,17 +678,25 @@ public class XDGenCollection {
 			} else if (n.getNodeType() == Node.TEXT_NODE) {
 				if (!("declaration".equals(el.getLocalName())
 					|| "component".equals(el.getLocalName())
-					|| "BNFGrammar".equals(el.getLocalName()))
+					|| "BNFGrammar".equals(el.getLocalName())
+					|| "thesaurus".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
-					String s = canonizeScript(txt.getData(),
-						defName, removeActions, true);
-					if (s.length() > 0) {
-						Element txtEl = doc.createElementNS(xdUri, "xd:text");
-						txtEl.appendChild(doc.createTextNode(s));
-						el.replaceChild(txtEl, txt);
+					String s = ((Text) n).getData();
+					if ("thesaurus".equals(el.getLocalName())) {
+						if (s.trim().isEmpty()) {
+							el.removeChild(n);
+						}
 					} else {
-						el.removeChild(txt);
+						s = canonizeScript(s,
+							defName, removeActions, true);
+						if (s.length() > 0) {
+							Element txtEl = doc.createElementNS(xdUri, "xd:text");
+							txtEl.appendChild(doc.createTextNode(s));
+							el.replaceChild(txtEl, txt);
+						} else {
+							el.removeChild(txt);
+						}
 					}
 				}
 			}

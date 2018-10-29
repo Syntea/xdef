@@ -62,6 +62,14 @@ public final class TestParse extends XDTester {
 		StringWriter strw;
 		String tempDir = getTempDir();
 		_myX = 1;
+		try {
+			XDFactory.getXDBuilder(null).compileXD(); // no sources
+			fail("Exception not thrown");
+		} catch (Exception ex) {
+			if (ex.getMessage()==null || !ex.getMessage().contains("XDEF903")) {
+				fail(ex);
+			}
+		}
 		try {//no source
 			XDFactory.compileXD(null, (Object[]) new File[0]);
 			fail("Error not reported");
