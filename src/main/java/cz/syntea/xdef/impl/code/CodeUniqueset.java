@@ -138,9 +138,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return true if reporter was empty.
 	 */
 	public final boolean checkAndClear(final ReportWriter reporter) {
-		if (_map == null) {
-			return true;
-		}
 		boolean result = true;
 		for (UniquesetItem a: _map.values()) {
 			if (reporter != null) {
@@ -154,7 +151,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		}
 		_map.clear();
 		for (int i = 0; i < _parseItems.length; i++) {
-			_parseItems[i] = (ParseItem) _parseItems[i].cloneItem();
+			((ParseItem) _parseItems[i])._itemValue = null;
 		}
 		return result;
 	}
