@@ -44,21 +44,25 @@ public class TestYaml extends STester {
 		try {
 			g = BNFGrammar.compile(new File(getDataDir() + "TestYaml.bnf"));
 //System.out.println(g);
-//			s = 
-//"# This stream contains no\n" +
-//"# documents, only comments.\n";
-//			g.trace(null);
-//			assertEq(s, parse(g, "s_l_comments", s));
-//			s = "%TAG !e! tag:example.com,2000:app/\n";
-//			g.trace(null);
-//			assertEq(s, parse(g, "l_directive", s));
-			s = 
+			s = "%TAG !e! !e!foo \"bar\"\n";
+//			g.trace(System.err);
+			assertEq(s, parse(g, "l_directive", s));
+//if(true) return;
+			s =
+"%TAG !e! tag:example.com,2000:app/\n"+
+"# This stream contains no\n" +
+"# documents, only comments.\n";
+//			g.trace(System.err);
+			assertEq(s, parse(g, "l_directive", s));
+//if(true) return;
+			s =
 "%TAG !e! tag:example.com,2000:app/\n" +
 "---\n" +
 "!e!foo \"bar\"\n";
-			g.trace(System.err);
-			assertEq(s, parse(g, "l_yaml_stream", s));
-			s = 
+//			g.trace(System.err);
+//			assertEq(s, parse(g, "l_yaml_stream", s));
+//if(true) return;
+			s =
 "%YAML 1.2\n" +
 "---\n" +
 "!!map {\n" +
@@ -72,18 +76,21 @@ public class TestYaml extends STester {
 "}\n";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
-			s = 
+//if(true) return;
+			s =
 "%YAML 1.2\n" +
 "---\n" +
 "!<tag:example.com,2000:app/int> \"1 - 3\"\n";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
+//if(true) return;
 			s =
 "%YAML 1.2\n" +
 "---\n" +
 "!!str \"Document\"";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
+//if(true) return;
 			s =
 "Block style: !!seq\n" +
 "- Clark Evans\n" +
@@ -91,10 +98,8 @@ public class TestYaml extends STester {
 "- Oren Ben-Kiki";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
-////////////////////////////////////////////////////////////////////////////////
-		} catch (Exception ex) {
-			fail(ex);
-		}
+//if(true) return;
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test

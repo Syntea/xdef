@@ -30,7 +30,7 @@ public final class TestExternalVariables extends XDTester {
 "    external String i;\n"+
 "    String j = i;\n"+
 "  </xd:declaration>\n"+
-"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"  <a xd:script='finally{out(i); out(i==null); out(j); outln(j==null);}'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -43,14 +43,14 @@ public final class TestExternalVariables extends XDTester {
 			xd.xparse(xml, reporter);
 			assertNoErrors(reporter);
 			strw.close();
-			assertEq("truetrue1falsetrue2falsetrue", strw.toString());
+			assertEq("truetrue\n1falsetrue\n2falsetrue\n", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    external final String i;\n"+
 "    String j = i;\n"+
 "  </xd:declaration>\n"+
-"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"  <a xd:script='finally{out(i); out(i==null); out(j); out(j==null);}'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a/>";
@@ -85,7 +85,7 @@ public final class TestExternalVariables extends XDTester {
 "    external final String i;\n"+
 "    String j = i;\n"+
 "  </xd:declaration>\n"+
-"  <a xd:script='finally{out(i+(i==null)+j+(j==null));}'/>\n"+
+"  <a xd:script='finally{out(i); out(i==null); out(j); out(j==null);}'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a/>";
@@ -93,7 +93,6 @@ public final class TestExternalVariables extends XDTester {
 			xd.setStdOut(strw = new StringWriter());
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter);
-			strw.close();
 			assertEq(strw.toString(),"truetrue");
 			xd = xp.createXDDocument();
 			xd.setStdOut(strw = new StringWriter());
@@ -101,6 +100,7 @@ public final class TestExternalVariables extends XDTester {
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(0, xd.getVariable("#i").intValue());
+			assertEq(strw.toString(),"1false1false");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

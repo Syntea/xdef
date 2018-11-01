@@ -97,10 +97,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
-//	/** Switch to allow/restrict read files. */
-//	private boolean _fileRead;
-//	/** Switch to allow/restrict read write. */
-//	private boolean _fileWrite;
 	/** Switch to allow/restrict DOCTYPE in XML. */
 	/** Program code */
 	private XDValue[] _code;
@@ -150,8 +146,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects =
 		new TreeMap<String, Object>();
-//	/** UniqueSet for ID, IDREF, IREFS */
-//	private CodeUniqueset _idrefTable;
 
 	/** XPath function resolver. */
 	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
@@ -348,8 +342,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private void init(final XDefinition xd, final Properties props) {
 		_xd = xd;
 		XPool xp = (XPool) xd.getXDPool();
-//		_fileRead = xp._fileRead;
-//		_fileWrite = xp._fileWrite;
 		_xmlVersion1 = false;
 		_init = xp.getInitAddress();
 		_stack = new XDValue[xp.getStackSize()];
@@ -494,10 +486,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		}
 		closeFinalList(_finalList);
 		boolean result = true;
-//		if (_idrefTable != null) {//check ID list
-//			_idrefTable.checkAndClear(_reporter);
-//			_idrefTable = null;
-//		}
 		if (_globalVariables != null) {
 			XVariableTable vartab =
 				(XVariableTable) _xd.getXDPool().getVariableTable();
@@ -1504,15 +1492,15 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case UNIQUESET_NEWINSTANCE: {
 					CodeXD x = (CodeXD) item;
-					CodeUniqueset u = (CodeUniqueset) x.getParam2();
-					_stack[++sp] = new CodeUniqueset(
-						u.getParsedItems(), u.getName());
+					CodeUniqueset u = (CodeUniqueset) x.getParam2().cloneItem();
+					_stack[++sp] =
+						new CodeUniqueset(u.getParsedItems(), u.getName());
 					continue;
 				}
 				case UNIQUESET_M_NEWKEY: {
-					CodeUniqueset dt = (CodeUniqueset) _stack[sp--];
-					for (CodeUniqueset.ParseItem pi : dt.getParsedItems()) {
-						pi.setParsedObject(null);
+					CodeUniqueset u = (CodeUniqueset) _stack[sp--];
+					for (CodeUniqueset.ParseItem i : u.getParsedItems()) {
+						i.setParsedObject(null);
 					}
 					continue;
 				}
@@ -1943,20 +1931,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case CLEAR_REPORTS: //clear temp reports
 					_reporter.clear();
 					continue;
-				case ADD_TEXT_NODE: {//add text node
-					String s = _stack[sp--].toString();
-					if (s != null && s.length() > 0) {
-						chkNode.getElement().appendChild(
-							chkNode.getDocument().createTextNode(s));
-					}
-					continue;
-				}
-				case ADD_COMMENT_NODE: { //set comment value
-					String s = _stack[sp--].toString();
-					chkNode.getElement().appendChild(
-						chkNode.getDocument().createComment(s));
-					continue;
-				}
 				case SET_TEXT: {//set string value
 					XDValue x =_stack[sp--];
 					String s = x == null || x.isNull() ? null : x.toString();
@@ -2508,10 +2482,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					} else {
 						xdef = _xd;
 					}
-//					CodeUniqueset idrefTable = _idrefTable;
 					Map<Integer, CodeUniqueset> idrefTables =
 						new TreeMap<Integer, CodeUniqueset>();
-//					_idrefTable = null;
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
@@ -2525,7 +2497,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					Element elem = ChkComposer.compose(_reporter,
 						(XDefinition) xdef, rootName, chkNode.getChkElement());
-//					_idrefTable = idrefTable;
 					// restore all unique
 					for (Integer j : idrefTables.keySet()) {
 						CodeUniqueset x = idrefTables.get(j);
@@ -3015,7 +2986,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					continue;
 				}
-//			//Codes implemented in XCodeImplMethods
+			//Codes implemented in XCodeImplMethods
 				case GET_TYPEID: //get type of a value (as integer type id)
 				case GET_TYPENAME: // get name of type of a value
 				case CHECK_TYPE:
@@ -3041,7 +3012,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case ELEMENT_CHILDNODES:
 				case ELEMENT_NAME:
 				case ELEMENT_NSURI:
-//			//ParseResult
+			//ParseResult
 				case GET_PARSED_STRING:
 			//Datetime
 				case GET_DAY:
@@ -3261,7 +3232,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private int genDefException(final int pc,
 		final Throwable ex,
 		final XXNode xNode) {
-//		_catchItem.setThrownAddr(pc);
 		int result = _catchItem.getCatchAddr();
 		_localVariables = _catchItem.getVariables();
 		Report report;
@@ -3542,7 +3512,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final short getItemId() {return XDValueID.XD_ANY;}
-
 		@Override
 		public final XDValueType getItemType() {return XDValueType.OBJECT;}
 
@@ -3551,10 +3520,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final XDCallItem getParentCallItem() {return _parent;}
-
 		@Override
 		public final int getDebugMode() {return _step;}
-
 		@Override
 		public final int getReturnAddr() {return _returnAddr;}
 	}

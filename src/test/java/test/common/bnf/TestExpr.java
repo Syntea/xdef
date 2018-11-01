@@ -4,9 +4,11 @@ import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -825,224 +827,256 @@ public class TestExpr extends STester {
 		g.setUserObject(this);
 		try {
 			String s;
-//			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
-//			assertEq("", expr("abcdef", g, "'abc' + 'def'"));
-//			assertEq("", expr("25abc", g, "((3+2)*5)+'abc'"));
-//			assertEq("", expr("25abc", g, "( 5 * ( 3 + 2 ) ) + 'abc'"));
-//			assertEq("", expr("50abc", g, "+( +5 * -(-7 + 2))*2+'abc'"));
-//			assertEq("", expr("true", g, "true"));
-//			assertEq("", expr("false", g, "!true"));
-//			assertEq("", expr("true", g, "true | false"));
-//			assertEq("", expr("false", g, "true&false"));
-//			assertEq("", expr("true", g, "true | false"));
-//			assertEq("", expr("true", g, "! (true & false)"));
-//			assertEq("", expr("1abc", g, "( (3 + 3)/5 ) + \"abc\" "));
-//			assertEq("", expr("1.26abc", g, "((3 + 3.3)/5) + 'abc'"));
-//			assertEq("", expr("2", g, "-1 + 3"));
-//			assertEq("", expr("1", g, "min(2,1)"));
-//			assertEq("", expr("1.0", g, "min(2.0,1.0)"));
-//			assertEq("", expr("1.0", g, "min(2,1.0)"));
-//			assertEq("", expr("1.0", g, "min(2.0,1)"));
-//			assertEq("", expr(String.valueOf(Math.sin(3.14)), g, "sin(3.14)"));
-//			assertEq("", expr(String.valueOf(Math.cos(3.14)), g, "cos(3.14)"));
-//			assertEq("", prog(g, "float i;"));
-//			assertEq("", prog(g, "empty();"));
-//			
-//			assertEq("", prog(g, "j = empty() + 'abc';"));
-//			assertEq("abc", getVar("j"));
-//
-//			assertEq("", prog(g, "i = ~1;"));
-//			assertEq(-2, getVar("i"));
-//
-//			assertEq("", prog(g, "i=~(~1);"));
-//			assertEq(1, getVar("i"));
-//
-//			assertEq("", prog(g, "i=8; i=i<< 2;"));
-//			assertEq(32, getVar("i"));
-//			assertEq("", prog(g, "j ='abc'+empty()/*x*/; k=j+'d';"));
-//			assertEq("abc", getVar("j"));
-//			assertEq("abcd", getVar("k"));
-//
-//			assertEq("", prog(g, "/*xx*/i=sin(/*xx*/3.14/*xx*/) ;/*xx*/"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			assertEq("", prog(g, "/*xx*/i/*xx*/=/*xx*/3/*xx*/;/*xx*/ "));
-//			assertEq(3, getVar("i"));
-//
-//			assertEq("", prog(g, "i=3;j=i*5;"));
-//			assertEq(3, getVar("i"));
-//			assertEq(15, getVar("j"));
-//
-//			assertEq("", prog(g, "i=''; j=i+(5*3);"));
-//			assertEq("", getVar("i"));
-//			assertEq("15", getVar("j"));
-//
-//			assertEq("", prog(g, "i=\"\";j=i+(5*3);"));
-//			assertEq("", getVar("i"));
-//			assertEq("15", getVar("j"));
-//
-//			assertEq("", prog(g, "i=\"\"\"\"; j=i+(5*3);"));
-//			assertEq("\"15", getVar("j"));
-//
-//			assertEq("", prog(g, "i=''''; j=i+(5*3);"));
-//			assertEq("'15", getVar("j"));
-//
-//			assertEq("", prog(g, "i = ''''''; j = i + (5 *3);"));
-//			assertEq("''15", getVar("j"));
-//
-//			assertEq("", prog(g, "i = 'x''y';"));
-//			assertEq("x'y", getVar("i"));
-//
-//			assertEq("", prog(g, "i = '''x'''; j = i + (5 *3);"));
-//			assertEq("'x'15", getVar("j"));
-//
-//			assertEq("", prog(g, "i = '''''x'''''; j = i + (5 *3);"));
-//			assertEq("''x''15", getVar("j"));
-//
-//			assertEq("", prog(g, "i = '\"x\"'; j = i + (5 *3);"));
-//			assertEq("\"x\"15", getVar("j"));
-//
-//			assertEq("", prog(g, "i = 'abc'; j = (5 *3) + i;"));
-//			assertEq("abc", getVar("i"));
-//			assertEq("15abc", getVar("j"));
-//
-//			assertEq("", prog(g, "i = sin(3.14);"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			assertEq("", prog(g, "i = min(3.14, sin(3.14));"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			assertEq("",  prog(g, "i = max(3.14, sin(3.14 + 4));"));
-//			assertEq(3.14, getVar("i"));
-//
-//			assertEq("", prog(g, "i = max(3.15, sin(3.14));"));
-//			assertEq(3.15, getVar("i"));
-//
-//			assertEq("", prog(g, "i = min(3.15, sin(3.14));"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			assertEq("", prog(g, "i = sin(0);"));
-//			assertEq(Math.sin(0), getVar("i"));
-//
-//			assertEq("", prog(g, "i = sin(1.5);"));
-//			assertEq(Math.sin(1.5), getVar("i"));
-//
-//			assertEq("", prog(g, "i = tanh(1.5);"));
-//			assertEq(Math.tanh(1.5), getVar("i"));
-//
-//			assertEq("", prog(g, "i=sqrt(2);"));
-//			assertEq(Math.sqrt(2), getVar("i"));
-//
-//			assertEq("", prog(g, "i = cbrt(2);"));
-//			assertEq(Math.cbrt(2), getVar("i"));
-//
-//			assertEq("", prog(g, "i = 3.15 == sin(0);"));
-//			assertEq(false, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 8; i = i << 2;"));
-//			assertEq(32, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 8; i <<= 2;"));
-//			assertEq(32, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 8; i = i >> 2;"));
-//			assertEq(2, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 8; i >>= 2;"));
-//			assertEq(2, getVar("i"));
-//
-//			assertEq("", prog(g, "i = -8; i = i >> 2;"));
-//			assertEq(-2, getVar("i"));
-//
-//			assertEq("", prog(g, "i = -8; i = i >>> 2;"));
-//			assertEq(-8L >>> 2, getVar("i"));
-//
-//			assertEq("", prog(g, "i = -8; i >>>= 2;"));
-//			assertEq(-8L >>> 2, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 3==3.0;"));
-//			assertEq(true, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 3.15!=sin(0);"));
-//			assertEq(true, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 1; j = i++;"));
-//			assertEq(2, getVar("i"));
-//			assertEq(1, getVar("j"));
-//
-//			assertEq("", prog(g, "i = 1; j = ++i;"));
-//			assertEq(2, getVar("i"));
-//			assertEq(2, getVar("j"));
-//
-//			assertEq("", prog(g, "i = 1; j = i--;"));
-//			assertEq(0, getVar("i"));
-//			assertEq(1, getVar("j"));
-//
-//			assertEq("", prog(g, "i = 1; j = i--;"));
-//			assertEq(0, getVar("i"));
-//			assertEq(1, getVar("j"));
-//
-//			assertEq("", prog(g, "i = 2.1; j = --i;"));
-//			assertEq(1.1, getVar("i"));
-//			assertEq(1.1, getVar("j"));
-//
-//			assertEq("", prog(g, "i = 1; i += 2;"));
-//			assertEq(3, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 1; i -= 2;"));
-//			assertEq(-1, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 1; i += 3.14;"));
-//			assertEq(3.14 + 1, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 3; j = i % 2;"));
-//			assertEq(3, getVar("i"));
-//			assertEq(1, getVar("j"));
-//			
-//			assertEq("", prog(g, "i = 1; i += 2;"));
-//			assertEq(3, getVar("i"));
-//
-//			assertEq("", prog(g, "i = 1; j = 1; k = i++; m = ++j;"));
-//			assertEq(2, getVar("i"));
-//			assertEq(2, getVar("j"));
-//			assertEq(1, getVar("k"));
-//			assertEq(2, getVar("m"));
-//
-//			assertEq("", prog(g, "i=(3 + 5)*2; j=i+1; k=i/2; l=j/2;m=j/2.0;"));
-//			assertEq(16, getVar("i"));
-//			assertEq(17, getVar("j"));
-//			assertEq(8, getVar("k"));
-//			assertEq(8, getVar("l"));
-//			assertEq(8.5, getVar("m"));
-//
-//			assertEq("", prog(g,
-//				"i = true; j = false; k = i == j; m = i != j;\n" +
-//				"o = 1; p = 0; q = o > p; r = 1.0; s = 2.0; t = r <= s;"));
-//			assertEq(true, getVar("i"));
-//			assertEq(false, getVar("j"));
-//			assertEq(false, getVar("k"));
-//			assertEq(true, getVar("m"));
-//			assertEq(true, getVar("q"));
-//			assertEq(true, getVar("t"));
-//
-//			assertEq("", prog(g, "i=sin(3.14);"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			assertEq("", prog(g, "i=1*2+-(1+1);"));
-//			assertEq(0, getVar("i"));
-//
-//			assertEq("", prog(g, "sin(3.14);"));
-//
-//			assertEq("", prog(g, "float i; i = 0.0; i += sin(3.14);"));
-//			assertEq(Math.sin(3.14), getVar("i"));
-//
-//			prog(g, "print(min(3,14)); println('x');");
-//			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
-//			assertEq("3x\n", s);
-//			
-//			prog(g, "printf('Ahoj'); println();");
-//			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
-//			assertEq("Ahoj\n", s);
+			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos, true, "UTF-8");
+			g.trace(ps);
+			prog(g, "int i?");
+			ps.close();
+			BufferedReader in = new BufferedReader(
+				new StringReader(new String(baos.toByteArray(), "UTF-8")));
+			String line;
+			int max = 0;
+			int min = 999999;
+			String ruleName = null;
+			while((line = in.readLine()) != null) {
+				if (line.endsWith("; true")) {
+					String[] xx = line.split(";");
+					String ss = xx[0];
+					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
+					int i = Integer.parseInt(xx[0]);
+					int j = Integer.parseInt(xx[1]);
+					if (j >= max) {
+						max = j;
+						ruleName = ss;
+						if (i < min) {
+							min = i;
+						}
+					}
+				}
+			}
+			in.close();
+			System.out.println(ruleName + " (" + min + "," + max + ")");
+			g.trace(null);
+			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
+			assertEq("", expr("abcdef", g, "'abc' + 'def'"));
+			assertEq("", expr("25abc", g, "((3+2)*5)+'abc'"));
+			assertEq("", expr("25abc", g, "( 5 * ( 3 + 2 ) ) + 'abc'"));
+			assertEq("", expr("50abc", g, "+( +5 * -(-7 + 2))*2+'abc'"));
+			assertEq("", expr("true", g, "true"));
+			assertEq("", expr("false", g, "!true"));
+			assertEq("", expr("true", g, "true | false"));
+			assertEq("", expr("false", g, "true&false"));
+			assertEq("", expr("true", g, "true | false"));
+			assertEq("", expr("true", g, "! (true & false)"));
+			assertEq("", expr("1abc", g, "( (3 + 3)/5 ) + \"abc\" "));
+			assertEq("", expr("1.26abc", g, "((3 + 3.3)/5) + 'abc'"));
+			assertEq("", expr("2", g, "-1 + 3"));
+			assertEq("", expr("1", g, "min(2,1)"));
+			assertEq("", expr("1.0", g, "min(2.0,1.0)"));
+			assertEq("", expr("1.0", g, "min(2,1.0)"));
+			assertEq("", expr("1.0", g, "min(2.0,1)"));
+			assertEq("", expr(String.valueOf(Math.sin(3.14)), g, "sin(3.14)"));
+			assertEq("", expr(String.valueOf(Math.cos(3.14)), g, "cos(3.14)"));
+			assertEq("", prog(g, "float i;"));
+			assertEq("", prog(g, "empty();"));
+			
+			assertEq("", prog(g, "j = empty() + 'abc';"));
+			assertEq("abc", getVar("j"));
+
+			assertEq("", prog(g, "i = ~1;"));
+			assertEq(-2, getVar("i"));
+
+			assertEq("", prog(g, "i=~(~1);"));
+			assertEq(1, getVar("i"));
+
+			assertEq("", prog(g, "i=8; i=i<< 2;"));
+			assertEq(32, getVar("i"));
+			assertEq("", prog(g, "j ='abc'+empty()/*x*/; k=j+'d';"));
+			assertEq("abc", getVar("j"));
+			assertEq("abcd", getVar("k"));
+
+			assertEq("", prog(g, "/*xx*/i=sin(/*xx*/3.14/*xx*/) ;/*xx*/"));
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			assertEq("", prog(g, "/*xx*/i/*xx*/=/*xx*/3/*xx*/;/*xx*/ "));
+			assertEq(3, getVar("i"));
+
+			assertEq("", prog(g, "i=3;j=i*5;"));
+			assertEq(3, getVar("i"));
+			assertEq(15, getVar("j"));
+
+			assertEq("", prog(g, "i=''; j=i+(5*3);"));
+			assertEq("", getVar("i"));
+			assertEq("15", getVar("j"));
+
+			assertEq("", prog(g, "i=\"\";j=i+(5*3);"));
+			assertEq("", getVar("i"));
+			assertEq("15", getVar("j"));
+
+			assertEq("", prog(g, "i=\"\"\"\"; j=i+(5*3);"));
+			assertEq("\"15", getVar("j"));
+
+			assertEq("", prog(g, "i=''''; j=i+(5*3);"));
+			assertEq("'15", getVar("j"));
+
+			assertEq("", prog(g, "i = ''''''; j = i + (5 *3);"));
+			assertEq("''15", getVar("j"));
+
+			assertEq("", prog(g, "i = 'x''y';"));
+			assertEq("x'y", getVar("i"));
+
+			assertEq("", prog(g, "i = '''x'''; j = i + (5 *3);"));
+			assertEq("'x'15", getVar("j"));
+
+			assertEq("", prog(g, "i = '''''x'''''; j = i + (5 *3);"));
+			assertEq("''x''15", getVar("j"));
+
+			assertEq("", prog(g, "i = '\"x\"'; j = i + (5 *3);"));
+			assertEq("\"x\"15", getVar("j"));
+
+			assertEq("", prog(g, "i = 'abc'; j = (5 *3) + i;"));
+			assertEq("abc", getVar("i"));
+			assertEq("15abc", getVar("j"));
+
+			assertEq("", prog(g, "i = sin(3.14);"));
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			assertEq("", prog(g, "i = min(3.14, sin(3.14));"));
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			assertEq("",  prog(g, "i = max(3.14, sin(3.14 + 4));"));
+			assertEq(3.14, getVar("i"));
+
+			assertEq("", prog(g, "i = max(3.15, sin(3.14));"));
+			assertEq(3.15, getVar("i"));
+
+			assertEq("", prog(g, "i = min(3.15, sin(3.14));"));
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			assertEq("", prog(g, "i = sin(0);"));
+			assertEq(Math.sin(0), getVar("i"));
+
+			assertEq("", prog(g, "i = sin(1.5);"));
+			assertEq(Math.sin(1.5), getVar("i"));
+
+			assertEq("", prog(g, "i = tanh(1.5);"));
+			assertEq(Math.tanh(1.5), getVar("i"));
+
+			assertEq("", prog(g, "i=sqrt(2);"));
+			assertEq(Math.sqrt(2), getVar("i"));
+
+			assertEq("", prog(g, "i = cbrt(2);"));
+			assertEq(Math.cbrt(2), getVar("i"));
+
+			assertEq("", prog(g, "i = 3.15 == sin(0);"));
+			assertEq(false, getVar("i"));
+
+			assertEq("", prog(g, "i = 8; i = i << 2;"));
+			assertEq(32, getVar("i"));
+
+			assertEq("", prog(g, "i = 8; i <<= 2;"));
+			assertEq(32, getVar("i"));
+
+			assertEq("", prog(g, "i = 8; i = i >> 2;"));
+			assertEq(2, getVar("i"));
+
+			assertEq("", prog(g, "i = 8; i >>= 2;"));
+			assertEq(2, getVar("i"));
+
+			assertEq("", prog(g, "i = -8; i = i >> 2;"));
+			assertEq(-2, getVar("i"));
+
+			assertEq("", prog(g, "i = -8; i = i >>> 2;"));
+			assertEq(-8L >>> 2, getVar("i"));
+
+			assertEq("", prog(g, "i = -8; i >>>= 2;"));
+			assertEq(-8L >>> 2, getVar("i"));
+
+			assertEq("", prog(g, "i = 3==3.0;"));
+			assertEq(true, getVar("i"));
+
+			assertEq("", prog(g, "i = 3.15!=sin(0);"));
+			assertEq(true, getVar("i"));
+
+			assertEq("", prog(g, "i = 1; j = i++;"));
+			assertEq(2, getVar("i"));
+			assertEq(1, getVar("j"));
+
+			assertEq("", prog(g, "i = 1; j = ++i;"));
+			assertEq(2, getVar("i"));
+			assertEq(2, getVar("j"));
+
+			assertEq("", prog(g, "i = 1; j = i--;"));
+			assertEq(0, getVar("i"));
+			assertEq(1, getVar("j"));
+
+			assertEq("", prog(g, "i = 1; j = i--;"));
+			assertEq(0, getVar("i"));
+			assertEq(1, getVar("j"));
+
+			assertEq("", prog(g, "i = 2.1; j = --i;"));
+			assertEq(1.1, getVar("i"));
+			assertEq(1.1, getVar("j"));
+
+			assertEq("", prog(g, "i = 1; i += 2;"));
+			assertEq(3, getVar("i"));
+
+			assertEq("", prog(g, "i = 1; i -= 2;"));
+			assertEq(-1, getVar("i"));
+
+			assertEq("", prog(g, "i = 1; i += 3.14;"));
+			assertEq(3.14 + 1, getVar("i"));
+
+			assertEq("", prog(g, "i = 3; j = i % 2;"));
+			assertEq(3, getVar("i"));
+			assertEq(1, getVar("j"));
+			
+			assertEq("", prog(g, "i = 1; i += 2;"));
+			assertEq(3, getVar("i"));
+
+			assertEq("", prog(g, "i = 1; j = 1; k = i++; m = ++j;"));
+			assertEq(2, getVar("i"));
+			assertEq(2, getVar("j"));
+			assertEq(1, getVar("k"));
+			assertEq(2, getVar("m"));
+
+			assertEq("", prog(g, "i=(3 + 5)*2; j=i+1; k=i/2; l=j/2;m=j/2.0;"));
+			assertEq(16, getVar("i"));
+			assertEq(17, getVar("j"));
+			assertEq(8, getVar("k"));
+			assertEq(8, getVar("l"));
+			assertEq(8.5, getVar("m"));
+
+			assertEq("", prog(g,
+				"i = true; j = false; k = i == j; m = i != j;\n" +
+				"o = 1; p = 0; q = o > p; r = 1.0; s = 2.0; t = r <= s;"));
+			assertEq(true, getVar("i"));
+			assertEq(false, getVar("j"));
+			assertEq(false, getVar("k"));
+			assertEq(true, getVar("m"));
+			assertEq(true, getVar("q"));
+			assertEq(true, getVar("t"));
+
+			assertEq("", prog(g, "i=sin(3.14);"));
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			assertEq("", prog(g, "sin(3.14); i=1;"));
+			assertEq(1, getVar("i"));
+
+			assertEq("", prog(g, "i=1*2+-(1+1);"));
+			assertEq(0, getVar("i"));
+
+			assertEq("", prog(g, "float i; i = 0.0; i += sin(3.14);"));
+//			printObjects(g);
+			assertEq(Math.sin(3.14), getVar("i"));
+
+			prog(g, "print(min(3,14)); println('x');");
+			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
+			assertEq("3x\n", s);
+			
+			prog(g, "printf('Ahoj'); println();");
+			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
+			assertEq("Ahoj\n", s);
 			
 			prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");

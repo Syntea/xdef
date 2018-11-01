@@ -42,7 +42,10 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public CodeUniqueset(final ParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
-		_parseItems = parseItems;
+		_parseItems = new ParseItem[parseItems.length];
+		for(int i = 0; i < parseItems.length; i++) {
+			_parseItems[i] = (ParseItem) parseItems[i].cloneItem();
+		}
 		_name = name;
 	}
 
@@ -150,6 +153,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 			a._references.clear();
 		}
 		_map.clear();
+		for (int i = 0; i < _parseItems.length; i++) {
+			_parseItems[i] = (ParseItem) _parseItems[i].cloneItem();
+		}
 		return result;
 	}
 
@@ -235,6 +241,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return enumeration item of this type.
 	 */
 	public final XDValueType getItemType() {return  XDValueType.OBJECT;}
+
+	@Override
+	public XDValue cloneItem() {
+		return new CodeUniqueset(_parseItems, _name);
+	}
 
 	@Override
 	public String toString() {

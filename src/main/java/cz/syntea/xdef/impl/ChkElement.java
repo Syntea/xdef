@@ -3156,7 +3156,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param data The value of Comment node.
 	 * @return <tt>true</tt> if Comment node is compliant with definition.
 	 */
-	public final boolean addComment(final String data) {return true;}
+	public final boolean addComment(final String data) {
+		return true; //TODO
+	}
 
 	@Override
 	/** Add new Processing instruction node to current element.
@@ -3166,7 +3168,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return <tt>true</tt> if PI node is compliant with definition.
 	 */
 	public final boolean addPI(final String name, final String data) {
-		return true;
+		return true; //TODO
 	}
 
 	@Override

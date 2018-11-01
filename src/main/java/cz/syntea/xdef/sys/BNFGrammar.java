@@ -597,11 +597,7 @@ public final class BNFGrammar {
 	private static String genBNFString(final String s,
 		final boolean genBrackets) {
 		String separators = SPECCHARS;
-		if (s.indexOf('"') >= 0) {
-			separators += '"';
-		} else if (s.indexOf('\'') > 0) {
-			separators += '\'';
-		}
+		separators += (s.indexOf('"') >= 0) ? '"' : '\'';
 		StringTokenizer st = new StringTokenizer(s, separators, true);
 		int numTokens = st.countTokens();
 		final StringBuilder sb = new StringBuilder();
@@ -618,7 +614,7 @@ public final class BNFGrammar {
 					if (c == '"') {
 						sb.append("'\"'");
 					} else {
-						sb.append("\"").append(c).append("\"");
+						sb.append('"').append(c).append('"');
 					}
 				}
 			} else {
@@ -694,10 +690,12 @@ public final class BNFGrammar {
 				if (_item.perform()) {
 					if (_traceOut != null) {
 						try {
-							_traceOut.println(_name+"; ("
-								+ _pos.getIndex() + "," + _p.getIndex()
-								+ "); true");
-							_traceOut.flush();
+							if (_pos.getIndex() < _p.getIndex()) {
+								_traceOut.println(_name+"; ("
+									+ _pos.getIndex() + "," + _p.getIndex()
+									+ "); true");
+								_traceOut.flush();
+							}
 						} catch (Exception ex) {}
 					}
 					return true;

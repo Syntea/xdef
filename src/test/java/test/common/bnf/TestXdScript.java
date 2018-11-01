@@ -3,6 +3,10 @@ package test.common.bnf;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
 import java.net.URL;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
@@ -145,6 +149,36 @@ public class TestXdScript extends XDTester {
 			s = "external Element source";
 			assertEq(s, parse(g, "DeclarationScript", s));
 
+			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos, true, "UTF-8");
+			g.trace(ps);
+			parse(g, "DeclarationScript", "external Element x ?");
+			ps.close();
+			BufferedReader in = new BufferedReader(
+				new StringReader(new String(baos.toByteArray(), "UTF-8")));
+			String line;
+			int max = 0;
+			int min = 999999;
+			String ruleName = null;
+			while((line = in.readLine()) != null) {
+				if (line.endsWith("; true")) {
+					String[] xx = line.split(";");
+					String ss = xx[0];
+					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
+					int i = Integer.parseInt(xx[0]);
+					int j = Integer.parseInt(xx[1]);
+					if (j >= max) {
+						max = j;
+						ruleName = ss;
+						if (i < min) {
+							min = i;
+						}
+					}
+				}
+			}
+			in.close();
+//			System.out.println(ruleName + " (" + min + "," + max + ")");
+			g.trace(null);
 //			printCode(g);
 
 			s = "{ i ++ ; ++ k ; j += 2;}";

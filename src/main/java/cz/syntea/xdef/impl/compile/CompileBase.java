@@ -610,12 +610,6 @@ public class CompileBase implements CodeTable, XDValueID {
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
 		short ti = NOTYPE_VALUE_ID; // no base methods
-		method(ti, genInternalMethod(ADD_COMMENT_NODE, XD_VOID, TEXT_MODE,
-			1, 1, XD_STRING), "addComment");
-//		method(ti, genInternalMethod(ADD_PI_NODE, XD_VOID,
-//			TEXT_MODE, 1, 1, XD_STRING), "addPI");
-		method(ti, genInternalMethod(ADD_TEXT_NODE, XD_VOID,
-			(byte) (TEXT_MODE + ELEMENT_MODE), 1, 1, XD_STRING), "addText");
 		method(ti, genInternalMethod(CLEAR_REPORTS, XD_VOID,
 			ANY_MODE, 0, 0), "clearReports");
 		method(ti, genInternalMethod(COMPILE_REGEX, XD_REGEX, ANY_MODE, 1,1,
@@ -723,8 +717,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 0, 1, XD_STRING), "outln");
 		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,//outln(..)
 			ANY_MODE, 1, Integer.MAX_VALUE, XD_ANY), "printf");
-//		method(ti, genInternalMethod(PARSE_EMAILDATE, XD_DATETIME,
-//			ANY_MODE, 1, 1, XD_STRING), "parseEmailDate");
 		method(ti, genInternalMethod(PARSE_DATE, XD_DATETIME,
 			ANY_MODE, 1, 2, XD_STRING, XD_STRING),
 			"parseDate", "?parseISODate");
@@ -732,8 +724,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 2, XD_STRING, XD_STRING), "parseFloat");
 		method(ti, genInternalMethod(PARSE_INT,XD_INT,
 			ANY_MODE, 1, 2, XD_STRING, XD_STRING), "parseInt");
-//		method(ti,genInternalMethod(PARSE_DURATION, XD_DURATION,
-//			ANY_MODE, 1, 1, XD_STRING), "parseDuration");
 		method(ti, genInternalMethod(DEBUG_PAUSE, XD_VOID, // debug pause
 			ANY_MODE, 0, 2, XD_ANY), "pause");
 		method(ti, genInternalMethod(DEL_ATTR, XD_VOID, //remove attribute

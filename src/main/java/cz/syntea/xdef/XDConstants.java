@@ -123,10 +123,10 @@ public interface XDConstants {
 	// are generated authomaticaly!
 	////////////////////////////////////////////////////////////////////////////
 
-	/** Build version of software (3.1.004.009). */
-	public static final String BUILD_VERSION = "3.1.004.009";
-	/** Date of build version (2018-10-17). */
-	public static final String BUILD_DATE = "2018-10-17";
+	/** Build version of software (3.1.004.011). */
+	public static final String BUILD_VERSION = "3.1.004.011";
+	/** Date of build version (2018-10-31). */
+	public static final String BUILD_DATE = "2018-10-31";
 	/** Java version of compiler when the X-definition code was compiled. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";

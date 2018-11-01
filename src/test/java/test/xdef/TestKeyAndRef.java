@@ -4,6 +4,7 @@ import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDConstants;
+import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
 import org.w3c.dom.Element;
@@ -43,6 +44,7 @@ public final class TestKeyAndRef extends XDTester {
 		String xdef;
 		String s;
 		String xml;
+		XDDocument xd;
 		XDPool xp;
 		final String dataDir = getDataDir() + "test/";
 		final ArrayReporter reporter = new ArrayReporter();
@@ -1004,6 +1006,25 @@ public final class TestKeyAndRef extends XDTester {
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
 				&& s.contains("birthday") && s.contains("name"),reporter);
+			xdef = // run parse twice
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n" +
+"  <xd:declaration>uniqueSet u{s: string; e: string};</xd:declaration>\n" +
+"  <a>\n" +
+"    <b N=\"enum('A')\"><E xd:script='ref E' N=\"enum('B')\" /></b>\n" +
+"    <b N='u.s'><E xd:script='1..; ref E'/></b>\n" +
+"  </a>\n" +
+"  <E xd:script='finally u.ID()' N='u.e'/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml = "<a><b N='A'><E N='B'/></b><b N='x'><E N='T'/></b></a>";
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument(); // parse again
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter); // uniqeue set must be clear!
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter); // even here uniqeue set must be clear!
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
