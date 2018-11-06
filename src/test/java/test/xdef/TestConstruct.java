@@ -1,10 +1,10 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.proc.XXElement;
+import org.xdef.sys.Report;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.proc.XXElement;
 
 /** Test of construction of element from the program.
  * @author  Vaclav Trojan

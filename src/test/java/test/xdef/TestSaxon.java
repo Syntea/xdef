@@ -1,11 +1,11 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.impl.code.DefXQueryExpr;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.impl.code.DefXQueryExpr;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 

@@ -1,28 +1,28 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.model.XMDefinition;
-import cz.syntea.xdef.model.XMElement;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlConstants;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.proc.XXNode;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.XDContainer;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.XDContainer;
+import org.xdef.proc.XXData;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan

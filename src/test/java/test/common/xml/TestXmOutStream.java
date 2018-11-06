@@ -1,20 +1,7 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: TestXmlWriter.java, created 2011-11-12.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package test.common.xml;
 
-import cz.syntea.xdef.xml.KDOMBuilder;
-import cz.syntea.xdef.xml.KXmlOutStream;
+import org.xdef.xml.KDOMBuilder;
+import org.xdef.xml.KXmlOutStream;
 import java.io.StringWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,7 +10,7 @@ import org.w3c.dom.NodeList;
 import test.utils.STester;
 
 /** Test XmOutStream.
- * @author Vaclav Trojan <vaclav.trojan@syntea.cz>
+ * @author Vaclav Trojan
  */
 public class TestXmOutStream extends STester {
 
@@ -40,7 +27,7 @@ public class TestXmOutStream extends STester {
 		KDOMBuilder db;
 		String s;
 		try {// no indenting;
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			doc = db.parse(
 "<!-- c1 -->"+
@@ -91,7 +78,7 @@ public class TestXmOutStream extends STester {
 			fail(ex);
 		}
 		try {// indenting
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			doc = db.parse(
 "<!-- c1 -->"+
@@ -146,7 +133,7 @@ public class TestXmOutStream extends STester {
 			fail(ex);
 		}
 		try {// namespace, no indenting
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			db.setNamespaceAware(true);
 			doc = db.parse(
@@ -194,7 +181,7 @@ public class TestXmOutStream extends STester {
 			fail(ex);
 		}
 		try {// namespace, indenting
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			db.setNamespaceAware(true);
 			doc = db.parse(
@@ -248,7 +235,7 @@ public class TestXmOutStream extends STester {
 			fail(ex);
 		}
 		try {// namespace, no indenting
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			db.setNamespaceAware(true);
 			doc = db.parse(
@@ -291,7 +278,7 @@ public class TestXmOutStream extends STester {
 			fail(ex);
 		}
 		try {// namespace, no indenting
-			db = new cz.syntea.xdef.xml.KDOMBuilder();
+			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
 			db.setNamespaceAware(true);
 			doc = db.parse(
@@ -341,7 +328,7 @@ public class TestXmOutStream extends STester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-//		cz.syntea.common.xml.KXmlUtils.setDOMImplementation("javax",true,true);
+//		org.xdef.xml.KXmlUtils.setDOMImplementation("javax",true,true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

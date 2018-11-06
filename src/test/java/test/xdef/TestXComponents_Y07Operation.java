@@ -1,5 +1,5 @@
 package test.xdef;
-import cz.syntea.xdef.component.XComponent;
+import org.xdef.component.XComponent;
 
 public class TestXComponents_Y07Operation {
 	Integer idFlow;

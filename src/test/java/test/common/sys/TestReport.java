@@ -1,14 +1,14 @@
 package test.common.sys;
 
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.msg.SYS;
-import cz.syntea.xdef.msg.XML;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FileReportReader;
-import cz.syntea.xdef.sys.FileReportWriter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SManager;
-import cz.syntea.xdef.xml.KXmlUtils;
+import org.xdef.XDConstants;
+import org.xdef.msg.SYS;
+import org.xdef.msg.XML;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FileReportReader;
+import org.xdef.sys.FileReportWriter;
+import org.xdef.sys.Report;
+import org.xdef.sys.SManager;
+import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;

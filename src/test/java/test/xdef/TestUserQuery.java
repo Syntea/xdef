@@ -1,13 +1,13 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.proc.XXElement;
+import org.xdef.proc.XXElement;
 
 /** Test of using external methods (such as query) in create mode.
  * @author Vaclav Trojan

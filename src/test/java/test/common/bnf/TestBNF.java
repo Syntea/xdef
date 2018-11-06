@@ -1,10 +1,10 @@
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.BNFExtMethod;
-import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.BNFExtMethod;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.StringParser;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Stack;

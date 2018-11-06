@@ -1,11 +1,11 @@
 package test.common.sys;
 
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SDatetime;
-import cz.syntea.xdef.sys.SException;
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.Report;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SException;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;

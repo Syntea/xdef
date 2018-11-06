@@ -1,12 +1,12 @@
 package test.xdef;
 
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.component.GenXComponent;
-import cz.syntea.xdef.component.XComponent;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.sys.FUtils;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.FUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,12 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.XDConstants;
+import org.xdef.XDPool;
 import java.io.File;
 import java.io.StringWriter;
 

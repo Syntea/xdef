@@ -1,11 +1,11 @@
 package test.xdutils;
 
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.util.XsdToXdef;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.util.XsdToXdef;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -11,9 +11,9 @@
  */
 package test.common.xml;
 
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.xml.KDOMBuilder;
-import cz.syntea.xdef.xml.KXmlUtils;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KDOMBuilder;
+import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.net.URL;
 import javax.xml.XMLConstants;

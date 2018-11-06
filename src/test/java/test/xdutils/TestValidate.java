@@ -1,15 +1,15 @@
 package test.xdutils;
 
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FileReportReader;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.util.XValidate;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FileReportReader;
+import org.xdef.sys.Report;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.util.XValidate;
 import java.io.File;
 import java.io.FileOutputStream;
-import cz.syntea.xdef.sys.ReportReader;
+import org.xdef.sys.ReportReader;
 import test.utils.XDTester;
 
 /** TestValidate.

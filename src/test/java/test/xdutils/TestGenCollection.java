@@ -1,8 +1,8 @@
 package test.xdutils;
 
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.util.GenCollection;
-import cz.syntea.xdef.util.gencollection.XDGenCollection;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.util.GenCollection;
+import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
 import org.w3c.dom.Element;
 import test.utils.XDTester;

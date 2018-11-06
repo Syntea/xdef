@@ -1,12 +1,12 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDPool;
+import org.xdef.XDConstants;
+import org.xdef.sys.Report;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDOutput;
+import org.xdef.XDPool;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import org.w3c.dom.Element;

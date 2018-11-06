@@ -1,13 +1,13 @@
 package test.xdutils;
 
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.SException;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.util.GenDTD2XDEF;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.util.DTDToXdef;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.SException;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.util.GenDTD2XDEF;
+import org.xdef.XDPool;
+import org.xdef.sys.SUtils;
+import org.xdef.util.DTDToXdef;
 import java.io.File;
 import org.w3c.dom.Element;
 import test.utils.XDTester;

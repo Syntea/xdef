@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import test.utils.STester;
 
-/** Run all available basic tests for package cz.syntea.xdef.
+/** Run all available basic tests for package org.xdef.
  * @author Vaclav Trojan
  */
 public class TestAll {

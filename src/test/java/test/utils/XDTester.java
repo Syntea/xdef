@@ -1,23 +1,23 @@
 package test.utils;
 
-import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.component.XComponent;
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.model.XMDefinition;
-import cz.syntea.xdef.model.XMElement;
-import cz.syntea.xdef.impl.code.DefOutStream;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXmlConstants;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.component.XComponent;
+import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDOutput;
+import org.xdef.XDPool;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
+import org.xdef.impl.code.DefOutStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,9 +31,9 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Properties;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.sys.ReportReader;
-import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.util.gencollection.XDGenCollection;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.ReportWriter;
+import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.xml.namespace.QName;
@@ -533,11 +533,11 @@ public abstract class XDTester extends STester {
 		if (_xdOfxd == null) {
 			try {
 				URL urls[] = new URL[] {ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
+						"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
 					ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
+						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
 				};
 				_xdOfxd = XDFactory.compileXD(null, urls);
 			} catch (Exception ex) {

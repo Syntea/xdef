@@ -1,9 +1,9 @@
 package test.xdutils;
 
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.util.GenCollection;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.util.GenCollection;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import test.utils.XDTester;

@@ -1,14 +1,14 @@
 package test.xdutils;
 
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SException;
-import cz.syntea.xdef.xml.KDOMBuilder;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.util.PrettyXdef;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.SException;
+import org.xdef.xml.KDOMBuilder;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.util.PrettyXdef;
 import java.io.File;
-import cz.syntea.xdef.sys.ReportWriter;
+import org.xdef.sys.ReportWriter;
 import test.utils.XDTester;
 
 /** Test pretty indentation of XDefinition.

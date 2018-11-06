@@ -1,9 +1,9 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
 import java.io.StringWriter;
 
 /** Test getXComponentVariable/setVariable

@@ -1,4 +1,4 @@
 package test.xdef;
-import cz.syntea.xdef.component.XComponent;
+import org.xdef.component.XComponent;
 
 public interface TestXComponents_Y06Domain extends XComponent {}

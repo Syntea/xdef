@@ -1,7 +1,12 @@
 package test.utils;
 
-import cz.syntea.xdef.sys.*;
-import cz.syntea.xdef.xml.KXmlUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.xml.KXmlUtils;
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
@@ -23,7 +28,7 @@ import org.w3c.dom.Node;
  * invoke static method runTest(args) (usually in main method). This method
  * returns number of errors. Example:
  * <pre><code>
- public class TestMyCode extends cz.syntea.xdef.sys.STester {
+ public class TestMyCode extends org.xdef.sys.STester {
    public TestMyCode() {}
    public void test() {
 	 try {

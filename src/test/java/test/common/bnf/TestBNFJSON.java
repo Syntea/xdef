@@ -1,9 +1,9 @@
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.SParser;
-import cz.syntea.xdef.sys.StringParser;
-import cz.syntea.xdef.xml.KXmlUtils;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.SParser;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

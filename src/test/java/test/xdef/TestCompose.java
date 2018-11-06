@@ -1,31 +1,31 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.xml.KXpathExpr;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.XDContainer;
-import cz.syntea.xdef.impl.code.DefElement;
-import cz.syntea.xdef.impl.code.DefXPathExpr;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.xml.KXpathExpr;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.XDContainer;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefXPathExpr;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import cz.syntea.xdef.XDFactory;
+import org.xdef.XDFactory;
 import java.io.StringWriter;
-import cz.syntea.xdef.proc.XXElement;
-import cz.syntea.xdef.proc.XXNode;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
-import cz.syntea.xdef.XDValueID;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.XDValueID;
+import org.xdef.proc.XXData;
 
 /** Test of x-definition composition mode.
  * @author Vaclav Trojan

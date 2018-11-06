@@ -1,7 +1,7 @@
 package test.xdef;
 
-import cz.syntea.xdef.component.XComponent;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.component.XComponent;
+import org.xdef.proc.XXData;
 
 public class TestXComponents_C {
 

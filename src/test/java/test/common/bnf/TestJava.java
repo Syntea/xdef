@@ -1,7 +1,7 @@
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.StringParser;
 import java.io.File;
 import test.utils.STester;
 
@@ -45,7 +45,7 @@ public class TestJava extends STester {
 //			s =
 //"/*soubor LICENSE.TXT.*/\n"+
 //"package test.common.bnf;\n" +
-//"import cz.syntea.xdef.sys.STester;\n" +
+//"import org.xdef.sys.STester;\n" +
 //"import x.Y;\n" +
 //"public final class TestJava extends STester implements a.b, c.d {n" +
 //"	public TestJava() {super();}\n" +

@@ -1,17 +1,17 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 import java.io.CharArrayWriter;
 import java.io.StringWriter;
 import java.util.Properties;
-import cz.syntea.xdef.sys.ReportReader;
+import org.xdef.sys.ReportReader;
 
 /** Test of reporting of script errors.
  * @author Vaclav Trojan

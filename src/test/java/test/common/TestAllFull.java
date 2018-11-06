@@ -22,7 +22,7 @@ import test.common.xml.TestXml;
 import test.utils.XDTester;
 import test.utils.STester;
 
-/** Run all available tests for package cz.syntea.xdef.sys with all features
+/** Run all available tests for package org.xdef.sys with all features
  * of the tester.
  * @author Vaclav Trojan
  */

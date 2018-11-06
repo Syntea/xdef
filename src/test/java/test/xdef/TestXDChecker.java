@@ -1,10 +1,10 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.SDatetime;
-import cz.syntea.xdef.util.XDChecker;
-import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.sys.SDatetime;
+import org.xdef.util.XDChecker;
+import org.xdef.XDParseResult;
+import org.xdef.proc.XXData;
 import java.util.Arrays;
 
 /** Test XD value types.
