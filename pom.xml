@@ -6,17 +6,17 @@
 >
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>cz.syntea.xdefinition</groupId>
-	<artifactId>syntea-xdefinition-OSS</artifactId>
-	<version>3.1.4.4</version><!-- when changed, change also pom.xml/project/properties/release.date, see below -->
+	<groupId>org.xdef</groupId>
+	<artifactId>xdef-core</artifactId>
+	<version>3.1.4.9</version><!-- when changed, change also ./properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
-	<name>syntea-xdefinition-OSS</name>
+	<name>xdef-core</name>
 	<!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
-	<description>XDefinition 3.1 (Open Source Software)</description>
+	<description>X-Definitions 3.1 (Open Source Software)</description>
 	
 	<properties>
-		<release.date>2018-07-23</release.date>
+		<release.date>2018-10-17</release.date>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
@@ -100,12 +100,6 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>cz/syntea/xdef/msg/*.properties</include>
-				</includes>
-			</resource>
-			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
@@ -150,11 +144,11 @@
 				</configuration>
 			</plugin>
 			
-			<plugin>
+			<!-- do not use toolchain for now, for simplicity
+            <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
 				<version>1.1</version>
-				
 				<executions>
 					<execution>
 						<goals>
@@ -162,7 +156,6 @@
 						</goals>
 					</execution>
 				</executions>
-				
 				<configuration>
 					<toolchains>
 						<jdk>
@@ -172,6 +165,7 @@
 					</toolchains>
 				</configuration>
 			</plugin>
+            -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
