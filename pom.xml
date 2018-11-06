@@ -105,7 +105,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>cz/syntea/xdef/sys/config/pominfo.properties</include>
+					<include>org/xdef/sys/config/pominfo.properties</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>
