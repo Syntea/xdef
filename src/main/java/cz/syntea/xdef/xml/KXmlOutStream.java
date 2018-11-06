@@ -1,16 +1,3 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: KXmlOutStream.java, created 2011-11-12.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.xml;
 
 import cz.syntea.xdef.msg.SYS;
@@ -32,7 +19,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** Provides incremental writer of XML to data stream.
- *
  * @author Vaclav Trojan
  */
 public class KXmlOutStream {
