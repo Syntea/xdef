@@ -3189,10 +3189,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			s = _idName;
 			nextSymbol();
 			if (s.startsWith("cz.syntea.xdef.proc.")) {
-				s = s.substring(20);
+				s = s.substring("cz.syntea.xdef.proc.".length());
 			}
 			if (s.startsWith("cz.syntea.xdef.")) {
-				s = s.substring(15);
+				s = s.substring("cz.syntea.xdef.".length());
 			}
 			if ("XXElement".equals(s) ||
 				"XXData".equals(s) ||
@@ -3242,10 +3242,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				s = _idName;
 				nextSymbol();
 				if (s.startsWith("cz.syntea.xdef.proc.")) {
-					s = s.substring(20);
+					s = s.substring("cz.syntea.xdef.proc.".length());
 				}
 				if (s.startsWith("cz.syntea.xdef.")) {
-					s = s.substring(15);
+					s = s.substring("cz.syntea.xdef.".length());
 				}
 				// check first parameter, it can be XXNode
 				if (("XDValue".equals(s)) && _sym == LSQ_SYM) {
