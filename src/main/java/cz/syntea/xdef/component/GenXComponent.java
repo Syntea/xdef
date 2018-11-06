@@ -1,14 +1,3 @@
-/*
- * Copyright 2013 Syntea software group a.s. All rights reserved.
- *
- * File: GenXComponent.java
- * Package: cz.syntea.xc
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.component;
 
 import cz.syntea.xdef.msg.SYS;
@@ -215,6 +204,26 @@ public final class GenXComponent {
 	 * @return Java Object name corresponding to XD type
 	 */
 	private String getJavaObjectTypeName(final XMData xdata) {
+		String parserName = xdata.getParserName();
+		if ("byte".equals(parserName)) {
+			return "Byte";
+		} else if ("short".equals(parserName)) {
+			return "Short";
+		} else if ("int".equals(parserName)
+			|| "unsignedByte".equals(parserName)
+			|| "unsignedShort".equals(parserName)) {
+			return "Integer";
+		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
+			return "Long";
+		} else if ("integer".equals(parserName)
+			|| "negativeInteger".equals(parserName)
+			|| "nonNegativeInteger".equals(parserName)
+			|| "PositiveInteger".equals(parserName)
+			|| "nonPositiveiveInteger".equals(parserName)) {
+			return "java.math.BigInteger";
+		} else if ("decimal".equals(parserName)) {
+			return "java.math.BigDecimal";
+		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return "Boolean";
@@ -242,6 +251,26 @@ public final class GenXComponent {
 	 */
 	private static String getParsedResultGetter(final XMData xdata) {
 		String result = "parseResult.getParsedValue().";
+		String parserName = xdata.getParserName();
+		if ("byte".equals(parserName)) {
+			return result + "byteValue()";
+		} else if ("short".equals(parserName)) {
+			return result + "shortValue()";
+		} else if ("int".equals(parserName)
+			|| "unsignedByte".equals(parserName)
+			|| "unsignedShort".equals(parserName)) {
+			return result + "intValue()";
+		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
+			return result + "longValue()";
+		} else if ("integer".equals(parserName)
+			|| "negativeInteger".equals(parserName)
+			|| "nonNegativeInteger".equals(parserName)
+			|| "PositiveInteger".equals(parserName)
+			|| "nonPositiveiveInteger".equals(parserName)) {
+			return result + "integerValue()";
+		} else if ("decimal".equals(parserName)) {
+			return result + "decimalValue()";
+		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return result + "booleanValue()";
@@ -2350,7 +2379,6 @@ String digest = xe.getDigest();
 		boolean javadoc = false;
 		boolean jaxb = false;
 		String xpClassName = null;
-		String xpFileName = null;
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];

@@ -1,14 +1,7 @@
 /*
- * File: CompileXDPool.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
  * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
+ * with the terms of the limited licence contained in the accompanying
  * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
  */
 package cz.syntea.xdef.impl.compile;
 
@@ -695,7 +688,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_precomp.reportNotAllowedAttrs(nodei);
 			}
 			if (!languages .isEmpty()) {
-				String[] langs = new String[languages .size()];
+				String[] langs = new String[languages.size()];
 				boolean deflt = false;
 				for (int i = 0; i < langs.length; i++) {
 					Map<String,String> p = languages.get(i);
@@ -850,10 +843,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					"BNFGrammar".equals(nodeName)) {
 					_precomp.chkNestedElements(nodei);
 					if ("thesaurus".equals(nodeName)) {
-						if (nodei._value != null &&
-							nodei._value.getString().length() > 0) {// not empty
-							_thesaurus.add(nodei);
-						}
+						_thesaurus.add(nodei);
 					} else if ("BNFGrammar".equals(nodeName)) {
 						_listBNF.add(0, nodei);
 					} else if ("component".equals(nodeName)) {
@@ -1726,7 +1716,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			//Attempt to recompile compiled pool
 			throw new SRuntimeException(XDEF.XDEF203);
 		}
-		_precomp.prepareMacros(); // find macro definitions and resolve macro calls
+		if (_sources.isEmpty()) {
+			//X-definition source is missing or null&{0}{: }
+			throw new SRuntimeException(XDEF.XDEF903);
+		}
+		_precomp.prepareMacros(); //find macro definitions and resolve macros
 		precompile(); //compile definitions and groups.
 		for (PNode p: _xdefPNodes) {
 			compileXdefHeader(p, xdp);
@@ -2436,8 +2430,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean selective = selectiveFlag;
 		boolean notReported = true;
 		boolean empty = true;
-		short selectorKind = selector == null ?
-			XNode.XMSEQUENCE : selector.getKind();
+		short selectorKind = selector == null ?	XNode.XMSEQUENCE : selector.getKind();
 		for (int i = index; i < xel._childNodes.length; i++) {
 			XNode xn = xel._childNodes[i];
 			short kind;

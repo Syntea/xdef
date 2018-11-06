@@ -1,15 +1,3 @@
-/*
- * File: ChkComposer.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefSQLConstructor;
@@ -1082,7 +1070,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 									chkEl.incRefNum();
 								}
 							}
-							chkEl._element.removeChild(el);
+							try {
+								chkEl._element.removeChild(el);
+							} catch (Exception ex) {} //??? ignore exception
 						}
 					} else { //result here is not null!
 						if (result.isNull()) {

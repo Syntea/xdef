@@ -59,7 +59,7 @@ public interface BNF {
 	public static final long BNF025 = 120717335L;
 	/** Undefined rule reference: "&amp;{0}"&amp;{#SYS000} */
 	public static final long BNF026 = 120717336L;
-	/** Maximum numeric value of character is 65535 */
+	/** Maximum numeric value of character is 65535&amp;{#SYS000} */
 	public static final long BNF027 = 120717337L;
 	/** Maximal occurrence must be greater or equal to the minimum&amp;{#SYS000} */
 	public static final long BNF028 = 120717338L;
@@ -69,15 +69,15 @@ public interface BNF {
 	public static final long BNF030 = 120717340L;
 	/** After alias name "&amp;{0}" is expected ":"&amp;{#SYS000} */
 	public static final long BNF031 = 120717341L;
-	/** Alias name "&amp;{0}" is predefined */
+	/** Alias name "&amp;{0}" is predefined&amp;{#SYS000} */
 	public static final long BNF032 = 120717342L;
-	/** Internal loop */
+	/** Internal loop&amp;{#SYS000} */
 	public static final long BNF035 = 120717343L;
-	/** Item is null */
+	/** Item is null&amp;{#SYS000} */
 	public static final long BNF036 = 120717344L;
-	/** No parameters are declared in method &amp;{0} */
+	/** No parameters are declared in method &amp;{0}&amp;{#SYS000} */
 	public static final long BNF038 = 120717345L;
-	/** Illegal BNF runtime code: &amp;{0} */
+	/** Illegal BNF runtime code: &amp;{0}&amp;{#SYS000} */
 	public static final long BNF040 = 120717346L;
 	/** Rule "&amp;{0}" does not exist&amp;{#SYS000} */
 	public static final long BNF901 = 120717347L;

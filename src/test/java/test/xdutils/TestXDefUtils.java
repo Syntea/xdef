@@ -1,16 +1,3 @@
-/*
- * File: TestXDefUtils.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
-
 package test.xdutils;
 
 import cz.syntea.xdef.sys.FUtils;
@@ -22,7 +9,6 @@ import org.w3c.dom.NodeList;
 import test.utils.XDTester;
 
 /** Test of xdef utilities.
- *
  * @author  trojan
  */
 public class TestXDefUtils extends XDTester {

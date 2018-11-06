@@ -1,15 +1,3 @@
-/*
- * File: WhiteSpaceRestrImpl.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.type.domain.restr;
 
 import java.util.HashSet;
@@ -21,12 +9,12 @@ import java.util.Set;
 public class WhiteSpaceRestrImpl implements WhiteSpaceRestricted {
 
 	/** Set of white space values. */
-	private static final Set<String> _wsConstants = new HashSet<String>();
+	private static final Set<String> _WSCONSTANTS = new HashSet<String>();
 
 	static {
-		_wsConstants.add(COLLAPSE_STR);
-		_wsConstants.add(PRESERVE_STR);
-		_wsConstants.add(REPLACE_STR);
+		_WSCONSTANTS.add(COLLAPSE_STR);
+		_WSCONSTANTS.add(PRESERVE_STR);
+		_WSCONSTANTS.add(REPLACE_STR);
 	}
 	/** White space restriction. */
 	private String _whiteSpace;
@@ -34,7 +22,8 @@ public class WhiteSpaceRestrImpl implements WhiteSpaceRestricted {
 	/** Sets white space.
 	 *
 	 * @param whiteSpace white space value.
-	 * @throws NullPointerException if given white space value is <code>null</code>.
+	 * @throws NullPointerException if given white space value is
+	 * <code>null</code>.
 	 * @throws IllegalArgumentException if given white space value is invalid.
 	 */
 	@Override
@@ -42,20 +31,17 @@ public class WhiteSpaceRestrImpl implements WhiteSpaceRestricted {
 		if (whiteSpace == null) {
 			throw new NullPointerException("White space is null!");
 		}
-		if (!_wsConstants.contains(whiteSpace)) {
+		if (!_WSCONSTANTS.contains(whiteSpace)) {
 			throw new IllegalArgumentException("White space is illegal!");
 		}
 		_whiteSpace = whiteSpace;
 	}
 
 	/** Gets white space value.
-	 *
 	 * @return white space value or <code>null</code>.
 	 */
 	@Override
-	public String getWhiteSpace() {
-		return _whiteSpace;
-	}
+	public String getWhiteSpace() {return _whiteSpace;}
 
 	@Override
 	public boolean equals(Object obj) {

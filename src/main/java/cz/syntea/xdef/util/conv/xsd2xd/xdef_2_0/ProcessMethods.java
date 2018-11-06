@@ -1,20 +1,7 @@
-/*
- * File: ProcessMethods.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xsd2xd.xdef_2_0;
 
 import cz.syntea.xdef.sys.SReporter;
 import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.util.conv.xd.xd_2_0.XdNames;
 import cz.syntea.xdef.util.conv.xsd.xsd_1_0.XsdUtils;
 import cz.syntea.xdef.util.conv.xsd2xd.schema_1_0.Processor;
 import cz.syntea.xdef.util.conv.xsd2xd.util.DOMUtils;

@@ -1,15 +1,3 @@
-/*
- * File: ScriptCodeProcessor.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefBoolean;
@@ -23,7 +11,6 @@ import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.impl.code.DefElement;
 import cz.syntea.xdef.impl.code.DefLong;
 import cz.syntea.xdef.impl.code.DefDouble;
-import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.impl.code.DefDecimal;
 import cz.syntea.xdef.impl.code.DefException;
 import cz.syntea.xdef.impl.code.DefOutStream;
@@ -110,10 +97,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
-//	/** Switch to allow/restrict read files. */
-//	private boolean _fileRead;
-//	/** Switch to allow/restrict read write. */
-//	private boolean _fileWrite;
 	/** Switch to allow/restrict DOCTYPE in XML. */
 	/** Program code */
 	private XDValue[] _code;
@@ -163,8 +146,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects =
 		new TreeMap<String, Object>();
-	/** UniqueSet for ID, IDREF, IREFS */
-	private CodeUniqueset _idrefTable;
 
 	/** XPath function resolver. */
 	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
@@ -281,7 +262,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		} else {
 			_props.setProperty(key, value);
 		}
-		if (key.startsWith(SManager.XDPROPERTY_MSGTABLE)
+		if (key.startsWith(SManager.XDPROPERTY_MESSAGES)
 			|| key.startsWith(SManager.XDPROPERTY_MSGLANGUAGE)) {
 			SManager.setProperty(key, value);
 		}
@@ -361,8 +342,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private void init(final XDefinition xd, final Properties props) {
 		_xd = xd;
 		XPool xp = (XPool) xd.getXDPool();
-//		_fileRead = xp._fileRead;
-//		_fileWrite = xp._fileWrite;
 		_xmlVersion1 = false;
 		_init = xp.getInitAddress();
 		_stack = new XDValue[xp.getStackSize()];
@@ -413,30 +392,18 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			_code = new XDValue[code.length];
 			for (int i = 0; i < code.length; i++) {
 				XDValue x = code[i];
-				if (x.getCode() == 0) {
-					_code[i] = x.cloneItem();
-				} else {
-					_code[i] = x;
-				}
+				// to assure reeentrancy of XDPool create clones of constants.
+				_code[i] = x.getCode() != LD_CONST ? x : x.cloneItem();
 			}
-			_globalVariables =
-				new XDValue[xp.getGlobalVariablesSize()];
+			_globalVariables = new XDValue[xp.getGlobalVariablesSize()];
 			_globalVariables[0] = out == null ?
 				new DefOutStream(System.out) : out;
 			_globalVariables[1] = rw == null ?
 				new DefOutStream(System.err) : new DefOutStream(rw);
 			_globalVariables[2] = in == null ?
 					new DefInStream(System.in, false) : in;
-			_globalVariables[3] = CompileBase.getParser("QName");
-			 CodeUniquesetParseItem[] parseItems =
-				 new CodeUniquesetParseItem[] {
-					 new CodeUniquesetParseItem(null, //name
-						 -1, // chkAddr,
-						 0, // itemIndex,
-						 XD_STRING, // parsedType,
-						 true) // optional
-					};
-			_globalVariables[4] = new CodeUniqueset(parseItems,	"");
+			_globalVariables[3] = null; // "QName" parser
+			_globalVariables[4] = null; // CodeUniqueset for ID,IDREF, ...
 			_initialized1 = true;
 		}
 		_initialized2 = false; //initialize global variables at execution
@@ -457,11 +424,12 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		}
 	}
 
+
 	/** Check if the value from argument is assigned to a global variable.
 	 * @param xv the value to be checked.
 	 * @return true if variable is assigned to a global variable.
 	 */
-	final boolean isInInGlobals(final XDValue xv) {
+	private boolean isInInGlobals(final XDValue xv) {
 		for (int i = 2; i < _globalVariables.length; i++) {
 			if (xv == _globalVariables[i]) {
 				return true;
@@ -470,6 +438,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		return false;
 	}
 
+	/** Close ResultSet object (a database result).
+	 * @param x ResultSet object.
+	 */
 	final void closeResultSet(final XDResultSet x) {
 		if (x != null && !x.isClosed() && !isInInGlobals(x)) {
 			x.close();
@@ -515,10 +486,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		}
 		closeFinalList(_finalList);
 		boolean result = true;
-		if (_idrefTable != null) {//check ID list
-			_idrefTable.checkAndClear(_reporter);
-			_idrefTable = null;
-		}
 		if (_globalVariables != null) {
 			XVariableTable vartab =
 				(XVariableTable) _xd.getXDPool().getVariableTable();
@@ -634,19 +601,25 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Remove given report from temporary reporter. */
 	final void removeReport(final Report rep) {_reporter.removeReport(rep);}
 
+	/** Get the default uniqueSet (used for ID, IDREF etc).
+	 * @return the default uniqueSet object.
+	 */
 	final CodeUniqueset getIdRefTable() {
-		if (_idrefTable == null) {
-			 CodeUniquesetParseItem[] parseItems =
-				 new CodeUniquesetParseItem[] {
-					 new CodeUniquesetParseItem(null, //name
-						 -1, // chkAddr,
-						 0, // itemIndex,
-						 XD_STRING, // parsedType,
-						 true) // optional
-					};
-			_idrefTable = new CodeUniqueset(parseItems,	"");
+		if (_globalVariables[4] == null) {
+//			_idrefTable = (CodeUniqueset) _globalVariables[4];
+			 CodeUniqueset.ParseItem[] parseItems =
+				new CodeUniqueset.ParseItem[] {
+					new CodeUniqueset.ParseItem(
+						"", // no key name
+						-1, // chkAddr,
+						0, // itemIndex,
+						XD_STRING, // parsedType,
+						true) // required item
+				}; // optional
+			_globalVariables[3] = CompileBase.getParser("QName");
+			_globalVariables[4] = new CodeUniqueset(parseItems,	"");
 		}
-		return _idrefTable;
+		return (CodeUniqueset) _globalVariables[4];
 	}
 
 	final StringParser getStringParser() {return _textParser;}
@@ -672,7 +645,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			}
 		}
 	}
-
 	private void putError(final ChkNode chkNode, final long id) {
 		putReport(chkNode, Report.error(id));
 	}
@@ -1520,15 +1492,15 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case UNIQUESET_NEWINSTANCE: {
 					CodeXD x = (CodeXD) item;
-					CodeUniqueset u = (CodeUniqueset) x.getParam2();
-					_stack[++sp] = new CodeUniqueset(
-						u.getParsedItems(), u.getName());
+					CodeUniqueset u = (CodeUniqueset) x.getParam2().cloneItem();
+					_stack[++sp] =
+						new CodeUniqueset(u.getParsedItems(), u.getName());
 					continue;
 				}
 				case UNIQUESET_M_NEWKEY: {
-					CodeUniqueset dt = (CodeUniqueset) _stack[sp--];
-					for (CodeUniquesetParseItem pi : dt.getParsedItems()) {
-						pi.setParsedObject(null);
+					CodeUniqueset u = (CodeUniqueset) _stack[sp--];
+					for (CodeUniqueset.ParseItem i : u.getParsedItems()) {
+						i.setParsedObject(null);
 					}
 					continue;
 				}
@@ -1610,7 +1582,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_KEY_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					_stack[sp--] = null;
-					CodeUniquesetParseItem[] o = dt.getParsedItems();
+					CodeUniqueset.ParseItem[] o = dt.getParsedItems();
 					o[item.getParam()].setParsedObject(null);
 					continue;
 				}
@@ -1959,20 +1931,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case CLEAR_REPORTS: //clear temp reports
 					_reporter.clear();
 					continue;
-				case ADD_TEXT_NODE: {//add text node
-					String s = _stack[sp--].toString();
-					if (s != null && s.length() > 0) {
-						chkNode.getElement().appendChild(
-							chkNode.getDocument().createTextNode(s));
-					}
-					continue;
-				}
-				case ADD_COMMENT_NODE: { //set comment value
-					String s = _stack[sp--].toString();
-					chkNode.getElement().appendChild(
-						chkNode.getDocument().createComment(s));
-					continue;
-				}
 				case SET_TEXT: {//set string value
 					XDValue x =_stack[sp--];
 					String s = x == null || x.isNull() ? null : x.toString();
@@ -1984,10 +1942,15 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					if (_stack[sp].getItemId() == XD_ELEMENT){
 						el = ((DefElement) _stack[sp--]).getElement();
 					} else {
-						XDContainer c = (XDContainer) _stack[sp--];
-						el = (c.getXDItemsNumber() > 0
-							&& c.getXDItem(0).getItemId() == XD_ELEMENT)
-							? c.getXDItem(0).getElement() : null;
+						XDValue x = _stack[sp--];
+						if (x == null || x.isNull()) {
+							el = null;
+						} else {
+							XDContainer c = (XDContainer) x;
+							el = (c.getXDItemsNumber() > 0
+								&& c.getXDItem(0).getItemId() == XD_ELEMENT)
+								? c.getXDItem(0).getElement() : null;
+						}
 					}
 					if (el == null) {
 						//Required element is missing in setElement method
@@ -2519,10 +2482,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					} else {
 						xdef = _xd;
 					}
-					CodeUniqueset idrefTable = _idrefTable;
 					Map<Integer, CodeUniqueset> idrefTables =
 						new TreeMap<Integer, CodeUniqueset>();
-					_idrefTable = null;
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
@@ -2536,7 +2497,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					Element elem = ChkComposer.compose(_reporter,
 						(XDefinition) xdef, rootName, chkNode.getChkElement());
-					_idrefTable = idrefTable;
 					// restore all unique
 					for (Integer j : idrefTables.keySet()) {
 						CodeUniqueset x = idrefTables.get(j);
@@ -3026,7 +2986,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					continue;
 				}
-//			//Codes implemented in XCodeImplMethods
+			//Codes implemented in XCodeImplMethods
 				case GET_TYPEID: //get type of a value (as integer type id)
 				case GET_TYPENAME: // get name of type of a value
 				case CHECK_TYPE:
@@ -3052,7 +3012,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case ELEMENT_CHILDNODES:
 				case ELEMENT_NAME:
 				case ELEMENT_NSURI:
-//			//ParseResult
+			//ParseResult
 				case GET_PARSED_STRING:
 			//Datetime
 				case GET_DAY:
@@ -3272,7 +3232,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private int genDefException(final int pc,
 		final Throwable ex,
 		final XXNode xNode) {
-//		_catchItem.setThrownAddr(pc);
 		int result = _catchItem.getCatchAddr();
 		_localVariables = _catchItem.getVariables();
 		Report report;
@@ -3553,7 +3512,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final short getItemId() {return XDValueID.XD_ANY;}
-
 		@Override
 		public final XDValueType getItemType() {return XDValueType.OBJECT;}
 
@@ -3562,10 +3520,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		////////////////////////////////////////////////////////////////////////
 		@Override
 		public final XDCallItem getParentCallItem() {return _parent;}
-
 		@Override
 		public final int getDebugMode() {return _step;}
-
 		@Override
 		public final int getReturnAddr() {return _returnAddr;}
 	}

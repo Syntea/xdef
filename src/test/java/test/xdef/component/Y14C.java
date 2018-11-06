@@ -183,7 +183,7 @@ public static class X implements test.xdef.component.Y14A{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AD32D66B34D2129EC548E9EFBA976948".equals(
+    if (!"1A9E6F6A4286AE666612F79DF944F5E7".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

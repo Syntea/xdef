@@ -1,0 +1,28 @@
+<x:def xmlns:x='http://www.syntea.cz/xdef/3.1' name='test' root='a' impl-version = '1.0.0'>
+
+  <x:declaration>
+     external method String test.xdutils.TestGuiEditor.test(XXNode);
+     external String xyz;
+     String verze = getImplProperty('version');
+     String x = '???';
+
+    void myPause(String i, int j, Datetime k) {
+      i += ',i=' + k + ',' + j;
+      j++;
+      k = null;
+      outln('MyPause')
+    }
+  </x:declaration>
+
+  <a>
+    <b x:script = "occurs +; finally {outln(test()); outln(xyz); }"
+       a = "required eq('b');
+        onFalse pause('Error setText to b!');
+        finally {
+           pause(xyz);
+           myPause(verze, 0, now());
+        }"
+    />
+</a>
+
+</x:def>

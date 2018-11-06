@@ -1,15 +1,3 @@
-/*
- * File: TestNamespaces.java
- * Copyright 2009 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -55,13 +43,13 @@ public final class TestNamespaces extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a = 'A' b = 'b' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a='A' a='a'><c:a xmlns:c='B' c='C'/></a:a>";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -90,13 +78,13 @@ public final class TestNamespaces extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a = 'A' b = 'b' />";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a='A' a='a'><c:a xmlns:c='B' c='C'/></a:a>";
 			parse(xp, "Test", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

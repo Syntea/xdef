@@ -3,6 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z1 implements cz.syntea.xdef.component.XComponent{
+  public String getVerze() {return _Verze;}
+  public Integer getSeqRec() {return _SeqRec;}
   public String getKrajPolicie() {return _KrajPolicie;}
   public cz.syntea.xdef.sys.SDatetime getPlatnostOd() {return _PlatnostOd;}
   public java.util.Date dateOfPlatnostOd() {
@@ -14,8 +16,6 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfPlatnostOd() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostOd);
   }
-  public Long getSeqRec() {return _SeqRec;}
-  public String getVerze() {return _Verze;}
   public Z2 getProtokol() {return _Protokol;}
   public Z7 getRozhodnutiDN() {return _RozhodnutiDN;}
   public java.util.List<Z1.VyliceniDN> listOfVyliceniDN() {return _VyliceniDN;}
@@ -29,6 +29,8 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   public java.util.List<PredmetDN> listOfPredmet() {return _Predmet;}
   public java.util.List<ZvireDN> listOfZvire() {return _Zvire;}
   public java.util.List<UcastnikDN> listOfUcastnik() {return _Ucastnik;}
+  public void setVerze(String x) {_Verze = x;}
+  public void setSeqRec(Integer x) {_SeqRec = x;}
   public void setKrajPolicie(String x) {_KrajPolicie = x;}
   public void setPlatnostOd(cz.syntea.xdef.sys.SDatetime x) {_PlatnostOd = x;}
   public void setPlatnostOd(java.util.Date x) {
@@ -40,8 +42,6 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
   public void setPlatnostOd(java.util.Calendar x) {
     _PlatnostOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setSeqRec(Long x) {_SeqRec = x;}
-  public void setVerze(String x) {_Verze = x;}
   public void setProtokol(Z2 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Protokol", null, "SouborD1A#ZaznamPDN/$mixed/Protokol");
@@ -127,10 +127,10 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
       _Ucastnik.add(x);
     }
   }
+  public String xposOfVerze(){return XD_XPos + "/@Verze";}
+  public String xposOfSeqRec(){return XD_XPos + "/@SeqRec";}
   public String xposOfKrajPolicie(){return XD_XPos + "/@KrajPolicie";}
   public String xposOfPlatnostOd(){return XD_XPos + "/@PlatnostOd";}
-  public String xposOfSeqRec(){return XD_XPos + "/@SeqRec";}
-  public String xposOfVerze(){return XD_XPos + "/@Verze";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -175,14 +175,14 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
+    if (getVerze() != null)
+      el.setAttribute("Verze", getVerze());
+    if (getSeqRec() != null)
+      el.setAttribute("SeqRec", String.valueOf(getSeqRec()));
     if (getKrajPolicie() != null)
       el.setAttribute("KrajPolicie", getKrajPolicie());
     if (getPlatnostOd() != null)
       el.setAttribute("PlatnostOd", getPlatnostOd().formatDate("d.M.yyyy H:mm"));
-    if (getSeqRec() != null)
-      el.setAttribute("SeqRec", String.valueOf(getSeqRec()));
-    if (getVerze() != null)
-      el.setAttribute("Verze", getVerze());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -221,16 +221,16 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"F9DDF5713E93E887062B13E0C31A4D01".equals(
+    if (!"7433043803A7E244ED58DBD7C11E92A5".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String _Verze;
+  private Integer _SeqRec;
   private String _KrajPolicie;
   private cz.syntea.xdef.sys.SDatetime _PlatnostOd;
-  private Long _SeqRec;
-  private String _Verze;
   private Z2 _Protokol;
   private Z7 _RozhodnutiDN;
   private final java.util.List<Z1.VyliceniDN> _VyliceniDN = new java.util.ArrayList<Z1.VyliceniDN>();
@@ -264,7 +264,7 @@ public class Z1 implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd"))
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec"))
-      setSeqRec(parseResult.getParsedValue().longValue());
+      setSeqRec(parseResult.getParsedValue().intValue());
     else setVerze(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -405,7 +405,7 @@ public static class VyliceniDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

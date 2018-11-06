@@ -1,16 +1,3 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XDFactory.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef;
 
 import cz.syntea.xdef.msg.SYS;
@@ -33,7 +20,6 @@ import java.util.Properties;
 import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
-import cz.syntea.xdef.sys.SConstants;
 import java.nio.charset.Charset;
 
 /** Provides generation of {@link cz.syntea.xdef.XDPool} from source
@@ -75,7 +61,7 @@ public final class XDFactory {
 	 * @return version of this implementation of X-definition.
 	 */
 	public static String getXDVersion() {
-		return SConstants.BUILD_VERSION + " (" + SConstants.BUILD_DATE + "]";
+		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + "]";
 	}
 
 	/** Creates instance of XDBuilder with properties.
@@ -84,30 +70,65 @@ public final class XDFactory {
 	 * @return created XDBuilder.
 	 */
 	public static XDBuilder getXDBuilder(final Properties props) {
-		return getXDBuilder(props, null);
+		return getXDBuilder(null, props);
 	}
 
 	/** Creates instance of XDBuilder with properties.
+	 * @param reporter the ReportWriter to be used for error reporting.
 	 * @param props Properties or <tt>null</tt> -
 	 * see {@link cz.syntea.xdef.XDConstants}.
-	 * @param reporter the ReportWriter to be used for error reporting.
 	 * @return created XDBuilder.
 	 */
-	public static XDBuilder getXDBuilder(final Properties props,
-		final ReportWriter reporter) {
-		XDBuilder result = new cz.syntea.xdef.impl.XBuilder(props);
-		if (reporter != null) {
-			result.setReporter(reporter);
-		}
+	public static XDBuilder getXDBuilder(final ReportWriter reporter,
+		final Properties props) {
+		XDBuilder result = new cz.syntea.xdef.impl.XBuilder(reporter, props);
 		return result;
 	}
-
 
 	private static void setParam(final XDBuilder b, final Object param) {
 		if (param == null) {
 			return;
 		}
-		if (param instanceof Class) {
+		if (param instanceof Object[]) {
+			Object[] x = (Object[]) param;
+			if (x.length == 2
+				&& x[0] instanceof Object[] && x[1] instanceof String[]) {
+				Object[] x1 = (Object[]) x[0];
+				String[] x2 = (String[]) x[1];
+				boolean ids = true;
+				for (int i = 0; i < x1.length; i++) {
+					Object y =  x1[i];
+					if (y instanceof String) {
+						 if (((String) y).charAt(0) != '<') {
+							ids = false;
+							break;
+						}
+					} else if (!(y instanceof InputStream)) {
+						ids = false;
+						break;
+					}
+					String s =  x2[i];
+					if (s == null || s.charAt(0) == '<') {
+						ids = false;
+						break;
+					}
+				}
+				if (ids) {
+					// input data and source names
+					for (int i = 0; i < x1.length; i++) {
+						if (x1[i] instanceof String) {
+							b.setSource((String) x1[i], x2[i]);
+						} else {
+							b.setSource((InputStream) x1[i], x2[i]);
+						}
+					}
+					return;
+				}
+			}
+			for (Object o : x) {
+				setParam(b, o);
+			}
+		} else if (param instanceof Class) {
 			b.setExternals((Class) param);
 		} else if (param instanceof Class[]) {
 			Class[] x = (Class[]) param;
@@ -148,11 +169,12 @@ public final class XDFactory {
 				&& x[1] instanceof String) {
 				b.setSource((InputStream) x[0], (String) x[1]);
 			} else {
-				throw new SRuntimeException(
-					"Incorrect parameter: " + param);
+				//Incorrect parameter of compiler of X-definitions&{0}{: }
+				throw new SRuntimeException(XDEF.XDEF904, param.getClass());
 			}
 		} else {
-			throw new SRuntimeException("Incorrect parameter: " + param);
+			//Incorrect parameter of compiler of X-definitions&{0}{: }
+			throw new SRuntimeException(XDEF.XDEF904, param.getClass());
 		}
 	}
 
@@ -165,13 +187,11 @@ public final class XDFactory {
 	public static XDPool compileXD(final Properties props,
 		final String[] params) {
 		XDBuilder builder = getXDBuilder(props);
-		for (String s : params) {
-			setParam(builder, s);
-		}
+		setParam(builder, params);
 		return builder.compileXD();
 	}
 
-	/** Compile XDPool from source.
+	/** Compile XDPool from URLs.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of URLs with X-definition sources.
 	 * @return generated XDPool.
@@ -180,13 +200,11 @@ public final class XDFactory {
 	public static XDPool compileXD(final Properties props,
 		final URL[] params) {
 		XDBuilder builder = getXDBuilder(props);
-		for (URL u : params) {
-			setParam(builder, u);
-		}
+		setParam(builder, params);
 		return builder.compileXD();
 	}
 
-	/** Compile XDPool from sources.
+	/** Compile XDPool from files.
 	 * @param props Properties or <tt>null</tt>.
 	 * @param params list of files with X-definition sources.
 	 * @return generated XDPool.
@@ -195,9 +213,38 @@ public final class XDFactory {
 	public static XDPool compileXD(final Properties props,
 		final File[] params) {
 		XDBuilder builder = getXDBuilder(props);
-		for (File f : params) {
-			setParam(builder, f);
-		}
+		setParam(builder, params);
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from InputStreams.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param params list of files with X-definition sources.
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final InputStream[] params) {
+		XDBuilder builder = getXDBuilder(props);
+		setParam(builder, params);
+		return builder.compileXD();
+	}
+
+	/** Compile XDPool from sources and assign the sourceId to each source.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param sources array with source data with X-definitions source data.
+	 * (The type of items can only be either the InputStreams or the String
+	 * containing an XML document).
+	 * @param sourceIds array with sourceIds (corresponding to the items
+	 * in the argument sources).
+	 * @return generated XDPool.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static XDPool compileXD(final Properties props,
+		final Object[] sources,
+		final String[] sourceIds) {
+		XDBuilder builder = XDFactory.getXDBuilder(props);
+		setParam(builder, new Object[] {sources, sourceIds});
 		return builder.compileXD();
 	}
 
@@ -227,14 +274,10 @@ public final class XDFactory {
 		if (params == null || params.length == 0) {
 			throw new SRuntimeException(XDEF.XDEF903);
 		}
-		XDBuilder builder = getXDBuilder(props, reporter);
-		for (Object o : params) {
-			setParam(builder, o);
-		}
+		XDBuilder builder = getXDBuilder(reporter, props);
+		setParam(builder, params);
 		return builder.compileXD();
 	}
-
-
 
 	/** Read the serialized XDPool from the input stream.
 	 * @param stream input stream with X-definition.

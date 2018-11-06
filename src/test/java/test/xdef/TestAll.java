@@ -1,15 +1,3 @@
-/*
- * File: TestAll.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -69,6 +57,7 @@ public class TestAll {
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),
+			new TestThesaurus(),
 			new TestTryCatch(),
 			new TestTypes(),
 			new TestUserMethods(),

@@ -1,15 +1,3 @@
-/*
- * File: Test000.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -67,20 +55,15 @@ public final class Test000 extends XDTester {
 		final String dataDir = getDataDir() + "test/";
 		final String tempDir = getTempDir();
 		try {
-			//processing instructions
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
-"<root/>\n"+
-"</xd:def>";
-			xml = "<?A A?><root><?B B?></root><?C C?>";
+			xdef = "<xd:def xmlns:xd='"+XDEFNS+"' root='root'><root/></xd:def>";
+			xml = "<?A A?><root><?B B?></root><?C C?>";//processing instructions
 			assertFalse(test(xdef,xml,"",'P',"<root><?B B?></root>",""));
 			assertNoErrors(reporter);
-			// method toString(obj)
-			xdef =
+			xdef = //toString(obj) method
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 " <a a='finally if (!toString(12).equals(\"12\")) error(toString(12));'/>\n"+
 "</xd:def>";
-			xml = "<a a='x' />";
+			xml = "<a a='x'/>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -100,39 +83,39 @@ public final class Test000 extends XDTester {
 "         error(toString(from(\"@a\")));'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
-			// declaration of variables in different XDefinitions
+			// declaration of variables in different XDefinitions in collection
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "' impl-ver='1.0'>\n"+
 "<xd:def xd:name='z'>\n"+
-"<xd:declaration scope = 'global'>int k = 1; int j = k;</xd:declaration>\n"+
+"  <xd:declaration scope = 'global'> int k = 1; int j = k; </xd:declaration>\n"+
 "</xd:def>\n"+
-"<xd:def xd:name='test' xd:root = 'aaa' >\n"+
-"<aaa xd:script=\"finally {h(); if (k != 1) outln('error');}\"/>\n"+
-"<xd:declaration scope = 'global'>\n"+
-"  int i = 0;\n"+
-"  void h() {\n"+
-"    if (i != 0) outln('error');\n"+
-"    if (k != 1) outln('error');\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"<xd:def xd:name='test' xd:root = 'a' >\n"+
+"  <a xd:script=\"finally {h(); if (k != 1) outln('error');}\"/>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    int i = 0;\n"+
+"    void h() {\n"+
+"      if (i != 0) outln('error');\n"+
+"      if (k != 1) outln('error');\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
-			xml = "<aaa/>";
+			xml = "<a/>";
 			assertFalse(test(xdef, xml, "test",'P'));
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  String targetNS = '';\n"+
-"  String unq = '';\n"+
+"  String targetNS='';\n"+
+"  String unq='';\n"+
 "  boolean chkUnique() {\n"+
 "    if (!NCName()) {\n"+
 "      return error('Value is not NCName');\n"+
 "    }\n"+
-"    String s = getText();\n"+
+"    String s=getText();\n"+
 "    if (unq.indexOf(' ' + s + ' ') GE 0) {\n"+
 "      return error('Not Unique');\n"+
 "    } else {\n"+
-"      unq += s + ' ';\n"+
+"      unq+=s + ' ';\n"+
 "      return true;\n"+
 "    }\n"+
 "  }\n"+
@@ -140,9 +123,9 @@ public final class Test000 extends XDTester {
 "    if (!QName()) {\n"+
 "      return error('Value is not QName');\n"+
 "    }\n"+
-"    String prefix = getQnamePrefix(getText());\n"+
-"    String localName = getQnameLocalpart(getText());\n"+
-"    String s = getNamespaceURI(prefix);\n"+
+"    String prefix=getQnamePrefix(getText());\n"+
+"    String localName=getQnameLocalpart(getText());\n"+
+"    String s=getNamespaceURI(prefix);\n"+
 "    if (targetNS NE s) {\n"+
 "      return error('Incorrect namespace: \\'' + s + '\\', ' + targetNS);\n"+
 "    }\n"+
@@ -156,30 +139,30 @@ public final class Test000 extends XDTester {
 "  }\n"+
 "</xd:declaration>\n"+
 "\n"+
-"<root>\n"+
+"<a>\n"+
 "<meta xd:script=\"init {targetNS=@targetNS; unq=' ';} finally out(unq)\"\n"+
-"     targetNS = \"required uri()\" >\n"+
-"  <msg xd:script = \"occurs 1..\" name = \"required chkUnique()\" />\n"+
+"     targetNS=\"required uri()\" >\n"+
+"  <msg xd:script=\"occurs 1..\" name=\"required chkUnique()\" />\n"+
 "  <input>\n"+
-"    <msg xd:script = \"occurs 1..\" name = \"required chkRef()\" />\n"+
+"    <msg xd:script=\"occurs 1..\" name=\"required chkRef()\" />\n"+
 "  </input>\n"+
 "</meta>\n"+
-"</root>\n"+
+"</a>\n"+
 "</xd:def>\n";
 			xml =
-"<root xmlns:ab = \"cde\">" +
-"<meta targetNS = \"abc\" >" +
-"<msg name = \"A\" />" +
-"<msg name = \"B\" />" +
-"<msg name = \"C\" />" +
-"<msg name = \"D\" />" +
-"<input xmlns:ab = \"abc\" xmlns:b = \"abc\" >" +
-"<msg name = \"ab:B\" />" +
-"<msg name = \"b:D\" />" +
-"<msg xmlns:c = \"abc\" name = \"c:C\" />" +
+"<a xmlns:ab=\"cde\">" +
+"<meta targetNS=\"abc\" >" +
+"<msg name=\"A\" />" +
+"<msg name=\"B\" />" +
+"<msg name=\"C\" />" +
+"<msg name=\"D\" />" +
+"<input xmlns:ab=\"abc\" xmlns:b=\"abc\" >" +
+"<msg name=\"ab:B\" />" +
+"<msg name=\"b:D\" />" +
+"<msg xmlns:c=\"abc\" name=\"c:C\" />" +
 "</input>" +
 "</meta>" +
-"</root>";
+"</a>";
 			assertFalse(test(xdef, xml, "",'P',
 				xml,
 				"targetNamespace=\"abc\", localName=\"B\", prefix=\"ab\"\n"+
@@ -188,19 +171,19 @@ public final class Test000 extends XDTester {
 				" A B C D "));
 			xdef =
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
-"<xd:def name='a' xd:root='aaa' >\n"+
-"<aaa>\n"+
-"  <bbb attr=\"required string()\"\n"+
-"       xd:script=\"occurs 0..1; finally outln(@attr)\" />\n"+
+"<xd:def name='a' xd:root='a' >\n"+
+"<a>\n"+
+"  <b attr=\"required string()\"\n"+
+"           xd:script=\"occurs 0..1; finally outln(@attr)\" />\n"+
 "  optional string();finally{outln('text: '+getText());setText('text1');}\n"+
-"  <ccc xd:script=\"occurs 1; onAbsence setElement(newElement('ccc'))\"/>\n"+
+"  <c xd:script=\"occurs 1; onAbsence setElement(newElement('c'))\"/>\n"+
 "  optional string(); finally {outln('text: '+getText()); setText('text2');\n"+
-"    hanoi(3); if ((test != 1) | (k != 1)) outln('error');}\n"+
-"</aaa>\n"+
+"    hanoi(3); if ((test!=1) | (k!=1)) outln('error');}\n"+
+"</a>\n"+
 "<xd:declaration>\n"+
-"  int test = 1;\n"+
-"  int i = 0, q = i;\n"+
-"  int j = i;\n"+
+"  int test=1;\n"+
+"  int i=0, q=i;\n"+
+"  int j=i;\n"+
 "  int x;\n"+
 "  void move(int v, int o, int k, int h) {\n"+
 "    if (v GT 0) {\n"+
@@ -208,16 +191,16 @@ public final class Test000 extends XDTester {
 "      outln(o + '->' + k);\n"+
 "      move(v -1, h, k, o);\n"+
 "    }\n"+
-"    if ((test != 1) | (j != 0)) outln('error');\n"+
+"    if ((test!=1) | (j!=0)) outln('error');\n"+
 "    for(int i=1, j=1; i LT j; i++);\n"+
 "  }\n"+
 "  int r;\n"+
-"  int s = 1, f = r = 1;\n"+
+"  int s=1, f=r=1;\n"+
 "  int y;\n"+
 "  int z;\n"+
 "</xd:declaration>\n"+
 "</xd:def>\n"+
-"<xd:def xd:name  = 'y'>\n"+
+"<xd:def xd:name='y'>\n"+
 "<xd:declaration>\n"+
 "  void hanoi(int v) {\n"+
 "    outln('v=' + v + ':');\n"+
@@ -225,54 +208,39 @@ public final class Test000 extends XDTester {
 "  }\n"+
 "</xd:declaration>\n"+
 "</xd:def>\n"+
-"<xd:def xd:name  = 'z'>\n"+
-"<xd:declaration>int k = 1;</xd:declaration>\n"+
+"<xd:def xd:name='z'>\n"+
+"<xd:declaration>int k=1;</xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
-			xml =
-"<aaa>\n"+
-"  <bbb attr='xxxx' />\n"+
-"orig1\n"+
-"</aaa>\n";
+			xml = "<a><b attr='x' />orig1</a>\n";
 			assertFalse(test(xdef, xml, "a",'P',
-				"<aaa><bbb attr='xxxx'/>text1<ccc/>text2</aaa>",
-				"xxxx\ntext: orig1\ntext: \nv=3:\n"+
+				"<a><b attr='x'/>text1<c/>text2</a>",
+				"x\ntext: orig1\ntext: \nv=3:\n"+
 				"1->2\n1->3\n2->3\n1->2\n3->1\n3->2\n1->2\n"));
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='Field'>\n"+
-"<Field xd:script='ref Component;'\n"+
-"  LabelShort='optional string();' Type=\"required tokens(\n"+
-"    'Boolean|Currency|Date|DateTime|Float|Integer|Choice|String|Text|Time'\n"+
-	 ")\">\n"+
-"  <ValueCheck xd:script='1'>\n"+
-"    <xd:choice xd:script='?'>\n"+
-"       <Precission xd:script=\"\n"+
-"            match (xpath('../../@Type').toString() EQ 'Integer');\"\n"+
-"          ValueMax = \"required num();\"/>\n"+
-"       <Precission xd:script=\"\n"+
-"            match (xpath('../../@Type').toString() EQ 'String'); occurs 1\"\n"+
-"          ValueLength='required num();'/>\n"+
-"    </xd:choice>\n"+
-"   </ValueCheck>\n"+
-"</Field>\n"+
-"<Component Name='required string(); /*jmeno - jen alfanumericke znaky*/'\n"+
-"          Label='optional string();/*label - libovolne znaky*/'\n"+
-"          Class='optional string(); /*class - jejiz instanci komponenta je\n"+
-"            - nepovinne, pouzije se pokud defaultni trida nevyhovuje.*/'\n"+
-"          />\n"+
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a xd:script='ref X;' z=\"tokens('I|S|X')\">\n"+
+"    <b xd:script='1'>\n"+
+"      <xd:choice xd:script='?'>\n"+
+"        <c xd:script=\"match (xpath('../../@z').toString() EQ 'I');\"\n"+
+"           c=\"num();\"/>\n"+
+"        <c xd:script=\"match(xpath('../../@z').toString()=='S');occurs 1\"\n"+
+"           d='num();'/>\n"+
+"      </xd:choice>\n"+
+"     </b>\n"+
+"  </a>\n"+
+"  <X x='string();' y='? string();' z='? string();' />\n"+
 "</xd:def>";
-			xml =
-"<Field Name       = 'Jmeno'\n"+
-"       Label      = 'Jmeno osoby'\n"+
-"       LabelShort = 'Jmeno'\n"+
-"       Type       = 'String'>\n"+
-"   <ValueCheck>\n"+
-"      <Precission ValueLength = '10'/>\n"+
-"   </ValueCheck>\n"+
-"</Field>";
+			xml = "<a x='a' z='X'><b/></a>";
 			parse(xdef, "", xml, reporter);
 			assertNoErrors(reporter);
-			xdef = //test of recursion
+			xml = "<a x='xx' z='I'><b><c c='10'/></b></a>";
+			parse(xdef, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml = "<a x='xx' y='yy' z='S'><b><c d='10'/></b></a>";
+			parse(xdef, "", xml, reporter);
+			assertNoErrors(reporter);
+			xdef = //test of recursion in X-definition
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a x='optional int();' y='optional string()'>\n"+
 "    <b xd:script='occurs 0..'/>\n"+
@@ -286,52 +254,46 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='People'>\n"+
-"<xd:declaration>int n = 0; float sum = 0.0; </xd:declaration>\n"+
-"<xd:macro name = \"tiskPerson\">finally {n++; outln('Person ' + @FirstName\n"+
-"  + ' ' + @LastName + ' earns ' + @Salary);\n"+
-" sum += int.parse(toString(@Salary)).intValue();}\n"+
+"<xd:declaration>int n=0; float sum=0.0; </xd:declaration>\n"+
+"<xd:macro name=\"tiskPerson\">finally {n++; outln('Person '+@FirstName\n"+
+"  + ' ' + @LastName + ' earns ' + @Salary + ' (' + getTextContent() + ')');\n"+
+" sum+=int.parse(toString(@Salary)).intValue();}\n"+
 "</xd:macro>\n"+
-"<xd:macro name = \"tisk:Total\">finally outln('Number of people = ' + n + \n"+
+"<xd:macro name=\"tisk:Total\">finally outln('Number of people = ' + n + \n"+
 " ', average salary = ' + (sum/n));</xd:macro>\n"+
-"<People xd:script  = \"${tisk:Total}\" >\n"+
-"  <Person xd:script  = \"occurs 0..; ${tiskPerson}\" \n"+
-"        FirstName  = \"required string(1, 50)\"\n"+
-"        LastName   = \"required string(1, 50)\"\n"+
-"        BirthDate  = \"required xdatetime('d.m.yyyy')\"\n"+
-"        Salary     = \"optional int(2500, 1000000)\" >\n"+
-"    optional;\n"+
+"<People xd:script=\"${tisk:Total}\" >\n"+
+"  <Person xd:script=\"occurs 0..; ${tiskPerson}\" \n"+
+"        FirstName=\"required string(1, 50)\"\n"+
+"        LastName=\"required string(1, 50)\"\n"+
+"        BirthDate=\"required xdatetime('d.m.yyyy')\"\n"+
+"        Salary=\"optional int(2500, 1000000)\" >\n"+
+"    optional\n"+
 "  </Person>\n"+
 "</People>\n"+
 "</xd:def>";
 			xml =
 "<People>" +
-"<Person FirstName = \"John\"" +
-"        LastName  = \"Brown\"" +
-"        BirthDate = \"1.4.1970\"" +
-"        Salary    = \"35000\">" +
+"<Person FirstName='John' LastName='Brown' BirthDate='1.4.1970' Salary='9500'>"+
 "Good boy" +
 "</Person>" +
-"<Person FirstName  = \"Mary\"" +
-"        LastName   = \"Brown\"" +
-"        BirthDate  = \"11.2.1980\"" +
-"        Salary     = \"2500\" >" +
-"Good boy" +
+"<Person FirstName='Mary' LastName='Brown' BirthDate='8.2.1980' Salary='2500'>"+
+"It's a monster" +
 "</Person>" +
 "</People>";
-			assertFalse(test(xdef, xml, "",'P', xml,
-				"Person John Brown earns 35000\n"+
-				"Person Mary Brown earns 2500\n"+
-				"Number of people = 2, average salary = 18750.0\n"));
+			assertFalse(test(xdef, xml, "", 'P', xml,
+				"Person John Brown earns 9500 (Good boy)\n"+
+				"Person Mary Brown earns 2500 (It's a monster)\n"+
+				"Number of people = 2, average salary = 6000.0\n"));
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='XXX'>\n"+
-"  <XXX>\n"+
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
 "    <AAA xd:script=\"occurs 0..\" xd:text=\"* string()\">\n"+
 "      <CCC xd:script=\"occurs 0..\"/>\n"+
 "    </AAA>\n"+
-"  </XXX>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml =
-"<XXX>" +
+"<a>" +
   "<AAA>" +
 	"<CCC/>" +
   "</AAA>" +
@@ -351,19 +313,17 @@ public final class Test000 extends XDTester {
 	"<CCC/>" +
 	"text2" +
   "</AAA>" +
-"</XXX>";
+"</a>";
 			assertFalse(test(xdef, xml, "",'P'));
-			//test of occurrence in sequence
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='XXX'>\n"+
-"  <XXX>\n"+
+			xdef = //test of occurrence in sequence
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"  <a>\n"+
 "    <xd:sequence occurs='0..'>\n"+
-"      <AAA/>\n"+
-"      <BBB/>\n"+
+"      <AAA/><BBB/>\n"+
 "    </xd:sequence>\n"+
-"  </XXX>\n"+
+"  </a>\n"+
 "</xd:def>";
-			xml = "<XXX><AAA/><BBB/><AAA/><BBB/></XXX>";
+			xml = "<a><AAA/><BBB/><AAA/><BBB/></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -372,16 +332,32 @@ public final class Test000 extends XDTester {
 			xml = "<a a=\"1\"/>";
 			assertFalse(test(xdef, xml, "",'P'));
 			//test ignoring of attributes from namespace XMLschema-instance.
-			xd = XDFactory.xparse(
-				dataDir + "Test000_00.xml",
-				null);
+			xd = XDFactory.xparse(dataDir + "Test000_00.xml", null);
 			if (!"empty".equals(xd.getElement().getNodeName()) ||
 				xd.getElement().getChildNodes().getLength() != 0) {
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
+			//Lubor
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"  <EndPrgInfo Verze=\"fixed '2.0'\" IdProces='int()' Kanal='num(2,2)'/>\n"+
+"  <Complex ver=\"fixed '1.0'\">\n"+
+"    <inside xd:script=\"occurs 1..; ref EndPrgInfo\" />\n"+
+"    <x xd:script=\"occurs 0..1\"> string() </x>\n"+
+"  </Complex>\n"+
+"</xd:def>";
+			xml =
+"<Complex>\n"+
+"  <inside IdProces=\"123\" Kanal=\"22\"/>\n"+
+"  <x>test</x>\n"+
+"  <x>test1</x>\n"+
+"</Complex>\n";
+			el = create(compile(xdef), "", "Complex", reporter, xml);
+			assertEq("<Complex ver='1.0'><inside Kanal='22'"
+				+ " IdProces='123' Verze='2.0'/><x>test</x></Complex>", el);
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		try { //test ignoring of DTD.
-			//test switch illegal DOCTYPE.
+		try { //test ignoring of DTD - test switch illegal DOCTYPE.
 			xdef = dataDir + "Test000_01.xdef";
 			xml = dataDir + "Test000_01.xml";
 			Properties props = new Properties();
@@ -405,13 +381,13 @@ public final class Test000 extends XDTester {
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
 		resetProperties();
-//		try { //test ignoring of DTD.
-//			xdef = dataDir + "Test000_01.xdef";
-//			xp = compile(xdef);
-//			xml = dataDir + "Test000_01.xml";
-//			parse(xp, "root", xml, reporter);
-//			assertNoErrors(reporter);
-//		} catch (Exception ex) {fail(ex);}
+		try { //test ignoring of DTD.
+			xdef = dataDir + "Test000_01.xdef";
+			xp = compile(xdef);
+			xml = dataDir + "Test000_01.xml";
+			parse(xp, "root", xml, reporter);
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {  //test DTD fail
 			xdef = dataDir + "Test000_01_1.xdef";
 			xml = dataDir + "Test000_01.xml";
@@ -419,7 +395,7 @@ public final class Test000 extends XDTester {
 			parse(xp, "root", xml, reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("SYS076") < 0) {
+			if (ex.getMessage() == null || !ex.getMessage().contains("SYS076")){
 				fail(ex);
 			}
 		}
@@ -438,7 +414,6 @@ public final class Test000 extends XDTester {
 				org.w3c.dom.Node n = nm.getNamedItem("e");
 				assertFalse(n == null, "missing entity");
 			}
-			//mytest5
 			xdef = dataDir + "Test000_02.xdef";
 			xp = compile(xdef);
 			strw = new StringWriter();
@@ -528,45 +503,13 @@ public final class Test000 extends XDTester {
 			} else {
 				fail("Error not reported");
 			}
-			//Lubor
-			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
-"  <EndPrgInfo Verze=\"fixed '2.0'\"\n"+
-"    Program=\"required string(1,4)\"\n"+
-"    IdProces=\"required int()\"\n"+
-"    Prg=\"required string(3,3)\"\n"+
-"    Vysledek=\"required enum('OK','ERR')\"\n"+
-"    Kanal=\"required num(2,2)\">\n"+
-"  </EndPrgInfo>\n"+
-"  <Complex ver=\"fixed '1.0'\">\n"+
-"    <inside xd:script=\"occurs 1..; ref EndPrgInfo\" />\n"+
-"    <x xd:script=\"occurs 0..1\">\n"+
-"		required string\n"+
-"    </x>\n"+
-"  </Complex>\n"+
-"</xd:def>";
-			xml = "<Complex>\n"+
-				"  <inside Program=\"abcd\"\n"+
-				"    IdProces=\"123\"\n"+
-				"    Prg=\"xyz\"\n"+
-				"    Vysledek=\"OK\"\n"+
-				"    Kanal=\"22\">\n"+
-				"  </inside>\n"+
-				"  <x>test</x>\n"+
-				"  <x></x>\n"+
-				"</Complex>\n";
-			el = create(compile(xdef), "", "Complex", reporter, xml);
-			assertEq("<Complex ver='1.0'><inside Program='abcd' Kanal='22'"
-				+ " Prg='xyz' Vysledek='OK' IdProces='123' Verze='2.0'/>"
-				+ "<x>test</x></Complex>", el);
-			//russian
 			parse(dataDir + "Test000_03.xdef", //recursive reference, unique set
 				"", dataDir + "Test000_03.xml", reporter);
 			assertNoErrors(reporter);
 			parse(dataDir + "Test000_04.xdef",
 				"", dataDir + "Test000_04.xml", reporter);
 			assertNoErrors(reporter);
-			parse(dataDir + "Test000_rus.xdef",
+			parse(dataDir + "Test000_rus.xdef", //test encoding - russian
 				"test", dataDir + "Test000_rus.xml", reporter);
 			assertNoErrors(reporter);
 			parse(dataDir + "Test000_rus_1.xdef",
@@ -591,13 +534,13 @@ public final class Test000 extends XDTester {
 		try { //Matej2
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Vozidlo'>\n"+
-"  <Vozidlo SPZ = \"optional unknown() OR regex('[A-Z0-9]{6,7}');\"\n"+
-"    VIN        = \"optional known() AND string(1,26);\"\n"+
-"    CisloTP    = \"optional unknown() OR pic('AA999999');\" />\n"+
+"  <Vozidlo SPZ=\"optional unknown() OR regex('[A-Z0-9]{6,7}');\"\n"+
+"    VIN       =\"optional known() AND string(1,26);\"\n"+
+"    CisloTP   =\"optional unknown() OR pic('AA999999');\" />\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef, getClass());
-			xml = "<Vozidlo SPZ=\"ZA384CP\" VIN=\"VF1C066MG19952957\" "+
-				"CisloTP=\"SB746826\"/>";
+			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
+				"CisloTP='SB746826'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter, xml);
 		} catch (Exception ex) {fail(ex);}
@@ -672,7 +615,7 @@ public final class Test000 extends XDTester {
 			xml = dataDir + "Test000_07_1.xml";
 			parse(xp,"XDefSOAP", xml, reporter);
 			if (!reporter.errors()) {
-				fail("Error not found");
+				fail("Error not reported");
 			} else {
 				if (reporter.getErrorCount() != 4) {
 					assertNoErrors(reporter, xml);
@@ -685,7 +628,7 @@ public final class Test000 extends XDTester {
 			xml = dataDir + "Test000_07_2.xml";
 			parse(xp,"XDefSOAP", xml, reporter);
 			if (!reporter.errors()) {
-				fail("Error not found");
+				fail("Error not reported");
 			} else {
 				if (reporter.getErrorCount() != 3) {
 					assertNoErrors(reporter, xml);
@@ -771,10 +714,10 @@ public final class Test000 extends XDTester {
 "			UsekPojisteniOd =\"required xdatetime('yyyyMMdd')\"\n"+
 "			UsekPojisteniDo =\"required xdatetime('yyyyMMdd')\" >\n"+
 "			<RozhodnaUdalost xd:script=\"occurs 0..\"\n"+
-"				Rezerva              =\"required int()\"\n"+
-"				Vyplaceno            =\"required int()\"\n"+
-"				DatumCasSU           =\"required xdatetime('yyyyMMdd0000')\"\n"+
-"				KlasifikovanaUdalost =\"required enum('A','N')\"\n"+
+"				Rezerva             =\"required int()\"\n"+
+"				Vyplaceno           =\"required int()\"\n"+
+"				DatumCasSU          =\"required xdatetime('yyyyMMdd0000')\"\n"+
+"				KlasifikovanaUdalost=\"required enum('A','N')\"\n"+
 "			/>\n"+
 "		</UsekPojisteni>\n"+
 "	</PSP>\n"+
@@ -868,12 +811,12 @@ public final class Test000 extends XDTester {
 "		</xd:choice>\n"+
 "	</PSP>\n"+
 "	<UsekPojisteni xd:script='occurs 1..'\n"+
-"		KodPojistitele  =\"required num(4)\"\n"+
-"		CisloSmlouvy    =\"required string(1,35)\"\n"+
-"		PoradiVozidla   =\"required num(1,10)\"\n"+
-"		DruhVozidla     =\"required num(2)\"\n"+
-"		UsekPojisteniOd =\"required xdatetime('yyyyMMdd')\"\n"+
-"		UsekPojisteniDo =\"required xdatetime('yyyyMMdd')\" >\n"+
+"		KodPojistitele =\"required num(4)\"\n"+
+"		CisloSmlouvy   =\"required string(1,35)\"\n"+
+"		PoradiVozidla  =\"required num(1,10)\"\n"+
+"		DruhVozidla    =\"required num(2)\"\n"+
+"		UsekPojisteniOd=\"required xdatetime('yyyyMMdd')\"\n"+
+"		UsekPojisteniDo=\"required xdatetime('yyyyMMdd')\" >\n"+
 "		<xd:choice occurs=\"?\">\n"+
 "			<RozhodnaUdalost xd:script=\"occurs 0..; ref RozhodnaUdalost\"/>\n"+
 "		</xd:choice>\n"+
@@ -897,15 +840,15 @@ public final class Test000 extends XDTester {
 "<xd:def xmlns:s='soap' xmlns:b='request' name='a' root='s:Envelope'>\n"+
 " <s:Envelope xd:script=\"init out('&lt;s:Envelope xmlns:s=&quot;soap&quot;');"
 				+ " finally out('&lt;/s:Envelope&gt;')\"\n"+
-"   s:encodingStyle = \"fixed 'encoding'; onTrue "
+"   s:encodingStyle=\"fixed 'encoding'; onTrue "
 				+ "out(' s:encodingStyle = &quot;encoding&quot; &gt;')\">\n"+
-"   <s:Header xd:script = \"init out('&lt;s:Header>');"
+"   <s:Header xd:script=\"init out('&lt;s:Header>');"
 				+ " finally out('&lt;/s:Header>')\">\n"+
 "     <b:User xd:script=\"occurs 1; init out('&lt;s:User'); onStartElement"
 				+ " out('>'); ref BM#User; finally out('&lt;/s:User>')\"\n"+
-"       s:understand = \"fixed 'true';"
+"       s:understand=\"fixed 'true';"
 				+ " onTrue out(' s:understand = &quot;true&quot;');\"\n"+
-"       s:actor ='illegal' />\n"+
+"       s:actor='illegal' />\n"+
 "     <b:Request xd:script='occurs 1; ref BM#Request'\n"+
 "       s:understand=\"fixed 'true';"
 				+ " onTrue out(' s:understand = &quot;true&quot;')\"\n"+
@@ -929,18 +872,18 @@ public final class Test000 extends XDTester {
 "</xd:def>\n"+
 "</xd:collection>";
 			xml =
-" <s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>\n"+
+"<s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>\n"+
 "   <s:Header>\n"+
 "     <b:User IdentUser='string 1,32'/>\n"+
 "     <b:Request s:understand='true'\n"+
 "       IdentZpravy='string 1,32' ReqMsgId='123' Mode='TST'/>\n"+
 "   </s:Header>\n"+
 "   <s:Body><b:PingFlow Flow='B1'/></s:Body>\n"+
-" </s:Envelope>\n";
+"</s:Envelope>\n";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			assertEq(
-" <s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>"+
+"<s:Envelope xmlns:s='soap' xmlns:b='request' s:encodingStyle='encoding'>"+
 "<s:Header>"+
 "<b:User IdentUser='string 1,32' s:understand='true'/>"+
 "<b:Request s:understand='true'\n"+
@@ -961,10 +904,10 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
 "<xd:def xd:name=\"EndRec\" xd:root=\"EndRec\" >\n"+
-"   <EndRec IdPrace  = \"required int()\"\n"+
-"      DruhSouboru   = \"required regex('[A-Z]\\\\d[A-Z]{1,2}')\"\n"+
-"      SeqRec        = \"required int()\" >\n"+
-"      <OperaceP1 xd:script = \"occurs 0..; ref OperaceP1#OperaceP1\"/>\n"+
+"   <EndRec IdPrace=\"required int()\"\n"+
+"      DruhSouboru =\"required regex('[A-Z]\\\\d[A-Z]{1,2}')\"\n"+
+"      SeqRec      =\"required int()\" >\n"+
+"      <OperaceP1 xd:script=\"occurs 0..; ref OperaceP1#OperaceP1\"/>\n"+
 "   </EndRec>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name=\"OperaceP1\" root=\"OperaceP1\" >\n"+
@@ -974,29 +917,29 @@ public final class Test000 extends XDTester {
 "</xd:def>\n"+
 "\n"+
 "<xd:def xmlns:xd='" + XDEFNS + "' name=\"VR_common\" >\n"+
-"   <Osoba StatPrislusnos = \"optional string(1,3)\" >\n"+
-"      <Pobyt xd:script   = \"occurs 0..1; ref Adresa\" />\n"+
+"   <Osoba StatPrislusnos=\"optional string(1,3)\" >\n"+
+"      <Pobyt xd:script  =\"occurs 0..1; ref Adresa\" />\n"+
 "   </Osoba>\n"+
-"   <Organizace NazevOrganizace = \"optional string(1,100)\"\n"+
-"      IC                       = \"optional string(1,12)\"\n"+
-"      StatPrislusnost          = \"optional string(1,3)\" >\n"+
+"   <Organizace NazevOrganizace=\"optional string(1,100)\"\n"+
+"      IC                      =\"optional string(1,12)\"\n"+
+"      StatPrislusnost         =\"optional string(1,3)\" >\n"+
 "      <Sidlo xd:script=\"occurs 0..1; ref Adresa\" />\n"+
 "   </Organizace>\n"+
 "   <OSVC StatPrislusnost=\"optional string(1,3)\" >\n"+
 "      <Sidlo xd:script=\"occurs 0..1; ref Adresa\" />\n"+
 "   </OSVC>\n"+
 "   <Adresa StatAdresa=\"optional string(1,3)\" />\n"+
-"   <FirmaText NazevText = \"optional string(1,200)\"\n"+
-"      IC                = \"optional int(0,99999999)\" >\n"+
-"      <AdresaText xd:script = \"occurs 0..1\" >\n"+
+"   <FirmaText NazevText=\"optional string(1,200)\"\n"+
+"      IC               =\"optional int(0,99999999)\" >\n"+
+"      <AdresaText xd:script=\"occurs 0..1\" >\n"+
 "         required string(1,200)\n"+
 "      </AdresaText>\n"+
 "   </FirmaText>\n"+
 "   <Vozidlo PocetMistCelkem=\"optional int(1,999)\" />\n"+
 "   <VozidloPS PojistneBM=\"optional int(1,999999)\" />\n"+
 "   <ZelenaKarta DatumZneplatneni=\"optional xdatetime('yyyyMMdd')\"/>\n"+
-"   <Pojisteni PojisteniOd = \"optional xdatetime('yyyyMMdd')\"\n"+
-"      PojisteniDo         = \"optional xdatetime('yyyyMMdd')\" />\n"+
+"   <Pojisteni PojisteniOd=\"optional xdatetime('yyyyMMdd')\"\n"+
+"      PojisteniDo        =\"optional xdatetime('yyyyMMdd')\" />\n"+
 "   <Pojistnik PlatnostOd=\"optional xdatetime('yyyyMMdd')\" >\n"+
 "      <xd:choice>\n"+
 "         <Osoba xd:script=\"occurs 1; ref Osoba\" />\n"+
@@ -1015,7 +958,7 @@ public final class Test000 extends XDTester {
 "      <xd:choice>\n"+
 "         <Osoba xd:script=\"occurs 1; ref Osoba\" />\n"+
 "         <OSVC xd:script=\"occurs 1; ref OSVC\" />\n"+
-"         <Organizace xd:script = \"occurs 1; ref Organizace\" />\n"+
+"         <Organizace xd:script=\"occurs 1; ref Organizace\" />\n"+
 "      </xd:choice>\n"+
 "   </Vlastnik>\n"+
 "   <Chyby>\n"+
@@ -1027,9 +970,9 @@ public final class Test000 extends XDTester {
 			el = parse(xp, "EndRec",
  "<EndRec IdPrace=\"1\" SeqRec=\"3\" DruhSouboru=\"L1D\">\n"
 +" <OperaceL1 Operace=\"ZmenaSU\"\n"
-+"            IdentZaznamu=\"500000000003\"\n"
-+"            CisloSmlouvy=\"???\"\n"
-+"            PoradiVozidla=\"???\"/>\n"
++"   IdentZaznamu=\"500000000003\"\n"
++"   CisloSmlouvy=\"???\"\n"
++"   PoradiVozidla=\"???\"/>\n"
 +"</EndRec>", reporter);
 			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
@@ -1066,14 +1009,14 @@ public final class Test000 extends XDTester {
 " <RezervaPU Rezerva=\"required int(0,99999999);\"\n"+
 "   Mena=\"onAbsence setText('CZK')\"/>\n"+
 "   <Plneni PodtypSkody=\"required string();\"\n"+
-"     Vyplaceno   = \"required int(0,99999999);\"\n"+
-"     Mena        = \"required string(); onAbsence setText('CZK')\"/>\n"+
+"     Vyplaceno=\"required int(0,99999999);\"\n"+
+"     Mena     =\"required string(); onAbsence setText('CZK')\"/>\n"+
 "   <PN xd:script=\"finally out('PN')\"\n"+
-"     IdentZaznamu         = \"required string(1,12)\"\n"+
-"     CisloPU              = \"required string(3,35)\"\n"+
-"     PodtypSkody          = \"optional string()\"\n"+
-"     PoradiVozidlaSU      = \"optional int(1,999)\"\n"+
-"     DatumUcinnosti       = \"required xdatetime('yyyyMMddHHmm');\">\n"+
+"     IdentZaznamu   =\"required string(1,12)\"\n"+
+"     CisloPU        =\"required string(3,35)\"\n"+
+"     PodtypSkody    =\"optional string()\"\n"+
+"     PoradiVozidlaSU=\"optional int(1,999)\"\n"+
+"     DatumUcinnosti =\"required xdatetime('yyyyMMddHHmm');\">\n"+
 "     <RezervaPU xd:script=\"occurs 1..;  ref RezervaPU\"/>\n"+
 "     <Plneni xd:script=\"occurs 0..;  ref Plneni\"/>\n"+
 "     <SkodaVozidla xd:script=\"occurs 0..;  ref SkodaVozidla\"/>\n"+
@@ -1165,8 +1108,8 @@ public final class Test000 extends XDTester {
 "         Kind=\"xyz\"\n"+
 "         RecNum=\"12345678\">\n"+
 "       <CheckSum Type=\"MD5\"\n"+
-"                 Value=\"0xfadb8701a\">\n"+
-"           text\n"+
+"         Value=\"0xfadb8701a\">\n"+
+"         text\n"+
 "       </CheckSum>\n"+
 "       <x/>\n"+
 "   </File>\n"+
@@ -1188,12 +1131,12 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
 "<xd:declaration scope='global'>\n"+
-"  ParseResult p = int.check('123');\n"+
+"  ParseResult p=int.check('123');\n"+
 "</xd:declaration>\n"+
 "<A a='p.matches()'>\n" +
 "    <xd:sequence>\n" +
 "        <A/>\n" +
-"        <xd:sequence xd:script =\"occurs ?\">\n" +
+"        <xd:sequence xd:script=\"occurs ?\">\n" +
 "            <B/>\n" +
 "            <C/>\n" +
 "        </xd:sequence>\n" +

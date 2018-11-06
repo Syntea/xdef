@@ -71,7 +71,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements cz.syntea.xdef.c
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"52D5CAFABFBEA4A6542FBFE6B652547B".equals(
+    if (!"0B0C0D7434E155C04FB0975330A17591".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

@@ -1,15 +1,3 @@
-/*
- * File: XSourceItem.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.xml.XInputStream;
@@ -64,12 +52,21 @@ public final class XDSourceItem {
 		}
 	}
 
+	/** Write this XDSourceItem object.
+	 * @param xw Writer where to write
+	 * @throws IOException if an error occurs.
+	 */
 	public final void writeXDSourceItem(final XDWriter xw) throws IOException {
 		xw.writeString(_url == null ? null : _url.toExternalForm());
 		xw.writeString(_encoding);
 		xw.writeString(_source);
 	}
 
+	/** Read XDSourceItem object from XDReader.
+	 * @param xr XDReader containing XDSourceItem object
+	 * @return XDSourceItem object
+	 * @throws IOException if an error occurs.
+	 */
 	public final static XDSourceItem readXDSourceItem(final XDReader xr)
 		throws IOException{
 		XDSourceItem result = new XDSourceItem();

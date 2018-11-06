@@ -1,15 +1,3 @@
-/*
- * File: DefNull.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.sys.SDatetime;
@@ -200,9 +188,9 @@ public final class DefNull extends XDValueAbstract {
 				return new DefSQLResultSet();
 			case CompileBase.UNIQUESET_VALUE: // UNIQUESET value
 			case CompileBase.UNIQUESET_M_VALUE: // UNIQUESET value
-				return new CodeUniqueset(new CodeUniquesetParseItem[0], "null");
+				return new CodeUniqueset(new CodeUniqueset.ParseItem[0], "");
 			case CompileBase.PARSEITEM_VALUE: // ParseItem value
-				return new CodeUniquesetParseItem();
+				return new CodeUniqueset.ParseItem();
 		}
 		return new DefNull(type);
 	}

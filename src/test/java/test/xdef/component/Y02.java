@@ -76,7 +76,7 @@ public class Y02 implements test.xdef.component.s.Y01Part,cz.syntea.xdef.compone
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"EE056CF6D2378A333A8BC86A2D27005E".equals(
+    if (!"8CA6859CFC76F9874BBB173F3C760348".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

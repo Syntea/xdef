@@ -424,8 +424,8 @@ public static class C implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class B_2 implements cz.syntea.xdef.component.XComponent{
-  public Long getb() {return _b;}
-  public void setb(Long x) {_b = x;}
+  public Integer getb() {return _b;}
+  public void setb(Integer x) {_b = x;}
   public String xposOfb(){return XD_XPos + "/@b";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -497,7 +497,7 @@ public static class B_2 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _b;
+  private Integer _b;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -511,7 +511,7 @@ public static class B_2 implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setb(parseResult.getParsedValue().longValue());
+    setb(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)

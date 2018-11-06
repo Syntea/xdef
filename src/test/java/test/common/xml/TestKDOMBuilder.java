@@ -229,7 +229,7 @@ public class TestKDOMBuilder extends STester {
 			builder.setNamespaceAware(true);
 			builder.setValidating(false);
 			builder.parse("<a:a xmlns:a='a.b'><b xmlns:x=''/></a:a>");
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception x) {}
 		try {
 			builder = new KDOMBuilder();

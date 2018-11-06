@@ -1,15 +1,3 @@
-/*
- * File: ChkElement.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefBoolean;
@@ -2081,11 +2069,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					root._element = el2;
 				} else if ((el1 = _parent.getElement()) != null) {
 					Document doc = _element.getOwnerDocument();
-					if (doc == el2.getOwnerDocument()) {
-						el1.replaceChild(el2, _element);
-					} else {
-						el2 = (Element) doc.importNode(el2, true);
-						el1.replaceChild(el2,_element);
+					Document doc1 = el1.getOwnerDocument();
+					if (doc != doc1) {
+						el1 = (Element) doc.importNode(el1, true);
+					}
+					if (el2 != doc1.getDocumentElement()) {
+						Document doc2 = el2.getOwnerDocument();
+						if (doc != doc2) {
+							el2 = (Element) doc.importNode(el2, true);
+						}
+						if (el2 != doc1.getDocumentElement()) {
+							el1.replaceChild(el2, _element);
+						}
 					}
 				}
 			}
@@ -2118,93 +2113,106 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (xname.charAt(0) == '$') {//service attrs text, attr, textcontent
 				continue; // TODO
 			}
+			boolean processed = false; // true if attribute was processed
 			if (xatt.getNSUri() != null) {
 				if (_element.hasAttributeNS(xatt.getNSUri(),
 					xname.substring(xname.indexOf(':') + 1))) {
-					continue;
+					processed = true;
+//					continue;
 				}
-			} else {
-				if (_element.hasAttribute(xname)) {
-					continue;
-				}
+			} else if (_element.hasAttribute(xname)) {
+				processed = true;
+//				continue;
 			}
 			if (_attNames.contains(xname)) {
-				continue; //if attribute was processed do nothing
+				processed = true;
+//				continue; //if attribute was processed do nothing
 			}
-			_xPos = xPos + "/@" + xname;
-			if (xatt._deflt >= 0) {//exec default method
-				_data = null;
-				_parseResult = null;
-				_attName = xname;
-				_elemValue = _element;
-				XDValue value = exec(xatt._deflt, (byte) 'A');
-				if (value != null) {
-					_data = value.toString();
-					checkDatatype(xatt, true);
-					if (xatt.getNSUri() == null) {
-						_element.setAttribute(xname, _data);
-					} else {
-						_element.setAttributeNS(xatt.getNSUri(), xname, _data);
-					}
-				}
-				copyTemporaryReports();
-				if (xatt.getNSUri() == null) {
-					if (_element.hasAttribute(xname)) {
-						continue;
-					}
-				} else {
-					if (_element.hasAttributeNS(xatt.getNSUri(),
-						xname.substring(xname.indexOf(':') + 1))) {
-						continue;
-					}
-				}
-			}
-			//missing attribute
-			debugXPos(XDDebug.ONABSENCE);
-			if (xatt._onAbsence >= 0) {
-				// onAbsence method
-				_data = null;
-				_parseResult = null;
-				_attName = xname;
-				_elemValue = _element;
-				clearTemporaryReporter();
-				Report rep = null;
-				if (xatt.minOccurs() == XData.REQUIRED) {
-					//Missing required attribute &{0}
-					rep = Report.error(XDEF.XDEF526, xname);
-					putTemporaryReport(rep);
-				}
-				if (!_attNames.contains(xatt.getName())) { //was not processed
-					String uri = xatt.getNSUri();
-					_xPos = xPos +"/@" + xname;
-					exec(xatt._onAbsence, (byte) 'A');
-					if (_data != null) {
+			if (!processed) {
+				_xPos = xPos + "/@" + xname;
+				if (xatt._deflt >= 0) {//exec default method
+					_data = null;
+					_parseResult = null;
+					_attName = xname;
+					_elemValue = _element;
+					XDValue value = exec(xatt._deflt, (byte) 'A');
+					if (value != null) {
+						_data = value.toString();
 						checkDatatype(xatt, true);
-						if (uri == null) {
+						if (xatt.getNSUri() == null) {
 							_element.setAttribute(xname, _data);
 						} else {
-							_element.setAttributeNS(uri, xname, _data);
+							_element.setAttributeNS(
+								xatt.getNSUri(), xname, _data);
 						}
-						_attNames.add(xname);
 					}
-					if (uri == null && _element.hasAttribute(xname) ||
-						uri != null && _element.hasAttributeNS(uri,
-						xname.substring(xname.indexOf(':') + 1))) {
-						removeTemporaryReport(rep); //remove message "missing"
-						continue; //attribute exists, don't invoke default
-					}
-				}
-				if (xatt._deflt < 0) {
 					copyTemporaryReports();
-					continue; //skip default method
+					if (xatt.getNSUri() == null) {
+						if (_element.hasAttribute(xname)) {
+							continue;
+						}
+					} else {
+						if (_element.hasAttributeNS(xatt.getNSUri(),
+							xname.substring(xname.indexOf(':') + 1))) {
+							continue;
+						}
+					}
 				}
-				removeTemporaryReport(rep); // not report "missing" twice
-				copyTemporaryReports();
+				//missing attribute
+				debugXPos(XDDebug.ONABSENCE);
+				if (xatt._onAbsence >= 0) {
+					// onAbsence method
+					_data = null;
+					_parseResult = null;
+					_attName = xname;
+					_elemValue = _element;
+					clearTemporaryReporter();
+					Report rep = null;
+					if (xatt.minOccurs() == XData.REQUIRED) {
+						//Missing required attribute &{0}
+						rep = Report.error(XDEF.XDEF526, xname);
+						putTemporaryReport(rep);
+					}
+					if (!_attNames.contains(xatt.getName())) {
+						String uri = xatt.getNSUri(); //was not processed
+						_xPos = xPos +"/@" + xname;
+						exec(xatt._onAbsence, (byte) 'A');
+						if (_data != null) {
+							checkDatatype(xatt, true);
+							if (uri == null) {
+								_element.setAttribute(xname, _data);
+							} else {
+								_element.setAttributeNS(uri, xname, _data);
+							}
+							_attNames.add(xname);
+						}
+						if (uri == null && _element.hasAttribute(xname) ||
+							uri != null && _element.hasAttributeNS(uri,
+							xname.substring(xname.indexOf(':') + 1))) {
+							//remove message "missing"
+							removeTemporaryReport(rep);
+							continue; //attribute exists, don't invoke default
+						}
+					}
+					if (xatt._deflt < 0) {
+						copyTemporaryReports();
+						continue; //skip default method
+					}
+					removeTemporaryReport(rep); // not report "missing" twice
+					copyTemporaryReports();
+				}
+				if (xatt.minOccurs() == XData.REQUIRED) {
+					//no method called; put error
+					error(XDEF.XDEF526, xname);//Missing required attribute &{0}
+					result = false;
+				}
 			}
-			if (xatt.minOccurs() == XData.REQUIRED) {
-				//no method called; put error
-				error(XDEF.XDEF526, xname); //Missing required attribute &{0}
-				result = false;
+			if (xatt._onStartElement >= 0) { // execute onStartElement action
+				_data = null;
+				_parseResult = null;
+				_attName = xname;
+				_elemValue = _element;
+				exec(xatt._onStartElement, (byte) 'A');
 			}
 		}
 		_xPos = xPos;
@@ -3148,7 +3156,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param data The value of Comment node.
 	 * @return <tt>true</tt> if Comment node is compliant with definition.
 	 */
-	public final boolean addComment(final String data) {return true;}
+	public final boolean addComment(final String data) {
+		return true; //TODO
+	}
 
 	@Override
 	/** Add new Processing instruction node to current element.
@@ -3158,7 +3168,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return <tt>true</tt> if PI node is compliant with definition.
 	 */
 	public final boolean addPI(final String name, final String data) {
-		return true;
+		return true; //TODO
 	}
 
 	@Override

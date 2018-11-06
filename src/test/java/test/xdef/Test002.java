@@ -1,15 +1,3 @@
-/*
- * File: Test002.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -89,7 +77,7 @@ public final class Test002 extends XDTester {
 			xml = dataDir + "Test002_1.xml";
 			parse(xp, "BPEL_com", xml, reporter);
 			if (!reporter.errors()) {
-				fail("Error not detected");
+				fail("Error not reported");
 			} else {
 				if (reporter.getErrorCount() != 2) {
 					while ((rep = reporter.getReport()) != null) {
@@ -744,7 +732,7 @@ public final class Test002 extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 			compile(xdef);
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			if ((s = ex.getMessage()) == null) {
 				fail(ex);
@@ -1071,7 +1059,7 @@ public final class Test002 extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a><b a='XX'/></a>";
 			parse(xp, null, xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xdef = // test XMPool.findModel
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:def root='a|b#b'>\n"+

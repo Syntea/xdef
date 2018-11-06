@@ -1,18 +1,6 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: SManager.java.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.sys;
 
+import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.RegisterReportTables.ReportTable;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -42,7 +30,7 @@ import java.util.Set;
  *
  * @author Vaclav Trojan &lt;vaclav.trojan@syntea.cz&gt;
  */
-public final class SManager implements SConstants {
+public final class SManager implements XDConstants {
 	/** The unique instance of SManager. */
 	private static final SManager MANAGER = new SManager();
 	/** Length of array of report tables. */
@@ -78,7 +66,7 @@ public final class SManager implements SConstants {
 	/** This constructor can be invoked only from this class .*/
 	private SManager() {
 		_properties = (Properties) System.getProperties().clone();
-		String s = _properties.getProperty(SConstants.XDPROPERTY_MSGLANGUAGE);
+		String s = _properties.getProperty(XDPROPERTY_MSGLANGUAGE);
 		s = (s == null) ? SUtils.getISO3Language() : SUtils.getISO3Language(s);
 		_language = new SLanguage(s, "eng");
 	}
@@ -98,7 +86,7 @@ public final class SManager implements SConstants {
 		SManager sm = getInstance();
 		synchronized (sm) {
 			sm._properties = (Properties) properties.clone();
-			String s = sm._properties.getProperty(SConstants.XDPROPERTY_MSGLANGUAGE);
+			String s = sm._properties.getProperty(XDPROPERTY_MSGLANGUAGE);
 			if (s != null) {
 				s = (s == null)
 					? sm._language.getLanguage() : SUtils.getISO3Language(s);
@@ -130,7 +118,7 @@ public final class SManager implements SConstants {
 			} else {
 				result = (String) sm._properties.setProperty(name, value);
 			}
-			if (SConstants.XDPROPERTY_MSGLANGUAGE.equals(name)) {
+			if (XDPROPERTY_MSGLANGUAGE.equals(name)) {
 				String v = value;
 				if (v == null) {
 					v = SUtils.getISO3Language();
@@ -838,12 +826,13 @@ public final class SManager implements SConstants {
 				Properties props = new Properties();
 				props.load(in);
 				in.close();
-				return addReportTable(RegisterReportTables.genReportTable(props));
+				return addReportTable(
+					RegisterReportTables.genReportTable(props));
 			} catch (Exception ex) {}
 			// not found, so we try to read the external data
-			String s = _properties.getProperty(XDPROPERTY_MSGTABLE + tableName);
+			String s = _properties.getProperty(XDPROPERTY_MESSAGES + tableName);
 			if (s == null) {
-				s = _properties.getProperty(XDPROPERTY_MSGTABLE
+				s = _properties.getProperty(XDPROPERTY_MESSAGES
 					+ ReportTable.getPrefixFromID(tableName));
 				if (s != null) {
 					File[] files = SUtils.getFileGroup(s);

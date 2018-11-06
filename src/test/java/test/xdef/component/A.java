@@ -5,7 +5,7 @@ package test.xdef.component;
 public class A implements cz.syntea.xdef.component.XComponent{
   public String geta() {return _a;}
   public java.math.BigDecimal getdec() {return _dec;}
-  public java.util.List<test.xdef.TestXComponents_W.W> listOfW() {return _W;}
+  public java.util.List<A.W> listOfW() {return _W;}
   public java.util.List<A.Y> listOfY() {return _Y;}
   public A.i geti() {return _i;}
   public A.f getf() {return _f;}
@@ -18,7 +18,7 @@ public class A implements cz.syntea.xdef.component.XComponent{
   public A.d_e_f getd_e_f() {return _d_e_f;}
   public void seta(String x) {_a = x;}
   public void setdec(java.math.BigDecimal x) {_dec = x;}
-  public void addW(test.xdef.TestXComponents_W.W x) {
+  public void addW(A.W x) {
     if (x!=null) _W.add(x);
   }
   public void addY(A.Y x) {
@@ -121,7 +121,7 @@ public class A implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"478EA85B2CD7CBD8AC2C6E8B5200E8E4".equals(
+    if (!"1A6A8A290C4684B8FC5FE53160965D01".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -129,8 +129,7 @@ public class A implements cz.syntea.xdef.component.XComponent{
   }
   private String _a;
   private java.math.BigDecimal _dec;
-  private final java.util.List<test.xdef.TestXComponents_W.W> _W =
-    new java.util.ArrayList<test.xdef.TestXComponents_W.W>();
+  private final java.util.List<A.W> _W = new java.util.ArrayList<A.W>();
   private final java.util.List<A.Y> _Y = new java.util.ArrayList<A.Y>();
   private A.i _i;
   private A.f _f;
@@ -164,7 +163,7 @@ public class A implements cz.syntea.xdef.component.XComponent{
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx) {
     String s = xx.getXMElement().getXDPosition();
     if ("A#A/W".equals(s))
-      return new test.xdef.TestXComponents_W.W(this, xx);
+      return new W(this, xx);
     if ("A#A/Y".equals(s))
       return new Y(this, xx);
     if ("A#A/Z".equals(s))
@@ -190,7 +189,7 @@ public class A implements cz.syntea.xdef.component.XComponent{
     xc.xSetNodeIndex(XD_ndx++);
     String s = xc.xGetModelPosition();
     if ("A#A/W".equals(s))
-      listOfW().add((test.xdef.TestXComponents_W.W) xc);
+      listOfW().add((W) xc);
     else if ("A#A/Y".equals(s))
       listOfY().add((Y) xc);
     else if ("A#A/Z".equals(s))
@@ -215,6 +214,124 @@ public class A implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
+public static class W implements cz.syntea.xdef.component.XComponent{
+  public String getw() {return _w;}
+  public String get$value() {return _$value;}
+  public void setw(String x) {_w = x;}
+  public void set$value(String x) {_$value = x;}
+  public String xposOfw(){return XD_XPos + "/@w";}
+  public String xposOf$value(){return XD_XPos + "/$text";}
+//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  @Override
+  public org.w3c.dom.Element toXml()
+    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+  @Override
+  public String xGetNodeName() {return XD_NodeName;}
+  @Override
+  public void xInit(cz.syntea.xdef.component.XComponent p,
+    String name, String ns, String xdPos) {
+    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+  }
+  @Override
+  public String xGetNamespaceURI() {return XD_NamespaceURI;}
+  @Override
+  public String xGetXPos() {return XD_XPos;}
+  @Override
+  public void xSetXPos(String xpos){XD_XPos = xpos;}
+  @Override
+  public int xGetNodeIndex() {return XD_Index;}
+  @Override
+  public void xSetNodeIndex(int index) {XD_Index = index;}
+  @Override
+  public cz.syntea.xdef.component.XComponent xGetParent() {return XD_Parent;}
+  @Override
+  public Object xGetObject() {return XD_Object;}
+  @Override
+  public void xSetObject(final Object obj) {XD_Object = obj;}
+  @Override
+  public String toString() {return "XComponent: "+xGetModelPosition();}
+  @Override
+  public String xGetModelPosition() {return XD_Model;}
+  @Override
+  public int xGetModelIndex() {return 0;}
+  @Override
+  public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
+    org.w3c.dom.Element el;
+    if (doc == null) {
+      doc = cz.syntea.xdef.xml.KXmlUtils.newDocument(
+        XD_NamespaceURI, XD_NodeName, null);
+      el = doc.getDocumentElement();
+    } else {
+      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+    }
+    if (getw() != null)
+      el.setAttribute("w", getw());
+    for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.appendChild(x.toXml(doc));
+    XD_List = null;
+    return el;
+  }
+  @Override
+  public java.util.List<cz.syntea.xdef.component.XComponent> xGetNodeList() {
+    java.util.ArrayList<cz.syntea.xdef.component.XComponent> a =
+      new java.util.ArrayList<cz.syntea.xdef.component.XComponent>();
+    if (get$value() != null)
+      cz.syntea.xdef.component.XComponentUtil.addText(this,
+        "A#A/W/$text", a, get$value(), _$$value);
+    return XD_List = a;
+  }
+  public W() {}
+  public W(cz.syntea.xdef.component.XComponent p,
+    String name, String ns, String xPos, String XDPos) {
+    XD_NodeName=name; XD_NamespaceURI=ns;
+    XD_XPos=xPos;
+    XD_Model=XDPos;
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+  }
+  public W(cz.syntea.xdef.component.XComponent p, cz.syntea.xdef.proc.XXNode xx){
+    org.w3c.dom.Element el=xx.getElement();
+    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+    XD_XPos=xx.getXPos();
+    XD_Model=xx.getXMElement().getXDPosition();
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    if (!"A9BBBAF23D2AB8D10365F45482A9BED0".equals(
+      xx.getXMElement().getDigest())) { //incompatible element model
+      throw new cz.syntea.xdef.sys.SRuntimeException(
+        cz.syntea.xdef.msg.XDEF.XDEF374);
+    }
+  }
+  private String _w;
+  private String _$value;
+  private char _$$value= (char) -1;
+  private cz.syntea.xdef.component.XComponent XD_Parent;
+  private Object XD_Object;
+  private String XD_NodeName = "W";
+  private String XD_NamespaceURI;
+  private int XD_Index = -1;
+  private int XD_ndx;
+  private String XD_XPos;
+  private java.util.List<cz.syntea.xdef.component.XComponent> XD_List;
+  private String XD_Model="A#A/W";
+  @Override
+  public void xSetText(cz.syntea.xdef.proc.XXNode xx,
+    cz.syntea.xdef.XDParseResult parseResult) {
+    _$$value=(char) XD_ndx++;
+    set$value(parseResult.getParsedValue().stringValue());
+  }
+  @Override
+  public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
+    cz.syntea.xdef.XDParseResult parseResult) {
+    setw(parseResult.getParsedValue().stringValue());
+  }
+  @Override
+  public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)
+    {return null;}
+  @Override
+  public void xAddXChild(cz.syntea.xdef.component.XComponent xc) {}
+  @Override
+  public void xSetAny(org.w3c.dom.Element el) {}
+// </editor-fold>
+}
 public static class Y implements cz.syntea.xdef.component.XComponent{
   public String get$value() {return _$value;}
   public void set$value(String x) {_$value = x;}
@@ -290,7 +407,7 @@ public static class Y implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"A982AEB9546DDA0C24B0BF73AF751593".equals(
+    if (!"80B5EDA1E4E7017596CC1DE4DEF76027".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -326,8 +443,8 @@ public static class Y implements cz.syntea.xdef.component.XComponent{
 // </editor-fold>
 }
 public static class i implements cz.syntea.xdef.component.XComponent{
-  public Long get$value() {return _$value;}
-  public void set$value(Long x) {_$value = x;}
+  public java.math.BigInteger get$value() {return _$value;}
+  public void set$value(java.math.BigInteger x) {_$value = x;}
   public String xposOf$value(){return XD_XPos + "/$text";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -400,13 +517,13 @@ public static class i implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"10F058BD785FFD2C7DCA5A925F7E7569".equals(
+    if (!"6B8D2FD962C49D070954DB59331B96B1".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _$value;
+  private java.math.BigInteger _$value;
   private char _$$value= (char) -1;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -421,7 +538,7 @@ public static class i implements cz.syntea.xdef.component.XComponent{
   public void xSetText(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().longValue());
+    set$value(parseResult.getParsedValue().integerValue());
   }
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
@@ -510,7 +627,7 @@ public static class f implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"8EBD2F8E69D0208F01CF600CF5ABD3D7".equals(
+    if (!"FDB62EECA5BAF96A90AE873174B25C52".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -638,7 +755,7 @@ public static class d implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4CC439E07B7F86B79AFADB834200BC0D".equals(
+    if (!"C762FB06F37FF3C85305ADB4A0584164".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -766,7 +883,7 @@ public static class t implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7B95360C6DAAE013269E822D781F0764".equals(
+    if (!"2BB1068F741DC8B9D7BF396632BDC6D2".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -876,7 +993,7 @@ public static class s implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"987F5E92708EE6A2EC166F6E9E9AFB41".equals(
+    if (!"79543694EAACE9ED2AC09685EF55A681".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -1027,7 +1144,7 @@ public static class d1 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D4C84751E0AF09477D50039A9CDEDA47".equals(
+    if (!"C30BB5AB2D4173A504ED8866FC668700".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -1181,7 +1298,7 @@ public static class d2 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"964C1F9018DB36FD6497176EB57D78AF".equals(
+    if (!"DA3338624A4E044E98C99A5F6CA9B6D1".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -1299,7 +1416,7 @@ public static class d_e_f implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"64ED7E48BBA8A939BF56487AEADD818F".equals(
+    if (!"9E3A812834C6D23774DBE1CEA645D46D".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

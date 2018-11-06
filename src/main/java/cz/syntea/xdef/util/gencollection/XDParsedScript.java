@@ -1,17 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XdParsedScript.java, created 2009-07-15.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
-
 package cz.syntea.xdef.util.gencollection;
 
 import cz.syntea.xdef.XDConstants;
@@ -53,6 +39,8 @@ public class XDParsedScript {
 	public String _default = "";
 	/** Parsed finally action (source string).*/
 	public String _finally = "";
+	/** Parsed onStartElement action (source string).*/
+	public String _onStartElement = "";
 	/** Parsed match action (source string).*/
 	public String _match = "";
 	/** Parsed forget (source string).*/
@@ -152,6 +140,9 @@ public class XDParsedScript {
 				case XScriptParser.FINALLY_SYM:
 					_finally = parseScriptSection(sp);
 					continue;
+				case XScriptParser.ON_START_ELEMENT_SYM:
+					_onStartElement = parseScriptSection(sp);
+					continue;
 				case XScriptParser.MATCH_SYM:
 					_match = parseScriptSection(sp);
 					continue;
@@ -216,6 +207,7 @@ public class XDParsedScript {
 		}
 		result = addSection(result, "onTrue ", _onTrue);
 		result = addSection(result, "onFalse ", _onFalse);
+		result = addSection(result, "onStartElement ", _onStartElement);
 		result = addSection(result, "onAbsence ", _onAbsence);
 		result = addSection(result, "onExcess ", _onExcess);
 		result = addSection(result, "onIllegalAttr ", _onIllegalAttr);
@@ -418,7 +410,7 @@ public class XDParsedScript {
 						if (sp._sym == XScriptParser.COLON_SYM) {
 							sp.nextSymbol();
 						}
-						sb.append("default:").append(parseScriptSection(sp));
+						sb.append("default: ").append(parseScriptSection(sp));
 					} else {
 						break;
 					}

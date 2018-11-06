@@ -4,12 +4,12 @@
 package test.xdef.component;
 public class K implements cz.syntea.xdef.component.XComponent{
   public java.util.List<K.c> listOfc() {return _c;}
-  public Long get$value() {return _$value;}
+  public Integer get$value() {return _$value;}
   public K.d getd() {return _d;}
   public void addc(K.c x) {
     if (x!=null) _c.add(x);
   }
-  public void set$value(Long x) {_$value = x;}
+  public void set$value(Integer x) {_$value = x;}
   public void setd(K.d x) {_d = x;}
   public String xposOf$value(){return XD_XPos + "/$text";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -93,7 +93,7 @@ public class K implements cz.syntea.xdef.component.XComponent{
     }
   }
   private final java.util.List<K.c> _c = new java.util.ArrayList<K.c>();
-  private Long _$value;
+  private Integer _$value;
   private char _$$value= (char) -1;
   private K.d _d;
   private cz.syntea.xdef.component.XComponent XD_Parent;
@@ -109,7 +109,7 @@ public class K implements cz.syntea.xdef.component.XComponent{
   public void xSetText(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().longValue());
+    set$value(parseResult.getParsedValue().intValue());
   }
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
@@ -134,8 +134,8 @@ public class K implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class c implements cz.syntea.xdef.component.XComponent{
-  public String getCislo() {return _Cislo;}
   public String getKod() {return _Kod;}
+  public String getCislo() {return _Cislo;}
   public cz.syntea.xdef.sys.SDatetime getRok() {return _Rok;}
   public java.util.Date dateOfRok() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_Rok);
@@ -146,8 +146,8 @@ public static class c implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfRok() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_Rok);
   }
-  public void setCislo(String x) {_Cislo = x;}
   public void setKod(String x) {_Kod = x;}
+  public void setCislo(String x) {_Cislo = x;}
   public void setRok(cz.syntea.xdef.sys.SDatetime x) {_Rok = x;}
   public void setRok(java.util.Date x) {
     _Rok=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -158,8 +158,8 @@ public static class c implements cz.syntea.xdef.component.XComponent{
   public void setRok(java.util.Calendar x) {
     _Rok=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public String xposOfCislo(){return XD_XPos + "/@Cislo";}
   public String xposOfKod(){return XD_XPos + "/@Kod";}
+  public String xposOfCislo(){return XD_XPos + "/@Cislo";}
   public String xposOfRok(){return XD_XPos + "/@Rok";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -204,10 +204,10 @@ public static class c implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    if (getCislo() != null)
-      el.setAttribute("Cislo", getCislo());
     if (getKod() != null)
       el.setAttribute("Kod", getKod());
+    if (getCislo() != null)
+      el.setAttribute("Cislo", getCislo());
     if (getRok() != null)
       el.setAttribute("Rok", getRok().formatDate("yy"));
     return el;
@@ -229,14 +229,14 @@ public static class c implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BAEDF74DAA6981B13490768B12C5ED4B".equals(
+    if (!"2F3331D59E9D157924D090B855791D90".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _Cislo;
   private String _Kod;
+  private String _Cislo;
   private cz.syntea.xdef.sys.SDatetime _Rok;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -352,7 +352,7 @@ public static class d implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AF1C2B98A0306368DBFD85096CCD7C13".equals(
+    if (!"8AADD8500FAE1C807089CD4F388C3AA8".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

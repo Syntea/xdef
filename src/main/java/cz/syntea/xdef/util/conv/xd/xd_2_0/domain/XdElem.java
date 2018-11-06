@@ -1,21 +1,7 @@
-/*
- * File: XdElem.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xd.xd_2_0.domain;
 
 /** Represents element model.
- *
  * @author Ilia Alexandrov
- * @version 1.0.0
  */
 public final class XdElem extends XdModel {
 
@@ -25,7 +11,6 @@ public final class XdElem extends XdModel {
 	private final String _namespace;
 
 	/** Creates instance of element model.
-	 *
 	 * @param def model X-definition.
 	 * @param namespace element namespace.
 	 * @param name element name.

@@ -1,15 +1,3 @@
-/*
- * File: DefDouble.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.sys.SIllegalArgumentException;
@@ -18,6 +6,7 @@ import cz.syntea.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
+import java.math.BigInteger;
 
 /** The class DefDouble implements the internal object with float values.
  * @author Vaclav Trojan
@@ -138,7 +127,13 @@ public final class DefDouble extends XDValueAbstract {
 	@Override
 	public double doubleValue() {return _value;}
 	@Override
-	public BigDecimal decimalValue() {return new BigDecimal(_value);}
+	public BigDecimal decimalValue() {
+		return isNull() ? null : new BigDecimal(_value);
+	}
+	@Override
+	public BigInteger integerValue() {
+		return isNull() ? null : decimalValue().toBigInteger();
+	}
 	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns

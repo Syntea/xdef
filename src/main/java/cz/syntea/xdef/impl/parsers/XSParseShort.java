@@ -1,21 +1,10 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSParseShort.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.proc.XXNode;
+import cz.syntea.xdef.sys.SRuntimeException;
 
 /** Parser of Schema "short" type.
  * @author Vaclav Trojan
@@ -32,10 +21,21 @@ public class XSParseShort extends XSParseLong {
 		if(p.matches()) {
 			long val =  p.getParsedValue().longValue();
 			if (val < Short.MIN_VALUE || val > Short.MAX_VALUE) {
-				p.error(XDEF.XDEF809,parserName());//Incorrect value of '&{0}'
+				//Value of '&{0}' is out of range
+				p.error(XDEF.XDEF806, parserName());
 			}
 		}
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
+
+	@Override
+	public void checkValue(final XDValue x) {
+		long val =  x.longValue();
+		if (val < Short.MIN_VALUE || val > Short.MAX_VALUE) {
+			//Incorrect range specification of &{0}
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+		}
+	}
 }

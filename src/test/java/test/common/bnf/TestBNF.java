@@ -1,15 +1,3 @@
-/*
- * File: TestBNF.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFExtMethod;
@@ -298,8 +286,30 @@ public class TestBNF extends STester {
 		String bnf;
 		BNFGrammar g, g1;
 		try {
-			g = BNFGrammar.compile( "C::= $xmlChar B::= \"'\"");
+			g = BNFGrammar.compile("X::= 'A'?");
+			assertEq("", parse(g, "X", ""));
+			assertEq("A", parse(g, "X", "A"));
+			g = BNFGrammar.compile("X::= 'A'? 'B'?");
+			assertEq("", parse(g, "X", ""));
+			assertEq("A", parse(g, "X", "A"));
+			assertEq("B", parse(g, "X", "B"));
+			assertEq("AB", parse(g, "X", "AB"));
+			g = BNFGrammar.compile("X::= \"A\"* \"B\"? \"C\"*");
+			assertEq("", parse(g, "X", ""));
+			assertEq("A", parse(g, "X", "A"));
+			assertEq("B", parse(g, "X", "B"));
+			assertEq("AB", parse(g, "X", "AB"));
+			assertEq("C", parse(g, "X", "C"));
+			assertEq("CC", parse(g, "X", "CC"));
+			assertEq("ACC", parse(g, "X", "ACC"));
+			assertEq("BCC", parse(g, "X", "BCC"));
+			assertEq("ABC", parse(g, "X", "ABC"));
+			assertEq("AAABCC", parse(g, "X", "AAABCC"));
+			g = BNFGrammar.compile("C::= $xmlChar B::= \"'\"");
 			assertEq("'", parse(g, "B", "'"));
+			assertEq("'", parse(g, "C", "'"));
+			assertEq(" ", parse(g, "C", " "));
+			assertEq("@", parse(g, "C", "@"));
 			g = BNFGrammar.compile("x ::= $JavaName");
 			assertEq("a1", parse(g, "x", "a1"));
 			g = BNFGrammar.compile("x::=$JavaQName");
@@ -311,20 +321,20 @@ public class TestBNF extends STester {
 			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
 			g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
 			assertEq("a", parse(g, "x", "a"));
-			assertNull(g.getAndClearParsedObjects());
+			assertNull(g.getParsedObjects());
 			assertEq("ax", parse(g, "x", "ax"));
 			assertEq("axy", parse(g, "x", "axy"));
 			assertTrue(parse(g, "x", "b").indexOf("x failed, ") >= 0);
 			assertTrue(parse(g, "x", "bb").indexOf("x failed, ") >= 0);
 			g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
 			assertEq("a", parse(g, "x", "abc"));
-			assertNull(g.getAndClearParsedObjects());
+			assertNull(g.getParsedObjects());
 			g = BNFGrammar.compile("%define $x: $stop(123) x ::= 'a' $x 'b' ");
 			assertEq("a", parse(g, "x", "abc"));
-			assertEq("STOP 123", (String) g.getAndClearParsedObjects()[0]);
+			assertEq("STOP 123", (String) g.getParsedObjects()[0]);
 			g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
 			assertEq("a", parse(g, "x", "abc"));
-			assertEq("STOP 1,\"x\"", (String) g.getAndClearParsedObjects()[0]);
+			assertEq("STOP 1,\"x\"", (String) g.getParsedObjects()[0]);
 			bnf =
 "S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
 " RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?" +

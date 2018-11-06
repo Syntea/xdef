@@ -1,12 +1,3 @@
-/*
- * Copyright 2018 Syntea software group a.s. All rights reserved.
- *
- * File: DomBaseHandler.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.xml;
 
 import java.io.IOException;
@@ -25,7 +16,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
 /** Reader used in SAX parser.
- * @author trojan
+ * @author Vaclav Trojan
  */
 public abstract class DomBaseHandler
 	implements ContentHandler, EntityResolver, ErrorHandler,

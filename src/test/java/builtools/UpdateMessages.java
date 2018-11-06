@@ -22,10 +22,23 @@ public class UpdateMessages {
 	 * @param args not used
 	 */
 	public static void main(String... args) {
-		File dir = new File("src/cz/syntea/xdef/msg/");
+		File dir = new File("src/main/resources/cz/syntea/xdef/msg/");
 		if (!dir.exists() || !dir.isDirectory()) {
-			dir = new File("src/main/java/cz/syntea/xdef/msg/");
+			dir = new File("src/cz/syntea/xdef/msg/");
+			if (!dir.exists() || !dir.isDirectory()) {
+				throw new RuntimeException(
+					"Resources directory is not available");
+			}
 		}
+		File srcDir = new File("src/main/java/cz/syntea/xdef/msg/");
+		if (!srcDir.exists() || !srcDir.isDirectory()) {
+			srcDir = new File("src/cz/syntea/xdef/msg/");
+			if (!srcDir.exists() || !srcDir.isDirectory()) {
+				throw new RuntimeException(
+					"Java sources directory is not available");
+			}
+		}
+		
 		File temp = new File("temp");
 		temp.mkdir();
 		try {
@@ -43,7 +56,7 @@ public class UpdateMessages {
 				"-o", temp.getAbsolutePath(),
 				"-r"});
 			String msg = 
-				FUtils.updateDirectories(temp, dir, "java", true, false);
+				FUtils.updateDirectories(temp, srcDir, "java", true, false);
 			if (msg.isEmpty()) {
 				System.out.println("Nothing changed in report files");
 			} else {

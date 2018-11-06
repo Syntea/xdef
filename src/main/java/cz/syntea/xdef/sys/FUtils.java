@@ -1,21 +1,8 @@
-/*
- * Copyright 2007 Syntea software group a.s.
- *
- * File: FUtils.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -1678,7 +1665,7 @@ public class FUtils {
 		checkDir(fromDir, false);
 		if (!toDir.exists()) {
 			checkDir(toDir, true);
-			addMessage(sb, "Creatted dir: " + toDir.getAbsolutePath());
+			addMessage(sb, "Created dir: " + toDir.getAbsolutePath());
 		} else {
 			checkDir(toDir, true);
 		}
@@ -1708,7 +1695,7 @@ public class FUtils {
 					if (g.isDirectory()) {
 						if (deleteOther) {
 							deleteAll(g, true);
-							addMessage(sb, "deleted dir: "+g.getAbsolutePath());
+							addMessage(sb, "Deleted dir: "+g.getAbsolutePath());
 							FUtils.copyToFile(f, g);
 							addMessage(sb, "Added: " + g.getAbsolutePath());
 						}
@@ -1758,7 +1745,7 @@ public class FUtils {
 						if (!g.exists()) {
 							checkDir(g, true);
 							addMessage(sb,
-								"Creatted dir: " + g.getAbsolutePath());
+								"Created dir: " + g.getAbsolutePath());
 						}
 						updateDirectories(
 							f, g, extension, subdirs, deleteOther, sb);

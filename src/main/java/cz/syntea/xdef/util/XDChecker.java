@@ -1,17 +1,3 @@
-/*
- * Copyright 2015 Syntea software group a.s. All rights reserved.
- *
- * File: XDChecker.java, created 2015-03-24.
- * Package: cz.syntea.xdef.util
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package cz.syntea.xdef.util;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -97,11 +83,10 @@ public class XDChecker {
 		ArrayReporter ar = new ArrayReporter();
 		XDParseResult result;
 		try {
-			XDBuilder xb = XDFactory.getXDBuilder(_properties);
+			XDBuilder xb = XDFactory.getXDBuilder(ar, _properties);
 			if (_classes != null && _classes.length > 0) {
 				xb.setExternals(_classes);
 			}
-			xb.setReporter(ar);
 			String xdef =
 "<x:def xmlns:x='"+ KXmlConstants.XDEF31_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {

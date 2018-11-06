@@ -1,16 +1,3 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XDWriter.java, created 2010-10-19.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefException;
@@ -20,7 +7,6 @@ import cz.syntea.xdef.impl.code.CodeUniqueset;
 import cz.syntea.xdef.impl.code.DefRegex;
 import cz.syntea.xdef.impl.code.DefParseResult;
 import cz.syntea.xdef.impl.code.DefBNFGrammar;
-import cz.syntea.xdef.impl.code.CodeUniquesetParseItem;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.SObjectWriter;
 import cz.syntea.xdef.sys.SError;
@@ -218,9 +204,9 @@ public final class XDWriter extends SObjectWriter {
 					case CompileBase.UNIQUESET_VALUE:
 					case CompileBase.UNIQUESET_M_VALUE: {
 						CodeUniqueset y = (CodeUniqueset) x;
-						CodeUniquesetParseItem[] keys = y.getParsedItems();
+						CodeUniqueset.ParseItem[] keys = y.getParsedItems();
 						writeLength(keys.length);
-						for (CodeUniquesetParseItem key : keys) {
+						for (CodeUniqueset.ParseItem key : keys) {
 							writeString(key.getParseName());
 							writeInt(key.getParseMethodAddr());
 							writeShort(key.getParsedType());

@@ -1,15 +1,3 @@
-/*
- * File: TestGroups.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -312,13 +300,13 @@ public final class TestGroups extends XDTester {
 			xml = "<A><B/>Text<C/></A>";
 			strw = new StringWriter();
 			el = parse(xp, null, xml, reporter, strw, null, null);
-			assertTrue(reporter.errors(),"Error not recognized");
+			assertTrue(reporter.errors(),"Error not reported");
 			assertEq("<A><B/>Text<C/></A>", el);
 			assertEq(strw.toString(), "0");
 			xml = null;
 			strw = new StringWriter();
 			el = create(xp, null, "A", reporter, xml, strw, null);
-			assertTrue(reporter.errors(),"Error not recognized");
+			assertTrue(reporter.errors(),"Error not reported");
 			assertEq("<A><B/>Text<C/></A>", el);
 			assertEq(strw.toString(), "15");
 			xdef =
@@ -1016,7 +1004,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
 			if (!reporter.errors()) {
-				fail("Error not recognized");
+				fail("Error not reported");
 			} else {
 				rep = reporter.getReport();
 				if (!"XDEF555".equals(rep.getMsgID())) {
@@ -1033,7 +1021,7 @@ public final class TestGroups extends XDTester {
 			}
 			parse(xp, null, "<a><b/><e/></a>", reporter);
 			if (!reporter.errors()) {
-				fail("Error not recognized");
+				fail("Error not reported");
 			} else {
 				rep = reporter.getReport();
 				if (!"XDEF555".equals(rep.getMsgID())) {
@@ -1055,7 +1043,7 @@ public final class TestGroups extends XDTester {
 "</xdef:def>";
 			parse(xdef, null, "<a><b/></a>", reporter);
 			if (!reporter.errors()) {
-				fail("Error not recognized");
+				fail("Error not reported");
 			} else {
 				rep = reporter.getReport();
 				if (!"XDEF555".equals(rep.getMsgID())) {
@@ -1107,12 +1095,12 @@ public final class TestGroups extends XDTester {
 			xml = "<A><B/>Text<C/></A>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xdef, null, xml, reporter, strw, null, null));
-			assertTrue(reporter.errors(),"Error not recognized");
+			assertTrue(reporter.errors(),"Error not reported");
 			assertEq(strw.toString(), "0");
 			strw = new StringWriter();
 			// null input XML!!!
 			assertEq(xml, create(xdef, null, "A", reporter, null, strw, null));
-			assertTrue(reporter.errors(),"Error not recognized");
+			assertTrue(reporter.errors(),"Error not reported");
 			assertEq(strw.toString(), "12");
 			xdef = //reference to other XDefinition
 "<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
@@ -2181,15 +2169,15 @@ public final class TestGroups extends XDTester {
 "</x:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, null, "<a><b/></a>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, null, "<a><c/><b/></a>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, null, "<a><b/><c/></a>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -2209,9 +2197,9 @@ public final class TestGroups extends XDTester {
 			parse(xp, "", "<a/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<a><O/><O/><O/></a>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a><O/><A/></a>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {//text checking inside sequence
 			xdef =

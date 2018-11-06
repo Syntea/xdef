@@ -1,21 +1,10 @@
-/*
- * File: CodeXD.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.XDValue;
 
-/** Implements CodeXD with XDValue as the second parameter. */
+/** Implements CodeXD with XDValue as the second parameter.
+ * @author Vaclav Trojan
+ */
 public class CodeXD extends CodeI1 {
 
 	private XDValue _p2;

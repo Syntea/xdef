@@ -1,17 +1,3 @@
-/*
- * Copyright 2011 Syntea software group a.s. All rights reserved.
- *
- * File: XDResultSetAbstract.java, created 2011-08-25.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
-
 package cz.syntea.xdef;
 
 import cz.syntea.xdef.proc.XXNode;
@@ -19,7 +5,6 @@ import cz.syntea.xdef.sys.SRuntimeException;
 
 /** The abstract class for implementation of user objects with the
  * implementation of XDResultSet interface.
- *
  * @author Vaclav Trojan
  */
 public abstract class XDResultSetAbstract extends XDValueAbstract

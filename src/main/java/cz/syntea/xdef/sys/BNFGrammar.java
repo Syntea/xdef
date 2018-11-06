@@ -1,22 +1,10 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: BNFGrammar.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.BNF;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -82,7 +70,10 @@ public final class BNFGrammar {
 		"tokens", 				//35
 		"info",  				//36
 		"eos",  				//37
-		"stop",  				//38
+		"rule",  				//38
+		"true",  				//39
+		"false",  				//40
+		"stop",  				//41
 	};
 
 	/** Inline methods code identifiers. */
@@ -124,7 +115,10 @@ public final class BNFGrammar {
 	private static final int INL_TOKENS = INL_JAVAQNAME + 1;
 	private static final int INL_INFO = INL_TOKENS + 1;
 	private static final int INL_EOS = INL_INFO + 1;
-	private static final int INL_STOP = INL_EOS + 1;
+	private static final int INL_RULE = INL_EOS + 1;
+	private static final int INL_TRUE = INL_RULE + 1;
+	private static final int INL_FALSE = INL_TRUE + 1;
+	private static final int INL_STOP = INL_FALSE + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -142,9 +136,14 @@ public final class BNFGrammar {
 	private SPosition _spos;
 	/** Parsed objects. */
 	private Object[] _parsedObjects;
+	/** Printer where to print trace information (in null then do not trace). */
+	private PrintStream _traceOut;
 
 	/** Create new empty instance of grammar. */
-	BNFGrammar() {_rules = new ArrayList<BNFRuleObj>();}
+	BNFGrammar() {
+		_rules = new ArrayList<BNFRuleObj>();
+		_traceOut = null;
+	}
 
 	/** Get associated parser.
 	 * @return  associated parser.
@@ -175,14 +174,10 @@ public final class BNFGrammar {
 	 */
 	public final boolean isEOS() {return _p.eos();}
 
-	/** Get array of parsed objects and clear it.
-	 * @return o array of parsed objects or <tt>null</tt>.
+	/** Get array with parsed objects.
+	 * @return array with parsed objects or <tt>null</tt>.
 	 */
-	public final Object[] getAndClearParsedObjects() {
-		Object[] result = _parsedObjects;
-		_parsedObjects = null;
-		return result;
-	}
+	public final Object[] getParsedObjects() {return  _parsedObjects;}
 
 	/** Clear array of parsed objects. */
 	public final void clearParsedObjects() {_parsedObjects = null;}
@@ -211,6 +206,11 @@ public final class BNFGrammar {
 		return parse(new StringParser(source), name);
 	}
 
+	/** Set trace printer.
+	 * @param out Printer where to print the tracer information or null.
+	 */
+	public final void trace(final PrintStream out) {_traceOut = out;}
+
 	/** Parse text given by parser with given rule.
 	 * @param p parser.
 	 * @param name rule name.
@@ -231,6 +231,7 @@ public final class BNFGrammar {
 	 */
 	public final boolean parse(final String name) {
 		_actRule = _rootRule = (BNFRuleObj) getRule(name);
+		_parsedObjects = null;
 		return parse();
 	}
 
@@ -567,14 +568,16 @@ public final class BNFGrammar {
 ////////////////////////////////////////////////////////////////////////////////
 
 	private static String genBNFChars(final String s) {
-		String result = s;
-		for (char c = 0; c < ' '; c++) {
-			if (result.indexOf(c) >= 0) {
-				result = SUtils.modifyString(result,
-					String.valueOf(c), "#" + (int) c);
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c <= 0x20 || c >= 0x7f) {
+				result.append("#x").append(Integer.toHexString(c));
+			} else {
+				result.append(c);
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
 	private final static String SPECCHARS;
@@ -585,6 +588,7 @@ public final class BNFGrammar {
 		}
 		SPECCHARS = sb.toString();
 	}
+
 	/** Generate BNF source string,
 	 * @param s string to be generated.
 	 * @param genBrackets if true the string is closed in brackets.
@@ -593,11 +597,7 @@ public final class BNFGrammar {
 	private static String genBNFString(final String s,
 		final boolean genBrackets) {
 		String separators = SPECCHARS;
-		if (s.indexOf('"') >= 0) {
-			separators += '"';
-		} else if (s.indexOf('\'') > 0) {
-			separators += '\'';
-		}
+		separators += (s.indexOf('"') >= 0) ? '"' : '\'';
 		StringTokenizer st = new StringTokenizer(s, separators, true);
 		int numTokens = st.countTokens();
 		final StringBuilder sb = new StringBuilder();
@@ -606,8 +606,17 @@ public final class BNFGrammar {
 		}
 		for (;;) {
 			String t = st.nextToken();
-			if (t.length() == 1 && separators.indexOf(t) >= 0) {
-				sb.append('#').append(String.valueOf((int) t.charAt(0)));
+			if (t.length() == 1) {
+				char c;
+				if ((c = t.charAt(0)) < 0x20 || c > 0x7e) {
+					sb.append("#x").append(Integer.toHexString(t.charAt(0)));
+				} else {
+					if (c == '"') {
+						sb.append("'\"'");
+					} else {
+						sb.append('"').append(c).append('"');
+					}
+				}
 			} else {
 				char delimiter = t.indexOf('"') < 0 ? '"' : '\'';
 				sb.append(delimiter);
@@ -670,15 +679,37 @@ public final class BNFGrammar {
 		final void setItem(final BNFItem item) {_item = item;}
 
 		final boolean perform() {
+			if (_traceOut != null) {
+				try {
+					_traceOut.println(this.toString());
+					_traceOut.flush();
+				} catch (Exception ex) {}
+			}
 			setPosition();
 			try {
-				boolean result = _item.perform();
-				if (!result) {
-					resetPosition();
-					_p.freeBuffer();
-					return false;
+				if (_item.perform()) {
+					if (_traceOut != null) {
+						try {
+							if (_pos.getIndex() < _p.getIndex()) {
+								_traceOut.println(_name+"; ("
+									+ _pos.getIndex() + "," + _p.getIndex()
+									+ "); true");
+								_traceOut.flush();
+							}
+						} catch (Exception ex) {}
+					}
+					return true;
 				}
-				return true;
+				if (_traceOut != null) {
+					try {
+						_traceOut.println(_name + "; "
+							+ _pos.getIndex() + "; false");
+						_traceOut.flush();
+					} catch (Exception ex) {}
+				}
+				resetPosition();
+				_p.freeBuffer();
+				return false;
 			} catch (StackOverflowError ex) {
 				StringBuilder sb = new StringBuilder(
 					"BNF recursive call of rule:\n" +
@@ -695,6 +726,12 @@ public final class BNFGrammar {
 				throw new StackOverflowError(sb.toString());
 			}
 		}
+
+		@Override
+		/** Get array of objects created by this rule.
+		 * @return array of objects created by this rule or null.
+		 */
+		public Object[] getParsedObjects() {return _parsedObjects;}
 
 		@Override
 		/** Parse string assigned to SParser by this rule.
@@ -1072,13 +1109,14 @@ public final class BNFGrammar {
 		@Override
 		final boolean perform() {
 			SPosition startPos = setPosition();
-			for (int count = 0; count < _max; count++) {
+			int count = 0;
+			for (; count < _max; count++) {
 				SPosition xPos = null; //successfull position
 				Object xUserObject = null;
 				Object[] xParsedObjects = null, parsedObjects = _parsedObjects;
 				Object userObject = _userObject;
 				setPosition();
-				for (int i = 0;  !_p.eos()  && i < _items.length; i++) {
+				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
 					if (_items[i].perform()) { // success
 						SPosition p = _p.getPosition();
 						if (xPos == null ||
@@ -1186,7 +1224,7 @@ public final class BNFGrammar {
 				_p.resetPosition(pos1); //OK
 				_parsedObjects = parsedObjects;
 			}
-			return true;
+			return count >= _min;
 		}
 
 		@Override
@@ -1217,8 +1255,8 @@ public final class BNFGrammar {
 		final boolean perform() {
 			setPosition();
 			int count = 0;
-			loop:
-			while (count < _max && !_p.eos()) {
+		loop:
+			while (count < _max) {
 				SPosition pos = _p.getPosition();
 				Object[] parsedObjects = _parsedObjects;
 				for (int i = 0; i < _items.length; i++) {
@@ -1838,6 +1876,14 @@ public final class BNFGrammar {
 					return _p.isOneOfTokens((String[]) _param) >= 0;
 				case INL_EOS:
 					return _p.eos();
+				case INL_RULE:
+					pushObject(_actRule._name + " " +
+						_actRule._pos.getIndex() + " " + _p.getIndex());
+					return true;
+				case INL_TRUE:
+					return true;
+				case INL_FALSE:
+					return true;
 				case INL_STOP: {
 					if (_param != null) {
 						pushObject("STOP " + _param);

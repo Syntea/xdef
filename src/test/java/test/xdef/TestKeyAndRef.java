@@ -1,21 +1,10 @@
-/*
- * File: TestKeyAndRef.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
 import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDConstants;
+import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import cz.syntea.xdef.proc.XXData;
 import org.w3c.dom.Element;
@@ -55,13 +44,14 @@ public final class TestKeyAndRef extends XDTester {
 		String xdef;
 		String s;
 		String xml;
+		XDDocument xd;
 		XDPool xp;
 		final String dataDir = getDataDir() + "test/";
 		final ArrayReporter reporter = new ArrayReporter();
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<xd:declaration>uniqueSet u {x:int()}</xd:declaration>\n"+
+"<xd:declaration>uniqueSet u {x: int()}</xd:declaration>\n"+
 "<a><b z='u.x.IDREFS'/><c x='u.x.ID' y='u.x.ID'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -75,7 +65,7 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<xd:declaration> type p QName(); uniqueSet u p; </xd:declaration>\n"+
+"<xd:declaration> type p QName(); uniqueSet u p;</xd:declaration>\n"+
 "<a><b z='SET'> u.IDREFS </b><c x='u.ID' y='u.ID'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -473,7 +463,7 @@ public final class TestKeyAndRef extends XDTester {
 "</A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.printToString().indexOf("XDEF523") > 0,
-				"Error not recognized; " + reporter.printToString());
+				"Error not reported; " + reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Zeme'>\n"+
 "<xd:declaration scope='local'>\n"+
@@ -982,19 +972,15 @@ public final class TestKeyAndRef extends XDTester {
 // and order of attribute processing in X-definition
 			xdef =
 "<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
-"  <xd:declaration>\n" +
-"    uniqueSet u {a: string(); var Parser x;}\n" +
-"  </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet u {a: string(); var Parser x}</xd:declaration>\n" +
 "  <A>\n" +
 "    <DefParams>\n" +
 "       <Param xd:script='*;'\n" +
 "          Name='u.a.ID();'\n" +
-"          Type='xdType(); onTrue u.x = getParsedValue();'/>\n" +
+"          Type='xdType(); onTrue u.x=getParsedValue()' />\n" +
 "    </DefParams>\n" +
 "    <Params xd:script=\"*; init u.checkUnref()\">\n" +
-"       <Param xd:script='*;'\n" +
-"              Name='u.a.CHKID();'\n" +
-"              Value='u.x'/>\n" +
+"       <Param xd:script='*;' Name='u.a.CHKID();' Value='u.x'/>\n" +
 "    </Params>\n" +
 "  </A>\n" +
 "</xd:def>";
@@ -1002,24 +988,43 @@ public final class TestKeyAndRef extends XDTester {
 			xml =
 "<A>\n" +
 "  <DefParams>\n" +
-"    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"Vyska\" />\n" +
-"    <Param Name=\"DatumNarozeni\" Type=\"xdatetime('dd.MM.yyyy')\"/>\n" +
+"    <Param Name=\"name\" Type=\"string()\" />\n" +
+"    <Param Type=\"dec()\" Name=\"stature\"/>\n" +
+"    <Param Name=\"birthday\" Type=\"xdatetime('dd.MM.yyyy')\"/>\n" +
 "  </DefParams>\n" +
 "  <Params>\n" +
-"    <Param Name=\"Jmeno\" Value=\"Jan\"/>\n" +
-"    <Param Name=\"Vyska\" Value=\"14.8\"/>\n" +
-"    <Param Name=\"DatumNarozeni\" Value=\"01.02.1987\"/>\n" +
+"    <Param Name=\"name\" Value=\"John\"/>\n" +
+"    <Param Name=\"stature\" Value=\"184.8\"/>\n" +
+"    <Param Name=\"birthday\" Value=\"01.02.1987\"/>\n" +
 "  </Params>\n" +
 "  <Params>\n" +
-"    <Param Value=\"14.8a\" Name=\"Vyska\"/>\n" +
+"    <Param Value=\"1.8a\" Name=\"stature\"/>\n" +
 "  </Params>\n" +
 "</A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
-				&& s.contains("DatumNarozeni") && s.contains("Jmeno"),reporter);
+				&& s.contains("birthday") && s.contains("name"),reporter);
+			xdef = // run parse twice
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n" +
+"  <xd:declaration>uniqueSet u{s: string; e: string};</xd:declaration>\n" +
+"  <a>\n" +
+"    <b N=\"enum('A')\"><E xd:script='ref E' N=\"enum('B')\" /></b>\n" +
+"    <b N='u.s'><E xd:script='1..; ref E'/></b>\n" +
+"  </a>\n" +
+"  <E xd:script='finally u.ID()' N='u.e'/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml = "<a><b N='A'><E N='B'/></b><b N='x'><E N='T'/></b></a>";
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument(); // parse again
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter); // uniqeue set must be clear!
+			parse(xd, xml, reporter);
+			assertNoErrors(reporter); // even here uniqeue set must be clear!
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

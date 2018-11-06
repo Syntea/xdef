@@ -1,17 +1,3 @@
-/*
- * Copyright 2017 Syntea software group a.s. All rights reserved.
- *
- * File: Thesaurus.java, created 2017-04-11.
- * Package: cz.syntea.xd
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package cz.syntea.xdef.proc;
 
 /** Provides methods for thesaurus

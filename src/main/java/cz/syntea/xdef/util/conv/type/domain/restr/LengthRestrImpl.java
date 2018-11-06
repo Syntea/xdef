@@ -1,15 +1,3 @@
-/*
- * File: LengthRestrImpl.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.type.domain.restr;
 
 /** Skeletal implementation of item length restricted type.
@@ -17,18 +5,13 @@ package cz.syntea.xdef.util.conv.type.domain.restr;
  */
 public class LengthRestrImpl implements LengthRestricted {
 
-	/**
-	 * Length restriction.
-	 */
+	/** Length restriction. */
 	private Integer _length;
-	/**
-	 * Minimal length restriction.
-	 */
+	/** Minimal length restriction. */
 	private Integer _minLength;
-	/**
-	 * Maximal length restriction.
-	 */
+	/** Maximal length restriction. */
 	private Integer _maxLength;
+
 	@Override
 	public Integer getLength() {
 		return _length;
@@ -44,21 +27,24 @@ public class LengthRestrImpl implements LengthRestricted {
 	@Override
 	public void setLength(int length) {
 		if (length < 0) {
-			throw new IllegalArgumentException("Length is negative: '" + length + "'!");
+			throw new IllegalArgumentException("Length is negative: '"
+				+ length + "'!");
 		}
 		_length = length;
 	}
 	@Override
 	public void setMinLength(int minLength) {
 		if (minLength < 0) {
-			throw new IllegalArgumentException("Minimal length is negative: '" + minLength + "'!");
+			throw new IllegalArgumentException("Minimal length is negative: '"
+				+ minLength + "'!");
 		}
 		_minLength = minLength;
 	}
 	@Override
 	public void setMaxLength(int maxLength) {
 		if (maxLength < 0) {
-			throw new IllegalArgumentException("Length is negative: '" + maxLength + "'!");
+			throw new IllegalArgumentException("Length is negative: '"
+				+ maxLength + "'!");
 		}
 		_maxLength = maxLength;
 	}

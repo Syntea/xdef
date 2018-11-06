@@ -1,17 +1,3 @@
-/*
- * Copyright 2014 Syntea software group a.s. All rights reserved.
- *
- * File: TestJSON1, created 2014-08-06.
- * Package: mytest.json
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package test.common.json;
 
 import cz.syntea.xdef.sys.JSONUtil;
@@ -360,7 +346,7 @@ public class TestJSON extends STester {
 		// Check error reporting
 		try {
 			JSONUtil.parseJSON("[00]"); // more leading zeroes
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			if (ex.toString().indexOf("JSON014") < 0) {
 				fail(ex);

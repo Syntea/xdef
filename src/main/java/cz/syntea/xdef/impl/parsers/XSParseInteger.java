@@ -1,16 +1,3 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSParseInteger.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -23,7 +10,7 @@ import java.math.BigDecimal;
  * @author Vaclav Trojan
  */
 public class XSParseInteger extends XSAbstractParseComparable {
-	private static final String ROOTBASENAME = "xs:integer";
+	private static final String ROOTBASENAME = "integer";
 	private long _totalDigits;
 
 	public XSParseInteger() {
@@ -90,7 +77,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		try {
 			val = new BigDecimal(sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
-			p.error(XDEF.XDEF806,parserName());//Value of '&{0}' is out of range'
+			p.error(XDEF.XDEF809,parserName());//Incorrect value of '&{0}'
 			return;
 		}
 		p.setParsedValue(new DefDecimal(val));

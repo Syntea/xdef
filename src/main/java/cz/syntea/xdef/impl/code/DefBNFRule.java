@@ -1,15 +1,3 @@
-/*
- * File: DefBNFRule.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -21,6 +9,8 @@ import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueAbstract;
 import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.XDValueType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /** Implementation object containing compiled grammar of source of extended
  * Backus-Naur form.
@@ -59,7 +49,34 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	public DefParseResult perform(final StringParser p) {
 		if (_rule.parse(p) && p.eos()) {
 			String s = _rule.getParsedString();
-			return new DefParseResult(s);
+			DefParseResult result = new DefParseResult(s);
+			Object[] stack = _rule.getParsedObjects();
+			if (stack != null) {
+				DefContainer c = new DefContainer();
+				for (Object o: stack) {
+					if (o == null) {
+						c.addXDItem(new DefNull());
+					} if (o instanceof Number) {
+						if (o instanceof BigInteger || o instanceof BigDecimal){
+							c.addXDItem(new DefDecimal(o.toString()));
+						} else if (o instanceof Long || o instanceof Integer) {
+							c.addXDItem(new DefLong(o.toString()));
+						} else if (o instanceof Float) {
+							c.addXDItem(
+								new DefDouble(((Float)o).doubleValue()));
+						} else if (o instanceof Double) {
+							c.addXDItem(
+								new DefDouble(((Double)o)));
+						} else {
+							c.addXDItem(new DefString(o.toString()));
+						}
+					} else {
+						c.addXDItem(new DefString(o.toString()));
+					}
+				}
+				result.setParsedValue(c);
+			}
+			return result;
 		}
 		DefParseResult result = new DefParseResult();
 		//Value doesn't fit to BNF rule '&{0} at position &{1}'

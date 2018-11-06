@@ -3,8 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y07ControlId implements cz.syntea.xdef.component.XComponent{
-  public Long getIdNeco() {return _IdNeco;}
-  public void setIdNeco(Long x) {_IdNeco = x;}
+  public Integer getIdNeco() {return _IdNeco;}
+  public void setIdNeco(Integer x) {_IdNeco = x;}
   public String xposOfIdNeco(){return XD_XPos + "/@IdNeco";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -77,7 +77,7 @@ public class Y07ControlId implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _IdNeco;
+  private Integer _IdNeco;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "ControlId";
@@ -91,7 +91,7 @@ public class Y07ControlId implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setIdNeco(parseResult.getParsedValue().longValue());
+    setIdNeco(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)

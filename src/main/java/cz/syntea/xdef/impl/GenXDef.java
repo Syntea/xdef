@@ -1,15 +1,3 @@
-/*
- * File: GenXDef.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENSE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package cz.syntea.xdef.impl;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlConstants;

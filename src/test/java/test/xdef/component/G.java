@@ -76,7 +76,7 @@ public class G extends test.xdef.TestXComponentsGen implements cz.syntea.xdef.co
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"203A0A3F5AFF375D5385D98C83C98241".equals(
+    if (!"30FEA883C08A27D250C63EA5E0D57639".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -186,7 +186,7 @@ public static class XXX implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"6011780AA5BE2CD4DA50C5FD819B2A95".equals(
+    if (!"2A00584B1B2A27565D4A1123CCDAA2ED".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -285,7 +285,7 @@ public static class YYY implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"1C9C4B02AFEE56BBA3BBBF9482F96DF4".equals(
+    if (!"431C145FDA47ADF45A9F09EED890060B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

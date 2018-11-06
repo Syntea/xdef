@@ -1,15 +1,3 @@
-/*
- * Copyright 2007 Syntea software group a.s.
- *
- * File: StringParser.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
@@ -1970,7 +1958,15 @@ public class StringParser extends SReporter implements SParser {
 		if (findToken(token)) {
 			int x = getIndex() + token.length();
 			setIndex(x);
-			_ch = x < _endPos || readNextBuffer() ? _source.charAt(x) : NOCHAR;
+			if ( x >= _endPos) {
+				readNextBuffer();
+				if ( x >= _endPos) {
+					_ch =  NOCHAR;
+					setIndex(_endPos);
+					return true;
+				}
+			}
+			_ch = _source.charAt(x);
 			return true;
 		}
 		return false;

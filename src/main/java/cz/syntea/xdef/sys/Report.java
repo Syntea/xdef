@@ -1,17 +1,6 @@
-/*
- * Copyright 2007 Syntea software group a.s.
- *
- * File: Report.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.sys;
 
+import cz.syntea.xdef.XDConstants;
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.sys.RegisterReportTables.ReportTable;
 import cz.syntea.xdef.xml.KXmlUtils;
@@ -901,9 +890,9 @@ public class Report {
 	public static Report buildInfo() {
 		//Compiled: &{c}, build version: &{v}, date: &{d}
 		return Report.info(SYS.SYS010,
-			"&{c}" + SConstants.JAVA_VERSION +
-			"&{v}" + SConstants.BUILD_VERSION +
-			"&{d}" + SConstants.BUILD_DATE);
+			"&{c}" + XDConstants.JAVA_VERSION +
+			"&{v}" + XDConstants.BUILD_VERSION +
+			"&{d}" + XDConstants.BUILD_DATE);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

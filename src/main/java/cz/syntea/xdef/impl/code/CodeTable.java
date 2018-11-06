@@ -1,15 +1,3 @@
-/*
- * File: CodeTable.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 /** Constants of script code ID.
@@ -471,14 +459,8 @@ public interface CodeTable {
 	static final short CLEAR_REPORTS = BYTES_TO_HEX + 1;
 	/** Set given string as value of text node. */
 	static final short SET_TEXT = CLEAR_REPORTS + 1;
-	/** Add text node to actual element. */
-	static final short ADD_TEXT_NODE = SET_TEXT + 1;
-	/**Create comment node and add it to the actual element.*/
-	static final short ADD_COMMENT_NODE = ADD_TEXT_NODE + 1;
-//	/** Create processing instruction and add to actual element.*/
-//	static final short ADD_PI_NODE = ADD_COMMENT_NODE + 1;
 	/** Remove actual text node. */
-	static final short REMOVE_TEXT = ADD_COMMENT_NODE + 1;
+	static final short REMOVE_TEXT = SET_TEXT + 1;
 	/** Set argument as value of element. */
 	static final short SET_ELEMENT = REMOVE_TEXT + 1;
 	/** Set value of "now" date. */

@@ -1,15 +1,3 @@
-/*
- * File: XdNames.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xd.xd_2_0;
 
 /** Contains X-definition names as static constants.
@@ -295,13 +283,11 @@ public interface XdNames {
 	public static final String TOTAL_DIGITS = "totalDigits";
 	/** Parameter <code>whiteSpace</code> name in X-definition.*/
 	public static final String WHITE_SPACE = "whiteSpace";
-	/**
-	 * Parameter <code>item</code> name in X-definition schema
+	/** Parameter <code>item</code> name in X-definition schema
 	 * <code>union</code> type.
 	 */
 	public static final String ITEM_UNION = "item";
-	/**
-	 * Parameter <code>item</code> name in X-definition schema
+	/** Parameter <code>item</code> name in X-definition schema
 	 * <code>union</code> type.*/
 	public static final String ITEM_LIST = "item";
 }

@@ -3,33 +3,33 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class TramvajDN implements cz.syntea.xdef.component.XComponent{
-  public String getCisloDokladuPojisteni() {return _CisloDokladuPojisteni;}
-  public String getDruhVozidla() {return _DruhVozidla;}
-  public String getEvidCislo() {return _EvidCislo;}
-  public String getKodPojistitele() {return _KodPojistitele;}
-  public String getLinka() {return _Linka;}
-  public Long getLinkaPoradi() {return _LinkaPoradi;}
-  public String getNazevPojistitele() {return _NazevPojistitele;}
   public String getOznSegmentu() {return _OznSegmentu;}
-  public String getPojisteniText() {return _PojisteniText;}
-  public String getStavBrzd() {return _StavBrzd;}
-  public String getTypBrzd() {return _TypBrzd;}
+  public String getLinka() {return _Linka;}
+  public Integer getLinkaPoradi() {return _LinkaPoradi;}
+  public String getEvidCislo() {return _EvidCislo;}
   public String getTypVozidla() {return _TypVozidla;}
+  public String getTypBrzd() {return _TypBrzd;}
+  public String getStavBrzd() {return _StavBrzd;}
+  public String getKodPojistitele() {return _KodPojistitele;}
+  public String getNazevPojistitele() {return _NazevPojistitele;}
+  public String getCisloDokladuPojisteni() {return _CisloDokladuPojisteni;}
+  public String getPojisteniText() {return _PojisteniText;}
+  public String getDruhVozidla() {return _DruhVozidla;}
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public TramvajDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setCisloDokladuPojisteni(String x) {_CisloDokladuPojisteni = x;}
-  public void setDruhVozidla(String x) {_DruhVozidla = x;}
-  public void setEvidCislo(String x) {_EvidCislo = x;}
-  public void setKodPojistitele(String x) {_KodPojistitele = x;}
-  public void setLinka(String x) {_Linka = x;}
-  public void setLinkaPoradi(Long x) {_LinkaPoradi = x;}
-  public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
-  public void setPojisteniText(String x) {_PojisteniText = x;}
-  public void setStavBrzd(String x) {_StavBrzd = x;}
-  public void setTypBrzd(String x) {_TypBrzd = x;}
+  public void setLinka(String x) {_Linka = x;}
+  public void setLinkaPoradi(Integer x) {_LinkaPoradi = x;}
+  public void setEvidCislo(String x) {_EvidCislo = x;}
   public void setTypVozidla(String x) {_TypVozidla = x;}
+  public void setTypBrzd(String x) {_TypBrzd = x;}
+  public void setStavBrzd(String x) {_StavBrzd = x;}
+  public void setKodPojistitele(String x) {_KodPojistitele = x;}
+  public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
+  public void setCisloDokladuPojisteni(String x) {_CisloDokladuPojisteni = x;}
+  public void setPojisteniText(String x) {_PojisteniText = x;}
+  public void setDruhVozidla(String x) {_DruhVozidla = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#TramvajDN/$mixed/Skoda");
@@ -45,18 +45,18 @@ public class TramvajDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vlastnik", null, "SouborD1A#TramvajDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
-  public String xposOfCisloDokladuPojisteni(){return XD_XPos + "/@CisloDokladuPojisteni";}
-  public String xposOfDruhVozidla(){return XD_XPos + "/@DruhVozidla";}
-  public String xposOfEvidCislo(){return XD_XPos + "/@EvidCislo";}
-  public String xposOfKodPojistitele(){return XD_XPos + "/@KodPojistitele";}
+  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
   public String xposOfLinka(){return XD_XPos + "/@Linka";}
   public String xposOfLinkaPoradi(){return XD_XPos + "/@LinkaPoradi";}
-  public String xposOfNazevPojistitele(){return XD_XPos + "/@NazevPojistitele";}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfPojisteniText(){return XD_XPos + "/@PojisteniText";}
-  public String xposOfStavBrzd(){return XD_XPos + "/@StavBrzd";}
-  public String xposOfTypBrzd(){return XD_XPos + "/@TypBrzd";}
+  public String xposOfEvidCislo(){return XD_XPos + "/@EvidCislo";}
   public String xposOfTypVozidla(){return XD_XPos + "/@TypVozidla";}
+  public String xposOfTypBrzd(){return XD_XPos + "/@TypBrzd";}
+  public String xposOfStavBrzd(){return XD_XPos + "/@StavBrzd";}
+  public String xposOfKodPojistitele(){return XD_XPos + "/@KodPojistitele";}
+  public String xposOfNazevPojistitele(){return XD_XPos + "/@NazevPojistitele";}
+  public String xposOfCisloDokladuPojisteni(){return XD_XPos + "/@CisloDokladuPojisteni";}
+  public String xposOfPojisteniText(){return XD_XPos + "/@PojisteniText";}
+  public String xposOfDruhVozidla(){return XD_XPos + "/@DruhVozidla";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -101,30 +101,30 @@ public class TramvajDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getCisloDokladuPojisteni() != null)
-      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
-    if (getDruhVozidla() != null)
-      el.setAttribute("DruhVozidla", getDruhVozidla());
-    if (getEvidCislo() != null)
-      el.setAttribute("EvidCislo", getEvidCislo());
-    if (getKodPojistitele() != null)
-      el.setAttribute("KodPojistitele", getKodPojistitele());
+    if (getOznSegmentu() != null)
+      el.setAttribute("OznSegmentu", getOznSegmentu());
     if (getLinka() != null)
       el.setAttribute("Linka", getLinka());
     if (getLinkaPoradi() != null)
       el.setAttribute("LinkaPoradi", String.valueOf(getLinkaPoradi()));
-    if (getNazevPojistitele() != null)
-      el.setAttribute("NazevPojistitele", getNazevPojistitele());
-    if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
-    if (getPojisteniText() != null)
-      el.setAttribute("PojisteniText", getPojisteniText());
-    if (getStavBrzd() != null)
-      el.setAttribute("StavBrzd", getStavBrzd());
-    if (getTypBrzd() != null)
-      el.setAttribute("TypBrzd", getTypBrzd());
+    if (getEvidCislo() != null)
+      el.setAttribute("EvidCislo", getEvidCislo());
     if (getTypVozidla() != null)
       el.setAttribute("TypVozidla", getTypVozidla());
+    if (getTypBrzd() != null)
+      el.setAttribute("TypBrzd", getTypBrzd());
+    if (getStavBrzd() != null)
+      el.setAttribute("StavBrzd", getStavBrzd());
+    if (getKodPojistitele() != null)
+      el.setAttribute("KodPojistitele", getKodPojistitele());
+    if (getNazevPojistitele() != null)
+      el.setAttribute("NazevPojistitele", getNazevPojistitele());
+    if (getCisloDokladuPojisteni() != null)
+      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
+    if (getPojisteniText() != null)
+      el.setAttribute("PojisteniText", getPojisteniText());
+    if (getDruhVozidla() != null)
+      el.setAttribute("DruhVozidla", getDruhVozidla());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -153,24 +153,24 @@ public class TramvajDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9DA2973F0DAEF41293D076CB5229A077".equals(
+    if (!"4DC90BE6C676AE65D104290D09DF7B11".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _CisloDokladuPojisteni;
-  private String _DruhVozidla;
-  private String _EvidCislo;
-  private String _KodPojistitele;
-  private String _Linka;
-  private Long _LinkaPoradi;
-  private String _NazevPojistitele;
   private String _OznSegmentu;
-  private String _PojisteniText;
-  private String _StavBrzd;
-  private String _TypBrzd;
+  private String _Linka;
+  private Integer _LinkaPoradi;
+  private String _EvidCislo;
   private String _TypVozidla;
+  private String _TypBrzd;
+  private String _StavBrzd;
+  private String _KodPojistitele;
+  private String _NazevPojistitele;
+  private String _CisloDokladuPojisteni;
+  private String _PojisteniText;
+  private String _DruhVozidla;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private TramvajDN.Vlastnik _Vlastnik;
@@ -200,7 +200,7 @@ public class TramvajDN implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@Linka"))
       setLinka(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@LinkaPoradi"))
-      setLinkaPoradi(parseResult.getParsedValue().longValue());
+      setLinkaPoradi(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele"))
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
@@ -311,7 +311,7 @@ public static class Vlastnik implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

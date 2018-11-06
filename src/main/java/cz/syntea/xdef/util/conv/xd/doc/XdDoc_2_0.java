@@ -1,15 +1,3 @@
-/*
- * File: XdDoc_2_0.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xd.doc;
 import cz.syntea.xdef.sys.SRuntimeException;
 import cz.syntea.xdef.xml.KXmlConstants;
@@ -38,9 +26,6 @@ public final class XdDoc_2_0 extends XdDoc {
 		new HashMap<XdModel, Element>();
 	/** X-definition (XdDef) representation to X-definition element mapping.*/
 	private final Map<XdDef, Element> _xdDefs = new HashMap<XdDef, Element>();
-
-	/** Namespace of X-definiton.*/
-//	private final String _xdNS;
 
 	/** Creates instance of X-definition version 2.0 document.
 	 * @param xdef X-definition document.

@@ -1,15 +1,3 @@
-/*
- * File: XElement.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.msg.SYS;
@@ -33,8 +21,8 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /** Implementation of the model of an element.
  *  deprecated - will be not public in future versions
@@ -78,7 +66,7 @@ public final class XElement extends XCodeDescriptor
 		super(name, nsURI, xdef.getDefPool(), XNode.XMELEMENT);
 		_sqId = ((XPool)xdef.getDefPool()).getSqId();
 		_definition = xdef;
-		_attrs = new TreeMap<String, XData>();
+		_attrs = new LinkedHashMap<String, XData>();
 		_childNodes = new XNode[0];
 		//copy global options from the definition
 		copyOptions(xdef);

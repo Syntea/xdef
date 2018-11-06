@@ -1,16 +1,3 @@
-/*
- * File: XBuilder.java.
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl;
 
 import cz.syntea.xdef.impl.code.DefDuration;
@@ -52,6 +39,7 @@ import java.lang.reflect.Constructor;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation") // see setReporter method
 public class XBuilder implements XDBuilder {
 
 	private XPool _xp;
@@ -62,7 +50,23 @@ public class XBuilder implements XDBuilder {
 	 * referred from definitions (may be <tt>null</tt>).
 	 */
 	public XBuilder(final Properties props, final Class<?>... extObjects) {
+		this(null, props, extObjects);
+	}
+
+	/** Creates instance of XDBuilder with properties and external objects.
+	 * @param reporter ReportWriter or <tt>null</tt>.
+	 * @param props Properties or <tt>null</tt>.
+	 * @param extObjects The array of classes where are available methods
+	 * referred from definitions (may be <tt>null</tt>).
+	 */
+	public XBuilder(final ReportWriter reporter,
+		final Properties props,
+		final Class<?>... extObjects) {
 		_xp = new XPool(props, null, extObjects);
+		if (reporter != null) {
+			_xp._compiler.setReportWriter(reporter);
+		}
+		_xp._reporter = reporter;
 	}
 
 	@Override
@@ -153,6 +157,7 @@ public class XBuilder implements XDBuilder {
 	/** Set reporter. This method is should be used only for incremental
 	 * message reporting. The reporter must be set before setting sources.
 	 * @param reporter the reporter to be set to this builder.
+	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
 	 */
 	public final void setReporter(final ReportWriter reporter) {
 		if (reporter != null) {
@@ -181,8 +186,6 @@ public class XBuilder implements XDBuilder {
 		result._compiler = null;
 		ReportWriter userReporter = result._reporter; // user's reporter
 		result._reporter = null;
-//		if (result._reporter == null
-//			|| result._reporter instanceof ArrayReporter) {
 		p.compileXPool(result);
 		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
 		byte displayMode = result.getDisplayMode();
@@ -208,19 +211,26 @@ public class XBuilder implements XDBuilder {
 					XDEF.XDEF850, ex, result.getXdefEditor());
 			}
 			if (xeditor == null) {
-				xeditor = new ChkGUIDisplay();
+				// create editor with the default screen position.
+				xeditor = new ChkGUIDisplay(result.getXDSourceInfo());
 			}
 			while(!xeditor.setXEditor(result, ar)) {
+				XDSourceInfo is = result.getXDSourceInfo();
+				Map<String, XDSourceItem> map = is.getMap();
 				// compile again
-				Map<String, XDSourceItem> map = result._sourcesMap;
 				result = new XPool(result.getProperties(),null, externals);
-				// update source map (something might be changed)
+				XDSourceInfo is1 = result.getXDSourceInfo();
+				// update source info (something might be changed)
+				is1._xpos = is._xpos;
+				is1._ypos = is._ypos;
+				is1._width = is._width;
+				is1._height = is._height;
 				for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
 					String key = e.getKey();
 					XDSourceItem src = e.getValue();
 					if (src._source != null) {
 						result.setSource(src._source, key);
-						result._sourcesMap.put(key, src);
+						result.getXDSourceInfo().getMap().put(key, src);
 					} else if (src._url != null) {
 						result.setSource(src._url);
 					}
@@ -230,12 +240,6 @@ public class XBuilder implements XDBuilder {
 				p.compileXPool(result);
 				ar = (ArrayReporter) p.getReportWriter();
 				result._compiler = null;
-			}
-			if (userReporter == null && result.isChkWarnings()
-				&& !reporter.errors()) {
-				// because warnings were already dispalyed we clear reporter to
-				// prevent to throw an exception if only warnings are reported.
-				reporter.clear();
 			}
 		}
 		if (userReporter == null) {

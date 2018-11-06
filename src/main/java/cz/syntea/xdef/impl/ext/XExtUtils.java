@@ -1,16 +1,3 @@
-/*
- * Copyright 2006 Syntea software group a.s.
- *
- * File: XExtUtils.java
- *
- * This file may be copied modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENSE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package cz.syntea.xdef.impl.ext;
 
 import cz.syntea.xdef.XDConstants;
@@ -19,7 +6,6 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SBuffer;
-import cz.syntea.xdef.sys.SConstants;
 import cz.syntea.xdef.sys.SError;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.XDParseResult;
@@ -62,9 +48,10 @@ public final class XExtUtils {
 	private XExtUtils() {}
 
 	public final static String getVersionInfo() {
-		return SConstants.BUILD_VERSION + " " +
-			SConstants.BUILD_DATE + " (" + SConstants.JAVA_VERSION + ")";
+		return XDConstants.BUILD_VERSION + " " +
+			XDConstants.BUILD_DATE + " (" + XDConstants.JAVA_VERSION + ")";
 	}
+
 
 	/**	Get name space URI of qualified name.
 	 * @param qname qualified name
@@ -105,6 +92,37 @@ public final class XExtUtils {
 			}
 			el = (Element) n;
 		}
+	}
+	public final static void addComment(final XXNode x, final String s) {
+		addComment(x.getElement(), s);
+	}
+	public final static void addComment(final Element el, final String s) {
+		el.appendChild(el.getOwnerDocument().createComment(s != null? s : ""));
+	}
+	public final static void addPI(final XXNode x,
+		final String target,
+		final String data) {
+		addPI(x.getElement(), target, data);
+	}
+	public final static void addPI(final Element el,
+		final String target,
+		final String data) {
+		el.appendChild(el.getOwnerDocument().createProcessingInstruction(
+			target, data));
+	}
+	public final static void addText(final XXNode x, final String s) {
+		addText(x.getElement(), s);
+	}
+	public final static void addText(final Element el, final String s) {
+		if (s != null && !s.isEmpty()) {
+			el.appendChild(el.getOwnerDocument().createTextNode(s));
+		}
+	}
+	public final static String getTextContent(final XXNode x) {
+		return getTextContent(x.getElement());
+	}
+	public final static String getTextContent(final Element el) {
+		return el != null ? el.getTextContent() : null;
 	}
 	public final static String getXPos(final XXNode x) {return x.getXPos();}
 	public final static String getXDPosition(final XXNode xnode) {

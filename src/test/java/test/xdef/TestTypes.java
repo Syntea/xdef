@@ -1,15 +1,3 @@
-/*
- * File: TestTypes.java
- * Copyright 2011 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -176,7 +164,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b a='25001231' b='25001231235959'/></a>";
 			parse(xp, null, xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a><b a='30001231' b='30001231235959'/></a>";
 			el = parse(xp, null, xml, reporter);
 			assertNoErrorwarnings(reporter);
@@ -188,7 +176,7 @@ public final class TestTypes extends XDTester {
 			xml = "<a><b a='30001231' b='30001231100000'/></a>";
 			assertEq("<a><b a=\"31.12.3000\" b=\"30001231100000\"/></a>",
 				parse(xp, null, xml, reporter));
-			assertTrue(reporter.errorWarnings(), "Error not recognized");
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			resetProperties();
 ////////////////////////////////////////////////////////////////////////////////
 

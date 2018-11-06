@@ -3,13 +3,13 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class PovozDN implements cz.syntea.xdef.component.XComponent{
-  public String getDruhPovozu() {return _DruhPovozu;}
   public String getOznSegmentu() {return _OznSegmentu;}
+  public String getDruhPovozu() {return _DruhPovozu;}
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public PovozDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setDruhPovozu(String x) {_DruhPovozu = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
+  public void setDruhPovozu(String x) {_DruhPovozu = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#PovozDN/$mixed/Skoda");
@@ -25,8 +25,8 @@ public class PovozDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Vlastnik", null, "SouborD1A#PovozDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
-  public String xposOfDruhPovozu(){return XD_XPos + "/@DruhPovozu";}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
+  public String xposOfDruhPovozu(){return XD_XPos + "/@DruhPovozu";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -71,10 +71,10 @@ public class PovozDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getDruhPovozu() != null)
-      el.setAttribute("DruhPovozu", getDruhPovozu());
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
+    if (getDruhPovozu() != null)
+      el.setAttribute("DruhPovozu", getDruhPovozu());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -103,14 +103,14 @@ public class PovozDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"00EE7A307C5FA656032C563C188FEB0B".equals(
+    if (!"EC795E253743BC5F914756ECE2873306".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _DruhPovozu;
   private String _OznSegmentu;
+  private String _DruhPovozu;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private PovozDN.Vlastnik _Vlastnik;
@@ -231,7 +231,7 @@ public static class Vlastnik implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

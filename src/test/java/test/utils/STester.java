@@ -1,17 +1,3 @@
-/*
- * Copyright 2013 Syntea software group a.s. All rights reserved.
- *
- * File: STester, created 2013-09-21.
- * Package: cz.syntea.xdef.sys
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package test.utils;
 
 import cz.syntea.xdef.sys.*;
@@ -97,6 +83,7 @@ public abstract class STester {
 	public STester() {}
 
 	private void printlnOut(final String s) {
+		flushErr();
 		_out.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
@@ -110,6 +97,7 @@ public abstract class STester {
 	}
 
 	private void printErr(final String s) {
+		flushOut();
 		_err.print(s);
 		if (_outStream != null) {
 			_outStream.print(s);
@@ -117,6 +105,7 @@ public abstract class STester {
 	}
 
 	private void printlnErr(final String s) {
+		flushOut();
 		_err.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
@@ -177,6 +166,20 @@ public abstract class STester {
 	 */
 	public final String getTempDir() {
 		if (_homeDir != null) {
+//			try {
+//				File f = File.createTempFile("temp", "");
+//				_tempDir = f.getParentFile().getAbsolutePath().replace('\\', '/');
+//				if (!_tempDir.endsWith("/")) {
+//					_tempDir += '/';
+//				}
+//				f = new File(_tempDir +"a.tmp");
+//				FileOutputStream fs = new FileOutputStream(f);
+//				fs.write('x');
+//				fs.close();				
+//				return _tempDir;
+//			} catch (Exception ex) {
+//				ex.printStackTrace();
+//			}
 			_tempDir = _homeDir + "temp/";
 			File tempDir = new File(_tempDir);
 			if (!tempDir.exists()) {
@@ -187,8 +190,8 @@ public abstract class STester {
 			}
 			return _tempDir;
 		} else {
-			  throw new RuntimeException(
-				  "Home directory doesn't exist or isn't accessible");
+			throw new RuntimeException(
+				"Home directory doesn't exist or isn't accessible");
 		}
 	}
 
@@ -273,7 +276,7 @@ public abstract class STester {
 	 * @param info the string with result information.
 	 */
 	public final void setResultInfo(final String info) {
-		if (info != null && !info.isEmpty())
+		if (info != null && !info.isEmpty()) {
 			if (_resultInfo == null || _resultInfo.isEmpty()) {
 				_resultInfo = info;
 			} else {
@@ -282,6 +285,7 @@ public abstract class STester {
 				}
 				_resultInfo += info;
 			}
+		}
 	}
 
 	/** Increase error counter and write the information to the error stream.
@@ -331,8 +335,6 @@ public abstract class STester {
 			}
 			text = _name + " fail\n" + text;
 		}
-		flushOut();
-		flushErr();
 		_errors++;
 		// in Java 1.3 is not avalable the method Throwable.getStackTrace()
 		// so we grab the information from printStackTrace and we create
@@ -369,7 +371,9 @@ public abstract class STester {
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is <tt>null</tt> the message is ignored.
 	 */
-	public final void fail() {putErrInfo("*");}
+	public final void fail() {
+		putErrInfo("*");
+	}
 
 	/** Increase error counter and write information of given object.
 	 * If the print stream is <tt>null</tt> the message is ignored.
@@ -890,18 +894,30 @@ public abstract class STester {
 			_timeStamp = System.currentTimeMillis();
 			return;
 		}
-		s = _homeDir + "test/data/";
-		f = new File(s);
-		if (!f.exists() || !f.isDirectory()) {
-			s = _sourceDir + "data/";
-			f = new File(s);
+		if (_sourceDir.contains("src/test/java/test/")
+			&& (f = new File(s = SUtils.modifyString(_sourceDir,
+			"src/test/java/test/" ,
+			"src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else if (_sourceDir.contains("/test/test/")
+			&& (f = new File(s = SUtils.modifyString(
+			_sourceDir, "test/test/" ,
+			"test/resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else if (_sourceDir.contains("/test/test/")
+			&& (f = new File(s = SUtils.modifyString(
+			_sourceDir, "test/test/" ,
+			"resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_dataDir = s;
+		} else {
+			f = new File(s = _homeDir + "test/data/");
 			if (!f.exists() || !f.isDirectory()) {
-				_dataDir = null;
+				s = _sourceDir + "data/";
+				f = new File(s);
+				_dataDir = (!f.exists() || !f.isDirectory()) ? null : s;
 			} else {
 				_dataDir = s;
 			}
-		} else {
-			_dataDir = s;
 		}
 		_tempDir =  _homeDir + "temp/";
 		_timeStamp = System.currentTimeMillis();

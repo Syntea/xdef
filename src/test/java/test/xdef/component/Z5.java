@@ -3,18 +3,18 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z5 implements cz.syntea.xdef.component.XComponent{
-  public Long getIC() {return _IC;}
   public String getNazevFirmy() {return _NazevFirmy;}
+  public Integer getIC() {return _IC;}
   public Z9 getSidlo() {return _Sidlo;}
-  public void setIC(Long x) {_IC = x;}
   public void setNazevFirmy(String x) {_NazevFirmy = x;}
+  public void setIC(Integer x) {_IC = x;}
   public void setSidlo(Z9 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Sidlo", null, "SouborD1A#Firma/Sidlo");
     _Sidlo = x;
   }
-  public String xposOfIC(){return XD_XPos + "/@IC";}
   public String xposOfNazevFirmy(){return XD_XPos + "/@NazevFirmy";}
+  public String xposOfIC(){return XD_XPos + "/@IC";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -59,10 +59,10 @@ public class Z5 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getIC() != null)
-      el.setAttribute("IC", String.valueOf(getIC()));
     if (getNazevFirmy() != null)
       el.setAttribute("NazevFirmy", getNazevFirmy());
+    if (getIC() != null)
+      el.setAttribute("IC", String.valueOf(getIC()));
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -89,14 +89,14 @@ public class Z5 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BDDC546D2837142C6C6C0F3ABF047D81".equals(
+    if (!"4938D1BE66E12B4C269ECE167D90C9E0".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _IC;
   private String _NazevFirmy;
+  private Integer _IC;
   private Z9 _Sidlo;
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -114,7 +114,7 @@ public class Z5 implements cz.syntea.xdef.component.XComponent{
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
     if (xx.getXMNode().getXDPosition().endsWith("/@IC"))
-      setIC(parseResult.getParsedValue().longValue());
+      setIC(parseResult.getParsedValue().intValue());
     else setNazevFirmy(parseResult.getParsedValue().stringValue());
   }
   @Override

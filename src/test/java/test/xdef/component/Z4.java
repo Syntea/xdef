@@ -3,6 +3,14 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Z4 implements cz.syntea.xdef.component.XComponent{
+  public String getJmeno() {return _Jmeno;}
+  public String getPrijmeni() {return _Prijmeni;}
+  public String getRodnePrijmeni() {return _RodnePrijmeni;}
+  public String getTitulPred() {return _TitulPred;}
+  public String getTitulZa() {return _TitulZa;}
+  public String getRC() {return _RC;}
+  public String getPohlavi() {return _Pohlavi;}
+  public String getOsobniStav() {return _OsobniStav;}
   public cz.syntea.xdef.sys.SDatetime getDatumNarozeni() {return _DatumNarozeni;}
   public java.util.Date dateOfDatumNarozeni() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_DatumNarozeni);
@@ -13,20 +21,20 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumNarozeni() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumNarozeni);
   }
-  public String getJmeno() {return _Jmeno;}
   public String getMistoNarozeni() {return _MistoNarozeni;}
-  public String getOsobniStav() {return _OsobniStav;}
-  public String getPohlavi() {return _Pohlavi;}
-  public String getPrijmeni() {return _Prijmeni;}
-  public String getProfese() {return _Profese;}
-  public String getRC() {return _RC;}
-  public String getRodnePrijmeni() {return _RodnePrijmeni;}
   public String getStatNarozeni() {return _StatNarozeni;}
   public String getStatniPrislusnost() {return _StatniPrislusnost;}
-  public String getTitulPred() {return _TitulPred;}
-  public String getTitulZa() {return _TitulZa;}
+  public String getProfese() {return _Profese;}
   public Z9 getTrvalyPobyt() {return _TrvalyPobyt;}
   public Z9 getPrechodnyPobyt() {return _PrechodnyPobyt;}
+  public void setJmeno(String x) {_Jmeno = x;}
+  public void setPrijmeni(String x) {_Prijmeni = x;}
+  public void setRodnePrijmeni(String x) {_RodnePrijmeni = x;}
+  public void setTitulPred(String x) {_TitulPred = x;}
+  public void setTitulZa(String x) {_TitulZa = x;}
+  public void setRC(String x) {_RC = x;}
+  public void setPohlavi(String x) {_Pohlavi = x;}
+  public void setOsobniStav(String x) {_OsobniStav = x;}
   public void setDatumNarozeni(cz.syntea.xdef.sys.SDatetime x) {_DatumNarozeni = x;}
   public void setDatumNarozeni(java.util.Date x) {
     _DatumNarozeni=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -37,18 +45,10 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
   public void setDatumNarozeni(java.util.Calendar x) {
     _DatumNarozeni=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setJmeno(String x) {_Jmeno = x;}
   public void setMistoNarozeni(String x) {_MistoNarozeni = x;}
-  public void setOsobniStav(String x) {_OsobniStav = x;}
-  public void setPohlavi(String x) {_Pohlavi = x;}
-  public void setPrijmeni(String x) {_Prijmeni = x;}
-  public void setProfese(String x) {_Profese = x;}
-  public void setRC(String x) {_RC = x;}
-  public void setRodnePrijmeni(String x) {_RodnePrijmeni = x;}
   public void setStatNarozeni(String x) {_StatNarozeni = x;}
   public void setStatniPrislusnost(String x) {_StatniPrislusnost = x;}
-  public void setTitulPred(String x) {_TitulPred = x;}
-  public void setTitulZa(String x) {_TitulZa = x;}
+  public void setProfese(String x) {_Profese = x;}
   public void setTrvalyPobyt(Z9 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "TrvalyPobyt", null, "SouborD1A#Osoba/$mixed/TrvalyPobyt");
@@ -59,19 +59,19 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "PrechodnyPobyt", null, "SouborD1A#Osoba/$mixed/PrechodnyPobyt");
     _PrechodnyPobyt = x;
   }
-  public String xposOfDatumNarozeni(){return XD_XPos + "/@DatumNarozeni";}
   public String xposOfJmeno(){return XD_XPos + "/@Jmeno";}
-  public String xposOfMistoNarozeni(){return XD_XPos + "/@MistoNarozeni";}
-  public String xposOfOsobniStav(){return XD_XPos + "/@OsobniStav";}
-  public String xposOfPohlavi(){return XD_XPos + "/@Pohlavi";}
   public String xposOfPrijmeni(){return XD_XPos + "/@Prijmeni";}
-  public String xposOfProfese(){return XD_XPos + "/@Profese";}
-  public String xposOfRC(){return XD_XPos + "/@RC";}
   public String xposOfRodnePrijmeni(){return XD_XPos + "/@RodnePrijmeni";}
-  public String xposOfStatNarozeni(){return XD_XPos + "/@StatNarozeni";}
-  public String xposOfStatniPrislusnost(){return XD_XPos + "/@StatniPrislusnost";}
   public String xposOfTitulPred(){return XD_XPos + "/@TitulPred";}
   public String xposOfTitulZa(){return XD_XPos + "/@TitulZa";}
+  public String xposOfRC(){return XD_XPos + "/@RC";}
+  public String xposOfPohlavi(){return XD_XPos + "/@Pohlavi";}
+  public String xposOfOsobniStav(){return XD_XPos + "/@OsobniStav";}
+  public String xposOfDatumNarozeni(){return XD_XPos + "/@DatumNarozeni";}
+  public String xposOfMistoNarozeni(){return XD_XPos + "/@MistoNarozeni";}
+  public String xposOfStatNarozeni(){return XD_XPos + "/@StatNarozeni";}
+  public String xposOfStatniPrislusnost(){return XD_XPos + "/@StatniPrislusnost";}
+  public String xposOfProfese(){return XD_XPos + "/@Profese";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -116,32 +116,32 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getDatumNarozeni() != null)
-      el.setAttribute("DatumNarozeni", getDatumNarozeni().formatDate("d.M.yy"));
     if (getJmeno() != null)
       el.setAttribute("Jmeno", getJmeno());
-    if (getMistoNarozeni() != null)
-      el.setAttribute("MistoNarozeni", getMistoNarozeni());
-    if (getOsobniStav() != null)
-      el.setAttribute("OsobniStav", getOsobniStav());
-    if (getPohlavi() != null)
-      el.setAttribute("Pohlavi", getPohlavi());
     if (getPrijmeni() != null)
       el.setAttribute("Prijmeni", getPrijmeni());
-    if (getProfese() != null)
-      el.setAttribute("Profese", getProfese());
-    if (getRC() != null)
-      el.setAttribute("RC", getRC());
     if (getRodnePrijmeni() != null)
       el.setAttribute("RodnePrijmeni", getRodnePrijmeni());
-    if (getStatNarozeni() != null)
-      el.setAttribute("StatNarozeni", getStatNarozeni());
-    if (getStatniPrislusnost() != null)
-      el.setAttribute("StatniPrislusnost", getStatniPrislusnost());
     if (getTitulPred() != null)
       el.setAttribute("TitulPred", getTitulPred());
     if (getTitulZa() != null)
       el.setAttribute("TitulZa", getTitulZa());
+    if (getRC() != null)
+      el.setAttribute("RC", getRC());
+    if (getPohlavi() != null)
+      el.setAttribute("Pohlavi", getPohlavi());
+    if (getOsobniStav() != null)
+      el.setAttribute("OsobniStav", getOsobniStav());
+    if (getDatumNarozeni() != null)
+      el.setAttribute("DatumNarozeni", getDatumNarozeni().formatDate("d.M.yy"));
+    if (getMistoNarozeni() != null)
+      el.setAttribute("MistoNarozeni", getMistoNarozeni());
+    if (getStatNarozeni() != null)
+      el.setAttribute("StatNarozeni", getStatNarozeni());
+    if (getStatniPrislusnost() != null)
+      el.setAttribute("StatniPrislusnost", getStatniPrislusnost());
+    if (getProfese() != null)
+      el.setAttribute("Profese", getProfese());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -169,25 +169,25 @@ public class Z4 implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"30DF54F2693948DBE26A18ED6A8A268D".equals(
+    if (!"937D65C5FF7BC9717024FF8F456967A9".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private cz.syntea.xdef.sys.SDatetime _DatumNarozeni;
   private String _Jmeno;
-  private String _MistoNarozeni;
-  private String _OsobniStav;
-  private String _Pohlavi;
   private String _Prijmeni;
-  private String _Profese;
-  private String _RC;
   private String _RodnePrijmeni;
-  private String _StatNarozeni;
-  private String _StatniPrislusnost;
   private String _TitulPred;
   private String _TitulZa;
+  private String _RC;
+  private String _Pohlavi;
+  private String _OsobniStav;
+  private cz.syntea.xdef.sys.SDatetime _DatumNarozeni;
+  private String _MistoNarozeni;
+  private String _StatNarozeni;
+  private String _StatniPrislusnost;
+  private String _Profese;
   private Z9 _TrvalyPobyt;
   private Z9 _PrechodnyPobyt;
   private cz.syntea.xdef.component.XComponent XD_Parent;

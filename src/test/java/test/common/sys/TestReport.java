@@ -1,15 +1,3 @@
-/*
- * File: TestReport.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.common.sys;
 
 import cz.syntea.xdef.XDConstants;
@@ -107,7 +95,7 @@ public class TestReport extends STester {
 			s = Report.getReportText("XML_LANGUAGE", "eng");
 			assertEq("English", s);
 			reporter.clear();
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE + "ABC",
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES + "ABC",
 				dataDir + "ABC_*.properties");
 			s = Report.getReportText("ABC_LANGUAGE", "deu");
 			assertEq("deutsch", s);
@@ -132,11 +120,11 @@ public class TestReport extends STester {
 			assertEq("Test Nachricht: Etwas", Report.text(
 				"ABC001","?","&{msg}&{#ABC003}").toString());
 			SManager.removeReportTables("ABC");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_ces", dataDir + "ABC_ces.properties");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_eng", dataDir + "ABC_eng.properties");
-			SManager.setProperty(XDConstants.XDPROPERTY_MSGTABLE +
+			SManager.setProperty(XDConstants.XDPROPERTY_MESSAGES +
 				"ABC_deu", dataDir + "ABC_deu.properties");
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "cs");
 			assertEq("Testovací zpráva: x",

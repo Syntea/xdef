@@ -1,19 +1,6 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XDPool.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef;
 
-import cz.syntea.xdef.impl.XDSourceItem;
+import cz.syntea.xdef.impl.XDSourceInfo;
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.model.XMDebugInfo;
 import cz.syntea.xdef.model.XMDefinition;
@@ -23,13 +10,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Map;
 
 /** Provides the interface to object containing compiled code of set of
  * X-definitions. You can create from XDPool the XDDocument.
  * @author Vaclav Trojan
  */
-public interface XDPool {
+public interface XDPool extends Serializable {
 
 	/** Display mode true (i.e. display always). */
 	public static final byte DISPLAY_TRUE = 2;
@@ -217,20 +205,21 @@ public interface XDPool {
 	 */
 	public SDatetime[] getSpecialDates();
 
-	/** Get map of source items of compiled X-definitions.
-	 * @return map of source items of compiled X-definitions.
+	/** Get the object with the map of source items of compiled X-definitions
+	 * and with editing information.
+	 * @return object with the map of source items of compiled X-definitions
+	 * and with editing information.
 	 */
-	public Map<String, XDSourceItem> getXDSourcesMap();
+	public XDSourceInfo getXDSourceInfo();
 
 	/** Get debug editor class name.
-	 * @return debug editor class name (if null. the default debug editor
+	 * @return debug editor class name (if null the default debug editor
 	 * will be used).
 	 */
 	public String getDebugEditor();
 
 	/** Get class name of the editor of X-definition.
-	 * @return class name of the editor of X-definition which
-	 * will be used).
+	 * @return class name of the editor of X-definition which will be used).
 	 */
 	public String getXdefEditor();
 

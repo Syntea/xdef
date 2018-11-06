@@ -111,12 +111,12 @@ public class Y11 implements cz.syntea.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class B implements cz.syntea.xdef.component.XComponent{
-  public String getI() {return _I;}
   public String getN() {return _N;}
+  public String getI() {return _I;}
   public java.util.List<test.xdef.component.Y11Op> listOfEv() {return _Ev;}
   public java.util.List<test.xdef.component.Y11Op> listOfOp() {return _Op;}
-  public void setI(String x) {_I = x;}
   public void setN(String x) {_N = x;}
+  public void setI(String x) {_I = x;}
   public void addEv(test.xdef.component.Y11Op x) {
     if (x != null) {
         if (x.xGetXPos() == null)
@@ -131,8 +131,8 @@ public static class B implements cz.syntea.xdef.component.XComponent{
       _Op.add(x);
     }
   }
-  public String xposOfI(){return XD_XPos + "/@I";}
   public String xposOfN(){return XD_XPos + "/@N";}
+  public String xposOfI(){return XD_XPos + "/@I";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -176,10 +176,10 @@ public static class B implements cz.syntea.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    if (getI() != null)
-      el.setAttribute("I", getI());
     if (getN() != null)
       el.setAttribute("N", getN());
+    if (getI() != null)
+      el.setAttribute("I", getI());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -207,14 +207,14 @@ public static class B implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9B6363B037A3B36C28498C01C7313FA9".equals(
+    if (!"A86A577033331F2779B867D74A73954D".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _I;
   private String _N;
+  private String _I;
   private final java.util.List<test.xdef.component.Y11Op> _Ev =
     new java.util.ArrayList<test.xdef.component.Y11Op>();
   private final java.util.List<test.xdef.component.Y11Op> _Op =

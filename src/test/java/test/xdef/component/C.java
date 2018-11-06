@@ -82,7 +82,7 @@ public class C extends test.xdef.TestXComponents_C implements cz.syntea.xdef.com
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"FADA13A42AD0FA14BEA032CD762E4BEB".equals(
+    if (!"2C5CFACFF7CB2D6FEFFC24F9104128D2".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -197,7 +197,7 @@ public static class Street implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E1F9788C3BD76427931D5DF63D721DBD".equals(
+    if (!"E361E0B7F87EDB773885460F90FC37F2".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

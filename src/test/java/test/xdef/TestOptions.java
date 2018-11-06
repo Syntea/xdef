@@ -1,15 +1,3 @@
-/*
- * File: TestOptions.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -18,7 +6,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDPool;
 import java.io.StringWriter;
-import javax.xml.soap.Node;
+import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 /** Test of text options and text values.
@@ -37,7 +25,6 @@ public final class TestOptions extends XDTester {
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
-		String s;
 		StringWriter strw;
 		try {
 			// trimAttr, trimText

@@ -3,9 +3,9 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class C2 implements cz.syntea.xdef.component.XComponent{
-  public Long getNum() {return _Num;}
+  public Integer getNum() {return _Num;}
   public java.util.List<C1> listOfPerson() {return _Person;}
-  public void setNum(Long x) {_Num = x;}
+  public void setNum(Integer x) {_Num = x;}
   public void addPerson(C1 x) {
     if (x != null) {
         if (x.xGetXPos() == null)
@@ -92,7 +92,7 @@ public class C2 implements cz.syntea.xdef.component.XComponent{
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Long _Num;
+  private Integer _Num;
   private final java.util.List<C1> _Person = new java.util.ArrayList<C1>();
   private cz.syntea.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -109,7 +109,7 @@ public class C2 implements cz.syntea.xdef.component.XComponent{
   @Override
   public void xSetAttr(cz.syntea.xdef.proc.XXNode xx,
     cz.syntea.xdef.XDParseResult parseResult) {
-    setNum(parseResult.getParsedValue().longValue());
+    setNum(parseResult.getParsedValue().intValue());
   }
   @Override
   public cz.syntea.xdef.component.XComponent xCreateXChild(cz.syntea.xdef.proc.XXNode xx)

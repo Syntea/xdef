@@ -1,21 +1,9 @@
-/*
- * Copyright 2010 Syntea software group a.s. All rights reserved.
- *
- * File: XDValue.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef;
 
 import cz.syntea.xdef.sys.SDatetime;
 import cz.syntea.xdef.sys.SDuration;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -86,6 +74,11 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 * @return BigDecimal value of this object or return  <tt>null</tt>.
 	 */
 	public BigDecimal decimalValue();
+
+	/** Get BigInteger value of this object.
+	 * @return BigInteger value of this object or return  <tt>null</tt>.
+	 */
+	public BigInteger integerValue();
 
 	/** Get boolean value of this object.
 	 * @return boolean value of this object or <tt>false</tt>.

@@ -1,24 +1,14 @@
-/*
- * File: TestExpr.java
- * Copyright 2006 Syntea.
- *
- * This file may be copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt kopirovan, modifikovan a siren pouze v souladu4
- * s textem prilozeneho souboru LICENCE.TXT, ktery obsahuje specifikaci
- * prislusnych prav.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.sys.SUtils;
 import cz.syntea.xdef.sys.StringParser;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -96,11 +86,11 @@ public class TestExpr extends STester {
 		if (!source.equals(s)) {
 			return "Error parsed: " + s;
 		}
-		Object[] code = grammar.getAndClearParsedObjects();
+		Object[] code = grammar.getParsedObjects();
 		if (_displayCode) {
 			System.out.println(codeToString(code));
 		}
-		Object result = execute(code, _variables);
+		Object result = execute(source, code, _variables);
 		if (result == null) {
 			return "No result: null";
 		}
@@ -120,13 +110,17 @@ public class TestExpr extends STester {
 		if (!source.equals(result)) {
 			return result;
 		}
-		Object[] code = grammar.getAndClearParsedObjects();
+		Object[] code = grammar.getParsedObjects();
 		if (_displayCode) {
 			System.out.println(codeToString(code));
 		}
-		parse(grammar, "program", toSource(code, 0));
-		code = grammar.getAndClearParsedObjects();
-		execute(code, _variables);
+//printObjects(grammar);
+//System.out.println("====");
+//System.out.println(toSource(code, 0) + "\n====");
+		String s = toSource(source, code, 0);
+		parse(grammar, "program", s);
+		code = grammar.getParsedObjects();
+		execute(s, code, _variables);
 		try {
 			return SUtils.modifyString(_byteArray.toString("UTF-8"),"\r\n","\n");
 		} catch (UnsupportedEncodingException ex) {}
@@ -141,8 +135,10 @@ public class TestExpr extends STester {
 		final String _operator;
 
 		/** Create this object from code item. */
-		Operator(String code) {
+		Operator(String item) {
 			char ch;
+			int ndx = item.indexOf(' ');
+			String code = ndx > 0 ? item.substring(0, ndx) : item;
 			if (code.startsWith("ASS")) {
 				Operator op = new Operator(code.substring(3));
 				_operator = "=" + op._operator;
@@ -207,20 +203,24 @@ public class TestExpr extends STester {
 	}
 
 	/** Create source code from generated code.
+	 * @param source source text.
 	 * @param code the generated code.
 	 * @return String with Java code.
 	 */
-	private static String toSource(final Object[] code, final int start) {
+	private static String toSource(final String source,
+		final Object[] code,
+		final int start) {
 		Stack<SourceItem> stack = new Stack<SourceItem>();
 		Stack<Stack<SourceItem>> stackOfStack = new Stack<Stack<SourceItem>>();
 		StringBuilder result = new StringBuilder();
 		Map<String, SourceItem> variables = new TreeMap<String, SourceItem>();
-
 		for (int i = start; i < code.length; i++) {
 			String item = code[i].toString();
 			if (item.startsWith("info: ")) { // parsed position
 				continue;
 			}
+			String[] ii = ((String) code[i]).split(" ");
+			item = ii[0];
 ///// operators. ///////////////////////////////////////////////////////////////
 			Operator op = new Operator(item);
 			int level = op.getLevel();
@@ -257,33 +257,41 @@ public class TestExpr extends STester {
 				SourceItem x = stack.peek();
 				x.setString(x.getString()
 					+ (item.startsWith("INC") ? "++" : "--"));
-			} else if ("BOOLEAN".equals(item) || "INT".equals(item)
-				|| "FLOAT".equals(item) || "STRING".equals(item)) { // type decl
-				char ch = item.charAt(0);
-				if (i + 2 < code.length && "TONAME".equals(code[i + 1])) {
-					String name = code[i += 2].toString();
-					int type = ch == 'B' ? TYPE_BOOLEAN
-						: ch == 'I' ? TYPE_INT
-						: ch == 'F' ? TYPE_FLOAT : TYPE_STRING;
-					SourceItem val = new SourceItem("");
-					val.setType(type);
-					variables.put(name, val);
-					val = new SourceItem(new String[] {
-						"", "boolean", "int", "float", "String"}[type]
-						+ " " + name);
-					val.setType(type);
-					stack.push(val);
+			} else if (item.endsWith("type")) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
+				if ("boolean".equals(s) || "int".equals(s)
+					|| "float".equals(s) || "String".equals(s)) {
+					// type decl
+					char ch = item.charAt(0);
+					if (i + 1 < code.length 
+						&& ((String)code[i + 1]).startsWith("name ")) {
+						ii = code[++i].toString().split(" ");
+						String name = source.substring(Integer.parseInt(ii[1]),
+							Integer.parseInt(ii[2]));
+						int type = ch == 'B' ? TYPE_BOOLEAN
+							: ch == 'I' ? TYPE_INT
+							: ch == 'F' ? TYPE_FLOAT : TYPE_STRING;
+						SourceItem val = new SourceItem("");
+						val.setType(type);
+						variables.put(name, val);
+						val = new SourceItem(new String[] {
+							"", "boolean", "int", "float", "String"}[type]
+							+ " " + name);
+						val.setType(type);
+						stack.push(val);
+					}
 				}
-			} else if ("PLIST".equals(item)) { // parameter list
+			} else if ("paramList".equals(item)) { // parameter list
 				stackOfStack.push(stack);
 				stackOfStack.push(new Stack<SourceItem>());
 				stack = new Stack<SourceItem>();
-			} else if ("PARAM".equals(item)) { // parameter
+			} else if ("param".equals(item)) { // parameter
 				stackOfStack.peek().push(stack.pop());
-			} else if ("PROC".equals(item) || "FUN".equals(item)) {
+			} else if ("method".equals(item) || "function".equals(item)) {
 				Stack<SourceItem> params = stackOfStack.pop();
 				stack = stackOfStack.pop();
-				StringBuilder s = // set "name("
+				StringBuilder s = // "name("
 					new StringBuilder(stack.pop().getString() + '(');
 				int len = params.size();
 				if (len > 0) {
@@ -294,28 +302,37 @@ public class TestExpr extends STester {
 				}
 				s.append(')');
 				stack.push(new SourceItem(s.toString()));
-			} else if ("TOINT".equals(item)) {
-				SourceItem x = new SourceItem(code[++i].toString());
+			} else if ("intConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));				
+				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_INT);
 				stack.push(x);
-			} else if ("TOFLOAT".equals(item)) {
-				SourceItem x = new SourceItem(code[++i].toString());
+			} else if ("fltConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));				
+				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_FLOAT);
 				stack.push(x);
-			} else if ("TOBOOLEAN".equals(item)) {
-				SourceItem x = new SourceItem(code[++i].toString());
+			} else if ("boolConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));				
+				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_BOOLEAN);
 				stack.push(x);
-			} else if ("TOSTRING".equals(item)) {
-				String s = code[++i].toString();
+			} else if ("strConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
 				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_STRING);
 				stack.push(x);
-			} else if ("TONAME".equals(item)) {
-				stack.push(new SourceItem(code[++i].toString()));
+			} else if ("name".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
+				stack.push(new SourceItem(s));
 ////////////////////////////////////////////////////////////////////////////////
-			} else if ("IDREF".equals(item)) { // reference to variable name
-			} else if ("CLEARSTCK".equals(item)) {  // clear stack
+			} else if ("idRef".equals(item)) { // reference to variable name
+			} else if ("command".equals(item)) {  // clear stack
 				result.append(stack.pop().getString()).append(";\n");
 				if (!stack.empty()) {
 					result.append(Report.error("",
@@ -331,18 +348,24 @@ public class TestExpr extends STester {
 			result.append(stack.pop());
 			stack.clear();
 		}
+//System.out.println(result);
 		return result.toString().trim();
 	}
 
 	/** Execute generated code.
-	 * @param code the generated code.
+	 * @param source source text.
+	 * @param code generated code.
 	 * @param variables variable table.
 	 * @return result of execution (or null).
 	 */
-	private static Object execute(final Object[] code,
+	private static Object execute(final String source,
+		final Object[] code,
 		final Map<String, Object> variables) {
 		final Stack<Object> stack = new Stack<Object>();
 		variables.clear();
+//		if (code == null) {
+//			return "Code is null!";
+//		}
 		try { // prepare printing
 			_byteArray = new ByteArrayOutputStream();
 			_out = new PrintStream(_byteArray, true, "UTF-8");
@@ -352,30 +375,46 @@ public class TestExpr extends STester {
 			if (item.startsWith("info: ")) { // parsed position
 				continue;
 			}
-			if ("TOINT".equals(item)) {
-				stack.push(new Long(code[++i].toString()));
-			} else if ("TOFLOAT".equals(item)) {
-				stack.push(new Double(code[++i].toString()));
-			} else if ("TOBOOLEAN".equals(item)) {
-				stack.push("true".equals(code[++i].toString()));
-			} else if ("TOSTRING".equals(item)) {
-				String s = code[++i].toString();
+			String[] ii = ((String) code[i]).split(" ");
+			item = ii[0];
+			if ("intConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));				
+				stack.push(new Long(s));
+			} else if ("fltConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));				
+				stack.push(new Double(s));
+			} else if ("boolConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
+				stack.push("true".equals(s));
+			} else if ("strConst".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
 				String delimiter = String.valueOf(s.charAt(0));
 				s = s.substring(1, s.length() - 1);
 				s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
 				stack.push(s);
-			} else if ("TONAME".equals(item)) {
-				stack.push(code[++i].toString());
-			} else if ("BOOLEAN".equals(item) || "INT".equals(item)
-				|| "FLOAT".equals(item) || "STRING".equals(item)) { // type decl
-				char ch = item.charAt(0);
-				if (i + 2 < code.length && "TONAME".equals(code[i + 1])) {
-					String name = code[i += 2].toString();
-					int type = ch == 'B' ? TYPE_BOOLEAN
-						: ch == 'I' ? TYPE_INT
-						: ch == 'F' ? TYPE_FLOAT : TYPE_STRING;
-					variables.put(name, null);
-					stack.push(name);
+			} else if ("name".equals(item)) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
+				stack.push(s);
+			} else if (item.endsWith("type")) {
+				String s = source.substring(Integer.parseInt(ii[1]),
+					Integer.parseInt(ii[2]));
+				if ("boolean".equals(s) || "int".equals(s)
+					|| "float".equals(s) || "String".equals(s)) {
+					// type decl
+					char ch = item.charAt(0);
+					if (i + 2 < code.length && "name".equals(code[i + 1])) {
+						String name = code[i += 2].toString();
+						int type = ch == 'B' ? TYPE_BOOLEAN
+							: ch == 'I' ? TYPE_INT
+							: ch == 'F' ? TYPE_FLOAT : TYPE_STRING;
+						variables.put(name, null);
+						stack.push(name);
+					}
 				}
 			} else if ("MINUS".equals(item)) {// unary operator minus
 				Number x = (Number) stack.pop();
@@ -388,7 +427,7 @@ public class TestExpr extends STester {
 				stack.push(!((Boolean) stack.pop()));
 			} else if ("NEG".equals(item)) { // unary operator bitwise ~
 				stack.push( ~ (Long) stack.pop());
-			} else if ("IDREF".equals(item)) { // reference to object name
+			} else if ("idRef".equals(item)) { // reference to object name
 				stack.push(variables.get(stack.pop().toString()));
 			} else if ("AND".equals(item) || "OR".equals(item)
 				|| "XOR".equals(item)) { // operators & | ~
@@ -607,16 +646,16 @@ public class TestExpr extends STester {
 						: "ASSRSH".equals(item) ? yy >> xx : yy >>> xx;
 				}
 				variables.put(name, y);
-			} else if ("PLIST".equals(item)) { // parameter list
+			} else if ("paramList".equals(item)) { // parameter list
 				stack.push(new PredefinedMethod(stack.pop().toString()));
-			} else if ("PARAM".equals(item)) { // parameter
+			} else if ("param".equals(item)) { // parameter
 				Object x = stack.pop();
 				PredefinedMethod y =  (PredefinedMethod) stack.peek();
 				y.add(x);
-			} else if ("PROC".equals(item) || "FUN".equals(item)) {
+			} else if ("method".equals(item) || "function".equals(item)) {
 				// procedure or function
 				PredefinedMethod x = (PredefinedMethod) stack.pop();
-				if ("FUN".equals(item)) {
+				if ("function".equals(item)) {
 					Object y = x.invoke();
 					if (y != null) {
 						stack.push(y);
@@ -627,7 +666,7 @@ public class TestExpr extends STester {
 				} else {
 					x.invoke();
 				}
-			} else if ("CLEARSTCK".equals(item)) {  // clear stack
+			} else if ("command".equals(item)) {  // clear stack
 				stack.clear();
 			} else {
 				return Report.error("", "Unknown code: " + item);
@@ -768,6 +807,16 @@ public class TestExpr extends STester {
 		return sb.toString();
 	}
 
+	private static void printObjects(final BNFGrammar g) {
+		Object[] oo = g.getParsedObjects();
+		if (oo == null) {
+			System.out.println("null");
+		} else {
+			for (Object o : oo) {
+				System.out.println(o);
+			}
+		}
+	}
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
@@ -778,6 +827,36 @@ public class TestExpr extends STester {
 		g.setUserObject(this);
 		try {
 			String s;
+			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos, true, "UTF-8");
+			g.trace(ps);
+			prog(g, "int i?");
+			ps.close();
+			BufferedReader in = new BufferedReader(
+				new StringReader(new String(baos.toByteArray(), "UTF-8")));
+			String line;
+			int max = 0;
+			int min = 999999;
+			String ruleName = null;
+			while((line = in.readLine()) != null) {
+				if (line.endsWith("; true")) {
+					String[] xx = line.split(";");
+					String ss = xx[0];
+					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
+					int i = Integer.parseInt(xx[0]);
+					int j = Integer.parseInt(xx[1]);
+					if (j >= max) {
+						max = j;
+						ruleName = ss;
+						if (i < min) {
+							min = i;
+						}
+					}
+				}
+			}
+			in.close();
+			System.out.println(ruleName + " (" + min + "," + max + ")");
+			g.trace(null);
 			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
 			assertEq("", expr("abcdef", g, "'abc' + 'def'"));
 			assertEq("", expr("25abc", g, "((3+2)*5)+'abc'"));
@@ -798,8 +877,9 @@ public class TestExpr extends STester {
 			assertEq("", expr("1.0", g, "min(2.0,1)"));
 			assertEq("", expr(String.valueOf(Math.sin(3.14)), g, "sin(3.14)"));
 			assertEq("", expr(String.valueOf(Math.cos(3.14)), g, "cos(3.14)"));
+			assertEq("", prog(g, "float i;"));
 			assertEq("", prog(g, "empty();"));
-			assertEq("", prog(g, "empty();"));
+			
 			assertEq("", prog(g, "j = empty() + 'abc';"));
 			assertEq("abc", getVar("j"));
 
@@ -950,6 +1030,7 @@ public class TestExpr extends STester {
 			assertEq("", prog(g, "i = 3; j = i % 2;"));
 			assertEq(3, getVar("i"));
 			assertEq(1, getVar("j"));
+			
 			assertEq("", prog(g, "i = 1; i += 2;"));
 			assertEq(3, getVar("i"));
 
@@ -979,26 +1060,28 @@ public class TestExpr extends STester {
 			assertEq("", prog(g, "i=sin(3.14);"));
 			assertEq(Math.sin(3.14), getVar("i"));
 
+			assertEq("", prog(g, "sin(3.14); i=1;"));
+			assertEq(1, getVar("i"));
+
 			assertEq("", prog(g, "i=1*2+-(1+1);"));
 			assertEq(0, getVar("i"));
 
-			assertEq("", prog(g, "sin(3.14);"));
-
 			assertEq("", prog(g, "float i; i = 0.0; i += sin(3.14);"));
+//			printObjects(g);
 			assertEq(Math.sin(3.14), getVar("i"));
 
 			prog(g, "print(min(3,14)); println('x');");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("3x\n", s);
-			_byteArray.reset();
+			
 			prog(g, "printf('Ahoj'); println();");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("Ahoj\n", s);
-			_byteArray.reset();
+			
 			prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("3, 4, 5\nx\n", s);
-			_byteArray.reset();
+			
 		} catch (Exception ex) {fail(ex);}
 	}
 

@@ -3,57 +3,13 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class VozidloDN implements cz.syntea.xdef.component.XComponent{
-  public String getCisloDokladuPojisteni() {return _CisloDokladuPojisteni;}
-  public String getCisloZK() {return _CisloZK;}
-  public cz.syntea.xdef.sys.SDatetime getDatumUhradyHP() {return _DatumUhradyHP;}
-  public java.util.Date dateOfDatumUhradyHP() {
-    return cz.syntea.xdef.sys.SDatetime.getDate(_DatumUhradyHP);
-  }
-  public java.sql.Timestamp timestampOfDatumUhradyHP() {
-    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_DatumUhradyHP);
-  }
-  public java.util.Calendar calendarOfDatumUhradyHP() {
-    return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumUhradyHP);
-  }
-  public String getDruhVozidla() {return _DruhVozidla;}
-  public String getKodPojistitele() {return _KodPojistitele;}
-  public String getMPZ() {return _MPZ;}
-  public cz.syntea.xdef.sys.SDatetime getMesicSTKDo() {return _MesicSTKDo;}
-  public java.util.Date dateOfMesicSTKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getDate(_MesicSTKDo);
-  }
-  public java.sql.Timestamp timestampOfMesicSTKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_MesicSTKDo);
-  }
-  public java.util.Calendar calendarOfMesicSTKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getCalendar(_MesicSTKDo);
-  }
-  public String getMistoUhradyHP() {return _MistoUhradyHP;}
-  public String getNazevPojistitele() {return _NazevPojistitele;}
   public String getOznSegmentu() {return _OznSegmentu;}
-  public String getPlatnostSTK() {return _PlatnostSTK;}
-  public cz.syntea.xdef.sys.SDatetime getPlatnostZKDo() {return _PlatnostZKDo;}
-  public java.util.Date dateOfPlatnostZKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getDate(_PlatnostZKDo);
-  }
-  public java.sql.Timestamp timestampOfPlatnostZKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_PlatnostZKDo);
-  }
-  public java.util.Calendar calendarOfPlatnostZKDo() {
-    return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostZKDo);
-  }
-  public cz.syntea.xdef.sys.SDatetime getPlatnostZKOd() {return _PlatnostZKOd;}
-  public java.util.Date dateOfPlatnostZKOd() {
-    return cz.syntea.xdef.sys.SDatetime.getDate(_PlatnostZKOd);
-  }
-  public java.sql.Timestamp timestampOfPlatnostZKOd() {
-    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_PlatnostZKOd);
-  }
-  public java.util.Calendar calendarOfPlatnostZKOd() {
-    return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostZKOd);
-  }
-  public String getPojisteniText() {return _PojisteniText;}
-  public Long getPojistneHPKc() {return _PojistneHPKc;}
+  public String getDruhVozidla() {return _DruhVozidla;}
+  public String getSPZ() {return _SPZ;}
+  public String getMPZ() {return _MPZ;}
+  public String getVIN() {return _VIN;}
+  public String getZnacka() {return _Znacka;}
+  public String getTypVozidla() {return _TypVozidla;}
   public cz.syntea.xdef.sys.SDatetime getRokVyroby() {return _RokVyroby;}
   public java.util.Date dateOfRokVyroby() {
     return cz.syntea.xdef.sys.SDatetime.getDate(_RokVyroby);
@@ -64,67 +20,67 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
   public java.util.Calendar calendarOfRokVyroby() {
     return cz.syntea.xdef.sys.SDatetime.getCalendar(_RokVyroby);
   }
-  public String getSPZ() {return _SPZ;}
-  public String getStavBrzd() {return _StavBrzd;}
+  public String getPlatnostSTK() {return _PlatnostSTK;}
+  public cz.syntea.xdef.sys.SDatetime getMesicSTKDo() {return _MesicSTKDo;}
+  public java.util.Date dateOfMesicSTKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getDate(_MesicSTKDo);
+  }
+  public java.sql.Timestamp timestampOfMesicSTKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_MesicSTKDo);
+  }
+  public java.util.Calendar calendarOfMesicSTKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getCalendar(_MesicSTKDo);
+  }
   public String getTypBrzd() {return _TypBrzd;}
-  public String getTypVozidla() {return _TypVozidla;}
-  public String getVIN() {return _VIN;}
+  public String getStavBrzd() {return _StavBrzd;}
+  public String getKodPojistitele() {return _KodPojistitele;}
+  public String getNazevPojistitele() {return _NazevPojistitele;}
+  public String getCisloDokladuPojisteni() {return _CisloDokladuPojisteni;}
+  public String getPojisteniText() {return _PojisteniText;}
+  public String getCisloZK() {return _CisloZK;}
   public String getVydalZK() {return _VydalZK;}
-  public String getZnacka() {return _Znacka;}
+  public cz.syntea.xdef.sys.SDatetime getPlatnostZKOd() {return _PlatnostZKOd;}
+  public java.util.Date dateOfPlatnostZKOd() {
+    return cz.syntea.xdef.sys.SDatetime.getDate(_PlatnostZKOd);
+  }
+  public java.sql.Timestamp timestampOfPlatnostZKOd() {
+    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_PlatnostZKOd);
+  }
+  public java.util.Calendar calendarOfPlatnostZKOd() {
+    return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostZKOd);
+  }
+  public cz.syntea.xdef.sys.SDatetime getPlatnostZKDo() {return _PlatnostZKDo;}
+  public java.util.Date dateOfPlatnostZKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getDate(_PlatnostZKDo);
+  }
+  public java.sql.Timestamp timestampOfPlatnostZKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_PlatnostZKDo);
+  }
+  public java.util.Calendar calendarOfPlatnostZKDo() {
+    return cz.syntea.xdef.sys.SDatetime.getCalendar(_PlatnostZKDo);
+  }
+  public Integer getPojistneHPKc() {return _PojistneHPKc;}
+  public cz.syntea.xdef.sys.SDatetime getDatumUhradyHP() {return _DatumUhradyHP;}
+  public java.util.Date dateOfDatumUhradyHP() {
+    return cz.syntea.xdef.sys.SDatetime.getDate(_DatumUhradyHP);
+  }
+  public java.sql.Timestamp timestampOfDatumUhradyHP() {
+    return cz.syntea.xdef.sys.SDatetime.getTimestamp(_DatumUhradyHP);
+  }
+  public java.util.Calendar calendarOfDatumUhradyHP() {
+    return cz.syntea.xdef.sys.SDatetime.getCalendar(_DatumUhradyHP);
+  }
+  public String getMistoUhradyHP() {return _MistoUhradyHP;}
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VozidloDN.Drzitel getDrzitel() {return _Drzitel;}
-  public void setCisloDokladuPojisteni(String x) {_CisloDokladuPojisteni = x;}
-  public void setCisloZK(String x) {_CisloZK = x;}
-  public void setDatumUhradyHP(cz.syntea.xdef.sys.SDatetime x) {_DatumUhradyHP = x;}
-  public void setDatumUhradyHP(java.util.Date x) {
-    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setDatumUhradyHP(java.sql.Timestamp x) {
-    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setDatumUhradyHP(java.util.Calendar x) {
-    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setDruhVozidla(String x) {_DruhVozidla = x;}
-  public void setKodPojistitele(String x) {_KodPojistitele = x;}
-  public void setMPZ(String x) {_MPZ = x;}
-  public void setMesicSTKDo(cz.syntea.xdef.sys.SDatetime x) {_MesicSTKDo = x;}
-  public void setMesicSTKDo(java.util.Date x) {
-    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setMesicSTKDo(java.sql.Timestamp x) {
-    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setMesicSTKDo(java.util.Calendar x) {
-    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setMistoUhradyHP(String x) {_MistoUhradyHP = x;}
-  public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
   public void setOznSegmentu(String x) {_OznSegmentu = x;}
-  public void setPlatnostSTK(String x) {_PlatnostSTK = x;}
-  public void setPlatnostZKDo(cz.syntea.xdef.sys.SDatetime x) {_PlatnostZKDo = x;}
-  public void setPlatnostZKDo(java.util.Date x) {
-    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostZKDo(java.sql.Timestamp x) {
-    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostZKDo(java.util.Calendar x) {
-    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostZKOd(cz.syntea.xdef.sys.SDatetime x) {_PlatnostZKOd = x;}
-  public void setPlatnostZKOd(java.util.Date x) {
-    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostZKOd(java.sql.Timestamp x) {
-    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostZKOd(java.util.Calendar x) {
-    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
-  }
-  public void setPojisteniText(String x) {_PojisteniText = x;}
-  public void setPojistneHPKc(Long x) {_PojistneHPKc = x;}
+  public void setDruhVozidla(String x) {_DruhVozidla = x;}
+  public void setSPZ(String x) {_SPZ = x;}
+  public void setMPZ(String x) {_MPZ = x;}
+  public void setVIN(String x) {_VIN = x;}
+  public void setZnacka(String x) {_Znacka = x;}
+  public void setTypVozidla(String x) {_TypVozidla = x;}
   public void setRokVyroby(cz.syntea.xdef.sys.SDatetime x) {_RokVyroby = x;}
   public void setRokVyroby(java.util.Date x) {
     _RokVyroby=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
@@ -135,13 +91,57 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
   public void setRokVyroby(java.util.Calendar x) {
     _RokVyroby=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
   }
-  public void setSPZ(String x) {_SPZ = x;}
-  public void setStavBrzd(String x) {_StavBrzd = x;}
+  public void setPlatnostSTK(String x) {_PlatnostSTK = x;}
+  public void setMesicSTKDo(cz.syntea.xdef.sys.SDatetime x) {_MesicSTKDo = x;}
+  public void setMesicSTKDo(java.util.Date x) {
+    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setMesicSTKDo(java.sql.Timestamp x) {
+    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setMesicSTKDo(java.util.Calendar x) {
+    _MesicSTKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
   public void setTypBrzd(String x) {_TypBrzd = x;}
-  public void setTypVozidla(String x) {_TypVozidla = x;}
-  public void setVIN(String x) {_VIN = x;}
+  public void setStavBrzd(String x) {_StavBrzd = x;}
+  public void setKodPojistitele(String x) {_KodPojistitele = x;}
+  public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
+  public void setCisloDokladuPojisteni(String x) {_CisloDokladuPojisteni = x;}
+  public void setPojisteniText(String x) {_PojisteniText = x;}
+  public void setCisloZK(String x) {_CisloZK = x;}
   public void setVydalZK(String x) {_VydalZK = x;}
-  public void setZnacka(String x) {_Znacka = x;}
+  public void setPlatnostZKOd(cz.syntea.xdef.sys.SDatetime x) {_PlatnostZKOd = x;}
+  public void setPlatnostZKOd(java.util.Date x) {
+    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPlatnostZKOd(java.sql.Timestamp x) {
+    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPlatnostZKOd(java.util.Calendar x) {
+    _PlatnostZKOd=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPlatnostZKDo(cz.syntea.xdef.sys.SDatetime x) {_PlatnostZKDo = x;}
+  public void setPlatnostZKDo(java.util.Date x) {
+    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPlatnostZKDo(java.sql.Timestamp x) {
+    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPlatnostZKDo(java.util.Calendar x) {
+    _PlatnostZKDo=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setPojistneHPKc(Integer x) {_PojistneHPKc = x;}
+  public void setDatumUhradyHP(cz.syntea.xdef.sys.SDatetime x) {_DatumUhradyHP = x;}
+  public void setDatumUhradyHP(java.util.Date x) {
+    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setDatumUhradyHP(java.sql.Timestamp x) {
+    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setDatumUhradyHP(java.util.Calendar x) {
+    _DatumUhradyHP=x==null ? null : new cz.syntea.xdef.sys.SDatetime(x);
+  }
+  public void setMistoUhradyHP(String x) {_MistoUhradyHP = x;}
   public void setSkoda(Z3 x) {
     if (x != null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VozidloDN/$mixed/Skoda");
@@ -157,29 +157,29 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
       x.xInit(this, "Drzitel", null, "SouborD1A#VozidloDN/$mixed/Drzitel");
     _Drzitel = x;
   }
-  public String xposOfCisloDokladuPojisteni(){return XD_XPos + "/@CisloDokladuPojisteni";}
-  public String xposOfCisloZK(){return XD_XPos + "/@CisloZK";}
-  public String xposOfDatumUhradyHP(){return XD_XPos + "/@DatumUhradyHP";}
-  public String xposOfDruhVozidla(){return XD_XPos + "/@DruhVozidla";}
-  public String xposOfKodPojistitele(){return XD_XPos + "/@KodPojistitele";}
-  public String xposOfMPZ(){return XD_XPos + "/@MPZ";}
-  public String xposOfMesicSTKDo(){return XD_XPos + "/@MesicSTKDo";}
-  public String xposOfMistoUhradyHP(){return XD_XPos + "/@MistoUhradyHP";}
-  public String xposOfNazevPojistitele(){return XD_XPos + "/@NazevPojistitele";}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfPlatnostSTK(){return XD_XPos + "/@PlatnostSTK";}
-  public String xposOfPlatnostZKDo(){return XD_XPos + "/@PlatnostZKDo";}
-  public String xposOfPlatnostZKOd(){return XD_XPos + "/@PlatnostZKOd";}
-  public String xposOfPojisteniText(){return XD_XPos + "/@PojisteniText";}
-  public String xposOfPojistneHPKc(){return XD_XPos + "/@PojistneHPKc";}
-  public String xposOfRokVyroby(){return XD_XPos + "/@RokVyroby";}
+  public String xposOfDruhVozidla(){return XD_XPos + "/@DruhVozidla";}
   public String xposOfSPZ(){return XD_XPos + "/@SPZ";}
-  public String xposOfStavBrzd(){return XD_XPos + "/@StavBrzd";}
-  public String xposOfTypBrzd(){return XD_XPos + "/@TypBrzd";}
-  public String xposOfTypVozidla(){return XD_XPos + "/@TypVozidla";}
+  public String xposOfMPZ(){return XD_XPos + "/@MPZ";}
   public String xposOfVIN(){return XD_XPos + "/@VIN";}
-  public String xposOfVydalZK(){return XD_XPos + "/@VydalZK";}
   public String xposOfZnacka(){return XD_XPos + "/@Znacka";}
+  public String xposOfTypVozidla(){return XD_XPos + "/@TypVozidla";}
+  public String xposOfRokVyroby(){return XD_XPos + "/@RokVyroby";}
+  public String xposOfPlatnostSTK(){return XD_XPos + "/@PlatnostSTK";}
+  public String xposOfMesicSTKDo(){return XD_XPos + "/@MesicSTKDo";}
+  public String xposOfTypBrzd(){return XD_XPos + "/@TypBrzd";}
+  public String xposOfStavBrzd(){return XD_XPos + "/@StavBrzd";}
+  public String xposOfKodPojistitele(){return XD_XPos + "/@KodPojistitele";}
+  public String xposOfNazevPojistitele(){return XD_XPos + "/@NazevPojistitele";}
+  public String xposOfCisloDokladuPojisteni(){return XD_XPos + "/@CisloDokladuPojisteni";}
+  public String xposOfPojisteniText(){return XD_XPos + "/@PojisteniText";}
+  public String xposOfCisloZK(){return XD_XPos + "/@CisloZK";}
+  public String xposOfVydalZK(){return XD_XPos + "/@VydalZK";}
+  public String xposOfPlatnostZKOd(){return XD_XPos + "/@PlatnostZKOd";}
+  public String xposOfPlatnostZKDo(){return XD_XPos + "/@PlatnostZKDo";}
+  public String xposOfPojistneHPKc(){return XD_XPos + "/@PojistneHPKc";}
+  public String xposOfDatumUhradyHP(){return XD_XPos + "/@DatumUhradyHP";}
+  public String xposOfMistoUhradyHP(){return XD_XPos + "/@MistoUhradyHP";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -224,52 +224,52 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getCisloDokladuPojisteni() != null)
-      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
-    if (getCisloZK() != null)
-      el.setAttribute("CisloZK", getCisloZK());
-    if (getDatumUhradyHP() != null)
-      el.setAttribute("DatumUhradyHP", getDatumUhradyHP().formatDate("d.M.yyyy"));
-    if (getDruhVozidla() != null)
-      el.setAttribute("DruhVozidla", getDruhVozidla());
-    if (getKodPojistitele() != null)
-      el.setAttribute("KodPojistitele", getKodPojistitele());
-    if (getMPZ() != null)
-      el.setAttribute("MPZ", getMPZ());
-    if (getMesicSTKDo() != null)
-      el.setAttribute("MesicSTKDo", getMesicSTKDo().formatDate("M/yyyy"));
-    if (getMistoUhradyHP() != null)
-      el.setAttribute("MistoUhradyHP", getMistoUhradyHP());
-    if (getNazevPojistitele() != null)
-      el.setAttribute("NazevPojistitele", getNazevPojistitele());
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
-    if (getPlatnostSTK() != null)
-      el.setAttribute("PlatnostSTK", getPlatnostSTK());
-    if (getPlatnostZKDo() != null)
-      el.setAttribute("PlatnostZKDo", getPlatnostZKDo().formatDate("d.M.yyyy"));
-    if (getPlatnostZKOd() != null)
-      el.setAttribute("PlatnostZKOd", getPlatnostZKOd().formatDate("d.M.yyyy"));
-    if (getPojisteniText() != null)
-      el.setAttribute("PojisteniText", getPojisteniText());
-    if (getPojistneHPKc() != null)
-      el.setAttribute("PojistneHPKc", String.valueOf(getPojistneHPKc()));
-    if (getRokVyroby() != null)
-      el.setAttribute("RokVyroby", getRokVyroby().formatDate("yyyy"));
+    if (getDruhVozidla() != null)
+      el.setAttribute("DruhVozidla", getDruhVozidla());
     if (getSPZ() != null)
       el.setAttribute("SPZ", getSPZ());
-    if (getStavBrzd() != null)
-      el.setAttribute("StavBrzd", getStavBrzd());
-    if (getTypBrzd() != null)
-      el.setAttribute("TypBrzd", getTypBrzd());
-    if (getTypVozidla() != null)
-      el.setAttribute("TypVozidla", getTypVozidla());
+    if (getMPZ() != null)
+      el.setAttribute("MPZ", getMPZ());
     if (getVIN() != null)
       el.setAttribute("VIN", getVIN());
-    if (getVydalZK() != null)
-      el.setAttribute("VydalZK", getVydalZK());
     if (getZnacka() != null)
       el.setAttribute("Znacka", getZnacka());
+    if (getTypVozidla() != null)
+      el.setAttribute("TypVozidla", getTypVozidla());
+    if (getRokVyroby() != null)
+      el.setAttribute("RokVyroby", getRokVyroby().formatDate("yyyy"));
+    if (getPlatnostSTK() != null)
+      el.setAttribute("PlatnostSTK", getPlatnostSTK());
+    if (getMesicSTKDo() != null)
+      el.setAttribute("MesicSTKDo", getMesicSTKDo().formatDate("M/yyyy"));
+    if (getTypBrzd() != null)
+      el.setAttribute("TypBrzd", getTypBrzd());
+    if (getStavBrzd() != null)
+      el.setAttribute("StavBrzd", getStavBrzd());
+    if (getKodPojistitele() != null)
+      el.setAttribute("KodPojistitele", getKodPojistitele());
+    if (getNazevPojistitele() != null)
+      el.setAttribute("NazevPojistitele", getNazevPojistitele());
+    if (getCisloDokladuPojisteni() != null)
+      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
+    if (getPojisteniText() != null)
+      el.setAttribute("PojisteniText", getPojisteniText());
+    if (getCisloZK() != null)
+      el.setAttribute("CisloZK", getCisloZK());
+    if (getVydalZK() != null)
+      el.setAttribute("VydalZK", getVydalZK());
+    if (getPlatnostZKOd() != null)
+      el.setAttribute("PlatnostZKOd", getPlatnostZKOd().formatDate("d.M.yyyy"));
+    if (getPlatnostZKDo() != null)
+      el.setAttribute("PlatnostZKDo", getPlatnostZKDo().formatDate("d.M.yyyy"));
+    if (getPojistneHPKc() != null)
+      el.setAttribute("PojistneHPKc", String.valueOf(getPojistneHPKc()));
+    if (getDatumUhradyHP() != null)
+      el.setAttribute("DatumUhradyHP", getDatumUhradyHP().formatDate("d.M.yyyy"));
+    if (getMistoUhradyHP() != null)
+      el.setAttribute("MistoUhradyHP", getMistoUhradyHP());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -298,35 +298,35 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"939DFD736F5213FD74465A6F9006AD71".equals(
+    if (!"C46901B3CA22A36AA0CC722F7FDD7E20".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _CisloDokladuPojisteni;
-  private String _CisloZK;
-  private cz.syntea.xdef.sys.SDatetime _DatumUhradyHP;
-  private String _DruhVozidla;
-  private String _KodPojistitele;
-  private String _MPZ;
-  private cz.syntea.xdef.sys.SDatetime _MesicSTKDo;
-  private String _MistoUhradyHP;
-  private String _NazevPojistitele;
   private String _OznSegmentu;
-  private String _PlatnostSTK;
-  private cz.syntea.xdef.sys.SDatetime _PlatnostZKDo;
-  private cz.syntea.xdef.sys.SDatetime _PlatnostZKOd;
-  private String _PojisteniText;
-  private Long _PojistneHPKc;
-  private cz.syntea.xdef.sys.SDatetime _RokVyroby;
+  private String _DruhVozidla;
   private String _SPZ;
-  private String _StavBrzd;
-  private String _TypBrzd;
-  private String _TypVozidla;
+  private String _MPZ;
   private String _VIN;
-  private String _VydalZK;
   private String _Znacka;
+  private String _TypVozidla;
+  private cz.syntea.xdef.sys.SDatetime _RokVyroby;
+  private String _PlatnostSTK;
+  private cz.syntea.xdef.sys.SDatetime _MesicSTKDo;
+  private String _TypBrzd;
+  private String _StavBrzd;
+  private String _KodPojistitele;
+  private String _NazevPojistitele;
+  private String _CisloDokladuPojisteni;
+  private String _PojisteniText;
+  private String _CisloZK;
+  private String _VydalZK;
+  private cz.syntea.xdef.sys.SDatetime _PlatnostZKOd;
+  private cz.syntea.xdef.sys.SDatetime _PlatnostZKDo;
+  private Integer _PojistneHPKc;
+  private cz.syntea.xdef.sys.SDatetime _DatumUhradyHP;
+  private String _MistoUhradyHP;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private VozidloDN.Drzitel _Drzitel;
@@ -374,7 +374,7 @@ public class VozidloDN implements cz.syntea.xdef.component.XComponent{
     else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText"))
       setPojisteniText(parseResult.getParsedValue().stringValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc"))
-      setPojistneHPKc(parseResult.getParsedValue().longValue());
+      setPojistneHPKc(parseResult.getParsedValue().intValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby"))
       setRokVyroby(parseResult.getParsedValue().datetimeValue());
     else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ"))
@@ -489,7 +489,7 @@ public static class Drzitel implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0FCCB2E8708248A360CA91FE9422D1B7".equals(
+    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);

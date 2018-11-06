@@ -1,16 +1,3 @@
-/*
- * File: TestReport.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
-
 package test.common.sys;
 
 import cz.syntea.xdef.sys.SObjectReader;
@@ -25,7 +12,6 @@ import java.util.Arrays;
 import test.utils.STester;
 
 /** TestReport
- *
  * @author  Vaclav Trojan
  */
 public class TestObjectWriter extends STester {

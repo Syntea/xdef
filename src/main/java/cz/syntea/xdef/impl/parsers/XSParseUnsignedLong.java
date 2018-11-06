@@ -1,22 +1,11 @@
-/*
- * Copyright 2009 Syntea software group a.s. All rights reserved.
- *
- * File: XSParseUnsignedLong.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- *
- */
 package cz.syntea.xdef.impl.parsers;
 
 import cz.syntea.xdef.msg.XDEF;
 import cz.syntea.xdef.XDParseResult;
+import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.proc.XXNode;
 import cz.syntea.xdef.impl.code.DefDecimal;
+import cz.syntea.xdef.sys.SRuntimeException;
 import java.math.BigDecimal;
 
 /** Parser of Schema "unsignedLong" type.
@@ -24,11 +13,13 @@ import java.math.BigDecimal;
  */
 public class XSParseUnsignedLong extends XSParseInteger {
 	private static final String ROOTBASENAME = "unsignedLong";
+	private static final BigDecimal MAX_VALUE =
+		new BigDecimal("18446744073709551615");
 	private int _totalDigits;
 
 	public XSParseUnsignedLong() {super();}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
@@ -52,8 +43,7 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		BigDecimal val;
 		try {
 			val = new BigDecimal(plus ? s.substring(1) : s);
-			if (val.signum() < 0 ||
-				val.compareTo(new BigDecimal("18446744073709551615")) > 0) {
+			if (val.signum() < 0 ||	val.compareTo(MAX_VALUE) > 0) {
 				throw new Exception();
 			}
 		} catch (Exception ex) {
@@ -76,4 +66,14 @@ public class XSParseUnsignedLong extends XSParseInteger {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
+
+	@Override
+	public void checkValue(final XDValue x) {
+		BigDecimal val = x.decimalValue();
+		if (val.signum() < 0 ||
+			val.compareTo(new BigDecimal("18446744073709551615")) > 0) {
+			//Incorrect range specification of &{0}
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+		}
+	}
 }

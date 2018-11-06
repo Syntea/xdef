@@ -1,15 +1,3 @@
-/*
- * File: TestParse.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -74,16 +62,23 @@ public final class TestParse extends XDTester {
 		StringWriter strw;
 		String tempDir = getTempDir();
 		_myX = 1;
-		boolean chkSyntax = getChkSyntax();
+		try {
+			XDFactory.getXDBuilder(null).compileXD(); // no sources
+			fail("Exception not thrown");
+		} catch (Exception ex) {
+			if (ex.getMessage()==null || !ex.getMessage().contains("XDEF903")) {
+				fail(ex);
+			}
+		}
 		try {//no source
 			XDFactory.compileXD(null, (Object[]) new File[0]);
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
 		try {//no source
 			XDFactory.compileXD(null, "myxxx.xdef");
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
@@ -105,6 +100,164 @@ public final class TestParse extends XDTester {
 "  </a>\n"+
 "/*comment*/\n"+
 "</xd:def>");
+			xdef = // check the sequence of processing of attributes
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='onTrue out(@a)' b='onTrue out(@b)' c='onTrue out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='finally out(@a)' b='finally out(@b)' c='finally out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='init out(@a)' b='init out(@b)' c='init out(@c)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef = // check the sequence of processed attribute
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A a='onStartElement out(@a)'\n" +
+"     b='onStartElement out(@b)'\n" +
+"     c='onStartElement out(@c)' />\n" +
+"</xd:def>";
+//TODO
+//			xd = compile(xdef);
+			xd = XDFactory.compileXD(getProperties(),xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
+			xdef = // check the sequence of processing of attributes
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A b='onTrue out(@b)' c='onTrue out(@c)' a='onTrue out(@a)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A b='finally out(@b)' c='finally out(@c)' a='finally out(@a)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xdef = // check the sequence of processed attribute
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"  <A b='onStartElement out(@b)'\n" +
+"     c='onStartElement out(@c)'\n" +
+"     a='onStartElement out(@a)' />\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A a='a' b='b' c='c' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A b='b' c='c' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xml = "<A c='c' b='b' a='a' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("bca", strw.toString());
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' xmlns:a='a.a' >\n" +
+"  <A a:b='finally out(@a:a)'\n" +
+"     a:a='finally out(@a:b)'\n" +
+"     a:c='finally out(@a:c)'/>\n"+
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<A xmlns:x='a.a' x:c='c' x:a='a' x:b='b' />";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("abc", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef = // check in the onIllegalRoot
@@ -579,32 +732,27 @@ public final class TestParse extends XDTester {
 			parse(xp, "", "<d p='hi'/>", reporter);
 			assertTrue(reporter.errorWarnings());
 			xdef =
-"<x:def x:root = 'TimeMsg' xmlns:x = '" + XDEFNS + "'>\n"+
-"   <TimeMsg Ver         = \"fixed '1.2'\"\n"+
-"            Class       = \"required\"\n"+
-"            Element     = \"required\"\n"+
-"            Time        = \"required\"\n"+
-"            Queue       = \"required\"\n"+
-"            Recurr      = \"optional\"\n"+
-"            x:script    = \"finally {myCheck('abc',\n"+
-"                           parseBase64('abc'.getBytes().toBase64()));}\" >\n"+
-"     <x:any x:attr   = \"optional\"\n"+
-"            x:script = \"occurs 0..;  options moreElements, moreText\"/>\n"+
-"   </TimeMsg>\n"+
+"<x:def xmlns:x='" + XDEFNS + "' root='a'>\n"+
+"<a Ver     =\"fixed '1.2'\"\n"+
+"   Class   =''\n"+
+"   Recurr  ='?'\n"+
+"   x:script=\"finally {myCheck('abc',\n"+
+"      parseBase64('abc'.getBytes().toBase64()));}\" >\n"+
+"   <x:any x:attr='?' x:script='*; options moreElements, moreText'/>\n"+
+"</a>\n"+
 "</x:def>";
 			xp = compile(xdef, getClass());
 			xml =
-"<TimeMsg Ver='1.2' Class='class' Element='element' Time='time'\n"+
-"  Queue='queue' Recurr='recurr'>"+
-"<any xx=\"nn\">"+
-"<any1 xx1=\"nn\">"+
-"<any3/>"+
-"any2 text..."+
+"<a Ver='1.2' Class='Cls' Recurr='recurr'>"+
+"<any xx='nn'>"+
+"<any1 xx1='nn'>"+
+"<inner_any/>"+
+"any1 text..."+
 "</any1>"+
 "<any2/>"+
 "any text..."+
 "</any>"+
-"</TimeMsg>";
+"</a>";
 			assertEq(xml, parse(xp,"", xml, reporter, this));
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -732,7 +880,7 @@ public final class TestParse extends XDTester {
 "  </xd:choice>\n"+
 "</root>\n"+
 "</xd:def>");
-			xml = " <root><a/></root>";
+			xml = "<root><a/></root>";
 			el = parse(xp, "", xml, reporter);
 			if (reporter.getErrorCount() != 1 ||
 				!"XDEF527".equals(reporter.getReport().getMsgID())) {
@@ -864,6 +1012,7 @@ public final class TestParse extends XDTester {
 			xml = "<a><b x='1'/><b x='1'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
+			// test match
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "  <a>\n" +
@@ -1036,8 +1185,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			el = parse(xp, "abc", xml, reporter, strw, null, null);
 			assertEq("<root any='12000'/>\n"+
-				"testparams a, 1, 1999-05-01T20:43:09+01:00\n"+
-				"myString xxx\n123\n",
+				"myString xxx\n123\ntestparams a, 1, 1999-05-01T20:43:09+01:00\n",
 				strw.toString());
 			assertNoErrors(reporter);
 			assertEq("2.0", el.getAttribute("Verze"));
@@ -1145,9 +1293,8 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "abc", xml, null, strw, null, null);
 			assertEq("<root EwqRef='1'/>\n<root any='12000'/>\n"+
-				"testparams a, 1, EwqRef\n"+
-				"testparams a, 1, any\n"+
-				"myString xxx\n123\n",
+				"myString xxx\n123\ntestparams a, 1, EwqRef\n" +
+				"testparams a, 1, any\n",
 				strw.toString());
 			BufferedReader br = new BufferedReader(new FileReader(tempFile));
 			sb = new StringBuffer();
@@ -1247,7 +1394,7 @@ public final class TestParse extends XDTester {
 				+ "'&{xpath}{ v }&{#XDEF500}") > 0 &&
 				s.endsWith("XDEF502Element '&{child}' není definován jako "
 				+ "'root'{ v }&{#XDEF500}"), s);
-			//macro
+			//test macro
 			xdef =
 "<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
 "<xd:def name='messages' root='messages' script='options ${mac#opt}'>\n"+
@@ -1278,7 +1425,7 @@ public final class TestParse extends XDTester {
 "X01 VÝSKYT NEPOVOLENÉHO ELEMENTU '&{CHILD}'&{XPATH}{ V }&{#X00}\n"+
 "X02 ELEMENT '&{CHILD}' NENÍ DEFINOVÁN JAKO 'ROOT'{ V }&{#X00}\n",
 				strw.toString());
-			//macro
+			//test macro
 			xdef =
 "<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
 "<xd:def name='macTest' root='macTest'>\n"+
@@ -1813,7 +1960,7 @@ public final class TestParse extends XDTester {
 "   </U>\n"+
 "</xd:def>").getBytes())}, new String[]{dataDir + "U.xdef"});
 			xb.compileXD();
-			fail("Error not recognized");
+			fail("Error not reported");
 		} catch(Exception ex) {
 			s = ex.getMessage();
 			if (s == null) {
@@ -2063,7 +2210,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, el);
 			xml = "<a><b a='123456'/></a>";
 			el = parse(xp, "",  xml, reporter);
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			assertEq(xml, el);
 			xml = "<a><b a=''/><b a=''/></a>"; //empty attribute is not checked!
 			el = parse(xp, "",  xml, reporter);
@@ -2071,14 +2218,14 @@ public final class TestParse extends XDTester {
 			assertEq(xml, el);
 			xml = "<a><b a='12'/></a>";
 			assertEq(xml, parse(xp, "",  xml, reporter));
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			xml = "<a><b a='123'/></a>";
 			el = parse(xp, "",  xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			xml = "<a><b a='123'/><b a='123'/></a>";
 			el = parse(xp, "",  xml, reporter);
-			assertTrue(reporter.errors(), "Error not recognized");
+			assertTrue(reporter.errors(), "Error not reported");
 			assertEq(xml, el);
 
 			xdef = // test reference to xd:any
@@ -2501,7 +2648,7 @@ public final class TestParse extends XDTester {
 " <a paramCode='xx()' />\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xml = " <a paramCode='xx'/>";
+			xml = "<a paramCode='xx'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}

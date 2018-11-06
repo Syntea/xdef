@@ -1,15 +1,3 @@
-/*
- * File: XdDoc.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.util.conv.xd.doc;
 
 import cz.syntea.xdef.sys.SReporter;
@@ -72,11 +60,12 @@ public abstract class XdDoc {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
 		if (xdef.length() == 0) {
-			throw new SRuntimeException(XDEF.XDEF706);//X-definition is empty string
+			//X-definition is empty string
+			throw new SRuntimeException(XDEF.XDEF706);
 		}
 		try {
-			Element collection = XDGenCollection.genCollection(new String[]{xdef},
-				true, true, false);
+			Element collection = XDGenCollection.genCollection(
+				new String[]{xdef}, true, true, false);
 			Document xdefDocument = collection.getOwnerDocument();
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
@@ -101,8 +90,8 @@ public abstract class XdDoc {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
 		try {
-			Element collection =
-				XDGenCollection.genCollection(new URL[]{xdef}, true, true, false);
+			Element collection = XDGenCollection.genCollection(
+				new URL[]{xdef}, true, true, false);
 			Document xdefDocument = collection.getOwnerDocument();
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
@@ -127,8 +116,8 @@ public abstract class XdDoc {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
 		try {
-			Element collection =
-				XDGenCollection.genCollection(new File[]{xdef}, true, true, false);
+			Element collection = XDGenCollection.genCollection(
+				new File[]{xdef}, true, true, false);
 			Document xdefDocument = collection.getOwnerDocument();
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {

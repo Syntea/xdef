@@ -1,22 +1,9 @@
-/*
- * Copyright 2007 Syntea software group a.s.
- *
- * File: NullReportWriter.java
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.SYS;
 import cz.syntea.xdef.xml.KXmlUtils;
 
 /** Implementation of ReportWriter to null stream.
- *
  * @author  Vaclav Trojan
  */
 public class NullReportWriter implements ReportWriter {
@@ -35,7 +22,6 @@ public class NullReportWriter implements ReportWriter {
 	private Report _lastErrorReport;
 	/** Switch whether errors, fatal errors or light errors throws exception.*/
 	public boolean _throwException;
-	/** Switch if report messages will be included to a thrown message. */
 
 	/** Creates a new instance of NulReportWriter
 	 * @param throwException if true the <tt>putReport</tt> method will

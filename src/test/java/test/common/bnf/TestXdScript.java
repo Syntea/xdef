@@ -1,21 +1,13 @@
-/*
- * File: TestBNF.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.common.bnf;
 
 import cz.syntea.xdef.sys.BNFGrammar;
 import cz.syntea.xdef.sys.StringParser;
 import cz.syntea.xdef.xml.KXmlUtils;
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.net.URL;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
 
@@ -42,7 +34,7 @@ public class TestXdScript extends XDTester {
 	}
 
 	private static void printCode(final BNFGrammar g) {
-		Object[] o = g.getAndClearParsedObjects();
+		Object[] o = g.getParsedObjects();
 		if (o == null) {
 			System.out.println("ParsedObjects = null");
 			return;
@@ -61,10 +53,9 @@ public class TestXdScript extends XDTester {
 		String s;
 		BNFGrammar g;
 		try {
-			File f = new File(getDataDir()).getParentFile().getParentFile()
-				.getParentFile().getParentFile();
-			f = new File(f, "test/xdef/data/test/TestXdefOfXdef.xdef");
-			Element e = KXmlUtils.parseXml(f).getDocumentElement();
+			URL u =	ClassLoader.getSystemResource(
+				"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef");
+			Element e = KXmlUtils.parseXml(u).getDocumentElement();
 			e = KXmlUtils.firstElementChildNS(
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);
@@ -142,7 +133,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "DeclarationScript", s));			
 			s = "uniqueSet u{x:flt;y:?flt;}\n";
 			assertEq(s, parse(g, "DeclarationScript", s));			
-			s = "uniqueSet u {a:string();b:int();var Parser x;var Parser y;}";
+			s = "uniqueSet u {a:string();b:int(); var Parser x, Parser y}";
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s =
 "type XY enum('XX','YY'); type flt float();\n" +
@@ -158,6 +149,36 @@ public class TestXdScript extends XDTester {
 			s = "external Element source";
 			assertEq(s, parse(g, "DeclarationScript", s));
 
+			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos, true, "UTF-8");
+			g.trace(ps);
+			parse(g, "DeclarationScript", "external Element x ?");
+			ps.close();
+			BufferedReader in = new BufferedReader(
+				new StringReader(new String(baos.toByteArray(), "UTF-8")));
+			String line;
+			int max = 0;
+			int min = 999999;
+			String ruleName = null;
+			while((line = in.readLine()) != null) {
+				if (line.endsWith("; true")) {
+					String[] xx = line.split(";");
+					String ss = xx[0];
+					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
+					int i = Integer.parseInt(xx[0]);
+					int j = Integer.parseInt(xx[1]);
+					if (j >= max) {
+						max = j;
+						ruleName = ss;
+						if (i < min) {
+							min = i;
+						}
+					}
+				}
+			}
+			in.close();
+//			System.out.println(ruleName + " (" + min + "," + max + ")");
+			g.trace(null);
 //			printCode(g);
 
 			s = "{ i ++ ; ++ k ; j += 2;}";
@@ -273,12 +294,12 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XCComponent", s));
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "MethodListItem", s));
+			s = "";
 //			printCode(g);
-			if (XDTester.getFulltestMode()) {
-				s = g.toString();
-				assertEq(s, parse(g, "BNFGrammar", s));
-				assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
-			}
+			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
+			s = g.toString();
+			assertEq(s, parse(g, "BNFGrammar", s));
+//			System.out.println(s);			
 		} catch (Exception ex) {
 			fail(ex);
 		}

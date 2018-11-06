@@ -1,17 +1,3 @@
-/*
- * Copyright 2016 Syntea software group a.s. All rights reserved.
- *
- * File: JSONUtil.java, created 2016-03-22.
- * Package: cz.syntea.xdef.sys
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package cz.syntea.xdef.sys;
 
 import cz.syntea.xdef.msg.JSON;

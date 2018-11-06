@@ -1,15 +1,3 @@
-/*
- * File: CodeUniqueset.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package cz.syntea.xdef.impl.code;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -17,6 +5,7 @@ import cz.syntea.xdef.sys.ArrayReporter;
 import cz.syntea.xdef.sys.Report;
 import cz.syntea.xdef.XDValue;
 import cz.syntea.xdef.XDValueAbstract;
+import cz.syntea.xdef.XDValueID;
 import cz.syntea.xdef.impl.compile.CompileBase;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +28,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	/** Set of markers. */
 	private final Set<Object> _markers = new HashSet<Object>();
 	/** Array with parse items. */
-	private final CodeUniquesetParseItem[] _parseItems;
+	private final ParseItem[] _parseItems;
 	/** Name of this uniqueSet. */
 	private final String _name;
 	/** Index of actual key item of multiple key. */
@@ -50,10 +39,13 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * will be created.
 	 * @param name name of unique set object.
 	 */
-	public CodeUniqueset(final CodeUniquesetParseItem[] parseItems,
+	public CodeUniqueset(final ParseItem[] parseItems,
 		final String name) {
 		_map = new HashMap<Object, UniquesetItem>();
-		_parseItems = parseItems;
+		_parseItems = new ParseItem[parseItems.length];
+		for(int i = 0; i < parseItems.length; i++) {
+			_parseItems[i] = (ParseItem) parseItems[i].cloneItem();
+		}
 		_name = name;
 	}
 
@@ -115,13 +107,13 @@ public final class CodeUniqueset extends XDValueAbstract {
 	/** Get array of keys.
 	 * @return array of keys.
 	 */
-	public final CodeUniquesetParseItem[] getParsedItems() {return _parseItems;}
+	public final ParseItem[] getParsedItems() {return _parseItems;}
 
 	/** Get address of parsing method for key item with given index.
 	 * @param i index of key in multiple key array.
 	 * @return parse item of key in multiple key array.
 	 */
-	public final CodeUniquesetParseItem getParseKeyItem(final int i) {
+	public final ParseItem getParseKeyItem(final int i) {
 		return _parseItems[i];
 	}
 
@@ -146,9 +138,6 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return true if reporter was empty.
 	 */
 	public final boolean checkAndClear(final ReportWriter reporter) {
-		if (_map == null) {
-			return true;
-		}
 		boolean result = true;
 		for (UniquesetItem a: _map.values()) {
 			if (reporter != null) {
@@ -161,6 +150,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 			a._references.clear();
 		}
 		_map.clear();
+		for (int i = 0; i < _parseItems.length; i++) {
+			((ParseItem) _parseItems[i])._itemValue = null;
+		}
 		return result;
 	}
 
@@ -248,6 +240,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public final XDValueType getItemType() {return  XDValueType.OBJECT;}
 
 	@Override
+	public XDValue cloneItem() {
+		return new CodeUniqueset(_parseItems, _name);
+	}
+
+	@Override
 	public String toString() {
 		String result = "UNIQUESET: " + _name;
 		UniquesetItem uso = _map.get(getKeyValue());
@@ -255,7 +252,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		if (_parseItems.length > 1) {
 			result += "keys:";
 			for (int i = 0; i < _parseItems.length; i++) {
-				CodeUniquesetParseItem keyItem = _parseItems[i];
+				ParseItem keyItem = _parseItems[i];
 				result += (i > 0 ? "," : "") + keyItem.toString();
 			}
 		} else {
@@ -285,7 +282,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		/** Construct  CodeUniquesetKey object.
 		 * @param keys array with unique set parse items.
 		 */
-		private CodeUniquesetKey(final CodeUniquesetParseItem[] keys) {
+		private CodeUniquesetKey(final ParseItem[] keys) {
 			XDValue[] items = new XDValue[keys.length];
 			for (int i = 0; i < items.length; i++) {
 				XDValue x = keys[i].getParsedObject();
@@ -407,5 +404,143 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private XDValue getValue(final String name) {
 			return _assignedValues ==null ? null : _assignedValues.get(name);
 		}
+	}
+
+	/** Implements uniqueSet parse item. */
+	public static final class ParseItem extends XDValueAbstract {
+
+		/** Address of check method. */
+		private final int _parseMethodAddr;
+		/** Type of parsed object. */
+		private final short _itemType;
+		/** True if this key is optional, false if it is required. */
+		private final boolean _optional;
+		/** Key name. */
+		private final String _name;
+		/** Resulting value of parsing. */
+		private XDValue _itemValue;
+		/** Index of key item. */
+		private final int _itemIndex;
+
+		/** Creates a new null instance of CodeUniquesetParseItem. */
+		ParseItem() {
+			_itemType = XDValueID.XD_OBJECT;
+			_parseMethodAddr = -1;
+			_name = null;
+			_optional = false;
+			_itemIndex = -1;
+		}
+
+		/** Creates a new instance of CodeUniquesetParseItem (must be public
+		 * because of XDReader).
+		 * @param name name of parse item or null;
+		 * @param chkAddr address of code of the method.
+		 * @param itemIndex index of this key part
+		 * @param parsedType type of id.
+		 * @param optional if true this key value is required or return
+		 * false if it is optional
+		 */
+		public ParseItem(final String name,
+			final int chkAddr,
+			final int itemIndex,
+			final short parsedType,
+			final boolean optional) {
+			_parseMethodAddr = chkAddr;
+			_itemType = parsedType;
+			_optional = optional;
+			_name = name;
+			_itemIndex = itemIndex;
+			// _itemValue = null; // java mekes it
+		}
+
+		////////////////////////////////////////////////////////////////////////
+		// Implementation of XDUniquesetParseItem interface
+		////////////////////////////////////////////////////////////////////////
+
+		/** Get address of parsing method.
+		 * @return the address of code.
+		 */
+		public final int getParseMethodAddr() {return _parseMethodAddr;}
+
+		/** Get parsed type.
+		 * @return the type id.
+		 */
+		public final short getParsedType() {return _itemType;}
+
+		/** Get parsed type.
+		 * @return the type id.
+		 */
+		public final String getParseName() {return _name;}
+
+		/** Set parsed object (used in XDCodeProcessor).
+		 * @param value the value of parsed object.
+		 */
+		public final void setParsedObject(XDValue value) {_itemValue = value;}
+
+		/** Check if this item is optional or required.
+		 * @return true if this item is required.
+		 */
+		public final boolean isOptional() {return _optional;}
+
+		////////////////////////////////////////////////////////////////////////
+		// Implementation of XDValue interface
+		////////////////////////////////////////////////////////////////////////
+
+		@Override
+		public final short getItemId() {return CompileBase.PARSEITEM_VALUE;}
+
+		@Override
+		/** Get ID of the type of value
+		 * @return enumeration item of this type.
+		 */
+		public XDValueType getItemType() {return XDValueType.OBJECT;}
+
+		@Override
+		public String toString() {
+			return "[" + _itemIndex + "]"
+				+ (!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue;
+		}
+
+		@Override
+		public final String stringValue() {return _itemValue.stringValue();}
+
+		@Override
+		public final XDValue cloneItem() {
+			return new ParseItem(_name,
+				_parseMethodAddr, _itemIndex, _itemType, _optional);
+		}
+
+		@Override
+		public final boolean isNull() {return _parseMethodAddr == -1;}
+
+		@Override
+		public int hashCode() {return _name.hashCode();}
+
+		@Override
+		public boolean equals(final Object arg) {
+			 return arg instanceof XDValue
+				 ? equals((XDValue) arg) : false;
+		}
+
+		@Override
+		public final boolean equals(final XDValue arg) {
+			return arg.getItemId() != CompileBase.PARSEITEM_VALUE ?
+				false : _name.equals(((ParseItem)arg)._name);
+		}
+
+		////////////////////////////////////////////////////////////////////////
+		// Methods used in CodeUniquset.
+		////////////////////////////////////////////////////////////////////////
+
+		/** Get index of actual uniqueSet parse item.
+		 * @return parse item index.
+		 */
+		final int getItemIndex() {return _itemIndex;}
+
+		/** Get object of actual uniqueSet parse item.
+		 * @return value of parsed object or <tt>null</tt>.
+		 */
+		final XDValue getParsedObject() {return _itemValue;}
+
 	}
 }

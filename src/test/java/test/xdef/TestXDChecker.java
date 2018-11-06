@@ -1,17 +1,3 @@
-/*
- * Copyright 2015 Syntea software group a.s. All rights reserved.
- *
- * File: Aaa.java, created 2015-03-16.
- * Package: mytest.xdef
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited license contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENCE.TXT.
- *
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -21,7 +7,7 @@ import cz.syntea.xdef.XDParseResult;
 import cz.syntea.xdef.proc.XXData;
 import java.util.Arrays;
 
-/**
+/** Test XD value types.
  * @author Vaclav Trojan
  */
 public class TestXDChecker extends XDTester {
@@ -81,7 +67,7 @@ public class TestXDChecker extends XDTester {
 		x = chk.checkType("int()", "10");
 		assertTrue(10 == x.getParsedValue().intValue());
 		x = chk.checkType("int()", null);
-		assertTrue(x.errors(), "Error not recognized");
+		assertTrue(x.errors(), "Error not reported");
 		x = chk.checkType("? int()", null);
 		assertFalse(x.errors());
 

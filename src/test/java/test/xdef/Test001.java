@@ -1,15 +1,3 @@
-/*
- * File: Test001.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.xdef;
 
 import test.utils.XDTester;
@@ -19,6 +7,7 @@ import cz.syntea.xdef.xml.KXmlUtils;
 import cz.syntea.xdef.XDDocument;
 import cz.syntea.xdef.XDFactory;
 import cz.syntea.xdef.XDPool;
+import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 
@@ -67,7 +56,7 @@ public final class Test001  extends XDTester {
 				"false\nxxxx\nxxxx\ntext: orig1\ntext: \n"));
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='Book'>\n"+
-"<Book isbn = \"int(0, 9999999999)\"\n"+
+"<Book isbn = \"int(0, 999999999)\"\n"+
 "      published  = \"? gYear()\"\n " +
 "      xd:script = \"finally outln('isbn: ' + @isbn + '; ' + getElementText());\"> \n"+
 "  string();\n"+
@@ -1136,6 +1125,44 @@ public final class Test001  extends XDTester {
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
+		try {
+			// check compiling if source items have assignment of sourceId
+			Object[] p1 = new Object[] {
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' name='A'><A/></xd:def>",
+"<xd:def xmlns:xd='" + XDEFNS + "' root='B' name='B'><B/></xd:def>",
+			new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + XDEFNS + "' root='C' name='C'><C/></xd:def>")
+				.getBytes("UTF-8"))
+			};
+			String[] p2 = new String[] {"AA", "AB", "AC"};
+			xp = XDFactory.compileXD(null, p1, p2);
+			xml = "<A/>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<B/>";
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<C/>";
+			assertEq(xml, parse(xp, "C", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			// check compiling if source items have assignment of sourceId
+			Object[] p1 = new Object[] {
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' name='A'><A a='x'/></xd:def>",
+"<xd:def xmlns:xd='" + XDEFNS + "' root='B' name='B'><B a='x'/></xd:def>",
+			new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + XDEFNS + "' root='C' name='C'><C a='x'/></xd:def>")
+				.getBytes("UTF-8"))
+			};
+			String[] p2 = new String[] {"AA", "AB", "AC"};
+			XDFactory.compileXD(null, p1, p2);
+		} catch (Exception ex) {
+			String s = ex.getMessage();
+			if (!s.contains("AA") || !s.contains("AB") || !s.contains("AC")) {
+				fail(ex); // not present "AA" or "AB" or "AC"
+			}
+		}
 
 		resetTester();
 	}

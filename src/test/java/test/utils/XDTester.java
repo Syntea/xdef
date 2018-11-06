@@ -1,15 +1,3 @@
-/*
- * File: XDTester.java
- *
- * Copyright 2007 Syntea software group a.s.
- *
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- *
- * Tento soubor muze byt pouzit, kopirovan, modifikovan a siren pouze v souladu
- * s licencnimi podminkami uvedenymi v prilozenem souboru LICENSE.TXT.
- */
 package test.utils;
 
 import cz.syntea.xdef.msg.XDEF;
@@ -46,8 +34,9 @@ import org.w3c.dom.Element;
 import cz.syntea.xdef.sys.ReportReader;
 import cz.syntea.xdef.sys.ReportWriter;
 import cz.syntea.xdef.util.gencollection.XDGenCollection;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.xml.namespace.QName;
-import test.utils.STester;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -236,10 +225,12 @@ public abstract class XDTester extends STester {
 		if (!_genObj) {return xp;}
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			xp.writeXDPool(baos);
-			baos.close();
-			return XDFactory.readXDPool(
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp);
+			oos.close();
+			ObjectInputStream ois = new ObjectInputStream(
 				new ByteArrayInputStream(baos.toByteArray()));
+			return (XDPool) ois.readObject();
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
@@ -540,12 +531,18 @@ public abstract class XDTester extends STester {
 
 	private void genXdOfXd() {
 		if (_xdOfxd == null) {
-			String dir = "test/test/xdef/data/test/";
-			File f = new File(dir);
-			if (!f.exists() || !f.isDirectory()) {
-				dir = "src/test/java/test/xdef/data/test/";
+			try {
+				URL urls[] = new URL[] {ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+					ClassLoader.getSystemResource(
+						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
+				};
+				_xdOfxd = XDFactory.compileXD(null, urls);
+			} catch (Exception ex) {
+				new RuntimeException("XdefOfXdef is not available", ex);
 			}
-			_xdOfxd = XDFactory.compileXD(null,dir+"TestXdefOfXdef*.xdef");
 		}
 	}
 

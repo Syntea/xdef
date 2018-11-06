@@ -3,18 +3,18 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y11Op implements cz.syntea.xdef.component.XComponent{
-  public String getM() {return _M;}
   public String getN() {return _N;}
+  public String getM() {return _M;}
   public java.util.List<Y11Op.Co> listOfCo() {return _Co;}
   public Y11Op.Y getY() {return _Y;}
-  public void setM(String x) {_M = x;}
   public void setN(String x) {_N = x;}
+  public void setM(String x) {_M = x;}
   public void addCo(Y11Op.Co x) {
     if (x!=null) _Co.add(x);
   }
   public void setY(Y11Op.Y x) {_Y = x;}
-  public String xposOfM(){return XD_XPos + "/@M";}
   public String xposOfN(){return XD_XPos + "/@N";}
+  public String xposOfM(){return XD_XPos + "/@M";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -59,10 +59,10 @@ public class Y11Op implements cz.syntea.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement() == null) doc.appendChild(el);
     }
-    if (getM() != null)
-      el.setAttribute("M", getM());
     if (getN() != null)
       el.setAttribute("N", getN());
+    if (getM() != null)
+      el.setAttribute("M", getM());
     for (cz.syntea.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -90,14 +90,14 @@ public class Y11Op implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"46FB5A488E5A21FD200B5B9488A14029".equals(
+    if (!"32BA2E4FDE52028B6EE01D5D4AE74E60".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
     }
   }
-  private String _M;
   private String _N;
+  private String _M;
   private final java.util.List<Y11Op.Co> _Co = new java.util.ArrayList<Y11Op.Co>();
   private Y11Op.Y _Y;
   private cz.syntea.xdef.component.XComponent XD_Parent;
@@ -220,7 +220,7 @@ public static class Co implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7CE1844B344A51086C60B5EC032E7B09".equals(
+    if (!"5769EBAC59223A71255140A00C153BAA".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
@@ -413,7 +413,7 @@ public static class Y implements cz.syntea.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"091FDF11B55BD1A2CF47EF61161F8F8F".equals(
+    if (!"15C2BB7E38B4FF377FEEFE7EC7065103".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new cz.syntea.xdef.sys.SRuntimeException(
         cz.syntea.xdef.msg.XDEF.XDEF374);
