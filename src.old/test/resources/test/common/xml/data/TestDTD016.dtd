@@ -1,4 +1,0 @@
-<!ENTITY % e "IGNORE" >
-<!ELEMENT root EMPTY >
-<![%e;[<!ATTLIST root a1 CDATA "a1" >
-]]>

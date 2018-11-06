@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<ns1:SkpGetNextDavka  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-   xmlns:ns1='http://www.syntea.cz/dn/Export/1.0'
-   xsi:schemaLocation='http://www.syntea.cz/dn/Export/1.0 ta.xsd'
-   PosledniDavka   = "123"/>

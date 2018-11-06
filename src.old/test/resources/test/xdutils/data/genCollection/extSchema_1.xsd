@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://example.com/FirmHierarchy"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:include schemaLocation="ext_2.xsd"/>
-  <xs:element name="Position" type="ext_2_Position_cType"/>
-  <xs:element name="Salary" type="ext_2_Salary_cType"/>
-</xs:schema>
- 

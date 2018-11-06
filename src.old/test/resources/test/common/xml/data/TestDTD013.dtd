@@ -1,5 +1,0 @@
-<!ENTITY % ee SYSTEM "TestDTD010.txt" >
-<!ENTITY e "%ee;" >
-<!ELEMENT root EMPTY >
-<!ATTLIST root a1 CDATA #REQUIRED 
-               a2 CDATA "x&e;y" >

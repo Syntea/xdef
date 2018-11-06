@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-    <a	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="t021.xsd"
-	a="abc">
-	<aa ac = "abccba"
-	    b="bbb"
-	    c="5"/>
-    </a>

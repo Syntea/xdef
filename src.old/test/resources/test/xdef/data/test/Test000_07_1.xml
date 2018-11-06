@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<Envelope encodingStyle="http://pis.ckp.cz/soap/encoding">
-	<Header>
-		<Request/>
-	</Header>
-	<Body>
-		<Ping1/>
-	</Body>
-</Envelope>

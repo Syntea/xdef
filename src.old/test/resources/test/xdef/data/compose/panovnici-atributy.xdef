@@ -1,8 +1,0 @@
-<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='panovnici-ceskeho-statu'>
-<panovnici-ceskeho-statu>
-  <panovnik xd:script="occurs *; create from('//panovnici/panovnik')" 
-            jmeno="required; create from('jmeno/text()')"
-            od="required; create from('panoval/od/text()')"
-            do="optional int(); create from('panoval/do/text()')" />
-</panovnici-ceskeho-statu>
-</xd:def>

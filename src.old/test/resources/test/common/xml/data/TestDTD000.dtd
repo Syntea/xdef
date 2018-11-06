@@ -1,6 +1,0 @@
-<!ENTITY e "&#x27;" >
-<!-- this is intentionaly missing: --
-<!ELEMENT root EMPTY>
-<!-- -->
-<!ATTLIST root att CDATA #REQUIRED 
-               att1 CDATA ">x&e;y&e;z>" >

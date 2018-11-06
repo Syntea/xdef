@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="Windows-1250"?>
-<!DOCTYPE slide SYSTEM "TestDTD003.dtd">
-<slide type ="all" >
-  <image src="image/intro-pic.gif" alt="Intro Pic" />
-  <title> This is title </title>
-  <item> This is item ] ]><item/></item><item/>
-</slide>

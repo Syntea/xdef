@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    name="t020"
-    root="a">
-  <a aa ="required list(%item=int(0,1000))"/>
-</xd:def>

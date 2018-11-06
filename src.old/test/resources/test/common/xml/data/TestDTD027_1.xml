@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<!DOCTYPE zamestnanec SYSTEM "TestDTD027_1.dtd" [
-  <!ENTITY P "bbb">
-  <!ENTITY P "ccc">
-]>
-<root>&P;</root>

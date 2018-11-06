@@ -1,1 +1,0 @@
-<portTypes xmlns:xd="http://www.syntea.cz/xdef/2.0" xd:script="occurs ?" />

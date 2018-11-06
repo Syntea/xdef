@@ -1,4 +1,0 @@
-<!ENTITY % ca "a1 CDATA 'x1'
-  a2 ( aa | a2 | bb ) 'x2'" >
-<!ELEMENT root EMPTY >
-<!ATTLIST root%ca;a3 CDATA "x3" >

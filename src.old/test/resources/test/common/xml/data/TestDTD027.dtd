@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="windows-1250"?>
-  <!ELEMENT zamestnanec (jmeno, prijmeni, plat, narozen)>
-  <!ATTLIST zamestnanec
-            id          CDATA   #REQUIRED>
-  <!ELEMENT jmeno       (#PCDATA)>
-  <!ELEMENT prijmeni    (#PCDATA)>
-  <!ELEMENT plat        (#PCDATA)>
-  <!ELEMENT narozen     (#PCDATA)>

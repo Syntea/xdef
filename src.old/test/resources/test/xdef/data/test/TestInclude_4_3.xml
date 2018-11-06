@@ -1,5 +1,0 @@
-<b>
-<xi:include xmlns:xi = 'http://www.w3.org/2001/XInclude'
-            parse='xml'
-            href = 'TestInclude_4_4.xml' />
-</b>

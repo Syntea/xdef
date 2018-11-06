@@ -1,9 +1,0 @@
-<!ENTITY % a "e" >
-<!ENTITY % b "'&d;a&d;'" >
-<!--ENTITY d "&#x27;" -->
-<!-- ENTITY e "&d;a&d;" -->
-<!ENTITY %a; %b; >
-<!ENTITY d "&#x27;" >
-<!ELEMENT root (#PCDATA)* >
-<!ATTLIST root att CDATA #REQUIRED 
-               att1 CDATA "x&e;y&e;z" >

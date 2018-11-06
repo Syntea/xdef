@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "TestDTD001.dtd">
-<root version = "v1">
-&t1;
-&t2;
-</root>
-<!-- result is error: Attribute "version" must be declared... --> 

@@ -1,3 +1,0 @@
-<!ENTITY e SYSTEM "TestDTD010.txt" >
-<!ELEMENT root EMPTY >
-<!ATTLIST root a CDATA #REQUIRED>

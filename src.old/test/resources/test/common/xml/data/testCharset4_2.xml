@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ISO_8859-2:1987"?>
-<!--
-    Document   : testCharset4.xml
-    Created on : 14. 9. 2005, 15:33
-    Author     : Trojan
-    Description:
-        Purpose of the document is test of charset Latin2.
--->
-<root text = "ěščřžýáíéóďťňúůĚŠČŘŽÝÁÍÉÓĎŤŇÚŮ" >ěščřžýáíéóďťňúůĚŠČŘŽÝÁÍÉÓĎŤŇÚŮ</root>

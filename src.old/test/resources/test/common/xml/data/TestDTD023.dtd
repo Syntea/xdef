@@ -1,5 +1,0 @@
-<!-- Test of processing instructions -->
-<?ProcInstr MyProcInstr ?>
-<!-- comment -->
-<!ELEMENT root (a)* >
-<!ELEMENT a EMPTY >

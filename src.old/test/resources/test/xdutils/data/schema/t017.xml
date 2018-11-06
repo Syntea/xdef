@@ -1,9 +1,0 @@
-<pb:elem xsi:schemaLocation = "http://b t017.xsd"
-	 xmlns:xsi ="http://www.w3.org/2001/XMLSchema-instance"
-	 xmlns:pb  = "http://b">
-    <pa:a1 xmlns:pa  = "http://a"
-	   attr1 ="aaa"/>
-    <pa:a2 xmlns:pa  = "http://a"/>
-    <a3	 attr1 ="aaab"
-	 pb:attr2 ="15"/>
-</pb:elem>

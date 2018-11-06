@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "TestDTD022.dtd">
-<root>
-  <a def="A1" />
-  <a def=" A2 " />
-  <a ref=" A1" />
-  <a refs=" A1 A2" />
-</root>

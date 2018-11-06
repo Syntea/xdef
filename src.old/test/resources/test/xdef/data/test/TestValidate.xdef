@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="Windows-1250"?>
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-        xd:include="TestValidate1.xdef"
-        xd:name="Test"
-        xd:root="Test1#root"/>

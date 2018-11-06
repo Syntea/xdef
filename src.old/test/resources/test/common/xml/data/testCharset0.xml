@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<!--
-	Document   : testCharset0.xml
-	Created on : 14. 9. 2005, 18:23
-	Author     : Trojan
-	Description:
-		Purpose of the document is test of charset us-ascii.
--->
-<root text = "@#$%^*()_+=-~`{}[]!'?|\abyzABYZ09" >@#$%^*()_+=-~`{}[]!'?|\abyzABYZ09</root>

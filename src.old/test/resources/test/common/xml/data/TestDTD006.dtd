@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!ENTITY writer "Donald Duck.">
-<!ENTITY copyright "Copyright W3Schools.">
-<!ELEMENT author (#PCDATA)* >
