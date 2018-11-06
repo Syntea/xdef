@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xd:def xd:name="t011_1"
+    xmlns:tns="http://www.w3ctest.com"
+    xd:root="tns:to | tns:heading">
+    <tns:to>
+      required string()
+    </tns:to>
+    <tns:heading>
+      required string()
+    </tns:heading>
+  </xd:def>
+  <xd:def xd:name="t011"
+    xmlns:tns="http://www.w3schools.com"
+    xd:root="tns:note"
+    xmlns:a="http://www.w3ctest.com">
+    <tns:note att1="required string()"
+      att2="required string()">
+      <xd:sequence xd:script="occurs 1">
+        <a:to xd:script="occurs 1; ref t011_1#a:to"/>
+        <tns:from xd:script="occurs 1">
+          required string()
+        </tns:from>
+        <a:heading xd:script="occurs 1; ref t011_1#a:heading"/>
+        <tns:body xd:script="occurs 1">
+          required string()
+        </tns:body>
+      </xd:sequence>
+    </tns:note>
+  </xd:def>
+</xd:collection>

@@ -1,14 +1,14 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.model.XMData;
+import org.xdef.XDConstants;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.model.XMData;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.XDContainer;
+import org.xdef.XDContainer;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan

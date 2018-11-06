@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pro jazyk popisující Xdefinice je použit jmenný prostor
+  "http://www.syntea.cz/xdef/2.0-meta"
+-->
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0-meta"
+  xmlns:META     = "http://www.syntea.cz/xdef/2.0"
+  root           = "META:def | META:collection"
+  name           = "XdefOfXdef"
+  META:metaNamespace  = "http://www.syntea.cz/xdef/2.0-meta" >
+
+  <xd:declaration>
+
+   final String DefaultUri = "http://www.syntea.cz/xdef/2.0";
+
+   String NS = DefaultUri; /* proměnná pro hodnotu project namespace */
+
+    /** Následující metody jsou ve skutečnosti jsou realizovány externími
+       metodami, které prováději syntaktickou analýzu podle pravidel uvedených
+       v následujících odstavcích. */
+
+    boolean checkClassList() {return true;}
+    boolean checkRootList() {return true;}
+    boolean checkXdefScript() {return true;}
+    boolean checkDeclarationScript() {return true;}
+    boolean checkValueScript() {return true;}
+    boolean checkAttributeScript() {return true;}
+    boolean checkElementScript() {return true;}
+    boolean checkElementOccurrenceSection() {return true;}
+    boolean checkElementCreateExpression() {return true;}
+    boolean checkIdentifier() {return true;}
+    boolean checkBooleanLiteral() {return true;}
+    
+  </xd:declaration>
+
+  <!-- xd:any xd:script = "options moreAttributes" xd:name = "A"/>
+  <xd:any xd:script = "options moreAttributes" xd:name = "B"/ -->
+
+  <META:collection xd:script = "init NS = @metaNamespace ?
+                                (String) @metaNamespace : DefaultUri"
+    metaNamespace = "optional uri(); options acceptQualifiedAttr" >
+
+    <META:def xd:script = "occurs +; ref META:def" />
+
+  </META:collection>
+    
+  <META:def xd:script = "init NS = @metaNamespace ?
+	                     (String) @metaNamespace : DefaultUri;
+                         options moreAttributes"
+    name              = "optional Qname(); options acceptQualifiedAttr"
+    metaNamespace  = "optional uri(); options acceptQualifiedAttr"
+    classes           = "optional checkClassList(); options acceptQualifiedAttr"
+    include           = "optional uriList(); options acceptQualifiedAttr"
+    root              = "optional checkRootList(); options acceptQualifiedAttr" 
+    script            = "optional checkXdefScript();
+	                     options acceptQualifiedAttr" >
+
+  <!-- Jmena atributu, které jsou specifikovany navíc oproti vyse vyjmenovanym
+    (viz option moreAttributes) musí zacinat sekvenci znaku "impl-" --> 
+
+    <xd:mixed>
+
+      <META:macro xd:script = "occurs *; options moreAttributes" 
+        name                = "required Qname(); options acceptQualifiedAttr"
+        xd:attr             = "occurs * checkIdentifier()" >
+			
+        optional string();
+		
+      </META:macro>
+	  
+      <META:declaration xd:script = "occurs *">
+		  
+         required checkDeclarationScript();
+		 
+      </META:declaration>
+  
+      <xd:choice occurs = "*">
+
+          <META:choice xd:script = "occurs *;
+		                            match @name AND !@ref; ref META:choiceDef" 
+            name = "required Qname(); options acceptQualifiedAttr" />
+
+          <META:mixed xd:script="occurs *;
+		                         match @name AND !@ref; ref META:mixedDef" 
+            name = "required Qname(); options acceptQualifiedAttr" />
+
+          <META:sequence xd:script="occurs *;
+		                            match @name AND !@ref; ref META:sequenceDef"
+            name = "required Qname(); options acceptQualifiedAttr" />
+
+          <xd:any xd:script = "occurs *; ref xelement" />
+
+            optional checkValueScript();
+
+      </xd:choice>
+
+    </xd:mixed>
+
+  </META:def>
+
+  <!-- model elementu -->
+  <xelement xd:script = "options moreAttributes" 
+    xd:attr     = "occurs * checkAttributeScript()"
+    xd:text     = "occurs * checkValueScript()"
+    META:script = "optional checkElementScript()" >
+
+    <xd:choice occurs = "*" ref = "xcontent" />
+
+  </xelement>
+
+  <xd:choice name = "xcontent">
+
+    <META:choice xd:script = "occurs *; match @ref; ref META:choiceRef" />
+
+    <META:choice xd:script = "occurs *; match !@ref; ref META:choiceDef" />
+	
+    <META:mixed xd:script = "occurs *; match @ref; ref META:mixedRef" />
+
+    <META:mixed xd:script = "occurs *; match !@ref; ref META:mixedDef" />
+
+    <META:sequence xd:script = "occurs *; match @ref; ref META:sequenceRef" />
+
+    <META:sequence xd:script = "occurs *; match !@ref; ref META:sequenceDef" />
+
+    <META:includeChildNodes  ref = "required Qname()" />
+
+    <xd:any xd:script = "occurs *; ref xelement" />
+
+    optional checkValueScript();
+
+  </xd:choice>
+
+  <META:choiceRef occurs = "optional checkElementOccurrenceSection();
+              options acceptQualifiedAttr"
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr"
+    ref    = "required Qname(); options acceptQualifiedAttr" />
+
+  <META:choiceDef occurs = "optional checkElementOccurrenceSection();
+              options acceptQualifiedAttr" 
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr"
+    ref    = "illegal; options acceptQualifiedAttr" >
+
+     <xd:choice ref = "xcontent" occurs = "+" />
+
+  </META:choiceDef>
+
+  <META:sequenceRef occurs = "optional checkElementOccurrenceSection();
+              options acceptQualifiedAttr"
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr"
+    ref    = "required Qname(); options acceptQualifiedAttr" />
+
+  <META:sequenceDef occurs = "optional checkElementOccurrenceSection();
+              options acceptQualifiedAttr"
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr"
+    ref    = "illegal; options acceptQualifiedAttr" >
+
+     <xd:choice ref = "xcontent" occurs = "*" />
+
+  </META:sequenceDef>
+
+  <META:mixedRef ref = "required Qname(); options acceptQualifiedAttr" 
+    empty  = "optional checkBooleanLiteral(); options acceptQualifiedAttr"
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr" />
+
+  <META:mixedDef ref = "illegal; options acceptQualifiedAttr" 
+    empty  = "optional checkBooleanLiteral(); options acceptQualifiedAttr"
+    create = "optional checkElementCreateExpression();
+              options acceptQualifiedAttr" >
+
+     <xd:choice ref = "xcontent" occurs = "+" />
+
+  </META:mixedDef>
+
+</xd:def>

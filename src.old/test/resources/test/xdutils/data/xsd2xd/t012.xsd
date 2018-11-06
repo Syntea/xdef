@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:pk="http://a">
+  <xs:import namespace="http://a"
+    schemaLocation="t012_1.xsd"/>
+  <xs:element name="elem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="pk:a1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

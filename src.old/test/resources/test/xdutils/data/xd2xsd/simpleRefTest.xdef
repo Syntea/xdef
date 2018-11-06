@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
+         xd:name      =  "main"
+         xd:root      =  "X" >
+     <X>
+        <A xd:script="ref A" />
+        <B xd:script="ref B" />
+        <C xd:script="ref C" />
+        <D xd:script="ref D" />
+        <F xd:script="ref F" />
+        <G xd:script="ref G" />
+        <J xd:script="ref J" />
+        <L xd:script="ref L" />
+     </X>
+     <A />
+     <B>string(1,10)</B>
+     <C attr="int(1,10)"/>
+     <D>
+       <E />
+     </D>
+     <F attr="string(1,5)">
+        int
+     </F>
+     <G>
+       <H />
+       string
+       <I />
+     </G>
+     <J attr="int">
+       <K />
+     </J>
+     <L attr="string">
+       <M />
+       float
+     </L>
+</xd:def>

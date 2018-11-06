@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Staff>
+    <Worker     sex="name"
+                name="John"
+                surname="Doe"
+                workerId="1">
+        <Description>Average worker</Description>
+    </Worker>
+    <Manager    sex="male"
+                name="Joe"
+                surname="Smith"
+                department="production">
+        <Salary>75000</Salary>
+    </Manager>
+</Staff>

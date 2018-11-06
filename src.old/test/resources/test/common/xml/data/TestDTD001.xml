@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM 'TestDTD001.dtd'>
+<root a1="a1" >&t1;,&t2;</root> 
+<!-- result: <root a1="a1" a2="a2" a3="%pe">text 1,text 2</root> --> 

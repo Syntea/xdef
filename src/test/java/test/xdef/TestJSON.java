@@ -1,11 +1,11 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.JSONUtil;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.component.XJUtil;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.JSONUtil;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.component.XJUtil;
+import org.xdef.XDPool;
 import org.w3c.dom.Element;
 
 /** Test of parsing of JSON objects with XDefinition.

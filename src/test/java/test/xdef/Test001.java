@@ -1,12 +1,12 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import org.w3c.dom.Element;

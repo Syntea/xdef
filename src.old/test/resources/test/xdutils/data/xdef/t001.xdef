@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="t001"
+  xd:root="a">
+  <xd:declaration>
+    type a_Type{parse: string(1, 8);}
+  </xd:declaration>
+  <xd:declaration>
+    type e_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type d_Type{parse: float(3.0, 4.0);}
+  </xd:declaration>
+  <xd:declaration>
+    type c_Type{parse: int(1, 10);}
+  </xd:declaration>
+  <xd:declaration>
+    type b_XdDatetime_Type{parse: string() &amp; regex("([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <a a="optional a_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <b xd:script="occurs 1"
+        b="required b_XdDatetime_Type()"
+        c="required c_Type()"
+        d="required d_Type()"
+        e="required e_user_Type()"/>
+    </xd:sequence>
+  </a>
+</xd:def>

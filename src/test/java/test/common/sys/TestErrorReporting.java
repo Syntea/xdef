@@ -1,13 +1,13 @@
 package test.common.sys;
 
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SPosition;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.SPosition;
+import org.xdef.sys.StringParser;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import cz.syntea.xdef.sys.ReportReader;
+import org.xdef.sys.ReportReader;
 import test.utils.XDTester;
 import test.utils.STester;
 

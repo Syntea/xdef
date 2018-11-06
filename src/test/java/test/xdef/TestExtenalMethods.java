@@ -1,23 +1,23 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.proc.XXData;
-import cz.syntea.xdef.proc.XXElement;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.impl.parsers.XSParseInt;
-import cz.syntea.xdef.impl.parsers.XSParseName;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlConstants;
+import org.xdef.XDBuilder;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDOutput;
+import org.xdef.XDParseResult;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
+import org.xdef.impl.parsers.XSParseInt;
+import org.xdef.impl.parsers.XSParseName;
 import java.io.StringWriter;
-import cz.syntea.xdef.XDContainer;
-import cz.syntea.xdef.XDValueID;
+import org.xdef.XDContainer;
+import org.xdef.XDValueID;
 
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
@@ -524,7 +524,7 @@ public final class TestExtenalMethods extends XDTester {
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDValue test.xdef.TestExtenalMethods.y();\n"+
-"  external method cz.syntea.xdef.XDValue test.xdef.TestExtenalMethods.z();\n"+
+"  external method org.xdef.XDValue test.xdef.TestExtenalMethods.z();\n"+
 "</xd:declaration>\n"+
 "  <a a=\"string;\n"+
 "        onTrue{if (y()==null) error('y'); error(z().toString());}\"/>\n"+
@@ -539,8 +539,8 @@ public final class TestExtenalMethods extends XDTester {
 "<xd:declaration>\n"+
 "external method {\n"+
 //"  XDValue test.xdef.TestExtenalMethods.x();\n"+
-"void test.xdef.TestExtenalMethods.x(cz.syntea.xdef.proc.XXElement);\n"+
-"void test.xdef.TestExtenalMethods.x(XXElement, cz.syntea.xdef.XDContainer);\n"+
+"void test.xdef.TestExtenalMethods.x(org.xdef.proc.XXElement);\n"+
+"void test.xdef.TestExtenalMethods.x(XXElement, org.xdef.XDContainer);\n"+
 "void test.xdef.TestExtenalMethods.x(XXElement, XDContainer, XDContainer);\n"+
 "}\n"+
 "  Container p = null, q = null, r = null, s = null, t = null;\n"+

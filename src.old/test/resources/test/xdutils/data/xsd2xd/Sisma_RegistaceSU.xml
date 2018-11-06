@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RegistraceSU CisloSU="1234567890"
+  DatumCasOznameniSU="20140608123900"
+  DatumCasSU="20140606164500"
+  DatumUcinnosti="20140608123900"
+  IdentZaznamu="1" LikvidacniTitul="POV"
+  RozhodnaUdalost="A" StavSetreniPolicie="N">
+    <Misto>
+      <Adresa Okres="PRAHA 9" Stat="CZ"/>
+   SSSSSSSS 1/2
+    </Misto>
+    <VozidloPojistnika PoradiVozidlaSU="1">
+      <Smlouva CisloSmlouvy="123456789" DruhPojisteni="POV" PoradiVozidla="1"/>
+    </VozidloPojistnika>
+    <VozidloUcastnika PoradiVozidlaSU="4" Zruseni="N">
+      <VozidloPS>
+        <Vozidlo DruhVozidla="03"
+          KodModeluVozidla="2628" MPZ="???"
+          ModelText="NEUVEDEN" SPZ="1A11779"
+          VIN="AA0AXXGCDA3Y54427" ZnackaText="FORD"/>
+      </VozidloPS>
+    </VozidloUcastnika>
+</RegistraceSU>

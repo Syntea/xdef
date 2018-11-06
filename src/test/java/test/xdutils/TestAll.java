@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import test.utils.XDTester;
 import test.utils.STester;
 
-/** Run all available basic tests for package cz.syntea.xdef.util.
+/** Run all available basic tests for package org.xdef.util.
  * @author Vaclav Trojan
  */
 public class TestAll {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root = 'HTML'>
+<HTML>
+   <HEAD>
+      <TITLE>create 'Panovníci českých zemí'</TITLE>
+   </HEAD>
+   <BODY>
+     <table border="fixed 'border'">
+       <tr>
+         <td>create 'Panovník'</td>
+         <td>create 'vládl od'</td>
+         <td>create 'vládl do'</td>
+         <td>create 'po dobu'</td>
+       </tr>
+       <xd:sequence script="*; create from('//panovnik').sort('jmeno/text()')">
+       <tr>
+         <td>create from('jmeno/text()')</td>
+         <td>create from('panoval/od/text()')</td>
+         <td>optional string(); create from('panoval/do/text()')</td>
+		 <td>optional string();
+		   create from('panoval/do/text()').getLength() == 0 ?
+		       new Container("") :
+               from('number(panoval/do/text()) - number(panoval/od/text())')
+         </td>
+       </tr>
+       </xd:sequence>
+	 </table>
+   </BODY>
+</HTML>
+</xd:def>

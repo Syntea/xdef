@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SODContainer
+    xmlns="http://www.syntea.cz/ISDN/SOD/2.0"
+    Phase="Template"
+>
+    <Query>
+        <Command>
+            select
+                <Fact Ref="Row"/> as "Row",
+                <Fact Ref="Col"/> as "Col",
+                count(1)          as "Value"
+            from      <Vector Ref="Vector"/> as vektor
+            left join st.st_snimek           as snimek on
+                vektor.idSnimek  = snimek.idSnimek    and
+                snimek.kodSnimek = <Shot Ref="Shot"/>
+            where
+                (<Expression Ref="Where"/>)     and
+                (<Expression Ref="Pusobnost"/>)
+            group by
+                <Fact Ref="Row"/>,
+                <Fact Ref="Col"/>
+        </Command>
+        <Dimension Dimension="Row">
+            <Fact Ref="Row"/>
+            <Sum><Const Ref="Row"/></Sum>
+        </Dimension>
+        <Dimension Dimension="Col">
+            <Fact Ref="Col"/>
+            <Sum><Const Ref="Col"/></Sum>
+        </Dimension>
+        <Form>
+            <Shot Id="Shot">
+                <Info><Title>Snímek</Title></Info>
+            </Shot>
+            <Vector Id="Vector">
+                <Info><Title>Vektor</Title></Info>
+            </Vector>
+            <Fact Id="Row">
+                <Info>
+                    <Title>Dimenze pro řádky</Title>
+                    <Vector Ref="Vector"/>
+                </Info>
+            </Fact>
+            <Const Id="Row" Type="bool">
+                <Info><Title>Součet pro řádky</Title></Info>
+            </Const>
+            <Fact Id="Col">
+                <Info>
+                    <Title>Dimenze pro sloupce</Title>
+                    <Vector Ref="Vector"/>
+                </Info>
+            </Fact>
+            <Const Id="Col" Type="bool">
+                <Info><Title>Součet pro sloupce</Title></Info>
+            </Const>
+            <Expression Id="Where" Type="bool">
+                <Operator Operator="and" Type="bool"/>and
+                <Info>
+                    <Title>Podmínka na vektor</Title>
+                    <Vector Ref="Vector"/>
+                </Info>
+            </Expression>
+            <Expression Id="Pusobnost" Type="bool">
+                <Info>
+                    <Title>Automaticky doplněná podmínka na působnost zadavatele</Title>
+                    <Label  Key="UserScope"/>
+                    <Vector Ref="Vector"/>
+                </Info>
+            </Expression>
+        </Form>
+    </Query>
+    <Info>
+        <Title>
+            Jednoduchý dvourozměrný dotaz na počet entit ve vybraném vektoru a
+            s volitelnou podmínkou
+        </Title>
+        <Label Key="Author">Šišma</Label>
+        <Label Key="CreationDate">21.5.2014 10:00:05</Label>
+    </Info>
+</SODContainer>
+
+

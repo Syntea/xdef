@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+   xd:name      = "b"
+   xd:root      = "b"
+   xd:classes   = "test.xdef.TestErrors"
+   xd:script    = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces,
+                   noTrimText,preserveTextWhiteSpaces"
+   impl-version = "2.5.0.2"
+   impl-date    = "30.01.2007">
+ <c xd:script = "fynally outln('konec');"/>
+</xd:def>

@@ -1,0 +1,17 @@
+<!-- Test of parameter entities -->
+<!ENTITY % Header "AAA">
+<!ENTITY % Detail "BBB">
+<!ENTITY % Summary "CCC">
+<!ENTITY % Content "((%Header;),(%Detail;)?,(%Summary;)?)">
+<!ENTITY % Root "XXX">
+<!ENTITY % xRoot "%Root; (%Content;)">
+<!ELEMENT %xRoot;>
+<!ENTITY % Attrs "">
+<!ENTITY % Types "">
+<!ENTITY % xRootAttr "%Root; %Attrs;">
+<!ATTLIST %xRootAttr;
+     type CDATA #FIXED '%Types;'>
+<!ATTLIST %Root; ns CDATA #FIXED 'XCBL30.sox'>
+<!ELEMENT AAA EMPTY>
+<!ELEMENT BBB EMPTY>
+<!ELEMENT CCC EMPTY>

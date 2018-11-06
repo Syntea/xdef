@@ -1,0 +1,29 @@
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" xd:root="Weather" >
+<xd:declaration> float sum = 0; int n = 0; </xd:declaration>
+
+<Weather xd:script="finally setElement(xcreate('html'))"
+     date="optional date()">
+     <Measurement xd:script="occurs 1..*;"
+        wind="required float()"
+        temperature="required float(-99, +99);
+                     onTrue {n++; sum+=parseFloat(getText());}"
+        time="required datetime('HH:mm')" />
+</Weather>
+
+<html>
+  <body>
+     <h1>create 'Date: ' + from('/Weather/@date')</h1>
+    <li xd:script="occurs 1..*; create from('/Weather/Measurement')">
+    create 'Time: ' + toString(from('@time'))
+               + ', wind: ' + toString(from('@wind'))
+               + ', temperature: '
+               + toString(from('@temperature'));
+
+    </li>
+    <h3>
+      create n > 0 ? 'Average temperature: ' + toString(sum / n) : 'No data'
+    </h3>
+  </body>
+</html>
+
+</xd:def>

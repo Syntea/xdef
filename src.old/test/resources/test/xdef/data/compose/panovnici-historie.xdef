@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root = 'HTML'>
+<HTML>
+   <HEAD>
+      <TITLE>create 'Politické dějiny zemí koruny české'</TITLE>
+   </HEAD>
+   <BODY>
+     <h1>create 'Politické dějiny zemí koruny české'</h1>
+     <table>
+		<xd:sequence occurs = "*" create = "from('//panovnik')">
+		<tr>
+		  <td bgcolor="fixed '#FF0A0A'">
+			create 'Období ' + from('panoval/od/text()') +
+			'-'	+ from('panoval/do/text()')
+		  </td>
+		  <td bgcolor="fixed '#FFFF08'">
+		    create 'Státní zřízení ' + 
+			  (from('panoval/od/text()').toString() LT  '1918'? 'království' : 'republika')
+		  </td>
+		</tr>
+		<tr>
+			<td/>
+			<td>
+				create 'Představitel: ' + from('jmeno/text()') + ' z rodu: ' + from('@rod')
+				<br/>
+				create 'Titul: ' + from('panoval/@titul')
+			</td>
+		</tr>
+		</xd:sequence>
+	 </table>
+   </BODY>
+</HTML>
+</xd:def>

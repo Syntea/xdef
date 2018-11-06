@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+    <xs:element name="WorkerHierarchy" >
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Worker"  minOccurs="1" maxOccurs="unbounded" type="Worker" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="Worker">
+        <xs:sequence>
+            <xs:element name="SubWorker" minOccurs="0" maxOccurs="unbounded" type="Worker" />
+        </xs:sequence>
+        <xs:attribute name="name" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1" />
+                    <xs:maxLength value="30" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="surname" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1" />
+                    <xs:maxLength value="50" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="birth" use="required" type="xs:date" />
+    </xs:complexType>
+
+</xs:schema>

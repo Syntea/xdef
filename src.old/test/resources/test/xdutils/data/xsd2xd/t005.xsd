@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="KodUtvaruPolicie_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="RokDN_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="2000"/>
+      <xs:maxInclusive value="3000"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CisloDN_Xdnum_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumCasOznameni_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumRozhodnuti_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumCasDN_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumCasDoDN_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KodOkresu_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="CelkovaSkodaKc_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="HlavniPricina_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="Pricina_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="Foto_Ref_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="Kc_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RokVyroby_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostSTK_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="platná"/>
+      <xs:enumeration value="neplatná"/>
+      <xs:enumeration value="nezjištěno"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MesicSTKDo_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="TypBrzd_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="StavBrzd_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KodPojistitele_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PojisteniText_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Doklad o pojištění nepředložen"/>
+      <xs:enumeration value="Potvrzení nepředloženo"/>
+      <xs:enumeration value="Nepodléhá pojištění"/>
+      <xs:enumeration value="Smlouva neuzavřena"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostZKOd_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostZKDo_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumUhradyHP_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DruhSoupravy_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="vlak"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Okres_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="RC_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="Pohlavi_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="M"/>
+      <xs:enumeration value="Ž"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumNarozeni_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="IC_Xdnum_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumVydani_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PraxeRizeni_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="AlkoholDech_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Alkohol"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Zraneni_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="ZdravPojistovna_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PokutaZapl_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="nezaplacena"/>
+      <xs:enumeration value="zaplacena"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Pachatel_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Pachatel DN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Poskozeny_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Poškozený"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Verze_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KrajPolicie_Type">
+    <xs:restriction base="xs:string">
+      <xs:length value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostOd_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="ZaznamPDN_ProtokolDN_type">
+    <xs:attribute name="KodUtvaruPolicie"
+      type="KodUtvaruPolicie_user_Type"
+      use="required"/>
+    <xs:attribute name="RokDN"
+      type="RokDN_Type"
+      use="required"/>
+    <xs:attribute name="CisloDN"
+      type="CisloDN_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CJ"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="DatumCasOznameni"
+      type="DatumCasOznameni_user_Type"
+      use="required"/>
+    <xs:attribute name="NazevDN"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="Zpracovatel"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_RozhodnutiDN_type">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="DatumRozhodnuti"
+          type="DatumRozhodnuti_user_Type"
+          use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="ZaznamPDN_Text4000_type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="ZaznamPDN_ObjStrankaDN_type">
+    <xs:sequence>
+      <xs:element name="Misto"
+        type="ZaznamPDN_Text255_type"/>
+    </xs:sequence>
+    <xs:attribute name="DatumCasDN"
+      type="DatumCasDN_user_Type"
+      use="required"/>
+    <xs:attribute name="DatumCasDoDN"
+      type="DatumCasDoDN_user_Type"
+      use="optional"/>
+    <xs:attribute name="KodOkresu"
+      type="KodOkresu_user_Type"
+      use="required"/>
+    <xs:attribute name="Obec"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Ulice"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloPopisne"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CelkovaSkodaKc"
+      type="CelkovaSkodaKc_Type"
+      use="optional"/>
+    <xs:attribute name="HlavniPricina"
+      type="HlavniPricina_user_Type"
+      use="optional"/>
+    <xs:attribute name="Pricina"
+      type="Pricina_user_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:simpleType name="ZaznamPDN_Text255_type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="ZaznamPDN_FotoDN_type">
+    <xs:attribute name="Foto_Ref"
+      type="Foto_Ref_user_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_VozidloDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="JinaSkoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Drzitel"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="DruhVozidla"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="SPZ"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="MPZ"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="VIN"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="ZnackaVozidla"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TypVozidla"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="RokVyroby"
+      type="RokVyroby_user_Type"
+      use="optional"/>
+    <xs:attribute name="PlatnostSTK"
+      type="PlatnostSTK_Type"
+      use="optional"/>
+    <xs:attribute name="MesicSTKDo"
+      type="MesicSTKDo_user_Type"
+      use="optional"/>
+    <xs:attribute name="TypBrzd"
+      type="TypBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="StavBrzd"
+      type="StavBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="KodPojistitele"
+      type="KodPojistitele_user_Type"
+      use="optional"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PojisteniText"
+      type="PojisteniText_Type"
+      use="optional"/>
+    <xs:attribute name="CisloZK"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="VydalZK"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_user_Type"
+      use="optional"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_user_Type"
+      use="optional"/>
+    <xs:attribute name="PojistneHPKc"
+      type="xs:long"
+      use="optional"/>
+    <xs:attribute name="DatumUhradyHP"
+      type="DatumUhradyHP_user_Type"
+      use="optional"/>
+    <xs:attribute name="MistoUhradyHP"
+      type="xs:string"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_Skoda_type">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="Kc"
+          type="Kc_Type"
+          use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_TramvajDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="JinaSkoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="Linka"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="LinkaPoradi"
+      type="xs:long"
+      use="optional"/>
+    <xs:attribute name="EvidCislo"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TypVozidla"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TypBrzd"
+      type="TypBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="StavBrzd"
+      type="StavBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="KodPojistitele"
+      type="KodPojistitele_user_Type"
+      use="optional"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PojisteniText"
+      type="PojisteniText_Type"
+      use="optional"/>
+    <xs:attribute name="DruhVozidla"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_TrolejbusDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="JinaSkoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="Linka"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="LinkaPoradi"
+      type="xs:long"
+      use="optional"/>
+    <xs:attribute name="EvidCislo"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TypVozidla"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TypBrzd"
+      type="TypBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="StavBrzd"
+      type="StavBrzd_user_Type"
+      use="optional"/>
+    <xs:attribute name="KodPojistitele"
+      type="KodPojistitele_user_Type"
+      use="optional"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PojisteniText"
+      type="PojisteniText_Type"
+      use="optional"/>
+    <xs:attribute name="DruhVozidla"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_VlakDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="JinaSkoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="TypSoupravy"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="Spoj"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="DruhSoupravy"
+      type="DruhSoupravy_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_PovozDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="JinaSkoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="DruhPovozu"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_PredmetDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="NazevPredmetu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="DruhPredmetu"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_ZvireDN_type">
+    <xs:all>
+      <xs:element name="Skoda"
+        type="ZaznamPDN_Skoda_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="ZaznamPDN_Text255_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="NazevZvirete"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="DruhZvirete"
+      type="xs:string"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_UcastnikDN_type">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="JinaSkoda"
+          type="ZaznamPDN_Skoda_type"
+          minOccurs="0"/>
+        <xs:element name="Osoba"
+          type="ZaznamPDN_Osoba_type"
+          minOccurs="0"/>
+        <xs:element name="Firma"
+          type="ZaznamPDN_Firma_type"
+          minOccurs="0"/>
+        <xs:element name="Doklad"
+          type="ZaznamPDN_Doklad_type"
+          minOccurs="0"
+          maxOccurs="unbounded"/>
+        <xs:element name="PoruseniZakProvoz"
+          type="ZaznamPDN_Text400_type"
+          minOccurs="0"/>
+        <xs:element name="PoruseniZakPrest"
+          type="ZaznamPDN_Text400_type"
+          minOccurs="0"/>
+        <xs:element name="PoruseniZakTrest"
+          type="ZaznamPDN_Text400_type"
+          minOccurs="0"/>
+        <xs:element name="PoruseniZakOst"
+          type="ZaznamPDN_Text400_type"
+          minOccurs="0"/>
+        <xs:element name="Vazba"
+          type="ZaznamPDN_Text255_type"
+          minOccurs="0"/>
+        <xs:element name="TrvalyPobyt"
+          type="ZaznamPDN_Adresa_type"
+          minOccurs="0"/>
+        <xs:element name="PrechodnyPobyt"
+          type="ZaznamPDN_Adresa_type"
+          minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="OznSegmentu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="TypUcastnika"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="PraxeRizeni"
+      type="PraxeRizeni_user_Type"
+      use="optional"/>
+    <xs:attribute name="AlkoholDech"
+      type="AlkoholDech_Type"
+      use="optional"/>
+    <xs:attribute name="AlkoholKrev"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Zraneni"
+      type="Zraneni_user_Type"
+      use="optional"/>
+    <xs:attribute name="ZdravPojistovna"
+      type="ZdravPojistovna_user_Type"
+      use="optional"/>
+    <xs:attribute name="PokutaKc"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PokutaZapl"
+      type="PokutaZapl_Type"
+      use="optional"/>
+    <xs:attribute name="Pachatel"
+      type="Pachatel_Type"
+      use="optional"/>
+    <xs:attribute name="Poskozeny"
+      type="Poskozeny_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_Osoba_type">
+    <xs:all>
+      <xs:element name="TrvalyPobyt"
+        type="ZaznamPDN_Adresa_type"
+        minOccurs="0"/>
+      <xs:element name="PrechodnyPobyt"
+        type="ZaznamPDN_Adresa_type"
+        minOccurs="0"/>
+      <xs:element name="Pobyt"
+        type="ZaznamPDN_Adresa_type"
+        minOccurs="0"/>
+      <xs:element name="JinyPobyt"
+        type="ZaznamPDN_Adresa_type"
+        minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="Jmeno"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Prijmeni"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="RodnePrijmeni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TitulPred"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TitulZa"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="RC"
+      type="RC_user_Type"
+      use="optional"/>
+    <xs:attribute name="Pohlavi"
+      type="Pohlavi_Type"
+      use="optional"/>
+    <xs:attribute name="OsobniStav"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="DatumNarozeni"
+      type="DatumNarozeni_user_Type"
+      use="optional"/>
+    <xs:attribute name="MistoNarozeni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="StatNarozeni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="StatniPrislusnost"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Profese"
+      type="xs:string"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_Adresa_type">
+    <xs:attribute name="Ulice"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloOrientacni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloPopisne"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Obec"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PSC"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Okres"
+      type="Okres_user_Type"
+      use="optional"/>
+    <xs:attribute name="Stat"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Telefon1"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Telefon2"
+      type="xs:string"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_Firma_type">
+    <xs:sequence>
+      <xs:element name="Sidlo"
+        type="ZaznamPDN_Adresa_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="NazevFirmy"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="IC"
+      type="IC_Xdnum_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZaznamPDN_Doklad_type">
+    <xs:attribute name="TypDokladu"
+      type="xs:string"
+      use="required"/>
+    <xs:attribute name="Opravneni"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloDokladu"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="DatumVydani"
+      type="DatumVydani_user_Type"
+      use="optional"/>
+    <xs:attribute name="MistoVydani"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="StatVydani"
+      type="xs:string"
+      use="optional"/>
+  </xs:complexType>
+  <xs:simpleType name="ZaznamPDN_Text400_type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:element name="ZaznamPDN">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="Protokol"
+            type="ZaznamPDN_ProtokolDN_type"/>
+          <xs:element name="Rozhodnuti"
+            type="ZaznamPDN_RozhodnutiDN_type"
+            minOccurs="0"/>
+          <xs:element name="Vyliceni"
+            type="ZaznamPDN_Text4000_type"/>
+          <xs:element name="ObjStranka"
+            type="ZaznamPDN_ObjStrankaDN_type"/>
+          <xs:element name="Foto"
+            type="ZaznamPDN_FotoDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Vozidlo"
+            type="ZaznamPDN_VozidloDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Tramvaj"
+            type="ZaznamPDN_TramvajDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Trolejbus"
+            type="ZaznamPDN_TrolejbusDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Vlak"
+            type="ZaznamPDN_VlakDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Povoz"
+            type="ZaznamPDN_PovozDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Predmet"
+            type="ZaznamPDN_PredmetDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Zvire"
+            type="ZaznamPDN_ZvireDN_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="Ucastnik"
+            type="ZaznamPDN_UcastnikDN_type"
+            maxOccurs="unbounded"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="Verze"
+        type="Verze_user_Type"
+        use="optional"/>
+      <xs:attribute name="SeqRec"
+        type="xs:long"
+        use="required"/>
+      <xs:attribute name="KrajPolicie"
+        type="KrajPolicie_Type"
+        use="required"/>
+      <xs:attribute name="PlatnostOd"
+        type="PlatnostOd_user_Type"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

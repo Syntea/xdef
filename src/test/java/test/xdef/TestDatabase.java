@@ -1,12 +1,12 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.XDService;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.XDService;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;

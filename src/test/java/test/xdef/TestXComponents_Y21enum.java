@@ -1,6 +1,6 @@
 package test.xdef;
 
-import cz.syntea.xdef.component.XCEnumeration;
+import org.xdef.component.XCEnumeration;
 
 public enum TestXComponents_Y21enum implements XCEnumeration {
 	a, b, c;

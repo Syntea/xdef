@@ -1,7 +1,7 @@
 package builtools;
 
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.RegisterReportTables;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.RegisterReportTables;
 import java.io.File;
 
 /** Update registered message files.
@@ -13,17 +13,17 @@ public class UpdateMessages {
 	 * @param args not used
 	 */
 	public static void main(String... args) {
-		File dir = new File("src/main/resources/cz/syntea/xdef/msg/");
+		File dir = new File("src/main/resources/org/xdef/msg/");
 		if (!dir.exists() || !dir.isDirectory()) {
-			dir = new File("src/cz/syntea/xdef/msg/");
+			dir = new File("src/org/xdef/msg/");
 			if (!dir.exists() || !dir.isDirectory()) {
 				throw new RuntimeException(
 					"Resources directory is not available");
 			}
 		}
-		File srcDir = new File("src/main/java/cz/syntea/xdef/msg/");
+		File srcDir = new File("src/main/java/org/xdef/msg/");
 		if (!srcDir.exists() || !srcDir.isDirectory()) {
-			srcDir = new File("src/cz/syntea/xdef/msg/");
+			srcDir = new File("src/org/xdef/msg/");
 			if (!srcDir.exists() || !srcDir.isDirectory()) {
 				throw new RuntimeException(
 					"Java sources directory is not available");
@@ -43,7 +43,7 @@ public class UpdateMessages {
 			RegisterReportTables.main(new String[] {
 				"-i", msgPath + "*.properties",
 				"-c", "UTF-8",
-				"-p", "cz.syntea.xdef.msg",
+				"-p", "org.xdef.msg",
 				"-o", temp.getAbsolutePath(),
 				"-r"});
 			String msg = 

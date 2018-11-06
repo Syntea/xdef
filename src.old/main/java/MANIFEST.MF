@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+
+Name: cz/syntea/xdef
+Comment: Created date 2018-10-17
+Implementation-Version: 3.1.004.009
+Specification-Version: 3.1
+Java-Version: jdk1.6
+Implementation-Vendor-Id: Syntea.cz
+Implementation-Vendor: Syntea software group a.s.
+Specification-Vendor: Syntea software group a.s.
+Specification-Title: Syntea X-definition 3.1
+Implementation-Title: cz.syntea.xdef

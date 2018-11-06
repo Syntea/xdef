@@ -1,0 +1,9 @@
+<Envelope>
+  <Heade2r>
+    <Request KodPartnera='0001' IdentZpravy='154' RefMsgID='123'/>
+  </Header>
+  <Body>
+    <Get_PSP CisloSmlouvy='306000030'
+      PoradiVozidla='1' KodPojistitele='0062'/>
+ </Body>
+</Envelope>

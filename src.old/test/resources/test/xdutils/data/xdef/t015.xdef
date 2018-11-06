@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xd:def xd:name="t015_1"
+    xmlns:tns="http://a"
+    xd:root="tns:a1"
+    xmlns:a="http://b">
+    <tns:a1 atr1="optional string()"
+      a:atr2="optional string()"
+      tns:atr3="optional string()"/>
+  </xd:def>
+  <xd:def xd:name="t015_3"
+    xmlns:tns="http://d"
+    xd:root="tns:a4"
+    xmlns:a="http://b">
+    <tns:a4 atr1="optional string()"
+      a:atr2="optional string()"
+      tns:atr3="optional string()"/>
+  </xd:def>
+  <xd:def xd:name="t015"
+    xmlns:tns="http://b"
+    xd:root="tns:elem"
+    xmlns:a="http://a"
+    xmlns:b="http://c"
+    xmlns:c="http://d">
+    <tns:elem>
+      <xd:sequence xd:script="occurs 1">
+        <a:a1 xd:script="occurs 1; ref t015_1#a:a1"/>
+        <b:a2 xd:script="occurs 1; ref t015_2#b:a2"/>
+        <a3 xd:script="occurs 1"
+          atr1="optional string()"
+          tns:atr2="optional string()"
+          atr3="optional string()"/>
+        <c:a4 xd:script="occurs 1; ref t015_3#c:a4"/>
+      </xd:sequence>
+    </tns:elem>
+  </xd:def>
+  <xd:def xd:name="t015_2"
+    xmlns:tns="http://c"
+    xd:root="tns:a2"
+    xmlns:a="http://b">
+    <tns:a2 atr1="optional string()"
+      a:atr2="optional string()"
+      tns:atr3="optional string()"/>
+  </xd:def>
+</xd:collection>

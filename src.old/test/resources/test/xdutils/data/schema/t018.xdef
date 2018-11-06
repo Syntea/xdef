@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+	xmlns:pa = "http://a"
+	xmlns:pb = "http://b"
+	xd:name = "Test"
+	xd:root = "pb:elem">
+    
+    <pb:elem>
+	  <pa:a1 attr1 ="optional string();" pb:attr2 ="optional int(2,10);"/>
+	  <pa:a2 pa:attr1 ="optional string();" pb:attr2 ="optional int(2,10);"/>
+	  <a3 attr1 ="optional string();" pb:attr2 ="optional int(0,20);" />
+    </pb:elem>
+    
+</xd:def>

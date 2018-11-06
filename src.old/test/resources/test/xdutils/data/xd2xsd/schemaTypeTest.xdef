@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
+         xd:name      =  "main"
+         xd:root      =  "Root" >
+
+     <Root>
+         <xd:mixed>
+             <Test1 xd:script="occurs *">xs:string(%minLength='1', %maxLength='10', %pattern=['[A-Z][a-z]*', '[A-Z]*'])</Test1>
+             <Test2 xd:script="occurs *">xs:list(%item=xs:int(%minInclusive='1', %maxInclusive='10'))</Test2>
+             <Test3 xd:script="occurs *">xs:list(%item=xs:int(%minInclusive='1', %maxInclusive='10'), %length='3')</Test3>
+             <Test4 xd:script="occurs *">xs:union(%item=[xs:int(%minInclusive='1', %maxInclusive='10'), xs:string(%enumeration=['A', 'B', 'C'])])</Test4>
+         </xd:mixed>
+     </Root>
+
+</xd:def>

@@ -1,24 +1,24 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.FUtils;
-import cz.syntea.xdef.sys.FileReportReader;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SDatetime;
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.sys.StringParser;
-import cz.syntea.xdef.xml.KXmlConstants;
-import cz.syntea.xdef.XDBuilder;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.XDParser;
-import cz.syntea.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.FileReportReader;
+import org.xdef.sys.Report;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlConstants;
+import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.XDOutput;
+import org.xdef.XDParseResult;
+import org.xdef.XDParser;
+import org.xdef.msg.XDEF;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
@@ -27,13 +27,13 @@ import java.io.StringWriter;
 import java.util.TimeZone;
 import org.w3c.dom.Element;
 import java.io.File;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.proc.XXElement;
-import cz.syntea.xdef.impl.code.DefDate;
-import cz.syntea.xdef.impl.code.DefLong;
-import cz.syntea.xdef.impl.code.DefParseResult;
-import cz.syntea.xdef.XDValueID;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.proc.XXNode;
+import org.xdef.proc.XXElement;
+import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.XDValueID;
+import org.xdef.proc.XXData;
 
 /** Test of parsing of source XML according to XDefinition.
  * @author Vaclav Trojan
@@ -2763,7 +2763,7 @@ public final class TestParse extends XDTester {
 		xdata.setTextValue(sd.formatDate(mask2));
 		return new DefParseResult(s,new DefDate(sd));
 	}
-	private static class LicheCislo extends cz.syntea.xdef.XDParserAbstract {
+	private static class LicheCislo extends org.xdef.XDParserAbstract {
 		LicheCislo() {}
 		@Override
 		final public void parseObject(final XXNode xnode,

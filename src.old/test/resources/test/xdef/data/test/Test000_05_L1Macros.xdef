@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/2.0" >
+
+<!--  date: 19.01.2005  -->
+<xd:def xd:name="L1">
+   <xd:macro name="Options">setAttrUpperCase</xd:macro>
+</xd:def>
+</xd:collection>

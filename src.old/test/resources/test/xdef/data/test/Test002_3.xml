@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Example name="ProcesObjednavky"
+         targetNamespace="http://www.syntea.cz/xbpel/procesy/priklady/objednavky"
+         xmlns:ob="http://www.syntea.cz/xbpel/xdef-ws/priklady/objednavky"
+         suppressJoinFailure="yes">
+    <!--=====================-->
+    <!-- Deklarace           -->
+    <!--=====================-->
+   <partnerLinks>
+      <partnerLink name="objednavani"
+               partnerLinkType="ob:objednavaniLT"
+               myRole="objednavaniService"/>
+      <partnerLink name="worklist"
+               partnerLinkType="worklistLT"
+               myRole="worklistRequester"
+               partnerRole="worklistService"/>
+   </partnerLinks>
+
+   <variables>
+      <variable name="Objednavka"            messageType="ob:VznikObjednavkyMsg"/>
+      <variable name="Storno"                messageType="ob:StornoObjednavkyMsg"/>
+      <variable name="Vydejka"               messageType="ob:VznikVydejkyMsg"/>
+
+      <variable name="iKonec"                type="xd:integer"/>
+      <variable name="IdWlUcinVydej"         type="xd:integer"/>
+      <variable name="IdWlUrgujVydej"        type="xd:integer"/>
+      <variable name="IdWlZaluj"             type="xd:integer"/>
+      <variable name="iAccepted"             type="xd:integer"/>
+      <variable name="sFaultText"            type="xd:string"/>
+
+
+      <variable name="PutOnList"             messageType="wl:PutOnListMsg"/>
+      <variable name="RemoveFromList"        messageType="wl:RemoveFromListMsg"/>
+      <variable name="WorkListAnswer"        messageType="wl:WorkListAnswerMsg"/>
+    <!--NEBO-->
+      <variable name="wlUcinVydej"           messageType="wl:PutOnListMsg"/>
+      <variable name="wlZalujObjednavku"     messageType="wl:PutOnListMsg"/>
+      <variable name="wlUrgujVydej"          messageType="wl:PutOnListMsg"/>
+
+   </variables>
+
+   <correlationSets>
+      <correlationSet name="Objednavka" properties="IdObjednavka"/>
+   </correlationSets>
+
+    <!--===========================================-->
+    <!-- Procedurni cast Procesu		-->
+    <!--===========================================-->
+   <sequence>
+   <sequence>
+      <if>
+         <condition>true</condition>
+         <if><condition>false</condition>
+            <empty/>
+         </if>
+         <elseif>
+            <condition>false</condition>
+            <empty/>
+         </elseif>
+         <else>
+          <while>
+            <condition>false</condition>
+            <sequence>
+              <if>
+                <condition>false</condition>
+                <empty/>
+                <else>
+                  <sequence>
+                    <empty/>
+                    <empty/>
+                  </sequence>
+                </else>
+              </if>
+             <empty/>
+            </sequence>
+          </while>
+         </else>
+       </if>
+      <empty/>
+   </sequence>
+   </sequence>
+</Example>

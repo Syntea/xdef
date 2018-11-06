@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<statOnDemandInputParam>
+    <visualisation>
+        <title>Statistika okres vs druhVozidla</title>
+        <rovne>
+            <column name="sednDruhVozidla"/>
+            <soucet value="true"/>
+        </rovne>
+        <svisle>
+            <column name="sednOkres"/>
+            <soucet value="true"/>
+        </svisle>
+    </visualisation>
+    <select>
+        <op_val_fcn name="count">
+            <const value="1" type="int"/>
+        </op_val_fcn>
+    </select>
+    <group_by>
+        <column name="sednOkres"/>
+        <column name="sednDruhVozidla"/>
+    </group_by>
+    <where>
+        <op_bool_equi operator="and">
+            <op_bool_tern operator="in">
+                <column name="ndnKraj"/>
+                <values>
+                    <const value="53" type="int"/>
+                    <const value="54" type="int"/>
+                </values>
+            </op_bool_tern>
+            <op_bool_tern operator="in">
+                <column name="denVTydnu"/>
+                <values>
+                    <const value="pondelok" type="string"/>
+                    <const value="utorok"   type="string"/>
+                </values>
+            </op_bool_tern>
+        </op_bool_equi>
+    </where>
+</statOnDemandInputParam>

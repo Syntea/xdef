@@ -1,7 +1,7 @@
 package test.xdutils;
 
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.util.GenDTD;
+import org.xdef.sys.Report;
+import org.xdef.util.GenDTD;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,30 +1,30 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.XDStatement;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.XDService;
-import cz.syntea.xdef.XDConstructor;
-import cz.syntea.xdef.XDValueAbstract;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDResultSet;
-import cz.syntea.xdef.msg.XDEF;
-import cz.syntea.xdef.sys.SRuntimeException;
-import cz.syntea.xdef.sys.SUnsupportedOperationException;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.xml.KXpathExpr;
-import cz.syntea.xdef.impl.code.DefElement;
-import cz.syntea.xdef.impl.code.DefString;
+import org.xdef.XDStatement;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.proc.XXNode;
+import org.xdef.XDValue;
+import org.xdef.XDService;
+import org.xdef.XDConstructor;
+import org.xdef.XDValueAbstract;
+import org.xdef.XDFactory;
+import org.xdef.XDResultSet;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUnsupportedOperationException;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.xml.KXpathExpr;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefString;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import cz.syntea.xdef.XDValueID;
-import cz.syntea.xdef.XDValueType;
+import org.xdef.XDValueID;
+import org.xdef.XDValueType;
 
 /** Test of external services.
  *

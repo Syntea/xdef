@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding = "windows-1250"?>
+<!--
+    Document   : testCharset1.xml
+    Created on : 14.9.2005, 15:26
+    Author     : Trojan
+    Description:
+        Purpose of the document is test of charset windows-1250.
+-->
+<root text = "μθψύανισοςϊωΜΘΨέΑΝΙΣΟÒΪΩ" >μθψύανισοςϊωΜΘΨέΑΝΙΣΟÒΪΩ</root>

@@ -1,0 +1,12 @@
+<!ELEMENT slide (image?, title, item*)>
+<!ATTLIST slide 
+            type   (tech | exec | all) #IMPLIED
+>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT item (#PCDATA | item)* >
+<!ELEMENT image EMPTY>
+<!ATTLIST image 
+            alt    CDATA    #IMPLIED
+            src    CDATA    #REQUIRED
+            type   CDATA    "image/gif"
+>

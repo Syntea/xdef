@@ -1,8 +1,8 @@
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.StringParser;
-import cz.syntea.xdef.xml.KXmlUtils;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -54,7 +54,7 @@ public class TestXdScript extends XDTester {
 		BNFGrammar g;
 		try {
 			URL u =	ClassLoader.getSystemResource(
-				"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef");
+				"org/xdef/impl/compile/XdefOfXdefBase.xdef");
 			Element e = KXmlUtils.parseXml(u).getDocumentElement();
 			e = KXmlUtils.firstElementChildNS(
 				e, e.getNamespaceURI(), "BNFGrammar");

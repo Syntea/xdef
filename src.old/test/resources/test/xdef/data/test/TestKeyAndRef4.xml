@@ -1,0 +1,55 @@
+<A>
+  <Zeme Nazev = 'CZ'>
+    <Pracoviste>
+      <Obec Nazev ='Mala'>
+        <Ulice Nazev ='Kratka'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+        <Ulice Nazev ='Dlouha'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+      </Obec>
+      <Obec Nazev ='Velka'>
+        <Ulice Nazev ='Kratka'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+      <Ulice Nazev ='Dlouha'>
+        <Dum Cislo ='1'/>
+        <Dum Cislo ='2'/>
+        <Dilna Cislo ='3'/>
+        </Ulice>
+      </Obec>
+    </Pracoviste>
+    <Zamestnanci>
+      <Zamestnanec ID ='1' Jmeno='Jan' Prijmeni ='Novak'>
+        <Pracoviste Obec ='Mala' Ulice  ='Kratka' Objekt ='1'/>
+      </Zamestnanec>
+      <Zamestnanec ID ='1' Jmeno='Jana' Prijmeni ='Novakova'>
+        <Pracoviste Obec ='Velka' Ulice  ='Dlouha' Objekt ='2'/>
+      </Zamestnanec>
+    </Zamestnanci>
+  </Zeme>
+  <Zeme Nazev = 'SK'>
+    <Pracoviste>
+      <Obec Nazev ='Mala'>
+        <Ulice Nazev ='Kratka'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+        <Ulice Nazev ='Dlouha'>
+          <Dum Cislo ='1'/>
+          <Dum Cislo ='2'/>
+          <Dilna Cislo ='3'/>
+        </Ulice>
+      </Obec>
+    </Pracoviste>
+    <Zamestnanci/>
+  </Zeme>
+</A>

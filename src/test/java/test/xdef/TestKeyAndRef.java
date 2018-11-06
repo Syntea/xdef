@@ -1,12 +1,12 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.StringParser;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.StringParser;
+import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.proc.XXData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 

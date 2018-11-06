@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="KodUtvaruPolicie_user_Type">
+    <xs:annotation>
+      <xs:documentation>
+        This "User type"replaces an unrecognised type of attribute
+        or text value! The name of unrecognised type is: required
+        tab('CC_UtvarPolicie','KodUtvaruPolicie') . Please check
+        the XDefinition!
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="CisloDN_Xdnum_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MD5_Type">
+    <xs:restriction base="xs:string">
+      <xs:length value="32"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Delka_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Format_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="JPG"/>
+      <xs:enumeration value="PDF"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SeqSouboru_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Repeat_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PrilohaPDN_PrilohaPDN_type">
+    <xs:attribute name="SeqRec"
+      type="xs:long"
+      use="required"/>
+    <xs:attribute name="IdentSouboru"
+      type="xs:long"
+      use="required"/>
+    <xs:attribute name="KodUtvaruPolicie"
+      type="KodUtvaruPolicie_user_Type"
+      use="required"/>
+    <xs:attribute name="RokDN"
+      type="xs:gYear"
+      use="required"/>
+    <xs:attribute name="CisloDN"
+      type="CisloDN_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="Poradi"
+      type="xs:long"
+      use="required"/>
+    <xs:attribute name="MD5"
+      type="MD5_Type"
+      use="required"/>
+    <xs:attribute name="Delka"
+      type="Delka_Type"
+      use="required"/>
+    <xs:attribute name="Format"
+      type="Format_Type"
+      use="required"/>
+    <xs:attribute name="SeqSouboru"
+      type="SeqSouboru_Type"
+      use="required"/>
+    <xs:attribute name="Repeat"
+      type="Repeat_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:element name="SouborD2A">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PrilohaPDN"
+          type="PrilohaPDN_PrilohaPDN_type"
+          minOccurs="0"
+          maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="Davka"
+        type="xs:string"
+        use="required"/>
+      <xs:attribute name="ZeDne"
+        type="xs:string"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

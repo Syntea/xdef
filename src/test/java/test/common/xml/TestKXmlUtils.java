@@ -1,7 +1,7 @@
 package test.common.xml;
 
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.xml.KXpathExpr;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.xml.KXpathExpr;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -13,11 +13,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import cz.syntea.xdef.sys.ReportWriter;
+import org.xdef.sys.ReportWriter;
 import test.utils.STester;
 
 /** TestKXmlUtils
- * @author  Vaclav Trojan
+ * @author Vaclav Trojan
  */
 public class TestKXmlUtils extends STester {
 

@@ -1,25 +1,25 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDDebug;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDOutput;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.model.XMDebugInfo;
-import cz.syntea.xdef.model.XMStatementInfo;
+import org.xdef.XDConstants;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDDebug;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDOutput;
+import org.xdef.XDPool;
+import org.xdef.model.XMDebugInfo;
+import org.xdef.model.XMStatementInfo;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.XDValueID;
+import org.xdef.XDValueID;
 
 /** TestDebug provides testing of debug mode.
  * @author Trojan
@@ -42,9 +42,9 @@ public final class TestDebug extends XDTester {
 		PrintStream ps;
 		Element el;
 		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, // debug editor
-			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
+			"org.xdef.impl.debug.ChkGUIDebug"); // class name
 		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
-			"cz.syntea.xdef.impl.debug.ChkGUIDebug"); // class name
+			"org.xdef.impl.debug.ChkGUIDebug"); // class name
 //		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
 		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug

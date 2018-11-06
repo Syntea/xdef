@@ -1,11 +1,11 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
-import cz.syntea.xdef.util.gencollection.XDGenCollection;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -50,11 +50,11 @@ public final class TestXdefOfXdef extends XDTester {
 			if (XP == null) {
 				URL[] sources = new URL[] {
 					ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdefBase.xdef"),
+						"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
 					ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdef20.xdef"),
+						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
-						"cz/syntea/xdef/impl/compile/XdefOfXdef31.xdef"),
+						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
 				};
 				XP = compile(sources);
 				ByteArrayOutputStream out;

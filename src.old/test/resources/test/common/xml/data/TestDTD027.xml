@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!DOCTYPE zamestnanec SYSTEM "TestDTD027.dtd" [
+  <!ATTLIST zamestnanec id CDATA #IMPLIED>
+]>
+<zamestnanec>
+  <jmeno>Jan</jmeno>
+  <prijmeni>Novák</prijmeni>
+  <plat>25000</plat>
+  <narozen>1965-12-24</narozen>
+</zamestnanec>

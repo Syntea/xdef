@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<SouborP1A Davka="362" ZeDne="20061227">
+
+<OpravaXPolPS IdentZaznamu="1" CisloSmlouvy="6101543996" PoradiVozidla="1">
+   <VozidloSmlouvy>
+      <Vozidlo SPZ="6A84013" />
+   </VozidloSmlouvy>
+</OpravaXPolPS>
+
+</SouborP1A>

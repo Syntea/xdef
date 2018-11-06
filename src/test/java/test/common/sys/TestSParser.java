@@ -1,9 +1,9 @@
 package test.common.sys;
 
-import cz.syntea.xdef.sys.SDatetime;
-import cz.syntea.xdef.sys.SDuration;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

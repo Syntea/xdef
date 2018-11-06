@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<List>
+  <Employee Name                   = "John"
+            FamilyName             = "Braun"
+            Ingoing                = "2004-10-01"
+            Salary                 = "2000" 
+            Qualification          = "worker" /> 
+
+  <Employee Name                   = "Mary"
+            FamilyName             = "White"
+            Ingoing                = "1998-19-13"
+            Salary                 = "abcd" 
+            Qualification          = "" /> 
+
+  <Employee Name                   = "Peter"
+            FamilyName             = "Black"
+            Ingoing                = "1998-02-13"
+            Salary                 = "1600" 
+            SecondaryQualification = "electrician" /> 
+
+</List>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            name="M1"/>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="BezProvozovateleVO"
+            name="BezProvozovateleVO">
+    <BezProvozovateleVO xdef:script="finally outputIVR('BezProvozovateleVO_')"
+                        Pcv="required int();                                        onFalse setErr(4208); onAbsence setErr(4202)"
+                        DatumPosledniEvidZmeny="required datetime('yyyyMMdd'); onTrue dateDavka(4221); onFalse setErr(4208); onAbsence setErr(4202)">
+      <VozidloCR xdef:script="occurs 1; ref M1_common#VozidloCR;                                               onAbsence elementErr(4262)"/>
+    </BezProvozovateleVO>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="BezProvozovateleVO_"
+            name="BezProvozovateleVO_">
+    <BezProvozovateleVO_ IdPrace="required int();                create getIdPrace()"
+                         Pcv="required int()"
+                         DatumVytvoreniDavkyCR="required datetime('yyyyMMdd'); create getDatumdavky()"
+                         DatumPosledniEvidZmeny="required datetime('yyyyMMdd')">
+      <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
+    </BezProvozovateleVO_>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="KonfliktniVO#KonfliktniVO"
+            name="KonfliktniVO">
+    <KonfliktniVO xdef:script="finally outputIVR('KonfliktniVO_')"
+                  Pcv="required int();            onFalse setErr(4208); onAbsence setErr(4202)"
+                  IdZmenaVozidlaPS="required int();            onFalse setErr(4208); onAbsence setErr(4202)"
+                  MiraShody="required int(1,6);         onFalse setErr(4208); onAbsence setErr(4202)">
+      <VozidloCR xdef:script="occurs 1; ref M1_common#VozidloCR;   onAbsence elementErr(4262)"/>
+    </KonfliktniVO>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="KonfliktniVO_#KonfliktniVO_"
+            name="KonfliktniVO_">
+    <KonfliktniVO_ IdPrace="required int();                create getIdPrace()"
+                   Pcv="required int()"
+                   IdZmenaVozidlaPS="required int()"
+                   MiraShody="required int()"
+                   DatumVytvoreniDavkyCR="required datetime('yyyyMMdd'); create getDatumdavky()">
+      <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
+    </KonfliktniVO_>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            name="M1_common">
+    <VozidloCR CisloTP="optional pic('AA999999');                              onFalse setErr(4208)"
+               VIN="required string(1,26);                                 onFalse setErr(4208); onAbsence setErr(4202)"
+               SPZ="required string(1,8);                                  onFalse setErr(4208); onAbsence setErr(4202)"
+               KodTridySPZ="required tab('VO_TridaSPZ','KodTridySPZ');             onFalse setErr(4225); onAbsence setErr(4202)"
+               KodDruhuVozidlaCR="required tab('CC_DruhVozidlaCR','KodDruhuVozidlaCR');  onFalse setErr(4225); onAbsence setErr(4202)"
+               KodStavuVozidlaCR="optional tab('CC_StavVozidlaCR','KodStavuVozidlaCR');  onFalse setErr(4225)"
+               ZnackaModelText="required string(1,37);                                 onFalse setErr(4208); onAbsence setErr(4202)"
+               BarvaText="optional string(1,20);                                 onFalse setErr(4208)"
+               RokDoProvozu="optional datetime('yyyy');                             onFalse setErr(4208)"
+               ZdvihovyObjem="optional int(0, 99_999); onTrue setNullIfZero();       onFalse setErr(4208)"
+               VykonMotoru="optional int(0,  9_999); onTrue setNullIfZero();       onFalse setErr(4208)"
+               CelkovaHmotnost="optional int(0,999_999); onTrue setNullIfZero();       onFalse setErr(4208)"
+               PocetMistCelkem="optional int(0,999);     onTrue setNullIfZero();       onFalse setErr(4208)"
+               KodOkresuEvidence="required tab('CC_Okres','KodOkresu');                  onFalse setErr(4225); onAbsence setErr(4202)"
+               PoverenaObec="optional tab('CC_PoverenaObec','KodPovereneObce');     onFalse setErr(4225)"/>
+    <ProvozovatelCR PlatnostOd="required datetime('yyyyMMdd'); onTrue dateDavka(4221); onFalse setErr(4208); onAbsence setErr(4202)"
+                    ProvozovatelText="optional string(1,241);                                onFalse setErr(4208)">
+      <Subjekt xdef:script="occurs 0..1; ref Subjekt"/>
+    </ProvozovatelCR>
+    <Subjekt xdef:script="finally {                                     setDefault_ifEx('@StatPrislusnost','CZ','@RC','@IC');                                     chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','CZ');                                     chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','SK');                                     chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','CZ');                                     chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','SK');                                     emptySubjHasAddr(4266,'Adresa');                                  }"
+             Jmeno="optional string(1,24);                                 onFalse setErr(4208)"
+             Prijmeni="optional string(1,36);                                 onFalse setErr(4208)"
+             RC="optional string(1,14);                                 onFalse setErr(4208)"
+             DatumNarozeni="optional datetime('yyyyMMdd');                         onFalse setErr(4208)"
+             NazevFirmy="optional string(1,100);                                onFalse setErr(4208)"
+             IC="optional string(1,12);                                 onFalse setErr(4208)"
+             StatPrislusnost="optional tab('CC_Stat','KodStatu');                    onFalse setErr(4225)">
+      <Adresa xdef:script="occurs 0..1; ref Adresa"/>
+    </Subjekt>
+    <Adresa Ulice="optional string(1,36);                                 onFalse setErr(4208)"
+            CisloDomu="optional string(1,10);                                 onFalse setErr(4208)"
+            Obec="required string(1,36);                                 onFalse setErr(4208); onAbsence setErr(4203)"
+            Okres="optional string(1,36);                                 onFalse setErr(4208)"
+            Stat="required tab('CC_Stat','KodStatu');                    onFalse setErr(4225); onAbsence setText('CZ')"
+            PSC="required string(1,16);                                 onFalse setErr(4208); onAbsence setErr(4203)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            name="M1_common_">
+    <VozidloCRId xdef:script="                                                                                create from('VozidloCR')"
+                 CisloTP="optional"
+                 VIN="required"
+                 SPZ="required"
+                 KodTridySPZ="required"
+                 IdDruhVozidlaCR="required; onTrue setText(getTab('CC_DruhVozidlaCR','KodDruhuVozidlaCR','IdDruhVozidlaCR')); create from('@KodDruhuVozidlaCR')"
+                 IdStavVozidlaCR="optional; onTrue setText(getTab('CC_StavVozidlaCR','KodStavuVozidlaCR','IdStavVozidlaCR')); create from('@KodStavuVozidlaCR')"
+                 IdZnackaModelText="required; onTrue setText(getTabId('ZnMo.FindZnackaModelText'));                             create from('@ZnackaModelText')"
+                 IdBarvaText="optional; onTrue setText(getTabId('BarvaTxt.FindBarvaText'));                               create from('@BarvaText')"
+                 RokDoProvozu="optional"
+                 ZdvihovyObjem="optional"
+                 VykonMotoru="optional"
+                 CelkovaHmotnost="optional"
+                 PocetMistCelkem="optional"
+                 IdOkresEvidence="required; onTrue setText(getTab('CC_Okres','KodOkresu','IdOkres'));                         create from('@KodOkresuEvidence')"
+                 IdPoverenaObec="optional; onTrue setText(getTab('CC_PoverenaObec','KodPovereneObce','IdPoverenaObec'));     create from('@PoverenaObec')"/>
+    <ProvozovatelCRId xdef:script="                                                                              create from('ProvozovatelCR')"
+                      PlatnostOd="required"
+                      IdSubjekt="optional;                                                                                   create getIdSubjekt()"
+                      IdAdresa="optional;                                                                                   create getIdAdresa()"
+                      IdProvozovatelText="optional; onTrue setText(getTabId('PrTxt.FindProvozovatelText'));                           create from('@ProvozovatelText')"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="NeznameVO"
+            name="NeznameVO">
+    <NeznameVO xdef:script="finally outputIVR('NeznameVO_')"
+               IdZmenaVozidlaPS="required int(); onFalse setErr(4208); onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="NeznameVO_"
+            name="NeznameVO_">
+    <NeznameVO_ IdPrace="required int();                    create getIdPrace()"
+                IdZmenaVozidlaPS="required int()"
+                DatumVytvoreniDavkyCR="required datetime('yyyyMMdd');     create getDatumdavky()"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="NoveVO"
+            name="NoveVO">
+    <NoveVO xdef:script="finally outputIVR('NoveVO_')"
+            Pcv="required int(); onFalse setErr(4208); onAbsence setErr(4202)">
+      <VozidloCR xdef:script="occurs 1; onAbsence elementErr(4262); ref M1_common#VozidloCR"/>
+      <ProvozovatelCR xdef:script="occurs 1; onAbsence elementErr(4260); ref M1_common#ProvozovatelCR"/>
+    </NoveVO>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="NoveVO_"
+            name="NoveVO_">
+    <NoveVO_ IdPrace="required int();                create getIdPrace()"
+             Pcv="required int()"
+             DatumVytvoreniDavkyCR="required datetime('yyyyMMdd'); create getDatumdavky()">
+      <VozidloCRId xdef:script="occurs 1;    ref M1_common_#VozidloCRId"/>
+      <ProvozovatelCRId xdef:script="occurs 0..1; ref M1_common_#ProvozovatelCRId"/>
+    </NoveVO_>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="PotvrzeneVO#PotvrzeneVO"
+            name="PotvrzeneVO">
+    <PotvrzeneVO xdef:script="finally outputIVR('PotvrzeneVO_')"
+                 Pcv="required int(); onFalse setErr(4208); onAbsence setErr(4202)"
+                 IdZmenaVozidlaPS="required int(); onFalse setErr(4208); onAbsence setErr(4202)"
+                 MiraShody="fixed '0'">
+      <VozidloCR xdef:script="occurs 1; onAbsence elementErr(4262); ref M1_common#VozidloCR"/>
+    </PotvrzeneVO>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="PotvrzeneVO_#PotvrzeneVO_"
+            name="PotvrzeneVO_">
+    <PotvrzeneVO_ IdPrace="required int();                 create getIdPrace()"
+                  Pcv="required int()"
+                  IdZmenaVozidlaPS="required int()"
+                  MiraShody="fixed '0'"
+                  DatumVytvoreniDavkyCR="required datetime('yyyyMMdd');  create getDatumdavky()">
+      <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
+    </PotvrzeneVO_>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="SouborM1RC"
+            name="SouborM1RC">
+    <SouborM1RC xdef:script="init initParams()"
+                Davka="required"
+                ZeDne="required">
+      <NeznameVO xdef:script="forget; occurs 0..; ref NeznameVO#NeznameVO"/>
+    </SouborM1RC>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="SouborM1RN#SouborM1RN"
+            name="SouborM1RN">
+    <SouborM1RN xdef:script="init initParams()"
+                Davka="required"
+                ZeDne="required">
+      <KonfliktniVO xdef:script="forget; occurs 0..; ref KonfliktniVO#KonfliktniVO"/>
+    </SouborM1RN>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="SouborM1RS"
+            name="SouborM1RS">
+    <SouborM1RS xdef:script="init initParams()"
+                Davka="required"
+                ZeDne="required">
+      <PotvrzeneVO xdef:script="forget; occurs 0..; ref PotvrzeneVO#PotvrzeneVO"/>
+    </SouborM1RS>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="SouborM1RT#SouborM1RT"
+            name="SouborM1RT">
+    <SouborM1RT xdef:script="init initParams()"
+                Davka="required"
+                ZeDne="required">
+      <ZmenaStavuVO xdef:script="forget; occurs 0..; ref ZmenaStavuVO#ZmenaStavuVO"/>
+    </SouborM1RT>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="SouborM1RV"
+            name="SouborM1RV">
+    <SouborM1RV xdef:script="init initParams()"
+                Davka="required"
+                ZeDne="required">
+      <xdef:mixed>
+        <ZmenaProvozovateleVO xdef:script="forget; occurs 0..; ref ZmenaProvozovateleVO#ZmenaProvozovateleVO"/>
+        <BezProvozovateleVO xdef:script="forget; occurs 0..; ref BezProvozovateleVO#BezProvozovateleVO"/>
+        <NoveVO xdef:script="forget; occurs 0..; ref NoveVO#NoveVO"/>
+      </xdef:mixed>
+    </SouborM1RV>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="ZmenaProvozovateleVO"
+            name="ZmenaProvozovateleVO">
+    <ZmenaProvozovateleVO xdef:script="finally outputIVR('ZmenaProvozovateleVO_')"
+                          Pcv="required int(); onFalse setErr(4208); onAbsence setErr(4202)">
+      <VozidloCR xdef:script="occurs 1; onAbsence elementErr(4262); ref M1_common#VozidloCR"/>
+      <ProvozovatelCR xdef:script="occurs 1; onAbsence elementErr(4260); ref M1_common#ProvozovatelCR"/>
+    </ZmenaProvozovateleVO>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="ZmenaProvozovateleVO_"
+            name="ZmenaProvozovateleVO_">
+    <ZmenaProvozovateleVO_ IdPrace="required int();                create getIdPrace()"
+                           Pcv="required int()"
+                           DatumVytvoreniDavkyCR="required datetime('yyyyMMdd'); create getDatumdavky()">
+      <VozidloCRId xdef:script="occurs 1;    ref M1_common_#VozidloCRId"/>
+      <ProvozovatelCRId xdef:script="occurs 0..1; ref M1_common_#ProvozovatelCRId"/>
+    </ZmenaProvozovateleVO_>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            xdef:script="options setAttrUpperCase"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="ZmenaStavuVO"
+            name="ZmenaStavuVO">
+    <ZmenaStavuVO xdef:script="finally outputIVR('ZmenaStavuVO_')"
+                  Pcv="required int();                onFalse setErr(4208);                         onAbsence setErr(4202)"
+                  KodStavuVozidlaCR="required string(1);            onFalse setErr(4208);                         onAbsence setErr(4202)"
+                  DatumPosledniEvidZmeny="required datetime('yyyyMMdd'); onTrue dateDavka(4221); onFalse setErr(4208); onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+            impl-version="2.2.0.0"
+            impl-date="17.07.2005"
+            root="ZmenaStavuVO_#ZmenaStavuVO_"
+            name="ZmenaStavuVO_">
+    <ZmenaStavuVO_ IdPrace="required int();                                                                             create getIdPrace()"
+                   Pcv="required int()"
+                   DatumVytvoreniDavkyCR="required datetime('yyyyMMdd');                                                              create getDatumdavky()"
+                   DatumPosledniEvidZmeny="required datetime('yyyyMMdd')"
+                   IdStavVozidlaCR="required; onTrue setText(getTab('CC_StavVozidlaCR','KodStavuVozidlaCR','IdStavVozidlaCR')); create from('@KodStavuVozidlaCR')"/>
+  </xdef:def>
+</xd:collection>

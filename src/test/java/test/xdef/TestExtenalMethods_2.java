@@ -1,8 +1,8 @@
 package test.xdef;
 
-import cz.syntea.xdef.proc.XXData;
-import cz.syntea.xdef.proc.XXElement;
-import cz.syntea.xdef.proc.XXNode;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
 import java.math.BigDecimal;
 
 /** Class containing external methods.

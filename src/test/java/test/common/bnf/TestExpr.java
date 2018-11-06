@@ -1,9 +1,9 @@
 package test.common.bnf;
 
-import cz.syntea.xdef.sys.BNFGrammar;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.sys.StringParser;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.Report;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.ByteArrayOutputStream;
@@ -855,7 +855,7 @@ public class TestExpr extends STester {
 				}
 			}
 			in.close();
-			System.out.println(ruleName + " (" + min + "," + max + ")");
+//			System.out.println(ruleName + " (" + min + "," + max + ")");
 			g.trace(null);
 			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
 			assertEq("", expr("abcdef", g, "'abc' + 'def'"));

@@ -1,0 +1,38 @@
+<SouborD2A Davka="1234/1" ZeDne="20050930000000"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="D2A.xsd">
+
+<PrilohaPDN SeqSouboru="28"
+  RokDN="2005"
+  IdentSouboru="1122211"
+  CisloDN="01234"
+  SeqRec="1"
+  KodUtvaruPolicie="123456"
+  Delka="20906"
+  MD5="20293ebcc8af836f7c94f5878e309fe0"
+  Format="JPG"
+  Poradi="1"/>
+
+<PrilohaPDN SeqSouboru="29"
+  RokDN="2005"
+  IdentSouboru="1122212"
+  CisloDN="01234"
+  SeqRec="2"
+  KodUtvaruPolicie="123456"
+  Delka="25309"
+  MD5="392e957e394484ffe3800e22084c3e42"
+  Format="JPG"
+  Poradi="2"/>
+
+<PrilohaPDN SeqSouboru="30"
+  RokDN="2005"
+  IdentSouboru="1122213"
+  CisloDN="01234"
+  SeqRec="3"
+  KodUtvaruPolicie="123456"
+  Delka="17257"
+  MD5="abf8386da75bc52e1cb312fcd4f8a7c7"
+  Format="JPG"
+  Poradi="3"/>
+
+</SouborD2A>

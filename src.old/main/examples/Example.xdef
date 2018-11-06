@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1" xd:root = "List" >
+
+<List>
+  <Employee xd:script = "occurs 0..*" 
+     Name                   = "required string(1,30)"
+     FamilyName             = "required string(1,30)"
+     Ingoing                = "required date()"
+     Salary                 = "required int(1000,100000)" 
+     Qualification          = "required string()" 
+     SecondaryQualification = "optional string()" />
+
+</List>
+
+</xd:def>
+

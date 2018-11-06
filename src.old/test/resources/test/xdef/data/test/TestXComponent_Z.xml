@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="Windows-1250"?>
+<SouborD1A>
+   <ZaznamPDN Verze="2.0" KrajPolicie="XY" SeqRec="1" PlatnostOd="1.1.2013 9:30" >
+      <Protokol KodUtvaruPolicie="012345" RokDN="2013" CisloDN="00123" CisloJednaciDN="XXXX-123/XX-YY-2013" DatumCasOznameni="01.01.2013 10:00" NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ" Zpracovatel="PRAP. PAVEL NOVAK" />
+      <RozhodnutiDN>Věc je v šetření</RozhodnutiDN>
+      <VyliceniDN>K dopravní nehodě došlo v době od 31. prosince 2013</VyliceniDN>
+      <ObjStranka DatumCasDN="01.01.2013 17:00" DatumCasDoDN="01.01.2013 09:30" KodOkresu="0111" Obec="LHOTA" SkodaTisKc="25" HlavniPricina=" ZPŮSOB JÍZDY " Pricina="511">
+         <Misto>NA  SILNICI 3.TŘÍDY VE SMĚRU NA OBEC MALÁ U DOMU ČP. 1</Misto>
+      </ObjStranka>
+      <Vozidlo OznSegmentu="1" SPZ="XYZ1234" MPZ="CZ" PlatnostSTK="platná" MesicSTKDo="1/2005" Znacka="HONDA" TypVozidla="CiVIC 15GL" RokVyroby="1990" TypBrzd="kapalinové" StavBrzd="dobrý" VIN="ABCDE123456789123" KodPojistitele="0002" CisloDokladuPojisteni="110000999" DruhVozidla="osobní automobil">
+         <Skoda TisKc="25">pravý přední blatník</Skoda>
+         <Drzitel>LEASING a.s., IČO: 11111111, Krátká č. 11, Staré Město, stát : ČR</Drzitel>
+      </Vozidlo>
+      <Ucastnik OznSegmentu="1-1" TypUcastnika="vlastník (právnická osoba)" Poskozeny="Poškozený">
+         <Firma NazevFirmy="LEASING a.s." IC="11111111">
+            <Sidlo Ulice="Krátká" CisloPopisne="11" Obec="STARÉ MĚSTO" Stat="ČR" />
+         </Firma>
+         <Vazba>osobní automobil - HONDA CiVIC 15GL, RZ - XYZ 12-34, MSPZ CZ</Vazba>
+      </Ucastnik>
+   </ZaznamPDN>
+   <ZaznamPDN Verze="2.0" KrajPolicie="AB" SeqRec="2" PlatnostOd="5.5.2013 13:00">
+      <Protokol KodUtvaruPolicie="045123" RokDN="2013" CisloDN="00456" CisloJednaciDN="XXXX-999/XX-YY-2013" DatumCasOznameni="05.05.2003 13:15" NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ" Zpracovatel="PPRAP. MARTIN NOVÁK" />
+      <RozhodnutiDN DatumRozhodnuti="30.04.2003">Rozhodnutí nabylo právní moci</RozhodnutiDN>
+      <VyliceniDN>
+         K dopravní nehodě došlo tak, že řidič vozidlem Mercedes přejel vlevo.
+      </VyliceniDN>
+      <ObjStranka DatumCasDN="05.05.2003 13:10" KodOkresu="0234" Obec="MESTO" SkodaTisKc="18" HlavniPricina=" ZPŮSOB JÍZDY " Pricina="501">
+         <Misto>NA  MÍSTNÍ KOMUNIKACI , PŘÍJEZDOVÁ KOMUNIKACE K F. PAS</Misto>
+      </ObjStranka>
+      <Vozidlo OznSegmentu="1" SPZ="ZYX1234" MPZ="CZ" PlatnostSTK="platná" Znacka="MERCEDES" TypVozidla="308 CDI" RokVyroby="2001" TypBrzd="kapalinové" StavBrzd="dobrý" KodPojistitele="1111" CisloDokladuPojisteni="123456789" DruhVozidla="nákladní automobil">
+         <Skoda TisKc="15">levý bok skříně</Skoda>
+         <Drzitel>Pavel NOVÁK,  DYBNÁ č. 615,  PSČ 123 34  VELKÁ MALÁ</Drzitel>
+      </Vozidlo>
+      <Ucastnik OznSegmentu="1-1" TypUcastnika="řidič" PraxeRizeni="18" PokutaKc="1000" PokutaZapl="nezaplacena" Pachatel="Pachatel DN">
+         <JinaSkoda TisKc = "123,45">nejaka skoda</JinaSkoda>
+         <Osoba Jmeno="Josef" Prijmeni="NOVÁK" RC="121212/121" Pohlavi="M" DatumNarozeni="12.12.12" StatNarozeni="ČR" StatniPrislusnost="ČR">
+            <TrvalyPobyt Ulice="VELKÁ" CisloPopisne="123" CisloOrientacni="1" Obec="MALÁ" PSC="123 45" Okres="MESTO" Stat="ČR" />
+         </Osoba>
+         <Doklad TypDokladu="občanský průkaz" CisloDokladu="XY 123456" StatVydani="ČR" />
+         <Doklad TypDokladu="řidičský průkaz" Opravneni="A B" CisloDokladu="AL 123456" MistoVydani="Město" StatVydani="ČR" />
+         <PoruseniZakProvoz>§ 11 odst. 1</PoruseniZakProvoz>
+         <PoruseniZakPrest>§ 22 odst.1 písm.f) zákona č. 200/1990 Sb.</PoruseniZakPrest>
+         <Vazba>nákladní automobil - MERCEDES, RZ - XX 0123, MSPZ CZ</Vazba>
+      </Ucastnik>
+      <Ucastnik OznSegmentu="1-2" TypUcastnika="vlastník (fyzická osoba)" Poskozeny="Poškozený">
+         <Osoba Jmeno="Josef" Prijmeni="NOVÁK" RC="111111/111" Pohlavi="M" DatumNarozeni="11.11.11" StatNarozeni="ČR" StatniPrislusnost="ČR">
+            <TrvalyPobyt Ulice="ULICE" CisloPopisne="615" Obec="MĚSTO" PSC="783 53" Okres="MĚSTO" Stat="ČR" />
+         </Osoba>
+         <Vazba>nákladní automobil - MERCEDES, RZ - XX 0123, MSPZ CZ</Vazba>
+      </Ucastnik>
+      <Vozidlo OznSegmentu="2" SPZ="1X11234" MPZ="CZ" PlatnostSTK="platná" Znacka="ŠKODA" TypVozidla="120 L" RokVyroby="1988" TypBrzd="kapalinové" StavBrzd="dobrý" KodPojistitele="0009" CisloDokladuPojisteni="999999" DruhVozidla="osobní automobil">
+         <Skoda TisKc="3">přední maska</Skoda>
+         <Drzitel>Petr NOVÁK,  MALÁ č. 63,  PSČ 123 45 TROUBY</Drzitel>
+      </Vozidlo>
+      <Ucastnik OznSegmentu="2-1" TypUcastnika="řidič-vlastník" PraxeRizeni="01" Poskozeny="Poškozený">
+         <Osoba Jmeno="Petr" Prijmeni="NOVÁK" RC="111111/1111" Pohlavi="M" DatumNarozeni="11.11.11" StatNarozeni="ČR" StatniPrislusnost="ČR">
+            <TrvalyPobyt Ulice="ULIČKA" CisloPopisne="12" Obec="TROUBY" PSC="123 34" Okres="MĚSTO" Stat="ČR" />
+         </Osoba>
+         <Doklad TypDokladu="občanský průkaz" CisloDokladu="XX 123456" StatVydani="ČR" />
+         <Doklad TypDokladu="řidičský průkaz" Opravneni="A1 B C" CisloDokladu="XX 456789" MistoVydani="Město" StatVydani="ČR" />
+         <Vazba>osobní automobil - ŠKODA 120 L, RZ - 1X1 1234, MSPZ CZ</Vazba>
+      </Ucastnik>
+   </ZaznamPDN>
+</SouborD1A>

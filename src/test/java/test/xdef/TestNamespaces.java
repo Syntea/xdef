@@ -1,9 +1,9 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.XDPool;
 
 /** Test of references with NameSpace.
  * @author Vaclav Trojan

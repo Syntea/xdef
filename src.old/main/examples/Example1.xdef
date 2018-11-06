@@ -1,0 +1,36 @@
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1">
+<xd:declaration>
+<![CDATA[
+   boolean checkId(){
+      String s = getText();
+      if (!string(10,11))
+         return error('Incorrect length of PID');
+      if (s.substring(6,7) != '/')
+         return error('Missing slash character');
+      if (!isNumeric(s.substring(7)))
+			return error('Second part is not numeric');
+      if (!isNumeric(s.substring(0,6)))
+			return error('First part is not numeric');
+      return true;
+   }
+]]>
+</xd:declaration>
+
+<Contract cId = "required num(10)" >
+
+  <Owner xd:script = "occurs 1; create from('Client[@role=\'1\']')"
+     Title  = "required string(1,30); create from('@title')"
+     IC     = "required num(8); create from('@ic')" />
+
+  <Holder xd:script = "occurs 1; create from('Client[@role=\'2\']')"
+     Name        = "required string(1,30); create from('@name')"
+     FamilyName  = "required string(1,30); create from('@familyname')"
+     PersonalId  = "required checkId(); create from('@pid')" />
+
+  <Policyholder xd:script = "occurs 1; create from('Client[@role=\'3\']')"
+     Title = "required string(1,30); create toString(from('@name')) + ' ' + from('@familyname')"
+     IC    = "required num(8); create from('@ic')" />
+
+</Contract>
+
+</xd:def>

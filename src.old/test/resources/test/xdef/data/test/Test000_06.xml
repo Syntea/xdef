@@ -1,0 +1,28 @@
+<RegistraceSU DatumCasSU="200507240000"
+              RozhodnaUdalost="N"
+              CisloSU="1234567890"
+              IdentZaznamu="12"
+              DatumUcinnosti="200507270858">
+  <Misto>
+    <Adresa Stat="SK"/>
+  </Misto>
+  <VozidloPojistnika PoradiVozidlaSU="1">
+    <Smlouva DruhPojisteni="HAV"
+             PoradiVozidla="1"
+             CisloSmlouvy="1234567890">
+      <Pojistnik IC="25329146"
+                 NazevFirmy="DVS MARKET, S.R.O."
+                 StatPrislusnost="CZ"/>
+      <VozidloPS>
+        <Vozidlo SPZ="ABC1234"
+                 MPZ="CZ"
+                 KodModeluVozidla="1682"
+                 ModelText="AVANT"
+                 DruhVozidla="03"
+                 CisloTP="AB123456"
+                 VIN="ABCZZZ8E82A061234"
+                 ZnackaText="AUDI"/>
+      </VozidloPS>
+    </Smlouva>
+  </VozidloPojistnika>
+</RegistraceSU>

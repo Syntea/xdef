@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://a"
+  xmlns:pa="http://a"
+  attributeFormDefault="qualified"
+  elementFormDefault="qualified"
+  xmlns:pb="http://b">
+  <xs:import namespace="http://b"
+    schemaLocation="t018.xsd"/>
+  <xs:element name="a1">
+    <xs:complexType>
+      <xs:attribute name="attr1"
+        type="xs:string"
+        use="optional"
+        form="unqualified"/>
+      <xs:attribute ref="pb:attr2"
+        use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="a2">
+    <xs:complexType>
+      <xs:attribute name="attr1"
+        type="xs:string"
+        use="optional"/>
+      <xs:attribute ref="pb:attr2"
+        use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

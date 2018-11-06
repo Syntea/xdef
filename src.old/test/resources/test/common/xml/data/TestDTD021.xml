@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "TestDTD021.dtd">
+<root att = "a" att1 = "a c" att2 = "-01-:a:b:-" att3 = "4 5" />

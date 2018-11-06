@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="t009"
+  xmlns:tns="http://www.w3schools.com"
+  xd:root="tns:note">
+  <tns:note>
+    <xd:sequence xd:script="occurs 1">
+      <to xd:script="occurs 1">
+        required string()
+      </to>
+      <tns:from xd:script="occurs 1">
+        required string()
+      </tns:from>
+      <tns:heading xd:script="occurs 1">
+        required string()
+      </tns:heading>
+      <tns:body xd:script="occurs 1">
+        required string()
+      </tns:body>
+    </xd:sequence>
+  </tns:note>
+</xd:def>

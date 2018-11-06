@@ -1,11 +1,11 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.SDatetime;
-import cz.syntea.xdef.sys.SUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
 import java.util.GregorianCalendar;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;

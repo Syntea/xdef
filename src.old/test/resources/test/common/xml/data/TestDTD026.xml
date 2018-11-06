@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE a SYSTEM "TestDTD026.dtd">
+<a b='&lt;&b;'>&gt;&b;</a>

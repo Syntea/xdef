@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="M1RN"
+  xd:root="SouborM1RN">
+  <xd:declaration>
+    type CisloTP_Xdpic_Type{parse: string() &amp; regex("[a-zA-Z][a-zA-Z]\\d\\d\\d\\d\\d\\d");}
+  </xd:declaration>
+  <xd:declaration>
+    type VIN_Type{parse: string(1, 26);}
+  </xd:declaration>
+  <xd:declaration>
+    type SPZ_Type{parse: string(1, 8);}
+  </xd:declaration>
+  <xd:declaration>
+    type KodTridySPZ_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type KodDruhuVozidlaCR_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type KodStavuVozidlaCR_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type ZnackaModelText_Type{parse: string(1, 37);}
+  </xd:declaration>
+  <xd:declaration>
+    type BarvaText_Type{parse: string(1, 20);}
+  </xd:declaration>
+  <xd:declaration>
+    type ZdvihovyObjem_Type{parse: int(0, 99999);}
+  </xd:declaration>
+  <xd:declaration>
+    type VykonMotoru_Type{parse: int(0, 9999);}
+  </xd:declaration>
+  <xd:declaration>
+    type CelkovaHmotnost_Type{parse: int(0, 999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type PocetMistCelkem_Type{parse: int(0, 999);}
+  </xd:declaration>
+  <xd:declaration>
+    type KodOkresuEvidence_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type PoverenaObec_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type MiraShody_Type{parse: int(1, 6);}
+  </xd:declaration>
+  <KonfliktniVO_KonfliktniVO_type_cType Pcv="required int()"
+    IdZmenaVozidlaPS="required int()"
+    MiraShody="required MiraShody_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <VozidloCR xd:script="occurs 1; ref M1_common_VozidloCR_type_cType"/>
+    </xd:sequence>
+  </KonfliktniVO_KonfliktniVO_type_cType>
+  <M1_common_VozidloCR_type_cType CisloTP="optional CisloTP_Xdpic_Type()"
+    VIN="required VIN_Type()"
+    SPZ="required SPZ_Type()"
+    KodTridySPZ="required KodTridySPZ_user_Type()"
+    KodDruhuVozidlaCR="required KodDruhuVozidlaCR_user_Type()"
+    KodStavuVozidlaCR="optional KodStavuVozidlaCR_user_Type()"
+    ZnackaModelText="required ZnackaModelText_Type()"
+    BarvaText="optional BarvaText_Type()"
+    RokDoProvozu="optional ISOyear()"
+    ZdvihovyObjem="optional ZdvihovyObjem_Type()"
+    VykonMotoru="optional VykonMotoru_Type()"
+    CelkovaHmotnost="optional CelkovaHmotnost_Type()"
+    PocetMistCelkem="optional PocetMistCelkem_Type()"
+    KodOkresuEvidence="required KodOkresuEvidence_user_Type()"
+    PoverenaObec="optional PoverenaObec_user_Type()"/>
+  <SouborM1RN Davka="required string()"
+    ZeDne="required string()">
+    <xd:sequence xd:script="occurs 1">
+      <KonfliktniVO xd:script="occurs 0..*; ref KonfliktniVO_KonfliktniVO_type_cType"/>
+    </xd:sequence>
+  </SouborM1RN>
+</xd:def>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="t020"
+  xd:root="a">
+  <xd:declaration>
+    type aa_list_Type{parse: list(%item=int(0, 1000));}
+  </xd:declaration>
+  <xd:declaration>
+    type aa_Type{parse: int(0, 1000);}
+  </xd:declaration>
+  <a aa="required aa_list_Type()"/>
+</xd:def>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<text_attr_chld>
+    <ref  attr="abcde">
+        <A />
+        abcde
+        <B />
+    </ref>
+</text_attr_chld>

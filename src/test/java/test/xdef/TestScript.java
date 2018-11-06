@@ -1,17 +1,17 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import cz.syntea.xdef.XDConstants;
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.Report;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDParseResult;
-import cz.syntea.xdef.XDParser;
-import cz.syntea.xdef.proc.XXNode;
-import cz.syntea.xdef.XDPool;
+import org.xdef.XDConstants;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.XDDocument;
+import org.xdef.XDParseResult;
+import org.xdef.XDParser;
+import org.xdef.proc.XXNode;
+import org.xdef.XDPool;
 import org.w3c.dom.Element;
-import cz.syntea.xdef.XDValue;
-import cz.syntea.xdef.proc.XXData;
+import org.xdef.XDValue;
+import org.xdef.proc.XXData;
 
 /** TestScript.
  * @author Vaclav Trojan

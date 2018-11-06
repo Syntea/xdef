@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="Windows-1250" ?>
+<ZaznamPDN Verze="2.0" KrajPolicie="SM" SeqRec="232" PlatnostOd="05.05.2003">
+
+      <Protokol KodUtvaruPolicie="070040" RokDN="2003" CisloDN="00046" CisloJednaciDN="PSM-46/DO-DN-HER-2003" NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ" Zpracovatel="PRAP. PETR HERJECKÝ" />
+
+      <RozhodnutiDN DatumRozhodnuti="19.04.2003">
+         Rozhodnutí nabylo právní moci
+      </RozhodnutiDN>
+
+      <VyliceniDN>
+         K dopravní nehodě došlo tak, že řidič Fiala nezvládl řízení vozu z důvodu, že s uvedeným typem vozu teprve začína jezdit a špatně odhadl chování naloženého vozidla při průjezdu pravotočivou zatáčkou. a při jízdě s vozidlem Volvo s návěsem na přepravu dřeva vyjel vpravo mimo vozovku, kde narazil do odvodňovacích žlabů, kde se převrátil návěs na pravý bok a vysypal se náklad dřeva vpravo mimo vozovku.       Dechová zkouška byla provedena přístrojem DRÄGER, její výsledek byl negativní. Ke zranění osob nedošlo.  Technická závada jako příčina dopravní nehody nebyla na místě ohledáním zjištěna, ani účastníky uplatněna.
+      </VyliceniDN>
+
+      <ObjStranka DatumCasDN="19.04.2003 08:15" SkodaTisKc="410" HlavniPricina=" ZPŮSOB JÍZDY " Pricina="508">
+         <Misto>
+            SILNICI 1.TŘÍDY Č. 35 V KM 289 V KATASTRU OBCE VELKÝ ÚJEZD DÁLNIČNÍ PŘIVADĚČ OKRES OLOMOUC VE SMĚRU OD POTŠTÁTU NA OLOMOUC.
+         </Misto>
+      </ObjStranka>
+
+      <Vozidlo OznSegmentu="1" SPZ="2A38039" MPZ="CZ" PlatnostSTK="platná" Znacka="VOLVO" TypVozidla="FM12" RokVyroby="2003" TypBrzd="vzduchové" StavBrzd="dobrý dle vyjádření řidiče" KodPojistitele="0010" CisloDokladuPojisteni="69717256560" DruhVozidla="nákladní automobil s návěsem">
+         <Skoda TisKc="100">
+            Poškozen závěs návěsu- vytržen., 
+         </Skoda>
+         <Drzitel>
+            Opavská lesní a.s. Praha 4, Krajánkova č. 11/2390, Praha 4, stát : ČR
+         </Drzitel>
+      </Vozidlo>
+
+      <Vozidlo OznSegmentu="1&apos;1" SPZ="1A51254" MPZ="CZ" PlatnostSTK="platná" Znacka="AGAMA" TypVozidla="NPD35" RokVyroby="2003" TypBrzd="vzduchové" StavBrzd="dobrý dle vyjádření řidiče" KodPojistitele="0010" CisloDokladuPojisteni="6971725642" DruhVozidla="návěs">
+         <Skoda TisKc="300">
+            Vytržený závěs poškozen celý pravý bok poškozeny boční ramena.
+         </Skoda>
+      </Vozidlo>
+
+      <Ucastnik OznSegmentu="1-1" TypUcastnika="řidič" PraxeRizeni="04" ZdravPojistovna="Všeobecná zdravotní pojišťovna ČR - 130 00 Praha 3; Orlická 4/2020" PokutaKc="5000" PokutaZapl="nezaplacena" Pachatel="Pachatel DN">
+         <Osoba Jmeno="Luboš" Prijmeni="FIALA" RC="750428/5426" Pohlavi="M" DatumNarozeni="28.04.75" MistoNarozeni="Opava" StatNarozeni="ČR" StatniPrislusnost="ČR" Profese="Řidič">
+            <TrvalyPobyt Ulice="SPORTOVNÍ " CisloPopisne="374" CisloOrientacni="36" Obec="OPAVA MALÉ HOŠTICE" Okres="OPAVA" Stat="ČR" />
+         </Osoba>
+         <Firma NazevFirmy="Opavská lesní a.s. Praha 4 Krajánkova 11/2390" IC="45193177">
+         </Firma>
+         <Doklad TypDokladu="občanský průkaz" CisloDokladu="EK878277" DatumVydani="06.10.87" MistoVydani="Opava" StatVydani="ČR" />
+         <Doklad TypDokladu="řidičský průkaz" Opravneni="A-50ccm B BE C CE" CisloDokladu="AO597922" MistoVydani="Opava" StatVydani="ČR" />
+         <PoruseniZakProvoz>
+            § 4 písm. a 5/1b věnovat se řízen
+         </PoruseniZakProvoz>
+         <PoruseniZakPrest>
+            § 22 odst.1 písm.c) zákona č. 200/1990 Sb. o přestupcích
+         </PoruseniZakPrest>
+         <Vazba>
+            nákladní automobil s návěsem - VOLVO FM12, RZ - NEZJIŠTĚNA  S-PZ, MSPZ CZ
+         </Vazba>
+      </Ucastnik>
+
+      <Ucastnik OznSegmentu="1-2" TypUcastnika="vlastník (právnická osoba)" Poskozeny="Poškozený">
+         <Firma NazevFirmy="Opavská lesní a.s. Praha 4">
+            <Sidlo Ulice="Krajánkova" CisloPopisne="11" CisloOrientacni="2390" Obec="PRAHA 4" PSC="140 00" Okres="PRAHA 1" Stat="ČR" />
+         </Firma>
+         <Vazba>
+            nákladní automobil s návěsem - VOLVO FM12, RZ - NEZJIŠTĚNA  S-PZ, MSPZ CZ
+         </Vazba>
+      </Ucastnik>
+
+      <Predmet OznSegmentu="P-1" NazevPredmetu="dopravní zařízení -  Odvodňovací žlaby kolem vozovky" DruhPredmetu="dopravní zařízení">
+         <Skoda TisKc="10">
+            Rozbité odvodňovací žlaby v nélce cca 35m
+         </Skoda>
+         <Vlastnik>
+            SSURS Kocourovec, Kocourovec stát : ČR
+         </Vlastnik>
+      </Predmet>
+
+      <Ucastnik OznSegmentu="P-1" TypUcastnika="majitel (právnická osoba)" Poskozeny="Poškozený">
+         <Firma NazevFirmy="SSURS Kocourovec">
+            <Sidlo Obec="KOCOUROVEC" Okres="OLOMOUC" Stat="ČR" />
+         </Firma>
+         <Vazba>
+            - , RZ
+         </Vazba>
+      </Ucastnik>
+</ZaznamPDN>

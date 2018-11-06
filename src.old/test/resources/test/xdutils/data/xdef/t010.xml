@@ -1,0 +1,10 @@
+<x:note xmlns:x="http://www.w3schools.com"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.w3schools.com t010.xsd"
+  att1 = "att1"
+  x:att2 = "att2">
+  <x:to>Tove</x:to>
+  <x:from>Jani</x:from>
+  <x:heading>Reminder</x:heading>
+  <x:body>Don't forget me this weekend!</x:body>
+</x:note>

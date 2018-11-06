@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
+         xd:name      =  "main"
+         xd:root      =  "empty | text | attr | chld | text_attr | text_chld | attr_chld | text_attr_chld">
+
+             <empty>
+                <ref xd:script="ref EMPTY" />
+             </empty>
+
+             <text>
+                 <ref xd:script="ref TEXT" />
+             </text>
+
+             <attr>
+                 <ref xd:script="ref ATTR" />
+             </attr>
+
+             <chld>
+                 <ref xd:script="ref CHLD" />
+             </chld>
+
+             <text_attr>
+                 <ref xd:script="ref TEXT_ATTR" />
+             </text_attr>
+
+             <text_chld>
+                 <ref xd:script="ref TEXT_CHLD" />
+             </text_chld>
+
+             <attr_chld>
+                 <ref xd:script="ref ATTR_CHLD" />
+             </attr_chld>
+
+             <text_attr_chld>
+                 <ref xd:script="ref TEXT_ATTR_CHLD" />
+             </text_attr_chld>
+
+             <EMPTY />
+
+             <TEXT>string(5)</TEXT>
+
+             <ATTR attr="string(5)" />
+
+             <CHLD>
+                 <A />
+                 <B />
+             </CHLD>
+
+             <TEXT_ATTR attr="string(5)">
+                string(5)
+             </TEXT_ATTR>
+
+             <TEXT_CHLD>
+                 <A />
+                 string(5)
+                 <B />
+             </TEXT_CHLD>
+
+             <ATTR_CHLD attr="string(5)">
+                 <A />
+                 <B />
+             </ATTR_CHLD>
+
+             <TEXT_ATTR_CHLD attr="string(5)">
+                 <A />
+                 string(5)
+                 <B />
+             </TEXT_ATTR_CHLD>
+
+</xd:def>

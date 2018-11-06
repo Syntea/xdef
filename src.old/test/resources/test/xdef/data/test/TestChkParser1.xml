@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="Windows-1250"?>
+   <ZaznamPDN xmlns:xdi="http://www.syntea.cz/xdef/instance"
+              xdi:location="SYSTEM 'TestChkParser1.xdef'"
+              xdi:xdefName="ZaznamPDN"
+      Verze="1.2"
+      KrajPolicie="AA"
+      SeqRec="55"
+      PlatnostOd="11.12.2001" >
+
+      <Protokol
+         KodUtvaruPolicie="123456"
+         RokDN="2001"
+         CisloDN="12345"
+         CJ="ABCD-1234/AB-CD-2001"
+         DatumCasOznameni="11.7.2002 6:30" 
+         NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ - STŘET ZE ZVĚŘÍ"
+         Zpracovatel="NSTRŽM. PAVEL NOVAK" />
+
+      <Rozhodnuti DatumRozhodnuti="11.12.2003">
+         Odloženo dle § 58 odst. 3 písm. b) zákona č. 200/1990 Sb. o přestupcích
+         ve znění pozdějších předpisů
+      </Rozhodnuti>
+
+      <Vyliceni>
+         Dne 10. července 2001 v době kolem 06:25 hod. jel dosud nezjištěný
+         řidič s vozidlem BMW na kterém byly namotovány spz: 1S12345 patřící
+         na OA Škoda 120 zelené barvy, v obci Velké ze směru od obce Lhota.
+         Na náměstí v obci došlo k  proražení PP pneu a následně je vidět
+         přerušovaná dřecí stopa od PP disku a zhruba po 400m je vidět modrá
+         barva na vozovce a dále z tohoto místa pokračují dvě souvislé stopy
+         od předních kol, které končí v místě nehody, kde řidič vjel mimo
+         vozovku do živého plotu okrasných keřů, které poškodil. Na místě
+         nalezena přední reg. zn.  1S23456. Vozidlo BMW bylo nalezeno odstavené
+         na parkovišti v obci Rudlofov před Obecním úřadem. Na místě použit
+         služební pes s negativním výsledkem. Vozidlo zajištěno odtahovou
+         službou NOVAK Brno.
+         Technická závada jako příčina dopravní nehody nebyla na místě
+         ohledáním zjištěna, ani uplatněna.
+      </Vyliceni>
+
+      <ObjStranka
+         DatumCasDN="10.6.2001 6:25"
+         KodOkresu="0201"
+         Obec="Velká"
+         Ulice="Malá"
+         CisloPopisne="123"
+         CelkovaSkodaKc="10000"
+         HlavniPricina="ZPŮSOB JÍZDY"
+         Pricina="508">
+
+         <Misto>
+            na  místní komunikaci
+         </Misto>
+
+      </ObjStranka>
+
+      <Predmet
+         OznSegmentu="P-1"
+         NazevPredmetu="okrasné keře u č.p.175 -   polámané okrasné keře"
+         DruhPredmetu="okrasné keře u č.p.175">
+
+         <Skoda Kc="10000">
+            
+         </Skoda>
+
+      </Predmet>
+      <Ucastnik
+         OznSegmentu="1-1"
+         TypUcastnika="řidič"
+         PraxeRizeni="18"
+         PokutaKc="1000"
+         PokutaZapl="nezaplacena"
+         Pachatel="Pachatel DN">
+
+         <Osoba
+            Jmeno="Zdeněk"
+            Prijmeni="Novák"
+            RC="450112/123"
+            Pohlavi="M"
+            DatumNarozeni="12.01.45"
+            StatNarozeni="ČR"
+            StatniPrislusnost="ČR">
+
+            <TrvalyPobyt
+               Ulice="VÍTĚZNÁ"
+               CisloPopisne="1166"
+               CisloOrientacni="15"
+               Obec="LHOTA"
+               PSC="123 45"
+               Okres="BRNO"
+               Stat="ČR" />
+         </Osoba>
+
+         <Doklad 
+            TypDokladu="občanský průkaz"
+            CisloDokladu="XY 123456"
+            StatVydani="ČR" />
+
+         <Doklad
+            TypDokladu="řidičský průkaz"
+            Opravneni="A B"
+            CisloDokladu="AB 123456"
+            MistoVydani="Přerov"
+            StatVydani="ČR" />
+
+         <PoruseniZakProvoz>
+            § 11 odst. 1
+         </PoruseniZakProvoz>
+
+         <PoruseniZakPrest>
+            § 22 odst.1 písm.f) zákona č. 200/1990 Sb. o přestupcích
+         </PoruseniZakPrest>
+
+         <Vazba>
+            nákladní automobil - SKODA AUTO 308 CDI, RZ - 1A2 1234, MSPZ CZ
+         </Vazba>
+
+      </Ucastnik>
+
+   </ZaznamPDN>

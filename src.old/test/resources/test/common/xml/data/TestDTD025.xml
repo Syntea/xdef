@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE s:Envelope [
+   <!ELEMENT testConnection ANY>
+      <!ENTITY t "TS">
+      <!ENTITY x0 "eEMpmgxdHPUqEaiRzPImeGWYHULDBFTqBWoAvUBXkqqCcXeWXOcjCLZlrYqMipnbaLzEeeDHZsjktWvyBzTjrTThhlkpwcJRdXbV">
+      <!ENTITY x1 "&x0;&x0;">
+      <!ENTITY x2 "&x1;&x1;">
+      <!ENTITY x3 "&x2;&x2;">
+      <!ENTITY x4 "&x3;&x3;">
+      <!ENTITY x5 "&x4;&x4;">
+      <!ENTITY x6 "&x5;&x5;">
+      <!ENTITY x7 "&x6;&x6;">
+      <!ENTITY x8 "&x7;&x7;">
+      <!ENTITY x9 "&x8;&x8;">
+      <!ENTITY x10 "&x9;&x9;">
+      <!ENTITY x11 "&x10;&x10;">
+      <!ENTITY x12 "&x11;&x11;">
+      <!ENTITY x13 "&x12;&x12;">
+      <!ENTITY x14 "&x13;&x13;">
+      <!ENTITY x15 "&x14;&x14;">
+      <!ENTITY x16 "&x15;&x15;">
+      <!ENTITY x17 "&x16;&x16;">
+      <!ENTITY x18 "&x17;&x17;">
+      <!ENTITY x19 "&x18;&x18;">
+      <!ENTITY x20 "&x19;&x19;">
+      <!ENTITY x21 "&x20;&x20;">
+      <!ENTITY x22 "&x21;&x21;">
+      <!ENTITY x23 "&x22;&x22;">
+      <!ENTITY x24 "&x23;&x23;">
+      <!ENTITY x25 "&x24;&x24;">
+      <!ENTITY x26 "&x25;&x25;">
+      <!ENTITY x27 "&x26;&x26;">
+      <!ENTITY x28 "&x27;&x27;">
+      <!ENTITY x29 "&x28;&x28;">
+      <!ENTITY x30 "&x29;&x29;">
+      <!ENTITY x31 "&x30;&x30;">
+      <!ENTITY x32 "&x31;&x31;">
+      <!ENTITY x33 "&x32;&x32;">
+      <!ENTITY x34 "&x33;&x33;">
+      <!ENTITY x35 "&x34;&x34;">
+      <!ENTITY x36 "&x35;&x35;">
+      <!ENTITY x37 "&x36;&x36;">
+      <!ENTITY x38 "&x37;&x37;">
+      <!ENTITY x39 "&x38;&x38;">
+      <!ENTITY x40 "&x39;&x39;">
+      <!ENTITY x41 "&x40;&x40;">
+      <!ENTITY x42 "&x41;&x41;">
+      <!ENTITY x43 "&x42;&x42;">
+      <!ENTITY x44 "&x43;&x43;">
+      <!ENTITY x45 "&x44;&x44;">
+      <!ENTITY x26 "&x25;&x25;">
+      <!ENTITY x27 "&x26;&x26;">
+      <!ENTITY x28 "&x27;&x27;">
+      <!ENTITY x29 "&x28;&x28;">
+      <!ENTITY x30 "&x29;&x29;">
+      <!ENTITY x31 "&x30;&x30;">
+      <!ENTITY x32 "&x31;&x31;">
+      <!ENTITY x33 "&x32;&x32;">
+      <!ENTITY x34 "&x33;&x33;">
+      <!ENTITY x35 "&x34;&x34;">
+      <!ENTITY x36 "&x35;&x35;">
+      <!ENTITY x37 "&x36;&x36;">
+      <!ENTITY x38 "&x37;&x37;">
+      <!ENTITY x39 "&x38;&x38;">
+      <!ENTITY x40 "&x39;&x39;">
+      <!ENTITY x41 "&x40;&x40;">
+      <!ENTITY x42 "&x41;&x41;">
+      <!ENTITY x43 "&x42;&x42;">
+      <!ENTITY x44 "&x43;&x43;">
+      <!ENTITY x45 "&x44;&x44;">
+      <!ENTITY x46 "&x45;&x45;">
+      <!ENTITY x47 "&x46;&x46;">
+      <!ENTITY x48 "&x47;&x47;">
+      ]>
+
+<s:Envelope xmlns:s="http://www.w3c.org/2003/05/soap-envelope"
+xmlns:b="http://ws.ckp.cz/pis/B1/2007/04"
+s:encodingStyle="http://www.syntea.cz/ckp/pis/encoding">
+&x10;
+<s:Header>
+<b:Request s:mustUnderstand="true" IdentZpravy="4322" Mode="&t;T"/>
+</s:Header>
+<s:Body>
+  <b:Get_VolnePSP>
+       <Nositel InfoDatum="18011231" Jmeno="JAN" Prijmeni="NOVAK"
+       RC="7703110123"/>
+</b:Get_VolnePSP>
+</s:Body>
+</s:Envelope>
