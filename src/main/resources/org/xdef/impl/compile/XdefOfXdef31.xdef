@@ -70,19 +70,19 @@
                             match @name || @XD3.1:name; ref XD3.1:choiceDef"
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:mixed xd:script="occurs *;
+          <XD3.1:mixed xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:mixedDef" 
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:sequence xd:script="occurs *;
+          <XD3.1:sequence xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:sequenceDef"
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:list xd:script="occurs *;
+          <XD3.1:list xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:listDef" 
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:any xd:script="occurs *;
+          <XD3.1:any xd:script = "occurs *;
                             match @XD3.1:name; ref XD3.1:anyDef;
 							options moreAttributes, moreElements"
               XD3.1:name = "required QName;" />
@@ -97,8 +97,7 @@
 
   </XD3.1:def>
  
-  <XD3.1:thesaurus language="languageId()"
-      default="optional yesNo()">
+  <XD3.1:thesaurus language = "languageId()" default = "optional yesNo()">
     optional thesaurus();
   </XD3.1:thesaurus>
 
@@ -172,7 +171,7 @@
     <xd:choice xd:script = "*; ref xcontent;" />
   </XD3.1:listDef>
   
-  <XD3.1:anyDef XD3.1:name= "required QName" 
+  <XD3.1:anyDef XD3.1:name = "required QName" 
     XD3.1:script = "optional groupScript;
                     options moreAttributes, moreElements" />
   

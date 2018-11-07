@@ -81,19 +81,19 @@
                             match @name || @XD2.0:name; ref XD2.0:choiceDef"
             name = "required QName; options acceptQualifiedAttr" />
 
-          <XD2.0:mixed xd:script="occurs *;
+          <XD2.0:mixed xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:mixedDef" 
             name = "required QName; options acceptQualifiedAttr" />
 
-          <XD2.0:sequence xd:script="occurs *;
+          <XD2.0:sequence xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:sequenceDef"
             name = "required QName; options acceptQualifiedAttr" />
 
-          <XD2.0:list xd:script="occurs *;
+          <XD2.0:list xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:listDef" 
             name = "required QName; options acceptQualifiedAttr" />
 
-          <XD2.0:any xd:script="occurs *;
+          <XD2.0:any xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:anyDef"
             name = "required QName; options acceptQualifiedAttr" />
 
@@ -184,7 +184,7 @@
     <xd:choice xd:script = "*; ref xcontent;" />
   </XD2.0:listDef>
   
-  <XD2.0:anyDef name= "required QName" 
+  <XD2.0:anyDef name = "required QName" 
     script = "optional groupScript; options acceptQualifiedAttr" />
   <XD2.0:anyRef script = "optional groupScript" />
 
