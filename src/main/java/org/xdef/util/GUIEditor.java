@@ -367,6 +367,12 @@ public class GUIEditor extends GUIScreen {
 			// Create element with project according to X-definition
 			XDDocument pxd = PROJECTXDPOOL.createXDDocument();
 			Element project = pxd.xparse(src, null);
+			if ("true".equals(project.getAttribute("Show"))) {
+				XDSourceInfo sinfo = new XDSourceInfo();
+				Object o = src.charAt(0) == '<' ? src : new File(src);
+				editXml(null, "Project", o, sinfo, null);
+				project = pxd.xparse(src, null);
+			}
 			Element originalProject = (Element) project.cloneNode(true);
 			NodeList nl;
 			// set properties
