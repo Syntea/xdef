@@ -35,6 +35,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.sys.SThrowable;
 
 /** Provides utility for interactive editing and debugging X-definitions.
  * @author Vaclav Trojan
@@ -545,8 +546,13 @@ public class GUIEditor extends GUIScreen {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
-			JOptionPane.showMessageDialog(null,//Program exception &{0}
-				Report.error(SYS.SYS036, ex.toString()).toString());
+			if (ex instanceof SThrowable) {
+				JOptionPane.showMessageDialog(null,
+					((SThrowable) ex).getReport().toString());
+			} else {
+				JOptionPane.showMessageDialog(null, //Program exception &{0}
+					Report.error(SYS.SYS036, ex.toString()).toString());
+			}
 		}
 	}
 

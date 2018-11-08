@@ -551,7 +551,7 @@ public interface XDEF {
 	public static final long XDEF582 = 31159025933L;
 	/** Model of element '&amp;{0}' is missing in X-definition&amp;{1}{ }&amp;{#SYS000} */
 	public static final long XDEF601 = 31159025934L;
-	/** X-definition&amp; '{0}' is missing */
+	/** X-definition '&amp;{0}' is missing */
 	public static final long XDEF602 = 31159025935L;
 	/** '&amp;{0}' does not point to the model of element */
 	public static final long XDEF603 = 31159025936L;
