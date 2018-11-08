@@ -1,5 +1,6 @@
 package org.xdef.impl;
 
+import org.xdef.XDConstants;
 import org.xdef.msg.XDEF;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
@@ -9,10 +10,8 @@ import org.xdef.sys.SManager;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.proc.Thesaurus;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -338,7 +337,7 @@ public final class XPool implements XDPool, Serializable {
 			&& (source.startsWith("?") || source.length() == 0)) {
 			if (source.length() <= 1) {
 				setSource(
-"<xd:def xmlns:xd='"+ KXmlConstants.XDEF31_NS_URI + "' root=\"a\" name=\"a\">\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root=\"a\" name=\"a\">\n"+
 "  <a/>\n"+
 "</xd:def>", "String[1]");
 				return;
@@ -1054,14 +1053,14 @@ public final class XPool implements XDPool, Serializable {
 		if (ndx < 0) {
 			XDefinition xd = getDefinition(id);
 			if (xd == null) {
-				//X-definition&{0}{ '}{' }is missing
+				//The X-definition&{0}{ '}{'} is missing
 				throw new SRuntimeException(XDEF.XDEF602, id);
 			}
 			return new ChkDocument(getDefinition(id));
 		} else {
 			XMNode xn = findModel(id);
 			if (xn != null  && xn.getKind() == XMNode.XMELEMENT) {
-			return ((XMElement) xn).createXDDocument();
+				return ((XMElement) xn).createXDDocument();
 			}
 			//'&{0' doesn't point to model of element
 			throw new SRuntimeException(XDEF.XDEF603, id);

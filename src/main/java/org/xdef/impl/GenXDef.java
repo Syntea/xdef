@@ -1,6 +1,7 @@
 package org.xdef.impl;
+
+import org.xdef.XDConstants;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ import org.w3c.dom.NodeList;
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
-public class GenXDef implements KXmlConstants {
+public class GenXDef implements XDConstants {
 
 	/** Prevent create an instance of this class.*/
 	private GenXDef() {}

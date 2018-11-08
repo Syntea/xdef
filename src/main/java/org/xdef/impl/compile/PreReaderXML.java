@@ -14,7 +14,6 @@ import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KParsedAttr;
 import org.xdef.xml.KParsedElement;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
 import org.w3c.dom.Element;
@@ -88,11 +87,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				KParsedAttr ka;
 				byte ver;
 				if ((ka = parsedElem.getAttrNS(
-					KXmlConstants.XDEF20_NS_URI, "metaNamespace")) != null
+					XDConstants.XDEF20_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
-						KXmlConstants.XDEF31_NS_URI, "metaNamespace")) != null){
+						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
-					ver=KXmlConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
+					ver=XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
 						 ? XDConstants.XD31_ID : XDConstants.XD20_ID;
 					if (XExtUtils.uri(projectNS).errors()) {
 						//Attribute 'metaNamespace' must contain a valid URI
@@ -100,15 +99,15 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 					parsedElem.remove(ka);
 				} else {
-					if (KXmlConstants.XDEF20_NS_URI.equals(uri)
-						|| KXmlConstants.XDEF31_NS_URI.equals(uri)) {
-						ver = KXmlConstants.XDEF31_NS_URI.equals(uri)
+					if (XDConstants.XDEF20_NS_URI.equals(uri)
+						|| XDConstants.XDEF31_NS_URI.equals(uri)) {
+						ver = XDConstants.XDEF31_NS_URI.equals(uri)
 							? XDConstants.XD31_ID : XDConstants.XD20_ID;
 						projectNS = uri;
 					} else {
 						//Namespace of X-definitions is required
 						error(_actPNode._name, XDEF.XDEF256);
-						projectNS = KXmlConstants.XDEF31_NS_URI;
+						projectNS = XDConstants.XDEF31_NS_URI;
 						ver = XDConstants.XD31_ID;
 					}
 				}

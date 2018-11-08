@@ -12,7 +12,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
+import org.xdef.XDConstants;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -104,8 +104,8 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
 		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
-		_codeGenerator._namespaceURIs.add(KXmlConstants.XLINK_NS_URI);
-		_codeGenerator._namespaceURIs.add(KXmlConstants.XINCLUDE_NS_URI);
+		_codeGenerator._namespaceURIs.add(XDConstants.XLINK_NS_URI);
+		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add(//schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
 		_macrosProcessed = false;

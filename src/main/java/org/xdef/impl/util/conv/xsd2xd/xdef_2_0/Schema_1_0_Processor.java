@@ -1,6 +1,6 @@
 package org.xdef.impl.util.conv.xsd2xd.xdef_2_0;
 
-import org.xdef.xml.KXmlConstants;
+import org.xdef.XDConstants;
 import org.xdef.impl.util.conv.xsd2xd.schema_1_0.Processor;
 import org.xdef.impl.util.conv.xsd2xd.schema_1_0.Utils;
 import org.xdef.impl.util.conv.xsd2xd.util.Reporter;
@@ -42,10 +42,10 @@ public class Schema_1_0_Processor extends Processor {
 	public Schema_1_0_Processor(String xdefPrefix, Reporter reporter,
 		URL rootSchemaURL, boolean separately) {
 /*VT*/
-		super(rootSchemaURL, KXmlConstants.XDEF31_NS_URI, xdefPrefix);
+		super(rootSchemaURL, XDConstants.XDEF31_NS_URI, xdefPrefix);
 /*VT*/
 		_xdef = new XdefDocument(_schemaElements,
-			xdefPrefix, KXmlConstants.XDEF31_NS_URI, separately);
+			xdefPrefix, XDConstants.XDEF31_NS_URI, separately);
 		_xdefPrefix = xdefPrefix;
 		_reporter = reporter;
 		_separately = separately;

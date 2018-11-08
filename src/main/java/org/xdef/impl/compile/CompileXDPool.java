@@ -47,8 +47,8 @@ import java.util.TreeMap;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
+import org.xdef.XDConstants;
 import org.xdef.XDValueID;
-import org.xdef.xml.KXmlConstants;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -1472,8 +1472,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				newNode = createReference(pnode, pnode._localName, xdef);
 			} else {
 				if (level > 1 || !"macro".equals(pnode._localName)
-					|| (KXmlConstants.XDEF20_NS_URI.equals(pnode._nsURI)
-					&& KXmlConstants.XDEF31_NS_URI.equals(pnode._nsURI))) {
+					|| (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
+					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI))) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);

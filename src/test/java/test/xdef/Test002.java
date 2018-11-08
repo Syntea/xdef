@@ -5,11 +5,11 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDConstants;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -174,7 +174,7 @@ public final class Test002 extends XDTester {
 			strw.close();
 			assertEq("t1t2", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='"+ KXmlConstants.XDEF31_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+
@@ -189,7 +189,7 @@ public final class Test002 extends XDTester {
 			assertEq("t1t2", strw.toString());
 			try {
 				xdef = //test ListOf with XDEF_2_0
-"<xd:def xmlns:xd='"+ KXmlConstants.XDEF20_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF20_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+

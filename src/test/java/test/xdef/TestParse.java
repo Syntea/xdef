@@ -8,7 +8,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -603,7 +602,7 @@ public final class TestParse extends XDTester {
 			assertEq(strw.toString(),
 				"1,1.1; 2,2.2; 1,1,1; 2,2,2; 1,1.1; 2,2.2; 1,1,1; 2,2,2");
 			xdef = // "$" identifiers, miscellaneous
-"<xd:collection xmlns:xd='" + KXmlConstants.XDEF20_NS_URI + "'>\n"+
+"<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>\n"+
 "<xd:def xd:classes = 'test.xdef.TestParse' impl-version = '2.0'\n"+
 "   name='abc' script='options trimText' root='Davka'>\n"+
 "<xd:declaration>\n"+
@@ -2322,7 +2321,7 @@ public final class TestParse extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("5", strw.toString());
 			xdef = //X-definition ver 2.0 //////////////////////////////////////
-"<xd:def xmlns:xd='" + KXmlConstants.XDEF20_NS_URI + "' root='a'\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'\n"+
 "  methods= 'XDParser test.xdef.TestParse.licheCislo()' >\n"+
 "  <a a='licheCislo'/>\n"+
 "</xd:def>\n";
@@ -2332,7 +2331,7 @@ public final class TestParse extends XDTester {
 			parse(xp, "", "<a a=\"10\"/>", reporter);
 			assertErrors(reporter);
 			xdef = //X-definition ver 3.1 //////////////////////////////////////
-"<xd:def xmlns:xd='" + KXmlConstants.XDEF31_NS_URI + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDParser test.xdef.TestParse.licheCislo();\n"+
 "</xd:declaration>\n"+

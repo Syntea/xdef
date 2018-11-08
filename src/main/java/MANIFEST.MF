@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 
-Name: cz/syntea/xdef
+Name: org/xdef
 Comment: Created date 2018-10-31
 Implementation-Version: 3.1.004.011
 Specification-Version: 3.1
@@ -9,4 +9,4 @@ Implementation-Vendor-Id: Syntea.cz
 Implementation-Vendor: Syntea software group a.s.
 Specification-Vendor: xdef.org
 Specification-Title: X-definition 3.1
-Implementation-Title: org.xdef.xdef
+Implementation-Title: org.xdef

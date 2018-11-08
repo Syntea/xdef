@@ -6,7 +6,6 @@ import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDBuilder;
@@ -42,8 +41,8 @@ import javax.xml.namespace.QName;
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-//	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
-	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
+//	public static String XDEFNS = XDConstants.XDEF20_NS_URI;
+	public static String XDEFNS = XDConstants.XDEF31_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 

@@ -12,7 +12,6 @@ import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KNamespace;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDConstants;
@@ -126,10 +125,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		XBuilder xb = new XBuilder(props);
 		xb.setExternals(extObjects);
 		xb.setSource(
-			"<xd:collection xmlns:xd='"+KXmlConstants.XDEF31_NS_URI+"'/>");
+			"<xd:collection xmlns:xd='"+XDConstants.XDEF31_NS_URI+"'/>");
 		XPool xp = (XPool) xb.compileXD();
 		XDefinition xd = new XDefinition("#",
-			xp, KXmlConstants.XDEF31_NS_URI, null, (byte) 20);
+			xp, XDConstants.XDEF31_NS_URI, null, (byte) 20);
 		xp._xdefs.put("#", xd);
 		//create dummy X-definition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);
@@ -160,7 +159,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 //		_refNum = 0; _xElement = null; //Java makes it!
 		setXPos("");
 		if ((_xdef = xd) == null) {
-			throw new SRuntimeException(XDEF.XDEF602); //X-definition is missing
+			//The X-definition&{0}{ '}{'} is missing
+			throw new SRuntimeException(XDEF.XDEF602);
 		}
 		_minYear = _xdef.getXDPool().getMinYear();
 		_maxYear = _xdef.getXDPool().getMaxYear();

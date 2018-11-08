@@ -4,7 +4,6 @@ import org.xdef.XDConstants;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.proc.Thesaurus;
@@ -59,7 +58,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
-		_xdVersion = KXmlConstants.XDEF20_NS_URI.equals(nsURI)
+		_xdVersion = XDConstants.XDEF20_NS_URI.equals(nsURI)
 			? XDConstants.XD20_ID : XDConstants.XD31_ID;
 		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;

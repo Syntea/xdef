@@ -1,10 +1,10 @@
 package org.xdef.util;
 
+import org.xdef.XDConstants;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDBuilder;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -53,7 +53,7 @@ public class XDChecker {
 		_properties = new Properties();
 		// just check if all parameters are correct
 		String xdef =
-"<x:def xmlns:x='"+ KXmlConstants.XDEF31_NS_URI + "' root = 'a'>\n";
+"<x:def xmlns:x='"+ XDConstants.XDEF31_NS_URI + "' root = 'a'>\n";
 		if (_declarations != null || _methods != null) {
 			xdef +=	"<x:declaration>\n";
 			if (_methods != null) {
@@ -88,7 +88,7 @@ public class XDChecker {
 				xb.setExternals(_classes);
 			}
 			String xdef =
-"<x:def xmlns:x='"+ KXmlConstants.XDEF31_NS_URI + "' root = 'a'>";
+"<x:def xmlns:x='"+ XDConstants.XDEF31_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {
 			xdef +=	"<x:declaration>\n";
 			if (_methods != null) {

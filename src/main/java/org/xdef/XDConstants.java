@@ -1,8 +1,10 @@
 package org.xdef;
 
-/** Constants used by X-definition builder. The constants with the name with the
- * prefix "XDPROPERTY" are names of properties. The constants with the name with
- * the prefix XDPROPERTYVALUE are valid values of respective property.
+import javax.xml.XMLConstants;
+
+/** Important constants used by X-definition. The constants with the name with
+ * the prefix "XDPROPERTY" are names of properties. The constants with the name
+ * with the prefix XDPROPERTYVALUE are valid values of respective property.
  * @author Vaclav Trojan
  */
 public interface XDConstants {
@@ -111,17 +113,39 @@ public interface XDConstants {
 	public static final String XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_TRUE =
 		"true";
 
-	////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+	/** URI of xmlns:xlink */
+	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
+	/** URI of w3c Xinclude */
+	public static final String XINCLUDE_NS_URI =
+		"http://www.w3.org/2001/XInclude";
+	/** URI of JSON/XML conversion nodes. */
+	public static final String JSON_NS_URI = "http://www.syntea.cz/json/1.0";
+	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
+	public static final String JSON_NS_PREFIX = "js";
+	/** Recommended namespace prefix used for X-definition nodes. */
+	public static final String XDEF_NS_PREFIX = "xd";
+	/** URI of X-definition 2.0. */
+	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
+	/** URI of X-definition 3.1. */
+	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
+	/** The namespace URI for X-definition instance */
+	public static final String XDEF_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/instance";
+
+////////////////////////////////////////////////////////////////////////////////
+// Used internally	
+////////////////////////////////////////////////////////////////////////////////
 	/** X-definition version 2.0 ID. */
 	public static final byte XD20_ID = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31_ID = 31;
-
-	////////////////////////////////////////////////////////////////////////////
-	// Build version information. Do not modify following part of the code!
-	// Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
-	// are generated authomaticaly!
-	////////////////////////////////////////////////////////////////////////////
+	
+////////////////////////////////////////////////////////////////////////////////
+// Build version information. Do not modify following part of the code!
+// Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
+// are generated authomaticaly!
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Build version of software (3.1.004.011). */
 	public static final String BUILD_VERSION = "3.1.004.011";
@@ -139,5 +163,16 @@ public interface XDConstants {
 /*#elseif JAVA_1.10*#/
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
+	
+
+////////////////////////////////////////////////////////////////////////////////
+// Deprecated constants
+////////////////////////////////////////////////////////////////////////////////
+	@Deprecated
+	/** The namespace URI for X-definition instance,
+	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
+	 */
+	public static final String NS_XDEF_2_0_INSTANCE =
+		"http://www.syntea.cz/xdef/2.0/instance";
 
 }

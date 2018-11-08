@@ -1,9 +1,9 @@
 package org.xdef.sys;
 
+import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.xml.KNamespace;
-import org.xdef.xml.KXmlConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
  * to JSON and for comparing of JSON objects.
  * @author Vaclav Trojan
  */
-public class JSONUtil implements KXmlConstants {
+public class JSONUtil implements XDConstants {
 
 	public static final String J_MAP = "map";
 	public static final String J_ARRAY = "array";

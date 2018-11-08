@@ -12,7 +12,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KNamespace;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDBNFRule;
 import org.xdef.proc.Thesaurus;
@@ -42,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
 
@@ -815,9 +815,9 @@ public final class CompileCode extends CompileBase {
 		for (Map.Entry<String, Integer> item : _nsPrefixes.entrySet()) {
 			String key = item.getKey();
 			if ("xml".equals(key) || "xmlns".equals(key)
-				|| KXmlConstants.XDEF20_NS_URI.equals(
+				|| XDConstants.XDEF20_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
-				|| KXmlConstants.XDEF31_NS_URI.equals(
+				|| XDConstants.XDEF31_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}

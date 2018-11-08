@@ -28,7 +28,6 @@ import org.w3c.dom.Element;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -823,9 +822,9 @@ final class ChkParser extends DomBaseHandler {
 		_level++;
 		if (_level == 0) {
 			int ndx = parsedElem.indexOfNS(
-				KXmlConstants.NS_XDEF_2_0_INSTANCE, "location");
+				XDConstants.NS_XDEF_2_0_INSTANCE, "location");
 			if (ndx < 0) {
-				ndx = parsedElem.indexOfNS(KXmlConstants.XDEF_INSTANCE_NS_URI,
+				ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
 					"location");
 			}
 			KParsedAttr ka;

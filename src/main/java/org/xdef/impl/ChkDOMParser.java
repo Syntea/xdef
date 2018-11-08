@@ -10,8 +10,8 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.XDConstants;
 import org.xdef.XDInput;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
@@ -90,8 +90,8 @@ class ChkDOMParser extends SReporter {
 					String name = atrs.item(i).getNodeName();
 					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
-						if (KXmlConstants.NS_XDEF_2_0_INSTANCE.equals(val)
-							|| KXmlConstants.XDEF_INSTANCE_NS_URI.equals(val)) {
+						if (XDConstants.NS_XDEF_2_0_INSTANCE.equals(val)
+							|| XDConstants.XDEF_INSTANCE_NS_URI.equals(val)) {
 							xdefInstancePrefix = name.substring(6);
 							xdefInstanceNSAttr = name;
 							break;
