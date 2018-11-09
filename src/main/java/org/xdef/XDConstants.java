@@ -136,26 +136,6 @@ public interface XDConstants {
 		"http://www.syntea.cz/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
-// Used internally	
-////////////////////////////////////////////////////////////////////////////////
-
-	/** X-definition version 2.0 ID. */
-	public static final byte XD20_ID = 20;
-	/** X-definition version 3.1 ID. */
-	public static final byte XD31_ID = 31;
-
-////////////////////////////////////////////////////////////////////////////////
-// Deprecated constants
-////////////////////////////////////////////////////////////////////////////////
-
-	@Deprecated
-	/** The namespace URI for X-definition instance,
-	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
-	 */
-	public static final String NS_XDEF_2_0_INSTANCE =
-		"http://www.syntea.cz/xdef/2.0/instance";
-
-////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
 // Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
 // are generated authomaticaly!
@@ -177,5 +157,25 @@ public interface XDConstants {
 /*#elseif JAVA_1.10*#/
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
+
+////////////////////////////////////////////////////////////////////////////////
+// Used internally	
+////////////////////////////////////////////////////////////////////////////////
+
+	/** X-definition version 2.0 ID. */
+	public static final byte XD20_ID = 20;
+	/** X-definition version 3.1 ID. */
+	public static final byte XD31_ID = 31;
+
+////////////////////////////////////////////////////////////////////////////////
+// Deprecated constants
+////////////////////////////////////////////////////////////////////////////////
+
+	@Deprecated
+	/** The namespace URI for X-definition instance,
+	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
+	 */
+	public static final String NS_XDEF_2_0_INSTANCE =
+		"http://www.syntea.cz/xdef/2.0/instance";
 
 }
