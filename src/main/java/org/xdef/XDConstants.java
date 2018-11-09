@@ -1,7 +1,5 @@
 package org.xdef;
 
-import javax.xml.XMLConstants;
-
 /** Important constants used by X-definition. The constants with the name with
  * the prefix "XDPROPERTY" are names of properties. The constants with the name
  * with the prefix XDPROPERTYVALUE are valid values of respective property.
@@ -101,6 +99,7 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef.language";
 
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** This property is not designed for public, it sets XML parser
 	 * to ignore unresolved entities. */
 	public static final String XDPROPERTY_IGNOREUNRESOLVEDENTITIES =
@@ -114,6 +113,9 @@ public interface XDConstants {
 		"true";
 
 ////////////////////////////////////////////////////////////////////////////////
+// XML constants
+////////////////////////////////////////////////////////////////////////////////
+	
 	/** URI of xmlns:xlink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
 	/** URI of w3c Xinclude */
@@ -136,11 +138,23 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // Used internally	
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** X-definition version 2.0 ID. */
 	public static final byte XD20_ID = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31_ID = 31;
-	
+
+////////////////////////////////////////////////////////////////////////////////
+// Deprecated constants
+////////////////////////////////////////////////////////////////////////////////
+
+	@Deprecated
+	/** The namespace URI for X-definition instance,
+	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
+	 */
+	public static final String NS_XDEF_2_0_INSTANCE =
+		"http://www.syntea.cz/xdef/2.0/instance";
+
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
 // Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
@@ -163,16 +177,5 @@ public interface XDConstants {
 /*#elseif JAVA_1.10*#/
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
-	
-
-////////////////////////////////////////////////////////////////////////////////
-// Deprecated constants
-////////////////////////////////////////////////////////////////////////////////
-	@Deprecated
-	/** The namespace URI for X-definition instance,
-	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
-	 */
-	public static final String NS_XDEF_2_0_INSTANCE =
-		"http://www.syntea.cz/xdef/2.0/instance";
 
 }
