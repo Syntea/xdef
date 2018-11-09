@@ -178,13 +178,8 @@ public final class XdefToXsd {
 				if (a != null) {
 					name = a.getValue();
 				} else {
-					a = el.getAttributeNodeNS(
-						XDConstants.NS_XDEF_2_0_INSTANCE, "name");
-					if (a == null) {
-						a = el.getAttributeNodeNS(
-							XDConstants.XDEF_INSTANCE_NS_URI, "name");
-
-					}
+					a = el.getAttributeNodeNS(XDConstants.XDEF_INSTANCE_NS_URI,
+						"name");
 					if (a != null) {
 						name = a.getValue();
 					}
@@ -196,10 +191,6 @@ public final class XdefToXsd {
 					xdMode = xdName;
 				}
 				a = el.getAttributeNode("root");
-				if (a == null) {
-					a = el.getAttributeNodeNS(
-						XDConstants.NS_XDEF_2_0_INSTANCE, "root");
-				}
 				if (a == null) {
 					el.setAttributeNS(
 						XDConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);

@@ -55,7 +55,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004010L; // 3.1.004.010
+	private static final long XD_MIN_VERSION = 301004011L; // 3.1.004.011
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -75,8 +75,6 @@ public final class XPool implements XDPool, Serializable {
 	private byte _displayMode;
 	/** flag unresolved externals to be ignored.*/
 	private boolean _ignoreUnresolvedExternals;
-	/** Switch XML parser ignores unresolved entities (e.g. file not found).*/
-	private boolean _ignoreUnresolvedEntities;
 	/** Switch if location details will be generated.*/
 	private boolean _locationdetails;
 	/** Global variables description block.*/
@@ -135,41 +133,6 @@ public final class XPool implements XDPool, Serializable {
 		_sourceInfo = new XDSourceInfo();
 	}
 
-	/** Create the instance of XDPool with flags and options.*/
-	private XPool(final byte debugMode,
-		final String debugEditor,
-		final String xdefEditor,
-		final boolean illegalDoctype,
-		final boolean ignoreUnresolvedEntities,
-		final boolean ignoreUnresolvedExternals,
-		final boolean locationdetails,
-		final boolean validate,
-		final boolean chkWarnings,
-		final boolean resolveIncludes,
-		final byte displayMode,
-		final int minYear,
-		final int maxYear,
-		final SDatetime[] specialDates,
-		final Class<?>[] extClasses) {
-		this();
-		_debugMode = debugMode;
-		_debugEditor = debugEditor;
-		_xdefEditor = xdefEditor;
-		_displayMode = displayMode;
-		_illegalDoctype = illegalDoctype;
-		_ignoreUnresolvedEntities = ignoreUnresolvedEntities;
-		_ignoreUnresolvedExternals = ignoreUnresolvedExternals;
-		_locationdetails = locationdetails;
-		_validate = validate;
-		_chkWarnings = chkWarnings;
-		_resolveIncludes = resolveIncludes;
-		_minYear = minYear;
-		_maxYear = maxYear;
-		_specialDates = specialDates;
-		_props = null;
-		_extClasses = extClasses;
-	}
-
 	/** Creates instance of XDPool with properties, external objects and
 	 * reporter.
 	 * @param props Properties or <tt>null</tt>.
@@ -206,13 +169,6 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
-		_ignoreUnresolvedEntities =
-			readProperty(_props,
-				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
-			new String[] {
-				XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_TRUE,
-				XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE},
-			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE) == 0;
 		//ignore undefined external objects
 		_ignoreUnresolvedExternals = readProperty(_props,
 			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -964,14 +920,6 @@ public final class XPool implements XDPool, Serializable {
 	}
 
 	@Override
-	/** Get the ignoreUnresolvedEntities switch.
-	 * @return the resolveIncludes switch.
-	 */
-	public final boolean isIgnoreUnresolvedEntities() {
-		return _ignoreUnresolvedEntities;
-	}
-
-	@Override
 	/** Check if exists the X-definition of given name.
 	 * @param name the name of X-definition (or <tt>null</tt>) if
 	 * noname X-definition is checked.
@@ -1186,7 +1134,6 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeString(_debugEditor);
 		xw.writeString(_xdefEditor);
 		xw.writeBoolean(_illegalDoctype);
-		xw.writeBoolean(_ignoreUnresolvedEntities);
 		xw.writeBoolean(_ignoreUnresolvedExternals);
 		xw.writeBoolean(_locationdetails);
 		xw.writeBoolean(_validate);
@@ -1347,7 +1294,6 @@ public final class XPool implements XDPool, Serializable {
 		_debugEditor = xr.readString();
 		_xdefEditor = xr.readString();
 		_illegalDoctype = xr.readBoolean();
-		_ignoreUnresolvedEntities = xr.readBoolean();
 		_ignoreUnresolvedExternals = xr.readBoolean();
 		_locationdetails =  xr.readBoolean();
 		_validate = xr.readBoolean();

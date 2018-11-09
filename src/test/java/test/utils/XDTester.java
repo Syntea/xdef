@@ -86,8 +86,6 @@ public abstract class XDTester extends STester {
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
-		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
-			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
 	}
 
 	public final void resetTester() {
@@ -106,9 +104,7 @@ public abstract class XDTester extends STester {
 
 	public final static boolean getFulltestMode() {return _fulltestMode;}
 
-	public final static void setFulltestMode(boolean fulltest) {
-		_fulltestMode = fulltest;
-	}
+	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
 
 	public final void setProperty(final String key, final String value) {
 		if (value == null) {

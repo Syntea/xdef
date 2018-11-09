@@ -103,7 +103,6 @@ final class ChkParser extends DomBaseHandler {
 	private boolean _illegalDoctype;
 	private boolean _resolveIncludes;
 	private boolean _locationDetails;
-	private boolean _ignoreEntities;
 
 	private static class HandlerInfo {
 		private final XAbstractReader _mr;
@@ -154,6 +153,7 @@ final class ChkParser extends DomBaseHandler {
 			h._elemLocator = _elemLocator;
 		}
 	}
+	
 	private ChkParser(final ReportWriter reporter) {
 		super();
 		_sReporter = new SReporter(
@@ -165,7 +165,7 @@ final class ChkParser extends DomBaseHandler {
 		_entities.put("apos", "'");
 		_entities.put("quot", "\"");
 		_resolveIncludes = true;
-//		_illegalDoctype = _ignoreEntities = false; // java makes it
+//		_illegalDoctype = false; // java makes it
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
@@ -313,15 +313,13 @@ final class ChkParser extends DomBaseHandler {
 			is = new InputSource(in);
 			is.setSystemId(sysID);
 			if (_illegalDoctype) {
-				if (!_ignoreEntities) {
-					_sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
-				}
+				_sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
 			}
 			return is;
 		}
 		if (sysID != null && pubID == null) {
 			InputStream in = new ByteArrayInputStream(new byte[0]);
-			if (_isDTD && _illegalDoctype && !_ignoreEntities) {
+			if (_isDTD && _illegalDoctype) {
 				_sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
 			} else if ((_isDTD && _chkDoc._xdef._resolveEntities != 'F')
 				|| !_isDTD) {
@@ -727,9 +725,9 @@ final class ChkParser extends DomBaseHandler {
 				XDConstants.XDPROPERTY_XINCLUDE, props);
 			_locationDetails = getBooleanProperty(xdp.isLocationsdetails(),
 				XDConstants.XDPROPERTY_LOCATIONDETAILS, props);
-			_ignoreEntities = getBooleanProperty(
-				_chkDoc.getXDPool().isIgnoreUnresolvedEntities(),
-				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES, props);
+//			_ignoreEntities = getBooleanProperty(
+//				_chkDoc.getXDPool().isIgnoreUnresolvedEntities(),
+//				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES, props);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);
@@ -821,12 +819,8 @@ final class ChkParser extends DomBaseHandler {
 	private void elementStart(final KParsedElement parsedElem) {
 		_level++;
 		if (_level == 0) {
-			int ndx = parsedElem.indexOfNS(
-				XDConstants.NS_XDEF_2_0_INSTANCE, "location");
-			if (ndx < 0) {
-				ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
+			int ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
 					"location");
-			}
 			KParsedAttr ka;
 			String s;
 			if (ndx >= 0 &&	(ndx =

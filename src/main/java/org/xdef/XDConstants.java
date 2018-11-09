@@ -1,8 +1,10 @@
 package org.xdef;
 
-/** Important constants used by X-definition. The constants with the name with
- * the prefix "XDPROPERTY" are names of properties. The constants with the name
- * with the prefix XDPROPERTYVALUE are valid values of respective property.
+/** Important constants used by X-definition.
+ * Note the constants with the name starting with prefix "XDPROPERTY"
+ * are names of properties. To each such constant are also defined the constants
+ * with the name starting with prefix "XDPROPERTYVALUE" and there are
+ * defined the valid values of a respective property.
  * @author Vaclav Trojan
  */
 public interface XDConstants {
@@ -99,20 +101,6 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef.language";
 
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** This property is not designed for public, it sets XML parser
-	 * to ignore unresolved entities. */
-	public static final String XDPROPERTY_IGNOREUNRESOLVEDENTITIES =
-		"xdef.ignoreunresovedentities";
-	/** This is not designed for public; it resets to normal use
-	 * process of unresolved entities (default value). */
-	public static final String XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE =
-		"false";
-	/** This is not designed for public; it resets ignore unresolved entities.*/
-	public static final String XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_TRUE =
-		"true";
-
-////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
 	
@@ -161,21 +149,10 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // Used internally	
 ////////////////////////////////////////////////////////////////////////////////
-
+	
 	/** X-definition version 2.0 ID. */
 	public static final byte XD20_ID = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31_ID = 31;
-
-////////////////////////////////////////////////////////////////////////////////
-// Deprecated constants
-////////////////////////////////////////////////////////////////////////////////
-
-	@Deprecated
-	/** The namespace URI for X-definition instance,
-	 * @deprecated Please use XDEF_INSTANCE_NS_URI".
-	 */
-	public static final String NS_XDEF_2_0_INSTANCE =
-		"http://www.syntea.cz/xdef/2.0/instance";
 
 }
