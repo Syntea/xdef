@@ -16,7 +16,6 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.XDConstants;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;

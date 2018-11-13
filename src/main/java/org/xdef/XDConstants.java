@@ -122,6 +122,11 @@ public interface XDConstants {
 	/** The namespace URI for X-definition instance */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.syntea.cz/xdef/instance";
+	/** URI of X-definition 3.2. */
+	public static final String XDEF32_NS_URI = "http://www.org.xdef/3.2";
+	/** The namespace URI for X-definition instance */
+	public static final String XDEF32_INSTANCE_NS_URI = 
+		"http://org.xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
@@ -154,5 +159,7 @@ public interface XDConstants {
 	public static final byte XD20_ID = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31_ID = 31;
+	/** X-definition version 3.2 ID. */
+	public static final byte XD32_ID = 32;
 
 }
