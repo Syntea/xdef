@@ -119,14 +119,14 @@ public interface XDConstants {
 	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
 	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
-	/** The namespace URI for X-definition instance */
-	public static final String XDEF_INSTANCE_NS_URI =
-		"http://www.syntea.cz/xdef/instance";
 	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.org.xdef/3.2";
 	/** The namespace URI for X-definition instance */
+	public static final String XDEF_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/instance";
+	/** The namespace URI for X-definition instance */
 	public static final String XDEF32_INSTANCE_NS_URI = 
-		"http://org.xdef/instance";
+		"http://www.org.xdef/instance/3.2";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
@@ -134,10 +134,10 @@ public interface XDConstants {
 // are generated authomaticaly!
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Build version of software (3.1.004.011). */
-	public static final String BUILD_VERSION = "3.1.004.011";
-	/** Date of build version (2018-10-31). */
-	public static final String BUILD_DATE = "2018-10-31";
+	/** Build version of software (3.2.001.001). */
+	public static final String BUILD_VERSION = "3.2.001.001";
+	/** Date of build version (2018-11-14). */
+	public static final String BUILD_DATE = "2018-11-14";
 	/** Java version of compiler when the X-definition code was compiled. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";
@@ -151,15 +151,5 @@ public interface XDConstants {
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
 
-////////////////////////////////////////////////////////////////////////////////
-// Used internally	
-////////////////////////////////////////////////////////////////////////////////
-	
-	/** X-definition version 2.0 ID. */
-	public static final byte XD20_ID = 20;
-	/** X-definition version 3.1 ID. */
-	public static final byte XD31_ID = 31;
-	/** X-definition version 3.2 ID. */
-	public static final byte XD32_ID = 32;
 
 }

@@ -174,7 +174,7 @@ public final class Test002 extends XDTester {
 			strw.close();
 			assertEq("t1t2", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+
@@ -1580,7 +1580,7 @@ public final class Test002 extends XDTester {
 /**
 // ???????????????? This runs on NetBeans and not without them ????????????????
 			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xmlns:x= 'a'\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' xmlns:x= 'a'\n" +
 "        root = \"M\">\n" +
 "<M xd:script=\"var String s = '';\">\n" +
 "    <Measurement xd:script=\"occurs 1..*;\n" +

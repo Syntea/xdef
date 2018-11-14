@@ -236,6 +236,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			xr.parse(is);
 			getReader().close();
 		} catch (Error ex) {
+			ex.printStackTrace();
 			thwn = new RuntimeException(ex);
 		} catch (RuntimeException ex) {
 			thwn = ex;

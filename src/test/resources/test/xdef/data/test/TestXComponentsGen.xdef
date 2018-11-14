@@ -1,5 +1,4 @@
-<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>
-
+<xd:collection xmlns:xd='http://www.org.xdef/3.2'>
 <xd:def>
 <xd:component>
   %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
@@ -67,8 +66,10 @@
     name = "? string; create from('s/text()')"/>
 </xd:def>
 
-<xd:def name='C' root='Town | Persons'
-  methods='void test.xdef.TestXComponents_C.test(XXData)' >
+<xd:def name='C' root='Town | Persons'>
+<xd:declaration>
+   external method void test.xdef.TestXComponents_C.test(XXData);
+</xd:declaration>
 <Town Name="string">
   <Street xd:script="+" Name="string">
     <House xd:script='*' Num='int'>
@@ -159,8 +160,10 @@
   </Y>
 </xd:def>
 
-<xd:def name='G' root='G'
-   xd:methods='void test.xdef.TestXComponentsGen.genXC(XXNode);'>
+<xd:def name='G' root='G'>
+<xd:declaration>
+   external method void test.xdef.TestXComponentsGen.genXC(XXNode);
+</xd:declaration>
 <xd:component>
   %class test.xdef.component.G extends test.xdef.TestXComponentsGen %link G
 </xd:component>
@@ -311,12 +314,13 @@
 </A>
 </xd:def>
 
-<xd:def name='X' root='X|Y'
-  methods='void test.xdef.TestXComponentsGen.setXX(XXNode,String)'>
+<xd:def name='X' root='X|Y'>
+<xd:declaration>
+   external method void test.xdef.TestXComponentsGen.setXX(XXNode,String);
+</xd:declaration>
 <xd:component>
   %class test.xdef.component.X %link X;
-  %class test.xdef.component.X1
-    extends test.xdef.TestXComponentsGen %link Y;
+  %class test.xdef.component.X1 extends test.xdef.TestXComponentsGen %link Y;
 </xd:component>
    <X>
      <A xd:script = '+;'>
@@ -697,5 +701,4 @@
    </Transfer>
  </A>
 </xd:def>
-
 </xd:collection>

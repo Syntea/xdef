@@ -54,6 +54,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import org.xdef.impl.XConstants;
 
 /** Provide compiling of X-definitions from source data.
  * @author Vaclav Trojan
@@ -498,7 +499,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				"methods", false, true);
 			if (sval!= null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
-				if (pnode._xdVersion >= XDConstants.XD31_ID) {
+				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
 					"Attribute \"methods\"",
 					"<xd:declaration> external method { ... } ...");
@@ -513,7 +514,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			sval = _precomp.getXdefAttr(pnode, "classes", false, true);
 			if (sval != null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
-				if (pnode._xdVersion >= XDConstants.XD31_ID) {
+				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
 					"Attribute \"classes\"",
 					"<xd:declaration> external method { ... } ...");
@@ -1472,7 +1473,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else {
 				if (level > 1 || !"macro".equals(pnode._localName)
 					|| (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
-					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI))) {
+					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI)
+					&& XDConstants.XDEF32_NS_URI.equals(pnode._nsURI))) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);

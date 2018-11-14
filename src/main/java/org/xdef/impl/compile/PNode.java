@@ -127,7 +127,8 @@ public final class PNode {
 		final Map<String, XScriptMacro> macros) {
 		if ("macro".equals(_localName) &&
 			(XDConstants.XDEF20_NS_URI.equals(_nsURI)
-			|| XDConstants.XDEF31_NS_URI.equals(_nsURI))) {
+			|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
+			|| XDConstants.XDEF32_NS_URI.equals(_nsURI))) {
 			return; // do not process macro definitions
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(

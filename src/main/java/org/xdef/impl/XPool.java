@@ -55,7 +55,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 301004011L; // 3.1.004.011
+	private static final long XD_MIN_VERSION = 302001001L; // 3.2.001.001
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -293,7 +293,7 @@ public final class XPool implements XDPool, Serializable {
 			&& (source.startsWith("?") || source.length() == 0)) {
 			if (source.length() <= 1) {
 				setSource(
-"<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root=\"a\" name=\"a\">\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root=\"a\" name=\"a\">\n"+
 "  <a/>\n"+
 "</xd:def>", "String[1]");
 				return;

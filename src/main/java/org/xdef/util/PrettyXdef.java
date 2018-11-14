@@ -121,6 +121,8 @@ public class PrettyXdef {
 			if (!XDConstants.XDEF20_NS_URI.equals(
 				input.getAttribute(oldPrefixNS))
 				&& !XDConstants.XDEF31_NS_URI.equals(
+					input.getAttribute(oldPrefixNS))
+				&& !XDConstants.XDEF32_NS_URI.equals(
 					input.getAttribute(oldPrefixNS))) {
 				System.err.println("Input is not X-definition");
 				return;

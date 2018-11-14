@@ -219,7 +219,7 @@ public class XJUtil extends JSONUtil {
 			if (ee != null) {
 				final NodeList nl = ee.getChildNodes();
 				if (nl.getLength() > 1) {
-					Element eee = getDoc(ee).createElementNS(XDEF31_NS_URI,
+					Element eee = getDoc(ee).createElementNS(XDEF32_NS_URI,
 						XDEF_NS_PREFIX + ":mixed");
 					for (int i = nl.getLength()-1; i >=0 ; i--) {
 						final Node n = nl.item(i);
@@ -301,7 +301,7 @@ public class XJUtil extends JSONUtil {
 			final Document doc = db.newDocument();
 			final XJUtil jsp = new XJUtil();
 			final Element xdef =
-				jsp.appendElem(doc, XDEF31_NS_URI, XDEF_NS_PREFIX + ":def");
+				jsp.appendElem(doc, XDEF32_NS_URI, XDEF_NS_PREFIX + ":def");
 			xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				"xmlns:" + JSON_NS_PREFIX, JSON_NS_URI);
 			jsp._ns.setPrefix(JSON_NS_PREFIX, JSON_NS_URI);

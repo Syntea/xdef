@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" xd:root="Weather" >
+<xd:def xmlns:xd="http://www.org.xdef/3.2" xd:root="Weather" >
 <xd:declaration> float sum = 0; int n = 0; </xd:declaration>
 
 <Weather xd:script="finally setElement(xcreate('html'))"

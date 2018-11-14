@@ -100,7 +100,7 @@ public final class TestParse extends XDTester {
 "/*comment*/\n"+
 "</xd:def>");
 			xdef = // check the sequence of processing of attributes
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A a='onTrue out(@a)' b='onTrue out(@b)' c='onTrue out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -120,7 +120,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("abc", strw.toString());
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A a='finally out(@a)' b='finally out(@b)' c='finally out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -140,7 +140,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("abc", strw.toString());
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A a='init out(@a)' b='init out(@b)' c='init out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -160,7 +160,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("abc", strw.toString());
 			xdef = // check the sequence of processed attribute
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A a='onStartElement out(@a)'\n" +
 "     b='onStartElement out(@b)'\n" +
 "     c='onStartElement out(@c)' />\n" +
@@ -184,7 +184,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("abc", strw.toString());
 			xdef = // check the sequence of processing of attributes
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A b='onTrue out(@b)' c='onTrue out(@c)' a='onTrue out(@a)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -204,7 +204,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("bca", strw.toString());
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A b='finally out(@b)' c='finally out(@c)' a='finally out(@a)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -224,7 +224,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("bca", strw.toString());
 			xdef = // check the sequence of processed attribute
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'\n" +
 "     c='onStartElement out(@c)'\n" +
 "     a='onStartElement out(@a)' />\n" +
@@ -246,7 +246,7 @@ public final class TestParse extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("bca", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' xmlns:a='a.a' >\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='A' xmlns:a='a.a' >\n" +
 "  <A a:b='finally out(@a:a)'\n" +
 "     a:a='finally out(@a:b)'\n" +
 "     a:c='finally out(@a:c)'/>\n"+
@@ -2613,7 +2613,7 @@ public final class TestParse extends XDTester {
 			assertEq(strw.toString(),
 				"i=1,j=123,x=-1123.0,%x:y..n-v=%y=%z=-123456890999000333.0");
 			xdef = // types in different declarations
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a' >\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n" +
 "<xd:declaration>\n" +
 "   int i = 1;\n" +
 "   type paramCode string(i);\n" +
@@ -2632,7 +2632,7 @@ public final class TestParse extends XDTester {
 			assertEq("<a paramCode='xx'/>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // types in different declarations
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a' >\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n" +
 "<xd:declaration>\n" +
 "   int j = i;\n" +
 "   type xx zz;\n" +
@@ -2656,13 +2656,13 @@ public final class TestParse extends XDTester {
 			setChkSyntax(false);
 			xp = compile(
 "<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
-"<xd:def xd:name='X' xd:root='A' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
+"<xd:def xd:name='X' xd:root='A' xmlns:xd='" + XDEFNS + "'>"+
 "<A a='string()'>"+
 "  <B xd:script='+; ref X#R'/>"+
 "</A>"+
 "<R r='optional string()'/>"+
 "</xd:def>"+
-"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
+"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
 "<B b='string()'/>"+
 "</xd:def>"+
 "</xd:collection>");

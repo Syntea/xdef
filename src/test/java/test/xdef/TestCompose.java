@@ -249,14 +249,14 @@ final public class TestCompose extends XDTester {
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF539".equals(reporter.getReport().getMsgID()), reporter);
 			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "'>\n" +
 "  <A xd:script= \"create [%a='1234']\" a = \"?\" b = \"?\"/> \n" +
 "</xd:def>");
 			xml ="<A  a='1234'/>";
 			assertEq(xml, create(xp, "", "A", reporter));
 			assertNoErrors(reporter);
 			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "'>\n" +
 "  <A> \n" +
 "    <B xd:script= \"create [%a='1234']\" a = \"?\" b = \"?\"/> \n" +
 "  </A> \n" +
@@ -2172,7 +2172,7 @@ final public class TestCompose extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd = \"http://www.syntea.cz/xdef/3.1\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\">\n" +
 "<xd:declaration>  \n" +
 "   Container source = [[%a='A', [%b='B', 'C'], 'D']];\n" +
 "</xd:declaration>  \n" +

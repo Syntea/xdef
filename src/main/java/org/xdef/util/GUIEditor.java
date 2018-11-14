@@ -54,7 +54,7 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Project\">\n" +
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
 "  <Project>\n" +
 "    <xd:mixed>\n" +
 "      <!-- Add a class to classpath -->\n" +
@@ -677,7 +677,7 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"HTML\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
 "  &lt;HEAD>&lt;TITLE> create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
 "  &lt;BODY>\n" +
@@ -719,7 +719,7 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"root\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"root\">\n" +
 "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
 "      ? string(2,3);\n" +

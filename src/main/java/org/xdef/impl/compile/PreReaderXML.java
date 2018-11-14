@@ -19,6 +19,7 @@ import java.io.InputStream;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.impl.XConstants;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from XML source data.
@@ -89,10 +90,16 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				if ((ka = parsedElem.getAttrNS(
 					XDConstants.XDEF20_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null) {
+						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(
+						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
-					ver=XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						 ? XDConstants.XD31_ID : XDConstants.XD20_ID;
+					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD20
+						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD31 
+						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD32 : 0;
 					if (XExtUtils.uri(projectNS).errors()) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
@@ -100,15 +107,20 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					parsedElem.remove(ka);
 				} else {
 					if (XDConstants.XDEF20_NS_URI.equals(uri)
-						|| XDConstants.XDEF31_NS_URI.equals(uri)) {
-						ver = XDConstants.XDEF31_NS_URI.equals(uri)
-							? XDConstants.XD31_ID : XDConstants.XD20_ID;
+						|| XDConstants.XDEF31_NS_URI.equals(uri)
+						|| XDConstants.XDEF32_NS_URI.equals(uri)) {
+						ver = XDConstants.XDEF20_NS_URI.equals(uri)
+							? XConstants.XD20
+							: XDConstants.XDEF31_NS_URI.equals(uri)
+							? XConstants.XD31 
+							: XDConstants.XDEF32_NS_URI.equals(uri)
+							? XConstants.XD32 : 0;
 						projectNS = uri;
 					} else {
 						//Namespace of X-definitions is required
 						error(_actPNode._name, XDEF.XDEF256);
 						projectNS = XDConstants.XDEF31_NS_URI;
-						ver = XDConstants.XD31_ID;
+						ver = XConstants.XD32;
 					}
 				}
 				_actPNode._xdVersion = ver;

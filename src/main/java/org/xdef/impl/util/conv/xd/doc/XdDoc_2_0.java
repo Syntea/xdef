@@ -89,6 +89,12 @@ public final class XdDoc_2_0 extends XdDoc {
 			Element def = (Element) defs.item(i);
 			initDef(def);
 		}
+		defs = KXmlUtils.getChildElementsNS(collection,
+			XDConstants.XDEF32_NS_URI, XdNames.DEF);
+		for (int i = 0; i < defs.getLength(); i++) {
+			Element def = (Element) defs.item(i);
+			initDef(def);
+		}
 	}
 
 	/** Initiates given X-definition <tt>def</tt> element.

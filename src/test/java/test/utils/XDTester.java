@@ -42,7 +42,8 @@ import javax.xml.namespace.QName;
  */
 public abstract class XDTester extends STester {
 //	public static String XDEFNS = XDConstants.XDEF20_NS_URI;
-	public static String XDEFNS = XDConstants.XDEF31_NS_URI;
+//	public static String XDEFNS = XDConstants.XDEF31_NS_URI;
+	public static String XDEFNS = XDConstants.XDEF32_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 
@@ -533,6 +534,8 @@ public abstract class XDTester extends STester {
 						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
 						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
+					ClassLoader.getSystemResource(
+						"org/xdef/impl/compile/XdefOfXdef32.xdef"),
 				};
 				_xdOfxd = XDFactory.compileXD(null, urls);
 			} catch (Exception ex) {

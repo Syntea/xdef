@@ -125,10 +125,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		XBuilder xb = new XBuilder(props);
 		xb.setExternals(extObjects);
 		xb.setSource(
-			"<xd:collection xmlns:xd='"+XDConstants.XDEF31_NS_URI+"'/>");
+			"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>");
 		XPool xp = (XPool) xb.compileXD();
 		XDefinition xd = new XDefinition("#",
-			xp, XDConstants.XDEF31_NS_URI, null, (byte) 20);
+			xp, XDConstants.XDEF32_NS_URI, null, (byte) 20);
 		xp._xdefs.put("#", xd);
 		//create dummy X-definition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);
