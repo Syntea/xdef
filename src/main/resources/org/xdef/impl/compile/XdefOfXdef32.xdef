@@ -2,7 +2,7 @@
 
 <!--
   With the metanamespace "META" (XDefinition 3.2)  is described
-  the input XML document which must fit the XDefinition 3.1 specification.
+  the input XML document which must fit the XDefinition 3.2 specification.
 -->
 
 <xd:def xmlns:xd  = "METAXD"

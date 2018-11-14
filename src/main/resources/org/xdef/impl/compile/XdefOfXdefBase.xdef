@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Metanamespace of XDefinition: "METAXD" is 3.1 -->
 <xd:def xmlns:xd  = "METAXD"
-  xmlns:w         = "http://www.syntea.cz/xdef/3.1"
+  xmlns:w         = "http://www.org.xdef/3.2"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.org.xdef/3.2"
