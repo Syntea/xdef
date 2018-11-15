@@ -5,12 +5,12 @@
   the input XML document which must fit the XDefinition 3.2 specification.
 -->
 
-<xd:def xmlns:xd  = "METAXD"
+<xd:def xmlns:xd  = "META"
   name            = "Ver3.2"
   root            = "XD3.2:def | XD3.2:collection | XD3.2:thesaurus"
   xmlns:XD3.2     = "http://www.org.xdef/3.2"
   xmlns:w         = "http://www.org.xdef/3.2"
-  w:metaNamespace = "METAXD" >
+  w:metaNamespace = "META" >
 	
 /******************************************************************************/
 /*X-definition of X-definitions ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
@@ -19,8 +19,8 @@
 	<XD3.2:collection xd:script = "init NS = @metaNamespace 
       ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
       options moreAttributes"
-    include        = "optional uriList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr" >
+    include       = "optional uriList; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr" >
     <xd:mixed>
       <XD3.2:def xd:script = "occurs *; ref XD3.2:def" />
       <XD3.2:thesaurus xd:script = "occurs *; ref XD3.2:thesaurus" />
@@ -30,12 +30,12 @@
   <XD3.2:def xd:script = "init NS = @metaNamespace 
       ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
       options moreAttributes"
-    name            = "optional QName; options acceptQualifiedAttr"
-    metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr" 
-    include         = "optional uriList; options acceptQualifiedAttr"
-    script          = "optional xdefScript; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    name          = "optional QName; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    root          = "optional rootList; options acceptQualifiedAttr" 
+    include       = "optional uriList; options acceptQualifiedAttr"
+    script        = "optional xdefScript; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" --> 
 
 	  <xd:mixed>
@@ -103,8 +103,8 @@
 
   <!-- model of element -->
   <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes" 
-    xd:attr   = "occurs * attributeScript"
-    xd:text   = "occurs * valueScript"
+    xd:attr      = "occurs * attributeScript"
+    xd:text      = "occurs * valueScript"
     XD3.2:script = "optional elementScript" >
     <xd:choice occurs = "*" ref = "xcontent" />
   </xelement>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  With the metanamespace "META" (XDefinition 3.1)  is described
+  With the metanamespace "META" (XDefinition 3.2)  is described
   the input XML document which must fit the XDefinition 2.0 specification.
 -->
 
@@ -25,10 +25,10 @@
   <XD2.0:collection xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/2.0';
       options moreAttributes"
-    classes        = "optional classList; options acceptQualifiedAttr"
-    include        = "optional uriList; options acceptQualifiedAttr"
-    methods        = "optional methodList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr">
+    classes       = "optional classList; options acceptQualifiedAttr"
+    include       = "optional uriList; options acceptQualifiedAttr"
+    methods       = "optional methodList; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr">
 
     <xd:mixed>
       <XD2.0:def xd:script = "occurs *; ref XD2.0:def" />
@@ -40,14 +40,14 @@
   <XD2.0:def xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/2.0';
       options moreAttributes"
-    name            = "optional QName; options acceptQualifiedAttr"
-    metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    classes         = "optional classList; options acceptQualifiedAttr"
-    methods         = "optional methodList; options acceptQualifiedAttr"
-    include         = "optional uriList; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr" 
-    script          = "optional xdefScript; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    name          = "optional QName; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    classes       = "optional classList; options acceptQualifiedAttr"
+    methods       = "optional methodList; options acceptQualifiedAttr"
+    include       = "optional uriList; options acceptQualifiedAttr"
+    root          = "optional rootList; options acceptQualifiedAttr" 
+    script        = "optional xdefScript; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" --> 
 
     <xd:mixed>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  With the metanamespace "META" (XDefinition 3.1)  is described
+  With the metanamespace "META" (XDefinition 3.2)  is described
   the input XML document which must fit the XDefinition 3.1 specification.
 -->
 
-<xd:def xmlns:xd  = "METAXD"
+<xd:def xmlns:xd  = "META"
   name            = "Ver3.1"
   root            = "XD3.1:def | XD3.1:collection | XD3.1:thesaurus"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:w         = "http://www.org.xdef/3.2"
-  w:metaNamespace = "METAXD" >
+  w:metaNamespace = "META" >
 	
 /******************************************************************************/
 /*X-definition of X-definitions ver 3.1, metanamespace: METAXD, prefix: XD3.1 */
@@ -19,8 +19,8 @@
 	<XD3.1:collection xd:script = "init NS = @metaNamespace 
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/3.1';
       options moreAttributes"
-    include        = "optional uriList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr" >
+    include       = "optional uriList; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr" >
     <xd:mixed>
       <XD3.1:def xd:script = "occurs *; ref XD3.1:def" />
       <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
@@ -30,12 +30,12 @@
   <XD3.1:def xd:script = "init NS = @metaNamespace 
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/3.1';
       options moreAttributes"
-    name            = "optional QName; options acceptQualifiedAttr"
-    metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr" 
-    include         = "optional uriList; options acceptQualifiedAttr"
-    script          = "optional xdefScript; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    name          = "optional QName; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    root          = "optional rootList; options acceptQualifiedAttr" 
+    include       = "optional uriList; options acceptQualifiedAttr"
+    script        = "optional xdefScript; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" --> 
 
 	  <xd:mixed>
@@ -103,8 +103,8 @@
 
   <!-- model of element -->
   <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes" 
-    xd:attr   = "occurs * attributeScript"
-    xd:text   = "occurs * valueScript"
+    xd:attr      = "occurs * attributeScript"
+    xd:text      = "occurs * valueScript"
     XD3.1:script = "optional elementScript" >
     <xd:choice occurs = "*" ref = "xcontent" />
   </xelement>

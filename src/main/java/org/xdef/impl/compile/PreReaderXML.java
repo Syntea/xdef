@@ -82,6 +82,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			if ("def".equals(elemLocalName)
 				|| "thesaurus".equals(elemLocalName)
 				|| "declaration".equals(elemLocalName)
+				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
 				|| "collection".equals(elemLocalName))  {
 				String projectNS; // = XDConstants.XDEF20_NS_URI;

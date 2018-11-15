@@ -808,7 +808,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		for (PNode nodei: listComponent) {
-			String defName = nodei._xdef.getName();
+			String defName = nodei._xdef == null ? "" : nodei._xdef.getName();
 			_scriptCompiler.setSource(nodei._value, defName,
 				nodei._xdVersion, nodei._nsPrefixes);
 			compileComponentDeclaration();
@@ -1901,15 +1901,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._enums.entrySet()) {
-					String name = e.getKey();
+					String name = e.getKey(); // name of enumeration
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
 						name.substring(0, ndx);
 					}
+					SBuffer cls = e.getValue(); // qualified name of class
 					CompileVariable var = _codeGenerator.getVariable(name);
-					SBuffer cls = e.getValue(); // name of class
 					if (var == null) {
-						//Enumeration &{0} is not declared as typ&
+						//Enumeration &{0} is not declared as a type
 						error(cls, XDEF.XDEF380, name);
 					} else {
 						XDValue xv = _codeGenerator._code.get(

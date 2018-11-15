@@ -1,8 +1,8 @@
-import cz.syntea.xdef.sys.ArrayReporter;
-import cz.syntea.xdef.sys.ReportPrinter;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 
 public class Example_listing {	
 	public static void main(String[] args) throws Exception {
@@ -17,5 +17,4 @@ public class Example_listing {
 				true);
 		}
 	}
-		
 }

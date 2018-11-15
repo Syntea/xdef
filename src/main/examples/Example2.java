@@ -1,7 +1,7 @@
-import cz.syntea.xdef.xml.KXmlUtils;
-import cz.syntea.xdef.XDDocument;
-import cz.syntea.xdef.XDFactory;
-import cz.syntea.xdef.XDPool;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 import org.w3c.dom.Element;
 
 public class Example2 {	
