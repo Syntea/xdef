@@ -1699,6 +1699,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = actDefName;
 	}
 
+	/** Get identifier of type from a model.*/
 	private static short getTypeId(XMNode xn) {
 		if (xn.getKind() == XMNode.XMELEMENT) {
 			// all elements have same type (i.e XComponent or List<XComponent>)
@@ -1804,7 +1805,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._parser._xdVersion,
 					_codeGenerator._thesaurus);
 				XVariableTable variables = new XVariableTable(0);
-
 				// set variables to xdp
 				for (XMVariable xv:
 					_codeGenerator._globalVariables.toArray()) {
@@ -1814,7 +1814,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					variables.addVariable(v);
 				}
 				((XPool) xdp).setVariables(variables);
-
 				// set debug info to xdp
 				if (_codeGenerator._debugInfo != null) {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
@@ -1850,7 +1849,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 				}
 				((XPool) xdp).setXComponents(x);
-
+				// binds
 				x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._binds.entrySet()) {
@@ -1904,12 +1903,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					if ((ndx = name.indexOf(' ')) >= 0) {
 						name.substring(0, ndx);
 					}
-					// qualified name of class
 					SBuffer sbf = _codeGenerator._enums.get(name);
 					String s = sbf.getString();
 					ndx = s.indexOf('#');
 					// set XDefinition name
 					_codeGenerator._parser._actDefName = s.substring(0, ndx);
+					// qualified name of class
 					String clsname = s.substring(ndx + 1);
 					CompileVariable var = _codeGenerator.getVariable(name);
 					if (var == null) {
