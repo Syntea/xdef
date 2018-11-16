@@ -1,5 +1,5 @@
 <xd:collection xmlns:xd='http://www.org.xdef/3.2'>
-<xd:def>
+
 <xd:component>
   %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
   %bind g %with test.xdef.TestXComponentsGen %link G#G/@g;
@@ -29,6 +29,9 @@
   %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
   %class test.xdef.component.A %link A#A;
   %class test.xdef.component.B %link B#A;
+</xd:component>
+
+<xd:component>
   %class test.xdef.component.C extends test.xdef.TestXComponents_C
          %link C#Town;
   %class test.xdef.component.C1 implements test.xdef.component.CI
@@ -36,12 +39,13 @@
   %class test.xdef.component.C2 %link C#Town/Street/House;
   %interface test.xdef.component.CI %link C#Person;
 </xd:component>
-</xd:def>
+
+<xd:declaration> type XY enum('XX','YY');
+  type flt float(); type dat xdatetime('yyyy-MM-dd');
+  uniqueSet uflt flt; uniqueSet udat dat;
+</xd:declaration>
+
 <xd:def name='A' root='A'>
-  <xd:declaration> type XY enum('XX','YY');
-    type flt float(); type dat xdatetime('yyyy-MM-dd');
-    uniqueSet uflt flt; uniqueSet udat dat;
-  </xd:declaration>
   <A a='string' dec='?dec(5,2)'>
     <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>
     <Y xd:script='*'>?num</Y>
@@ -66,7 +70,7 @@
 </xd:def>
 
 <xd:def name='C' root='Town | Persons'>
-<xd:declaration>
+<xd:declaration scope="local">
    external method void test.xdef.TestXComponents_C.test(XXData);
 </xd:declaration>
 <Town Name="string">
@@ -160,7 +164,7 @@
 </xd:def>
 
 <xd:def name='G' root='G'>
-<xd:declaration>
+<xd:declaration scope="local">
    external method void test.xdef.TestXComponentsGen.genXC(XXNode);
 </xd:declaration>
 <xd:component>
@@ -174,8 +178,7 @@
 
 <xd:def xmlns:s='soap' xmlns:b='request' name='H' root='s:H'>
 <xd:component>%class test.xdef.component.H %link s:H</xd:component>
- <s:H
-   s:encodingStyle = "fixed 'encoding'">
+ <s:H s:encodingStyle = "fixed 'encoding'">
    <s:Header>
      <b:User xd:script = 'occurs 1; ref I#User'
        s:understand = "fixed 'true'"
@@ -295,7 +298,7 @@
 </xd:def>
 
 <xd:def name='P' root="A">
-<xd:declaration>
+<xd:declaration scope="local">
   type pflt float(1,6);
   type pdat xdatetime('M.d.yyyy');
   uniqueSet ppdat{x: pdat;}
@@ -314,7 +317,7 @@
 </xd:def>
 
 <xd:def name='X' root='X|Y'>
-<xd:declaration>
+<xd:declaration scope="local">
    external method void test.xdef.TestXComponentsGen.setXX(XXNode,String);
 </xd:declaration>
 <xd:component>
@@ -667,7 +670,7 @@
   %ref %enum test.xdef.TestXComponents_Y21enum eType1;
 </xd:component>
 
-<xd:declaration>
+<xd:declaration scope="local">
   type eType enum('x', 'y', 'A1_b', 'z', '_1', 'A1_b2', '$');
   type myType eType;
   type eType1 enum('a', 'b', 'c');

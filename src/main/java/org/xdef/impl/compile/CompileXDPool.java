@@ -343,11 +343,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.skipBlanksAndComments();
 			if (result.startsWith("%enum ")) {
 				ndx = result.indexOf(' ', 6);
-				String enumClass = result.substring(6, ndx);
+				// xdef name + class
+				String enumClass = _codeGenerator._parser._actDefName
+					+ "#" + result.substring(6, ndx);
 				SBuffer sbf = new SBuffer(enumClass, spos);
 				String enumTypeName = result.substring(ndx+1);
-				if (_codeGenerator._enums.put(enumTypeName, sbf)
-					!= null) {
+				if (_codeGenerator._enums.put(enumTypeName, sbf) != null) {
 					_scriptCompiler.error(//Duplicity of enumeration &{0}
 						spos, XDEF.XDEF379, enumTypeName);
 				}
@@ -1818,7 +1819,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (_codeGenerator._debugInfo != null) {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
 				}
-
 				// set X-components to xdp
 				HashSet<String> classNames = new HashSet<String>();
 				// create map of components
@@ -1897,28 +1897,35 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					x.put(e.getKey(), e.getValue().getString());
 				}
 				((XPool) xdp).setXComponentBinds(x);
-
+				// enumerations
 				x = new TreeMap<String, String>();
-				for (Map.Entry<String, SBuffer> e:
-					_codeGenerator._enums.entrySet()) {
-					String name = e.getKey(); // name of enumeration
+				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
 						name.substring(0, ndx);
 					}
-					SBuffer cls = e.getValue(); // qualified name of class
+					// qualified name of class
+					SBuffer sbf = _codeGenerator._enums.get(name);
+					String s = sbf.getString();
+					ndx = s.indexOf('#');
+					// set XDefinition name
+					_codeGenerator._parser._actDefName = s.substring(0, ndx);
+					String clsname = s.substring(ndx + 1);
 					CompileVariable var = _codeGenerator.getVariable(name);
 					if (var == null) {
 						//Enumeration &{0} is not declared as a type
-						error(cls, XDEF.XDEF380, name);
+						error(sbf, XDEF.XDEF380, name);
 					} else {
 						XDValue xv = _codeGenerator._code.get(
 							var.getParseMethodAddr());
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
-							if (!name.equals(p.getDeclaredName())) {
+							String declName = p.getDeclaredName();
+							ndx = declName.indexOf('#');
+							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
+							if (!name.equals(s)) {
 								//Enumeration &{0} is not declared as a type
-								error(cls,XDEF.XDEF380, e.getKey());
+								error(sbf, XDEF.XDEF380, name);
 							} else {
 								XDContainer xc = p.getNamedParams();
 								if (xc != null && (p instanceof XDParseEnum
@@ -1927,7 +1934,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 									xc = (XDContainer) xv;
 								} else {
 									//Type &{0} can't be converted to enum
-									error(cls, XDEF.XDEF381, name);
+									error(sbf, XDEF.XDEF381, name);
 									continue;
 								}
 								XDValue[] names = xc.getXDItems();
@@ -1935,33 +1942,33 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 									names == null || names.length == 0;
 								if (!wasError) {
 									for (XDValue item: names) {
-										String s = item == null
+										s = item == null
 											? null : item.stringValue();
 										if (!StringParser.isJavaName(s)) {
 											wasError = true;
 											//Type &{0} can't be converted to
 											//enumeration &{1} because value
 											//"&{2}" is not Java identifier
-											error(cls, XDEF.XDEF382,
-												name, cls.getString(), s);
+											error(sbf, XDEF.XDEF382,
+												name, clsname, s);
 										}
 									}
 								}
-								String s = cls.getString(); // get as string
+								s = clsname; // get as string
 								if (!classNames.add(s)) {
 									//Class name &{0} is used in other command
-									error(cls, XDEF.XDEF383, s);
+									error(sbf, XDEF.XDEF383, s);
 								}
 								if (!wasError) {
 									for (XDValue item: names) {
 										s += " " + item.stringValue();
 									}
-									x.put(e.getKey(), s);
+									x.put(p.getDeclaredName(), s);
 								}
 							}
 						} else {
 							//Enumeration &{0} is not declared as a type
-							error(cls, XDEF.XDEF380, name);
+							error(sbf, XDEF.XDEF380, name);
 						}
 					}
 				}
