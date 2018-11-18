@@ -31,8 +31,7 @@
         int mod =  n % 10;
         int num = rok*10000000+mesic*100000+den*1000+(n/10);
         if (num % 11 != mod) {
-           return error("MYERR03",
-              "Chybny kontrolni soucet: &{p}", "&{p} + n");
+           return error("MYERR03", "Control check error: &{0}", "" + n);
         }
     }
     return true;
@@ -53,9 +52,7 @@
         parsedError |= x == $MININT;
     }
     if (parsedError) {
-       return error("XDEF532",
-         "Error detected by external check method: &{msg}",
-         "&{msg}skodaTisice: " + s);
+       return error("MYERR04", "Error detected: &{0}", "skodaTisice: " + s);
     }
     return true;
   }

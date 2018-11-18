@@ -7,7 +7,6 @@ import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBuilder;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDConstants;
 import org.xdef.XDFactory;
@@ -593,6 +592,8 @@ public final class Test002 extends XDTester {
 			strw = new StringWriter();
 			assertEq("<A/>", parse(xdef,"","<A/>",reporter, strw, null, null));
 			assertNoErrors(reporter);
+			//force compilation of test.xdef.TestExtenalMethods_1;
+			test.xdef.TestExtenalMethods_1.class.getClass();
 			assertEq(strw.toString(), "true,true,true");
 			xdef = // external methods in global declaration section
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+

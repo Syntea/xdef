@@ -597,6 +597,8 @@ public final class TestErrors extends XDTester {
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try {
+			//force compilation of test.xdef.Test002;
+			test.xdef.TestExtenalMethods.class.getClass();			
 			xml =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
