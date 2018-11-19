@@ -52,10 +52,12 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefLocale;
 
 /** Provides invoking of external method from script code.
@@ -261,6 +263,16 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					rep = out.getLastErrorReport();
 				}
 				return new DefReport(rep);
+			}
+			case UNIQUESET_TOCONTAINER: {
+				DefContainer c = new DefContainer();
+				CodeUniqueset u = (CodeUniqueset) p;
+				for (Map.Entry<Object, CodeUniqueset.UniquesetItem> x:
+					u.getMap().entrySet()) {
+//////////////////////////////////////////////////					
+					System.out.println(x.getValue().toString());
+				}
+				return c;
 			}
 		}
 		return null;

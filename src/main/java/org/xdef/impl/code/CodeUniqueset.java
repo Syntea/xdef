@@ -223,6 +223,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final String printActualKey() {return getKeyValue().printKey();}
 
+	/** Get map of the table.
+	 * @return map of the table.
+	 */
+	public final Map<Object, UniquesetItem> getMap() {return _map;}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -349,7 +354,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	}
 
 	/** Implements the item of unique set item. */
-	private static final class UniquesetItem {
+	public static final class UniquesetItem {
 		/** Key of unique set. */
 		private final CodeUniquesetKey _key;
 		/** List of unresolved references. */
@@ -403,6 +408,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 		 */
 		private XDValue getValue(final String name) {
 			return _assignedValues ==null ? null : _assignedValues.get(name);
+		}
+		
+		@Override
+		public String toString() {
+			return _key.toString();
 		}
 	}
 
