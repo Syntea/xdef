@@ -720,8 +720,10 @@ public interface CodeTable {
 	static final short UNIQUESET_GETVALUEX = UNIQUESET_SETVALUEX + 1;
 	/** Check unresolved Id references and clear unique set (CLEAR, close). */
 	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUEX + 1;
+	/** Get size of uniqueSet. */
+	static final short UNIQUESET_SIZE = UNIQUESET_KEY_LOAD + 1;
 	/** Create Container from uniqueSet. */
-	static final short UNIQUESET_TOCONTAINER = UNIQUESET_KEY_LOAD + 1;
+	static final short UNIQUESET_TOCONTAINER = UNIQUESET_SIZE + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//Object

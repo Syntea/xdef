@@ -52,7 +52,6 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
-import java.util.Map;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
@@ -264,16 +263,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return new DefReport(rep);
 			}
-			case UNIQUESET_TOCONTAINER: {
-				DefContainer c = new DefContainer();
-				CodeUniqueset u = (CodeUniqueset) p;
-				for (Map.Entry<Object, CodeUniqueset.UniquesetItem> x:
-					u.getMap().entrySet()) {
-//////////////////////////////////////////////////					
-					System.out.println(x.getValue().toString());
-				}
-				return c;
-			}
+			case UNIQUESET_SIZE:{return new DefLong(((CodeUniqueset)p).size());}
+			case UNIQUESET_TOCONTAINER: {return ((CodeUniqueset) p).getKeys();}
 		}
 		return null;
 	}

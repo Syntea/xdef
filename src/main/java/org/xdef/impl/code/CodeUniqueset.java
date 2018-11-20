@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
+import org.xdef.XDContainer;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
@@ -223,10 +224,25 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final String printActualKey() {return getKeyValue().printKey();}
 
-	/** Get map of the table.
-	 * @return map of the table.
+	/** Get keys of the table.
+	 * @return the Container with keys of the table.
 	 */
-	public final Map<Object, UniquesetItem> getMap() {return _map;}
+	public final XDContainer getKeys() {
+		DefContainer result = new DefContainer();
+		for (UniquesetItem x: _map.values()) {
+			DefContainer items = new DefContainer();
+			for (int i = 0; x._key != null && i < x._key._items.length; i++) {
+				items.setXDNamedItem(_parseItems[i]._name, x._key._items[i]);
+			}
+			result.addXDItem(items);
+		}
+		return result;
+	}
+
+	/** Get size of the uniqueSet table.
+	 * @return size of the table.
+	 */
+	public final int size() {return _map.size();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -275,7 +291,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Private classes used in this implementation of XDUniqueset.
+// Classes used in this implementation of XDUniqueset.
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** This class is used for multiple keys in map of key values. */
@@ -354,7 +370,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	}
 
 	/** Implements the item of unique set item. */
-	public static final class UniquesetItem {
+	private static final class UniquesetItem {
 		/** Key of unique set. */
 		private final CodeUniquesetKey _key;
 		/** List of unresolved references. */

@@ -3040,6 +3040,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			//Report
 				case GET_REPORT:
 			//uniqueSet
+				case UNIQUESET_SIZE:
 				case UNIQUESET_TOCONTAINER:
 					_stack[sp] = XCodeProcessorExt.perform1v(item, _stack[sp]);
 					continue;
