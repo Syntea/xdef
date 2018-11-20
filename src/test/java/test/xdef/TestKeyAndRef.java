@@ -46,6 +46,7 @@ public final class TestKeyAndRef extends XDTester {
 		String xml;
 		XDDocument xd;
 		XDPool xp;
+		Element el;
 		final String dataDir = getDataDir() + "test/";
 		final ArrayReporter reporter = new ArrayReporter();
 		try {
@@ -1026,6 +1027,7 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter); // even here uniqeue set must be clear!
 			
+
 			xdef = // method toContainer() of uniqueSet
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List' >\n" +
 "<xd:declaration>\n" +
@@ -1052,13 +1054,45 @@ public final class TestKeyAndRef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			xml = 
+			xml =
 "<List>\n" +
 "   <Member Name='Smith' Room='A'/>\n" +
 "   <Member Name='Bush' Room='B'/>\n" +
 "   <Member Name='Bloch' Room=\"A\"/>\n" +
 "</List>";
 			xd.xparse(xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xd.xcreate("School", reporter),
+"<School>" +
+"<Group Room='A'><Student Name='Smith'/><Student Name='Bloch'/></Group>" +
+"<Group Room='B'><Student Name='Bush'/></Group>" +
+"</School>");
+			assertNoErrors(reporter);
+			xdef = // method toContainer(); variant with container as context
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List' >\n" +
+"<xd:declaration>\n" +
+"   Container c;\n" +
+"   uniqueSet members {room: string()};\n" +
+"</xd:declaration>\n" +
+"\n" +
+"<List xd:script='finally c = members.toContainer();'>\n" +
+"   <Member xd:script='occurs +'\n" +
+"     Name='string()'\n" +
+"     Room='members.room.SET()'/>\n" +
+"</List>\n" +
+"\n" +
+"<School>\n" +
+"  <Group xd:script='*; var String s; create c;'\n" +
+"    Room='string(); create s=from(\"@room\");'>\n" +
+"    <Student xd:script=\"1..*;\n" +
+"                create xpath('//Member[@Room=\\'' + s + '\\']');\"\n" +
+"      Name='string()'/>\n" +
+"  </Group>\n" +
+"</School>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.xparse(xml, reporter); // xml is set - see above
 			assertNoErrors(reporter);
 			assertEq(xd.xcreate("School", reporter),
 "<School>" +

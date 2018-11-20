@@ -1475,7 +1475,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	final void initElem() {
-		if (_xElement._varinit >= 0) {
+		// prepare variables declared in the script (do not make it twice)
+		if (_xElement._varinit >= 0 && _variables == null) {
 			_variables = new XDValue[_xElement._varsize];
 			exec(_xElement._varinit, (byte) 'E');
 			copyTemporaryReports();
