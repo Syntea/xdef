@@ -263,8 +263,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return new DefReport(rep);
 			}
-			case UNIQUESET_SIZE:{return new DefLong(((CodeUniqueset)p).size());}
-			case UNIQUESET_TOCONTAINER: {return ((CodeUniqueset) p).getKeys();}
+			case UNIQUESET_M_SIZE:{
+				return new DefLong(((CodeUniqueset)p).size());
+			}
+			case UNIQUESET_M_TOCONTAINER: {return ((CodeUniqueset)p).getKeys();}
 		}
 		return null;
 	}
