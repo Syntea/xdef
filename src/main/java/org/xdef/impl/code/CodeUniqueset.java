@@ -308,12 +308,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 			for (int i = 0; i < items.length; i++) {
 				XDValue x = keys[i].getParsedObject();
 				if (x != null) {
-					if (x instanceof DefParseResult) {
-						DefParseResult d = (DefParseResult) x;
-						items[i] = d.getParsedValue();
-					} else {
-						items[i] = x;
-					}
+					items[i] = (x instanceof DefParseResult)
+						 ? ((DefParseResult) x).getParsedValue() : x;
 					if (keys[i].isOptional()) {
 						keys[i].setParsedObject(null);
 					}
@@ -427,9 +423,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		}
 		
 		@Override
-		public String toString() {
-			return _key.toString();
-		}
+		public String toString() {return _key.toString();}
 	}
 
 	/** Implements uniqueSet parse item. */
