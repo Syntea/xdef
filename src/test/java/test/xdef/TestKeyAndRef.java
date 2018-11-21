@@ -1027,78 +1027,63 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter); // even here uniqeue set must be clear!
 			
-
-			xdef = // method toContainer() of uniqueSet
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List' >\n" +
+			// method uniqueSet.toContainer()
+			xdef = // explicit variant
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List'>\n" +
 "<xd:declaration>\n" +
 "   Container c;\n" +
 "   int i=0;\n" +
 "   uniqueSet members {room: string()};\n" +
-"</xd:declaration> \n" +
-"\n" +
+"</xd:declaration>\n" +
 "<List xd:script='finally c = members.toContainer();'>\n" +
 "   <Member xd:script='occurs +'\n" +
 "     Name='string()'\n" +
 "     Room='members.room.SET()'/>\n" +
 "</List>\n" +
-"\n" +
 "<School xd:script='var String s;'>\n" +
 "  <Group xd:script='*; create c.getLength()'\n" +
 "    Room='string(); create\n" +
 "             s = ((Container)c.item(i++)).getNamedString(\"room\");'>\n" +
-"    <Student xd:script=\"1..*;\n" +
-"                create xpath('//Member[@Room=\\'' + s + '\\']');\"\n" +
-"      Name='string()'/> \n" +
+"    <Student xd:script=\"+; create xpath('//Member[@Room=\\''+s+'\\']');\"\n" +
+"      Name='string()'/>\n" +
 "  </Group>\n" +
 "</School>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xml =
+			xd = compile(xdef).createXDDocument();
+			xml = // source
 "<List>\n" +
 "   <Member Name='Smith' Room='A'/>\n" +
 "   <Member Name='Bush' Room='B'/>\n" +
 "   <Member Name='Bloch' Room=\"A\"/>\n" +
 "</List>";
-			xd.xparse(xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xd.xcreate("School", reporter),
+			s = // result
 "<School>" +
 "<Group Room='A'><Student Name='Smith'/><Student Name='Bloch'/></Group>" +
 "<Group Room='B'><Student Name='Bush'/></Group>" +
-"</School>");
+"</School>";				
+			parse(xd, xml, reporter);
 			assertNoErrors(reporter);
-			xdef = // method toContainer(); variant with container as context
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List' >\n" +
+			assertEq(create(xd, "School", reporter), s);
+			assertNoErrors(reporter);
+			xdef = // toContainer() - variant with container as context
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List'>\n" +
 "<xd:declaration>\n" +
-"   Container c;\n" +
 "   uniqueSet members {room: string()};\n" +
-"</xd:declaration>\n" +
-"\n" +
-"<List xd:script='finally c = members.toContainer();'>\n" +
+"</xd:declaration> \n" +
+"<List xd:script='finally {returnElement(xcreate(\"School\"))}'>\n" +
 "   <Member xd:script='occurs +'\n" +
 "     Name='string()'\n" +
 "     Room='members.room.SET()'/>\n" +
 "</List>\n" +
-"\n" +
 "<School>\n" +
-"  <Group xd:script='*; var String s; create c;'\n" +
+"  <Group xd:script='*; var String s; create members.toContainer();'\n" +
 "    Room='string(); create s=from(\"@room\");'>\n" +
-"    <Student xd:script=\"1..*;\n" +
-"                create xpath('//Member[@Room=\\'' + s + '\\']');\"\n" +
-"      Name='string()'/>\n" +
+"    <Student xd:script=\"+; create xpath('//Member[@Room=\\''+s+'\\']');\"\n" +
+"      Name='string()'/> \n" +
 "  </Group>\n" +
 "</School>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xd.xparse(xml, reporter); // xml is set - see above
-			assertNoErrors(reporter);
-			assertEq(xd.xcreate("School", reporter),
-"<School>" +
-"<Group Room='A'><Student Name='Smith'/><Student Name='Bloch'/></Group>" +
-"<Group Room='B'><Student Name='Bush'/></Group>" +
-"</School>");
+			assertEq(parse(compile(xdef).createXDDocument(), xml, reporter), s);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 
