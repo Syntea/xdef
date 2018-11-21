@@ -1540,6 +1540,13 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					execUniqueOperation(dt, chkNode, code);
 					continue;
 				}
+				case UNIQUESET_M_SIZE:
+					_stack[sp] = new DefLong(
+						((CodeUniqueset) _stack[sp]).size());
+					continue;
+				case UNIQUESET_M_TOCONTAINER:
+					_stack[sp] = ((CodeUniqueset) _stack[sp]).getKeys();
+					continue;
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
@@ -3039,9 +3046,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case WHITESPACES_S:
 			//Report
 				case GET_REPORT:
-			//uniqueSet
-				case UNIQUESET_M_SIZE:
-				case UNIQUESET_M_TOCONTAINER:
 					_stack[sp] = XCodeProcessorExt.perform1v(item, _stack[sp]);
 					continue;
 			//Element

@@ -56,7 +56,6 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
-import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefLocale;
 
 /** Provides invoking of external method from script code.
@@ -263,10 +262,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return new DefReport(rep);
 			}
-			case UNIQUESET_M_SIZE:{
-				return new DefLong(((CodeUniqueset)p).size());
-			}
-			case UNIQUESET_M_TOCONTAINER: {return ((CodeUniqueset)p).getKeys();}
 		}
 		return null;
 	}
