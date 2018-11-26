@@ -1026,7 +1026,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrors(reporter); // uniqeue set must be clear!
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter); // even here uniqeue set must be clear!
-			
+
 			// method uniqueSet.toContainer()
 			xdef = // explicit variant
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='List'>\n" +
