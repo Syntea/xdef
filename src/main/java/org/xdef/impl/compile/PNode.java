@@ -122,6 +122,11 @@ public final class PNode {
 		return xattr;
 	}
 
+	/** Expand macros.
+	 * @param reporter error reporter.
+	 * @param actDefName actua X-definition name.
+	 * @param macros map with macros.
+	 */
 	public void expandMacros(final ReportWriter reporter,
 		final String actDefName,
 		final Map<String, XScriptMacro> macros) {
@@ -129,7 +134,7 @@ public final class PNode {
 			(XDConstants.XDEF20_NS_URI.equals(_nsURI)
 			|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
 			|| XDConstants.XDEF32_NS_URI.equals(_nsURI))) {
-			return; // do not process macro definitions
+			return; // do not process macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(
 			actDefName, _xmlVersion, macros, reporter);

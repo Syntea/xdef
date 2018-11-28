@@ -320,7 +320,7 @@ public final class Test002 extends XDTester {
 "        xmlns:p='http://ws.ckp.cz/pis/B1/2006/10'\n"+
 "        impl-version='0.0.1' impl-date='18.9.2006' root='s:Envelope'>\n"+
 "<xd:macro\n"+
-"name=\"moreAll\">options moreAttributes,moreElements,moreText</xd:macro>\n"+
+"name=\"moreAll\">options moreAttributes,moreElements,moreText;</xd:macro>\n"+
 "<s:Envelope xd:script=\"occurs 1\"\n"+
 "        s:encodingStyle=\"fixed 'http://www.syntea.cz/ckp/pis/encoding'\">\n"+
 "    <s:Header xd:script=\"occurs 0..1; finally setHeaderEl()\">\n"+

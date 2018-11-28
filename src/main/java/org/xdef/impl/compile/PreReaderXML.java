@@ -258,21 +258,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 							error(_actPNode._name, XDEF.XDEF303, defName);
 						}
 						defName = null;
-//						String s = null;
-//						for (int count = 1; s == null; count++) {
-//							s = defName + "_DUPLICATED_NAME_" + count;
-//							for (PNode q: _xdefPNodes) {
-//								if (s.equals(q. _xdef.getName())) {
-//									s = null;
-//									break;
-//								}
-//							}
-//						}
-//						defName = s;
 					}
 				}
 				if (defName != null) {
-//					_xdefNames.add(defName);
 					_pcomp.getPXDefs().add(_actPNode);
 				}
 			}
@@ -280,9 +268,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			_level++;
 			_actPNode._parent._childNodes.add(_actPNode);
 		}
-//		if (_level == 1 && "declaration".equals(elemLocalName)) {
-//			_listDecl.add(0, _actPNode);
-//		}
 	}
 
 	/** Get "name" (or "prefix:name") of node.
