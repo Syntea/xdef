@@ -714,7 +714,7 @@ public final class TestGroups extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "3");
 			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "'>\n" +
 "<A xd:script= \"create 1\">\n" +
 "  <xd:mixed xd:script= \"create 5\"> \n" +
 "    <B xd:script= \"occurs *; create 2\" />\n" +

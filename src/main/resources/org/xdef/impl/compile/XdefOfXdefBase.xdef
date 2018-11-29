@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Metanamespace of XDefinition: "METAXD" is 3.1 -->
-<xd:def xmlns:xd  = "METAXD"
-  xmlns:w         = "http://www.syntea.cz/xdef/3.1"
+<!-- Metanamespace of XDefinition: "METAXD" is 3.2 -->
+<xd:def xmlns:xd  = "META"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
-  w:metaNamespace = "METAXD"
+  xmlns:XD3.2     = "http://www.org.xdef/3.2"
+  xmlns:w         = "http://www.org.xdef/3.2"
+  w:metaNamespace = "META"
   xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection 
-                     | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection" >
+                     | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
+                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection" >
 
 <xd:declaration>
   /* Default namespace of XDefinition */
@@ -593,9 +595,9 @@ BNFMethodparameters ::= "(" S?
 BNFMethodparameter ::= Digit+ | BNFTerminalSymbol
 
 BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"' 
-  | (BNFHexaChracter (S? BNFHexaChracter)* )
+  | (BNFHexaCharacter (S? BNFHexaCharacter)* )
 
-BNFHexaChracter ::= "#" HexaDigit+
+BNFHexaCharacter ::= "#" HexaDigit+
 
 BNFRules ::= BNFRule (BNFRule)*
 

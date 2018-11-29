@@ -55,6 +55,8 @@ public final class TestXdefOfXdef extends XDTester {
 						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
 						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
+					ClassLoader.getSystemResource(
+						"org/xdef/impl/compile/XdefOfXdef32.xdef"),
 				};
 				XP = compile(sources);
 				ByteArrayOutputStream out;
@@ -77,13 +79,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
+"<xd:def xmlns:xd ='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 " external method String x.b(XXNode, XDValue[]);\n"+
 "</xd:declaration>\n"+
@@ -116,7 +118,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' root = \"#A\">\n"+
+"<xd:def xmlns:xd ='" + XDEFNS + "' root = \"#A\">\n"+
 "  <A>\n"+
 "    <B xd:script='occurs 2 /*intentionaly no parse method*/'/>\n"+
 "  </A>\n"+
@@ -148,7 +150,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n" +
 "<a b=\"optional { int i=1;\n" +
 "                  switch(i) {\n" +
 "                     case 1: i=2;\n" +
@@ -169,13 +171,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/3.1' root='A'>\n"+
+"<xd:def xmlns:xd = '" + XDEFNS + "' root='A'>\n"+
 "  <A xd:script=\"match @x==''; options acceptEmptyAttributes\" x=''/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n"+
+"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
 "  <root> required myType() </root>\n"+
 "</xd:def>\n"+
@@ -203,13 +205,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' name = \"XDDecl\">  \n"+
+"<xd:def xmlns:xd ='" + XDEFNS + "' name = \"XDDecl\">  \n"+
 "  <xd:BNFGrammar name=\"xscript\"><![CDATA[L::='a'/*E*/]]></xd:BNFGrammar>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'>\n"+
+"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
 "<xd:declaration>\n"+
 " external method boolean a.b.a(int);\n"+
 " type an a(2)\n"+ // here is intentionaly missing the semicolon
@@ -249,7 +251,7 @@ public final class TestXdefOfXdef extends XDTester {
 //				xml = dataDir + "TestXdefOfXdef*.xdef";
 //				assertNoErrorwarnings(parse(xml), xml);
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (Throwable ex) {fail(ex);}
 
 		resetTester();
 	}

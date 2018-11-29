@@ -710,15 +710,19 @@ public interface CodeTable {
 	static final short UNIQUESET_M_CHKID = UNIQUESET_M_IDREF + 1;
 	/** Clear all parts of key value. */
 	static final short UNIQUESET_M_NEWKEY = UNIQUESET_M_CHKID + 1;
-	/** Check unresolved Id references and clear unique set (CLEAR, close). */
-	static final short UNIQUESET_CLOSE = UNIQUESET_M_NEWKEY + 1;
+	/** Get size of uniqueSet. */
+	static final short UNIQUESET_M_SIZE = UNIQUESET_M_NEWKEY + 1;
+	/** Create Container from uniqueSet values. */
+	static final short UNIQUESET_M_TOCONTAINER = UNIQUESET_M_SIZE + 1;
+	/** Close uniqueSet. */
+	static final short UNIQUESET_CLOSE = UNIQUESET_M_TOCONTAINER + 1;
 	/** Check unresolved Id references and clear unique set (CLEAR, close). */
 	static final short UNIQUESET_CHEKUNREF = UNIQUESET_CLOSE + 1;
 	/** Set named value to the key of unique set. */
 	static final short UNIQUESET_SETVALUEX = UNIQUESET_CHEKUNREF + 1;
 	/** Get named value to the key of unique set. */
 	static final short UNIQUESET_GETVALUEX = UNIQUESET_SETVALUEX + 1;
-	/** Check unresolved Id references and clear unique set (CLEAR, close). */
+	/** Set index of multiple key  (0 if key is simple). */
 	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUEX + 1;
 
 	////////////////////////////////////////////////////////////////////////////

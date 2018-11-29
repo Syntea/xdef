@@ -1,6 +1,7 @@
 package test.xdutils;
 
 import org.xdef.proc.XXNode;
+import org.xdef.util.GUIEditor;
 import test.utils.XDTester;
 
 /** Test GUI editor
@@ -13,7 +14,7 @@ public class TestGuiEditor  extends XDTester {
 	public static final String test(final XXNode x) {return "Method test; ";}
 
 	private void test(final String... params) {
-		org.xdef.util.GUIEditor.main(params);
+		GUIEditor.main(params);
 		System.out.println("OK " + params[0] +
 			(params.length > 1 ? " " + params[1] : ""));
 	}
@@ -21,30 +22,12 @@ public class TestGuiEditor  extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		String dataDir = getDataDir() + "GUI/";
 ////////////////////////////////////////////////////////////////////////////////
-//		test(new String[] {"-p", dataDir + "validate/project.xml"});
-//		test(new String[] {"-p", dataDir + "construct/project.xml"});
-		test(new String[] {"-p", dataDir + "test/project.xml"});
 //		test(new String[] {"-v"});
-//		test(new String[] {"-p", "C:/temp/project.xml"});
 //		test(new String[] {"-c"});
-//		test(new String[] {
-//			"-v",
-//			"-xdef", dataDir + "validate/xdef.xml",
-//			"-data", dataDir + "validate/data.xml",
-//			"-debug",
-////			"-editInput",
-//			"-displayResult",
-//		});
-//		test(new String[] {
-//			"-c",
-//			"-xdef", dataDir + "construct/xdef.xml",
-//			"-data", dataDir + "construct/data.xml",
-//			"-debug",
-//			"-editInput",
-//			"-displayResult"
-//		});
+		test(new String[] {"-p", getDataDir() + "GUI/validate/project.xml"});
+//		test(new String[] {"-p", getDataDir() + "GUI/construct/project.xml"});
+//		test(new String[] {"-p", getDataDir() + "GUI/test/project.xml"});
 	}
 
 	/** Run test

@@ -2,10 +2,10 @@ package test.xdef;
 
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDBuilder;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
+import org.xdef.XDConstants;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
@@ -331,7 +331,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertNoErrors(reporter);
 
 			xdef =
-"<xd:def xmlns:xd='" + KXmlConstants.XDEF20_NS_URI + "' root='a'\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'\n"+
 "  classes='test.xdef.TestExtenalMethods_2'>\n"+
 "<a\n"+
 "m00=\"?string;finally{m00();m00(1);}\"\n"+

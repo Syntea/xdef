@@ -1,8 +1,8 @@
 package org.xdef.util;
 
+import org.xdef.XDConstants;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KDOMBuilder;
-import org.xdef.xml.KXmlConstants;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -118,10 +118,12 @@ public class PrettyXdef {
 			oldPrefix = input.getNodeName().substring(0,index + 1);
 			String oldPrefixNS =
 				"xmlns:" + oldPrefix.substring(0, oldPrefix.length() - 1);
-			if (!KXmlConstants.XDEF20_NS_URI.equals(
+			if (!XDConstants.XDEF20_NS_URI.equals(
 				input.getAttribute(oldPrefixNS))
-				&& !KXmlConstants.XDEF31_NS_URI.equals(
-				input.getAttribute(oldPrefixNS))) {
+				&& !XDConstants.XDEF31_NS_URI.equals(
+					input.getAttribute(oldPrefixNS))
+				&& !XDConstants.XDEF32_NS_URI.equals(
+					input.getAttribute(oldPrefixNS))) {
 				System.err.println("Input is not X-definition");
 				return;
 			}

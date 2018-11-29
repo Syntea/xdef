@@ -234,6 +234,7 @@ public class GUIScreen extends GUIBase {
 		});
 		// Create an undo action and add it to the text component
 		_sourceArea.getActionMap().put("Undo", new AbstractAction("Undo") {
+			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				try {
@@ -247,6 +248,7 @@ public class GUIScreen extends GUIBase {
 		});
 		// Create an redo action and add it to the text component
 		_sourceArea.getActionMap().put("Redo", new AbstractAction("Redo") {
+			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				try {
@@ -259,6 +261,7 @@ public class GUIScreen extends GUIBase {
 		});
 		// Create action compile the text component
 		_sourceArea.getActionMap().put("Compile", new AbstractAction("Compile"){
+			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				updateSourceItem();
@@ -268,6 +271,7 @@ public class GUIScreen extends GUIBase {
 		});
 		// Create action Exit the text component
 		_sourceArea.getActionMap().put("Save", new AbstractAction("Save") {
+			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				updateSourceItem();

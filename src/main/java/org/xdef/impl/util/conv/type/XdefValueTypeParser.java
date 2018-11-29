@@ -1,6 +1,5 @@
 package org.xdef.impl.util.conv.type;
 
-import org.xdef.XDConstants;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.StringParser;
 import org.xdef.impl.compile.XScriptParser;
@@ -23,6 +22,7 @@ import org.xdef.impl.util.conv.type.domain.restr.WhiteSpaceRestricted;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import org.xdef.impl.XConstants;
 
 /** X-definition value type parser.
  * @author Ilia Alexandrov
@@ -71,7 +71,7 @@ public final class XdefValueTypeParser {
 			throw new IllegalArgumentException("Given type string is empty");
 		}
 		_p = new XScriptParser((byte) 10);
-		_p.setSource(new SBuffer(type), null, XDConstants.XD20_ID);
+		_p.setSource(new SBuffer(type), null, XConstants.XD32);
 		_b = new StringBuffer();
 	}
 

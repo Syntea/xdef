@@ -16,7 +16,6 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.XDConstants;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -47,14 +46,15 @@ import java.util.TreeMap;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
+import org.xdef.XDConstants;
 import org.xdef.XDValueID;
-import org.xdef.xml.KXmlConstants;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import org.xdef.impl.XConstants;
 
 /** Provide compiling of X-definitions from source data.
  * @author Vaclav Trojan
@@ -343,11 +343,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.skipBlanksAndComments();
 			if (result.startsWith("%enum ")) {
 				ndx = result.indexOf(' ', 6);
-				String enumClass = result.substring(6, ndx);
+				// xdef name + class
+				String enumClass = _codeGenerator._parser._actDefName
+					+ "#" + result.substring(6, ndx);
 				SBuffer sbf = new SBuffer(enumClass, spos);
 				String enumTypeName = result.substring(ndx+1);
-				if (_codeGenerator._enums.put(enumTypeName, sbf)
-					!= null) {
+				if (_codeGenerator._enums.put(enumTypeName, sbf) != null) {
 					_scriptCompiler.error(//Duplicity of enumeration &{0}
 						spos, XDEF.XDEF379, enumTypeName);
 				}
@@ -499,7 +500,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				"methods", false, true);
 			if (sval!= null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
-				if (pnode._xdVersion >= XDConstants.XD31_ID) {
+				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
 					"Attribute \"methods\"",
 					"<xd:declaration> external method { ... } ...");
@@ -514,7 +515,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			sval = _precomp.getXdefAttr(pnode, "classes", false, true);
 			if (sval != null
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
-				if (pnode._xdVersion >= XDConstants.XD31_ID) {
+				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
 					"Attribute \"classes\"",
 					"<xd:declaration> external method { ... } ...");
@@ -808,7 +809,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		for (PNode nodei: listComponent) {
-			String defName = nodei._xdef.getName();
+			String defName = nodei._xdef == null ? "" : nodei._xdef.getName();
 			_scriptCompiler.setSource(nodei._value, defName,
 				nodei._xdVersion, nodei._nsPrefixes);
 			compileComponentDeclaration();
@@ -1472,8 +1473,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				newNode = createReference(pnode, pnode._localName, xdef);
 			} else {
 				if (level > 1 || !"macro".equals(pnode._localName)
-					|| (KXmlConstants.XDEF20_NS_URI.equals(pnode._nsURI)
-					&& KXmlConstants.XDEF31_NS_URI.equals(pnode._nsURI))) {
+					|| (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
+					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI)
+					&& XDConstants.XDEF32_NS_URI.equals(pnode._nsURI))) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);
@@ -1697,6 +1699,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = actDefName;
 	}
 
+	/** Get identifier of type from a model.*/
 	private static short getTypeId(XMNode xn) {
 		if (xn.getKind() == XMNode.XMELEMENT) {
 			// all elements have same type (i.e XComponent or List<XComponent>)
@@ -1802,7 +1805,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._parser._xdVersion,
 					_codeGenerator._thesaurus);
 				XVariableTable variables = new XVariableTable(0);
-
 				// set variables to xdp
 				for (XMVariable xv:
 					_codeGenerator._globalVariables.toArray()) {
@@ -1812,12 +1814,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					variables.addVariable(v);
 				}
 				((XPool) xdp).setVariables(variables);
-
 				// set debug info to xdp
 				if (_codeGenerator._debugInfo != null) {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
 				}
-
 				// set X-components to xdp
 				HashSet<String> classNames = new HashSet<String>();
 				// create map of components
@@ -1849,7 +1849,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 				}
 				((XPool) xdp).setXComponents(x);
-
+				// binds
 				x = new TreeMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._binds.entrySet()) {
@@ -1896,28 +1896,35 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					x.put(e.getKey(), e.getValue().getString());
 				}
 				((XPool) xdp).setXComponentBinds(x);
-
+				// enumerations
 				x = new TreeMap<String, String>();
-				for (Map.Entry<String, SBuffer> e:
-					_codeGenerator._enums.entrySet()) {
-					String name = e.getKey();
+				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
 						name.substring(0, ndx);
 					}
+					SBuffer sbf = _codeGenerator._enums.get(name);
+					String s = sbf.getString();
+					ndx = s.indexOf('#');
+					// set XDefinition name
+					_codeGenerator._parser._actDefName = s.substring(0, ndx);
+					// qualified name of class
+					String clsname = s.substring(ndx + 1);
 					CompileVariable var = _codeGenerator.getVariable(name);
-					SBuffer cls = e.getValue(); // name of class
 					if (var == null) {
-						//Enumeration &{0} is not declared as typ&
-						error(cls, XDEF.XDEF380, name);
+						//Enumeration &{0} is not declared as a type
+						error(sbf, XDEF.XDEF380, name);
 					} else {
 						XDValue xv = _codeGenerator._code.get(
 							var.getParseMethodAddr());
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
-							if (!name.equals(p.getDeclaredName())) {
+							String declName = p.getDeclaredName();
+							ndx = declName.indexOf('#');
+							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
+							if (!name.equals(s)) {
 								//Enumeration &{0} is not declared as a type
-								error(cls,XDEF.XDEF380, e.getKey());
+								error(sbf, XDEF.XDEF380, name);
 							} else {
 								XDContainer xc = p.getNamedParams();
 								if (xc != null && (p instanceof XDParseEnum
@@ -1926,7 +1933,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 									xc = (XDContainer) xv;
 								} else {
 									//Type &{0} can't be converted to enum
-									error(cls, XDEF.XDEF381, name);
+									error(sbf, XDEF.XDEF381, name);
 									continue;
 								}
 								XDValue[] names = xc.getXDItems();
@@ -1934,33 +1941,33 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 									names == null || names.length == 0;
 								if (!wasError) {
 									for (XDValue item: names) {
-										String s = item == null
+										s = item == null
 											? null : item.stringValue();
 										if (!StringParser.isJavaName(s)) {
 											wasError = true;
 											//Type &{0} can't be converted to
 											//enumeration &{1} because value
 											//"&{2}" is not Java identifier
-											error(cls, XDEF.XDEF382,
-												name, cls.getString(), s);
+											error(sbf, XDEF.XDEF382,
+												name, clsname, s);
 										}
 									}
 								}
-								String s = cls.getString(); // get as string
+								s = clsname; // get as string
 								if (!classNames.add(s)) {
 									//Class name &{0} is used in other command
-									error(cls, XDEF.XDEF383, s);
+									error(sbf, XDEF.XDEF383, s);
 								}
 								if (!wasError) {
 									for (XDValue item: names) {
 										s += " " + item.stringValue();
 									}
-									x.put(e.getKey(), s);
+									x.put(p.getDeclaredName(), s);
 								}
 							}
 						} else {
 							//Enumeration &{0} is not declared as a type
-							error(cls, XDEF.XDEF380, name);
+							error(sbf, XDEF.XDEF380, name);
 						}
 					}
 				}

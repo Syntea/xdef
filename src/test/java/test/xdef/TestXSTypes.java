@@ -1,7 +1,6 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
@@ -35,6 +34,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
+import org.xdef.impl.XConstants;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -423,7 +423,7 @@ public final class TestXSTypes extends XDTester {
 "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
 "<xs:simpleType name='mytype'>\n");
 		XScriptParser p = new XScriptParser((byte) 10);
-		p.setSource(new SBuffer(params), null, XDConstants.XD20_ID);
+		p.setSource(new SBuffer(params), null, XConstants.XD32);
 		p.nextSymbol();
 		genSchemaType(p, "  ", sb);
 		sb.append(

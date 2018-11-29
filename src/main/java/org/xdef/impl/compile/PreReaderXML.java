@@ -14,12 +14,12 @@ import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KParsedAttr;
 import org.xdef.xml.KParsedElement;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.impl.XConstants;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from XML source data.
@@ -82,34 +82,46 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			if ("def".equals(elemLocalName)
 				|| "thesaurus".equals(elemLocalName)
 				|| "declaration".equals(elemLocalName)
+				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
 				|| "collection".equals(elemLocalName))  {
 				String projectNS; // = XDConstants.XDEF20_NS_URI;
 				KParsedAttr ka;
 				byte ver;
 				if ((ka = parsedElem.getAttrNS(
-					KXmlConstants.XDEF20_NS_URI, "metaNamespace")) != null
+					XDConstants.XDEF20_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
-						KXmlConstants.XDEF31_NS_URI, "metaNamespace")) != null){
+						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(
+						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
-					ver=KXmlConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						 ? XDConstants.XD31_ID : XDConstants.XD20_ID;
+					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD20
+						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD31 
+						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD32 : 0;
 					if (XExtUtils.uri(projectNS).errors()) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
 					}
 					parsedElem.remove(ka);
 				} else {
-					if (KXmlConstants.XDEF20_NS_URI.equals(uri)
-						|| KXmlConstants.XDEF31_NS_URI.equals(uri)) {
-						ver = KXmlConstants.XDEF31_NS_URI.equals(uri)
-							? XDConstants.XD31_ID : XDConstants.XD20_ID;
+					if (XDConstants.XDEF20_NS_URI.equals(uri)
+						|| XDConstants.XDEF31_NS_URI.equals(uri)
+						|| XDConstants.XDEF32_NS_URI.equals(uri)) {
+						ver = XDConstants.XDEF20_NS_URI.equals(uri)
+							? XConstants.XD20
+							: XDConstants.XDEF31_NS_URI.equals(uri)
+							? XConstants.XD31 
+							: XDConstants.XDEF32_NS_URI.equals(uri)
+							? XConstants.XD32 : 0;
 						projectNS = uri;
 					} else {
 						//Namespace of X-definitions is required
 						error(_actPNode._name, XDEF.XDEF256);
-						projectNS = KXmlConstants.XDEF31_NS_URI;
-						ver = XDConstants.XD31_ID;
+						projectNS = XDConstants.XDEF31_NS_URI;
+						ver = XConstants.XD32;
 					}
 				}
 				_actPNode._xdVersion = ver;
@@ -246,21 +258,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 							error(_actPNode._name, XDEF.XDEF303, defName);
 						}
 						defName = null;
-//						String s = null;
-//						for (int count = 1; s == null; count++) {
-//							s = defName + "_DUPLICATED_NAME_" + count;
-//							for (PNode q: _xdefPNodes) {
-//								if (s.equals(q. _xdef.getName())) {
-//									s = null;
-//									break;
-//								}
-//							}
-//						}
-//						defName = s;
 					}
 				}
 				if (defName != null) {
-//					_xdefNames.add(defName);
 					_pcomp.getPXDefs().add(_actPNode);
 				}
 			}
@@ -268,9 +268,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			_level++;
 			_actPNode._parent._childNodes.add(_actPNode);
 		}
-//		if (_level == 1 && "declaration".equals(elemLocalName)) {
-//			_listDecl.add(0, _actPNode);
-//		}
 	}
 
 	/** Get "name" (or "prefix:name") of node.

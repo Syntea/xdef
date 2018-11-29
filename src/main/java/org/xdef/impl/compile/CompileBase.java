@@ -1366,6 +1366,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "CLEAR");
 		method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID,
 			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "checkUnref");
+		method(ti, genInternalMethod(UNIQUESET_M_SIZE, XD_INT,
+			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "size");
+		method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
+			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "toContainer");
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)

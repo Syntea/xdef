@@ -1,5 +1,6 @@
 package org.xdef.util;
 
+import org.xdef.XDConstants;
 import org.xdef.impl.xml.DomBaseHandler;
 import org.xdef.impl.xml.XAbstractReader;
 import org.xdef.impl.xml.XInputStream;
@@ -14,7 +15,6 @@ import org.w3c.dom.Element;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -648,10 +648,10 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 				y._attList.add(x);
 			}
 		}
-		_doc = KXmlUtils.newDocument(KXmlConstants.XDEF31_NS_URI,"xd:def",null);
+		_doc = KXmlUtils.newDocument(XDConstants.XDEF32_NS_URI,"xd:def",null);
 		_xdef = _doc.getDocumentElement();
 		_xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-			"xmlns:xd", KXmlConstants.XDEF31_NS_URI);
+			"xmlns:xd", XDConstants.XDEF32_NS_URI);
 	}
 
 	private void genAttributes(Element model, ElemDecl elem) {
@@ -694,8 +694,8 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		genAttributes(model, elem);
 		if (elem._any) {
 			Element any = xd.getOwnerDocument().createElementNS(
-				KXmlConstants.XDEF31_NS_URI, "xd:any");
-			any.setAttributeNS(KXmlConstants.XDEF31_NS_URI,
+				XDConstants.XDEF32_NS_URI, "xd:any");
+			any.setAttributeNS(XDConstants.XDEF32_NS_URI,
 				"xd:script", "*; options moreAttributes, moreElements");
 			model.appendChild(any);
 		} else if (elem._childList == null || elem._childList.size() == 0) {
@@ -705,7 +705,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		} else {
 			if (elem._numText > 0) {
-				model.setAttributeNS(KXmlConstants.XDEF31_NS_URI,
+				model.setAttributeNS(XDConstants.XDEF32_NS_URI,
 					"xd:text", "* string()");
 			}
 			char seqType;
@@ -746,12 +746,12 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			} else {
 				s = occurs + "; " + ref;
 			}
-			x.setAttributeNS(KXmlConstants.XDEF31_NS_URI, "xd:script", s);
+			x.setAttributeNS(XDConstants.XDEF32_NS_URI, "xd:script", s);
 		}
 		if ("".equals(ref)) {
 			if (elem._childList != null && elem._childList.size() > 0) {
 				if (elem._numText > 0) {
-					x.setAttributeNS(KXmlConstants.XDEF31_NS_URI,
+					x.setAttributeNS(XDConstants.XDEF32_NS_URI,
 						"xd:text", "* string()");
 				}
 				genAttributes(x, elem);
@@ -851,14 +851,14 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		}
 		Element x;
 		if (seq._type == SeqItem.CHOICE) {
-			x= p.getOwnerDocument().createElementNS(KXmlConstants.XDEF31_NS_URI,
+			x= p.getOwnerDocument().createElementNS(XDConstants.XDEF32_NS_URI,
 				"xd:choice");
 			if (seq._occurs != 0) {
 				x.setAttribute("script", String.valueOf(seq._occurs));
 			}
 			p.appendChild(x);
 		} else if (seq._type == SeqItem.MIXED) {
-			x= p.getOwnerDocument().createElementNS(KXmlConstants.XDEF31_NS_URI,
+			x= p.getOwnerDocument().createElementNS(XDConstants.XDEF32_NS_URI,
 				"xd:mixed");
 			if (seq._occurs == '?') {
 				x.setAttribute("script", "?");
@@ -868,7 +868,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			p.appendChild(x);
 		} else if (seq._occurs != 0 || (seqType != SeqItem.SEQUENCE
 			&& seqType != '\0')) {
-			x =p.getOwnerDocument().createElementNS(KXmlConstants.XDEF31_NS_URI,
+			x =p.getOwnerDocument().createElementNS(XDConstants.XDEF32_NS_URI,
 				"xd:sequence");
 			p.appendChild(x);
 			if (seq._occurs != 0) {

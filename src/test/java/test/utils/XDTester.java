@@ -6,7 +6,6 @@ import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDBuilder;
@@ -42,8 +41,9 @@ import javax.xml.namespace.QName;
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-//	public static String XDEFNS = KXmlConstants.XDEF20_NS_URI;
-	public static String XDEFNS = KXmlConstants.XDEF31_NS_URI;
+//	public static String XDEFNS = XDConstants.XDEF20_NS_URI;
+//	public static String XDEFNS = XDConstants.XDEF31_NS_URI;
+	public static String XDEFNS = XDConstants.XDEF32_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 
@@ -87,8 +87,6 @@ public abstract class XDTester extends STester {
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
-		setProperty(XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES,
-			XDConstants.XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE);
 	}
 
 	public final void resetTester() {
@@ -107,9 +105,7 @@ public abstract class XDTester extends STester {
 
 	public final static boolean getFulltestMode() {return _fulltestMode;}
 
-	public final static void setFulltestMode(boolean fulltest) {
-		_fulltestMode = fulltest;
-	}
+	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
 
 	public final void setProperty(final String key, final String value) {
 		if (value == null) {
@@ -538,6 +534,8 @@ public abstract class XDTester extends STester {
 						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
 					ClassLoader.getSystemResource(
 						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
+					ClassLoader.getSystemResource(
+						"org/xdef/impl/compile/XdefOfXdef32.xdef"),
 				};
 				_xdOfxd = XDFactory.compileXD(null, urls);
 			} catch (Exception ex) {

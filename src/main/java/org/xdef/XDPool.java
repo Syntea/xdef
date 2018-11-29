@@ -154,11 +154,6 @@ public interface XDPool extends Serializable {
 	 */
 	public boolean isIgnoreUnresolvedExternals();
 
-	/** Get the ignoreUnresolvedEntities switch.
-	 * @return the resolveIncludes switch.
-	 */
-	public boolean isIgnoreUnresolvedEntities();
-
 	/** Get the switch if XML parser will generate detailed location reports.
 	 * @return the location details switch.
 	 */

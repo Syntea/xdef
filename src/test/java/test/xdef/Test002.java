@@ -5,11 +5,10 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBuilder;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDConstants;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -174,7 +173,7 @@ public final class Test002 extends XDTester {
 			strw.close();
 			assertEq("t1t2", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='"+ KXmlConstants.XDEF31_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+
@@ -189,7 +188,7 @@ public final class Test002 extends XDTester {
 			assertEq("t1t2", strw.toString());
 			try {
 				xdef = //test ListOf with XDEF_2_0
-"<xd:def xmlns:xd='"+ KXmlConstants.XDEF20_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF20_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+
@@ -321,7 +320,7 @@ public final class Test002 extends XDTester {
 "        xmlns:p='http://ws.ckp.cz/pis/B1/2006/10'\n"+
 "        impl-version='0.0.1' impl-date='18.9.2006' root='s:Envelope'>\n"+
 "<xd:macro\n"+
-"name=\"moreAll\">options moreAttributes,moreElements,moreText</xd:macro>\n"+
+"name=\"moreAll\">options moreAttributes,moreElements,moreText;</xd:macro>\n"+
 "<s:Envelope xd:script=\"occurs 1\"\n"+
 "        s:encodingStyle=\"fixed 'http://www.syntea.cz/ckp/pis/encoding'\">\n"+
 "    <s:Header xd:script=\"occurs 0..1; finally setHeaderEl()\">\n"+
@@ -593,6 +592,8 @@ public final class Test002 extends XDTester {
 			strw = new StringWriter();
 			assertEq("<A/>", parse(xdef,"","<A/>",reporter, strw, null, null));
 			assertNoErrors(reporter);
+			//force compilation of test.xdef.TestExtenalMethods_1;
+			test.xdef.TestExtenalMethods_1.class.getClass();
 			assertEq(strw.toString(), "true,true,true");
 			xdef = // external methods in global declaration section
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
@@ -1580,7 +1581,7 @@ public final class Test002 extends XDTester {
 /**
 // ???????????????? This runs on NetBeans and not without them ????????????????
 			xp = compile(
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xmlns:x= 'a'\n" +
+"<xd:def xmlns:xd='" + XDEFNS + "' xmlns:x= 'a'\n" +
 "        root = \"M\">\n" +
 "<M xd:script=\"var String s = '';\">\n" +
 "    <Measurement xd:script=\"occurs 1..*;\n" +

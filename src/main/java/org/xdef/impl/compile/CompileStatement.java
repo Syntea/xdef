@@ -14,7 +14,6 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.XDConstants;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -39,6 +38,7 @@ import java.util.TreeMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import org.xdef.impl.XConstants;
 
 /** Compiler of statements in script.
  * @author Vaclav Trojan
@@ -2964,7 +2964,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, XDConstants.XD31_ID, null);
+		setSource(source, defName, XConstants.XD32, null);
 		if (lang == null) {
 			error(XDEF.XDEF410, "language");//'&{0}' expected
 			return;
@@ -3063,7 +3063,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String defName,
 		final boolean local,
 		final Map<String, Integer> nsPrefixes) { // namespace
-		setSource(sName, defName, XDConstants.XD20_ID, nsPrefixes);
+		setSource(sName, defName, XConstants.XD32, nsPrefixes);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;

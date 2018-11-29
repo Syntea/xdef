@@ -1,6 +1,7 @@
 package org.xdef.impl.util.conv.xd.doc;
+
+import org.xdef.XDConstants;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdDecl;
@@ -77,13 +78,19 @@ public final class XdDoc_2_0 extends XdDoc {
 	 */
 	private void initCollection(Element collection) {
 		NodeList defs = KXmlUtils.getChildElementsNS(collection,
-			KXmlConstants.XDEF20_NS_URI, XdNames.DEF);
+			XDConstants.XDEF20_NS_URI, XdNames.DEF);
 		for (int i = 0; i < defs.getLength(); i++) {
 			Element def = (Element) defs.item(i);
 			initDef(def);
 		}
 		defs = KXmlUtils.getChildElementsNS(collection,
-			KXmlConstants.XDEF31_NS_URI, XdNames.DEF);
+			XDConstants.XDEF31_NS_URI, XdNames.DEF);
+		for (int i = 0; i < defs.getLength(); i++) {
+			Element def = (Element) defs.item(i);
+			initDef(def);
+		}
+		defs = KXmlUtils.getChildElementsNS(collection,
+			XDConstants.XDEF32_NS_URI, XdNames.DEF);
 		for (int i = 0; i < defs.getLength(); i++) {
 			Element def = (Element) defs.item(i);
 			initDef(def);

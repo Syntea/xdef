@@ -1,6 +1,5 @@
 package org.xdef.impl.util.gencollection;
 
-import org.xdef.XDConstants;
 import org.xdef.sys.SBuffer;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.XOccurrence;
@@ -8,6 +7,7 @@ import org.xdef.impl.compile.XScriptParser;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.impl.XConstants;
 
 /** Parse script of X-definition.
  * @author Trojan
@@ -627,7 +627,7 @@ public class XDParsedScript {
 		final String defName,
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser((byte) 10);
-		sp.setSource(new SBuffer(script), defName, XDConstants.XD20_ID);
+		sp.setSource(new SBuffer(script), defName, XConstants.XD32);
 		return new XDParsedScript(sp, isValue);
 	}
 

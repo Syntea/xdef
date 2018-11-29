@@ -2,33 +2,33 @@
 
 <!--
   With the metanamespace "META" (XDefinition 3.2)  is described
-  the input XML document which must fit the XDefinition 3.1 specification.
+  the input XML document which must fit the XDefinition 3.2 specification.
 -->
 
 <xd:def xmlns:xd  = "META"
-  name            = "Ver3.1"
-  root            = "XD3.1:def | XD3.1:collection | XD3.1:thesaurus"
-  xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
+  name            = "Ver3.2"
+  root            = "XD3.2:def | XD3.2:collection | XD3.2:thesaurus"
+  xmlns:XD3.2     = "http://www.org.xdef/3.2"
   xmlns:w         = "http://www.org.xdef/3.2"
   w:metaNamespace = "META" >
 	
 /******************************************************************************/
-/*X-definition of X-definitions ver 3.1, metanamespace: METAXD, prefix: XD3.1 */
+/*X-definition of X-definitions ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
 /******************************************************************************/
 
-	<XD3.1:collection xd:script = "init NS = @metaNamespace 
-      ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/3.1';
+	<XD3.2:collection xd:script = "init NS = @metaNamespace 
+      ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
       options moreAttributes"
     include       = "optional uriList; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr" >
     <xd:mixed>
-      <XD3.1:def xd:script = "occurs *; ref XD3.1:def" />
-      <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
+      <XD3.2:def xd:script = "occurs *; ref XD3.2:def" />
+      <XD3.2:thesaurus xd:script = "occurs *; ref XD3.2:thesaurus" />
     </xd:mixed>
-  </XD3.1:collection>
+  </XD3.2:collection>
     
-  <XD3.1:def xd:script = "init NS = @metaNamespace 
-      ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/3.1';
+  <XD3.2:def xd:script = "init NS = @metaNamespace 
+      ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
       options moreAttributes"
     name          = "optional QName; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr"
@@ -40,52 +40,52 @@
 
 	  <xd:mixed>
 
-      <XD3.1:macro xd:script = "occurs *; options moreAttributes" 
+      <XD3.2:macro xd:script = "occurs *; options moreAttributes" 
         name    = "required QName; options acceptQualifiedAttr"
         xd:attr = "occurs * xdIdentifier" >
         optional string;
-      </XD3.1:macro>
+      </XD3.2:macro>
 
-      <XD3.1:declaration xd:script = "occurs *"
+      <XD3.2:declaration xd:script = "occurs *"
          scope = "optional enum('global','local'); options acceptQualifiedAttr"> 
          optional declarationScript;
-      </XD3.1:declaration>
+      </XD3.2:declaration>
 	  
-      <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
+      <XD3.2:thesaurus xd:script = "occurs *; ref XD3.2:thesaurus" />
 
-      <XD3.1:BNFGrammar xd:script = "occurs *"
+      <XD3.2:BNFGrammar xd:script = "occurs *"
          extends = "optional xdIdentifier; options acceptQualifiedAttr"
          name = "xdIdentifier; options acceptQualifiedAttr"
          scope = "optional enum('global','local'); options acceptQualifiedAttr">
          optional bnfGrammar; /* may be nothing */
-      </XD3.1:BNFGrammar>
+      </XD3.2:BNFGrammar>
 
-      <XD3.1:component xd:script = "occurs *">
+      <XD3.2:component xd:script = "occurs *">
          required xcomponent;
-      </XD3.1:component>
+      </XD3.2:component>
 
       <xd:choice occurs = "*">
 
-          <XD3.1:choice xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:choiceDef"
+          <XD3.2:choice xd:script = "occurs *;
+                            match @name || @XD3.2:name; ref XD3.2:choiceDef"
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:mixed xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:mixedDef" 
+          <XD3.2:mixed xd:script = "occurs *;
+                            match @name || @XD3.2:name; ref XD3.2:mixedDef" 
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:sequence xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:sequenceDef"
+          <XD3.2:sequence xd:script = "occurs *;
+                            match @name || @XD3.2:name; ref XD3.2:sequenceDef"
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:list xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:listDef" 
+          <XD3.2:list xd:script = "occurs *;
+                            match @name || @XD3.2:name; ref XD3.2:listDef" 
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:any xd:script = "occurs *;
-                            match @XD3.1:name; ref XD3.1:anyDef;
+          <XD3.2:any xd:script = "occurs *;
+                            match @XD3.2:name; ref XD3.2:anyDef;
 							options moreAttributes, moreElements"
-              XD3.1:name = "required QName;" />
+              XD3.2:name = "required QName;" />
 
           <xd:any xd:script = "occurs *; ref xelement" />
 
@@ -95,87 +95,87 @@
 	  
     </xd:mixed>
 
-  </XD3.1:def>
+  </XD3.2:def>
  
-  <XD3.1:thesaurus language = "languageId()" default = "optional yesNo()">
+  <XD3.2:thesaurus language = "languageId()" default = "optional yesNo()">
     optional thesaurus();
-  </XD3.1:thesaurus>
+  </XD3.2:thesaurus>
 
   <!-- model of element -->
   <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes" 
     xd:attr      = "occurs * attributeScript"
     xd:text      = "occurs * valueScript"
-    XD3.1:script = "optional elementScript" >
+    XD3.2:script = "optional elementScript" >
     <xd:choice occurs = "*" ref = "xcontent" />
   </xelement>
 
   <xd:choice name = "xcontent">
-    <XD3.1:choice xd:script = "occurs *;
-                      match @ref || @XD3.1:ref; ref XD3.1:choiceRef" />
-    <XD3.1:choice xd:script = "occurs *; ref XD3.1:choiceDef" />
-    <XD3.1:mixed xd:script  = "occurs *;
-                      match @ref || @XD3.1:ref; ref XD3.1:mixedRef" />
-    <XD3.1:mixed xd:script  = "occurs *; ref XD3.1:mixedDef" />
-    <XD3.1:sequence xd:script = "occurs *;
-                      match @ref || @XD3.1:ref; ref XD3.1:sequenceRef" />
-    <XD3.1:sequence xd:script = "occurs *; ref XD3.1:sequenceDef" />
-    <XD3.1:list xd:script = "occurs *;
-                      match @ref || @XD3.1:ref; ref XD3.1:listRef"/>
-    <XD3.1:any xd:script = "occurs *;
-                      match @XD3.1:ref; ref XD3.1:anyRef"/>
-    <XD3.1:any xd:script = "occurs *; match !@XD3.1:ref; ref xelement"/>
+    <XD3.2:choice xd:script = "occurs *;
+                      match @ref || @XD3.2:ref; ref XD3.2:choiceRef" />
+    <XD3.2:choice xd:script = "occurs *; ref XD3.2:choiceDef" />
+    <XD3.2:mixed xd:script  = "occurs *;
+                      match @ref || @XD3.2:ref; ref XD3.2:mixedRef" />
+    <XD3.2:mixed xd:script  = "occurs *; ref XD3.2:mixedDef" />
+    <XD3.2:sequence xd:script = "occurs *;
+                      match @ref || @XD3.2:ref; ref XD3.2:sequenceRef" />
+    <XD3.2:sequence xd:script = "occurs *; ref XD3.2:sequenceDef" />
+    <XD3.2:list xd:script = "occurs *;
+                      match @ref || @XD3.2:ref; ref XD3.2:listRef"/>
+    <XD3.2:any xd:script = "occurs *;
+                      match @XD3.2:ref; ref XD3.2:anyRef"/>
+    <XD3.2:any xd:script = "occurs *; match !@XD3.2:ref; ref xelement"/>
     <xd:any xd:script = "occurs *; ref xelement" />
-    <XD3.1:text> optional valueScript; </XD3.1:text>
+    <XD3.2:text> optional valueScript; </XD3.2:text>
     optional valueScript;
   </xd:choice>
 
-  <XD3.1:choiceRef occurs = "optional Occurrence; options acceptQualifiedAttr"
+  <XD3.2:choiceRef occurs = "optional Occurrence; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "required xposition; options acceptQualifiedAttr"
     script = "optional string; options acceptQualifiedAttr" />
 
-  <XD3.1:choiceDef occurs = "optional Occurrence; options acceptQualifiedAttr" 
+  <XD3.2:choiceDef occurs = "optional Occurrence; options acceptQualifiedAttr" 
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >
     <xd:choice ref = "xcontent" occurs = "*" />
-  </XD3.1:choiceDef>
+  </XD3.2:choiceDef>
 
-  <XD3.1:sequenceRef occurs = "optional Occurrence; options acceptQualifiedAttr"
+  <XD3.2:sequenceRef occurs = "optional Occurrence; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "required xposition; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" />
 
-  <XD3.1:sequenceDef occurs = "optional Occurrence; options acceptQualifiedAttr"
+  <XD3.2:sequenceDef occurs = "optional Occurrence; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >
     <xd:choice ref = "xcontent" occurs = "*" />
-  </XD3.1:sequenceDef>
+  </XD3.2:sequenceDef>
 
-  <XD3.1:mixedRef ref = "required xposition; options acceptQualifiedAttr" 
+  <XD3.2:mixedRef ref = "required xposition; options acceptQualifiedAttr" 
     empty  = "optional booleanLiteral; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" />
 
-  <XD3.1:mixedDef ref = "optional xposition; options acceptQualifiedAttr" 
+  <XD3.2:mixedDef ref = "optional xposition; options acceptQualifiedAttr" 
     empty  = "optional booleanLiteral; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >
     <xd:choice xd:script = "*; ref xcontent;" />
-  </XD3.1:mixedDef>
+  </XD3.2:mixedDef>
 
-  <XD3.1:listRef ref = "required xposition; options acceptQualifiedAttr" />
+  <XD3.2:listRef ref = "required xposition; options acceptQualifiedAttr" />
   
-  <XD3.1:listDef ref = "illegal; options acceptQualifiedAttr">
+  <XD3.2:listDef ref = "illegal; options acceptQualifiedAttr">
     <xd:choice xd:script = "*; ref xcontent;" />
-  </XD3.1:listDef>
+  </XD3.2:listDef>
   
-  <XD3.1:anyDef XD3.1:name = "required QName" 
-    XD3.1:script = "optional groupScript;
+  <XD3.2:anyDef XD3.2:name = "required QName" 
+    XD3.2:script = "optional groupScript;
                     options moreAttributes, moreElements" />
   
-  <XD3.1:anyRef XD3.1:script = "optional groupScript;
+  <XD3.2:anyRef XD3.2:script = "optional groupScript;
                     options moreAttributes, moreElements" />
 
 </xd:def>

@@ -1,13 +1,12 @@
-<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>
+<xd:collection xmlns:xd='http://www.org.xdef/3.2'>
 
-<xd:def>
 <xd:component>
   %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
   %bind g %with test.xdef.TestXComponentsGen %link G#G/@g;
   %bind XXX %with test.xdef.TestXComponentsGen %link G#G/XXX;
   %bind YYY %with test.xdef.TestXComponentsGen %link G#G/YYY;
-  %class test.xdef.component.AZ
-     extends test.xdef.TestXComponentsGen %link A#A/Z;
+  %class test.xdef.component.AZ extends test.xdef.TestXComponentsGen
+         %link A#A/Z;
   %class test.xdef.component.J %link J#A;
   %class test.xdef.component.Z %link SouborD1A#SouborD1A;
   %class test.xdef.component.Z1 %link SouborD1A#ZaznamPDN;
@@ -29,8 +28,10 @@
   %class test.xdef.component.ZvireDN %link SouborD1A#ZvireDN;
   %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
   %class test.xdef.component.A %link A#A;
-
   %class test.xdef.component.B %link B#A;
+</xd:component>
+
+<xd:component>
   %class test.xdef.component.C extends test.xdef.TestXComponents_C
          %link C#Town;
   %class test.xdef.component.C1 implements test.xdef.component.CI
@@ -38,12 +39,13 @@
   %class test.xdef.component.C2 %link C#Town/Street/House;
   %interface test.xdef.component.CI %link C#Person;
 </xd:component>
-</xd:def>
+
+<xd:declaration scope="global"> type XY enum('XX','YY');
+  type flt float(); type dat xdatetime('yyyy-MM-dd');
+  uniqueSet uflt flt; uniqueSet udat dat;
+</xd:declaration>
+
 <xd:def name='A' root='A'>
-  <xd:declaration> type XY enum('XX','YY');
-    type flt float(); type dat xdatetime('yyyy-MM-dd');
-    uniqueSet uflt flt; uniqueSet udat dat;
-  </xd:declaration>
   <A a='string' dec='?dec(5,2)'>
     <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>
     <Y xd:script='*'>?num</Y>
@@ -67,8 +69,10 @@
     name = "? string; create from('s/text()')"/>
 </xd:def>
 
-<xd:def name='C' root='Town | Persons'
-  methods='void test.xdef.TestXComponents_C.test(XXData)' >
+<xd:def name='C' root='Town | Persons'>
+<xd:declaration scope="local">
+   external method void test.xdef.TestXComponents_C.test(XXData);
+</xd:declaration>
 <Town Name="string">
   <Street xd:script="+" Name="string">
     <House xd:script='*' Num='int'>
@@ -87,7 +91,7 @@
 </xd:def>
 
 <xd:def name='D' root='A'>
-<xd:component>%class test.xdef.component.D %link A</xd:component>
+<xd:component> %class test.xdef.component.D %link A </xd:component>
 <A>
   <_ xd:script='?'/>
   <B A='boolean'>
@@ -159,8 +163,10 @@
   </Y>
 </xd:def>
 
-<xd:def name='G' root='G'
-   xd:methods='void test.xdef.TestXComponentsGen.genXC(XXNode);'>
+<xd:def name='G' root='G'>
+<xd:declaration scope="local">
+   external method void test.xdef.TestXComponentsGen.genXC(XXNode);
+</xd:declaration>
 <xd:component>
   %class test.xdef.component.G extends test.xdef.TestXComponentsGen %link G
 </xd:component>
@@ -172,8 +178,7 @@
 
 <xd:def xmlns:s='soap' xmlns:b='request' name='H' root='s:H'>
 <xd:component>%class test.xdef.component.H %link s:H</xd:component>
- <s:H
-   s:encodingStyle = "fixed 'encoding'">
+ <s:H s:encodingStyle = "fixed 'encoding'">
    <s:Header>
      <b:User xd:script = 'occurs 1; ref I#User'
        s:understand = "fixed 'true'"
@@ -293,7 +298,7 @@
 </xd:def>
 
 <xd:def name='P' root="A">
-<xd:declaration>
+<xd:declaration scope="local">
   type pflt float(1,6);
   type pdat xdatetime('M.d.yyyy');
   uniqueSet ppdat{x: pdat;}
@@ -311,12 +316,13 @@
 </A>
 </xd:def>
 
-<xd:def name='X' root='X|Y'
-  methods='void test.xdef.TestXComponentsGen.setXX(XXNode,String)'>
+<xd:def name='X' root='X|Y'>
+<xd:declaration scope="local">
+   external method void test.xdef.TestXComponentsGen.setXX(XXNode,String);
+</xd:declaration>
 <xd:component>
   %class test.xdef.component.X %link X;
-  %class test.xdef.component.X1
-    extends test.xdef.TestXComponentsGen %link Y;
+  %class test.xdef.component.X1 extends test.xdef.TestXComponentsGen %link Y;
 </xd:component>
    <X>
      <A xd:script = '+;'>
@@ -396,10 +402,8 @@
      extends test.xdef.TestXComponents_Y06Container
         &lt;test.xdef.TestXComponents_Y06Domain&gt; %link A;
   %class test.xdef.component.Y06B
-     implements test.xdef.TestXComponents_Y06XCDomain
-        %link  A/B;
-  %bind Domain %with test.xdef.TestXComponents_Y06Container
-        %link A/B;
+     implements test.xdef.TestXComponents_Y06XCDomain %link A/B;
+  %bind Domain %with test.xdef.TestXComponents_Y06Container %link A/B;
 </xd:component>
 <A>
   <B One='required string()' Two='required string()'/>
@@ -409,10 +413,8 @@
 <xd:def name='Y07' root='Smlouva'>
     <xd:component>
         %class test.xdef.component.Y07Smlouva
-            extends test.xdef.TestXComponents_Y07Operation
-                %link Smlouva;
-        %class test.xdef.component.Y07ControlId
-            %link ControlId;
+            extends test.xdef.TestXComponents_Y07Operation %link Smlouva;
+        %class test.xdef.component.Y07ControlId %link ControlId;
         %bind IdFlow %with test.xdef.TestXComponents_Y07Operation
             %link Nehoda/@IdFlow;
         %bind ControlId %with test.xdef.TestXComponents_Y07Operation
@@ -668,7 +670,7 @@
   %ref %enum test.xdef.TestXComponents_Y21enum eType1;
 </xd:component>
 
-<xd:declaration>
+<xd:declaration scope="local">
   type eType enum('x', 'y', 'A1_b', 'z', '_1', 'A1_b2', '$');
   type myType eType;
   type eType1 enum('a', 'b', 'c');
@@ -697,5 +699,4 @@
    </Transfer>
  </A>
 </xd:def>
-
 </xd:collection>

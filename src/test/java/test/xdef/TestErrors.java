@@ -597,6 +597,8 @@ public final class TestErrors extends XDTester {
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try {
+			//force compilation of test.xdef.Test002;
+			test.xdef.TestExtenalMethods.class.getClass();			
 			xml =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -944,7 +946,7 @@ public final class TestErrors extends XDTester {
 				assertTrue(s.contains("E XDEF903") || !s.contains("xd1"), s);
 				s = reporter.getReport().toString();
 				assertTrue(s.contains("E XDEF903") || !s.contains("xd2"), s);
-				assertEq("", chkReport(reporter, "XDEF307", "1", "73", null));
+				assertEq("", chkReport(reporter, "XDEF307", "1", "67", null));
 				assertNull(reporter.getReport(), reporter.printToString());
 			}
 		} catch (Exception ex) { fail(ex); }

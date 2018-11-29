@@ -4,7 +4,6 @@ import org.xdef.XDConstants;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.proc.Thesaurus;
@@ -30,7 +29,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public Map<String, XNode> _rootSelection;
 	/** root namespaces. */
 	public Map<String, String> _namespaces = new TreeMap<String, String>();
-	/** Version of X-definition (XDConstants.XD20_ID or XDConstants.XD31_ID). */
+	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
 	private byte _xdVersion;
 	/** Version of XML from which the X-definition was created. */
 	private byte _xmlVersion;
@@ -59,8 +58,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
-		_xdVersion = KXmlConstants.XDEF20_NS_URI.equals(nsURI)
-			? XDConstants.XD20_ID : XDConstants.XD31_ID;
+		_xdVersion = XDConstants.XDEF20_NS_URI.equals(nsURI) ? XConstants.XD20
+			: XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
+			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32 : 0;
 		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;
 		_xElements = new ArrayList<XElement>();

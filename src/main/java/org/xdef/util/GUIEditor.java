@@ -35,6 +35,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.sys.SThrowable;
 
 /** Provides utility for interactive editing and debugging X-definitions.
  * @author Vaclav Trojan
@@ -53,7 +54,7 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"Project\">\n" +
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
 "  <Project>\n" +
 "    <xd:mixed>\n" +
 "      <!-- Add a class to classpath -->\n" +
@@ -222,6 +223,8 @@ public class GUIEditor extends GUIScreen {
 		if (runMenu != null) {
 			_sourceArea.getActionMap().put(runMenu,
 				new AbstractAction(runMenu){
+				private static final long serialVersionUID =
+					4377386270269629176L;
 				@Override
 				public void actionPerformed(ActionEvent evt) {
 					updateSourceItem();
@@ -364,6 +367,12 @@ public class GUIEditor extends GUIScreen {
 			// Create element with project according to X-definition
 			XDDocument pxd = PROJECTXDPOOL.createXDDocument();
 			Element project = pxd.xparse(src, null);
+			if ("true".equals(project.getAttribute("Show"))) {
+				XDSourceInfo sinfo = new XDSourceInfo();
+				Object o = src.charAt(0) == '<' ? src : new File(src);
+				editXml(null, "Project", o, sinfo, null);
+				project = pxd.xparse(src, null);
+			}
 			Element originalProject = (Element) project.cloneNode(true);
 			NodeList nl;
 			// set properties
@@ -545,8 +554,13 @@ public class GUIEditor extends GUIScreen {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
-			JOptionPane.showMessageDialog(null,//Program exception &{0}
-				Report.error(SYS.SYS036, ex.toString()).toString());
+			if (ex instanceof SThrowable) {
+				JOptionPane.showMessageDialog(null,
+					((SThrowable) ex).getReport().toString());
+			} else {
+				JOptionPane.showMessageDialog(null, //Program exception &{0}
+					Report.error(SYS.SYS036, ex.toString()).toString());
+			}
 		}
 	}
 
@@ -663,7 +677,7 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"HTML\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
 "  &lt;HEAD>&lt;TITLE> create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
 "  &lt;BODY>\n" +
@@ -705,7 +719,7 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" name=\"test\" root=\"root\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"root\">\n" +
 "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
 "      ? string(2,3);\n" +

@@ -4,7 +4,7 @@ import org.xdef.impl.XDefinition;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
-import org.xdef.xml.KXmlConstants;
+import org.xdef.XDConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -122,13 +122,19 @@ public final class PNode {
 		return xattr;
 	}
 
+	/** Expand macros.
+	 * @param reporter error reporter.
+	 * @param actDefName actua X-definition name.
+	 * @param macros map with macros.
+	 */
 	public void expandMacros(final ReportWriter reporter,
 		final String actDefName,
 		final Map<String, XScriptMacro> macros) {
 		if ("macro".equals(_localName) &&
-			(KXmlConstants.XDEF20_NS_URI.equals(_nsURI)
-			|| KXmlConstants.XDEF31_NS_URI.equals(_nsURI))) {
-			return; // do not process macro definitions
+			(XDConstants.XDEF20_NS_URI.equals(_nsURI)
+			|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
+			|| XDConstants.XDEF32_NS_URI.equals(_nsURI))) {
+			return; // do not process macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(
 			actDefName, _xmlVersion, macros, reporter);

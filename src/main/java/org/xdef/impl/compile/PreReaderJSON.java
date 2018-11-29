@@ -10,7 +10,6 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlConstants;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.XMLConstants;
+import org.xdef.impl.XConstants;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from JSON source data.
@@ -622,7 +622,7 @@ class PreReaderJSON implements PreReader {
 			PAttr pattr = new PAttr(name, sbf, null, 0);
 			if (ndx > 0) {
 				pattr._localName = name.substring(ndx + 1);
-				pattr._nsURI = KXmlConstants.XDEF31_NS_URI;
+				pattr._nsURI = XDConstants.XDEF32_NS_URI;
 				pattr._nsindex = _pcomp.getNSURIIndex(pattr._nsURI);
 			} else {
 				pattr._localName = name;
@@ -646,8 +646,8 @@ class PreReaderJSON implements PreReader {
 		PNode pn = new PNode(xdPrefix + ":" + localName,
 			spos, parent, (byte) 31, (byte) 10);
 		pn._localName = localName;
-		pn._nsURI = KXmlConstants.XDEF31_NS_URI;
-		pn._xdVersion = XDConstants.XD31_ID;
+		pn._nsURI = XDConstants.XDEF32_NS_URI;
+		pn._xdVersion = XConstants.XD32;
 		return pn;
 	}
 
@@ -906,13 +906,13 @@ class PreReaderJSON implements PreReader {
 					pars = (JMap) jo;
 					js = getJAttr(pars, "xmlns:" + prefix, false);
 					if (js == null
-						|| !KXmlConstants.XDEF31_NS_URI.equals(js.getString())){
+						|| !XDConstants.XDEF32_NS_URI.equals(js.getString())){
 						throw new RuntimeException("Incorrect namespace: "+js);
 					}
 					//remove this attribute from pars
 					pars.remove(new JString(new SBuffer("xmlns:" + prefix)));
-					pNode._nsURI = KXmlConstants.XDEF31_NS_URI;
-					pNode._xdVersion = XDConstants.XD31_ID;
+					pNode._nsURI = XDConstants.XDEF32_NS_URI;
+					pNode._xdVersion = XConstants.XD32;
 					_pcomp.setURIOnIndex(0, pNode._nsURI);
 					int nsndx = 0;
 					pNode._nsPrefixes.put(prefix, nsndx);

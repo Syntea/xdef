@@ -1,9 +1,9 @@
 package org.xdef.impl.util.conv.xd.doc;
 
+import org.xdef.XDConstants;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KDOMBuilder;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.msg.XDEF;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
@@ -34,8 +34,9 @@ public abstract class XdDoc {
 			throw new SRuntimeException(XDEF.XDEF707); //Reporter is null
 		}
 		String namespace = xdef.getDocumentElement().getNamespaceURI();
-		if (KXmlConstants.XDEF20_NS_URI.equals(namespace)
-			|| KXmlConstants.XDEF31_NS_URI.equals(namespace)) {
+		if (XDConstants.XDEF20_NS_URI.equals(namespace)
+			|| XDConstants.XDEF31_NS_URI.equals(namespace)
+			|| XDConstants.XDEF32_NS_URI.equals(namespace)) {
 			return new XdDoc_2_0(xdef, namespace);
 		} else {
 			//Not valid X-definition document

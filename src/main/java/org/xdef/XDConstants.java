@@ -1,8 +1,10 @@
 package org.xdef;
 
-/** Constants used by X-definition builder. The constants with the name with the
- * prefix "XDPROPERTY" are names of properties. The constants with the name with
- * the prefix XDPROPERTYVALUE are valid values of respective property.
+/** Important constants used by X-definition.
+ * Note the constants with the name starting with prefix "XDPROPERTY"
+ * are names of properties. To each such constant are also defined the constants
+ * with the name starting with prefix "XDPROPERTYVALUE" and there are
+ * defined the valid values of a respective property.
  * @author Vaclav Trojan
  */
 public interface XDConstants {
@@ -99,34 +101,43 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef.language";
 
 ////////////////////////////////////////////////////////////////////////////////
-	/** This property is not designed for public, it sets XML parser
-	 * to ignore unresolved entities. */
-	public static final String XDPROPERTY_IGNOREUNRESOLVEDENTITIES =
-		"xdef.ignoreunresovedentities";
-	/** This is not designed for public; it resets to normal use
-	 * process of unresolved entities (default value). */
-	public static final String XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_FALSE =
-		"false";
-	/** This is not designed for public; it resets ignore unresolved entities.*/
-	public static final String XDPROPERTYVALUE_IGNOREUNRESOLVEDENTITIES_TRUE =
-		"true";
+// XML constants
+////////////////////////////////////////////////////////////////////////////////
+	
+	/** URI of xmlns:xlink */
+	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
+	/** URI of w3c Xinclude */
+	public static final String XINCLUDE_NS_URI =
+		"http://www.w3.org/2001/XInclude";
+	/** URI of JSON/XML conversion nodes. */
+	public static final String JSON_NS_URI = "http://www.syntea.cz/json/1.0";
+	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
+	public static final String JSON_NS_PREFIX = "js";
+	/** Recommended namespace prefix used for X-definition nodes. */
+	public static final String XDEF_NS_PREFIX = "xd";
+	/** URI of X-definition 2.0. */
+	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
+	/** URI of X-definition 3.1. */
+	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
+	/** URI of X-definition 3.2. */
+	public static final String XDEF32_NS_URI = "http://www.org.xdef/3.2";
+	/** The namespace URI for X-definition instance */
+	public static final String XDEF_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/instance";
+	/** The namespace URI for X-definition instance */
+	public static final String XDEF32_INSTANCE_NS_URI = 
+		"http://www.org.xdef/instance/3.2";
 
-	////////////////////////////////////////////////////////////////////////////
-	/** X-definition version 2.0 ID. */
-	public static final byte XD20_ID = 20;
-	/** X-definition version 3.1 ID. */
-	public static final byte XD31_ID = 31;
+////////////////////////////////////////////////////////////////////////////////
+// Build version information. Do not modify following part of the code!
+// Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
+// are generated authomaticaly!
+////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////
-	// Build version information. Do not modify following part of the code!
-	// Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
-	// are generated authomaticaly!
-	////////////////////////////////////////////////////////////////////////////
-
-	/** Build version of software (3.1.004.011). */
-	public static final String BUILD_VERSION = "3.1.004.011";
-	/** Date of build version (2018-10-31). */
-	public static final String BUILD_DATE = "2018-10-31";
+	/** Build version of software (3.2.001.001). */
+	public static final String BUILD_VERSION = "3.2.001.001";
+	/** Date of build version (2018-11-14). */
+	public static final String BUILD_DATE = "2018-11-14";
 	/** Java version of compiler when the X-definition code was compiled. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";
@@ -139,5 +150,6 @@ public interface XDConstants {
 /*#elseif JAVA_1.10*#/
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
+
 
 }

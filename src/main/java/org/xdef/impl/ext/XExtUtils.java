@@ -343,7 +343,7 @@ public final class XExtUtils {
 		XDParseResult result = new DefParseResult(s);
 		try {
 			String xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A'>" +
+"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root='A'>" +
 "<xd:declaration>" +
 "Parser x=" + xdata.getTextValue() + ";"+
 "</xd:declaration>" +

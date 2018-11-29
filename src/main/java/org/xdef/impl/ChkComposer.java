@@ -516,6 +516,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 			chkElem.setElemValue(sourceElem);
 			chkElem.setXXType(mode);
 			chkElem.setTextValue(null);
+			// prepare variables declared in the script (do not make it twice)
+			if (chkElem._xElement._varinit >= 0 && chkElem._variables == null) {
+				chkElem._variables = new XDValue[chkElem._xElement._varsize];
+				chkElem.exec(chkElem._xElement._varinit, (byte) 'E');
+				chkElem.copyTemporaryReports();
+			}
 			XDValue result = chkElem.exec(addr, mode);
 			chkElem.copyTemporaryReports();
 			if (result != null && !result.isNull()) {

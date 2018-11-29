@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
+import org.xdef.XDContainer;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
@@ -223,6 +224,26 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final String printActualKey() {return getKeyValue().printKey();}
 
+	/** Get keys of the table.
+	 * @return the Container with keys of the table.
+	 */
+	public final XDContainer getKeys() {
+		DefContainer result = new DefContainer();
+		for (UniquesetItem x: _map.values()) {
+			DefContainer items = new DefContainer();
+			for (int i = 0; x._key != null && i < x._key._items.length; i++) {
+				items.setXDNamedItem(_parseItems[i]._name, x._key._items[i]);
+			}
+			result.addXDItem(items);
+		}
+		return result;
+	}
+
+	/** Get size of the uniqueSet table.
+	 * @return size of the table.
+	 */
+	public final int size() {return _map.size();}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +291,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Private classes used in this implementation of XDUniqueset.
+// Classes used in this implementation of XDUniqueset.
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** This class is used for multiple keys in map of key values. */
@@ -287,12 +308,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 			for (int i = 0; i < items.length; i++) {
 				XDValue x = keys[i].getParsedObject();
 				if (x != null) {
-					if (x instanceof DefParseResult) {
-						DefParseResult d = (DefParseResult) x;
-						items[i] = d.getParsedValue();
-					} else {
-						items[i] = x;
-					}
+					items[i] = (x instanceof DefParseResult)
+						 ? ((DefParseResult) x).getParsedValue() : x;
 					if (keys[i].isOptional()) {
 						keys[i].setParsedObject(null);
 					}
@@ -404,6 +421,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private XDValue getValue(final String name) {
 			return _assignedValues ==null ? null : _assignedValues.get(name);
 		}
+		
+		@Override
+		public String toString() {return _key.toString();}
 	}
 
 	/** Implements uniqueSet parse item. */

@@ -4,7 +4,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
@@ -36,6 +35,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.xdef.impl.XConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -309,8 +309,9 @@ public class XDGenCollection {
 		}
 		String uri = getXDNodeNS(root);
 		if ("collection".equals(root.getLocalName())
-			&& (KXmlConstants.XDEF20_NS_URI.equals(uri)
-			|| KXmlConstants.XDEF31_NS_URI.equals(uri))) {
+			&& (XDConstants.XDEF20_NS_URI.equals(uri)
+			|| XDConstants.XDEF31_NS_URI.equals(uri)
+			|| XDConstants.XDEF32_NS_URI.equals(uri))) {
 			if (_collection == null) {
 				genCollection(uri);
 			}
@@ -326,9 +327,10 @@ public class XDGenCollection {
 				}
 			}
 		} else {
-			if (!KXmlConstants.XDEF20_NS_URI.equals(uri)
-				&& !KXmlConstants.XDEF31_NS_URI.equals(uri)) {
-				uri = KXmlConstants.XDEF20_NS_URI;
+			if (!XDConstants.XDEF20_NS_URI.equals(uri)
+				&& !XDConstants.XDEF31_NS_URI.equals(uri)
+				&& !XDConstants.XDEF32_NS_URI.equals(uri)) {
+				uri = XDConstants.XDEF32_NS_URI;
 			}
 			if (_collection == null && _doc.getDocumentElement() == null) {
 				genCollection(uri);
@@ -574,7 +576,7 @@ public class XDGenCollection {
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser((byte) 10);
 		SBuffer sb = new SBuffer(script.trim());
-		sp.setSource(sb, defName, XDConstants.XD20_ID);
+		sp.setSource(sb, defName, XConstants.XD20);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
 		return xp.getCanonizedScript(removeActions);
 	}
@@ -764,8 +766,9 @@ public class XDGenCollection {
 					Element e = (Element) nl.item(j);
 					String uri = e.getNamespaceURI();
 					if ("def".equals(e.getLocalName())
-						&& (KXmlConstants.XDEF20_NS_URI.equals(uri)
-							|| KXmlConstants.XDEF31_NS_URI.equals(uri))) {
+						&& (XDConstants.XDEF20_NS_URI.equals(uri)
+							|| XDConstants.XDEF31_NS_URI.equals(uri)
+							|| XDConstants.XDEF32_NS_URI.equals(uri))) {
 						s = getXdefAttr(e, uri, "name", false);
 						if (xdName.equals(s)) {
 							xd = e;
@@ -1074,8 +1077,9 @@ public class XDGenCollection {
 
 	public static byte getXDVersion(final Node n) {
 		String s = findXDNS(n);
-		return KXmlConstants.XDEF20_NS_URI.equals(s) ? XDConstants.XD20_ID
-			: KXmlConstants.XDEF31_NS_URI.equals(s) ? XDConstants.XD31_ID : 0;
+		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
+			: XDConstants.XDEF31_NS_URI.equals(s) ? XConstants.XD31
+			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32 : 0;
 	}
 
 	public final static String getXDNodeNS(final Node n) {
@@ -1089,24 +1093,32 @@ public class XDGenCollection {
 		}
 		String localName = e.getLocalName();
 		if ("collection".equals(localName)) {
-			if (e.hasAttributeNS(KXmlConstants.XDEF20_NS_URI, "metaNamespace")){
-				return KXmlConstants.XDEF20_NS_URI;
+			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF20_NS_URI;
 			}
-			if (e.hasAttributeNS(KXmlConstants.XDEF31_NS_URI, "metaNamespace")){
-				return KXmlConstants.XDEF31_NS_URI;
+			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF31_NS_URI;
 			}
-			return uri.equals(KXmlConstants.XDEF20_NS_URI)
-				|| uri.equals(KXmlConstants.XDEF31_NS_URI) ? uri : null;
+			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF32_NS_URI;
+			}
+			return uri.equals(XDConstants.XDEF20_NS_URI)
+				|| uri.equals(XDConstants.XDEF31_NS_URI)
+				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
 		}
 		if ("def".equals(localName)) {
-			if (e.hasAttributeNS(KXmlConstants.XDEF20_NS_URI, "metaNamespace")) {
-				return KXmlConstants.XDEF20_NS_URI;
+			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF20_NS_URI;
 			}
-			if (e.hasAttributeNS(KXmlConstants.XDEF31_NS_URI, "metaNamespace")) {
-				return KXmlConstants.XDEF31_NS_URI;
+			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF31_NS_URI;
 			}
-			String s = uri.equals(KXmlConstants.XDEF20_NS_URI)
-				|| uri.equals(KXmlConstants.XDEF31_NS_URI) ? uri : null;
+			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF32_NS_URI;
+			}
+			String s = uri.equals(XDConstants.XDEF20_NS_URI)
+				|| uri.equals(XDConstants.XDEF31_NS_URI)
+				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
 			if (s != null) {
 				return s;
 			}

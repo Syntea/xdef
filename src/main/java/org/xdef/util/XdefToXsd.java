@@ -1,12 +1,12 @@
 package org.xdef.util;
 
+import org.xdef.XDConstants;
 import org.xdef.msg.XDEF;
 import org.xdef.impl.util.conv.Util;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.impl.util.conv.xd2xsd.Convertor;
 import org.xdef.impl.util.conv.xd.doc.XdDoc;
@@ -166,10 +166,10 @@ public final class XdefToXsd {
 		}
 		if (xdName != null) {
 			NodeList nl = KXmlUtils.getChildElementsNS(collection,
-				KXmlConstants.NS_XDEF_2_0_INSTANCE, "xdef");
+				XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
 			if (nl.getLength() == 0) {
 				nl = KXmlUtils.getChildElementsNS(collection,
-					KXmlConstants.XDEF_INSTANCE_NS_URI, "xdef");
+					XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
 			}
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element) nl.item(i);
@@ -178,13 +178,8 @@ public final class XdefToXsd {
 				if (a != null) {
 					name = a.getValue();
 				} else {
-					a = el.getAttributeNodeNS(
-						KXmlConstants.NS_XDEF_2_0_INSTANCE, "name");
-					if (a == null) {
-						a = el.getAttributeNodeNS(
-							KXmlConstants.XDEF_INSTANCE_NS_URI, "name");
-
-					}
+					a = el.getAttributeNodeNS(XDConstants.XDEF_INSTANCE_NS_URI,
+						"name");
 					if (a != null) {
 						name = a.getValue();
 					}
@@ -197,12 +192,8 @@ public final class XdefToXsd {
 				}
 				a = el.getAttributeNode("root");
 				if (a == null) {
-					a = el.getAttributeNodeNS(
-						KXmlConstants.NS_XDEF_2_0_INSTANCE, "root");
-				}
-				if (a == null) {
 					el.setAttributeNS(
-						KXmlConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);
+						XDConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);
 				} else {
 					String value = a.getValue();
 					StringTokenizer st = new StringTokenizer(value, " |");
