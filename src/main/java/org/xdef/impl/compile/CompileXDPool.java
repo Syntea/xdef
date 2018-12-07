@@ -2497,8 +2497,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					selective = false;
 					if (selectorKind==XNode.XMCHOICE ||
 						selectorKind==XNode.XMMIXED) {
-						String s = x.getNSUri() == null ? x.getName() :
-							('{' + x.getNSUri() + '}' + x.getName());
+						String s = x.getNSUri() == null 
+							? x.getName() : ('{'+x.getNSUri()+'}'+x.getName());
 						Integer j;
 						if ((j = groupItems.get(s)) != null && notReported) {
 							XElement y = (XElement) xel._childNodes[j];
@@ -2520,8 +2520,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						// get previous node (we know it is XElement)
 						XElement y = (XElement) xel._childNodes[i-1];
 						if (y.isSpecified() // (occurrence)
-							&& y.maxOccurs()!=y.minOccurs() && y._match==-1) {
-							if (y.maxOccurs()==Integer.MAX_VALUE) {
+							&& y.maxOccurs() != y.minOccurs() && y._match==-1) {
+							if (y.maxOccurs() == Integer.MAX_VALUE) {
 								//Ambiguous X-definition: previous element
 								// with same name has unlimited occurrence
 								error(x.getSPosition(), XDEF.XDEF238);
@@ -2548,7 +2548,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						i = updateSelectors(xel,
 							i + 1,
 							xs,
-							kind==XNode.XMCHOICE || ignorable,
+							kind == XNode.XMCHOICE || ignorable,
 							selective,
 							hs);
 						xs.setEndIndex(i);
