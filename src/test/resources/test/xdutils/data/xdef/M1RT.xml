@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <SouborM1RT xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
    xsi:noNamespaceSchemaLocation='M1RT.xsd'
-	 ZeDne="19980719091939" Davka="00354">
-     
+     ZeDne="19980719091939" Davka="00354">
+
    <ZmenaStavuVO Pcv="1"
        KodStavuVozidlaCR="X"
        DatumPosledniEvidZmeny="19991231" />

@@ -23444,7 +23444,7 @@
          <population measured="census" year="1999">17838676</population>
          <population measured="census" year="2009">19584287</population>
          <population measured="census" year="2013">20439400</population>
-	 <city id="cty-Vietnam-Hanoi" country="VN" province="prov-VN-2">
+     <city id="cty-Vietnam-Hanoi" country="VN" province="prov-VN-2">
             <name>Hanoi</name>
             <localname>Hà Nội</localname>
             <latitude>21.03</latitude>
@@ -55239,7 +55239,7 @@
    </river>
    <river id="river-Ingoda" country="R">
       <name>Ingoda</name>
-      <located country="R" province="prov-Russia-79"/> 
+      <located country="R" province="prov-Russia-79"/>
       <to watertype="river" water="river-Schilka"/>
       <area>37200</area>
       <length>708</length>
@@ -55258,7 +55258,7 @@
    </river>
    <river id="river-Onon" country="R MNG">
       <name>Onon</name>
-      <located country="R" province="prov-Russia-79"/> 
+      <located country="R" province="prov-Russia-79"/>
       <to watertype="river" water="river-Schilka"/>
       <area>96200</area>
       <length>1032</length>
@@ -56796,7 +56796,7 @@
    </river>
    <river country="CDN" id="river-Liard">
       <name>Liard River</name>
-      <located country="CDN" province="prov-Canada-13 prov-Canada-3 prov-Canada-7"/> 
+      <located country="CDN" province="prov-Canada-13 prov-Canada-3 prov-Canada-7"/>
       <to watertype="river" water="river-Mackenzie"/>
       <area>277100</area>
       <length>1115</length>
@@ -58126,7 +58126,7 @@
       <source country="CO">
          <mountains>Andes</mountains>
          <located country="CO" province="prov-Colombia-32"/>
-         <latitude>1.8</latitude> 
+         <latitude>1.8</latitude>
          <longitude>-76.6</longitude>
       </source>
       <estuary country="BR">
@@ -58427,7 +58427,7 @@
       </estuary>
    </river>
    <river country="PE BOL" id="river-RioMadreDeDios">
-      <name>Rio Madre de Dios</name> 
+      <name>Rio Madre de Dios</name>
       <located country="PE" province="prov-Peru-19"/>
       <located country="BOL" province="prov-BOL-1 prov-BOL-6"/>
       <to watertype="river" water="river-Beni"/>
@@ -58743,7 +58743,7 @@
    </river>
    <river id="river-RioSalado" country="RA">
       <name>Rio Salado</name>
-      <!-- Rio Pasaje/Rio Juramento- Rio Guachipas/Rio Las Conchas south of Salta 
+      <!-- Rio Pasaje/Rio Juramento- Rio Guachipas/Rio Las Conchas south of Salta
            Rio Calchaqui west of Salta -->
       <located country="RA" province="prov-Argentina-17 prov-Argentina-22 prov-Argentina-21"/>
       <to watertype="river" water="river-Parana"/>
@@ -65237,7 +65237,7 @@
    <mountain id="mount-Kekes" country="H">
       <name>Kékes</name>
       <mountains>Matra</mountains>
-      <located country="H" province="prov-Hungary-10"/> 
+      <located country="H" province="prov-Hungary-10"/>
       <latitude>47.87</latitude>
       <longitude>20.01</longitude>
       <elevation>1014</elevation>
@@ -65245,7 +65245,7 @@
    <mountain id="mount-Howerla" country="UA">
       <name>Howerla</name>
       <mountains>Carpathians</mountains>
-      <located country="UA" province="prov-Ukraine-23 prov-Ukraine-7"/> 
+      <located country="UA" province="prov-Ukraine-23 prov-Ukraine-7"/>
       <latitude>48.16</latitude>
       <longitude>25.50</longitude>
       <elevation>2061</elevation>
@@ -65253,7 +65253,7 @@
    <mountain id="mount-Pietrosul" country="RO">
       <name>Pietrosul</name>
       <mountains>Carpathians</mountains>
-      <located country="RO" province="prov-Romania-27"/> 
+      <located country="RO" province="prov-Romania-27"/>
       <latitude>47.59</latitude>
       <longitude>24.64</longitude>
       <elevation>2303</elevation>
@@ -76949,7 +76949,7 @@
       <elevation>31</elevation>
       <gmtOffset>1</gmtOffset>
    </airport>
-   <airport iatacode="JKG" city="cty-Sweden-10" country="S"> 
+   <airport iatacode="JKG" city="cty-Sweden-10" country="S">
      <name>Jönköping</name>
       <latitude>57.757594</latitude>
       <longitude>14.068731</longitude>

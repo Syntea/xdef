@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
 
 <!--  date: 22.08.2003  -->
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0" 
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
           xd:name    = "ZaznamPDN"
           xd:root    = "ZaznamPDN" >
 
@@ -42,8 +42,8 @@
            return error("MYERR03",
               "Error detected by external check method: &{msg}",
               "&{msg}RC - CRC");
-		}
-	}
+        }
+    }
     return true;
   }
   boolean tDate(int e) {
@@ -128,13 +128,13 @@
                  ZnackaVozidla         = "optional string(); onTrue trString(4101,16)"
                  TypVozidla            = "optional string(); onTrue trString(4101,30)"
                  RokVyroby             = "optional rokVyroby(4108)"
-                 PlatnostSTK           = "optional tokens('platná|neplatná|nezjištěno'); onFalse valueErr(4105)"
+                 PlatnostSTK           = "optional tokens('platnďż˝|neplatnďż˝|nezjiďż˝tďż˝no'); onFalse valueErr(4105)"
                  MesicSTKDo            = "optional tMesicSTKDo(4107)"
                  TypBrzd               = "optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')"
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional list('Doklad o pojiďż˝tďż˝nďż˝ nepďż˝edloďż˝en','Potvrzenďż˝ nepďż˝edloďż˝eno','Nepodlďż˝hďż˝ pojiďż˝tďż˝nďż˝','Smlouva neuzavďż˝ena'); onFalse valueErr(4105)"
                  CisloZK               = "optional string(); onTrue trString(4101,40)"
                  VydalZK               = "optional string(); onTrue trString(4101,255)"
                  PlatnostZKOd          = "optional tDate(4102)"
@@ -158,7 +158,7 @@
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional list('Doklad o pojiďż˝tďż˝nďż˝ nepďż˝edloďż˝en','Potvrzenďż˝ nepďż˝edloďż˝eno','Nepodlďż˝hďż˝ pojiďż˝tďż˝nďż˝','Smlouva neuzavďż˝ena'); onFalse valueErr(4105)"
                  DruhVozidla           = "required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" >
       <xd:mixed >
          <Skoda     xd:script = "occurs 0..1; ref Skoda" />
@@ -176,7 +176,7 @@
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional list('Doklad o pojiďż˝tďż˝nďż˝ nepďż˝edloďż˝en','Potvrzenďż˝ nepďż˝edloďż˝eno','Nepodlďż˝hďż˝ pojiďż˝tďż˝nďż˝','Smlouva neuzavďż˝ena'); onFalse valueErr(4105)"
                  DruhVozidla           = "required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" >
       <xd:mixed >
          <Skoda     xd:script = "occurs 0..1; ref Skoda" />
@@ -233,7 +233,7 @@
                  PokutaKc        = "optional string(); onTrue trString(4101,7)"
                  PokutaZapl      = "optional list('nezaplacena','zaplacena'); onFalse valueErr(4105)"
                  Pachatel        = "optional list('Pachatel DN'); onFalse valueErr(4105)"
-                 Poskozeny       = "optional list('Poškozený'); onFalse valueErr(4105)" >
+                 Poskozeny       = "optional list('Poďż˝kozenďż˝'); onFalse valueErr(4105)" >
       <xd:mixed >
          <JinaSkoda         xd:script = "occurs 0..1; ref Skoda" />
          <Osoba             xd:script = "occurs 0..1; ref Osoba" />
@@ -255,7 +255,7 @@
                  TitulPred         = "optional string(); onTrue trString(4101,36)"
                  TitulZa           = "optional string(); onTrue trString(4101,36)"
                  RC                = "optional rodneCislo(4108)"
-                 Pohlavi           = "optional list('M','Ž'); onFalse valueErr(4105)"
+                 Pohlavi           = "optional list('M','ďż˝'); onFalse valueErr(4105)"
                  OsobniStav        = "optional string(); onTrue trString(4101,30)"
                  DatumNarozeni     = "optional tDate(4102)"
                  MistoNarozeni     = "optional string(); onTrue trString(4101,36)"

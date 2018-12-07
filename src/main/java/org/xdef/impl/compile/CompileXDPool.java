@@ -1,8 +1,3 @@
-/*
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package org.xdef.impl.compile;
 
 import org.xdef.impl.code.CodeTable;
@@ -344,7 +339,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (result.startsWith("%enum ")) {
 				ndx = result.indexOf(' ', 6);
 				// xdef name + class
-				String enumClass = _codeGenerator._parser._actDefName
+				String enumClass = 	_codeGenerator._parser._actDefName
 					+ "#" + result.substring(6, ndx);
 				SBuffer sbf = new SBuffer(enumClass, spos);
 				String enumTypeName = result.substring(ndx+1);
@@ -502,8 +497,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
-					"Attribute \"methods\"",
-					"<xd:declaration> external method { ... } ...");
+						"Attribute \"methods\"",
+						"<xd:declaration> external method { ... } ...");
 				}
 				_scriptCompiler.setSource(sval,
 					_scriptCompiler._actDefName,
@@ -517,8 +512,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				&& !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
-					"Attribute \"classes\"",
-					"<xd:declaration> external method { ... } ...");
+						"Attribute \"classes\"",
+						"<xd:declaration> external method { ... } ...");
 				}
 				String value = sval.getString();
 				Map<String, Class<?>> ht = new TreeMap<String, Class<?>>();
@@ -623,7 +618,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								_scriptCompiler.getReportWriter();
 							Report report;
 							//check if there is undefined variable report
-							while((report = reporter.getReport()) != null) {
+							while ((report = reporter.getReport()) != null) {
 								//XDEF424 ... Undefined variable &{0}
 								//XDEF443 ... Unknown method &{0}
 								if ("XDEF424".equals(report.getMsgID())
@@ -831,7 +826,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			// since we are removing childnodes from X-definition we must
 			// process the childnodes list downwards!
 			// However, we insert the item to the first position of the created
-			// list to assure the original sequence of items in the X-definition.
+			// list to assure the original sequence of items in the X-definition
 			for (int j = def._childNodes.size() - 1;  j >= 0; j--) {
 				PNode nodei = def._childNodes.get(j);
 				if (nodei._nsindex != XPreCompiler.NS_XDEF_INDEX) {
@@ -1118,7 +1113,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
-					newNode.setInitCode(_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
+					newNode.setInitCode(_scriptCompiler.compileSection(
+						CompileBase.ELEMENT_MODE,
 						XD_VOID,
 						XScriptParser.INIT_SYM));
 				}
@@ -1173,7 +1169,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
-					newNode.setMatchCode(_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
+					newNode.setMatchCode(_scriptCompiler.compileSection(
+						CompileBase.ELEMENT_MODE,
 						XD_BOOLEAN,
 						XScriptParser.MATCH_SYM));
 				}
@@ -1656,7 +1653,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				}
 				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					PAttr v = nodei.getAttrNS("name",XPreCompiler.NS_XDEF_INDEX);
+					PAttr v = nodei.getAttrNS("name",
+						XPreCompiler.NS_XDEF_INDEX);
 					if (v == null) {
 						gname = null;
 						//Required attribute '&{0}' is missing
@@ -1684,8 +1682,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
-						} else if (name.startsWith("any")) {
-							compileXChild(dummy, dummy, nodei, def, 2);
+//						} else if (name.startsWith("any")) {
+//							compileXChild(dummy, dummy, nodei, def, 2);
 						} else {
 							compileXChild(dummy, dummy, nodei, def, 2);
 						}
@@ -1805,6 +1803,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._parser._xdVersion,
 					_codeGenerator._thesaurus);
 				XVariableTable variables = new XVariableTable(0);
+
 				// set variables to xdp
 				for (XMVariable xv:
 					_codeGenerator._globalVariables.toArray()) {
@@ -2437,7 +2436,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean selective = selectiveFlag;
 		boolean notReported = true;
 		boolean empty = true;
-		short selectorKind = selector == null ?	XNode.XMSEQUENCE : selector.getKind();
+		short selectorKind = selector == null
+			? XNode.XMSEQUENCE : selector.getKind();
 		for (int i = index; i < xel._childNodes.length; i++) {
 			XNode xn = xel._childNodes[i];
 			short kind;
@@ -2486,8 +2486,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XElement x;
 					min = (x = (XElement) xn).minOccurs();
 					if (!hs.contains(x)) {
-						updateSelectors(
-							x, 0, null, false, false, hs);
+						updateSelectors(x, 0, null, false, false, hs);
 					}
 					if (selectorKind== XNode.XMCHOICE) {
 						ignorable |= min == 0;
@@ -2506,9 +2505,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							if (y._match == -1) {// we accept items with match
 								//Ambiguous group '&{0}' (equal items)
 								// in XDefinition '&{1}'
-								error(x.getSPosition(), XDEF.XDEF234,
-									(selectorKind==XNode.XMCHOICE ?
-									"choice" : "mixed"),
+								error(x.getSPosition(),
+									XDEF.XDEF234,
+									selectorKind == XNode.XMCHOICE
+										? "choice" : "mixed",
 									xel._definition.getName());
 								notReported = false;
 							}
@@ -2586,8 +2586,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 					return i;
-//				case XNode.XMCOMMENT:
-//				case XNode.XMPI:
 				default:
 			}
 		}

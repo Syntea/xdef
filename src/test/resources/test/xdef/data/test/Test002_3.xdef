@@ -142,7 +142,7 @@
  <validate          xd:script = "occurs 1;  ref validate" />
  <wait              xd:script = "occurs 1;  ref wait" />
  <while             xd:script = "occurs 1;  ref while" />
-</xd:choice>		
+</xd:choice>
 
 <xd:mixed name = "Activities" >
  <assign            xd:script = "occurs *;  ref assign" />
@@ -163,7 +163,7 @@
  <validate          xd:script = "occurs *;  ref validate" />
  <wait              xd:script = "occurs *;  ref wait" />
  <while             xd:script = "occurs *;  ref while" />
-</xd:mixed>		
+</xd:mixed>
    <!--======================================-->
    <!-- HandlerActivity                      -->
    <!--======================================-->
@@ -507,7 +507,7 @@
              <query xd:script = "occurs 0..1; ref query" />
           </from>
      <from xd:script="match(@expressionLanguage)"
-     		  expressionLanguage = "optional uri()">
+                  expressionLanguage = "optional uri()">
              required ${Expression}
           </from>
      <from>

@@ -3,7 +3,7 @@
     external String xyz;
   </xd:declaration>
 
-  <root a="int(); finally {outln('xyz = ' + xyz);}" >
+  <root a="int(); finally {outln('xyz=' + xyz);}" >
     <b xd:script="*" >
       ? string(2,3);
     </b>

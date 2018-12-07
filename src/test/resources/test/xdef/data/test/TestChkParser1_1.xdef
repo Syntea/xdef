@@ -9,8 +9,8 @@
                  dn = "fixed 'o=ČKP,dc=ckp,dc=cz'">
       <xd:mixed>
          <o xd:script = "occurs 1"
-	          type = "fixed 'attribute'"
-	          value = "fixed 'ČKP'"/>
+              type = "fixed 'attribute'"
+              value = "fixed 'ČKP'"/>
          <organizationalUnit xd:script = "match @rdn == 'ou=AccessControl'; occurs 1; options moreAttributes"
                              type="fixed 'entry'">
            <xd:mixed>
@@ -140,7 +140,7 @@
            </xd:mixed>
          </organizationalUnit>
          <xd:any xd:script = "match @type == 'attribute'; occurs 0..; options moreAttributes"
-	                 value = "required string()" />
+                     value = "required string()" />
       </xd:mixed>
    </organization>
 

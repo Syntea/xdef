@@ -26,9 +26,9 @@
        </xd:mixed>
    </File>
    <xd:choice occurs = "?" >
-	    <Osoba      xd:script="occurs 1..1; ref Osoba" />
-		<OSVC       xd:script="occurs 1..1; ref OSVC" />
-		<Organizace xd:script="occurs 1..2; ref Organizace" />
+        <Osoba      xd:script="occurs 1..1; ref Osoba" />
+        <OSVC       xd:script="occurs 1..1; ref OSVC" />
+        <Organizace xd:script="occurs 1..2; ref Organizace" />
    </xd:choice>
    <xd:text>fixed 'ahoj'</xd:text>
    <y xd:script="ref y; occurs 1" />

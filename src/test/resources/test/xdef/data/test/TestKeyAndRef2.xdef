@@ -35,7 +35,7 @@
     }
     if (unq.indexOf(';' + localName + ';') > 0) {
       String prefix=(ndx=qname.indexOf(':'))>0?qname.substring(0,ndx) : '';
-      outln('xy="' + s + '", localName="' + localName + 
+      outln('xy="' + s + '", localName="' + localName +
             '", prefix="' + prefix + '"');
       return true;
     } else {
@@ -50,7 +50,7 @@
    uniqueSet SQLNameDist {x: string(1, 30)};
 </xd:declaration>
 
-<DefSystemStatistics 
+<DefSystemStatistics
          KodSystemu     = 'required string(1,4)'
          KodPartnera    = 'required num(4,7)'
          System         = 'required string(1,50)'
@@ -97,7 +97,7 @@
  </DefAggregations>
  <DefStatistics>
   <xd:mixed>
-    <Statistics 
+    <Statistics
          StatText      ='required string(1,100)'
          StatName      ='required StatName.x.ID()'
         PeriodIdSource="optional enum('FROM','TO')" >
@@ -133,7 +133,7 @@
    <DistrSQL xd:script='occurs +' SQLName='required SQLNameDist.x.ID()'>
      required string(1,4000)
    </DistrSQL>
-   <Distribution  xd:script='occurs +' 
+   <Distribution  xd:script='occurs +'
          ChannelType="required string"
          PartnerClass="optional string"
          PartnerElement="optional string"
@@ -148,7 +148,7 @@
    </Distribution>
  </DefDistributions>
  <DefSchedules xd:script='occurs *'>
-    <Schedule xd:script= 'occurs +' 
+    <Schedule xd:script= 'occurs +'
          StatName='required StatName.x.IDREF()'
          Time="optional xdatetime('d.M.yyyy H:m[:s]')"
          Reccur='optional string(1,50)'

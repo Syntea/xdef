@@ -2,25 +2,25 @@
 <xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" name="Mondial" root="mondial" >
 
 <xd:declaration>
-	type laketype enum("impact", "caldera", "saline", "crater", "dam", "naturaldam", "acid", "asphalt");
-	type islandtype enum("atoll", "coral", "lime", "volcanic");
-	type mountaintype enum("monolith", "granite", "volcano", "volcanic");
-	type deserttype enum("salt", "sand", "lime");
-	type watertype enum("sea", "lake", "river");
+    type laketype enum("impact", "caldera", "saline", "crater", "dam", "naturaldam", "acid", "asphalt");
+    type islandtype enum("atoll", "coral", "lime", "volcanic");
+    type mountaintype enum("monolith", "granite", "volcano", "volcanic");
+    type deserttype enum("salt", "sand", "lime");
+    type watertype enum("sea", "lake", "river");
     type yes_no enum("yes", "no");
-	
-	uniqueSet org QName();
-	uniqueSet city QName();
-	uniqueSet country QName();
-	uniqueSet continent QName();
-	uniqueSet island QName();
-	uniqueSet river QName();
-	uniqueSet province QName();
-	uniqueSet mountain QName();
-	uniqueSet lake QName();
-	uniqueSet sea QName();
-	uniqueSet desert QName();
-	uniqueSet iatacode QName();
+
+    uniqueSet org QName();
+    uniqueSet city QName();
+    uniqueSet country QName();
+    uniqueSet continent QName();
+    uniqueSet island QName();
+    uniqueSet river QName();
+    uniqueSet province QName();
+    uniqueSet mountain QName();
+    uniqueSet lake QName();
+    uniqueSet sea QName();
+    uniqueSet desert QName();
+    uniqueSet iatacode QName();
 </xd:declaration>
 
 <mondial>
@@ -31,7 +31,7 @@
       capital="? city.IDREF()"
       memberships="? org.IDREFS;" >
       <name xd:script="+" > string; </name>
-      <localname xd:script="*" > string; </localname>	  
+      <localname xd:script="*" > string; </localname>
       <population xd:script="*; ref population" />
       <population_growth xd:script="?" > double; </population_growth>
       <infant_mortality xd:script="?" > double; </infant_mortality>
@@ -54,13 +54,13 @@
       <province xd:script="*; ref province" />
       <city xd:script="*; ref city" />
     </country>
-   
+
     <continent xd:script="*"
       id="continent.ID" >
       <name xd:script="+" > string; </name>
       <area> double; </area>
     </continent>
-   
+
     <organization xd:script="*"
       id="org.ID;"
       headq="? city.IDREF;" >
@@ -71,7 +71,7 @@
         type="string;"
         country="country.IDREFS;" />
     </organization>
-   
+
     <sea xd:script="*"
       id="sea.ID;"
       country="? country.IDREFS;"
@@ -80,16 +80,16 @@
       <located xd:script="*"
         country="country.IDREF;"
         province="? province.IDREFS;" />
-	  <area xd:script="?" > double; </area>
+      <area xd:script="?" > double; </area>
       <depth xd:script="?" > double; </depth>
-    </sea>   
-   
+    </sea>
+
     <river xd:script="*"
       id="river.ID;"
       country="country.IDREFS;"
       island="? island.IDREF" >
       <name xd:script="+" > string; </name>
-      <xd:mixed> 
+      <xd:mixed>
         <located xd:script="*"
           country="country.IDREF;"
           province="? province.IDREFS;" />
@@ -97,7 +97,7 @@
         <through xd:script="*" lake="lake.IDREF" />
         <length xd:script="?"> double; </length>
         <area xd:script="?" > double; </area>
-      </xd:mixed> 
+      </xd:mixed>
       <source country="country.IDREFS;" >
         <mountains xd:script="?"> string; </mountains>
         <located xd:script="*"
@@ -117,7 +117,7 @@
         <elevation xd:script="?" > double; </elevation>
       </estuary>
     </river>
-   
+
     <lake xd:script="*"
      id="lake.ID;"
      country="country.IDREFS;"
@@ -138,7 +138,7 @@
      <depth xd:script="?" > double; </depth>
      <heigth xd:script="?" > double; </heigth>
     </lake>
-   
+
     <island xd:script="*"
       id="island.ID;"
       country="country.IDREFS;"
@@ -156,7 +156,7 @@
       <longitude> double; </longitude>
       <elevation xd:script="?" > double; </elevation>
     </island>
-   
+
     <mountain xd:script="*"
       id="mountain.ID;"
       country="country.IDREFS;"
@@ -172,7 +172,7 @@
       <longitude> double; </longitude>
       <elevation> double; </elevation>
     </mountain>
-   
+
     <desert xd:script="*"
       id="desert.ID;"
       type="? deserttype;"
@@ -180,12 +180,12 @@
       <name xd:script="*" > string; </name>
       <located xd:script="*"
         country="country.IDREF;"
-		province="province.IDREFS;" />
+        province="province.IDREFS;" />
       <area xd:script="?" > double; </area>
       <latitude xd:script="?" > double; </latitude>
       <longitude xd:script="?" > double; </longitude>
     </desert>
-   
+
     <airport xd:script="*"
       iatacode="iatacode.ID;"
       city="? city.IDREF;"
@@ -195,7 +195,7 @@
       <longitude> double; </longitude>
       <elevation xd:script="?" > double; </elevation>
       <gmtOffset> double; </gmtOffset>
-      <located_on xd:script="?" island="island.IDREF" />	  
+      <located_on xd:script="?" island="island.IDREF" />
     </airport>
   </xd:mixed>
 </mondial>

@@ -13,7 +13,7 @@
 
 <Vlastnik                xd:script = "occurs 1; ref Subjekt; onAbsence setErr(4261);"/>
 
-<Subjekt                 
+<Subjekt
 
    PlatnostOd            = "optional;                  onTrue setErr(4204)"
    Jmeno                 = "optional string(1,24);                                               onFalse setErr(4208)"

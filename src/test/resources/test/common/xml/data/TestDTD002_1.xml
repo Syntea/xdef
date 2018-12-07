@@ -10,6 +10,6 @@
   <child names = "A1 A2  A3 "/>
   <child notation = "N1 "/>
   <child notation = " N2"/>
-	<child notation = "N2">a.txt</child>
-	<child notation = "N3"></child>
+    <child notation = "N2">a.txt</child>
+    <child notation = "N3"></child>
 </root>

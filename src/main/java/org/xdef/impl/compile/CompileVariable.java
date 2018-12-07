@@ -1,8 +1,3 @@
-/*
- * This file may be used, copied, modified and distributed only in accordance
- * with the terms of the limited licence contained in the accompanying
- * file LICENSE.TXT.
- */
 package org.xdef.impl.compile;
 
 import org.xdef.impl.code.CodeI1;

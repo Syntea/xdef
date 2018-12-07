@@ -1,12 +1,20 @@
-<Project>
-  <XDefinition>src/test/resources/test/xdutils/data/GUI/validate/xdef.xml</XDefinition>
-  <Property Name = "xdef.warnings" Value = "true"/>
-  <Property Name = "xdef.display" Value = "true"/>
-  <Property Name = "xdef.debug" Value = "true"/>
-  <Execute XDName = "test" Mode = "validate" DisplayResult = "true">
-    <Var Name="xyz">Toto je test</Var>
-    <Input>src/test/resources/test/xdutils/data/GUI/validate/data.xml</Input>
-    <SaveResult File = "src/test/resources/test/xdutils/data/GUI/validate/result1.xml" />
+<?xml version="1.0" encoding="UTF-8"?>
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <Execute DisplayResult="true"
+    Mode="validate"
+    XDName="test">
+    <Var Name="xyz">
+      Toto je test
+    </Var>
+    <Input>
+      test/resources/test/xdutils/data/GUI/validate/data.xml
+    </Input>
+    <SaveResult File="test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
   </Execute>
+  <XDefinition>
+    file:/D:/cvs/DEV/java/xdef31/test/resources/test/xdutils/data/GUI/validate/xdef.xml
+  </XDefinition>
 </Project>
-

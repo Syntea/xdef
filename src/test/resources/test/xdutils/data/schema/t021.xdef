@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-	name="Test_t021"
-	root="a|b">
+    name="Test_t021"
+    root="a|b">
     <a a="optional string(1,8)">
-	<aa xd:script = "ref c"
-	    b="required string(1,1000)"
-	    c="required int(1,10)"/>
+    <aa xd:script = "ref c"
+        b="required string(1,1000)"
+        c="required int(1,10)"/>
     </a>
     <b a = "required string(5,10)">
-	<ba b = "optional int(-1,20)"/>
+    <ba b = "optional int(-1,20)"/>
     </b>
     <c ac = "optional string(1,100)"/>
 </xd:def>

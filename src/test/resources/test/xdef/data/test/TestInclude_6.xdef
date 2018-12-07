@@ -3,7 +3,7 @@
 <!--                                                                                       -->
 <!-- 2007.09.04 - Zakladni verze (JK)                                                      -->
 <!-- ===================================================================================== -->
- 
+
 <xd:def
    xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
    xd:name      = "wsdefinitions"
@@ -11,7 +11,7 @@
    xd:root      = "ws:definitions"
    impl-version = "2.5.0.2"
    impl-date    = "31.05.2007">
- 
+
  <ws:definitions              xd:script="init {;}"
           xmlns:ws            ="http://schema.xmlsoap.org/wsdl/"
           xmlns:vp            ="http://docs.oasis-open.org/wsbpel/2.0/varprop"
@@ -20,12 +20,11 @@
           xmlns:wfsq          ="http://www.syntea.cz/xbpel/GAMqueue/2007/07"
           targetNamespace     ="required string()"
           name                ="required string()">
- 
+
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
                href="xxx.xxx"/>
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
                href="yyy.yyy"/>
  </ws:definitions>
-  
+
 </xd:def>
- 

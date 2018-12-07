@@ -24,15 +24,15 @@
   <xd:macro name="options">options ignoreEmptyAttributes, preserveTextCase</xd:macro>
 
   <xd:macro name="ONFALSE">onFalse{
-     	/*setErr(4208);*/
-     	outln('XDOUT: ISDN_LDN - ISDN4208'+getXpos());
-     	error('ISDN4208','Wrong type of value','&amp;{xpath}'+getXpos());
-     	}</xd:macro>
+            /*setErr(4208);*/
+            outln('XDOUT: ISDN_LDN - ISDN4208'+getXpos());
+            error('ISDN4208','Wrong type of value','&amp;{xpath}'+getXpos());
+            }</xd:macro>
   <xd:macro name="ONABSENCE">onAbsence{
-    	/*setErr(4202);*/
-    	outln('XDOUT: ISDN_LDN - ISDN4202'+getXpos());
-    	error('ISDN4202','Value of required item is missing','&amp;{xpath}'+getXpos());
-     	}</xd:macro>
+        /*setErr(4202);*/
+        outln('XDOUT: ISDN_LDN - ISDN4202'+getXpos());
+        error('ISDN4202','Value of required item is missing','&amp;{xpath}'+getXpos());
+            }</xd:macro>
 
 <!-- ldn ******************************************************************** -->
 
@@ -40,13 +40,13 @@
    KodNdnDuvodLustrace  ="required string(); ${ONFALSE}; ${ONABSENCE};">
    <xd:choice xd:script= "occurs 1">
       <ldn:DnSearch_PodleVozidla
-		  xd:script= "occurs 1; ref ldn:DnSearch_PodleVozidla" />
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleVozidla" />
       <ldn:DnSearch_PodleOsoby
-		  xd:script= "occurs 1; ref ldn:DnSearch_PodleOsoby" />
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleOsoby" />
       <ldn:DnSearch_PodleKnihy
-		  xd:script= "occurs 1; ref ldn:DnSearch_PodleKnihy" />
-      <ldn:DnSearch_PodlePisemnosti 
-		  xd:script= "occurs 1; ref ldn:DnSearch_PodlePisemnosti" />
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleKnihy" />
+      <ldn:DnSearch_PodlePisemnosti
+          xd:script= "occurs 1; ref ldn:DnSearch_PodlePisemnosti" />
    </xd:choice>
  </ldn:DnSearch>
 
@@ -72,7 +72,7 @@
    KodSednStatRegVoz          ="${options}; optional string(); ${ONFALSE}"
  />
 
- <ldn:DnSearch_PodleOsoby 
+ <ldn:DnSearch_PodleOsoby
    xd:script ="occurs 1; ref ldn:DnSearch_Casove_Mistni_Skodni_Vymezeni"
    Jmeno                   ="${options}; optional ${JMENO}; ${ONFALSE}"
    Prijmeni                ="${options}; optional ${PRIJMENI}; ${ONFALSE}"
@@ -142,13 +142,13 @@
   seqDnVerze          ="${options}; optional int(); ${ONFALSE}"/>
 
 <ldn:DnBasicLustrace_Answer>
-	<ldn:DNNdn xd:script= "occurs 1; ref ldn:DNNdnBasic"/>
+    <ldn:DNNdn xd:script= "occurs 1; ref ldn:DNNdnBasic"/>
 </ldn:DnBasicLustrace_Answer>
 
 <ldn:DnFullLustrace_Request
-	KodNdnDuvodLustrace      ="${options}; required string(); ${ONFALSE}; ${ONABSENCE}"
-	seqDnCentrum             ="${options}; required int(); ${ONFALSE}; ${ONABSENCE}"
-	seqDnVerze               ="${options}; optional int(); ${ONFALSE}"
+    KodNdnDuvodLustrace      ="${options}; required string(); ${ONFALSE}; ${ONABSENCE}"
+    seqDnCentrum             ="${options}; required int(); ${ONFALSE}; ${ONABSENCE}"
+    seqDnVerze               ="${options}; optional int(); ${ONFALSE}"
 />
 
 <ldn:DnFullLustrace_Answer>
@@ -157,8 +157,8 @@
 
 <!-- dn a jeji verze ******************************************************************** -->
 <!-- Kniha
-	pred 2010 ... TextNdnKniha, VerzeRokKniha, VerzeCisloKniha
-	po 2010	... TextNdnUtvar, VerzeRokKniha, VerzeCisloKniha-->
+    pred 2010 ... TextNdnKniha, VerzeRokKniha, VerzeCisloKniha
+    po 2010	... TextNdnUtvar, VerzeRokKniha, VerzeCisloKniha-->
 <ldn:DNNdn
    TextNdnDuvodLustrace       = "${options}; required ${TEXTVETA}"
    TextKdoLustroval           = "${options}; required ${TEXTVETA}"
@@ -263,7 +263,7 @@
          VecSkodaNakladEUR     = "${options}; required ${CASTKA}"
          VecPopisSkodaNaklad   = "${options}; optional ${TEXTSTRANKA}"
          PripojenaNaIdVec      = "optional int()"
-	 Textndntypvazbavecvec = "optional string()"
+     Textndntypvazbavecvec = "optional string()"
    >
    </ldn:Vec>
 
@@ -320,7 +320,7 @@
    <!-- jina vec -->
    <ldn:JinaVec
         TextNdnDruhJinaVec     ="${options}; required string()"
-	TextSednPrekazka       ="${options}; required string()">
+    TextSednPrekazka       ="${options}; required string()">
    </ldn:JinaVec>
 
 <ldn:VecBasic					xd:script= "occurs 1; ref ldn:Vec">
@@ -404,7 +404,7 @@
 
   <!-- Procesni ukon: sankce -->
   <ldn:Sankce
-	 SankceCastkaEUR     ="${options}; required ${CASTKA}"
+     SankceCastkaEUR     ="${options}; required ${CASTKA}"
          TextNdnZpusobPlatby ="${options}; required ${TEXTVETA}"
          SankceSerieCislo    ="${options}; required ${TEXTVETA}"
   />

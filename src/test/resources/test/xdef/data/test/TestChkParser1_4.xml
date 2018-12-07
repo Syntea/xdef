@@ -1,71 +1,71 @@
-  <?xml version="1.0" encoding="Windows-1250" ?> 
- <!--   date: 22.08.2003  
-  --> 
+  <?xml version="1.0" encoding="Windows-1250" ?>
+ <!--   date: 22.08.2003
+  -->
  <xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" xd:name="ZaznamPDN" xd:root="ZaznamPDN#ZaznamPDN">
  <xd:declaration>
-  <attr name="SeqRec" value="int()" onFalse="requiredErr(4100)" /> 
-  <attr name="KrajPolicie" value="string(2)" onFalse="requiredErr(4100)" /> 
-  <attr name="KodUtvaruPolicie" value="ciselnik(4103,'CC_UtvarPolicie','KodUtvaruPolicie')" onFalse="requiredErr(4100)" /> 
-  <attr name="RokDN" value="xdatetime('yyyy')" onFalse="requiredErr(4100)" /> 
-  <attr name="CisloDN" value="num(5)" onFalse="requiredErr(4100)" /> 
-  <attr name="CJ" value="string()" onTrue="trString(4101,50)" onFalse="requiredErr(4100)" /> 
-  <attr name="DatumCasDN" value="tDateTime(4102)" onFalse="valueErr(4100)" /> 
-  <attr name="DatumCasDoDN" value="tDateTime(4102)" /> 
-  <attr name="Foto_Ref" value="blobref()" onFalse="requiredErr(4100)" /> 
-  <attr name="KodOkresu" value="ciselnik(4103,'DN_PrevodOkres','KodOkresuSDP')" onFalse="valueErr(4100)" /> 
-  <attr name="Pricina" value="ciselnik(4103,'CC_PricinaDN','KodPricinyDN')" /> 
-  <attr name="HlavniPricina" value="ciselnik(4103,'CC_HlavniPricinaDN','HlavniPricinaDN')" /> 
-  <attr name="MPZ" value="string()" onTrue="trString(4101,3)" /> 
-  <attr name="VIN" value="string()" onTrue="trString(4101,26)" /> 
-  <attr name="CisloZK" value="string()" onTrue="trString(4101,40)" /> 
-  <attr name="RokVyroby" value="rokVyroby(4108)" /> 
-  <attr name="PlatnostSTK" value="tokens('platn |neplatn |nezjiçtŘno')" onFalse="valueErr(4105)" /> 
-  <attr name="MesicSTKDo" value="tMesicSTKDo(4107)" /> 
-  <attr name="KodPojistitele" value="ciselnik(4103,'DN_Pojistitel','KodPojistitele')" /> 
-  <attr name="StavBrzd" value="ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" /> 
-  <attr name="TypBrzd" value="ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" /> 
-  <attr name="PojisteniText" value="list('Doklad o pojiçtŘnˇ nepýedlo§en','Potvrzenˇ nepýedlo§eno', 'Nepodl‚h  pojiçtŘnˇ','Smlouva neuzavýena')" onFalse="onFalse valueErr(4105)" /> 
-  <attr name="typ1" value="string()" onTrue="trString(4101,30)" /> 
-  <attr name="Linka" value="string()" onTrue="onTrue trString(4101,20)" onFalse="requiredErr(4100)" /> 
-  <attr name="LEvidCislo" value="string()" onTrue="trString(4101,20)" /> 
-  <attr name="DruhSoupravy" value="list('vlak')" onFalse="requiredErr(4100); valueErr(4103);" /> 
-  <attr name="OznSegmentu" value="string()" onTrue="trString(4101,5)" onFalse="requiredErr(4100)" /> 
-  <attr name="typ" value="string()" onTrue="trString(4101,30)" onFalse="requiredErr(4100)" /> 
-  <attr name="typ1" value="string()" onTrue="trString(4101,40)" onFalse="requiredErr(4100)" /> 
-  <attr name="PraxeRizeni" value="praxeRizeni(4108)" /> 
-  <attr name="AlkoholDech" value="list('Alkohol')" onFalse="valueErr(4105)" /> 
-  <attr name="popis" value="string()" onTrue="trString(4101,10)" /> 
-  <attr name="Zraneni" value="ciselnik(4103,'DN_Zraneni','Zraneni')" /> 
-  <attr name="ZdravPojistovna" value="ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')" /> 
-  <attr name="PokutaKc" value="string()" onTrue="onTrue trString(4101,7)" /> 
-  <attr name="PokutaZapl" value="list('nezaplacena','zaplacena')" onFalse="valueErr(4105)" /> 
-  <attr name="Pachatel" value="list('Pachatel DN')" onFalse="valueErr(4105)" /> 
-  <attr name="Poskozeny" value="list('Poçkozeně')" onFalse="valueErr(4105)" /> 
-  <attr name="Pohlavi" value="list('M','¦')" onFalse="requiredErr(4105)" /> 
-  <attr name="RC" value="rodneCislo(4108)" /> 
-  <attr name="Nazev" value="string()" onTrue="trString(4101,36)" /> 
-  <attr name="Nazev_1" value="string()" onTrue="trString(4101,255)" onFalse="requiredErr(4100)" /> 
-  <attr name="Nazev_2" value="string()" onTrue="trString(4101,36)" onFalse="requiredErr(4100)" /> 
-  <attr name="Nazev_3" value="string()" onTrue="trString(4101,255)" /> 
-  <attr name="Nazev_4" value="string()" onTrue="trString(4101,16)" /> 
-  <attr name="IC" value="num(1,12)" onFalse="valueErr(4108)" /> 
-  <attr name="NazevFirmy" value="string()" onTrue="trString(4101,100)" onFalse="requiredErr(4100)" /> 
-  <attr name="TypDokladu" value="string()" onTrue="trString(4101,60)" onFalse="requiredErr(4100)" /> 
-  <attr name="Opravneni" value="string()" onTrue="trString(4101,60)" /> 
-  <attr name="datum" value="tDate(4102)" /> 
-  <attr name="PlatnostOd" value="tDate(4102)" onFalse="requiredErr(4100)" /> 
-  <attr name="pismena" value="string()" onTrue="trString(4101,50)" /> 
-  <attr name="Cislo" value="string()" onTrue="trString(4101,10)" /> 
-  <attr name="Cislo1" value="int()" onFalse="valueErr(4108)" /> 
-  <attr name="Okres" value="normOkres() AND ciselnik(4103,'CC_Okres','Okres')" /> 
-  <attr name="Telefon" value="string()" onTrue="trString(4101,14)" /> 
-  <text name="typ4000" value="string()" onTrue="trString(4101,4000)" onFalse="requiredErr(4100)" /> 
-  <text name="typ400" value="string()" onTrue="trString(4101,400)" onFalse="requiredErr(4100)" /> 
-  <text name="typ255" value="string()" onTrue="trString(4101,255)" onFalse="requiredErr(4100)" /> 
-  <text name="Skoda" value="string()" onTrue="trString(4101,4000)" onFalse="requiredErr(4100)" /> 
-  <text name="skodaKc" value="int(0,9999999)" onFalse="valueErr(4106)" /> 
-  <action name="a4004" onAbsence="elementErr(4104)" /> 
-- <![CDATA[ 
+  <attr name="SeqRec" value="int()" onFalse="requiredErr(4100)" />
+  <attr name="KrajPolicie" value="string(2)" onFalse="requiredErr(4100)" />
+  <attr name="KodUtvaruPolicie" value="ciselnik(4103,'CC_UtvarPolicie','KodUtvaruPolicie')" onFalse="requiredErr(4100)" />
+  <attr name="RokDN" value="xdatetime('yyyy')" onFalse="requiredErr(4100)" />
+  <attr name="CisloDN" value="num(5)" onFalse="requiredErr(4100)" />
+  <attr name="CJ" value="string()" onTrue="trString(4101,50)" onFalse="requiredErr(4100)" />
+  <attr name="DatumCasDN" value="tDateTime(4102)" onFalse="valueErr(4100)" />
+  <attr name="DatumCasDoDN" value="tDateTime(4102)" />
+  <attr name="Foto_Ref" value="blobref()" onFalse="requiredErr(4100)" />
+  <attr name="KodOkresu" value="ciselnik(4103,'DN_PrevodOkres','KodOkresuSDP')" onFalse="valueErr(4100)" />
+  <attr name="Pricina" value="ciselnik(4103,'CC_PricinaDN','KodPricinyDN')" />
+  <attr name="HlavniPricina" value="ciselnik(4103,'CC_HlavniPricinaDN','HlavniPricinaDN')" />
+  <attr name="MPZ" value="string()" onTrue="trString(4101,3)" />
+  <attr name="VIN" value="string()" onTrue="trString(4101,26)" />
+  <attr name="CisloZK" value="string()" onTrue="trString(4101,40)" />
+  <attr name="RokVyroby" value="rokVyroby(4108)" />
+  <attr name="PlatnostSTK" value="tokens('platnďż˝|neplatnďż˝|nezjiďż˝tďż˝no')" onFalse="valueErr(4105)" />
+  <attr name="MesicSTKDo" value="tMesicSTKDo(4107)" />
+  <attr name="KodPojistitele" value="ciselnik(4103,'DN_Pojistitel','KodPojistitele')" />
+  <attr name="StavBrzd" value="ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" />
+  <attr name="TypBrzd" value="ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" />
+  <attr name="PojisteniText" value="list('Doklad o pojiďż˝tďż˝nďż˝ nepďż˝edloďż˝en','Potvrzenďż˝ nepďż˝edloďż˝eno', 'Nepodlďż˝hďż˝ pojiďż˝tďż˝nďż˝','Smlouva neuzavďż˝ena')" onFalse="onFalse valueErr(4105)" />
+  <attr name="typ1" value="string()" onTrue="trString(4101,30)" />
+  <attr name="Linka" value="string()" onTrue="onTrue trString(4101,20)" onFalse="requiredErr(4100)" />
+  <attr name="LEvidCislo" value="string()" onTrue="trString(4101,20)" />
+  <attr name="DruhSoupravy" value="list('vlak')" onFalse="requiredErr(4100); valueErr(4103);" />
+  <attr name="OznSegmentu" value="string()" onTrue="trString(4101,5)" onFalse="requiredErr(4100)" />
+  <attr name="typ" value="string()" onTrue="trString(4101,30)" onFalse="requiredErr(4100)" />
+  <attr name="typ1" value="string()" onTrue="trString(4101,40)" onFalse="requiredErr(4100)" />
+  <attr name="PraxeRizeni" value="praxeRizeni(4108)" />
+  <attr name="AlkoholDech" value="list('Alkohol')" onFalse="valueErr(4105)" />
+  <attr name="popis" value="string()" onTrue="trString(4101,10)" />
+  <attr name="Zraneni" value="ciselnik(4103,'DN_Zraneni','Zraneni')" />
+  <attr name="ZdravPojistovna" value="ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')" />
+  <attr name="PokutaKc" value="string()" onTrue="onTrue trString(4101,7)" />
+  <attr name="PokutaZapl" value="list('nezaplacena','zaplacena')" onFalse="valueErr(4105)" />
+  <attr name="Pachatel" value="list('Pachatel DN')" onFalse="valueErr(4105)" />
+  <attr name="Poskozeny" value="list('Poďż˝kozenďż˝')" onFalse="valueErr(4105)" />
+  <attr name="Pohlavi" value="list('M','ďż˝')" onFalse="requiredErr(4105)" />
+  <attr name="RC" value="rodneCislo(4108)" />
+  <attr name="Nazev" value="string()" onTrue="trString(4101,36)" />
+  <attr name="Nazev_1" value="string()" onTrue="trString(4101,255)" onFalse="requiredErr(4100)" />
+  <attr name="Nazev_2" value="string()" onTrue="trString(4101,36)" onFalse="requiredErr(4100)" />
+  <attr name="Nazev_3" value="string()" onTrue="trString(4101,255)" />
+  <attr name="Nazev_4" value="string()" onTrue="trString(4101,16)" />
+  <attr name="IC" value="num(1,12)" onFalse="valueErr(4108)" />
+  <attr name="NazevFirmy" value="string()" onTrue="trString(4101,100)" onFalse="requiredErr(4100)" />
+  <attr name="TypDokladu" value="string()" onTrue="trString(4101,60)" onFalse="requiredErr(4100)" />
+  <attr name="Opravneni" value="string()" onTrue="trString(4101,60)" />
+  <attr name="datum" value="tDate(4102)" />
+  <attr name="PlatnostOd" value="tDate(4102)" onFalse="requiredErr(4100)" />
+  <attr name="pismena" value="string()" onTrue="trString(4101,50)" />
+  <attr name="Cislo" value="string()" onTrue="trString(4101,10)" />
+  <attr name="Cislo1" value="int()" onFalse="valueErr(4108)" />
+  <attr name="Okres" value="normOkres() AND ciselnik(4103,'CC_Okres','Okres')" />
+  <attr name="Telefon" value="string()" onTrue="trString(4101,14)" />
+  <text name="typ4000" value="string()" onTrue="trString(4101,4000)" onFalse="requiredErr(4100)" />
+  <text name="typ400" value="string()" onTrue="trString(4101,400)" onFalse="requiredErr(4100)" />
+  <text name="typ255" value="string()" onTrue="trString(4101,255)" onFalse="requiredErr(4100)" />
+  <text name="Skoda" value="string()" onTrue="trString(4101,4000)" onFalse="requiredErr(4100)" />
+  <text name="skodaKc" value="int(0,9999999)" onFalse="valueErr(4106)" />
+  <action name="a4004" onAbsence="elementErr(4104)" />
+- <![CDATA[
   boolean ciselnik(int i,String utvar, String KodUtvaru) {
     return true;
   }
@@ -93,7 +93,7 @@
       if (s.substring(i, i + 1) == 'C')
          return true; /*cizinec*/
     }
-	  int n = parseInteger(s.substring(i));
+      int n = parseInteger(s.substring(i));
       if (s.length() > i + 3) {
         int mod =  n % 10;
         int num = rok*10000000+mesic*100000+den*1000+(n/10);
@@ -101,8 +101,8 @@
            return error("MYERR03",
               "Error detected by external check method: &{msg}",
               "&{msg}RC - CRC");
-		}
-	}
+        }
+    }
     return true;
   }
   boolean tDate(int e) {
@@ -130,191 +130,191 @@
   void trString(int i1, int i2) {}
 
 
-  ]]> 
+  ]]>
   </xd:declaration>
 
  <ZaznamPDN Verze="'1.2'" SeqRec="SeqRec" KrajPolicie="KrajPolicie" PlatnostOd="PlatnostOd?">
  <xd:mixed>
-  <Protokol /> 
-  ref ProtokolDN, action a4004; 
-  <Rozhodnuti /> 
-  ?, ref RozhodnutiDN; 
-  <Vyliceni /> 
-  ref Text4000, action a4004; 
-  <ObjStranka /> 
-  ref ObjStrankaDN, action a4004; 
-  <Foto /> 
-  ?, ref FotoDN; 
-  <Vozidlo /> 
-  ?, ref VozidloDN; 
-  <Tramvaj /> 
-  ?, ref TramvajDN; 
-  <Trolejbus /> 
-  ?, ref TrolejbusDN; 
-  <Vlak /> 
-  ?, ref VlakDN; 
-  <Povoz /> 
-  ?, ref PovozDN; 
-  <Predmet /> 
-  ?, ref PredmetDN; 
-  <Zvire /> 
-  ?, ref ZvireDN; 
-  <Ucastnik /> 
-  +, ref UcastnikDN, action a4004; 
+  <Protokol />
+  ref ProtokolDN, action a4004;
+  <Rozhodnuti />
+  ?, ref RozhodnutiDN;
+  <Vyliceni />
+  ref Text4000, action a4004;
+  <ObjStranka />
+  ref ObjStrankaDN, action a4004;
+  <Foto />
+  ?, ref FotoDN;
+  <Vozidlo />
+  ?, ref VozidloDN;
+  <Tramvaj />
+  ?, ref TramvajDN;
+  <Trolejbus />
+  ?, ref TrolejbusDN;
+  <Vlak />
+  ?, ref VlakDN;
+  <Povoz />
+  ?, ref PovozDN;
+  <Predmet />
+  ?, ref PredmetDN;
+  <Zvire />
+  ?, ref ZvireDN;
+  <Ucastnik />
+  +, ref UcastnikDN, action a4004;
   </xd:mixed>
   </ZaznamPDN>
-  <ProtokolDN KodUtvaruPolicie="KodUtvaruPolicie" RokDN="RokDN" CisloDN="CisloDN" CJ="CJ" DatumCasOznameni="DatumCasDN?" NazevDN="Nazev_1" Zpracovatel="Nazev_2" /> 
-  ; 
+  <ProtokolDN KodUtvaruPolicie="KodUtvaruPolicie" RokDN="RokDN" CisloDN="CisloDN" CJ="CJ" DatumCasOznameni="DatumCasDN?" NazevDN="Nazev_1" Zpracovatel="Nazev_2" />
+  ;
  <RozhodnutiDN DatumRozhodnuti="datum?">
-  ? 
-  <xd:text>onFalse requiredErr(4100)</xd:text> 
-  ; 
+  ?
+  <xd:text>onFalse requiredErr(4100)</xd:text>
+  ;
   </RozhodnutiDN>
  <ObjStrankaDN DatumCasDN="DatumCasDN?" DatumCasDoDN="DatumCasDoDN?" KodOkresu="KodOkresu?" Obec="Nazev?" Ulice="Nazev?" CisloPopisne="Cislo?" CelkovaSkodaKc="skodaKc?" HlavniPricina="HlavniPricina?" Pricina="Pricina?">
-  <Misto /> 
-  ref Text255, action a4004; 
+  <Misto />
+  ref Text255, action a4004;
   </ObjStrankaDN>
-  <FotoDN Foto_Ref="Foto_Ref" /> 
+  <FotoDN Foto_Ref="Foto_Ref" />
  <VozidloDN OznSegmentu="OznSegmentu" DruhVozidla="typ" SPZ="Cislo?" MPZ="MPZ?" VIN="VIN?" ZnackaVozidla="Nazev_4?" TypVozidla="typ1?" RokVyroby="RokVyroby?" PlatnostSTK="PlatnostSTK?" MesicSTKDo="MesicSTKDo?" TypBrzd="TypBrzd?" StavBrzd="StavBrzd?" KodPojistitele="KodPojistitele?" CisloDokladuPojisteni="typ1?" PojisteniText="PojisteniText?" CisloZK="CisloZK?" VydalZK="Nazev_3?" PlatnostZKOd="datum?" PlatnostZKDo="datum?" PojistneHPKc="Cislo1?" DatumUhradyHP="datum?" MistoUhradyHP="Nazev_3?">
 
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Drzitel /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Drzitel />
+  ?, ref Text255;
   </xd:mixed>
   </VozidloDN>
-  ; 
+  ;
  <TramvajDN OznSegmentu="OznSegmentu" Linka="Linka" LinkaPoradi="LinkaPoradi?" EvidCislo="EvidCislo?" TypVozidla="typ1?" TypBrzd="TypBrzd?" StavBrzd="StavBrzd?" KodPojistitele="KodPojistitele?" CisloDokladuPojisteni="typ1?" PojisteniText="PojisteniText?" DruhVozidla="typ">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </TramvajDN>
-  ; 
+  ;
  <TrolejbusDN OznSegmentu="OznSegmentu" Linka="Linka" LinkaPoradi="LinkaPoradi?" EvidCislo="EvidCislo?" TypVozidla="typ1?" TypBrzd="TypBrzd?" StavBrzd="StavBrzd?" KodPojistitele="KodPojistitele?" CisloDokladuPojisteni="typ1?" PojisteniText="PojisteniText?" DruhVozidla="typ">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </TrolejbusDN>
-  ; 
+  ;
  <VlakDN OznSegmentu="OznSegmentu" TypSoupravy="typ1" Spoj="pismena?" DruhSoupravy="DruhSoupravy">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </VlakDN>
-  ; 
+  ;
  <PovozDN OznSegmentu="OznSegmentu" DruhPovozu="typ">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </PovozDN>
-  ; 
+  ;
  <PredmetDN OznSegmentu="OznSegmentu" NazevPredmetu="Nazev_1" DruhPredmetu="Nazev_1">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </PredmetDN>
-  ; 
+  ;
  <ZvireDN OznSegmentu="OznSegmentu" NazevZvirete="typ" DruhZvirete="typ">
  <xd:mixed>
-  <Skoda /> 
-  ?, ref Skoda; 
-  <Vlastnik /> 
-  ?, ref Text255; 
+  <Skoda />
+  ?, ref Skoda;
+  <Vlastnik />
+  ?, ref Text255;
   </xd:mixed>
   </ZvireDN>
-  ; 
+  ;
  <UcastnikDN OznSegmentu="OznSegmentu" TypUcastnika="typ" PraxeRizeni="PraxeRizeni?" AlkoholDech="AlkoholDech?" AlkoholKrev="popis?" Zraneni="Zraneni?" ZdravPojistovna="ZdravPojistovna?" PokutaKc="PokutaKc?" PokutaZapl="PokutaZapl?" Pachatel="Pachatel?" Poskozeny="Poskozeny?">
  <xd:mixed>
-  <JinaSkoda /> 
-  ?, ref Skoda; 
-  <Osoba /> 
-  ?, ref Osoba; 
-  <Firma /> 
-  ?, ref Firma; 
-  <Doklad /> 
-  ?, ref Doklad; 
-  <PoruseniZakProvoz /> 
-  ?, ref Text400; 
-  <PoruseniZakPrest /> 
-  ?, ref Text400; 
-  <PoruseniZakTres /> 
-  ?, ref Text400; 
-  <PoruseniZakOst /> 
-  ?, ref Text400; 
-  <Vazba /> 
-  ?, ref Text255; 
-  <TrvalyPobyt /> 
-  ?, ref Adresa; 
-  <PrechodnyPobyt /> 
-  ?, ref Adresa; 
+  <JinaSkoda />
+  ?, ref Skoda;
+  <Osoba />
+  ?, ref Osoba;
+  <Firma />
+  ?, ref Firma;
+  <Doklad />
+  ?, ref Doklad;
+  <PoruseniZakProvoz />
+  ?, ref Text400;
+  <PoruseniZakPrest />
+  ?, ref Text400;
+  <PoruseniZakTres />
+  ?, ref Text400;
+  <PoruseniZakOst />
+  ?, ref Text400;
+  <Vazba />
+  ?, ref Text255;
+  <TrvalyPobyt />
+  ?, ref Adresa;
+  <PrechodnyPobyt />
+  ?, ref Adresa;
   </xd:mixed>
   </UcastnikDN>
-  ; 
+  ;
  <Osoba Jmeno="Nazev?" Prijmeni="Nazev_2" RodnePrijmeni="Nazev?" TitulPred="Nazev?" TitulZa="Nazev?" RC="RC?" Pohlavi="Pohlavi?" OsobniStav="typ1?" DatumNarozeni="datum?" MistoNarozeni="nazev?" StatNarozeni="pismena?" StatniPrislusnost="pismena?" Profese="pismena?">
  <xd:mixed>
-  <TrvalyPobyt /> 
-  ?, ref Adresa; 
-  <PrechodnyPobyt /> 
-  ?, ref Adresa; 
-  <Pobyt /> 
-  ?, ref Adresa; 
-  <JinyPobyt /> 
-  ?, ref Adresa; 
+  <TrvalyPobyt />
+  ?, ref Adresa;
+  <PrechodnyPobyt />
+  ?, ref Adresa;
+  <Pobyt />
+  ?, ref Adresa;
+  <JinyPobyt />
+  ?, ref Adresa;
   </xd:mixed>
   </Osoba>
-  ; 
+  ;
  <Firma NazevFirmy="NazevFirmy" IC="IC?">
-  <Sidlo /> 
-  ?, ref Adresa; 
+  <Sidlo />
+  ?, ref Adresa;
   </Firma>
-  ; 
-  <Adresa Ulice="Nazev?" CisloOrientacni="Cislo?" CisloPopisne="Cislo?" Obec="Nazev?" PSC="Cislo?" Okres="Okres?" Stat="pismena?" Telefon1="Telefon?" Telefon2="Telefon?" /> 
-  ; 
-  <Doklad TypDokladu="TypDokladu" Opravneni="Opravneni?" CisloDokladu="Nazev_4?" DatumVydani="datum?" MistoVydani="jmeno?" StatVydani="pismena?" /> 
-  ; 
+  ;
+  <Adresa Ulice="Nazev?" CisloOrientacni="Cislo?" CisloPopisne="Cislo?" Obec="Nazev?" PSC="Cislo?" Okres="Okres?" Stat="pismena?" Telefon1="Telefon?" Telefon2="Telefon?" />
+  ;
+  <Doklad TypDokladu="TypDokladu" Opravneni="Opravneni?" CisloDokladu="Nazev_4?" DatumVydani="datum?" MistoVydani="jmeno?" StatVydani="pismena?" />
+  ;
  <Skoda Kc="skodaKc?">
-  <xd:text value="Skoda" /> 
-  ?; 
+  <xd:text value="Skoda" />
+  ?;
   </Skoda>
-  ?; 
+  ?;
  <Text255>
-  <xd:text value="typ255" /> 
+  <xd:text value="typ255" />
  </Text255>
-  ; 
+  ;
  <Text400>
-  <xd:text value="typ400" /> 
+  <xd:text value="typ400" />
  </Text400>
-  ; 
+  ;
  <Text4000>
-  <xd:text value="typ4000" /> 
+  <xd:text value="typ4000" />
  </Text4000>
-  ; 
+  ;
 </xd:def>
 
 

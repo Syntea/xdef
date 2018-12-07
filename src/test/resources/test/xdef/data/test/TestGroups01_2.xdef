@@ -3,7 +3,7 @@
     xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
     xmlns        = "http://www.syntea.cz/ISDN/SOD/2.0"
     xmlns:sod    = "http://www.syntea.cz/ISDN/SOD/2.0"
-    
+
     impl-version = "2.0"
     impl-date    = "2014-05-14"
 >
@@ -24,15 +24,15 @@
 
 <xd:declaration>
     String      $phase;         /* pozadovana faze k validaci */
-    
+
     type phase enum(           /* 3 fáze pro SODContainer */
             'Template', 'Query', 'Report');
-    
+
     type dimension enum(
             'Row',              /* dimenze pro řádky */
             'Col'               /* dimenze pro sloupce */
         );
-    
+
     type ctype enum(            /* pozn.: "formát" je formát textové reprezentace v Const/@Value */
             'int',              /* celé číslo,      formát: číslo v 10-kové soustava */
             'double',           /* desetiné číslo s plovoucí čárkou, formát: číslo v 10-kové soustava */
@@ -44,14 +44,14 @@
                                    může se vyskytnout jen u elementu Fact */
             'string'            /* řetězec */
         );
-    
+
     type operator enum(                                     /* pozn.: "any" je libovolný typ */
             'and',                                          /* logický operátor AND -  0, 1 a více-četný - (bool, ...) -> bool
                                                                0-ární má hodnotu "true" */
             'or',                                           /* logický operátor OR  -  1 a více-četný - (bool, ...) -> bool */
             '=', '!=', '&lt;', '&lt;=', '&gt;', '&gt;=',    /* logické operátory porovnavaci - (any, any) -> bool */
             'in',                                           /* logické operátor in - (any, (any, ...)) -> bool
-                                                               první argument je testovaný argument, 
+                                                               první argument je testovaný argument,
                                                                druhý argumenty je seznam, tj. seznam možností */
             '+',                                            /* číselný operátor unární, binární, vícečetný
                                                                řetězcový operátor spojení binární, vícečetný */
@@ -61,11 +61,11 @@
             '()',                                           /* číselné operátory unární */
             'count', 'sum', 'max', 'min'                    /* funkce agregační */
         );
-    
+
     type modifier enum(
             'distinct'                                      /* modifikátor k agregačním funkcím count, sum */
         );
-    
+
     type label enum(
             'Faulty',               /* viz kapitola "Štítek 'Faulty'" */
             'PossibleExeError',     /* viz kapitola "Štítek 'PossibleExeError'" */
@@ -75,7 +75,7 @@
             'UserScope',            /* pro Expression: značka pro automaticky doplňovanou podmínku
                                        pro uzemní působnost zadavatele */
             'AggregationTemplate',  /* pro Expression, List: výraz/y je/jsou agregační funkce.
-                                       Je-li to volitelný prvek vybírá se z předdefinovaných 
+                                       Je-li to volitelný prvek vybírá se z předdefinovaných
                                        agregací pro daný vektor */
             'AggregationTemplateCode', /* pro Expression: příslušný výraz byl vybrán z předdefinovaných
                                        agregací s kódem v hodnotě tohoto štítku */
@@ -95,15 +95,15 @@
             'OriginTemplateTitle'   /* jen v top Info: popis původní globální šablony, ze kterého dotaz vznikl.
                                        Globální šablona tento štítek nemá */
         );
-    
+
     type faulty enum(               /* hodnoty štítku 'Faulty' */
             'Invalid'             /* příslušný element je neplatný */
         );
-            
+
     type possibleExeError enum(     /* hodnoty štítku 'PossibleDBError' */
             'CommonError'           /* při výpočtu příslušného sql-dotazu může dojít k chybě */
         );
-    
+
     /* id-ref typy pro jednotlive elementy */
     uniqueSet constRefTyp {t: string()};
     uniqueSet factRefTyp {t: string()};
@@ -111,7 +111,7 @@
     uniqueSet shotRefTyp {t: string()};
     uniqueSet exprRefTyp {t: string()};
     uniqueSet listRefTyp {t: string()};
-    
+
 </xd:declaration>
 
 <xd:macro name="DateTimeMsDesc">xdatetime('yyyy-MM-dd HH:mm:ss.S')</xd:macro>
@@ -146,7 +146,7 @@ operátor nad celými dotazy, respektive tabulkami, které jsou výsledkem dotaz
 <OperatorQuery
     Operator ="enum('join', 'sort')"
     Kind     ="optional enum('concatenate', 'attach', 'merge', 'ascending', 'descending')"
-    Dimension="optional dimension()" 
+    Dimension="optional dimension()"
 >
     <xd:mixed>
         <OperatorQuery      xd:script="ref OperatorQuery; occurs *"/>
@@ -162,7 +162,7 @@ operátor nad celými dotazy, respektive tabulkami, které jsou výsledkem dotaz
     <Dimension  xd:script="ref Dimension; occurs 0..2"/>
     <Form       xd:script="ref Form; optional"/>
     <Info       xd:script="ref Info; optional"/>
-    
+
     <!-- spočítaná data. Seznam položek s dimenzemi řádek/sloupec a hodnotou/ami.
     Typicky @Row, @Col, @Value -->
     <Data       xd:script="optional; onAbsence if ($phase == 'Report') { error('SODE0102', 'chybí Query/Data') };
@@ -174,7 +174,7 @@ operátor nad celými dotazy, respektive tabulkami, které jsou výsledkem dotaz
     </Data>
 </Query>
 
-<!-- xml-text-předpis pro příkaz. Po přepisu vznikne textový příkaz, který se 
+<!-- xml-text-předpis pro příkaz. Po přepisu vznikne textový příkaz, který se
 při výpočtu pošle k vykonání do výkoného systému -->
 <Command>
     <xd:sequence xd:script="ref expression"/>
@@ -191,15 +191,15 @@ Dimenze může být víceúrovňová, pak se zobrazí kaskádově.
                  Nižší úrovně tento atribut neobsahují.
     @Attribute - určuje jméno atributu v Data/Item spřažený s touto dimenzí, tj. filtrují se
                  ty položky Data/Item, které mají v atributu se jménem Dimension/@Atribute stejnou
-                 hodnotu jako Dimension/Item/@Code. Po filtraci ze všech dimenzí musí zbýt 
-                 kvůli jednoznačnosti maximálně jen jedna Data/Item. 
-                 Pak se do příslušného políčka tabulky vloží hodnota 
-                 v atributu Data/Item/@Value. Je-li hodnota @Atribute prázdný řetězec, pak se 
+                 hodnotu jako Dimension/Item/@Code. Po filtraci ze všech dimenzí musí zbýt
+                 kvůli jednoznačnosti maximálně jen jedna Data/Item.
+                 Pak se do příslušného políčka tabulky vloží hodnota
+                 v atributu Data/Item/@Value. Je-li hodnota @Atribute prázdný řetězec, pak se
                  pro tuto dimenzi neprovádí filtrace, ale hodnota se vezme z atributu se jménem v @Code,
                  tj. Data/Item/@*[name = @Code] místo výše uvedené Data/Item/@Value.
                  Proto @Attribute="" může být ve všech dimenzích uveden maximálně jednou.
                  Nezbyde-li  po filtraci žádná Data/Item použije se
-                 do příslušného políčka tabulky defaultní hodnota, viz Label. 
+                 do příslušného políčka tabulky defaultní hodnota, viz Label.
                  Není-li uveden a je-li @Dimension uveden, předpokládá se stejná
                  hodnota jako u @Dimension.
                  Není-li uveden @Attribute, ani @Dimension, je to chyba.
@@ -245,7 +245,7 @@ Dimenze může být víceúrovňová, pak se zobrazí kaskádově.
     </xd:choice>
 </Form>
 
-<!-- 
+<!--
 stromová struktura výrazu
   - povoluje i textově reprezentované podvýrazy
   - např. sql-příkaz
@@ -383,14 +383,14 @@ defaultní oddělovač ", "), pak se přepíše na:
         <Title xd:script="optional">
             optional string
         </Title>
-        
+
         <!-- štítky, reprezentuje dvojici klíč-hodnota jako meta-informace, viz label() -->
         <Label      xd:script="occurs *" Key="label()">optional string</Label>
         <!-- vektor, ke kterému se vztahuje příslušný element. Může jich být více, pak se sjednocují.
         Pro Fakt, Expression, List určuje vektor pro volené fakty.
         Pro Vektor určuje seznam volitelných vektorů. -->
         <Vector     xd:script="ref Vector; occurs *"/>
-    
+
         <!-- informace o výpočtu sql-příkazu -->
         <Execution  xd:script="optional; finally if ($phase != 'Report') { error('SODE0115', 'nepovolený výskyt Info/Execution') }">
             <!-- použitý sql-příkaz -->

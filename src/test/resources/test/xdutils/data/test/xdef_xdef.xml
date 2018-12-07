@@ -30,7 +30,7 @@
     boolean checkElementCreateExpression() {return true;}
     boolean checkIdentifier() {return true;}
     boolean checkBooleanLiteral() {return true;}
-    
+
   </xd:declaration>
 
   <!-- xd:any xd:script = "options moreAttributes" xd:name = "A"/>
@@ -43,49 +43,49 @@
     <META:def xd:script = "occurs +; ref META:def" />
 
   </META:collection>
-    
+
   <META:def xd:script = "init NS = @metaNamespace ?
-	                     (String) @metaNamespace : DefaultUri;
+                         (String) @metaNamespace : DefaultUri;
                          options moreAttributes"
     name              = "optional Qname(); options acceptQualifiedAttr"
     metaNamespace  = "optional uri(); options acceptQualifiedAttr"
     classes           = "optional checkClassList(); options acceptQualifiedAttr"
     include           = "optional uriList(); options acceptQualifiedAttr"
-    root              = "optional checkRootList(); options acceptQualifiedAttr" 
+    root              = "optional checkRootList(); options acceptQualifiedAttr"
     script            = "optional checkXdefScript();
-	                     options acceptQualifiedAttr" >
+                         options acceptQualifiedAttr" >
 
   <!-- Jmena atributu, které jsou specifikovany navíc oproti vyse vyjmenovanym
-    (viz option moreAttributes) musí zacinat sekvenci znaku "impl-" --> 
+    (viz option moreAttributes) musí zacinat sekvenci znaku "impl-" -->
 
     <xd:mixed>
 
-      <META:macro xd:script = "occurs *; options moreAttributes" 
+      <META:macro xd:script = "occurs *; options moreAttributes"
         name                = "required Qname(); options acceptQualifiedAttr"
         xd:attr             = "occurs * checkIdentifier()" >
-			
+
         optional string();
-		
+
       </META:macro>
-	  
+
       <META:declaration xd:script = "occurs *">
-		  
+
          required checkDeclarationScript();
-		 
+
       </META:declaration>
-  
+
       <xd:choice occurs = "*">
 
           <META:choice xd:script = "occurs *;
-		                            match @name AND !@ref; ref META:choiceDef" 
+                                    match @name AND !@ref; ref META:choiceDef"
             name = "required Qname(); options acceptQualifiedAttr" />
 
           <META:mixed xd:script="occurs *;
-		                         match @name AND !@ref; ref META:mixedDef" 
+                                 match @name AND !@ref; ref META:mixedDef"
             name = "required Qname(); options acceptQualifiedAttr" />
 
           <META:sequence xd:script="occurs *;
-		                            match @name AND !@ref; ref META:sequenceDef"
+                                    match @name AND !@ref; ref META:sequenceDef"
             name = "required Qname(); options acceptQualifiedAttr" />
 
           <xd:any xd:script = "occurs *; ref xelement" />
@@ -99,7 +99,7 @@
   </META:def>
 
   <!-- model elementu -->
-  <xelement xd:script = "options moreAttributes" 
+  <xelement xd:script = "options moreAttributes"
     xd:attr     = "occurs * checkAttributeScript()"
     xd:text     = "occurs * checkValueScript()"
     META:script = "optional checkElementScript()" >
@@ -113,7 +113,7 @@
     <META:choice xd:script = "occurs *; match @ref; ref META:choiceRef" />
 
     <META:choice xd:script = "occurs *; match !@ref; ref META:choiceDef" />
-	
+
     <META:mixed xd:script = "occurs *; match @ref; ref META:mixedRef" />
 
     <META:mixed xd:script = "occurs *; match !@ref; ref META:mixedDef" />
@@ -137,7 +137,7 @@
     ref    = "required Qname(); options acceptQualifiedAttr" />
 
   <META:choiceDef occurs = "optional checkElementOccurrenceSection();
-              options acceptQualifiedAttr" 
+              options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr" >
@@ -162,12 +162,12 @@
 
   </META:sequenceDef>
 
-  <META:mixedRef ref = "required Qname(); options acceptQualifiedAttr" 
+  <META:mixedRef ref = "required Qname(); options acceptQualifiedAttr"
     empty  = "optional checkBooleanLiteral(); options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr" />
 
-  <META:mixedDef ref = "illegal; options acceptQualifiedAttr" 
+  <META:mixedDef ref = "illegal; options acceptQualifiedAttr"
     empty  = "optional checkBooleanLiteral(); options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr" >

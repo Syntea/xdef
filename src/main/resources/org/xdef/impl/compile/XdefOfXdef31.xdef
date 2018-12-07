@@ -16,7 +16,7 @@
 /*X-definition of X-definitions ver 3.1, metanamespace: METAXD, prefix: XD3.1 */
 /******************************************************************************/
 
-	<XD3.1:collection xd:script = "init NS = @metaNamespace 
+    <XD3.1:collection xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/3.1';
       options moreAttributes"
     include        = "optional uriList; options acceptQualifiedAttr"
@@ -34,13 +34,13 @@
       options moreAttributes"
     name            = "optional QName; options acceptQualifiedAttr"
     metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr" 
+    root            = "optional rootList; options acceptQualifiedAttr"
     include         = "optional uriList; options acceptQualifiedAttr"
     script          = "optional xdefScript; options acceptQualifiedAttr"
     xd:attr         = "occurs * getAttrName().startsWith('impl-');">
-    <!-- Names of other atributes (see xd:attr) must start with "impl-" --> 
+    <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
-	  <xd:mixed>
+      <xd:mixed>
 
       <XD3.1:macro xd:script = "occurs *; ref XD3.1:macro" />
 
@@ -65,7 +65,7 @@
               name = "required QName; options acceptQualifiedAttr" />
 
           <XD3.1:mixed xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:mixedDef" 
+                            match @name || @XD3.1:name; ref XD3.1:mixedDef"
               name = "required QName; options acceptQualifiedAttr" />
 
           <XD3.1:sequence xd:script = "occurs *;
@@ -73,19 +73,19 @@
               name = "required QName; options acceptQualifiedAttr" />
 
           <XD3.1:list xd:script = "occurs *;
-                            match @name || @XD3.1:name; ref XD3.1:listDef" 
+                            match @name || @XD3.1:name; ref XD3.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
 
           <XD3.1:any xd:script = "occurs *;
                             match @XD3.1:name; ref XD3.1:anyDef;
-							options moreAttributes, moreElements"
+                            options moreAttributes, moreElements"
               XD3.1:name = "required QName;" />
 
           <xd:any xd:script = "occurs *; ref xelement" />
 
-		  optional valueScript;
+          optional valueScript;
 
-	  </xd:choice>
+      </xd:choice>
 
     </xd:mixed>
 
@@ -101,7 +101,7 @@
      <xd:mixed>
        <XD3.1:macro xd:script = "occurs *; ref XD3.1:macro" />
        * declarationScript;
-	 </xd:mixed>
+     </xd:mixed>
   </XD3.1:declaration>
 
   <XD3.1:component>
@@ -113,7 +113,7 @@
   </XD3.1:thesaurus>
 
   <!-- model of element -->
-  <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes" 
+  <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes"
     xd:attr   = "occurs * attributeScript"
     xd:text   = "occurs * valueScript"
     XD3.1:script = "optional elementScript" >
@@ -145,7 +145,7 @@
     ref    = "required xposition; options acceptQualifiedAttr"
     script = "optional string; options acceptQualifiedAttr" />
 
-  <XD3.1:choiceDef occurs = "optional Occurrence; options acceptQualifiedAttr" 
+  <XD3.1:choiceDef occurs = "optional Occurrence; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >
@@ -169,7 +169,7 @@
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" />
 
-  <XD3.1:mixedDef ref = "optional xposition; options acceptQualifiedAttr" 
+  <XD3.1:mixedDef ref = "optional xposition; options acceptQualifiedAttr"
     empty  = "optional booleanLiteral; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >

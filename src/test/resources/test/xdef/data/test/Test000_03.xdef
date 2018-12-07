@@ -5,7 +5,7 @@
     impl-date    = "2011-03-25">
 
 <xd:declaration>
-    
+
     uniqueSet column {t: string()};
     type op_bool_equi enum('and', 'or');
     type op_bool_comp enum('eq', 'lt', 'le', 'gt', 'ge', 'ne');
@@ -20,7 +20,7 @@
 <statOnDemandInputParam>
     <visualisation>
         <title>required string()</title>
-        
+
         <rovne  xd:script="ref dimension"/>
         <svisle xd:script="ref dimension"/>
     </visualisation>
@@ -28,11 +28,11 @@
     <select>
         <xd:choice xd:script="ref expr_val; occurs 1..*"/>
     </select>
-    
+
     <group_by>
         <column name="required column.t.ID()" xd:script="occurs 2..2"/>
     </group_by>
-    
+
     <where>
         <xd:choice xd:script="ref expr_bool; occurs 0..1"/>
     </where>

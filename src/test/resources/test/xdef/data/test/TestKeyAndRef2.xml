@@ -55,7 +55,7 @@
       <DimMinus DimName='IdPojistitel' />
     </ContingStatistics>
     <SuperStatistics StatText='Pocet pojisteni dle druhu vozidla celkem'
-					 StatName='PocPoj_DruhVozidlaCelkem_M'
+                     StatName='PocPoj_DruhVozidlaCelkem_M'
        OrigStatName='PocPoj_DruhVozidla+Pojistitel_M' >
       <DimPlus DimName='IdPojistitel'/>
     </SuperStatistics>
@@ -78,6 +78,6 @@
   </DefDistributions>
   <DefSchedules>
     <Schedule Time='25.1.2007 23:00:00' Reccur='M' Class='STATISTICS'
-		   Element='MES' StatName='PocPoj_DruhVozidla+Pojistitel_M' />
+           Element='MES' StatName='PocPoj_DruhVozidla+Pojistitel_M' />
   </DefSchedules>
 </DefSystemStatistics>
