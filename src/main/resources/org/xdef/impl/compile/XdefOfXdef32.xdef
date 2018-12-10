@@ -94,8 +94,8 @@
 
   <XD3.2:macro xd:script = "occurs *; options moreAttributes"
     name    = "required QName; options acceptQualifiedAttr"
-    xd:attr = "occurs * xdIdentifier" >
-    optional string;
+    xd:attr = "occurs * string()" >
+    optional string();
   </XD3.2:macro>
 
   <XD3.2:declaration>

@@ -116,11 +116,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listCollection = _precomp.getPCollections();
 		_listComponent = _precomp.getPComponents();
 
-		ClassLoader classLoader =
-			Thread.currentThread().getContextClassLoader();
+		ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,
-			(byte) 10,
-			XPreCompiler.PREDEFINED_PREFIXES, classLoader);
+			(byte) 10, XPreCompiler.PREDEFINED_PREFIXES, cloader);
+		_scriptCompiler.setReportWriter(reporter);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
