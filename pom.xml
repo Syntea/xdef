@@ -8,23 +8,23 @@
 	
 	<groupId>org.xdef</groupId>
 	<artifactId>xdef-core</artifactId>
-	<version>3.1.4.9</version><!-- when changed, change also ./properties/release.date, see below -->
+	<version>3.2.1.1</version><!-- when changed, change also ./properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
 	<name>xdef-core</name>
 	<!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
-	<description>X-Definitions 3.1 (Open Source Software)</description>
+	<description>X-Definitions 3.2 (Open Source Software)</description>
 	
 	<properties>
-		<release.date>2018-10-17</release.date>
+		<release.date>2018-11-14</release.date>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-		<maven.compiler.testSource>1.8</maven.compiler.testSource>
-		<jdk.version>1.8</jdk.version>
+		<maven.compiler.testTarget>1.6</maven.compiler.testTarget>
+		<maven.compiler.testSource>1.6</maven.compiler.testSource>
+		<jdk.version>1.6</jdk.version>
 		<jdk.vendor>sun</jdk.vendor>
 		
 		<saxon-he.version>9.7.0-18</saxon-he.version>
@@ -32,7 +32,8 @@
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.2.3</logback.version>
 		<logback-testng.version>1.0.0</logback-testng.version>
-		<testng.version>6.14.3</testng.version>
+<!-- <testng.version>6.14.3</testng.version> -->
+		<testng.version>6.8.21</testng.version>
 	</properties>
 	
 	<dependencies>
@@ -40,7 +41,6 @@
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>Saxon-HE</artifactId>
-			<version>${saxon-he.version}</version>
 			<classifier>xqj</classifier>
 		</dependency>
 		
@@ -51,7 +51,6 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -59,13 +58,11 @@
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>Saxon-HE</artifactId>
-			<version>${saxon-he.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -73,19 +70,16 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.sbabcoc</groupId>
 			<artifactId>logback-testng</artifactId>
-			<version>${logback-testng.version}</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
@@ -115,7 +109,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
 				<configuration>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
@@ -126,7 +119,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
 				<configuration>
 					<archive>
 						<index>true</index>
@@ -144,11 +136,9 @@
 				</configuration>
 			</plugin>
 			
-			<!-- do not use toolchain for now, for simplicity
-            <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>1.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -165,13 +155,12 @@
 					</toolchains>
 				</configuration>
 			</plugin>
-            -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.0</version>
 				<configuration>
+					<forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
@@ -179,6 +168,36 @@
 			</plugin>
 					
 		</plugins>
+		
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-toolchains-plugin</artifactId>
+					<version>1.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	
 	<profiles>
@@ -224,6 +243,53 @@
 		</profile>
 	</profiles>
 	
+	<dependencyManagement>
+		<dependencies>
+			<!-- third parties -->
+			<dependency>
+				<groupId>net.sf.saxon</groupId>
+				<artifactId>Saxon-HE</artifactId>
+				<version>${saxon-he.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.saxon</groupId>
+				<artifactId>Saxon-HE</artifactId>
+				<version>${saxon-he.version}</version>
+				<classifier>xqj</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>${derby.version}</version>
+			</dependency>
+			
+			<!-- test-phase -->
+			<dependency>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>${testng.version}</version>
+			</dependency>
+			
+			<!-- logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.sbabcoc</groupId>
+				<artifactId>logback-testng</artifactId>
+				<version>${logback-testng.version}</version>
+			</dependency>
+		
+		</dependencies>
+	</dependencyManagement>
+	
 	<distributionManagement>
 		<repository>
 			<id>private</id>
@@ -234,12 +300,5 @@
 			<url>${mrmUrl}/private-snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
-	<!--
-	<scm>
-		<connection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</connection>
-		<developerConnection>scm:svn:${svnsUrl}/${svnRepo}/trunk/statistika</developerConnection>
-	</scm>
-	-->
 	
 </project>

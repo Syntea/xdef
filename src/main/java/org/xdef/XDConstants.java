@@ -1,5 +1,7 @@
 package org.xdef;
 
+import org.xdef.sys.config.PomInfo;
+
 /** Important constants used by X-definition.
  * Note the constants with the name starting with prefix "XDPROPERTY"
  * are names of properties. To each such constant are also defined the constants
@@ -120,6 +122,7 @@ public interface XDConstants {
 	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
+	//FIXME: http://www.xdef.org/3.2
 	public static final String XDEF32_NS_URI = "http://www.org.xdef/3.2";
 	/** The namespace URI for X-definition instance */
 	public static final String XDEF_INSTANCE_NS_URI =
@@ -134,10 +137,10 @@ public interface XDConstants {
 // are generated authomaticaly!
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Build version of software (3.2.001.001). */
-	public static final String BUILD_VERSION = "3.2.001.001";
-	/** Date of build version (2018-11-14). */
-	public static final String BUILD_DATE = "2018-11-14";
+	/** Build version of software from pom.xml */
+	public static final String BUILD_VERSION = PomInfo.pomInfo.getVersion();
+	/** Date of build version from pom.xml */
+	public static final String BUILD_DATE    = PomInfo.pomInfo.getReleaseDate();
 	/** Java version of compiler when the X-definition code was compiled. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";
