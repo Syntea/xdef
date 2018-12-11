@@ -120,7 +120,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler = new CompileXScript(_codeGenerator,
 			(byte) 10, XPreCompiler.PREDEFINED_PREFIXES, cloader);
 		_scriptCompiler.setReportWriter(reporter);
-		_scriptCompiler.setReportWriter(reporter);
 	}
 
 	/** Get external classes used in x-definition methods.
@@ -2496,7 +2495,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					selective = false;
 					if (selectorKind==XNode.XMCHOICE ||
 						selectorKind==XNode.XMMIXED) {
-						String s = x.getNSUri() == null 
+						String s = x.getNSUri() == null
 							? x.getName() : ('{'+x.getNSUri()+'}'+x.getName());
 						Integer j;
 						if ((j = groupItems.get(s)) != null && notReported) {

@@ -343,7 +343,7 @@ public final class XExtUtils {
 		XDParseResult result = new DefParseResult(s);
 		try {
 			String xdef =
-"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root='A'>" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='A'>" +
 "<xd:declaration>" +
 "Parser x=" + xdata.getTextValue() + ";"+
 "</xd:declaration>" +
@@ -731,6 +731,4 @@ public final class XExtUtils {
 		return a.subtract(new BigDecimal(b));
 	}
 	public final static BigDecimal ulp(final BigDecimal a) {return a.ulp();}
-////////////////////////////////////////////////////////////////////////////////
-
 }

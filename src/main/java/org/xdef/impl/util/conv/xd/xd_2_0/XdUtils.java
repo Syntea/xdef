@@ -40,7 +40,9 @@ public final class XdUtils {
 		return Util.isElement(node,
 			XDConstants.XDEF20_NS_URI, XdNames.COLLECTION)
 			|| Util.isElement(node,
-				XDConstants.XDEF31_NS_URI, XdNames.COLLECTION);
+				XDConstants.XDEF31_NS_URI, XdNames.COLLECTION)
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.COLLECTION);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
@@ -51,7 +53,8 @@ public final class XdUtils {
 	 */
 	public static boolean isDef(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.DEF)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.DEF);
+			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.DEF);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
@@ -62,29 +65,32 @@ public final class XdUtils {
 	 */
 	public static boolean isModel(final Node node) {
 		return Util.isChild(node, XDConstants.XDEF20_NS_URI, XdNames.DEF)
-			|| Util.isChild(node, XDConstants.XDEF31_NS_URI, XdNames.DEF);
+			|| Util.isChild(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
+			|| Util.isChild(node, XDConstants.XDEF32_NS_URI, XdNames.DEF);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
 	 * <tt>mixed</tt> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition <tt>mixed</tt>
+	 * @return <tt>true</tt> if given node is valid X-definition <tt>mixed</tt>
 	 * element.
 	 */
 	public static boolean isMixed(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.MIXED)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.MIXED);
+			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.MIXED)
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.MIXED);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
 	 * <tt>choice</tt> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition <tt>choice</tt>
+	 * @return <tt>true</tt> if given node is valid X-definition <tt>choice</tt>
 	 * element.
 	 */
 	public static boolean isChoice(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.CHOICE)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.CHOICE);
+			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.CHOICE)
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.CHOICE);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -95,7 +101,8 @@ public final class XdUtils {
 	 */
 	public static boolean isSequence(final Node node) {
 		return Util.isElement(node,XDConstants.XDEF20_NS_URI, XdNames.SEQUENCE)
-			|| Util.isElement(node,XDConstants.XDEF31_NS_URI, XdNames.SEQUENCE);
+			|| Util.isElement(node,XDConstants.XDEF31_NS_URI, XdNames.SEQUENCE)
+			|| Util.isElement(node,XDConstants.XDEF32_NS_URI, XdNames.SEQUENCE);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -108,7 +115,9 @@ public final class XdUtils {
 		return Util.isElement(node,
 			XDConstants.XDEF20_NS_URI, XdNames.DECLARATION)
 			|| Util.isElement(node,
-				XDConstants.XDEF31_NS_URI, XdNames.DECLARATION);
+				XDConstants.XDEF31_NS_URI, XdNames.DECLARATION)
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.DECLARATION);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-macro
@@ -121,7 +130,9 @@ public final class XdUtils {
 		return Util.isElement(node,
 			XDConstants.XDEF20_NS_URI, XdNames.MACRO)
 			|| Util.isElement(node,
-				XDConstants.XDEF31_NS_URI, XdNames.MACRO);
+				XDConstants.XDEF31_NS_URI, XdNames.MACRO)
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.MACRO);
 	}
 
 	/** Returns <tt>true</tt> if given model is declared as root model.
@@ -135,8 +146,9 @@ public final class XdUtils {
 		Element defElem = (Element) element.getParentNode();
 		String  roots   = null;
 		try {
-			roots = Util.getAttrValue(defElem, defElem.getNamespaceURI(), XdNames.ROOT);
-		} catch (IllegalArgumentException ex) { /*empty - leaves roots == null*/ }
+			roots = Util.getAttrValue(
+				defElem, defElem.getNamespaceURI(), XdNames.ROOT);
+		} catch (IllegalArgumentException ex) {/*empty - leaves roots==null*/ }
 
 		if (roots == null || roots.length() == 0) {
 			return false;
@@ -186,8 +198,13 @@ public final class XdUtils {
 		if (result != null) {
 			return result;
 		}
-		return Util.getAttrValue(element,
+		result = Util.getAttrValue(element,
 			XDConstants.XDEF31_NS_URI, XdNames.NAME);
+		if (result != null) {
+			return result;
+		}
+		return Util.getAttrValue(element,
+			XDConstants.XDEF32_NS_URI, XdNames.NAME);
 	}
 
 	/** Gets instance of element properties of given element.
@@ -216,6 +233,10 @@ public final class XdUtils {
 		if (textValues.getLength() == 0) {
 			textValues = KXmlUtils.getChildElementsNS(element,
 			XDConstants.XDEF31_NS_URI, XdNames.TEXT);
+		}
+		if (textValues.getLength() == 0) {
+			textValues = KXmlUtils.getChildElementsNS(element,
+			XDConstants.XDEF32_NS_URI, XdNames.TEXT);
 		}
 		//one text value specified
 		if (textValues.getLength() == 1) {
@@ -475,7 +496,8 @@ public final class XdUtils {
 		//TODO: resolve text existence
 		//attribute xd:text is present
 		if (Util.hasAttrDecl(element, XDConstants.XDEF20_NS_URI, XdNames.TEXT)
-			|| Util.hasAttrDecl(element, XDConstants.XDEF31_NS_URI,
+			|| Util.hasAttrDecl(element, XDConstants.XDEF31_NS_URI,XdNames.TEXT)
+			|| Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,
 				XdNames.TEXT)) {
 			return true;
 		}
@@ -483,7 +505,9 @@ public final class XdUtils {
 		return KXmlUtils.getChildElementsNS(element,
 			XDConstants.XDEF20_NS_URI, XdNames.TEXT).getLength() > 0
 			||  KXmlUtils.getChildElementsNS(element,
-				XDConstants.XDEF31_NS_URI, XdNames.TEXT).getLength() > 0;
+				XDConstants.XDEF31_NS_URI, XdNames.TEXT).getLength() > 0
+			||  KXmlUtils.getChildElementsNS(element,
+				XDConstants.XDEF32_NS_URI, XdNames.TEXT).getLength() > 0;
 	}
 
 	/** Returns <tt>true</tt> if given X-definition element declaration contains
@@ -498,7 +522,8 @@ public final class XdUtils {
 			Attr attr = (Attr) attrs.item(i);
 			String attrNS = attr.getNamespaceURI();
 			if (!XDConstants.XDEF20_NS_URI.equals(attrNS)
-				&& !XDConstants.XDEF31_NS_URI.equals(attrNS)) {
+				&& !XDConstants.XDEF31_NS_URI.equals(attrNS)
+				&& !XDConstants.XDEF32_NS_URI.equals(attrNS)) {
 				return true;
 			} else {
 				if (XdNames.ATTR.equals(Util.getAttrLocalName(attr))) {
@@ -522,7 +547,8 @@ public final class XdUtils {
 		for (int i = 0; i < children.getLength(); i++) {
 			Element child = (Element) children.item(i);
 			if (!XDConstants.XDEF20_NS_URI.equals(child.getNamespaceURI())
-				&& !XDConstants.XDEF31_NS_URI.equals(child.getNamespaceURI())) {
+				&& !XDConstants.XDEF31_NS_URI.equals(child.getNamespaceURI())
+				&& !XDConstants.XDEF32_NS_URI.equals(child.getNamespaceURI())) {
 				return true;
 			} else {
 				String elemName = child.getLocalName();
@@ -537,8 +563,8 @@ public final class XdUtils {
 		return false;
 	}
 
-	/** Returns X-definition reference string from given element or <tt>null</tt>
-	 * if given element does not contain reference.
+	/** Returns X-definition reference string from given element
+	 * or <tt>null</tt>if given element does not contain reference.
 	 * @param element element to search for reference.
 	 * @return reference string from given element or <tt>null</tt>
 	 * if given element does not contain reference.
@@ -595,7 +621,7 @@ public final class XdUtils {
 	 * @param elemType1 first element type.
 	 * @param elemType2 second element type.
 	 * @return element type constant from union of given types.
-	 * @throws IllegalArgumentException if any of given type is unknown constant.
+	 * @throws IllegalArgumentException if any of given type is unknown constant
 	 */
 	public static int getElemTypeUnion(int elemType1, int elemType2) {
 		switch (elemType1) {
@@ -701,7 +727,7 @@ public final class XdUtils {
 	 * @param node node to get ancestor <tt>def</tt> element from.
 	 * @return ancestor <tt>def</tt> element.
 	 * @throws NullPointerException if given node is <tt>null</tt>.
-	 * @throws IllegalArgumentException if given node is not a valid X-definition
+	 * @throws IllegalArgumentException if given node is not valid X-definition
 	 * <tt>def</tt> element descendant.
 	 */
 	public static Element getAncestorDef(Node node) {

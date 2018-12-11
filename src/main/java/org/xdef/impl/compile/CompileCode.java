@@ -49,7 +49,6 @@ import org.xdef.impl.code.DefLocale;
  * @author Trojan
  */
 public final class CompileCode extends CompileBase {
-
 	/** Internal stack size. */
 	private final static int STACK_SIZE = 512; //20 for tests is enough!
 

@@ -26,7 +26,6 @@ import org.xdef.impl.XConstants;
  * @author Trojan
  */
 class PreReaderXML extends XmlDefReader implements PreReader {
-
 	/** Actual node */
 	private PNode _actPNode;
 	/** includes. */
@@ -93,14 +92,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					|| (ka = parsedElem.getAttrNS(
 						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null) {
+						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null){
 					projectNS = ka.getValue().trim();
 					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
-						? XConstants.XD20
+						? XConstants.XD20 
 						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						? XConstants.XD31 
-						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						? XConstants.XD32 : 0;
+						? XConstants.XD31 : XConstants.XD32;
 					if (XExtUtils.uri(projectNS).errors()) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
@@ -113,15 +110,13 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						ver = XDConstants.XDEF20_NS_URI.equals(uri)
 							? XConstants.XD20
 							: XDConstants.XDEF31_NS_URI.equals(uri)
-							? XConstants.XD31 
-							: XDConstants.XDEF32_NS_URI.equals(uri)
-							? XConstants.XD32 : 0;
+							? XConstants.XD31 :  XConstants.XD32;
 						projectNS = uri;
 					} else {
 						//Namespace of X-definitions is required
 						error(_actPNode._name, XDEF.XDEF256);
 						projectNS = XDConstants.XDEF31_NS_URI;
-						ver = XConstants.XD32;
+						ver = XConstants.XD31;
 					}
 				}
 				_actPNode._xdVersion = ver;
@@ -527,5 +522,4 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 		return true;
 	}
-
 }

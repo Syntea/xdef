@@ -645,5 +645,4 @@ public class XDParsedScript {
 	public final String getOnExcess() {return _onExcess;}
 
 	public final String getOnIllegalAttr() {return _onIllegalAttr;}
-
 }

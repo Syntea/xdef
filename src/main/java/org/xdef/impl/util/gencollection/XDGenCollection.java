@@ -441,10 +441,22 @@ public class XDGenCollection {
 		return result;
 	}
 
+	/** Add macro to the list.
+	 * @param macro source of macro to be added.
+	 * @param xdUri namespace of X-definition.
+	 * @param defName name of X-definition or null.
+	 * @param macros list of macros.
+	 * @param resolve if true, the macro references are resolved and the macro
+	 * definitions are removed.
+	 */
 	private static void addMacro(final Element macro,
 		final String xdUri,
 		final String defName,
-		final HashMap<String, XScriptMacro> macros) {
+		final HashMap<String, XScriptMacro> macros,
+		final boolean resolve) {
+		if (resolve) {
+			macro.getParentNode().removeChild(macro);
+		}
 		Node macNameNode = macro.getAttributeNodeNS(xdUri, "name");
 		if (macNameNode == null) {
 			macNameNode = macro.getAttributeNode("name");
@@ -486,39 +498,25 @@ public class XDGenCollection {
 				continue;
 			}
 			NodeList nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "macro");
-			for (int j = 0; j < nl1.getLength(); j++) {
+			for (int j = nl1.getLength() - 1; j >= 0 ; j--) {
 				Node n = nl1.item(j);
-				addMacro((Element) n, xdUri, null, macros);
-				if (resolve) {
-					el.removeChild(n);
-				}
-			}
-			nl1 = KXmlUtils.getChildElements(el, "macro");
-			for (int j = 0; j < nl1.getLength(); j++) {
-				Node n = nl1.item(j);
-				addMacro((Element) n, xdUri, null, macros);
-				if (resolve) {
-					el.removeChild(n);
-				}
+				addMacro((Element) n, xdUri, null, macros, resolve);
 			}
 		}
 		// Set macros from xd:def elements (compatibility with version 2.0. 3.1)
 		nl = KXmlUtils.getChildElements(collection);
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element el = (Element) nl.item(i);
+			String xdUri = el.getNamespaceURI();
 			if (!"def".equals(el.getLocalName())
-				|| el.getNamespaceURI() == null){
+				|| xdUri == null){
 				continue;
 			}
-			String xdUri = el.getNamespaceURI();
 			NodeList nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "macro");
 			String defName = getXdefAttr(el, xdUri, "name", false);
-			for (int j = 0; j < nl1.getLength(); j++) {
+			for (int j = nl1.getLength() - 1; j >= 0 ; j--) {
 				Node n = nl1.item(j);
-				addMacro((Element) n, xdUri, defName, macros);
-				if (resolve) {
-					el.removeChild(n);
-				}
+				addMacro((Element) n, xdUri, defName, macros, resolve);
 			}
 			// Set macros from xd:declarations
 			nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "declaration");
@@ -532,12 +530,9 @@ public class XDGenCollection {
 				String s = n1 != null && "local".equals(n1.getNodeValue())
 					? defName : null;
 				NodeList nl2 = KXmlUtils.getChildElementsNS(decl,xdUri,"macro");
-				for (int k = 0; k < nl2.getLength(); k++) {
+				for (int k = nl2.getLength() - 1; k >= 0 ; k--) {
 					Node n = nl2.item(k);
-					addMacro((Element) n, xdUri, s, macros);
-					if (resolve) {
-						decl.removeChild(n);
-					}
+					addMacro((Element) n, xdUri, s, macros, resolve);
 				}
 			}
 		}
@@ -545,30 +540,13 @@ public class XDGenCollection {
 			nl = KXmlUtils.getChildElements(collection);
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element def = (Element) nl.item(i);
-				if (!"def".equals(def.getLocalName())
-					|| def.getNamespaceURI() == null) {
-					continue;
-				}
 				String xdUri = def.getNamespaceURI();
-				NodeList macs =
-					KXmlUtils.getChildElementsNS(def, xdUri, "macro");
-				int len;
-				if (macs != null && (len = macs.getLength()) > 0) {
-					for (int j = 0; j < len; j++) {
-						def.removeChild(macs.item(j));
-					}
+				if (("def".equals(def.getLocalName())
+					|| "declaration".equals(def.getLocalName()))
+					&& xdUri != null) {
+					String defName = getXdefAttr(def, xdUri, "name", false);
+					expandMacros(def, defName, macros);
 				}
-			}
-			nl = KXmlUtils.getChildElements(collection);
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element def = (Element) nl.item(i);
-				if (!"def".equals(def.getLocalName())
-					|| def.getNamespaceURI() == null){
-					continue;
-				}
-				String defName =
-					getXdefAttr(def, def.getNamespaceURI(), "name", false);
-				expandMacros(def, defName, macros);
 			}
 		}
 	}
@@ -1156,7 +1134,7 @@ public class XDGenCollection {
 			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")){
 				return XDConstants.XDEF31_NS_URI;
 			}
-			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")){
+			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")){
 				return XDConstants.XDEF32_NS_URI;
 			}
 			return uri.equals(XDConstants.XDEF20_NS_URI)

@@ -496,12 +496,6 @@ final class ChkParser extends DomBaseHandler {
 		if (_genPositionsX) {
 			mr.scanEndElement();
 		}
-		Node parent = _element;
-		if (parent == null) {
-			parent = _element;
-		}
-		_element = parent==null || parent.getNodeType()==Node.DOCUMENT_NODE
-			? null : (Element) parent;
 		updateLocator();
 	}
 
