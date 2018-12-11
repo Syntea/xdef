@@ -154,13 +154,15 @@ public final class TestUserMethods extends XDTester {
 
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"match {out('m#{p} '); return true;};\n"+
-"init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
-"<xd:macro name='n' p='?'>\n"+
-"${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
-"</xd:macro>\n"+
+"<xd:declaration>\n" +
+"  <xd:macro name='m' p='?'>\n"+
+"    match {out('m#{p} '); return true;};\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <xd:macro name='n' p='?'>\n"+
+"    ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
+"  </xd:macro>\n"+
+"</xd:declaration>\n" +
 " <a xd:script=\"1;${n(p='a')}\">\n"+
 "   <xd:sequence xd:script=\"1;${m(p='SQ')}\">\n"+
 "      <b xd:script=\"1;${n(p='b')}; create from('/a/b')\"/>\n"+

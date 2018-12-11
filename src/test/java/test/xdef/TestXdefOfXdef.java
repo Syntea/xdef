@@ -79,7 +79,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd=\"" + XDEFNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);

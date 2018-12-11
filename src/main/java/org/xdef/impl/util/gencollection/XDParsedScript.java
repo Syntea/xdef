@@ -627,7 +627,7 @@ public class XDParsedScript {
 		final String defName,
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser((byte) 10);
-		sp.setSource(new SBuffer(script), defName, XConstants.XD32);
+		sp.setSource(new SBuffer(script), defName, XConstants.XD20);
 		return new XDParsedScript(sp, isValue);
 	}
 

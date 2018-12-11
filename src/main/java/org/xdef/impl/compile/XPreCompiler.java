@@ -505,11 +505,44 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void chkNestedElements(final PNode pnode) {
 		for (PNode p: pnode._childNodes) {
-			//Nested child elements are not allowed here
-			error(p._name, XDEF.XDEF219);
+			if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName)
+				|| !"macro".equals(p._localName)) {
+				//Nested child elements are not allowed here
+				error(p._name, XDEF.XDEF219);
+			}
 		}
 	}
 
+	private void setMacros(final List<PNode> macros) {
+		for (PNode macro : macros) {
+			chkNestedElements(macro);
+			Map<String, String> params = new TreeMap<String, String>();
+			String def = null;
+			for (PAttr val : macro._attrs) {
+				if ("#def".equals(val._name)) {
+					def = val.getValue().getString();
+					macro._attrs.remove(val);
+					break;
+				}
+			}
+			for (PAttr val : macro._attrs) {
+				params.put(val._name, val._value.getString());
+			}
+			XScriptMacro m = new XScriptMacro(
+				getNameAttr(macro, true, true),
+				def,
+				params,
+				macro._value,
+				getReportWriter());
+			if (_macros.containsKey(m.getName())) {
+				//Macro '&{0}' redefinition
+				Report rep = Report.error(XDEF.XDEF482, m.getName());
+				macro._name.putReport(rep, getReportWriter());
+			} else {
+				_macros.put(m.getName(), m);
+			}
+		}
+	}
 	@Override
 	/** Prepare list of declared macros and expand macro references. */
 	public final void prepareMacros() {
@@ -525,34 +558,44 @@ public class XPreCompiler implements PreCompiler {
 				parseFile((File) o);
 			}
 		}
+		List<PNode> macros = new ArrayList<PNode>();
+		for (PNode xd: _listDecl) {
+			for (PNode pnode : xd._childNodes) {
+				if (pnode._localName.equals("macro")) {
+					macros.add(pnode);
+				}
+			}
+		}
 		for (PNode xd: _xdefPNodes) {
 			String defName = xd._xdef.getName();
-			List<PNode> macros = new ArrayList<PNode>();
-			for (PNode node : xd._childNodes) {
-				if (node._nsindex == 0 && node._localName.equals("macro")) {
-					macros.add(node);
+			PAttr defAttr = new PAttr("#def", new SBuffer(defName), "", -1);
+			defAttr._localName = "#def";
+			for (PNode pnode : xd._childNodes) {
+				if (pnode._nsindex == 0) {
+					if (pnode._localName.equals("macro")) {
+						pnode._attrs.add(defAttr);
+						macros.add(pnode);
+					} else if (pnode._localName.equals("declaration")) {
+						boolean local = false;
+						for (PAttr pa : pnode._attrs) {
+							if ("scope".equals(pa._localName)) {
+								local = "local".equals(pa._value.getString());
+							}
+						}
+						for (PNode x : pnode._childNodes) {
+							if (x._nsindex==0 && "macro".equals(x._localName)) {
+								if (local) {
+									// local mactro
+									x._attrs.add(defAttr);
+								}
+								macros.add(x);
+							}
+						}
+					}
 				}
 			}
-			for (PNode macro : macros) {
-				chkNestedElements(macro);
-				Map<String, String> params = new TreeMap<String, String>();
-				for (PAttr val : macro._attrs) {
-					params.put(val._name, val._value.getString());
-				}
-				XScriptMacro m = new XScriptMacro(
-					getNameAttr(macro, true, true),
-					defName,
-					params,
-					macro._value,
-					getReportWriter());
-				if (_macros.containsKey(m.getName())) {
-					//Macro '&{0}' redefinition
-					Report rep = Report.error(XDEF.XDEF482, m.getName());
-					macro._name.putReport(rep, getReportWriter());
-				} else {
-					_macros.put(m.getName(), m);
-				}
-			}
+			setMacros(macros);
+			macros.clear();
 		}
 		// expand macros
 		ReportWriter reporter = getReportWriter();
