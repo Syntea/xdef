@@ -62,8 +62,6 @@ public class XDGenCollection {
 	private final ArrayList<Element> _thesaurusList;
 	/** List of macro definitions. */
 	private final HashMap<String, XScriptMacro> _macros;
-	/** Actual name space URI of X-definition. */
-//	private String _xdNS;
 
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 
@@ -330,7 +328,7 @@ public class XDGenCollection {
 			if (!XDConstants.XDEF20_NS_URI.equals(uri)
 				&& !XDConstants.XDEF31_NS_URI.equals(uri)
 				&& !XDConstants.XDEF32_NS_URI.equals(uri)) {
-				uri = XDConstants.XDEF32_NS_URI;
+				uri = XDConstants.XDEF20_NS_URI;
 			}
 			if (_collection == null && _doc.getDocumentElement() == null) {
 				genCollection(uri);
@@ -443,6 +441,45 @@ public class XDGenCollection {
 		return result;
 	}
 
+	/** Add macro to the list.
+	 * @param macro source of macro to be added.
+	 * @param xdUri namespace of X-definition.
+	 * @param defName name of X-definition or null.
+	 * @param macros list of macros.
+	 * @param resolve if true, the macro references are resolved and the macro
+	 * definitions are removed.
+	 */
+	private static void addMacro(final Element macro,
+		final String xdUri,
+		final String defName,
+		final HashMap<String, XScriptMacro> macros,
+		final boolean resolve) {
+		if (resolve) {
+			macro.getParentNode().removeChild(macro);
+		}
+		Node macNameNode = macro.getAttributeNodeNS(xdUri, "name");
+		if (macNameNode == null) {
+			macNameNode = macro.getAttributeNode("name");
+		}
+		String macName = macNameNode == null ? "?" : macNameNode.getNodeValue();
+		HashMap<String, String> params = new HashMap<String, String>();
+		NamedNodeMap nm = macro.getAttributes();
+		for (int k = 0; k < nm.getLength(); k++) {
+			Node n = nm.item(k);
+			if (n != macNameNode) {
+				params.put(n.getNodeName(), n.getNodeValue());
+			}
+		}
+		SBuffer v = new SBuffer(KXmlUtils.getTextContent(macro).trim());
+		XScriptMacro m = new XScriptMacro(macName, defName, params, v , null);
+		if (macros.containsKey(m.getName())) {
+			//Macro '&{0}' redefinition
+			throw new SRuntimeException(XDEF.XDEF482, m.getName());
+		} else {
+			macros.put(m.getName(), m);
+		}
+	}
+
 	/** Reads all macros to the table macros. If parameter resolve is specified
 	 * macros are expanded and macro definitions are removed from collection.
 	 * @param collection Collection of X-definitions.
@@ -452,71 +489,67 @@ public class XDGenCollection {
 	private static void processMacros(final Element collection,
 		final HashMap<String, XScriptMacro> macros,
 		final boolean resolve) {
-/**/
-		NodeList nl = collection.getChildNodes();
+		NodeList nl = KXmlUtils.getChildElements(collection);
+		// Set macros from xd:declaration elements (version 3.2)
 		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
-			if (n.getNodeType() != Node.ELEMENT_NODE
-				|| !"def".equals(n.getLocalName())
-				|| n.getNamespaceURI() == null) {
+			Element el = (Element) nl.item(i);
+			String xdUri = el.getNamespaceURI();
+			if (!"declaration".equals(el.getLocalName()) || xdUri == null) {
 				continue;
 			}
-			Element def = (Element) n;
-			String xdUri = def.getNamespaceURI();
-			NodeList macs = KXmlUtils.getChildElementsNS(def, xdUri, "macro");
-			int len;
-			if (macs == null || (len = macs.getLength()) == 0) {
+			NodeList nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "macro");
+			for (int j = nl1.getLength() - 1; j >= 0 ; j--) {
+				Node n = nl1.item(j);
+				addMacro((Element) n, xdUri, null, macros, resolve);
+			}
+		}
+		// Set macros from xd:def elements (compatibility with version 2.0. 3.1)
+		nl = KXmlUtils.getChildElements(collection);
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element el = (Element) nl.item(i);
+			String xdUri = el.getNamespaceURI();
+			if (!"def".equals(el.getLocalName())
+				|| xdUri == null){
 				continue;
 			}
-			String defName = getXdefAttr(def, xdUri, "name", false);
-			for (int j = 0; j < len; j++) {
-				Element macro = (Element) macs.item(j);
-				Node macNameNode = macro.getAttributeNodeNS(xdUri, "name");
-				if (macNameNode == null) {
-					macNameNode = macro.getAttributeNode("name");
+			NodeList nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "macro");
+			String defName = getXdefAttr(el, xdUri, "name", false);
+			for (int j = nl1.getLength() - 1; j >= 0 ; j--) {
+				Node n = nl1.item(j);
+				addMacro((Element) n, xdUri, defName, macros, resolve);
+			}
+			// Set macros from xd:declarations
+			nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "declaration");
+			for (int j = 0; j < nl1.getLength(); j++) {
+				Element decl = (Element) nl1.item(j);
+				Node n1 = decl.getAttributeNode("scope");
+				if (n1 == null) {
+					n1 = decl.getAttributeNodeNS(xdUri, "scope");
 				}
-				String macName =
-					macNameNode == null ? "?" : macNameNode.getNodeValue();
-				HashMap<String, String> params = new HashMap<String, String>();
-				NamedNodeMap nm = macro.getAttributes();
-				for (int k = 0; k < nm.getLength(); k++) {
-					if ((n = nm.item(k)) != macNameNode) {
-						params.put(n.getNodeName(), n.getNodeValue());
-					}
-				}
-				SBuffer v = new SBuffer(KXmlUtils.getTextContent(macro).trim());
-				XScriptMacro m =
-						new XScriptMacro(macName, defName, params, v , null);
-				if (macros.containsKey(m.getName())) {
-					//Macro '&{0}' redefinition
-					throw new SRuntimeException(XDEF.XDEF482, m.getName());
-				} else {
-					macros.put(m.getName(), m);
+				// If scope is not local the the name of X-definition is null.
+				String s = n1 != null && "local".equals(n1.getNodeValue())
+					? defName : null;
+				NodeList nl2 = KXmlUtils.getChildElementsNS(decl,xdUri,"macro");
+				for (int k = nl2.getLength() - 1; k >= 0 ; k--) {
+					Node n = nl2.item(k);
+					addMacro((Element) n, xdUri, s, macros, resolve);
 				}
 			}
 		}
 		if (resolve) {
+			nl = KXmlUtils.getChildElements(collection);
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element def = (Element) nl.item(i);
 				String xdUri = def.getNamespaceURI();
-				NodeList macs =
-					KXmlUtils.getChildElementsNS(def, xdUri, "macro");
-				int len;
-				if (macs != null && (len = macs.getLength()) > 0) {
-					for (int j = 0; j < len; j++) {
-						def.removeChild(macs.item(j));
-					}
+				if (("def".equals(def.getLocalName())
+					|| "declaration".equals(def.getLocalName()))
+					&& xdUri != null) {
+					String defName = getXdefAttr(def, xdUri, "name", false);
+					expandMacros(def, defName, macros);
 				}
 			}
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element def = (Element) nl.item(i);
-				String defName =
-					getXdefAttr(def, def.getNamespaceURI(), "name", false);
-				expandMacros(def, defName, macros);
-			}
 		}
-/**/
-		}
+	}
 
 	/** Expand all macros in given element and its attributes and child nodes.
 	 * @param el Element in which macros are expanded.
@@ -690,14 +723,16 @@ public class XDGenCollection {
 							el.removeChild(n);
 						}
 					} else {
-						s = canonizeScript(s,
-							defName, removeActions, true);
-						if (s.length() > 0) {
-							Element txtEl = doc.createElementNS(xdUri, "xd:text");
-							txtEl.appendChild(doc.createTextNode(s));
-							el.replaceChild(txtEl, txt);
-						} else {
-							el.removeChild(txt);
+						if (!"macro".equals(el.getLocalName())) {
+							s = canonizeScript(s, defName, removeActions, true);
+							if (s.length() > 0){
+								Element txtEl =
+									doc.createElementNS(xdUri, "xd:text");
+								txtEl.appendChild(doc.createTextNode(s));
+								el.replaceChild(txtEl, txt);
+							} else {
+								el.removeChild(txt);
+							}
 						}
 					}
 				}
@@ -1079,7 +1114,7 @@ public class XDGenCollection {
 		String s = findXDNS(n);
 		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
 			: XDConstants.XDEF31_NS_URI.equals(s) ? XConstants.XD31
-			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32 : 0;
+			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD31 : 0;
 	}
 
 	public final static String getXDNodeNS(final Node n) {
@@ -1093,13 +1128,13 @@ public class XDGenCollection {
 		}
 		String localName = e.getLocalName();
 		if ("collection".equals(localName)) {
-			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
+			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")){
 				return XDConstants.XDEF20_NS_URI;
 			}
-			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
+			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")){
 				return XDConstants.XDEF31_NS_URI;
 			}
-			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
+			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")){
 				return XDConstants.XDEF32_NS_URI;
 			}
 			return uri.equals(XDConstants.XDEF20_NS_URI)
@@ -1204,7 +1239,7 @@ public class XDGenCollection {
 			//XDEF269=X-definition &{0}{'}{' }doesn't exist
 			throw new SRuntimeException(XDEF.XDEF269);
 		}
-		XDPool xp = chkXdef(files);
+		chkXdef(files); // just check
 		XDGenCollection x = new XDGenCollection();
 		x.parse(files);
 		for (int i = 0; i < x._includeList.size(); i++) {

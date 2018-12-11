@@ -1,4 +1,4 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1" 
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
   xd:name = "Test" xd:root = "empty" >
   <empty/>
 </xd:def>

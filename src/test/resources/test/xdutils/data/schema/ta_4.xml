@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <ns1:SuborD2A  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
    xmlns:ns1='http://www.syntea.cz/dn/Export/1.0'
-   xsi:schemaLocation='http://www.syntea.cz/dn/Export/1.0 ta.xsd' 
+   xsi:schemaLocation='http://www.syntea.cz/dn/Export/1.0 ta.xsd'
    Davka="1"
    ZoDna="30.06.2010 15:39:11">
-	<ns1:ZaznamDN 
-		DnXMLVersion="1"
-		SeqDnCentrum="1"
-		DnKodUtvarSetri="abcdef"
-		KodNdnZaznamPlatSchval="X">
-		<ns1:DNVerze
-			SeqDnVerze="1"
-			DnCj="a"
-			KodNdnKniha="1234"
-			VerzeRokKniha="1"
-			VerzeCisloKniha="0"
-			KodSednOkres="1234"
-			VerzeOznaceni="a"
-			VerzeDatumCas="30.06.2010 15:39"
-			VerzeDatumCasDo="30.06.2010 15:39"
-			VerzeUzemiUtvar="ab"
-			KodSednVObci="a"
-			KodSednMistoDn="a"
-			KodSednDruhKomunikace="a"
-			KodSednDruhKomunikaceKriz="a"
-			VerzeCisloKomunikace="a"
-			VerzeKm="0"
-			VerzeCisloUzlu1="123"
-			VerzeCisloUzlu2="123"
-			VerzeGPSSirka="1"
-			VerzeGPSDelka="1"
-			VerzePopisMista="TEXTODSTAVEC"
-			VerzeObec="TEXTVETA"
-			KodNdnStavSetreni="a"
-			KodNdnStavEvidence="a"
-			KodNdnKvalEvidence="a"
-			KodNdnKvalUdalost="a"
-			DatumCasUlozeni="30.06.2010 15:39:11">
-			<ns1:Osoba
-				SeqKlient="1"
-				RefKlientVec="1"
-				KodNdnKvalOsoba="a"
-				KodNdnZaznamPlat="A">
-				<ns1:FO
-					FoTitul="titul"
-					FoJmeno="Jmeno"
-					FoPrijmeni="Prijmeni"
-					FoDatumNarozeni="30.05.1980"
-					FoRC="a"
-					KodSednStat="a"
-					KodNdnPohlavi="a"
-					KodNdnKvalUcastnikProvoz="a"
-					KodNdnRoleFo="a"
-					KodNdnTypZraneni="a"
-					FoUcastnikChovaniPopis="TEXTSTRANKA"
-					KodSednSituaceChodce="a"
-					KodSednChovaniChodce="a"/>
-				<ns1:Adresa
-					SeqKlient="1"
-					AdresaObec="a"
-					AdresaUliceDom="a"
-					AdresaPSC="a"
-					AdresaOkres="a"
-					KodSednStat="a"/>
-			</ns1:Osoba>
-		</ns1:DNVerze>
-	</ns1:ZaznamDN>
+    <ns1:ZaznamDN
+        DnXMLVersion="1"
+        SeqDnCentrum="1"
+        DnKodUtvarSetri="abcdef"
+        KodNdnZaznamPlatSchval="X">
+        <ns1:DNVerze
+            SeqDnVerze="1"
+            DnCj="a"
+            KodNdnKniha="1234"
+            VerzeRokKniha="1"
+            VerzeCisloKniha="0"
+            KodSednOkres="1234"
+            VerzeOznaceni="a"
+            VerzeDatumCas="30.06.2010 15:39"
+            VerzeDatumCasDo="30.06.2010 15:39"
+            VerzeUzemiUtvar="ab"
+            KodSednVObci="a"
+            KodSednMistoDn="a"
+            KodSednDruhKomunikace="a"
+            KodSednDruhKomunikaceKriz="a"
+            VerzeCisloKomunikace="a"
+            VerzeKm="0"
+            VerzeCisloUzlu1="123"
+            VerzeCisloUzlu2="123"
+            VerzeGPSSirka="1"
+            VerzeGPSDelka="1"
+            VerzePopisMista="TEXTODSTAVEC"
+            VerzeObec="TEXTVETA"
+            KodNdnStavSetreni="a"
+            KodNdnStavEvidence="a"
+            KodNdnKvalEvidence="a"
+            KodNdnKvalUdalost="a"
+            DatumCasUlozeni="30.06.2010 15:39:11">
+            <ns1:Osoba
+                SeqKlient="1"
+                RefKlientVec="1"
+                KodNdnKvalOsoba="a"
+                KodNdnZaznamPlat="A">
+                <ns1:FO
+                    FoTitul="titul"
+                    FoJmeno="Jmeno"
+                    FoPrijmeni="Prijmeni"
+                    FoDatumNarozeni="30.05.1980"
+                    FoRC="a"
+                    KodSednStat="a"
+                    KodNdnPohlavi="a"
+                    KodNdnKvalUcastnikProvoz="a"
+                    KodNdnRoleFo="a"
+                    KodNdnTypZraneni="a"
+                    FoUcastnikChovaniPopis="TEXTSTRANKA"
+                    KodSednSituaceChodce="a"
+                    KodSednChovaniChodce="a"/>
+                <ns1:Adresa
+                    SeqKlient="1"
+                    AdresaObec="a"
+                    AdresaUliceDom="a"
+                    AdresaPSC="a"
+                    AdresaOkres="a"
+                    KodSednStat="a"/>
+            </ns1:Osoba>
+        </ns1:DNVerze>
+    </ns1:ZaznamDN>
 </ns1:SuborD2A>

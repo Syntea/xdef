@@ -43,7 +43,7 @@ public final class XScriptMacro {
 		SBuffer ibody = body == null ? new SBuffer("") : body;
 		ReportWriter rwi =
 			reporter == null ? new ArrayReporter() : reporter;
-		_name = (defName + '#' + name).intern();
+		_name = (defName != null ? defName + '#' + name : name).intern();
 		int numParams = params.size();
 		_paramNames = new ArrayList<String>(params.keySet());
 		_paramValues = new String[numParams];

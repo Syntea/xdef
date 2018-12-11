@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Metanamespace of XDefinition: "METAXD" is 3.2 -->
-<xd:def xmlns:xd  = "META"
+<!-- Metanamespace of XDefinition: "METAXD" is 3.1 -->
+<xd:def xmlns:xd  = "METAXD"
+  xmlns:w         = "http://www.org.xdef/3.2"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.org.xdef/3.2"
-  xmlns:w         = "http://www.org.xdef/3.2"
-  w:metaNamespace = "META"
-  xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection 
+  w:metaNamespace = "METAXD"
+  xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection
                      | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
                      | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection" >
 
@@ -38,7 +38,7 @@
   type languageId XDScript.rule('LanguageId');
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Thesaurus');
-	
+
   /** Check element name and namespace URI (used in the match section) */
   boolean xdName(String name) {
     return getElementLocalName() EQ name AND getNamespaceURI() EQ NS;
@@ -114,7 +114,7 @@ DecimalInteger ::= ("_"* Digit+)+ ("_")*
 IntegerLiteral ::= (("0" [Dd])? DecimalInteger
   | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $rule
   /* Inside a number specification it is possible to insert the character "_".
-    This character does not influence the value of the number, it just makes 
+    This character does not influence the value of the number, it just makes
     a number more readable. E.g. the number 123456789 you can be written
     as 123_456_789 (or 0x0f123456 as 0x0f_12_34_56). */
 
@@ -170,10 +170,10 @@ RootSpecification ::= XPosition | "*"
 
 ExternalType ::= QualifiedIdentifier (S?"[" S? "]")?
 
-MethodListItem ::= ExternalType S? 
+MethodListItem ::= ExternalType S?
   QualifiedIdentifier S? "(" S? MethodListItemParamList? S? ")" S?
   ("as" S? Identifier)?
-  
+
 MethodListItemParamList ::= ExternalType
   (S? "," S? QualifiedIdentifier (S?"[" S? "]")? )*
 
@@ -275,13 +275,13 @@ ParentalExpression ::= S? "(" S? Expression S? ")" S?
 
 StatementExpression ::= Expression
 
-/******************************************************************************/ 
+/******************************************************************************/
 /* Script statement                                                           */
 /******************************************************************************/
 
 Statement ::= S? (Statement1 | Statement2)
 
-Statement1 ::= (Block | SwitchStatement | TryStatement) 
+Statement1 ::= (Block | SwitchStatement | TryStatement)
 
 Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement
   | ReturnStatement | ThrowStatement | BreakStatement | ContinueStatement
@@ -293,14 +293,14 @@ EmptyStatement ::= ";"
 StatementSequence ::= (S? VariableDeclaration S? ";" S? | Statement)*
 
 Block ::= "{" StatementSequence S? "}"
- 
+
 SimpleStatement ::= S? (Statement1 | (Statement2? S? ";" S?)) | EmptyStatement
 
 IfStatement ::=
   "if" ParentalExpression SimpleStatement (S? "else" S? SimpleStatement)?
   /* Result of ParentalExpression must be boolean. */
 
-ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S? 
+ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S?
   ForBooleanExpression? S? ";" S? ForStep? S? ")" S? SimpleStatement
 
 ForBooleanExpression ::= $rule Expression
@@ -341,7 +341,7 @@ NewException ::= "new" S? $rule "Exception" S? "(" S? (Expression S?)? ")"
 TryStatement ::= "try" S? $rule "{" S? StatementSequence S? "}"
   S? CatchStatement
 
-CatchStatement ::= 
+CatchStatement ::=
   "catch" S? $rule "(" S? "Exception" S?  Identifier S? ")" S?
   "{" S? StatementSequence S? "}"
 
@@ -417,7 +417,7 @@ AttributeScript ::= (ValueExecutivePart* S?)?
 
 ValueScript ::= (ValueExecutivePart* S?)?
 
-ValueExecutivePart ::= "$$$script:"? S? 
+ValueExecutivePart ::= "$$$script:"? S?
   (ValueValidationSection | ValueInitSection | ValueOnTrueSection
   | ValueOnErrorSection | ValueOnAbsenceSection | ValueDefaultSection
   | ValueCreateSection | ValueFinallySection | ValueMatchSection
@@ -487,16 +487,16 @@ ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
   | ElementOnAbsenceSection | ElementOnExcessSection | ElementCreateSection
   | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
   | ElementOnStartSection | ElementStructureCompare | ";")
-  
-  
-  /* Each item can be specified only once. 
+
+
+  /* Each item can be specified only once.
    * If the occurrence is not specified, the implicite value is "required" */
 
 TemplateSection ::= "template"
 
-ElementVarSection ::= "var" S? 
+ElementVarSection ::= "var" S?
   (("{"(S? ElementVarSectionItem S?)* "}") | ElementVarSectionItem S?)
-  
+
 ElementVarSectionItem ::= TypeDeclaration | VariableDeclaration S? ";"  | S? ";"
 
 ElementInitSection ::= "init" S? Statement?
@@ -512,7 +512,7 @@ ElementOnAbsenceSection ::= "onAbsence" S? Statement?
 
 ElementCreateSection ::= "create" ElementCreateCode
 
-ElementCreateCode ::= S? (Expression | ExplicitCode) S? 
+ElementCreateCode ::= S? (Expression | ExplicitCode) S?
   /* Expression nebo ExplicitCode must return value of Container or Element. */
 
 ElementFinallySection ::= "finally" S? Statement?
@@ -582,7 +582,7 @@ BNFRuleName ::= RawIdentifier
 
 BNFDefinedMethodName ::= "$" (BNFRuleName | Digit+)
 
-BNFRuleDecl ::= S? BNFRuleName S? "::=" S? 
+BNFRuleDecl ::= S? BNFRuleName S? "::=" S?
 
 BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
 
@@ -594,7 +594,7 @@ BNFMethodparameters ::= "(" S?
 
 BNFMethodparameter ::= Digit+ | BNFTerminalSymbol
 
-BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"' 
+BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"'
   | (BNFHexaCharacter (S? BNFHexaCharacter)* )
 
 BNFHexaCharacter ::= "#" HexaDigit+
@@ -605,7 +605,7 @@ BNFRule ::= BNFRuleDecl BNFExpression
 
 BNFQuantifier ::= S? ("+" | "*" | "?" | BNFExplicitQuantifier)
 
-BNFExplicitQuantifier ::= "{" S? Digit+ (S? "," S? Digit+)? S? "}" 
+BNFExplicitQuantifier ::= "{" S? Digit+ (S? "," S? Digit+)? S? "}"
 
 BNFSet ::= "[" ("^"? Char - "]")* "]" BNFQuantifier?
 
@@ -614,15 +614,15 @@ BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference) BNFQuantifier?
 
 BNFParentalExpr ::= "(" S? BNFExpr S? ")" S? BNFQuantifier?
 
-BNFSequence ::= BNFTerm (S? BNFTerm)* 
+BNFSequence ::= BNFTerm (S? BNFTerm)*
 
 BNFRestriction ::= BNFSequence (S? "-" S? BNFTerm)?
 
 BNFExpr ::= BNFRestriction (S? "|" S? BNFRestriction)*
 
-BNFExpression ::= (BNFExpr S?)+ 
+BNFExpression ::= (BNFExpr S?)+
 
-/******************************************************************************/ 
+/******************************************************************************/
 /* XComponent                                                                 */
 /******************************************************************************/
 

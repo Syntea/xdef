@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1250"?>
 
-<SouborD3A Davka="606/1" ZeDne="20050722150026" 
-	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+<SouborD3A Davka="606/1" ZeDne="20050722150026"
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:noNamespaceSchemaLocation='D3A.xsd'>
 
 <InfoPrilohaPDN SeqRec="1311"
@@ -32,65 +32,65 @@
             CisloDN="12345"
             CJ="AAA-1234/BB-2005-124"
             DatumCasOznameni="22.03.2005 16:30"
-            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ"
+            NazevDN="DOPRAVNďż˝ NEHODA BEZ ZRANďż˝Nďż˝"
             Zpracovatel="NPRAP. BC. Venda KLAUS"/>
   <Rozhodnuti DatumRozhodnuti="22.07.2005">
-    Odloženo dle § 58 odst. 3 písm. b) zákona č. 200/1990 Sb. o přestupcích
-    ve znění pozdějších předpisů
+    Odloďż˝eno dle ďż˝ 58 odst. 3 pďż˝sm. b) zďż˝kona ďż˝. 200/1990 Sb. o pďż˝estupcďż˝ch
+    ve znďż˝nďż˝ pozdďż˝jďż˝ďż˝ch pďż˝edpisďż˝
   </Rozhodnuti>
   <Vyliceni>
-    Dne 22. března 2005 v 13:11 hodin řídil dosud neztotožněný řidič
-    nezjištěné nákladní vozidlo couval
-    s ním podél nákladové rampy, nevěnoval se plně řízení
-    vozidla, přehlédl za sebou rozvodnou skříň a pravou zadní částí
-    do ní narazil do jejího krytu a poškodil jej. Při nehodě vznikla
-    hmotná škoda rozvodné skříni. Neztotožněný řidič po nehodě z
-    místa odjel aniž by nehodu ohlásil. Ke zranění osob nedošlo.
-    Dechová zkouška nebyla provedena. Technická závada, jako příčina
-    dopravní nehody, nebyla na místě ohledáním zjištěna ani uplatněna.
-    Nehoda zaznamenána kamerovým systémem, ze záznamu však
+    Dne 22. bďż˝ezna 2005 v 13:11 hodin ďż˝ďż˝dil dosud neztotoďż˝nďż˝nďż˝ ďż˝idiďż˝
+    nezjiďż˝tďż˝nďż˝ nďż˝kladnďż˝ vozidlo couval
+    s nďż˝m podďż˝l nďż˝kladovďż˝ rampy, nevďż˝noval se plnďż˝ ďż˝ďż˝zenďż˝
+    vozidla, pďż˝ehlďż˝dl za sebou rozvodnou skďż˝ďż˝ďż˝ a pravou zadnďż˝ ďż˝ďż˝stďż˝
+    do nďż˝ narazil do jejďż˝ho krytu a poďż˝kodil jej. Pďż˝i nehodďż˝ vznikla
+    hmotnďż˝ ďż˝koda rozvodnďż˝ skďż˝ďż˝ni. Neztotoďż˝nďż˝nďż˝ ďż˝idiďż˝ po nehodďż˝ z
+    mďż˝sta odjel aniďż˝ by nehodu ohlďż˝sil. Ke zranďż˝nďż˝ osob nedoďż˝lo.
+    Dechovďż˝ zkouďż˝ka nebyla provedena. Technickďż˝ zďż˝vada, jako pďż˝ďż˝ďż˝ina
+    dopravnďż˝ nehody, nebyla na mďż˝stďż˝ ohledďż˝nďż˝m zjiďż˝tďż˝na ani uplatnďż˝na.
+    Nehoda zaznamenďż˝na kamerovďż˝m systďż˝mem, ze zďż˝znamu vďż˝ak
     nelze zjistit typ a ani reg. zn. vozidla pachatele..
   </Vyliceni>
   <ObjStranka DatumCasDN="22.03.2005 13:11"
               Okres="VELKY KOCOURKOV 4"
               Obec="VELKY KOCOURKOV 4"
-              Ulice="MALÁ"
+              Ulice="MALďż˝"
               CisloPopisne="19"
               CelkovaSkodaKc="10000"
-              HlavniPricina="ZPŮSOB JÍZDY"
+              HlavniPricina="ZPďż˝SOB Jďż˝ZDY"
               Pricina="508">
     <Misto>
-      VELKY KOCOURKOV 4, ulice MALÁ 19 - účelová komunikace, nákladová
-      rampa OC Chodov ( souřadnice GPS -123456,200/-999999,470 )
+      VELKY KOCOURKOV 4, ulice MALďż˝ 19 - ďż˝ďż˝elovďż˝ komunikace, nďż˝kladovďż˝
+      rampa OC Chodov ( souďż˝adnice GPS -123456,200/-999999,470 )
     </Misto>
   </ObjStranka>
   <Vozidlo OznSegmentu="1"
-           DruhVozidla="nezjištěno, řidič ujel"/>
+           DruhVozidla="nezjiďż˝tďż˝no, ďż˝idiďż˝ ujel"/>
   <Predmet OznSegmentu="P-1"
-           NazevPredmetu="rozvodná skříň -"
-           DruhPredmetu="rozvodná skříň">
+           NazevPredmetu="rozvodnďż˝ skďż˝ďż˝ďż˝ -"
+           DruhPredmetu="rozvodnďż˝ skďż˝ďż˝ďż˝">
     <Skoda Kc="10000">
-      uražený plastový kryt
+      uraďż˝enďż˝ plastovďż˝ kryt
     </Skoda>
     <Vlastnik>
-      OC Chodov, Roztylská č. 2321/19, PSČ 123 00, VELKY KOCOURKOV 4, stát:
-      ČR
+      OC Chodov, Roztylskďż˝ ďż˝. 2321/19, PSďż˝ 123 00, VELKY KOCOURKOV 4, stďż˝t:
+      ďż˝R
     </Vlastnik>
   </Predmet>
   <Ucastnik OznSegmentu="P-1"
-            TypUcastnika="majitel (právnická osoba)"
-            Poskozeny="Poškozený">
+            TypUcastnika="majitel (prďż˝vnickďż˝ osoba)"
+            Poskozeny="Poďż˝kozenďż˝">
     <Firma NazevFirmy="Firma">
-      <Sidlo Ulice="MALÁ"
+      <Sidlo Ulice="MALďż˝"
              CisloOrientacni="19"
              CisloPopisne="2321"
              Obec="VELKY KOCOURKOV 4"
              PSC="123 00"
              Okres="VELKY KOCOURKOV 4"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Firma>
     <Vazba>
-      rozvodná skříň
+      rozvodnďż˝ skďż˝ďż˝ďż˝
     </Vazba>
   </Ucastnik>
 </InfoZaznamPDN>
@@ -101,48 +101,48 @@
             CisloDN="12345"
             CJ="AAA-1234/BB-2005-124"
             DatumCasOznameni="15.07.2005 15:11"
-            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ"
+            NazevDN="DOPRAVNďż˝ NEHODA BEZ ZRANďż˝Nďż˝"
             Zpracovatel="NPRAP. Venda KLAUS"/>
   <Rozhodnuti DatumRozhodnuti="21.07.2005">
-    Rozhodnutí nabylo právní moci
+    Rozhodnutďż˝ nabylo prďż˝vnďż˝ moci
   </Rozhodnuti>
   <Vyliceni>
-    Dne 15. července 2005 v 15:10 hod.řídil řidič vozidlo Š Octavia 
-    ulici Malá vjel na tramvajový pás a zachytil levou částí
-    svého vozidla o pravou přední část předního vozu tramvaje linky.
-    na vozidlech. Dechová zkouška na alkohol byla provedena přístrojem
-    DRÄGER, její výsledek byl negativní. Ke zranění osob nedošlo.
-    Technická závada, jako příčina dopravní nehody, nebyla na místě
-    ohledáním zjištěna ani uplatněna. Vznikla hmotná škoda na vozidle
-    Škoda Octavia a na předním voze tramvaje.
+    Dne 15. ďż˝ervence 2005 v 15:10 hod.ďż˝ďż˝dil ďż˝idiďż˝ vozidlo ďż˝ Octavia
+    ulici Malďż˝ vjel na tramvajovďż˝ pďż˝s a zachytil levou ďż˝ďż˝stďż˝
+    svďż˝ho vozidla o pravou pďż˝ednďż˝ ďż˝ďż˝st pďż˝ednďż˝ho vozu tramvaje linky.
+    na vozidlech. Dechovďż˝ zkouďż˝ka na alkohol byla provedena pďż˝ďż˝strojem
+    DRďż˝GER, jejďż˝ vďż˝sledek byl negativnďż˝. Ke zranďż˝nďż˝ osob nedoďż˝lo.
+    Technickďż˝ zďż˝vada, jako pďż˝ďż˝ďż˝ina dopravnďż˝ nehody, nebyla na mďż˝stďż˝
+    ohledďż˝nďż˝m zjiďż˝tďż˝na ani uplatnďż˝na. Vznikla hmotnďż˝ ďż˝koda na vozidle
+    ďż˝koda Octavia a na pďż˝ednďż˝m voze tramvaje.
   </Vyliceni>
   <ObjStranka DatumCasDN="15.07.2005 15:10"
               Okres="VELKY KOCOURKOV 3"
               Obec="VELKY KOCOURKOV 3"
-              Ulice="MALÁ"
+              Ulice="MALďż˝"
               CelkovaSkodaKc="40000"
-              HlavniPricina="ZPŮSOB JÍZDY"
+              HlavniPricina="ZPďż˝SOB Jďż˝ZDY"
               Pricina="508">
     <Misto>
-      VELKY KOCOURKOV 3, křižovatka ulic JIČínská x Vinohradská
+      VELKY KOCOURKOV 3, kďż˝iďż˝ovatka ulic JIďż˝ďż˝nskďż˝ x Vinohradskďż˝
     </Misto>
   </ObjStranka>
   <Vozidlo OznSegmentu="1"
-           DruhVozidla="osobní automobil"
+           DruhVozidla="osobnďż˝ automobil"
            SPZ="1X123456"
            MPZ="CZ"
            VIN="ABCCS123456789012"
-           ZnackaVozidla="ŠKODA"
+           ZnackaVozidla="ďż˝KODA"
            TypVozidla="OCTAVIA 1Z"
            RokVyroby="2005"
-           PlatnostSTK="platná"
+           PlatnostSTK="platnďż˝"
            MesicSTKDo="02/2009">
     <Skoda Kc="20000">
-      levý bok, levé přední dveře, levý přední blatník,
+      levďż˝ bok, levďż˝ pďż˝ednďż˝ dveďż˝e, levďż˝ pďż˝ednďż˝ blatnďż˝k,
     </Skoda>
     <Drzitel>
-      LEASE PLAN ČESKÁ REPUBLIKA ,S.R.O., IČO: 12345678, Pekařská
-      č. 14, PSČ 123 00, VELKY KOCOURKOV 5, stát: ČR
+      LEASE PLAN ďż˝ESKďż˝ REPUBLIKA ,S.R.O., Iďż˝O: 12345678, Pekaďż˝skďż˝
+      ďż˝. 14, PSďż˝ 123 00, VELKY KOCOURKOV 5, stďż˝t: ďż˝R
     </Drzitel>
   </Vozidlo>
   <Tramvaj OznSegmentu="2"
@@ -150,20 +150,20 @@
            LinkaPoradi="3"
            EvidCislo="8512"
            TypVozidla="8513"
-           StavBrzd="dobrý"
+           StavBrzd="dobrďż˝"
            KodPojistitele="0010"
            CisloDokladuPojisteni="123456789"
            DruhVozidla="tramvaj">
     <Skoda Kc="20000">
-      pravý bok předního vozu odřený lak ,
+      pravďż˝ bok pďż˝ednďż˝ho vozu odďż˝enďż˝ lak ,
     </Skoda>
     <Vlastnik>
-      Dopravní podnik hl. m Prahy A.S., IČO: 12345678, 217 č. 42,
-      PSČ 123 00, SOKOLOVSKÁ, stát: ČR
+      Dopravnďż˝ podnik hl. m Prahy A.S., Iďż˝O: 12345678, 217 ďż˝. 42,
+      PSďż˝ 123 00, SOKOLOVSKďż˝, stďż˝t: ďż˝R
     </Vlastnik>
   </Tramvaj>
   <Ucastnik OznSegmentu="1-1"
-            TypUcastnika="řidič"
+            TypUcastnika="ďż˝idiďż˝"
             PraxeRizeni="25"
             PokutaKc="500"
             PokutaZapl="nezaplacena"
@@ -174,95 +174,95 @@
            Pohlavi="M"
            DatumNarozeni="29.08.1977"
            MistoNarozeni="KOCOURKOV"
-           StatNarozeni="ČESKÁ REPUBLIKA"
-           StatniPrislusnost="ČESKÁ REPUBLIKA">
-      <Pobyt Ulice="MALÁ"
+           StatNarozeni="ďż˝ESKďż˝ REPUBLIKA"
+           StatniPrislusnost="ďż˝ESKďż˝ REPUBLIKA">
+      <Pobyt Ulice="MALďż˝"
              CisloOrientacni="8"
              CisloPopisne="231"
              Obec="VELKY KOCOURKOV 6"
              PSC="123 00"
              Okres="VELKY KOCOURKOV 6"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Osoba>
-    <Doklad TypDokladu="občanský průkaz"
+    <Doklad TypDokladu="obďż˝anskďż˝ prďż˝kaz"
             CisloDokladu="123456789"
             DatumVydani="26.10.2005"
             MistoVydani="VELKY KOCOURKOV 6"
-            StatVydani="ČESKÁ REPUBLIKA"/>
-    <Doklad TypDokladu="řidičský průkaz"
+            StatVydani="ďż˝ESKďż˝ REPUBLIKA"/>
+    <Doklad TypDokladu="ďż˝idiďż˝skďż˝ prďż˝kaz"
             Opravneni="A B C T"
             CisloDokladu="123456789"
-            StatVydani="ČESKÁ REPUBLIKA"/>
+            StatVydani="ďż˝ESKďż˝ REPUBLIKA"/>
     <PoruseniZakProvoz>
-      § 4 písm. a), § 4 písm. b), § 13 odst. 2
+      ďż˝ 4 pďż˝sm. a), ďż˝ 4 pďż˝sm. b), ďż˝ 13 odst. 2
     </PoruseniZakProvoz>
     <PoruseniZakPrest>
-      § 22 odst.1 písm. l) zákona č. 200/1990 Sb. o přestupcích
+      ďż˝ 22 odst.1 pďż˝sm. l) zďż˝kona ďż˝. 200/1990 Sb. o pďż˝estupcďż˝ch
     </PoruseniZakPrest>
     <Vazba>
-      osobní automobil - ŠKODA OCTAVIA
+      osobnďż˝ automobil - ďż˝KODA OCTAVIA
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="1-2"
-            TypUcastnika="vlastník (právnická osoba)"
-            Poskozeny="Poškozený">
+            TypUcastnika="vlastnďż˝k (prďż˝vnickďż˝ osoba)"
+            Poskozeny="Poďż˝kozenďż˝">
     <Firma NazevFirmy="Firma"
            IC="123456">
-      <Sidlo Ulice="MALÁ"
+      <Sidlo Ulice="MALďż˝"
              CisloPopisne="14"
              Obec="VELKY KOCOURKOV 5"
              PSC="123 00"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Firma>
     <Vazba>
-      osobní automobil - ŠKODA OCTAVIA
+      osobnďż˝ automobil - ďż˝KODA OCTAVIA
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-1"
-            TypUcastnika="řidič"
+            TypUcastnika="ďż˝idiďż˝"
             PraxeRizeni="20"
-            Poskozeny="Poškozený">
+            Poskozeny="Poďż˝kozenďż˝">
     <Osoba Jmeno="Milan"
            Prijmeni="NOVAK"
            RC="770123/180"
            Pohlavi="M"
            DatumNarozeni="23.01.1977"
            MistoNarozeni="KOCOURKOV 7"
-           StatNarozeni="ČESKÁ REPUBLIKA"
-           StatniPrislusnost="ČESKÁ REPUBLIKA">
-      <Pobyt Ulice="MALÁ"
+           StatNarozeni="ďż˝ESKďż˝ REPUBLIKA"
+           StatniPrislusnost="ďż˝ESKďż˝ REPUBLIKA">
+      <Pobyt Ulice="MALďż˝"
              CisloPopisne="460"
              Obec="VELKY KOCOURKOV 9"
              PSC="123 00"
              Okres="VELKY KOCOURKOV 9"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Osoba>
-    <Doklad TypDokladu="občanský průkaz"
+    <Doklad TypDokladu="obďż˝anskďż˝ prďż˝kaz"
             CisloDokladu="123456789"
             DatumVydani="04.01.2005"
             MistoVydani="VELKY KOCOURKOV 18"
-            StatVydani="ČESKÁ REPUBLIKA"/>
-    <Doklad TypDokladu="řidičský průkaz"
+            StatVydani="ďż˝ESKďż˝ REPUBLIKA"/>
+    <Doklad TypDokladu="ďż˝idiďż˝skďż˝ prďż˝kaz"
             Opravneni="A18 A1 A21 B"
             CisloDokladu="123456789"
             MistoVydani="VELKY KOCOURKOV"
-            StatVydani="ČESKÁ REPUBLIKA"/>
-    <Doklad TypDokladu="Povolení k řízení drážních vozidel"
+            StatVydani="ďż˝ESKďż˝ REPUBLIKA"/>
+    <Doklad TypDokladu="Povolenďż˝ k ďż˝ďż˝zenďż˝ drďż˝nďż˝ch vozidel"
             CisloDokladu="123456789"/>
     <Vazba>
       tramvaj
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-2"
-            TypUcastnika="vlastník (právnická osoba)"
-            Poskozeny="Poškozený">
+            TypUcastnika="vlastnďż˝k (prďż˝vnickďż˝ osoba)"
+            Poskozeny="Poďż˝kozenďż˝">
     <Firma NazevFirmy="Firma"
            IC="123456">
-      <Sidlo Ulice="MALÁ"
+      <Sidlo Ulice="MALďż˝"
              CisloPopisne="42"
-             Obec="SOKOLOVSKÁ"
+             Obec="SOKOLOVSKďż˝"
              PSC="123 00"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Firma>
     <Vazba>
       tramvaj
@@ -287,75 +287,75 @@
             CisloDN="12345"
             CJ="AAA-1234/BB-2005-124"
             DatumCasOznameni="18.07.2005 16:25"
-            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANĚNÍ"
+            NazevDN="DOPRAVNďż˝ NEHODA BEZ ZRANďż˝Nďż˝"
             Zpracovatel="NPRAP. Venda KLAUS"/>
   <Rozhodnuti>
-    Věc je v šetření - o pachateli přestupku resp. TČ nebylo rozhodnuto
+    Vďż˝c je v ďż˝etďż˝enďż˝ - o pachateli pďż˝estupku resp. Tďż˝ nebylo rozhodnuto
   </Rozhodnuti>
   <Vyliceni>
-    K dopravní nehodě došlo v době od 18. července 2005 07:00 hod.
-    do 18. července 2005 16:20 hod., kdy v uvedené době řídil dosud
-    neztotožněný řidič vozidlo, nezjištěné tovární a reg. značky,
-    narazil do zaparkovaného vozidla t.z. Renault Megane, 
-	které zde nepoškozené zaparkoval oznamovatel dopravní nehody
-    Jaroslav. Dosud neztotožněný řidič z místa dopravní nehody
-    odjel aniž by věc oznámil PČR. Došlo k hmotné škodě na vozidle
-    t.z. Renault Megan. Ke zranění osob nedošlo. Dechová
-    zkouška vzhledem k uvedenému neprováděna. Technická závada, jako
-    příčina dopravní nehody, nebyla na místě ohledáním zjištěna ani
-    uplatněna.
+    K dopravnďż˝ nehodďż˝ doďż˝lo v dobďż˝ od 18. ďż˝ervence 2005 07:00 hod.
+    do 18. ďż˝ervence 2005 16:20 hod., kdy v uvedenďż˝ dobďż˝ ďż˝ďż˝dil dosud
+    neztotoďż˝nďż˝nďż˝ ďż˝idiďż˝ vozidlo, nezjiďż˝tďż˝nďż˝ tovďż˝rnďż˝ a reg. znaďż˝ky,
+    narazil do zaparkovanďż˝ho vozidla t.z. Renault Megane,
+    kterďż˝ zde nepoďż˝kozenďż˝ zaparkoval oznamovatel dopravnďż˝ nehody
+    Jaroslav. Dosud neztotoďż˝nďż˝nďż˝ ďż˝idiďż˝ z mďż˝sta dopravnďż˝ nehody
+    odjel aniďż˝ by vďż˝c oznďż˝mil Pďż˝R. Doďż˝lo k hmotnďż˝ ďż˝kodďż˝ na vozidle
+    t.z. Renault Megan. Ke zranďż˝nďż˝ osob nedoďż˝lo. Dechovďż˝
+    zkouďż˝ka vzhledem k uvedenďż˝mu neprovďż˝dďż˝na. Technickďż˝ zďż˝vada, jako
+    pďż˝ďż˝ďż˝ina dopravnďż˝ nehody, nebyla na mďż˝stďż˝ ohledďż˝nďż˝m zjiďż˝tďż˝na ani
+    uplatnďż˝na.
   </Vyliceni>
   <ObjStranka DatumCasDN="18.07.2005 07:00"
               DatumCasDoDN="18.07.2005 16:20"
               Okres="VELKY KOCOURKOV 1"
               Obec="VELKY KOCOURKOV 1"
-              Ulice="MALÁ"
+              Ulice="MALďż˝"
               CisloPopisne="1065/13"
               CelkovaSkodaKc="30000"
-              HlavniPricina="ZPŮSOB JÍZDY"
+              HlavniPricina="ZPďż˝SOB Jďż˝ZDY"
               Pricina="508">
     <Misto>
-      VELKY KOCOURKOV 1 , ulice MALÁ 1065/13 - místní komunikace
-      ( souřadnice GPS -123456,170/-9999999,140 )
+      VELKY KOCOURKOV 1 , ulice MALďż˝ 1065/13 - mďż˝stnďż˝ komunikace
+      ( souďż˝adnice GPS -123456,170/-9999999,140 )
     </Misto>
   </ObjStranka>
   <Vozidlo OznSegmentu="1"
-           DruhVozidla="nezjištěno, řidič ujel"/>
+           DruhVozidla="nezjiďż˝tďż˝no, ďż˝idiďż˝ ujel"/>
   <Vozidlo OznSegmentu="2"
-           DruhVozidla="osobní automobil"
+           DruhVozidla="osobnďż˝ automobil"
            SPZ="1X123456"
            MPZ="CZ"
            VIN="ABCCS123456789012"
            ZnackaVozidla="RENAULT"
            TypVozidla="MEGANE SCENIC N1 JM"
            RokVyroby="2007"
-           PlatnostSTK="platná"
+           PlatnostSTK="platnďż˝"
            MesicSTKDo="09/2011"
            KodPojistitele="0008"
            CisloDokladuPojisteni="123456789">
     <Skoda Kc="30000">
-      LZ blatník, Z nárazník,
+      LZ blatnďż˝k, Z nďż˝raznďż˝k,
     </Skoda>
     <Drzitel>
-      Josef Selichar Setrans, IČO: 12345678, Petýrkova č. 1953/24,
-      PSČ 123 00, VELKY KOCOURKOV 4, stát: ČR
+      Josef Selichar Setrans, Iďż˝O: 12345678, Petďż˝rkova ďż˝. 1953/24,
+      PSďż˝ 123 00, VELKY KOCOURKOV 4, stďż˝t: ďż˝R
     </Drzitel>
   </Vozidlo>
   <Ucastnik OznSegmentu="2-1"
-            TypUcastnika="vlastník (právnická osoba)"
-            Poskozeny="Poškozený">
+            TypUcastnika="vlastnďż˝k (prďż˝vnickďż˝ osoba)"
+            Poskozeny="Poďż˝kozenďż˝">
     <Firma NazevFirmy="Firma"
            IC="123456">
-      <Sidlo Ulice="MALÁ"
+      <Sidlo Ulice="MALďż˝"
              CisloOrientacni="24"
              CisloPopisne="1953"
              Obec="VELKY KOCOURKOV 4"
              PSC="123 00"
              Okres="VELKY KOCOURKOV 4"
-             Stat="ČESKÁ REPUBLIKA"/>
+             Stat="ďż˝ESKďż˝ REPUBLIKA"/>
     </Firma>
     <Vazba>
-      osobní automobil - RENAULT MEGANE SCENIC
+      osobnďż˝ automobil - RENAULT MEGANE SCENIC
     </Vazba>
   </Ucastnik>
   <InfoPojistitel KodPojistitele="0008"

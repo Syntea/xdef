@@ -34,10 +34,6 @@ import org.xdef.impl.XConstants;
  * @author Trojan
  */
 class PreReaderJSON implements PreReader {
-
-//	/** includes. */
-//	private Element _includeElement;
-
 	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
 
@@ -622,7 +618,7 @@ class PreReaderJSON implements PreReader {
 			PAttr pattr = new PAttr(name, sbf, null, 0);
 			if (ndx > 0) {
 				pattr._localName = name.substring(ndx + 1);
-				pattr._nsURI = XDConstants.XDEF32_NS_URI;
+				pattr._nsURI = XDConstants.XDEF31_NS_URI;
 				pattr._nsindex = _pcomp.getNSURIIndex(pattr._nsURI);
 			} else {
 				pattr._localName = name;
@@ -646,8 +642,8 @@ class PreReaderJSON implements PreReader {
 		PNode pn = new PNode(xdPrefix + ":" + localName,
 			spos, parent, (byte) 31, (byte) 10);
 		pn._localName = localName;
-		pn._nsURI = XDConstants.XDEF32_NS_URI;
-		pn._xdVersion = XConstants.XD32;
+		pn._nsURI = XDConstants.XDEF31_NS_URI;
+		pn._xdVersion = XConstants.XD31;
 		return pn;
 	}
 
@@ -906,13 +902,13 @@ class PreReaderJSON implements PreReader {
 					pars = (JMap) jo;
 					js = getJAttr(pars, "xmlns:" + prefix, false);
 					if (js == null
-						|| !XDConstants.XDEF32_NS_URI.equals(js.getString())){
+						|| !XDConstants.XDEF31_NS_URI.equals(js.getString())){
 						throw new RuntimeException("Incorrect namespace: "+js);
 					}
 					//remove this attribute from pars
 					pars.remove(new JString(new SBuffer("xmlns:" + prefix)));
-					pNode._nsURI = XDConstants.XDEF32_NS_URI;
-					pNode._xdVersion = XConstants.XD32;
+					pNode._nsURI = XDConstants.XDEF31_NS_URI;
+					pNode._xdVersion = XConstants.XD31;
 					_pcomp.setURIOnIndex(0, pNode._nsURI);
 					int nsndx = 0;
 					pNode._nsPrefixes.put(prefix, nsndx);
@@ -963,5 +959,4 @@ class PreReaderJSON implements PreReader {
 		}
 		parser.closeReader();
 	}
-
 }

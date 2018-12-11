@@ -12,107 +12,107 @@
          RokDN="2001"
          CisloDN="12345"
          CJ="ABCD-1234/AB-CD-2001"
-         DatumCasOznameni="11.7.2002 6:30" 
-         NazevDN="DOPRAVNÍ NEHODA BEZ ZRANÌNÍ - STØET ZE ZVÌØÍ"
-         Zpracovatel="NSTRŽM. PAVEL NOVAK" />
+         DatumCasOznameni="11.7.2002 6:30"
+         NazevDN="DOPRAVNï¿½ NEHODA BEZ ZRANï¿½Nï¿½ - STï¿½ET ZE ZVï¿½ï¿½ï¿½"
+         Zpracovatel="NSTRï¿½M. PAVEL NOVAK" />
 
       <Rozhodnuti DatumRozhodnuti="11.12.2003">
-         Odloženo dle § 58 odst. 3 písm. b) zákona è. 200/1990 Sb. o pøestupcích
-         ve znìní pozdìjších pøedpisù
+         Odloï¿½eno dle ï¿½ 58 odst. 3 pï¿½sm. b) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
+         ve znï¿½nï¿½ pozdï¿½jï¿½ï¿½ch pï¿½edpisï¿½
       </Rozhodnuti>
 
       <Vyliceni>
-         Dne 10. èervence 2001 v dobì kolem 06:25 hod. jel dosud nezjištìný
-         øidiè s vozidlem BMW na kterém byly namotovány spz: 1S12345 patøící
-         na OA Škoda 120 zelené barvy, v obci Velké ze smìru od obce Lhota.
-         Na námìstí v obci došlo k  proražení PP pneu a následnì je vidìt
-         pøerušovaná døecí stopa od PP disku a zhruba po 400m je vidìt modrá
-         barva na vozovce a dále z tohoto místa pokraèují dvì souvislé stopy
-         od pøedních kol, které konèí v místì nehody, kde øidiè vjel mimo
-         vozovku do živého plotu okrasných keøù, které poškodil. Na místì
-         nalezena pøední reg. zn.  1S23456. Vozidlo BMW bylo nalezeno odstavené
-         na parkovišti v obci Rudlofov pøed Obecním úøadem. Na místì použit
-         služební pes s negativním výsledkem. Vozidlo zajištìno odtahovou
-         službou NOVAK Brno.
-         Technická závada jako pøíèina dopravní nehody nebyla na místì
-         ohledáním zjištìna, ani uplatnìna.
+         Dne 10. ï¿½ervence 2001 v dobï¿½ kolem 06:25 hod. jel dosud nezjiï¿½tï¿½nï¿½
+         ï¿½idiï¿½ s vozidlem BMW na kterï¿½m byly namotovï¿½ny spz: 1S12345 patï¿½ï¿½cï¿½
+         na OA ï¿½koda 120 zelenï¿½ barvy, v obci Velkï¿½ ze smï¿½ru od obce Lhota.
+         Na nï¿½mï¿½stï¿½ v obci doï¿½lo k  proraï¿½enï¿½ PP pneu a nï¿½slednï¿½ je vidï¿½t
+         pï¿½eruï¿½ovanï¿½ dï¿½ecï¿½ stopa od PP disku a zhruba po 400m je vidï¿½t modrï¿½
+         barva na vozovce a dï¿½le z tohoto mï¿½sta pokraï¿½ujï¿½ dvï¿½ souvislï¿½ stopy
+         od pï¿½ednï¿½ch kol, kterï¿½ konï¿½ï¿½ v mï¿½stï¿½ nehody, kde ï¿½idiï¿½ vjel mimo
+         vozovku do ï¿½ivï¿½ho plotu okrasnï¿½ch keï¿½ï¿½, kterï¿½ poï¿½kodil. Na mï¿½stï¿½
+         nalezena pï¿½ednï¿½ reg. zn.  1S23456. Vozidlo BMW bylo nalezeno odstavenï¿½
+         na parkoviï¿½ti v obci Rudlofov pï¿½ed Obecnï¿½m ï¿½ï¿½adem. Na mï¿½stï¿½ pouï¿½it
+         sluï¿½ebnï¿½ pes s negativnï¿½m vï¿½sledkem. Vozidlo zajiï¿½tï¿½no odtahovou
+         sluï¿½bou NOVAK Brno.
+         Technickï¿½ zï¿½vada jako pï¿½ï¿½ï¿½ina dopravnï¿½ nehody nebyla na mï¿½stï¿½
+         ohledï¿½nï¿½m zjiï¿½tï¿½na, ani uplatnï¿½na.
       </Vyliceni>
 
       <ObjStranka
          DatumCasDN="10.6.2001 6:25"
          KodOkresu="0201"
-         Obec="Velká"
-         Ulice="Malá"
+         Obec="Velkï¿½"
+         Ulice="Malï¿½"
          CisloPopisne="123"
          CelkovaSkodaKc="10000"
-         HlavniPricina="ZPÙSOB JÍZDY"
+         HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
          Pricina="508">
 
          <Misto>
-            na  místní komunikaci
+            na  mï¿½stnï¿½ komunikaci
          </Misto>
 
       </ObjStranka>
 
       <Predmet
          OznSegmentu="P-1"
-         NazevPredmetu="okrasné keøe u è.p.175 -   polámané okrasné keøe"
-         DruhPredmetu="okrasné keøe u è.p.175">
+         NazevPredmetu="okrasnï¿½ keï¿½e u ï¿½.p.175 -   polï¿½manï¿½ okrasnï¿½ keï¿½e"
+         DruhPredmetu="okrasnï¿½ keï¿½e u ï¿½.p.175">
 
          <Skoda Kc="10000">
-            
+
          </Skoda>
 
       </Predmet>
       <Ucastnik
          OznSegmentu="1-1"
-         TypUcastnika="øidiè"
+         TypUcastnika="ï¿½idiï¿½"
          PraxeRizeni="18"
          PokutaKc="1000"
          PokutaZapl="nezaplacena"
          Pachatel="Pachatel DN">
 
          <Osoba
-            Jmeno="Zdenìk"
-            Prijmeni="Novák"
+            Jmeno="Zdenï¿½k"
+            Prijmeni="Novï¿½k"
             RC="450112/123"
             Pohlavi="M"
             DatumNarozeni="12.01.45"
-            StatNarozeni="ÈR"
-            StatniPrislusnost="ÈR">
+            StatNarozeni="ï¿½R"
+            StatniPrislusnost="ï¿½R">
 
             <TrvalyPobyt
-               Ulice="VÍTÌZNÁ"
+               Ulice="Vï¿½Tï¿½ZNï¿½"
                CisloPopisne="1166"
                CisloOrientacni="15"
                Obec="LHOTA"
                PSC="123 45"
                Okres="BRNO"
-               Stat="ÈR" />
+               Stat="ï¿½R" />
          </Osoba>
 
-         <Doklad 
-            TypDokladu="obèanský prùkaz"
+         <Doklad
+            TypDokladu="obï¿½anskï¿½ prï¿½kaz"
             CisloDokladu="XY 123456"
-            StatVydani="ÈR" />
+            StatVydani="ï¿½R" />
 
          <Doklad
-            TypDokladu="øidièský prùkaz"
+            TypDokladu="ï¿½idiï¿½skï¿½ prï¿½kaz"
             Opravneni="A B"
             CisloDokladu="AB 123456"
-            MistoVydani="Pøerov"
-            StatVydani="ÈR" />
+            MistoVydani="Pï¿½erov"
+            StatVydani="ï¿½R" />
 
          <PoruseniZakProvoz>
-            § 11 odst. 1
+            ï¿½ 11 odst. 1
          </PoruseniZakProvoz>
 
          <PoruseniZakPrest>
-            § 22 odst.1 písm.f) zákona è. 200/1990 Sb. o pøestupcích
+            ï¿½ 22 odst.1 pï¿½sm.f) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
          </PoruseniZakPrest>
 
          <Vazba>
-            nákladní automobil - SKODA AUTO 308 CDI, RZ - 1A2 1234, MSPZ CZ
+            nï¿½kladnï¿½ automobil - SKODA AUTO 308 CDI, RZ - 1A2 1234, MSPZ CZ
          </Vazba>
 
       </Ucastnik>

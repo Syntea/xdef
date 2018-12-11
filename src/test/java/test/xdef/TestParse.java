@@ -1521,7 +1521,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "a", "<macTest/>", null, strw, null, null);
 			assertEq("m2", strw.toString());
-			// $${m1} -> ${m2} -> out('m2')
+			// macro $${m1} -> ${m2} -> out('m2')
 			xdef =
 "<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 "<macTest xd:script='finally $${m1}; options trimText;'/>\n"+
@@ -1532,7 +1532,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "a", "<macTest/>", null, strw, null, null);
 			assertEq("m2", strw.toString());
-			// empty replacement
+			// macro empty replacement
 			xdef =
 "<xd:def name='a' root='macTest' xmlns:xd='" + XDEFNS + "'>\n"+
 "<macTest xd:script = \"finally out('${m1}'); options trimText;\"/>\n"+
@@ -1543,6 +1543,32 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "a", "<macTest/>", null, strw, null, null);
 			assertEq("m1", strw.toString());
+			// macro in the declaration part
+			xdef =
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:declaration>\n" +
+"  <xd:macro name='a'>'aaa'</xd:macro>\n"+
+"    String s = ${a};\n"+
+"  </xd:declaration>\n" +
+"  <a xd:script=\"finally out(${a}+s)\"/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			strw = new StringWriter();
+			parse(xp, "", "<a/>", null, strw, null, null);
+			assertEq("aaaaaa", strw.toString());
+			xp = compile(new String[] {
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+" <a xd:script=\"finally out(s + ${a})\"/>\n"+
+"</xd:def>",
+"<xd:declaration xmlns:xd='" + XDEFNS + "'>\n" +
+"  <xd:macro name='a'>'aaa'</xd:macro>\n"+
+"  String s = ${a};\n"+
+"</xd:declaration>",
+			});
+			strw = new StringWriter();
+			parse(xp, "", "<a/>", null, strw, null, null);
+			assertEq("aaaaaa", strw.toString());
+			
 			xdef =
 "<xd:def name='a' root='txt' xmlns:xd='" + XDEFNS + "'>\n"+
 "<txt xd:script = \"options trimText;\">\n"+
@@ -1935,6 +1961,8 @@ public final class TestParse extends XDTester {
 			xml = "<foo><bar><bar><bar><bar/></bar></bar></bar></foo>";
 			parse(xp, "", xml, reporter);
 			assertEq(reporter.errorWarnings(), false, reporter.printToString());
+		} catch(Exception ex) {fail(ex);}
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDEFNS + "' root='foo'>\n"+
 "<foo>\n"+

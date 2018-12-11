@@ -2,7 +2,7 @@
 <xd:def  xmlns:xd    ="http://www.syntea.cz/xdef/3.1"
          impl-version="2016/09.0" impl-date="11.09.2016"
          xmlns       ="http://ws.ckp.cz/pis/B1/2016/09"
-		 xd:root     = "Get_NositelPSP | SmlouvyPSP"
+         xd:root     = "Get_NositelPSP | SmlouvyPSP"
          xd:name     ="main">
 
  <!-- Struktury element Body (pozadavky)                    -->
@@ -209,4 +209,3 @@
          KontrolaNositele    ="optional enum('A','N'); onAbsence setText('A')"
  />
 </xd:def>
-

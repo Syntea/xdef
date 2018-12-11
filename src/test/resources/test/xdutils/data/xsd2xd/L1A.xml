@@ -1,102 +1,102 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <SouborL1A Davka="800064" ZeDne="19950722"
-	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:noNamespaceSchemaLocation='L1A.xsd'>
-	<RegistraceSU IdentZaznamu="1234567"
-	CisloSU="1234567"
-	DatumCasSU="199507071800"
-	DatumCasOznameniSU="199507081325"
-	RozhodnaUdalost="A"
-	DatumUcinnosti="199507081330">
-		<Misto>
-			<Adresa Stat="CZ"/>
-		</Misto>
-		<VozidloPojistnika PoradiVozidlaSU="1">
-			<Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
-				<Pojistnik NazevFirmy="FIRMA S.R.O." IC="12345678" StatPrislusnost="CZ">
-					<Adresa Ulice="KRÁTKÁ" CisloDomu="6" Obec="Kotěhůlky" Stat="CZ" PSC="12345"/>
-				</Pojistnik>
-				<VozidloPS>
-					<Vozidlo SPZ="ABC1234" MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="03"/>
-				</VozidloPS>
-			</Smlouva>
-		</VozidloPojistnika>
-		<VozidloUcastnika PoradiVozidlaSU="2">
-			<VozidloPS>
-				<Vozidlo SPZ="ABC1234" MPZ="XXX" DruhVozidla="03"/>
-			</VozidloPS>
-		</VozidloUcastnika>
-	</RegistraceSU>
-	<ZmenaSU IdentZaznamu="1234567"
-	CisloSU="1234567" DatumCasSU="199401300845"
-	DatumCasOznameniSU="199402100000"
-	RozhodnaUdalost="A" 
-	DatumUcinnosti="199507171222">
-		<Misto>
-			<Adresa Stat="XXX"/>
-		</Misto>
-		<VozidloPojistnika PoradiVozidlaSU="1">
-			<Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
-				<Pojistnik NazevFirmy="FIRMA S.R.O." IC="12345678" StatPrislusnost="CZ">
-					<Adresa Ulice="KRÁTKÁ" CisloDomu="286" Obec="Kotěhůlky" Stat="CZ" PSC="12345"/>
-				</Pojistnik>
-				<VozidloPS>
-					<Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="04"/>
-				</VozidloPS>
-			</Smlouva>
-		</VozidloPojistnika>
-		<VozidloUcastnika PoradiVozidlaSU="2">
-			<VozidloPS>
-				<Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" DruhVozidla="10"/>
-			</VozidloPS>
-		</VozidloUcastnika>
-	</ZmenaSU>
-	<ReaktivaceSU IdentZaznamu="1234567"
-	CisloSU="1234567"
-	DatumCasSU="199309112200"
-	DatumCasOznameniSU="199309161313"
-	RozhodnaUdalost="A"
-	DatumUcinnosti="199507211426">
-		<Misto>
-			<Adresa Stat="HR"/>
-		</Misto>
-		<VozidloPojistnika PoradiVozidlaSU="1">
-			<Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
-				<Pojistnik Jmeno="JOSEF" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830" StatPrislusnost="CZ">
-					<Adresa Ulice="KRÁTKÁ" CisloDomu="7" Obec="Kotěhůlky" Stat="CZ" PSC="12345"/>
-				</Pojistnik>
-				<VozidloPS>
-					<Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="03"/>
-				</VozidloPS>
-			</Smlouva>
-		</VozidloPojistnika>
-		<VozidloUcastnika PoradiVozidlaSU="2">
-			<VozidloPS>
-				<Vozidlo MPZ="XXX" DruhVozidla="10"/>
-			</VozidloPS>
-		</VozidloUcastnika>
-	</ReaktivaceSU>
-	<UzavreniSU IdentZaznamu="1234567" CisloSU="21234567" DatumUcinnosti="199507171222" KodDuvoduUzavreni="L"/>
-	<ZruseniSU IdentZaznamu="1" CisloSU="1234567" DatumUcinnosti="199506270000"/>
-	<RegistracePU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199406141030">
-		<Poskozeny Jmeno="VACLAV" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830"/>
-	</RegistracePU>
-	<ReaktivacePU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507211427">
-		<Poskozeny Jmeno="ZVONKO" Prijmeni="NOVAK"/>
-	</ReaktivacePU>
-	<ZmenaPU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507180944">
-		<Poskozeny NazevFirmy="FIRMA S.R.O." IC="12345678"/>
-	</ZmenaPU>
-	<UzavreniPU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199407161125">
-		<Poskozeny Jmeno="VACLAV" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830"/>
-	</UzavreniPU>
-	<Naroky IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507101300">
-		<RezervaPU TypSkody="B" Zmena="5123" Rezerva="5123" Mena="CZK"/>
-		<RezervaPU TypSkody="C" Zmena="98000" Rezerva="98000" Mena="CZK"/>
-		<PlneniPU TypSkody="B" Platba="43020" Vyplaceno="43020" Mena="CZK"/>
-		<PlneniPU TypSkody="B" Platba="5401" Vyplaceno="48421" Mena="CZK"/>
-		<PlneniPU TypSkody="B" Platba="5123" Vyplaceno="53544" Mena="CZK"/>
-		<PlneniPU TypSkody="B" Platba="2355" Vyplaceno="55899" Mena="CZK"/>
-	</Naroky>
-	<ZruseniNaroku IdentZaznamu="12" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199709051354" TypSkody="B" Mena="SKK" />
+    <RegistraceSU IdentZaznamu="1234567"
+    CisloSU="1234567"
+    DatumCasSU="199507071800"
+    DatumCasOznameniSU="199507081325"
+    RozhodnaUdalost="A"
+    DatumUcinnosti="199507081330">
+        <Misto>
+            <Adresa Stat="CZ"/>
+        </Misto>
+        <VozidloPojistnika PoradiVozidlaSU="1">
+            <Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
+                <Pojistnik NazevFirmy="FIRMA S.R.O." IC="12345678" StatPrislusnost="CZ">
+                    <Adresa Ulice="KRďż˝TKďż˝" CisloDomu="6" Obec="Kotďż˝hďż˝lky" Stat="CZ" PSC="12345"/>
+                </Pojistnik>
+                <VozidloPS>
+                    <Vozidlo SPZ="ABC1234" MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="03"/>
+                </VozidloPS>
+            </Smlouva>
+        </VozidloPojistnika>
+        <VozidloUcastnika PoradiVozidlaSU="2">
+            <VozidloPS>
+                <Vozidlo SPZ="ABC1234" MPZ="XXX" DruhVozidla="03"/>
+            </VozidloPS>
+        </VozidloUcastnika>
+    </RegistraceSU>
+    <ZmenaSU IdentZaznamu="1234567"
+    CisloSU="1234567" DatumCasSU="199401300845"
+    DatumCasOznameniSU="199402100000"
+    RozhodnaUdalost="A"
+    DatumUcinnosti="199507171222">
+        <Misto>
+            <Adresa Stat="XXX"/>
+        </Misto>
+        <VozidloPojistnika PoradiVozidlaSU="1">
+            <Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
+                <Pojistnik NazevFirmy="FIRMA S.R.O." IC="12345678" StatPrislusnost="CZ">
+                    <Adresa Ulice="KRďż˝TKďż˝" CisloDomu="286" Obec="Kotďż˝hďż˝lky" Stat="CZ" PSC="12345"/>
+                </Pojistnik>
+                <VozidloPS>
+                    <Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="04"/>
+                </VozidloPS>
+            </Smlouva>
+        </VozidloPojistnika>
+        <VozidloUcastnika PoradiVozidlaSU="2">
+            <VozidloPS>
+                <Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" DruhVozidla="10"/>
+            </VozidloPS>
+        </VozidloUcastnika>
+    </ZmenaSU>
+    <ReaktivaceSU IdentZaznamu="1234567"
+    CisloSU="1234567"
+    DatumCasSU="199309112200"
+    DatumCasOznameniSU="199309161313"
+    RozhodnaUdalost="A"
+    DatumUcinnosti="199507211426">
+        <Misto>
+            <Adresa Stat="HR"/>
+        </Misto>
+        <VozidloPojistnika PoradiVozidlaSU="1">
+            <Smlouva CisloSmlouvy="12345678" PoradiVozidla="1" DruhPojisteni="POV">
+                <Pojistnik Jmeno="JOSEF" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830" StatPrislusnost="CZ">
+                    <Adresa Ulice="KRďż˝TKďż˝" CisloDomu="7" Obec="Kotďż˝hďż˝lky" Stat="CZ" PSC="12345"/>
+                </Pojistnik>
+                <VozidloPS>
+                    <Vozidlo MPZ="XXX" VIN="ABCDEFABCDEF12345" CisloTP="AB123456" DruhVozidla="03"/>
+                </VozidloPS>
+            </Smlouva>
+        </VozidloPojistnika>
+        <VozidloUcastnika PoradiVozidlaSU="2">
+            <VozidloPS>
+                <Vozidlo MPZ="XXX" DruhVozidla="10"/>
+            </VozidloPS>
+        </VozidloUcastnika>
+    </ReaktivaceSU>
+    <UzavreniSU IdentZaznamu="1234567" CisloSU="21234567" DatumUcinnosti="199507171222" KodDuvoduUzavreni="L"/>
+    <ZruseniSU IdentZaznamu="1" CisloSU="1234567" DatumUcinnosti="199506270000"/>
+    <RegistracePU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199406141030">
+        <Poskozeny Jmeno="VACLAV" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830"/>
+    </RegistracePU>
+    <ReaktivacePU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507211427">
+        <Poskozeny Jmeno="ZVONKO" Prijmeni="NOVAK"/>
+    </ReaktivacePU>
+    <ZmenaPU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507180944">
+        <Poskozeny NazevFirmy="FIRMA S.R.O." IC="12345678"/>
+    </ZmenaPU>
+    <UzavreniPU IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199407161125">
+        <Poskozeny Jmeno="VACLAV" Prijmeni="NOVAK" RC="6308301234" DatumNarozeni="19630830"/>
+    </UzavreniPU>
+    <Naroky IdentZaznamu="1234567" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199507101300">
+        <RezervaPU TypSkody="B" Zmena="5123" Rezerva="5123" Mena="CZK"/>
+        <RezervaPU TypSkody="C" Zmena="98000" Rezerva="98000" Mena="CZK"/>
+        <PlneniPU TypSkody="B" Platba="43020" Vyplaceno="43020" Mena="CZK"/>
+        <PlneniPU TypSkody="B" Platba="5401" Vyplaceno="48421" Mena="CZK"/>
+        <PlneniPU TypSkody="B" Platba="5123" Vyplaceno="53544" Mena="CZK"/>
+        <PlneniPU TypSkody="B" Platba="2355" Vyplaceno="55899" Mena="CZK"/>
+    </Naroky>
+    <ZruseniNaroku IdentZaznamu="12" CisloSU="1234567" CisloPU="1234567" DatumUcinnosti="199709051354" TypSkody="B" Mena="SKK" />
 </SouborL1A>

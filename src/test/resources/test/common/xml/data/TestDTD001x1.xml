@@ -4,4 +4,4 @@
 &t1;
 &t2;
 </root>
-<!-- result is error: Attribute "version" must be declared... --> 
+<!-- result is error: Attribute "version" must be declared... -->

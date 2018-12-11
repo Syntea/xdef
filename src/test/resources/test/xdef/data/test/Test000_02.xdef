@@ -3,7 +3,7 @@
 <xd:def xd:name="test1">
  <xd:declaration>
 <![CDATA[
-  external method String test.xdef.Test000.b(XXNode, XDValue[]);	
+  external method String test.xdef.Test000.b(XXNode, XDValue[]);
   Bytes b = new Bytes(16);
   boolean rodneCislo() {
     String s = getText();
@@ -26,7 +26,7 @@
       if (s.substring(i, i + 1) == 'C')
          return true; /*cizinec*/
     }
-	  int n = parseInt(s.substring(i));
+      int n = parseInt(s.substring(i));
       if (s.length() > i + 3) {
         int mod =  n % 10;
         int num = rok*10000000+mesic*100000+den*1000+(n/10);
@@ -58,7 +58,7 @@
          "Error detected by external check method: &{msg}",
          "&{msg}skodaTisice: " + s);
     }
-	  return true;
+      return true;
   }
 
   Element myErr(int code) {
@@ -119,7 +119,7 @@
    <c xd:script = "occurs 1..; finally id2.CLEAR()"
      stamp = "required id3.t.ID()" >
      <d xd:script = "occurs 1.."
-        a1 = "required id1.t.ID()" 
+        a1 = "required id1.t.ID()"
         a2 = "optional id2.t.ID()"/>
      <e a3 = "required id2.t.IDREF()"/>
    </c>

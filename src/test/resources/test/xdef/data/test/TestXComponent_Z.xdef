@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
-<xd:def xmlns:xd = "http://www.org.xdef/3.2"
-		name = "SouborD1A" root = "SouborD1A">
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+        name = "SouborD1A" root = "SouborD1A">
 
 <xd:declaration>
 <![CDATA[
@@ -253,7 +253,7 @@
           TitulPred         = "optional string()"
           TitulZa           = "optional string()"
           RC                = "optional rodneCislo()"
-          Pohlavi           = "optional tokens('M|Ž')"
+          Pohlavi           = "optional tokens('M|ďż˝')"
           OsobniStav        = "optional string()"
           DatumNarozeni     = "optional xdatetime('d.M.yy')"
           MistoNarozeni     = "optional string()"
@@ -290,7 +290,7 @@
    <Skoda xd:script = "occurs 0..1" TisKc = "optional skodaTisice()" >
       optional string(); onTrue trString(4101,4000)
    </Skoda>
-   
+
    <text>required string;</text>
 
 </xd:def>

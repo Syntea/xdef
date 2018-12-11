@@ -4,8 +4,8 @@
 
   <a a = "optional string(1,8)">
     <xd:choice>
-      <b b = "optional string(1,8)" >required int()</b> 
-      <c c = "optional int(1,8)" >required int()</c> 
+      <b b = "optional string(1,8)" >required int()</b>
+      <c c = "optional int(1,8)" >required int()</c>
     </xd:choice>
   </a>
 </xd:def>

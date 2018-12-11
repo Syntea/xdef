@@ -32,8 +32,7 @@ public class XScriptMacroResolver extends StringParser {
 	}
 
 	private boolean isXScriptName(final StringParser p) {
-		if (p.getXmlCharType(_xmlVersion)
-			!= StringParser.XML_CHAR_NAME_START) {
+		if (p.getXmlCharType(_xmlVersion) != StringParser.XML_CHAR_NAME_START) {
 			return false;
 		}
 		StringBuilder sb = new StringBuilder(String.valueOf(p.peekChar()));
@@ -90,9 +89,12 @@ public class XScriptMacroResolver extends StringParser {
 		}
 		XScriptMacro macro = _macros.get(macName);
 		if (macro == null) {
-			//Macro '&{0}' doesn't exist
-			macError(nestingLevel, XDEF.XDEF483,macName);
-			return null;
+			macName = macName.substring(macName.indexOf('#') + 1);
+			if ((macro = _macros.get(macName)) == null) {
+				//Macro '&{0}' doesn't exist
+				macError(nestingLevel, XDEF.XDEF483,macName);
+				return null;
+			}
 		}
 		String[] params = null;
 		StringBuilder sb;

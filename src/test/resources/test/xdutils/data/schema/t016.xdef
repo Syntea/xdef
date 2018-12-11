@@ -20,7 +20,7 @@
     year="required ISOyear()"
     monthDay="required ISOmonthDay()"
     yearMonth="required ISOyearMonth()"
-    duration="required ISOduration" 
+    duration="required ISOduration"
     byte="required int(-0x80,0x7f)/*byte*/"
     short="required int(-0x8000,0x7fff)/*short*/"
     integer="required int(-0x80000000,0x7fffffff)/*integer*/"
@@ -84,7 +84,7 @@
     </yearMonth>
     <duration xd:script="occurs 1..*">
       ISOduration
-    </duration> 
+    </duration>
     <byte xd:script="occurs 1..*">
       int(-0x80,0x7f)
     </byte>

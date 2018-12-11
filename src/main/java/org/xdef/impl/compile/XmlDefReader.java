@@ -50,6 +50,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	public final StringBuilder _sb = new StringBuilder();
 	static {
 		try {
+			// Set SAX parser parameters
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
@@ -85,8 +86,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			SPF.setFeature(
 				"http://xml.org/sax/features/external-general-entities", true);
 			SPF.setFeature(
-				"http://xml.org/sax/features/external-parameter-entities",
-				true);
+				"http://xml.org/sax/features/external-parameter-entities",true);
 			SPF.setSchema(null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -149,27 +149,22 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	}
 
 	/** Create the instance of XDefReader with the internal ArrayReporter. */
-	public XmlDefReader() {
-		this(new ArrayReporter());
-	}
+	public XmlDefReader() {this(new ArrayReporter());}
+	
 	/** Create the instance of XDefReader with reporter.
 	 * @param reporter report writer.
 	 */
 	public XmlDefReader(ReportWriter reporter) {
 		super();
 		_reporter = reporter;
+		prepareEnities();
 		_entities = new TreeMap<String, String>();
-		_entities.put("gt", ">");
-		_entities.put("lt", "<");
-		_entities.put("amp", "&");
-		_entities.put("apos", "'");
-		_entities.put("quot", "\"");
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
 			xr = sp.getXMLReader();
-			xr.setProperty("http://xml.org/sax/properties/declaration-handler",
-				this);
+			xr.setProperty(
+				"http://xml.org/sax/properties/declaration-handler", this);
 		} catch (Exception ex) {
 			throw new RuntimeException("Parse configuration error", ex);
 		}
@@ -177,6 +172,17 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		xr.setErrorHandler(this);
 		xr.setEntityResolver(this);
 		setXMLReader(xr);
+	}
+	
+	/** Prepare entities with predefined items. */
+	private void prepareEnities() {
+		_entities = new TreeMap<String, String>();
+		// Set predefined entities
+		_entities.put("gt", ">");
+		_entities.put("lt", "<");
+		_entities.put("amp", "&");
+		_entities.put("apos", "'");
+		_entities.put("quot", "\"");
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -205,12 +211,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		try {
 			_is = is;
 			_sysId = is.getSystemId();
-			_entities = new TreeMap<String, String>();
-			_entities.put("gt", ">");
-			_entities.put("lt", "<");
-			_entities.put("amp", "&");
-			_entities.put("apos", "'");
-			_entities.put("quot", "\"");
+			prepareEnities();
 			XMLReader xr;
 			try {
 				SAXParser sp = SPF.newSAXParser();
@@ -236,7 +237,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			xr.parse(is);
 			getReader().close();
 		} catch (Error ex) {
-			ex.printStackTrace();
 			thwn = new RuntimeException(ex);
 		} catch (RuntimeException ex) {
 			thwn = ex;
@@ -263,6 +263,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param text SBuffer with value of text node.
 	 */
 	abstract void text(final SBuffer text);
+	
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked
@@ -880,5 +881,4 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	final void putReport(final Report rep) {
 		_reporter.putReport(rep);
 	}
-
 }

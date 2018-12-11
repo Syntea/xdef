@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="windows-1250" ?>
 <SOUBOR>
   <HISTORIE_SOUBORU>
-    Založen 1999.
-  </HISTORIE_SOUBORU>	
-  <REZISER jmeno = "Jan" 
-         prijmeni = "Novák"
+    Zaloďż˝en 1999.
+  </HISTORIE_SOUBORU>
+  <REZISER jmeno = "Jan"
+         prijmeni = "Novďż˝k"
          pohlavi = "muz"
          datum_narozeni = "11.12.1950"/>
-  <ASISTENT_REZIE jmeno = "Jana" 
-         prijmeni = "Nováková"
+  <ASISTENT_REZIE jmeno = "Jana"
+         prijmeni = "Novďż˝kovďż˝"
          pohlavi = "zena"
          datum_narozeni = "11.12.1950"/>
-  <DRAMATURG jmeno = "Libor" 
-         prijmeni = "Novák"
+  <DRAMATURG jmeno = "Libor"
+         prijmeni = "Novďż˝k"
          pohlavi = "muz"
          datum_narozeni = "11.12.1950"/>
-  <SCENARISTA jmeno = "Marie" 
-         prijmeni = "Nováková"
+  <SCENARISTA jmeno = "Marie"
+         prijmeni = "Novďż˝kovďż˝"
          pohlavi = "zena"
          datum_narozeni = "11.12.1950"/>
-  <HEREC jmeno = "Dalibor" 
-         prijmeni = "Novák"
+  <HEREC jmeno = "Dalibor"
+         prijmeni = "Novďż˝k"
          pohlavi = "muz"
          datum_narozeni = "11.12.1950">
-    <ODEHRANE_ROLE 
-      nazev = "Novákovi"
-      typ_role = "hlavní"
+    <ODEHRANE_ROLE
+      nazev = "Novďż˝kovi"
+      typ_role = "hlavnďż˝"
       nazev_postavy = "Maruska"
       pocet_repriz = "10">
-      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+      <AUTOR jmeno  = "Franta" prijmeni = "Novďż˝k"/>
     </ODEHRANE_ROLE>
-    <CHARAKTERISTIKA>Skvělá</CHARAKTERISTIKA>
-    <OHLASY_OD_DIVAKU>Nejlepší</OHLASY_OD_DIVAKU>
+    <CHARAKTERISTIKA>Skvďż˝lďż˝</CHARAKTERISTIKA>
+    <OHLASY_OD_DIVAKU>Nejlepďż˝ďż˝</OHLASY_OD_DIVAKU>
   </HEREC>
-  <HEREC jmeno = "Magda" 
-         prijmeni = "Nováková"
+  <HEREC jmeno = "Magda"
+         prijmeni = "Novďż˝kovďż˝"
          pohlavi = "zena"
          datum_narozeni = "11.12.1950">
-    <ODEHRANE_ROLE 
-      nazev = "Novákovi"
-      typ_role = "vedlejší"
-      nazev_postavy = "Pepíček"
+    <ODEHRANE_ROLE
+      nazev = "Novďż˝kovi"
+      typ_role = "vedlejďż˝ďż˝"
+      nazev_postavy = "Pepďż˝ďż˝ek"
       pocet_repriz = "10">
-      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+      <AUTOR jmeno  = "Franta" prijmeni = "Novďż˝k"/>
     </ODEHRANE_ROLE>
-    <ODEHRANE_ROLE 
-      nazev = "Loupežnice"
-      typ_role = "hlavní"
-      nazev_postavy = "Loupežníci"
+    <ODEHRANE_ROLE
+      nazev = "Loupeďż˝nice"
+      typ_role = "hlavnďż˝"
+      nazev_postavy = "Loupeďż˝nďż˝ci"
       pocet_repriz = "2">
-      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+      <AUTOR jmeno  = "Franta" prijmeni = "Novďż˝k"/>
     </ODEHRANE_ROLE>
-    <CHARAKTERISTIKA>Skvělá</CHARAKTERISTIKA>
-    <OHLASY_OD_DIVAKU>Nejlepší</OHLASY_OD_DIVAKU>
+    <CHARAKTERISTIKA>Skvďż˝lďż˝</CHARAKTERISTIKA>
+    <OHLASY_OD_DIVAKU>Nejlepďż˝ďż˝</OHLASY_OD_DIVAKU>
   </HEREC>
 </SOUBOR>

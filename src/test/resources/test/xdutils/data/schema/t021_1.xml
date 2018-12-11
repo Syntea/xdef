@@ -2,5 +2,5 @@
 <b  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="t021.xsd"
     a = "aaaabc">
-	<ba b = "5"/>
+    <ba b = "5"/>
     </b>

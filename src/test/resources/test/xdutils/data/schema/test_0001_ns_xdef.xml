@@ -1,5 +1,5 @@
 <xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
-	xmlns:pk = "http://www.syntea.cz/pokus"
+    xmlns:pk = "http://www.syntea.cz/pokus"
   xd:name = "Test"
   xd:root = "pk:empty">
 

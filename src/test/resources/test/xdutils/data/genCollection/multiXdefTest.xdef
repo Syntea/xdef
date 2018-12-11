@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1">
-	<![CDATA[/** comment */]]>
-	<xd:def xd:name = "main"
+    <![CDATA[/** comment */]]>
+    <xd:def xd:name = "main"
             xd:root = "FirmWorkers"
             xmlns:ext = "http://example.com/HumanResources">
-	<![CDATA[/** comment */]]>
+    <![CDATA[/** comment */]]>
         <FirmWorkers>
             <Worker xd:script="ref ext_1#ext:Person; occurs +"
                     workerId="required int" />
         </FirmWorkers>
     </xd:def>
     <xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
-			xd:name      =  "ext_1"
+            xd:name      =  "ext_1"
             xd:root      =  "hr:Person"
             xmlns:hr = "http://example.com/HumanResources"
             xmlns:ext = "http://example.com/FirmHierarchy" >
