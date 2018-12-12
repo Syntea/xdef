@@ -208,7 +208,8 @@ public interface SParser {
 	 */
 	public boolean isToken(String s);
 
-	/** If on source position is one of tokens specified in the argument the	 * method returns index to this item and sets position to the next
+	/** If on source position is one of tokens specified in the argument the
+	 * method returns index to this item and sets position to the next
 	 * position after a token. Otherwise it returns -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
