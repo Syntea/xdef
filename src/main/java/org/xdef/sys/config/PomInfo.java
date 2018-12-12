@@ -114,6 +114,6 @@ public class PomInfo {
 	/** default charset */
 	private static final Charset    charset          = Charset.forName("UTF-8");
 	
-	/** alone instance */
+	/** singleton instance */
 	public static final PomInfo     pomInfo          = new PomInfo();
 }
