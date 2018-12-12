@@ -1557,14 +1557,13 @@ public final class TestParse extends XDTester {
 			parse(xp, "", "<a/>", null, strw, null, null);
 			assertEq("aaaaaa", strw.toString());
 			xp = compile(new String[] {
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
-" <a xd:script=\"finally out(s + ${a})\"/>\n"+
-"</xd:def>",
 "<xd:declaration xmlns:xd='" + XDEFNS + "'>\n" +
 "  <xd:macro name='a'>'aaa'</xd:macro>\n"+
 "  String s = ${a};\n"+
 "</xd:declaration>",
-			});
+"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+" <a xd:script=\"finally out(s + ${a})\"/>\n"+
+"</xd:def>"});
 			strw = new StringWriter();
 			parse(xp, "", "<a/>", null, strw, null, null);
 			assertEq("aaaaaa", strw.toString());

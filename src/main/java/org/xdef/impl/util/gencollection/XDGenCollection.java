@@ -222,6 +222,9 @@ public class XDGenCollection {
 		if ("thesaurus".equals(el.getLocalName())) {
 			_thesaurusList.add(el);
 			_collection.appendChild(el);
+		} else if ("declaration".equals(el.getLocalName())) {
+			_collection.appendChild(el);
+			return null;
 		} else if ("def".equals(el.getLocalName())) {
 			String root = getXdefAttr(el, uri, "root", true);
 			if (root.length() > 0) {
@@ -1159,6 +1162,14 @@ public class XDGenCollection {
 			}
 			return getXDNodeNS(e.getParentNode());
 		}
+		if ("declaration".equals(localName)) {
+			String s = uri.equals(XDConstants.XDEF20_NS_URI)
+				|| uri.equals(XDConstants.XDEF31_NS_URI)
+				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
+			if (s != null) {
+				return s;
+			}
+		}
 		return null;
 	}
 
@@ -1208,7 +1219,7 @@ public class XDGenCollection {
 				}
 			}
 			if (!found) {
-				//XDEF269=X-definition &{0}{'}{' }doesn't exist
+				//X-definition &{0}{'}{' }doesn't exist
 				throw new SRuntimeException(XDEF.XDEF269);
 			}
 			if (removeActions) {
