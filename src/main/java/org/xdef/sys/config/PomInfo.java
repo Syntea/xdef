@@ -1,5 +1,6 @@
 package org.xdef.sys.config;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,7 +33,13 @@ public class PomInfo {
 	 */
 	public PomInfo() {
 		try {
-		    loadProps(PomInfo.class.getResourceAsStream(pomInfoPropsName));
+			InputStream ppIs = PomInfo.class.getResourceAsStream(pomInfoPropsName);
+			
+			if (ppIs == null) {
+			    throw new FileNotFoundException("java-resource " + pomInfoPropsName + " not found");
+			}
+			
+		    loadProps(ppIs);
 		} catch (IOException ex) {
 		    throw new RuntimeException(ex);
 		}
@@ -41,10 +48,6 @@ public class PomInfo {
 	
 	
 	private void loadProps(InputStream ppIs) throws IOException {
-		if (ppIs == null) {
-		    return;
-		}
-		
 		Properties properties = new Properties();
 		try {
 		    properties.load(new InputStreamReader(ppIs, charset));
