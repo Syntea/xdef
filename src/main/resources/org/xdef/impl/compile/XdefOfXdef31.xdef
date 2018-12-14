@@ -1,6 +1,6 @@
 <!--
-  With the metanamespace "META" (XDefinition 3.1)  is described
-  the input XML document which must fit the XDefinition 3.1 specification.
+  With the metanamespace "META" (X-definition 3.2)  is described
+  the input XML document which must fit the X-definition 3.1 specification.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -8,7 +8,7 @@
   root            = "XD3.1:def | XD3.1:collection | XD3.1:thesaurus
                     | XD3.1:declaration | XD3.1:BNFGrammar | XD3.1:component"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
-  xmlns:w         = "http://www.org.xdef/3.2"
+  xmlns:w         = "http://www.xdef.org/3.2"
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/

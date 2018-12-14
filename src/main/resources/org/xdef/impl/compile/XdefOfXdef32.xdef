@@ -1,14 +1,14 @@
 <!--
-  With the metanamespace "META" (XDefinition 3.2)  is described
-  the input XML document which must fit the XDefinition 3.2 specification.
+  With the meta namespace "METAXD" (X-definition 3.2)  is described
+  the input XML document which must fit the X-definition 3.2 specification.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
   name            = "Ver3.2"
   root            = "XD3.2:def | XD3.2:collection | XD3.2:thesaurus
                      | XD3.2:declaration | XD3.2:BNFGrammar | XD3.2:component"
-  xmlns:XD3.2     = "http://www.org.xdef/3.2"
-  xmlns:w         = "http://www.org.xdef/3.2"
+  xmlns:XD3.2     = "http://www.xdef.org/3.2"
+  xmlns:w         = "http://www.xdef.org/3.2"
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/
@@ -16,7 +16,7 @@
 /******************************************************************************/
 
     <XD3.2:collection xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
+      ? (String) @metaNamespace : 'http://www.xdef.org/3.2';
       options moreAttributes"
     include        = "optional uriList; options acceptQualifiedAttr"
     metaNamespace  = "optional uri; options acceptQualifiedAttr" >
@@ -30,7 +30,7 @@
   </XD3.2:collection>
 
   <XD3.2:def xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.org.xdef/3.2';
+      ? (String) @metaNamespace : 'http://www.xdef.org/3.2';
       options moreAttributes"
     name            = "optional QName; options acceptQualifiedAttr"
     metaNamespace   = "optional uri; options acceptQualifiedAttr"

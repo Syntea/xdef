@@ -1,13 +1,13 @@
 <!--
-  With the metanamespace "META" (XDefinition 3.1)  is described
-  the input XML document which must fit the XDefinition 2.0 specification.
+  With the meta namespace "METAXD" (X-definition 3.2) is described
+  the input XML document which must fit the X-definition 2.0 specification.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
   name            = "Ver2.0"
   root            = "XD2.0:def | XD2.0:collection"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
-  xmlns:w         = "http://www.org.xdef/3.2"
+  xmlns:w         = "http://www.xdef.org/3.2"
   w:metaNamespace = "METAXD" >
 
 <xd:declaration scope = "local">
