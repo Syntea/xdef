@@ -24,7 +24,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.testTarget>1.6</maven.compiler.testTarget>
 		<maven.compiler.testSource>1.6</maven.compiler.testSource>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.8</jdk.version>
 		<jdk.vendor>sun</jdk.vendor>
 		
 		<saxon-he.version>9.7.0-18</saxon-he.version>
