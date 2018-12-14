@@ -1,6 +1,4 @@
-<!-- This X-definition contains base types and BNF grammar ot he X-script
-  and the root declaration of all X-definition versions.
--->
+<!-- Common base types and BNF grammar ot of the X-script. -->
 <!-- Metanamespace of XDefinition: "METAXD" is 3.1 -->
 <xd:def xmlns:xd  = "METAXD"
   xmlns:w         = "http://www.org.xdef/3.2"
