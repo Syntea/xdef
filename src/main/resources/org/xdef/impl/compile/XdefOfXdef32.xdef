@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   With the metanamespace "META" (XDefinition 3.2)  is described
   the input XML document which must fit the XDefinition 3.2 specification.
@@ -8,7 +6,7 @@
 <xd:def xmlns:xd  = "METAXD"
   name            = "Ver3.2"
   root            = "XD3.2:def | XD3.2:collection | XD3.2:thesaurus
-                     | XD3.2:declaration | XD3.2:component"
+                     | XD3.2:declaration | XD3.2:BNFGrammar | XD3.2:component"
   xmlns:XD3.2     = "http://www.org.xdef/3.2"
   xmlns:w         = "http://www.org.xdef/3.2"
   w:metaNamespace = "METAXD" >
@@ -25,6 +23,7 @@
     <xd:mixed>
       <XD3.2:def xd:script = "occurs *; ref XD3.2:def" />
       <XD3.2:declaration xd:script = "occurs *; ref XD3.2:declaration" />
+      <XD3.2:BNFGrammar xd:script = "occurs *; ref XD3.2:BNFGrammar" />
       <XD3.2:component xd:script = "occurs *; ref XD3.2:component"/>
       <XD3.2:thesaurus xd:script = "occurs *; ref XD3.2:thesaurus" />
     </xd:mixed>
@@ -50,12 +49,7 @@
 
       <XD3.2:thesaurus xd:script = "occurs *; ref XD3.2:thesaurus" />
 
-      <XD3.2:BNFGrammar xd:script = "occurs *"
-         extends = "optional xdIdentifier; options acceptQualifiedAttr"
-         name = "xdIdentifier; options acceptQualifiedAttr"
-         scope = "optional enum('global','local'); options acceptQualifiedAttr">
-         optional bnfGrammar; /* may be nothing */
-      </XD3.2:BNFGrammar>
+      <XD3.2:BNFGrammar xd:script = "occurs *; ref XD3.2:BNFGrammar"/>
 
       <XD3.2:component xd:script = "occurs *; ref XD3.2:component"/>
 
@@ -104,6 +98,12 @@
        * declarationScript;
      </xd:mixed>
   </XD3.2:declaration>
+
+  <XD3.2:BNFGrammar extends="optional xdIdentifier; options acceptQualifiedAttr"
+     name = "xdIdentifier; options acceptQualifiedAttr"
+     scope = "optional enum('global','local'); options acceptQualifiedAttr">
+       optional bnfGrammar; /* may be nothing */
+  </XD3.2:BNFGrammar>
 
   <XD3.2:component>
       required xcomponent;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- Common base types and BNF grammar ot of the X-script. -->
 <!-- Metanamespace of XDefinition: "METAXD" is 3.1 -->
 <xd:def xmlns:xd  = "METAXD"
   xmlns:w         = "http://www.org.xdef/3.2"
@@ -8,7 +8,11 @@
   w:metaNamespace = "METAXD"
   xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection
                      | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
-                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection" >
+					 | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component 
+                     | Ver3.1#XD3.1:thesaurus
+                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection 
+					 | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component 
+                     | Ver3.2#XD3.2:thesaurus" >
 
 <xd:declaration>
   /* Default namespace of XDefinition */
