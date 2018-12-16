@@ -27,7 +27,7 @@ public final class TestImplementsAndUses extends XDTester {
 // test error reporting
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
 "<B a='int(1,2);'/>\n"+
 "<A xd:script=\"implements B\" a='float'></A>\n"+
@@ -44,7 +44,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
 "<B a='int(1,2);'/>\n"+
 "<A xd:script=\"implements B\" a='xxx'></A>\n"+ // this is error
@@ -59,7 +59,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='b'>\n"+
 "<A a=\"fixed 'a'\"/>\n"+
 "</xd:def>\n"+
@@ -77,7 +77,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='x();'/>\n"+
 "</xd:def>\n"+
@@ -95,7 +95,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A>x();</A>\n"+
 "</xd:def>\n"+
@@ -113,7 +113,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
 "<A a='int(1,2);'/>\n"+
 "</xd:def>\n"+
@@ -131,7 +131,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<xd:declaration>\n"+
 "  boolean a(int i) {return true}\n"+
@@ -152,7 +152,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='int(1,2);'/>\n"+
 "</xd:def>\n"+
@@ -170,7 +170,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try { //check "implements" XDefinifion
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='int(1,2);'><B/></A>\n"+
 "</xd:def>\n"+
@@ -188,7 +188,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='int(1,2);'/>\n"+
 "</xd:def>\n"+
@@ -206,7 +206,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='b'>\n"+
 "<A a=\"int; default 'a'\"/>\n"+
 "</xd:def>\n"+
@@ -224,7 +224,7 @@ public final class TestImplementsAndUses extends XDTester {
 		}
 		try {
 			xdef = //this is a question
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<xd:declaration>\n"+
 "  boolean a() {return true}\n"+
@@ -248,7 +248,7 @@ public final class TestImplementsAndUses extends XDTester {
 		setChkSyntax(chkSyntax);
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='b'>\n"+
 "<A a=\"int; default '123'\"/>\n"+
 "</xd:def>\n"+
@@ -268,7 +268,7 @@ public final class TestImplementsAndUses extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='b'>\n"+
 "<A a=\"fixed 'a'\"/>\n"+
 "</xd:def>\n"+
@@ -287,7 +287,7 @@ public final class TestImplementsAndUses extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='int(1,2);'/>\n"+
 "</xd:def>\n"+
@@ -297,7 +297,7 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
 "<xd:declaration> boolean a(int i) {return true;} </xd:declaration>\n"+
 "<A a='a(1)'/>\n"+
@@ -308,7 +308,7 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
 "<X xd:script=\"create [%a='a','b'].toElement()\"\n"+
@@ -328,7 +328,7 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
 "<X xd:script=\"create [%a='a','b'].toElement()\"\n"+
@@ -352,13 +352,13 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='P'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='P'>\n"+
 "<P xd:script='uses A' a='required '> <B/> required <C xd:script='+'/> </P>\n"+
 "<A a='required int'> <B/> required float <C xd:script='+'/> </A>\n"+
 "</xd:def>";
 			compile(xdef);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
 "<P a='required int'>\n"+
 "  <B/>\n"+
 "    required float\n"+
@@ -376,7 +376,7 @@ public final class TestImplementsAndUses extends XDTester {
 // external method
 			setChkSyntax(false); // follows comparing of external method
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
 "<A a='x();'/>\n"+
 "</xd:def>\n"+
@@ -388,7 +388,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef, getClass());
 			setChkSyntax(chkSyntax);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<B a='x();'/>\n"+
 "<A xd:script=\"uses B; finally outln()\"\n"+
 "  a='required; finally outln()'/>\n"+
@@ -396,7 +396,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef, getClass());
 //REGEX
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A'>\n"+
 " <X a=\"required regex('[A-Z]');\" />\n"+
 "</xd:def>\n"+
@@ -407,19 +407,19 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 " <X xd:script='uses Y' a=\"required regex('[A-Z]')\" />\n"+
 " <Y a=\"required regex('[A-Z]');\" />\n"+
 "</xd:def>";
 			compile(xdef);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 " <X xd:script='uses Y' a=\"required\" />\n"+
 " <Y a=\"required regex(' [A-Z]\n ');\" />\n"+
 "</xd:def>";
 			compile(xdef);
 			xdef =
-"<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd = '" + _xdNS + "'>\n"+
 "<xd:def xd:name = \"A\" > \n"+
 "  <Firma xd:script = \"implements B#Firma\" \n"+
 "     ulice = \"required string(1,30)\"\n"+
@@ -445,7 +445,7 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 			xdef =
-"<xd:collection xmlns:xd = '" + XDEFNS + "' >\n"+
+"<xd:collection xmlns:xd = '" + _xdNS + "' >\n"+
 "<xd:def xd:name = \"A\" > \n"+
 "  <Firma xd:script = \"uses B#Object\" \n"+
 "     ulice = \"required\"\n"+
@@ -472,7 +472,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 //BNF
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
 "<B a=\"$xscript.check('X');\"/>\n"+
 "<A xd:script=\"uses B\"\n"+

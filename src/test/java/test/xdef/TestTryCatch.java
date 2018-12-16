@@ -25,7 +25,7 @@ public final class TestTryCatch extends XDTester {
 
 		try {
 			xdef =
-"<xd:def xd:name='test' root='a' xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xd:name='test' root='a' xmlns:xd='" + _xdNS + "'>\n"+
 "\n"+
 "  <xd:declaration>\n"+
 "    boolean mytype() {\n"+

@@ -21,7 +21,7 @@ public class TestSaxon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {//test binding of XPath variables with XDefinition variables
 			xdef = //integer variable x without leading "$"
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration> int x = 123; </xd:declaration>\n"+
 "  <a xd:script = \"create from('*[@a=$x]')\"> string </a>\n"+
 "</xd:def>";
@@ -39,7 +39,7 @@ public class TestSaxon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {//fromXQ (xquery)
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
 "<root>\n"+
 " <xd:sequence xd:script=\"occurs *; create fromXQ('//a')\">\n"+
 "  <a a = \"required string; create fromXQ('@A')\">\n"+
@@ -63,7 +63,7 @@ public class TestSaxon extends XDTester {
 				"<a a=\"B\"><b x=\"e\" y=\"f\"/></a>" +
 				"</root>");
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "    script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'\n"+
 "    xmlns='N' xmlns:sod='N'>\n"+
 "<a>\n"+
@@ -83,7 +83,7 @@ public class TestSaxon extends XDTester {
 			assertEq(
 "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>", el);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "    xmlns='N' xmlns:sod='N'\n"+
 "    script='options ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces'>\n"+
 "<a>\n"+
@@ -102,7 +102,7 @@ public class TestSaxon extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {//test of xquery
 			xp = compile(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "   <a C='required num(1,9);'>\n"+
 "      <O J='optional string(1,36);\n"+
 "            finally setText(toString(xquery(\".\")) + \"d\");' />\n"+
@@ -115,7 +115,7 @@ public class TestSaxon extends XDTester {
 		} catch(Exception ex) {fail(ex);}
 		try {
 			xdef = // result of xquery (in boolean expression
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a|b|c|d'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a|b|c|d'>\n"+
 "<a typ='int()'>\n"+
 "  <xd:choice>\n"+
 "    <b xd:script=\"match xquery('/a[@typ=1]')\"/>\n"+
@@ -201,7 +201,7 @@ public class TestSaxon extends XDTester {
 		} catch(Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='"+ XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='"+ _xdNS + "'>\n"+
 "\n"+
 "  <mraveniste jmeno='string; create xquery(&apos;\n"+
 "    for $i in (//mraveniste)\n"+

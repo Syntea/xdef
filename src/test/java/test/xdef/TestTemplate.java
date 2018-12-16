@@ -29,7 +29,7 @@ public final class TestTemplate extends XDTester {
 		try {
 			//default trimtext
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a xd:script=\"template\"\n"+
 "  a1=\"a1\">" +
 "<b>" +
@@ -67,7 +67,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = //noTrimText in header
-"<xd:def xmlns:xd='" + XDEFNS + "' script='options noTrimText' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' script='options noTrimText' root='a'>\n"+
 "<a xd:script=\"template\"\n"+
 "   a1=\"a1\">\n"+
 "  <b>\n"+
@@ -107,7 +107,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = //trimText
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a xd:script=\"template; options trimText\"\n"+
 "   a1=\"a1\">\n"+
 "  <b>\n"+
@@ -145,7 +145,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = //modification of template
-"<xd:def xmlns:xd='" + XDEFNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "<a xd:script=\"template; options trimText\"\n"+
 "   a1=\"xxx\">\n"+
 "  <b>\n"+
@@ -188,7 +188,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "", "x", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // $$$script:
-"<xd:def xmlns:xd='" + XDEFNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "<xd:declaration>\n"+
 "  String a1() {return 'a1';}\n"+
 "  String aa() {return 'aa';}\n"+
@@ -238,7 +238,7 @@ public final class TestTemplate extends XDTester {
 				create(xp, "", "x", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = //method call
-"<xd:def xmlns:xd='" + XDEFNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "<xd:declaration>\n"+
 "  String a1() {return 'a1';}\n"+
 "  String aa() {return 'aa';}\n"+
@@ -286,7 +286,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "", "x", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = //collection
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='test1'>\n"+
 "<xd:declaration>\n"+
 "  String a1() {return 'a1';}\n"+
@@ -338,7 +338,7 @@ public final class TestTemplate extends XDTester {
 			assertEq(xml, create(xp, "test2", "x", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'elem'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'>\n"+
 "<elem xd:script = \"template; options preserveTextWhiteSpaces, noTrimText\"\n"+
 "    a1 = \"ab cd\"\n"+
 "    a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
@@ -358,7 +358,7 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(SUtils.modifyString(xml, "{d}", s), el);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'elem'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'\n"+
 "        xd:script= 'options preserveTextWhiteSpaces, noTrimText' >\n"+
 "<elem xd:script = \"template\"\n"+
 "    a1 = \"ab cd\"\n"+
@@ -376,7 +376,7 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(SUtils.modifyString(xml, "{d}", s), el);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='elem'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='elem'\n"+
 "        xd:script= 'options ignoreTextWhiteSpaces, trimText,\n"+
 "                    ignoreAttrWhiteSpaces, trimAttr' >\n"+
 "<elem xd:script = \"template\"\n"+
@@ -398,7 +398,7 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(SUtils.modifyString(xml, "{d}", s), el);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'elem'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'\n"+
 "        xd:script= 'options ignoreTextWhiteSpaces, trimText,\n"+
 "                    ignoreAttrWhiteSpaces, trimAttr' >\n"+
 "<elem xd:script = \"template\"\n"+
@@ -426,7 +426,7 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(SUtils.modifyString(xml, "{d}", s), el);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 " name = 'Example' root = 'html' xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html>\n"+
 "<head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
@@ -481,7 +481,7 @@ public final class TestTemplate extends XDTester {
 "</table></body></html>");
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html>\n"+
 "   <head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
@@ -525,7 +525,7 @@ public final class TestTemplate extends XDTester {
 				new QName("http://www.w3.org/1999/xhtml", "html"), reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<html xd:script='template'>"+
 "<head><title>Panovníci českých zemí</title></head>"+
@@ -547,7 +547,7 @@ public final class TestTemplate extends XDTester {
 				new QName("http://www.w3.org/1999/xhtml", "html"), reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "<xd:declaration>external Element source</xd:declaration>\n"+
 "<html xd:script='template'>\n"+
@@ -571,7 +571,7 @@ public final class TestTemplate extends XDTester {
 				new QName("http://www.w3.org/1999/xhtml", "html"), reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'\n"+
 "        script='options noTrimAttr,noTrimText'>\n"+
 "<xd:declaration>external Element source</xd:declaration>\n"+

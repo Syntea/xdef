@@ -25,7 +25,7 @@ public final class TestExternalVariables extends XDTester {
 		String s;
 		try {//dynamic errors
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external String i;\n"+
 "    String j = i;\n"+
@@ -45,7 +45,7 @@ public final class TestExternalVariables extends XDTester {
 			strw.close();
 			assertEq("truetrue\n1falsetrue\n2falsetrue\n", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    external final String i;\n"+
 "    String j = i;\n"+
@@ -80,7 +80,7 @@ public final class TestExternalVariables extends XDTester {
 			//variable i remains unchaged
 			assertEq(strw.toString(),"1false1false1false1false");
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external final String i;\n"+
 "    String j = i;\n"+

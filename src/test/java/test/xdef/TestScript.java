@@ -59,7 +59,7 @@ public final class TestScript extends XDTester {
 		System.out.flush();
 		System.err.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+			"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 			"   script='options preserveEmptyAttributes," +
 			"           preserveAttrWhiteSpaces, noTrimAttr'\n"+
 			"    root='a'>\n"+
@@ -102,7 +102,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 			"  <a a=\"" + source + "\"/>\n"+
 			"</xd:def>\n";
 		String xml = "<a a=\"" + value + "\"/>";
@@ -138,7 +138,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 			"  <xd:declaration>String result='?';</xd:declaration>\n"+
 			"  <a a='string' xd:script='finally result=" + source + "'/>\n"+
 			"</xd:def>\n";
@@ -177,7 +177,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 			"  <xd:declaration>\n"+ source + "</xd:declaration>\n"+
 			"\n"+
 			"  <a a=\"optional " + call + "\"/>\n"+
@@ -1027,7 +1027,7 @@ public final class TestScript extends XDTester {
 		testAttr1("(String) ((@a OR @b) AND @a)", "true");
 ////////////////////////////////////////////////////////////////////////////////
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a date=\"required xdatetime('d.M.yyyy','HH:mm:ss')\"/>\n"+
 "</xd:def>";
 		xml = "<a date= '1.1.2000'/>";
@@ -1040,7 +1040,7 @@ public final class TestScript extends XDTester {
 		assertNoErrorwarnings(reporter);
 		assertEq("00:00:00", el.getAttribute("date"));
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "<![CDATA[\n"+
 "  int count;\n"+
@@ -1135,7 +1135,7 @@ public final class TestScript extends XDTester {
 			"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 " +
 			"OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  void x() {\n"+
 "    Decimal d = decimalValue('123');\n"+
@@ -1155,7 +1155,7 @@ public final class TestScript extends XDTester {
 		"3.141592653589793115997963468544185161590576171875; 312561.52461"));
 		// Test hasAttribute and hasNamedItem
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration><![CDATA[\n"+
 "  Container c = [%a='a'];"+
 "  Element e = xparse(\"<a a='a'/>\");\n"+

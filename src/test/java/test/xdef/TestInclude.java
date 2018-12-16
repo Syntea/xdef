@@ -37,7 +37,7 @@ public final class TestInclude extends XDTester {
 		try {
 			//xd:include in XDefinition header
 			xdef =
-"<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/2.0' name = 'a' root = 'foo'"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='a' root='foo'"+
 "   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
@@ -87,7 +87,7 @@ public final class TestInclude extends XDTester {
 		try {
 			//xi:include in collection
 			xdef =
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name = 'a' root = 'foo'>\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
@@ -119,7 +119,7 @@ public final class TestInclude extends XDTester {
 		try {
 			//include attribute in collection
 			xdef =
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 	"include='" + dataDir + "TestInclude.xdef'/>";
 			xp = compile(xdef);
 			strw = new StringWriter();
@@ -134,20 +134,16 @@ public final class TestInclude extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {//xinclude
 			xdef =
-"<xdef:def xmlns:xdef='" + XDEFNS + "' name='test' root='a'>\n"+
-"  <a>\n"+
-"    <b>\n"+
-"      required string()\n"+
-"    </b>\n"+
-"  </a>\n"+
-"</xdef:def>";
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a><b>required string()</b></a>\n"+
+"</xd:def>";
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_1_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
-				parse(xp, "test", xml, reporter));
+				parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml = dataDir + "TestInclude_2_1.xml";
-			parse(xp, "test", xml, reporter);
+			parse(xp, "", xml, reporter);
 			if (!reporter.errors()) {
 				fail("Error not reported");
 			} else {
@@ -172,14 +168,8 @@ public final class TestInclude extends XDTester {
 		}
 		try {// xinclude
 			xdef =
-"<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
-"          xdef:name   =\"test\"\n"+
-"          xdef:root   =\"a\">\n"+
-"  <a>\n"+
-"    <b>\n"+
-"      required string()\n"+
-"    </b>\n"+
-"  </a>\n"+
+"<xdef:def xmlns:xdef='" + _xdNS + "' xdef:name=\"test\" xdef:root=\"a\">\n"+
+"  <a><b>required string()</b></a>\n"+
 "</xdef:def>";
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_3_1.xml";
@@ -198,22 +188,15 @@ public final class TestInclude extends XDTester {
 			}
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || !(s.contains("SYS033")
-				|| s.contains("XML306"))) {
+			if (s == null || !(s.contains("SYS033") || s.contains("XML306"))) {
 				fail(ex);
 			}
 		}
 		try {
 			xdef =
-"<xdef:def xmlns:xdef='" + XDEFNS + "'\n"+
-"          xdef:name   =\"test\"\n"+
-"          xdef:root   =\"a\">\n"+
-"  <a>\n"+
-"    <b>\n"+
-"      required string()\n"+
-"    </b>\n"+
-"  </a>\n"+
-"</xdef:def>";
+"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='a'>\n"+
+"  <a><b>required string()</b></a>\n"+
+"</xd:def>";
 			xp = compile(xdef);
 			xml = dataDir + "TestInclude_4_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
@@ -274,7 +257,7 @@ public final class TestInclude extends XDTester {
 		try {
 			//test Include default (not allowed)
 			xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "' xd:root ='A'>\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "' xd:root ='A'>\n"+
 "  <A><b/></A>\n"+
 "</xd:def>";
 			xp = compile(xdef); //here is default (not allowed)

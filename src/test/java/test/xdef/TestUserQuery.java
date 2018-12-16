@@ -28,7 +28,7 @@ public final class TestUserQuery extends XDTester {
 		// userQuery method)
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -56,7 +56,7 @@ public final class TestUserQuery extends XDTester {
 		// parameter new UserTable().
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root>\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -85,7 +85,7 @@ public final class TestUserQuery extends XDTester {
 		// is called in element
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -114,7 +114,7 @@ public final class TestUserQuery extends XDTester {
 		// is called from sequence item
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 " <xd:sequence xd:script='occurs *; create getNext()'>\n"+
 "  <firma\n"+
@@ -145,7 +145,7 @@ public final class TestUserQuery extends XDTester {
 		// inside of sequence block. User method is called inside of sequence.
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root>\n"+
 " <xd:sequence>\n"+
 "  <firma xd:script='occurs *;create getNext()'\n"+
@@ -174,7 +174,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -223,7 +223,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {//create books from simulated select (with element qualifier "*")
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+
@@ -241,7 +241,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {// the same with sequence (qualifier "*")
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
 "  <test>\n"+
 "    <xd:sequence script = \"*; create select('??')\">\n"+
 "      <book cover=\"optional string(); create getColumn('cover')\">"+
@@ -263,7 +263,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {//this is the example of an external user object passed to creator
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+

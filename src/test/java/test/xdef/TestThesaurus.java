@@ -24,7 +24,7 @@ public final class TestThesaurus extends XDTester {
 		XDDocument xd;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='Contract' name='kontrakt'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Contract' name='kontrakt'>\n"+
 "\n"+
 "<Contract Number=\"num()\">\n"+
 "  <Client xd:script=\"+\"\n"+
@@ -53,7 +53,7 @@ public final class TestThesaurus extends XDTester {
 "</Agreement>\n"+
 "</xd:def>";
 			String thesaurus1 =
-"<xd:thesaurus xmlns:xd='" + XDEFNS + "' language='eng'>\n"+
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng'>\n"+
 "kontrakt#Contract =                         Contract\n"+
 "kontrakt#Contract/@Number =                 Number\n"+
 "kontrakt#Contract/Client =                  Client\n"+
@@ -78,7 +78,7 @@ public final class TestThesaurus extends XDTester {
 "kontrakt#Agreement/Mediator/@Name =         Name\n"+
 "</xd:thesaurus>";
 			String thesaurus2 =
-"<xd:thesaurus xmlns:xd='" + XDEFNS + "' language='ces'>\n"+
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='ces'>\n"+
 "kontrakt#Contract =                         Smlouva\n"+
 "kontrakt#Contract/@Number =                 Číslo\n"+
 "kontrakt#Contract/Client =                  Klient\n"+
@@ -168,7 +168,7 @@ public final class TestThesaurus extends XDTester {
 			assertEq(xml, el);
 
 			thesaurus1 =
-"<xd:thesaurus xmlns:xd='" + XDEFNS + "' language='eng' default='yes'>\n"+
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
 "/* this is just a comment */\n"+
 "</xd:thesaurus>";
 			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
@@ -194,7 +194,7 @@ public final class TestThesaurus extends XDTester {
 			assertEq(xml, el);
 
 			thesaurus1 =
-"<xd:thesaurus xmlns:xd='" + XDEFNS + "' language='eng' default='yes'>\n"+
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
 "</xd:thesaurus>";
 			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
 			xd = xp.createXDDocument("kontrakt");

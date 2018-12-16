@@ -4,6 +4,7 @@ import test.utils.XDTester;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import org.xdef.XDConstants;
 import test.utils.STester;
 
 /** Run all available tests for package cz.syntea.xdef with all features
@@ -72,11 +73,19 @@ public class TestAllFull {
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
 		};
+		String xdNS = XDTester._xdNS;
+		XDTester._xdNS = XDConstants.XDEF31_NS_URI;		
+		System.out.println("Testing X-definition version 3.1");
 		int result = STester.runTests(System.out, System.err, log,
+			tests, "package xdef", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF32_NS_URI;		
+		System.out.println("Testing X-definition version 3.2");
+		result += STester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}
+		XDTester._xdNS = xdNS;
 		return result;
 	}
 

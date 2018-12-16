@@ -28,7 +28,7 @@ public final class TestTypes extends XDTester {
 		StringWriter strw;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  String s = null;\n"+
 "  String t = null;\n"+
@@ -93,7 +93,7 @@ public final class TestTypes extends XDTester {
 			assertTrue(xd.getVariable("u").isNull());
 			assertTrue(xd.getVariable("u").stringValue() == null);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Decimal dc = null;\n"+
 "  Datetime dt = null;\n"+
@@ -122,7 +122,7 @@ public final class TestTypes extends XDTester {
 			assertEq("truetruetruetrueElementintfloat",
 				xd.getVariable("t").toString());
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  AnyValue a = null;\n"+
 "  Decimal dc = null;\n"+
@@ -151,7 +151,7 @@ public final class TestTypes extends XDTester {
 			setProperty(XDConstants.XDPROPERTY_SPECDATES,
 				"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 			xdef =  //test limits in datetime
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
 " <b xd:script='+'\n"+
 "  a=\"xdatetime('yyyyMMdd', 'd.M.y')\" b=\"xdatetime('yyyyMMddHHmmss')\" />\n"+
@@ -211,7 +211,7 @@ public final class TestTypes extends XDTester {
 		resetTester();
 		try { //element type
 			xdef =
-"<xd:def root='a' xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
 "\n"+
 "  <xd:declaration><![CDATA[\n"+
 "    void x() {\n"+
@@ -238,7 +238,7 @@ public final class TestTypes extends XDTester {
 			s = "A\nxA\nxA\nt1t2\n";
 			assertEq(s, strw.toString());
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "   <![CDATA[\n"+
 "    Element $a;\n"+
@@ -278,7 +278,7 @@ public final class TestTypes extends XDTester {
 				"<e2 xmlns=\"nsuri\"/>\n"+
 				"<x:e2 xmlns:x=\"nsuri\"/>\n");
 			xdef = // Parse, ParseResult
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "  void x() {\n"+
 "    ParseResult t;\n"+
@@ -322,7 +322,7 @@ public final class TestTypes extends XDTester {
 			parse(xdef, "", "<A/>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = //uniqueSet
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "   uniqueSet id1 {key:int()};" +
 "  </xd:declaration>\n"+
@@ -334,7 +334,7 @@ public final class TestTypes extends XDTester {
 			parse(xdef, "", xml, reporter);
 			assertNoErrors(reporter);
 			xdef = // test getParserParams
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='string(2,3)' b='int(2,3)' c='xs:date(\"2000-01-01\",\"2010-01-01\")'>\n"+
 "    xdatetime('y-M-d','d.M.y')\n"+
 "  </a>\n"+
