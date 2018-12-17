@@ -534,9 +534,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		@Override
 		public final boolean equals(final XDValue arg) {
-			return arg == null
-				? false : arg.getItemId() != CompileBase.PARSEITEM_VALUE
-				? false : _name != null ? _name.equals(((ParseItem)arg)._name)
+			return arg == null ? false
+				: arg.getItemId() != CompileBase.PARSEITEM_VALUE ? false
+				: _name != null ? _name.equals(((ParseItem)arg)._name)
 				: ((ParseItem)arg)._name == null;
 		}
 
