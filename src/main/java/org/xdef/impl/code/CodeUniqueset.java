@@ -421,7 +421,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private XDValue getValue(final String name) {
 			return _assignedValues ==null ? null : _assignedValues.get(name);
 		}
-		
+
 		@Override
 		public String toString() {return _key.toString();}
 	}
@@ -517,8 +517,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		@Override
 		public String toString() {
-			return "[" + _itemIndex + "]"
-				+ (!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue;
+			return "[" + _itemIndex + "]" + (_name == null || !_name.isEmpty()
+				? ":" +_name : "") + "=" + _itemValue;
 		}
 
 		@Override
@@ -545,7 +545,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 		@Override
 		public final boolean equals(final XDValue arg) {
 			return arg.getItemId() != CompileBase.PARSEITEM_VALUE ?
-				false : _name.equals(((ParseItem)arg)._name);
+				false : _name != null ? _name.equals(((ParseItem)arg)._name)
+				: ((ParseItem)arg)._name == null;
 		}
 
 		////////////////////////////////////////////////////////////////////////
