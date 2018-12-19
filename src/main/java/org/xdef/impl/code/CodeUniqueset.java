@@ -507,8 +507,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		@Override
 		public String toString() {
-			return "[" + _itemIndex + "]" + (_name == null || !_name.isEmpty()
-				? ":" +_name : "") + "=" + _itemValue;
+			return "[" + _itemIndex + "]" + (_name == null ? "null"
+				: ((!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue));
 		}
 
 		@Override
