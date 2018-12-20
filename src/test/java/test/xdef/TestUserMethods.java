@@ -21,7 +21,7 @@ public final class TestUserMethods extends XDTester {
 		StringWriter strw;
 		try { //test methods
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
 "    <A xd:script = \"ref A; create from('A')\" a='string'/>;\n"+
 "  </a>\n"+
@@ -39,7 +39,7 @@ public final class TestUserMethods extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "AB");
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:macro name='m' p='?'>\n"+
 "match {out('m#{p} '); return true;};\n"+
 "init out('i#{p} ');finally out('f#{p} ')\n"+
@@ -68,7 +68,7 @@ public final class TestUserMethods extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "ia sa iCH ib sb fb fCH ic sc fc fa ");
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:macro name='m' p='?'>\n"+
 "match {out('m#{p} '); return true;};\n"+
 "init out('i#{p} ');finally out('f#{p} ')\n"+
@@ -109,7 +109,7 @@ public final class TestUserMethods extends XDTester {
 				"ia sa iMX ib sb fb ix sx fx fMX ic sc fc fa ");
 
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:macro name='m' p='?'>\n"+
 "match {out('m#{p} '); return true;};\n"+
 "init out('i#{p} ');finally out('f#{p} ')\n"+
@@ -153,7 +153,7 @@ public final class TestUserMethods extends XDTester {
 				"ia sa ip sp fp iCH ix sx fx fCH ic sc fc fa ");
 
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n" +
 "  <xd:macro name='m' p='?'>\n"+
 "    match {out('m#{p} '); return true;};\n"+

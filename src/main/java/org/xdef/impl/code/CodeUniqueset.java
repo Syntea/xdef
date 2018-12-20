@@ -114,9 +114,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @param i index of key in multiple key array.
 	 * @return parse item of key in multiple key array.
 	 */
-	public final ParseItem getParseKeyItem(final int i) {
-		return _parseItems[i];
-	}
+	public final ParseItem getParseKeyItem(final int i) {return _parseItems[i];}
 
 	/** Create value of unique set key object.
 	 * @return new value of unique set key object.
@@ -261,9 +259,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public final XDValueType getItemType() {return  XDValueType.OBJECT;}
 
 	@Override
-	public XDValue cloneItem() {
-		return new CodeUniqueset(_parseItems, _name);
-	}
+	public XDValue cloneItem() {return new CodeUniqueset(_parseItems, _name);}
 
 	@Override
 	public String toString() {
@@ -421,7 +417,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private XDValue getValue(final String name) {
 			return _assignedValues ==null ? null : _assignedValues.get(name);
 		}
-		
+
 		@Override
 		public String toString() {return _key.toString();}
 	}
@@ -443,13 +439,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private final int _itemIndex;
 
 		/** Creates a new null instance of CodeUniquesetParseItem. */
-		ParseItem() {
-			_itemType = XDValueID.XD_OBJECT;
-			_parseMethodAddr = -1;
-			_name = null;
-			_optional = false;
-			_itemIndex = -1;
-		}
+		ParseItem() {this(null, -1, -1, XDValueID.XD_OBJECT, false);}
 
 		/** Creates a new instance of CodeUniquesetParseItem (must be public
 		 * because of XDReader).
@@ -465,11 +455,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 			final int itemIndex,
 			final short parsedType,
 			final boolean optional) {
+			_name = name;
 			_parseMethodAddr = chkAddr;
+			_itemIndex = itemIndex;
 			_itemType = parsedType;
 			_optional = optional;
-			_name = name;
-			_itemIndex = itemIndex;
 			// _itemValue = null; // java mekes it
 		}
 
@@ -517,8 +507,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		@Override
 		public String toString() {
-			return "[" + _itemIndex + "]"
-				+ (!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue;
+			return "[" + _itemIndex + "]" + (_name == null ? "null"
+				: ((!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue));
 		}
 
 		@Override
@@ -538,14 +528,16 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		@Override
 		public boolean equals(final Object arg) {
-			 return arg instanceof XDValue
+			 return arg != null && arg instanceof XDValue
 				 ? equals((XDValue) arg) : false;
 		}
 
 		@Override
 		public final boolean equals(final XDValue arg) {
-			return arg.getItemId() != CompileBase.PARSEITEM_VALUE ?
-				false : _name.equals(((ParseItem)arg)._name);
+			return arg == null ? false
+				: arg.getItemId() != CompileBase.PARSEITEM_VALUE ? false
+				: _name != null ? _name.equals(((ParseItem)arg)._name)
+				: ((ParseItem)arg)._name == null;
 		}
 
 		////////////////////////////////////////////////////////////////////////

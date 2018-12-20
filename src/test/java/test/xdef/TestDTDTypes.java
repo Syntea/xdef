@@ -21,7 +21,7 @@ public final class TestDTDTypes extends XDTester {
 		try {
 //CDATA
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required CDATA'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -36,7 +36,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //ID
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
@@ -53,7 +53,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //ID
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
@@ -70,7 +70,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //IDREF
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -88,7 +88,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //IDREF
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -106,7 +106,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //CHKID
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKID'/>\n"+
@@ -124,7 +124,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //IDREFS
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -150,7 +150,7 @@ public final class TestDTDTypes extends XDTester {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -177,7 +177,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //CHKIDS
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
@@ -203,7 +203,7 @@ public final class TestDTDTypes extends XDTester {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
@@ -230,7 +230,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //NMTOKEN
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -261,7 +261,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //NMTOKEN
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -292,7 +292,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //NMTOKENS
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -316,7 +316,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //NMTOKENS
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -341,7 +341,7 @@ public final class TestDTDTypes extends XDTester {
 //ENTITY
 //			if (hasDatatype) {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -379,7 +379,7 @@ public final class TestDTDTypes extends XDTester {
 //			}
 //ENTITY
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -416,7 +416,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //ENTITIES
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -453,7 +453,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //ENTITIES
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -490,7 +490,7 @@ public final class TestDTDTypes extends XDTester {
 			}
 //Test NOTATION
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a = 'required NOTATION'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -509,7 +509,7 @@ public final class TestDTDTypes extends XDTester {
 
 //Test of ID, IDREF, IDREFS
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name=\"test1\">\n"+
 " <xd:declaration>\n"+
 "   uniqueSet id2 {c: cislo};\n"+

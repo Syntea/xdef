@@ -331,7 +331,7 @@ public class XDGenCollection {
 			if (!XDConstants.XDEF20_NS_URI.equals(uri)
 				&& !XDConstants.XDEF31_NS_URI.equals(uri)
 				&& !XDConstants.XDEF32_NS_URI.equals(uri)) {
-				uri = XDConstants.XDEF20_NS_URI;
+				uri = XDConstants.XDEF32_NS_URI;
 			}
 			if (_collection == null && _doc.getDocumentElement() == null) {
 				genCollection(uri);

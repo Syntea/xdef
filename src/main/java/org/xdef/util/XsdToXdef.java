@@ -19,10 +19,6 @@ import javax.xml.validation.Validator;
  */
 public class XsdToXdef {
 
-//	/** Constant that represents X-definition version 2.0.*/
-//	private static final byte XDEF2_0 = 1;
-//	/** Constant that represents X-definition version 2.1. */
-//	private static final byte XDEF2_1 = 2;
 	/** Constant that represents XML Schema version 1.0. */
 	private static final byte SCHEMA1_0 = 1;
 	/** Prefix of X-definition nodes in output documents. */

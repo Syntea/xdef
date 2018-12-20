@@ -71,11 +71,11 @@ public final class TestXdefOfXdef extends XDTester {
 			}
 			
 			xml = genCollection(new String[] {
-"<xd:declaration xmlns:xd='" + XDEFNS + "'>\n" +
+"<xd:declaration xmlns:xd='" + _xdNS + "'>\n" +
 "  <xd:macro name='a'>'aaa'</xd:macro>\n"+
 "  String s = ${a};\n"+
 "</xd:declaration>",
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a xd:script=\"finally outln(${a})\"/>\n"+
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
@@ -90,13 +90,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a xd:script = \"\n" +
 "    var { int i = 1;\n" +
 "          uniqueSet id1 {t: string()};\n" +
@@ -121,13 +121,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root = \"#A\">\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"#A\">\n"+
 "  <A><B xd:script='occurs 2 /*intentionaly no parse method*/'/></A>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
 "  uniqueSet id2 string\n"+
 "</xd:declaration>\n"+
@@ -135,7 +135,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
 "<a b=\"optional { int i=1;\n" +
 "                  switch(i) {\n" +
 "                     case 1: i=2;\n" +
@@ -149,20 +149,20 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml =
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "  <xd:declaration> String t = ((String)1.5).substring(1);</xd:declaration>\n"+
 "  <a xd:script=\"*; create getElementName()=='B' ? null : null;\"/>\n"+
 "</xd:def>";
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' xd:root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n"+
 "  <a xd:script=\"match @x=='';options acceptEmptyAttributes\" x=''/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def root='a'><a a='myType'/></xd:def>\n"+
 "<xd:def xd:name='a'>\n"+
 "  <xd:declaration>type myType $rrr.check('intList');</xd:declaration>\n"+
@@ -181,30 +181,30 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 
 			xml = genCollection(new String[] {
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'><a a='myType'/></xd:def>",
-"<xd:BNFGrammar xmlns:xd='" + XDEFNS + "' name='$base'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'><a a='myType'/></xd:def>",
+"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='$base'>\n"+
 "    integer  ::= [0-9]+\n"+
 "    S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "</xd:BNFGrammar>",
-"<xd:BNFGrammar xmlns:xd='" + XDEFNS + "' name='$rrr' extends='$base'>\n"+
+"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='$rrr' extends='$base'>\n"+
 "    intList  ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "</xd:BNFGrammar>",
-"<xd:def xmlns:xd='" + XDEFNS + "' xd:name='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xd:name='a'>\n"+
 "  <xd:declaration>type myType $rrr.check('intList');</xd:declaration>\n"+
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' name='XDDecl'>  \n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='XDDecl'>  \n"+
 "  <xd:BNFGrammar name=\"xscript\"><![CDATA[L::='a'/*E*/]]></xd:BNFGrammar>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:declaration>\n"+
 " external method boolean a.b.a(int);\n"+
 " type an a(2)\n"+ // here is intentionally missing semicolon
@@ -214,13 +214,13 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			if (getFulltestMode()) {xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root ='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+
 "</xd:def>");
 				assertNoErrorwarnings(parse(xml), xml);
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 				xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
 "  </xd:declaration>\n"+
@@ -229,7 +229,7 @@ public final class TestXdefOfXdef extends XDTester {
 				assertNoErrorwarnings(parse(xml), xml);
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 				xml = genCollection(
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a | b | m/n | m/o | x'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a | b | m/n | m/o | x'>\n"+
 "   <xd:any xd:name='x' b='int()' />\n"+
 "   <xd:mixed xd:name='m'> <n/> <o/> </xd:mixed>\n"+
 "   <a> <xd:mixed xd:script='ref m' /> </a>\n"+

@@ -21,7 +21,7 @@ public final class TestNamespaces extends XDTester {
 		Report rep;
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "'\n"+
 "  xd:name='Test' xmlns='A' xmlns:a='B' root='a|a:a'>\n"+
 "\n"+
 "  <a:a xd:script='occurs 2' xmlns:a='C' c='required string()' />\n"+
@@ -53,7 +53,7 @@ public final class TestNamespaces extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:collection xmlns:xd = '" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd = '" + _xdNS + "'>\n"+
 "\n"+
 "<xd:def xmlns='A' xmlns:a='B' xd:name='Test' root='A#a|A#a:a'>\n"+
 "  <a:a xd:script='occurs 2' xmlns:a='C' c='required string()' />\n"+
@@ -88,7 +88,7 @@ public final class TestNamespaces extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='x:a|*' xmlns:x='abcdef'>\n"+
 "  <x:a>\n"+
 "    <x:b xd:script = 'occurs 0..;' >\n"+

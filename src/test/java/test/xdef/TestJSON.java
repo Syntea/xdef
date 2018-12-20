@@ -103,7 +103,7 @@ if (true) return;
 			xdef =
 "<xd:def root=\"js:array\" name = 'json'\n"+
 "  xmlns:js=\"http://www.syntea.cz/json/1.0\"\n"+
-"  xmlns:xd='" + XDEFNS + "'>\n"+
+"  xmlns:xd='" + _xdNS + "'>\n"+
 "  <js:array>\n"+
 "    sequence(%item=[jvalue(),jvalue()])\n"+
 "  </js:array>\n"+
@@ -127,7 +127,7 @@ if (true) return;
 			xdef =
 "<xd:def root=\"js:array\" name = 'json'\n"+
 "  xmlns:js=\"http://www.syntea.cz/json/1.0\"\n"+
-"  xmlns:xd='" + XDEFNS + "'>\n"+
+"  xmlns:xd='" + _xdNS + "'>\n"+
 "  <js:array>\n"+
 "    list(%length=2,%item=jvalue())\n"+
 "  </js:array>\n"+

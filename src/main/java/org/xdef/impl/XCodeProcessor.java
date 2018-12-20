@@ -609,8 +609,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 //			_idrefTable = (CodeUniqueset) _globalVariables[4];
 			 CodeUniqueset.ParseItem[] parseItems =
 				new CodeUniqueset.ParseItem[] {
-					new CodeUniqueset.ParseItem(
-						"", // no key name
+					new CodeUniqueset.ParseItem("", // no key name
 						-1, // chkAddr,
 						0, // itemIndex,
 						XD_STRING, // parsedType,

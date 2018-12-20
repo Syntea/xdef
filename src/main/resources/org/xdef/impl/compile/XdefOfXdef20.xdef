@@ -1,13 +1,15 @@
 <!--
-  With the metanamespace "META" (XDefinition 3.1)  is described
-  the input XML document which must fit the XDefinition 2.0 specification.
+  With the meta namespace "METAXD" (X-definition 3.2) is described
+  the input XML document which must fit the X-definition 2.0 specification.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
   name            = "Ver2.0"
   root            = "XD2.0:def | XD2.0:collection"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
-  xmlns:w         = "http://www.org.xdef/3.2"
+  xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
+  xmlns:XD3.2     = "http://www.xdef.org/3.2"
+  xmlns:w         = "http://www.xdef.org/3.2"
   w:metaNamespace = "METAXD" >
 
 <xd:declaration scope = "local">
@@ -29,8 +31,21 @@
     metaNamespace  = "optional uri; options acceptQualifiedAttr">
 
     <xd:mixed>
+      <!-- Here may be objects from all versions of X-definition -->
       <XD2.0:def xd:script = "occurs *; ref XD2.0:def" />
+      <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
+      <XD3.2:def xd:script = "occurs *; ref Ver3.2#XD3.2:def" />
+      <XD3.1:declaration xd:script = "occurs *; ref Ver3.1#XD3.1:declaration" />
+      <XD3.2:declaration xd:script = "occurs *; ref Ver3.2#XD3.2:declaration" />
+      <XD2.0:BNFGrammar xd:script = "occurs *; ref XD2.0:BNFGrammar" />
+      <XD3.1:BNFGrammar xd:script = "occurs *; ref Ver3.1#XD3.1:BNFGrammar" />
+      <XD3.2:BNFGrammar xd:script = "occurs *; ref Ver3.2#XD3.2:BNFGrammar" />
       <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
+      <XD3.1:thesaurus xd:script = "occurs *; ref Ver3.1#XD3.1:thesaurus" />
+      <XD3.2:thesaurus xd:script = "occurs *; ref Ver3.2#XD3.2:thesaurus" />
+      <XD2.0:component xd:script = "occurs *; ref XD2.0:component" />
+      <XD3.1:component xd:script = "occurs *; ref Ver3.1#XD3.1:component" />
+      <XD3.2:component xd:script = "occurs *; ref Ver3.2#XD3.2:component" />
     </xd:mixed>
 
   </XD2.0:collection>
@@ -60,16 +75,9 @@
          optional declarationScript;
       </XD2.0:declaration>
 
-      <XD2.0:BNFGrammar xd:script = "occurs *"
-         extends = "optional xdIdentifier; options acceptQualifiedAttr"
-         name = "xdIdentifier; options acceptQualifiedAttr"
-         scope = "optional enum('global','local'); options acceptQualifiedAttr">
-         optional bnfGrammar; /* may be nothing */
-      </XD2.0:BNFGrammar>
+      <XD2.0:BNFGrammar xd:script = "occurs *; ref XD2.0:BNFGrammar" />
 
-      <XD2.0:component xd:script = "occurs *">
-         required xcomponent;
-      </XD2.0:component>
+      <XD2.0:component xd:script = "occurs *; ref XD2.0:component" />
 
       <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
 
@@ -103,6 +111,17 @@
     </xd:mixed>
 
   </XD2.0:def>
+
+  <XD2.0:BNFGrammar
+     extends = "optional xdIdentifier; options acceptQualifiedAttr"
+     name = "xdIdentifier; options acceptQualifiedAttr"
+     scope = "optional enum('global','local'); options acceptQualifiedAttr">
+     optional bnfGrammar; /* may be nothing */
+  </XD2.0:BNFGrammar>
+
+  <XD2.0:component>
+     required xcomponent;
+  </XD2.0:component>
 
   <XD2.0:thesaurus language="languageId()"
       default="optional yesNo()">

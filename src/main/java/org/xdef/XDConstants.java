@@ -122,14 +122,13 @@ public interface XDConstants {
 	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
-	//FIXME: http://www.xdef.org/3.2
-	public static final String XDEF32_NS_URI = "http://www.org.xdef/3.2";
+	public static final String XDEF32_NS_URI = "http://www.xdef.org/3.2";
 	/** The namespace URI for X-definition instance */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.syntea.cz/xdef/instance";
 	/** The namespace URI for X-definition instance */
 	public static final String XDEF32_INSTANCE_NS_URI = 
-		"http://www.org.xdef/instance/3.2";
+		"http://www.xdef.org/instance/3.2";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!

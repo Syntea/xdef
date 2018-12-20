@@ -146,7 +146,7 @@ public final class TestExtenalMethods extends XDTester {
 		String s;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "external method void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
 "external method {\n"+
@@ -243,7 +243,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertNoErrors(reporter);
 
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration scope='local'>\n"+
 "external method {\n"+
 "void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
@@ -365,7 +365,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a\n"+
 "m00=\"?string;finally{m00();m00(1);}\"\n"+
 "m01=\"?string;\"\n"+ // byte not supported for declared class
@@ -406,7 +406,7 @@ public final class TestExtenalMethods extends XDTester {
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
 			xdb.setSource(
 "<?xml version='1.0' encoding='UTF-8'?>\n"+
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Test' root='Test'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "</xd:declaration>\n"+
@@ -430,7 +430,7 @@ public final class TestExtenalMethods extends XDTester {
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
 			xdb.setSource(
 "<?xml version='1.0' encoding='UTF-8'?>\n"+
-"<xd:def xmlns:xd='" + XDEFNS + "' name='Test' root='Test'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "</xd:declaration>\n"+
@@ -444,7 +444,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "  external method int test.xdef.TestExtenalMethods.p4(long);\n"+
@@ -471,7 +471,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "external method {\n"+
 "XDParseResult test.xdef.TestExtenalMethods.p1(XXData, String);\n"+
@@ -503,7 +503,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("p12103450433604", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "  <a xd:script = \"finally {Bytes b = p9();\n"+
 "     AnyValue a = '6'; out(''+p1('p1')+p2('2',1)+p3()+p3()+p3(3,3,3)+\n"+
 "     p4(4)+p5(5) + p8(b) + b.size()); p6(a); p7(); p7(1,'x',2,true);}\"/>\n"+
@@ -521,7 +521,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDValue test.xdef.TestExtenalMethods.y();\n"+
 "  external method org.xdef.XDValue test.xdef.TestExtenalMethods.z();\n"+
@@ -535,7 +535,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "external method {\n"+
 //"  XDValue test.xdef.TestExtenalMethods.x();\n"+
@@ -555,7 +555,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "external method {\n"+
 "void test.xdef.TestExtenalMethods.m1(XXNode);\n"+
@@ -585,7 +585,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertEq(_m9, 9);
 			assertEq(_m10, 3);
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
 "        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
 "</xd:def>";
@@ -603,7 +603,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method {\n"+ //*
 "    void test.xdef.TestExtenalMethods.t1(XDContainer);\n"+
@@ -620,7 +620,7 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {// test declarations scope local and global
 			xp = compile(new String[] {
-"<xd:def xmlns:xd='" + XDEFNS + "' name='A' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='A' root='a'>\n"+
 "<xd:declaration scope='local'>\n"+
 "  external method {\n"+
 "    void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
@@ -635,7 +635,7 @@ public final class TestExtenalMethods extends XDTester {
 "  m01=\"?string;finally{String s=m01(m01());if('1'!=s)setText(s);}\"\n"+
 " />\n"+
 "</xd:def>",
-"<xd:def xmlns:xd='" + XDEFNS + "' name='B' root='b'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='B' root='b'>\n"+
 "<xd:declaration scope='global'>\n"+
 "  external method {\n"+
 "    void test.xdef.TestExtenalMethods_1.m00() as m;\n"+

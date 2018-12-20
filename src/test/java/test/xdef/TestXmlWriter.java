@@ -29,7 +29,7 @@ public final class TestXmlWriter extends XDTester {
 		String tempDir = super.getTempDir();
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='books'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='books'>\n"+
 "  <books>\n"+
 "    <book xd:script='+; forget' isbn='int'>\n"+
 "      <title>string</title>\n"+
@@ -63,7 +63,7 @@ public final class TestXmlWriter extends XDTester {
 			assertEq("<books/>", el);
 
 			xdef = // Test XmlOutStream methods
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external String tempDir;\n"+
 "    XmlOutStream x = new XmlOutStream(tempDir + 'x.xml','UTF-8',true);\n"+

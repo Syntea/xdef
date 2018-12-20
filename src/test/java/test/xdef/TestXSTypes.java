@@ -443,7 +443,7 @@ public final class TestXSTypes extends XDTester {
 
 	void genXDef() {
 		_xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "  script='options noTrimAttr,preserveEmptyAttributes,\n"+
 "    preserveAttrWhiteSpaces,\n"+
 "    noTrimText,preserveTextWhiteSpaces'>\n"+
@@ -647,7 +647,7 @@ public final class TestXSTypes extends XDTester {
 		try {
 			//external method with keyparams
 			xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
 "</xd:declaration>\n"+
@@ -664,7 +664,7 @@ public final class TestXSTypes extends XDTester {
 
 		//test combine seq and key params
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<a a='string(2,%maxLength=3)'/>\n"+
 "</xd:def>";
 		parse(xdef, "", "<a a='abc'/>", reporter);
@@ -672,7 +672,7 @@ public final class TestXSTypes extends XDTester {
 		parse(xdef, "", "<a a='abcd'/>", reporter);
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)'\n"+
 "  />\n"+
 "</xd:def>";
@@ -685,7 +685,7 @@ public final class TestXSTypes extends XDTester {
 		assertFalse(reporter.getErrorCount() != 2, reporter.printToString());
 		//decimal
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<a a='decimal(0,1)'/>\n"+
 "</xd:def>";
 		compile(xdef).createXDDocument();
@@ -697,7 +697,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//decimal, base decimal
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' name = 'test' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name = 'test' root = 'a'>\n"+
 "<a a='decimal(%base=decimal(%minInclusive=0),%minInclusive=1," +
 "      %maxInclusive=5,%totalDigits=1,%fractionDigits=0," +
 "      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
@@ -712,7 +712,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared type parser
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  type t union(%item=[decimal,boolean]);\n"+
 "</xd:declaration>\n"+
@@ -732,7 +732,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared simplified version
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  type x union(%item = [int(1, 2), boolean]);\n"+
 "  type t x;\n"+
@@ -756,7 +756,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared parser
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  boolean x() {if (int(1, 2)) return true; return boolean();}\n"+
 "  type t x;\n"+
@@ -774,7 +774,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union - declared parser
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  boolean t() { if (int(1, 2)) return true; return boolean(); }\n"+
 "</xd:declaration>\n"+
@@ -791,7 +791,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union, declared items, base.
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = string(%enumeration=['true', '2', 'xyz']); \n"+
 "  Parser t = union(%base=s, %item=[decimal,boolean]); \n"+
@@ -816,7 +816,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with base
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = string(%enumeration='xyz'); \n"+
 "  Parser t = union(%item=[decimal, boolean, s ]); \n"+
@@ -838,7 +838,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//model variable.
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<A xd:script='var type p union(%item = [int(1, 3), boolean]);'>\n"+
 "  <a xd:script='occurs *;'>\n"+
 "    <b x='p'/>\n"+
@@ -851,7 +851,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrors(reporter);
 		//model variable.
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<A xd:script='var {Parser p = union(%item = [int(1, 3), boolean]);}'>\n"+
 "  <a xd:script='occurs *;'>\n"+
 "    <b x='p'/>\n"+
@@ -864,7 +864,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrors(reporter);
 		//union with the a list of same items
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = list(%item=eq('abc'), %minLength=1, %maxLength=2); \n"+
 "</xd:declaration>\n"+
@@ -894,7 +894,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with the a list item
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = list(%item=decimal, %enumeration=[1,2,[3,4]]); \n"+
 "  Parser t = union(%item=[boolean, s]); \n"+
@@ -922,7 +922,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		//union with the sequence item
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = sequence(%item=[boolean,decimal],\n"+
 "    %enumeration=['true 1', 'false 2']); \n"+
@@ -952,7 +952,7 @@ public final class TestXSTypes extends XDTester {
 
 		//gYear - invoked in if command (see method "check").
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<a a = \"required {return gYear(%minInclusive='1999',\n"+
 "   %maxInclusive='2000');}\"/>\n"+
 "</xd:def>";
@@ -968,7 +968,7 @@ public final class TestXSTypes extends XDTester {
 
 		//sequence
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a a=' sequence ( %item = [ decimal ( %maxInclusive = 5 ) ] ) '/>\n"+
 "</xd:def>";
 		xml = "<a a=' 1' />";
@@ -976,8 +976,8 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		//sequence
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
-" xmlns:xs='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
+" xmlns:xs='" + _xdNS + "' root = 'a'>\n"+
 " <a a='sequence(%item=[decimal(%maxInclusive=5),\n"+
 "      int(%minInclusive=0)])'/>\n"+
 "</xd:def>";
@@ -990,7 +990,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		//sequence with enumeration
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = sequence(%item=[boolean,decimal],\n"+
 "    %enumeration=['true 1', 'false 2']); \n"+
@@ -1009,7 +1009,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings(), "Error not reported");
 		// string
 		xdef = //whiteSpace=preserve (option trimAttr)
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "  Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
 "</xd:declaration>\n"+
@@ -1021,7 +1021,7 @@ public final class TestXSTypes extends XDTester {
 		assertErrors(reporter);
 		assertEq(el, "<A a='' b=''/>");
 		xdef = //whiteSpace=preserve (option noTrimAttr)
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'\n"+
 " xd:script = 'options noTrimAttr'>\n"+
 "<xd:declaration>\n"+
 "  Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
@@ -1033,7 +1033,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		assertEq(el, "<A a=' ' b=' '/>");
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root = 'A'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'\n"+
 " xd:script = 'options noTrimAttr'>\n"+
 "<xd:declaration>\n"+
 "  Parser p = string(%minLength=0, %whiteSpace='collapse');\n"+
@@ -4197,7 +4197,7 @@ public final class TestXSTypes extends XDTester {
 
 		//check xml schema types
 		xdef =
-"<xd:collection xmlns:xd='" + XDEFNS + "'>\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
 " <xd:declaration>\n"+
 "   type ID ID();\n"+
@@ -4292,7 +4292,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
 		//Test of methods NCname(), QName(), QnameURI()
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "     xmlns:ws='abc' xd:root=\"ws:message\" xd:name=\"test\">\n"+
 "   <ws:message xd:script='occurs 0..'\n"+
 "     name='required NCName()'>" +
@@ -4352,7 +4352,7 @@ public final class TestXSTypes extends XDTester {
 		setChkSyntax(false);
 		// expressions
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='xs:int | string; finally out(xs:int | string)'/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
@@ -4367,7 +4367,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq("true", strw.toString());
 		assertNoErrors(reporter);
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='xs:int || string; finally out(xs:int || string)'/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
@@ -4382,7 +4382,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq("true", strw.toString());
 		assertNoErrors(reporter);
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='xs:int AND string; finally out(xs:int AND string)'/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
@@ -4397,7 +4397,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq("false", strw.toString());
 		assertErrors(reporter);
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='xs:int AAND string; finally out(xs:int AAND string)'/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
@@ -4413,7 +4413,7 @@ public final class TestXSTypes extends XDTester {
 		assertErrors(reporter);
 		// check Parser - combination of sequential and key parameters
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+
 "     b='decimal(-2,2,%totalDigits=3,%fractionDigits=2)' c='dec(3,2)'/>\n"+
 "</xd:def>\n";
@@ -4437,7 +4437,7 @@ public final class TestXSTypes extends XDTester {
 		parse(xp, "", xml, reporter);
 		assertNoErrors(reporter);
 		xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
 "  <a x=\"list(string, %length = 2);\"/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
@@ -4451,7 +4451,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq(xml, parse(xp, "", xml, reporter));
 		assertTrue(reporter.errorWarnings());
 		xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
 "  <xd:declaration> Parser p = string;</xd:declaration>\n"+
 "  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
 "</xd:def>";
@@ -4463,7 +4463,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq(xml, parse(xp, "", xml, reporter));
 		assertTrue(reporter.errorWarnings());
 		xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
 "  <xd:declaration>int i = 1, j = 2; Parser p = int(i,j);</xd:declaration>\n"+
 "  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
 "</xd:def>";
@@ -4479,7 +4479,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(reporter.errorWarnings());
 		// check element variable
 		xdef =
-"<xd:def xmlns:xd = '" + XDEFNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
 " <a xd:script=\"var {String x;}\">\n"+
 "   <b xd:script='+'"+
 "     x=\"empty();\n"+
@@ -4498,7 +4498,7 @@ public final class TestXSTypes extends XDTester {
 		assertEq(xml, parse(xdef, "", xml, reporter));
 		assertNoErrorwarnings(reporter);
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a xd:script=\"var final String z='1999';\">\n"+
 "  <b>\n"+
 "   <c xd:script='+'\n"+
@@ -4519,7 +4519,7 @@ public final class TestXSTypes extends XDTester {
 		assertNoErrorwarnings(reporter);
 		//parser type
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a='getMyParser()'/>\n"+
 "</xd:def>\n";
 		xp = compile(xdef, getClass());
@@ -4530,7 +4530,7 @@ public final class TestXSTypes extends XDTester {
 		parse(xp, "", xml, reporter);
 		assertTrue(reporter.errorWarnings());
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "<xd:declaration>\n"+
 "  Parser p = getMyParser(); \n"+
 "</xd:declaration>\n"+
@@ -4544,7 +4544,7 @@ public final class TestXSTypes extends XDTester {
 		parse(xp, "", xml, reporter);
 		assertTrue(reporter.errorWarnings());
 		xdef = //external variable
-"<xd:def xmlns:xd='" + XDEFNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "<xd:declaration>\n"+
 "  external Parser p; \n"+
 "</xd:declaration>\n"+
@@ -4567,7 +4567,7 @@ public final class TestXSTypes extends XDTester {
 		setProperty("xdef.specdates",
 			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 		xdef =
-"<xd:def xmlns:xd='" + XDEFNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<A a='int()' b='int()'/>\n"+
 "</xd:def>";
 		xp = compile(xdef);
