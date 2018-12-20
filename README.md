@@ -8,5 +8,7 @@ processing and creation, this tool was developed by Syntea Software Group Inc.
 It allows the user to not only define the structure of XML documents,
 but also to describe specifically their processing and construction.
 
+Homepage: [https://www.xdefinice.cz](https://www.xdefinice.cz)
+
 # License
 The source code for this project is licensed under Apache 2.0 license.
