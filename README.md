@@ -11,4 +11,5 @@ but also to describe specifically their processing and construction.
 Homepage: <https://www.xdefinice.cz>
 
 # License
-The source code for this project is licensed under [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
+The source code for this project is licensed under
+[Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
