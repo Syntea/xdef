@@ -5,7 +5,7 @@ package test.xdef.component;
 public class L implements org.xdef.component.XComponent{
   public L.$any get$any() {return _$any;}
   public void set$any(L.$any x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "$any", null, "L#L/$any");
     _$any = x;
   }
@@ -45,13 +45,13 @@ public class L implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -148,7 +148,7 @@ public static class $any implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    if (doc == null) {
+    if (doc==null) {
       return org.xdef.xml.KXmlUtils.parseXml(XD_Any)
         .getDocumentElement();
     } else {

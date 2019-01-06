@@ -9,7 +9,7 @@ public class Z5 implements org.xdef.component.XComponent{
   public void setNazevFirmy(String x) {_NazevFirmy = x;}
   public void setIC(Integer x) {_IC = x;}
   public void setSidlo(Z9 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Sidlo", null, "SouborD1A#Firma/Sidlo");
     _Sidlo = x;
   }
@@ -51,13 +51,13 @@ public class Z5 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNazevFirmy() != null)
       el.setAttribute("NazevFirmy", getNazevFirmy());

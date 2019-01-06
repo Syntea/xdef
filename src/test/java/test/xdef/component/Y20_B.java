@@ -41,13 +41,13 @@ public class Y20_B implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -113,11 +113,12 @@ public static class X implements org.xdef.component.XComponent{
   public java.util.List<test.xdef.component.Y20_B.X> listOfX() {return _X;}
   public void setb(String x) {_b = x;}
   public void addX(test.xdef.component.Y20_B.X x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "X", null, "Y20#B/X/X");
       _X.add(x);
     }
+
   }
   public String xposOfb(){return XD_XPos + "/@b";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -156,9 +157,9 @@ public static class X implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

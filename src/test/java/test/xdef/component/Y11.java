@@ -43,13 +43,13 @@ public class Y11 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -118,18 +118,20 @@ public static class B implements org.xdef.component.XComponent{
   public void setN(String x) {_N = x;}
   public void setI(String x) {_I = x;}
   public void addEv(test.xdef.component.Y11Op x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Ev", null, "Y11#A/B/$mixed/Ev");
       _Ev.add(x);
     }
+
   }
   public void addOp(test.xdef.component.Y11Op x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Op", null, "Y11#A/B/$mixed/Op");
       _Op.add(x);
     }
+
   }
   public String xposOfN(){return XD_XPos + "/@N";}
   public String xposOfI(){return XD_XPos + "/@I";}
@@ -169,9 +171,9 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

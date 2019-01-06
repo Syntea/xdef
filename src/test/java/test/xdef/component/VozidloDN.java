@@ -143,17 +143,17 @@ public class VozidloDN implements org.xdef.component.XComponent{
   }
   public void setMistoUhradyHP(String x) {_MistoUhradyHP = x;}
   public void setSkoda(Z3 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VozidloDN/$mixed/Skoda");
     _Skoda = x;
   }
   public void setJinaSkoda(Z3 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#VozidloDN/$mixed/JinaSkoda");
     _JinaSkoda = x;
   }
   public void setDrzitel(VozidloDN.Drzitel x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Drzitel", null, "SouborD1A#VozidloDN/$mixed/Drzitel");
     _Drzitel = x;
   }
@@ -216,13 +216,13 @@ public class VozidloDN implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
@@ -454,9 +454,9 @@ public static class Drzitel implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

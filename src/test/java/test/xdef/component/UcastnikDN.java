@@ -35,49 +35,50 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   public void setPachatel(String x) {_Pachatel = x;}
   public void setPoskozeny(String x) {_Poskozeny = x;}
   public void setJinaSkoda(Z3 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#UcastnikDN/$mixed/JinaSkoda");
     _JinaSkoda = x;
   }
   public void setOsoba(Z4 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Osoba", null, "SouborD1A#UcastnikDN/$mixed/Osoba");
     _Osoba = x;
   }
   public void setFirma(Z5 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Firma", null, "SouborD1A#UcastnikDN/$mixed/Firma");
     _Firma = x;
   }
   public void addDoklad(Z6 x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Doklad", null, "SouborD1A#UcastnikDN/$mixed/Doklad");
       _Doklad.add(x);
     }
+
   }
   public void setPoruseniZakProvoz(UcastnikDN.PoruseniZakProvoz x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakProvoz", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz");
     _PoruseniZakProvoz = x;
   }
   public void setPoruseniZakPrest(UcastnikDN.PoruseniZakPrest x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakPrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest");
     _PoruseniZakPrest = x;
   }
   public void setPoruseniZakTrest(UcastnikDN.PoruseniZakTrest x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakTrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest");
     _PoruseniZakTrest = x;
   }
   public void setPoruseniZakOst(UcastnikDN.PoruseniZakOst x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakOst", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakOst");
     _PoruseniZakOst = x;
   }
   public void setVazba(UcastnikDN.Vazba x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vazba", null, "SouborD1A#UcastnikDN/$mixed/Vazba");
     _Vazba = x;
   }
@@ -128,13 +129,13 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
       el.setAttribute("OznSegmentu", getOznSegmentu());
@@ -342,9 +343,9 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -452,9 +453,9 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -562,9 +563,9 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -672,9 +673,9 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -782,9 +783,9 @@ public static class Vazba implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

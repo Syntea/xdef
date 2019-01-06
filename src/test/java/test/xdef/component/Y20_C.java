@@ -5,7 +5,7 @@ package test.xdef.component;
 public class Y20_C implements org.xdef.component.XComponent{
   public Y20_C.B getB() {return _B;}
   public void setB(Y20_C.B x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "B", null, "Y20#C/B");
     _B = x;
   }
@@ -45,13 +45,13 @@ public class Y20_C implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -117,11 +117,12 @@ public static class B implements org.xdef.component.XComponent{
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY() {return _Y;}
   public void setb(String x) {_b = x;}
   public void addY(test.xdef.component.Y20_C.B.Y x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Y", null, "Y20#Y/Y");
       _Y.add(x);
     }
+
   }
   public String xposOfb(){return XD_XPos + "/@b";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -160,9 +161,9 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -237,11 +238,12 @@ public static class Y implements org.xdef.component.XComponent{
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY() {return _Y;}
   public void setb(String x) {_b = x;}
   public void addY(test.xdef.component.Y20_C.B.Y x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Y", null, "Y20#Y/Y");
       _Y.add(x);
     }
+
   }
   public String xposOfb(){return XD_XPos + "/@b";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -280,9 +282,9 @@ public static class Y implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

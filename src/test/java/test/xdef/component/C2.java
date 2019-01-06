@@ -7,11 +7,12 @@ public class C2 implements org.xdef.component.XComponent{
   public java.util.List<C1> listOfPerson() {return _Person;}
   public void setNum(Integer x) {_Num = x;}
   public void addPerson(C1 x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Person", null, "C#Town/Street/House/Person");
       _Person.add(x);
     }
+
   }
   public String xposOfNum(){return XD_XPos + "/@Num";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -50,13 +51,13 @@ public class C2 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNum() != null)
       el.setAttribute("Num", String.valueOf(getNum()));

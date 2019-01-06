@@ -17,11 +17,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** Provides tools for generation Java class source registered table and for
- * report tables.
+/** Generates Java class source with registered report tables.
  * @author Vaclav Trojan
  */
 public class RegisterReportTables {
+
+	/** Platform-dependent new line. */
+	private static final String NL = /**" \n"; /**/ String.format("%n"); /**/
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
@@ -572,18 +574,18 @@ public class RegisterReportTables {
 			OutputStreamWriter out = new OutputStreamWriter(
 				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
 			out.write(
-"// This file was generated automatically, DO NOT modify it!\n"+
-"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";\n"+
-"\n"+
-"/** Registered identifiers of reports with the prefix " + prefix + ". */\n"+
-"public interface " + prefix + " {\n"+
-"\t/** Prefix of reports. */\n"+
+"// This file was generated automatically, DO NOT modify it!"+NL+
+"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+NL+
+NL+
+"/** Registered identifiers of reports with the prefix " + prefix + ". */"+NL+
+"public interface " + prefix + " {"+NL+
+"\t/** Prefix of reports. */"+NL+
 "\tstatic final String " + table.getPrefix() +
-	"_PREFIX = \"" + table.getPrefix() + "\";\n"+
-"\t/** Default language. */\n"+
+	"_PREFIX = \"" + table.getPrefix() + "\";"+NL+
+"\t/** Default language. */"+NL+
 "\tstatic final String " + prefix +
-	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";\n"+
-"\t/** List of supported languages or registred message tables. */\n"+
+	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";"+NL+
+"\t/** List of supported languages or registred message tables. */"+NL+
 "\tstatic final String[] " + prefix + "_LANGUAGES = {");
 			String xx[] = table.getLanguages();
 			for (int i = 0; i < xx.length; i++) {
@@ -592,7 +594,7 @@ public class RegisterReportTables {
 					 out.write(", ");
 				 }
 			}
-			out.write("};\n");
+			out.write("};"+NL);
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
 				String s = table.getReportText(id);
@@ -601,16 +603,16 @@ public class RegisterReportTables {
 					s = s.replace("<", "&lt;");
 					s = s.replace(">", "&gt;");
 					s = s.replace("*/", "*&#47;");
-					out.write("\t/** " + s + " */\n");
+					out.write("\t/** " + s + " */"+NL);
 				}
 				long regID = ReportTable.getRegisteredReportId(table, i);
 				out.write(
-"\tpublic static final long " + id + " = " + regID + "L;\n");
+"\tpublic static final long " + id + " = " + regID + "L;"+NL);
 			}
 			out.write("}");
 			out.close();
 		} catch (Exception ex) {
-			reporter.write("E SYS036 Program exception: "+ex.getMessage()+'\n');
+			reporter.write("E SYS036 Program exception: "+ex.getMessage()+NL);
 		}
 	}
 
@@ -637,7 +639,7 @@ public class RegisterReportTables {
 			reporter.write("E SYS220 |Default report table is incorrect;"
 				+ " localized table:  " +
 				(registeredTable == null ?
-					"null" : registeredTable.getTableName()) + ")\n");
+					"null" : registeredTable.getTableName()) + ")"+NL);
 			return;
 		}
 		if (table == registeredTable) {
@@ -657,7 +659,7 @@ public class RegisterReportTables {
 						reporter.write("E SYS221 Report "
 							+ prefix  + key
 							+ " is missing in the default"+table.getTableName()
-							+ "\n");
+							+ NL);
 					}
 				}
 				for (String key: registeredTable._ids) {
@@ -665,7 +667,7 @@ public class RegisterReportTables {
 					if (text == null) {
 						reporter.write("E SYS225 Report " + prefix+key
 							+ " is missing in the default"+table.getTableName()
-							+ "\n");
+							+ NL);
 					}
 				}
 			}
@@ -677,7 +679,7 @@ public class RegisterReportTables {
 					if (p1 == null) {
 						reporter.write("E SYS212 Unclosed parameter in the text"
 							+ " of report " + prefix+id
-							+ " table " + table.getTableName() + "\n");
+							+ " table " + table.getTableName() + NL);
 						p1 =  new String[0];
 					}
 					if (table != registeredTable) { //not default table
@@ -691,7 +693,7 @@ public class RegisterReportTables {
 									reporter.write("E SYS217 Parameters in"
 										+ " tables " + table.getTableName()
 										+ " and "+registeredTable.getTableName()
-										+ "differs, report " + id + "\n");
+										+ "differs, report " + id + NL);
 									break;
 								}
 							}
@@ -699,7 +701,7 @@ public class RegisterReportTables {
 							reporter.write("E SYS217 Parameters in tables "
 								+ table.getTableName()
 								+ " and " + registeredTable.getTableName()
-								+ " report " + id + "\n");
+								+ " report " + id + NL);
 						}
 					}
 				}
@@ -707,7 +709,7 @@ public class RegisterReportTables {
 		} catch (Exception ex) {
 			String msg = ex.getMessage();
 			if (!reporter.toString().isEmpty()) {
-				msg = (msg != null ? msg + "\n" : "") + reporter.toString();
+				msg = (msg != null ? msg + NL : "") + reporter.toString();
 			}
 			throw new RuntimeException(msg, ex);
 		}
@@ -1007,15 +1009,15 @@ public class RegisterReportTables {
 		final String HDRMSG =
 "RegisterReportTables - generator of registered report tables.\n"+
 "Parameters: source -i input -o outDir [-p package] [-c encoding] [-r]\n"+
-"where:"+
-"-i input pathname(s) of property file(s) with report texts (the" +
-"   file name may contain wildcard characters)."+
+"where:\n"+
+"-i input pathname(s) of property file(s) with report texts (the file name\n"+
+"   may contain wildcard characters).\n"+
 "-o the directory where Java source with report tables are generated\n"+
 "-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
 "-c endoding: character set name of output file (default is UTF-8).\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Missing parameters.\n\n"+ HDRMSG);
+			throw new RuntimeException("Missing parameters.\n\n" + HDRMSG);
 		}
 		String[] files = null;
 		String pckg = null;
@@ -1090,8 +1092,8 @@ public class RegisterReportTables {
 							continue;
 						case 'c':
 							if (encoding != null) {
-								errors.println(
-									"Duplicated parameter -c: " + args[i]);
+								errors.println("Duplicated parameter -c: "
+									+ args[i]);
 							}
 							if (args[i].length() > 2) {
 								encoding = args[i].substring(2);
@@ -1099,8 +1101,7 @@ public class RegisterReportTables {
 								if (++i <= len && !args[i].startsWith("-")) {
 									encoding = args[i];
 								} else {
-									errors.println(
-										"Missing encoding parameter");
+									errors.println("Missing encoding");
 								}
 							}
 							continue;
@@ -1115,12 +1116,12 @@ public class RegisterReportTables {
 								if (++i <= len && !args[i].startsWith("-")) {
 									pckg = args[i];
 								} else {
-									errors.println("Missing package parameter");
+									errors.println("Missing package name");
 								}
 							}
 							continue;
 						default:
-							errors.println("Unknown switch name: " + args[i]);
+							errors.println("Unknown switch: " + args[i]);
 					}
 				}
 			}
@@ -1135,7 +1136,7 @@ public class RegisterReportTables {
 		}
 		errors.close();
 		if (!errWriter.toString().isEmpty()) {
-			throw new RuntimeException(errWriter.toString() + "\n" + HDRMSG);
+			throw new RuntimeException(errWriter.toString() + NL + HDRMSG);
 		}
 		ReportTableImpl[] msgTables = (ReportTableImpl[])readReporTables(files);
 		if (msgTables != null) {

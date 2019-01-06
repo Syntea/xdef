@@ -43,89 +43,99 @@ public class Z1 implements org.xdef.component.XComponent{
     _PlatnostOd=x==null ? null : new org.xdef.sys.SDatetime(x);
   }
   public void setProtokol(Z2 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Protokol", null, "SouborD1A#ZaznamPDN/$mixed/Protokol");
     _Protokol = x;
   }
   public void setRozhodnutiDN(Z7 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "RozhodnutiDN", null, "SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN");
     _RozhodnutiDN = x;
   }
   public void addVyliceniDN(Z1.VyliceniDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "VyliceniDN", null, "SouborD1A#ZaznamPDN/$mixed/VyliceniDN");
       _VyliceniDN.add(x);
     }
+
   }
   public void setObjStranka(Z8 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "ObjStranka", null, "SouborD1A#ZaznamPDN/$mixed/ObjStranka");
     _ObjStranka = x;
   }
   public void addFoto(FotoDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Foto", null, "SouborD1A#ZaznamPDN/$mixed/Foto");
       _Foto.add(x);
     }
+
   }
   public void addVozidlo(VozidloDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Vozidlo", null, "SouborD1A#ZaznamPDN/$mixed/Vozidlo");
       _Vozidlo.add(x);
     }
+
   }
   public void addTramvaj(TramvajDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Tramvaj", null, "SouborD1A#ZaznamPDN/$mixed/Tramvaj");
       _Tramvaj.add(x);
     }
+
   }
   public void addTrolejbus(TrolejbusDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Trolejbus", null, "SouborD1A#ZaznamPDN/$mixed/Trolejbus");
       _Trolejbus.add(x);
     }
+
   }
   public void addVlak(VlakDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Vlak", null, "SouborD1A#ZaznamPDN/$mixed/Vlak");
       _Vlak.add(x);
     }
+
   }
   public void addPovoz(PovozDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Povoz", null, "SouborD1A#ZaznamPDN/$mixed/Povoz");
       _Povoz.add(x);
     }
+
   }
   public void addPredmet(PredmetDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Predmet", null, "SouborD1A#ZaznamPDN/$mixed/Predmet");
       _Predmet.add(x);
     }
+
   }
   public void addZvire(ZvireDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Zvire", null, "SouborD1A#ZaznamPDN/$mixed/Zvire");
       _Zvire.add(x);
     }
+
   }
   public void addUcastnik(UcastnikDN x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Ucastnik", null, "SouborD1A#ZaznamPDN/$mixed/Ucastnik");
       _Ucastnik.add(x);
     }
+
   }
   public String xposOfVerze(){return XD_XPos + "/@Verze";}
   public String xposOfSeqRec(){return XD_XPos + "/@SeqRec";}
@@ -167,13 +177,13 @@ public class Z1 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getVerze() != null)
       el.setAttribute("Verze", getVerze());
@@ -370,9 +380,9 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);

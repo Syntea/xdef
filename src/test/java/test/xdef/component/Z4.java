@@ -50,12 +50,12 @@ public class Z4 implements org.xdef.component.XComponent{
   public void setStatniPrislusnost(String x) {_StatniPrislusnost = x;}
   public void setProfese(String x) {_Profese = x;}
   public void setTrvalyPobyt(Z9 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "TrvalyPobyt", null, "SouborD1A#Osoba/$mixed/TrvalyPobyt");
     _TrvalyPobyt = x;
   }
   public void setPrechodnyPobyt(Z9 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PrechodnyPobyt", null, "SouborD1A#Osoba/$mixed/PrechodnyPobyt");
     _PrechodnyPobyt = x;
   }
@@ -108,13 +108,13 @@ public class Z4 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJmeno() != null)
       el.setAttribute("Jmeno", getJmeno());
