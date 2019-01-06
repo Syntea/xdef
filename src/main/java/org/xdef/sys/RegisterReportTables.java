@@ -48,7 +48,7 @@ public class RegisterReportTables {
 	 * letters. Messages for the specific language and prefix must be stored to
 	 * the separate file.
 	 * The report files must be available in the package
-	 * <tt>cz.syntea.xdef.msg</tt>.
+	 * <tt>org.xdef.msg</tt>.
 	 * <p>The file name must be composed by following way:</p>
 	 * <tt>prefix_ccc.xml</tt>
 	 * <p>where prefix must be followed by the character
@@ -86,12 +86,12 @@ public class RegisterReportTables {
 	 *
 	 * <p>Example:</p>
 	 * <p>The report tables are searched by report manager in the package
-	 * <tt>cz.syntea.xdef.msg</tt>. For each prefix should exist a class
+	 * <tt>org.xdef.msg</tt>. For each prefix should exist a class
 	 * with the name equal to the report prefix. This class may be empty, it
 	 * just helps to find report files by class loader.</p>
 	 * <p><b>example:</b></p>
 	 * <pre><code>
-	 * package cz.syntea.xdef.msg;
+	 * package org.xdef.msg;
 	 * public final class MYAPP {}
 	 * </code></pre>
 	 * The report can be created by the following command:
@@ -551,7 +551,7 @@ public class RegisterReportTables {
 	/** Generate Java source with the interface of registered IDs.
 	 * @param table report table.
 	 * @param dir directory where java source is stored.
-	 * @param pckg name of package or <tt>null</tt> (i.e. cz.syntea.xdef.msg).
+	 * @param pckg name of package or <tt>null</tt> (i.e. org.xdef.msg).
 	 * @param encoding character encoding of source file or <tt>null</tt> (then
 	 * the system encoding is used).
 	 * @param reporter where error reports are written.
@@ -569,16 +569,11 @@ public class RegisterReportTables {
 		fname += prefix + ".java";
 		File f = new File(fname);
 		try {
-			OutputStreamWriter out;
-			if (encoding != null) {
-				out = new OutputStreamWriter(new FileOutputStream(f), encoding);
-			} else {
-				out = new OutputStreamWriter(new FileOutputStream(f));
-			}
-			Properties msgs = table.getReports();
+			OutputStreamWriter out = new OutputStreamWriter(
+				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
 			out.write(
 "// This file was generated automatically, DO NOT modify it!\n"+
-"package " + (pckg == null ? "cz.syntea.xdef.msg" : pckg) + ";\n"+
+"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";\n"+
 "\n"+
 "/** Registered identifiers of reports with the prefix " + prefix + ". */\n"+
 "public interface " + prefix + " {\n"+
@@ -623,7 +618,7 @@ public class RegisterReportTables {
 	 * @param table report table.
 	 * @param dir output directory where generated source will be written.
 	 * @param pckg name of Java package or <tt>null</tt>. If the parameter is
-	 * <tt>null</tt> it is used the default value "cz.syntea.xdef.msg").
+	 * <tt>null</tt> it is used the default value "org.xdef.msg").
 	 * @param encoding character set encoding of output file or <tt>null</tt>.
 	 * If the argument is <tt>null</tt> it is used the default system character
 	 * set from Java VM.
@@ -1000,7 +995,7 @@ public class RegisterReportTables {
 	 * <p>-o the directory where Java source with report tables
 	 * are generated</p>
 	 * <p>-p package name where tables will be generated. Default value is
-	 * "cz.syntea.xdef.msg"</p>
+	 * "org.xdef.msg"</p>
 	 * <p>-r: generate interface with registered identifiers of given
 	 * table from input.</p>
 	 *<p>-c encoding: character set name of output file (default is the
@@ -1016,9 +1011,8 @@ public class RegisterReportTables {
 "-i input pathname(s) of property file(s) with report texts (the" +
 "   file name may contain wildcard characters)."+
 "-o the directory where Java source with report tables are generated\n"+
-"-p package name of generated tables. Default value: \"cz.syntea.xdef.msg\"\n"+
-"-r: generate interface with registered identifiers of input source tables.\n"+
-"-c endoding: character set name of output file (default is system charset).\n"+
+"-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
+"-c endoding: character set name of output file (default is UTF-8).\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Missing parameters.\n\n"+ HDRMSG);
@@ -1027,7 +1021,6 @@ public class RegisterReportTables {
 		String pckg = null;
 		String encoding = null;
 		File outDir = null;
-		boolean register = false;
 		int len = args.length - 1;
 		StringWriter errWriter = new StringWriter();
 		PrintWriter errors = new PrintWriter(errWriter);
@@ -1125,12 +1118,6 @@ public class RegisterReportTables {
 									errors.println("Missing package parameter");
 								}
 							}
-							continue;
-						case 'r':
-							if (register) {
-								errors.println("Duplicated parameter -r");
-							}
-							register = true;
 							continue;
 						default:
 							errors.println("Unknown switch name: " + args[i]);

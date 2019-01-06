@@ -170,7 +170,7 @@ public interface Reporter {
 		final String modif);
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link cz.syntea.xdef.sys.Report#getMsgID()}).
+	 * (see {@link org.xdef.sys.Report#getMsgID()}).
 	 * @param report The report.
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and if report
 	 * type is <tt>FATAL</tt>, <tt>ERROR</tt> or <tt>LIGHTERROR</tt>.
@@ -186,7 +186,7 @@ public interface Reporter {
 	public void putReport(final SPosition pos, final Report report);
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link cz.syntea.xdef.sys.Report#getMsgID()}).
+	 * (see {@link org.xdef.sys.Report#getMsgID()}).
 	 * @param type Type of report.
 	 * @param id Identifier of message (may be <tt>null</tt>).
 	 * @param msg Default text of report.
@@ -196,7 +196,7 @@ public interface Reporter {
 	public void putReport(final char type, final String id, final String msg);
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link cz.syntea.xdef.sys.Report#getMsgID()}).
+	 * (see {@link org.xdef.sys.Report#getMsgID()}).
 	 * @param type Type of report.
 	 * @param id Identifier of message (may be <tt>null</tt>).
 	 * @param msg Default text of report.

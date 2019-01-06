@@ -19,6 +19,8 @@ final class CompileVariable extends XVariable {
 	private short _parseResultType; //TYPECHK_VALUE
 	/** List of code code addresses where method was called. */
 	private int[] _postdefs;
+	/** Reference name to declared type (valid only for uniqueset keys).*/
+	private String _refTypeName;
 
 	/** Creates a new instance of ScriptVariable.
 	 * @param name Name of variable.
@@ -110,11 +112,22 @@ final class CompileVariable extends XVariable {
 			&& isFinal() && _value != null;
 	}
 
+	/** Get reference name of declared type (valid only for uniqueset keys).
+	 * @return reference name of declared type or null.
+	 */
+	public final String getKeyRefName() {return _refTypeName;}
+
+	/** Set reference name of declared type (valid only for uniqueset keys).
+	 * @param x reference name of declared type or null.
+	 */
+	public final void setKeyRefName(final String x) {_refTypeName = x;}
+
 	@Override
 	/** Set value of variable. */
 	public String toString() {return super.toString()
 		+ ", parseMethodAddr=" + _parseMethodAddr + ", codeAddr=" + _codeAddr
-		+ ", parseResultType="  + _parseResultType + ", val=" + _value;
+		+ ", parseResultType="  + CompileBase.getTypeName(_parseResultType)
+		+ ", val=" + _value;
 	}
 
 }

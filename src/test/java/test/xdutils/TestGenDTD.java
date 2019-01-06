@@ -1,6 +1,5 @@
 package test.xdutils;
 
-import org.xdef.sys.Report;
 import org.xdef.util.GenDTD;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,7 +24,6 @@ public class TestGenDTD extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		Report.setLanguage("en"); //localize
 		XMLReader reader = null;
 		String xdef;
 		String xml;

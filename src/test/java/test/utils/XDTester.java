@@ -60,6 +60,7 @@ public abstract class XDTester extends STester {
 	}
 
 	public final void resetProperties() {
+		Report.setLanguage("en"); //localize
 		setProperty(XDConstants.XDPROPERTY_DOCTYPE,
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
 		if (_fulltestMode) {

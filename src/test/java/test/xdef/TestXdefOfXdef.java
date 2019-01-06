@@ -222,7 +222,7 @@ public final class TestXdefOfXdef extends XDTester {
 				xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
-"    external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
+"    external method boolean test.xdef.TestTypes.kp(XXNode, XDValue[]);"+
 "  </xd:declaration>\n"+
 "  <a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");

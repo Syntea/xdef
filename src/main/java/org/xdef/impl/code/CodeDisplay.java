@@ -16,12 +16,12 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Set;
 import org.xdef.XDValueID;
+import org.xdef.model.XMData;
 
 /** Display compiled objects.
  * @author Vaclav Trojan
  */
 public class CodeDisplay implements CodeTable, XDValueID {
-
 
 	//Prevent user to instantiate this class.
 	private CodeDisplay() {}
@@ -33,7 +33,6 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	private static String getTypeAbbrev(final short type) {
 		return "(" + getTypeName(type) + ")";
 	}
-
 
 	public final static String codeToString(final XDValue item) {
 		if (item == null) {
@@ -176,9 +175,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			}
 		} else if (sc.getKind() == XNode.XMATTRIBUTE ||
 			sc.getKind() == XNode.XMTEXT) {
-			org.xdef.model.XMData xd = (org.xdef.model.XMData) sc;
-			out.print(" (" + getTypeName(xd.getBaseType()) +
-					", " + xd.getValueTypeName() + ")");
+			out.print(" (" + ((XMData) sc).getValueTypeName() + ")");
 		}
 		if (sc._check >= 0) {
 			out.print(",check=" + sc._check);

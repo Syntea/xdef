@@ -433,29 +433,34 @@ public final class CodeUniqueset extends XDValueAbstract {
 		private final boolean _optional;
 		/** Key name. */
 		private final String _name;
+		/** Reference name to declared type or null. */
+		private final String _refName;
 		/** Resulting value of parsing. */
 		private XDValue _itemValue;
 		/** Index of key item. */
 		private final int _itemIndex;
 
 		/** Creates a new null instance of CodeUniquesetParseItem. */
-		ParseItem() {this(null, -1, -1, XDValueID.XD_OBJECT, false);}
+		ParseItem() {this(null, null, -1, -1, XDValueID.XD_OBJECT, false);}
 
 		/** Creates a new instance of CodeUniquesetParseItem (must be public
 		 * because of XDReader).
 		 * @param name name of parse item or null;
 		 * @param chkAddr address of code of the method.
+		 * @param refName name of type;
 		 * @param itemIndex index of this key part
 		 * @param parsedType type of id.
 		 * @param optional if true this key value is required or return
 		 * false if it is optional
 		 */
 		public ParseItem(final String name,
+			final String refName,
 			final int chkAddr,
 			final int itemIndex,
 			final short parsedType,
 			final boolean optional) {
 			_name = name;
+			_refName = refName;
 			_parseMethodAddr = chkAddr;
 			_itemIndex = itemIndex;
 			_itemType = parsedType;
@@ -481,6 +486,11 @@ public final class CodeUniqueset extends XDValueAbstract {
 		 * @return the type id.
 		 */
 		public final String getParseName() {return _name;}
+
+		/** Get reference name to declared type.
+		 * @return reference name to declared type or null.
+		 */
+		public final String getDeclaredTypeName() {return _refName;}
 
 		/** Set parsed object (used in XDCodeProcessor).
 		 * @param value the value of parsed object.
@@ -517,7 +527,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		@Override
 		public final XDValue cloneItem() {
 			return new ParseItem(_name,
-				_parseMethodAddr, _itemIndex, _itemType, _optional);
+				_refName, _parseMethodAddr, _itemIndex, _itemType, _optional);
 		}
 
 		@Override

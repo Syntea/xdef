@@ -139,7 +139,7 @@ public class SReporter extends SPosition {
 	}
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link cz.syntea.xdef.sys.Report#getMsgID()}).
+	 * (see {@link org.xdef.sys.Report#getMsgID()}).
 	 * @param report The report.
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and if report
 	 * type is <tt>FATAL</tt>, <tt>ERROR</tt> or <tt>LIGHTERROR</tt> .

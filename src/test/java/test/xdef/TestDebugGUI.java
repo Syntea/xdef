@@ -2,7 +2,6 @@ package test.xdef;
 
 import test.utils.XDTester;
 import org.xdef.XDConstants;
-import org.xdef.sys.Report;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
@@ -20,7 +19,6 @@ public final class TestDebugGUI extends XDTester {
 
 	@Override
 	public void test() {
-		Report.setLanguage("en"); //localize
 		String xdef;
 		XDPool xp;
 		String xml;

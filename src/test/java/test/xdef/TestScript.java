@@ -3,7 +3,6 @@ package test.xdef;
 import test.utils.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
 import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
@@ -217,7 +216,6 @@ public final class TestScript extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
-		Report.setLanguage("en"); //localize
 		setDebug(true);
 		_printCode = true;
 		_printCode = false;

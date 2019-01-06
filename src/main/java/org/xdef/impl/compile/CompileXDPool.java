@@ -1643,7 +1643,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				"document".equals(name) || //TODO
 //				"attlist".equals(name) || //TODO
 				"list".equals(name) || "any".equals(name))) {
-//				if ("text".equals() &&
+//				if ("text".equals(name) &&
 //					nodei.getXdefAttr("name", true, true) == null) {
 //					// Text not allowed here
 //					error(nodei._value, XDEF.XDEF260);
@@ -1703,7 +1703,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		} else {
 			XDValue p = ((XData)xn).getParseMethod();
 			return p.getItemId() == XDValueID.XD_PARSER ?
-				((XDParser) p).parsedType() : ((XData)xn).getBaseType();
+				((XDParser) p).parsedType() : XD_STRING;
 		}
 	}
 

@@ -126,12 +126,12 @@ public class XBuilder implements XDBuilder {
 	@Override
 	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
-	 * @param sourceId name of source source data corresponding to
+	 * @param srcId name of source source data corresponding to
 	 * stream from the argument sources (any item or even this argument
 	 * may be <tt>null</tt>).
 	 */
-	public final void setSource(final InputStream source, final String sourceId) {
-		_xp.setSource(source, sourceId);
+	public final void setSource(final InputStream source, final String srcId) {
+		_xp.setSource(source, srcId);
 	}
 
 	@Override

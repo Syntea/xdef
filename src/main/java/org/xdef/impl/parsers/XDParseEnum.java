@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.xdef.XDContainer;
 
-/** Parser of X-Script "list" type.
+/** Parser of X-Script "enum" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnum extends XDParserAbstract {

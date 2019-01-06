@@ -848,10 +848,8 @@ public interface CodeTable {
 	static final short GETELEM_FROM_CONTEXT = GETATTR_FROM_CONTEXT + 1;
 	static final short GETELEMS_FROM_CONTEXT = GETELEM_FROM_CONTEXT + 1;
 
-	/** Exit X-definition processing. */
-	static final short EXIT_CODE = GETELEMS_FROM_CONTEXT + 1;
 	/** This code keeps information about X-definition source. */
-	static final short SRCINFO_CODE = EXIT_CODE + 1;
+	static final short SRCINFO_CODE = GETELEMS_FROM_CONTEXT + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//	Following values are used only in compile time.

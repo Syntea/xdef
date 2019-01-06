@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
+import org.xdef.XDContainer;
+import org.xdef.XDNamedValue;
+import org.xdef.XDParser;
+import org.xdef.XDValue;
+import org.xdef.impl.code.CodeTable;
+import org.xdef.impl.parsers.XDParseEnum;
 
 /** Generation of DTD from X-definitions.
  * Also provides main method for calling the program from command line.
@@ -146,6 +152,72 @@ public class GenDTD {
 		gd.genDTD(defElem);
 	}
 
+	/** Get values of enumeration type (list, tokens, eq, string).
+	 * @return string array with values specified as enumeration or return
+	 * <tt>null</tt> if specified type is not enumeration of string values.
+	 */
+	private static String[] getEnumerationValues(XDValue code) {
+		if (code == null) {
+			return null;
+		}
+		if (code.getCode() == CodeTable.LD_CONST
+			&& code.getItemId() == XDValue.XD_PARSER) {
+			XDParser p = (XDParser) code;
+			XDContainer pars = p.getNamedParams();
+			if (pars == null) {
+				return null;
+			}
+			XDNamedValue n;
+			String name = p.parserName();
+			n = "list".equals(name) || "tokens".equals(name) ?
+				pars.getXDNamedItem("argument") :
+				"string".equals(name) ?
+				pars.getXDNamedItem("enumeration") :
+				null;
+			if (n == null) {
+				return null;
+			}
+			XDValue v;
+			if ((v = n.getValue()) != null && !v.isNull()) {
+				if (v.getItemId() == XDValue.XD_CONTAINER) {
+					XDContainer c = (XDContainer) v;
+					XDValue[] vv = c.getXDItems();
+					int num = vv == null ? 0 : vv.length;
+					if (num == 0) {
+						return null;
+					}
+					String[] result = new String[num];
+					for (int i = 0; i < num; i++) {
+						result[i] = "" + vv[i];
+					}
+					return result;
+				} else {
+					String s;
+					if ((s = v.toString()) == null || s.length() == 0) {
+						return null;
+					}
+					if ("tokens".equals(name)) {
+						// Convert string to array of strings
+						XDContainer context = XDParseEnum.tokensToContext(s);
+						int num = context.getXDItemsNumber();
+						if (num == 0) {
+							return null;
+						}
+						String[] result = new String[num];
+						for(int i=0; i < num; i++) {
+							result[i] = context.getXDItem(i).toString();
+						}
+						return result;
+					} else {
+						return new String[] {s};
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+
 	/** Generate attribute list.
 	 * @param xel The XElement object.
 	 * @throws IOException if IO error occurs.
@@ -171,7 +243,8 @@ public class GenDTD {
 							_out.write(s);
 							_out.write("\"");
 						} else {
-							String[] en = xAttr.getEnumerationValues();
+							String[] en =
+								getEnumerationValues(xAttr.getParseMethod());
 							if (en != null && en.length > 0) {
 								_out.write("(");
 								_out.write(en[0]);
@@ -239,7 +312,6 @@ public class GenDTD {
 		final String selSeparator = " | ";
 		String separator = seqSeparator;
 		XMNode[] childNodes = def.getChildNodeModels();
-//		boolean hasPCDATA = false;
 		boolean isMixed = false;
 		ArrayList<String> elements = new ArrayList<String>();
 		String name;
@@ -250,7 +322,6 @@ public class GenDTD {
 			name = dn.getName();
 			short kind;
 			if ((kind = dn.getKind()) == XMNode.XMTEXT) {
-//				hasPCDATA = true;
 				isMixed = true;
 				separator = selSeparator;
 				sb.append("#PCDATA");
@@ -325,9 +396,6 @@ public class GenDTD {
 						} else if (de.minOccurs() >= 1 &&
 							(de.maxOccurs() > 1 || de.maxOccurs() == 0)) {
 							sb.append('+');
-//						} else if (de._min == 0 &&
-//							(de._max > 1 || de._max == 0)) {
-//							sb.append('*');
 						}
 					}
 					if (seqSeparator.equals(separator) &&

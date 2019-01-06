@@ -186,6 +186,28 @@ public class XScriptParser extends StringParser
 	public static final char XMLWRITER_ID_SYM = (char) (BASE_ID + XD_XMLWRITER);
 	public static final char OBJECT_ID_SYM = (char) (BASE_ID + XD_OBJECT);
 
+	/** Symbols which separates sections in the X-script. */
+	public static final String SCRIPT_SEPARATORS = new String(new char[] {
+		OPTIONS_SYM,
+		REQUIRED_SYM,
+		OPTIONAL_SYM,
+		FIXED_SYM,
+		IGNORE_SYM,
+		ILLEGAL_SYM,
+		OCCURS_SYM,
+		ON_TRUE_SYM,
+		ON_FALSE_SYM,
+		ON_ABSENCE_SYM,
+		ON_EXCESS_SYM,
+		ON_ILLEGAL_ATTR_SYM,
+		ON_ILLEGAL_TEXT_SYM,
+		ON_ILLEGAL_ELEMENT_SYM,
+		MATCH_SYM,
+		CREATE_SYM,
+		INIT_SYM,
+		FINALLY_SYM,
+		FORGET_SYM});
+
 	/** Name of actual X-definition. */
 	public String _actDefName;
 	/** Version of X-definition (see XD2_0, XD3_1). */
@@ -452,7 +474,6 @@ public class XScriptParser extends StringParser
 		if (!chkBufferIndex()) {
 			return _sym = NOCHAR;
 		}
-		char ch;
 		setLastPosition();
 		if (_sym == REF_SYM) {
 			// after "ref" keyword read reference name!
@@ -463,17 +484,28 @@ public class XScriptParser extends StringParser
 				return _sym = REFERENCE_SYM;
 			}
 		}
-		char c;
+		char ch;
 		switch (ch = peekChar()) {
+			case '.':
+				if (isChar('.')) return _sym = DDOT_SYM;
+			case '(':
+			case ')':
+			case '[':
+			case ']':
+			case '{':
+			case '}':
+			case ',':
+			case ':':
+			case ';':
+			case '?':
+			case '~':
+			case '#':
+				return _sym = ch;
 			case '<':
 			case '>':
-				if (eos()) {
-					return _sym = ch;
-				}
-				if (isChar(c = ch)) {
+				if (isChar(ch)) {
 					if (isChar('=')) {
-						return ch == '<' ?
-							(_sym = LSH_EQ_SYM) : (_sym = RSH_EQ_SYM);
+						return _sym = ch == '<' ? LSH_EQ_SYM : RSH_EQ_SYM;
 					}
 					if (ch == '<') {
 						return _sym = LSH_SYM;
@@ -485,53 +517,39 @@ public class XScriptParser extends StringParser
 						return _sym = RRSH_SYM;
 					}
 					return _sym = RRSH_EQ_SYM;
-				} else if (c != '=') {
+				} else if (ch != '=') {
 					return _sym = ch;
 				}
-				return nextChar() == '<' ? (_sym = LE_SYM) : (_sym = GE_SYM);
+				return _sym = nextChar() == '<' ? LE_SYM : GE_SYM;
 			case '=':
 			case '!':
-				if (!isChar('=')) {
-					return _sym = ch;
-				}
-				return ch == '=' ? (_sym = EQ_SYM) : (_sym = NE_SYM);
+				return _sym = isChar('=') ? ch == '=' ? EQ_SYM : NE_SYM : ch;
 			case '+':
 			case '-':
-				if (eos()) {
-					return _sym = ch;
-				}
 				if (isChar(ch)) {
-					return ch == '+' ? (_sym = INC_SYM) : (_sym = DEC_SYM);
+					return _sym = ch == '+' ? INC_SYM :  DEC_SYM;
 				} else if (isChar('=')) {
-					return ch == '+' ?
-						(_sym = PLUS_EQ_SYM) : (_sym = MINUS_EQ_SYM);
+					return _sym = ch == '+' ? PLUS_EQ_SYM : MINUS_EQ_SYM;
 				}
 				return _sym = ch;
-			case '/':
-			case '*':
 			case '&':
 			case '|':
+				if (isChar(ch)) { // '&&' or '||'
+					return _sym = ch == '&' ? AAND_SYM : OOR_SYM;
+				}
+			case '/':
+			case '*':				
 			case '^': //XOR
 			case '%': //MOD
-				if (isChar('=')) {
-					switch (ch) {
-						case '^':
-							return _sym = XOR_EQ_SYM;
-						case '|':
-							return _sym = OR_EQ_SYM;
-						case '*':
-							return _sym = MUL_EQ_SYM;
-						case '/':
-							return _sym = DIV_EQ_SYM;
-						case '%':
-							return _sym = MOD_EQ_SYM;
-						default:
-							return _sym = AND_EQ_SYM;
+				if (isChar('=')) { 
+					switch (ch) { // "&=", "|=", "/=", "*=", "%="
+						case '&': return _sym = AND_EQ_SYM;
+						case '|': return _sym = OR_EQ_SYM;
+						case '/': return _sym = DIV_EQ_SYM;
+						case '*': return _sym = MUL_EQ_SYM;
+						case '^': return _sym = XOR_EQ_SYM;
 					}
-				} else if (ch == '|' && isChar('|')) {
-					return _sym = OOR_SYM;
-				} else if (ch == '&' && isChar('&')) {
-					return _sym = AAND_SYM;
+					return _sym = MOD_EQ_SYM; // '%'
 				}
 				return _sym = ch;
 			case '@': {
@@ -556,22 +574,6 @@ public class XScriptParser extends StringParser
 				}
 				return _sym = ATCHAR_SYM;
 			}
-			case '.':
-				if (isChar('.')) {
-					return _sym = DDOT_SYM;
-				}
-			case '(':
-			case ')':
-			case '[':
-			case ']':
-			case '{':
-			case '}':
-			case ',':
-			case ':':
-			case ';':
-			case '?':
-			case '~':
-				return _sym = ch;
 			case '\'':
 			case '"': // string literal
 				readStringLiteral(ch);
@@ -585,12 +587,9 @@ public class XScriptParser extends StringParser
 			case '6':
 			case '7':
 			case '8':
-			case '9': {
+			case '9': 
 				readNumber(ch);
 				return _sym = CONSTANT_SYM;
-			}
-			case '#':
-				return _sym = UNDEF_SYM;
 			default: {
 				boolean wasDollar;
 				if (!(wasDollar = ch == '$')) {
@@ -622,13 +621,13 @@ public class XScriptParser extends StringParser
 					}
 					_lastSPos = spos; //reset last position
 				}
-				// find keyword
-				int sym = KEYWORDS.indexOf(';' + s + ';');
-				if (sym < 0) { //not found
+				// find keyword index
+				int keyindex = KEYWORDS.indexOf(';' + s + ';');
+				if (keyindex < 0) { //not found
 					_idName = s;
 					return _sym = IDENTIFIER_SYM;
 				}
-				switch (sym = KEYWORDS.charAt(sym - 1)) { // sym = keyword ID
+				switch (keyindex = KEYWORDS.charAt(keyindex - 1)) {
 					case TRUE_SYM:
 						_parsedValue = new DefBoolean(true);
 						return _sym = CONSTANT_SYM;
@@ -668,7 +667,7 @@ public class XScriptParser extends StringParser
 					case MOD_SYM:
 						if (getCurrentChar() == '=') {
 							setBufIndex(getIndex() + 1); // ????????????????????
-							switch (sym) {
+							switch (keyindex) { 
 								case LSH_SYM:
 									return _sym = LSH_EQ_SYM;  //<<=
 								case RSH_SYM:
@@ -683,16 +682,15 @@ public class XScriptParser extends StringParser
 									return _sym = XOR_EQ_SYM; //^=
 								case MOD_SYM:
 									return _sym = MOD_EQ_SYM; //%=
-								default:
 							}
 						}
-						return _sym = (char) sym;
+						return _sym = (char) keyindex;
 					default:
-						if (sym < BASE_ID || sym > BASE_ID
-							+ CompileBase.XD_UNDEF) {
-							return _sym = (char) sym; //ID of parser - see above
+						if (keyindex < BASE_ID
+							|| keyindex > BASE_ID + CompileBase.XD_UNDEF) {
+							return _sym = (char) keyindex;//parser ID(see above)
 						}
-						_parsedValue = new DefLong(sym - BASE_ID);// type IDs
+						_parsedValue = new DefLong(keyindex - BASE_ID);//type ID
 						return _sym = CONSTANT_SYM;
 				} // end of switch (sym.charValue())
 			} // default
@@ -751,25 +749,17 @@ public class XScriptParser extends StringParser
 	 * @return true if XDPositione was parsed and set parseResult.
 	 */
 	public final boolean isXModelPosition() {
-		String modelName;
 		String xdName = _actDefName;
-		if (isChar('*') && !isChar('#')) {
-			modelName = "*";
-		} else if (isXMLName(_xmlVersion)) {
-			modelName = getParsedString();
-		} else {
-			modelName = "";
-		}
+		String modelName = isChar('*') && !isChar('#')
+			? "*" : isXMLName(_xmlVersion) ? getParsedString() : "";
 		if (isChar('#')) {
 			xdName = modelName;
 			if (isChar('*') && !isChar('/')) {
 				modelName = "*";
 			} else if (isXMLName(_xmlVersion)) {
 				modelName = getParsedString();
-				if (isChar('!')) {
-					if (isXMLName(_xmlVersion)) {
-						modelName += '!' + getParsedString();
-					}
+				if (isChar('!') && isXMLName(_xmlVersion)) {
+					modelName += '!' + getParsedString();
 				}
 			} else {
 				error(XDEF.XDEF104); //Name of model expected
@@ -1721,6 +1711,7 @@ public class XScriptParser extends StringParser
 	public void lightError(final long registeredID, final Object... mod){
 		putReportOnLastPos(Report.lightError(registeredID, mod));
 	}
+
 	@Override
 	/** Put error message with modification parameters.
 	 * @param registeredID registered message ID.

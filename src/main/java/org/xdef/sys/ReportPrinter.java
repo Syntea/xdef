@@ -150,7 +150,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final String language,
 		final boolean resolveReportReferences) throws Exception {
 		ClassLoader cl = ClassLoader.getSystemClassLoader();
-		Class<?> clazz = cl.loadClass("cz.syntea.xdef.msg." + prefix);
+		Class<?> clazz = cl.loadClass("org.xdef.msg." + prefix);
 		Field field = clazz.getField(prefix);
 		String[] ids = (String[]) field.get(new String[]{});
 		for (String id: ids) {

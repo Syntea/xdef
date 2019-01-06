@@ -29,7 +29,7 @@ public class UpdateMessages {
 					"Java sources directory is not available");
 			}
 		}
-		
+							
 		File temp = new File("temp");
 		temp.mkdir();
 		try {
@@ -42,18 +42,13 @@ public class UpdateMessages {
 			}
 			RegisterReportTables.main(new String[] {
 				"-i", msgPath + "*.properties",
-				"-c", "UTF-8",
 				"-p", "org.xdef.msg",
-				"-o", temp.getAbsolutePath(),
-				"-r"});
+//				"-c", "UTF-8",
+				"-o", temp.getAbsolutePath()});
 			String msg = 
 				FUtils.updateDirectories(temp, srcDir, "java", true, false);
-			if (msg.isEmpty()) {
-				System.out.println("Nothing changed in report files");
-			} else {
-				System.out.println(msg); // print changes
-			}
-			
+			System.out.println(// print info about changes
+				msg.isEmpty() ? "Nothing changed in report files" : msg); 			
 			FUtils.deleteAll(temp, true); // delete temp directory
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

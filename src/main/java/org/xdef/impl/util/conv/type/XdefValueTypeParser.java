@@ -6,7 +6,6 @@ import org.xdef.impl.compile.XScriptParser;
 import org.xdef.impl.util.conv.type.domain.Other;
 import org.xdef.impl.util.conv.type.domain.ValueType;
 import org.xdef.impl.util.conv.type.domain.XdefBase;
-import org.xdef.impl.util.conv.type.domain.XdefList;
 import org.xdef.impl.util.conv.type.domain.XdefType;
 import org.xdef.impl.util.conv.type.domain.XsdBase;
 import org.xdef.impl.util.conv.type.domain.XsdFacet;
@@ -624,39 +623,6 @@ public final class XdefValueTypeParser {
 				throwEx("Unexpected end of string");
 			}
 		}
-	}
-
-	/** Parses X-definition list type and returns type object.
-	 * @param b
-	 * @return X-definition list type object.
-	 */
-	@SuppressWarnings("unused")
-	private XdefList parseXdefList(StringBuffer b) {
-		XdefList xdefList = new XdefList();
-		readSym(); // (
-		if (!isLPar()) {
-			throwEx("Expecting left parenthesis", Symbol.LPAR);
-		}
-		ValueType item;
-		item = parseType();
-		xdefList.setItem(item);
-		buffer(b, item.getTypeString());
-		readSym();
-		if (isComma()) {
-			buffer(b);
-			readSym(); //delimeter
-			if (!isConst()) {
-				throwEx("Expecting parameter value", "Parameter value");
-			}
-			String delim = getConst();
-			xdefList.setDelimeter(delim);
-			buffer(b);
-			readSym(); // )
-		}
-		if (!isRPar()) {
-			throwEx("Expecting right parenthesis", Symbol.RPAR);
-		}
-		return xdefList;
 	}
 
 	/** Parses X-definition type and returns type object.

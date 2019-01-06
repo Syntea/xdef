@@ -951,37 +951,6 @@ public final class Test002 extends XDTester {
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
-			xdef = // name of type equals to name of internal type method
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration> type string string(1,2); </xd:declaration>\n"+
-"<a x='required string'>\n"+
-" required string;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration>\n"+
-"  type int string(1,2);\n"+
-"  int i;\n"+
-" </xd:declaration>\n"+
-"<a x='required int'>\n"+
-" required int;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
 			xdef = // Create document from model of element.
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "  <b><a x='required'>required;</a></b>\n"+

@@ -2,30 +2,14 @@ package test.xdef;
 
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.XDContainer;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.XDValue;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.parsers.XSAbstractParser;
-import org.xdef.impl.parsers.XSParseDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import java.io.StringWriter;
-import org.xdef.proc.XXElement;
-import org.xdef.XDParser;
-import org.xdef.XDParserAbstract;
-import org.xdef.XDParseResult;
 import org.xdef.impl.compile.XScriptParser;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SUtils;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -40,8 +24,9 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import static test.utils.XDTester._xdNS;
 
-/** Test schema and structured types.
+/** Test XML schema and X-definition types.
  * @author Vaclav Trojan
  */
 public final class TestXSTypes extends XDTester {
@@ -82,8 +67,6 @@ public final class TestXSTypes extends XDTester {
 		if (_schema == null || _schema.isEmpty()) {
 			return true; //do not check schema if it is not available
 		}
-		//error handler to be assigned to builder and validator
-		//we nead to set resolver for builder to assign the schema
 		try {
 			Document doc = null;
 			if (_xml != null) {
@@ -262,8 +245,7 @@ public final class TestXSTypes extends XDTester {
 						break;
 					}
 					if (!isSymbol(p, XScriptParser.COMMA_SYM)) {
-						throw new RuntimeException(
-							"Error in key parameter list");
+						throw new RuntimeException("Error in key parameters");
 					}
 				}
 			}
@@ -345,8 +327,7 @@ public final class TestXSTypes extends XDTester {
 		final String indent,
 		final StringBuffer sb) {
 		if (!"item".equals(parseKeyParam(p))) {
-			throw new RuntimeException(
-				"'%item' expexted as first parameter of list");
+			throw new RuntimeException("'%item' expexted as first parameter");
 		}
 		String type = readTypeName(p);
 		sb.append(indent).append("<xs:restriction>\n");
@@ -423,7 +404,7 @@ public final class TestXSTypes extends XDTester {
 "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
 "<xs:simpleType name='mytype'>\n");
 		XScriptParser p = new XScriptParser((byte) 10);
-		p.setSource(new SBuffer(params), null, XConstants.XD32);
+		p.setSource(new SBuffer(params), null, XConstants.XD31);
 		p.nextSymbol();
 		genSchemaType(p, "  ", sb);
 		sb.append(
@@ -445,8 +426,7 @@ public final class TestXSTypes extends XDTester {
 		_xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "  script='options noTrimAttr,preserveEmptyAttributes,\n"+
-"    preserveAttrWhiteSpaces,\n"+
-"    noTrimText,preserveTextWhiteSpaces'>\n"+
+"    preserveAttrWhiteSpaces, noTrimText,preserveTextWhiteSpaces'>\n"+
 "  <a a=\"" + _params + "\">\n"+
 "    optional " + _params + "\n"+
 "  </a>\n"+
@@ -634,419 +614,7 @@ public final class TestXSTypes extends XDTester {
 			resetTester();
 			return;
 		}
-		String xdef;
-		String xml;
-		ArrayReporter reporter = new ArrayReporter();
-		XDPool xp;
-		XDDocument xd;
-		Element el;
-		StringWriter strw;
-		Report rep;
-		String s;
 		boolean chkSyntax = getChkSyntax();
-		try {
-			//external method with keyparams
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
-"</xd:declaration>\n"+
-"<a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='1'/>";
-			parse(xp, "", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xml = "<a a='2'/>";
-			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not reported");
-		} catch (Exception ex) {fail(ex);}
-
-		//test combine seq and key params
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<a a='string(2,%maxLength=3)'/>\n"+
-"</xd:def>";
-		parse(xdef, "", "<a a='abc'/>", reporter);
-		assertNoErrorwarnings(reporter);
-		parse(xdef, "", "<a a='abcd'/>", reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)'\n"+
-"  />\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		parse(xp, null, "<a a='a12' b='3'/>", reporter);
-		assertNoErrors(reporter);
-		parse(xp, null, "<a a='a1' b ='2'/>", reporter);
-		assertFalse(reporter.getErrorCount() != 2, reporter.printToString());
-		parse(xp, null, "<a a='a124' b ='4'/>", reporter);
-		assertFalse(reporter.getErrorCount() != 2, reporter.printToString());
-		//decimal
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<a a='decimal(0,1)'/>\n"+
-"</xd:def>";
-		compile(xdef).createXDDocument();
-		xml = "<a a='1'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//decimal, base decimal
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name = 'test' root = 'a'>\n"+
-"<a a='decimal(%base=decimal(%minInclusive=0),%minInclusive=1," +
-"      %maxInclusive=5,%totalDigits=1,%fractionDigits=0," +
-"      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
-"/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='1'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union - declared type parser
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  type t union(%item=[decimal,boolean]);\n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xml = "<a a='true' />";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2' />";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='xyz' />";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2' />";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union - declared simplified version
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  type x union(%item = [int(1, 2), boolean]);\n"+
-"  type t x;\n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xml = "<a a='true'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='3'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a='xyz'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union - declared parser
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  boolean x() {if (int(1, 2)) return true; return boolean();}\n"+
-"  type t x;\n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xml = "<a a='true'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='3'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union - declared parser
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  boolean t() { if (int(1, 2)) return true; return boolean(); }\n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xml = "<a a='true'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='3'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union, declared items, base.
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = string(%enumeration=['true', '2', 'xyz']); \n"+
-"  Parser t = union(%base=s, %item=[decimal,boolean]); \n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xml = "<a a='true' />";
-		xp = compile(xdef);
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='xyz' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union with base
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = string(%enumeration='xyz'); \n"+
-"  Parser t = union(%item=[decimal, boolean, s ]); \n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='true' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='xyz' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' 1 2' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//model variable.
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A xd:script='var type p union(%item = [int(1, 3), boolean]);'>\n"+
-"  <a xd:script='occurs *;'>\n"+
-"    <b x='p'/>\n"+
-"  </a>\n"+
-"</A>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrors(reporter);
-		//model variable.
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A xd:script='var {Parser p = union(%item = [int(1, 3), boolean]);}'>\n"+
-"  <a xd:script='occurs *;'>\n"+
-"    <b x='p'/>\n"+
-"  </a>\n"+
-"</A>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrors(reporter);
-		//union with the a list of same items
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = list(%item=eq('abc'), %minLength=1, %maxLength=2); \n"+
-"</xd:declaration>\n"+
-" <a a='required s'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='abc' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' abc' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' abc ' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' abc abc ' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' abc abc abc' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), reporter.printToString());
-		xml = "<a a=' efg ' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a='' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union with the a list item
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = list(%item=decimal, %enumeration=[1,2,[3,4]]); \n"+
-"  Parser t = union(%item=[boolean, s]); \n"+
-"</xd:declaration>\n"+
-" <a a='required t'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a=' true' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' 1' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' 2 ' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='3 4' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' 7 ' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' true 1 ' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		//union with the sequence item
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = sequence(%item=[boolean,decimal],\n"+
-"    %enumeration=['true 1', 'false 2']); \n"+
-"  Parser t = union(%item=[decimal,boolean, s]); \n"+
-"</xd:declaration>\n"+
-" <a a='required t; options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
-"</xd:def>";
-		xml = "<a a=' true ' />";
-		xp = compile(xdef);
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a=' 2 ' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='   true        1    ' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='   true        2    ' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' xyz ' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-
-		//gYear - invoked in if command (see method "check").
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<a a = \"required {return gYear(%minInclusive='1999',\n"+
-"   %maxInclusive='2000');}\"/>\n"+
-"</xd:def>";
-		xml = "<a a='1999'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2000'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='2010'/>";
-		parse(compile(xdef), "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-
-		//sequence
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a=' sequence ( %item = [ decimal ( %maxInclusive = 5 ) ] ) '/>\n"+
-"</xd:def>";
-		xml = "<a a=' 1' />";
-		parse(compile(xdef), "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		//sequence
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'\n"+
-" xmlns:xs='" + _xdNS + "' root = 'a'>\n"+
-" <a a='sequence(%item=[decimal(%maxInclusive=5),\n"+
-"      int(%minInclusive=0)])'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a=' 1 2 3' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		xml = "<a a=' 1 2' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		//sequence with enumeration
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"  Parser s = sequence(%item=[boolean,decimal],\n"+
-"    %enumeration=['true 1', 'false 2']); \n"+
-"</xd:declaration>\n"+
-" <a a='required s'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='true 1' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='false 2' />";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='false 1' />";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings(), "Error not reported");
-		// string
-		xdef = //whiteSpace=preserve (option trimAttr)
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
-"<xd:declaration>\n"+
-"  Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
-"</xd:declaration>\n"+
-"<A a=\"optional p;\"\n"+
-"   b=\"optional string(0,100);\"/>\n"+
-"</xd:def>";
-		xml = "<A a=' ' b=' '/>";
-		el = parse(xdef, "", xml, reporter);
-		assertErrors(reporter);
-		assertEq(el, "<A a='' b=''/>");
-		xdef = //whiteSpace=preserve (option noTrimAttr)
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'\n"+
-" xd:script = 'options noTrimAttr'>\n"+
-"<xd:declaration>\n"+
-"  Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
-"</xd:declaration>\n"+
-"<A a=\"optional p;\"\n"+
-"   b=\"optional string(0,100);\"/>\n"+
-"</xd:def>";
-		el = parse(xdef, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		assertEq(el, "<A a=' ' b=' '/>");
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'\n"+
-" xd:script = 'options noTrimAttr'>\n"+
-"<xd:declaration>\n"+
-"  Parser p = string(%minLength=0, %whiteSpace='collapse');\n"+
-"</xd:declaration>\n"+
-"<A a=\"optional p;\"\n"+
-"   b=\"optional string(0,100);\"/>\n"+
-"</xd:def>";
-		el = parse(xdef, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		assertEq(el, "<A a='' b=' '/>");
-
-////////////////////////////////////////////////////////////////////////////////
-
 		setProperty("xdef.minyear", null);
 		setProperty("xdef.maxyear", null);
 
@@ -1054,14 +622,14 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING string
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("string(%maxInclusive='asdf')"), _msg);
 		assertTrue(checkFail("string(%maxExclusive='qwer')"), _msg);
 		assertTrue(checkFail("string(%minInclusive='zxcv')"), _msg);
 		assertTrue(checkFail("string(%minExclusive='tyui')"), _msg);
 		assertTrue(checkFail("string(%fractionDigits='3')"), _msg);
 		assertTrue(checkFail("string(%totalDigits='6')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing correct values
 		assertTrue(prepare("string()"), _msg);
@@ -1164,7 +732,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING normalizedstring
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("normalizedString(%maxInclusive='asdf')"),_msg);
 		assertTrue(checkFail("normalizedString(%maxExclusive='qwer')"),_msg);
 		assertTrue(checkFail("normalizedString(%minInclusive='zxcv')"),_msg);
@@ -1172,7 +740,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("normalizedString(%fractionDigits='3')"), _msg);
 		assertTrue(checkFail("normalizedString(%totalDigits='6')"), _msg);
 		assertTrue(checkFail("normalizedString(%whiteSpace='preserve')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing correct values
 		assertTrue(prepare("normalizedString(%whiteSpace='collapse')"),_msg);
@@ -1282,7 +850,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING anyURI
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("anyURI(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("anyURI(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("anyURI(%minExclusive='1')"), _msg);
@@ -1292,7 +860,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("anyURI(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("anyURI(%fractionDigits='2')"), _msg);
 		assertTrue(prepare("anyURI(%whiteSpace='collapse')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing correct values
 		assertTrue(prepare("anyURI"), _msg);
@@ -1334,7 +902,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING boolean
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("boolean(%enumeration=['1', 'false']"), _msg);
 		assertTrue(checkFail("boolean(%length='1')"), _msg);
 		assertTrue(checkFail("boolean(%minLength='1')"), _msg);
@@ -1347,7 +915,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("boolean(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("boolean(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("boolean(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 		// testing fixed facets
 		assertTrue(prepare("boolean(%whiteSpace='collapse')"), _msg);
 
@@ -1383,7 +951,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING decimal
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("decimal(%length='1')"), _msg);
 		assertTrue(checkFail("decimal(%minLength='1')"), _msg);
 		assertTrue(checkFail("decimal(%maxLength='1')"), _msg);
@@ -1393,7 +961,7 @@ public final class TestXSTypes extends XDTester {
 			"decimal(%minInclusive='1',%minExclusive='1')"), _msg);
 		assertTrue(checkFail(
 			"decimal(%minInclusive='1',%maxInclusive='0')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("decimal(%whiteSpace='collapse')"), _msg);
@@ -1486,7 +1054,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING integer
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("integer(%length='1')"), _msg);
 		assertTrue(checkFail("integer(%minLength='1')"), _msg);
 		assertTrue(checkFail("integer(%maxLength='1')"), _msg);
@@ -1498,7 +1066,7 @@ public final class TestXSTypes extends XDTester {
 			"integer(%minInclusive='1',%maxInclusive='0')"), _msg);
 // This is not recognized by SCHEMA
 //		assertTrue(checkFail("integer(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("integer(%whiteSpace='collapse')"), _msg);
@@ -1568,7 +1136,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING negativeInteger
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("negativeInteger(%length='1')"), _msg);
 		assertTrue(checkFail("negativeInteger(%minLength='1')"), _msg);
 		assertTrue(checkFail("negativeInteger(%maxLength='1')"), _msg);
@@ -1580,7 +1148,7 @@ public final class TestXSTypes extends XDTester {
 			"negativeInteger(%minInclusive='-1',%maxInclusive='-2')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("negativeInteger(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("negativeInteger(%whiteSpace='collapse')"), _msg);
@@ -1644,7 +1212,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING byte
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("byte(%length='1')"), _msg);
 		assertTrue(checkFail("byte(%minLength='1')"), _msg);
 		assertTrue(checkFail("byte(%maxLength='1')"), _msg);
@@ -1656,7 +1224,7 @@ public final class TestXSTypes extends XDTester {
 			"byte(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("byte(%fractionDigits='0')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("byte(%whiteSpace='collapse')"), _msg);
@@ -1735,7 +1303,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING short
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("short(%length='1')"), _msg);
 		assertTrue(checkFail("short(%minLength='1')"), _msg);
 		assertTrue(checkFail("short(%maxLength='1')"), _msg);
@@ -1747,7 +1315,7 @@ public final class TestXSTypes extends XDTester {
 			"short(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("short(%fractionDigits='0')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("short(%whiteSpace='collapse')"), _msg);
@@ -1812,7 +1380,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING int
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("xs:int(%length='1')"), _msg);
 		assertTrue(checkFail("xs:int(%minLength='1')"), _msg);
 		assertTrue(checkFail("xs:int(%maxLength='1')"), _msg);
@@ -1884,13 +1452,13 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("-000000000011"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parseFail("111"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 //------------------------------------------------------------------------------
 //                          TESTING unsignedInt
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("unsignedInt(%length='1')"), _msg);
 		assertTrue(checkFail("unsignedInt(%minLength='1')"), _msg);
 		assertTrue(checkFail("unsignedInt(%maxLength='1')"), _msg);
@@ -1902,7 +1470,7 @@ public final class TestXSTypes extends XDTester {
 			"unsignedInt(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("unsignedInt(%fractionDigits='0')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("unsignedInt(%whiteSpace='collapse')"), _msg);
@@ -1968,7 +1536,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING long
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("long(%length='1')"), _msg);
 		assertTrue(checkFail("long(%minLength='1')"), _msg);
 		assertTrue(checkFail("long(%maxLength='1')"), _msg);
@@ -1980,7 +1548,7 @@ public final class TestXSTypes extends XDTester {
 			"long(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("long(%fractionDigits='0')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("long(%whiteSpace='collapse')"), _msg);
@@ -2063,7 +1631,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING float
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("float(%length='1')"), _msg);
 		assertTrue(checkFail("float(%minLength='1')"), _msg);
 		assertTrue(checkFail("float(%maxLength='1')"), _msg);
@@ -2071,7 +1639,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("float(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("float(%fractionDigits='1')"), _msg);
 		assertTrue(checkFail("float(%totalDigits='1')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal facets
 		assertTrue(prepare("float(%whiteSpace='collapse')"), _msg);
@@ -2185,9 +1753,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING double
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("double(%length='1')"), _msg);
 		assertTrue(checkFail("double(%minLength='1')"), _msg);
 		assertTrue(checkFail("double(%maxLength='1')"), _msg);
@@ -2195,7 +1762,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("double(%totalDigits='1')"), _msg);
 		assertTrue(checkFail("double(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("double(%whiteSpace='replace')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal facets
 		assertTrue(prepare("double(%whiteSpace='collapse')"), _msg);
@@ -2314,9 +1881,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING date
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("date(%length='1')"), _msg);
 		assertTrue(checkFail("date(%minLength='1')"), _msg);
 		assertTrue(checkFail("date(%maxLength='1')"), _msg);
@@ -2324,7 +1890,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("date(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("date(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("date(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal default
 		assertTrue(prepare("date(%whiteSpace='collapse')"), _msg);
@@ -2479,7 +2045,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING time
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("time(%length='1')"), _msg);
 		assertTrue(checkFail("time(%minLength='1')"), _msg);
 		assertTrue(checkFail("time(%maxLength='1')"), _msg);
@@ -2487,7 +2053,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("time(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("time(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("time(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("time(%whiteSpace='collapse')"), _msg);
@@ -2603,7 +2169,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING dateTime
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("dateTime(%length='1')"), _msg);
 		assertTrue(checkFail("dateTime(%minLength='1')"), _msg);
 		assertTrue(checkFail("dateTime(%maxLength='1')"), _msg);
@@ -2611,7 +2177,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("dateTime(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("dateTime(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("dateTime(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal facets
 		assertTrue(prepare("dateTime(%whiteSpace='collapse')"), _msg);
@@ -2783,7 +2349,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING gDay
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("gDay(%length='1')"), _msg);
 		assertTrue(checkFail("gDay(%minLength='1')"), _msg);
 		assertTrue(checkFail("gDay(%maxLength='1')"), _msg);
@@ -2791,7 +2357,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("gDay(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gDay(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gDay(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal default
 		assertTrue(prepare("gDay(%whiteSpace='collapse')"), _msg);
@@ -2913,9 +2479,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING gMonth
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("gMonth(%length='1')"), _msg);
 		assertTrue(checkFail("gMonth(%minLength='1')"), _msg);
 		assertTrue(checkFail("gMonth(%maxLength='1')"), _msg);
@@ -2923,7 +2488,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("gMonth(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gMonth(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gMonth(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing correct values
 		assertTrue(prepare("gMonth"), _msg);
@@ -2999,7 +2564,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING gMonthDay
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("gMonthDay(%length='1')"), _msg);
 		assertTrue(checkFail("gMonthDay(%minLength='1')"), _msg);
 		assertTrue(checkFail("gMonthDay(%maxLength='1')"), _msg);
@@ -3007,7 +2572,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("gMonthDay(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gMonthDay(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gMonthDay(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal default
 		assertTrue(prepare("gMonthDay(%whiteSpace='collapse')"), _msg);
@@ -3118,7 +2683,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING gYear
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("gYear(%length='1')"), _msg);
 		assertTrue(checkFail("gYear(%minLength='1')"), _msg);
 		assertTrue(checkFail("gYear(%maxLength='1')"), _msg);
@@ -3126,7 +2691,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("gYear(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gYear(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gYear(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal default
 		assertTrue(prepare("gYear(%whiteSpace='collapse')"), _msg);
@@ -3209,7 +2774,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING gYearMonth
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("gYearMonth(%length='1')"), _msg);
 		assertTrue(checkFail("gYearMonth(%minLength='1')"), _msg);
 		assertTrue(checkFail("gYearMonth(%maxLength='1')"), _msg);
@@ -3217,7 +2782,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("gYearMonth(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("gYearMonth(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("gYearMonth(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// test legal default
 		assertTrue(prepare("gYearMonth(%whiteSpace='collapse')"), _msg);
@@ -3297,9 +2862,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING duration
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("duration(%length='1')"), _msg);
 		assertTrue(checkFail("duration(%minLength='10')"), _msg);
 		assertTrue(checkFail("duration(%maxLength='20')"), _msg);
@@ -3307,7 +2871,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("duration(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail("duration(%fractionDigits='5')"), _msg);
 		assertTrue(checkFail("duration(%totalDigits='10')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("duration(%whiteSpace='collapse')"), _msg);
@@ -3477,7 +3041,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING NOTATION
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("NOTATION(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NOTATION(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NOTATION(%minExclusive='1')"), _msg);
@@ -3486,15 +3050,14 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("NOTATION(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NOTATION(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NOTATION(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 
 //------------------------------------------------------------------------------
 //                          TESTING token
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("token(%maxInclusive='asdf')"), _msg);
 		assertTrue(checkFail("token(%maxExclusive='qwer')"), _msg);
 		assertTrue(checkFail("token(%minInclusive='zxcv')"), _msg);
@@ -3503,7 +3066,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("token(%totalDigits='6')"), _msg);
 		assertTrue(checkFail("token(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("token(%whiteSpace='replace')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("token(%whiteSpace='collapse')"), _msg);
@@ -3562,9 +3125,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING language
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("language(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("language(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("language(%minExclusive='1')"), _msg);
@@ -3573,7 +3135,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("language(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("language(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("language(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("language(%whiteSpace='collapse')"), _msg);
@@ -3624,9 +3186,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING NMTOKEN
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("NMTOKEN(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%minExclusive='1')"), _msg);
@@ -3635,7 +3196,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("NMTOKEN(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NMTOKEN(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("NMTOKEN(%whiteSpace='collapse')"), _msg);
@@ -3694,9 +3255,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING NMTOKENS
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("NMTOKENS(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%minExclusive='1')"), _msg);
@@ -3705,7 +3265,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("NMTOKENS(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NMTOKENS(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("NMTOKENS(%whiteSpace='collapse')"), _msg);
@@ -3772,9 +3332,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING Name
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("Name(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("Name(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("Name(%minExclusive='1')"), _msg);
@@ -3783,7 +3342,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("Name(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("Name(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("Name(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("Name(%whiteSpace='collapse')"), _msg);
@@ -3842,7 +3401,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING NCName
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("NCName(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("NCName(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("NCName(%minExclusive='1')"), _msg);
@@ -3851,7 +3410,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("NCName(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("NCName(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("NCName(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("NCName(%whiteSpace='collapse')"), _msg);
@@ -3906,7 +3465,7 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING base64Binary
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("base64Binary(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("base64Binary(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("base64Binary(%minExclusive='1')"), _msg);
@@ -3915,7 +3474,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("base64Binary(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("base64Binary(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("base64Binary(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("base64Binary(%whiteSpace='collapse')"), _msg);
@@ -3972,9 +3531,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING hexBinary
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("hexBinary(%minInclusive='1')"), _msg);
 		assertTrue(checkFail("hexBinary(%maxInclusive='1')"), _msg);
 		assertTrue(checkFail("hexBinary(%minExclusive='1')"), _msg);
@@ -3983,7 +3541,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("hexBinary(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("hexBinary(%totalDigits='2')"), _msg);
 		assertTrue(checkFail("hexBinary(%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("hexBinary(%whiteSpace='collapse')"), _msg);
@@ -4033,9 +3591,8 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING union
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail(
 			"union(%item=[boolean, short],%minInclusive='1')"), _msg);
 		assertTrue(checkFail(
@@ -4054,7 +3611,7 @@ public final class TestXSTypes extends XDTester {
 			"union(%item=[boolean, short],%totalDigits='2')"), _msg);
 		assertTrue(checkFail(
 			"union(%item=[boolean,short],%fractionDigits='2')"), _msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing correct values
 		assertTrue(prepare("union(%item=[boolean, short])"), _msg);
@@ -4096,12 +3653,25 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("6"), _msg);
 		assertTrue(parseFail("true"), _msg);
 
+		assertTrue(prepare(
+			"union(%item=[int,date,dateTime,string(%length=1)])"), _msg);
+		assertTrue(parse("x"), _msg);
+		assertTrue(parse("1999"), _msg);
+		assertTrue(parse("1999-10-11"), _msg);
+		assertTrue(parse("1999-10-11T10:11:12"), _msg);
+
+		assertTrue(prepare(
+			"union(%item=[string(%length=1),dateTime,date,int])"), _msg);
+		assertTrue(parse("x"), _msg);
+		assertTrue(parse("1999"), _msg);
+		assertTrue(parse("1999-10-11"), _msg);
+		assertTrue(parse("1999-10-11T10:11:12"), _msg);
+		
 //------------------------------------------------------------------------------
 //                          TESTING list
 //------------------------------------------------------------------------------
-
 		// testing illegal facets
-		setChkSyntax(false);
+		setChkSyntax(false); // do not check syntax
 		assertTrue(checkFail("list(%item=short,%minInclusive='1')"),_msg);
 		assertTrue(checkFail("list(%item=short,%maxInclusive='1')"),_msg);
 		assertTrue(checkFail("list(%item=short,%minExclusive='1')"),_msg);
@@ -4110,7 +3680,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("list(%item=short,%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("list(%item=short,%totalDigits='2')"), _msg);
 		assertTrue(checkFail("list(%item=short,%fractionDigits=2)"),_msg);
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset syntax  checking
 
 		// testing fixed facets
 		assertTrue(prepare("list(%item=short,%whiteSpace='collapse')"),_msg);
@@ -4174,7 +3744,6 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 //                          TESTING list and union
 //------------------------------------------------------------------------------
-
 		//list contains union
 		assertTrue(prepare("list("+
 			"%item=union(%item=[short(%minInclusive=-9),boolean]),"+
@@ -4193,428 +3762,18 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("false 2 3"), _msg);
 		assertTrue(parseFail("1 2"), _msg);
 
+		assertTrue(prepare(
+			"list(%item=union(%item=[int,date,dateTime,string(%length=1)]))"),
+			_msg);
+		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
+		assertTrue(prepare(
+			"list(%item=union(%item=[string(%length=1),dateTime,date,int]))"),
+			_msg);
+		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
+		
 ////////////////////////////////////////////////////////////////////////////////
 
-		//check xml schema types
-		xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def xd:name='SchemaTypes'>\n"+
-" <xd:declaration>\n"+
-"   type ID ID();\n"+
-"   type normalizedString normalizedString();\n"+
-"   type tokens NMTOKENS();\n"+
-"   type language language();\n"+
-"   type Qname QName();\n"+
-"   type NCname NCName();\n"+
-"   type duration duration();\n"+
-"   type dateTime xdatetime('yyyy-M-dTH:m[:s][ Z]');\n"+
-"   type date xdatetime('yyyy-M-d');\n"+
-"   type time xdatetime('H:m[:s]');\n"+
-"   type gYearMonth xdatetime('yyyy-M');\n"+
-"   type gYear xdatetime('yyyy');\n"+
-"   type gMonthDay xdatetime('M-d');\n"+
-"   type gDay xdatetime('d');\n"+
-"   type gMonth xdatetime('M');\n"+
-"   type base64Binary base64Binary(4);\n"+
-"   type hexBinary hexBinary(3);\n"+
-" </xd:declaration>\n"+
-"</xd:def>\n"+
-"\n"+
-"<xd:def xd:script='options preserveAttrWhiteSpaces,noTrimAttr'\n"+
-" xd:name='a' xd:root='a'>\n"+
-"<a\n"+
-" string = \"required string(); onFalse out('string');\"\n"+
-" normalizedString = \"required normalizedString();\n"+
-"                      onFalse out('normalizedString');\"\n"+
-" tokens = \"required tokens(); onFalse out('token');\"\n"+
-" language = \"required language(); onFalse out('language');\"\n"+
-" Qname = \"required Qname(); onFalse out('name');\"\n"+
-" NCName = \"required NCname(); onFalse out('NCName');\"\n"+
-" ID = \"required ID(); onFalse out('ID');\"\n"+
-" ID1 = \"required ID(); onFalse out('ID1');\"\n"+
-" IDREF = \"required IDREF(); onFalse out('IDREF');\"\n"+
-" IDREFS = \"required IDREFS(); onFalse out('IDREFS');\"\n"+
-" duration = \"required duration(); onFalse out('duration');\"\n"+
-" dateTime = \"required dateTime(); onFalse out('dateTime');\"\n"+
-" date = \"required date(); onFalse out('date');\"\n"+
-" time = \"required time(); onFalse out('time');\"\n"+
-" gYearMonth = \"required gYearMonth(); onFalse out('gYearMonth');\"\n"+
-" gYear = \"required gYear(); onFalse out('gYear');\"\n"+
-" gMonthDay = \"required gMonthDay(); onFalse out('gMonthDay');\"\n"+
-" gDay = \"required gDay(); onFalse out('gDay');\"\n"+
-" gMonth = \"required gMonth(); onFalse out('gMonth');\"\n"+
-" boolean = \"required boolean(); onFalse out('boolean');\"\n"+
-" base64Binary = \"required base64Binary(); onFalse out('base64Binary');\"\n"+
-" hexBinary = \"required hexBinary(); onFalse out('hexBinary');\"\n"+
-" float = \"required float(); onFalse out('float');\"\n"+
-"/>\n"+
-"</xd:def>\n"+
-"</xd:collection>";
-		xml =
-"<a\n"+
-" string = ' a		 b c   '\n"+
-" normalizedString = ' a		 b c   '\n"+
-" tokens = ' a		 b c '\n"+
-" language = ' cs   '\n"+
-" Qname = ' cs   '\n"+
-" NCName = ' cs   '\n"+
-" ID = ' cs   '\n"+
-" ID1 = ' cs1   '\n"+
-" IDREF = ' cs   '\n"+
-" IDREFS = ' cs    cs1   '\n"+
-" duration = 'T1H'\n"+
-" dateTime = '1998-1-1T19:30'\n"+
-" date = '1998-1-1'\n"+
-" time = '19:30:1'\n"+
-" gYearMonth = '1998-1'\n"+
-" gYear = '1998'\n"+
-" gMonthDay = '1-1'\n"+
-" gDay = '1'\n"+
-" gMonth = '1'\n"+
-" boolean = '0'\n"+
-" base64Binary = '01abcQ=='\n"+
-" hexBinary = '01abcd'\n"+
-" float = '1.5e-7'\n"+
-"/>\n";
-		xp = compile(xdef);
-		el = parse(xp, "a", xml, reporter, null);
-		assertNoErrors(reporter);
-		assertEq(el.getAttribute("string"), " a   b c   ");
-		assertEq(el.getAttribute("normalizedString"), " a   b c   ");
-		assertEq(el.getAttribute("tokens"), "a b c");
-		assertEq(el.getAttribute("language"), "cs");
-		assertEq(el.getAttribute("Qname"), "cs");
-		assertEq(el.getAttribute("NCName"), "cs");
-		assertEq(el.getAttribute("ID"), "cs");
-		assertEq(el.getAttribute("ID1"), "cs1");
-		assertEq(el.getAttribute("IDREF"), "cs");
-		assertEq("cs cs1", el.getAttribute("IDREFS"), _msg);
-		assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
-		//Test of methods NCname(), QName(), QnameURI()
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'\n"+
-"     xmlns:ws='abc' xd:root=\"ws:message\" xd:name=\"test\">\n"+
-"   <ws:message xd:script='occurs 0..'\n"+
-"     name='required NCName()'>" +
-"     <xd:choice>" +
-"       <ws:part xd:script=\"occurs 0..; match @element\"" +
-"          name =\"required NCName();" +
-"          finally {String t, s=getText(); t=getQnamePrefix(s); out(t+'/' +" +
-"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +" +
-"          getQnameURI(s) + ';' + tst(s));}\"" +
-"          element             =\"required QNameURI();" +
-"          finally {String t, s=getText(); t=getQnamePrefix(s); out(t+'/' +" +
-"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +" +
-"          getQnameURI(s) + ';' + tst(s));}\"/>" +
-"       <ws:part xd:script=\"occurs 0..; match @type\"" +
-"          name=\"required NCName();\"" +
-"          type=\"required QName();\"/>" +
-"     </xd:choice>" +
-"   </ws:message>" +
-"</xd:def>\n";
-		xp = compile(xdef, getClass());
-		strw = new StringWriter();
-		xml =
-"<message name=\"GetEndorsingBoarderRequest\"\n"+
-"  xmlns='abc'\n"+
-"  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
-"  <part name=\"body\" element=\"esxsdX:GetEndorsingBoarder\"/>" +
-"</message>";
-		parse(xp, "test", xml, reporter, strw, null, null);
-		s = strw.toString();
-		assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-			s.indexOf("/abc;abc;abc") < 0, s);
-		if (reporter.getErrorCount() == 0) {
-			fail("error not reported");
-		} else if (reporter.getErrorCount() != 1) {
-			fail(reporter.printToString());
-		} else if (!"XDEF554".equals(
-			(rep = reporter.getReport()).getMsgID()) &&
-			!"XDEF515".equals(rep.getMsgID())) {
-			fail(rep.toString());
-		}
-		strw = new StringWriter();
-		xml =
-"<message name=\"GetEndorsingBoarderRequest\"" +
-"  xmlns='abc'" +
-"  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
-"  <part   name=\"body\" element=\"esxsd:GetEndorsingBoarder\"/>" +
-"</message>";
-		parse(xp, "test", xml, reporter, strw, null, null);
-		s = strw.toString();
-		assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-			s.indexOf("esxsd/GetEndorsingBoarder/" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd") < 0,
-			s);
-		assertNoErrorwarnings(reporter);
-		setChkSyntax(false);
-		// expressions
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int | string; finally out(xs:int | string)'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='1'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xml = "<a a='x'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int || string; finally out(xs:int || string)'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='1'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xml = "<a a='x'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int AND string; finally out(xs:int AND string)'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='1'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xml = "<a a='x'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("false", strw.toString());
-		assertErrors(reporter);
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int AAND string; finally out(xs:int AAND string)'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a a='1'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("true", strw.toString());
-		assertNoErrors(reporter);
-		xml = "<a a='x'/>";
-		strw = new StringWriter();
-		parse(xp, null, xml, reporter, strw, null, null);
-		assertEq("false", strw.toString());
-		assertErrors(reporter);
-		// check Parser - combination of sequential and key parameters
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
-"  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+
-"     b='decimal(-2,2,%totalDigits=3,%fractionDigits=2)' c='dec(3,2)'/>\n"+
-"</xd:def>\n";
-		xp = compile(xdef);
-		xml = "<a a='+3.21' b='-1.21' c='+0.00'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		xml = "<a a='+1.21' b='-3.21' c='+0.00'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		xml = "<a a='+1.21' b='-1.21' c='+12.45'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		xml = "<a a='+1.21' b='-1.21' c='+0.0'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrors(reporter);
-		xml = "<a a='+1.21' b='-1.21' c='+1.21'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrors(reporter);
-		xml = "<a a='+1.21' b='-1.21' c='-1.21'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrors(reporter);
-		xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
-"  <a x=\"list(string, %length = 2);\"/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a x='1 2'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<a x='1'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertTrue(reporter.errorWarnings());
-		xml = "<a x='1 2 3'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertTrue(reporter.errorWarnings());
-		xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
-"  <xd:declaration> Parser p = string;</xd:declaration>\n"+
-"  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a x='1 2'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<a x='1'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertTrue(reporter.errorWarnings());
-		xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
-"  <xd:declaration>int i = 1, j = 2; Parser p = int(i,j);</xd:declaration>\n"+
-"  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml = "<a x='1 2'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<a x='1'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertTrue(reporter.errorWarnings());
-		xml = "<a x='1 9'/>";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertTrue(reporter.errorWarnings());
-		// check element variable
-		xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
-" <a xd:script=\"var {String x;}\">\n"+
-"   <b xd:script='+'"+
-"     x=\"empty();\n"+
-"       onTrue x = '1999';\n"+
-"       finally {\n"+
-"         Parser p = gYear(%minInclusive=1999);\n"+
-"         ParseResult r = p.parse(x);\n"+
-"         if (!r.matches()) {\n"+
-"           error('E001','Check failed: &amp;{p}', '&amp;{p}' + x);\n"+
-"         }\n"+
-"       }\">\n"+
-"   </b>\n"+
-" </a>\n"+
-"</xd:def>";
-		xml = "<a><b x=''></b></a>";
-		assertEq(xml, parse(xdef, "", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a xd:script=\"var final String z='1999';\">\n"+
-"  <b>\n"+
-"   <c xd:script='+'\n"+
-"     x=\"empty();\n"+
-"       finally {\n"+
-"         Parser p = gYear(%minInclusive=1999);\n"+
-"         ParseResult r = p.parse(z);\n"+
-"         if (!r.check()) {\n"+
-"           error('E001','Check failed: &amp;{p}', '&amp;{p}' + z);\n"+
-"         }\n"+
-"       }\">\n"+
-"   </c>\n"+
-"  </b>\n"+
-" </a>\n"+
-"</xd:def>";
-		xml = "<a><b><c x=''/></b></a>";
-		assertEq(xml, parse(xdef, "", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		//parser type
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
-"  <a a='getMyParser()'/>\n"+
-"</xd:def>\n";
-		xp = compile(xdef, getClass());
-		xml = "<a a='abc'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='cde'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
-"<xd:declaration>\n"+
-"  Parser p = getMyParser(); \n"+
-"</xd:declaration>\n"+
-"  <a a='p'/>\n"+
-"</xd:def>\n";
-		xp = compile(xdef, getClass());
-		xml = "<a a='abc'/>";
-		parse(xp, "", xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='cde'/>";
-		parse(xp, "", xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		xdef = //external variable
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
-"<xd:declaration>\n"+
-"  external Parser p; \n"+
-"</xd:declaration>\n"+
-"  <a a='p'/>\n"+
-"</xd:def>\n";
-		xp = compile(xdef, getClass());
-		xml = "<a a='abc'/>";
-		xd = xp.createXDDocument();
-		xd.setVariable("p", getMyParser());
-		parse(xd, xml, reporter);
-		assertNoErrorwarnings(reporter);
-		xd = xp.createXDDocument();
-		xd.setVariable("p", getMyParser());
-		xml = "<a a='cde'/>";
-		parse(xd, xml, reporter);
-		assertTrue(reporter.errorWarnings());
-		int year = new GregorianCalendar().get(Calendar.YEAR);
-		setProperty("xdef.minyear", String.valueOf(year - 200));
-		setProperty("xdef.maxyear", String.valueOf(year + 200));
-		setProperty("xdef.specdates",
-			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-		xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A a='int()' b='int()'/>\n"+
-"</xd:def>";
-		xp = compile(xdef);
-		xml ="<A a='2147483647' b='-2147483648' />";
-		assertEq(xml, parse(xp, "", xml, reporter));
-		assertNoErrors(reporter);
-		xml ="<A a='2147483648' b='-2147483649' />";
-		parse(xp, "", xml, reporter);
-		assertEq(2, reporter.getErrorCount());
-
 		resetTester();
-	}
-
-	public static String tst(XXElement xe, String s) {
-		return KXmlUtils.getNSURI(KXmlUtils.getQNamePrefix(s), xe.getElement());
-	}
-
-	public static boolean kp(XXNode chkel, XDValue[] params) {
-		XDContainer c = XDFactory.createXDContainer((XDContainer) params[2]);
-		c.setXDNamedItem("minInclusive", params[0]);
-		c.setXDNamedItem("maxInclusive", params[1]);
-		try {
-			XSAbstractParser d = new XSParseDecimal();
-			d.setNamedParams(null, c);
-			return !d.check(null, chkel.getXMLNode().getNodeValue()).errors();
-		} catch (Exception ex) {
-			chkel.error("", ex.getMessage());
-			return false;
-		}
-	}
-
-	public static XDParser getMyParser() {
-		return new XDParserAbstract() {
-			@Override
-			public void parseObject(XXNode xnode, XDParseResult p) {
-				p.isSpaces();
-				if (!p.isToken("abc")) {
-					p.error("E000", "Chyba");
-				}
-				p.isSpaces();
-				if (!p.eos()) {
-					p.error("E000", "Chyba");
-				}
-			}
-			@Override
-			public String parserName() {return "myParser";}
-		};
 	}
 
 	/** Run test

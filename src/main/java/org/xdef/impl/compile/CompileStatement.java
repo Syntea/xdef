@@ -2964,7 +2964,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, XConstants.XD32, null);
+		setSource(source, defName, XConstants.XD31, null);
 		if (lang == null) {
 			error(XDEF.XDEF410, "language");//'&{0}' expected
 			return;
@@ -3063,7 +3063,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String defName,
 		final boolean local,
 		final Map<String, Integer> nsPrefixes) { // namespace
-		setSource(sName, defName, XConstants.XD32, nsPrefixes);
+		setSource(sName, defName, XConstants.XD20, nsPrefixes);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;
@@ -3404,7 +3404,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			for (int i = 0; i < numPar; i++) {
 				String s = params.get(i);
 				if (s == null) {//array
-					pars[i] = org.xdef.XDValue[].class;
+					pars[i] = XDValue[].class;
 				} else {
 					if ((pars[i] = getClassParam(s, cl)) == null) {
 						error(XDEF.XDEF228, s); //Class '&{0}' not exists
@@ -3423,7 +3423,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			for (int i = 0; i < numPar; i++) {
 				String s = params.get(i);
 				if (s == null) {//array
-					pars[i + 1] = org.xdef.XDValue[].class;
+					pars[i + 1] = XDValue[].class;
 				} else {
 					if ((pars[i+1] = getClassParam(s, cl)) == null) {
 						error(XDEF.XDEF228, s); //Class '&{0}' not exists
@@ -3568,8 +3568,18 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeI1 jmp = null;
 		int addr;
 		short type;
-		switch (nextSymbol()) {
+		nextSymbol();
+/*XXX*/
+		int srcPos = getIndex();
+/*XXX*/
+		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
+/*XXX*/
+				String typeName =
+					_sym==IDENTIFIER_SYM ? _idName : symToName(_sym);
+//				CodeS1 info = new CodeS1(XD_STRING, TYPEINFO_CODE, 0, "");
+//				_g.addCode(info, 0);
+/*XXX*/
 				CompileVariable rVar =
 					(CompileVariable) _g._globalVariables.getXVariable(_idName);
 				int dx = addDebugInfo(true);
@@ -3579,6 +3589,22 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						errorAndSkip(XDEF.XDEF423,
 							String.valueOf(END_SYM), "Parser");
 					} else {
+/*XXX*/
+			String s = getParsedBufferPartFrom(srcPos).trim();
+			if (s.startsWith("OR") || s.startsWith("NOT") || s.startsWith("AND")
+				|| s.startsWith("AAND") || s.startsWith("OOR")) {
+				s = ' ' + s;
+			}
+			if (s.endsWith(";")) {
+				s = s.substring(0, s.length() - 1);
+				s = s.trim();
+			}
+			if (s.isEmpty()) {
+				s = "()";
+			}
+//			info.setParam2(typeName + s);
+//System.out.println(typeName + s);
+/*XXX*/
 						CompileVariable v =
 							_g.addVariable(name, _g._tstack[_g._sp], varKind);
 						if (_g._cstack[_g._sp] >= 0) {
@@ -3592,7 +3618,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
 				}
-				addr = compileCheckMethod("");
+				addr = compileCheckMethod("").getParam();
 				if (rVar!=null && rVar.getType()==CompileBase.PARSEITEM_VALUE) {
 					type = rVar.getParseResultType();
 				} else {
@@ -3614,30 +3640,29 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case BEG_SYM: { // explicit declaration of type method
-				nextSymbol();
-				if (!"parse".equals(_idName) || nextSymbol() != COLON_SYM) {
-					//'&{0}' expected
-					errorAndSkip(XDEF.XDEF410, String.valueOf(END_SYM),"parse");
-					return;
-				} else {
-					//Type declaration format "{parse: xxx}" is deprecated.
-					//Please use just xxx.
-					if (_xdVersion == 31) {
-						warning(XDEF.XDEF997);
+				if (_xdVersion < XConstants.XD31) { // old X-definition versions
+					if (nextSymbol() == IDENTIFIER_SYM && "parse".equals(_idName)
+						&& nextSymbol() == COLON_SYM) {
+						nextSymbol();
+					} else {
+						errorAndSkip(XDEF.XDEF410, //'&{0}' expected
+							String.valueOf(END_SYM), "parse");
+						return;
 					}
-					nextSymbol();
 				}
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
 				}
 				int dx = addDebugInfo(true);
-				addr = compileCheckMethod("");
+				addr = compileCheckMethod("").getParam();
 				type = XD_STRING;
 				setDebugEndPosition(dx);
-				if (_sym == SEMICOLON_SYM) {
-					nextSymbol();
+				if (_xdVersion < XConstants.XD31) { // old X-definition versions
+					if (_sym == SEMICOLON_SYM) {
+						nextSymbol();
+					}
+					checkSymbol(END_SYM);
 				}
-				checkSymbol(END_SYM);
 				break;
 			}
 			default:
@@ -3739,9 +3764,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return false;
 			} else {
 				int dx = addDebugInfo(true);
-				int addr = compileCheckMethod("");
+				CodeS1 checkMethod = compileCheckMethod("");
+				int addr = checkMethod.getParam();
 				setDebugEndPosition(dx);
 				keyItems.add(new CodeUniqueset.ParseItem(keyName,
+					checkMethod.stringValue(),
 					addr, keyItems.size(), XD_STRING, optional));
 			}
 		}
@@ -3795,16 +3822,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		switch (nextSymbol()) {
 			case IDENTIFIER_SYM: { // type method
 				varType = CompileBase.UNIQUESET_VALUE;
-				CompileVariable rVar =
-					(CompileVariable) _g._globalVariables.getXVariable(_idName);
-				int addr;
-				short type;
 				int dx = addDebugInfo(true);
-				addr = compileCheckMethod("");
+				CodeS1 checkMethod = compileCheckMethod("");
+				int addr = checkMethod.getParam();
 				setDebugEndPosition(dx);
-				type = XD_STRING;
+				short type = XD_STRING;
 				keyItems.add(new CodeUniqueset.ParseItem("",
-					addr, keyItems.size(), XD_STRING, false));
+					checkMethod.stringValue(),
+					addr,
+					keyItems.size(),
+					type,
+					false));
 				break;
 			}
 			case BEG_SYM: { // explicit declaration of type method
@@ -3830,8 +3858,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			default:
 				// Expected declaration of uniqueSet
-				errorAndSkip(XDEF.XDEF489,String.valueOf(END_SYM));
-				_g.addVariable(uniquesetName, CompileBase.UNIQUESET_M_VALUE, varKind);
+				errorAndSkip(XDEF.XDEF489,
+					String.valueOf(END_SYM));
+				_g.addVariable(uniquesetName,
+					CompileBase.UNIQUESET_M_VALUE, varKind);
 				return;
 		}
 		if (varKind == 'X') { // ModelVariable
@@ -3865,6 +3895,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					var.getOffset(),
 					varKind);
 				x.setCodeAddr(var.getCodeAddr());
+				x.setKeyRefName(key.getDeclaredTypeName());
 				if (varKind == 'G') {
 					_g._globalVariables.addVariable(x);
 				} else {
@@ -3905,11 +3936,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Compile a validation method.
 	 * @param keywords where to skip if a syntax error is reported.
-	 * @return address of generated method.
+	 * @return code with the adress, type and refered name.
 	 */
-	final int compileCheckMethod(final String keywords) {
+	final CodeS1 compileCheckMethod(final String keywords) {
 		int sp = _g._sp  = -1;
 		int start = _g._lastCodeIndex;
+		CodeS1 result = new CodeS1(XD_STRING, (short) 0, start + 1, null);
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
 			// generate call of following method
@@ -3921,19 +3953,23 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_g.addCode(initCode, 0);
 			_popNumParams = 0;
 			compileMethodBody(true, initCode);
+			result.setItemType(XD_STRING);
 		} else { // check expression
+			String typeName = _sym==IDENTIFIER_SYM ? _idName : symToName(_sym);
 			int dx = addDebugInfo(false);
 			if (!expression()) {
 				//Action &{0} expected
 				errorAndSkip(XDEF.XDEF426, keywords, "validation");
 				_g._sp  = -1;
-				return -1;
+				result.setParam(-1);
+				return result;
 			}
 			if (sp == _g._sp) {
 				//Validation method or a value of type ParseResult
 				//or boolean expected
 				error(XDEF.XDEF107);
-				return -1;
+				result.setParam(-1);
+				return result;
 			}
 			switch (_g._tstack[_g._sp]) {
 				case XD_BNFRULE:
@@ -3942,13 +3978,22 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				case XD_ANY:
 				case XD_PARSER: {
+					if (getVariable(typeName) != null) {
+						result.setParam2(typeName);
+					}
 					_g.addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 					_g.genStop();
 					break;
 				}
-				case XD_PARSERESULT:
+				case XD_PARSERESULT: {
+					CompileVariable var = getVariable(typeName);
+					if (var != null) {
+						String s = var.getKeyRefName();
+						result.setParam2(s != null ? s : typeName);
+					}
 					_g.genStop();
 					break;
+				}
 				case XD_BOOLEAN:
 					_g.genStop();
 					break;
@@ -3959,12 +4004,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (CompileBase.PARSEITEM_VALUE == val.getItemId()
 							&& ((code = val.getCode()) == LD_GLOBAL
 							|| code == LD_LOCAL || code == LD_XMODEL)) {
+							result.setParam2(typeName);
 							_g.removeCodeFromIndexAndClearStack(start,
 								sp, _g._spMax);
 							String err = _g.genMethod(val.stringValue(), 0);
 							if (err != null) {
 								error(XDEF.XDEF443, err);//Unknown method:'&{0}'
 							}
+							_g._sp  = -1;
+							return result;
 						}
 					}
 					break;
@@ -3980,7 +4028,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		_g._sp  = -1;
-		return start + 1;
+		return result;
 	}
 
 	/** Compile "fixed" validation method.

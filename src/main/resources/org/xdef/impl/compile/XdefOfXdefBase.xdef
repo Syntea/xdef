@@ -301,8 +301,8 @@ Block ::= "{" StatementSequence S? "}"
 
 SimpleStatement ::= S? (Statement1 | (Statement2? S? ";" S?)) | EmptyStatement
 
-IfStatement ::=
-  "if" ParentalExpression SimpleStatement (S? "else" S? SimpleStatement)?
+IfStatement ::= "if" ParentalExpression SimpleStatement
+  (S? "else" S? SimpleStatement)?
   /* Result of ParentalExpression must be boolean. */
 
 ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S?
@@ -377,8 +377,7 @@ Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
      equal to the first one. */
 
 ExplicitCode ::= Block
-  /* If result value is required it must be returned by the command
-     "return value". */
+  /* If result value is required it must be returned by the command "return" */
 
 /******************************************************************************/
 /* Script of X-definition header                                              */
@@ -554,8 +553,11 @@ TypeDeclaration ::= ("type" S Identifier S?
   ((Identifier (S? "," S? Identifier)* S? ";" S? )
   | TypeDeclarationBody)) | UniqueSetDeclaration
 
-TypeDeclarationBody ::= Expression
-  /* Expression or ExplicitCode must return value of boolean or ParseResult.*/
+TypeDeclarationBody ::= TypeExplicitCode | Expression
+  /* Expression or TypeExplicitCode must return either
+     a boolean or a ParseResult value.*/
+
+TypeExplicitCode ::= ("{" S? "parse" S? ":" S? Statement S? "}") | ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"
   ( S? "{" S? (MethodListItem S? ";" S? )* MethodListItem? S? ";"? S? "}"

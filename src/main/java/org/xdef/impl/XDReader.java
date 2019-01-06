@@ -245,11 +245,12 @@ public final class XDReader extends SObjectReader {
 						if (len > 0) {
 							for (int i = 0; i < len; i++) {
 								keys[i] = new CodeUniqueset.ParseItem(
-									readString(),
-									readInt(),
-									i,
-									readShort(),
-									readBoolean());
+									readString(), //key name
+									readString(), // reference type name
+									readInt(), // address of validation method
+									i, // item index
+									readShort(), // parsed type
+									readBoolean()); // optional flag
 							}
 						}
 						return new CodeUniqueset(keys, readString());

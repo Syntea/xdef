@@ -134,7 +134,7 @@ public class XVariable implements XMVariable {
 	 */
 	public final String getName() {return _name;}
 	@Override
-	/** Get type of variable (see cz.syntea.xdef.XDValueID).
+	/** Get type of variable (see org.xdef.XDValueID).
 	 * @return type of variable.
 	 */
 	public final short getType() {return _type;}

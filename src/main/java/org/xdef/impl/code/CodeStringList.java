@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 
 /** CodeStringList implements CodeI1 for direct list of string parameters.
- *
  * @author  Vaclav Trojan
  */
 public class CodeStringList extends CodeI1 {

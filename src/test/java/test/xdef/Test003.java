@@ -155,7 +155,6 @@ public final class Test003 extends XDTester {
 		InputStreamReader isr;
 		Element el;
 		final String dataDir = getDataDir() + "test/";
-		Report.setLanguage("en"); //localize
 		try {
 			reporter.clear();
 			xp = compile(dataDir + "TestChkParser1_1.xdef");

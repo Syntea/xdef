@@ -112,7 +112,6 @@ public final class TestErrors extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		props.setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
 			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
-		Report.setLanguage("en"); //localize
 
 		final String dataDir = getDataDir();
 		int count, pos;
