@@ -6,6 +6,7 @@ import org.xdef.impl.XDReader;
 import org.xdef.impl.XDSourceItem;
 import org.xdef.impl.XDWriter;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
@@ -65,11 +66,15 @@ public abstract class ExternalXDEditor implements XEditor {
 			// the result information
 			String resultInfo = resultFile.getAbsolutePath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
-			// wait max. 2 hours for the resultFile (14400 = 2*2*3600)
+			// wait max. 4 hours for the resultFile (14400 = 2*2*3600)
 			for (int i = 0; i < 14400 && !waitForFileExists(resultFile); i++) {}
 			if (!resultFile.exists() || !resultFile.canRead()) {
-				throw new RuntimeException(
-					"No response from the external editor");
+				//No response from the external editor
+				throw new SRuntimeException(XDEF.XDEF860);
+			}
+			if (resultFile.length() == 0) {
+				//In the external editor is aleady opened the other project
+				throw new SRuntimeException(XDEF.XDEF861);
 			}
 			// Read result information from the result file.
 			FileInputStream fis = new FileInputStream(resultFile);
@@ -77,8 +82,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			// read flag if editing was finished
 			boolean editingFinished = xr.readBoolean();
 			int len = xr.readInt();
-			Map<String, XDSourceItem> sources =
-				xpool.getXDSourceInfo().getMap();
+			Map<String,XDSourceItem> sources = xpool.getXDSourceInfo().getMap();
 			// read and update source map
 			for (int i = 0; i < len; i++) {
 				String key = xr.readString();
@@ -194,10 +198,9 @@ public abstract class ExternalXDEditor implements XEditor {
 				tmpFile.wait(100); // wait 0.1 sec
 			}
 		}
-		if (count >= 100) { // error: not renamed even after 10 sec
-			throw new RuntimeException("Can't rename file: "
-				+ tmpFile.getAbsolutePath()
-				+ "\nto: "+resultFile.getAbsolutePath());
+		if (count >= 100) { // Can't rename file &{0} to &{1}
+			throw new SRuntimeException(SYS.SYS031,
+				tmpFile.getAbsolutePath(), resultFile.getAbsolutePath());
 		}
 	}
 

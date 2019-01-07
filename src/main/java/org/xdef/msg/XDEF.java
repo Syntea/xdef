@@ -633,22 +633,26 @@ public interface XDEF {
 	public static final long XDEF850 = 31159025974L;
 	/** GUIEditor can't write XML data to file &amp;{0}. */
 	public static final long XDEF851 = 31159025975L;
+	/** No response from the external editor */
+	public static final long XDEF860 = 31159025976L;
+	/** In the external editor is aleady opened the other project */
+	public static final long XDEF861 = 31159025977L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159025976L;
+	public static final long XDEF901 = 31159025978L;
 	/** Can't read X-definition&amp;{0}{: } */
-	public static final long XDEF902 = 31159025977L;
+	public static final long XDEF902 = 31159025979L;
 	/** X-definition source is missing or null&amp;{0}{: } */
-	public static final long XDEF903 = 31159025978L;
+	public static final long XDEF903 = 31159025980L;
 	/** Incorrect parameter of compiler of X-definitions&amp;{0}{: } */
-	public static final long XDEF904 = 31159025979L;
+	public static final long XDEF904 = 31159025981L;
 	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159025980L;
+	public static final long XDEF905 = 31159025982L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159025981L;
+	public static final long XDEF906 = 31159025983L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025982L;
+	public static final long XDEF998 = 31159025984L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025983L;
+	public static final long XDEF_DESCRIPTION = 31159025985L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159025984L;
+	public static final long XDEF_LANGUAGE = 31159025986L;
 }
