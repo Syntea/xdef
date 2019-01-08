@@ -1639,7 +1639,9 @@ public final class CompileCode extends CompileBase {
 
 	final boolean genConstructor(final short type, final int numPar) {
 		if (type == XD_UNDEF) {
-			_cstack[_sp] = -1;
+			if (_sp >= 0) {
+				_cstack[_sp] = -1;
+			}
 			return true; //do not report multiple errors!
 		}
 		InternalMethod imethod = getTypeMethod(type, "#");
