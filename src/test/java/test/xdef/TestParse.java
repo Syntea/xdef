@@ -35,6 +35,7 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
+import org.xdef.sys.SUtils;
 
 /** Test of parsing of source XML according to XDefinition.
  * @author Vaclav Trojan
@@ -2722,17 +2723,9 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		try { // test declared type in version 2.0 and 3.1
-			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
-"  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
-"  <a x='x'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'>\n"+
+		try { // test declared type in version 2.0, 3.1 ...
+			xdef = // 3.1 and higher
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    type x {if (true) return true; else return error('xxx');}\n"+
   "</xd:declaration>\n"+
@@ -2741,6 +2734,35 @@ public final class TestParse extends XDTester {
 			xp = compile(xdef);
 			xml="<a x='x'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
+			xdef =
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
+"  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
+"  <a x='x'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x='x'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n" +
+"    <xd:declaration>\n" +
+"        type gamYear        {parse : {return long(1,2);}}\n" +
+"        type gamDate        {parse : xdatetime('yyyyMMdd');}\n" +
+"        type gamDateTime    {parse:  xdatetime('yyyyMMddHHmmss');}\n" +
+"        type gamS           {parse:  {return true;}}\n" +
+"    </xd:declaration>\n" +
+"  <a a='gamYear' b='gamDate' c='gamDateTime' d='gamS' />\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a a='2' b='20180501' c='20180501122105' d='?'/>";
+			assertEq(xml, parse(xp,"",xml, reporter));
+			assertNoErrors(reporter);
+			try {
+				xdef = SUtils.modifyFirst(xdef, "xdef/2.0'", "xdef/3.1'");
+				compile(xdef);
+			} catch (Exception ex) {
+				if(!ex.toString().contains("W XDEF997")) fail(ex);
+			}
 		} catch (Exception ex) {fail(ex);}
 		try { //test ver 20 and 31 in collection
 			xp = compile(

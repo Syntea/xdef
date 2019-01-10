@@ -3546,35 +3546,23 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 	}
 
-	/** Compile check type as a method.
+	/** Compile validation type as a method.
 	 * @param varKind variable kind ('G' .. global or 'X' .. model).
 	 * @param local true if it is in the declaration part with the local scope.
+	 * @param name the name of declared type.
 	 */
-	final void compileType(final byte varKind, final boolean local) {
-		String name;
-		if (nextSymbol() != IDENTIFIER_SYM) {
-			error(XDEF.XDEF329); //Identifier expected
-			name = CompileBase.genErrId(); // "UNDEF$$$";
-		} else {
-			name = _idName;
-			if (local) {
-				name = _actDefName + '#' + name;
-			}
-		}
-		if (varKind != 'X' && _g.getVariable(name) != null) {
-			error(XDEF.XDEF450, name);//Redefinition of variable '&{0}'
-			name = CompileBase.genErrId(); // "UNDEF$$$";
-		}
+	private void compileType(final byte varKind,
+		final boolean local,
+		final String name) {
 		CodeI1 jmp = null;
 		int addr;
 		short type;
-		nextSymbol();
-/*XXX*/
+/*XXX*
 		int srcPos = getIndex();
 /*XXX*/
 		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
-/*XXX*/
+/*XXX*
 				String typeName =
 					_sym==IDENTIFIER_SYM ? _idName : symToName(_sym);
 //				CodeS1 info = new CodeS1(XD_STRING, TYPEINFO_CODE, 0, "");
@@ -3589,7 +3577,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						errorAndSkip(XDEF.XDEF423,
 							String.valueOf(END_SYM), "Parser");
 					} else {
-/*XXX*/
+/*XXX*
 			String s = getParsedBufferPartFrom(srcPos).trim();
 			if (s.startsWith("OR") || s.startsWith("NOT") || s.startsWith("AND")
 				|| s.startsWith("AAND") || s.startsWith("OOR")) {
@@ -3640,15 +3628,34 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case BEG_SYM: { // explicit declaration of type method
-				if (_xdVersion < XConstants.XD31) { // old X-definition versions
-					if (nextSymbol() == IDENTIFIER_SYM && "parse".equals(_idName)
-						&& nextSymbol() == COLON_SYM) {
+				skipBlanksAndComments();
+				if (isToken("parse")) {
+					skipBlanksAndComments();
+					if (isChar(':')) { // X-definition version 2.0
 						nextSymbol();
-					} else {
-						errorAndSkip(XDEF.XDEF410, //'&{0}' expected
-							String.valueOf(END_SYM), "parse");
+						compileType(varKind, local, name);
+						if (_sym == SEMICOLON_SYM) {
+							nextSymbol();
+						}
+						checkSymbol(END_SYM);
+						if (_xdVersion >= XConstants.XD31) {
+							//Type declaration format "{parse: ...}" is deprecated;
+							//please use just validation method call
+							if (_xdVersion == XConstants.XD31) {
+								warning(XDEF.XDEF997);
+							} else {
+								error(XDEF.XDEF997);
+							}
+						}
 						return;
+					} else {
+						_sym = IDENTIFIER_SYM;
+						_idName = "parse";
 					}
+//				} else if (_xdVersion < XConstants.XD31) {//old X-def versions
+//					errorAndSkip(XDEF.XDEF410, //'&{0}' expected
+//						String.valueOf(END_SYM), "parse:");
+//					return;
 				}
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
@@ -3657,12 +3664,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				addr = compileCheckMethod("").getParam();
 				type = XD_STRING;
 				setDebugEndPosition(dx);
-				if (_xdVersion < XConstants.XD31) { // old X-definition versions
-					if (_sym == SEMICOLON_SYM) {
-						nextSymbol();
-					}
-					checkSymbol(END_SYM);
-				}
 				break;
 			}
 			default:
@@ -3678,6 +3679,29 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_g.addVariable(name, CompileBase.PARSEITEM_VALUE, varKind);
 		var.setParseMethodAddr(addr);
 		var.setParseResultType(type);
+	}
+
+	/** Compile check type as a method.
+	 * @param varKind variable kind ('G' .. global or 'X' .. model).
+	 * @param local true if it is in the declaration part with the local scope.
+	 */
+	final void compileType(final byte varKind, final boolean local) {
+		String name;
+		if (nextSymbol() != IDENTIFIER_SYM) {
+			error(XDEF.XDEF329); //Identifier expected
+			name = CompileBase.genErrId(); // "UNDEF$$$";
+		} else {
+			name = _idName;
+			if (local) {
+				name = _actDefName + '#' + name;
+			}
+		}
+		if (varKind != 'X' && _g.getVariable(name) != null) {
+			error(XDEF.XDEF450, name);//Redefinition of variable '&{0}'
+			name = CompileBase.genErrId(); // "UNDEF$$$";
+		}
+		nextSymbol();
+		compileType(varKind, local, name);
 	}
 
 	/** Compile "var" section of the uniqueSet declaration (the named values).

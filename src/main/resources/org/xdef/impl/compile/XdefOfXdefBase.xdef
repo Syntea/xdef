@@ -557,7 +557,9 @@ TypeDeclarationBody ::= TypeExplicitCode | Expression
   /* Expression or TypeExplicitCode must return either
      a boolean or a ParseResult value.*/
 
-TypeExplicitCode ::= ("{" S? "parse" S? ":" S? Statement S? "}") | ExplicitCode
+TypeExplicitCode ::= /* X-defintion version 2.0 */
+  ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}") 
+  | /* X-defintion version 3.1 and higher */ ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"
   ( S? "{" S? (MethodListItem S? ";" S? )* MethodListItem? S? ";"? S? "}"
