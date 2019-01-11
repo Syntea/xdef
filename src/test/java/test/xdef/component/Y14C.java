@@ -79,7 +79,7 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4F5C1F1B9409F045C5B9BDA701A2F678".equals(
+    if (!"06A37D65DD429BF38C93B33BB75C9E09".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -183,7 +183,7 @@ public static class X implements test.xdef.component.Y14A{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"1A9E6F6A4286AE666612F79DF944F5E7".equals(
+    if (!"2C1A231C386245B90D25F64228A3EF86".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

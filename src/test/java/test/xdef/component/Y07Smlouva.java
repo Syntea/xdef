@@ -81,7 +81,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9072049E259E64B284E5524D775648FF".equals(
+    if (!"AB2F81C7FFA7256BADE290FB04F4683C".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -198,7 +198,7 @@ public static class Domain implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D418163F032D19ED4963296738035CDE".equals(
+    if (!"E03A37B3616CD189CF239F63D7FA83EA".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

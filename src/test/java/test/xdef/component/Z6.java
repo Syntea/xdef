@@ -114,7 +114,7 @@ public class Z6 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E899C4BB77874F323CCF525EF9754AB9".equals(
+    if (!"866C6AEE9FDA2E44DFDF8425E73B792A".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

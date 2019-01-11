@@ -71,7 +71,7 @@ public class Y12_S implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7F0677B8E85B5142009063FF99D39B46".equals(
+    if (!"E51DC98AC66B01F49D9DE581A4356FDF".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

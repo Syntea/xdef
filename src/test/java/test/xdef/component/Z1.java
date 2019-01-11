@@ -231,7 +231,7 @@ public class Z1 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7433043803A7E244ED58DBD7C11E92A5".equals(
+    if (!"4584F2D55B3E3B6707313549D69DA5C8".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -415,7 +415,7 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

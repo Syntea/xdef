@@ -101,7 +101,7 @@ public class ZvireDN implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E6DEFD300BBDF168BCB0CD1F00B9BB2F".equals(
+    if (!"2116F761E13F9752FD19D24D986FAEC6".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -227,7 +227,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

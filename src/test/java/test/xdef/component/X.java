@@ -413,7 +413,7 @@ public static class E implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B11C69578B6DDBB7A9F563C3DC58938E".equals(
+    if (!"0878A6523B9B06D2A6040A3E59ED37A1".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

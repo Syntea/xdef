@@ -193,7 +193,7 @@ public class UcastnikDN implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0B1FF45E0EB6E84AA76C1C1417E84960".equals(
+    if (!"5DC275F71F5B296AF68E6B9E707FED7C".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -378,7 +378,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -488,7 +488,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -598,7 +598,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -708,7 +708,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -818,7 +818,7 @@ public static class Vazba implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

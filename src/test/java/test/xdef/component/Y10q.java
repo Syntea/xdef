@@ -71,7 +71,7 @@ public class Y10q implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4F2FFFE513A95D38C092FD589A492FD7".equals(
+    if (!"F0E1A776E0FF545C6BFDA925E1623E27".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

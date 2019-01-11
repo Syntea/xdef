@@ -176,7 +176,7 @@ public static class Clazz implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B808778C43533CF260492F9B818F6EAC".equals(
+    if (!"4234629C237D76C0DB1D4F45F998CB97".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

@@ -491,7 +491,7 @@ public static class B_2 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"82E4B367846122DE0CE3BD67406BEBD1".equals(
+    if (!"4414926D6963A1DBABEAD0435FB237D7".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

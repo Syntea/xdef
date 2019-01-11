@@ -153,7 +153,7 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"A92B865CB8863367123917EE43184194".equals(
+    if (!"D4BF570CA602EC4C5D205CD463EB5A01".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -311,7 +311,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

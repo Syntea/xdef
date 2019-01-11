@@ -86,7 +86,7 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"8E85C8C5920B35432FE3204B272A3D41".equals(
+    if (!"1EBA483EF34CFE74D3B53495EA71868E".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -201,7 +201,7 @@ public static class A implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"589B1B05289C3450C1FC8DD0A217FCDB".equals(
+    if (!"91208C74FAC47D911491BF7DEDF05A05".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

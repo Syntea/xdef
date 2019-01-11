@@ -71,7 +71,7 @@ public class Y13B implements test.xdef.component.Y13C,org.xdef.component.XCompon
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"49D26E11679567C23DC19D92544EF22F".equals(
+    if (!"D88AEB90BA747FF1ABE4D8E95038CD85".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

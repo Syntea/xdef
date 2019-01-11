@@ -89,7 +89,7 @@ public class Z5 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4938D1BE66E12B4C269ECE167D90C9E0".equals(
+    if (!"321D7EC35C80E460E3E13214D0933D17".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

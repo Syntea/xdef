@@ -87,7 +87,7 @@ public class C2 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"C08AD32FE3D734C66EFCAD9AB991FE6A".equals(
+    if (!"3D0F636212BFD715BFF1951DD68327FC".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

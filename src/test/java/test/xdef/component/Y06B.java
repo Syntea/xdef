@@ -76,7 +76,7 @@ public class Y06B implements test.xdef.TestXComponents_Y06XCDomain,org.xdef.comp
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"DB943CE96D810614429CC61B165C9645".equals(
+    if (!"321D347E9F20750DE41DD6CBDF9914DB".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

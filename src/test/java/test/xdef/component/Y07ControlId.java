@@ -71,7 +71,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"EE84D825EA3CB1E8F0F0D928BD7C014B".equals(
+    if (!"BDDAD1967C59695CF36D1235D5CE523A".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

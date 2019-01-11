@@ -94,7 +94,7 @@ public class Y21 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"95818D569C1191E44C48B829095AD31D".equals(
+    if (!"C3E64FA1EC37712D22CF2278C0EF1DAC".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -222,7 +222,7 @@ public static class B implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"175FE21E878CA4DF84FA8DA82C092D8C".equals(
+    if (!"C5FC5DA651F4C7CC3D8920A256D8A39E".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

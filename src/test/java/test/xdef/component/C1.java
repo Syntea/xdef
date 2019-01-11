@@ -76,7 +76,7 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"8EA042D963067A1B2F493D56301DFF1A".equals(
+    if (!"5893E57727C3665E206DF8879C681AC2".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

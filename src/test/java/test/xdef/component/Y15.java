@@ -87,7 +87,7 @@ public class Y15 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"1BA93A71B4DAF39ADD409D8057E12732".equals(
+    if (!"E1563835F4A847AEB0A9638BFD48A6CB".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

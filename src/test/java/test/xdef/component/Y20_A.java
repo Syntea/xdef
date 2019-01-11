@@ -79,7 +79,7 @@ public class Y20_A implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B4D99310DB08FD64CED39A04197A8579".equals(
+    if (!"D4BB43878FE4CE0CAF83DF9237B37816".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -196,7 +196,7 @@ public static class X implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AD3CAE139B4CCC1C95227A65C995782B".equals(
+    if (!"F3FA2F0EC9E66366A2F8EC9CDC2E242B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

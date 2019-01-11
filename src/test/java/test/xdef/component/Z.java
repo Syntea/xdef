@@ -82,7 +82,7 @@ public class Z implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E7D45C4E1FE70AD909D0D85CBE4357D0".equals(
+    if (!"8E9D9F55CD197E7613DECDA78521064B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

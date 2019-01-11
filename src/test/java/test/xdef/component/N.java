@@ -79,7 +79,7 @@ public class N implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"333C7BC8F0A4A23695838943B2BCC15F".equals(
+    if (!"9421DF5DEC02E02D5DBE17020B4B26C6".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

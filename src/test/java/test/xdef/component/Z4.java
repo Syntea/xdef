@@ -169,7 +169,7 @@ public class Z4 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"937D65C5FF7BC9717024FF8F456967A9".equals(
+    if (!"7AE9EB136AB2113A55BB5A4659161C98".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

@@ -76,7 +76,7 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"2353328558846B911C4D193895ACD0D9".equals(
+    if (!"DCA386598611DCE25D34E4B92E53230F".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

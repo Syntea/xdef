@@ -71,7 +71,7 @@ public class Y03PartTwo implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D63DF06930855E735463CCBE2507D4B7".equals(
+    if (!"9A7C295545792DE39D959D7C359E157E".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

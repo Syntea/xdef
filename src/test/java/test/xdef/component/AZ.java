@@ -71,7 +71,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0B0C0D7434E155C04FB0975330A17591".equals(
+    if (!"F44679770A6C8407E75D4EB6D64831A0".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

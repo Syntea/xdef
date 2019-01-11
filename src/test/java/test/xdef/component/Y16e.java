@@ -79,7 +79,7 @@ public class Y16e implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E4E9C4213C7817CEB41A1EE95385AB7F".equals(
+    if (!"8ABF7A354A1ED8349D65387128B5BFAF".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
