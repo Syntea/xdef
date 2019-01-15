@@ -1289,7 +1289,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						!_selector._selective && _selector._prev == null) {
 						if (_counters[_nextDefIndex] < xel.minOccurs()) {
 							//required element is missing
-							if (_nextDefIndex + 1 < _defList.length) {
+							while (_nextDefIndex + 1 < _defList.length) {
 								XNode x = _defList[_nextDefIndex + 1];
 								if (x.getKind() == XNode.XMELEMENT &&
 									el != null &&
@@ -1301,6 +1301,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 									}
 									_actDefIndex = _nextDefIndex++;
 									return result;
+								} else { // next XMELEMENT is not required?
+									if (_nextDefIndex + 1 < _defList.length
+										&& el != null // not required
+										&& (x = _defList[_nextDefIndex + 1])
+											.getKind() == XNode.XMELEMENT
+										&& x.minOccurs() <= 0) {
+										_actDefIndex = _nextDefIndex++;
+										continue;
+									}
+									break;
 								}
 							}
 							if (_selector == null) {

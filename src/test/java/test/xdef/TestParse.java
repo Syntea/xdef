@@ -2722,6 +2722,41 @@ public final class TestParse extends XDTester {
 			xml = "<a paramCode='xx'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
+			// test correct error reporting
+			xdef =
+"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"a\" >\n" +
+"<xd:declaration> int x = 0; </xd:declaration>\n" +
+"<a x=\"?; onAbsence x=-1\">\n" +
+"  <A xd:script=\"occurs 1; onAbsence {if(x==-1) error ('Missing x');}\"/>\n"+
+"  <B xd:script=\"occurs ?\"/>\n" +
+"  <C xd:script=\"occurs ?\"/>\n" +
+"</a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x=\"1\"><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><A/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // test declared type in version 2.0, 3.1 ...
 			xdef = // 3.1 and higher
