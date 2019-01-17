@@ -328,7 +328,7 @@ public final class TestParse extends XDTester {
 		}
 		try { // recursive reference
 			xdef =
-"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A' name='Y21'>\n"+
+"<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='Y21'>\n"+
 "  <A>\n"+
 "    <B b='? string()'>\n"+
 "		<B xd:script='*; ref A/B'/>\n"+
@@ -340,7 +340,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml , reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A'>\n"+
+"<xd:def  xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A>\n"+
 "    <B xd:script='0..1; ref Y'/>\n"+
 "  </A>\n"+
@@ -2779,7 +2779,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
 "    <xd:declaration>\n" +
 "        type gamYear        {parse : {return long(1,2);}}\n" +
 "        type gamDate        {parse : xdatetime('yyyyMMdd');}\n" +
@@ -2801,14 +2801,14 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { //test ver 20 and 31 in collection
 			xp = compile(
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
+"<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>"+
 "<xd:def xd:name='X' xd:root='A' xmlns:xd='" + _xdNS + "'>"+
 "<A a='string()'>"+
 "  <B xd:script='+; ref X#R'/>"+
 "</A>"+
 "<R r='optional string()'/>"+
 "</xd:def>"+
-"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
+"<xd:def xd:name='Y' xd:root='B' xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>"+
 "<B b='string()'/>"+
 "</xd:def>"+
 "</xd:collection>");

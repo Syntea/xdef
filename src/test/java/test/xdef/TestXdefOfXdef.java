@@ -81,7 +81,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/2.0' name = 'a' root = 'foo'"+
+"<xd:def xmlns:xd='" + _xdNS + "' name = 'a' root = 'foo'"+
 "   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include

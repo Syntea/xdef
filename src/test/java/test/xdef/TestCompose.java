@@ -2172,7 +2172,7 @@ final public class TestCompose extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd=\"" + _xdNS + "\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:declaration>  \n" +
 "   Container source = [[%a='A', [%b='B', 'C'], 'D']];\n" +
 "</xd:declaration>  \n" +

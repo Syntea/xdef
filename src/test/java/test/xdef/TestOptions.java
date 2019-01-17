@@ -1483,7 +1483,7 @@ public final class TestOptions extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // option cdata
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A>string(); option cdata; create 'text'</A>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
