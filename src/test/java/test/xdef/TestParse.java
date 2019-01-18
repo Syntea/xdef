@@ -328,7 +328,7 @@ public final class TestParse extends XDTester {
 		}
 		try { // recursive reference
 			xdef =
-"<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='Y21'>\n"+
+"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A' name='Y21'>\n"+
 "  <A>\n"+
 "    <B b='? string()'>\n"+
 "		<B xd:script='*; ref A/B'/>\n"+
@@ -340,7 +340,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml , reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def  xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A'>\n"+
 "  <A>\n"+
 "    <B xd:script='0..1; ref Y'/>\n"+
 "  </A>\n"+
@@ -1612,7 +1612,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "", "<a/>", null, strw, null, null);
 			assertEq("aaaaaa", strw.toString());
-			
+
 			xdef =
 "<xd:def name='a' root='txt' xmlns:xd='" + _xdNS + "'>\n"+
 "<txt xd:script = \"options trimText;\">\n"+
@@ -1971,8 +1971,7 @@ public final class TestParse extends XDTester {
 "<x:def root='a'>\n"+
 "  <a>\n"+
 "    <xd:any xd:script=\"match 'x' == getQnameLocalpart(getElementName());\n"+
-"                        onAbsence out('Absence');\n"+
-"                        finally out('OK')\" />\n"+
+"               onAbsence out('Absence'); finally out('OK')\" />\n"+
 "  </a>\n"+
 "</x:def>\n"+
 "</xd:collection>";
@@ -2724,10 +2723,44 @@ public final class TestParse extends XDTester {
 			assertNoErrors(reporter);
 			// test correct error reporting
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"a\" >\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration> int x = 0; </xd:declaration>\n" +
-"<a x=\"?; onAbsence x=-1\">\n" +
-"  <A xd:script=\"occurs 1; onAbsence {if(x==-1) error ('Missing x');}\"/>\n"+
+"<a x=\"?; onAbsence x = -1;\">\n" +
+"  <A xd:script=\"occurs 1; onAbsence if (x == -1) error('Missing x');\"/>\n"+
+"  <B xd:script=\"occurs ?\"/>\n" +
+"  <C xd:script=\"occurs ?\"/>\n" +
+"</a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x=\"1\"><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><A/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration> int x = 0; </xd:declaration>\n" +
+"<a x=\"?; onAbsence x = -1;\">\n" +
+"  <A xd:script=\"occurs ?; onAbsence if (x == -1) error('Missing x');\"/>\n"+
 "  <B xd:script=\"occurs ?\"/>\n" +
 "  <C xd:script=\"occurs ?\"/>\n" +
 "</a>\n" +
@@ -2758,8 +2791,8 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
 		} catch (Exception ex) {fail(ex);}
-		try { // test declared type in version 2.0, 3.1 ...
-			xdef = // 3.1 and higher
+		try { // test declared type in version 2.0, 3.1, 3.2 ...
+			xdef = // version 3.1 and higher
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    type x {if (true) return true; else return error('xxx');}\n"+
@@ -2769,7 +2802,7 @@ public final class TestParse extends XDTester {
 			xp = compile(xdef);
 			xml="<a x='x'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			xdef =
+			xdef = // version 2.0
 "<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
 "  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
 "  <a x='x'/>\n"+
@@ -2778,8 +2811,8 @@ public final class TestParse extends XDTester {
 			xml = "<a x='x'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
+			xdef =  // version 2.0
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n" +
 "    <xd:declaration>\n" +
 "        type gamYear        {parse : {return long(1,2);}}\n" +
 "        type gamDate        {parse : xdatetime('yyyyMMdd');}\n" +
@@ -2808,7 +2841,7 @@ public final class TestParse extends XDTester {
 "</A>"+
 "<R r='optional string()'/>"+
 "</xd:def>"+
-"<xd:def xd:name='Y' xd:root='B' xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>"+
+"<xd:def xd:name='Y' xd:root='B' xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>"+
 "<B b='string()'/>"+
 "</xd:def>"+
 "</xd:collection>");
