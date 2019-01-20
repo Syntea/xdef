@@ -46,6 +46,12 @@ import java.io.Serializable;
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool, Serializable {
+	/** The namespace URI for X-definition instance (version 2.0; deprecated).*/
+	public static final String XDEF20_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/2.0/instance";
+	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
+	public static final String XDEF31_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/instance";
 
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -4736745770531753457L;

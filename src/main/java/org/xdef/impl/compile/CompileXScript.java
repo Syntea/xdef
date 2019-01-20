@@ -57,7 +57,7 @@ final class CompileXScript extends CompileStatement {
 				if (_sym == END_SYM || _sym == NOCHAR) {
 					break;
 				}
-				errorAndSkip(XDEF.XDEF410, ";}", ";"); //Script error
+				errorAndSkip(XDEF.XDEF525, ";}", ";"); //Script error
 			} else {
 				nextSymbol();
 			}
@@ -139,8 +139,9 @@ final class CompileXScript extends CompileStatement {
 			result = sc._attrValuesCase == 'T' ? result.toUpperCase() :
 				sc._attrValuesCase == 'F' ? result.toLowerCase() : result;
 		}
-		if (result.length() == 0 && ("$text".equals(sc.getName()) ||
-			"$comment".equals(sc.getName()) || sc._ignoreEmptyAttributes=='T')){
+		if (result.length() == 0 && ("$text".equals(sc.getName())
+			|| "$comment".equals(sc.getName())
+			|| sc._ignoreEmptyAttributes == 'T')){
 			sc.setOccurrence(0, 1);
 			sc._check = -1;
 		} else {
@@ -318,7 +319,7 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					sc._onIllegalAttr =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEMENT_MODE,XD_VOID, sym);
 					continue;
 				case CREATE_SYM:
 					if (sc._compose != -1) {
@@ -347,7 +348,7 @@ final class CompileXScript extends CompileStatement {
 					}
 					occ.setOptional();
 					sc._deflt =
-						compileSection(CompileBase.TEXT_MODE, XD_STRING,sym);
+						compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
 					continue;
 				case FINALLY_SYM:
 					if (sc._finaly != -1) {
@@ -442,8 +443,8 @@ final class CompileXScript extends CompileStatement {
 					if (i >= 0 && i + 2 < _g._code.size()) {
 						y = _g._code.get(i);
 						int j = _g._code.get(i+1).getCode();
-						if (j == PARSE_OP && y.getCode() == LD_CONST &&
-							y.getItemId() == XD_PARSER) {
+						if (j == PARSE_OP && y.getCode() == LD_CONST
+							&& y.getItemId() == XD_PARSER) {
 							j = _g._code.get(i+2).getCode();
 							if (j == PARSERESULT_MATCH || j == STOP_OP) {
 								XDParser p = (XDParser) y;
@@ -752,7 +753,7 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._finaly =
-						compileSection(CompileBase.ELEMENT_MODE,XD_VOID,sym);
+						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
 					continue;
 				case FORGET_SYM:
 					if (xel._forget != 0) {
@@ -832,21 +833,20 @@ final class CompileXScript extends CompileStatement {
 						} else {
 							short xType = _g._tstack[_g._sp];
 							if (xType == CompileBase.ATTR_REF_VALUE) {
-								if (returnType == XD_BOOLEAN ||
-									returnType == XD_ANY) {
+								if (returnType == XD_BOOLEAN
+									|| returnType == XD_ANY) {
 									_g.topToBool();
 								} else {
 									_g.topToString();
 								}
 								xType = _g._tstack[_g._sp];
 							}
-							if (returnType == XD_STRING
-								&& xType != XD_STRING) {
+							if (returnType == XD_STRING && xType != XD_STRING) {
 								_g.topToString();
 								xType = _g._tstack[_g._sp];
 							}
 							if (section == CREATE_SYM) {
-								if (returnType == XD_ANY) {//group or elelement
+								if (returnType==XD_ANY) {//group or elelement
 									if (xType != XD_ELEMENT
 										&& xType != XD_CONTAINER
 										&& xType != XD_RESULTSET
@@ -1190,8 +1190,8 @@ final class CompileXScript extends CompileStatement {
 				ignoreEntities = true;
 				result._resolveEntities =
 					(byte) ("resolveEntities".equals(_idName) ? 'T' : 'F');
-			} else if ("acceptQualifiedAttr".equals(_idName) ||
-				"notAacceptQualifiedAttr".equals(_idName)) {
+			} else if ("acceptQualifiedAttr".equals(_idName)
+				|| "notAacceptQualifiedAttr".equals(_idName)) {
 				if (acceptQualifiedAttr) {
 					error(XDEF.XDEF432); //Option redefinition
 				}
@@ -1204,8 +1204,8 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432); // option redefinition
 				}
 				cdata = true;
-				if (kind == XNode.XMTEXT || kind == XNode.XMATTRIBUTE &&
-					(result.getName().equals("$text")
+				if (kind == XNode.XMTEXT || kind == XNode.XMATTRIBUTE
+					&& (result.getName().equals("$text")
 					|| result.getName().equals("$textcontent"))) {
 					result._cdata = 'T';
 				} else {

@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
+import org.xdef.impl.XPool;
 
 /** Convertor of X-definition to XML Schema.
  * (see {@link org.xdef.util.XdefToXsd#main(String[])})
@@ -136,7 +137,6 @@ public final class XdefToXsd {
 			outputDir, xdName, model,schemaPrefix, schemaFileExt, out);
 	}
 
-	@SuppressWarnings("deprecation") //NS_XDEF_2_0_INSTANCE
 	/** Generates XML Schema from given X-definition file names and saves schema
 	 * files to given output directory.
 	 * @param xdefs X-definition file.
@@ -169,7 +169,11 @@ public final class XdefToXsd {
 				XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
 			if (nl.getLength() == 0) {
 				nl = KXmlUtils.getChildElementsNS(collection,
-					XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
+					XPool.XDEF31_INSTANCE_NS_URI, "xdef");
+			}
+			if (nl.getLength() == 0) {
+				nl = KXmlUtils.getChildElementsNS(collection,
+					XPool.XDEF20_INSTANCE_NS_URI, "xdef");
 			}
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element) nl.item(i);
@@ -178,8 +182,16 @@ public final class XdefToXsd {
 				if (a != null) {
 					name = a.getValue();
 				} else {
-					a = el.getAttributeNodeNS(XDConstants.XDEF_INSTANCE_NS_URI,
-						"name");
+					a = el.getAttributeNodeNS(
+						XDConstants.XDEF_INSTANCE_NS_URI, "name");
+					if (a == null) {
+						a = el.getAttributeNodeNS( // deprecated version
+							XPool.XDEF31_INSTANCE_NS_URI, "name");
+					}
+					if (a == null) {
+						a = el.getAttributeNodeNS( // deprecated version
+							XPool.XDEF20_INSTANCE_NS_URI, "name");
+					}
 					if (a != null) {
 						name = a.getValue();
 					}
@@ -192,8 +204,20 @@ public final class XdefToXsd {
 				}
 				a = el.getAttributeNode("root");
 				if (a == null) {
-					el.setAttributeNS(
-						XDConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);
+					a = el.getAttributeNodeNS(
+						XDConstants.XDEF_INSTANCE_NS_URI, "root");
+				}
+				if (a == null) {
+					a = el.getAttributeNodeNS(
+						XPool.XDEF31_INSTANCE_NS_URI, "root");
+				}
+				if (a == null) {
+					a = el.getAttributeNodeNS(
+						XPool.XDEF20_INSTANCE_NS_URI, "root");
+				}
+				if (a == null) {
+					el.setAttributeNS(XDConstants.XDEF_INSTANCE_NS_URI,
+						"root", xdMode);
 				} else {
 					String value = a.getValue();
 					StringTokenizer st = new StringTokenizer(value, " |");

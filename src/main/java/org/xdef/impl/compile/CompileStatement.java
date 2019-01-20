@@ -322,8 +322,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			return false;
 		}
 		int numPar;
-		if (!_g._debugMode &&
-			("trace".equals(name) || "pause".equals(name))) {
+		if (!_g._debugMode && ("trace".equals(name) || "pause".equals(name))) {
 			int lastCodeIndex = _g._lastCodeIndex;
 			int sp = _g._sp;
 			int spMax = _g._spMax;
@@ -357,13 +356,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			if (_g._sp < 0) {
 				error(XDEF.XDEF438); //Value expected
 				//skip identifiers followed by dots
-				while(nextSymbol() == IDENTIFIER_SYM &&
-					nextSymbol() == DOT_SYM){}
+				while(nextSymbol()==IDENTIFIER_SYM && nextSymbol()==DOT_SYM){}
 				return;
 			}
 			short xType;
-			if ((xType =_g._tstack[_g._sp]) == XD_INT ||
-				xType == XD_FLOAT) {
+			if ((xType =_g._tstack[_g._sp]) == XD_INT
+				|| xType == XD_FLOAT) {
 				error(XDEF.XDEF216); //Unexpected character
 				nextSymbol();
 				return;
@@ -479,10 +477,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					getVariableAndErr(cName).getParseMethodAddr()));
 				_g._tstack[_g._sp] = XD_PARSERESULT;
 				return true;
-			} else if (numPar<=1 && CompileBase.UNIQUESET_M_VALUE==xType &&
-				code < 0 &&
-				(var=getVariable(cName + "." + methodName))!=null
-					&& var.getType()==CompileBase.UNIQUESET_KEY_VALUE) {
+			} else if (numPar<=1 && CompileBase.UNIQUESET_M_VALUE==xType
+				&& code < 0
+				&& (var = getVariable(cName + "." + methodName)) != null
+					&& var.getType() == CompileBase.UNIQUESET_KEY_VALUE) {
 				if (yType != -1) {
 					_g.genPop();
 				}
@@ -589,8 +587,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			case LPAR_SYM: {// '('
 				nextSymbol();
 				short castRequest;
-				if (_sym == IDENTIFIER_SYM &&
-					(castRequest = CompileBase.getTypeId(_idName)) >= 0) {
+				if (_sym == IDENTIFIER_SYM
+					&& (castRequest = CompileBase.getTypeId(_idName)) >= 0) {
 					//type casting
 					checkNextSymbol(RPAR_SYM);
 					if (factor()) {
@@ -707,9 +705,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							UNIQUESET_GETVALUEX, var.getValue().toString()), 0);
 					} else if (var == null || !_g.genLD(var)) {
 						int xsp = _g._sp;
-						if (_g.scriptMethod(name, 0) ||
-							_g.internalMethod(name, 0) ||
-							_g.externalMethod(name, name, 0)) {
+						if (_g.scriptMethod(name, 0)
+							|| _g.internalMethod(name, 0)
+							|| _g.externalMethod(name, name, 0)) {
 							if (xsp == _g._sp) { // method without parameters
 								error(XDEF.XDEF438); //Value expected
 							}
@@ -889,8 +887,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			short yType = _g._tstack[_g._sp];
 			int yValue = _g._cstack[_g._sp];
-			if ((operator == MUL_SYM) || (operator == DIV_SYM) ||
-				 (operator == MOD_SYM)) { // mul | div | modulo
+			if ((operator == MUL_SYM) || (operator == DIV_SYM)
+				|| (operator == MOD_SYM)) { // mul | div | modulo
 				if (xType == XD_INT && yType == XD_INT) {
 					if (xValue >= 0 && yValue >= 0) { // both constants
 						long x = _g.getCodeItem(xValue).longValue();
@@ -954,8 +952,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			short yType = _g._tstack[_g._sp];
 			int yValue = _g._cstack[_g._sp];
-			if (operator == PLUS_SYM &&
-				(xType == XD_STRING || yType == XD_STRING)) {
+			if (operator == PLUS_SYM
+				&& (xType == XD_STRING || yType == XD_STRING)) {
 				// "+" => string concatenation
 				_g.operandsToString();
 				xValue = _g._cstack[_g._sp - 1];
@@ -978,9 +976,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						_g.addCode(new CodeOp(XD_INT,
 							operator==PLUS_SYM ? ADD_I : SUB_I), -1);
 					}
-				} else if (xType == XD_FLOAT && yType == XD_FLOAT ||
-					xType == XD_FLOAT && yType == XD_INT ||
-					xType == XD_INT && yType == XD_FLOAT) {
+				} else if (xType == XD_FLOAT && yType == XD_FLOAT
+					|| xType == XD_FLOAT && yType == XD_INT
+					|| xType == XD_INT && yType == XD_FLOAT) {
 					_g.operandsToFloat();
 					yValue = _g._cstack[_g._sp];
 					if (xValue >= 0 && yValue >= 0) {
@@ -1570,9 +1568,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					_g._cstack[_g._sp] = -2; // prevent code optimizing
 				}
 				if (xType != yType) {
-					if (xType != XD_ANY && yType != XD_ANY &&
-						xType != CompileBase.XD_UNDEF &&
-						yType != CompileBase.XD_UNDEF) {
+					if (xType != XD_ANY && yType != XD_ANY
+						&& xType != CompileBase.XD_UNDEF
+						&& yType != CompileBase.XD_UNDEF) {
 						error(XDEF.XDEF457, //Incompatible types&{0}{: }
 							CompileBase.getTypeName(xType) + "," +
 							CompileBase.getTypeName(yType));
@@ -1601,8 +1599,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (_g._sp > sp) {
 			_g.topToBool();
 			xType = _g._tstack[_g._sp];
-			if (xType != XD_BOOLEAN &&
-				xType != XD_ANY && xType != CompileBase.XD_UNDEF) {
+			if (xType != XD_BOOLEAN
+				&& xType != XD_ANY && xType != CompileBase.XD_UNDEF) {
 				error(XDEF.XDEF423, "boolean");//Value of type '&{0}' expected
 				_g._tstack[_g._sp] = CompileBase.XD_UNDEF;
 				_g._cstack[_g._sp] = -1;
@@ -2394,8 +2392,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_blockInfo._jumps = true;
 		int sp = _g._sp;
 		CompileJumpVector jumpVector = null;
-		if (_sym != SEMICOLON_SYM &&
-			(jumpVector =  boolExpression(false)) != null) {
+		if (_sym != SEMICOLON_SYM
+			&& (jumpVector =  boolExpression(false)) != null) {
 			jumpVector.resoveTrueJumps(_g._lastCodeIndex + 1);
 		}
 		checkSymbol(SEMICOLON_SYM); // ';'
@@ -2452,8 +2450,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		int dx = addDebugInfo(true);
 		expression();
 		short xType = _g._sp > sp ? _g._tstack[_g._sp] : XD_VOID;
-		if (xType != XD_INT && xType != XD_STRING &&
-			xType != CompileBase.XD_UNDEF) {
+		if (xType != XD_INT && xType != XD_STRING
+			&& xType != CompileBase.XD_UNDEF) {
 			xType = CompileBase.XD_UNDEF;
 			error(XDEF.XDEF446); //'int' or 'String' value expected
 		}
@@ -2492,8 +2490,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					yType = XD_VOID;
 				}
 				if (yType != xType) {
-					if (xType != CompileBase.XD_UNDEF &&
-						yType != CompileBase.XD_UNDEF) {
+					if (xType != CompileBase.XD_UNDEF
+						&& yType != CompileBase.XD_UNDEF) {
 						//Constant expression of type &{0} expected
 						error(XDEF.XDEF448,xType==XD_INT ? "int":"String");
 					}
@@ -2539,8 +2537,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			if (statement()) {
-				while (_sym != CASE_SYM && _sym != DEFAULT_SYM &&
-					_sym != END_SYM) {
+				while (_sym != CASE_SYM && _sym != DEFAULT_SYM
+					&& _sym != END_SYM) {
 					if (!statement()) {
 						error(XDEF.XDEF447); //Statement expected
 						break;
@@ -2831,8 +2829,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (_sym == CONSTANT_SYM) {
 							val = _parsedValue;
 							nextSymbol();
-						} else if (_sym == IDENTIFIER_SYM &&
-							(paramType = CompileBase.getTypeId(_idName)) > 0) {
+						} else if (_sym == IDENTIFIER_SYM
+							&& (paramType = CompileBase.getTypeId(_idName))>0) {
 							val = DefNull.genNullValue(paramType);
 						} else {
 							val = new DefNull();
@@ -3194,9 +3192,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			if (s.startsWith("org.xdef.")) {
 				s = s.substring("org.xdef.".length());
 			}
-			if ("XXElement".equals(s) ||
-				"XXData".equals(s) ||
-				"XXNode".equals(s)) {
+			if ("XXElement".equals(s) || "XXData".equals(s)
+				|| "XXNode".equals(s)) {
 				classPar = "org.xdef.proc." + s;
 			} else {
 				if ("XDValue".equals(s) && _sym == LSQ_SYM) {
@@ -3323,8 +3320,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					//Result type of the extenal method '&{0}' differs
 					error(XDEF.XDEF226, mName);
 				} else if (((modifiers = method.getModifiers())
-					& Modifier.STATIC) == 0 &&
-					(modifiers & Modifier.PUBLIC) == 0) {
+					& Modifier.STATIC)==0 && (modifiers & Modifier.PUBLIC)==0) {
 					//External method '&{0}' must be 'static' and 'public'
 					error(XDEF.XDEF466, mName);
 				} else if ((m=_g.addDeclaredMethod(localName, method))!=null
@@ -3508,9 +3504,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (nextSymbol() == LPAR_SYM) { // method
 							compileMethodDeclaration(varType, name);
 							continue;
-						} else if (_sym == NOCHAR || _sym == SEMICOLON_SYM ||
-							_sym == COLON_SYM || _sym == ASSGN_SYM ||
-							 _sym == COMMA_SYM) {
+						} else if (_sym == NOCHAR || _sym == SEMICOLON_SYM
+							|| _sym == COLON_SYM || _sym == ASSGN_SYM
+							|| _sym == COMMA_SYM) {
 							// declaration of variable
 							int actAdr = _g._lastCodeIndex;
 							CodeI1 lastStop = _g.getLastStop();
@@ -3536,8 +3532,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			error(XDEF.XDEF487); //Variable or method declaration expected
 			while (nextSymbol() != NOCHAR) {// skip to type identifier or EOS
-				if (_sym == IDENTIFIER_SYM &&
-					CompileBase.getTypeId(_idName) >= 0) {
+				if (_sym==IDENTIFIER_SYM && CompileBase.getTypeId(_idName)>=0) {
 					break;
 				} else { // ???
 					nextChar(); // ???
@@ -3551,7 +3546,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param local true if it is in the declaration part with the local scope.
 	 * @param name the name of declared type.
 	 */
-	private void compileType(final byte varKind,
+	final void compileType(final byte varKind,
 		final boolean local,
 		final String name) {
 		CodeI1 jmp = null;
@@ -3629,9 +3624,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			case BEG_SYM: { // explicit declaration of type method
 				skipBlanksAndComments();
-				if (isToken("parse")) {
+				if (isToken("parse")) {  // X-definition version 2.0
 					skipBlanksAndComments();
-					if (isChar(':')) { // X-definition version 2.0
+					if (isChar(':')) {
 						nextSymbol();
 						compileType(varKind, local, name);
 						if (_sym == SEMICOLON_SYM) {

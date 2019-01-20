@@ -200,7 +200,6 @@ final class CompileReference extends XNode {
 			dn = xn.getKind() == XMNode.XMELEMENT ? (XMElement) xn : null;
 		}
 		return (XElement) dn;
-//		return (dn==null && (dn=xdef.getModel(getNSUri(), mName+"$any"))==null) ? null : (XElement) dn;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
