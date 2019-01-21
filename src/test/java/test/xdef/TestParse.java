@@ -26,6 +26,8 @@ import java.io.StringWriter;
 import java.util.TimeZone;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.Properties;
+import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
 import org.xdef.proc.XXElement;
 import org.xdef.impl.code.DefDate;
@@ -33,6 +35,7 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
+import org.xdef.sys.SUtils;
 
 /** Test of parsing of source XML according to XDefinition.
  * @author Vaclav Trojan
@@ -45,9 +48,6 @@ public final class TestParse extends XDTester {
 
 	@Override
 	public void test() {
-		Report.setLanguage("en"); //localize
-		setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		final String dataDir = getDataDir() + "test/";
 		XDPool xp;
 		String xdef;
@@ -81,6 +81,51 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
+		try { // compile InputStream, String and more
+			xdef =
+"<x:def xmlns:x ='" + _xdNS + "' name='a' root='a'>\n"+
+"<a/>\n"+
+"</x:def>";
+			Object[][] params = new Object[1][2];
+			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
+			params[0][1] = "Osoba xdef";
+			xp = XDFactory.compileXD(new Properties(), (Object[]) params);
+			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
+			assertNoErrors(reporter);
+
+			params = new Object[2][2];
+			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
+			params[0][1] = "Osoba xdef";
+			params[1][0] = new ByteArrayInputStream((
+"<x:def xmlns:x ='" + _xdNS + "' name='b' root='b'>\n"+
+"<b/>\n"+
+"</x:def>").getBytes("UTF-8"));
+			params[1][1] = "Osoba2 xdef";
+			xp = XDFactory.compileXD(new Properties(), (Object[]) params);
+			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
+			assertNoErrors(reporter);
+			assertEq("<b/>", parse(xp, "b", "<b/>", reporter));
+			assertNoErrors(reporter);
+			params = new Object[2][2];
+
+			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
+			params[0][1] = "Osoba xdef";
+			params[1][0] = new ByteArrayInputStream((
+"<x:def xmlns:x ='" + _xdNS + "' name='b' root='b'>\n"+
+"<b/>\n"+
+"</x:def>").getBytes("UTF-8"));
+			params[1][1] = "Osoba2 xdef";
+			xp = XDFactory.compileXD(new Properties(), (Object[]) params,
+"<x:def xmlns:x ='" + _xdNS + "' name='c' root='c'>\n"+
+"<c/>\n"+
+"</x:def>");
+			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
+			assertNoErrors(reporter);
+			assertEq("<b/>", parse(xp, "b", "<b/>", reporter));
+			assertNoErrors(reporter);
+			assertEq("<c/>", parse(xp, "c", "<c/>", reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {
 			compile(// check semicolon tolerance
 "<x:def xmlns:x ='" + _xdNS + "' root='a'>\n"+
@@ -1567,7 +1612,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "", "<a/>", null, strw, null, null);
 			assertEq("aaaaaa", strw.toString());
-			
+
 			xdef =
 "<xd:def name='a' root='txt' xmlns:xd='" + _xdNS + "'>\n"+
 "<txt xd:script = \"options trimText;\">\n"+
@@ -1926,8 +1971,7 @@ public final class TestParse extends XDTester {
 "<x:def root='a'>\n"+
 "  <a>\n"+
 "    <xd:any xd:script=\"match 'x' == getQnameLocalpart(getElementName());\n"+
-"                        onAbsence out('Absence');\n"+
-"                        finally out('OK')\" />\n"+
+"               onAbsence out('Absence'); finally out('OK')\" />\n"+
 "  </a>\n"+
 "</x:def>\n"+
 "</xd:collection>";
@@ -2677,19 +2721,127 @@ public final class TestParse extends XDTester {
 			xml = "<a paramCode='xx'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
+			// test correct error reporting
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration> int x = 0; </xd:declaration>\n" +
+"<a x=\"?; onAbsence x = -1;\">\n" +
+"  <A xd:script=\"occurs 1; onAbsence if (x == -1) error('Missing x');\"/>\n"+
+"  <B xd:script=\"occurs ?\"/>\n" +
+"  <C xd:script=\"occurs ?\"/>\n" +
+"</a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x=\"1\"><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><A/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration> int x = 0; </xd:declaration>\n" +
+"<a x=\"?; onAbsence x = -1;\">\n" +
+"  <A xd:script=\"occurs ?; onAbsence if (x == -1) error('Missing x');\"/>\n"+
+"  <B xd:script=\"occurs ?\"/>\n" +
+"  <C xd:script=\"occurs ?\"/>\n" +
+"</a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x=\"1\"><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a x=\"1\"><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><A/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
+			xml = "<a><B/><C/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {
-			//test ver 20 and 31 in collection
-			setChkSyntax(false);
+		try { // test declared type in version 2.0, 3.1, 3.2 ...
+			xdef = // version 3.1 and higher
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    type x {if (true) return true; else return error('xxx');}\n"+
+  "</xd:declaration>\n"+
+"  <a x='x'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml="<a x='x'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			xdef = // version 2.0
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
+"  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
+"  <a x='x'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a x='x'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =  // version 2.0
+"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n" +
+"    <xd:declaration>\n" +
+"        type gamYear        {parse : {return long(1,2);}}\n" +
+"        type gamDate        {parse : xdatetime('yyyyMMdd');}\n" +
+"        type gamDateTime    {parse:  xdatetime('yyyyMMddHHmmss');}\n" +
+"        type gamS           {parse:  {return true;}}\n" +
+"    </xd:declaration>\n" +
+"  <a a='gamYear' b='gamDate' c='gamDateTime' d='gamS' />\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a a='2' b='20180501' c='20180501122105' d='?'/>";
+			assertEq(xml, parse(xp,"",xml, reporter));
+			assertNoErrors(reporter);
+			try {
+				xdef = SUtils.modifyFirst(xdef, "xdef/2.0'", "xdef/3.1'");
+				compile(xdef);
+			} catch (Exception ex) {
+				if(!ex.toString().contains("W XDEF997")) fail(ex);
+			}
+		} catch (Exception ex) {fail(ex);}
+		try { //test ver 20 and 31 in collection
 			xp = compile(
-"<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>"+
+"<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>"+
 "<xd:def xd:name='X' xd:root='A' xmlns:xd='" + _xdNS + "'>"+
 "<A a='string()'>"+
 "  <B xd:script='+; ref X#R'/>"+
 "</A>"+
 "<R r='optional string()'/>"+
 "</xd:def>"+
-"<xd:def xd:name='Y' xd:root='B' xmlns:xd='http://www.syntea.cz/xdef/3.1'>"+
+"<xd:def xd:name='Y' xd:root='B' xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>"+
 "<B b='string()'/>"+
 "</xd:def>"+
 "</xd:collection>");
@@ -2700,6 +2852,36 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "Y", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try { // test DOCTYPE
+			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "true");
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' xmlns='http://www.w3.org/1999/xhtml'>\n"+
+"  <a><body>string</body></a>\n" +
+"</xd:def>";
+			xml =
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
+"  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
+"<a xmlns='http://www.w3.org/1999/xhtml'><body> xxx&nbsp;xxx </body></a>";
+			el = parse(xdef, "", xml, reporter);
+			assertTrue(el.getOwnerDocument().getDoctype() != null, "NULL");
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try { // test DOCTYPE not allowed
+			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' xmlns='http://www.w3.org/1999/xhtml'>\n"+
+"  <a><body>string</body></a>\n" +
+"</xd:def>";
+			xml =
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
+"  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
+"<a xmlns='http://www.w3.org/1999/xhtml'><body> xxx&nbsp;xxx </body></a>";
+			el = parse(xdef, "", xml, reporter);
+			assertTrue(el.getOwnerDocument().getDoctype() != null, "NULL");
+			assertNoErrors(reporter);
+		} catch (Exception ex) {
+			if (!ex.getMessage().contains("XML099"))fail(ex);
+		}
 
 		resetTester();
 		new File(tempDir + "vystup.txt").delete();
@@ -2708,14 +2890,13 @@ public final class TestParse extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 // external methods
 ////////////////////////////////////////////////////////////////////////////////
-
 	public static long getInt5() {return 5;}
-	public static void testOldx(XXNode chkel, XDValue[] params) {
-		Element el = chkel.getElement();
+	public static void testOldx(XXNode xnode, XDValue[] params) {
+		Element el = xnode.getElement();
 		if (el == null) {
-			chkel.error("", "Object is null");
+			xnode.error("", "Object is null");
 		} else if (!"a".equals(el.getNodeName())) {
-			chkel.error("","Object is not element 'a'");
+			xnode.error("","Object is not element 'a'");
 		}
 	}
 	public static void testOldy(XXData xdata, XDValue[] params) {
@@ -2726,40 +2907,38 @@ public final class TestParse extends XDTester {
 			xdata.error("", "Object is not String '1'");
 		}
 	}
-	public static void myCheck(final XXElement chkElem,
+	public static void myCheck(final XXElement xel,
 		final String s, final byte[] b) {
 		if (!s.equals(new String(b))) {
-			((TestParse) chkElem.getXDDocument().getUserObject()).fail("Check");
+			((TestParse) xel.getXDDocument().getUserObject()).fail("Check");
 		}
 	}
 	public void myProc(final String s) {_myX = 1;}
-	public static void myProc(final XXNode chkElem, final String s) {_myX = 2;}
+	public static void myProc(final XXNode xnode, final String s) {_myX = 2;}
 	public static void myProc(final XDValue[] p) {_myX = 3;}
 	public static void setDateProc(XXData xdata, XDValue[] params) {
 		String s = params[0].datetimeValue().formatDate("yyyy-MM-dd");
 		xdata.setTextValue(s);
 	}
-	public static boolean testExt(XXElement chel, String a, String b, String c){
+	public static boolean testExt(XXElement xel, String a, String b, String c){
 		if (_myX == 1 && "a".equals(a) && "b".equals(b) && "c".equals(c)) {
 			_myX = 0;
 			return true;
 		}
 		return false;
 	}
-	public static void myErr(XXNode chkElem, XDValue[] params) {
-		chkElem.getTemporaryReporter().clear();
+	public static void myErr(XXNode xel, XDValue[] params) {
+		xel.getTemporaryReporter().clear();
 		if (params.length == 1
 			&& params[0].getItemId() == XDValueID.XD_INT
 			&& params[0].longValue() == 4204) {
-			chkElem.getTemporaryReporter().clear();
+			xel.getTemporaryReporter().clear();
 			_myX = 4204;
 		} else {
 			_myX = 1;
 		}
 	}
-	public static long myError() {
-		throw new RuntimeException("MyError");
-	}
+	public static long myError() {throw new RuntimeException("MyError");}
 	final public static void testPos(final XXNode xnode) {}
 	/** Check datetime according to mask1. If parsed value has time zone UTC,
 	 * then convert date to the local time. Format of result is given by mask2.
@@ -2789,7 +2968,7 @@ public final class TestParse extends XDTester {
 		xdata.setTextValue(sd.formatDate(mask2));
 		return new DefParseResult(s,new DefDate(sd));
 	}
-	private static class LicheCislo extends org.xdef.XDParserAbstract {
+	private static class LicheCislo extends XDParserAbstract {
 		LicheCislo() {}
 		@Override
 		final public void parseObject(final XXNode xnode,

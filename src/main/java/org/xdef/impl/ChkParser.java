@@ -804,7 +804,6 @@ final class ChkParser extends DomBaseHandler {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation") // NS_XDEF_2_0_INSTANCE
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked
@@ -814,7 +813,15 @@ final class ChkParser extends DomBaseHandler {
 		_level++;
 		if (_level == 0) {
 			int ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
+				"location");
+			if (ndx < 0) { // deprecated instance specification
+				ndx = parsedElem.indexOfNS(XPool.XDEF31_INSTANCE_NS_URI,
 					"location");
+			}
+			if (ndx < 0) { // deprecated instance specification
+				ndx = parsedElem.indexOfNS(XPool.XDEF20_INSTANCE_NS_URI,
+					"location");
+			}
 			KParsedAttr ka;
 			String s;
 			if (ndx >= 0 &&	(ndx =

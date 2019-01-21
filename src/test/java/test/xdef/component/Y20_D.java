@@ -5,7 +5,7 @@ package test.xdef.component;
 public class Y20_D implements org.xdef.component.XComponent{
   public Y20_D.Z getZ() {return _Z;}
   public void setZ(Y20_D.Z x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Z", null, "Y20#D/Z");
     _Z = x;
   }
@@ -45,13 +45,13 @@ public class Y20_D implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -79,7 +79,7 @@ public class Y20_D implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"8349F45AD2DCD9233508505AD643FD78".equals(
+    if (!"1E328CD454AF19CC62037CF930F782C3".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -154,9 +154,9 @@ public static class Z implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -189,7 +189,7 @@ public static class Z implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"CB32291431E4B4BCE4BE78D6358E4C57".equals(
+    if (!"6287F99158E13A1E5AAEE4AB5B1BF749".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -228,11 +228,12 @@ public static class Z implements org.xdef.component.XComponent{
 public static class C implements org.xdef.component.XComponent{
   public java.util.List<Z> listOfZ() {return _Z;}
   public void addZ(Z x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "Z", null, "Y20#Z/C/Z");
       _Z.add(x);
     }
+
   }
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -270,9 +271,9 @@ public static class C implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -303,7 +304,7 @@ public static class C implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"5AFFDEEEE5E22B540B3979F654173BD7".equals(
+    if (!"4466854AD534B02FBC1FFE4D95F57535".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

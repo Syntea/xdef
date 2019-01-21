@@ -3,7 +3,6 @@ package test.xdef;
 import test.utils.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -30,7 +29,6 @@ public final class TestDebug extends XDTester {
 
 	@Override
 	public void test() {
-		Report.setLanguage("en"); //localize
 		String xdef;
 		XDPool xp;
 		String xml;
@@ -49,8 +47,6 @@ public final class TestDebug extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
 		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
 			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 		try {
 			// Xscript breakpoints
 			xdef =

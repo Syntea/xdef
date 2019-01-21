@@ -106,7 +106,7 @@ public interface XDConstants {
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
 	
-	/** URI of xmlns:xlink */
+	/** URI of w3c Xlink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
 	/** URI of w3c Xinclude */
 	public static final String XINCLUDE_NS_URI =
@@ -123,17 +123,14 @@ public interface XDConstants {
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/3.2";
-	/** The namespace URI for X-definition instance */
-	public static final String XDEF_INSTANCE_NS_URI =
-		"http://www.syntea.cz/xdef/instance";
-	/** The namespace URI for X-definition instance */
-	public static final String XDEF32_INSTANCE_NS_URI = 
-		"http://www.xdef.org/instance/3.2";
+	/** The namespace URI for X-definition instance. */
+	public static final String XDEF_INSTANCE_NS_URI = 
+		"http://www.xdef.org/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
 // Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
-// are generated authomaticaly!
+// are generated automatically!
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Build version of software from pom.xml */
@@ -152,6 +149,4 @@ public interface XDConstants {
 /*#elseif JAVA_1.10*#/
 	public static final String JAVA_VERSION = "Java 1.10";
 /*#end*/
-
-
 }

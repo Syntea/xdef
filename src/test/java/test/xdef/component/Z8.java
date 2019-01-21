@@ -59,7 +59,7 @@ public class Z8 implements org.xdef.component.XComponent{
   public void setHlavniPricina(String x) {_HlavniPricina = x;}
   public void setPricina(String x) {_Pricina = x;}
   public void setMisto(Z8.Misto x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Misto", null, "SouborD1A#ObjStrankaDN/Misto");
     _Misto = x;
   }
@@ -108,13 +108,13 @@ public class Z8 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getDatumCasDN() != null)
       el.setAttribute("DatumCasDN", getDatumCasDN().formatDate("d.M.yyyy H:mm"));
@@ -160,7 +160,7 @@ public class Z8 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"173224C3076035BEF34B18A3ABBA934F".equals(
+    if (!"199AB9CCBBED043C8646204196B61E95".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -260,9 +260,9 @@ public static class Misto implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -295,7 +295,7 @@ public static class Misto implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4DFC03ACF3E95404A09F28C955B74323".equals(
+    if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

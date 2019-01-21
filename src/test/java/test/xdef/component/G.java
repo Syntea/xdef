@@ -39,13 +39,13 @@ public class G extends test.xdef.TestXComponentsGen implements org.xdef.componen
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getg() != null)
       el.setAttribute("g", getg());
@@ -76,7 +76,7 @@ public class G extends test.xdef.TestXComponentsGen implements org.xdef.componen
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"30FEA883C08A27D250C63EA5E0D57639".equals(
+    if (!"4803BCAC86DA28670B6AB4A4DB657BFA".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -158,9 +158,9 @@ public static class XXX implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -186,7 +186,7 @@ public static class XXX implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"2A00584B1B2A27565D4A1123CCDAA2ED".equals(
+    if (!"F4CCD2E2223EB63CA25128EA0A9D5ED1".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -257,9 +257,9 @@ public static class YYY implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -285,7 +285,7 @@ public static class YYY implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"431C145FDA47ADF45A9F09EED890060B".equals(
+    if (!"728CB4F0A84E9375AC05C2A8A2982268".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

@@ -42,13 +42,13 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJedna() != null)
       el.setAttribute("One", getJedna());
@@ -73,7 +73,7 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"8BE503F9D2FE84E7FED4540CA9FAEEF9".equals(
+    if (!"08C621F258C5FD7C8F3F5892F75D0045".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

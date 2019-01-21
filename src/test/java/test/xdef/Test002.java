@@ -173,7 +173,7 @@ public final class Test002 extends XDTester {
 			strw.close();
 			assertEq("t1t2", strw.toString());
 			xdef =
-"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+
@@ -592,9 +592,11 @@ public final class Test002 extends XDTester {
 			strw = new StringWriter();
 			assertEq("<A/>", parse(xdef,"","<A/>",reporter, strw, null, null));
 			assertNoErrors(reporter);
+			assertEq(strw.toString(), "true,true,true");
 			//force compilation of test.xdef.TestExtenalMethods_1;
 			test.xdef.TestExtenalMethods_1.class.getClass();
-			assertEq(strw.toString(), "true,true,true");
+			//force compilation of test.xdef.Test002;
+			test.xdef.Test002.class.getClass();
 			xdef = // external methods in global declaration section
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration scope='global'>\n"+
@@ -951,37 +953,6 @@ public final class Test002 extends XDTester {
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
-			xdef = // name of type equals to name of internal type method
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration> type string string(1,2); </xd:declaration>\n"+
-"<a x='required string'>\n"+
-" required string;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration>\n"+
-"  type int string(1,2);\n"+
-"  int i;\n"+
-" </xd:declaration>\n"+
-"<a x='required int'>\n"+
-" required int;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
 			xdef = // Create document from model of element.
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "  <b><a x='required'>required;</a></b>\n"+
@@ -1578,7 +1549,7 @@ public final class Test002 extends XDTester {
 				&& s.contains("E XDEF804:")	&& s.contains("=/a/@c")
 				&& s.contains("=/a/@d")	&& s.contains("=/a/text()[3]")
 				&& s.contains("=/a/text()[4]"), s);
-/**
+/*x*
 // ???????????????? This runs on NetBeans and not without them ????????????????
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:x= 'a'\n" +
@@ -1619,7 +1590,7 @@ public final class Test002 extends XDTester {
 "2017-08-10T11:31:05;n=3,average=10.4 2017-08-10T13:01:27;n=1,average=12.35 " +
 "</M>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-/**/
+/*x*/
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

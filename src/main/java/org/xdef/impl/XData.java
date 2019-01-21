@@ -2,11 +2,9 @@ package org.xdef.impl;
 
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDNamedValue;
-import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.xdef.impl.parsers.XDParseEnum;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.model.XMData;
@@ -15,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
+import org.xdef.impl.compile.CompileBase;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SRuntimeException;
 
@@ -22,10 +21,12 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XData extends XCodeDescriptor implements XMData, XDValueID {
-	/** Type ID of value of data. */
-	private short _baseType;
+	/** Type name of value of data. */
+	short _valueType;
 	/** Type name of value of data. */
 	private String _valueTypeName;
+	/** Referenced type (null if not reference). */
+	private String _refTypeName;
 
 	/** Creates a new instance of XData.
 	 * @param name The name of attribute ("$text" if the type is text node).
@@ -39,28 +40,31 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		final short kind) {
 		super(name, nsUri, xp, kind);
 		setOccurrence(1,1); //???
+		_valueType = XD_STRING;
 	}
 
 	public XData(final XData x) {
 		super(x);
 		setOccurrence(x.minOccurs(), x.maxOccurs());
-		_baseType = x._baseType;
+		_valueType = x._valueType;
 		_valueTypeName = x._valueTypeName;
+		_refTypeName = x._refTypeName;
 	}
 
 	@Override
 	/** Get XMDefinition assigned to this node.
 	 * @return root XMDefintion node.
 	 */
-	public final XMDefinition getXMDefinition() {return null;} //TODO!
+	public final XMDefinition getXMDefinition() {return getXMDefinition();}
 
 	@Override
 	// can't be final, can be overwritten!
 	public void writeXNode(final XDWriter xw,
 		final ArrayList<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
-		xw.writeShort(_baseType);
+		xw.writeShort(_valueType);
 		xw.writeString(_valueTypeName);
+		xw.writeString(_refTypeName);
 	}
 
 	// can't be final, can be overwritten!
@@ -72,14 +76,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		String uri = xr.readString();
 		XData x = new XData(name, uri, xd.getDefPool(), kind);
 		x.readXCodeDescriptor(xr);
-		x._baseType = xr.readShort();
+		x._valueType = xr.readShort();
 		x._valueTypeName = xr.readString();
+		x._refTypeName = xr.readString();
 		return x;
-	}
-
-	@Override
-	public final XDParseResult validate(final String value) {
-		return null;
 	}
 
 	@Override
@@ -132,106 +132,36 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	}
 
 	@Override
-	/** Get values of enumeration type (list, tokens, eq, string).
-	 * @return string array with values specified as enumeration or return
-	 * <tt>null</tt> if specified type is not enumeration of string values.
-	 */
-	public final String[] getEnumerationValues() {
-		if (_check < 0) {
-			return null;
-		}
-//		XDValue[] code = getXDPool().getCode();
-//		if (code[_check].getCode() == CodeTable.LD_CONST
-//			&& code[_check].getItemId() == XD_PARSER) {
-//			XDParser p = (XDParser) code[_check];
-		XDValue code = getParseMethod();
-		if (code.getCode() == CodeTable.LD_CONST
-			&& code.getItemId() == XD_PARSER) {
-			XDParser p = (XDParser) code;
-			XDContainer pars = p.getNamedParams();
-			if (pars == null) {
-				return null;
-			}
-			XDNamedValue n;
-			String name = p.parserName();
-			n = "list".equals(name) || "tokens".equals(name) ?
-				pars.getXDNamedItem("argument") :
-				"string".equals(name) ?
-				pars.getXDNamedItem("enumeration") :
-				null;
-			if (n == null) {
-				return null;
-			}
-			XDValue v;
-			if ((v = n.getValue()) != null && !v.isNull()) {
-				if (v.getItemId() == XD_CONTAINER) {
-					XDContainer c = (XDContainer) v;
-					XDValue[] vv = c.getXDItems();
-					int num = vv == null ? 0 : vv.length;
-					if (num == 0) {
-						return null;
-					}
-					String[] result = new String[num];
-					for (int i = 0; i < num; i++) {
-						result[i] = "" + vv[i];
-					}
-					return result;
-				} else {
-					String s;
-					if ((s = v.toString()) == null || s.length() == 0) {
-						return null;
-					}
-					if ("tokens".equals(name)) {
-						// Convert string to array of strings
-						XDContainer context = XDParseEnum.tokensToContext(s);
-						int num = context.getXDItemsNumber();
-						if (num == 0) {
-							return null;
-						}
-						String[] result = new String[num];
-						for(int i=0; i < num; i++) {
-							result[i] = context.getXDItem(i).toString();
-						}
-						return result;
-					} else {
-						return new String[] {s};
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	/** Get type of value.
-	 * @return type ID of data value.
-	 */
-	public final short getBaseType() {return _baseType;}
-
-	@Override
 	/** Get type name of value.
 	 * @return type name of data value.
 	 */
 	public final String getValueTypeName() {return _valueTypeName;}
 
 	@Override
+	/** Get reference name to declared type.
+	 * @return reference name to declared type or null if not reference.
+	 */
+	public final String getRefTypeName() {return _refTypeName;}
+
+	@Override
 	/** Get parser used for parsing of value.
 	 * @return XDParser or null if parser is not available.
 	 */
-	public final XDValue getParseMethod() {
-		XDValue[] xv = ((XPool) getXDPool()).getCode();
-		return getParseMethod(xv);
-	}
+	public final XDValue getParseMethod() {return getParseMethod(_check);}
 
-	public final XDValue getParseMethod(final XDValue[] xv) {
-		int xs = _check; //start of code
+	/** Get parse method.
+	 * @param addr address (index to code) of validation method.
+	 * @return XDParser or null if parser is not available.
+	 */
+	public final XDValue getParseMethod(final int addr) {
+		final XDValue[] xv = ((XPool) getXDPool()).getCode();
+		int xs = addr; //start of code
 		if (xs < 0) {
 			return null;
 		}
 		XDValue y = xv[xs];
 		if (y.getCode() == CodeTable.JMP_OP
-			|| (xs + 1 < xv.length
-				&& y.getCode() == CodeTable.CALL_OP
+			|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
 				&& xv[xs+1].getCode() == CodeTable.STOP_OP)) {
 			y = xv[xs = y.getParam()];
 		} else if (xs + 2 < xv.length
@@ -268,14 +198,12 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 						return y;
 					}
 				}
-			} else if (xs + 2 < xv.length
-				&& y.getCode() == CodeTable.LD_CONST
-				&& y.getItemId() == XDValueID.XD_PARSER
-				&& xv[xs+1].getCode() == CodeTable.PARSE_OP
-				&& xv[xs+2].getCode() == CodeTable.STOP_OP) {
-				return y; // we found parser and parse operation
 			} else {
-				return null;
+				return (xs + 2 < xv.length
+					&& y.getCode() == CodeTable.LD_CONST
+					&& y.getItemId() == XDValueID.XD_PARSER
+					&& xv[xs+1].getCode() == CodeTable.PARSE_OP
+					&& xv[xs+2].getCode() == CodeTable.STOP_OP) ? y : null;
 			}
 		}
 	}
@@ -292,12 +220,12 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from org.xdef.XDValueTypes.
+	 * @return value from cz.syntea.xd.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();
-		return p != null && p.getItemId() == XDValueID.XD_PARSER
-			? ((XDParser) p).parsedType() : getBaseType();
+		return p != null && p.getItemId() == XD_PARSER
+			? ((XDParser) p).parsedType() : XD_STRING;
 	}
 
 	@Override
@@ -358,14 +286,18 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	}
 
 	/** Set type of value.
-	 * @param valueType ID of data value type.
-	 * @param valueTypeName Name of data value type.
+	 * @param valType ID of data value type.
+	 * @param valName Name of data value type.
 	 */
-	public final void setValueType(final short valueType,
-		final String valueTypeName) {
-		_baseType = valueType;
-		_valueTypeName = valueTypeName;
+	public final void setValueType(final short valType, final String valName) {
+		_valueType = valType;
+		_valueTypeName = valName;
 	}
+
+	/** Set reference name to declared type.
+	 * @param x reference name to declared type or null if not reference.
+	 */
+	public final void setRefTypeName(final String x) {_refTypeName = x;}
 
 	@Override
 	/** Add node as child.
@@ -376,4 +308,45 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
 			"Attempt to add node to ScriptCodeDescriptor");
 	}
+
+	@Override
+	public String toString() {
+		String result = getName()
+			+ ": type="+CompileBase.getTypeName(getParserType());
+		String s = getRefTypeName();
+		if (s != null) {
+			result += ", refType=" + s;
+		}
+		result += ", method=" + getParseMethod();
+		XDContainer params = getParseParams();
+		if (params != null && params.getXDNamedItemsNumber() > 0) {
+			s = "";
+			for (XDNamedValue x : params.getXDNamedItems()) {
+				if (!s.isEmpty()) {
+					s += ",";
+				}
+				if (x.getValue()!=null && x.getValue() instanceof XDContainer) {
+					s += '%' + x.getName() + '=';
+					String t = "";
+					for (XDValue y: ((XDContainer) x.getValue()).getXDItems()) {
+						if (!t.isEmpty()) {
+							t += ',';
+						}
+						t += y;
+					}
+					s += '[' + t + ']';
+
+				} else {
+					s += x;
+				}
+			}
+			result += '[' + s + ']';
+		}
+		s = getDateMask();
+		if (s != null) {
+			result += ", date mask=" + s;
+		}
+		return result;
+	}
+
 }

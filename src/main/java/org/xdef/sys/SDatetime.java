@@ -2417,6 +2417,11 @@ public class SDatetime extends XMLGregorianCalendar
 		return x;
 	}
 
+	/** Get time zone from this instance o0f datetime.
+	 * @return TimeZone object.
+	 */
+	public final TimeZone getTimeZone() {return _tz;}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of javax.xml.datatype.XMLGregorianCalendar
 ////////////////////////////////////////////////////////////////////////////////
@@ -2549,7 +2554,7 @@ public class SDatetime extends XMLGregorianCalendar
 
 	@Override
 	public final QName getXMLSchemaType() {
-		switch((_year != Integer.MIN_VALUE ? 0x20 : 0 )
+		switch((_year != Integer.MIN_VALUE ?  0x20 : 0 )
 			| (_month != Integer.MIN_VALUE ?  0x10 : 0 )
 			| (_day != Integer.MIN_VALUE ?    0x08 : 0 )
 			| (_hour != Integer.MIN_VALUE ?   0x04 : 0 )
@@ -2632,14 +2637,16 @@ public class SDatetime extends XMLGregorianCalendar
 		}
 		// only set month if it is set
 		if (_month != Integer.MIN_VALUE) {
-			// Calendar.MONTH is zero based while XMLGregorianCalendar month field is not.
+			// Calendar.MONTH is zero based while XMLGregorianCalendar month
+			// field is not.
 			result.set(Calendar.MONTH, _month - 1);
 		} else {
 			// use default if set
 			int defaultMonth = (defaults != null) ?
 				defaults.getMonth() : Integer.MIN_VALUE;
 			if (defaultMonth != Integer.MIN_VALUE) {
-				// Calendar.MONTH is zero based while XMLGregorianCalendar month field is not.
+				// Calendar.MONTH is zero based while XMLGregorianCalendar month
+				// field is not.
 				result.set(Calendar.MONTH, defaultMonth - 1);
 			}
 		}
@@ -2701,25 +2708,7 @@ public class SDatetime extends XMLGregorianCalendar
 		return result;
 	}
 
-	/** Get time zone.
-	 * @return TimeZone object.
-	 */
-	public final TimeZone getTimeZone() {return _tz;}
-
 	@Override
 	public final TimeZone getTimeZone(final int defaultZoneoffset) {return _tz;}
-
-	/** Set nanosecond value.
-	 * @deprecated Please use method setNanos instead.
-	 * @param nanos the nanosecond (0..999999999).
-	 * @throws SRuntimeException if milliseconds is not in interval 0..999.
-	 */
-	public final void setNanosecond(final int nanos) {setNanos(nanos);}
-
-	/** Get nanoseconds from this date. If nanosecond is undefined return 0.
-	 * @deprecated Please use method getNanos instead.
-	 * @return millisecond from this date or 0.
-	 */
-	public final int getNanosecond() {return getNanos();}
 
 }

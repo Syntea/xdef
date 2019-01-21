@@ -813,6 +813,16 @@ public final class XElement extends XCodeDescriptor
 		return _digest;
 	}
 
+	private static void genDataDigestInfo(final SObjectWriter xw,
+		final XData x) throws Exception {
+		xw.writeShort(x.getKind());
+		xw.writeString(x.getName());
+		xw.writeInt(x.minOccurs());
+		xw.writeInt(x.maxOccurs());
+		xw.writeShort(x.getParserType());
+		xw.writeString(x.getDateMask());
+	}
+
 	private static void genDigestInfo(final XElement xe) {
 		if (xe.isReference()) {
 			XMNode xn = xe.getXDPool().findModel(xe.getReferencePos());
@@ -833,11 +843,7 @@ public final class XElement extends XCodeDescriptor
 				xe._attrs.keySet().toArray(names);
 				Arrays.sort(names);
 				for (String name: names) {
-					xw.writeString(name);
-					XData x = xe._attrs.get(name);
-					xw.writeInt(x.minOccurs());
-					xw.writeInt(x.maxOccurs());
-					xw.writeShort(x.getParserType());
+					genDataDigestInfo(xw, xe._attrs.get(name));
 				}
 			}
 			for (XNode x: xe._childNodes) {
@@ -851,22 +857,13 @@ public final class XElement extends XCodeDescriptor
 						xw.writeInt(x.maxOccurs());
 						continue;
 					case XNode.XMTEXT:
+						genDataDigestInfo(xw, (XData) x);
+						continue;
+					case XNode.XMELEMENT:
 						xw.writeShort(kind);
 						xw.writeInt(x.minOccurs());
 						xw.writeInt(x.maxOccurs());
-						xw.writeShort(((XData) x).getParserType());
-						continue;
-					case XNode.XMELEMENT: {
-							xw.writeShort(kind);
-							XElement xxe = (XElement) x;
-							if (xxe.isReference()) {
-								xxe = (XElement) xxe.getXDPool().findModel(
-									xxe.getReferencePos());
-							}
-							xw.writeInt(xxe.minOccurs());
-							xw.writeInt(xxe.maxOccurs());
-							xw.writeString(xxe.getName());
-						}
+						xw.writeString(x.getName());
 						continue;
 					default:
 						xw.writeShort(kind);

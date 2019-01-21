@@ -5,7 +5,7 @@ package test.xdef.component;
 public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XComponent{
   public Y14A getX() {return _X;}
   public void setX(Y14A x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "X", null, "Y14#B/X");
     _X = x;
   }
@@ -45,13 +45,13 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -79,7 +79,7 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4F5C1F1B9409F045C5B9BDA701A2F678".equals(
+    if (!"06A37D65DD429BF38C93B33BB75C9E09".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -155,9 +155,9 @@ public static class X implements test.xdef.component.Y14A{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -183,7 +183,7 @@ public static class X implements test.xdef.component.Y14A{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"1A9E6F6A4286AE666612F79DF944F5E7".equals(
+    if (!"2C1A231C386245B90D25F64228A3EF86".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

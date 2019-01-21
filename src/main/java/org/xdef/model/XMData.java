@@ -1,6 +1,5 @@
 package org.xdef.model;
 
-import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.XDContainer;
 
@@ -8,8 +7,6 @@ import org.xdef.XDContainer;
  * @author Vaclav Trojan
  */
 public interface XMData extends XMNode {
-
-	public XDParseResult validate(String value);
 
 	/** Get value specified as default.
 	 * @return string with value specified as default or return <tt>null</tt>
@@ -23,21 +20,15 @@ public interface XMData extends XMNode {
 	 */
 	public String getFixedValue();
 
-	/** Get values of enumeration type.
-	 * @return string array with values specified as enumeration or return
-	 * <tt>null</tt> if specified type is not enumeration of string values.
-	 */
-	public String[] getEnumerationValues();
-
-	/** Get base type ID of value.
-	 * @return type ID of data value.
-	 */
-	public short getBaseType();
-
 	/** Get type name of value.
 	 * @return type name of data value.
 	 */
 	public String getValueTypeName();
+
+	/** Get reference name to declared type.
+	 * @return reference name to declared type or null if not reference.
+	 */
+	public String getRefTypeName();
 
 	/** Get parser used for parsing of value.
 	 * @return XDParser or null if parser is not available.

@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 
 /** Implements CodeI1 with string as the second parameter.
- *
  * @author  Vaclav Trojan
  */
 public class CodeS1 extends CodeI1 {

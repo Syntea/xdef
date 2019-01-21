@@ -5,7 +5,7 @@ package test.xdef.component;
 public class Y20_A implements org.xdef.component.XComponent{
   public Y20_A.X getX() {return _X;}
   public void setX(Y20_A.X x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "X", null, "Y20#A/X");
     _X = x;
   }
@@ -45,13 +45,13 @@ public class Y20_A implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -79,7 +79,7 @@ public class Y20_A implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B4D99310DB08FD64CED39A04197A8579".equals(
+    if (!"D4BB43878FE4CE0CAF83DF9237B37816".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -117,11 +117,12 @@ public static class X implements org.xdef.component.XComponent{
   public java.util.List<X> listOfX() {return _X;}
   public void setb(String x) {_b = x;}
   public void addX(X x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "X", null, "Y20#X/X");
       _X.add(x);
     }
+
   }
   public String xposOfb(){return XD_XPos + "/@b";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
@@ -160,9 +161,9 @@ public static class X implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
@@ -195,7 +196,7 @@ public static class X implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AD3CAE139B4CCC1C95227A65C995782B".equals(
+    if (!"F3FA2F0EC9E66366A2F8EC9CDC2E242B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

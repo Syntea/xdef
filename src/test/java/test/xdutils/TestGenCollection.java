@@ -22,11 +22,8 @@ public class TestGenCollection extends XDTester {
 		File file;
 		File dataDir = new File(getDataDir(), "genCollection");
 		try {
-//if(true)return;
-
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0'"
-+ " root='mtest' >"
+"<xd:def xmlns:xd='" + _xdNS + "' root='mtest' >"
 + "<mtest>"
 + " <xd:choice>"
 + "  <adam xd:script = '*'>required string();</adam>"
@@ -46,15 +43,15 @@ public class TestGenCollection extends XDTester {
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
-"<xd:def xmlns:xd ='" + _xdNS + "' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"default 'abc'\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='" + _xdNS + "'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
-" <A f=\"default 'abc'\" />\n" +
+" <A f=\"default 'abc'\"/>\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
 			el1 = GenCollection.genCollection(
@@ -62,13 +59,13 @@ public class TestGenCollection extends XDTester {
 			assertEq(el, el1);
 
 			xdef =
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"default 1\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='http://www.syntea.cz/xdef/2.0'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
 " <A f=\"default 1\" />\n" +
 "</xd:def>\n" +
@@ -77,13 +74,13 @@ public class TestGenCollection extends XDTester {
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/3.1' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"optional int; default 1\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='http://www.syntea.cz/xdef/3.1'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
 " <A f=\"optional int; default 1\" />\n" +
 "</xd:def>\n" +
@@ -92,13 +89,13 @@ public class TestGenCollection extends XDTester {
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"'abc'\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='http://www.syntea.cz/xdef/2.0'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
 " <A f=\"fixed 'abc'\" />\n" +
 "</xd:def>\n" +
@@ -108,13 +105,13 @@ public class TestGenCollection extends XDTester {
 			assertEq(el, el1);
 
 			xdef =
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"fixed 'abc'\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='http://www.syntea.cz/xdef/2.0'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
 " <A f=\"fixed 'abc'\" />\n" +
 "</xd:def>\n" +
@@ -124,13 +121,13 @@ public class TestGenCollection extends XDTester {
 			assertEq(el, el1);
 
 			xdef =
-"<xd:def xmlns:xd ='http://www.syntea.cz/xdef/2.0' name='B0'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"fixed 1\" />\n" +
 "</xd:def>";
 			el = GenCollection.genCollection(new String[]{xdef},true,true,true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
 			assertEq(
-"<xd:collection	xmlns:xd ='http://www.syntea.cz/xdef/2.0'>\n" +
+"<xd:collection	xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name='B0'>\n" +
 " <A f=\"fixed 1\" />\n" +
 "</xd:def>\n" +

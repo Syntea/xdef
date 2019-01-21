@@ -37,9 +37,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Class ChkElement object contains data from validation of X-definition or it
- * can be used as base for construction of XML objects according to a
- * X-definition. This code is nasty, should be written better.
+/** Provides validation of input data or it can be used as base for construction
+ * of XML objects according to a X-definition.
+ *  This code is nasty code in some parts, should be written better!
  * @author Vaclav Trojan
  */
 public final class ChkElement extends ChkNode implements XXElement, XXData {
@@ -50,28 +50,28 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * external methods - to allow gc to do the job!
 	 */
 	private String _data;
-	/** Element value used for ScriptCode.
+	/** Element value used for X-Script code.
 	 * Important note: it should be cleared after invocation of
 	 * external methods - to allow garbage collector to do the job!
 	 */
 	private Element _elemValue;
 	/** The name of actually processed attribute for communication with
-	 *  Script interpreter. */
+	 *  the X-Script interpreter. */
 	private String _attName;
-	/** The name of actually processed attribute for communication with
-	 *  Script interpreter. */
+	/** The namespace URI of actually processed attribute for communication with
+	 *  the X-Script interpreter. */
 	private String _attURI;
-	/** List names of attributes. */
+	/** List of names of attributes. */
 	private HashSet<String> _attNames;
-	/** The Hash Table to store the element XPath occurrence. */
+	/** The Map to store the element XPath occurrence. */
 	private final Map<String, XPosInfo> _xPosOccur;
-	/** Array of definitions. */
+	/** Array of X-definitions. */
 	private XNode[] _defList;
 	/** Array of occurrence counters. */
 	private int[] _counters;
-	/** Index to actual definition. */
+	/** Index to actual X-definition. */
 	int _actDefIndex;
-	/** Index to next definition. */
+	/** Index to next X-definition. */
 	int _nextDefIndex;
 	/** Number of text nodes found. */
 	private int _numText;
@@ -96,27 +96,24 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	XMData _xdata;
 
 	/** The set containing marked unique sets. */
-	final Set<CodeUniqueset> _markedUniqueSets =
-		new HashSet<CodeUniqueset>();
+	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<CodeUniqueset>();
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
-	 * @param xelement The definition of element.
-	 * @param parent The ChkNode parent.
-	 * @param element The element with attributes.
+	 * @param xelement X-definition of element.
+	 * @param parent ChkNode parent.
+	 * @param element element with attributes.
 	 * @param ignoreAll if <tt>true</tt> ignore this and all child nodes.
 	 */
 	ChkElement(final ChkNode parent,
 		Element element,
 		final XElement xelement,
 		boolean ignoreAll) {
-		super(element == null ?
-			xelement.getName() : element.getNodeName(), parent);
+		super(element==null ? xelement.getName(): element.getNodeName(),parent);
 //		_sourceElem = _elemValue = null;  //Java makes it!
-//		_nextDefIndex = 0; //Java makes it!
-//		_numText = 0; //Java makes it!
-//		_nil = false; //Java makes it!
 //		_selector = null; //Java makes it!
 //		Arrays.fill(_counters, 0); //Java makes it!
+//		_nextDefIndex = _numText = 0; //Java makes it!
+//		_nil = false; //Java makes it!
 		_element = element;
 		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
 		if (xelement.isIgnore() || xelement.isIllegal()) {
@@ -124,8 +121,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		_xElement = xelement;
 		_xPosOccur = new TreeMap<String, XPosInfo>();
-		StringBuilder sb = new StringBuilder(
-			_parent.getXPos()).append('/').append(_name);
+		StringBuilder sb =
+			new StringBuilder(_parent.getXPos()).append('/').append(_name);
 		if (_parent.getParent() != null) {
 			int xPosCnt =
 				getElemXPos(((ChkElement)_parent)._xPosOccur, sb.toString());
@@ -134,11 +131,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_errCount=getReporter().getErrorCount()+_scp._reporter.getErrorCount();
 		_xPos = sb.toString();
 		_defList = _xElement._childNodes;
-		_actDefIndex = -1; //index of actual definition
+		_actDefIndex = -1; //index of actual X-definition
 		_counters = new int[_defList.length + 1]; //one more for '*'
-			_chkChildNodes = new ArrayList<ChkElement>();
+		_chkChildNodes = new ArrayList<ChkElement>();
 		_attNames = new HashSet<String>();
-//		_attNames = new TreeMap<String, XDValue>();
 		if (ignoreAll) {
 			_element = null;
 		} else if (_element != null) {
@@ -153,8 +149,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			} else if ((el = _parent.getElement()) != null) {
 				el.appendChild(_element);
 			}
-			if (_xElement._nillable == 'T' &&
-				"true".equals(_element.getAttributeNS(
+			if (_xElement._nillable == 'T'
+				&& "true".equals(_element.getAttributeNS(
 					XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "nil"))) {
 				_nil = true;
 			}
@@ -165,7 +161,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	/** Execute script from given address (with given type).
+	/** Execute X-script from given address (with given type).
 	 * @param addr address of script.
 	 * @param type type of model ('E' - element, 'A' - attribute, 'T' text,
 	 * otherwise 'U').
@@ -205,14 +201,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return namespace URI or <tt>null</tt>.
 	 */
 	public final String getNodeURI() {
-		if (getItemId() != XX_ELEMENT) {
-			return _attURI;
-		} else {
-			if (_element != null) {
-				return _element.getNamespaceURI();
-			}
-			return null;
-		}
+		return (getItemId() != XX_ELEMENT)
+			? _attURI : _element != null ? _element.getNamespaceURI() : null;
 	}
 
 	/** Set name of the actually processed attribute or Text node.
@@ -320,9 +310,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	public final XXElement prepareXXElementNS(final String ns,
 		final String qname) {
-		return ns == null ?
-			createChkElement(_rootChkDocument._doc.createElement(qname)) :
-			createChkElement(_rootChkDocument._doc.createElementNS(ns, qname));
+		return ns == null
+			? createChkElement(_rootChkDocument._doc.createElement(qname))
+			: createChkElement(_rootChkDocument._doc.createElementNS(ns,qname));
 	}
 
 	@Override
@@ -342,9 +332,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final XXElement createChildXXElement(final XMElement model) {
 		String ns = model.getNSUri();
 		String qname = model.getName();
-		Element el = ns == null ?
-			_rootChkDocument._doc.createElement(qname) :
-			_rootChkDocument._doc.createElementNS(ns, qname);
+		Element el = ns == null ? _rootChkDocument._doc.createElement(qname)
+			: _rootChkDocument._doc.createElementNS(ns, qname);
 		return chkElem((XElement) model, el);
 	}
 
@@ -353,7 +342,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return created check element object.
 	 */
 	final ChkElement createChkElement(final Element element) {
-		_data = null; // ??? why
+		_data = null;
 		_parseResult = null;
 		if (_nil) {
 			//Not allowed element '&{0}'
@@ -506,8 +495,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		String txtname = getTextPathIndex(index); // index or ""
 		_xPos += "/text()" + txtname;
 		txtname = "$text" + txtname;
-		if (!_attNames.contains(txtname) &&
-			xtxt._onAbsence >= 0) {//exec onAbsence
+		if (!_attNames.contains(txtname)
+			&& xtxt._onAbsence >= 0) {//exec onAbsence
 			_attNames.add(txtname);
 			_elemValue = _element;
 			exec(xtxt._onAbsence, (byte) 'T');
@@ -515,8 +504,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				checkDatatype(xtxt, true);
 			}
 			copyTemporaryReports();
-		} else if (!ignoreAbsence && _data == null &&
-			xtxt.minOccurs() >= XData.REQUIRED && !_nil) {
+		} else if (!ignoreAbsence && _data == null
+			&& xtxt.minOccurs() >= XData.REQUIRED && !_nil) {
 			error(XDEF.XDEF527); //Missing required text
 		}
 		if (_data == null && xtxt._deflt >= 0) {//exec default
@@ -787,7 +776,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							SelectorState s =
 								new SelectorState(selector, (XSelector) xnode);
 							required =
-								(s._kind == XNode.XMCHOICE) && s.minOccurs() > 0;
+								(s._kind==XNode.XMCHOICE) && s.minOccurs() > 0;
 							required &= checkAbsence(s, c, skipSelectors);
 							i = s._endIndex;
 						}
@@ -802,8 +791,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (required &&	!selector._occur &&	selector._count == 0) {
-			if (!empty && selector._prev != null &&
-				selector._prev._count >= selector._prev.minOccurs()) {
+			if (!empty && selector._prev != null
+				&& selector._prev._count >= selector._prev.minOccurs()) {
 				return required;
 			}
 			//Sequence has no required item in
@@ -951,8 +940,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (!_selector._occur) {//no variant reached
 				if (_selector._count == 0) {
 					if (_selector.minOccurs() > 0) {
-						if (_selector._prev == null ||
-							_selector._prev._kind == XNode.XMSEQUENCE) {
+						if (_selector._prev == null
+							|| _selector._prev._kind == XNode.XMSEQUENCE) {
 							checkAbsence(_selector, null, true);
 						}
 					}
@@ -987,11 +976,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_selector._count = ++_counters[_nextDefIndex];
 			}
 			if (_selector.maxOccurs() <= 1 || !_selector._occur) {
-				if (_selector._count < _selector.minOccurs() &&
-					(_selector._prev == null ||
-					_selector._prev.minOccurs() > _selector._prev._count &&
-					_selector._prev._begIndex==_selector._begIndex+1 &&
-					_selector._prev._endIndex==_selector._endIndex-1)) {
+				if (_selector._count < _selector.minOccurs()
+					&& (_selector._prev == null
+					|| _selector._prev.minOccurs() > _selector._prev._count
+					&& _selector._prev._begIndex == _selector._begIndex + 1
+					&& _selector._prev._endIndex == _selector._endIndex - 1)) {
 					//Minimum occurrence not reached for &{0}
 					error(XDEF.XDEF555, "choice");
 					XSelector xsel =
@@ -1050,8 +1039,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			if (_selector.maxOccurs() <= 1 || !_selector._occur) {
 				if (_selector._prev == null) {
-					if (!_selector._ignorable &&
-						_selector.minOccurs() > 0) {
+					if (!_selector._ignorable
+						&& _selector.minOccurs() > 0) {
 						if (!_selector._occur) {//was not checked
 							checkAbsence(_selector,
 								new Counter(_selector._firstChild), true);
@@ -1065,8 +1054,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				} else {
 					_selector._prev._occur |=
 						_selector._occur || _selector._count > 0;
-					if (_selector._prev._kind != XNode.XMSEQUENCE &&
-						_selector._count > 0) {
+					if (_selector._prev._kind != XNode.XMSEQUENCE
+						&& _selector._count > 0) {
 						_selector._prev._occur = true;
 						_nextDefIndex =
 							_selector._prev._begIndex + 1;
@@ -1108,15 +1097,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_elemValue = _element;
 				XDValue value = exec(xs._match, (byte) 'U');
 				if (xs._match >= 0) {
-					if (value != null && !value.isNull() &&
-						!value.booleanValue()) {
+					if (value != null && !value.isNull()
+						&& !value.booleanValue()) {
 						_nextDefIndex = xs._endIndex + 1;
 						return false; // not match
 					}
 				}
 			}
-			if (_selector == null ||
-				_selector._begIndex != _nextDefIndex) {
+			if (_selector == null || _selector._begIndex != _nextDefIndex) {
 				_selector =	new SelectorState(_selector, xs);
 				debugXPos(XDDebug.SELECTORINIT);
 				if (xs._init >= 0) {
@@ -1150,8 +1138,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		int lastNextDefIndex = _nextDefIndex;
 		int lastActDefIndex = _actDefIndex;
 		if (el == null) { // element is null => text node
-			if (_nextDefIndex < defLength &&
-				_defList[_nextDefIndex].getKind() != XNode.XMTEXT) {
+			if (_nextDefIndex < defLength
+				&& _defList[_nextDefIndex].getKind() != XNode.XMTEXT) {
 				if ((xn = _xElement.getDefAttr("$text", -1)) != null) {
 					return xn;
 				} else if ((xn=_xElement.getDefAttr("$textcontent",-1))!=null) {
@@ -1159,8 +1147,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						"$textcontent", null, xn.getDefPool(), XNode.XMTEXT);
 				}
 			}
-		} else if (_actDefIndex >= 0 &&
-			(xn = _defList[_actDefIndex]).getKind() == XNode.XMELEMENT
+		} else if (_actDefIndex >= 0
+			&& (xn = _defList[_actDefIndex]).getKind() == XNode.XMELEMENT
 			&& xn.maxOccurs() > 1
 			&& (_selector == null || _selector._kind != XNode.XMMIXED)) {
 			if ((result = chkElem((XElement) xn, el)) != null) {
@@ -1246,6 +1234,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 				case XNode.XMELEMENT: {
 					XElement xel = (XElement) xn;
+					result = null;
 					if (el != null) { // not text node (element)
 						int oldAefIndex = _actDefIndex;
 						_actDefIndex = _nextDefIndex; // save actual index
@@ -1265,7 +1254,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 									boolean all = true;
 									for (int i = _selector._begIndex + 1;
 										i < _selector._endIndex; i++) {
-										if (_counters[i]<_defList[i].maxOccurs()) {
+										if (_counters[i] <
+											_defList[i].maxOccurs()) {
 											all = false;
 											break;
 										}
@@ -1284,35 +1274,49 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_nextDefIndex++; // next item
 						continue;
 					}
-					if (_selector == null ||
-						_selector._kind == XNode.XMSEQUENCE &&
-						!_selector._selective && _selector._prev == null) {
-						if (_counters[_nextDefIndex] < xel.minOccurs()) {
-							//required element is missing
-							if (_nextDefIndex + 1 < _defList.length) {
-								XNode x = _defList[_nextDefIndex + 1];
-								if (x.getKind() == XNode.XMELEMENT &&
-									el != null &&
-									(result=chkElem((XElement)x,el))!=null){
-									//following element is OK
-									chkElementAbsence(_nextDefIndex++,xel,null);
-									if (_selector != null) {
-										_selector._occur = true; //found
-									}
-									_actDefIndex = _nextDefIndex++;
-									return result;
-								}
-							}
-							if (_selector == null) {
-								return null; //not in sequence
-							}
-						}
-					} else if (_selector._kind == XNode.XMSEQUENCE &&
-						_selector._selective) {
-						if (_nextDefIndex == _selector._begIndex +1) {
-							_nextDefIndex = _selector._endIndex;
+					if (_selector == null
+						|| _selector._kind == XNode.XMSEQUENCE
+						&& !_selector._selective && _selector._prev == null) {
+						int index = _nextDefIndex;
+						int counter = _counters[index];
+						if (counter == 0 && xel._onAbsence >= 0
+							&& xel.minOccurs() == 0) {
+							// not required element, however execute onAbsence
+							chkElementAbsence(index, xel, null);
+							_nextDefIndex++;
 							continue;
 						}
+						if (counter < xel.minOccurs()) {
+							//required element is missing
+							while (_nextDefIndex + 1 < _defList.length) {
+								XNode x = _defList[_nextDefIndex + 1];
+								if (x.getKind()==XNode.XMELEMENT && el!=null) {
+									if ((result=chkElem((XElement)x,el))!=null){
+										chkElementAbsence(index, xel, null);
+										//following element is OK
+										_nextDefIndex++;
+										if (_selector != null) {
+											_selector._occur = true; //found
+										}
+										_actDefIndex = _nextDefIndex++;
+										return result;
+									} else if (x.minOccurs() <= 0) {
+										// skip next XMELEMENT if not required
+										_actDefIndex = _nextDefIndex++;
+										continue;
+									}
+								}
+								break;
+							}
+							if (_selector == null) {
+								return null; //not in sequence, not found
+							}
+						}
+					} else if (_selector._kind == XNode.XMSEQUENCE
+						&& _selector._selective
+						&& _nextDefIndex == _selector._begIndex + 1) {
+						_nextDefIndex = _selector._endIndex;
+						continue;
 					}
 					_nextDefIndex++;
 					continue;
@@ -1322,10 +1326,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_nextDefIndex++;
 						return null;
 					}
-					if (el == null && _selector._prev == null &&
-						_selector._kind == XNode.XMMIXED &&
-						(_nextDefIndex == defLength -1 ||
-						_defList[_nextDefIndex+1].getKind() != XNode.XMTEXT)) {
+					if (el == null && _selector._prev == null
+						&& _selector._kind == XNode.XMMIXED
+						&& (_nextDefIndex == defLength -1
+						|| _defList[_nextDefIndex+1].getKind()!=XNode.XMTEXT)) {
 						//just to improve error reporting ???
 						_nextDefIndex = lastNextDefIndex;
 						_actDefIndex = lastActDefIndex;
@@ -1474,6 +1478,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return chkEl;
 	}
 
+	/** Prepare cariables and execute the init section of X-script. */
 	final void initElem() {
 		// prepare variables declared in the script (do not make it twice)
 		if (_xElement._varinit >= 0 && _variables == null) {
@@ -1490,30 +1495,31 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	/** Get actual definition assigned to node.
-	 * @param index The index of definition.
+	/** Get actual X-definition assigned to node.
+	 * @param index The index of X-definition.
 	 * @return The actual definition or null.
 	 */
 	public final XNode getDefElement(final int index) {
 		return index < _defList.length ? _defList[index] : null;
 	}
 
-	/** Get maximal index of definition in the list.
+	/** Get maximal index of X-definition in the list.
 	 * @return Max index of definition list.
 	 */
 	final int getDefinitionMaxIndex() {return _defList.length;}
 
 	/** Add the new attribute to the current element.
 	 * @param att The object with attribute.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <tt>true</tt> if attribute was created according to X-definition.
 	 */
 	final boolean newAttribute(final Attr att) {
 		_node = att;
-		boolean result = addAttributeNS(att.getNamespaceURI(),
-			att.getName(), att.getValue());
+		boolean result = addAttributeNS(
+			att.getNamespaceURI(), att.getName(), att.getValue());
 		_node = null;
 		return result;
 	}
+
 	/** Process attribute white spaces.
 	 * @param xatt Model of attribute.
 	 * @param data value of attribute.
@@ -1521,26 +1527,27 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	private String attrWhitespaces(final XData xatt, final String data) {
 		String result;
-		if ((xatt != null && xatt._attrWhiteSpaces!= 0) ?
-			xatt._attrWhiteSpaces == 'T' :
-			(_xElement._attrWhiteSpaces!= 0) ?
-				_xElement._attrWhiteSpaces == 'T' :
-				_rootChkDocument._attrWhiteSpaces == 'T') {
+		if ((xatt != null && xatt._attrWhiteSpaces!= 0)
+			? xatt._attrWhiteSpaces == 'T'
+			: (_xElement._attrWhiteSpaces!= 0)
+				? _xElement._attrWhiteSpaces == 'T'
+				: _rootChkDocument._attrWhiteSpaces == 'T') {
 			result = SUtils.trimAndRemoveMultipleWhiteSpaces(data);
-		} else if ((xatt != null && xatt._trimAttr != 0) ?
-			xatt._trimAttr != 'F' :
-			(_xElement._trimAttr != 0) ? _xElement._trimAttr != 'F' :
-			_rootChkDocument._trimAttr != 'F') {
+		} else if ((xatt != null && xatt._trimAttr != 0)
+			? xatt._trimAttr != 'F'
+			: (_xElement._trimAttr != 0)
+				? _xElement._trimAttr != 'F' :
+				_rootChkDocument._trimAttr != 'F') {
 			result = data.trim();
 		} else {
 			result = data;
 		}
 		if (result.length() == 0) {
-			if ((xatt != null && xatt._ignoreEmptyAttributes != 0) ?
-				xatt._ignoreEmptyAttributes == 'T' :
-				(_xElement._ignoreEmptyAttributes != 0) ?
-					_xElement._ignoreEmptyAttributes == 'T' :
-					_rootChkDocument._ignoreEmptyAttributes == 'T') {
+			if ((xatt != null && xatt._ignoreEmptyAttributes != 0)
+				? xatt._ignoreEmptyAttributes == 'T'
+				: (_xElement._ignoreEmptyAttributes != 0)
+					? _xElement._ignoreEmptyAttributes == 'T'
+					: _rootChkDocument._ignoreEmptyAttributes == 'T') {
 				return null;
 			}
 			return result;
@@ -1548,10 +1555,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (xatt != null && xatt.isFixed()) {
 			return result;
 		}
-		byte c = (xatt != null && xatt._attrValuesCase != 0) ?
-			xatt._attrValuesCase :
-			_xElement._attrValuesCase != 0 ? _xElement._attrValuesCase :
-			_rootChkDocument._setAttrValuesCase;
+		byte c = (xatt != null && xatt._attrValuesCase != 0)
+			? xatt._attrValuesCase
+			: _xElement._attrValuesCase != 0
+				? _xElement._attrValuesCase
+				: _rootChkDocument._setAttrValuesCase;
 		return c == 'T' ? result.toUpperCase() :
 			c == 'F' ? result.toLowerCase() : result;
 	}
@@ -1565,7 +1573,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		XData xatt = _xElement.getDefAttrNS(nsURI,
 			localName, _rootChkDocument._sourceLanguageID);
 		if (xatt == null && nsURI.equals(_element.getNamespaceURI())) {
-			XData xa =_xElement.getDefAttr(localName,
+			XData xa = _xElement.getDefAttr(localName,
 				_rootChkDocument._sourceLanguageID);
 			if (xa != null && xa._acceptQualifiedAttr == 'T') {
 				return xa;
@@ -1637,7 +1645,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param data The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <tt>true</tt> if attribute was created according to X-definition.
 	 */
 	public final boolean addAttributeNS(final String nsURI,
 		final String qname,
@@ -1645,8 +1653,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_element == null) {
 			return _ignoreAll;
 		}
-		if ("xmlns".equals(qname) || qname.startsWith("xmlns:") ||
-			qname.startsWith("xml:")) {
+		if ("xmlns".equals(qname) || qname.startsWith("xmlns:")
+			|| qname.startsWith("xml:")) {
 			String uri;
 			if ((uri = nsURI) == null) {
 				uri = qname.startsWith("xml:")
@@ -1663,9 +1671,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			return false;
 		}
 		if (_nil) {// XML schema; xsi:nil & options nillable
-			//Attribute not allowed
-			error(XDEF.XDEF525, qname,
-				"&{xpath}" + _xPos + "&{xdpos}" + getXDPosition());
+			error(XDEF.XDEF525, //Attribute not allowed
+				qname, "&{xpath}" + _xPos + "&{xdpos}" + getXDPosition());
 			return false;
 		}
 		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
@@ -1722,11 +1729,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (xatt != null) {
 			String xname = xatt.getName();
 			//let's register that we processed this attribute
-			if (_attNames.contains(xatt.getName())
-				&& !"$attr".equals(xname) &&
-				xatt._acceptQualifiedAttr == 'T') {
-				//Both, qualified and unqualified attributes are not allowed
-				//with option acceptQualifiedAttr: &{0}
+			if (_attNames.contains(xatt.getName()) && !"$attr".equals(xname)
+				&& xatt._acceptQualifiedAttr == 'T') {
+				//Both, the qualified and unqualified attributes are not allowed
+				//with the option acceptQualifiedAttr: &{0}
 				error(XDEF.XDEF559, qname);
 			}
 			if ("$attr".equals(xname)) {
@@ -1737,7 +1743,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			boolean result = true;
 			switch (xatt.minOccurs()) {
-				case XOccurrence.IGNORE: //ignore
+				case XOccurrence.IGNORE: // ignore
 					_attName = null;
 					_attURI = null;
 					if (nsURI != null) {
@@ -1751,7 +1757,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_parseResult = null;
 					_xPos = xPos;
 					return true;
-				case XOccurrence.ILLEGAL: //illegal
+				case XOccurrence.ILLEGAL: // illegal
 					debugXPos(XDDebug.ONILLEGALATTR);
 					if (xatt._onIllegalAttr >= 0) {
 						_elemValue = _element;
@@ -1767,7 +1773,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_xPos = xPos;
 						return false;
 					}
-					break; //report as it is undefined
+					break; // report as it is undefined
 				default : {// required(1) or optional(0)
 					_data = adata;
 					debugXPos(XDDebug.INIT);
@@ -1777,7 +1783,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						copyTemporaryReports();
 					}
 					if (_data == null) {
-						if (xatt._onFalse >= 0) {//value not exist
+						if (xatt._onFalse >= 0) {// value not exist
 							_elemValue = _element;
 							exec(xatt._onFalse, (byte) 'A');
 							copyTemporaryReports();
@@ -1790,8 +1796,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						//set to "acceptEmptyAttributes" at any level then
 						//set the result of the check method to "true" (do NOT
 						//report and/or process an error)!
-						if (_data.length() == 0 &&
-							((xatt._ignoreEmptyAttributes == 'A'
+						if (_data.length() == 0
+							&& ((xatt._ignoreEmptyAttributes == 'A'
 								|| xatt._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
 							|| xatt._ignoreEmptyAttributes == 0
@@ -1814,7 +1820,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							_attNames.add(xname);
 							checkDatatype(xatt, false);
 						}
-						if (_parseResult.matches()) { //true
+						if (_parseResult.matches()) { // true
 							clearTemporaryReporter();
 							if (_data != null) {
 								if (!_data.equals(adata)) {
@@ -1855,13 +1861,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							} else {
 								result = false;
 								//copy errors from parsed result to
-								// temporary reporter.
+								//the temporary reporter.
 								for (Report rep: _parseResult.getReporter()) {
 									_scp.getTemporaryReporter().putReport(rep);
 								}
 								if (!chkTemporaryErrors()) {
-									//Value error
-									putTemporaryReport(
+									putTemporaryReport( //Value error
 										Report.error(XDEF.XDEF515));
 								}
 							}
@@ -1884,7 +1889,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							_xdata = null;
 							_parseResult = null;
 							_xPos = xPos;
-							return result; //ignore empty attributes
+							return result; // ignore empty attributes
 						}
 					} else {
 						adata = _data;
@@ -1919,10 +1924,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			}
 		}
-		//definition not found
+		// X-definition not found
 		if (_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I') {
 			//more attributes allowed, add attribute as it is
-			// no definition for this attribute
+			//no X-definition for this attribute
 			_parseResult = new DefParseResult(data);
 			if (nsURI != null) {
 				if (_xElement._moreAttributes=='I') {
@@ -1998,7 +2003,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add the new attribute to the current XXElement.
 	 * @param name name of attribute.
 	 * @param data value of attribute.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <tt>true</tt> if attribute was created according to X-definition.
 	 */
 	public final boolean addAttribute(final String name, final String data) {
 		return addAttributeNS(null, name, data);
@@ -2008,7 +2013,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * attribute if exists to prevent report about attribute redefinition.
 	 * @param name The name of attribute.
 	 * @param value The value of attribute.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <tt>true</tt> if attribute was created according to X-definition.
 	 */
 	public final boolean setAttribute(final String name,
 		final String value) {
@@ -2021,7 +2026,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name The name of attribute.
 	 * @param data The value of attribute.
 	 * @param nsURI The value of name space URI.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <tt>true</tt> if attribute was created according to X-definition.
 	 */
 	public final boolean setAttribute(final String name,
 		final String data,
@@ -2042,7 +2047,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if ((el2 = el) == null) {
 			//remove child
 			if (_element != null) {
-				if (_parent._parent == null) { //root element
+				if (_parent._parent == null) { // root element
 					try {
 						((ChkDocument) _parent).
 							getDocument().removeChild(_element);
@@ -2056,7 +2061,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else if (el2 != _element) {
 			//update child
 			if (_element == null) {
-				if (_parent._parent == null) { //root element
+				if (_parent._parent == null) { // root element
 					((ChkDocument) _parent).getDocument().appendChild(el2);
 				} else {
 					if ((el1 = _parent.getElement()) != null) {
@@ -2064,7 +2069,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 				}
 			} else {
-				if (_parent._parent == null) { //root  element
+				if (_parent._parent == null) { // root  element
 					ChkDocument root = ((ChkDocument) _parent);
 					root.getDocument().replaceChild(el2, _element);
 					root._element = el2;
@@ -2093,14 +2098,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** This method is called when the end of the current element attribute list
 	 * was parsed. The implementation may check the list of attributes and
 	 * may invoke appropriate actions.
-	 * @return <tt>true</tt> if element is compliant with definition.
+	 * @return <tt>true</tt> if element is compliant with X-definition.
 	 */
 	public final boolean checkElement() {
 		if (_attsChecked) {
 			return true;
 		}
 		_attsChecked = true;
-		if (_ignoreAll) {//all checks areignored (undef element)
+		if (_ignoreAll) { // all checks are ignored (undef element)
 			return true;
 		}
 		boolean result = true;
@@ -2119,19 +2124,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (_element.hasAttributeNS(xatt.getNSUri(),
 					xname.substring(xname.indexOf(':') + 1))) {
 					processed = true;
-//					continue;
 				}
 			} else if (_element.hasAttribute(xname)) {
 				processed = true;
-//				continue;
 			}
 			if (_attNames.contains(xname)) {
 				processed = true;
-//				continue; //if attribute was processed do nothing
 			}
 			if (!processed) {
 				_xPos = xPos + "/@" + xname;
-				if (xatt._deflt >= 0) {//exec default method
+				if (xatt._deflt >= 0) {// exec default method
 					_data = null;
 					_parseResult = null;
 					_attName = xname;
@@ -2175,7 +2177,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						putTemporaryReport(rep);
 					}
 					if (!_attNames.contains(xatt.getName())) {
-						String uri = xatt.getNSUri(); //was not processed
+						String uri = xatt.getNSUri(); // was not processed
 						_xPos = xPos +"/@" + xname;
 						exec(xatt._onAbsence, (byte) 'A');
 						if (_data != null) {
@@ -2187,17 +2189,17 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							}
 							_attNames.add(xname);
 						}
-						if (uri == null && _element.hasAttribute(xname) ||
-							uri != null && _element.hasAttributeNS(uri,
+						if (uri == null && _element.hasAttribute(xname)
+							|| uri != null && _element.hasAttributeNS(uri,
 							xname.substring(xname.indexOf(':') + 1))) {
-							//remove message "missing"
+							//remove the message "missing"
 							removeTemporaryReport(rep);
-							continue; //attribute exists, don't invoke default
+							continue; // attribute exists, don't invoke default
 						}
 					}
 					if (xatt._deflt < 0) {
 						copyTemporaryReports();
-						continue; //skip default method
+						continue; // skip default method
 					}
 					removeTemporaryReport(rep); // not report "missing" twice
 					copyTemporaryReports();
@@ -2218,7 +2220,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		_xPos = xPos;
 		debugXPos(XDDebug.ONSTARTELEMENT);
-		if (_xElement._onStartElement >= 0) {//exec on end of attr list
+		if (_xElement._onStartElement >= 0) {// exec on end of attr list
 			_elemValue = _element;
 			exec(_xElement._onStartElement, (byte) 'E');
 			copyTemporaryReports();
@@ -2244,9 +2246,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			return;
 		}
 		//2. ckeck if there is list of pending selector
-		if (!_selector._ignorable &&
-			_selector.minOccurs() > 0 &&
-			_selector.minOccurs() > (_selector._occur ?
+		if (!_selector._ignorable
+			&& _selector.minOccurs() > 0
+			&& _selector.minOccurs() > (_selector._occur ?
 				_selector._kind == XNode.XMMIXED ?
 					1 : ++_selector._count : _selector._count)) {
 			XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
@@ -2270,9 +2272,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			//check absence within a group. If actual node is the end of a group
 			// then set "skipselector" to true, othewise to false.
 			checkAbsence(_selector, null,
-				_nextDefIndex < _defList.length &&
-				_defList[_nextDefIndex].getKind() ==
-				XNode.XMSELECTOR_END && nested);
+				_nextDefIndex < _defList.length
+					&& _defList[_nextDefIndex].getKind() == XNode.XMSELECTOR_END
+					&& nested);
 			nested = true;
 			_actDefIndex = -1;
 			_nextDefIndex = _selector._endIndex + 1;
@@ -2294,7 +2296,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private void finishModel() {
 		_parseResult = null;
 		//1. check if last element occurrence
-		if (_actDefIndex >= 0) { //check last processed item
+		if (_actDefIndex >= 0) { // check last processed item
 			XNode xn = _defList[_actDefIndex];
 			if (xn.getKind() == XNode.XMELEMENT) {
 				if (xn.minOccurs() > _counters[_actDefIndex]) {
@@ -2317,10 +2319,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				case XNode.XMTEXT:
 				case XNode.XMELEMENT: {
 					if (_selector != null && _selector._selective) {
-						if ((_selector.maxOccurs() <= 1 || !_selector._occur) &&
-							_selector._count <= _selector.minOccurs()) {
-							if (_selector._prev == null ||
-								_selector._prev._count+1 <=
+						if ((_selector.maxOccurs() <= 1 || !_selector._occur)
+							&& _selector._count <= _selector.minOccurs()) {
+							if (_selector._prev == null
+								|| _selector._prev._count+1 <=
 								_selector._prev.minOccurs()) {
 								XSelector xsel = (XSelector)
 									getDefElement(_selector._begIndex);
@@ -2355,7 +2357,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 					switch (_selector._kind) {
 						case XNode.XMMIXED: {
-							if (!_selector._occur) {//no variant reached
+							if (!_selector._occur) {// no variant reached
 								if (_selector._count == 0) {
 									if (_selector.minOccurs() > 0) {// not empty
 										checkAbsence(_selector, null, true);
@@ -2393,8 +2395,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 									++_counters[_selector._endIndex];
 							}
 							if (_selector.maxOccurs()<=1 || !_selector._occur) {
-								if (!_selector._ignorable &&
-									_selector._count < _selector.minOccurs()) {
+								if (!_selector._ignorable
+									&& _selector._count < _selector.minOccurs()) {
 									//Minimum occurrence not reached for &{0}
 									error(XDEF.XDEF555, "choice");
 									XSelector xsel = (XSelector)
@@ -2464,12 +2466,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_actDefIndex = -1;
 					if (_selector != null && _selector._selective) {
 						if ((!_selector._ignorable &&
-							_selector._count < _selector.minOccurs()) &&
-							(_selector._prev == null ||
-							_selector._prev.minOccurs()>_selector._prev._count&&
-							_selector._prev._begIndex==_selector._begIndex+1 &&
-							_selector._prev._endIndex==_selector._endIndex-1) &&
-							(_selector.maxOccurs() <= 1 || !_selector._occur)) {
+							_selector._count < _selector.minOccurs())
+							&& (_selector._prev == null
+							|| _selector._prev.minOccurs()
+								>_selector._prev._count
+							&& _selector._prev._begIndex==_selector._begIndex+1
+							&& _selector._prev._endIndex==_selector._endIndex-1)
+							&& (_selector.maxOccurs()<=1 || !_selector._occur)){
 							//Minimum occurrence not reached for &{0}
 							error(XDEF.XDEF555, xnode.getName().substring(1));
 							XSelector xsel = (XSelector) xnode;
@@ -2481,8 +2484,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_selector = _selector._prev;
 						break;
 					}
-					if (_selector == null ||
-						_selector._begIndex != _nextDefIndex) {
+					if (_selector==null || _selector._begIndex!=_nextDefIndex) {
 						_selector =
 							new SelectorState(_selector, (XSelector) xnode);
 					}
@@ -2541,7 +2543,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new element as a child of the current element.
 	 * Checks all attributes and child elements for occurrence.
-	 * @return <tt>true</tt> if element was added and complies to definition.
+	 * @return <tt>true</tt> if element was added and complies to X-definition.
 	 */
 	public final boolean addElement() {
 		if (_nil) {
@@ -2551,17 +2553,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				exec(_xElement._finaly, (byte) 'E');
 				copyTemporaryReports();
 				updateElement(_elemValue);
-				if (_elemValue == null && _element != null ||
-					_elemValue != null && _element == null) {
-				}
 			}
 			_parent.incRefNum();
 			closeChkElement();
 			return true;
 		}
 		if (_ignoreAll) { //all checks are ignored (undef element)
-			if (_element != null
-				&& (_elemValue = _parent.getElement()) != null) {
+			if (_element!=null && (_elemValue = _parent.getElement())!=null) {
 				_elemValue.removeChild(_element);
 			}
 			//let's garbage collector do the job
@@ -2653,7 +2651,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						//was exceeded
 						putTemporaryReport(Report.error(XDEF.XDEF532));
 					}
-				} else if (name.charAt(0) != '$') {//normal attribute
+				} else if (name.charAt(0) != '$') {// normal attribute
 					_xPos = xPos + "/@" + name;
 					debugXPos(XDDebug.FINALLY);
 					if (xatt._finaly >= 0) {
@@ -2720,7 +2718,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 					if (_numText < xatt.minOccurs()) {
 						if (!_nil || _numText > 0) {
-							 //Missing required text
+							//Missing required text
 							error(XDEF.XDEF527,"&{xdpos}"+xatt.getXDPosition());
 						}
 					}
@@ -2740,8 +2738,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					XDValue item = xatt._check >= 0 ?
 						exec(xatt._check, (byte) 'T') : new DefBoolean(true);
 					if (item != null && (item.getItemId() == XD_PARSERESULT
-							? ((XDParseResult) item).matches()
-							: item.booleanValue())) {
+						? ((XDParseResult) item).matches()
+						: item.booleanValue())) {
 						clearTemporaryReporter();
 						debugXPos(XDDebug.ONTRUE);
 						if (xatt._onTrue >= 0) {
@@ -2764,8 +2762,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							NodeList nl = _element.getChildNodes();
 							for (int j = nl.getLength() - 1; j >= 0; j--) {
 								Node n = nl.item(j);
-								if (n.getNodeType() == Node.TEXT_NODE ||
-									n.getNodeType() == Node.CDATA_SECTION_NODE){
+								if (n.getNodeType() == Node.TEXT_NODE
+									||n.getNodeType()==Node.CDATA_SECTION_NODE){
 									_element.removeChild(n);
 								}
 							}
@@ -2884,7 +2882,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add new Text node to current element.
 	 * @param data The value of text node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if text node is compliant with definition.
+	 * @return <tt>true</tt> if text node is compliant with X-definition.
 	 */
 	public final boolean addText(final String data) {
 		if (_ignoreAll || _element  == null) {
@@ -2993,7 +2991,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_parseResult = null;
 				_xPos = xPos;
 				return false;
-			} else {//moreElements, textcontent
+			} else {// moreElements, textcontent
 				if (_xElement._moreText == 'I') {
 					_data = null;
 					_xdata = null;
@@ -3001,7 +2999,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_xPos = xPos;
 					return true;
 				}
-				xtxt1 = new XData(//dummy text
+				xtxt1 = new XData(// dummy text
 					"$text", null, _xElement.getDefPool(), XNode.XMTEXT);
 				if (_xElement.hasDefAttr("$textcontent")) { //copy option cdata!
 					xtxt1._cdata =
@@ -3018,13 +3016,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		int obligation;
 		switch (obligation = xtxt1.minOccurs()) {
-			case XOccurrence.IGNORE: //ignore
+			case XOccurrence.IGNORE: // ignore
 				_data = null;
 				_parseResult = null;
 				_xdata = null;
 				_xPos = xPos;
 				return true;
-			case XOccurrence.ILLEGAL: //illegal
+			case XOccurrence.ILLEGAL: // illegal
 				if (value.length() == 0) {
 					_xdata = null;
 					_xPos = xPos;
@@ -3055,7 +3053,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_data = null;
 					_parseResult = null;
 					debugXPos(XDDebug.ONFALSE);
-					if (xtxt1._onFalse >= 0) {//value not exist
+					if (xtxt1._onFalse >= 0) {// value not exist
 						_elemValue = _element;
 						exec(xtxt1._onFalse, (byte) 'T');
 						copyTemporaryReports();
@@ -3076,7 +3074,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							}
 						}
 						if (_parseResult.matches()) {
-							clearTemporaryReporter(); //clear all error reports
+							clearTemporaryReporter(); // clear all error reports
 							if (_xComponent != null) {
 								_xComponent.xSetText(this, _parseResult);
 							}
@@ -3110,11 +3108,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						}
 					}
 				}
-				if (_data != null && !_data.equals(value)) {
-					value = textWhitespaces(xtxt1, _data);
-				} else {
-					value = _data;
-				}
+				value = _data != null && !_data.equals(value)
+					? textWhitespaces(xtxt1, _data) : _data;
 				if (value != null) {
 					debugXPos(XDDebug.FINALLY);
 					if (xtxt1._finaly >= 0) {
@@ -3155,22 +3150,20 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
-	 * @return <tt>true</tt> if Comment node is compliant with definition.
+	 * @return <tt>true</tt> if Comment node is compliant with X-definition.
 	 */
-	public final boolean addComment(final String data) {
-		return true; //TODO
-	}
+	//TODO
+	public final boolean addComment(final String data) {return true;}
 
 	@Override
 	/** Add new Processing instruction node to current element.
 	 * @param name The name of the PI node.
-	 * @param data The value of instruction part of the PI node.
+	 * @param X The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if PI node is compliant with definition.
+	 * @return <tt>true</tt> if PI node is compliant with X-definition.
 	 */
-	public final boolean addPI(final String name, final String data) {
-		return true; //TODO
-	}
+	//TODO
+	public final boolean addPI(final String name, final String x) {return true;}
 
 	@Override
 	/** Get text value of this node.
@@ -3205,8 +3198,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	@Override
 	public final short getItemId() {
-		return _mode == 'T' ? XX_TEXT :
-			_mode == 'A'? XX_ATTR : XX_ELEMENT;
+		return _mode == 'T' ? XX_TEXT : _mode == 'A'? XX_ATTR : XX_ELEMENT;
 	}
 
 	@Override
@@ -3245,7 +3237,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			return null; //attribute is defined but not exists
 		} else if (xel.hasOtherAttrs()) {
-			//If definition has a VARIABLE_PART makes no sense to check it more.
+			//If X-definition has a VARIABLE_PART it makes no sense
+			//to check it more.
 			return null;
 		}
 		//Attempt to get undeclared item
@@ -3295,20 +3288,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param ndx index where to start.
 	 */
 	final void updateCounters(final int[] cc, final int ndx) {
-		if (cc != null) { //update counters.
+		if (cc != null) { // update counters.
 			int len = cc.length + ndx - 1;
 			for (int x = 0, y = ndx + 1; y < len; y++, x++) {
 				_counters[y] += cc[x];
 			}
-		}
-	}
-
-	/** Execute init section if specified in selector. */
-	final void execInit() {
-		debugXPos(XDDebug.INIT);
-		if (_xElement._init >= 0) {
-			exec(_xElement._init, (byte) 'E');
-			copyTemporaryReports();
 		}
 	}
 
@@ -3322,7 +3306,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 *	to complete XPath identifier.
 	 */
 	private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
-		if(xPosOccur != null) { //never should happen!!
+		if(xPosOccur != null) { // never should happen!!
 			XPosInfo xPathInfo;
 			if ((xPathInfo = xPosOccur.get(xPath)) == null) {
 				// first occurrence of the xPath
@@ -3357,8 +3341,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private static final class XPosInfo {
 		/** Field to count the amount of the same XPaths. */
 		private int _counter;
-		/* Other values/fields can be added to this class. */
-		// private Object _o;
 
 		/** Creates info object in case of first occurrence of this XPath
 		 * in the input XML source.

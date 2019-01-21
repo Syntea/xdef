@@ -81,7 +81,7 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
-"<xd:def xmlns:xd = 'http://www.syntea.cz/xdef/2.0' name = 'a' root = 'foo'"+
+"<xd:def xmlns:xd='" + _xdNS + "' name = 'a' root = 'foo'"+
 "   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
@@ -222,7 +222,7 @@ public final class TestXdefOfXdef extends XDTester {
 				xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
-"    external method boolean test.xdef.TestXSTypes.kp(XXNode, XDValue[]);"+
+"    external method boolean test.xdef.TestTypes.kp(XXNode, XDValue[]);"+
 "  </xd:declaration>\n"+
 "  <a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");

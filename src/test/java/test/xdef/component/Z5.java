@@ -9,7 +9,7 @@ public class Z5 implements org.xdef.component.XComponent{
   public void setNazevFirmy(String x) {_NazevFirmy = x;}
   public void setIC(Integer x) {_IC = x;}
   public void setSidlo(Z9 x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Sidlo", null, "SouborD1A#Firma/Sidlo");
     _Sidlo = x;
   }
@@ -51,13 +51,13 @@ public class Z5 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNazevFirmy() != null)
       el.setAttribute("NazevFirmy", getNazevFirmy());
@@ -89,7 +89,7 @@ public class Z5 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"4938D1BE66E12B4C269ECE167D90C9E0".equals(
+    if (!"321D7EC35C80E460E3E13214D0933D17".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

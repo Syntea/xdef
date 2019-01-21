@@ -5,7 +5,7 @@ package test.xdef.component;
 public class Y16 implements org.xdef.component.XComponent{
   public Y16a getx$b() {return _x$b;}
   public void setx$b(Y16a x) {
-    if (x != null && x.xGetXPos() == null)
+    if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "x:b", "x.int", "Y16#a/x:b");
     _x$b = x;
   }
@@ -45,13 +45,13 @@ public class Y16 implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -79,7 +79,7 @@ public class Y16 implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B01AFD52C22C744DF688A018D101EA11".equals(
+    if (!"8922621966B094A534B8ED771AF71F51".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

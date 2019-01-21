@@ -5,11 +5,12 @@ package test.xdef.component;
 public class Z implements org.xdef.component.XComponent{
   public java.util.List<Z1> listOfZaznamPDN() {return _ZaznamPDN;}
   public void addZaznamPDN(Z1 x) {
-    if (x != null) {
-        if (x.xGetXPos() == null)
+    if (x!=null) {
+        if (x.xGetXPos()==null)
           x.xInit(this, "ZaznamPDN", null, "SouborD1A#SouborD1A/ZaznamPDN");
       _ZaznamPDN.add(x);
     }
+
   }
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -47,13 +48,13 @@ public class Z implements org.xdef.component.XComponent{
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
     org.w3c.dom.Element el;
-    if (doc == null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null);
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
       el = doc.getDocumentElement();
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement() == null) doc.appendChild(el);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
@@ -81,7 +82,7 @@ public class Z implements org.xdef.component.XComponent{
     XD_XPos=xx.getXPos();
     XD_Model=xx.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"E7D45C4E1FE70AD909D0D85CBE4357D0".equals(
+    if (!"8E9D9F55CD197E7613DECDA78521064B".equals(
       xx.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);

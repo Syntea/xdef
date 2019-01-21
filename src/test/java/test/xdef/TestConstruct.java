@@ -1,7 +1,6 @@
 package test.xdef;
 
 import test.utils.XDTester;
-import org.xdef.sys.Report;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.proc.XXElement;
@@ -15,10 +14,6 @@ public final class TestConstruct extends XDTester {
 
 	@Override
 	public void test() {
-		Report.setLanguage("en"); //localize
-		System.getProperties().setProperty("xdef.warnings", "true");
-		System.getProperties().setProperty("xdef.extmode", "new");
-		System.getProperties().setProperty("xdef.debug", "false");
 		XDPool xp;
 		XDDocument xd;
 		String xdef;

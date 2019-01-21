@@ -247,7 +247,7 @@ public interface SYS {
 	public static final long SYS830 = 953221237L;
 	/** Not implemented&amp;{0}{: } */
 	public static final long SYS901 = 953221238L;
-	/** Messages for basic messages of the cz.syntea.xdef package */
+	/** System messages of X-definitions */
 	public static final long SYS_DESCRIPTION = 953221239L;
 	/** English */
 	public static final long SYS_LANGUAGE = 953221240L;

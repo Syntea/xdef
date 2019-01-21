@@ -85,44 +85,67 @@ public final class XDFactory {
 		return result;
 	}
 
+	/** Set object from parameter to be prepared for compiling.
+	 * @param b Instance of XDBuilder.
+	 * @param param Object to be analyzed for compiling.
+	 */
 	private static void setParam(final XDBuilder b, final Object param) {
 		if (param == null) {
 			return;
 		}
+		if (param instanceof Object[][]) {
+			Object[][] x = (Object[][]) param;
+			for (Object[] y : x) {
+				setParam(b, y);
+			}
+			return;
+		}
 		if (param instanceof Object[]) {
 			Object[] x = (Object[]) param;
-			if (x.length == 2
-				&& x[0] instanceof Object[] && x[1] instanceof String[]) {
-				Object[] x1 = (Object[]) x[0];
-				String[] x2 = (String[]) x[1];
-				boolean ids = true;
-				for (int i = 0; i < x1.length; i++) {
-					Object y =  x1[i];
-					if (y instanceof String) {
-						 if (((String) y).charAt(0) != '<') {
+			if (x.length >  0 && x[0] instanceof Object[][]) {
+				setParam(b, (Object[][]) x[0]);
+				for (int i = 1; i < x.length; i++) {
+					setParam(b, x[i]);
+				}
+				return;
+			}
+			if (x.length == 2) {
+				if (x[0] instanceof InputStream && x[1] instanceof String) {
+					b.setSource((InputStream) x[0], (String) x[1]);
+					return;
+				}
+				if (x[0] instanceof Object[] && x[1] instanceof String[]) {
+					Object[] x1 = (Object[]) x[0];
+					String[] x2 = (String[]) x[1];
+					boolean ids = true;
+					for (int i = 0; i < x1.length; i++) {
+						Object y =  x1[i];
+						if (y instanceof String) {
+							 if (((String) y).charAt(0) != '<') {
+								ids = false;
+								break;
+							}
+						} else if (!(y instanceof InputStream)) {
 							ids = false;
 							break;
 						}
-					} else if (!(y instanceof InputStream)) {
-						ids = false;
-						break;
-					}
-					String s =  x2[i];
-					if (s == null || s.charAt(0) == '<') {
-						ids = false;
-						break;
-					}
-				}
-				if (ids) {
-					// input data and source names
-					for (int i = 0; i < x1.length; i++) {
-						if (x1[i] instanceof String) {
-							b.setSource((String) x1[i], x2[i]);
-						} else {
-							b.setSource((InputStream) x1[i], x2[i]);
+						String s =  x2[i];
+						if (s == null || s.charAt(0) == '<') {
+							ids = false;
+							break;
 						}
 					}
-					return;
+					if (ids) {
+						// input data and source names
+						for (int i = 0; i < x1.length; i++) {
+							if (x1[i] instanceof String) {
+								b.setSource((String) x1[i], x2[i]);
+							} else {
+								b.setSource((InputStream) x1[i], x2[i]);
+							}
+						}
+						return;
+					}
 				}
 			}
 			for (Object o : x) {

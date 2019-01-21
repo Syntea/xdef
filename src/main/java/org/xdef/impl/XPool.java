@@ -46,12 +46,17 @@ import java.io.Serializable;
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool, Serializable {
+	/** The namespace URI for X-definition instance (version 2.0; deprecated).*/
+	public static final String XDEF20_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/2.0/instance";
+	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
+	public static final String XDEF31_INSTANCE_NS_URI =
+		"http://www.syntea.cz/xdef/instance";
 
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -4736745770531753457L;
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
-
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
@@ -77,14 +82,6 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _ignoreUnresolvedExternals;
 	/** Switch if location details will be generated.*/
 	private boolean _locationdetails;
-	/** Global variables description block.*/
-	// valid date parameters
-	/** Maximal accepted value of the year.*/
-	private int _maxYear;
-	/** Minimal accepted value of the year.*/
-	private int _minYear;
-	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
-	private SDatetime _specialDates[];
 	/** External objects.*/
 	private Class<?>[] _extClasses;
 	/** Properties.*/
@@ -115,7 +112,6 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-
 	/** Thesaurus of terms in different languages.*/
 	Thesaurus _thesaurus = null;
 	/** Reporter writer.*/
@@ -127,6 +123,14 @@ public final class XPool implements XDPool, Serializable {
 	Map<String, XDefinition> _xdefs;
 	/** Table of source objects.*/
 	private XDSourceInfo _sourceInfo;
+	
+	// valid date parameters
+	/** Maximal accepted value of the year.*/
+	private int _maxYear;
+	/** Minimal accepted value of the year.*/
+	private int _minYear;
+	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
+	private SDatetime _specialDates[];
 
 	private XPool() {
 		_xdefs = new TreeMap<String, XDefinition>();
@@ -164,8 +168,7 @@ public final class XPool implements XDPool, Serializable {
 		_debugEditor = _props.getProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR);
 		_xdefEditor = _props.getProperty(XDConstants.XDPROPERTY_XDEF_EDITOR);
 		//set DOCTYPE illegal
-		_illegalDoctype =
-			readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
+		_illegalDoctype = readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
@@ -192,8 +195,7 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE,
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE},
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE) == 0;
-		_resolveIncludes =
-			readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
+		_resolveIncludes = readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0;
@@ -201,7 +203,7 @@ public final class XPool implements XDPool, Serializable {
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
 		_compiler = new CompileXDPool(this,
-			_reporter!= null ? _reporter : new ArrayReporter(),
+			_reporter != null ? _reporter : new ArrayReporter(),
 			_extClasses,
 			_xdefs);
 	}
@@ -309,7 +311,7 @@ public final class XPool implements XDPool, Serializable {
 						sid = source.substring(1, source.length()-2) + "def";
 					}
 					if (src != null) { // Generate a X-definition from XML
-						src = KXmlUtils.nodeToString(GenXDef.genXdef(src), true);
+						src = KXmlUtils.nodeToString(GenXDef.genXdef(src),true);
 						setSource(src, sid);
 						return;
 					}
@@ -610,7 +612,7 @@ public final class XPool implements XDPool, Serializable {
 	/** Set list of XComponent binds.
 	 * @param p list of XComponents binds.
 	 */
-	public final void setXComponentBinds(final Map<String, String> p){
+	public final void setXComponentBinds(final Map<String, String> p) {
 		_binds = p;
 	}
 
@@ -695,8 +697,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return XMVariable object of the global variable or <tt>null</tt>.
 	 */
 	final XVariable getVariable(final String name) {
-		return _variables != null
-			? (XVariable) _variables.getVariable(name) : null;
+		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
 	}
 
 	/** Get X-definition of given name from the pool or nameless X-definition
@@ -705,8 +706,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return X-definition or <tt>null</tt> if definition doesn't exist.
 	 */
 	final XDefinition getDefinition(final String key) {
-		return (key == null || key.length() == 0)
-			? getDefinition() : _xdefs.get(key);
+		return (key==null || key.length()==0) ? getDefinition():_xdefs.get(key);
 	}
 
 	private static void checkModel(ArrayList<XElement> reflist,
@@ -754,9 +754,7 @@ public final class XPool implements XDPool, Serializable {
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
-	public final void setXComponentEnums(final Map<String, String> p){
-		_enums = p;
-	}
+	public final void setXComponentEnums(final Map<String, String> p){_enums=p;}
 
 	/** Get array with code of XDPool.
 	 * @return array with code of XDPool.
@@ -1232,17 +1230,6 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 		_sourceInfo.writeXDSourceInfo(xw);
-//		if (_sourceInfo.getMap().isEmpty()) {
-//			xw.writeInt(0);
-//		} else {
-//			Map<String, XDSourceItem> map = _sourceInfo.getMap();
-//			len = map.size();
-//			xw.writeInt(len);
-//			for (Map.Entry<String, XDSourceItem> entry: map.entrySet()){
-//				xw.writeString(entry.getKey());
-//				entry.getValue().writeXDSourceItem(xw);
-//			}
-//		}
 		if (_debugInfo == null) {
 			xw.writeString(null);
 		} else {
@@ -1254,8 +1241,7 @@ public final class XPool implements XDPool, Serializable {
 		gout.close();
 	}
 
-	private void writeObject(java.io.ObjectOutputStream out)
-		throws IOException {
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
 		writeXDPool(out);
 	}
 

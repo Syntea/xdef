@@ -38,7 +38,7 @@ public class M implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return -1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    if (doc == null) {
+    if (doc==null) {
       return org.xdef.xml.KXmlUtils.parseXml(XD_Any)
         .getDocumentElement();
     } else {

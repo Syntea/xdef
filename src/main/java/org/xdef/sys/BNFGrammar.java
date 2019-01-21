@@ -18,14 +18,14 @@ import java.util.TreeMap;
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
  * see:
- * <p>{@link cz.syntea.xdef.sys.BNFGrammar#compile(BNFGrammar, String,
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, String,
 		ReportWriter)}</p> or
- * <p>{@link cz.syntea.xdef.sys.BNFGrammar#compile(BNFGrammar, File,
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, File,
 		ReportWriter)}</p> or
- * <p>{@link cz.syntea.xdef.sys.BNFGrammar#compile(BNFGrammar, URL,
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, URL,
 		ReportWriter)}</p>.
  * <p>With the created BNFGrammar object you can parse data by method
- * {@link cz.syntea.xdef.sys.BNFGrammar#parse(StringParser, String)}</p>
+ * {@link org.xdef.sys.BNFGrammar#parse(StringParser, String)}</p>
  * @author Vaclav Trojan
  */
 public final class BNFGrammar {
@@ -2429,7 +2429,7 @@ public final class BNFGrammar {
 					//Undefined external method '&{0}'
 					error(BNF015, method.getMethodName());
 				} else if (method._method.toString().contains(
-					"boolean cz.syntea.xdef.sys.BNFGrammar.dummy(")) {
+					"boolean org.xdef.sys.BNFGrammar.dummy(")) {
 					s = method.getMethodName();
 					if (s.charAt(0) != '$') {
 						error(BNF015, '$' + s);

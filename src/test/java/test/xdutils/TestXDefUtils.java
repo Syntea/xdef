@@ -1,7 +1,6 @@
 package test.xdutils;
 
 import org.xdef.sys.FUtils;
-import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenCollection;
 import org.w3c.dom.Element;
@@ -22,7 +21,6 @@ public class TestXDefUtils extends XDTester {
 			fail("Temporary directory is missing, test canceled");
 			return;
 		}
-		Report.setLanguage("en"); //localize
 		try {
 			String outFile = tempDir + "collection.xml";
 			GenCollection.main(new String[] {

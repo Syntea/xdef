@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import org.xdef.sys.ReportWriter;
 
-/** *  Provides building of {@link org.xdef.XDPool}. This object you need to
+/** Provides building of {@link org.xdef.XDPool}. This object you need to
  * use only in special case you want to make incremental building of
  * {@link org.xdef.XDPool}. In most of cases you can create
  * {@link org.xdef.XDPool} with static methods of
@@ -103,7 +103,7 @@ public interface XDBuilder {
 	/** Set reporter. This method is should be used only for incremental
 	 * message reporting. The reporter must be set before setting sources.
 	 * @param reporter the reporter to be set to this builder.
-	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
+	 * @deprecated please use XDFactrory.getXDBuilder(ReportWriter, Properties)
 	 */
 	public void setReporter(ReportWriter reporter);
 

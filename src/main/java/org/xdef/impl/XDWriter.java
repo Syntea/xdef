@@ -208,6 +208,7 @@ public final class XDWriter extends SObjectWriter {
 						writeLength(keys.length);
 						for (CodeUniqueset.ParseItem key : keys) {
 							writeString(key.getParseName());
+							writeString(key.getDeclaredTypeName());
 							writeInt(key.getParseMethodAddr());
 							writeShort(key.getParsedType());
 							writeBoolean(key.isOptional());

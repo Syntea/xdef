@@ -17,11 +17,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** Provides tools for generation Java class source registered table and for
- * report tables.
+/** Generates Java class source with registered report tables.
  * @author Vaclav Trojan
  */
 public class RegisterReportTables {
+
+	/** Platform-dependent new line. */
+	private static final String NL = /**" \n"; /**/ String.format("%n"); /**/
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
@@ -48,7 +50,7 @@ public class RegisterReportTables {
 	 * letters. Messages for the specific language and prefix must be stored to
 	 * the separate file.
 	 * The report files must be available in the package
-	 * <tt>cz.syntea.xdef.msg</tt>.
+	 * <tt>org.xdef.msg</tt>.
 	 * <p>The file name must be composed by following way:</p>
 	 * <tt>prefix_ccc.xml</tt>
 	 * <p>where prefix must be followed by the character
@@ -86,12 +88,12 @@ public class RegisterReportTables {
 	 *
 	 * <p>Example:</p>
 	 * <p>The report tables are searched by report manager in the package
-	 * <tt>cz.syntea.xdef.msg</tt>. For each prefix should exist a class
+	 * <tt>org.xdef.msg</tt>. For each prefix should exist a class
 	 * with the name equal to the report prefix. This class may be empty, it
 	 * just helps to find report files by class loader.</p>
 	 * <p><b>example:</b></p>
 	 * <pre><code>
-	 * package cz.syntea.xdef.msg;
+	 * package org.xdef.msg;
 	 * public final class MYAPP {}
 	 * </code></pre>
 	 * The report can be created by the following command:
@@ -551,7 +553,7 @@ public class RegisterReportTables {
 	/** Generate Java source with the interface of registered IDs.
 	 * @param table report table.
 	 * @param dir directory where java source is stored.
-	 * @param pckg name of package or <tt>null</tt> (i.e. cz.syntea.xdef.msg).
+	 * @param pckg name of package or <tt>null</tt> (i.e. org.xdef.msg).
 	 * @param encoding character encoding of source file or <tt>null</tt> (then
 	 * the system encoding is used).
 	 * @param reporter where error reports are written.
@@ -569,26 +571,21 @@ public class RegisterReportTables {
 		fname += prefix + ".java";
 		File f = new File(fname);
 		try {
-			OutputStreamWriter out;
-			if (encoding != null) {
-				out = new OutputStreamWriter(new FileOutputStream(f), encoding);
-			} else {
-				out = new OutputStreamWriter(new FileOutputStream(f));
-			}
-			Properties msgs = table.getReports();
+			OutputStreamWriter out = new OutputStreamWriter(
+				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
 			out.write(
-"// This file was generated automatically, DO NOT modify it!\n"+
-"package " + (pckg == null ? "cz.syntea.xdef.msg" : pckg) + ";\n"+
-"\n"+
-"/** Registered identifiers of reports with the prefix " + prefix + ". */\n"+
-"public interface " + prefix + " {\n"+
-"\t/** Prefix of reports. */\n"+
+"// This file was generated automatically, DO NOT modify it!"+NL+
+"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+NL+
+NL+
+"/** Registered identifiers of reports with the prefix " + prefix + ". */"+NL+
+"public interface " + prefix + " {"+NL+
+"\t/** Prefix of reports. */"+NL+
 "\tstatic final String " + table.getPrefix() +
-	"_PREFIX = \"" + table.getPrefix() + "\";\n"+
-"\t/** Default language. */\n"+
+	"_PREFIX = \"" + table.getPrefix() + "\";"+NL+
+"\t/** Default language. */"+NL+
 "\tstatic final String " + prefix +
-	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";\n"+
-"\t/** List of supported languages or registred message tables. */\n"+
+	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";"+NL+
+"\t/** List of supported languages or registred message tables. */"+NL+
 "\tstatic final String[] " + prefix + "_LANGUAGES = {");
 			String xx[] = table.getLanguages();
 			for (int i = 0; i < xx.length; i++) {
@@ -597,7 +594,7 @@ public class RegisterReportTables {
 					 out.write(", ");
 				 }
 			}
-			out.write("};\n");
+			out.write("};"+NL);
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
 				String s = table.getReportText(id);
@@ -606,16 +603,16 @@ public class RegisterReportTables {
 					s = s.replace("<", "&lt;");
 					s = s.replace(">", "&gt;");
 					s = s.replace("*/", "*&#47;");
-					out.write("\t/** " + s + " */\n");
+					out.write("\t/** " + s + " */"+NL);
 				}
 				long regID = ReportTable.getRegisteredReportId(table, i);
 				out.write(
-"\tpublic static final long " + id + " = " + regID + "L;\n");
+"\tpublic static final long " + id + " = " + regID + "L;"+NL);
 			}
 			out.write("}");
 			out.close();
 		} catch (Exception ex) {
-			reporter.write("E SYS036 Program exception: "+ex.getMessage()+'\n');
+			reporter.write("E SYS036 Program exception: "+ex.getMessage()+NL);
 		}
 	}
 
@@ -623,7 +620,7 @@ public class RegisterReportTables {
 	 * @param table report table.
 	 * @param dir output directory where generated source will be written.
 	 * @param pckg name of Java package or <tt>null</tt>. If the parameter is
-	 * <tt>null</tt> it is used the default value "cz.syntea.xdef.msg").
+	 * <tt>null</tt> it is used the default value "org.xdef.msg").
 	 * @param encoding character set encoding of output file or <tt>null</tt>.
 	 * If the argument is <tt>null</tt> it is used the default system character
 	 * set from Java VM.
@@ -642,7 +639,7 @@ public class RegisterReportTables {
 			reporter.write("E SYS220 |Default report table is incorrect;"
 				+ " localized table:  " +
 				(registeredTable == null ?
-					"null" : registeredTable.getTableName()) + ")\n");
+					"null" : registeredTable.getTableName()) + ")"+NL);
 			return;
 		}
 		if (table == registeredTable) {
@@ -662,7 +659,7 @@ public class RegisterReportTables {
 						reporter.write("E SYS221 Report "
 							+ prefix  + key
 							+ " is missing in the default"+table.getTableName()
-							+ "\n");
+							+ NL);
 					}
 				}
 				for (String key: registeredTable._ids) {
@@ -670,7 +667,7 @@ public class RegisterReportTables {
 					if (text == null) {
 						reporter.write("E SYS225 Report " + prefix+key
 							+ " is missing in the default"+table.getTableName()
-							+ "\n");
+							+ NL);
 					}
 				}
 			}
@@ -682,7 +679,7 @@ public class RegisterReportTables {
 					if (p1 == null) {
 						reporter.write("E SYS212 Unclosed parameter in the text"
 							+ " of report " + prefix+id
-							+ " table " + table.getTableName() + "\n");
+							+ " table " + table.getTableName() + NL);
 						p1 =  new String[0];
 					}
 					if (table != registeredTable) { //not default table
@@ -696,7 +693,7 @@ public class RegisterReportTables {
 									reporter.write("E SYS217 Parameters in"
 										+ " tables " + table.getTableName()
 										+ " and "+registeredTable.getTableName()
-										+ "differs, report " + id + "\n");
+										+ "differs, report " + id + NL);
 									break;
 								}
 							}
@@ -704,7 +701,7 @@ public class RegisterReportTables {
 							reporter.write("E SYS217 Parameters in tables "
 								+ table.getTableName()
 								+ " and " + registeredTable.getTableName()
-								+ " report " + id + "\n");
+								+ " report " + id + NL);
 						}
 					}
 				}
@@ -712,7 +709,7 @@ public class RegisterReportTables {
 		} catch (Exception ex) {
 			String msg = ex.getMessage();
 			if (!reporter.toString().isEmpty()) {
-				msg = (msg != null ? msg + "\n" : "") + reporter.toString();
+				msg = (msg != null ? msg + NL : "") + reporter.toString();
 			}
 			throw new RuntimeException(msg, ex);
 		}
@@ -1000,7 +997,7 @@ public class RegisterReportTables {
 	 * <p>-o the directory where Java source with report tables
 	 * are generated</p>
 	 * <p>-p package name where tables will be generated. Default value is
-	 * "cz.syntea.xdef.msg"</p>
+	 * "org.xdef.msg"</p>
 	 * <p>-r: generate interface with registered identifiers of given
 	 * table from input.</p>
 	 *<p>-c encoding: character set name of output file (default is the
@@ -1012,22 +1009,20 @@ public class RegisterReportTables {
 		final String HDRMSG =
 "RegisterReportTables - generator of registered report tables.\n"+
 "Parameters: source -i input -o outDir [-p package] [-c encoding] [-r]\n"+
-"where:"+
-"-i input pathname(s) of property file(s) with report texts (the" +
-"   file name may contain wildcard characters)."+
+"where:\n"+
+"-i input pathname(s) of property file(s) with report texts (the file name\n"+
+"   may contain wildcard characters).\n"+
 "-o the directory where Java source with report tables are generated\n"+
-"-p package name of generated tables. Default value: \"cz.syntea.xdef.msg\"\n"+
-"-r: generate interface with registered identifiers of input source tables.\n"+
-"-c endoding: character set name of output file (default is system charset).\n"+
+"-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
+"-c endoding: character set name of output file (default is UTF-8).\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Missing parameters.\n\n"+ HDRMSG);
+			throw new RuntimeException("Missing parameters.\n\n" + HDRMSG);
 		}
 		String[] files = null;
 		String pckg = null;
 		String encoding = null;
 		File outDir = null;
-		boolean register = false;
 		int len = args.length - 1;
 		StringWriter errWriter = new StringWriter();
 		PrintWriter errors = new PrintWriter(errWriter);
@@ -1097,8 +1092,8 @@ public class RegisterReportTables {
 							continue;
 						case 'c':
 							if (encoding != null) {
-								errors.println(
-									"Duplicated parameter -c: " + args[i]);
+								errors.println("Duplicated parameter -c: "
+									+ args[i]);
 							}
 							if (args[i].length() > 2) {
 								encoding = args[i].substring(2);
@@ -1106,8 +1101,7 @@ public class RegisterReportTables {
 								if (++i <= len && !args[i].startsWith("-")) {
 									encoding = args[i];
 								} else {
-									errors.println(
-										"Missing encoding parameter");
+									errors.println("Missing encoding");
 								}
 							}
 							continue;
@@ -1122,18 +1116,12 @@ public class RegisterReportTables {
 								if (++i <= len && !args[i].startsWith("-")) {
 									pckg = args[i];
 								} else {
-									errors.println("Missing package parameter");
+									errors.println("Missing package name");
 								}
 							}
 							continue;
-						case 'r':
-							if (register) {
-								errors.println("Duplicated parameter -r");
-							}
-							register = true;
-							continue;
 						default:
-							errors.println("Unknown switch name: " + args[i]);
+							errors.println("Unknown switch: " + args[i]);
 					}
 				}
 			}
@@ -1148,7 +1136,7 @@ public class RegisterReportTables {
 		}
 		errors.close();
 		if (!errWriter.toString().isEmpty()) {
-			throw new RuntimeException(errWriter.toString() + "\n" + HDRMSG);
+			throw new RuntimeException(errWriter.toString() + NL + HDRMSG);
 		}
 		ReportTableImpl[] msgTables = (ReportTableImpl[])readReporTables(files);
 		if (msgTables != null) {
