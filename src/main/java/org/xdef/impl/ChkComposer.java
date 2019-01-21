@@ -30,8 +30,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDValueID;
 
-/** Creating the DOM tree from given element and the X-definition. This code is
- * nasty, should be written better.
+/** Constructs XML object according to X-definition.
+ *  This code is nasty code in some parts, should be written better!
  * @author Vaclav Trojan
  */
 final class ChkComposer extends SReporter implements XDValueID {
@@ -706,7 +706,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		// create attributes
 		String xpos = chkElem._xPos;
 		if (chkElem._parent._parent != null) { // not root
-			chkElem.execInit();
+			chkElem.initElem();
 		}
 		XData[] xattrs = xel.getXDAttrs();
 		chkElem.setXXType((byte) 'A');
@@ -1016,7 +1016,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							chkEl._element.replaceChild(
 								result.getElement(), el);
 							childChkEl._sourceElem = chkEl._sourceElem;
-							childChkEl.execInit();
+							childChkEl.initElem();
 							childChkEl.addElement();
 						} else if (result.getItemId() == XD_RESULTSET) {
 							XDResultSet it = (XDResultSet) result;
@@ -1032,7 +1032,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 									if (item.getItemId() == XD_RESULTSET) {
 										chkEl._iterator=(XDResultSet)result;
 									}
-									childChkEl.execInit();
+									childChkEl.initElem();
 									chkEl._element.insertBefore(node, el);
 									chkEl.incRefNum();
 								}
@@ -1054,7 +1054,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 									Node node = doc.importNode(
 										dc.getXDItem(j).getElement(),
 										true);
-									childChkEl.execInit();
+									childChkEl.initElem();
 									chkEl._element.insertBefore(node, el);
 									addr = childChkEl._xElement._onStartElement;
 									childChkEl.debugXPos(
@@ -1094,7 +1094,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 							if (text != null && text.length() > 0) {
 								Element el = stringToElement(childChkEl, text);
 								childChkEl.setElemValue(el);
-//								childChkEl.execInit();
 								createElement(childChkEl, el);
 							} else {//empty string is no value!
 								childChkEl.updateElement(null);
@@ -1103,7 +1102,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 							for (int j = 0;;) {
 								if (j < childChkEl._xElement.maxOccurs() &&
 									result != null && result.booleanValue()) {
-//									childChkEl.execInit();
 									createElement(childChkEl ,null);
 									if (childChkEl._xElement == null ||
 										++j>=childChkEl._xElement.maxOccurs()){

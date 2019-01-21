@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
+import static test.utils.XDTester._xdNS;
 
 /** Test of x-definition composition mode.
  * @author Vaclav Trojan
@@ -2606,6 +2607,32 @@ final public class TestCompose extends XDTester {
 			xml = "<a><c/></a>";
 			xd.setXDContext(xml);
 			assertEq(xml, create(xd, "a", reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try { // test initialization of var section
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
+"  <a xd:script=\"var int i; init i = 2;\"\n" +
+"     b=\"optional int(); create '' + i;\" />\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a b='2'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			assertEq(xml, create(xp, "", "a", reporter, null));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
+"  <a>\n" +
+"    <a xd:script=\"var int i; init i = 2;\"\n" +
+"       b=\"optional int(); create  '' + i;\" />\n" +
+"  </a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a><a b='2'/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			assertEq(xml, create(xp, "", "a", reporter, null));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 

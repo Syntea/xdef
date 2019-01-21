@@ -37,9 +37,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Class ChkElement object contains data from validation of X-definition or it
- * can be used as base for construction of XML objects according to a
- * X-definition. This code is nasty, should be written better.
+/** Provides validation of input data or it can be used as base for construction
+ * of XML objects according to a X-definition.
+ *  This code is nasty code in some parts, should be written better!
  * @author Vaclav Trojan
  */
 public final class ChkElement extends ChkNode implements XXElement, XXData {
@@ -3293,15 +3293,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			for (int x = 0, y = ndx + 1; y < len; y++, x++) {
 				_counters[y] += cc[x];
 			}
-		}
-	}
-
-	/** Execute init section if specified in selector. */
-	final void execInit() {
-		debugXPos(XDDebug.INIT);
-		if (_xElement._init >= 0) {
-			exec(_xElement._init, (byte) 'E');
-			copyTemporaryReports();
 		}
 	}
 
