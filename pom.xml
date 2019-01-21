@@ -8,7 +8,7 @@
 	
 	<groupId>org.xdef</groupId>
 	<artifactId>xdef-core</artifactId>
-	<version>3.2.1.1</version><!-- when changed, change also ./properties/release.date, see below -->
+	<version>3.2.1.2</version><!-- when changed, change also ./properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
 	<name>xdef-core</name>
@@ -16,7 +16,7 @@
 	<description>X-Definitions 3.2 (Open Source Software)</description>
 	
 	<properties>
-		<release.date>2018-11-14</release.date>
+		<release.date>2019-01-21</release.date>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
@@ -32,7 +32,7 @@
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.2.3</logback.version>
 		<logback-testng.version>1.0.0</logback-testng.version>
-<!-- <testng.version>6.14.3</testng.version> -->
+        <!-- <testng.version>6.14.3</testng.version> -->
 		<testng.version>6.8.21</testng.version>
 	</properties>
 	
