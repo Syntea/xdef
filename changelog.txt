@@ -2,7 +2,7 @@
 =================== 
 - corrected backward compatibility of the validation type declaration in
  the X-definition version 2.0 (the keyword "parse:")
-- corrected the bug if the missing elementin the model is followd by
+- corrected the bug if the missing element in the model is followed by
   optional elements which are also missing.
 - corrected the bug in construction mode. It was not invoked the
   initialization section in the section "var" in the X-script of 

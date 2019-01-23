@@ -585,7 +585,7 @@ NL+
 "\t/** Default language. */"+NL+
 "\tstatic final String " + prefix +
 	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";"+NL+
-"\t/** List of supported languages or registred message tables. */"+NL+
+"\t/** List of supported languages in the registered message tables. */"+NL+
 "\tstatic final String[] " + prefix + "_LANGUAGES = {");
 			String xx[] = table.getLanguages();
 			for (int i = 0; i < xx.length; i++) {

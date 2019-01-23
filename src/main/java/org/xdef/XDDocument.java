@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
  * XDDocument is the root node of processing and it is the extension of
  * the interface {@link org.xdef.proc.XXNode}. You can read of or set to
  *  variables of a XDPool by methods of {@link org.xdef.proc.XXNode}:
- * <p>{@link org.xdef.xdef.proc.XXNode#getVariable(String)},
+ * <p>{@link org.xdef.proc.XXNode#getVariable(String)},
  * {@link org.xdef.proc.XXNode#setVariable(String, Object)},
  * {@link org.xdef.proc.XXNode#setUserObject(Object)},
  * {@link org.xdef.proc.XXNode#getUserObject()},

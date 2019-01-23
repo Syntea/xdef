@@ -7,7 +7,7 @@ public interface XML {
 	static final String XML_PREFIX = "XML";
 	/** Default language. */
 	static final String XML_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages or registred message tables. */
+	/** List of supported languages in the registered message tables. */
 	static final String[] XML_LANGUAGES = {"ces", "eng", "slk"};
 	/** Unexpected end of source&amp;{#SYS000} */
 	public static final long XML005 = 1170407424L;

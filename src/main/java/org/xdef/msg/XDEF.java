@@ -7,9 +7,9 @@ public interface XDEF {
 	static final String XDEF_PREFIX = "XDEF";
 	/** Default language. */
 	static final String XDEF_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages or registred message tables. */
+	/** List of supported languages in the registered message tables. */
 	static final String[] XDEF_LANGUAGES = {"ces", "eng", "slk"};
-	/** Can'create root element */
+	/** Can't create root element */
 	public static final long XDEF103 = 31159025664L;
 	/** Name of model expected&amp;{#SYS000} */
 	public static final long XDEF104 = 31159025665L;
@@ -89,7 +89,7 @@ public interface XDEF {
 	public static final long XDEF219 = 31159025702L;
 	/** Qualified method name expected&amp;{#SYS000} */
 	public static final long XDEF220 = 31159025703L;
-	/** Attribute "scope" in selfstanding declaration section can be only "global" */
+	/** Attribute "scope" in the detached declaration section can be only "global" */
 	public static final long XDEF221 = 31159025704L;
 	/** After XDValue[] parameter can't follow other parameter&amp;{#SYS000} */
 	public static final long XDEF223 = 31159025705L;
@@ -123,7 +123,7 @@ public interface XDEF {
 	public static final long XDEF237 = 31159025719L;
 	/** Ambiguous X-definition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
 	public static final long XDEF238 = 31159025720L;
-	/** Ambiguous X-definition: text node can´t follow provious text node&amp;{#SYS000} */
+	/** Ambiguous X-definition: text node can´t follow previous text node&amp;{#SYS000} */
 	public static final long XDEF239 = 31159025721L;
 	/** Attribute 'metaNamespace' must contain a valid URI&amp;{#SYS000} */
 	public static final long XDEF253 = 31159025722L;
@@ -447,7 +447,7 @@ public interface XDEF {
 	public static final long XDEF501 = 31159025881L;
 	/** Element &amp;{0} is not defined as root&amp;{1}{ in X-definition }&amp;{#SYS000} */
 	public static final long XDEF502 = 31159025882L;
-	/** Element doesn't fit to match condition&amp;{#SYS000} */
+	/** Element does not fit to match condition&amp;{#SYS000} */
 	public static final long XDEF503 = 31159025883L;
 	/** Quoted string declaration expected&amp;{#SYS000} */
 	public static final long XDEF504 = 31159025884L;
@@ -611,7 +611,7 @@ public interface XDEF {
 	public static final long XDEF811 = 31159025963L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
 	public static final long XDEF812 = 31159025964L;
-	/** Value of '&amp;{0}' doesn't fit to '&amp;{1}'&amp;{#SYS000} */
+	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF813 = 31159025965L;
 	/** Length of value of '&amp;{0}' is too short&amp;{#SYS000} */
 	public static final long XDEF814 = 31159025966L;
@@ -635,7 +635,7 @@ public interface XDEF {
 	public static final long XDEF851 = 31159025975L;
 	/** No response from the external editor */
 	public static final long XDEF860 = 31159025976L;
-	/** In the external editor is aleady opened the other project */
+	/** In the external editor is already opened the other project */
 	public static final long XDEF861 = 31159025977L;
 	/** XDPool object was already built */
 	public static final long XDEF901 = 31159025978L;
