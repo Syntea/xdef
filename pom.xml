@@ -13,7 +13,7 @@
 	
 	<name>xdef-core</name>
 	<!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
-	<description>X-Definitions 3.2 (Open Source Software)</description>
+	<description>X-definition 3.2 (Open Source Software)</description>
 	
 	<properties>
 		<release.date>2019-01-21</release.date>
