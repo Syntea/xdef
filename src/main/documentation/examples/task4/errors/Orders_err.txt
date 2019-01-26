@@ -1,1 +1,0 @@
-E XDEF809: Incorrect value of 'int'; line=4; column=42; source="file:/D:/cvs/DEV/java/examples/task4/input/Orders_err.xml"; xpath=/Orders/Order[1]/Item[2]/@Quantity; X-position=Orders#Orders/Order/Item/@Quantity
