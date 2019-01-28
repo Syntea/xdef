@@ -169,7 +169,7 @@ public interface SYS {
 	public static final long SYS215 = 953221198L;
 	/** Incorrect message key: &amp;{0} */
 	public static final long SYS216 = 953221199L;
-	/** Parameters in tables &amp;{0} and &amp;{1} differs, report &amp;{2} */
+	/** Parameters in tables &amp;{0} and &amp;{1} differs, report: &amp;{2} */
 	public static final long SYS217 = 953221200L;
 	/** Unclosed parameter in the modification of report &amp;{0} */
 	public static final long SYS218 = 953221201L;
