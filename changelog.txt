@@ -8,3 +8,7 @@
   initialization section in the section "var" in the X-script of 
   an element model.
 
+previous versions
+======================
+- the previous vesrions were distributed by the site www.synntea.cz.
+  in this version were renamed the packages "cz.synte.xdef" to "org.xdef"

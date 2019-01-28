@@ -51,6 +51,8 @@ public class TestReport extends STester {
 		String s;
 		Report r;
 		ArrayReporter reporter = new ArrayReporter();
+		// test modification
+		assertEq("axzyb", Report.text("","a&{0}{&u&x}{y}b","&{0}z").toString());
 		try {
 			reporter.clear();
 			//XML075=XML chyba&{0}{: }&{#SYS000}

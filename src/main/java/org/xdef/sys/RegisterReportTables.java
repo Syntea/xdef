@@ -180,25 +180,19 @@ public class RegisterReportTables {
 		@Override
 		public boolean isRegistered() {return false;}
 
-	////////////////////////////////////////////////////////////////////////////
-
-		/** Get array with all reports in this table.
-		 * @return array with all reports in this table.
-		 */
-		private Properties getReports() {return _msgs;}
 	}
 
 	/** Abstract class of report table. The report table contains text models of
 	 * reports associated to a prefix. The prefix is sequence of capital letters
 	 * ASCII letters. Minimum length of prefix is 2 letters, maximum 10 letters.
-	 * Each report in the table has an identifier starting with a small ASCII letter
-	 * or a digit or character '_'. After this character may follow sequence of
-	 * small letters, capital letters, digits or '_'. Let's have prefix "XYZ".
+	 * Each report in the table has an identifier starting with a small ASCII
+	 * letter or a digit or character '_'. After this character may follow
+	 * sequence of small letters, capital letters, digits or '_'. Let's have
+	 * prefix "XYZ".
 	 * Report identifiers may be: "XYZ0019", "XYZ_NAME", "XYZ0019_1", ...
 	 * Report table may be constructed from external data (see
 	 * {@link org.xdef.sys.RegisterReportTables}) or it can be created
 	 * from the class of registered report table.
-	 * @author Vaclav Trojan
 	 */
 	abstract static class ReportTable implements Comparable<ReportTable> {
 
@@ -665,9 +659,9 @@ NL+
 				for (String key: registeredTable._ids) {
 					String text = table.getReportText(prefix + key);
 					if (text == null) {
-						reporter.write("E SYS225 Report " + prefix+key
-							+ " is missing in the default"+table.getTableName()
-							+ NL);
+						reporter.write("W SYS225 Report " + prefix+key
+							+ " which is in the default table is missing"
+							+ " in table "+table.getTableName() + NL);
 					}
 				}
 			}
@@ -679,7 +673,7 @@ NL+
 					if (p1 == null) {
 						reporter.write("E SYS212 Unclosed parameter in the text"
 							+ " of report " + prefix+id
-							+ " table " + table.getTableName() + NL);
+							+ ", table " + table.getTableName() + NL);
 						p1 =  new String[0];
 					}
 					if (table != registeredTable) { //not default table
@@ -693,7 +687,7 @@ NL+
 									reporter.write("E SYS217 Parameters in"
 										+ " tables " + table.getTableName()
 										+ " and "+registeredTable.getTableName()
-										+ "differs, report " + id + NL);
+										+ "differs, report: " + id + NL);
 									break;
 								}
 							}
@@ -701,7 +695,7 @@ NL+
 							reporter.write("E SYS217 Parameters in tables "
 								+ table.getTableName()
 								+ " and " + registeredTable.getTableName()
-								+ " report " + id + NL);
+								+ " differs, report: " + id + NL);
 						}
 					}
 				}
