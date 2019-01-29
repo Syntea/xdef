@@ -760,9 +760,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		String xpos = xnode.getXPos();
 		String txt;
 		if (code == null) {
-			if (si == null) {
-				return NOSTEP;
-			}
+//			if (si == null) {
+//				return NOSTEP;
+//			}
 			codeItem = null;
 			trace = pause = false;
 			txt = "PAUSE " + xpos;
