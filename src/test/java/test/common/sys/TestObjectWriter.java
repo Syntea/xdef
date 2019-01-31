@@ -11,7 +11,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import test.utils.STester;
 
-/** TestReport
+/** Test SObjectWriter.
  * @author  Vaclav Trojan
  */
 public class TestObjectWriter extends STester {
@@ -25,53 +25,53 @@ public class TestObjectWriter extends STester {
 			Object result;
 			ByteArrayInputStream in;
 			if (obj instanceof Boolean) {
-				w.writeBoolean(((Boolean) obj).booleanValue());
+				w.writeBoolean((Boolean) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
 				result = r.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
 			} else if (obj instanceof Character) {
-				w.writeChar(((Character) obj).charValue());
+				w.writeChar((Character) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Character(r.readChar());
+				result = r.readChar();
 			} else if (obj instanceof Byte) {
-				w.writeByte(((Byte) obj).byteValue());
+				w.writeByte((Byte) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Byte(r.readByte());
+				result = r.readByte();
 			} else if (obj instanceof Short) {
-				w.writeShort(((Short) obj).shortValue());
+				w.writeShort((Short) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Short(r.readShort());
+				result = r.readShort();
 			} else if (obj instanceof Integer) {
-				w.writeInt(((Integer) obj).intValue());
+				w.writeInt((Integer) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Integer(r.readInt());
+				result = r.readInt();
 			} else if (obj instanceof Long) {
-				w.writeLong(((Long) obj).longValue());
+				w.writeLong((Long) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Long(r.readLong());
+				result = r.readLong();
 			} else if (obj instanceof Float) {
-				w.writeFloat(((Float) obj).floatValue());
+				w.writeFloat((Float) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Float(r.readFloat());
+				result = r.readFloat();
 			} else if (obj instanceof Double) {
-				w.writeDouble(((Double) obj).doubleValue());
+				w.writeDouble((Double) obj);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
-				result = new Double(r.readDouble());
+				result = r.readDouble();
 			} else if (obj instanceof String) {
 				w.writeString(obj.toString());
 				out.close();
@@ -104,12 +104,12 @@ public class TestObjectWriter extends STester {
 			} else if (obj instanceof StringBuffer) {//len
 				Integer i = Integer.valueOf(obj.toString());
 				obj = i;
-				w.writeLength(i.intValue());
+				w.writeLength(i);
 				out.close();
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
 				int j = r.readLength();
-				result = new Integer(j);
+				result = j;
 			} else {
 				return "Unsupported type: " + obj;
 			}
@@ -127,71 +127,71 @@ public class TestObjectWriter extends STester {
 	/** Run test and print error information. */
 	public void test() {
 		String s;
-		assertTrue("".equals(s = test(new Byte((byte) 0))), s);
-		assertTrue("".equals(s = test(new Byte((byte) 1))), s);
-		assertTrue("".equals(s = test(new Byte((byte) -1))), s);
-		assertTrue("".equals(s = test(new Byte((byte) 2))), s);
-		assertTrue("".equals(s = test(new Byte((byte) -2))), s);
-		assertTrue("".equals(s = test(new Byte(Byte.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Byte(Byte.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Short((short) 0))), s);
-		assertTrue("".equals(s = test(new Short((short) 1))), s);
-		assertTrue("".equals(s = test(new Short((short) -1))), s);
-		assertTrue("".equals(s = test(new Short((short) 2))), s);
-		assertTrue("".equals(s = test(new Short((short) -2))), s);
-		assertTrue("".equals(s = test(new Short(Byte.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Short(Byte.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Short(Short.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Short(Short.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(0))), s);
-		assertTrue("".equals(s = test(new Integer(1))), s);
-		assertTrue("".equals(s = test(new Integer(-1))), s);
-		assertTrue("".equals(s = test(new Integer(2))), s);
-		assertTrue("".equals(s = test(new Integer(-2))), s);
-		assertTrue("".equals(s = test(new Integer(Byte.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(Byte.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(Short.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(Short.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(Integer.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Integer(Integer.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(0))), s);
-		assertTrue("".equals(s = test(new Long(1))), s);
-		assertTrue("".equals(s = test(new Long(-1))), s);
-		assertTrue("".equals(s = test(new Long(2))), s);
-		assertTrue("".equals(s = test(new Long(-2))), s);
-		assertTrue("".equals(s = test(new Long(Byte.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Byte.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Short.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Short.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Integer.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Integer.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Long.MAX_VALUE))), s);
-		assertTrue("".equals(s = test(new Long(Long.MIN_VALUE))), s);
-		assertTrue("".equals(s = test(new Character((char) 0))), s);
-		assertTrue("".equals(s = test(new Character('a'))), s);
-		assertTrue("".equals(s = test(new Character((char) 65535))), s);
-		assertTrue("".equals(s = test(new Float(0))), s);
-		assertTrue("".equals(s = test(new Float(1))), s);
-		assertTrue("".equals(s = test(new Float(-1))), s);
-		assertTrue("".equals(s = test(new Float(65535))), s);
-		assertTrue("".equals(s = test(new Float(-65535))), s);
-		assertTrue("".equals(s = test(new Float(3.141592))), s);
-		assertTrue("".equals(s = test(new Float(0.000000001))), s);
-		assertTrue("".equals(s = test(new Float(0.999999999))), s);
-		assertTrue("".equals(s = test(new Float(Float.NaN))), s);
-		assertTrue("".equals(s = test(new Float(Float.POSITIVE_INFINITY))), s);
-		assertTrue("".equals(s = test(new Float(Float.NEGATIVE_INFINITY))), s);
-		assertTrue("".equals(s = test(new Double(0))), s);
-		assertTrue("".equals(s = test(new Double(1))), s);
-		assertTrue("".equals(s = test(new Double(-1))), s);
-		assertTrue("".equals(s = test(new Double(65535))), s);
-		assertTrue("".equals(s = test(new Double(-65535))), s);
-		assertTrue("".equals(s = test(new Double(3.141592))), s);
-		assertTrue("".equals(s = test(new Double(0.0000000000000001))), s);
-		assertTrue("".equals(s = test(new Double(0.9999999999999999))), s);
-		assertTrue("".equals(s = test(new Double(Double.NaN))), s);
-		assertTrue("".equals(s = test(new Double(Double.POSITIVE_INFINITY))),s);
-		assertTrue("".equals(s = test(new Double(Double.NEGATIVE_INFINITY))),s);
+		assertTrue("".equals(s = test((byte) 0)), s);
+		assertTrue("".equals(s = test((byte) 1)), s);
+		assertTrue("".equals(s = test((byte) -1)), s);
+		assertTrue("".equals(s = test((byte) 2)), s);
+		assertTrue("".equals(s = test((byte) -2)), s);
+		assertTrue("".equals(s = test(Byte.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Byte.MIN_VALUE)), s);
+		assertTrue("".equals(s = test((short) 0)), s);
+		assertTrue("".equals(s = test((short) 1)), s);
+		assertTrue("".equals(s = test((short) -1)), s);
+		assertTrue("".equals(s = test((short) 2)), s);
+		assertTrue("".equals(s = test((short) -2)), s);
+		assertTrue("".equals(s = test(Byte.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Byte.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(Short.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Short.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(0)), s);
+		assertTrue("".equals(s = test(1)), s);
+		assertTrue("".equals(s = test(-1)), s);
+		assertTrue("".equals(s = test(2)), s);
+		assertTrue("".equals(s = test(-2)), s);
+		assertTrue("".equals(s = test((int) Byte.MAX_VALUE)), s);
+		assertTrue("".equals(s = test((int) Byte.MIN_VALUE)), s);
+		assertTrue("".equals(s = test((int) Short.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Short.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(Integer.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Integer.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(0L)), s);
+		assertTrue("".equals(s = test(1L)), s);
+		assertTrue("".equals(s = test(-1L)), s);
+		assertTrue("".equals(s = test(2L)), s);
+		assertTrue("".equals(s = test(-2L)), s);
+		assertTrue("".equals(s = test((long) Byte.MAX_VALUE)), s);
+		assertTrue("".equals(s = test((long) Byte.MIN_VALUE)), s);
+		assertTrue("".equals(s = test((long) Short.MAX_VALUE)), s);
+		assertTrue("".equals(s = test((long) Short.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(Integer.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Integer.MIN_VALUE)), s);
+		assertTrue("".equals(s = test(Long.MAX_VALUE)), s);
+		assertTrue("".equals(s = test(Long.MIN_VALUE)), s);
+		assertTrue("".equals(s = test((char) 0)), s);
+		assertTrue("".equals(s = test('a')), s);
+		assertTrue("".equals(s = test((char) 65535)), s);
+		assertTrue("".equals(s = test(0F)), s);
+		assertTrue("".equals(s = test(1F)), s);
+		assertTrue("".equals(s = test(-1F)), s);
+		assertTrue("".equals(s = test(65535F)), s);
+		assertTrue("".equals(s = test(-65535F)), s);
+		assertTrue("".equals(s = test(3.141592F)), s);
+		assertTrue("".equals(s = test(0.000000001F)), s);
+		assertTrue("".equals(s = test(0.999999999F)), s);
+		assertTrue("".equals(s = test(Float.NaN)), s);
+		assertTrue("".equals(s = test(Float.POSITIVE_INFINITY)), s);
+		assertTrue("".equals(s = test(Float.NEGATIVE_INFINITY)), s);
+		assertTrue("".equals(s = test(0D)), s);
+		assertTrue("".equals(s = test(1D)), s);
+		assertTrue("".equals(s = test(-1D)), s);
+		assertTrue("".equals(s = test(65535D)), s);
+		assertTrue("".equals(s = test(-65535D)), s);
+		assertTrue("".equals(s = test(3.141592D)), s);
+		assertTrue("".equals(s = test(0.000000000000000D)), s);
+		assertTrue("".equals(s = test(0.9999999999999999D)), s);
+		assertTrue("".equals(s = test(Double.NaN)), s);
+		assertTrue("".equals(s = test(Double.POSITIVE_INFINITY)),s);
+		assertTrue("".equals(s = test(Double.NEGATIVE_INFINITY)),s);
 		assertTrue("".equals(s = test(new StringBuffer("0"))), s);
 		assertTrue("".equals(s = test(new StringBuffer("1"))), s);
 		assertTrue("".equals(s = test(new StringBuffer("255"))), s);

@@ -36,28 +36,25 @@ public class ProcessMethods {
 		Element xdefContextElement,
 		XdefDocument xdef) {
 		String groupType = getObjectGroupType(objectGroupElement);
-		//odstraneni zbytecneho <xd:sequence> po elementu
+		// remove unused <xd:sequence> after an element
 		Node parentNode = objectGroupElement.getParentNode();
 		if (Node.ELEMENT_NODE == parentNode.getNodeType()) {
 			Element parentElem = (Element) parentNode;
 			if ("sequence".equals(groupType)
 				&& Utils.NSURI_SCHEMA.equals(parentElem.getNamespaceURI())
 				&& "complexType".equals(parentElem.getLocalName())
-				&& new Integer(1).equals(
-					Utils.getMinOccurrence(objectGroupElement))
-				&& new Integer(1).equals(
-					Utils.getMaxOccurrence(objectGroupElement))) {
+				&& 1 == Utils.getMinOccurrence(objectGroupElement)
+				&& 1 == Utils.getMaxOccurrence(objectGroupElement)) {
 				//add nothing (return current xdefinition context element)
 				return xdefContextElement;
 			}
 		}
-		//konec
 		Element element = xdef.addXdefElement(xdefContextElement,
-				groupType);
+			groupType);
 		//is group child that is schema child
 		if (Utils.isSchemaGroupChild(objectGroupElement)
-				|| Utils.isRedefineSchemaChild(
-					(Element) objectGroupElement.getParentNode())) {
+			|| Utils.isRedefineSchemaChild(
+				(Element) objectGroupElement.getParentNode())) {
 			xdef.addXdefAttr(element,
 				"name",
 				((Element) objectGroupElement.getParentNode())

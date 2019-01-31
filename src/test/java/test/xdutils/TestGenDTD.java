@@ -5,11 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 import test.utils.XDTester;
 
 /** Test of generation of DTD from XDefinition.
@@ -31,7 +31,7 @@ public class TestGenDTD extends XDTester {
 		ByteArrayOutputStream bos;
 		OutputStreamWriter wr;
 		try {
-			reader = XMLReaderFactory.createXMLReader();
+			reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 			reader.setFeature( //validace pres DTD
 				"http://xml.org/sax/features/validation", //FeatureURI
 				true);
