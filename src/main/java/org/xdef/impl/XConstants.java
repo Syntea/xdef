@@ -11,5 +11,5 @@ public interface XConstants {
 	public static final byte XD31 = 31;
 	/** X-definition version 3.2 ID. */
 	public static final byte XD32 = 32;
-	
+
 }

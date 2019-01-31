@@ -268,7 +268,7 @@ public interface XDDocument extends XXNode {
 	public Element xparse(Node xmlData,
 		ReportWriter reporter) throws SRuntimeException;
 
-
+	@Deprecated
 	/** Run create mode - create element according to the X-definition model.
 	 * If the parameter nsUri is not <tt>null</tt> then its assigned the model
 	 * with given namespaceURI; in this case the parameter name may be

@@ -84,7 +84,10 @@ public final class DefDouble extends XDValueAbstract {
 	public XDValue cloneItem() {return new DefDouble(_value);}
 
 	@Override
-	public int hashCode() {return Double.hashCode(_value);}
+	public int hashCode() {
+        long bits = Double.doubleToLongBits(_value);
+        return (int)(bits ^ (bits >>> 32));
+	}
 
 	@Override
 	public boolean equals(final Object arg) {
