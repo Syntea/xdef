@@ -248,7 +248,7 @@ KeyParameterReference ::= KeyName
 Method ::= (SchemaTypeName | (QualifiedIdentifier - Keyword)) $rule
   S? ParameterList?
 
-SchemaTypeName ::= "xs:" Identifier
+SchemaTypeName ::= "xs:" Identifier /* prefix “xs:” is deprecated */
 
 incAfter ::= ("++" | "--") S? $rule VariableReference
 incBefore ::= VariableReference S? ("++" | "--") S? $rule
