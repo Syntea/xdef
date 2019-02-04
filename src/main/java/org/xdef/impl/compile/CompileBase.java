@@ -107,30 +107,27 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
-		setType(XD_REGEXRESULT, "RegexResult",
-			org.xdef.XDRegexResult.class);
+		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
 		setType(XD_BNFRULE,"BNFRule", org.xdef.XDBNFRule.class);
 		setType(XD_INPUT,"Input", org.xdef.XDInput.class);
 		setType(XD_OUPUT,"Output", org.xdef.XDOutput.class);
-		setType(XX_ELEMENT, "",org.xdef.proc.XXElement.class);
+		setType(XX_ELEMENT, "", org.xdef.proc.XXElement.class);
 		setType(XX_DATA, "", org.xdef.proc.XXData.class);
 		setType(XD_BYTES, "Bytes", byte[].class);
 		setType(XD_ELEMENT, "Element", org.w3c.dom.Element.class);
-		setType(XD_EXCEPTION, "Exception",org.xdef.XDException.class);
+		setType(XD_EXCEPTION, "Exception", org.xdef.XDException.class);
 		setType(XD_REPORT, "Report", org.xdef.sys.Report.class);
 		setType(XD_XPATH, "XpathExpr", org.xdef.xml.KXpathExpr.class);
-		setType(XD_XQUERY,"XqueryExpr",org.xdef.XDXQueryExpr.class);
+		setType(XD_XQUERY,"XqueryExpr", org.xdef.XDXQueryExpr.class);
 		setType(XD_PARSER, "Parser", org.xdef.XDParser.class);
-		setType(XD_PARSERESULT, "ParseResult",
-			org.xdef.XDParseResult.class);
+		setType(XD_PARSERESULT, "ParseResult", org.xdef.XDParseResult.class);
 		setType(XD_SERVICE, "Service", org.xdef.XDService.class);
 		setType(XD_STATEMENT, "Statement", org.xdef.XDStatement.class);
 		setType(XD_RESULTSET, "ResultSet", org.xdef.XDResultSet.class);
 		setType(XM_MODEL, "XModel", null);
 		setType(XD_NAMEDVALUE, "NamedValue", org.xdef.XDNamedValue.class);
-		setType(XD_XMLWRITER, "XmlOutStream",
-			org.xdef.XDXmlOutStream.class);
+		setType(XD_XMLWRITER, "XmlOutStream", org.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
@@ -193,10 +190,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
 					-1, true, new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseBoolean.class,
-			"xs:boolean", "boolean", "?bool");
-		parser(im,org.xdef.impl.parsers.XDParseJBoolean.class,"jboolean");
-		parser(im,org.xdef.impl.parsers.XDParseJNull.class, "jnull");
+		parser(im, org.xdef.impl.parsers.XSParseBoolean.class,
+			"boolean", "?xs:boolean", "?bool");
+		parser(im, org.xdef.impl.parsers.XDParseJBoolean.class,"jboolean");
+		parser(im, org.xdef.impl.parsers.XDParseJNull.class, "jnull");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
@@ -211,8 +208,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("totalDigits", XD_INT,false,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseDecimal.class,
-			"decimal", "xs:decimal");
+		parser(im, org.xdef.impl.parsers.XSParseDecimal.class,
+			"decimal", "?xs:decimal");
 
 		im = genParserMetnod(0, 2, new short[] {XD_FLOAT, XD_FLOAT},
 			XD_FLOAT,
@@ -227,10 +224,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("totalDigits", XD_INT,false,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseDouble.class,
-			"double", "xs:double");
-		parser(im,org.xdef.impl.parsers.XSParseDouble.class,
-			"float", "xs:float");
+		parser(im, org.xdef.impl.parsers.XSParseDouble.class,
+			"double", "?xs:double");
+		parser(im, org.xdef.impl.parsers.XSParseDouble.class,
+			"float", "?xs:float");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DATETIME, XD_DATETIME},
 			XD_DATETIME,
@@ -243,33 +240,28 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseDatetime.class,
-			"dateTime", "xs:dateTime");
-		parser(im,org.xdef.impl.parsers.XSParseDate.class,
-			"date", "xs:date");
-		parser(im,org.xdef.impl.parsers.XSParseGDay.class,
-			"xs:gDay", "gDay", "?ISOday");
-		parser(im,org.xdef.impl.parsers.XSParseGMonth.class,
-			"xs:gMonth", "gMonth", "?ISOmonth");
-		parser(im,org.xdef.impl.parsers.XSParseGMonthDay.class,
-			"xs:gMonthDay", "gMonthDay", "?ISOmonthDay");
-		parser(im,org.xdef.impl.parsers.XSParseGYear.class,
-			"gYear", "xs:gYear");
-		parser(im,org.xdef.impl.parsers.XSParseGYearMonth.class,
-			"gYearMonth", "xs:gYearMonth");
-		parser(im,org.xdef.impl.parsers.XSParseTime.class,
-			"xs:time", "time", "?ISOtime");
-		parser(im,org.xdef.impl.parsers.XDParseISOYearMonth.class,
+		parser(im, org.xdef.impl.parsers.XSParseDatetime.class,
+			"dateTime", "?xs:dateTime");
+		parser(im, org.xdef.impl.parsers.XSParseDate.class, "date", "?xs:date");
+		parser(im, org.xdef.impl.parsers.XSParseGDay.class,
+			"gDay", "?xs:gDay", "?ISOday");
+		parser(im, org.xdef.impl.parsers.XSParseGMonth.class,
+			"gMonth", "?xs:gMonth", "?ISOmonth");
+		parser(im, org.xdef.impl.parsers.XSParseGMonthDay.class,
+			"gMonthDay", "?xs:gMonthDay", "?ISOmonthDay");
+		parser(im, org.xdef.impl.parsers.XSParseGYear.class,
+			"gYear", "?xs:gYear");
+		parser(im, org.xdef.impl.parsers.XSParseGYearMonth.class,
+			"gYearMonth", "?xs:gYearMonth");
+		parser(im, org.xdef.impl.parsers.XSParseTime.class,
+			"time", "?xs:time", "?ISOtime");
+		parser(im, org.xdef.impl.parsers.XDParseISOYearMonth.class,
 			"?ISOyearMonth");
-		parser(im,org.xdef.impl.parsers.XDParseDateYMDhms.class,
-			"dateYMDhms");
-		parser(im,org.xdef.impl.parsers.XDParseEmailDate.class,
-			"emailDate");
-		parser(im,org.xdef.impl.parsers.XDParseISOYear.class,
-			"?ISOyear");
-		parser(im,org.xdef.impl.parsers.XDParseISODate.class,
-			"?ISOdate");
-		parser(im,org.xdef.impl.parsers.XDParseISODateTime.class,
+		parser(im, org.xdef.impl.parsers.XDParseDateYMDhms.class, "dateYMDhms");
+		parser(im, org.xdef.impl.parsers.XDParseEmailDate.class, "emailDate");
+		parser(im, org.xdef.impl.parsers.XDParseISOYear.class, "?ISOyear");
+		parser(im, org.xdef.impl.parsers.XDParseISODate.class, "?ISOdate");
+		parser(im, org.xdef.impl.parsers.XDParseISODateTime.class,
 			"?ISOdateTime");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT},
@@ -284,30 +276,27 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("totalDigits", XD_INT,false, -1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseByte.class,
-			"byte", "xs:byte");
-		parser(im,org.xdef.impl.parsers.XSParseInteger.class,
-			"integer", "xs:integer");
-		parser(im,org.xdef.impl.parsers.XSParseInt.class,
-			"int", "xs:int");
-		parser(im,org.xdef.impl.parsers.XSParseLong.class,
-			"long", "xs:long");
-		parser(im,org.xdef.impl.parsers.XSParseNegativeInteger.class,
-			"negativeInteger", "xs:negativeInteger");
-		parser(im,org.xdef.impl.parsers.XSParseNonNegativeInteger.class,
-			"nonNegativeInteger", "xs:nonNegativeInteger");
-		parser(im,org.xdef.impl.parsers.XSParseNonPositiveInteger.class,
-			"nonPositiveInteger", "xs:nonPositiveInteger");
-		parser(im,org.xdef.impl.parsers.XSParsePositiveInteger.class,
-			"positiveInteger", "xs:positiveInteger");
-		parser(im,org.xdef.impl.parsers.XSParseShort.class,
-			"short", "xs:short");
-		parser(im,org.xdef.impl.parsers.XSParseUnsignedByte.class,
-			"unsignedByte", "xs:unsignedByte");
-		parser(im,org.xdef.impl.parsers.XSParseUnsignedInt.class,
-			"unsignedInt", "xs:unsignedInt");
-		parser(im,org.xdef.impl.parsers.XSParseUnsignedShort.class,
-			"unsignedShort", "xs:unsignedShort");
+		parser(im, org.xdef.impl.parsers.XSParseByte.class, "byte", "?xs:byte");
+		parser(im, org.xdef.impl.parsers.XSParseInteger.class,
+			"integer", "?xs:integer");
+		parser(im, org.xdef.impl.parsers.XSParseInt.class, "int", "?xs:int");
+		parser(im, org.xdef.impl.parsers.XSParseLong.class, "long", "?xs:long");
+		parser(im, org.xdef.impl.parsers.XSParseNegativeInteger.class,
+			"negativeInteger", "?xs:negativeInteger");
+		parser(im, org.xdef.impl.parsers.XSParseNonNegativeInteger.class,
+			"nonNegativeInteger", "?xs:nonNegativeInteger");
+		parser(im, org.xdef.impl.parsers.XSParseNonPositiveInteger.class,
+			"nonPositiveInteger", "?xs:nonPositiveInteger");
+		parser(im, org.xdef.impl.parsers.XSParsePositiveInteger.class,
+			"positiveInteger", "?xs:positiveInteger");
+		parser(im, org.xdef.impl.parsers.XSParseShort.class,
+			"short", "?xs:short");
+		parser(im, org.xdef.impl.parsers.XSParseUnsignedByte.class,
+			"unsignedByte", "?xs:unsignedByte");
+		parser(im, org.xdef.impl.parsers.XSParseUnsignedInt.class,
+			"unsignedInt", "?xs:unsignedInt");
+		parser(im, org.xdef.impl.parsers.XSParseUnsignedShort.class,
+			"unsignedShort", "?xs:unsignedShort");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
@@ -322,8 +311,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		//unsigned long must be decimal!
-		parser(im,org.xdef.impl.parsers.XSParseUnsignedLong.class,
-			"unsignedLong", "xs:unsignedLong");
+		parser(im, org.xdef.impl.parsers.XSParseUnsignedLong.class,
+			"unsignedLong", "?xs:unsignedLong");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT,XD_INT},
 			XD_STRING,
@@ -335,10 +324,9 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseAnyURI.class,
-			"anyURI", "xs:anyURI");
-		parser(im,org.xdef.impl.parsers.XSParseName.class,
-			"xs:Name", "Name");
+		parser(im, org.xdef.impl.parsers.XSParseAnyURI.class,
+			"anyURI", "?xs:anyURI");
+		parser(im, org.xdef.impl.parsers.XSParseName.class, "Name", "?xs:Name");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT,XD_INT},
 			XD_STRING,
@@ -351,8 +339,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, false,
 				new DefString("preserve"), new DefString("collapse"),
 				new DefString("replace")));
-		parser(im,org.xdef.impl.parsers.XSParseString.class,
-			"string", "xs:string");
+		parser(im, org.xdef.impl.parsers.XSParseString.class,
+			"string", "?xs:string");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT,XD_INT},
 			XD_STRING,
@@ -364,8 +352,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false,  -1, false,
 				new DefString("replace"), new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseNormalizedString.class,
-			"xs:normalizedString", "normalizedString", "?normString");
+		parser(im, org.xdef.impl.parsers.XSParseNormalizedString.class,
+			"normalizedString", "?xs:normalizedString", "?normString");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_STRING,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -377,20 +365,20 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false,  -1, false,
 				new DefString("preserve"), new DefString("collapse"),
 				new DefString("replace")));
-		parser(im,org.xdef.impl.parsers.XDParseLetters.class, "letters");
-		parser(im,org.xdef.impl.parsers.XDParseAn.class, "an");
-		parser(im,org.xdef.impl.parsers.XDParseNum.class, "num");
-		parser(im,org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
-		parser(im,org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
-		parser(im,org.xdef.impl.parsers.XDParseJString.class, "jstring");
-		parser(im,org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
+		parser(im, org.xdef.impl.parsers.XDParseLetters.class, "letters");
+		parser(im, org.xdef.impl.parsers.XDParseAn.class, "an");
+		parser(im, org.xdef.impl.parsers.XDParseNum.class, "num");
+		parser(im, org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
+		parser(im, org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
+		parser(im, org.xdef.impl.parsers.XDParseJString.class, "jstring");
+		parser(im, org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
 
 		im = genParserMetnod(0, 0, null, XD_ANY,
 			keyParam("enumeration", XD_ANY, true, -1,false),
 			keyParam("item", XD_PARSER, true, -1,false),
 			keyParam("pattern", XD_STRING, true, -1,false));
-		parser(im,org.xdef.impl.parsers.XSParseUnion.class,
-			"union", "xs:union");
+		parser(im, org.xdef.impl.parsers.XSParseUnion.class,
+			"union", "?xs:union");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_STRING,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -401,26 +389,26 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseID.class, "ID", "xs:ID");
-		parser(im,org.xdef.impl.parsers.XSParseIDREF.class,
-			"IDREF", "xs:IDREF");
-		parser(im,org.xdef.impl.parsers.XSParseENTITY.class,
-			"ENTITY", "xs:ENTITY");
-		parser(im,org.xdef.impl.parsers.XSParseNMTOKEN.class,
-			"xs:NMTOKEN", "NMTOKEN", "?normToken");
-		parser(im,org.xdef.impl.parsers.XSParseToken.class,
-			"token", "xs:token");
-		parser(im,org.xdef.impl.parsers.XDParseCHKID.class, "CHKID");
-		parser(im,org.xdef.impl.parsers.XDParseSET.class, "SET");
-		parser(im,org.xdef.impl.parsers.XDParseCHKIDS.class, "CHKIDS");
-		parser(im,org.xdef.impl.parsers.XSParseNOTATION.class,
-			"NOTATION", "xs:NOTATION");
-		parser(im,org.xdef.impl.parsers.XSParseNCName.class,
-			"xs:NCName", "NCName", "?NCname");
-		parser(im,org.xdef.impl.parsers.XSParseQName.class,
-			"xs:QName", "QName", "?Qname");
-		parser(im,org.xdef.impl.parsers.XSParseLanguage.class,
-			"xs:language", "language", "?ISOlanguage");
+		parser(im, org.xdef.impl.parsers.XSParseID.class, "ID", "?xs:ID");
+		parser(im, org.xdef.impl.parsers.XSParseIDREF.class,
+			"IDREF", "?xs:IDREF");
+		parser(im, org.xdef.impl.parsers.XSParseENTITY.class,
+			"ENTITY", "?xs:ENTITY");
+		parser(im, org.xdef.impl.parsers.XSParseNMTOKEN.class,
+			"NMTOKEN", "?xs:NMTOKEN", "?normToken");
+		parser(im, org.xdef.impl.parsers.XSParseToken.class,
+			"token", "?xs:token");
+		parser(im, org.xdef.impl.parsers.XDParseCHKID.class, "CHKID");
+		parser(im, org.xdef.impl.parsers.XDParseSET.class, "SET");
+		parser(im, org.xdef.impl.parsers.XDParseCHKIDS.class, "CHKIDS");
+		parser(im, org.xdef.impl.parsers.XSParseNOTATION.class,
+			"NOTATION", "?xs:NOTATION");
+		parser(im, org.xdef.impl.parsers.XSParseNCName.class,
+			"NCName", "?xs:NCName", "?NCname");
+		parser(im, org.xdef.impl.parsers.XSParseQName.class,
+			"QName", "?xs:QName", "?Qname");
+		parser(im, org.xdef.impl.parsers.XSParseLanguage.class,
+			"language", "?xs:language", "?ISOlanguage");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1, false),
@@ -430,13 +418,13 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseIDREFS.class,
-			"IDREFS", "xs:IDREFS");
-		parser(im,org.xdef.impl.parsers.XSParseENTITIES.class,
-			"ENTITIES", "xs:ENTITIES");
-		parser(im,org.xdef.impl.parsers.XSParseNMTOKENS.class,
-			"xs:NMTOKENS", "NMTOKENS", "?normTokens", "?nmTokens");
-		parser(im,org.xdef.impl.parsers.XDParseCHKIDS.class, "CHKIDS");
+		parser(im, org.xdef.impl.parsers.XSParseIDREFS.class,
+			"IDREFS", "?xs:IDREFS");
+		parser(im, org.xdef.impl.parsers.XSParseENTITIES.class,
+			"ENTITIES", "?xs:ENTITIES");
+		parser(im, org.xdef.impl.parsers.XSParseNMTOKENS.class,
+			"NMTOKENS", "?xs:NMTOKENS", "?normTokens", "?nmTokens");
+		parser(im, org.xdef.impl.parsers.XDParseCHKIDS.class, "CHKIDS");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DURATION,XD_DURATION},
 			XD_DURATION,
@@ -449,8 +437,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseDuration.class,
-			"xs:duration", "duration", "?ISOduration");
+		parser(im, org.xdef.impl.parsers.XSParseDuration.class,
+			"duration", "?xs:duration", "?ISOduration");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_BYTES,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -461,11 +449,11 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseBase64Binary.class,
-			"base64Binary", "xs:base64Binary", "base64");
-		parser(im,org.xdef.impl.parsers.XSParseHexBinary.class,
-			"hexBinary", "xs:hexBinary");
-		parser(im,org.xdef.impl.parsers.XDParseHex.class, "hex");
+		parser(im, org.xdef.impl.parsers.XSParseBase64Binary.class,
+			"base64Binary", "?xs:base64Binary", "base64");
+		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class,
+			"hexBinary", "?xs:hexBinary");
+		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
 
 		im = genParserMetnod(0, 1, new short[] {XD_PARSER}, XD_CONTAINER,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -477,8 +465,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern", XD_STRING, true, -1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XSParseList.class,
-			"list", "xs:list");
+		parser(im, org.xdef.impl.parsers.XSParseList.class,
+			"list", "?xs:list");
 ////////////////////////////////////////////////////////////////////////////////
 // X-Script parsers
 ////////////////////////////////////////////////////////////////////////////////
@@ -491,7 +479,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern", XD_STRING, true,  -1, false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XDParseSequence.class,
+		parser(im, org.xdef.impl.parsers.XDParseSequence.class,
 			"sequence", "?parseSequence");
 
 		im = genParserMetnod(0, 2, new short[]{XD_INT, XD_INT}, XD_DECIMAL,
@@ -509,7 +497,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("enumeration", XD_BYTES, true, -1,false),
 			keyParam("length", XD_INT, false, -1, true,/*fixed*/
 				new DefLong(16)));
-		parser(im,org.xdef.impl.parsers.XDParseMD5.class, "MD5");
+		parser(im, org.xdef.impl.parsers.XDParseMD5.class, "MD5");
 
 		im = genParserMetnod(0, 1, new short[]{XD_ELEMENT}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1,false),
@@ -520,11 +508,11 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("separator", XD_STRING, true, 0,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XDParseNCNameList.class,
+		parser(im, org.xdef.impl.parsers.XDParseNCNameList.class,
 			"NCNameList", "?NCnameList");
-		parser(im,org.xdef.impl.parsers.XDParseQNameList.class,
+		parser(im, org.xdef.impl.parsers.XDParseQNameList.class,
 			"QNameList", "?QnameList");
-		parser(im,org.xdef.impl.parsers.XDParseISOLanguages.class,
+		parser(im, org.xdef.impl.parsers.XDParseISOLanguages.class,
 			"languages", "?ISOlanguages");
 
 		im = genParserMetnod(0, 1, null, XD_STRING,
@@ -536,7 +524,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XDParseQNameURI.class,
+		parser(im, org.xdef.impl.parsers.XDParseQNameURI.class,
 			"QNameURI", "?QnameURI");
 
 		im = genParserMetnod(0, 1, new short[] {XD_STRING}, XD_CONTAINER,
@@ -549,7 +537,7 @@ public class CompileBase implements CodeTable, XDValueID {
 				keyParam("separator", XD_STRING, true,  0, false),
 				keyParam("whiteSpace", XD_STRING, false, -1, true,
 					new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XDParseQNameURIList.class,
+		parser(im, org.xdef.impl.parsers.XDParseQNameURIList.class,
 			"QNameURIList", "?QnameListURI", "?QnameURIList");
 
 		im = genParserMetnod(1, 2, new short[] {XD_STRING, XD_STRING},
@@ -563,49 +551,46 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		parser(im,org.xdef.impl.parsers.XDParseXDatetime.class,
+		parser(im, org.xdef.impl.parsers.XDParseXDatetime.class,
 			"xdatetime", "?datetime");
 
 		im = genParserMetnod(0, 0, null, XD_STRING);
-		parser(im,org.xdef.impl.parsers.XDParseEmpty.class, "empty");
+		parser(im, org.xdef.impl.parsers.XDParseEmpty.class, "empty");
 
 		im = genParserMetnod(1, 1, new short[] {XD_STRING}, XD_STRING,
 			keyParam("argument", XD_STRING, false,  0, false));
-		parser(im,org.xdef.impl.parsers.XDParseEq.class, "eq");
-		parser(im,org.xdef.impl.parsers.XDParseEqi.class, "eqi");
-		parser(im,org.xdef.impl.parsers.XDParseStarts.class, "starts");
-		parser(im,org.xdef.impl.parsers.XDParseStartsi.class, "startsi");
-		parser(im,org.xdef.impl.parsers.XDParseEnds.class, "ends");
-		parser(im,org.xdef.impl.parsers.XDParseEndsi.class, "endsi");
-		parser(im,org.xdef.impl.parsers.XDParseContains.class,"contains");
-		parser(im,org.xdef.impl.parsers.XDParseContainsi.class,
-			"containsi");
-		parser(im,org.xdef.impl.parsers.XDParsePic.class,
-			"pic", "?picture");
-		parser(im,org.xdef.impl.parsers.XDParseRegex.class, "regex");
+		parser(im, org.xdef.impl.parsers.XDParseEq.class, "eq");
+		parser(im, org.xdef.impl.parsers.XDParseEqi.class, "eqi");
+		parser(im, org.xdef.impl.parsers.XDParseStarts.class, "starts");
+		parser(im, org.xdef.impl.parsers.XDParseStartsi.class, "startsi");
+		parser(im, org.xdef.impl.parsers.XDParseEnds.class, "ends");
+		parser(im, org.xdef.impl.parsers.XDParseEndsi.class, "endsi");
+		parser(im, org.xdef.impl.parsers.XDParseContains.class,"contains");
+		parser(im, org.xdef.impl.parsers.XDParseContainsi.class, "containsi");
+		parser(im, org.xdef.impl.parsers.XDParsePic.class, "pic", "?picture");
+		parser(im, org.xdef.impl.parsers.XDParseRegex.class, "regex");
 
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
 			XD_STRING,
 			keyParam("argument", XD_CONTAINER, true,  0, false));
-		parser(im,org.xdef.impl.parsers.XDParseEnum.class, "enum");
-		parser(im,org.xdef.impl.parsers.XDParseEnumi.class,
-			"enumi", "?listi");
+		parser(im, org.xdef.impl.parsers.XDParseEnum.class, "enum");
+		parser(im, org.xdef.impl.parsers.XDParseEnumi.class, "enumi", "?listi");
 
 		im = genParserMetnod(1, 1, new short[] {XD_STRING}, XD_STRING,
 			keyParam("argument", XD_CONTAINER, true,  0, false));
 		// This type is deprecated, replace with "list(%item=typ)"
-		parser(im,org.xdef.impl.parsers.XDParseTokens.class, "?tokens");
-		parser(im,org.xdef.impl.parsers.XDParseTokensi.class, "?tokensi");
+		parser(im, org.xdef.impl.parsers.XDParseTokens.class, "?tokens");
+		parser(im, org.xdef.impl.parsers.XDParseTokensi.class, "?tokensi");
 
 		im = genParserMetnod(1, 2, new short[] {XD_ANY, XD_STRING},
 			XD_STRING,
 			keyParam("a2", XD_ANY, true, 1, false),
 			keyParam("a1", XD_ANY, true, 0, false));
-		parser(im,org.xdef.impl.parsers.XDParseBNF.class, "BNF");
+		parser(im, org.xdef.impl.parsers.XDParseBNF.class, "BNF");
 		// This type is deprecated, replace with "list(%item=typ)"
 		im = genParserMetnod(1, 1, new short[] {XD_PARSER}, XD_STRING,
 			keyParam("item", XD_PARSER, true, 0, false));
-		parser(im,org.xdef.impl.parsers.XSParseList.class, "?ListOf");
+		parser(im, org.xdef.impl.parsers.XSParseList.class, "?ListOf");
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -810,7 +795,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 2, XD_STRING,XD_BNFGRAMMAR), "#");
 		method(ti, genInternalMethod(BNF_PARSE, XD_PARSERESULT,
 			ANY_MODE, 2, 3, XD_BNFGRAMMAR, XD_STRING, XD_STRING),
-			"parse","?check");
+			"parse", "?check");
 		method(ti, genInternalMethod(GET_BNFRULE, XD_BNFRULE,
 			ANY_MODE, 2, 2, XD_BNFGRAMMAR, XD_STRING), "rule");
 
@@ -819,7 +804,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_BNFRULE;
 		method(ti, genInternalMethod(BNFRULE_PARSE, XD_PARSERESULT,
-			ANY_MODE, 1, 2, XD_BNFRULE, XD_STRING), "parse","?check");
+			ANY_MODE, 1, 2, XD_BNFRULE, XD_STRING), "parse", "?check");
 
 ////////////////////////////////////////////////////////////////////////////////
 // BYTES (array)
@@ -859,8 +844,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(CONTEXT_GETELEMENTS, XD_CONTAINER,
 			ANY_MODE, 1, 2, XD_CONTAINER, XD_STRING), "getElements");
 		method(ti, genInternalMethod(CONTEXT_ITEMTYPE, XD_INT,
-			ANY_MODE, 2, 2, XD_CONTAINER, XD_INT),
-			"getItemType", "?itemType");
+			ANY_MODE, 2, 2, XD_CONTAINER, XD_INT), "getItemType", "?itemType");
 		method(ti, genInternalMethod(CONTEXT_GETLENGTH, XD_INT,
 			ANY_MODE, 1, 1, XD_CONTAINER), "getLength");
 		method(ti, genInternalMethod(GET_NAMEDVALUE, XD_ANY,
@@ -885,8 +869,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(CONTEXT_SORT, XD_CONTAINER,
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_BOOLEAN),"sort");
 		method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT,
-			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING),
-			"toElement");
+			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
 
 ////////////////////////////////////////////////////////////////////////////////
 // DATETIME
@@ -958,8 +941,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_MONTH, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_INT), "setMonth");
 		method(ti, genInternalMethod(SET_NANOS, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME, XD_INT),
-			"setNanos", "?setNanosecond");
+			ANY_MODE, 2, 2, XD_DATETIME, XD_INT), "setNanos", "?setNanosecond");
 		method(ti, genInternalMethod(SET_SECOND, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME, XD_INT), "setSecond");
 		method(ti, genInternalMethod(SET_YEAR, XD_DATETIME,
@@ -1024,8 +1006,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING),
 			"getAttribute", "?getAttr");
 		method(ti, genInternalMethod(ELEMENT_HASATTR, XD_BOOLEAN,
-			ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING),
-			"hasAttribute");
+			ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING), "hasAttribute");
 		method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN,
 			ANY_MODE, 1, 1, XD_ELEMENT), "isEmpty");
 		method(ti, genInternalMethod(ELEMENT_SETATTR, XD_VOID,
@@ -1044,8 +1025,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3,XD_STRING, XD_STRING, XD_STRING), "#");
 		method(ti, genInternalMethod(GET_REPORT, XD_REPORT,
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getReport");
-		method(ti, genInternalMethod(GET_MESSAGE, XD_STRING, ANY_MODE, 1, 1,
-			XD_EXCEPTION), "getMessage");
+		method(ti, genInternalMethod(GET_MESSAGE, XD_STRING,
+			ANY_MODE, 1, 1, XD_EXCEPTION), "getMessage");
 
 ////////////////////////////////////////////////////////////////////////////////
 // LOCALE
@@ -1090,8 +1071,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUPUT,
 			GLOBAL_MODE, 1, 3, XD_STRING,XD_STRING,XD_BOOLEAN), "#");
 		method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN,
-			ANY_MODE, 2, 4,
-			XD_OUPUT, XD_STRING, XD_STRING, XD_STRING),
+			ANY_MODE, 2, 4, XD_OUPUT, XD_STRING, XD_STRING, XD_STRING),
 			"error");
 		method(ti, genInternalMethod(GET_REPORT, XD_REPORT,
 			ANY_MODE, 1, 1, XD_OUPUT), "getLastError");
@@ -1133,8 +1113,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_PARSED_LONG, XD_INT,
 			ANY_MODE, 1, 1, XD_PARSERESULT), "intValue");
 		method(ti, genInternalMethod(SET_PARSED_ERROR, XD_PARSERESULT,
-			ANY_MODE, 2, 4,
-			XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING),
+			ANY_MODE, 2, 4, XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING),
 			"error", "?setError");
 		method(ti, genInternalMethod(GET_PARSED_DOUBLE, XD_FLOAT,
 			ANY_MODE, 1, 1, XD_PARSERESULT), "floatValue");
@@ -1177,7 +1156,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_REGEXRESULT, XD_INT), "start");
 
 ////////////////////////////////////////////////////////////////////////////////
-// REPORT (see org.xdef.Report)
+// REPORT (see cz.syntea.common.Report)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_REPORT;
 		method(ti, genInternalMethod(NEW_REPORT, XD_REPORT,
@@ -1185,8 +1164,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(REPORT_GETPARAM, XD_STRING,
 			ANY_MODE, 2, 2, XD_REPORT, XD_STRING), "getParameter");
 		method(ti, genInternalMethod(REPORT_SETPARAM, XD_REPORT,
-			ANY_MODE, 3, 3, XD_REPORT, XD_STRING, XD_STRING),
-			"setParameter");
+			ANY_MODE, 3, 3, XD_REPORT, XD_STRING, XD_STRING), "setParameter");
 		method(ti, genInternalMethod(REPORT_SETTYPE, XD_REPORT,
 			ANY_MODE, 2, 2, XD_REPORT, XD_STRING), "setType");
 		method(ti, genInternalMethod(REPORT_TOSTRING, XD_STRING,
@@ -1294,8 +1272,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN,
 			ANY_MODE, 1, 1, XD_STRING), "isEmpty");
 		method(ti, genInternalMethod(GET_LASTINDEXOFSTRING, XD_INT,
-			ANY_MODE, 2, 3, XD_STRING, XD_STRING, XD_INT),
-			"lastIndexOf");
+			ANY_MODE, 2, 3, XD_STRING, XD_STRING, XD_INT), "lastIndexOf");
 		method(ti, genInternalMethod(GET_STRING_LENGTH, XD_INT, //length
 			ANY_MODE, 1, 1, XD_STRING), "length");
 		method(ti, genInternalMethod(STARTSWITH, XD_BOOLEAN,//check prefix
