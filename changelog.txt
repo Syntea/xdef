@@ -4,6 +4,8 @@
   in the X-script section "var" in the model of element was not invoked
   correctly.
 - corrected setting of stop addresses in the GUI of debugger.
+- X-definition validation methods with the prefix "xs:" are deprecated. You can
+  use the name without this prefix (ie. "xs:string" should be "string").
 
 32.1.2, 2019-01-21
 =================== 
