@@ -15,7 +15,6 @@
   initialization section in the section "var" in the X-script of 
   an element model.
 
-previous versions
-======================
+#Previous versions
 - the previous versions were distributed by the site www.synntea.cz.
   in this version were renamed the packages "cz.synte.xdef" to "org.xdef"
