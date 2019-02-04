@@ -27,11 +27,12 @@ import java.util.TreeMap;
  */
 public class SUtils extends FUtils {
 
-	/** Version of Java runtime as the integer composed from the string where
-	 * the integer part is multiplied by 100 and subversion part is added.
+	/** Version of Java VM as an integer composed from the string where
+	 * the version part is multiplied by 100 and subversion part is added.
 	 * E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
+	
 	/** The string with the last part of Java VM version information.
 	 * E.g. if version information is "1.6.0_45" it will be "0_45".
 	 */

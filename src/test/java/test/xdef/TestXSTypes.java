@@ -1381,23 +1381,23 @@ public final class TestXSTypes extends XDTester {
 //------------------------------------------------------------------------------
 		// testing illegal facets
 		setChkSyntax(false); // do not check syntax
-		assertTrue(checkFail("xs:int(%length='1')"), _msg);
-		assertTrue(checkFail("xs:int(%minLength='1')"), _msg);
-		assertTrue(checkFail("xs:int(%maxLength='1')"), _msg);
-		assertTrue(checkFail("xs:int(%whiteSpace='preserve')"), _msg);
-		assertTrue(checkFail("xs:int(%whiteSpace='replace')"), _msg);
+		assertTrue(checkFail("int(%length='1')"), _msg);
+		assertTrue(checkFail("int(%minLength='1')"), _msg);
+		assertTrue(checkFail("int(%maxLength='1')"), _msg);
+		assertTrue(checkFail("int(%whiteSpace='preserve')"), _msg);
+		assertTrue(checkFail("int(%whiteSpace='replace')"), _msg);
 		assertTrue(checkFail(
-			"xs:int(%minInclusive='1',%minExclusive='1')"), _msg);
+			"int(%minInclusive='1',%minExclusive='1')"), _msg);
 		assertTrue(checkFail(
-			"xs:int(%minInclusive='1',%maxInclusive='0')"), _msg);
+			"int(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
-//		assertTrue(checkFail("xs:int(%fractionDigits='0')"), _msg);
+//		assertTrue(checkFail("int(%fractionDigits='0')"), _msg);
 
 		// testing fixed facets
-		assertTrue(prepare("xs:int(%whiteSpace='collapse')"), _msg);
+		assertTrue(prepare("int(%whiteSpace='collapse')"), _msg);
 
 		// testing correct values
-		assertTrue(prepare("xs:int"), _msg);
+		assertTrue(prepare("int"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("+1"), _msg);
 		assertTrue(parse("-1"), _msg);
@@ -1415,37 +1415,37 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("-2147483649"), _msg);  //lower then max
 
 		// testing facets
-		assertTrue(prepare("xs:int(%minInclusive='1')"), _msg);
+		assertTrue(prepare("int(%minInclusive='1')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parseFail("0"), _msg);
 
-		assertTrue(prepare("xs:int(%minExclusive='1')"), _msg);
+		assertTrue(prepare("int(%minExclusive='1')"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("1"), _msg);
 
-		assertTrue(prepare("xs:int(%minInclusive='1',%maxInclusive='2')"),_msg);
+		assertTrue(prepare("int(%minInclusive='1',%maxInclusive='2')"),_msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare("xs:int(%minExclusive='0',%maxExclusive='3')"),_msg);
+		assertTrue(prepare("int(%minExclusive='0',%maxExclusive='3')"),_msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare("xs:int(%enumeration=['0','3'])"), _msg);
+		assertTrue(prepare("int(%enumeration=['0','3'])"), _msg);
 		assertTrue(parse("0"), _msg);
 		assertTrue(parse("3"), _msg);
 		assertTrue(parseFail("2"), _msg);
 
-		assertTrue(prepare("xs:int(%pattern=['1','2'])"), _msg);
+		assertTrue(prepare("int(%pattern=['1','2'])"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("  2  "), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare("xs:int(%totalDigits='2')"), _msg);
+		assertTrue(prepare("int(%totalDigits='2')"), _msg);
 		assertTrue(parse("11"), _msg);
 		assertTrue(parse("000000000011"), _msg);
 		assertTrue(parse("+000000000011"), _msg);

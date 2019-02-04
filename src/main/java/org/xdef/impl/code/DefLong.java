@@ -40,7 +40,7 @@ public final class DefLong extends XDValueAbstract {
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return isNull() ? null : new Long(_value);}
+	public Object getObject() {return isNull() ? null : _value;}
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.

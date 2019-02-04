@@ -8,7 +8,7 @@ import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
-/** The class DefDouble implements the internal object with float values.
+/** Implements the internal object with float values.
  * @author Vaclav Trojan
  */
 public final class DefDouble extends XDValueAbstract {
@@ -44,7 +44,7 @@ public final class DefDouble extends XDValueAbstract {
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return isNull() ? null : new Double(_value);}
+	public Object getObject() {return isNull() ? null : _value;}
 
 	@Override
 	/** Get type of value.
@@ -84,7 +84,10 @@ public final class DefDouble extends XDValueAbstract {
 	public XDValue cloneItem() {return new DefDouble(_value);}
 
 	@Override
-	public int hashCode() {return new Double(_value).hashCode();}
+	public int hashCode() {
+        long bits = Double.doubleToLongBits(_value);
+        return (int)(bits ^ (bits >>> 32));
+	}
 
 	@Override
 	public boolean equals(final Object arg) {
@@ -101,7 +104,8 @@ public final class DefDouble extends XDValueAbstract {
 	 * value of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return new Double(_value).equals(arg.doubleValue());
+		return Double.isNaN(_value)
+			? Double.isNaN(arg.doubleValue()) :  _value == arg.doubleValue();
 	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
@@ -112,18 +116,18 @@ public final class DefDouble extends XDValueAbstract {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		return new Double(_value).compareTo(arg.doubleValue());
+		return Double.compare(_value, arg.doubleValue());
 	}
 	@Override
-	public byte byteValue() {return new Double(_value).byteValue();}
+	public byte byteValue() {return (byte) _value;}
 	@Override
-	public short shortValue() {return new Double(_value).shortValue();}
+	public short shortValue() {return (short) _value;}
 	@Override
-	public int intValue() {return new Double(_value).intValue();}
+	public int intValue() {return (int) _value;}
 	@Override
-	public long longValue() {return new Double(_value).longValue();}
+	public long longValue() {return (long) _value;}
 	@Override
-	public float floatValue() {return new Double(_value).floatValue();}
+	public float floatValue() {return (float) _value;}
 	@Override
 	public double doubleValue() {return _value;}
 	@Override

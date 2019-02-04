@@ -326,7 +326,7 @@ public final class TestTypes extends XDTester {
 "<xd:declaration>\n"+
 "  void x() {\n"+
 "    ParseResult t;\n"+
-"    Parser s = xs:decimal; \n"+
+"    Parser s = decimal; \n"+
 "    t = s.parse('2');\n"+
 "    Decimal i = t.getValue();\n"+
 "    if (2 != i) error('E01');\n"+
@@ -343,20 +343,20 @@ public final class TestTypes extends XDTester {
 "    j = 2.0;\n"+
 "    boolean b = t;\n"+
 "    if (!b) error('E10');\n"+
-"    t = xs:boolean().parse('false');\n"+
+"    t = boolean().parse('false');\n"+
 "    if (!t) error('E11');\n"+
 "    b = t.getValue();\n"+
 "    if (b) error('E11');\n"+
-"    t = xs:int().parse('9');\n"+
+"    t = int().parse('9');\n"+
 "    int k = t.getValue();\n"+
 "    if (9 != k) error('E12');\n"+
-"    t = xs:float().parse('3.14');\n"+
+"    t = float().parse('3.14');\n"+
 "    float f = t.getValue();\n"+
 "    if (f != 3.14) error('E15');\n"+
-"    t = xs:dateTime().parse('2000-01-02T11:30:00Z');\n"+
+"    t = dateTime().parse('2000-01-02T11:30:00Z');\n"+
 "    Datetime dt = t.getValue();\n"+
 "    if (dt != new Datetime('2000-01-02T11:30:00Z')) error('E16');\n"+
-"    t = xs:duration().parse('PT9999H');\n"+
+"    t = duration().parse('PT9999H');\n"+
 "    Duration du = t.getValue();\n"+
 "    if (du != new Duration('PT9999H')) error('E18');\n"+
 "  }\n"+
@@ -379,7 +379,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			xdef = // test getParserParams
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a='string(2,3)' b='int(2,3)' c='xs:date(\"2000-01-01\",\"2010-01-01\")'>\n"+
+"  <a a='string(2,3)' b='int(2,3)' c='date(\"2000-01-01\",\"2010-01-01\")'>\n"+
 "    xdatetime('y-M-d','d.M.y')\n"+
 "  </a>\n"+
 "</xd:def>";
@@ -823,7 +823,7 @@ public final class TestTypes extends XDTester {
 			setChkSyntax(false);
 			xdef = // expressions
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int | string; finally out(xs:int | string)'/>\n"+
+"<a a='int | string; finally out(int | string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -838,7 +838,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int || string; finally out(xs:int || string)'/>\n"+
+"<a a='int || string; finally out(int || string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -853,7 +853,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int AND string; finally out(xs:int AND string)'/>\n"+
+"<a a='int AND string; finally out(int AND string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -868,7 +868,7 @@ public final class TestTypes extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='xs:int AAND string; finally out(xs:int AAND string)'/>\n"+
+"<a a='int AAND string; finally out(int AAND string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -1162,6 +1162,8 @@ public final class TestTypes extends XDTester {
 
 	public static XDParser getMyParser() {
 		return new XDParserAbstract() {
+			@Override
+			public int getLegalKeys() {return 0;}
 			@Override
 			public void parseObject(XXNode xnode, XDParseResult p) {
 				p.isSpaces();

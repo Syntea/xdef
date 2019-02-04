@@ -161,4 +161,10 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @return declared type name of parser
 	 */
 	public final String getDeclaredName() {return _declaredName;}
+	
+	@Override
+	/** Get integer with bits representing the allowed keyword parameters.
+	 * @return integer with bits representing the allowed keyword parameters.
+	 */
+	public int getLegalKeys() {return 0;}
 }

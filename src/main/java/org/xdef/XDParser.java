@@ -7,6 +7,67 @@ import org.xdef.sys.SException;
  * @author Vaclav Trojan
  */
 public interface XDParser extends XDValue {
+	/** Keyword "pattern" id.*/
+	public final static int PATTERN = 1;
+	/** Keyword "enumeration" id.*/
+	public final static int ENUMERATION = 2;
+	/** Keyword "whiteSpace" id.*/
+	public final static int WHITESPACE = 4;
+	/** Keyword "maxInclusive" id.*/
+	public final static int MAXINCLUSIVE = 8;
+	/** Keyword "maxExclusive" id.*/
+	public final static int MAXEXCLUSIVE = 16;
+	/** Keyword "minInclusive" id.*/
+	public final static int MININCLUSIVE = 32;
+	/** Keyword "minExclusive" id.*/
+	public final static int MINEXCLUSIVE = 64;
+	/** Keyword "totalDigits" id.*/
+	public final static int TOTALDIGITS = 128;
+	/** Keyword "fractionDigits" id.*/
+	public final static int FRACTIONDIGITS = 256;
+	/** Keyword "length" id.*/
+	public final static int LENGTH = 512;
+	/** Keyword "maxLength" id.*/
+	public final static int MAXLENGTH = 1024;
+	/** Keyword "minLength" id.*/
+	public final static int MINLENGTH = 2048;
+	/** Keyword "format" id.*/
+	public final static int NORMALIZE = 4096;
+	/** Keyword "item" id.*/
+	public final static int ITEM = 8192;
+	/** Keyword "base" id.*/
+	public final static int BASE = 16384;
+	/** Keyword "separator" id.*/
+	public final static int SEPARATOR = 32768;
+	/** Keyword "format" id.*/
+	public final static int FORMAT = 65536;
+	/** Keyword "outFormat" id.*/
+	public final static int OUTFORMAT = 131072;
+	/** Keyword "argument" id.*/
+	public final static int ARGUMENT = 262144;
+
+	/** Table of keyword parameters.*/
+	public final static String[] PARAM_NAMES = new String[] {
+		"pattern",			// p
+		"enumeration",		// e
+		"whiteSpace",		// w
+		"maxInclusive",		// m
+		"maxExclusive",		// m
+		"minInclusive",		// m
+		"minExclusive",		// m
+		"totalDigits",		// t
+		"fractionDigits",	// f
+		"length",			// l
+		"maxLength",		// l
+		"minLength",		// l
+		"normalize",		// n
+		"item",				// i
+		"base",				// b
+		"separator",		// s
+		"format",			// f
+		"outFormat",		// o
+		"argument",			// a
+	};
 
 	/** Get base parser.
 	 * @return base XDParser or null.
@@ -97,4 +158,8 @@ public interface XDParser extends XDValue {
 	 */
 	public String getDeclaredName();
 
+	/** Get integer with bits representing the allowed keyword parameters.
+	 * @return integer with bits representing the allowed keyword parameters.
+	 */
+	public int getLegalKeys();
 }

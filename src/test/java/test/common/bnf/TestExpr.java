@@ -4,11 +4,9 @@ import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 import test.utils.STester;
 
-/** Test of parsing and executions of expressions an assignment commands.
+/** Test of parsing and executions of BNF expressions an assignment commands.
  * @author Vaclav Trojan
  */
 public class TestExpr extends STester {
@@ -264,7 +262,7 @@ public class TestExpr extends STester {
 					|| "float".equals(s) || "String".equals(s)) {
 					// type decl
 					char ch = item.charAt(0);
-					if (i + 1 < code.length 
+					if (i + 1 < code.length
 						&& ((String)code[i + 1]).startsWith("name ")) {
 						ii = code[++i].toString().split(" ");
 						String name = source.substring(Integer.parseInt(ii[1]),
@@ -304,19 +302,19 @@ public class TestExpr extends STester {
 				stack.push(new SourceItem(s.toString()));
 			} else if ("intConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));				
+					Integer.parseInt(ii[2]));
 				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_INT);
 				stack.push(x);
 			} else if ("fltConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));				
+					Integer.parseInt(ii[2]));
 				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_FLOAT);
 				stack.push(x);
 			} else if ("boolConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));				
+					Integer.parseInt(ii[2]));
 				SourceItem x = new SourceItem(s);
 				x.setType(TYPE_BOOLEAN);
 				stack.push(x);
@@ -348,7 +346,6 @@ public class TestExpr extends STester {
 			result.append(stack.pop());
 			stack.clear();
 		}
-//System.out.println(result);
 		return result.toString().trim();
 	}
 
@@ -363,9 +360,6 @@ public class TestExpr extends STester {
 		final Map<String, Object> variables) {
 		final Stack<Object> stack = new Stack<Object>();
 		variables.clear();
-//		if (code == null) {
-//			return "Code is null!";
-//		}
 		try { // prepare printing
 			_byteArray = new ByteArrayOutputStream();
 			_out = new PrintStream(_byteArray, true, "UTF-8");
@@ -379,12 +373,12 @@ public class TestExpr extends STester {
 			item = ii[0];
 			if ("intConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));				
-				stack.push(new Long(s));
+					Integer.parseInt(ii[2]));
+				stack.push(Long.parseLong(s));
 			} else if ("fltConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));				
-				stack.push(new Double(s));
+					Integer.parseInt(ii[2]));
+				stack.push(Double.parseDouble(s));
 			} else if ("boolConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
@@ -807,16 +801,6 @@ public class TestExpr extends STester {
 		return sb.toString();
 	}
 
-	private static void printObjects(final BNFGrammar g) {
-		Object[] oo = g.getParsedObjects();
-		if (oo == null) {
-			System.out.println("null");
-		} else {
-			for (Object o : oo) {
-				System.out.println(o);
-			}
-		}
-	}
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
@@ -827,35 +811,6 @@ public class TestExpr extends STester {
 		g.setUserObject(this);
 		try {
 			String s;
-			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PrintStream ps = new PrintStream(baos, true, "UTF-8");
-			g.trace(ps);
-			prog(g, "int i?");
-			ps.close();
-			BufferedReader in = new BufferedReader(
-				new StringReader(new String(baos.toByteArray(), "UTF-8")));
-			String line;
-			int max = 0;
-			int min = 999999;
-			String ruleName = null;
-			while((line = in.readLine()) != null) {
-				if (line.endsWith("; true")) {
-					String[] xx = line.split(";");
-					String ss = xx[0];
-					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
-					int i = Integer.parseInt(xx[0]);
-					int j = Integer.parseInt(xx[1]);
-					if (j >= max) {
-						max = j;
-						ruleName = ss;
-						if (i < min) {
-							min = i;
-						}
-					}
-				}
-			}
-			in.close();
-//			System.out.println(ruleName + " (" + min + "," + max + ")");
 			g.trace(null);
 			assertEq("", expr("13", g, " /*x*/ 12/*x*//*x*/ + 1 /*x*/ "));
 			assertEq("", expr("abcdef", g, "'abc' + 'def'"));
@@ -879,7 +834,7 @@ public class TestExpr extends STester {
 			assertEq("", expr(String.valueOf(Math.cos(3.14)), g, "cos(3.14)"));
 			assertEq("", prog(g, "float i;"));
 			assertEq("", prog(g, "empty();"));
-			
+
 			assertEq("", prog(g, "j = empty() + 'abc';"));
 			assertEq("abc", getVar("j"));
 
@@ -1030,7 +985,7 @@ public class TestExpr extends STester {
 			assertEq("", prog(g, "i = 3; j = i % 2;"));
 			assertEq(3, getVar("i"));
 			assertEq(1, getVar("j"));
-			
+
 			assertEq("", prog(g, "i = 1; i += 2;"));
 			assertEq(3, getVar("i"));
 
@@ -1067,21 +1022,20 @@ public class TestExpr extends STester {
 			assertEq(0, getVar("i"));
 
 			assertEq("", prog(g, "float i; i = 0.0; i += sin(3.14);"));
-//			printObjects(g);
 			assertEq(Math.sin(3.14), getVar("i"));
 
 			prog(g, "print(min(3,14)); println('x');");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("3x\n", s);
-			
+
 			prog(g, "printf('Ahoj'); println();");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("Ahoj\n", s);
-			
+
 			prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("3, 4, 5\nx\n", s);
-			
+
 		} catch (Exception ex) {fail(ex);}
 	}
 

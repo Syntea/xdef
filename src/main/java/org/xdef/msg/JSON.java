@@ -7,7 +7,7 @@ public interface JSON {
 	static final String JSON_PREFIX = "JSON";
 	/** Default language. */
 	static final String JSON_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages or registred message tables. */
+	/** List of supported languages in the registered message tables. */
 	static final String[] JSON_LANGUAGES = {"ces", "eng", "slk"};
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;

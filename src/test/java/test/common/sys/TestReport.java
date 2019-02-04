@@ -10,12 +10,8 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SManager;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.charset.Charset;
 import java.util.Properties;
 import test.utils.STester;
 
@@ -25,15 +21,6 @@ import test.utils.STester;
 public class TestReport extends STester {
 
 	public TestReport() {super();}
-
-	private static Properties readProperties(String fname) throws Exception {
-		return readProperties(new FileInputStream(fname));
-	}
-
-	private static Properties readProperties(InputStream is) throws Exception {
-		return readProperties(new InputStreamReader(is,
-			Charset.forName("UTF-8")));
-	}
 
 	private static Properties readProperties(Reader in) throws Exception {
 		try {
@@ -51,6 +38,8 @@ public class TestReport extends STester {
 		String s;
 		Report r;
 		ArrayReporter reporter = new ArrayReporter();
+		// test modification
+		assertEq("axzyb", Report.text("","a&{0}{&u&x}{y}b","&{0}z").toString());
 		try {
 			reporter.clear();
 			//XML075=XML chyba&{0}{: }&{#SYS000}

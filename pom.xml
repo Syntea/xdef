@@ -7,16 +7,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>org.xdef</groupId>
-	<artifactId>xdef-core</artifactId>
-	<version>3.2.1.2</version><!-- when changed, change also ./properties/release.date, see below -->
+	<artifactId>xdef</artifactId>
+	<version>32.1.4</version><!-- when changed, change also ./properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
-	<name>xdef-core</name>
+	<name>xdef</name>
 	<!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
 	<description>X-definition 3.2 (Open Source Software)</description>
 	
 	<properties>
-		<release.date>2019-01-21</release.date>
+		<release.date>2019-02-04</release.date>
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		

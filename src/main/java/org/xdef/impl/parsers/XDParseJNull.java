@@ -16,28 +16,10 @@ public class XDParseJNull  extends XSAbstractParser {
 		_whiteSpace = 'c';
 	}
 	@Override
+	public int getLegalKeys() {return WHITESPACE;}
+	@Override
 	public void initParams() {
 		_whiteSpace = 'c';
-	}
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
-//			ENUMERATION +
-			WHITESPACE + //fixed collapse
-//			MAXINCLUSIVE +
-//			MAXEXCLUSIVE +
-//			MININCLUSIVE +
-//			MINEXCLUSIVE +
-//			TOTALDIGITS +
-//			FRACTIONDIGITS +
-//			LENGTH +
-//			MAXLENGTH +
-//			MINLENGTH +
-//			NORMALIZE +
-//			SEPARATOR +
-//			ITEM +
-			BASE +
-			0;
 	}
 	@Override
 	public byte getDefaultWhiteSpace() {return 'c';}

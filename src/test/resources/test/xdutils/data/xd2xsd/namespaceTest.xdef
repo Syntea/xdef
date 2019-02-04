@@ -4,7 +4,7 @@
          xd:name     ="main">
  <A a="string"
     b="int(2014)"
-    b1="? xs:long(2014)"
+    b1="? long(2014)"
     c="date('2014-01-01', '2017-01-01')"
     d="dec(2, 1)"
     e="float; default '1.2'"

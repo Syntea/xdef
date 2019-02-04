@@ -94,7 +94,7 @@ public class TestBNF extends STester {
 		if (!p.getParser().isInteger()) {
 			return false;
 		}
-		long i = new Long(p.getParser().getParsedString());
+		long i = Long.parseLong(p.getParser().getParsedString());
 		if (i < min) {
 			p.getParser().putReport(
 				Report.error("", "integer is lower then minimum"));
@@ -234,9 +234,9 @@ public class TestBNF extends STester {
 					} else if (ch >= '0' && ch <= '9') { //integer or float
 						if (s.indexOf('.') < 0 &&
 							s.indexOf('e') < 0 && s.indexOf('R') < 0) {
-							stack.push(new Long(s));
+							stack.push(Long.parseLong(s));
 						} else {
-							stack.push(new Double(s));
+							stack.push(Double.parseDouble(s));
 						}
 					} else { //var name
 						if (s.equals("true")) {
