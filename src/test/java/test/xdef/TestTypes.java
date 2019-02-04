@@ -1163,6 +1163,8 @@ public final class TestTypes extends XDTester {
 	public static XDParser getMyParser() {
 		return new XDParserAbstract() {
 			@Override
+			public int getLegalKeys() {return 0;}
+			@Override
 			public void parseObject(XXNode xnode, XDParseResult p) {
 				p.isSpaces();
 				if (!p.isToken("abc")) {

@@ -23,71 +23,6 @@ import org.xdef.XDContainer;
 public abstract class XSAbstractParser extends XDParserAbstract
 	implements XDParser, XDValue {
 
-	/** Table of keyword parameters.*/
-	protected final static String[] PARAM_NAMES = new String[] {
-		"pattern",			// p
-		"enumeration",		// e
-		"whiteSpace",		// w
-		"maxInclusive",		// m
-		"maxExclusive",		// m
-		"minInclusive",		// m
-		"minExclusive",		// m
-		"totalDigits",		// t
-		"fractionDigits",	// f
-		"length",			// l
-		"maxLength",		// l
-		"minLength",		// l
-		"normalize",		// n
-		"item",				// i
-		"base",				// b
-		"separator",		// s
-		"format",			// f
-		"outFormat",		// o
-		"argument",			// a
-//		"trimTo",			// x
-	};
-
-	/** Keyword "pattern" id.*/
-	protected final static int PATTERN = 1;
-	/** Keyword "enumeration" id.*/
-	protected final static int ENUMERATION = 2;
-	/** Keyword "whiteSpace" id.*/
-	protected final static int WHITESPACE = 4;
-	/** Keyword "maxInclusive" id.*/
-	protected final static int MAXINCLUSIVE = 8;
-	/** Keyword "maxExclusive" id.*/
-	protected final static int MAXEXCLUSIVE = 16;
-	/** Keyword "minInclusive" id.*/
-	protected final static int MININCLUSIVE = 32;
-	/** Keyword "minExclusive" id.*/
-	protected final static int MINEXCLUSIVE = 64;
-	/** Keyword "totalDigits" id.*/
-	protected final static int TOTALDIGITS = 128;
-	/** Keyword "fractionDigits" id.*/
-	public final static int FRACTIONDIGITS = 256;
-	/** Keyword "length" id.*/
-	public final static int LENGTH = 512;
-	/** Keyword "maxLength" id.*/
-	protected final static int MAXLENGTH = 1024;
-	/** Keyword "minLength" id.*/
-	protected final static int MINLENGTH = 2048;
-	/** Keyword "format" id.*/
-	protected final static int NORMALIZE = 4096;
-	/** Keyword "item" id.*/
-	protected final static int ITEM = 8192;
-	/** Keyword "base" id.*/
-	protected final static int BASE = 16384;
-	/** Keyword "separator" id.*/
-	protected final static int SEPARATOR = 32768;
-	/** Keyword "format" id.*/
-	protected final static int FORMAT = 65536;
-	/** Keyword "outFormat" id.*/
-	protected final static int OUTFORMAT = 131072;
-	/** Keyword "argument" id.*/
-	protected final static int ARGUMENT = 262144;
-//	/** Keyword "trimTo" id.*/
-//	protected final static int TRIMTO = 524288;
-
 	/** WhiteSpace handling mode. Capital letter means fixed value.
 	 * <ul>
 	 * <li>'p' (preserve)<p> No normalization is done, the value is not
@@ -215,7 +150,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	}
 
 	public void setItem(XDValue item) {} //default: not specified
-	abstract public int getLegalKeys();
 	abstract public byte getDefaultWhiteSpace();
 	private int getKeyId(String name) {
 		int keyMask = getLegalKeys();
@@ -698,4 +632,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		return true;
 	}
+	@Override
+	abstract public int getLegalKeys();
 }
