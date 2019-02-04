@@ -60,7 +60,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 302001001L; // 3.2.001.001
+	private static final long XD_MIN_VERSION = 302001001L; // 32.001.001
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -1263,14 +1263,26 @@ public final class XPool implements XDPool, Serializable {
 		try {
 			// check if version is compatible with this implementation
 			String[] verParts = ver.split("\\."); // verion parts
-			if (verParts.length == 4 && verParts[0].startsWith("XD")) {
-				long x = Integer.parseInt(verParts[0].substring(2)) * 100
+			if (!verParts[0].startsWith("XD")) {
+				throw new Exception("Version error");
+			}
+			verParts[0] = verParts[0].substring(2);
+			long x;
+			if (verParts.length == 3) {
+				x = Integer.parseInt(verParts[0]);
+				x = (x / 10) * 100 + (x % 10);
+				x = x * 1000 + Integer.parseInt(verParts[1]);
+				x = x * 1000 + Integer.parseInt(verParts[2]);
+			} else if (verParts.length==4) {
+				x = Integer.parseInt(verParts[0]) * 100
 					+ Integer.parseInt(verParts[1]);
 				x = x * 1000 + Integer.parseInt(verParts[2]);
 				x = x * 1000 + Integer.parseInt(verParts[3]);
-				if (x < XD_MIN_VERSION) {
-					throw new Exception("Version error");
-				}
+			} else {
+				throw new Exception("Version error");
+			}
+			if (x < XD_MIN_VERSION) {
+				throw new Exception("Version error");
 			}
 		} catch (Exception ex) {
 			//SObject reader: incorrect format of data&{0}{: }
@@ -1436,5 +1448,5 @@ public final class XPool implements XDPool, Serializable {
 		XPool xp = new XPool();
 		xp.xpRead(input);
 		return xp;
-	}
+	}	
 }

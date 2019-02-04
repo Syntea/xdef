@@ -220,7 +220,7 @@ public class XScriptParser extends StringParser
 	public char _sym;
 	/** Parsed unary minus. */
 	public boolean _unaryMinus;
-	/** XML version (10 -> "1.0", 11 -> "1.1" )*/
+	/** XML version (10 -&gt; "1.0", 11 -&gt; "1.1" )*/
 	public byte _xmlVersion;
 	/** Saved position of last symbol (for error reports) */
 	private SPosition _lastSPos;
@@ -377,7 +377,7 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Creates a new instance of ScriptParser.
-	 * @param xmlVersion 10 -> "1.0", 11 -> "1.1".
+	 * @param xmlVersion 10 -&gt; "1.0", 11 -&gt; "1.1".
 	 */
 	public XScriptParser(final byte xmlVersion) {
 		super();

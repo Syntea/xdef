@@ -175,6 +175,11 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 			return  false;
 		}
+
+		@Override
+		public String toString() {
+			return "stopAddr=" + _stopAddr + ", sourceID=" + _sourceID;
+		}
 	}
 
 	// debugger command
@@ -319,10 +324,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 		}
 		XMStatementInfo nextsi = di.nextStatementInfo(si);
-//		while (nextsi != null
-//			&& nextsi.getLine() == si.getLine()
-//			&& nextsi.getLine() == si.getColumn()) {
-//		}
 		int endPos;
 		if (nextsi != null && spos._sysId.equals(nextsi.getSysId())
 			&& nextsi.getLine() == spos._line) {
@@ -745,6 +746,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (!_debugMode) {
 			return NOSTEP;
 		}
+		if (xnode == null) {
+			return NOSTEP;
+		}
 		if (!_opened) {
 			initGUI(xnode.getXDPool());
 		}
@@ -752,12 +756,16 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		XDValue codeItem;
 		boolean trace;
 		boolean pause;
-		String txt;
 		XMStatementInfo si = debugInfo==null ? null : debugInfo.getInfo(pc);
+		String xpos = xnode.getXPos();
+		String txt;
 		if (code == null) {
+//			if (si == null) {
+//				return NOSTEP;
+//			}
 			codeItem = null;
 			trace = pause = false;
-			txt = "PAUSE " + xnode.getXPos();
+			txt = "PAUSE " + xpos;
 		} else {
 			codeItem = code[pcounter];
 			trace = codeItem.getCode() == CodeTable.DEBUG_TRACE;
@@ -766,7 +774,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				si = debugInfo.prevStatementInfo(si);
 			}
 			txt = (trace ? "TRACE " : pause ?	"PAUSE " : codeItem.toString())
-				+ xnode.getXPos() + "; pc=" + pcounter
+				+ xpos + "; pc=" + pcounter
 				+ ((trace || pause) && codeItem.getParam() > 0 ?
 				"; \"" + stack[stackPointer].toString() + "\"; " : "");
 		}
@@ -1103,25 +1111,28 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (_stopAddresses.length == 0) {
 			return false;
 		}
-		boolean found = false;
-		int i;
-		while ((i=Arrays.binarySearch(_stopAddresses,new StopAddr(addr))) >= 0){
-			if (_stopAddresses.length == 1) {
-				_stopAddresses = new StopAddr[0];
-			} else {
-				StopAddr[] old = _stopAddresses;
-				_stopAddresses = new StopAddr[old.length - 1];
-				if (i > 0) {
-					System.arraycopy(old, 0, _stopAddresses, 0, i);
-				}
-				if (i < _stopAddresses.length) {
-					System.arraycopy(old,
-						i + 1, _stopAddresses, i, _stopAddresses.length - i);
+		if (_stopAddresses != null) {
+			for (int i = 0; i < _stopAddresses.length; i++) {
+				StopAddr x = _stopAddresses[i];
+				if (x._stopAddr == addr) {
+					if (_stopAddresses.length == 1) {
+						_stopAddresses = new StopAddr[0];
+					} else {
+						StopAddr[] old = _stopAddresses;
+						_stopAddresses = new StopAddr[old.length - 1];
+						if (i > 0) {
+							System.arraycopy(old, 0, _stopAddresses, 0, i);
+						}
+						if (i < _stopAddresses.length) {
+							System.arraycopy(old,
+								i+1, _stopAddresses,i,_stopAddresses.length-i);
+						}
+					}
+					return true;
 				}
 			}
-			found = true;
 		}
-		return found;
+		return false;
 	}
 
 	@Override

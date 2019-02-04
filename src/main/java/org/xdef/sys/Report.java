@@ -40,40 +40,40 @@ import org.w3c.dom.NodeList;
  * the empty string.</p>
  * <p>Examples of source report text and modification strings:</p>
  * <pre><code><b>
- * report text: "a &amp;{p} &amp;{q} b"
+ * report text: "a &amp;{0} &amp;{1} b"
  *   modification string: null
  *   result: "a   b"
- *   modification string: "&amp;{p}xy&amp;{q}z"
+ *   modification string: "&amp;{0}xy&amp;{1}z"
  *   result: "a xy z b"
  *
- * report text: "a&amp;{p}{x}b"
+ * report text: "a&amp;{0}{x}b"
  *   modification string: null
  *   result: "ab"
- *   modification string: "&amp;{p}z"
+ *   modification string: "&amp;{0}z"
  *   result: "axzb"
  *
- * report text: "a&amp;{p}{x}{y}b"
+ * report text: "a&amp;{0}{x}{y}b"
  *   modification string: null
  *   result: "ab"
- *   modification string: "&amp;{p}z"
+ *   modification string: "&amp;{0}z"
  *   result: "axzyb"
  *
- * report text: "a&amp;{p}{&amp;u&amp;x}{y}b"
+ * report text: "a&amp;{0}{&amp;u&amp;x}{y}b"
  *   modification string: null
  *   result: "aub"
- *   modification string: "&amp;{p}z"
+ *   modification string: "&amp;{0}z"
  *   result: "axzyb"
  *
- * report text: "Error&amp;{p}{, pos=}"
+ * report text: "Error&amp;{0}{, pos=}"
  *   modification string: null
  *   result: "Error"
- *   modification string: "&amp;{p}123"
+ *   modification string: "&amp;{0}123"
  *   result: "Error, pos= 123"
  *
- * report text: "Error&amp;{p}{&amp; on undefined position&amp; on position }"
+ * report text: "Error&amp;{0}{&amp; on undefined position&amp; on position }"
  *   modification string: null
  *   result: "Error on undefined position"
- *   modification string: "&amp;{p}123"
+ *   modification string: "&amp;{0}123"
  *   result: "Error on position 123"
  * </b></code></pre>
  * @author Vaclav Trojan

@@ -55,6 +55,35 @@ public class TestErrorReporting extends STester {
 		}
 	}
 
+	private void test1() {
+		String source =
+			"\n" +      //01
+			"\n" +      //02
+			"a a\n" +   //03
+			" b\n" +    //04
+			"\n";       //05
+		StringParser p;
+		SPosition savedPos;
+
+		try {
+			p = new StringParser(source);
+			test2(p, source);
+		} catch (Exception ex) {
+			fail(ex);
+		}
+
+		try {
+			p = new StringParser(source);
+			savedPos = p.getPosition(); //position with line info
+			p.setLineInfoFlag(true);
+			p.setSourceBuffer(source);
+			test2(p, source);
+		} catch (Exception ex) {
+			fail(ex);
+		}
+
+	}
+
 	private void test2(final StringParser p, final String source) {
 		Report report;
 		ArrayReporter reporter;
@@ -135,34 +164,6 @@ public class TestErrorReporting extends STester {
 			}
 //			reporter = (ArrayReporter) reporter.getReportReader();
 //			printToString(reporter, source);
-		} catch (Exception ex) {
-			fail(ex);
-		}
-
-	}
-	private void test1() {
-		String source =
-			"\n" +      //01
-			"\n" +      //02
-			"a a\n" +   //03
-			" b\n" +    //04
-			"\n";       //05
-		StringParser p;
-		SPosition savedPos;
-
-		try {
-			p = new StringParser(source);
-			test2(p, source);
-		} catch (Exception ex) {
-			fail(ex);
-		}
-
-		try {
-			p = new StringParser(source);
-			savedPos = p.getPosition(); //position with line info
-			p.setLineInfoFlag(true);
-			p.setSourceBuffer(source);
-			test2(p, source);
 		} catch (Exception ex) {
 			fail(ex);
 		}

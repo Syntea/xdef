@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<Order Number="123" CustomerCode="ALFA">
+  <DeliveryPlace>
+    <Address Street="LIBERECKÁ" House="5" City="LIBEREC" ZIP="32321"/>
+  </DeliveryPlace>
+  <Item ProductCode="0002" Quantity="2"/>
+  <Item ProductCode="0003" Quantity="1"/>
+</Order>

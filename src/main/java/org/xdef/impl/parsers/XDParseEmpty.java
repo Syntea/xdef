@@ -12,6 +12,8 @@ public class XDParseEmpty extends XDParseCDATA {
 		_minLength = _maxLength = 0;
 	}
 	@Override
+	public int getLegalKeys() {return 0;}
+	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public boolean equals(final XDValue o) {return o instanceof XDParseEmpty;}

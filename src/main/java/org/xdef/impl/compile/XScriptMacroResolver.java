@@ -297,7 +297,7 @@ public class XScriptMacroResolver extends StringParser {
 	 * is specified
 	 * @param reporter reporter where to write errors.
 	 * @param macros map with macro definitions
-	 * @param xmlVersion version of XML (10 -> "1.0", 11 -> "1.0").
+	 * @param xmlVersion version of XML (10 -&gt; "1.0", 11 -&gt; "1.0").
 	 */
 	public static void expandMacros(final SBuffer sb,
 		final String actDefName,

@@ -31,6 +31,8 @@ public abstract class Processor implements Convertor {
 	/** Creates instance with root schema at given URL. Initializes all schema
 	 * elements.
 	 * @param rootSchemaURL URL of root schema.
+	 * @param xdURI namespace URI of X-definition.
+	 * @param xdPrefix prefix of namespace URI of X-definition.
 	 */
 	public Processor(URL rootSchemaURL, String xdURI, String xdPrefix) {
 /*VT*/

@@ -1,0 +1,11 @@
+<Books>
+
+  <Book issued='1935' title='Krakatit'  isbn='230567819'>
+    <Author>Karel Čapek</Author>
+  </Book>
+
+  <Book issued='1968' isbn='234567819' title='2001: A Space Odyssey'>
+    <Author>Arthur C. Clarke</Author>
+  </Book>
+
+</Books>

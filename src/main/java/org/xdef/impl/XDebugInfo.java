@@ -141,6 +141,7 @@ public class XDebugInfo implements XMDebugInfo {
 		final long column,
 		final String sysId,
 		final String xdName) {
+		// find the statement at the line position
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo inf = _statementList.get(i);
 			String n1 = inf.getXDName();
@@ -152,43 +153,11 @@ public class XDebugInfo implements XMDebugInfo {
 				continue;
 			}
 			if (inf.posIn(line, column)) {
-				return inf;
+				if (line == inf._line) {
+					return inf;
+				}
 			}
 		}
-//		for (int i = 0; i < _statementList.size(); i++) {
-//			XStatementInfo inf = _statementList.get(i);
-//			String n1 = inf.getXDName();
-//			if (xdName != null && !xdName.equals(n1)) {
-//				continue;
-//			}
-//			String s1 = inf.getSysId();
-//			if (sysId != null && !sysId.equals(s1)) {
-//				continue;
-//			}
-//			if (line == inf.getLine()) {
-//				if (column >= inf.getColumn()) {
-//					int j = i+1;
-//					if (j == _statementList.size()) {
-//						return inf;
-//					}
-//					XStatementInfo inf1 = _statementList.get(j);
-//					String n2 = inf1.getXDName();
-//					if (!n1.equals(n2)) {
-//						continue;
-//					}
-//					String s2 = inf1.getSysId();
-//					if (!s1.equals(s2)) {
-//						return inf;
-//					}
-//					if (inf1.getLine() > line) {
-//						return inf;
-//					}
-//					if (inf1.getColumn() < 0 || column <= inf1.getColumn()) {
-//						return inf;
-//					}
-//				}
-//			}
-//		}
 		return null;
 	}
 
