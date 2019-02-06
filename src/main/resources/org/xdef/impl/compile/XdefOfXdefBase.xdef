@@ -433,7 +433,7 @@ AttributeOnStartSection ::= "onStartElement" S? Statement?
 FixedModifier ::= "fixed" S $rule
 
 ValueValidationSection ::= FixedModifier (Expression | Block)
-  | (Occurrence S CheckValueSpecification?) | CheckValueSpecification
+  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */
