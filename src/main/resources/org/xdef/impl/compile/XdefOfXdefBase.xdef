@@ -100,7 +100,7 @@ PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
   "$PI" |"$E" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY" | "null") $rule
 
 Identifier ::= BaseIdentifier - Keyword
-  /* Identifier ::= (BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
+  /* Identifier ::= BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
 
 LanguageId ::= [a-z] {2,3}
 
@@ -433,13 +433,21 @@ AttributeOnStartSection ::= "onStartElement" S? Statement?
 FixedModifier ::= "fixed" S $rule
 
 ValueValidationSection ::= FixedModifier (Expression | Block)
-  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
+  | (Occurrence S CheckValueSpecification?) | CheckValueSpecification
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */
 
-ValidationExpression ::= Expression
+ValidationExpression ::= ValidationMethod | Expression
   /* Result of ValidationExpression must be a boolean or ParseResult type. */
+
+ValidationMethod ::= SchemaValidationMethod | XDValidationMethod
+
+SchemaValidationMethod ::= ParseMethod
+
+XDValidationMethod ::= ParseMethod
+
+ParseMethod ::= Method
 
 TypeMethodName ::= Identifier
 
