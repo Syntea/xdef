@@ -12,6 +12,7 @@
             <includes>
                 <include>README.md</include>
                 <include>apache-license-2.0.md</include>
+                <include>changelog.md</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
@@ -32,6 +33,10 @@
             <source>src/main/resources/org/xdef/sys/config/pominfo.properties</source>
             <outputDirectory>src/org/xdef/sys/config</outputDirectory>
             <filtered>true</filtered>
+        </file>
+        <file>
+            <source>pom.xml</source>
+            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
         </file>
     </files>
 </assembly>

@@ -17,4 +17,10 @@
             <outputDirectory>documentation</outputDirectory>
         </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>pom.xml</source>
+            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
+        </file>
+    </files>
 </assembly>
