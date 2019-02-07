@@ -13,7 +13,7 @@
     
     <name>xdef</name>
     <!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
-    <description>X-definition 3.2 (Open Source Software)</description>
+    <description>X-definition 32.x (Open Source Software)</description>
     
     <properties>
         <release.date>2019-02-04</release.date>
@@ -258,13 +258,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>assembly</id>
-            <build>
-                <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
