@@ -9,7 +9,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>src/main/documentation</directory>
+            <directory>src/documentation</directory>
             <excludes>
                 <exclude>*.docx</exclude>
                 <exclude>*.doc</exclude>
