@@ -7,6 +7,7 @@
     <formats>
         <format>zip</format>
     </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
             <includes>
@@ -14,24 +15,24 @@
                 <include>apache-license-2.0.md</include>
                 <include>changelog.md</include>
             </includes>
-            <useDefaultExcludes>true</useDefaultExcludes>
+            <outputDirectory>META-INF</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/java</directory>
-            <outputDirectory>src</outputDirectory>
+            <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
             <excludes>
                 <exclude>org/xdef/sys/config/pominfo.properties</exclude>
             </excludes>
-            <outputDirectory>src</outputDirectory>
+            <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>
     <files>
         <file>
             <source>src/main/resources/org/xdef/sys/config/pominfo.properties</source>
-            <outputDirectory>src/org/xdef/sys/config</outputDirectory>
+            <outputDirectory>org/xdef/sys/config</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
