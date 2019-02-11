@@ -2952,7 +2952,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param source source data.
 	 * @param defName the name of X-definition.
 	 * @param lang language of thesaurus.
-	 * @param deflt defalut language.
+	 * @param deflt default language.
 	 * @param xp XDPool object.
 	 * @param languages List of languages in this thesaurus.
 	 */
