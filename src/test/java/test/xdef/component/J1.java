@@ -391,7 +391,7 @@ public static class X2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getx() != null)
-      el.setAttribute("x", getx());
+      el.setAttribute(XD_Name_x, getx());
     return el;
   }
   @Override
@@ -417,6 +417,7 @@ public static class X2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_x="x";
   private String _x;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -431,6 +432,7 @@ public static class X2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_x = xx.getNodeName();
     setx(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -490,7 +492,7 @@ public static class C2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getc() != null)
-      el.setAttribute("c", getc());
+      el.setAttribute(XD_Name_c, getc());
     return el;
   }
   @Override
@@ -516,6 +518,7 @@ public static class C2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_c="c";
   private String _c;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -530,6 +533,7 @@ public static class C2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_c = xx.getNodeName();
     setc(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -589,7 +593,7 @@ public static class X3 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getxx() != null)
-      el.setAttribute("xx", getxx());
+      el.setAttribute(XD_Name_xx, getxx());
     return el;
   }
   @Override
@@ -615,6 +619,7 @@ public static class X3 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_xx="xx";
   private String _xx;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -629,6 +634,7 @@ public static class X3 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_xx = xx.getNodeName();
     setxx(parseResult.getParsedValue().stringValue());
   }
   @Override

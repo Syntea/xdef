@@ -82,9 +82,9 @@ public class A implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (geta() != null)
-      el.setAttribute("a", geta());
+      el.setAttribute(XD_Name_a, geta());
     if (getdec() != null)
-      el.setAttribute("dec", getdec().toString());
+      el.setAttribute(XD_Name_dec, getdec().toString());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -127,7 +127,9 @@ public class A implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private String _a;
+  private String XD_Name_dec="dec";
   private java.math.BigDecimal _dec;
   private final java.util.List<A.W> _W = new java.util.ArrayList<A.W>();
   private final java.util.List<A.Y> _Y = new java.util.ArrayList<A.Y>();
@@ -155,9 +157,13 @@ public class A implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().stringValue());
-    else setdec(parseResult.getParsedValue().decimalValue());
+}    else {
+      XD_Name_dec = xx.getNodeName();
+      setdec(parseResult.getParsedValue().decimalValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -265,7 +271,7 @@ public static class W implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getw() != null)
-      el.setAttribute("w", getw());
+      el.setAttribute(XD_Name_w, getw());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -300,6 +306,7 @@ public static class W implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_w="w";
   private String _w;
   private String _$value;
   private char _$$value= (char) -1;
@@ -321,6 +328,7 @@ public static class W implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_w = xx.getNodeName();
     setw(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -1115,7 +1123,7 @@ public static class d1 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getd() != null)
-      el.setAttribute("d", getd().formatDate("yyyyMMddHHmmss"));
+      el.setAttribute(XD_Name_d, getd().formatDate("yyyyMMddHHmmss"));
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -1150,6 +1158,7 @@ public static class d1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_d="d";
   private org.xdef.sys.SDatetime _d;
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
@@ -1171,6 +1180,7 @@ public static class d1 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_d = xx.getNodeName();
     setd(parseResult.getParsedValue().datetimeValue());
   }
   @Override
@@ -1269,7 +1279,7 @@ public static class d2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getd() != null)
-      el.setAttribute("d", getd().formatDate("EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]"));
+      el.setAttribute(XD_Name_d, getd().formatDate("EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]"));
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -1304,6 +1314,7 @@ public static class d2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_d="d";
   private org.xdef.sys.SDatetime _d;
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
@@ -1325,6 +1336,7 @@ public static class d2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_d = xx.getNodeName();
     setd(parseResult.getParsedValue().datetimeValue());
   }
   @Override
@@ -1387,7 +1399,7 @@ public static class d_e_f implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getd_e_f() != null)
-      el.setAttribute("d-e.f", getd_e_f());
+      el.setAttribute(XD_Name_d_e_f, getd_e_f());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -1422,6 +1434,7 @@ public static class d_e_f implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_d_e_f="d_e_f";
   private String _d_e_f;
   private String _$value;
   private char _$$value= (char) -1;
@@ -1443,6 +1456,7 @@ public static class d_e_f implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_d_e_f = xx.getNodeName();
     setd_e_f(parseResult.getParsedValue().stringValue());
   }
   @Override

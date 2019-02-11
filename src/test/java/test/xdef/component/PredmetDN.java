@@ -69,11 +69,11 @@ public class PredmetDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getNazevPredmetu() != null)
-      el.setAttribute("NazevPredmetu", getNazevPredmetu());
+      el.setAttribute(XD_Name_NazevPredmetu, getNazevPredmetu());
     if (getDruhPredmetu() != null)
-      el.setAttribute("DruhPredmetu", getDruhPredmetu());
+      el.setAttribute(XD_Name_DruhPredmetu, getDruhPredmetu());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -107,8 +107,11 @@ public class PredmetDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_NazevPredmetu="NazevPredmetu";
   private String _NazevPredmetu;
+  private String XD_Name_DruhPredmetu="DruhPredmetu";
   private String _DruhPredmetu;
   private Z3 _Skoda;
   private PredmetDN.Vlastnik _Vlastnik;
@@ -127,11 +130,16 @@ public class PredmetDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@DruhPredmetu"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@DruhPredmetu")) {
+      XD_Name_DruhPredmetu = xx.getNodeName();
       setDruhPredmetu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPredmetu"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPredmetu")) {
+      XD_Name_NazevPredmetu = xx.getNodeName();
       setNazevPredmetu(parseResult.getParsedValue().stringValue());
-    else setOznSegmentu(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_OznSegmentu = xx.getNodeName();
+      setOznSegmentu(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

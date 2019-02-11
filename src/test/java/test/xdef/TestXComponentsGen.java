@@ -87,10 +87,6 @@ public class TestXComponentsGen extends XDTester {
 				throw new RuntimeException("Test directory is missing");
 			}
 		}
-		String xcDir = g.getAbsolutePath().replace('\\', '/');
-		if (!xcDir.endsWith("/")) {
-			xcDir += '/';
-		}
 		// generate XCDPool from sources
 		try {
 			// force following classes to be compiled!

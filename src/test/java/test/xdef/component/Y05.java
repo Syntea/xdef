@@ -54,9 +54,9 @@ public class Y05 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute("One", getOne());
+      el.setAttribute(XD_Name_One, getOne());
     if (getTwo() != null)
-      el.setAttribute("Two", getTwo());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override
@@ -82,7 +82,9 @@ public class Y05 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_One="One";
   private String _One;
+  private String XD_Name_Two="Two";
   private String _Two;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -97,9 +99,13 @@ public class Y05 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().stringValue());
-    else setTwo(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_Two = xx.getNodeName();
+      setTwo(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

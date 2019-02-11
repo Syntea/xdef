@@ -471,7 +471,7 @@ public static class B_2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getb() != null)
-      el.setAttribute("b", String.valueOf(getb()));
+      el.setAttribute(XD_Name_b, String.valueOf(getb()));
     return el;
   }
   @Override
@@ -497,6 +497,7 @@ public static class B_2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_b="b";
   private Integer _b;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -511,6 +512,7 @@ public static class B_2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_b = xx.getNodeName();
     setb(parseResult.getParsedValue().intValue());
   }
   @Override

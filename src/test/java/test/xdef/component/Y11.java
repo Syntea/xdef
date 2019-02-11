@@ -179,9 +179,9 @@ public static class B implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getN() != null)
-      el.setAttribute("N", getN());
+      el.setAttribute(XD_Name_N, getN());
     if (getI() != null)
-      el.setAttribute("I", getI());
+      el.setAttribute(XD_Name_I, getI());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -215,7 +215,9 @@ public static class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_N="N";
   private String _N;
+  private String XD_Name_I="I";
   private String _I;
   private final java.util.List<test.xdef.component.Y11Op> _Ev =
     new java.util.ArrayList<test.xdef.component.Y11Op>();
@@ -236,9 +238,13 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@I"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@I")) {
+      XD_Name_I = xx.getNodeName();
       setI(parseResult.getParsedValue().stringValue());
-    else setN(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_N = xx.getNodeName();
+      setN(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

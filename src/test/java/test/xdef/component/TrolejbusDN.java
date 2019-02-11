@@ -102,29 +102,29 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getLinka() != null)
-      el.setAttribute("Linka", getLinka());
+      el.setAttribute(XD_Name_Linka, getLinka());
     if (getLinkaPoradi() != null)
-      el.setAttribute("LinkaPoradi", String.valueOf(getLinkaPoradi()));
+      el.setAttribute(XD_Name_LinkaPoradi, String.valueOf(getLinkaPoradi()));
     if (getEvidCislo() != null)
-      el.setAttribute("EvidCislo", getEvidCislo());
+      el.setAttribute(XD_Name_EvidCislo, getEvidCislo());
     if (getTypVozidla() != null)
-      el.setAttribute("TypVozidla", getTypVozidla());
+      el.setAttribute(XD_Name_TypVozidla, getTypVozidla());
     if (getTypBrzd() != null)
-      el.setAttribute("TypBrzd", getTypBrzd());
+      el.setAttribute(XD_Name_TypBrzd, getTypBrzd());
     if (getStavBrzd() != null)
-      el.setAttribute("StavBrzd", getStavBrzd());
+      el.setAttribute(XD_Name_StavBrzd, getStavBrzd());
     if (getKodPojistitele() != null)
-      el.setAttribute("KodPojistitele", getKodPojistitele());
+      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele());
     if (getNazevPojistitele() != null)
-      el.setAttribute("NazevPojistitele", getNazevPojistitele());
+      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele());
     if (getCisloDokladuPojisteni() != null)
-      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
+      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni());
     if (getPojisteniText() != null)
-      el.setAttribute("PojisteniText", getPojisteniText());
+      el.setAttribute(XD_Name_PojisteniText, getPojisteniText());
     if (getDruhVozidla() != null)
-      el.setAttribute("DruhVozidla", getDruhVozidla());
+      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -159,17 +159,29 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_Linka="Linka";
   private String _Linka;
+  private String XD_Name_LinkaPoradi="LinkaPoradi";
   private Integer _LinkaPoradi;
+  private String XD_Name_EvidCislo="EvidCislo";
   private String _EvidCislo;
+  private String XD_Name_TypVozidla="TypVozidla";
   private String _TypVozidla;
+  private String XD_Name_TypBrzd="TypBrzd";
   private String _TypBrzd;
+  private String XD_Name_StavBrzd="StavBrzd";
   private String _StavBrzd;
+  private String XD_Name_KodPojistitele="KodPojistitele";
   private String _KodPojistitele;
+  private String XD_Name_NazevPojistitele="NazevPojistitele";
   private String _NazevPojistitele;
+  private String XD_Name_CisloDokladuPojisteni="CisloDokladuPojisteni";
   private String _CisloDokladuPojisteni;
+  private String XD_Name_PojisteniText="PojisteniText";
   private String _PojisteniText;
+  private String XD_Name_DruhVozidla="DruhVozidla";
   private String _DruhVozidla;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
@@ -189,29 +201,43 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
+      XD_Name_CisloDokladuPojisteni = xx.getNodeName();
       setCisloDokladuPojisteni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
+      XD_Name_DruhVozidla = xx.getNodeName();
       setDruhVozidla(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@EvidCislo"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@EvidCislo")) {
+      XD_Name_EvidCislo = xx.getNodeName();
       setEvidCislo(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
+      XD_Name_KodPojistitele = xx.getNodeName();
       setKodPojistitele(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Linka"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Linka")) {
+      XD_Name_Linka = xx.getNodeName();
       setLinka(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@LinkaPoradi"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@LinkaPoradi")) {
+      XD_Name_LinkaPoradi = xx.getNodeName();
       setLinkaPoradi(parseResult.getParsedValue().intValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
+      XD_Name_NazevPojistitele = xx.getNodeName();
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
+      XD_Name_PojisteniText = xx.getNodeName();
       setPojisteniText(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
+      XD_Name_StavBrzd = xx.getNodeName();
       setStavBrzd(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
+      XD_Name_TypBrzd = xx.getNodeName();
       setTypBrzd(parseResult.getParsedValue().stringValue());
-    else setTypVozidla(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_TypVozidla = xx.getNodeName();
+      setTypVozidla(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

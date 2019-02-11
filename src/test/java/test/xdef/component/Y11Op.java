@@ -60,9 +60,9 @@ public class Y11Op implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getN() != null)
-      el.setAttribute("N", getN());
+      el.setAttribute(XD_Name_N, getN());
     if (getM() != null)
-      el.setAttribute("M", getM());
+      el.setAttribute(XD_Name_M, getM());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -96,7 +96,9 @@ public class Y11Op implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_N="N";
   private String _N;
+  private String XD_Name_M="M";
   private String _M;
   private final java.util.List<Y11Op.Co> _Co = new java.util.ArrayList<Y11Op.Co>();
   private Y11Op.Y _Y;
@@ -115,9 +117,13 @@ public class Y11Op implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@M"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@M")) {
+      XD_Name_M = xx.getNodeName();
       setM(parseResult.getParsedValue().stringValue());
-    else setN(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_N = xx.getNodeName();
+      setN(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -191,9 +197,9 @@ public static class Co implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getC() != null)
-      el.setAttribute("C", getC());
+      el.setAttribute(XD_Name_C, getC());
     if (getI() != null)
-      el.setAttribute("I", getI());
+      el.setAttribute(XD_Name_I, getI());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -226,7 +232,9 @@ public static class Co implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_C="C";
   private String _C;
+  private String XD_Name_I="I";
   private String _I;
   private test.xdef.component.Y11Op.Co.X _X;
   private org.xdef.component.XComponent XD_Parent;
@@ -244,9 +252,13 @@ public static class Co implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@C"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@C")) {
+      XD_Name_C = xx.getNodeName();
       setC(parseResult.getParsedValue().stringValue());
-    else setI(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_I = xx.getNodeName();
+      setI(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -393,7 +405,7 @@ public static class Y implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getY() != null)
-      el.setAttribute("Y", getY());
+      el.setAttribute(XD_Name_Y, getY());
     return el;
   }
   @Override
@@ -419,6 +431,7 @@ public static class Y implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Y="Y";
   private String _Y;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -433,6 +446,7 @@ public static class Y implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Y = xx.getNodeName();
     setY(parseResult.getParsedValue().stringValue());
   }
   @Override

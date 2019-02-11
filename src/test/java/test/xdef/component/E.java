@@ -156,7 +156,7 @@ public static class Clazz implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gettry() != null)
-      el.setAttribute("try", gettry());
+      el.setAttribute(XD_Name_try, gettry());
     return el;
   }
   @Override
@@ -182,6 +182,7 @@ public static class Clazz implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_try="try";
   private String _try;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -196,6 +197,7 @@ public static class Clazz implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_try = xx.getNodeName();
     settry(parseResult.getParsedValue().stringValue());
   }
   @Override

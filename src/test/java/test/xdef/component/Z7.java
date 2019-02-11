@@ -72,7 +72,7 @@ public class Z7 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getDatumRozhodnuti() != null)
-      el.setAttribute("DatumRozhodnuti", getDatumRozhodnuti().formatDate("d.M.yyyy"));
+      el.setAttribute(XD_Name_DatumRozhodnuti, getDatumRozhodnuti().formatDate("d.M.yyyy"));
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -107,6 +107,7 @@ public class Z7 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_DatumRozhodnuti="DatumRozhodnuti";
   private org.xdef.sys.SDatetime _DatumRozhodnuti;
   private String _$value;
   private char _$$value= (char) -1;
@@ -128,6 +129,7 @@ public class Z7 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_DatumRozhodnuti = xx.getNodeName();
     setDatumRozhodnuti(parseResult.getParsedValue().datetimeValue());
   }
   @Override

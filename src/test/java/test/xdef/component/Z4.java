@@ -117,31 +117,31 @@ public class Z4 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJmeno() != null)
-      el.setAttribute("Jmeno", getJmeno());
+      el.setAttribute(XD_Name_Jmeno, getJmeno());
     if (getPrijmeni() != null)
-      el.setAttribute("Prijmeni", getPrijmeni());
+      el.setAttribute(XD_Name_Prijmeni, getPrijmeni());
     if (getRodnePrijmeni() != null)
-      el.setAttribute("RodnePrijmeni", getRodnePrijmeni());
+      el.setAttribute(XD_Name_RodnePrijmeni, getRodnePrijmeni());
     if (getTitulPred() != null)
-      el.setAttribute("TitulPred", getTitulPred());
+      el.setAttribute(XD_Name_TitulPred, getTitulPred());
     if (getTitulZa() != null)
-      el.setAttribute("TitulZa", getTitulZa());
+      el.setAttribute(XD_Name_TitulZa, getTitulZa());
     if (getRC() != null)
-      el.setAttribute("RC", getRC());
+      el.setAttribute(XD_Name_RC, getRC());
     if (getPohlavi() != null)
-      el.setAttribute("Pohlavi", getPohlavi());
+      el.setAttribute(XD_Name_Pohlavi, getPohlavi());
     if (getOsobniStav() != null)
-      el.setAttribute("OsobniStav", getOsobniStav());
+      el.setAttribute(XD_Name_OsobniStav, getOsobniStav());
     if (getDatumNarozeni() != null)
-      el.setAttribute("DatumNarozeni", getDatumNarozeni().formatDate("d.M.yy"));
+      el.setAttribute(XD_Name_DatumNarozeni, getDatumNarozeni().formatDate("d.M.yy"));
     if (getMistoNarozeni() != null)
-      el.setAttribute("MistoNarozeni", getMistoNarozeni());
+      el.setAttribute(XD_Name_MistoNarozeni, getMistoNarozeni());
     if (getStatNarozeni() != null)
-      el.setAttribute("StatNarozeni", getStatNarozeni());
+      el.setAttribute(XD_Name_StatNarozeni, getStatNarozeni());
     if (getStatniPrislusnost() != null)
-      el.setAttribute("StatniPrislusnost", getStatniPrislusnost());
+      el.setAttribute(XD_Name_StatniPrislusnost, getStatniPrislusnost());
     if (getProfese() != null)
-      el.setAttribute("Profese", getProfese());
+      el.setAttribute(XD_Name_Profese, getProfese());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -175,18 +175,31 @@ public class Z4 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Jmeno="Jmeno";
   private String _Jmeno;
+  private String XD_Name_Prijmeni="Prijmeni";
   private String _Prijmeni;
+  private String XD_Name_RodnePrijmeni="RodnePrijmeni";
   private String _RodnePrijmeni;
+  private String XD_Name_TitulPred="TitulPred";
   private String _TitulPred;
+  private String XD_Name_TitulZa="TitulZa";
   private String _TitulZa;
+  private String XD_Name_RC="RC";
   private String _RC;
+  private String XD_Name_Pohlavi="Pohlavi";
   private String _Pohlavi;
+  private String XD_Name_OsobniStav="OsobniStav";
   private String _OsobniStav;
+  private String XD_Name_DatumNarozeni="DatumNarozeni";
   private org.xdef.sys.SDatetime _DatumNarozeni;
+  private String XD_Name_MistoNarozeni="MistoNarozeni";
   private String _MistoNarozeni;
+  private String XD_Name_StatNarozeni="StatNarozeni";
   private String _StatNarozeni;
+  private String XD_Name_StatniPrislusnost="StatniPrislusnost";
   private String _StatniPrislusnost;
+  private String XD_Name_Profese="Profese";
   private String _Profese;
   private Z9 _TrvalyPobyt;
   private Z9 _PrechodnyPobyt;
@@ -205,31 +218,46 @@ public class Z4 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@DatumNarozeni"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@DatumNarozeni")) {
+      XD_Name_DatumNarozeni = xx.getNodeName();
       setDatumNarozeni(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Jmeno"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Jmeno")) {
+      XD_Name_Jmeno = xx.getNodeName();
       setJmeno(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoNarozeni"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoNarozeni")) {
+      XD_Name_MistoNarozeni = xx.getNodeName();
       setMistoNarozeni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@OsobniStav"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@OsobniStav")) {
+      XD_Name_OsobniStav = xx.getNodeName();
       setOsobniStav(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Pohlavi"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Pohlavi")) {
+      XD_Name_Pohlavi = xx.getNodeName();
       setPohlavi(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Prijmeni"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Prijmeni")) {
+      XD_Name_Prijmeni = xx.getNodeName();
       setPrijmeni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Profese"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Profese")) {
+      XD_Name_Profese = xx.getNodeName();
       setProfese(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@RC"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@RC")) {
+      XD_Name_RC = xx.getNodeName();
       setRC(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@RodnePrijmeni"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@RodnePrijmeni")) {
+      XD_Name_RodnePrijmeni = xx.getNodeName();
       setRodnePrijmeni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@StatNarozeni"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@StatNarozeni")) {
+      XD_Name_StatNarozeni = xx.getNodeName();
       setStatNarozeni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@StatniPrislusnost"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@StatniPrislusnost")) {
+      XD_Name_StatniPrislusnost = xx.getNodeName();
       setStatniPrislusnost(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@TitulPred"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@TitulPred")) {
+      XD_Name_TitulPred = xx.getNodeName();
       setTitulPred(parseResult.getParsedValue().stringValue());
-    else setTitulZa(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_TitulZa = xx.getNodeName();
+      setTitulZa(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

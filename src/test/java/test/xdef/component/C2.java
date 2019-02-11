@@ -60,7 +60,7 @@ public class C2 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNum() != null)
-      el.setAttribute("Num", String.valueOf(getNum()));
+      el.setAttribute(XD_Name_Num, String.valueOf(getNum()));
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -93,6 +93,7 @@ public class C2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Num="Num";
   private Integer _Num;
   private final java.util.List<C1> _Person = new java.util.ArrayList<C1>();
   private org.xdef.component.XComponent XD_Parent;
@@ -110,6 +111,7 @@ public class C2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Num = xx.getNodeName();
     setNum(parseResult.getParsedValue().intValue());
   }
   @Override

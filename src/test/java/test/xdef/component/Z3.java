@@ -54,7 +54,7 @@ public class Z3 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getTisKc() != null)
-      el.setAttribute("TisKc", getTisKc());
+      el.setAttribute(XD_Name_TisKc, getTisKc());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -89,6 +89,7 @@ public class Z3 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_TisKc="TisKc";
   private String _TisKc;
   private String _$value;
   private char _$$value= (char) -1;
@@ -110,6 +111,7 @@ public class Z3 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_TisKc = xx.getNodeName();
     setTisKc(parseResult.getParsedValue().stringValue());
   }
   @Override

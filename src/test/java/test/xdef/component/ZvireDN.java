@@ -69,11 +69,11 @@ public class ZvireDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getNazevZvirete() != null)
-      el.setAttribute("NazevZvirete", getNazevZvirete());
+      el.setAttribute(XD_Name_NazevZvirete, getNazevZvirete());
     if (getDruhZvirete() != null)
-      el.setAttribute("DruhZvirete", getDruhZvirete());
+      el.setAttribute(XD_Name_DruhZvirete, getDruhZvirete());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -107,8 +107,11 @@ public class ZvireDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_NazevZvirete="NazevZvirete";
   private String _NazevZvirete;
+  private String XD_Name_DruhZvirete="DruhZvirete";
   private String _DruhZvirete;
   private Z3 _Skoda;
   private ZvireDN.Vlastnik _Vlastnik;
@@ -127,11 +130,16 @@ public class ZvireDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@DruhZvirete"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@DruhZvirete")) {
+      XD_Name_DruhZvirete = xx.getNodeName();
       setDruhZvirete(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevZvirete"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevZvirete")) {
+      XD_Name_NazevZvirete = xx.getNodeName();
       setNazevZvirete(parseResult.getParsedValue().stringValue());
-    else setOznSegmentu(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_OznSegmentu = xx.getNodeName();
+      setOznSegmentu(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

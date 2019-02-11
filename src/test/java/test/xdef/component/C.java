@@ -55,7 +55,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getName() != null)
-      el.setAttribute("Name", getName());
+      el.setAttribute(XD_Name_Name, getName());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -88,6 +88,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Name="Name";
   private String _Name;
   private final java.util.List<C.Street> _Street = new java.util.ArrayList<C.Street>();
   private org.xdef.component.XComponent XD_Parent;
@@ -105,6 +106,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Name = xx.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -170,7 +172,7 @@ public static class Street implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute("Name", getName());
+      el.setAttribute(XD_Name_Name, getName());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -203,6 +205,7 @@ public static class Street implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Name="Name";
   private String _Name;
   private final java.util.List<test.xdef.component.C2> _House =
     new java.util.ArrayList<test.xdef.component.C2>();
@@ -221,6 +224,7 @@ public static class Street implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Name = xx.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override

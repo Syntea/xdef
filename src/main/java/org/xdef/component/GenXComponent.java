@@ -42,7 +42,7 @@ public final class GenXComponent {
 	private byte byteArrayEncoding = 0;
 	/** Switch to generate JavaDoc. */
 	private boolean _genJavadoc = false;
-	/** Swith to generate JAXB annotations. */
+	/** Switch to generate JAXB annotations. */
 	private boolean _jaxb = false;
 	/** Builder to generate interface or null. */
 	private StringBuilder _interface = null; // where to create interface.
@@ -315,6 +315,20 @@ public final class GenXComponent {
 		final String descr,
 		final StringBuilder sb) {
 		genVariableFromModel(getJavaObjectTypeName(xdata),name,max,descr,sb);
+	}
+
+	/** Generate declaration of variable of attribute name.
+	 * @param name name of variable.
+	 * @param sb String builder where the code is generated.
+	 */
+	private void genAttrNameVariable(final String name,
+		final StringBuilder sb) {
+		if (_genJavadoc) {
+			sb.append(
+_genJavadoc?"\t/** Name of attribute "+name+" in data.*/"+NL:"");
+		}
+		sb.append("\tprivate String XD_Name_")
+			.append(name).append("=\"").append(name).append("\";").append(NL);
 	}
 
 	/** Generate declaration of variable as Java object from child element.
@@ -756,7 +770,8 @@ public final class GenXComponent {
 		final String name,
 		final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
-		final String fn = uri!=null? "AttributeNS(\""+uri+"\", " : "Attribute(";
+		final String fn =
+			uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		final String qName = xdata.getName();
 		String x;
 		switch (xdata.getParserType()) {
@@ -787,10 +802,10 @@ public final class GenXComponent {
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+NL+
-"\t\t\tel.set&{fn}\"&{qName}\", &{x};"+NL,
+"\t\t\tel.set&{fn}&{qName}, &{x};"+NL,
 			"&{x}", x,
 			"&{fn}", fn,
-			"&{qName}", qName,
+			"&{qName}", "XD_Name_" + name,
 			"&{name}", name));
 	}
 
@@ -1181,6 +1196,7 @@ public final class GenXComponent {
 				name = javaName(xdata.getName());
 			}
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
+			genAttrNameVariable(name, vars);
 			if (!ext) {
 				genBaseVariable(xdata, name, 1, "attribute", vars);
 				genBaseGetterMethod(xdata, name, 1, "attribute", getters, isb);
@@ -1213,7 +1229,6 @@ public final class GenXComponent {
 			creators.append(s);
 		}
 		final XMNode[] nodes = xe.getChildNodeModels();
-		int ix = 0;
 		final Map<String, String> xctab = new TreeMap<String, String>();
 		final Map<String, String> txttab = new TreeMap<String, String>();
 		int groupMax = 1;
@@ -1276,7 +1291,6 @@ public final class GenXComponent {
 					final boolean xunique = checkUnique(nodes, i);
 					name = "$value"; // name of text value
 					if (!xunique) {
-						ix = ix == 0 ? 1 : (ix += ix);
 						if (txtcount > 0) {
 							name += String.valueOf(txtcount);
 						}
@@ -1413,9 +1427,6 @@ public final class GenXComponent {
 					}
 				}
 				varNames.add(iname);
-				if (!xunique) {
-					ix = ix == 0 ? 1 : (ix += ix);
-				}
 				String typeName;
 				if (xcClass != null) {
 					typeName = xcClass;
@@ -1847,6 +1858,7 @@ String digest = xe.getDigest();
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+NL+
 "\t\torg.xdef.XDParseResult parseResult) {"+NL+
+"\t\tXD_Name_"+val.substring(ndx + 1)+ " = xx.getNodeName();"+NL+
 "\t\tset"+val.substring(ndx + 1)+"(" + getter + ");"+NL+"\t}"+NL;
 		} else {
 			result +=
@@ -1859,22 +1871,25 @@ String digest = xe.getDigest();
 				if (s.length() == 0) {
 					s = "\t\t";
 				} else {
-					s += "\t\telse ";
+					s += "else ";
 				}
 				String key = e.getKey();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
 				if (i.hasNext()) {
 					s +=
-"if (xx.getXMNode().getXDPosition().endsWith(\"" + key + "\"))"+NL+"\t\t\t";
+"if (xx.getXMNode().getXDPosition().endsWith(\"" + key + "\")) {"+NL+"\t\t\t";
+				} else {
+					s += "{"+NL+"\t\t\t";
 				}
 				String val = e.getValue();
 				ndx = val.indexOf(';');
-				s += "set" + val.substring(ndx + 1);
+				s += "XD_Name_"+val.substring(ndx+1)+ " = xx.getNodeName();"+NL;
+				s += "\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
-				s+= "("+getter+");"+NL;
+				s+= "("+getter+");"+NL+"}\t\t";
 			}
-			result += s + "\t}"+NL;
+			result += s+NL+"\t}"+NL;
 		}
 		result +=
 "\t@Override"+NL+

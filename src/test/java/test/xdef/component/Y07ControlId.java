@@ -51,7 +51,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getIdNeco() != null)
-      el.setAttribute("IdNeco", String.valueOf(getIdNeco()));
+      el.setAttribute(XD_Name_IdNeco, String.valueOf(getIdNeco()));
     return el;
   }
   @Override
@@ -77,6 +77,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_IdNeco="IdNeco";
   private Integer _IdNeco;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -91,6 +92,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_IdNeco = xx.getNodeName();
     setIdNeco(parseResult.getParsedValue().intValue());
   }
   @Override

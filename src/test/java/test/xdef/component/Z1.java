@@ -186,13 +186,13 @@ public class Z1 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getVerze() != null)
-      el.setAttribute("Verze", getVerze());
+      el.setAttribute(XD_Name_Verze, getVerze());
     if (getSeqRec() != null)
-      el.setAttribute("SeqRec", String.valueOf(getSeqRec()));
+      el.setAttribute(XD_Name_SeqRec, String.valueOf(getSeqRec()));
     if (getKrajPolicie() != null)
-      el.setAttribute("KrajPolicie", getKrajPolicie());
+      el.setAttribute(XD_Name_KrajPolicie, getKrajPolicie());
     if (getPlatnostOd() != null)
-      el.setAttribute("PlatnostOd", getPlatnostOd().formatDate("d.M.yyyy H:mm"));
+      el.setAttribute(XD_Name_PlatnostOd, getPlatnostOd().formatDate("d.M.yyyy H:mm"));
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -237,9 +237,13 @@ public class Z1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Verze="Verze";
   private String _Verze;
+  private String XD_Name_SeqRec="SeqRec";
   private Integer _SeqRec;
+  private String XD_Name_KrajPolicie="KrajPolicie";
   private String _KrajPolicie;
+  private String XD_Name_PlatnostOd="PlatnostOd";
   private org.xdef.sys.SDatetime _PlatnostOd;
   private Z2 _Protokol;
   private Z7 _RozhodnutiDN;
@@ -269,13 +273,19 @@ public class Z1 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
+      XD_Name_KrajPolicie = xx.getNodeName();
       setKrajPolicie(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
+      XD_Name_PlatnostOd = xx.getNodeName();
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
+      XD_Name_SeqRec = xx.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
-    else setVerze(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_Verze = xx.getNodeName();
+      setVerze(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

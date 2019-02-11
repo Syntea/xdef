@@ -61,7 +61,7 @@ public class Y21 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getb() != null)
-      el.setAttribute("b", getb().name());
+      el.setAttribute(XD_Name_b, getb().name());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -100,6 +100,7 @@ public class Y21 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_b="b";
   private test.xdef.component.Y21_enum _b;
   private test.xdef.component.Y21_enum _$value;
   private char _$$value= (char) -1;
@@ -129,6 +130,7 @@ public class Y21 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_b = xx.getNodeName();
     setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
@@ -193,7 +195,7 @@ public static class B implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getc() != null)
-      el.setAttribute("c", getc().name());
+      el.setAttribute(XD_Name_c, getc().name());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -228,6 +230,7 @@ public static class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_c="c";
   private test.xdef.TestXComponents_Y21enum _c;
   private test.xdef.component.Y21_enum _$value;
   private char _$$value= (char) -1;
@@ -249,6 +252,7 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_c = xx.getNodeName();
     setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override

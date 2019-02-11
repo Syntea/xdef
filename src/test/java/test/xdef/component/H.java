@@ -56,7 +56,7 @@ public class H implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (gets$encodingStyle() != null)
-      el.setAttributeNS("soap", "s:encodingStyle", gets$encodingStyle());
+      el.setAttributeNS("soap", XD_Name_s$encodingStyle, gets$encodingStyle());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
@@ -92,6 +92,7 @@ public class H implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_s$encodingStyle="s$encodingStyle";
   private String _s$encodingStyle;
   private H.s$Header _s$Header;
   private H.s$Body _s$Body;
@@ -110,6 +111,7 @@ public class H implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_s$encodingStyle = xx.getNodeName();
     sets$encodingStyle(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -304,9 +306,9 @@ public static class b$User implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gets$understand() != null)
-      el.setAttributeNS("soap", "s:understand", gets$understand());
+      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand());
     if (getIdentUser() != null)
-      el.setAttribute("IdentUser", getIdentUser());
+      el.setAttribute(XD_Name_IdentUser, getIdentUser());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -336,7 +338,9 @@ public static class b$User implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_s$understand="s$understand";
   private String _s$understand;
+  private String XD_Name_IdentUser="IdentUser";
   private String _IdentUser;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -351,9 +355,13 @@ public static class b$User implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@IdentUser"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@IdentUser")) {
+      XD_Name_IdentUser = xx.getNodeName();
       setIdentUser(parseResult.getParsedValue().stringValue());
-    else sets$understand(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_s$understand = xx.getNodeName();
+      sets$understand(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -423,13 +431,13 @@ public static class b$Request implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gets$understand() != null)
-      el.setAttributeNS("soap", "s:understand", gets$understand());
+      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand());
     if (getIdentZpravy() != null)
-      el.setAttribute("IdentZpravy", getIdentZpravy());
+      el.setAttribute(XD_Name_IdentZpravy, getIdentZpravy());
     if (getReqMsgId() != null)
-      el.setAttribute("ReqMsgId", String.valueOf(getReqMsgId()));
+      el.setAttribute(XD_Name_ReqMsgId, String.valueOf(getReqMsgId()));
     if (getMode() != null)
-      el.setAttribute("Mode", getMode());
+      el.setAttribute(XD_Name_Mode, getMode());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -459,9 +467,13 @@ public static class b$Request implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_s$understand="s$understand";
   private String _s$understand;
+  private String XD_Name_IdentZpravy="IdentZpravy";
   private String _IdentZpravy;
+  private String XD_Name_ReqMsgId="ReqMsgId";
   private Integer _ReqMsgId;
+  private String XD_Name_Mode="Mode";
   private String _Mode;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -476,13 +488,19 @@ public static class b$Request implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@IdentZpravy"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@IdentZpravy")) {
+      XD_Name_IdentZpravy = xx.getNodeName();
       setIdentZpravy(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Mode"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Mode")) {
+      XD_Name_Mode = xx.getNodeName();
       setMode(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@ReqMsgId"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@ReqMsgId")) {
+      XD_Name_ReqMsgId = xx.getNodeName();
       setReqMsgId(parseResult.getParsedValue().intValue());
-    else sets$understand(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_s$understand = xx.getNodeName();
+      sets$understand(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -671,7 +689,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getFlow() != null)
-      el.setAttribute("Flow", getFlow());
+      el.setAttribute(XD_Name_Flow, getFlow());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:b", "request");
     return el;
@@ -699,6 +717,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Flow="Flow";
   private String _Flow;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -713,6 +732,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Flow = xx.getNodeName();
     setFlow(parseResult.getParsedValue().stringValue());
   }
   @Override

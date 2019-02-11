@@ -163,7 +163,7 @@ public static class X implements test.xdef.component.Y14A{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute("a", geta());
+      el.setAttribute(XD_Name_a, geta());
     return el;
   }
   @Override
@@ -189,6 +189,7 @@ public static class X implements test.xdef.component.Y14A{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private String _a;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -203,6 +204,7 @@ public static class X implements test.xdef.component.Y14A{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_a = xx.getNodeName();
     seta(parseResult.getParsedValue().stringValue());
   }
   @Override

@@ -117,23 +117,23 @@ public class Z8 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getDatumCasDN() != null)
-      el.setAttribute("DatumCasDN", getDatumCasDN().formatDate("d.M.yyyy H:mm"));
+      el.setAttribute(XD_Name_DatumCasDN, getDatumCasDN().formatDate("d.M.yyyy H:mm"));
     if (getDatumCasDoDN() != null)
-      el.setAttribute("DatumCasDoDN", getDatumCasDoDN().formatDate("d.M.yyyy H:mm"));
+      el.setAttribute(XD_Name_DatumCasDoDN, getDatumCasDoDN().formatDate("d.M.yyyy H:mm"));
     if (getKodOkresu() != null)
-      el.setAttribute("KodOkresu", getKodOkresu());
+      el.setAttribute(XD_Name_KodOkresu, getKodOkresu());
     if (getObec() != null)
-      el.setAttribute("Obec", getObec());
+      el.setAttribute(XD_Name_Obec, getObec());
     if (getUlice() != null)
-      el.setAttribute("Ulice", getUlice());
+      el.setAttribute(XD_Name_Ulice, getUlice());
     if (getCisloPopisne() != null)
-      el.setAttribute("CisloPopisne", getCisloPopisne());
+      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
     if (getSkodaTisKc() != null)
-      el.setAttribute("SkodaTisKc", getSkodaTisKc());
+      el.setAttribute(XD_Name_SkodaTisKc, getSkodaTisKc());
     if (getHlavniPricina() != null)
-      el.setAttribute("HlavniPricina", getHlavniPricina());
+      el.setAttribute(XD_Name_HlavniPricina, getHlavniPricina());
     if (getPricina() != null)
-      el.setAttribute("Pricina", getPricina());
+      el.setAttribute(XD_Name_Pricina, getPricina());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -166,14 +166,23 @@ public class Z8 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_DatumCasDN="DatumCasDN";
   private org.xdef.sys.SDatetime _DatumCasDN;
+  private String XD_Name_DatumCasDoDN="DatumCasDoDN";
   private org.xdef.sys.SDatetime _DatumCasDoDN;
+  private String XD_Name_KodOkresu="KodOkresu";
   private String _KodOkresu;
+  private String XD_Name_Obec="Obec";
   private String _Obec;
+  private String XD_Name_Ulice="Ulice";
   private String _Ulice;
+  private String XD_Name_CisloPopisne="CisloPopisne";
   private String _CisloPopisne;
+  private String XD_Name_SkodaTisKc="SkodaTisKc";
   private String _SkodaTisKc;
+  private String XD_Name_HlavniPricina="HlavniPricina";
   private String _HlavniPricina;
+  private String XD_Name_Pricina="Pricina";
   private String _Pricina;
   private Z8.Misto _Misto;
   private org.xdef.component.XComponent XD_Parent;
@@ -191,23 +200,34 @@ public class Z8 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+      XD_Name_CisloPopisne = xx.getNodeName();
       setCisloPopisne(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDN"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDN")) {
+      XD_Name_DatumCasDN = xx.getNodeName();
       setDatumCasDN(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDoDN"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDoDN")) {
+      XD_Name_DatumCasDoDN = xx.getNodeName();
       setDatumCasDoDN(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@HlavniPricina"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
+      XD_Name_HlavniPricina = xx.getNodeName();
       setHlavniPricina(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@KodOkresu"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@KodOkresu")) {
+      XD_Name_KodOkresu = xx.getNodeName();
       setKodOkresu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Obec"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
+      XD_Name_Obec = xx.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Pricina"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@Pricina")) {
+      XD_Name_Pricina = xx.getNodeName();
       setPricina(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@SkodaTisKc"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@SkodaTisKc")) {
+      XD_Name_SkodaTisKc = xx.getNodeName();
       setSkodaTisKc(parseResult.getParsedValue().stringValue());
-    else setUlice(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_Ulice = xx.getNodeName();
+      setUlice(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

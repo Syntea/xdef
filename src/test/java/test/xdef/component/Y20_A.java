@@ -169,7 +169,7 @@ public static class X implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getb() != null)
-      el.setAttribute("b", getb());
+      el.setAttribute(XD_Name_b, getb());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -202,6 +202,7 @@ public static class X implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_b="b";
   private String _b;
   private final java.util.List<X> _X = new java.util.ArrayList<X>();
   private org.xdef.component.XComponent XD_Parent;
@@ -219,6 +220,7 @@ public static class X implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_b = xx.getNodeName();
     setb(parseResult.getParsedValue().stringValue());
   }
   @Override

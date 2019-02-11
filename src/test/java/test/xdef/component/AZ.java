@@ -51,7 +51,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getz() != null)
-      el.setAttribute("z", getz());
+      el.setAttribute(XD_Name_z, getz());
     return el;
   }
   @Override
@@ -77,6 +77,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_z="z";
   private String _z;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -91,6 +92,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_z = xx.getNodeName();
     setz(parseResult.getParsedValue().stringValue());
   }
   @Override

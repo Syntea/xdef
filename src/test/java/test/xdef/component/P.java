@@ -207,9 +207,9 @@ public static class a implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute("a", String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, String.valueOf(geta()));
     if (getb() != null)
-      el.setAttribute("b", getb().formatDate("M.d.yyyy"));
+      el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
   }
   @Override
@@ -235,7 +235,9 @@ public static class a implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private Double _a;
+  private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -250,9 +252,13 @@ public static class a implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-    else setb(parseResult.getParsedValue().datetimeValue());
+}    else {
+      XD_Name_b = xx.getNodeName();
+      setb(parseResult.getParsedValue().datetimeValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -332,9 +338,9 @@ public static class b implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute("a", String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, String.valueOf(geta()));
     if (getb() != null)
-      el.setAttribute("b", getb().formatDate("M.d.yyyy"));
+      el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
   }
   @Override
@@ -360,7 +366,9 @@ public static class b implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private Double _a;
+  private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -375,9 +383,13 @@ public static class b implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-    else setb(parseResult.getParsedValue().datetimeValue());
+}    else {
+      XD_Name_b = xx.getNodeName();
+      setb(parseResult.getParsedValue().datetimeValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -457,9 +469,9 @@ public static class c implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute("a", String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, String.valueOf(geta()));
     if (getb() != null)
-      el.setAttribute("b", getb().formatDate("M.d.yyyy"));
+      el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
   }
   @Override
@@ -485,7 +497,9 @@ public static class c implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private Double _a;
+  private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -500,9 +514,13 @@ public static class c implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-    else setb(parseResult.getParsedValue().datetimeValue());
+}    else {
+      XD_Name_b = xx.getNodeName();
+      setb(parseResult.getParsedValue().datetimeValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -582,9 +600,9 @@ public static class d implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute("a", String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, String.valueOf(geta()));
     if (getb() != null)
-      el.setAttribute("b", getb().formatDate("M.d.yyyy"));
+      el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
   }
   @Override
@@ -610,7 +628,9 @@ public static class d implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_a="a";
   private Double _a;
+  private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -625,9 +645,13 @@ public static class d implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-    else setb(parseResult.getParsedValue().datetimeValue());
+}    else {
+      XD_Name_b = xx.getNodeName();
+      setb(parseResult.getParsedValue().datetimeValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

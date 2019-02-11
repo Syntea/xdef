@@ -225,51 +225,51 @@ public class VozidloDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getDruhVozidla() != null)
-      el.setAttribute("DruhVozidla", getDruhVozidla());
+      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla());
     if (getSPZ() != null)
-      el.setAttribute("SPZ", getSPZ());
+      el.setAttribute(XD_Name_SPZ, getSPZ());
     if (getMPZ() != null)
-      el.setAttribute("MPZ", getMPZ());
+      el.setAttribute(XD_Name_MPZ, getMPZ());
     if (getVIN() != null)
-      el.setAttribute("VIN", getVIN());
+      el.setAttribute(XD_Name_VIN, getVIN());
     if (getZnacka() != null)
-      el.setAttribute("Znacka", getZnacka());
+      el.setAttribute(XD_Name_Znacka, getZnacka());
     if (getTypVozidla() != null)
-      el.setAttribute("TypVozidla", getTypVozidla());
+      el.setAttribute(XD_Name_TypVozidla, getTypVozidla());
     if (getRokVyroby() != null)
-      el.setAttribute("RokVyroby", getRokVyroby().formatDate("yyyy"));
+      el.setAttribute(XD_Name_RokVyroby, getRokVyroby().formatDate("yyyy"));
     if (getPlatnostSTK() != null)
-      el.setAttribute("PlatnostSTK", getPlatnostSTK());
+      el.setAttribute(XD_Name_PlatnostSTK, getPlatnostSTK());
     if (getMesicSTKDo() != null)
-      el.setAttribute("MesicSTKDo", getMesicSTKDo().formatDate("M/yyyy"));
+      el.setAttribute(XD_Name_MesicSTKDo, getMesicSTKDo().formatDate("M/yyyy"));
     if (getTypBrzd() != null)
-      el.setAttribute("TypBrzd", getTypBrzd());
+      el.setAttribute(XD_Name_TypBrzd, getTypBrzd());
     if (getStavBrzd() != null)
-      el.setAttribute("StavBrzd", getStavBrzd());
+      el.setAttribute(XD_Name_StavBrzd, getStavBrzd());
     if (getKodPojistitele() != null)
-      el.setAttribute("KodPojistitele", getKodPojistitele());
+      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele());
     if (getNazevPojistitele() != null)
-      el.setAttribute("NazevPojistitele", getNazevPojistitele());
+      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele());
     if (getCisloDokladuPojisteni() != null)
-      el.setAttribute("CisloDokladuPojisteni", getCisloDokladuPojisteni());
+      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni());
     if (getPojisteniText() != null)
-      el.setAttribute("PojisteniText", getPojisteniText());
+      el.setAttribute(XD_Name_PojisteniText, getPojisteniText());
     if (getCisloZK() != null)
-      el.setAttribute("CisloZK", getCisloZK());
+      el.setAttribute(XD_Name_CisloZK, getCisloZK());
     if (getVydalZK() != null)
-      el.setAttribute("VydalZK", getVydalZK());
+      el.setAttribute(XD_Name_VydalZK, getVydalZK());
     if (getPlatnostZKOd() != null)
-      el.setAttribute("PlatnostZKOd", getPlatnostZKOd().formatDate("d.M.yyyy"));
+      el.setAttribute(XD_Name_PlatnostZKOd, getPlatnostZKOd().formatDate("d.M.yyyy"));
     if (getPlatnostZKDo() != null)
-      el.setAttribute("PlatnostZKDo", getPlatnostZKDo().formatDate("d.M.yyyy"));
+      el.setAttribute(XD_Name_PlatnostZKDo, getPlatnostZKDo().formatDate("d.M.yyyy"));
     if (getPojistneHPKc() != null)
-      el.setAttribute("PojistneHPKc", String.valueOf(getPojistneHPKc()));
+      el.setAttribute(XD_Name_PojistneHPKc, String.valueOf(getPojistneHPKc()));
     if (getDatumUhradyHP() != null)
-      el.setAttribute("DatumUhradyHP", getDatumUhradyHP().formatDate("d.M.yyyy"));
+      el.setAttribute(XD_Name_DatumUhradyHP, getDatumUhradyHP().formatDate("d.M.yyyy"));
     if (getMistoUhradyHP() != null)
-      el.setAttribute("MistoUhradyHP", getMistoUhradyHP());
+      el.setAttribute(XD_Name_MistoUhradyHP, getMistoUhradyHP());
     for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
       el.appendChild(x.toXml(doc));
     XD_List = null;
@@ -304,28 +304,51 @@ public class VozidloDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_DruhVozidla="DruhVozidla";
   private String _DruhVozidla;
+  private String XD_Name_SPZ="SPZ";
   private String _SPZ;
+  private String XD_Name_MPZ="MPZ";
   private String _MPZ;
+  private String XD_Name_VIN="VIN";
   private String _VIN;
+  private String XD_Name_Znacka="Znacka";
   private String _Znacka;
+  private String XD_Name_TypVozidla="TypVozidla";
   private String _TypVozidla;
+  private String XD_Name_RokVyroby="RokVyroby";
   private org.xdef.sys.SDatetime _RokVyroby;
+  private String XD_Name_PlatnostSTK="PlatnostSTK";
   private String _PlatnostSTK;
+  private String XD_Name_MesicSTKDo="MesicSTKDo";
   private org.xdef.sys.SDatetime _MesicSTKDo;
+  private String XD_Name_TypBrzd="TypBrzd";
   private String _TypBrzd;
+  private String XD_Name_StavBrzd="StavBrzd";
   private String _StavBrzd;
+  private String XD_Name_KodPojistitele="KodPojistitele";
   private String _KodPojistitele;
+  private String XD_Name_NazevPojistitele="NazevPojistitele";
   private String _NazevPojistitele;
+  private String XD_Name_CisloDokladuPojisteni="CisloDokladuPojisteni";
   private String _CisloDokladuPojisteni;
+  private String XD_Name_PojisteniText="PojisteniText";
   private String _PojisteniText;
+  private String XD_Name_CisloZK="CisloZK";
   private String _CisloZK;
+  private String XD_Name_VydalZK="VydalZK";
   private String _VydalZK;
+  private String XD_Name_PlatnostZKOd="PlatnostZKOd";
   private org.xdef.sys.SDatetime _PlatnostZKOd;
+  private String XD_Name_PlatnostZKDo="PlatnostZKDo";
   private org.xdef.sys.SDatetime _PlatnostZKDo;
+  private String XD_Name_PojistneHPKc="PojistneHPKc";
   private Integer _PojistneHPKc;
+  private String XD_Name_DatumUhradyHP="DatumUhradyHP";
   private org.xdef.sys.SDatetime _DatumUhradyHP;
+  private String XD_Name_MistoUhradyHP="MistoUhradyHP";
   private String _MistoUhradyHP;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
@@ -345,51 +368,76 @@ public class VozidloDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
+      XD_Name_CisloDokladuPojisteni = xx.getNodeName();
       setCisloDokladuPojisteni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloZK"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloZK")) {
+      XD_Name_CisloZK = xx.getNodeName();
       setCisloZK(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumUhradyHP"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumUhradyHP")) {
+      XD_Name_DatumUhradyHP = xx.getNodeName();
       setDatumUhradyHP(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
+      XD_Name_DruhVozidla = xx.getNodeName();
       setDruhVozidla(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
+      XD_Name_KodPojistitele = xx.getNodeName();
       setKodPojistitele(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@MPZ"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@MPZ")) {
+      XD_Name_MPZ = xx.getNodeName();
       setMPZ(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@MesicSTKDo"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@MesicSTKDo")) {
+      XD_Name_MesicSTKDo = xx.getNodeName();
       setMesicSTKDo(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoUhradyHP"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoUhradyHP")) {
+      XD_Name_MistoUhradyHP = xx.getNodeName();
       setMistoUhradyHP(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
+      XD_Name_NazevPojistitele = xx.getNodeName();
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostSTK"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostSTK")) {
+      XD_Name_PlatnostSTK = xx.getNodeName();
       setPlatnostSTK(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKDo"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKDo")) {
+      XD_Name_PlatnostZKDo = xx.getNodeName();
       setPlatnostZKDo(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKOd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKOd")) {
+      XD_Name_PlatnostZKOd = xx.getNodeName();
       setPlatnostZKOd(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
+      XD_Name_PojisteniText = xx.getNodeName();
       setPojisteniText(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc")) {
+      XD_Name_PojistneHPKc = xx.getNodeName();
       setPojistneHPKc(parseResult.getParsedValue().intValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby")) {
+      XD_Name_RokVyroby = xx.getNodeName();
       setRokVyroby(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ")) {
+      XD_Name_SPZ = xx.getNodeName();
       setSPZ(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
+      XD_Name_StavBrzd = xx.getNodeName();
       setStavBrzd(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
+      XD_Name_TypBrzd = xx.getNodeName();
       setTypBrzd(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@TypVozidla"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypVozidla")) {
+      XD_Name_TypVozidla = xx.getNodeName();
       setTypVozidla(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@VIN"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@VIN")) {
+      XD_Name_VIN = xx.getNodeName();
       setVIN(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@VydalZK"))
+}    else if (xx.getXMNode().getXDPosition().endsWith("/@VydalZK")) {
+      XD_Name_VydalZK = xx.getNodeName();
       setVydalZK(parseResult.getParsedValue().stringValue());
-    else setZnacka(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_Znacka = xx.getNodeName();
+      setZnacka(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

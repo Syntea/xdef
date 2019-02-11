@@ -54,9 +54,9 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute("One", String.valueOf(getOne()));
+      el.setAttribute(XD_Name_One, String.valueOf(getOne()));
     if (getTwo() != null)
-      el.setAttribute("Two", getTwo());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override
@@ -82,7 +82,9 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_One="One";
   private Integer _One;
+  private String XD_Name_Two="Two";
   private String _Two;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -97,9 +99,13 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().intValue());
-    else setTwo(parseResult.getParsedValue().stringValue());
+}    else {
+      XD_Name_Two = xx.getNodeName();
+      setTwo(parseResult.getParsedValue().stringValue());
+}    
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
