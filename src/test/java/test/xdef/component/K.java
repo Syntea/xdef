@@ -257,13 +257,13 @@ public static class c implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@Cislo")) {
       XD_Name_Cislo = xx.getNodeName();
       setCislo(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Kod")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Kod")) {
       XD_Name_Kod = xx.getNodeName();
       setKod(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Rok = xx.getNodeName();
       setRok(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

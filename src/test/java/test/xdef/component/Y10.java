@@ -125,13 +125,13 @@ public class Y10 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@b")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@b")) {
       XD_Name_b = xx.getNodeName();
       setb(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_c = xx.getNodeName();
       setc(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

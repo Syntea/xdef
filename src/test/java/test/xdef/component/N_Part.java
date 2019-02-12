@@ -102,10 +102,10 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
     if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().intValue());
-}    else {
+    } else {
       XD_Name_Two = xx.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

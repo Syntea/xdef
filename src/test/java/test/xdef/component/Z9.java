@@ -151,31 +151,31 @@ public class Z9 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
       XD_Name_CisloOrientacni = xx.getNodeName();
       setCisloOrientacni(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
       XD_Name_CisloPopisne = xx.getNodeName();
       setCisloPopisne(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = xx.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Okres")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Okres")) {
       XD_Name_Okres = xx.getNodeName();
       setOkres(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PSC")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PSC")) {
       XD_Name_PSC = xx.getNodeName();
       setPSC(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Stat")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Stat")) {
       XD_Name_Stat = xx.getNodeName();
       setStat(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
       XD_Name_Telefon1 = xx.getNodeName();
       setTelefon1(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
       XD_Name_Telefon2 = xx.getNodeName();
       setTelefon2(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Ulice = xx.getNodeName();
       setUlice(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -148,22 +148,22 @@ public class Z6 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladu")) {
       XD_Name_CisloDokladu = xx.getNodeName();
       setCisloDokladu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumVydani")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumVydani")) {
       XD_Name_DatumVydani = xx.getNodeName();
       setDatumVydani(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoVydani")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@MistoVydani")) {
       XD_Name_MistoVydani = xx.getNodeName();
       setMistoVydani(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Opravneni")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Opravneni")) {
       XD_Name_Opravneni = xx.getNodeName();
       setOpravneni(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@StatVydani")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@StatVydani")) {
       XD_Name_StatVydani = xx.getNodeName();
       setStatVydani(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_TypDokladu = xx.getNodeName();
       setTypDokladu(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

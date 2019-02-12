@@ -98,10 +98,10 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_Jedna = xx.getNodeName();
       setJedna(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Two = xx.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -276,16 +276,16 @@ public class Z1 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
       XD_Name_KrajPolicie = xx.getNodeName();
       setKrajPolicie(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
       XD_Name_PlatnostOd = xx.getNodeName();
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
       XD_Name_SeqRec = xx.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
-}    else {
+    } else {
       XD_Name_Verze = xx.getNodeName();
       setVerze(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

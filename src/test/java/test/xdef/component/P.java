@@ -255,10 +255,10 @@ public static class a implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-}    else {
+    } else {
       XD_Name_b = xx.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -386,10 +386,10 @@ public static class b implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-}    else {
+    } else {
       XD_Name_b = xx.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -517,10 +517,10 @@ public static class c implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-}    else {
+    } else {
       XD_Name_b = xx.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -648,10 +648,10 @@ public static class d implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
-}    else {
+    } else {
       XD_Name_b = xx.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

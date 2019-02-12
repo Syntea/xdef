@@ -102,10 +102,10 @@ public class Y02 implements test.xdef.component.s.Y01Part,org.xdef.component.XCo
     if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Two = xx.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -102,10 +102,10 @@ public class Y18a implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@c")) {
       XD_Name_c = xx.getNodeName();
       setc(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_d = xx.getNodeName();
       setd(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -159,19 +159,19 @@ public class B implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@date")) {
       XD_Name_date = xx.getNodeName();
       setdate(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@id")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@id")) {
       XD_Name_id = xx.getNodeName();
       setid(parseResult.getParsedValue().intValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@name")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@name")) {
       XD_Name_name = xx.getNodeName();
       setname(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@num")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@num")) {
       XD_Name_num = xx.getNodeName();
       setnum(parseResult.getParsedValue().doubleValue());
-}    else {
+    } else {
       XD_Name_time = xx.getNodeName();
       settime(parseResult.getParsedValue().datetimeValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

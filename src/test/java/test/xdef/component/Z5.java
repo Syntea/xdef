@@ -118,10 +118,10 @@ public class Z5 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@IC")) {
       XD_Name_IC = xx.getNodeName();
       setIC(parseResult.getParsedValue().intValue());
-}    else {
+    } else {
       XD_Name_NazevFirmy = xx.getNodeName();
       setNazevFirmy(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

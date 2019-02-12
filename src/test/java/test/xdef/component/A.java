@@ -160,10 +160,10 @@ public class A implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = xx.getNodeName();
       seta(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_dec = xx.getNodeName();
       setdec(parseResult.getParsedValue().decimalValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

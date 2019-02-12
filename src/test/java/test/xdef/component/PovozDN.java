@@ -134,10 +134,10 @@ public class PovozDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@DruhPovozu")) {
       XD_Name_DruhPovozu = xx.getNodeName();
       setDruhPovozu(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

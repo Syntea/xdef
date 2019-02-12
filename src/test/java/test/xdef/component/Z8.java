@@ -203,31 +203,31 @@ public class Z8 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
       XD_Name_CisloPopisne = xx.getNodeName();
       setCisloPopisne(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDN")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDN")) {
       XD_Name_DatumCasDN = xx.getNodeName();
       setDatumCasDN(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDoDN")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasDoDN")) {
       XD_Name_DatumCasDoDN = xx.getNodeName();
       setDatumCasDoDN(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
       XD_Name_HlavniPricina = xx.getNodeName();
       setHlavniPricina(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@KodOkresu")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@KodOkresu")) {
       XD_Name_KodOkresu = xx.getNodeName();
       setKodOkresu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = xx.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Pricina")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Pricina")) {
       XD_Name_Pricina = xx.getNodeName();
       setPricina(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@SkodaTisKc")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@SkodaTisKc")) {
       XD_Name_SkodaTisKc = xx.getNodeName();
       setSkodaTisKc(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Ulice = xx.getNodeName();
       setUlice(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

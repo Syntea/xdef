@@ -109,13 +109,13 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
     if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Two")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Two")) {
       XD_Name_Two = xx.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_x = xx.getNodeName();
       setx(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

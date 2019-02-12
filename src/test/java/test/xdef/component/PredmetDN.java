@@ -133,13 +133,13 @@ public class PredmetDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@DruhPredmetu")) {
       XD_Name_DruhPredmetu = xx.getNodeName();
       setDruhPredmetu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPredmetu")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPredmetu")) {
       XD_Name_NazevPredmetu = xx.getNodeName();
       setNazevPredmetu(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

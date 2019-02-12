@@ -358,10 +358,10 @@ public static class b$User implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@IdentUser")) {
       XD_Name_IdentUser = xx.getNodeName();
       setIdentUser(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_s$understand = xx.getNodeName();
       sets$understand(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
@@ -491,16 +491,16 @@ public static class b$Request implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@IdentZpravy")) {
       XD_Name_IdentZpravy = xx.getNodeName();
       setIdentZpravy(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Mode")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Mode")) {
       XD_Name_Mode = xx.getNodeName();
       setMode(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@ReqMsgId")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@ReqMsgId")) {
       XD_Name_ReqMsgId = xx.getNodeName();
       setReqMsgId(parseResult.getParsedValue().intValue());
-}    else {
+    } else {
       XD_Name_s$understand = xx.getNodeName();
       sets$understand(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

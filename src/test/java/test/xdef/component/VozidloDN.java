@@ -371,73 +371,73 @@ public class VozidloDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
       XD_Name_CisloDokladuPojisteni = xx.getNodeName();
       setCisloDokladuPojisteni(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloZK")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloZK")) {
       XD_Name_CisloZK = xx.getNodeName();
       setCisloZK(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumUhradyHP")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumUhradyHP")) {
       XD_Name_DatumUhradyHP = xx.getNodeName();
       setDatumUhradyHP(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
       XD_Name_DruhVozidla = xx.getNodeName();
       setDruhVozidla(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
       XD_Name_KodPojistitele = xx.getNodeName();
       setKodPojistitele(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@MPZ")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@MPZ")) {
       XD_Name_MPZ = xx.getNodeName();
       setMPZ(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@MesicSTKDo")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@MesicSTKDo")) {
       XD_Name_MesicSTKDo = xx.getNodeName();
       setMesicSTKDo(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoUhradyHP")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@MistoUhradyHP")) {
       XD_Name_MistoUhradyHP = xx.getNodeName();
       setMistoUhradyHP(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
       XD_Name_NazevPojistitele = xx.getNodeName();
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostSTK")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostSTK")) {
       XD_Name_PlatnostSTK = xx.getNodeName();
       setPlatnostSTK(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKDo")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKDo")) {
       XD_Name_PlatnostZKDo = xx.getNodeName();
       setPlatnostZKDo(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKOd")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostZKOd")) {
       XD_Name_PlatnostZKOd = xx.getNodeName();
       setPlatnostZKOd(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
       XD_Name_PojisteniText = xx.getNodeName();
       setPojisteniText(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PojistneHPKc")) {
       XD_Name_PojistneHPKc = xx.getNodeName();
       setPojistneHPKc(parseResult.getParsedValue().intValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@RokVyroby")) {
       XD_Name_RokVyroby = xx.getNodeName();
       setRokVyroby(parseResult.getParsedValue().datetimeValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@SPZ")) {
       XD_Name_SPZ = xx.getNodeName();
       setSPZ(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
       XD_Name_StavBrzd = xx.getNodeName();
       setStavBrzd(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
       XD_Name_TypBrzd = xx.getNodeName();
       setTypBrzd(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypVozidla")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@TypVozidla")) {
       XD_Name_TypVozidla = xx.getNodeName();
       setTypVozidla(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@VIN")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@VIN")) {
       XD_Name_VIN = xx.getNodeName();
       setVIN(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@VydalZK")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@VydalZK")) {
       XD_Name_VydalZK = xx.getNodeName();
       setVydalZK(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Znacka = xx.getNodeName();
       setZnacka(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

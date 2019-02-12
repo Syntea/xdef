@@ -133,13 +133,13 @@ public class ZvireDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@DruhZvirete")) {
       XD_Name_DruhZvirete = xx.getNodeName();
       setDruhZvirete(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevZvirete")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevZvirete")) {
       XD_Name_NazevZvirete = xx.getNodeName();
       setNazevZvirete(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

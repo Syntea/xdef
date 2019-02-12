@@ -195,8 +195,7 @@ public final class GenXComponent {
 			}
 			// now we remove leading "%" (i.e. recerence flag)
 			return enumName.indexOf('%') == 0
-				? enumName.substring(1) // is reference
-				: enumName;
+				? /* is reference */ enumName.substring(1) : enumName;
 		}
 		return null;
 	}
@@ -323,12 +322,10 @@ public final class GenXComponent {
 	 */
 	private void genAttrNameVariable(final String name,
 		final StringBuilder sb) {
-		if (_genJavadoc) {
-			sb.append(
-_genJavadoc?"\t/** Name of attribute "+name+" in data.*/"+NL:"");
-		}
-		sb.append("\tprivate String XD_Name_")
-			.append(name).append("=\"").append(name).append("\";").append(NL);
+		sb.append(modify(
+(_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+NL : "") +
+"\tprivate String XD_Name_&{name}=\"&{name}\";"+NL,
+			"&{name}", name));
 	}
 
 	/** Generate declaration of variable as Java object from child element.
@@ -561,24 +558,24 @@ _genJavadoc?"\t/** Name of attribute "+name+" in data.*/"+NL:"");
 		if (max > 1) {
 			d += 's';
 			if (modelName != null) {
-				x =NL+
-"\t\tif (x!=null) {"+NL+
-"\t\t\t\tif (x.xGetXPos()==null)"+NL+
-"\t\t\t\t\tx.xInit(this, \""+modelName+"\", ";
-				x += modelURI != null ? "\"" + modelURI + "\"" : "null";
-				x += ", \"" + modelXDPos + "\");"+NL;
-				x += "\t\t\t_&{name}.add(x);"+NL+"\t\t}"+NL+NL+'\t';
+				x = NL +
+"\t\tif (x!=null) {"+NL +
+"\t\t\t\tif (x.xGetXPos()==null)"+NL +
+"\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
+				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ ", \"" + modelXDPos + "\");"+NL
+				+ "\t\t\t_&{name}.add(x);"+NL+"\t\t}"+NL+NL+'\t';
 			} else {
 				x = NL+"\t\tif (x!=null) _&{name}.add(x);"+NL+'\t';
 			}
 		} else {
 			if (modelName != null) {
-				x =NL+
-"\t\tif (x!=null && x.xGetXPos() == null)"+NL+
-"\t\t\tx.xInit(this, \""+modelName+"\", ";
-				x += modelURI != null ? "\"" + modelURI + "\"" : "null";
-				x += ", \"" + modelXDPos + "\");"+NL;
-				x += "\t\t_&{name} = x;"+NL+"\t";
+				x = NL +
+"\t\tif (x!=null && x.xGetXPos() == null)"+NL +
+"\t\t\tx.xInit(this, \""+modelName+"\", "
+				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ ", \"" + modelXDPos + "\");"+NL
+				+ "\t\t_&{name} = x;"+NL+"\t";
 			} else {
 				x = "_&{name} = x;";
 			}
@@ -1820,24 +1817,18 @@ String digest = xe.getDigest();
 "\t\torg.xdef.XDParseResult parseResult) {"+NL;
 			String s = "";
 			for(Entry<String, String> e: txttab.entrySet()) {
-				if (s.length() == 0) {
-					s = "\t\t";
-				} else {
-					s += "\t\t} else ";
-				}
-				s +=
-"if (\"" + e.getKey() + "\".equals(xx.getXMNode().getXDPosition())) {"+NL;
+				s += (s.length() == 0 ? "\t\t" : "\t\t} else ")
+					+ "if (\"" + e.getKey()
+					+ "\".equals(xx.getXMNode().getXDPosition())) {"+NL;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				String name = val.substring(ndx + 1);
 				String getter = val.substring(2, ndx);
-				if (val.startsWith("1")) {
-					s += "\t\t\t_$"+name+"=(char) XD_ndx++;"+NL+
-						"\t\t\tset" + name +"("+getter+");"+NL;
-				} else {
-					s += "\t\t\t_$"+name+".append((char) XD_ndx++);"+NL+
-					"\t\t\tget" + name + "().add("+getter+");"+NL;
-				}
+				s += (val.startsWith("1")
+					? "\t\t\t_$"+name+"=(char) XD_ndx++;"+NL+"\t\t\tset" + name
+					: "\t\t\t_$"+name+".append((char) XD_ndx++);"+NL+
+						"\t\t\tget" + name + "().add")
+					+ "("+getter+");"+NL;
 			}
 			result += s + "\t\t}"+NL+"\t}"+NL;
 		}
@@ -1868,26 +1859,19 @@ String digest = xe.getDigest();
 			for (Iterator<Entry<String, String>>i=atttab.entrySet().iterator();
 				i.hasNext();){
 				Entry<String, String> e = i.next();
-				if (s.length() == 0) {
-					s = "\t\t";
-				} else {
-					s += "else ";
-				}
+				s += s.length() == 0 ? "\t\t" : " else ";
 				String key = e.getKey();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
-				if (i.hasNext()) {
-					s +=
-"if (xx.getXMNode().getXDPosition().endsWith(\"" + key + "\")) {"+NL+"\t\t\t";
-				} else {
-					s += "{"+NL+"\t\t\t";
-				}
+				s += (i.hasNext() 
+? "if (xx.getXMNode().getXDPosition().endsWith(\""+key+"\")) {" : "{") + NL;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
-				s += "XD_Name_"+val.substring(ndx+1)+ " = xx.getNodeName();"+NL;
+				s += "\t\t\tXD_Name_" + val.substring(ndx + 1)
+					+ " = xx.getNodeName();" + NL;
 				s += "\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
-				s+= "("+getter+");"+NL+"}\t\t";
+				s+= "("+getter+");"+NL+"\t\t}";
 			}
 			result += s+NL+"\t}"+NL;
 		}
@@ -1906,11 +1890,8 @@ String digest = xe.getDigest();
 		} else if (xctab.size() == 1) {
 			Entry<String, String> e = xctab.entrySet().iterator().next();
 			String s = e.getValue().replace('#', '.');
-			if (s.length() == 0) {
-				s = "this";
-			} else {
-				s = "new " + s.substring(s.indexOf(";") + 1) +"(this, xx)";
-			}
+			s = s.length() != 0
+				? "new "+s.substring(s.indexOf(";") + 1)+"(this, xx)" : "this";
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
 				"org.xdef.proc.XXNode xx)"+NL+
@@ -1929,15 +1910,14 @@ String digest = xe.getDigest();
 				if (s.length() == 0) {
 					dflt = true;
 				} else {
-					if (i.hasNext() || dflt) {
-						result+="\t\tif (\""+e.getKey()+
-							"\".equals(s))"+NL+"\t\t\treturn new " +
-							s.substring(s.indexOf(";") + 1) + "(this, xx);"+NL;
-					} else {
-						result+="\t\treturn new " +
-							s.substring(s.indexOf(";") + 1) + "(this, xx); // "+
-							e.getKey()+NL;
-					}
+					result += ((i.hasNext() || dflt)
+						? "\t\tif (\""+e.getKey()
+							+ "\".equals(s))"+NL+"\t\t\treturn new "
+							+ s.substring(s.indexOf(";") + 1)+"(this, xx);"
+						: ("\t\treturn new "
+							+ s.substring(s.indexOf(";") + 1)+"(this, xx); // "
+							+ e.getKey()))
+						+ NL;
 				}
 			}
 			result += (dflt ? "\t\treturn " + dflt + ';'+NL : "") + "\t}"+NL;

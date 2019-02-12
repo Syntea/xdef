@@ -114,10 +114,10 @@ public class Y09 implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@x")) {
       XD_Name_x = xx.getNodeName();
       setx(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_y = xx.getNodeName();
       sety(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

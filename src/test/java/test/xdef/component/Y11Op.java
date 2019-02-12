@@ -120,10 +120,10 @@ public class Y11Op implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@M")) {
       XD_Name_M = xx.getNodeName();
       setM(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_N = xx.getNodeName();
       setN(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -255,10 +255,10 @@ public static class Co implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@C")) {
       XD_Name_C = xx.getNodeName();
       setC(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_I = xx.getNodeName();
       setI(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

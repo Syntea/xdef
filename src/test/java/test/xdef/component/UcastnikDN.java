@@ -248,37 +248,37 @@ public class UcastnikDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholDech")) {
       XD_Name_AlkoholDech = xx.getNodeName();
       setAlkoholDech(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholKrev")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholKrev")) {
       XD_Name_AlkoholKrev = xx.getNodeName();
       setAlkoholKrev(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
       XD_Name_Pachatel = xx.getNodeName();
       setPachatel(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaKc")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaKc")) {
       XD_Name_PokutaKc = xx.getNodeName();
       setPokutaKc(parseResult.getParsedValue().intValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaZapl")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaZapl")) {
       XD_Name_PokutaZapl = xx.getNodeName();
       setPokutaZapl(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Poskozeny")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Poskozeny")) {
       XD_Name_Poskozeny = xx.getNodeName();
       setPoskozeny(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
       XD_Name_PraxeRizeni = xx.getNodeName();
       setPraxeRizeni(parseResult.getParsedValue().intValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
       XD_Name_TypUcastnika = xx.getNodeName();
       setTypUcastnika(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
       XD_Name_ZdravPojistovna = xx.getNodeName();
       setZdravPojistovna(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_Zraneni = xx.getNodeName();
       setZraneni(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {

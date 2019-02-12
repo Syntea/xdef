@@ -148,16 +148,16 @@ public class VlakDN implements org.xdef.component.XComponent{
     if (xx.getXMNode().getXDPosition().endsWith("/@DruhSoupravy")) {
       XD_Name_DruhSoupravy = xx.getNodeName();
       setDruhSoupravy(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-}    else if (xx.getXMNode().getXDPosition().endsWith("/@Spoj")) {
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Spoj")) {
       XD_Name_Spoj = xx.getNodeName();
       setSpoj(parseResult.getParsedValue().stringValue());
-}    else {
+    } else {
       XD_Name_TypSoupravy = xx.getNodeName();
       setTypSoupravy(parseResult.getParsedValue().stringValue());
-}    
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
