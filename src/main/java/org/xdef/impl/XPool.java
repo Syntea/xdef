@@ -132,6 +132,10 @@ public final class XPool implements XDPool, Serializable {
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private SDatetime _specialDates[];
 
+////////////////////////////////////////////////////////////////////////////////
+// Constructors
+////////////////////////////////////////////////////////////////////////////////
+
 	private XPool() {
 		_xdefs = new TreeMap<String, XDefinition>();
 		_sourceInfo = new XDSourceInfo();
@@ -207,6 +211,8 @@ public final class XPool implements XDPool, Serializable {
 			_extClasses,
 			_xdefs);
 	}
+	
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Read MIN_YEAR or MAX_YEAR from properties.
 	 * @param props properties
@@ -1238,7 +1244,6 @@ public final class XPool implements XDPool, Serializable {
 		}
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		gout.finish();
-		gout.close();
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
