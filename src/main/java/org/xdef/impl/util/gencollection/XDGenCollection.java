@@ -58,8 +58,8 @@ public class XDGenCollection {
 	private final ArrayList<String> _includeList;
 	/** List of parsed sources */
 	private final ArrayList<String> _parsedList;
-	/** List of thesaurus. */
-	private final ArrayList<Element> _thesaurusList;
+	/** List of lexicon. */
+	private final ArrayList<Element> _lexiconList;
 	/** List of macro definitions. */
 	private final HashMap<String, XScriptMacro> _macros;
 
@@ -197,7 +197,7 @@ public class XDGenCollection {
 		_defNames = new ArrayList<String>();
 		_includeList = new ArrayList<String>();
 		_parsedList = new ArrayList<String>();
-		_thesaurusList = new ArrayList<Element>();
+		_lexiconList = new ArrayList<Element>();
 		_macros = new HashMap<String, XScriptMacro>();
 		_xdParser = null;
 		_doc = KXmlUtils.newDocument();
@@ -219,8 +219,8 @@ public class XDGenCollection {
 			return null;
 		}
 		Element el = (Element) node.cloneNode(true);
-		if ("thesaurus".equals(el.getLocalName())) {
-			_thesaurusList.add(el);
+		if ("lexicon".equals(el.getLocalName())) {
+			_lexiconList.add(el);
 			_collection.appendChild(el);
 		} else if ("declaration".equals(el.getLocalName())) {
 			_collection.appendChild(el);
@@ -717,11 +717,11 @@ public class XDGenCollection {
 				if (!("declaration".equals(el.getLocalName())
 					|| "component".equals(el.getLocalName())
 					|| "BNFGrammar".equals(el.getLocalName())
-					|| "thesaurus".equals(el.getLocalName()))
+					|| "lexicon".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();
-					if ("thesaurus".equals(el.getLocalName())) {
+					if ("lexicon".equals(el.getLocalName())) {
 						if (s.trim().isEmpty()) {
 							el.removeChild(n);
 						}

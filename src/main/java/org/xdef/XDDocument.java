@@ -479,30 +479,30 @@ public interface XDDocument extends XXNode {
 	 */
 	public void printReports(PrintStream out);
 
-	/** Get actual source language used for thesaurus.
+	/** Get actual source language used for lexicon.
 	 * @return string with actual language.
 	 */
-	public String getSourceThesaurusLanguage();
+	public String getSourceLexiconLanguage();
 
-	/** Set actual source language used for thesaurus.
+	/** Set actual source language used for lexicon.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if thesaurus is not specified or if
+	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	public void setSourceThesaurusLanguage(String language)
+	public void setSourceLexiconLanguage(String language)
 		throws SRuntimeException;
 
-	/** Get actual destination language used for thesaurus.
+	/** Get actual destination language used for lexicon.
 	 * @return string with actual language.
 	 */
-	public String getDestThesaurusLanguage();
+	public String getDestLexiconLanguage();
 
-	/** Set actual destination language used for thesaurus.
+	/** Set actual destination language used for lexicon.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if thesaurus is not specified or if
+	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	public void setDestThesaurusLanguage(String language)
+	public void setDestLexiconLanguage(String language)
 		throws SRuntimeException;
 
 }

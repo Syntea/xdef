@@ -77,9 +77,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	Document _doc;
 	/** Root check element. */
 	ChkElement _chkRoot;
-	/** Thesaurus source language ID.*/
+	/** Lexicon source language ID.*/
 	int _sourceLanguageID = -1;
-	/** Thesaurus destination language ID.*/
+	/** Lexicon destination language ID.*/
 	int _destLanguageID = -1;
 	/** Reference number - max. 1 for root. */
 	private int _refNum;
@@ -222,7 +222,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final XXElement prepareRootXXElement(final String name,
 		final boolean checkRoot) {
-		return createRootChkElement(_doc.createElementNS(null,name), checkRoot);
+		return prepareRootXXElementNS(null, name, checkRoot);
 	}
 
 	/** Create root check element for given name.
@@ -236,9 +236,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		String name = element.getNodeName();
 		String nsURI = element.getNamespaceURI();
 		if (_xElement == null) {
-			_xElement = checkRoot?
-				_xdef.selectRoot(name, nsURI, _sourceLanguageID)
-				: _xdef.getXElement(name, nsURI);
+			int languageId = isCreateMode() ?_destLanguageID:_sourceLanguageID;
+			_xElement = checkRoot
+				? _xdef.selectRoot(name, nsURI, languageId)
+				: _xdef.getXElement(name, nsURI, languageId);
 		}
 		_element = element;
 		boolean ignore;
@@ -456,14 +457,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return _element;
 	}
 
-	/** Find text in thesaurus.
-	 * @param key in thesaurus.
-	 * @return text from thesaurus.
+	/** Find text in lexicon.
+	 * @param key in lexicon.
+	 * @return text from lexicon.
 	 */
-	final String findInThesaurus(final String key) {
+	final String findInLexicon(final String key) {
 		XPool xp = (XPool) getXDPool();
-		return (_sourceLanguageID < 0 || xp._thesaurus == null)
-			? null : xp._thesaurus.findText(key, _sourceLanguageID);
+		return (_sourceLanguageID < 0 || xp._lexicon == null)
+			? null : xp._lexicon.findText(key, _sourceLanguageID);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1085,62 +1086,62 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		getReportWriter().getReportReader().printReports(out);
 	}
 	@Override
-	/** Get actual source language used for thesaurus.
+	/** Get actual source language used for lexicon.
 	 * @return string with actual language.
 	 */
-	public final String getSourceThesaurusLanguage() {
+	public final String getSourceLexiconLanguage() {
 		return _sourceLanguageID < 0 ? null
-		: ((XPool) getXDPool())._thesaurus.getLanguages()[_sourceLanguageID];
+		: ((XPool) getXDPool())._lexicon.getLanguages()[_sourceLanguageID];
 	}
 	@Override
-	/** Set actual source language used for thesaurus.
+	/** Set actual source language used for lexicon.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if thesaurus is not specified or if
+	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	public final void setSourceThesaurusLanguage(final String language) {
+	public final void setSourceLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
-		if (xp._thesaurus == null) {
-			//Can't set language of input &{0} because thesaurus is not declared
+		if (xp._lexicon == null) {
+			//Can't set language of input &{0} because lexicon is not declared
 			throw new SRuntimeException(XDEF.XDEF140, language);
 		}
 		try {
 			_sourceLanguageID = language == null
-				? -1 : xp._thesaurus.getLanguageID(language);
+				? -1 : xp._lexicon.getLanguageID(language);
 		} catch (Exception ex) {
 			//Can't set language of input &{0} because this language is not
-			//specified in thesaurus
+			//specified in lexicon
 			throw new SRuntimeException(XDEF.XDEF142, language);
 		}
 	}
 	@Override
-	/** Get actual destination language used for thesaurus.
+	/** Get actual destination language used for lexicon.
 	 * @return string with actual language.
 	 */
-	public final String getDestThesaurusLanguage() {
+	public final String getDestLexiconLanguage() {
 		return (_destLanguageID < 0) ? null
 			: ((XPool) getXDPool())
-			._thesaurus.getLanguages()[_destLanguageID];
+			._lexicon.getLanguages()[_destLanguageID];
 	}
 	@Override
-	/** Set actual destination language used for thesaurus.
+	/** Set actual destination language used for lexicon.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if thesaurus is not specified or if
+	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	public final void setDestThesaurusLanguage(final String language) {
+	public final void setDestLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
-		if (xp._thesaurus == null) {
-			//Can't set language of output &{0} because thesaurus is not
+		if (xp._lexicon == null) {
+			//Can't set language of output &{0} because lexicon is not
 			//declared
 			throw new SRuntimeException(XDEF.XDEF141, language);
 		}
 		try {
 			_destLanguageID = language == null
-				? -1 : xp._thesaurus.getLanguageID(language);
+				? -1 : xp._lexicon.getLanguageID(language);
 		} catch (Exception ex) {
 			//Can't set language of output &{0} because this language is not
-			//specified in thesaurus
+			//specified in lexicon
 			throw new SRuntimeException(XDEF.XDEF143, language);
 		}
 	}

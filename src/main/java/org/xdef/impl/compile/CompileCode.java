@@ -14,7 +14,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.xml.KNamespace;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDBNFRule;
-import org.xdef.proc.Thesaurus;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.proc.XXData;
@@ -44,6 +43,7 @@ import java.util.TreeMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.proc.Lexicon;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -117,8 +117,8 @@ public final class CompileCode extends CompileBase {
 	final Map<String, SBuffer> _binds = new TreeMap<String, SBuffer>();
 	/** Enumerations. */
 	final Map<String, SBuffer> _enums = new TreeMap<String, SBuffer>();
-	/** Thesaurus object (null if not specified). */
-	Thesaurus _thesaurus = null;
+	/** Lexicon object (null if not specified). */
+	Lexicon _lexicon = null;
 	/** Flag if external method should be searched. */
 	private boolean _ignoreExternalMethods;
 

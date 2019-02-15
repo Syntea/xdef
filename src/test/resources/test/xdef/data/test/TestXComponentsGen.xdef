@@ -1,34 +1,33 @@
-<xd:collection xmlns:xd='http://www.syntea.cz/xdef/2.0'>
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1">
 
 <xd:component>
-  %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
-  %bind g %with test.xdef.TestXComponentsGen %link G#G/@g;
-  %bind XXX %with test.xdef.TestXComponentsGen %link G#G/XXX;
-  %bind YYY %with test.xdef.TestXComponentsGen %link G#G/YYY;
-  %class test.xdef.component.AZ
-     extends test.xdef.TestXComponentsGen %link A#A/Z;
-  %class test.xdef.component.J %link J#A;
-  %class test.xdef.component.Z %link SouborD1A#SouborD1A;
-  %class test.xdef.component.Z1 %link SouborD1A#ZaznamPDN;
-  %class test.xdef.component.Z2 %link SouborD1A#ProtokolDN;
-  %class test.xdef.component.Z3 %link SouborD1A#Skoda;
-  %class test.xdef.component.Z4 %link SouborD1A#Osoba;
-  %class test.xdef.component.Z5 %link SouborD1A#Firma;
-  %class test.xdef.component.Z6 %link SouborD1A#Doklad;
-  %class test.xdef.component.Z7 %link SouborD1A#RozhodnutiDN;
-  %class test.xdef.component.Z8 %link SouborD1A#ObjStrankaDN;
-  %class test.xdef.component.Z9 %link SouborD1A#Adresa;
-  %class test.xdef.component.FotoDN %link SouborD1A#FotoDN;
-  %class test.xdef.component.VozidloDN %link SouborD1A#VozidloDN;
-  %class test.xdef.component.TramvajDN %link SouborD1A#TramvajDN;
-  %class test.xdef.component.TrolejbusDN %link SouborD1A#TrolejbusDN;
-  %class test.xdef.component.VlakDN %link SouborD1A#VlakDN;
-  %class test.xdef.component.PovozDN %link SouborD1A#PovozDN;
-  %class test.xdef.component.PredmetDN %link SouborD1A#PredmetDN;
-  %class test.xdef.component.ZvireDN %link SouborD1A#ZvireDN;
-  %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
-  %class test.xdef.component.A %link A#A;
-  %class test.xdef.component.B %link B#A;
+ %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
+ %bind g %with test.xdef.TestXComponentsGen %link G#G/@g;
+ %bind XXX %with test.xdef.TestXComponentsGen %link G#G/XXX;
+ %bind YYY %with test.xdef.TestXComponentsGen %link G#G/YYY;
+ %class test.xdef.component.AZ extends test.xdef.TestXComponentsGen %link A#A/Z;
+ %class test.xdef.component.J %link J#A;
+ %class test.xdef.component.Z %link SouborD1A#SouborD1A;
+ %class test.xdef.component.Z1 %link SouborD1A#ZaznamPDN;
+ %class test.xdef.component.Z2 %link SouborD1A#ProtokolDN;
+ %class test.xdef.component.Z3 %link SouborD1A#Skoda;
+ %class test.xdef.component.Z4 %link SouborD1A#Osoba;
+ %class test.xdef.component.Z5 %link SouborD1A#Firma;
+ %class test.xdef.component.Z6 %link SouborD1A#Doklad;
+ %class test.xdef.component.Z7 %link SouborD1A#RozhodnutiDN;
+ %class test.xdef.component.Z8 %link SouborD1A#ObjStrankaDN;
+ %class test.xdef.component.Z9 %link SouborD1A#Adresa;
+ %class test.xdef.component.FotoDN %link SouborD1A#FotoDN;
+ %class test.xdef.component.VozidloDN %link SouborD1A#VozidloDN;
+ %class test.xdef.component.TramvajDN %link SouborD1A#TramvajDN;
+ %class test.xdef.component.TrolejbusDN %link SouborD1A#TrolejbusDN;
+ %class test.xdef.component.VlakDN %link SouborD1A#VlakDN;
+ %class test.xdef.component.PovozDN %link SouborD1A#PovozDN;
+ %class test.xdef.component.PredmetDN %link SouborD1A#PredmetDN;
+ %class test.xdef.component.ZvireDN %link SouborD1A#ZvireDN;
+ %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
+ %class test.xdef.component.A %link A#A;
+ %class test.xdef.component.B %link B#A;
 </xd:component>
 
 <xd:component>
@@ -703,6 +702,37 @@
      </DataFiles>
    </Transfer>
  </A>
+</xd:def>
+
+<!-- Used in TestLexicon.java -->
+<xd:def root="X" name="Lexicon">
+  <X x="string">
+    <Y xd:script="+"  y="int()"/>
+  </X>
+
+  <xd:component>
+    %class test.xdef.component.Lexicon %link Lexicon#X;
+  </xd:component>
+
+  <xd:declaration>
+    type state enum("draft", "processed");
+  </xd:declaration>
+
+  <xd:lexicon language="eng" default="yes"/>
+
+  <xd:lexicon language="ces">
+    Lexicon#X =                    P
+    Lexicon#X/@x =                 p
+    Lexicon#X/Y =                  Q
+    Lexicon#X/Y/@y =               q
+  </xd:lexicon>
+
+  <xd:lexicon language="deu">
+    Lexicon#X =                    S
+    Lexicon#X/@x =                 p
+    Lexicon#X/Y =                  T
+    Lexicon#X/Y/@y =               t
+  </xd:lexicon>
 </xd:def>
 
 </xd:collection>

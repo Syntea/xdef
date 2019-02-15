@@ -11,7 +11,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.proc.Thesaurus;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -41,6 +40,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.sys.ReportWriter;
 import java.io.Serializable;
+import org.xdef.proc.Lexicon;
 
 /** Implementation of the XDPool containing the set of X-definitions.
  * @author Vaclav Trojan
@@ -112,8 +112,8 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-	/** Thesaurus of terms in different languages.*/
-	Thesaurus _thesaurus = null;
+	/** Lexicon of terms in different languages.*/
+	Lexicon _lexicon = null;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
@@ -674,7 +674,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param stackMaxSize the maximum size of stack.
 	 * @param init the starting point of init action for the code.
 	 * @param xdVersion version ID of X-definition.
-	 * @param thesaurus Thesaurus or null.
+	 * @param lexicon Lexicon or null.
 	 */
 	public final void setCode(final ArrayList<XDValue> code,
 		final int globalVariablesSize,
@@ -682,10 +682,10 @@ public final class XPool implements XDPool, Serializable {
 		final int stackMaxSize,
 		final int init,
 		final byte xdVersion,
-		final Thesaurus thesaurus) {
+		final Lexicon lexicon) {
 		_globalVariablesSize = globalVariablesSize;
 		_localVariablesMaxSize = localVariablesMaxSize;
-		_thesaurus = thesaurus;
+		_lexicon = lexicon;
 		_code = new XDValue[code.size()];
 		for (int i = 0; i < _code.length; i++) {
 			XDValue item = code.get(i);
@@ -1156,22 +1156,22 @@ public final class XPool implements XDPool, Serializable {
 		for (int i = 0; i < len; i++) {
 			xw.writeString(_extClasses[i].getName());
 		}
-		if (_thesaurus == null) {
+		if (_lexicon == null) {
 			xw.writeLength(0);
 		} else {
-			String[] languages = _thesaurus.getLanguages();
+			String[] languages = _lexicon.getLanguages();
 			len = languages.length;
 			xw.writeLength(len);
 			for (int i = 0; i < len; i++) {
 				xw.writeString(languages[i]);
 			}
-			String[] keys = _thesaurus.getKeys();
+			String[] keys = _lexicon.getKeys();
 			len = keys.length;
 			xw.writeLength(len);
 			for (int i = 0; i < len; i++) {
 				String key = keys[i];
 				xw.writeString(key);
-				String[] words = _thesaurus.findTexts(key);
+				String[] words = _lexicon.findTexts(key);
 				for (String word: words) {
 					xw.writeString(word);
 				}
@@ -1327,7 +1327,7 @@ public final class XPool implements XDPool, Serializable {
 			for (int i = 0; i < len; i++) {
 				languages[i] = xr.readString();
 			}
-			XThesaurusImpl t = new XThesaurusImpl(languages);
+			XLexicon t = new XLexicon(languages);
 			len = xr.readLength(); // number of aliases
 			for (int i = 0; i < len; i++) {
 				String base = xr.readString();
@@ -1335,7 +1335,7 @@ public final class XPool implements XDPool, Serializable {
 					t.setItem(base, j, xr.readString());
 				}
 			}
-			_thesaurus = t;
+			_lexicon = t;
 		}
 		len = xr.readLength();
 		_components = new TreeMap<String, String>();
@@ -1403,7 +1403,7 @@ public final class XPool implements XDPool, Serializable {
 					XDefinition refXd = getDefinition(refDefName);
 					String refName = xr.readString();
 					String refUri = xr.readString();
-					ref = refXd.getXElement(refName, refUri);
+					ref = refXd.getXElement(refName, refUri, -1);
 					if (ref == null) {
 						ref = (XNode) findModel(key);
 					}

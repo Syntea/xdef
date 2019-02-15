@@ -2948,15 +2948,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_g._localVariables.clear();
 	}
 
-	/** Compile thesaurus specification
+	/** Compile lexicon specification
 	 * @param source source data.
 	 * @param defName the name of X-definition.
-	 * @param lang language of thesaurus.
+	 * @param lang language of lexicon.
 	 * @param deflt default language.
 	 * @param xp XDPool object.
-	 * @param languages List of languages in this thesaurus.
+	 * @param languages List of languages in this lexicon.
 	 */
-	final void compileThesaurus(final SBuffer source,
+	final void compileLexicon(final SBuffer source,
 		final String defName,
 		final SBuffer lang,
 		final SBuffer deflt,
@@ -3001,7 +3001,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (eos()) {
-			error(XDEF.XDEF148); //Specification of thesaurus values expected
+			error(XDEF.XDEF148); //Specification of lexicon values expected
 		}
 		StringBuilder sb = new StringBuilder();
 		for (;;) {
@@ -3014,11 +3014,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			String key = sb.toString().trim();
 			if (nextSymbol() == ASSGN_SYM) {
 				if (props.containsKey(key)) {
-					//The reference alias in thesaurus must be unique: &{0}
+					//The reference alias in lexicon must be unique: &{0}
 					error(spos,XDEF.XDEF147, key);
 				}
 				if (xp.findModel(key) == null) {
-					//Invalid reference of thesaurus item &{0} for language &{1}
+					//Invalid reference of lexicon item &{0} for language &{1}
 					error(spos, XDEF.XDEF150, key, language);
 				}
 				if (nextSymbol() == IDENTIFIER_SYM) {

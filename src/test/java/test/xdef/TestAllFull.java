@@ -60,7 +60,7 @@ public class TestAllFull {
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),
-			new TestThesaurus(),
+			new TestLexicon(),
 			new TestTryCatch(),
 			new TestTypes(),
 			new TestUserMethods(),

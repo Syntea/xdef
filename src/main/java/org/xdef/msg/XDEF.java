@@ -43,27 +43,27 @@ public interface XDEF {
 	public static final long XDEF120 = 31159025679L;
 	/** Error in variable declaration&amp;{#SYS000} */
 	public static final long XDEF121 = 31159025680L;
-	/** Can't set language of input "&amp;{0}" because thesaurus is not declared&amp; */
+	/** Can't set language of input "&amp;{0}" because lexicon is not declared */
 	public static final long XDEF140 = 31159025681L;
-	/** Can't set language of output "&amp;{0}" because thesaurus is not declared */
+	/** Can't set language of output "&amp;{0}" because lexicon is not declared */
 	public static final long XDEF141 = 31159025682L;
-	/** Can't set language of input "&amp;{0}" because this language is not specified in thesaurus&amp; */
+	/** Can't set language of input "&amp;{0}" because this language is not specified in lexicon */
 	public static final long XDEF142 = 31159025683L;
-	/** Can't set language of output "&amp;{0}" because this language is not specified in thesaurus&amp; */
+	/** Can't set language of output "&amp;{0}" because this language is not specified in lexicon */
 	public static final long XDEF143 = 31159025684L;
-	/** Incorrect thesaurus language ID: &amp;{0} */
+	/** Incorrect lexicon language ID: &amp;{0} */
 	public static final long XDEF144 = 31159025685L;
 	/** Redefinition of reference alias &amp;{0} and language &amp;{1}: the word &amp;{2} already exists as &amp;{3}&amp;{#SYS000} */
 	public static final long XDEF145 = 31159025686L;
 	/** Redefinition of the named value specification &amp;{0} in the declaration of uniqueSet &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF146 = 31159025687L;
-	/** The reference alias in thesaurus must be unique: &amp;{0}&amp;{#SYS000} */
+	/** The reference alias in lexicon must be unique: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF147 = 31159025688L;
-	/** Specification of thesaurus values expected&amp;{#SYS000} */
+	/** Specification of lexicon values expected&amp;{#SYS000} */
 	public static final long XDEF148 = 31159025689L;
 	/** Thesaurus item "&amp;{0}" is missing for language &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF149 = 31159025690L;
-	/** Invalid reference of thesaurus item "&amp;{0}" for language &amp;{1}&amp;{#SYS000} */
+	/** Invalid reference of lexicon item "&amp;{0}" for language &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF150 = 31159025691L;
 	/** Error of X-definitions integrity */
 	public static final long XDEF201 = 31159025692L;

@@ -79,7 +79,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_level == -1) {
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)
+				|| "lexicon".equals(elemLocalName)
 				|| "declaration".equals(elemLocalName)
 				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
@@ -215,9 +215,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("thesaurus".equals(elemLocalName)) {
+			} else if ("lexicon".equals(elemLocalName)) {
 				_level++;
-				_pcomp.getPThesaurusList().add(_actPNode);
+				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
 				_level++;
 				_pcomp.getPDeclarations().add(0, _actPNode);
@@ -237,7 +237,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				// the PNode we create a dumy one in fact just to store
 				// the X-definition name (we nead it to be able to compile
 				// internal declarations, BNGGrammars, components and
-				// thesaurus items).
+				// lexicon items).
 				_actPNode._xdef = new XDefinition(defName,
 					null, null, null, _actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
@@ -421,7 +421,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 			if ("text".equals(_actPNode._localName) ||
 				"BNFGrammar".equals(_actPNode._localName) ||
-				"thesaurus".equals(_actPNode._localName) ||
+				"lexicon".equals(_actPNode._localName) ||
 				"declaration".equals(_actPNode._localName) ||
 				"component".equals(_actPNode._localName) ||
 				"macro".equals(_actPNode._localName)) {
