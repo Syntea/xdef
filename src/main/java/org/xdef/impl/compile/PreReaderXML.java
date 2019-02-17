@@ -44,6 +44,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_pcomp = pcomp;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
@@ -79,6 +80,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_level == -1) {
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
+				|| "thesaurus".equals(elemLocalName)// && _actPNode._xdVersion==31
 				|| "lexicon".equals(elemLocalName)
 				|| "declaration".equals(elemLocalName)
 				|| "component".equals(elemLocalName)
@@ -95,7 +97,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null){
 					projectNS = ka.getValue().trim();
 					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
-						? XConstants.XD20 
+						? XConstants.XD20
 						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD31 : XConstants.XD32;
 					if (XExtUtils.uri(projectNS).errors()) {
@@ -215,7 +217,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("lexicon".equals(elemLocalName)) {
+			} else if ("thesaurus".equals(elemLocalName)
+//					&& _actPNode._xdVersion == 31
+				|| "lexicon".equals(elemLocalName)) {
 				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
@@ -419,23 +423,25 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("text".equals(_actPNode._localName) ||
-				"BNFGrammar".equals(_actPNode._localName) ||
-				"lexicon".equals(_actPNode._localName) ||
-				"declaration".equals(_actPNode._localName) ||
-				"component".equals(_actPNode._localName) ||
-				"macro".equals(_actPNode._localName)) {
+			if ("text".equals(_actPNode._localName)
+				|| "BNFGrammar".equals(_actPNode._localName)
+				|| "thesaurus".equals(_actPNode._localName)
+//					&& _actPNode._xdVersion == 31
+				|| "lexicon".equals(_actPNode._localName)
+				|| "declaration".equals(_actPNode._localName)
+				|| "component".equals(_actPNode._localName)
+				|| "macro".equals(_actPNode._localName)) {
 				return; //text is processed in the pnode
-			} else if (!"mixed".equals(_actPNode._localName) &&
-				!"choice".equals(_actPNode._localName) &&
-				!"list".equals(_actPNode._localName) &&
-//				!"PI".equals(_actPNode._localName) && //TODO
-//				!"comment".equals(_actPNode._localName) && //TODO
-//				!"document".equals(_actPNode._localName) && //TODO
-//				!"value".equals(_actPNode._localName) && //TODO
-//				!"attlist".equals(_actPNode._localName) && //TODO
-				!"sequence".equals(_actPNode._localName) &&
-				!"any".equals(_actPNode._localName)) {
+			} else if (!"mixed".equals(_actPNode._localName)
+				&& !"choice".equals(_actPNode._localName)
+				&& !"list".equals(_actPNode._localName)
+//				&& !"PI".equals(_actPNode._localName) //TODO
+//				&& !"comment".equals(_actPNode._localName) //TODO
+//				&& !"document".equals(_actPNode._localName) //TODO
+//				&& !"value".equals(_actPNode._localName) //TODO
+//				&&!"attlist".equals(_actPNode._localName) //TODO
+				&& !"sequence".equals(_actPNode._localName)
+				&& !"any".equals(_actPNode._localName)) {
 				//Text value is not allowed here
 				lightError(_actPNode._value, XDEF.XDEF260);
 				_actPNode._value = null; //prevent repeated message

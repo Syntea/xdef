@@ -457,11 +457,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return _element;
 	}
 
-	/** Find text in lexicon.
-	 * @param key in lexicon.
-	 * @return text from lexicon.
+	/** Find text in thesaurus.
+	 * @param key in thesaurus.
+	 * @return text from thesaurus.
 	 */
-	final String findInLexicon(final String key) {
+	final String findInThesaurus(final String key) {
 		XPool xp = (XPool) getXDPool();
 		return (_sourceLanguageID < 0 || xp._lexicon == null)
 			? null : xp._lexicon.findText(key, _sourceLanguageID);
@@ -1086,7 +1086,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		getReportWriter().getReportReader().printReports(out);
 	}
 	@Override
-	/** Get actual source language used for lexicon.
+	/** Get actual source language used for thesaurus.
 	 * @return string with actual language.
 	 */
 	public final String getSourceLexiconLanguage() {
@@ -1094,15 +1094,15 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		: ((XPool) getXDPool())._lexicon.getLanguages()[_sourceLanguageID];
 	}
 	@Override
-	/** Set actual source language used for lexicon.
+	/** Set actual source language used for thesaurus.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon is not specified or if
+	 * @throws SRuntimeException if thesaurus is not specified or if
 	 * language is not specified.
 	 */
 	public final void setSourceLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
 		if (xp._lexicon == null) {
-			//Can't set language of input &{0} because lexicon is not declared
+			//Can't set language of input &{0} because thesaurus is not declared
 			throw new SRuntimeException(XDEF.XDEF140, language);
 		}
 		try {
@@ -1110,12 +1110,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				? -1 : xp._lexicon.getLanguageID(language);
 		} catch (Exception ex) {
 			//Can't set language of input &{0} because this language is not
-			//specified in lexicon
+			//specified in thesaurus
 			throw new SRuntimeException(XDEF.XDEF142, language);
 		}
 	}
 	@Override
-	/** Get actual destination language used for lexicon.
+	/** Get actual destination language used for thesaurus.
 	 * @return string with actual language.
 	 */
 	public final String getDestLexiconLanguage() {
@@ -1124,15 +1124,15 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			._lexicon.getLanguages()[_destLanguageID];
 	}
 	@Override
-	/** Set actual destination language used for lexicon.
+	/** Set actual destination language used for thesaurus.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon is not specified or if
+	 * @throws SRuntimeException if thesaurus is not specified or if
 	 * language is not specified.
 	 */
 	public final void setDestLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
 		if (xp._lexicon == null) {
-			//Can't set language of output &{0} because lexicon is not
+			//Can't set language of output &{0} because thesaurus is not
 			//declared
 			throw new SRuntimeException(XDEF.XDEF141, language);
 		}
@@ -1141,7 +1141,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				? -1 : xp._lexicon.getLanguageID(language);
 		} catch (Exception ex) {
 			//Can't set language of output &{0} because this language is not
-			//specified in lexicon
+			//specified in thesaurus
 			throw new SRuntimeException(XDEF.XDEF143, language);
 		}
 	}
@@ -1166,4 +1166,39 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			"Unknown variable "+name);
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	@Override
+	/** Set actual source language used for lexicon.
+	 * @deprecated pleas use method setSourceLexiconLanguage instead.
+	 * @param language string with language or null.
+	 * @throws SRuntimeException if lexicon not specified
+	 * or if language is not specified.
+	 */
+	public void setSourceThesaurusLanguage(String language)
+		throws SRuntimeException {setSourceLexiconLanguage(language);}
+	@Override
+	/** Get actual source language used for lexicon.
+	 * @deprecated pleas use method getSourceLexiconLanguage instead.
+	 * @return string with actual language.
+	 */
+	public String getSourceThesaurusLanguage() {
+		return getSourceLexiconLanguage();
+	}
+	@Override
+	/** Get actual destination language used for lexicon.
+	 * @deprecated pleas use method getDestLexiconLanguage instead.
+	 * @return string with actual language.
+	 */
+	public String getDestThesaurusLanguage() {
+		return getDestLexiconLanguage();
+	}
+	@Override
+	/** Set actual destination language used for lexicon.
+	 * @deprecated pleas use method setDestLexiconLanguage instead.
+	 * @param language string with language or null.
+	 * @throws SRuntimeException if lexicon is not specified
+	 * or if language is not specified.
+	 */
+	public void setDestThesaurusLanguage(String language)
+		throws SRuntimeException {setDestLexiconLanguage(language);}
 }

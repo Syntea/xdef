@@ -1569,10 +1569,10 @@ public final class CompileCode extends CompileBase {
 			&& var.getCodeAddr() == -1
 			|| var.getType() == PARSEITEM_VALUE && numPar == 0)){//check type ID
 			//unique type, unique value
-			CodeI1 operator = new CodeI1(XD_BOOLEAN,
+			CodeI1 op = new CodeI1(XD_BOOLEAN,
 				CALL_OP, var.getParseMethodAddr());
-			addCode(operator, 1);
-			//Unknown method: '&{0}'
+			addCode(op, 1);
+			// return null if it is OK, otherwise return the name of method
 			return numPar != 0 ? name : null;
 		}
 		if (scriptMethod(extName, numPar)) {
@@ -1610,7 +1610,7 @@ public final class CompileCode extends CompileBase {
 			np--;
 		}
 		addCode(method,	-np);
-		return s;
+		return s; // null if it is OK, othrwise it is error message
 	}
 
 	/** Put report XDEF998 "{0}" is deprecated. Please use "&{1}" instead.

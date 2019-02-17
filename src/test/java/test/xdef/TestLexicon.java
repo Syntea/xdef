@@ -1,15 +1,13 @@
 package test.xdef;
 
+import java.util.List;
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
-import org.xdef.component.XComponent;
-import static test.utils.STester.runTest;
-import static test.utils.XDTester._xdNS;
 
-/** Test of Lexicon.
+/** Test of Thesaurus.
  * @author Vaclav Trojan
  */
 public final class TestLexicon extends XDTester {
@@ -55,8 +53,8 @@ public final class TestLexicon extends XDTester {
 "              create toString(from('@GivenName'))+' '+from('@LastName');\"/>\n"+
 "</Agreement>\n"+
 "</xd:def>";
-			String lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng'>\n"+
+			String thesaurus1 =
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng'>\n"+
 "kontrakt#Contract =                         Contract\n"+
 "kontrakt#Contract/@Number =                 Number\n"+
 "kontrakt#Contract/Client =                  Client\n"+
@@ -79,9 +77,9 @@ public final class TestLexicon extends XDTester {
 "kontrakt#Agreement/Mediator =               Mediator\n"+
 "kontrakt#Agreement/Mediator/@ID =           ID\n"+
 "kontrakt#Agreement/Mediator/@Name =         Name\n"+
-"</xd:lexicon>";
-			String lexicon2 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='ces'>\n"+
+"</xd:thesaurus>";
+			String thesaurus2 =
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='ces'>\n"+
 "kontrakt#Contract =                         Smlouva\n"+
 "kontrakt#Contract/@Number =                 Číslo\n"+
 "kontrakt#Contract/Client =                  Klient\n"+
@@ -104,8 +102,8 @@ public final class TestLexicon extends XDTester {
 "kontrakt#Agreement/Mediator =               Prostředník\n"+
 "kontrakt#Agreement/Mediator/@ID =           IČO\n"+
 "kontrakt#Agreement/Mediator/@Name =         Název\n"+
-"</xd:lexicon>";
-			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+"</xd:thesaurus>";
+			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
 			xd = xp.createXDDocument("kontrakt");
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
@@ -148,7 +146,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 
-			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
 			xd = xp.createXDDocument("kontrakt");
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
@@ -170,11 +168,11 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 
-			lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
+			thesaurus1 =
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
 "/* this is just a comment */\n"+
-"</xd:lexicon>";
-			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+"</xd:thesaurus>";
+			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
 			xd = xp.createXDDocument("kontrakt");
 			xml =
 "<Contract Number = \"0123456789\">\n"+
@@ -196,10 +194,10 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 
-			lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
-"</xd:lexicon>";
-			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			thesaurus1 =
+"<xd:thesaurus xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
+"</xd:thesaurus>";
+			xp = compile(new String[]{xdef, thesaurus1, thesaurus2});
 			xd = xp.createXDDocument("kontrakt");
 			xml =
 "<Contract Number = \"0123456789\">\n"+
@@ -270,6 +268,14 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 
 			xd = xp.createXDDocument("Lexicon");
+			xd.setSourceLexiconLanguage("ces");
+			xd.setDestLexiconLanguage("deu");
+			xd.setXDContext(xml);
+			el = create(xd, "S", reporter);
+			assertNoErrors(reporter);
+			assertEq("<S s='x'><T t='1'/><T t='2'/><T t='3'/></S>", el);
+
+			xd = xp.createXDDocument("Lexicon");
 			xd.setSourceLexiconLanguage("eng");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
 			el = parse(xd, xml, reporter);
@@ -296,11 +302,17 @@ public final class TestLexicon extends XDTester {
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
 			xd.setSourceLexiconLanguage("ces");
-//			Class<?> clazz = test.xdef.component.Lexicon.class;
-//			XComponent xc = parseXC(xd, xml, clazz, reporter);
-//			assertNoErrors(reporter);
-//			el = xc.toXml();
-//			assertEq(xml, el);
+			Class<?> clazz = test.xdef.component.Lexicon.class;
+			test.xdef.component.Lexicon xc = (test.xdef.component.Lexicon)
+				parseXC(xd, xml, clazz, reporter);
+			assertNoErrors(reporter);
+			assertEq(xc.getx(), "x");
+			List<test.xdef.component.Lexicon.Y> x = xc.listOfY();
+			assertEq(x.size(), 3);
+			assertEq(x.get(0).gety(), 1);
+			assertEq(x.get(2).gety(), 3);
+			el = xc.toXml();
+			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

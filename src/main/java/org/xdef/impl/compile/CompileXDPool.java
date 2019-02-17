@@ -198,7 +198,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Get precompiled sources (PNodes) of Lexicon items.
 	 * @return array with PNodes.
 	 */
-	public final List<PNode> getPLexicones() {return _lexicon;}
+	public final List<PNode> getPLexicons() {return _lexicon;}
 
 	/** Get precompiled sources (PNodes) of collection items.
 	 * @return array with PNodes.
@@ -832,11 +832,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				String nodeName = nodei._localName;
 				if ("declaration".equals(nodeName)
+					|| "thesaurus".equals(nodeName) // && def._xdVersion == 31
 					|| "lexicon".equals(nodeName)
 					|| "component".equals(nodeName)
 					|| "BNFGrammar".equals(nodeName)) {
 					_precomp.chkNestedElements(nodei);
-					if ("lexicon".equals(nodeName)) {
+					if ("thesaurus".equals(nodeName)
+						|| "lexicon".equals(nodeName)) {
 						_lexicon.add(nodei);
 					} else if ("BNFGrammar".equals(nodeName)) {
 						_listBNF.add(0, nodei);
