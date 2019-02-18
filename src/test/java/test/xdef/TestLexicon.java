@@ -7,7 +7,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
 
-/** Test of Thesaurus.
+/** Test of Lexicon.
  * @author Vaclav Trojan
  */
 public final class TestLexicon extends XDTester {
