@@ -505,34 +505,4 @@ public interface XDDocument extends XXNode {
 	public void setDestLexiconLanguage(String language)
 		throws SRuntimeException;
 
-	////////////////////////////////////////////////////////////////////////////
-
-	/** Set actual source language used for lexicon.
-	 * @deprecated pleas use method setSourceLexiconLanguage instead.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon not specified
-	 * or if language is not specified.
-	 */
-	public void setSourceThesaurusLanguage(String language)
-		throws SRuntimeException;
-	/** Get actual source language used for lexicon.
-	 * @deprecated pleas use method getSourceLexiconLanguage instead.
-	 * @return string with actual language.
-	 */
-	public String getSourceThesaurusLanguage();
-
-	/** Get actual destination language used for lexicon.
-	 * @deprecated pleas use method getDestLexiconLanguage instead.
-	 * @return string with actual language.
-	 */
-	public String getDestThesaurusLanguage();
-	/** Set actual destination language used for lexicon.
-	 * @deprecated pleas use method setDestLexiconLanguage instead.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon is not specified
-	 * or if language is not specified.
-	 */
-	public void setDestThesaurusLanguage(String language)
-		throws SRuntimeException;
-
 }

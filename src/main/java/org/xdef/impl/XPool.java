@@ -40,7 +40,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.sys.ReportWriter;
 import java.io.Serializable;
-import org.xdef.proc.Lexicon;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of the XDPool containing the set of X-definitions.
  * @author Vaclav Trojan
@@ -112,8 +112,8 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-	/** Lexicon of terms in different languages.*/
-	Lexicon _lexicon = null;
+	/** XDLexicon of terms in different languages.*/
+	XDLexicon _lexicon = null;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
@@ -674,7 +674,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param stackMaxSize the maximum size of stack.
 	 * @param init the starting point of init action for the code.
 	 * @param xdVersion version ID of X-definition.
-	 * @param lexicon Lexicon or null.
+	 * @param lexicon XDLexicon or null.
 	 */
 	public final void setCode(final ArrayList<XDValue> code,
 		final int globalVariablesSize,
@@ -682,7 +682,7 @@ public final class XPool implements XDPool, Serializable {
 		final int stackMaxSize,
 		final int init,
 		final byte xdVersion,
-		final Lexicon lexicon) {
+		final XDLexicon lexicon) {
 		_globalVariablesSize = globalVariablesSize;
 		_localVariablesMaxSize = localVariablesMaxSize;
 		_lexicon = lexicon;

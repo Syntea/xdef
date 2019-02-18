@@ -77,9 +77,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	Document _doc;
 	/** Root check element. */
 	ChkElement _chkRoot;
-	/** Lexicon source language ID.*/
+	/** XDLexicon source language ID.*/
 	int _sourceLanguageID = -1;
-	/** Lexicon destination language ID.*/
+	/** XDLexicon destination language ID.*/
 	int _destLanguageID = -1;
 	/** Reference number - max. 1 for root. */
 	private int _refNum;
@@ -1165,40 +1165,4 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"Unknown variable "+name);
 	}
-
-	////////////////////////////////////////////////////////////////////////////
-	@Override
-	/** Set actual source language used for lexicon.
-	 * @deprecated pleas use method setSourceLexiconLanguage instead.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon not specified
-	 * or if language is not specified.
-	 */
-	public void setSourceThesaurusLanguage(String language)
-		throws SRuntimeException {setSourceLexiconLanguage(language);}
-	@Override
-	/** Get actual source language used for lexicon.
-	 * @deprecated pleas use method getSourceLexiconLanguage instead.
-	 * @return string with actual language.
-	 */
-	public String getSourceThesaurusLanguage() {
-		return getSourceLexiconLanguage();
-	}
-	@Override
-	/** Get actual destination language used for lexicon.
-	 * @deprecated pleas use method getDestLexiconLanguage instead.
-	 * @return string with actual language.
-	 */
-	public String getDestThesaurusLanguage() {
-		return getDestLexiconLanguage();
-	}
-	@Override
-	/** Set actual destination language used for lexicon.
-	 * @deprecated pleas use method setDestLexiconLanguage instead.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon is not specified
-	 * or if language is not specified.
-	 */
-	public void setDestThesaurusLanguage(String language)
-		throws SRuntimeException {setDestLexiconLanguage(language);}
 }

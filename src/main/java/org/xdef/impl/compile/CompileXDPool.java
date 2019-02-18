@@ -195,7 +195,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
-	/** Get precompiled sources (PNodes) of Lexicon items.
+	/** Get precompiled sources (PNodes) of XDLexicon items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPLexicons() {return _lexicon;}

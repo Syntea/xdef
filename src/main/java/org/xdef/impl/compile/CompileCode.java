@@ -43,7 +43,7 @@ import java.util.TreeMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
-import org.xdef.proc.Lexicon;
+import org.xdef.proc.XDLexicon;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -117,8 +117,8 @@ public final class CompileCode extends CompileBase {
 	final Map<String, SBuffer> _binds = new TreeMap<String, SBuffer>();
 	/** Enumerations. */
 	final Map<String, SBuffer> _enums = new TreeMap<String, SBuffer>();
-	/** Lexicon object (null if not specified). */
-	Lexicon _lexicon = null;
+	/** XDLexicon object (null if not specified). */
+	XDLexicon _lexicon = null;
 	/** Flag if external method should be searched. */
 	private boolean _ignoreExternalMethods;
 

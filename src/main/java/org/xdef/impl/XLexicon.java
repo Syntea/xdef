@@ -4,12 +4,12 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
 import java.util.Map;
 import java.util.TreeMap;
-import org.xdef.proc.Lexicon;
+import org.xdef.proc.XDLexicon;
 
-/** Implementation of Lexicon.
+/** Implementation of XDLexicon.
  * @author Vaclav Trojan
  */
-public class XLexicon implements Lexicon {
+public class XLexicon implements XDLexicon {
 	final String[] _languages;
 	final Map<String, String[]> _dictionaries;
 

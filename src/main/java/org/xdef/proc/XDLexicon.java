@@ -1,9 +1,9 @@
 package org.xdef.proc;
 
-/** Provides methods for Lexicon.
+/** Provides methods for XDLexicon.
  * @author Vaclav Trojan
  */
-public interface Lexicon {
+public interface XDLexicon {
 
 	/** Get ID of language.
 	 * @param language language name

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.xdef.proc.Lexicon;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of the model of an element.
  *  deprecated - will be not public in future versions
@@ -131,7 +131,7 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public final XData getDefAttr(final String key, final int languageID) {
 		if (languageID >= 0) {
-			Lexicon t = ((XPool) getXDPool())._lexicon;
+			XDLexicon t = ((XPool) getXDPool())._lexicon;
 			for (XData xattr : _attrs.values()) {
 				String s = xattr.getXDPosition();
 				if (key.equals(t.findText(s, languageID))) {
@@ -157,7 +157,7 @@ public final class XElement extends XCodeDescriptor
 		int i = key.indexOf(':');
 		String k;
 		k = i >= 0 ? key.substring(i + 1) : key;
-		Lexicon t =
+		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		for (XData xattr : _attrs.values()) {
 			String locName = xattr.getName();

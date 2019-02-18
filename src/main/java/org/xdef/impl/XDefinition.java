@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
-import org.xdef.proc.Lexicon;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of X-definition.
  * @author Vaclav Trojan
@@ -83,7 +83,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final XElement getXElement(final String key,
 		final String nsURI,
 		final int languageID) {
-		Lexicon t =
+		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		int ndx = key.lastIndexOf('#');
 		String lockey;
@@ -263,7 +263,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final String namespaceURI,
 		final int languageID) {
 		String nm = name;
-		Lexicon t =
+		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		if (namespaceURI != null && namespaceURI.length() > 0) { // has NS URI
 			int i = name.indexOf(':');
