@@ -14,16 +14,6 @@ import org.xdef.XDParseResult;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
-import static org.xdef.XDValueID.XD_BOOLEAN;
-import static org.xdef.XDValueID.XD_BYTES;
-import static org.xdef.XDValueID.XD_CONTAINER;
-import static org.xdef.XDValueID.XD_ELEMENT;
-import static org.xdef.XDValueID.XD_INT;
-import static org.xdef.XDValueID.XD_NAMEDVALUE;
-import static org.xdef.XDValueID.XD_PARSERESULT;
-import static org.xdef.XDValueID.XD_RESULTSET;
-import static org.xdef.XDValueID.XD_STRING;
-import static org.xdef.XDValueID.XX_DOCUMENT;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefLong;
@@ -197,18 +187,18 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		final String sourceLanguage,
 		final String destLanguage) {
 		XElement oldXElement = chkDoc._xElement; //Save XElement
-		chkDoc._xElement = null;
-		setReportWriter(chkDoc.getReportWriter());
 		boolean oldMode = chkDoc.isCreateMode();
-		chkDoc.setCreateMode(true);
 		Element oldContext = chkDoc._sourceElem;
 		int oldSourceLanguageID = chkDoc._sourceLanguageID;
 		int oldDestLanguageID = chkDoc._destLanguageID;
 		_lexicon = ((XPool) chkDoc.getXDPool())._lexicon;
 		if (_lexicon == null) {
-			fatal(XDEF.XDEF151); //Lexicon is not available in the XDPool object
-			return;
+			//Lexicon is not available in the XDPool object
+			throw new SRuntimeException(XDEF.XDEF143);
 		}
+		chkDoc.setCreateMode(true);
+		chkDoc._xElement = null;
+		setReportWriter(chkDoc.getReportWriter());
 		try {
 			chkDoc.setSourceLexiconLanguage(sourceLanguage);
 			_sourceLanguageID = chkDoc._sourceLanguageID;

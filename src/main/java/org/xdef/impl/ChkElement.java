@@ -1438,7 +1438,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			String s;
 /*LEXICON*/
-			s = _rootChkDocument.findInThesaurus(xel.getXDPosition());
+			s = _rootChkDocument.findInLexicon(xel.getXDPosition());
 			if (s != null) {
 				localName = s;
 			}

@@ -33,7 +33,8 @@ public class XLexicon implements XDLexicon {
 				return index;
 			}
 		}
-		throw new SRuntimeException("unknown language: " + language);
+		//Incorrect lexicon language ID: &{0}
+		throw new SRuntimeException(XDEF.XDEF144, language);
 	}
 
 	/** Set lexicon item.
