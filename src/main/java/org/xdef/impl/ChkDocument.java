@@ -1114,37 +1114,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			throw new SRuntimeException(XDEF.XDEF142, language);
 		}
 	}
-	@Override
-	/** Get actual destination language used for thesaurus.
-	 * @return string with actual language.
-	 */
-	public final String getDestLexiconLanguage() {
-		return (_destLanguageID < 0) ? null
-			: ((XPool) getXDPool())
-			._lexicon.getLanguages()[_destLanguageID];
-	}
-	@Override
-	/** Set actual destination language used for thesaurus.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if thesaurus is not specified or if
-	 * language is not specified.
-	 */
-	public final void setDestLexiconLanguage(final String language) {
-		XPool xp = (XPool) getXDPool();
-		if (xp._lexicon == null) {
-			//Can't set language of output &{0} because thesaurus is not
-			//declared
-			throw new SRuntimeException(XDEF.XDEF141, language);
-		}
-		try {
-			_destLanguageID = language == null
-				? -1 : xp._lexicon.getLanguageID(language);
-		} catch (Exception ex) {
-			//Can't set language of output &{0} because this language is not
-			//specified in thesaurus
-			throw new SRuntimeException(XDEF.XDEF143, language);
-		}
-	}
 
 	@Override
 	/** Store  model variable.
@@ -1165,4 +1134,79 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"Unknown variable "+name);
 	}
+
+	@Override
+	/** Translate the input element from the source language to the destination
+	 * language according to lexicon.
+	 * @param elem the element in the source language.
+	 * @param sourceLanguage name of source language.
+	 * @param destLanguage name of destination language.
+	 * @param reporter the reporter where to write errors or null.
+	 * @return element converted to the destination language.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public Element xtranslate(final Element elem,
+		final String sourceLanguage,
+		final String destLanguage,
+		final ReportWriter reporter) throws SRuntimeException {
+		_reporter = new SReporter(reporter);
+		_scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));
+		_refNum = 0; // we must clear counter!
+		ChkTranslate chTranlsate =
+			new ChkTranslate(reporter == null ? new ArrayReporter() : reporter);
+		chTranlsate.xtranslate(this, elem, sourceLanguage, destLanguage);
+		return chkAndGetRootElement(chTranlsate, reporter == null);
+	}
+
+	@Override
+	/** Translate the input element from the source language to the destination
+	 * language according to lexicon.
+	 * @param elem path to the source element or the string
+	 * with element.
+	 * @param sourceLanguage name of source language.
+	 * @param destLanguage name of destination language.
+	 * @param reporter the reporter where to write errors or null.
+	 * @return element converted to the destination language.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public Element xtranslate(String elem,
+		String sourceLanguage,
+		String destLanguage,
+		ReportWriter reporter) throws SRuntimeException {
+		return xtranslate(KXmlUtils.parseXml(elem).getDocumentElement(),
+			sourceLanguage, destLanguage, reporter);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+
+	/** Get actual destination language used for thesaurus.
+	 * @return string with actual language.
+	 */
+	public final String getDestLexiconLanguage() {
+		return (_destLanguageID < 0) ? null
+			: ((XPool) getXDPool())
+			._lexicon.getLanguages()[_destLanguageID];
+	}
+
+	/** Set actual destination language used for thesaurus.
+	 * @param language string with language or null.
+	 * @throws SRuntimeException if thesaurus is not specified or if
+	 * language is not specified.
+	 */
+	public final void setDestLexiconLanguage(final String language) {
+		XPool xp = (XPool) getXDPool();
+		if (xp._lexicon == null) {
+			//Can't set language of output &{0} because thesaurus is not
+			//declared
+			throw new SRuntimeException(XDEF.XDEF141, language);
+		}
+		try {
+			_destLanguageID = language == null
+				? -1 : xp._lexicon.getLanguageID(language);
+		} catch (Exception ex) {
+			//Can't set language of output &{0} because this language is not
+			//specified in thesaurus
+			throw new SRuntimeException(XDEF.XDEF143, language);
+		}
+	}	
 }

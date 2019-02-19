@@ -31,7 +31,6 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDValueID;
 
 /** Constructs XML object according to X-definition.
- *  This code is nasty code in some parts, should be written better!
  * @author Vaclav Trojan
  */
 final class ChkComposer extends SReporter implements XDValueID {
@@ -199,12 +198,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 			}
 			chkDoc._scp.initscript(); //Initialize variables and methods
 			composeRoot(elem);
+		} finally {
 			chkDoc._xElement = oldXElement; //restore original value of XElement
 			KXmlUtils.setNecessaryXmlnsAttrs(chkDoc.getElement());
 			chkDoc.setCreateMode(oldMode);
-		} catch (RuntimeException ex) {
-			chkDoc.setCreateMode(oldMode);
-			throw ex;
 		}
 	}
 
@@ -547,14 +544,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final ChkElement chkEl,
 		final Element elem) {
 		String uri = chkEl.getXMElement().getNSUri();
-/*LEXICON*/
-		String qname = getSrcLexiconName(chkEl.getXMElement().getXDPosition());
-		if (qname == null) {
-			qname = chkEl.getXMElement().getName();
-		}
-/*LEXICON*
 		String qname = chkEl.getXMElement().getName();
-/*LEXICON*/
 		int n = qname.indexOf(':');
 		String localName = n < 0 ? qname : qname.substring(n + 1);
 		String lName = elem.getLocalName();
@@ -702,31 +692,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 		return result;
 	}
 
-	private String getDestLexiconName(String xdPosition) {
-		XPool xp = (XPool) _rootChkElement.getXDPool();
-		int languageID = _rootChkElement._rootChkDocument._destLanguageID;
-		int savedLanguageID =_rootChkElement._rootChkDocument._sourceLanguageID;
-		if (languageID < 0) {
-			languageID = savedLanguageID;
-		}
-		if (xp._lexicon != null && languageID >= 0) {
-			_rootChkElement._rootChkDocument._sourceLanguageID = languageID;
-			String newName = xp._lexicon.findText(xdPosition, languageID);
-			_rootChkElement._rootChkDocument._sourceLanguageID =savedLanguageID;
-			return newName;
-		}
-		return null;
-	}
-
-	private String getSrcLexiconName(String xdPosition) {
-		XPool xp = (XPool) _rootChkElement.getXDPool();
-		int languageID = _rootChkElement._rootChkDocument._sourceLanguageID;
-		if (xp._lexicon != null && languageID >= 0) {
-			return xp._lexicon.findText(xdPosition, languageID);
-		}
-		return null;
-	}
-
 	private void createElement(final ChkElement chkElem,
 		final Element sourceElem) {
 		XElement xel = chkElem._xElement;
@@ -745,12 +710,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 			if (attrName.charAt(0) == '$') { //special XDEF attribute
 				continue; // skip xd:text etc
 			}
-/*LEXICON*/
-			String attrName1 = getSrcLexiconName(xatr.getXDPosition());
-			if (attrName1 != null) {
-				attrName = attrName1;
-			}
-/*LEXICON*/
 			chkElem._xPos = xpos + "/@" + attrName;
 			chkElem.debugXPos(XDDebug.CREATE);
 			if (xatr._compose < 0) {
@@ -777,12 +736,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 					||  xel._ignoreEmptyAttributes == 0
 					&& chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
 					// set attribute
-/*LEXICON*/
-					String newName = getDestLexiconName(xatr.getXDPosition());
-					if (newName != null) {
-						attrName = newName;
-					}
-/*LEXICON*/
 					if (xatr.getNSUri() == null) {
 						chkElem._element.setAttribute(attrName, s);
 					} else {
@@ -879,7 +832,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param chkElem actual ChkElement object.
 	 * @param sourceElem actual source element.
 	 * @param savedSource saved source element.
-	 * @param xText text xtxt.
+	 * @param xText text node model.
 	 * @param lastNode last processed text from source item or <tt>null</tt>.
 	 */
 	private Node createTextNode(final ChkElement chkElem,
@@ -1434,12 +1387,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 				u = null;
 			}
 		}
-/*LEXICON*/
-		String s = getDestLexiconName(xel.getXDPosition());
-		if (s != null) {
-			n = s;
-		}
-/*LEXICON*/
 		return chkElem._element.getOwnerDocument().createElementNS(u, n);
 	}
 

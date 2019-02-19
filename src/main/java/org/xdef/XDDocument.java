@@ -492,17 +492,33 @@ public interface XDDocument extends XXNode {
 	public void setSourceLexiconLanguage(String language)
 		throws SRuntimeException;
 
-	/** Get actual destination language used for lexicon.
-	 * @return string with actual language.
+	/** Translate the input element from the source language to the destination
+	 * language according to lexicon.
+	 * @param elem path to the source element or the string
+	 * with element.
+	 * @param sourceLanguage name of source language.
+	 * @param destLanguage name of destination language.
+	 * @param reporter the reporter where to write errors or null.
+	 * @return element converted to the destination language.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public String getDestLexiconLanguage();
+	public Element xtranslate(String elem,
+		String sourceLanguage,
+		String destLanguage,
+		ReportWriter reporter) throws SRuntimeException;
 
-	/** Set actual destination language used for lexicon.
-	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon is not specified
-	 * or if language is not specified.
+	/** Translate the input element from the source language to the destination
+	 * language according to lexicon.
+	 * @param elem the element in the source language.
+	 * @param sourceLanguage name of source language.
+	 * @param destLanguage name of destination language.
+	 * @param reporter the reporter where to write errors or null.
+	 * @return element converted to the destination language.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void setDestLexiconLanguage(String language)
-		throws SRuntimeException;
+	public Element xtranslate(Element elem,
+		String sourceLanguage,
+		String destLanguage,
+		ReportWriter reporter) throws SRuntimeException;
 
 }

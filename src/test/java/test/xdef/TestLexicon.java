@@ -245,35 +245,22 @@ public final class TestLexicon extends XDTester {
 			xp = test.xdef.component.Pool.getXDPool();
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			xd.setSourceLexiconLanguage("eng");
-			xd.setDestLexiconLanguage("eng");
-			xd.setXDContext(xml);
-			el = create(xd, "X", reporter);
+			el = xd.xtranslate(xml, "eng", "eng", reporter);
 			assertNoErrors(reporter);
 
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			xd.setSourceLexiconLanguage("eng");
-			xd.setDestLexiconLanguage("ces");
-			xd.setXDContext(xml);
-			el = create(xd, "P", reporter);
+			el = xd.xtranslate(xml, "eng", "ces", reporter);
 			assertNoErrors(reporter);
 
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd.setSourceLexiconLanguage("ces");
-			xd.setDestLexiconLanguage("eng");
-			xd.setXDContext(xml);
-			el = create(xd, "X", reporter);
+			el = xd.xtranslate(xml, "ces", "eng", reporter);
 			assertNoErrors(reporter);
 
 			xd = xp.createXDDocument("Lexicon");
-			xd.setSourceLexiconLanguage("ces");
-			xd.setDestLexiconLanguage("deu");
-			xd.setXDContext(xml);
-			el = create(xd, "S", reporter);
+			el = xd.xtranslate(xml, "ces", "deu", reporter);
 			assertNoErrors(reporter);
-			assertEq("<S s='x'><T t='1'/><T t='2'/><T t='3'/></S>", el);
 
 			xd = xp.createXDDocument("Lexicon");
 			xd.setSourceLexiconLanguage("eng");
@@ -285,7 +272,6 @@ public final class TestLexicon extends XDTester {
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
 			xd.setSourceLexiconLanguage("ces");
-			xd.setDestLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -293,7 +279,6 @@ public final class TestLexicon extends XDTester {
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
 			xd = xp.createXDDocument("Lexicon");
 			xd.setSourceLexiconLanguage("ces");
-			xd.setDestLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
