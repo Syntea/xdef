@@ -112,7 +112,7 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-	/** XDLexicon of terms in different languages.*/
+	/** Lexicon of tag names in different languages.*/
 	XDLexicon _lexicon = null;
 	/** Reporter writer.*/
 	ReportWriter _reporter;

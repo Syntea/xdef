@@ -89,7 +89,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private Class<?> _xclass;
 	/** XComponent if exists or null. */
 	private XComponent _xComponent;
-	/** Swith to generate XComponent instead of Element; */
+	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
 	/** The list of child check elements. */
 	final ArrayList<ChkElement> _chkChildNodes = new ArrayList<ChkElement>();
@@ -176,54 +176,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 	}
 
-	@Override
-	/** Get create mode/process mode.
-	 * @return true if and only if create mode is running.
-	 */
-	public final boolean isCreateMode() {return _createMode;}
-
 	/** Set create mode.
 	 * @param createMode true if create mode is running.
 	 */
 	final void setCreateMode(boolean createMode) {_createMode = createMode;}
-
-	@Override
-	/** Create root check element for given name.
-	 * @param nsURI NameSpace URI of the element.
-	 * @param qname Qualified name of the element (with prefix).
-	 * @param checkRoot if true, the root check element is checked against
-	 * the root list, otherwise it is found as XElement on the base level.
-	 * @return The ChkElement object.
-	 */
-	public final XXElement prepareRootXXElementNS(final String nsURI,
-		final String qname,
-		final boolean checkRoot) {
-		String uri = nsURI == null || nsURI.length() == 0 ? null : nsURI;
-		try {
-			Element root = _doc.createElementNS(uri, qname);
-			if (uri != null) {
-				String s = root.getPrefix();
-				root.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-					(s != null && s.length()>0) ? "xmlns:"+s : "xmlns", nsURI);
-			}
-			return createRootChkElement(root, checkRoot);
-		} catch (Exception ex) {
-			 //Can'create root element
-			throw new SRuntimeException(XDEF.XDEF103, ex);
-		}
-	}
-
-	@Override
-	/** Create root check element for given name.
-	 * @param name Tag name of the root element (with prefix).
-	 * @param checkRoot if true, the root check element is checked against
-	 * the root list, otherwise it is found as XElement on the base level.
-	 * @return The ChkElement object.
-	 */
-	public final XXElement prepareRootXXElement(final String name,
-		final boolean checkRoot) {
-		return prepareRootXXElementNS(null, name, checkRoot);
-	}
 
 	/** Create root check element for given name.
 	 * @param element The element
@@ -470,6 +426,51 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 ////////////////////////////////////////////////////////////////////////////////
 // implementation of XDDocument
 ////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Get create mode/process mode.
+	 * @return true if and only if create mode is running.
+	 */
+	public final boolean isCreateMode() {return _createMode;}
+
+	@Override
+	/** Create root check element for given name.
+	 * @param nsURI NameSpace URI of the element.
+	 * @param qname Qualified name of the element (with prefix).
+	 * @param checkRoot if true, the root check element is checked against
+	 * the root list, otherwise it is found as XElement on the base level.
+	 * @return The ChkElement object.
+	 */
+	public final XXElement prepareRootXXElementNS(final String nsURI,
+		final String qname,
+		final boolean checkRoot) {
+		String uri = nsURI == null || nsURI.length() == 0 ? null : nsURI;
+		try {
+			Element root = _doc.createElementNS(uri, qname);
+			if (uri != null) {
+				String s = root.getPrefix();
+				root.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+					(s != null && s.length()>0) ? "xmlns:"+s : "xmlns", nsURI);
+			}
+			return createRootChkElement(root, checkRoot);
+		} catch (Exception ex) {
+			 //Can'create root element
+			throw new SRuntimeException(XDEF.XDEF103, ex);
+		}
+	}
+
+	@Override
+	/** Create root check element for given name.
+	 * @param name Tag name of the root element (with prefix).
+	 * @param checkRoot if true, the root check element is checked against
+	 * the root list, otherwise it is found as XElement on the base level.
+	 * @return The ChkElement object.
+	 */
+	public final XXElement prepareRootXXElement(final String name,
+		final boolean checkRoot) {
+		return prepareRootXXElementNS(null, name, checkRoot);
+	}
+
 	@Override
 	public final short getItemId() {return XX_DOCUMENT;}
 
@@ -1176,16 +1177,15 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return xtranslate(KXmlUtils.parseXml(elem).getDocumentElement(),
 			sourceLanguage, destLanguage, reporter);
 	}
-	
-	////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Get actual destination language used for thesaurus.
 	 * @return string with actual language.
 	 */
-	public final String getDestLexiconLanguage() {
+	final String getDestLexiconLanguage() {
 		return (_destLanguageID < 0) ? null
-			: ((XPool) getXDPool())
-			._lexicon.getLanguages()[_destLanguageID];
+			: ((XPool) getXDPool())._lexicon.getLanguages()[_destLanguageID];
 	}
 
 	/** Set actual destination language used for thesaurus.
@@ -1193,20 +1193,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if thesaurus is not specified or if
 	 * language is not specified.
 	 */
-	public final void setDestLexiconLanguage(final String language) {
+	final void setDestLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
 		if (xp._lexicon == null) {
 			//Can't set language of output &{0} because thesaurus is not
 			//declared
 			throw new SRuntimeException(XDEF.XDEF141, language);
 		}
-		try {
-			_destLanguageID = language == null
-				? -1 : xp._lexicon.getLanguageID(language);
-		} catch (Exception ex) {
-			//Can't set language of output &{0} because this language is not
-			//specified in thesaurus
-			throw new SRuntimeException(XDEF.XDEF143, language);
-		}
-	}	
+		_destLanguageID =
+			language == null ? -1 : xp._lexicon.getLanguageID(language);
+	}
 }

@@ -41,15 +41,20 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
-
-/** Constructs XML object according to X-definition.
- *  This code is nasty code in some parts, should be written better!
+/** Translates element from one language to another language
+ * according to Lexicon.
  * @author Vaclav Trojan
  */
 final class ChkTranslate extends SReporter implements XDValueID {
 
 	/** Root check element. */
 	private ChkElement _rootChkElement;
+	/** Lexicon of tag names in different languages.*/
+	private XDLexicon _lexicon = null;
+	/** XDLexicon source language ID.*/
+	private int _sourceLanguageID = -1;
+	/** XDLexicon destination language ID.*/
+	private int _destLanguageID = -1;
 
 	/** Creates a new instance of ChkTranslate. */
 	ChkTranslate(final ReportWriter reporter) {super(reporter);}
@@ -199,19 +204,21 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		Element oldContext = chkDoc._sourceElem;
 		int oldSourceLanguageID = chkDoc._sourceLanguageID;
 		int oldDestLanguageID = chkDoc._destLanguageID;
-		XDLexicon lexicon = ((XPool) chkDoc.getXDPool())._lexicon;
-		if (lexicon == null) {
+		_lexicon = ((XPool) chkDoc.getXDPool())._lexicon;
+		if (_lexicon == null) {
 			fatal(XDEF.XDEF151); //Lexicon is not available in the XDPool object
 			return;
 		}
 		try {
 			chkDoc.setSourceLexiconLanguage(sourceLanguage);
+			_sourceLanguageID = chkDoc._sourceLanguageID;
 			chkDoc.setDestLexiconLanguage(destLanguage);
+			_destLanguageID = chkDoc._destLanguageID;
 			String nsuri = inElem.getNamespaceURI();
 			XElement xel = chkDoc._xdef.getXElement(inElem.getTagName(),
-				nsuri, chkDoc._sourceLanguageID);
-			String name = ((XPool) chkDoc.getXDPool())._lexicon
-				.findText(xel.getXDPosition(), chkDoc._destLanguageID);
+				nsuri, _sourceLanguageID);
+			String name = ((XPool) chkDoc.getXDPool())._lexicon.findText(
+				xel.getXDPosition(), _destLanguageID);
 			chkDoc.setXDContext(inElem);
 			_rootChkElement = (ChkElement) chkDoc.prepareRootXXElementNS(
 				nsuri, name, false);
@@ -419,41 +426,6 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		}
 	}
 
-	/** Execute "compose" action for value of an attribute or a text nodes.
-	 * @param addr The address of action or negative number.
-	 * @param mode mode of process.
-	 * @param chkElem The actual check element containing attribute/text.
-	 * @param sourceElem The source element.
-	 */
-	private void execComposeValue(final int addr,
-		final byte mode,
-		final ChkElement chkElem,
-		final Element sourceElem) {
-		String xpos = chkElem._xPos; //save xPos
-		chkElem.debugXPos(XDDebug.CREATE);
-		if (addr >= 0) {
-			chkElem.setElemValue(sourceElem);
-			chkElem.setXXType(mode);
-			chkElem.setTextValue(null);
-			// prepare variables declared in the script (do not make it twice)
-			if (chkElem._xElement._varinit >= 0 && chkElem._variables == null) {
-				chkElem._variables = new XDValue[chkElem._xElement._varsize];
-				chkElem.exec(chkElem._xElement._varinit, (byte) 'E');
-				chkElem.copyTemporaryReports();
-			}
-			XDValue result = chkElem.exec(addr, mode);
-			chkElem.copyTemporaryReports();
-			if (result != null && !result.isNull()) {
-				String s = result.toString();
-				if (s.length() > 0 || mode == 'A') {
-					//attribute may have empty string value
-					chkElem.setTextValue(s);
-				}
-			}
-		}
-		chkElem._xPos = xpos;  //reset xPos
-	}
-
 	/** Find elements with given name in child nodes. If the argument "elem" has
 	 * the name and namespace URI as required then add this element to result
 	 * and return true. Otherwise try to find direct child nodes with such name
@@ -469,14 +441,11 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		final ChkElement chkEl,
 		final Element elem) {
 		String uri = chkEl.getXMElement().getNSUri();
-/*LEXICON*/
-		String qname = getSrcLexiconName(chkEl.getXMElement().getXDPosition());
+		String qname = _lexicon.findText(chkEl.getXMElement().getXDPosition(),
+			_sourceLanguageID);
 		if (qname == null) {
 			qname = chkEl.getXMElement().getName();
 		}
-/*LEXICON*
-		String qname = chkEl.getXMElement().getName();
-/*LEXICON*/
 		int n = qname.indexOf(':');
 		String localName = n < 0 ? qname : qname.substring(n + 1);
 		String lName = elem.getLocalName();
@@ -567,30 +536,6 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		return result;
 	}
 
-	private String getDestLexiconName(String xdPosition) {
-		XPool xp = (XPool) _rootChkElement.getXDPool();
-		int languageID = _rootChkElement._rootChkDocument._destLanguageID;
-		int savedLanguageID =_rootChkElement._rootChkDocument._sourceLanguageID;
-		if (languageID < 0) {
-			languageID = savedLanguageID;
-		}
-		if (xp._lexicon != null && languageID >= 0) {
-			_rootChkElement._rootChkDocument._sourceLanguageID = languageID;
-			String newName = xp._lexicon.findText(xdPosition, languageID);
-			_rootChkElement._rootChkDocument._sourceLanguageID =savedLanguageID;
-			return newName;
-		}
-		return null;
-	}
-
-	private String getSrcLexiconName(String xdPosition) {
-		XPool xp = (XPool) _rootChkElement.getXDPool();
-		int languageID = _rootChkElement._rootChkDocument._sourceLanguageID;
-		if (xp._lexicon != null && languageID >= 0) {
-			return xp._lexicon.findText(xdPosition, languageID);
-		}
-		return null;
-	}
 
 	private void createElement(final ChkElement chkElem,
 		final Element sourceElem) {
@@ -611,7 +556,8 @@ final class ChkTranslate extends SReporter implements XDValueID {
 				continue; // skip xd:text etc
 			}
 /*LEXICON*/
-			String attrName1 = getSrcLexiconName(xatr.getXDPosition());
+			String attrName1 = _lexicon.findText(xatr.getXDPosition(),
+				_sourceLanguageID);
 			if (attrName1 != null) {
 				attrName = attrName1;
 			}
@@ -635,7 +581,8 @@ final class ChkTranslate extends SReporter implements XDValueID {
 					&& chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
 					// set attribute
 /*LEXICON*/
-					String newName = getDestLexiconName(xatr.getXDPosition());
+					String newName = _lexicon.findText(xatr.getXDPosition(),
+						_destLanguageID);
 					if (newName != null) {
 						attrName = newName;
 					}
@@ -1279,7 +1226,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 			}
 		}
 /*LEXICON*/
-		String s = getDestLexiconName(xel.getXDPosition());
+		String s = _lexicon.findText(xel.getXDPosition(), _destLanguageID);
 		if (s != null) {
 			n = s;
 		}

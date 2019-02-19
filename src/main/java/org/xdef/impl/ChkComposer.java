@@ -1,17 +1,5 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefSQLConstructor;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefElement;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SError;
-import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBytes;
 import org.xdef.XDContainer;
 import org.xdef.XDDebug;
@@ -19,16 +7,29 @@ import org.xdef.XDNamedValue;
 import org.xdef.XDParseResult;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
+import org.xdef.impl.code.DefSQLConstructor;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefElement;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XDLexicon;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SError;
+import org.xdef.sys.SReporter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXmlUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.XDValueID;
 
 /** Constructs XML object according to X-definition.
  * @author Vaclav Trojan
@@ -37,6 +38,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 
 	/** Root check element. */
 	private ChkElement _rootChkElement;
+	/** Lexicon of tag names in different languages.*/
+	private XDLexicon _lexicon = null;
+	/** XDLexicon source language ID.*/
+	private int _sourceLanguageID = -1;
+	/** XDLexicon destination language ID.*/
+	private int _destLanguageID = -1;
 
 	/** Creates a new instance of ChkComposer. */
 	ChkComposer(final ReportWriter reporter) {super(reporter);}
@@ -184,6 +191,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 		boolean oldMode = chkDoc.isCreateMode();
 		chkDoc.setCreateMode(true);
 		try {
+			XPool xp = ((XPool) chkDoc.getXDPool());
+			_lexicon = xp._lexicon;
+			_sourceLanguageID = chkDoc._sourceLanguageID;
+			_destLanguageID = chkDoc._destLanguageID;
 			_rootChkElement = (ChkElement) chkDoc.prepareRootXXElementNS(
 				nsURI, qname, false);
 			Object obj = chkDoc.getCreateContext();
@@ -202,6 +213,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 			chkDoc._xElement = oldXElement; //restore original value of XElement
 			KXmlUtils.setNecessaryXmlnsAttrs(chkDoc.getElement());
 			chkDoc.setCreateMode(oldMode);
+			chkDoc._sourceLanguageID = _sourceLanguageID;
+			chkDoc._destLanguageID = _destLanguageID;
 		}
 	}
 
@@ -544,7 +557,14 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final ChkElement chkEl,
 		final Element elem) {
 		String uri = chkEl.getXMElement().getNSUri();
+/*LEXICON*/
+		String qname = getSrcLexiconName(chkEl.getXMElement().getXDPosition());
+		if (qname == null) {
+			qname = chkEl.getXMElement().getName();
+		}
+/*LEXICON*
 		String qname = chkEl.getXMElement().getName();
+/*LEXICON*/
 		int n = qname.indexOf(':');
 		String localName = n < 0 ? qname : qname.substring(n + 1);
 		String lName = elem.getLocalName();
@@ -692,6 +712,26 @@ final class ChkComposer extends SReporter implements XDValueID {
 		return result;
 	}
 
+	private String getDestLexiconName(final String xdPosition) {
+		int languageID = _destLanguageID;
+		int savedLanguageID = _sourceLanguageID;
+		if (languageID < 0) {
+			languageID = savedLanguageID;
+		}
+		if (_lexicon != null && languageID >= 0) {
+			_rootChkElement._rootChkDocument._sourceLanguageID = languageID;
+			String newName = _lexicon.findText(xdPosition, languageID);
+			_rootChkElement._rootChkDocument._sourceLanguageID =savedLanguageID;
+			return newName;
+		}
+		return null;
+	}
+
+	private String getSrcLexiconName(final String xdPosition) {
+		return _lexicon != null && _sourceLanguageID >= 0
+			? _lexicon.findText(xdPosition, _sourceLanguageID) : null;
+	}
+
 	private void createElement(final ChkElement chkElem,
 		final Element sourceElem) {
 		XElement xel = chkElem._xElement;
@@ -710,6 +750,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 			if (attrName.charAt(0) == '$') { //special XDEF attribute
 				continue; // skip xd:text etc
 			}
+/*LEXICON*/
+			String attrName1 = getSrcLexiconName(xatr.getXDPosition());
+			if (attrName1 != null) {
+				attrName = attrName1;
+			}
+/*LEXICON*/
 			chkElem._xPos = xpos + "/@" + attrName;
 			chkElem.debugXPos(XDDebug.CREATE);
 			if (xatr._compose < 0) {
@@ -736,6 +782,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 					||  xel._ignoreEmptyAttributes == 0
 					&& chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
 					// set attribute
+/*LEXICON*/
+					String newName = getDestLexiconName(xatr.getXDPosition());
+					if (newName != null) {
+						attrName = newName;
+					}
+/*LEXICON*/
 					if (xatr.getNSUri() == null) {
 						chkElem._element.setAttribute(attrName, s);
 					} else {
@@ -1387,6 +1439,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 				u = null;
 			}
 		}
+/*LEXICON*/
+		String s = getDestLexiconName(xel.getXDPosition());
+		if (s != null) {
+			n = s;
+		}
+/*LEXICON*/
 		return chkElem._element.getOwnerDocument().createElementNS(u, n);
 	}
 
