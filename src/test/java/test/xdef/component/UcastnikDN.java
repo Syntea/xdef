@@ -159,14 +159,13 @@ public class UcastnikDN implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_Pachatel, getPachatel());
     if (getPoskozeny() != null)
       el.setAttribute(XD_Name_Poskozeny, getPoskozeny());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getOsoba());
@@ -177,7 +176,7 @@ public class UcastnikDN implements org.xdef.component.XComponent{
     org.xdef.component.XComponentUtil.addXC(a, getPoruseniZakTrest());
     org.xdef.component.XComponentUtil.addXC(a, getPoruseniZakOst());
     org.xdef.component.XComponentUtil.addXC(a, getVazba());
-    return XD_List = a;
+    return a;
   }
   public UcastnikDN() {}
   public UcastnikDN(org.xdef.component.XComponent p,
@@ -237,7 +236,6 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -374,9 +372,8 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -386,7 +383,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakProvoz() {}
   public PoruseniZakProvoz(org.xdef.component.XComponent p,
@@ -417,7 +414,6 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -484,9 +480,8 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -496,7 +491,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakPrest() {}
   public PoruseniZakPrest(org.xdef.component.XComponent p,
@@ -527,7 +522,6 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -594,9 +588,8 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -606,7 +599,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakTrest() {}
   public PoruseniZakTrest(org.xdef.component.XComponent p,
@@ -637,7 +630,6 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -704,9 +696,8 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -716,7 +707,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakOst() {}
   public PoruseniZakOst(org.xdef.component.XComponent p,
@@ -747,7 +738,6 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakOst";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -814,9 +804,8 @@ public static class Vazba implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -826,7 +815,7 @@ public static class Vazba implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Vazba() {}
   public Vazba(org.xdef.component.XComponent p,
@@ -857,7 +846,6 @@ public static class Vazba implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/Vazba";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

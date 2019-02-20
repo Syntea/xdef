@@ -63,18 +63,17 @@ public class Y11Op implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_N, getN());
     if (getM() != null)
       el.setAttribute(XD_Name_M, getM());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfCo());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public Y11Op() {}
   public Y11Op(org.xdef.component.XComponent p,
@@ -109,7 +108,6 @@ public class Y11Op implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y11#Op";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -200,17 +198,16 @@ public static class Co implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_C, getC());
     if (getI() != null)
       el.setAttribute(XD_Name_I, getI());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getX());
-    return XD_List = a;
+    return a;
   }
   public Co() {}
   public Co(org.xdef.component.XComponent p,
@@ -244,7 +241,6 @@ public static class Co implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y11#Op/Co";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

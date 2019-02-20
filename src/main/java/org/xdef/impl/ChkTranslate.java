@@ -200,7 +200,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 		chkDoc._xElement = null;
 		setReportWriter(chkDoc.getReportWriter());
 		try {
-			chkDoc.setSourceLexiconLanguage(sourceLanguage);
+			chkDoc.setLexiconLanguage(sourceLanguage);
 			_sourceLanguageID = chkDoc._sourceLanguageID;
 			chkDoc.setDestLexiconLanguage(destLanguage);
 			_destLanguageID = chkDoc._destLanguageID;

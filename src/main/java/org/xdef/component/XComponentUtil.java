@@ -214,14 +214,15 @@ public class XComponentUtil {
 		}
 	}
 
-	/** Update XPostitions, */
+	/** Update XPostitions.
+	 * @param xc X-component.
+	 * @param xpos X-position.
+	 * @param index index of the referred item of X-position.
+	 */
 	private static void updateXPos(final XComponent xc,
 		final String xpos,
 		final int index) {
 		String myXPos = xc.xGetNodeName();
-//		if (myXPos.equals("$text")) {
-//			myXPos = "text()";
-//		}
 		if (index > 0) {
 			myXPos += '[' + String.valueOf(index + 1) + ']';
 		}
@@ -248,36 +249,11 @@ public class XComponentUtil {
 		}
 	}
 
-	/** Updates XPositions of the subtree of XComponents starting
+	/** Updates XPositions in the subtree of XComponents starting
 	 * with given argument.
 	 * @param xc XComponent where updating starts.
 	 */
 	public static final void updateXPos(final XComponent xc) {
 		updateXPos(xc, "", 0);
 	}
-
-/**
-	private static final void sortXC(final List<XComponent> childList,
-		final int low,
-		final int high) {
-		int i = low, j = high;
-		final int pivot = childList.get(i + (j-i)/2).xGetNodeIndex();
-		while (i <= j) {
-			while (childList.get(i).xGetNodeIndex() < pivot) i++;
-			while (childList.get(j).xGetNodeIndex() > pivot) j--;
-			if (i <= j) {
-				if (i < j) { //swap
-					final XComponent x = childList.get(i);
-					childList.set(i, childList.get(j));
-					childList.set(j, x);
-				}
-				i++;
-				j--;
-			}
-			if (low < j) sortXC(childList, low, j);
-			if (i < high) sortXC(childList, i, high);
-		}
-	}
-/**/
-
 }

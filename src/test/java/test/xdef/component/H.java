@@ -59,18 +59,17 @@ public class H implements org.xdef.component.XComponent{
       el.setAttributeNS("soap", XD_Name_s$encodingStyle, gets$encodingStyle());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, gets$Header());
     org.xdef.component.XComponentUtil.addXC(a, gets$Body());
-    return XD_List = a;
+    return a;
   }
   public H() {}
   public H(org.xdef.component.XComponent p,
@@ -103,7 +102,6 @@ public class H implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="H#s:H";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -184,18 +182,17 @@ public static class s$Header implements org.xdef.component.XComponent{
     }
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb$User());
     org.xdef.component.XComponentUtil.addXC(a, getb$Request());
-    return XD_List = a;
+    return a;
   }
   public s$Header() {}
   public s$Header(org.xdef.component.XComponent p,
@@ -226,7 +223,6 @@ public static class s$Header implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="H#s:H/s:Header";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -571,18 +567,17 @@ public static class s$Body implements org.xdef.component.XComponent{
     }
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb$Ping());
     org.xdef.component.XComponentUtil.addXC(a, getb$PingFlow());
-    return XD_List = a;
+    return a;
   }
   public s$Body() {}
   public s$Body(org.xdef.component.XComponent p,
@@ -613,7 +608,6 @@ public static class s$Body implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="H#s:H/s:Body";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

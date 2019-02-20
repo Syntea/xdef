@@ -120,12 +120,12 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			xd = xp.createXDDocument("kontrakt");
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			xml =
 "<Contract Number = \"0123456789\">\n"+
 "  <Client Typ  = \"1\"\n"+
@@ -141,7 +141,7 @@ public final class TestLexicon extends XDTester {
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
-			xd.setSourceLexiconLanguage("eng");
+			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -163,7 +163,7 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -189,7 +189,7 @@ public final class TestLexicon extends XDTester {
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
-			xd.setSourceLexiconLanguage("eng");
+			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -217,7 +217,7 @@ public final class TestLexicon extends XDTester {
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
-			xd.setSourceLexiconLanguage("eng");
+			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -236,7 +236,7 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -263,7 +263,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 
 			xd = xp.createXDDocument("Lexicon");
-			xd.setSourceLexiconLanguage("eng");
+			xd.setLexiconLanguage("eng");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
@@ -271,14 +271,14 @@ public final class TestLexicon extends XDTester {
 
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
 			xd = xp.createXDDocument("Lexicon");
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
@@ -286,7 +286,7 @@ public final class TestLexicon extends XDTester {
 			// test theaurus with X-component
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd.setSourceLexiconLanguage("ces");
+			xd.setLexiconLanguage("ces");
 			Class<?> clazz = test.xdef.component.Lexicon.class;
 			test.xdef.component.Lexicon xc = (test.xdef.component.Lexicon)
 				parseXC(xd, xml, clazz, reporter);

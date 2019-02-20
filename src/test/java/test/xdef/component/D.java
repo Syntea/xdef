@@ -73,14 +73,13 @@ public class D implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, get$_());
     org.xdef.component.XComponentUtil.addXC(a, getB());
@@ -95,7 +94,7 @@ public class D implements org.xdef.component.XComponent{
     org.xdef.component.XComponentUtil.addXC(a, getE());
     org.xdef.component.XComponentUtil.addXC(a, getT());
     org.xdef.component.XComponentUtil.addXC(a, geta$T());
-    return XD_List = a;
+    return a;
   }
   private static byte[] decodeBase64(String s) {
     try {
@@ -163,7 +162,6 @@ public class D implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -380,9 +378,8 @@ public static class B implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, String.valueOf(getA()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -397,7 +394,7 @@ public static class B implements org.xdef.component.XComponent{
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/B/$text[2]", a, get$value1(), _$$value1);
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public B() {}
   public B(org.xdef.component.XComponent p,
@@ -435,7 +432,6 @@ public static class B implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/B";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -520,9 +516,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -532,7 +527,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/B/X/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -563,7 +558,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/B/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -630,9 +624,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -642,7 +635,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/B/Y/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -673,7 +666,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/B/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -749,18 +741,17 @@ public static class I implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, String.valueOf(getA()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public I() {}
   public I(org.xdef.component.XComponent p,
@@ -794,7 +785,6 @@ public static class I implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/I";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -871,9 +861,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -883,7 +872,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/I/X/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -914,7 +903,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/I/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -981,9 +969,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -993,7 +980,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/I/Y/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -1024,7 +1011,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/I/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1100,18 +1086,17 @@ public static class F implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, String.valueOf(getA()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public F() {}
   public F(org.xdef.component.XComponent p,
@@ -1145,7 +1130,6 @@ public static class F implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/F";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1222,9 +1206,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -1234,7 +1217,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/F/X/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -1265,7 +1248,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/F/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1332,9 +1314,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -1344,7 +1325,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/F/Y/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -1375,7 +1356,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/F/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1451,18 +1431,17 @@ public static class G implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, encodeBase64(getA()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public G() {}
   public G(org.xdef.component.XComponent p,
@@ -1496,7 +1475,6 @@ public static class G implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/G";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1573,9 +1551,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -1585,7 +1562,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/G/X/$text", a, encodeBase64(get$value()), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -1616,7 +1593,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/G/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1683,9 +1659,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -1695,7 +1670,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/G/Y/$text", a, encodeBase64(get$value()), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -1726,7 +1701,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/G/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1802,18 +1776,17 @@ public static class H implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, encodeHex(getA()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public H() {}
   public H(org.xdef.component.XComponent p,
@@ -1847,7 +1820,6 @@ public static class H implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/H";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -1924,9 +1896,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -1936,7 +1907,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/H/X/$text", a, encodeHex(get$value()), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -1967,7 +1938,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/H/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2034,9 +2004,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -2046,7 +2015,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/H/Y/$text", a, encodeHex(get$value()), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -2077,7 +2046,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/H/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2153,18 +2121,17 @@ public static class P implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public P() {}
   public P(org.xdef.component.XComponent p,
@@ -2198,7 +2165,6 @@ public static class P implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/P";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2275,9 +2241,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -2287,7 +2252,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/P/X/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -2318,7 +2283,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/P/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2385,9 +2349,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -2397,7 +2360,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/P/Y/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -2428,7 +2391,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/P/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2522,18 +2484,17 @@ public static class Q implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, getA().formatDate("yyyy-MM-dd"));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public Q() {}
   public Q(org.xdef.component.XComponent p,
@@ -2567,7 +2528,6 @@ public static class Q implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/Q";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2662,9 +2622,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -2674,7 +2633,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/Q/X/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -2705,7 +2664,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/Q/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2790,9 +2748,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -2802,7 +2759,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/Q/Y/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -2833,7 +2790,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/Q/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -2909,18 +2865,17 @@ public static class R implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public R() {}
   public R(org.xdef.component.XComponent p,
@@ -2954,7 +2909,6 @@ public static class R implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/R";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3031,9 +2985,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -3043,7 +2996,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/R/X/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -3074,7 +3027,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/R/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3141,9 +3093,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -3153,7 +3104,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/R/Y/$text", a, get$value().toString(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -3184,7 +3135,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/R/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3260,18 +3210,17 @@ public static class S implements org.xdef.component.XComponent{
     }
     if (getA() != null)
       el.setAttribute(XD_Name_A, getA());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfX());
     org.xdef.component.XComponentUtil.addXC(a, getY());
-    return XD_List = a;
+    return a;
   }
   public S() {}
   public S(org.xdef.component.XComponent p,
@@ -3305,7 +3254,6 @@ public static class S implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/S";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3382,9 +3330,8 @@ public static class X implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -3394,7 +3341,7 @@ public static class X implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/S/X/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
@@ -3425,7 +3372,6 @@ public static class X implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/S/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3492,9 +3438,8 @@ public static class Y implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -3504,7 +3449,7 @@ public static class Y implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "D#A/S/Y/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
@@ -3535,7 +3480,6 @@ public static class Y implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/S/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3695,17 +3639,16 @@ public static class T implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_t, gett());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns", "x.y");
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getI());
-    return XD_List = a;
+    return a;
   }
   public T() {}
   public T(org.xdef.component.XComponent p,
@@ -3737,7 +3680,6 @@ public static class T implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/T";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -3908,17 +3850,16 @@ public static class a$T implements org.xdef.component.XComponent{
       el.setAttributeNS("a.b", XD_Name_a$t, geta$t());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:a", "a.b");
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, geta$I());
-    return XD_List = a;
+    return a;
   }
   public a$T() {}
   public a$T(org.xdef.component.XComponent p,
@@ -3950,7 +3891,6 @@ public static class a$T implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="D#A/a:T";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

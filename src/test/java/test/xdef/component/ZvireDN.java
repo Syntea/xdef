@@ -74,18 +74,17 @@ public class ZvireDN implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_NazevZvirete, getNazevZvirete());
     if (getDruhZvirete() != null)
       el.setAttribute(XD_Name_DruhZvirete, getDruhZvirete());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getVlastnik());
-    return XD_List = a;
+    return a;
   }
   public ZvireDN() {}
   public ZvireDN(org.xdef.component.XComponent p,
@@ -122,7 +121,6 @@ public class ZvireDN implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#ZvireDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -207,9 +205,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -219,7 +216,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Vlastnik() {}
   public Vlastnik(org.xdef.component.XComponent p,
@@ -250,7 +247,6 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#ZvireDN/$mixed/Vlastnik";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

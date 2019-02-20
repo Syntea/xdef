@@ -62,9 +62,8 @@ public class Y21 implements org.xdef.component.XComponent{
     }
     if (getb() != null)
       el.setAttribute(XD_Name_b, getb().name());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -78,7 +77,7 @@ public class Y21 implements org.xdef.component.XComponent{
     if (get$value1() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "Y21#A/$text[2]", a, get$value1().name(), _$$value1);
-    return XD_List = a;
+    return a;
   }
   public Y21() {}
   public Y21(org.xdef.component.XComponent p,
@@ -114,7 +113,6 @@ public class Y21 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y21#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -196,9 +194,8 @@ public static class B implements org.xdef.component.XComponent{
     }
     if (getc() != null)
       el.setAttribute(XD_Name_c, getc().name());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -208,7 +205,7 @@ public static class B implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "Y21#A/B/$text", a, get$value().name(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public B() {}
   public B(org.xdef.component.XComponent p,
@@ -241,7 +238,6 @@ public static class B implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y21#A/B";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

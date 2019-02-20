@@ -51,17 +51,16 @@ public class Y11 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfB());
-    return XD_List = a;
+    return a;
   }
   public Y11() {}
   public Y11(org.xdef.component.XComponent p,
@@ -91,7 +90,6 @@ public class Y11 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y11#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -182,18 +180,17 @@ public static class B implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_N, getN());
     if (getI() != null)
       el.setAttribute(XD_Name_I, getI());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfEv());
     org.xdef.component.XComponentUtil.addXC(a, listOfOp());
-    return XD_List = a;
+    return a;
   }
   public B() {}
   public B(org.xdef.component.XComponent p,
@@ -230,7 +227,6 @@ public static class B implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y11#A/B";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

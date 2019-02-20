@@ -56,17 +56,16 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     }
     if (getName() != null)
       el.setAttribute(XD_Name_Name, getName());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfStreet());
-    return XD_List = a;
+    return a;
   }
   public C() {}
   public C(org.xdef.component.XComponent p,
@@ -98,7 +97,6 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="C#Town";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -173,17 +171,16 @@ public static class Street implements org.xdef.component.XComponent{
     }
     if (getName() != null)
       el.setAttribute(XD_Name_Name, getName());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfHouse());
-    return XD_List = a;
+    return a;
   }
   public Street() {}
   public Street(org.xdef.component.XComponent p,
@@ -216,7 +213,6 @@ public static class Street implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="C#Town/Street";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

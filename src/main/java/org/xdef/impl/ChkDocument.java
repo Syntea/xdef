@@ -1088,9 +1088,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 	@Override
 	/** Get actual source language used for lexicon.
-	 * @return string with actual language.
+	 * @return string with actual language or return null if lexicon is not
+	 * specified  or if language is not specified.
 	 */
-	public final String getSourceLexiconLanguage() {
+	public final String getLexiconLanguage() {
 		return _sourceLanguageID < 0 ? null
 		: ((XPool) getXDPool())._lexicon.getLanguages()[_sourceLanguageID];
 	}
@@ -1100,7 +1101,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	public final void setSourceLexiconLanguage(final String language) {
+	public final void setLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
 		if (xp._lexicon == null) {
 			//Can't set language &{0} because lexicon is not declared

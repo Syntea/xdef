@@ -51,17 +51,16 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
     }
     if (getIdFlow() != null)
       el.setAttribute(XD_Name_IdFlow, String.valueOf(getIdFlow()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getDomain());
-    return XD_List = a;
+    return a;
   }
   public Y08() {}
   public Y08(org.xdef.component.XComponent p,
@@ -92,7 +91,6 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y08#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

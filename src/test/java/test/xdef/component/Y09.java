@@ -59,17 +59,16 @@ public class Y09 implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_x, getx());
     if (gety() != null)
       el.setAttribute(XD_Name_y, gety());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, get$any());
-    return XD_List = a;
+    return a;
   }
   public Y09() {}
   public Y09(org.xdef.component.XComponent p,
@@ -103,7 +102,6 @@ public class Y09 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y09#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

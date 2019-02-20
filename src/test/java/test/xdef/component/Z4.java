@@ -142,18 +142,17 @@ public class Z4 implements org.xdef.component.XComponent{
       el.setAttribute(XD_Name_StatniPrislusnost, getStatniPrislusnost());
     if (getProfese() != null)
       el.setAttribute(XD_Name_Profese, getProfese());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getTrvalyPobyt());
     org.xdef.component.XComponentUtil.addXC(a, getPrechodnyPobyt());
-    return XD_List = a;
+    return a;
   }
   public Z4() {}
   public Z4(org.xdef.component.XComponent p,
@@ -210,7 +209,6 @@ public class Z4 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#Osoba";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

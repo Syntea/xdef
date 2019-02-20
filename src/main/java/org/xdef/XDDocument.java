@@ -101,7 +101,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public void setRootModel(XMElement xmodel);
 
-	/** Parse and process XML source element.
+	/** Parse and process XML source and return org.w3c.dom.Element.
 	 * @param xmlData string with pathname of XML file or XML source data.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
@@ -110,6 +110,114 @@ public interface XDDocument extends XXNode {
 	 * was reported.
 	 */
 	public Element xparse(String xmlData, ReportWriter reporter)
+		throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData string with pathname of XML file or XML source data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(String xmlData,
+		String sourceId,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData URL pointing to XML source data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(URL xmlData, ReportWriter reporter)
+		throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData file with XML source data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(File xmlData, ReportWriter reporter)
+		throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData XML <tt>org.w3c.dom.Node</tt>.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(Node xmlData,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData input stream with XML source data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(InputStream xmlData,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Parse and process XML source and return org.w3c.dom.Element.
+	 * @param xmlData input stream with XML source data.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xparse(InputStream xmlData,
+		String sourceId,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create element according to the X-definition model.
+	 * @param name the name of model of required element.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of created XML document.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xcreate(String name, ReportWriter reporter)
+		throws SRuntimeException;
+
+	/** Run create mode - create element according to the X-definition model.
+	 * If the parameter nsUri is not <tt>null</tt> then its assigned the model
+	 * with given namespaceURI; in this case the parameter name may be
+	 * qualified with a prefix.
+	 * @param nsUri the namespace URI of result element (may be <tt>null</tt>).
+	 * @param name the name of model of required element (may contain prefix).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of created XML document.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xcreate(String nsUri,
+		String name,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create element according to the X-definition model.
+	 * @param qname the QName of model of required element.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of created XML document.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public Element xcreate(QName qname, ReportWriter reporter)
 		throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
@@ -126,19 +234,6 @@ public interface XDDocument extends XXNode {
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
 
-	/** Parse and process XML source element.
-	 * @param xmlData string with pathname of XML file or XML source data.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @param sourceId name of source or <tt>null</tt>.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(String xmlData,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException;
-
 	/** Parse source XML and return XComponent as result.
 	 * @param xmlData file with XML source data.
 	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
@@ -152,17 +247,6 @@ public interface XDDocument extends XXNode {
 	public XComponent parseXComponent(File xmlData,
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
-
-	/** Parse and process XML source element.
-	 * @param xmlData file with XML source data.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(File xmlData, ReportWriter reporter)
-		throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @param xmlData URL pointing to XML source data.
@@ -178,17 +262,6 @@ public interface XDDocument extends XXNode {
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
 
-	/** Parse and process XML source element.
-	 * @param xmlData URL pointing to XML source data.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(URL xmlData, ReportWriter reporter)
-		throws SRuntimeException;
-
 	/** Parse source XML and return XComponent as result.
 	 * @param xmlData input stream with XML source data.
 	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
@@ -201,17 +274,6 @@ public interface XDDocument extends XXNode {
 	 */
 	public XComponent parseXComponent(InputStream xmlData,
 		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
-
-	/** Parse and process XML source element.
-	 * @param xmlData input stream with XML source data.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(InputStream xmlData,
 		ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
@@ -227,19 +289,6 @@ public interface XDDocument extends XXNode {
 	 */
 	public XComponent parseXComponent(InputStream xmlData,
 		Class<?> xClass,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException;
-
-	/** Parse and process XML source element.
-	 * @param xmlData input stream with XML source data.
-	 * @param sourceId name of source or <tt>null</tt>.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(InputStream xmlData,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
 
@@ -256,57 +305,6 @@ public interface XDDocument extends XXNode {
 	public XComponent parseXComponent(Node xmlData,
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
-
-	/** Parse and process XML source element.
-	 * @param xmlData XML <tt>org.w3c.dom.Node</tt>.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xparse(Node xmlData,
-		ReportWriter reporter) throws SRuntimeException;
-
-	@Deprecated
-	/** Run create mode - create element according to the X-definition model.
-	 * If the parameter nsUri is not <tt>null</tt> then its assigned the model
-	 * with given namespaceURI; in this case the parameter name may be
-	 * qualified with a prefix.
-	 * @param nsUri the namespace URI of result element (may be <tt>null</tt>).
-	 * @param name the name of model of required element (may contain prefix).
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of created XML document.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 * @deprecated Please use method xcreate(QName qname, ReportWriter reporter)
-	 */
-	public Element xcreate(String nsUri,
-		String name,
-		ReportWriter reporter) throws SRuntimeException;
-
-	/** Run create mode - create element according to the X-definition model.
-	 * @param name the name of model of required element.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of created XML document.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xcreate(String name, ReportWriter reporter)
-		throws SRuntimeException;
-
-	/** Run create mode - create element according to the X-definition model.
-	 * @param qname the QName of model of required element.
-	 * @param reporter report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of created XML document.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
-	 */
-	public Element xcreate(QName qname, ReportWriter reporter)
-		throws SRuntimeException;
 
 	/** get StdOut.
 	 * @return std out XDOutput.
@@ -480,17 +478,30 @@ public interface XDDocument extends XXNode {
 	public void printReports(PrintStream out);
 
 	/** Get actual source language used for lexicon.
-	 * @return string with actual language.
+	 * @return string with actual language or return null if lexicon is not
+	 * specified  or if language is not specified.
 	 */
-	public String getSourceLexiconLanguage();
+	public String getLexiconLanguage();
 
 	/** Set actual source language used for lexicon.
 	 * @param language string with language or null.
 	 * @throws SRuntimeException if lexicon not specified
 	 * or if language is not specified.
 	 */
-	public void setSourceLexiconLanguage(String language)
-		throws SRuntimeException;
+	public void setLexiconLanguage(String language) throws SRuntimeException;
+//
+//	/** Get actual destination language used for lexicon.
+//	 * @return string with actual language.
+//	 */
+//	public String getDestLexiconLanguage();
+
+//	/** Set actual destination language used for lexicon.
+//	 * @param language string with language or null.
+//	 * @throws SRuntimeException if lexicon is not specified
+//	 * or if language is not specified.
+//	 */
+//	public void setDestLexiconLanguage(String language)
+//		throws SRuntimeException;
 
 	/** Translate the input element from the source language to the destination
 	 * language according to lexicon.
@@ -520,5 +531,4 @@ public interface XDDocument extends XXNode {
 		String sourceLanguage,
 		String destLanguage,
 		ReportWriter reporter) throws SRuntimeException;
-
 }

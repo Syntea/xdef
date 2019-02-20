@@ -816,7 +816,7 @@ public final class GenXComponent {
 		final boolean isList) {
 		if (sb.length() == 0) {
 			sb.append(
-"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a =")
+"\t\tjava.util.List<org.xdef.component.XComponent> a =")
 			.append(NL).append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
 			.append(NL);
@@ -1548,9 +1548,8 @@ public final class GenXComponent {
 "\t\t}"+NL+ creators;
 			if (genNodeList.length() > 0) {
 				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
-					" XD_List==null?xGetNodeList():XD_List)"+NL+
-"\t\t\tel.appendChild(x.toXml(doc));"+NL+
-"\t\tXD_List = null;"+NL;
+					" xGetNodeList())"+NL+
+"\t\t\tel.appendChild(x.toXml(doc));"+NL;
 			}
 			toXml += "\t\treturn el;"+NL+"\t}"+NL;
 		}
@@ -1675,7 +1674,7 @@ public final class GenXComponent {
 "\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();}"
 				+NL;
 		} else {
-			result += genNodeList + "\t\treturn XD_List = a;"+NL+"\t}"+NL;
+			result += genNodeList + "\t\treturn a;"+NL+"\t}"+NL;
 		}
 		if (isRoot) {
 			if ((byteArrayEncoding & 1) != 0) { //base64
@@ -1778,9 +1777,6 @@ String digest = xe.getDigest();
 "\tprivate int XD_ndx;"+NL) +
 (_genJavadoc ? "\t/** Node xpos.*/"+NL : "") +
 "\tprivate String XD_XPos;"+NL+
-(genNodeList.length() == 0 ? "" :
-(_genJavadoc ? "\t/** List of XComponents used to create XML.*/"+NL : "") +
-"\tprivate java.util.List<org.xdef.component.XComponent> XD_List;"+NL) +
 (_genJavadoc ? "\t/** Node XD position.*/"+NL : "") +
 "\tprivate String XD_Model=\""+xe.getXDPosition()+"\";"+NL+
 ("$any".equals(xe.getName()) || "*".equals(xe.getName()) ?

@@ -56,17 +56,16 @@ public class Lexicon implements org.xdef.component.XComponent{
     }
     if (getx() != null)
       el.setAttribute(XD_Name_x, getx());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfY());
-    return XD_List = a;
+    return a;
   }
   public Lexicon() {}
   public Lexicon(org.xdef.component.XComponent p,
@@ -98,7 +97,6 @@ public class Lexicon implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Lexicon#X";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

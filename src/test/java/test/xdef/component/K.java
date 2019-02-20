@@ -56,21 +56,20 @@ public class K implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfc());
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "K#A/$text", a, get$value().toString(), _$$value);
     org.xdef.component.XComponentUtil.addXC(a, getd());
-    return XD_List = a;
+    return a;
   }
   public K() {}
   public K(org.xdef.component.XComponent p,
@@ -103,7 +102,6 @@ public class K implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="K#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
