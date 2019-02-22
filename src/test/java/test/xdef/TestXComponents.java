@@ -16,6 +16,7 @@ import org.xdef.model.XMNode;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import org.w3c.dom.Element;
 
 /** Test XComponents.
@@ -948,6 +949,63 @@ public final class TestXComponents extends XDTester {
 				parseXC(XP, "Y22", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(el, p.toXml());
+		} catch (Exception ex) {fail(ex);}
+		try { // test theaurus from generated XDPool
+			xd = XP.createXDDocument("Lexicon");
+			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
+			el = xd.xtranslate(xml, "eng", "eng", reporter);
+			assertNoErrors(reporter);
+
+			xd = XP.createXDDocument("Lexicon");
+			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
+			el = xd.xtranslate(xml, "eng", "ces", reporter);
+			assertNoErrors(reporter);
+
+			xd = XP.createXDDocument("Lexicon");
+			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
+			el = xd.xtranslate(xml, "ces", "eng", reporter);
+			assertNoErrors(reporter);
+
+			xd = XP.createXDDocument("Lexicon");
+			el = xd.xtranslate(xml, "ces", "deu", reporter);
+			assertNoErrors(reporter);
+
+			xd = XP.createXDDocument("Lexicon");
+			xd.setLexiconLanguage("eng");
+			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+
+			xd = XP.createXDDocument("Lexicon");
+			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
+			xd.setLexiconLanguage("ces");
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+
+			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
+			xd = XP.createXDDocument("Lexicon");
+			xd.setLexiconLanguage("ces");
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+
+			// test theaurus with X-component
+			xd = XP.createXDDocument("Lexicon");
+			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
+			xd.setLexiconLanguage("ces");
+			Class<?> clazz = test.xdef.component.Lexicon.class;
+			test.xdef.component.Lexicon xc = (test.xdef.component.Lexicon)
+				parseXC(xd, xml, clazz, reporter);
+			assertNoErrors(reporter);
+			assertEq(xc.getx(), "x");
+			List<test.xdef.component.Lexicon.Y> x = xc.listOfY();
+			assertEq(x.size(), 3);
+			assertEq(x.get(0).gety(), 1);
+			assertEq(x.get(2).gety(), 3);
+			el = xc.toXml();
+			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			//just force compilation

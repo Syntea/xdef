@@ -1,11 +1,16 @@
 package test.xdef;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.util.List;
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
+import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.sys.FUtils;
 
 /** Test of Lexicon.
  * @author Vaclav Trojan
@@ -17,6 +22,18 @@ public final class TestLexicon extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+		String tempDir = getTempDir();
+		try {
+			if (new File(tempDir).exists()) {
+				FUtils.deleteAll(tempDir, true);
+			} else {
+				fail("Temporary direcitory is not available");
+				return;
+			}
+		} catch (Exception ex) {
+			fail(ex);
+			return;
+		}
 		String xdef;
 		String xml;
 		Element el;
@@ -52,6 +69,9 @@ public final class TestLexicon extends XDTester {
 "            Name=\"required string(1,30);\n"+
 "              create toString(from('@GivenName'))+' '+from('@LastName');\"/>\n"+
 "</Agreement>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.component.L_Contract %link kontrakt#Contract;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			String lexicon1 =
 "<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng'>\n"+
@@ -145,7 +165,6 @@ public final class TestLexicon extends XDTester {
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
-
 			xp = compile(new String[]{xdef, lexicon1, lexicon2});
 			xd = xp.createXDDocument("kontrakt");
 			xml =
@@ -240,65 +259,30 @@ public final class TestLexicon extends XDTester {
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
-		} catch (Exception ex) {fail(ex);}
-		try { // test theaurus from generated XDPool
-			xp = test.xdef.component.Pool.getXDPool();
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = xd.xtranslate(xml, "eng", "eng", reporter);
+			// try X-component
+			String dir = tempDir + "components";
+			new File(dir).mkdirs();
+			assertNoErrors(GenXComponent.genXComponent(xp,
+				dir, null, false, false, true));
+			compileSources(dir);
+			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
+			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = xd.xtranslate(xml, "eng", "ces", reporter);
-			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			el = xd.xtranslate(xml, "ces", "eng", reporter);
-			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
-			el = xd.xtranslate(xml, "ces", "deu", reporter);
-			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
-			xd.setLexiconLanguage("eng");
-			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xml, el);
-
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd.setLexiconLanguage("ces");
-			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xml, el);
-
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd = xp.createXDDocument("Lexicon");
-			xd.setLexiconLanguage("ces");
-			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xml, el);
-
-			// test theaurus with X-component
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd.setLexiconLanguage("ces");
-			Class<?> clazz = test.xdef.component.Lexicon.class;
-			test.xdef.component.Lexicon xc = (test.xdef.component.Lexicon)
-				parseXC(xd, xml, clazz, reporter);
-			assertNoErrors(reporter);
-			assertEq(xc.getx(), "x");
-			List<test.xdef.component.Lexicon.Y> x = xc.listOfY();
-			assertEq(x.size(), 3);
-			assertEq(x.get(0).gety(), 1);
-			assertEq(x.get(2).gety(), 3);
 			el = xc.toXml();
 			assertEq(xml, el);
+			Method m = clazz.getDeclaredMethod("getNumber");
+			assertEq("0123456789", m.invoke(xc));
+			m = clazz.getDeclaredMethod("listOfClient");
+			List<?> list = (List<?>) m.invoke(xc);
+			assertEq(3, list.size());
 		} catch (Exception ex) {fail(ex);}
+		try {
+			if (new File(tempDir).exists()) {
+				FUtils.deleteAll(tempDir, true);
+			}
+		} catch (Exception ex) {
+			fail(ex);
+		}
 
 		resetTester();
 	}
