@@ -1189,6 +1189,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: ((XPool) getXDPool())._lexicon.getLanguages()[_destLanguageID];
 	}
 
+
 	/** Set actual destination language used for lexicon.
 	 * @param language string with language or null.
 	 * @throws SRuntimeException if lexicon is not specified or if

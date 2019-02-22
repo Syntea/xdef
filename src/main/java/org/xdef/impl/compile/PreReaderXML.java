@@ -121,6 +121,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						ver = XConstants.XD31;
 					}
 				}
+				if ("thesaurus".equals(elemLocalName)) {
+					warning(_actPNode._name,XDEF.XDEF998,"thesaurus","lexicon");
+				}
 				_actPNode._xdVersion = ver;
 				_pcomp.setURIOnIndex(0, projectNS);
 			} else {

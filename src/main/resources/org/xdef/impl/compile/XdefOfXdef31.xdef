@@ -5,7 +5,7 @@
 
 <xd:def xmlns:xd  = "METAXD"
   name            = "Ver3.1"
-  root            = "XD3.1:def | XD3.1:collection | XD3.1:thesaurus
+  root            = "XD3.1:def | XD3.1:collection | XD3.1:thesaurus | XD3.1:lexicon
                     | XD3.1:declaration | XD3.1:BNFGrammar | XD3.1:component"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
@@ -37,6 +37,7 @@
       <XD3.2:component xd:script = "occurs *; ref Ver3.2#XD3.2:component"/>
       <XD2.0:thesaurus xd:script = "occurs *; ref Ver2.0#XD2.0:thesaurus" />
       <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
+      <XD3.1:lexicon xd:script = "occurs *; ref XD3.1:lexicon" />
       <XD3.2:lexicon xd:script = "occurs *; ref Ver3.2#XD3.2:lexicon" />
     </xd:mixed>
   </XD3.1:collection>
@@ -60,6 +61,8 @@
         scope = "optional enum('global','local'); options acceptQualifiedAttr"/>
 
       <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
+
+      <XD3.1:lexicon xd:script = "occurs *; ref XD3.1:lexicon" />
 
       <XD3.1:BNFGrammar xd:script = "occurs *; ref XD3.1:BNFGrammar" />
 
@@ -124,6 +127,10 @@
   <XD3.1:thesaurus language = "languageId()" default = "optional yesNo()">
     optional thesaurus();
   </XD3.1:thesaurus>
+
+  <XD3.1:lexicon language = "languageId()" default = "optional yesNo()">
+    optional thesaurus();
+  </XD3.1:lexicon>
 
   <!-- model of element -->
   <xelement xd:script = "match getNamespaceURI() NE NS; options moreAttributes"

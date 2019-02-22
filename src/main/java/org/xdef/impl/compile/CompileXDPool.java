@@ -837,8 +837,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					|| "component".equals(nodeName)
 					|| "BNFGrammar".equals(nodeName)) {
 					_precomp.chkNestedElements(nodei);
-					if ("thesaurus".equals(nodeName)
-						|| "lexicon".equals(nodeName)) {
+					if ("lexicon".equals(nodeName)) {
+						_lexicon.add(nodei);
+					} else if ("thesaurus".equals(nodeName)) {
+						reportDeprecated(nodei._name, "thesaurus", "lexicon");
 						_lexicon.add(nodei);
 					} else if ("BNFGrammar".equals(nodeName)) {
 						_listBNF.add(0, nodei);

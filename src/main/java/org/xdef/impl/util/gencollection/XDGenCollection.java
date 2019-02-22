@@ -190,7 +190,6 @@ public class XDGenCollection {
 				throw new RuntimeException(ex);
 			}
 		}
-
 	}
 
 	private XDGenCollection() {
