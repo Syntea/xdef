@@ -1,12 +1,5 @@
 package test.utils;
 
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.ReportPrinter;
-import org.xdef.xml.KXmlUtils;
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
@@ -17,14 +10,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.XDConstants;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.xml.KXmlUtils;
 
 /** Abstract class for creating test classes.
  * You can create a test class as an extension of this class. You have to
@@ -176,20 +171,6 @@ public abstract class STester {
 	 */
 	public final String getTempDir() {
 		if (_homeDir != null) {
-//			try {
-//				File f = File.createTempFile("temp", "");
-//				_tempDir = f.getParentFile().getAbsolutePath().replace('\\', '/');
-//				if (!_tempDir.endsWith("/")) {
-//					_tempDir += '/';
-//				}
-//				f = new File(_tempDir +"a.tmp");
-//				FileOutputStream fs = new FileOutputStream(f);
-//				fs.write('x');
-//				fs.close();				
-//				return _tempDir;
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
 			_tempDir = _homeDir + "temp/";
 			File tempDir = new File(_tempDir);
 			if (!tempDir.exists()) {
@@ -1208,56 +1189,6 @@ public abstract class STester {
 		final String info,
 		final String... args) {
 		return runTests(out, err, log, tests, info, true, args);
-	}
-
-	/** Add Java sources to parameter list of the Java compiler.
-	 * @param f the file or directory.
-	 * @param params parameter list of Java compiler.
-	 */
-	private static void addJavaSource(final File f, final List<String> params) {
-		if (f.isDirectory()) {
-			for (File x: f.listFiles()) {
-				addJavaSource(x, params);
-			}
-		} else if (f.getName().endsWith(".java")) {
-			params.add(f.getAbsolutePath());
-		}
-	}
-
-	/** Compile sources from parameters and save files to the classes directory
-	 *  of tester.
-	 * @param sources paths of Java sources (may be a file or a directory).
-	 */
-	public static final void compileSources(final String... sources) {
-		// prepare compiler
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		// where are compiled classes of X-definitions
-		Class<?> clazz = XDConstants.class;
-		String clazzName = clazz.getName().replace('.', '/') + ".class";
-		URL u = clazz.getClassLoader().getResource(clazzName);
-		String classpath =
-			new File(u.getFile()).getAbsolutePath().replace('\\', '/');
-		classpath = classpath.substring(0, classpath.indexOf(clazzName));			
-		// where are compiled classes of tests
-		clazz = XDTester.class;
-		clazzName = clazz.getName().replace('.', '/') + ".class";
-		u = clazz.getClassLoader().getResource(clazzName);
-		String clazzDir =
-			new File(u.getFile()).getAbsolutePath().replace('\\', '/');
-		clazzDir = clazzDir.substring(0, clazzDir.indexOf(clazzName));
-		// prepare parameters
-		ArrayList<String> ar = new ArrayList<String>();
-		ar.add("-classpath"); ar.add(classpath+";" + clazzDir); //classpath
-		ar.add("-d"); ar.add(clazzDir); // where to write compiled classes
-		ar.add("-source"); ar.add("1.6"); // sources are in version 1.6
-		ar.add("-target"); ar.add("1.6"); // generate classes in version 1.6
-		// source files
-		for (String source: sources) {
-			addJavaSource(new File (source), ar);
-		}
-		// compile components
-		compiler.run(System.in, 
-			System.out, System.err, ar.toArray(new String[0]));
 	}
 
 }

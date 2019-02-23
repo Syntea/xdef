@@ -23,6 +23,8 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.util.XdefToXsd;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import test.utils.XDTester;
 
 /** Test XDefinition to schema conversion.
@@ -44,7 +46,7 @@ public class TestXd2XsdConv extends XDTester {
 	private XDDocument _chkDoc;
 	private boolean _prepared = false;
 	private ErrMessage _errMessage;
-	private Properties _props = new Properties();
+	private final Properties _props = new Properties();
 
 	private void init() {
 //        _conv = new XdefToXsd();
@@ -109,10 +111,13 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		try {
 			XDPool xdPool = XDFactory.compileXD(_props, _xdefFile);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			xdPool.writeXDPool(out);
-			xdPool = XDFactory.readXDPool(
-				new ByteArrayInputStream(out.toByteArray()));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(xdPool);
+			out.close();
+			ObjectInputStream in = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			xdPool = (XDPool) in.readObject();
 			if (!xdPool.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
 					"Could not find main definition in XDefinition file!",

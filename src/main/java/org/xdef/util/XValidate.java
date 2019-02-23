@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import org.xdef.impl.XPool;
 
 /** Validation of XML document with given X-definition.
  * <p>
@@ -183,7 +184,7 @@ public class XValidate {
 			}
 		} else if (poolFile != null) {
 			try {
-				xp = XDFactory.readXDPool(new FileInputStream(poolFile));
+				xp = XPool.readXDPool(new FileInputStream(poolFile));
 			} catch (Exception ex) {
 				if (ex instanceof SThrowable) {
 					repw.putReport(((SThrowable)ex).getReport());

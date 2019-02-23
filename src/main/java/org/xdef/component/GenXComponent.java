@@ -2356,8 +2356,6 @@ String digest = xe.getDigest();
 " -o Output directory where XComponents are generated, required\n"+
 " -p Output directory where source class with XDPool will be generated,\n"+
 "    optional (if not specified, -o is used instead)"+NL+
-" -x Qualified name of class with XDPool which source will be generated,\n"+
-"    optional (if not specified, source is not generated)\n"+
 " -e Encoding name, optional (default is the Java system encoding)\n"+
 " -d Generate JavaDoc, optional (default is not generate JavaDoc)\n"+
 " -j Generate JAXB annotations, optional (default is not generate JAXB)\n"+
@@ -2380,7 +2378,6 @@ String digest = xe.getDigest();
 		String encoding = null;
 		boolean javadoc = false;
 		boolean jaxb = false;
-		String xpClassName = null;
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
@@ -2468,20 +2465,6 @@ String digest = xe.getDigest();
 						throw new RuntimeException(
 							"Parameter '-p' is not output directory\n" + info);
 					}
-				case 'x': //Qualified name of generated class with XDPool
-					if (xpClassName != null) {
-						throw new RuntimeException(
-							"Redefinition of key \"-x\"\n" + info);
-					}
-					if (++i < args.length && (arg = args[i]) != null &&
-						!arg.startsWith("-")) {
-						xpClassName = arg;
-						i++;
-						continue;
-					} else {
-						throw new RuntimeException(
-							"Parameter '-x' is is not a class name\n" + info);
-					}
 				default:
 					throw new RuntimeException("Incorrect parameter \""
 						+arg+"\" on position " + (i+1)+".\n" + info);
@@ -2499,13 +2482,6 @@ String digest = xe.getDigest();
 			Object[] xdefs = new String[sources.size()];
 			sources.toArray(xdefs);
 			XDPool xp = XDFactory.compileXD(null, xdefs);
-			if (xpClassName != null) {
-				if (xpDir == null) {
-					xpDir = xcDir;
-				}
-				XDFactory.genXDPoolClass(xp,
-					xpDir.getAbsolutePath(), xpClassName, encoding);
-			}
 			if (xcDir != null) {
 				genXComponent(xp,
 					xcDir.getAbsolutePath(), encoding, javadoc, jaxb, false);

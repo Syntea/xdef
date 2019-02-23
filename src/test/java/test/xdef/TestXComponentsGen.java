@@ -3,16 +3,17 @@ package test.xdef;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.FUtils;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import test.utils.XDTester;
 
-/** Generate XComponents Java source files.
+/** Generate X-components Java source files.
  * @author Vaclav Trojan
  */
 public class TestXComponentsGen extends XDTester {
@@ -55,6 +56,7 @@ public class TestXComponentsGen extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 	private final List<XComponent> _YYY = new ArrayList<XComponent>();
 	private String _g;
+	private String XD_NAME_g;
 	private XComponent _XXX;
 
 	public String getg() {return _g;}
@@ -100,17 +102,23 @@ public class TestXComponentsGen extends XDTester {
 			String xcomponents = getDataDir() + "test/TestXComponentsGen.xdef";
 			String xcomponents1 = getDataDir()+	"test/TestXComponent_Z.xdef";
 			XDPool xp = compile(new String[] {xcomponents, xcomponents1});
-			// generate from xp the class containing the XDPool
-			XDFactory.genXDPoolClass(xp, dir, "test.xdef.component.Pool", null);
 			// generate XComponents from xp
-			ArrayReporter reporter = GenXComponent.genXComponent(
-				xp, dir,"UTF-8", false, false, true);
+			ArrayReporter reporter = GenXComponent.genXComponent(xp,
+				dir, "UTF-8", false, false, true);
+			reporter.checkAndThrowErrors();
 			// should generate warning XCOMPONENT037 on xdef Y19
 			if (reporter.getWarningCount() != 1
 				|| !reporter.printToString().contains("W XDEF377")
 				|| !reporter.printToString().contains("Y19#A/B/B_1/C/B")) {
-				System.err.println("Warning XDEF377 not reported.");
+				System.err.println("Warning XDEF377 not reported.\n"
+					+ reporter.printToString());
 			}
+			// save XDPool object to the file
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(
+				dir + "test/xdef/component/Pool.xp"));
+			os.writeObject(xp);
+			os.close();
+			// update components with generated files
 			String msg = FUtils.updateDirectories(
 				new File(f, "test/xdef/component"),
 				new File(g, "test/xdef/component"),
@@ -123,7 +131,6 @@ public class TestXComponentsGen extends XDTester {
 				System.out.println(msg);
 				System.out.println("X-component data created");
 			}
-
 			FUtils.deleteAll(f, true); // delete temp directory
 		} catch (Exception ex) {fail(ex);}
 	}
