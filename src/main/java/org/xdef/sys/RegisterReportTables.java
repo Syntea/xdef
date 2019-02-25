@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import org.xdef.msg.SYS;
 
 /** Generates Java class source with registered report tables.
  * @author Vaclav Trojan
@@ -35,49 +36,50 @@ public class RegisterReportTables {
 	 * <p><a href ="http://www.loc.gov/standards/iso639-2">
 	 * <tt>http://www.loc.gov/standards/iso639-2</tt></a>
 	 * </p>
-	 * <p>The source report table is the XML document (the
-	 * attribute <tt><i>lang</i></tt> must be a valid three letters ISO-639-2
-	 * Language Code):</p>
+	 * <p>The source report table is the properties file with following
+	 * obligatory properties:</p>
 	 * <pre><code>
-	 * &lt;messages
-	 *   <i>xxx</i>="text1_in_specified_language" ... /&gt;
-	 *   ...
-	 * &lt;/messages&gt;
+	 * _prefix = the prefis of message names in the table
+	 * _language = the 3 letters ISO-639 Language Code
+	 * _defaultLanguag = the ISO-639 Language Code (must be specified only once)
 	 * </code></pre>
-	 * <p>Reports are divided to separate files for each language. Each report
+	 * <p> All other property names must start with the prefix. </p>
+	 * <p> Reports are divided to separate files for each language. Each report
 	 * has a id. The id is composed of prefix and of a local ID (usually
 	 * a number). The prefix must be a sequence of minimum 3 capital ASCII
 	 * letters. Messages for the specific language and prefix must be stored to
 	 * the separate file.
 	 * The report files must be available in the package
-	 * <tt>org.xdef.msg</tt>.
+	 * <tt>org.xdef.msg</tt>.</p>
 	 * <p>The file name must be composed by following way:</p>
-	 * <tt>prefix_ccc.xml</tt>
+	 * <tt>prefix_CCC.properties</tt>
 	 * <p>where prefix must be followed by the character
 	 * '_' by three letters representing ISO-639-2 language code corresponding
 	 * to given national language. See examples of the English and German
-	 * version report files.</p>
-	 * <p>English (MYAPP_eng.xml):</p>
+	 * version report files. CCC is the language code</p>
+	 * <p>Example of English (MYAPP_eng.properties):</p>
 	 * <pre><code>
-	 * &lt;messages eng="english" &gt;
-	 *   &lt;MYAPP_DESCRIPTION eng='Test messages' /&gt;
-	 *   &lt;MYAPP001 eng"Message: &amp;{msg}{: }"/&gt;
-	 *   &lt;MYAPP002 eng="Given name: &amp;{g} Family name: &amp;{f}"/&gt;
-	 *   &lt;MYAPP003 eng="&amp;{p} {#MYAPP002}"/&gt;
-	 *   &lt;MYAPP004 eng="Mrs."/&gt;
-	 *   &lt;MYAPP005 eng="Mr."/&gt;
-	 * &lt;/messages&gt;
-	 * </code></pre>
-	 * German MYAPP_eng.deu:
+	 * # Prefix of messages.
+	 * _prefix=MYAPP
+	 * # ISO name of language.
+	 * _language=eng
+	 * # ISO name of the default language.
+	 * _defaultLanguage=eng
+	 * #
+	 * MYAPP001=Message: &{0}{: }
+	 * MYAPP002=Given name: &{0} Family name: &{1}
+	 * MYAPP003=Mrs. &(#MYAPP002)
+	 * MYAPP003=Mr. &(#MYAPP002)
+	 * </code>
+	 * <p>German MYAPP_deu.properties:</p>
 	 * <pre><code>
-	 * &lt;messages deu="deutsch" &gt;
-	 *   &lt;MYAPP_DESCRIPTION deu='Test Nachrichten' /&gt;
-	 *   &lt;MYAPP001 deu="Nachricht: &amp;{msg}"/&gt;
-	 *   &lt;MYAPP002 deu="Zuname: &amp;{f} Vorname: &amp;{g}"/&gt;
-	 *   &lt;MYAPP003 deu="&amp;{p} {#MYAPP002}"/&gt;
-	 *   &lt;MYAPP004 deu="Frau"/&gt;
-	 *   &lt;MYAPP005 deu="Herr"/&gt;
-	 * &lt;/messages&gt;
+	 * _prefix=MYAPP
+	 * _language=deu
+	 * #
+	 * MYAPP001=Nachricht &{0}
+	 * MYAPP002=Zuname: &{0} Vorname: &{1}
+	 * MYAPP003=Frau &(#MYAPP002)
+	 * MYAPP004=Herr &(#MYAPP002)
 	 * </code></pre>
 	 * <p>The report is described by an element which tag name is equal to the
 	 * report id. The text of report is represented by value of the attribute
@@ -85,7 +87,6 @@ public class RegisterReportTables {
 	 * parameters. The parameter is specified by "&amp;{name_of_parameter}". If
 	 * name* of parameter starts with "#" then following part of the name is
 	 * used as reference identifier to other report.</p>
-	 *
 	 * <p>Example:</p>
 	 * <p>The report tables are searched by report manager in the package
 	 * <tt>org.xdef.msg</tt>. For each prefix should exist a class
@@ -106,7 +107,6 @@ public class RegisterReportTables {
 	 *   // will be printed
 	 *   System.out.println(report.toString("rus")); //print the russian ersion
 	 * </code></pre>
-	 *
 	 * If no report or no report file is found then it is used the default text
 	 * from the report.Therefore it is highly recommended to specify the default
 	 * English text directly to the source code:
@@ -134,8 +134,8 @@ public class RegisterReportTables {
 			super(prefix, language, defaultLanguage);
 			_prefixLen = prefix.length();
 			if (msgs == null || msgs.isEmpty()) {
-				throw new RuntimeException("E SYS203 In the report table "
-					+ getTableName() + " are no reports");
+				//In the report table &{0} are no reports
+				throw new SRuntimeException(SYS.SYS203, getTableName());
 			}
 			_msgs = msgs;
 			ArrayList<String> ar = new ArrayList<String>();
@@ -241,13 +241,12 @@ public class RegisterReportTables {
 		private final String _tableName;
 
 		public ReportTable(final Class<?> baseClass,
-			final Class<?> localizedClass) throws Exception{
+			final Class<?> localizedClass) {
 			String className = localizedClass.getName();
 			int i = className.lastIndexOf('_');
 			if (i < 0) {
-				throw new Exception(
-					"E SYS210 Incorrect class of registered report table "
-					+ className);
+				//Incorrect class of registered report table &{0}
+				throw new SRuntimeException(SYS.SYS210, className);
 			}
 			int j = className.lastIndexOf('.');
 			_prefix = className.substring(j + 1, i).intern();
@@ -287,8 +286,8 @@ public class RegisterReportTables {
 				_tableName = prefix + '_' + lang;
 				long regId;
 				if ((regId = prefix.charAt(0) - '@') <= 0 || regId >= 27) {
-					throw new RuntimeException("E SYS203 In the report table "
-						+ _tableName + " are no reports");
+					//In the report table &{0} are no reports
+					throw new SRuntimeException(SYS.SYS203, _tableName);
 				}
 				_prefix = prefix;
 				_tableID = getTableID(prefix, lang);
@@ -408,8 +407,7 @@ public class RegisterReportTables {
 				} catch (Exception ex) {}
 			}
 			//Unsupported language code: &{0}
-			throw new RuntimeException(
-				"E SYS018 Unsupported language code: " + language);
+			throw new SRuntimeException(SYS.SYS018, language);
 		}
 
 		/** Get sorted array of parameters from the report text.
@@ -496,8 +494,8 @@ public class RegisterReportTables {
 			try {
 				return readProperties(new FileInputStream(fileName));
 			} catch (IOException ex) {
-				throw new RuntimeException(
-					"E SYS226 Can't read properties with reports: " + fileName);
+				//Can't read properties with reports: &{0}
+				throw new SRuntimeException(SYS.SYS226, fileName);
 			}
 		}
 
@@ -517,8 +515,8 @@ public class RegisterReportTables {
 					in.close();
 				}
 			} catch (Exception ex) {
-				throw new RuntimeException(
-					"E SYS226 Can't read properties with reports", ex);
+				//Can't read properties with reports: &{0}
+				throw new SRuntimeException(SYS.SYS226, ex.getMessage());
 			}
 		}
 
@@ -556,7 +554,7 @@ public class RegisterReportTables {
 		final File dir,
 		final String pckg,
 		String encoding,
-		StringWriter reporter) {
+		ReportWriter reporter) {
 		String prefix = table.getPrefix();
 		String fname = dir.getAbsolutePath().replace('\\', '/');
 		if (!fname.endsWith("/")) {
@@ -574,13 +572,13 @@ NL+
 "/** Registered identifiers of reports with the prefix " + prefix + ". */"+NL+
 "public interface " + prefix + " {"+NL+
 "\t/** Prefix of reports. */"+NL+
-"\tstatic final String " + table.getPrefix() +
+"\tpublic static final String " + table.getPrefix() +
 	"_PREFIX = \"" + table.getPrefix() + "\";"+NL+
 "\t/** Default language. */"+NL+
-"\tstatic final String " + prefix +
+"\tpublic static final String " + prefix +
 	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";"+NL+
-"\t/** List of supported languages in the registered message tables. */"+NL+
-"\tstatic final String[] " + prefix + "_LANGUAGES = {");
+"\t/** List of supported languages for this message table. */"+NL+
+"\tpublic static final String[] " + prefix + "_LANGUAGES = {");
 			String xx[] = table.getLanguages();
 			for (int i = 0; i < xx.length; i++) {
 				 out.write('"' + xx[i] + '"');
@@ -606,7 +604,7 @@ NL+
 			out.write("}");
 			out.close();
 		} catch (Exception ex) {
-			reporter.write("E SYS036 Program exception: "+ex.getMessage()+NL);
+			reporter.fatal(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
 
@@ -626,14 +624,13 @@ NL+
 		final String pckg,
 		final String encoding,
 		final ReportTableImpl registeredTable,
-		final StringWriter reporter) {
+		final ReportWriter reporter) {
 		String prefix = table.getPrefix();
 		if (registeredTable == null ||
 			!prefix.equals(registeredTable.getPrefix())) {
-			reporter.write("E SYS220 |Default report table is incorrect;"
-				+ " localized table:  " +
-				(registeredTable == null ?
-					"null" : registeredTable.getTableName()) + ")"+NL);
+			//Default report table is incorrect; localized table: &{0}
+			reporter.error(SYS.SYS220,
+				registeredTable==null? "null" : registeredTable.getTableName());
 			return;
 		}
 		if (table == registeredTable) {
@@ -650,18 +647,19 @@ NL+
 				for (String key: table._ids) {
 					String text = registeredTable.getReportText(prefix + key);
 					if (text == null) {
-						reporter.write("E SYS221 Report "
-							+ prefix  + key
-							+ " is missing in the default"+table.getTableName()
-							+ NL);
+						//Report &{0} from table &{1} is missing in
+						//the default table
+						reporter.error(SYS.SYS221,
+							prefix + key, table.getTableName());
 					}
 				}
 				for (String key: registeredTable._ids) {
 					String text = table.getReportText(prefix + key);
 					if (text == null) {
-						reporter.write("W SYS225 Report " + prefix+key
-							+ " which is in the default table is missing"
-							+ " in table "+table.getTableName() + NL);
+						//Report &{0} which is in the default table is missing
+						// in table &{1}
+						reporter.error(SYS.SYS225,
+							prefix+key, table.getTableName());
 					}
 				}
 			}
@@ -671,9 +669,9 @@ NL+
 				if (text != null) {
 					String[] p1 = table.getReportParamNames(id);
 					if (p1 == null) {
-						reporter.write("E SYS212 Unclosed parameter in the text"
-							+ " of report " + prefix+id
-							+ ", table " + table.getTableName() + NL);
+						// Unclosed parameter in text of report &{0}, table &{1}
+						reporter.error(SYS.SYS212,
+							prefix+id, table.getTableName());
 						p1 =  new String[0];
 					}
 					if (table != registeredTable) { //not default table
@@ -684,18 +682,20 @@ NL+
 						if (p1.length == p2.length) {
 							for (int j = 0; j < p1.length; j++) {
 								if (!p1[j].equals(p2[j])) {
-									reporter.write("E SYS217 Parameters in"
-										+ " tables " + table.getTableName()
-										+ " and "+registeredTable.getTableName()
-										+ "differs, report: " + id + NL);
+									//Parameters in tables &{0} and
+									//&{1} differs, report: &{2}
+									reporter.error(SYS.SYS217,
+										table.getTableName(),
+										registeredTable.getTableName(),
+										id);
 									break;
 								}
 							}
 						} else {
-							reporter.write("E SYS217 Parameters in tables "
-								+ table.getTableName()
-								+ " and " + registeredTable.getTableName()
-								+ " differs, report: " + id + NL);
+							//Parameters in tables &{0} and &{1} differs,
+							//report: &{2}
+							reporter.error(SYS.SYS217, table.getTableName(),
+								registeredTable.getTableName(), id);
 						}
 					}
 				}
@@ -755,14 +755,10 @@ NL+
 			File f = new File(".");
 			if (f.isDirectory()) {
 				String s = f.getCanonicalPath();
-				if (!s.endsWith(File.separator)) {
-					return s + File.separator;
-				} else {
-					return s;
-				}
+				return (!s.endsWith(File.separator)) ? s + File.separator : s;
 			}
 		} catch (Exception ex) {}
-		throw new RuntimeException("E SYS051 Actual path isn't accessible");
+		throw new SRuntimeException(SYS.SYS051); //Actual path isn't accessible
 	}
 
 	/** Create report table from properties.
@@ -774,8 +770,7 @@ NL+
 		String prefix = reportTable.getProperty("_prefix");
 		if (prefix == null || prefix.length() < 3) {
 			//SYS214 Message prefix is incorrect or not specified: &{0}
-			throw new RuntimeException("E SYS214 " +
-				"Mesage prefix is incorrect or not specified: " + prefix);
+			throw new SRuntimeException(SYS.SYS214, prefix);
 		}
 		int prefixLen = prefix.length();
 		for (Object o: reportTable.keySet()) {
@@ -787,8 +782,8 @@ NL+
 			String id;
 			if (!key.startsWith(prefix)
 				|| !chkReportID(id = key.substring(prefixLen))) {
-				throw new RuntimeException(
-					"E SYS216 Incorrect kessage key: " + key);
+				//Incorrect message key: &{0}
+				throw new SRuntimeException(SYS.SYS216, key);
 			}
 			String text = reportTable.getProperty(key);
 			if (text != null) {
@@ -796,21 +791,21 @@ NL+
 				while (j >= 0) {
 					int k = text.indexOf('}', j + 2);
 					if (k < 0) {
-						throw new RuntimeException("E SYS218 Unclosed parameter"
-							+ " in the modification of report " + prefix+id);
+						//Unclosed parameter in the modification of report &{0}
+						throw new SRuntimeException(SYS.SYS218, prefix+id);
 					}
 					if (text.charAt(j + 2) == '#') {//report reference
 						if (j + 6 >= k) {
-							throw new RuntimeException("E SYS219 Incorrect"
-								+ " parameter reference on position: " + j
-								+ " (report ID: " + key + ")");
+							//Incorrect parameter reference on position: &{0}
+							//(report ID: &{1});
+							throw new SRuntimeException(SYS.SYS219, j, key);
 						}
 						String refid = text.substring(j + 3, k);
 						String refPrefix = ReportTable.getPrefixFromID(refid);
 						if (refPrefix == null || refPrefix.length() < 3) {
-							throw new RuntimeException("Incorrect parameter"
-								+ " reference on position: " + j
-								+ "report ID: " + key);
+							//Incorrect parameter reference on position: &{0}
+							//(report ID: &{1});
+							throw new SRuntimeException(SYS.SYS219, j, key);
 						}
 					}
 					j = text.indexOf("&{", k + 1);
@@ -819,8 +814,8 @@ NL+
 		}
 		String language = reportTable.getProperty("_language");
 		if (language == null || language.length() < 3) {
-			throw new RuntimeException("E SYS215 " +
-				"Message language is incorrect or not specified: " + language);
+			//Message language is incorrect or not specified: &{0}
+			throw new SRuntimeException(SYS.SYS215, language);
 		}
 		String defaultLanguage = reportTable.getProperty("_defaultLanguage");
 		ReportTableImpl result =
@@ -843,7 +838,8 @@ NL+
 	 * @param files array of name of source files.
 	 * @return array with ReportTable objects created from properties.
 	 */
-	static final ReportTable[] readReporTables(final String[] files) {
+	static final ReportTable[] readReporTables(final String[] files,
+		ReportWriter reporter) {
 		ReportTableImpl[] msgTables = null;
 		for (int i = 0; i < files.length; i++) {
 			String s = files[i].replace('\\', '/');
@@ -878,9 +874,10 @@ NL+
 				if (defaultLanguage == null) {
 					defaultLanguage = s;
 				} else if (!defaultLanguage.equals(s)) {
-					System.err.println("W SYS213 Ambiguous default"
-						+ " in the table " + x.getLanguage()
-						+ " , set" + defaultLanguage);
+					//Ambiguous default language of reports" &{0}
+					//in the table &{1}, set &{2}
+					reporter.warning(SYS.SYS213,
+						x.getLanguage(), defaultLanguage);
 
 				}
 			}
@@ -913,14 +910,14 @@ NL+
 	 * @param encoding required code table name for generated Java code.
 	 * If null the actual code of system is used.
 	 * @param pckg package name of generated classes. If null the package
-	 * name will be cz.syntea,common.msg.
+	 * name will be org.xdef.msg.
 	 */
 	private static void genRegisteredJavaTables(
 		final ReportTableImpl[] msgTables,
 		final File outDir,
 		final String encoding,
-		final String pckg) {
-		StringWriter reporter = new StringWriter();
+		final String pckg,
+		ArrayReporter reporter) {
 		//gen default tables
 		for (int j = 0; j < msgTables.length; j++) {
 			ReportTableImpl table = msgTables[j]; //default table
@@ -971,8 +968,10 @@ NL+
 			}
 			genJavaSource(table, outDir, pckg, encoding, table1, reporter);
 		}
-		if (!reporter.toString().isEmpty()) {
-			throw new RuntimeException(reporter.toString());
+		reporter.checkAndThrowErrors();
+		if (reporter.errorWarnings()) {
+			// only warnings or information
+			System.out.println(reporter.printToString());
 		}
 	}
 
@@ -1132,11 +1131,15 @@ NL+
 		if (!errWriter.toString().isEmpty()) {
 			throw new RuntimeException(errWriter.toString() + NL + HDRMSG);
 		}
-		ReportTableImpl[] msgTables = (ReportTableImpl[])readReporTables(files);
+		ArrayReporter reporter = new ArrayReporter();
+		ReportTableImpl[] msgTables = (ReportTableImpl[])
+			readReporTables(files, reporter);
 		if (msgTables != null) {
-			genRegisteredJavaTables(msgTables, outDir, encoding, pckg);
+			genRegisteredJavaTables(msgTables,
+				outDir, encoding, pckg, reporter);
 		} else {
-			throw new RuntimeException("E SYS223 No report tables generated");
+			//No report tables generated
+			throw new SRuntimeException(SYS.SYS223);
 		}
 	}
 }

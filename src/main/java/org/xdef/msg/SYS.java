@@ -4,11 +4,11 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix SYS. */
 public interface SYS {
 	/** Prefix of reports. */
-	static final String SYS_PREFIX = "SYS";
+	public static final String SYS_PREFIX = "SYS";
 	/** Default language. */
-	static final String SYS_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] SYS_LANGUAGES = {"ces", "eng", "slk"};
+	public static final String SYS_DEFAULT_LANGUAGE = "eng";
+	/** List of supported languages for this message table. */
+	public static final String[] SYS_LANGUAGES = {"ces", "eng", "slk"};
 	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; xpath=}&amp;{xdpos}{; X-position=} */
 	public static final long SYS000 = 953221120L;
 	/** Compiled: &amp;{c}, build version: &amp;{v}, date: &amp;{d} */

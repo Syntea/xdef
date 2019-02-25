@@ -4,11 +4,11 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix XDEF. */
 public interface XDEF {
 	/** Prefix of reports. */
-	static final String XDEF_PREFIX = "XDEF";
+	public static final String XDEF_PREFIX = "XDEF";
 	/** Default language. */
-	static final String XDEF_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] XDEF_LANGUAGES = {"ces", "eng", "slk"};
+	public static final String XDEF_DEFAULT_LANGUAGE = "eng";
+	/** List of supported languages for this message table. */
+	public static final String[] XDEF_LANGUAGES = {"ces", "eng", "slk"};
 	/** Can't create root element */
 	public static final long XDEF103 = 31159025664L;
 	/** Name of model expected&amp;{#SYS000} */

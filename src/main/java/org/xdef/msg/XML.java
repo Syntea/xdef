@@ -4,11 +4,11 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix XML. */
 public interface XML {
 	/** Prefix of reports. */
-	static final String XML_PREFIX = "XML";
+	public static final String XML_PREFIX = "XML";
 	/** Default language. */
-	static final String XML_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] XML_LANGUAGES = {"ces", "eng", "slk"};
+	public static final String XML_DEFAULT_LANGUAGE = "eng";
+	/** List of supported languages for this message table. */
+	public static final String[] XML_LANGUAGES = {"ces", "eng", "slk"};
 	/** Unexpected end of source&amp;{#SYS000} */
 	public static final long XML005 = 1170407424L;
 	/** Whitespace expected after "&amp;{0}"&amp;{#SYS000} */

@@ -4,11 +4,11 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix BNF. */
 public interface BNF {
 	/** Prefix of reports. */
-	static final String BNF_PREFIX = "BNF";
+	public static final String BNF_PREFIX = "BNF";
 	/** Default language. */
-	static final String BNF_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] BNF_LANGUAGES = {"ces", "eng", "slk"};
+	public static final String BNF_DEFAULT_LANGUAGE = "eng";
+	/** List of supported languages for this message table. */
+	public static final String[] BNF_LANGUAGES = {"ces", "eng", "slk"};
 	/** BNF grammar not exists&amp;{#SYS000} */
 	public static final long BNF001 = 120717312L;
 	/** Unclosed comment&amp;{#SYS000} */
