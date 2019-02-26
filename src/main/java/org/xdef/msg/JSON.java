@@ -36,8 +36,6 @@ public interface JSON {
 	/** English */
 	public static final long JSON_LANGUAGE = 13834649615L;
 
-	/** List of registered message identifiers (without prefix). */
-	public static final String[] JSON = {"001","002","003","004","005","006",
-		"007","008","009","010","011","012","013","014","_DESCRIPTION",
-		"_LANGUAGE","|eng"};
+	/** Default language. */
+	public static final String JSON = "eng";
 }

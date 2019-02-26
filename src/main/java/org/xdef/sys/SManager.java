@@ -1,18 +1,21 @@
 package org.xdef.sys;
 
-import org.xdef.XDConstants;
-import org.xdef.msg.SYS;
-import org.xdef.sys.RegisterReportTables.ReportTable;
-import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeSet;
 import java.util.Properties;
 import java.util.Set;
+import org.xdef.XDConstants;
+import org.xdef.msg.SYS;
+import org.xdef.sys.RegisterReportTables.ReportTable;
+import org.xdef.xml.KXmlUtils;
 
 /** Provides managing of properties, languages and report tables. It exists
  * the singleton instance of SManager. You can get this instance by the static
@@ -817,12 +820,26 @@ public final class SManager implements XDConstants {
 		String[] ids = null;
 		for (String packageName : _packages) {
 			try { // try to read properties from the package
-				String s = tableName.substring(0, tableName.length() - 4);
+				String prefix = tableName.substring(0, tableName.length() - 4);
 				// get class of registered table.
-				Class<?> c = Class.forName(packageName + '.' + s);
-				ids = (String[]) c.getDeclaredField(s).get(null);
+				Class<?> c = Class.forName(packageName + '.' + prefix);
+				// get fields of this class.
+				Field[] fields = c.getDeclaredFields();
+				ArrayList<String> ar = new ArrayList<String>(fields.length-1);
+				for (int i = 0, j = 0; i < fields.length; i++) {
+					String name = fields[i].getName();
+					if (name.startsWith(prefix) && !prefix.equals(name)) {
+						// only fields of message identifiers
+						ar.add(name.substring(prefix.length()));
+					}
+				}
+				// create sorted array of message identifiers
+				ids = new String[ar.size()];
+				ar.toArray(ids);
+				Arrays.sort(ids);
+				// read properties with mmessages 
 				InputStream input =
-					c.getResourceAsStream(tableName+".properties");
+					c.getResourceAsStream(tableName + ".properties");
 				InputStreamReader in =
 					new InputStreamReader(input, Charset.forName("UTF-8"));
 				Properties props = new Properties();

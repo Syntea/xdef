@@ -56,8 +56,6 @@ public interface XML {
 	/** English */
 	public static final long XML_LANGUAGE = 1170407449L;
 
-	/** List of registered message identifiers (without prefix). */
-	public static final String[] XML = {"005","014","024","041","047","053",
-		"075","080","090","099","201","305","306","308","309","402","403","404",
-		"405","505","506","601","602","802","_DESCRIPTION","_LANGUAGE","|eng"};
+	/** Default language. */
+	public static final String XML = "eng";
 }

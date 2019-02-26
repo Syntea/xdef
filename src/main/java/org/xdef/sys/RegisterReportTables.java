@@ -179,14 +179,31 @@ public class RegisterReportTables {
 	 * {@link org.xdef.sys.RegisterReportTables}) or it can be created
 	 * from the class of registered report table.
 	 */
-	abstract static class ReportTable implements Comparable<ReportTable> {
-
+	abstract static class ReportTable implements Comparable<ReportTable> {		
+		/** Minimal length of prefix of registered report. */
+		private static final int PREFIX_MINLENGTH = 2;
+		/** Maximal length of prefix of registered report. */
+		private static final int PREFIX_MAXLENGTH = 11;
 		/** Bit mask for extracting if the index part of registered report ID.*/
 		static final int IDMASK = 0xffff;
 		/** Bit mask for extracting registered report ID for all languages. */
 		static final long REGTABIDMASK = 0xffffffffffff0000L;
 		/** Bit size of the index part of registered report ID. */
 		static final int IDBITS = 16;
+		/** Sorted array of message ids without prefix. */
+		String[] _ids;
+		/** Prefix of message identifiers. */
+		private final String _prefix;
+		/** Language ID of this table. */
+		private final String _language;
+		/** Available languages. */
+		private String[] _languages;
+		/** Default language. */
+		private String _defaultLanguage;
+		/** Identifier of this table. */
+		private final long _tableID;
+		/** Full name of this table. */
+		private final String _tableName;
 
 		/** Check if this table is registered.
 		 * @return <tt>true</tt> if and only if the table is registered.
@@ -212,20 +229,6 @@ public class RegisterReportTables {
 		 * @return string created from registered report ID or <tt>null</tt>.
 		 */
 		abstract public String getReportID(final long registeredID);
-
-		/** Minimal length of prefix of registered report. */
-		private static final int PREFIX_MINLENGTH = 2;
-		/** Maximal length of prefix of registered report. */
-		private static final int PREFIX_MAXLENGTH = 11;
-
-		String[] _ids;//sorted array of message ids without prefix
-
-		private final String _prefix;
-		private final String _language;
-		private String[] _languages;
-		private String _defaultLanguage;
-		private final long _tableID;
-		private final String _tableName;
 
 		public ReportTable(final Class<?> baseClass,
 			final Class<?> localizedClass) {
@@ -346,11 +349,6 @@ public class RegisterReportTables {
 		public final String[] getReportParamNames(final long registeredID) {
 			return getParams(getReportText(registeredID));
 		}
-
-		/** Set array of message names of registered message table.
-		 * @param ids sorted array of message ids without prefix.
-		 */
-		public void setIDs(final String[] ids) {_ids = ids;}
 
 		@Override
 		public String toString() {return "ReportTable: " + _tableName;}
@@ -590,32 +588,10 @@ public class RegisterReportTables {
 				out.write(
 "\tpublic static final long " + id + " = " + regID + "L;"+NL);
 			}
-			// generate list of registered identifiers of this message table
-			out.write(
-NL+"\t/** List of registered message identifiers (without prefix). */"+NL+
-"\tpublic static final String[] " + prefix + " = {");
-			int len = 38 + prefix.length(); //length of text written on the line
-			for (int i = 0; i < table._ids.length; i++) {
-				if (i > 0) {
-					out.write(',');
-					len++;
-				}
-				String id = table._ids[i];
-				if ((len += id.length() + 2) > 80) {
-					out.write(NL + "\t\t");
-					len = id.length() + 10;
-				}
-				out.write('\"' + id + '\"');
-			}
-			// add the default language starting with "|" to the end of table
-			if (table._ids.length > 0) {
-				out.write(',');
-			}
-			String language = table.getLanguage();
-			if (len + language.length() + 5 > 80) {
-				out.write(NL + "\t\t");
-			}
-			out.write("\"|" + language + "\"};" + NL + "}");
+			// identifier which is equal to the prefix contans default language
+			out.write(NL+"\t/** Default language. */"+NL+
+"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+NL+
+'}');
 			out.close();
 		} catch (Exception ex) {
 			reporter.fatal(SYS.SYS036, ex); //Program exception &{0}
