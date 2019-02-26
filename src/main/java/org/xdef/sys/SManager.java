@@ -28,7 +28,7 @@ import java.util.Set;
  * }
  * </b></code></pre>
  *
- * @author Vaclav Trojan &lt;vaclav.trojan@syntea.cz&gt;
+ * @author Vaclav Trojan
  */
 public final class SManager implements XDConstants {
 	/** The unique instance of SManager. */
@@ -139,8 +139,8 @@ public final class SManager implements XDConstants {
 		synchronized (sm) {
 			String lang = SUtils.getISO3Language(language);
 			String plang = sm._language.getDefaultLanguage();
-			if (!sm._language.getLanguage().equals(lang) ||
-				!sm._language.getDefaultLanguage().equals(plang)) {
+			if (!sm._language.getLanguage().equals(lang)
+				|| !sm._language.getDefaultLanguage().equals(plang)) {
 				sm._language = new SLanguage(lang, plang);
 			}
 			return sm._language;
@@ -486,7 +486,7 @@ public final class SManager implements XDConstants {
 		final String language,
 		final boolean resolveReferences) {
 		String id;
-		if ((id = reportID) == null ||(id = id.trim()).length() == 0) {
+		if ((id = reportID) == null || (id = id.trim()).length() == 0) {
 			return null;
 		}
 		ReportTable table = getReportTable(id, language);
@@ -814,11 +814,13 @@ public final class SManager implements XDConstants {
 				return _tables[i];
 			}
 		}
+		String[] ids = null;
 		for (String packageName : _packages) {
 			try { // try to read properties from the package
 				String s = tableName.substring(0, tableName.length() - 4);
 				// get class of registered table.
 				Class<?> c = Class.forName(packageName + '.' + s);
+				ids = (String[]) c.getDeclaredField(s).get(null);
 				InputStream input =
 					c.getResourceAsStream(tableName+".properties");
 				InputStreamReader in =
@@ -826,8 +828,9 @@ public final class SManager implements XDConstants {
 				Properties props = new Properties();
 				props.load(in);
 				in.close();
-				return addReportTable(
-					RegisterReportTables.genReportTable(props));
+				ReportTable table = RegisterReportTables.genReportTable(props);
+				table._ids = ids;
+				return addReportTable(table);
 			} catch (Exception ex) {}
 			// not found, so we try to read the external data
 			String s = _properties.getProperty(XDPROPERTY_MESSAGES + tableName);
@@ -842,10 +845,12 @@ public final class SManager implements XDConstants {
 							String name = f.getName();
 							if (name.equals(tableName+".properties")) {
 								try {
-									return addReportTable(
+									ReportTable table =
 										RegisterReportTables.genReportTable(
 											ReportTable.readProperties(
-												new FileInputStream(f))));
+												new FileInputStream(f)));
+									table._ids = ids;
+									return addReportTable(table);
 								} catch (IOException ex) {
 									break;
 								}
@@ -857,11 +862,14 @@ public final class SManager implements XDConstants {
 			if (s != null) {
 				ReportTable[] tables = null;
 				try {
-					return addReportTable(RegisterReportTables.genReportTable(
-						ReportTable.readProperties(s)));
+					ReportTable table = RegisterReportTables.genReportTable(
+						ReportTable.readProperties(s));
+					table._ids = ids;
+					return addReportTable(table);
 				} catch (Exception ex) {}
 				for (int i = 0; i <= _tableHighIndex; i++) {
 					if (tableName.equals(tables[i].getTableName())) {
+						tables[i]._ids = ids;
 						return addReportTable(tables[i]);
 					}
 				}
@@ -977,77 +985,5 @@ public final class SManager implements XDConstants {
 		}
 		if (low < hi) sortTables(low, hi);
 		if (lo < high) sortTables(lo, high);
-	}
-
-	/** This class is used for generation of registered message tables. */
-	private static final class RegisteredReportTable extends ReportTable {
-		private final int _prefixLen;
-		private final String[] _reportIDs;
-		private final String[] _texts;
-
-		/** Create instance of localized report table from classes.
-		 * @param baseClass common class for all localizations.
-		 * @param localizedClass class with localized informations.
-		 * @throws Exception if an error occurs.
-		 */
-		private RegisteredReportTable(final Class<?> baseClass,
-			final Class<?> localizedClass) throws Exception {
-			super(baseClass, localizedClass);
-			String prefix = getPrefix();
-			_prefixLen = prefix.length();
-			String language = getLanguage();
-			try {
-				_reportIDs =
-					(String[]) baseClass.getDeclaredField(prefix).get(null);
-				// localized class
-				_texts = (String[]) localizedClass.getDeclaredField(
-					prefix + "_" + language).get(null);
-			} catch (Exception ex) {
-				//Incorrect class of registered report table &{0}
-				throw new SException(SYS.SYS210,
-					localizedClass.getName() + " (" + ex +")");
-			}
-		}
-
-		@Override
-		public final boolean isRegistered() { return true;}
-
-		@Override
-		public final String getReportText(final String id) {
-			int index = _prefixLen < id.length() ?
-				indexOf(id.substring(_prefixLen)) :
-				indexOf(id);
-			return (index < 0) ? null : _texts[index];
-		}
-
-		@Override
-		public final String getReportText(long id) {
-			return  _texts[(int) id & ReportTable.IDMASK];
-		}
-
-		@Override
-		public final String getReportID(long id) {
-			return getPrefix() + _reportIDs[(int) id & ReportTable.IDMASK];
-		}
-
-		/** Search id in sorted array of report identifiers.
-		 * @param id Identifier to be found.
-		 * @return index of identifier in the table.
-		 */
-		private int indexOf(final String id) {
-			int first = 0, last = _reportIDs.length - 1;
-			while (last > first) {
-				int mid = (last + first) / 2;  // compute mid point.
-				int i;
-				if ((i = id.compareTo(_reportIDs[mid])) > 0) {
-					first = mid + 1;  // repeat search in top half.
-				} else if (i < 0) {
-					last = mid - 1; // repeat search in bottom half.
-				} else {
-					return mid;  // found it. return position
-				}
-			}
-			return id.equals(_reportIDs[first]) ? first : -1;
-		}
 	}
 }

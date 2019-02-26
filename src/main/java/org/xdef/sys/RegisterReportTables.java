@@ -63,8 +63,6 @@ public class RegisterReportTables {
 	 * _prefix=MYAPP
 	 * # ISO name of language.
 	 * _language=eng
-	 * # ISO name of the default language.
-	 * _defaultLanguage=eng
 	 * #
 	 * MYAPP001=Message: &{0}{: }
 	 * MYAPP002=Given name: &{0} Family name: &{1}
@@ -117,9 +115,7 @@ public class RegisterReportTables {
 	 * </code></pre>
 	 */
 	private final static class ReportTableImpl extends ReportTable {
-		private final int _prefixLen; // length of messages
 		private final Properties _msgs; // Properties with messages
-		private final String[] _ids; //sorted array of message ids withou prefix
 
 		/** Create new instance of ReportTable.
 		 * @param prefix prefix of ReportTable.
@@ -132,22 +128,11 @@ public class RegisterReportTables {
 			final String defaultLanguage,
 			final Properties msgs) throws RuntimeException {
 			super(prefix, language, defaultLanguage);
-			_prefixLen = prefix.length();
 			if (msgs == null || msgs.isEmpty()) {
 				//In the report table &{0} are no reports
 				throw new SRuntimeException(SYS.SYS203, getTableName());
 			}
 			_msgs = msgs;
-			ArrayList<String> ar = new ArrayList<String>();
-			for (Object o: msgs.keySet()) {
-				String key = (String) o;
-				if (!"_prefix".equals(key) && !"_language".equals(key)
-					&& !"_defaultLanguage".equals(key)) {
-					ar.add(key.substring(_prefixLen));
-				}
-			}
-			_ids = ar.toArray(new String[0]);
-			Arrays.sort(_ids); // sort it!
 		}
 
 		@Override
@@ -163,8 +148,7 @@ public class RegisterReportTables {
 		 */
 		public String getReportText(final long registeredID) {
 			int index = getRegisteredReportId(registeredID);
-			return index >= _ids.length
-				? null : getReportText(getPrefix() + _ids[index]);
+			return getReportText(getPrefix() + _ids[index]);
 		}
 
 		@Override
@@ -174,7 +158,8 @@ public class RegisterReportTables {
 		 */
 		public String getReportID(final long registeredID) {
 			int index = getRegisteredReportId(registeredID);
-			return index >= _ids.length ? null : getPrefix() + _ids[index];
+			if (_ids == null) return null;
+			return getPrefix() + _ids[index];
 		}
 
 		@Override
@@ -220,18 +205,20 @@ public class RegisterReportTables {
 		 * @param registeredID report registered ID.
 		 * @return The text of report or null.
 		 */
-		abstract public String getReportText(long registeredID);
+		abstract public String getReportText(final long registeredID);
 
 		/** Get string of reportID from registered report ID.
 		 * @param registeredID registered report ID.
 		 * @return string created from registered report ID or <tt>null</tt>.
 		 */
-		abstract public String getReportID(long registeredID);
+		abstract public String getReportID(final long registeredID);
 
 		/** Minimal length of prefix of registered report. */
 		private static final int PREFIX_MINLENGTH = 2;
 		/** Maximal length of prefix of registered report. */
 		private static final int PREFIX_MAXLENGTH = 11;
+
+		String[] _ids;//sorted array of message ids without prefix
 
 		private final String _prefix;
 		private final String _language;
@@ -360,6 +347,11 @@ public class RegisterReportTables {
 			return getParams(getReportText(registeredID));
 		}
 
+		/** Set array of message names of registered message table.
+		 * @param ids sorted array of message ids without prefix.
+		 */
+		public void setIDs(final String[] ids) {_ids = ids;}
+
 		@Override
 		public String toString() {return "ReportTable: " + _tableName;}
 
@@ -370,8 +362,8 @@ public class RegisterReportTables {
 
 		@Override
 		public final boolean equals(final Object o) {
-			return (o instanceof ReportTable) &&
-				_tableID == ((ReportTable) o).getRegisteredTableID();
+			return (o instanceof ReportTable)
+				&& _tableID == ((ReportTable) o).getRegisteredTableID();
 		}
 
 		@Override
@@ -556,6 +548,18 @@ public class RegisterReportTables {
 		String encoding,
 		ReportWriter reporter) {
 		String prefix = table.getPrefix();
+		int prefixLen = prefix.length();
+		ArrayList<String> ar = new ArrayList<String>();
+		for (Object o: table._msgs.keySet()) {
+			String key = (String) o;
+			if (!"_prefix".equals(key) && !"_language".equals(key)
+				&& !"_defaultLanguage".equals(key)) {
+				ar.add(key.substring(prefixLen));
+			}
+		}
+		String[] ids = ar.toArray(new String[0]);
+		Arrays.sort(ids); // sort it!
+		table._ids = ids;
 		String fname = dir.getAbsolutePath().replace('\\', '/');
 		if (!fname.endsWith("/")) {
 			fname += "/";
@@ -567,41 +571,51 @@ public class RegisterReportTables {
 				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
 			out.write(
 "// This file was generated automatically, DO NOT modify it!"+NL+
-"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+NL+
-NL+
+"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+NL+NL+
 "/** Registered identifiers of reports with the prefix " + prefix + ". */"+NL+
-"public interface " + prefix + " {"+NL+
-"\t/** Prefix of reports. */"+NL+
-"\tpublic static final String " + table.getPrefix() +
-	"_PREFIX = \"" + table.getPrefix() + "\";"+NL+
-"\t/** Default language. */"+NL+
-"\tpublic static final String " + prefix +
-	"_DEFAULT_LANGUAGE = \"" + table.getLanguage() + "\";"+NL+
-"\t/** List of supported languages for this message table. */"+NL+
-"\tpublic static final String[] " + prefix + "_LANGUAGES = {");
-			String xx[] = table.getLanguages();
-			for (int i = 0; i < xx.length; i++) {
-				 out.write('"' + xx[i] + '"');
-				 if (i < xx.length - 1) {
-					 out.write(", ");
-				 }
-			}
-			out.write("};"+NL);
+"public interface " + prefix + " {"+NL);
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
 				String s = table.getReportText(id);
-				if (s != null && s.length() > 0) {//comment in english
+				// generate comment in the default language for this item
+				if (s != null && s.length() > 0) {
 					s = s.replace("&", "&amp;");
 					s = s.replace("<", "&lt;");
 					s = s.replace(">", "&gt;");
 					s = s.replace("*/", "*&#47;");
 					out.write("\t/** " + s + " */"+NL);
 				}
+				// generate the field with the value of the registered item
 				long regID = ReportTable.getRegisteredReportId(table, i);
 				out.write(
 "\tpublic static final long " + id + " = " + regID + "L;"+NL);
 			}
-			out.write("}");
+			// generate list of registered identifiers of this message table
+			out.write(
+NL+"\t/** List of registered message identifiers (without prefix). */"+NL+
+"\tpublic static final String[] " + prefix + " = {");
+			int len = 38 + prefix.length(); //length of text written on the line
+			for (int i = 0; i < table._ids.length; i++) {
+				if (i > 0) {
+					out.write(',');
+					len++;
+				}
+				String id = table._ids[i];
+				if ((len += id.length() + 2) > 80) {
+					out.write(NL + "\t\t");
+					len = id.length() + 10;
+				}
+				out.write('\"' + id + '\"');
+			}
+			// add the default language starting with "|" to the end of table
+			if (table._ids.length > 0) {
+				out.write(',');
+			}
+			String language = table.getLanguage();
+			if (len + language.length() + 5 > 80) {
+				out.write(NL + "\t\t");
+			}
+			out.write("\"|" + language + "\"};" + NL + "}");
 			out.close();
 		} catch (Exception ex) {
 			reporter.fatal(SYS.SYS036, ex); //Program exception &{0}
@@ -626,39 +640,35 @@ NL+
 		final ReportTableImpl registeredTable,
 		final ReportWriter reporter) {
 		String prefix = table.getPrefix();
-		if (registeredTable == null ||
-			!prefix.equals(registeredTable.getPrefix())) {
-			//Default report table is incorrect; localized table: &{0}
+		if (registeredTable == null
+			|| !prefix.equals(registeredTable.getPrefix())) {
+			//Default report table is incorrect or missing
+			//&{0}{, localized table:}
 			reporter.error(SYS.SYS220,
-				registeredTable==null? "null" : registeredTable.getTableName());
+				registeredTable==null ? null : registeredTable.getTableName());
 			return;
 		}
 		if (table == registeredTable) {
 			//generate registration java source
 			genRegIDsInterface(table, dir, pckg, encoding, reporter);
 		}
-		String fname = dir.getAbsolutePath().replace('\\', '/');
-		if (!fname.endsWith("/")) {
-			fname += "/";
-		}
-		fname += table.getTableName() + ".java";
 		try {
 			if (table != registeredTable) {
-				for (String key: table._ids) {
-					String text = registeredTable.getReportText(prefix + key);
+				for (Object x: table._msgs.keySet()) {
+					String text = registeredTable.getReportText((String) x);
 					if (text == null) {
 						//Report &{0} from table &{1} is missing in
 						//the default table
 						reporter.error(SYS.SYS221,
-							prefix + key, table.getTableName());
+							prefix + x, table.getTableName());
 					}
 				}
 				for (String key: registeredTable._ids) {
-					String text = table.getReportText(prefix + key);
+					String text = table._msgs.getProperty(prefix + key);
 					if (text == null) {
 						//Report &{0} which is in the default table is missing
 						// in table &{1}
-						reporter.error(SYS.SYS225,
+						reporter.warning(SYS.SYS225,
 							prefix+key, table.getTableName());
 					}
 				}
@@ -844,8 +854,7 @@ NL+
 		for (int i = 0; i < files.length; i++) {
 			String s = files[i].replace('\\', '/');
 			try {
-				ReportTableImpl x =
-					(ReportTableImpl) readReporTable(s);
+				ReportTableImpl x = (ReportTableImpl) readReporTable(s);
 				if (msgTables == null) {
 					msgTables = new ReportTableImpl[] {x};
 				} else {
@@ -961,8 +970,8 @@ NL+
 			//find default table
 			for (int k = 0; k < msgTables.length; k++) {
 				ReportTableImpl t = msgTables[k];
-				if (table.getPrefix().equals(t.getPrefix()) &&
-					table.getDefaultLanguage().equals(t.getLanguage())) {
+				if (table.getPrefix().equals(t.getPrefix())
+					&& table.getDefaultLanguage().equals(t.getLanguage())) {
 					table1 = t;
 				}
 			}
@@ -1074,8 +1083,7 @@ NL+
 								errors.println(
 									"Duplicated parameter -i: " + args[i]);
 							}
-							if (i + 1 <= len &&
-								!args[i + 1].startsWith("-")) {
+							if (i + 1 <= len && !args[i + 1].startsWith("-")) {
 								outDir = new File(args[++i]);
 								if (!outDir.isDirectory()) {
 									errors.println("Incorrect output directory:"
