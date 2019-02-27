@@ -16,6 +16,7 @@ import org.xdef.model.XMNode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -2354,8 +2355,8 @@ String digest = xe.getDigest();
 "Parameters:"+NL+
 " -i X-definitions list of files, required. Wildcards may be used. Required.\n"+
 " -o Output directory where XComponents are generated, required\n"+
-" -p Output directory where source class with XDPool will be generated,\n"+
-"    optional (if not specified, -o is used instead)"+NL+
+" -p Output directory where the compiled XDPool will be stored,\n"+
+"    optional (if not specified the XDPool object is not stored)"+NL+
 " -e Encoding name, optional (default is the Java system encoding)\n"+
 " -d Generate JavaDoc, optional (default is not generate JavaDoc)\n"+
 " -j Generate JAXB annotations, optional (default is not generate JAXB)\n"+
@@ -2374,7 +2375,7 @@ String digest = xe.getDigest();
 		}
 		ArrayList<String> sources = new ArrayList<String>();
 		File xcDir = null; // base directory where XComponents will be generated
-		File xpDir = null; // directory where generate XDPool class
+		FileOutputStream xpFile = null; // the file where save compiled XDPool
 		String encoding = null;
 		boolean javadoc = false;
 		boolean jaxb = false;
@@ -2445,25 +2446,28 @@ String digest = xe.getDigest();
 						throw new RuntimeException(
 							"Parameter '-o' is not output directory.\n" + info);
 					}
-				case 'p': // Output directory where source class with XDPool
-					if (xpDir != null) {
+				case 'p': // where to write the XDPool
+					if (xpFile != null) {
 						throw new RuntimeException(
 							"Redefinition of key \"-p\"\n" + info);
 					}
 					if (++i < args.length && (arg = args[i]) != null &&
 						!arg.startsWith("-")) {
+						File f = new File(arg);
+						if (f.exists() && f.isDirectory()) {
+							throw new RuntimeException(
+								"The key \"-p\" must be file\n" + info);
+						}
 						try {
-							xpDir = new File(arg);
-							if (xpDir.exists() && xpDir.isDirectory()) {
-								i++;
-								continue;
-							}
-						} catch (Exception ex) {}
-						throw new RuntimeException(
-							"Parameter '-p' is not output directory.\n" + info);
+							xpFile = new FileOutputStream(f);
+						} catch (Exception ex) {
+							throw new RuntimeException(
+								"Can't write to the file from tne key \"-p\"\n"
+									+ info, ex);
+						}
 					} else {
 						throw new RuntimeException(
-							"Parameter '-p' is not output directory\n" + info);
+							"Parameter '-p' is not file\n" + info);
 					}
 				default:
 					throw new RuntimeException("Incorrect parameter \""
@@ -2474,7 +2478,7 @@ String digest = xe.getDigest();
 			throw new RuntimeException(
 				"No XDPool source is specified.\n" + info);
 		}
-		if (xcDir == null && xpDir == null) {
+		if (xcDir == null) {
 			throw new RuntimeException(
 				"No output directory specified.\n" + info);
 		}
@@ -2482,9 +2486,12 @@ String digest = xe.getDigest();
 			Object[] xdefs = new String[sources.size()];
 			sources.toArray(xdefs);
 			XDPool xp = XDFactory.compileXD(null, xdefs);
-			if (xcDir != null) {
-				genXComponent(xp,
-					xcDir.getAbsolutePath(), encoding, javadoc, jaxb, false);
+			genXComponent(xp,
+				xcDir.getAbsolutePath(), encoding, javadoc, jaxb, false);
+			if (xpFile != null) {
+				ObjectOutputStream oos = new ObjectOutputStream(xpFile);
+				oos.writeObject(xp);
+				oos.close();
 			}
 		} catch (RuntimeException ex) {
 			throw ex;
