@@ -2459,6 +2459,7 @@ String digest = xe.getDigest();
 								"The key \"-p\" must be file\n" + info);
 						}
 						try {
+							i++;
 							xpFile = new FileOutputStream(f);
 							continue;
 						} catch (Exception ex) {
