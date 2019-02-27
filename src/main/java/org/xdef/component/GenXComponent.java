@@ -2460,6 +2460,7 @@ String digest = xe.getDigest();
 						}
 						try {
 							xpFile = new FileOutputStream(f);
+							continue;
 						} catch (Exception ex) {
 							throw new RuntimeException(
 								"Can't write to the file from tne key \"-p\"\n"
