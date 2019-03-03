@@ -112,6 +112,10 @@
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <compilerArgs>
+                        <arg>-Xpkginfo:always</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
