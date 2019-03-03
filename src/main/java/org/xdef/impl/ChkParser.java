@@ -627,6 +627,11 @@ final class ChkParser extends DomBaseHandler {
 				_sReporter.error(XML.XML041);
 				return;
 			}
+			if (m.contains("--")) {
+				_sReporter.setPosition(getPos(x));
+				_sReporter.error(XML.XML030);//XML030=Comment can't contain "--"
+				return;
+			}
 			if (m.contains("character sequence \"]]>\" must not")) {
 				_sReporter.setPosition(getPos(x));
 				//Character sequence "]]>" is not allowed in element content

@@ -367,6 +367,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			parser.closeReader();
 			return result;
 		} catch (Exception ex) {
+			XDDebug debugger = getDebugger();
+			if (debugger != null) {
+				debugger.closeDebugger("Process finished with exception:\n"+ex);
+			}
 			if (parser != null) {
 				parser.closeReader();
 			}

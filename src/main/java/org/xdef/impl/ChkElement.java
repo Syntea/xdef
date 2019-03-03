@@ -246,7 +246,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name name of variable.
 	 * @return loaded value.
 	 */
-	final XDValue loadModelVariable(final String name) {
+	public final XDValue loadModelVariable(final String name) {
 		int addr = findModelVariableOffset(name);
 		return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
 	}

@@ -42,7 +42,7 @@ public interface XDDebug {
 	public static final char CREATE = 'J';
 	/** Event "init". */
 	public static final char INIT = 'K';
-	/** Event "match". */
+//	/** Event "match". */
 //	public static final char MATCH = 'L';
 	/** Event "finally". */
 	public static final char FINALLY = 'M';
@@ -67,26 +67,31 @@ public interface XDDebug {
 	 * @param xp XDPool.
 	 */
 	public void openDebugger(Properties props, XDPool xp);
+	
+	/** Close debugger and display message.
+	 * @param msg message to be displayed.
+	 */
+	public void closeDebugger(String msg);
 
 	/** Close debugger */
 	public void closeDebugger();
 
-	/** get debug PrintStream.
+	/** Get debug PrintStream.
 	 * @return debug PrintStream.
 	 */
 	public PrintStream getOutDebug();
 
-	/** get debug InputStream.
+	/** Get debug InputStream.
 	 * @return debug InputStream.
 	 */
 	public InputStream getInDebug();
 
-	/** set debug PrintStream.
+	/** Set debug PrintStream.
 	 * @param outDebug debug PrintStream.
 	 */
 	public void setOutDebug(PrintStream outDebug);
 
-	/** set debug InputStream.
+	/** Set debug InputStream.
 	 * @param inDebug debug InputStream.
 	 */
 	public void setInDebug(InputStream inDebug);
