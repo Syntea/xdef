@@ -28,13 +28,13 @@ public interface XDContainer extends XDValue {
 	 * @param value new item.
 	 */
 	public void addXDItem(Element value);
-
 	/** Set item at position given by index.
 	 * @param index index of item item. If index is out of range of items this
 	 * method does nothing.
 	 * @param value of item.
+	 * @return original value or null;
 	 */
-	public void replaceXDItem(final int index, XDValue value);
+	public XDValue replaceXDItem(final int index, XDValue value);
 
 	/** Insert item before given index to the sequence.
 	 * @param index index of required item.

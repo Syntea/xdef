@@ -486,12 +486,18 @@ public final class DefContainer extends XDValueAbstract
 
 	@Override
 	/** Set item at position given by index.
+	 * @param index index of item item. If index is out of range of items this
+	 * method does nothing.
 	 * @param value of item.
+	 * @return original value or null;
 	 */
-	public void replaceXDItem(final int index, XDValue value) {
+	public XDValue replaceXDItem(final int index, final XDValue value) {
 		if (_value != null && index >= 0 && index < _value.length) {
+			XDValue result = _value[index];
 			_value[index] = value;
+			return result;
 		}
+		return null;
 	}
 
 	@Override

@@ -8,7 +8,7 @@
 	
 	<groupId>org.xdef</groupId>
 	<artifactId>xdef</artifactId>
-	<version>32.2.1</version><!-- when changed, change also ./properties/release.date, see below -->
+	<version>32.3.1</version><!-- when changed, change also ./properties/release.date, see below -->
 	<packaging>jar</packaging>
 	
 	<name>xdef</name>
@@ -16,7 +16,7 @@
 	<description>X-Definitions 3.2 (Open Source Software)</description>
 	
 	<properties>
-		<release.date>2019-02-25</release.date><!-- update when changed version -->
+		<release.date>2019-03-04</release.date><!-- update when changed version -->
 		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		

@@ -864,6 +864,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_INT), "removeItem");
 		method(ti, genInternalMethod(REMOVE_NAMEDVALUE, XD_VOID,
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "removeNamedItem");
+		method(ti, genInternalMethod(CONTEXT_REPLACEITEM, XD_ANY,
+			ANY_MODE, 3, 3, XD_CONTAINER, XD_INT, XD_ANY), "replaceItem");
 		method(ti, genInternalMethod(SET_NAMEDVALUE, XD_VOID,
 			ANY_MODE, 2, 3, XD_CONTAINER,XD_ANY,XD_ANY),"setNamedItem");
 		method(ti, genInternalMethod(CONTEXT_SORT, XD_CONTAINER,

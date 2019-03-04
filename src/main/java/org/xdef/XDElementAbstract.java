@@ -305,7 +305,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		throw new UnsupportedOperationException("Not supported.");
 	}
 	@Override
-	public void replaceXDItem(final int index, XDValue value) {
+	public XDValue replaceXDItem(final int index, XDValue value) {
 		throw new UnsupportedOperationException("Not supported.");
 	}
 	@Override
