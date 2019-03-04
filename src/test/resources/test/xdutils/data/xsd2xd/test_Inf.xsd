@@ -3,12 +3,12 @@
   <xs:element name="a">
     <xs:complexType>
       <xs:attribute name="a" use="optional">
-              <xs:simpleType>
-                <xs:restriction base="xs:double">
-		<xs:minInclusive value="-INF"/>
-		<xs:maxExclusive value="INF"/>
-                </xs:restriction>
-              </xs:simpleType>
+        <xs:simpleType>
+          <xs:restriction base="xs:double">
+		    <xs:minInclusive value="-INF"/>
+		    <xs:maxExclusive value="INF"/>
+          </xs:restriction>
+        </xs:simpleType>
      </xs:attribute>
     </xs:complexType>
   </xs:element>

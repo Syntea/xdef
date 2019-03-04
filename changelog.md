@@ -1,6 +1,11 @@
+# Version 32.3.0, release-date 2019-03-04
+- to the X-script added method
+    XDValue replaceItem(int index, XDValue value)
+  This method is member of the Container objects.
+
 # Version 32.2.1, release-date 2019-02-25
-- corrected X-component bug when the prefix of the attribute namespace differs
-  frm the prefix in the model. The method toXml() returns not then correct
+- fixed X-component bug when the prefix of the attribute namespace differs
+  from the prefix in the model. The method toXml() returns not then correct
   result.
 - Now is available the technology of X-lexicon (see the document
   xdef-32_Lexicon.pdf).
