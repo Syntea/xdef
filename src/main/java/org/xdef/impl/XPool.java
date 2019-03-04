@@ -1453,5 +1453,5 @@ public final class XPool implements XDPool, Serializable {
 		XPool xp = new XPool();
 		xp.xpRead(input);
 		return xp;
-	}	
+	}
 }
