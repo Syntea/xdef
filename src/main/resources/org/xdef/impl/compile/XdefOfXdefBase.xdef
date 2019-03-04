@@ -13,7 +13,7 @@
                      | Ver3.1#XD3.1:thesaurus
                      | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection 
 					 | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component 
-                     | Ver3.2#XD3.2:thesaurus" >
+                     | Ver3.2#XD3.2:lexicon" >
 
 <xd:declaration>
   /* Default namespace of XDefinition */
@@ -42,7 +42,7 @@
   type xcomponent XDScript.rule('XCComponent');
   type languageId XDScript.rule('LanguageId');
   type yesNo XDScript.rule('YesNo');
-  type thesaurus XDScript.rule('Thesaurus');
+  type thesaurus XDScript.rule('Lexicon');
 
   /** Check element name and namespace URI (used in the match section) */
   boolean xdName(String name) {
@@ -100,7 +100,7 @@ PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
   "$PI" |"$E" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY" | "null") $rule
 
 Identifier ::= BaseIdentifier - Keyword
-  /* Identifier ::= (BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
+  /* Identifier ::= BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
 
 LanguageId ::= [a-z] {2,3}
 
@@ -248,7 +248,7 @@ KeyParameterReference ::= KeyName
 Method ::= (SchemaTypeName | (QualifiedIdentifier - Keyword)) $rule
   S? ParameterList?
 
-SchemaTypeName ::= "xs:" Identifier
+SchemaTypeName ::= "xs:" Identifier /* prefix “xs:” is deprecated */
 
 incAfter ::= ("++" | "--") S? $rule VariableReference
 incBefore ::= VariableReference S? ("++" | "--") S? $rule
@@ -438,8 +438,16 @@ ValueValidationSection ::= FixedModifier (Expression | Block)
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */
 
-ValidationExpression ::= Expression
+ValidationExpression ::= ValidationMethod | Expression
   /* Result of ValidationExpression must be a boolean or ParseResult type. */
+
+ValidationMethod ::= SchemaValidationMethod | XDValidationMethod
+
+SchemaValidationMethod ::= ParseMethod
+
+XDValidationMethod ::= ParseMethod
+
+ParseMethod ::= Method
 
 TypeMethodName ::= Identifier
 
@@ -660,7 +668,7 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
 
 XCLink ::= "%link" S ("*" | XPosition)
 
-Thesaurus ::= (S? $rule XPosition S? "=" S? XMLName)* S?
+Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
 ]]>
   </xd:BNFGrammar>

@@ -56,21 +56,20 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfA());
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "X#Y/$text", a, get$value(), _$$value);
     org.xdef.component.XComponentUtil.addXC(a, getB());
-    return XD_List = a;
+    return a;
   }
   public X1() {}
   public X1(org.xdef.component.XComponent p,
@@ -103,7 +102,6 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="X#Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -181,7 +179,7 @@ public static class A implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getV() != null)
-      el.setAttribute("V", getV());
+      el.setAttribute(XD_Name_V, getV());
     return el;
   }
   @Override
@@ -207,6 +205,7 @@ public static class A implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_V="V";
   private String _V;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -221,6 +220,7 @@ public static class A implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_V = xx.getNodeName();
     setV(parseResult.getParsedValue().stringValue());
   }
   @Override

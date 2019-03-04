@@ -105,19 +105,19 @@ public class Z2 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getKodUtvaruPolicie() != null)
-      el.setAttribute("KodUtvaruPolicie", getKodUtvaruPolicie());
+      el.setAttribute(XD_Name_KodUtvaruPolicie, getKodUtvaruPolicie());
     if (getRokDN() != null)
-      el.setAttribute("RokDN", getRokDN().formatDate("yyyy"));
+      el.setAttribute(XD_Name_RokDN, getRokDN().formatDate("yyyy"));
     if (getCisloDN() != null)
-      el.setAttribute("CisloDN", getCisloDN());
+      el.setAttribute(XD_Name_CisloDN, getCisloDN());
     if (getCisloJednaciDN() != null)
-      el.setAttribute("CisloJednaciDN", getCisloJednaciDN());
+      el.setAttribute(XD_Name_CisloJednaciDN, getCisloJednaciDN());
     if (getDatumCasOznameni() != null)
-      el.setAttribute("DatumCasOznameni", getDatumCasOznameni().formatDate("d.M.yyyy H:mm"));
+      el.setAttribute(XD_Name_DatumCasOznameni, getDatumCasOznameni().formatDate("d.M.yyyy H:mm"));
     if (getNazevDN() != null)
-      el.setAttribute("NazevDN", getNazevDN());
+      el.setAttribute(XD_Name_NazevDN, getNazevDN());
     if (getZpracovatel() != null)
-      el.setAttribute("Zpracovatel", getZpracovatel());
+      el.setAttribute(XD_Name_Zpracovatel, getZpracovatel());
     return el;
   }
   @Override
@@ -143,12 +143,19 @@ public class Z2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_KodUtvaruPolicie="KodUtvaruPolicie";
   private String _KodUtvaruPolicie;
+  private String XD_Name_RokDN="RokDN";
   private org.xdef.sys.SDatetime _RokDN;
+  private String XD_Name_CisloDN="CisloDN";
   private String _CisloDN;
+  private String XD_Name_CisloJednaciDN="CisloJednaciDN";
   private String _CisloJednaciDN;
+  private String XD_Name_DatumCasOznameni="DatumCasOznameni";
   private org.xdef.sys.SDatetime _DatumCasOznameni;
+  private String XD_Name_NazevDN="NazevDN";
   private String _NazevDN;
+  private String XD_Name_Zpracovatel="Zpracovatel";
   private String _Zpracovatel;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -163,19 +170,28 @@ public class Z2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDN"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
+      XD_Name_CisloDN = xx.getNodeName();
       setCisloDN(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
+      XD_Name_CisloJednaciDN = xx.getNodeName();
       setCisloJednaciDN(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
+      XD_Name_DatumCasOznameni = xx.getNodeName();
       setDatumCasOznameni(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
+      XD_Name_KodUtvaruPolicie = xx.getNodeName();
       setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@NazevDN"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
+      XD_Name_NazevDN = xx.getNodeName();
       setNazevDN(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@RokDN"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@RokDN")) {
+      XD_Name_RokDN = xx.getNodeName();
       setRokDN(parseResult.getParsedValue().datetimeValue());
-    else setZpracovatel(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Zpracovatel = xx.getNodeName();
+      setZpracovatel(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

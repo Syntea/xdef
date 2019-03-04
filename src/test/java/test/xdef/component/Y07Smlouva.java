@@ -53,19 +53,18 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getIdFlow() != null)
-      el.setAttribute("IdFlow", String.valueOf(getIdFlow()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_IdFlow, String.valueOf(getIdFlow()));
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getControlId());
     org.xdef.component.XComponentUtil.addXC(a, getDomain());
-    return XD_List = a;
+    return a;
   }
   public Y07Smlouva() {}
   public Y07Smlouva(org.xdef.component.XComponent p,
@@ -87,6 +86,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_IdFlow="IdFlow";
   private Integer _IdFlow;
   private Y07Smlouva.Domain _Domain;
   private org.xdef.component.XComponent XD_Parent;
@@ -96,7 +96,6 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y07#Smlouva";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -104,6 +103,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_IdFlow = xx.getNodeName();
     setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
@@ -176,9 +176,9 @@ public static class Domain implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getOne() != null)
-      el.setAttribute("One", getOne());
+      el.setAttribute(XD_Name_One, getOne());
     if (getTwo() != null)
-      el.setAttribute("Two", getTwo());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override
@@ -204,7 +204,9 @@ public static class Domain implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_One="One";
   private String _One;
+  private String XD_Name_Two="Two";
   private String _Two;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -219,9 +221,13 @@ public static class Domain implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = xx.getNodeName();
       setOne(parseResult.getParsedValue().stringValue());
-    else setTwo(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Two = xx.getNodeName();
+      setTwo(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

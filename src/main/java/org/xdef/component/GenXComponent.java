@@ -16,6 +16,7 @@ import org.xdef.model.XMNode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public final class GenXComponent {
 	private byte byteArrayEncoding = 0;
 	/** Switch to generate JavaDoc. */
 	private boolean _genJavadoc = false;
-	/** Swith to generate JAXB annotations. */
+	/** Switch to generate JAXB annotations. */
 	private boolean _jaxb = false;
 	/** Builder to generate interface or null. */
 	private StringBuilder _interface = null; // where to create interface.
@@ -195,8 +196,7 @@ public final class GenXComponent {
 			}
 			// now we remove leading "%" (i.e. recerence flag)
 			return enumName.indexOf('%') == 0
-				? enumName.substring(1) // is reference
-				: enumName;
+				? /* is reference */ enumName.substring(1) : enumName;
 		}
 		return null;
 	}
@@ -315,6 +315,18 @@ public final class GenXComponent {
 		final String descr,
 		final StringBuilder sb) {
 		genVariableFromModel(getJavaObjectTypeName(xdata),name,max,descr,sb);
+	}
+
+	/** Generate declaration of variable of attribute name.
+	 * @param name name of variable.
+	 * @param sb String builder where the code is generated.
+	 */
+	private void genAttrNameVariable(final String name,
+		final StringBuilder sb) {
+		sb.append(modify(
+(_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+NL : "") +
+"\tprivate String XD_Name_&{name}=\"&{name}\";"+NL,
+			"&{name}", name));
 	}
 
 	/** Generate declaration of variable as Java object from child element.
@@ -547,24 +559,24 @@ public final class GenXComponent {
 		if (max > 1) {
 			d += 's';
 			if (modelName != null) {
-				x =NL+
-"\t\tif (x!=null) {"+NL+
-"\t\t\t\tif (x.xGetXPos()==null)"+NL+
-"\t\t\t\t\tx.xInit(this, \""+modelName+"\", ";
-				x += modelURI != null ? "\"" + modelURI + "\"" : "null";
-				x += ", \"" + modelXDPos + "\");"+NL;
-				x += "\t\t\t_&{name}.add(x);"+NL+"\t\t}"+NL+NL+'\t';
+				x = NL +
+"\t\tif (x!=null) {"+NL +
+"\t\t\t\tif (x.xGetXPos()==null)"+NL +
+"\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
+				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ ", \"" + modelXDPos + "\");"+NL
+				+ "\t\t\t_&{name}.add(x);"+NL+"\t\t}"+NL+NL+'\t';
 			} else {
 				x = NL+"\t\tif (x!=null) _&{name}.add(x);"+NL+'\t';
 			}
 		} else {
 			if (modelName != null) {
-				x =NL+
-"\t\tif (x!=null && x.xGetXPos() == null)"+NL+
-"\t\t\tx.xInit(this, \""+modelName+"\", ";
-				x += modelURI != null ? "\"" + modelURI + "\"" : "null";
-				x += ", \"" + modelXDPos + "\");"+NL;
-				x += "\t\t_&{name} = x;"+NL+"\t";
+				x = NL +
+"\t\tif (x!=null && x.xGetXPos() == null)"+NL +
+"\t\t\tx.xInit(this, \""+modelName+"\", "
+				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ ", \"" + modelXDPos + "\");"+NL
+				+ "\t\t_&{name} = x;"+NL+"\t";
 			} else {
 				x = "_&{name} = x;";
 			}
@@ -756,7 +768,8 @@ public final class GenXComponent {
 		final String name,
 		final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
-		final String fn = uri!=null? "AttributeNS(\""+uri+"\", " : "Attribute(";
+		final String fn =
+			uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		final String qName = xdata.getName();
 		String x;
 		switch (xdata.getParserType()) {
@@ -787,10 +800,10 @@ public final class GenXComponent {
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+NL+
-"\t\t\tel.set&{fn}\"&{qName}\", &{x};"+NL,
+"\t\t\tel.set&{fn}&{qName}, &{x};"+NL,
 			"&{x}", x,
 			"&{fn}", fn,
-			"&{qName}", qName,
+			"&{qName}", "XD_Name_" + name,
 			"&{name}", name));
 	}
 
@@ -804,7 +817,7 @@ public final class GenXComponent {
 		final boolean isList) {
 		if (sb.length() == 0) {
 			sb.append(
-"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a =")
+"\t\tjava.util.List<org.xdef.component.XComponent> a =")
 			.append(NL).append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
 			.append(NL);
@@ -1181,6 +1194,7 @@ public final class GenXComponent {
 				name = javaName(xdata.getName());
 			}
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
+			genAttrNameVariable(name, vars);
 			if (!ext) {
 				genBaseVariable(xdata, name, 1, "attribute", vars);
 				genBaseGetterMethod(xdata, name, 1, "attribute", getters, isb);
@@ -1213,7 +1227,6 @@ public final class GenXComponent {
 			creators.append(s);
 		}
 		final XMNode[] nodes = xe.getChildNodeModels();
-		int ix = 0;
 		final Map<String, String> xctab = new TreeMap<String, String>();
 		final Map<String, String> txttab = new TreeMap<String, String>();
 		int groupMax = 1;
@@ -1276,7 +1289,6 @@ public final class GenXComponent {
 					final boolean xunique = checkUnique(nodes, i);
 					name = "$value"; // name of text value
 					if (!xunique) {
-						ix = ix == 0 ? 1 : (ix += ix);
 						if (txtcount > 0) {
 							name += String.valueOf(txtcount);
 						}
@@ -1413,9 +1425,6 @@ public final class GenXComponent {
 					}
 				}
 				varNames.add(iname);
-				if (!xunique) {
-					ix = ix == 0 ? 1 : (ix += ix);
-				}
 				String typeName;
 				if (xcClass != null) {
 					typeName = xcClass;
@@ -1540,9 +1549,8 @@ public final class GenXComponent {
 "\t\t}"+NL+ creators;
 			if (genNodeList.length() > 0) {
 				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
-					" XD_List==null?xGetNodeList():XD_List)"+NL+
-"\t\t\tel.appendChild(x.toXml(doc));"+NL+
-"\t\tXD_List = null;"+NL;
+					" xGetNodeList())"+NL+
+"\t\t\tel.appendChild(x.toXml(doc));"+NL;
 			}
 			toXml += "\t\treturn el;"+NL+"\t}"+NL;
 		}
@@ -1667,7 +1675,7 @@ public final class GenXComponent {
 "\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();}"
 				+NL;
 		} else {
-			result += genNodeList + "\t\treturn XD_List = a;"+NL+"\t}"+NL;
+			result += genNodeList + "\t\treturn a;"+NL+"\t}"+NL;
 		}
 		if (isRoot) {
 			if ((byteArrayEncoding & 1) != 0) { //base64
@@ -1770,9 +1778,6 @@ String digest = xe.getDigest();
 "\tprivate int XD_ndx;"+NL) +
 (_genJavadoc ? "\t/** Node xpos.*/"+NL : "") +
 "\tprivate String XD_XPos;"+NL+
-(genNodeList.length() == 0 ? "" :
-(_genJavadoc ? "\t/** List of XComponents used to create XML.*/"+NL : "") +
-"\tprivate java.util.List<org.xdef.component.XComponent> XD_List;"+NL) +
 (_genJavadoc ? "\t/** Node XD position.*/"+NL : "") +
 "\tprivate String XD_Model=\""+xe.getXDPosition()+"\";"+NL+
 ("$any".equals(xe.getName()) || "*".equals(xe.getName()) ?
@@ -1809,24 +1814,18 @@ String digest = xe.getDigest();
 "\t\torg.xdef.XDParseResult parseResult) {"+NL;
 			String s = "";
 			for(Entry<String, String> e: txttab.entrySet()) {
-				if (s.length() == 0) {
-					s = "\t\t";
-				} else {
-					s += "\t\t} else ";
-				}
-				s +=
-"if (\"" + e.getKey() + "\".equals(xx.getXMNode().getXDPosition())) {"+NL;
+				s += (s.length() == 0 ? "\t\t" : "\t\t} else ")
+					+ "if (\"" + e.getKey()
+					+ "\".equals(xx.getXMNode().getXDPosition())) {"+NL;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				String name = val.substring(ndx + 1);
 				String getter = val.substring(2, ndx);
-				if (val.startsWith("1")) {
-					s += "\t\t\t_$"+name+"=(char) XD_ndx++;"+NL+
-						"\t\t\tset" + name +"("+getter+");"+NL;
-				} else {
-					s += "\t\t\t_$"+name+".append((char) XD_ndx++);"+NL+
-					"\t\t\tget" + name + "().add("+getter+");"+NL;
-				}
+				s += (val.startsWith("1")
+					? "\t\t\t_$"+name+"=(char) XD_ndx++;"+NL+"\t\t\tset" + name
+					: "\t\t\t_$"+name+".append((char) XD_ndx++);"+NL+
+						"\t\t\tget" + name + "().add")
+					+ "("+getter+");"+NL;
 			}
 			result += s + "\t\t}"+NL+"\t}"+NL;
 		}
@@ -1847,6 +1846,7 @@ String digest = xe.getDigest();
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+NL+
 "\t\torg.xdef.XDParseResult parseResult) {"+NL+
+"\t\tXD_Name_"+val.substring(ndx + 1)+ " = xx.getNodeName();"+NL+
 "\t\tset"+val.substring(ndx + 1)+"(" + getter + ");"+NL+"\t}"+NL;
 		} else {
 			result +=
@@ -1856,25 +1856,21 @@ String digest = xe.getDigest();
 			for (Iterator<Entry<String, String>>i=atttab.entrySet().iterator();
 				i.hasNext();){
 				Entry<String, String> e = i.next();
-				if (s.length() == 0) {
-					s = "\t\t";
-				} else {
-					s += "\t\telse ";
-				}
+				s += s.length() == 0 ? "\t\t" : " else ";
 				String key = e.getKey();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
-				if (i.hasNext()) {
-					s +=
-"if (xx.getXMNode().getXDPosition().endsWith(\"" + key + "\"))"+NL+"\t\t\t";
-				}
+				s += (i.hasNext() 
+? "if (xx.getXMNode().getXDPosition().endsWith(\""+key+"\")) {" : "{") + NL;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
-				s += "set" + val.substring(ndx + 1);
+				s += "\t\t\tXD_Name_" + val.substring(ndx + 1)
+					+ " = xx.getNodeName();" + NL;
+				s += "\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
-				s+= "("+getter+");"+NL;
+				s+= "("+getter+");"+NL+"\t\t}";
 			}
-			result += s + "\t}"+NL;
+			result += s+NL+"\t}"+NL;
 		}
 		result +=
 "\t@Override"+NL+
@@ -1891,11 +1887,8 @@ String digest = xe.getDigest();
 		} else if (xctab.size() == 1) {
 			Entry<String, String> e = xctab.entrySet().iterator().next();
 			String s = e.getValue().replace('#', '.');
-			if (s.length() == 0) {
-				s = "this";
-			} else {
-				s = "new " + s.substring(s.indexOf(";") + 1) +"(this, xx)";
-			}
+			s = s.length() != 0
+				? "new "+s.substring(s.indexOf(";") + 1)+"(this, xx)" : "this";
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
 				"org.xdef.proc.XXNode xx)"+NL+
@@ -1914,15 +1907,14 @@ String digest = xe.getDigest();
 				if (s.length() == 0) {
 					dflt = true;
 				} else {
-					if (i.hasNext() || dflt) {
-						result+="\t\tif (\""+e.getKey()+
-							"\".equals(s))"+NL+"\t\t\treturn new " +
-							s.substring(s.indexOf(";") + 1) + "(this, xx);"+NL;
-					} else {
-						result+="\t\treturn new " +
-							s.substring(s.indexOf(";") + 1) + "(this, xx); // "+
-							e.getKey()+NL;
-					}
+					result += ((i.hasNext() || dflt)
+						? "\t\tif (\""+e.getKey()
+							+ "\".equals(s))"+NL+"\t\t\treturn new "
+							+ s.substring(s.indexOf(";") + 1)+"(this, xx);"
+						: ("\t\treturn new "
+							+ s.substring(s.indexOf(";") + 1)+"(this, xx); // "
+							+ e.getKey()))
+						+ NL;
 				}
 			}
 			result += (dflt ? "\t\treturn " + dflt + ';'+NL : "") + "\t}"+NL;
@@ -2363,10 +2355,8 @@ String digest = xe.getDigest();
 "Parameters:"+NL+
 " -i X-definitions list of files, required. Wildcards may be used. Required.\n"+
 " -o Output directory where XComponents are generated, required\n"+
-" -p Output directory where source class with XDPool will be generated,\n"+
-"    optional (if not specified, -o is used instead)"+NL+
-" -x Qualified name of class with XDPool which source will be generated,\n"+
-"    optional (if not specified, source is not generated)\n"+
+" -p Output directory where the compiled XDPool will be stored,\n"+
+"    optional (if not specified the XDPool object is not stored)"+NL+
 " -e Encoding name, optional (default is the Java system encoding)\n"+
 " -d Generate JavaDoc, optional (default is not generate JavaDoc)\n"+
 " -j Generate JAXB annotations, optional (default is not generate JAXB)\n"+
@@ -2385,11 +2375,10 @@ String digest = xe.getDigest();
 		}
 		ArrayList<String> sources = new ArrayList<String>();
 		File xcDir = null; // base directory where XComponents will be generated
-		File xpDir = null; // directory where generate XDPool class
+		FileOutputStream xpFile = null; // the file where save compiled XDPool
 		String encoding = null;
 		boolean javadoc = false;
 		boolean jaxb = false;
-		String xpClassName = null;
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
@@ -2457,39 +2446,30 @@ String digest = xe.getDigest();
 						throw new RuntimeException(
 							"Parameter '-o' is not output directory.\n" + info);
 					}
-				case 'p': // Output directory where source class with XDPool
-					if (xpDir != null) {
+				case 'p': // where to write the XDPool
+					if (xpFile != null) {
 						throw new RuntimeException(
 							"Redefinition of key \"-p\"\n" + info);
 					}
 					if (++i < args.length && (arg = args[i]) != null &&
 						!arg.startsWith("-")) {
+						File f = new File(arg);
+						if (f.exists() && f.isDirectory()) {
+							throw new RuntimeException(
+								"The key \"-p\" must be file\n" + info);
+						}
 						try {
-							xpDir = new File(arg);
-							if (xpDir.exists() && xpDir.isDirectory()) {
-								i++;
-								continue;
-							}
-						} catch (Exception ex) {}
-						throw new RuntimeException(
-							"Parameter '-p' is not output directory.\n" + info);
+							i++;
+							xpFile = new FileOutputStream(f);
+							continue;
+						} catch (Exception ex) {
+							throw new RuntimeException(
+								"Can't write to the file from tne key \"-p\"\n"
+									+ info, ex);
+						}
 					} else {
 						throw new RuntimeException(
-							"Parameter '-p' is not output directory\n" + info);
-					}
-				case 'x': //Qualified name of generated class with XDPool
-					if (xpClassName != null) {
-						throw new RuntimeException(
-							"Redefinition of key \"-x\"\n" + info);
-					}
-					if (++i < args.length && (arg = args[i]) != null &&
-						!arg.startsWith("-")) {
-						xpClassName = arg;
-						i++;
-						continue;
-					} else {
-						throw new RuntimeException(
-							"Parameter '-x' is is not a class name\n" + info);
+							"Parameter '-p' is not file\n" + info);
 					}
 				default:
 					throw new RuntimeException("Incorrect parameter \""
@@ -2500,7 +2480,7 @@ String digest = xe.getDigest();
 			throw new RuntimeException(
 				"No XDPool source is specified.\n" + info);
 		}
-		if (xcDir == null && xpDir == null) {
+		if (xcDir == null) {
 			throw new RuntimeException(
 				"No output directory specified.\n" + info);
 		}
@@ -2508,16 +2488,12 @@ String digest = xe.getDigest();
 			Object[] xdefs = new String[sources.size()];
 			sources.toArray(xdefs);
 			XDPool xp = XDFactory.compileXD(null, xdefs);
-			if (xpClassName != null) {
-				if (xpDir == null) {
-					xpDir = xcDir;
-				}
-				XDFactory.genXDPoolClass(xp,
-					xpDir.getAbsolutePath(), xpClassName, encoding);
-			}
-			if (xcDir != null) {
-				genXComponent(xp,
-					xcDir.getAbsolutePath(), encoding, javadoc, jaxb, false);
+			genXComponent(xp,
+				xcDir.getAbsolutePath(), encoding, javadoc, jaxb, false);
+			if (xpFile != null) {
+				ObjectOutputStream oos = new ObjectOutputStream(xpFile);
+				oos.writeObject(xp);
+				oos.close();
 			}
 		} catch (RuntimeException ex) {
 			throw ex;

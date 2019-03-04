@@ -3,11 +3,8 @@ package test.xdef;
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.util.gencollection.XDGenCollection;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import org.w3c.dom.Element;
 
@@ -15,16 +12,28 @@ import org.w3c.dom.Element;
  * @author Vaclav Trojan
  */
 public final class TestXdefOfXdef extends XDTester {
-	private static XDPool XP;
+	
+	private final XDPool _xp;
 
 	public TestXdefOfXdef() {
 		super();
 		setChkSyntax(false); // here it MUST be false!
+		URL[] sources = new URL[] {
+			ClassLoader.getSystemResource(
+				"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
+			ClassLoader.getSystemResource(
+				"org/xdef/impl/compile/XdefOfXdef20.xdef"),
+			ClassLoader.getSystemResource(
+				"org/xdef/impl/compile/XdefOfXdef31.xdef"),
+			ClassLoader.getSystemResource(
+				"org/xdef/impl/compile/XdefOfXdef32.xdef"),
+		};
+		_xp = compile(sources);
 	}
 
 	final public ArrayReporter parse(final String xml) {
 		ArrayReporter reporter = new ArrayReporter();
-		XP.createXDDocument().xparse(xml, reporter);
+		_xp.createXDDocument().xparse(xml, reporter);
 		return reporter;
 	}
 
@@ -46,30 +55,7 @@ public final class TestXdefOfXdef extends XDTester {
 	public void test() {
 		String xml;
 		final String dataDir = getDataDir() + "test/";
-		try { //check xdefinition of xdefinitions
-			if (XP == null) {
-				URL[] sources = new URL[] {
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef32.xdef"),
-				};
-				XP = compile(sources);
-				ByteArrayOutputStream out;
-				try {
-					out = new ByteArrayOutputStream();
-					XP.writeXDPool(out);
-					XP = XDFactory.readXDPool(
-						new ByteArrayInputStream(out.toByteArray()));
-				} catch (Exception ex) {
-					throw new RuntimeException("Error when serialized", ex);
-				}
-			}
-			
+		try { //check xdefinition of xdefinitions		
 			xml = genCollection(new String[] {
 "<xd:declaration xmlns:xd='" + _xdNS + "'>\n" +
 "  <xd:macro name='a'>'aaa'</xd:macro>\n"+

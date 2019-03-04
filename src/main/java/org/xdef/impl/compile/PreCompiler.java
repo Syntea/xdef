@@ -66,10 +66,10 @@ public interface PreCompiler {
 	 */
 	public List<PNode> getPXDefs();
 
-	/** Get precompiled sources (PNodes) of Thesaurus items.
+	/** Get precompiled sources (PNodes) of Lexicon items.
 	 * @return array with PNodes.
 	 */
-	public List<PNode> getPThesaurusList();
+	public List<PNode> getPLexiconList();
 
 	/** Get precompiled sources (PNodes) of collection items.
 	 * @return array with PNodes.

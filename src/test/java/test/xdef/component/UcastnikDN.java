@@ -138,35 +138,34 @@ public class UcastnikDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getTypUcastnika() != null)
-      el.setAttribute("TypUcastnika", getTypUcastnika());
+      el.setAttribute(XD_Name_TypUcastnika, getTypUcastnika());
     if (getPraxeRizeni() != null)
-      el.setAttribute("PraxeRizeni", String.valueOf(getPraxeRizeni()));
+      el.setAttribute(XD_Name_PraxeRizeni, String.valueOf(getPraxeRizeni()));
     if (getAlkoholDech() != null)
-      el.setAttribute("AlkoholDech", getAlkoholDech());
+      el.setAttribute(XD_Name_AlkoholDech, getAlkoholDech());
     if (getAlkoholKrev() != null)
-      el.setAttribute("AlkoholKrev", getAlkoholKrev());
+      el.setAttribute(XD_Name_AlkoholKrev, getAlkoholKrev());
     if (getZraneni() != null)
-      el.setAttribute("Zraneni", getZraneni());
+      el.setAttribute(XD_Name_Zraneni, getZraneni());
     if (getZdravPojistovna() != null)
-      el.setAttribute("ZdravPojistovna", getZdravPojistovna());
+      el.setAttribute(XD_Name_ZdravPojistovna, getZdravPojistovna());
     if (getPokutaKc() != null)
-      el.setAttribute("PokutaKc", String.valueOf(getPokutaKc()));
+      el.setAttribute(XD_Name_PokutaKc, String.valueOf(getPokutaKc()));
     if (getPokutaZapl() != null)
-      el.setAttribute("PokutaZapl", getPokutaZapl());
+      el.setAttribute(XD_Name_PokutaZapl, getPokutaZapl());
     if (getPachatel() != null)
-      el.setAttribute("Pachatel", getPachatel());
+      el.setAttribute(XD_Name_Pachatel, getPachatel());
     if (getPoskozeny() != null)
-      el.setAttribute("Poskozeny", getPoskozeny());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Poskozeny, getPoskozeny());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getOsoba());
@@ -177,7 +176,7 @@ public class UcastnikDN implements org.xdef.component.XComponent{
     org.xdef.component.XComponentUtil.addXC(a, getPoruseniZakTrest());
     org.xdef.component.XComponentUtil.addXC(a, getPoruseniZakOst());
     org.xdef.component.XComponentUtil.addXC(a, getVazba());
-    return XD_List = a;
+    return a;
   }
   public UcastnikDN() {}
   public UcastnikDN(org.xdef.component.XComponent p,
@@ -199,16 +198,27 @@ public class UcastnikDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_TypUcastnika="TypUcastnika";
   private String _TypUcastnika;
+  private String XD_Name_PraxeRizeni="PraxeRizeni";
   private Integer _PraxeRizeni;
+  private String XD_Name_AlkoholDech="AlkoholDech";
   private String _AlkoholDech;
+  private String XD_Name_AlkoholKrev="AlkoholKrev";
   private String _AlkoholKrev;
+  private String XD_Name_Zraneni="Zraneni";
   private String _Zraneni;
+  private String XD_Name_ZdravPojistovna="ZdravPojistovna";
   private String _ZdravPojistovna;
+  private String XD_Name_PokutaKc="PokutaKc";
   private Integer _PokutaKc;
+  private String XD_Name_PokutaZapl="PokutaZapl";
   private String _PokutaZapl;
+  private String XD_Name_Pachatel="Pachatel";
   private String _Pachatel;
+  private String XD_Name_Poskozeny="Poskozeny";
   private String _Poskozeny;
   private Z3 _JinaSkoda;
   private Z4 _Osoba;
@@ -226,7 +236,6 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -234,27 +243,40 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholDech"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholDech")) {
+      XD_Name_AlkoholDech = xx.getNodeName();
       setAlkoholDech(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholKrev"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@AlkoholKrev")) {
+      XD_Name_AlkoholKrev = xx.getNodeName();
       setAlkoholKrev(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Pachatel"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
+      XD_Name_Pachatel = xx.getNodeName();
       setPachatel(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaKc"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaKc")) {
+      XD_Name_PokutaKc = xx.getNodeName();
       setPokutaKc(parseResult.getParsedValue().intValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaZapl"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PokutaZapl")) {
+      XD_Name_PokutaZapl = xx.getNodeName();
       setPokutaZapl(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Poskozeny"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Poskozeny")) {
+      XD_Name_Poskozeny = xx.getNodeName();
       setPoskozeny(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PraxeRizeni"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
+      XD_Name_PraxeRizeni = xx.getNodeName();
       setPraxeRizeni(parseResult.getParsedValue().intValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@TypUcastnika"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
+      XD_Name_TypUcastnika = xx.getNodeName();
       setTypUcastnika(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
+      XD_Name_ZdravPojistovna = xx.getNodeName();
       setZdravPojistovna(parseResult.getParsedValue().stringValue());
-    else setZraneni(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Zraneni = xx.getNodeName();
+      setZraneni(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -350,9 +372,8 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -362,7 +383,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakProvoz() {}
   public PoruseniZakProvoz(org.xdef.component.XComponent p,
@@ -393,7 +414,6 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -460,9 +480,8 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -472,7 +491,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakPrest() {}
   public PoruseniZakPrest(org.xdef.component.XComponent p,
@@ -503,7 +522,6 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -570,9 +588,8 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -582,7 +599,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakTrest() {}
   public PoruseniZakTrest(org.xdef.component.XComponent p,
@@ -613,7 +630,6 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -680,9 +696,8 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -692,7 +707,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public PoruseniZakOst() {}
   public PoruseniZakOst(org.xdef.component.XComponent p,
@@ -723,7 +738,6 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/PoruseniZakOst";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -790,9 +804,8 @@ public static class Vazba implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -802,7 +815,7 @@ public static class Vazba implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Vazba() {}
   public Vazba(org.xdef.component.XComponent p,
@@ -833,7 +846,6 @@ public static class Vazba implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#UcastnikDN/$mixed/Vazba";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

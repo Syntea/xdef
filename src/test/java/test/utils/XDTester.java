@@ -35,6 +35,10 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
 
 /** Support of tests.
@@ -1066,6 +1070,65 @@ public abstract class XDTester extends STester {
 			reporter.clear();
 		}
 		return xd.parseXComponent(el, clazz, reporter);
+	}
+
+	/** Add Java sources to parameter list of the Java compiler.
+	 * @param f the file or directory.
+	 * @param params parameter list of Java compiler.
+	 */
+	private static void addJavaSource(final File f, final List<String> params) {
+		if (f.isDirectory()) {
+			for (File x: f.listFiles()) {
+				addJavaSource(x, params);
+			}
+		} else if (f.getName().endsWith(".java")) {
+			params.add(f.getAbsolutePath());
+		}
+	}
+
+	/** Compile sources from parameters and save files to the classes directory
+	 *  of tester.
+	 * @param sources paths of Java sources (may be a file or a directory).
+	 */
+	public static final void compileSources(final String... sources) {
+		// where are compiled classes of X-definitions
+		Class<?> clazz = XDConstants.class;
+		String className = clazz.getName().replace('.', '/') + ".class";
+		URL u = clazz.getClassLoader().getResource(className);
+		String classpath = u.toExternalForm();
+		if (classpath.startsWith("jar:file:") && classpath.indexOf('!') > 0) {
+			classpath = classpath.substring(9,classpath.lastIndexOf('!'));
+			classpath =	new File(classpath).getAbsolutePath().replace('\\','/');
+		} else {
+			classpath =
+				new File(u.getFile()).getAbsolutePath().replace('\\','/');
+			classpath = classpath.substring(0, classpath.indexOf(className));
+		}
+		// where are compiled classes of tests
+		clazz = XDTester.class;
+		className = clazz.getName().replace('.', '/') + ".class";
+		u = clazz.getClassLoader().getResource(className);
+		String classDir =
+			new File(u.getFile()).getAbsolutePath().replace('\\', '/');
+		classDir = classDir.substring(0, classDir.indexOf(className));
+		// prepare parameters
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add("-classpath"); ar.add(classpath+";" + classDir); // classpath
+		ar.add("-d"); ar.add(classDir); // where to write compiled classes
+		ar.add("-source"); ar.add("1.6"); // sources are in version 1.6
+		ar.add("-target"); ar.add("1.6"); // generate classes in version 1.6
+		// source files
+		for (String source: sources) {
+			addJavaSource(new File (source), ar);
+		}
+		// prepare compiler
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ByteArrayOutputStream err = new ByteArrayOutputStream();
+		// compile sources
+		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
+			throw new RuntimeException("Error in  compilation");
+		}
 	}
 
 }

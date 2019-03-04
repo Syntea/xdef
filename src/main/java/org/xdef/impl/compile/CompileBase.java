@@ -864,6 +864,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_INT), "removeItem");
 		method(ti, genInternalMethod(REMOVE_NAMEDVALUE, XD_VOID,
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "removeNamedItem");
+		method(ti, genInternalMethod(CONTEXT_REPLACEITEM, XD_ANY,
+			ANY_MODE, 3, 3, XD_CONTAINER, XD_INT, XD_ANY), "replaceItem");
 		method(ti, genInternalMethod(SET_NAMEDVALUE, XD_VOID,
 			ANY_MODE, 2, 3, XD_CONTAINER,XD_ANY,XD_ANY),"setNamedItem");
 		method(ti, genInternalMethod(CONTEXT_SORT, XD_CONTAINER,
@@ -1738,16 +1740,17 @@ public class CompileBase implements CodeTable, XDValueID {
 
 		final short getCode() {return _code;}
 		final byte getRestrictions() {return _restrictions;}
-		final int getMinParams() {return _minParams;}
-		final int getMaxParams() {return _maxParams;}
-		final String[] getSqParamNames() {return _sqKeynames;}
-		final short[] getParamTypes() {return _paramTypes;}
-		final boolean isDeprecated() {return _recommended != null;}
-		final String getRecommendedName() {return _recommended;}
-		final short getResultType() {return _resultType;}
-		final KeyParam[] getKeyParams() {return _keyparams;}
-		final short getParsedResult() {return _parsedResult;}
-		final XDContainer getFixedParams() {
+		
+		public final int getMinParams() {return _minParams;}
+		public final int getMaxParams() {return _maxParams;}
+		public final String[] getSqParamNames() {return _sqKeynames;}
+		public final short[] getParamTypes() {return _paramTypes;}
+		public final boolean isDeprecated() {return _recommended != null;}
+		public final String getRecommendedName() {return _recommended;}
+		public short getResultType() {return _resultType;}
+		public KeyParam[] getKeyParams() {return _keyparams;}
+		public short getParsedResult() {return _parsedResult;}
+		public XDContainer getFixedParams() {
 			if (_keyparams == null) {
 				return null;
 			}
@@ -1766,7 +1769,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	}
 
 	/** Description of keyword parameter. */
-	final static class KeyParam {
+	public static class KeyParam {
 		private final String _name; //name of parameter
 		private final short _type;  //type of parameter value
 		private final boolean _list; //true if parameter is list of values
@@ -1802,37 +1805,37 @@ public class CompileBase implements CodeTable, XDValueID {
 		/** Get name of parameter.
 		 * @return name of parameter.
 		 */
-		final String getName() {return _name;}
+		public final String getName() {return _name;}
 		/** Get type of parameter value.
 		 * @return type of parameter value.
 		 */
-		final short getType() {return _type;}
+		public final short getType() {return _type;}
 		/** Get default value of parameter.
 		 * @return default value of parameter or <tt>null</tt>.
 		 */
-		final XDValue[] getLegalValues() {return _legalValues;}
+		public final XDValue[] getLegalValues() {return _legalValues;}
 		/** Get default value of parameter.
 		 * @return default value of parameter or <tt>null</tt>.
 		 */
-		final XDValue getDefaultValue() {
+		public final XDValue getDefaultValue() {
 			return _legalValues == null || _legalValues.length == 0 ?
 				null : _legalValues[0];
 		}
 		/** Get parameter index (if specified as sequential).
 		 * @return sequential parameter index or -1.
 		 */
-		final int getSeqIndex() {return _seqIndex;}
+		public final int getSeqIndex() {return _seqIndex;}
 		/** Check if parameter is list of values or a single value.
 		 * @return true if parameter is list of values.
 		 */
-		final boolean isList() {return _list;}
+		public boolean isList() {return _list;}
 		/** Check if parameter value is fixed.
 		 * @return true if parameter value is fixed.
 		 */
-		final boolean isFixed() {return _fixed;}
+		public final boolean isFixed() {return _fixed;}
 		/** Check if parameter value is required.
 		 * @return true if parameter value is required.
 		 */
-		final boolean isRequired() {return _required;}
+		public final boolean isRequired() {return _required;}
 	}
 }

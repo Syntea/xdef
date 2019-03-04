@@ -9,6 +9,8 @@ import org.xdef.util.XsdToXdef;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -110,10 +112,13 @@ public class TestXsd2XdConv extends XDTester {
 			Properties props = new Properties();
 			props.put("xdef.warnings", "true");
 			XDPool xdPool = XDFactory.compileXD(props, xdefFile);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			xdPool.writeXDPool(out);
-			xdPool = XDFactory.readXDPool(
-				new ByteArrayInputStream(out.toByteArray()));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(xdPool);
+			out.close();
+			ObjectInputStream in = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			xdPool = (XDPool) in.readObject();
 			if (!xdPool.exists(testName)) {
 				setMessage(new ErrMessage(
 					"Main XDefinition is missing", xdefFile, null));
@@ -366,6 +371,9 @@ public class TestXsd2XdConv extends XDTester {
 
 		assertTrue(prepare("test_00015"), popMessage());
 		assertTrue(parse("test_00015_data"), popMessage());
+
+		assertTrue(prepare("test_INF"), popMessage());
+		assertTrue(parse("test_INF_valid"), popMessage());
 
 		// my tests
 		assertTrue(prepare("basicTestSchema"), popMessage());

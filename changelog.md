@@ -1,3 +1,10 @@
+# Version 32.2.1, release-date 2019-02-25
+- corrected X-component bug when the prefix of the attribute namespace differs
+  frm the prefix in the model. The method toXml() returns not then correct
+  result.
+- Now is available the technology of X-lexicon (see the document
+  xdef-32_Lexicon.pdf).
+
 # Version 32.1.3, release-date 2019-02-04
 - corrected bug in the construction mode. Te initialization of variables
   in the X-script section "var" in the model of element was not invoked

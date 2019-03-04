@@ -55,9 +55,8 @@ public class Y15 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -71,7 +70,7 @@ public class Y15 implements org.xdef.component.XComponent{
     if (get$value1() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "Y15#a/$text[2]", a, get$value1(), _$$value1);
-    return XD_List = a;
+    return a;
   }
   public Y15() {}
   public Y15(org.xdef.component.XComponent p,
@@ -105,7 +104,6 @@ public class Y15 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y15#a";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

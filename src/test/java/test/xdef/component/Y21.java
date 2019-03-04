@@ -61,10 +61,9 @@ public class Y21 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getb() != null)
-      el.setAttribute("b", getb().name());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_b, getb().name());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -78,7 +77,7 @@ public class Y21 implements org.xdef.component.XComponent{
     if (get$value1() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "Y21#A/$text[2]", a, get$value1().name(), _$$value1);
-    return XD_List = a;
+    return a;
   }
   public Y21() {}
   public Y21(org.xdef.component.XComponent p,
@@ -100,6 +99,7 @@ public class Y21 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_b="b";
   private test.xdef.component.Y21_enum _b;
   private test.xdef.component.Y21_enum _$value;
   private char _$$value= (char) -1;
@@ -113,7 +113,6 @@ public class Y21 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y21#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -129,6 +128,7 @@ public class Y21 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_b = xx.getNodeName();
     setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
@@ -193,10 +193,9 @@ public static class B implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getc() != null)
-      el.setAttribute("c", getc().name());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_c, getc().name());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -206,7 +205,7 @@ public static class B implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "Y21#A/B/$text", a, get$value().name(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public B() {}
   public B(org.xdef.component.XComponent p,
@@ -228,6 +227,7 @@ public static class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_c="c";
   private test.xdef.TestXComponents_Y21enum _c;
   private test.xdef.component.Y21_enum _$value;
   private char _$$value= (char) -1;
@@ -238,7 +238,6 @@ public static class B implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y21#A/B";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -249,6 +248,7 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_c = xx.getNodeName();
     setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override

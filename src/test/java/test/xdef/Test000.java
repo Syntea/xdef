@@ -18,8 +18,6 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -365,13 +363,6 @@ public final class Test000 extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			xp = XDFactory.compileXD(props, xdef);
-			ByteArrayOutputStream xpOut = new ByteArrayOutputStream();
-			xp.writeXDPool(xpOut);
-			xpOut.close();
-			ByteArrayInputStream xpIn =
-				new ByteArrayInputStream(xpOut.toByteArray());
-			xp = XDFactory.readXDPool(xpIn);
-			xpIn.close();
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
@@ -563,13 +554,6 @@ public final class Test000 extends XDTester {
 			xp = xb.compileXD();
 			double duration = (System.nanoTime()- t) / 1000000000.0;
 			String durationInfo = "(compile " + df.format(duration) + "s";
-			ByteArrayOutputStream xpOut = new ByteArrayOutputStream();
-			xp.writeXDPool(xpOut);
-			xpOut.close();
-			ByteArrayInputStream xpIn =
-				new ByteArrayInputStream(xpOut.toByteArray());
-			xp = XDFactory.readXDPool(xpIn);
-			xpIn.close();
 			xd = xp.createXDDocument(defName);
 			FileOutputStream fw = new FileOutputStream(errFile);
 			repw = new FileReportWriter(fw);

@@ -42,7 +42,9 @@ public class BaseType extends Type {
 			_method = new TypeMethod("dec", 'N', new String[0]);
 /*VT1*/
 		} else if ("double".equals(name)) {
-			_method = new TypeMethod("float", 'N', new String[0]);
+/*VT1*/
+			_method = new TypeMethod("double", 'N', new String[0]);
+/*VT1*/
 		} else if ("duration".equals(name)) {
 			_method = new TypeMethod("duration", 'U', new String[0]);
 		} else if ("ENTITIES".equals(name)) {
@@ -70,8 +72,6 @@ public class BaseType extends Type {
 		} else if ("IDREFS".equals(_name)) {
 			_method = new TypeMethod("IDREFS", 'A', new String[0]);
 		} else if ("int".equals(_name)) {
-//			_method = new TypeMethod("integer", 'N',
-//				new String[]{"-2147483648", "2147483647"});
 			_method = new TypeMethod("int", 'N', new String[0]);
 		} else if ("integer".equals(_name)) {
 			_method = new TypeMethod("integer", 'N', new String[0]);
@@ -84,15 +84,24 @@ public class BaseType extends Type {
 		} else if ("NCName".equals(_name)) {
 			_method = new TypeMethod("NCName", 'A', new String[0]);
 		} else if ("negativeInteger".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"$MININT", "-1"});
+/*VT1*/
+			_method = new TypeMethod("negativeInteger", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"$MININT", "-1"});
+/*VT1*/
 		} else if ("NMTOKEN".equals(_name)) {
 			_method = new TypeMethod("NMTOKEN", 'A', new String[0]);
 		} else if ("NMTOKENS".equals(_name)) {
 			_method = new TypeMethod("NMTOKENS", 'A', new String[0]);
 		} else if ("nonNegativeInteger".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"0", "$MAXINT"});
+/*VT1*/
+			_method = new TypeMethod("nonNegativeInteger", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"0", "$MAXINT"});
+/*VT1*/
 		} else if ("nonPositiveInteger".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"$MININT", "0"});
+/*VT1*/
+			_method = new TypeMethod("nonPositiveInteger", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"$MININT", "0"});
+/*VT1*/
 		} else if ("normalizedString".equals(_name)) {
 			_method = new TypeMethod("normalizedString", 'A', new String[0]);
 		} else if ("NOTATION".equals(_name)) {
@@ -111,13 +120,25 @@ public class BaseType extends Type {
 		} else if ("token".equals(_name)) {
 			_method = new TypeMethod("token", 'A',  new String[0]);
 		} else if ("unsignedByte".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"0", "255"});
+/*VT1*/
+			_method = new TypeMethod("unsignedByte", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"0", "255"});
+/*VT1*/
 		} else if ("unsignedInt".equals(_name)) {
-			_method = new TypeMethod("int", 'N',new String[]{"0","4294967295"});
+/*VT1*/
+			_method = new TypeMethod("unsignedInt", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N',new String[]{"0","4294967295"});
+/*VT1*/
 		} else if ("unsignedLong".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"0", "$MAXINT"});
+/*VT1*/
+			_method = new TypeMethod("unsignedLong", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"0", "$MAXINT"});
+/*VT1*/
 		} else if ("unsignedShort".equals(_name)) {
-			_method = new TypeMethod("int", 'N', new String[]{"0", "65535"});
+/*VT1*/
+			_method = new TypeMethod("unsignedShort", 'N', new String[0]);
+//			_method = new TypeMethod("int", 'N', new String[]{"0", "65535"});
+/*VT1*/
 		} else {
 //			_method = new TypeMethod("unknownType", 'A', new String[0]);
 /*VT1*/

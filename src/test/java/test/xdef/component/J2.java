@@ -62,9 +62,8 @@ public class J2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -82,7 +81,7 @@ public class J2 implements org.xdef.component.XComponent{
     if (get$value2() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "J#C/$text[3]", a, get$value2(), _$$value2);
-    return XD_List = a;
+    return a;
   }
   public J2() {}
   public J2(org.xdef.component.XComponent p,
@@ -119,7 +118,6 @@ public class J2 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="J#C";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

@@ -14,7 +14,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.xml.KNamespace;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDBNFRule;
-import org.xdef.proc.Thesaurus;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.proc.XXData;
@@ -44,6 +43,7 @@ import java.util.TreeMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.proc.XDLexicon;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -117,8 +117,8 @@ public final class CompileCode extends CompileBase {
 	final Map<String, SBuffer> _binds = new TreeMap<String, SBuffer>();
 	/** Enumerations. */
 	final Map<String, SBuffer> _enums = new TreeMap<String, SBuffer>();
-	/** Thesaurus object (null if not specified). */
-	Thesaurus _thesaurus = null;
+	/** XDLexicon object (null if not specified). */
+	XDLexicon _lexicon = null;
 	/** Flag if external method should be searched. */
 	private boolean _ignoreExternalMethods;
 
@@ -1569,10 +1569,10 @@ public final class CompileCode extends CompileBase {
 			&& var.getCodeAddr() == -1
 			|| var.getType() == PARSEITEM_VALUE && numPar == 0)){//check type ID
 			//unique type, unique value
-			CodeI1 operator = new CodeI1(XD_BOOLEAN,
+			CodeI1 op = new CodeI1(XD_BOOLEAN,
 				CALL_OP, var.getParseMethodAddr());
-			addCode(operator, 1);
-			//Unknown method: '&{0}'
+			addCode(op, 1);
+			// return null if it is OK, otherwise return the name of method
 			return numPar != 0 ? name : null;
 		}
 		if (scriptMethod(extName, numPar)) {
@@ -1610,7 +1610,7 @@ public final class CompileCode extends CompileBase {
 			np--;
 		}
 		addCode(method,	-np);
-		return s;
+		return s; // null if it is OK, othrwise it is error message
 	}
 
 	/** Put report XDEF998 "{0}" is deprecated. Please use "&{1}" instead.

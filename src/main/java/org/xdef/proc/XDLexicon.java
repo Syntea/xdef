@@ -1,22 +1,16 @@
 package org.xdef.proc;
 
-/** Provides methods for thesaurus
+/** Provides methods for XDLexicon.
  * @author Vaclav Trojan
  */
-public interface Thesaurus {
+public interface XDLexicon {
 
 	/** Get ID of language.
 	 * @param language language name
 	 * @return ID of language.
-	 * @throws RuntimeException if language is not declared in thesaurus.
+	 * @throws RuntimeException if language is not declared in lexicon.
 	 */
 	public int getLanguageID(final String language);
-//
-//	/** Check if the language is default.
-//	 * @param language language name
-//	 * @return true if the language is default.
-//	 */
-//	public boolean isDefault(final String language);
 
 	/** Find text assigned to a key for given language.
 	 * @param key reference key.
@@ -37,8 +31,8 @@ public interface Thesaurus {
 	 */
 	public String[] findTexts(final String key);
 
-	/** Get array of all keys from thesaurus.
-	 * @return array of all keys from thesaurus.
+	/** Get array of all keys from lexicon.
+	 * @return array of all keys from lexicon.
 	 */
 	public String[] getKeys();
 

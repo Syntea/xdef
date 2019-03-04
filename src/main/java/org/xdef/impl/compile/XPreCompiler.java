@@ -53,8 +53,8 @@ public class XPreCompiler implements PreCompiler {
 	private final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
 	/** Source files table - to prevent to doParse the source twice. */
 	private final ArrayList<Object> _sources = new ArrayList<Object>();
-	/** Array of thesaurus sources item. */
-	private final ArrayList<PNode> _thesaurus = new ArrayList<PNode>();
+	/** Array of lexicon sources item. */
+	private final ArrayList<PNode> _lexicon = new ArrayList<PNode>();
 	/** Array of BNF sources. */
 	private final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
 	/** Array of declaration source items. */
@@ -602,7 +602,7 @@ public class XPreCompiler implements PreCompiler {
 		for (PNode p: _xdefPNodes) {
 			p.expandMacros(reporter, p._xdef.getName(), _macros);
 		}
-		for (PNode p: _thesaurus) {
+		for (PNode p: _lexicon) {
 			p.expandMacros(reporter, null, _macros);
 		}
 		for (PNode p: _listBNF) {
@@ -644,10 +644,10 @@ public class XPreCompiler implements PreCompiler {
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of Thesaurus items.
+	/** Get precompiled sources (PNodes) of lexicon items.
 	 * @return array with PNodes.
 	 */
-	public final List<PNode> getPThesaurusList() {return _thesaurus;}
+	public final List<PNode> getPLexiconList() {return _lexicon;}
 
 	@Override
 	/** Get precompiled sources (PNodes) of collection items.

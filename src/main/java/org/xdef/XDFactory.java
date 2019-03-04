@@ -1,38 +1,33 @@
 package org.xdef;
 
-import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.Properties;
 import org.w3c.dom.Element;
+import org.xdef.impl.XPool;
+import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
-import java.nio.charset.Charset;
+import org.xdef.sys.SRuntimeException;
 
-/** *  Provides generation of {@link org.xdef.XDPool} from source
+/** Provides generation of {@link org.xdef.XDPool} from source
  * X-definitions. You can modify properties of compilation by parameters from
  * properties (see {@link org.xdef.XDConstants}). In most of cases you can
  * get {@link org.xdef.XDPool} directly by using of static methods of
  * {@link org.xdef.XDFactory} class. You can also create a XDBuilder when
  * you have to compile XDPool from different sources of X-definitions.
- * <p>The external methods must be static methods with compliant parameters
- * to X-definition technology. The list of external classes with external
- * methods can be passed as a parameter containing array of classes. If relevant
- * method is not found in the list of classes then the generator of XDPool
- * is searching the the method in the system class path.</p>
+ * <p>The external methods must be static. The list of external classes with
+ * the external methods can be passed as a parameter containing array of
+ * classes. If relevant method is not found in the list of classes then the
+ * generator of XDPool is searching the the method in the system class path.</p>
  *
  * Typical use of XDFactory:
  * <pre><tt>
@@ -302,27 +297,6 @@ public final class XDFactory {
 		return builder.compileXD();
 	}
 
-	/** Read the serialized XDPool from the input stream.
-	 * @param stream input stream with X-definition.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XDPool readXDPool(InputStream stream) throws IOException {
-		return org.xdef.impl.XPool.readXDPool(stream);
-	}
-
-	/** Read the serialized XDPool from the file.
-	 * @param f File with saved XDPool.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XDPool readXDPool(File f) throws IOException {
-		InputStream is = new FileInputStream(f);
-		XDPool xp = readXDPool(is);
-		is.close();
-		return xp;
-	}
-
 	/** Parse XML with X-definition declared in source input stream.
 	 * @param source where to read XML.
 	 * @param reporter used for error messages or <tt>null</tt>.
@@ -343,6 +317,27 @@ public final class XDFactory {
 	public static XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
 		return org.xdef.impl.XBuilder.xparse(source, reporter);
+	}
+
+	/** Read the XDPool from the input stream.
+	 * @param stream input stream with X-definition.
+	 * @return created XPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public static XDPool readXDPool(InputStream stream) throws IOException {
+		return XPool.readXDPool(stream);
+	}
+
+	/** Read the XDPool from the file.
+	 * @param f File with saved XDPool.
+	 * @return created XPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public static XDPool readXDPool(File f) throws IOException {
+		InputStream is = new FileInputStream(f);
+		XDPool xp = readXDPool(is);
+		is.close();
+		return xp;
 	}
 
 	/** Creates XDInput from InputStream.
@@ -535,144 +530,5 @@ public final class XDFactory {
 	 */
 	public static XDValue createXDValue(final Object obj) {
 		return org.xdef.impl.XBuilder.createXDValue(obj);
-	}
-
-	/** Generate Java source class containing XDPool.
-	 * You can get stored data if you invoke static method getXDPool() in
-	 * generated class.
-	 * @param xp XDPool object where is the X-definition with model
-	 * from which Java source will be generated.
-	 * @param dir path to directory where write the source code.
-	 * @param className class name (file name will be "className.java").
-	 * @param charset the character set name or null (if null then it is used
-	 * the system character set name).
-	 * @throws IOException if an error occurs.
-	 */
-	public static void genXDPoolClass(final XDPool xp,
-		final String dir,
-		final String className,
-		final String charset) throws IOException {
-		final int BLOCKLEN = 24576; //Size of base64 string <= 32768 chars
-		String pkgdir = dir;
-		String clsName = className;
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		xp.writeXDPool(baos);
-		baos.close();
-		final byte[] data = baos.toByteArray();
-		final int codeLen = data.length;
-		File f = new File(pkgdir);
-		if (f.isDirectory()) {
-			if (!pkgdir.endsWith("/")) {
-				pkgdir += "/";
-			}
-		} else {
-			throw new RuntimeException("The argument \""
-				+ pkgdir + "\" must be a directory!");
-		}
-		String pckg;
-		int ndx;
-		if ((ndx = clsName.lastIndexOf('.')) > 0) {
-			pckg = clsName.substring(0, ndx);
-			clsName = clsName.substring(ndx + 1);
-		} else {
-			pckg = "";
-		}
-		f = pckg != null && pckg.length() > 0 ?
-			new File(f, pckg.replace('.', '/')) : f;
-		f.mkdirs();
-		String name = clsName.endsWith(".java") ?
-			clsName.substring(0, clsName.length() - 5) : clsName;
-		FileOutputStream fos = new FileOutputStream(new File(f, name+".java"));
-		OutputStreamWriter w = charset == null || charset.length() == 0 ?
-			new OutputStreamWriter(fos) : new OutputStreamWriter(fos, charset);
-		w.write(
-"/* NOTE: this source code was generated by org.xdef.GenXComponent.\n"+
-" * DO NOT MAKE ANY MODIFICATION!\n"+
-" */\n");
-		if (pckg.length() > 0) {
-			w.write("package " + pckg +";\n\n");
-		}
-		w.write(
-"import org.xdef.sys.SUtils;\n"+
-"import org.xdef.XDFactory;\n"+
-"import org.xdef.XDPool;\n"+
-"import java.io.ByteArrayInputStream;\n"+
-"\n"+
-"/** This class contains encoded data generated from XDPool object.\n"+
-" * See the static method getXDPool().\n"+
-" */\n"+
-"public final class " + name + " {\n"+
-"\n"+
-"\t/** Get XDPool from encoded data.\n"+
-"\t * @return XDPool object.\n"+
-"\t */\n"+
-"\tpublic static final XDPool getXDPool() {\n"+
-"\t\tif (xdp != null) return xdp;\n"+
-"\t\ttry {\n");
-		if (codeLen <= BLOCKLEN) {
-			w.append(
-"\t\t\treturn xdp = XDFactory.readXDPool(new ByteArrayInputStream(\n"+
-"\t\t\t\tSUtils.decodeBase64(\"")
-					.append(new String(SUtils.encodeBase64(data,false),
-						Charset.forName("UTF-8")))
-					.append("\")));\n"+
-"\t\t} catch (Exception ex) {\n"+
-"\t\t\tthrow new RuntimeException(ex);\n"+
-"\t\t}\n"+
-"\t}\n");
-		} else {
-			w.append(
-"\t\t\tbyte[] b = new byte["+codeLen+"];\n"+
-"\t\t\tSystem.arraycopy(SUtils.decodeBase64(\"")
-				.append(new String(SUtils.encodeBase64(data,
-					0, BLOCKLEN, false), Charset.forName("UTF-8")))
-				.append("\"), 0, b, 0, "+BLOCKLEN+");\n");
-			int offset = BLOCKLEN;
-			for (int i = 1; offset < codeLen; i++, offset += BLOCKLEN) {
-				int len = codeLen-offset>=BLOCKLEN ? BLOCKLEN : codeLen-offset;
-				w.write("\t\t\tSystem.arraycopy(SUtils.decodeBase64(C"
-					+i+".x()), 0, b, "+offset+", "+len+ ");\n");
-			}
-			w.write(
-"\t\t\treturn xdp = XDFactory.readXDPool(new ByteArrayInputStream(b));\n"+
-"\t\t} catch (Exception ex) {\n"+
-"\t\t\tthrow new RuntimeException(ex);\n"+
-"\t\t}\n"+
-"\t}\n"+
-"\n");
-			int subclassIndex = 1;
-			offset = BLOCKLEN;
-			while (offset < codeLen) {
-				String s =
-"\tprivate static final class C" + subclassIndex + "{"+
-"private static String x(){return\"";
-				if (BLOCKLEN + offset < codeLen) {
-					w.append(s)
-						.append(new String(SUtils.encodeBase64(data,
-							offset, BLOCKLEN, false), Charset.forName("UTF-8")))
-						.append("\";}");
-					if (subclassIndex > 0) {
-						w.write('}');
-					}
-					w.write('\n');
-					subclassIndex++;
-					offset += BLOCKLEN;
-				} else if (offset < codeLen) {
-					w.append(s)
-						.append(new String(SUtils.encodeBase64(data,
-							offset, codeLen-offset, false),
-							Charset.forName("UTF-8")))
-						.append("\";}");
-					offset = codeLen;
-					if (subclassIndex > 0) {
-						w.write('}');
-					}
-					w.write('\n');
-					subclassIndex++;
-				}
-			}
-		}
-		w.append("\tprivate static XDPool xdp = null;\n}")
-			.close();
 	}
 }

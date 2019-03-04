@@ -84,17 +84,17 @@ public class Z6 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getTypDokladu() != null)
-      el.setAttribute("TypDokladu", getTypDokladu());
+      el.setAttribute(XD_Name_TypDokladu, getTypDokladu());
     if (getOpravneni() != null)
-      el.setAttribute("Opravneni", getOpravneni());
+      el.setAttribute(XD_Name_Opravneni, getOpravneni());
     if (getCisloDokladu() != null)
-      el.setAttribute("CisloDokladu", getCisloDokladu());
+      el.setAttribute(XD_Name_CisloDokladu, getCisloDokladu());
     if (getDatumVydani() != null)
-      el.setAttribute("DatumVydani", getDatumVydani().formatDate("d.M.yyyy"));
+      el.setAttribute(XD_Name_DatumVydani, getDatumVydani().formatDate("d.M.yyyy"));
     if (getMistoVydani() != null)
-      el.setAttribute("MistoVydani", getMistoVydani());
+      el.setAttribute(XD_Name_MistoVydani, getMistoVydani());
     if (getStatVydani() != null)
-      el.setAttribute("StatVydani", getStatVydani());
+      el.setAttribute(XD_Name_StatVydani, getStatVydani());
     return el;
   }
   @Override
@@ -120,11 +120,17 @@ public class Z6 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_TypDokladu="TypDokladu";
   private String _TypDokladu;
+  private String XD_Name_Opravneni="Opravneni";
   private String _Opravneni;
+  private String XD_Name_CisloDokladu="CisloDokladu";
   private String _CisloDokladu;
+  private String XD_Name_DatumVydani="DatumVydani";
   private org.xdef.sys.SDatetime _DatumVydani;
+  private String XD_Name_MistoVydani="MistoVydani";
   private String _MistoVydani;
+  private String XD_Name_StatVydani="StatVydani";
   private String _StatVydani;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -139,17 +145,25 @@ public class Z6 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladu"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladu")) {
+      XD_Name_CisloDokladu = xx.getNodeName();
       setCisloDokladu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@DatumVydani"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumVydani")) {
+      XD_Name_DatumVydani = xx.getNodeName();
       setDatumVydani(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@MistoVydani"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@MistoVydani")) {
+      XD_Name_MistoVydani = xx.getNodeName();
       setMistoVydani(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Opravneni"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Opravneni")) {
+      XD_Name_Opravneni = xx.getNodeName();
       setOpravneni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@StatVydani"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@StatVydani")) {
+      XD_Name_StatVydani = xx.getNodeName();
       setStatVydani(parseResult.getParsedValue().stringValue());
-    else setTypDokladu(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_TypDokladu = xx.getNodeName();
+      setTypDokladu(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

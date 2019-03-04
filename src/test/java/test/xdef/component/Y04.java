@@ -51,9 +51,9 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJedna() != null)
-      el.setAttribute("One", getJedna());
+      el.setAttribute(XD_Name_Jedna, getJedna());
     if (getTwo() != null)
-      el.setAttribute("Two", getTwo());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override
@@ -79,6 +79,8 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Jedna="Jedna";
+  private String XD_Name_Two="Two";
   private String _Two;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -93,9 +95,13 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_Jedna = xx.getNodeName();
       setJedna(parseResult.getParsedValue().stringValue());
-    else setTwo(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Two = xx.getNodeName();
+      setTwo(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
