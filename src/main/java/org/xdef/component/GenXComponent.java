@@ -29,6 +29,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 
 /** Generation of Java source code of XDComponents.
@@ -36,7 +37,7 @@ import org.xdef.XDValueID;
  */
 public final class GenXComponent {
 	/** Platform-dependent newline. */
-	private static final String NL = String.format("%n");
+	private static final String LN = XDConstants.LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
 	private static final Set<String> RESERVED_NAMES = new TreeSet<String>();
 	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
@@ -324,8 +325,8 @@ public final class GenXComponent {
 	private void genAttrNameVariable(final String name,
 		final StringBuilder sb) {
 		sb.append(modify(
-(_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+NL : "") +
-"\tprivate String XD_Name_&{name}=\"&{name}\";"+NL,
+(_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+LN : "") +
+"\tprivate String XD_Name_&{name}=\"&{name}\";"+LN,
 			"&{name}", name));
 	}
 
@@ -353,14 +354,14 @@ public final class GenXComponent {
 		if (max > 1) {
 			d += 's';
 			String s = "new java.util.ArrayList<" + typ + ">()";
-			x = " =" + (s.length() > 40 ? NL + "\t\t" : " ") + s;
+			x = " =" + (s.length() > 40 ? LN + "\t\t" : " ") + s;
 			typ = "java.util.List<"+typ+">";
 		} else {
 			x = "";
 		}
 		sb.append(modify(
-(_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+NL : "")+
-"\tprivate"+(max > 1?" final":"") +" &{typ} _&{name}&{x};"+NL,
+(_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+LN : "")+
+"\tprivate"+(max > 1?" final":"") +" &{typ} _&{name}&{x};"+LN,
 			"&{d}", d,
 			"&{xmlName}", name.replace('$', ':'),
 			"&{typ}", typ,
@@ -428,34 +429,34 @@ public final class GenXComponent {
 				", namespace=\"" + xn.getNSUri() + "\"" : "";
 			if ("attribute".equals(descr)) {
 				jaxbInfo =
-"\t@javax.xml.bind.annotation.XmlAttribute(name=\"&{xmlName}\"" + ns + ')'+NL;
+"\t@javax.xml.bind.annotation.XmlAttribute(name=\"&{xmlName}\"" + ns + ')'+LN;
 			} else if ("text node".equals(descr)) {
-				jaxbInfo = "\t@javax.xml.bind.annotation.XmlValue"+NL;
+				jaxbInfo = "\t@javax.xml.bind.annotation.XmlValue"+LN;
 			} else {
 				jaxbInfo =
 "\t@javax.xml.bind.annotation.XmlElement(name=\"&{xmlName}\"" + ns
 					+ ", type=&{" +(!typeName.equals(name) ?"baseTyp":"name")
-					+ "}.class)"+NL;
+					+ "}.class)"+LN;
 			}
 		}
 		if (isb != null) {
-			sb.append("\t@Override").append(NL);
+			sb.append("\t@Override").append(LN);
 			if (typ.startsWith("java.util.List<")) {
 				isb.append(modify(
-(_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+NL+
-"\t * @return value of &{d}"+NL+
-"\t */"+NL : "")+
-"\tpublic &{typ} listOf&{name}();"+NL,
+(_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
+"\t * @return value of &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic &{typ} listOf&{name}();"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
 				"&{typ}", typ));
 			} else {
 				isb.append(modify(
-(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+NL+
-"\t * @return value of &{d}"+NL+
-"\t */"+NL : "")+
-"\tpublic &{typ} get&{name}();"+NL,
+(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
+"\t * @return value of &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic &{typ} get&{name}();"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -467,44 +468,44 @@ public final class GenXComponent {
 		}
 		if (typ.startsWith("java.util.List<")) {
 			sb.append(modify(jaxbInfo+
-(_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+NL+
-"\t * @return value of &{d}"+NL+
-"\t */"+NL : "")+
-"\tpublic &{typ} listOf&{name}() {return _&{name};}"+NL,
+(_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
+"\t * @return value of &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic &{typ} listOf&{name}() {return _&{name};}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
 				"&{typ}", typ));
 		} else {
 			sb.append(modify(jaxbInfo+
-(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+NL+
-"\t * @return value of &{d}"+NL+
-"\t */"+NL : "")+
-"\tpublic &{typ} get&{name}() {return _&{name};}"+NL,
+(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
+"\t * @return value of &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic &{typ} get&{name}() {return _&{name};}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
 				"&{typ}", typ));
 			if (typeName.contains("org.xdef.sys.SDatetime")) {
 				sb.append(modify(
-(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+NL+
-"\t * @return value of &{d} as java.util.Date or null."+NL+
-"\t */"+NL : "")+
-"\tpublic java.util.Date dateOf&{name}() {"+NL+
-"\t\treturn org.xdef.sys.SDatetime.getDate(_&{name});"+NL+
-"\t}"+NL+
-(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+NL+
-"\t * @return value of &{d} as java.sql.Timestamp or null."+NL+
-"\t */"+NL : "")+
-"\tpublic java.sql.Timestamp timestampOf&{name}() {"+NL+
-"\t\treturn org.xdef.sys.SDatetime.getTimestamp(_&{name});"+NL+
-"\t}"+NL+
-(_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+NL+
-"\t * @return value of &{d} as java.util.Calendar or null."+NL+
-"\t */"+NL : "")+
-"\tpublic java.util.Calendar calendarOf&{name}() {"+NL+
-"\t\treturn org.xdef.sys.SDatetime.getCalendar(_&{name});"+NL+
-"\t}"+NL,
+(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
+"\t * @return value of &{d} as java.util.Date or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.util.Date dateOf&{name}() {"+LN+
+"\t\treturn org.xdef.sys.SDatetime.getDate(_&{name});"+LN+
+"\t}"+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
+"\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.sql.Timestamp timestampOf&{name}() {"+LN+
+"\t\treturn org.xdef.sys.SDatetime.getTimestamp(_&{name});"+LN+
+"\t}"+LN+
+(_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
+"\t * @return value of &{d} as java.util.Calendar or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.util.Calendar calendarOf&{name}() {"+LN+
+"\t\treturn org.xdef.sys.SDatetime.getCalendar(_&{name});"+LN+
+"\t}"+LN,
 					"&{xmlName}", xmlName,
 					"&{d}" , d,
 					"&{name}", name));
@@ -559,36 +560,36 @@ public final class GenXComponent {
 		if (max > 1) {
 			d += 's';
 			if (modelName != null) {
-				x = NL +
-"\t\tif (x!=null) {"+NL +
-"\t\t\t\tif (x.xGetXPos()==null)"+NL +
+				x = LN +
+"\t\tif (x!=null) {"+LN +
+"\t\t\t\tif (x.xGetXPos()==null)"+LN +
 "\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
 				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
-				+ ", \"" + modelXDPos + "\");"+NL
-				+ "\t\t\t_&{name}.add(x);"+NL+"\t\t}"+NL+NL+'\t';
+				+ ", \"" + modelXDPos + "\");"+LN
+				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+LN+'\t';
 			} else {
-				x = NL+"\t\tif (x!=null) _&{name}.add(x);"+NL+'\t';
+				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN+'\t';
 			}
 		} else {
 			if (modelName != null) {
-				x = NL +
-"\t\tif (x!=null && x.xGetXPos() == null)"+NL +
+				x = LN +
+"\t\tif (x!=null && x.xGetXPos() == null)"+LN +
 "\t\t\tx.xInit(this, \""+modelName+"\", "
 				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
-				+ ", \"" + modelXDPos + "\");"+NL
-				+ "\t\t_&{name} = x;"+NL+"\t";
+				+ ", \"" + modelXDPos + "\");"+LN
+				+ "\t\t_&{name} = x;"+LN+"\t";
 			} else {
 				x = "_&{name} = x;";
 			}
 		}
 		if (isb != null) {
-			sb.append("\t@Override").append(NL);
+			sb.append("\t@Override").append(LN);
 			if (max > 1) {
 				String template =
-(_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+NL+
-"\t * @param x value to added."+NL+
-"\t */"+NL) : "")+
-"\tpublic void add&{name}(&{typ} x);"+NL;
+(_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+LN+
+"\t * @param x value to added."+LN+
+"\t */"+LN) : "")+
+"\tpublic void add&{name}(&{typ} x);"+LN;
 				isb.append(modify(template,
 					"&{name}", name,
 					"&{xmlName}", name.replace('$', ':'),
@@ -609,10 +610,10 @@ public final class GenXComponent {
 				}
 			} else {
 				final String template =
-(_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+NL+
-"\t * @param x value to be set."+NL+
-"\t */"+NL) : "")+
-"\tpublic void set&{name}(&{typ} x);"+NL;
+(_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
+"\t * @param x value to be set."+LN+
+"\t */"+LN) : "")+
+"\tpublic void set&{name}(&{typ} x);"+LN;
 				isb.append(modify(template,
 					"&{name}", name,
 					"&{d}" , d,
@@ -639,10 +640,10 @@ public final class GenXComponent {
 		}
 		if (max > 1) {
 			final String template =
-(_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+NL+
-"\t * @param x value to be added."+NL+
-"\t */"+NL) : "")+
-"\tpublic void add&{name}(&{typ} x) {&{x}}"+NL;
+(_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+LN+
+"\t * @param x value to be added."+LN+
+"\t */"+LN) : "")+
+"\tpublic void add&{name}(&{typ} x) {&{x}}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,
@@ -682,10 +683,10 @@ public final class GenXComponent {
 			}
 		} else {
 				final String template =
-(_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+NL+
-"\t * @param x value to be set."+NL+
-"\t */"+NL) : "")+
-"\tpublic void set&{name}(&{typ} x) {&{x}}"+NL;
+(_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
+"\t * @param x value to be set."+LN+
+"\t */"+LN) : "")+
+"\tpublic void set&{name}(&{typ} x) {&{x}}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,
@@ -698,8 +699,8 @@ public final class GenXComponent {
 					"&{x}", modify(x,
 						typeName, typeName1,
 						"_&{name} = x;",
-						NL+
-"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+NL+"\t"),
+						LN+
+"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+LN+"\t"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -709,8 +710,8 @@ public final class GenXComponent {
 					"&{x}", modify(x,
 						typeName, typeName1,
 						"_&{name} = x;",
-						NL+
-"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+NL+"\t"),
+						LN+
+"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+LN+"\t"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -720,8 +721,8 @@ public final class GenXComponent {
 						"&{x}", modify(x,
 							typeName, typeName1,
 							"_&{name} = x;",
-							NL+
-"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+NL+"\t"),
+							LN+
+"\t\t_&{name}=x==null ? null : new org.xdef.sys.SDatetime(x);"+LN+"\t"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -743,17 +744,17 @@ public final class GenXComponent {
 		final StringBuilder sb,
 		final StringBuilder isb) {
 		if (isb != null) {
-			sb.append("\t@Override").append(NL);
+			sb.append("\t@Override").append(LN);
 			isb.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+NL) : "")+
-"\tpublic String xposOf&{name}();"+NL,
+(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+"\tpublic String xposOf&{name}();"+LN,
 				"&{name}", name,
 				"&{descr}", descr));
 		}
 		final String x = "attribute".equals(descr) ? "@" + name : "$text";
 		sb.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+NL) : "")+
-"\tpublic String xposOf&{name}(){return XD_XPos + \"/&{x}\";}"+NL,
+(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+"\tpublic String xposOf&{name}(){return XD_XPos + \"/&{x}\";}"+LN,
 			"&{name}", name,
 			"&{x}", x,
 			"&{descr}", descr));
@@ -799,8 +800,8 @@ public final class GenXComponent {
 					"get&{name}())" : "get&{name}().name())";
 		}
 		sb.append(modify(
-"\t\tif (get&{name}() != null)"+NL+
-"\t\t\tel.set&{fn}&{qName}, &{x};"+NL,
+"\t\tif (get&{name}() != null)"+LN+
+"\t\t\tel.set&{fn}&{qName}, &{x};"+LN,
 			"&{x}", x,
 			"&{fn}", fn,
 			"&{qName}", "XD_Name_" + name,
@@ -818,13 +819,13 @@ public final class GenXComponent {
 		if (sb.length() == 0) {
 			sb.append(
 "\t\tjava.util.List<org.xdef.component.XComponent> a =")
-			.append(NL).append(
+			.append(LN).append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
-			.append(NL);
+			.append(LN);
 		}
 		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ")
 			.append(isList ? "listOf" : "get")
-			.append(name).append("());").append(NL);
+			.append(name).append("());").append(LN);
 	}
 
 	/** Generation Java code for creating child element with text node.
@@ -839,10 +840,10 @@ public final class GenXComponent {
 		final StringBuilder sb) {
 		if (sb.length() == 0) {
 			sb.append(
-"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a =").append(NL)
+"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a =").append(LN)
 				.append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
-				.append(NL);
+				.append(LN);
 		}
 		String x;
 		final String y = max > 1? ".get(i)" : "";
@@ -871,14 +872,14 @@ public final class GenXComponent {
 				}
 		}
 		sb.append(modify(max == 1 ?
-("\t\tif (get&{name}() != null)"+NL+
-"\t\t\torg.xdef.component.XComponentUtil.addText(this,"+NL+
-"\t\t\t\t\"&{xpos}\", a, &{x}, _$&{name});"+NL)
-: ("\t\tfor (int i=0; i<listOf$value().size(); i++) {"+NL+
-"\t\t\tif (listOf&{name}().get(i) != null)"+NL+
+("\t\tif (get&{name}() != null)"+LN+
+"\t\t\torg.xdef.component.XComponentUtil.addText(this,"+LN+
+"\t\t\t\t\"&{xpos}\", a, &{x}, _$&{name});"+LN)
+: ("\t\tfor (int i=0; i<listOf$value().size(); i++) {"+LN+
+"\t\t\tif (listOf&{name}().get(i) != null)"+LN+
 "\t\t\t\torg.xdef.component.XComponentUtil.addText(this,\"&{xpos}\",a,&{x}"+
-	",_$&{name}.charAt(i));"+NL+
-"\t\t}"+NL),
+	",_$&{name}.charAt(i));"+LN+
+"\t\t}"+LN),
 			"&{x}", x,
 			"&{xpos}", xdata.getXDPosition(),
 			"&{name}", name));
@@ -937,7 +938,7 @@ public final class GenXComponent {
 	 * @return string with the separator or an empty string.
 	 */
 	private static String genSeparator(final String text, final boolean doit) {
-		return doit ? "// " + text+NL : "";
+		return doit ? "// " + text+LN : "";
 	}
 
 	private static String javaName(final String s) {
@@ -1212,18 +1213,18 @@ public final class GenXComponent {
 			final String xmlname = addVarName(varNames,
 				name.replace('$', ':'), xe.getXDPosition()+"/@"+name, false);
 			String jaxbInfo = _jaxb ?
-"\t@javax.xml.bind.annotation.XmlAttribute(name=\"&{xmlname}\")"+NL : "";
+"\t@javax.xml.bind.annotation.XmlAttribute(name=\"&{xmlname}\")"+LN : "";
 			getters.append(modify(jaxbInfo +
-(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+NL+
-"\t * @return string with value of attribute"+NL+
-"\t */"+NL) : "")+
-"\tpublic String get&{name}() {return \"&{value}\";}"+NL,
+(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+LN+
+"\t * @return string with value of attribute"+LN+
+"\t */"+LN) : "")+
+"\tpublic String get&{name}() {return \"&{value}\";}"+LN,
 				"&{name}", name,
 				"&{xmlname}", xmlname,
 				"&{value}", value));
 			String s =
-("\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+NL+
-"\t\t\t\"" + xmlname + "\", \"" + value + "\");"+NL);
+("\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+LN+
+"\t\t\t\"" + xmlname + "\", \"" + value + "\");"+LN);
 			creators.append(s);
 		}
 		final XMNode[] nodes = xe.getChildNodeModels();
@@ -1309,9 +1310,9 @@ public final class GenXComponent {
 				}
 				String s =
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
-"\".*/"+NL : "")+
+"\".*/"+LN : "")+
 "\tprivate " + (groupMax > 1 ? "StringBuilder":"char") + " _$" + name+"= "+
-(groupMax > 1?"new StringBuilder()":"(char) -1") + ";"+NL);
+(groupMax > 1?"new StringBuilder()":"(char) -1") + ";"+LN);
 				vars.append(s);
 				genTextNodeCreator(xdata, name, groupMax, genNodeList);
 				txttab.put(node.getXDPosition(),
@@ -1474,7 +1475,7 @@ public final class GenXComponent {
 						"",
 						components,
 						false,
-						xdpath + '/' + xe1.getName())).append('}').append(NL);
+						xdpath + '/' + xe1.getName())).append('}').append(LN);
 				} else {//other root class
 					xctab.put(node.getXDPosition(), xval + xcClass);
 				}
@@ -1508,57 +1509,57 @@ public final class GenXComponent {
 			}
 		}
 		String toXml =
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Create XML element or text node from default model"+NL+
-"\t * as an element created from given document."+NL+
-"\t * @param doc XML Document or <tt>null</tt>."+NL+
-"\t * If the argument is null <tt>null</tt> then document is created with"+NL+
-"\t * created document element."+NL+
-"\t * @return XML element belonging to given document from default model."+NL+
-"\t */"+NL) : "")+
-"\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+NL;
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Create XML element or text node from default model"+LN+
+"\t * as an element created from given document."+LN+
+"\t * @param doc XML Document or <tt>null</tt>."+LN+
+"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
+"\t * created document element."+LN+
+"\t * @return XML element belonging to given document from default model."+LN+
+"\t */"+LN) : "")+
+"\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+LN;
 		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
 			toXml +=
-"\t\tif (doc==null) {"+NL+
-"\t\t\treturn org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+NL+
-"\t\t\t\t.getDocumentElement();"+NL+
-"\t\t} else {"+NL+
-"\t\t\treturn (org.w3c.dom.Element)"+NL+
-"\t\t\t\tdoc.adoptNode(org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+NL+
-"\t\t\t\t\t.getDocumentElement());"+NL+
-"\t\t}"+NL+
-"\t}"+NL;
+"\t\tif (doc==null) {"+LN+
+"\t\t\treturn org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
+"\t\t\t\t.getDocumentElement();"+LN+
+"\t\t} else {"+LN+
+"\t\t\treturn (org.w3c.dom.Element)"+LN+
+"\t\t\t\tdoc.adoptNode(org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
+"\t\t\t\t\t.getDocumentElement());"+LN+
+"\t\t}"+LN+
+"\t}"+LN;
 		} else if (creators.length() == 0 && genNodeList.length() == 0) {
 			toXml +=
-"\t\treturn doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+NL+
-"\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+NL+
-"\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+NL+
-"\t}"+NL;
+"\t\treturn doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
+"\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
+"\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
+"\t}"+LN;
 		} else {
 			toXml +=
-"\t\torg.w3c.dom.Element el;"+NL+
-"\t\tif (doc==null) {"+NL+
-"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,"+NL+
-"\t\t\t\tXD_NodeName, null);"+NL+
-"\t\t\tel = doc.getDocumentElement();"+NL+
-"\t\t} else {"+NL+
-(isRoot ? "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+NL+
-"\t\t\tif (doc.getDocumentElement()==null) doc.appendChild(el);"+NL
-: "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+NL
+"\t\torg.w3c.dom.Element el;"+LN+
+"\t\tif (doc==null) {"+LN+
+"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,"+LN+
+"\t\t\t\tXD_NodeName, null);"+LN+
+"\t\t\tel = doc.getDocumentElement();"+LN+
+"\t\t} else {"+LN+
+(isRoot ? "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN+
+"\t\t\tif (doc.getDocumentElement()==null) doc.appendChild(el);"+LN
+: "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN
 )+
-"\t\t}"+NL+ creators;
+"\t\t}"+LN+ creators;
 			if (genNodeList.length() > 0) {
 				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
-					" xGetNodeList())"+NL+
-"\t\t\tel.appendChild(x.toXml(doc));"+NL;
+					" xGetNodeList())"+LN+
+"\t\t\tel.appendChild(x.toXml(doc));"+LN;
 			}
-			toXml += "\t\treturn el;"+NL+"\t}"+NL;
+			toXml += "\t\treturn el;"+LN+"\t}"+LN;
 		}
 ////////////////////////////////////////////////////////////////////////////////
 		String result =
-(isRoot && _jaxb ? ("@XmlRootElement(name = \"" + model + "\")"+NL) : "")+
+(isRoot && _jaxb ? ("@XmlRootElement(name = \"" + model + "\")"+LN) : "")+
 (_genJavadoc ?
-"/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+NL
+"/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+LN
 : "") +
 "public "+(isRoot?"":"static ")+"class "+
 			clazz + extClazz + (interfcName.length() > 0 ?
@@ -1567,232 +1568,232 @@ public final class GenXComponent {
 				: (" implements " + interfcName)
 				: extClazz.contains("implements ") ?
 				",org.xdef.component.XComponent"
-				: " implements org.xdef.component.XComponent")+ "{"+NL;
+				: " implements org.xdef.component.XComponent")+ "{"+LN;
 		result +=
 			genSeparator("Getters", _genJavadoc & getters.length() > 0)+
 			getters+
 			genSeparator("Setters", _genJavadoc & setters.length() > 0)+
 			setters+
 			xpathes.toString() +
-"//<editor-fold defaultstate=\"collapsed\" desc=\"XComponent interface\">"+NL+
+"//<editor-fold defaultstate=\"collapsed\" desc=\"XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+NL+
-"\t * If the argument is null <tt>null</tt> then document is created with"+NL+
-"\t * created document element."+NL+
-"\t * @return XML element created from thos object."+NL+
-"\t */"+NL) : "") +
-"\tpublic org.w3c.dom.Element toXml()"+NL+
-"\t\t{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}"+NL+
-"\t@Override"+NL+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
+"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
+"\t * created document element."+LN+
+"\t * @return XML element created from thos object."+LN+
+"\t */"+LN) : "") +
+"\tpublic org.w3c.dom.Element toXml()"+LN+
+"\t\t{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Get name of XML node used for construction of this object."+NL+
-"\t * @return name of XML node used for construction of this object."+NL+
-"\t */"+NL) : "") +
-"\tpublic String xGetNodeName() {return XD_NodeName;}"+NL+
-"\t@Override"+NL+
+"\t/** Get name of XML node used for construction of this object."+LN+
+"\t * @return name of XML node used for construction of this object."+LN+
+"\t */"+LN) : "") +
+"\tpublic String xGetNodeName() {return XD_NodeName;}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Update parameters of XComponent."+NL+
-"\t * @param parent p XComponent."+NL+
-"\t * @param name name of element."+NL+
-"\t * @param ns name space."+NL+
-"\t * @param xPos XDPosition."+NL+
-"\t */"+NL) : "") +
-"\tpublic void xInit(org.xdef.component.XComponent p,"+NL+
-"\t\tString name, String ns, String xdPos) {"+NL+
-"\t\tXD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;"+NL+
-"\t}"+NL+
-"\t@Override"+NL+
+"\t/** Update parameters of XComponent."+LN+
+"\t * @param parent p XComponent."+LN+
+"\t * @param name name of element."+LN+
+"\t * @param ns name space."+LN+
+"\t * @param xPos XDPosition."+LN+
+"\t */"+LN) : "") +
+"\tpublic void xInit(org.xdef.component.XComponent p,"+LN+
+"\t\tString name, String ns, String xdPos) {"+LN+
+"\t\tXD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;"+LN+
+"\t}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Get namespace of node used for construction of this object."+NL+
-"\t * @return namespace of node used for construction of this object."+NL+
-"\t */"+NL) : "") +
-"\tpublic String xGetNamespaceURI() {return XD_NamespaceURI;}"+NL+
-"\t@Override"+NL+
+"\t/** Get namespace of node used for construction of this object."+LN+
+"\t * @return namespace of node used for construction of this object."+LN+
+"\t */"+LN) : "") +
+"\tpublic String xGetNamespaceURI() {return XD_NamespaceURI;}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Get XPosition of node."+NL+
-"\t * @return XPosition of node."+NL+
-"\t */"+NL) : "") +
-"\tpublic String xGetXPos() {return XD_XPos;}"+NL+
-"\t@Override"+NL+
+"\t/** Get XPosition of node."+LN+
+"\t * @return XPosition of node."+LN+
+"\t */"+LN) : "") +
+"\tpublic String xGetXPos() {return XD_XPos;}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Set XPosition of node."+NL+
-"\t * @param xpos XPosition of node."+NL+
-"\t */"+NL) : "") +
-"\tpublic void xSetXPos(String xpos){XD_XPos = xpos;}"+NL+
-"\t@Override"+NL+
+"\t/** Set XPosition of node."+LN+
+"\t * @param xpos XPosition of node."+LN+
+"\t */"+LN) : "") +
+"\tpublic void xSetXPos(String xpos){XD_XPos = xpos;}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Get index of node."+NL+
-"\t * @return index of node."+NL+
-"\t */"+NL) : "") +
-"\tpublic int xGetNodeIndex() {return XD_Index;}"+NL+
-"\t@Override"+NL+
+"\t/** Get index of node."+LN+
+"\t * @return index of node."+LN+
+"\t */"+LN) : "") +
+"\tpublic int xGetNodeIndex() {return XD_Index;}"+LN+
+"\t@Override"+LN+
 (_genJavadoc ? (
-"\t/** Set index of node."+NL+
-"\t * @param index index of node."+NL+
-"\t */"+NL) : "") +
-"\tpublic void xSetNodeIndex(int index) {XD_Index = index;}"+NL+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Get parent XComponent."+NL+
-"\t * @return parent XComponent object or null if this object is root."+NL+
-"\t */"+NL) : "") +
+"\t/** Set index of node."+LN+
+"\t * @param index index of node."+LN+
+"\t */"+LN) : "") +
+"\tpublic void xSetNodeIndex(int index) {XD_Index = index;}"+LN+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Get parent XComponent."+LN+
+"\t * @return parent XComponent object or null if this object is root."+LN+
+"\t */"+LN) : "") +
 "\tpublic org.xdef.component.XComponent xGetParent() {return XD_Parent;}"
-+NL+"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Get user object."+NL+
-"\t * @return assigned user object."+NL+
-"\t */"+NL) : "") +
-"\tpublic Object xGetObject() {return XD_Object;}"+NL+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Set user object."+NL+
-"\t * @param obj assigned user object."+NL+
-"\t */"+NL) : "") +
-"\tpublic void xSetObject(final Object obj) {XD_Object = obj;}"+NL+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Create string about this object."+NL+
-"\t * @return string about this object."+NL+
-"\t */"+NL) : "") +
-"\tpublic String toString() {return \"XComponent: \"+xGetModelPosition();}"+NL+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Get XDPosition of this XComponent."+NL+
-"\t * @return string withXDPosition of this XComponent."+NL+
-"\t */"+NL) : "") +
-"\tpublic String xGetModelPosition() {return XD_Model;}"+NL+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Get index of model of this XComponent."+NL+
-"\t * @return index of model of this XComponent."+NL+
-"\t */"+NL) : "") +
-"\tpublic int xGetModelIndex() {return "+index+";}"+NL+
++LN+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Get user object."+LN+
+"\t * @return assigned user object."+LN+
+"\t */"+LN) : "") +
+"\tpublic Object xGetObject() {return XD_Object;}"+LN+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Set user object."+LN+
+"\t * @param obj assigned user object."+LN+
+"\t */"+LN) : "") +
+"\tpublic void xSetObject(final Object obj) {XD_Object = obj;}"+LN+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Create string about this object."+LN+
+"\t * @return string about this object."+LN+
+"\t */"+LN) : "") +
+"\tpublic String toString() {return \"XComponent: \"+xGetModelPosition();}"+LN+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Get XDPosition of this XComponent."+LN+
+"\t * @return string withXDPosition of this XComponent."+LN+
+"\t */"+LN) : "") +
+"\tpublic String xGetModelPosition() {return XD_Model;}"+LN+
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Get index of model of this XComponent."+LN+
+"\t * @return index of model of this XComponent."+LN+
+"\t */"+LN) : "") +
+"\tpublic int xGetModelIndex() {return "+index+";}"+LN+
 ////////////////////////////////////////////////////////////////////////////////
 			genSeparator("Private methods", _genJavadoc) + toXml+
-"\t@Override"+NL+
-(_genJavadoc ? ("\t/** Create list of XComponents for creation of XML."+NL+
-"* @return list of XComponents."+NL+
-"\t */"+NL) : "") +
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Create list of XComponents for creation of XML."+LN+
+"* @return list of XComponents."+LN+
+"\t */"+LN) : "") +
 "\tpublic java.util.List<org.xdef.component.XComponent> xGetNodeList() {"
-			+NL;
+			+LN;
 		if (genNodeList.length() == 0) {
 			result +=
 "\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();}"
-				+NL;
+				+LN;
 		} else {
-			result += genNodeList + "\t\treturn a;"+NL+"\t}"+NL;
+			result += genNodeList + "\t\treturn a;"+LN+"\t}"+LN;
 		}
 		if (isRoot) {
 			if ((byteArrayEncoding & 1) != 0) { //base64
 				result +=
-(_genJavadoc ? ("\t/** Decode Base64 string."+NL+
-"\t * @param s string with encoded value."+NL+
-"\t * @return decoded byte array."+NL+
-"\t */"+NL) : "")+
-"\tprivate static byte[] decodeBase64(String s) {"+NL+
-"\t\ttry {"+NL+
-"\t\t\treturn org.xdef.sys.SUtils.decodeBase64(s);"+NL+
-"\t\t} catch (org.xdef.sys.SException ex) {"+NL+
-"\t\t\tthrow new org.xdef.sys.SRuntimeException(ex.getReport());"+NL+
-"\t\t}"+NL+
-"\t}"+NL+
-"\t/** Encode byte array to Base64 string."+NL+
-"\t * @param b byte array."+NL+
-"\t * @return string with encoded byte array."+NL+
-"\t */"+NL+
-"\tprivate static String encodeBase64(byte[] b) {"+NL+
-"\t\t\treturn new String(org.xdef.sys.SUtils.encodeBase64(b),"+NL+
-"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+NL+
-"\t}"+NL;
+(_genJavadoc ? ("\t/** Decode Base64 string."+LN+
+"\t * @param s string with encoded value."+LN+
+"\t * @return decoded byte array."+LN+
+"\t */"+LN) : "")+
+"\tprivate static byte[] decodeBase64(String s) {"+LN+
+"\t\ttry {"+LN+
+"\t\t\treturn org.xdef.sys.SUtils.decodeBase64(s);"+LN+
+"\t\t} catch (org.xdef.sys.SException ex) {"+LN+
+"\t\t\tthrow new org.xdef.sys.SRuntimeException(ex.getReport());"+LN+
+"\t\t}"+LN+
+"\t}"+LN+
+"\t/** Encode byte array to Base64 string."+LN+
+"\t * @param b byte array."+LN+
+"\t * @return string with encoded byte array."+LN+
+"\t */"+LN+
+"\tprivate static String encodeBase64(byte[] b) {"+LN+
+"\t\t\treturn new String(org.xdef.sys.SUtils.encodeBase64(b),"+LN+
+"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+LN+
+"\t}"+LN;
 			}
 			if ((byteArrayEncoding & 2) != 0) { //hex
 				result +=
-(_genJavadoc ? ("\t/** Decode hexadecimal string."+NL+
-"\t * @param s string with encoded value."+NL+
-"\t * @return decoded byte array."+NL+
-"\t */"+NL) : "")+
-"\tprivate static byte[] decodeHex(String s) {"+NL+
-"\t\ttry {"+NL+
-"\t\t\treturn org.xdef.sys.SUtils.decodeHex(s);"+NL+
-"\t\t} catch (org.xdef.sys.SException ex) {"+NL+
-"\t\t\tthrow new org.xdef.sys.SRuntimeException(ex.getReport());"+NL+
-"\t\t}"+NL+
-"\t}"+NL+
-(_genJavadoc ? ("\t/** Encode byte array to hexadecimal string."+NL+
-"\t * @param b byte array."+NL+
-"\t * @return string with encoded byte array."+NL+
-"\t */"+NL) : "")+
-"\tprivate static String encodeHex(byte[] b) {"+NL+
-"\t\treturn new String(org.xdef.sys.SUtils.encodeHex(b),"+NL+
-"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+NL+
-"\t}"+NL;
+(_genJavadoc ? ("\t/** Decode hexadecimal string."+LN+
+"\t * @param s string with encoded value."+LN+
+"\t * @return decoded byte array."+LN+
+"\t */"+LN) : "")+
+"\tprivate static byte[] decodeHex(String s) {"+LN+
+"\t\ttry {"+LN+
+"\t\t\treturn org.xdef.sys.SUtils.decodeHex(s);"+LN+
+"\t\t} catch (org.xdef.sys.SException ex) {"+LN+
+"\t\t\tthrow new org.xdef.sys.SRuntimeException(ex.getReport());"+LN+
+"\t\t}"+LN+
+"\t}"+LN+
+(_genJavadoc ? ("\t/** Encode byte array to hexadecimal string."+LN+
+"\t * @param b byte array."+LN+
+"\t * @return string with encoded byte array."+LN+
+"\t */"+LN) : "")+
+"\tprivate static String encodeHex(byte[] b) {"+LN+
+"\t\treturn new String(org.xdef.sys.SUtils.encodeHex(b),"+LN+
+"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+LN+
+"\t}"+LN;
 			}
 		}
 String digest = xe.getDigest();
 		result +=
-(_genJavadoc ? ("\t/** Create an empty object."+NL+
-"\t * @param xd XDPool object from which this XComponent was generated."+NL+
-"\t */"+NL) : "")+
-"\tpublic "+clazz+"() {}"+NL+
-(_genJavadoc ? ("\t/** Create XComponent."+NL+
-"\t * @param p parent component."+NL+
-"\t * @param name name of element."+NL+
-"\t * @param ns namespace URI of element."+NL+
-"\t * @param xPos XPOS of actual element."+NL+
-"\t * @param XDPos XDposition of element model."+NL+
-"\t */"+NL) : "")+
+(_genJavadoc ? ("\t/** Create an empty object."+LN+
+"\t * @param xd XDPool object from which this XComponent was generated."+LN+
+"\t */"+LN) : "")+
+"\tpublic "+clazz+"() {}"+LN+
+(_genJavadoc ? ("\t/** Create XComponent."+LN+
+"\t * @param p parent component."+LN+
+"\t * @param name name of element."+LN+
+"\t * @param ns namespace URI of element."+LN+
+"\t * @param xPos XPOS of actual element."+LN+
+"\t * @param XDPos XDposition of element model."+LN+
+"\t */"+LN) : "")+
 "\tpublic " + clazz +
-"(org.xdef.component.XComponent p,"+NL+
-"\t\tString name, String ns, String xPos, String XDPos) {"+NL+
-"\t\tXD_NodeName=name; XD_NamespaceURI=ns;"+NL+
-"\t\tXD_XPos=xPos;"+NL+
-"\t\tXD_Model=XDPos;"+NL+
-"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+NL+
-"\t}"+NL+
-(_genJavadoc ? ("\t/** Create XComponent from XXNode."+NL+
-"\t * @param p parent component."+NL+
-"\t * @param xn XXNode object."+NL+
-"\t */"+NL) : "")+
+"(org.xdef.component.XComponent p,"+LN+
+"\t\tString name, String ns, String xPos, String XDPos) {"+LN+
+"\t\tXD_NodeName=name; XD_NamespaceURI=ns;"+LN+
+"\t\tXD_XPos=xPos;"+LN+
+"\t\tXD_Model=XDPos;"+LN+
+"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+LN+
+"\t}"+LN+
+(_genJavadoc ? ("\t/** Create XComponent from XXNode."+LN+
+"\t * @param p parent component."+LN+
+"\t * @param xn XXNode object."+LN+
+"\t */"+LN) : "")+
 "\tpublic " + clazz +
-"(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){"+NL+
-"\t\torg.w3c.dom.Element el=xx.getElement();"+NL+
-"\t\tXD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();"+NL+
-"\t\tXD_XPos=xx.getXPos();"+NL+
-"\t\tXD_Model=xx.getXMElement().getXDPosition();"+NL+
-"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+NL+
-"\t\tif (!\""+ digest + "\".equals("+NL+
-"\t\t\txx.getXMElement().getDigest())) { //incompatible element model"+NL+
-"\t\t\tthrow new org.xdef.sys.SRuntimeException("+NL+
-"\t\t\t\torg.xdef.msg.XDEF.XDEF374);"+NL+
-"\t\t}"+NL+
-"\t}"+NL+
+"(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){"+LN+
+"\t\torg.w3c.dom.Element el=xx.getElement();"+LN+
+"\t\tXD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();"+LN+
+"\t\tXD_XPos=xx.getXPos();"+LN+
+"\t\tXD_Model=xx.getXMElement().getXDPosition();"+LN+
+"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+LN+
+"\t\tif (!\""+ digest + "\".equals("+LN+
+"\t\t\txx.getXMElement().getDigest())) { //incompatible element model"+LN+
+"\t\t\tthrow new org.xdef.sys.SRuntimeException("+LN+
+"\t\t\t\torg.xdef.msg.XDEF.XDEF374);"+LN+
+"\t\t}"+LN+
+"\t}"+LN+
 		vars +
-(_genJavadoc ? "\t/** Parent XComponent node.*/"+NL : "") +
-"\tprivate org.xdef.component.XComponent XD_Parent;"+NL+
-(_genJavadoc ? "\t/** User object.*/"+NL : "") +
-"\tprivate Object XD_Object;"+NL+
-(_genJavadoc ? "\t/** Node name.*/"+NL : "") +
-"\tprivate String XD_NodeName = \""+xe.getName()+"\";"+NL+
-(_genJavadoc ? "\t/** Node namespace.*/"+NL : "") +
+(_genJavadoc ? "\t/** Parent XComponent node.*/"+LN : "") +
+"\tprivate org.xdef.component.XComponent XD_Parent;"+LN+
+(_genJavadoc ? "\t/** User object.*/"+LN : "") +
+"\tprivate Object XD_Object;"+LN+
+(_genJavadoc ? "\t/** Node name.*/"+LN : "") +
+"\tprivate String XD_NodeName = \""+xe.getName()+"\";"+LN+
+(_genJavadoc ? "\t/** Node namespace.*/"+LN : "") +
 "\tprivate String XD_NamespaceURI" +
-	(xe.getNSUri() != null ? " = \""+xe.getNSUri()+ "\"" : "") + ";"+NL+
-(_genJavadoc ? "\t/** Node index.*/"+NL : "") +
-"\tprivate int XD_Index = -1;"+NL+
+	(xe.getNSUri() != null ? " = \""+xe.getNSUri()+ "\"" : "") + ";"+LN+
+(_genJavadoc ? "\t/** Node index.*/"+LN : "") +
+"\tprivate int XD_Index = -1;"+LN+
 (genNodeList.length() == 0 ? "" :
-(_genJavadoc ? "\t/** Internal use.*/"+NL : "") +
-"\tprivate int XD_ndx;"+NL) +
-(_genJavadoc ? "\t/** Node xpos.*/"+NL : "") +
-"\tprivate String XD_XPos;"+NL+
-(_genJavadoc ? "\t/** Node XD position.*/"+NL : "") +
-"\tprivate String XD_Model=\""+xe.getXDPosition()+"\";"+NL+
+(_genJavadoc ? "\t/** Internal use.*/"+LN : "") +
+"\tprivate int XD_ndx;"+LN) +
+(_genJavadoc ? "\t/** Node xpos.*/"+LN : "") +
+"\tprivate String XD_XPos;"+LN+
+(_genJavadoc ? "\t/** Node XD position.*/"+LN : "") +
+"\tprivate String XD_Model=\""+xe.getXDPosition()+"\";"+LN+
 ("$any".equals(xe.getName()) || "*".equals(xe.getName()) ?
-(_genJavadoc ? "\t/** Content of xd:any.*/"+NL : "") +
-"\tprivate String XD_Any;"+NL : "");
+(_genJavadoc ? "\t/** Content of xd:any.*/"+LN : "") +
+"\tprivate String XD_Any;"+LN : "");
 		result +=
-"\t@Override"+NL+
-(_genJavadoc ? "\t/** Set value of text node."+NL+
-"\t * @param xx Actual XXNode (from text node)."+NL+
-"\t * @param parseResult parsed value."+NL+
-"\t */"+NL : "");
+"\t@Override"+LN+
+(_genJavadoc ? "\t/** Set value of text node."+LN+
+"\t * @param xx Actual XXNode (from text node)."+LN+
+"\t * @param parseResult parsed value."+LN+
+"\t */"+LN : "");
 		if (txttab.isEmpty()) {
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {}"+NL;
+"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {}"+LN;
 		} else if (txttab.size() == 1) {
 			Entry<String, String> e = txttab.entrySet().iterator().next();
 			String val = e.getValue();
@@ -1803,55 +1804,55 @@ String digest = xe.getDigest();
 				"\t\tset" + name +"("+getter+")"
 				: "\t\tlistOf" + name + "().add("+getter+")";
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {"+NL+
+"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {"+LN+
 (val.startsWith("1") ?
-"\t\t_$"+name+"=(char) XD_ndx++;"+NL+ s + ";"+NL+"\t}"+NL
-:"\t\t_$"+name+".append((char) XD_ndx++);"+NL+ s + ";"+NL+"\t}"+NL);
+"\t\t_$"+name+"=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
+:"\t\t_$"+name+".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
 		} else {
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {"+NL;
+"\tpublic void xSetText(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {"+LN;
 			String s = "";
 			for(Entry<String, String> e: txttab.entrySet()) {
 				s += (s.length() == 0 ? "\t\t" : "\t\t} else ")
 					+ "if (\"" + e.getKey()
-					+ "\".equals(xx.getXMNode().getXDPosition())) {"+NL;
+					+ "\".equals(xx.getXMNode().getXDPosition())) {"+LN;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				String name = val.substring(ndx + 1);
 				String getter = val.substring(2, ndx);
 				s += (val.startsWith("1")
-					? "\t\t\t_$"+name+"=(char) XD_ndx++;"+NL+"\t\t\tset" + name
-					: "\t\t\t_$"+name+".append((char) XD_ndx++);"+NL+
+					? "\t\t\t_$"+name+"=(char) XD_ndx++;"+LN+"\t\t\tset" + name
+					: "\t\t\t_$"+name+".append((char) XD_ndx++);"+LN+
 						"\t\t\tget" + name + "().add")
-					+ "("+getter+");"+NL;
+					+ "("+getter+");"+LN;
 			}
-			result += s + "\t\t}"+NL+"\t}"+NL;
+			result += s + "\t\t}"+LN+"\t}"+LN;
 		}
 		result +=
-"\t@Override"+NL+
-(_genJavadoc ? "\t/** Set value of attribute."+NL+
-"\t * @param xx Actual XXNode (from attribute node)."+NL+
-"\t * @param parseResult parsed value."+NL+
-"\t */"+NL : "");
+"\t@Override"+LN+
+(_genJavadoc ? "\t/** Set value of attribute."+LN+
+"\t * @param xx Actual XXNode (from attribute node)."+LN+
+"\t * @param parseResult parsed value."+LN+
+"\t */"+LN : "");
 		if (atttab.isEmpty()) {
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {}"+NL;
+"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {}"+LN;
 		} else if (atttab.size() == 1) {
 			String val = atttab.entrySet().iterator().next().getValue();
 			ndx = val.indexOf(';');
 			String getter = val.substring(0, ndx);
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {"+NL+
-"\t\tXD_Name_"+val.substring(ndx + 1)+ " = xx.getNodeName();"+NL+
-"\t\tset"+val.substring(ndx + 1)+"(" + getter + ");"+NL+"\t}"+NL;
+"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {"+LN+
+"\t\tXD_Name_"+val.substring(ndx + 1)+ " = xx.getNodeName();"+LN+
+"\t\tset"+val.substring(ndx + 1)+"(" + getter + ");"+LN+"\t}"+LN;
 		} else {
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+NL+
-"\t\torg.xdef.XDParseResult parseResult) {"+NL;
+"\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+LN+
+"\t\torg.xdef.XDParseResult parseResult) {"+LN;
 			String s = "";
 			for (Iterator<Entry<String, String>>i=atttab.entrySet().iterator();
 				i.hasNext();){
@@ -1861,29 +1862,29 @@ String digest = xe.getDigest();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
 				s += (i.hasNext() 
-? "if (xx.getXMNode().getXDPosition().endsWith(\""+key+"\")) {" : "{") + NL;
+? "if (xx.getXMNode().getXDPosition().endsWith(\""+key+"\")) {" : "{") + LN;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				s += "\t\t\tXD_Name_" + val.substring(ndx + 1)
-					+ " = xx.getNodeName();" + NL;
+					+ " = xx.getNodeName();" + LN;
 				s += "\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
-				s+= "("+getter+");"+NL+"\t\t}";
+				s+= "("+getter+");"+LN+"\t\t}";
 			}
-			result += s+NL+"\t}"+NL;
+			result += s+LN+"\t}"+LN;
 		}
 		result +=
-"\t@Override"+NL+
-(_genJavadoc ? "\t/** Create instance of child XComponent."+NL+
-"\t * @param xx actual XXNode."+NL+
-"\t * @return new empty child XCopmponent."+NL+
-"\t */"+NL
+"\t@Override"+LN+
+(_genJavadoc ? "\t/** Create instance of child XComponent."+LN+
+"\t * @param xx actual XXNode."+LN+
+"\t * @return new empty child XCopmponent."+LN+
+"\t */"+LN
 : "");
 		if (xctab.isEmpty()) {
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode xx)"+NL+
-"\t\t{return null;}"+NL;
+				"org.xdef.proc.XXNode xx)"+LN+
+"\t\t{return null;}"+LN;
 		} else if (xctab.size() == 1) {
 			Entry<String, String> e = xctab.entrySet().iterator().next();
 			String s = e.getValue().replace('#', '.');
@@ -1891,15 +1892,15 @@ String digest = xe.getDigest();
 				? "new "+s.substring(s.indexOf(";") + 1)+"(this, xx)" : "this";
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode xx)"+NL+
-"\t\t{return " + s + ";}"+NL;
+				"org.xdef.proc.XXNode xx)"+LN+
+"\t\t{return " + s + ";}"+LN;
 		} else {
 			boolean dflt = false;
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode xx) {"+NL;
+				"org.xdef.proc.XXNode xx) {"+LN;
 			result +=
-"\t\tString s = xx.getXMElement().getXDPosition();"+NL;
+"\t\tString s = xx.getXMElement().getXDPosition();"+LN;
 			for (Iterator<Entry<String, String>>i=xctab.entrySet().iterator();
 				i.hasNext();) {
 				Entry<String, String> e = i.next();
@@ -1909,32 +1910,32 @@ String digest = xe.getDigest();
 				} else {
 					result += ((i.hasNext() || dflt)
 						? "\t\tif (\""+e.getKey()
-							+ "\".equals(s))"+NL+"\t\t\treturn new "
+							+ "\".equals(s))"+LN+"\t\t\treturn new "
 							+ s.substring(s.indexOf(";") + 1)+"(this, xx);"
 						: ("\t\treturn new "
 							+ s.substring(s.indexOf(";") + 1)+"(this, xx); // "
 							+ e.getKey()))
-						+ NL;
+						+ LN;
 				}
 			}
-			result += (dflt ? "\t\treturn " + dflt + ';'+NL : "") + "\t}"+NL;
+			result += (dflt ? "\t\treturn " + dflt + ';'+LN : "") + "\t}"+LN;
 		}
 		result +=
-"\t@Override"+NL+
-(_genJavadoc ? "\t/** Add XComponent object to local variable."+NL+
-"\t * @param xc XComponent to be added."+NL+
-"\t */"+NL
+"\t@Override"+LN+
+(_genJavadoc ? "\t/** Add XComponent object to local variable."+LN+
+"\t * @param xc XComponent to be added."+LN+
+"\t */"+LN
 : "");
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {}"+NL;
+"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {}"+LN;
 		} else if (xctab.isEmpty()) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {}"+NL;
+"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {}"+LN;
 		} else if (xctab.size() == 1) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {"+NL+
-"\t\txc.xSetNodeIndex(XD_ndx++);"+NL;
+"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {"+LN+
+"\t\txc.xSetNodeIndex(XD_ndx++);"+LN;
 			String s = xctab.values().iterator().next().replace('#', '.');
 			String typ = s.substring(s.indexOf(";") + 1);
 			String var = s.substring(2, s.indexOf(";"));
@@ -1942,13 +1943,13 @@ String digest = xe.getDigest();
 				? "\t\tset" + var + "(" + "(" + typ
 				: "\t\tlistOf" + var + "().add((" + typ;
 			String key = xctab.keySet().iterator().next();
-			result += ") xc); //" + key+NL+"\t}"+NL;
+			result += ") xc); //" + key+LN+"\t}"+LN;
 		} else {
 			boolean first = true;
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {"+NL+
-"\t\txc.xSetNodeIndex(XD_ndx++);"+NL+
-"\t\tString s = xc.xGetModelPosition();"+NL;
+"\tpublic void xAddXChild(org.xdef.component.XComponent xc) {"+LN+
+"\t\txc.xSetNodeIndex(XD_ndx++);"+LN+
+"\t\tString s = xc.xGetModelPosition();"+LN;
 			for (Iterator<Entry<String, String>> i=xctab.entrySet().iterator();
 				i.hasNext();) {
 				Entry<String, String> e = i.next();
@@ -1959,17 +1960,17 @@ String digest = xe.getDigest();
 					s = s.charAt(0) == '1'
 						? "set" + var + "(" + "(" + typ + ") xc);"
 						: "listOf" + var + "().add((" + typ + ") xc);";
-					s += !i.hasNext() ? " //" + e.getKey()+NL : NL;
+					s += !i.hasNext() ? " //" + e.getKey()+LN : LN;
 					if (first) {
 						result +=
-"\t\tif (\""+e.getKey()+"\".equals(s))"+NL+"\t\t\t" + s;
+"\t\tif (\""+e.getKey()+"\".equals(s))"+LN+"\t\t\t" + s;
 						first = false;
 					} else {
 						if (i.hasNext()) {
 							result += "\t\telse if (\"" +
-								e.getKey()+ "\".equals(s))"+NL+"\t\t\t" + s;
+								e.getKey()+ "\".equals(s))"+LN+"\t\t\t" + s;
 						} else {
-							result += "\t\telse"+NL+"\t\t\t" + s + "\t}"+NL;
+							result += "\t\telse"+LN+"\t\t\t" + s + "\t}"+LN;
 							break;
 						}
 					}
@@ -1977,20 +1978,20 @@ String digest = xe.getDigest();
 			}
 		}
 		result +=
-"\t@Override"+NL+
-(_genJavadoc ? "\t/** Set value of xd:any model."+NL+
-"\t * @param el Element which is value of xd:any model."+NL+
-"\t */"+NL
+"\t@Override"+LN+
+(_genJavadoc ? "\t/** Set value of xd:any model."+LN+
+"\t * @param el Element which is value of xd:any model."+LN+
+"\t */"+LN
 : "")+
 "\tpublic void xSetAny(org.w3c.dom.Element el) {";
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
-			result += NL+
-"\t\tXD_Any = org.xdef.xml.KXmlUtils.nodeToString(el);"+NL+
-"\t}"+NL;
+			result += LN+
+"\t\tXD_Any = org.xdef.xml.KXmlUtils.nodeToString(el);"+LN+
+"\t}"+LN;
 		} else {
-			result += "}"+NL;
+			result += "}"+LN;
 		}
-		result += "// </editor-fold>"+NL+ innerClasses;
+		result += "// </editor-fold>"+LN+ innerClasses;
 		innerClasses.setLength(0); //clean
 		varNames.clear();
 		_interface = isb;
@@ -2036,10 +2037,10 @@ String digest = xe.getDigest();
 			true,
 			xe.getXDPosition());
 		String hdrTemplate =
-"// This file was generated by org.xdef.component.GenXComponent."+NL+
+"// This file was generated by org.xdef.component.GenXComponent."+LN+
 "// XDPosition: \"" +
-(definitionName == null ? "" : definitionName) + '#' +	modelName + "\"."+NL+
-"// Any modifications to this file will be lost upon recompilation."+NL;
+(definitionName == null ? "" : definitionName) + '#' +	modelName + "\"."+LN+
+"// Any modifications to this file will be lost upon recompilation."+LN;
 		if (_interface != null) {
 			packageName = "";
 			if ((ndx = interfaceName.lastIndexOf('.')) > 0) {
@@ -2048,10 +2049,10 @@ String digest = xe.getDigest();
 			}
 			String s = hdrTemplate;
 			if (packageName != null && packageName.length() > 0) {
-				s += "package " + packageName + ";"+NL;
+				s += "package " + packageName + ";"+LN;
 			}
-			s += NL+"public interface "+interfaceName
-				+" extends org.xdef.component.XComponent {"+NL;
+			s += LN+"public interface "+interfaceName
+				+" extends org.xdef.component.XComponent {"+LN;
 			_interface.insert(0, s).append("}");
 		}
 		if (className.length() == 0) {
@@ -2062,7 +2063,7 @@ String digest = xe.getDigest();
 				(definitionName != null ? "" : definitionName)
 					+ '#' + modelName));
 		if (packageName != null && packageName.length() > 0) {
-			sb.append("package ").append(packageName).append(';').append(NL);
+			sb.append("package ").append(packageName).append(';').append(LN);
 		}
 		return sb.append(result).append("}").toString();
 	}
@@ -2106,52 +2107,52 @@ String digest = xe.getDigest();
 					new OutputStreamWriter(fos) :
 					new OutputStreamWriter(fos, charset);
 				out.write(
-"//This enumeration was generated by org.xdef.component.GenXComponent"+NL+
-"//from declared parser type name: " + e.getKey() + "."+NL+
-"//Any modifications to this file will be lost upon recompilation."+NL);
+"//This enumeration was generated by org.xdef.component.GenXComponent"+LN+
+"//from declared parser type name: " + e.getKey() + "."+LN+
+"//Any modifications to this file will be lost upon recompilation."+LN);
 				if (!packageName.isEmpty()) {
-					out.write("package " + packageName +";"+NL);
+					out.write("package " + packageName +";"+LN);
 				}
 				if (genJavadoc) {
-					out.write(NL+"/** This enumeration represents the type "
-						+ e.getKey() + " from X-definition.*/"+NL);
+					out.write(LN+"/** This enumeration represents the type "
+						+ e.getKey() + " from X-definition.*/"+LN);
 				}
 				out.write("public enum "
 					+ enumName
-					+ " implements org.xdef.component.XCEnumeration{"+NL);
+					+ " implements org.xdef.component.XCEnumeration{"+LN);
 				boolean notFirst = false;
 				StringTokenizer st = new StringTokenizer(values);
 				while (st.hasMoreTokens()) {
 					if (notFirst) {
-						out.write(","+NL);
+						out.write(","+LN);
 					}
 					notFirst = true;
 					out.write("\t"+ st.nextToken());
 				}
-				final String template =";"+NL+
+				final String template =";"+LN+
 (genJavadoc ?
-(NL+"\t@Override"+NL+
-"\t/** Get object associated with this item of enumeration."+NL+
-"\t * @return object associated with this item of enumeration."+NL+
-"\t */"+NL) : "\t@Override"+NL) +
-"\tpublic final Object itemValue() {return name();}"+NL+
+(LN+"\t@Override"+LN+
+"\t/** Get object associated with this item of enumeration."+LN+
+"\t * @return object associated with this item of enumeration."+LN+
+"\t */"+LN) : "\t@Override"+LN) +
+"\tpublic final Object itemValue() {return name();}"+LN+
 (genJavadoc ?
-(NL+"\t@Override"+NL+
-"\t/** Get string which is used to create enumeration."+NL+
-"\t * @return string which is used to create enumeration."+NL+
-"\t */"+NL) : "\t@Override"+NL) +
-"\tpublic final String toString() {return name();}"+NL+
+(LN+"\t@Override"+LN+
+"\t/** Get string which is used to create enumeration."+LN+
+"\t * @return string which is used to create enumeration."+LN+
+"\t */"+LN) : "\t@Override"+LN) +
+"\tpublic final String toString() {return name();}"+LN+
 (genJavadoc ?
-(NL+"\t/** Create enumeration item from an object."+NL+
-"\t * @param x Object to be converted."+NL+
-"\t * @return the item of this  enumeration (or null)."+NL+
-"\t */"+NL) : "") +
-"\tpublic static final &{name} toEnum(final Object x) {"+NL+
-"\t\tif (x!=null)"+NL+
-"\t\t\tfor(&{name} y: values())"+NL+
-"\t\t\t\tif (y.itemValue().toString().equals(x.toString())) return y;"+NL+
-"\t\treturn null;"+NL+
-"\t}"+NL+
+(LN+"\t/** Create enumeration item from an object."+LN+
+"\t * @param x Object to be converted."+LN+
+"\t * @return the item of this  enumeration (or null)."+LN+
+"\t */"+LN) : "") +
+"\tpublic static final &{name} toEnum(final Object x) {"+LN+
+"\t\tif (x!=null)"+LN+
+"\t\t\tfor(&{name} y: values())"+LN+
+"\t\t\t\tif (y.itemValue().toString().equals(x.toString())) return y;"+LN+
+"\t\treturn null;"+LN+
+"\t}"+LN+
 "}";
 				out.write(modify(template, "&{name}", enumName));
 				out.close();
@@ -2352,11 +2353,11 @@ String digest = xe.getDigest();
 	public static void main(String... args) {
 		final String info =
 "GenXComponent - generate XComponent Java source code from X-definition.\n"+
-"Parameters:"+NL+
+"Parameters:"+LN+
 " -i X-definitions list of files, required. Wildcards may be used. Required.\n"+
 " -o Output directory where XComponents are generated, required\n"+
 " -p Output directory where the compiled XDPool will be stored,\n"+
-"    optional (if not specified the XDPool object is not stored)"+NL+
+"    optional (if not specified the XDPool object is not stored)"+LN+
 " -e Encoding name, optional (default is the Java system encoding)\n"+
 " -d Generate JavaDoc, optional (default is not generate JavaDoc)\n"+
 " -j Generate JAXB annotations, optional (default is not generate JAXB)\n"+

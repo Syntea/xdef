@@ -105,7 +105,7 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	/** URI of w3c Xlink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
 	/** URI of w3c Xinclude */
@@ -126,6 +126,13 @@ public interface XDConstants {
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI = 
 		"http://www.xdef.org/instance";
+
+////////////////////////////////////////////////////////////////////////////////
+// Platform dependent constants.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Platform-dependent newline. */
+	public static final String LINE_SEPARATOR = String.format("%n");
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!

@@ -1,5 +1,7 @@
 package org.xdef.sys;
 
+import org.xdef.XDConstants;
+import org.xdef.msg.SYS;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,7 +18,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-import org.xdef.msg.SYS;
 
 /** Generates Java class source with registered report tables.
  * @author Vaclav Trojan
@@ -24,7 +25,7 @@ import org.xdef.msg.SYS;
 public class RegisterReportTables {
 
 	/** Platform-dependent new line. */
-	private static final String NL = /**" \n"; /**/ String.format("%n"); /**/
+	private static final String LN = XDConstants.LINE_SEPARATOR;
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
@@ -568,10 +569,10 @@ public class RegisterReportTables {
 			OutputStreamWriter out = new OutputStreamWriter(
 				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
 			out.write(
-"// This file was generated automatically, DO NOT modify it!"+NL+
-"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+NL+NL+
-"/** Registered identifiers of reports with the prefix " + prefix + ". */"+NL+
-"public interface " + prefix + " {"+NL);
+"// This file was generated automatically, DO NOT modify it!"+LN+
+"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+LN+LN+
+"/** Registered identifiers of reports with the prefix " + prefix + ". */"+LN+
+"public interface " + prefix + " {"+LN);
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
 				String s = table.getReportText(id);
@@ -581,16 +582,16 @@ public class RegisterReportTables {
 					s = s.replace("<", "&lt;");
 					s = s.replace(">", "&gt;");
 					s = s.replace("*/", "*&#47;");
-					out.write("\t/** " + s + " */"+NL);
+					out.write("\t/** " + s + " */"+LN);
 				}
 				// generate the field with the value of the registered item
 				long regID = ReportTable.getRegisteredReportId(table, i);
 				out.write(
-"\tpublic static final long " + id + " = " + regID + "L;"+NL);
+"\tpublic static final long " + id + " = " + regID + "L;"+LN);
 			}
 			// identifier which is equal to the prefix contans default language
-			out.write(NL+"\t/** Default language. */"+NL+
-"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+NL+
+			out.write(LN+"\t/** Default language. */"+LN+
+"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+LN+
 '}');
 			out.close();
 		} catch (Exception ex) {
@@ -689,7 +690,7 @@ public class RegisterReportTables {
 		} catch (Exception ex) {
 			String msg = ex.getMessage();
 			if (!reporter.toString().isEmpty()) {
-				msg = (msg != null ? msg + NL : "") + reporter.toString();
+				msg = (msg != null ? msg + LN : "") + reporter.toString();
 			}
 			throw new RuntimeException(msg, ex);
 		}
@@ -1113,7 +1114,7 @@ public class RegisterReportTables {
 		}
 		errors.close();
 		if (!errWriter.toString().isEmpty()) {
-			throw new RuntimeException(errWriter.toString() + NL + HDRMSG);
+			throw new RuntimeException(errWriter.toString() + LN + HDRMSG);
 		}
 		ArrayReporter reporter = new ArrayReporter();
 		ReportTableImpl[] msgTables = (ReportTableImpl[])
