@@ -1127,7 +1127,9 @@ public abstract class XDTester extends STester {
 		ByteArrayOutputStream err = new ByteArrayOutputStream();
 		// compile sources
 		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
-			throw new RuntimeException("Error in  compilation");
+			throw new RuntimeException("Java compilation failed:\n" 
+				+ new String(err.toByteArray()));
+			
 		}
 	}
 
