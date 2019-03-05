@@ -1113,8 +1113,8 @@ public abstract class XDTester extends STester {
 		classDir = classDir.substring(0, classDir.indexOf(className));
 		// prepare parameters
 		ArrayList<String> ar = new ArrayList<String>();
-		ar.add("-classpath"); ar.add(classpath +
-			System.getProperty("path.separator") + classDir); // classpath
+		ar.add("-classpath"); ar.add(classpath
+			+ System.getProperty("path.separator") + classDir); // classpath
 		ar.add("-d"); ar.add(classDir); // where to write compiled classes
 		ar.add("-source"); ar.add("1.6"); // sources are in version 1.6
 		ar.add("-target"); ar.add("1.6"); // generate classes in version 1.6
@@ -1128,9 +1128,8 @@ public abstract class XDTester extends STester {
 		ByteArrayOutputStream err = new ByteArrayOutputStream();
 		// compile sources
 		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
-			throw new RuntimeException("Java compilation failed:\n" 
+			throw new RuntimeException("Java compilation failed:\n"
 				+ new String(err.toByteArray()));
-			
 		}
 	}
 
