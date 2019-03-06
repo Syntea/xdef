@@ -23,7 +23,6 @@ import org.xdef.model.XMNode;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariableTable;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -1113,23 +1112,11 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final String getXdefEditor() {return _xdefEditor;}
 
-	@Override
-	/** Write this XDPool to output stream.
-	 * @param f where to write.
-	 * @throws IOException if an error occurs.
-	 */
-	public final void writeXDPool(final File f) throws IOException {
-		OutputStream out = new FileOutputStream(f);
-		writeXDPool(out);
-		out.close();
-	}
-
-	@Override
 	/** Write this XDPool to stream.
 	 * @param out where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	public final void writeXDPool(final OutputStream out) throws IOException {
+	private void writeXPool(final OutputStream out) throws IOException {
 		GZIPOutputStream gout = new GZIPOutputStream(out);
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
@@ -1247,7 +1234,7 @@ public final class XPool implements XDPool, Serializable {
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
-		writeXDPool(out);
+		writeXPool(out);
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
@@ -1442,16 +1429,5 @@ public final class XPool implements XDPool, Serializable {
 				}
 			}
 		}
-	}
-
-	/** Read XPool from input stream.
-	 * @param input where to read.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XPool readXDPool(final InputStream input) throws IOException {
-		XPool xp = new XPool();
-		xp.xpRead(input);
-		return xp;
 	}
 }

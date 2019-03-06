@@ -6,9 +6,6 @@ import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMNode;
 import org.xdef.model.XMVariableTable;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map;
@@ -82,18 +79,6 @@ public interface XDPool extends Serializable {
 	 * @return XMNode representing model or null if model was nod found.
 	 */
 	public XMNode findModel(String xdpos);
-
-	/** Write this XDPool to output stream.
-	 * @param out where to write.
-	 * @throws IOException if an error occurs.
-	 */
-	public void writeXDPool(OutputStream out) throws IOException;
-
-	/** Write this XDPool to output stream.
-	 * @param f where to write.
-	 * @throws IOException if an error occurs.
-	 */
-	public void writeXDPool(File f) throws IOException;
 
 	/** Display XDPool.
 	 * @param out PrintStream where pool is printed.

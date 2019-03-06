@@ -131,7 +131,7 @@ public interface XDConstants {
 // Platform dependent constants.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Platform-dependent newline. */
+	/** Platform-dependent line separator (newline characters: LF, CR LF, etc.*/
 	public static final String LINE_SEPARATOR = String.format("%n");
 
 ////////////////////////////////////////////////////////////////////////////////

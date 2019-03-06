@@ -1,7 +1,6 @@
 package org.xdef;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,7 +10,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.util.Properties;
 import org.w3c.dom.Element;
-import org.xdef.impl.XPool;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportReader;
@@ -317,27 +315,6 @@ public final class XDFactory {
 	public static XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
 		return org.xdef.impl.XBuilder.xparse(source, reporter);
-	}
-
-	/** Read the XDPool from the input stream.
-	 * @param stream input stream with X-definition.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XDPool readXDPool(InputStream stream) throws IOException {
-		return XPool.readXDPool(stream);
-	}
-
-	/** Read the XDPool from the file.
-	 * @param f File with saved XDPool.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XDPool readXDPool(File f) throws IOException {
-		InputStream is = new FileInputStream(f);
-		XDPool xp = readXDPool(is);
-		is.close();
-		return xp;
 	}
 
 	/** Creates XDInput from InputStream.

@@ -1,6 +1,5 @@
 package org.xdef.impl.debug;
 
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.XDReader;
 import org.xdef.impl.XDSourceItem;
@@ -15,6 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 /** Provides tools for connection of an external editor of X-definitions.
@@ -52,13 +53,14 @@ public abstract class ExternalXDEditor implements XEditor {
 			File resultFile = File.createTempFile("result", ".txt");
 			resultFile.deleteOnExit();
 			resultFile.delete();
-
-			// write data to files
-			xpool.writeXDPool(poolFile);
+			// write XDPool files
+			ObjectOutputStream outpool =
+				new ObjectOutputStream(new FileOutputStream(poolFile));
+			outpool.writeObject(xpool);
+			outpool.close();
 			FileReportWriter frw = new FileReportWriter(reportFile);
 			reporter.writeReports(frw);
 			frw.close();
-
 			// we need file names to pass as parameters (see "main"  method)
 			String defPool = poolFile.getAbsolutePath();
 			String reports = reportFile.getAbsolutePath();
@@ -131,9 +133,17 @@ public abstract class ExternalXDEditor implements XEditor {
 		final String defPool) throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
-		XDPool result = XDFactory.readXDPool(pool);
-		pool.delete();
-		return result;
+		ObjectInputStream inpool = 
+			new ObjectInputStream(new FileInputStream(pool));
+		try {
+			XDPool result = (XDPool) inpool.readObject();
+			return result;
+		} catch (ClassNotFoundException ex) {			
+			throw new IOException(ex);
+		} finally {
+			inpool.close();
+			pool.delete();
+		}
 	}
 
 	/** Create ArrayReporter from the file. The external editor can use this

@@ -15,10 +15,11 @@ import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefOutStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import org.xdef.impl.XPool;
+import org.xdef.sys.SRuntimeException;
 
 /** Validation of XML document with given X-definition.
  * <p>
@@ -152,7 +153,7 @@ public class XValidate {
 	 * @param in The DefInStream used as standard input or <tt>null</tt>.
 	 * @param userObj The user object or <tt>null</tt>.
 	 * @param xmlFile The file with XML.
-	 * @param poolFile The file with XDPool or null.
+	 * @param poolFile The file with serialized XDPool or null.
 	 * @param xdefFiles Array of files with definitions or null.
 	 * @param rootDefName Name of root definition.
 	 * @param repw Report writer; if <tt>null</tt> then an RuntimeEexception
@@ -183,13 +184,23 @@ public class XValidate {
 				return null;
 			}
 		} else if (poolFile != null) {
+			ObjectInputStream inpool = null;
 			try {
-				xp = XPool.readXDPool(new FileInputStream(poolFile));
+				inpool = new ObjectInputStream(new FileInputStream(poolFile));
+				xp = (XDPool) inpool.readObject();
+				inpool.close();
 			} catch (Exception ex) {
 				if (ex instanceof SThrowable) {
 					repw.putReport(((SThrowable)ex).getReport());
 				} else {
 					repw.fatal(SYS.SYS036, ex); //Program exception &{0}
+				}
+				if (inpool != null) {
+					try {
+						inpool.close();
+					} catch (Exception exx) {//Program exception &{0}
+						throw new SRuntimeException(SYS.SYS036, exx);
+					}						
 				}
 				return null;
 			}
