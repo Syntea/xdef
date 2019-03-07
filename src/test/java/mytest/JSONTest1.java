@@ -1,6 +1,5 @@
 package mytest;
 
-import java.io.File;
 import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
@@ -44,9 +43,9 @@ public class JSONTest1 {
 	}
 	
 	public static void main(String[] args) {
-		test("src/test/java/mytest/JSONTest1.xdef", 
-			"src/test/java/mytest/JSONTest1.xml");
-		test("src/test/java/mytest/JSONTest1.xdef", 
-			"src/test/java/mytest/JSONTest1_1.xml");
+		test("src/test/java/mytest/JSONTest1_base.xdef", 
+			"src/test/java/mytest/JSONTest1_data1.xml");
+		test("src/test/java/mytest/JSONTest1_base.xdef", 
+			"src/test/java/mytest/JSONTest1_data2.xml");
 	}
 }
