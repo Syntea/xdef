@@ -52,5 +52,10 @@ public class JSONTest1 {
 			"src/test/java/mytest/JSONTest1_data2.xml");
 		test("src/test/java/mytest/JSONTest1_data2.xdef.xml", 
 			"src/test/java/mytest/JSONTest1_data2.xml");
+
+		test("src/test/java/mytest/JSONTest1_base.xdef", 
+			"src/test/java/mytest/XML.txt");
+		test("src/test/java/mytest/Xdef.txt", "src/test/java/mytest/XML.txt");
+
 	}
 }
