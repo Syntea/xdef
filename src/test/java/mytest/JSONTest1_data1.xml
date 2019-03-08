@@ -2,45 +2,15 @@
   <js:string key="x"></js:string>
   <js:string key="y">z</js:string>
   <js:array key="z">
-    <js:string>1</js:string>
-    <js:string>2</js:string>
+    <js:number>1</js:number>
+    <js:number>2</js:number>
 	<js:map>
       <js:string key="x">y</js:string>
-      <js:string key="y">z</js:string>
+      <js:number key="y">1</js:number>
+      <js:null key="z"/>
 	</js:map>
-    <js:string>3</js:string>
+    <js:string>z</js:string>
   </js:array>
   <js:string key="u">u</js:string>
   <js:string key="v">v</js:string>
-  <!-- 
-  <js:array key="p">
-    <js:map> 
-      <js:number key="a">123</js:number> 
-      <js:string key="b">abc</js:string> 
-      <js:boolean key="c">false</js:boolean>
-      <js:null key="d"/>
-      <js:array key="e">
-        <js:string>xyz</js:string>
-        <js:boolean>true</js:boolean>
-      </js:array>
-      <js:map key="f">
-        <js:string key="a" >xyz</js:string>
-        <js:boolean key="b" >true</js:boolean>
-      </js:map>
-      <js:number key="g">1</js:number> 
-    </js:map> 
-    <js:number>3.14e2</js:number> 
-    <js:string>def</js:string>
-    <js:boolean>true</js:boolean>
-    <js:null/>
-    <js:map>
-      <js:string key="a" >xyz</js:string>
-      <js:boolean key="b" >true</js:boolean>
-    </js:map>
-    <js:array>
-      <js:string>xyz</js:string>
-      <js:boolean>true</js:boolean>
-    </js:array>
-  </js:array>
-  -->
 </js:map>

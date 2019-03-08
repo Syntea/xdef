@@ -1,21 +1,19 @@
-<xd:def xmlns:xd="http://www.xdef.org/3.2"
-  xmlns:js="http://www.w3.org/2005/xpath-functions"
-  xd:root="js:array">
+<js:array xmlns:js="http://www.w3.org/2005/xpath-functions">
+  <js:string>111</js:string>
+  <js:string>222</js:string>
   <js:array>
-    <js:string>optional string()</js:string>
-    <js:string>optional string()</js:string>
-    <js:array>
-      <js:string>optional string()</js:string>
-      <js:string>optional string()</js:string>
-    </js:array>
-    <js:map>
-      <js:string xd:script="match @key=='x'" key="'x'">optional string()</js:string>
-      <js:array xd:script="match @key=='z'" key="'z'">
-        <js:string>optional string()</js:string>
-        <js:map/>
-        <js:string>optional string()</js:string>
-      </js:array>
-    </js:map>
-    <js:string>optional string()</js:string>
+    <js:string>333</js:string>
+    <js:string>444</js:string>
   </js:array>
-</xd:def>
+  <js:map>
+    <js:string key="x"></js:string>
+    <js:array key="z">
+      <js:string>1</js:string>
+      <!--EMPTY MAP-->
+	  <js:map>
+ 	  </js:map>
+      <js:string>3</js:string>
+    </js:array>
+  </js:map>
+  <js:string>x</js:string>
+</js:array>

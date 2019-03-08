@@ -31,11 +31,12 @@ public class JSONTest1 {
 			xd = xp.createXDDocument();
 			ArrayReporter reporter = new ArrayReporter();
 			el = xd.xparse(xml, reporter);
+			// check errors
 			if (reporter.errorWarnings()) {
-				System.err.println("ERRORS in " + xml + ":\n"
-					+ reporter.printToString());
+				System.err.println("ERRORS in "+ xml +" (xdef: "+ xdef +"):\n");
+				System.err.println(reporter.printToString());
 			} else {
-				System.out.println("OK " + xml);
+				System.out.println("OK "+ xml +" (xdef: "+ xdef +")");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
@@ -45,7 +46,11 @@ public class JSONTest1 {
 	public static void main(String[] args) {
 		test("src/test/java/mytest/JSONTest1_base.xdef", 
 			"src/test/java/mytest/JSONTest1_data1.xml");
+		test("src/test/java/mytest/JSONTest1_data1.xdef.xml", 
+			"src/test/java/mytest/JSONTest1_data1.xml");
 		test("src/test/java/mytest/JSONTest1_base.xdef", 
+			"src/test/java/mytest/JSONTest1_data2.xml");
+		test("src/test/java/mytest/JSONTest1_data2.xdef.xml", 
 			"src/test/java/mytest/JSONTest1_data2.xml");
 	}
 }
