@@ -1,0 +1,4 @@
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" name="main" root="A | B">
+  <A a="datetime('d.M.yyyy')" />
+  <B b="xdatetime('d.M.yyyy')" />
+</xd:def>

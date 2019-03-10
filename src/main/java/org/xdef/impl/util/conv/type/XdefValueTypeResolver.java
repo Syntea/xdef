@@ -518,6 +518,7 @@ public class XdefValueTypeResolver {
 				}
 			}
 			break;
+			case XdefBase.Id.XDATE_TIME: /*VT*/
 			case XdefBase.Id.DATE_TIME: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));

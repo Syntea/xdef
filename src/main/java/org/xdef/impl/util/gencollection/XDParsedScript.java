@@ -576,7 +576,6 @@ public class XDParsedScript {
 				(i + oLen == optionsLen || getOptions().charAt(i+oLen) == ',')) {
 				return true;
 			}
-			i+= 1;
 		}
 		return false;
 	}
@@ -617,6 +616,7 @@ public class XDParsedScript {
 			? null : getXdScript(s, defName, isValue);
 	}
 
+	@SuppressWarnings("deprecation")
 	/** Create XdParsedScript object from the script.
 	 * @param script string with script.
 	 * @param defName name of X-definition.

@@ -32,6 +32,9 @@ public class XdefBase {
 	/** <code>datetime</code> type.*/
 	public static final XdefBase DATE_TIME =
 		new XdefBase(Id.DATE_TIME, XdNames.DATE_TIME);
+	/** <code>xdatetime</code> type.*/
+	public static final XdefBase XDATE_TIME = /*VT*/
+		new XdefBase(Id.XDATE_TIME, XdNames.XDATE_TIME);
 	/** <code>dateYMDhms</code> type.*/
 	public static final XdefBase DATE_YMDHMS =
 		new XdefBase(Id.DATE_YMDHMS, XdNames.DATE_YMDHMS);
@@ -222,6 +225,7 @@ public class XdefBase {
 		XDEFBASES.add(CONTAINS);
 		XDEFBASES.add(CONTAINS_I);
 		XDEFBASES.add(DATE_TIME);
+		XDEFBASES.add(XDATE_TIME); /*VT*/
 		XDEFBASES.add(DATE_YMDHMS);
 		XDEFBASES.add(DECIMAL);
 		XDEFBASES.add(EMAIL);
@@ -362,8 +366,10 @@ public class XdefBase {
 		public static final int CONTAINS_I = CONTAINS + 1;
 		/** <code>datetime</code> type id.*/
 		public static final int DATE_TIME = CONTAINS_I + 1;
+		/** <code>datetime</code> type id.*/
+		public static final int XDATE_TIME = DATE_TIME + 1;
 		/** <code>dateYMDhms</code> type id.*/
-		public static final int DATE_YMDHMS = DATE_TIME + 1;
+		public static final int DATE_YMDHMS = XDATE_TIME + 1;
 		/** <code>dec</code> type id.*/
 		public static final int DECIMAL = DATE_YMDHMS + 1;
 		/** <code>ENTITY</code> type id.*/
