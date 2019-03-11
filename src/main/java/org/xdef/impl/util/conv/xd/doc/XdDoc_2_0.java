@@ -1,8 +1,10 @@
 package org.xdef.impl.util.conv.xd.doc;
 
 import org.xdef.XDConstants;
+import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.impl.compile.XScriptParser;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdDecl;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdDef;
@@ -10,11 +12,13 @@ import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdElem;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdModel;
 import org.xdef.impl.util.conv.xd.xd_2_0.XdNames;
 import org.xdef.impl.util.conv.xd.xd_2_0.XdUtils;
+import org.xdef.impl.util.conv.Util;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** Represents implementation of X-definition document version 2.0.
@@ -115,9 +119,54 @@ public final class XdDoc_2_0 extends XdDoc {
 		for (int i = 0; i < models.getLength(); i++) {
 			Element model = (Element) models.item(i);
 			try {
-				XdModel xdModel = XdUtils.createXdModel(model);
-				if (xdModel != null) {
-					_xdModels.put(xdModel, model);
+/*VT*/
+				if (XdUtils.isDeclaration(model)) {
+					// create XdDecl items from all declared types
+					String typeDecl = KXmlUtils.getTextValue(model);
+					XScriptParser p = new XScriptParser((byte) 10);
+					p.setSource(new SBuffer(typeDecl), "", (byte) 10);
+					String localNamePfx = "";
+					Node parent = model.getParentNode();
+					String ns = model.getNamespaceURI();
+					if ("def".equals(parent.getLocalName())
+						&& ns.equals(parent.getNamespaceURI())) {
+						try {
+							String scope = Util.getAttrValue(model, ns,"scope");
+							if ("local".equals(scope)) {
+								localNamePfx = "_" +
+									Util.getAttrValue(parent,ns,"name") + "_";
+							}
+						} catch (Exception ex) {}
+					}
+					while (!p.eos()) {
+					   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
+							int pos = p.getIndex();
+							if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
+								char sym;
+								String name =
+									p.getParsedBufferPartFrom(pos).trim();
+								pos = p.getIndex();
+								while ((sym = p.nextSymbol())
+									!= XScriptParser.SEMICOLON_SYM
+									&& sym != XScriptParser.END_SYM
+									&& sym != XScriptParser.NOCHAR){}
+								typeDecl =
+									p.getParsedBufferPartFrom(pos).trim();
+								if (sym != XScriptParser.NOCHAR) {
+									typeDecl = typeDecl.substring(
+										0, typeDecl.length() - 1);
+								}
+								_xdModels.put(new XdDecl(xdDef,
+									localNamePfx + name), model);
+							}
+					   }
+					}
+				} else {
+/*VT*/
+					XdModel xdModel = XdUtils.createXdModel(model);
+					if (xdModel != null) {
+						_xdModels.put(xdModel, model);
+					}
 				}
 			} catch (Exception ex) {
 				throw new RuntimeException(

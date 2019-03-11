@@ -381,18 +381,16 @@ public class TestXd2XsdConv extends XDTester {
 
 		/*VT*/
 		_props.put("xdef.warnings", "false");//do not check validity of 3.1
-		assertTrue(prepare("xdatetimeTest"), popMessage());
-		assertTrue(parse("xdatetimeTest_valid_1"), popMessage());
-		assertTrue(parse("xdatetimeTest_valid_2"), popMessage());
-		assertTrue(parseFail("xdatetimeTest_invalid_1"), popMessage());
-		assertTrue(parseFail("xdatetimeTest_invalid_2"), popMessage());
-		_props.put("xdef.warnings", "true");//check full validity of 3.1 version
-		/*VT*/
-
 		assertTrue(prepare("declarationTest"), popMessage());
 		assertTrue(parse("declarationTest_valid_1"), popMessage());
+		assertTrue(parse("declarationTest_valid_2"), popMessage());
+		assertTrue(parse("declarationTest_valid_3"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_1"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
+		assertTrue(parseFail("declarationTest_invalid_3"), popMessage());
+		assertTrue(parseFail("declarationTest_invalid_4"), popMessage());
+		_props.put("xdef.warnings", "true");//check full validity of 3.1 version
+		/*VT*/
 
 		assertTrue(prepare("schemaTypeTest"), popMessage());
 		assertTrue(parse("schemaTypeTest_valid_1"), popMessage());

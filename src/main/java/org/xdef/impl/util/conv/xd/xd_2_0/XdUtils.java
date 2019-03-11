@@ -386,10 +386,7 @@ public final class XdUtils {
 		XdDef xdDef = getXdDef(e);
 		String xdURI = e.getNamespaceURI();
 		if (xdURI.equals(model.getNamespaceURI())) {
-			if (isDeclaration(model)) {
-				String name = getDeclName(model);
-				return new XdDecl(xdDef, name);
-			} else if (isChoice(model)) {
+			if (isChoice(model)) {
 				String name = getGroupName(model);
 				return new XdGroup(xdDef, name, XdGroup.GroupType.CHOICE);
 			} else if (isMixed(model)) {
@@ -400,40 +397,18 @@ public final class XdUtils {
 				return new XdGroup(xdDef, name, XdGroup.GroupType.SEQUENCE);
 			} else if (isMacro(model)) {
 				return null;
+/*VT*/
+//			} else if (isDeclaration(model)) {
+//				String name = getDeclName(model);
+//				return new XdDecl(xdDef, name);
+/*VT*/
 			}
 		} else {
-			return new XdElem(
-				xdDef, model.getNamespaceURI(), model.getLocalName());
+			return new XdElem(xdDef,
+				model.getNamespaceURI(), model.getLocalName());
 		}
 		throw new IllegalArgumentException(
 			"Given element is not a valid X-definition model");
-	}
-
-	/** Returns name of X-definition <tt>declaration</tt> model.
-	 * @param declaration X-definition <tt>declaration</tt> element.
-	 * @return name of X-definition <tt>declaration</tt> model.
-	 * @throws NullPointerException if given declaration element
-	 * is <tt>null</tt>.
-	 * @throws IllegalArgumentException if given declaration element does not
-	 * contain a type declaration.
-	 */
-	private static String getDeclName(final Element declaration) {
-		if (declaration == null) {
-			throw new NullPointerException("Given declaration element is null");
-		}
-		String scriptText = KXmlUtils.getTextContent(declaration);
-		XDParsedScript script =
-			XDParsedScript.getXdScript(scriptText, null, true);
-		if (script != null) {
-			String fullType = script._type;
-			int ndx = fullType.indexOf("{"); // old format {parse: xxx;}
-			if (ndx <= 0) {
-				ndx = fullType.indexOf(" "); // new format xxx
-			}
-			return fullType.substring(0, ndx);
-		}
-		throw new IllegalArgumentException("Given declaration element does not "
-				+ "contain a type declaration");
 	}
 
 	/** Returns type constant of given X-definition element declaration.
@@ -749,41 +724,6 @@ public final class XdUtils {
 		}
 		throw new IllegalArgumentException("Given node is not a valid def "
 				+ "descendant node");
-	}
-
-	/** Gets type declaration string from given X-definition
-	 * <code>declaration</code> model.
-	 * @param declElem X-definition <code>declaration</code> model.
-	 * @return type declaration string.
-	 * @throws NullPointerException if given <code>declaration</code> element is
-	 * <code>null</code>.
-	 */
-	public static String getDeclTypeString(Element declElem) {
-		if (declElem == null) {
-			throw new NullPointerException("Given declaration is null");
-		}
-		String text = KXmlUtils.getTextValue(declElem);
-		int ndx;
-		if ((ndx = text.indexOf("parse:")) >= 0) {
-			text = text.substring(ndx + 6);
-			ndx = text.lastIndexOf(";");
-			text = text.substring(0, ndx);
-			return text.trim();
-		} else {
-			if (text.startsWith("type ")) {
-				if ((ndx = text.indexOf(" ", + 5)) > 0) {
-					text = text.substring(ndx+1);
-					ndx = text.lastIndexOf(";");
-					text = text.substring(0, ndx);
-					return text.trim();
-				}
-			}
-/*VT*/
-// TODO thie works only if declaration starts with type.
-			return "";
-//			throw new RuntimeException("Could not find type to parse");
-/*VT*/
-		}
 	}
 
 	/** Represents node occurrence. */

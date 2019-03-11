@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<Root>
-    <Elem>1</Elem>
-    <Elem>10</Elem>
-</Root>
+<A>
+  <Elem>1</Elem>
+  <Elem>10</Elem>
+</A>

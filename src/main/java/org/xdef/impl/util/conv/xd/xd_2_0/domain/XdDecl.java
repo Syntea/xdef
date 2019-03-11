@@ -9,9 +9,8 @@ public final class XdDecl extends XdModel {
 	private int _hashCode = 0;
 
 	/** Creates instance of declaration model.
-	 *
 	 * @param def declaration X-definition.
-	 * @param name name of delcaration.
+	 * @param name name of declaration.
 	 * @throws NullPointerException if given model X-definition or declaration
 	 * name is <tt>null</tt>.
 	 * @throws IllegalArgumentException if given declaration name is empty.
