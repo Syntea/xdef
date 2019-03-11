@@ -46,7 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XDGenCollection {
 
-	/** The created document */
+	/** Created XML document. */
 	private final Document _doc;
 	/** Root element of collection. */
 	private Element _collection;
