@@ -1,4 +1,4 @@
-# Version 32.3.0, release-date 2019-03-04
+# Version 32.3.0, release-date 2019-03-12
 - to the X-script added method
     XDValue replaceItem(int index, XDValue value)
   This method is member of the Container objects.

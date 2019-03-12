@@ -16,7 +16,7 @@
     <description>X-definition 3.2 (Open Source Software)</description>
     
     <properties>
-		<release.date>2019-03-04</release.date><!-- update when changed version -->
+		<release.date>2019-03-12</release.date><!-- update when changed version -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
