@@ -2,6 +2,7 @@
 - to the X-script added method
     XDValue replaceItem(int index, XDValue value)
   This method is member of the Container objects.
+- fixed errors in conversion of X-definition to XML schema (in declared types)
 
 # Version 32.2.1, release-date 2019-02-25
 - fixed X-component bug when the prefix of the attribute namespace differs
