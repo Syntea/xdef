@@ -4,13 +4,11 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.proc.XXElement;
 import org.xdef.util.GenCollection;
 import java.io.File;
-import java.util.Properties;
 import java.io.IOException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -21,10 +19,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xdef.sys.ReportWriter;
 import org.xdef.util.XdefToXsd;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import test.utils.XDTester;
 
 /** Test XDefinition to schema conversion.
@@ -46,7 +40,6 @@ public class TestXd2XsdConv extends XDTester {
 	private XDDocument _chkDoc;
 	private boolean _prepared = false;
 	private ErrMessage _errMessage;
-	private final Properties _props = new Properties();
 
 	private void init() {
 //        _conv = new XdefToXsd();
@@ -110,14 +103,7 @@ public class TestXd2XsdConv extends XDTester {
 			return false;
 		}
 		try {
-			XDPool xdPool = XDFactory.compileXD(_props, _xdefFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(xdPool);
-			out.close();
-			ObjectInputStream in = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			xdPool = (XDPool) in.readObject();
+			XDPool xdPool = compile(_xdefFile);
 			if (!xdPool.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
 					"Could not find main definition in XDefinition file!",
@@ -308,8 +294,6 @@ public class TestXd2XsdConv extends XDTester {
 	public void test() {
 		init();
 
-		_props.put("xdef.warnings", "true");
-
 		assertTrue(prepare("basicTest"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
 		assertTrue(parse("basicTest_valid_2"), popMessage());
@@ -380,7 +364,7 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parse("dateTimeTest_valid_1"), popMessage());
 
 		/*VT*/
-		_props.put("xdef.warnings", "false");//do not check validity of 3.1
+		setProperty("xdef.warnings", "false");//do not check validity of 3.1
 		assertTrue(prepare("declarationTest"), popMessage());
 		assertTrue(parse("declarationTest_valid_1"), popMessage());
 		assertTrue(parse("declarationTest_valid_2"), popMessage());
@@ -389,7 +373,7 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_3"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_4"), popMessage());
-		_props.put("xdef.warnings", "true");//check full validity of 3.1 version
+		resetProperties();
 		/*VT*/
 
 		assertTrue(prepare("schemaTypeTest"), popMessage());
@@ -405,13 +389,15 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parse("B1_Common_valid_1"), popMessage());
 		assertTrue(parse("B1_Common_valid_2"), popMessage());
 
-		_props.put("xdef.warnings", "false"); // do not check deprecated
+		/*VT*/
+		setProperty("xdef.warnings", "false"); // do not check deprecated
 		assertTrue(prepare("Sisma"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
 
-		_props.put("xdef.warnings", "true");//check full validity of 3.1 version
 		assertTrue(prepare("Sisma3_1"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
+		resetProperties();
+		/*VT*/
 
 		try {
 			FUtils.deleteAll(_tempDir, true);

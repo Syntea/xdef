@@ -1,5 +1,6 @@
 package org.xdef.impl.util.conv.type;
 
+import org.xdef.impl.util.conv.Util;
 import org.xdef.impl.util.conv.type.domain.Other;
 import org.xdef.impl.util.conv.type.domain.ValueType;
 import org.xdef.impl.util.conv.type.domain.XdefBase;
@@ -26,9 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.w3c.dom.Element;
-import org.xdef.impl.compile.XScriptParser;
-import org.xdef.sys.SBuffer;
-import org.xdef.xml.KXmlUtils;
 
 /** Provides functionality for resolving value type declarations.
  * @author Ilia Alexandrov
@@ -242,44 +240,37 @@ public class XdefValueTypeResolver {
 		addTypeToSType(type, sTypeElem);
 	}
 
+
 	/** Resolves X-definition declaration model.
 	 * @param xdDecl X-definition declaration model to resolve.
 	 */
 	public void resolveXdDecl(XdDecl xdDecl) {
 		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
 		String declName = xdDecl.getName();
-		String typeDecl = KXmlUtils.getTextValue(declElem);
-		XScriptParser p = new XScriptParser((byte) 10);
-		p.setSource(new SBuffer(typeDecl), "", (byte) 10);
-		while (!p.eos()) {
-		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
-				int pos = p.getIndex();
-				if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
-					char sym;
-					String name = p.getParsedBufferPartFrom(pos).trim();
-					pos = p.getIndex();
-					while ((sym=p.nextSymbol()) != XScriptParser.SEMICOLON_SYM
-						&& sym != XScriptParser.END_SYM
-						&& sym != XScriptParser.NOCHAR){}
-					typeDecl = p.getParsedBufferPartFrom(pos).trim();
-					if (sym != XScriptParser.NOCHAR) {
-						typeDecl = typeDecl.substring(0, typeDecl.length() - 1);
-					}
-					if (declName.equals(name)) {
-						try {
-							ValueType type =
-								XdefValueTypeParser.parse(typeDecl);
-							XsdSType model =
-								(XsdSType) _xdModelXsdModelMap.get(xdDecl);
-							Element sTypeElem =
-								(Element) _xsdDoc.getModels().get(model);
-							addTypeToSType(type, sTypeElem);
-						} catch (Exception ex) {
-							throw new RuntimeException("Can not parse type",ex);
-						}
-					}
-				}
-		   }
+		Map<String, String> map = Util.getDeclaredTypes(declElem);
+		String localNamePfx = "_" + xdDecl.getDef().getName() + "_";
+
+		String typeDecl = map.get(localNamePfx + declName); // try local
+//if (typeDecl != null) {
+//System.out.println("FOUND LOCAL: " + localNamePfx + declName);
+//}
+		if (typeDecl == null) {
+			typeDecl = map.get(declName); // global
+//if (typeDecl != null) {
+//System.out.println("FOUND GLOBAL: " + declName);
+//} else {
+//System.out.println("NOT FOUND: " + declName + " (" + localNamePfx +")");
+//}
+		}
+		if (typeDecl != null) {
+			try {
+				ValueType type = XdefValueTypeParser.parse(typeDecl);
+				XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
+				Element sTypeElem = (Element) _xsdDoc.getModels().get(model);
+				addTypeToSType(type, sTypeElem);
+			} catch (Exception ex) {
+				throw new RuntimeException("Can not parse type",ex);
+			}
 		}
 	}
 
