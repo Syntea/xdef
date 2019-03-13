@@ -186,21 +186,20 @@ public class Z1 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getVerze() != null)
-      el.setAttribute("Verze", getVerze());
+      el.setAttribute(XD_Name_Verze, getVerze());
     if (getSeqRec() != null)
-      el.setAttribute("SeqRec", String.valueOf(getSeqRec()));
+      el.setAttribute(XD_Name_SeqRec, String.valueOf(getSeqRec()));
     if (getKrajPolicie() != null)
-      el.setAttribute("KrajPolicie", getKrajPolicie());
+      el.setAttribute(XD_Name_KrajPolicie, getKrajPolicie());
     if (getPlatnostOd() != null)
-      el.setAttribute("PlatnostOd", getPlatnostOd().formatDate("d.M.yyyy H:mm"));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_PlatnostOd, getPlatnostOd().formatDate("d.M.yyyy H:mm"));
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getProtokol());
     org.xdef.component.XComponentUtil.addXC(a, getRozhodnutiDN());
@@ -215,7 +214,7 @@ public class Z1 implements org.xdef.component.XComponent{
     org.xdef.component.XComponentUtil.addXC(a, listOfPredmet());
     org.xdef.component.XComponentUtil.addXC(a, listOfZvire());
     org.xdef.component.XComponentUtil.addXC(a, listOfUcastnik());
-    return XD_List = a;
+    return a;
   }
   public Z1() {}
   public Z1(org.xdef.component.XComponent p,
@@ -237,9 +236,13 @@ public class Z1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Verze="Verze";
   private String _Verze;
+  private String XD_Name_SeqRec="SeqRec";
   private Integer _SeqRec;
+  private String XD_Name_KrajPolicie="KrajPolicie";
   private String _KrajPolicie;
+  private String XD_Name_PlatnostOd="PlatnostOd";
   private org.xdef.sys.SDatetime _PlatnostOd;
   private Z2 _Protokol;
   private Z7 _RozhodnutiDN;
@@ -261,7 +264,6 @@ public class Z1 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#ZaznamPDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -269,13 +271,19 @@ public class Z1 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
+      XD_Name_KrajPolicie = xx.getNodeName();
       setKrajPolicie(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
+      XD_Name_PlatnostOd = xx.getNodeName();
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
+      XD_Name_SeqRec = xx.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
-    else setVerze(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Verze = xx.getNodeName();
+      setVerze(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -387,9 +395,8 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -399,7 +406,7 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public VyliceniDN() {}
   public VyliceniDN(org.xdef.component.XComponent p,
@@ -430,7 +437,6 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#ZaznamPDN/$mixed/VyliceniDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

@@ -30,33 +30,43 @@ public class FinalRestriction {
 	 * type. If is empty string - same method as type method.
 	 */
 	private static final String[][] TYPE_METHODS = new String[][]{
-		{"anyURI", "URI", "string", "n/a"},
+/*VT1*/
+		{"anyURI", "anyURI", "string", "n/a"},
+/*VT1*/
 		{"base64Binary", "base64", "", "n/a"},
-		{"hexBinary", "hex", "", "n/a"},
 		{"boolean", "", "n/a", "n/a"},
-		{"byte", "int", "dec", ""},
-//		{"date", "ISOdate", "n/a", ""},
+/*VT1*/
+		{"byte", "byte", "n/a", ""},
+/*VT1*/
 /*VT1*/
 		{"date", "date", "n/a", ""},
 /*VT1*/
 		{"dateTime", "dateTime", "n/a", ""},
 		{"decimal", "dec", "", "int"},
-		{"double", "float", "n/a", ""},
+/*VT1*/
+		{"double", "double", "n/a", ""},
+/*VT1*/
 		{"duration", "duration", "n/a", ""},
 		{"ENTITIES", "", "n/a", "n/a"},
 		{"ENTITY", "", "string", "n/a"},
-		{"float", "", "decimal", ""},
+/*VT1*/
+		{"float", "float", "decimal", ""},
+/*VT1*/
 		{"gDay", "gDay", "n/a", "n/a"},
 		{"gMonth", "gMonth", "n/a", "n/a"},
 		{"gMonthDay", "gMonthDay", "n/a", "n/a"},
 		{"gYear", "gYear", "n/a", "n/a"},
 		{"gYearMonth", "gYearMonth", "n/a", "n/a"},
-		{"hexBinary", "hexBinary", "", "n/a"},
-		{"ID", "", "ID", "n/a"},
-		{"IDREF", "", "IDREF", "n/a"},
-		{"IDREFS", "", "n/a", "n/a"},
+/*VT1*/
+		{"hexBinary", "hex", "", "n/a"},
+		{"ID", "ID", "ID", "n/a"},
+		{"IDREF", "ID", "IDREF", "n/a"},
+		{"IDREFS", "ID", "n/a", "n/a"},
+/*VT1*/
 		{"int", "int", "decimal", ""},
-		{"integer", "int", "decimal", ""},
+/*VT1*/
+		{"integer", "integer", "decimal", ""},
+/*VT1*/
 		{"language", "language", "string", "n/a"},
 		{"long", "long", "decimal", ""},
 		{"Name", "string", "", "n/a"},
@@ -238,15 +248,22 @@ public class FinalRestriction {
 				min = valueMethod.getParameter(1);
 			}
 			if (_restrictions[Restriction.MIN_EXCLUSIVE] != null) {
-				min = String.valueOf(Integer.parseInt(
-					_restrictions[Restriction.MIN_EXCLUSIVE]) + 1);
+/*VT1*/
+				min = _restrictions[Restriction.MIN_EXCLUSIVE];
+/*VT1*/
 			} else if (_restrictions[Restriction.MIN_INCLUSIVE] != null) {
 				_base.getTypeMethod();
 				min = _restrictions[Restriction.MIN_INCLUSIVE];
+			}
 /*VT1*/
-				if (_base.getMethod().getValueType() != 'N') { // Not numeric
-					min = '\'' + min + '\'';
-				}
+			if (_base.getMethod().getValueType() != 'N'
+				|| "INF".equals(min) || "-INF".equals(min)) {
+				min = '\'' + min + '\'';  // INF is contertyed to string
+			}
+			if (_restrictions[Restriction.MIN_EXCLUSIVE] != null) {
+				min = "%minExclusive=" + min;
+			} else {
+				min = "%minInclusive=" + min;
 			}
 /*VT1*/
 			//resolving maximum value
@@ -255,17 +272,24 @@ public class FinalRestriction {
 			if (valueMethod.getParameter(2) != null) {
 				max = valueMethod.getParameter(2);
 			}
+/*VT1*/
 			if (_restrictions[Restriction.MAX_INCLUSIVE] != null) {
 				max = _restrictions[Restriction.MAX_INCLUSIVE];
-/*VT1*/
-				if (_base.getMethod().getValueType() != 'N') { // Not numeric
-					max = '\'' + max + '\'';
-				}
-/*VT1*/
 			} else if (_restrictions[Restriction.MAX_EXCLUSIVE] != null) {
-				max = String.valueOf(Integer.parseInt(
-					_restrictions[Restriction.MAX_EXCLUSIVE]) - 1);
+//				max = String.valueOf(Integer.parseInt(
+//					_restrictions[Restriction.MAX_EXCLUSIVE]) - 1);
+				max = _restrictions[Restriction.MAX_EXCLUSIVE];
 			}
+			if (_base.getMethod().getValueType() != 'N'
+				|| "INF".equals(max) || ("-INF").equals(max)) {
+				max = '\'' + max + '\''; // INF is contertyed to string
+			}
+			if (_restrictions[Restriction.MAX_EXCLUSIVE] != null) {
+				max = "%maxExclusive=" + max;
+			} else {
+				max = "%maxInclusive=" + max;
+			}
+/*VT1*/
 			//setting maximum and minimum value
 			if (valueMethod.getParameter(1) != null) {
 				valueMethod.setParameter(1, min);

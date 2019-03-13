@@ -75,23 +75,23 @@ public class Z9 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getUlice() != null)
-      el.setAttribute("Ulice", getUlice());
+      el.setAttribute(XD_Name_Ulice, getUlice());
     if (getCisloOrientacni() != null)
-      el.setAttribute("CisloOrientacni", getCisloOrientacni());
+      el.setAttribute(XD_Name_CisloOrientacni, getCisloOrientacni());
     if (getCisloPopisne() != null)
-      el.setAttribute("CisloPopisne", getCisloPopisne());
+      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
     if (getObec() != null)
-      el.setAttribute("Obec", getObec());
+      el.setAttribute(XD_Name_Obec, getObec());
     if (getPSC() != null)
-      el.setAttribute("PSC", getPSC());
+      el.setAttribute(XD_Name_PSC, getPSC());
     if (getOkres() != null)
-      el.setAttribute("Okres", getOkres());
+      el.setAttribute(XD_Name_Okres, getOkres());
     if (getStat() != null)
-      el.setAttribute("Stat", getStat());
+      el.setAttribute(XD_Name_Stat, getStat());
     if (getTelefon1() != null)
-      el.setAttribute("Telefon1", getTelefon1());
+      el.setAttribute(XD_Name_Telefon1, getTelefon1());
     if (getTelefon2() != null)
-      el.setAttribute("Telefon2", getTelefon2());
+      el.setAttribute(XD_Name_Telefon2, getTelefon2());
     return el;
   }
   @Override
@@ -117,14 +117,23 @@ public class Z9 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Ulice="Ulice";
   private String _Ulice;
+  private String XD_Name_CisloOrientacni="CisloOrientacni";
   private String _CisloOrientacni;
+  private String XD_Name_CisloPopisne="CisloPopisne";
   private String _CisloPopisne;
+  private String XD_Name_Obec="Obec";
   private String _Obec;
+  private String XD_Name_PSC="PSC";
   private String _PSC;
+  private String XD_Name_Okres="Okres";
   private String _Okres;
+  private String XD_Name_Stat="Stat";
   private String _Stat;
+  private String XD_Name_Telefon1="Telefon1";
   private String _Telefon1;
+  private String XD_Name_Telefon2="Telefon2";
   private String _Telefon2;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -139,23 +148,34 @@ public class Z9 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloOrientacni"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
+      XD_Name_CisloOrientacni = xx.getNodeName();
       setCisloOrientacni(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+      XD_Name_CisloPopisne = xx.getNodeName();
       setCisloPopisne(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Obec"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
+      XD_Name_Obec = xx.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Okres"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Okres")) {
+      XD_Name_Okres = xx.getNodeName();
       setOkres(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@PSC"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@PSC")) {
+      XD_Name_PSC = xx.getNodeName();
       setPSC(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Stat"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Stat")) {
+      XD_Name_Stat = xx.getNodeName();
       setStat(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon1"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
+      XD_Name_Telefon1 = xx.getNodeName();
       setTelefon1(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon2"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
+      XD_Name_Telefon2 = xx.getNodeName();
       setTelefon2(parseResult.getParsedValue().stringValue());
-    else setUlice(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Ulice = xx.getNodeName();
+      setUlice(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -60,20 +60,19 @@ public class Z5 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNazevFirmy() != null)
-      el.setAttribute("NazevFirmy", getNazevFirmy());
+      el.setAttribute(XD_Name_NazevFirmy, getNazevFirmy());
     if (getIC() != null)
-      el.setAttribute("IC", String.valueOf(getIC()));
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_IC, String.valueOf(getIC()));
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSidlo());
-    return XD_List = a;
+    return a;
   }
   public Z5() {}
   public Z5(org.xdef.component.XComponent p,
@@ -95,7 +94,9 @@ public class Z5 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_NazevFirmy="NazevFirmy";
   private String _NazevFirmy;
+  private String XD_Name_IC="IC";
   private Integer _IC;
   private Z9 _Sidlo;
   private org.xdef.component.XComponent XD_Parent;
@@ -105,7 +106,6 @@ public class Z5 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#Firma";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -113,9 +113,13 @@ public class Z5 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@IC"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@IC")) {
+      XD_Name_IC = xx.getNodeName();
       setIC(parseResult.getParsedValue().intValue());
-    else setNazevFirmy(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_NazevFirmy = xx.getNodeName();
+      setNazevFirmy(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

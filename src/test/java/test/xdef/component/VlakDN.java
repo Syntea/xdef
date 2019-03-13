@@ -78,26 +78,25 @@ public class VlakDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute("OznSegmentu", getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getTypSoupravy() != null)
-      el.setAttribute("TypSoupravy", getTypSoupravy());
+      el.setAttribute(XD_Name_TypSoupravy, getTypSoupravy());
     if (getSpoj() != null)
-      el.setAttribute("Spoj", getSpoj());
+      el.setAttribute(XD_Name_Spoj, getSpoj());
     if (getDruhSoupravy() != null)
-      el.setAttribute("DruhSoupravy", getDruhSoupravy());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_DruhSoupravy, getDruhSoupravy());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getVlastnik());
-    return XD_List = a;
+    return a;
   }
   public VlakDN() {}
   public VlakDN(org.xdef.component.XComponent p,
@@ -119,9 +118,13 @@ public class VlakDN implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_OznSegmentu="OznSegmentu";
   private String _OznSegmentu;
+  private String XD_Name_TypSoupravy="TypSoupravy";
   private String _TypSoupravy;
+  private String XD_Name_Spoj="Spoj";
   private String _Spoj;
+  private String XD_Name_DruhSoupravy="DruhSoupravy";
   private String _DruhSoupravy;
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
@@ -133,7 +136,6 @@ public class VlakDN implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#VlakDN";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -141,13 +143,19 @@ public class VlakDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@DruhSoupravy"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@DruhSoupravy")) {
+      XD_Name_DruhSoupravy = xx.getNodeName();
       setDruhSoupravy(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = xx.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@Spoj"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@Spoj")) {
+      XD_Name_Spoj = xx.getNodeName();
       setSpoj(parseResult.getParsedValue().stringValue());
-    else setTypSoupravy(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_TypSoupravy = xx.getNodeName();
+      setTypSoupravy(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
@@ -219,9 +227,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -231,7 +238,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#text/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Vlastnik() {}
   public Vlastnik(org.xdef.component.XComponent p,
@@ -262,7 +269,6 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#VlakDN/$mixed/Vlastnik";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,

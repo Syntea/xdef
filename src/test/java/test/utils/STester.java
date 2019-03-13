@@ -1,12 +1,5 @@
 package test.utils;
 
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.ReportPrinter;
-import org.xdef.xml.KXmlUtils;
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
@@ -20,6 +13,13 @@ import java.net.URL;
 import java.util.Arrays;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.xml.KXmlUtils;
 
 /** Abstract class for creating test classes.
  * You can create a test class as an extension of this class. You have to
@@ -171,20 +171,6 @@ public abstract class STester {
 	 */
 	public final String getTempDir() {
 		if (_homeDir != null) {
-//			try {
-//				File f = File.createTempFile("temp", "");
-//				_tempDir = f.getParentFile().getAbsolutePath().replace('\\', '/');
-//				if (!_tempDir.endsWith("/")) {
-//					_tempDir += '/';
-//				}
-//				f = new File(_tempDir +"a.tmp");
-//				FileOutputStream fs = new FileOutputStream(f);
-//				fs.write('x');
-//				fs.close();				
-//				return _tempDir;
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
 			_tempDir = _homeDir + "temp/";
 			File tempDir = new File(_tempDir);
 			if (!tempDir.exists()) {

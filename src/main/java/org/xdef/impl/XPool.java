@@ -11,7 +11,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.proc.Thesaurus;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -24,7 +23,6 @@ import org.xdef.model.XMNode;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariableTable;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,6 +39,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.sys.ReportWriter;
 import java.io.Serializable;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of the XDPool containing the set of X-definitions.
  * @author Vaclav Trojan
@@ -60,7 +59,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 302001001L; // 32.001.001
+	private static final long XD_MIN_VERSION = 302003000L; // 32.3.0
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -112,8 +111,8 @@ public final class XPool implements XDPool, Serializable {
 	private Map<String, String> _binds;
 	/** Enumerations.*/
 	private Map<String, String> _enums;
-	/** Thesaurus of terms in different languages.*/
-	Thesaurus _thesaurus = null;
+	/** Lexicon of tag names in different languages.*/
+	XDLexicon _lexicon = null;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
 	/** CompileXDPool for definitions.*/
@@ -131,6 +130,10 @@ public final class XPool implements XDPool, Serializable {
 	private int _minYear;
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private SDatetime _specialDates[];
+
+////////////////////////////////////////////////////////////////////////////////
+// Constructors
+////////////////////////////////////////////////////////////////////////////////
 
 	private XPool() {
 		_xdefs = new TreeMap<String, XDefinition>();
@@ -207,6 +210,8 @@ public final class XPool implements XDPool, Serializable {
 			_extClasses,
 			_xdefs);
 	}
+	
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Read MIN_YEAR or MAX_YEAR from properties.
 	 * @param props properties
@@ -668,7 +673,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param stackMaxSize the maximum size of stack.
 	 * @param init the starting point of init action for the code.
 	 * @param xdVersion version ID of X-definition.
-	 * @param thesaurus Thesaurus or null.
+	 * @param lexicon XDLexicon or null.
 	 */
 	public final void setCode(final ArrayList<XDValue> code,
 		final int globalVariablesSize,
@@ -676,10 +681,10 @@ public final class XPool implements XDPool, Serializable {
 		final int stackMaxSize,
 		final int init,
 		final byte xdVersion,
-		final Thesaurus thesaurus) {
+		final XDLexicon lexicon) {
 		_globalVariablesSize = globalVariablesSize;
 		_localVariablesMaxSize = localVariablesMaxSize;
-		_thesaurus = thesaurus;
+		_lexicon = lexicon;
 		_code = new XDValue[code.size()];
 		for (int i = 0; i < _code.length; i++) {
 			XDValue item = code.get(i);
@@ -1107,23 +1112,11 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final String getXdefEditor() {return _xdefEditor;}
 
-	@Override
-	/** Write this XDPool to output stream.
-	 * @param f where to write.
-	 * @throws IOException if an error occurs.
-	 */
-	public final void writeXDPool(final File f) throws IOException {
-		OutputStream out = new FileOutputStream(f);
-		writeXDPool(out);
-		out.close();
-	}
-
-	@Override
 	/** Write this XDPool to stream.
 	 * @param out where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	public final void writeXDPool(final OutputStream out) throws IOException {
+	private void writeXPool(final OutputStream out) throws IOException {
 		GZIPOutputStream gout = new GZIPOutputStream(out);
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
@@ -1150,22 +1143,22 @@ public final class XPool implements XDPool, Serializable {
 		for (int i = 0; i < len; i++) {
 			xw.writeString(_extClasses[i].getName());
 		}
-		if (_thesaurus == null) {
+		if (_lexicon == null) {
 			xw.writeLength(0);
 		} else {
-			String[] languages = _thesaurus.getLanguages();
+			String[] languages = _lexicon.getLanguages();
 			len = languages.length;
 			xw.writeLength(len);
 			for (int i = 0; i < len; i++) {
 				xw.writeString(languages[i]);
 			}
-			String[] keys = _thesaurus.getKeys();
+			String[] keys = _lexicon.getKeys();
 			len = keys.length;
 			xw.writeLength(len);
 			for (int i = 0; i < len; i++) {
 				String key = keys[i];
 				xw.writeString(key);
-				String[] words = _thesaurus.findTexts(key);
+				String[] words = _lexicon.findTexts(key);
 				for (String word: words) {
 					xw.writeString(word);
 				}
@@ -1238,11 +1231,10 @@ public final class XPool implements XDPool, Serializable {
 		}
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		gout.finish();
-		gout.close();
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
-		writeXDPool(out);
+		writeXPool(out);
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
@@ -1322,7 +1314,7 @@ public final class XPool implements XDPool, Serializable {
 			for (int i = 0; i < len; i++) {
 				languages[i] = xr.readString();
 			}
-			XThesaurusImpl t = new XThesaurusImpl(languages);
+			XLexicon t = new XLexicon(languages);
 			len = xr.readLength(); // number of aliases
 			for (int i = 0; i < len; i++) {
 				String base = xr.readString();
@@ -1330,7 +1322,7 @@ public final class XPool implements XDPool, Serializable {
 					t.setItem(base, j, xr.readString());
 				}
 			}
-			_thesaurus = t;
+			_lexicon = t;
 		}
 		len = xr.readLength();
 		_components = new TreeMap<String, String>();
@@ -1398,7 +1390,7 @@ public final class XPool implements XDPool, Serializable {
 					XDefinition refXd = getDefinition(refDefName);
 					String refName = xr.readString();
 					String refUri = xr.readString();
-					ref = refXd.getXElement(refName, refUri);
+					ref = refXd.getXElement(refName, refUri, -1);
 					if (ref == null) {
 						ref = (XNode) findModel(key);
 					}
@@ -1438,15 +1430,4 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 	}
-
-	/** Read XPool from input stream.
-	 * @param input where to read.
-	 * @return created XPool object.
-	 * @throws IOException if an error occurs.
-	 */
-	public static XPool readXDPool(final InputStream input) throws IOException {
-		XPool xp = new XPool();
-		xp.xpRead(input);
-		return xp;
-	}	
 }

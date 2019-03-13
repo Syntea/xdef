@@ -1,7 +1,7 @@
 package org.xdef.impl.code;
 
 /** Constants of script code ID.
- * @author  Vaclav Trojan
+ * @author Vaclav Trojan
  */
 public interface CodeTable {
 
@@ -547,7 +547,7 @@ public interface CodeTable {
 	/** Get name of actual attribute. */
 	static final short GET_ATTR_NAME = GET_ELEMENT_LOCALNAME + 1;
 	////////////////////////////////////////////////////////////////////////////
-	// Context
+	// Container
 	////////////////////////////////////////////////////////////////////////////
 	/** getElements(List[, string]). */
 	static final short CONTEXT_GETELEMENTS = GET_ATTR_NAME + 1;
@@ -565,8 +565,10 @@ public interface CodeTable {
 	static final short CONTEXT_REMOVEITEM = CONTEXT_ADDITEM + 1;
 	/** item(List, index) */
 	static final short CONTEXT_ITEM = CONTEXT_REMOVEITEM + 1;
+	/** item(List, index) */
+	static final short CONTEXT_REPLACEITEM = CONTEXT_ITEM + 1;
 	/** Create element from source.*/
-	static final short CONTEXT_TO_ELEMENT = CONTEXT_ITEM + 1;
+	static final short CONTEXT_TO_ELEMENT = CONTEXT_REPLACEITEM + 1;
 	/** getItemType(List, index) */
 	static final short CONTEXT_ITEMTYPE = CONTEXT_TO_ELEMENT + 1;
 	////////////////////////////////////////////////////////////////////////////
@@ -640,21 +642,21 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	// Named value
 	////////////////////////////////////////////////////////////////////////////
-	/** Set key value to hash table. */
+	/** Set key value to to container. */
 	static final short SET_NAMEDVALUE = GET_PARSED_VALUE + 1;
-	/** Get key value of hash table. */
+	/** Get key value from container. */
 	static final short GET_NAMEDVALUE = SET_NAMEDVALUE+ 1;
-	/** Has key value of hash table. */
+	/** Has key value in container. */
 	static final short HAS_NAMEDVALUE = GET_NAMEDVALUE+ 1;
-	/** Set key value to hash table. */
+	/** Remove key value from container. */
 	static final short REMOVE_NAMEDVALUE = HAS_NAMEDVALUE + 1;
 	/** Get named item as string. */
 	static final short GET_NAMED_AS_STRING = REMOVE_NAMEDVALUE + 1;
 	/** Get value from named value. */
 	static final short NAMEDVALUE_GET = GET_NAMED_AS_STRING + 1;
-	/** Get value from named value. */
+	/** Set value to container. */
 	static final short NAMEDVALUE_SET = NAMEDVALUE_GET + 1;
-	/** Get key value to hash table. */
+	/** Get key value to container. */
 	static final short NAMEDVALUE_NAME = NAMEDVALUE_SET + 1;
 	////////////////////////////////////////////////////////////////////////////
 	// XML writer
@@ -712,7 +714,7 @@ public interface CodeTable {
 	static final short UNIQUESET_M_NEWKEY = UNIQUESET_M_CHKID + 1;
 	/** Get size of uniqueSet. */
 	static final short UNIQUESET_M_SIZE = UNIQUESET_M_NEWKEY + 1;
-	/** Create Container from uniqueSet values. */
+	/** Create Container from uniqueSet. */
 	static final short UNIQUESET_M_TOCONTAINER = UNIQUESET_M_SIZE + 1;
 	/** Close uniqueSet. */
 	static final short UNIQUESET_CLOSE = UNIQUESET_M_TOCONTAINER + 1;

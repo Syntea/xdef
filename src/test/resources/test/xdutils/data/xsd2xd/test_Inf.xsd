@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="a">
+    <xs:complexType>
+      <xs:attribute name="a" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minInclusive value="-INF"/>
+            <xs:maxExclusive value="INF"/>
+          </xs:restriction>
+        </xs:simpleType>
+     </xs:attribute>
+      <xs:attribute name="b" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:double">
+            <xs:minInclusive value="-INF"/>
+            <xs:maxExclusive value="INF"/>
+          </xs:restriction>
+        </xs:simpleType>
+     </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

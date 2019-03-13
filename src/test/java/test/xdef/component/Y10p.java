@@ -51,7 +51,7 @@ public class Y10p implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute("x", getx());
+      el.setAttribute(XD_Name_x, getx());
     return el;
   }
   @Override
@@ -77,6 +77,7 @@ public class Y10p implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_x="x";
   private String _x;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -91,6 +92,7 @@ public class Y10p implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_x = xx.getNodeName();
     setx(parseResult.getParsedValue().stringValue());
   }
   @Override

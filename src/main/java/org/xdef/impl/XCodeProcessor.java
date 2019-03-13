@@ -2002,7 +2002,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					continue;
 				}
-				case CONTEXT_GETELEMENTS: //getElements(list)
+				case CONTEXT_GETELEMENTS: //getElements(container)
 					if (item.getParam() == 2) {
 						sp--;
 						_stack[sp] = ((XDContainer) _stack[sp]).getXDElements(
@@ -2011,7 +2011,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						_stack[sp] = ((XDContainer) _stack[sp]).getXDElements();
 					}
 					continue;
-				case CONTEXT_GETELEMENT_X: { //getElement(list, index)
+				case CONTEXT_GETELEMENT_X: { //getElement(container, index)
 					int i = item.getParam() == 2 ? _stack[sp--].intValue() : 0;
 					Element elem = ((XDContainer) _stack[sp]).getXDElement(i);
 					if (elem == null) {
@@ -2021,7 +2021,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = new DefElement(elem);
 					continue;
 				}
-				case CONTEXT_GETTEXT: //getText(list)
+				case CONTEXT_GETTEXT: //getText(container)
 					if (item.getParam() == 2) {
 						int i = _stack[sp--].intValue();
 						_stack[sp] = new DefString(
@@ -2031,11 +2031,11 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 							new DefString(((XDContainer) _stack[sp]).getXDText());
 					}
 					continue;
-				case CONTEXT_GETLENGTH: //getLength(list)
+				case CONTEXT_GETLENGTH: //getLength(container)
 					_stack[sp] = new DefLong(
 						((XDContainer) _stack[sp]).getXDItemsNumber());
 					continue;
-				case CONTEXT_SORT: //list.sort()
+				case CONTEXT_SORT: //container.sort()
 					switch (item.getParam()) {
 						case 2:
 							sp--;
@@ -2052,22 +2052,28 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 							((XDContainer) _stack[sp]).sortXD(null, true);
 					}
 					continue;
-				case CONTEXT_ADDITEM: //list.add(obj);
+				case CONTEXT_ADDITEM: //container.add(obj);
 					sp -= 2;
 					((XDContainer) _stack[sp + 1]).addXDItem(_stack[sp + 2]);
 					continue;
-				case CONTEXT_REMOVEITEM: //list.remove(index);
+				case CONTEXT_REMOVEITEM: //container.remove(index);
 					sp--;
 					_stack[sp] = ((XDContainer) _stack[sp]).removeXDItem(
 						_stack[sp + 1].intValue());
 					continue;
-				case CONTEXT_ITEM: { //list.getXDItem(index)
+				case CONTEXT_ITEM: { //container.getXDItem(index)
 					sp--;
 					XDValue x = ((XDContainer) _stack[sp]).getXDItem(
 						_stack[sp + 1].intValue());
 					_stack[sp] = (x == null) ?  new DefNull() : x;
 					continue;
 				}
+				case CONTEXT_REPLACEITEM: //container.rreplace(index, value)
+					sp -= 2;
+					_stack[sp] = ((XDContainer) _stack[sp]).replaceXDItem(
+						_stack[sp + 1].intValue(),
+						_stack[sp + 2]);
+					continue;
 				case CONTEXT_TO_ELEMENT: {
 					String uri = null;
 					String name = null;
@@ -2081,7 +2087,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = new DefElement(x.toElement(uri, name));
 					continue;
 				}
-				case CONTEXT_ITEMTYPE:{ //list.temType(index)
+				case CONTEXT_ITEMTYPE:{ //container.temType(index)
 					int index = _stack[sp--].intValue();
 					_stack[sp] = new DefLong(
 						((XDContainer)_stack[sp]).getXDItem(index).getItemId());

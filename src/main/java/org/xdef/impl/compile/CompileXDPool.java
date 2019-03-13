@@ -26,7 +26,7 @@ import org.xdef.impl.XOccurrence;
 import org.xdef.impl.XSelector;
 import org.xdef.impl.XSelectorEnd;
 import org.xdef.impl.XSequence;
-import org.xdef.impl.XThesaurusImpl;
+import org.xdef.impl.XLexicon;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.parsers.XDParseEnum;
 import org.xdef.model.XMElement;
@@ -69,8 +69,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final List<Object> _sources;
 	/** PNodes with parsed source items. */
 	private final List<PNode> _xdefPNodes;
-	/** Array of thesaurus sources item. */
-	private final List<PNode> _thesaurus;
+	/** Array of lexicon sources item. */
+	private final List<PNode> _lexicon;
 	/** Array of BNF sources. */
 	private final List<PNode> _listBNF;
 	/** Array of declaration source items. */
@@ -110,7 +110,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator = _precomp.getCodeGenerator();
 		_sources = _precomp.getSources();
 		_xdefPNodes = _precomp.getPXDefs();
-		_thesaurus = _precomp.getPThesaurusList();
+		_lexicon = _precomp.getPLexiconList();
 		_listBNF = _precomp.getPBNFs();
 		_listDecl = _precomp.getPDeclarations();
 		_listCollection = _precomp.getPCollections();
@@ -195,10 +195,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
-	/** Get precompiled sources (PNodes) of Thesaurus items.
+	/** Get precompiled sources (PNodes) of XDLexicon items.
 	 * @return array with PNodes.
 	 */
-	public final List<PNode> getPThesauruses() {return _thesaurus;}
+	public final List<PNode> getPLexicons() {return _lexicon;}
 
 	/** Get precompiled sources (PNodes) of collection items.
 	 * @return array with PNodes.
@@ -662,18 +662,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator.setIgnoreExternalMethods(false);
 	}
 
-	/** Compile thesaurus.
-	 * @param thesaurus list of thesaurus declarations.
+	/** Compile lexicon.
+	 * @param lexicon list of lexicon declarations.
 	 * @param xp XDPool object.
 	 */
-	private void compileThesaurus(final List<PNode> thesaurus,
+	private void compileLexicon(final List<PNode> lexicon,
 		final XDPool xp) {
-		if (!thesaurus.isEmpty()) { //Compile thesaurus section
-			/** Array of properties for thesaurus languages. */
+		if (!lexicon.isEmpty()) { //Compile lexicon section
+			/** Array of properties for lexicon languages. */
 			List<Map<String,String>> languages =
 				new ArrayList<Map<String,String>>();
-			for (PNode nodei: thesaurus) {
-				_scriptCompiler.compileThesaurus(nodei._value,
+			for (PNode nodei: lexicon) {
+				_scriptCompiler.compileLexicon(nodei._value,
 					nodei._xdef == null ? null : nodei._xdef.getName(),
 					_precomp.getXdefAttr(nodei, "language", true, true),
 					_precomp.getXdefAttr(nodei, "default", false, true),
@@ -693,9 +693,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							Map<String,String> pp = languages.get(0);
 							languages.set(0, p);
 							languages.set(i, pp);
-							PNode nodei = thesaurus.get(0);
-							thesaurus.set(0, thesaurus.get(i));
-							thesaurus.set(i, nodei);
+							PNode nodei = lexicon.get(0);
+							lexicon.set(0, lexicon.get(i));
+							lexicon.set(i, nodei);
 						}
 						break;
 					}
@@ -705,7 +705,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					langs[i] = p.get("%{language}");
 					p.remove("%{language}");
 				}
-				XThesaurusImpl t = new XThesaurusImpl(langs);
+				XLexicon t = new XLexicon(langs);
 				for (int i = deflt ? 1 : 0; i < langs.length; i++) {
 					Map<String,String> p = languages .get(i);
 					for (Object o: p.keySet()) {
@@ -719,8 +719,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					for (int i = deflt ? 1 : 0; i < texts.length; i++) {
 						if (texts[i] == null) {
 							badIndexes[i] = false;
-							//Thesaurus item "&{0}" is missing for language &{1}
-							error(thesaurus.get(i)._name, XDEF.XDEF149,
+							//Lexicon item "&{0}" is missing for language &{1}
+							error(lexicon.get(i)._name, XDEF.XDEF149,
 								key, t.getLanguages()[i]);
 						}
 					}
@@ -751,9 +751,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						t.setItem(s, 0, v);
 					}
 				}
-				_scriptCompiler._g._thesaurus = t;
+				_scriptCompiler._g._lexicon = t;
 			}
-			thesaurus.clear();
+			lexicon.clear();
 		}
 	}
 
@@ -832,12 +832,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				String nodeName = nodei._localName;
 				if ("declaration".equals(nodeName)
-					|| "thesaurus".equals(nodeName)
+					|| "thesaurus".equals(nodeName) // && def._xdVersion == 31
+					|| "lexicon".equals(nodeName)
 					|| "component".equals(nodeName)
 					|| "BNFGrammar".equals(nodeName)) {
 					_precomp.chkNestedElements(nodei);
-					if ("thesaurus".equals(nodeName)) {
-						_thesaurus.add(nodei);
+					if ("lexicon".equals(nodeName)) {
+						_lexicon.add(nodei);
+					} else if ("thesaurus".equals(nodeName)) {
+						reportDeprecated(nodei._name, "thesaurus", "lexicon");
+						_lexicon.add(nodei);
 					} else if ("BNFGrammar".equals(nodeName)) {
 						_listBNF.add(0, nodei);
 					} else if ("component".equals(nodeName)) {
@@ -876,7 +880,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setReportWriter(reporter); //reset original reporter
 		_codeGenerator.reInit(); //clear the generated code
 		_scriptCompiler.initCompilation(CompileBase.GLOBAL_MODE, XD_VOID);
-		// now compile all: BNF gramars, declarations, components, thesaurus
+		// now compile all: BNF gramars, declarations, components, lexicon
 		compileDeclarations(_listBNF, _listDecl, _listComponent);
 		// clear all postdefines (should be already dleared, but who knows?)
 		_codeGenerator.clearPostdefines();
@@ -1770,7 +1774,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				d._rootSelection = rootSelection;
 			}
 		}
-		compileThesaurus(_thesaurus, xdp); // compile thesaurus
+		compileLexicon(_lexicon, xdp); // compile lexicon
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
 		} else {
@@ -1782,7 +1786,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._spMax + 1,
 					_codeGenerator._init,
 					_codeGenerator._parser._xdVersion,
-					_codeGenerator._thesaurus);
+					_codeGenerator._lexicon);
 				XVariableTable variables = new XVariableTable(0);
 				// set variables to xdp
 				for (XMVariable xv:

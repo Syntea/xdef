@@ -150,7 +150,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 
 	/** Create the instance of XDefReader with the internal ArrayReporter. */
 	public XmlDefReader() {this(new ArrayReporter());}
-	
+
 	/** Create the instance of XDefReader with reporter.
 	 * @param reporter report writer.
 	 */
@@ -173,7 +173,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		xr.setEntityResolver(this);
 		setXMLReader(xr);
 	}
-	
+
 	/** Prepare entities with predefined items. */
 	private void prepareEnities() {
 		_entities = new TreeMap<String, String>();
@@ -263,7 +263,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param text SBuffer with value of text node.
 	 */
 	abstract void text(final SBuffer text);
-	
+
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked

@@ -3,12 +3,6 @@ package org.xdef.msg;
 
 /** Registered identifiers of reports with the prefix JSON. */
 public interface JSON {
-	/** Prefix of reports. */
-	static final String JSON_PREFIX = "JSON";
-	/** Default language. */
-	static final String JSON_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] JSON_LANGUAGES = {"ces", "eng", "slk"};
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;
 	/** "&amp;{0}" expected&amp;{#SYS000} */
@@ -41,4 +35,7 @@ public interface JSON {
 	public static final long JSON_DESCRIPTION = 13834649614L;
 	/** English */
 	public static final long JSON_LANGUAGE = 13834649615L;
+
+	/** Default language. */
+	public static final String JSON = "eng";
 }

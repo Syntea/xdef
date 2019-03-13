@@ -9,6 +9,7 @@ import org.xdef.XDPool;
 import org.xdef.util.XValidate;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import org.xdef.sys.ReportReader;
 import test.utils.XDTester;
 
@@ -82,24 +83,21 @@ public class TestValidate extends XDTester {
 			repr.close();
 			new File(getTempDir() + "TestValidate2.log").delete();
 			new File(getTempDir()).delete();
-			XDPool xp =
-				XDFactory.compileXD(null, dataDir + "TestValidate.xdef");
-			FileOutputStream fs =
-				new FileOutputStream(getTempDir() + "TestValidate3.xp");
-			xp.writeXDPool(fs);
-			fs.close();
+			XDPool xp =	XDFactory.compileXD(null, dataDir+"TestValidate.xdef");
+			ObjectOutputStream outpool = new ObjectOutputStream(
+				new FileOutputStream(getTempDir() + "TestValidate3.xp"));
+			outpool.writeObject(xp);
+			outpool.close();
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate2.xml",
 				"-p", getTempDir() + "TestValidate3.xp",
 				"-x", "Test1",
 				"-l", getTempDir() + "TestValidate3.log"});
-			repr =
-				new FileReportReader(getTempDir() + "TestValidate3.log");
+			repr = new FileReportReader(getTempDir() + "TestValidate3.log");
 			assertEq(((rep = repr.getReport()) == null ?
 				null: rep.toString()).indexOf("I: File OK: "),
 				0, rep);
 			assertEq(null, rep = repr.getReport(), rep);
 			repr.close();
-
 		} catch (Exception ex) {
 			fail(ex);
 		}

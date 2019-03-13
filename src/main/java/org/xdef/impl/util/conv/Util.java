@@ -1,9 +1,12 @@
 package org.xdef.impl.util.conv;
 
+import org.xdef.impl.compile.XScriptParser;
+import org.xdef.sys.SBuffer;
 import org.xdef.xml.KDOMBuilder;
 import javax.xml.namespace.QName;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -588,4 +591,50 @@ public final class Util {
 			return new MyQName(prefix, name);
 		}
 	}
+
+	/*VT*/
+	/** Get map with declared types.
+	 * @param decl Element with declaration section.
+	 * @return map with declared types.
+	 */
+	public static Map<String, String> getDeclaredTypes(final Element decl) {
+		String localNamePfx = "";
+		Node parent = decl.getParentNode();
+		String ns = decl.getNamespaceURI();
+		if ("def".equals(parent.getLocalName())
+			&& ns.equals(parent.getNamespaceURI())) {
+			try {
+				String scope = Util.getAttrValue(decl, ns,"scope");
+				if ("local".equals(scope)) {
+					localNamePfx = "_" +
+						Util.getAttrValue(parent,ns,"name") + "_";
+				}
+			} catch (Exception ex) {}
+		}
+		XScriptParser p = new XScriptParser((byte) 10);
+		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
+		Map<String, String> map = new HashMap<String, String>();
+		while (!p.eos()) {
+		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
+				int pos = p.getIndex();
+				if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
+					char sym;
+					String name = p.getParsedBufferPartFrom(pos).trim();
+					pos = p.getIndex();
+					while ((sym=p.nextSymbol()) != XScriptParser.SEMICOLON_SYM
+						&& sym != XScriptParser.END_SYM
+						&& sym != XScriptParser.NOCHAR){}
+					String typeDecl = p.getParsedBufferPartFrom(pos).trim();
+					if (sym != XScriptParser.NOCHAR) {
+						typeDecl = typeDecl.substring(0, typeDecl.length() - 1);
+					}
+//System.out.println("SAVED TO MAP: " + localNamePfx + name);
+					map.put(localNamePfx + name, typeDecl);
+				}
+		   }
+		}
+		return map;
+	}
+	/*VT*/
+
 }

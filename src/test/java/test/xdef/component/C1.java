@@ -54,9 +54,9 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getFirstName() != null)
-      el.setAttribute("FirstName", getFirstName());
+      el.setAttribute(XD_Name_FirstName, getFirstName());
     if (getLastName() != null)
-      el.setAttribute("LastName", getLastName());
+      el.setAttribute(XD_Name_LastName, getLastName());
     return el;
   }
   @Override
@@ -82,7 +82,9 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_FirstName="FirstName";
   private String _FirstName;
+  private String XD_Name_LastName="LastName";
   private String _LastName;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -97,9 +99,13 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@FirstName"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@FirstName")) {
+      XD_Name_FirstName = xx.getNodeName();
       setFirstName(parseResult.getParsedValue().stringValue());
-    else setLastName(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_LastName = xx.getNodeName();
+      setLastName(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

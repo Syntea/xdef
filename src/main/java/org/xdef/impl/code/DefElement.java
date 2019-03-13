@@ -169,7 +169,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	public void addXDItem(final Element value) {}//ignore
 
 	@Override
-	public void replaceXDItem(final int index, XDValue value) {}
+	public XDValue replaceXDItem(final int index, XDValue value) {return null;}
 
 	@Override
 	public void insertXDItemBefore(final int index, final XDValue value){}

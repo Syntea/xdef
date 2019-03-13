@@ -5,9 +5,7 @@ package org.xdef.impl.util.conv.xsd.xsd_1_0.domain;
  */
 public final class XsdSType extends XsdModel {
 
-	/**
-	 * Hashcode.
-	 */
+	/** Hashcode. */
 	private int _hashCode = 0;
 
 	/** Creates instance of simple type model.

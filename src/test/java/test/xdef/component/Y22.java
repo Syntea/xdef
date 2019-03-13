@@ -53,18 +53,17 @@ public class Y22 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getCreator() != null)
-      el.setAttribute("Creator", getCreator());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Creator, getCreator());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getTransfer());
-    return XD_List = a;
+    return a;
   }
   public Y22() {}
   public Y22(org.xdef.component.XComponent p,
@@ -86,6 +85,7 @@ public class Y22 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Creator="Creator";
   private String _Creator;
   private Y22.Transfer _Transfer;
   private org.xdef.component.XComponent XD_Parent;
@@ -95,7 +95,6 @@ public class Y22 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y22#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -103,6 +102,7 @@ public class Y22 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Creator = xx.getNodeName();
     setCreator(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -166,18 +166,17 @@ public static class Transfer implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getSender() != null)
-      el.setAttribute("Sender", getSender());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Sender, getSender());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getDataFiles());
-    return XD_List = a;
+    return a;
   }
   public Transfer() {}
   public Transfer(org.xdef.component.XComponent p,
@@ -199,6 +198,7 @@ public static class Transfer implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Sender="Sender";
   private String _Sender;
   private test.xdef.component.Y22.Transfer.DataFiles _DataFiles;
   private org.xdef.component.XComponent XD_Parent;
@@ -208,7 +208,6 @@ public static class Transfer implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y22#A/Transfer";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -216,6 +215,7 @@ public static class Transfer implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Sender = xx.getNodeName();
     setSender(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -275,17 +275,16 @@ public static class DataFiles implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getDirectory());
-    return XD_List = a;
+    return a;
   }
   public DataFiles() {}
   public DataFiles(org.xdef.component.XComponent p,
@@ -315,7 +314,6 @@ public static class DataFiles implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y22#A/Transfer/DataFiles";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -386,18 +384,17 @@ public static class Directory implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getPath() != null)
-      el.setAttribute("Path", getPath());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Path, getPath());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfFile());
-    return XD_List = a;
+    return a;
   }
   public Directory() {}
   public Directory(org.xdef.component.XComponent p,
@@ -419,6 +416,7 @@ public static class Directory implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Path="Path";
   private String _Path;
   private final java.util.List<test.xdef.component.Y22.Transfer.DataFiles.Directory.File> _File =
     new java.util.ArrayList<test.xdef.component.Y22.Transfer.DataFiles.Directory.File>();
@@ -429,7 +427,6 @@ public static class Directory implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y22#A/Transfer/DataFiles/Directory";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -437,6 +434,7 @@ public static class Directory implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Path = xx.getNodeName();
     setPath(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -498,7 +496,7 @@ public static class File implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute("Name", getName());
+      el.setAttribute(XD_Name_Name, getName());
     return el;
   }
   @Override
@@ -524,6 +522,7 @@ public static class File implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Name="Name";
   private String _Name;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -538,6 +537,7 @@ public static class File implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Name = xx.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override

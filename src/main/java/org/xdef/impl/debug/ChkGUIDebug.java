@@ -43,6 +43,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.Caret;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
+import org.xdef.impl.ChkElement;
+import org.xdef.impl.XElement;
+import org.xdef.impl.XVariableTable;
 import org.xdef.sys.ReportWriter;
 
 /** Provides debugging tool for X-definition.
@@ -79,11 +82,11 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		"stepInto/Step into/F7",				// DBG_STEPINTO
 		"cancel/Cancel X-definition",			// DBG_CANCEL
 		"disable/Disable this stop address",	// DBG_DISABLE
-		"ps/Show stack",						// SHOWSTACK
-		"pl/Show local variables",				// DBG_SHOWLOCALVARS
-		"pg/Show global variables",				// DBG_SHOWGLOBALVARS
+		"ps/Show stack/F2",						// SHOWSTACK
+		"pl/Show local variables/F3",			// DBG_SHOWLOCALVARS
+		"pg/Show global variables/F4",			// DBG_SHOWGLOBALVARS
 		"pos/Show position",					// DBG_SHOWPOSITION
-		"text/Show text value",					// DBG_SHOWTEXT
+		"text/Show text value/F9",				// DBG_SHOWTEXT
 		"setText/Set text value",				// DBG_SETTEXT
 		"elem/Show actual element",				// DBG_SHOWELEMENT
 		"context/Show context",					// DBG_SHOWCONTEXT
@@ -302,10 +305,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			return null;
 		}
 		XMStatementInfo si = xsi;
-//		XMStatementInfo si = di.prevStatementInfo(xsi);
-//		if (si == null || si.getAddr() != xsi.getAddr()) {
-//			si = xsi;
-//		}
 		XDSourceItem xi = _sources.get(si.getSysId());
 		String txt;
 		if (xi == null || (txt = xi._source) == null || si.getAddr() < 0) {
@@ -374,7 +373,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_sourceArea.setCaretPosition(pos);
 			_sourceArea.setFocusable(true);
 			_sourceArea.setVisible(true);
-//			_sourceArea.repaint();
 			_frame.repaint();
 		} catch (Exception ex) {}
 	}
@@ -521,7 +519,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_debugMode = false;
-//				updateSourceItem();
 				_frame.dispose();
 			}
 		});
@@ -582,7 +579,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 
 	@Override
 	/** Open debugger.
-/	 * @param props Properties or null.
+	 * @param props Properties or null.
 	 * @param xp XDPool.
 	 */
 	public void openDebugger(Properties props, XDPool xp) {
@@ -601,6 +598,17 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_infoArea.setText("");
 		}
 	}
+	
+	@Override
+	/** Close debugger and display message.
+	 * @param msg message to be displayed.
+	 */
+	public void closeDebugger(String msg) {
+		closeDebugger();
+		if (msg != null && !msg.isEmpty()) {
+			JOptionPane.showMessageDialog(null, msg);
+		}
+	}
 
 	@Override
 	/** Close debugger */
@@ -612,7 +620,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_out = null;
 	}
 
-	/** set defaults according to Properties.
+	/** Set defaults according to Properties.
 	 * @param props Properties or null.
 	 */
 	private void init(final Properties props) {
@@ -645,19 +653,19 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** get debug PrintStream.
+	/** Get debug PrintStream.
 	 * @return debug PrintStream.
 	 */
 	public final PrintStream getOutDebug() {return _out;}
 
 	@Override
-	/** get debug InputStream.
+	/** Get debug InputStream.
 	 * @return debug InputStream.
 	 */
 	public InputStream getInDebug() {return _in;}
 
 	@Override
-	/** set debug PrintStream.
+	/** Set debug PrintStream.
 	 * @param outDebug debug PrintStream.
 	 */
 	public void setOutDebug(PrintStream outDebug) {
@@ -669,7 +677,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** set debug InputStream.
+	/** Set debug InputStream.
 	 * @param inDebug debug InputStream.
 	 */
 	public void setInDebug(InputStream inDebug) {
@@ -760,9 +768,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		String xpos = xnode.getXPos();
 		String txt;
 		if (code == null) {
-//			if (si == null) {
-//				return NOSTEP;
-//			}
 			codeItem = null;
 			trace = pause = false;
 			txt = "PAUSE " + xpos;
@@ -877,8 +882,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					if (codeItem != null) {
 						if (stackPointer < 0 ||
 							stackPointer-codeItem.getParam() < 0) {
-							display("empty");
+							display("Stack is empty");
 						} else {
+							display("Stack:");
 							for (int i = 0; i<=stackPointer-codeItem.getParam();
 								i++) {
 								display("[" + i + "]: " + stack[i]);
@@ -894,12 +900,33 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				}
 				case DBG_SHOWGLOBALVARS: {
 					String[] names = xnode.getVariableNames();
-					if (names.length == 0) {
+					if (names == null || names.length == 0) {
 						display("No global variables");
 					} else {
-						for (int i = 0; i < names.length; i++) {
-							display(names[i] + ": " +
-								xnode.getVariable(names[i]));
+						display("Global variables:");
+						for (String name:  names) {
+							display(name + ": " + xnode.getVariable(name));
+						}
+					}
+					if (xnode instanceof ChkElement) {
+						ChkElement xc =(ChkElement) xnode;
+						for (;;) {
+							XVariableTable vars = 
+								((XElement) xc.getXMElement())._vartable;
+							names = vars!=null ? vars.getVariableNames() : null;
+							if (names != null && names.length > 0) {
+								display("Variables of " + xc.getXPos() + ":");
+								for (String name: names) {
+									display(name + ": "
+										+ xc.loadModelVariable(name));
+								}
+							}
+							XXNode xn = xc.getParent();
+							if (xn instanceof ChkElement) {
+								xc =(ChkElement) xn;
+							} else {
+								break;
+							}
 						}
 					}
 					continue;
@@ -909,6 +936,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					if (vars == null || vars.length == 0) {
 						display("No local variables");
 					} else {
+						display("Local variables:");
 						for (int i = 0; i < vars.length; i++) {
 							XMVariable v = vars[i];
 							String val;
@@ -973,7 +1001,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						display("'" + ((XXData) xnode).getTextValue() + "'");
 					} else {
 						if (_out != null) {
-							display("value: ");
+							display("Set value: ");
 							((XXData) xnode).setTextValue(readLine());
 						} else {
 							((XXData) xnode).setTextValue(

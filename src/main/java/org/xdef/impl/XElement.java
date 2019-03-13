@@ -7,7 +7,6 @@ import org.xdef.sys.SObjectWriter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KNamespace;
-import org.xdef.proc.Thesaurus;
 import org.xdef.XDDocument;
 import org.xdef.XDValue;
 import org.xdef.impl.code.CodeTable;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of the model of an element.
  *  deprecated - will be not public in future versions
@@ -126,12 +126,12 @@ public final class XElement extends XCodeDescriptor
 
 	/** Get definition of attribute of given name.
 	 * @param key The name of attribute.
-	 * @param languageID language ID of the actual language in thesaurus.
+	 * @param languageID language ID of the actual language in lexicon.
 	 * @return the value of attribute definition.
 	 */
 	public final XData getDefAttr(final String key, final int languageID) {
 		if (languageID >= 0) {
-			Thesaurus t = ((XPool) getXDPool())._thesaurus;
+			XDLexicon t = ((XPool) getXDPool())._lexicon;
 			for (XData xattr : _attrs.values()) {
 				String s = xattr.getXDPosition();
 				if (key.equals(t.findText(s, languageID))) {
@@ -145,7 +145,7 @@ public final class XElement extends XCodeDescriptor
 	/** Get definition of attribute of given name.
 	 * @param key The name of attribute (both local and/or prefixed).
 	 * @param nsURI namespace URI.
-	 * @param languageID language ID of the actual language in thesaurus.
+	 * @param languageID language ID of the actual language in lexicon.
 	 * @return the value of attribute definition.
 	 */
 	public final XData getDefAttrNS(final String nsURI,
@@ -157,8 +157,8 @@ public final class XElement extends XCodeDescriptor
 		int i = key.indexOf(':');
 		String k;
 		k = i >= 0 ? key.substring(i + 1) : key;
-		Thesaurus t =
-			languageID >= 0 ? ((XPool) getXDPool())._thesaurus : null;
+		XDLexicon t =
+			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		for (XData xattr : _attrs.values()) {
 			String locName = xattr.getName();
 			i = locName.indexOf(':');

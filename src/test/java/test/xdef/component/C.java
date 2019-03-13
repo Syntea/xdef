@@ -55,18 +55,17 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getName() != null)
-      el.setAttribute("Name", getName());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Name, getName());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfStreet());
-    return XD_List = a;
+    return a;
   }
   public C() {}
   public C(org.xdef.component.XComponent p,
@@ -88,6 +87,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Name="Name";
   private String _Name;
   private final java.util.List<C.Street> _Street = new java.util.ArrayList<C.Street>();
   private org.xdef.component.XComponent XD_Parent;
@@ -97,7 +97,6 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="C#Town";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -105,6 +104,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Name = xx.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
@@ -170,18 +170,17 @@ public static class Street implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute("Name", getName());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_Name, getName());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfHouse());
-    return XD_List = a;
+    return a;
   }
   public Street() {}
   public Street(org.xdef.component.XComponent p,
@@ -203,6 +202,7 @@ public static class Street implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_Name="Name";
   private String _Name;
   private final java.util.List<test.xdef.component.C2> _House =
     new java.util.ArrayList<test.xdef.component.C2>();
@@ -213,7 +213,6 @@ public static class Street implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="C#Town/Street";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -221,6 +220,7 @@ public static class Street implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_Name = xx.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override

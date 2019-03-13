@@ -52,7 +52,7 @@ public class Y16a implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (gety() != null)
-      el.setAttribute("y", String.valueOf(gety()));
+      el.setAttribute(XD_Name_y, String.valueOf(gety()));
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:x", "x.int");
     return el;
@@ -80,6 +80,7 @@ public class Y16a implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_y="y";
   private Integer _y;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -94,6 +95,7 @@ public class Y16a implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_y = xx.getNodeName();
     sety(parseResult.getParsedValue().intValue());
   }
   @Override

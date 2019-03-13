@@ -99,15 +99,15 @@ public class B implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getid() != null)
-      el.setAttribute("id", String.valueOf(getid()));
+      el.setAttribute(XD_Name_id, String.valueOf(getid()));
     if (getnum() != null)
-      el.setAttribute("num", String.valueOf(getnum()));
+      el.setAttribute(XD_Name_num, String.valueOf(getnum()));
     if (getdate() != null)
-      el.setAttribute("date", getdate().formatDate("yyyy-MM-dd"));
+      el.setAttribute(XD_Name_date, getdate().formatDate("yyyy-MM-dd"));
     if (gettime() != null)
-      el.setAttribute("time", gettime().formatDate("HH:mm:ss"));
+      el.setAttribute(XD_Name_time, gettime().formatDate("HH:mm:ss"));
     if (getname() != null)
-      el.setAttribute("name", getname());
+      el.setAttribute(XD_Name_name, getname());
     return el;
   }
   @Override
@@ -133,10 +133,15 @@ public class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_id="id";
   private Integer _id;
+  private String XD_Name_num="num";
   private Double _num;
+  private String XD_Name_date="date";
   private org.xdef.sys.SDatetime _date;
+  private String XD_Name_time="time";
   private org.xdef.sys.SDatetime _time;
+  private String XD_Name_name="name";
   private String _name;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -151,15 +156,22 @@ public class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@date"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@date")) {
+      XD_Name_date = xx.getNodeName();
       setdate(parseResult.getParsedValue().datetimeValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@id"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@id")) {
+      XD_Name_id = xx.getNodeName();
       setid(parseResult.getParsedValue().intValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@name"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@name")) {
+      XD_Name_name = xx.getNodeName();
       setname(parseResult.getParsedValue().stringValue());
-    else if (xx.getXMNode().getXDPosition().endsWith("/@num"))
+    } else if (xx.getXMNode().getXDPosition().endsWith("/@num")) {
+      XD_Name_num = xx.getNodeName();
       setnum(parseResult.getParsedValue().doubleValue());
-    else settime(parseResult.getParsedValue().datetimeValue());
+    } else {
+      XD_Name_time = xx.getNodeName();
+      settime(parseResult.getParsedValue().datetimeValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

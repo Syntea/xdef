@@ -1,5 +1,6 @@
 package org.xdef.impl.util.conv.type;
 
+import org.xdef.impl.util.conv.Util;
 import org.xdef.impl.util.conv.type.domain.Other;
 import org.xdef.impl.util.conv.type.domain.ValueType;
 import org.xdef.impl.util.conv.type.domain.XdefBase;
@@ -11,7 +12,6 @@ import org.xdef.impl.util.conv.type.domain.XsdList;
 import org.xdef.impl.util.conv.type.domain.XsdRestricted;
 import org.xdef.impl.util.conv.type.domain.XsdUnion;
 import org.xdef.impl.util.conv.xd.doc.XdDoc_2_0;
-import org.xdef.impl.util.conv.xd.xd_2_0.XdUtils;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdDecl;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdModel;
 import org.xdef.impl.util.conv.xsd.doc.XsdDoc_1_0;
@@ -240,24 +240,38 @@ public class XdefValueTypeResolver {
 		addTypeToSType(type, sTypeElem);
 	}
 
+
 	/** Resolves X-definition declaration model.
 	 * @param xdDecl X-definition declaration model to resolve.
 	 */
 	public void resolveXdDecl(XdDecl xdDecl) {
 		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
-		String typeDecl = XdUtils.getDeclTypeString(declElem);
-		ValueType type;
-		try {
-			type = XdefValueTypeParser.parse(typeDecl);
-		} catch (Exception ex) {
-/*VT*/
-			return;
-//			throw new RuntimeException("Could not parse type!", ex);
-/*VT*/
+		String declName = xdDecl.getName();
+		Map<String, String> map = Util.getDeclaredTypes(declElem);
+		String localNamePfx = "_" + xdDecl.getDef().getName() + "_";
+
+		String typeDecl = map.get(localNamePfx + declName); // try local
+//if (typeDecl != null) {
+//System.out.println("FOUND LOCAL: " + localNamePfx + declName);
+//}
+		if (typeDecl == null) {
+			typeDecl = map.get(declName); // global
+//if (typeDecl != null) {
+//System.out.println("FOUND GLOBAL: " + declName);
+//} else {
+//System.out.println("NOT FOUND: " + declName + " (" + localNamePfx +")");
+//}
 		}
-		XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
-		Element sTypeElem = (Element) _xsdDoc.getModels().get(model);
-		addTypeToSType(type, sTypeElem);
+		if (typeDecl != null) {
+			try {
+				ValueType type = XdefValueTypeParser.parse(typeDecl);
+				XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
+				Element sTypeElem = (Element) _xsdDoc.getModels().get(model);
+				addTypeToSType(type, sTypeElem);
+			} catch (Exception ex) {
+				throw new RuntimeException("Can not parse type",ex);
+			}
+		}
 	}
 
 	/** Resolves attribute type and adds proper declaration to given schema
@@ -518,6 +532,7 @@ public class XdefValueTypeResolver {
 				}
 			}
 			break;
+			case XdefBase.Id.XDATE_TIME: /*VT*/
 			case XdefBase.Id.DATE_TIME: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));

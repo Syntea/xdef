@@ -10,6 +10,7 @@ import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdElem;
 import org.xdef.impl.util.conv.xd.xd_2_0.domain.XdModel;
 import org.xdef.impl.util.conv.xd.xd_2_0.XdNames;
 import org.xdef.impl.util.conv.xd.xd_2_0.XdUtils;
+import org.xdef.impl.util.conv.Util;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -115,10 +116,21 @@ public final class XdDoc_2_0 extends XdDoc {
 		for (int i = 0; i < models.getLength(); i++) {
 			Element model = (Element) models.item(i);
 			try {
-				XdModel xdModel = XdUtils.createXdModel(model);
-				if (xdModel != null) {
-					_xdModels.put(xdModel, model);
+/*VT*/
+				if (XdUtils.isDeclaration(model)) {
+					// get map with declared types
+					Map<String, String> map = Util.getDeclaredTypes(model);
+					for (Map.Entry<String, String> e: map.entrySet()) {
+//System.out.println("GENERATED: " + e.getKey());
+						_xdModels.put(new XdDecl(xdDef, e.getKey()), model);
+					}
+				} else {
+					XdModel xdModel = XdUtils.createXdModel(model);
+					if (xdModel != null) {
+						_xdModels.put(xdModel, model);
+					}
 				}
+/*VT*/
 			} catch (Exception ex) {
 				throw new RuntimeException(
 					"Error during cretaing model representation", ex);

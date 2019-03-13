@@ -246,7 +246,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name name of variable.
 	 * @return loaded value.
 	 */
-	final XDValue loadModelVariable(final String name) {
+	public final XDValue loadModelVariable(final String name) {
 		int addr = findModelVariableOffset(name);
 		return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
 	}
@@ -1437,19 +1437,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				localName = localName.substring(ndx + 1);
 			}
 			String s;
-/*THESAURUS*/
-			s = _rootChkDocument.findInThesaurus(xel.getXDPosition());
+/*LEXICON*/
+			s = _rootChkDocument.findInLexicon(xel.getXDPosition());
 			if (s != null) {
 				localName = s;
 			}
-/*THESAURUS*/
+/*LEXICON*/
 			s = el.getNodeName();
 			if ((ndx = s.indexOf(':')) >= 0) {
 				s = s.substring(ndx + 1);
 			}
 			if (!localName.equals(s)) {
 				return null;
-/*THESAURUS*/
+/*LEXICON*/
 			}
 			String uri = el.getNamespaceURI();
 			if (uri == null) {
@@ -1536,8 +1536,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else if ((xatt != null && xatt._trimAttr != 0)
 			? xatt._trimAttr != 'F'
 			: (_xElement._trimAttr != 0)
-				? _xElement._trimAttr != 'F' :
-				_rootChkDocument._trimAttr != 'F') {
+			? _xElement._trimAttr != 'F' : _rootChkDocument._trimAttr != 'F') {
 			result = data.trim();
 		} else {
 			result = data;
@@ -1558,8 +1557,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		byte c = (xatt != null && xatt._attrValuesCase != 0)
 			? xatt._attrValuesCase
 			: _xElement._attrValuesCase != 0
-				? _xElement._attrValuesCase
-				: _rootChkDocument._setAttrValuesCase;
+			? _xElement._attrValuesCase : _rootChkDocument._setAttrValuesCase;
 		return c == 'T' ? result.toUpperCase() :
 			c == 'F' ? result.toLowerCase() : result;
 	}
@@ -1573,8 +1571,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		XData xatt = _xElement.getDefAttrNS(nsURI,
 			localName, _rootChkDocument._sourceLanguageID);
 		if (xatt == null && nsURI.equals(_element.getNamespaceURI())) {
-			XData xa = _xElement.getDefAttr(localName,
-				_rootChkDocument._sourceLanguageID);
+			XData xa = _xElement.getDefAttr(
+				localName, _rootChkDocument._sourceLanguageID);
 			if (xa != null && xa._acceptQualifiedAttr == 'T') {
 				return xa;
 			}
@@ -1657,8 +1655,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			|| qname.startsWith("xml:")) {
 			String uri;
 			if ((uri = nsURI) == null) {
-				uri = qname.startsWith("xml:")
-					? XMLConstants.XML_NS_URI
+				uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI
 					: XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
 			}
 			_element.setAttributeNS(uri, qname, data);
@@ -1703,8 +1700,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_parseResult = null;
 			if (item != null && !item.booleanValue()) {//delete it
 				if (nsURI != null) {
-					_element.removeAttributeNS(
-						nsURI, qname.substring(ndx + 1));
+					_element.removeAttributeNS(nsURI, qname.substring(ndx + 1));
 				} else {
 					_element.removeAttribute(qname);
 				}
@@ -1800,12 +1796,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							&& ((xatt._ignoreEmptyAttributes == 'A'
 								|| xatt._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
-							|| xatt._ignoreEmptyAttributes == 0
-							&& (_xElement._ignoreEmptyAttributes == 'A'
+								|| xatt._ignoreEmptyAttributes == 0
+								&& (_xElement._ignoreEmptyAttributes == 'A'
 								||_xElement._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
-							|| _xElement._ignoreEmptyAttributes == 0
-							&& (_rootChkDocument._ignoreEmptyAttributes == 'A'
+								|| _xElement._ignoreEmptyAttributes == 0
+								&& (_rootChkDocument._ignoreEmptyAttributes=='A'
 								|| _rootChkDocument._ignoreEmptyAttributes=='P'
 								&& xatt.isOptional()))) {
 							//accept empty attributes
@@ -3397,11 +3393,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * XXElement, otherwise return <tt>false</tt>.
 	 */
 	public final boolean checkAttributeLegal(final String name) {
-/*THESAURUS*/
+/*LEXICON*/
 		return getXAttr(name) != null;
-/*THESAURUS*
+/*LEXICON*
 		return _xElement.getDefAttr(name) != null;
-/*THESAURUS*/
+/*LEXICON*/
 	}
 
 	@Override
@@ -3413,15 +3409,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	public final boolean checkAttributeNSLegal(final String uri,
 		final String name) {
-/*THESAURUS*/
+/*LEXICON*/
 		XData xatt = uri == null || uri.length() == 0 ?
 			getXAttr(name) : getXAttr(uri, name);
 		return xatt != null;
-/*THESAURUS*
+/*LEXICON*
 		XData xatt = uri == null || uri.length() == 0 ?
 			_xElement.getDefAttr(name) : _xElement.getDefAttrNS(uri, name);
 		return xatt != null;
-/*THESAURUS*/
+/*LEXICON*/
 	}
 
 	@Override

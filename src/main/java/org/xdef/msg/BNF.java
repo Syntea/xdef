@@ -3,12 +3,6 @@ package org.xdef.msg;
 
 /** Registered identifiers of reports with the prefix BNF. */
 public interface BNF {
-	/** Prefix of reports. */
-	static final String BNF_PREFIX = "BNF";
-	/** Default language. */
-	static final String BNF_DEFAULT_LANGUAGE = "eng";
-	/** List of supported languages in the registered message tables. */
-	static final String[] BNF_LANGUAGES = {"ces", "eng", "slk"};
 	/** BNF grammar not exists&amp;{#SYS000} */
 	public static final long BNF001 = 120717312L;
 	/** Unclosed comment&amp;{#SYS000} */
@@ -89,4 +83,7 @@ public interface BNF {
 	public static final long BNF_DESCRIPTION = 120717350L;
 	/** English */
 	public static final long BNF_LANGUAGE = 120717351L;
+
+	/** Default language. */
+	public static final String BNF = "eng";
 }

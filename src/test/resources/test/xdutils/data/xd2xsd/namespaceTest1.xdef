@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
         xmlns:car     = "http://example.com/carInfo"
         xmlns:shop    = "http://example.com/eshopInfo"
@@ -10,7 +9,7 @@
                     shop:from="required xdatetime('dd.MM.yyyy')">
             <car:VIN>required an()</car:VIN>
             <car:Built>xdatetime("yyyy/MM")</car:Built>
-            <car:Mark>required enum("Škoda", "Audi", "Mercedes-Benz", "BMW")</car:Mark>
+            <car:Mark>required enum("Ĺ koda", "Audi", "Mercedes-Benz", "BMW")</car:Mark>
             <shop:Info xd:script="occurs ?">required string(1, 500)</shop:Info>
          </car:Car>
      </Cars>

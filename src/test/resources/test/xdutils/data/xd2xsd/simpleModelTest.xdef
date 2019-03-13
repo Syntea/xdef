@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
          xd:name      =  "main"
          xd:root      =  "empty | text | attr | chld | text_attr | text_chld | attr_chld | text_attr_chld">

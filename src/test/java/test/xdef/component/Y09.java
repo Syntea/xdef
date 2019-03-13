@@ -56,20 +56,19 @@ public class Y09 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute("x", getx());
+      el.setAttribute(XD_Name_x, getx());
     if (gety() != null)
-      el.setAttribute("y", gety());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_y, gety());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, get$any());
-    return XD_List = a;
+    return a;
   }
   public Y09() {}
   public Y09(org.xdef.component.XComponent p,
@@ -91,7 +90,9 @@ public class Y09 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_x="x";
   private String _x;
+  private String XD_Name_y="y";
   private String _y;
   private Y09.$any _$any;
   private org.xdef.component.XComponent XD_Parent;
@@ -101,7 +102,6 @@ public class Y09 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="Y09#A";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -109,9 +109,13 @@ public class Y09 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@x"))
+    if (xx.getXMNode().getXDPosition().endsWith("/@x")) {
+      XD_Name_x = xx.getNodeName();
       setx(parseResult.getParsedValue().stringValue());
-    else sety(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_y = xx.getNodeName();
+      sety(parseResult.getParsedValue().stringValue());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)

@@ -54,10 +54,9 @@ public class Z3 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getTisKc() != null)
-      el.setAttribute("TisKc", getTisKc());
-    for (org.xdef.component.XComponent x: XD_List==null?xGetNodeList():XD_List)
+      el.setAttribute(XD_Name_TisKc, getTisKc());
+    for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
-    XD_List = null;
     return el;
   }
   @Override
@@ -67,7 +66,7 @@ public class Z3 implements org.xdef.component.XComponent{
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
         "SouborD1A#Skoda/$text", a, get$value(), _$$value);
-    return XD_List = a;
+    return a;
   }
   public Z3() {}
   public Z3(org.xdef.component.XComponent p,
@@ -89,6 +88,7 @@ public class Z3 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  private String XD_Name_TisKc="TisKc";
   private String _TisKc;
   private String _$value;
   private char _$$value= (char) -1;
@@ -99,7 +99,6 @@ public class Z3 implements org.xdef.component.XComponent{
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private java.util.List<org.xdef.component.XComponent> XD_List;
   private String XD_Model="SouborD1A#Skoda";
   @Override
   public void xSetText(org.xdef.proc.XXNode xx,
@@ -110,6 +109,7 @@ public class Z3 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode xx,
     org.xdef.XDParseResult parseResult) {
+    XD_Name_TisKc = xx.getNodeName();
     setTisKc(parseResult.getParsedValue().stringValue());
   }
   @Override

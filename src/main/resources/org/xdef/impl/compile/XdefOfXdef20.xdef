@@ -42,7 +42,7 @@
       <XD3.2:BNFGrammar xd:script = "occurs *; ref Ver3.2#XD3.2:BNFGrammar" />
       <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
       <XD3.1:thesaurus xd:script = "occurs *; ref Ver3.1#XD3.1:thesaurus" />
-      <XD3.2:thesaurus xd:script = "occurs *; ref Ver3.2#XD3.2:thesaurus" />
+      <XD3.2:lexicon xd:script = "occurs *; ref Ver3.2#XD3.2:lexicon" />
       <XD2.0:component xd:script = "occurs *; ref XD2.0:component" />
       <XD3.1:component xd:script = "occurs *; ref Ver3.1#XD3.1:component" />
       <XD3.2:component xd:script = "occurs *; ref Ver3.2#XD3.2:component" />

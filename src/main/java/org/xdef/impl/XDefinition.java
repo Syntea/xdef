@@ -6,7 +6,6 @@ import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import org.xdef.proc.Thesaurus;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.sys.SRuntimeException;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+import org.xdef.proc.XDLexicon;
 
 /** Implementation of X-definition.
  * @author Vaclav Trojan
@@ -45,6 +45,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Source ID of this X-definition. */
 	private final SPosition _sourcePosition;
 
+	@SuppressWarnings("deprecation")
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
 	 * @param xdp XPool object.
@@ -76,9 +77,14 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * <i>null</i> if definition item is not available.
 	 * @param key a name of definition item used for search.
 	 * @param nsURI an namespace URI.
+	 * @param languageID the actual lexicon language or null.
 	 * @return The required XElement or null.
 	 */
-	public final XElement getXElement(final String key, final String nsURI) {
+	public final XElement getXElement(final String key,
+		final String nsURI,
+		final int languageID) {
+		XDLexicon t =
+			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		int ndx = key.lastIndexOf('#');
 		String lockey;
 		XDefinition def;
@@ -99,6 +105,15 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					return xel;
 				}
 			}
+			if (t != null) { // lexicon
+				for (int i = 0; i < _xElements.size(); i++) {
+					XElement xel  = def._xElements.get(i);
+					String lname = t.findText(xel.getXDPosition(),languageID);
+					if (xel.getNSUri() == null && lockey.equals(lname)){
+						return xel;
+					}
+				}
+			}
 		} else {
 			ndx = lockey.indexOf(':');
 			lockey = ndx >= 0 ? lockey.substring(ndx + 1) : lockey;
@@ -111,6 +126,19 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				}
 				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
 					return xel;
+				}
+			}
+			if (t != null) { // lexicon
+				for (int i = 0; i < _xElements.size(); i++) {
+					XElement xel  = def._xElements.get(i);
+					String lname = t.findText(xel.getXDPosition(),languageID);
+					ndx = lname.indexOf(':');
+					if (ndx >= 0) {
+						lname = lname.substring(ndx + 1);
+					}
+					if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
+						return xel;
+					}
 				}
 			}
 		}
@@ -183,7 +211,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * <tt>null</tt> if such model not exists.
 	 */
 	public final XMElement getModel(final String nsURI, final String name) {
-		return getXElement(name, nsURI);
+		return getXElement(name, nsURI, -1);
 	}
 
 	@Override
@@ -201,8 +229,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
-	 * (see {@link org.xdef.XDConstants#XD2_0}
-	 * or {@link org.xdef.XDConstants#XD3_1}).
+	 * (see {@link cz.syntea.xd.XDConstants#XD2_0}
+	 * or {@link cz.syntea.xd.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 
@@ -218,7 +246,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * to X-definition.
 	 */
 	public final boolean addModel(final XElement newModel) {
-		if (getXElement(newModel.getName(), newModel.getNSUri()) != null) {
+		if (getXElement(newModel.getName(), newModel.getNSUri(), -1) != null) {
 			return false;
 		}
 		_xElements.add(newModel);
@@ -228,16 +256,15 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Select root element.
 	 * @param name The name of element.
 	 * @param namespaceURI namespace URI or <tt>null</tt>.
-	 * @param languageID the actual thesaurus language or null.
+	 * @param languageID the actual lexicon language or null.
 	 * @return The X-element or <tt>null</tt> if not found.
 	 */
 	final XElement selectRoot(final String name,
 		final String namespaceURI,
 		final int languageID) {
-		XElement result;
 		String nm = name;
-		Thesaurus t =
-			languageID >= 0 ? ((XPool) getXDPool())._thesaurus : null;
+		XDLexicon t =
+			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		if (namespaceURI != null && namespaceURI.length() > 0) { // has NS URI
 			int i = name.indexOf(':');
 			nm = name.substring(i + 1);
@@ -257,7 +284,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					return (XElement) xe;
 				}
 			}
-		} else if (t != null) { // not NS URI, thesaurus
+		} else if (t != null) { // not NS URI, lexicon
 			for (XNode xe: _rootSelection.values()) {
 				// get translated name
 				String newName = t.findText(xe.getXDPosition(), languageID);
@@ -265,7 +292,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					return (XElement) xe;
 				}
 			}
-		} else {  // not NS URI, not thesaurus
+		} else {  // not NS URI, not lexicon
 			for (XNode xe: _rootSelection.values()) {
 				if (xe != null && nm.equals(xe.getName()) &&
 					xe.getNSUri() == null){
