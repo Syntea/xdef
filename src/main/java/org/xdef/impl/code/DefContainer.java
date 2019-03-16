@@ -306,10 +306,10 @@ public final class DefContainer extends XDValueAbstract
 
 	@Override
 	/** Get array with named items in the table.
-	 * @return array with named items or null.
+	 * @return array with named items.
 	 */
 	public final XDNamedValue[] getXDNamedItems() {
-		return _map;
+		return _map != null ? _map : new XDNamedValue[0];
 	}
 
 	@Override

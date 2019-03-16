@@ -115,7 +115,7 @@ public interface XDContainer extends XDValue {
 	public String getXDNamedItemName(int index);
 
 	/** Get array with named items in the table.
-	 * @return array with named items or null.
+	 * @return array with named items.
 	 */
 	public XDNamedValue[] getXDNamedItems();
 

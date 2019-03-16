@@ -1792,7 +1792,7 @@ public final class CompileCode extends CompileBase {
 					} else {
 						if (imethod.getMinParams() > 0) {
 							//More parameters required for method &{0}
-							_parser.warning(XDEF.XDEF460, name);
+							_parser.error(XDEF.XDEF460, name);
 						}
 						genLDC(CompileBase.getParser(name));
 					}
