@@ -25,8 +25,8 @@ public class JSONTest1 {
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);
 //				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE);
 			props.setProperty(XDConstants.XDPROPERTY_DEBUG,
-//				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
-				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE);
+				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+//				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE);
 			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
 			ArrayReporter reporter = new ArrayReporter();
