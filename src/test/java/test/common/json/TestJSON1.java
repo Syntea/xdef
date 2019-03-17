@@ -31,7 +31,7 @@ if(true) return;
 "<js:map xmlns:js='http://www.syntea.cz/json/1.0'/>"));
 		assertTrue(check("[0]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>0</js:item>"+
++ "<js:number>0</js:number>"+
 "</js:array>"));
 		assertTrue(check("[[[]]]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
@@ -46,8 +46,8 @@ if(true) return;
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'><a/></js:array>"));
 		assertTrue(check("[0, 1]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>0</js:item>"
-+ "<js:item>1</js:item>"+
++ "<js:number>0</js:number>"
++ "<js:number>1</js:number>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":0}]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
@@ -58,7 +58,7 @@ if(true) return;
 		assertTrue(check("{\"a\":[\"\\\\a\\\"\"]}",
 "<a>"
 + "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
-+ "<js:item>\\a\"</js:item>"
++ "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"a\":[{\"b\":null}, {\"c\":null}]}",
@@ -71,7 +71,7 @@ if(true) return;
 "<a>"
 + "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
 +   "<b>\"\tx\n\"</b>"
-+   "<js:item>\"\tx\n\t\"</js:item>"
++   "<js:string>\"\tx\n\t\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"\":1}", "<_u0_>1</_u0_>"));
@@ -80,14 +80,14 @@ if(true) return;
 			"<a a:b=\"x\" xmlns:a=\"x\"/>"));
 		assertTrue(check("[\"A\",{}, []]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>A</js:item>"
++ "<js:string>A</js:string>"
 + "<js:map/>"
 + "<js:array/>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":{\"x\":1}},\"x\"]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<a x='1'/>"
-+ "<js:item>x</js:item>"+
++ "<js:string>x</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a&+\": null}", "<a_u26__u2b_/>"));
 		assertTrue(check("{\"a\":[{},[]]}",
@@ -98,7 +98,7 @@ if(true) return;
 		assertTrue(check("{\"x\":[1]}",
 "<x>"
 + "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>1</js:item>"
++   "<js:number>1</js:number>"
 + "</js:array>"+
 "</x>"));
 		assertTrue(check("[{\"a\":null}, []]",
@@ -110,7 +110,7 @@ if(true) return;
 		assertTrue(check("{\"a\":[\"\\\\a\"\"\"]}",
 "<a>"
 + "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("[{\"a\":{}}, []]",
@@ -132,19 +132,19 @@ if(true) return;
 		assertTrue(check("[{\"a\":{\"b\":1,\"c\":2}},\"abc\"]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<a b=\"1\" c=\"2\"/>"
-+ "<js:item>abc</js:item>"+
++ "<js:string>abc</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"x\":[{\"a\":{\"b\":1,\"c\":2}},\"abc\"]}",
 "<x>"
 + "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 +   "<a b=\"1\" c=\"2\"/>"
-+   "<js:item>abc</js:item>"
++   "<js:string>abc</js:string>"
 + "</js:array>"+
 "</x>"));
 		assertTrue(check("{\"a\": [\"GM\", \"XM\"]}",
 "<a><js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>GM</js:item>"
-+ "<js:item>XM</js:item>"+
++ "<js:string>GM</js:string>"
++ "<js:string>XM</js:string>"+
 "</js:array></a>"));
 		assertTrue(check("{\"a\":null}", "<a/>"));
 		assertTrue(check("{\"_\":true}", "<_>true</_>"));
@@ -176,33 +176,33 @@ if(true) return;
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<a/>"
 + "<x>1</x>"
-+ "<js:item>null</js:item>"
-+ "<js:item>-1.23E+4</js:item>"
-+ "<js:item>\\a\"</js:item>"+
++ "<js:null/>"
++ "<js:number>-1.23E+4</js:number>"
++ "<js:string>\\a\"</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":[{\"x\":\"1\"},null, -1.23E+4, \"\\\\a\\\"\"]}",
 "<a>"
 + "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
 +   "<x>\"1\"</x>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1.23E+4</js:item>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:null/>"
++   "<js:number>-1.23E+4</js:number>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"a\":[{\"x\":1}, null, -1230.0, \"\\\\a\\\"\"]}",
 "<a>"
 + "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
 +   "<x>1</x>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1230.0</js:item>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:null/>"
++   "<js:number>-1230.0</js:number>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("[\"A\", { \"B\": 1}, \"x\" ]",
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>A</js:item>"
++ "<js:string>A</js:string>"
 + "<B>1</B>"
-+ "<js:item>x</js:item>"+
++ "<js:string>x</js:string>"+
 "</js:array>"));
 		assertTrue(check(
 "{\n" +
@@ -235,8 +235,8 @@ if(true) return;
 +                 "<js:mapItems>"
 +                   "<GlossSeeAlso>"
 +                     "<js:array>"
-+                       "<js:item>GML</js:item>"
-+                       "<js:item>XML</js:item>"
++                       "<js:string>GML</js:string>"
++                       "<js:string>XML</js:string>"
 +                     "</js:array>"
 +                   "</GlossSeeAlso>"
 +                 "</js:mapItems>"
@@ -263,8 +263,8 @@ if(true) return;
 + "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<IDs>"
 +   "<js:array>"
-+     "<js:item>116</js:item>"
-+     "<js:item>38793</js:item>"
++     "<js:number>116</js:number>"
++     "<js:number>38793</js:number>"
 +   "</js:array>"
 + "</IDs>"
 + "<Thumbnail Url=\"www\"/>"
@@ -285,9 +285,9 @@ if(true) return;
 + "<js:map>"
 +   "<State>"
 +     "<js:array>"
-+       "<js:item>CA</js:item>"
-+       "<js:item>CZ</js:item>"
-+       "<js:item>US</js:item>"
++       "<js:string>CA</js:string>"
++       "<js:string>CZ</js:string>"
++       "<js:string>US</js:string>"
 +     "</js:array>"
 +   "</State>"
 +   "<Country>US</Country>"
@@ -396,21 +396,21 @@ if(true) return;
 +     "<js:array>"
 +       "<id>Open</id>"
 +       "<js:map><id>OpenNew</id><label>\"Open New\"</label></js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<js:map><id>ZoomIn</id><label>\"Zoom In\"</label></js:map>"
 +       "<js:map><id>ZoomOut</id><label>\"Zoom Out\"</label></js:map>"
 +       "<js:map><id>OriginalView</id><label>\"Original View\"</label>"
 +       "</js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<id>Quality</id>"
 +       "<id>Pause</id>"
 +       "<id>Mute</id>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<js:map><id>Find</id><label>Find...</label></js:map>"
 +       "<id>Copy</id>"
 +       "<js:map><id>ViewSource</id><label>\"View Source\"</label></js:map>"
 +       "<js:map><id>SaveAs</id><label>\"Save As\"</label></js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<id>Help</id>"
 +       "<js:map><id>About</id><label>\"About CVG Viewer...\"</label></js:map>"
 +     "</js:array>"
@@ -421,21 +421,21 @@ if(true) return;
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<a/>"
 + "<x>\"1\"</x>"
-+ "<js:item>null</js:item>"
-+ "<js:item>-1.23E+4</js:item>"
-+ "<js:item>\\a\"</js:item>"+
++ "<js:null/>"
++ "<js:number>-1.23E+4</js:number>"
++ "<js:string>\\a\"</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":[1,null,-1.23E+4,[true, 5]\"\\\\a\\\"\"]}",
 "<a>"
 + "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>1</js:item>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1.23E+4</js:item>"
++   "<js:number>1</js:number>"
++   "<js:null/>"
++   "<js:number>-1.23E+4</js:number>"
 +   "<js:array>"
-+     "<js:item>true</js:item>"
-+     "<js:item>5</js:item>"
++     "<js:boolean>true</js:boolean>"
++     "<js:number>5</js:number>"
 +   "</js:array>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 				assertTrue(check(
@@ -517,11 +517,11 @@ if(true) return;
 "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
 + "<a x=\"1\" y=\"true\"/>"
 + "<js:array><b y=\"x\"/>"
-+   "<js:item>1</js:item>"
++   "<js:number>1</js:number>"
 + "</js:array>"
 + "<js:array>"
 +   "<c y=\"y\"/>"
-+   "<js:item>2</js:item>"
++   "<js:number>2</js:number>"
 + "</js:array>"+
 "</js:array>"));
 		assertTrue(check(
@@ -590,7 +590,7 @@ if(true) return;
 +       "</js:map>"
 +       "<d>"
 +         "<js:array>"
-+           "<js:item>d</js:item>"
++           "<js:string>d</js:string>"
 +         "</js:array>"
 +       "</d>"
 +       "<b c=\"true\"/>"
