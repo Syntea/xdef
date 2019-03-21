@@ -90,10 +90,11 @@
   </Persons>
 </xd:def>
 
-<xd:def name='D' root='A'>
-<xd:component>%class test.xdef.component.D %link A</xd:component>
+<xd:def name='D' root='a:A' xmlns:a='a.b'>
 
-  <A>
+  <xd:component>%class test.xdef.component.D %link a:A</xd:component>
+
+  <a:A>
     <_ xd:script='?'/>
     <B A='boolean'>
       string; <X xd:script='*'>boolean</X> string;
@@ -133,8 +134,8 @@
     </S>
     <E/>
     <T xd:script='?' xmlns='x.y' t='string'><I/></T>
-    <a:T xd:script='?' xmlns:a='a.b' a:t='?string'><a:I/></a:T>
-  </A>
+    <a:T xd:script='?' a:t='?string'><a:I/></a:T>
+  </a:A>
 </xd:def>
 
 <xd:def name='E' root='if'>

@@ -1,3 +1,6 @@
+# Version 32.3.0, release-date 2019-03-21
+- fixed error in generation of X-components from models with namespace URI.
+
 # Version 32.3.0, release-date 2019-03-12
 - to the X-script added method
     XDValue replaceItem(int index, XDValue value)

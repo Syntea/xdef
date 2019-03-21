@@ -334,25 +334,11 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml =
-"<A>"+
+"<a:A xmlns:a='a.b'>"+
 "<_/>"+
-	"<B A='true'>"+
-	   "1"+
-		"<X>true</X>"+
-		"<X>false</X>"+
-	   "2"+
-		"<Y>true</Y>"+
-	"</B>"+
-	"<I A='1'>"+
-		"<X>2</X>"+
-		"<X>3</X>"+
-		"<Y>4</Y>"+
-	"</I>"+
-	"<F A='3.14'>"+
-		"<X>-3.14</X>"+
-		"<X>-3.15</X>"+
-		"<Y>NaN</Y>"+
-	"</F>"+
+	"<B A='true'>1<X>true</X><X>false</X>2<Y>true</Y></B>"+
+	"<I A='1'><X>2</X><X>3</X><Y>4</Y></I>"+
+	"<F A='3.14'><X>-3.14</X><X>-3.15</X><Y>NaN</Y></F>"+
 	"<G A='ahgkjfd01Q=='>"+
 		"<X>bhgkjfd01Q==</X>"+
 		"<X>chgkjfd01Q==</X>"+
@@ -363,30 +349,15 @@ public final class TestXComponents extends XDTester {
 		"<X>89ABCDE34567</X>"+
 		"<Y>6789</Y>"+
 	"</H>"+
-	"<P A='1.15'>"+
-		"<X>0.1</X>"+
-		"<X>123.0</X>"+
-		"<Y>-12.0</Y>"+
-	"</P>"+
-	"<Q A='2013-09-25'>"+
-		"<X>2013-09-26</X>"+
-		"<X>2013-09-27</X>"+
-		"<Y>2013-09-28</Y>"+
-	"</Q>"+
-	"<R A='P2Y1M3DT11H'>"+
-		"<X>P2Y1M3DT12H</X>"+
-		"<X>P2Y1M3DT13H</X>"+
-		"<Y>P2Y1M3DT14H</Y>"+
+	"<P A='1.15'><X>0.1</X><X>123.0</X><Y>-12.0</Y></P>"+
+	"<Q A='2013-09-25'><X>2013-09-26</X><X>2013-09-27</X><Y>2013-09-28</Y></Q>"+
+	"<R A='P2Y1M3DT11H'><X>P2Y1M3DT12H</X><X>P2Y1M3DT13H</X><Y>P2Y1M3DT14H</Y>"+
 	"</R>"+
-	"<S A='abc'>"+
-		"<X>abc</X>"+
-		"<X>def</X>"+
-		"<Y>ghi</Y>"+
-	"</S>"+
+	"<S A='abc'><X>abc</X><X>def</X><Y>ghi</Y></S>"+
 	"<E/>"+
 	"<T xmlns='x.y' t='s'><I/></T>"+
 	"<a:T xmlns:a='a.b' a:t='t'><a:I/></a:T>"+
-"</A>";
+"</a:A>";
 			test.xdef.component.D p = (test.xdef.component.D)
 				parseXC(xp, "D", xml, null, null);
 			el = p.toXml();
@@ -394,9 +365,9 @@ public final class TestXComponents extends XDTester {
 			byte[] bytes;
 			bytes = SUtils.decodeBase64("ahgkjfd01Q==");
 			assertEq("1", p.getB().get$value());
-			assertEq("/A/B[1]/$text", p.getB().xposOf$value());
+			assertEq("/a:A/B[1]/$text", p.getB().xposOf$value());
 			assertEq("2", p.getB().get$value1());
-			assertEq("/A/B[1]/$text", p.getB().xposOf$value1());
+			assertEq("/a:A/B[1]/$text", p.getB().xposOf$value1());
 			assertEq(bytes, p.getG().getA());
 			assertEq(2, p.getG().listOfX().size());
 			bytes = SUtils.decodeBase64("bhgkjfd01Q==");
