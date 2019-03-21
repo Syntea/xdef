@@ -1,4 +1,4 @@
-# Version 32.3.0, release-date 2019-03-21
+# Version 32.3.1, release-date 2019-03-21
 - fixed error in generation of X-components from models with namespace URI.
 
 # Version 32.3.0, release-date 2019-03-12
