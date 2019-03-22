@@ -598,19 +598,6 @@ public final class Util {
 	 * @return map with declared types.
 	 */
 	public static Map<String, String> getDeclaredTypes(final Element decl) {
-		String localNamePfx = "";
-		Node parent = decl.getParentNode();
-		String ns = decl.getNamespaceURI();
-		if ("def".equals(parent.getLocalName())
-			&& ns.equals(parent.getNamespaceURI())) {
-			try {
-				String scope = Util.getAttrValue(decl, ns,"scope");
-				if ("local".equals(scope)) {
-					localNamePfx = "_" +
-						Util.getAttrValue(parent,ns,"name") + "_";
-				}
-			} catch (Exception ex) {}
-		}
 		XScriptParser p = new XScriptParser((byte) 10);
 		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
 		Map<String, String> map = new HashMap<String, String>();
@@ -628,8 +615,7 @@ public final class Util {
 					if (sym != XScriptParser.NOCHAR) {
 						typeDecl = typeDecl.substring(0, typeDecl.length() - 1);
 					}
-//System.out.println("SAVED TO MAP: " + localNamePfx + name);
-					map.put(localNamePfx + name, typeDecl);
+					map.put(name, typeDecl);
 				}
 		   }
 		}

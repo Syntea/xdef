@@ -1330,8 +1330,8 @@ public final class GenXComponent {
 				boolean ext = false;
 				if (name != null) {
 					if ((ndx = name.indexOf(';')) > 0) {
-						newClassName = name.substring(0, ndx);
-						name = name.substring(ndx+1);
+						newClassName = javaName(name.substring(0, ndx));
+						name = javaName(name.substring(ndx+1));
 					} else if ((ndx = name.indexOf(" %with ")) > 0) {
 						if (extClazz.startsWith(" extends")) {
 							ext = true;
@@ -1361,8 +1361,7 @@ public final class GenXComponent {
 						newClassName = name;
 					}
 				} else {
-					name = javaName(xe1.getName());
-					newClassName = name;
+					newClassName = name = javaName(xe1.getName());
 				}
 				final boolean xunique = checkUnique(nodes, i);
 				// if the element is not processed by user XComponent

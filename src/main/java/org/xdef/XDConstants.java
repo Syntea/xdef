@@ -112,7 +112,7 @@ public interface XDConstants {
 	public static final String XINCLUDE_NS_URI =
 		"http://www.w3.org/2001/XInclude";
 	/** URI of JSON/XML conversion nodes. */
-	public static final String JSON_NS_URI = "http://www.syntea.cz/json/1.0";
+	public static final String JSON_NS_URI = "http://www.xdef.org/json/1.0";
 	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
 	public static final String JSON_NS_PREFIX = "js";
 	/** Recommended namespace prefix used for X-definition nodes. */

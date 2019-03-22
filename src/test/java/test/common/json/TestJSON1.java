@@ -19,59 +19,59 @@ public class TestJSON1 extends STester {
 /*xx*
 		assertTrue(check("{\"a\":[{\"b\":null}, {\"c\":null}]}",
 "<a>"
-	+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
+	+ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
 	+ "<b/><c/>"
 	+ "</js:array>"+
 "</a>"));
 if(true) return;
 /*xx*/
 		assertTrue(check("[]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'/>"));
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'/>"));
 		assertTrue(check("{}",
-"<js:map xmlns:js='http://www.syntea.cz/json/1.0'/>"));
+"<js:map xmlns:js='http://www.xdef.org/json/1.0'/>"));
 		assertTrue(check("[0]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>0</js:item>"+
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++ "<js:number>0</js:number>"+
 "</js:array>"));
 		assertTrue(check("[[[]]]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<js:array><js:array/></js:array>"+
 "</js:array>"));
 		assertTrue(check("[[],[]]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<js:array/><js:array/>"+
 "</js:array>"));
 		assertTrue(check("{\"a\": null}", "<a/>"));
 		assertTrue(check("[{\"a\": null}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'><a/></js:array>"));
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'><a/></js:array>"));
 		assertTrue(check("[0, 1]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>0</js:item>"
-+ "<js:item>1</js:item>"+
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++ "<js:number>0</js:number>"
++ "<js:number>1</js:number>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":0}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a>0</a>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":{\"x\":1}}", "<a x='1'/>"));
 		assertTrue(check("{\"a\":1}", "<a>1</a>"));
 		assertTrue(check("{\"a\":[\"\\\\a\\\"\"]}",
 "<a>"
-+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
-+ "<js:item>\\a\"</js:item>"
++ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
++ "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"a\":[{\"b\":null}, {\"c\":null}]}",
 "<a>"
-	+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
+	+ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
 	+ "<b/><c/>"
 	+ "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"a\":[{\"b\":\"\tx\n\"},\"\tx\n\t\"]}",
 "<a>"
-+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
++ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
 +   "<b>\"\tx\n\"</b>"
-+   "<js:item>\"\tx\n\t\"</js:item>"
++   "<js:string>\"\tx\n\t\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"\":1}", "<_u0_>1</_u0_>"));
@@ -79,72 +79,72 @@ if(true) return;
 		assertTrue(check("{\"a\":{\"a:b\":\"x\",\"xmlns:a\":\"x\"}}",
 			"<a a:b=\"x\" xmlns:a=\"x\"/>"));
 		assertTrue(check("[\"A\",{}, []]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>A</js:item>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++ "<js:string>A</js:string>"
 + "<js:map/>"
 + "<js:array/>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":{\"x\":1}},\"x\"]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a x='1'/>"
-+ "<js:item>x</js:item>"+
++ "<js:string>x</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a&+\": null}", "<a_u26__u2b_/>"));
 		assertTrue(check("{\"a\":[{},[]]}",
 "<a>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<js:map/><js:array/></js:array>"+
 "</a>"));
 		assertTrue(check("{\"x\":[1]}",
 "<x>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>1</js:item>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++   "<js:number>1</js:number>"
 + "</js:array>"+
 "</x>"));
 		assertTrue(check("[{\"a\":null}, []]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a/>"
 + "<js:array/>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":{\"b\":null}}", "<a b='null'></a>"));
 		assertTrue(check("{\"a\":[\"\\\\a\"\"\"]}",
 "<a>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>\\a\"</js:item>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("[{\"a\":{}}, []]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 	+ "<a><js:map/></a>"
 	+ "<js:array/>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":{\"x\":1}},{\"b\":null}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a x=\"1\"/><b/>"+
 "</js:array>"));
 		assertTrue(check("[{\"a\":{\"x\":1}}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'><a x='1'/></js:array>"));
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'><a x='1'/></js:array>"));
 		assertTrue(check("{\"a\":1}", "<a>1</a>"));
 		assertTrue(check("[{\"a\":1}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'><a>1</a></js:array>"));
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'><a>1</a></js:array>"));
 		assertTrue(check("{\"a\":{\"x\":\"1\",\"y\":\"2\"}}",
 			"<a x='\"1\"' y='\"2\"'/>"));
 		assertTrue(check("[{\"a\":{\"b\":1,\"c\":2}},\"abc\"]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a b=\"1\" c=\"2\"/>"
-+ "<js:item>abc</js:item>"+
++ "<js:string>abc</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"x\":[{\"a\":{\"b\":1,\"c\":2}},\"abc\"]}",
 "<x>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<a b=\"1\" c=\"2\"/>"
-+   "<js:item>abc</js:item>"
++   "<js:string>abc</js:string>"
 + "</js:array>"+
 "</x>"));
 		assertTrue(check("{\"a\": [\"GM\", \"XM\"]}",
-"<a><js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>GM</js:item>"
-+ "<js:item>XM</js:item>"+
+"<a><js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++ "<js:string>GM</js:string>"
++ "<js:string>XM</js:string>"+
 "</js:array></a>"));
 		assertTrue(check("{\"a\":null}", "<a/>"));
 		assertTrue(check("{\"_\":true}", "<_>true</_>"));
@@ -163,46 +163,46 @@ if(true) return;
 			"<_u3c_A_u3f__u2a__u2c__u27_>1</_u3c_A_u3f__u2a__u2c__u27_>"));
 		assertTrue(check("{\" \": {\" \": 1}}",  "<_u20_ _u20_=\"1\"/>"));
 		assertTrue(check("[{\"a\": null}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'><a/></js:array>"));
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'><a/></js:array>"));
 		assertTrue(check("{\"a\":[{},[]]}",
 "<a>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<js:map/><js:array/>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{ \"a\":{\"x\":1}}", "<a x=\"1\"/>"));
 		assertTrue(check("{\"a\":{\"'x\":1,\"y\":2}}","<a _u27_x='1' y='2'/>"));
 		assertTrue(check("[{\"a\":null},{\"x\":1},null,-1.23E+4,\"\\\\a\\\"\"]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a/>"
 + "<x>1</x>"
-+ "<js:item>null</js:item>"
-+ "<js:item>-1.23E+4</js:item>"
-+ "<js:item>\\a\"</js:item>"+
++ "<js:null/>"
++ "<js:number>-1.23E+4</js:number>"
++ "<js:string>\\a\"</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":[{\"x\":\"1\"},null, -1.23E+4, \"\\\\a\\\"\"]}",
 "<a>"
-+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
++ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
 +   "<x>\"1\"</x>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1.23E+4</js:item>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:null/>"
++   "<js:number>-1.23E+4</js:number>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("{\"a\":[{\"x\":1}, null, -1230.0, \"\\\\a\\\"\"]}",
 "<a>"
-+ "<js:array xmlns:js=\"http://www.syntea.cz/json/1.0\">"
++ "<js:array xmlns:js=\"http://www.xdef.org/json/1.0\">"
 +   "<x>1</x>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1230.0</js:item>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:null/>"
++   "<js:number>-1230.0</js:number>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 		assertTrue(check("[\"A\", { \"B\": 1}, \"x\" ]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+ "<js:item>A</js:item>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++ "<js:string>A</js:string>"
 + "<B>1</B>"
-+ "<js:item>x</js:item>"+
++ "<js:string>x</js:string>"+
 "</js:array>"));
 		assertTrue(check(
 "{\n" +
@@ -224,7 +224,7 @@ if(true) return;
 "    }\n" +
 "}",
 "<glossary title=\"example glossary\">"
-+ "<js:mapItems xmlns:js=\"http://www.syntea.cz/json/1.0\">"
++ "<js:mapItems xmlns:js=\"http://www.xdef.org/json/1.0\">"
 +   "<GlossDiv title=\"S\">"
 +     "<js:mapItems>"
 +       "<GlossList>"
@@ -235,8 +235,8 @@ if(true) return;
 +                 "<js:mapItems>"
 +                   "<GlossSeeAlso>"
 +                     "<js:array>"
-+                       "<js:item>GML</js:item>"
-+                       "<js:item>XML</js:item>"
++                       "<js:string>GML</js:string>"
++                       "<js:string>XML</js:string>"
 +                     "</js:array>"
 +                   "</GlossSeeAlso>"
 +                 "</js:mapItems>"
@@ -260,11 +260,11 @@ if(true) return;
 "  }\n"+
 "}",
 "<Image Title=\"View\" Width=\"800\">"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<IDs>"
 +   "<js:array>"
-+     "<js:item>116</js:item>"
-+     "<js:item>38793</js:item>"
++     "<js:number>116</js:number>"
++     "<js:number>38793</js:number>"
 +   "</js:array>"
 + "</IDs>"
 + "<Thumbnail Url=\"www\"/>"
@@ -281,13 +281,13 @@ if(true) return;
 "    \"Country\": \"US\"\n"+
 "   }\n"+
 "]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<js:map>"
 +   "<State>"
 +     "<js:array>"
-+       "<js:item>CA</js:item>"
-+       "<js:item>CZ</js:item>"
-+       "<js:item>US</js:item>"
++       "<js:string>CA</js:string>"
++       "<js:string>CZ</js:string>"
++       "<js:string>US</js:string>"
 +     "</js:array>"
 +   "</State>"
 +   "<Country>US</Country>"
@@ -310,7 +310,7 @@ if(true) return;
 "  }\n" +
 "]}}",
 "<breakfast_menu>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<food>"
 +     "<js:array>"
 +       "<js:map>"
@@ -342,7 +342,7 @@ if(true) return;
 "  }\n" +
 "}}",
 "<menu id=\"file\" value=\"File\">"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<popup>"
 +   "<js:mapItems>"
 +     "<menuitem>"
@@ -391,26 +391,26 @@ if(true) return;
 "  }\n"+
 "}",
 "<menu header=\"SVG Viewer\">"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<items>"
 +     "<js:array>"
 +       "<id>Open</id>"
 +       "<js:map><id>OpenNew</id><label>\"Open New\"</label></js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<js:map><id>ZoomIn</id><label>\"Zoom In\"</label></js:map>"
 +       "<js:map><id>ZoomOut</id><label>\"Zoom Out\"</label></js:map>"
 +       "<js:map><id>OriginalView</id><label>\"Original View\"</label>"
 +       "</js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<id>Quality</id>"
 +       "<id>Pause</id>"
 +       "<id>Mute</id>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<js:map><id>Find</id><label>Find...</label></js:map>"
 +       "<id>Copy</id>"
 +       "<js:map><id>ViewSource</id><label>\"View Source\"</label></js:map>"
 +       "<js:map><id>SaveAs</id><label>\"Save As\"</label></js:map>"
-+       "<js:item>null</js:item>"
++       "<js:null/>"
 +       "<id>Help</id>"
 +       "<js:map><id>About</id><label>\"About CVG Viewer...\"</label></js:map>"
 +     "</js:array>"
@@ -418,24 +418,24 @@ if(true) return;
 + "</js:mapItems>"+
 "</menu>"));
 		assertTrue(check("[{\"a\":null},{\"x\":\"1\"},null,-1.23E+4,\"\\\\a\\\"\"]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a/>"
 + "<x>\"1\"</x>"
-+ "<js:item>null</js:item>"
-+ "<js:item>-1.23E+4</js:item>"
-+ "<js:item>\\a\"</js:item>"+
++ "<js:null/>"
++ "<js:number>-1.23E+4</js:number>"
++ "<js:string>\\a\"</js:string>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":[1,null,-1.23E+4,[true, 5]\"\\\\a\\\"\"]}",
 "<a>"
-+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
-+   "<js:item>1</js:item>"
-+   "<js:item>null</js:item>"
-+   "<js:item>-1.23E+4</js:item>"
++ "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
++   "<js:number>1</js:number>"
++   "<js:null/>"
++   "<js:number>-1.23E+4</js:number>"
 +   "<js:array>"
-+     "<js:item>true</js:item>"
-+     "<js:item>5</js:item>"
++     "<js:boolean>true</js:boolean>"
++     "<js:number>5</js:number>"
 +   "</js:array>"
-+   "<js:item>\\a\"</js:item>"
++   "<js:string>\\a\"</js:string>"
 + "</js:array>"+
 "</a>"));
 				assertTrue(check(
@@ -452,7 +452,7 @@ if(true) return;
 " }\n" +
 "}",
 "<a>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<b>"
 +     "<js:array>"
 +       "<js:map>"
@@ -485,7 +485,7 @@ if(true) return;
 "  }\n" +
 "}",
 "<A x=\"null\" y=\"1\" z=\"false\">"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<g h=\"/\" i=\"/i/*\"/>"
 +   "<a>"
 +     "<js:array>"
@@ -499,7 +499,7 @@ if(true) return;
 + "</js:mapItems>"+
 "</A>"));
 		assertTrue(check("[{\"a\":{\"x\":1}},{\"b\":{\"y\":\"\"}}]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a x=\"1\"/><b y=\"\"/>"+
 "</js:array>"));
 		assertTrue(check(
@@ -514,20 +514,20 @@ if(true) return;
 +     "2"
 +   "]"
 + "]",
-"<js:array xmlns:js='http://www.syntea.cz/json/1.0'>"
+"<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 + "<a x=\"1\" y=\"true\"/>"
 + "<js:array><b y=\"x\"/>"
-+   "<js:item>1</js:item>"
++   "<js:number>1</js:number>"
 + "</js:array>"
 + "<js:array>"
 +   "<c y=\"y\"/>"
-+   "<js:item>2</js:item>"
++   "<js:number>2</js:number>"
 + "</js:array>"+
 "</js:array>"));
 		assertTrue(check(
 "{\"a\":{\"b\":{\"d\":{\"e\":5},\"c\":\"C\"}}}",
 "<a>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<b c=\"C\">"
 +       "<js:mapItems>"
 +         "<d e='5'/>"
@@ -538,7 +538,7 @@ if(true) return;
 		assertTrue(check(
 "{\"a\":{\"b\":[{\"d\":{\"e\":5},\"c\":\"C\"}]}}",
 "<a>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<b>"
 +     "<js:array>"
 +       "<js:map>"
@@ -577,7 +577,7 @@ if(true) return;
 + "}" +
 "}",
 "<A x=\"null\" y=\"1\" z=\"false\">"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<g h=\"/\" i=\"/i/*\"/>"
 +   "<a>"
 +     "<js:array>"
@@ -590,7 +590,7 @@ if(true) return;
 +       "</js:map>"
 +       "<d>"
 +         "<js:array>"
-+           "<js:item>d</js:item>"
++           "<js:string>d</js:string>"
 +         "</js:array>"
 +       "</d>"
 +       "<b c=\"true\"/>"
@@ -642,7 +642,7 @@ if(true) return;
 "  }"+
 "}",
 "<a>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<t t-l=\"/W\" t-u=\"c\"/>"
 +   "<b>"
 +     "<js:array>"
@@ -689,7 +689,7 @@ if(true) return;
 "  \"taglib\": {\n" +
 "    \"taglib-location\": \"/WEB-INF/tlds/cofax.tld\"}}}",
 "<A>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<servlet-mapping cofaxCDS=\"/\" cofaxTools=\"/tools/*\"/>"
 +   "<taglib taglib-location=\"/WEB-INF/tlds/cofax.tld\"/>"
 +   "<a>"
@@ -760,7 +760,7 @@ if(true) return;
 "    \"taglib-uri\": \"cofax.tld\",\n" +
 "    \"taglib-location\": \"/WEB-INF/tlds/cofax.tld\"}}}",
 "<web-app>"
-+ "<js:mapItems xmlns:js='http://www.syntea.cz/json/1.0'>"
++ "<js:mapItems xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<servlet-mapping"
 +   " cofaxAdmin=\"/admin/*\""
 +   " cofaxCDS=\"/\""

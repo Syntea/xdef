@@ -1,20 +1,18 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="main" root="A | B | C" >
-  <xd:declaration>type myType z</xd:declaration>
+<xd:def xmlns:xd="http://www.xdef.org/3.2" name="main" root="A | B | C" >
+  <xd:declaration scope = "local">type myType z</xd:declaration>
   <A>
     <Elem xd:script="occurs *; ref Model" />
   </A>
   <Model>myType</Model>
-  <xd:declaration>
+  <xd:declaration scope = "local">
+    /* xxx */
     int i = 0;
-	  /* xxx */
     type pom1 datetime('d.M.yyyy');
     type pom2 xdatetime('d.M.yyyy');
     type x pom1;
-	  /* xxx */
     type y pom2;
-	  /* xxx */
     type z int(1, 10);
-	  /* xxx */
+    /* xxx */
   </xd:declaration>
   <B b="x" />
   <C c="y" />

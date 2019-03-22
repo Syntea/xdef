@@ -1,14 +1,12 @@
 <!-- Because of usage of the the type ListOf use X-definition 2.0! -->
-<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
-        xd:name      =  "main"
-        xd:root      =  "Types" >
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" xd:name="main" xd:root="Types">
 
     <Types>
         <xd:mixed>
             <an xd:script="occurs *">an</an>
             <an_1 xd:script="occurs *">an(3)</an_1>
             <an_2 xd:script="occurs *">an(3,4)</an_2>
-            <base64 xd:script="occurs *">base64Binary</base64>
+            <base64 xd:script="occurs *">base64</base64>
             <base64_1 xd:script="occurs *">base64Binary(2)</base64_1>
             <base64_2 xd:script="occurs *">base64Binary(4,6)</base64_2>
             <boolean xd:script="occurs *">boolean</boolean>
