@@ -33,4 +33,4 @@
 
 # Previous versions
 - the previous versions were distributed by the site www.syntea.cz.
-  in this version were renamed the packages "cz.syntea.xdef" to "org.xdef"
+  In this version were renamed the packages "cz.syntea.xdef" to "org.xdef"
