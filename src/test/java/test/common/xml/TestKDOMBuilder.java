@@ -1059,38 +1059,6 @@ public class TestKDOMBuilder extends STester {
 			s = el.getPrefix();
 			assertTrue(s == null || ":".equals(s), s); //java: null, syntea: ":"
 		} catch (Exception ex) {fail(ex);}
-		try {//test XML from URL (internet connection required))
-			builder = new KDOMBuilder();
-			builder.setExpandEntityReferences(false);
-			builder.setCoalescing(false);
-			builder.setValidating(true);
-			data = "http://xdef.syntea.cz/tutorial/test/TestDTD001.xml";
-			doc = builder.parse(new URL(data));
-			el = doc.getDocumentElement();
-			assertEq("a1", el.getAttribute("a1"));
-			assertEq("a2", el.getAttribute("a2"));
-			assertEq("%pe", el.getAttribute("a3"));
-			assertEq("text 1,text 2", el.getTextContent());
-			data =
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-"<!DOCTYPE root SYSTEM 'http://xdef.syntea.cz/tutorial/test/TestDTD001.dtd'>\n"+
-"<root a1=\"a1\" >&t1;,&t2;</root>";
-			doc = builder.parse(data);
-			el = doc.getDocumentElement();
-			assertEq("a1", el.getAttribute("a1"));
-			assertEq("a2", el.getAttribute("a2"));
-			assertEq("%pe", el.getAttribute("a3"));
-			assertEq("text 1,text 2", el.getTextContent());
-		} catch (Exception ex) {
-			s = ex.getMessage(); // Internet not available?
-			if (s == null || (!s.contains("java.net.UnknownHostException")
-				&& !s.contains("java.net.ConnectException"))) {
-				fail(ex); // other error!
-			} else {
-				setResultInfo(
-					"(Internet connection is not available, not tested.)");
-			}
-		}
 		try {// test DOCTYPE declared in an external file.
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);
