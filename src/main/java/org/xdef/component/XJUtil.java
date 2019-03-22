@@ -74,7 +74,7 @@ public class XJUtil extends JSONUtil {
 					if (ch == '-' || ch >= '0' && ch <= '9') {
 						StringParser p = new StringParser(s);
 						p.isChar('-');
-						addQuot |= p.isFloat() || p.isInteger();
+//						addQuot |= p.isFloat() || p.isInteger();
 					}
 				}
 				return "jstring()";
@@ -97,7 +97,23 @@ public class XJUtil extends JSONUtil {
 	 * @param val value which will be represented as value of created element.
 	 */
 	private void addValueToXD(final Node node, final Object val) {
-		addValueAsTextXD(appendJSONElem(node, J_ITEM), val);
+		String name;
+		if (val == null) {
+			name = J_NULL;
+		} else if (val instanceof String) {
+			name = J_STRING;
+		} else if (val instanceof Number) {
+			name = J_NUMBER;
+		} else if (val instanceof Boolean) {
+			name = J_BOOLEAN;
+		} else {
+			throw new RuntimeException("Unknown object: " + val);
+		}
+		if (val != null) {
+			addValueAsTextXD(appendJSONElem(node, name), val);
+		} else {
+			appendJSONElem(node, name);
+		}
 		popContext();
 	}
 
@@ -219,7 +235,7 @@ public class XJUtil extends JSONUtil {
 			if (ee != null) {
 				final NodeList nl = ee.getChildNodes();
 				if (nl.getLength() > 1) {
-					Element eee = getDoc(ee).createElementNS(XDEF32_NS_URI,
+					Element eee = getDoc(ee).createElementNS(XDEF31_NS_URI,
 						XDEF_NS_PREFIX + ":mixed");
 					for (int i = nl.getLength()-1; i >=0 ; i--) {
 						final Node n = nl.item(i);
@@ -301,7 +317,7 @@ public class XJUtil extends JSONUtil {
 			final Document doc = db.newDocument();
 			final XJUtil jsp = new XJUtil();
 			final Element xdef =
-				jsp.appendElem(doc, XDEF32_NS_URI, XDEF_NS_PREFIX + ":def");
+				jsp.appendElem(doc, XDEF31_NS_URI, XDEF_NS_PREFIX + ":def");
 			xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				"xmlns:" + JSON_NS_PREFIX, JSON_NS_URI);
 			jsp._ns.setPrefix(JSON_NS_PREFIX, JSON_NS_URI);

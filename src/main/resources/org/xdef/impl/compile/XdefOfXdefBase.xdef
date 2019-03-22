@@ -258,7 +258,8 @@ Increment ::= incAfter | incBefore
 
 Parameter ::= Expression $rule
 
-ParameterList ::= "(" S? (Parameter (S? "," S? Parameter)* S?)? ")" $rule
+ParameterList ::= "(" S? (Parameter
+   (S? "," S? Parameter)* (S? "," S? "*")? S?)? ")" $rule
 
 VariableReference ::= (Identifier - TypeIdentifier) $rule
 

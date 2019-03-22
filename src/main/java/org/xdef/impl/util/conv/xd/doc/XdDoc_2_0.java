@@ -121,7 +121,6 @@ public final class XdDoc_2_0 extends XdDoc {
 					// get map with declared types
 					Map<String, String> map = Util.getDeclaredTypes(model);
 					for (Map.Entry<String, String> e: map.entrySet()) {
-//System.out.println("GENERATED: " + e.getKey());
 						_xdModels.put(new XdDecl(xdDef, e.getKey()), model);
 					}
 				} else {

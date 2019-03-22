@@ -113,7 +113,6 @@ public class TestXd2XsdConv extends XDTester {
 			}
 			_chkDoc = xdPool.createXDDocument(MAIN_DEF_NAME);
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
 			return false;

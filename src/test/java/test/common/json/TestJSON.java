@@ -368,17 +368,17 @@ public class TestJSON extends STester {
 		assertTrue(chkxj("<a x='1'><b/><c/></a>",
 			"[{\"a\":{\"x\":1}},{\"b\":null},{\"c\":null}]"));
 		assertTrue(chkxj(
-"<a><js:array xmlns:js='http://www.syntea.cz/json/1.0'>1 2</js:array></a>",
+"<a><js:array xmlns:js='http://www.xdef.org/json/1.0'>1 2</js:array></a>",
 "{\"a\":[1, 2]}"));
 		assertTrue(chkxj(
-"<a x='1'><js:array xmlns:js='http://www.syntea.cz/json/1.0'>1</js:array></a>",
+"<a x='1'><js:array xmlns:js='http://www.xdef.org/json/1.0'>1</js:array></a>",
 "[{\"a\":{\"x\":1}},[1]]"));
 		assertTrue(chkxj(
-"<a><js:array xmlns:js='http://www.syntea.cz/json/1.0'><b/></js:array></a>",
+"<a><js:array xmlns:js='http://www.xdef.org/json/1.0'><b/></js:array></a>",
 "{\"a\":[{\"b\":null}]}"));
 		assertTrue(chkxj(
 "<a x='1'>"
-	+ "<js:array xmlns:js='http://www.syntea.cz/json/1.0'><b/></js:array>"+
+	+ "<js:array xmlns:js='http://www.xdef.org/json/1.0'><b/></js:array>"+
 "</a>",
 "[{\"a\":{\"x\":1}},[{\"b\":null}]]"));
 ////////////////////////////////////////////////////////////////////////////////

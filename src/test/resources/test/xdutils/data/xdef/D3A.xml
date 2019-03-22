@@ -39,17 +39,8 @@
     ve znï¿½nï¿½ pozdï¿½jï¿½ï¿½ch pï¿½edpisï¿½
   </Rozhodnuti>
   <Vyliceni>
-    Dne 22. bï¿½ezna 2005 v 13:11 hodin ï¿½ï¿½dil dosud neztotoï¿½nï¿½nï¿½ ï¿½idiï¿½
-    nezjiï¿½tï¿½nï¿½ nï¿½kladnï¿½ vozidlo couval
-    s nï¿½m podï¿½l nï¿½kladovï¿½ rampy, nevï¿½noval se plnï¿½ ï¿½ï¿½zenï¿½
-    vozidla, pï¿½ehlï¿½dl za sebou rozvodnou skï¿½ï¿½ï¿½ a pravou zadnï¿½ ï¿½ï¿½stï¿½
-    do nï¿½ narazil do jejï¿½ho krytu a poï¿½kodil jej. Pï¿½i nehodï¿½ vznikla
-    hmotnï¿½ ï¿½koda rozvodnï¿½ skï¿½ï¿½ni. Neztotoï¿½nï¿½nï¿½ ï¿½idiï¿½ po nehodï¿½ z
-    mï¿½sta odjel aniï¿½ by nehodu ohlï¿½sil. Ke zranï¿½nï¿½ osob nedoï¿½lo.
-    Dechovï¿½ zkouï¿½ka nebyla provedena. Technickï¿½ zï¿½vada, jako pï¿½ï¿½ï¿½ina
-    dopravnï¿½ nehody, nebyla na mï¿½stï¿½ ohledï¿½nï¿½m zjiï¿½tï¿½na ani uplatnï¿½na.
-    Nehoda zaznamenï¿½na kamerovï¿½m systï¿½mem, ze zï¿½znamu vï¿½ak
-    nelze zjistit typ a ani reg. zn. vozidla pachatele..
+    Dne 22. bžezna 2005 v 13:11 hodin vozidlo couvalo.
+    Nelze zjistit typ a ani reg. zn. vozidla pachatele..
   </Vyliceni>
   <ObjStranka DatumCasDN="22.03.2005 13:11"
               Okres="VELKY KOCOURKOV 4"
@@ -60,8 +51,7 @@
               HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
               Pricina="508">
     <Misto>
-      VELKY KOCOURKOV 4, ulice MALï¿½ 19 - ï¿½ï¿½elovï¿½ komunikace, nï¿½kladovï¿½
-      rampa OC Chodov ( souï¿½adnice GPS -123456,200/-999999,470 )
+      VELKY KOCOURKOV 4, ulice MALÁ 19
     </Misto>
   </ObjStranka>
   <Vozidlo OznSegmentu="1"
@@ -73,8 +63,7 @@
       uraï¿½enï¿½ plastovï¿½ kryt
     </Skoda>
     <Vlastnik>
-      OC Chodov, Roztylskï¿½ ï¿½. 2321/19, PSï¿½ 123 00, VELKY KOCOURKOV 4, stï¿½t:
-      ï¿½R
+      OC Chodov, Roztylská è. 2321/19, PSÈ 123 00, VELKY KOCOURKOV 4
     </Vlastnik>
   </Predmet>
   <Ucastnik OznSegmentu="P-1"
@@ -107,14 +96,7 @@
     Rozhodnutï¿½ nabylo prï¿½vnï¿½ moci
   </Rozhodnuti>
   <Vyliceni>
-    Dne 15. ï¿½ervence 2005 v 15:10 hod.ï¿½ï¿½dil ï¿½idiï¿½ vozidlo ï¿½ Octavia
-    ulici Malï¿½ vjel na tramvajovï¿½ pï¿½s a zachytil levou ï¿½ï¿½stï¿½
-    svï¿½ho vozidla o pravou pï¿½ednï¿½ ï¿½ï¿½st pï¿½ednï¿½ho vozu tramvaje linky.
-    na vozidlech. Dechovï¿½ zkouï¿½ka na alkohol byla provedena pï¿½ï¿½strojem
-    DRï¿½GER, jejï¿½ vï¿½sledek byl negativnï¿½. Ke zranï¿½nï¿½ osob nedoï¿½lo.
-    Technickï¿½ zï¿½vada, jako pï¿½ï¿½ï¿½ina dopravnï¿½ nehody, nebyla na mï¿½stï¿½
-    ohledï¿½nï¿½m zjiï¿½tï¿½na ani uplatnï¿½na. Vznikla hmotnï¿½ ï¿½koda na vozidle
-    ï¿½koda Octavia a na pï¿½ednï¿½m voze tramvaje.
+    Dne 15. èervence 2005 v 15:10 voze tramvaje.
   </Vyliceni>
   <ObjStranka DatumCasDN="15.07.2005 15:10"
               Okres="VELKY KOCOURKOV 3"
@@ -124,7 +106,7 @@
               HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
               Pricina="508">
     <Misto>
-      VELKY KOCOURKOV 3, kï¿½iï¿½ovatka ulic JIï¿½ï¿½nskï¿½ x Vinohradskï¿½
+      VELKY KOCOURKOV 3, køižovatka ulic
     </Misto>
   </ObjStranka>
   <Vozidlo OznSegmentu="1"
@@ -138,11 +120,10 @@
            PlatnostSTK="platnï¿½"
            MesicSTKDo="02/2009">
     <Skoda Kc="20000">
-      levï¿½ bok, levï¿½ pï¿½ednï¿½ dveï¿½e, levï¿½ pï¿½ednï¿½ blatnï¿½k,
+      levý bok
     </Skoda>
     <Drzitel>
-      LEASE PLAN ï¿½ESKï¿½ REPUBLIKA ,S.R.O., Iï¿½O: 12345678, Pekaï¿½skï¿½
-      ï¿½. 14, PSï¿½ 123 00, VELKY KOCOURKOV 5, stï¿½t: ï¿½R
+      LEASE PLAN ÈESKÁ REPUBLIKA ,S.R.O., IÈO: 12345678,VELKY KOCOURKOV 5
     </Drzitel>
   </Vozidlo>
   <Tramvaj OznSegmentu="2"
@@ -155,11 +136,10 @@
            CisloDokladuPojisteni="123456789"
            DruhVozidla="tramvaj">
     <Skoda Kc="20000">
-      pravï¿½ bok pï¿½ednï¿½ho vozu odï¿½enï¿½ lak ,
+      pravý bok lak
     </Skoda>
     <Vlastnik>
-      Dopravnï¿½ podnik hl. m Prahy A.S., Iï¿½O: 12345678, 217 ï¿½. 42,
-      PSï¿½ 123 00, SOKOLOVSKï¿½, stï¿½t: ï¿½R
+      Dopravní podnik hl. m Prahy A.S., IÈO: 12345678
     </Vlastnik>
   </Tramvaj>
   <Ucastnik OznSegmentu="1-1"
@@ -194,13 +174,13 @@
             CisloDokladu="123456789"
             StatVydani="ï¿½ESKï¿½ REPUBLIKA"/>
     <PoruseniZakProvoz>
-      ï¿½ 4 pï¿½sm. a), ï¿½ 4 pï¿½sm. b), ï¿½ 13 odst. 2
+      par. 13 odst. 2
     </PoruseniZakProvoz>
     <PoruseniZakPrest>
-      ï¿½ 22 odst.1 pï¿½sm. l) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
+      par. 22 odst.1 písm. l) zákona è. 200/1990 Sb.
     </PoruseniZakPrest>
     <Vazba>
-      osobnï¿½ automobil - ï¿½KODA OCTAVIA
+      osobní automobil - ŠKODA OCTAVIA
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="1-2"
@@ -215,7 +195,7 @@
              Stat="ï¿½ESKï¿½ REPUBLIKA"/>
     </Firma>
     <Vazba>
-      osobnï¿½ automobil - ï¿½KODA OCTAVIA
+      osobní automobil - ŠKODA OCTAVIA
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-1"
@@ -228,14 +208,14 @@
            Pohlavi="M"
            DatumNarozeni="23.01.1977"
            MistoNarozeni="KOCOURKOV 7"
-           StatNarozeni="ï¿½ESKï¿½ REPUBLIKA"
-           StatniPrislusnost="ï¿½ESKï¿½ REPUBLIKA">
+           StatNarozeni="ÈESKÁ REPUBLIKA"
+           StatniPrislusnost="ÈESKÁ REPUBLIKA">
       <Pobyt Ulice="MALï¿½"
              CisloPopisne="460"
              Obec="VELKY KOCOURKOV 9"
              PSC="123 00"
              Okres="VELKY KOCOURKOV 9"
-             Stat="ï¿½ESKï¿½ REPUBLIKA"/>
+             Stat="ÈESKÁ REPUBLIKA"/>
     </Osoba>
     <Doklad TypDokladu="obï¿½anskï¿½ prï¿½kaz"
             CisloDokladu="123456789"

@@ -240,7 +240,6 @@ public class XdefValueTypeResolver {
 		addTypeToSType(type, sTypeElem);
 	}
 
-
 	/** Resolves X-definition declaration model.
 	 * @param xdDecl X-definition declaration model to resolve.
 	 */
@@ -248,19 +247,9 @@ public class XdefValueTypeResolver {
 		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
 		String declName = xdDecl.getName();
 		Map<String, String> map = Util.getDeclaredTypes(declElem);
-		String localNamePfx = "_" + xdDecl.getDef().getName() + "_";
-
-		String typeDecl = map.get(localNamePfx + declName); // try local
-//if (typeDecl != null) {
-//System.out.println("FOUND LOCAL: " + localNamePfx + declName);
-//}
+		String typeDecl = map.get(declName); // try local
 		if (typeDecl == null) {
 			typeDecl = map.get(declName); // global
-//if (typeDecl != null) {
-//System.out.println("FOUND GLOBAL: " + declName);
-//} else {
-//System.out.println("NOT FOUND: " + declName + " (" + localNamePfx +")");
-//}
 		}
 		if (typeDecl != null) {
 			try {

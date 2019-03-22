@@ -37,9 +37,22 @@ import org.w3c.dom.NodeList;
  */
 public class JSONUtil implements XDConstants {
 
+	/** JSON map. */
 	public static final String J_MAP = "map";
+	/** JSON array. */
 	public static final String J_ARRAY = "array";
+	/** JSON string item. */
+	public static final String J_STRING = "string";
+	/** JSON number item. */
+	public static final String J_NUMBER = "number";
+	/** JSON boolean item. */
+	public static final String J_BOOLEAN = "boolean";
+	/** JSON null item. */
+	public static final String J_NULL = "null";
+
+	/** JSON any item with JSON value. */
 	public static final String J_ITEM = "item";
+	/** Extension of JSON map if named values are map or array. */
 	public static final String J_EXTMAP = "mapItems";
 
 	/** This field is internally used. */
@@ -553,8 +566,22 @@ public class JSONUtil implements XDConstants {
 	 * @param val value which will be represented as value of created element.
 	 */
 	private void addValue(final Node node, final Object val) {
-		Element e = appendJSONElem(node, J_ITEM);
-		addValueAsText(e, val);
+		String name;
+		if (val == null) {
+			name = J_NULL;
+		} else if (val instanceof String) {
+			name = J_STRING;
+		} else if (val instanceof Number) {
+			name = J_NUMBER;
+		} else if (val instanceof Boolean) {
+			name = J_BOOLEAN;
+		} else {
+			throw new RuntimeException("Unknown object: " + val);
+		}
+		Element e = appendJSONElem(node, name);
+		if (val != null) {
+			addValueAsText(e, val);
+		}
 		popContext();
 	}
 
@@ -1040,11 +1067,12 @@ public class JSONUtil implements XDConstants {
 					if (J_EXTMAP.equals(name)) {
 						return namedItems(n, null);
 					}
-					if (J_ITEM.equals(name)) {
+					if (J_NULL.equals(name)) {
+						return null;
+					} else if (J_STRING.equals(name)
+						|| J_NUMBER.equals(name)
+						|| J_BOOLEAN.equals(name)) {
 						String s = ((Element) n).getTextContent();
-						if (s == null) {
-							return null;
-						}
 						return getValue(s);
 					}
 					throw new RuntimeException(
@@ -1108,10 +1136,8 @@ public class JSONUtil implements XDConstants {
 							Object o = createItem(nl1.item(j));
 							if (o instanceof Map) {
 								Map<?,?> m = (Map) o;
-//								if (!m.isEmpty()) {
-									Object k = m.keySet().iterator().next();
-									attrs.put(k.toString(), m.get(k));
-//								}
+								Object k = m.keySet().iterator().next();
+								attrs.put(k.toString(), m.get(k));
 							} else if (o instanceof List &&
 								((List) o).size() >= 1 &&
 								((List) o).get(0) instanceof Map) {
