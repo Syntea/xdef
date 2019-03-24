@@ -108,13 +108,13 @@ public class Y20_B implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class X implements org.xdef.component.XComponent{
   public String getb() {return _b;}
-  public java.util.List<test.xdef.component.Y20_B.X> listOfX() {return _X;}
+  public java.util.List<test.xdef.component.Y20_B.X> listOfX_1() {return _X_1;}
   public void setb(String x) {_b = x;}
-  public void addX(test.xdef.component.Y20_B.X x) {
+  public void addX_1(test.xdef.component.Y20_B.X x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
           x.xInit(this, "X", null, "Y20#B/X/X");
-      _X.add(x);
+      _X_1.add(x);
     }
 
   }
@@ -172,7 +172,7 @@ public static class X implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
+    org.xdef.component.XComponentUtil.addXC(a, listOfX_1());
     return a;
   }
   public X() {}
@@ -197,7 +197,7 @@ public static class X implements org.xdef.component.XComponent{
   }
   private String XD_Name_b="b";
   private String _b;
-  private final java.util.List<test.xdef.component.Y20_B.X> _X =
+  private final java.util.List<test.xdef.component.Y20_B.X> _X_1 =
     new java.util.ArrayList<test.xdef.component.Y20_B.X>();
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -222,7 +222,7 @@ public static class X implements org.xdef.component.XComponent{
   @Override
   public void xAddXChild(org.xdef.component.XComponent xc) {
     xc.xSetNodeIndex(XD_ndx++);
-    listOfX().add((test.xdef.component.Y20_B.X) xc); //Y20#B/X/X
+    listOfX_1().add((test.xdef.component.Y20_B.X) xc); //Y20#B/X/X
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

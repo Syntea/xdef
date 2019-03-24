@@ -1,3 +1,7 @@
+# Version 32.3.2, release-date 2019-03-24
+- fixed error in generation of X-components from models where there are more
+  nested models with the same name.
+
 # Version 32.3.1, release-date 2019-03-21
 - fixed error in generation of X-components from models with namespace URI.
 

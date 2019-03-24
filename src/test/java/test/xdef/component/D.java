@@ -3591,9 +3591,9 @@ public static class E implements org.xdef.component.XComponent{
 public static class T implements org.xdef.component.XComponent{
   public String gett() {return _t;}
   public String getxmlns() {return "x.y";}
-  public test.xdef.component.D.T.I getI() {return _I;}
+  public test.xdef.component.D.T.I_1 getI_1() {return _I_1;}
   public void sett(String x) {_t = x;}
-  public void setI(test.xdef.component.D.T.I x) {_I = x;}
+  public void setI_1(test.xdef.component.D.T.I_1 x) {_I_1 = x;}
   public String xposOft(){return XD_XPos + "/@t";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -3650,7 +3650,7 @@ public static class T implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, getI());
+    org.xdef.component.XComponentUtil.addXC(a, getI_1());
     return a;
   }
   public T() {}
@@ -3675,7 +3675,7 @@ public static class T implements org.xdef.component.XComponent{
   }
   private String XD_Name_t="t";
   private String _t;
-  private test.xdef.component.D.T.I _I;
+  private test.xdef.component.D.T.I_1 _I_1;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "T";
@@ -3695,16 +3695,16 @@ public static class T implements org.xdef.component.XComponent{
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new I(this, xx);}
+    {return new I_1(this, xx);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent xc) {
     xc.xSetNodeIndex(XD_ndx++);
-    setI((I) xc); //D#a:A/T/I
+    setI_1((I_1) xc); //D#a:A/T/I
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
-public static class I implements org.xdef.component.XComponent{
+public static class I_1 implements org.xdef.component.XComponent{
   public String getxmlns() {return "x.y";}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
@@ -3756,15 +3756,15 @@ public static class I implements org.xdef.component.XComponent{
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();}
-  public I() {}
-  public I(org.xdef.component.XComponent p,
+  public I_1() {}
+  public I_1(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
     XD_NodeName=name; XD_NamespaceURI=ns;
     XD_XPos=xPos;
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public I(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
+  public I_1(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
     org.w3c.dom.Element el=xx.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
     XD_XPos=xx.getXPos();
