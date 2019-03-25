@@ -776,8 +776,8 @@ public final class TestXComponents extends XDTester {
 			q = parseXC(xp, "Y19", xml, null, null);
 			assertEq(xml, q.toXml());
 			test.xdef.component.Y19 p = (test.xdef.component.Y19) q;
-			assertEq(1, p.getB().getB_1().getC().getB().getb());
-			s = p.getB().getB_1().getC().getB().getClass().getName();
+			assertEq(1, p.getB().getB_1().getC().getB_2().getb());
+			s = p.getB().getB_1().getC().getB_2().getClass().getName();
 			assertTrue(s.endsWith("B_2"), s);
 		} catch (Exception ex) {fail(ex);}
 		try { // construction of XComponent
@@ -838,13 +838,13 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
 			assertEq("1", p.getX().getb());
-			java.util.List<test.xdef.component.Y20_A.X> lb =
-				p.getX().listOfX();
+			java.util.List<test.xdef.component.Y20_A.X.X_1> lb =
+				p.getX().listOfX_1();
 			assertEq(2, lb.size());
 			assertEq("2", lb.get(0).getb());
-			assertEq(1, lb.get(0).listOfX().size());
-			assertEq("3", lb.get(0).listOfX().get(0).getb());
-			assertEq(0, lb.get(1).listOfX().size());
+			assertEq(1, lb.get(0).listOfX_2().size());
+			assertEq("3", lb.get(0).listOfX_2().get(0).getb());
+			assertEq(0, lb.get(1).listOfX_2().size());
 			assertEq("4", lb.get(1).getb());
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -854,12 +854,13 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
 			assertEq("1", p.getX().getb());
-			java.util.List<test.xdef.component.Y20_B.X> lb = p.getX().listOfX();
+			java.util.List<test.xdef.component.Y20_B.X> lb =
+				p.getX().listOfX_1();
 			assertEq(2, lb.size());
 			assertEq("2", lb.get(0).getb());
-			assertEq(1, lb.get(0).listOfX().size());
-			assertEq("3", lb.get(0).listOfX().get(0).getb());
-			assertEq(0, lb.get(1).listOfX().size());
+			assertEq(1, lb.get(0).listOfX_1().size());
+			assertEq("3", lb.get(0).listOfX_1().get(0).getb());
+			assertEq(0, lb.get(1).listOfX_1().size());
 			assertEq("4", lb.get(1).getb());
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -874,9 +875,9 @@ public final class TestXComponents extends XDTester {
 				p.getB().listOfY();
 			assertEq(2, lb.size());
 			assertEq("2", lb.get(0).getb());
-			assertEq(1, lb.get(0).listOfY().size());
-			assertEq("3", lb.get(0).listOfY().get(0).getb());
-			assertEq(0, lb.get(1).listOfY().size());
+			assertEq(1, lb.get(0).listOfY_1().size());
+			assertEq("3", lb.get(0).listOfY_1().get(0).getb());
+			assertEq(0, lb.get(1).listOfY_1().size());
 			assertEq("4", lb.get(1).getb());
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -887,12 +888,12 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
 			assertEq("1", p.getZ().getb());
-			java.util.List<test.xdef.component.Y20_D.Z> lb=
-				p.getZ().getC().listOfZ();
+			java.util.List<test.xdef.component.Y20_D.Z.C.Z_1> lb =
+				p.getZ().getC().listOfZ_1();
 			assertEq(1, lb.size());
 			assertEq("2", lb.get(0).getb());
-			assertEq(1, lb.get(0).getC().listOfZ().size());
-			assertEq("3", lb.get(0).getC().listOfZ().get(0).getb());
+			assertEq(1, lb.get(0).getC_1().listOfZ_1().size());
+			assertEq("3", lb.get(0).getC_1().listOfZ_1().get(0).getb());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<A b='x'>z<B c='a'>x</B><B c='c'>y</B>x</A>";

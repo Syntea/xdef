@@ -1018,61 +1018,6 @@ public final class GenXComponent {
 		if (s == null && (s = xe.getReferencePos()) != null) {
 			s = _binds.get(xe.getXDPosition() + xdPos.substring(ndx));
 		}
-		if (s == null && ndx >= 0) { // no bind
-			String name = xdPos.substring(ndx+1); // last item
-			String t = xdPos.substring(0, ndx); // prefix
-			// look if name is in the path
-			ndx = t.indexOf('#');
-			String v = t.substring(0, ndx+1);
-			t = t.substring(ndx+1);
-			StringTokenizer st = new StringTokenizer(t, "/");
-			int i = 0;
-			String u = name;
-			while(st.hasMoreTokens()) {
-				String x = st.nextToken();
-				if (!v.endsWith("#")) v += "/";
-				v += x;
-				if (u.equals(x)) {
-					u = name + "_" + ++i;
-					st = new StringTokenizer(t, "/");
-				}
-			}
-			if (i > 0) {
-				// check if chnged name points to a recursive reference
-				if (xn instanceof XMElement && ((XMElement) xn).isReference()) {
-					XMElement xe1 = (XMElement) xn;
-					String ref = xe1.getReferencePos();
-					if (ref != null && xdPos.startsWith(ref+'/')) {// recurse
-						String path = xdpath;
-						for(;;) {
-							if (path.endsWith(name)) {
-								XMElement xe2 =
-									(XMElement) xn.getXDPool().findModel(path);
-								if (xe2 != null && xe2.isReference()
-									&& !xe2.getXDPosition().startsWith(
-										xe2.getReferencePos() + '/' )) {
-									return "";
-								}
-								break;
-							}
-							ndx = path.lastIndexOf('/');
-							if (ndx < 0) {
-								break;
-							}
-							path = path.substring(0, ndx);
-						}
-						return null;
-					}
-				}
-				// force bind
-				ndx = xdPos.lastIndexOf("/");
-				//Object &{0} already exists in the tree structure.
-				//It was renamed to &{1}
-				_reporter.warning(XDEF.XDEF377,
-					xdPos, xdPos.substring(0, ndx+1) + u);
-				return u + ";" + name;
-			}
-		}
 		return s;
 	}
 
@@ -1119,7 +1064,8 @@ public final class GenXComponent {
 	 * @param interfaceName name of interface.
 	 * @param classNameBase prefix for inner class names.
 	 * @param packageName name of package.
-	 * @param components set of components.
+	 * @param components Map with components.
+	 * @param clsNames Set with class names or null.
 	 * @param isRoot if true then this is root element.
 	 * @return string wit Java code.
 	 */
@@ -1131,6 +1077,7 @@ public final class GenXComponent {
 		final String classNameBase,
 		final String packageName,
 		final Map<String, String> components,
+		final Set<String> clsNames,
 		final boolean isRoot,
 		String xdpath) {
 		String extClazz = extClass;
@@ -1138,6 +1085,9 @@ public final class GenXComponent {
 		_components = components;
 		final String model = xe.getName();
 		final Set<String> classNames = new TreeSet<String>(RESERVED_NAMES);
+		if (clsNames != null) {
+			classNames.addAll(clsNames);
+		}
 		final String xdname = xe.getXMDefinition().getName();
 		int ndx = model.indexOf(':');
 		final String localName = ndx >= 0 ? model.substring(ndx+1) : model;
@@ -1255,10 +1205,7 @@ public final class GenXComponent {
 				newClassName = name = checkBind(xdpath, xe, xdata);
 				boolean ext = false;
 				if (name != null) {
-					if ((ndx = name.indexOf(';')) > 0) {
-						newClassName = name.substring(0, ndx);
-						name = name.substring(0, ndx+1);
-					} else if ((ndx = name.indexOf(" %with ")) > 0) {
+					if ((ndx = name.indexOf(" %with ")) > 0) {
 						if (extClazz.startsWith(" extends ")) {
 							ext = true;
 							name = name.substring(0, ndx);
@@ -1368,8 +1315,8 @@ public final class GenXComponent {
 				// and if it is unique and if the only child node of this node
 				// is this text node and if it has no attributes then we process
 				// it is processed same way as an attribute of the parent class.
-				final String xcClass0 = isRecurseRef ?  name :
-					getXDPosition(xe1, interfcName.length() > 0);
+				final String xcClass0 = isRecurseRef 
+					?  name : getXDPosition(xe1, interfcName.length() > 0);
 				String xcClass = xcClass0;
 				if (xcClass0 != null) {
 					if (xcClass.indexOf("%ref ") ==0) {
@@ -1402,8 +1349,9 @@ public final class GenXComponent {
 				}
 				String chgName;
 				chgName = newClassName;
-				for (int j = 1; classNames.contains(chgName); j++) {
+				for (int j = 1; classNames.contains(newClassName); j++) {
 					newClassName = chgName + "_" + j;
+					nameChanged = true;
 				}
 				chgName = iname;
 				for (int j = 1; classNames.contains(iname) ||
@@ -1464,6 +1412,7 @@ public final class GenXComponent {
 				String xval = (max == 1 ? "1" : "2") + "," + iname + ";";
 				if (xcClass0 == null || xcClass0.startsWith("interface ")) {
 					xctab.put(node.getXDPosition(), xval + newClassName);
+					classNames.add(newClassName);
 					innerClasses.append(genComponent(xe1,
 						i,
 						newClassName,
@@ -1473,6 +1422,7 @@ public final class GenXComponent {
 							+ classNameBase + '#' + newClassName,
 						"",
 						components,
+						classNames,
 						false,
 						xdpath + '/' + xe1.getName())).append('}').append(LN);
 				} else {//other root class
@@ -2033,6 +1983,7 @@ String digest = xe.getDigest();
 			className,
 			packageName,
 			components,
+			null,
 			true,
 			xe.getXDPosition());
 		String hdrTemplate =

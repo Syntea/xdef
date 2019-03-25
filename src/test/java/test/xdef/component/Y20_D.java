@@ -224,12 +224,12 @@ public static class Z implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class C implements org.xdef.component.XComponent{
-  public java.util.List<Z> listOfZ() {return _Z;}
-  public void addZ(Z x) {
+  public java.util.List<test.xdef.component.Y20_D.Z.C.Z_1> listOfZ_1() {return _Z_1;}
+  public void addZ_1(test.xdef.component.Y20_D.Z.C.Z_1 x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
           x.xInit(this, "Z", null, "Y20#Z/C/Z");
-      _Z.add(x);
+      _Z_1.add(x);
     }
 
   }
@@ -284,7 +284,7 @@ public static class C implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfZ());
+    org.xdef.component.XComponentUtil.addXC(a, listOfZ_1());
     return a;
   }
   public C() {}
@@ -307,7 +307,8 @@ public static class C implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private final java.util.List<Z> _Z = new java.util.ArrayList<Z>();
+  private final java.util.List<test.xdef.component.Y20_D.Z.C.Z_1> _Z_1 =
+    new java.util.ArrayList<test.xdef.component.Y20_D.Z.C.Z_1>();
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -324,15 +325,129 @@ public static class C implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {}
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Z(this, xx);}
+    {return new Z_1(this, xx);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent xc) {
     xc.xSetNodeIndex(XD_ndx++);
-    listOfZ().add((Z) xc); //Y20#Z/C/Z
+    listOfZ_1().add((Z_1) xc); //Y20#Z/C/Z
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
+public static class Z_1 implements org.xdef.component.XComponent{
+  public String getb() {return _b;}
+  public test.xdef.component.Y20_D.Z.C getC_1() {return _C_1;}
+  public void setb(String x) {_b = x;}
+  public void setC_1(test.xdef.component.Y20_D.Z.C x) {_C_1 = x;}
+  public String xposOfb(){return XD_XPos + "/@b";}
+//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  @Override
+  public org.w3c.dom.Element toXml()
+    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+  @Override
+  public String xGetNodeName() {return XD_NodeName;}
+  @Override
+  public void xInit(org.xdef.component.XComponent p,
+    String name, String ns, String xdPos) {
+    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+  }
+  @Override
+  public String xGetNamespaceURI() {return XD_NamespaceURI;}
+  @Override
+  public String xGetXPos() {return XD_XPos;}
+  @Override
+  public void xSetXPos(String xpos){XD_XPos = xpos;}
+  @Override
+  public int xGetNodeIndex() {return XD_Index;}
+  @Override
+  public void xSetNodeIndex(int index) {XD_Index = index;}
+  @Override
+  public org.xdef.component.XComponent xGetParent() {return XD_Parent;}
+  @Override
+  public Object xGetObject() {return XD_Object;}
+  @Override
+  public void xSetObject(final Object obj) {XD_Object = obj;}
+  @Override
+  public String toString() {return "XComponent: "+xGetModelPosition();}
+  @Override
+  public String xGetModelPosition() {return XD_Model;}
+  @Override
+  public int xGetModelIndex() {return 0;}
+  @Override
+  public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
+    org.w3c.dom.Element el;
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
+      el = doc.getDocumentElement();
+    } else {
+      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+    }
+    if (getb() != null)
+      el.setAttribute(XD_Name_b, getb());
+    for (org.xdef.component.XComponent x: xGetNodeList())
+      el.appendChild(x.toXml(doc));
+    return el;
+  }
+  @Override
+  public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
+    java.util.List<org.xdef.component.XComponent> a =
+      new java.util.ArrayList<org.xdef.component.XComponent>();
+    org.xdef.component.XComponentUtil.addXC(a, getC_1());
+    return a;
+  }
+  public Z_1() {}
+  public Z_1(org.xdef.component.XComponent p,
+    String name, String ns, String xPos, String XDPos) {
+    XD_NodeName=name; XD_NamespaceURI=ns;
+    XD_XPos=xPos;
+    XD_Model=XDPos;
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+  }
+  public Z_1(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
+    org.w3c.dom.Element el=xx.getElement();
+    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+    XD_XPos=xx.getXPos();
+    XD_Model=xx.getXMElement().getXDPosition();
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    if (!"6287F99158E13A1E5AAEE4AB5B1BF749".equals(
+      xx.getXMElement().getDigest())) { //incompatible element model
+      throw new org.xdef.sys.SRuntimeException(
+        org.xdef.msg.XDEF.XDEF374);
+    }
+  }
+  private String XD_Name_b="b";
+  private String _b;
+  private test.xdef.component.Y20_D.Z.C _C_1;
+  private org.xdef.component.XComponent XD_Parent;
+  private Object XD_Object;
+  private String XD_NodeName = "Z";
+  private String XD_NamespaceURI;
+  private int XD_Index = -1;
+  private int XD_ndx;
+  private String XD_XPos;
+  private String XD_Model="Y20#Z/C/Z";
+  @Override
+  public void xSetText(org.xdef.proc.XXNode xx,
+    org.xdef.XDParseResult parseResult) {}
+  @Override
+  public void xSetAttr(org.xdef.proc.XXNode xx,
+    org.xdef.XDParseResult parseResult) {
+    XD_Name_b = xx.getNodeName();
+    setb(parseResult.getParsedValue().stringValue());
+  }
+  @Override
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+    {return new test.xdef.component.Y20_D.Z.C(this, xx);}
+  @Override
+  public void xAddXChild(org.xdef.component.XComponent xc) {
+    xc.xSetNodeIndex(XD_ndx++);
+    setC_1((test.xdef.component.Y20_D.Z.C) xc); //Y20#Z/C
+  }
+  @Override
+  public void xSetAny(org.w3c.dom.Element el) {}
+// </editor-fold>
+}
 }
 }
 }
