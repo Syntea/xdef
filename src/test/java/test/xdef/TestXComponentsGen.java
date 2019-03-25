@@ -106,12 +106,12 @@ public class TestXComponentsGen extends XDTester {
 			ArrayReporter reporter = GenXComponent.genXComponent(xp,
 				dir, "UTF-8", false, false, true);
 			reporter.checkAndThrowErrors();
-			// should generate warning XCOMPONENT037 on xdef Y19
-			if (reporter.getWarningCount() != 1
-				|| !reporter.printToString().contains("W XDEF377")
-				|| !reporter.printToString().contains("Y19#A/B/B_1/C/B")) {
-				System.err.println("Warning XDEF377 not reported.\n"
-					+ reporter.printToString());
+			// should generate warnings on xdef Y19 and xdef Y20
+			if (reporter.errors() 
+				|| !reporter.printToString().contains("XDEF360")
+				|| !reporter.printToString().contains("Y19#A/B/B_1/C/B")
+				|| !reporter.printToString().contains("Y20#")) {
+				System.err.println(reporter.printToString());
 			}
 			// save XDPool object to the file
 			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(

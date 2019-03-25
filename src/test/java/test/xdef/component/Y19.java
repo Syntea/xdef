@@ -313,8 +313,8 @@ public static class B_1 implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class C implements org.xdef.component.XComponent{
-  public test.xdef.component.Y19.B.B_1.C.B_2 getB() {return _B;}
-  public void setB(test.xdef.component.Y19.B.B_1.C.B_2 x) {_B = x;}
+  public test.xdef.component.Y19.B.B_1.C.B_2 getB_2() {return _B_2;}
+  public void setB_2(test.xdef.component.Y19.B.B_1.C.B_2 x) {_B_2 = x;}
 //<editor-fold defaultstate="collapsed" desc="XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -366,7 +366,7 @@ public static class C implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a =
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, getB());
+    org.xdef.component.XComponentUtil.addXC(a, getB_2());
     return a;
   }
   public C() {}
@@ -389,7 +389,7 @@ public static class C implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private test.xdef.component.Y19.B.B_1.C.B_2 _B;
+  private test.xdef.component.Y19.B.B_1.C.B_2 _B_2;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -410,7 +410,7 @@ public static class C implements org.xdef.component.XComponent{
   @Override
   public void xAddXChild(org.xdef.component.XComponent xc) {
     xc.xSetNodeIndex(XD_ndx++);
-    setB((B_2) xc); //Y19#A/B/B_1/C/B
+    setB_2((B_2) xc); //Y19#A/B/B_1/C/B
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
