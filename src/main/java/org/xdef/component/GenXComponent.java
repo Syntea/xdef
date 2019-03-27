@@ -102,43 +102,57 @@ public final class GenXComponent {
 		RESERVED_NAMES.add("double");
 		RESERVED_NAMES.add("float");
 		RESERVED_NAMES.add("int");
-		RESERVED_NAMES.add("short");
 		RESERVED_NAMES.add("long");
+		RESERVED_NAMES.add("short");
 		// Class names (both unqualified and qualified) used in generated code.
 		RESERVED_NAMES.add("Boolean");
 		RESERVED_NAMES.add("java.lang.Boolean");
+		RESERVED_NAMES.add("Byte");
+		RESERVED_NAMES.add("java.lang.Byte");
+		RESERVED_NAMES.add("Character");
+		RESERVED_NAMES.add("java.lang.Character");
 		RESERVED_NAMES.add("Class");
 		RESERVED_NAMES.add("java.lang.Class");
 		RESERVED_NAMES.add("Double");
 		RESERVED_NAMES.add("java.lang.Double");
+		RESERVED_NAMES.add("Float");
+		RESERVED_NAMES.add("java.lang.Float");
+		RESERVED_NAMES.add("Integer");
+		RESERVED_NAMES.add("java.lang.Integer");
 		RESERVED_NAMES.add("Long");
 		RESERVED_NAMES.add("java.lang.Long");
 		RESERVED_NAMES.add("Object");
 		RESERVED_NAMES.add("java.lang.Object");
+		RESERVED_NAMES.add("Short");
+		RESERVED_NAMES.add("java.lang.Short");
 		RESERVED_NAMES.add("String");
 		RESERVED_NAMES.add("java.lang.String");
+		RESERVED_NAMES.add("StringBuffer");
+		RESERVED_NAMES.add("java.lang.StringBuffer");
 		RESERVED_NAMES.add("StringBuilder");
 		RESERVED_NAMES.add("java.lang.StringBuilder");
 		// Qualified names used in code generation
-		RESERVED_NAMES.add("org.xdef.msg.XDEF");
-		RESERVED_NAMES.add("org.xdef.sys.SDatetime");
-		RESERVED_NAMES.add("org.xdef.sys.SDuration");
-		RESERVED_NAMES.add("org.xdef.xml.KXmlUtils");
-		RESERVED_NAMES.add("org.xdef.component.XComponent");
-		RESERVED_NAMES.add("org.xdef.component.XComponentUtil");
-		RESERVED_NAMES.add("org.xdef.XDParseResult");
-		RESERVED_NAMES.add("org.xdef.proc.XXNode");
+		RESERVED_NAMES.add("cz.syntea.xdef.msg.XDEF");
+		RESERVED_NAMES.add("cz.syntea.xdef.sys.SDatetime");
+		RESERVED_NAMES.add("cz.syntea.xdef.sys.SDuration");
+		RESERVED_NAMES.add("cz.syntea.xdef.xml.KXmlUtils");
+		RESERVED_NAMES.add("cz.syntea.xdef.component.XComponent");
+		RESERVED_NAMES.add("cz.syntea.xdef.component.XComponentUtil");
+		RESERVED_NAMES.add("cz.syntea.xdef.XDParseResult");
+		RESERVED_NAMES.add("cz.syntea.xdef.proc.XXNode");
 		RESERVED_NAMES.add("java.math.BigDecimal");
 		RESERVED_NAMES.add("java.sql.Timestamp");
 		RESERVED_NAMES.add("java.util.ArrayList");
 		RESERVED_NAMES.add("java.util.Calenfar");
 		RESERVED_NAMES.add("java.util.Date");
+		RESERVED_NAMES.add("java.util.GregorianCalendar");
 		RESERVED_NAMES.add("java.util.List");
 		RESERVED_NAMES.add("javax.xml.datatype.Duration");
 		RESERVED_NAMES.add("javax.xml.datatype.XMLGregorianCalendar");
-		RESERVED_NAMES.add("org.xdef.sys.SUtils");
-		RESERVED_NAMES.add("org.xdef.sys.SException");
-		RESERVED_NAMES.add("org.xdef.sys.SRuntimeException");
+		RESERVED_NAMES.add("cz.syntea.xdef.sys.SUtils");
+		RESERVED_NAMES.add("cz.syntea.xdef.sys.SException");
+		RESERVED_NAMES.add("cz.syntea.xdef.sys.SRuntimeException");
+		RESERVED_NAMES.add("org.w3c.dom.Attr");
 		RESERVED_NAMES.add("org.w3c.dom.Document");
 		RESERVED_NAMES.add("org.w3c.dom.Element");
 		RESERVED_NAMES.add("org.w3c.dom.Node");
@@ -1244,11 +1258,10 @@ public final class GenXComponent {
 					}
 					newClassName = name;
 				}
-				name = addVarName(
-					varNames, name, xdata.getXDPosition(), ext);
+				name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 				classNames.add(newClassName);
 				if (!ext) {
-					genBaseVariable(xdata,name,groupMax,"text node",vars);
+					genBaseVariable(xdata, name,groupMax,"text node",vars);
 					genBaseGetterMethod(xdata,
 						name, groupMax, "text node", getters, isb);
 					genBaseSetterMethod(xdata,
@@ -1310,13 +1323,13 @@ public final class GenXComponent {
 				} else {
 					newClassName = name = javaName(xe1.getName());
 				}
-				final boolean xunique = checkUnique(nodes, i);
+//				final boolean xunique = checkUnique(nodes, i);
 				// if the element is not processed by user XComponent
 				// and if it is unique and if the only child node of this node
 				// is this text node and if it has no attributes then we process
 				// it is processed same way as an attribute of the parent class.
 				final String xcClass0 = isRecurseRef 
-					?  name : getXDPosition(xe1, interfcName.length() > 0);
+					? name : getXDPosition(xe1, interfcName.length() > 0);
 				String xcClass = xcClass0;
 				if (xcClass0 != null) {
 					if (xcClass.indexOf("%ref ") ==0) {
@@ -1383,8 +1396,8 @@ public final class GenXComponent {
 				} else {
 					typeName = classNameBase + '#' + newClassName;
 					_components.put(xe1.getXDPosition(),
-					packageName.length() > 0 ?
-						packageName+'.'+typeName : typeName);
+					packageName.length() > 0
+						? packageName+'.'+typeName : typeName);
 				}
 				ndx = typeName.lastIndexOf('.');
 				if (ndx > 0
@@ -1512,18 +1525,16 @@ public final class GenXComponent {
 : "") +
 "public "+(isRoot?"":"static ")+"class "+
 			clazz + extClazz + (interfcName.length() > 0 ?
-				extClazz.contains("implements ") ?
-				", " + interfcName
-				: (" implements " + interfcName)
-				: extClazz.contains("implements ") ?
-				",org.xdef.component.XComponent"
+				extClazz.contains("implements ")
+				? ", " + interfcName : (" implements " + interfcName)
+				: extClazz.contains("implements ")
+				? ",org.xdef.component.XComponent"
 				: " implements org.xdef.component.XComponent")+ "{"+LN;
-		result +=
-			genSeparator("Getters", _genJavadoc & getters.length() > 0)+
-			getters+
-			genSeparator("Setters", _genJavadoc & setters.length() > 0)+
-			setters+
-			xpathes.toString() +
+		result += genSeparator("Getters", _genJavadoc & getters.length() > 0)
+			+ getters
+			+ genSeparator("Setters", _genJavadoc & setters.length() > 0)
+			+ setters
+			+ xpathes.toString() + 
 "//<editor-fold defaultstate=\"collapsed\" desc=\"XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
 "\t@Override"+LN+
