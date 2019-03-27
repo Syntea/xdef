@@ -132,14 +132,14 @@ public final class GenXComponent {
 		RESERVED_NAMES.add("StringBuilder");
 		RESERVED_NAMES.add("java.lang.StringBuilder");
 		// Qualified names used in code generation
-		RESERVED_NAMES.add("cz.syntea.xdef.msg.XDEF");
-		RESERVED_NAMES.add("cz.syntea.xdef.sys.SDatetime");
-		RESERVED_NAMES.add("cz.syntea.xdef.sys.SDuration");
-		RESERVED_NAMES.add("cz.syntea.xdef.xml.KXmlUtils");
-		RESERVED_NAMES.add("cz.syntea.xdef.component.XComponent");
-		RESERVED_NAMES.add("cz.syntea.xdef.component.XComponentUtil");
-		RESERVED_NAMES.add("cz.syntea.xdef.XDParseResult");
-		RESERVED_NAMES.add("cz.syntea.xdef.proc.XXNode");
+		RESERVED_NAMES.add("org.xdef.msg.XDEF");
+		RESERVED_NAMES.add("org.xdef.sys.SDatetime");
+		RESERVED_NAMES.add("org.xdef.sys.SDuration");
+		RESERVED_NAMES.add("org.xdef.xml.KXmlUtils");
+		RESERVED_NAMES.add("org.xdef.component.XComponent");
+		RESERVED_NAMES.add("org.xdef.component.XComponentUtil");
+		RESERVED_NAMES.add("org.xdef.XDParseResult");
+		RESERVED_NAMES.add("org.xdef.proc.XXNode");
 		RESERVED_NAMES.add("java.math.BigDecimal");
 		RESERVED_NAMES.add("java.sql.Timestamp");
 		RESERVED_NAMES.add("java.util.ArrayList");
@@ -149,9 +149,9 @@ public final class GenXComponent {
 		RESERVED_NAMES.add("java.util.List");
 		RESERVED_NAMES.add("javax.xml.datatype.Duration");
 		RESERVED_NAMES.add("javax.xml.datatype.XMLGregorianCalendar");
-		RESERVED_NAMES.add("cz.syntea.xdef.sys.SUtils");
-		RESERVED_NAMES.add("cz.syntea.xdef.sys.SException");
-		RESERVED_NAMES.add("cz.syntea.xdef.sys.SRuntimeException");
+		RESERVED_NAMES.add("org.xdef.sys.SUtils");
+		RESERVED_NAMES.add("org.xdef.sys.SException");
+		RESERVED_NAMES.add("org.xdef.sys.SRuntimeException");
 		RESERVED_NAMES.add("org.w3c.dom.Attr");
 		RESERVED_NAMES.add("org.w3c.dom.Document");
 		RESERVED_NAMES.add("org.w3c.dom.Element");
