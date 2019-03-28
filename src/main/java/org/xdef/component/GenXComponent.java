@@ -1194,9 +1194,8 @@ public final class GenXComponent {
 		final XMNode[] nodes = xe.getChildNodeModels();
 		final Map<String, String> xctab = new TreeMap<String, String>();
 		final Map<String, String> txttab = new TreeMap<String, String>();
-		int groupMax = 1;
 		final Stack<Integer> groupStack = new Stack<Integer>();
-		for (int i = 0, txtcount = 0; i < nodes.length; i++) {
+		for (int i = 0, txtcount = 0, groupMax = 1; i < nodes.length; i++) {
 			final XMNode node = nodes[i];
 			if (node.isIgnore() || node.isIllegal()) {
 				continue;
@@ -1227,7 +1226,7 @@ public final class GenXComponent {
 							if (isRoot) {
 								ext = true;
 								extClazz = " extends "
-									+ name.substring(ndx+7)+extClazz;
+									+ name.substring(ndx+7) + extClazz;
 								//"In command "%class &{0}" is missing parameter
 								//"extends". In command "%bind &{2}" is
 								//parameter "%with &{1}!
@@ -1261,7 +1260,7 @@ public final class GenXComponent {
 				name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 				classNames.add(newClassName);
 				if (!ext) {
-					genBaseVariable(xdata, name,groupMax,"text node",vars);
+					genBaseVariable(xdata, name, groupMax, "text node", vars);
 					genBaseGetterMethod(xdata,
 						name, groupMax, "text node", getters, isb);
 					genBaseSetterMethod(xdata,
@@ -1272,11 +1271,11 @@ public final class GenXComponent {
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
 "\".*/"+LN : "")+
 "\tprivate " + (groupMax > 1 ? "StringBuilder":"char") + " _$" + name+"= "+
-(groupMax > 1?"new StringBuilder()":"(char) -1") + ";"+LN);
+(groupMax > 1 ? "new StringBuilder()" : "(char) -1") + ";"+LN);
 				vars.append(s);
 				genTextNodeCreator(xdata, name, groupMax, genNodeList);
 				txttab.put(node.getXDPosition(),
-					(groupMax==1 ? "1" : "2") + "," +
+					(groupMax == 1 ? "1" : "2") + "," +
 						getParsedResultGetter(xdata) + ";" + name);
 			} else if (node.getKind() == XMNode.XMELEMENT) {
 				final XMElement xe1 = (XMElement) node;
@@ -1323,7 +1322,6 @@ public final class GenXComponent {
 				} else {
 					newClassName = name = javaName(xe1.getName());
 				}
-//				final boolean xunique = checkUnique(nodes, i);
 				// if the element is not processed by user XComponent
 				// and if it is unique and if the only child node of this node
 				// is this text node and if it has no attributes then we process
@@ -1684,7 +1682,6 @@ public final class GenXComponent {
 "\t}"+LN;
 			}
 		}
-String digest = xe.getDigest();
 		result +=
 (_genJavadoc ? ("\t/** Create an empty object."+LN+
 "\t * @param xd XDPool object from which this XComponent was generated."+LN+
@@ -1716,7 +1713,7 @@ String digest = xe.getDigest();
 "\t\tXD_XPos=xx.getXPos();"+LN+
 "\t\tXD_Model=xx.getXMElement().getXDPosition();"+LN+
 "\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+LN+
-"\t\tif (!\""+ digest + "\".equals("+LN+
+"\t\tif (!\"" + xe.getDigest() + "\".equals("+LN+ // check digest
 "\t\t\txx.getXMElement().getDigest())) { //incompatible element model"+LN+
 "\t\t\tthrow new org.xdef.sys.SRuntimeException("+LN+
 "\t\t\t\torg.xdef.msg.XDEF.XDEF374);"+LN+
@@ -1728,10 +1725,10 @@ String digest = xe.getDigest();
 (_genJavadoc ? "\t/** User object.*/"+LN : "") +
 "\tprivate Object XD_Object;"+LN+
 (_genJavadoc ? "\t/** Node name.*/"+LN : "") +
-"\tprivate String XD_NodeName = \""+xe.getName()+"\";"+LN+
+"\tprivate String XD_NodeName = \"" + xe.getName() + "\";"+LN+
 (_genJavadoc ? "\t/** Node namespace.*/"+LN : "") +
 "\tprivate String XD_NamespaceURI" +
-	(xe.getNSUri() != null ? " = \""+xe.getNSUri()+ "\"" : "") + ";"+LN+
+	(xe.getNSUri() != null ? " = \"" + xe.getNSUri() + "\"" : "") + ";"+LN+
 (_genJavadoc ? "\t/** Node index.*/"+LN : "") +
 "\tprivate int XD_Index = -1;"+LN+
 (genNodeList.length() == 0 ? "" :
@@ -1740,7 +1737,7 @@ String digest = xe.getDigest();
 (_genJavadoc ? "\t/** Node xpos.*/"+LN : "") +
 "\tprivate String XD_XPos;"+LN+
 (_genJavadoc ? "\t/** Node XD position.*/"+LN : "") +
-"\tprivate String XD_Model=\""+xe.getXDPosition()+"\";"+LN+
+"\tprivate String XD_Model=\"" + xe.getXDPosition() + "\";"+LN+
 ("$any".equals(xe.getName()) || "*".equals(xe.getName()) ?
 (_genJavadoc ? "\t/** Content of xd:any.*/"+LN : "") +
 "\tprivate String XD_Any;"+LN : "");
@@ -1767,8 +1764,8 @@ String digest = xe.getDigest();
 "\tpublic void xSetText(org.xdef.proc.XXNode xx,"+LN+
 "\t\torg.xdef.XDParseResult parseResult) {"+LN+
 (val.startsWith("1") ?
-"\t\t_$"+name+"=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
-:"\t\t_$"+name+".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
+"\t\t_$" + name + "=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
+:"\t\t_$" + name + ".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
 		} else {
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode xx,"+LN+
@@ -1784,7 +1781,7 @@ String digest = xe.getDigest();
 				String getter = val.substring(2, ndx);
 				s += (val.startsWith("1")
 					? "\t\t\t_$"+name+"=(char) XD_ndx++;"+LN+"\t\t\tset" + name
-					: "\t\t\t_$"+name+".append((char) XD_ndx++);"+LN+
+					: "\t\t\t_$" + name + ".append((char) XD_ndx++);"+LN+
 						"\t\t\tget" + name + "().add")
 					+ "("+getter+");"+LN;
 			}
@@ -1807,8 +1804,8 @@ String digest = xe.getDigest();
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+LN+
 "\t\torg.xdef.XDParseResult parseResult) {"+LN+
-"\t\tXD_Name_"+val.substring(ndx + 1)+ " = xx.getNodeName();"+LN+
-"\t\tset"+val.substring(ndx + 1)+"(" + getter + ");"+LN+"\t}"+LN;
+"\t\tXD_Name_" + val.substring(ndx + 1) + " = xx.getNodeName();"+LN+
+"\t\tset" + val.substring(ndx + 1) + "(" + getter + ");"+LN+"\t}"+LN;
 		} else {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode xx,"+LN+
@@ -1822,7 +1819,7 @@ String digest = xe.getDigest();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
 				s += (i.hasNext() 
-? "if (xx.getXMNode().getXDPosition().endsWith(\""+key+"\")) {" : "{") + LN;
+? "if (xx.getXMNode().getXDPosition().endsWith(\"" + key + "\")) {" : "{") + LN;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				s += "\t\t\tXD_Name_" + val.substring(ndx + 1)
@@ -1838,8 +1835,7 @@ String digest = xe.getDigest();
 (_genJavadoc ? "\t/** Create instance of child XComponent."+LN+
 "\t * @param xx actual XXNode."+LN+
 "\t * @return new empty child XCopmponent."+LN+
-"\t */"+LN
-: "");
+"\t */"+LN : "");
 		if (xctab.isEmpty()) {
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild("+
@@ -1884,8 +1880,7 @@ String digest = xe.getDigest();
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Add XComponent object to local variable."+LN+
 "\t * @param xc XComponent to be added."+LN+
-"\t */"+LN
-: "");
+"\t */"+LN : "");
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result +=
 "\tpublic void xAddXChild(org.xdef.component.XComponent xc) {}"+LN;
@@ -1899,11 +1894,10 @@ String digest = xe.getDigest();
 			String s = xctab.values().iterator().next().replace('#', '.');
 			String typ = s.substring(s.indexOf(";") + 1);
 			String var = s.substring(2, s.indexOf(";"));
-			result += s.charAt(0) == '1'
-				? "\t\tset" + var + "(" + "(" + typ
+			result += s.charAt(0) == '1' ? "\t\tset" + var + "(" + "(" + typ
 				: "\t\tlistOf" + var + "().add((" + typ;
 			String key = xctab.keySet().iterator().next();
-			result += ") xc); //" + key+LN+"\t}"+LN;
+			result += ") xc); //" + key + LN+"\t}"+LN;
 		} else {
 			boolean first = true;
 			result +=
@@ -1923,12 +1917,12 @@ String digest = xe.getDigest();
 					s += !i.hasNext() ? " //" + e.getKey()+LN : LN;
 					if (first) {
 						result +=
-"\t\tif (\""+e.getKey()+"\".equals(s))"+LN+"\t\t\t" + s;
+"\t\tif (\"" + e.getKey() + "\".equals(s))"+LN+"\t\t\t" + s;
 						first = false;
 					} else {
 						if (i.hasNext()) {
 							result += "\t\telse if (\"" +
-								e.getKey()+ "\".equals(s))"+LN+"\t\t\t" + s;
+								e.getKey() + "\".equals(s))"+LN+"\t\t\t" + s;
 						} else {
 							result += "\t\telse"+LN+"\t\t\t" + s + "\t}"+LN;
 							break;
@@ -1941,8 +1935,7 @@ String digest = xe.getDigest();
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of xd:any model."+LN+
 "\t * @param el Element which is value of xd:any model."+LN+
-"\t */"+LN
-: "")+
+"\t */"+LN : "")+
 "\tpublic void xSetAny(org.w3c.dom.Element el) {";
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += LN+
