@@ -8,7 +8,7 @@
     
     <groupId>org.xdef</groupId>
     <artifactId>xdef</artifactId>
-    <version>32.3.2</version><!-- when changed, change also ./properties/release.date, see below -->
+    <version>${version}${snapshot}</version>
     <packaging>jar</packaging>
     
     <name>xdef</name>
@@ -16,6 +16,8 @@
     <description>X-definition 3.2 (Open Source Software)</description>
     
     <properties>
+        <version>32.3.3</version><!-- when changed, change also ${release.date}, see below -->
+        <snapshot>-SNAPSHOT</snapshot>
 		<release.date>2019-03-24</release.date><!-- update when changed version -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -170,6 +172,41 @@
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <name/>
+                        <description/>
+                        <url/>
+                        <organization/>
+                        <developers/>
+                        <modules/>
+                        <dependencyManagement/>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <!-- enable flattening -->
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <!-- ensure proper cleanup -->
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         
         <pluginManagement>
@@ -200,6 +237,11 @@
                     <version>2.22.0</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.1.0</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.1.0</version>
@@ -224,6 +266,12 @@
     </build>
     
     <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <snapshot/>
+            </properties>
+        </profile>
         <profile>
             <id>javadoc</id>
             <build>
