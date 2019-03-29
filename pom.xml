@@ -333,6 +333,19 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>dm-config</id>
+            <distributionManagement>
+                <repository>
+                    <id>private</id>
+                    <url>${mrmUrl}/private</url>
+                </repository>
+                <snapshotRepository>
+                    <id>private-snapshot</id>
+                    <url>${mrmUrl}/private-snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
     </profiles>
     
     <dependencyManagement>
@@ -381,18 +394,5 @@
         
         </dependencies>
     </dependencyManagement>
-    
-    <distributionManagement>
-        <!--
-        <repository>
-            <id>private</id>
-            <url>${mrmUrl}/private</url>
-        </repository>
-        <snapshotRepository>
-            <id>private-snapshot</id>
-            <url>${mrmUrl}/private-snapshot</url>
-        </snapshotRepository>
-        -->
-    </distributionManagement>
     
 </project>
