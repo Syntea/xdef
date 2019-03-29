@@ -16,7 +16,7 @@
     <description>X-definition 3.2 (Open Source Software)</description>
     
     <properties>
-        <version>32.3.2</version><!-- when changed, change also ${release.date}, see below -->
+        <version>32.3.3</version><!-- when changed, change also ${release.date}, see below -->
         <snapshot>-SNAPSHOT</snapshot>
 		<release.date>2019-03-24</release.date><!-- update when changed version -->
         
