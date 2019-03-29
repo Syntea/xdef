@@ -1050,7 +1050,7 @@ public final class GenXComponent {
 		String s;
 		String iname;
 		s = iname = name;
-		for (int j = 1; set.contains(name); j++) {
+		for (int j = 1; set.contains(iname); j++) {
 			iname = s + "_" + j;
 		}
 		set.add(iname);
