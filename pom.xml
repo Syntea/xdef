@@ -18,7 +18,8 @@
     <properties>
         <version>32.3.3</version><!-- when changed, change also ${release.date}, see below -->
         <snapshot>-SNAPSHOT</snapshot>
-		<release.date>2019-03-24</release.date><!-- update when changed version -->
+        <!--snapshot/-->
+		<release.date>2019-03-29</release.date><!-- update when changed version -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
