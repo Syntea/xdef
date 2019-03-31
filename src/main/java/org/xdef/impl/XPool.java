@@ -57,7 +57,8 @@ public final class XPool implements XDPool, Serializable {
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 	/** XDPool version.*/
-	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
+	private static final String XD_VERSION = 
+		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool.*/
 	private static final long XD_MIN_VERSION = 302003000L; // 32.3.0
 
