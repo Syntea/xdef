@@ -389,16 +389,16 @@ public final class GenXComponent {
 	 * @param max maximal number of items .
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
-	 * @param isb String builder where the code is generated for interface.
+	 * @param sbi String builder where the code is generated for interface.
 	 */
 	private void genBaseGetterMethod(final XMData xdata,
 		final String name,
 		final int max,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder isb) {
+		final StringBuilder sbi) {
 		final String typ = getJavaObjectTypeName(xdata);
-		genGetterMethodFromChildElement(xdata, typ, name, max, descr, sb, isb);
+		genGetterMethodFromChildElement(xdata, typ, name, max, descr, sb, sbi);
 	}
 
 	/** Generate java code of getter method for child element classes.
@@ -408,7 +408,7 @@ public final class GenXComponent {
 	 * set name of this model, otherwise this argument is null.
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
-	 * @param isb String builder where the code is generated for interface.
+	 * @param sbi String builder where the code is generated for interface.
 	 * @return generated code.
 	 */
 	private void genGetterMethodFromChildElement(XMNode xn,
@@ -417,7 +417,7 @@ public final class GenXComponent {
 		final int max,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder isb) {
+		final StringBuilder sbi) {
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) {
 			throw new SRuntimeException(SYS.SYS066,// Internal error&{0}{: }
@@ -453,10 +453,10 @@ public final class GenXComponent {
 					+ "}.class)"+LN;
 			}
 		}
-		if (isb != null) {
+		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
 			if (typ.startsWith("java.util.List<")) {
-				isb.append(modify(
+				sbi.append(modify(
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
@@ -466,7 +466,7 @@ public final class GenXComponent {
 				"&{name}", name,
 				"&{typ}", typ));
 			} else {
-				isb.append(modify(
+				sbi.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
@@ -533,16 +533,16 @@ public final class GenXComponent {
 	 * @param descr Description text.
 	 * @param max maximal number of items .
 	 * @param sb String builder where the code is generated.
-	 * @param isb String builder where the code is generated for interface.
+	 * @param sbi String builder where the code is generated for interface.
 	 */
 	private void genBaseSetterMethod(final XMData xdata,
 		final String name,
 		final int max,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder isb) {
+		final StringBuilder sbi) {
 		genSetterMethodOfChildElement(getJavaObjectTypeName(xdata),
-			name, max, null, null, null, descr, sb, isb);
+			name, max, null, null, null, descr, sb, sbi);
 	}
 
 	/** Generate java code of setter method for child element classes.
@@ -553,7 +553,7 @@ public final class GenXComponent {
 	 * @param modelXDPos if the node references other model of node
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
-	 * @param isb String builder where the code is generated for interface.
+	 * @param sbi String builder where the code is generated for interface.
 	 */
 	private void genSetterMethodOfChildElement(final String typeName,
 		final String name,
@@ -563,7 +563,7 @@ public final class GenXComponent {
 		final String modelXDPos,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder isb) {
+		final StringBuilder sbi) {
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) {
 			// Internal error&{0}{: }
@@ -596,7 +596,7 @@ public final class GenXComponent {
 				x = "_&{name} = x;";
 			}
 		}
-		if (isb != null) {
+		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
 			if (max > 1) {
 				String template =
@@ -604,20 +604,20 @@ public final class GenXComponent {
 "\t * @param x value to added."+LN+
 "\t */"+LN) : "")+
 "\tpublic void add&{name}(&{typ} x);"+LN;
-				isb.append(modify(template,
+				sbi.append(modify(template,
 					"&{name}", name,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName));
 				if ("org.xdef.sys.SDatetime".equals(typeName)) {
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{xmlName}", name.replace('$', ':'),
 						"&{typ}", "java.util.Date"));
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{xmlName}", name.replace('$', ':'),
 						"&{typ}", "java.sql.Timestamp"));
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{xmlName}", name.replace('$', ':'),
 						"&{typ}", "java.util.Calendar"));
@@ -628,23 +628,23 @@ public final class GenXComponent {
 "\t * @param x value to be set."+LN+
 "\t */"+LN) : "")+
 "\tpublic void set&{name}(&{typ} x);"+LN;
-				isb.append(modify(template,
+				sbi.append(modify(template,
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName));
 				if ("org.xdef.sys.SDatetime".equals(typeName)) {
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{d}" , d,
 						"&{xmlName}", name.replace('$', ':'),
 						"&{typ}", "java.util.Date"));
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{d}" , d,
 						"&{xmlName}", name.replace('$', ':'),
 						"&{typ}", "java.sql.Timestamp"));
-					isb.append(modify(template,
+					sbi.append(modify(template,
 						"&{name}", name,
 						"&{d}" , d,
 						"&{xmlName}", name.replace('$', ':'),
@@ -750,16 +750,16 @@ public final class GenXComponent {
 	 * @param descr Description text.
 	 * @param max maximal number of items .
 	 * @param sb String builder where the code is generated.
-	 * @param isb String builder where the code is generated.
+	 * @param sbi String builder where the code is generated.
 	 */
 	private void genBaseXPosMethod(
 		final String name,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder isb) {
-		if (isb != null) {
+		final StringBuilder sbi) {
+		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
-			isb.append(modify(
+			sbi.append(modify(
 (_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
 "\tpublic String xposOf&{name}();"+LN,
 				"&{name}", name,
@@ -1114,8 +1114,8 @@ public final class GenXComponent {
 		final StringBuilder creators = new StringBuilder();
 		final StringBuilder genNodeList = new StringBuilder();
 		final StringBuilder innerClasses = new StringBuilder();
-		final StringBuilder isb =
-			interfcName.length()==0 ? null : new StringBuilder();
+		final StringBuilder sbi = // interface
+			interfcName.length() == 0 ? null : new StringBuilder();
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
 		final Map<String, String> atttab = new TreeMap<String, String>();
@@ -1162,9 +1162,9 @@ public final class GenXComponent {
 			genAttrNameVariable(name, vars);
 			if (!ext) {
 				genBaseVariable(xdata, name, 1, "attribute", vars);
-				genBaseGetterMethod(xdata, name, 1, "attribute", getters, isb);
-				genBaseSetterMethod(xdata, name, 1, "attribute", setters, isb);
-				genBaseXPosMethod(name, "attribute", xpathes, isb);
+				genBaseGetterMethod(xdata, name, 1, "attribute", getters, sbi);
+				genBaseSetterMethod(xdata, name, 1, "attribute", setters, sbi);
+				genBaseXPosMethod(name, "attribute", xpathes, sbi);
 			}
 			genCreatorOfAttribute(xdata, name, creators);
 			atttab.put(xdata.getXDPosition(),
@@ -1262,10 +1262,10 @@ public final class GenXComponent {
 				if (!ext) {
 					genBaseVariable(xdata, name, groupMax, "text node", vars);
 					genBaseGetterMethod(xdata,
-						name, groupMax, "text node", getters, isb);
+						name, groupMax, "text node", getters, sbi);
 					genBaseSetterMethod(xdata,
-						name, groupMax, "text node", setters, isb);
-					genBaseXPosMethod(name, "text node", xpathes, isb);
+						name, groupMax, "text node", setters, sbi);
+					genBaseXPosMethod(name, "text node", xpathes, sbi);
 				}
 				String s =
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
@@ -1406,7 +1406,7 @@ public final class GenXComponent {
 				if (!ext) {
 					genVariableFromModel(typeName, iname, max, "element", vars);
 					genGetterMethodFromChildElement(node,
-						typeName, iname, max, "element", getters, isb);
+						typeName, iname, max, "element", getters, sbi);
 					String mname = null;
 					String mURI = null;
 					String mXDPos = null;
@@ -1416,7 +1416,7 @@ public final class GenXComponent {
 						mXDPos = xe1.getXDPosition();
 					}
 					genSetterMethodOfChildElement(typeName, iname, max,
-						mname, mURI, mXDPos, "element", setters, isb);
+						mname, mURI, mXDPos, "element", setters, sbi);
 				}
 				genChildElementCreator(iname, genNodeList, max > 1);
 				// generate if it was not declared as XComponent
@@ -1442,7 +1442,7 @@ public final class GenXComponent {
 			}
 		}
 		if (isRoot) {
-			_interface = isb;
+			_interface = sbi;
 			final int i = interfcName.lastIndexOf('.');
 			if (i > 0 && interfcName.substring(0, i).equals(packageName)) {
 				interfcName = interfcName.substring(i + 1);
@@ -1947,7 +1947,7 @@ public final class GenXComponent {
 		result += "// </editor-fold>"+LN+ innerClasses;
 		innerClasses.setLength(0); //clean
 		varNames.clear();
-		_interface = isb;
+		_interface = sbi;
 		return result;
 	}
 
