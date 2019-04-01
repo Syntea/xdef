@@ -774,6 +774,7 @@ public final class GenXComponent {
 				"&{d}", xe1.getName(),
 				"&{typ1}", typ1));
 			}
+			// setter
 			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void add$&{name}(&{typ} x)";
@@ -791,6 +792,27 @@ public final class GenXComponent {
 				"&{name}", name,
 				"&{d}", xe1.getName(),
 				"&{typ}", typ));
+			}
+			template =
+(_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
+"\tpublic void set$&{name}(&{typ1} x)";
+			setters.append(modify(template +
+"{"+LN+
+"\t\t_&{name}.clear(); if (x==null) return;"+LN+
+"\t\tfor (&{typ} y:x){"+LN+
+"\t\t\t&{typeName} z=new &{typeName}();z._$value=y;add&{name}(z);"+LN+
+"\t\t}"+LN+
+"\t}"+LN,
+				"&{name}", name,
+				"&{d}", xe1.getName(),
+				"&{typ}", typ,
+				"&{typ1}", typ1,
+				"&{typeName}", typeName));
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template +";"+LN,
+				"&{name}", name,
+				"&{d}", xe1.getName(),
+				"&{typ1}", typ1));
 			}
 		} else { // single value
 			// getter
@@ -901,7 +923,7 @@ public final class GenXComponent {
 			}
 		}
 	}
-	
+
 	/** Generate Java code of getter of xpath for attributes and text nodes.
 	 * @param name name of variable.
 	 * @param descr Description text.
@@ -2273,32 +2295,32 @@ public final class GenXComponent {
 			}
 		}
 	}
-//
-//	@Deprecated
-//	/** Generate XComponent Java source class from X-definition.
-//	 * @deprecated switch to generate JAXB annotations  is ignored. Please use
-//	 * method GenXComponent.genXComponent(...) without "jaxb" parameter.
-//	 * @param xdpool XDPool object where is the X-definition with model
-//	 * from which Java source will be generated.
-//	 * @param dir path to directory where write the source code. The file name
-//	 * will be constructed from the argument className as "className.java".
-//	 * @param charset the character set name or null (if null then it is used
-//	 * the system character set name).
-//	 * @param genJavadoc switch to generate JavaDoc.
-//	 * @param jaxb switch to generate JAXB annotations.
-//	 * @param suppressPrintWarnings suppress print of warnings.
-//	 * @return ArrayReporter with errors and warnings
-//	 * @throws IOException if an error occurs.
-//	 */
-//	public static ArrayReporter genXComponent(XDPool xdpool,
-//		String dir,
-//		String charset,
-//		boolean genJavadoc,
-//		boolean jaxb,
-//		boolean suppressPrintWarnings) throws IOException {
-//		return genXComponent(xdpool,
-//			dir, charset, genJavadoc, suppressPrintWarnings);
-//	}
+
+	@Deprecated
+	/** Generate XComponent Java source class from X-definition.
+	 * @deprecated switch to generate JAXB annotations  is ignored. Please use
+	 * method GenXComponent.genXComponent(...) without "jaxb" parameter.
+	 * @param xdpool XDPool object where is the X-definition with model
+	 * from which Java source will be generated.
+	 * @param dir path to directory where write the source code. The file name
+	 * will be constructed from the argument className as "className.java".
+	 * @param charset the character set name or null (if null then it is used
+	 * the system character set name).
+	 * @param genJavadoc switch to generate JavaDoc.
+	 * @param jaxb switch to generate JAXB annotations.
+	 * @param suppressPrintWarnings suppress print of warnings.
+	 * @return ArrayReporter with errors and warnings
+	 * @throws IOException if an error occurs.
+	 */
+	public static ArrayReporter genXComponent(XDPool xdpool,
+		String dir,
+		String charset,
+		boolean genJavadoc,
+		boolean jaxb,
+		boolean suppressPrintWarnings) throws IOException {
+		return genXComponent(xdpool,
+			dir, charset, genJavadoc, suppressPrintWarnings);
+	}
 
 	/** Generate XComponent Java source class from X-definition.
 	 * @param xdpool XDPool object where is the X-definition with model
@@ -2544,10 +2566,10 @@ public final class GenXComponent {
 						sources.add(arg);
 					}
 					continue;
-//				case 'j': // JAXB annotations
-//					System.err.println("Warning JAXB annotations swith"
-//						+ " is ignored in this version!");
-//					continue;
+				case 'j': // JAXB annotations
+					System.err.println("Warning JAXB annotations swith"
+						+ " is ignored in this version!");
+					continue;
 				case 'h': // help
 					System.out.println(info);
 					i++;

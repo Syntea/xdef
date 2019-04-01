@@ -932,6 +932,77 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(el, p.toXml());
 		} catch (Exception ex) {fail(ex);}
+		try { // test vlaue setters/getters
+			xml = "<a><s k='p'>t1</s><s k='q'>t2</s></a>";
+			test.xdef.component.XCa a = (test.xdef.component.XCa)
+				parseXC(xp,"Y23",xml,test.xdef.component.XCa.class, reporter);
+			assertEq("p", a.gets().getk());
+			assertEq("t1", a.gets().get$value());
+			assertEq("q", a.gets_1().getk());
+			assertEq("t2", a.gets_1().get$value());
+			assertEq(xml, a.toXml());
+			xml = "<b><c>xx</c></b>";
+			test.xdef.component.XCb b = (test.xdef.component.XCb)
+				parseXC(xp,"Y23",xml,test.xdef.component.XCb.class,reporter);
+			assertEq("xx", b.get$c());
+			assertEq(xml, b.toXml());
+			b.set$c("yy");
+			assertEq("<b><c>yy</c></b>", b.toXml());
+			xml = "<d><e>2019-04-01+02:00</e></d>";
+			test.xdef.component.XCd d = (test.xdef.component.XCd)
+				parseXC(xp,"Y23",xml,test.xdef.component.XCd.class,reporter);
+			assertEq(xml, d.toXml());
+			SDatetime sd = new SDatetime("2019-04-01+02:00");
+			assertEq(sd, d.get$e());
+			assertEq(sd, d.gete().get$value());
+			sd = new SDatetime("2019-04-02+02:00");
+			d.gete().set$value(sd);
+			assertEq(sd, d.get$e());
+			assertTrue(new SDatetime(d.dateOf$e()).equals(sd));
+			assertTrue(new SDatetime(d.timestampOf$e()).equals(sd));
+			assertTrue(new SDatetime(d.calendarOf$e()).equals(sd));
+			sd = new SDatetime("2019-04-02+02:00");
+			assertEq("<d><e>2019-04-02+02:00</e></d>", d.toXml());
+			sd = new SDatetime("2019-04-03+02:00");
+			d.set$e(sd);
+			assertEq(sd, d.get$e());
+			assertEq("<d><e>2019-04-03+02:00</e></d>", d.toXml());
+			d.set$e(sd.getCalendar());
+			assertEq(sd, d.get$e());
+			assertEq("<d><e>2019-04-03+02:00</e></d>", d.toXml());
+
+			xml = "<e>2019-04-01+02:00</e>";
+			test.xdef.component.XCe e = (test.xdef.component.XCe)
+				parseXC(xp,"Y23",xml,test.xdef.component.XCe.class,reporter);
+			sd = new SDatetime("2019-04-01+02:00");
+			assertEq(sd, e.get$value());
+			assertEq(xml, e.toXml());
+			sd = new SDatetime("2019-04-02+02:00");
+			e.set$value(sd);
+			assertEq(sd, e.get$value());
+			assertEq("<e>2019-04-02+02:00</e>", e.toXml());
+
+			xml = "<f><g>2019-04-02+02:00</g></f>";
+			test.xdef.component.XCf f = (test.xdef.component.XCf)
+				parseXC(xp,"Y23",xml,test.xdef.component.XCf.class,reporter);
+			sd = new SDatetime("2019-04-03+02:00");
+			f.add$g(sd);
+			List<SDatetime> list = f.listOf$g();
+			assertEq(2, list.size());
+			assertEq(sd, list.get(1));
+			assertEq("<f><g>2019-04-02+02:00</g><g>2019-04-03+02:00</g></f>",
+				f.toXml());
+			list.clear();
+			f.set$g(list);
+			assertEq("<f/>", f.toXml());
+			list.add(sd);
+			f.set$g(list);
+			assertEq("<f><g>2019-04-03+02:00</g></f>", f.toXml());
+			f.listOfg().get(0).set$value(new SDatetime("2019-04-01+02:00"));
+			assertEq("<f><g>2019-04-01+02:00</g></f>", f.toXml());
+			f.listOfg().clear();
+			assertEq("<f/>", f.toXml());
+		} catch (Exception ex) {fail(ex);}
 		try { // test theaurus from generated XDPool
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";

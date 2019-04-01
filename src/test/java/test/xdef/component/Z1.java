@@ -56,6 +56,12 @@ public class Z1 implements org.xdef.component.XComponent{
   public void add$VyliceniDN(String x){
     if (x!=null) {Z1.VyliceniDN y = new Z1.VyliceniDN(); y.set$value(x); addVyliceniDN(y);}
   }
+  public void set$VyliceniDN(java.util.List<String> x){
+    _VyliceniDN.clear(); if (x==null) return;
+    for (String y:x){
+      Z1.VyliceniDN z=new Z1.VyliceniDN();z._$value=y;addVyliceniDN(z);
+    }
+  }
   public void setObjStranka(Z8 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "ObjStranka", null, "SouborD1A#ZaznamPDN/$mixed/ObjStranka");

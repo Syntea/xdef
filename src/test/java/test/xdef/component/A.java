@@ -39,6 +39,12 @@ public class A implements org.xdef.component.XComponent{
   public void add$Y(String x){
     if (x!=null) {A.Y y = new A.Y(); y.set$value(x); addY(y);}
   }
+  public void set$Y(java.util.List<String> x){
+    _Y.clear(); if (x==null) return;
+    for (String y:x){
+      A.Y z=new A.Y();z._$value=y;addY(z);
+    }
+  }
   public void seti(A.i x){_i = x;}
   public void set$i(java.math.BigInteger x){if(_i==null)seti(new A.i());_i.set$value(x);}
   public void setf(A.f x){_f = x;}

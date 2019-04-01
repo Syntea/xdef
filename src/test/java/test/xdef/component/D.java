@@ -338,6 +338,12 @@ public static class B implements org.xdef.component.XComponent{
   public void add$X(Boolean x){
     if (x!=null) {test.xdef.component.D.B.X y = new test.xdef.component.D.B.X(); y.set$value(x); addX(y);}
   }
+  public void set$X(java.util.List<Boolean> x){
+    _X.clear(); if (x==null) return;
+    for (Boolean y:x){
+      test.xdef.component.D.B.X z=new test.xdef.component.D.B.X();z._$value=y;addX(z);
+    }
+  }
   public void set$value1(String x){_$value1 = x;}
   public void setY(test.xdef.component.D.B.Y x){_Y = x;}
   public void set$Y(Boolean x){if(_Y==null)setY(new test.xdef.component.D.B.Y());_Y.set$value(x);}
@@ -712,6 +718,12 @@ public static class I implements org.xdef.component.XComponent{
   public void add$X(Integer x){
     if (x!=null) {test.xdef.component.D.I.X y = new test.xdef.component.D.I.X(); y.set$value(x); addX(y);}
   }
+  public void set$X(java.util.List<Integer> x){
+    _X.clear(); if (x==null) return;
+    for (Integer y:x){
+      test.xdef.component.D.I.X z=new test.xdef.component.D.I.X();z._$value=y;addX(z);
+    }
+  }
   public void setY(test.xdef.component.D.I.Y x){_Y = x;}
   public void set$Y(Integer x){if(_Y==null)setY(new test.xdef.component.D.I.Y());_Y.set$value(x);}
   public String xposOfA(){return XD_XPos + "/@A";}
@@ -1064,6 +1076,12 @@ public static class F implements org.xdef.component.XComponent{
   public void addX(test.xdef.component.D.F.X x) {if (x!=null) _X.add(x);}
   public void add$X(Double x){
     if (x!=null) {test.xdef.component.D.F.X y = new test.xdef.component.D.F.X(); y.set$value(x); addX(y);}
+  }
+  public void set$X(java.util.List<Double> x){
+    _X.clear(); if (x==null) return;
+    for (Double y:x){
+      test.xdef.component.D.F.X z=new test.xdef.component.D.F.X();z._$value=y;addX(z);
+    }
   }
   public void setY(test.xdef.component.D.F.Y x){_Y = x;}
   public void set$Y(Double x){if(_Y==null)setY(new test.xdef.component.D.F.Y());_Y.set$value(x);}
@@ -1418,6 +1436,12 @@ public static class G implements org.xdef.component.XComponent{
   public void add$X(byte[] x){
     if (x!=null) {test.xdef.component.D.G.X y = new test.xdef.component.D.G.X(); y.set$value(x); addX(y);}
   }
+  public void set$X(java.util.List<byte[]> x){
+    _X.clear(); if (x==null) return;
+    for (byte[] y:x){
+      test.xdef.component.D.G.X z=new test.xdef.component.D.G.X();z._$value=y;addX(z);
+    }
+  }
   public void setY(test.xdef.component.D.G.Y x){_Y = x;}
   public void set$Y(byte[] x){if(_Y==null)setY(new test.xdef.component.D.G.Y());_Y.set$value(x);}
   public String xposOfA(){return XD_XPos + "/@A";}
@@ -1771,6 +1795,12 @@ public static class H implements org.xdef.component.XComponent{
   public void add$X(byte[] x){
     if (x!=null) {test.xdef.component.D.H.X y = new test.xdef.component.D.H.X(); y.set$value(x); addX(y);}
   }
+  public void set$X(java.util.List<byte[]> x){
+    _X.clear(); if (x==null) return;
+    for (byte[] y:x){
+      test.xdef.component.D.H.X z=new test.xdef.component.D.H.X();z._$value=y;addX(z);
+    }
+  }
   public void setY(test.xdef.component.D.H.Y x){_Y = x;}
   public void set$Y(byte[] x){if(_Y==null)setY(new test.xdef.component.D.H.Y());_Y.set$value(x);}
   public String xposOfA(){return XD_XPos + "/@A";}
@@ -2123,6 +2153,12 @@ public static class P implements org.xdef.component.XComponent{
   public void addX(test.xdef.component.D.P.X x) {if (x!=null) _X.add(x);}
   public void add$X(java.math.BigDecimal x){
     if (x!=null) {test.xdef.component.D.P.X y = new test.xdef.component.D.P.X(); y.set$value(x); addX(y);}
+  }
+  public void set$X(java.util.List<java.math.BigDecimal> x){
+    _X.clear(); if (x==null) return;
+    for (java.math.BigDecimal y:x){
+      test.xdef.component.D.P.X z=new test.xdef.component.D.P.X();z._$value=y;addX(z);
+    }
   }
   public void setY(test.xdef.component.D.P.Y x){_Y = x;}
   public void set$Y(java.math.BigDecimal x){if(_Y==null)setY(new test.xdef.component.D.P.Y());_Y.set$value(x);}
@@ -2485,6 +2521,12 @@ public static class Q implements org.xdef.component.XComponent{
   public void addX(test.xdef.component.D.Q.X x) {if (x!=null) _X.add(x);}
   public void add$X(org.xdef.sys.SDatetime x){
     if (x!=null) {test.xdef.component.D.Q.X y = new test.xdef.component.D.Q.X(); y.set$value(x); addX(y);}
+  }
+  public void set$X(java.util.List<org.xdef.sys.SDatetime> x){
+    _X.clear(); if (x==null) return;
+    for (org.xdef.sys.SDatetime y:x){
+      test.xdef.component.D.Q.X z=new test.xdef.component.D.Q.X();z._$value=y;addX(z);
+    }
   }
   public void setY(test.xdef.component.D.Q.Y x){_Y = x;}
   public void set$Y(org.xdef.sys.SDatetime x){if(_Y==null)setY(new test.xdef.component.D.Q.Y());_Y.set$value(x);}
@@ -2854,6 +2896,12 @@ public static class R implements org.xdef.component.XComponent{
   public void add$X(org.xdef.sys.SDuration x){
     if (x!=null) {test.xdef.component.D.R.X y = new test.xdef.component.D.R.X(); y.set$value(x); addX(y);}
   }
+  public void set$X(java.util.List<org.xdef.sys.SDuration> x){
+    _X.clear(); if (x==null) return;
+    for (org.xdef.sys.SDuration y:x){
+      test.xdef.component.D.R.X z=new test.xdef.component.D.R.X();z._$value=y;addX(z);
+    }
+  }
   public void setY(test.xdef.component.D.R.Y x){_Y = x;}
   public void set$Y(org.xdef.sys.SDuration x){if(_Y==null)setY(new test.xdef.component.D.R.Y());_Y.set$value(x);}
   public String xposOfA(){return XD_XPos + "/@A";}
@@ -3206,6 +3254,12 @@ public static class S implements org.xdef.component.XComponent{
   public void addX(test.xdef.component.D.S.X x) {if (x!=null) _X.add(x);}
   public void add$X(String x){
     if (x!=null) {test.xdef.component.D.S.X y = new test.xdef.component.D.S.X(); y.set$value(x); addX(y);}
+  }
+  public void set$X(java.util.List<String> x){
+    _X.clear(); if (x==null) return;
+    for (String y:x){
+      test.xdef.component.D.S.X z=new test.xdef.component.D.S.X();z._$value=y;addX(z);
+    }
   }
   public void setY(test.xdef.component.D.S.Y x){_Y = x;}
   public void set$Y(String x){if(_Y==null)setY(new test.xdef.component.D.S.Y());_Y.set$value(x);}

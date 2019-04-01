@@ -728,6 +728,26 @@
   </A>
 </xd:def>
 
+<xd:def name='Y23' root='a | b | d | e | f'>
+  <a xd:script="occurs 1..*;">
+   <xd:mixed>
+     <s xd:script="match @k=='p'" k="">string();</s>
+	  <s xd:script="match @k=='q'" k="">string();</s>
+   </xd:mixed>
+  </a>
+  <b><c>string()</c></b>
+  <d><e>date()</e></d>
+  <e>date()</e>
+  <f><g xd:script="occurs *">date()</g></f>
+  <xd:component>
+    %class test.xdef.component.XCa %link Y23#a;
+    %class test.xdef.component.XCb %link Y23#b;
+    %class test.xdef.component.XCd %link Y23#d;
+    %class test.xdef.component.XCe %link Y23#e;
+    %class test.xdef.component.XCf %link Y23#f;
+  </xd:component>
+</xd:def>
+
 <!-- Used in TestLexicon.java -->
 <xd:def xmlns:xd = "http://www.xdef.org/3.2" root="X" name="Lexicon">
   <X x="string">
