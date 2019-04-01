@@ -67,8 +67,8 @@ public final class TestXComponents extends XDTester {
 		XDDocument xd;
 		String s;
 		XComponent q;
-		final String dataDir = getDataDir() + "test/";
 		ArrayReporter reporter = new ArrayReporter();
+		final String dataDir = getDataDir() + "test/";
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
 			parseXC(xp, "A", xml, null, reporter);
@@ -182,7 +182,7 @@ public final class TestXComponents extends XDTester {
 "</A>");
 			p.setdec(new BigDecimal("456.01"));
 			assertEq(p.toXml(),
-"<A a='a' dec = '456.01'>"+
+"<A a='a' dec='456.01'>"+
 "<W w='w'/>"+
 "<W w='w1'>blabla</W>"+
 "<Y>1</Y>"+
@@ -205,9 +205,11 @@ public final class TestXComponents extends XDTester {
 			assertEq("blabla", s);
 			p.listOfY().clear();
 			p.listOfW().clear();
-			p.geti().set$value(new BigInteger("99"));
+			p.geti().set$value(new BigInteger("98"));
+			assertEq(new BigInteger("98"), p.get$i());
+			p.set$i(new BigInteger("99"));
 			assertEq(p.toXml(), //clone
-"<A a='a' dec = '123.45'>"+
+"<A a='a' dec='123.45'>"+
 "<i>99</i><d>2013-09-01</d><t>11:21:31</t><s>Pepik</s>"+
 "<Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
@@ -282,7 +284,7 @@ public final class TestXComponents extends XDTester {
 		"<House Num='3'>"+
 			"<Person FirstName='Josef' LastName='Novak'></Person>"+
 		"</House>"+
-		"</Street>"+
+	"</Street>"+
 	"<Street Name='Kratka'>"+
 		"<House Num='1'>"+
 			"<Person FirstName='Pavel' LastName='Novak'></Person>"+
@@ -440,9 +442,7 @@ public final class TestXComponents extends XDTester {
 		"<b:User xmlns:b='request' s:understand='true' IdentUser='Novak'/>"+
 		"<b:Request xmlns:b='request' IdentZpravy='xx' s:understand='true'/>"+
 	"</s:Header>"+
-	"<s:Body>"+
-		"<b:PingFlow xmlns:b='request' Flow='B1B'/>"+
-	"</s:Body>"+
+	"<s:Body><b:PingFlow xmlns:b='request' Flow='B1B'/></s:Body>"+
 "</s:H>\n";
 			q = (test.xdef.component.H) parseXC(xp, "H", xml, null, null);
 			assertEq(q.toXml(), xml);
@@ -917,7 +917,7 @@ public final class TestXComponents extends XDTester {
 "    Not in X-definition: <a x='y'>x<y/></a>xxx<b/>\n" +
 "    <DataFiles>\n" +
 "      <Directory Path='q:/Ckp-2.6/VstupTest_SK/KOOP_P1_163/'>\n" +
-"        <File Name='7P19998163.ctl'/>\n" +
+"        <File Name='7P19998163.ctl'/>" +
 "        <File Name='7P19998163A.xml'/>\n" +
 "      </Directory>\n" +
 "    </DataFiles>\n" +

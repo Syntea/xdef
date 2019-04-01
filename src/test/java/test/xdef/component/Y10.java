@@ -8,15 +8,15 @@ public class Y10 implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public Y10p getp() {return _p;}
   public Y10q getq() {return _q;}
-  public void seta(String x) {_a = x;}
-  public void setb(String x) {_b = x;}
-  public void setc(String x) {_c = x;}
-  public void setp(Y10p x) {_p = x;}
-  public void setq(Y10q x) {_q = x;}
+  public void seta(String x){_a = x;}
+  public void setb(String x){_b = x;}
+  public void setc(String x){_c = x;}
+  public void setp(Y10p x){_p = x;}
+  public void setq(Y10q x){_q = x;}
   public String xposOfa(){return XD_XPos + "/@a";}
   public String xposOfb(){return XD_XPos + "/@b";}
   public String xposOfc(){return XD_XPos + "/@c";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -86,14 +86,14 @@ public class Y10 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y10(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y10(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"33377B941B1C2E1BD10C1867872051E5".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -115,37 +115,37 @@ public class Y10 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y10#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
-      XD_Name_a = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = x.getNodeName();
       seta(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@b")) {
-      XD_Name_b = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@b")) {
+      XD_Name_b = x.getNodeName();
       setb(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_c = xx.getNodeName();
+      XD_Name_c = x.getNodeName();
       setc(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
-    String s = xx.getXMElement().getXDPosition();
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+    String s = x.getXMElement().getXDPosition();
     if ("Y10#A/$mixed/a".equals(s))
-      return new test.xdef.component.Y10p(this, xx);
-    return new test.xdef.component.Y10q(this, xx); // Y10#A/$mixed/b
+      return new test.xdef.component.Y10p(this, x);
+    return new test.xdef.component.Y10q(this, x); // Y10#A/$mixed/b
   }
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    String s = xc.xGetModelPosition();
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    String s = x.xGetModelPosition();
     if ("Y10#A/$mixed/a".equals(s))
-      setp((test.xdef.component.Y10p) xc);
+      setp((test.xdef.component.Y10p)x);
     else
-      setq((test.xdef.component.Y10q) xc); //Y10#A/$mixed/b
+      setq((test.xdef.component.Y10q)x); //Y10#A/$mixed/b
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

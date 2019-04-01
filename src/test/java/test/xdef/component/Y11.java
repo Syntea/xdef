@@ -4,10 +4,8 @@
 package test.xdef.component;
 public class Y11 implements org.xdef.component.XComponent{
   public java.util.List<Y11.B> listOfB() {return _B;}
-  public void addB(Y11.B x) {
-    if (x!=null) _B.add(x);
-  }
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  public void addB(Y11.B x) {if (x!=null) _B.add(x);}
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -70,14 +68,14 @@ public class Y11 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y11(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y11(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"B95F5E87189B1375E643122AD325AE7A".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -92,18 +90,18 @@ public class Y11 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y11#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new B(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new B(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfB().add((B) xc); //Y11#A/B
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfB().add((B) x); //Y11#A/B
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -113,8 +111,8 @@ public static class B implements org.xdef.component.XComponent{
   public String getI() {return _I;}
   public java.util.List<test.xdef.component.Y11Op> listOfEv() {return _Ev;}
   public java.util.List<test.xdef.component.Y11Op> listOfOp() {return _Op;}
-  public void setN(String x) {_N = x;}
-  public void setI(String x) {_I = x;}
+  public void setN(String x){_N = x;}
+  public void setI(String x){_I = x;}
   public void addEv(test.xdef.component.Y11Op x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -133,7 +131,7 @@ public static class B implements org.xdef.component.XComponent{
   }
   public String xposOfN(){return XD_XPos + "/@N";}
   public String xposOfI(){return XD_XPos + "/@I";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -200,14 +198,14 @@ public static class B implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public B(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public B(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"44573DFFAA22362023F4098526D37A91".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -229,34 +227,34 @@ public static class B implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y11#A/B";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@I")) {
-      XD_Name_I = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@I")) {
+      XD_Name_I = x.getNodeName();
       setI(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_N = xx.getNodeName();
+      XD_Name_N = x.getNodeName();
       setN(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
-    String s = xx.getXMElement().getXDPosition();
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+    String s = x.getXMElement().getXDPosition();
     if ("Y11#A/B/$mixed/Ev".equals(s))
-      return new test.xdef.component.Y11Op(this, xx);
-    return new test.xdef.component.Y11Op(this, xx); // Y11#A/B/$mixed/Op
+      return new test.xdef.component.Y11Op(this, x);
+    return new test.xdef.component.Y11Op(this, x); // Y11#A/B/$mixed/Op
   }
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    String s = xc.xGetModelPosition();
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    String s = x.xGetModelPosition();
     if ("Y11#A/B/$mixed/Ev".equals(s))
-      listOfEv().add((test.xdef.component.Y11Op) xc);
+      listOfEv().add((test.xdef.component.Y11Op)x);
     else
-      listOfOp().add((test.xdef.component.Y11Op) xc); //Y11#A/B/$mixed/Op
+      listOfOp().add((test.xdef.component.Y11Op)x); //Y11#A/B/$mixed/Op
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

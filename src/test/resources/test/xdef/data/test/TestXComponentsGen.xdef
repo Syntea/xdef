@@ -619,18 +619,22 @@
         e='optional string()'>
         <xd:text> optional string(); </xd:text>
       </C>
+      <D xd:script = 'optional; ref Y18a#C'/>
    </A>
 
    <xd:component>
       %class test.xdef.component.Y18 %link A;
       %bind x %link A/C/$text;
+      %bind y %link A/D/$text;
    </xd:component>
 </xd:def>
 
 <xd:def name='Y18a'>
    <B c='optional string()' d='optional string()'/>
+   <C>int()</C>
    <xd:component>
       %class test.xdef.component.Y18a %link B;
+      %class test.xdef.component.Y18a1 %link C;
    </xd:component>
 </xd:def>
 
@@ -651,8 +655,12 @@
 </xd:def>
 
 <xd:def root='A|B|C|D' name='Y20'>
-  <A><X xd:script='0..1; ref X'/></A>
-  <X b='? string()' ><X xd:script='*; ref X'/></X>
+  <A>
+    <X xd:script='0..1; ref X'/>
+  </A>
+  <X b='? string()' >
+    <X xd:script='*; ref X'/>
+  </X>
   <B>
     <X b='? string()'>
       <X xd:script='*; ref B/X'/>

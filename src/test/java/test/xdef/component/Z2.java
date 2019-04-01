@@ -5,54 +5,30 @@ package test.xdef.component;
 public class Z2 implements org.xdef.component.XComponent{
   public String getKodUtvaruPolicie() {return _KodUtvaruPolicie;}
   public org.xdef.sys.SDatetime getRokDN() {return _RokDN;}
-  public java.util.Date dateOfRokDN() {
-    return org.xdef.sys.SDatetime.getDate(_RokDN);
-  }
-  public java.sql.Timestamp timestampOfRokDN() {
-    return org.xdef.sys.SDatetime.getTimestamp(_RokDN);
-  }
-  public java.util.Calendar calendarOfRokDN() {
-    return org.xdef.sys.SDatetime.getCalendar(_RokDN);
-  }
+  public java.util.Date dateOfRokDN(){return org.xdef.sys.SDatetime.getDate(_RokDN);}
+  public java.sql.Timestamp timestampOfRokDN(){return org.xdef.sys.SDatetime.getTimestamp(_RokDN);}
+  public java.util.Calendar calendarOfRokDN(){return org.xdef.sys.SDatetime.getCalendar(_RokDN);}
   public String getCisloDN() {return _CisloDN;}
   public String getCisloJednaciDN() {return _CisloJednaciDN;}
   public org.xdef.sys.SDatetime getDatumCasOznameni() {return _DatumCasOznameni;}
-  public java.util.Date dateOfDatumCasOznameni() {
-    return org.xdef.sys.SDatetime.getDate(_DatumCasOznameni);
-  }
-  public java.sql.Timestamp timestampOfDatumCasOznameni() {
-    return org.xdef.sys.SDatetime.getTimestamp(_DatumCasOznameni);
-  }
-  public java.util.Calendar calendarOfDatumCasOznameni() {
-    return org.xdef.sys.SDatetime.getCalendar(_DatumCasOznameni);
-  }
+  public java.util.Date dateOfDatumCasOznameni(){return org.xdef.sys.SDatetime.getDate(_DatumCasOznameni);}
+  public java.sql.Timestamp timestampOfDatumCasOznameni(){return org.xdef.sys.SDatetime.getTimestamp(_DatumCasOznameni);}
+  public java.util.Calendar calendarOfDatumCasOznameni(){return org.xdef.sys.SDatetime.getCalendar(_DatumCasOznameni);}
   public String getNazevDN() {return _NazevDN;}
   public String getZpracovatel() {return _Zpracovatel;}
-  public void setKodUtvaruPolicie(String x) {_KodUtvaruPolicie = x;}
-  public void setRokDN(org.xdef.sys.SDatetime x) {_RokDN = x;}
-  public void setRokDN(java.util.Date x) {
-    _RokDN=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setRokDN(java.sql.Timestamp x) {
-    _RokDN=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setRokDN(java.util.Calendar x) {
-    _RokDN=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setCisloDN(String x) {_CisloDN = x;}
-  public void setCisloJednaciDN(String x) {_CisloJednaciDN = x;}
-  public void setDatumCasOznameni(org.xdef.sys.SDatetime x) {_DatumCasOznameni = x;}
-  public void setDatumCasOznameni(java.util.Date x) {
-    _DatumCasOznameni=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setDatumCasOznameni(java.sql.Timestamp x) {
-    _DatumCasOznameni=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setDatumCasOznameni(java.util.Calendar x) {
-    _DatumCasOznameni=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setNazevDN(String x) {_NazevDN = x;}
-  public void setZpracovatel(String x) {_Zpracovatel = x;}
+  public void setKodUtvaruPolicie(String x){_KodUtvaruPolicie = x;}
+  public void setRokDN(org.xdef.sys.SDatetime x){_RokDN = x;}
+  public void setRokDN(java.util.Date x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setRokDN(java.sql.Timestamp x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setRokDN(java.util.Calendar x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setCisloDN(String x){_CisloDN = x;}
+  public void setCisloJednaciDN(String x){_CisloJednaciDN = x;}
+  public void setDatumCasOznameni(org.xdef.sys.SDatetime x){_DatumCasOznameni = x;}
+  public void setDatumCasOznameni(java.util.Date x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasOznameni(java.sql.Timestamp x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasOznameni(java.util.Calendar x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setNazevDN(String x){_NazevDN = x;}
+  public void setZpracovatel(String x){_Zpracovatel = x;}
   public String xposOfKodUtvaruPolicie(){return XD_XPos + "/@KodUtvaruPolicie";}
   public String xposOfRokDN(){return XD_XPos + "/@RokDN";}
   public String xposOfCisloDN(){return XD_XPos + "/@CisloDN";}
@@ -60,7 +36,7 @@ public class Z2 implements org.xdef.component.XComponent{
   public String xposOfDatumCasOznameni(){return XD_XPos + "/@DatumCasOznameni";}
   public String xposOfNazevDN(){return XD_XPos + "/@NazevDN";}
   public String xposOfZpracovatel(){return XD_XPos + "/@Zpracovatel";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -131,14 +107,14 @@ public class Z2 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Z2(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Z2(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"AB38509992762E5A7B12437155F69376".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -165,39 +141,39 @@ public class Z2 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#ProtokolDN";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
-      XD_Name_CisloDN = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
+      XD_Name_CisloDN = x.getNodeName();
       setCisloDN(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
-      XD_Name_CisloJednaciDN = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
+      XD_Name_CisloJednaciDN = x.getNodeName();
       setCisloJednaciDN(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
-      XD_Name_DatumCasOznameni = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
+      XD_Name_DatumCasOznameni = x.getNodeName();
       setDatumCasOznameni(parseResult.getParsedValue().datetimeValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
-      XD_Name_KodUtvaruPolicie = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
+      XD_Name_KodUtvaruPolicie = x.getNodeName();
       setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
-      XD_Name_NazevDN = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
+      XD_Name_NazevDN = x.getNodeName();
       setNazevDN(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@RokDN")) {
-      XD_Name_RokDN = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
+      XD_Name_RokDN = x.getNodeName();
       setRokDN(parseResult.getParsedValue().datetimeValue());
     } else {
-      XD_Name_Zpracovatel = xx.getNodeName();
+      XD_Name_Zpracovatel = x.getNodeName();
       setZpracovatel(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

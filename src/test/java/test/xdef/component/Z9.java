@@ -12,15 +12,15 @@ public class Z9 implements org.xdef.component.XComponent{
   public String getStat() {return _Stat;}
   public String getTelefon1() {return _Telefon1;}
   public String getTelefon2() {return _Telefon2;}
-  public void setUlice(String x) {_Ulice = x;}
-  public void setCisloOrientacni(String x) {_CisloOrientacni = x;}
-  public void setCisloPopisne(String x) {_CisloPopisne = x;}
-  public void setObec(String x) {_Obec = x;}
-  public void setPSC(String x) {_PSC = x;}
-  public void setOkres(String x) {_Okres = x;}
-  public void setStat(String x) {_Stat = x;}
-  public void setTelefon1(String x) {_Telefon1 = x;}
-  public void setTelefon2(String x) {_Telefon2 = x;}
+  public void setUlice(String x){_Ulice = x;}
+  public void setCisloOrientacni(String x){_CisloOrientacni = x;}
+  public void setCisloPopisne(String x){_CisloPopisne = x;}
+  public void setObec(String x){_Obec = x;}
+  public void setPSC(String x){_PSC = x;}
+  public void setOkres(String x){_Okres = x;}
+  public void setStat(String x){_Stat = x;}
+  public void setTelefon1(String x){_Telefon1 = x;}
+  public void setTelefon2(String x){_Telefon2 = x;}
   public String xposOfUlice(){return XD_XPos + "/@Ulice";}
   public String xposOfCisloOrientacni(){return XD_XPos + "/@CisloOrientacni";}
   public String xposOfCisloPopisne(){return XD_XPos + "/@CisloPopisne";}
@@ -30,7 +30,7 @@ public class Z9 implements org.xdef.component.XComponent{
   public String xposOfStat(){return XD_XPos + "/@Stat";}
   public String xposOfTelefon1(){return XD_XPos + "/@Telefon1";}
   public String xposOfTelefon2(){return XD_XPos + "/@Telefon2";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -105,14 +105,14 @@ public class Z9 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Z9(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Z9(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"7070EC0A858206E367DABF38B96DB80C".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -143,45 +143,45 @@ public class Z9 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#Adresa";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
-      XD_Name_CisloOrientacni = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
+      XD_Name_CisloOrientacni = x.getNodeName();
       setCisloOrientacni(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
-      XD_Name_CisloPopisne = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+      XD_Name_CisloPopisne = x.getNodeName();
       setCisloPopisne(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Obec")) {
-      XD_Name_Obec = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
+      XD_Name_Obec = x.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Okres")) {
-      XD_Name_Okres = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
+      XD_Name_Okres = x.getNodeName();
       setOkres(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@PSC")) {
-      XD_Name_PSC = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@PSC")) {
+      XD_Name_PSC = x.getNodeName();
       setPSC(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Stat")) {
-      XD_Name_Stat = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Stat")) {
+      XD_Name_Stat = x.getNodeName();
       setStat(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
-      XD_Name_Telefon1 = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
+      XD_Name_Telefon1 = x.getNodeName();
       setTelefon1(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
-      XD_Name_Telefon2 = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
+      XD_Name_Telefon2 = x.getNodeName();
       setTelefon2(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_Ulice = xx.getNodeName();
+      XD_Name_Ulice = x.getNodeName();
       setUlice(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

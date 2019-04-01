@@ -263,7 +263,7 @@ public final class TestLexicon extends XDTester {
 			String dir = tempDir + "components";
 			new File(dir).mkdirs();
 			assertNoErrors(GenXComponent.genXComponent(xp,
-				dir, null, false, false, true));
+				dir, null, false, true));
 			compileSources(dir);
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);

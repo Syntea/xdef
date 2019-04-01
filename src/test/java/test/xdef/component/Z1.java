@@ -7,18 +7,17 @@ public class Z1 implements org.xdef.component.XComponent{
   public Integer getSeqRec() {return _SeqRec;}
   public String getKrajPolicie() {return _KrajPolicie;}
   public org.xdef.sys.SDatetime getPlatnostOd() {return _PlatnostOd;}
-  public java.util.Date dateOfPlatnostOd() {
-    return org.xdef.sys.SDatetime.getDate(_PlatnostOd);
-  }
-  public java.sql.Timestamp timestampOfPlatnostOd() {
-    return org.xdef.sys.SDatetime.getTimestamp(_PlatnostOd);
-  }
-  public java.util.Calendar calendarOfPlatnostOd() {
-    return org.xdef.sys.SDatetime.getCalendar(_PlatnostOd);
-  }
+  public java.util.Date dateOfPlatnostOd(){return org.xdef.sys.SDatetime.getDate(_PlatnostOd);}
+  public java.sql.Timestamp timestampOfPlatnostOd(){return org.xdef.sys.SDatetime.getTimestamp(_PlatnostOd);}
+  public java.util.Calendar calendarOfPlatnostOd(){return org.xdef.sys.SDatetime.getCalendar(_PlatnostOd);}
   public Z2 getProtokol() {return _Protokol;}
   public Z7 getRozhodnutiDN() {return _RozhodnutiDN;}
   public java.util.List<Z1.VyliceniDN> listOfVyliceniDN() {return _VyliceniDN;}
+  public java.util.List<String> listOf$VyliceniDN(){
+    java.util.List<String> result = new java.util.ArrayList<String>();
+    for(Z1.VyliceniDN x: _VyliceniDN) result.add(x.get$value());
+    return result;
+  }
   public Z8 getObjStranka() {return _ObjStranka;}
   public java.util.List<FotoDN> listOfFoto() {return _Foto;}
   public java.util.List<VozidloDN> listOfVozidlo() {return _Vozidlo;}
@@ -29,25 +28,19 @@ public class Z1 implements org.xdef.component.XComponent{
   public java.util.List<PredmetDN> listOfPredmet() {return _Predmet;}
   public java.util.List<ZvireDN> listOfZvire() {return _Zvire;}
   public java.util.List<UcastnikDN> listOfUcastnik() {return _Ucastnik;}
-  public void setVerze(String x) {_Verze = x;}
-  public void setSeqRec(Integer x) {_SeqRec = x;}
-  public void setKrajPolicie(String x) {_KrajPolicie = x;}
-  public void setPlatnostOd(org.xdef.sys.SDatetime x) {_PlatnostOd = x;}
-  public void setPlatnostOd(java.util.Date x) {
-    _PlatnostOd=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostOd(java.sql.Timestamp x) {
-    _PlatnostOd=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setPlatnostOd(java.util.Calendar x) {
-    _PlatnostOd=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setProtokol(Z2 x) {
+  public void setVerze(String x){_Verze = x;}
+  public void setSeqRec(Integer x){_SeqRec = x;}
+  public void setKrajPolicie(String x){_KrajPolicie = x;}
+  public void setPlatnostOd(org.xdef.sys.SDatetime x){_PlatnostOd = x;}
+  public void setPlatnostOd(java.util.Date x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostOd(java.sql.Timestamp x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostOd(java.util.Calendar x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setProtokol(Z2 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Protokol", null, "SouborD1A#ZaznamPDN/$mixed/Protokol");
     _Protokol = x;
   }
-  public void setRozhodnutiDN(Z7 x) {
+  public void setRozhodnutiDN(Z7 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "RozhodnutiDN", null, "SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN");
     _RozhodnutiDN = x;
@@ -60,7 +53,10 @@ public class Z1 implements org.xdef.component.XComponent{
     }
 
   }
-  public void setObjStranka(Z8 x) {
+  public void add$VyliceniDN(String x){
+    if (x!=null) {Z1.VyliceniDN y = new Z1.VyliceniDN(); y.set$value(x); addVyliceniDN(y);}
+  }
+  public void setObjStranka(Z8 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "ObjStranka", null, "SouborD1A#ZaznamPDN/$mixed/ObjStranka");
     _ObjStranka = x;
@@ -141,7 +137,7 @@ public class Z1 implements org.xdef.component.XComponent{
   public String xposOfSeqRec(){return XD_XPos + "/@SeqRec";}
   public String xposOfKrajPolicie(){return XD_XPos + "/@KrajPolicie";}
   public String xposOfPlatnostOd(){return XD_XPos + "/@PlatnostOd";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -224,14 +220,14 @@ public class Z1 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Z1(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Z1(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"4584F2D55B3E3B6707313549D69DA5C8".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -266,93 +262,93 @@ public class Z1 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#ZaznamPDN";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
-      XD_Name_KrajPolicie = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
+      XD_Name_KrajPolicie = x.getNodeName();
       setKrajPolicie(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
-      XD_Name_PlatnostOd = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
+      XD_Name_PlatnostOd = x.getNodeName();
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
-      XD_Name_SeqRec = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
+      XD_Name_SeqRec = x.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
     } else {
-      XD_Name_Verze = xx.getNodeName();
+      XD_Name_Verze = x.getNodeName();
       setVerze(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
-    String s = xx.getXMElement().getXDPosition();
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+    String s = x.getXMElement().getXDPosition();
     if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
-      return new test.xdef.component.FotoDN(this, xx);
+      return new test.xdef.component.FotoDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
-      return new test.xdef.component.Z8(this, xx);
+      return new test.xdef.component.Z8(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
-      return new test.xdef.component.PovozDN(this, xx);
+      return new test.xdef.component.PovozDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
-      return new test.xdef.component.PredmetDN(this, xx);
+      return new test.xdef.component.PredmetDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Protokol".equals(s))
-      return new test.xdef.component.Z2(this, xx);
+      return new test.xdef.component.Z2(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN".equals(s))
-      return new test.xdef.component.Z7(this, xx);
+      return new test.xdef.component.Z7(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Tramvaj".equals(s))
-      return new test.xdef.component.TramvajDN(this, xx);
+      return new test.xdef.component.TramvajDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Trolejbus".equals(s))
-      return new test.xdef.component.TrolejbusDN(this, xx);
+      return new test.xdef.component.TrolejbusDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Ucastnik".equals(s))
-      return new test.xdef.component.UcastnikDN(this, xx);
+      return new test.xdef.component.UcastnikDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Vlak".equals(s))
-      return new test.xdef.component.VlakDN(this, xx);
+      return new test.xdef.component.VlakDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
-      return new test.xdef.component.VozidloDN(this, xx);
+      return new test.xdef.component.VozidloDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
-      return new VyliceniDN(this, xx);
-    return new test.xdef.component.ZvireDN(this, xx); // SouborD1A#ZaznamPDN/$mixed/Zvire
+      return new VyliceniDN(this, x);
+    return new test.xdef.component.ZvireDN(this, x); // SouborD1A#ZaznamPDN/$mixed/Zvire
   }
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    String s = xc.xGetModelPosition();
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    String s = x.xGetModelPosition();
     if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
-      listOfFoto().add((test.xdef.component.FotoDN) xc);
+      listOfFoto().add((test.xdef.component.FotoDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
-      setObjStranka((test.xdef.component.Z8) xc);
+      setObjStranka((test.xdef.component.Z8)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
-      listOfPovoz().add((test.xdef.component.PovozDN) xc);
+      listOfPovoz().add((test.xdef.component.PovozDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
-      listOfPredmet().add((test.xdef.component.PredmetDN) xc);
+      listOfPredmet().add((test.xdef.component.PredmetDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Protokol".equals(s))
-      setProtokol((test.xdef.component.Z2) xc);
+      setProtokol((test.xdef.component.Z2)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN".equals(s))
-      setRozhodnutiDN((test.xdef.component.Z7) xc);
+      setRozhodnutiDN((test.xdef.component.Z7)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Tramvaj".equals(s))
-      listOfTramvaj().add((test.xdef.component.TramvajDN) xc);
+      listOfTramvaj().add((test.xdef.component.TramvajDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Trolejbus".equals(s))
-      listOfTrolejbus().add((test.xdef.component.TrolejbusDN) xc);
+      listOfTrolejbus().add((test.xdef.component.TrolejbusDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Ucastnik".equals(s))
-      listOfUcastnik().add((test.xdef.component.UcastnikDN) xc);
+      listOfUcastnik().add((test.xdef.component.UcastnikDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Vlak".equals(s))
-      listOfVlak().add((test.xdef.component.VlakDN) xc);
+      listOfVlak().add((test.xdef.component.VlakDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
-      listOfVozidlo().add((test.xdef.component.VozidloDN) xc);
+      listOfVozidlo().add((test.xdef.component.VozidloDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
-      listOfVyliceniDN().add((VyliceniDN) xc);
+      listOfVyliceniDN().add((VyliceniDN)x);
     else
-      listOfZvire().add((test.xdef.component.ZvireDN) xc); //SouborD1A#ZaznamPDN/$mixed/Zvire
+      listOfZvire().add((test.xdef.component.ZvireDN)x); //SouborD1A#ZaznamPDN/$mixed/Zvire
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class VyliceniDN implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x) {_$value = x;}
+  public void set$value(String x){_$value = x;}
   public String xposOf$value(){return XD_XPos + "/$text";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -416,14 +412,14 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public VyliceniDN(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public VyliceniDN(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -439,19 +435,19 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#ZaznamPDN/$mixed/VyliceniDN";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
     set$value(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
