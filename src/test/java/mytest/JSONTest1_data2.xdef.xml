@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/3.2"
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2"
   xmlns:js="http://www.w3.org/2005/xpath-functions"
   xd:root="js:array">
   <js:array>

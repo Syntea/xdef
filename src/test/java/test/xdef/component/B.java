@@ -6,55 +6,31 @@ public class B implements org.xdef.component.XComponent{
   public Integer getid() {return _id;}
   public Double getnum() {return _num;}
   public org.xdef.sys.SDatetime getdate() {return _date;}
-  public java.util.Date dateOfdate() {
-    return org.xdef.sys.SDatetime.getDate(_date);
-  }
-  public java.sql.Timestamp timestampOfdate() {
-    return org.xdef.sys.SDatetime.getTimestamp(_date);
-  }
-  public java.util.Calendar calendarOfdate() {
-    return org.xdef.sys.SDatetime.getCalendar(_date);
-  }
+  public java.util.Date dateOfdate(){return org.xdef.sys.SDatetime.getDate(_date);}
+  public java.sql.Timestamp timestampOfdate(){return org.xdef.sys.SDatetime.getTimestamp(_date);}
+  public java.util.Calendar calendarOfdate(){return org.xdef.sys.SDatetime.getCalendar(_date);}
   public org.xdef.sys.SDatetime gettime() {return _time;}
-  public java.util.Date dateOftime() {
-    return org.xdef.sys.SDatetime.getDate(_time);
-  }
-  public java.sql.Timestamp timestampOftime() {
-    return org.xdef.sys.SDatetime.getTimestamp(_time);
-  }
-  public java.util.Calendar calendarOftime() {
-    return org.xdef.sys.SDatetime.getCalendar(_time);
-  }
+  public java.util.Date dateOftime(){return org.xdef.sys.SDatetime.getDate(_time);}
+  public java.sql.Timestamp timestampOftime(){return org.xdef.sys.SDatetime.getTimestamp(_time);}
+  public java.util.Calendar calendarOftime(){return org.xdef.sys.SDatetime.getCalendar(_time);}
   public String getname() {return _name;}
-  public void setid(Integer x) {_id = x;}
-  public void setnum(Double x) {_num = x;}
-  public void setdate(org.xdef.sys.SDatetime x) {_date = x;}
-  public void setdate(java.util.Date x) {
-    _date=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setdate(java.sql.Timestamp x) {
-    _date=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setdate(java.util.Calendar x) {
-    _date=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void settime(org.xdef.sys.SDatetime x) {_time = x;}
-  public void settime(java.util.Date x) {
-    _time=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void settime(java.sql.Timestamp x) {
-    _time=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void settime(java.util.Calendar x) {
-    _time=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setname(String x) {_name = x;}
+  public void setid(Integer x){_id = x;}
+  public void setnum(Double x){_num = x;}
+  public void setdate(org.xdef.sys.SDatetime x){_date = x;}
+  public void setdate(java.util.Date x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setdate(java.sql.Timestamp x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setdate(java.util.Calendar x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void settime(org.xdef.sys.SDatetime x){_time = x;}
+  public void settime(java.util.Date x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void settime(java.sql.Timestamp x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void settime(java.util.Calendar x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setname(String x){_name = x;}
   public String xposOfid(){return XD_XPos + "/@id";}
   public String xposOfnum(){return XD_XPos + "/@num";}
   public String xposOfdate(){return XD_XPos + "/@date";}
   public String xposOftime(){return XD_XPos + "/@time";}
   public String xposOfname(){return XD_XPos + "/@name";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -121,14 +97,14 @@ public class B implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public B(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public B(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"60D8175F3557EEF191C01DB33B27C6A7".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -151,33 +127,33 @@ public class B implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="B#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@date")) {
-      XD_Name_date = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@date")) {
+      XD_Name_date = x.getNodeName();
       setdate(parseResult.getParsedValue().datetimeValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@id")) {
-      XD_Name_id = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@id")) {
+      XD_Name_id = x.getNodeName();
       setid(parseResult.getParsedValue().intValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@name")) {
-      XD_Name_name = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@name")) {
+      XD_Name_name = x.getNodeName();
       setname(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@num")) {
-      XD_Name_num = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@num")) {
+      XD_Name_num = x.getNodeName();
       setnum(parseResult.getParsedValue().doubleValue());
     } else {
-      XD_Name_time = xx.getNodeName();
+      XD_Name_time = x.getNodeName();
       settime(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

@@ -9,8 +9,8 @@
                     | XD3.1:declaration | XD3.1:BNFGrammar | XD3.1:component"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
-  xmlns:XD3.2     = "http://www.xdef.org/3.2"
-  xmlns:w         = "http://www.xdef.org/3.2"
+  xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
+  xmlns:w         = "http://www.xdef.org/xdef/3.2"
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/

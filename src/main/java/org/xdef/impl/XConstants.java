@@ -12,4 +12,7 @@ public interface XConstants {
 	/** X-definition version 3.2 ID. */
 	public static final byte XD32 = 32;
 
+	/** Old version of URI of X-definition 3.2. */
+	public static final String XDEF32NS_OLD = "http://www.xdef.org/3.2";
+
 }

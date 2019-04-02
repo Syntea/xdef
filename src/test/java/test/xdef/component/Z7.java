@@ -4,30 +4,18 @@
 package test.xdef.component;
 public class Z7 implements org.xdef.component.XComponent{
   public org.xdef.sys.SDatetime getDatumRozhodnuti() {return _DatumRozhodnuti;}
-  public java.util.Date dateOfDatumRozhodnuti() {
-    return org.xdef.sys.SDatetime.getDate(_DatumRozhodnuti);
-  }
-  public java.sql.Timestamp timestampOfDatumRozhodnuti() {
-    return org.xdef.sys.SDatetime.getTimestamp(_DatumRozhodnuti);
-  }
-  public java.util.Calendar calendarOfDatumRozhodnuti() {
-    return org.xdef.sys.SDatetime.getCalendar(_DatumRozhodnuti);
-  }
+  public java.util.Date dateOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getDate(_DatumRozhodnuti);}
+  public java.sql.Timestamp timestampOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getTimestamp(_DatumRozhodnuti);}
+  public java.util.Calendar calendarOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getCalendar(_DatumRozhodnuti);}
   public String get$value() {return _$value;}
-  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x) {_DatumRozhodnuti = x;}
-  public void setDatumRozhodnuti(java.util.Date x) {
-    _DatumRozhodnuti=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setDatumRozhodnuti(java.sql.Timestamp x) {
-    _DatumRozhodnuti=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setDatumRozhodnuti(java.util.Calendar x) {
-    _DatumRozhodnuti=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void set$value(String x) {_$value = x;}
+  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x){_DatumRozhodnuti = x;}
+  public void setDatumRozhodnuti(java.util.Date x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumRozhodnuti(java.sql.Timestamp x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumRozhodnuti(java.util.Calendar x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(String x){_$value = x;}
   public String xposOfDatumRozhodnuti(){return XD_XPos + "/@DatumRozhodnuti";}
   public String xposOf$value(){return XD_XPos + "/$text";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -94,14 +82,14 @@ public class Z7 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Z7(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Z7(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"E7365B687489FBBA126C707177842884".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -119,22 +107,22 @@ public class Z7 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#RozhodnutiDN";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
     set$value(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_DatumRozhodnuti = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_DatumRozhodnuti = x.getNodeName();
     setDatumRozhodnuti(parseResult.getParsedValue().datetimeValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

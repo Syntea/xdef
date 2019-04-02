@@ -5,11 +5,11 @@ package test.xdef.component;
 public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.xdef.component.XComponent{
   public Integer getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(Integer x) {_One = x;}
-  public void setTwo(String x) {_Two = x;}
+  public void setOne(Integer x){_One = x;}
+  public void setTwo(String x){_Two = x;}
   public String xposOfOne(){return XD_XPos + "/@One";}
   public String xposOfTwo(){return XD_XPos + "/@Two";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -70,14 +70,14 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public N_Part(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public N_Part(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"DCA386598611DCE25D34E4B92E53230F".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -94,24 +94,24 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
   private String XD_XPos;
   private String XD_Model="N#Part";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
-      XD_Name_One = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = x.getNodeName();
       setOne(parseResult.getParsedValue().intValue());
     } else {
-      XD_Name_Two = xx.getNodeName();
+      XD_Name_Two = x.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

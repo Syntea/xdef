@@ -122,10 +122,10 @@ public interface XDConstants {
 	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
-	public static final String XDEF32_NS_URI = "http://www.xdef.org/3.2";
+	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI = 
-		"http://www.xdef.org/instance";
+		"http://www.xdef.org/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Platform dependent constants.

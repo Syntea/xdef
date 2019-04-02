@@ -9,8 +9,8 @@
                      | XD3.2:declaration | XD3.2:BNFGrammar | XD3.2:component"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
-  xmlns:XD3.2     = "http://www.xdef.org/3.2"
-  xmlns:w         = "http://www.xdef.org/3.2"
+  xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
+  xmlns:w         = "http://www.xdef.org/xdef/3.2"
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/
@@ -18,7 +18,7 @@
 /******************************************************************************/
 
     <XD3.2:collection xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.xdef.org/3.2';
+      ? (String) @metaNamespace : 'http://www.xdef.org/xdef/3.2';
       options moreAttributes"
     include        = "optional uriList; options acceptQualifiedAttr"
     metaNamespace  = "optional uri; options acceptQualifiedAttr" >
@@ -42,7 +42,7 @@
   </XD3.2:collection>
 
   <XD3.2:def xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.xdef.org/3.2';
+      ? (String) @metaNamespace : 'http://www.xdef.org/xdef/3.2';
       options moreAttributes"
     name            = "optional QName; options acceptQualifiedAttr"
     metaNamespace   = "optional uri; options acceptQualifiedAttr"

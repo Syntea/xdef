@@ -14,9 +14,11 @@ import org.xdef.impl.util.conv.Util;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.XConstants;
 
 /** Represents implementation of X-definition document version 2.0.
  * @author Ilia Alexandrov
@@ -96,6 +98,12 @@ public final class XdDoc_2_0 extends XdDoc {
 			Element def = (Element) defs.item(i);
 			initDef(def);
 		}
+		defs = KXmlUtils.getChildElementsNS(collection,
+			XConstants.XDEF32NS_OLD, XdNames.DEF);
+		for (int i = 0; i < defs.getLength(); i++) {
+			Element def = (Element) defs.item(i);
+			initDef(def);
+		}
 	}
 
 	/** Initiates given X-definition <tt>def</tt> element.
@@ -120,7 +128,7 @@ public final class XdDoc_2_0 extends XdDoc {
 				if (XdUtils.isDeclaration(model)) {
 					// get map with declared types
 					Map<String, String> map = Util.getDeclaredTypes(model);
-					for (Map.Entry<String, String> e: map.entrySet()) {
+					for (Entry<String, String> e: map.entrySet()) {
 						_xdModels.put(new XdDecl(xdDef, e.getKey()), model);
 					}
 				} else {

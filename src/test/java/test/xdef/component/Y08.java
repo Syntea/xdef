@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.component.XComponent{
   public Y08.Domain getDomain() {return _Domain;}
-  public void setDomain(Y08.Domain x) {_Domain = x;}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  public void setDomain(Y08.Domain x){_Domain = x;}
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -70,14 +70,14 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y08(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y08(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"F709C00EADB1E821100824A89550CEA5".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -93,21 +93,21 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
   private String XD_XPos;
   private String XD_Model="Y08#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_IdFlow = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_IdFlow = x.getNodeName();
     setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Domain(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new Domain(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setDomain((Domain) xc); //Y08#A/Domain
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setDomain((Domain) x); //Y08#A/Domain
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -115,11 +115,11 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
 public static class Domain implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(String x) {_One = x;}
-  public void setTwo(String x) {_Two = x;}
+  public void setOne(String x){_One = x;}
+  public void setTwo(String x){_Two = x;}
   public String xposOfOne(){return XD_XPos + "/@One";}
   public String xposOfTwo(){return XD_XPos + "/@Two";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -179,14 +179,14 @@ public static class Domain implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Domain(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Domain(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"E03A37B3616CD189CF239F63D7FA83EA".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -203,24 +203,24 @@ public static class Domain implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y08#A/Domain";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@One")) {
-      XD_Name_One = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = x.getNodeName();
       setOne(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_Two = xx.getNodeName();
+      XD_Name_Two = x.getNodeName();
       setTwo(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.proc.XDLexicon;
 
@@ -819,6 +820,8 @@ public final class CompileCode extends CompileBase {
 				|| XDConstants.XDEF31_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF32_NS_URI.equals(
+					_namespaceURIs.get(item.getValue()))
+					|| XConstants.XDEF32NS_OLD.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}
