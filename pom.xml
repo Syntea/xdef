@@ -16,10 +16,10 @@
     <description>X-definition 3.2 (Open Source Software)</description>
     
     <properties>
-        <version>32.4.0</version><!-- when changed, change also ${release.date}, see below -->
+        <version>32.4.1</version><!-- when changed, change also ${release.date}, see below -->
         <snapshot>-SNAPSHOT</snapshot>
         <!--snapshot/-->
-		<release.date>2019-04-02</release.date><!-- update when changed version -->
+		<release.date>2019-04-03</release.date><!-- update when changed version -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
