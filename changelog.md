@@ -1,7 +1,10 @@
 # Version ${version}, release-date ${release.date}
+
+
+# Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
   and it has just a text child node, there are also generated getter/setter
-  methods which have the "$" set before the name of element (e.g. get$name().
+  methods which have the "$" set before the name of element (e.g. get$name()).
 - the namespace URI for the X-definition version 3.2 is changed
     - old: "http://www.xdef.org/3.2"
     - new: "http://www.xdef.org/xdef/3.2"
