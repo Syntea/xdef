@@ -749,7 +749,7 @@
 </xd:def>
 
 <!-- Used in TestLexicon.java -->
-<xd:def xmlns:xd = "http://www.xdef.org/3.2" root="X" name="Lexicon">
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/3.2" root="X" name="Lexicon">
   <X x="string">
     <Y xd:script="+"  y="int()"/>
   </X>
