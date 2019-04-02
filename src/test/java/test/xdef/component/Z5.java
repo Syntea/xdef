@@ -6,16 +6,16 @@ public class Z5 implements org.xdef.component.XComponent{
   public String getNazevFirmy() {return _NazevFirmy;}
   public Integer getIC() {return _IC;}
   public Z9 getSidlo() {return _Sidlo;}
-  public void setNazevFirmy(String x) {_NazevFirmy = x;}
-  public void setIC(Integer x) {_IC = x;}
-  public void setSidlo(Z9 x) {
+  public void setNazevFirmy(String x){_NazevFirmy = x;}
+  public void setIC(Integer x){_IC = x;}
+  public void setSidlo(Z9 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Sidlo", null, "SouborD1A#Firma/Sidlo");
     _Sidlo = x;
   }
   public String xposOfNazevFirmy(){return XD_XPos + "/@NazevFirmy";}
   public String xposOfIC(){return XD_XPos + "/@IC";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -82,14 +82,14 @@ public class Z5 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Z5(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Z5(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"321D7EC35C80E460E3E13214D0933D17".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -108,26 +108,26 @@ public class Z5 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#Firma";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@IC")) {
-      XD_Name_IC = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@IC")) {
+      XD_Name_IC = x.getNodeName();
       setIC(parseResult.getParsedValue().intValue());
     } else {
-      XD_Name_NazevFirmy = xx.getNodeName();
+      XD_Name_NazevFirmy = x.getNodeName();
       setNazevFirmy(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new test.xdef.component.Z9(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new test.xdef.component.Z9(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setSidlo((test.xdef.component.Z9) xc); //SouborD1A#Firma/Sidlo
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setSidlo((test.xdef.component.Z9) x); //SouborD1A#Firma/Sidlo
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

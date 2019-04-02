@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/3.2" name="main" root="Staff">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="main" root="Staff">
 
     <Person sex="string" name="string(1,30)" surname="string(1,50)" />
 

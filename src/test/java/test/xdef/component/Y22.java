@@ -5,10 +5,10 @@ package test.xdef.component;
 public class Y22 implements org.xdef.component.XComponent{
   public String getCreator() {return _Creator;}
   public Y22.Transfer getTransfer() {return _Transfer;}
-  public void setCreator(String x) {_Creator = x;}
-  public void setTransfer(Y22.Transfer x) {_Transfer = x;}
+  public void setCreator(String x){_Creator = x;}
+  public void setTransfer(Y22.Transfer x){_Transfer = x;}
   public String xposOfCreator(){return XD_XPos + "/@Creator";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -73,14 +73,14 @@ public class Y22 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y22(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y22(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"A545ADBCB3C08780B1A44503D717B7BD".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -97,21 +97,21 @@ public class Y22 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y22#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Creator = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Creator = x.getNodeName();
     setCreator(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Transfer(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new Transfer(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setTransfer((Transfer) xc); //Y22#A/Transfer
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setTransfer((Transfer) x); //Y22#A/Transfer
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -119,10 +119,10 @@ public class Y22 implements org.xdef.component.XComponent{
 public static class Transfer implements org.xdef.component.XComponent{
   public String getSender() {return _Sender;}
   public test.xdef.component.Y22.Transfer.DataFiles getDataFiles() {return _DataFiles;}
-  public void setSender(String x) {_Sender = x;}
-  public void setDataFiles(test.xdef.component.Y22.Transfer.DataFiles x) {_DataFiles = x;}
+  public void setSender(String x){_Sender = x;}
+  public void setDataFiles(test.xdef.component.Y22.Transfer.DataFiles x){_DataFiles = x;}
   public String xposOfSender(){return XD_XPos + "/@Sender";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -186,14 +186,14 @@ public static class Transfer implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Transfer(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Transfer(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"8089F45020BACF13412743FF25FD581E".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -210,29 +210,29 @@ public static class Transfer implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y22#A/Transfer";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Sender = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Sender = x.getNodeName();
     setSender(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new DataFiles(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new DataFiles(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setDataFiles((DataFiles) xc); //Y22#A/Transfer/DataFiles
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setDataFiles((DataFiles) x); //Y22#A/Transfer/DataFiles
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class DataFiles implements org.xdef.component.XComponent{
   public test.xdef.component.Y22.Transfer.DataFiles.Directory getDirectory() {return _Directory;}
-  public void setDirectory(test.xdef.component.Y22.Transfer.DataFiles.Directory x) {_Directory = x;}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  public void setDirectory(test.xdef.component.Y22.Transfer.DataFiles.Directory x){_Directory = x;}
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -294,14 +294,14 @@ public static class DataFiles implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public DataFiles(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public DataFiles(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"4F647045C93B6CF04506D0C61654A7A3".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -316,18 +316,18 @@ public static class DataFiles implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y22#A/Transfer/DataFiles";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Directory(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new Directory(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setDirectory((Directory) xc); //Y22#A/Transfer/DataFiles/Directory
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setDirectory((Directory) x); //Y22#A/Transfer/DataFiles/Directory
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -335,12 +335,10 @@ public static class DataFiles implements org.xdef.component.XComponent{
 public static class Directory implements org.xdef.component.XComponent{
   public String getPath() {return _Path;}
   public java.util.List<test.xdef.component.Y22.Transfer.DataFiles.Directory.File> listOfFile() {return _File;}
-  public void setPath(String x) {_Path = x;}
-  public void addFile(test.xdef.component.Y22.Transfer.DataFiles.Directory.File x) {
-    if (x!=null) _File.add(x);
-  }
+  public void setPath(String x){_Path = x;}
+  public void addFile(test.xdef.component.Y22.Transfer.DataFiles.Directory.File x) {if (x!=null) _File.add(x);}
   public String xposOfPath(){return XD_XPos + "/@Path";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -404,14 +402,14 @@ public static class Directory implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Directory(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Directory(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"3C407DDCA08F5BE77AE843860C81913D".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -429,30 +427,30 @@ public static class Directory implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y22#A/Transfer/DataFiles/Directory";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Path = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Path = x.getNodeName();
     setPath(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new File(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new File(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfFile().add((File) xc); //Y22#A/Transfer/DataFiles/Directory/File
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfFile().add((File) x); //Y22#A/Transfer/DataFiles/Directory/File
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class File implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
-  public void setName(String x) {_Name = x;}
+  public void setName(String x){_Name = x;}
   public String xposOfName(){return XD_XPos + "/@Name";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -510,14 +508,14 @@ public static class File implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public File(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public File(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"BFBC327EA86B45EA71927DD86F161979".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -532,19 +530,19 @@ public static class File implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y22#A/Transfer/DataFiles/Directory/File";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Name = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Name = x.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

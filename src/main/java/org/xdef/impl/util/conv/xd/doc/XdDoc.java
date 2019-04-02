@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.impl.XConstants;
 
 /** Represents any X-definition document.
  * @author Ilia Alexandrov
@@ -36,7 +37,8 @@ public abstract class XdDoc {
 		String namespace = xdef.getDocumentElement().getNamespaceURI();
 		if (XDConstants.XDEF20_NS_URI.equals(namespace)
 			|| XDConstants.XDEF31_NS_URI.equals(namespace)
-			|| XDConstants.XDEF32_NS_URI.equals(namespace)) {
+			|| (XDConstants.XDEF32_NS_URI.equals(namespace)
+				|| XConstants.XDEF32NS_OLD.equals(namespace))) {
 			return new XdDoc_2_0(xdef, namespace);
 		} else {
 			//Not valid X-definition document

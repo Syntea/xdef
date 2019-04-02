@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXComponents_Y06Domain> implements org.xdef.component.XComponent{
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -66,14 +66,14 @@ public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXC
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y06(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y06(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"461D097569D2F8BEC714683DA0E683C0".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -87,18 +87,18 @@ public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXC
   private String XD_XPos;
   private String XD_Model="Y06#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Y06B(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new Y06B(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    setDomain((Y06B) xc); //Y06#A/B
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    setDomain((Y06B) x); //Y06#A/B
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

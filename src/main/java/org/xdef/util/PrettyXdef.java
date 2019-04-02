@@ -13,8 +13,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.XConstants;
 
-/** Generate formated source of the X-definitions.
+/** Generate formatted source of the X-definitions.
  * Also provides main method for calling the program from command line.
  * (see {@link org.xdef.util.PrettyXdef#main(String[])})
  * @author Vaclav Trojan
@@ -24,7 +25,7 @@ public class PrettyXdef {
 	/** Prevent user to create a new instance of PrettyXdef */
 	private PrettyXdef() {}
 
-	/** Write pretty formated files with source X-definitions.
+	/** Write pretty formatted files with source X-definitions.
 	 * @param files Array of files.
 	 * @param outDir directory where to put result files.
 	 * @param encoding The character encoding name or null.
@@ -40,7 +41,7 @@ public class PrettyXdef {
 		}
 	}
 
-	/** Write pretty formated file with source X-definition to given directory.
+	/** Write pretty formatted file with source X-definition to given directory.
 	 * @param file The input file.
 	 * @param outDir directory where to put result files.
 	 * @param encoding The character encoding name or null.
@@ -70,7 +71,7 @@ public class PrettyXdef {
 
 	}
 
-	/** Write pretty formated file with source X-definition.
+	/** Write pretty formatted file with source X-definition.
 	 * @param input the source file.
 	 * @param fname the name of result file.
 	 * @param encoding The character encoding name or null.
@@ -94,7 +95,7 @@ public class PrettyXdef {
 		}
 	}
 
-	/** Write pretty formated X-definition.
+	/** Write pretty formatted X-definition.
 	 * @param input the element with pool of definitions or X-definition.
 	 * @param fname the name of output file.
 	 * @param encoding The character encoding name or null.
@@ -122,8 +123,10 @@ public class PrettyXdef {
 				input.getAttribute(oldPrefixNS))
 				&& !XDConstants.XDEF31_NS_URI.equals(
 					input.getAttribute(oldPrefixNS))
-				&& !XDConstants.XDEF32_NS_URI.equals(
-					input.getAttribute(oldPrefixNS))) {
+				&& !(XDConstants.XDEF32_NS_URI.equals(
+					input.getAttribute(oldPrefixNS))
+					|| XConstants.XDEF32NS_OLD.equals(
+					input.getAttribute(oldPrefixNS)))) {
 				System.err.println("Input is not X-definition");
 				return;
 			}

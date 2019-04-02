@@ -5,12 +5,10 @@ package test.xdef.component;
 public class C extends test.xdef.TestXComponents_C implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<C.Street> listOfStreet() {return _Street;}
-  public void setName(String x) {_Name = x;}
-  public void addStreet(C.Street x) {
-    if (x!=null) _Street.add(x);
-  }
+  public void setName(String x){_Name = x;}
+  public void addStreet(C.Street x) {if (x!=null) _Street.add(x);}
   public String xposOfName(){return XD_XPos + "/@Name";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -75,14 +73,14 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public C(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public C(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"6E4AB5A0C0AC36CF3C6AD6B90F17A9E9".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -99,21 +97,21 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   private String XD_XPos;
   private String XD_Model="C#Town";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Name = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Name = x.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new Street(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new Street(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfStreet().add((Street) xc); //C#Town/Street
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfStreet().add((Street) x); //C#Town/Street
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -121,12 +119,10 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
 public static class Street implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<test.xdef.component.C2> listOfHouse() {return _House;}
-  public void setName(String x) {_Name = x;}
-  public void addHouse(test.xdef.component.C2 x) {
-    if (x!=null) _House.add(x);
-  }
+  public void setName(String x){_Name = x;}
+  public void addHouse(test.xdef.component.C2 x) {if (x!=null) _House.add(x);}
   public String xposOfName(){return XD_XPos + "/@Name";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -190,14 +186,14 @@ public static class Street implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Street(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Street(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"F9798A82BC183697D9CE102B62AF06E9".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -215,21 +211,21 @@ public static class Street implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="C#Town/Street";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Name = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Name = x.getNodeName();
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new test.xdef.component.C2(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new test.xdef.component.C2(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfHouse().add((test.xdef.component.C2) xc); //C#Town/Street/House
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfHouse().add((test.xdef.component.C2) x); //C#Town/Street/House
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

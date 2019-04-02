@@ -7,16 +7,14 @@ public class Y21 implements org.xdef.component.XComponent{
   public test.xdef.component.Y21_enum get$value() {return _$value;}
   public java.util.List<Y21.B> listOfB() {return _B;}
   public test.xdef.component.Y21_enum get$value1() {return _$value1;}
-  public void setb(test.xdef.component.Y21_enum x) {_b = x;}
-  public void set$value(test.xdef.component.Y21_enum x) {_$value = x;}
-  public void addB(Y21.B x) {
-    if (x!=null) _B.add(x);
-  }
-  public void set$value1(test.xdef.component.Y21_enum x) {_$value1 = x;}
+  public void setb(test.xdef.component.Y21_enum x){_b = x;}
+  public void set$value(test.xdef.component.Y21_enum x){_$value = x;}
+  public void addB(Y21.B x) {if (x!=null) _B.add(x);}
+  public void set$value1(test.xdef.component.Y21_enum x){_$value1 = x;}
   public String xposOfb(){return XD_XPos + "/@b";}
   public String xposOf$value(){return XD_XPos + "/$text";}
   public String xposOf$value1(){return XD_XPos + "/$text";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -87,14 +85,14 @@ public class Y21 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Y21(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Y21(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"C3E64FA1EC37712D22CF2278C0EF1DAC".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -115,29 +113,29 @@ public class Y21 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y21#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    if ("Y21#A/$text".equals(xx.getXMNode().getXDPosition())) {
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    if ("Y21#A/$text".equals(x.getXMNode().getXDPosition())){
       _$$value=(char) XD_ndx++;
       set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
-    } else if ("Y21#A/$text[2]".equals(xx.getXMNode().getXDPosition())) {
+    } else if ("Y21#A/$text[2]".equals(x.getXMNode().getXDPosition())){
       _$$value1=(char) XD_ndx++;
       set$value1(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
     }
   }
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_b = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_b = x.getNodeName();
     setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new B(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new B(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfB().add((B) xc); //Y21#A/B
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfB().add((B) x); //Y21#A/B
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -145,11 +143,11 @@ public class Y21 implements org.xdef.component.XComponent{
 public static class B implements org.xdef.component.XComponent{
   public test.xdef.TestXComponents_Y21enum getc() {return _c;}
   public test.xdef.component.Y21_enum get$value() {return _$value;}
-  public void setc(test.xdef.TestXComponents_Y21enum x) {_c = x;}
-  public void set$value(test.xdef.component.Y21_enum x) {_$value = x;}
+  public void setc(test.xdef.TestXComponents_Y21enum x){_c = x;}
+  public void set$value(test.xdef.component.Y21_enum x){_$value = x;}
   public String xposOfc(){return XD_XPos + "/@c";}
   public String xposOf$value(){return XD_XPos + "/$text";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -215,14 +213,14 @@ public static class B implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public B(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public B(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"C5FC5DA651F4C7CC3D8920A256D8A39E".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -240,22 +238,22 @@ public static class B implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="Y21#A/B";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
     set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_c = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_c = x.getNodeName();
     setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

@@ -18,33 +18,35 @@ public class TramvajDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public TramvajDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setOznSegmentu(String x) {_OznSegmentu = x;}
-  public void setLinka(String x) {_Linka = x;}
-  public void setLinkaPoradi(Integer x) {_LinkaPoradi = x;}
-  public void setEvidCislo(String x) {_EvidCislo = x;}
-  public void setTypVozidla(String x) {_TypVozidla = x;}
-  public void setTypBrzd(String x) {_TypBrzd = x;}
-  public void setStavBrzd(String x) {_StavBrzd = x;}
-  public void setKodPojistitele(String x) {_KodPojistitele = x;}
-  public void setNazevPojistitele(String x) {_NazevPojistitele = x;}
-  public void setCisloDokladuPojisteni(String x) {_CisloDokladuPojisteni = x;}
-  public void setPojisteniText(String x) {_PojisteniText = x;}
-  public void setDruhVozidla(String x) {_DruhVozidla = x;}
-  public void setSkoda(Z3 x) {
+  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
+  public void setOznSegmentu(String x){_OznSegmentu = x;}
+  public void setLinka(String x){_Linka = x;}
+  public void setLinkaPoradi(Integer x){_LinkaPoradi = x;}
+  public void setEvidCislo(String x){_EvidCislo = x;}
+  public void setTypVozidla(String x){_TypVozidla = x;}
+  public void setTypBrzd(String x){_TypBrzd = x;}
+  public void setStavBrzd(String x){_StavBrzd = x;}
+  public void setKodPojistitele(String x){_KodPojistitele = x;}
+  public void setNazevPojistitele(String x){_NazevPojistitele = x;}
+  public void setCisloDokladuPojisteni(String x){_CisloDokladuPojisteni = x;}
+  public void setPojisteniText(String x){_PojisteniText = x;}
+  public void setDruhVozidla(String x){_DruhVozidla = x;}
+  public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#TramvajDN/$mixed/Skoda");
     _Skoda = x;
   }
-  public void setJinaSkoda(Z3 x) {
+  public void setJinaSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#TramvajDN/$mixed/JinaSkoda");
     _JinaSkoda = x;
   }
-  public void setVlastnik(TramvajDN.Vlastnik x) {
+  public void setVlastnik(TramvajDN.Vlastnik x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#TramvajDN/$mixed/Vlastnik");
     _Vlastnik = x;
   }
+  public void set$Vlastnik(String x){if(_Vlastnik==null)setVlastnik(new TramvajDN.Vlastnik());_Vlastnik.set$value(x);}
   public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
   public String xposOfLinka(){return XD_XPos + "/@Linka";}
   public String xposOfLinkaPoradi(){return XD_XPos + "/@LinkaPoradi";}
@@ -57,7 +59,7 @@ public class TramvajDN implements org.xdef.component.XComponent{
   public String xposOfCisloDokladuPojisteni(){return XD_XPos + "/@CisloDokladuPojisteni";}
   public String xposOfPojisteniText(){return XD_XPos + "/@PojisteniText";}
   public String xposOfDruhVozidla(){return XD_XPos + "/@DruhVozidla";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -146,14 +148,14 @@ public class TramvajDN implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public TramvajDN(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public TramvajDN(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"CB73722D3B817D010A053582707CE8A8".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -194,77 +196,77 @@ public class TramvajDN implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#TramvajDN";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
-      XD_Name_CisloDokladuPojisteni = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
+      XD_Name_CisloDokladuPojisteni = x.getNodeName();
       setCisloDokladuPojisteni(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
-      XD_Name_DruhVozidla = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
+      XD_Name_DruhVozidla = x.getNodeName();
       setDruhVozidla(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@EvidCislo")) {
-      XD_Name_EvidCislo = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@EvidCislo")) {
+      XD_Name_EvidCislo = x.getNodeName();
       setEvidCislo(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
-      XD_Name_KodPojistitele = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
+      XD_Name_KodPojistitele = x.getNodeName();
       setKodPojistitele(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@Linka")) {
-      XD_Name_Linka = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Linka")) {
+      XD_Name_Linka = x.getNodeName();
       setLinka(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@LinkaPoradi")) {
-      XD_Name_LinkaPoradi = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@LinkaPoradi")) {
+      XD_Name_LinkaPoradi = x.getNodeName();
       setLinkaPoradi(parseResult.getParsedValue().intValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
-      XD_Name_NazevPojistitele = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
+      XD_Name_NazevPojistitele = x.getNodeName();
       setNazevPojistitele(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
-      XD_Name_OznSegmentu = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = x.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
-      XD_Name_PojisteniText = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
+      XD_Name_PojisteniText = x.getNodeName();
       setPojisteniText(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
-      XD_Name_StavBrzd = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
+      XD_Name_StavBrzd = x.getNodeName();
       setStavBrzd(parseResult.getParsedValue().stringValue());
-    } else if (xx.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
-      XD_Name_TypBrzd = xx.getNodeName();
+    } else if (x.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
+      XD_Name_TypBrzd = x.getNodeName();
       setTypBrzd(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_TypVozidla = xx.getNodeName();
+      XD_Name_TypVozidla = x.getNodeName();
       setTypVozidla(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
-    String s = xx.getXMElement().getXDPosition();
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+    String s = x.getXMElement().getXDPosition();
     if ("SouborD1A#TramvajDN/$mixed/JinaSkoda".equals(s))
-      return new test.xdef.component.Z3(this, xx);
+      return new test.xdef.component.Z3(this, x);
     if ("SouborD1A#TramvajDN/$mixed/Skoda".equals(s))
-      return new test.xdef.component.Z3(this, xx);
-    return new Vlastnik(this, xx); // SouborD1A#TramvajDN/$mixed/Vlastnik
+      return new test.xdef.component.Z3(this, x);
+    return new Vlastnik(this, x); // SouborD1A#TramvajDN/$mixed/Vlastnik
   }
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    String s = xc.xGetModelPosition();
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    String s = x.xGetModelPosition();
     if ("SouborD1A#TramvajDN/$mixed/JinaSkoda".equals(s))
-      setJinaSkoda((test.xdef.component.Z3) xc);
+      setJinaSkoda((test.xdef.component.Z3)x);
     else if ("SouborD1A#TramvajDN/$mixed/Skoda".equals(s))
-      setSkoda((test.xdef.component.Z3) xc);
+      setSkoda((test.xdef.component.Z3)x);
     else
-      setVlastnik((Vlastnik) xc); //SouborD1A#TramvajDN/$mixed/Vlastnik
+      setVlastnik((Vlastnik)x); //SouborD1A#TramvajDN/$mixed/Vlastnik
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x) {_$value = x;}
+  public void set$value(String x){_$value = x;}
   public String xposOf$value(){return XD_XPos + "/$text";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -328,14 +330,14 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public Vlastnik(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public Vlastnik(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"0BBC8E2A504A9E2D3C354DD465C51838".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -351,19 +353,19 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="SouborD1A#TramvajDN/$mixed/Vlastnik";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
     set$value(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

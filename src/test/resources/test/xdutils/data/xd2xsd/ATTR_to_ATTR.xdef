@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/3.2" name="main" root="Staff" >
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="main" root="Staff" >
 
          <Subject id="int(1, 999_999_999)" />
 

@@ -104,7 +104,7 @@ public class TestXComponentsGen extends XDTester {
 			XDPool xp = compile(new String[] {xcomponents, xcomponents1});
 			// generate XComponents from xp
 			ArrayReporter reporter = GenXComponent.genXComponent(xp,
-				dir, "UTF-8", false, false, true);
+				dir, "UTF-8", false, true);
 			reporter.checkAndThrowErrors();
 			// should generate warnings on xdef Y19 and xdef Y20
 			if (reporter.errors() 

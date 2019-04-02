@@ -7,13 +7,11 @@ public class P implements org.xdef.component.XComponent{
   public java.util.List<P.b> listOfb() {return _b;}
   public P.c getc() {return _c;}
   public P.d getd() {return _d;}
-  public void seta(P.a x) {_a = x;}
-  public void addb(P.b x) {
-    if (x!=null) _b.add(x);
-  }
-  public void setc(P.c x) {_c = x;}
-  public void setd(P.d x) {_d = x;}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+  public void seta(P.a x){_a = x;}
+  public void addb(P.b x) {if (x!=null) _b.add(x);}
+  public void setc(P.c x){_c = x;}
+  public void setd(P.d x){_d = x;}
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -79,14 +77,14 @@ public class P implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public P(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public P(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"6A9C9D4CD9C6449FC8A4EF18BD6E042A".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -104,34 +102,34 @@ public class P implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="P#A";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx) {
-    String s = xx.getXMElement().getXDPosition();
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+    String s = x.getXMElement().getXDPosition();
     if ("P#A/a".equals(s))
-      return new a(this, xx);
+      return new a(this, x);
     if ("P#A/b".equals(s))
-      return new b(this, xx);
+      return new b(this, x);
     if ("P#A/c".equals(s))
-      return new c(this, xx);
-    return new d(this, xx); // P#A/d
+      return new c(this, x);
+    return new d(this, x); // P#A/d
   }
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    String s = xc.xGetModelPosition();
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    String s = x.xGetModelPosition();
     if ("P#A/a".equals(s))
-      seta((a) xc);
+      seta((a)x);
     else if ("P#A/b".equals(s))
-      listOfb().add((b) xc);
+      listOfb().add((b)x);
     else if ("P#A/c".equals(s))
-      setc((c) xc);
+      setc((c)x);
     else
-      setd((d) xc); //P#A/d
+      setd((d)x); //P#A/d
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -139,29 +137,17 @@ public class P implements org.xdef.component.XComponent{
 public static class a implements org.xdef.component.XComponent{
   public Double geta() {return _a;}
   public org.xdef.sys.SDatetime getb() {return _b;}
-  public java.util.Date dateOfb() {
-    return org.xdef.sys.SDatetime.getDate(_b);
-  }
-  public java.sql.Timestamp timestampOfb() {
-    return org.xdef.sys.SDatetime.getTimestamp(_b);
-  }
-  public java.util.Calendar calendarOfb() {
-    return org.xdef.sys.SDatetime.getCalendar(_b);
-  }
-  public void seta(Double x) {_a = x;}
-  public void setb(org.xdef.sys.SDatetime x) {_b = x;}
-  public void setb(java.util.Date x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.sql.Timestamp x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.util.Calendar x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
+  public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
+  public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
+  public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
+  public void seta(Double x){_a = x;}
+  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfa(){return XD_XPos + "/@a";}
   public String xposOfb(){return XD_XPos + "/@b";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -221,14 +207,14 @@ public static class a implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public a(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public a(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"53A0B7F2020ACBDB880EA4F2E6BBBB6A".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -245,24 +231,24 @@ public static class a implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="P#A/a";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
-      XD_Name_a = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = x.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
     } else {
-      XD_Name_b = xx.getNodeName();
+      XD_Name_b = x.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
@@ -270,29 +256,17 @@ public static class a implements org.xdef.component.XComponent{
 public static class b implements org.xdef.component.XComponent{
   public Double geta() {return _a;}
   public org.xdef.sys.SDatetime getb() {return _b;}
-  public java.util.Date dateOfb() {
-    return org.xdef.sys.SDatetime.getDate(_b);
-  }
-  public java.sql.Timestamp timestampOfb() {
-    return org.xdef.sys.SDatetime.getTimestamp(_b);
-  }
-  public java.util.Calendar calendarOfb() {
-    return org.xdef.sys.SDatetime.getCalendar(_b);
-  }
-  public void seta(Double x) {_a = x;}
-  public void setb(org.xdef.sys.SDatetime x) {_b = x;}
-  public void setb(java.util.Date x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.sql.Timestamp x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.util.Calendar x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
+  public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
+  public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
+  public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
+  public void seta(Double x){_a = x;}
+  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfa(){return XD_XPos + "/@a";}
   public String xposOfb(){return XD_XPos + "/@b";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -352,14 +326,14 @@ public static class b implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public b(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public b(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"AC1DAF66ADABF867EAF179F2BEAE393E".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -376,24 +350,24 @@ public static class b implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="P#A/b";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
-      XD_Name_a = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = x.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
     } else {
-      XD_Name_b = xx.getNodeName();
+      XD_Name_b = x.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
@@ -401,29 +375,17 @@ public static class b implements org.xdef.component.XComponent{
 public static class c implements org.xdef.component.XComponent{
   public Double geta() {return _a;}
   public org.xdef.sys.SDatetime getb() {return _b;}
-  public java.util.Date dateOfb() {
-    return org.xdef.sys.SDatetime.getDate(_b);
-  }
-  public java.sql.Timestamp timestampOfb() {
-    return org.xdef.sys.SDatetime.getTimestamp(_b);
-  }
-  public java.util.Calendar calendarOfb() {
-    return org.xdef.sys.SDatetime.getCalendar(_b);
-  }
-  public void seta(Double x) {_a = x;}
-  public void setb(org.xdef.sys.SDatetime x) {_b = x;}
-  public void setb(java.util.Date x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.sql.Timestamp x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.util.Calendar x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
+  public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
+  public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
+  public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
+  public void seta(Double x){_a = x;}
+  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfa(){return XD_XPos + "/@a";}
   public String xposOfb(){return XD_XPos + "/@b";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -483,14 +445,14 @@ public static class c implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public c(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public c(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"F89A8C95DC7541FC67D2967F2B7976E6".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -507,24 +469,24 @@ public static class c implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="P#A/c";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
-      XD_Name_a = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = x.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
     } else {
-      XD_Name_b = xx.getNodeName();
+      XD_Name_b = x.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
@@ -532,29 +494,17 @@ public static class c implements org.xdef.component.XComponent{
 public static class d implements org.xdef.component.XComponent{
   public Double geta() {return _a;}
   public org.xdef.sys.SDatetime getb() {return _b;}
-  public java.util.Date dateOfb() {
-    return org.xdef.sys.SDatetime.getDate(_b);
-  }
-  public java.sql.Timestamp timestampOfb() {
-    return org.xdef.sys.SDatetime.getTimestamp(_b);
-  }
-  public java.util.Calendar calendarOfb() {
-    return org.xdef.sys.SDatetime.getCalendar(_b);
-  }
-  public void seta(Double x) {_a = x;}
-  public void setb(org.xdef.sys.SDatetime x) {_b = x;}
-  public void setb(java.util.Date x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.sql.Timestamp x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
-  public void setb(java.util.Calendar x) {
-    _b=x==null ? null : new org.xdef.sys.SDatetime(x);
-  }
+  public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
+  public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
+  public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
+  public void seta(Double x){_a = x;}
+  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfa(){return XD_XPos + "/@a";}
   public String xposOfb(){return XD_XPos + "/@b";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -614,14 +564,14 @@ public static class d implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public d(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public d(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"AB8264FDB3CA248DD9C396170CA55707".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -638,24 +588,24 @@ public static class d implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="P#A/d";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
+  public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (xx.getXMNode().getXDPosition().endsWith("/@a")) {
-      XD_Name_a = xx.getNodeName();
+    if (x.getXMNode().getXDPosition().endsWith("/@a")) {
+      XD_Name_a = x.getNodeName();
       seta(parseResult.getParsedValue().doubleValue());
     } else {
-      XD_Name_b = xx.getNodeName();
+      XD_Name_b = x.getNodeName();
       setb(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
     {return null;}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {}
+  public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>

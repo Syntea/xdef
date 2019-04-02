@@ -5,7 +5,7 @@ package test.xdef.component;
 public class C2 implements org.xdef.component.XComponent{
   public Integer getNum() {return _Num;}
   public java.util.List<C1> listOfPerson() {return _Person;}
-  public void setNum(Integer x) {_Num = x;}
+  public void setNum(Integer x){_Num = x;}
   public void addPerson(C1 x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -15,7 +15,7 @@ public class C2 implements org.xdef.component.XComponent{
 
   }
   public String xposOfNum(){return XD_XPos + "/@Num";}
-//<editor-fold defaultstate="collapsed" desc="XComponent interface">
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -80,14 +80,14 @@ public class C2 implements org.xdef.component.XComponent{
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public C2(org.xdef.component.XComponent p, org.xdef.proc.XXNode xx){
-    org.w3c.dom.Element el=xx.getElement();
+  public C2(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+    org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=xx.getXPos();
-    XD_Model=xx.getXMElement().getXDPosition();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
     if (!"3D0F636212BFD715BFF1951DD68327FC".equals(
-      xx.getXMElement().getDigest())) { //incompatible element model
+      x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
@@ -104,21 +104,21 @@ public class C2 implements org.xdef.component.XComponent{
   private String XD_XPos;
   private String XD_Model="C#Town/Street/House";
   @Override
-  public void xSetText(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {}
+  public void xSetText(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){}
   @Override
-  public void xSetAttr(org.xdef.proc.XXNode xx,
-    org.xdef.XDParseResult parseResult) {
-    XD_Name_Num = xx.getNodeName();
+  public void xSetAttr(org.xdef.proc.XXNode x,
+    org.xdef.XDParseResult parseResult){
+    XD_Name_Num = x.getNodeName();
     setNum(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode xx)
-    {return new C1(this, xx);}
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+    {return new C1(this, x);}
   @Override
-  public void xAddXChild(org.xdef.component.XComponent xc) {
-    xc.xSetNodeIndex(XD_ndx++);
-    listOfPerson().add((C1) xc); //C#Town/Street/House/Person
+  public void xAddXChild(org.xdef.component.XComponent x){
+    x.xSetNodeIndex(XD_ndx++);
+    listOfPerson().add((C1) x); //C#Town/Street/House/Person
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
