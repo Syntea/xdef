@@ -8,7 +8,7 @@
     
     <groupId>org.xdef</groupId>
     <artifactId>xdef</artifactId>
-    <version>${version}${snapshot}</version>
+    <version>${revision}${changelist}</version>
     <packaging>jar</packaging>
     
     <name>xdef</name>
@@ -16,9 +16,9 @@
     <description>X-definition 3.2 (Open Source Software)</description>
     
     <properties>
-        <version>32.4.1</version><!-- when changed, change also ${release.date}, see below -->
-        <snapshot>-SNAPSHOT</snapshot>
-        <!--snapshot/-->
+        <revision>32.4.1</revision><!-- when changed, change also ${release.date}, see below -->
+        <changelist>-SNAPSHOT</changelist>
+        <!--changelist/-->
 		<release.date>2019-04-03</release.date><!-- update when changed version -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -270,7 +270,7 @@
         <profile>
             <id>release</id>
             <properties>
-                <snapshot/>
+                <changelist/>
             </properties>
         </profile>
         <profile>
