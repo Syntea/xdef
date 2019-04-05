@@ -316,8 +316,8 @@
                         <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/assembly/src.xml</descriptor>
-                                <descriptor>src/assembly/userdoc.xml</descriptor>
+                                <descriptor>maven/assembly/src.xml</descriptor>
+                                <descriptor>maven/assembly/userdoc.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <executions>
