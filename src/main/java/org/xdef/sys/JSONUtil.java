@@ -173,9 +173,7 @@ public class JSONUtil implements XDConstants {
 			} else if (_p.isChar('"')) { // string
 				StringBuilder sb = new StringBuilder();
 				while (!_p.eos()) {
-					if (_p.isToken("\"\"")) {
-						sb.append('"');
-					} else if (_p.isChar('"')) {
+					if (_p.isChar('"')) {
 						return sb.toString();
 					} else if (_p.isChar('\\')) {
 						char c = _p.peekChar();
@@ -906,10 +904,8 @@ public class JSONUtil implements XDConstants {
 		} else if (p.isSignedInteger()) {
 			return new BigInteger(s);
 		}
-		String t = s.charAt(0) == '"' ?
-			s.substring(1, s.length()-1) : s;
+		String t = s.charAt(0) == '"' ? s.substring(1, s.length()-1) : s;
 		t = SUtils.modifyString(t, "\\\\", "\\");
-		t = SUtils.modifyString(t, "\"\"", "\"");
 		return t;
 	}
 
@@ -1242,7 +1238,7 @@ public class JSONUtil implements XDConstants {
 							sb.append("\\\\");
 							break;
 						case '"':
-							sb.append("\"\"");
+							sb.append("\\\"");
 							break;
 						default:
 							sb.append(c);

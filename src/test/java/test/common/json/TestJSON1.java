@@ -107,7 +107,7 @@ if(true) return;
 + "<js:array/>"+
 "</js:array>"));
 		assertTrue(check("{\"a\":{\"b\":null}}", "<a b='null'></a>"));
-		assertTrue(check("{\"a\":[\"\\\\a\"\"\"]}",
+		assertTrue(check("{\"a\":[\"\\\\a\\\"\"]}",
 "<a>"
 + "<js:array xmlns:js='http://www.xdef.org/json/1.0'>"
 +   "<js:string>\\a\"</js:string>"
