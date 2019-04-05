@@ -260,6 +260,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					);
 					
 					if (
+						defName != null &&
 						defName
 						.equals(
 							p
