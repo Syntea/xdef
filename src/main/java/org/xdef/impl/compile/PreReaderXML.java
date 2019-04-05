@@ -252,7 +252,13 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_pcomp.processIncludeList(_actPNode);
 				// check duplicate of X-definition
 				for (PNode p: _pcomp.getPXDefs()) {
-					System.out.println("defname: " + defName + ", _actPNode: " + _actPNode.toString());
+					//DEBUG
+					System.out.println(
+						"defname: " + defName +
+						", _actPNode: " + _actPNode.toString() +
+						", p._xdef.getName(): " + p._xdef.getName()
+					);
+					
 					if (
 						defName
 						.equals(
