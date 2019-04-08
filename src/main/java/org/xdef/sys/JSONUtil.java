@@ -26,8 +26,8 @@ import org.w3c.dom.NodeList;
 import org.xdef.msg.XDEF;
 import org.xdef.xml.KXmlUtils;
 
-/** Provides methods for conversion from JSON to XML, conversion from XML
- * to JSON and for comparing of JSON objects.
+/** Provides tools for conversion of JSON to XML, conversion of XML
+ * to JSON and comparing of JSON objects.
  * @author Vaclav Trojan
  */
 public class JSONUtil implements XDConstants {
@@ -39,25 +39,32 @@ public class JSONUtil implements XDConstants {
 			_jsprefix = jsprefix;
 		}
 	}
-	
+
 	/** Create instance of JSON parser build with reader,
 	 * @param p parser of source data,
 	 */
 	private JSONUtil(final SParser p) {_p = p;}
-	
-	private SParser _p;
+
+	/** Prefix of JSON namespace URI. */
 	private String _jsprefix = "js";
-//	private String _xdprefix = "xd:";
-	
 	/** Switch to allow comments in JSON source. */
 	private boolean _allowComments = false;
-	/** Switch to set source positions to JSOB objects. */
-	private boolean _setPositions = false;
+//	/** Switch to save source positions of JSOB objects. */
+//	private boolean _setPositions = false;
 
-    public void allowComments(boolean x) {_allowComments = x;}
+	/** Internal parser. */
+	private SParser _p;
 
-    public void setPositions(boolean x) {_setPositions = x;}
-	
+	/** Set switch to allow comments in JSOU source.
+	 * @param x if true the comments are allowed.
+	 */
+	public void allowComments(boolean x) {_allowComments = x;}
+//
+//	/** Set switch to save JSOU source positions of JSOB objects.
+//	 * @param x if true the source positions are saved.
+//	 */
+//	public void setPositions(boolean x) {_setPositions = x;}
+
 	/** Check if argument is a hexadecimal digit. */
 	private static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
@@ -150,7 +157,7 @@ public class JSONUtil implements XDConstants {
 		}
 		return sb.toString();
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 // Parse JSON
 ////////////////////////////////////////////////////////////////////////////////
@@ -209,9 +216,8 @@ public class JSONUtil implements XDConstants {
 					String name = (String) o;
 					isWhitespace();
 					if (!_p.isChar(':')) {
-						// ":" expected
-						throw new SRuntimeException(JSON.JSON002, ":",
-							genPosMod());
+						throw new SRuntimeException(// ":" expected
+							JSON.JSON002, ":", genPosMod());
 					}
 					isWhitespace();
 					result.put(name, readValue());
@@ -222,6 +228,10 @@ public class JSONUtil implements XDConstants {
 					}
 					if (_p.isChar(',')) {
 						isWhitespace();
+					} else {
+						// JSON002="&{0}" expected&{#SYS000}
+						throw new SRuntimeException(
+							JSON.JSON002, ",", genPosMod());
 					}
 				} else {
 					// String with name of item expected
@@ -242,6 +252,9 @@ public class JSONUtil implements XDConstants {
 				}
 				if (_p.isChar(',')) {
 					isWhitespace();
+				} else {
+					// JSON002="&{0}" expected&{#SYS000}
+					throw new SRuntimeException(JSON.JSON002, ",", genPosMod());
 				}
 			}
 		} else if (_p.isChar('"')) { // string
@@ -458,7 +471,12 @@ public class JSONUtil implements XDConstants {
 // JSON to string
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static void objToJSONString(final Object obj,
+	/** Create source form of JSON value.
+	 * @param obj JSON value.
+	 * @param indent indentation.
+	 * @param sb where the source form is recorded.
+	 */
+	private static void valueToJSONString(final Object obj,
 		final String indent,
 		final StringBuilder sb) {
 		if (obj == null) {
@@ -507,7 +525,7 @@ public class JSONUtil implements XDConstants {
 			sb.append(obj.toString());
 		} else if (obj instanceof List) {
 			List<?> x = (List) obj;
-			listToJSONString(x, indent, sb);
+			arrayToJSONString(x, indent, sb);
 		} else if (obj instanceof Map) {
 			Map<?,?> x = (Map) obj;
 			mapToJSONString(x, indent, sb);
@@ -516,17 +534,22 @@ public class JSONUtil implements XDConstants {
 		}
 	}
 
-	private static void listToJSONString (final List<?> list,
+	/** Create source form of JSON array.
+	 * @param array JSON array.
+	 * @param indent indentation.
+	 * @param sb where the source form is recorded.
+	 */
+	private static void arrayToJSONString (final List<?> array,
 		final String indent,
 		final StringBuilder sb) {
 		sb.append('[');
-		if (list.isEmpty()) {
+		if (array.isEmpty()) {
 			sb.append(']');
 			return;
 		}
 		String ind = (indent != null) ? indent + "  " : null;
 		boolean first = true;
-		for (Object o: list) {
+		for (Object o: array) {
 			if (first) {
 				first = false;
 			} else {
@@ -535,7 +558,7 @@ public class JSONUtil implements XDConstants {
 			if (ind != null) {
 				sb.append(ind);
 			}
-			objToJSONString(o, ind, sb);
+			valueToJSONString(o, ind, sb);
 		}
 		if (indent != null) {
 			sb.append(indent);
@@ -543,6 +566,11 @@ public class JSONUtil implements XDConstants {
 		sb.append(']');
 	}
 
+	/** Create source form of JSON map.
+	 * @param map JSON map.
+	 * @param indent indentation.
+	 * @param sb where the source form is recorded.
+	 */
 	private static void mapToJSONString(final Map<?,?> map,
 		final String indent,
 		final StringBuilder sb) {
@@ -562,9 +590,9 @@ public class JSONUtil implements XDConstants {
 			if (ind != null) {
 				sb.append(ind);
 			}
-			objToJSONString(e.getKey(), ind, sb);
+			valueToJSONString(e.getKey(), ind, sb);
 			sb.append(':');
-			objToJSONString(e.getValue(), ind, sb);
+			valueToJSONString(e.getValue(), ind, sb);
 		}
 		if (ind != null) {
 			sb.append(indent);
@@ -589,7 +617,7 @@ public class JSONUtil implements XDConstants {
 		StringBuilder sb = new StringBuilder();
 		String ind = indent ? "\n" : null;
 		if (obj instanceof List) {
-			listToJSONString((List) obj, ind, sb);
+			arrayToJSONString((List) obj, ind, sb);
 		} else if (obj instanceof Map) {
 			mapToJSONString((Map) obj, ind, sb);
 		} else {
@@ -603,6 +631,10 @@ public class JSONUtil implements XDConstants {
 // Create JSON from XML.
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Get JSON value from string.
+	 * @param source string with JSON simple value
+	 * @return
+	 */
 	private static Object getValue(final String source) {
 		String s;
 		if (source == null || "null".equals(s = source.trim())) {
@@ -629,7 +661,7 @@ public class JSONUtil implements XDConstants {
 			case '8':
 			case '9':
 				try {
-					if (s.indexOf('.') > 0 
+					if (s.indexOf('.') > 0
 						|| s.indexOf('e') > 0 || s.indexOf('E') > 0) {
 						return new BigDecimal(s);
 					} else {
@@ -692,6 +724,10 @@ public class JSONUtil implements XDConstants {
 		}
 	}
 
+	/** Check if the node is a value.
+	 * @param n the node to be checked.
+	 * @return true if and only if the node represents a JSON value.
+	 */
 	private static boolean isValue(final Node n) {
 		if (n.getNodeType() == Node.ELEMENT_NODE) {
 			String uri = n.getNamespaceURI();
@@ -704,7 +740,7 @@ public class JSONUtil implements XDConstants {
 				if (nl == null || nl.getLength() == 0) {
 					return true;
 				}
-				if (nl.getLength() == 1 
+				if (nl.getLength() == 1
 					&& nl.item(0).getNodeType() == Node.TEXT_NODE) {
 					return true;
 				}
@@ -713,61 +749,69 @@ public class JSONUtil implements XDConstants {
 		return false;
 	}
 
-	private static void genArrayItems(NodeList nl, List<Object> list) {
+	/** Get items from NodeList.
+	 * @param nl NodeList with items.
+	 * @param array the array where to save items.
+	 */
+	private static void getArrayItems(NodeList nl, List<Object> array) {
 		int len = nl == null ? null : nl.getLength();
 		if (len > 0) {
 			if (len == 1 && nl.item(0).getNodeType() == Node.TEXT_NODE) {
-				String s = nl.item(0).getNodeValue().trim();				
+				String s = nl.item(0).getNodeValue().trim();
 				// ignore empty strings (assumed as indentation)
 				if (!s.isEmpty()) {
-					list.add(getValue(s));
+					array.add(getValue(s));
 				}
 				return;
 			}
 			for (int i = 0; nl != null && i < nl.getLength(); i++) {
 				Node n = nl.item(i);
 				if (isValue(n)) {
-					list.add(getValue(n.getNodeValue()));
-				} else 
+					array.add(getValue(n.getNodeValue()));
+				} else
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
 					Element el = (Element) n;
 					if (JSON_NS_URI.equals(el.getNamespaceURI())) {
 						if ("array".equals(el.getLocalName())) {
-							List<Object> list1 = new ArrayList<Object>();
-							genArrayItems(el.getChildNodes(), list1);
-							list.add(list1);
+							List<Object> array1 = new ArrayList<Object>();
+							getArrayItems(el.getChildNodes(), array1);
+							array.add(array1);
 						} else if ("map".equals(el.getLocalName())) {
-							Map<String, Object> map = 
+							Map<String, Object> map =
 								new LinkedHashMap<String, Object>();
 							genMapItems(el, map);
-							list.add(map);
+							array.add(map);
 						} else if ("null".equals(el.getLocalName())) {
-							list.add(null);
+							array.add(null);
 						} else if ("string".equals(el.getLocalName())) {
-							list.add(el.getTextContent());
+							array.add(el.getTextContent());
 						} else {
-							list.add(getValue(el.getTextContent()));
+							array.add(getValue(el.getTextContent()));
 						}
 						continue;
 					}
-					Map<String, Object> map = 
+					Map<String, Object> map =
 						new LinkedHashMap<String, Object>();
 					genMapItems(el, map);
 					Map<String, Object> map1 =
 						new LinkedHashMap<String, Object>();
 					map1.put(el.getTagName(), map);
-					list.add(map1);
+					array.add(map1);
 				} else if (n.getNodeType() == Node.TEXT_NODE) {
 					String s = n.getNodeValue().trim();
 					if (!s.isEmpty()) {
-						list.add(getValue(s));
-					}	
+						array.add(getValue(s));
+					}
 				}
 			}
 		}
 	}
 
-	private static void genMapItems(final Element el, 
+	/** Get map items from Element.
+	 * @param el Element with map items.
+	 * @param map the map where to save map items.
+	 */
+	private static void genMapItems(final Element el,
 		final Map<String, Object> map) {
 		NamedNodeMap attrs = el.getAttributes();
 		for (int i = 0; attrs != null && i < attrs.getLength(); i++) {
@@ -778,7 +822,7 @@ public class JSONUtil implements XDConstants {
 					getValue(n.getNodeValue()));
 			}
 		}
-		NodeList nl = el.getChildNodes();		
+		NodeList nl = el.getChildNodes();
 		for (int i = 0; nl != null && i < nl.getLength(); i++) {
 			Node n = nl.item(i);
 			if (isValue(n)) {
@@ -792,6 +836,10 @@ public class JSONUtil implements XDConstants {
 		}
 	}
 
+	/** Create JSON object from XML element.
+	 * @param el XML element
+	 * @return JSON object.
+	 */
 	public final static Object xmlToJson(final Element el) {
 		if (JSON_NS_URI.equals(el.getNamespaceURI())) {
 			if ("map".equals(el.getLocalName())) {
@@ -799,9 +847,9 @@ public class JSONUtil implements XDConstants {
 				genMapItems(el, map);
 				return map;
 			} else if ("array".equals(el.getLocalName())) {
-				List<Object> list = new ArrayList<Object>();
-				genArrayItems(el.getChildNodes(), list);
-				return list;
+				List<Object> array = new ArrayList<Object>();
+				getArrayItems(el.getChildNodes(), array);
+				return array;
 			}
 			throw new RuntimeException("Incorrect root JSON element: "
 				+ el.getLocalName());
@@ -832,24 +880,37 @@ public class JSONUtil implements XDConstants {
 			return map;
 		} else {
 			genMapItems((Element) el.cloneNode(false), map);
-			List<Object> list = new ArrayList<Object>();
-			genArrayItems(el.getChildNodes(), list);
-			map.put(toJsonName(el.getNodeName()), list);
-			return list;
+			List<Object> array = new ArrayList<Object>();
+			getArrayItems(el.getChildNodes(), array);
+			map.put(toJsonName(el.getNodeName()), array);
+			return array;
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// Create XML from JSON.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create Element from JSON map item.
+	 * @param xmlns map of namespaces.
+	 * @param doc document from which the element will be created.
+	 * @param key the name of item.
+	 * @return Element created from JSON map item.
+	 */
 	private static Element createElement(final Map<String, String> xmlns,
 		final Document doc,
 		final String key){
 		int ndx = key.indexOf(':');
-		String uri = ndx < 0 ? xmlns.get("xmlns")
-			: xmlns.get("xmlns:" + key.substring(0, ndx));
-		return uri == null ? doc.createElement(key)
-			: doc.createElementNS(uri, key);
+		String uri = ndx < 0
+			? xmlns.get("xmlns") : xmlns.get("xmlns:" + key.substring(0, ndx));
+		return uri==null ? doc.createElement(key):doc.createElementNS(uri, key);
 	}
 
 	@SuppressWarnings("unchecked")
+	/** Generate XML from a map.
+	 * @param map JSON map from which an Element will be created.
+	 * @param parent parent element.
+	 */
 	private void genJMap(final Map<String, Object> map, final Element parent) {
 		Map<String, String> xmlns = new LinkedHashMap<String, String>();
 		for (Map.Entry<String, Object> e: map.entrySet()) {
@@ -877,13 +938,13 @@ public class JSONUtil implements XDConstants {
 					parent.appendChild(el1);
 					genJMap((Map<String, Object>) val, el1);
 				} else if (val instanceof List) {
-					List<Object> list = (List<Object>) val;
+					List<Object> array = (List<Object>) val;
 					Element el1 = createElement(xmlns, doc, key);
 					parent.appendChild(el1);
-					if (list.isEmpty()) {
+					if (array.isEmpty()) {
 						el1.appendChild(createElement(xmlns, doc, "js:array"));
 					} else {
-						genJList((List<Object>) val, el1);
+						genArray((List<Object>) val, el1);
 					}
 				} else {
 					if (!(key.startsWith("xmlns")&& JSON_NS_URI.equals(val))) {
@@ -904,10 +965,14 @@ public class JSONUtil implements XDConstants {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void genJList(final List<Object> list, final Element parent) {
+	/** Generate XML from an JSON array.
+	 * @param array JSON array which will be converted to XML.
+	 * @param parent parent element.
+	 */
+	private void genArray(final List<Object> array, final Element parent) {
 		parent.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 			"xmlns:" + _jsprefix , JSON_NS_URI);
-		for (Object o: list) {
+		for (Object o: array) {
 			Element el1;
 			if (o == null) {
 				el1 = parent.getOwnerDocument().createElementNS(
@@ -923,7 +988,7 @@ public class JSONUtil implements XDConstants {
 				} else if (o instanceof List) {
 					el1 = parent.getOwnerDocument().createElementNS(
 						JSON_NS_URI, _jsprefix + ":array");
-					genJList((List<Object>) o, el1);
+					genArray((List<Object>) o, el1);
 					parent.appendChild(el1);
 				} else {
 					el1 = parent.getOwnerDocument().createElementNS(
@@ -949,10 +1014,10 @@ public class JSONUtil implements XDConstants {
 				JSON_NS_URI, _jsprefix + ":map", null);
 			genJMap(map, doc.getDocumentElement());
 		} else if (json instanceof List) {
-			List<Object> list = (List<Object>) json;
+			List<Object> array = (List<Object>) json;
 			doc = KXmlUtils.newDocument(
 				JSON_NS_URI, _jsprefix + ":array", null);
-			genJList(list, doc.getDocumentElement());
+			genArray(array, doc.getDocumentElement());
 		} else {
 			throw new RuntimeException("Unknown instance of JSON");
 		}
@@ -962,7 +1027,7 @@ public class JSONUtil implements XDConstants {
 	public static final Element jsonToXml(final Object json) {
 		return jsonToXml(json, null);
 	}
-	
+
 	public static final Element jsonToXml(final Object json,
 		final String prefix) {
 		return new JSONUtil(prefix).jsToXML(json);
@@ -977,10 +1042,10 @@ public class JSONUtil implements XDConstants {
 //	 * @param el input data.
 //	 * @return JSON object created from Element.
 //	 */
-//	public static Element xmlToJson(XDDocument xd, Element el) {		
+//	public static Element xmlToJson(XDDocument xd, Element el) {
 //		return null;
 //	}
-	
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create XML element from JSON according to XDDocument.
@@ -991,18 +1056,23 @@ public class JSONUtil implements XDConstants {
 //	 * @param json json object.
 //	 * @return the element in the form of JSON object.
 //	 */
-//	public static Element jsonToXml(XDDocument xd, Object json) {		
+//	public static Element jsonToXml(XDDocument xd, Object json) {
 //		return null;
 //	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 // Compare two JSON objects.
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static boolean equalList(final List<?> l1, final List<?> l2) {
-		if (l1.size() == l2.size()) {
-			for (int i = 0; i < l1.size(); i++) {
-				if (!equalValue(l1.get(i), l2.get(i))) {
+	/** Check if JSON arrays from arguments are equal.
+	 * @param a1 first array.
+	 * @param a2 second array.
+	 * @return true if and only if both arrays are equal.
+	 */
+	private static boolean equalArray(final List<?> a1, final List<?> a2) {
+		if (a1.size() == a2.size()) {
+			for (int i = 0; i < a1.size(); i++) {
+				if (!equalValue(a1.get(i), a2.get(i))) {
 					return false;
 				}
 			}
@@ -1011,6 +1081,11 @@ public class JSONUtil implements XDConstants {
 		return false;
 	}
 
+	/** Check if JSON maps from arguments are equal.
+	 * @param m1 first map.
+	 * @param m2 second map.
+	 * @return true if and only if both maps are equal.
+	 */
 	private static boolean equalMap(final Map<?,?> m1, final Map<?, ?>m2) {
 		if (m1.size() == m2.size()) {
 			for (Object k: m1.keySet()) {
@@ -1023,76 +1098,91 @@ public class JSONUtil implements XDConstants {
 		return false;
 	}
 
-	private static boolean equalNumber(final Number o1, final Number o2) {
-		if (o1 instanceof BigDecimal) {
-			if (o2 instanceof BigDecimal) {
-				return o1.equals(o2);
-			} else if (o2 instanceof BigInteger) {
-				return o1.equals(new BigDecimal((BigInteger) o2));
-			} else if (o2 instanceof Long || o2 instanceof Integer
-				|| o2 instanceof Short || o2 instanceof Byte) {
-				return o1.equals(new BigDecimal(o2.longValue()));
-			} else if (o2 instanceof Double || o2 instanceof Float) {
-				return o1.equals(new BigDecimal(o2.doubleValue()));
+	/** Check if JSON numbers from arguments are equal.
+	 * @param n1 first number.
+	 * @param n2 second number.
+	 * @return true if and only if both numbers are equal.
+	 * @throws SRuntimeException if objects are incomparable
+	 */
+	private static boolean equalNumber(final Number n1, final Number n2) {
+		if (n1 instanceof BigDecimal) {
+			if (n2 instanceof BigDecimal) {
+				return n1.equals(n2);
+			} else if (n2 instanceof BigInteger) {
+				return n1.equals(new BigDecimal((BigInteger) n2));
+			} else if (n2 instanceof Long || n2 instanceof Integer
+				|| n2 instanceof Short || n2 instanceof Byte) {
+				return n1.equals(new BigDecimal(n2.longValue()));
+			} else if (n2 instanceof Double || n2 instanceof Float) {
+				return n1.equals(new BigDecimal(n2.doubleValue()));
 			}
-		} else if (o1 instanceof BigInteger) {
-			if (o2 instanceof BigInteger) {
-				return o1.equals(o2);
+		} else if (n1 instanceof BigInteger) {
+			if (n2 instanceof BigInteger) {
+				return n1.equals(n2);
 			}
-			if (o2 instanceof BigDecimal) {
-				return equalNumber(o2, o1);
-			} else if (o2 instanceof Long || o2 instanceof Integer
-				|| o2 instanceof Short || o2 instanceof Byte) {
-				return o1.equals(new BigInteger(o2.toString()));
-			} else if (o2 instanceof Double || o2 instanceof Float) {
-				return o1.equals(
-					new BigInteger(String.valueOf(o2.longValue())));
+			if (n2 instanceof BigDecimal) {
+				return equalNumber(n2, n1);
+			} else if (n2 instanceof Long || n2 instanceof Integer
+				|| n2 instanceof Short || n2 instanceof Byte) {
+				return n1.equals(new BigInteger(n2.toString()));
+			} else if (n2 instanceof Double || n2 instanceof Float) {
+				return n1.equals(
+					new BigInteger(String.valueOf(n2.longValue())));
 			}
-		} else if (o1 instanceof Long || o1 instanceof Integer
-			|| o1 instanceof Short || o1 instanceof Byte) {
-			if (o2 instanceof Long || o2 instanceof Integer
-				|| o2 instanceof Short || o2 instanceof Byte) {
-				return o1.longValue() == o2.longValue();
-			} else if (o2 instanceof Double || o2 instanceof Float) {
-				return o1.longValue() == o2.longValue();
+		} else if (n1 instanceof Long || n1 instanceof Integer
+			|| n1 instanceof Short || n1 instanceof Byte) {
+			if (n2 instanceof Long || n2 instanceof Integer
+				|| n2 instanceof Short || n2 instanceof Byte) {
+				return n1.longValue() == n2.longValue();
+			} else if (n2 instanceof Double || n2 instanceof Float) {
+				return n1.longValue() == n2.longValue();
 			}
-		} else if (o1 instanceof Double || o1 instanceof Float) {
-			return o1.doubleValue() == o2.doubleValue();
+		} else if (n1 instanceof Double || n1 instanceof Float) {
+			return n1.doubleValue() == n2.doubleValue();
 		}
-		return o1.equals(o2);
+		//Incomparable objects &{0} and &{1}
+		throw new SRuntimeException(JSON.JSON012,
+			n1.getClass().getName(), n2.getClass().getName());
 	}
 
-	private static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null) {
-			return o2 == null;
-		} else if (o2 == null) {
+	/** Check if JSON values from arguments are equal.
+	 * @param n1 first value.
+	 * @param n2 second value.
+	 * @return true if and only if both values are equal.
+	 * @throws SRuntimeException if objects are incomparable
+	 */
+	private static boolean equalValue(final Object v1, final Object v2) {
+		if (v1 == null) {
+			return v2 == null;
+		} else if (v2 == null) {
 			return false;
 		}
-		if (o1 instanceof Map) {
-			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
+		if (v1 instanceof Map) {
+			return v2 instanceof Map ? equalMap((Map)v1, (Map)v2) : false;
 		}
-		if (o1 instanceof List) {
-			return o2 instanceof List ? equalList((List) o1, (List) o2) : false;
+		if (v1 instanceof List) {
+			return v2 instanceof List ? equalArray((List) v1, (List) v2) : false;
 		}
-		if (o1 instanceof String) {
-			return ((String) o1).equals(o2);
+		if (v1 instanceof String) {
+			return ((String) v1).equals(v2);
 		}
-		if (o1 instanceof Number) {
-			return (o2 instanceof Number)
-				? equalNumber((Number) o1, (Number) o2) : false;
+		if (v1 instanceof Number) {
+			return (v2 instanceof Number)
+				? equalNumber((Number) v1, (Number) v2) : false;
 		}
-		if (o1 instanceof Boolean) {
-			return ((Boolean) o1).equals(o2);
+		if (v1 instanceof Boolean) {
+			return ((Boolean) v1).equals(v2);
 		}
-		// Incomparable objects &{0} and &{1}
+		//Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
-			o1.getClass().getName(), o2.getClass().getName());
+			v1.getClass().getName(), v2.getClass().getName());
 	}
 
 	/** Compare two JSON objects.
-	 * @param j1 first object with JSON data.
-	 * @param j2 second object with JSON data.
+	 * @param j1 first object with JSON.
+	 * @param j2 second object with JSON.
 	 * @return true if and only if both objects contains equal data.
+	 * @throws SRuntimeException if objects are incomparable
 	 */
 	public static final boolean jsonEqual(final Object j1, final Object j2) {
 		if (j1 != null && j2 != null
@@ -1100,7 +1190,7 @@ public class JSONUtil implements XDConstants {
 			&& (j2 instanceof Map || j2 instanceof List)) {
 			return equalValue(j1, j2);
 		}
-		// Uncomparable objects &{0} and &{1}
+		//Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
 			j1 == null ? "null" : j1.getClass().getName(),
 			j2 == null ? "null" : j2.getClass().getName());
