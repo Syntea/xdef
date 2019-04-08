@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.xdef.impl.XConstants;
 
-/** Contains information about parsed source item.
+/** Contains parsed source item.
  * @author Trojan
  */
-/** Object with the parsed precompiled node. */
 public final class PNode {
 	final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
 	final List<PNode> _childNodes = new ArrayList<PNode>(); //child nodes
@@ -124,7 +124,7 @@ public final class PNode {
 
 	/** Expand macros.
 	 * @param reporter error reporter.
-	 * @param actDefName actua X-definition name.
+	 * @param actDefName actual X-definition name.
 	 * @param macros map with macros.
 	 */
 	public void expandMacros(final ReportWriter reporter,
@@ -134,7 +134,7 @@ public final class PNode {
 			(XDConstants.XDEF20_NS_URI.equals(_nsURI)
 			|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
 			|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)
-				|| XDConstants.XDEF32_NS_URI.equals(_nsURI)))) {
+				|| XConstants.XDEF32NS_OLD.equals(_nsURI)))) {
 			return; // it is not macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(

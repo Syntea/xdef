@@ -52,7 +52,6 @@ public class TestAllFull {
 			new TestGroups(),
 			new TestImplementsAndUses(),
 			new TestInclude(),
-			new TestJSON(),
 			new TestKeyAndRef(),
 			new TestLexicon(),
 			new TestNamespaces(),

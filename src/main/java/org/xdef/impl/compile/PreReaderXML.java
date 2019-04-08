@@ -250,22 +250,24 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._xdef = new XDefinition(defName,
 					null, null, null, _actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
-				// check duplicate of X-definition
-				for (PNode p: _pcomp.getPXDefs()) {
-					if (defName.equals(p._xdef.getName())) {
-						if (defName.length() == 0) {
-							//Only one X-definition in the compiled XDPool
-							// may be without name
-							error(_actPNode._name, XDEF.XDEF212);
-						} else {
-							//X-definition '&{0}' already exists
-							error(_actPNode._name, XDEF.XDEF303, defName);
-						}
-						defName = null;
-					}
-				}
 				if (defName != null) {
-					_pcomp.getPXDefs().add(_actPNode);
+					// check duplicate of X-definition
+					for (PNode p: _pcomp.getPXDefs()) {
+						if (defName.equals(p._xdef.getName())) {
+							if (defName.length() == 0) {
+								//Only one X-definition in the compiled XDPool
+								// may be without name
+								error(_actPNode._name, XDEF.XDEF212);
+							} else {
+								//X-definition '&{0}' already exists
+								error(_actPNode._name, XDEF.XDEF303, defName);
+							}
+							defName = null;
+						}
+					}
+					if (defName != null) {
+						_pcomp.getPXDefs().add(_actPNode);
+					}
 				}
 			}
 		} else {
