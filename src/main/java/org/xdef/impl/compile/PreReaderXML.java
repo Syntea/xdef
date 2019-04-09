@@ -263,7 +263,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 								error(_actPNode._name, XDEF.XDEF303, defName);
 							}
 							defName = null;
-							continue;
+							break;
 						}
 					}
 					if (defName != null) {
