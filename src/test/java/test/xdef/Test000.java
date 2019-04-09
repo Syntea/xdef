@@ -541,7 +541,7 @@ public final class Test000 extends XDTester {
 			File[] defFiles = new File[] {
 				new File(dataDir + "Test000_05_L1_common_.xdef"),
 				new File(dataDir + "Test000_05_L1_common.xdef"),
-				new File(dataDir + "Test000_05_L1Macros.xdef"),
+				//new File(dataDir + "Test000_05_L1Macros.xdef"),
 				new File(dataDir + "Test000_05_RegistraceSU_.xdef"),
 				new File(dataDir + "Test000_05_RegistraceSU.xdef")
 			};
