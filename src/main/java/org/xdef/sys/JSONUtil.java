@@ -3,6 +3,7 @@ package org.xdef.sys;
 import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
+import org.xdef.xml.KNamespace;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,58 +13,71 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.msg.XDEF;
-import org.xdef.xml.KXmlUtils;
 
-/** Provides tools for conversion of JSON to XML, conversion of XML
- * to JSON and comparing of JSON objects.
+/** Provides methods for conversion from JSON to XML, conversion from XML
+ * to JSON and for comparing of JSON objects.
  * @author Vaclav Trojan
  */
 public class JSONUtil implements XDConstants {
 
-	private JSONUtil(String jsprefix) {
-		if (jsprefix == null) {
-			_jsprefix = "js";
-		} else {
-			_jsprefix = jsprefix;
+	/** JSON map. */
+	public static final String J_MAP = "map";
+	/** JSON array. */
+	public static final String J_ARRAY = "array";
+	/** JSON string item. */
+	public static final String J_STRING = "string";
+	/** JSON number item. */
+	public static final String J_NUMBER = "number";
+	/** JSON boolean item. */
+	public static final String J_BOOLEAN = "boolean";
+	/** JSON null item. */
+	public static final String J_NULL = "null";
+
+	/** JSON any item with JSON value. */
+	public static final String J_ITEM = "item";
+	/** Extension of JSON map if named values are map or array. */
+	public static final String J_EXTMAP = "mapItems";
+
+	/** This field is internally used. */
+	public final KNamespace _ns = new KNamespace();
+
+	public int _n = 0;
+
+	/** This method is internally used. */
+	public final void pushContext() {
+		_ns.pushContext();
+		_n++;
+	}
+
+	/** This method is internally used. */
+	public final void popContext() {
+		_ns.popContext();
+		_n--;
+		if (_n < 0) {
+			// Internal error&{0}{: }
+			throw new SRuntimeException(SYS.SYS066,	"Namespace nesting: "+_n);
 		}
 	}
 
-	/** Create instance of JSON parser build with reader,
-	 * @param p parser of source data,
-	 */
-	private JSONUtil(final SParser p) {_p = p;}
-
-	/** Prefix of JSON namespace URI. */
-	private String _jsprefix = "js";
-	/** Switch to allow comments in JSON source. */
-	private boolean _allowComments = false;
-//	/** Switch to save source positions of JSOB objects. */
-//	private boolean _setPositions = false;
-
-	/** Internal parser. */
-	private SParser _p;
-
-	/** Set switch to allow comments in JSOU source.
-	 * @param x if true the comments are allowed.
-	 */
-	public void allowComments(boolean x) {_allowComments = x;}
-//
-//	/** Set switch to save JSOU source positions of JSOB objects.
-//	 * @param x if true the source positions are saved.
-//	 */
-//	public void setPositions(boolean x) {_setPositions = x;}
+	/** Create instance of JSONUtil object (used only internally). */
+	public JSONUtil() {}
 
 	/** Check if argument is a hexadecimal digit. */
 	private static int hexDigit(final char ch) {
@@ -71,290 +85,208 @@ public class JSONUtil implements XDConstants {
 		return i >= 16 ? i - 6 : i;
 	}
 
-	/** Convert character to representation used in XML names. */
-	private static String toXmlChar(final char c) {
-		return "_u" + Integer.toHexString(c) + '_';
-	}
-
-	/** Check if on position in the string given by index if is JSON special
-	 * char representation in XML format.
-	 * @param s inspected string.
-	 * @param index index where to start inspection.
-	 * @return true if on
-	 */
-	private static boolean isJChar(final String s, final int index) {
-		if (index + 3 > s.length() ||
-			s.charAt(index) != '_' || s.charAt(index+1) != 'u' ||
-			hexDigit(s.charAt(index+2)) < 0) {
-			return false;
-		}
-		// is hexDigit
-		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (hexDigit(ch) < 0) {
-				//if not hexadecimal digit and follows '_' return true
-				return ch == '_'; // if
-			}
-		}
-		return false;
-	}
-
-	/** Get XML name created from JSOM pair name.
-	 * @param s JSOM pair name.
-	 * @return XML name.
-	 */
-	public final static String toXmlName(final String s) {
-		if (s.length() == 0) {
-			return "_u0_"; // empty string
-		}
-		StringBuilder sb = new StringBuilder();
-		char ch = s.charAt(0);
-		sb.append(isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, (byte) 10)
-				!= StringParser.XML_CHAR_NAME_START ? toXmlChar(ch) : ch);
-		boolean firstcolon = true;
-		for (int i = 1; i < s.length(); i++) {
-			ch = s.charAt(i);
-			if (isJChar(s, i)) {
-				sb.append(toXmlChar(ch));
-			} else if (ch == ':' && firstcolon) {
-				firstcolon = false;
-				sb.append(':');
-			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
-				StringParser.XML_CHAR_COLON) {
-				sb.append(ch);
-			} else {
-				firstcolon = false;
-				sb.append(toXmlChar(ch));
-			}
-		}
-		return sb.toString();
-	}
-
-	/** Create JSON name from XML name.
-	 * @param name XML name.
-	 * @return JSON name.
-	 */
-	private static String toJsonName(final String name) {
-		if ("_u0_".equals(name)) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < name.length(); i++) {
-			char ch = name.charAt(i);
-			if (ch == '_' && i + 2 < name.length()) {
-				if (isJChar(name, i)) {
-					int ndx = name.indexOf('_', i+1);
-					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
-					sb.append((char) x);
-					i = ndx;
-				} else {
-					sb.append('_');
-				}
-			} else {
-				sb.append(ch);
-			}
-		}
-		return sb.toString();
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
-// Parse JSON
+// parse JSON
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create modification string with source position.
-	 * @return modification string with source position.
-	 */
-	private String genPosMod() {
-		if (_p instanceof StringParser) {
-			StringParser p = (StringParser) _p;
-			return "&{line}" + p.getLineNumber()
-				+ "&{column}" + p.getColumnNumber()
-				+ "&{sysId}" + p.getSysId();
-		} else {
-			return null;
-		}
-	}
+	/** JSON parser class. */
+	private static final class JParser {
+		/** parser used for parsing of source. */
+		private final SParser _p;
 
-	/** Check white space or comment.
-	 * @return true if and only if a white space or comment was found.
-	 */
-	private boolean isWhitespace() {
-		boolean result = _p.isSpaces();
-		if (_allowComments) {
-			while (_p.isToken("/*")) {
-				result = true;
-				if (!_p.findToken("*/")) {
-					//Unclosed comment in the script
-					throw new SRuntimeException(XDEF.XDEF401);
+		private boolean _commentsAllowed;
+
+		/** Create instance of JSON parser build with reader,
+		 * @param p parser of source data,
+		 */
+		private JParser(final SParser p) {_p = p;}
+
+		/** Create modification string with source position.
+		 * @return modification string with source position.
+		 */
+		private String genPosMod() {
+			if (_p instanceof StringParser) {
+				StringParser p = (StringParser) _p;
+				return "&{line}" + p.getLineNumber()
+					+ "&{column}" + p.getColumnNumber()
+					+ "&{sysId}" + p.getSysId();
+			} else {
+				return null;
+			}
+		}
+
+		/** Check white space or comment.
+		 * @return true if and only if a white space or comment was found.
+		 */
+		private boolean isWhitespace() {
+			boolean result = _p.isSpaces();
+			if (_commentsAllowed) {
+				while (_p.isToken("/*")) {
+					result = true;
+					if (!_p.findToken("*/")) {
+						//Unclosed comment&{#SYS000}
+						throw new SRuntimeException(JSON.JSON015);
+					}
+					 _p.isSpaces();
 				}
-				 _p.isSpaces();
 			}
+			return result;
 		}
-		return result;
-	}
 
-	/** Read JSON value.
-	 * @return parsed value: List, Map, String, Number, Boolean or null.
-	 * @throws SRuntimeException is an error occurs.
-	 */
-	private Object readValue() throws SRuntimeException {
-		if (_p.eos()) {
-			//unexpected eof
-			throw new SRuntimeException(JSON.JSON007, genPosMod());
-		}
-		if (_p.isChar('{')) { // Map
-			Map<String,Object> result = new LinkedHashMap<String,Object>();
-			isWhitespace();
-			if (_p.isChar('}')) {
-				return result;
+		/** Read JSON value.
+		 * @return parsed value: List, Map, String, Number, Boolean or null.
+		 * @throws SRuntimeException is an error occurs.
+		 */
+		private Object readValue() throws SRuntimeException {
+			if (_p.eos()) {
+				//unexpected eof
+				throw new SRuntimeException(JSON.JSON007, genPosMod());
 			}
-			for (;;) {
-				Object o = readValue();
-				if (o != null && o instanceof String) {
-					 // parse JSON named pair
-					String name = (String) o;
-					isWhitespace();
-					if (!_p.isChar(':')) {
-						throw new SRuntimeException(// ":" expected
-							JSON.JSON002, ":", genPosMod());
-					}
-					isWhitespace();
-					result.put(name, readValue());
-					isWhitespace();
-					if (_p.isChar('}')) {
+			if (_p.isChar('{')) { // Map
+				Map<String,Object> result = new LinkedHashMap<String,Object>();
+				isWhitespace();
+				if (_p.isChar('}')) {
+					return result;
+				}
+				for (;;) {
+					Object o = readValue();
+					if (o != null && o instanceof String) {
+						 // parse JSON named pair
+						String name = (String) o;
 						isWhitespace();
-						return result;
-					}
-					if (_p.isChar(',')) {
+						if (!_p.isChar(':')) {
+							// ":" expected
+							throw new SRuntimeException(JSON.JSON002, ":",
+								genPosMod());
+						}
 						isWhitespace();
-					} else {
-						// JSON002="&{0}" expected&{#SYS000}
-						throw new SRuntimeException(
+						result.put(name, readValue());
+						isWhitespace();
+						if (_p.isChar('}')) {
+							isWhitespace();
+							return result;
+						}
+						if (_p.isChar(',')) {
+							_p.isSpaces();
+						} else {
+							// JSON002="&{0}" expected&{#SYS000}
+							throw new SRuntimeException(
 							JSON.JSON002, ",", genPosMod());
+						}
+					} else {
+						// String with name of item expected
+						throw new SRuntimeException(JSON.JSON004, genPosMod());
 					}
-				} else {
-					// String with name of item expected
-					throw new SRuntimeException(JSON.JSON004, genPosMod());
 				}
-			}
-		} else if (_p.isChar('[')) {
-			List<Object> result = new ArrayList<Object>();
-			isWhitespace();
-			if (_p.isChar(']')) {
-				return result;
-			}
-			for(;;) {
-				result.add(readValue());
+			} else if (_p.isChar('[')) {
+				List<Object> result = new ArrayList<Object>();
 				isWhitespace();
 				if (_p.isChar(']')) {
 					return result;
 				}
-				if (_p.isChar(',')) {
+				for(;;) {
+					result.add(readValue());
 					isWhitespace();
-				} else {
-					// JSON002="&{0}" expected&{#SYS000}
-					throw new SRuntimeException(JSON.JSON002, ",", genPosMod());
+					if (_p.isChar(']')) {
+						return result;
+					}
+					if (_p.isChar(',')) {
+						_p.isSpaces();
+					} else {
+						// JSON002="&{0}" expected&{#SYS000}
+						throw new SRuntimeException(
+						JSON.JSON002, ",", genPosMod());
+					}
 				}
-			}
-		} else if (_p.isChar('"')) { // string
-			StringBuilder sb = new StringBuilder();
-			while (!_p.eos()) {
-				if (_p.isChar('"')) {
-					return sb.toString();
-				} else if (_p.isChar('\\')) {
-					char c = _p.peekChar();
-					if (c == 'u') {
-						int x = 0;
-						for (int j = 1; j < 4; j++) {
-							int y = hexDigit(_p.peekChar());
-							if (y < 0) {
-								// hexadecimal digit expected
-								throw new SRuntimeException(JSON.JSON005,
+			} else if (_p.isChar('"')) { // string
+				StringBuilder sb = new StringBuilder();
+				while (!_p.eos()) {
+					if (_p.isChar('"')) {
+						return sb.toString();
+					} else if (_p.isChar('\\')) {
+						char c = _p.peekChar();
+						if (c == 'u') {
+							int x = 0;
+							for (int j = 1; j < 4; j++) {
+								int y = hexDigit(_p.peekChar());
+								if (y < 0) {
+									// hexadecimal digit expected
+									throw new SRuntimeException(JSON.JSON005,
+										genPosMod());
+								}
+								x = (x << 4) + y;
+							}
+							sb.append((char) x);
+						} else {
+							int i = "\"\\/bfnrt".indexOf(c);
+							if (i >= 0) {
+								sb.append("\"\\/\b\f\n\r\t".charAt(i));
+							} else {
+								 // Incorrect control character in string
+								throw new SRuntimeException(JSON.JSON006,
 									genPosMod());
 							}
-							x = (x << 4) + y;
 						}
-						sb.append((char) x);
 					} else {
-						int i = "\"\\/bfnrt".indexOf(c);
-						if (i >= 0) {
-							sb.append("\"\\/\b\f\n\r\t".charAt(i));
-						} else {
-							 // Incorrect control character in string
-							throw new SRuntimeException(JSON.JSON006,
-								genPosMod());
-						}
+						sb.append(_p.peekChar());
 					}
-				} else {
-					sb.append(_p.peekChar());
 				}
-			}
-			// end of string ('"') is missing
-			throw new SRuntimeException(JSON.JSON001, genPosMod());
-		} else if (_p.isToken("null")) {
-			return null;
-		} else if (_p.isToken("true")) {
-			return Boolean.TRUE;
-		} else if (_p.isToken("false")) {
-			return Boolean.FALSE;
-		} else {
-			boolean minus = _p.isChar('-');
-			int pos = _p.getIndex();
-			Number n;
-			String s;
-			if (_p.isFloat()) {
-				s = _p.getBufferPart(pos, _p.getIndex());
-				n = new BigDecimal((minus ? "-" : "") + s);
-			} else if (_p.isInteger()) {
-				s = _p.getBufferPart(pos, _p.getIndex());
-				n = new BigInteger((minus ? "-" : "") + s);
+				// end of string ('"') is missing
+				throw new SRuntimeException(JSON.JSON001, genPosMod());
+			} else if (_p.isToken("null")) {
+				return null;
+			} else if (_p.isToken("true")) {
+				return Boolean.TRUE;
+			} else if (_p.isToken("false")) {
+				return Boolean.FALSE;
 			} else {
-				if (minus) {
-					// number expected
-					throw new SRuntimeException(JSON.JSON003, genPosMod());
+				boolean minus = _p.isChar('-');
+				int pos = _p.getIndex();
+				Number n;
+				String s;
+				if (_p.isFloat()) {
+					s = _p.getBufferPart(pos, _p.getIndex());
+					n = new BigDecimal((minus ? "-" : "") + s);
+				} else if (_p.isInteger()) {
+					s = _p.getBufferPart(pos, _p.getIndex());
+					n = new BigInteger((minus? "-" : "") + s);
 				} else {
-					//JSON value expected
-					throw new SRuntimeException(JSON.JSON010, genPosMod());
+					if (minus) {
+						// number expected
+						throw new SRuntimeException(JSON.JSON003, genPosMod());
+					} else {
+						//JSON value expected
+						throw new SRuntimeException(JSON.JSON010, genPosMod());
+					}
 				}
+				if (s.charAt(0) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(1))) {
+						// Illegal leading zero in number
+						throw new SRuntimeException(JSON.JSON014, genPosMod());
+				}
+				return n;
 			}
-			if (s.charAt(0) == '0' && s.length() > 1 &&
-				Character.isDigit(s.charAt(1))) {
-					// Illegal leading zero in number
-					throw new SRuntimeException(JSON.JSON014, genPosMod());
+		}
+
+		/** Parse source data.
+		 * @return parsed JSON object.
+		 * @throws SRuntimeException if an error occurs,
+		 */
+		private Object parse() throws SRuntimeException {
+			isWhitespace();
+			char c = _p.getCurrentChar();
+			if (c != '{' && c != '[' ) {
+				// JSON object or array expected"
+				throw new SRuntimeException(JSON.JSON009, genPosMod());
 			}
-			return n;
+			Object result = readValue();
+			isWhitespace();
+			if (!_p.eos()) {
+				//Text after JSON not allowed
+				throw new SRuntimeException(JSON.JSON008, genPosMod());
+			}
+			return result;
 		}
-	}
-
-	/** Parse source data.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	private Object parse() throws SRuntimeException {
-		isWhitespace();
-		char c = _p.getCurrentChar();
-		if (c != '{' && c != '[' ) {
-			// JSON object or array expected"
-			throw new SRuntimeException(JSON.JSON009, genPosMod());
-		}
-		Object result = readValue();
-		isWhitespace();
-		if (!_p.eos()) {
-			//Text after JSON not allowed
-			throw new SRuntimeException(JSON.JSON008, genPosMod());
-		}
-		return result;
-	}
-
-	/** Parse JSON document with StringParser.
-	 * @param parser StringParser with input data.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public static final Object parseJSON(StringParser parser)
-		throws SRuntimeException{
-		return new JSONUtil(parser).parse();
 	}
 
 	/** Parse JSON document from input source data.
@@ -390,6 +322,16 @@ public class JSONUtil implements XDConstants {
 			throw new SRuntimeException(SYS.SYS034, source, x);
 		}
 		return result;
+	}
+
+	/** Parse JSON document with StringParser.
+	 * @param parser StringParser with input data.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public static final Object parseJSON(StringParser parser)
+		throws SRuntimeException{
+		return new JParser(parser).parse();
 	}
 
 	/** Parse JSON document from input source data.
@@ -460,176 +402,518 @@ public class JSONUtil implements XDConstants {
 			if (sysid != null && !sysid.isEmpty()) {
 				p.setSysId(sysid);
 			}
-			return new JSONUtil(p).parse();
+			return new JParser(p).parse();
 		} catch (Exception ex) { // never happens
 			ex.printStackTrace(System.err);
 			return null;
 		}
 	}
 
+	/** Parse source URL to JSON.
+	 * @param in source URL
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public static final Object parseJSON(final URL in) throws SRuntimeException{
+		try {
+			URLConnection u = in.openConnection();
+			InputStream is = u.getInputStream();
+			try {
+				return parseJSON(is, in.toExternalForm());
+			} finally {
+				is.close();
+			}
+		} catch (IOException ex) {
+			//URL &{0} error: &{1}{; }
+			throw new SRuntimeException(SYS.SYS076,in.toExternalForm(), ex);
+		}
+	}
+
+	/** Parse source data from reader to JSON.
+	 * @param in reader with source data.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public static final Object parseJSON(final Reader in)
+		throws SRuntimeException {
+		return parseJSON(in, null);
+	}
+
+	/** Parse source data from reader to JSON.
+	 * @param in reader with source data.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public static final Object parseJSON(final Reader in,
+		final String sysid) throws SRuntimeException {
+		StringParser parser = new StringParser(in, null);
+		if (sysid != null && !sysid.isEmpty()) {
+			parser.setSysId(sysid);
+		}
+		return parseJSON(parser);
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
-// JSON to string
+// JSON to XML
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create source form of JSON value.
-	 * @param obj JSON value.
-	 * @param indent indentation.
-	 * @param sb where the source form is recorded.
-	 */
-	private static void valueToJSONString(final Object obj,
-		final String indent,
-		final StringBuilder sb) {
-		if (obj == null) {
-			sb.append("null");
-		} else if (obj instanceof String) {
-			String s = (String) obj;
-			sb.append('"');
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (Character.isDefined(c)) {
-					switch (c) {
-						case '\n':
-							sb.append("\\n");
-							break;
-						case '\r':
-							sb.append("\\r");
-							break;
-						case '\b':
-							sb.append("\\b");
-							break;
-						case '\t':
-							sb.append("\\t");
-							break;
-						case '\f':
-							sb.append("\\f");
-							break;
-						case '\\':
-							sb.append("\\\\");
-							break;
-						case '"':
-							sb.append("\\\"");
-							break;
-						default:
-							sb.append(c);
-					}
-				} else {
-					sb.append("\\u");
-					int x = c;
-					for (int j=12; j >= 0; j-= 4) {
-						sb.append("0123456789ABCDEF".charAt((x >> j) & 15));
-					}
-				}
-			}
-			sb.append('"');
-		} else if (obj instanceof Boolean || obj instanceof Number) {
-			sb.append(obj.toString());
-		} else if (obj instanceof List) {
-			List<?> x = (List) obj;
-			arrayToJSONString(x, indent, sb);
-		} else if (obj instanceof Map) {
-			Map<?,?> x = (Map) obj;
-			mapToJSONString(x, indent, sb);
-		} else {
-			throw new SRuntimeException(JSON.JSON011, obj);//Not JSON object&{0}
-		}
+	/** Convert character to representation used in XML names. */
+	private static String toXmlChar(final char c) {
+		return "_u" + Integer.toHexString(c) + '_';
 	}
 
-	/** Create source form of JSON array.
-	 * @param array JSON array.
-	 * @param indent indentation.
-	 * @param sb where the source form is recorded.
+	/** Check if on position in the string given by index if is JSON special
+	 * char representation in XML format.
+	 * @param s inspected string.
+	 * @param index index where to start inspection.
+	 * @return true if on
 	 */
-	private static void arrayToJSONString (final List<?> array,
-		final String indent,
-		final StringBuilder sb) {
-		sb.append('[');
-		if (array.isEmpty()) {
-			sb.append(']');
-			return;
+	private static boolean isJChar(final String s, final int index) {
+		if (index + 3 > s.length() ||
+			s.charAt(index) != '_' || s.charAt(index+1) != 'u' ||
+			hexDigit(s.charAt(index+2)) < 0) {
+			return false;
 		}
-		String ind = (indent != null) ? indent + "  " : null;
-		boolean first = true;
-		for (Object o: array) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(',');
+		// is hexDigit
+		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (hexDigit(ch) < 0) {
+				//if not hexadecimal digit and follows '_' return true
+				return ch == '_'; // if
 			}
-			if (ind != null) {
-				sb.append(ind);
-			}
-			valueToJSONString(o, ind, sb);
 		}
-		if (indent != null) {
-			sb.append(indent);
-		}
-		sb.append(']');
+		return false;
 	}
 
-	/** Create source form of JSON map.
-	 * @param map JSON map.
-	 * @param indent indentation.
-	 * @param sb where the source form is recorded.
+	/** Get XML name created from JSOM pair name.
+	 * @param s JSOM pair name.
+	 * @return XML name.
 	 */
-	private static void mapToJSONString(final Map<?,?> map,
-		final String indent,
-		final StringBuilder sb) {
-		sb.append('{');
-		if (map.isEmpty()) {
-			sb.append('}');
-			return;
+	public final static String toXmlName(final String s) {
+		if (s.length() == 0) {
+			return "_u0_"; // empty string
 		}
-		String ind = (indent != null) ? indent + "  " : null;
-		boolean first = true;
-		for (Map.Entry<?,?> e: map.entrySet()) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(',');
-			}
-			if (ind != null) {
-				sb.append(ind);
-			}
-			valueToJSONString(e.getKey(), ind, sb);
-			sb.append(':');
-			valueToJSONString(e.getValue(), ind, sb);
-		}
-		if (ind != null) {
-			sb.append(indent);
-		}
-		sb.append('}');
-	}
-
-	/** Create JSON string from object (no indentation).
-	 * @param obj JSON object.
-	 * @return string with JSON source format.
-	 */
-	public final static String toJSONString(final Object obj) {
-		return toJSONString(obj, false);
-	}
-
-	/** Create JSON string from object. Indentation depends on argument.
-	 * @param obj JSON object.
-	 * @param indent if true then result will be indented.
-	 * @return string with JSON source format.
-	 */
-	public final static String toJSONString(final Object obj, boolean indent) {
 		StringBuilder sb = new StringBuilder();
-		String ind = indent ? "\n" : null;
-		if (obj instanceof List) {
-			arrayToJSONString((List) obj, ind, sb);
-		} else if (obj instanceof Map) {
-			mapToJSONString((Map) obj, ind, sb);
-		} else {
-			//Not JSON object &{0}{: }
-			throw new SRuntimeException(JSON.JSON011, obj);
+		char ch = s.charAt(0);
+		sb.append(isJChar(s, 0)
+			|| StringParser.getXmlCharType(ch, (byte) 10)
+				!= StringParser.XML_CHAR_NAME_START ? toXmlChar(ch) : ch);
+		boolean firstcolon = true;
+		for (int i = 1; i < s.length(); i++) {
+			ch = s.charAt(i);
+			if (isJChar(s, i)) {
+				sb.append(toXmlChar(ch));
+			} else if (ch == ':' && firstcolon) {
+				firstcolon = false;
+				sb.append(':');
+			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
+				StringParser.XML_CHAR_COLON) {
+				sb.append(ch);
+			} else {
+				firstcolon = false;
+				sb.append(toXmlChar(ch));
+			}
 		}
 		return sb.toString();
 	}
 
+	/** Get Document from argument. If argument is null then create Document.
+	 * @param n node.
+	 * @return Document object.
+	 */
+	private static Document getDoc(final Node n) {
+		return (n instanceof Document) ? (Document) n : n.getOwnerDocument();
+	}
+
+	/** Get XML name without colon, replace it with "_u3a_".
+	 * @param s raw XML name.
+	 * @return name with colon replaced by "_u3a_".
+	 */
+	private static String replaceColonInName(final String s) {
+		int i = s.indexOf(':');
+		return i >= 0 ? s.substring(0, i) + "_u3a_" + s.substring(i + 1) : s;
+	}
+
+	/** Get prefix of XML name.
+	 * @param s XML name.
+	 * @return prefix of XML name.
+	 */
+	private static String getNamePrefix(final String s) {
+		int i = s.indexOf(':');
+		return (i >= 0) ? s.substring(0, i) : "";
+	}
+
+	/** Create and append new element and push context.
+	 * @param n node to which new element will be appended.
+	 * @param namespace name space URI.
+	 * @param tagname tag name of element.
+	 * @return created element.
+	 */
+	public final Element appendElem(final Node n,
+		final String namespace,
+		final String tagname) {
+		pushContext();
+		String u;
+		String prefix = getNamePrefix(tagname);
+		u = namespace == null ?	_ns.getNamespaceURI(prefix) : namespace;
+		Document doc = getDoc(n);
+		Element e = u != null ? doc.createElementNS(u, tagname)
+			: doc.createElement(replaceColonInName(tagname));
+		if (u != null && _ns.getNamespaceURI(prefix) == null) {
+			_ns.setPrefix(prefix, u);
+			e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+				prefix.length() > 0 ? "xmlns:" + prefix : "xmlns", u);
+		}
+		n.appendChild(e);
+		return e;
+	}
+
+	/** Append to node the element with JSON name space.
+	 * @param n node where to append new element.
+	 * @param name local name of element.
+	 * @return created element.
+	 */
+	public Element appendJSONElem(final Node n, final String name) {
+		return appendElem(n, JSON_NS_URI, JSON_NS_PREFIX + ":" + name);
+	}
+
+	/** Append text with a value to element.
+	 * @param e element where to add value.
+	 * @param val value to be added as text.
+	 */
+	private void addValueAsText(final Element e, final Object val) {
+		String s = genSimpleValueToXML(val);
+		e.appendChild(getDoc(e).createTextNode(s));
+	}
+
+	/** Create child element with text value to node.
+	 * @param node node where to create element.
+	 * @param val value which will be represented as value of created element.
+	 */
+	private void addValue(final Node node, final Object val) {
+		String name;
+		if (val == null) {
+			name = J_NULL;
+		} else if (val instanceof String) {
+			name = J_STRING;
+		} else if (val instanceof Number) {
+			name = J_NUMBER;
+		} else if (val instanceof Boolean) {
+			name = J_BOOLEAN;
+		} else {
+			throw new RuntimeException("Unknown object: " + val);
+		}
+		Element e = appendJSONElem(node, name);
+		if (val != null) {
+			addValueAsText(e, val);
+		}
+		popContext();
+	}
+
+	/** Append array of JSON values to node.
+	 * @param list list with array of values.
+	 * @param parent node where to append array.
+	 */
+	private void listToXml(final List<?> list, final Node parent) {
+		Element e = appendJSONElem(parent, J_ARRAY);
+		for (Object x: list) {
+			if (x == null) {
+				addValue(e, null);
+			} else if (x instanceof Map) {
+				mapToXml((Map) x, e);
+			} else if (x instanceof List) {
+				listToXml((List)x,  e);
+			} else {
+				addValue(e, x);
+			}
+		}
+		popContext();
+	}
+
+	/** Check if the value may be represented as unquoted string.
+	 * @param val Object to be tested.
+	 * @return true the value may be represented as unquoted string.
+	 */
+	public static final boolean isSimpleValue(final Object val) {
+		if (val == null || "".equals(val)
+			|| val instanceof Number || val instanceof Boolean) {
+			return true;
+		}
+		if (val instanceof String) {
+			String s = (String) val;
+			return !"null".equals(s) && !"true".equals(s) && !"false".equals(s)
+				&& s.indexOf('\t') < 0 && s.indexOf('\n') < 0
+				&& s.indexOf('\r') < 0 && s.indexOf('\f') < 0
+				&& s.indexOf('\"') < 0 && s.indexOf('\\') < 0;
+		}
+		return false;
+	}
+
+	/** Generate  value to XML string,
+	 * @param val Object with value.
+	 * @return string representing the value.
+	 */
+	public static final String genSimpleValueToXML(final Object val) {
+		if (val == null) {
+			return "null";
+		} else if (val instanceof String) {
+			String s = (String) val;
+			if (s.length() == 0 ||
+				"null".equals(s) || "true".equals(s) || "false".equals(s)) {
+				return "\"" + s + "\"";
+			} else {
+				boolean addQuot = s.indexOf(' ') > 0 || s.indexOf('\t') > 0
+					|| s.indexOf('\n') > 0 || s.indexOf('\r') > 0
+					|| s.indexOf('\f') > 0 || s.indexOf('\b') > 0;
+				if (!addQuot) {
+					char ch = s.charAt(0);
+					if (ch == '-' || ch >= '0' && ch <= '9') {
+						StringParser p = new StringParser(s);
+						p.isChar('-');
+						addQuot |= p.isFloat() || p.isInteger();
+						if (!addQuot) return s;
+					}
+				}
+				return addQuot ? '\"' + s + '\"' : s;
+			}
+		} else {
+			return val.toString();
+		}
+	}
+
+	/** Set attribute to element,
+	 * @param e element where to set attribute.
+	 * @param namespace namespace URI of attribute.
+	 * @param name name of attribute {if there is colon and namespace is null
+	 * then replace colon with "_u3a_"}
+	 * @param val string with value of attribute.
+	 */
+	public static final void setAttr(final Element e,
+		final String namespace,
+		final String name,
+		final String val) {
+		if (namespace == null) {
+			e.setAttribute(replaceColonInName(name), val);
+		} else {
+			e.setAttributeNS(namespace, name, val);
+		}
+	}
+
+	/** Create named item,
+	 * @param rawName raw name (JSON string).
+	 * @param val Object to be created as named item.
+	 * @param parent parent node where the item will be appended.
+	 * @return created element.
+	 */
+	private Element namedItemToXml(final String rawName,
+		final Object val,
+		final Node parent) {
+		String name = toXmlName(rawName);
+		String namespace = _ns.getNamespaceURI(getNamePrefix(name));
+		if (val == null) {
+			return appendElem(parent, namespace, name);
+		} else if (val instanceof Map) {
+			Map<?, ?> map = (Map) val;
+			if (map.isEmpty()) {
+				Element e = appendElem(parent, namespace, name);
+				appendJSONElem(e, J_MAP);
+				popContext(); // appended element js:map
+				return e;
+			}
+			String u = getNamePrefix(name);
+			u = u.length() > 0 ? "xmlns:" + u : "xmlns";
+			u = (String) map.get(u);
+			if (u == null) {
+				u = namespace;
+			}
+			Element e = appendElem(parent, u, name);
+			for (Object key: map.keySet()) { // xmlns elements
+				String name1 = (String) key;
+				Object o = map.get(key);
+				if (o == null || o instanceof String) {
+					name1 = toXmlName(name1);
+					String s = o == null ? "" : o.toString();
+					if ("xmlns".equals(name1)) {
+						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+							"xmlns", s);
+						_ns.setPrefix("", s);
+					} else if (name1.startsWith("xmlns:")) {
+						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+							name1, s);
+						_ns.setPrefix(name1.substring(6), s);
+					}
+				}
+			}
+			Element ee = null;
+			for (Object key: map.keySet()) {
+				String name1 = toXmlName(key.toString());
+				Object o = map.get(key);
+				if (o != null && (o instanceof Map || o instanceof List)) {
+					if (ee == null) {
+						ee = appendJSONElem(e, J_EXTMAP);
+					}
+					namedItemToXml(name1, o, ee);
+					popContext();
+				} else {
+					if (!e.hasAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+						name1)) {
+						String uri1 = _ns.getNamespaceURI(getNamePrefix(name1));
+						if (isSimpleValue(o) ) { // we set it as attribute
+							String s;
+							if (o == null) {
+								s = "null";
+							} else if (o instanceof String) {
+								s = (String) o;
+								StringParser p = new StringParser(s);
+								if ((p.isToken("null") || p.isToken("true")
+									|| p.isToken("false") || p.isSignedFloat()
+									|| p.isSignedInteger()) && p.eos()) {
+									s = genSimpleValueToXML(o);
+								}
+							} else {
+								s = genSimpleValueToXML(o);
+							}
+							setAttr(e, uri1, name1, s);
+						} else {
+							if (map.size() == 1) {
+								if (o == null) {
+									setAttr(e, uri1, name1, "null");
+								} else { // string
+									String s = (String) o;
+									if ("".equals(s)) {
+										setAttr(e, uri1, name1, "");
+									} else {
+										s = genSimpleValueToXML(s);
+										if (s.charAt(0) == '"') {
+											// we set it as named item
+											if (ee == null) {
+												ee = appendJSONElem(e,J_EXTMAP);
+											}
+											namedItemToXml(name1, s, ee);
+											popContext();
+										} else { // just attribute
+											setAttr(e, uri1, name1, s);
+										}
+									}
+								}
+								break;
+							}
+							if (ee == null) {
+								ee = appendJSONElem(e, J_EXTMAP);
+							}
+							namedItemToXml(name1, o, ee);
+							popContext();
+						}
+					}
+				}
+			}
+			if (ee != null) {
+				popContext();
+			}
+			return e;
+		} else if (val instanceof List) {
+			Element e = appendElem(parent, namespace, name);
+			listToXml((List) val, e);
+			return e;
+		} else {
+			Element e = appendElem(parent, namespace, name);
+			addValueAsText(e, val);
+			return e;
+		}
+	}
+
+	/** Append map with JSON tuples to node.
+	 * @param map map with JSON tuples.
+	 * @param parent node where to append map.
+	 */
+	private void mapToXml(final Map<?, ?> map, final Node parent) {
+		int size = map.size();
+		if (size == 0) {
+			appendJSONElem(parent, J_MAP);
+		} else if (size == 1) {
+			String key = (String) map.keySet().iterator().next();
+			namedItemToXml(key, map.get(key), parent);
+		} else {
+			Element el = appendJSONElem(parent, J_MAP);
+			for (Object key: map.keySet()) {
+				namedItemToXml(key.toString(), map.get(key), el);
+				popContext();
+			}
+		}
+		popContext();
+	}
+
+	/** Create child nodes with JSON object to node.
+	 * @param json JSON object.
+	 * @param parent where to create child nodes.
+	 */
+	private void json2xml(final Object json, final Node parent) {
+		if (json != null) {
+			if (json instanceof Map) {
+				mapToXml((Map) json, parent);
+				return;
+			}
+			if (json instanceof List) {
+				listToXml((List) json, parent);
+				return;
+			}
+		}
+		throw new SRuntimeException(JSON.JSON011, json); //Not JSON object&{0}
+	}
+
+	/** Convert object with JSON data to XML element.
+	 * @param json object with JSON data.
+	 * @return XML element.
+	 */
+	public final static Element jsonToXml(final Object json) {
+		try {
+			DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = df.newDocumentBuilder();
+			Document doc = db.newDocument();
+			JSONUtil jsp = new JSONUtil();
+			jsp.json2xml(json, doc);
+			if (jsp._n != 0) {
+				// Internal error&{0}{: }
+				throw new SRuntimeException(SYS.SYS066,
+					"Namespace nesting: "+jsp._n);
+			}
+			return doc.getDocumentElement();
+		} catch (ParserConfigurationException ex) {
+			return null;
+		}
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
-// Create JSON from XML.
+// XML to JSON
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Create JSON name from XML name.
+	 * @param name XML name.
+	 * @return JSON name.
+	 */
+	private static String toJsonName(final String name) {
+		if ("_u0_".equals(name)) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < name.length(); i++) {
+			char ch = name.charAt(i);
+			if (ch == '_' && i + 2 < name.length()) {
+				if (isJChar(name, i)) {
+					int ndx = name.indexOf('_', i+1);
+					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
+					sb.append((char) x);
+					i = ndx;
+				} else {
+					sb.append('_');
+				}
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
 
 	/** Get JSON value from string.
 	 * @param source string with JSON simple value
@@ -665,7 +949,11 @@ public class JSONUtil implements XDConstants {
 						|| s.indexOf('e') > 0 || s.indexOf('E') > 0) {
 						return new BigDecimal(s);
 					} else {
-						return new BigInteger(s);
+						try {
+							return new Long(s);
+						} catch (Exception ex) {
+							return new BigInteger(s);
+						}
 					}
 				} catch (Exception ex) {
 					return s;
@@ -724,341 +1012,484 @@ public class JSONUtil implements XDConstants {
 		}
 	}
 
-	/** Check if the node is a value.
-	 * @param n the node to be checked.
-	 * @return true if and only if the node represents a JSON value.
+	/** Create JSON Map with attributes from element.
+	 * @param el element with attributes.
+	 * @return JSON Map with attributes.
 	 */
-	private static boolean isValue(final Node n) {
-		if (n.getNodeType() == Node.ELEMENT_NODE) {
-			String uri = n.getNamespaceURI();
-			if (uri != null) {
-				return false;
+	private static Map<String, Object> createAttrs(final Element el) {
+		if (el.hasAttributes()) {
+			Map<String,Object> attrs = new LinkedHashMap<String,Object>();
+			NamedNodeMap nnm = el.getAttributes();
+			for (int i = nnm.getLength() - 1; i >= 0; i--) {
+				Node attr = nnm.item(i);
+				String key = toJsonName(attr.getNodeName());
+				Object value = getValue(attr.getNodeValue());
+				attrs.put(key, value);
 			}
-			NamedNodeMap attrs = n.getAttributes();
-			if (attrs == null || attrs.getLength() == 0) {
-				NodeList nl = n.getChildNodes();
-				if (nl == null || nl.getLength() == 0) {
-					return true;
-				}
-				if (nl.getLength() == 1
-					&& nl.item(0).getNodeType() == Node.TEXT_NODE) {
-					return true;
-				}
-			}
+			return attrs;
 		}
-		return false;
+		return null;
 	}
 
-	/** Get items from NodeList.
-	 * @param nl NodeList with items.
-	 * @param array the array where to save items.
+	/** Add JSON value to the JSON array.
+	 * @param array JSON array.
+	 * @param s string with JSON value.
 	 */
-	private static void getArrayItems(NodeList nl, List<Object> array) {
-		int len = nl == null ? null : nl.getLength();
-		if (len > 0) {
-			if (len == 1 && nl.item(0).getNodeType() == Node.TEXT_NODE) {
-				String s = nl.item(0).getNodeValue().trim();
-				// ignore empty strings (assumed as indentation)
-				if (!s.isEmpty()) {
-					array.add(getValue(s));
-				}
-				return;
-			}
-			for (int i = 0; nl != null && i < nl.getLength(); i++) {
-				Node n = nl.item(i);
-				if (isValue(n)) {
-					array.add(getValue(n.getNodeValue()));
-				} else
-				if (n.getNodeType() == Node.ELEMENT_NODE) {
-					Element el = (Element) n;
-					if (JSON_NS_URI.equals(el.getNamespaceURI())) {
-						if ("array".equals(el.getLocalName())) {
-							List<Object> array1 = new ArrayList<Object>();
-							getArrayItems(el.getChildNodes(), array1);
-							array.add(array1);
-						} else if ("map".equals(el.getLocalName())) {
-							Map<String, Object> map =
-								new LinkedHashMap<String, Object>();
-							genMapItems(el, map);
-							array.add(map);
-						} else if ("null".equals(el.getLocalName())) {
-							array.add(null);
-						} else if ("string".equals(el.getLocalName())) {
-							array.add(el.getTextContent());
-						} else {
-							array.add(getValue(el.getTextContent()));
+	private static void valuesToArray(final List<Object> array, final String s){
+		StringParser p = new StringParser(s.trim());
+		while ((p.isSpaces() || true) && !p.eos()) {
+			if (p.isToken("null")) {
+				array.add(null);
+			} else if (p.isToken("false")) {
+				array.add(Boolean.FALSE);
+			} else if (p.isToken("true")) {
+				array.add(Boolean.TRUE);
+			} else if (p.isSignedFloat()) {
+				array.add(new BigDecimal(p.getParsedString()));
+			} else if (p.isSignedInteger()) {
+				array.add(new BigInteger(p.getParsedString()));					
+			} else {
+				if (p.isChar('"')) { // quoted string
+					StringBuilder sb = new StringBuilder();
+					for (;;) {
+						if (p.eos()) {
+							throw new RuntimeException("Unclosed string");
 						}
-						continue;
+						if (p.isToken("\"\"")) {
+							sb.append('"');
+						} else if (p.isChar('"')) {
+							array.add(sb.toString());
+							break;
+						} else {
+							sb.append(p.peekChar());
+						}
 					}
-					Map<String, Object> map =
-						new LinkedHashMap<String, Object>();
-					genMapItems(el, map);
-					Map<String, Object> map1 =
-						new LinkedHashMap<String, Object>();
-					map1.put(el.getTagName(), map);
-					array.add(map1);
-				} else if (n.getNodeType() == Node.TEXT_NODE) {
-					String s = n.getNodeValue().trim();
-					if (!s.isEmpty()) {
-						array.add(getValue(s));
+				} else { //not quoed string
+					int pos = p.getIndex();
+					while (!p.isSpace() && !p.eos()) {
+						p.nextChar();
 					}
+					array.add(p.getParsedBufferPartFrom(pos).trim());
 				}
 			}
 		}
 	}
 
-	/** Get map items from Element.
-	 * @param el Element with map items.
-	 * @param map the map where to save map items.
+	/** Create JSON array from the NodeList.
+	 * @param nl NodeList with childs of an Element.
+	 * @return JSON array with values created from argument.
 	 */
-	private static void genMapItems(final Element el,
-		final Map<String, Object> map) {
-		NamedNodeMap attrs = el.getAttributes();
-		for (int i = 0; attrs != null && i < attrs.getLength(); i++) {
-			Node n = attrs.item(i);
-			if (!(n.getNodeName().startsWith("xmlns")
-				&& JSON_NS_URI.equals(n.getNodeValue()))) {
-				map.put(toJsonName(n.getNodeName()),
-					getValue(n.getNodeValue()));
-			}
-		}
-		NodeList nl = el.getChildNodes();
-		for (int i = 0; nl != null && i < nl.getLength(); i++) {
+	private static List<Object> createArray(final NodeList nl) {
+		List<Object> list = new ArrayList<Object>();
+		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
-			if (isValue(n)) {
-				map.put(toJsonName(n.getNodeName()),
-					getValue(n.getTextContent()));
-			} else if (n.getNodeType() == Node.ELEMENT_NODE) {
-				Map<String, Object> map1 = new LinkedHashMap<String, Object>();
-				genMapItems((Element) n, map1);
-				map.put(toJsonName(n.getNodeName()), map1);
+			if (n.getNodeType() == Node.TEXT_NODE
+				|| n.getNodeType() == Node.CDATA_SECTION_NODE) {
+				String s = n.getNodeValue();
+				if (s == null) {
+					s = "";
+				}
+				while (i+1 < nl.getLength()
+					&& ((n = nl.item(i+1)).getNodeType() == Node.TEXT_NODE
+					|| n.getNodeType() == Node.CDATA_SECTION_NODE)) {
+					s += n.getNodeValue();
+					i++;
+				}
+				valuesToArray(list, s);
+			} else {
+				list.add(createItem(n));
 			}
 		}
+		return list;
 	}
 
-	/** Create JSON object from XML element.
-	 * @param el XML element
-	 * @return JSON object.
+	/** Create JSON map from NodeList.
+	 * @param nl NodeList with nodes.
+	 * @return JSON map created from NodeList.
 	 */
-	public final static Object xmlToJson(final Element el) {
-		if (JSON_NS_URI.equals(el.getNamespaceURI())) {
-			if ("map".equals(el.getLocalName())) {
-				Map<String, Object> map = new LinkedHashMap<String, Object>();
-				genMapItems(el, map);
-				return map;
-			} else if ("array".equals(el.getLocalName())) {
-				List<Object> array = new ArrayList<Object>();
-				getArrayItems(el.getChildNodes(), array);
-				return array;
-			}
-			throw new RuntimeException("Incorrect root JSON element: "
-				+ el.getLocalName());
-		}
-		NodeList nl = el.getChildNodes();
-		int len = nl == null ? 0 : nl.getLength();
-		int j = 0;
-		for (int i = 0; i < len; i++) {
+	private static Map<?,?> createMap(final NodeList nl) {
+		Map<String,Object> map = new LinkedHashMap<String,Object>();
+		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				j++;
-			} else if (n.getNodeType() == Node.TEXT_NODE) {
-				if (!n.getNodeValue().trim().isEmpty()) {
-					j++;
-				}
-			}
-		}
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		if (j <= 1) {
-			if (j == 1) {
-				Map<String, Object> map1 =
-					new LinkedHashMap<String, Object>();
-				genMapItems(el, map1);
-				map.put(toJsonName(el.getNodeName()), map1);
-			} else {
-				genMapItems(el, map);
-			}
-			return map;
-		} else {
-			genMapItems((Element) el.cloneNode(false), map);
-			List<Object> array = new ArrayList<Object>();
-			getArrayItems(el.getChildNodes(), array);
-			map.put(toJsonName(el.getNodeName()), array);
-			return array;
-		}
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Create XML from JSON.
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create Element from JSON map item.
-	 * @param xmlns map of namespaces.
-	 * @param doc document from which the element will be created.
-	 * @param key the name of item.
-	 * @return Element created from JSON map item.
-	 */
-	private static Element createElement(final Map<String, String> xmlns,
-		final Document doc,
-		final String key){
-		int ndx = key.indexOf(':');
-		String uri = ndx < 0
-			? xmlns.get("xmlns") : xmlns.get("xmlns:" + key.substring(0, ndx));
-		return uri==null ? doc.createElement(key):doc.createElementNS(uri, key);
-	}
-
-	@SuppressWarnings("unchecked")
-	/** Generate XML from a map.
-	 * @param map JSON map from which an Element will be created.
-	 * @param parent parent element.
-	 */
-	private void genJMap(final Map<String, Object> map, final Element parent) {
-		Map<String, String> xmlns = new LinkedHashMap<String, String>();
-		for (Map.Entry<String, Object> e: map.entrySet()) {
-			if (e.getKey().startsWith("xmlns")
-				&& JSON_NS_URI.equals(e.getValue())) {
-				xmlns.put(e.getKey(), (String) e.getValue());
-			}
-		}
-		Document doc = parent.getOwnerDocument();
-		for (Map.Entry<String, Object> e: map.entrySet()) {
-			String key = toXmlName(e.getKey());
-			Object val = e.getValue();
-			if (val == null) {
-				if (JSON_NS_URI.equals(parent.getNamespaceURI())
-					&& "map".equals(parent.getLocalName())) {
-					Element el1 = createElement(xmlns, doc, key);
-					el1.appendChild(doc.createTextNode("null"));
-					parent.appendChild(el1);
-				} else {
-					parent.setAttribute(key, "null");
-				}
-			} else {
-				if (val instanceof Map) {
-					Element el1 = createElement(xmlns, doc, key);
-					parent.appendChild(el1);
-					genJMap((Map<String, Object>) val, el1);
-				} else if (val instanceof List) {
-					List<Object> array = (List<Object>) val;
-					Element el1 = createElement(xmlns, doc, key);
-					parent.appendChild(el1);
-					if (array.isEmpty()) {
-						el1.appendChild(createElement(xmlns, doc, "js:array"));
-					} else {
-						genArray((List<Object>) val, el1);
+				String key = toJsonName(n.getNodeName());
+				List<Object> list = createArray(n.getChildNodes());
+				NamedNodeMap nnm = n.getAttributes();
+				if (nnm != null && nnm.getLength() > 0) {
+					Map<String,Object> ats = new LinkedHashMap<String,Object>();
+					for (int j = 0; j < nnm.getLength(); j++) {
+						Node att = nnm.item(j);
+						ats.put(toJsonName(att.getNodeName()),
+							getValue(att.getNodeValue()));
 					}
-				} else {
-					if (!(key.startsWith("xmlns")&& JSON_NS_URI.equals(val))) {
-						parent.setAttribute(key, val.toString());
-					} else {
-						if (JSON_NS_URI.equals(parent.getNamespaceURI())
-							&& "map".equals(parent.getLocalName())) {
-							Element el1 = createElement(xmlns, doc, key);
-							el1.appendChild(doc.createTextNode("" + val));
-							parent.appendChild(el1);
+					list.add(0, ats);
+				}
+				map.put(key, list.size() == 1 ? list.get(0) : list);
+			} else {
+				System.err.println("ERROR: " + n);
+			}
+		}
+		return map;
+	}
+
+	/** Add named items created from node to the JSON map.
+	 * @param n XML Node from which named items are created.
+	 * @param attrs the JSON map with attributes.
+	 * @return JSON map.
+	 */
+	private static Map<String, Object> namedItems(final Node n,
+		final Map<String, Object> attrs) {
+		Map<String, Object> atrs =
+			attrs == null ? new LinkedHashMap<String, Object>() : attrs;
+		NodeList nl = n.getChildNodes();
+		if (nl.getLength() > 0) {
+			for (int j = 0; j < nl.getLength(); j++) {
+				Object o = createItem(nl.item(j));
+				if (o instanceof Map) {
+					Object k = ((Map) o).keySet().iterator().next();
+					atrs.put(k.toString(), ((Map) o).get(k));
+				} else if (o instanceof List && ((List) o).size() >= 1 &&
+					((List) o).get(0) instanceof Map) {
+					Iterator<?> x =
+						((Map)((List)o).get(0)).entrySet().iterator();
+					while (x.hasNext()) {
+						Map.Entry<?, ?> y = (Map.Entry) x.next();
+						List<?> list = (List) o;
+						if (list.size() == 1) {
+							atrs.put(y.getKey().toString(), y.getValue());
 						} else {
-							parent.setAttribute(key, "" + val);
+							List<Object> z= new ArrayList<Object>();
+							for (int k = 1; k <  list.size(); k++) {
+								z.add(list.get(k));
+							}
+							atrs.put(y.getKey().toString(), z);
 						}
 					}
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	/** Generate XML from an JSON array.
-	 * @param array JSON array which will be converted to XML.
-	 * @param parent parent element.
-	 */
-	private void genArray(final List<Object> array, final Element parent) {
-		parent.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-			"xmlns:" + _jsprefix , JSON_NS_URI);
-		for (Object o: array) {
-			Element el1;
-			if (o == null) {
-				el1 = parent.getOwnerDocument().createElementNS(
-					JSON_NS_URI, _jsprefix + ":item");
-				el1.setTextContent("null");
-				parent.appendChild(el1);
-			} else {
-				if (o instanceof Map) {
-					el1 = parent.getOwnerDocument().createElementNS(
-						JSON_NS_URI, _jsprefix + ":map");
-					genJMap((Map<String, Object>) o, el1);
-					parent.appendChild(el1);
-				} else if (o instanceof List) {
-					el1 = parent.getOwnerDocument().createElementNS(
-						JSON_NS_URI, _jsprefix + ":array");
-					genArray((List<Object>) o, el1);
-					parent.appendChild(el1);
 				} else {
-					el1 = parent.getOwnerDocument().createElementNS(
-						JSON_NS_URI, _jsprefix + ":item");
-					el1.setTextContent(o.toString());
-					parent.appendChild(el1);
+					atrs.put(toJsonName(nl.item(j).getNodeName()), o);
 				}
 			}
 		}
+		return atrs;
 	}
 
-	/** Create XML element from JSON.
-	 * @param xd XDDocument.
-	 * @param el input data.
-	 * @return XML element created from JSON.
+	/** Create JSON item from XML node.
+	 * @param n XML node.
+	 * @return JSON item
 	 */
-	@SuppressWarnings("unchecked")
-	private Element jsToXML(final Object json) {
-		Document doc;
-		if (json instanceof Map) {
-			Map <String, Object> map = (Map<String, Object>) json;
-			doc = KXmlUtils.newDocument(
-				JSON_NS_URI, _jsprefix + ":map", null);
-			genJMap(map, doc.getDocumentElement());
-		} else if (json instanceof List) {
-			List<Object> array = (List<Object>) json;
-			doc = KXmlUtils.newDocument(
-				JSON_NS_URI, _jsprefix + ":array", null);
-			genArray(array, doc.getDocumentElement());
-		} else {
-			throw new RuntimeException("Unknown instance of JSON");
+	private static Object createItem(final Node n) {
+		switch (n.getNodeType()) {
+			case Node.ELEMENT_NODE: {
+				if (JSON_NS_URI.equals(n.getNamespaceURI())) {
+					String name = n.getLocalName();
+					if (J_ARRAY.equals(name)) {
+						return createArray(n.getChildNodes());
+					}
+					if (J_MAP.equals(name)) {
+						return createMap(n.getChildNodes());
+					}
+					if (J_EXTMAP.equals(name)) {
+						return namedItems(n, null);
+					}
+					if (J_NULL.equals(name)) {
+						return null;
+					} else if (J_STRING.equals(name)
+						|| J_NUMBER.equals(name)
+						|| J_BOOLEAN.equals(name)) {
+						String s = ((Element) n).getTextContent();
+						return getValue(s);
+					}
+					throw new RuntimeException(
+						"Incorrect node: " + n.getNodeName());
+				} else {
+					return xmlToJson((Element) n);
+				}
+			}
+			case Node.TEXT_NODE:
+			case Node.CDATA_SECTION_NODE:
+				List<Object> list = new ArrayList<Object>();
+				String s = n.getNodeValue();
+				if (s == null) {
+					s = "";
+				}
+				valuesToArray(list, s);
+				if (list.size() == 1) {
+					return list.get(0);
+				}
+				return list;
 		}
-		return doc.getDocumentElement();
+		return "?";
 	}
 
-	public static final Element jsonToXml(final Object json) {
-		return jsonToXml(json, null);
+	/** Convert XML element to object with JSON data.
+	 * @param xml XML element.
+	 * @return object with JSON data.
+	 */
+	public static final Object xmlToJson(final Element xml) {
+		NodeList nl = xml.getChildNodes();
+		if (JSON_NS_URI.equals(xml.getNamespaceURI())) {
+			if (J_ARRAY.equals(xml.getLocalName())) {
+				return createArray(nl);
+			}
+			if (J_MAP.equals(xml.getLocalName())) {
+				return createMap(nl);
+			}
+			//Incorrect XML node name with JSON namespace &{0}{: }
+			throw new SRuntimeException(JSON.JSON013, xml.getNodeName());
+		}
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		String key = toJsonName(xml.getNodeName());
+		if (xml.getChildNodes().getLength() == 0) {
+			map.put(key, createAttrs(xml));
+			return map;
+		} else {
+			Map<String, Object> attrs = createAttrs(xml);
+			int i = 0;
+			int len = nl.getLength();
+			if (len >= 1) {
+				Node n = nl.item(0);
+				if (JSON_NS_URI.equals(n.getNamespaceURI())
+					&& J_EXTMAP.equals(n.getLocalName())) {
+					i = 1;
+					NodeList nl1 = n.getChildNodes();
+					if (nl1.getLength() > 0) {
+						if (attrs == null) {
+							attrs = new LinkedHashMap<String, Object>();
+						}
+						for (int j = 0; j < nl1.getLength(); j++) {
+							Object o = createItem(nl1.item(j));
+							if (o instanceof Map) {
+								Map<?,?> m = (Map) o;
+								Object k = m.keySet().iterator().next();
+								attrs.put(k.toString(), m.get(k));
+							} else if (o instanceof List &&
+								((List) o).size() >= 1 &&
+								((List) o).get(0) instanceof Map) {
+								Iterator<?> x = ((Map)((List)o).get(0))
+									.entrySet().iterator();
+								while (x.hasNext()) {
+									Map.Entry<?, ?> y = (Map.Entry) x.next();
+									List<?> list = (List) o;
+									if (list.size() == 1) {
+										attrs.put(y.getKey().toString(),
+											y.getValue());
+									} else {
+										List<Object> z= new ArrayList<Object>();
+										for (int k = 1; k <  list.size(); k++) {
+											z.add(list.get(k));
+										}
+										attrs.put(y.getKey().toString(), z);
+									}
+								}
+							}
+						}
+					}
+				} else if (attrs == null && len == 1) {
+					map.put(key, createItem(nl.item(0)));
+					return map;
+				}
+			}
+			if (len == 1 && i == 1 &&
+				!JSON_NS_URI.equals(xml.getNamespaceURI()) &&
+				!J_ARRAY.equals(xml.getLocalName())) {
+				// no js:array and no child nodes (just an element)
+				map.put(key, attrs);
+				return map;
+			}
+			Object result;
+			List<Object> list = new ArrayList<Object>();
+			if (attrs == null || attrs.isEmpty()) {
+				// no attributes: we set list to value and return map
+				map.put(key, list);
+				result = map;
+			} else {
+				// attributes exists: we set return list with map
+				map.put(key, attrs);
+				list.add(map);
+				result = list;
+			}
+			for (; i < len; i++) {
+				Node n = nl.item(i);
+				if (n.getNodeType() == Node.TEXT_NODE
+					|| n.getNodeType() == Node.CDATA_SECTION_NODE) {
+					String s = n.getNodeValue();
+					if (s == null) {
+						s = "";
+					}
+					while (i+1 < nl.getLength()
+						&& ((n = nl.item(i+1)).getNodeType() == Node.TEXT_NODE
+						|| n.getNodeType() == Node.CDATA_SECTION_NODE)) {
+						s += n.getNodeValue();
+						i++;
+					}
+					valuesToArray(list, s);
+				} else {
+					list.add(createItem(n));
+				}
+			}
+			return result;
+		}
 	}
 
-	public static final Element jsonToXml(final Object json,
-		final String prefix) {
-		return new JSONUtil(prefix).jsToXML(json);
+////////////////////////////////////////////////////////////////////////////////
+// JSON to string
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Add the string created from JSON object to StringBuilder.
+	 * @param obj JSON object to be created to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 */
+	private static void objToJSONString(final Object obj,
+		final String indent,
+		final StringBuilder sb) {
+		if (obj == null) {
+			sb.append("null");
+		} else if (obj instanceof String) {
+			String s = (String) obj;
+			sb.append('"');
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (Character.isDefined(c)) {
+					switch (c) {
+						case '\n':
+							sb.append("\\n");
+							break;
+						case '\r':
+							sb.append("\\r");
+							break;
+						case '\b':
+							sb.append("\\b");
+							break;
+						case '\t':
+							sb.append("\\t");
+							break;
+						case '\f':
+							sb.append("\\f");
+							break;
+						case '\\':
+							sb.append("\\\\");
+							break;
+						case '"':
+							sb.append("\\\"");
+							break;
+						default:
+							sb.append(c);
+					}
+				} else {
+					sb.append("\\u");
+					int x = c;
+					for (int j=12; j >= 0; j-= 4) {
+						sb.append("0123456789ABCDEF".charAt((x >> j) & 15));
+					}
+				}
+			}
+			sb.append('"');
+		} else if (obj instanceof Boolean || obj instanceof Number) {
+			sb.append(obj.toString());
+		} else if (obj instanceof List) {
+			List<?> x = (List) obj;
+			arrayToJSONString(x, indent, sb);
+		} else if (obj instanceof Map) {
+			Map<?,?> x = (Map) obj;
+			mapToJSONString(x, indent, sb);
+		} else {
+			throw new SRuntimeException(JSON.JSON011, obj);//Not JSON object&{0}
+		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Create JSON from XML element according to XDDocument.
-////////////////////////////////////////////////////////////////////////////////
-//
-//	/** Create JSON from XML element according to XDDocument.
-//	 * @param xd XDDocument.
-//	 * @param el input data.
-//	 * @return JSON object created from Element.
-//	 */
-//	public static Element xmlToJson(XDDocument xd, Element el) {
-//		return null;
-//	}
+	/** Add the string created from JSON array to StringBuilder.
+	 * @param array JSON array to be created to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 */
+	private static void arrayToJSONString (final List<?> array,
+		final String indent,
+		final StringBuilder sb) {
+		sb.append('[');
+		if (array.isEmpty()) {
+			sb.append(']');
+			return;
+		}
+		String ind = (indent != null) ? indent + "  " : null;
+		boolean first = true;
+		for (Object o: array) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(',');
+			}
+			if (ind != null) {
+				sb.append(ind);
+			}
+			objToJSONString(o, ind, sb);
+		}
+		if (indent != null) {
+			sb.append(indent);
+		}
+		sb.append(']');
+	}
 
+	/** Add the string created from JSON map to StringBuilder.
+	 * @param map JSON map to be created to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 */
+	private static void mapToJSONString(final Map<?,?> map,
+		final String indent,
+		final StringBuilder sb) {
+		sb.append('{');
+		if (map.isEmpty()) {
+			sb.append('}');
+			return;
+		}
+		String ind = (indent != null) ? indent + "  " : null;
+		boolean first = true;
+		for (Map.Entry<?,?> e: map.entrySet()) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(',');
+			}
+			if (ind != null) {
+				sb.append(ind);
+			}
+			objToJSONString(e.getKey(), ind, sb);
+			sb.append(':');
+			objToJSONString(e.getValue(), ind, sb);
+		}
+		if (ind != null) {
+			sb.append(indent);
+		}
+		sb.append('}');
+	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Create XML element from JSON according to XDDocument.
-////////////////////////////////////////////////////////////////////////////////
-//
-//	/** Create XML element from JSON according to XDDocument.
-//	 * @param xd XDDocument.
-//	 * @param json json object.
-//	 * @return the element in the form of JSON object.
-//	 */
-//	public static Element jsonToXml(XDDocument xd, Object json) {
-//		return null;
-//	}
+	/** Create JSON string from object (no indentation).
+	 * @param obj JSON object.
+	 * @return string with JSON source format.
+	 */
+	public final static String toJSONString(final Object obj) {
+		return toJSONString(obj, false);
+	}
+
+	/** Create JSON string from object. Indentation depends on argument.
+	 * @param obj JSON object.
+	 * @param indent if true then result will be indented.
+	 * @return string with JSON source format.
+	 */
+	public final static String toJSONString(final Object obj, boolean indent) {
+		StringBuilder sb = new StringBuilder();
+		String ind = indent ? "\n" : null;
+		if (obj instanceof List) {
+			arrayToJSONString((List) obj, ind, sb);
+		} else if (obj instanceof Map) {
+			mapToJSONString((Map) obj, ind, sb);
+		} else {
+			//Not JSON object &{0}{: }
+			throw new SRuntimeException(JSON.JSON011, obj);
+		}
+		return sb.toString();
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Compare two JSON objects.
@@ -1117,11 +1548,8 @@ public class JSONUtil implements XDConstants {
 				return n1.equals(new BigDecimal(n2.doubleValue()));
 			}
 		} else if (n1 instanceof BigInteger) {
-			if (n2 instanceof BigInteger) {
+			if (n2 instanceof BigDecimal || n2 instanceof BigInteger) {
 				return n1.equals(n2);
-			}
-			if (n2 instanceof BigDecimal) {
-				return equalNumber(n2, n1);
 			} else if (n2 instanceof Long || n2 instanceof Integer
 				|| n2 instanceof Short || n2 instanceof Byte) {
 				return n1.equals(new BigInteger(n2.toString()));
@@ -1136,6 +1564,8 @@ public class JSONUtil implements XDConstants {
 				return n1.longValue() == n2.longValue();
 			} else if (n2 instanceof Double || n2 instanceof Float) {
 				return n1.longValue() == n2.longValue();
+			} else if (n2 instanceof BigInteger) {
+				return equalNumber(n2, n1);
 			}
 		} else if (n1 instanceof Double || n1 instanceof Float) {
 			return n1.doubleValue() == n2.doubleValue();
@@ -1146,43 +1576,42 @@ public class JSONUtil implements XDConstants {
 	}
 
 	/** Check if JSON values from arguments are equal.
-	 * @param n1 first value.
-	 * @param n2 second value.
+	 * @param o1 first value.
+	 * @param o2 second value.
 	 * @return true if and only if both values are equal.
 	 * @throws SRuntimeException if objects are incomparable
 	 */
-	private static boolean equalValue(final Object v1, final Object v2) {
-		if (v1 == null) {
-			return v2 == null;
-		} else if (v2 == null) {
+	private static boolean equalValue(final Object o1, final Object o2) {
+		if (o1 == null) {
+			return o2 == null;
+		} else if (o2 == null) {
 			return false;
 		}
-		if (v1 instanceof Map) {
-			return v2 instanceof Map ? equalMap((Map)v1, (Map)v2) : false;
+		if (o1 instanceof Map) {
+			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
 		}
-		if (v1 instanceof List) {
-			return v2 instanceof List ? equalArray((List) v1, (List) v2) : false;
+		if (o1 instanceof List) {
+			return o2 instanceof List ? equalArray((List) o1, (List) o2) : false;
 		}
-		if (v1 instanceof String) {
-			return ((String) v1).equals(v2);
+		if (o1 instanceof String) {
+			return ((String) o1).equals(o2);
 		}
-		if (v1 instanceof Number) {
-			return (v2 instanceof Number)
-				? equalNumber((Number) v1, (Number) v2) : false;
+		if (o1 instanceof Number) {
+			return (o2 instanceof Number)
+				? equalNumber((Number) o1, (Number) o2) : false;
 		}
-		if (v1 instanceof Boolean) {
-			return ((Boolean) v1).equals(v2);
+		if (o1 instanceof Boolean) {
+			return ((Boolean) o1).equals(o2);
 		}
-		//Incomparable objects &{0} and &{1}
+		// Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
-			v1.getClass().getName(), v2.getClass().getName());
+			o1.getClass().getName(), o2.getClass().getName());
 	}
 
 	/** Compare two JSON objects.
-	 * @param j1 first object with JSON.
-	 * @param j2 second object with JSON.
+	 * @param j1 first object with JSON data.
+	 * @param j2 second object with JSON data.
 	 * @return true if and only if both objects contains equal data.
-	 * @throws SRuntimeException if objects are incomparable
 	 */
 	public static final boolean jsonEqual(final Object j1, final Object j2) {
 		if (j1 != null && j2 != null
@@ -1190,10 +1619,9 @@ public class JSONUtil implements XDConstants {
 			&& (j2 instanceof Map || j2 instanceof List)) {
 			return equalValue(j1, j2);
 		}
-		//Incomparable objects &{0} and &{1}
+		// Uncomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
 			j1 == null ? "null" : j1.getClass().getName(),
 			j2 == null ? "null" : j2.getClass().getName());
 	}
-
 }

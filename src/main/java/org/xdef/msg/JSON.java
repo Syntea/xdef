@@ -31,10 +31,12 @@ public interface JSON {
 	public static final long JSON013 = 13834649612L;
 	/** Illegal leading zero in number */
 	public static final long JSON014 = 13834649613L;
+	/** Unclosed comment&amp;{#SYS000} */
+	public static final long JSON015 = 13834649614L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649614L;
+	public static final long JSON_DESCRIPTION = 13834649615L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649615L;
+	public static final long JSON_LANGUAGE = 13834649616L;
 
 	/** Default language. */
 	public static final String JSON = "eng";
