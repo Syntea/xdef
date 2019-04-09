@@ -537,7 +537,14 @@ public final class Test000 extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String defName = "RegistraceSU";
-			File[] defFiles = SUtils.getFileGroup(dataDir + "Test000_05*.xdef");
+			//DEBUG: File[] defFiles = SUtils.getFileGroup(dataDir + "Test000_05*.xdef");
+			File[] defFiles = new File[] {
+				new File(dataDir + "Test000_05_L1_common_.xdef"),
+				new File(dataDir + "Test000_05_L1_common.xdef"),
+				new File(dataDir + "Test000_05_L1Macros.xdef"),
+				new File(dataDir + "Test000_05_RegistraceSU_.xdef"),
+				new File(dataDir + "Test000_05_RegistraceSU.xdef")
+			};
 			File dataFile = new File(dataDir + "Test000_05.xml");
 			String errFile = tempDir + "Test000_05.err";
 			String lstFile = tempDir + "Test000_05.lst";
