@@ -1416,32 +1416,37 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case EQUALSI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.equalsIgnoreCase(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.equalsIgnoreCase(s));
 					continue;
 				}
 				case STARTSWITH: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.startsWith(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.startsWith(s));
 					continue;
 				}
 				case STARTSWITHI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(s.length() > t.length() ? false
+					_stack[sp] = new DefBoolean(
+						t == null || s.length() > t.length() ? false
 						: s.equalsIgnoreCase(t.substring(0, s.length())));
 					continue;
 				}
 				case ENDSWITH: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.endsWith(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.endsWith(s));
 					continue;
 				}
 				case ENDSWITHI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(s.length() > t.length() ? false
+					_stack[sp] = new DefBoolean(
+						t == null || s.length() > t.length() ? false
 						: s.equalsIgnoreCase(
 							t.substring(t.length() - s.length())));
 					continue;
@@ -1449,37 +1454,43 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case CHK_GT: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) > 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.compareTo(s) > 0);
 					continue;
 				}
 				case CHK_LT: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) < 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? true : t.compareTo(s) < 0);
 					continue;
 				}
 				case CHK_GE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) >= 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.compareTo(s) >= 0);
 					continue;
 				}
 				case CHK_LE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) <= 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? true : t.compareTo(s) <= 0);
 					continue;
 				}
 				case CHK_NE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(!t.equals(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? s != null : !t.equals(s));
 					continue;
 				}
 				case CHK_NEI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(!s.equalsIgnoreCase(t));
+					_stack[sp] = new DefBoolean(
+						t == null ? s != null : !s.equalsIgnoreCase(t));
 					continue;
 				}
 				case GET_USEROBJECT:

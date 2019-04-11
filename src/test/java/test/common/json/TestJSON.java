@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.XDConstants;
 import test.utils.STester;
 
 /** Test JSON tools.
@@ -120,7 +121,7 @@ public class TestJSON extends STester {
 		if (nl2.getLength() != len) {
 			return false;
 		}
-		if (JSONUtil.JSON_NS_URI.equals(uri) &&
+		if (XDConstants.JSON_NS_URI.equals(uri) &&
 			(JSONUtil.J_MAP.equals(e1.getLocalName())
 			|| JSONUtil.J_EXTMAP.equals(e1.getLocalName()))) {
 			for (int i = 0; i < len; i++) {

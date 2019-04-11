@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
  * to JSON and for comparing of JSON objects.
  * @author Vaclav Trojan
  */
-public class JSONUtil implements XDConstants {
+public class JSONUtil {
 
 	/** JSON map. */
 	public static final String J_MAP = "map";
@@ -55,27 +55,6 @@ public class JSONUtil implements XDConstants {
 	/** Extension of JSON map if named values are map or array. */
 	public static final String J_EXTMAP = "mapItems";
 
-	/** This field is internally used. */
-	public final KNamespace _ns = new KNamespace();
-
-	public int _n = 0;
-
-	/** This method is internally used. */
-	public final void pushContext() {
-		_ns.pushContext();
-		_n++;
-	}
-
-	/** This method is internally used. */
-	public final void popContext() {
-		_ns.popContext();
-		_n--;
-		if (_n < 0) {
-			// Internal error&{0}{: }
-			throw new SRuntimeException(SYS.SYS066,	"Namespace nesting: "+_n);
-		}
-	}
-
 	/** Create instance of JSONUtil object (used only internally). */
 	public JSONUtil() {}
 
@@ -93,7 +72,7 @@ public class JSONUtil implements XDConstants {
 	private static final class JParser {
 		/** parser used for parsing of source. */
 		private final SParser _p;
-
+		/* Flag if comments are allowed. */
 		private boolean _commentsAllowed;
 
 		/** Create instance of JSON parser build with reader,
@@ -167,11 +146,11 @@ public class JSONUtil implements XDConstants {
 							return result;
 						}
 						if (_p.isChar(',')) {
-							_p.isSpaces();
+							isWhitespace();
 						} else {
-							// JSON002="&{0}" expected&{#SYS000}
+							// "&{0}" expected&{#SYS000}
 							throw new SRuntimeException(
-							JSON.JSON002, ",", genPosMod());
+								JSON.JSON002, ",", genPosMod());
 						}
 					} else {
 						// String with name of item expected
@@ -191,11 +170,10 @@ public class JSONUtil implements XDConstants {
 						return result;
 					}
 					if (_p.isChar(',')) {
-						_p.isSpaces();
+						isWhitespace();
 					} else {
-						// JSON002="&{0}" expected&{#SYS000}
-						throw new SRuntimeException(
-						JSON.JSON002, ",", genPosMod());
+						throw new SRuntimeException( //"&{0}" expected&{#SYS000}
+							JSON.JSON002, ",", genPosMod());
 					}
 				}
 			} else if (_p.isChar('"')) { // string
@@ -457,9 +435,35 @@ public class JSONUtil implements XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to XML
 ////////////////////////////////////////////////////////////////////////////////
+	/** Stack of namespace URI. */
+	private final KNamespace _ns = new KNamespace();
+	/** namespace URI top index. */
+	private int _n = 0;
 
+	/** This method is internally used. */
+	public final void pushContext() {
+		_ns.pushContext();
+		_n++;
+	}
+
+	public String getNamespaceURI(final String prefix) {
+		return _ns.getNamespaceURI(prefix);
+	}
+	
+	public void setPrefix(final String prefix, final String uri) {
+		_ns.setPrefix(prefix, uri);
+	}
+	/** This method is internally used. */
+	public final void popContext() {
+		_ns.popContext();
+		_n--;
+		if (_n < 0) {
+			// Internal error&{0}{: }
+			throw new SRuntimeException(SYS.SYS066,	"Namespace nesting: "+_n);
+		}
+	}
 	/** Convert character to representation used in XML names. */
-	private static String toXmlChar(final char c) {
+	private static String toXmlNameChar(final char c) {
 		return "_u" + Integer.toHexString(c) + '_';
 	}
 
@@ -475,12 +479,12 @@ public class JSONUtil implements XDConstants {
 			hexDigit(s.charAt(index+2)) < 0) {
 			return false;
 		}
-		// is hexDigit
+		// parse hexdigits
 		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
 			char ch = s.charAt(i);
 			if (hexDigit(ch) < 0) {
-				//if not hexadecimal digit and follows '_' return true
-				return ch == '_'; // if
+				// not hexadecimal digit.
+				return ch == '_'; //if '_' return true otherwise return false
 			}
 		}
 		return false;
@@ -498,12 +502,12 @@ public class JSONUtil implements XDConstants {
 		char ch = s.charAt(0);
 		sb.append(isJChar(s, 0)
 			|| StringParser.getXmlCharType(ch, (byte) 10)
-				!= StringParser.XML_CHAR_NAME_START ? toXmlChar(ch) : ch);
+				!= StringParser.XML_CHAR_NAME_START ? toXmlNameChar(ch) : ch);
 		boolean firstcolon = true;
 		for (int i = 1; i < s.length(); i++) {
 			ch = s.charAt(i);
 			if (isJChar(s, i)) {
-				sb.append(toXmlChar(ch));
+				sb.append(toXmlNameChar(ch));
 			} else if (ch == ':' && firstcolon) {
 				firstcolon = false;
 				sb.append(':');
@@ -512,7 +516,7 @@ public class JSONUtil implements XDConstants {
 				sb.append(ch);
 			} else {
 				firstcolon = false;
-				sb.append(toXmlChar(ch));
+				sb.append(toXmlNameChar(ch));
 			}
 		}
 		return sb.toString();
@@ -543,7 +547,7 @@ public class JSONUtil implements XDConstants {
 		int i = s.indexOf(':');
 		return (i >= 0) ? s.substring(0, i) : "";
 	}
-
+	
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
 	 * @param namespace name space URI.
@@ -556,12 +560,12 @@ public class JSONUtil implements XDConstants {
 		pushContext();
 		String u;
 		String prefix = getNamePrefix(tagname);
-		u = namespace == null ?	_ns.getNamespaceURI(prefix) : namespace;
+		u = namespace == null ?	getNamespaceURI(prefix) : namespace;
 		Document doc = getDoc(n);
 		Element e = u != null ? doc.createElementNS(u, tagname)
 			: doc.createElement(replaceColonInName(tagname));
-		if (u != null && _ns.getNamespaceURI(prefix) == null) {
-			_ns.setPrefix(prefix, u);
+		if (u != null && getNamespaceURI(prefix) == null) {
+			setPrefix(prefix, u);
 			e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				prefix.length() > 0 ? "xmlns:" + prefix : "xmlns", u);
 		}
@@ -575,7 +579,8 @@ public class JSONUtil implements XDConstants {
 	 * @return created element.
 	 */
 	public Element appendJSONElem(final Node n, final String name) {
-		return appendElem(n, JSON_NS_URI, JSON_NS_PREFIX + ":" + name);
+		return appendElem(n, XDConstants.JSON_NS_URI,
+			XDConstants.JSON_NS_PREFIX + ":" + name);
 	}
 
 	/** Append text with a value to element.
@@ -710,7 +715,7 @@ public class JSONUtil implements XDConstants {
 		final Object val,
 		final Node parent) {
 		String name = toXmlName(rawName);
-		String namespace = _ns.getNamespaceURI(getNamePrefix(name));
+		String namespace = getNamespaceURI(getNamePrefix(name));
 		if (val == null) {
 			return appendElem(parent, namespace, name);
 		} else if (val instanceof Map) {
@@ -737,11 +742,11 @@ public class JSONUtil implements XDConstants {
 					if ("xmlns".equals(name1)) {
 						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 							"xmlns", s);
-						_ns.setPrefix("", s);
+						setPrefix("", s);
 					} else if (name1.startsWith("xmlns:")) {
 						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 							name1, s);
-						_ns.setPrefix(name1.substring(6), s);
+						setPrefix(name1.substring(6), s);
 					}
 				}
 			}
@@ -758,7 +763,7 @@ public class JSONUtil implements XDConstants {
 				} else {
 					if (!e.hasAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 						name1)) {
-						String uri1 = _ns.getNamespaceURI(getNamePrefix(name1));
+						String uri1 = getNamespaceURI(getNamePrefix(name1));
 						if (isSimpleValue(o) ) { // we set it as attribute
 							String s;
 							if (o == null) {
@@ -835,9 +840,9 @@ public class JSONUtil implements XDConstants {
 			String key = (String) map.keySet().iterator().next();
 			namedItemToXml(key, map.get(key), parent);
 		} else {
-			Element el = appendJSONElem(parent, J_MAP);
+			Element ee = appendJSONElem(parent, J_MAP);
 			for (Object key: map.keySet()) {
-				namedItemToXml(key.toString(), map.get(key), el);
+				namedItemToXml(key.toString(), map.get(key), ee);
 				popContext();
 			}
 		}
@@ -873,11 +878,12 @@ public class JSONUtil implements XDConstants {
 			Document doc = db.newDocument();
 			JSONUtil jsp = new JSONUtil();
 			jsp.json2xml(json, doc);
-			if (jsp._n != 0) {
-				// Internal error&{0}{: }
-				throw new SRuntimeException(SYS.SYS066,
-					"Namespace nesting: "+jsp._n);
-			}
+			jsp._ns.clearContext();
+//			if (jsp._n != 0) {
+//				// Internal error&{0}{: }
+//				throw new SRuntimeException(SYS.SYS066,
+//					"Namespace nesting: "+jsp._n);
+//			}
 			return doc.getDocumentElement();
 		} catch (ParserConfigurationException ex) {
 			return null;
@@ -1047,7 +1053,7 @@ public class JSONUtil implements XDConstants {
 			} else if (p.isSignedFloat()) {
 				array.add(new BigDecimal(p.getParsedString()));
 			} else if (p.isSignedInteger()) {
-				array.add(new BigInteger(p.getParsedString()));					
+				array.add(new BigInteger(p.getParsedString()));
 			} else {
 				if (p.isChar('"')) { // quoted string
 					StringBuilder sb = new StringBuilder();
@@ -1107,7 +1113,7 @@ public class JSONUtil implements XDConstants {
 	 * @param nl NodeList with nodes.
 	 * @return JSON map created from NodeList.
 	 */
-	private static Map<?,?> createMap(final NodeList nl) {
+	private static Map<String, Object> createMap(final NodeList nl) {
 		Map<String,Object> map = new LinkedHashMap<String,Object>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
@@ -1180,7 +1186,7 @@ public class JSONUtil implements XDConstants {
 	private static Object createItem(final Node n) {
 		switch (n.getNodeType()) {
 			case Node.ELEMENT_NODE: {
-				if (JSON_NS_URI.equals(n.getNamespaceURI())) {
+				if (XDConstants.JSON_NS_URI.equals(n.getNamespaceURI())) {
 					String name = n.getLocalName();
 					if (J_ARRAY.equals(name)) {
 						return createArray(n.getChildNodes());
@@ -1196,7 +1202,13 @@ public class JSONUtil implements XDConstants {
 					} else if (J_STRING.equals(name)
 						|| J_NUMBER.equals(name)
 						|| J_BOOLEAN.equals(name)) {
-						String s = ((Element) n).getTextContent();
+						String s = n.getTextContent();
+						return getValue(s);
+					} else if (J_ITEM.equals(name)) {
+						String s = n.getTextContent();
+						if (s == null || s.isEmpty()) {
+							return "";
+						}
 						return getValue(s);
 					}
 					throw new RuntimeException(
@@ -1227,7 +1239,7 @@ public class JSONUtil implements XDConstants {
 	 */
 	public static final Object xmlToJson(final Element xml) {
 		NodeList nl = xml.getChildNodes();
-		if (JSON_NS_URI.equals(xml.getNamespaceURI())) {
+		if (XDConstants.JSON_NS_URI.equals(xml.getNamespaceURI())) {
 			if (J_ARRAY.equals(xml.getLocalName())) {
 				return createArray(nl);
 			}
@@ -1248,7 +1260,7 @@ public class JSONUtil implements XDConstants {
 			int len = nl.getLength();
 			if (len >= 1) {
 				Node n = nl.item(0);
-				if (JSON_NS_URI.equals(n.getNamespaceURI())
+				if (XDConstants.JSON_NS_URI.equals(n.getNamespaceURI())
 					&& J_EXTMAP.equals(n.getLocalName())) {
 					i = 1;
 					NodeList nl1 = n.getChildNodes();
@@ -1289,9 +1301,9 @@ public class JSONUtil implements XDConstants {
 					return map;
 				}
 			}
-			if (len == 1 && i == 1 &&
-				!JSON_NS_URI.equals(xml.getNamespaceURI()) &&
-				!J_ARRAY.equals(xml.getLocalName())) {
+			if (len == 1 && i == 1
+				&& !XDConstants.JSON_NS_URI.equals(xml.getNamespaceURI()) 
+				&& !J_ARRAY.equals(xml.getLocalName())) {
 				// no js:array and no child nodes (just an element)
 				map.put(key, attrs);
 				return map;
@@ -1545,7 +1557,8 @@ public class JSONUtil implements XDConstants {
 				|| n2 instanceof Short || n2 instanceof Byte) {
 				return n1.equals(new BigDecimal(n2.longValue()));
 			} else if (n2 instanceof Double || n2 instanceof Float) {
-				return n1.equals(new BigDecimal(n2.doubleValue()));
+				return ((BigDecimal) n1).compareTo(
+					new BigDecimal(n2.doubleValue())) == 0;
 			}
 		} else if (n1 instanceof BigInteger) {
 			if (n2 instanceof BigDecimal || n2 instanceof BigInteger) {

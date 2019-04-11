@@ -1,11 +1,11 @@
 package org.xdef.component;
 
+import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
-import org.xdef.msg.SYS;
 import org.xdef.sys.JSONUtil;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,21 @@ import org.w3c.dom.NodeList;
  */
 public class XJUtil extends JSONUtil {
 
-	private XJUtil() {super();}
+	private final String _jsonPrefix;
+	private final String _xdefPrefix;
+	private final String _xdefNS;
+	private final String _jsonNS;
+
+	private XJUtil(final String jsonPrefix,
+		final String xdefPrefix) {
+		super();
+		_jsonPrefix = jsonPrefix == null
+			? XDConstants.JSON_NS_PREFIX : jsonPrefix;
+		_xdefPrefix = xdefPrefix == null
+			? XDConstants.XDEF_NS_PREFIX : xdefPrefix;
+		_xdefNS = XDConstants.XDEF32_NS_URI;
+		_jsonNS = XDConstants.JSON_NS_URI;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to XDEF
@@ -127,7 +141,7 @@ public class XJUtil extends JSONUtil {
 		final Object val,
 		final Node parent) {
 		final String name = toXmlName(rawName);
-		final String namespace = _ns.getNamespaceURI(getNamePrefix(name));
+		final String namespace = getNamespaceURI(getNamePrefix(name));
 		if (val == null) {
 			return appendElem(parent, namespace, name);
 		} else if (val instanceof Map) {
@@ -154,11 +168,11 @@ public class XJUtil extends JSONUtil {
 					if ("xmlns".equals(name1)) {
 						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 							"xmlns", s);
-						_ns.setPrefix("", s);
+						setPrefix("", s);
 					} else if (name1.startsWith("xmlns:")) {
 						e.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 							name1, s);
-						_ns.setPrefix(name1.substring(6), s);
+						setPrefix(name1.substring(6), s);
 					}
 				}
 			}
@@ -175,7 +189,7 @@ public class XJUtil extends JSONUtil {
 				} else {
 					if (!name1.startsWith("xmlns")) {
 						final String uri1 =
-							_ns.getNamespaceURI(getNamePrefix(name1));
+							getNamespaceURI(getNamePrefix(name1));
 						if (isSimpleValue(o)) { // we set it as attribute
 							String s;
 							if (o == null) {
@@ -235,8 +249,8 @@ public class XJUtil extends JSONUtil {
 			if (ee != null) {
 				final NodeList nl = ee.getChildNodes();
 				if (nl.getLength() > 1) {
-					Element eee = getDoc(ee).createElementNS(XDEF31_NS_URI,
-						XDEF_NS_PREFIX + ":mixed");
+					Element eee = getDoc(ee).createElementNS(_xdefNS,
+						_xdefPrefix + ":mixed");
 					for (int i = nl.getLength()-1; i >=0 ; i--) {
 						final Node n = nl.item(i);
 						eee.appendChild(n.cloneNode(true));
@@ -310,27 +324,33 @@ public class XJUtil extends JSONUtil {
 	 * @return XML element with X-definition.
 	 */
 	public final static Element jsonToXDef(final Object json) {
+		return jsonToXDef(json, null, null);
+	}
+
+	/** Convert object with JSON data to XML element.
+	 * @param json object with JSON data.
+	 * @param jsonPrefix prefix of JSON namesapce uri.
+	 * @param xdefPrefix prefix of X-definition namesapce uri.
+	 * @return XML element with X-definition.
+	 */
+	public final static Element jsonToXDef(final Object json,
+		final String jsonPrefix,
+		final String xdefPrefix) {
 		try {
 			final DocumentBuilderFactory df =
 				DocumentBuilderFactory.newInstance();
 			final DocumentBuilder db = df.newDocumentBuilder();
 			final Document doc = db.newDocument();
-			final XJUtil jsp = new XJUtil();
+			final XJUtil jsp = new XJUtil(jsonPrefix, xdefPrefix);
 			final Element xdef =
-				jsp.appendElem(doc, XDEF31_NS_URI, XDEF_NS_PREFIX + ":def");
+				jsp.appendElem(doc, jsp._xdefNS, jsp._xdefPrefix + ":def");
 			xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				"xmlns:" + JSON_NS_PREFIX, JSON_NS_URI);
-			jsp._ns.setPrefix(JSON_NS_PREFIX, JSON_NS_URI);
-			jsp._ns.setPrefix(XDEF_NS_PREFIX, XDEF_NS_PREFIX);
+				"xmlns:" + jsp._jsonPrefix, jsp._jsonNS);
+			jsp.setPrefix(jsp._jsonPrefix, jsp._jsonNS);
+			jsp.setPrefix(jsp._xdefPrefix, jsp._xdefNS);
 			jsp.json2xd(json, xdef);
 			xdef.setAttribute("root",
 				KXmlUtils.firstElementChild(xdef).getNodeName());
-			jsp.popContext();
-			if (jsp._n != 0) {
-				// Internal error&{0}{: }
-				throw new SRuntimeException(SYS.SYS066,
-					"Namespace nesting:"+jsp._n);
-			}
 			return xdef;
 		} catch (ParserConfigurationException ex) {
 			return null;
