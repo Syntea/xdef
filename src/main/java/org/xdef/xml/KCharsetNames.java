@@ -5,10 +5,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Checking and canonize of character set names in Java and XML format.
+/** Checking and canonize character set names in Java and XML.
  * @author Vaclav Trojan
  */
-public final class CharsetNames {
+public final class KCharsetNames {
 
 	private static final Map<String, String> IANA_TO_JAVA =
 		new TreeMap<String, String>();
@@ -79,7 +79,7 @@ public final class CharsetNames {
 	}
 
 	/** Don't allow user to create an instance of this class. */
-	private CharsetNames() {}
+	private KCharsetNames() {}
 
 	/** Get XML encoding name. Return null if encoding name is
 	 * unknown. The argument can be either a XML encoding name or character set

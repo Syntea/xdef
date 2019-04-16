@@ -11,7 +11,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDBNFRule;
 import org.xdef.XDParser;

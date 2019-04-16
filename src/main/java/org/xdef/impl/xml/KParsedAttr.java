@@ -1,4 +1,4 @@
-package org.xdef.xml;
+package org.xdef.impl.xml;
 
 import org.xdef.sys.SPosition;
 

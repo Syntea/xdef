@@ -5,7 +5,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.component.XComponent;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMNode;

@@ -1,6 +1,6 @@
 package org.xdef.impl;
 
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMDocument;
 import org.xdef.model.XMNode;

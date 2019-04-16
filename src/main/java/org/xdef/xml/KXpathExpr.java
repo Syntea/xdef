@@ -1,5 +1,6 @@
 package org.xdef.xml;
 
+import org.xdef.impl.xml.KNodeList;
 import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import org.w3c.dom.Node;

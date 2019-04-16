@@ -11,7 +11,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDConstants;

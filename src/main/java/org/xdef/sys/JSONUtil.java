@@ -3,7 +3,7 @@ package org.xdef.sys;
 import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

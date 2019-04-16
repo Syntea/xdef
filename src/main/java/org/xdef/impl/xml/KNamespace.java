@@ -1,4 +1,4 @@
-package org.xdef.xml;
+package org.xdef.impl.xml;
 
 import org.xdef.msg.SYS;
 import org.xdef.msg.XML;

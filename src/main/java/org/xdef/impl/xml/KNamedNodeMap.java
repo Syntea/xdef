@@ -1,4 +1,4 @@
-package org.xdef.xml;
+package org.xdef.impl.xml;
 
 import javax.xml.namespace.QName;
 import org.w3c.dom.DOMException;
@@ -10,15 +10,15 @@ import org.w3c.dom.Node;
  */
 public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
-	KNamedNodeMap() {super();}
-	KNamedNodeMap(Node x) {
+	public KNamedNodeMap() {super();}
+	public KNamedNodeMap(Node x) {
 		this();
 		if (x != null){
 			add(x);
 		}
 	}
 
-	KNamedNodeMap(NamedNodeMap x) {
+	public KNamedNodeMap(final NamedNodeMap x) {
 		this();
 		if (x != null){
 			for(int i = 0; i < x.getLength(); i++) {

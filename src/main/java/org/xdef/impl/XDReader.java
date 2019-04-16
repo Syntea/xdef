@@ -31,7 +31,7 @@ import org.xdef.sys.SDuration;
 import org.xdef.sys.SException;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SObjectReader;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;

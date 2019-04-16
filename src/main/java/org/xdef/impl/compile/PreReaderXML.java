@@ -12,14 +12,14 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KParsedAttr;
-import org.xdef.xml.KParsedElement;
+import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.xml.KParsedAttr;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from XML source data.

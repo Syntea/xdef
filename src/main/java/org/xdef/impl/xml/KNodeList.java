@@ -1,22 +1,22 @@
-package org.xdef.xml;
+package org.xdef.impl.xml;
 
 import java.util.ArrayList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Simple implementation of org.w3c.dom.NodeList interface. It also allows
+/** Implementation of org.w3c.dom.NodeList interface. It also allows
  * to use methods addItem, clearItems, addAllItems and containsItem.
  * @author Vaclav Trojan
  */
 public class KNodeList extends ArrayList<Node> implements NodeList {
 
 	/** Create empty list. */
-	KNodeList() {super();}
+	public KNodeList() {super();}
 
 	/** Create list with one node from the argument.
 	 * @param x node which will be in the created list.
 	 */
-	KNodeList(final Node x) {
+	public KNodeList(final Node x) {
 		super();
 		if (x != null){
 			add(x);
@@ -26,7 +26,7 @@ public class KNodeList extends ArrayList<Node> implements NodeList {
 	/** Construct list with items from the list from argument.
 	 * @param x the list with items which will be in the created list.
 	 */
-	KNodeList(final NodeList x) {
+	public KNodeList(final NodeList x) {
 		this();
 		if (x != null) {
 			for (int i = 0; i < x.getLength(); i++) {
@@ -41,29 +41,29 @@ public class KNodeList extends ArrayList<Node> implements NodeList {
 
 	@Override
 	/** Get node from the index in this list.
+	 * @param index index of item.
 	 * @return node from the index in this list.
 	 */
 	public final Node item(final int index) {return get(index);}
 
-	/** Add an item to the position given by argument index.
-	 * @param index
-	 * @param item
+	/** Add node to the position given by argument index.
+	 * @param index index of item.
+	 * @param node node to be added.
 	 */
-	final void addItem(final int index, final Node item) {add(index, item);}
+	public final void addItem(final int index, final Node node) {add(index, node);}
 
 	/** Add an item to the end of list..
-	 * @param index index where to add.
-	 * @param item the item to be added.
+	 * @param node the item to be added.
 	 */
-	final void addItem(final Node item) {add(item);}
+	public final void addItem(final Node node) {add(node);}
 
 	/** Delete all items in this list. */
-	final void clearItems() {clear();}
+	public final void clearItems() {clear();}
 
 	/** Add items from NodeList to this list.
 	 * @param nl list with items to be added.
 	 */
-	final void addAllItems(final NodeList nl) {
+	public final void addAllItems(final NodeList nl) {
 		for (int i = 0; i < nl.getLength(); i++) {
 			add(nl.item(i));
 		}

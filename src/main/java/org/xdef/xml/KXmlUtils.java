@@ -831,7 +831,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 */
 	public static final void writeXml(final OutputStreamWriter out,
 		final Node node) throws IOException {
-		String encoding = CharsetNames.getXmlEncodingName(out.getEncoding());
+		String encoding = KCharsetNames.getXmlEncodingName(out.getEncoding());
 		if (encoding == null) {
 			//Incorrect name of data encoding&{0}{: '}{'}
 			throw new SIOException(XML.XML090, out.getEncoding());
@@ -860,7 +860,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean indenting,
 		final boolean removeIgnorableWhiteSpaces,
 		final boolean comments) throws IOException {
-		String encoding = CharsetNames.getXmlEncodingName(out.getEncoding());
+		String encoding = KCharsetNames.getXmlEncodingName(out.getEncoding());
 		if (encoding == null) {
 			//Incorrect name of data encoding&{0}{: '}{'}
 			throw new SIOException(XML.XML090, out.getEncoding());

@@ -1,4 +1,4 @@
-package org.xdef.xml;
+package org.xdef.impl.xml;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
