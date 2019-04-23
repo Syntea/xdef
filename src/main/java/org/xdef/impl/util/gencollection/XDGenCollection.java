@@ -271,7 +271,7 @@ public class XDGenCollection {
 		}
 	}
 
-	private void parse(String[] sources) throws Exception {
+	private void parse(String... sources) throws Exception {
 		if (sources == null) {
 			return;
 		}
@@ -1029,7 +1029,7 @@ public class XDGenCollection {
 	 * @return X-definition namespace.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool chkXdef(String[] sources) throws SRuntimeException {
+	public static XDPool chkXdef(String... sources) throws SRuntimeException {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
@@ -1333,7 +1333,7 @@ public class XDGenCollection {
 	 * @param sources Array with source file names.
 	 * @return true if all strings starts with '&gt;'
 	 */
-	public static boolean isXML(final String[] sources) {
+	public static boolean isXML(final String... sources) {
 		if (sources.length < 1) {
 			return false;
 		}

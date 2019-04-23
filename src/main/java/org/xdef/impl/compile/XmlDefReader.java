@@ -41,7 +41,7 @@ import org.xml.sax.ext.DeclHandler;
  * @author trojan
  */
 abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
-	private int _lev;
+	private int _level; // nesting level of a node
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private ReportWriter _reporter;
 	private final Stack<HandlerInfo> _stackReader=new Stack<HandlerInfo>();
@@ -554,7 +554,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		setDocumentLocator(_locator);
 		XAbstractReader mr = getReader();
 		String nsuri = uri != null && uri.isEmpty() ? null : uri;
-		if (_lev++ == 0) {
+		if (_level++ == 0) { // root
 			boolean wasDTD = _isDTD;
 			Document doc;
 			try {
@@ -645,7 +645,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	public void endElement(final String uri,
 		final String localName,
 		final String qName) {
-		_lev--;
+		_level--; // increase nesting level
 		XAbstractReader mr = getReader();
 		if (mr != null) {
 			if (!mr.wasEndTag()) {
@@ -668,7 +668,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				}
 				SPosition spos1 = mr.getSPosition();
 				if (mr.scanEndElement() < 0) {
-					if (_lev == 0) {
+					if (_level == 0) { //root
 						int i = spos1.getIndex() + qName.length() + 3;
 						spos1.setIndex(i);
 					}

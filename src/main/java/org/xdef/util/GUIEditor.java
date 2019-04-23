@@ -580,7 +580,7 @@ public class GUIEditor extends GUIScreen {
 	 * <li><tt>-displayResult </tt>displays result XML element</li>
 	 * </ul>
 	 */
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		final String info =
 "GUI - Edit and run X-definition in graphical user interface.\n"+
 "Usage: -p project_file | -v [switches] | [-c [switches\n\n"+

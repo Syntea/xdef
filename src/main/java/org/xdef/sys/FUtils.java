@@ -744,7 +744,7 @@ public class FUtils {
 	 * @param exc exclude list
 	 * @return true if and only if the file should be skipped.
 	 */
-	private static boolean chkExclude(final File f, final String[] exc) {
+	private static boolean chkExclude(final File f, final String... exc) {
 		String s = f.getAbsolutePath().replace('\\', '/');
 		if (f.isDirectory() && !s.endsWith("/")) {
 			s += "/";
@@ -769,15 +769,15 @@ public class FUtils {
 	 */
 	public static void xcopy(final File[] from,
 		final File to,
-		final String[] exclude,
-		final boolean deep)
+		final boolean deep,
+		final String... exclude)
 		throws SException {
 		for (File x: from) {
 			if (!chkExclude(x, exclude)) {
 				if (x.isDirectory() && deep) {
 					File newDir = new File(to, x.getName());
 					newDir.mkdirs();
-					xcopy(x.listFiles(), newDir, exclude, true);
+					xcopy(x.listFiles(), newDir, true, exclude);
 				} else { //file
 					File newFile = new File(to, x.getName());
 					copyToFile(x, newFile);
@@ -798,8 +798,8 @@ public class FUtils {
 	 */
 	public static void xcopy(final String fromDir,
 		final String toDir,
-		final String[] excludes,
-		final boolean deep) throws SException {
+		final boolean deep,
+		final String... excludes) throws SException {
 		File from = new File(fromDir);
 		if (!from.exists() || !from.isDirectory()) {
 			// Directory doesn't exist or isn't accessible: &{0}
@@ -807,7 +807,7 @@ public class FUtils {
 		}
 		File to = new File(toDir);
 		to.mkdirs(); //create target directory if it not exists
-		xcopy(from.listFiles(), to, excludes, deep);
+		xcopy(from.listFiles(), to, deep, excludes);
 	}
 
 	/** Read input stream to StringBuffer (decoded from given character
@@ -1529,24 +1529,14 @@ public class FUtils {
 		return dir.listFiles(new NameWildCardFilter(wn, caseInsensitive));
 	}
 
-	/** Get array of existing files represented by given argument. The argument
-	 * can either represent one concrete file or it can represent a set of files
-	 * with wildcards '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildName file name (wildcards are accepted) .
-	 * @return array of existing files according to argument.
-	 */
-	public static File[] getFileGroup(final String wildName) {
-		return getFileGroup(wildName, false);
-	}
-
 	/** Get array of existing files represented by given argument array. The
 	 * argument array is an array of strings where each one can either represent
 	 * one concrete file or it can represent a set of files with wildcards
 	 * '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildNames array of file names.
+	 * @param wildNames file names (may be array or list of arguments).
 	 * @return array of existing files according to argument.
 	 */
-	public static File[] getFileGroup(final String[] wildNames) {
+	public static File[] getFileGroup(final String... wildNames) {
 		return getFileGroup(wildNames, false);
 	}
 

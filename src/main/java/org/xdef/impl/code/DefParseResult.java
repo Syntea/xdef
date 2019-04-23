@@ -356,7 +356,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 
 	@Override
-	public final int isOneOfTokens(final String[] tokens) {
+	public final int isOneOfTokens(final String... tokens) {
 		int result = -1, len = -1;
 		for (int i = 0; i < tokens.length; i++) {
 			if (_source.startsWith(tokens[i], _srcIndex)) {

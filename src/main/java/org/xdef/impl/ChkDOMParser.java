@@ -106,8 +106,7 @@ class ChkDOMParser extends SReporter {
 						StringParser p = new StringParser(val);
 						p.skipSpaces();
 						String systemLiteral;
-						int i = p.isOneOfTokens(
-							new String[]{"SYSTEM","PUBLIC"});
+						int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
 						if (i == 1) { //PUBLIC
 							if (!p.isSpaces()) {
 								//Whitespace expected after '&{0}'

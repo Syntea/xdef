@@ -913,7 +913,7 @@ public final class BNFGrammar {
 	private final class BNFTokens extends BNFItem {
 		final String[] _tokens;
 
-		BNFTokens(String[] tokens) {
+		BNFTokens(final String... tokens) {
 			super();
 			_tokens = tokens;
 		}
@@ -1172,7 +1172,7 @@ public final class BNFGrammar {
 			sb.append(")").append(genQuantifier());
 		}
 
-		BNFTokens newTokens(String[] tokens) {
+		BNFTokens newTokens(final String... tokens) {
 			return new BNFTokens(tokens);
 		}
 	}

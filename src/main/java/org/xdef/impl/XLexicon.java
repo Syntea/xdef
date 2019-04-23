@@ -14,9 +14,9 @@ public class XLexicon implements XDLexicon {
 	final Map<String, String[]> _dictionaries;
 
 	/** Create new instance of lexicon.
-	 * @param languageNames array of lexicon names.
+	 * @param languageNames list of lexicon names.
 	 */
-	public XLexicon(final String[] languageNames) {
+	public XLexicon(final String... languageNames) {
 		_languages = languageNames;
 		_dictionaries = new TreeMap<String, String[]>();
 	}

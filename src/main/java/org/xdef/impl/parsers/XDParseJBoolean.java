@@ -46,7 +46,7 @@ public class XDParseJBoolean  extends XSAbstractParser {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
-		int i = p.isOneOfTokens(new String[] {"false", "true"});
+		int i = p.isOneOfTokens("false", "true");
 		if (i < 0) {
 			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
 		} else {

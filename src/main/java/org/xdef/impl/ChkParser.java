@@ -997,7 +997,7 @@ final class ChkParser extends DomBaseHandler {
 		} else {
 			return "";
 		}
-		int i = p.isOneOfTokens(new String[]{"SYSTEM","PUBLIC"});
+		int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
 		if (i < 0) {
 			return p.getSourceBuffer().trim(); //we allow direct specification??
 		}
