@@ -19,14 +19,14 @@
         </fileSet>
         <fileSet>
             <directory>src/main/java</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
             <excludes>
                 <exclude>org/xdef/sys/config/pominfo.properties</exclude>
             </excludes>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
         </fileSet>
     </fileSets>
     <files>
