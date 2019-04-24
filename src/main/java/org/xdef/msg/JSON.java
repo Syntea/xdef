@@ -5,7 +5,7 @@ package org.xdef.msg;
 public interface JSON {
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;
-	/** "&amp;{0}" expected&amp;{#SYS000} */
+	/** "&amp;{0}"&amp;{1}{ or "}{"} expected&amp;{#SYS000} */
 	public static final long JSON002 = 13834649601L;
 	/** Number expected&amp;{#SYS000} */
 	public static final long JSON003 = 13834649602L;
