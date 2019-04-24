@@ -134,7 +134,7 @@ public class JSONUtil {
 						String name = (String) o;
 						isWhitespace();
 						if (!_p.isChar(':')) {
-							// ":" expected
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							throw new SRuntimeException(JSON.JSON002, ":",
 								genPosMod());
 						}
@@ -148,9 +148,9 @@ public class JSONUtil {
 						if (_p.isChar(',')) {
 							isWhitespace();
 						} else {
-							// "&{0}" expected&{#SYS000}
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							throw new SRuntimeException(
-								JSON.JSON002, ",", genPosMod());
+								JSON.JSON002, ",", "}", genPosMod());
 						}
 					} else {
 						// String with name of item expected
@@ -172,8 +172,9 @@ public class JSONUtil {
 					if (_p.isChar(',')) {
 						isWhitespace();
 					} else {
-						throw new SRuntimeException( //"&{0}" expected&{#SYS000}
-							JSON.JSON002, ",", genPosMod());
+						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+						throw new SRuntimeException(
+							JSON.JSON002, ",", "]", genPosMod());
 					}
 				}
 			} else if (_p.isChar('"')) { // string

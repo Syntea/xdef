@@ -277,7 +277,7 @@ class PreReaderJSON implements PreReader {
 						JString name = (JString) o;
 						_p.isSpaces();
 						if (!_p.isChar(':')) {
-							// ":" expected
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							throw new SRuntimeException(JSON.JSON002, ":",
 								genPosMod());
 						}
