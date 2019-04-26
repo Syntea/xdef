@@ -5,7 +5,7 @@ package test.xdef.component;
 public class C2 implements org.xdef.component.XComponent{
   public Integer getNum() {return _Num;}
   public java.util.List<C1> listOfPerson() {return _Person;}
-  public void setNum(Integer x){_Num = x;}
+  public void setNum(Integer x){_Num=x;}
   public void addPerson(C1 x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -14,7 +14,7 @@ public class C2 implements org.xdef.component.XComponent{
     }
 
   }
-  public String xposOfNum(){return XD_XPos + "/@Num";}
+  public String xposOfNum(){return XD_XPos+"/@Num";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -67,7 +67,7 @@ public class C2 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfPerson());
     return a;

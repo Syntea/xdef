@@ -14,22 +14,22 @@ public class B implements org.xdef.component.XComponent{
   public java.sql.Timestamp timestampOftime(){return org.xdef.sys.SDatetime.getTimestamp(_time);}
   public java.util.Calendar calendarOftime(){return org.xdef.sys.SDatetime.getCalendar(_time);}
   public String getname() {return _name;}
-  public void setid(Integer x){_id = x;}
-  public void setnum(Double x){_num = x;}
-  public void setdate(org.xdef.sys.SDatetime x){_date = x;}
+  public void setid(Integer x){_id=x;}
+  public void setnum(Double x){_num=x;}
+  public void setdate(org.xdef.sys.SDatetime x){_date=x;}
   public void setdate(java.util.Date x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setdate(java.sql.Timestamp x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setdate(java.util.Calendar x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void settime(org.xdef.sys.SDatetime x){_time = x;}
+  public void settime(org.xdef.sys.SDatetime x){_time=x;}
   public void settime(java.util.Date x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void settime(java.sql.Timestamp x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void settime(java.util.Calendar x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setname(String x){_name = x;}
-  public String xposOfid(){return XD_XPos + "/@id";}
-  public String xposOfnum(){return XD_XPos + "/@num";}
-  public String xposOfdate(){return XD_XPos + "/@date";}
-  public String xposOftime(){return XD_XPos + "/@time";}
-  public String xposOfname(){return XD_XPos + "/@name";}
+  public void setname(String x){_name=x;}
+  public String xposOfid(){return XD_XPos+"/@id";}
+  public String xposOfnum(){return XD_XPos+"/@num";}
+  public String xposOfdate(){return XD_XPos+"/@date";}
+  public String xposOftime(){return XD_XPos+"/@time";}
+  public String xposOfname(){return XD_XPos+"/@name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

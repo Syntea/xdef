@@ -4,7 +4,7 @@
 package test.xdef.component;
 public class E implements org.xdef.component.XComponent{
   public E.Clazz getClazz() {return _Clazz;}
-  public void setClazz(E.Clazz x){_Clazz = x;}
+  public void setClazz(E.Clazz x){_Clazz=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -55,7 +55,7 @@ public class E implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getClazz());
     return a;
@@ -108,8 +108,8 @@ public class E implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Clazz implements org.xdef.component.XComponent{
   public String gettry() {return _try;}
-  public void settry(String x){_try = x;}
-  public String xposOftry(){return XD_XPos + "/@try";}
+  public void settry(String x){_try=x;}
+  public String xposOftry(){return XD_XPos+"/@try";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

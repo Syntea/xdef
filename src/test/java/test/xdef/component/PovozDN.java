@@ -9,26 +9,29 @@ public class PovozDN implements org.xdef.component.XComponent{
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public PovozDN.Vlastnik getVlastnik() {return _Vlastnik;}
   public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
-  public void setOznSegmentu(String x){_OznSegmentu = x;}
-  public void setDruhPovozu(String x){_DruhPovozu = x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setDruhPovozu(String x){_DruhPovozu=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#PovozDN/$mixed/Skoda");
-    _Skoda = x;
+    _Skoda=x;
   }
   public void setJinaSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#PovozDN/$mixed/JinaSkoda");
-    _JinaSkoda = x;
+    _JinaSkoda=x;
   }
   public void setVlastnik(PovozDN.Vlastnik x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#PovozDN/$mixed/Vlastnik");
-    _Vlastnik = x;
+    _Vlastnik=x;
   }
-  public void set$Vlastnik(String x){if(_Vlastnik==null)setVlastnik(new PovozDN.Vlastnik());_Vlastnik.set$value(x);}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfDruhPovozu(){return XD_XPos + "/@DruhPovozu";}
+  public void set$Vlastnik(String x){
+    if(_Vlastnik==null)setVlastnik(new PovozDN.Vlastnik());
+    _Vlastnik.set$value(x);
+  }
+  public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
+  public String xposOfDruhPovozu(){return XD_XPos+"/@DruhPovozu";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -83,7 +86,7 @@ public class PovozDN implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
@@ -164,8 +167,8 @@ public class PovozDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -215,7 +218,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

@@ -8,12 +8,12 @@ public class Y03 implements test.xdef.component.Y03i,org.xdef.component.XCompone
   public void setPartOne(Y03PartOne x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PartOne", null, "Y03#Part/PartOne");
-    _PartOne = x;
+    _PartOne=x;
   }
   public void setPartTwo(Y03PartTwo x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PartTwo", null, "Y03#Part/PartTwo");
-    _PartTwo = x;
+    _PartTwo=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -65,7 +65,7 @@ public class Y03 implements test.xdef.component.Y03i,org.xdef.component.XCompone
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getPartOne());
     org.xdef.component.XComponentUtil.addXC(a, getPartTwo());

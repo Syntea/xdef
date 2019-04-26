@@ -8,17 +8,20 @@ public class Y18 implements org.xdef.component.XComponent{
   public Y18.C getC() {return _C;}
   public Y18a1 getD() {return _D;}
   public Integer get$D(){return _D==null?null:_D.get$value();}
-  public void seta(String x){_a = x;}
-  public void setb(String x){_b = x;}
-  public void setC(Y18.C x){_C = x;}
+  public void seta(String x){_a=x;}
+  public void setb(String x){_b=x;}
+  public void setC(Y18.C x){_C=x;}
   public void setD(Y18a1 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "D", null, "Y18#A/D");
-    _D = x;
+    _D=x;
   }
-  public void set$D(Integer x){if(_D==null)setD(new Y18a1());_D.set$value(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public void set$D(Integer x){
+    if(_D==null)setD(new Y18a1());
+    _D.set$value(x);
+  }
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -73,7 +76,7 @@ public class Y18 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getC());
     org.xdef.component.XComponentUtil.addXC(a, getD());
@@ -151,14 +154,14 @@ public static class C implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public String getd() {return _d;}
   public String getx() {return _x;}
-  public void sete(String x){_e = x;}
-  public void setc(String x){_c = x;}
-  public void setd(String x){_d = x;}
-  public void setx(String x){_x = x;}
-  public String xposOfe(){return XD_XPos + "/@e";}
-  public String xposOfc(){return XD_XPos + "/@c";}
-  public String xposOfd(){return XD_XPos + "/@d";}
-  public String xposOfx(){return XD_XPos + "/$text";}
+  public void sete(String x){_e=x;}
+  public void setc(String x){_c=x;}
+  public void setd(String x){_d=x;}
+  public void setx(String x){_x=x;}
+  public String xposOfe(){return XD_XPos+"/@e";}
+  public String xposOfc(){return XD_XPos+"/@c";}
+  public String xposOfd(){return XD_XPos+"/@d";}
+  public String xposOfx(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -214,7 +217,7 @@ public static class C implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (getx() != null)
       org.xdef.component.XComponentUtil.addText(this,

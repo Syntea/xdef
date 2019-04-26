@@ -7,7 +7,7 @@ public class Y20_C implements org.xdef.component.XComponent{
   public void setB(Y20_C.B x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "B", null, "Y20#C/B");
-    _B = x;
+    _B=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -59,7 +59,7 @@ public class Y20_C implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getB());
     return a;
@@ -113,7 +113,7 @@ public class Y20_C implements org.xdef.component.XComponent{
 public static class B implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY() {return _Y;}
-  public void setb(String x){_b = x;}
+  public void setb(String x){_b=x;}
   public void addY(test.xdef.component.Y20_C.B.Y x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -122,7 +122,7 @@ public static class B implements org.xdef.component.XComponent{
     }
 
   }
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -174,7 +174,7 @@ public static class B implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfY());
     return a;
@@ -234,7 +234,7 @@ public static class B implements org.xdef.component.XComponent{
 public static class Y implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY_1() {return _Y_1;}
-  public void setb(String x){_b = x;}
+  public void setb(String x){_b=x;}
   public void addY_1(test.xdef.component.Y20_C.B.Y x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -243,7 +243,7 @@ public static class Y implements org.xdef.component.XComponent{
     }
 
   }
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -295,7 +295,7 @@ public static class Y implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfY_1());
     return a;

@@ -7,7 +7,7 @@ public class Y16e implements org.xdef.component.XComponent{
   public void setf(Y16f x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "f", null, "Y16#e/f");
-    _f = x;
+    _f=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -59,7 +59,7 @@ public class Y16e implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getf());
     return a;

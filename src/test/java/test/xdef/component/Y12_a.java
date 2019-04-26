@@ -9,7 +9,7 @@ public class Y12_a implements org.xdef.component.XComponent{
   public void addb(Y12_a.b x) {if (x!=null) _b.add(x);}
   public void addc(Y12_a.c x) {if (x!=null) _c.add(x);}
   public void add$value(Integer x) {if (x!=null) _$value.add(x);}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -60,7 +60,7 @@ public class Y12_a implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfb());
     org.xdef.component.XComponentUtil.addXC(a, listOfc());

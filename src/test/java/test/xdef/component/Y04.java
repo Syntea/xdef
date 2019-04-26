@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serializable,Runnable,org.xdef.component.XComponent{
   public String getTwo() {return _Two;}
-  public void setTwo(String x){_Two = x;}
-  public String xposOfTwo(){return XD_XPos + "/@Two";}
+  public void setTwo(String x){_Two=x;}
+  public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

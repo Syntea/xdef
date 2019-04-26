@@ -53,7 +53,7 @@ public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXC
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getDomain());
     return a;

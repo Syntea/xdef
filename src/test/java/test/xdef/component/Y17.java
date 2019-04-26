@@ -6,9 +6,9 @@ public class Y17 implements org.xdef.component.XComponent{
   public Y17.b_1 getb_1() {return _b_1;}
   public Y17.c getc() {return _c;}
   public Y17.b_2 getb_2() {return _b_2;}
-  public void setb_1(Y17.b_1 x){_b_1 = x;}
-  public void setc(Y17.c x){_c = x;}
-  public void setb_2(Y17.b_2 x){_b_2 = x;}
+  public void setb_1(Y17.b_1 x){_b_1=x;}
+  public void setc(Y17.c x){_c=x;}
+  public void setb_2(Y17.b_2 x){_b_2=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -59,7 +59,7 @@ public class Y17 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb_1());
     org.xdef.component.XComponentUtil.addXC(a, getc());
@@ -128,8 +128,8 @@ public class Y17 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class b_1 implements org.xdef.component.XComponent{
   public Integer geta() {return _a;}
-  public void seta(Integer x){_a = x;}
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public void seta(Integer x){_a=x;}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -314,8 +314,8 @@ public static class c implements org.xdef.component.XComponent{
 }
 public static class b_2 implements org.xdef.component.XComponent{
   public String geta() {return _a;}
-  public void seta(String x){_a = x;}
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public void seta(String x){_a=x;}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

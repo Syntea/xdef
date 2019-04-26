@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class Y03PartOne implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
-  public void setOne(String x){_One = x;}
-  public String xposOfOne(){return XD_XPos + "/@One";}
+  public void setOne(String x){_One=x;}
+  public String xposOfOne(){return XD_XPos+"/@One";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

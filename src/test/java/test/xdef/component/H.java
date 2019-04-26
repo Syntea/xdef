@@ -7,10 +7,10 @@ public class H implements org.xdef.component.XComponent{
   public String getxmlns$s() {return "soap";}
   public H.s$Header gets$Header() {return _s$Header;}
   public H.s$Body gets$Body() {return _s$Body;}
-  public void sets$encodingStyle(String x){_s$encodingStyle = x;}
-  public void sets$Header(H.s$Header x){_s$Header = x;}
-  public void sets$Body(H.s$Body x){_s$Body = x;}
-  public String xposOfs$encodingStyle(){return XD_XPos + "/@s$encodingStyle";}
+  public void sets$encodingStyle(String x){_s$encodingStyle=x;}
+  public void sets$Header(H.s$Header x){_s$Header=x;}
+  public void sets$Body(H.s$Body x){_s$Body=x;}
+  public String xposOfs$encodingStyle(){return XD_XPos+"/@s$encodingStyle";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -65,7 +65,7 @@ public class H implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, gets$Header());
     org.xdef.component.XComponentUtil.addXC(a, gets$Body());
@@ -135,8 +135,8 @@ public static class s$Header implements org.xdef.component.XComponent{
   public String getxmlns$s() {return "soap";}
   public test.xdef.component.H.s$Header.b$User getb$User() {return _b$User;}
   public test.xdef.component.H.s$Header.b$Request getb$Request() {return _b$Request;}
-  public void setb$User(test.xdef.component.H.s$Header.b$User x){_b$User = x;}
-  public void setb$Request(test.xdef.component.H.s$Header.b$Request x){_b$Request = x;}
+  public void setb$User(test.xdef.component.H.s$Header.b$User x){_b$User=x;}
+  public void setb$Request(test.xdef.component.H.s$Header.b$Request x){_b$Request=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -188,7 +188,7 @@ public static class s$Header implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb$User());
     org.xdef.component.XComponentUtil.addXC(a, getb$Request());
@@ -254,10 +254,10 @@ public static class b$User implements org.xdef.component.XComponent{
   public String getIdentUser() {return _IdentUser;}
   public String getxmlns$s() {return "soap";}
   public String getxmlns$b() {return "request";}
-  public void sets$understand(String x){_s$understand = x;}
-  public void setIdentUser(String x){_IdentUser = x;}
-  public String xposOfs$understand(){return XD_XPos + "/@s$understand";}
-  public String xposOfIdentUser(){return XD_XPos + "/@IdentUser";}
+  public void sets$understand(String x){_s$understand=x;}
+  public void setIdentUser(String x){_IdentUser=x;}
+  public String xposOfs$understand(){return XD_XPos+"/@s$understand";}
+  public String xposOfIdentUser(){return XD_XPos+"/@IdentUser";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -375,14 +375,14 @@ public static class b$Request implements org.xdef.component.XComponent{
   public String getMode() {return _Mode;}
   public String getxmlns$s() {return "soap";}
   public String getxmlns$b() {return "request";}
-  public void sets$understand(String x){_s$understand = x;}
-  public void setIdentZpravy(String x){_IdentZpravy = x;}
-  public void setReqMsgId(Integer x){_ReqMsgId = x;}
-  public void setMode(String x){_Mode = x;}
-  public String xposOfs$understand(){return XD_XPos + "/@s$understand";}
-  public String xposOfIdentZpravy(){return XD_XPos + "/@IdentZpravy";}
-  public String xposOfReqMsgId(){return XD_XPos + "/@ReqMsgId";}
-  public String xposOfMode(){return XD_XPos + "/@Mode";}
+  public void sets$understand(String x){_s$understand=x;}
+  public void setIdentZpravy(String x){_IdentZpravy=x;}
+  public void setReqMsgId(Integer x){_ReqMsgId=x;}
+  public void setMode(String x){_Mode=x;}
+  public String xposOfs$understand(){return XD_XPos+"/@s$understand";}
+  public String xposOfIdentZpravy(){return XD_XPos+"/@IdentZpravy";}
+  public String xposOfReqMsgId(){return XD_XPos+"/@ReqMsgId";}
+  public String xposOfMode(){return XD_XPos+"/@Mode";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -515,12 +515,12 @@ public static class s$Body implements org.xdef.component.XComponent{
   public void setb$Ping(test.xdef.component.I x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "b:Ping", "request", "H#s:H/s:Body/$choice/b:Ping");
-    _b$Ping = x;
+    _b$Ping=x;
   }
   public void setb$PingFlow(test.xdef.component.H.s$Body.b$PingFlow x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "b:PingFlow", "request", "H#s:H/s:Body/$choice/b:PingFlow");
-    _b$PingFlow = x;
+    _b$PingFlow=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -573,7 +573,7 @@ public static class s$Body implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb$Ping());
     org.xdef.component.XComponentUtil.addXC(a, getb$PingFlow());
@@ -637,8 +637,8 @@ public static class s$Body implements org.xdef.component.XComponent{
 public static class b$PingFlow implements org.xdef.component.XComponent{
   public String getFlow() {return _Flow;}
   public String getxmlns$b() {return "request";}
-  public void setFlow(String x){_Flow = x;}
-  public String xposOfFlow(){return XD_XPos + "/@Flow";}
+  public void setFlow(String x){_Flow=x;}
+  public String xposOfFlow(){return XD_XPos+"/@Flow";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

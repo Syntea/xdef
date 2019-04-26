@@ -7,12 +7,12 @@ public class Y11Op implements org.xdef.component.XComponent{
   public String getM() {return _M;}
   public java.util.List<Y11Op.Co> listOfCo() {return _Co;}
   public Y11Op.Y getY() {return _Y;}
-  public void setN(String x){_N = x;}
-  public void setM(String x){_M = x;}
+  public void setN(String x){_N=x;}
+  public void setM(String x){_M=x;}
   public void addCo(Y11Op.Co x) {if (x!=null) _Co.add(x);}
-  public void setY(Y11Op.Y x){_Y = x;}
-  public String xposOfN(){return XD_XPos + "/@N";}
-  public String xposOfM(){return XD_XPos + "/@M";}
+  public void setY(Y11Op.Y x){_Y=x;}
+  public String xposOfN(){return XD_XPos+"/@N";}
+  public String xposOfM(){return XD_XPos+"/@M";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -67,7 +67,7 @@ public class Y11Op implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfCo());
     org.xdef.component.XComponentUtil.addXC(a, getY());
@@ -144,11 +144,11 @@ public static class Co implements org.xdef.component.XComponent{
   public String getC() {return _C;}
   public String getI() {return _I;}
   public test.xdef.component.Y11Op.Co.X getX() {return _X;}
-  public void setC(String x){_C = x;}
-  public void setI(String x){_I = x;}
-  public void setX(test.xdef.component.Y11Op.Co.X x){_X = x;}
-  public String xposOfC(){return XD_XPos + "/@C";}
-  public String xposOfI(){return XD_XPos + "/@I";}
+  public void setC(String x){_C=x;}
+  public void setI(String x){_I=x;}
+  public void setX(test.xdef.component.Y11Op.Co.X x){_X=x;}
+  public String xposOfC(){return XD_XPos+"/@C";}
+  public String xposOfI(){return XD_XPos+"/@I";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -202,7 +202,7 @@ public static class Co implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getX());
     return a;
@@ -353,8 +353,8 @@ public static class X implements org.xdef.component.XComponent{
 }
 public static class Y implements org.xdef.component.XComponent{
   public String getY() {return _Y;}
-  public void setY(String x){_Y = x;}
-  public String xposOfY(){return XD_XPos + "/@Y";}
+  public void setY(String x){_Y=x;}
+  public String xposOfY(){return XD_XPos+"/@Y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

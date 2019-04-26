@@ -55,7 +55,7 @@ public class X implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfA());
     return a;
@@ -160,7 +160,7 @@ public static class A implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfB());
     org.xdef.component.XComponentUtil.addXC(a, listOfC());
@@ -226,8 +226,11 @@ public static class A implements org.xdef.component.XComponent{
 public static class B implements org.xdef.component.XComponent{
   public test.xdef.component.X.A.B.E getE() {return _E;}
   public String get$E(){return _E==null?null:_E.get$value();}
-  public void setE(test.xdef.component.X.A.B.E x){_E = x;}
-  public void set$E(String x){if(_E==null)setE(new test.xdef.component.X.A.B.E());_E.set$value(x);}
+  public void setE(test.xdef.component.X.A.B.E x){_E=x;}
+  public void set$E(String x){
+    if(_E==null)setE(new test.xdef.component.X.A.B.E());
+    _E.set$value(x);
+  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -277,7 +280,7 @@ public static class B implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getE());
     return a;
@@ -330,8 +333,8 @@ public static class B implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class E implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -381,7 +384,7 @@ public static class E implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

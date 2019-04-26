@@ -14,9 +14,9 @@ public class Z1 implements org.xdef.component.XComponent{
   public Z7 getRozhodnutiDN() {return _RozhodnutiDN;}
   public java.util.List<Z1.VyliceniDN> listOfVyliceniDN() {return _VyliceniDN;}
   public java.util.List<String> listOf$VyliceniDN(){
-    java.util.List<String> result = new java.util.ArrayList<String>();
-    for(Z1.VyliceniDN x: _VyliceniDN) result.add(x.get$value());
-    return result;
+    java.util.List<String> x=new java.util.ArrayList<String>();
+    for(Z1.VyliceniDN y: _VyliceniDN) x.add(y.get$value());
+    return x;
   }
   public Z8 getObjStranka() {return _ObjStranka;}
   public java.util.List<FotoDN> listOfFoto() {return _Foto;}
@@ -28,22 +28,22 @@ public class Z1 implements org.xdef.component.XComponent{
   public java.util.List<PredmetDN> listOfPredmet() {return _Predmet;}
   public java.util.List<ZvireDN> listOfZvire() {return _Zvire;}
   public java.util.List<UcastnikDN> listOfUcastnik() {return _Ucastnik;}
-  public void setVerze(String x){_Verze = x;}
-  public void setSeqRec(Integer x){_SeqRec = x;}
-  public void setKrajPolicie(String x){_KrajPolicie = x;}
-  public void setPlatnostOd(org.xdef.sys.SDatetime x){_PlatnostOd = x;}
+  public void setVerze(String x){_Verze=x;}
+  public void setSeqRec(Integer x){_SeqRec=x;}
+  public void setKrajPolicie(String x){_KrajPolicie=x;}
+  public void setPlatnostOd(org.xdef.sys.SDatetime x){_PlatnostOd=x;}
   public void setPlatnostOd(java.util.Date x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setPlatnostOd(java.sql.Timestamp x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setPlatnostOd(java.util.Calendar x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setProtokol(Z2 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Protokol", null, "SouborD1A#ZaznamPDN/$mixed/Protokol");
-    _Protokol = x;
+    _Protokol=x;
   }
   public void setRozhodnutiDN(Z7 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "RozhodnutiDN", null, "SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN");
-    _RozhodnutiDN = x;
+    _RozhodnutiDN=x;
   }
   public void addVyliceniDN(Z1.VyliceniDN x) {
     if (x!=null) {
@@ -54,18 +54,22 @@ public class Z1 implements org.xdef.component.XComponent{
 
   }
   public void add$VyliceniDN(String x){
-    if (x!=null) {Z1.VyliceniDN y = new Z1.VyliceniDN(); y.set$value(x); addVyliceniDN(y);}
+    if (x!=null) {
+      Z1.VyliceniDN y=new Z1.VyliceniDN();
+      y.set$value(x); addVyliceniDN(y);
+    }
   }
   public void set$VyliceniDN(java.util.List<String> x){
     _VyliceniDN.clear(); if (x==null) return;
     for (String y:x){
-      Z1.VyliceniDN z=new Z1.VyliceniDN();z._$value=y;addVyliceniDN(z);
+      Z1.VyliceniDN z=new Z1.VyliceniDN();
+      z._$value=y;addVyliceniDN(z);
     }
   }
   public void setObjStranka(Z8 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "ObjStranka", null, "SouborD1A#ZaznamPDN/$mixed/ObjStranka");
-    _ObjStranka = x;
+    _ObjStranka=x;
   }
   public void addFoto(FotoDN x) {
     if (x!=null) {
@@ -139,10 +143,10 @@ public class Z1 implements org.xdef.component.XComponent{
     }
 
   }
-  public String xposOfVerze(){return XD_XPos + "/@Verze";}
-  public String xposOfSeqRec(){return XD_XPos + "/@SeqRec";}
-  public String xposOfKrajPolicie(){return XD_XPos + "/@KrajPolicie";}
-  public String xposOfPlatnostOd(){return XD_XPos + "/@PlatnostOd";}
+  public String xposOfVerze(){return XD_XPos+"/@Verze";}
+  public String xposOfSeqRec(){return XD_XPos+"/@SeqRec";}
+  public String xposOfKrajPolicie(){return XD_XPos+"/@KrajPolicie";}
+  public String xposOfPlatnostOd(){return XD_XPos+"/@PlatnostOd";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -201,7 +205,7 @@ public class Z1 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getProtokol());
     org.xdef.component.XComponentUtil.addXC(a, getRozhodnutiDN());
@@ -352,8 +356,8 @@ public class Z1 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class VyliceniDN implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -403,7 +407,7 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

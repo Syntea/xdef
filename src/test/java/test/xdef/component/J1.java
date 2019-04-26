@@ -9,12 +9,15 @@ public class J1 implements org.xdef.component.XComponent{
   public java.util.List<J1.X2> listOfX2() {return _X2;}
   public J1.C2 getC2() {return _C2;}
   public J1.X3 getX3() {return _X3;}
-  public void setX(J1.X x){_X = x;}
-  public void set$X(String x){if(_X==null)setX(new J1.X());_X.set$value(x);}
+  public void setX(J1.X x){_X=x;}
+  public void set$X(String x){
+    if(_X==null)setX(new J1.X());
+    _X.set$value(x);
+  }
   public void addC(J1.C x) {if (x!=null) _C.add(x);}
   public void addX2(J1.X2 x) {if (x!=null) _X2.add(x);}
-  public void setC2(J1.C2 x){_C2 = x;}
-  public void setX3(J1.X3 x){_X3 = x;}
+  public void setC2(J1.C2 x){_C2=x;}
+  public void setX3(J1.X3 x){_X3=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -65,7 +68,7 @@ public class J1 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getX());
     org.xdef.component.XComponentUtil.addXC(a, listOfC());
@@ -146,8 +149,8 @@ public class J1 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class X implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -197,7 +200,7 @@ public static class X implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -339,8 +342,8 @@ public static class C implements org.xdef.component.XComponent{
 }
 public static class X2 implements org.xdef.component.XComponent{
   public String getx() {return _x;}
-  public void setx(String x){_x = x;}
-  public String xposOfx(){return XD_XPos + "/@x";}
+  public void setx(String x){_x=x;}
+  public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -440,8 +443,8 @@ public static class X2 implements org.xdef.component.XComponent{
 }
 public static class C2 implements org.xdef.component.XComponent{
   public String getc() {return _c;}
-  public void setc(String x){_c = x;}
-  public String xposOfc(){return XD_XPos + "/@c";}
+  public void setc(String x){_c=x;}
+  public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -541,8 +544,8 @@ public static class C2 implements org.xdef.component.XComponent{
 }
 public static class X3 implements org.xdef.component.XComponent{
   public String getxx() {return _xx;}
-  public void setxx(String x){_xx = x;}
-  public String xposOfxx(){return XD_XPos + "/@xx";}
+  public void setxx(String x){_xx=x;}
+  public String xposOfxx(){return XD_XPos+"/@xx";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

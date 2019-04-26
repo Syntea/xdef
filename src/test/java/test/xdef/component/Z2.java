@@ -16,26 +16,26 @@ public class Z2 implements org.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumCasOznameni(){return org.xdef.sys.SDatetime.getCalendar(_DatumCasOznameni);}
   public String getNazevDN() {return _NazevDN;}
   public String getZpracovatel() {return _Zpracovatel;}
-  public void setKodUtvaruPolicie(String x){_KodUtvaruPolicie = x;}
-  public void setRokDN(org.xdef.sys.SDatetime x){_RokDN = x;}
+  public void setKodUtvaruPolicie(String x){_KodUtvaruPolicie=x;}
+  public void setRokDN(org.xdef.sys.SDatetime x){_RokDN=x;}
   public void setRokDN(java.util.Date x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRokDN(java.sql.Timestamp x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRokDN(java.util.Calendar x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setCisloDN(String x){_CisloDN = x;}
-  public void setCisloJednaciDN(String x){_CisloJednaciDN = x;}
-  public void setDatumCasOznameni(org.xdef.sys.SDatetime x){_DatumCasOznameni = x;}
+  public void setCisloDN(String x){_CisloDN=x;}
+  public void setCisloJednaciDN(String x){_CisloJednaciDN=x;}
+  public void setDatumCasOznameni(org.xdef.sys.SDatetime x){_DatumCasOznameni=x;}
   public void setDatumCasOznameni(java.util.Date x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasOznameni(java.sql.Timestamp x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasOznameni(java.util.Calendar x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setNazevDN(String x){_NazevDN = x;}
-  public void setZpracovatel(String x){_Zpracovatel = x;}
-  public String xposOfKodUtvaruPolicie(){return XD_XPos + "/@KodUtvaruPolicie";}
-  public String xposOfRokDN(){return XD_XPos + "/@RokDN";}
-  public String xposOfCisloDN(){return XD_XPos + "/@CisloDN";}
-  public String xposOfCisloJednaciDN(){return XD_XPos + "/@CisloJednaciDN";}
-  public String xposOfDatumCasOznameni(){return XD_XPos + "/@DatumCasOznameni";}
-  public String xposOfNazevDN(){return XD_XPos + "/@NazevDN";}
-  public String xposOfZpracovatel(){return XD_XPos + "/@Zpracovatel";}
+  public void setNazevDN(String x){_NazevDN=x;}
+  public void setZpracovatel(String x){_Zpracovatel=x;}
+  public String xposOfKodUtvaruPolicie(){return XD_XPos+"/@KodUtvaruPolicie";}
+  public String xposOfRokDN(){return XD_XPos+"/@RokDN";}
+  public String xposOfCisloDN(){return XD_XPos+"/@CisloDN";}
+  public String xposOfCisloJednaciDN(){return XD_XPos+"/@CisloJednaciDN";}
+  public String xposOfDatumCasOznameni(){return XD_XPos+"/@DatumCasOznameni";}
+  public String xposOfNazevDN(){return XD_XPos+"/@NazevDN";}
+  public String xposOfZpracovatel(){return XD_XPos+"/@Zpracovatel";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

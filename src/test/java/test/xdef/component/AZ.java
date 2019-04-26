@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.component.XComponent{
   public String getz() {return _z;}
-  public void setz(String x){_z = x;}
-  public String xposOfz(){return XD_XPos + "/@z";}
+  public void setz(String x){_z=x;}
+  public String xposOfz(){return XD_XPos+"/@z";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

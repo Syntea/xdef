@@ -20,36 +20,39 @@ public class Z8 implements org.xdef.component.XComponent{
   public String getPricina() {return _Pricina;}
   public Z8.Misto getMisto() {return _Misto;}
   public String get$Misto(){return _Misto==null?null:_Misto.get$value();}
-  public void setDatumCasDN(org.xdef.sys.SDatetime x){_DatumCasDN = x;}
+  public void setDatumCasDN(org.xdef.sys.SDatetime x){_DatumCasDN=x;}
   public void setDatumCasDN(java.util.Date x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasDN(java.sql.Timestamp x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasDN(java.util.Calendar x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDoDN(org.xdef.sys.SDatetime x){_DatumCasDoDN = x;}
+  public void setDatumCasDoDN(org.xdef.sys.SDatetime x){_DatumCasDoDN=x;}
   public void setDatumCasDoDN(java.util.Date x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasDoDN(java.sql.Timestamp x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasDoDN(java.util.Calendar x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setKodOkresu(String x){_KodOkresu = x;}
-  public void setObec(String x){_Obec = x;}
-  public void setUlice(String x){_Ulice = x;}
-  public void setCisloPopisne(String x){_CisloPopisne = x;}
-  public void setSkodaTisKc(String x){_SkodaTisKc = x;}
-  public void setHlavniPricina(String x){_HlavniPricina = x;}
-  public void setPricina(String x){_Pricina = x;}
+  public void setKodOkresu(String x){_KodOkresu=x;}
+  public void setObec(String x){_Obec=x;}
+  public void setUlice(String x){_Ulice=x;}
+  public void setCisloPopisne(String x){_CisloPopisne=x;}
+  public void setSkodaTisKc(String x){_SkodaTisKc=x;}
+  public void setHlavniPricina(String x){_HlavniPricina=x;}
+  public void setPricina(String x){_Pricina=x;}
   public void setMisto(Z8.Misto x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Misto", null, "SouborD1A#ObjStrankaDN/Misto");
-    _Misto = x;
+    _Misto=x;
   }
-  public void set$Misto(String x){if(_Misto==null)setMisto(new Z8.Misto());_Misto.set$value(x);}
-  public String xposOfDatumCasDN(){return XD_XPos + "/@DatumCasDN";}
-  public String xposOfDatumCasDoDN(){return XD_XPos + "/@DatumCasDoDN";}
-  public String xposOfKodOkresu(){return XD_XPos + "/@KodOkresu";}
-  public String xposOfObec(){return XD_XPos + "/@Obec";}
-  public String xposOfUlice(){return XD_XPos + "/@Ulice";}
-  public String xposOfCisloPopisne(){return XD_XPos + "/@CisloPopisne";}
-  public String xposOfSkodaTisKc(){return XD_XPos + "/@SkodaTisKc";}
-  public String xposOfHlavniPricina(){return XD_XPos + "/@HlavniPricina";}
-  public String xposOfPricina(){return XD_XPos + "/@Pricina";}
+  public void set$Misto(String x){
+    if(_Misto==null)setMisto(new Z8.Misto());
+    _Misto.set$value(x);
+  }
+  public String xposOfDatumCasDN(){return XD_XPos+"/@DatumCasDN";}
+  public String xposOfDatumCasDoDN(){return XD_XPos+"/@DatumCasDoDN";}
+  public String xposOfKodOkresu(){return XD_XPos+"/@KodOkresu";}
+  public String xposOfObec(){return XD_XPos+"/@Obec";}
+  public String xposOfUlice(){return XD_XPos+"/@Ulice";}
+  public String xposOfCisloPopisne(){return XD_XPos+"/@CisloPopisne";}
+  public String xposOfSkodaTisKc(){return XD_XPos+"/@SkodaTisKc";}
+  public String xposOfHlavniPricina(){return XD_XPos+"/@HlavniPricina";}
+  public String xposOfPricina(){return XD_XPos+"/@Pricina";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -118,7 +121,7 @@ public class Z8 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getMisto());
     return a;
@@ -218,8 +221,8 @@ public class Z8 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Misto implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -269,7 +272,7 @@ public static class Misto implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

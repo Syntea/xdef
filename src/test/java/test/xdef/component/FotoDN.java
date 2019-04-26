@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class FotoDN implements org.xdef.component.XComponent{
   public String getFoto_Ref() {return _Foto_Ref;}
-  public void setFoto_Ref(String x){_Foto_Ref = x;}
-  public String xposOfFoto_Ref(){return XD_XPos + "/@Foto_Ref";}
+  public void setFoto_Ref(String x){_Foto_Ref=x;}
+  public String xposOfFoto_Ref(){return XD_XPos+"/@Foto_Ref";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

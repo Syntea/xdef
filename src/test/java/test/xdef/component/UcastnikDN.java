@@ -28,31 +28,31 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   public String get$PoruseniZakOst(){return _PoruseniZakOst==null?null:_PoruseniZakOst.get$value();}
   public UcastnikDN.Vazba getVazba() {return _Vazba;}
   public String get$Vazba(){return _Vazba==null?null:_Vazba.get$value();}
-  public void setOznSegmentu(String x){_OznSegmentu = x;}
-  public void setTypUcastnika(String x){_TypUcastnika = x;}
-  public void setPraxeRizeni(Integer x){_PraxeRizeni = x;}
-  public void setAlkoholDech(String x){_AlkoholDech = x;}
-  public void setAlkoholKrev(String x){_AlkoholKrev = x;}
-  public void setZraneni(String x){_Zraneni = x;}
-  public void setZdravPojistovna(String x){_ZdravPojistovna = x;}
-  public void setPokutaKc(Integer x){_PokutaKc = x;}
-  public void setPokutaZapl(String x){_PokutaZapl = x;}
-  public void setPachatel(String x){_Pachatel = x;}
-  public void setPoskozeny(String x){_Poskozeny = x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setTypUcastnika(String x){_TypUcastnika=x;}
+  public void setPraxeRizeni(Integer x){_PraxeRizeni=x;}
+  public void setAlkoholDech(String x){_AlkoholDech=x;}
+  public void setAlkoholKrev(String x){_AlkoholKrev=x;}
+  public void setZraneni(String x){_Zraneni=x;}
+  public void setZdravPojistovna(String x){_ZdravPojistovna=x;}
+  public void setPokutaKc(Integer x){_PokutaKc=x;}
+  public void setPokutaZapl(String x){_PokutaZapl=x;}
+  public void setPachatel(String x){_Pachatel=x;}
+  public void setPoskozeny(String x){_Poskozeny=x;}
   public void setJinaSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#UcastnikDN/$mixed/JinaSkoda");
-    _JinaSkoda = x;
+    _JinaSkoda=x;
   }
   public void setOsoba(Z4 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Osoba", null, "SouborD1A#UcastnikDN/$mixed/Osoba");
-    _Osoba = x;
+    _Osoba=x;
   }
   public void setFirma(Z5 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Firma", null, "SouborD1A#UcastnikDN/$mixed/Firma");
-    _Firma = x;
+    _Firma=x;
   }
   public void addDoklad(Z6 x) {
     if (x!=null) {
@@ -65,44 +65,59 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   public void setPoruseniZakProvoz(UcastnikDN.PoruseniZakProvoz x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakProvoz", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz");
-    _PoruseniZakProvoz = x;
+    _PoruseniZakProvoz=x;
   }
-  public void set$PoruseniZakProvoz(String x){if(_PoruseniZakProvoz==null)setPoruseniZakProvoz(new UcastnikDN.PoruseniZakProvoz());_PoruseniZakProvoz.set$value(x);}
+  public void set$PoruseniZakProvoz(String x){
+    if(_PoruseniZakProvoz==null)setPoruseniZakProvoz(new UcastnikDN.PoruseniZakProvoz());
+    _PoruseniZakProvoz.set$value(x);
+  }
   public void setPoruseniZakPrest(UcastnikDN.PoruseniZakPrest x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakPrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest");
-    _PoruseniZakPrest = x;
+    _PoruseniZakPrest=x;
   }
-  public void set$PoruseniZakPrest(String x){if(_PoruseniZakPrest==null)setPoruseniZakPrest(new UcastnikDN.PoruseniZakPrest());_PoruseniZakPrest.set$value(x);}
+  public void set$PoruseniZakPrest(String x){
+    if(_PoruseniZakPrest==null)setPoruseniZakPrest(new UcastnikDN.PoruseniZakPrest());
+    _PoruseniZakPrest.set$value(x);
+  }
   public void setPoruseniZakTrest(UcastnikDN.PoruseniZakTrest x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakTrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest");
-    _PoruseniZakTrest = x;
+    _PoruseniZakTrest=x;
   }
-  public void set$PoruseniZakTrest(String x){if(_PoruseniZakTrest==null)setPoruseniZakTrest(new UcastnikDN.PoruseniZakTrest());_PoruseniZakTrest.set$value(x);}
+  public void set$PoruseniZakTrest(String x){
+    if(_PoruseniZakTrest==null)setPoruseniZakTrest(new UcastnikDN.PoruseniZakTrest());
+    _PoruseniZakTrest.set$value(x);
+  }
   public void setPoruseniZakOst(UcastnikDN.PoruseniZakOst x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakOst", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakOst");
-    _PoruseniZakOst = x;
+    _PoruseniZakOst=x;
   }
-  public void set$PoruseniZakOst(String x){if(_PoruseniZakOst==null)setPoruseniZakOst(new UcastnikDN.PoruseniZakOst());_PoruseniZakOst.set$value(x);}
+  public void set$PoruseniZakOst(String x){
+    if(_PoruseniZakOst==null)setPoruseniZakOst(new UcastnikDN.PoruseniZakOst());
+    _PoruseniZakOst.set$value(x);
+  }
   public void setVazba(UcastnikDN.Vazba x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vazba", null, "SouborD1A#UcastnikDN/$mixed/Vazba");
-    _Vazba = x;
+    _Vazba=x;
   }
-  public void set$Vazba(String x){if(_Vazba==null)setVazba(new UcastnikDN.Vazba());_Vazba.set$value(x);}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfTypUcastnika(){return XD_XPos + "/@TypUcastnika";}
-  public String xposOfPraxeRizeni(){return XD_XPos + "/@PraxeRizeni";}
-  public String xposOfAlkoholDech(){return XD_XPos + "/@AlkoholDech";}
-  public String xposOfAlkoholKrev(){return XD_XPos + "/@AlkoholKrev";}
-  public String xposOfZraneni(){return XD_XPos + "/@Zraneni";}
-  public String xposOfZdravPojistovna(){return XD_XPos + "/@ZdravPojistovna";}
-  public String xposOfPokutaKc(){return XD_XPos + "/@PokutaKc";}
-  public String xposOfPokutaZapl(){return XD_XPos + "/@PokutaZapl";}
-  public String xposOfPachatel(){return XD_XPos + "/@Pachatel";}
-  public String xposOfPoskozeny(){return XD_XPos + "/@Poskozeny";}
+  public void set$Vazba(String x){
+    if(_Vazba==null)setVazba(new UcastnikDN.Vazba());
+    _Vazba.set$value(x);
+  }
+  public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
+  public String xposOfTypUcastnika(){return XD_XPos+"/@TypUcastnika";}
+  public String xposOfPraxeRizeni(){return XD_XPos+"/@PraxeRizeni";}
+  public String xposOfAlkoholDech(){return XD_XPos+"/@AlkoholDech";}
+  public String xposOfAlkoholKrev(){return XD_XPos+"/@AlkoholKrev";}
+  public String xposOfZraneni(){return XD_XPos+"/@Zraneni";}
+  public String xposOfZdravPojistovna(){return XD_XPos+"/@ZdravPojistovna";}
+  public String xposOfPokutaKc(){return XD_XPos+"/@PokutaKc";}
+  public String xposOfPokutaZapl(){return XD_XPos+"/@PokutaZapl";}
+  public String xposOfPachatel(){return XD_XPos+"/@Pachatel";}
+  public String xposOfPoskozeny(){return XD_XPos+"/@Poskozeny";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -175,7 +190,7 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getOsoba());
@@ -337,8 +352,8 @@ public class UcastnikDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -388,7 +403,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -445,8 +460,8 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -496,7 +511,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -553,8 +568,8 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -604,7 +619,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -661,8 +676,8 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakOst implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -712,7 +727,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -769,8 +784,8 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
 }
 public static class Vazba implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -820,7 +835,7 @@ public static class Vazba implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

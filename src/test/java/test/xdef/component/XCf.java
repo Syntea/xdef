@@ -5,18 +5,22 @@ package test.xdef.component;
 public class XCf implements org.xdef.component.XComponent{
   public java.util.List<XCf.g> listOfg() {return _g;}
   public java.util.List<org.xdef.sys.SDatetime> listOf$g(){
-    java.util.List<org.xdef.sys.SDatetime> result = new java.util.ArrayList<org.xdef.sys.SDatetime>();
-    for(XCf.g x: _g) result.add(x.get$value());
-    return result;
+    java.util.List<org.xdef.sys.SDatetime> x=new java.util.ArrayList<org.xdef.sys.SDatetime>();
+    for(XCf.g y: _g) x.add(y.get$value());
+    return x;
   }
   public void addg(XCf.g x) {if (x!=null) _g.add(x);}
   public void add$g(org.xdef.sys.SDatetime x){
-    if (x!=null) {XCf.g y = new XCf.g(); y.set$value(x); addg(y);}
+    if (x!=null) {
+      XCf.g y=new XCf.g();
+      y.set$value(x); addg(y);
+    }
   }
   public void set$g(java.util.List<org.xdef.sys.SDatetime> x){
     _g.clear(); if (x==null) return;
     for (org.xdef.sys.SDatetime y:x){
-      XCf.g z=new XCf.g();z._$value=y;addg(z);
+      XCf.g z=new XCf.g();
+      z._$value=y;addg(z);
     }
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -69,7 +73,7 @@ public class XCf implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfg());
     return a;
@@ -125,11 +129,11 @@ public static class g implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public void set$value(org.xdef.sys.SDatetime x){_$value = x;}
+  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
   public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -179,7 +183,7 @@ public static class g implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

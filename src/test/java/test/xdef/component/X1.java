@@ -7,9 +7,9 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
   public String get$value() {return _$value;}
   public X1.B getB() {return _B;}
   public void addA(X1.A x) {if (x!=null) _A.add(x);}
-  public void set$value(String x){_$value = x;}
-  public void setB(X1.B x){_B = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public void setB(X1.B x){_B=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -60,7 +60,7 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfA());
     if (get$value() != null)
@@ -131,8 +131,8 @@ public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.compone
 // </editor-fold>
 public static class A implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){_V = x;}
-  public String xposOfV(){return XD_XPos + "/@V";}
+  public void setV(String x){_V=x;}
+  public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

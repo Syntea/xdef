@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class Y07ControlId implements org.xdef.component.XComponent{
   public Integer getIdNeco() {return _IdNeco;}
-  public void setIdNeco(Integer x){_IdNeco = x;}
-  public String xposOfIdNeco(){return XD_XPos + "/@IdNeco";}
+  public void setIdNeco(Integer x){_IdNeco=x;}
+  public String xposOfIdNeco(){return XD_XPos+"/@IdNeco";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

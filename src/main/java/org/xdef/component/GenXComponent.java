@@ -422,7 +422,6 @@ public final class GenXComponent {
 			d += 's';
 		}
 		final String xmlName = xn.getQName().getLocalPart();
-		String jaxbInfo = "";
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
 			if (typ.startsWith("java.util.List<")) {
@@ -470,7 +469,7 @@ public final class GenXComponent {
 			typ = (max > 1) ? "java.util.List<" + typeName + ">" : typeName;
 		}
 		if (typ.startsWith("java.util.List<")) {
-			sb.append(modify(jaxbInfo+
+			sb.append(modify(
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
@@ -480,7 +479,7 @@ public final class GenXComponent {
 				"&{name}", name,
 				"&{typ}", typ));
 		} else {
-			sb.append(modify(jaxbInfo+
+			sb.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
@@ -573,9 +572,9 @@ public final class GenXComponent {
 "\t\t\tx.xInit(this, \""+modelName+"\", "
 				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
-				+ "\t\t_&{name} = x;"+LN+"\t";
+				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
-				x = "_&{name} = x;";
+				x = "_&{name}=x;";
 			}
 		}
 		if (sbi != null) {
@@ -694,7 +693,7 @@ public final class GenXComponent {
 				sb.append(modify(template,
 					"&{x}", modify(x,
 						typeName, typeName1,
-						"_&{name} = x;",
+						"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -704,7 +703,7 @@ public final class GenXComponent {
 				sb.append(modify(template,
 					"&{x}", modify(x,
 						typeName, typeName1,
-						"_&{name} = x;",
+						"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -714,7 +713,7 @@ public final class GenXComponent {
 				sb.append(modify(template,
 						"&{x}", modify(x,
 							typeName, typeName1,
-							"_&{name} = x;",
+							"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -759,9 +758,9 @@ public final class GenXComponent {
 "\tpublic &{typ1} listOf$&{name}()";
 			getters.append(modify(template +
 "{"+LN+
-"\t\t&{typ1} result = new java.util.ArrayList<&{typ}>();"+LN+
-"\t\tfor(&{typeName} x: _&{name}) result.add(x.get$value());"+LN+
-"\t\treturn result;"+LN+
+"\t\t&{typ1} x=new java.util.ArrayList<&{typ}>();"+LN+
+"\t\tfor(&{typeName} y: _&{name}) x.add(y.get$value());"+LN+
+"\t\treturn x;"+LN+
 "\t}"+LN,
 				"&{name}", name,
 				"&{d}", xe1.getName(),
@@ -780,8 +779,10 @@ public final class GenXComponent {
 "\tpublic void add$&{name}(&{typ} x)";
 			setters.append(modify(template +
 "{"+LN+
-"\t\tif (x!=null) {&{typeName} y = new &{typeName}(); y.set$value(x); add&{name}(y);}"+LN+
-"\t}"+LN,
+"\t\tif (x!=null) {"+LN+
+"\t\t\t&{typeName} y=new &{typeName}();"+LN+
+"\t\t\ty.set$value(x); add&{name}(y);"+LN+
+"\t\t}"+LN+"\t}"+LN,
 				"&{name}", name,
 				"&{d}", xe1.getName(),
 				"&{typ}", typ,
@@ -800,7 +801,8 @@ public final class GenXComponent {
 "{"+LN+
 "\t\t_&{name}.clear(); if (x==null) return;"+LN+
 "\t\tfor (&{typ} y:x){"+LN+
-"\t\t\t&{typeName} z=new &{typeName}();z._$value=y;add&{name}(z);"+LN+
+"\t\t\t&{typeName} z=new &{typeName}();"+LN+
+"\t\t\tz._$value=y;add&{name}(z);"+LN+
 "\t\t}"+LN+
 "\t}"+LN,
 				"&{name}", name,
@@ -873,8 +875,10 @@ public final class GenXComponent {
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x)";
-				setters.append(modify(template+
-"{if(_&{name}==null)set&{name}(new &{typeName}());_&{name}.set$value(x);}"+LN,
+				setters.append(modify(template+"{"+LN+
+"\t\tif(_&{name}==null)set&{name}(new &{typeName}());"+LN+
+"\t\t_&{name}.set$value(x);"+LN+
+"\t}"+LN,
 				"&{name}", name,
 				"&{d}", xe1.getName(),
 				"&{typ}", typ,
@@ -947,7 +951,7 @@ public final class GenXComponent {
 		final String x = "attribute".equals(descr) ? "@" + name : "$text";
 		sb.append(modify(
 (_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
-"\tpublic String xposOf&{name}(){return XD_XPos + \"/&{x}\";}"+LN,
+"\tpublic String xposOf&{name}(){return XD_XPos+\"/&{x}\";}"+LN,
 			"&{name}", name,
 			"&{x}", x,
 			"&{descr}", descr));
@@ -1011,7 +1015,7 @@ public final class GenXComponent {
 		final boolean isList) {
 		if (sb.length() == 0) {
 			sb.append(
-"\t\tjava.util.List<org.xdef.component.XComponent> a =")
+"\t\tjava.util.List<org.xdef.component.XComponent> a=")
 			.append(LN).append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
 			.append(LN);
@@ -1033,7 +1037,7 @@ public final class GenXComponent {
 		final StringBuilder sb) {
 		if (sb.length() == 0) {
 			sb.append(
-"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a =").append(LN)
+"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a=").append(LN)
 				.append(
 "\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
 				.append(LN);

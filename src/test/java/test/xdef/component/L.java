@@ -7,7 +7,7 @@ public class L implements org.xdef.component.XComponent{
   public void set$any(L.$any x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "$any", null, "L#L/$any");
-    _$any = x;
+    _$any=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -59,7 +59,7 @@ public class L implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, get$any());
     return a;

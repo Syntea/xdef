@@ -7,7 +7,7 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
   public void setX(Y14A x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "X", null, "Y14#B/X");
-    _X = x;
+    _X=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -59,7 +59,7 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getX());
     return a;
@@ -114,9 +114,9 @@ public static class X implements test.xdef.component.Y14A{
   @Override
   public String geta() {return _a;}
   @Override
-  public void seta(String x){_a = x;}
+  public void seta(String x){_a=x;}
   @Override
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

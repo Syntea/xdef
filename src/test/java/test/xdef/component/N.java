@@ -7,7 +7,7 @@ public class N implements org.xdef.component.XComponent{
   public void setOperation(N_Part x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Operation", null, "N#A/Operation");
-    _Operation = x;
+    _Operation=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
@@ -59,7 +59,7 @@ public class N implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getOperation());
     return a;

@@ -9,7 +9,7 @@ public class O implements org.xdef.component.XComponent{
   public void addB(O.B x) {if (x!=null) _B.add(x);}
   public void addC(O.C x) {if (x!=null) _C.add(x);}
   public void add$value(Integer x) {if (x!=null) _$value.add(x);}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -60,7 +60,7 @@ public class O implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfB());
     org.xdef.component.XComponentUtil.addXC(a, listOfC());

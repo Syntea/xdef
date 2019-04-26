@@ -5,8 +5,8 @@ package test.xdef.component;
 public class F1 implements org.xdef.component.XComponent{
   public F1.A getA() {return _A;}
   public F1.B getB() {return _B;}
-  public void setA(F1.A x){_A = x;}
-  public void setB(F1.B x){_B = x;}
+  public void setA(F1.A x){_A=x;}
+  public void setB(F1.B x){_B=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -57,7 +57,7 @@ public class F1 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getA());
     org.xdef.component.XComponentUtil.addXC(a, getB());

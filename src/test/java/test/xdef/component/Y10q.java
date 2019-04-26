@@ -4,8 +4,8 @@
 package test.xdef.component;
 public class Y10q implements org.xdef.component.XComponent{
   public String getx() {return _x;}
-  public void setx(String x){_x = x;}
-  public String xposOfx(){return XD_XPos + "/@x";}
+  public void setx(String x){_x=x;}
+  public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

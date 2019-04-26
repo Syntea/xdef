@@ -5,10 +5,10 @@ package test.xdef.component;
 public class Y18a implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public String getd() {return _d;}
-  public void setc(String x){_c = x;}
-  public void setd(String x){_d = x;}
-  public String xposOfc(){return XD_XPos + "/@c";}
-  public String xposOfd(){return XD_XPos + "/@d";}
+  public void setc(String x){_c=x;}
+  public void setd(String x){_d=x;}
+  public String xposOfc(){return XD_XPos+"/@c";}
+  public String xposOfd(){return XD_XPos+"/@d";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

@@ -61,7 +61,7 @@ public class Y12_B implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfS());
     org.xdef.component.XComponentUtil.addXC(a, listOfM());
@@ -136,8 +136,8 @@ public class Y12_B implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class S implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){_V = x;}
-  public String xposOfV(){return XD_XPos + "/@V";}
+  public void setV(String x){_V=x;}
+  public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -237,8 +237,8 @@ public static class S implements org.xdef.component.XComponent{
 }
 public static class M implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){_V = x;}
-  public String xposOfV(){return XD_XPos + "/@V";}
+  public void setV(String x){_V=x;}
+  public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -338,8 +338,8 @@ public static class M implements org.xdef.component.XComponent{
 }
 public static class P implements org.xdef.component.XComponent{
   public String getO() {return _O;}
-  public void setO(String x){_O = x;}
-  public String xposOfO(){return XD_XPos + "/@O";}
+  public void setO(String x){_O=x;}
+  public String xposOfO(){return XD_XPos+"/@O";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -439,8 +439,8 @@ public static class P implements org.xdef.component.XComponent{
 }
 public static class Q implements org.xdef.component.XComponent{
   public String getO() {return _O;}
-  public void setO(String x){_O = x;}
-  public String xposOfO(){return XD_XPos + "/@O";}
+  public void setO(String x){_O=x;}
+  public String xposOfO(){return XD_XPos+"/@O";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

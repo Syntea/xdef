@@ -21,45 +21,45 @@ public class Z4 implements org.xdef.component.XComponent{
   public String getProfese() {return _Profese;}
   public Z9 getTrvalyPobyt() {return _TrvalyPobyt;}
   public Z9 getPrechodnyPobyt() {return _PrechodnyPobyt;}
-  public void setJmeno(String x){_Jmeno = x;}
-  public void setPrijmeni(String x){_Prijmeni = x;}
-  public void setRodnePrijmeni(String x){_RodnePrijmeni = x;}
-  public void setTitulPred(String x){_TitulPred = x;}
-  public void setTitulZa(String x){_TitulZa = x;}
-  public void setRC(String x){_RC = x;}
-  public void setPohlavi(String x){_Pohlavi = x;}
-  public void setOsobniStav(String x){_OsobniStav = x;}
-  public void setDatumNarozeni(org.xdef.sys.SDatetime x){_DatumNarozeni = x;}
+  public void setJmeno(String x){_Jmeno=x;}
+  public void setPrijmeni(String x){_Prijmeni=x;}
+  public void setRodnePrijmeni(String x){_RodnePrijmeni=x;}
+  public void setTitulPred(String x){_TitulPred=x;}
+  public void setTitulZa(String x){_TitulZa=x;}
+  public void setRC(String x){_RC=x;}
+  public void setPohlavi(String x){_Pohlavi=x;}
+  public void setOsobniStav(String x){_OsobniStav=x;}
+  public void setDatumNarozeni(org.xdef.sys.SDatetime x){_DatumNarozeni=x;}
   public void setDatumNarozeni(java.util.Date x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumNarozeni(java.sql.Timestamp x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumNarozeni(java.util.Calendar x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMistoNarozeni(String x){_MistoNarozeni = x;}
-  public void setStatNarozeni(String x){_StatNarozeni = x;}
-  public void setStatniPrislusnost(String x){_StatniPrislusnost = x;}
-  public void setProfese(String x){_Profese = x;}
+  public void setMistoNarozeni(String x){_MistoNarozeni=x;}
+  public void setStatNarozeni(String x){_StatNarozeni=x;}
+  public void setStatniPrislusnost(String x){_StatniPrislusnost=x;}
+  public void setProfese(String x){_Profese=x;}
   public void setTrvalyPobyt(Z9 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "TrvalyPobyt", null, "SouborD1A#Osoba/$mixed/TrvalyPobyt");
-    _TrvalyPobyt = x;
+    _TrvalyPobyt=x;
   }
   public void setPrechodnyPobyt(Z9 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PrechodnyPobyt", null, "SouborD1A#Osoba/$mixed/PrechodnyPobyt");
-    _PrechodnyPobyt = x;
+    _PrechodnyPobyt=x;
   }
-  public String xposOfJmeno(){return XD_XPos + "/@Jmeno";}
-  public String xposOfPrijmeni(){return XD_XPos + "/@Prijmeni";}
-  public String xposOfRodnePrijmeni(){return XD_XPos + "/@RodnePrijmeni";}
-  public String xposOfTitulPred(){return XD_XPos + "/@TitulPred";}
-  public String xposOfTitulZa(){return XD_XPos + "/@TitulZa";}
-  public String xposOfRC(){return XD_XPos + "/@RC";}
-  public String xposOfPohlavi(){return XD_XPos + "/@Pohlavi";}
-  public String xposOfOsobniStav(){return XD_XPos + "/@OsobniStav";}
-  public String xposOfDatumNarozeni(){return XD_XPos + "/@DatumNarozeni";}
-  public String xposOfMistoNarozeni(){return XD_XPos + "/@MistoNarozeni";}
-  public String xposOfStatNarozeni(){return XD_XPos + "/@StatNarozeni";}
-  public String xposOfStatniPrislusnost(){return XD_XPos + "/@StatniPrislusnost";}
-  public String xposOfProfese(){return XD_XPos + "/@Profese";}
+  public String xposOfJmeno(){return XD_XPos+"/@Jmeno";}
+  public String xposOfPrijmeni(){return XD_XPos+"/@Prijmeni";}
+  public String xposOfRodnePrijmeni(){return XD_XPos+"/@RodnePrijmeni";}
+  public String xposOfTitulPred(){return XD_XPos+"/@TitulPred";}
+  public String xposOfTitulZa(){return XD_XPos+"/@TitulZa";}
+  public String xposOfRC(){return XD_XPos+"/@RC";}
+  public String xposOfPohlavi(){return XD_XPos+"/@Pohlavi";}
+  public String xposOfOsobniStav(){return XD_XPos+"/@OsobniStav";}
+  public String xposOfDatumNarozeni(){return XD_XPos+"/@DatumNarozeni";}
+  public String xposOfMistoNarozeni(){return XD_XPos+"/@MistoNarozeni";}
+  public String xposOfStatNarozeni(){return XD_XPos+"/@StatNarozeni";}
+  public String xposOfStatniPrislusnost(){return XD_XPos+"/@StatniPrislusnost";}
+  public String xposOfProfese(){return XD_XPos+"/@Profese";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -136,7 +136,7 @@ public class Z4 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getTrvalyPobyt());
     org.xdef.component.XComponentUtil.addXC(a, getPrechodnyPobyt());

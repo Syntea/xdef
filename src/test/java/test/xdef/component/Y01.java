@@ -4,7 +4,7 @@
 package test.xdef.component;
 public class Y01 implements org.xdef.component.XComponent{
   public test.xdef.component.s.Y01Operation getOperation() {return _Operation;}
-  public void setOperation(test.xdef.component.s.Y01Operation x){_Operation = x;}
+  public void setOperation(test.xdef.component.s.Y01Operation x){_Operation=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -55,7 +55,7 @@ public class Y01 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getOperation());
     return a;

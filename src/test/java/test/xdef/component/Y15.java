@@ -6,11 +6,11 @@ public class Y15 implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
   public Y15.b getb() {return _b;}
   public String get$value1() {return _$value1;}
-  public void set$value(String x){_$value = x;}
-  public void setb(Y15.b x){_b = x;}
-  public void set$value1(String x){_$value1 = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
-  public String xposOf$value1(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public void setb(Y15.b x){_b=x;}
+  public void set$value1(String x){_$value1=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
+  public String xposOf$value1(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -61,7 +61,7 @@ public class Y15 implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

@@ -5,8 +5,11 @@ package test.xdef.component;
 public class XCb implements org.xdef.component.XComponent{
   public XCb.c getc() {return _c;}
   public String get$c(){return _c==null?null:_c.get$value();}
-  public void setc(XCb.c x){_c = x;}
-  public void set$c(String x){if(_c==null)setc(new XCb.c());_c.set$value(x);}
+  public void setc(XCb.c x){_c=x;}
+  public void set$c(String x){
+    if(_c==null)setc(new XCb.c());
+    _c.set$value(x);
+  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -57,7 +60,7 @@ public class XCb implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getc());
     return a;
@@ -110,8 +113,8 @@ public class XCb implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class c implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -161,7 +164,7 @@ public static class c implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,

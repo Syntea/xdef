@@ -7,9 +7,9 @@ public class K implements org.xdef.component.XComponent{
   public Integer get$value() {return _$value;}
   public K.d getd() {return _d;}
   public void addc(K.c x) {if (x!=null) _c.add(x);}
-  public void set$value(Integer x){_$value = x;}
-  public void setd(K.d x){_d = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(Integer x){_$value=x;}
+  public void setd(K.d x){_d=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -60,7 +60,7 @@ public class K implements org.xdef.component.XComponent{
   }
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfc());
     if (get$value() != null)
@@ -136,15 +136,15 @@ public static class c implements org.xdef.component.XComponent{
   public java.util.Date dateOfRok(){return org.xdef.sys.SDatetime.getDate(_Rok);}
   public java.sql.Timestamp timestampOfRok(){return org.xdef.sys.SDatetime.getTimestamp(_Rok);}
   public java.util.Calendar calendarOfRok(){return org.xdef.sys.SDatetime.getCalendar(_Rok);}
-  public void setKod(String x){_Kod = x;}
-  public void setCislo(String x){_Cislo = x;}
-  public void setRok(org.xdef.sys.SDatetime x){_Rok = x;}
+  public void setKod(String x){_Kod=x;}
+  public void setCislo(String x){_Cislo=x;}
+  public void setRok(org.xdef.sys.SDatetime x){_Rok=x;}
   public void setRok(java.util.Date x){_Rok=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRok(java.sql.Timestamp x){_Rok=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRok(java.util.Calendar x){_Rok=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfKod(){return XD_XPos + "/@Kod";}
-  public String xposOfCislo(){return XD_XPos + "/@Cislo";}
-  public String xposOfRok(){return XD_XPos + "/@Rok";}
+  public String xposOfKod(){return XD_XPos+"/@Kod";}
+  public String xposOfCislo(){return XD_XPos+"/@Cislo";}
+  public String xposOfRok(){return XD_XPos+"/@Rok";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
@@ -263,11 +263,11 @@ public static class d implements org.xdef.component.XComponent{
   public java.util.Date dateOfa(){return org.xdef.sys.SDatetime.getDate(_a);}
   public java.sql.Timestamp timestampOfa(){return org.xdef.sys.SDatetime.getTimestamp(_a);}
   public java.util.Calendar calendarOfa(){return org.xdef.sys.SDatetime.getCalendar(_a);}
-  public void seta(org.xdef.sys.SDatetime x){_a = x;}
+  public void seta(org.xdef.sys.SDatetime x){_a=x;}
   public void seta(java.util.Date x){_a=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void seta(java.sql.Timestamp x){_a=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void seta(java.util.Calendar x){_a=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
