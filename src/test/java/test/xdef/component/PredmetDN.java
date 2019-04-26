@@ -8,7 +8,6 @@ public class PredmetDN implements org.xdef.component.XComponent{
   public String getDruhPredmetu() {return _DruhPredmetu;}
   public Z3 getSkoda() {return _Skoda;}
   public PredmetDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
   public void setOznSegmentu(String x){_OznSegmentu=x;}
   public void setNazevPredmetu(String x){_NazevPredmetu=x;}
   public void setDruhPredmetu(String x){_DruhPredmetu=x;}
@@ -21,10 +20,6 @@ public class PredmetDN implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#PredmetDN/$mixed/Vlastnik");
     _Vlastnik=x;
-  }
-  public void set$Vlastnik(String x){
-    if(_Vlastnik==null)setVlastnik(new PredmetDN.Vlastnik());
-    _Vlastnik.set$value(x);
   }
   public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
   public String xposOfNazevPredmetu(){return XD_XPos+"/@NazevPredmetu";}

@@ -19,7 +19,6 @@ public class Z8 implements org.xdef.component.XComponent{
   public String getHlavniPricina() {return _HlavniPricina;}
   public String getPricina() {return _Pricina;}
   public Z8.Misto getMisto() {return _Misto;}
-  public String get$Misto(){return _Misto==null?null:_Misto.get$value();}
   public void setDatumCasDN(org.xdef.sys.SDatetime x){_DatumCasDN=x;}
   public void setDatumCasDN(java.util.Date x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasDN(java.sql.Timestamp x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
@@ -39,10 +38,6 @@ public class Z8 implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Misto", null, "SouborD1A#ObjStrankaDN/Misto");
     _Misto=x;
-  }
-  public void set$Misto(String x){
-    if(_Misto==null)setMisto(new Z8.Misto());
-    _Misto.set$value(x);
   }
   public String xposOfDatumCasDN(){return XD_XPos+"/@DatumCasDN";}
   public String xposOfDatumCasDoDN(){return XD_XPos+"/@DatumCasDoDN";}

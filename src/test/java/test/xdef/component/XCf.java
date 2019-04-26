@@ -4,25 +4,7 @@
 package test.xdef.component;
 public class XCf implements org.xdef.component.XComponent{
   public java.util.List<XCf.g> listOfg() {return _g;}
-  public java.util.List<org.xdef.sys.SDatetime> listOf$g(){
-    java.util.List<org.xdef.sys.SDatetime> x=new java.util.ArrayList<org.xdef.sys.SDatetime>();
-    for(XCf.g y: _g) x.add(y.get$value());
-    return x;
-  }
   public void addg(XCf.g x) {if (x!=null) _g.add(x);}
-  public void add$g(org.xdef.sys.SDatetime x){
-    if (x!=null) {
-      XCf.g y=new XCf.g();
-      y.set$value(x); addg(y);
-    }
-  }
-  public void set$g(java.util.List<org.xdef.sys.SDatetime> x){
-    _g.clear(); if (x==null) return;
-    for (org.xdef.sys.SDatetime y:x){
-      XCf.g z=new XCf.g();
-      z._$value=y;addg(z);
-    }
-  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

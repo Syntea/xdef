@@ -7,27 +7,11 @@ public class A implements org.xdef.component.XComponent{
   public java.math.BigDecimal getdec() {return _dec;}
   public java.util.List<A.W> listOfW() {return _W;}
   public java.util.List<A.Y> listOfY() {return _Y;}
-  public java.util.List<String> listOf$Y(){
-    java.util.List<String> x=new java.util.ArrayList<String>();
-    for(A.Y y: _Y) x.add(y.get$value());
-    return x;
-  }
   public A.i geti() {return _i;}
-  public java.math.BigInteger get$i(){return _i==null?null:_i.get$value();}
   public A.f getf() {return _f;}
-  public Double get$f(){return _f==null?null:_f.get$value();}
   public A.d getd() {return _d;}
-  public org.xdef.sys.SDatetime get$d(){return _d==null?null:_d.get$value();}
-  public java.util.Date dateOf$d(){return org.xdef.sys.SDatetime.getDate(get$d());}
-  public java.sql.Timestamp timestampOf$d(){return org.xdef.sys.SDatetime.getTimestamp(get$d());}
-  public java.util.Calendar calendarOf$d(){return org.xdef.sys.SDatetime.getCalendar(get$d());}
   public A.t gett() {return _t;}
-  public org.xdef.sys.SDatetime get$t(){return _t==null?null:_t.get$value();}
-  public java.util.Date dateOf$t(){return org.xdef.sys.SDatetime.getDate(get$t());}
-  public java.sql.Timestamp timestampOf$t(){return org.xdef.sys.SDatetime.getTimestamp(get$t());}
-  public java.util.Calendar calendarOf$t(){return org.xdef.sys.SDatetime.getCalendar(get$t());}
   public A.s gets() {return _s;}
-  public String get$s(){return _s==null?null:_s.get$value();}
   public AZ getZ() {return _Z;}
   public A.d1 getd1() {return _d1;}
   public java.util.List<A.d2> listOfd2() {return _d2;}
@@ -36,50 +20,11 @@ public class A implements org.xdef.component.XComponent{
   public void setdec(java.math.BigDecimal x){_dec=x;}
   public void addW(A.W x) {if (x!=null) _W.add(x);}
   public void addY(A.Y x) {if (x!=null) _Y.add(x);}
-  public void add$Y(String x){
-    if (x!=null) {
-      A.Y y=new A.Y();
-      y.set$value(x); addY(y);
-    }
-  }
-  public void set$Y(java.util.List<String> x){
-    _Y.clear(); if (x==null) return;
-    for (String y:x){
-      A.Y z=new A.Y();
-      z._$value=y;addY(z);
-    }
-  }
   public void seti(A.i x){_i=x;}
-  public void set$i(java.math.BigInteger x){
-    if(_i==null)seti(new A.i());
-    _i.set$value(x);
-  }
   public void setf(A.f x){_f=x;}
-  public void set$f(Double x){
-    if(_f==null)setf(new A.f());
-    _f.set$value(x);
-  }
   public void setd(A.d x){_d=x;}
-  public void set$d(org.xdef.sys.SDatetime x){
-    if(_d==null)setd(new A.d());
-    _d.set$value(x);
-  }
-  public void set$d(java.util.Date x){set$d(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$d(java.sql.Timestamp x){set$d(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$d(java.util.Calendar x){set$d(x==null?null:new org.xdef.sys.SDatetime(x));}
   public void sett(A.t x){_t=x;}
-  public void set$t(org.xdef.sys.SDatetime x){
-    if(_t==null)sett(new A.t());
-    _t.set$value(x);
-  }
-  public void set$t(java.util.Date x){set$t(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$t(java.sql.Timestamp x){set$t(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$t(java.util.Calendar x){set$t(x==null?null:new org.xdef.sys.SDatetime(x));}
   public void sets(A.s x){_s=x;}
-  public void set$s(String x){
-    if(_s==null)sets(new A.s());
-    _s.set$value(x);
-  }
   public void setZ(AZ x){_Z=x;}
   public void setd1(A.d1 x){_d1=x;}
   public void addd2(A.d2 x) {if (x!=null) _d2.add(x);}

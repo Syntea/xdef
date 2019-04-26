@@ -4,18 +4,7 @@
 package test.xdef.component;
 public class XCd implements org.xdef.component.XComponent{
   public XCd.e gete() {return _e;}
-  public org.xdef.sys.SDatetime get$e(){return _e==null?null:_e.get$value();}
-  public java.util.Date dateOf$e(){return org.xdef.sys.SDatetime.getDate(get$e());}
-  public java.sql.Timestamp timestampOf$e(){return org.xdef.sys.SDatetime.getTimestamp(get$e());}
-  public java.util.Calendar calendarOf$e(){return org.xdef.sys.SDatetime.getCalendar(get$e());}
   public void sete(XCd.e x){_e=x;}
-  public void set$e(org.xdef.sys.SDatetime x){
-    if(_e==null)sete(new XCd.e());
-    _e.set$value(x);
-  }
-  public void set$e(java.util.Date x){set$e(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$e(java.sql.Timestamp x){set$e(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void set$e(java.util.Calendar x){set$e(x==null?null:new org.xdef.sys.SDatetime(x));}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

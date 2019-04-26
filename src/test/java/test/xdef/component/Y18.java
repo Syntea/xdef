@@ -7,7 +7,6 @@ public class Y18 implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public Y18.C getC() {return _C;}
   public Y18a1 getD() {return _D;}
-  public Integer get$D(){return _D==null?null:_D.get$value();}
   public void seta(String x){_a=x;}
   public void setb(String x){_b=x;}
   public void setC(Y18.C x){_C=x;}
@@ -15,10 +14,6 @@ public class Y18 implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "D", null, "Y18#A/D");
     _D=x;
-  }
-  public void set$D(Integer x){
-    if(_D==null)setD(new Y18a1());
-    _D.set$value(x);
   }
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}

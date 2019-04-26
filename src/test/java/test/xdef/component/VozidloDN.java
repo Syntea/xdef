@@ -44,7 +44,6 @@ public class VozidloDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VozidloDN.Drzitel getDrzitel() {return _Drzitel;}
-  public String get$Drzitel(){return _Drzitel==null?null:_Drzitel.get$value();}
   public void setOznSegmentu(String x){_OznSegmentu=x;}
   public void setDruhVozidla(String x){_DruhVozidla=x;}
   public void setSPZ(String x){_SPZ=x;}
@@ -97,10 +96,6 @@ public class VozidloDN implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Drzitel", null, "SouborD1A#VozidloDN/$mixed/Drzitel");
     _Drzitel=x;
-  }
-  public void set$Drzitel(String x){
-    if(_Drzitel==null)setDrzitel(new VozidloDN.Drzitel());
-    _Drzitel.set$value(x);
   }
   public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
   public String xposOfDruhVozidla(){return XD_XPos+"/@DruhVozidla";}

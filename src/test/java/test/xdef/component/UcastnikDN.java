@@ -19,15 +19,10 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   public Z5 getFirma() {return _Firma;}
   public java.util.List<Z6> listOfDoklad() {return _Doklad;}
   public UcastnikDN.PoruseniZakProvoz getPoruseniZakProvoz() {return _PoruseniZakProvoz;}
-  public String get$PoruseniZakProvoz(){return _PoruseniZakProvoz==null?null:_PoruseniZakProvoz.get$value();}
   public UcastnikDN.PoruseniZakPrest getPoruseniZakPrest() {return _PoruseniZakPrest;}
-  public String get$PoruseniZakPrest(){return _PoruseniZakPrest==null?null:_PoruseniZakPrest.get$value();}
   public UcastnikDN.PoruseniZakTrest getPoruseniZakTrest() {return _PoruseniZakTrest;}
-  public String get$PoruseniZakTrest(){return _PoruseniZakTrest==null?null:_PoruseniZakTrest.get$value();}
   public UcastnikDN.PoruseniZakOst getPoruseniZakOst() {return _PoruseniZakOst;}
-  public String get$PoruseniZakOst(){return _PoruseniZakOst==null?null:_PoruseniZakOst.get$value();}
   public UcastnikDN.Vazba getVazba() {return _Vazba;}
-  public String get$Vazba(){return _Vazba==null?null:_Vazba.get$value();}
   public void setOznSegmentu(String x){_OznSegmentu=x;}
   public void setTypUcastnika(String x){_TypUcastnika=x;}
   public void setPraxeRizeni(Integer x){_PraxeRizeni=x;}
@@ -67,45 +62,25 @@ public class UcastnikDN implements org.xdef.component.XComponent{
       x.xInit(this, "PoruseniZakProvoz", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz");
     _PoruseniZakProvoz=x;
   }
-  public void set$PoruseniZakProvoz(String x){
-    if(_PoruseniZakProvoz==null)setPoruseniZakProvoz(new UcastnikDN.PoruseniZakProvoz());
-    _PoruseniZakProvoz.set$value(x);
-  }
   public void setPoruseniZakPrest(UcastnikDN.PoruseniZakPrest x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakPrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest");
     _PoruseniZakPrest=x;
-  }
-  public void set$PoruseniZakPrest(String x){
-    if(_PoruseniZakPrest==null)setPoruseniZakPrest(new UcastnikDN.PoruseniZakPrest());
-    _PoruseniZakPrest.set$value(x);
   }
   public void setPoruseniZakTrest(UcastnikDN.PoruseniZakTrest x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakTrest", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest");
     _PoruseniZakTrest=x;
   }
-  public void set$PoruseniZakTrest(String x){
-    if(_PoruseniZakTrest==null)setPoruseniZakTrest(new UcastnikDN.PoruseniZakTrest());
-    _PoruseniZakTrest.set$value(x);
-  }
   public void setPoruseniZakOst(UcastnikDN.PoruseniZakOst x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "PoruseniZakOst", null, "SouborD1A#UcastnikDN/$mixed/PoruseniZakOst");
     _PoruseniZakOst=x;
   }
-  public void set$PoruseniZakOst(String x){
-    if(_PoruseniZakOst==null)setPoruseniZakOst(new UcastnikDN.PoruseniZakOst());
-    _PoruseniZakOst.set$value(x);
-  }
   public void setVazba(UcastnikDN.Vazba x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vazba", null, "SouborD1A#UcastnikDN/$mixed/Vazba");
     _Vazba=x;
-  }
-  public void set$Vazba(String x){
-    if(_Vazba==null)setVazba(new UcastnikDN.Vazba());
-    _Vazba.set$value(x);
   }
   public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
   public String xposOfTypUcastnika(){return XD_XPos+"/@TypUcastnika";}

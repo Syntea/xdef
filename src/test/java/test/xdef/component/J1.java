@@ -4,16 +4,11 @@
 package test.xdef.component;
 public class J1 implements org.xdef.component.XComponent{
   public J1.X getX() {return _X;}
-  public String get$X(){return _X==null?null:_X.get$value();}
   public java.util.List<J1.C> listOfC() {return _C;}
   public java.util.List<J1.X2> listOfX2() {return _X2;}
   public J1.C2 getC2() {return _C2;}
   public J1.X3 getX3() {return _X3;}
   public void setX(J1.X x){_X=x;}
-  public void set$X(String x){
-    if(_X==null)setX(new J1.X());
-    _X.set$value(x);
-  }
   public void addC(J1.C x) {if (x!=null) _C.add(x);}
   public void addX2(J1.X2 x) {if (x!=null) _X2.add(x);}
   public void setC2(J1.C2 x){_C2=x;}

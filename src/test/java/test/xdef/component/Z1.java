@@ -13,11 +13,6 @@ public class Z1 implements org.xdef.component.XComponent{
   public Z2 getProtokol() {return _Protokol;}
   public Z7 getRozhodnutiDN() {return _RozhodnutiDN;}
   public java.util.List<Z1.VyliceniDN> listOfVyliceniDN() {return _VyliceniDN;}
-  public java.util.List<String> listOf$VyliceniDN(){
-    java.util.List<String> x=new java.util.ArrayList<String>();
-    for(Z1.VyliceniDN y: _VyliceniDN) x.add(y.get$value());
-    return x;
-  }
   public Z8 getObjStranka() {return _ObjStranka;}
   public java.util.List<FotoDN> listOfFoto() {return _Foto;}
   public java.util.List<VozidloDN> listOfVozidlo() {return _Vozidlo;}
@@ -52,19 +47,6 @@ public class Z1 implements org.xdef.component.XComponent{
       _VyliceniDN.add(x);
     }
 
-  }
-  public void add$VyliceniDN(String x){
-    if (x!=null) {
-      Z1.VyliceniDN y=new Z1.VyliceniDN();
-      y.set$value(x); addVyliceniDN(y);
-    }
-  }
-  public void set$VyliceniDN(java.util.List<String> x){
-    _VyliceniDN.clear(); if (x==null) return;
-    for (String y:x){
-      Z1.VyliceniDN z=new Z1.VyliceniDN();
-      z._$value=y;addVyliceniDN(z);
-    }
   }
   public void setObjStranka(Z8 x){
     if (x!=null && x.xGetXPos() == null)

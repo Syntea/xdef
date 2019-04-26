@@ -1218,7 +1218,7 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432); // option redefinition
 				}
 				json = true;
-				result._json = "JSON1".equals(_idName) ? (byte) '1' : (byte)'2';
+				result._json = "JSON1".equals(_idName) ? (byte) 1 : (byte) 2;
 			} else {
 				error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
 			}

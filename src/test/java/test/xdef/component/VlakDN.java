@@ -10,7 +10,6 @@ public class VlakDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VlakDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
   public void setOznSegmentu(String x){_OznSegmentu=x;}
   public void setTypSoupravy(String x){_TypSoupravy=x;}
   public void setSpoj(String x){_Spoj=x;}
@@ -29,10 +28,6 @@ public class VlakDN implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#VlakDN/$mixed/Vlastnik");
     _Vlastnik=x;
-  }
-  public void set$Vlastnik(String x){
-    if(_Vlastnik==null)setVlastnik(new VlakDN.Vlastnik());
-    _Vlastnik.set$value(x);
   }
   public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
   public String xposOfTypSoupravy(){return XD_XPos+"/@TypSoupravy";}

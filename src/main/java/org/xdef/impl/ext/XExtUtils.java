@@ -276,27 +276,40 @@ public final class XExtUtils {
 		return uriList(data.getTextValue());
 	}
 
+	/** Check email address.
+	 * @param email string with email address.
+	 * @return parsed result.
+	 */
 	private static XDParseResult email(final String email) {
 		//TODO this is just primitive test, implement syntax RFC2822!
 		String s = email.trim();
 		XDParseResult pr = new DefParseResult(s);
-		int i, j;
-		int len;
-		if ((len = s.length()) == 0
-			|| (i = s.indexOf('@')) <= 0 || i == len - 1 || i + 1 >= s.length()
-			|| s.indexOf('@', i + 1) > 0
-			|| (j = s.lastIndexOf('.')) < 0 || j == len - 1 || j < i) {
+		if (s == null || s.isEmpty()) {
 			pr.error(XDEF.XDEF809, "email"); //Incorrect value of &{0}
+		} else {			
+            String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*"
+				+ "@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            if (!s.matches(emailregex)) {
+				pr.error(XDEF.XDEF809, "email"); //Incorrect value of &{0}
+			}
 		}
 		return pr;
 	}
 
+	/** Check email address.
+	 * @param data XXData with email.
+	 * @return parsed result.
+	 */
 	public final static XDParseResult email(final XXData data) {
 		return email(data.getTextValue());
 	}
 
+	/** Check email address.
+	 * @param s string with list of email address (separator space, ',' or ';').
+	 * @return parsed result.
+	 */
 	private static XDParseResult emailList(final String s) {
-		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
+		StringTokenizer st = new StringTokenizer(s, ";,");
 		if (!st.hasMoreTokens()) {
 			XDParseResult pr = new DefParseResult(s);
 			pr.error(XDEF.XDEF809, "emailList"); //Incorrect value of &{0}
@@ -305,21 +318,29 @@ public final class XExtUtils {
 		XDContainer val = new DefContainer();
 		String t = null;
 		do {
-			String x = st.nextToken();
-			if (email(x).errors()) {
-				XDParseResult pr = new DefParseResult(s);
-				pr.error(XDEF.XDEF809, "emailList"); //Incorrect value of &{0}
-				return pr;
+			String x = st.nextToken().trim();
+			if (!s.isEmpty() ) {
+				if (email(x).errors()) {
+					XDParseResult pr = new DefParseResult(s);
+					//Incorrect value of &{0}
+					pr.error(XDEF.XDEF809, "emailList"); 
+					return pr;
+				}
+				if (t == null) {
+					t = x;
+				} else {
+					t += ' ' + x;
+				}
+				val.addXDItem(x);
 			}
-			if (t == null) {
-				t = x;
-			} else {
-				t += ' ' + x;
-			}
-			val.addXDItem(x);
 		} while (st.hasMoreTokens());
 		return new DefParseResult(t, val);
 	}
+	
+	/** Check email address.
+	 * @param data contains list of email address (separator space, ',' or ';').
+	 * @return parsed result.
+	 */
 	public final static XDParseResult emailList(final XXData data) {
 		return emailList(data.getTextValue());
 	}

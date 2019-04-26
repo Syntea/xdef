@@ -4,12 +4,7 @@
 package test.xdef.component;
 public class XCb implements org.xdef.component.XComponent{
   public XCb.c getc() {return _c;}
-  public String get$c(){return _c==null?null:_c.get$value();}
   public void setc(XCb.c x){_c=x;}
-  public void set$c(String x){
-    if(_c==null)setc(new XCb.c());
-    _c.set$value(x);
-  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()

@@ -8,7 +8,6 @@ public class ZvireDN implements org.xdef.component.XComponent{
   public String getDruhZvirete() {return _DruhZvirete;}
   public Z3 getSkoda() {return _Skoda;}
   public ZvireDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
   public void setOznSegmentu(String x){_OznSegmentu=x;}
   public void setNazevZvirete(String x){_NazevZvirete=x;}
   public void setDruhZvirete(String x){_DruhZvirete=x;}
@@ -21,10 +20,6 @@ public class ZvireDN implements org.xdef.component.XComponent{
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#ZvireDN/$mixed/Vlastnik");
     _Vlastnik=x;
-  }
-  public void set$Vlastnik(String x){
-    if(_Vlastnik==null)setVlastnik(new ZvireDN.Vlastnik());
-    _Vlastnik.set$value(x);
   }
   public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
   public String xposOfNazevZvirete(){return XD_XPos+"/@NazevZvirete";}

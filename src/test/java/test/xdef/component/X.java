@@ -225,12 +225,7 @@ public static class A implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class B implements org.xdef.component.XComponent{
   public test.xdef.component.X.A.B.E getE() {return _E;}
-  public String get$E(){return _E==null?null:_E.get$value();}
   public void setE(test.xdef.component.X.A.B.E x){_E=x;}
-  public void set$E(String x){
-    if(_E==null)setE(new test.xdef.component.X.A.B.E());
-    _E.set$value(x);
-  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   @Override
   public org.w3c.dom.Element toXml()
