@@ -40,7 +40,7 @@
     <ISOyearMonth>2000-01</ISOyearMonth>
     <ISOduration>P01Y20M12D</ISOduration>
     <email>john.doe@server.com</email>
-    <emailList>john.doe@server.com joe.smith@another.server.com</emailList>
+    <emailList>john.doe@server.com, joe.smith@another.server.com</emailList>
     <!--
     <emailDate></emailDate>
     -->

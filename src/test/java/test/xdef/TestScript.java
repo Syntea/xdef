@@ -923,26 +923,34 @@ public final class TestScript extends XDTester {
 		testAttr("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
 			"onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
-		testAttr("tro@volny.cz","onTrue setResult(true); required email();"
-			+ " onFalse setResult(false); ");
-		testAttr("trovolny.cz","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("@trovolny.cz","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("trovolny.cz@","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("tro@@volny.cz","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("tro@vol@ny.cz","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("tro@volny","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); ");
-		testAttr("tro@volny.cz","onTrue setResult(true); required emailList();"
-			+ " onFalse setResult(false); ");
-		testAttr("t@v.c a@b.c","onTrue setResult(true); required emailList();"
-			+ " onFalse setResult(false); ");
 		testAttr("http://pes.eunet.cz","onTrue setResult(true); required url();"
 			+ " onFalse setResult(false); ");
+		// test email
+		testAttr("tro@volny.cz","onTrue setResult(true); required email();"
+			+ " onFalse setResult(false); "); // OK
+		testAttr("trovolny.cz","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // missing "@"
+		testAttr("@trovolny.cz","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // missing name
+		testAttr("trovolny.cz@","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // missing domain
+		testAttr("tro@@volny.cz","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // more than one "@"
+		testAttr("tro@vol@ny.cz","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // more than one "@"
+		testAttr("tro@volny","onTrue setResult(false); required email();"
+			+ " onFalse setResult(true); "); // missing top domain
+		testAttr("tro@volny.","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // top domain missing
+		testAttr("tro@volny.c","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // top domain too short
+		testAttr("t@v.cc, a@b.cc","onTrue setResult(true);required emailList();"
+			+ " onFalse setResult(false); "); // OK
+		testAttr(" t@v.cc\t;\n a@b.cc ", // Ok, white spaces re allowed
+			"onTrue setResult(true);required emailList();"
+			+ " onFalse setResult(false); ");
+		testAttr("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"
+			+ " onFalse setResult(true); "); // missing separator (";" or ",")
 //		_printCode = true;
 		_printCode = false;
 		testCheckMethod("ahoj",

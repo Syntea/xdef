@@ -31,9 +31,8 @@ public class XDParseJString extends XDParseAn {
 		} else if (!p.eos()) {//not quoed string
 			int pos = p.getIndex();
 			char ch;
-			while (!p.eos() && (ch = p.getCurrentChar()) != ' '
-				&& ch != '\t' && ch != '\r' && ch != '\n') {
-//				sb.append(ch = p.peekChar());
+			while (!p.eos() && (ch = p.getCurrentChar()) != '\t'
+				&& ch != '\r' && ch != '\n') {
 				ch = p.peekChar();
 			}
 			p.setParsedValue(p.getBufferPart(pos, p.getIndex()));
