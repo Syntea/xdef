@@ -11,6 +11,10 @@ import org.xdef.sys.config.PomInfo;
  */
 public interface XDConstants {
 
+////////////////////////////////////////////////////////////////////////////////
+// Properties
+////////////////////////////////////////////////////////////////////////////////
+
 	/** Property defines debug mode (default is false).*/
 	public static final String XDPROPERTY_DEBUG = "xdef.debug";
 	/** Value "true" of property "xdef.debug" */
@@ -27,7 +31,8 @@ public interface XDConstants {
 	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef.debugeditor";
 	/** Property defines X-definition editor class name.*/
 	public static final String XDPROPERTY_XDEF_EDITOR = "xdef.editor";
-
+	/** Property defines X-definition editor class name.*/
+	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef.exteditor";
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
 	public static final String XDPROPERTY_DOCTYPE = "xdef.doctype";
 	/** Value "false" of property "xdef.doctype" */
@@ -111,10 +116,11 @@ public interface XDConstants {
 	/** URI of w3c Xinclude */
 	public static final String XINCLUDE_NS_URI =
 		"http://www.w3.org/2001/XInclude";
-	/** URI of JSON/XML conversion nodes. */
-	public static final String JSON_NS_URI = "http://www.xdef.org/json/1.0";
-	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
-	public static final String JSON_NS_PREFIX = "js";
+
+////////////////////////////////////////////////////////////////////////////////
+// X-definition
+////////////////////////////////////////////////////////////////////////////////
+
 	/** Recommended namespace prefix used for X-definition nodes. */
 	public static final String XDEF_NS_PREFIX = "xd";
 	/** URI of X-definition 2.0. */
@@ -124,8 +130,20 @@ public interface XDConstants {
 	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
 	/** The namespace URI for X-definition instance. */
-	public static final String XDEF_INSTANCE_NS_URI = 
+	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.xdef.org/xdef/instance";
+	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
+
+////////////////////////////////////////////////////////////////////////////////
+// JSON
+////////////////////////////////////////////////////////////////////////////////
+
+	public static final String JSON_NS_PREFIX = "js";
+	/** URI of JSON/XML X-definition conversion. */
+	public static final String JSON_NS_URI = "http://www.xdef.org/json/1.0";
+	/** URI of JSON/XML W3C conversion (https://www.w3.org/TR/xslt-30/#json). */
+	public static final String JSON_NS_URI_W3C =
+		"http://www.w3.org/2005/xpath-functions";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Platform dependent constants.
