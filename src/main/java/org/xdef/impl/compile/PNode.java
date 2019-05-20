@@ -48,7 +48,7 @@ public final class PNode {
 		_xdVersion = xdVersion;
 		_xmlVersion = xmlVersion;
 		if (parent == null) {
-			_nsPrefixes.putAll(XPreCompiler.PREDEFINED_PREFIXES);
+			_nsPrefixes.putAll(XPreCompiler.DEFINED_PREFIXES);
 			_template = false;
 		} else {
 			_template = parent._template;
