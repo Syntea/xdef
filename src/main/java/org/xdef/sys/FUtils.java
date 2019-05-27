@@ -37,13 +37,14 @@ public class FUtils {
 	 * returns Long.MAX_VALUE.
 	 * @param file the file to be checked.
 	 * @return number of bytes available in the filesystem of the file or return
-	 * 0 if filesystem not exists or if it is not allowed to write to the file.
+	 * Long.MAX_VALUE if filesystem not exists or if it is not allowed to write
+	 * to the file.
 	 */
 	public static long getUsableSpace(final File file) {
 		File f = file;
 		for (;;) {
-			if (f.isDirectory() && f.exists()) {
-				return f.getUsableSpace();
+			if (f.isDirectory()) {
+				 return f.exists() ? f.getUsableSpace() : Long.MAX_VALUE;
 			}
 			String s = file.getAbsolutePath().replace('\\', '/');
 			int ndx = s.lastIndexOf('/');
@@ -557,13 +558,21 @@ public class FUtils {
 		final File outFile,
 		final boolean append) throws SException {
 		InputStream in;
-		if (inFile.length() + 10 > getUsableSpace(outFile)) {
-			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
+		if (!inFile.exists()) {
+			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		try {
 			in = new FileInputStream(inFile);
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
+		}
+		if (inFile.length() + 10 > getUsableSpace(outFile)) {
+			if (outFile.getParentFile() != null && 
+				!outFile.getParentFile().exists()) {
+				//File doesn't exist: &{0}
+				throw new SException(SYS.SYS024, outFile); 
+			}
+			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
 		OutputStream out;
 		try {
