@@ -30,21 +30,16 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	private PNode _actPNode;
 	/** includes. */
 	private Element _includeElement;
-	/** The nesting level of XML node. */
+	/** Nesting level of XML node. */
 	private int _level;
-
 	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
 
-	/** Creates a new instance of XDefCompiler
-	 * @param pcomp pre compiler.
+	/** Creates a new instance of XPreCompiler.
+	 * @param pcomp XPreCompiler.
 	 */
-	PreReaderXML(final XPreCompiler pcomp) {
-		super();
-		_pcomp = pcomp;
-	}
+	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
@@ -80,8 +75,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_level == -1) {
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)// && _actPNode._xdVersion==31
 				|| "lexicon".equals(elemLocalName)
+				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
 				|| "declaration".equals(elemLocalName)
 				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
@@ -222,9 +217,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("thesaurus".equals(elemLocalName)
-//					&& _actPNode._xdVersion == 31
-				|| "lexicon".equals(elemLocalName)) {
+			} else if ("lexicon".equals(elemLocalName)
+				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
+				) {
 				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {

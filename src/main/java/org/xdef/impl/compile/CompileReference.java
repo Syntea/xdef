@@ -113,7 +113,7 @@ final class CompileReference extends XNode {
 				_varinit = -1;
 				break;
 			default:
-				throw new SRuntimeException(XDEF.XDEF315,//Internal error:&{0}
+				throw new SRuntimeException(XDEF.XDEF309,//Internal error:&{0}
 					"Incorrect reference node: " + parent.getKind() +
 					": " + getName() +
 					(position != null ?

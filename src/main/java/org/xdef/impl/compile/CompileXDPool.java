@@ -281,7 +281,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				if (parentXel == null) {
 					//Internal error: &{0}
-					throw new SError(XDEF.XDEF315, "No XElement");
+					throw new SError(XDEF.XDEF309, "No XElement");
 				}
 			}
 			if (nodeKind == XNode.XMELEMENT) {
@@ -1758,12 +1758,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							xref.putTargetError(getReportWriter());
 						} else {
 							if (rootSelection.put(xref.getName(), xel) != null){
-								error(XDEF.XDEF315, //Internal error: &{0}
+								error(XDEF.XDEF309, //Internal error: &{0}
 									"reference to element model expected");
 							}
 						}
 					} else {
-						error(XDEF.XDEF315, //Internal error: &{0}
+						error(XDEF.XDEF309, //Internal error: &{0}
 							"reference to element model expected");
 						result = false;
 					}
