@@ -872,15 +872,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Max. size of source buffer.*/
-//	private static final int SOURCE_BUFFER_SIZE = 1024;
+	/** Max. size of source buffer for stream parser. */
 	private static final int SOURCE_BUFFER_SIZE = 2048;
-//	private static final int SOURCE_BUFFER_SIZE = 8192;
-//	private static final int SOURCE_BUFFER_SIZE = 3;
-//	private static final int SOURCE_BUFFER_SIZE = 2;
-//	private static final int SOURCE_BUFFER_SIZE = 1;
 
-	/** Counter of nested keepBuffer methods.*/
+	/** Counter of nested keepBuffer methods. */
 	private int _keepBufferCounter;
 	/** Source reader. */
 	protected Reader _reader;
@@ -4494,6 +4489,7 @@ public class StringParser extends SReporter implements SParser {
 		freeBuffer();
 		return true;
 	}
+	
 	private boolean readXMLMonth() {
 		int start = getIndex();
 		if (!isToken("--")) {
