@@ -59,9 +59,9 @@ public final class BNFGrammar {
 		"whitespace",			//24
 		"xmlNamestartchar",		//25
 		"xmlNameExtchar",		//26
-		"clear",	            //27
-		"push",		            //28
-		"pop",           	    //29
+		"clear",				//27
+		"push",					//28
+		"pop",					//29
 		"anyChar",				//30
 		"find",					//31
 		"error",				//32
