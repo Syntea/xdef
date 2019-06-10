@@ -1702,6 +1702,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 		}
 		if (result != -1) {
+			ensureBuffer(len+1);
 			setIndex(pos += len);
 			_ch = pos + len < _endPos || readNextBuffer()
 				? _source.charAt(getIndex()) : NOCHAR;
@@ -1724,6 +1725,7 @@ public class StringParser extends SReporter implements SParser {
 			if (pos + len <= _endPos || ensureBuffer(len)) {
 				if (token.equalsIgnoreCase(
 					_source.substring(pos, pos + len))) {
+					ensureBuffer(len+1);
 					setIndex(pos += len);
 					_ch = pos<_endPos || readNextBuffer()
 						? _source.charAt(getIndex()) : NOCHAR;
@@ -1929,6 +1931,7 @@ public class StringParser extends SReporter implements SParser {
 							break id;
 						}
 					}
+					ensureBuffer(len+1);
 					setBufIndex(j);
 					return true;
 				}
@@ -2323,6 +2326,7 @@ public class StringParser extends SReporter implements SParser {
 				if (!_source.startsWith(token, x)) {
 					return false;
 				}
+				ensureBuffer(len+1);
 				setBufIndex(getIndex() + len);
 				return true;
 			}
