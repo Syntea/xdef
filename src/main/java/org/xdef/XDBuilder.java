@@ -3,7 +3,6 @@ package org.xdef;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import org.xdef.sys.ReportWriter;
 
 /** Provides building of {@link org.xdef.XDPool}. This object you need to
  * use only in special case you want to make incremental building of
@@ -32,7 +31,6 @@ import org.xdef.sys.ReportWriter;
  * @author Vaclav Trojan
  */
 public interface XDBuilder {
-
 	/** Add source data of X-definition or collection. If the argument starts
 	 * with "&lt;" character then it is interpreted as source X-definition data,
 	 * otherwise it can be the pathname of the file or URL. If it is a pathname
@@ -41,8 +39,9 @@ public interface XDBuilder {
 	 * @param source The string with source X-definition.
 	 * @param sourceId name of source source data corresponding to
 	 * the argument source (may be null).
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(String source, String sourceId);
+	public XDBuilder setSource(String source, String sourceId);
 
 	/** Add source data of X-definitions or collections. If an item starts with
 	 * "&lt;" character then it is interpreted as source data, otherwise
@@ -50,8 +49,9 @@ public interface XDBuilder {
 	 * then it may contain also wildcard characters representing a group
 	 * of files.
 	 * @param sources The string with sources.
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(String... sources);
+	public XDBuilder setSource(String... sources);
 
 	/** Add source data of X-definitions or collections. If an item starts with
 	 * "&lt;" character then it is interpreted as source data, otherwise
@@ -62,51 +62,59 @@ public interface XDBuilder {
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument (any item or even this argument
 	 * may be <tt>null</tt>).
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(String[] sources, String[] sourceIds);
+	public XDBuilder setSource(String[] sources, String[] sourceIds);
 
 	/** Add files with source data of  X-definitions or collections.
 	 * @param sources array of files with sources.
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(File... sources);
+	public XDBuilder setSource(File... sources);
 
 	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(URL... sources);
+	public XDBuilder setSource(URL... sources);
 
 	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
 	 * @param sourceId name of source source data corresponding to
 	 * stream (may be null).
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(InputStream source, String sourceId);
+	public XDBuilder setSource(InputStream source, String sourceId);
 
 	/** Add input streams with sources data of X-definitions or collections.
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to
 	 * streams from the argument sources (any item or even this argument
 	 * may be <tt>null</tt>).
+	 * @return this XDBuilde object.
 	 */
-	public void setSource(InputStream[] sources, String[] sourceIds);
+	public XDBuilder setSource(InputStream[] sources, String[] sourceIds);
 
 	/** Set class loader. The class loader must be set before setting sources.
 	 * @param loader class loader.
+	 * @return this XDBuilde object.
 	 */
-	public void setClassLoader(ClassLoader loader);
+	public XDBuilder setClassLoader(ClassLoader loader);
 
 	/** Set external classes with external methods.
 	 * @param extClasses array of classes with external methods.
+	 * @return XDBuilde object.
 	 */
-	public void setExternals(Class<?>... extClasses);
-
-	@Deprecated
-	/** Set reporter. This method is should be used only for incremental
-	 * message reporting. The reporter must be set before setting sources.
-	 * @param reporter the reporter to be set to this builder.
-	 * @deprecated please use XDFactrory.getXDBuilder(ReportWriter, Properties)
-	 */
-	public void setReporter(ReportWriter reporter);
+	public XDBuilder setExternals(Class<?>... extClasses);
+//	
+//	@Deprecated
+//	/** Set reporter. This method is should be used only for incremental
+//	 * message reporting. The reporter must be set before setting sources.
+//	 * @deprecated please use XDFactrory.getXDBuilder(ReportWriter, Properties)
+//	 * @param reporter the reporter to be set to this builder.
+//	 * @return this XDBuilde object.
+//	 */
+//	public XDBuilder setReporter(ReportWriter reporter);
 
 	/** Compile XDefPool from prepared sources.
 	 * @return compiled XDefPool.

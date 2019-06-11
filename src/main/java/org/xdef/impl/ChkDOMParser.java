@@ -158,7 +158,7 @@ class ChkDOMParser extends SReporter {
 						}
 						XDPool xdp;
 						try {
-							xdp = XBuilder.build(null, null, u);
+							xdp = new XBuilder(null).setSource(u).compileXD();
 						} catch (Exception ex) {
 							//In X-definition are errors&{0}{: }
 							fatal(XDEF.XDEF543, ex);

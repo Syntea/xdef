@@ -1,6 +1,5 @@
 package org.xdef.util;
 
-import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -394,9 +393,9 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			// compile X-definitions
-			XDBuilder xb = XDFactory.getXDBuilder(props);
-			xb.setSource(axdefs.toArray(new String[axdefs.size()]));
-			XDPool xp = xb.compileXD();
+			XDPool xp = XDFactory.getXDBuilder(props)
+				.setSource(axdefs.toArray(new String[axdefs.size()]))
+				.compileXD();
 			XDSourceInfo si = xp.getXDSourceInfo();
 			boolean changed = false;
 			for (String x: si.getMap().keySet()) {

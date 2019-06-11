@@ -5,7 +5,6 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
@@ -1019,9 +1018,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(source);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(source).compileXD();
 	}
 
 	/** Check if given String sources contains correct X-definition.
@@ -1033,14 +1030,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(sources);
-		try {
-			return xf.compileXD();
-		} catch (SRuntimeException ex) {
-			throw ex;
-		}
-
+		return XDFactory.getXDBuilder(props).setSource(sources).compileXD();
 	}
 
 	/** Check if given file contains correct X-definition.
@@ -1052,9 +1042,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(file);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(file).compileXD();
 	}
 
 	/** Check if given files contains correct X-definition.
@@ -1065,9 +1053,7 @@ public class XDGenCollection {
 	public static XDPool chkXdef(File[] files) throws SRuntimeException {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, "true");
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(files);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(files).compileXD();
 	}
 
 	/** Check if given URL contains correct X-definition.
@@ -1079,9 +1065,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(url);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(url).compileXD();
 	}
 
 	/** Check if given URLs contains correct X-definition.
@@ -1093,9 +1077,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(urls);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(urls).compileXD();
 	}
 
 	public static String getXDAttrNS(final Attr n) {

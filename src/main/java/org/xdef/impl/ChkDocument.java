@@ -122,11 +122,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	ChkDocument(final Class<?>[] extObjects, final Properties props) {
 		super("$root", null);
-		XBuilder xb = new XBuilder(props);
-		xb.setExternals(extObjects);
-		xb.setSource(
-			"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>");
-		XPool xp = (XPool) xb.compileXD();
+		XPool xp = (XPool) new XBuilder(props).setExternals(extObjects)
+			.setSource(
+				"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>")
+			.compileXD();
 		XDefinition xd = new XDefinition("#",
 			xp, XDConstants.XDEF32_NS_URI, null, XConstants.XD32);
 		xp._xdefs.put("#", xd);
