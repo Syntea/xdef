@@ -1535,7 +1535,7 @@ public final class KXmlUtils extends KDOMUtils {
 						}
 					} else if (!(sa.trim()).equals(sb.trim())) {
 						reporter.error(null, "<" + elem_A.getNodeName()
-							+ "> A text: '" + sa + "', B: " + sb + "'");
+							+ "> A text: '" + sa + "', B: '" + sb + "'");
 						return false;
 					}
 			}

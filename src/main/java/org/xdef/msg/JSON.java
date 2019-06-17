@@ -33,10 +33,12 @@ public interface JSON {
 	public static final long JSON014 = 13834649613L;
 	/** Unclosed comment&amp;{#SYS000} */
 	public static final long JSON015 = 13834649614L;
+	/** Test node is not allowed in this XML representation of JSOM map. */
+	public static final long JSON016 = 13834649615L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649615L;
+	public static final long JSON_DESCRIPTION = 13834649616L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649616L;
+	public static final long JSON_LANGUAGE = 13834649617L;
 
 	/** Default language. */
 	public static final String JSON = "eng";
