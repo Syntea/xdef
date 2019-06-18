@@ -9,7 +9,37 @@ public class XDParseJString extends XDParseAn {
 	private static final String ROOTBASENAME = "jstring";
 	public XDParseJString() {
 		super();
+		_whiteSpace = WS_PEESERVE;
 	}
+	@Override
+	public  void initParams() {
+		_whiteSpace = WS_PEESERVE;
+		_patterns = null;
+		_enumeration = null;
+		_minLength = _maxLength = -1;
+	}
+	
+	@Override
+	public int getLegalKeys() {
+		return PATTERN +
+			ENUMERATION +
+//			WHITESPACE + //fixed to preserve
+//			MAXINCLUSIVE +
+//			MAXEXCLUSIVE +
+//			MININCLUSIVE +
+//			MINEXCLUSIVE +
+//			TOTALDIGITS +
+//			FRACTIONDIGITS +
+			LENGTH +
+			MAXLENGTH +
+			MINLENGTH +
+//			NORMALIZE +
+//			SEPARATOR +
+//			ITEM +
+			BASE +
+			0;
+	}
+	
 	@Override
 	boolean parse(final XDParseResult p) {
 		p.isSpaces();
@@ -19,9 +49,7 @@ public class XDParseJString extends XDParseAn {
 				if (p.eos()) {
 					return false;
 				}
-				if (p.isToken("\"\"")) {
-					sb.append('"');
-				} else if (p.isChar('"')) {
+				if (p.isChar('"')) {
 					p.setParsedValue(sb.toString());
 					return true;
 				} else {

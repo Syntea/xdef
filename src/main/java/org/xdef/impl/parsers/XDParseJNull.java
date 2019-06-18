@@ -12,16 +12,14 @@ public class XDParseJNull  extends XSAbstractParser {
 
 	public XDParseJNull() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_PEESERVE;
 	}
 	@Override
 	public int getLegalKeys() {return WHITESPACE;}
 	@Override
-	public void initParams() {
-		_whiteSpace = 'c';
-	}
+	public void initParams() {_whiteSpace = WS_PEESERVE;}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

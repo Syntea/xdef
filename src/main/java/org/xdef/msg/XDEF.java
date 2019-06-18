@@ -175,7 +175,7 @@ public interface XDEF {
 	public static final long XDEF310 = 31159025748L;
 	/** Only one JSON simple value allowed{#SYS000} */
 	public static final long XDEF311 = 31159025749L;
-	/** Illegal JSON objekt &amp;{0} */
+	/** Illegal JSON object &amp;{0} */
 	public static final long XDEF312 = 31159025750L;
 	/** Illegal JSON XML mode &amp;{0} */
 	public static final long XDEF313 = 31159025751L;
