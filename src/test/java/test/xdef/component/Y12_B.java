@@ -108,7 +108,8 @@ public class Y12_B implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y12#Actions$mixed/$mixed/M".equals(s))
       return new M(this, x);
@@ -227,7 +228,8 @@ public static class S implements org.xdef.component.XComponent{
     setV(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -328,7 +330,8 @@ public static class M implements org.xdef.component.XComponent{
     setV(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -429,7 +432,8 @@ public static class P implements org.xdef.component.XComponent{
     setO(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -530,7 +534,8 @@ public static class Q implements org.xdef.component.XComponent{
     setO(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

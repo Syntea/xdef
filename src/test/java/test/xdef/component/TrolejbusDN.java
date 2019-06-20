@@ -238,7 +238,8 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("SouborD1A#TrolejbusDN/$mixed/JinaSkoda".equals(s))
       return new test.xdef.component.Z3(this, x);
@@ -360,7 +361,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

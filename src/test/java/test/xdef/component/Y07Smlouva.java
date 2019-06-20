@@ -107,7 +107,8 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
     setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y07#Nehoda/ControlId".equals(s))
       return new test.xdef.component.Y07ControlId(this, x);
@@ -230,7 +231,8 @@ public static class Domain implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

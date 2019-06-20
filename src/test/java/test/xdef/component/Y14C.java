@@ -100,7 +100,8 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new X(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -206,7 +207,8 @@ public static class X implements test.xdef.component.Y14A{
     seta(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

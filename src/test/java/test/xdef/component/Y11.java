@@ -96,7 +96,8 @@ public class Y11 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new B(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -241,7 +242,8 @@ public static class B implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y11#A/B/$mixed/Ev".equals(s))
       return new test.xdef.component.Y11Op(this, x);

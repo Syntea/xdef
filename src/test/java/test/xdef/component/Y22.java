@@ -106,7 +106,8 @@ public class Y22 implements org.xdef.component.XComponent{
     setCreator(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Transfer(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -219,7 +220,8 @@ public static class Transfer implements org.xdef.component.XComponent{
     setSender(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new DataFiles(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -322,7 +324,8 @@ public static class DataFiles implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Directory(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -436,7 +439,8 @@ public static class Directory implements org.xdef.component.XComponent{
     setPath(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new File(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -539,7 +543,8 @@ public static class File implements org.xdef.component.XComponent{
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

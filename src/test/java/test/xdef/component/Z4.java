@@ -246,7 +246,8 @@ public class Z4 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("SouborD1A#Osoba/$mixed/PrechodnyPobyt".equals(s))
       return new test.xdef.component.Z9(this, x);

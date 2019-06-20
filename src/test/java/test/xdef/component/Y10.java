@@ -132,7 +132,8 @@ public class Y10 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y10#A/$mixed/a".equals(s))
       return new test.xdef.component.Y10p(this, x);

@@ -119,7 +119,8 @@ public class Z7 implements org.xdef.component.XComponent{
     setDatumRozhodnuti(parseResult.getParsedValue().datetimeValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

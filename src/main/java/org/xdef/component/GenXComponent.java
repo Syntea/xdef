@@ -2022,8 +2022,8 @@ return;
 "\t */"+LN : "");
 		if (xctab.isEmpty()) {
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode x)"+LN+
+"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
+"\t\torg.xdef.proc.XXNode x)"+LN+
 "\t\t{return null;}"+LN;
 		} else if (xctab.size() == 1) {
 			Entry<String, String> e = xctab.entrySet().iterator().next();
@@ -2031,14 +2031,14 @@ return;
 			s = s.length() != 0
 				? "new "+s.substring(s.indexOf(";") + 1)+"(this, x)" : "this";
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode x)"+LN+
+"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
+"\t\torg.xdef.proc.XXNode x)"+LN+
 "\t\t{return " + s + ";}"+LN;
 		} else {
 			boolean dflt = false;
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+
-				"org.xdef.proc.XXNode x) {"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
+"\t\torg.xdef.proc.XXNode x) {"+LN;
 			result +=
 "\t\tString s = x.getXMElement().getXDPosition();"+LN;
 			for (Iterator<Entry<String, String>>i=xctab.entrySet().iterator();

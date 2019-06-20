@@ -106,7 +106,8 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Street(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -220,7 +221,8 @@ public static class Street implements org.xdef.component.XComponent{
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.C2(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

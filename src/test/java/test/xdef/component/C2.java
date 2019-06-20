@@ -113,7 +113,8 @@ public class C2 implements org.xdef.component.XComponent{
     setNum(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new C1(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

@@ -130,7 +130,8 @@ public class Y21 implements org.xdef.component.XComponent{
     setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new B(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -250,7 +251,8 @@ public static class B implements org.xdef.component.XComponent{
     setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().stringValue()));
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

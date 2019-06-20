@@ -93,7 +93,8 @@ public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXC
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Y06B(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

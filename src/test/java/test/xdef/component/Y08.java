@@ -102,7 +102,8 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
     setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Domain(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -217,7 +218,8 @@ public static class Domain implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

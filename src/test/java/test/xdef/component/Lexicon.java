@@ -106,7 +106,8 @@ public class Lexicon implements org.xdef.component.XComponent{
     setx(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Y(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -209,7 +210,8 @@ public static class Y implements org.xdef.component.XComponent{
     sety(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

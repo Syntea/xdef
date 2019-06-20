@@ -122,7 +122,8 @@ public class Z5 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.Z9(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

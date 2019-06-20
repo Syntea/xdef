@@ -96,7 +96,8 @@ public class Y01 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.s.Y01Operation(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

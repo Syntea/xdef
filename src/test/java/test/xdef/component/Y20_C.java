@@ -100,7 +100,8 @@ public class Y20_C implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new B(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -221,7 +222,8 @@ public static class B implements org.xdef.component.XComponent{
     setb(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Y(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -342,7 +344,8 @@ public static class Y implements org.xdef.component.XComponent{
     setb(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.Y20_C.B.Y(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
