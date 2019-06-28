@@ -513,10 +513,7 @@ public class XScriptParser extends StringParser
 					if (!isChar('>')) {
 						return _sym = RSH_SYM;
 					}
-					if (!isChar('=')) {
-						return _sym = RRSH_SYM;
-					}
-					return _sym = RRSH_EQ_SYM;
+					return _sym = isChar('=') ? RRSH_EQ_SYM : RRSH_SYM;
 				} else if (ch != '=') {
 					return _sym = ch;
 				}
@@ -538,10 +535,10 @@ public class XScriptParser extends StringParser
 					return _sym = ch == '&' ? AAND_SYM : OOR_SYM;
 				}
 			case '/':
-			case '*':				
+			case '*':
 			case '^': //XOR
 			case '%': //MOD
-				if (isChar('=')) { 
+				if (isChar('=')) {
 					switch (ch) { // "&=", "|=", "/=", "*=", "%="
 						case '&': return _sym = AND_EQ_SYM;
 						case '|': return _sym = OR_EQ_SYM;
@@ -587,7 +584,7 @@ public class XScriptParser extends StringParser
 			case '6':
 			case '7':
 			case '8':
-			case '9': 
+			case '9':
 				readNumber(ch);
 				return _sym = CONSTANT_SYM;
 			default: {
@@ -667,7 +664,7 @@ public class XScriptParser extends StringParser
 					case MOD_SYM:
 						if (getCurrentChar() == '=') {
 							setBufIndex(getIndex() + 1); // ????????????????????
-							switch (keyindex) { 
+							switch (keyindex) {
 								case LSH_SYM:
 									return _sym = LSH_EQ_SYM;  //<<=
 								case RSH_SYM:
@@ -687,7 +684,7 @@ public class XScriptParser extends StringParser
 						return _sym = (char) keyindex;
 					default:
 						if (keyindex < BASE_ID
-							|| keyindex > BASE_ID + CompileBase.XD_UNDEF) {
+							|| keyindex > BASE_ID+CompileBase.XD_UNDEF) {
 							return _sym = (char) keyindex;//parser ID(see above)
 						}
 						_parsedValue = new DefLong(keyindex - BASE_ID);//type ID

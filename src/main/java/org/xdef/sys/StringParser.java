@@ -1037,7 +1037,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param source Initial source buffer.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	final void setSourceReader(final Reader reader,
+	public final void setSourceReader(final Reader reader,
 		final long pos,
 		final String source) {
 		setLineNumber(1L);
@@ -4493,7 +4493,7 @@ public class StringParser extends SReporter implements SParser {
 		freeBuffer();
 		return true;
 	}
-	
+
 	private boolean readXMLMonth() {
 		int start = getIndex();
 		if (!isToken("--")) {

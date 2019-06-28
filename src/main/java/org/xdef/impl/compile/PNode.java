@@ -64,6 +64,15 @@ public final class PNode {
 	 */
 	public final SBuffer getName() {return _name;}
 
+	/** Get prefix of name.
+	 * @return prefix of node name.
+	 */
+	public final String getPrefix() {
+		String s = _name.getString();
+		int ndx = s.indexOf(':');
+		return ndx < 0 ? "" : s.substring(0, ndx);
+	}
+
 	/** Get namsepace index of the node .
 	 * @return node name (as SBufer).
 	 */
@@ -158,5 +167,40 @@ public final class PNode {
 
 	@Override
 	public String toString() {return "PNode: " + _name.getString();}
+
+/*#if DEBUG*/
+	/** Create XML element from this PNode.
+	 * @return XML element created from this PNode.
+	 */
+	public org.w3c.dom.Element toXML() {
+		return pnodeToXML(this, null);
+	}
+
+	private static org.w3c.dom.Element pnodeToXML(final PNode p,
+		final org.w3c.dom.Node node) {
+		org.w3c.dom.Document doc;
+		org.w3c.dom.Node parent;
+		if (node == null) {
+			parent = doc = org.xdef.xml.KXmlUtils.newDocument();
+		} else {
+			doc = node.getOwnerDocument();
+			parent = node;
+		}
+		org.w3c.dom.Element e =
+			doc.createElementNS(p.getNamespace(), p.getName().getString());
+		parent.appendChild(e);
+		for (PAttr a: p.getAttrs()) {
+			e.setAttributeNS(
+				a.getNamespace(), a.getName(), a.getValue().getString());
+		}
+		for (PNode child: p.getChildNodes()) {
+			pnodeToXML(child, e);
+		}
+		if (p.getValue() != null) {
+			e.appendChild(doc.createTextNode(p.getValue().getString()));
+		}
+		return e;
+	}
+/*#end*/
 
 }

@@ -1213,12 +1213,6 @@ final class CompileXScript extends CompileStatement {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, _idName);
 				}
-			} else if ("JSON1".equals(_idName) || "JSON2".equals(_idName)) {
-				if (json) {
-					error(XDEF.XDEF432); // option redefinition
-				}
-				json = true;
-				result._json = "JSON1".equals(_idName) ? (byte) 1 : (byte) 2;
 			} else {
 				error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
 			}

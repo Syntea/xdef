@@ -1117,7 +1117,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				sval = _precomp.getXdefAttr(pnode, "occurs", false, true);
 				if (sval != null) {
 					if (kind == XNode.XMMIXED) {
-						reportDeprecated(pnode._name, "occurs","script");
+						reportDeprecated(pnode._name, "occurs", "script");
 					}
 					XOccurrence occ = new XOccurrence();
 					_scriptCompiler.setSource(sval,
@@ -1301,7 +1301,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XElement lastElement,
 		final PNode pnode,
 		final XDefinition xdef,
-		final int level) {
+		final int level,
+		final byte json) {
 		String xchildName = pnode._name.getString();
 		XNode newNode;
 		SBuffer sval;
@@ -1500,7 +1501,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (PNode nodei: pnode._childNodes) {
 			XElement x = newNode.getKind() == XMNode.XMELEMENT ?
 				(XElement) newNode : lastElement;
-			compileXChild(newNode, x, nodei, xdef, level + 1);
+			compileXChild(newNode, x, nodei, xdef, level + 1, json);
 		}
 		short newKind = newNode.getKind();
 		if (level == 1) {
@@ -1529,6 +1530,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler._g._varBlock =
 					_scriptCompiler._g._varBlock.getParent();
 			}
+			((XElement) newNode)._json = json;
 		}
 	}
 
@@ -1562,7 +1564,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				String nsURI = null;
 				if (_scriptCompiler.isChar('*')) {
 					refName = "*"; //any
-				} else if (_scriptCompiler.isXModelPosition()) { /*xx*/
+				} else if (_scriptCompiler.isXModelPosition()) {
 					refName = _scriptCompiler.getParsedString();
 					//get NSUri of the reference identifier.
 					int ndx = refName.indexOf('#') + 1;
@@ -1630,8 +1632,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		_nodeList.add(0,def);
 		//compile xmodels
-		for (PNode nodei: pnode._childNodes) {
+//		for (PNode nodei: pnode._childNodes) {
+		for (int i = 0; i < pnode._childNodes.size(); i++) {
+			PNode nodei = pnode._childNodes.get(i);
 			String name = nodei._localName;
+			PAttr v = nodei.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
+			SBuffer gname = v == null ? null : v._value;
 			if (nodei._nsindex == XPreCompiler.NS_XDEF_INDEX
 				&& ("choice".equals(name)
 				|| "mixed".equals(name) || "sequence".equals(name)
@@ -1641,16 +1647,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				|| "document".equals(name) //TODO
 //				|| "attlist".equals(name) //TODO
 				|| "list".equals(name) || "any".equals(name))) {
-				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					PAttr v = nodei.getAttrNS("name",
-						XPreCompiler.NS_XDEF_INDEX);
 					if (v == null) {
-						gname = null;
 						//Required attribute '&{0}' is missing
 						error(nodei._name, XDEF.XDEF323, "xd:name");
 					} else {
-						gname = v._value;
 						nodei._attrs.remove(v);
 					}
 				} else {
@@ -1668,18 +1669,38 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						if ("list".equals(name)) {
 							for (PNode pn: nodei._childNodes){
-								compileXChild(dummy, dummy, pn, def, 2);
+								compileXChild(dummy, dummy, pn, def, 2,(byte)0);
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2);
+							compileXChild(dummy, dummy, nodei, def, 2, (byte)0);
 						}
 					}
 				}
 				continue;
+			} else if (("json".equals(nodei._localName))
+				&& (XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+				|| XDConstants.JSON_NS_URI.equals(nodei._nsURI))) {
+				if (nodei._value == null || nodei._value.getString().isEmpty()){
+					// JSON model required in JSON definition
+					error(nodei._name, XDEF.XDEF323, "xd:name");
+					continue;
+				}
+				if (!nodei._childNodes.isEmpty()) {
+					// XML element models is not allowed in JSON definition
+					error(nodei._name, XDEF.XDEF323, "xd:name");
+					continue;
+				}
+				XJson.genXdef(nodei, _precomp);
+//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(
+//	pnode.toXML(),true));
+				byte json = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+					? (byte) 1 : (byte) 2;
+				compileXChild(def, null, nodei, def, 1, json);
+				continue;
 			}
-			compileXChild(def, null, nodei, def, 1);
+			compileXChild(def, null, nodei, def, 1, (byte)0);
 		}
 		_nodeList.clear();
 		_scriptCompiler._actDefName = actDefName;

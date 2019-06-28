@@ -1,0 +1,8 @@
+{
+  "foo": ["bar", "baz"],
+  "highly": {
+    "nested": {
+      "objects": true
+    }
+  }
+}
