@@ -1682,15 +1682,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else if (nodei._localName.startsWith("json")
 				&& (XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
 				|| XDConstants.JSON_NS_URI.equals(nodei._nsURI))) {
+				if (!nodei._childNodes.isEmpty()) {
+					//XML element models are not allowed in JSON definition
+					error(nodei._childNodes.get(0)._name, XDEF.XDEF314);
+					nodei._childNodes.clear();
+				}
 				if (nodei._value == null || nodei._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(nodei._name, XDEF.XDEF315);
 					continue;
-				}
-				if (!nodei._childNodes.isEmpty()) {
-					//XML element models is not allowed in JSON definition
-					error(nodei._name, XDEF.XDEF314);
-					nodei._childNodes.clear();
 				}
 				XJson.genXdef(nodei, _precomp);
 //System.out.println(org.xdef.xml.KXmlUtils.nodeToString(

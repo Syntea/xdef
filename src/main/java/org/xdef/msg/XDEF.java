@@ -179,7 +179,7 @@ public interface XDEF {
 	public static final long XDEF312 = 31159025750L;
 	/** Illegal JSON XML mode &amp;{0} */
 	public static final long XDEF313 = 31159025751L;
-	/** XML element models is not allowed in JSON definition */
+	/** XML element models are not allowed in JSON definition */
 	public static final long XDEF314 = 31159025752L;
 	/** JSON model is missing in JSON definition */
 	public static final long XDEF315 = 31159025753L;

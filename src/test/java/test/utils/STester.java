@@ -356,7 +356,7 @@ public abstract class STester {
 				s = s.substring(0, j);
 			}
 		}
-		printErr(text + "\n\tat " + s + '\n');
+		printErr(text + "\n" + s + '\n');
 	}
 
 	/** Increase error counter and write the default information to the print

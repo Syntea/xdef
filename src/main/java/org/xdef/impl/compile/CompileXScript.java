@@ -1198,7 +1198,6 @@ final class CompileXScript extends CompileStatement {
 				acceptQualifiedAttr = true;
 				result._acceptQualifiedAttr =
 					(byte) ("acceptQualifiedAttr".equals(_idName) ? 'T' : 'F');
-
 			} else if ("cdata".equals(_idName)) {
 				if (cdata) {
 					error(XDEF.XDEF432); // option redefinition
