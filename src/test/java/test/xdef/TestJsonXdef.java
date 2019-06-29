@@ -30,7 +30,7 @@ public class TestJsonXdef extends XDTester {
 	private String _tempDir;
 	private int _errors;
 
-	/** Get ID from the file name.
+	/** Get ID from the fil.e name.
 	 * @param f file name
 	 * @return ID (string of file name without the prefix "Test"
 	 * and without file extension.
@@ -59,49 +59,40 @@ public class TestJsonXdef extends XDTester {
 			String xdir = _tempDir + "x/";
 			new File(xdir).mkdirs();
 			String components =
-				"<xd:component xmlns:xd=\"http://www.xdef.org/3.2\">\n";
+				"<xd:component xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n";
 			for (File fdef: _jfiles) {
 				File newFile;
 				String xdef;
-				String rootName;
 				Element el;
 				String id = getId(fdef); // get ID from def file name
-
 				// write JSON as XML (W3C modc)
 				el = JsonToXml.toXmlW3C(
 					JsonToXml.parse(_dataDir + "Test"+id+".json"));
 				SUtils.writeString(new File(_tempDir + "Test" + id + "a.xml"),
 					KXmlUtils.nodeToString(el,true),"UTF-8");
 				// create root name
-				rootName = "jw:json";
 				// read jdef file to string.
 				String jdef = SUtils.readString(
 					new File(_dataDir + "Test" + id + ".jdef"), "UTF-8");
-
 				// Create X-definition from Jdef (W3C)
 				newFile = new File(_tempDir + "Test" + id + "a.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
 					+ "'\n xmlns:jw='" + XDConstants.JSON_NS_URI_W3C
-					+ "'\n xd:name='" + "Test" + id + "a'" +
-					" xd:root='" + rootName + "' >\n" +
-					"<jw:json>\n" +jdef+ "\n</jw:json>\n</xd:def>";
+					+ "'\n xd:name='" + "Test" + id + "a' xd:root='jw:json'>\n"
+					+ "<jw:json>\n" +jdef+ "\n</jw:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
-
 				// Write JSON data as XML (XDEF modc)
 				el = JsonToXml.toXmlXD(JsonUtil.parse(
 					_dataDir + "Test" + id + ".json"));
 				SUtils.writeString(new File(_tempDir + "Test" + id + "b.xml"),
 					KXmlUtils.nodeToString(el,true),"UTF-8");
 				// Create X-definition from Jdef (X-definition)
-				rootName = "js:json";
 				newFile = new File(_tempDir + "Test" + id + "b.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
 					+ "'\n xmlns:js='" + XDConstants.JSON_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "b'" +
-					" xd:root='" + rootName + "' >\n" +
-					"<js:json>\n" +jdef+ "\n</js:json>\n</xd:def>";
+					+ "'\n xd:name='" + "Test" + id + "b' xd:root='js:json'>\n"
+					+ "<js:json>\n" +jdef+ "\n</js:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
-
 				// create X-component items
 				String cls = "  %class test.common.json.component.Test" + id;
 				el = KXmlUtils.parseXml(
@@ -114,7 +105,7 @@ public class TestJsonXdef extends XDTester {
 					+ "b#" + el.getAttribute("xd:root") + ";\n";
 			}
 			components += "</xd:component>";
-
+			// write X-component declaration to the file
 			File componentFile = new File(_tempDir + "Components.xdef");
 			SUtils.writeString(componentFile, components, "UTF-8");
 			// compile all X-definitions to XDPool

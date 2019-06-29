@@ -1013,7 +1013,6 @@ final class CompileXScript extends CompileStatement {
 		boolean acceptQualifiedAttr = false;
 		boolean nillable = false;
 		boolean cdata = false;
-		boolean json = false;
 		while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
 			if (_sym == FORGET_SYM) {
 				if (kind != XNode.XMELEMENT) {
