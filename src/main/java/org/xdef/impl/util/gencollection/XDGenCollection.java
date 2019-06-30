@@ -488,7 +488,7 @@ public class XDGenCollection {
 	 * macros are expanded and macro definitions are removed from collection.
 	 * @param collection Collection of X-definitions.
 	 * @param macros HashMap with macros.
-	 * @param resolve swith if macros will be expanded and removed.
+	 * @param resolve switch if macros will be expanded and removed.
 	 */
 	private static void processMacros(final Element collection,
 		final HashMap<String, XScriptMacro> macros,

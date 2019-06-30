@@ -45,11 +45,11 @@ public final class GenXComponent {
 	/** Names that can't be used in generated code.*/
 	private static final Set<String> RESERVED_NAMES = new TreeSet<String>();
 	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
-	private byte byteArrayEncoding = 0;
+	private byte byteArrayEncoding;
 	/** Switch to generate JavaDoc. */
-	private boolean _genJavadoc = false;
+	private boolean _genJavadoc;
 	/** Builder to generate interface or null. */
-	private StringBuilder _interface = null; // where to create interface.
+	private StringBuilder _interface; // where to create interface.
 	/** Map with components information. */
 	private Map<String, String> _components;
 	/** Map with binds information. */
@@ -2053,22 +2053,22 @@ if (true) return;
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
 "\t\torg.xdef.XDParseResult parseResult) {"+LN;
 			String s = "";
-			for (Iterator<Entry<String, String>>i=atttab.entrySet().iterator();
-				i.hasNext();){
-				Entry<String, String> e = i.next();
+			for (Iterator<Entry<String, String>> it =
+				atttab.entrySet().iterator(); it.hasNext();) {
+				Entry<String, String> en = it.next();
 				s += s.length() == 0 ? "\t\t" : " else ";
-				String key = e.getKey();
+				String key = en.getKey();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
-				s += (i.hasNext()
-? "if (x.getXMNode().getXDPosition().endsWith(\"" + key + "\")) {" : "{") + LN;
-				String val = e.getValue();
+				s += (it.hasNext()
+? "if (x.getXMNode().getXDPosition().endsWith(\"" + key + "\")) {" : "{")+LN;
+				String val = en.getValue();
 				ndx = val.indexOf(';');
 				s += "\t\t\tXD_Name_" + val.substring(ndx + 1)
-					+ " = x.getNodeName();" + LN;
+					+ " = x.getNodeName();"+LN;
 				s += "\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
-				s+= "("+getter+");"+LN+"\t\t}";
+				s += "(" + getter + ");"+LN+"\t\t}";
 			}
 			result += s+LN+"\t}"+LN;
 		}
