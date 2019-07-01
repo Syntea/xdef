@@ -362,9 +362,7 @@ public abstract class STester {
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is <tt>null</tt> the message is ignored.
 	 */
-	public final void fail() {
-		putErrInfo("*");
-	}
+	public final void fail() {putErrInfo("*");}
 
 	/** Increase error counter and write information of given object.
 	 * If the print stream is <tt>null</tt> the message is ignored.
@@ -821,30 +819,27 @@ public abstract class STester {
 
 		_className = clazz.getName();
 		_name = clazz.getName();
-		int i = _name.lastIndexOf('.');
-		if (i >= 0) {
-			_name = _name.substring(i + 1);
+		int ndx = _name.lastIndexOf('.');
+		if (ndx >= 0) {
+			_name = _name.substring(ndx + 1);
 		}
-		URL url;
-		String s;
-		File f;
-		url = ClassLoader.getSystemClassLoader()
-			.getResource(_className.replace('.', '/') + ".class");
+		String s = _className.replace('.', '/') + ".class";
+		URL url = ClassLoader.getSystemClassLoader().getResource(s);
 		s = new File( url.getFile()).getAbsolutePath().replace('\\', '/');
 		String cname = _className.replace('.', '/');
-		i = s.indexOf("/build/web/WEB-INF/classes/" + cname);
-		if (i >= 0) {
-			s = s.substring(0, i + 1);
+		ndx = s.indexOf("/build/web/WEB-INF/classes/" + cname);
+		if (ndx >= 0) {
+			s = s.substring(0, ndx + 1);
 			_sourceName = s + "src/java/" + cname + ".java";
 		} else {
-			i = s.indexOf("/build/classes/" + cname);
-			if (i < 0) {
-				i = s.indexOf("/target/test-classes/" + cname);
-				if (i < 0) {
-					i = s.indexOf("/temp/classes/" + cname);
-					if (i < 0) {
-						i = s.indexOf("/classes/" + cname);
-						if (i < 0) {
+			ndx = s.indexOf("/build/classes/" + cname);
+			if (ndx < 0) {
+				ndx = s.indexOf("/target/test-classes/" + cname);
+				if (ndx < 0) {
+					ndx = s.indexOf("/temp/classes/" + cname);
+					if (ndx < 0) {
+						ndx = s.indexOf("/classes/" + cname);
+						if (ndx < 0) {
 							_sourceName = null;
 							_timeStamp = System.currentTimeMillis();
 							return; //no homeDir, dataDir, sourceDir, sourceName
@@ -852,7 +847,7 @@ public abstract class STester {
 					}
 				}
 			}
-			s = s.substring(0, i + 1);
+			s = s.substring(0, ndx + 1);
 			_sourceName = s + "src/"+ cname + ".java";
 		}
 		_homeDir = s;
@@ -885,6 +880,7 @@ public abstract class STester {
 			_timeStamp = System.currentTimeMillis();
 			return;
 		}
+		File f;
 		if (_sourceDir.contains("src/test/java/test/")
 			&& (f = new File(s = SUtils.modifyString(_sourceDir,
 			"src/test/java/test/" ,
@@ -948,7 +944,7 @@ public abstract class STester {
 		if (printOK && out != null) {
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
-			if (_resultInfo.length() > 0) {
+			if (!_resultInfo.isEmpty()) {
 				_resultInfo = "; " + _resultInfo;
 			}
 			if (_errors == 0) {
@@ -974,7 +970,7 @@ public abstract class STester {
 		StackTraceElement[] st = new Throwable().getStackTrace();
 		int i = 0;
 		while (i < st.length && st[i].getClassName().equals(
-			"test.utils.STester")) {
+			STester.class.getName())) {
 			i++;
 		}
 		className = st[i].getClassName();

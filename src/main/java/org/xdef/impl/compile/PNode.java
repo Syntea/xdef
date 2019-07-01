@@ -17,20 +17,19 @@ import org.xdef.impl.XConstants;
 public final class PNode {
 	final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
 	final List<PNode> _childNodes = new ArrayList<PNode>(); //child nodes
-	final SBuffer _name; //qualified name of node
+	// namespace prefixes
+	final Map<String, Integer> _nsPrefixes = new TreeMap<String, Integer>();
+	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI
 	byte _xdVersion;  // version of X-definion
 	byte _xmlVersion;  // version of xml
 	XDefinition _xdef;  //XDefinition associated with this node
 	SBuffer _value; //String node assigned to this node
-	final PNode _parent; //parent PNode
-
-	// namespace prefixes
-	final Map<String, Integer> _nsPrefixes = new TreeMap<String, Integer>();
+	PNode _parent; //parent PNode
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
-	boolean _template;  //template
+	boolean _template;  //template switch
 
 	/** Creates a new instance of PNode.
 	 * @param name The node name.
@@ -139,12 +138,12 @@ public final class PNode {
 	public void expandMacros(final ReportWriter reporter,
 		final String actDefName,
 		final Map<String, XScriptMacro> macros) {
-		if ("macro".equals(_localName) &&
-			(XDConstants.XDEF20_NS_URI.equals(_nsURI)
-			|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
-			|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)
+		if ("macro".equals(_localName)
+			&& (XDConstants.XDEF20_NS_URI.equals(_nsURI)
+				|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
+				|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)
 				|| XConstants.XDEF32NS_OLD.equals(_nsURI)))) {
-			return; // it is not macro definition
+			return; // it is not a macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(
 			actDefName, _xmlVersion, macros, reporter);

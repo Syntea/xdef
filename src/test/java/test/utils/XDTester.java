@@ -142,8 +142,7 @@ public abstract class XDTester extends STester {
 			if (data != null && data.length() > 0) {
 				in = new java.io.ByteArrayInputStream(data.getBytes("ASCII"));
 			}
-			Element result = test(xdin, in, name, out, reporter, mode, exts);
-			return result;
+			return test(xdin, in, name, out, reporter, mode, exts);
 		} catch (Exception ex) {
 			fail(ex);
 		}
@@ -218,8 +217,7 @@ public abstract class XDTester extends STester {
 			nsURI = xe.getNSUri();
 		}
 		xd.xcreate(new QName(nsURI, qname), reporter);
-		Element result = xd.getElement();
-		return result;
+		return xd.getElement();
 	}
 
 	public final XDPool checkExtObjects(final XDPool xp) {
@@ -281,9 +279,7 @@ public abstract class XDTester extends STester {
 				if (stdout != null) {
 					xd.setStdOut(stdout);
 				}
-				xd.xparse(data, "", reporter);
-				Element result = xd.getElement();
-				return result;
+				return xd.xparse(data, "", reporter);
 			}
 		} catch (Exception ex) {
 			fail(ex);
@@ -354,8 +350,7 @@ public abstract class XDTester extends STester {
 		Report rep;
 		ReportReader rri = rw.getReportReader();
 		while((rep = rri.getReport()) != null) {
-			swr.write(rep.toString());
-			swr.write('\n');
+			swr.write(rep.toString() + '\n');
 		}
 		fail(swr.toString());
 	}
@@ -367,13 +362,7 @@ public abstract class XDTester extends STester {
 				true, //removeActions
 				false);
 			return KXmlUtils.nodeToString(el, true);
-//			String xml = KXmlUtils.nodeToString(el, true);
-//			return KXmlUtils.nodeToString(XDGenCollection.genCollection(
-//				new String[]{xml},
-//				true, //resolvemacros
-//				true, //removeActions
-//				false), true);
-	} catch (Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 			return "";
 		}
@@ -403,12 +392,10 @@ public abstract class XDTester extends STester {
 			if (data != null && data.length() > 0) {
 				el = KXmlUtils.parseXml(data).getDocumentElement();
 			}
-			Element result = createElement(xp, name, reporter, el, stdout);
-			return result;
+			return createElement(xp, name, reporter, el, stdout);
 		} else {
 			xd.setStdOut(stdout);
-			xd.xparse(data, reporter);
-			return xd.getElement();
+			return xd.xparse(data, reporter);
 		}
 	}
 
@@ -509,17 +496,15 @@ public abstract class XDTester extends STester {
 	}
 
 	final public XDPool compile(final InputStream source,
-		final String pathname,
+		final String path,
 		final Class<?>... obj) {
-		return checkExtObjects(XDFactory.compileXD(
-			_props, source, pathname, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, source, path, obj));
 	}
 
 	final public XDPool compile(final InputStream[] sources,
-		final String[] pathnames,
+		final String[] path,
 		final Class<?>... obj) {
-		return checkExtObjects(XDFactory.compileXD(
-			_props, sources, pathnames, obj));
+		return checkExtObjects(XDFactory.compileXD(_props, sources, path, obj));
 	}
 
 	final public XDPool compile(final URL[] source, final Class<?>... obj) {
@@ -610,9 +595,8 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		Element el = KXmlUtils.parseXml(xml).getDocumentElement();
 		xd.setXDContext(el);
-		Element result = xd.xcreate(
-			new QName(el.getNamespaceURI(), el.getNodeName()), reporter);
-		return result;
+		return xd.xcreate(new QName(el.getNamespaceURI(),
+			el.getNodeName()), reporter);
 	}
 
 	final public Element create(final XDPool xp,
@@ -624,8 +608,7 @@ public abstract class XDTester extends STester {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xcreate(name, reporter);
-		return result;
+		return xd.xcreate(name, reporter);
 	}
 
 	final public Element create(final XDPool xp,
@@ -637,8 +620,7 @@ public abstract class XDTester extends STester {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xcreate(qname, reporter);
-		return result;
+		return xd.xcreate(qname, reporter);
 	}
 
 	final public Element create(final String xdef,
@@ -657,11 +639,9 @@ public abstract class XDTester extends STester {
 		if (el != null) {
 			xd.setXDContext(el);
 		}
-		Element result = (el != null && (name == null || name.length() == 0))
-			? xd.xcreate(
-				new QName(el.getNamespaceURI(), el.getTagName()), null)
+		return (el != null && (name == null || name.length() == 0))
+			? xd.xcreate(new QName(el.getNamespaceURI(), el.getTagName()), null)
 			: xd.xcreate(name, null);
-		return result;
 	}
 
 	final public Element create(final String xdef,
@@ -721,12 +701,11 @@ public abstract class XDTester extends STester {
 		if(param != null) {
 			xd.setVariable(param, obj);
 		}
-		Element result = (el != null &&
+		return (el != null &&
 			(name == null || name.length() == 0) && reporter != null)
 			? xd.xcreate(
 				new QName(el.getNamespaceURI(), el.getTagName()), reporter)
 			: xd.xcreate(name, null);
-		return result;
 	}
 	final public Element create(final XDPool xp,
 		final String xdName,
@@ -773,8 +752,7 @@ public abstract class XDTester extends STester {
 		final String xml,
 		final StringWriter strw,
 		final Object userObj) {
-		return create(compile(xdef),
-			xdName, qname, reporter, xml, strw, userObj);
+		return create(compile(xdef), xdName, qname, reporter, xml,strw,userObj);
 	}
 
 	final public Element create(final XDPool xp,
@@ -848,8 +826,7 @@ public abstract class XDTester extends STester {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(xml, reporter);
-		return result;
+		return xd.xparse(xml, reporter);
 	}
 
 	final public Element parse(final String xdef,
@@ -868,8 +845,7 @@ public abstract class XDTester extends STester {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(el, reporter);
-		return result;
+		return xd.xparse(el, reporter);
 	}
 
 	final public Element parse(final String xdef,
@@ -884,8 +860,7 @@ public abstract class XDTester extends STester {
 		final Element el) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(el, null);
-		return result;
+		return xd.xparse(el, null);
 	}
 
 	final public Element parse(final String xdef,
@@ -899,8 +874,7 @@ public abstract class XDTester extends STester {
 		final String xml) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		Element result = xd.xparse(xml, null);
-		return result;
+		return xd.xparse(xml, null);
 	}
 
 	final public Element parse(final String xdef,
@@ -922,8 +896,7 @@ public abstract class XDTester extends STester {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Element result = xd.xparse(xml, reporter);
-		return result;
+		return xd.xparse(xml, reporter);
 	}
 
 	final public Element parse(final String xdef,
@@ -1000,11 +973,10 @@ public abstract class XDTester extends STester {
 			try {
 				strw.close();
 			} catch (Exception ex) {
-				System.err.println(ex.toString());
+				throw new RuntimeException(ex);
 			}
 		}
-		Element result = xd.getElement();
-		return result;
+		return xd.getElement();
 	}
 
 	final public Element parse(final String xdef,
