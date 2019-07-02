@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
+import static test.utils.STester.runTest;
 import test.utils.XDTester;
 
 /** Test processing JSON objects with X-definitions.
@@ -30,7 +31,7 @@ public class TestJsonXdef extends XDTester {
 	private String _tempDir;
 	private int _errors;
 
-	/** Get ID from the fil.e name.
+	/** Get ID from the file name.
 	 * @param f file name
 	 * @return ID (string of file name without the prefix "Test"
 	 * and without file extension.
@@ -70,7 +71,6 @@ public class TestJsonXdef extends XDTester {
 					JsonToXml.parse(_dataDir + "Test"+id+".json"));
 				SUtils.writeString(new File(_tempDir + "Test" + id + "a.xml"),
 					KXmlUtils.nodeToString(el,true),"UTF-8");
-				// create root name
 				// read jdef file to string.
 				String jdef = SUtils.readString(
 					new File(_dataDir + "Test" + id + ".jdef"), "UTF-8");
@@ -118,8 +118,8 @@ public class TestJsonXdef extends XDTester {
 			}
 			File oldFile, newFile;
 			// Generate X-components to the directory test
-			ArrayReporter reporter = GenXComponent.genXComponent(
-				xp, xdir, "UTF-8", false, true);
+			ArrayReporter reporter = GenXComponent.genXComponent(xp,
+				xdir, "UTF-8", false, true);
 			reporter.checkAndThrowErrors();
 			String componentDir = _tempDir + "test/common/json/component/";
 			new File(componentDir).mkdirs();
@@ -128,16 +128,14 @@ public class TestJsonXdef extends XDTester {
 				String id = getId(fdef);
 				newFile = new File(newComponentDir + "Test" + id + "a.java");
 				oldFile = new File(componentDir + "Test" + id + "a.java");
-				if (!oldFile.exists()
-					|| SUtils.compareFile(oldFile, newFile) >= 0) {
+				if (!oldFile.exists()||SUtils.compareFile(oldFile,newFile)>=0) {
 					SUtils.copyToFile(newFile, oldFile);
 					rebuild = true; //force rebuild
 				}
 				newFile.delete();
 				newFile = new File(newComponentDir + "Test" + id + "b.java");
 				oldFile = new File(componentDir + "Test" + id + "b.java");
-				if (!oldFile.exists()
-					|| SUtils.compareFile(oldFile, newFile) >= 0) {
+				if (!oldFile.exists()||SUtils.compareFile(oldFile,newFile)>=0) {
 					SUtils.copyToFile(newFile, oldFile);
 					rebuild = true; //force rebuild
 				}
