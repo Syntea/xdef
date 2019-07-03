@@ -74,8 +74,8 @@ public abstract class XCodeDescriptor extends XNode {
 	public byte _moreElements; //0 not set, 'T' or 'F'
 	/** "more attributes" flag. */
 	public byte _moreText; //0 not set, 'T' or 'F'
-	/** flag "model represents JSON" (given version). */
-	public byte _json; //0 not set, '1' .. version 1, '2' .. version 2
+	/** "JSON version" flag: 0 not set, 1 .. W3C, 2 .. XDEF. */
+	public byte _json; //0 not set, '1' .. version W3C, '2' .. version XDEF
 	/** flag to set a text as CDATA section. */
 	public byte _cdata; //0 not set 'T' or 'F'
 	/** flag to set element nillable. */

@@ -23,7 +23,7 @@ public class XDParseJString extends XDParseAn {
 	public int getLegalKeys() {
 		return PATTERN +
 			ENUMERATION +
-//			WHITESPACE + //fixed to preserve
+			WHITESPACE + //fixed to preserve
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +

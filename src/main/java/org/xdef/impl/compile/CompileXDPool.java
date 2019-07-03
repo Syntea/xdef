@@ -1692,12 +1692,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(nodei._name, XDEF.XDEF315);
 					continue;
 				}
-				XJson.genXdef(nodei, _precomp);
+				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+					? (byte) 1 : (byte) 2;
+				XJson.genXdef(nodei, _precomp.getReportWriter());
 //System.out.println(org.xdef.xml.KXmlUtils.nodeToString(
 //	pnode.toXML(),true));
-				byte json = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-					? (byte) 1 : (byte) 2;
-				compileXChild(def, null, nodei, def, 1, json);
+				compileXChild(def, null, nodei, def, 1, jsonMode);
 				continue;
 			}
 			compileXChild(def, null, nodei, def, 1, (byte)0);

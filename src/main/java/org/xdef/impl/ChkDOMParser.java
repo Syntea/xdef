@@ -224,11 +224,21 @@ class ChkDOMParser extends SReporter {
 						}
 					}
 				}
-				chkEl = _chkDoc.createRootChkElement(
-					_doc.createElementNS(ns, elementName), true);
+				Element el = _doc.createElementNS(ns, elementName);
+				for (int i = 0; i < maxAttr; i++) {
+					Node n = atrs.item(i);
+					el.setAttributeNS(n.getNamespaceURI(),
+						n.getNodeName(), n.getNodeValue());
+				}
+				chkEl = _chkDoc.createRootChkElement(el, true);
 			} else {
-				chkEl = parentNode.createChkElement(
-					_doc.createElementNS(ns, elementName));
+				Element el = _doc.createElementNS(ns, elementName);
+				for (int i = 0; i < maxAttr; i++) {
+					Node n = atrs.item(i);
+					el.setAttributeNS(n.getNamespaceURI(),
+						n.getNodeName(), n.getNodeValue());
+				}
+				chkEl = parentNode.createChkElement(el);
 			}
 			List<Attr> atrs1 = new ArrayList<Attr>(); // list of processed atrs
 			// Process atrributes which have model

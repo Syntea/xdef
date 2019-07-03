@@ -4,6 +4,7 @@ import org.xdef.XDConstants;
 import org.xdef.json.JsonToXml;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
+import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SPosition;
@@ -20,10 +21,6 @@ public class XJson extends JsonToXml {
 
 	/** Prepare instance of XJSON. */
 	private XJson() {super();}
-
-////////////////////////////////////////////////////////////////////////////////
-// Create X-definition model from xd:json (W3C version)
-////////////////////////////////////////////////////////////////////////////////
 
 	/** Set attribute to PNode.
 	 * @param e PNode where to set an attribute.
@@ -72,25 +69,6 @@ public class XJson extends JsonToXml {
 		a._localName = name;
 		e._attrs.add(a);
 		return a;
-	}
-
-	/** Get PAttr from PNode.
-	 * @param e PNode where this attribute can be.
-	 * @param namespace namespace URI of attribute.
-	 * @param localname local name of attribute.
-	 * @return PAttr or null;
-	 */
-	private PAttr getAttr(final PNode e,
-		final String namespace,
-		final String localname) {
-		for (PAttr att: e._attrs) {
-			if (localname.equals(att._localName) &&
-				(att._nsURI == null && namespace == null
-				|| att._nsURI != null && att._nsURI.equals(namespace))) {
-				return att;
-			}
-		}
-		return null;
 	}
 
 	/** Parse X-script and return occurrence and executive part in separate fields.
@@ -201,6 +179,8 @@ public class XJson extends JsonToXml {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+// Create X-definition model from xd:json (W3C version)
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Update key information to xd:script attribute.
 	 * @param e PNode where to update.
@@ -219,7 +199,7 @@ public class XJson extends JsonToXml {
 		if (attr != null) {
 			val = attr._value;
 		} else {
-			attr = setXDAttr(e, "script", val = new SBuffer(""));
+			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
 		}
 		if (!val.getString().trim().isEmpty()) {
 			if (!val.getString().trim().endsWith(";")) {
@@ -227,8 +207,11 @@ public class XJson extends JsonToXml {
 			}
 			val.addString(" ");
 		}
-		val.addString("match @"+ J_KEYATTRW3C + "=='"+key+"';");
-		setAttr(e, J_KEYATTRW3C, new SBuffer(""));
+		val.addString("match @"+ J_KEYATTRW3C + "=='"+key+"';"
+			+ (key.isEmpty() ? " options preserveEmptyAttributes;" : ""));
+		setAttr(e, J_KEYATTRW3C,
+			new SBuffer(key.isEmpty()
+				? "empty();": "string();", e._name));
 	}
 
 	/** Create PNode with JSON model from JSON parsed data.
@@ -385,16 +368,6 @@ public class XJson extends JsonToXml {
 				e._childNodes.add(txt);
 			}
 		}
-//		if (!_xdNamespace.equals(e._nsURI)) {
-//			PAttr script = getAttr(e, _xdNamespace, "script");
-//			if (script != null) {
-//				if (!script._value.getString().endsWith(";")) {
-//					script._value.addString("; options JSON1;");
-//				}
-//			} else {
-//				setXDAttr(e, "script", new SBuffer("options JSON1;"));
-//			}
-//		}
 		parent._childNodes.add(e);
 		return e;
 	}
@@ -402,6 +375,25 @@ public class XJson extends JsonToXml {
 ////////////////////////////////////////////////////////////////////////////////
 // Create X-definition model from xd:json (Xdef version)
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Get PAttr from PNode.
+	 * @param e PNode where this attribute can be.
+	 * @param namespace namespace URI of attribute.
+	 * @param localname local name of attribute.
+	 * @return PAttr or null;
+	 */
+	private PAttr getAttr(final PNode e,
+		final String namespace,
+		final String localname) {
+		for (PAttr att: e._attrs) {
+			if (localname.equals(att._localName) &&
+				(att._nsURI == null && namespace == null
+				|| att._nsURI != null && att._nsURI.equals(namespace))) {
+				return att;
+			}
+		}
+		return null;
+	}
 
 	/** Add named value to the parent node.
 	 * @param rawName JSON name.
@@ -772,39 +764,33 @@ public class XJson extends JsonToXml {
 // Create X-definition form of model from xd:json
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create X-definition model from PNode created from json XML element.*/
-	final static PNode genXdef(final PNode p, final PreCompiler precomp) {
+	/** Create X-definition model from PNode created from json XML element.
+	 * @param p PNode with JSON script.
+	 * @param reporter report writer
+	 */
+	final static void genXdef(final PNode p, final ReportWriter reporter) {
 		XJson jx = new XJson();
 		jx.setGenJObjects();
+		jx.setReportWriter(reporter);
+		if (p._value == null) {
+			jx.setSourceBuffer(p._name);
+			jx.error(JSON.JSON011); //Not JSON object&{0}
+			return;
+		}
 		jx.setSourceBuffer(p._value);
-		jx.setReportWriter(precomp.getReportWriter());
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JList)) {
-			p._value = null;
-			PNode result = null;
 			jx._jsNamespace = p._nsURI;
 			jx._jsPrefix = p.getPrefix();
 			if (XDConstants.JSON_NS_URI_W3C.equals(p._nsURI)) {
-				result = jx.genJsonModelW3C(json, p);
+				jx.genJsonModelW3C(json, p);
 			} else if (XDConstants.JSON_NS_URI.equals(p._nsURI)) {
-				result = jx.genJsonModelXD(json, p);
-//				if (result != null
-//					&& !jx._xdNamespace.equals(result._nsURI)) {
-//					PAttr script = jx.getAttr(result,jx._xdNamespace, "script");
-//					if (script != null) {
-//						if (!script._value.getString().endsWith(";")) {
-//							script._value.addString("; options JSON2;");
-//						}
-//					} else {
-//						jx.setXDAttr(result, "script",
-//							new SBuffer("options JSON2;"));
-//					}
-//				}
+				jx.genJsonModelXD(json, p);
 			}
-			return p._childNodes.get(0);
+		} else {
+			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
-		jx.error(JSON.JSON011); //Not JSON object&{0}
-		return null;
+		p._value = null;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

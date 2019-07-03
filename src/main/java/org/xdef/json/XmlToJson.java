@@ -16,13 +16,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static org.xdef.sys.JSONUtil.J_ARRAY;
-import static org.xdef.sys.JSONUtil.J_BOOLEAN;
-import static org.xdef.sys.JSONUtil.J_ITEM;
-import static org.xdef.sys.JSONUtil.J_MAP;
-import static org.xdef.sys.JSONUtil.J_NULL;
-import static org.xdef.sys.JSONUtil.J_NUMBER;
-import static org.xdef.sys.JSONUtil.J_STRING;
 
 /** Conversion of XML to JSON (both versions - W3C and XDEF)
  * @author Vaclav Trojan
