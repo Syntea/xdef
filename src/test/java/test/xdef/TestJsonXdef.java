@@ -66,11 +66,21 @@ public class TestJsonXdef extends XDTester {
 				String xdef;
 				Element el;
 				String id = getId(fdef); // get ID from def file name
-				// write JSON as XML (W3C modc)
-				el = JsonToXml.toXmlW3C(
-					JsonToXml.parse(_dataDir + "Test"+id+".json"));
-				SUtils.writeString(new File(_tempDir + "Test" + id + "a.xml"),
-					KXmlUtils.nodeToString(el,true),"UTF-8");
+				File[] data = SUtils.getFileGroup(_dataDir+"Test"+id +"*.json");
+				for (File f: data) {				
+					String name = f.getName();
+					int ndx = name.indexOf(".json");
+					name = name.substring(0, ndx);
+					Object json = JsonUtil.parse(f);
+					// write JSON as XML (W3C modc)
+					el = JsonToXml.toXmlW3C(json);
+					SUtils.writeString(new File(_tempDir + name + "a.xml"),
+						KXmlUtils.nodeToString(el,true),"UTF-8");
+					// Write JSON data as XML (XDEF modc)
+					el = JsonToXml.toXmlXD(json);
+					SUtils.writeString(new File(_tempDir + name + "b.xml"),
+						KXmlUtils.nodeToString(el,true),"UTF-8");
+				}
 				// read jdef file to string.
 				String jdef = SUtils.readString(
 					new File(_dataDir + "Test" + id + ".jdef"), "UTF-8");
@@ -81,11 +91,6 @@ public class TestJsonXdef extends XDTester {
 					+ "'\n xd:name='" + "Test" + id + "a' xd:root='jw:json'>\n"
 					+ "<jw:json>\n" +jdef+ "\n</jw:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
-				// Write JSON data as XML (XDEF modc)
-				el = JsonToXml.toXmlXD(JsonUtil.parse(
-					_dataDir + "Test" + id + ".json"));
-				SUtils.writeString(new File(_tempDir + "Test" + id + "b.xml"),
-					KXmlUtils.nodeToString(el,true),"UTF-8");
 				// Create X-definition from Jdef (X-definition)
 				newFile = new File(_tempDir + "Test" + id + "b.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
@@ -183,6 +188,127 @@ public class TestJsonXdef extends XDTester {
 			throw new RuntimeException(ex);
 		}
 	}
+	/** Provides different tests on files with given ID.
+	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param id identifier test.
+	 * @param ver version of test ('a'..w3c, 'b'.. XDEF)
+	 * @return the empty string if tests are OK, otherwise return the string
+	 * with error messages.
+	 */
+	private String testJdef(final XDPool xp, 
+		final String id, 
+		final String ver) {
+		Element e;
+		XDDocument xd;
+		XComponent xc;
+		String result = "";
+		ArrayReporter reporter = new ArrayReporter();
+		// get test files
+		File[] data = SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml");
+		xd = xp.createXDDocument("Test" + id + ver);
+		for (File f : data) {
+			Object json;
+			String name = f.getName();
+			// read JSON data
+			try {
+				int ndx = name.indexOf(ver + ".xml");
+				name = name.substring(0, ndx);
+				json = JsonUtil.parse(_dataDir + name +".json");
+			} catch (Exception ex) {
+				if (!result.isEmpty()) {
+					result += '\n';
+				}
+				result += "Incorrect JSON data Test"+id+".json";
+				continue;
+			}
+			// create XDDocument with W3C form X-definition
+			try {
+				reporter.clear(); // clear reporter
+				// parse data with X-definition
+				e = xd.xparse(f, reporter);
+				if (reporter.errorWarnings()) { // check errors
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "ERRORS in " + f.getName()
+						+ " (xdef: Test" + id + ver +".xdef" +"):\n"
+						+ reporter.printToString();
+				} else {
+					KXmlUtils.compareElements(e,
+						f.getAbsolutePath(), true, reporter);
+					if (reporter.errorWarnings()) {
+						_errors++;
+						result +=  (result.isEmpty() ? "" : "\n")
+							+ "ERROR: result differs " + f.getName();
+					} else {
+						Object o2 = XmlToJson.toJson(e);
+						if (!JsonUtil.jsonEqual(json, o2)) {
+							result +=  (result.isEmpty() ? "" : "\n")
+								+ "ERROR conversion XML to JSON: " 
+								+ f.getName()+ "\n"
+								+ JsonUtil.toJSONString(json, true)
+								+ '\n' + JsonUtil.toJSONString(o2, true)
+								+ '\n' + KXmlUtils.nodeToString(e, true);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				ex.printStackTrace(pw);
+				pw.close();
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Error " + f.getName() + "\n" + sw;
+			}
+			try {
+				xc = xd.parseXComponent(f, Class.forName(
+					"test.common.json.component.Test"+id+ver), null);
+				reporter.clear();
+				e = xc.toXml();
+				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
+				if (reporter.errorWarnings()) {
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "Error X-component " + f.getName() + "\n"
+						+ reporter.printToString()
+						+ "\n"+ KXmlUtils.nodeToString(e, true);
+				}
+			} catch (Exception ex) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				ex.printStackTrace(pw);
+				pw.close();
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Error X-component " + f.getName() + "\n" + sw;
+			}
+			// Test X-component in XDEF mode.
+			try {
+				xd = xp.createXDDocument("Test" + id + ver);
+				xc = xd.parseXComponent(f, Class.forName(
+					"test.common.json.component.Test"+id+ver), null);
+				reporter.clear();
+				e = xc.toXml();
+				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
+				if (reporter.errorWarnings()) {
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "Error X-component " + f.getName() +"\n"
+						+ reporter.printToString()
+						+ "\n"+ KXmlUtils.nodeToString(e, true);
+				}
+			} catch (Exception ex) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				ex.printStackTrace(pw);
+				pw.close();
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Error X-component " + id + ver + "\n" + sw;
+			}
+		}
+		return result;
+	}
 
 	/** Provides different tests on files with given ID.
 	 * @param xp compiled XDPool from generated X-definitions.
@@ -191,153 +317,11 @@ public class TestJsonXdef extends XDTester {
 	 * with error messages.
 	 */
 	private String testJdef(final XDPool xp, String id) {
-		String testFile = _tempDir + "Test" + id;
-		ArrayReporter reporter = new ArrayReporter();
-		Element e;
-		XDDocument xd;
-		String result = "";
-		Object o1, o2;
-		Class<?> clazz;
-		XComponent xc;
-		// parse JSON data to JSON object
-		try {
-			o1 = JsonUtil.parse(_dataDir + "Test"+id+".json");
-		} catch (Exception ex) {
-			return "Incorrect JSON data Test"+id+".json";
+		String result = testJdef(xp, id, "a");
+		if (!result.isEmpty()) {
+			result += '\n';
 		}
-
-		// create XDDocument with W3C form X-definition
-		try {
-			xd = xp.createXDDocument("Test" + id + "a");
-			reporter.clear(); // clear reporter
-			// parse data with X-definition
-			e = xd.xparse(testFile + "a.xml", reporter);
-			if (reporter.errorWarnings()) { // check errors
-				_errors++;
-				result += (result.isEmpty() ? "" : "\n")
-					+ "ERRORS in Test" + id + "a.xml"
-					+ " (xdef: Test" + id + "a.xdef" +"):\n"
-					+ reporter.printToString();
-			} else {
-				KXmlUtils.compareElements(e, KXmlUtils.parseXml(
-					testFile + "a.xml").getDocumentElement(), true, reporter);
-				if (reporter.errorWarnings()) {
-					_errors++;
-					result +=  (result.isEmpty() ? "" : "\n")
-						+ "ERROR: result differs + Test" + id + "b";
-				} else {
-					o2 = XmlToJson.toJson(e);
-					if (!JsonUtil.jsonEqual(o1, o2)) {
-						result +=  (result.isEmpty() ? "" : "\n")
-							+ "ERROR conversion XML to JSON: Test" + id + "a\n"
-							+ JsonUtil.toJSONString(o1, true)
-							+ '\n' + JsonUtil.toJSONString(o2, true)
-							+ '\n' + KXmlUtils.nodeToString(e, true);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			ex.printStackTrace(pw);
-			pw.close();
-			_errors++;
-			result += (result.isEmpty() ? "" : "\n")
-				+ "Error Test" + id + "a:\n" + sw;
-		}
-
-		// create XDDocument with X-definition generated from jdef
-		try {
-			reporter.clear();
-			xd = xp.createXDDocument("Test" + id + "b");
-			// parse data with X-definition
-			e = xd.xparse(testFile + "b.xml", reporter);
-			// check errors
-			if (reporter.errorWarnings()) {
-				_errors++;
-				result += (result.isEmpty() ? "" : "\n")
-					+ "ERRORS in Test" + id + "b.xml"
-					+ " (xdef: Test" + id + "b.xdef" +"):\n"
-					+ reporter.printToString();
-			} else {
-				KXmlUtils.compareElements(e, KXmlUtils.parseXml(
-					testFile + "b.xml").getDocumentElement(), true, reporter);
-				if (reporter.errorWarnings()) {
-					_errors++;
-					result +=  (result.isEmpty() ? "" : "\n")
-						+ "ERROR: result differs + Test" + id + "b";
-				} else {
-					o2 = XmlToJson.toJson(e);
-					if (!JsonUtil.jsonEqual(o1, o2)) {
-						result +=  (result.isEmpty() ? "" : "\n")
-							+ "ERROR conversion XML to JSON: Test" + id + "b\n"
-							+ JsonUtil.toJSONString(o1, true)
-							+ '\n' + JsonUtil.toJSONString(o2, true)
-							+ '\n' + KXmlUtils.nodeToString(e, true);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			ex.printStackTrace(pw);
-			pw.close();
-			_errors++;
-			result +=  (result.isEmpty() ? "" : "\n")
-				+ "Error Test" + id + "b:\n" + sw;
-		}
-
-		// Test X-component in W3C mode.
-		try {
-			xd = xp.createXDDocument("Test" + id + 'a');
-			clazz = Class.forName("test.common.json.component.Test"+id+"a");
-			xc = xd.parseXComponent(_tempDir + "Test"+id+"a.xml", clazz, null);
-			reporter.clear();
-			e = xc.toXml();
-			KXmlUtils.compareElements(e, KXmlUtils.parseXml(
-				testFile + "a.xml").getDocumentElement(), true, reporter);
-			if (reporter.errorWarnings()) {
-				_errors++;
-				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component Test"
-					+ id  +"a:\n" + reporter.printToString()
-					+ "\n"+ KXmlUtils.nodeToString(e, true);
-			}
-		} catch (Exception ex) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			ex.printStackTrace(pw);
-			pw.close();
-			_errors++;
-			result += (result.isEmpty() ? "" : "\n")
-				+ "Error X-component Test" + id + "a:\n" + sw;
-		}
-		// Test X-component in XDEF mode.
-		try {
-			xd = xp.createXDDocument("Test" + id + 'b');
-			clazz = Class.forName("test.common.json.component.Test" + id + 'b');
-			xc = xd.parseXComponent(_tempDir + "Test"+id+"b.xml", clazz, null);
-			reporter.clear();
-			e = xc.toXml();
-			KXmlUtils.compareElements(e, KXmlUtils.parseXml(
-				testFile + "b.xml").getDocumentElement(), true, reporter);
-			if (reporter.errorWarnings()) {
-				_errors++;
-				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component Test"
-					+ id  +"b:\n" + reporter.printToString()
-					+ "\n"+ KXmlUtils.nodeToString(e, true);
-			}
-		} catch (Exception ex) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			ex.printStackTrace(pw);
-			pw.close();
-			_errors++;
-			result += (result.isEmpty() ? "" : "\n")
-				+ "Error X-component Test" + id + "b:\n" + sw;
-		}
-		return result;
+		return result + testJdef(xp, id, "b");
 	}
 
 	@Override
@@ -346,6 +330,7 @@ public class TestJsonXdef extends XDTester {
 		// Generate all data (X-definitons, X-components, XML ddocuments).
 		XDPool xp = genAll("Test*");
 //		XDPool xp = genAll("Test001");
+
 		// run tests
 		for (File f: _jfiles) {
 			String s = testJdef(xp, getId(f));
@@ -355,7 +340,7 @@ public class TestJsonXdef extends XDTester {
 		}
 
 		// If no errors were reported delete all generated data.
-		// Otherwise, leave them to allow to see the reason of errors.
+		// Otherwise, leave them to be able to see the reason of errors.
 		if (_errors == 0) {
 			try {
 				SUtils.deleteAll(_tempDir, true); //delete all generated data

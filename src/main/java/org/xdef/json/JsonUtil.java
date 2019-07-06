@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
@@ -115,7 +114,7 @@ public class JsonUtil extends StringParser {
 			if (isChar('}')) {
 				return result;
 			}
-			for (;;) {
+			while (!eos()) {
 				Object o = readValue();
 				if (o != null && (o instanceof String ||
 					(_genJObjects && o instanceof XJson.JValue)
@@ -137,6 +136,9 @@ public class JsonUtil extends StringParser {
 					if (isChar(',')) {
 						skipBlanksAndComments();
 					} else {
+						if (eos()) {
+							break;
+						}
 						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 						error(JSON.JSON002, ",", "}");
 					}
@@ -145,6 +147,9 @@ public class JsonUtil extends StringParser {
 					error(JSON.JSON004);
 				}
 			}
+			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+			fatal(JSON.JSON002, "}");
+			return result;
 		} else if (isChar('[')) {
 			List<Object> result;
 			if (_genJObjects) {
@@ -156,7 +161,7 @@ public class JsonUtil extends StringParser {
 			if (isChar(']')) {
 				return result;
 			}
-			for(;;) {
+			while (!eos()) {
 				result.add(readValue());
 				skipBlanksAndComments();
 				if (isChar(']')) {
@@ -165,10 +170,16 @@ public class JsonUtil extends StringParser {
 				if (isChar(',')) {
 					skipBlanksAndComments();
 				} else {
+					if (eos()) {
+						break;
+					}
 					 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "]");
 				}
 			}
+			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+			fatal(JSON.JSON002, "]");
+			return result;
 		} else if (isChar('"')) { // string
 			StringBuilder sb = new StringBuilder();
 			while (!eos()) {
@@ -204,7 +215,7 @@ public class JsonUtil extends StringParser {
 				}
 			}
 			// end of string ('"') is missing
-			error(JSON.JSON001);
+			fatal(JSON.JSON001);
 			return _genJObjects ? new XJson.JValue(_sPosition, sb.toString())
 				: sb.toString();
 		} else if (isToken("null")) {
