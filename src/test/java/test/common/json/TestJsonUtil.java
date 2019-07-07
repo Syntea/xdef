@@ -62,7 +62,13 @@ public class TestJsonUtil extends STester {
 			return "Error jsonToXmlXD: Test" + id + ".json\n"
 				+ ex + "\n" + JsonUtil.toJSONString(o1, true);
 		}
-		o2 = XmlToJson.toJson(el);
+		try {
+			o2 = XmlToJson.toJson(el);
+		} catch (Exception ex) {
+			_errors++;
+			return "Error XmlToJson: Test" + id + ".json\n"
+				+ ex + "\n" + JsonUtil.toJSONString(o1, true);
+		}
 		if (!JsonUtil.jsonEqual(o1, o2)) {
 			_errors++;
 			result += "Error jsonXmlToJson (XD): Test" + id + ".json\n"

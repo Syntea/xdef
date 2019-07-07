@@ -6,6 +6,7 @@ import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -256,6 +257,12 @@ public class JsonToXml extends JsonUtil {
 					}
 				}
 				if (addQuot) {
+					s = SUtils.modifyString(s, "\\", "\\\\");
+					s = SUtils.modifyString(s, "\"", "\\\"");
+					s = SUtils.modifyString(s, "\t", "\\t");
+					s = SUtils.modifyString(s, "\n", "\\n");
+					s = SUtils.modifyString(s, "\r", "\\r");
+					s = SUtils.modifyString(s, "\f", "\\f");
 					if (isAttr && s.equals(s.trim())) {
 						return s; // not necessary to add quotes for attributes
 					} else {
@@ -289,6 +296,12 @@ public class JsonToXml extends JsonUtil {
 	 * @param parent node where to append array.
 	 */
 	private void listToNodeXD(final List list, final Node parent) {
+		if (list.size() == 2 && list.get(0) instanceof Map
+			&& isSimpleValue(list.get(1))) { // map and value
+			Element e = mapToXmlXD((Map) list.get(0), parent);
+			addValueAsText(e, list.get(1));
+			return;
+		}
 		Element e = appendJSONElem(parent, J_ARRAY);
 		for (Object x: list) {
 			if (x == null) {
@@ -398,14 +411,15 @@ public class JsonToXml extends JsonUtil {
 	 * @param map map with JSON tuples.
 	 * @param parent node where to append map.
 	 */
-	private void mapToXmlXD(final Map map, final Node parent) {
+	private Element mapToXmlXD(final Map map, final Node parent) {
 		int size = map.size();
 		if (size == 0) {
 			Element e = appendJSONElem(parent, J_MAP);
 			_ns.popContext();
+			return e;
 		} else if (size == 1) {
 			String key = (String) map.keySet().iterator().next();
-			namedItemToXmlXD(key, map.get(key), parent);
+			return namedItemToXmlXD(key, map.get(key), parent);
 		} else {
 			Element e = appendJSONElem(parent, J_MAP);
 			for (Object key: map.keySet()) {
@@ -419,6 +433,7 @@ public class JsonToXml extends JsonUtil {
 				}
 			}
 			_ns.popContext();
+			return e;
 		}
 	}
 

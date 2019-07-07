@@ -7,9 +7,7 @@ import test.common.bnf.TestExpr;
 import test.common.bnf.TestBNFJSON;
 import test.common.bnf.TestXML;
 import test.common.bnf.TestXdScript;
-import test.common.json.TestJSON;
-import test.common.json.TestJSON1;
-import test.common.json.TestJSON2;
+import test.common.json.TestJsonUtil;
 import test.common.sys.TestErrorReporting;
 import test.common.sys.TestObjectWriter;
 import test.common.sys.TestReport;
@@ -50,9 +48,7 @@ public class TestAllFull {
 			new TestSUtils(),
 			new TestObjectWriter(),
 			// JSON
-			new TestJSON(),
-			new TestJSON1(),
-			new TestJSON2(),
+			new TestJsonUtil(),
 			// xml
 			new TestXml(),
 			new TestKDOMBuilder(),

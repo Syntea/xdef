@@ -97,7 +97,7 @@ public class JsonUtil extends StringParser {
 	 */
 	private Object readValue() throws SRuntimeException {
 		if (eos()) {
-			error(JSON.JSON007); //unexpected eof
+			fatal(JSON.JSON007); //unexpected eof
 			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 		}
 		if (_genJObjects) {
@@ -114,7 +114,7 @@ public class JsonUtil extends StringParser {
 			if (isChar('}')) {
 				return result;
 			}
-			while (!eos()) {
+			while(!eos()) {
 				Object o = readValue();
 				if (o != null && (o instanceof String ||
 					(_genJObjects && o instanceof XJson.JValue)
@@ -141,10 +141,12 @@ public class JsonUtil extends StringParser {
 						}
 						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 						error(JSON.JSON002, ",", "}");
+//						return result;
 					}
 				} else {
 					// String with name of item expected
-					error(JSON.JSON004);
+					fatal(JSON.JSON004);
+					return result;
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -161,7 +163,7 @@ public class JsonUtil extends StringParser {
 			if (isChar(']')) {
 				return result;
 			}
-			while (!eos()) {
+			while(!eos()) {
 				result.add(readValue());
 				skipBlanksAndComments();
 				if (isChar(']')) {
@@ -177,8 +179,8 @@ public class JsonUtil extends StringParser {
 					error(JSON.JSON002, ",", "]");
 				}
 			}
-			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-			fatal(JSON.JSON002, "]");
+			 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+			error(JSON.JSON002, "]");
 			return result;
 		} else if (isChar('"')) { // string
 			StringBuilder sb = new StringBuilder();

@@ -16,24 +16,23 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
-import static test.utils.STester.runTest;
 import test.utils.XDTester;
 
-/** Test processing JSON objects with X-definitions.
+/** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
  */
 public class TestJsonXdef extends XDTester {
 
 	public TestJsonXdef() {super();}
 
-	private String _dataDir;
-	private File[] _jfiles;
-	private String _tempDir;
-	private int _errors;
+	private String _dataDir; // dirsctory with test data
+	private File[] _jfiles; // array with jdef files
+	private String _tempDir; // dirsctory where to generate files
+	private int _errors; // error sounter
 
-	/** Get ID from the file name.
+	/** Get ID number of a test from the file name.
 	 * @param f file name
-	 * @return ID (string of file name without the prefix "Test"
+	 * @return ID (string created from the file name without the prefix "Test"
 	 * and without file extension.
 	 */
 	private static String getId(final File f) {
@@ -65,9 +64,10 @@ public class TestJsonXdef extends XDTester {
 				File newFile;
 				String xdef;
 				Element el;
-				String id = getId(fdef); // get ID from def file name
+				String id = getId(fdef); // get ID from jdef file name
+				// get all json files for this test
 				File[] data = SUtils.getFileGroup(_dataDir+"Test"+id +"*.json");
-				for (File f: data) {				
+				for (File f: data) {
 					String name = f.getName();
 					int ndx = name.indexOf(".json");
 					name = name.substring(0, ndx);
@@ -188,6 +188,7 @@ public class TestJsonXdef extends XDTester {
 			throw new RuntimeException(ex);
 		}
 	}
+
 	/** Provides different tests on files with given ID.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param id identifier test.
@@ -195,15 +196,15 @@ public class TestJsonXdef extends XDTester {
 	 * @return the empty string if tests are OK, otherwise return the string
 	 * with error messages.
 	 */
-	private String testJdef(final XDPool xp, 
-		final String id, 
+	private String testJdef(final XDPool xp,
+		final String id,
 		final String ver) {
 		Element e;
 		XDDocument xd;
 		XComponent xc;
 		String result = "";
 		ArrayReporter reporter = new ArrayReporter();
-		// get test files
+		// get all json files for this test
 		File[] data = SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml");
 		xd = xp.createXDDocument("Test" + id + ver);
 		for (File f : data) {
@@ -212,13 +213,11 @@ public class TestJsonXdef extends XDTester {
 			// read JSON data
 			try {
 				int ndx = name.indexOf(ver + ".xml");
-				name = name.substring(0, ndx);
-				json = JsonUtil.parse(_dataDir + name +".json");
+				json = JsonUtil.parse(_dataDir + name.substring(0,ndx)+".json");
 			} catch (Exception ex) {
-				if (!result.isEmpty()) {
-					result += '\n';
-				}
-				result += "Incorrect JSON data Test"+id+".json";
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Incorrect JSON data Test"+id+".json";
 				continue;
 			}
 			// create XDDocument with W3C form X-definition
@@ -229,7 +228,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) { // check errors
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
-						+ "ERRORS in " + f.getName()
+						+ "ERRORS in " + name
 						+ " (xdef: Test" + id + ver +".xdef" +"):\n"
 						+ reporter.printToString();
 				} else {
@@ -237,14 +236,14 @@ public class TestJsonXdef extends XDTester {
 						f.getAbsolutePath(), true, reporter);
 					if (reporter.errorWarnings()) {
 						_errors++;
-						result +=  (result.isEmpty() ? "" : "\n")
-							+ "ERROR: result differs " + f.getName();
+						result += (result.isEmpty() ? "" : "\n")
+							+ "ERROR: result differs " + name;
 					} else {
 						Object o2 = XmlToJson.toJson(e);
 						if (!JsonUtil.jsonEqual(json, o2)) {
-							result +=  (result.isEmpty() ? "" : "\n")
-								+ "ERROR conversion XML to JSON: " 
-								+ f.getName()+ "\n"
+							_errors++;
+							result += (result.isEmpty() ? "" : "\n")
+								+ "ERROR conversion XML to JSON: " + name + "\n"
 								+ JsonUtil.toJSONString(json, true)
 								+ '\n' + JsonUtil.toJSONString(o2, true)
 								+ '\n' + KXmlUtils.nodeToString(e, true);
@@ -258,7 +257,7 @@ public class TestJsonXdef extends XDTester {
 				pw.close();
 				_errors++;
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error " + f.getName() + "\n" + sw;
+					+ "Error " + name + "\n" + sw;
 			}
 			try {
 				xc = xd.parseXComponent(f, Class.forName(
@@ -269,7 +268,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) {
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error X-component " + f.getName() + "\n"
+						+ "Error X-component " + name + "\n"
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
@@ -280,7 +279,7 @@ public class TestJsonXdef extends XDTester {
 				pw.close();
 				_errors++;
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component " + f.getName() + "\n" + sw;
+					+ "Error X-component " + name + "\n" + sw;
 			}
 			// Test X-component in XDEF mode.
 			try {
@@ -293,7 +292,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) {
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error X-component " + f.getName() +"\n"
+						+ "Error X-component " + name +"\n"
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
@@ -317,11 +316,12 @@ public class TestJsonXdef extends XDTester {
 	 * with error messages.
 	 */
 	private String testJdef(final XDPool xp, String id) {
-		String result = testJdef(xp, id, "a");
-		if (!result.isEmpty()) {
-			result += '\n';
+		String resulta = testJdef(xp, id, "a");
+		String resultb = testJdef(xp, id, "b");
+		if (!resulta.isEmpty() && !resultb.isEmpty()) {
+			resulta += '\n';
 		}
-		return result + testJdef(xp, id, "b");
+		return resulta + resultb;
 	}
 
 	@Override
@@ -354,5 +354,4 @@ public class TestJsonXdef extends XDTester {
 		XDTester.setFulltestMode(false);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

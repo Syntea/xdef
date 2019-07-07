@@ -5,6 +5,7 @@ import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.SUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -189,30 +190,20 @@ public class XmlToJson extends JsonToXml {
 		} else if (p.isSignedInteger()) {
 			array.add(new BigInteger(p.getParsedString()));
 		} else if (p.isChar('"')) { // quoted string
+			String t;
 			if (s.endsWith("\"")) {
-				if (s.length() == 1) {
-					array.add(s);
-				} else {
-					array.add(s.substring(1, s.length() - 1));
-				}
+				t = s.length() > 1 ? s.substring(1, s.length() - 1) : s;
 			} else {
-				StringBuilder sb = new StringBuilder();
-				for (;;) {
-					if (p.eos()) {
-						//End of string is missing
-						throw new SRuntimeException(JSON.JSON001);
-					}
-					if (p.isChar('"')) {
-						array.add(sb.toString());
-						break;
-					}
-					if (p.isChar('\\')) {
-						p.nextChar();
-					}
-					sb.append(p.peekChar());
-				}
+				t = s;
 			}
-		} else { //not quoed string
+			t = SUtils.modifyString(t, "\\t", "\t");
+			t = SUtils.modifyString(t, "\\n", "\n");
+			t = SUtils.modifyString(t, "\\r", "\r");
+			t = SUtils.modifyString(t, "\\f", "\f");
+			t = SUtils.modifyString(t, "\\\"", "\"");
+			t = SUtils.modifyString(t, "\\\\", "\\");
+			array.add(t);
+		} else { //not quoted string
 			array.add(s);
 		}
 	}
@@ -447,15 +438,16 @@ public class XmlToJson extends JsonToXml {
 					}
 				}
 			}
-			if (len == 1 && i == 1 && !map.containsKey(key)
-				&& !_jsNamespace.equals(e.getNamespaceURI())
-				&& !J_ARRAY.equals(e.getLocalName())) {
+			if (len == 1 && i == 1 && !map.containsKey(key)) {
 				// no js:array and no child nodes (just an element)
 				if (list.size() == 1) {
 					map.put(key, list.get(0));
 				} else {
 					map.put(key, list);
 				}
+			} else if (list.size() > 0) {
+				list.add(0, map);
+				return list;
 			}
 			return map;
 		}
