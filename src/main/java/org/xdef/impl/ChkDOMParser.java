@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/** ChkDOMParser
+/** Provides processing of an XML document in the form of org.w3c.dom object.
  * @author  Vaclav Trojan
  */
 class ChkDOMParser extends SReporter {
