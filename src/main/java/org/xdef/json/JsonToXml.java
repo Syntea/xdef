@@ -6,7 +6,6 @@ import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
-import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -249,20 +248,52 @@ public class JsonToXml extends JsonUtil {
 					|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0;
 				if (!addQuot) {
 					char ch = s.charAt(0);
-					StringParser p = new StringParser(s);
 					if (ch == '-' || ch >= '0' && ch <= '9') {
+						StringParser p = new StringParser(s);
 						addQuot |= (p.isSignedFloat() || p.isSignedInteger())
 							&& p.eos();
 						if (!addQuot && !p.eos()) return s;
 					}
 				}
 				if (addQuot) {
-					s = SUtils.modifyString(s, "\\", "\\\\");
-					s = SUtils.modifyString(s, "\"", "\\\"");
-					s = SUtils.modifyString(s, "\t", "\\t");
-					s = SUtils.modifyString(s, "\n", "\\n");
-					s = SUtils.modifyString(s, "\r", "\\r");
-					s = SUtils.modifyString(s, "\f", "\\f");
+					StringBuilder sb = new StringBuilder();
+					for (char ch: s.toCharArray()) {
+						switch (ch) {
+							case '\\':
+								sb.append("\\\\");
+								continue;
+							case '"':
+								sb.append("\\\"");
+								continue;
+							case '\b':
+								sb.append("\\b");
+								continue;
+							case '\f':
+								sb.append("\\f");
+								continue;
+							case '\n':
+								sb.append("\\n");
+								continue;
+							case '\r':
+								sb.append("\\r");
+								continue;
+							case '\t':
+								sb.append("\\t");
+								continue;
+							default:
+								if (ch >= ' ' && Character.isDefined(ch)) {
+									sb.append(ch);
+								} else {
+									sb.append("\\u");
+									for (int i = 12; i >= 0; i -=4) {
+										sb.append("0123456789abcdef"
+											.charAt((ch >> i) & 0xf));
+									}
+								}
+						}
+
+					}
+					s = sb.toString();
 					if (isAttr && s.equals(s.trim())) {
 						return s; // not necessary to add quotes for attributes
 					} else {

@@ -12,7 +12,6 @@ import test.utils.STester;
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
 public class TestJsonUtil extends STester {
 
-	String _dataDir;
 	File[] _files;
 	int _errors;
 
@@ -20,8 +19,9 @@ public class TestJsonUtil extends STester {
 
 	/** Set tempDir and srcDir variables. */
 	private void init(String groupName) {
-		_dataDir = getDataDir();
-		_files = SUtils.getFileGroup(_dataDir + groupName + ".json");
+		File f = new File(getDataDir());
+		String s = (f.getAbsolutePath() + File.separator).replace('\\', '/');
+		_files = SUtils.getFileGroup(s + groupName + ".json");
 		_errors = 0;
 	}
 
@@ -115,8 +115,8 @@ public class TestJsonUtil extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-//		init("Test*"); //set directories
-		init("Test009"); //set directories
+		init("Test*"); //set directories
+//		init("Test009"); //set directories
 		for (File json: _files) {
 			String id = getId(json);
 			// test JSOMN parser

@@ -47,11 +47,11 @@ public class XDParseJString extends XDParseAn {
 					if (p.eos()) {
 						return false;
 					}
+
 					if (p.isChar('"')) {
-						if (!p.eos()) {
-							return false;
+						if (p.eos()) {
+							break;
 						}
-						break;
 					} else {
 						if (p.isChar('\\')) {
 							if (p.isOneOfChars("\\\"tnrf") < 0) {

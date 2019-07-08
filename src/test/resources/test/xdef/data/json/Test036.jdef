@@ -1,5 +1,5 @@
 {
-  "Title": "optional string()",
+  "Title": "optional jstring()",
   "Artists": [
     { "xd:script": "occurs 1..*",
       "Name": "string()",

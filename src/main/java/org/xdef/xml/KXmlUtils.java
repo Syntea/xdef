@@ -29,6 +29,7 @@ import java.util.TreeMap;
 /** Collection of static methods designed for easy work with XML data.
  * KDOMBuilder is used for creation of XML objects and it is set in the class
  * initialization time.
+ *
  * @author  Vaclav Trojan
  */
 public final class KXmlUtils extends KDOMUtils {
@@ -1361,7 +1362,7 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 		return compareElements(a, b, reporter);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param elem_A the first element.
@@ -1389,7 +1390,7 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 		return r;
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param A source string with the first element.
@@ -1406,7 +1407,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(parseXml(A).getDocumentElement(),
 			elem_B, trimText, reporter);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param A source string with the first element.
@@ -1421,7 +1422,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(parseXml(A).getDocumentElement(),
 			elem_B, reporter);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param A source string with the first element.
@@ -1432,7 +1433,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final Element elem_B) {
 		return compareElements(parseXml(A).getDocumentElement(), elem_B);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param elem_A the first element.
@@ -1449,7 +1450,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A,
 			parseXml(B).getDocumentElement(), trimText, reporter);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param elem_A the first element.
@@ -1464,7 +1465,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A,
 			parseXml(B).getDocumentElement(),reporter);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param elem_A the first element.

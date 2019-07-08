@@ -116,7 +116,7 @@ public class XmlToJson extends JsonToXml {
 						}
 					}
 				} catch (Exception ex) {
-					return s;
+					return s; // return raw value
 				}
 			case '"': // JSON string
 				if (s.length() > 1 && s.charAt(s.length() - 1) == '"'
@@ -127,9 +127,12 @@ public class XmlToJson extends JsonToXml {
 						char ch = s.charAt(i);
 						if (ch == '\\') {
 							if (++i >= s.length()) {
-								return s; // error
+								return s; // // missing escape char
 							}
 							switch (ch = s.charAt(i)) {
+								case '\\':
+									ch = '\\';
+									break;
 								case 'b':
 									ch = '\b';
 									break;
@@ -145,11 +148,11 @@ public class XmlToJson extends JsonToXml {
 								case 't':
 									ch = '\t';
 									break;
-								case '/':
-									ch = '/';
-									break;
 								case '"':
 									ch = '"';
+									break;
+								case '/':
+									ch = '/';
 									break;
 								case 'u':
 									try {
@@ -158,10 +161,10 @@ public class XmlToJson extends JsonToXml {
 										i += 4;
 										break;
 									} catch (Exception ex) {
-										return s;
+										return s; // incorrect UTF-8 char
 									}
 								default:
-									return s; // error???
+									return s; // illegal escape char
 							}
 						}
 						sb.append(ch);
@@ -178,33 +181,23 @@ public class XmlToJson extends JsonToXml {
 	 */
 	private static void valueToArray(final List<Object> array,
 		final String s){
-		StringParser p = new StringParser(s);
-		if (p.isToken("null")) {
+		if ("null".equals(s)) {
 			array.add(null);
-		} else if (p.isToken("false")) {
+		} else if ("false".equals(s)) {
 			array.add(Boolean.FALSE);
-		} else if (p.isToken("true")) {
+		} else if ("true".equals(s)) {
 			array.add(Boolean.TRUE);
-		} else if (p.isSignedFloat()) {
-			array.add(new BigDecimal(p.getParsedString()));
-		} else if (p.isSignedInteger()) {
-			array.add(new BigInteger(p.getParsedString()));
-		} else if (p.isChar('"')) { // quoted string
-			String t;
-			if (s.endsWith("\"")) {
-				t = s.length() > 1 ? s.substring(1, s.length() - 1) : s;
-			} else {
-				t = s;
+		} else if (s.startsWith("\"")) {
+			array.add(getJValue(s));
+		} else {
+			StringParser p = new StringParser(s);
+			if (p.isSignedFloat()) {
+				array.add(new BigDecimal(p.getParsedString()));
+			} else if (p.isSignedInteger()) {
+				array.add(new BigInteger(p.getParsedString()));
+			} else { //not quoted string ???
+				array.add(s);
 			}
-			t = SUtils.modifyString(t, "\\t", "\t");
-			t = SUtils.modifyString(t, "\\n", "\n");
-			t = SUtils.modifyString(t, "\\r", "\r");
-			t = SUtils.modifyString(t, "\\f", "\f");
-			t = SUtils.modifyString(t, "\\\"", "\"");
-			t = SUtils.modifyString(t, "\\\\", "\\");
-			array.add(t);
-		} else { //not quoted string
-			array.add(s);
 		}
 	}
 
