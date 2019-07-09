@@ -30,6 +30,11 @@ public interface XComponent {
 	 */
 	public Node toXml(Document doc);
 
+	/** Create JSON object from this XComponent (marshal to JSON).
+	 * @return JSON object created from this XComponent.
+	 */
+	public Object toJon();
+
 	/** Get name of element used for construction of this object.
 	 * @return name of element used for construction of this object.
 	 */

@@ -80,6 +80,8 @@ public class PovozDN implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -212,6 +214,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
       el.appendChild(x.toXml(doc));
     return el;
   }
+  @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=

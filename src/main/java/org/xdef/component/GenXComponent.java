@@ -1758,6 +1758,13 @@ if (true) return;
 			}
 			toXml += "\t\treturn el;"+LN+"\t}"+LN;
 		}
+		toXml +=
+"\t@Override"+LN+
+(_genJavadoc ? (
+"\t/** Create JSON object from this XComponent (marshal to JSON)"+LN+
+"\t * @return JSON object created from this XComponent."+LN+
+"\t */"+LN) : "")+
+"\tpublic Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}"+LN;
 ////////////////////////////////////////////////////////////////////////////////
 		String result =
 (_genJavadoc ?

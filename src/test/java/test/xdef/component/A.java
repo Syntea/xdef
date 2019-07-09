@@ -84,6 +84,8 @@ public class A implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -270,6 +272,8 @@ public static class W implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -384,6 +388,8 @@ public static class Y implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -493,6 +499,8 @@ public static class i implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -601,6 +609,8 @@ public static class f implements org.xdef.component.XComponent{
       el.appendChild(x.toXml(doc));
     return el;
   }
+  @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
@@ -717,6 +727,8 @@ public static class d implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -832,6 +844,8 @@ public static class t implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -940,6 +954,8 @@ public static class s implements org.xdef.component.XComponent{
       el.appendChild(x.toXml(doc));
     return el;
   }
+  @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
@@ -1066,6 +1082,8 @@ public static class d1 implements org.xdef.component.XComponent{
       el.appendChild(x.toXml(doc));
     return el;
   }
+  @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
@@ -1198,6 +1216,8 @@ public static class d2 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -1316,6 +1336,8 @@ public static class d_e_f implements org.xdef.component.XComponent{
       el.appendChild(x.toXml(doc));
     return el;
   }
+  @Override
+  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.ArrayList<org.xdef.component.XComponent> a=

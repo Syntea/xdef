@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
+import org.xdef.json.XmlToJson;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
@@ -56,23 +57,6 @@ public class XComponentUtil {
 		}
 	}
 
-	/** Create XML element from XComponent according to given model from XDPool.
-	 * @param xc XComponent.
-	 * @param xp XDPool.
-	 * @param xdPosition the XDPosition of model in XDPool.
-	 * @return created Element.
-	 */
-	public static final Element toXml(final XComponent xc,
-		final XDPool xp,
-		final String xdPosition) {
-		final XMNode xm = xp.findModel(xdPosition);
-		if (xm.getKind() != XMNode.XMELEMENT) {
-			//Argument is not model of element: &{0}
-			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
-		}
-		return toXml(xc, (XMElement) xm);
-	}
-
 	/** Create XComponent from XComponent according to given model in XDPool.
 	 * @param xc XComponent.
 	 * @param xp XDPool.
@@ -103,6 +87,69 @@ public class XComponentUtil {
 		return xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
 	}
 
+	/** Create the new XML element from XComponent according to model.
+	 * @param xc XComponent.
+	 * @param xd XDocument for creation on new Element.
+	 * @param modelName name of model to be created.
+	 * @return new Element.
+	 */
+	public static final Element toXml(final XComponent xc,
+		final XDDocument xd,
+		final String modelName) {
+		xd.setXDContext(xc.toXml());
+		return xd.xcreate(modelName, null);
+	}
+
+	/** Create XML element from XComponent according to given model from XDPool.
+	 * @param xc XComponent.
+	 * @param xp XDPool.
+	 * @param xdPosition the XDPosition of model in XDPool.
+	 * @return created Element.
+	 */
+	public static final Element toXml(final XComponent xc,
+		final XDPool xp,
+		final String xdPosition) {
+		final XMNode xm = xp.findModel(xdPosition);
+		if (xm.getKind() != XMNode.XMELEMENT) {
+			//Argument is not model of element: &{0}
+			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
+		}
+		return toXml(xc, (XMElement) xm);
+	}
+
+	/** Create the new JSON object from XComponent according to model.
+	 * @param xc XComponent.
+	 * @param xm model according which element will be constructed.
+	 * @return JSON object created from XComponent created from XComponent.
+	 */
+	public static final Object toJson(final XComponent xc, final XMElement xm) {
+		return XmlToJson.toJson(toXml(xc, xm));
+	}
+
+	/** Create the JSON object from XComponent according to model.
+	 * @param xc XComponent.
+	 * @param xd XDocument for creation on new Element.
+	 * @param modelName name of model to be created.
+	 * @return JSON object created from XComponent according to model..
+	 */
+	public static final Object toJson(final XComponent xc,
+		final XDDocument xd,
+		final String modelName) {
+		return XmlToJson.toJson(toXml(xc, xd, modelName));
+	}
+
+	/** Create JSON object from XComponent according to given model from XDPool.
+	 * @param xc XComponent.
+	 * @param xp XDPool.
+	 * @param xdPosition the XDPosition of model in XDPool.
+	 * @return JSON object created from XComponent.
+	 */
+	public static final Object toJson(final XComponent xc,
+		final XDPool xp,
+		final String xdPosition) {
+		return XmlToJson.toJson(toXml(xc, xp, xdPosition));
+	}
+
 	/** Create XComponent from XComponent according to given model in XDPool.
 	 * @param xc XComponent
 	 * @param xm model of required result.
@@ -115,19 +162,6 @@ public class XComponentUtil {
 		final Element el =
 			xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
 		return xd.parseXComponent(el, null,  null);
-	}
-
-	/** Create the new XML element from XComponent according to model.
-	 * @param xc XComponent.
-	 * @param xd XDocument for creation on new Element.
-	 * @param modelName name of model to be created.
-	 * @return new Element.
-	 */
-	public static final Element toXml(final XComponent xc,
-		final XDDocument xd,
-		final String modelName) {
-		xd.setXDContext(xc.toXml());
-		return xd.xcreate(modelName, null);
 	}
 
 	/** Create XComponent from XComponent according to model.
