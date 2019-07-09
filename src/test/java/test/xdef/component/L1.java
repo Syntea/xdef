@@ -48,10 +48,11 @@ public class L1 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public L1() {}
   public L1(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {

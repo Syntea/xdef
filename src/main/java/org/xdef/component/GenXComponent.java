@@ -1764,7 +1764,7 @@ if (true) return;
 "\t/** Create JSON object from this XComponent (marshal to JSON)"+LN+
 "\t * @return JSON object created from this XComponent."+LN+
 "\t */"+LN) : "")+
-"\tpublic Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}"+LN;
+"\tpublic Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
 ////////////////////////////////////////////////////////////////////////////////
 		String result =
 (_genJavadoc ?
@@ -1880,8 +1880,8 @@ if (true) return;
 			+LN;
 		if (genNodeList.length() == 0) {
 			result +=
-"\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();}"
-				+LN;
+"\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();"+LN+
+"\t}"+LN;
 		} else {
 			result += genNodeList + "\t\treturn a;"+LN+"\t}"+LN;
 		}

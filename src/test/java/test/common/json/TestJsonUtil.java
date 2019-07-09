@@ -5,8 +5,6 @@ import org.w3c.dom.Element;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.json.JsonUtil;
-import org.xdef.json.JsonToXml;
-import org.xdef.json.XmlToJson;
 import test.utils.STester;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
@@ -45,8 +43,9 @@ public class TestJsonUtil extends STester {
 		Element el;
 		String result = "";
 		try {
+			// test toJsonString and parse JSON
 			o1 = JsonUtil.parse(f);
-			o2 = JsonUtil.parse(JsonUtil.toJSONString(o1, true));
+			o2 = JsonUtil.parse(JsonUtil.toJsonString(o1, true));
 			if (!JsonUtil.jsonEqual(o1, o2)) {
 				_errors++;
 				result += "JSON toString error " + id;
@@ -56,39 +55,42 @@ public class TestJsonUtil extends STester {
 			return "JSON error " + id + "\n" + ex;
 		}
 		try {
-			el = JsonToXml.toXmlXD(o1);
+			// test jsonToXml (XDEF)
+			el = JsonUtil.jsonToXml(o1);
 		} catch (Exception ex) {
 			_errors++;
 			return "Error jsonToXmlXD: Test" + id + ".json\n"
-				+ ex + "\n" + JsonUtil.toJSONString(o1, true);
+				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
 		try {
-			o2 = XmlToJson.toJson(el);
+			// test XmlToJson
+			o2 = JsonUtil.xmlToJson(el);
 		} catch (Exception ex) {
 			_errors++;
-			return "Error XmlToJson: Test" + id + ".json\n"
-				+ ex + "\n" + JsonUtil.toJSONString(o1, true);
+			return "Error XmlToJson (XD): Test" + id + ".json\n"
+				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
 		if (!JsonUtil.jsonEqual(o1, o2)) {
 			_errors++;
-			result += "Error jsonXmlToJson (XD): Test" + id + ".json\n"
-				+ JsonUtil.toJSONString(o1, true) + "\n"
-				+ JsonUtil.toJSONString(o2, true) + "\n" +
+			result += "Error XmlToJson (XD): Test" + id + ".json\n"
+				+ JsonUtil.toJsonString(o1, true) + "\n"
+				+ JsonUtil.toJsonString(o2, true) + "\n" +
 				KXmlUtils.nodeToString(el, true);
 		}
 		try {
-			el = JsonToXml.toXmlW3C(o1);
+			// test jsonToXMl (W3C)
+			el = JsonUtil.jsonToXmlW3C(o1);
 		} catch (Exception ex) {
 			_errors++;
-			return "Error jsonToXmlXD: Test" + id + ".json\n"
-				+ ex + "\n" + JsonUtil.toJSONString(o1, true);
+			return "Error jsonToXml (W3C): Test" + id + ".json\n"
+				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
-		o2 = XmlToJson.toJson(el);
+		o2 = JsonUtil.xmlToJson(el);
 		if (!JsonUtil.jsonEqual(o1, o2)) {
 			_errors++;
-			result += "Error jsonXmlToJson (W3C): Test" + id + ".json\n"
-				+ JsonUtil.toJSONString(o1, true) + "\n"
-				+ JsonUtil.toJSONString(o2, true) + "\n" +
+			result += "Error XmlToJson (W3C): Test" + id + ".json\n"
+				+ JsonUtil.toJsonString(o1, true) + "\n"
+				+ JsonUtil.toJsonString(o2, true) + "\n" +
 				KXmlUtils.nodeToString(el, true);
 		}
 		return result;
@@ -100,14 +102,13 @@ public class TestJsonUtil extends STester {
 	 * @return empty string or error message.
 	 */
 	private String checkXmlToJson(File xml, File json) {
-		Object o1 = 
-			XmlToJson.toJson(KXmlUtils.parseXml(xml).getDocumentElement());
+		Object o1 = JsonUtil.xmlToJson(xml);
 		Object o2 = JsonUtil.parse(json);
 		if (!JsonUtil.jsonEqual(o1, o2)) {
 			_errors++;
 			return "Error in check XML and JSON:\n"
 				+ xml.getName() + ", " + json.getName() + "\n"
-				+ JsonUtil.toJSONString(o1);
+				+ JsonUtil.toJsonString(o1);
 		}
 		return "";
 	}
@@ -115,8 +116,8 @@ public class TestJsonUtil extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		init("Test*"); //set directories
-//		init("Test009"); //set directories
+		init("Test*"); //init directories and test files
+//		init("Test009"); 
 		for (File json: _files) {
 			String id = getId(json);
 			// test JSOMN parser
@@ -141,5 +142,4 @@ public class TestJsonUtil extends STester {
 	public static void main(String... args) {
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

@@ -58,7 +58,7 @@ public class Y17 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
@@ -181,10 +181,11 @@ public static class b_1 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public b_1() {}
   public b_1(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -274,10 +275,11 @@ public static class c implements org.xdef.component.XComponent{
         XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public c() {}
   public c(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -373,10 +375,11 @@ public static class b_2 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public b_2() {}
   public b_2(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {

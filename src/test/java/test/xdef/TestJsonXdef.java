@@ -7,8 +7,6 @@ import org.xdef.XDPool;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.json.JsonUtil;
-import org.xdef.json.JsonToXml;
-import org.xdef.json.XmlToJson;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -73,11 +71,11 @@ public class TestJsonXdef extends XDTester {
 					name = name.substring(0, ndx);
 					Object json = JsonUtil.parse(f);
 					// write JSON as XML (W3C modc)
-					el = JsonToXml.toXmlW3C(json);
+					el = JsonUtil.jsonToXmlW3C(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 					// Write JSON data as XML (XDEF modc)
-					el = JsonToXml.toXmlXD(json);
+					el = JsonUtil.jsonToXml(json);
 					SUtils.writeString(new File(_tempDir + name + "b.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 				}
@@ -239,13 +237,13 @@ public class TestJsonXdef extends XDTester {
 						result += (result.isEmpty() ? "" : "\n")
 							+ "ERROR: result differs " + name;
 					} else {
-						Object o2 = XmlToJson.toJson(e);
+						Object o2 = JsonUtil.xmlToJson(KXmlUtils.nodeToString(e, true));
 						if (!JsonUtil.jsonEqual(json, o2)) {
 							_errors++;
 							result += (result.isEmpty() ? "" : "\n")
 								+ "ERROR conversion XML to JSON: " + name + "\n"
-								+ JsonUtil.toJSONString(json, true)
-								+ '\n' + JsonUtil.toJSONString(o2, true)
+								+ JsonUtil.toJsonString(json, true)
+								+ '\n' + JsonUtil.toJsonString(o2, true)
 								+ '\n' + KXmlUtils.nodeToString(e, true);
 						}
 					}
@@ -301,8 +299,8 @@ public class TestJsonXdef extends XDTester {
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + ver + "\n"
-						+ JsonUtil.toJSONString(json) + "\n"
-						+ JsonUtil.toJSONString(o) + "\n";
+						+ JsonUtil.toJsonString(json) + "\n"
+						+ JsonUtil.toJsonString(o) + "\n";
 				}
 
 			} catch (Exception ex) {

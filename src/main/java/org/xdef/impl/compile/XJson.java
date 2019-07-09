@@ -827,5 +827,4 @@ public class XJson extends JsonToXml {
 		@Override
 		public String toString() {return o == null ? "null" : o.toString();}
 	}
-
 }

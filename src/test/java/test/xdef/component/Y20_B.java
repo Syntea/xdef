@@ -54,7 +54,7 @@ public class Y20_B implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
@@ -172,7 +172,7 @@ public static class X implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=

@@ -6,6 +6,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.w3c.dom.Element;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
  * and create string with JSON source from JSON object.
@@ -29,8 +31,8 @@ import java.util.Map;
  */
 public class JsonUtil extends StringParser {
 
-	/** Prepare instance of JX. */
-	public JsonUtil() {}
+	/** Create instance of JsonUtil. */
+	JsonUtil() {}
 
 	/** Flag to accept comments in JSON. */
 	private boolean _acceptComments = false; // default value
@@ -43,7 +45,7 @@ public class JsonUtil extends StringParser {
 // JSON parser
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Set _genJObjects flag (_acceptComments flag is also set). */
+	/** Set genJObjects flag (and the _acceptComments flag is also set). */
 	public final void setGenJObjects() {
 		_genJObjects = true;
 		_acceptComments = true;
@@ -88,8 +90,6 @@ public class JsonUtil extends StringParser {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
 		return i >= 16 ? i - 6 : i;
 	}
-
-////////////////////////////////////////////////////////////////////////////////
 
 	/** Read JSON value.
 	 * @return parsed value: List, Map, String, Number, Boolean or null.
@@ -141,7 +141,6 @@ public class JsonUtil extends StringParser {
 						}
 						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 						error(JSON.JSON002, ",", "}");
-//						return result;
 					}
 				} else {
 					// String with name of item expected
@@ -186,7 +185,8 @@ public class JsonUtil extends StringParser {
 			StringBuilder sb = new StringBuilder();
 			while (!eos()) {
 				if (isChar('"')) {
-					return _genJObjects ? new XJson.JValue(_sPosition, sb.toString())
+					return _genJObjects 
+						? new XJson.JValue(_sPosition, sb.toString())
 						: sb.toString();
 				} else if (isChar('\\')) {
 					char c = peekChar();
@@ -197,7 +197,7 @@ public class JsonUtil extends StringParser {
 							if (y < 0) {
 								error(JSON.JSON005);//hexadecimal digit expected
 								return _genJObjects
-									? new XJson.JValue(_sPosition, sb.toString())
+									? new XJson.JValue(_sPosition,sb.toString())
 									: sb.toString();
 							}
 							x = (x << 4) + y;
@@ -439,7 +439,7 @@ public class JsonUtil extends StringParser {
 	 * @param sb StringBuilder where to append the created string.
 	 */
 	@SuppressWarnings("unchecked")
-	private static void objToJSONString(final Object obj,
+	private static void objToJsonString(final Object obj,
 		final String indent,
 		final StringBuilder sb) {
 		if (obj == null) {
@@ -488,10 +488,10 @@ public class JsonUtil extends StringParser {
 			sb.append(obj.toString());
 		} else if (obj instanceof List) {
 			List<Object> x = (List) obj;
-			arrayToJSONString(x, indent, sb);
+			arrayToJsonString(x, indent, sb);
 		} else if (obj instanceof Map) {
 			Map<String, Object> x = (Map) obj;
-			mapToJSONString(x, indent, sb);
+			mapToJsonString(x, indent, sb);
 		} else {
 			throw new SRuntimeException(JSON.JSON011, obj);//Not JSON object&{0}
 		}
@@ -502,7 +502,7 @@ public class JsonUtil extends StringParser {
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 */
-	private static void arrayToJSONString (final List<Object> array,
+	private static void arrayToJsonString (final List<Object> array,
 		final String indent,
 		final StringBuilder sb) {
 		sb.append('[');
@@ -521,7 +521,7 @@ public class JsonUtil extends StringParser {
 			if (ind != null) {
 				sb.append(ind);
 			}
-			objToJSONString(o, ind, sb);
+			objToJsonString(o, ind, sb);
 		}
 		if (indent != null) {
 			sb.append(indent);
@@ -534,7 +534,7 @@ public class JsonUtil extends StringParser {
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 */
-	private static void mapToJSONString(final Map<String, Object> map,
+	private static void mapToJsonString(final Map<String, Object> map,
 		final String indent,
 		final StringBuilder sb) {
 		sb.append('{');
@@ -553,9 +553,9 @@ public class JsonUtil extends StringParser {
 			if (ind != null) {
 				sb.append(ind);
 			}
-			objToJSONString(e.getKey(), ind, sb);
+			objToJsonString(e.getKey(), ind, sb);
 			sb.append(':');
-			objToJSONString(e.getValue(), ind, sb);
+			objToJsonString(e.getValue(), ind, sb);
 		}
 		if (ind != null) {
 			sb.append(indent);
@@ -567,8 +567,8 @@ public class JsonUtil extends StringParser {
 	 * @param obj JSON object.
 	 * @return string with JSON source format.
 	 */
-	public final static String toJSONString(final Object obj) {
-		return toJSONString(obj, false);
+	public final static String toJsonString(final Object obj) {
+		return toJsonString(obj, false);
 	}
 
 	/** Create JSON string from object. Indentation depends on argument.
@@ -577,13 +577,13 @@ public class JsonUtil extends StringParser {
 	 * @return string with JSON source format.
 	 */
 	@SuppressWarnings("unchecked")
-	public final static String toJSONString(final Object obj, boolean indent) {
+	public final static String toJsonString(final Object obj, boolean indent) {
 		StringBuilder sb = new StringBuilder();
 		String ind = indent ? "\n" : null;
 		if (obj instanceof List) {
-			arrayToJSONString((List) obj, ind, sb);
+			arrayToJsonString((List) obj, ind, sb);
 		} else if (obj instanceof Map) {
-			mapToJSONString((Map) obj, ind, sb);
+			mapToJsonString((Map) obj, ind, sb);
 		} else {
 			//Not JSON object &{0}{: }
 			throw new SRuntimeException(JSON.JSON011, obj);
@@ -730,6 +730,120 @@ public class JsonUtil extends StringParser {
 		throw new SRuntimeException(JSON.JSON012,
 			j1 == null ? "null" : j1.getClass().getName(),
 			j2 == null ? "null" : j2.getClass().getName());
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Convert XML element to JSON object.
+	 * @param e XML element.
+	 * @return JSON object.
+	 */
+	public static final Object xmlToJson(final Element e) {
+		return new XmlToJson().toJson(e);
+	}
+
+	/** Convert XML document to JSON object.
+	 * @param source path or string with source of XML document.
+	 * @return object with JSON data.
+	 */
+	public static final Object xmlToJson(final String source) {
+		return xmlToJson(KXmlUtils.parseXml(source).getDocumentElement());
+	}
+
+	/** Convert XML document to JSON object.
+	 * @param file file with XML document.
+	 * @return object with JSON data.
+	 */
+	public static final Object xmlToJson(final File file) {
+		return xmlToJson(KXmlUtils.parseXml(file).getDocumentElement());
+	}
+
+	/** Convert XML document to JSON object.
+	 * @param url URL containing XML document.
+	 * @return object with JSON data.
+	 */
+	public static final Object xmlToJson(final URL url) {
+		return xmlToJson(KXmlUtils.parseXml(url).getDocumentElement());
+	}
+
+	/** Convert XML document to JSON object.
+	 * @param in InputStream with XML document.
+	 * @return object with JSON data.
+	 */
+	public static final Object xmlToJson(final InputStream in) {
+		return xmlToJson(KXmlUtils.parseXml(in).getDocumentElement());
+	}
+
+	/** Create XML from JSON object according to W3C recommendation.
+	 * @param jobject object with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlW3C(final Object jobject) {
+		return new JsonToXml().toXmlW3C(jobject);
+	}
+
+	/** Create XML from JSON object according to W3C recommendation.
+	 * @param json path or string with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlW3C(final String json) {
+		return new JsonToXml().toXmlW3C(parse(json));
+	}
+
+	/** Create XML from JSON object according to W3C recommendation.
+	 * @param file file with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlW3C(final File file) {
+		return new JsonToXml().toXmlW3C(parse(file));
+	}
+
+	/** Create XML from JSON object according to W3C recommendation.
+	 * @param url URL with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlW3C(final URL url) {
+		return new JsonToXml().toXmlW3C(parse(url));
+	}
+
+	/** Create XML from JSON object according (XDefinition form).
+	 * @param jobject object with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXml(final Object jobject) {
+		return new JsonToXml().toXmlXD(jobject);
+	}
+
+	/** Create XML from JSON object according (XDefinition form).
+	 * @param json path or string with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXml(final String json) {
+		return new JsonToXml().toXmlXD(parse(json));
+	}
+
+	/** Create XML from JSON object according (XDefinition form).
+	 * @param file file JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXml(final File file) {
+		return new JsonToXml().toXmlXD(parse(file));
+	}
+
+	/** Create XML from JSON object according (XDefinition form).
+	 * @param url URL with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXml(final URL url) {
+		return new JsonToXml().toXmlXD(parse(url));
+	}
+
+	/** Create XML from JSON object according (XDefinition form).
+	 * @param in InputStream with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXml(final InputStream in) {
+		return new JsonToXml().toXmlXD(parse(in));
 	}
 
 }

@@ -5,7 +5,6 @@ import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
-import org.xdef.sys.SUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class XmlToJson extends JsonToXml {
 	private boolean _isW3C;
 
 	/** Prepare instance of JX. */
-	private XmlToJson() {super();}
+	XmlToJson() {super();}
 
 	/** Create JSON name from XML name.
 	 * @param name XML name.
@@ -450,15 +449,14 @@ public class XmlToJson extends JsonToXml {
 	 * @param e XML element.
 	 * @return object with JSON data.
 	 */
-	public static final Object toJson(final Element e) {
-		XmlToJson jx = new XmlToJson();
+	final Object toJson(final Element e) {
 		if (XDConstants.JSON_NS_URI_W3C.equals(e.getNamespaceURI())) {
-			jx._jsNamespace = XDConstants.JSON_NS_URI_W3C;
-			jx._isW3C = true;
+			_jsNamespace = XDConstants.JSON_NS_URI_W3C;
+			_isW3C = true;
 		} else {
-			jx._jsNamespace = XDConstants.JSON_NS_URI;
-			jx._isW3C = false;
+			_jsNamespace = XDConstants.JSON_NS_URI;
+			_isW3C = false;
 		}
-		return jx.getJsonObject(e);
+		return getJsonObject(e);
 	}
 }

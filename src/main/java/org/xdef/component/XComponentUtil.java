@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
-import org.xdef.json.XmlToJson;
+import org.xdef.json.JsonUtil;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
@@ -123,7 +123,7 @@ public class XComponentUtil {
 	 * @return JSON object created from XComponent created from XComponent.
 	 */
 	public static final Object toJson(final XComponent xc, final XMElement xm) {
-		return XmlToJson.toJson(toXml(xc, xm));
+		return JsonUtil.xmlToJson(toXml(xc, xm));
 	}
 
 	/** Create the JSON object from XComponent according to model.
@@ -135,7 +135,7 @@ public class XComponentUtil {
 	public static final Object toJson(final XComponent xc,
 		final XDDocument xd,
 		final String modelName) {
-		return XmlToJson.toJson(toXml(xc, xd, modelName));
+		return JsonUtil.xmlToJson(toXml(xc, xd, modelName));
 	}
 
 	/** Create JSON object from XComponent according to given model from XDPool.
@@ -147,7 +147,7 @@ public class XComponentUtil {
 	public static final Object toJson(final XComponent xc,
 		final XDPool xp,
 		final String xdPosition) {
-		return XmlToJson.toJson(toXml(xc, xp, xdPosition));
+		return JsonUtil.xmlToJson(toXml(xc, xp, xdPosition));
 	}
 
 	/** Create XComponent from XComponent according to given model in XDPool.

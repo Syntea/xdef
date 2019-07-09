@@ -60,10 +60,11 @@ public class Y06B implements test.xdef.TestXComponents_Y06XCDomain,org.xdef.comp
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.XmlToJson.toJson(toXml());}
+  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Y06B() {}
   public Y06B(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
