@@ -220,7 +220,7 @@ public class TestJsonXdef extends XDTester {
 					+ "Incorrect JSON data Test"+id+".json";
 				continue;
 			}
-			// create XDDocument with W3C form X-definition
+			// create XDDocument with W3C from X-definition
 			try {
 				reporter.clear(); // clear reporter
 				// parse data with X-definition
@@ -281,7 +281,7 @@ public class TestJsonXdef extends XDTester {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error X-component " + name + "\n" + sw;
 			}
-			// Test X-component in XDEF mode.
+			// Test X-component.
 			try {
 				xd = xp.createXDDocument("Test" + id + ver);
 				xc = xd.parseXComponent(f, Class.forName(
@@ -296,6 +296,15 @@ public class TestJsonXdef extends XDTester {
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
+				Object o = xc.toJon();
+				if (!JsonUtil.jsonEqual(json, o)) {
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "Error X-component toJsjon " + id + ver + "\n"
+						+ JsonUtil.toJSONString(json) + "\n"
+						+ JsonUtil.toJSONString(o) + "\n";
+				}
+
 			} catch (Exception ex) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
