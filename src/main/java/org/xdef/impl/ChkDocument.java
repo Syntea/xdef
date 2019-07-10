@@ -39,6 +39,7 @@ import org.w3c.dom.Node;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
+import org.xdef.json.JsonUtil;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -763,6 +764,118 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public Element xparse(final InputStream xmlData,
 		final ReportWriter reporter) throws SRuntimeException {
 		return xparse(xmlData, null, reporter);
+	}
+
+	/** Check if exists JSON root model and return versio (W3C or XDEF).
+	 * @param modelName name of root model.
+	 * @return true if version of model is XDEF version or false if it is W3C.
+	 * @throws SRuntimeExcception if model is not found.
+	 */
+	private boolean getRootXElement(final String modelName) {
+		int languageId = isCreateMode() ?_destLanguageID:_sourceLanguageID;
+		int ndx = modelName.indexOf(':');
+		String name;
+		if (ndx > 0 && (name = modelName.substring(ndx+1)).startsWith("json")) {
+			for (XMElement xe: _xdef.getModels()) {
+				if (modelName.equals(xe.getName())) {
+					String nsURI = xe.getNSUri();
+					_xElement = _xdef.selectRoot(name, nsURI, languageId);
+					if (XDConstants.JSON_NS_URI.equals(nsURI)) {
+						return true;
+					} else if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
+						return false;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		//JSON model &{0}{"}{" }is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, modelName);
+	}
+
+	@Override
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData string with pathname of JSON file or JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final String jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData file with JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final File jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData URL with JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final URL jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param jsonData input stream with JSON data.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final InputStream jsonData,
+		final String sourceId,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData, sourceId), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param jsonData JSON data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final Object jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		Element e = getRootXElement(model)
+			? JsonUtil.jsonToXml(jsonData) : JsonUtil.jsonToXmlW3C(jsonData);
+		xparse(e, reporter);
+		return JsonUtil.xmlToJson(_element);
 	}
 
 	@Override

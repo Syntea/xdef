@@ -257,7 +257,25 @@ public class TestJsonXdef extends XDTester {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error " + name + "\n" + sw;
 			}
+			// parse with jparse
 			try {
+				String model = ("a".equals(ver) ? "jw" : "js") + ":json";
+				Object o = xd.jparse(json, model, null);
+				if (!JsonUtil.jsonEqual(json, o)) {
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "Error jparse Test" + id + ver + "\n"
+						+ JsonUtil.toJsonString(json) + "\n"
+						+ JsonUtil.toJsonString(o) + "\n";
+				}
+			} catch (Exception ex) {
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Incorrect jparse Test"+id+".json";
+				continue;
+			}
+			try {
+				// parse X-component
 				xc = xd.parseXComponent(f, Class.forName(
 					"test.common.json.component.Test"+id+ver), null);
 				reporter.clear();
