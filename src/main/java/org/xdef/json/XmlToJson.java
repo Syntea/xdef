@@ -376,13 +376,13 @@ public class XmlToJson extends JsonToXml {
 			}
 		}
 		Map<String, Object> attrs = genAttrs(e);
-		if (attrs != null) {
-			map.put(key, attrs);
-		}
 		if (numOfItems == 0) {
 			map.put(key, attrs);
 			return map;
 		} else {
+			if (attrs != null) {
+				map.put(key, attrs);
+			}
 			List<Object> list = new ArrayList<Object>();
 			int i = 0;
 			int len = nl.getLength();
