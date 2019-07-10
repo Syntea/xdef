@@ -208,10 +208,10 @@ public class TestJsonXdef extends XDTester {
 		for (File f : data) {
 			Object json;
 			String name = f.getName();
+			String basename = name.substring(0, name.indexOf(ver + ".xml"));
 			// read JSON data
 			try {
-				int ndx = name.indexOf(ver + ".xml");
-				json = JsonUtil.parse(_dataDir + name.substring(0,ndx)+".json");
+				json = JsonUtil.parse(_dataDir + basename + ".json");
 			} catch (Exception ex) {
 				_errors++;
 				result += (result.isEmpty() ? "" : "\n")
@@ -226,7 +226,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) { // check errors
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
-						+ "ERRORS in " + name
+						+ "ERRORS in " + name 
 						+ " (xdef: Test" + id + ver +".xdef" +"):\n"
 						+ reporter.printToString();
 				} else {
@@ -237,13 +237,14 @@ public class TestJsonXdef extends XDTester {
 						result += (result.isEmpty() ? "" : "\n")
 							+ "ERROR: result differs " + name;
 					} else {
-						Object o2 = JsonUtil.xmlToJson(KXmlUtils.nodeToString(e, true));
-						if (!JsonUtil.jsonEqual(json, o2)) {
+						Object o = JsonUtil.xmlToJson(
+							KXmlUtils.nodeToString(e, true));
+						if (!JsonUtil.jsonEqual(json, o)) {
 							_errors++;
 							result += (result.isEmpty() ? "" : "\n")
-								+ "ERROR conversion XML to JSON: " + name + "\n"
-								+ JsonUtil.toJsonString(json, true)
-								+ '\n' + JsonUtil.toJsonString(o2, true)
+								+ "ERROR conversion XML to JSON: " + name
+								+ "\n" + JsonUtil.toJsonString(json, true)
+								+ '\n' + JsonUtil.toJsonString(o, true)
 								+ '\n' + KXmlUtils.nodeToString(e, true);
 						}
 					}
@@ -274,8 +275,8 @@ public class TestJsonXdef extends XDTester {
 					+ "Incorrect jparse Test"+id+".json";
 				continue;
 			}
+			// parse with X-component
 			try {
-				// parse X-component
 				xc = xd.parseXComponent(f, Class.forName(
 					"test.common.json.component.Test"+id+ver), null);
 				reporter.clear();
