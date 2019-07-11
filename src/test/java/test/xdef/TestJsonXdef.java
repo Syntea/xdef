@@ -203,9 +203,9 @@ public class TestJsonXdef extends XDTester {
 		String result = "";
 		ArrayReporter reporter = new ArrayReporter();
 		// get all json files for this test
-		File[] data = SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml");
 		xd = xp.createXDDocument("Test" + id + ver);
-		for (File f : data) {
+		String rootName = ("a".equals(ver) ? "jw" : "js") + ":json";
+		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml")) {
 			Object json;
 			String name = f.getName();
 			String basename = name.substring(0, name.indexOf(ver + ".xml"));
@@ -226,7 +226,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) { // check errors
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
-						+ "ERRORS in " + name 
+						+ "ERRORS in " + name
 						+ " (xdef: Test" + id + ver +".xdef" +"):\n"
 						+ reporter.printToString();
 				} else {
@@ -260,8 +260,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parse with jparse
 			try {
-				String model = ("a".equals(ver) ? "jw" : "js") + ":json";
-				Object o = xd.jparse(json, model, null);
+				Object o = xd.jparse(json, rootName, null);
 				if (!JsonUtil.jsonEqual(json, o)) {
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
@@ -321,7 +320,6 @@ public class TestJsonXdef extends XDTester {
 						+ JsonUtil.toJsonString(json) + "\n"
 						+ JsonUtil.toJsonString(o) + "\n";
 				}
-
 			} catch (Exception ex) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
@@ -330,6 +328,26 @@ public class TestJsonXdef extends XDTester {
 				_errors++;
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error X-component " + id + ver + "\n" + sw;
+			}
+		}
+		// Test error reporting
+		for (File f: SUtils.getFileGroup(_dataDir+"Test"+id+"*.jerr")) {
+			try {
+				reporter.clear();
+				xd.jparse(f, rootName, reporter);
+				if (!reporter.errorWarnings()) {
+					_errors++;
+					result += (result.isEmpty() ? "" : "\n")
+						+ "Error not reported: "+f.getName()+" ("+ver+")";
+				}
+			} catch (Exception ex) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				ex.printStackTrace(pw);
+				pw.close();
+				_errors++;
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Error jerr: " + f.getName() + " (" + ver +")\n" + sw;
 			}
 		}
 		return result;
@@ -360,11 +378,8 @@ public class TestJsonXdef extends XDTester {
 		// run tests
 		for (File f: _jfiles) {
 			String s = testJdef(xp, getId(f));
-			if (!s.isEmpty()) {
-				fail(s);
-			}
+			assertTrue(s.isEmpty(), s);
 		}
-
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (_errors == 0) {
