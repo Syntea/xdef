@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Conversion of JSON to XML and XML to JSON.
+/** Conversion of JSON to XML (X-definition form,or W3C form).
  * @author Vaclav Trojan
  */
 public class JsonToXml extends JsonUtil {
@@ -250,9 +250,10 @@ public class JsonToXml extends JsonUtil {
 					char ch = s.charAt(0);
 					if (ch == '-' || ch >= '0' && ch <= '9') {
 						StringParser p = new StringParser(s);
-						addQuot |= (p.isSignedFloat() || p.isSignedInteger())
-							&& p.eos();
-						if (!addQuot && !p.eos()) return s;
+						if ((p.isSignedFloat() || p.isSignedInteger())
+							&& p.eos()) {
+							return '"' + s + '"'; // value is number
+						}
 					}
 				}
 				if (addQuot) {
@@ -553,7 +554,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	final Element toXmlW3C(final Object json) {
+	public final Element toXmlW3C(final Object json) {
 		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		_jsPrefix = "";
 		_doc = KXmlUtils.newDocument();
