@@ -1,6 +1,44 @@
 # Version ${version}, release-date ${release.date}
 
 
+# Version 32.5.0, release-date 2019-07-11
+  - Prpared the experimenta verison for processing JSON data (it has no
+    influence to processing of XML data). 
+      The X-component has ne method toJson which returns a JCON object created
+      from the X-component instance.
+
+      It is now available new class org.xdef.json.JsonUtil which enables
+      to work with JSON objects (convestion JSON to XML, XML to JSON,
+      parse source JSON data, compare JSON objects).
+
+      In the X-definition is now possible to specify a JSON model written to
+      the element js:json as a text child. The namespace assigne to the prefix
+      "js" can be either
+        http://www.xdef.org/json/1.0 (see XDConstants.JSON_NS_URI)
+        used for X-definition version of JSON to XML coversion
+       or
+        http://www.w3.org/2005/xpath-functions (see XDConstants.JSON_NS_URI_W3C)
+        used for W3C version of conversion to XML 
+                 
+      In the class XDDocument are now implemented methods "jparse" (parssing
+      of an JSON object according to X-definition).
+      Example:
+
+      <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2"
+        xmlns:js="http://www.xdef.org/json/1.0"
+        xd:name="Test" xd:root="js:json">
+        <js:json>
+          {"Person":
+            {
+              "Name": "jstring(1, 50); onFalse outln('Incorrect name')",
+              "Salary": "int(1000, 1000000)",
+              "Vehicle": "optional enum('Skoda','Ford','WW','Other');"
+            }
+          }
+        </js:json>
+      </xd:def>
+
+
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
   and it has just a text child node, there are also generated getter/setter
