@@ -58,6 +58,11 @@ public final class DefText extends XDValueAbstract {
 	 */
 	public String stringValue() {return _value == null ? "" : _value.getData();}
 	@Override
+	public boolean booleanValue() {
+		String s = _value == null ? null : _value.getData();
+		return s != null && !s.isEmpty();
+	}
+	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
@@ -66,10 +71,7 @@ public final class DefText extends XDValueAbstract {
 	public int hashCode() {return _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof DefText) {
-			return equals((DefText) arg);
-		}
-		return false;
+		return (arg instanceof DefText) ? equals((DefText) arg) : false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.

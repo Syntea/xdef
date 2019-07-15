@@ -1478,7 +1478,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return chkEl;
 	}
 
-	/** Prepare cariables and execute the init section of X-script. */
+	/** Prepare variables and execute the init section of X-script. */
 	final void initElem() {
 		// prepare variables declared in the script (do not make it twice)
 		if (_xElement._varinit >= 0 && _variables == null) {

@@ -89,11 +89,17 @@ public final class DefString extends XDValueAbstract {
 	 */
 	public String toString() {return _value == null ? "" : _value;}
 	@Override
+	public char charValue() {
+		return isNull() || _value.length() != 1 ? 0 : _value.charAt(0);
+	}
+	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
 	public String stringValue() {return _value;}
+	@Override
+	public boolean booleanValue() {return _value != null && !_value.isEmpty();}
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.

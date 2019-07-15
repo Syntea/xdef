@@ -671,8 +671,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		while (true) {
 			int code;
 			try {
-			if (_debug
-				&& (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP)) {
+			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
 				step = _debugger.debug(chkNode, _code, pc, sp, _stack,
 					_localVariables, _debugInfo, _callList, step);
 				if (step == XDDebug.KILL) {

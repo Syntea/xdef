@@ -108,10 +108,8 @@ public final class DefDecimal extends XDValueAbstract {
 		if (isNull()) {
 			return arg == null || arg.isNull();
 		}
-		if (arg == null || arg.isNull()) {
-			return false;
-		}
-		return _value.equals(arg.decimalValue());
+		return (arg == null || arg.isNull()) 
+			? false : _value.equals(arg.decimalValue());
 	}
 
 	@Override
@@ -127,22 +125,25 @@ public final class DefDecimal extends XDValueAbstract {
 	}
 
 	@Override
-	public byte byteValue() {return _value.byteValue();}
+	public byte byteValue() {return _value==null ? 0 : _value.byteValue();}
 	@Override
-	public short shortValue() {return _value.shortValue();}
+	public short shortValue() {return  _value==null ? 0 : _value.shortValue();}
 	@Override
-	public int intValue() { return _value.intValue();}
+	public int intValue() { return  _value==null ? 0 : _value.intValue();}
 	@Override
-	public long longValue() {return _value.longValue();}
+	public long longValue() {return  _value==null ? 0 : _value.longValue();}
 	@Override
-	public float floatValue() {return _value.floatValue();}
+	public float floatValue() {return  _value==null ? 0 : _value.floatValue();}
 	@Override
-	public double doubleValue() {return _value.doubleValue();}
+	public double doubleValue() {return  _value==null? 0 :_value.doubleValue();}
 	@Override
 	public BigDecimal decimalValue() {return _value;}
 	@Override
-	public BigInteger integerValue() {return _value.toBigInteger();}
+	public BigInteger integerValue() {
+		return  _value==null ? null : _value.toBigInteger();
+	}
 	@Override
-	public boolean booleanValue() {return false;}
-
+	public boolean booleanValue() {
+		return isNull() ? false : !_value.equals(BigDecimal.ZERO);
+	}
 }

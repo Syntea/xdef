@@ -62,18 +62,33 @@ public final class DefBoolean extends XDValueAbstract {
 	 * @return the DefBoolean object as boolean.
 	 */
 	public boolean booleanValue() {return _value;}
-
+	@Override
+	public byte byteValue() {return _value ? (byte) 1 : (byte) 0;}
+	@Override
+	public short shortValue() {return _value ? (short) 1 : (short) 0;}
+	@Override
+	public int intValue() {return _value ? 1 : 0;}
+	@Override
+	public long longValue() {return _value ? 1 : 0;}
+	@Override
+	public float floatValue() {return _value ? 1 : 0;}
+	@Override
+	public double doubleValue() {return _value ? 1 : 0;}
+	@Override
+	public BigDecimal decimalValue() {
+		return isNull() ? null : _value ? BigDecimal.ONE : BigDecimal.ZERO;
+	}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value ? "true" : "false";}
+	public String toString() {return isNull() ? "null":_value ? "true":"false";}
 
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return String.valueOf(_value);}
+	public String stringValue() {return isNull()? null: String.valueOf(_value);}
 
 	@Override
 	/** Clone the item.
@@ -86,10 +101,7 @@ public final class DefBoolean extends XDValueAbstract {
 
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof XDValue) {
-			return equals((XDValue) arg);
-		}
-		return false;
+		return arg instanceof XDValue ?  equals((XDValue) arg) : false;
 	}
 
 	@Override
@@ -99,10 +111,8 @@ public final class DefBoolean extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (arg.getItemId() != XDValueID.XD_BOOLEAN) {
-			return false;
-		}
-		return _value == arg.booleanValue();
+		return (arg.getItemId() != XDValueID.XD_BOOLEAN)
+			? false : _value == arg.booleanValue();
 	}
 
 	@Override
@@ -119,22 +129,10 @@ public final class DefBoolean extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-
-	@Override
-	public int intValue() {return _value ? 1 : 0;}
-	@Override
-	public long longValue() {return _value ? 1 : 0;}
-	@Override
-	public float floatValue() {return _value ? 1 : 0;}
-	@Override
-	public double doubleValue() {return _value ? 1 : 0;}
-	@Override
-	public BigDecimal decimalValue() {return new BigDecimal(_value ? 1 : 0);}
 	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
 	 * <tt>false</tt>.
 	 */
 	public boolean isNull() {return _isNull;}
-
 }

@@ -5,11 +5,11 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SUnsupportedOperationException;
-//import org.xdef.impl.compile.CodeTable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.impl.code.CodeTable;
 
 /** Abstract class for implementing of XDValues.
  * @author Vaclav Trojan
@@ -30,19 +30,19 @@ public abstract class XDValueAbstract implements XDValue {
 	@Override
 	public String stringValue() {return null;}
 	@Override
-	public char charValue() {return 0;}
+	public char charValue() {return (char) intValue();}
 	@Override
-	public byte byteValue() {return 0;}
+	public byte byteValue() {return (byte) longValue();}
 	@Override
-	public short shortValue() {return 0;}
+	public short shortValue() {return  (short) longValue();}
 	@Override
-	public int intValue() {return 0;}
+	public int intValue() {return  (int) longValue();}
 	@Override
 	public long longValue() {return 0;}
 	@Override
-	public float floatValue() {return 0.0f;}
+	public float floatValue() {return (float) doubleValue();}
 	@Override
-	public double doubleValue() {return 0.0;}
+	public double doubleValue() {return 0.0d;}
 	@Override
 	public BigDecimal decimalValue() {return null;}
 	@Override
@@ -79,9 +79,7 @@ public abstract class XDValueAbstract implements XDValue {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public short getCode() {
-		return org.xdef.impl.code.CodeTable.LD_CONST;
-	}
+	public short getCode() {return CodeTable.LD_CONST;}
 	@Override
 	public int getParam() {return 0;}
 	@Override

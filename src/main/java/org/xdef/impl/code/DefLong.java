@@ -71,10 +71,7 @@ public final class DefLong extends XDValueAbstract {
 	public int hashCode() {return (int) _value;}
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof XDValue) {
-			return _value == ((XDValue) arg).longValue();
-		}
-		return false;
+		return arg instanceof XDValue ? equals((XDValue) arg) :  false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
@@ -92,8 +89,7 @@ public final class DefLong extends XDValueAbstract {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) {
-		return _value == arg.longValue() ?
-			0 : _value < arg.longValue() ? -1 : 1;
+		return _value==arg.longValue() ? 0 : _value < arg.longValue() ? -1 : 1;
 	}
 	@Override
 	public byte byteValue() {return (byte) _value;}
@@ -115,10 +111,11 @@ public final class DefLong extends XDValueAbstract {
 		return isNull() ? null : BigInteger.valueOf(_value);
 	}
 	@Override
+	public boolean booleanValue() {return isNull() ? false : _value != 0;}
+	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
 	 * <tt>false</tt>.
 	 */
 	public boolean isNull() {return _isNull;}
-
 }

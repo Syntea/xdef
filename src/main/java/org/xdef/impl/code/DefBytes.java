@@ -210,18 +210,19 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	public byte[] getBytes() {return _value;}
 	@Override
 	/** Get value as String.
-	 * @return The string from value.
+	 * @return string with hexadecimal created from value.
 	 */
-	public String toString() {
-		return _value == null ? "null" :_value.length <= 32
-			? getHex() : ("bytes[" + _value.length + "]");
-	}
+	public String toString() {return _value == null ? "null" : getHex();}
 	@Override
 	/** Get string in Base64 format of value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return getBase64();}
+	public String stringValue() {return toString();}
+	@Override
+	public char charValue() {
+		return isNull() || _value.length != 1 ? 0 : (char) _value[0];
+	}
 	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns

@@ -782,20 +782,29 @@ public final class DefContainer extends XDValueAbstract
 		if (!isEmpty()) {
 			if (_map == null && _value != null) {
 				XDValue x;
-				if (_value.length == 1 && (x = _value[0]) != null) {
-					switch (x.getItemId()) {
+				if (_value.length==1 && (x = _value[0])!=null) {
+					if (x.isNull()) {
+						return false;
+					}
+					switch(x.getItemId()) {
 						case XD_BOOLEAN:
-							return _value[0].booleanValue();
-						case XD_INT:
-							return _value[0].longValue() != 0;
+							return x.booleanValue();
 						case XD_FLOAT:
-							return _value[0].doubleValue() != 0;
+						case XD_INT:
 						case XD_DECIMAL:
-							return _value[0].decimalValue().compareTo(
-								BigDecimal.ZERO) != 0;
+							return x.longValue() != 0;
+						case XD_STRING:
+							return !x.stringValue().isEmpty();
+						default:
+							return true;
 					}
 				}
-				return _value.length != 0;
+				for (XDValue v: _value) {
+					if (v != null && !v.isNull()) {
+						return true;
+					}
+				}
+				return false;
 			}
 		}
 		return false;
