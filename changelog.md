@@ -1,8 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-
 # Version 32.5.0, release-date 2019-07-11
-  - Prpared the experimenta verison for processing JSON data (it has no
+  - Prpared the EXPERIMENTAL verison for processing JSON data (it has no
     influence to processing of XML data). 
       The X-component has ne method toJson which returns a JCON object created
       from the X-component instance.
@@ -37,7 +36,6 @@
           }
         </js:json>
       </xd:def>
-
 
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
