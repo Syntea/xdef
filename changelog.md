@@ -44,7 +44,7 @@
       XDDocument xd = xp.createXDDocument("test");
       // parse json source and return parsed JSON object
       Object result = xd.jparse(json, "js:json", null);
-      // result will be instance of java.util.Map
+      // result will be the instance of java.util.Map
 
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
