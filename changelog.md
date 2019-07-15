@@ -22,7 +22,7 @@
       In the class XDDocument are now implemented methods "jparse" (parssing
       of an JSON object according to X-definition).
       Example:
-
+      X-definition:
       <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2"
         xmlns:js="http://www.xdef.org/json/1.0"
         xd:name="Test" xd:root="js:json">
@@ -36,6 +36,18 @@
           }
         </js:json>
       </xd:def>
+      JSON data:
+      {"Person":
+        { "Name": "John Smith", "Salary": 3500, "Vehicle": "Ford" }
+      }
+      
+      ''''
+      File json; // file with JSON data
+      ...
+      XDPool xp = XDFactory.compileXD(... // compile X-definitions to XDPool;
+      XDDocument xd = xd = xp.createXDDocument("test");
+      // parse json source and return parsed JSON object
+      Object result = xd.jparse(json, "js:json", null); 
 
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
