@@ -24,6 +24,7 @@ import org.xdef.impl.XSelector;
 import org.xdef.impl.XVariable;
 import org.xdef.model.XMNode;
 import java.util.Map;
+import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeS1;
 
 /** Compiler of XD script of headers, elements and attributes.
@@ -571,7 +572,17 @@ final class CompileXScript extends CompileStatement {
 			xel._varinit = start + 1;
 			_g.genStop();
 			xel._varsize = _g._varBlock.size();
-			xel._vartable = _g._varBlock;
+			if (xel._varsize > 0 && _g._varBlock != null) {
+				xel._vartable = new XVariableTable(xel._varsize);
+				for (int i = 0; i < xel._varsize; i++) {
+					XVariable x = _g._varBlock.getXVariable(i);
+					if (x != null) {
+						xel._vartable.addVariable(_g._varBlock.getXVariable(i));
+					}
+				}
+			} else {
+				xel._vartable = null;
+			}
 		}
 	}
 

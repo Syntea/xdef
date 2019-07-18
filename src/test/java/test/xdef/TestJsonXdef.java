@@ -2,7 +2,6 @@ package test.xdef;
 
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
@@ -114,8 +113,11 @@ public class TestJsonXdef extends XDTester {
 			// compile all X-definitions to XDPool
 			XDPool xp;
 			try {
-				xp = XDFactory.compileXD(null,
-					SUtils.getFileGroup(_tempDir+"Test*.xdef"), componentFile);
+				File[] x = SUtils.getFileGroup(_tempDir+"Test*.xdef");
+				File[] files = new File[x.length + 1];
+				System.arraycopy(x, 0, files, 0, x.length);
+				files[x.length] = componentFile;
+				xp = compile(files);
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
