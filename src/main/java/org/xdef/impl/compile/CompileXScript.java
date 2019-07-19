@@ -574,6 +574,7 @@ final class CompileXScript extends CompileStatement {
 			xel._varsize = _g._varBlock.size();
 			if (xel._varsize > 0 && _g._varBlock != null) {
 				xel._vartable = new XVariableTable(xel._varsize);
+				// copy CCompileVariables to the table as XVariables.
 				for (int i = 0; i < xel._varsize; i++) {
 					XVariable x = _g._varBlock.getXVariable(i);
 					if (x != null) {
