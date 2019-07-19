@@ -140,7 +140,7 @@ public interface XDConstants {
 
 	public static final String JSON_NS_PREFIX = "js";
 	/** URI of JSON/XML X-definition conversion. */
-	public static final String JSON_NS_URI = "http://www.xdef.org/json/1.0";
+	public static final String JSON_NS_URI = "http://www.xdef.org/json/3.2";
 	/** URI of JSON/XML W3C conversion (https://www.w3.org/TR/xslt-30/#json). */
 	public static final String JSON_NS_URI_W3C =
 		"http://www.w3.org/2005/xpath-functions";

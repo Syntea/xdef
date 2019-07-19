@@ -1,5 +1,5 @@
 <a>
-  <js:array xmlns:js="http://www.xdef.org/json/1.0">
+  <js:array xmlns:js="http://www.xdef.org/json/3.2">
     <js:item>1</js:item>
     <js:item>null</js:item>
     <js:item>-1.23E+4</js:item>
