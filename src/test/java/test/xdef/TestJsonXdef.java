@@ -373,6 +373,12 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+		// this code will be removed after Gelcollection will process JSON
+		boolean chkSyntax = getChkSyntax();
+		boolean genObjFile = getGenObjFile();
+		setChkSyntax(false);
+		setGenObjFile(false);
+		
 		// Generate all data (X-definitons, X-components, XML ddocuments).
 		XDPool xp = genAll("Test*");
 //		XDPool xp = genAll("Test001");
@@ -391,6 +397,9 @@ public class TestJsonXdef extends XDTester {
 				fail(ex); // error when delete generated data.
 			}
 		}
+		// this code will be removed after Gelcollection will process JSON
+		setChkSyntax(chkSyntax);
+		setGenObjFile(genObjFile);
 	}
 
 	public static void main(String[] args) {
