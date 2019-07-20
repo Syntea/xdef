@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import org.xdef.impl.XConstants;
@@ -106,7 +107,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
 		_nodeList = new ArrayList<XNode>();
-
 		_codeGenerator = _precomp.getCodeGenerator();
 		_sources = _precomp.getSources();
 		_xdefPNodes = _precomp.getPXDefs();
@@ -115,7 +115,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listDecl = _precomp.getPDeclarations();
 		_listCollection = _precomp.getPCollections();
 		_listComponent = _precomp.getPComponents();
-
 		ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,
 			(byte) 10, XPreCompiler.DEFINED_PREFIXES, cloader);
@@ -170,9 +169,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * of definitions.
 	 * @param file The file with with X-definitions.
 	 */
-	public final void parseFile(final File file) {
-		_precomp.parseFile(file);
-	}
+	public final void parseFile(final File file) {_precomp.parseFile(file);}
 
 	/** Parse InputStream source X-definition and addAttr it to the set
 	 * of definitions.
@@ -1687,16 +1684,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(nodei._childNodes.get(0)._name, XDEF.XDEF314);
 					nodei._childNodes.clear();
 				}
+				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+					? (byte) 1 : (byte) 2;
 				if (nodei._value == null || nodei._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(nodei._name, XDEF.XDEF315);
 					continue;
 				}
-				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-					? (byte) 1 : (byte) 2;
 				XJson.genXdef(nodei, _precomp.getReportWriter());
-//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(
-//	pnode.toXML(),true));
 				compileXChild(def, null, nodei, def, 1, jsonMode);
 				continue;
 			}
@@ -1768,7 +1763,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		hs.clear(); //let's gc do the job
 		//resolve root references for all XDefinitions
 		for (XDefinition d : _xdefs.values()) {
-			Map<String, XNode> rootSelection = new TreeMap<String, XNode>();
+			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
 			for (Map.Entry<String,XNode> entry: d._rootSelection.entrySet()) {
 				try {
 					XNode xnode = entry.getValue();

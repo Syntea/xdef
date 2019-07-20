@@ -13,22 +13,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.proc.XDLexicon;
 
 /** Implementation of X-definition.
  * @author Vaclav Trojan
  */
 public final class XDefinition extends XCodeDescriptor implements XMDefinition {
-
 	/** table of xElements. */
-	private final ArrayList<XElement> _xElements;
+	private final ArrayList<XElement> _xElements = new ArrayList<XElement>();
 	/** Implementation properties. */
-	public final Properties _properties;
-	/** root selection. */
-	public Map<String, XNode> _rootSelection;
+	public final Properties _properties = new Properties();
 	/** root namespaces. */
-	public Map<String, String> _namespaces = new TreeMap<String, String>();
+	public final Map<String, String> _namespaces =
+		new LinkedHashMap<String,String>();
+	/** root selection. */
+	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
 	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
 	private byte _xdVersion;
 	/** Version of XML from which the X-definition was created. */
@@ -65,9 +65,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			  || XConstants.XDEF32NS_OLD.equals(nsURI)? XConstants.XD32 : 0;
 		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;
-		_xElements = new ArrayList<XElement>();
-		_rootSelection = new TreeMap<String, XNode>();
-		_properties = new Properties();
 		setXDPosition(name + '#');
 		///////////////////////////////
 		_onIllegalRoot = -1;
@@ -154,6 +151,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_xElements.toArray(result);
 		return result;
 	}
+
 	@Override
 	/** Get source position of this X-definition.
 	 * @return source ID of this X-definition..
@@ -175,6 +173,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
+
 	@Override
 	/** Get the Element model with given NameSpace and name.
 	 * @param nsURI NameSpace URI of element or <tt>null</tt>.

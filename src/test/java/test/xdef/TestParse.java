@@ -2507,8 +2507,7 @@ public final class TestParse extends XDTester {
 			xml = "<d/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
-			// variables declared in script of Element
-			xdef =
+			xdef = // variables declared in script of Element
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n"+
 "  <A xd:script=\"var int b=0,c=0; occurs *; finally out('B='+b+',C='+c);\">\n"+
 "    <B xd:script=\"occurs *; finally b++;\"/>\n"+
@@ -2519,10 +2518,9 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			xml = "<A><B/><B/><C/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrors(reporter);			
 			assertEq("B=2,C=1", strw.toString());
-			// test ignore
-			xdef =
+			xdef = // test ignore
 "<xd:def name='a' root='root' xmlns:xd='" + _xdNS + "'>\n"+
 "<root xd:text=\"ignore\">\n"+
 "  <xd:choice>\n"+
@@ -2790,8 +2788,20 @@ public final class TestParse extends XDTester {
 			xml = "<a><B/><C/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.toString().startsWith("E: Missing x"),reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { // test declared type in version 2.0, 3.1, 3.2 ...
+			xdef = // test var section of element script
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<A xd:script=\"var String s = 'x';\">\n" +
+"  <B xd:script=\"var int count = 0; occurs 1..*; finally s += count;\">\n"+
+"    string; onAbsence addText(s);\n" +
+"  </B>\n" +
+"</A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B/></A>";
+			assertEq("<A><B>x</B></A>", parse(xp, "", xml, reporter));
+			xml = "<A><B/><B/></A>";
+			assertEq("<A><B>x</B><B>x0</B></A>", parse(xp, "", xml, reporter));
+// test declared type in version 2.0, 3.1, 3.2 ...
 			xdef = // version 3.1 and higher
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
@@ -2831,8 +2841,7 @@ public final class TestParse extends XDTester {
 			} catch (Exception ex) {
 				if(!ex.toString().contains("W XDEF997")) fail(ex);
 			}
-		} catch (Exception ex) {fail(ex);}
-		try { //test ver 20 and 31 in collection
+//test ver 20 and 31 in collection
 			xp = compile(
 "<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>"+
 "<xd:def xd:name='X' xd:root='A' xmlns:xd='" + _xdNS + "'>"+
@@ -2851,8 +2860,7 @@ public final class TestParse extends XDTester {
 			xml = "<B b='y'/>";
 			assertEq(xml, parse(xp, "Y", xml, reporter));
 			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { // test DOCTYPE
+// test DOCTYPE
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "true");
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' xmlns='http://www.w3.org/1999/xhtml'>\n"+
@@ -2888,7 +2896,7 @@ public final class TestParse extends XDTester {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// external methods
+// methods and objects used in X-definitions as external.
 ////////////////////////////////////////////////////////////////////////////////
 	public static long getInt5() {return 5;}
 	public static void testOldx(XXNode xnode, XDValue[] params) {
