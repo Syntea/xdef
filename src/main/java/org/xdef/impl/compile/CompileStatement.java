@@ -34,7 +34,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -2464,7 +2464,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		initBlock(true, -1);
 		boolean wasDefault = false;
 		int defaultAddr = -1;
-		Map<Object, Integer> ht = new TreeMap<Object, Integer>();
+		Map<Object, Integer> ht = new LinkedHashMap<Object, Integer>();
 		boolean wasContinue = true;
 		boolean wasReturn = true;
 		while (_sym != END_SYM) {
@@ -2982,7 +2982,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (props == null) {
-			props = new TreeMap<String,String>();
+			props = new LinkedHashMap<String,String>();
 			props.put("%{language}", language);
 			languages.add(props);
 		}
@@ -4127,7 +4127,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			final CompileCode g) {
 			_variables = g._localVariables;
 			_variablesLastIndex = g._localVariablesLastIndex;
-			g._localVariables = new TreeMap<String, CompileVariable>(_variables);
+			g._localVariables =
+				new LinkedHashMap<String, CompileVariable>(_variables);
 			_jumps = jumps;
 			if (_jumps) {
 				_breakJumps = new ArrayList<CodeI1>();

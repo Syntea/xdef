@@ -176,33 +176,33 @@ public class Z8 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
-      XD_Name_CisloPopisne = x.getNodeName();
-      setCisloPopisne(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasDN")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@DatumCasDN")) {
       XD_Name_DatumCasDN = x.getNodeName();
       setDatumCasDN(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasDoDN")) {
       XD_Name_DatumCasDoDN = x.getNodeName();
       setDatumCasDoDN(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
-      XD_Name_HlavniPricina = x.getNodeName();
-      setHlavniPricina(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@KodOkresu")) {
       XD_Name_KodOkresu = x.getNodeName();
       setKodOkresu(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = x.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Pricina")) {
-      XD_Name_Pricina = x.getNodeName();
-      setPricina(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
+      XD_Name_Ulice = x.getNodeName();
+      setUlice(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+      XD_Name_CisloPopisne = x.getNodeName();
+      setCisloPopisne(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@SkodaTisKc")) {
       XD_Name_SkodaTisKc = x.getNodeName();
       setSkodaTisKc(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
+      XD_Name_HlavniPricina = x.getNodeName();
+      setHlavniPricina(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_Ulice = x.getNodeName();
-      setUlice(parseResult.getParsedValue().stringValue());
+      XD_Name_Pricina = x.getNodeName();
+      setPricina(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

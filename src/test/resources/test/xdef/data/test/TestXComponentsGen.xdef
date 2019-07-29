@@ -748,6 +748,15 @@
   </xd:component>
 </xd:def>
 
+<xd:def name='Y24' root='a | c'>
+   <a xd:script='ref c' />
+   <c><d xd:script='occurs 0..1'/></c>
+  <xd:component>
+    %class test.xdef.component.Y24a extends test.xdef.component.Y24 %link Y24#a;
+    %class test.xdef.component.Y24 %link Y24#c;
+  </xd:component>
+</xd:def>
+
 <!-- Used in TestLexicon.java -->
 <xd:def xmlns:xd = "http://www.xdef.org/xdef/3.2" root="X" name="Lexicon">
   <X x="string">

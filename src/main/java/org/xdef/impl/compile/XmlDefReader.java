@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -131,7 +131,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			h.setSysId(mr.getSysId());
 
 			h._isDTD = false;
-			h._entities = new TreeMap<String, String>(_entities);
+			h._entities = new LinkedHashMap<String, String>(_entities);
 		}
 
 		private void resetHandler(XmlDefReader h) {
@@ -158,7 +158,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		super();
 		_reporter = reporter;
 		prepareEnities();
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
@@ -176,7 +176,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 
 	/** Prepare entities with predefined items. */
 	private void prepareEnities() {
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		// Set predefined entities
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");

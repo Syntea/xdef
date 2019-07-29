@@ -109,7 +109,7 @@ public interface XDEF {
 	public static final long XDEF234 = 31159025715L;
 	/** Ambiguous X-definition: minimum occurrence must be zero (or optional)&amp;{#SYS000} */
 	public static final long XDEF235 = 31159025716L;
-	/** Repeated specification of element '&amp;{0}'&amp;{#SYS000} */
+	/** Repeated name of element model '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF236 = 31159025717L;
 	/** In model with reference can't be variable declaration&amp;{#SYS000} */
 	public static final long XDEF237 = 31159025718L;

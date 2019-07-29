@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
@@ -129,7 +129,7 @@ public final class BNFGrammar {
 	/** Current processed rule. */
 	private BNFRuleObj _actRule;
 	/** Table of function aliases. */
-	Map<String, String> _aliases = new TreeMap<String, String>();
+	Map<String, String> _aliases = new LinkedHashMap<String, String>();
 	/** Array of rules.*/
 	private final List<BNFRuleObj> _rules;
 	/** Starting position of current rule. */

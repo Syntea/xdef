@@ -766,34 +766,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return xparse(xmlData, null, reporter);
 	}
 
-	/** Check if exists JSON root model and return versio (W3C or XDEF).
-	 * @param modelName name of root model.
-	 * @return true if version of model is XDEF version or false if it is W3C.
-	 * @throws SRuntimeExcception if model is not found.
-	 */
-	private boolean getRootXElement(final String modelName) {
-		int languageId = isCreateMode() ?_destLanguageID:_sourceLanguageID;
-		int ndx = modelName.indexOf(':');
-		String name;
-		if (ndx > 0 && (name = modelName.substring(ndx+1)).startsWith("json")) {
-			for (XMElement xe: _xdef.getModels()) {
-				if (modelName.equals(xe.getName())) {
-					String nsURI = xe.getNSUri();
-					_xElement = _xdef.selectRoot(name, nsURI, languageId);
-					if (XDConstants.JSON_NS_URI.equals(nsURI)) {
-						return true;
-					} else if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
-						return false;
-					} else {
-						break;
-					}
-				}
-			}
-		}
-		//JSON model &{0}{"}{" }is missing in X-definition
-		throw new SRuntimeException(XDEF.XDEF315, modelName);
-	}
-
 	@Override
 	/** Parse and process JSON source and return JSON object.
 	 * @param jsonData string with pathname of JSON file or JSON source data.
@@ -826,6 +798,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return jparse(JsonUtil.parse(jsonData), model, reporter);
 	}
 
+	@Override
 	/** Parse and process JSON source and return JSON object.
 	 * @param jsonData URL with JSON source data.
 	 * @param model qualified name of JSON root model.
@@ -866,14 +839,45 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
-	 * was reported.
+	 * @throws SRuntimeExcception if model is not found.
 	 */
 	public final Object jparse(final Object jsonData,
 		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		Element e = getRootXElement(model)
-			? JsonUtil.jsonToXml(jsonData) : JsonUtil.jsonToXmlW3C(jsonData);
+		int ndx = model.indexOf(':');
+		String name;
+		String nsURI = null;
+		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
+		if (ndx > 0 && (name = model.substring(ndx+1)).startsWith("json")) {
+			XNode xn = _xdef._rootSelection.get(model);
+			if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+				nsURI =_xdef._namespaces.get(model.substring(0,ndx));
+				if (XDConstants.JSON_NS_URI.equals(nsURI)
+					|| XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
+					_xElement = (XElement) xn;
+				} else {
+					nsURI = null;
+				}
+			}
+			if (nsURI == null) {
+				for (XMElement xe: _xdef.getModels()) {
+					if (model.equals(xe.getName())) {
+						nsURI = xe.getNSUri();
+						_xElement = _xdef.selectRoot(name, nsURI, -1);
+						break;
+					}
+				}
+			}
+		}
+		Element e;
+		if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
+			e = JsonUtil.jsonToXmlW3C(jsonData);
+		} else if (XDConstants.JSON_NS_URI.equals(nsURI)) {
+			e = JsonUtil.jsonToXml(jsonData);
+		} else {
+			//JSON model &{0}{"}{" }is missing in X-definition
+			throw new SRuntimeException(XDEF.XDEF315, model);
+		}
 		xparse(e, reporter);
 		return JsonUtil.xmlToJson(_element);
 	}

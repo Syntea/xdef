@@ -26,8 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.LinkedHashMap;
+import java.util.HashSet;
 import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 import org.xdef.impl.XData;
@@ -43,7 +43,7 @@ public final class GenXComponent {
 	/** Platform-dependent newline. */
 	private static final String LN = XDConstants.LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
-	private static final Set<String> RESERVED_NAMES = new TreeSet<String>();
+	private static final Set<String> RESERVED_NAMES = new HashSet<String>();
 	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
 	private byte byteArrayEncoding;
 	/** Switch to generate JavaDoc. */
@@ -160,9 +160,6 @@ public final class GenXComponent {
 		RESERVED_NAMES.add("org.w3c.dom.Element");
 		RESERVED_NAMES.add("org.w3c.dom.Node");
 	}
-
-	/** Just prevent user to instantiate this class.*/
-	private GenXComponent() {_xp = null; _binds = null; _reporter = null;}
 
 	/** New instance of this class.*/
 	private GenXComponent(XDPool xp, ArrayReporter reporter) {
@@ -1296,8 +1293,8 @@ if (true) return;
 	/** Generation of Java code of class composed from XDElement.
 	 * @param xelem XDElement from which Java code is composed.
 	 * @param index index of model.
-	 * @param className class name.
-	 * @param extClass class extension.
+	 * @param clsName class name.
+	 * @param extCls class extension.
 	 * @param interfaceName name of interface.
 	 * @param classNameBase prefix for inner class names.
 	 * @param packageName name of package.
@@ -1308,8 +1305,8 @@ if (true) return;
 	 */
 	private	String genComponent(final XElement xelem,
 		final int index,
-		final String className,
-		final String extClass,
+		final String clsName,
+		final String extCls,
 		final String interfaceName,
 		final String classNameBase,
 		final String packageName,
@@ -1317,7 +1314,7 @@ if (true) return;
 		final Set<String> clsNames,
 		final boolean isRoot,
 		String xdpath) {
-		String extClazz = extClass;
+		String extClazz = extCls;
 		String interfcName = interfaceName;
 		_components = components;
 		XElement xe = xelem;
@@ -1331,16 +1328,16 @@ if (true) return;
 			}
 		}
 		final String model = xe.getName();
-		final Set<String> classNames = new TreeSet<String>(RESERVED_NAMES);
+		final Set<String> classNames = new HashSet<String>(RESERVED_NAMES);
 		if (clsNames != null) {
 			classNames.addAll(clsNames);
 		}
 		final String xdname = xe.getXMDefinition().getName();
 		int ndx = model.indexOf(':');
 		final String localName = ndx >= 0 ? model.substring(ndx+1) : model;
-		final String clazz = className == null ? localName : className;
+		final String clazz = clsName == null ? localName : clsName;
 		final StringBuilder vars = new StringBuilder();
-		final Set<String> varNames = new TreeSet<String>();
+		final Set<String> varNames = new HashSet<String>();
 		final StringBuilder getters = new StringBuilder();
 		final StringBuilder xpathes = new StringBuilder();
 		final StringBuilder setters = new StringBuilder();
@@ -1351,7 +1348,7 @@ if (true) return;
 			interfcName.length() == 0 ? null : new StringBuilder();
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
-		final Map<String, String> atttab = new TreeMap<String, String>();
+		final Map<String, String> atttab = new LinkedHashMap<String, String>();
 		// attributes
 		for (XMData xmdata : xe.getAttrs()) {
 			if (xmdata.isIgnore() || xmdata.isIllegal()) {
@@ -1375,7 +1372,7 @@ if (true) return;
 							//"extends". In command "%bind &{2}" is
 							//parameter "%with &{1}!
 							_reporter.error(XDEF.XDEF375,
-								className,
+								clsName,
 								name.substring(ndx+7),
 								name.substring(0, ndx));
 							name = name.substring(0, ndx);
@@ -1383,7 +1380,7 @@ if (true) return;
 							//Class &{0} is not root. It can't be extended
 							//to &{1} according to command %bind &{2}
 							_reporter.error(XDEF.XDEF376,
-								className,
+								clsName,
 								name.substring(ndx+7),
 								name.substring(0, ndx));
 						}
@@ -1424,8 +1421,8 @@ if (true) return;
 			creators.append(s);
 		}
 		final XNode[] nodes = (XNode[]) xe.getChildNodeModels();
-		final Map<String, String> xctab = new TreeMap<String, String>();
-		final Map<String, String> txttab = new TreeMap<String, String>();
+		final Map<String, String> xctab = new LinkedHashMap<String, String>();
+		final Map<String, String> txttab = new LinkedHashMap<String, String>();
 		final Stack<Integer> groupStack = new Stack<Integer>();
 		for (int i = 0, txtcount = 0, groupMax = 1; i < nodes.length; i++) {
 			final XNode node = nodes[i];
@@ -1463,7 +1460,7 @@ if (true) return;
 								//"extends". In command "%bind &{2}" is
 								//parameter "%with &{1}!
 								_reporter.error(XDEF.XDEF375,
-									className,
+									clsName,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 								name = name.substring(0, ndx);
@@ -1471,7 +1468,7 @@ if (true) return;
 								//Class &{0} is not root. It can't be extended
 								//to &{1} according to command %bind &{2}
 								_reporter.error(XDEF.XDEF376,
-									className,
+									clsName,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 							}
@@ -1536,7 +1533,7 @@ if (true) return;
 								//"extends". In command "%bind &{2}" is
 								//parameter "%with &{1}!
 								_reporter.error(XDEF.XDEF375,
-									className,
+									clsName,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 								name = name.substring(0, ndx);
@@ -1544,7 +1541,7 @@ if (true) return;
 								//Class &{0} is not root. It can't be extended
 								//to &{1} according to command %bind &{2}
 								_reporter.error(XDEF.XDEF376,
-									className,
+									clsName,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 							}
@@ -1620,7 +1617,7 @@ if (true) return;
 				if (xcClass != null) {
 					typeName = xcClass;
 					if ((ndx = xcClass.lastIndexOf('.')) > 0
-						&& (xcClass.substring(ndx + 1)).equals(className)) {
+						&& (xcClass.substring(ndx + 1)).equals(clsName)) {
 						typeName = xcClass.substring(ndx + 1);
 					}
 				} else {
@@ -1667,18 +1664,19 @@ if (true) return;
 				if (xcClass0 == null || xcClass0.startsWith("interface ")) {
 					xctab.put(node.getXDPosition(), xval + newClassName);
 					classNames.add(newClassName);
-					innerClasses.append(genComponent(xe1,
-						i,
-						newClassName,
-						"", // extclazz
+					innerClasses.append(genComponent(xe1, //Elememnt model
+						i, // index
+						newClassName, //class name
+ 						"", //ext class
 						(xcClass0 != null)? xcClass0.substring(10): "",
 						(packageName.length() > 0 ? packageName +"." : "")
-							+ classNameBase + '#' + newClassName,
-						"",
-						components,
-						classNames,
-						false,
-						xdpath + '/' + xe1.getName())).append('}').append(LN);
+							+ classNameBase + '#' + newClassName, //interface
+						"", //classNameBase
+						components, //Map with components
+						classNames, //Set with class names or null
+						false, //not root element.
+						xdpath + '/' + xe1.getName())).append('}')
+							.append(LN); //actual path
 				} else {//other root class
 					xctab.put(node.getXDPosition(), xval + xcClass);
 				}
@@ -2201,20 +2199,22 @@ if (true) return;
 	}
 
 	/** Generate XComponent Java source class from X-definition.
-	 * @param modelName name of model.
+	 * @param model name of model.
 	 * @param className name of generated class.
 	 * @param extClass class extension.
+	 * @param interfaceName name of interface
 	 * @param packageName the package of generated class (may be null).
+	 * @param components Map with components.
 	 * @param genJavadoc switch to generate JavaDoc.
 	 * @return String with generated Java source code.
 	 */
-	private String genXComponent(String model,
-		String className,
-		String extClass,
-		String interfaceName,
-		String packageName,
-		Map<String, String> components,
-		boolean genJavadoc) {
+	private String genXComponent(final String model,
+		final String className,
+		final String extClass,
+		final String interfaceName,
+		final String packageName,
+		final Map<String, String> components,
+		final boolean genJavadoc) {
 		_genJavadoc = genJavadoc;
 		final XNode xn = (XElement) _xp.findModel(model);
 		if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
@@ -2225,33 +2225,35 @@ if (true) return;
 		int ndx = model.indexOf('#');
 		String definitionName = model.substring(0, ndx);
 		String modelName = model.substring(ndx + 1);
-		String result = genComponent(xe,
-			-1,
-			className,
-			extClass,
-			interfaceName,
-			className,
-			packageName,
-			components,
-			null,
-			true,
-			xe.getXDPosition());
+		String result = genComponent(xe, //elememnt model
+			-1, //index
+			className, //class name
+			extClass, // ext class
+			interfaceName,  //interface
+			className,  //classNameBase
+			packageName, //classNameBase (package)
+			components, //Map with components
+			null, //Set with class names or null
+			true, //root element.
+			xe.getXDPosition());  //actual xPosition
 		String hdrTemplate =
 "// This file was generated by org.xdef.component.GenXComponent."+LN+
 "// XDPosition: \"" +
 (definitionName == null ? "" : definitionName) + '#' +	modelName + "\"."+LN+
 "// Any modifications to this file will be lost upon recompilation."+LN;
+		String packageName1 = packageName;
+		String interfaceName1 = interfaceName;
 		if (_interface != null) {
-			packageName = "";
-			if ((ndx = interfaceName.lastIndexOf('.')) > 0) {
-				packageName = interfaceName.substring(0, ndx);
-				interfaceName = interfaceName.substring(ndx + 1);
+			packageName1 = "";
+			if ((ndx = interfaceName1.lastIndexOf('.')) > 0) {
+				packageName1 = interfaceName1.substring(0, ndx);
+				interfaceName1 = interfaceName1.substring(ndx + 1);
 			}
 			String s = hdrTemplate;
-			if (packageName != null && packageName.length() > 0) {
-				s += "package " + packageName + ";"+LN;
+			if (packageName1 != null && packageName1.length() > 0) {
+				s += "package " + packageName1 + ";"+LN;
 			}
-			s += LN+"public interface "+interfaceName
+			s += LN+"public interface "+interfaceName1
 				+" extends org.xdef.component.XComponent {"+LN;
 			_interface.insert(0, s).append("}");
 		}
@@ -2262,8 +2264,8 @@ if (true) return;
 			SUtils.modifyString(hdrTemplate, "&{xdpos}",
 				(definitionName != null ? "" : definitionName)
 					+ '#' + modelName));
-		if (packageName != null && packageName.length() > 0) {
-			sb.append("package ").append(packageName).append(';').append(LN);
+		if (packageName1 != null && packageName1.length() > 0) {
+			sb.append("package ").append(packageName1).append(';').append(LN);
 		}
 		return sb.append(result).append("}").toString();
 	}
@@ -2417,16 +2419,44 @@ if (true) return;
 				dir += "/";
 			}
 		} else {
-			fdir = null;
 			//Argument &{0} must be a directory
 			throw new SRuntimeException(XDEF.XDEF368, dir);
 		}
 		final Map<String, String> components =
-			new TreeMap<String, String>(xdpool.getXComponents());
+			new LinkedHashMap<String, String>(xdpool.getXComponents());
 		for (int runCount = 0; runCount < 2; runCount++) {
+			// create HashSet with class names of X.components
+			HashSet<String> classNames = new HashSet<String>();
+			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
+				String s = e.getValue();
+				int ndx = s.indexOf(" ");
+				classNames.add(ndx > 0 ? s.substring(0, ndx): s);
+			}
+			// create array of all X-components so that first are the items
+			// which are extensions of an other X-component and then follows
+			// those not extendsd. This ensures that X-components which extends
+			// other X-component are compiled first.
+			ArrayList<Entry<String, String>> xcarray =
+				new ArrayList<Entry<String, String>>();
+			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
+				int ndx;
+				String s = e.getValue();
+				if ((ndx = s.indexOf(" extends ")) > 0) {
+					s = s.substring(ndx + 9);
+					ndx = s.indexOf(' ');
+					if (ndx > 0) {
+						s = s.substring(0, ndx);
+					}
+					if (classNames.contains(s)) {
+						xcarray.add(e);
+						continue;
+					}
+				}
+				xcarray.add(0, e);
+			}
 			 // in first run we generate only component classes
 			 // in second run we generate only interfaces
-			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
+			for (Entry<String, String> e: xcarray) {
 				final String model = e.getKey();
 				String className = e.getValue();
 				String extName = "", interfaceName = "";
@@ -2502,13 +2532,13 @@ if (true) return;
 					extClass=" implements "+className.substring(ndx+11).trim();
 					className = className.substring(0,ndx).trim();
 				}
-				final String result = genxc.genXComponent(model,
-					className,
-					extClass,
-					interfaceName,
-					packageName,
-					components,
-					genJavadoc);
+				final String result = genxc.genXComponent(model, //model name
+					className, //name of generated class
+					extClass, //class extension
+					interfaceName, //name of interface
+					packageName, //package of generated class
+					components, // Map with components
+					genJavadoc); //switch to generate JavaDoc
 				if (result != null) {
 					File f = new File(fparent, fName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);

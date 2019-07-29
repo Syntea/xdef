@@ -115,10 +115,10 @@ public class J implements org.xdef.component.XComponent{
     String s = x.getXMElement().getXDPosition();
     if ("J#A/B".equals(s))
       return new B(this, x);
-    if ("J#A/B[2]".equals(s))
-      return new B2(this, x);
     if ("J#A/C".equals(s))
       return new C(this, x);
+    if ("J#A/B[2]".equals(s))
+      return new B2(this, x);
     return new C2(this, x); // J#A/C[2]
   }
   @Override
@@ -127,10 +127,10 @@ public class J implements org.xdef.component.XComponent{
     String s = x.xGetModelPosition();
     if ("J#A/B".equals(s))
       setB((B)x);
-    else if ("J#A/B[2]".equals(s))
-      setB2((B2)x);
     else if ("J#A/C".equals(s))
       listOfC().add((C)x);
+    else if ("J#A/B[2]".equals(s))
+      setB2((B2)x);
     else
       setC2((C2)x); //J#A/C[2]
   }

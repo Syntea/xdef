@@ -206,63 +206,63 @@ public class Z4 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@DatumNarozeni")) {
-      XD_Name_DatumNarozeni = x.getNodeName();
-      setDatumNarozeni(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Jmeno")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@Jmeno")) {
       XD_Name_Jmeno = x.getNodeName();
       setJmeno(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@MistoNarozeni")) {
-      XD_Name_MistoNarozeni = x.getNodeName();
-      setMistoNarozeni(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@OsobniStav")) {
-      XD_Name_OsobniStav = x.getNodeName();
-      setOsobniStav(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Pohlavi")) {
-      XD_Name_Pohlavi = x.getNodeName();
-      setPohlavi(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Prijmeni")) {
       XD_Name_Prijmeni = x.getNodeName();
       setPrijmeni(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Profese")) {
-      XD_Name_Profese = x.getNodeName();
-      setProfese(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@RC")) {
-      XD_Name_RC = x.getNodeName();
-      setRC(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@RodnePrijmeni")) {
       XD_Name_RodnePrijmeni = x.getNodeName();
       setRodnePrijmeni(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@TitulPred")) {
+      XD_Name_TitulPred = x.getNodeName();
+      setTitulPred(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@TitulZa")) {
+      XD_Name_TitulZa = x.getNodeName();
+      setTitulZa(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@RC")) {
+      XD_Name_RC = x.getNodeName();
+      setRC(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Pohlavi")) {
+      XD_Name_Pohlavi = x.getNodeName();
+      setPohlavi(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@OsobniStav")) {
+      XD_Name_OsobniStav = x.getNodeName();
+      setOsobniStav(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@DatumNarozeni")) {
+      XD_Name_DatumNarozeni = x.getNodeName();
+      setDatumNarozeni(parseResult.getParsedValue().datetimeValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@MistoNarozeni")) {
+      XD_Name_MistoNarozeni = x.getNodeName();
+      setMistoNarozeni(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@StatNarozeni")) {
       XD_Name_StatNarozeni = x.getNodeName();
       setStatNarozeni(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@StatniPrislusnost")) {
       XD_Name_StatniPrislusnost = x.getNodeName();
       setStatniPrislusnost(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@TitulPred")) {
-      XD_Name_TitulPred = x.getNodeName();
-      setTitulPred(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_TitulZa = x.getNodeName();
-      setTitulZa(parseResult.getParsedValue().stringValue());
+      XD_Name_Profese = x.getNodeName();
+      setProfese(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("SouborD1A#Osoba/$mixed/PrechodnyPobyt".equals(s))
+    if ("SouborD1A#Osoba/$mixed/TrvalyPobyt".equals(s))
       return new test.xdef.component.Z9(this, x);
-    return new test.xdef.component.Z9(this, x); // SouborD1A#Osoba/$mixed/TrvalyPobyt
+    return new test.xdef.component.Z9(this, x); // SouborD1A#Osoba/$mixed/PrechodnyPobyt
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("SouborD1A#Osoba/$mixed/PrechodnyPobyt".equals(s))
-      setPrechodnyPobyt((test.xdef.component.Z9)x);
+    if ("SouborD1A#Osoba/$mixed/TrvalyPobyt".equals(s))
+      setTrvalyPobyt((test.xdef.component.Z9)x);
     else
-      setTrvalyPobyt((test.xdef.component.Z9)x); //SouborD1A#Osoba/$mixed/TrvalyPobyt
+      setPrechodnyPobyt((test.xdef.component.Z9)x); //SouborD1A#Osoba/$mixed/PrechodnyPobyt
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

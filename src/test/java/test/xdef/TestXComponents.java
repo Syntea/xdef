@@ -999,6 +999,21 @@ public final class TestXComponents extends XDTester {
 			assertEq("<f><g>2019-04-01+02:00</g></f>", f.toXml());
 			f.listOfg().clear();
 			assertEq("<f/>", f.toXml());
+			
+			xml = "<a><d/></a>";
+			test.xdef.component.Y24a y24a = (test.xdef.component.Y24a)
+				parseXC(xp,"Y24", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, y24a.toXml());
+			assertTrue(y24a.getd()!=null && "test.xdef.component.Y24$d".equals(
+				y24a.getd().getClass().getName()));
+			xml = "<c><d/></c>";
+			test.xdef.component.Y24 y24 = (test.xdef.component.Y24)
+				parseXC(xp,"Y24", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, y24.toXml());
+			assertTrue(y24.getd()!=null && "test.xdef.component.Y24$d".equals(
+				y24.getd().getClass().getName()));
 		} catch (Exception ex) {fail(ex);}
 		try { // test theaurus from generated XDPool
 			xd = xp.createXDDocument("Lexicon");

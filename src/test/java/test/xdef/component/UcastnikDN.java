@@ -245,83 +245,83 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@AlkoholDech")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = x.getNodeName();
+      setOznSegmentu(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
+      XD_Name_TypUcastnika = x.getNodeName();
+      setTypUcastnika(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
+      XD_Name_PraxeRizeni = x.getNodeName();
+      setPraxeRizeni(parseResult.getParsedValue().intValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@AlkoholDech")) {
       XD_Name_AlkoholDech = x.getNodeName();
       setAlkoholDech(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@AlkoholKrev")) {
       XD_Name_AlkoholKrev = x.getNodeName();
       setAlkoholKrev(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
-      XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
-      XD_Name_Pachatel = x.getNodeName();
-      setPachatel(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Zraneni")) {
+      XD_Name_Zraneni = x.getNodeName();
+      setZraneni(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
+      XD_Name_ZdravPojistovna = x.getNodeName();
+      setZdravPojistovna(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PokutaKc")) {
       XD_Name_PokutaKc = x.getNodeName();
       setPokutaKc(parseResult.getParsedValue().intValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PokutaZapl")) {
       XD_Name_PokutaZapl = x.getNodeName();
       setPokutaZapl(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Poskozeny")) {
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
+      XD_Name_Pachatel = x.getNodeName();
+      setPachatel(parseResult.getParsedValue().stringValue());
+    } else {
       XD_Name_Poskozeny = x.getNodeName();
       setPoskozeny(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
-      XD_Name_PraxeRizeni = x.getNodeName();
-      setPraxeRizeni(parseResult.getParsedValue().intValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
-      XD_Name_TypUcastnika = x.getNodeName();
-      setTypUcastnika(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
-      XD_Name_ZdravPojistovna = x.getNodeName();
-      setZdravPojistovna(parseResult.getParsedValue().stringValue());
-    } else {
-      XD_Name_Zraneni = x.getNodeName();
-      setZraneni(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("SouborD1A#UcastnikDN/$mixed/Doklad".equals(s))
-      return new test.xdef.component.Z6(this, x);
-    if ("SouborD1A#UcastnikDN/$mixed/Firma".equals(s))
-      return new test.xdef.component.Z5(this, x);
     if ("SouborD1A#UcastnikDN/$mixed/JinaSkoda".equals(s))
       return new test.xdef.component.Z3(this, x);
     if ("SouborD1A#UcastnikDN/$mixed/Osoba".equals(s))
       return new test.xdef.component.Z4(this, x);
-    if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakOst".equals(s))
-      return new PoruseniZakOst(this, x);
-    if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest".equals(s))
-      return new PoruseniZakPrest(this, x);
+    if ("SouborD1A#UcastnikDN/$mixed/Firma".equals(s))
+      return new test.xdef.component.Z5(this, x);
+    if ("SouborD1A#UcastnikDN/$mixed/Doklad".equals(s))
+      return new test.xdef.component.Z6(this, x);
     if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz".equals(s))
       return new PoruseniZakProvoz(this, x);
+    if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest".equals(s))
+      return new PoruseniZakPrest(this, x);
     if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest".equals(s))
       return new PoruseniZakTrest(this, x);
+    if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakOst".equals(s))
+      return new PoruseniZakOst(this, x);
     return new Vazba(this, x); // SouborD1A#UcastnikDN/$mixed/Vazba
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("SouborD1A#UcastnikDN/$mixed/Doklad".equals(s))
-      listOfDoklad().add((test.xdef.component.Z6)x);
-    else if ("SouborD1A#UcastnikDN/$mixed/Firma".equals(s))
-      setFirma((test.xdef.component.Z5)x);
-    else if ("SouborD1A#UcastnikDN/$mixed/JinaSkoda".equals(s))
+    if ("SouborD1A#UcastnikDN/$mixed/JinaSkoda".equals(s))
       setJinaSkoda((test.xdef.component.Z3)x);
     else if ("SouborD1A#UcastnikDN/$mixed/Osoba".equals(s))
       setOsoba((test.xdef.component.Z4)x);
-    else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakOst".equals(s))
-      setPoruseniZakOst((PoruseniZakOst)x);
-    else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest".equals(s))
-      setPoruseniZakPrest((PoruseniZakPrest)x);
+    else if ("SouborD1A#UcastnikDN/$mixed/Firma".equals(s))
+      setFirma((test.xdef.component.Z5)x);
+    else if ("SouborD1A#UcastnikDN/$mixed/Doklad".equals(s))
+      listOfDoklad().add((test.xdef.component.Z6)x);
     else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakProvoz".equals(s))
       setPoruseniZakProvoz((PoruseniZakProvoz)x);
+    else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakPrest".equals(s))
+      setPoruseniZakPrest((PoruseniZakPrest)x);
     else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakTrest".equals(s))
       setPoruseniZakTrest((PoruseniZakTrest)x);
+    else if ("SouborD1A#UcastnikDN/$mixed/PoruseniZakOst".equals(s))
+      setPoruseniZakOst((PoruseniZakOst)x);
     else
       setVazba((Vazba)x); //SouborD1A#UcastnikDN/$mixed/Vazba
   }

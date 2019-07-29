@@ -178,18 +178,18 @@ public class D implements org.xdef.component.XComponent{
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
+    if ("D#a:A/_".equals(s))
+      return new $_(this, x);
     if ("D#a:A/B".equals(s))
       return new B(this, x);
-    if ("D#a:A/E".equals(s))
-      return new E(this, x);
+    if ("D#a:A/I".equals(s))
+      return new I(this, x);
     if ("D#a:A/F".equals(s))
       return new F(this, x);
     if ("D#a:A/G".equals(s))
       return new G(this, x);
     if ("D#a:A/H".equals(s))
       return new H(this, x);
-    if ("D#a:A/I".equals(s))
-      return new I(this, x);
     if ("D#a:A/P".equals(s))
       return new P(this, x);
     if ("D#a:A/Q".equals(s))
@@ -198,28 +198,28 @@ public class D implements org.xdef.component.XComponent{
       return new R(this, x);
     if ("D#a:A/S".equals(s))
       return new S(this, x);
+    if ("D#a:A/E".equals(s))
+      return new E(this, x);
     if ("D#a:A/T".equals(s))
       return new T(this, x);
-    if ("D#a:A/_".equals(s))
-      return new $_(this, x);
     return new a$T(this, x); // D#a:A/a:T
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("D#a:A/B".equals(s))
+    if ("D#a:A/_".equals(s))
+      set$_(($_)x);
+    else if ("D#a:A/B".equals(s))
       setB((B)x);
-    else if ("D#a:A/E".equals(s))
-      setE((E)x);
+    else if ("D#a:A/I".equals(s))
+      setI((I)x);
     else if ("D#a:A/F".equals(s))
       setF((F)x);
     else if ("D#a:A/G".equals(s))
       setG((G)x);
     else if ("D#a:A/H".equals(s))
       setH((H)x);
-    else if ("D#a:A/I".equals(s))
-      setI((I)x);
     else if ("D#a:A/P".equals(s))
       setP((P)x);
     else if ("D#a:A/Q".equals(s))
@@ -228,10 +228,10 @@ public class D implements org.xdef.component.XComponent{
       setR((R)x);
     else if ("D#a:A/S".equals(s))
       setS((S)x);
+    else if ("D#a:A/E".equals(s))
+      setE((E)x);
     else if ("D#a:A/T".equals(s))
       setT((T)x);
-    else if ("D#a:A/_".equals(s))
-      set$_(($_)x);
     else
       seta$T((a$T)x); //D#a:A/a:T
   }

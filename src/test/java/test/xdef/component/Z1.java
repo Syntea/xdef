@@ -261,80 +261,80 @@ public class Z1 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
-      XD_Name_KrajPolicie = x.getNodeName();
-      setKrajPolicie(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@PlatnostOd")) {
-      XD_Name_PlatnostOd = x.getNodeName();
-      setPlatnostOd(parseResult.getParsedValue().datetimeValue());
+    if (x.getXMNode().getXDPosition().endsWith("/@Verze")) {
+      XD_Name_Verze = x.getNodeName();
+      setVerze(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
       XD_Name_SeqRec = x.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
+      XD_Name_KrajPolicie = x.getNodeName();
+      setKrajPolicie(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_Verze = x.getNodeName();
-      setVerze(parseResult.getParsedValue().stringValue());
+      XD_Name_PlatnostOd = x.getNodeName();
+      setPlatnostOd(parseResult.getParsedValue().datetimeValue());
     }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
-      return new test.xdef.component.FotoDN(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
-      return new test.xdef.component.Z8(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
-      return new test.xdef.component.PovozDN(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
-      return new test.xdef.component.PredmetDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Protokol".equals(s))
       return new test.xdef.component.Z2(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN".equals(s))
       return new test.xdef.component.Z7(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
+      return new VyliceniDN(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
+      return new test.xdef.component.Z8(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
+      return new test.xdef.component.FotoDN(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
+      return new test.xdef.component.VozidloDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Tramvaj".equals(s))
       return new test.xdef.component.TramvajDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Trolejbus".equals(s))
       return new test.xdef.component.TrolejbusDN(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/Ucastnik".equals(s))
-      return new test.xdef.component.UcastnikDN(this, x);
     if ("SouborD1A#ZaznamPDN/$mixed/Vlak".equals(s))
       return new test.xdef.component.VlakDN(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
-      return new test.xdef.component.VozidloDN(this, x);
-    if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
-      return new VyliceniDN(this, x);
-    return new test.xdef.component.ZvireDN(this, x); // SouborD1A#ZaznamPDN/$mixed/Zvire
+    if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
+      return new test.xdef.component.PovozDN(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
+      return new test.xdef.component.PredmetDN(this, x);
+    if ("SouborD1A#ZaznamPDN/$mixed/Zvire".equals(s))
+      return new test.xdef.component.ZvireDN(this, x);
+    return new test.xdef.component.UcastnikDN(this, x); // SouborD1A#ZaznamPDN/$mixed/Ucastnik
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
-      listOfFoto().add((test.xdef.component.FotoDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
-      setObjStranka((test.xdef.component.Z8)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
-      listOfPovoz().add((test.xdef.component.PovozDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
-      listOfPredmet().add((test.xdef.component.PredmetDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/Protokol".equals(s))
+    if ("SouborD1A#ZaznamPDN/$mixed/Protokol".equals(s))
       setProtokol((test.xdef.component.Z2)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/RozhodnutiDN".equals(s))
       setRozhodnutiDN((test.xdef.component.Z7)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
+      listOfVyliceniDN().add((VyliceniDN)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/ObjStranka".equals(s))
+      setObjStranka((test.xdef.component.Z8)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/Foto".equals(s))
+      listOfFoto().add((test.xdef.component.FotoDN)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
+      listOfVozidlo().add((test.xdef.component.VozidloDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Tramvaj".equals(s))
       listOfTramvaj().add((test.xdef.component.TramvajDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Trolejbus".equals(s))
       listOfTrolejbus().add((test.xdef.component.TrolejbusDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/Ucastnik".equals(s))
-      listOfUcastnik().add((test.xdef.component.UcastnikDN)x);
     else if ("SouborD1A#ZaznamPDN/$mixed/Vlak".equals(s))
       listOfVlak().add((test.xdef.component.VlakDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/Vozidlo".equals(s))
-      listOfVozidlo().add((test.xdef.component.VozidloDN)x);
-    else if ("SouborD1A#ZaznamPDN/$mixed/VyliceniDN".equals(s))
-      listOfVyliceniDN().add((VyliceniDN)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/Povoz".equals(s))
+      listOfPovoz().add((test.xdef.component.PovozDN)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/Predmet".equals(s))
+      listOfPredmet().add((test.xdef.component.PredmetDN)x);
+    else if ("SouborD1A#ZaznamPDN/$mixed/Zvire".equals(s))
+      listOfZvire().add((test.xdef.component.ZvireDN)x);
     else
-      listOfZvire().add((test.xdef.component.ZvireDN)x); //SouborD1A#ZaznamPDN/$mixed/Zvire
+      listOfUcastnik().add((test.xdef.component.UcastnikDN)x); //SouborD1A#ZaznamPDN/$mixed/Ucastnik
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

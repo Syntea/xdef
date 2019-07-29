@@ -56,16 +56,14 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			case LD_GLOBAL:
 			case ST_LOCAL:
 			case ST_GLOBAL:
-//				return codeName + getTypeAbbrev(type) + " " + item.getParam();
 			case LD_XMODEL:
 			case ST_XMODEL:
 				return codeName + getTypeAbbrev(type)
-					+ " name=" + item.stringValue() +
-//					+ " " + item.getParam() +
-					", " + item.intValue();
+					+ " name=" + item.stringValue()
+					+ ", " + item.intValue();
 			case INIT_PARAMS_OP:
-				return codeName + " " + item.getParam() +
-					"," + item.intValue();
+				return codeName + " " + item.getParam()
+					+ "," + item.intValue();
 			case ATTR_EXIST:
 			case ATTR_REF:
 				return codeName + " '" + item.stringValue() + "'";
@@ -86,7 +84,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			case EXTMETHOD_XDARRAY: {
 				CodeExtMethod method = (CodeExtMethod) item;
 				return codeName + " " + method.getExtMethod().toString()
-				+ "," + item.getParam();
+					+ "," + item.getParam();
 			}
 			case COMPILE_BNF: {
 				return (codeName + " source:\n"
@@ -137,14 +135,14 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				} else if (item instanceof CodeXD) {
 					return ((CodeXD) item).toString();
 				} else if (item instanceof CodeS1) {
-					return codeName + " " + item.getParam() +
-						",'" + item.stringValue() + "'";
+					return codeName + " " + item.getParam()
+						+ ",'" + item.stringValue() + "'";
 				} else if (item instanceof CodeL2) {
-					return codeName + " " + item.getParam() +
-						"," + item.longValue();
+					return codeName + " " + item.getParam()
+						+ "," + item.longValue();
 				} else if (item instanceof CodeI2) {
-					return codeName + " " + item.getParam() +
-						"," + item.intValue();
+					return codeName + " " + item.getParam()
+						+ "," + item.intValue();
 				} else if (item instanceof CodeI1) {
 					return codeName + " " + item.getParam();
 				} else if (item instanceof CodeOp) {
@@ -166,8 +164,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 
 	private static void displayDesriptor(final XCodeDescriptor sc,
 		final PrintStream out) {
-		out.print(sc.getName() + " " + sc.minOccurs() + ".." +
-			(sc.maxOccurs() == Integer.MAX_VALUE ? "*" :
+		out.print(sc.getName() + " " + sc.minOccurs() + ".."
+			+ (sc.maxOccurs() == Integer.MAX_VALUE ? "*" :
 				String.valueOf(sc.maxOccurs())));
 		if (sc.getKind() == XNode.XMELEMENT) {
 			if (((XElement)sc)._forget != 0) {
@@ -297,30 +295,20 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		final PrintStream out,
 		final Set<XNode> processed) {
 		if (!processed.add(xn)) {
-			switch (xn.getKind()) {
-				case XNode.XMATTRIBUTE:
-					out.print(" * ref XAttr: ");
-					break;
-				case XNode.XMELEMENT:
-					out.print(" * ref XElement: ");
-					break;
-				default:
-					out.print(" * ref: ");
-			}
-			out.println(xn.getName());
+			out.println(" * ref " + xn.getXDPosition());
 			return;
 		}
 		switch (xn.getKind()) {
 			case XNode.XMATTRIBUTE:
 			case XNode.XMTEXT: {
 				XData xd = (XData)xn;
-				out.print("-- XAttribute: ");
+				out.print("-- XMAttr: ");
 				displayDesriptor(xd, out);
 				return;
 			}
 			case XNode.XMELEMENT: {
 				XElement defEl = (XElement)xn;
-				out.print("-- Start XElement: ");
+				out.print("-- Start XMElement: ");
 				displayDesriptor(defEl, out);
 				XNode[] attrs = defEl.getXDAttrs();
 				for(int i = 0; i < attrs.length; i++) {
@@ -329,7 +317,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				for (int i = 0; i < defEl._childNodes.length; i++) {
 					displayDefNode(defEl._childNodes[i], out, processed);
 				}
-				out.println("-- End XElement: " + xn.getName());
+				out.println("-- End XMElement: " + xn.getName());
 				return;
 			}
 			case XNode.XMSELECTOR_END:
@@ -342,7 +330,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				return;
 			case XNode.XMDEFINITION: {
 				XDefinition def = (XDefinition)xn;
-				out.print("=== Start X-definition: ");
+				out.print("=== Start XMDefinition: ");
 				displayDesriptor(def, out);
 				if (def._rootSelection!=null && def._rootSelection.size() > 0) {
 					Iterator<String> e=def._rootSelection.keySet().iterator();
@@ -357,7 +345,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				for (int i = 0; i < elems.length; i++){
 					displayDefNode(elems[i], out, processed);
 				}
-				out.println("=== End X-definition: " + def.getName() + "\n");
+				out.println("=== End XMDefinition: " + def.getName() + "\n");
 				return;
 			}
 			default:
@@ -371,10 +359,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 */
 	public final static void displayCode(final XDValue[] code,
 		final PrintStream out) {
-		java.text.NumberFormat nf = new java.text.DecimalFormat("00000");
-		if (code != null) {
+		if (code == null || code.length == 0) {
+			out.println("No code");
+		} else {
 			for (int i = 0; i < code.length; i++) {
-				out.println(nf.format(i) + " " + codeToString(code[i]));
+				out.println(new java.text.DecimalFormat("000000").format(i)
+					+ " " + codeToString(code[i]));
 			}
 		}
 	}

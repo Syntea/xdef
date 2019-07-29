@@ -269,15 +269,15 @@ public static class C implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@c")) {
-      XD_Name_c = x.getNodeName();
-      setc(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@d")) {
-      XD_Name_d = x.getNodeName();
-      setd(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@e")) {
       XD_Name_e = x.getNodeName();
       sete(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@c")) {
+      XD_Name_c = x.getNodeName();
+      setc(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_d = x.getNodeName();
+      setd(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

@@ -130,15 +130,15 @@ public class PredmetDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@DruhPredmetu")) {
-      XD_Name_DruhPredmetu = x.getNodeName();
-      setDruhPredmetu(parseResult.getParsedValue().stringValue());
+    if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = x.getNodeName();
+      setOznSegmentu(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevPredmetu")) {
       XD_Name_NazevPredmetu = x.getNodeName();
       setNazevPredmetu(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
+      XD_Name_DruhPredmetu = x.getNodeName();
+      setDruhPredmetu(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

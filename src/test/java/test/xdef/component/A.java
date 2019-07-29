@@ -167,23 +167,23 @@ public class A implements org.xdef.component.XComponent{
       return new W(this, x);
     if ("A#A/Y".equals(s))
       return new Y(this, x);
-    if ("A#A/Z".equals(s))
-      return new AZ(this, x);
+    if ("A#A/i".equals(s))
+      return new i(this, x);
+    if ("A#A/f".equals(s))
+      return new f(this, x);
     if ("A#A/d".equals(s))
       return new d(this, x);
-    if ("A#A/d-e.f".equals(s))
-      return new d_e_f(this, x);
+    if ("A#A/t".equals(s))
+      return new t(this, x);
+    if ("A#A/s".equals(s))
+      return new s(this, x);
+    if ("A#A/Z".equals(s))
+      return new AZ(this, x);
     if ("A#A/d1".equals(s))
       return new d1(this, x);
     if ("A#A/d2".equals(s))
       return new d2(this, x);
-    if ("A#A/f".equals(s))
-      return new f(this, x);
-    if ("A#A/i".equals(s))
-      return new i(this, x);
-    if ("A#A/s".equals(s))
-      return new s(this, x);
-    return new t(this, x); // A#A/t
+    return new d_e_f(this, x); // A#A/d-e.f
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -193,24 +193,24 @@ public class A implements org.xdef.component.XComponent{
       listOfW().add((W)x);
     else if ("A#A/Y".equals(s))
       listOfY().add((Y)x);
-    else if ("A#A/Z".equals(s))
-      setZ((AZ)x);
+    else if ("A#A/i".equals(s))
+      seti((i)x);
+    else if ("A#A/f".equals(s))
+      setf((f)x);
     else if ("A#A/d".equals(s))
       setd((d)x);
-    else if ("A#A/d-e.f".equals(s))
-      setd_e_f((d_e_f)x);
+    else if ("A#A/t".equals(s))
+      sett((t)x);
+    else if ("A#A/s".equals(s))
+      sets((s)x);
+    else if ("A#A/Z".equals(s))
+      setZ((AZ)x);
     else if ("A#A/d1".equals(s))
       setd1((d1)x);
     else if ("A#A/d2".equals(s))
       listOfd2().add((d2)x);
-    else if ("A#A/f".equals(s))
-      setf((f)x);
-    else if ("A#A/i".equals(s))
-      seti((i)x);
-    else if ("A#A/s".equals(s))
-      sets((s)x);
     else
-      sett((t)x); //A#A/t
+      setd_e_f((d_e_f)x); //A#A/d-e.f
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

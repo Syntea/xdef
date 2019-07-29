@@ -39,7 +39,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.XConstants;
@@ -113,11 +113,11 @@ public final class CompileCode extends CompileBase {
 	/** Debug information. */
 	XDebugInfo _debugInfo = null;
 	/** Components. */
-	final Map<String, SBuffer> _components = new TreeMap<String, SBuffer>();
+	final Map<String,SBuffer> _components = new LinkedHashMap<String,SBuffer>();
 	/** Binds. */
-	final Map<String, SBuffer> _binds = new TreeMap<String, SBuffer>();
+	final Map<String, SBuffer> _binds = new LinkedHashMap<String, SBuffer>();
 	/** Enumerations. */
-	final Map<String, SBuffer> _enums = new TreeMap<String, SBuffer>();
+	final Map<String, SBuffer> _enums = new LinkedHashMap<String, SBuffer>();
 	/** XDLexicon object (null if not specified). */
 	XDLexicon _lexicon = null;
 	/** Flag if external method should be searched. */
@@ -142,10 +142,10 @@ public final class CompileCode extends CompileBase {
 		_sp = -1;
 		_lastCodeIndex = -1;
 		_code = new ArrayList<XDValue>();
-		_localVariables = new TreeMap<String, CompileVariable>();
-		_extMethods = new TreeMap<String, CodeExtMethod>();
+		_localVariables = new LinkedHashMap<String, CompileVariable>();
+		_extMethods = new LinkedHashMap<String, CodeExtMethod>();
 		_declaredMethods = new ArrayList<ExternalMethod>();
-		_scriptMethods = new TreeMap<String, ScriptMethod>();
+		_scriptMethods = new LinkedHashMap<String, ScriptMethod>();
 		_namespaceURIs = new ArrayList<String>();
 		_globalVariables = _varBlock = new XVariableTable(null, 0);
 		_localVariablesLastIndex = -1;

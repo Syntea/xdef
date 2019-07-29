@@ -135,21 +135,21 @@ public class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@date")) {
-      XD_Name_date = x.getNodeName();
-      setdate(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@id")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@id")) {
       XD_Name_id = x.getNodeName();
       setid(parseResult.getParsedValue().intValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@name")) {
-      XD_Name_name = x.getNodeName();
-      setname(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@num")) {
       XD_Name_num = x.getNodeName();
       setnum(parseResult.getParsedValue().doubleValue());
-    } else {
+    } else if (x.getXMNode().getXDPosition().endsWith("/@date")) {
+      XD_Name_date = x.getNodeName();
+      setdate(parseResult.getParsedValue().datetimeValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@time")) {
       XD_Name_time = x.getNodeName();
       settime(parseResult.getParsedValue().datetimeValue());
+    } else {
+      XD_Name_name = x.getNodeName();
+      setname(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

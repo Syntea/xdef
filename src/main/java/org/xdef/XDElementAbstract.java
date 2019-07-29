@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.xml.KXmlUtils;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -617,7 +617,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 
 	private void createAttrs() {
-		_attrs = new TreeMap<String, Attr>();
+		_attrs = new LinkedHashMap<String, Attr>();
 		for (int i = 0; i < getXDNamedItemsNumber(); i++) {
 			String name = getXDNamedItemName(i);
 			if (name != null && hasAttribute(name)) {

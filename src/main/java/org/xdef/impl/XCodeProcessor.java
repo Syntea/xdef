@@ -70,7 +70,7 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
@@ -145,7 +145,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private ArrayList<XDValue> _finalList;
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects =
-		new TreeMap<String, Object>();
+		new LinkedHashMap<String, Object>();
 
 	/** XPath function resolver. */
 	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
@@ -2506,7 +2506,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						xdef = _xd;
 					}
 					Map<Integer, CodeUniqueset> idrefTables =
-						new TreeMap<Integer, CodeUniqueset>();
+						new LinkedHashMap<Integer, CodeUniqueset>();
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;

@@ -117,28 +117,28 @@ public class J1 implements org.xdef.component.XComponent{
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("J#B/C".equals(s))
-      return new C(this, x);
-    if ("J#B/C[2]".equals(s))
-      return new C2(this, x);
     if ("J#B/X".equals(s))
       return new X(this, x);
+    if ("J#B/C".equals(s))
+      return new C(this, x);
     if ("J#B/X[2]".equals(s))
       return new X2(this, x);
+    if ("J#B/C[2]".equals(s))
+      return new C2(this, x);
     return new X3(this, x); // J#B/X[3]
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("J#B/C".equals(s))
-      listOfC().add((C)x);
-    else if ("J#B/C[2]".equals(s))
-      setC2((C2)x);
-    else if ("J#B/X".equals(s))
+    if ("J#B/X".equals(s))
       setX((X)x);
+    else if ("J#B/C".equals(s))
+      listOfC().add((C)x);
     else if ("J#B/X[2]".equals(s))
       listOfX2().add((X2)x);
+    else if ("J#B/C[2]".equals(s))
+      setC2((C2)x);
     else
       setX3((X3)x); //J#B/X[3]
   }

@@ -3,7 +3,7 @@ package org.xdef.xml;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Checking and canonize character set names in Java and XML.
  * @author Vaclav Trojan
@@ -11,9 +11,9 @@ import java.util.TreeMap;
 public final class KCharsetNames {
 
 	private static final Map<String, String> IANA_TO_JAVA =
-		new TreeMap<String, String>();
+		new LinkedHashMap<String, String>();
 	private static final Map<String, String> JAVA_TO_IANA =
-		new TreeMap<String, String>();
+		new LinkedHashMap<String, String>();
 	static {
 		IANA_TO_JAVA.put("IBM852", "IBM-852");
 		IANA_TO_JAVA.put("CSGB2312","GB2312");

@@ -111,9 +111,9 @@ public class Y17 implements org.xdef.component.XComponent{
     String s = x.getXMElement().getXDPosition();
     if ("Y17#a/b".equals(s))
       return new b_1(this, x);
-    if ("Y17#a/b[2]".equals(s))
-      return new b_2(this, x);
-    return new c(this, x); // Y17#a/c
+    if ("Y17#a/c".equals(s))
+      return new c(this, x);
+    return new b_2(this, x); // Y17#a/b[2]
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -121,10 +121,10 @@ public class Y17 implements org.xdef.component.XComponent{
     String s = x.xGetModelPosition();
     if ("Y17#a/b".equals(s))
       setb_1((b_1)x);
-    else if ("Y17#a/b[2]".equals(s))
-      setb_2((b_2)x);
+    else if ("Y17#a/c".equals(s))
+      setc((c)x);
     else
-      setc((c)x); //Y17#a/c
+      setb_2((b_2)x); //Y17#a/b[2]
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

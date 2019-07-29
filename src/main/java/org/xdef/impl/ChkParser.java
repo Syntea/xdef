@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -158,7 +158,7 @@ final class ChkParser extends DomBaseHandler {
 		super();
 		_sReporter = new SReporter(
 			reporter == null ?  new ArrayReporter() : reporter);
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
 		_entities.put("amp", "&");

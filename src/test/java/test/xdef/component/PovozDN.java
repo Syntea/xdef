@@ -131,21 +131,21 @@ public class PovozDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@DruhPovozu")) {
-      XD_Name_DruhPovozu = x.getNodeName();
-      setDruhPovozu(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = x.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_DruhPovozu = x.getNodeName();
+      setDruhPovozu(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("SouborD1A#PovozDN/$mixed/JinaSkoda".equals(s))
-      return new test.xdef.component.Z3(this, x);
     if ("SouborD1A#PovozDN/$mixed/Skoda".equals(s))
+      return new test.xdef.component.Z3(this, x);
+    if ("SouborD1A#PovozDN/$mixed/JinaSkoda".equals(s))
       return new test.xdef.component.Z3(this, x);
     return new Vlastnik(this, x); // SouborD1A#PovozDN/$mixed/Vlastnik
   }
@@ -153,10 +153,10 @@ public class PovozDN implements org.xdef.component.XComponent{
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("SouborD1A#PovozDN/$mixed/JinaSkoda".equals(s))
-      setJinaSkoda((test.xdef.component.Z3)x);
-    else if ("SouborD1A#PovozDN/$mixed/Skoda".equals(s))
+    if ("SouborD1A#PovozDN/$mixed/Skoda".equals(s))
       setSkoda((test.xdef.component.Z3)x);
+    else if ("SouborD1A#PovozDN/$mixed/JinaSkoda".equals(s))
+      setJinaSkoda((test.xdef.component.Z3)x);
     else
       setVlastnik((Vlastnik)x); //SouborD1A#PovozDN/$mixed/Vlastnik
   }

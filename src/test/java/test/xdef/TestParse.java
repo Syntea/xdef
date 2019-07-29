@@ -2518,7 +2518,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			xml = "<A><B/><B/><C/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);			
+			assertNoErrors(reporter);
 			assertEq("B=2,C=1", strw.toString());
 			xdef = // test ignore
 "<xd:def name='a' root='root' xmlns:xd='" + _xdNS + "'>\n"+

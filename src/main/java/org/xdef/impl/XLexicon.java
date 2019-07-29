@@ -3,7 +3,7 @@ package org.xdef.impl;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.proc.XDLexicon;
 
 /** Implementation of XDLexicon.
@@ -18,7 +18,7 @@ public class XLexicon implements XDLexicon {
 	 */
 	public XLexicon(final String... languageNames) {
 		_languages = languageNames;
-		_dictionaries = new TreeMap<String, String[]>();
+		_dictionaries = new LinkedHashMap<String, String[]>();
 	}
 
 	@Override

@@ -151,7 +151,10 @@ public class Z9 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
+      XD_Name_Ulice = x.getNodeName();
+      setUlice(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
       XD_Name_CisloOrientacni = x.getNodeName();
       setCisloOrientacni(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
@@ -160,24 +163,21 @@ public class Z9 implements org.xdef.component.XComponent{
     } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = x.getNodeName();
       setObec(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
-      XD_Name_Okres = x.getNodeName();
-      setOkres(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PSC")) {
       XD_Name_PSC = x.getNodeName();
       setPSC(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
+      XD_Name_Okres = x.getNodeName();
+      setOkres(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Stat")) {
       XD_Name_Stat = x.getNodeName();
       setStat(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
       XD_Name_Telefon1 = x.getNodeName();
       setTelefon1(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon2")) {
+    } else {
       XD_Name_Telefon2 = x.getNodeName();
       setTelefon2(parseResult.getParsedValue().stringValue());
-    } else {
-      XD_Name_Ulice = x.getNodeName();
-      setUlice(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

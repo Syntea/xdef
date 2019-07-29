@@ -149,7 +149,13 @@ public class Z2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
+      XD_Name_KodUtvaruPolicie = x.getNodeName();
+      setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
+      XD_Name_RokDN = x.getNodeName();
+      setRokDN(parseResult.getParsedValue().datetimeValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
       XD_Name_CisloDN = x.getNodeName();
       setCisloDN(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
@@ -158,15 +164,9 @@ public class Z2 implements org.xdef.component.XComponent{
     } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
       XD_Name_DatumCasOznameni = x.getNodeName();
       setDatumCasOznameni(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
-      XD_Name_KodUtvaruPolicie = x.getNodeName();
-      setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
       XD_Name_NazevDN = x.getNodeName();
       setNazevDN(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
-      XD_Name_RokDN = x.getNodeName();
-      setRokDN(parseResult.getParsedValue().datetimeValue());
     } else {
       XD_Name_Zpracovatel = x.getNodeName();
       setZpracovatel(parseResult.getParsedValue().stringValue());

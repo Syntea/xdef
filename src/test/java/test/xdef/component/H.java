@@ -118,18 +118,18 @@ public class H implements org.xdef.component.XComponent{
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("H#s:H/s:Body".equals(s))
-      return new s$Body(this, x);
-    return new s$Header(this, x); // H#s:H/s:Header
+    if ("H#s:H/s:Header".equals(s))
+      return new s$Header(this, x);
+    return new s$Body(this, x); // H#s:H/s:Body
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("H#s:H/s:Body".equals(s))
-      sets$Body((s$Body)x);
+    if ("H#s:H/s:Header".equals(s))
+      sets$Header((s$Header)x);
     else
-      sets$Header((s$Header)x); //H#s:H/s:Header
+      sets$Body((s$Body)x); //H#s:H/s:Body
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -239,18 +239,18 @@ public static class s$Header implements org.xdef.component.XComponent{
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("H#s:H/s:Header/b:Request".equals(s))
-      return new b$Request(this, x);
-    return new b$User(this, x); // H#s:H/s:Header/b:User
+    if ("H#s:H/s:Header/b:User".equals(s))
+      return new b$User(this, x);
+    return new b$Request(this, x); // H#s:H/s:Header/b:Request
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("H#s:H/s:Header/b:Request".equals(s))
-      setb$Request((b$Request)x);
+    if ("H#s:H/s:Header/b:User".equals(s))
+      setb$User((b$User)x);
     else
-      setb$User((b$User)x); //H#s:H/s:Header/b:User
+      setb$Request((b$Request)x); //H#s:H/s:Header/b:Request
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -360,12 +360,12 @@ public static class b$User implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@IdentUser")) {
-      XD_Name_IdentUser = x.getNodeName();
-      setIdentUser(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@s:understand")) {
       XD_Name_s$understand = x.getNodeName();
       sets$understand(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_IdentUser = x.getNodeName();
+      setIdentUser(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
@@ -497,18 +497,18 @@ public static class b$Request implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@IdentZpravy")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@s:understand")) {
+      XD_Name_s$understand = x.getNodeName();
+      sets$understand(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@IdentZpravy")) {
       XD_Name_IdentZpravy = x.getNodeName();
       setIdentZpravy(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Mode")) {
-      XD_Name_Mode = x.getNodeName();
-      setMode(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@ReqMsgId")) {
       XD_Name_ReqMsgId = x.getNodeName();
       setReqMsgId(parseResult.getParsedValue().intValue());
     } else {
-      XD_Name_s$understand = x.getNodeName();
-      sets$understand(parseResult.getParsedValue().stringValue());
+      XD_Name_Mode = x.getNodeName();
+      setMode(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

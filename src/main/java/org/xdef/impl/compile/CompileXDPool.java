@@ -37,7 +37,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
@@ -232,7 +232,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	}
 
 	/** Put error to compiler reporter.
-	 * @param registeredID registered report id.
+	 * @param regID registered report id.
 	 * @param mod Message modification parameters.
 	 */
 	private void error(final long registeredID, final Object... mod) {
@@ -511,7 +511,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						"<xd:declaration> external method { ... } ...");
 				}
 				String value = sval.getString();
-				Map<String, Class<?>> ht = new TreeMap<String, Class<?>>();
+				Map<String,Class<?>> ht = new LinkedHashMap<String,Class<?>>();
 				for (Class<?> clazz : _codeGenerator._extClasses) {
 					ht.put(clazz.getName(), clazz);
 				}
@@ -579,7 +579,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Precompile list of BNF declarations and then the list of variable
 	 * declarations. If there is an undefined object in an item of the list
 	 * then put this item to the end of list and try to recompile it again.
-	 * This nasty trick ensures the declarations on object to preceed object
+	 * This nasty trick ensures the declarations on object to process object
 	 * references. However, it should be resolved with a reference list
 	 * connected to the variable declaration.
 	 */
@@ -1821,7 +1821,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				// set X-components to xdp
 				HashSet<String> classNames = new HashSet<String>();
 				// create map of components
-				Map<String, String> x = new TreeMap<String, String>();
+				Map<String, String> x = new LinkedHashMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._components.entrySet()) {
 					XMNode xn = (XMElement) xdp.findModel(e.getKey());
@@ -1850,7 +1850,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponents(x);
 				// binds
-				x = new TreeMap<String, String>();
+				x = new LinkedHashMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(e.getKey());
@@ -1897,7 +1897,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponentBinds(x);
 				// enumerations
-				x = new TreeMap<String, String>();
+				x = new LinkedHashMap<String, String>();
 				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
@@ -2072,7 +2072,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Resolve references.
 	 * @param xel the XElement.
-	 * @param level The recursivity level.
+	 * @param level The recursion level.
 	 * @param ingnoreOccurrence if <tt>true</tt> the occurrence specification
 	 * from the referred object is ignored.
 	 * @param ar node list.
@@ -2387,7 +2387,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Check integrity of the node and resolve references.
 	 * @param xel the XElement.
-	 * @param level The recursivity level.
+	 * @param level The recursion level.
 	 * @param ar node list.
 	 * @return true if check was successful.
 	 */
@@ -2401,8 +2401,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if (result) {
 			for (XNode dn: xel._childNodes) {
 				if (dn.getKind() == XNode.XMELEMENT && !hs.contains(dn)) {
-					XElement xe = (XElement) dn;
-					result &= checkIntegrity(xe, level+1, hs);
+					result &= checkIntegrity((XElement) dn, level+1, hs);
 				} else if (dn.getKind() == XNode.XMTEXT) {
 					if (!dn.isSpecified()) {
 						dn.setOptional();
@@ -2411,7 +2410,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		if (!xel.isSpecified()) {
-			xel.setRequired(); //interval not set, let's set defaults
+			xel.setRequired(); //interval not set, let's set default required
 		}
 		return result;
 	}

@@ -8,7 +8,7 @@ import org.xdef.XDConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.impl.XConstants;
 
 /** Contains parsed source item.
@@ -18,7 +18,7 @@ public final class PNode {
 	final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
 	final List<PNode> _childNodes = new ArrayList<PNode>(); //child nodes
 	// namespace prefixes
-	final Map<String, Integer> _nsPrefixes = new TreeMap<String, Integer>();
+	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<String,Integer>();
 	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI

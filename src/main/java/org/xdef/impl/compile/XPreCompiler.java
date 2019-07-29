@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 
 /** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
@@ -51,7 +51,7 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_JSON_W3C_INDEX = NS_JSON_INDEX + 1;			//7
 	/** Table of NameSpace prefixes. */
 	static final Map<String, Integer> DEFINED_PREFIXES =
-		new TreeMap<String, Integer>();
+		new LinkedHashMap<String, Integer>();
 
 	/** PNodes with parsed source items. */
 	private final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
@@ -78,7 +78,7 @@ public class XPreCompiler implements PreCompiler {
 	private final ArrayList<Object> _includeList = new ArrayList<Object>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
-		new TreeMap<String, XScriptMacro>();
+		new LinkedHashMap<String, XScriptMacro>();
 	/** Reader of X-definitions in the form of XML. */
 	private final PreReaderXML _xmlReader;
 	/** Reader of X-definitions in the form of JSON. */
@@ -523,7 +523,7 @@ public class XPreCompiler implements PreCompiler {
 	private void setMacros(final List<PNode> macros) {
 		for (PNode macro : macros) {
 			chkNestedElements(macro);
-			Map<String, String> params = new TreeMap<String, String>();
+			Map<String, String> params = new LinkedHashMap<String, String>();
 			String def = null;
 			for (PAttr val : macro._attrs) {
 				if ("#def".equals(val._name)) {

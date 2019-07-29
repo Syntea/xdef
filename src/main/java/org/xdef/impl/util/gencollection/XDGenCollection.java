@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -95,7 +95,7 @@ public class XDGenCollection {
 		private final String _pathname;
 		private final StringBuilder _text = new StringBuilder();
 		public final Map<String, String> _prefixes =
-			new TreeMap<String, String>();
+			new LinkedHashMap<String, String>();
 
 		XdParser(Document doc, String pathname) throws Exception {
 			_pathname = pathname;

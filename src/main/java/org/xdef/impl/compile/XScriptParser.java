@@ -13,8 +13,8 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /** XScriptParser - lexical parser for the symbols of XD script. Before parsing
  * all macros are expanded.
@@ -349,7 +349,7 @@ public class XScriptParser extends StringParser
 
 	/** Table to convert base symbols to the source form. */
 	private static final Map<Character, String> BASESYMBOLTABLE =
-		new TreeMap<Character, String>();
+		new LinkedHashMap<Character, String>();
 
 	static {
 		BASESYMBOLTABLE.put(CONSTANT_SYM, "constant");

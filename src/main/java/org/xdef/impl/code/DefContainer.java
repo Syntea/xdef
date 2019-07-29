@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -616,7 +616,7 @@ public final class DefContainer extends XDValueAbstract
 			}
 			Document doc = KXmlUtils.newDocument(null, "_", null);
 			Element el = doc.getDocumentElement();
-			setAttrs(new TreeMap<String, String>(), el);
+			setAttrs(new LinkedHashMap<String, String>(), el);
 			XDValue val = _value[n];
 			String s = val == null || val.isNull() ? null :
 				val.getItemId() == XD_STRING ?
@@ -848,11 +848,11 @@ public final class DefContainer extends XDValueAbstract
 	 * @return element created from this context.
 	 */
 	public final Element toElement(final String nsUri, final String xmlName) {
-		return toElement(new TreeMap<String, String>(), nsUri, xmlName);
+		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
 	}
 /* */
 	public final Element toElement(
-		TreeMap<String, String> ns,
+		LinkedHashMap<String, String> ns,
 		final String nsUri, final String xmlName) {
 		String n = xmlName;
 		String u = nsUri;
@@ -889,13 +889,13 @@ public final class DefContainer extends XDValueAbstract
 			}
 		}
 		Element el = KXmlUtils.newDocument(u, n, null).getDocumentElement();
-		ns = new TreeMap<String, String>(ns);
+		ns = new LinkedHashMap<String, String>(ns);
 		c.setAttrs(ns, el);
 		c.setChildNodes(ns, el);
 		return el;
 	}
 
-	private void setAttrs(final TreeMap<String, String> ns,final Element el) {
+	private void setAttrs(final LinkedHashMap<String, String> ns,final Element el) {
 		if (_map != null) {
 			for (int i = 0; i < _map.length; i++) {
 				XDValue val = _map[i].getValue();
@@ -923,7 +923,7 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	private void setChildNodes(final TreeMap<String,String> ns,
+	private void setChildNodes(final LinkedHashMap<String,String> ns,
 		final Element el) {
 		if (_value != null && _value.length > 0) {
 			Document doc = el.getOwnerDocument();

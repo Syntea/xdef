@@ -115,12 +115,12 @@ public class Y11Op implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@M")) {
-      XD_Name_M = x.getNodeName();
-      setM(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@N")) {
       XD_Name_N = x.getNodeName();
       setN(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_M = x.getNodeName();
+      setM(parseResult.getParsedValue().stringValue());
     }
   }
   @Override

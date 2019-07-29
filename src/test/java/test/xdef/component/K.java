@@ -244,12 +244,12 @@ public static class c implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@Cislo")) {
-      XD_Name_Cislo = x.getNodeName();
-      setCislo(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Kod")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@Kod")) {
       XD_Name_Kod = x.getNodeName();
       setKod(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Cislo")) {
+      XD_Name_Cislo = x.getNodeName();
+      setCislo(parseResult.getParsedValue().stringValue());
     } else {
       XD_Name_Rok = x.getNodeName();
       setRok(parseResult.getParsedValue().datetimeValue());

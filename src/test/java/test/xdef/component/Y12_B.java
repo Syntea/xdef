@@ -113,26 +113,26 @@ public class Y12_B implements org.xdef.component.XComponent{
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
+    if ("Y12#Actions$mixed/$mixed/S".equals(s))
+      return new S(this, x);
     if ("Y12#Actions$mixed/$mixed/M".equals(s))
       return new M(this, x);
     if ("Y12#Actions$mixed/$mixed/P".equals(s))
       return new P(this, x);
-    if ("Y12#Actions$mixed/$mixed/Q".equals(s))
-      return new Q(this, x);
-    return new S(this, x); // Y12#Actions$mixed/$mixed/S
+    return new Q(this, x); // Y12#Actions$mixed/$mixed/Q
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("Y12#Actions$mixed/$mixed/M".equals(s))
+    if ("Y12#Actions$mixed/$mixed/S".equals(s))
+      listOfS().add((S)x);
+    else if ("Y12#Actions$mixed/$mixed/M".equals(s))
       listOfM().add((M)x);
     else if ("Y12#Actions$mixed/$mixed/P".equals(s))
       listOfP().add((P)x);
-    else if ("Y12#Actions$mixed/$mixed/Q".equals(s))
-      listOfQ().add((Q)x);
     else
-      listOfS().add((S)x); //Y12#Actions$mixed/$mixed/S
+      listOfQ().add((Q)x); //Y12#Actions$mixed/$mixed/Q
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}

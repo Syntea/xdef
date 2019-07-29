@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.sys.ReportWriter;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Collection of static methods designed for easy work with XML data.
  * KDOMBuilder is used for creation of XML objects and it is set in the class
@@ -35,7 +35,7 @@ import java.util.TreeMap;
 public final class KXmlUtils extends KDOMUtils {
 
 	private final static Map<String, String> PREFIXMAP =
-		new TreeMap<String, String>();
+		new LinkedHashMap<String, String>();
 	static {
 		PREFIXMAP.put("xmlns", "");
 	}
@@ -317,7 +317,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean comments,
 		final Map<String, String> namespaceMap) throws IOException {
 		Map<String, String> newPrefixMap = // map valid for child nodes
-			new TreeMap<String, String>(namespaceMap);
+			new LinkedHashMap<String, String>(namespaceMap);
 		short type;
 		String startLine = lineStart;
 		String indent = indentStep;
@@ -416,7 +416,8 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			}
 			case Node.ELEMENT_NODE: {
-				Map<String, String> unresolved = new TreeMap<String,String>();
+				Map<String, String> unresolved = 
+					new LinkedHashMap<String, String>();
 				if (encoding != null) {
 					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(),
 						encoding, indentStep);
