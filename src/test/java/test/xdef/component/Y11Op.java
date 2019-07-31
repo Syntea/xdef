@@ -14,6 +14,7 @@ public class Y11Op implements org.xdef.component.XComponent{
   public String xposOfN(){return XD_XPos+"/@N";}
   public String xposOfM(){return XD_XPos+"/@M";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -153,6 +154,7 @@ public static class Co implements org.xdef.component.XComponent{
   public String xposOfC(){return XD_XPos+"/@C";}
   public String xposOfI(){return XD_XPos+"/@I";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -273,6 +275,7 @@ public static class Co implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class X implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -366,6 +369,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void setY(String x){_Y=x;}
   public String xposOfY(){return XD_XPos+"/@Y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

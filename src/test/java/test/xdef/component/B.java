@@ -31,6 +31,7 @@ public class B implements org.xdef.component.XComponent{
   public String xposOftime(){return XD_XPos+"/@time";}
   public String xposOfname(){return XD_XPos+"/@name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

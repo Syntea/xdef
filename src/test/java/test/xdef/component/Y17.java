@@ -10,6 +10,7 @@ public class Y17 implements org.xdef.component.XComponent{
   public void setc(Y17.c x){_c=x;}
   public void setb_2(Y17.b_2 x){_b_2=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -134,6 +135,7 @@ public static class b_1 implements org.xdef.component.XComponent{
   public void seta(Integer x){_a=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -236,6 +238,7 @@ public static class b_1 implements org.xdef.component.XComponent{
 }
 public static class c implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -328,6 +331,7 @@ public static class b_2 implements org.xdef.component.XComponent{
   public void seta(String x){_a=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

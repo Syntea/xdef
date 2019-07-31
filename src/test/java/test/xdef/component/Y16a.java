@@ -8,6 +8,7 @@ public class Y16a implements org.xdef.component.XComponent{
   public void sety(Integer x){_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -726,17 +726,52 @@ public final class GenXComponent {
 		}
 	}
 
-	/** Create getter and setter of model which have only one child node which
-	 * is the text node.
+	/** Create new name if the name from argument exists in the set.
+	 * @param name the name to be checked.
+	 * @param set set with names.
+	 * @return new name if the the name from argument exists in the set or
+	 * return the original name;
+	 */
+	private static String getUniqueName(final String name, Set<String> set){
+		String s = name;
+		for (int i = 1; set.contains(s); i++) {
+			s = name + "_" + i;
+		}
+		return s;
+	}
+
+	/** Check if the model is a JSON model and if it has only one child
+	 * node which is a text node. Then JSON setter/getter can be generated.
+	 * @param xe the Element model.
+	 * @param iname name of item.
+	 * @return true if and only if the model is a JSON model and it has only one
+	 * child node which is a text node.
+	 */
+	private boolean isJsonItem(final XElement xe, final String iname) {
+		if (xe._json >= 1) {
+//		if (xe._json >= 1 && iname.indexOf('$') > 0
+//			&& (XDConstants.JSON_NS_URI.equals(xe.getNSUri())
+//			|| XDConstants.JSON_NS_URI_W3C.equals(xe.getNSUri()))) {
+			XNode[] nodes = (XNode[]) xe.getChildNodeModels();
+			if (nodes.length == 1 && nodes[0].getKind() == XNode.XMTEXT) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** Create getter and setter of the model which have only one child
+	 * node which is a text node.
 	 * @param xe Element model from which setter/getter is generated.
 	 * @param typeName the class name of this element X-component.
 	 * @param iname name of getter/setter of this model.
 	 * @param max maximal occurrence.
+	 * @param setters where to generate setter.
 	 * @param getters where to generate getter.
 	 * @param sbi where to generate interface.
 	 * @param setters where to generate setter.
 	 */
-	private void genValueGetterAndSetters(final XElement xe,
+	private void genJsonGetterAndSetters(final XElement xe,
 		final String typeName,
 		final String iname,
 		final int max,
@@ -745,87 +780,81 @@ public final class GenXComponent {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-if (true) return;
-		int ndx;
-		if (xe._json >= 1 && (ndx = iname.indexOf('$')) > 0
-			&& XDConstants.JSON_NS_URI.equals(xe.getNSUri())) {
-			XNode[] nodes = (XNode[]) xe.getChildNodeModels();
-			if (nodes.length != 1
-				|| nodes[0].getKind() != XNode.XMTEXT) {
-				return;
-			}
-			String name = iname.substring(ndx + 1);
-			if (xe._match >= 0) {
-				XDValue[] code = ((XPool)xe.getXDPool()).getCode();
-				for (int i = xe._match; i < code.length; i++) {
-					XDValue item = code[i];
-					if (item.getCode() == CodeTable.CMPEQ) {
-						name = code[i-1].toString();
-						break;
-					}
+		int ndx = iname.indexOf('$');
+		String name = iname.substring(ndx + 1);
+		if (xe._match >= 0) {
+			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
+			for (int i = xe._match; i < code.length; i++) {
+				XDValue item = code[i];
+				if (item.getCode() == CodeTable.CMPEQ) {
+					name = code[i-1].toString();
+					break;
 				}
 			}
-			String s = name;
-			for (int i = 1; RESERVED_NAMES.contains(s)
-				|| classNames.contains(s) || varNames.contains(s); i++) {
-				s = name + "_" + i;
-			}
-			name = s;
-			String template;
-			// has only a text child
-			String typ = getJavaObjectTypeName((XData) nodes[0]);
-			if (max > 1) { // list of values
-				String typ1 = "java.util.List<" + typ + ">";
-				// getter
-				template =
+		}
+		name = getUniqueName(getUniqueName(
+			getUniqueName(name, RESERVED_NAMES), classNames), varNames);
+//		String s = name;
+//		for (int i = 1; RESERVED_NAMES.contains(s)
+//			|| classNames.contains(s) || varNames.contains(s); i++) {
+//			s = name + "_" + i;
+//		}
+//		name = s;
+		String template;
+		// has only a text child
+		String typ = getJavaObjectTypeName((XData) xe.getChildNodeModels()[0]);
+		if (max > 1) { // list of values
+			String typ1 = "java.util.List<" + typ + ">";
+			// getter
+			template =
 (_genJavadoc ? "\t/** Get values of textnodes of &{d}."+LN+
 "\t * @return value of text of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ1} listOf&{name}()";
-				getters.append(modify(template +
+			getters.append(modify(template +
 "{"+LN+
 "\t\t&{typ1} x=new java.util.ArrayList<&{typ}>();"+LN+
 "\t\tfor(&{typeName} y: _&{iname}) x.add(y.get$value());"+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
-					"&{name}", name,
-					"&{iname}", iname,
-					"&{d}", xe.getName(),
-					"&{typ}", typ,
-					"&{typ1}", typ1,
-					"&{typeName}", typeName));
-				if (sbi != null) { // generate interface
-					sbi.append(modify(template +";"+LN,
-					"&{name}", name,
-					"&{d}", xe.getName(),
-					"&{typ1}", typ1));
-				}
-				// setter
-				template =
+				"&{name}", name,
+				"&{iname}", iname,
+				"&{d}", xe.getName(),
+				"&{typ}", typ,
+				"&{typ1}", typ1,
+				"&{typeName}", typeName));
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template +";"+LN,
+				"&{name}", name,
+				"&{d}", xe.getName(),
+				"&{typ1}", typ1));
+			}
+			// setter
+			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void add&{name}(&{typ} x)";
-				setters.append(modify(template +
+			setters.append(modify(template +
 "{"+LN+
 "\t\tif (x!=null) {"+LN+
 "\t\t\t&{typeName} y=new &{typeName}();"+LN+
 "\t\t\ty.set$value(x); add&{iname}(y);"+LN+
 "\t\t}"+LN+"\t}"+LN,
-					"&{name}", name,
-					"&{iname}", iname,
-					"&{d}", xe.getName(),
-					"&{typ}", typ,
-					"&{typ1}", typ1,
-					"&{typeName}", typeName));
-				if (sbi != null) { // generate interface
-					sbi.append(modify(template +";"+LN,
-					"&{name}", name,
-					"&{d}", xe.getName(),
-					"&{typ}", typ));
-				}
-				template =
+				"&{name}", name,
+				"&{iname}", iname,
+				"&{d}", xe.getName(),
+				"&{typ}", typ,
+				"&{typ1}", typ1,
+				"&{typeName}", typeName));
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template +";"+LN,
+				"&{name}", name,
+				"&{d}", xe.getName(),
+				"&{typ}", typ));
+			}
+			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void set&{name}(&{typ1} x)";
-				setters.append(modify(template +
+			setters.append(modify(template +
 "{"+LN+
 "\t\t_&{iname}.clear(); if (x==null) return;"+LN+
 "\t\tfor (&{typ} y:x){"+LN+
@@ -833,33 +862,33 @@ if (true) return;
 "\t\t\tz._$value=y;add&{iname}(z);"+LN+
 "\t\t}"+LN+
 "\t}"+LN,
-					"&{name}", name,
-					"&{iname}", iname,
-					"&{d}", xe.getName(),
-					"&{typ}", typ,
-					"&{typ1}", typ1,
-					"&{typeName}", typeName));
-				if (sbi != null) { // generate interface
-					sbi.append(modify(template +";"+LN,
-					"&{name}", name,
-					"&{d}", xe.getName(),
-					"&{typ1}", typ1));
-				}
-			} else { // single value
-				// getter
-				template =
+				"&{name}", name,
+				"&{iname}", iname,
+				"&{d}", xe.getName(),
+				"&{typ}", typ,
+				"&{typ1}", typ1,
+				"&{typeName}", typeName));
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template +";"+LN,
+				"&{name}", name,
+				"&{d}", xe.getName(),
+				"&{typ1}", typ1));
+			}
+		} else { // single value
+			// getter
+			template =
 (_genJavadoc ? "\t/** Get value of textnode of &{d}."+LN+
 "\t * @return value of text of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get&{name}()";
-				getters.append(modify(template
-					+"{return _&{iname}==null?null:_&{iname}.get$value();}"+LN,
-					"&{name}", name,
-					"&{iname}", iname,
-					"&{d}", xe.getName(),
-					"&{typ}", typ));
-				if ("org.xdef.sys.SDatetime".equals(typ)) {
-					getters.append(modify(
+			getters.append(modify(template
+				+"{return _&{iname}==null?null:_&{iname}.get$value();}"+LN,
+				"&{name}", name,
+				"&{iname}", iname,
+				"&{d}", xe.getName(),
+				"&{typ}", typ));
+			if ("org.xdef.sys.SDatetime".equals(typ)) {
+				getters.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
@@ -875,16 +904,16 @@ if (true) return;
 "\t */"+LN : "")+
 "\tpublic java.util.Calendar calendarOf&{name}(){"+
 "return org.xdef.sys.SDatetime.getCalendar(get&{name}());}"+LN,
-						"&{d}" , xe.getName(),
-						"&{name}", name));
-				}
-				if (sbi != null) { // generate interface
-					sbi.append(modify(template + ";" + LN,
-						"&{name}", name,
-						"&{d}", xe.getName(),
-						"&{typ}", typ));
-					if ("org.xdef.sys.SDatetime".equals(typ)) {
-						getters.append(modify(
+					"&{d}" , xe.getName(),
+					"&{name}", name));
+			}
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template + ";" + LN,
+					"&{name}", name,
+					"&{d}", xe.getName(),
+					"&{typ}", typ));
+				if ("org.xdef.sys.SDatetime".equals(typ)) {
+					getters.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
@@ -897,28 +926,50 @@ if (true) return;
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.util.Calendar calendarOf&{name}();"+LN,
-						"&{d}" , xe.getName(),
-						"&{name}", name));
-					}
+					"&{d}" , xe.getName(),
+					"&{name}", name));
 				}
-				// setter
-				template =
+			}
+			// setter
+			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
 "\tpublic void set&{name}(&{typ} x)";
-					setters.append(modify(template+"{"+LN+
+				setters.append(modify(template+"{"+LN+
 "\t\tif(_&{iname}==null)set&{iname}(new &{typeName}());"+LN+
 "\t\t_&{iname}.set$value(x);"+LN+
 "\t}"+LN,
-					"&{name}", name,
-					"&{iname}", iname,
-					"&{d}", xe.getName(),
-					"&{typ}", typ,
-					"&{typeName}", typeName));
-				if ("org.xdef.sys.SDatetime".equals(typ)) {
-					template =
+				"&{name}", name,
+				"&{iname}", iname,
+				"&{d}", xe.getName(),
+				"&{typ}", typ,
+				"&{typeName}", typeName));
+			if ("org.xdef.sys.SDatetime".equals(typ)) {
+				template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
 "\tpublic void set&{name}(&{typ} x)"+
 "{set&{name}(x==null?null:new org.xdef.sys.SDatetime(x));}"+LN;
+				setters.append(modify(template,
+					"&{name}", name,
+					"&{d}", xe.getName(),
+					"&{typ}", "java.util.Date"));
+				setters.append(modify(template,
+					"&{name}", name,
+					"&{d}", xe.getName(),
+					"&{typ}", "java.sql.Timestamp"));
+				setters.append(modify(template,
+					"&{name}", name,
+					"&{d}", xe.getName(),
+					"&{typ}", "java.util.Calendar"));
+			}
+			if (sbi != null) { // generate interface
+				sbi.append(modify(template +  ";" + LN,
+					"&{name}", name,
+					"&{d}", xe.getName(),
+					"&{typ}", typ));
+				if ("org.xdef.sys.SDatetime".equals(typeName)) {
+					template =
+(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
+"\tpublic void set&{name}(&{typ} x);"+LN;
 					setters.append(modify(template,
 						"&{name}", name,
 						"&{d}", xe.getName(),
@@ -931,29 +982,6 @@ if (true) return;
 						"&{name}", name,
 						"&{d}", xe.getName(),
 						"&{typ}", "java.util.Calendar"));
-				}
-				if (sbi != null) { // generate interface
-					sbi.append(modify(template +  ";" + LN,
-						"&{name}", name,
-						"&{d}", xe.getName(),
-						"&{typ}", typ));
-					if ("org.xdef.sys.SDatetime".equals(typeName)) {
-						template =
-(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
-"\tpublic void set&{name}(&{typ} x);"+LN;
-						setters.append(modify(template,
-							"&{name}", name,
-							"&{d}", xe.getName(),
-							"&{typ}", "java.util.Date"));
-						setters.append(modify(template,
-							"&{name}", name,
-							"&{d}", xe.getName(),
-							"&{typ}", "java.sql.Timestamp"));
-						setters.append(modify(template,
-							"&{name}", name,
-							"&{d}", xe.getName(),
-							"&{typ}", "java.util.Calendar"));
-					}
 				}
 			}
 		}
@@ -1256,7 +1284,6 @@ if (true) return;
 	}
 
 	/** Add name of variable name to the set.
-	 *
 	 * @param set the set where to add.
 	 * @param name name to add.
 	 * @param xdPosition XDPosition of actual model.
@@ -1267,12 +1294,7 @@ if (true) return;
 		final String name,
 		final String xdPosition,
 		final boolean ext) {
-		String s;
-		String iname;
-		s = iname = name;
-		for (int j = 1; set.contains(name); j++) {
-			iname = s + "_" + j;
-		}
+		String iname = getUniqueName(name, set);
 		set.add(iname);
 		if (iname.equals(name)) {
 			return name;
@@ -1293,8 +1315,8 @@ if (true) return;
 	/** Generation of Java code of class composed from XDElement.
 	 * @param xelem XDElement from which Java code is composed.
 	 * @param index index of model.
-	 * @param clsName class name.
-	 * @param extCls class extension.
+	 * @param className class name.
+	 * @param extClass class extension.
 	 * @param interfaceName name of interface.
 	 * @param classNameBase prefix for inner class names.
 	 * @param packageName name of package.
@@ -1305,8 +1327,8 @@ if (true) return;
 	 */
 	private	String genComponent(final XElement xelem,
 		final int index,
-		final String clsName,
-		final String extCls,
+		final String className,
+		final String extClass,
 		final String interfaceName,
 		final String classNameBase,
 		final String packageName,
@@ -1314,7 +1336,7 @@ if (true) return;
 		final Set<String> clsNames,
 		final boolean isRoot,
 		String xdpath) {
-		String extClazz = extCls;
+		String extClazz = extClass;
 		String interfcName = interfaceName;
 		_components = components;
 		XElement xe = xelem;
@@ -1332,10 +1354,13 @@ if (true) return;
 		if (clsNames != null) {
 			classNames.addAll(clsNames);
 		}
+		if (isRoot && className != null) {
+			classNames.add(className);
+		}
 		final String xdname = xe.getXMDefinition().getName();
 		int ndx = model.indexOf(':');
 		final String localName = ndx >= 0 ? model.substring(ndx+1) : model;
-		final String clazz = clsName == null ? localName : clsName;
+		final String clazz = className == null ? localName : className;
 		final StringBuilder vars = new StringBuilder();
 		final Set<String> varNames = new HashSet<String>();
 		final StringBuilder getters = new StringBuilder();
@@ -1372,7 +1397,7 @@ if (true) return;
 							//"extends". In command "%bind &{2}" is
 							//parameter "%with &{1}!
 							_reporter.error(XDEF.XDEF375,
-								clsName,
+								className,
 								name.substring(ndx+7),
 								name.substring(0, ndx));
 							name = name.substring(0, ndx);
@@ -1380,7 +1405,7 @@ if (true) return;
 							//Class &{0} is not root. It can't be extended
 							//to &{1} according to command %bind &{2}
 							_reporter.error(XDEF.XDEF376,
-								clsName,
+								className,
 								name.substring(ndx+7),
 								name.substring(0, ndx));
 						}
@@ -1460,7 +1485,7 @@ if (true) return;
 								//"extends". In command "%bind &{2}" is
 								//parameter "%with &{1}!
 								_reporter.error(XDEF.XDEF375,
-									clsName,
+									className,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 								name = name.substring(0, ndx);
@@ -1468,7 +1493,7 @@ if (true) return;
 								//Class &{0} is not root. It can't be extended
 								//to &{1} according to command %bind &{2}
 								_reporter.error(XDEF.XDEF376,
-									clsName,
+									className,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 							}
@@ -1533,7 +1558,7 @@ if (true) return;
 								//"extends". In command "%bind &{2}" is
 								//parameter "%with &{1}!
 								_reporter.error(XDEF.XDEF375,
-									clsName,
+									className,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 								name = name.substring(0, ndx);
@@ -1541,7 +1566,7 @@ if (true) return;
 								//Class &{0} is not root. It can't be extended
 								//to &{1} according to command %bind &{2}
 								_reporter.error(XDEF.XDEF376,
-									clsName,
+									className,
 									name.substring(ndx+7),
 									name.substring(0, ndx));
 							}
@@ -1581,24 +1606,14 @@ if (true) return;
 						xcClass = xcClass.replace('#','.');
 					}
 				}
-				String iname = name;
-				boolean nameChanged = false;
-				for (int j = 1; RESERVED_NAMES.contains(iname); j++) {
-					iname = name + "_" + j;
-					nameChanged = true;
-				}
-				String chgName;
-				chgName = newClassName;
-				for (int j = 1; classNames.contains(newClassName); j++) {
-					newClassName = chgName + "_" + j;
-					nameChanged = true;
-				}
+				String iname = getUniqueName(name, RESERVED_NAMES);
+				boolean nameChanged = !iname.equals(name);
+				String chgName = newClassName;
+				newClassName = getUniqueName(chgName, classNames);
+				nameChanged |= !chgName.equals(newClassName);
 				chgName = iname;
-				for (int j = 1; classNames.contains(iname) ||
-					varNames.contains(iname); j++) {
-					iname = chgName + "_" + j;
-					nameChanged = true;
-				}
+				iname = getUniqueName(getUniqueName(iname,classNames),varNames);
+				nameChanged |= !chgName.equals(iname);
 				if (nameChanged) {
 					if (ext) {
 						//Getter/setter name &{0} in &{1} can't be used.
@@ -1617,7 +1632,7 @@ if (true) return;
 				if (xcClass != null) {
 					typeName = xcClass;
 					if ((ndx = xcClass.lastIndexOf('.')) > 0
-						&& (xcClass.substring(ndx + 1)).equals(clsName)) {
+						&& (xcClass.substring(ndx + 1)).equals(className)) {
 						typeName = xcClass.substring(ndx + 1);
 					}
 				} else {
@@ -1642,22 +1657,15 @@ if (true) return;
 						mURI = xe1.getNSUri();
 						mXDPos = xe1.getXDPosition();
 					}
-//					if (xe1._json == 1) {
-//						genValueGetterAndSetters(xe1,
-//							typeName, iname, max, setters, getters, sbi);
-//						genGetterMethodFromChildElement(node,
-//							typeName, iname, max, "element", getters, sbi);
-//						genSetterMethodOfChildElement(typeName, iname, max,
-//							mname, mURI, mXDPos, "element", setters, sbi);
-//					} else {
-						genGetterMethodFromChildElement(node,
-							typeName, iname, max, "element", getters, sbi);
-						genSetterMethodOfChildElement(typeName, iname, max,
-							mname, mURI, mXDPos, "element", setters, sbi);
-//					}
+					genGetterMethodFromChildElement(node,
+						typeName, iname, max, "element", getters, sbi);
+					genSetterMethodOfChildElement(typeName, iname, max,
+						mname, mURI, mXDPos, "element", setters, sbi);
 				}
-				genValueGetterAndSetters(xe1, typeName, iname, max,
-					setters, getters, sbi, classNames, varNames);
+				if (isJsonItem(xe1, iname)) {
+					genJsonGetterAndSetters(xe1, typeName, iname, max,
+						setters, getters, sbi, classNames, varNames);
+				}
 				genChildElementCreator(iname, genNodeList, max > 1);
 				// generate if it was not declared as XComponent
 				String xval = (max == 1 ? "1" : "2") + "," + iname + ";";
@@ -1667,7 +1675,7 @@ if (true) return;
 					innerClasses.append(genComponent(xe1, //Elememnt model
 						i, // index
 						newClassName, //class name
- 						"", //ext class
+							"", //ext class
 						(xcClass0 != null)? xcClass0.substring(10): "",
 						(packageName.length() > 0 ? packageName +"." : "")
 							+ classNameBase + '#' + newClassName, //interface
@@ -1762,7 +1770,8 @@ if (true) return;
 "\t/** Create JSON object from this XComponent (marshal to JSON)"+LN+
 "\t * @return JSON object created from this XComponent."+LN+
 "\t */"+LN) : "")+
-"\tpublic Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
+"\tpublic Object toJon() {"+
+	"return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
 ////////////////////////////////////////////////////////////////////////////////
 		String result =
 (_genJavadoc ?
@@ -1782,6 +1791,9 @@ if (true) return;
 			+ xpathes.toString() +
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
+(_genJavadoc ? "\t/** Get JSON version: 0 not set, 1 .. W3C, 2 .. XDEF. */+LN"
+: "") +
+"\tpublic final static byte xJsonVersion = " + xe._json + ";" +LN+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <tt>null</tt> then document is created with"+LN+
@@ -1868,6 +1880,7 @@ if (true) return;
 "\t * @return index of model of this XComponent."+LN+
 "\t */"+LN) : "") +
 "\tpublic int xGetModelIndex() {return "+index+";}"+LN+
+
 ////////////////////////////////////////////////////////////////////////////////
 			genSeparator("Private methods", _genJavadoc) + toXml+
 "\t@Override"+LN+

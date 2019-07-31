@@ -28,6 +28,7 @@ public class Z6 implements org.xdef.component.XComponent{
   public String xposOfMistoVydani(){return XD_XPos+"/@MistoVydani";}
   public String xposOfStatVydani(){return XD_XPos+"/@StatVydani";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

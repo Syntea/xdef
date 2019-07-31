@@ -6,6 +6,7 @@ public class Y12 implements org.xdef.component.XComponent{
   public java.util.List<Y12_B> listOfB() {return _B;}
   public void addB(Y12_B x) {if (x!=null) _B.add(x);}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

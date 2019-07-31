@@ -12,6 +12,7 @@ public class H implements org.xdef.component.XComponent{
   public void sets$Body(H.s$Body x){_s$Body=x;}
   public String xposOfs$encodingStyle(){return XD_XPos+"/@s$encodingStyle";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -141,6 +142,7 @@ public static class s$Header implements org.xdef.component.XComponent{
   public void setb$User(test.xdef.component.H.s$Header.b$User x){_b$User=x;}
   public void setb$Request(test.xdef.component.H.s$Header.b$Request x){_b$Request=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -265,6 +267,7 @@ public static class b$User implements org.xdef.component.XComponent{
   public String xposOfs$understand(){return XD_XPos+"/@s$understand";}
   public String xposOfIdentUser(){return XD_XPos+"/@IdentUser";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -394,6 +397,7 @@ public static class b$Request implements org.xdef.component.XComponent{
   public String xposOfReqMsgId(){return XD_XPos+"/@ReqMsgId";}
   public String xposOfMode(){return XD_XPos+"/@Mode";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -537,6 +541,7 @@ public static class s$Body implements org.xdef.component.XComponent{
     _b$PingFlow=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -657,6 +662,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
   public void setFlow(String x){_Flow=x;}
   public String xposOfFlow(){return XD_XPos+"/@Flow";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -31,6 +31,7 @@ public class Z9 implements org.xdef.component.XComponent{
   public String xposOfTelefon1(){return XD_XPos+"/@Telefon1";}
   public String xposOfTelefon2(){return XD_XPos+"/@Telefon2";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

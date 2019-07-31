@@ -7,6 +7,7 @@ public class FotoDN implements org.xdef.component.XComponent{
   public void setFoto_Ref(String x){_Foto_Ref=x;}
   public String xposOfFoto_Ref(){return XD_XPos+"/@Foto_Ref";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -12,6 +12,7 @@ public class Y15 implements org.xdef.component.XComponent{
   public String xposOf$value(){return XD_XPos+"/$text";}
   public String xposOf$value1(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -135,6 +136,7 @@ public class Y15 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class b implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

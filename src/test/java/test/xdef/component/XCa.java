@@ -8,6 +8,7 @@ public class XCa implements org.xdef.component.XComponent{
   public void sets(XCa.s x){_s=x;}
   public void sets_1(XCa.s_1 x){_s_1=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -129,6 +130,7 @@ public static class s implements org.xdef.component.XComponent{
   public String xposOfk(){return XD_XPos+"/@k";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -250,6 +252,7 @@ public static class s_1 implements org.xdef.component.XComponent{
   public String xposOfk(){return XD_XPos+"/@k";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

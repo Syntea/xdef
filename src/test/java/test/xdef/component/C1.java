@@ -10,6 +10,7 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
   public String xposOfFirstName(){return XD_XPos+"/@FirstName";}
   public String xposOfLastName(){return XD_XPos+"/@LastName";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

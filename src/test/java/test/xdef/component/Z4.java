@@ -61,6 +61,7 @@ public class Z4 implements org.xdef.component.XComponent{
   public String xposOfStatniPrislusnost(){return XD_XPos+"/@StatniPrislusnost";}
   public String xposOfProfese(){return XD_XPos+"/@Profese";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

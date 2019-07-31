@@ -15,6 +15,7 @@ public class Y21 implements org.xdef.component.XComponent{
   public String xposOf$value(){return XD_XPos+"/$text";}
   public String xposOf$value1(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -151,6 +152,7 @@ public static class B implements org.xdef.component.XComponent{
   public String xposOfc(){return XD_XPos+"/@c";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

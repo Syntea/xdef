@@ -31,6 +31,7 @@ public class D implements org.xdef.component.XComponent{
   public void setT(D.T x){_T=x;}
   public void seta$T(D.a$T x){_a$T=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -240,6 +241,7 @@ public class D implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class $_ implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -342,6 +344,7 @@ public static class B implements org.xdef.component.XComponent{
   public String xposOf$value(){return XD_XPos+"/$text";}
   public String xposOf$value1(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -485,6 +488,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(Boolean x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -596,6 +600,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(Boolean x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -712,6 +717,7 @@ public static class I implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.I.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -837,6 +843,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(Integer x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -948,6 +955,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(Integer x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1064,6 +1072,7 @@ public static class F implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.F.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1189,6 +1198,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(Double x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1300,6 +1310,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(Double x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1416,6 +1427,7 @@ public static class G implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.G.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1541,6 +1553,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(byte[] x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1652,6 +1665,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(byte[] x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1768,6 +1782,7 @@ public static class H implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.H.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -1893,6 +1908,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(byte[] x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2004,6 +2020,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(byte[] x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2120,6 +2137,7 @@ public static class P implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.P.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2245,6 +2263,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(java.math.BigDecimal x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2356,6 +2375,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(java.math.BigDecimal x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2478,6 +2498,7 @@ public static class Q implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.Q.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2609,6 +2630,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2726,6 +2748,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2842,6 +2865,7 @@ public static class R implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.R.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -2967,6 +2991,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(org.xdef.sys.SDuration x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3078,6 +3103,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(org.xdef.sys.SDuration x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3194,6 +3220,7 @@ public static class S implements org.xdef.component.XComponent{
   public void setY(test.xdef.component.D.S.Y x){_Y=x;}
   public String xposOfA(){return XD_XPos+"/@A";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3319,6 +3346,7 @@ public static class X implements org.xdef.component.XComponent{
   public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3430,6 +3458,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3539,6 +3568,7 @@ public static class Y implements org.xdef.component.XComponent{
 }
 public static class E implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3634,6 +3664,7 @@ public static class T implements org.xdef.component.XComponent{
   public void setI_1(test.xdef.component.D.T.I_1 x){_I_1=x;}
   public String xposOft(){return XD_XPos+"/@t";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3748,6 +3779,7 @@ public static class T implements org.xdef.component.XComponent{
 public static class I_1 implements org.xdef.component.XComponent{
   public String getxmlns() {return "x.y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3852,6 +3884,7 @@ public static class a$T implements org.xdef.component.XComponent{
   public void seta$I(test.xdef.component.D.a$T.a$I x){_a$I=x;}
   public String xposOfa$t(){return XD_XPos+"/@a$t";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -3966,6 +3999,7 @@ public static class a$T implements org.xdef.component.XComponent{
 public static class a$I implements org.xdef.component.XComponent{
   public String getxmlns$a() {return "a.b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

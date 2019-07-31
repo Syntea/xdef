@@ -6,6 +6,7 @@ public class Y19 implements org.xdef.component.XComponent{
   public Y19.B getB() {return _B;}
   public void setB(Y19.B x){_B=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -113,6 +114,7 @@ public static class B implements org.xdef.component.XComponent{
   public test.xdef.component.Y19.B.B_1 getB_1() {return _B_1;}
   public void setB_1(test.xdef.component.Y19.B.B_1 x){_B_1=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -219,6 +221,7 @@ public static class B_1 implements org.xdef.component.XComponent{
   public test.xdef.component.Y19.B.B_1.C getC() {return _C;}
   public void setC(test.xdef.component.Y19.B.B_1.C x){_C=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -325,6 +328,7 @@ public static class C implements org.xdef.component.XComponent{
   public test.xdef.component.Y19.B.B_1.C.B_2 getB_2() {return _B_2;}
   public void setB_2(test.xdef.component.Y19.B.B_1.C.B_2 x){_B_2=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -432,6 +436,7 @@ public static class B_2 implements org.xdef.component.XComponent{
   public void setb(Integer x){_b=x;}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -880,6 +881,102 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		xparse(e, reporter);
 		return JsonUtil.xmlToJson(_element);
+	}
+
+	@Override
+	/** Parse source JSON and return XComponent as result.
+	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(String json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse URL with JSON source and return XComponent as result.
+	 * @param json URL with JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(URL json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse URL with JSON source and return XComponent as result.
+	 * @param json InputStream with JSON source data.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(InputStream json,
+		String sourceId,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json,sourceId),xClass,reporter);
+	}
+
+	@Override
+	/** Parse file with JSON source and return XComponent as result.
+	 * @param json file with JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(File json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse JSON data and return XComponent as result.
+	 * @param json XML <tt>org.w3c.dom.Node</tt>.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(Object json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		try {
+			Field jsonVersion = xClass.getDeclaredField("xJsonVersion");
+			byte jVersion = (Byte) jsonVersion.get(null);
+			e = jVersion == 1 ?
+				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
+		} catch (Exception ex) {
+			e = JsonUtil.jsonToXml(json);
+		}
+		return parseXComponent(e, xClass, reporter);
 	}
 
 	@Override

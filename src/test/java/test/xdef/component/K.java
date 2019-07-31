@@ -11,6 +11,7 @@ public class K implements org.xdef.component.XComponent{
   public void setd(K.d x){_d=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -149,6 +150,7 @@ public static class c implements org.xdef.component.XComponent{
   public String xposOfCislo(){return XD_XPos+"/@Cislo";}
   public String xposOfRok(){return XD_XPos+"/@Rok";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -276,6 +278,7 @@ public static class d implements org.xdef.component.XComponent{
   public void seta(java.util.Calendar x){_a=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -34,6 +34,7 @@ public class VlakDN implements org.xdef.component.XComponent{
   public String xposOfSpoj(){return XD_XPos+"/@Spoj";}
   public String xposOfDruhSoupravy(){return XD_XPos+"/@DruhSoupravy";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -188,6 +189,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

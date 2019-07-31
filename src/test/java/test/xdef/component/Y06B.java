@@ -10,6 +10,7 @@ public class Y06B implements test.xdef.TestXComponents_Y06XCDomain,org.xdef.comp
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

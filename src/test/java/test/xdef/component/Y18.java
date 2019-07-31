@@ -18,6 +18,7 @@ public class Y18 implements org.xdef.component.XComponent{
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -161,6 +162,7 @@ public static class C implements org.xdef.component.XComponent{
   public String xposOfd(){return XD_XPos+"/@d";}
   public String xposOfx(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

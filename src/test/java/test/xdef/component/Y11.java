@@ -6,6 +6,7 @@ public class Y11 implements org.xdef.component.XComponent{
   public java.util.List<Y11.B> listOfB() {return _B;}
   public void addB(Y11.B x) {if (x!=null) _B.add(x);}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -135,6 +136,7 @@ public static class B implements org.xdef.component.XComponent{
   public String xposOfN(){return XD_XPos+"/@N";}
   public String xposOfI(){return XD_XPos+"/@I";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

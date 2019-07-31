@@ -9,6 +9,7 @@ public class Lexicon implements org.xdef.component.XComponent{
   public void addY(Lexicon.Y x) {if (x!=null) _Y.add(x);}
   public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -124,6 +125,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void sety(Integer x){_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -9,6 +9,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   public void addStreet(C.Street x) {if (x!=null) _Street.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -126,6 +127,7 @@ public static class Street implements org.xdef.component.XComponent{
   public void addHouse(test.xdef.component.C2 x) {if (x!=null) _House.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

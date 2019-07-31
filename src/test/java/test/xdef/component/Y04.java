@@ -7,6 +7,7 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
   public void setTwo(String x){_Two=x;}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

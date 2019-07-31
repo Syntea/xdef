@@ -7,6 +7,7 @@ public class Y03PartTwo implements org.xdef.component.XComponent{
   public void setOne(Integer x){_One=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

@@ -16,6 +16,7 @@ public class Z5 implements org.xdef.component.XComponent{
   public String xposOfNazevFirmy(){return XD_XPos+"/@NazevFirmy";}
   public String xposOfIC(){return XD_XPos+"/@IC";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}

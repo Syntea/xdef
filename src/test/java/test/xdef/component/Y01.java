@@ -6,6 +6,7 @@ public class Y01 implements org.xdef.component.XComponent{
   public test.xdef.component.s.Y01Operation getOperation() {return _Operation;}
   public void setOperation(test.xdef.component.s.Y01Operation x){_Operation=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte xJsonVersion = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
