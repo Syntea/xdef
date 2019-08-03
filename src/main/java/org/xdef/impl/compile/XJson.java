@@ -208,10 +208,11 @@ public class XJson extends JsonToXml {
 			val.addString(" ");
 		}
 		val.addString("match @"+ J_KEYATTRW3C + "=='"+key+"';"
-			+ (key.isEmpty() ? " options preserveEmptyAttributes;" : ""));
+			+ (key.isEmpty()
+				? " options preserveEmptyAttributes,noTrimAttr;" : ""));
 		setAttr(e, J_KEYATTRW3C,
-			new SBuffer(key.isEmpty()
-				? "empty();": "string();", e._name));
+			new SBuffer(
+				"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;", e._name));
 	}
 
 	/** Create PNode with JSON model from JSON parsed data.

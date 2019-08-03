@@ -12,7 +12,7 @@ public class P implements org.xdef.component.XComponent{
   public void setc(P.c x){_c=x;}
   public void setd(P.d x){_d=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -61,7 +61,7 @@ public class P implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
@@ -152,7 +152,7 @@ public static class a implements org.xdef.component.XComponent{
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -202,7 +202,7 @@ public static class a implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -276,7 +276,7 @@ public static class b implements org.xdef.component.XComponent{
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -326,7 +326,7 @@ public static class b implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -400,7 +400,7 @@ public static class c implements org.xdef.component.XComponent{
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -450,7 +450,7 @@ public static class c implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -524,7 +524,7 @@ public static class d implements org.xdef.component.XComponent{
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -574,7 +574,7 @@ public static class d implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();

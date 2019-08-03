@@ -8,7 +8,7 @@ public class F1 implements org.xdef.component.XComponent{
   public void setA(F1.A x){_A=x;}
   public void setB(F1.B x){_B=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -57,7 +57,7 @@ public class F1 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
@@ -124,7 +124,7 @@ public class F1 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class A implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -164,7 +164,7 @@ public static class A implements org.xdef.component.XComponent{
         XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();
@@ -214,7 +214,7 @@ public static class A implements org.xdef.component.XComponent{
 }
 public static class B implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -254,7 +254,7 @@ public static class B implements org.xdef.component.XComponent{
         XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();

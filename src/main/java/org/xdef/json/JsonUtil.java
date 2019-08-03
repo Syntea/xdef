@@ -91,6 +91,29 @@ public class JsonUtil extends StringParser {
 		return i >= 16 ? i - 6 : i;
 	}
 
+	/** Check if on the position given by index in a string it is the
+	 * form of hexadecimal character representation.
+	 * @param s inspected string.
+	 * @param index index where to start inspection.
+	 * @return true if index position represents hexadecimal form of character.
+	 */
+	final static boolean isJChar(final String s, final int index) {
+		if (index + 3 > s.length() ||
+			s.charAt(index) != '_' || s.charAt(index+1) != 'x' ||
+			hexDigit(s.charAt(index+2)) < 0) {
+			return false;
+		}
+		// parse hexdigits
+		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (hexDigit(ch) < 0) {
+				// not hexadecimal digit.
+				return ch == '_'; //if '_' return true otherwise return false
+			}
+		}
+		return false;
+	}
+
 	/** Read JSON value.
 	 * @return parsed value: List, Map, String, Number, Boolean or null.
 	 * @throws SRuntimeException is an error occurs.
@@ -185,7 +208,7 @@ public class JsonUtil extends StringParser {
 			StringBuilder sb = new StringBuilder();
 			while (!eos()) {
 				if (isChar('"')) {
-					return _genJObjects 
+					return _genJObjects
 						? new XJson.JValue(_sPosition, sb.toString())
 						: sb.toString();
 				} else if (isChar('\\')) {
@@ -218,8 +241,8 @@ public class JsonUtil extends StringParser {
 			}
 			// end of string ('"') is missing
 			fatal(JSON.JSON001);
-			return _genJObjects ? new XJson.JValue(_sPosition, sb.toString())
-				: sb.toString();
+			return _genJObjects
+				? new XJson.JValue(_sPosition, sb.toString()) : sb.toString();
 		} else if (isToken("null")) {
 			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 		} else if (isToken("true")) {
@@ -228,6 +251,7 @@ public class JsonUtil extends StringParser {
 			return _genJObjects ? new XJson.JValue(_sPosition, false) : false;
 		} else {
 			boolean minus = isChar('-');
+			boolean plus = !minus && isChar('+');
 			Number number;
 			String s;
 			if (isFloat()) {
@@ -244,12 +268,15 @@ public class JsonUtil extends StringParser {
 					//JSON value expected
 					error(JSON.JSON010);
 				}
+				if (plus) {
+					error(JSON.JSON017, "+");//Not allowed character '&{0}'
+				}
 				return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
 				Character.isDigit(s.charAt(1))) {
 					// Illegal leading zero in number
-					error(JSON.JSON014);
+					warning(JSON.JSON014);
 			}
 			return _genJObjects ? new XJson.JValue(_sPosition,number) : number;
 		}
@@ -568,7 +595,7 @@ public class JsonUtil extends StringParser {
 	 * @return string with JSON source format.
 	 */
 	public final static String toJsonString(final Object obj) {
-		return toJsonString(obj, false);
+		return JsonUtil.toJsonString(obj, false);
 	}
 
 	/** Create JSON string from object. Indentation depends on argument.
@@ -775,11 +802,11 @@ public class JsonUtil extends StringParser {
 	}
 
 	/** Create XML from JSON object according to W3C recommendation.
-	 * @param jobject object with JSON data.
+	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlW3C(final Object jobject) {
-		return new JsonToXml().toXmlW3C(jobject);
+	public static final Element jsonToXmlW3C(final Object json) {
+		return new JsonToXml().toXmlW3C(json);
 	}
 
 	/** Create XML from JSON object according to W3C recommendation.
@@ -807,11 +834,11 @@ public class JsonUtil extends StringParser {
 	}
 
 	/** Create XML from JSON object according (XDefinition form).
-	 * @param jobject object with JSON data.
+	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXml(final Object jobject) {
-		return new JsonToXml().toXmlXD(jobject);
+	public static final Element jsonToXml(final Object json) {
+		return new JsonToXml().toXmlXD(json);
 	}
 
 	/** Create XML from JSON object according (XDefinition form).
@@ -846,4 +873,210 @@ public class JsonUtil extends StringParser {
 		return new JsonToXml().toXmlXD(parse(in));
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create JSON string from XML data.
+	 * @param source XML form of string.
+	 * @return XML form of string converted to JSON.
+	 */
+	public static final String jstringFromXML(final String source) {
+		if (source == null || source.isEmpty()) {
+			return source;
+		}
+		String src = source.trim();
+		if (src != null && src.length() > 1
+			&& src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
+			&& src.charAt(src.length() - 2) != '\\') {
+			String s = src.substring(1,  src.length() - 1); // remove '"'
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0;  i < s.length(); i++) {
+				char ch = s.charAt(i);
+				if (ch == '\\') {
+					if (++i >= s.length()) {
+						return s; // missing escape char (error)
+					}
+					switch (ch = s.charAt(i)) {
+						case '\\':
+							ch = '\\';
+							break;
+						case 'b':
+							ch = '\b';
+							break;
+						case 'f':
+							ch = '\f';
+							break;
+						case 'n':
+							ch = '\n';
+							break;
+						case 'r':
+							ch = '\r';
+							break;
+						case 't':
+							ch = '\t';
+							break;
+						case '"':
+							ch = '"';
+							break;
+						case '/':
+							ch = '/';
+							break;
+						case 'u':
+							try {
+								ch = (char) Short.parseShort(
+									s.substring(i+1, i+5), 16);
+								i += 4;
+								break;
+							} catch (Exception ex) {
+								return s; // incorrect UTF-8 char
+							}
+						default: return s; // illegal escape char (error)
+					}
+				}
+				sb.append(ch);
+			}
+			return sb.toString();
+		}
+		return src;
+	}
+
+	/** Create XML string created from JSON string.
+	 * @param source JSON form of string.
+	 * @param isAttr if true then it is used in attribute, otherwise it will be
+	 * used in a text node.
+	 * @return XML string converted to JSON string.
+	 */
+	public static final String jstringToXML(final String source,
+		final boolean isAttr) {
+		if (source.length() == 0 || "null".equals(source)
+			|| "true".equals(source) || "false".equals(source)) {
+			return "\"" + source + "\"";
+		}
+		boolean addQuot = source.indexOf(' ') >= 0 || source.indexOf('\t') >= 0
+			|| source.indexOf('\n') >= 0 || source.indexOf('\r') >= 0
+			|| source.indexOf('\f') >= 0 || source.indexOf('\b') >= 0;
+		if (!addQuot) {
+			char ch = source.charAt(0);
+			if (ch == '-' || ch >= '0' && ch <= '9') {
+				StringParser p = new StringParser(source);
+				if ((p.isSignedFloat() || p.isSignedInteger())
+					&& p.eos()) {
+					return '"' + source + '"'; // value is number
+				}
+			}
+		}
+		if (addQuot) {
+			StringBuilder sb = new StringBuilder();
+			for (char ch: source.toCharArray()) {
+				switch (ch) {
+					case '\\':
+						sb.append("\\\\");
+						continue;
+					case '"':
+						sb.append("\\\"");
+						continue;
+					case '\b':
+						sb.append("\\b");
+						continue;
+					case '\f':
+						sb.append("\\f");
+						continue;
+					case '\n':
+						sb.append("\\n");
+						continue;
+					case '\r':
+						sb.append("\\r");
+						continue;
+					case '\t':
+						sb.append("\\t");
+						continue;
+					default:
+						if (ch >= ' ' && Character.isDefined(ch)) {
+							sb.append(ch);
+						} else { // create \\uxxxx
+							sb.append("\\u");
+							for (int i = 12; i >= 0; i -=4) {
+								sb.append("0123456789abcdef"
+									.charAt((ch >> i) & 0xf));
+							}
+						}
+				}
+			}
+			String s = sb.toString();
+			if (isAttr && s.equals(s.trim())) {
+				// For attributes it is not necessary to add quotes if the data
+				// does not contain leading or trailing white spaces,
+				return s;
+			} else {
+				return '\"' + s + '\"';
+			}
+		} else {
+			return source;
+		}
+	}
+
+	/** Get XML name created from JSOM pair name.
+	 * @param s JSOM pair name.
+	 * @return XML name.
+	 */
+	public final static String toXmlName(final String s) {
+		if (s.length() == 0) {
+			return "_"; // empty string
+		} else if (("_").equals(s)) {
+			return "_x5f_";
+		}
+		StringBuilder sb = new StringBuilder();
+		char ch = s.charAt(0);
+		sb.append(isJChar(s, 0)
+			|| StringParser.getXmlCharType(ch, (byte) 10)
+				!= StringParser.XML_CHAR_NAME_START ? toHexChar(ch) : ch);
+		boolean firstcolon = true;
+		for (int i = 1; i < s.length(); i++) {
+			ch = s.charAt(i);
+			if (isJChar(s, i)) {
+				sb.append(toHexChar(ch));
+			} else if (ch == ':' && firstcolon) {
+				firstcolon = false;
+				sb.append(':');
+			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
+				StringParser.XML_CHAR_COLON) {
+				sb.append(ch);
+			} else {
+				firstcolon = false;
+				sb.append(toHexChar(ch));
+			}
+		}
+		return sb.toString();
+	}
+
+	/** Convert character to representation used in XML names. */
+	private static String toHexChar(final char c) {
+		return "_x" + Integer.toHexString(c) + '_';
+	}
+
+	/** Create JSON name from XML name.
+	 * @param name XML name.
+	 * @return JSON name.
+	 */
+	public static String toJsonName(final String name) {
+		if ("_".equals(name)) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < name.length(); i++) {
+			char ch = name.charAt(i);
+			if (ch == '_' && i + 2 < name.length()) {
+				if (isJChar(name, i)) {
+					int ndx = name.indexOf('_', i+1);
+					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
+					sb.append((char) x);
+					i = ndx;
+				} else {
+					sb.append('_');
+				}
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
 }

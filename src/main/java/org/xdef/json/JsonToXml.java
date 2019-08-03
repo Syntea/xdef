@@ -5,7 +5,6 @@ import org.xdef.impl.compile.XJson.JValue;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,40 +53,6 @@ public class JsonToXml extends JsonUtil {
 	/** Create instance of JsonToXml. */
 	public JsonToXml() {super();}
 
-	/** Get XML name created from JSOM pair name.
-	 * @param s JSOM pair name.
-	 * @return XML name.
-	 */
-	public final static String toXmlName(final String s) {
-		if (s.length() == 0) {
-			return "_"; // empty string
-		} else if (("_").equals(s)) {
-			return "_x5f_";
-		}
-		StringBuilder sb = new StringBuilder();
-		char ch = s.charAt(0);
-		sb.append(isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, (byte) 10)
-				!= StringParser.XML_CHAR_NAME_START ? toHexChar(ch) : ch);
-		boolean firstcolon = true;
-		for (int i = 1; i < s.length(); i++) {
-			ch = s.charAt(i);
-			if (isJChar(s, i)) {
-				sb.append(toHexChar(ch));
-			} else if (ch == ':' && firstcolon) {
-				firstcolon = false;
-				sb.append(':');
-			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
-				StringParser.XML_CHAR_COLON) {
-				sb.append(ch);
-			} else {
-				firstcolon = false;
-				sb.append(toHexChar(ch));
-			}
-		}
-		return sb.toString();
-	}
-
 	/** Get prefix of XML name.
 	 * @param s XML name.
 	 * @return prefix of XML name.
@@ -112,34 +77,6 @@ public class JsonToXml extends JsonUtil {
 		} else {
 			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
 		}
-	}
-
-	/** Convert character to representation used in XML names. */
-	private static String toHexChar(final char c) {
-		return "_x" + Integer.toHexString(c) + '_';
-	}
-
-	/** Check if on the position given by index in a string it is the
-	 * form of hexadecimal character representation.
-	 * @param s inspected string.
-	 * @param index index where to start inspection.
-	 * @return true if index position represents hexadecimal form of character.
-	 */
-	final static boolean isJChar(final String s, final int index) {
-		if (index + 3 > s.length() ||
-			s.charAt(index) != '_' || s.charAt(index+1) != 'x' ||
-			hexDigit(s.charAt(index+2)) < 0) {
-			return false;
-		}
-		// parse hexdigits
-		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (hexDigit(ch) < 0) {
-				// not hexadecimal digit.
-				return ch == '_'; //if '_' return true otherwise return false
-			}
-		}
-		return false;
 	}
 
 	/** Replace colon in XML name with "_x3a_".
@@ -235,78 +172,9 @@ public class JsonToXml extends JsonUtil {
 	 */
 	private static String genSimpleValueToXml(final Object val,
 		final boolean isAttr) {
-		if (val == null) {
-			return "null";
-		} else if (val instanceof String) {
-			String s = (String) val;
-			if (s.length() == 0 ||
-				"null".equals(s) || "true".equals(s) || "false".equals(s)) {
-				return "\"" + s + "\"";
-			} else {
-				boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
-					|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
-					|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0;
-				if (!addQuot) {
-					char ch = s.charAt(0);
-					if (ch == '-' || ch >= '0' && ch <= '9') {
-						StringParser p = new StringParser(s);
-						if ((p.isSignedFloat() || p.isSignedInteger())
-							&& p.eos()) {
-							return '"' + s + '"'; // value is number
-						}
-					}
-				}
-				if (addQuot) {
-					StringBuilder sb = new StringBuilder();
-					for (char ch: s.toCharArray()) {
-						switch (ch) {
-							case '\\':
-								sb.append("\\\\");
-								continue;
-							case '"':
-								sb.append("\\\"");
-								continue;
-							case '\b':
-								sb.append("\\b");
-								continue;
-							case '\f':
-								sb.append("\\f");
-								continue;
-							case '\n':
-								sb.append("\\n");
-								continue;
-							case '\r':
-								sb.append("\\r");
-								continue;
-							case '\t':
-								sb.append("\\t");
-								continue;
-							default:
-								if (ch >= ' ' && Character.isDefined(ch)) {
-									sb.append(ch);
-								} else {
-									sb.append("\\u");
-									for (int i = 12; i >= 0; i -=4) {
-										sb.append("0123456789abcdef"
-											.charAt((ch >> i) & 0xf));
-									}
-								}
-						}
-
-					}
-					s = sb.toString();
-					if (isAttr && s.equals(s.trim())) {
-						return s; // not necessary to add quotes for attributes
-					} else {
-						return '\"' + s + '\"';
-					}
-				} else {
-					return s;
-				}
-			}
-		} else {
-			return val.toString();
-		}
+		return val == null ? "null"
+			: val instanceof String ? jstringToXML((String) val, isAttr)
+			: val.toString();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -513,11 +381,8 @@ public class JsonToXml extends JsonUtil {
 		} else {
 			if (val instanceof String) {
 				e = genJElement(J_STRING);
-				String s = (String) val;
-				if (!s.isEmpty()) {
-					s = genSimpleValueToXml(val, false);
-					e.appendChild(_doc.createTextNode(s));
-				}
+				e.appendChild(_doc.createTextNode(
+					genSimpleValueToXml(val, false)));
 			} else if (val instanceof Number) {
 				e = genJElement(J_NUMBER);
 				e.appendChild(_doc.createTextNode(val.toString()));

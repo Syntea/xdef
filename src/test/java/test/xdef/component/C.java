@@ -9,7 +9,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   public void addStreet(C.Street x) {if (x!=null) _Street.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -60,7 +60,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
@@ -127,7 +127,7 @@ public static class Street implements org.xdef.component.XComponent{
   public void addHouse(test.xdef.component.C2 x) {if (x!=null) _House.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -177,7 +177,7 @@ public static class Street implements org.xdef.component.XComponent{
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=

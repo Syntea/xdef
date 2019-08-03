@@ -33,7 +33,7 @@ public interface XComponent {
 	/** Create JSON object from this XComponent (marshal to JSON).
 	 * @return JSON object created from this XComponent.
 	 */
-	public Object toJon();
+	public Object toJson();
 
 	/** Get name of element used for construction of this object.
 	 * @return name of element used for construction of this object.

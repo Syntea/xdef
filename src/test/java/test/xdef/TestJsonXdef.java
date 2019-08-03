@@ -12,6 +12,7 @@ import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
 
@@ -314,7 +315,7 @@ public class TestJsonXdef extends XDTester {
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
-				Object o = xc.toJon();
+				Object o = xc.toJson();
 				if (!JsonUtil.jsonEqual(json, o)) {
 					_errors++;
 					result += (result.isEmpty() ? "" : "\n")
@@ -355,6 +356,36 @@ public class TestJsonXdef extends XDTester {
 		return result;
 	}
 
+	/** Run a JSON getter on the X-component.
+	 * @param xc X-component.
+	 * @param name name of setter.
+	 * @return value of getter.
+	 */
+	private static Object getJValue(XComponent xc, String name) {
+		Class<?> cls = xc.getClass();
+		try {
+			Method m = cls.getDeclaredMethod("jget" + name);
+			return m.invoke(xc);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	/** Run a JSON setter on the X-component.
+	 * @param xc X-component.
+	 * @param name name of setter.
+	 * @param val value to be set.
+	 */
+	private static void setJValue(XComponent xc, String name, Object val) {
+		Class<?> cls = xc.getClass();
+		try {
+			Method m = cls.getDeclaredMethod("jset" + name, val.getClass());
+			m.invoke(xc, val);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 	/** Provides different tests on files with given ID.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param id identifier test files.
@@ -368,6 +399,13 @@ public class TestJsonXdef extends XDTester {
 			resulta += '\n';
 		}
 		return resulta + resultb;
+	}
+
+	private XComponent getXComponent(final XDPool xp,
+		final String id, final String json) throws Exception{
+		XDDocument xd = xp.createXDDocument("Test" + id);
+		return xd.jparseXComponent(json,
+			Class.forName("test.common.json.component.Test" + id), null);
 	}
 
 	@Override
@@ -386,6 +424,24 @@ public class TestJsonXdef extends XDTester {
 			String s = testJdef(xp, getId(f));
 			assertTrue(s.isEmpty(), s);
 		}
+		// test getters/setters in X-component
+		try {
+			XComponent xc;
+			String json = "{\"\":\"\"}";
+			xc = getXComponent(xp, "004a", json);
+			assertEq("", getJValue(xc, ""));
+			setJValue(xc, "", " abc");
+			assertEq(" abc", getJValue(xc, ""));
+			setJValue(xc, "", "");
+			assertEq("", getJValue(xc, ""));
+
+			xc = getXComponent(xp, "004b", json);
+			assertEq("", getJValue(xc, ""));
+			setJValue(xc, "", "abc");
+			assertEq("abc", getJValue(xc, ""));
+			setJValue(xc, "", "");
+			assertEq("", getJValue(xc, ""));
+		} catch (Exception ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (_errors == 0) {

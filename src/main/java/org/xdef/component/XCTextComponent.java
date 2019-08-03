@@ -52,7 +52,7 @@ public class XCTextComponent implements XComponent {
 	/** Create JSON object from this XComponent (marshal to JSON).
 	 * @return JSON object created from this XComponent.
 	 */
-	public Object toJon() {return null;}
+	public Object toJson() {return null;}
 
 	@Override
 	/** Get name of element model used for construction of this object.

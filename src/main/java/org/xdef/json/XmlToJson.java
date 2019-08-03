@@ -20,39 +20,12 @@ import org.w3c.dom.NodeList;
 /** Conversion of XML to JSON (both versions - W3C and XDEF)
  * @author Vaclav Trojan
  */
-public class XmlToJson extends JsonToXml {
+class XmlToJson extends JsonToXml {
 	/** Document used to create X-definition. */
 	private boolean _isW3C;
 
 	/** Prepare instance of JX. */
 	XmlToJson() {super();}
-
-	/** Create JSON name from XML name.
-	 * @param name XML name.
-	 * @return JSON name.
-	 */
-	private static String toJsonName(final String name) {
-		if ("_".equals(name)) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < name.length(); i++) {
-			char ch = name.charAt(i);
-			if (ch == '_' && i + 2 < name.length()) {
-				if (isJChar(name, i)) {
-					int ndx = name.indexOf('_', i+1);
-					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
-					sb.append((char) x);
-					i = ndx;
-				} else {
-					sb.append('_');
-				}
-			} else {
-				sb.append(ch);
-			}
-		}
-		return sb.toString();
-	}
 
 	/** Create JSON Map with attributes from element.
 	 * @param e element with attributes.
@@ -85,8 +58,7 @@ public class XmlToJson extends JsonToXml {
 		}
 		if (s.isEmpty()) {
 			return "";
-		}
-		if ("true".equals(s)) {
+		} else if ("true".equals(s)) {
 			return Boolean.TRUE;
 		} else if ("false".equals(s)) {
 			return Boolean.FALSE;
@@ -115,62 +87,9 @@ public class XmlToJson extends JsonToXml {
 						}
 					}
 				} catch (Exception ex) {
-					return s; // return raw value
+					return s; // error; so return raw value ???
 				}
-			case '"': // JSON string
-				if (s.length() > 1 && s.charAt(s.length() - 1) == '"'
-					&& s.charAt(s.length() - 2) != '\\') {
-					s = s.substring(1, s.length() - 1);
-					StringBuilder sb = new StringBuilder();
-					for (int i = 0;  i < s.length(); i++) {
-						char ch = s.charAt(i);
-						if (ch == '\\') {
-							if (++i >= s.length()) {
-								return s; // // missing escape char
-							}
-							switch (ch = s.charAt(i)) {
-								case '\\':
-									ch = '\\';
-									break;
-								case 'b':
-									ch = '\b';
-									break;
-								case 'f':
-									ch = '\f';
-									break;
-								case 'n':
-									ch = '\n';
-									break;
-								case 'r':
-									ch = '\r';
-									break;
-								case 't':
-									ch = '\t';
-									break;
-								case '"':
-									ch = '"';
-									break;
-								case '/':
-									ch = '/';
-									break;
-								case 'u':
-									try {
-										ch = (char) Short.parseShort(
-											s.substring(i+1, i+5), 16);
-										i += 4;
-										break;
-									} catch (Exception ex) {
-										return s; // incorrect UTF-8 char
-									}
-								default:
-									return s; // illegal escape char
-							}
-						}
-						sb.append(ch);
-					}
-					return sb.toString();
-				}
-			default: return s;
+			default: return jstringFromXML(s); // JSON String
 		}
 	}
 
@@ -349,7 +268,7 @@ public class XmlToJson extends JsonToXml {
 	 * @param e XML element.
 	 * @return object with JSON data.
 	 */
-	private Object getJsonObject(final Element e) {
+	final Object getJsonObject(final Element e) {
 		if (_jsNamespace.equals(e.getNamespaceURI())) {
 			if (J_ARRAY.equals(e.getLocalName())) {
 				return createArray(e);
@@ -445,10 +364,6 @@ public class XmlToJson extends JsonToXml {
 		}
 	}
 
-	/** Convert XML element to object with JSON data.
-	 * @param e XML element.
-	 * @return object with JSON data.
-	 */
 	final Object toJson(final Element e) {
 		if (XDConstants.JSON_NS_URI_W3C.equals(e.getNamespaceURI())) {
 			_jsNamespace = XDConstants.JSON_NS_URI_W3C;

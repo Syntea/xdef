@@ -7,7 +7,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
   public void setz(String x){_z=x;}
   public String xposOfz(){return XD_XPos+"/@z";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  public final static byte xJsonVersion = 0;
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -56,7 +56,7 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
     return el;
   }
   @Override
-  public Object toJon() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     return new java.util.ArrayList<org.xdef.component.XComponent>();

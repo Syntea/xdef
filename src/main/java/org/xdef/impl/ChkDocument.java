@@ -969,8 +969,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		ReportWriter reporter) throws SRuntimeException {
 		Element e;
 		try {
-			Field jsonVersion = xClass.getDeclaredField("xJsonVersion");
-			byte jVersion = (Byte) jsonVersion.get(null);
+			byte jVersion = (Byte) xClass.getDeclaredField("JSON").get(null);
 			e = jVersion == 1 ?
 				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
 		} catch (Exception ex) {
