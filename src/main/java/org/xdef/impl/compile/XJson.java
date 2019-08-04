@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.xdef.sys.StringParser;
 
 /** JSON/X-definition utility.
  * @author Vaclav Trojan
@@ -212,7 +213,8 @@ public class XJson extends JsonToXml {
 				? " options preserveEmptyAttributes,noTrimAttr;" : ""));
 		setAttr(e, J_KEYATTRW3C,
 			new SBuffer(
-				"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;", e._name));
+			"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;",
+				e._name));
 	}
 
 	/** Create PNode with JSON model from JSON parsed data.
@@ -445,18 +447,18 @@ public class XJson extends JsonToXml {
 					}
 					continue;
 				}
-				String name1 = toXmlName(key);
 				if (o == null) {
-					attrs.put(name1, "jnull()");
+					attrs.put(key, "jnull()");
 				} else if (isSimpleValue(o)) {
-					if (!"xmlns".equals(name1) && !name1.startsWith("xmlns:")) {
+					if (!"xmlns".equals(key) && !key.startsWith("xmlns:")
+						|| !StringParser.chkXMLName(key, (byte) 10)) {
 						if (choice) {
-							simpleChoiceName = name1;
+							simpleChoiceName = key;
 						}
 					}
-					attrs.put(name1, o);
+					attrs.put(key, o);
 				} else {
-					items.put(name1, o);
+					items.put(toXmlName(key), o);
 				}
 			}
 			PNode ee;
@@ -612,12 +614,13 @@ public class XJson extends JsonToXml {
 					setXDAttr(e, "script", val.getSBuffer());
 				} else {
 					if (isSimpleValue(o)) {
-						if (!"xmlns".equals(key) && !key.startsWith("xmlns:")) {
+						if (!"xmlns".equals(key) && !key.startsWith("xmlns:")
+							|| !StringParser.chkXMLName(key, (byte) 10)) {
 							setAttr(e, toXmlName(key), val.getSBuffer());
 						}
 					}
 				}
-			} else if (o instanceof String) { // ???
+			} else if (o instanceof String) { // ??? should not happen!
 				setAttr(e, toXmlName(key), new SBuffer((String) o));
 			}
 		}

@@ -3573,22 +3573,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						errorAndSkip(XDEF.XDEF423,
 							String.valueOf(END_SYM), "Parser");
 					} else {
-/*XXX*
-			String s = getParsedBufferPartFrom(srcPos).trim();
-			if (s.startsWith("OR") || s.startsWith("NOT") || s.startsWith("AND")
-				|| s.startsWith("AAND") || s.startsWith("OOR")) {
-				s = ' ' + s;
-			}
-			if (s.endsWith(";")) {
-				s = s.substring(0, s.length() - 1);
-				s = s.trim();
-			}
-			if (s.isEmpty()) {
-				s = "()";
-			}
-//			info.setParam2(typeName + s);
-//System.out.println(typeName + s);
-/*XXX*/
 						CompileVariable v =
 							_g.addVariable(name, _g._tstack[_g._sp], varKind);
 						if (_g._cstack[_g._sp] >= 0) {

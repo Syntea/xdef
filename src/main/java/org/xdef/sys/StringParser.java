@@ -4042,9 +4042,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse Nmtoken.
-	 * [7] Nmtoken::= (NameChar)+
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
+	 * [7] Nmtoken::= (NameChar)+
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
 	 * @return true if rule passed.
 	 */
@@ -4611,10 +4611,10 @@ public class StringParser extends SReporter implements SParser {
 // XML static methods
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Check if argument is a whitespace - static version of {@link
-	 * StringParser#getXmlCharType(byte)}.
+	/** Check if argument is a whitespace - see {@link StringParser#isSpace()}.
 	 * @param ch character to be checked.
-	 * @return <tt>true</tt> is only if argument is a whitespace.
+	 * @return <tt>true</tt> is only if argument is a whitespace according to
+	 * XML specification..
 	 */
 	public static final boolean chkXmlWhiteSpaceChar(final char ch) {
 		return XML_CHARTAB0[ch] == XML_CHAR_WHITESPACE;
@@ -4631,10 +4631,10 @@ public class StringParser extends SReporter implements SParser {
 		return xmlVersion == (byte) 11 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
 	}
 
-	/** Parse NCName - static version of {@link StringParser#isNCName(byte)}.
+	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
-	 * @return true if the argument passes the rule.
+	 * @return true if the argument is NCName according to XML specification.
 	 */
 	public static final boolean chkNCName(final String name,
 		final byte xmlVersion) {
@@ -4649,10 +4649,10 @@ public class StringParser extends SReporter implements SParser {
 		return i == max;
 	}
 
-	/** Parse NCName - static version of {
+	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
-	 * @return true if the argument passes the rule.
+	 * @return true if the argument is XML name according to XML specification..
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
 	public static final boolean chkXMLName(final String name,
@@ -4670,10 +4670,10 @@ public class StringParser extends SReporter implements SParser {
 		return i == max;
 	}
 
-	/** Parse NCName - static version of {
+	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * @return true if the argument passes the rule.
+	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */
 	public static final boolean chkNMToken(final String name,

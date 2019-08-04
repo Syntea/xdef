@@ -436,11 +436,11 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", getJValue(xc, ""));
 
 			xc = getXComponent(xp, "004b", json);
-			assertEq("", getJValue(xc, ""));
-			setJValue(xc, "", "abc");
-			assertEq("abc", getJValue(xc, ""));
-			setJValue(xc, "", "");
-			assertEq("", getJValue(xc, ""));
+			assertEq("", getJValue(xc, "$_"));
+			setJValue(xc, "$_", "abc");
+			assertEq("abc", getJValue(xc, "$_"));
+			setJValue(xc, "$_", "");
+			assertEq("", getJValue(xc, "$_"));
 		} catch (Exception ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.

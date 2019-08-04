@@ -798,10 +798,9 @@ public final class GenXComponent {
 			}
 			String typ =
 				getJavaObjectTypeName((XData) xe.getChildNodeModels()[0]);
-			name = "$_".equals(name) ? "" : javaName(name);
+			name = javaName(name);
 			name = getUniqueName(getUniqueName(getUniqueName(name,
 				RESERVED_NAMES), classNames), varNames);
-//			name = getUniqueName(name, varNames);
 			String template;
 			// has only a text child
 			String jGet, jSet;
@@ -1337,9 +1336,6 @@ public final class GenXComponent {
 		final StringBuilder getters,
 		final StringBuilder sbi) {
 		String name = javaName(xe.getName());
-		if ("$_".equals(name)) {
-			name = "";
-		}
 		String typ = getJavaObjectTypeName(xdata);
 		String jGet = "String".equals(typ) ?
 			"org.xdef.json.JsonUtil.jstringFromXML(get&{iname}())"
