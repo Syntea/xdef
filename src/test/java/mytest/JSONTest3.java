@@ -69,8 +69,8 @@ public class JSONTest3 extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); // errors
 //		props.setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-//		String knm = "";
-		String knm = " a,\n\t?:b ";
+		String knm = "";
+//		String knm = " a,\n\t?:b ";
 		try {
 			xp = XDFactory.compileXD(props, 
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='js:json | jw:json'\n" +
@@ -108,11 +108,10 @@ public class JSONTest3 extends XDTester {
 		}
 		try {
 			json = "{\""+knm+"\":\"Music Library\"}";
-			jname = knm.isEmpty() ? "" : JsonUtil.toXmlName(knm);
+			jname = GenXComponent.javaName(JsonUtil.toXmlName(knm));
 //System.out.println(jname);
 			js1 = JsonUtil.parse(json);
 			xd = xp.createXDDocument("A");
-			assertEq(JsonUtil.toJsonName(jname), knm);
 			js = xd.jparse(json, "js:json", reporter);
 			assertNoErrors(reporter);
 			reporter.clear();

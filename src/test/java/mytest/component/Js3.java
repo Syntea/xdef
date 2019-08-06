@@ -4,9 +4,9 @@
 package mytest.component;
 public class Js3 implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public String jget_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(){return _$value==null?null:org.xdef.json.JsonUtil.jstringFromXML(get$value());}
+  public String jget$_(){return _$value==null?null:org.xdef.json.JsonUtil.jstringFromXML(get$value());}
   public void set$value(String x){_$value=x;}
-  public void jset_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(String x){
+  public void jset$_(String x){
     set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
   }
   public String xposOf$value(){return XD_XPos+"/$text";}
@@ -67,7 +67,7 @@ public class Js3 implements org.xdef.component.XComponent{
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
-        "A#js:json/_x20_a_x2c__xa__x9__x3f__x3a_b_x20_/$text", a, get$value(), _$$value);
+        "A#js:json/_/$text", a, get$value(), _$$value);
     return a;
   }
   public Js3() {}
@@ -84,7 +84,7 @@ public class Js3 implements org.xdef.component.XComponent{
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"C63BEE8F06454127C380AF6ABB2C1D0E".equals(
+    if (!"790C32939D1B05A1254D1327447B1C7C".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -94,12 +94,12 @@ public class Js3 implements org.xdef.component.XComponent{
   private char _$$value= (char) -1;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
-  private String XD_NodeName = "_x20_a_x2c__xa__x9__x3f__x3a_b_x20_";
+  private String XD_NodeName = "_";
   private String XD_NamespaceURI;
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private String XD_Model="A#js:json/_x20_a_x2c__xa__x9__x3f__x3a_b_x20_";
+  private String XD_Model="A#js:json/_";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){

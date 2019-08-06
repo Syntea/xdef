@@ -5,9 +5,9 @@ package mytest.component;
 public class Js3w implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public Js3w.jw$string getjw$string() {return _jw$string;}
-  public String jget_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(){return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());}
+  public String jget$_(){return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());}
   public void setjw$string(Js3w.jw$string x){_jw$string=x;}
-  public void jset_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(String x){
+  public void jset$_(String x){
     if(_jw$string==null)setjw$string(new Js3w.jw$string());
     _jw$string.set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
   }

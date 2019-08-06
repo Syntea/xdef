@@ -4,9 +4,9 @@
 package mytest.component;
 public class Js3i implements org.xdef.component.XComponent{
   public Integer get$value() {return _$value;}
-  public Integer jget_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(){return _$value==null?null:get$value();}
+  public Integer jget$_(){return _$value==null?null:get$value();}
   public void set$value(Integer x){_$value=x;}
-  public void jset_x20_a_x2c__xa__x9__x3f__x3a_b_x20_(Integer x){
+  public void jset$_(Integer x){
     set$value(x);
   }
   public String xposOf$value(){return XD_XPos+"/$text";}
@@ -67,7 +67,7 @@ public class Js3i implements org.xdef.component.XComponent{
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
-        "B#js:json/_x20_a_x2c__xa__x9__x3f__x3a_b_x20_/$text", a, get$value().toString(), _$$value);
+        "B#js:json/_/$text", a, get$value().toString(), _$$value);
     return a;
   }
   public Js3i() {}
@@ -84,7 +84,7 @@ public class Js3i implements org.xdef.component.XComponent{
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"53B070AEAD7D4CA03905893D42CEB257".equals(
+    if (!"D8818534E3D5BD830BE7132239688926".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
@@ -94,12 +94,12 @@ public class Js3i implements org.xdef.component.XComponent{
   private char _$$value= (char) -1;
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
-  private String XD_NodeName = "_x20_a_x2c__xa__x9__x3f__x3a_b_x20_";
+  private String XD_NodeName = "_";
   private String XD_NamespaceURI;
   private int XD_Index = -1;
   private int XD_ndx;
   private String XD_XPos;
-  private String XD_Model="B#js:json/_x20_a_x2c__xa__x9__x3f__x3a_b_x20_";
+  private String XD_Model="B#js:json/_";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
