@@ -1,0 +1,28 @@
+<xd:collection xmlns:xd="http://www.xdef.org/xdef/3.2">
+<xd:def name='C' >
+ <Y x='i'>j;</Y>
+</xd:def>
+<xd:def name='main' root='X | Y | Z'>
+ <xd:declaration scope='local'>
+   type i p;
+ </xd:declaration>
+ <xd:declaration scope='local'>
+   type p int(1,10);
+   type q float(20.0,30.0);
+   type j q;
+ </xd:declaration>
+ <X x='i'>j;<B xd:script='ref C#Y'/></X>
+ <Y x='i'>j</Y>
+ <Z xd:script='ref C#Y'/>
+</xd:def>
+<xd:declaration>
+   type x int(-1,0);
+</xd:declaration>
+<xd:declaration>
+   type i x;
+   type j y;
+</xd:declaration>
+<xd:declaration>
+   type y float(-3.0,-2.0);
+</xd:declaration>
+</xd:collection>

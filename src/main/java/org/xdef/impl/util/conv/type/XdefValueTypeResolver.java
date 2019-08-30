@@ -202,12 +202,20 @@ public class XdefValueTypeResolver {
 	 */
 	private String getOtherTypeQName(Other otherType, Element contextElem) {
 		XdDecl xdDecl = getXdDecl(otherType);
+		if (xdDecl == null) {
+			String xdname;
+			if (otherType.isSimple() && (xdname=otherType.getXdefName())!=null) {
+				String typename = otherType.getName();
+				xdDecl = _xdDoc.getXdDecl('_'+xdname+'.' + typename);
+			}
+		}
 		if (xdDecl != null) {
 			XsdModel model = (XsdModel) _xdModelXsdModelMap.get(xdDecl);
 			Element schema = XsdUtils.getAncestorSchema(contextElem);
 			return _xsdDoc.getQName(schema, model.getSchema(), model.getName());
 		}
 		return _xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName());
+
 	}
 
 	/** Returns X-definition declaration model if given type is reference to
@@ -218,7 +226,15 @@ public class XdefValueTypeResolver {
 	public XdDecl getXdDecl(ValueType type) {
 		if (ValueType.OTHER == type.getKind()) {
 			Other otherType = (Other) type;
-			if (otherType.isSimple()) {
+			String xdname;
+			if (otherType.isSimple() && (xdname=otherType.getXdefName())!=null){
+				String typename = otherType.getName();
+				if (xdname != null) {
+					XdDecl xdDecl = _xdDoc.getXdDecl('_'+xdname+'.' + typename);
+					if (xdDecl != null) {
+						return xdDecl;
+					}
+				}
 				return _xdDoc.getXdDecl(otherType.getName());
 			}
 		}
@@ -246,14 +262,36 @@ public class XdefValueTypeResolver {
 	public void resolveXdDecl(XdDecl xdDecl) {
 		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
 		String declName = xdDecl.getName();
-		Map<String, String> map = Util.getDeclaredTypes(declElem);
+		String xdName = xdDecl.getDef().getName();
+		String localNamePrefix = xdName != null ? '_' + xdName+ '.' : "_.";
+		Map<String, String> map = new HashMap<String, String>();
+		Util.getDeclaredTypes(declElem, map);
 		String typeDecl = map.get(declName); // try local
+		if (typeDecl != null) {
+			String s = map.get(localNamePrefix + typeDecl); // try local
+			if (s == null) {
+				s = map.get(typeDecl); // try local
+			}
+			while (s != null) {
+				typeDecl = s;
+				s = map.get(localNamePrefix + s); // try local
+				if (s == null) {
+					s = map.get(s); // try global
+				}
+			}
+			}
+/*vtxx*
+		String typeDecl = map.get(localNamePrefix + declName); // try local
 		if (typeDecl == null) {
 			typeDecl = map.get(declName); // global
 		}
+/*vtxx*/
 		if (typeDecl != null) {
 			try {
 				ValueType type = XdefValueTypeParser.parse(typeDecl);
+				if (type.getKind() == ValueType.OTHER) {
+					((Other) type).setXdefName(xdName);
+				}
 				XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
 				Element sTypeElem = (Element) _xsdDoc.getModels().get(model);
 				addTypeToSType(type, sTypeElem);
@@ -268,7 +306,9 @@ public class XdefValueTypeResolver {
 	 * @param typeDecl attribute type declaration string.
 	 * @param attrElem schema <tt>attribute</tt> element to add declaration to.
 	 */
-	public void resolveAttrType(String typeDecl, Element attrElem) {
+	public void resolveAttrType(final String typeDecl,
+		final String xdname,
+		final Element attrElem) {
 		//type declaration is empty => anySimpleType
 		if (typeDecl == null || typeDecl.length() == 0) {
 			_xsdDoc.setType(attrElem,
@@ -277,6 +317,9 @@ public class XdefValueTypeResolver {
 		}
 		try {
 			ValueType parsedType = XdefValueTypeParser.parse(typeDecl);
+			if (parsedType.getKind() == ValueType.OTHER) {
+				((Other) parsedType).setXdefName(xdname);
+			}
 			addType(parsedType, attrElem);
 		} catch (Exception ex) {
 			throw new RuntimeException(
@@ -1427,7 +1470,6 @@ public class XdefValueTypeResolver {
 	}
 
 	private void addOtherTypeToSType(Other otherType, Element sTypeElem) {
-		//TODO: add documentation
 		_xsdDoc.addDocumentation(sTypeElem, otherType.getTypeString());
 		_xsdDoc.addRestrictionDecl(sTypeElem,
 			getOtherTypeQName(otherType, sTypeElem));

@@ -57,6 +57,7 @@ public final class XdefValueTypeParser {
 	/** Union type switch. */
 	private boolean _isXdefUnion = false;
 
+	@SuppressWarnings("deprecation")
 	/** Creates instance of type parser.
 	 * @param type type string to parse.
 	 * @throws NullPointerException if given type string is <tt>null</tt>.
@@ -70,7 +71,7 @@ public final class XdefValueTypeParser {
 			throw new IllegalArgumentException("Given type string is empty");
 		}
 		_p = new XScriptParser((byte) 10);
-		_p.setSource(new SBuffer(type), null, XConstants.XD32);
+		_p.setSource(new SBuffer(type), null, XConstants.XD20);
 		_b = new StringBuffer();
 	}
 

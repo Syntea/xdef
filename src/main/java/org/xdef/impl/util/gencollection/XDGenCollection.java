@@ -387,10 +387,13 @@ public class XDGenCollection {
 	 * @param n node to be inspected.
 	 * @return <tt>true</tt> if node is element with X-definition namespace.
 	 */
-	public static boolean isXdefElement(final Node n) {
+	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
 		if (n.getNodeType() != Node.ELEMENT_NODE
-			|| uri == null || uri.length() == 0) {
+			|| uri == null || uri.length() == 0
+			|| !(XDConstants.XDEF20_NS_URI.equals(uri)
+				|| XDConstants.XDEF31_NS_URI.equals(uri)
+				|| XDConstants.XDEF32_NS_URI.equals(uri))) {
 			return false;
 		}
 		String xdUri =
@@ -407,39 +410,39 @@ public class XDGenCollection {
 		return name.equals(n.getLocalName()) && isXdefElement(n);
 	}
 
-	/** Check XDEF attribute.
+	/** Check if XDEF attribute exists.
 	 * @param el element to be inspected.
 	 * @param xdUri name space URI of X-definition.
-	 * @param name name of attribute
-	 * @return value of attribute or an empty string.
+	 * @param localname name of attribute
+	 * @return true if attribute with given local name exists.
 	 */
 	public static boolean hasXdefAttr(final Element el,
 		final String xdUri,
-		final String name) {
-		return el.hasAttribute(name) || el.hasAttributeNS(xdUri, name);
+		final String localname) {
+		return el.hasAttribute(localname) || el.hasAttributeNS(xdUri,localname);
 	}
 
-	/** Get xdef attribute from an element.
+	/** Get attribute from an element (with or without prefix).
 	 * @param el element from which an attribute should be taken.
-	 * @param xdUri name space URI of X-definition.
-	 * @param name name of attribute
+	 * @param xdUri namespace URI of X-definition.
+	 * @param localname local name of attribute
 	 * @param remove if <tt>true</tt> then the attribute is removed.
 	 * @return value of attribute or an empty string.
 	 */
-	public static String getXdefAttr(final Element el,
+	static String getXdefAttr(final Element el,
 		final String xdUri,
-		final String name,
+		final String localname,
 		final boolean remove) {
 		String result = "";
-		if (el.hasAttribute(name)) {
-			result = el.getAttribute(name).trim();
+		if (el.hasAttribute(localname)) {
+			result = el.getAttribute(localname).trim();
 			if (remove) {
-				el.removeAttribute(name);
+				el.removeAttribute(localname);
 			}
-		} else if (el.hasAttributeNS(xdUri, name)) {
-			result = el.getAttributeNS(xdUri, name).trim();
+		} else if (el.hasAttributeNS(xdUri, localname)) {
+			result = el.getAttributeNS(xdUri, localname).trim();
 			if (remove) {
-				el.removeAttributeNS(xdUri, name);
+				el.removeAttributeNS(xdUri, localname);
 			}
 		}
 		return result;
@@ -879,7 +882,7 @@ public class XDGenCollection {
 	 * @param origName tested identifier.
 	 * @return id of unique identifier or 0.
 	 */
-	public static int genUniqueID(Element el, String origName) {
+	private static int genUniqueID(Element el, String origName) {
 		NodeList nl = el.getChildNodes();
 		int j = 0;
 		boolean found;
@@ -1080,14 +1083,10 @@ public class XDGenCollection {
 		return XDFactory.getXDBuilder(props).setSource(urls).compileXD();
 	}
 
-	public static String getXDAttrNS(final Attr n) {
-		String uri;
-		if (n == null || (uri = n.getNamespaceURI()) == null || uri.isEmpty()) {
-			return null;
-		}
-		return findXDNS(n.getOwnerElement());
-	}
-
+	/** Find namespace of child element on root level.
+	 * @param n node to be checked.
+	 * @return 
+	 */
 	public static String findXDNS(final Node n) {
 		if (n != null) {
 			for (Node x = n; x != null && x.getNodeType() != Node.DOCUMENT_NODE;
@@ -1102,6 +1101,10 @@ public class XDGenCollection {
 	}
 
 	@SuppressWarnings("deprecation")
+	/** Get X-definition version ID of given node.
+	 * @param n node to be checked.
+	 * @return byte with version ID of given node (see XConstants).
+	 */
 	public static byte getXDVersion(final Node n) {
 		String s = findXDNS(n);
 		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
@@ -1110,11 +1113,55 @@ public class XDGenCollection {
 				|| XConstants.XDEF32NS_OLD.equals(s) ? XConstants.XD32 : 0;
 	}
 
-	public final static String getXDNodeNS(final Node n) {
-		if (n.getNodeType() != Node.ELEMENT_NODE) {
+	/** Get the element with X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return X-definition where the node is declared..
+	 */
+	public final static Element getXdef(final Node n) {
+		if (n == null || n.getNodeType() != Node.ELEMENT_NODE) {
 			return null;
 		}
-		Element e = (Element) n;
+		for (Node x = n; x != null && x.getNodeType() != Node.DOCUMENT_NODE;
+			x = x.getParentNode()) {
+			String ns = getXDNodeNS(x);
+			if (ns != null && "def".equals(x.getLocalName())
+				&& ("collection".equals(x.getParentNode().getLocalName())
+					|| x.getParentNode().getNodeType()==Node.DOCUMENT_NODE)) {
+				return x.getNodeType()==Node.ELEMENT_NODE ? (Element) x : null;
+			}
+		}
+		return null;
+	}
+
+	/** Get name of X-definition of X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return name of X-definition of X-definition where the node is declared.
+	 */
+	public final static String getXDName(final Node n) {
+		Element xd = getXdef(n);
+		if (xd == null) {
+			return null;
+		}
+		Attr attr = xd.getAttributeNodeNS(xd.getNamespaceURI(), "name");
+		if (attr == null) {
+			attr = xd.getAttributeNode("name");
+		}
+		return attr == null ? null : attr.getValue();
+	}
+
+	/** Get namespace URI of X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return namespace URI of X-definition where the node is declared.
+	 */
+	public final static String getXDNodeNS(final Node n) {
+		Element e;
+		if (n.getNodeType() == Node.ATTRIBUTE_NODE) {
+			e = ((Attr) n).getOwnerElement();
+		} else if (n.getNodeType() == Node.ELEMENT_NODE) {
+			e = (Element) n;
+		} else {
+			return null;
+		}
 		String uri = e.getNamespaceURI();
 		if (uri == null || uri.isEmpty()) {
 			return null;

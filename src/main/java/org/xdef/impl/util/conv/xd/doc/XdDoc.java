@@ -38,7 +38,7 @@ public abstract class XdDoc {
 		if (XDConstants.XDEF20_NS_URI.equals(namespace)
 			|| XDConstants.XDEF31_NS_URI.equals(namespace)
 			|| (XDConstants.XDEF32_NS_URI.equals(namespace)
-				|| XConstants.XDEF32NS_OLD.equals(namespace))) {
+			|| XConstants.XDEF32NS_OLD.equals(namespace))) {
 			return new XdDoc_2_0(xdef, namespace);
 		} else {
 			//Not valid X-definition document

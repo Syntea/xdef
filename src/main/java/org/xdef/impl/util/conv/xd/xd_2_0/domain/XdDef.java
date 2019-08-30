@@ -7,6 +7,7 @@ public final class XdDef {
 
 	/** Hashcode. */
 	private int _hashCode = 0;
+
 	/** X-definition name as is in X-definition<tt>name</tt> attribute. */
 	private final String _name;
 
@@ -24,10 +25,12 @@ public final class XdDef {
 		}
 		_name = name;
 	}
+
 	/** X-definition name getter.
 	 * @return name of X-definition.
 	 */
 	public String getName() { return _name; }
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -38,6 +41,7 @@ public final class XdDef {
 		}
 		return _name.equals(((XdDef) obj)._name);
 	}
+
 	@Override
 	public int hashCode() {
 		if (_hashCode == 0) {
@@ -45,6 +49,7 @@ public final class XdDef {
 		}
 		return _hashCode;
 	}
+
 	@Override
 	public String toString() {return "XdDef[name='" + _name + "']";}
 }
