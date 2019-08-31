@@ -429,11 +429,11 @@ public class TestJsonXdef extends XDTester {
 			XComponent xc;
 			String json = "{\"\":\"\"}";
 			xc = getXComponent(xp, "004a", json);
-			assertEq("", getJValue(xc, ""));
-			setJValue(xc, "", " abc");
-			assertEq(" abc", getJValue(xc, ""));
-			setJValue(xc, "", "");
-			assertEq("", getJValue(xc, ""));
+			assertEq("", getJValue(xc, "$_"));
+			setJValue(xc, "$_", " abc");
+			assertEq(" abc", getJValue(xc, "$_"));
+			setJValue(xc, "$_", "");
+			assertEq("", getJValue(xc, "$_"));
 
 			xc = getXComponent(xp, "004b", json);
 			assertEq("", getJValue(xc, "$_"));

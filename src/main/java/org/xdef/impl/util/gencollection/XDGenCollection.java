@@ -143,6 +143,7 @@ public class XDGenCollection {
 			}
 			_prefixes.clear();
 		}
+
 		@Override
 		public void endElement(final String uri,
 			final String localName,
@@ -256,13 +257,9 @@ public class XDGenCollection {
 		}
 	}
 
-	private void parse(File file) throws Exception {
-		parse(file.toURI().toURL());
-	}
+	private void parse(File f) throws Exception {parse(f.toURI().toURL());}
 
-	private void parse(URL u) throws Exception {
-		parse(u.toExternalForm());
-	}
+	private void parse(URL u) throws Exception {parse(u.toExternalForm());}
 
 	private void parse(URL[] urls) throws Exception {
 		for (int i = 0; i < urls.length; i++) {
@@ -1085,7 +1082,7 @@ public class XDGenCollection {
 
 	/** Find namespace of child element on root level.
 	 * @param n node to be checked.
-	 * @return 
+	 * @return
 	 */
 	public static String findXDNS(final Node n) {
 		if (n != null) {
@@ -1100,7 +1097,6 @@ public class XDGenCollection {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Get X-definition version ID of given node.
 	 * @param n node to be checked.
 	 * @return byte with version ID of given node (see XConstants).
