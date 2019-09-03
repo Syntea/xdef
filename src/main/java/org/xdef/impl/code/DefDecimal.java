@@ -68,7 +68,7 @@ public final class DefDecimal extends XDValueAbstract {
 	 * @return The string from value.
 	 */
 	public String toString() {
-		return _value == null ? "null" : String.valueOf(_value);
+		return _value==null ? "" : String.valueOf(_value);
 	}
 
 	@Override

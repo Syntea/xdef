@@ -28,9 +28,9 @@ public abstract class XdDoc {
 	 * @throws IllegalArgumentException if given document is not a valid
 	 * X-definition document.
 	 */
-	public static XdDoc getXdDoc(Document xdef,
+	public final static XdDoc getXdDoc(final Document xdef,
 		final SReporter reporter,
-		boolean debugMode) {
+		final boolean debugMode) {
 		if (reporter == null) {
 			throw new SRuntimeException(XDEF.XDEF707); //Reporter is null
 		}
@@ -39,7 +39,7 @@ public abstract class XdDoc {
 			|| XDConstants.XDEF31_NS_URI.equals(namespace)
 			|| (XDConstants.XDEF32_NS_URI.equals(namespace)
 				|| XConstants.XDEF32NS_OLD.equals(namespace))) {
-			return new XdDoc_2_0(xdef, namespace);
+			return new XdDoc_2_0(xdef);
 		} else {
 			//Not valid X-definition document
 			throw new SRuntimeException(XDEF.XDEF704);
@@ -57,8 +57,9 @@ public abstract class XdDoc {
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
 	 */
-	public static XdDoc getXdDoc(String xdef, final SReporter reporter,
-		boolean debugMode) {
+	public final static XdDoc getXdDoc(final String xdef,
+		final SReporter reporter,
+		final boolean debugMode) {
 		if (xdef == null) {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
@@ -86,9 +87,9 @@ public abstract class XdDoc {
 	 * @throws RuntimeException if error occurs during creating collection
 	 * element.
 	 */
-	public static XdDoc getXdDoc(URL xdef,
+	public final static XdDoc getXdDoc(final URL xdef,
 		final SReporter reporter,
-		boolean debugMode) {
+		final boolean debugMode) {
 		if (xdef == null) {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
@@ -112,9 +113,9 @@ public abstract class XdDoc {
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
 	 */
-	public static XdDoc getXdDoc(File xdef,
+	public final static XdDoc getXdDoc(final File xdef,
 		final SReporter reporter,
-		boolean debugMode) {
+		final boolean debugMode) {
 		if (xdef == null) {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}
@@ -139,9 +140,9 @@ public abstract class XdDoc {
 	 * @throws RuntimeException if error occurs during parsing X-definition from
 	 * input stream.
 	 */
-	public static XdDoc getXdDoc(InputStream xdef,
-		SReporter reporter,
-		boolean debugMode) {
+	public final static XdDoc getXdDoc(final InputStream xdef,
+		final SReporter reporter,
+		final boolean debugMode) {
 		if (xdef == null) {
 			throw new SRuntimeException(XDEF.XDEF705); //X-definition is null
 		}

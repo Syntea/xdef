@@ -33,14 +33,12 @@ public final class XdDoc_2_0 extends XdDoc {
 
 	/** Creates instance of X-definition version 2.0 document.
 	 * @param xdef X-definition document.
-	 * @param xdNS namespace of X-definition.
 	 */
-	public XdDoc_2_0(Document xdef, String xdNS) {
+	public XdDoc_2_0(final Document xdef) {
 		if (xdef == null) {
 			throw new NullPointerException(
 				"Given X-definition document is null");
 		}
-//		_xdNS = xdNS;
 		validate(xdef);
 		init(xdef);
 	}
@@ -50,7 +48,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws RuntimeException if given X-definition document is not valid or
 	 * an error occurred during validation.
 	 */
-	private void validate(Document xdef) {
+	private void validate(final Document xdef) {
 		try {
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(xdef, true));
 		} catch (SRuntimeException ex) {
@@ -64,7 +62,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws IllegalArgumentException if given document is not a valid
 	 * X-definition document.
 	 */
-	private void init(Document xdef) {
+	private void init(final Document xdef) {
 		Element root = xdef.getDocumentElement();
 		if (XdUtils.isCollection(root)) {
 			initCollection(root);
@@ -79,7 +77,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** Initiates given X-definition <tt>collection</tt> element.
 	 * @param collection X-definition <tt>collection</tt> element.
 	 */
-	private void initCollection(Element collection) {
+	private void initCollection(final Element collection) {
 		NodeList defs = KXmlUtils.getChildElementsNS(collection,
 			XDConstants.XDEF20_NS_URI, XdNames.DEF);
 		for (int i = 0; i < defs.getLength(); i++) {
@@ -111,7 +109,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws RuntimeException if error occurs during creating X-definition
 	 * or model representation.
 	 */
-	private void initDef(Element def) {
+	private void initDef(final Element def) {
 		XdDef xdDef;
 		try {
 			xdDef = XdUtils.getXdDef(def);
@@ -150,7 +148,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @return element type constant.
 	 * @throws NullPointerException if given element is <tt>null</tt>.
 	 */
-	public int getElemType(Element element) {
+	public final int getElemType(final Element element) {
 		if (element == null) {
 			throw new NullPointerException("Given element is null");
 		}
@@ -173,14 +171,14 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** X-definition model representation to element map getter.
 	 * @return X-definition model representation (XdModel) to element map.
 	 */
-	public Map<XdModel, Element> getXdModels() {return _xdModels;}
+	public final Map<XdModel, Element> getXdModels() {return _xdModels;}
 
 	/** Returns instance of X-definition declaration representation if this
 	 * X-definition document contains declaration with given name or null.
 	 * @param xdDeclName name of X-definition declaration.
 	 * @return instance of X-definition declaration representation or null.
 	 */
-	public XdDecl getXdDecl(String xdDeclName) {
+	public final XdDecl getXdDecl(final String xdDeclName) {
 		if (xdDeclName == null) {
 			throw new NullPointerException(
 				"Given X-definition declaration name is null");
@@ -205,6 +203,6 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** X-definition def representation to element map getter.
 	 * @return X-definition def (XdDef) representation to element (Element) map.
 	 */
-	public Map<XdDef, Element> getXdDefs() { return _xdDefs; }
+	public final Map<XdDef, Element> getXdDefs() { return _xdDefs; }
 
 }
