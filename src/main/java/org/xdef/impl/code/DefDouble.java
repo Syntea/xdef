@@ -72,8 +72,7 @@ public final class DefDouble extends XDValueAbstract {
 	 * string value.
 	 */
 	public String stringValue() {
-		return isNull() ? "" :
-			_value == Double.NEGATIVE_INFINITY ? "-INF" :
+		return _value == Double.NEGATIVE_INFINITY ? "-INF" :
 			_value == Double.POSITIVE_INFINITY ? "INF" :
 			_value == Double.NaN ? "NaN" : String.valueOf(_value);
 	}

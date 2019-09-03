@@ -61,7 +61,7 @@ public final class DefLong extends XDValueAbstract {
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
+	public String stringValue() {return String.valueOf(_value);}
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
