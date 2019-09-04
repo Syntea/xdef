@@ -85,7 +85,7 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	 * @return ISO8601 string created from value or "null".
 	 */
 	public String toString() {
-		return _value == null ? "null" : _value.toISO8601();
+		return _value == null ? "" : _value.toISO8601();
 	}
 	@Override
 	/** Get ISO8601 string value of this object.

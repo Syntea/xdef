@@ -212,7 +212,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	/** Get value as String.
 	 * @return string with hexadecimal created from value.
 	 */
-	public String toString() {return _value == null ? "null" : getHex();}
+	public String toString() {return _value == null ? "" : getHex();}
 	@Override
 	/** Get string in Base64 format of value of this object.
 	 * @return string value of this object.

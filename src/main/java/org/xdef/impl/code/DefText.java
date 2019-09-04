@@ -50,13 +50,13 @@ public final class DefText extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value.getData();}
+	public String toString() {return _value == null ? "" : _value.getData();}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return _value == null ? "" : _value.getData();}
+	public String stringValue() {return toString();}
 	@Override
 	public boolean booleanValue() {
 		String s = _value == null ? null : _value.getData();

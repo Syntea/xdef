@@ -61,7 +61,7 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 	/** Get value as String.
 	 * @return ISO8601 string value of this object or "null".
 	 */
-	public String toString() {return _value==null ? "null" : _value.toString();}
+	public String toString() {return _value==null ? "" : _value.toString();}
 	@Override
 	public String stringValue() {return toString();}
 	@Override

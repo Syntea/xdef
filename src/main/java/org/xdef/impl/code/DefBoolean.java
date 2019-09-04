@@ -82,7 +82,7 @@ public final class DefBoolean extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return isNull() ? "null":_value ? "true":"false";}
+	public String toString() {return isNull() ? "":_value ? "true":"false";}
 
 	@Override
 	/** Get string value of this object.

@@ -64,7 +64,7 @@ public final class DefParseResult extends XDValueAbstract
 	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
 
 	@Override
-	public final String toString() {return _value==null ? "null" : _source;}
+	public final String toString() {return _value==null ? "" : _source;}
 
 	@Override
 	public final void clearReports() {_ar = null;}

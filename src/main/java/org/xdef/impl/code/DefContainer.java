@@ -754,6 +754,9 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get value as printable string. */
 	public final String toString() {
+		if (isNull()) {
+			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		if (_map != null) {
 			for (XDNamedValue x: _map) {

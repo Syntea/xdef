@@ -62,9 +62,7 @@ public final class DefDouble extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {
-		return stringValue();
-	}
+	public String toString() {return stringValue();}
 
 	@Override
 	/** Get string value of this object.
