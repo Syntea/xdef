@@ -19,6 +19,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.compile.XScriptParser;
+import org.xdef.sys.SBuffer;
 
 /** Represents implementation of X-definition document version 2.0.
  * @author Ilia Alexandrov
@@ -33,14 +35,12 @@ public final class XdDoc_2_0 extends XdDoc {
 
 	/** Creates instance of X-definition version 2.0 document.
 	 * @param xdef X-definition document.
-	 * @param xdNS namespace of X-definition.
 	 */
-	public XdDoc_2_0(Document xdef, String xdNS) {
+	public XdDoc_2_0(final Document xdef) {
 		if (xdef == null) {
 			throw new NullPointerException(
 				"Given X-definition document is null");
 		}
-//		_xdNS = xdNS;
 		validate(xdef);
 		init(xdef);
 	}
@@ -50,7 +50,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws RuntimeException if given X-definition document is not valid or
 	 * an error occurred during validation.
 	 */
-	private void validate(Document xdef) {
+	private void validate(final Document xdef) {
 		try {
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(xdef, true));
 		} catch (SRuntimeException ex) {
@@ -64,7 +64,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws IllegalArgumentException if given document is not a valid
 	 * X-definition document.
 	 */
-	private void init(Document xdef) {
+	private void init(final Document xdef) {
 		Element root = xdef.getDocumentElement();
 		if (XdUtils.isCollection(root)) {
 			initCollection(root);
@@ -76,34 +76,90 @@ public final class XdDoc_2_0 extends XdDoc {
 		}
 	}
 
+	private void initCollection(final Element collection, final String nsURI) {
+/*VT*/
+		// process global declasrations
+		NodeList nodes = KXmlUtils.getChildElementsNS(collection, //declarations
+			nsURI,XdNames.DECLARATION);
+		Map<String, String> xdTypes = new HashMap<String, String>();
+		if (nodes.getLength() > 0) { // find declared types.
+			NodeList defs = // xdefinitions
+				KXmlUtils.getChildElementsNS(collection, nsURI,XdNames.DEF);
+			String xdname = "_";
+			int n = 0;
+			// check if a X-definition have the name "_"; if yes, change it
+			for (int i = 0; i < defs.getLength(); i++) {
+				Element def = (Element) defs.item(i);
+				if (xdname.equals(XDGenCollection.getXDName(def))) {
+					xdname = "_" + (++n); // nsme already exists, change it
+					i = 0; //and try again
+				}
+			}
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Element declaration = (Element) nodes.item(i);
+				XScriptParser p = new XScriptParser((byte) 10);
+				p.setSource(new SBuffer(KXmlUtils.getTextValue(declaration)),
+					xdname, (byte) 10);
+				// find dedlartation of types
+				while (!p.eos()) {
+				   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
+						int pos = p.getIndex();
+						if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
+							char sym;
+							String name = p.getParsedBufferPartFrom(pos).trim();
+							pos = p.getIndex();
+							while ((sym=p.nextSymbol())
+								!= XScriptParser.SEMICOLON_SYM
+								&& sym != XScriptParser.END_SYM
+								&& sym != XScriptParser.NOCHAR){}
+							String typeDecl =
+								p.getParsedBufferPartFrom(pos).trim();
+							if (sym != XScriptParser.NOCHAR) {
+								typeDecl =
+									typeDecl.substring(0, typeDecl.length()-1);
+							}
+							xdTypes.put(name, typeDecl);
+						}
+					}
+				}
+			}
+			if (!xdTypes.isEmpty()) {
+				String s = "";
+				for (Entry<String, String> e: xdTypes.entrySet()) {
+					s += "type " + e.getKey() + " " + e.getValue() + ";\n";
+				}
+				Element def = collection.getOwnerDocument().createElementNS(
+					collection.getNamespaceURI(), "xd:def");
+				def.setAttribute("name", xdname);
+				Element decl = collection.getOwnerDocument()
+					.createElementNS(collection.getNamespaceURI(),
+						"xd:declaration");
+				decl.appendChild(
+					collection.getOwnerDocument().createTextNode(s));
+				def.appendChild(decl);
+				collection.appendChild(def);
+			}
+		}
+/*VT*/
+		nodes = // xdefinitions
+			KXmlUtils.getChildElementsNS(collection, nsURI, XdNames.DEF);
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Element def = (Element) nodes.item(i);
+			initDef(def);
+		}
+	}
+
 	/** Initiates given X-definition <tt>collection</tt> element.
 	 * @param collection X-definition <tt>collection</tt> element.
 	 */
-	private void initCollection(Element collection) {
-		NodeList defs = KXmlUtils.getChildElementsNS(collection,
-			XDConstants.XDEF20_NS_URI, XdNames.DEF);
-		for (int i = 0; i < defs.getLength(); i++) {
-			Element def = (Element) defs.item(i);
-			initDef(def);
-		}
-		defs = KXmlUtils.getChildElementsNS(collection,
-			XDConstants.XDEF31_NS_URI, XdNames.DEF);
-		for (int i = 0; i < defs.getLength(); i++) {
-			Element def = (Element) defs.item(i);
-			initDef(def);
-		}
-		defs = KXmlUtils.getChildElementsNS(collection,
-			XDConstants.XDEF32_NS_URI, XdNames.DEF);
-		for (int i = 0; i < defs.getLength(); i++) {
-			Element def = (Element) defs.item(i);
-			initDef(def);
-		}
-		defs = KXmlUtils.getChildElementsNS(collection,
-			XConstants.XDEF32NS_OLD, XdNames.DEF);
-		for (int i = 0; i < defs.getLength(); i++) {
-			Element def = (Element) defs.item(i);
-			initDef(def);
-		}
+	private void initCollection(final Element collection) {
+		initCollection(collection, XDConstants.XDEF20_NS_URI);
+		initCollection(collection, XDConstants.XDEF31_NS_URI);
+		initCollection(collection, XDConstants.XDEF32_NS_URI);
+		initCollection(collection, XConstants.XDEF32NS_OLD);
+		initCollection(collection, XDConstants.XDEF20_NS_URI);
+		initCollection(collection, XDConstants.XDEF20_NS_URI);
+		initCollection(collection, XDConstants.XDEF20_NS_URI);
 	}
 
 	/** Initiates given X-definition <tt>def</tt> element.
@@ -111,7 +167,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @throws RuntimeException if error occurs during creating X-definition
 	 * or model representation.
 	 */
-	private void initDef(Element def) {
+	private void initDef(final Element def) {
 		XdDef xdDef;
 		try {
 			xdDef = XdUtils.getXdDef(def);
@@ -127,7 +183,8 @@ public final class XdDoc_2_0 extends XdDoc {
 /*VT*/
 				if (XdUtils.isDeclaration(model)) {
 					// get map with declared types
-					Map<String, String> map = Util.getDeclaredTypes(model);
+					Map<String, String> map = new HashMap<String, String>();
+					Util.getDeclaredTypes(model, map);
 					for (Entry<String, String> e: map.entrySet()) {
 						_xdModels.put(new XdDecl(xdDef, e.getKey()), model);
 					}
@@ -150,7 +207,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	 * @return element type constant.
 	 * @throws NullPointerException if given element is <tt>null</tt>.
 	 */
-	public int getElemType(Element element) {
+	public final int getElemType(final Element element) {
 		if (element == null) {
 			throw new NullPointerException("Given element is null");
 		}
@@ -173,21 +230,17 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** X-definition model representation to element map getter.
 	 * @return X-definition model representation (XdModel) to element map.
 	 */
-	public Map<XdModel, Element> getXdModels() {return _xdModels;}
+	public final Map<XdModel, Element> getXdModels() {return _xdModels;}
 
 	/** Returns instance of X-definition declaration representation if this
 	 * X-definition document contains declaration with given name or null.
 	 * @param xdDeclName name of X-definition declaration.
 	 * @return instance of X-definition declaration representation or null.
 	 */
-	public XdDecl getXdDecl(String xdDeclName) {
-		if (xdDeclName == null) {
+	public final XdDecl getXdDecl(final String xdDeclName) {
+		if (xdDeclName == null || xdDeclName.length() == 0) {
 			throw new NullPointerException(
-				"Given X-definition declaration name is null");
-		}
-		if (xdDeclName.length() == 0) {
-			throw new IllegalArgumentException(
-				"Given X-definition declaration name is empty");
+				"Given X-definition declaration name is null or ompty string");
 		}
 		Iterator<XdModel> it = _xdModels.keySet().iterator();
 		while (it.hasNext()) {
@@ -205,6 +258,6 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** X-definition def representation to element map getter.
 	 * @return X-definition def (XdDef) representation to element (Element) map.
 	 */
-	public Map<XdDef, Element> getXdDefs() { return _xdDefs; }
+	public final Map<XdDef, Element> getXdDefs() { return _xdDefs; }
 
 }

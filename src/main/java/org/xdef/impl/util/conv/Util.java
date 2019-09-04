@@ -6,7 +6,6 @@ import org.xdef.xml.KDOMBuilder;
 import javax.xml.namespace.QName;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,7 +24,6 @@ public final class Util {
 
 	/** XML name space declaration. */
 	public static final String XMLNS = "xmlns";
-	/** XML <tt>xmlns</tt> name space URI. */
 	/** DOM Builder. */
 	private static final KDOMBuilder BUILDER = new KDOMBuilder();
 
@@ -45,9 +43,9 @@ public final class Util {
 	 * <tt>null</tt>.
 	 * @throws IllegalArgumentException if given element local name is empty.
 	 */
-	public static boolean isElement(Node node,
-		String namespace,
-		String localName) {
+	public static boolean isElement(final Node node,
+		final String namespace,
+		final String localName) {
 		if (node == null) {
 			throw new NullPointerException("Given node is null");
 		}
@@ -76,9 +74,9 @@ public final class Util {
 	 * name is <tt>null</tt>.
 	 * @throws IllegalArgumentException if parent node local name is empty.
 	 */
-	public static boolean isChild(Node child,
-		String namespace,
-		String localName) {
+	public static boolean isChild(final Node child,
+		final String namespace,
+		final String localName) {
 		if (child == null) {
 			throw new NullPointerException("Given child node is null");
 		}
@@ -105,17 +103,16 @@ public final class Util {
 	 * or given node is not an element node or if given node does not contain
 	 * attribute with such name space and local name.
 	 */
-	public static String getAttrValue(Node node,
-		String namespace,
-		String localName) {
+	public static String getAttrValue(final Node node,
+		final String namespace,
+		final String localName) {
 		Element element = (Element) node;
 		Attr attr = element.getAttributeNodeNS(namespace, localName);
 		if (attr == null) {
 			attr = element.getAttributeNode(localName);
 		}
 		if (attr == null) {
-			throw new IllegalArgumentException("Given node does not contain"
-				+ " attribute node with given namespace and local name");
+			return null;
 		}
 		return attr.getValue();
 	}
@@ -148,7 +145,7 @@ public final class Util {
 	}
 
 	/** Adds attribute node with given name and value to given parent element.
-	 * @param parent parent element to add attribute to.
+	 * @param el parent element to add attribute to.
 	 * @param name attribute name.
 	 * @param value attribute value.
 	 * @return created and added attribute node.
@@ -158,14 +155,16 @@ public final class Util {
 	 * @throws RuntimeException if could not add name space declaration
 	 * attribute to given parent element.
 	 */
-	public static Attr addAttr(Element parent, String name, String value) {
+	public static Attr addAttr(final Element el,
+		final String name,
+		final String value) {
 		if (name.length() == 0) {
 			throw new IllegalArgumentException("Given attribute name is empty");
 		}
-		Attr attr = parent.getOwnerDocument().createAttribute(name);
+		Attr attr = el.getOwnerDocument().createAttribute(name);
 		attr.setValue(value);
 		try {
-			parent.setAttributeNode(attr);
+			el.setAttributeNode(attr);
 			return attr;
 		} catch (DOMException ex) {
 			throw new RuntimeException("Could not add namespace declaration "
@@ -176,22 +175,22 @@ public final class Util {
 	/** Adds attribute with given name and given value to given parent element.
 	 * If attribute with given already exists it sets value to given attribute
 	 * value.
-	 * @param parent parent element to add attribute.
+	 * @param el parent element to add attribute.
 	 * @param attrName name of attribute.
 	 * @param attrValue attribute value.
 	 * @throws NullPointerException if given parent element or attribute name is
 	 * <tt>null</tt>.
 	 * @throws IllegalArgumentException if given attribute name is empty.
 	 */
-	public static void setAttr(Element parent,
-		String attrName,
-		String attrValue) {
+	public static void setAttr(final Element el,
+		final String attrName,
+		final String attrValue) {
 		if (attrName.length() == 0) {
 			throw new IllegalArgumentException("Given attribute name is empty");
 		}
-		Attr attr = parent.getAttributeNode(attrName);
+		Attr attr = el.getAttributeNode(attrName);
 		if (attr == null) {
-			addAttr(parent, attrName, attrValue);
+			addAttr(el, attrName, attrValue);
 		} else {
 			attr.setValue(attrValue);
 		}
@@ -202,7 +201,8 @@ public final class Util {
 	 * @param localName qualified name local part.
 	 * @return full qualified name.
 	 */
-	public static String getNodeQName(String prefix, String localName) {
+	public static String getNodeQName(final String prefix,
+		final String localName) {
 		return new MyQName(prefix, localName).getQName();
 	}
 
@@ -216,9 +216,9 @@ public final class Util {
 	 * <tt>null</tt>.
 	 * @throws IllegalArgumentException if given name space URI is empty.
 	 */
-	public static Attr addNamespaceDecl(Element element,
-		String prefix,
-		String namespaceURI) {
+	public static Attr addNamespaceDecl(final Element element,
+		final String prefix,
+		final String namespaceURI) {
 		if (namespaceURI == null) {
 			throw new NullPointerException("Given namespace URI is null");
 		}
@@ -241,8 +241,8 @@ public final class Util {
 	 * @return name space prefix.
 	 * @throws RuntimeException if cannot add name space declaration.
 	 */
-	public static String addNamespaceDeclaration(Element element,
-			String namespaceURI) throws RuntimeException {
+	public static String addNamespaceDeclaration(final Element element,
+			final String namespaceURI) throws RuntimeException {
 		final String prefixes = "abcdefghijklmnopqrstuvwxyz";
 		for (int i = 0; i < prefixes.length(); i++) {
 			String prefix = prefixes.substring(i, i + 1);
@@ -264,23 +264,23 @@ public final class Util {
 	}
 
 	/** Adds given element at first position to given parent element.
-	 * @param parent element to add to.
+	 * @param el element to add to.
 	 * @param inserted element to add.
 	 * @throws NullPointerException if given parent element or inserted element
 	 * is <tt>null</tt>.
 	 * @throws RuntimeException if cannot add given inserted element to given
 	 * parent element.
 	 */
-	public static void insertFirst(Element parent, Element inserted) {
+	public static void insertFirst(final Element el, final Element inserted) {
 		if (inserted == null) {
 			throw new NullPointerException("Given element to insert is null");
 		}
-		Node first = parent.getFirstChild();
+		Node first = el.getFirstChild();
 		try {
 			if (first == null) {
-				parent.appendChild(inserted);
+				el.appendChild(inserted);
 			} else {
-				parent.insertBefore(inserted, first);
+				el.insertBefore(inserted, first);
 			}
 		} catch (DOMException ex) {
 			throw new RuntimeException(
@@ -292,7 +292,7 @@ public final class Util {
 	 * @param qualifiedName qualified name.
 	 * @return qualified name representation.
 	 */
-	public static MyQName parseQName(String qualifiedName) {
+	public static MyQName parseQName(final String qualifiedName) {
 		return MyQName.parseQName(qualifiedName);
 	}
 
@@ -307,7 +307,8 @@ public final class Util {
 	 * is <tt>null</tt>.
 	 * @throws IllegalArgumentException if given name space URI is empty.
 	 */
-	public static String getNSPrefix(Node contextNode, String namespaceURI) {
+	public static String getNSPrefix(final Node contextNode,
+		final String namespaceURI) {
 		if (namespaceURI == null) {
 			throw new NullPointerException("Given namespace URI is null");
 		}
@@ -325,7 +326,8 @@ public final class Util {
 	 * @return prefix of name space declaration or <tt>null</tt> if there is
 	 * no such name space declaration.
 	 */
-	private static String getNSPrefixRec(Node contextNode, String namespaceURI){
+	private static String getNSPrefixRec(final Node contextNode,
+		final String namespaceURI){
 		//get prefix in node
 		String prefix = getNSPrefixInNode(contextNode, namespaceURI);
 		if (prefix != null) {
@@ -358,7 +360,8 @@ public final class Util {
 	 * <tt>null</tt> if given node does not contain name space declaration with
 	 * given name space URI.
 	 */
-	private static String getNSPrefixInNode(Node node, String namespaceURI) {
+	private static String getNSPrefixInNode(final Node node,
+		final String namespaceURI) {
 		if (Node.ELEMENT_NODE == node.getNodeType()) {
 			NamedNodeMap attrs = node.getAttributes();
 			for (int i = 0; i < attrs.getLength(); i++) {
@@ -386,9 +389,9 @@ public final class Util {
 	 * local name is <tt>null</tt>.
 	 * @throws IllegalArgumentException if given attribute local name is empty.
 	 */
-	public static boolean hasAttrDecl(Element contextElem,
-		String attrNS,
-		String attrLocalName) {
+	public static boolean hasAttrDecl(final Element contextElem,
+		final String attrNS,
+		final String attrLocalName) {
 		if (attrLocalName == null) {
 			throw new NullPointerException(
 				"Given attribute local name is null");
@@ -410,7 +413,7 @@ public final class Util {
 	 * does not contain prefix.
 	 * @throws NullPointerException if given attribute is <tt>null</tt>.
 	 */
-	public static String getAttrPrefix(Attr attr) {
+	public static String getAttrPrefix(final Attr attr) {
 		return getAttrQName(attr).getPrefix();
 	}
 
@@ -418,7 +421,7 @@ public final class Util {
 	 * @param attr attribute node to get local name from.
 	 * @return attribute local name.
 	 */
-	public static String getAttrLocalName(Attr attr) {
+	public static String getAttrLocalName(final Attr attr) {
 		return getAttrQName(attr).getLocalPart();
 	}
 
@@ -427,7 +430,7 @@ public final class Util {
 	 * @return qualified name representation.
 	 * @throws NullPointerException if given attribute node is <tt>null</tt>.
 	 */
-	private static QName getAttrQName(Attr attr) {
+	private static QName getAttrQName(final Attr attr) {
 		if (attr == null) {
 			throw new NullPointerException("Given attribute node is null");
 		}
@@ -442,11 +445,12 @@ public final class Util {
 		return new QName(name);
 	}
 
-	/** Write given schemas map into directory with given name.
+	/** Write given schema map into directory with given name.
 	 * @param schemas map with schema file name as key and document as value.
 	 * @param path output directory path.
 	 */
-	public static void printSchemas(Map<String, Document> schemas, String path){
+	public static void printSchemas(final Map<String, Document> schemas,
+		final String path){
 		if (schemas.isEmpty()) {
 			throw new IllegalArgumentException("Given schemas map is empty");
 		}
@@ -480,11 +484,45 @@ public final class Util {
 		}
 	}
 
+	/*VT*/
+	/** Read and set declared types to map.
+	 * @param decl Element with declaration section.
+	 * @param map with declared types.
+	 */
+	public static void getDeclaredTypes(final Element decl,
+		final Map<String, String> map) {
+		String localNamePrefix = ""; // nonempty if declaration scope is local
+		if ("local".equals(getAttrValue(decl, decl.getNamespaceURI(), "scope"))
+			&& "def".equals(decl.getParentNode().getLocalName())) {
+			String xdName = getAttrValue(decl.getParentNode(),
+				decl.getNamespaceURI(), "name");
+			localNamePrefix = xdName != null ? '_' + xdName + '.' : "_.";
+		}
+		XScriptParser p = new XScriptParser((byte) 10);
+		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
+		while (!p.eos()) {
+		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
+				int pos = p.getIndex();
+				if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
+					char sym;
+					String name = p.getParsedBufferPartFrom(pos).trim();
+					pos = p.getIndex();
+					while ((sym=p.nextSymbol()) != XScriptParser.SEMICOLON_SYM
+						&& sym != XScriptParser.END_SYM
+						&& sym != XScriptParser.NOCHAR){}
+					String typeDecl = p.getParsedBufferPartFrom(pos).trim();
+					if (sym != XScriptParser.NOCHAR) {
+						typeDecl = typeDecl.substring(0, typeDecl.length() - 1);
+					}
+					map.put(localNamePrefix + name, typeDecl);
+				}
+		   }
+		}
+	}
+	/*VT*/
+
 	/** Represents qualified name. */
 	public static final class MyQName {
-
-		/** Hash code. */
-		private int _hashCode = 0;
 		/** Qualified name prefix part. */
 		private final String _prefix;
 		/** Qualified name local name part. */
@@ -496,7 +534,7 @@ public final class Util {
 		 * @throws NullPointerException if given name is <tt>null</tt>.
 		 * @throws IllegalArgumentException if given name is empty.
 		 */
-		public MyQName(String name) {this(null, name);}
+		public MyQName(final String name) {this(null, name);}
 
 		/** Creates instance of QName with given prefix and local name.
 		 * @param prefix qualified name prefix (if is empty then
@@ -505,16 +543,12 @@ public final class Util {
 		 * @throws NullPointerException if given name is <tt>null</tt>.
 		 * @throws IllegalArgumentException if given name is empty.
 		 */
-		public MyQName(String prefix, String name) {
+		public MyQName(final String prefix, final String name) {
 			if (name.length() == 0) {
 				throw new IllegalArgumentException("Given naem is empty");
 			}
 			_name = name;
-			if (prefix != null && prefix.length() == 0) {
-				_prefix = null;
-			} else {
-				_prefix = prefix;
-			}
+			_prefix = (prefix != null && prefix.length() == 0) ? null : prefix;
 		}
 
 		/** Qualified name prefix part getter.
@@ -535,30 +569,21 @@ public final class Util {
 		}
 
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 			if (this == obj) {
 				return true;
 			}
 			if (!(obj instanceof MyQName)) {
 				return false;
 			}
-			MyQName n = (MyQName) obj;
-			if (_prefix == null
-				? n._prefix != null : !_prefix.equals(n._prefix)) {
-				return false;
-			}
-			return _name.equals(n._name);
+			MyQName x = (MyQName) obj;
+			return (_prefix==null?x._prefix!=null:!_prefix.equals(x._prefix))
+				? false : _name.equals(x._name);
 		}
 
 		@Override
 		public int hashCode() {
-			if (_hashCode == 0) {
-				_hashCode = 541;
-				_hashCode = 541 * _hashCode
-					+ (_prefix == null ? 0 : _prefix.hashCode());
-				_hashCode = 541 * _hashCode + _name.hashCode();
-			}
-			return _hashCode;
+			return (_prefix!=null?_prefix.hashCode()*5:0) + _name.hashCode();
 		}
 
 		@Override
@@ -570,13 +595,11 @@ public final class Util {
 		 * qualified name.
 		 * @param qName qualified name as string.
 		 * @return representation of qualified name.
-		 * @throws NullPointerException if given qualified name is null.
 		 * @throws IllegalArgumentException if given qualified name is empty.
 		 */
-		public static MyQName parseQName(String qName) {
+		public static MyQName parseQName(final String qName) {
 			if (qName == null || qName.length() == 0) {
-				throw new IllegalArgumentException(
-					"Given qualified name is empty");
+				throw new IllegalArgumentException("Qualified name is empty");
 			}
 			String prefix;
 			String name;
@@ -591,36 +614,4 @@ public final class Util {
 			return new MyQName(prefix, name);
 		}
 	}
-
-	/*VT*/
-	/** Get map with declared types.
-	 * @param decl Element with declaration section.
-	 * @return map with declared types.
-	 */
-	public static Map<String, String> getDeclaredTypes(final Element decl) {
-		XScriptParser p = new XScriptParser((byte) 10);
-		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
-		Map<String, String> map = new HashMap<String, String>();
-		while (!p.eos()) {
-		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
-				int pos = p.getIndex();
-				if (XScriptParser.IDENTIFIER_SYM == p.nextSymbol()) {
-					char sym;
-					String name = p.getParsedBufferPartFrom(pos).trim();
-					pos = p.getIndex();
-					while ((sym=p.nextSymbol()) != XScriptParser.SEMICOLON_SYM
-						&& sym != XScriptParser.END_SYM
-						&& sym != XScriptParser.NOCHAR){}
-					String typeDecl = p.getParsedBufferPartFrom(pos).trim();
-					if (sym != XScriptParser.NOCHAR) {
-						typeDecl = typeDecl.substring(0, typeDecl.length() - 1);
-					}
-					map.put(name, typeDecl);
-				}
-		   }
-		}
-		return map;
-	}
-	/*VT*/
-
 }

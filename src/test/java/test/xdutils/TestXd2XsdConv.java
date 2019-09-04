@@ -113,6 +113,7 @@ public class TestXd2XsdConv extends XDTester {
 			}
 			_chkDoc = xdPool.createXDDocument(MAIN_DEF_NAME);
 		} catch (Exception ex) {
+			ex.printStackTrace(System.err);
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
 			return false;
@@ -372,6 +373,14 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_3"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_4"), popMessage());
+
+		assertTrue(prepare("globalAndLocalTest"), popMessage());
+		assertTrue(parse("globalAndLocalTest_X"), popMessage());
+		assertTrue(parseFail("globalAndLocalTest_X_invalid"), popMessage());
+		assertTrue(parse("globalAndLocalTest_Y"), popMessage());
+		assertTrue(parseFail("globalAndLocalTest_Y_invalid"), popMessage());
+		assertTrue(parse("globalAndLocalTest_Z"), popMessage());
+		assertTrue(parseFail("globalAndLocalTest_Z_invalid"), popMessage());
 		resetProperties();
 		/*VT*/
 

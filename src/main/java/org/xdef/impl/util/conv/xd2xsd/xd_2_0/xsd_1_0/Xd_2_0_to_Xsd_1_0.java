@@ -40,7 +40,6 @@ import org.w3c.dom.Document;
  * @author Ilia Alexandrov
  */
 public class Xd_2_0_to_Xsd_1_0 extends Convertor {
-
 	/** X-definition version 2.0 document representation.*/
 	private final XdDoc_2_0 _xdDoc;
 	/** XML Schema version 1.0 document representation. */
@@ -58,10 +57,10 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param schemaPrefix prefix for schema nodes.
 	 * @param schemaFileExt file extension for schema files.
 	 */
-	public Xd_2_0_to_Xsd_1_0(XdDoc_2_0 xdDoc,
-		SReporter reporter,
-		String schemaPrefix,
-		String schemaFileExt) {
+	public Xd_2_0_to_Xsd_1_0(final XdDoc_2_0 xdDoc,
+		final SReporter reporter,
+		final String schemaPrefix,
+		final String schemaFileExt) {
 		super(reporter);
 		if (xdDoc == null) {
 			throw new NullPointerException("X-definition document is null");
@@ -95,8 +94,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 
 		switch (xdModel.getType()) {
 			case XdModel.Type.DECLARATION:
-				processDecl((XdDecl) xdModel);
-			break;
+				_typeResolver.resolveXdDecl((XdDecl) xdModel);
+				break;
 			case XdModel.Type.GROUP: {
 				XdGroup xdGroup = (XdGroup) xdModel;
 				Element xdGroupElem = _xdDoc.getXdModels().get(xdGroup);
@@ -170,13 +169,16 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param attr attribute node to process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
-	private void processAttribute(final Attr attr, Element schemaContext) {
+	private void processAttribute(final Attr attr,
+		final Element schemaContext) {
 		//getschema target namespace
 		String targetNS = XsdUtils.getTargetNS(schemaContext);
 		//get atttribute local name
 		String name = Util.getAttrLocalName(attr);
 		//get attribute namespace
 		String namespace = attr.getNamespaceURI();
+		// name of X-definition
+		String xdname = XDGenCollection.getXDName(attr.getOwnerElement());
 		//get attribute properties
 		XdUtils.AttrProps attrProps = XdUtils.getAttrProps(attr);
 		//schema has no target namespace
@@ -185,13 +187,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			if (namespace == null || namespace.length() == 0) {
 				//add attribute declaration
 				Element attrDecl = _xsdDoc.addAttributeDecl(schemaContext,
-					attrProps.getDefault(),
-					attrProps.getFixed(),
-					name,
-					null,
-					null,
-					attrProps.getUse(),
-					null);
+					attrProps.getDefault(), attrProps.getFixed(), name,
+					xdname, null, null, attrProps.getUse(), null);
 				String type = attrProps.getType();
 /*VT3*/
 				if ("int()".equals(type)) { // int() without parameters
@@ -206,10 +203,11 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 					}
 				}
 /*VT3*/
-				_typeResolver.resolveAttrType(type, attrDecl);
+				_typeResolver.resolveAttrType(type, xdname, attrDecl);
 			} else {
 				//process external namespace attribute
-				processExtNSAttribute(schemaContext, attrProps, namespace,name);
+				processExtNSAttribute(schemaContext,
+					attrProps, namespace, name, xdname);
 			}
 		} else {
 			//attribute has no namespace
@@ -217,25 +215,26 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				//add attribute declaration
 				Element attrDecl = _xsdDoc.addAttributeDecl(schemaContext,
 					attrProps.getDefault(), attrProps.getFixed(),
-					name, null, null, attrProps.getUse(), null);
+					name, xdname, null, null, attrProps.getUse(), null);
 				//TODO: resolve type
 				//TypeResolver.addAttrType(attrDecl, attrProps.getType(),
 				//  _xsdDoc, _xdDoc, _models);
-				_typeResolver.resolveAttrType(attrProps.getType(), attrDecl);
+				_typeResolver.resolveAttrType(attrProps.getType(),
+					xdname, attrDecl);
 			} else {
 				//attribute namespace is same as schema target namespace
 				if (namespace.equals(targetNS)) {
 					//add qualified attribute declaration
 					Element attrDecl = _xsdDoc.addAttributeDecl(schemaContext,
 						attrProps.getDefault(), attrProps.getFixed(), name,
-						null, null, attrProps.getUse(), true);
+						xdname, null, null, attrProps.getUse(), true);
 					//TODO: resolve type
-					_typeResolver.resolveAttrType(
-						attrProps.getType(), attrDecl);
+					_typeResolver.resolveAttrType(attrProps.getType(),
+						xdname, attrDecl);
 				} else {
 					//process external namespace attribute
-					processExtNSAttribute(
-						schemaContext, attrProps, namespace, name);
+					processExtNSAttribute(schemaContext,
+						attrProps, namespace, name, xdname);
 				}
 			}
 		}
@@ -244,12 +243,16 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	/** Processes given external attribute and adds declaration to given schema
 	 * context element.
 	 * @param schemaContext schema context to add declaration to.
-	 * @param attrProps external attrbiute properties.
+	 * @param attrProps external attribute properties.
 	 * @param attrNS external attribute namespace.
 	 * @param attrName external attribute local name.
+	 * @param xdname name of X-definition where attribute model is declared.
 	 */
-	private void processExtNSAttribute(Element schemaContext,
-			XdUtils.AttrProps attrProps, String attrNS, String attrName) {
+	private void processExtNSAttribute(final Element schemaContext,
+			final XdUtils.AttrProps attrProps,
+			final String attrNS,
+			final String attrName,
+			final String xdname) {
 		//get external schema with given namespace
 		XsdSchema extSchema = _xsdDoc.getExtNSSchema(attrNS);
 		Element extSchemaElem = _xsdDoc.getSchemas().get(extSchema);
@@ -260,12 +263,12 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			extSchemaElem = _xsdDoc.getSchemas().get(extSchema);
 			//create attribute declaration
 			Element attrElem = _xsdDoc.addAttributeDecl(extSchemaElem,
-				attrProps.getDefault(), attrProps.getFixed(), attrName,
+				attrProps.getDefault(), attrProps.getFixed(), attrName, xdname,
 				null, null, null, null);
 			//TODO: resolve type
 			//TypeResolver.addAttrType(
 			//	attrElem, attrProps.getType(), _xsdDoc, _xdDoc, _models);
-			_typeResolver.resolveAttrType(attrProps.getType(), attrElem);
+			_typeResolver.resolveAttrType(attrProps.getType(), xdname,attrElem);
 			XsdSchema extAttrGrpSchema = _xsdDoc.getExtSchema();
 			Element extAttrGrpSchemaElem =
 				_xsdDoc.getSchemas().get(extAttrGrpSchema);
@@ -280,7 +283,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				_xsdDoc.getQName(extAttrGrpSchemaElem, extSchema, attrName);
 			//add attribute ref
 			_xsdDoc.addAttributeDecl(attrGrpElem, null, null, null,
-				attrRef, null, attrProps.getUse(), null);
+				attrRef, xdname, null, attrProps.getUse(), null);
 			//get attribute group ref name
 			String attrGrpRef = _xsdDoc.getQName(extSchemaElem,
 				extAttrGrpSchema, attrGrpName);
@@ -290,15 +293,15 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			//add attribute decl
 			Element attrElem = _xsdDoc.addAttributeDecl(extSchemaElem,
 				attrProps.getDefault(), attrProps.getFixed(), attrName,
-				null, null, null, null);
+				xdname, null, null, null, null);
 			//TODO: resolve type
-			_typeResolver.resolveAttrType(attrProps.getType(), attrElem);
+			_typeResolver.resolveAttrType(attrProps.getType(), xdname,attrElem);
 			//get attr ref string
 			String attrRef = _xsdDoc.getQName(
 				XsdUtils.getAncestorSchema(schemaContext), extSchema, attrName);
 			//add attribute ref
-			_xsdDoc.addAttributeDecl(schemaContext,
-				null, null, null, attrRef, null, attrProps.getUse(), null);
+			_xsdDoc.addAttributeDecl(schemaContext, null, null, null,
+				xdname, attrRef, null, attrProps.getUse(), null);
 		}
 	}
 
@@ -307,20 +310,20 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param element element to process attribute nodes from.
 	 * @param schemaContext schema context element to add declarations to.
 	 */
-	private void processAttributes(final Element element,Element schemaContext){
+	private void processAttributes(final Element element,
+		final Element schemaContext){
 		//get attribute nodes
 		String xdNS = XDGenCollection.findXDNS(element);
 		if (xdNS == null) {
 			throw new RuntimeException("X-definifion namespace not found!");
 		}
+/*VT*/
 		NamedNodeMap attrs = element.getAttributes();
 		for (int i = 0; i < attrs.getLength(); i++) {
 			//get attribute
 			Attr attr = (Attr) attrs.item(i);
-
-			//attribute is not X-definition attribute
 			if (!xdNS.equals(attr.getNamespaceURI())) {
-				//process attribute
+				//attribute is not X-definition attribute, process attribute
 				processAttribute(attr, schemaContext);
 			} else {
 				String attrName = Util.getAttrLocalName(attr);
@@ -339,7 +342,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param element element to process children.
 	 * @param schemaContext schema context element to add declarations to.
 	 */
-	private void processChildren(Element element, Element schemaContext) {
+	private void processChildren(final Element element,
+		final Element schemaContext) {
 		//get child elements
 		NodeList children = KXmlUtils.getChildElements(element);
 		String xdNS = XDGenCollection.findXDNS(element);
@@ -378,7 +382,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param choice X-definition <tt>choice</tt> declaration element to process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
-	private void processChoice(final Element choice, Element schemaContext) {
+	private void processChoice(final Element choice,
+		final Element schemaContext) {
 		Occurrence choiceOcc = XdUtils.getOccurrence(choice);
 		//resolve ref
 		Element xsdChoiceElem = _xsdDoc.addChoiceDecl(
@@ -386,16 +391,13 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		processChildren(choice, xsdChoiceElem);
 	}
 
-	private void processDecl(XdDecl xdDecl) {
-		_typeResolver.resolveXdDecl(xdDecl);
-	}
-
 	/** Processes given X-definition element declaration and adds declaration to
 	 * given schema context element.
 	 * @param element X-definition element declaration element to process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
-	private void processElement(final Element element, Element schemaContext) {
+	private void processElement(final Element element,
+		final Element schemaContext) {
 		//get schema target namespace
 		String targetNS = XsdUtils.getTargetNS(schemaContext);
 		//get element namespace
@@ -455,10 +457,10 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param elemName external element local name.
 	 */
 	private void processExtNSElement(final Element element,
-		Element schemaContext,
-		ElemProps elemProps,
-		String elemNS,
-		String elemName) {
+		final Element schemaContext,
+		final ElemProps elemProps,
+		final String elemNS,
+		final String elemName) {
 		//get external schema with element namespace
 		XsdSchema extNSSchema = _xsdDoc.getExtNSSchema(elemNS);
 		Element extNSSchemaElem = _xsdDoc.getSchemas().get(extNSSchema);
@@ -523,7 +525,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param schemaContext schema context element to add declaration to.
 	 */
 	private void processElementContent(final Element element,
-		Element schemaContext) {
+		final Element schemaContext) {
 		//get element content type
 		int elemType = XdUtils.getElemType(element);
 		//get ref
@@ -561,8 +563,18 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 							if (ValueType.OTHER == elemSType.getKind()
 								&& ((Other) elemSType).isSimple()) {
 								Other otherType = (Other) elemSType;
-								XdDecl xdDecl =
-									_xdDoc.getXdDecl(otherType.getName());
+								XdDecl xdDecl;
+								String typename = otherType.getName();
+								String xdname = otherType.getXdefName();
+								if (otherType.isSimple() && xdname != null) {
+									xdDecl = _xdDoc.getXdDecl('_' + xdname
+										+ '.' + typename);
+									if (xdDecl == null) {
+										xdDecl = _xdDoc.getXdDecl(typename);
+									}
+								} else {
+									xdDecl = _xdDoc.getXdDecl(typename);
+								}
 								XsdModel xsdModel = _models.get(xdDecl);
 								Element schemaElem =
 									XsdUtils.getAncestorSchema(schemaContext);
@@ -766,11 +778,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param procAttrs
 	 * @param procChld
 	 */
-	private void extendElement(
-		Element element,
-		Element schemaContext,
-		XdElem refXdElem
-	) {
+	private void extendElement(final Element element,
+		final Element schemaContext,
+		final XdElem refXdElem) {
 		Element cTypeElem;
 		if (XdUtils.isModel(element)) {
 			cTypeElem = getXdElemCType(element);
@@ -817,7 +827,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param xdModelElem X-definition model element.
 	 * @return schema <tt>complexType</tt> element.
 	 */
-	private Element getXdElemCType(Element xdModelElem) {
+	private Element getXdElemCType(final Element xdModelElem) {
 		XdModel xdModel;
 		try {
 			xdModel = XdUtils.createXdModel(xdModelElem);
@@ -842,7 +852,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param xsdElemDecl Schema <tt>element</tt> declaration.
 	 * @param referredXdModel referred X-definition model representation object.
 	 */
-	private void setElementCType(Element xsdElemDecl, XdModel referredXdModel) {
+	private void setElementCType(final Element xsdElemDecl,
+		final XdModel referredXdModel) {
 		//get main schema element
 		Element schemaElem = XsdUtils.getAncestorSchema(xsdElemDecl);
 		//get external schema
@@ -859,7 +870,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			_xsdDoc.getQName(schemaElem, refSchema, refCType.getName()));
 	}
 
-	private ValueType getElementSimpleType(Element element) {
+	private ValueType getElementSimpleType(final Element element) {
 		String xdNS = XDGenCollection.findXDNS(element);
 		if (xdNS == null) {
 			throw new RuntimeException("X-definifion namespace not found!");
@@ -892,6 +903,10 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 				ValueType t;
 				try {
 					t = XdefValueTypeParser.parse(typeDecl);
+					if (t.getKind() == ValueType.OTHER) {
+						((Other) t).setXdefName(
+							XDGenCollection.getXDName(element));
+					}
 				} catch (Exception ex) {
 					throw new RuntimeException(
 						"Could not parse type declaration", ex);
@@ -934,7 +949,7 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param mixed X-definition <tt>mixed</tt> declaration element to process.
 	 * @param schemaContext schema context element to process.
 	 */
-	private void processMixed(final Element mixed, Element schemaContext) {
+	private void processMixed(final Element mixed, final Element schemaContext){
 		//Occurrence mixedOcc = XdUtils.getOccurrence(mixed);
 		//TODO: resolve ref
 		//TODO: resolve mixed occurrence
@@ -950,7 +965,8 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
-	private void processSequence(final Element sequence, Element schemaContext){
+	private void processSequence(final Element sequence,
+		final Element schemaContext) {
 		//TODO: resolve ref
 		Occurrence seqOccurrence = XdUtils.getOccurrence(sequence);
 		Element xsdSeqElem = _xsdDoc.addSequenceDecl(schemaContext,
@@ -964,9 +980,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param hasText
 	 * @return element
 	 */
-	private Element addComplexContExtension(Element complexType,
-		XdElem refElem,
-		boolean hasText) {
+	private Element addComplexContExtension(final Element complexType,
+		final XdElem refElem,
+		final boolean hasText) {
 		Element complexContent =
 			_xsdDoc.addComplexContentDecl(complexType, hasText);
 		//get referred complex type qualified name
