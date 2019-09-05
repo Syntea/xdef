@@ -60,7 +60,7 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return isNull() ? null : _value.getValue();}
+	public String toString() {return stringValue();}
 	@Override
 	/** Get string value of this object or throw SRuntimeException.
 	 * @return string value of this object.

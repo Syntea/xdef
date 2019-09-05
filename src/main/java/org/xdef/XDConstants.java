@@ -111,9 +111,9 @@ public interface XDConstants {
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** URI of w3c Xlink */
+	/** URI of w3c XLink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
-	/** URI of w3c Xinclude */
+	/** URI of w3c XInclude */
 	public static final String XINCLUDE_NS_URI =
 		"http://www.w3.org/2001/XInclude";
 
@@ -132,12 +132,12 @@ public interface XDConstants {
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.xdef.org/xdef/instance";
-	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
 
 ////////////////////////////////////////////////////////////////////////////////
 // JSON
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
 	public static final String JSON_NS_PREFIX = "js";
 	/** URI of JSON/XML X-definition conversion. */
 	public static final String JSON_NS_URI = "http://www.xdef.org/json/3.2";

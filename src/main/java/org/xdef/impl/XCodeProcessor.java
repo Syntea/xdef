@@ -798,6 +798,11 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp - i] = new DefDouble(_stack[sp - i].doubleValue());
 					continue;
 				}
+				case NULL_OR_TO_STRING:
+					if (_stack[sp] == null || _stack[sp].isNull()) {
+						_stack[sp] = new DefString();
+						continue;
+					}
 				case TO_STRING:
 					if (_stack[sp] == null) {
 						_stack[sp] = new DefString(_stack[sp].toString());

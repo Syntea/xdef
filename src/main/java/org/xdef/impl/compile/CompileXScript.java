@@ -854,7 +854,12 @@ final class CompileXScript extends CompileStatement {
 								xType = _g._tstack[_g._sp];
 							}
 							if (returnType == XD_STRING && xType != XD_STRING) {
-								_g.topToString();
+								if (mode == CompileBase.TEXT_MODE
+									&& section == CREATE_SYM) {
+									_g.topToNullOrString();
+								} else {
+									_g.topToString();
+								}
 								xType = _g._tstack[_g._sp];
 							}
 							if (section == CREATE_SYM) {

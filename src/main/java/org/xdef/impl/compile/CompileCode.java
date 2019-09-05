@@ -1270,6 +1270,30 @@ public final class CompileCode extends CompileBase {
 
 	/** Conversion of stack item under top to float. */
 	final void topXToFloat() {topXToFloat(1);}
+	
+	/** Conversion of the stack item at top position to null or string. */
+	final void topToNullOrString() {
+		short xType;
+		if (_sp >= 0 && (xType=_tstack[_sp])!=XD_STRING && xType!=XD_UNDEF){
+			int xValue;
+			if ((xValue = _cstack[_sp]) >= 0) {//constant
+				if (xType == ATTR_REF_VALUE) {
+					_code.set(xValue,
+						new CodeS1(XD_STRING, ATTR_REF,
+							getCodeItem(xValue).stringValue()));
+					_cstack[_sp] = -1;
+				} else {
+					//constant
+					_code.set(xValue,
+						new DefString(getCodeItem(xValue).stringValue()));
+				}
+			} else {//value
+				addCode(new CodeI1(XD_STRING, NULL_OR_TO_STRING));
+				_cstack[_sp] = -1;
+			}
+			_tstack[_sp] = XD_STRING;
+		}
+	}
 
 	/** Conversion of the stack item at top position to string. */
 	final void topToString() {topXToString(0);}
