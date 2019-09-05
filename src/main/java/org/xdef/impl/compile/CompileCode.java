@@ -1270,7 +1270,7 @@ public final class CompileCode extends CompileBase {
 
 	/** Conversion of stack item under top to float. */
 	final void topXToFloat() {topXToFloat(1);}
-	
+
 	/** Conversion of the stack item at top position to null or string. */
 	final void topToNullOrString() {
 		short xType;

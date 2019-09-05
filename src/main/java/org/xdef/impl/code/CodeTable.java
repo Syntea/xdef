@@ -62,7 +62,7 @@ public interface CodeTable {
 	static final short TO_FLOAT = TO_DECIMAL_X + 1;
 	/** Float from integer on stack item (top - index). */
 	static final short TO_FLOAT_X = TO_FLOAT + 1;
-	/** Null or string from any value on the top of stack. */
+	/** Set null or a string created from any value on the top of stack. */
 	static final short NULL_OR_TO_STRING = TO_FLOAT_X + 1;
 	/** String from any value  on the top of stack. */
 	static final short TO_STRING = NULL_OR_TO_STRING + 1;
