@@ -26,6 +26,8 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import static test.utils.XDTester._xdNS;
 
 /** Test of x-definition composition mode.
@@ -2635,6 +2637,29 @@ final public class TestCompose extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter, null));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {// test create from null 
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
+"<A b='optional string(); create nulString()'\n" +
+"   c='optional long(); create nulLong()'\n"+
+"   d='optional float(); create nulFloat()'\n"+
+"   e='optional dateTime(); create nulDatetime()'\n"+
+"   f='optional duration(); create nulDuration()'\n"+
+"   g='optional string(); create nulContainer()'\n"+
+"  >\n"+
+"  <B>optional string(); create nulString()</B>\n"+
+"  <C>optional string(); create nulString()</C>\n"+
+"  <D>optional string(); create nulString()</D>\n"+
+"  <E>optional string(); create nulString()</E>\n"+
+"  <F>optional string(); create nulString()</F>\n"+
+"  <G>optional string(); create nulString()</G>\n"+
+"</A>\n"+
+"</xd:def>";
+			xp = compile(xdef, this.getClass());
+			el = create(xp, "", "A", reporter, null);
+			assertNoErrors(reporter);
+			assertEq(el,"<A><B/><C/><D/><E/><F/><G/></A>");
+		} catch (Exception ex) {fail(ex);}
 
 		try {
 			FUtils.deleteAll(tempDir, true);
@@ -2805,6 +2830,14 @@ final public class TestCompose extends XDTester {
 	final public static String xx(final XXElement x, final XDContainer y) {
 		return y.getXDText();
 	}
+
+	// testing null in create data values
+	public static String nulString(XXData chkEl) {return null;}
+	public static Long nulLong(XXData chkEl) {return null;}
+	public static Float nulFloat(XXData chkEl) {return null;}
+	public static SDatetime nulDatetime(XXData chkEl) {return null;}
+	public static SDuration nulDuration(XXData chkEl) {return null;}
+	public static XDContainer nulContainer(XXData xx) {return null;}
 
 	/** Run test
 	 * @param args the command line arguments
