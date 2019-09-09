@@ -1158,7 +1158,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_REGEXRESULT, XD_INT), "start");
 
 ////////////////////////////////////////////////////////////////////////////////
-// REPORT (see cz.syntea.common.Report)
+// REPORT (see org.xdef.sys.Report)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_REPORT;
 		method(ti, genInternalMethod(NEW_REPORT, XD_REPORT,

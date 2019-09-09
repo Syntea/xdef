@@ -19,7 +19,7 @@ import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/** XPath expression container.
+/** XPath expression.
  * @author Vaclav Trojan
  */
 public class KXpathExpr {

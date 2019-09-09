@@ -21,7 +21,7 @@ import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
-/** Contains compiled XPath expression.
+/** Compiled XQuery expression.
  * @author Vaclav Trojan
  */
 public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
@@ -72,16 +72,12 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	public KXqueryExpr getXQuery() {return this;}
 
 	@Override
-	/** Execute XPath expression and return result.
-	 * @param node node or <tt>null</tt>.
+	/** Execute XQuery expression and return result.
 	 * @param xNode node model or <tt>null</tt>.
-	 * @return The string representation of value of the object.
+	 * @return result of execution of this object.
 	 */
 	public XDContainer exec(final Node node, final XXNode xNode) {
-		if (XQI != null) {
-			return XQI.exec(this, node, xNode);
-		}
-		return null;
+		return XQI == null ? null : XQI.exec(this, node, xNode);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

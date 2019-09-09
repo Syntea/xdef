@@ -754,9 +754,6 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get value as printable string. */
 	public final String toString() {
-		if (isNull()) {
-			return "";
-		}
 		StringBuilder sb = new StringBuilder();
 		if (_map != null) {
 			for (XDNamedValue x: _map) {
@@ -853,7 +850,7 @@ public final class DefContainer extends XDValueAbstract
 	public final Element toElement(final String nsUri, final String xmlName) {
 		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
 	}
-/* */
+
 	public final Element toElement(
 		LinkedHashMap<String, String> ns,
 		final String nsUri, final String xmlName) {
