@@ -1,12 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 32.5.0, release-date 2019-07-11
-  - Prepared the version for processing JSON data. 
+  - Prepared the version for processing of JSON data. 
       The X-component interface has now new method toJson which returns a JSON
       object (i.e. java.util.Map as JSON object or java.util.List as JSON array).
       It is also now available the new class org.xdef.json.JsonUtil which
       enables to work with JSON objects (conversion JSON to XML, XML to JSON,
-      parse source JSON data, compare JSON objects).
+      parsing of source JSON data, compare JSON objects etc.).
       In the X-definition will be possible in future to describe structure
       of JSON models.
 
