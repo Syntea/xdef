@@ -896,8 +896,14 @@ public class JsonUtil extends StringParser {
 						return s; // missing escape char (error)
 					}
 					switch (ch = s.charAt(i)) {
+						case '"':
+							ch = '"';
+							break;
 						case '\\':
 							ch = '\\';
+							break;
+						case '/':
+							ch = '/';
 							break;
 						case 'b':
 							ch = '\b';
@@ -913,12 +919,6 @@ public class JsonUtil extends StringParser {
 							break;
 						case 't':
 							ch = '\t';
-							break;
-						case '"':
-							ch = '"';
-							break;
-						case '/':
-							ch = '/';
 							break;
 						case 'u':
 							try {

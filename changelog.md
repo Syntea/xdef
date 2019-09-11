@@ -1,50 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 32.5.0, release-date 2019-07-11
-  - Prepared the EXPERIMENTAL version for processing JSON data (it does not
-    influence the processing of XML data). 
-      The X-component has the new method toJson which returns a JCON object.
+  - Prepared the version for processing JSON data. 
+      The X-component interface has now new method toJson which returns a JSON
+      object (i.e. java.util.Map as JSON object or java.util.List as JSON array).
       It is also now available the new class org.xdef.json.JsonUtil which
       enables to work with JSON objects (conversion JSON to XML, XML to JSON,
       parse source JSON data, compare JSON objects).
-      In the X-definition is now possible to specify a JSON model written to
-      an element js:json as a text child. The namespace assigned to the prefix
-      "js" can be either:
-        http://www.xdef.org/json/1.0 (see XDConstants.JSON_NS_URI)
-        used for X-definition version of JSON to XML coversion
-       or
-        http://www.w3.org/2005/xpath-functions (see XDConstants.JSON_NS_URI_W3C)
-        used for W3C version of conversion to XML
-      In the class XDDocument are now implemented the methods "jparse" (parsing
-      of an JSON objects with X-definition).
-      Example:
-      X-definition:
-      <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2"
-        xmlns:js="http://www.xdef.org/json/1.0"
-        xd:name="Test" xd:root="js:json">
-        <js:json>
-          {"Person":
-            {
-              "Name": "jstring(1, 50); onFalse outln('Incorrect name')",
-              "Salary": "int(1000, 1000000)",
-              "Vehicle": "optional enum('Skoda','Ford','WW','Other');"
-            }
-          }
-        </js:json>
-      </xd:def>
-      JSON data:
-      {"Person":
-        { "Name": "John Smith", "Salary": 3500, "Vehicle": "Ford" }
-      }
-      Program in Java:
-      ''''
-      File json; // file with JSON data
-      File xdef; // file with X-definition
-      XDPool xp = XDFactory.compileXD(null, xdef); // compile X-definition
-      XDDocument xd = xp.createXDDocument("test");
-      // parse json source and return parsed JSON object
-      Object result = xd.jparse(json, "js:json", null);
-      // result will be the instance of java.util.Map
+      In the X-definition will be possible in future to describe structure
+      of JSON models.
 
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
