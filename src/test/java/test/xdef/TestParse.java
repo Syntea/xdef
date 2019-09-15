@@ -210,9 +210,7 @@ public final class TestParse extends XDTester {
 "     b='onStartElement out(@b)'\n" +
 "     c='onStartElement out(@c)' />\n" +
 "</xd:def>";
-//TODO
-//			xd = compile(xdef);
-			xd = XDFactory.compileXD(getProperties(),xdef).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xml = "<A a='a' b='b' c='c' />";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));

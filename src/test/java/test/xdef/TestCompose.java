@@ -1553,6 +1553,18 @@ final public class TestCompose extends XDTester {
 			xp = compile(xdef);
 			assertEq("<a><b/><b/><b/><c/></a>",
 				create(xp, "", "a", reporter, "<a/>"));
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a xd:script=\"\">\n"+ //default => /a
+"   <b xd:script=\"occurs +; create from ('b')\" />\n"+
+"  </a>\n"+
+"</xd:def>\n";
+			assertEq("<a/>",
+				create(xdef, "", "a", reporter, "<a/>", null, null));
+			assertErrors(reporter);
+			assertEq("<a><b/><b/></a>",
+				create(xdef, "", "a", reporter, "<a><b/><b/></a>", null, null));
+			assertNoErrors(reporter);
 //test default create
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1560,10 +1572,9 @@ final public class TestCompose extends XDTester {
 "   <b xd:script=\"occurs +\" />\n"+
 "  </a>\n"+
 "</xd:def>\n";
-			//TODO!!!
-//			el = create(xdef, "", "a", reporter, "<a/>", null, null);
-//			assertTrue(reporter.errors(), "Error not reported");
-//			assertEq(el, "<a/>");
+			assertEq("<a><b/></a>",
+				create(xdef, "", "a", reporter, "<a></a>"));
+			assertNoErrors(reporter);
 			assertEq("<a><b/></a>",
 				create(xdef, "", "a", reporter, "<a><c/></a>"));
 			assertEq("<a><b/></a>",
