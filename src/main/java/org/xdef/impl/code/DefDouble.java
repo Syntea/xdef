@@ -62,9 +62,7 @@ public final class DefDouble extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {
-		return stringValue();
-	}
+	public String toString() {return stringValue();}
 
 	@Override
 	/** Get string value of this object.
@@ -72,7 +70,8 @@ public final class DefDouble extends XDValueAbstract {
 	 * string value.
 	 */
 	public String stringValue() {
-		return _value == Double.NEGATIVE_INFINITY ? "-INF" :
+		return isNull() ? "" :
+			_value == Double.NEGATIVE_INFINITY ? "-INF" :
 			_value == Double.POSITIVE_INFINITY ? "INF" :
 			_value == Double.NaN ? "NaN" : String.valueOf(_value);
 	}

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -34,7 +34,7 @@ public class GenXDef implements XDConstants {
 
 	private static class XModel {final private String _name;
 		final private String _nsuri;
-		private final Map<String, XAtt> _atts = new TreeMap<String, XAtt>();
+		private final Map<String,XAtt> _atts = new LinkedHashMap<String,XAtt>();
 		private final List<XModel> _models = new ArrayList<XModel>();
 		private String _value;
 		private int _min = 1;

@@ -25,7 +25,6 @@ import org.xdef.model.XMVariableTable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.sys.ReportWriter;
@@ -60,7 +59,7 @@ public final class XPool implements XDPool, Serializable {
 	private static final String XD_VERSION = 
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 302003000L; // 32.3.0
+	private static final long XD_MIN_VERSION = 302005000L; // 32.5.0
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -137,7 +136,7 @@ public final class XPool implements XDPool, Serializable {
 ////////////////////////////////////////////////////////////////////////////////
 
 	private XPool() {
-		_xdefs = new TreeMap<String, XDefinition>();
+		_xdefs = new LinkedHashMap<String, XDefinition>();
 		_sourceInfo = new XDSourceInfo();
 	}
 
@@ -716,7 +715,7 @@ public final class XPool implements XDPool, Serializable {
 	}
 
 	private static void checkModel(ArrayList<XElement> reflist,
-		HashSet<XElement> refset,
+		Set<XElement> refset,
 		XElement xe) {
 		if (refset.add(xe)) {
 			if (xe._childNodes == null) {
@@ -1117,7 +1116,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param out where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	private void writeXPool(final OutputStream out) throws IOException {
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
 		GZIPOutputStream gout = new GZIPOutputStream(out);
 		XDWriter xw = new XDWriter(gout);
 		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
@@ -1212,14 +1211,13 @@ public final class XPool implements XDPool, Serializable {
 			XDefinition xd = getDefinition(name);
 			len = xd._rootSelection == null ? 0 : xd._rootSelection.size();
 			xw.writeLength(len);
-			//here are references to models, so we write only names!
+			//here are references to models, so we write names and XPositions!
 			for (String key: xd._rootSelection.keySet()){
 				xw.writeString(key);
 				if (!"*".equals(key)) {
 					XElement xel = (XElement) xd._rootSelection.get(key);
 					xw.writeString(xel._definition.getName());
-					xw.writeString(xel.getName());
-					xw.writeString(xel.getNSUri());
+					xw.writeString(xel.getXDPosition());
 				}
 			}
 		}
@@ -1234,17 +1232,13 @@ public final class XPool implements XDPool, Serializable {
 		gout.finish();
 	}
 
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
-		writeXPool(out);
-	}
-
-	private void readObject(java.io.ObjectInputStream in)
+	/** This method uses the Serializable interface.
+	 * @param input from where to read.
+	 * @throws IOException if an error occurs.
+	 */
+	private void readObject(java.io.ObjectInputStream input)
 		throws IOException, ClassNotFoundException {
-		xpRead(in);
-	}
-
-	private void xpRead(final InputStream input) throws IOException {
-		_xdefs = new TreeMap<String, XDefinition>();
+		_xdefs = new LinkedHashMap<String, XDefinition>();
 		_sourceInfo = new XDSourceInfo();
 		GZIPInputStream in = new GZIPInputStream(input);
 		XDReader xr = new XDReader(in);
@@ -1326,19 +1320,19 @@ public final class XPool implements XDPool, Serializable {
 			_lexicon = t;
 		}
 		len = xr.readLength();
-		_components = new TreeMap<String, String>();
+		_components = new LinkedHashMap<String, String>();
 		for (int i = 0; i < len; i++) {
 			String s = xr.readString();
 			_components.put(s, xr.readString());
 		}
 		len = xr.readLength();
-		_binds = new TreeMap<String, String>();
+		_binds = new LinkedHashMap<String, String>();
 		for (int i = 0; i < len; i++) {
 			String s = xr.readString();
 			_binds.put(s, xr.readString());
 		}
 		len = xr.readLength();
-		_enums = new TreeMap<String, String>();
+		_enums = new LinkedHashMap<String, String>();
 		for (int i = 0; i < len; i++) {
 			String s = xr.readString();
 			_enums.put(s, xr.readString());
@@ -1360,7 +1354,7 @@ public final class XPool implements XDPool, Serializable {
 		_init = xr.readInt();
 		_globalVariablesSize = xr.readInt();
 		_localVariablesMaxSize = xr.readInt();
-		_xdefs = new TreeMap<String, XDefinition>();
+		_xdefs = new LinkedHashMap<String, XDefinition>();
 		len = xr.readLength();
 		for(int i = 0; i < len; i++) {
 			try {
@@ -1371,7 +1365,7 @@ public final class XPool implements XDPool, Serializable {
 				throw new SIOException(SYS.SYS039, ex);
 			}
 		}
-		//solve root selections - references to models!
+		//resolve root selections - references to models!
 		for (int i = 0; i < len; i++) {
 			String name = xr.readString();
 			XDefinition xd = getDefinition(name);
@@ -1390,11 +1384,7 @@ public final class XPool implements XDPool, Serializable {
 					String refDefName = xr.readString();
 					XDefinition refXd = getDefinition(refDefName);
 					String refName = xr.readString();
-					String refUri = xr.readString();
-					ref = refXd.getXElement(refName, refUri, -1);
-					if (ref == null) {
-						ref = (XNode) findModel(key);
-					}
+					ref = (XNode) refXd.getXDPool().findModel(refName);
 				}
 				xd._rootSelection.put(key, ref);
 			}
@@ -1408,7 +1398,7 @@ public final class XPool implements XDPool, Serializable {
 			throw new SIOException(SYS.SYS039, "Incorrect file format");
 		}
 		ArrayList<XElement> reflist = new ArrayList<XElement>();
-		HashSet<XElement> refset = new HashSet<XElement>();
+		Set<XElement> refset = new HashSet<XElement>();
 		for(XDefinition xd: _xdefs.values()) {
 			for (XMElement xe: xd.getModels()) {
 				checkModel(reflist, refset, (XElement) xe);

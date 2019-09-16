@@ -49,6 +49,12 @@ public class XCTextComponent implements XComponent {
 	public Node toXml(Document doc) {return doc.createTextNode(_value);}
 
 	@Override
+	/** Create JSON object from this XComponent (marshal to JSON).
+	 * @return JSON object created from this XComponent.
+	 */
+	public Object toJson() {return null;}
+
+	@Override
 	/** Get name of element model used for construction of this object.
 	 * @return name of element model used for construction of this object.
 	 */

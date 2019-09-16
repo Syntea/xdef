@@ -27,7 +27,7 @@ import org.xdef.impl.code.CodeStringList;
 import org.xdef.impl.code.CodeTable;
 import java.io.IOException;
 import java.io.OutputStream;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.XDContainer;

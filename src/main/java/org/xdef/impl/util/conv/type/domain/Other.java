@@ -5,22 +5,19 @@ package org.xdef.impl.util.conv.type.domain;
  */
 public class Other extends ValueType {
 
-	/**
-	 * Simple type switch.
-	 */
+	/** Simple type switch. */
 	private boolean _simple = true;
-	/**
-	 * Type name.
-	 */
+	/** Type name. */
 	private final String _name;
+	/** Name of XDefinition where it was declared. */
+	private String _xdName;
 
 	/** Creates instance of other type.
-	 *
 	 * @param name type name.
 	 * @throws NullPointerException if given type name is <code>null</code>.
 	 * @throws IllegalArgumentException if given type name is empty.
 	 */
-	public Other(String name) {
+	public Other(final String name) {
 		if (name == null) {
 			throw new NullPointerException("Given name is null!");
 		}
@@ -33,30 +30,20 @@ public class Other extends ValueType {
 	/** Gets type name.
 	 * @return type name.
 	 */
-	public String getName() {
-		return _name;
-	}
+	public String getName() {return _name;}
 
 	/** Returns <code>true</code> if type is simple (does not contain parameters).
-	 *
 	 * @return <code>true</code> if type is simple.
 	 */
-	public boolean isSimple() {
-		return _simple;
-	}
+	public boolean isSimple() {return _simple;}
 
 	/** Sets type simplicity.
-	 *
 	 * @param isSimple simple type switch.
 	 */
-	public void setSimple(boolean isSimple) {
-		_simple = isSimple;
-	}
+	public void setSimple(boolean isSimple) {_simple = isSimple;}
 
 	@Override
-	public int getKind() {
-		return OTHER;
-	}
+	public int getKind() {return OTHER;}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -70,6 +57,16 @@ public class Other extends ValueType {
 		return _name.equals(o._name);
 	}
 
+	/** Set name of X-definition.
+	 * @param xdName of X-definition where the type was declared.
+	 */
+	public final void setXdefName(final String xdName) {_xdName = xdName;}
+
+	/** Get name of X-definition.
+	 * @return name of X-definition where the type was declared.
+	 */
+	public final String getXdefName() {return _xdName;}
+
 	@Override
 	public int hashCode() {
 		int hash = 5;
@@ -79,7 +76,7 @@ public class Other extends ValueType {
 
 	@Override
 	public String toString() {
-		return "Other[name='" + _name + "', "
-				+ "simple='" + _simple + "']";
+		return "Other[name='" + _name + "', " + "simple='" + _simple
+			+ "', xd='" + _xdName + "']";
 	}
 }

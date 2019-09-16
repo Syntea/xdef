@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <Types xmlns:ns="http://testNamespace.com">
     <an>a1b2c</an>
     <an_1>a1b</an_1>
@@ -41,7 +40,7 @@
     <ISOyearMonth>2000-01</ISOyearMonth>
     <ISOduration>P01Y20M12D</ISOduration>
     <email>john.doe@server.com</email>
-    <emailList>john.doe@server.com joe.smith@another.server.com</emailList>
+    <emailList>john.doe@server.com, joe.smith@another.server.com</emailList>
     <!--
     <emailDate></emailDate>
     -->

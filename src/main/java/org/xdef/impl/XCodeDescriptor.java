@@ -74,6 +74,8 @@ public abstract class XCodeDescriptor extends XNode {
 	public byte _moreElements; //0 not set, 'T' or 'F'
 	/** "more attributes" flag. */
 	public byte _moreText; //0 not set, 'T' or 'F'
+	/** "JSON version" flag: 0 not set, 1 .. W3C, 2 .. XDEF. */
+	public byte _json; //0 not set, '1' .. version W3C, '2' .. version XDEF
 	/** flag to set a text as CDATA section. */
 	public byte _cdata; //0 not set 'T' or 'F'
 	/** flag to set element nillable. */
@@ -142,6 +144,7 @@ public abstract class XCodeDescriptor extends XNode {
 		_trimText = x._trimText;
 		_moreElements = x._moreElements;
 		_moreText = x._moreText;
+		_json = x._json;
 		_moreAttributes = x._moreAttributes;
 		_resolveEntities = x._resolveEntities;
 		_resolveIncludes = x._resolveIncludes;
@@ -154,7 +157,7 @@ public abstract class XCodeDescriptor extends XNode {
 		_ignoreComments = _attrWhiteSpaces = _textWhiteSpaces =
 			_ignoreEmptyAttributes = _attrValuesCase =
 			_textValuesCase = _trimAttr = _trimText = _moreElements =
-			_moreText = _moreAttributes = _resolveEntities =
+			_moreText = _json = _moreAttributes = _resolveEntities =
 			_resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
 	}
 
@@ -234,6 +237,7 @@ public abstract class XCodeDescriptor extends XNode {
 			_moreAttributes, //0 not set, 'T' or 'F'
 			_moreElements, //0 not set, 'T' or 'F'
 			_moreText, //0 not set, 'T' or 'F'
+			_json, //0 not set, or JSON version
 			_nillable, //0 not set 'T' or 'F'
 			_cdata //0 not set 'T' or 'F'
 		};
@@ -297,8 +301,9 @@ public abstract class XCodeDescriptor extends XNode {
 		_moreAttributes = (byte) (b[11] & 255); //0 not set, 'T' or 'F'
 		_moreElements = (byte) (b[12] & 255); //0 not set, 'T' or 'F'
 		_moreText = (byte) (b[13] & 255); //0 not set, 'T' or 'F'
-		_nillable = (byte) (b[14] & 255); //0 not set 'T' or 'F'
-		_cdata = (byte) (b[15] & 255); //0 not set 'T' or 'F'
+		_json = (byte) (b[14] & 255); //0 not set, or version number
+		_nillable = (byte) (b[15] & 255); //0 not set 'T' or 'F'
+		_cdata = (byte) (b[16] & 255); //0 not set 'T' or 'F'
 
 		////////////////////////////////////////////////////////////////////////
 		// variables

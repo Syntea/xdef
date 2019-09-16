@@ -6,12 +6,13 @@ public class Y09 implements org.xdef.component.XComponent{
   public String getx() {return _x;}
   public String gety() {return _y;}
   public Y09.$any get$any() {return _$any;}
-  public void setx(String x){_x = x;}
-  public void sety(String x){_y = x;}
-  public void set$any(Y09.$any x){_$any = x;}
-  public String xposOfx(){return XD_XPos + "/@x";}
-  public String xposOfy(){return XD_XPos + "/@y";}
+  public void setx(String x){_x=x;}
+  public void sety(String x){_y=x;}
+  public void set$any(Y09.$any x){_$any=x;}
+  public String xposOfx(){return XD_XPos+"/@x";}
+  public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -64,8 +65,10 @@ public class Y09 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, get$any());
     return a;
@@ -118,7 +121,8 @@ public class Y09 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new $any(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -130,6 +134,7 @@ public class Y09 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class $any implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -174,8 +179,11 @@ public static class $any implements org.xdef.component.XComponent{
     }
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public $any() {}
   public $any(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -211,7 +219,8 @@ public static class $any implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

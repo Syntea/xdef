@@ -1,0 +1,20 @@
+{
+    "personnel": {
+        "person": ["xd:script=occurs 1..*;",
+            {"xd:script": "occurs 1..*;",
+                "id": "string();",
+                "name": {
+                    "family": "string();",
+                    "given": "optional string();"
+                },
+                "email": "email();",
+                "link": {"xd:script": "xd:choice; optional;",
+                    "manager": "string();",
+                    "subordinates": [
+                         "occurs 0..* string(); /* finally outln('Ahoj'); */"
+                    ]
+                }
+            }
+        ]
+    }
+}

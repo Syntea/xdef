@@ -1,0 +1,11 @@
+{ 
+   "osoba" : {
+      "jmeno": "Nováková",
+      "prijmeni": "Jana",
+      "plat" : 1000,
+      "kocky" : [
+            {"kocka":"Mnau", "vek": 1},
+            {"kocka":"Mourek", "vek": 7}
+         ]
+      }
+}

@@ -37,13 +37,14 @@ public class FUtils {
 	 * returns Long.MAX_VALUE.
 	 * @param file the file to be checked.
 	 * @return number of bytes available in the filesystem of the file or return
-	 * 0 if filesystem not exists or if it is not allowed to write to the file.
+	 * Long.MAX_VALUE if filesystem not exists or if it is not allowed to write
+	 * to the file.
 	 */
 	public static long getUsableSpace(final File file) {
 		File f = file;
 		for (;;) {
-			if (f.isDirectory() && f.exists()) {
-				return f.getUsableSpace();
+			if (f.isDirectory()) {
+				 return f.exists() ? f.getUsableSpace() : Long.MAX_VALUE;
 			}
 			String s = file.getAbsolutePath().replace('\\', '/');
 			int ndx = s.lastIndexOf('/');
@@ -557,13 +558,21 @@ public class FUtils {
 		final File outFile,
 		final boolean append) throws SException {
 		InputStream in;
-		if (inFile.length() + 10 > getUsableSpace(outFile)) {
-			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
+		if (!inFile.exists()) {
+			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		try {
 			in = new FileInputStream(inFile);
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
+		}
+		if (inFile.length() + 10 > getUsableSpace(outFile)) {
+			if (outFile.getParentFile() != null && 
+				!outFile.getParentFile().exists()) {
+				//File doesn't exist: &{0}
+				throw new SException(SYS.SYS024, outFile); 
+			}
+			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
 		OutputStream out;
 		try {
@@ -744,7 +753,7 @@ public class FUtils {
 	 * @param exc exclude list
 	 * @return true if and only if the file should be skipped.
 	 */
-	private static boolean chkExclude(final File f, final String[] exc) {
+	private static boolean chkExclude(final File f, final String... exc) {
 		String s = f.getAbsolutePath().replace('\\', '/');
 		if (f.isDirectory() && !s.endsWith("/")) {
 			s += "/";
@@ -769,15 +778,15 @@ public class FUtils {
 	 */
 	public static void xcopy(final File[] from,
 		final File to,
-		final String[] exclude,
-		final boolean deep)
+		final boolean deep,
+		final String... exclude)
 		throws SException {
 		for (File x: from) {
 			if (!chkExclude(x, exclude)) {
 				if (x.isDirectory() && deep) {
 					File newDir = new File(to, x.getName());
 					newDir.mkdirs();
-					xcopy(x.listFiles(), newDir, exclude, true);
+					xcopy(x.listFiles(), newDir, true, exclude);
 				} else { //file
 					File newFile = new File(to, x.getName());
 					copyToFile(x, newFile);
@@ -798,8 +807,8 @@ public class FUtils {
 	 */
 	public static void xcopy(final String fromDir,
 		final String toDir,
-		final String[] excludes,
-		final boolean deep) throws SException {
+		final boolean deep,
+		final String... excludes) throws SException {
 		File from = new File(fromDir);
 		if (!from.exists() || !from.isDirectory()) {
 			// Directory doesn't exist or isn't accessible: &{0}
@@ -807,7 +816,7 @@ public class FUtils {
 		}
 		File to = new File(toDir);
 		to.mkdirs(); //create target directory if it not exists
-		xcopy(from.listFiles(), to, excludes, deep);
+		xcopy(from.listFiles(), to, deep, excludes);
 	}
 
 	/** Read input stream to StringBuffer (decoded from given character
@@ -1529,24 +1538,14 @@ public class FUtils {
 		return dir.listFiles(new NameWildCardFilter(wn, caseInsensitive));
 	}
 
-	/** Get array of existing files represented by given argument. The argument
-	 * can either represent one concrete file or it can represent a set of files
-	 * with wildcards '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildName file name (wildcards are accepted) .
-	 * @return array of existing files according to argument.
-	 */
-	public static File[] getFileGroup(final String wildName) {
-		return getFileGroup(wildName, false);
-	}
-
 	/** Get array of existing files represented by given argument array. The
 	 * argument array is an array of strings where each one can either represent
 	 * one concrete file or it can represent a set of files with wildcards
 	 * '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildNames array of file names.
+	 * @param wildNames file names (may be array or list of arguments).
 	 * @return array of existing files according to argument.
 	 */
-	public static File[] getFileGroup(final String[] wildNames) {
+	public static File[] getFileGroup(final String... wildNames) {
 		return getFileGroup(wildNames, false);
 	}
 

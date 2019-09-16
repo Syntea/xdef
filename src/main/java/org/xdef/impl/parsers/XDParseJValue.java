@@ -1,68 +1,52 @@
 package org.xdef.impl.parsers;
 
-import org.xdef.XDParseResult;
-import org.xdef.impl.code.DefDecimal;
-import org.xdef.impl.code.DefBoolean;
-import org.xdef.impl.code.DefNull;
+import org.xdef.XDParser;
 
 /** Parser of X-Script "jvalue" type.
  * @author Vaclav Trojan
  */
-public class XDParseJValue extends XDParseAn {
+public class XDParseJValue  extends XSParseUnion {
 	private static final String ROOTBASENAME = "jvalue";
+	
 	public XDParseJValue() {
 		super();
+		_itemTypes = new XDParser[]{
+			new XDParseJNull(),
+			new XDParseJBoolean(),
+			new XDParseJNumber(),
+			new XDParseJString()};
+	}
+	
+	@Override
+	public  void initParams() {
+		_patterns = null;
+		_enumeration = null;
+		_itemTypes = new XDParser[]{
+			new XDParseJNull(),
+			new XDParseJBoolean(),
+			new XDParseJNumber(),
+			new XDParseJString()};
 	}
 	@Override
-	boolean parse(final XDParseResult p) {
-		if (p.isChar('"')) { // quoted string
-			StringBuilder sb = new StringBuilder();
-			for (;;) {
-				if (p.eos()) {
-					return false;
-				}
-				if (p.isToken("\"\"")) {
-					sb.append('"');
-				} else if (p.isChar('"')) {
-					p.setParsedValue(sb.toString());
-					return true;
-				} else {
-					sb.append(p.peekChar());
-				}
-			}
-		} else if (!p.eos()) {//not quoed string
-			if (p.isToken("null")) {
-				p.setParsedValue(DefNull.genNullValue(XD_ANY));
-				return true;
-			}
-			if (p.isToken("true")) {
-				p.setParsedValue(new DefBoolean(true));
-				return true;
-			}
-			if (p.isToken("false")) {
-				p.setParsedValue(new DefBoolean(false));
-			}
-			if (p.getCurrentChar() != '+') {
-				int pos = p.getIndex();
-				if (p.isSignedFloat() || p.isSignedInteger()) {
-					p.setParsedValue(new DefDecimal(
-						p.getBufferPart(pos, p.getIndex())));
-					return true;
-				}
-			}
-			int pos = p.getIndex();
-			char ch;
-			while ((ch = p.getCurrentChar()) != 0 && ch != ' '
-				&& ch != '\t' && ch != '\r' && ch != '\n') {
-				p.peekChar();
-			}
-			p.setParsedValue(p.getBufferPart(pos, p.getIndex()));
-			return true;
-		}
-		return false;
+	public int getLegalKeys() {
+		return PATTERN +
+			ENUMERATION +
+//			WHITESPACE + //fixed to preserve
+//			MAXINCLUSIVE +
+//			MAXEXCLUSIVE +
+//			MININCLUSIVE +
+//			MINEXCLUSIVE +
+//			TOTALDIGITS +
+//			FRACTIONDIGITS +
+//			LENGTH +
+//			MAXLENGTH +
+//			MINLENGTH +
+//			NORMALIZE +
+//			SEPARATOR +
+//			ITEM +
+			BASE +
+			0;
 	}
-	@Override
-	public short parsedType() {return XD_ANY;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

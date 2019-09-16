@@ -3,7 +3,7 @@ package org.xdef.impl.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.xml.sax.ContentHandler;
@@ -45,7 +45,8 @@ public abstract class DomBaseHandler
 	private XMLReader _xr;
 	public boolean _isDTD;
 	public Locator _locator;
-	public final Map<String, String> _prefixes = new TreeMap<String, String>();
+	public final Map<String, String> _prefixes = 
+		new LinkedHashMap<String, String>();
 	private boolean _ignoreComments = true; //default
 	private XAbstractReader _mr ;
 	public String _sysId;

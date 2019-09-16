@@ -1,0 +1,7 @@
+{
+	"manzel": {
+	  "jmeno": "Jan",
+	  "prijmeni": "Novak",
+	  "auto": ["bmw", "skoda", {"pes": "Rex"}]
+	}
+}

@@ -7,11 +7,12 @@ public class P implements org.xdef.component.XComponent{
   public java.util.List<P.b> listOfb() {return _b;}
   public P.c getc() {return _c;}
   public P.d getd() {return _d;}
-  public void seta(P.a x){_a = x;}
+  public void seta(P.a x){_a=x;}
   public void addb(P.b x) {if (x!=null) _b.add(x);}
-  public void setc(P.c x){_c = x;}
-  public void setd(P.d x){_d = x;}
+  public void setc(P.c x){_c=x;}
+  public void setd(P.d x){_d=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -60,8 +61,10 @@ public class P implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, geta());
     org.xdef.component.XComponentUtil.addXC(a, listOfb());
@@ -108,7 +111,8 @@ public class P implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("P#A/a".equals(s))
       return new a(this, x);
@@ -140,14 +144,15 @@ public static class a implements org.xdef.component.XComponent{
   public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
   public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
   public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
-  public void seta(Double x){_a = x;}
-  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void seta(Double x){_a=x;}
+  public void setb(org.xdef.sys.SDatetime x){_b=x;}
   public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -197,8 +202,11 @@ public static class a implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public a() {}
   public a(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -245,7 +253,8 @@ public static class a implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -259,14 +268,15 @@ public static class b implements org.xdef.component.XComponent{
   public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
   public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
   public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
-  public void seta(Double x){_a = x;}
-  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void seta(Double x){_a=x;}
+  public void setb(org.xdef.sys.SDatetime x){_b=x;}
   public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -316,8 +326,11 @@ public static class b implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public b() {}
   public b(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -364,7 +377,8 @@ public static class b implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -378,14 +392,15 @@ public static class c implements org.xdef.component.XComponent{
   public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
   public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
   public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
-  public void seta(Double x){_a = x;}
-  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void seta(Double x){_a=x;}
+  public void setb(org.xdef.sys.SDatetime x){_b=x;}
   public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -435,8 +450,11 @@ public static class c implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public c() {}
   public c(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -483,7 +501,8 @@ public static class c implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -497,14 +516,15 @@ public static class d implements org.xdef.component.XComponent{
   public java.util.Date dateOfb(){return org.xdef.sys.SDatetime.getDate(_b);}
   public java.sql.Timestamp timestampOfb(){return org.xdef.sys.SDatetime.getTimestamp(_b);}
   public java.util.Calendar calendarOfb(){return org.xdef.sys.SDatetime.getCalendar(_b);}
-  public void seta(Double x){_a = x;}
-  public void setb(org.xdef.sys.SDatetime x){_b = x;}
+  public void seta(Double x){_a=x;}
+  public void setb(org.xdef.sys.SDatetime x){_b=x;}
   public void setb(java.util.Date x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.sql.Timestamp x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setb(java.util.Calendar x){_b=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -554,8 +574,11 @@ public static class d implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public d() {}
   public d(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -602,7 +625,8 @@ public static class d implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

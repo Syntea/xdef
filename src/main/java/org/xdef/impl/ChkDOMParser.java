@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/** ChkDOMParser
+/** Provides processing of an XML document in the form of org.w3c.dom object.
  * @author  Vaclav Trojan
  */
 class ChkDOMParser extends SReporter {
@@ -106,8 +106,7 @@ class ChkDOMParser extends SReporter {
 						StringParser p = new StringParser(val);
 						p.skipSpaces();
 						String systemLiteral;
-						int i = p.isOneOfTokens(
-							new String[]{"SYSTEM","PUBLIC"});
+						int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
 						if (i == 1) { //PUBLIC
 							if (!p.isSpaces()) {
 								//Whitespace expected after '&{0}'
@@ -159,7 +158,7 @@ class ChkDOMParser extends SReporter {
 						}
 						XDPool xdp;
 						try {
-							xdp = XBuilder.build(null, null, u);
+							xdp = new XBuilder(null).setSource(u).compileXD();
 						} catch (Exception ex) {
 							//In X-definition are errors&{0}{: }
 							fatal(XDEF.XDEF543, ex);
@@ -225,11 +224,21 @@ class ChkDOMParser extends SReporter {
 						}
 					}
 				}
-				chkEl = _chkDoc.createRootChkElement(
-					_doc.createElementNS(ns, elementName), true);
+				Element el = _doc.createElementNS(ns, elementName);
+				for (int i = 0; i < maxAttr; i++) {
+					Node n = atrs.item(i);
+					el.setAttributeNS(n.getNamespaceURI(),
+						n.getNodeName(), n.getNodeValue());
+				}
+				chkEl = _chkDoc.createRootChkElement(el, true);
 			} else {
-				chkEl = parentNode.createChkElement(
-					_doc.createElementNS(ns, elementName));
+				Element el = _doc.createElementNS(ns, elementName);
+				for (int i = 0; i < maxAttr; i++) {
+					Node n = atrs.item(i);
+					el.setAttributeNS(n.getNamespaceURI(),
+						n.getNodeName(), n.getNodeValue());
+				}
+				chkEl = parentNode.createChkElement(el);
 			}
 			List<Attr> atrs1 = new ArrayList<Attr>(); // list of processed atrs
 			// Process atrributes which have model

@@ -5,11 +5,12 @@ package test.xdef.component;
 public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
   public String getFirstName() {return _FirstName;}
   public String getLastName() {return _LastName;}
-  public void setFirstName(String x){_FirstName = x;}
-  public void setLastName(String x){_LastName = x;}
-  public String xposOfFirstName(){return XD_XPos + "/@FirstName";}
-  public String xposOfLastName(){return XD_XPos + "/@LastName";}
+  public void setFirstName(String x){_FirstName=x;}
+  public void setLastName(String x){_LastName=x;}
+  public String xposOfFirstName(){return XD_XPos+"/@FirstName";}
+  public String xposOfLastName(){return XD_XPos+"/@LastName";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -60,8 +61,11 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public C1() {}
   public C1(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -108,7 +112,8 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

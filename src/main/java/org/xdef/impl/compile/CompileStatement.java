@@ -34,7 +34,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -2464,7 +2464,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		initBlock(true, -1);
 		boolean wasDefault = false;
 		int defaultAddr = -1;
-		Map<Object, Integer> ht = new TreeMap<Object, Integer>();
+		Map<Object, Integer> ht = new LinkedHashMap<Object, Integer>();
 		boolean wasContinue = true;
 		boolean wasReturn = true;
 		while (_sym != END_SYM) {
@@ -2982,7 +2982,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (props == null) {
-			props = new TreeMap<String,String>();
+			props = new LinkedHashMap<String,String>();
 			props.put("%{language}", language);
 			languages.add(props);
 		}
@@ -3573,22 +3573,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						errorAndSkip(XDEF.XDEF423,
 							String.valueOf(END_SYM), "Parser");
 					} else {
-/*XXX*
-			String s = getParsedBufferPartFrom(srcPos).trim();
-			if (s.startsWith("OR") || s.startsWith("NOT") || s.startsWith("AND")
-				|| s.startsWith("AAND") || s.startsWith("OOR")) {
-				s = ' ' + s;
-			}
-			if (s.endsWith(";")) {
-				s = s.substring(0, s.length() - 1);
-				s = s.trim();
-			}
-			if (s.isEmpty()) {
-				s = "()";
-			}
-//			info.setParam2(typeName + s);
-//System.out.println(typeName + s);
-/*XXX*/
 						CompileVariable v =
 							_g.addVariable(name, _g._tstack[_g._sp], varKind);
 						if (_g._cstack[_g._sp] >= 0) {
@@ -4127,7 +4111,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			final CompileCode g) {
 			_variables = g._localVariables;
 			_variablesLastIndex = g._localVariablesLastIndex;
-			g._localVariables = new TreeMap<String, CompileVariable>(_variables);
+			g._localVariables =
+				new LinkedHashMap<String, CompileVariable>(_variables);
 			_jumps = jumps;
 			if (_jumps) {
 				_breakJumps = new ArrayList<CodeI1>();

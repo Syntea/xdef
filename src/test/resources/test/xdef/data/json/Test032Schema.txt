@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "personal-schema",
+    "type": "object",
+    "properties": {
+        "personnel": {
+            "type": "object",
+            "properties": {
+                "person": {"$ref": "#/definitions/personType"}
+            },
+            "additionalProperties": false
+        }
+    },
+    "definitions": {
+        "personType": {
+            "title": "The 'person' schema",
+            "type": "array",
+            "items": {
+                "description": "Rules for properties defining the items that constitute a 'person'",
+                "type": "object",
+                "properties": {
+                    "id": {"$ref": "#/definitions/idType"},
+                    "name": {"$ref": "#/definitions/nameType"},
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "link": {"$ref": "#/definitions/linkType"}
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "link"
+                ],
+                "additionalProperties": false
+            },
+            "uniqueItems": true
+        },
+        "idType": {
+            "title": "The 'id' schema ",
+            "type": "string",
+            "maxLength": 20,
+            "examples": ["Big.Boss"]
+        },
+        "nameType": {
+            "title": "The 'name' schema ",
+            "type": "object",
+            "properties": {
+                "family": {"$ref": "#/definitions/nameValueType"},
+                "given": {"$ref": "#/definitions/nameValueType"}
+            },
+            "required": [
+                "family",
+                "given"
+            ],
+            "additionalProperties": false
+        },
+        "nameValueType": {
+            "title": "The 'name value' schema",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20,
+            "pattern": "^[a-zA-Z ]*$",
+            "examples": ["John"]
+        },
+        "linkType": {
+            "title": "The 'link' schema ",
+            "type": "object",
+            "properties": {
+                "subordinates": {
+                    "title": "The 'subordinates' schema ",
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/idType"}
+                },
+                "manager": {"$ref": "#/definitions/idType"}
+            },
+            "additionalProperties": false
+        }
+    }
+}

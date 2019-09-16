@@ -1549,11 +1549,9 @@ public final class Test002 extends XDTester {
 				&& s.contains("E XDEF804:")	&& s.contains("=/a/@c")
 				&& s.contains("=/a/@d")	&& s.contains("=/a/text()[3]")
 				&& s.contains("=/a/text()[4]"), s);
-/*x*
-// ???????????????? This runs on NetBeans and not without them ????????????????
+
 			xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' xmlns:x= 'a'\n" +
-"        root = \"M\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xmlns:x='a.b.c' root='M'>\n" +
 "<M xd:script=\"var String s = '';\">\n" +
 "    <Measurement xd:script=\"occurs 1..*;\n" +
 "      var { int count = 0; float total = 0; }\n"+
@@ -1568,29 +1566,25 @@ public final class Test002 extends XDTester {
 "</xd:def>");
 			xml =
 "<M>" +
-"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T11:31:05\">" +
-"<Value>10</Value>" +
-"<Value>11.8</Value>" +
-"<Value>9.4</Value>" +
+"<Measurement xmlns:x = \"a.b.c\" x:date=\"2017-08-10T11:31:05\">" +
+"<Value>10</Value><Value>11.8</Value><Value>9.4</Value>" +
 "</Measurement>" +
-"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T13:01:27\">" +
+"<Measurement xmlns:x = \"a.b.c\" x:date=\"2017-08-10T13:01:27\">" +
 "<Value>12.35</Value>" +
 "</Measurement>" +
 "</M>";
 			assertEq(
 "<M>" +
-"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T11:31:05\">" +
-"<Value>10</Value>" +
-"<Value>11.8</Value>" +
-"<Value>9.4</Value>" +
+"<Measurement xmlns:x = \"a.b.c\" x:date=\"2017-08-10T11:31:05\">" +
+"<Value>10</Value><Value>11.8</Value><Value>9.4</Value>" +
 "</Measurement>" +
-"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T13:01:27\">" +
+"<Measurement xmlns:x = \"a.b.c\" x:date=\"2017-08-10T13:01:27\">" +
 "<Value>12.35</Value>" +
 "</Measurement>" +
 "2017-08-10T11:31:05;n=3,average=10.4 2017-08-10T13:01:27;n=1,average=12.35 " +
-"</M>", parse(xp, "", xml, reporter));
+"</M>",
+				parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-/*x*/
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

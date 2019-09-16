@@ -8,15 +8,16 @@ public class Y10 implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public Y10p getp() {return _p;}
   public Y10q getq() {return _q;}
-  public void seta(String x){_a = x;}
-  public void setb(String x){_b = x;}
-  public void setc(String x){_c = x;}
-  public void setp(Y10p x){_p = x;}
-  public void setq(Y10q x){_q = x;}
-  public String xposOfa(){return XD_XPos + "/@a";}
-  public String xposOfb(){return XD_XPos + "/@b";}
-  public String xposOfc(){return XD_XPos + "/@c";}
+  public void seta(String x){_a=x;}
+  public void setb(String x){_b=x;}
+  public void setc(String x){_c=x;}
+  public void setp(Y10p x){_p=x;}
+  public void setq(Y10q x){_q=x;}
+  public String xposOfa(){return XD_XPos+"/@a";}
+  public String xposOfb(){return XD_XPos+"/@b";}
+  public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -71,8 +72,10 @@ public class Y10 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getp());
     org.xdef.component.XComponentUtil.addXC(a, getq());
@@ -132,7 +135,8 @@ public class Y10 implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y10#A/$mixed/a".equals(s))
       return new test.xdef.component.Y10p(this, x);

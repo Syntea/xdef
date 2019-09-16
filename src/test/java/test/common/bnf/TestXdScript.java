@@ -70,6 +70,13 @@ public class TestXdScript extends XDTester {
 			s = "{loop : while ( true ) break loop ;}";
 			assertEq(s, parse(grammar, "Block", s));
 /*labels not implemented yet*/
+			s = "{parse : {return true;}}";
+			assertEq(s, parse(g, "TypeDeclarationBody", s));
+			s = "{if(true)return true; else return false;}";
+			assertEq(s, parse(g, "TypeDeclarationBody", s));
+//			s = "{if (true) return true else return error('xxx')}";
+//			assertEq(s, parse(g, "TypeDeclarationBody", s));
+if (true) return;
 			s = "( x() == 'B' )";
 			assertEq(s, parse(g, "Expression", s));
 			s = "void x(int a) {out();}";
@@ -131,9 +138,9 @@ public class TestXdScript extends XDTester {
 			s = "  uniqueSet u flt ;\n";
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s = " uniqueSet u { x: flt ; y : optional flt ; }\n";
-			assertEq(s, parse(g, "DeclarationScript", s));			
+			assertEq(s, parse(g, "DeclarationScript", s));
 			s = "uniqueSet u{x:flt;y:?flt;}\n";
-			assertEq(s, parse(g, "DeclarationScript", s));			
+			assertEq(s, parse(g, "DeclarationScript", s));
 			s = "uniqueSet u {a:string();b:int(); var Parser x, Parser y}";
 			assertEq(s, parse(g, "DeclarationScript", s));
 			s =
@@ -245,7 +252,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XPosition", s));
 			s = "X#Y/$mixed[1]/A[22]/$text[1]";
 			assertEq(s, parse(g, "XPosition", s));
-			
+
 			s =
 "external method String test.xdef.TestExtenalMethods_2.m35(XXElement, int);\n"+
 "external method {\n"+
@@ -266,49 +273,61 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "MethodListItem", s));
 			s = "";
 //			printCode(g);
+
 			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
 			s = g.toString();
 			assertEq(s, parse(g, "BNFGrammar", s));
-//			System.out.println(s);			
+//			System.out.println(s);
 
 			////////////////////////////////////////////////////////////////////
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PrintStream ps = new PrintStream(baos, true, "UTF-8");
 			g.trace(ps);
-			parse(g, "DeclarationScript", "external Element x ");
+			parse(g, "DeclarationScript", "external element x ?;");
 			ps.close();
 			BufferedReader in = new BufferedReader(
 				new StringReader(new String(baos.toByteArray(), "UTF-8")));
 			String line;
 			int max = Integer.MIN_VALUE;
-			int min = Integer.MAX_VALUE;
-			String rule = null;
 			ArrayList<String> lines = new ArrayList<String>();
 			while((line = in.readLine()) != null) {
-				if (line.endsWith("; true") || line.endsWith("; false")) {
-					lines.add(line);
-				}
+				lines.add(line);
 			}
-			for(String ln : lines) {
-//				System.out.println(ln);
-				if (ln.endsWith("; true")) {
-					String[] xx = ln.split(";");
-					xx = xx[1].substring(2, xx[1].length() - 1).split(",");
-					int i = Integer.parseInt(xx[0]);
-					int j = Integer.parseInt(xx[1]);
-					if (j >= max) {
-						max = j;
-						if (i <= min) {
-							min = i;
-							rule = ln;
-						}
+			in.close();
+			int z = -1;
+			String[] x;
+			for(int i = 0; i < lines.size(); i++) {
+				line = lines.get(i);
+				x = line.split(";");
+				if (line.endsWith("; true")) {
+					String[] y = x[1].substring(2, x[1].length()-1).split(",");
+					int j = Integer.parseInt(y[0]);
+					int k = Integer.parseInt(y[1]);
+					if (j == 0 && j != k && k >= max ) {
+						z = i;
 					}
 				}
 			}
-			in.close();
-			assertEq("DeclarationScript; (0,19); true", rule);
+			line = lines.get(z);
+			s = lines.get(z).split(";")[0];
+			z--;
+			for (;z >=0 ; z--) {
+				String y = lines.get(z);
+				int j = y.indexOf("::=");
+				if (j > 0 && y.indexOf(s, j) > 0) {
+					break;
+				}
+			}
+			if (z >= 0) {
+				s = lines.get(z);
+				s = "" + g.getRule(s.split("::=")[0].trim());
+				assertTrue(s.startsWith("VariableDeclaration ::= Var"));
+			} else {
+				fail("Rule not found");
+			}
+			assertEq("VariableModifier; (0,9); true", line);
 			g.trace(null);
-			
+
 		} catch (Exception ex) {
 			fail(ex);
 		}

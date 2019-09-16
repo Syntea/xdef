@@ -1,0 +1,8 @@
+{
+	"manzel": {
+	  "jmeno": "string();",
+	  "prijmeni": "string();",
+	  "auto": ["string();", "string();", {"pes": "string();"}]
+	  
+	}
+}

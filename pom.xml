@@ -8,18 +8,29 @@
     
     <groupId>org.xdef</groupId>
     <artifactId>xdef</artifactId>
-    <version>${version}${snapshot}</version>
+    <version>${revision}${changelist}</version>
     <packaging>jar</packaging>
     
     <name>xdef</name>
-    <!-- use format of java.util.Properties, it's included into pominfo.properties, see below -->
-    <description>X-definition 3.2 (Open Source Software)</description>
+    <description>X-definition ${specification.version} (Open Source Software)</description>
+    <url>https://www.xdef.org</url>
+    <organization>
+        <name>Syntea software group a.s.</name>
+        <url>https://www.syntea.cz</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>trojan</id>
+            <name>Václav Trojan</name>
+            <roles><role>leader</role></roles>
+        </developer>
+    </developers>
     
     <properties>
-        <version>32.4.0</version><!-- when changed, change also ${release.date}, see below -->
-        <snapshot>-SNAPSHOT</snapshot>
-        <!--snapshot/-->
-		<release.date>2019-04-02</release.date><!-- update when changed version -->
+        <revision>32.5.0</revision><!-- when changed, change also ${release.date}, see below -->
+        <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
+		<release.date>2019-09-16</release.date><!-- update when changed version -->
+        <specification.version>3.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
@@ -133,11 +144,14 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Build-Version>${project.version}</Build-Version>
-                            <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
-                            <Implementation-Title>${project.groupId}:${project.artifactId}:${project.version}</Implementation-Title>
-                            <Implementation-Vendor>Syntea software group a.s.</Implementation-Vendor>
+                            <Specification-Title>${project.groupId}:${project.artifactId} (${project.url})</Specification-Title>
+                            <Specification-Version>${specification.version}</Specification-Version>
+                            <Specification-Vendor>${project.organization.name} (${project.organization.url})</Specification-Vendor>
+                            <Implementation-Title>${project.groupId}:${project.artifactId}:${project.version} (release-date: ${release.date})</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Vendor>${project.organization.name} (${project.organization.url})</Implementation-Vendor>
                             <Comment>${project.description}</Comment>
+                            <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -185,8 +199,6 @@
                         <url/>
                         <organization/>
                         <developers/>
-                        <modules/>
-                        <dependencyManagement/>
                     </pomElements>
                 </configuration>
                 <executions>
@@ -270,7 +282,7 @@
         <profile>
             <id>release</id>
             <properties>
-                <snapshot/>
+                <changelist/>
             </properties>
         </profile>
         <profile>
@@ -316,8 +328,8 @@
                         <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/assembly/src.xml</descriptor>
-                                <descriptor>src/assembly/userdoc.xml</descriptor>
+                                <descriptor>maven/assembly/src.xml</descriptor>
+                                <descriptor>maven/assembly/userdoc.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <executions>

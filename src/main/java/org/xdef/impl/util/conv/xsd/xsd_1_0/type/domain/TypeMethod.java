@@ -23,7 +23,7 @@ public class TypeMethod {
 	 */
 	public TypeMethod(String methodName,
 		char valueType,
-		String[] parameters) {
+		String... parameters) {
 		_methodName = methodName;
 		_valueType = valueType;
 		for (int i = 0; i < parameters.length; i++) {

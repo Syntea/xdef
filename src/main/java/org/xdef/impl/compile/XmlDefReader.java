@@ -10,8 +10,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
-import org.xdef.xml.KParsedAttr;
-import org.xdef.xml.KParsedElement;
+import org.xdef.impl.xml.KParsedElement;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -28,6 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.xml.KParsedAttr;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -41,7 +41,7 @@ import org.xml.sax.ext.DeclHandler;
  * @author trojan
  */
 abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
-	private int _lev;
+	private int _level; // nesting level of a node
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private ReportWriter _reporter;
 	private final Stack<HandlerInfo> _stackReader=new Stack<HandlerInfo>();
@@ -131,7 +131,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			h.setSysId(mr.getSysId());
 
 			h._isDTD = false;
-			h._entities = new TreeMap<String, String>(_entities);
+			h._entities = new LinkedHashMap<String, String>(_entities);
 		}
 
 		private void resetHandler(XmlDefReader h) {
@@ -158,7 +158,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		super();
 		_reporter = reporter;
 		prepareEnities();
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
@@ -176,7 +176,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 
 	/** Prepare entities with predefined items. */
 	private void prepareEnities() {
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		// Set predefined entities
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
@@ -554,7 +554,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		setDocumentLocator(_locator);
 		XAbstractReader mr = getReader();
 		String nsuri = uri != null && uri.isEmpty() ? null : uri;
-		if (_lev++ == 0) {
+		if (_level++ == 0) { // root
 			boolean wasDTD = _isDTD;
 			Document doc;
 			try {
@@ -645,7 +645,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	public void endElement(final String uri,
 		final String localName,
 		final String qName) {
-		_lev--;
+		_level--; // increase nesting level
 		XAbstractReader mr = getReader();
 		if (mr != null) {
 			if (!mr.wasEndTag()) {
@@ -668,7 +668,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				}
 				SPosition spos1 = mr.getSPosition();
 				if (mr.scanEndElement() < 0) {
-					if (_lev == 0) {
+					if (_level == 0) { //root
 						int i = spos1.getIndex() + qName.length() + 3;
 						spos1.setIndex(i);
 					}

@@ -26,7 +26,7 @@ public class XVariable implements XMVariable {
 
 	/** Create instance of XVariable object.
 	 * @param name name of variable.
-	 * @param type type of variable (see cz.syntea.xddef.XDValueID).
+	 * @param type type of variable (see org.xdef.XDValueID).
 	 * @param kind kind of variable ('G' .. global,'L' .. local,'X' .. XModel).
 	 * @param offset address of variable.
 	 * @param isFinal if true the variable is final (can't be changed).

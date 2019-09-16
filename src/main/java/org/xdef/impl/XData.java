@@ -220,7 +220,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from cz.syntea.xd.XDValueTypes.
+	 * @return value from org.xdef.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();

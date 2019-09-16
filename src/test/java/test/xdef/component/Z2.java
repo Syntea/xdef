@@ -16,27 +16,28 @@ public class Z2 implements org.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumCasOznameni(){return org.xdef.sys.SDatetime.getCalendar(_DatumCasOznameni);}
   public String getNazevDN() {return _NazevDN;}
   public String getZpracovatel() {return _Zpracovatel;}
-  public void setKodUtvaruPolicie(String x){_KodUtvaruPolicie = x;}
-  public void setRokDN(org.xdef.sys.SDatetime x){_RokDN = x;}
+  public void setKodUtvaruPolicie(String x){_KodUtvaruPolicie=x;}
+  public void setRokDN(org.xdef.sys.SDatetime x){_RokDN=x;}
   public void setRokDN(java.util.Date x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRokDN(java.sql.Timestamp x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setRokDN(java.util.Calendar x){_RokDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setCisloDN(String x){_CisloDN = x;}
-  public void setCisloJednaciDN(String x){_CisloJednaciDN = x;}
-  public void setDatumCasOznameni(org.xdef.sys.SDatetime x){_DatumCasOznameni = x;}
+  public void setCisloDN(String x){_CisloDN=x;}
+  public void setCisloJednaciDN(String x){_CisloJednaciDN=x;}
+  public void setDatumCasOznameni(org.xdef.sys.SDatetime x){_DatumCasOznameni=x;}
   public void setDatumCasOznameni(java.util.Date x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasOznameni(java.sql.Timestamp x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumCasOznameni(java.util.Calendar x){_DatumCasOznameni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setNazevDN(String x){_NazevDN = x;}
-  public void setZpracovatel(String x){_Zpracovatel = x;}
-  public String xposOfKodUtvaruPolicie(){return XD_XPos + "/@KodUtvaruPolicie";}
-  public String xposOfRokDN(){return XD_XPos + "/@RokDN";}
-  public String xposOfCisloDN(){return XD_XPos + "/@CisloDN";}
-  public String xposOfCisloJednaciDN(){return XD_XPos + "/@CisloJednaciDN";}
-  public String xposOfDatumCasOznameni(){return XD_XPos + "/@DatumCasOznameni";}
-  public String xposOfNazevDN(){return XD_XPos + "/@NazevDN";}
-  public String xposOfZpracovatel(){return XD_XPos + "/@Zpracovatel";}
+  public void setNazevDN(String x){_NazevDN=x;}
+  public void setZpracovatel(String x){_Zpracovatel=x;}
+  public String xposOfKodUtvaruPolicie(){return XD_XPos+"/@KodUtvaruPolicie";}
+  public String xposOfRokDN(){return XD_XPos+"/@RokDN";}
+  public String xposOfCisloDN(){return XD_XPos+"/@CisloDN";}
+  public String xposOfCisloJednaciDN(){return XD_XPos+"/@CisloJednaciDN";}
+  public String xposOfDatumCasOznameni(){return XD_XPos+"/@DatumCasOznameni";}
+  public String xposOfNazevDN(){return XD_XPos+"/@NazevDN";}
+  public String xposOfZpracovatel(){return XD_XPos+"/@Zpracovatel";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -97,8 +98,11 @@ public class Z2 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Z2() {}
   public Z2(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -146,7 +150,13 @@ public class Z2 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
+      XD_Name_KodUtvaruPolicie = x.getNodeName();
+      setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
+      XD_Name_RokDN = x.getNodeName();
+      setRokDN(parseResult.getParsedValue().datetimeValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
       XD_Name_CisloDN = x.getNodeName();
       setCisloDN(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
@@ -155,22 +165,17 @@ public class Z2 implements org.xdef.component.XComponent{
     } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
       XD_Name_DatumCasOznameni = x.getNodeName();
       setDatumCasOznameni(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
-      XD_Name_KodUtvaruPolicie = x.getNodeName();
-      setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
       XD_Name_NazevDN = x.getNodeName();
       setNazevDN(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
-      XD_Name_RokDN = x.getNodeName();
-      setRokDN(parseResult.getParsedValue().datetimeValue());
     } else {
       XD_Name_Zpracovatel = x.getNodeName();
       setZpracovatel(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

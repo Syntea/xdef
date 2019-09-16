@@ -4,9 +4,10 @@
 package test.xdef.component;
 public class Y03PartOne implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
-  public void setOne(String x){_One = x;}
-  public String xposOfOne(){return XD_XPos + "/@One";}
+  public void setOne(String x){_One=x;}
+  public String xposOfOne(){return XD_XPos+"/@One";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -55,8 +56,11 @@ public class Y03PartOne implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Y03PartOne() {}
   public Y03PartOne(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -96,7 +100,8 @@ public class Y03PartOne implements org.xdef.component.XComponent{
     setOne(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

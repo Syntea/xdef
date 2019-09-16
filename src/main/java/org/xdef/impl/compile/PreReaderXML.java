@@ -12,14 +12,15 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KParsedAttr;
-import org.xdef.xml.KParsedElement;
+import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.xml.KParsedAttr;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from XML source data.
@@ -30,19 +31,15 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	private PNode _actPNode;
 	/** includes. */
 	private Element _includeElement;
-	/** The nesting level of XML node. */
+	/** Nesting level of XML node. */
 	private int _level;
-
 	/** Instance of PreCompiler. */
 	private final XPreCompiler _pcomp;
 
-	/** Creates a new instance of XDefCompiler
-	 * @param pcomp pre compiler.
+	/** Creates a new instance of XPreCompiler.
+	 * @param pcomp XPreCompiler.
 	 */
-	PreReaderXML(final XPreCompiler pcomp) {
-		super();
-		_pcomp = pcomp;
-	}
+	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -80,8 +77,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_level == -1) {
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)// && _actPNode._xdVersion==31
 				|| "lexicon".equals(elemLocalName)
+				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
 				|| "declaration".equals(elemLocalName)
 				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
@@ -222,9 +219,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("thesaurus".equals(elemLocalName)
-//					&& _actPNode._xdVersion == 31
-				|| "lexicon".equals(elemLocalName)) {
+			} else if ("lexicon".equals(elemLocalName)
+				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
+				) {
 				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
@@ -250,22 +247,25 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._xdef = new XDefinition(defName,
 					null, null, null, _actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
-				// check duplicate of X-definition
-				for (PNode p: _pcomp.getPXDefs()) {
-					if (defName.equals(p._xdef.getName())) {
-						if (defName.length() == 0) {
-							//Only one X-definition in the compiled XDPool
-							// may be without name
-							error(_actPNode._name, XDEF.XDEF212);
-						} else {
-							//X-definition '&{0}' already exists
-							error(_actPNode._name, XDEF.XDEF303, defName);
-						}
-						defName = null;
-					}
-				}
 				if (defName != null) {
-					_pcomp.getPXDefs().add(_actPNode);
+					// check duplicate of X-definition
+					for (PNode p: _pcomp.getPXDefs()) {
+						if (defName.equals(p._xdef.getName())) {
+							if (defName.length() == 0) {
+								//Only one X-definition in the compiled XDPool
+								// may be without name
+								error(_actPNode._name, XDEF.XDEF212);
+							} else {
+								//X-definition '&{0}' already exists
+								error(_actPNode._name, XDEF.XDEF303, defName);
+							}
+							defName = null;
+							break;
+						}
+					}
+					if (defName != null) {
+						_pcomp.getPXDefs().add(_actPNode);
+					}
 				}
 			}
 		} else {
@@ -412,6 +412,32 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_actPNode._childNodes.add(p);
 		_level--;
 	}
+//////////////////////////////////////////////////////////////////////////////
+
+	private static void pNodeToXML(final PNode p, Document doc, Node parent) {
+		Element e =
+			doc.createElementNS(p.getNamespace(), p.getName().getString());
+		parent.appendChild(e);
+		for (PAttr a: p.getAttrs()) {
+			e.setAttributeNS(
+				a.getNamespace(), a.getName(), a.getValue().getString());
+		}
+		for (PNode child: p.getChildNodes()) {
+			pNodeToXML(child, doc, e);
+		}
+		if (p.getValue() != null) {
+			e.appendChild(doc.createTextNode(p.getValue().getString()));
+		}
+	}
+
+	private static void displayPNode(final PNode p) {
+		Document doc = KXmlUtils.newDocument();
+		pNodeToXML(p, doc, doc);
+		System.out.println(
+			KXmlUtils.nodeToString(doc.getDocumentElement(), true));
+	}
+
+/////////////////////////////////////////////////////////////////////////////
 
 	private void processText() {
 		if (_actPNode._template && _level > 0
@@ -430,9 +456,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 			if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)
+				|| "lexicon".equals(_actPNode._localName)
 				|| "thesaurus".equals(_actPNode._localName)
 //					&& _actPNode._xdVersion == 31
-				|| "lexicon".equals(_actPNode._localName)
 				|| "declaration".equals(_actPNode._localName)
 				|| "component".equals(_actPNode._localName)
 				|| "macro".equals(_actPNode._localName)) {
@@ -452,6 +478,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._value = null; //prevent repeated message
 				return;
 			}
+		} else if ("json".equals(_actPNode._localName)
+			&& (XDConstants.JSON_NS_URI_W3C.equals(_actPNode._nsURI)
+			|| XDConstants.JSON_NS_URI.equals(_actPNode._nsURI))) {
+			if (_level != 1) {
+				//JSON model can be declared only as a child of X-definition
+				error(_actPNode._value, XDEF.XDEF310);
+			}
+			return;
 		}
 		if (_level == 0) {
 			//Text value not allowed here

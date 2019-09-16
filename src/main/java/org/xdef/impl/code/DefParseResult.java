@@ -64,7 +64,7 @@ public final class DefParseResult extends XDValueAbstract
 	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
 
 	@Override
-	public final String toString() {return _value==null ? "null" : _source;}
+	public final String toString() {return _value==null ? "" : _source;}
 
 	@Override
 	public final void clearReports() {_ar = null;}
@@ -356,7 +356,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 
 	@Override
-	public final int isOneOfTokens(final String[] tokens) {
+	public final int isOneOfTokens(final String... tokens) {
 		int result = -1, len = -1;
 		for (int i = 0; i < tokens.length; i++) {
 			if (_source.startsWith(tokens[i], _srcIndex)) {

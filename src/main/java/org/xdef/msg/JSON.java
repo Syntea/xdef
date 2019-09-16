@@ -5,7 +5,7 @@ package org.xdef.msg;
 public interface JSON {
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;
-	/** "&amp;{0}" expected&amp;{#SYS000} */
+	/** "&amp;{0}"&amp;{1}{ or "}{"} expected&amp;{#SYS000} */
 	public static final long JSON002 = 13834649601L;
 	/** Number expected&amp;{#SYS000} */
 	public static final long JSON003 = 13834649602L;
@@ -31,10 +31,16 @@ public interface JSON {
 	public static final long JSON013 = 13834649612L;
 	/** Illegal leading zero in number */
 	public static final long JSON014 = 13834649613L;
+	/** Unclosed comment&amp;{#SYS000} */
+	public static final long JSON015 = 13834649614L;
+	/** Test node is not allowed in this XML representation of JSOM map */
+	public static final long JSON016 = 13834649615L;
+	/** Not allowed character '&amp;{0}'&amp;{#SYS000} */
+	public static final long JSON017 = 13834649616L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649614L;
+	public static final long JSON_DESCRIPTION = 13834649617L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649615L;
+	public static final long JSON_LANGUAGE = 13834649618L;
 
 	/** Default language. */
 	public static final String JSON = "eng";

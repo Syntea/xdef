@@ -3,7 +3,6 @@ package org.xdef.util;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SUtils;
-import org.xdef.XDBuilder;
 import org.xdef.XDFactory;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -26,10 +25,8 @@ public class CheckXdef {
 		ReportWriter reporter = new ArrayReporter();
 		try {
 			Properties props = new Properties();
-			XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
-			xb.setExternals(ext);
-			xb.setSource(sources);
-			xb.compileXD();
+			XDFactory.getXDBuilder(reporter, props).setExternals(ext)
+				.setSource(sources).compileXD();
 			if (reporter.errorWarnings()) {
 				reporter.getReportReader().printReports(System.err);
 				return false;

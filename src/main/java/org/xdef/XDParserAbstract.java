@@ -1,5 +1,8 @@
 package org.xdef;
 
+import org.xdef.impl.code.CodeTable;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -27,8 +30,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @param xnode actual XXNode object or null.
 	 */
 	public XDParseResult check(XXNode xnode, String source) {
-		XDParseResult p =
-			new org.xdef.impl.code.DefParseResult(source, (XDValue) null);
+		XDParseResult p = new DefParseResult(source, (XDValue) null);
 		check(xnode, p);
 		return p;
 	}
@@ -69,9 +71,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	/** Get named parameters (pattern,enumeration,white spaces,total digits,..).
 	 * @return named parameters.
 	 */
-	public XDContainer getNamedParams() {
-		return new org.xdef.impl.code.DefContainer();
-	}
+	public XDContainer getNamedParams() {return new DefContainer();}
 
 	@Override
 	/** Set named parameters.
@@ -133,8 +133,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	@Override
 	public short parsedType() {return XD_STRING;}  // may be overrided
 	@Override
-	public final short getCode() {
-		return org.xdef.impl.code.CodeTable.LD_CONST;}
+	public final short getCode() {return CodeTable.LD_CONST;}
 	@Override
 	public String toString() {return parserName();}
 	@Override
@@ -161,7 +160,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @return declared type name of parser
 	 */
 	public final String getDeclaredName() {return _declaredName;}
-	
+
 	@Override
 	/** Get integer with bits representing the allowed keyword parameters.
 	 * @return integer with bits representing the allowed keyword parameters.

@@ -5,10 +5,11 @@ package test.xdef.component;
 public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implements org.xdef.component.XComponent{
   public Integer getIdFlow() {return _IdFlow;}
   public Y07Smlouva.Domain getDomain() {return _Domain;}
-  public void setIdFlow(Integer x){_IdFlow = x;}
-  public void setDomain(Y07Smlouva.Domain x){_Domain = x;}
-  public String xposOfIdFlow(){return XD_XPos + "/@IdFlow";}
+  public void setIdFlow(Integer x){_IdFlow=x;}
+  public void setDomain(Y07Smlouva.Domain x){_Domain=x;}
+  public String xposOfIdFlow(){return XD_XPos+"/@IdFlow";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -59,8 +60,10 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getControlId());
     org.xdef.component.XComponentUtil.addXC(a, getDomain());
@@ -107,7 +110,8 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
     setIdFlow(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y07#Nehoda/ControlId".equals(s))
       return new test.xdef.component.Y07ControlId(this, x);
@@ -128,11 +132,12 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
 public static class Domain implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(String x){_One = x;}
-  public void setTwo(String x){_Two = x;}
-  public String xposOfOne(){return XD_XPos + "/@One";}
-  public String xposOfTwo(){return XD_XPos + "/@Two";}
+  public void setOne(String x){_One=x;}
+  public void setTwo(String x){_Two=x;}
+  public String xposOfOne(){return XD_XPos+"/@One";}
+  public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -182,8 +187,11 @@ public static class Domain implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Domain() {}
   public Domain(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -230,7 +238,8 @@ public static class Domain implements org.xdef.component.XComponent{
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

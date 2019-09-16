@@ -17,6 +17,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.xdef.XDConstants;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -113,7 +114,7 @@ final class CompileReference extends XNode {
 				_varinit = -1;
 				break;
 			default:
-				throw new SRuntimeException(XDEF.XDEF315,//Internal error:&{0}
+				throw new SRuntimeException(XDEF.XDEF309,//Internal error:&{0}
 					"Incorrect reference node: " + parent.getKind() +
 					": " + getName() +
 					(position != null ?
@@ -192,12 +193,24 @@ final class CompileReference extends XNode {
 				return (XElement) xn;
 			}
 		}
-		if (dn != null && ndx > 0) {
-			XMNode xn = XPool.findXMNode(dn, name.substring(ndx + 1), 0, -1);
-			if (xn == null) {
-				return null;
+		if (dn != null) {
+			if(ndx > 0) {
+				XMNode xn = XPool.findXMNode(dn, name.substring(ndx + 1), 0, -1);
+				if (xn == null) {
+					return null;
+				}
+				dn = xn.getKind() == XMNode.XMELEMENT ? (XMElement) xn : null;
+			} else if (name.contains(":json")) {
+				String u = dn.getNSUri();
+				if (XDConstants.JSON_NS_URI.equals(u)
+					|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
+					XMNode[] models = dn.getChildNodeModels();
+					if (models.length == 1 && models[0].getKind()
+						== XMNode.XMELEMENT) {
+						dn = (XElement) models[0];
+					}
+				}
 			}
-			dn = xn.getKind() == XMNode.XMELEMENT ? (XMElement) xn : null;
 		}
 		return (XElement) dn;
 	}

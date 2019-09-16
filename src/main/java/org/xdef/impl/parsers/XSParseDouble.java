@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDouble;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Schema "double" type.
+/** Parser of XML Schema "double" type.
  * @author Vaclav Trojan
  */
 public class XSParseDouble extends XSAbstractParseComparable {
@@ -15,12 +15,12 @@ public class XSParseDouble extends XSAbstractParseComparable {
 
 	public XSParseDouble() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
@@ -46,7 +46,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();

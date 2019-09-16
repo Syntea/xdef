@@ -4,9 +4,10 @@
 package test.xdef.component;
 public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.component.XComponent{
   public String getz() {return _z;}
-  public void setz(String x){_z = x;}
-  public String xposOfz(){return XD_XPos + "/@z";}
+  public void setz(String x){_z=x;}
+  public String xposOfz(){return XD_XPos+"/@z";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -55,8 +56,11 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public AZ() {}
   public AZ(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -96,7 +100,8 @@ public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.compone
     setz(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

@@ -1,29 +1,22 @@
 package org.xdef.impl.parsers;
 
-import org.xdef.msg.XDEF;
-import org.xdef.XDParseResult;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefBoolean;
-
 /** Parser of X-Script "jboolean" type.
  * @author Vaclav Trojan
  */
-public class XDParseJBoolean  extends XSAbstractParser {
+public class XDParseJBoolean extends XSParseBoolean {
 	private static final String ROOTBASENAME = "jboolean";
 
 	public XDParseJBoolean() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_PEESERVE;
 	}
 	@Override
-	public void initParams() {
-		_whiteSpace = 'c';
-	}
+	public void initParams() {_whiteSpace = WS_PEESERVE;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
-//			ENUMERATION +
-			WHITESPACE + //fixed collapse
+			ENUMERATION +
+//			WHITESPACE + //fixed collapse
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +
@@ -40,23 +33,7 @@ public class XDParseJBoolean  extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
-		int i = p.isOneOfTokens(new String[] {"false", "true"});
-		if (i < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
-		} else {
-			String s = p.getParsedBufferPartFrom(pos);
-			p.isSpaces();
-			p.replaceParsedBufferFrom(pos0, s);
-			p.setParsedValue(new DefBoolean(i == 1));
-			checkPatterns(p);
-		}
-	}
+	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

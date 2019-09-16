@@ -37,7 +37,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import org.xdef.impl.XConstants;
@@ -106,7 +107,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
 		_nodeList = new ArrayList<XNode>();
-
 		_codeGenerator = _precomp.getCodeGenerator();
 		_sources = _precomp.getSources();
 		_xdefPNodes = _precomp.getPXDefs();
@@ -115,10 +115,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listDecl = _precomp.getPDeclarations();
 		_listCollection = _precomp.getPCollections();
 		_listComponent = _precomp.getPComponents();
-
 		ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,
-			(byte) 10, XPreCompiler.PREDEFINED_PREFIXES, cloader);
+			(byte) 10, XPreCompiler.DEFINED_PREFIXES, cloader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
@@ -170,9 +169,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * of definitions.
 	 * @param file The file with with X-definitions.
 	 */
-	public final void parseFile(final File file) {
-		_precomp.parseFile(file);
-	}
+	public final void parseFile(final File file) {_precomp.parseFile(file);}
 
 	/** Parse InputStream source X-definition and addAttr it to the set
 	 * of definitions.
@@ -235,7 +232,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	}
 
 	/** Put error to compiler reporter.
-	 * @param registeredID registered report id.
+	 * @param regID registered report id.
 	 * @param mod Message modification parameters.
 	 */
 	private void error(final long registeredID, final Object... mod) {
@@ -281,7 +278,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				if (parentXel == null) {
 					//Internal error: &{0}
-					throw new SError(XDEF.XDEF315, "No XElement");
+					throw new SError(XDEF.XDEF309, "No XElement");
 				}
 			}
 			if (nodeKind == XNode.XMELEMENT) {
@@ -514,7 +511,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						"<xd:declaration> external method { ... } ...");
 				}
 				String value = sval.getString();
-				Map<String, Class<?>> ht = new TreeMap<String, Class<?>>();
+				Map<String,Class<?>> ht = new LinkedHashMap<String,Class<?>>();
 				for (Class<?> clazz : _codeGenerator._extClasses) {
 					ht.put(clazz.getName(), clazz);
 				}
@@ -582,7 +579,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Precompile list of BNF declarations and then the list of variable
 	 * declarations. If there is an undefined object in an item of the list
 	 * then put this item to the end of list and try to recompile it again.
-	 * This nasty trick ensures the declarations on object to preceed object
+	 * This nasty trick ensures the declarations on object to process object
 	 * references. However, it should be resolved with a reference list
 	 * connected to the variable declaration.
 	 */
@@ -1117,7 +1114,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				sval = _precomp.getXdefAttr(pnode, "occurs", false, true);
 				if (sval != null) {
 					if (kind == XNode.XMMIXED) {
-						reportDeprecated(pnode._name, "occurs","script");
+						reportDeprecated(pnode._name, "occurs", "script");
 					}
 					XOccurrence occ = new XOccurrence();
 					_scriptCompiler.setSource(sval,
@@ -1301,7 +1298,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XElement lastElement,
 		final PNode pnode,
 		final XDefinition xdef,
-		final int level) {
+		final int level,
+		final byte json) {
 		String xchildName = pnode._name.getString();
 		XNode newNode;
 		SBuffer sval;
@@ -1500,7 +1498,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (PNode nodei: pnode._childNodes) {
 			XElement x = newNode.getKind() == XMNode.XMELEMENT ?
 				(XElement) newNode : lastElement;
-			compileXChild(newNode, x, nodei, xdef, level + 1);
+			compileXChild(newNode, x, nodei, xdef, level + 1, json);
 		}
 		short newKind = newNode.getKind();
 		if (level == 1) {
@@ -1529,6 +1527,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler._g._varBlock =
 					_scriptCompiler._g._varBlock.getParent();
 			}
+			((XElement) newNode)._json = json;
 		}
 	}
 
@@ -1562,7 +1561,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				String nsURI = null;
 				if (_scriptCompiler.isChar('*')) {
 					refName = "*"; //any
-				} else if (_scriptCompiler.isXModelPosition()) { /*xx*/
+				} else if (_scriptCompiler.isXModelPosition()) {
 					refName = _scriptCompiler.getParsedString();
 					//get NSUri of the reference identifier.
 					int ndx = refName.indexOf('#') + 1;
@@ -1630,8 +1629,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		_nodeList.add(0,def);
 		//compile xmodels
-		for (PNode nodei: pnode._childNodes) {
+//		for (PNode nodei: pnode._childNodes) {
+		for (int i = 0; i < pnode._childNodes.size(); i++) {
+			PNode nodei = pnode._childNodes.get(i);
 			String name = nodei._localName;
+			PAttr v = nodei.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
+			SBuffer gname = v == null ? null : v._value;
 			if (nodei._nsindex == XPreCompiler.NS_XDEF_INDEX
 				&& ("choice".equals(name)
 				|| "mixed".equals(name) || "sequence".equals(name)
@@ -1641,16 +1644,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				|| "document".equals(name) //TODO
 //				|| "attlist".equals(name) //TODO
 				|| "list".equals(name) || "any".equals(name))) {
-				SBuffer gname;
 				if ("any".equals(name)) {//any MUST use prefixed name attribute!
-					PAttr v = nodei.getAttrNS("name",
-						XPreCompiler.NS_XDEF_INDEX);
 					if (v == null) {
-						gname = null;
 						//Required attribute '&{0}' is missing
 						error(nodei._name, XDEF.XDEF323, "xd:name");
 					} else {
-						gname = v._value;
 						nodei._attrs.remove(v);
 					}
 				} else {
@@ -1668,18 +1666,36 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						if ("list".equals(name)) {
 							for (PNode pn: nodei._childNodes){
-								compileXChild(dummy, dummy, pn, def, 2);
+								compileXChild(dummy, dummy, pn, def, 2,(byte)0);
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2);
+							compileXChild(dummy, dummy, nodei, def, 2, (byte)0);
 						}
 					}
 				}
 				continue;
+			} else if (nodei._localName.startsWith("json")
+				&& (XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+				|| XDConstants.JSON_NS_URI.equals(nodei._nsURI))) {
+				if (!nodei._childNodes.isEmpty()) {
+					//XML element models are not allowed in JSON definition
+					error(nodei._childNodes.get(0)._name, XDEF.XDEF314);
+					nodei._childNodes.clear();
+				}
+				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
+					? (byte) 1 : (byte) 2;
+				if (nodei._value == null || nodei._value.getString().isEmpty()){
+					//JSON model is missing in JSON definition
+					error(nodei._name, XDEF.XDEF315);
+					continue;
+				}
+				XJson.genXdef(nodei, _precomp.getReportWriter());
+				compileXChild(def, null, nodei, def, 1, jsonMode);
+				continue;
 			}
-			compileXChild(def, null, nodei, def, 1);
+			compileXChild(def, null, nodei, def, 1, (byte)0);
 		}
 		_nodeList.clear();
 		_scriptCompiler._actDefName = actDefName;
@@ -1747,7 +1763,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		hs.clear(); //let's gc do the job
 		//resolve root references for all XDefinitions
 		for (XDefinition d : _xdefs.values()) {
-			Map<String, XNode> rootSelection = new TreeMap<String, XNode>();
+			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
 			for (Map.Entry<String,XNode> entry: d._rootSelection.entrySet()) {
 				try {
 					XNode xnode = entry.getValue();
@@ -1758,12 +1774,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							xref.putTargetError(getReportWriter());
 						} else {
 							if (rootSelection.put(xref.getName(), xel) != null){
-								error(XDEF.XDEF315, //Internal error: &{0}
+								error(XDEF.XDEF309, //Internal error: &{0}
 									"reference to element model expected");
 							}
 						}
 					} else {
-						error(XDEF.XDEF315, //Internal error: &{0}
+						error(XDEF.XDEF309, //Internal error: &{0}
 							"reference to element model expected");
 						result = false;
 					}
@@ -1805,7 +1821,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				// set X-components to xdp
 				HashSet<String> classNames = new HashSet<String>();
 				// create map of components
-				Map<String, String> x = new TreeMap<String, String>();
+				Map<String, String> x = new LinkedHashMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._components.entrySet()) {
 					XMNode xn = (XMElement) xdp.findModel(e.getKey());
@@ -1834,7 +1850,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponents(x);
 				// binds
-				x = new TreeMap<String, String>();
+				x = new LinkedHashMap<String, String>();
 				for (Map.Entry<String, SBuffer> e:
 					_codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(e.getKey());
@@ -1881,7 +1897,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponentBinds(x);
 				// enumerations
-				x = new TreeMap<String, String>();
+				x = new LinkedHashMap<String, String>();
 				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
@@ -2056,7 +2072,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Resolve references.
 	 * @param xel the XElement.
-	 * @param level The recursivity level.
+	 * @param level The recursion level.
 	 * @param ingnoreOccurrence if <tt>true</tt> the occurrence specification
 	 * from the referred object is ignored.
 	 * @param ar node list.
@@ -2371,7 +2387,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Check integrity of the node and resolve references.
 	 * @param xel the XElement.
-	 * @param level The recursivity level.
+	 * @param level The recursion level.
 	 * @param ar node list.
 	 * @return true if check was successful.
 	 */
@@ -2385,8 +2401,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if (result) {
 			for (XNode dn: xel._childNodes) {
 				if (dn.getKind() == XNode.XMELEMENT && !hs.contains(dn)) {
-					XElement xe = (XElement) dn;
-					result &= checkIntegrity(xe, level+1, hs);
+					result &= checkIntegrity((XElement) dn, level+1, hs);
 				} else if (dn.getKind() == XNode.XMTEXT) {
 					if (!dn.isSpecified()) {
 						dn.setOptional();
@@ -2395,7 +2410,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		if (!xel.isSpecified()) {
-			xel.setRequired(); //interval not set, let's set defaults
+			xel.setRequired(); //interval not set, let's set default required
 		}
 		return result;
 	}

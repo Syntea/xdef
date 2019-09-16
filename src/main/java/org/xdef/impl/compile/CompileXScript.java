@@ -24,6 +24,7 @@ import org.xdef.impl.XSelector;
 import org.xdef.impl.XVariable;
 import org.xdef.model.XMNode;
 import java.util.Map;
+import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeS1;
 
 /** Compiler of XD script of headers, elements and attributes.
@@ -571,7 +572,18 @@ final class CompileXScript extends CompileStatement {
 			xel._varinit = start + 1;
 			_g.genStop();
 			xel._varsize = _g._varBlock.size();
-			xel._vartable = _g._varBlock;
+			if (xel._varsize > 0 && _g._varBlock != null) {
+				xel._vartable = new XVariableTable(xel._varsize);
+				// copy CCompileVariables to the table as XVariables.
+				for (int i = 0; i < xel._varsize; i++) {
+					XVariable x = _g._varBlock.getXVariable(i);
+					if (x != null) {
+						xel._vartable.addVariable(_g._varBlock.getXVariable(i));
+					}
+				}
+			} else {
+				xel._vartable = null;
+			}
 		}
 	}
 
@@ -842,7 +854,12 @@ final class CompileXScript extends CompileStatement {
 								xType = _g._tstack[_g._sp];
 							}
 							if (returnType == XD_STRING && xType != XD_STRING) {
-								_g.topToString();
+								if (mode == CompileBase.TEXT_MODE
+									&& section == CREATE_SYM) {
+									_g.topToNullOrString();
+								} else {
+									_g.topToString();
+								}
 								xType = _g._tstack[_g._sp];
 							}
 							if (section == CREATE_SYM) {
@@ -1198,7 +1215,6 @@ final class CompileXScript extends CompileStatement {
 				acceptQualifiedAttr = true;
 				result._acceptQualifiedAttr =
 					(byte) ("acceptQualifiedAttr".equals(_idName) ? 'T' : 'F');
-
 			} else if ("cdata".equals(_idName)) {
 				if (cdata) {
 					error(XDEF.XDEF432); // option redefinition

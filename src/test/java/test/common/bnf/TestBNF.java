@@ -305,6 +305,9 @@ public class TestBNF extends STester {
 			assertEq("BCC", parse(g, "X", "BCC"));
 			assertEq("ABC", parse(g, "X", "ABC"));
 			assertEq("AAABCC", parse(g, "X", "AAABCC"));
+			g = BNFGrammar.compile("X::= A|B A::=$integer B::=$float");
+			assertEq("123", parse(g, "X", "123"));
+			assertEq("123.5", parse(g, "X", "123.5"));
 			g = BNFGrammar.compile("C::= $xmlChar B::= \"'\"");
 			assertEq("'", parse(g, "B", "'"));
 			assertEq("'", parse(g, "C", "'"));

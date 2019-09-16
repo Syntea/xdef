@@ -5,7 +5,7 @@ import java.util.TimeZone;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Node;
 
-/** Interface provides methods for XQuery expression.
+/** Interface for XQuery expression.
  * @author Vaclav Trojan
  */
 public interface KXquery {

@@ -5,7 +5,7 @@ import org.xdef.xml.KXpathExpr;
 import org.xdef.XDResultSet;
 import org.xdef.proc.XXNode;
 import org.xdef.XDValue;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.XDConstructor;
 import org.xdef.XDStatement;
 import org.xdef.XDValueAbstract;

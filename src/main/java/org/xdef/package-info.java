@@ -58,8 +58,8 @@
  * <p>{@link org.xdef.proc.XXNode#getXMElement()}</p>
  * <p>{@link org.xdef.proc.XXData#getXMData()}</p>
  * <p>
- * Those methods return an object with properties of	processed data.
- * The interfaces of such objects see package <i><b>cz.syntea.xm</b></i>.
+ * Those methods return an object with properties of processed data.
+ * The interfaces of such objects see package <i><b>org.xdef.model</b></i>.
  * </p>
  *
  * <UL>

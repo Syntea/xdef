@@ -169,11 +169,11 @@ public interface SYS {
 	public static final long SYS218 = 953221201L;
 	/** Incorrect parameter reference on position: &amp;{0} (report ID: &amp;{1}); */
 	public static final long SYS219 = 953221202L;
-	/** Default report table is incorrect; localized table: &amp;{0} */
+	/** Default report table is incorrect or missing&amp;{0}(, localized table: ) */
 	public static final long SYS220 = 953221203L;
 	/** Report &amp;{0} from table &amp;{1} is missing in the default table */
 	public static final long SYS221 = 953221204L;
-	/** No report tables generated or incorrect */
+	/** No report tables generated */
 	public static final long SYS223 = 953221205L;
 	/** Report &amp;{0} which is in the default table is missing in table &amp;{1} */
 	public static final long SYS225 = 953221206L;

@@ -3,7 +3,7 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Contains information about X-definition source items about
  * the position of the screen if some item was displayed (window rectangle).
@@ -20,7 +20,7 @@ public final class XDSourceInfo {
 	public int _height = -1;
 	/** Map with X-definition source items. */
 	private final Map<String, XDSourceItem> _sourcesMap =
-		new TreeMap<String, XDSourceItem>();
+		new LinkedHashMap<String, XDSourceItem>();
 
 	/** Get map with the description of X-definition sources.
 	 * @return map with the description of X-definition sources.
