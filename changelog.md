@@ -1,14 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 32.5.0, release-date 2019-09-16
-  - Prepared the version for processing of JSON data.
-    The X-component interface has now new method to Json which returns a JSON
-    object (i.e. java.util.Map as JSON object or java.util.List as JSON array).
-    It is also now available the new class org.xdef.json.JsonUtil which
-    enables to work with JSON objects (conversion JSON to XML, XML to JSON,
-    parsing of source JSON data, compare JSON objects etc.).
-    In the X-definition will be possible in future to describe structure
-    of JSON models.
+- Prepared the version for processing of JSON data.
+  The X-component interface has now new method to Json which returns a JSON
+  object (i.e. java.util.Map as JSON object or java.util.List as JSON array).
+  It is also now available the new class org.xdef.json.JsonUtil which
+  enables to work with JSON objects (conversion JSON to XML, XML to JSON,
+  parsing of source JSON data, compare JSON objects etc.).
+  In the X-definition will be possible in future to describe structure
+  of JSON models.
 
 # Version 32.4.0, release-date 2019-04-02
 - when X-component is generated from an element model where are no attributes
