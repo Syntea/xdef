@@ -8,14 +8,15 @@ public class Z7 implements org.xdef.component.XComponent{
   public java.sql.Timestamp timestampOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getTimestamp(_DatumRozhodnuti);}
   public java.util.Calendar calendarOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getCalendar(_DatumRozhodnuti);}
   public String get$value() {return _$value;}
-  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x){_DatumRozhodnuti = x;}
+  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x){_DatumRozhodnuti=x;}
   public void setDatumRozhodnuti(java.util.Date x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumRozhodnuti(java.sql.Timestamp x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setDatumRozhodnuti(java.util.Calendar x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(String x){_$value = x;}
-  public String xposOfDatumRozhodnuti(){return XD_XPos + "/@DatumRozhodnuti";}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOfDatumRozhodnuti(){return XD_XPos+"/@DatumRozhodnuti";}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -66,8 +67,10 @@ public class Z7 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -119,7 +122,8 @@ public class Z7 implements org.xdef.component.XComponent{
     setDatumRozhodnuti(parseResult.getParsedValue().datetimeValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

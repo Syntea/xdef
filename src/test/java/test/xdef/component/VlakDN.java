@@ -10,32 +10,31 @@ public class VlakDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VlakDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
-  public void setOznSegmentu(String x){_OznSegmentu = x;}
-  public void setTypSoupravy(String x){_TypSoupravy = x;}
-  public void setSpoj(String x){_Spoj = x;}
-  public void setDruhSoupravy(String x){_DruhSoupravy = x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setTypSoupravy(String x){_TypSoupravy=x;}
+  public void setSpoj(String x){_Spoj=x;}
+  public void setDruhSoupravy(String x){_DruhSoupravy=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VlakDN/$mixed/Skoda");
-    _Skoda = x;
+    _Skoda=x;
   }
   public void setJinaSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#VlakDN/$mixed/JinaSkoda");
-    _JinaSkoda = x;
+    _JinaSkoda=x;
   }
   public void setVlastnik(VlakDN.Vlastnik x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#VlakDN/$mixed/Vlastnik");
-    _Vlastnik = x;
+    _Vlastnik=x;
   }
-  public void set$Vlastnik(String x){if(_Vlastnik==null)setVlastnik(new VlakDN.Vlastnik());_Vlastnik.set$value(x);}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfTypSoupravy(){return XD_XPos + "/@TypSoupravy";}
-  public String xposOfSpoj(){return XD_XPos + "/@Spoj";}
-  public String xposOfDruhSoupravy(){return XD_XPos + "/@DruhSoupravy";}
+  public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
+  public String xposOfTypSoupravy(){return XD_XPos+"/@TypSoupravy";}
+  public String xposOfSpoj(){return XD_XPos+"/@Spoj";}
+  public String xposOfDruhSoupravy(){return XD_XPos+"/@DruhSoupravy";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -92,8 +91,10 @@ public class VlakDN implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getJinaSkoda());
@@ -145,26 +146,27 @@ public class VlakDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@DruhSoupravy")) {
-      XD_Name_DruhSoupravy = x.getNodeName();
-      setDruhSoupravy(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = x.getNodeName();
       setOznSegmentu(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@TypSoupravy")) {
+      XD_Name_TypSoupravy = x.getNodeName();
+      setTypSoupravy(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Spoj")) {
       XD_Name_Spoj = x.getNodeName();
       setSpoj(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_TypSoupravy = x.getNodeName();
-      setTypSoupravy(parseResult.getParsedValue().stringValue());
+      XD_Name_DruhSoupravy = x.getNodeName();
+      setDruhSoupravy(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
-    if ("SouborD1A#VlakDN/$mixed/JinaSkoda".equals(s))
-      return new test.xdef.component.Z3(this, x);
     if ("SouborD1A#VlakDN/$mixed/Skoda".equals(s))
+      return new test.xdef.component.Z3(this, x);
+    if ("SouborD1A#VlakDN/$mixed/JinaSkoda".equals(s))
       return new test.xdef.component.Z3(this, x);
     return new Vlastnik(this, x); // SouborD1A#VlakDN/$mixed/Vlastnik
   }
@@ -172,10 +174,10 @@ public class VlakDN implements org.xdef.component.XComponent{
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
     String s = x.xGetModelPosition();
-    if ("SouborD1A#VlakDN/$mixed/JinaSkoda".equals(s))
-      setJinaSkoda((test.xdef.component.Z3)x);
-    else if ("SouborD1A#VlakDN/$mixed/Skoda".equals(s))
+    if ("SouborD1A#VlakDN/$mixed/Skoda".equals(s))
       setSkoda((test.xdef.component.Z3)x);
+    else if ("SouborD1A#VlakDN/$mixed/JinaSkoda".equals(s))
+      setJinaSkoda((test.xdef.component.Z3)x);
     else
       setVlastnik((Vlastnik)x); //SouborD1A#VlakDN/$mixed/Vlastnik
   }
@@ -184,9 +186,10 @@ public class VlakDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -234,8 +237,10 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -282,7 +287,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

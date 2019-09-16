@@ -28,10 +28,9 @@ public class XVariableTable implements XMVariableTable {
 	 */
 	public XVariableTable(int sqId) {
 		_variables = new XVariable[0];
-		_size = 0;
-		_parent = null;
 		_lastOffset = -1;
 		_sqId = sqId;
+//		_size = 0; _parent = null; // java makes it
 	}
 
 	/** Create new instance of the variable table.
@@ -175,16 +174,12 @@ public class XVariableTable implements XMVariableTable {
 	public final int getLastOffset() {return _lastOffset;}
 
 	/** Set last variable offset.
-	 * @param lastOffset last variable offset.
+	 * @param x last variable offset.
 	 */
-	public final void setLastOffset(final int lastOffset) {
-		_lastOffset = lastOffset;
-	}
+	public final void setLastOffset(final int x) {_lastOffset = x;}
 
 	/** Set parent of the variable table. */
-	final void setParent(final XVariableTable p) {
-		_parent = p;
-	}
+	final void setParent(final XVariableTable p) {_parent = p;}
 
 	/** Write variable table to XDWriter.
 	 * @param xw the XDWriter.

@@ -70,7 +70,7 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
@@ -145,7 +145,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	private ArrayList<XDValue> _finalList;
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects =
-		new TreeMap<String, Object>();
+		new LinkedHashMap<String, Object>();
 
 	/** XPath function resolver. */
 	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
@@ -671,8 +671,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		while (true) {
 			int code;
 			try {
-			if (_debug
-				&& (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP)) {
+			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
 				step = _debugger.debug(chkNode, _code, pc, sp, _stack,
 					_localVariables, _debugInfo, _callList, step);
 				if (step == XDDebug.KILL) {
@@ -799,6 +798,11 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp - i] = new DefDouble(_stack[sp - i].doubleValue());
 					continue;
 				}
+				case NULL_OR_TO_STRING:
+					if (_stack[sp] == null || _stack[sp].isNull()) {
+						_stack[sp] = new DefString();
+						continue;
+					}
 				case TO_STRING:
 					if (_stack[sp] == null) {
 						_stack[sp] = new DefString(_stack[sp].toString());
@@ -1416,32 +1420,37 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case EQUALSI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.equalsIgnoreCase(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.equalsIgnoreCase(s));
 					continue;
 				}
 				case STARTSWITH: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.startsWith(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.startsWith(s));
 					continue;
 				}
 				case STARTSWITHI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(s.length() > t.length() ? false
+					_stack[sp] = new DefBoolean(
+						t == null || s.length() > t.length() ? false
 						: s.equalsIgnoreCase(t.substring(0, s.length())));
 					continue;
 				}
 				case ENDSWITH: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.endsWith(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.endsWith(s));
 					continue;
 				}
 				case ENDSWITHI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(s.length() > t.length() ? false
+					_stack[sp] = new DefBoolean(
+						t == null || s.length() > t.length() ? false
 						: s.equalsIgnoreCase(
 							t.substring(t.length() - s.length())));
 					continue;
@@ -1449,37 +1458,43 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case CHK_GT: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) > 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.compareTo(s) > 0);
 					continue;
 				}
 				case CHK_LT: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) < 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? true : t.compareTo(s) < 0);
 					continue;
 				}
 				case CHK_GE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) >= 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? false : t.compareTo(s) >= 0);
 					continue;
 				}
 				case CHK_LE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(t.compareTo(s) <= 0);
+					_stack[sp] = new DefBoolean(
+						t == null ? true : t.compareTo(s) <= 0);
 					continue;
 				}
 				case CHK_NE: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(!t.equals(s));
+					_stack[sp] = new DefBoolean(
+						t == null ? s != null : !t.equals(s));
 					continue;
 				}
 				case CHK_NEI: {
 					String s = _stack[sp].stringValue();
 					String t = _stack[--sp].stringValue();
-					_stack[sp] = new DefBoolean(!s.equalsIgnoreCase(t));
+					_stack[sp] = new DefBoolean(
+						t == null ? s != null : !s.equalsIgnoreCase(t));
 					continue;
 				}
 				case GET_USEROBJECT:
@@ -2496,7 +2511,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						xdef = _xd;
 					}
 					Map<Integer, CodeUniqueset> idrefTables =
-						new TreeMap<Integer, CodeUniqueset>();
+						new LinkedHashMap<Integer, CodeUniqueset>();
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;

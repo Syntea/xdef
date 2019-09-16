@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
@@ -87,7 +87,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	private byte[] _sourceBytes;
 	/** Map with element declarations. */
 	private final Map<String, ElemDecl> _elemDeclMap =
-		new TreeMap<String, ElemDecl>();
+		new LinkedHashMap<String, ElemDecl>();
 	/** Array with attribute declarations. */
 	private List<AttrDecl> _attrDeclList = new ArrayList<AttrDecl>();
 	/** true if xml parsing failed. */

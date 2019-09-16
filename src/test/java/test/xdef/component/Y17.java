@@ -6,10 +6,11 @@ public class Y17 implements org.xdef.component.XComponent{
   public Y17.b_1 getb_1() {return _b_1;}
   public Y17.c getc() {return _c;}
   public Y17.b_2 getb_2() {return _b_2;}
-  public void setb_1(Y17.b_1 x){_b_1 = x;}
-  public void setc(Y17.c x){_c = x;}
-  public void setb_2(Y17.b_2 x){_b_2 = x;}
+  public void setb_1(Y17.b_1 x){_b_1=x;}
+  public void setc(Y17.c x){_c=x;}
+  public void setb_2(Y17.b_2 x){_b_2=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -58,8 +59,10 @@ public class Y17 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getb_1());
     org.xdef.component.XComponentUtil.addXC(a, getc());
@@ -104,13 +107,14 @@ public class Y17 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y17#a/b".equals(s))
       return new b_1(this, x);
-    if ("Y17#a/b[2]".equals(s))
-      return new b_2(this, x);
-    return new c(this, x); // Y17#a/c
+    if ("Y17#a/c".equals(s))
+      return new c(this, x);
+    return new b_2(this, x); // Y17#a/b[2]
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -118,19 +122,20 @@ public class Y17 implements org.xdef.component.XComponent{
     String s = x.xGetModelPosition();
     if ("Y17#a/b".equals(s))
       setb_1((b_1)x);
-    else if ("Y17#a/b[2]".equals(s))
-      setb_2((b_2)x);
+    else if ("Y17#a/c".equals(s))
+      setc((c)x);
     else
-      setc((c)x); //Y17#a/c
+      setb_2((b_2)x); //Y17#a/b[2]
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class b_1 implements org.xdef.component.XComponent{
   public Integer geta() {return _a;}
-  public void seta(Integer x){_a = x;}
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public void seta(Integer x){_a=x;}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -178,8 +183,11 @@ public static class b_1 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public b_1() {}
   public b_1(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -219,7 +227,8 @@ public static class b_1 implements org.xdef.component.XComponent{
     seta(parseResult.getParsedValue().intValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -229,6 +238,7 @@ public static class b_1 implements org.xdef.component.XComponent{
 }
 public static class c implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -268,8 +278,11 @@ public static class c implements org.xdef.component.XComponent{
         XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public c() {}
   public c(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -304,7 +317,8 @@ public static class c implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
@@ -314,9 +328,10 @@ public static class c implements org.xdef.component.XComponent{
 }
 public static class b_2 implements org.xdef.component.XComponent{
   public String geta() {return _a;}
-  public void seta(String x){_a = x;}
-  public String xposOfa(){return XD_XPos + "/@a";}
+  public void seta(String x){_a=x;}
+  public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -364,8 +379,11 @@ public static class b_2 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public b_2() {}
   public b_2(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -405,7 +423,8 @@ public static class b_2 implements org.xdef.component.XComponent{
     seta(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

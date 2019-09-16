@@ -6,7 +6,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SObjectWriter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.XDDocument;
 import org.xdef.XDValue;
 import org.xdef.impl.code.CodeTable;

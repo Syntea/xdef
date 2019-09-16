@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "A",
+    "Genre": ["A1"]
+  },
+  {
+    "Name": "B",
+    "Genre": ["B1", "B2"]
+  },
+  {
+    "Name": " cc dd ",
+    "Genre": "C1"
+  }
+]

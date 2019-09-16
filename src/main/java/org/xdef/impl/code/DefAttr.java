@@ -60,17 +60,18 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value==null? null : _value.getValue();}
-
+	public String toString() {return stringValue();}
 	@Override
 	/** Get string value of this object or throw SRuntimeException.
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return _value==null? null : _value.getValue();}
+	public String stringValue() {return isNull() ? null : _value.getValue();}
+	@Override
+	public boolean booleanValue() {return !isNull();}
 
 	@Override
-	public String getName() {return _value==null ? null : _value.getName();}
+	public String getName() {return isNull() ? null : _value.getName();}
 
 	@Override
 	public XDValue getValue() {return new DefString(stringValue());}
@@ -81,5 +82,4 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
 		_value.setValue(newValue.toString());
 		return result;
 	}
-
 }

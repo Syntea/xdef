@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -32,7 +32,7 @@ public class SUtils extends FUtils {
 	 * E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
-	
+
 	/** The string with the last part of Java VM version information.
 	 * E.g. if version information is "1.6.0_45" it will be "0_45".
 	 */
@@ -79,7 +79,7 @@ public class SUtils extends FUtils {
 
 	/** Cache to accelerate 2 letters/3 letter (getISO3Language method).*/
 	private static final Map<String, String> LANGUAGES =
-		 new TreeMap<String, String>();
+		 new LinkedHashMap<String, String>();
 
 	/** Encodes a byte array to hexadecimal format, no blanks or line breaks
 	 * are inserted.

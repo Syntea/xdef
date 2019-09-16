@@ -11,7 +11,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDConstants;
@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -39,6 +40,7 @@ import org.w3c.dom.Node;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
+import org.xdef.json.JsonUtil;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -122,11 +124,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	ChkDocument(final Class<?>[] extObjects, final Properties props) {
 		super("$root", null);
-		XBuilder xb = new XBuilder(props);
-		xb.setExternals(extObjects);
-		xb.setSource(
-			"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>");
-		XPool xp = (XPool) xb.compileXD();
+		XPool xp = (XPool) new XBuilder(props).setExternals(extObjects)
+			.setSource(
+				"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>")
+			.compileXD();
 		XDefinition xd = new XDefinition("#",
 			xp, XDConstants.XDEF32_NS_URI, null, XConstants.XD32);
 		xp._xdefs.put("#", xd);
@@ -764,6 +765,217 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public Element xparse(final InputStream xmlData,
 		final ReportWriter reporter) throws SRuntimeException {
 		return xparse(xmlData, null, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData string with pathname of JSON file or JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final String jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData file with JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final File jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON source and return JSON object.
+	 * @param jsonData URL with JSON source data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final URL jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param jsonData input stream with JSON data.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final InputStream jsonData,
+		final String sourceId,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		return jparse(JsonUtil.parse(jsonData, sourceId), model, reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param jsonData JSON data.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeExcception if model is not found.
+	 */
+	public final Object jparse(final Object jsonData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		int ndx = model.indexOf(':');
+		String name;
+		String nsURI = null;
+		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
+		if (ndx > 0 && (name = model.substring(ndx+1)).startsWith("json")) {
+			XNode xn = _xdef._rootSelection.get(model);
+			if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+				nsURI =_xdef._namespaces.get(model.substring(0,ndx));
+				if (XDConstants.JSON_NS_URI.equals(nsURI)
+					|| XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
+					_xElement = (XElement) xn;
+				} else {
+					nsURI = null;
+				}
+			}
+			if (nsURI == null) {
+				for (XMElement xe: _xdef.getModels()) {
+					if (model.equals(xe.getName())) {
+						nsURI = xe.getNSUri();
+						_xElement = _xdef.selectRoot(name, nsURI, -1);
+						break;
+					}
+				}
+			}
+		}
+		Element e;
+		if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
+			e = JsonUtil.jsonToXmlW3C(jsonData);
+		} else if (XDConstants.JSON_NS_URI.equals(nsURI)) {
+			e = JsonUtil.jsonToXml(jsonData);
+		} else {
+			//JSON model &{0}{"}{" }is missing in X-definition
+			throw new SRuntimeException(XDEF.XDEF315, model);
+		}
+		xparse(e, reporter);
+		return JsonUtil.xmlToJson(_element);
+	}
+
+	@Override
+	/** Parse source JSON and return XComponent as result.
+	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(String json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse URL with JSON source and return XComponent as result.
+	 * @param json URL with JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(URL json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse URL with JSON source and return XComponent as result.
+	 * @param json InputStream with JSON source data.
+	 * @param sourceId name of source or <tt>null</tt>.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(InputStream json,
+		String sourceId,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json,sourceId),xClass,reporter);
+	}
+
+	@Override
+	/** Parse file with JSON source and return XComponent as result.
+	 * @param json file with JSON source data.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(File json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse JSON data and return XComponent as result.
+	 * @param json XML <tt>org.w3c.dom.Node</tt>.
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public XComponent jparseXComponent(Object json,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		try {
+			byte jVersion = (Byte) xClass.getDeclaredField("JSON").get(null);
+			e = jVersion == 1 ?
+				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
+		} catch (Exception ex) {
+			e = JsonUtil.jsonToXml(json);
+		}
+		return parseXComponent(e, xClass, reporter);
 	}
 
 	@Override

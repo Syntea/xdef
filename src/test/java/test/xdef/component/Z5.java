@@ -6,16 +6,17 @@ public class Z5 implements org.xdef.component.XComponent{
   public String getNazevFirmy() {return _NazevFirmy;}
   public Integer getIC() {return _IC;}
   public Z9 getSidlo() {return _Sidlo;}
-  public void setNazevFirmy(String x){_NazevFirmy = x;}
-  public void setIC(Integer x){_IC = x;}
+  public void setNazevFirmy(String x){_NazevFirmy=x;}
+  public void setIC(Integer x){_IC=x;}
   public void setSidlo(Z9 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Sidlo", null, "SouborD1A#Firma/Sidlo");
-    _Sidlo = x;
+    _Sidlo=x;
   }
-  public String xposOfNazevFirmy(){return XD_XPos + "/@NazevFirmy";}
-  public String xposOfIC(){return XD_XPos + "/@IC";}
+  public String xposOfNazevFirmy(){return XD_XPos+"/@NazevFirmy";}
+  public String xposOfIC(){return XD_XPos+"/@IC";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -68,8 +69,10 @@ public class Z5 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSidlo());
     return a;
@@ -113,16 +116,17 @@ public class Z5 implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@IC")) {
-      XD_Name_IC = x.getNodeName();
-      setIC(parseResult.getParsedValue().intValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@NazevFirmy")) {
       XD_Name_NazevFirmy = x.getNodeName();
       setNazevFirmy(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_IC = x.getNodeName();
+      setIC(parseResult.getParsedValue().intValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.Z9(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

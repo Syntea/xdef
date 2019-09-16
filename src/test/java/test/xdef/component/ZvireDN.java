@@ -8,25 +8,24 @@ public class ZvireDN implements org.xdef.component.XComponent{
   public String getDruhZvirete() {return _DruhZvirete;}
   public Z3 getSkoda() {return _Skoda;}
   public ZvireDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public String get$Vlastnik(){return _Vlastnik==null?null:_Vlastnik.get$value();}
-  public void setOznSegmentu(String x){_OznSegmentu = x;}
-  public void setNazevZvirete(String x){_NazevZvirete = x;}
-  public void setDruhZvirete(String x){_DruhZvirete = x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setNazevZvirete(String x){_NazevZvirete=x;}
+  public void setDruhZvirete(String x){_DruhZvirete=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#ZvireDN/$mixed/Skoda");
-    _Skoda = x;
+    _Skoda=x;
   }
   public void setVlastnik(ZvireDN.Vlastnik x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Vlastnik", null, "SouborD1A#ZvireDN/$mixed/Vlastnik");
-    _Vlastnik = x;
+    _Vlastnik=x;
   }
-  public void set$Vlastnik(String x){if(_Vlastnik==null)setVlastnik(new ZvireDN.Vlastnik());_Vlastnik.set$value(x);}
-  public String xposOfOznSegmentu(){return XD_XPos + "/@OznSegmentu";}
-  public String xposOfNazevZvirete(){return XD_XPos + "/@NazevZvirete";}
-  public String xposOfDruhZvirete(){return XD_XPos + "/@DruhZvirete";}
+  public String xposOfOznSegmentu(){return XD_XPos+"/@OznSegmentu";}
+  public String xposOfNazevZvirete(){return XD_XPos+"/@NazevZvirete";}
+  public String xposOfDruhZvirete(){return XD_XPos+"/@DruhZvirete";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -81,8 +80,10 @@ public class ZvireDN implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getSkoda());
     org.xdef.component.XComponentUtil.addXC(a, getVlastnik());
@@ -130,19 +131,20 @@ public class ZvireDN implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@DruhZvirete")) {
-      XD_Name_DruhZvirete = x.getNodeName();
-      setDruhZvirete(parseResult.getParsedValue().stringValue());
+    if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
+      XD_Name_OznSegmentu = x.getNodeName();
+      setOznSegmentu(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevZvirete")) {
       XD_Name_NazevZvirete = x.getNodeName();
       setNazevZvirete(parseResult.getParsedValue().stringValue());
     } else {
-      XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
+      XD_Name_DruhZvirete = x.getNodeName();
+      setDruhZvirete(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("SouborD1A#ZvireDN/$mixed/Skoda".equals(s))
       return new test.xdef.component.Z3(this, x);
@@ -162,9 +164,10 @@ public class ZvireDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value = x;}
-  public String xposOf$value(){return XD_XPos + "/$text";}
+  public void set$value(String x){_$value=x;}
+  public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -212,8 +215,10 @@ public static class Vlastnik implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a =
+    java.util.ArrayList<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     if (get$value() != null)
       org.xdef.component.XComponentUtil.addText(this,
@@ -260,7 +265,8 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

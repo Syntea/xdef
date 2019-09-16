@@ -10,8 +10,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KParsedAttr;
-import org.xdef.xml.KParsedElement;
+import org.xdef.impl.xml.KParsedElement;
 import org.xdef.impl.xml.DomBaseHandler;
 import org.xdef.impl.xml.XAbstractReader;
 import org.xdef.model.XMData;
@@ -35,12 +34,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Node;
+import org.xdef.impl.xml.KParsedAttr;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -158,7 +158,7 @@ final class ChkParser extends DomBaseHandler {
 		super();
 		_sReporter = new SReporter(
 			reporter == null ?  new ArrayReporter() : reporter);
-		_entities = new TreeMap<String, String>();
+		_entities = new LinkedHashMap<String, String>();
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
 		_entities.put("amp", "&");
@@ -860,9 +860,7 @@ final class ChkParser extends DomBaseHandler {
 						return;
 					}
 					try {
-						XBuilder xb = new XBuilder(null);
-						xb.setSource(u);
-						xdp = (XPool) xb.compileXD();
+						xdp =(XPool)new XBuilder(null).setSource(u).compileXD();
 					} catch (Exception ex) {
 						//In X-definition are errors&{0}{: }
 						_sReporter.putReport(ka.getPosition(),
@@ -997,7 +995,7 @@ final class ChkParser extends DomBaseHandler {
 		} else {
 			return "";
 		}
-		int i = p.isOneOfTokens(new String[]{"SYSTEM","PUBLIC"});
+		int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
 		if (i < 0) {
 			return p.getSourceBuffer().trim(); //we allow direct specification??
 		}

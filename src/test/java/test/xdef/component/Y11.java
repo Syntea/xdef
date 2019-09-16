@@ -6,6 +6,7 @@ public class Y11 implements org.xdef.component.XComponent{
   public java.util.List<Y11.B> listOfB() {return _B;}
   public void addB(Y11.B x) {if (x!=null) _B.add(x);}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -54,8 +55,10 @@ public class Y11 implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfB());
     return a;
@@ -96,7 +99,8 @@ public class Y11 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new B(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -111,8 +115,8 @@ public static class B implements org.xdef.component.XComponent{
   public String getI() {return _I;}
   public java.util.List<test.xdef.component.Y11Op> listOfEv() {return _Ev;}
   public java.util.List<test.xdef.component.Y11Op> listOfOp() {return _Op;}
-  public void setN(String x){_N = x;}
-  public void setI(String x){_I = x;}
+  public void setN(String x){_N=x;}
+  public void setI(String x){_I=x;}
   public void addEv(test.xdef.component.Y11Op x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -129,9 +133,10 @@ public static class B implements org.xdef.component.XComponent{
     }
 
   }
-  public String xposOfN(){return XD_XPos + "/@N";}
-  public String xposOfI(){return XD_XPos + "/@I";}
+  public String xposOfN(){return XD_XPos+"/@N";}
+  public String xposOfI(){return XD_XPos+"/@I";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -183,8 +188,10 @@ public static class B implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfEv());
     org.xdef.component.XComponentUtil.addXC(a, listOfOp());
@@ -232,16 +239,17 @@ public static class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@I")) {
-      XD_Name_I = x.getNodeName();
-      setI(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@N")) {
       XD_Name_N = x.getNodeName();
       setN(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_I = x.getNodeName();
+      setI(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x) {
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x) {
     String s = x.getXMElement().getXDPosition();
     if ("Y11#A/B/$mixed/Ev".equals(s))
       return new test.xdef.component.Y11Op(this, x);

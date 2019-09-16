@@ -128,7 +128,8 @@ public final class XsdUtils {
 	 * @param modelName model name.
 	 * @return full simple type name;
 	 */
-	public static String getModelSimpleTypeName(String defName, String modelName) {
+	public static String getModelSimpleTypeName(final String defName,
+		final String modelName) {
 		checkString(defName);
 		checkString(modelName);
 		return defName + "_" + modelName + "_sType";
@@ -148,7 +149,7 @@ public final class XsdUtils {
 		}
 	}
 
-	/** Returns external schema declaration (<tt>import</tt> or <tt>include</tt>)
+	/** Get external schema declaration (<tt>import</tt> or <tt>include</tt>)
 	 * element of given external schema file name in given main schema element.
 	 * @param mainSchema main schema element to search in.
 	 * @param extSchemaFileName external schema file name to search for.
@@ -159,23 +160,26 @@ public final class XsdUtils {
 	 * @throws IllegalArgumentException if given external schema file name is
 	 * empty.
 	 */
-	public static Element getExtSchemaDecl(Element mainSchema, String extSchemaFileName) {
+	public static Element getExtSchemaDecl(final Element mainSchema,
+		final String extSchemaFileName) {
 		if (mainSchema == null) {
 			throw new NullPointerException("Given main schema is null!");
 		}
 		if (extSchemaFileName == null) {
-			throw new NullPointerException("Given external schema file name is null!");
+			throw new NullPointerException(
+				"Given external schema file name is null!");
 		}
 		if (extSchemaFileName.length() == 0) {
-			throw new IllegalArgumentException("Given external schema file name is"
-					+ "empty!");
+			throw new IllegalArgumentException(
+				"Given external schema file name is empty!");
 		}
 		NodeList extDecls = KXmlUtils.getChildElementsNS(mainSchema,
-				XsdVersion.SCHEMA_1_0.getNSURI(), new String[]{XsdNames.IMPORT,
-					XsdNames.INCLUDE});
+			XsdVersion.SCHEMA_1_0.getNSURI(),
+			new String[]{XsdNames.IMPORT, XsdNames.INCLUDE});
 		for (int i = 0; i < extDecls.getLength(); i++) {
 			Element extDecl = (Element) extDecls.item(i);
-			if (extSchemaFileName.equals(extDecl.getAttribute(XsdNames.SCHEMA_LOCATION))) {
+			if (extSchemaFileName.equals(
+				extDecl.getAttribute(XsdNames.SCHEMA_LOCATION))) {
 				return extDecl;
 			}
 		}
@@ -186,7 +190,7 @@ public final class XsdUtils {
 	 * and has given local name.
 	 * @param schema schema element.
 	 * @param modelName model name.
-	 * @return qualfied reference name.
+	 * @return qualified reference name.
 	 */
 	public static MyQName getRefQName(Element schema, String modelName) {
 		String targetNS = getSchemaTargetNS(schema);
@@ -202,12 +206,13 @@ public final class XsdUtils {
 	 * @param schemaContextElem schema context element.
 	 * @return child <tt>annotation</tt> element or <tt>null</tt>.
 	 */
-	public static Element getAnnotationElem(Element schemaContextElem) {
+	public static Element getAnnotationElem(final Element schemaContextElem) {
 		NodeList children = KXmlUtils.getChildElementsNS(schemaContextElem,
 				XsdVersion.SCHEMA_1_0.getNSURI());
 		for (int i = 0; i < children.getLength(); i++) {
 			Element child = (Element) children.item(i);
-			if (Util.isElement(child, XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.ANNOTATION)) {
+			if (Util.isElement(child,
+				XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.ANNOTATION)) {
 				return child;
 			}
 		}
@@ -220,18 +225,20 @@ public final class XsdUtils {
 	 * @return <tt>true</tt> if given node is valid XML Schema <tt>schema</tt>
 	 * element.
 	 */
-	public static boolean isSchema(Node node) {
-		return Util.isElement(node, XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.SCHEMA);
+	public static final boolean isSchema(final Node node) {
+		return Util.isElement(node,
+			XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.SCHEMA);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid schema <tt>complexType</tt>
-	 * declaration element.
+	/** Returns <tt>true</tt> if given node is a valid schema
+	 * <tt>complexType</tt> declaration element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid schema <tt>complexType</tt>
-	 * declaration element.
+	 * @return <tt>true</tt> if given node is a valid schema
+	 * <tt>complexType</tt> declaration element.
 	 */
-	public static boolean isComplexType(Node node) {
-		return Util.isElement(node, XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.COMPLEX_TYPE);
+	public static final boolean isComplexType(final Node node) {
+		return Util.isElement(node,
+			XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.COMPLEX_TYPE);
 	}
 
 	/** Gets ancestor <tt>schema</tt> element of given node.
@@ -241,10 +248,7 @@ public final class XsdUtils {
 	 * @throws IllegalArgumentException if given node is not a valid
 	 * <tt>schema</tt> descendant.
 	 */
-	public static Element getAncestorSchema(Node node) {
-		if (node == null) {
-			throw new NullPointerException("Given node is null!");
-		}
+	public static final Element getAncestorSchema(final Node node) {
 		if (isSchema(node)) {
 			return (Element) node;
 		}
@@ -258,26 +262,26 @@ public final class XsdUtils {
 				return getAncestorSchema(parent);
 			}
 		}
-		throw new IllegalArgumentException("Given node is not a valid schema "
-				+ "descendant node!");
+		throw new IllegalArgumentException(
+			"Given node is not a valid schema descendant node!");
 	}
 
 	/** Gets <tt>targetNamesapce</tt> attribute value of given <tt>schema</tt>
 	 * element.
-	 * @param schema <tt>schema</tt> eleemnt to get target namesapce from.
+	 * @param schema <tt>schema</tt> element to get target namesapce from.
 	 * @return target namespace URI or <tt>null</tt> if given schema does not
 	 * contain <tt>targetNamespace</tt> attribute.
 	 * @throws NullPointerException if given schema element is <tt>null</tt>.
-	 * @throws IllegalArgumentException if given element ios not a valid
+	 * @throws IllegalArgumentException if given element is not a valid
 	 * <tt>schema</tt> element.
 	 */
-	public static String getSchemaTargetNS(Element schema) {
+	public static final String getSchemaTargetNS(final Element schema) {
 		if (schema == null) {
 			throw new NullPointerException("Given schema element is null!");
 		}
 		if (!isSchema(schema)) {
-			throw new IllegalArgumentException("Given element is not a valid "
-					+ "schema element!");
+			throw new IllegalArgumentException(
+				"Given element is not a valid schema element!");
 		}
 		String targetNS = schema.getAttribute(XsdNames.TARGET_NAMESPACE);
 		if (targetNS == null || targetNS.length() == 0) {
@@ -286,15 +290,16 @@ public final class XsdUtils {
 		return targetNS;
 	}
 
-	/** Gets <tt>targetNamespace</tt> attribute value of ancestor <tt>schema</tt>
+	/** Get <tt>targetNamespace</tt> attribute value of ancestor <tt>schema</tt>
 	 * element of given schema context element.
 	 * @param schemaContext schema context element.
 	 * @return <tt>targetNamespace</tt> attribute value.
-	 * @throws NullPointerException if given schema context element is <tt>null</tt>.
+	 * @throws NullPointerException if given schema context element is null.
 	 */
-	public static String getTargetNS(Element schemaContext) {
+	public static final String getTargetNS(final Element schemaContext) {
 		if (schemaContext == null) {
-			throw new NullPointerException("Given schema context element is null!");
+			throw new NullPointerException(
+				"Given schema context element is null!");
 		}
 		Element schema = getAncestorSchema(schemaContext);
 		return getSchemaTargetNS(schema);
@@ -306,8 +311,8 @@ public final class XsdUtils {
 	 * @param attrLocalName attribute local name.
 	 * @return <tt>true</tt> if given schema context element contains
 	 */
-	public static boolean hasAttributeDecl(Element schemaContext,
-			String attrLocalName) {
+	public static final boolean hasAttributeDecl(final Element schemaContext,
+		final String attrLocalName) {
 		return hasDeclaration(schemaContext, XsdNames.ATTRIBUTE, attrLocalName);
 	}
 
@@ -318,9 +323,9 @@ public final class XsdUtils {
 	 * @return <tt>true</tt> if given schema context element contains
 	 * <tt>element</tt> declaration element with given name.
 	 */
-	public static boolean hasElementDecl(Element schemaContext,
-			String elementLocalName) {
-		return hasDeclaration(schemaContext, XsdNames.ELEMENT, elementLocalName);
+	public static final boolean hasElementDecl(final Element schemaContext,
+		final String elementLocalName) {
+		return hasDeclaration(schemaContext, XsdNames.ELEMENT,elementLocalName);
 	}
 
 	/** Returns <tt>true</tt> if given schema context element contains
@@ -335,10 +340,12 @@ public final class XsdUtils {
 	 * @throws IllegalArgumentException if given node type or attribute local
 	 * name is empty.
 	 */
-	private static boolean hasDeclaration(Element schemaContext,
-			String nodeType, String localName) {
+	private static final boolean hasDeclaration(final Element schemaContext,
+		final String nodeType,
+		final String localName) {
 		if (schemaContext == null) {
-			throw new NullPointerException("Given schema context element is null!");
+			throw new NullPointerException(
+				"Given schema context element is null!");
 		}
 		if (nodeType == null) {
 			throw new NullPointerException("Given node type is null!");
@@ -347,13 +354,15 @@ public final class XsdUtils {
 			throw new IllegalArgumentException("Given node type is empty!");
 		}
 		if (localName == null) {
-			throw new NullPointerException("Given attribute local name is null!");
+			throw new NullPointerException(
+				"Given attribute local name is null!");
 		}
 		if (localName.length() == 0) {
-			throw new IllegalArgumentException("Given attribute local name is empty!");
+			throw new IllegalArgumentException(
+				"Given attribute local name is empty!");
 		}
 		NodeList attrDecls = KXmlUtils.getChildElementsNS(schemaContext,
-				XsdVersion.SCHEMA_1_0.getNSURI(), nodeType);
+			XsdVersion.SCHEMA_1_0.getNSURI(), nodeType);
 		for (int i = 0; i < attrDecls.getLength(); i++) {
 			Element attrDecl = (Element) attrDecls.item(i);
 			if (localName.equals(attrDecl.getAttribute(XsdNames.NAME))) {
@@ -367,7 +376,6 @@ public final class XsdUtils {
 	 * @author Alexandrov
 	 */
 	public static class ElemProps {
-
 		/** Name of element. */
 		private String _name;
 		/** Namespace of element. */
@@ -430,13 +438,13 @@ public final class XsdUtils {
 		 */
 		public void setNamespace(String namespace) {_namespace = namespace;}
 
-		/** Nillable swith getter.
+		/** Nillable switch getter.
 		 * @return nillable switch value.
 		 */
 		public boolean isNillable() {return _nillable;}
 
-		/** Nillable swith setter.
-		 * @param nillable nillable swith value.
+		/** Nillable switch setter.
+		 * @param nillable nillable switch value.
 		 */
 		public void setNillable(boolean nillable) {_nillable = nillable;}
 

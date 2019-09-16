@@ -7,9 +7,10 @@ public class N implements org.xdef.component.XComponent{
   public void setOperation(N_Part x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Operation", null, "N#A/Operation");
-    _Operation = x;
+    _Operation=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -58,8 +59,10 @@ public class N implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, getOperation());
     return a;
@@ -100,7 +103,8 @@ public class N implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){}
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new N_Part(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

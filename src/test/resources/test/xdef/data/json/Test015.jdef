@@ -1,0 +1,9 @@
+[
+  "jnull()",
+  "double()",
+  "string()",
+  ["xd:script=optional",
+     "boolean();", 
+     "optional int();"
+  ]
+]

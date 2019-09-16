@@ -11,7 +11,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
 import java.lang.reflect.Constructor;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import org.xdef.XDValueID;
 import java.util.Locale;
 
@@ -80,7 +80,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
-		new TreeMap<String, Constructor<?>>();
+		new LinkedHashMap<String, Constructor<?>>();
 	/** No parameters parameter type list. */
 	private final static Class<?>[] NULLCLASSLIST = new Class<?>[0];
 	/** No parameters parameter list. */
@@ -1158,7 +1158,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_REGEXRESULT, XD_INT), "start");
 
 ////////////////////////////////////////////////////////////////////////////////
-// REPORT (see cz.syntea.common.Report)
+// REPORT (see org.xdef.sys.Report)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_REPORT;
 		method(ti, genInternalMethod(NEW_REPORT, XD_REPORT,
@@ -1400,7 +1400,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			Map<String, InternalMethod> hm;
 			if ((hm = METHODS[NOTYPE_VALUE_ID]) == null) {
 				METHODS[NOTYPE_VALUE_ID] = hm =
-					new TreeMap<String, InternalMethod>();
+					new LinkedHashMap<String, InternalMethod>();
 			}
 			for (int i = 0; i < names.length; i++) {
 				InternalMethod im1 = im;
@@ -1435,7 +1435,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		final String... names) {
 		Map<String, InternalMethod> hm;
 		if ((hm = METHODS[typeId]) == null) {
-			METHODS[typeId] = hm = new TreeMap<String, InternalMethod>();
+			METHODS[typeId] = hm = new LinkedHashMap<String, InternalMethod>();
 		}
 		for (int i = 0; i < names.length; i++) {
 			InternalMethod im1 = im;

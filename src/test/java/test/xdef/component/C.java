@@ -5,10 +5,11 @@ package test.xdef.component;
 public class C extends test.xdef.TestXComponents_C implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<C.Street> listOfStreet() {return _Street;}
-  public void setName(String x){_Name = x;}
+  public void setName(String x){_Name=x;}
   public void addStreet(C.Street x) {if (x!=null) _Street.add(x);}
-  public String xposOfName(){return XD_XPos + "/@Name";}
+  public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -59,8 +60,10 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfStreet());
     return a;
@@ -106,7 +109,8 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new Street(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
@@ -119,10 +123,11 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
 public static class Street implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<test.xdef.component.C2> listOfHouse() {return _House;}
-  public void setName(String x){_Name = x;}
+  public void setName(String x){_Name=x;}
   public void addHouse(test.xdef.component.C2 x) {if (x!=null) _House.add(x);}
-  public String xposOfName(){return XD_XPos + "/@Name";}
+  public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -172,8 +177,10 @@ public static class Street implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a =
+    java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
     org.xdef.component.XComponentUtil.addXC(a, listOfHouse());
     return a;
@@ -220,7 +227,8 @@ public static class Street implements org.xdef.component.XComponent{
     setName(parseResult.getParsedValue().stringValue());
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return new test.xdef.component.C2(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){

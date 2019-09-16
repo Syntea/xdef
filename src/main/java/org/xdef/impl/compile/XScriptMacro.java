@@ -142,7 +142,7 @@ public final class XScriptMacro {
 	 * @param params parameters of macro reference.
 	 * @return string with expanded macro.
 	 */
-	public final String expand(final String[] params) {
+	public final String expand(final String... params) {
 		if (_references.length == 0) {
 			return _value; // no parameters
 		}

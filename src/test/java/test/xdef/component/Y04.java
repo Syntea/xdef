@@ -4,9 +4,10 @@
 package test.xdef.component;
 public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serializable,Runnable,org.xdef.component.XComponent{
   public String getTwo() {return _Two;}
-  public void setTwo(String x){_Two = x;}
-  public String xposOfTwo(){return XD_XPos + "/@Two";}
+  public void setTwo(String x){_Two=x;}
+  public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -57,8 +58,11 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Y04() {}
   public Y04(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -104,7 +108,8 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

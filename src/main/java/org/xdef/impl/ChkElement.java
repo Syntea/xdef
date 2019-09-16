@@ -9,7 +9,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.XDDebug;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -120,7 +120,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_forget = true;
 		}
 		_xElement = xelement;
-		_xPosOccur = new TreeMap<String, XPosInfo>();
+		_xPosOccur = new LinkedHashMap<String, XPosInfo>();
 		StringBuilder sb =
 			new StringBuilder(_parent.getXPos()).append('/').append(_name);
 		if (_parent.getParent() != null) {
@@ -1478,7 +1478,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return chkEl;
 	}
 
-	/** Prepare cariables and execute the init section of X-script. */
+	/** Prepare variables and execute the init section of X-script. */
 	final void initElem() {
 		// prepare variables declared in the script (do not make it twice)
 		if (_xElement._varinit >= 0 && _variables == null) {

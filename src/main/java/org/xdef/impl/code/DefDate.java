@@ -84,21 +84,17 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	/** Get value as String.
 	 * @return ISO8601 string created from value or "null".
 	 */
-	public String toString() {
-		return _value == null ? "null" : _value.toISO8601();
-	}
+	public String toString() {return _value == null ? "" : _value.toISO8601();}
 	@Override
 	/** Get ISO8601 string value of this object.
 	 * @return ISO8601 string created from value or "null".
 	 */
 	public String stringValue() {return toString();}
-
 	@Override
 	public XDValue cloneItem() {
 		return _value == null ?
 			new DefDate() : new DefDate((SDatetime) _value.clone());
 	}
-
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override

@@ -48,7 +48,7 @@ public final class DefObject extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return "" + _value;}
+	public String toString() {return _value == null ? "" : _value.toString();}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.

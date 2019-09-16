@@ -50,7 +50,7 @@ public class TestAll {
 			new TestGroups(),
 			new TestImplementsAndUses(),
 			new TestInclude(),
-			new TestJSON(),
+			new TestJsonXdef(),
 			new TestKeyAndRef(),
 			new TestLexicon(),
 			new TestNamespaces(),

@@ -28,7 +28,8 @@
     classes        = "optional classList; options acceptQualifiedAttr"
     include        = "optional uriList; options acceptQualifiedAttr"
     methods        = "optional methodList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr">
+    metaNamespace  = "optional uri; options acceptQualifiedAttr"
+    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
 
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->

@@ -1,5 +1,6 @@
 package test.xdef;
 
+import org.xdef.XDFactory;
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -21,40 +22,36 @@ public final class TestNamespaces extends XDTester {
 		Report rep;
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'\n"+
-"  xd:name='Test' xmlns='A' xmlns:a='B' root='a|a:a'>\n"+
-"\n"+
-"  <a:a xd:script='occurs 2' xmlns:a='C' c='required string()' />\n"+
-"  <a:a xmlns:a='B' b='required string()' />\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xmlns='A' xmlns:b='B' root='a | b:a'>\n"+
+"  <c:a xd:script='occurs 2' xmlns:c='C' c='required string()' />\n"+
+"  <b:a xmlns:b='B' b='required string()' />\n"+
 "  <a:a xmlns:a='A' a='required string()' >\n"+
 "    <a:a xmlns:a='C' xd:script='ref a:a' />\n"+
 "  </a:a>\n"+
-"\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a:a xmlns:a='A' a='a'>" +
 				"<c:a xmlns:c='C' c='C'/>" +
 				"<c:a xmlns:c='C' c='C'/>" +
 				"</a:a>";
-			assertEq(xml, parse(xp, "Test", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' b = 'b' />";
-			assertEq(xml, parse(xp, "Test", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
-			parse(xp, "Test", xml, reporter);
+			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a = 'A' b = 'b' />";
-			parse(xp, "Test", xml, reporter);
+			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xml = "<a:a xmlns:a='A' a='a'><c:a xmlns:c='B' c='C'/></a:a>";
-			parse(xp, "Test", xml, reporter);
+			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:collection xmlns:xd = '" + _xdNS + "'>\n"+
-"\n"+
 "<xd:def xmlns='A' xmlns:a='B' xd:name='Test' root='A#a|A#a:a'>\n"+
 "  <a:a xd:script='occurs 2' xmlns:a='C' c='required string()' />\n"+
 "</xd:def>\n"+
@@ -64,7 +61,6 @@ public final class TestNamespaces extends XDTester {
 "    <a:a xmlns:a='C' xd:script='ref Test#a:a' />\n"+
 "  </b:a>\n"+
 "</xd:def>\n"+
-"\n"+
 "</xd:collection>";
 			xp = compile(xdef);
 			xml = "<a:a xmlns:a='A' a='a'>" +
@@ -148,6 +144,20 @@ public final class TestNamespaces extends XDTester {
 			while((rep = reporter.getReport()) != null) {
 				fail(rep.toString());
 			}
+		} catch (Exception ex) {fail(ex);}
+		try { // test error (element models with same name)
+			reporter.clear();
+			XDFactory.compileXD(reporter, null,
+"<xd:def xmlns:xd = '" + _xdNS + "' xmlns='A' xmlns:a='B' root='a|a:a'>\n"+
+"  <a:a xd:script='occurs 2' xmlns:a='C' c='required string()' />\n"+
+"  <a:a xmlns:a='B' b='required string()' />\n"+
+"  <a:a xmlns:a='A' a='required string()' >\n"+
+"    <a:a xmlns:a='C' xd:script='ref a:a' />\n"+
+"  </a:a>\n"+
+"</xd:def>");
+			//XDEF236 Repeated name of element model '&{0}'
+			assertTrue(reporter.printToString().contains("XDEF236"),
+				"Error not reported");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

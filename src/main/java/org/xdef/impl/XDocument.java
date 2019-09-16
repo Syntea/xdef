@@ -1,13 +1,13 @@
 package org.xdef.impl;
 
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMDocument;
 import org.xdef.model.XMNode;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Implementation of the model of an element.
  * @author Vaclav Trojan
@@ -42,7 +42,7 @@ public final class XDocument extends XCodeDescriptor implements XMDocument {
 		_definition = xdef;
 		_forget = 0;
 		_clearAdoptedForgets = 0;
-		_attrs = new TreeMap<String, XData>();
+		_attrs = new LinkedHashMap<String, XData>();
 		_childNodes = new XNode[0];
 		//copy global options from the definition
 		copyOptions(xdef);

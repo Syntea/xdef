@@ -28,7 +28,7 @@ public class XSParseUnion extends XSAbstractParser {
 	public int getLegalKeys() {
 		return PATTERN +
 			ENUMERATION +
-//			WHITESPACE + //fixed to collapse
+//			WHITESPACE + // depends on items
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +

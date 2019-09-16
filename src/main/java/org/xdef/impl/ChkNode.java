@@ -20,7 +20,7 @@ import org.xdef.sys.SDuration;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KNamespace;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDInput;

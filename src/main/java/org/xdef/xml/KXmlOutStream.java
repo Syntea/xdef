@@ -1,5 +1,6 @@
 package org.xdef.xml;
 
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XML;
 import org.xdef.sys.SIOException;
@@ -61,7 +62,7 @@ public class KXmlOutStream {
 		_file = null;
 		_encoding = encoding == null ? "UTF-8" : encoding;
 		_writer = new OutputStreamWriter(
-			out, CharsetNames.getJavaCharsetName(_encoding));
+			out, KCharsetNames.getJavaCharsetName(_encoding));
 		_writeDocumentHeader = writeDocumentHeader;
 	}
 
@@ -142,7 +143,7 @@ public class KXmlOutStream {
 			String e = _encoding == null ? "UTF-8" : _encoding;
 			_writer = new BufferedWriter(
 				new OutputStreamWriter(new FileOutputStream(_file),
-				CharsetNames.getJavaCharsetName(e)));
+				KCharsetNames.getJavaCharsetName(e)));
 		}
 	}
 

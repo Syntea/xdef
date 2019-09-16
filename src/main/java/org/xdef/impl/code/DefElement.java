@@ -395,7 +395,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 * @return The string from value.
 	 */
 	public String toString() {
-		return _value == null ? "null" : KXmlUtils.nodeToString(_value);
+		return _value == null ? "" : KXmlUtils.nodeToString(_value);
 	}
 
 	@Override

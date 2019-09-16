@@ -14,23 +14,24 @@ public class B implements org.xdef.component.XComponent{
   public java.sql.Timestamp timestampOftime(){return org.xdef.sys.SDatetime.getTimestamp(_time);}
   public java.util.Calendar calendarOftime(){return org.xdef.sys.SDatetime.getCalendar(_time);}
   public String getname() {return _name;}
-  public void setid(Integer x){_id = x;}
-  public void setnum(Double x){_num = x;}
-  public void setdate(org.xdef.sys.SDatetime x){_date = x;}
+  public void setid(Integer x){_id=x;}
+  public void setnum(Double x){_num=x;}
+  public void setdate(org.xdef.sys.SDatetime x){_date=x;}
   public void setdate(java.util.Date x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setdate(java.sql.Timestamp x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setdate(java.util.Calendar x){_date=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void settime(org.xdef.sys.SDatetime x){_time = x;}
+  public void settime(org.xdef.sys.SDatetime x){_time=x;}
   public void settime(java.util.Date x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void settime(java.sql.Timestamp x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void settime(java.util.Calendar x){_time=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setname(String x){_name = x;}
-  public String xposOfid(){return XD_XPos + "/@id";}
-  public String xposOfnum(){return XD_XPos + "/@num";}
-  public String xposOfdate(){return XD_XPos + "/@date";}
-  public String xposOftime(){return XD_XPos + "/@time";}
-  public String xposOfname(){return XD_XPos + "/@name";}
+  public void setname(String x){_name=x;}
+  public String xposOfid(){return XD_XPos+"/@id";}
+  public String xposOfnum(){return XD_XPos+"/@num";}
+  public String xposOfdate(){return XD_XPos+"/@date";}
+  public String xposOftime(){return XD_XPos+"/@time";}
+  public String xposOfname(){return XD_XPos+"/@name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -87,8 +88,11 @@ public class B implements org.xdef.component.XComponent{
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public B() {}
   public B(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -132,25 +136,26 @@ public class B implements org.xdef.component.XComponent{
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@date")) {
-      XD_Name_date = x.getNodeName();
-      setdate(parseResult.getParsedValue().datetimeValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@id")) {
+    if (x.getXMNode().getXDPosition().endsWith("/@id")) {
       XD_Name_id = x.getNodeName();
       setid(parseResult.getParsedValue().intValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@name")) {
-      XD_Name_name = x.getNodeName();
-      setname(parseResult.getParsedValue().stringValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@num")) {
       XD_Name_num = x.getNodeName();
       setnum(parseResult.getParsedValue().doubleValue());
-    } else {
+    } else if (x.getXMNode().getXDPosition().endsWith("/@date")) {
+      XD_Name_date = x.getNodeName();
+      setdate(parseResult.getParsedValue().datetimeValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@time")) {
       XD_Name_time = x.getNodeName();
       settime(parseResult.getParsedValue().datetimeValue());
+    } else {
+      XD_Name_name = x.getNodeName();
+      setname(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

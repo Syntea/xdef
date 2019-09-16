@@ -38,8 +38,6 @@ public class TestAll {
 		Assert.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}
 
-
-
 	/**Run tests with TestNG */
 	private static void mainTestNG() {
 		String[] suiteList = {
@@ -61,8 +59,6 @@ public class TestAll {
 		testXdef();
 		testXDUtils();
 	}
-
-
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {

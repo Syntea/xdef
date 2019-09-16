@@ -6,13 +6,14 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
   public String getx() {return _x;}
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setx(String x){_x = x;}
-  public void setOne(String x){_One = x;}
-  public void setTwo(String x){_Two = x;}
-  public String xposOfx(){return XD_XPos + "/@x";}
-  public String xposOfOne(){return XD_XPos + "/@One";}
-  public String xposOfTwo(){return XD_XPos + "/@Two";}
+  public void setx(String x){_x=x;}
+  public void setOne(String x){_One=x;}
+  public void setTwo(String x){_Two=x;}
+  public String xposOfx(){return XD_XPos+"/@x";}
+  public String xposOfOne(){return XD_XPos+"/@One";}
+  public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
     {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
@@ -65,8 +66,11 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
     return el;
   }
   @Override
+  public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();}
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
+  }
   public Y01Operation() {}
   public Y01Operation(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
@@ -106,19 +110,20 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
-    if (x.getXMNode().getXDPosition().endsWith("/@One")) {
-      XD_Name_One = x.getNodeName();
-      setOne(parseResult.getParsedValue().stringValue());
-    } else if (x.getXMNode().getXDPosition().endsWith("/@Two")) {
-      XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
-    } else {
+    if (x.getXMNode().getXDPosition().endsWith("/@x")) {
       XD_Name_x = x.getNodeName();
       setx(parseResult.getParsedValue().stringValue());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@One")) {
+      XD_Name_One = x.getNodeName();
+      setOne(parseResult.getParsedValue().stringValue());
+    } else {
+      XD_Name_Two = x.getNodeName();
+      setTwo(parseResult.getParsedValue().stringValue());
     }
   }
   @Override
-  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)
+  public org.xdef.component.XComponent xCreateXChild(
+    org.xdef.proc.XXNode x)
     {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}

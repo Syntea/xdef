@@ -15,7 +15,7 @@ public final class PAttr {
 	/** Create new instance of AttrValue.
 	 * @param name the quoted name of attribute.
 	 * @param nsURI namespace.
-	 * @param nsindex index to namespace list.
+	 * @param nsindex index to the namespace list.
 	 * @param value the SBuffer object with the value of attribute.
 	 */
 	PAttr(final String name,
@@ -33,6 +33,14 @@ public final class PAttr {
 	 * @return node name.
 	 */
 	public final String getName() {return _name;}
+
+	/** Get node name.
+	 * @return node name.
+	 */
+	public final String getPrefix() {
+		int ndx = _name.indexOf(':');
+		return ndx < 0 ? _name : _name.substring(ndx + 1);
+	}
 
 	/** Get node namespace.
 	 * @return node namespace.

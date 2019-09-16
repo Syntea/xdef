@@ -13,22 +13,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
+import org.xdef.model.XMNode;
 import org.xdef.proc.XDLexicon;
 
-/** Implementation of X-definition.
+/** Implementation of XMDefinition.
  * @author Vaclav Trojan
  */
 public final class XDefinition extends XCodeDescriptor implements XMDefinition {
-
 	/** table of xElements. */
-	private final ArrayList<XElement> _xElements;
+	private final ArrayList<XElement> _xElements = new ArrayList<XElement>();
 	/** Implementation properties. */
-	public final Properties _properties;
-	/** root selection. */
-	public Map<String, XNode> _rootSelection;
+	public final Properties _properties = new Properties();
 	/** root namespaces. */
-	public Map<String, String> _namespaces = new TreeMap<String, String>();
+	public final Map<String, String> _namespaces =
+		new LinkedHashMap<String,String>();
+	/** root selection. */
+	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
 	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
 	private byte _xdVersion;
 	/** Version of XML from which the X-definition was created. */
@@ -65,9 +66,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			  || XConstants.XDEF32NS_OLD.equals(nsURI)? XConstants.XD32 : 0;
 		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;
-		_xElements = new ArrayList<XElement>();
-		_rootSelection = new TreeMap<String, XNode>();
-		_properties = new Properties();
 		setXDPosition(name + '#');
 		///////////////////////////////
 		_onIllegalRoot = -1;
@@ -115,6 +113,17 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					}
 				}
 			}
+		} else if (lockey.contains(":json")
+			&& (XDConstants.JSON_NS_URI.equals(nsURI)
+				|| XDConstants.JSON_NS_URI_W3C.equals(nsURI))) {
+			for (int i = 0; i < _xElements.size(); i++) {
+				XElement xel  = def._xElements.get(i);
+				String lname = xel.getName();
+				ndx = lname.indexOf(':');
+				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
+					return xel;
+				}
+			}
 		} else {
 			ndx = lockey.indexOf(':');
 			lockey = ndx >= 0 ? lockey.substring(ndx + 1) : lockey;
@@ -154,6 +163,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_xElements.toArray(result);
 		return result;
 	}
+
 	@Override
 	/** Get source position of this X-definition.
 	 * @return source ID of this X-definition..
@@ -175,6 +185,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
+
 	@Override
 	/** Get the Element model with given NameSpace and name.
 	 * @param nsURI NameSpace URI of element or <tt>null</tt>.
@@ -230,8 +241,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
-	 * (see {@link cz.syntea.xd.XDConstants#XD2_0}
-	 * or {@link cz.syntea.xd.XDConstants#XD3_1}).
+	 * (see {@link org.xdef.XDConstants#XD2_0}
+	 * or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 
@@ -247,8 +258,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * to X-definition.
 	 */
 	public final boolean addModel(final XElement newModel) {
-		if (getXElement(newModel.getName(), newModel.getNSUri(), -1) != null) {
-			return false;
+		String name = newModel.getName();
+		for (XElement x: _xElements) {
+			if (name.equals(x.getName())) {
+				return false;
+			}
 		}
 		_xElements.add(newModel);
 		return true;
@@ -269,10 +283,12 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		if (namespaceURI != null && namespaceURI.length() > 0) { // has NS URI
 			int i = name.indexOf(':');
 			nm = name.substring(i + 1);
-			for (XNode xe: _rootSelection.values()){
-				String xName = xe.getName(); // XElement name
+			for (String xName: _rootSelection.keySet()) {
+				XElement xe = (XElement) _rootSelection.get(xName);
 				i = xName.indexOf(':');
+				String prefix = "";
 				if (i >= 0) {
+					prefix = xName.substring(0, i);
 					xName = xName.substring(i + 1); // XElement local name
 				}
 				if (t != null) {
@@ -281,7 +297,25 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 						xName = s;
 					}
 				}
-				if (nm.equals(xName) && namespaceURI.equals(xe.getNSUri())) {
+				if (xName.startsWith("json") && !prefix.isEmpty()) {
+					if (xe == null) {
+						String u = _namespaces.get(prefix);
+						if (XDConstants.JSON_NS_URI.equals(u)
+							|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
+							XElement xxe = (XElement) getModel(u,xName);
+							XMNode[] models = xxe.getChildNodeModels();
+							if (models != null && models.length == 1
+								&& models[0].getKind() == XMNode.XMELEMENT) {
+								xe = (XElement) models[0];
+							}
+						}
+					}
+					if (xe != null) {
+						xName = xe.getQName().getLocalPart();
+					}
+				}
+				if (nm.equals(xName) && xe != null
+					&& namespaceURI.equals(xe.getNSUri())) {
 					return (XElement) xe;
 				}
 			}
@@ -302,7 +336,36 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			}
 		}
 		// not found, now try model renerence to an xd:any
-		for (XNode xe: _rootSelection.values()) {
+		for (String xName: _rootSelection.keySet()) {
+			XNode xe = _rootSelection.get(xName);
+			if (xe == null) {
+				int i = xName.indexOf(':');
+				String prefix = "";
+				if (i >= 0) {
+					prefix = xName.substring(0, i);
+					xName = xName.substring(i + 1); // XElement local name
+				}
+				if (xName.startsWith("json") && !prefix.isEmpty()) {
+					String u = _namespaces.get(prefix);
+					if (XDConstants.JSON_NS_URI.equals(u)
+						|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
+						XMElement xel =  getModel(u,xName);
+						if (xel != null) {
+							XMNode[] models = xel.getChildNodeModels();
+							if (models != null && models.length == 1
+								&& models[0].getKind() == XMNode.XMELEMENT) {
+								XElement xxel = (XElement) models[0];
+								if ((namespaceURI != null
+									&& namespaceURI.equals(xxel.getNSUri())
+									|| namespaceURI==null
+									&&  xxel.getNSUri()==null)) {
+									return xxel;
+								}
+							}
+						}
+					}
+				}
+			}
 			String lockey = xe.getName();
 			if (lockey.endsWith("$any") && lockey.length() > 4) {
 				// reference of the named any

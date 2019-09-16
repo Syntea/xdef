@@ -59,7 +59,7 @@ public final class DefNull extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return "null";}
+	public String toString() {return "";}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.

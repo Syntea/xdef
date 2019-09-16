@@ -28,6 +28,8 @@ import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Properties;
 import org.w3c.dom.Element;
+import org.xdef.XDContainer;
+import org.xdef.proc.XXElement;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
@@ -1138,6 +1140,34 @@ public final class Test000 extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A> <X x='optional boolean()'/></A>\n" +
+"  <B>\n" +
+"    <C xd:script=\"create from('X')\"\n" +
+"      y = \"required enum('A', 'N'); create convertBoolean(from('@x'))\"/>\n" +
+"  </B>\n" +
+"</xd:def>";
+			xp = compile(xdef, this.getClass());
+			xml = "<A><X x='0'/></A>";
+			el = parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
+			assertNoErrors(reporter);
+ 			xml = "<A><X x='1'/></A>";
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xd.xcreate("B", reporter), "<B><C y='A'/></B>");
+			assertNoErrors(reporter);
+ 			xml = "<A><X/></A>";
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
+			assertNoErrors(reporter);			
+		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
 	}
@@ -1207,6 +1237,10 @@ public final class Test000 extends XDTester {
 	public static void setPreBody(XXNode x) {}
 	public static void answerIOR(XXNode x, String s) {}
 	public static void ctlIOR(XXNode x) {}
+    public static String convertBoolean(XXElement el, XDContainer boolContainer){
+        return boolContainer.getXDItemsNumber() == 1 
+			&& "1".equals(boolContainer.getXDItem(0).toString()) ? "A" : "N";
+    }
 ////////////////////////////////////////////////////////////////////////////////
 	/** Run test
 	 * @param args the command line arguments

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
@@ -59,9 +59,9 @@ public final class BNFGrammar {
 		"whitespace",			//24
 		"xmlNamestartchar",		//25
 		"xmlNameExtchar",		//26
-		"clear",	            //27
-		"push",		            //28
-		"pop",           	    //29
+		"clear",				//27
+		"push",					//28
+		"pop",					//29
 		"anyChar",				//30
 		"find",					//31
 		"error",				//32
@@ -129,7 +129,7 @@ public final class BNFGrammar {
 	/** Current processed rule. */
 	private BNFRuleObj _actRule;
 	/** Table of function aliases. */
-	Map<String, String> _aliases = new TreeMap<String, String>();
+	Map<String, String> _aliases = new LinkedHashMap<String, String>();
 	/** Array of rules.*/
 	private final List<BNFRuleObj> _rules;
 	/** Starting position of current rule. */
@@ -913,7 +913,7 @@ public final class BNFGrammar {
 	private final class BNFTokens extends BNFItem {
 		final String[] _tokens;
 
-		BNFTokens(String[] tokens) {
+		BNFTokens(final String... tokens) {
 			super();
 			_tokens = tokens;
 		}
@@ -1172,7 +1172,7 @@ public final class BNFGrammar {
 			sb.append(")").append(genQuantifier());
 		}
 
-		BNFTokens newTokens(String[] tokens) {
+		BNFTokens newTokens(final String... tokens) {
 			return new BNFTokens(tokens);
 		}
 	}

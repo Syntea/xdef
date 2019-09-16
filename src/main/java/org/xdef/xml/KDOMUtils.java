@@ -1,5 +1,10 @@
 package org.xdef.xml;
 
+import org.xdef.impl.xml.KNodeList;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.impl.xml.KNamedNodeMap;
+import org.xdef.impl.xml.KEmptyNodeList;
+import org.xdef.impl.xml.KEmptyNamedNodeMap;
 import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;

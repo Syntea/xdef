@@ -156,7 +156,8 @@ public final class TestTypes extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xd.xparse("<a/>", reporter);
 			assertNoErrorwarnings(reporter);
-			assertEq("nullnullnullnullnull", xd.getVariable("t").toString());
+//			assertEq("nullnullnullnullnull", xd.getVariable("t").toString());
+			assertEq("", xd.getVariable("t").toString());
 
 ///////////// Check date limits ////////////////////////////////////////////////
 			setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");

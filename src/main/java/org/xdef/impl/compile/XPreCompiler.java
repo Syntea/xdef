@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 
 /** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
@@ -36,25 +36,29 @@ public class XPreCompiler implements PreCompiler {
 	/** index of NameSpace of X-definitions. */
 	static final int NS_XDEF_INDEX = 0;
 	/** index of NameSpace of XML. */
-	static final int NS_XML_INDEX = NS_XDEF_INDEX + 1; //1
+	static final int NS_XML_INDEX = NS_XDEF_INDEX + 1;				//1
 	/** index of NameSpace of XML NameSpace. */
-	static final int NS_XMLNS_INDEX = NS_XML_INDEX + 1; //2
+	static final int NS_XMLNS_INDEX = NS_XML_INDEX + 1;				//2
 	/** index of NameSpace of XLink. */
-	static final int NS_XLINK_INDEX = NS_XMLNS_INDEX + 1; //3
+	static final int NS_XLINK_INDEX = NS_XMLNS_INDEX + 1;			//3
 	/** index of NameSpace of XInclude. */
-	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1; //4
+	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1;		//4
 	/** index of NameSpace of XML Schema. */
-	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1; //5
+	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
+	/** index of NameSpace of JSON (xdef). */
+	static final int NS_JSON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
+	/** index of NameSpace of JSON (W3C). */
+	static final int NS_JSON_W3C_INDEX = NS_JSON_INDEX + 1;			//7
 	/** Table of NameSpace prefixes. */
-	static final Map<String, Integer> PREDEFINED_PREFIXES =
-		new TreeMap<String, Integer>();
+	static final Map<String, Integer> DEFINED_PREFIXES =
+		new LinkedHashMap<String, Integer>();
 
 	/** PNodes with parsed source items. */
 	private final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
 	/** Source files table - to prevent to doParse the source twice. */
 	private final ArrayList<Object> _sources = new ArrayList<Object>();
 	/** Array of lexicon sources item. */
-	private final ArrayList<PNode> _lexicon = new ArrayList<PNode>();
+	private final ArrayList<PNode> _lexicons = new ArrayList<PNode>();
 	/** Array of BNF sources. */
 	private final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
 	/** Array of declaration source items. */
@@ -74,7 +78,7 @@ public class XPreCompiler implements PreCompiler {
 	private final ArrayList<Object> _includeList = new ArrayList<Object>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
-		new TreeMap<String, XScriptMacro>();
+		new LinkedHashMap<String, XScriptMacro>();
 	/** Reader of X-definitions in the form of XML. */
 	private final PreReaderXML _xmlReader;
 	/** Reader of X-definitions in the form of JSON. */
@@ -96,9 +100,9 @@ public class XPreCompiler implements PreCompiler {
 		final boolean ignoreUnresolvedExternals) {
 		_displayMode = displayMode;
 		 //"xml"
-		PREDEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
+		DEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
 		//"xmlns",
-		PREDEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
+		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
 		_codeGenerator = new CompileCode(extClasses,
 			2, debugMode, ignoreUnresolvedExternals);
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
@@ -108,6 +112,9 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add(//schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+		_codeGenerator._namespaceURIs.add(XDConstants.JSON_NS_URI);//JSON Xdef
+		_codeGenerator._namespaceURIs.add(//JSON W3C
+			XDConstants.JSON_NS_URI_W3C);
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);
@@ -516,7 +523,7 @@ public class XPreCompiler implements PreCompiler {
 	private void setMacros(final List<PNode> macros) {
 		for (PNode macro : macros) {
 			chkNestedElements(macro);
-			Map<String, String> params = new TreeMap<String, String>();
+			Map<String, String> params = new LinkedHashMap<String, String>();
 			String def = null;
 			for (PAttr val : macro._attrs) {
 				if ("#def".equals(val._name)) {
@@ -602,7 +609,7 @@ public class XPreCompiler implements PreCompiler {
 		for (PNode p: _xdefPNodes) {
 			p.expandMacros(reporter, p._xdef.getName(), _macros);
 		}
-		for (PNode p: _lexicon) {
+		for (PNode p: _lexicons) {
 			p.expandMacros(reporter, null, _macros);
 		}
 		for (PNode p: _listBNF) {
@@ -647,7 +654,7 @@ public class XPreCompiler implements PreCompiler {
 	/** Get precompiled sources (PNodes) of lexicon items.
 	 * @return array with PNodes.
 	 */
-	public final List<PNode> getPLexiconList() {return _lexicon;}
+	public final List<PNode> getPLexiconList() {return _lexicons;}
 
 	@Override
 	/** Get precompiled sources (PNodes) of collection items.

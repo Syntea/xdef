@@ -39,7 +39,7 @@ import java.lang.reflect.Constructor;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation") // see setReporter method
+//@SuppressWarnings("deprecation") // see setReporter method
 public class XBuilder implements XDBuilder {
 
 	private XPool _xp;
@@ -78,9 +78,11 @@ public class XBuilder implements XDBuilder {
 	 * @param source The string with source X-definition.
 	 * @param sourceId name of source source data corresponding to
 	 * the argument source (may be null).
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final String source, final String sourceId) {
+	public final XDBuilder setSource(final String source,final String sourceId){
 		_xp.setSource(source, sourceId);
+		return this;
 	}
 
 	@Override
@@ -90,9 +92,11 @@ public class XBuilder implements XDBuilder {
 	 * then it may contain also wildcard characters representing a group
 	 * of files.
 	 * @param sources The string with sources.
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final String... sources) {
+	public final XDBuilder setSource(final String... sources) {
 		_xp.setSource(sources, null);
+		return this;
 	}
 
 	@Override
@@ -105,23 +109,33 @@ public class XBuilder implements XDBuilder {
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument (any item or even this argument
 	 * may be <tt>null</tt>).
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final String[] sources,
+	public final XDBuilder setSource(final String[] sources,
 		final String[] sourceIds) {
 		_xp.setSource(sources, sourceIds);
+		return this;
 	}
 
 	@Override
 	/** Add files with source data of  X-definitions or collections.
 	 * @param sources array of files with sources.
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final File... sources) {_xp.setSource(sources);}
+	public final XDBuilder setSource(final File... sources) {
+		_xp.setSource(sources);
+		return this;
+	}
 
 	@Override
 	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final URL... sources) {_xp.setSource(sources);}
+	public final XDBuilder setSource(final URL... sources) {
+		_xp.setSource(sources);
+		return this;
+	}
 
 	@Override
 	/** Add input stream with source data of a X-definition or collection.
@@ -129,9 +143,11 @@ public class XBuilder implements XDBuilder {
 	 * @param srcId name of source source data corresponding to
 	 * stream from the argument sources (any item or even this argument
 	 * may be <tt>null</tt>).
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final InputStream source, final String srcId) {
+	public final XDBuilder setSource(final InputStream source, final String srcId) {
 		_xp.setSource(source, srcId);
+		return this;
 	}
 
 	@Override
@@ -139,32 +155,48 @@ public class XBuilder implements XDBuilder {
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument (any item may be null).
+	 * @return this XDBuilde object.
 	 */
-	public final void setSource(final InputStream sources[],
+	public final XDBuilder setSource(final InputStream sources[],
 		final String sourceIds[]) {
 		_xp.setSource(sources, sourceIds);
+		return this;
+	}
+
+	@Override
+	/** Set class loader. The class loader must be set before setting sources.
+	 * @param loader class loader.
+	 * @return this XDBuilde object.
+	 */
+	public final XDBuilder setClassLoader(final ClassLoader loader) {
+		_xp._compiler.setClassLoader(loader);
+		return this;
 	}
 
 	@Override
 	/** Set external classes with external methods.
 	 * @param ext array of classes with external methods.
+	 * @return this XDBuilde object.
 	 */
-	public final void setExternals(final Class<?>... ext) {
+	public final XDBuilder setExternals(final Class<?>... ext) {
 		_xp._compiler.setExternals(ext);
+		return this;
 	}
 
-	@Override
-	/** Set reporter. This method is should be used only for incremental
-	 * message reporting. The reporter must be set before setting sources.
-	 * @param reporter the reporter to be set to this builder.
-	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
-	 */
-	public final void setReporter(final ReportWriter reporter) {
-		if (reporter != null) {
-			_xp._compiler.setReportWriter(reporter);
-		}
-		_xp._reporter = reporter;
-	}
+//	@Override
+//	/** Set reporter. This method is should be used only for incremental
+//	 * message reporting. The reporter must be set before setting sources.
+//	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
+//	 * @param reporter the reporter to be set to this builder.
+//	 * @return this XDBuilde object.
+//	 */
+//	public final XDBuilder setReporter(final ReportWriter reporter) {
+//		if (reporter != null) {
+//			_xp._compiler.setReportWriter(reporter);
+//		}
+//		_xp._reporter = reporter;
+//		return this;
+//	}
 
 	/** Get compiler.
 	 * @return created XDPool.
@@ -258,14 +290,6 @@ public class XBuilder implements XDBuilder {
 		return result;
 	}
 
-	@Override
-	/** Set class loader. The class loader must be set before setting sources.
-	 * @param loader class loader.
-	 */
-	public final void setClassLoader(final ClassLoader loader) {
-		_xp._compiler.setClassLoader(loader);
-	}
-
 	/** Parse XML with X-definition declared in source input stream.
 	 * @param source where to read XML.
 	 * @param reporter used for error messages or <tt>null</tt>.
@@ -290,22 +314,6 @@ public class XBuilder implements XDBuilder {
 		ChkDocument chkdoc = new ChkDocument(new Class<?>[0], null);
 		chkdoc.xparse(source, reporter);
 		return chkdoc;
-	}
-
-	/** Builds XPool with properties and external objects from source.
-	 * @param props Properties or <tt>null</tt>. If the argument is
-	 * <tt>null</tt> then System properties object is used.
-	 * @param extObjects The array of classes where are available methods
-	 * referred from definitions (may be <tt>null</tt>).
-	 * @param source source X-definition ()
-	 * @return created XDPool object.
-	 */
-	static final XPool build(final Properties props,
-		final Class<?>[] extObjects,
-		final URL source) {
-		XBuilder xb = new XBuilder(props, extObjects);
-		xb.setSource(source);
-		return (XPool) xb.compileXD();
 	}
 
 	/** Create XDValue object.

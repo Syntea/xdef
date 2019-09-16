@@ -61,9 +61,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param schemaFileExt file extension of schema files.
 	 * @param schemaPrefix prefix for schema nodes.
 	 */
-	public XsdDoc_1_0(SReporter reporter,
-		String schemaFileExt,
-		String schemaPrefix) {
+	public XsdDoc_1_0(final SReporter reporter,
+		final String schemaFileExt,
+		final String schemaPrefix) {
 		super(reporter, schemaFileExt, schemaPrefix);
 		_extSchemaCounter = 1;
 		_extAttrGrpCounter = 1;
@@ -71,89 +71,87 @@ public class XsdDoc_1_0 extends XsdDoc {
 		_extSTypeCounter = 1;
 	}
 
-	/** Initiates all schemas and schema models according to given X-definition
+	/** Initiates all schema and schema models according to given X-definition
 	 * document and returns mapping of models.
 	 * @param xdDoc X-definition version 2.0 document representation.
 	 * @return map of X-definition models (XdModel) mapped to schema
 	 * models (XsdModel).
 	 */
-	public Map<XdModel, XsdModel> init(XdDoc_2_0 xdDoc) {
+	public final Map<XdModel, XsdModel> init(final XdDoc_2_0 xdDoc) {
 		Map<XdDef, XsdSchemaContainer> schemas = initSchemas(xdDoc.getXdDefs());
 		return initModels(xdDoc.getXdModels(), schemas);
 	}
 
 	/** Initializes schema models according to given X-definition models map and
 	 * returns models map.
-	 * @param xdModels map of X-definition models.
-	 * @param schemas map of schemas.
+	 * @param models map of X-definition models.
+	 * @param schema map of schema.
 	 * @return map of models (XdModel) to (XsdModel).
 	 * @throws RuntimeErrorException if X-definition model is unknown type or
 	 * if schema container is unknown type.
 	 */
-	private Map<XdModel, XsdModel> initModels(
-		Map<XdModel, Element> 			xdModels,
-		Map<XdDef, XsdSchemaContainer> 	schemas
-	) {
+	private Map<XdModel,XsdModel> initModels(final Map<XdModel,Element> models,
+		Map<XdDef, XsdSchemaContainer> schema) {
 		Map<XdModel, XsdModel> ret = new HashMap<XdModel, XsdModel>();
-		Iterator<XdModel> it = xdModels.keySet().iterator();
+		Iterator<XdModel> it = models.keySet().iterator();
 		while (it.hasNext()) {
 			XdModel xdModel = it.next();
 			XdDef xdDef = xdModel.getDef();
 			XsdSchemaContainer container =
-				(XsdSchemaContainer) schemas.get(xdDef);
+				(XsdSchemaContainer) schema.get(xdDef);
 			XsdModel xsdModel = null;
 			switch (xdModel.getType()) {
 				case XdModel.Type.DECLARATION: {
 					XdDecl xdDecl = (XdDecl) xdModel;
-					XsdSchema schema;
+					XsdSchema schm;
 					switch (container.getType()) {
 						case XsdSchemaContainer.Type.SINGLE_SCHEMA: {
-							schema = (XsdSchema) container;
+							schm = (XsdSchema) container;
 						}
 						break;
 						case XsdSchemaContainer.Type.SCHEMA_SET: {
 							XsdSchemaSet schemaSet = (XsdSchemaSet) container;
-							schema = schemaSet.getMainSchema();
+							schm = schemaSet.getMainSchema();
 						}
 						break;
 						default:
 							throw new RuntimeException(
 								"Illegal schema container!");
 					}
-					xsdModel = initDecl(xdDecl, schema);
+					xsdModel = initDecl(xdDecl, schm);
 				}
 				break;
 				case XdModel.Type.GROUP: {
 					XdGroup xdGroup = (XdGroup) xdModel;
-					XsdSchema schema;
+					XsdSchema schm;
 					switch (container.getType()) {
 						case XsdSchemaContainer.Type.SINGLE_SCHEMA: {
-							schema = (XsdSchema) container;
+							schm = (XsdSchema) container;
 						}
 						break;
 						case XsdSchemaContainer.Type.SCHEMA_SET: {
 							XsdSchemaSet schemaSet = (XsdSchemaSet) container;
-							schema = schemaSet.getMainSchema();
+							schm = schemaSet.getMainSchema();
 						}
 						break;
 						default:
 							throw new RuntimeException(
 								"Illegal schema container!");
 					}
-					xsdModel = initGroup(xdGroup, schema);
+					xsdModel = initGroup(xdGroup, schm);
 				}
 				break;
 				case XdModel.Type.ELEMENT: {
 					XdElem xdElem = (XdElem) xdModel;
-					XsdSchema schema;
+					XsdSchema schm;
 					switch (container.getType()) {
 						case XsdSchemaContainer.Type.SINGLE_SCHEMA: {
-							schema = (XsdSchema) container;
+							schm = (XsdSchema) container;
 						}
 						break;
 						case XsdSchemaContainer.Type.SCHEMA_SET: {
 							XsdSchemaSet schemaSet = (XsdSchemaSet) container;
-							schema = xdElem.getNamespace() == null
+							schm = xdElem.getNamespace() == null
 								? schemaSet.getMainSchema()
 								: schemaSet.getSchema(xdElem.getNamespace());
 						}
@@ -162,7 +160,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 							throw new RuntimeException(
 								"Illegal schema container!");
 					}
-					xsdModel = initElem(xdElem, schema);
+					xsdModel = initElem(xdElem, schm);
 				}
 				break;
 				default:
@@ -180,10 +178,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param xsdSchema schema representation.
 	 * @return schema model representation.
 	 */
-	private XsdModel initDecl(XdDecl xdDecl, XsdSchema xsdSchema) {
+	private XsdModel initDecl(final XdDecl xdDecl, final XsdSchema xsdSchema) {
 		Element schema = _schemas.get(xsdSchema);
-		String sTypeName = XsdUtils.getSTypeName(
-			xdDecl.getDef().getName(), xdDecl.getName());
+		String name = xdDecl.getDef().getName();
+		String typeName = xdDecl.getName();
+		String sTypeName = XsdUtils.getSTypeName(name, typeName);
 		XsdSType xsdSType = new XsdSType(xsdSchema, sTypeName);
 		Element sTypeElem = addSimpleTypeDecl(schema, sTypeName);
 		_models.put(xsdSType, sTypeElem);
@@ -193,13 +192,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Initiates given X-definition group model declaration and returns created
 	 * schema model representation.
 	 * @param xdGroup X-definition group model.
-	 * @param xsdSchema schema representation to put model to.
+	 * @param xsSchema schema representation to put model to.
 	 * @return schema model representation.
 	 * @throws IllegalArgumentException if given X-definition group model is
 	 * unknown type.
 	 */
-	private XsdModel initGroup(XdGroup xdGroup, XsdSchema xsdSchema) {
-		Element schema = _schemas.get(xsdSchema);
+	private XsdModel initGroup(final XdGroup xdGroup, final XsdSchema xsSchema){
+		Element schema = _schemas.get(xsSchema);
 		String groupName;
 		switch (xdGroup.getGroupType()) {
 			case XdGroup.GroupType.CHOICE: {
@@ -221,7 +220,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 				throw new IllegalArgumentException(
 					"Given X-definition group model is unknown group type!");
 		}
-		XsdGroup xsdGroup = new XsdGroup(xsdSchema, groupName);
+		XsdGroup xsdGroup = new XsdGroup(xsSchema, groupName);
 		Element groupElem = addGroupDecl(schema, groupName, null, null, null);
 		_models.put(xsdGroup, groupElem);
 		return xsdGroup;
@@ -230,14 +229,14 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Initiates given X-definition element model and returns created schema
 	 * model representation.
 	 * @param xdElem X-definition element model.
-	 * @param xsdSchema schema representation.
+	 * @param xsSchema schema representation.
 	 * @return created schema model.
 	 */
-	private XsdModel initElem(XdElem xdElem, XsdSchema xsdSchema) {
-		Element schemaElem = _schemas.get(xsdSchema);
+	private XsdModel initElem(final XdElem xdElem, final XsdSchema xsSchema) {
+		Element schemaElem = _schemas.get(xsSchema);
 		String cTypeName = XsdUtils.getComplexTypeName(
 			xdElem.getDef().getName(), xdElem.getName());
-		XsdCType xsdCType = new XsdCType(xsdSchema, cTypeName);
+		XsdCType xsdCType = new XsdCType(xsSchema, cTypeName);
 		Element cTypeElem = addComplexTypeDecl(schemaElem, cTypeName, null);
 		_models.put(xsdCType, cTypeElem);
 		return xsdCType;
@@ -250,8 +249,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * (XsdSchemaContainer).
 	 */
 	private Map<XdDef, XsdSchemaContainer> initSchemas(
-		Map<XdDef, Element> xdDefs
-	) {
+		final Map<XdDef, Element> xdDefs) {
 		Map<XdDef, XsdSchemaContainer> ret =
 			new HashMap<XdDef, XsdSchemaContainer>();
 		Iterator<Entry<XdDef, Element>> it = xdDefs.entrySet().iterator();
@@ -299,12 +297,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 	}
 
 	/** Initiates given schema container. Creates proper elements and maps them
-	 * to schemas.
+	 * to schema.
 	 * @param schemaContainer schema container to initiate.
 	 * @throws IllegalArgumentException if given schema container
 	 * is unknown type.
 	 */
-	private void initSchema(XsdSchemaContainer schemaContainer) {
+	private void initSchema(final XsdSchemaContainer schemaContainer) {
 		switch (schemaContainer.getType()) {
 			case XsdSchemaContainer.Type.SINGLE_SCHEMA: {
 				initSingleSchema((XsdSchema) schemaContainer);
@@ -331,7 +329,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Initiates given schema. Creates proper element and maps it to schema.
 	 * @param schema schema to initialize.
 	 */
-	private void initSingleSchema(XsdSchema schema) {
+	private void initSingleSchema(final XsdSchema schema) {
 		Element schemaElem = createSchemaElem(schema.getTargetNS());
 		if (schema.getTargetNS() != null) {
 			Util.addNamespaceDecl(schemaElem, "tns", schema.getTargetNS());
@@ -341,13 +339,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 
 	/** Returns qualified name of given <tt>complexType</tt> reference
 	 * representation in scope of one schema.
-	 * @param xsdCType schema <tt>complexType</tt> representation object.
+	 * @param xsCType schema <tt>complexType</tt> representation object.
 	 * @return <tt>complexType</tt> reference qualified name.
 	 */
-	public String getQName(XsdCType xsdCType) {
-		XsdSchema schema = xsdCType.getSchema();
+	public String getQName(final XsdCType xsCType) {
+		XsdSchema schema = xsCType.getSchema();
 		Element schemaElem = _schemas.get(schema);
-		return XsdUtils.getRefQName(schemaElem, xsdCType.getName()).getQName();
+		return XsdUtils.getRefQName(schemaElem, xsCType.getName()).getQName();
 	}
 
 	/** Returns qualified name of model from given external schema
@@ -358,15 +356,15 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param modelName local name of referred model.
 	 * @return model qualified name.
 	 */
-	public String getQName(Element mainSchemaElem,
-		XsdSchema external,
-		String modelName) {
+	public final String getQName(final Element mainSchemaElem,
+		final XsdSchema external,
+		final String modelName) {
 		return getRefQName(mainSchemaElem,
 			external.getName(),	external.getTargetNS(), modelName).getQName();
 	}
 
 	/** Returns qualified name of reference to model. Resolves connection
-	 * of schemas and creating name space declarations.
+	 * of schema and creating name space declarations.
 	 * @param schema schema element.
 	 * @param extSchemaFileName file name of external schema.
 	 * @param extSchemaTargetNS external schema target name space URI.
@@ -374,10 +372,10 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @return  qualified name of reference.
 	 * @throws RuntimeException if can't get referenced model qualified name.
 	 */
-	private MyQName getRefQName(Element schema,
-		String extSchemaFileName,
-		String extSchemaTargetNS,
-		String modelName) {
+	private MyQName getRefQName(final Element schema,
+		final String extSchemaFileName,
+		final String extSchemaTargetNS,
+		final String modelName) {
 		Element extSchemaDecl = XsdUtils.getExtSchemaDecl(
 			schema, extSchemaFileName);
 		if (schema == extSchemaDecl) {
@@ -413,9 +411,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * <tt>null</tt>.
 	 * @return created and added external schema declaration element.
 	 */
-	private Element addExtSchemaDecl(Element schema,
-		String extSchemaFileName,
-		String extSchemaTargetNS) {
+	private Element addExtSchemaDecl(final Element schema,
+		final String extSchemaFileName,
+		final String extSchemaTargetNS) {
 		String targetNS = XsdUtils.getSchemaTargetNS(schema);
 		if (targetNS == null) {
 			if (extSchemaTargetNS == null) {
@@ -443,7 +441,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param namespaceURI name space URI of external schema.
 	 * @return external schema.
 	 */
-	public XsdSchema getExtNSSchema(String namespaceURI) {
+	public final XsdSchema getExtNSSchema(final String namespaceURI) {
 		XsdSchema extSchema = _extNSSchemas.get(namespaceURI);
 		if (extSchema == null) {
 			String schemaName =
@@ -461,7 +459,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * schema.
 	 * @return external schema.
 	 */
-	public XsdSchema getExtSchema() {
+	public final XsdSchema getExtSchema() {
 		String extSchemaName =
 			getSchemaFileName(XsdUtils.getExtSchemaName(_extSchemaCounter));
 		XsdSchema extSchema = new XsdSchema(extSchemaName, null);
@@ -476,7 +474,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param namespaceURI external schema name space URI.
 	 * @return created external schema.
 	 */
-	public XsdSchema getExtSchema(String namespaceURI) {
+	public final XsdSchema getExtSchema(final String namespaceURI) {
 		String extSchemaName =
 			getSchemaFileName(XsdUtils.getExtSchemaName(_extSchemaCounter));
 		XsdSchema extSchema = new XsdSchema(extSchemaName, namespaceURI);
@@ -495,7 +493,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param targetNamespace schema target name space or <tt>null</tt>.
 	 * @return created <tt>schema</tt> element.
 	 */
-	public Element createSchemaElem(String targetNamespace) {
+	public final Element createSchemaElem(final String targetNamespace) {
 		Document doc = Util.getBuilder().newDocument(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 				getSchemaNodeName(XsdNames.SCHEMA), null);
@@ -514,8 +512,8 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param parent parent element.
 	 * @param defaultValue element default value.
 	 * @param fixedValue element fixed value.
-	 * @param maxOccurs element maximal occurrence.
 	 * @param minOccurs element minimal occurrence.
+	 * @param maxOccurs element maximal occurrence.
 	 * @param name element local name.
 	 * @param ref referenced element declaration qualified name.
 	 * @param nillable nillable switch.
@@ -523,15 +521,17 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param qualified qualified element name switch.
 	 * @return created and added <tt>element</tt> declaration element.
 	 */
-	public Element addElementDecl(Element parent,
-		String defaultValue,
-		String fixedValue,
-		Integer minOccurs, Integer maxOccurs,
-		String name,
-		String ref,
-		Boolean nillable,
-		String type,
-		Boolean qualified) {
+	public final Element addElementDecl(final Element parent,
+		final String defaultValue,
+		final String fixedValue,
+		final Integer minOccurs,
+		final Integer maxOccurs,
+		final String name,
+		final String ref,
+		final Boolean nillable,
+		final String type,
+		final Boolean qualified) {
+		Integer min = minOccurs, max = maxOccurs;
 		//create element declaration
 		Element elemDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
@@ -551,7 +551,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 				|| defaultValue.startsWith("'") && defaultValue.endsWith("'"))
 					? defaultValue.substring(1, defaultValue.length()-1)
 					: defaultValue);
-			minOccurs = 0; // must be optional
+			min = 0; // must be optional
 /*VT*/
 		} else if (fixedValue != null && fixedValue.length() > 0) {
 //			addAttr(elemDecl, XsdNames.FIXED, fixedValue);
@@ -565,12 +565,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 /*VT*/
 		}
 		//resolving minOccurs
-		if (minOccurs != null && minOccurs != 1) {
-			addAttr(elemDecl, XsdNames.MIN_OCCURS, minOccurs.toString());
+		if (min != null && min != 1) {
+			addAttr(elemDecl, XsdNames.MIN_OCCURS, min.toString());
 		}
 		//resolving maxOccurs
-		if (maxOccurs != null && maxOccurs != 1) {
-			setMaxOccurs(elemDecl, maxOccurs);
+		if (max != null && max != 1) {
+			setMaxOccurs(elemDecl, max);
 		}
 		//resolving nillable
 		if (nillable != null && nillable != false) {
@@ -596,11 +596,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param mixed mixed type switch.
 	 * @return created and added <tt>complexType</tt> element.
 	 */
-	public Element addComplexTypeDecl(Element parent,
-		String name,
-		Boolean mixed) {
+	public final Element addComplexTypeDecl(final Element parent,
+		final String name,
+		final Boolean mixed) {
 		Element cTypeDecl = parent.getOwnerDocument().createElementNS(
-				XsdVersion.SCHEMA_1_0.getNSURI(), getSchemaNodeName(XsdNames.COMPLEX_TYPE));
+			XsdVersion.SCHEMA_1_0.getNSURI(),
+			getSchemaNodeName(XsdNames.COMPLEX_TYPE));
 		//resolving name
 		if (name != null && name.length() != 0) {
 			addAttr(cTypeDecl, XsdNames.NAME, name);
@@ -621,9 +622,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param maxOccurs maximal occurrence.
 	 * @return created and added <tt>any</tt> declaration element.
 	 */
-	public Element addAnyDecl(Element parent,
-		Integer minOccurs,
-		Integer maxOccurs) {
+	public final Element addAnyDecl(final Element parent,
+		final Integer minOccurs,
+		final Integer maxOccurs) {
 		Element anyDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(), getSchemaNodeName(XsdNames.ANY));
 		//resolving min occurs
@@ -649,7 +650,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * element.
 	 * @return child <tt>annotation</tt> element.
 	 */
-	private Element addAnnotationDecl(Element parent) {
+	private Element addAnnotationDecl(final Element parent) {
 		Element annotationElem = XsdUtils.getAnnotationElem(parent);
 		if (annotationElem == null) {
 			annotationElem = parent.getOwnerDocument().createElementNS(
@@ -666,11 +667,10 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param documentation documentation string to add.
 	 * @return created and added <tt>documentation</tt> element.
 	 */
-	private Element addDocumentationDecl(Element annotationElem,
-		String documentation) {
-		Element documentationElem =
-			annotationElem.getOwnerDocument().createElementNS(
-				XsdVersion.SCHEMA_1_0.getNSURI(),
+	private Element addDocumentationDecl(final Element annotationElem,
+		final String documentation) {
+		Element documentationElem =	annotationElem.getOwnerDocument()
+			.createElementNS(XsdVersion.SCHEMA_1_0.getNSURI(),
 				getSchemaNodeName(XsdNames.DOCUMENTATION));
 		annotationElem.appendChild(documentationElem);
 		Text documentationText =
@@ -684,7 +684,8 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param contextElem schema context element to add documentation to.
 	 * @param documentation documentation string to add.
 	 */
-	public void addDocumentation(Element contextElem, String documentation) {
+	public final void addDocumentation(final Element contextElem,
+		final String documentation) {
 		Element annotElem = addAnnotationDecl(contextElem);
 		addDocumentationDecl(annotElem, documentation);
 	}
@@ -694,7 +695,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param parent parent element.
 	 * @return created and added <tt>anyAttribute</tt> declaration element.
 	 */
-	public Element addAnyAttrDecl(Element parent) {
+	public final Element addAnyAttrDecl(final Element parent) {
 		Element anyAttrDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.ANY_ATTRIBUTE));
@@ -713,18 +714,26 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param defaultValue default attribute value.
 	 * @param fixedValue fixed attribute value.
 	 * @param name attribute local name.
+	 * @param xdname name of X-definition where attribute model is declared.
 	 * @param ref reference string.
 	 * @param type attribute value type.
-	 * @param use attribute use.
+	 * @param attrUse attribute use.
 	 * @param qualified qualified attribute name switch.
 	 * @return created and added <tt>attribute</tt> declaration element.
 	 */
-	public Element addAttributeDecl(Element parent, String defaultValue,
-		String fixedValue, String name, String ref, String type, String use,
-		Boolean qualified) {
+	public final Element addAttributeDecl(final Element parent,
+		final String defaultValue,
+		final String fixedValue,
+		final String name,
+		final String xdname,
+		final String ref,
+		final String type,
+		final String attrUse,
+		final Boolean qualified) {
 		Element attrDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.ATTRIBUTE));
+		String use = attrUse;
 		//resolving default and fixed vlues
 		if (defaultValue != null && defaultValue.length() > 0) {
 //			addAttr(attrDecl, XsdNames.DEFAULT, defaultValue);
@@ -779,7 +788,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param ref attribute group reference name.
 	 * @return created and added <tt>attributeGroup</tt> declaration element.
 	 */
-	public Element addAttrGroupDecl(Element parent, String name, String ref) {
+	public final Element addAttrGroupDecl(final Element parent,
+		final String name,
+		final String ref) {
 		Element attrGrpDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.ATTRIBUTE_GROUP));
@@ -799,7 +810,8 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param mixed mixed content switch.
 	 * @return created and added <tt>complexContent</tt> declaration element.
 	 */
-	public Element addComplexContentDecl(Element parent, Boolean mixed) {
+	public final Element addComplexContentDecl(final Element parent,
+		final Boolean mixed) {
 		Element complContDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.COMPLEX_CONTENT));
@@ -819,9 +831,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param maxOccurs maximal occurrence.
 	 * @return created and added <tt>choice</tt> declaration element.
 	 */
-	public Element addChoiceDecl(Element parent,
-		Integer minOccurs,
-		Integer maxOccurs) {
+	public final Element addChoiceDecl(final Element parent,
+		final Integer minOccurs,
+		final Integer maxOccurs) {
 		Element choiceDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.CHOICE));
@@ -843,7 +855,8 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param base extension base type name.
 	 * @return created and added <tt>extension</tt> declaration element.
 	 */
-	public Element addExtensionDecl(Element parent, String base) {
+	public final Element addExtensionDecl(final Element parent,
+		final String base) {
 		Element extensionDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.EXTENSION));
@@ -865,11 +878,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param maxOccurs maximal occurrence.
 	 * @return created and added <tt>group</tt> declaration element.
 	 */
-	public Element addGroupDecl(Element parent,
-		String name,
-		String ref,
-		Integer minOccurs,
-		Integer maxOccurs) {
+	public final Element addGroupDecl(final Element parent,
+		final String name,
+		final String ref,
+		final Integer minOccurs,
+		final Integer maxOccurs) {
 		Element groupDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.GROUP));
@@ -904,9 +917,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param schemaLocation imported schema location.
 	 * @return created and added <tt>import</tt> declaration element.
 	 */
-	public Element addImportDecl(Element parent,
-		String namespace,
-		String schemaLocation) {
+	public final Element addImportDecl(final Element parent,
+		final String namespace,
+		final String schemaLocation) {
 		Element importDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.IMPORT));
@@ -922,13 +935,14 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return importDecl;
 	}
 
-	/** Adds XML Schema <tt>includeImport</tt> declaration element with given schema
+	/** Add XML Schema "includeImport" declaration element with given schema
 	 * location to given parent element and returns created and added element.
 	 * @param parent parent element.
 	 * @param schemaLocation included schema location.
 	 * @return created and added <tt>includeImport</tt> declaration element.
 	 */
-	public Element addIncludeDecl(Element parent, String schemaLocation) {
+	public final Element addIncludeDecl(final Element parent,
+		final String schemaLocation) {
 		Element includeDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.INCLUDE));
@@ -946,10 +960,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param base restriction base type name.
 	 * @return created and added <tt>restriction</tt> element.
 	 */
-	public Element addRestrictionDecl(Element parent, String base) {
-		Element restrictionDecl = parent.getOwnerDocument().createElementNS(
-			XsdVersion.SCHEMA_1_0.getNSURI(),
-			getSchemaNodeName(XsdNames.RESTRICTION));
+	public final Element addRestrictionDecl(final Element parent,
+		final String base) {
+		Element restrictionDecl = parent.getOwnerDocument()
+			.createElementNS(XsdVersion.SCHEMA_1_0.getNSURI(),
+				getSchemaNodeName(XsdNames.RESTRICTION));
 		//resolving base
 		if (base != null && base.length() != 0) {
 			addAttr(restrictionDecl, XsdNames.BASE, base);
@@ -958,7 +973,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return restrictionDecl;
 	}
 
-	/** Adds XML Schema <tt>sequence</tt> declaration element with given
+	/** Add XML Schema <tt>sequence</tt> declaration element with given
 	 * minimal and maximal occurrence to given parent element and returns
 	 * created and added element.
 	 * @param parent parent element.
@@ -966,8 +981,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param maxOccurs sequence maximal occurrence.
 	 * @return created and added <tt>sequence</tt> declaration element.
 	 */
-	public Element addSequenceDecl(Element parent, Integer minOccurs,
-		Integer maxOccurs) {
+	public final Element addSequenceDecl(final Element parent,
+		final Integer minOccurs,
+		final Integer maxOccurs) {
 		Element sequenceDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.SEQUENCE));
@@ -983,12 +999,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return sequenceDecl;
 	}
 
-	/** Adds XML Schema <tt>simpleContent</tt> declaration element to given
+	/** Add XML Schema <tt>simpleContent</tt> declaration element to given
 	 * parent element and returns created and added element.
 	 * @param parent parent element.
 	 * @return created and added <tt>simpleContent</tt> element.
 	 */
-	public Element addSimpleContentDecl(Element parent) {
+	public final Element addSimpleContentDecl(final Element parent) {
 		Element simpleContDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.SIMPLE_CONTENT));
@@ -996,14 +1012,15 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return simpleContDecl;
 	}
 
-	/** Adds XML Schema <tt>simpleType</tt> declaration element with given
+	/** Add XML Schema <tt>simpleType</tt> declaration element with given
 	 * simple type name to given parent element and returns created and added
 	 * element.
 	 * @param parent parent element.
 	 * @param name simple type name .
 	 * @return created and added <tt>simpleType</tt> declaration element.
 	 */
-	public Element addSimpleTypeDecl(Element parent, String name) {
+	public final Element addSimpleTypeDecl(final Element parent,
+		final String name) {
 		Element simpleTypeDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.SIMPLE_TYPE));
@@ -1015,14 +1032,15 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return simpleTypeDecl;
 	}
 
-	/** Adds XML Schema <tt>union</tt> declaration element with given member
+	/** Add XML Schema <tt>union</tt> declaration element with given member
 	 * types string to given parent element and returns created and added
 	 * <tt>union</tt> declaration element.
 	 * @param parent parent element to add <tt>union</tt> declaration to.
 	 * @param memberTypes member types string.
 	 * @return created and added <tt>union</tt> declaration element.
 	 */
-	public Element addUnionDecl(Element parent, String memberTypes) {
+	public final Element addUnionDecl(final Element parent,
+		final String memberTypes) {
 		Element unionDecl = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			getSchemaNodeName(XsdNames.UNION));
@@ -1034,14 +1052,15 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return unionDecl;
 	}
 
-	/** Adds XML Schema <tt>list</tt> declaration element with given item type
+	/** Add XML Schema <tt>list</tt> declaration element with given item type
 	 * qualified name to given parent element and returns created and added
 	 * <tt>list</tt> declaration element.
 	 * @param parent parent element ot add <tt>list</tt> declaration to.
 	 * @param itemType item type qualified name.
 	 * @return created and added <tt>list</tt> declaration element.
 	 */
-	public Element addListDecl(Element parent, String itemType) {
+	public final Element addListDecl(final Element parent,
+		final String itemType) {
 		Element listElem = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(), getSchemaNodeName(XsdNames.LIST));
 		//resolving item type
@@ -1052,7 +1071,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return listElem;
 	}
 
-	/** Adds XML Schema simple type restriction facet declaration element with
+	/** Add XML Schema simple type restriction facet declaration element with
 	 * given facet name and given facet value to given parent node and
 	 * returns created and added facet declaration element.
 	 * @param parent parent element to add facet declaration to.
@@ -1060,7 +1079,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param value facet value.
 	 * @return created and added facet declaration element.
 	 */
-	public Element addFacet(Element parent, String name, String value) {
+	public final Element addFacet(final Element parent,
+		final String name,
+		final String value) {
 		Element facetElem = parent.getOwnerDocument().createElementNS(
 			XsdVersion.SCHEMA_1_0.getNSURI(), getSchemaNodeName(name));
 		addAttr(facetElem, XsdNames.VALUE, value);
@@ -1068,60 +1089,57 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return facetElem;
 	}
 
-	/** Adds <tt>mixed</tt> attribute to given schema <tt>complexType</tt>
+	/** Add <tt>mixed</tt> attribute to given schema <tt>complexType</tt>
 	 * element with given value.
 	 * @param complexType schema <tt>complexType</tt> element.
 	 * @param mixed value for <tt>mixed</tt> attribute.
 	 */
-	public void setMixed(Element complexType, boolean mixed) {
+	public final void setMixed(final Element complexType, final boolean mixed) {
 		Util.setAttr(complexType, XsdNames.MIXED, String.valueOf(mixed));
 	}
 
-	/** Adds <tt>minOccurs</tt> attribute to given element with given value.
-	 * @param element element ot add attribute.
+	/** Add <tt>minOccurs</tt> attribute to given element with given value.
+	 * @param element element of add attribute.
 	 * @param minOccurs minimal occurrence.
 	 */
-	public void setMinOccurs(Element element, int minOccurs) {
+	public final void setMinOccurs(final Element element, final int minOccurs) {
 		Util.setAttr(element, XsdNames.MIN_OCCURS, Integer.toString(minOccurs));
 	}
 
-	/** Adds <tt>maxOccurs</tt> attribute to given element with given value.
+	/** Add <tt>maxOccurs</tt> attribute to given element with given value.
 	 * @param element element to add attribute.
 	 * @param maxOccurs maximal occurrence.
 	 */
-	public void setMaxOccurs(Element element, int maxOccurs) {
-		String maxOccursString;
-		if (Occurrence.UNBOUNDED == maxOccurs) {
-			maxOccursString = XsdNames.UNBOUNDED;
-		} else {
-			maxOccursString = Integer.toString(maxOccurs);
-		}
+	public final void setMaxOccurs(final Element element, final int maxOccurs) {
+		String maxOccursString = Occurrence.UNBOUNDED == maxOccurs
+			? XsdNames.UNBOUNDED : Integer.toString(maxOccurs);
 		Util.setAttr(element, XsdNames.MAX_OCCURS, maxOccursString);
 	}
 
-	/** Adds <tt>type</tt> attribute to given element with given type name.
+	/** Add <tt>type</tt> attribute to given element with given type name.
 	 * @param element element to add <tt>type</tt> attribute.
 	 * @param type type name to add.
 	 */
-	public void setType(Element element, String type) {
+	public final void setType(final Element element, final String type) {
 		Util.setAttr(element, XsdNames.TYPE, type);
 	}
 
-	/** Adds or sets <tt>memberTypes</tt> attribute with given string.
+	/** Add or sets <tt>memberTypes</tt> attribute with given string.
 	 * @param unionElem schema <tt>union</tt> element to add member types.
 	 * @param memberTypes member types string to add.
 	 */
-	public void setMemeberTypes(Element unionElem, String memberTypes) {
+	public final void setMemeberTypes(final Element unionElem,
+		final String memberTypes) {
 		Util.setAttr(unionElem, XsdNames.MEMBER_TYPES, memberTypes);
 	}
 
-	/** Returns XML Schema qualified name according to given schema type local name.
+	/** Get XML Schema qualified name according to schema type local name.
 	 * @param typeLocalName local name of type.
 	 * @return type qualified name.
 	 * @throws NullPointerException if given type local name is <tt>null</tt>.
 	 * @throws IllegalArgumentException if given type local name is empty.
 	 */
-	public String getSchemaTypeQName(String typeLocalName) {
+	public final String getSchemaTypeQName(final String typeLocalName) {
 		if (typeLocalName == null) {
 			throw new NullPointerException("Given type local name is null!");
 		}
@@ -1132,32 +1150,36 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return getSchemaNodeName(typeLocalName);
 	}
 
-	/** Adds <tt>type</tt> attribute to given element with given schema type
+	/** Add <tt>type</tt> attribute to given element with given schema type
 	 * local name.
 	 * @param element element to add <tt>type</tt> attribute.
 	 * @param schemaType schema type local name.
 	 */
-	public void setSchemaType(Element element, String schemaType) {
+	public final void setSchemaType(final Element element,
+		final String schemaType) {
 		Util.setAttr(element, XsdNames.TYPE, getSchemaNodeName(schemaType));
 	}
 
-	/** Adds attribute node with given local name and given value to given
+	/** Add attribute node with given local name and given value to given
 	 * parent element.
 	 * @param parent parent element.
 	 * @param name attribute local name.
 	 * @param value attribute value.
 	 * @return created and added attribute node.
 	 */
-	private Attr addAttr(Element parent, String name, String value) {
+	private Attr addAttr(final Element parent,
+		final String name,
+		final String value) {
 		return Util.addAttr(parent, name, value);
 	}
 
-	/** Inserts given element node before attribute nodes declarations to given
+	/** Insert given element node before attribute nodes declarations to given
 	 * parent element.
 	 * @param parent parent element to add element.
 	 * @param element element to add.
 	 */
-	private void insertBeforeAttributes(Element parent, Element element) {
+	private void insertBeforeAttributes(final Element parent,
+		final Element element) {
 		Element attrDecl = KXmlUtils.firstElementChildNS(parent,
 			XsdVersion.SCHEMA_1_0.getNSURI(),
 			new String[]{XsdNames.ANY_ATTRIBUTE, XsdNames.ATTRIBUTE,
@@ -1172,33 +1194,33 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Schema models map getter.
 	 * @return schema models map (XsdModel) to (Element).
 	 */
-	public Map<XsdModel, Element> getModels() {return _models;}
+	public final Map<XsdModel, Element> getModels() {return _models;}
 
-	/** Schemas map getter.
-	 * @return schemas map (XsdSchema) to (Element).
+	/** Schema map getter.
+	 * @return schema map (XsdSchema) to (Element).
 	 */
-	public Map<XsdSchema, Element> getSchemas() {return _schemas;}
+	public final Map<XsdSchema, Element> getSchemas() {return _schemas;}
 
 	/** External attribute group counter getter.
 	 * @return external attribute group counter.
 	 */
-	public int getExtAttrGrpCounter() {return _extAttrGrpCounter++;}
+	public final int getExtAttrGrpCounter() {return _extAttrGrpCounter++;}
 
 	/** External group counter getter.
 	 * @return external group counter.
 	 */
-	public int getExtGroupCounter() {return _extGroupCounter++;}
+	public final int getExtGroupCounter() {return _extGroupCounter++;}
 
 	/** External simple type name counter getter.
 	 * @return external simple type name counter.
 	 */
-	public int getExtSTypeCounter() {return _extSTypeCounter++;}
+	public final int getExtSTypeCounter() {return _extSTypeCounter++;}
 
 	@Override
-	public XsdVersion getVersion() {return XsdVersion.SCHEMA_1_0;}
+	public final XsdVersion getVersion() {return XsdVersion.SCHEMA_1_0;}
 
 	@Override
-	public Map<String, Document> getSchemaDocuments() {
+	public final Map<String, Document> getSchemaDocuments() {
 		Map<String, Document> ret = new HashMap<String, Document>();
 		Iterator<Map.Entry<XsdSchema, Element>> it =
 			_schemas.entrySet().iterator();

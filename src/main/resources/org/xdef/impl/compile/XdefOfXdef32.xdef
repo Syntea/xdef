@@ -21,7 +21,8 @@
       ? (String) @metaNamespace : 'http://www.xdef.org/xdef/3.2';
       options moreAttributes"
     include        = "optional uriList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr" >
+    metaNamespace  = "optional uri; options acceptQualifiedAttr"
+    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->
       <XD2.0:def xd:script = "occurs *; ref Ver2.0#XD2.0:def" />

@@ -661,7 +661,8 @@ public final class TestExtenalMethods extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(strw);
 			parse(xd, "<b b='a'/>", reporter);
-			assertEq("e(0); e1=0, e2=2\ne(2); e1=0, e2=2\n", strw.toString());
+//			assertEq("e(0); e1=0, e2=2\ne(2); e1=0, e2=2\n", strw.toString());
+			assertEq("e(); e1=, e2=2\ne(2); e1=, e2=2\n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 	}
 

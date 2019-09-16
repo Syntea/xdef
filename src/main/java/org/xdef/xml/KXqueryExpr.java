@@ -6,7 +6,7 @@ import java.util.TimeZone;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Node;
 
-/** XQuery expression container.
+/** XQuery expression.
  * @author Vaclav Trojan
  */
 public class KXqueryExpr implements KXquery {

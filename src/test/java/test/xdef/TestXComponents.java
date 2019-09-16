@@ -8,7 +8,6 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.component.XJUtil;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMElement;
@@ -20,6 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import org.w3c.dom.Element;
+import org.xdef.sys.JSONUtil;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -205,9 +205,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("blabla", s);
 			p.listOfY().clear();
 			p.listOfW().clear();
-			p.geti().set$value(new BigInteger("98"));
-			assertEq(new BigInteger("98"), p.get$i());
-			p.set$i(new BigInteger("99"));
+			p.geti().set$value(new BigInteger("99"));
 			assertEq(p.toXml(), //clone
 "<A a='a' dec='123.45'>"+
 "<i>99</i><d>2013-09-01</d><t>11:21:31</t><s>Pepik</s>"+
@@ -787,10 +785,10 @@ public final class TestXComponents extends XDTester {
 			r.sety(1);
 			p.setx$b(r);
 			Object json =
-				XJUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
-			if (!XJUtil.jsonEqual(json, XJUtil.xmlToJson(el))) {
+			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
 				fail();
 			}
 			xml = "<c><d xmlns='y.int' y='1'/></c>";
@@ -811,12 +809,12 @@ public final class TestXComponents extends XDTester {
 			test.xdef.component.Y17 p = (test.xdef.component.Y17)
 				parseXC(xp, "Y17", xml, null, reporter);
 			Object json =
-				XJUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
 			assertEq(1, p.getb_1().geta());
 			assertEq("x", p.getb_2().geta());
-			if (!XJUtil.jsonEqual(json, XJUtil.xmlToJson(el))) {
+			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}
@@ -944,31 +942,28 @@ public final class TestXComponents extends XDTester {
 			xml = "<b><c>xx</c></b>";
 			test.xdef.component.XCb b = (test.xdef.component.XCb)
 				parseXC(xp,"Y23",xml,test.xdef.component.XCb.class,reporter);
-			assertEq("xx", b.get$c());
 			assertEq(xml, b.toXml());
-			b.set$c("yy");
+			b.getc().set$value("yy");
 			assertEq("<b><c>yy</c></b>", b.toXml());
 			xml = "<d><e>2019-04-01+02:00</e></d>";
 			test.xdef.component.XCd d = (test.xdef.component.XCd)
 				parseXC(xp,"Y23",xml,test.xdef.component.XCd.class,reporter);
 			assertEq(xml, d.toXml());
 			SDatetime sd = new SDatetime("2019-04-01+02:00");
-			assertEq(sd, d.get$e());
 			assertEq(sd, d.gete().get$value());
 			sd = new SDatetime("2019-04-02+02:00");
 			d.gete().set$value(sd);
-			assertEq(sd, d.get$e());
-			assertTrue(new SDatetime(d.dateOf$e()).equals(sd));
-			assertTrue(new SDatetime(d.timestampOf$e()).equals(sd));
-			assertTrue(new SDatetime(d.calendarOf$e()).equals(sd));
+			assertTrue(new SDatetime(d.gete().dateOf$value()).equals(sd));
+			assertTrue(new SDatetime(d.gete().timestampOf$value()).equals(sd));
+			assertTrue(new SDatetime(d.gete().calendarOf$value()).equals(sd));
 			sd = new SDatetime("2019-04-02+02:00");
 			assertEq("<d><e>2019-04-02+02:00</e></d>", d.toXml());
 			sd = new SDatetime("2019-04-03+02:00");
-			d.set$e(sd);
-			assertEq(sd, d.get$e());
+			d.gete().set$value(sd);
+			assertEq(sd, d.gete().get$value());
 			assertEq("<d><e>2019-04-03+02:00</e></d>", d.toXml());
-			d.set$e(sd.getCalendar());
-			assertEq(sd, d.get$e());
+			d.gete().set$value(sd.getCalendar());
+			assertEq(sd, d.gete().get$value());
 			assertEq("<d><e>2019-04-03+02:00</e></d>", d.toXml());
 
 			xml = "<e>2019-04-01+02:00</e>";
@@ -986,22 +981,43 @@ public final class TestXComponents extends XDTester {
 			test.xdef.component.XCf f = (test.xdef.component.XCf)
 				parseXC(xp,"Y23",xml,test.xdef.component.XCf.class,reporter);
 			sd = new SDatetime("2019-04-03+02:00");
-			f.add$g(sd);
-			List<SDatetime> list = f.listOf$g();
-			assertEq(2, list.size());
-			assertEq(sd, list.get(1));
+			List<test.xdef.component.XCf.g> lst = f.listOfg();
+			test.xdef.component.XCf.g g = new test.xdef.component.XCf.g();
+			g.set$value(sd);
+			f.addg(g);
+			assertEq(2, lst.size());
+			assertEq(sd, lst.get(1).get$value());
 			assertEq("<f><g>2019-04-02+02:00</g><g>2019-04-03+02:00</g></f>",
 				f.toXml());
-			list.clear();
-			f.set$g(list);
+			lst.clear();
 			assertEq("<f/>", f.toXml());
-			list.add(sd);
-			f.set$g(list);
+			g = new test.xdef.component.XCf.g();;
+			g.set$value(sd);
+			lst.add(g);
 			assertEq("<f><g>2019-04-03+02:00</g></f>", f.toXml());
 			f.listOfg().get(0).set$value(new SDatetime("2019-04-01+02:00"));
 			assertEq("<f><g>2019-04-01+02:00</g></f>", f.toXml());
 			f.listOfg().clear();
 			assertEq("<f/>", f.toXml());
+			
+			xml = "<a><d/></a>";
+			test.xdef.component.Y24a y24a = (test.xdef.component.Y24a)
+				parseXC(xp,"Y24", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, y24a.toXml());
+			assertTrue(y24a.getd()!=null && "test.xdef.component.Y24$d".equals(
+				y24a.getd().getClass().getName()));
+			xml = "<c><d/></c>";
+			test.xdef.component.Y24 y24 = (test.xdef.component.Y24)
+				parseXC(xp,"Y24", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, y24.toXml());
+			assertTrue(y24.getd()!=null && "test.xdef.component.Y24$d".equals(
+				y24.getd().getClass().getName()));
+			xml = "<Y24d Y24d='Y24d'><Y24d/></Y24d>";
+			assertEq(xml, parseXC(
+				xp,"Y24",xml,test.xdef.component.Y24d.class,reporter).toXml());			
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // test theaurus from generated XDPool
 			xd = xp.createXDDocument("Lexicon");

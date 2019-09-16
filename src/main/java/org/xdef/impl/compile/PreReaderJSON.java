@@ -40,32 +40,7 @@ class PreReaderJSON implements PreReader {
 	/** Creates a new instance of XDefCompiler
 	 * @param pcomp pre compiler.
 	 */
-	PreReaderJSON(XPreCompiler pcomp) {
-		_pcomp = pcomp;
-	}
-
-//
-//	/** Generate text node */
-//	private void genTextNode(PNode pnode) {
-//		String name = "";
-//		for (String prefix : pnode._nsPrefixes.keySet()) {
-//			if (pnode._nsPrefixes.get(prefix)==XPreCompiler.NS_XDEF_INDEX) {
-//				name = prefix + ":text";
-//				break;
-//			}
-//		}
-//		PNode p = new PNode(name,
-//			new SPosition(pnode._value),
-//			pnode,
-//			pnode._xdVersion,
-//			pnode._xmlVersion);
-//		p._nsURI = _nsURIs.get(XPreCompiler.NS_XDEF_INDEX);
-//		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
-//		p._localName = "text";
-//		p._value = pnode._value;
-//		pnode._value = null;
-//		pnode._childNodes.add(p);
-//	}
+	PreReaderJSON(XPreCompiler pcomp) {_pcomp = pcomp;}
 
 	/** Parse file with source X-definition and addAttr it to the set
 	 * of definitions.
@@ -229,6 +204,24 @@ class PreReaderJSON implements PreReader {
 		/** parser used for parsing of source. */
 		private final StringParser _p;
 
+		/** Skip white spaces and comments. */
+		public final void skipBlanksAndComments() {
+			_p.isSpaces();
+			boolean b = false;
+			while(_p.isToken("/*") || (b=_p.isToken("//"))) {
+				if (b) {
+					_p.skipToNextLine();
+				} else {
+					if (!_p.findTokenAndSkip("*/")) {
+						//Unclosed comment&amp;
+						throw new SRuntimeException(JSON.JSON015, genPosMod());
+					}
+				}
+				b = false;
+				_p.isSpaces();
+			}
+		}
+
 		/** Create instance of JSON parser build with reader,
 		 * @param p parser of source data,
 		 */
@@ -266,7 +259,7 @@ class PreReaderJSON implements PreReader {
 			SPosition spos = _p.getPosition();
 			if (_p.isChar('{')) { // Map
 				JMap result = new JMap(spos);
-				_p.isSpaces();
+				skipBlanksAndComments();
 				if (_p.isChar('}')) {
 					return result;
 				}
@@ -275,21 +268,25 @@ class PreReaderJSON implements PreReader {
 					if (o != null && o.getType() == 'S') {
 						 // parse JSON named pair
 						JString name = (JString) o;
-						_p.isSpaces();
+						skipBlanksAndComments();
 						if (!_p.isChar(':')) {
-							// ":" expected
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							throw new SRuntimeException(JSON.JSON002, ":",
 								genPosMod());
 						}
-						_p.isSpaces();
+						skipBlanksAndComments();
 						result.put(name, readValue());
-						_p.isSpaces();
+						skipBlanksAndComments();
 						if (_p.isChar('}')) {
-							_p.isSpaces();
+							skipBlanksAndComments();
 							return result;
 						}
 						if (_p.isChar(',')) {
-							_p.isSpaces();
+							skipBlanksAndComments();
+						} else {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							throw new SRuntimeException(
+								JSON.JSON002, ",", "}", genPosMod());
 						}
 					} else {
 						// String with name of item expected
@@ -298,18 +295,18 @@ class PreReaderJSON implements PreReader {
 				}
 			} else if (_p.isChar('[')) {
 				JList result = new JList(spos);
-				_p.isSpaces();
+				skipBlanksAndComments();
 				if (_p.isChar(']')) {
 					return result;
 				}
 				for(;;) {
 					result.add(readValue());
-					_p.isSpaces();
+					skipBlanksAndComments();
 					if (_p.isChar(']')) {
 						return result;
 					}
 					if (_p.isChar(',')) {
-						_p.isSpaces();
+						skipBlanksAndComments();
 					}
 				}
 			} else if (_p.isChar('"')) { // string
@@ -391,14 +388,14 @@ class PreReaderJSON implements PreReader {
 		 * @throws SRuntimeException if an error occurs,
 		 */
 		private JObject parse() throws SRuntimeException {
-			_p.isSpaces();
+			skipBlanksAndComments();
 			char c = _p.getCurrentChar();
 			if (c != '{' && c != '[' ) {
 				// JSON object or array expected"
 				throw new SRuntimeException(JSON.JSON009, genPosMod());
 			}
 			JObject result = readValue();
-			_p.isSpaces();
+			skipBlanksAndComments();
 			if (!_p.eos()) {
 				//Text after JSON not allowed
 				throw new SRuntimeException(JSON.JSON008, genPosMod());

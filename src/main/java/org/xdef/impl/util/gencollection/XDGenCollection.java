@@ -5,7 +5,6 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
@@ -23,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -96,7 +95,7 @@ public class XDGenCollection {
 		private final String _pathname;
 		private final StringBuilder _text = new StringBuilder();
 		public final Map<String, String> _prefixes =
-			new TreeMap<String, String>();
+			new LinkedHashMap<String, String>();
 
 		XdParser(Document doc, String pathname) throws Exception {
 			_pathname = pathname;
@@ -144,6 +143,7 @@ public class XDGenCollection {
 			}
 			_prefixes.clear();
 		}
+
 		@Override
 		public void endElement(final String uri,
 			final String localName,
@@ -257,13 +257,9 @@ public class XDGenCollection {
 		}
 	}
 
-	private void parse(File file) throws Exception {
-		parse(file.toURI().toURL());
-	}
+	private void parse(File f) throws Exception {parse(f.toURI().toURL());}
 
-	private void parse(URL u) throws Exception {
-		parse(u.toExternalForm());
-	}
+	private void parse(URL u) throws Exception {parse(u.toExternalForm());}
 
 	private void parse(URL[] urls) throws Exception {
 		for (int i = 0; i < urls.length; i++) {
@@ -271,7 +267,7 @@ public class XDGenCollection {
 		}
 	}
 
-	private void parse(String[] sources) throws Exception {
+	private void parse(String... sources) throws Exception {
 		if (sources == null) {
 			return;
 		}
@@ -388,10 +384,13 @@ public class XDGenCollection {
 	 * @param n node to be inspected.
 	 * @return <tt>true</tt> if node is element with X-definition namespace.
 	 */
-	public static boolean isXdefElement(final Node n) {
+	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
 		if (n.getNodeType() != Node.ELEMENT_NODE
-			|| uri == null || uri.length() == 0) {
+			|| uri == null || uri.length() == 0
+			|| !(XDConstants.XDEF20_NS_URI.equals(uri)
+				|| XDConstants.XDEF31_NS_URI.equals(uri)
+				|| XDConstants.XDEF32_NS_URI.equals(uri))) {
 			return false;
 		}
 		String xdUri =
@@ -408,39 +407,39 @@ public class XDGenCollection {
 		return name.equals(n.getLocalName()) && isXdefElement(n);
 	}
 
-	/** Check XDEF attribute.
+	/** Check if XDEF attribute exists.
 	 * @param el element to be inspected.
 	 * @param xdUri name space URI of X-definition.
-	 * @param name name of attribute
-	 * @return value of attribute or an empty string.
+	 * @param localname name of attribute
+	 * @return true if attribute with given local name exists.
 	 */
 	public static boolean hasXdefAttr(final Element el,
 		final String xdUri,
-		final String name) {
-		return el.hasAttribute(name) || el.hasAttributeNS(xdUri, name);
+		final String localname) {
+		return el.hasAttribute(localname) || el.hasAttributeNS(xdUri,localname);
 	}
 
-	/** Get xdef attribute from an element.
+	/** Get attribute from an element (with or without prefix).
 	 * @param el element from which an attribute should be taken.
-	 * @param xdUri name space URI of X-definition.
-	 * @param name name of attribute
+	 * @param xdUri namespace URI of X-definition.
+	 * @param localname local name of attribute
 	 * @param remove if <tt>true</tt> then the attribute is removed.
 	 * @return value of attribute or an empty string.
 	 */
-	public static String getXdefAttr(final Element el,
+	static String getXdefAttr(final Element el,
 		final String xdUri,
-		final String name,
+		final String localname,
 		final boolean remove) {
 		String result = "";
-		if (el.hasAttribute(name)) {
-			result = el.getAttribute(name).trim();
+		if (el.hasAttribute(localname)) {
+			result = el.getAttribute(localname).trim();
 			if (remove) {
-				el.removeAttribute(name);
+				el.removeAttribute(localname);
 			}
-		} else if (el.hasAttributeNS(xdUri, name)) {
-			result = el.getAttributeNS(xdUri, name).trim();
+		} else if (el.hasAttributeNS(xdUri, localname)) {
+			result = el.getAttributeNS(xdUri, localname).trim();
 			if (remove) {
-				el.removeAttributeNS(xdUri, name);
+				el.removeAttributeNS(xdUri, localname);
 			}
 		}
 		return result;
@@ -489,7 +488,7 @@ public class XDGenCollection {
 	 * macros are expanded and macro definitions are removed from collection.
 	 * @param collection Collection of X-definitions.
 	 * @param macros HashMap with macros.
-	 * @param resolve swith if macros will be expanded and removed.
+	 * @param resolve switch if macros will be expanded and removed.
 	 */
 	private static void processMacros(final Element collection,
 		final HashMap<String, XScriptMacro> macros,
@@ -880,7 +879,7 @@ public class XDGenCollection {
 	 * @param origName tested identifier.
 	 * @return id of unique identifier or 0.
 	 */
-	public static int genUniqueID(Element el, String origName) {
+	private static int genUniqueID(Element el, String origName) {
 		NodeList nl = el.getChildNodes();
 		int j = 0;
 		boolean found;
@@ -1019,9 +1018,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(source);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(source).compileXD();
 	}
 
 	/** Check if given String sources contains correct X-definition.
@@ -1029,18 +1026,11 @@ public class XDGenCollection {
 	 * @return X-definition namespace.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool chkXdef(String[] sources) throws SRuntimeException {
+	public static XDPool chkXdef(String... sources) throws SRuntimeException {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(sources);
-		try {
-			return xf.compileXD();
-		} catch (SRuntimeException ex) {
-			throw ex;
-		}
-
+		return XDFactory.getXDBuilder(props).setSource(sources).compileXD();
 	}
 
 	/** Check if given file contains correct X-definition.
@@ -1052,9 +1042,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(file);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(file).compileXD();
 	}
 
 	/** Check if given files contains correct X-definition.
@@ -1065,9 +1053,7 @@ public class XDGenCollection {
 	public static XDPool chkXdef(File[] files) throws SRuntimeException {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, "true");
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(files);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(files).compileXD();
 	}
 
 	/** Check if given URL contains correct X-definition.
@@ -1079,9 +1065,7 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(url);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(url).compileXD();
 	}
 
 	/** Check if given URLs contains correct X-definition.
@@ -1093,19 +1077,13 @@ public class XDGenCollection {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		XDBuilder xf = XDFactory.getXDBuilder(props);
-		xf.setSource(urls);
-		return xf.compileXD();
+		return XDFactory.getXDBuilder(props).setSource(urls).compileXD();
 	}
 
-	public static String getXDAttrNS(final Attr n) {
-		String uri;
-		if (n == null || (uri = n.getNamespaceURI()) == null || uri.isEmpty()) {
-			return null;
-		}
-		return findXDNS(n.getOwnerElement());
-	}
-
+	/** Find namespace of child element on root level.
+	 * @param n node to be checked.
+	 * @return
+	 */
 	public static String findXDNS(final Node n) {
 		if (n != null) {
 			for (Node x = n; x != null && x.getNodeType() != Node.DOCUMENT_NODE;
@@ -1119,7 +1097,10 @@ public class XDGenCollection {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
+	/** Get X-definition version ID of given node.
+	 * @param n node to be checked.
+	 * @return byte with version ID of given node (see XConstants).
+	 */
 	public static byte getXDVersion(final Node n) {
 		String s = findXDNS(n);
 		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
@@ -1128,11 +1109,55 @@ public class XDGenCollection {
 				|| XConstants.XDEF32NS_OLD.equals(s) ? XConstants.XD32 : 0;
 	}
 
-	public final static String getXDNodeNS(final Node n) {
-		if (n.getNodeType() != Node.ELEMENT_NODE) {
+	/** Get the element with X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return X-definition where the node is declared..
+	 */
+	public final static Element getXdef(final Node n) {
+		if (n == null || n.getNodeType() != Node.ELEMENT_NODE) {
 			return null;
 		}
-		Element e = (Element) n;
+		for (Node x = n; x != null && x.getNodeType() != Node.DOCUMENT_NODE;
+			x = x.getParentNode()) {
+			String ns = getXDNodeNS(x);
+			if (ns != null && "def".equals(x.getLocalName())
+				&& ("collection".equals(x.getParentNode().getLocalName())
+					|| x.getParentNode().getNodeType()==Node.DOCUMENT_NODE)) {
+				return x.getNodeType()==Node.ELEMENT_NODE ? (Element) x : null;
+			}
+		}
+		return null;
+	}
+
+	/** Get name of X-definition of X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return name of X-definition of X-definition where the node is declared.
+	 */
+	public final static String getXDName(final Node n) {
+		Element xd = getXdef(n);
+		if (xd == null) {
+			return null;
+		}
+		Attr attr = xd.getAttributeNodeNS(xd.getNamespaceURI(), "name");
+		if (attr == null) {
+			attr = xd.getAttributeNode("name");
+		}
+		return attr == null ? null : attr.getValue();
+	}
+
+	/** Get namespace URI of X-definition where the node is declared.
+	 * @param n the node to be checked.
+	 * @return namespace URI of X-definition where the node is declared.
+	 */
+	public final static String getXDNodeNS(final Node n) {
+		Element e;
+		if (n.getNodeType() == Node.ATTRIBUTE_NODE) {
+			e = ((Attr) n).getOwnerElement();
+		} else if (n.getNodeType() == Node.ELEMENT_NODE) {
+			e = (Element) n;
+		} else {
+			return null;
+		}
 		String uri = e.getNamespaceURI();
 		if (uri == null || uri.isEmpty()) {
 			return null;
@@ -1333,7 +1358,7 @@ public class XDGenCollection {
 	 * @param sources Array with source file names.
 	 * @return true if all strings starts with '&gt;'
 	 */
-	public static boolean isXML(final String[] sources) {
+	public static boolean isXML(final String... sources) {
 		if (sources.length < 1) {
 			return false;
 		}

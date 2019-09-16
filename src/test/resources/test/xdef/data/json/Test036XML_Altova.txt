@@ -1,0 +1,335 @@
+<ajson:json xmlns:ajson="http://www.altova.com/json" ajson:type="object">
+   <Title ajson:type="string">Music Library</Title>
+   <Artists ajson:type="array">
+      <item ajson:type="object">
+         <Name ajson:type="string">Queen</Name>
+         <Albums ajson:type="array">
+            <item ajson:type="object">
+               <Name ajson:type="string">A Night at the Opera</Name>
+               <Genre ajson:type="array">
+                  <item ajson:type="string">Rock</item>
+               </Genre>
+               <ReleaseDate ajson:type="string">1975-11-21</ReleaseDate>
+               <Label ajson:type="string">EMI / Hollywood Records</Label>
+               <Tracks ajson:type="array">
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Death on Two Legs</Title>
+                     <Duration ajson:type="string">03:43</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Lazing on a Sunday Afternoon</Title>
+                     <Duration ajson:type="string">01:08</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">I’m in Love with My Car</Title>
+                     <Duration ajson:type="string">03:05</Duration>
+                     <Writer ajson:type="string">Roger Taylor</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">You’re My Best Friend</Title>
+                     <Duration ajson:type="string">02:50</Duration>
+                     <Writer ajson:type="string">John Deacon</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">'39</Title>
+                     <Duration ajson:type="string">03:25</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Sweet Lady</Title>
+                     <Duration ajson:type="string">04:01</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Seaside Rendezvous</Title>
+                     <Duration ajson:type="string">02:13</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">The Prophet’s Song</Title>
+                     <Duration ajson:type="string">08:17</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Love of My Life</Title>
+                     <Duration ajson:type="string">03:38</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Good Company</Title>
+                     <Duration ajson:type="string">03:26</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Bohemian Rhapsody</Title>
+                     <Duration ajson:type="string">05:55</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">God Save the Queen</Title>
+                     <Duration ajson:type="string">01:11</Duration>
+                     <Writer ajson:type="string">Traditional, arr. Brian May</Writer>
+                  </item>
+               </Tracks>
+            </item>
+            <item ajson:type="object">
+               <Name ajson:type="string">A Day at the Races</Name>
+               <Genre ajson:type="array">
+                  <item ajson:type="string">Rock</item>
+                  <item ajson:type="string">Pop</item>
+               </Genre>
+               <ReleaseDate ajson:type="string">1976-12-10</ReleaseDate>
+               <Label ajson:type="string">EMI, Parlophone / Elektra, Hollywood</Label>
+               <Tracks ajson:type="array">
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Tie Your Mother Down</Title>
+                     <Duration ajson:type="string">04:48</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">You Take My Breath Away</Title>
+                     <Duration ajson:type="string">05:09</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Long Away</Title>
+                     <Duration ajson:type="string">03:34</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">The Millionaire Waltz</Title>
+                     <Duration ajson:type="string">04:54</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">You and I</Title>
+                     <Duration ajson:type="string">03:25</Duration>
+                     <Writer ajson:type="string">John Deacon</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Somebody to Love</Title>
+                     <Duration ajson:type="string">04:56</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">White Man</Title>
+                     <Duration ajson:type="string">04:59</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Good Old-Fashioned Lover Boy</Title>
+                     <Duration ajson:type="string">02:54</Duration>
+                     <Writer ajson:type="string">Freddie Mercury</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Drowse</Title>
+                     <Duration ajson:type="string">03:45</Duration>
+                     <Writer ajson:type="string">Roger Taylor</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Teo Torriatte (Let Us Cling Together)</Title>
+                     <Duration ajson:type="string">05:50</Duration>
+                     <Writer ajson:type="string">Brian May</Writer>
+                  </item>
+               </Tracks>
+            </item>
+         </Albums>
+      </item>
+      <item ajson:type="object">
+         <Name ajson:type="string">Tina Turner</Name>
+         <Albums ajson:type="array">
+            <item ajson:type="object">
+               <Name ajson:type="string">Break Every Rule</Name>
+               <Genre ajson:type="array">
+                  <item ajson:type="string">Rock</item>
+                  <item ajson:type="string">Pop</item>
+                  <item ajson:type="string">Country</item>
+                  <item ajson:type="string">R&amp;B</item>
+               </Genre>
+               <ReleaseDate ajson:type="string">1986-09-23</ReleaseDate>
+               <Label ajson:type="string">Capitol Records</Label>
+               <Tracks ajson:type="array">
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Typical Male</Title>
+                     <Duration ajson:type="string">04:18</Duration>
+                     <Writer ajson:type="string">Terry Britten, Graham Lyle</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">What You Get Is What You See</Title>
+                     <Duration ajson:type="string">04:31</Duration>
+                     <Writer ajson:type="string">Terry Britten, Graham Lyle</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Two People</Title>
+                     <Duration ajson:type="string">04:11</Duration>
+                     <Writer ajson:type="string">Terry Britten, Graham Lyle</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Till The Right Man Comes Along</Title>
+                     <Duration ajson:type="string">04:11</Duration>
+                     <Writer ajson:type="string">Terry Britten, Graham Lyle</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Afterglow</Title>
+                     <Duration ajson:type="string">04:30</Duration>
+                     <Writer ajson:type="string">Terry Britten, Graham Lyle</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Girls</Title>
+                     <Duration ajson:type="string">04:56</Duration>
+                     <Writer ajson:type="string">David Bowie, Erdal Kizilcay</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Back Where You Started</Title>
+                     <Duration ajson:type="string">04:27</Duration>
+                     <Writer ajson:type="string">Bryan Adams, Jim Vallance</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Break Every Rule</Title>
+                     <Duration ajson:type="string">04:02</Duration>
+                     <Writer ajson:type="string">Rupert Hine, Jeannette Obstoj</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Overnight Sensation</Title>
+                     <Duration ajson:type="string">04:40</Duration>
+                     <Writer ajson:type="string">Mark Knopfler</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Paradise Is Here</Title>
+                     <Duration ajson:type="string">05:35</Duration>
+                     <Writer ajson:type="string">Paul Brady</Writer>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">I'll Be Thunder</Title>
+                     <Duration ajson:type="string">05:21</Duration>
+                     <Writer ajson:type="string">Hine, Obstoj</Writer>
+                  </item>
+               </Tracks>
+            </item>
+         </Albums>
+      </item>
+      <item ajson:type="object">
+         <Name ajson:type="string">Billy Joel</Name>
+         <Albums ajson:type="array">
+            <item ajson:type="object">
+               <Name ajson:type="string">River of Dreams</Name>
+               <Genre ajson:type="string">Rock</Genre>
+               <ReleaseDate ajson:type="string">1993-08-10</ReleaseDate>
+               <Label ajson:type="string">Columbia</Label>
+               <Tracks ajson:type="array">
+                  <item ajson:type="object">
+                     <Title ajson:type="string">No Man's Land</Title>
+                     <Duration ajson:type="string">04:48</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">The Great Wall of China</Title>
+                     <Duration ajson:type="string">05:45</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Blonde Over Blue</Title>
+                     <Duration ajson:type="string">04:55</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">A Minor Variation</Title>
+                     <Duration ajson:type="string">05:36</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Shades of Grey</Title>
+                     <Duration ajson:type="string">04:10</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">All About Soul</Title>
+                     <Duration ajson:type="string">05:59</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Lullabye (Goodnight, My Angel)</Title>
+                     <Duration ajson:type="string">03:32</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">The River of Dreams</Title>
+                     <Duration ajson:type="string">04:05</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Two Thousand Years</Title>
+                     <Duration ajson:type="string">05:19</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Famous Last Words</Title>
+                     <Duration ajson:type="string">05:01</Duration>
+                  </item>
+               </Tracks>
+            </item>
+         </Albums>
+      </item>
+      <item ajson:type="object">
+         <Name ajson:type="string">Green Day</Name>
+         <Albums ajson:type="array">
+            <item ajson:type="object">
+               <Name ajson:type="string">Amarican Idiot</Name>
+               <Genre ajson:type="array">
+                  <item ajson:type="string">Pop punk</item>
+                  <item ajson:type="string">Punk rock</item>
+               </Genre>
+               <ReleaseDate ajson:type="string">2004-09-20</ReleaseDate>
+               <Label ajson:type="string">Reprise</Label>
+               <Tracks ajson:type="array">
+                  <item ajson:type="object">
+                     <Title ajson:type="string">American Idiot</Title>
+                     <Duration ajson:type="string">02:54</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Jesus of Suburbia</Title>
+                     <Duration ajson:type="string">09:08</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Holiday</Title>
+                     <Duration ajson:type="string">03:52</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Boulevard of Broken Dreams</Title>
+                     <Duration ajson:type="string">04:20</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Are We the Waiting</Title>
+                     <Duration ajson:type="string">02:42</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">St. Jimmy</Title>
+                     <Duration ajson:type="string">02:56</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Give Me Novacaine</Title>
+                     <Duration ajson:type="string">03:25</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">She's a Rebel</Title>
+                     <Duration ajson:type="string">02:00</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Extraordinary Girl</Title>
+                     <Duration ajson:type="string">03:33</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Letterbomb</Title>
+                     <Duration ajson:type="string">04:05</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Wake Me Up When September Ends</Title>
+                     <Duration ajson:type="string">04:45</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Homecoming</Title>
+                     <Duration ajson:type="string">09:18</Duration>
+                  </item>
+                  <item ajson:type="object">
+                     <Title ajson:type="string">Whatsername</Title>
+                     <Duration ajson:type="string">04:14</Duration>
+                  </item>
+               </Tracks>
+            </item>
+         </Albums>
+      </item>
+   </Artists>
+</ajson:json>
