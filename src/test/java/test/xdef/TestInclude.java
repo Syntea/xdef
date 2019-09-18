@@ -318,8 +318,7 @@ public final class TestInclude extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='foo'\n"+
-" xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'\n"+
-">\n"+
+" xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
 "  <foo>\n"+
 "    <bar xd:script = '*; ref B#B'/>\n"+ // B is from include
 "  </foo>\n"+
