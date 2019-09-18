@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -1630,5 +1632,40 @@ public final class KXmlUtils extends KDOMUtils {
 			}
 		}
 		return true;
+	}
+
+	/** Get URL from string (accept also protocol "classpath://").
+	 * @param source string with URL source (MAY BE ALSO protocol "classpath:").
+	 * @return URL created from the source string.
+	 * @throws MalformedURLException IF AN ERROR OCCURS.
+	 */
+	public static final URL getExtendedURL(final String source)
+		throws MalformedURLException{
+		URL url = null;
+		String s;
+		try {
+			s = URLDecoder.decode(source,
+				System.getProperties().getProperty("file.encoding"));
+		} catch (Exception ex) {
+			s = source;
+		}
+		try {
+			url = new URL(s);
+			return url;
+		} catch (MalformedURLException ex) {
+			if (s.startsWith("classpath://")) {
+				try {
+					String t = s.substring(12);
+					int i = t.lastIndexOf('.');
+					t = t.substring(0,i).replace('.', '/') + t.substring(i);
+					URL urls[] = new URL[] {ClassLoader.getSystemResource(t)};
+					url = urls[0];
+					if (url != null) {
+						return url;
+					}
+				} catch (Exception exx) {}
+			}
+			throw ex;
+		}
 	}
 }

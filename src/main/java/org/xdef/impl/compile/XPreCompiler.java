@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
+import org.xdef.xml.KXmlUtils;
 
 /** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
  * with X-definitions created from source data.
@@ -409,9 +409,10 @@ public class XPreCompiler implements PreCompiler {
 		while (st.hasMoreTokens()) {
 			String s = st.nextToken();
 			if (s.startsWith("https:") || s.startsWith("http:") ||
-				s.startsWith("ftp:") || s.startsWith("file:")) {
+				s.startsWith("ftp:") || s.startsWith("file:")
+				|| s.startsWith("classpath://")) {
 				try {
-					URL u = new URL(URLDecoder.decode(s, "UTF-8"));
+					URL u = KXmlUtils.getExtendedURL(s);
 					if (includeArray.contains(u)) {
 						continue;
 					}
@@ -424,14 +425,14 @@ public class XPreCompiler implements PreCompiler {
 					!s.startsWith("/") && !s.startsWith("\\")) {//no path
 					if (sysId != null) {//take path from sysId
 						try {
-							URL u = new URL(URLDecoder.decode(sysId, "UTF-8"));
+							URL u = KXmlUtils.getExtendedURL(sysId);
 							if (!"file".equals(u.getProtocol())) {
 								String v =u.toExternalForm().replace('\\', '/');
 								int i = v.lastIndexOf('/');
 								if (i >= 0) {
 									v = v.substring(0, i + 1);
 								}
-								u = new URL(URLDecoder.decode(v + s, "UTF-8"));
+								u = KXmlUtils.getExtendedURL(v + s);
 								if (includeArray.contains(u)) {
 									continue;
 								}

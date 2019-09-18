@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:name="B" xd:root="B">
+  <B b="int();">
+    <C xd:script="*;">string();</C>
+  </B>
+</xd:def>

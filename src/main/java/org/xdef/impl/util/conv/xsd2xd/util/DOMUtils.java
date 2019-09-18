@@ -1,11 +1,11 @@
 package org.xdef.impl.util.conv.xsd2xd.util;
 
 import java.net.URL;
-import java.net.URLDecoder;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.xml.KXmlUtils;
 
 /** Provides general static methods for manipulating with Document Object Model
  * nodes.
@@ -23,7 +23,7 @@ public class DOMUtils {
 	 */
 	public static URL getURLFromNamespace(final String namespace)
 		throws Exception {
-		return new URL(URLDecoder.decode(namespace, "UTF-8"));
+		return KXmlUtils.getExtendedURL(namespace);
 	}
 
 	/** Gets default namespace URI of given schema or empty string.

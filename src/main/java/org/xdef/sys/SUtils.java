@@ -15,12 +15,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
+import org.xdef.xml.KXmlUtils;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -1158,22 +1158,22 @@ public class SUtils extends FUtils {
 	public static URL resolveSystemID(final String id,
 		final String actualPath) throws SException {
 		if (id.startsWith("file:") || id.startsWith("http:")
-			|| id.startsWith("https:") || id.startsWith("ftp:")) {
+			|| actualPath.startsWith("https:")||actualPath.startsWith("ftp:")
+			|| actualPath.startsWith("classpath://")){
 			try {
-				return new URL(URLDecoder.decode(id,
-					System.getProperties().getProperty("file.encoding")));
+				return KXmlUtils.getExtendedURL(id);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, id, ex);
 			}
 		} else if (actualPath != null &&
 			(actualPath.startsWith("file:") || actualPath.startsWith("http:")
-			|| actualPath.startsWith("https:")||actualPath.startsWith("ftp:"))){
+			|| actualPath.startsWith("https:")||actualPath.startsWith("ftp:")
+			|| actualPath.startsWith("classpath://"))) {
 			try {
 				int ndx = actualPath.lastIndexOf('/');
 				String s = actualPath.substring(0, ndx+ 1) + id;
-				return new URL(URLDecoder.decode(s,
-					System.getProperties().getProperty("file.encoding")));
+				return KXmlUtils.getExtendedURL(s);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, id, ex);

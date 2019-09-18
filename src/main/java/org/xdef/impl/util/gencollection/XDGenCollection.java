@@ -15,7 +15,6 @@ import org.xdef.sys.ArrayReporter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -352,9 +351,10 @@ public class XDGenCollection {
 		while (st.hasMoreTokens()) {
 			String s = st.nextToken();
 			if (s.startsWith("https:") || s.startsWith("http:")
-				|| s.startsWith("ftp:") || s.startsWith("file:")) {
+				|| s.startsWith("ftp:") || s.startsWith("file:")
+				|| s.startsWith("classpath://")) {
 				try {
-					URL url = new URL(URLDecoder.decode(s, "UTF-8"));
+					URL url = KXmlUtils.getExtendedURL(s);
 					if (_includeList.contains(url.toExternalForm())) {
 						continue;
 					}

@@ -175,7 +175,8 @@ public class KDOMBuilder extends DocumentBuilder {
 						if (publicId == null && systemId != null) { //
 							InputStream in;
 							try {
-								in = new URL(systemId).openStream();
+								in = KXmlUtils.getExtendedURL(
+									systemId).openStream();
 							} catch (Exception ex) {
 								// if error occurs set the empty InputStream
 								in = new ByteArrayInputStream(new byte[0]);
@@ -465,6 +466,12 @@ public class KDOMBuilder extends DocumentBuilder {
 				putReport(Report.fatal(XML.XML403, ex));
 			}
 		} else {
+			if (source.startsWith("//") ||
+				(source.indexOf(":/") > 2 && source.indexOf(":/") < 11)) {
+				try { // try URL
+					return parse(KXmlUtils.getExtendedURL(source));
+				} catch (Exception ex) {}
+			}
 			doc = parse(new File(source));
 		}
 		if (_reporter != null) {
@@ -480,11 +487,11 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * Setting this to <code>null</code> will result in the underlying
 	 * implementation using it's own default implementation and
 	 * behavior.
-	 * @param eh The <code>ErrorHandler</code> to be used by the parser.
+	 * @param errHandler The <code>ErrorHandler</code> to be used by the parser.
 	 */
-	 public final void setErrorHandler(final ErrorHandler eh) {
+	 public final void setErrorHandler(final ErrorHandler errHandler) {
 		 if (_xBuilder != null) {
-			 _xBuilder.setErrorHandler(eh);
+			 _xBuilder.setErrorHandler(errHandler);
 		 } else {
 			throw new UnsupportedClassVersionError();
 		 }
@@ -496,12 +503,12 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * this to <code>null</code> will result in the underlying
 	 * implementation using it's own default implementation and
 	 * behavior.
-	 * @param er The <code>EntityResolver</code> to be used to resolve entities
-	 *           present in the XML document to be parsed.
+	 * @param entResolver The <code>EntityResolver</code> to be used to resolve
+	 * entities present in the XML document to be parsed.
 	 */
-	public final void setEntityResolver(final EntityResolver er) {
+	public final void setEntityResolver(final EntityResolver entResolver) {
 		 if (_xBuilder != null) {
-			 _xBuilder.setEntityResolver(er);
+			 _xBuilder.setEntityResolver(entResolver);
 		 } else {
 			throw new UnsupportedClassVersionError();
 		 }
