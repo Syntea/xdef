@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import org.xdef.impl.XConstants;
 
 /** Contains parsed source item.
  * @author Trojan
@@ -141,8 +140,7 @@ public final class PNode {
 		if ("macro".equals(_localName)
 			&& (XDConstants.XDEF20_NS_URI.equals(_nsURI)
 				|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
-				|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)
-				|| XConstants.XDEF32NS_OLD.equals(_nsURI)))) {
+				|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)))) {
 			return; // it is not a macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(

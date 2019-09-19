@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.XScriptParser;
 import org.xdef.sys.SBuffer;
 
@@ -156,10 +155,6 @@ public final class XdDoc_2_0 extends XdDoc {
 		initCollection(collection, XDConstants.XDEF20_NS_URI);
 		initCollection(collection, XDConstants.XDEF31_NS_URI);
 		initCollection(collection, XDConstants.XDEF32_NS_URI);
-		initCollection(collection, XConstants.XDEF32NS_OLD);
-		initCollection(collection, XDConstants.XDEF20_NS_URI);
-		initCollection(collection, XDConstants.XDEF20_NS_URI);
-		initCollection(collection, XDConstants.XDEF20_NS_URI);
 	}
 
 	/** Initiates given X-definition <tt>def</tt> element.

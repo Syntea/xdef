@@ -516,8 +516,8 @@ public abstract class XDTester extends STester {
 	}
 
 	private void genXdOfXd() {
-		if (_xdOfxd == null) {
-			return;
+		if (_xdOfxd != null) {
+			return; // already created
 		}
 		try {
 			_xdOfxd = XDFactory.compileXD(null,
