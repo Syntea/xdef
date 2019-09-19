@@ -1652,14 +1652,14 @@ public final class KXmlUtils extends KDOMUtils {
 		try {
 			if (s.startsWith("classpath://")) {
 				try {
-					String t = s.substring(12);
+					String t = s.substring(12); // remove protocol name
 					int ndx = t.lastIndexOf('.');
 					t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
-					URL urls[] = new URL[] {ClassLoader.getSystemResource(t)};
-					if (urls[0] != null) {
-						return urls[0];
+					URL url = ClassLoader.getSystemResource(t);
+					if (url != null) {
+						return url;
 					}
-				} catch (Exception ex) {} // try regular URL
+				} catch (Exception ex) {} // try regular URL constructor
 			}
 			return new URL(s);
 		} catch (MalformedURLException ex) {

@@ -518,16 +518,11 @@ public abstract class XDTester extends STester {
 	private void genXdOfXd() {
 		if (_xdOfxd == null) {
 			try {
-				URL urls[] = new URL[] {ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef20.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef31.xdef"),
-					ClassLoader.getSystemResource(
-						"org/xdef/impl/compile/XdefOfXdef32.xdef"),
-				};
-				_xdOfxd = XDFactory.compileXD(null, urls);
+				_xdOfxd = XDFactory.compileXD(null,
+					"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
+					"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
+					"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
+					"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef");
 			} catch (Exception ex) {
 				new RuntimeException("XdefOfXdef is not available", ex);
 			}
