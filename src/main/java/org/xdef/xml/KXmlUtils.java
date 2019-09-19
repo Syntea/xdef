@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1641,30 +1642,27 @@ public final class KXmlUtils extends KDOMUtils {
 	 */
 	public static final URL getExtendedURL(final String source)
 		throws MalformedURLException{
-		URL url = null;
 		String s;
 		try {
 			s = URLDecoder.decode(source,
-				System.getProperties().getProperty("file.encoding"));
-		} catch (Exception ex) {
-			s = source;
+				System.getProperties().getProperty("file.encoding")).trim();
+		} catch (UnsupportedEncodingException ex) {
+			s = source.trim();
 		}
 		try {
-			url = new URL(s);
-			return url;
-		} catch (MalformedURLException ex) {
 			if (s.startsWith("classpath://")) {
 				try {
 					String t = s.substring(12);
-					int i = t.lastIndexOf('.');
-					t = t.substring(0,i).replace('.', '/') + t.substring(i);
+					int ndx = t.lastIndexOf('.');
+					t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
 					URL urls[] = new URL[] {ClassLoader.getSystemResource(t)};
-					url = urls[0];
-					if (url != null) {
-						return url;
+					if (urls[0] != null) {
+						return urls[0];
 					}
-				} catch (Exception exx) {}
+				} catch (Exception ex) {} // try regular URL
 			}
+			return new URL(s);
+		} catch (MalformedURLException ex) {
 			throw ex;
 		}
 	}
