@@ -1649,21 +1649,17 @@ public final class KXmlUtils extends KDOMUtils {
 		} catch (UnsupportedEncodingException ex) {
 			s = source.trim();
 		}
-		try {
-			if (s.startsWith("classpath://")) {
-				try {
-					String t = s.substring(12); // remove protocol name
-					int ndx = t.lastIndexOf('.');
-					t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
-					URL url = ClassLoader.getSystemResource(t);
-					if (url != null) {
-						return url;
-					}
-				} catch (Exception ex) {} // try regular URL constructor
-			}
-			return new URL(s);
-		} catch (MalformedURLException ex) {
-			throw ex;
+		if (s.startsWith("classpath://")) {
+			try {
+				String t = s.substring(12); // remove protocol name
+				int ndx = t.lastIndexOf('.');
+				t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
+				URL url = ClassLoader.getSystemResource(t);
+				if (url != null) {
+					return url;
+				}
+			} catch (Exception ex) {} // try regular URL constructor
 		}
+		return new URL(s);
 	}
 }
