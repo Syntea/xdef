@@ -1150,43 +1150,45 @@ public class SUtils extends FUtils {
 	}
 
 	/** Resolve SYSTEM id.
-	 * @param id The string with system id.
-	 * @param actualPath actual file path.
+	 * @param sid system id.
+	 * @param actPath actual file path.
 	 * @return URL created from id.
 	 * @throws SException if an error occurs.
 	 */
-	public static URL resolveSystemID(final String id,
-		final String actualPath) throws SException {
-		if (id.startsWith("file:") || id.startsWith("http:")
-			|| actualPath.startsWith("https:")||actualPath.startsWith("ftp:")
-			|| actualPath.startsWith("classpath://")){
+	public static URL resolveSystemID(final String sid,
+		final String actPath) throws SException {
+		if (sid.startsWith("http:") || sid.startsWith("https:")
+			|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
+			|| sid.startsWith("file:")
+			|| sid.startsWith("classpath://")) {
 			try {
-				return KXmlUtils.getExtendedURL(id);
+				return KXmlUtils.getExtendedURL(sid);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
-				throw new SException(SYS.SYS076, id, ex);
+				throw new SException(SYS.SYS076, sid, ex);
 			}
-		} else if (actualPath != null &&
-			(actualPath.startsWith("file:") || actualPath.startsWith("http:")
-			|| actualPath.startsWith("https:")||actualPath.startsWith("ftp:")
-			|| actualPath.startsWith("classpath://"))) {
+		} else if (actPath != null &&
+			(actPath.startsWith("http:") || actPath.startsWith("https:")
+			|| actPath.startsWith("ftp:") || actPath.startsWith("sftp:")
+			|| actPath.startsWith("file:")
+			|| actPath.startsWith("classpath://"))) {
 			try {
-				int ndx = actualPath.lastIndexOf('/');
-				String s = actualPath.substring(0, ndx+ 1) + id;
+				int ndx = actPath.lastIndexOf('/');
+				String s = actPath.substring(0, ndx+ 1) + sid;
 				return KXmlUtils.getExtendedURL(s);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
-				throw new SException(SYS.SYS076, id, ex);
+				throw new SException(SYS.SYS076, sid, ex);
 			}
 		}
 		File f;
-		if (id.indexOf(":/") > 0 || id.startsWith("/")) {
-			f = new java.io.File(id);
+		if (sid.indexOf(":/") > 0 || sid.startsWith("/")) {
+			f = new java.io.File(sid);
 		} else {
-			if (actualPath == null) {
-				f = new java.io.File(id);
+			if (actPath == null) {
+				f = new java.io.File(sid);
 			} else {
-				f = new java.io.File(actualPath, id);
+				f = new java.io.File(actPath, sid);
 			}
 		}
 		if (f.exists() && f.canRead()) {

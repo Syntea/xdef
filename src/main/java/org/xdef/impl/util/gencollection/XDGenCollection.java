@@ -345,14 +345,15 @@ public class XDGenCollection {
 		if (include.length() == 0) {
 			return;
 		}
-		StringTokenizer st = new StringTokenizer(include, " \t\n\r\f,");
+		StringTokenizer st = new StringTokenizer(include, " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
-			String s = st.nextToken();
-			if (s.startsWith("https:") || s.startsWith("http:")
-				|| s.startsWith("ftp:") || s.startsWith("file:")
-				|| s.startsWith("classpath://")) {
+			String sid = st.nextToken(); // system id
+			if (sid.startsWith("http:") || sid.startsWith("https:")
+				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
+				|| sid.startsWith("file:")
+				|| sid.startsWith("classpath://")) {
 				try {
-					URL url = KXmlUtils.getExtendedURL(s);
+					URL url = KXmlUtils.getExtendedURL(sid);
 					if (_includeList.contains(url.toExternalForm())) {
 						continue;
 					}
@@ -361,7 +362,7 @@ public class XDGenCollection {
 					throw new RuntimeException(ex);
 				}
 			} else {
-				File[] list = SUtils.getFileGroup(sourcePath + s);
+				File[] list = SUtils.getFileGroup(sourcePath + sid);
 				for (int i = 0; list != null && i < list.length; i++) {
 					try {
 						String fname = list[i].getCanonicalPath();

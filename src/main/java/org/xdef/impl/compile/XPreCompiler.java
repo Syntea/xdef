@@ -391,13 +391,13 @@ public class XPreCompiler implements PreCompiler {
 	 * @param include SBuffer with list of items, separator is ",". Wildcard
 	 * characters are permitted.
 	 * @param includeArray ArrayList with items.
-	 * @param sysId actual path.
+	 * @param actPath actual path.
 	 * @param reporter report writer or <tt>null</tt>.
 	 * @throws SRuntimeException if list contains error and reporter is null.
 	 */
 	private static void processIncludeList(final SBuffer include,
 		final ArrayList<Object> includeArray,
-		final String sysId,
+		final String actPath,
 		final ReportWriter reporter) {
 		if (include == null) {
 			return;
@@ -405,34 +405,35 @@ public class XPreCompiler implements PreCompiler {
 		ReportWriter myreporter =
 			reporter == null ? new ArrayReporter() : reporter;
 		StringTokenizer st =
-			new StringTokenizer(include.getString(), " \t\n\r\f,");
+			new StringTokenizer(include.getString(), " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
-			String s = st.nextToken();
-			if (s.startsWith("https:") || s.startsWith("http:") ||
-				s.startsWith("ftp:") || s.startsWith("file:")
-				|| s.startsWith("classpath://")) {
+			String sid = st.nextToken(); // system ID
+			if (sid.startsWith("http:") || sid.startsWith("https:")
+				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
+				|| sid.startsWith("file:")
+				|| sid.startsWith("classpath://")) {
 				try {
-					URL u = KXmlUtils.getExtendedURL(s);
+					URL u = KXmlUtils.getExtendedURL(sid);
 					if (includeArray.contains(u)) {
 						continue;
 					}
 					includeArray.add(u);
 				} catch (Exception ex) {
-					myreporter.error(SYS.SYS024, s); //File doesn't exist: &{0}
+					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				}
 			} else {
-				if (s.indexOf(':') < 0 &&
-					!s.startsWith("/") && !s.startsWith("\\")) {//no path
-					if (sysId != null) {//take path from sysId
+				if (sid.indexOf(':') < 0 &&
+					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
+					if (actPath != null) {//take path from sysId
 						try {
-							URL u = KXmlUtils.getExtendedURL(sysId);
+							URL u = KXmlUtils.getExtendedURL(actPath);
 							if (!"file".equals(u.getProtocol())) {
 								String v =u.toExternalForm().replace('\\', '/');
 								int i = v.lastIndexOf('/');
 								if (i >= 0) {
 									v = v.substring(0, i + 1);
 								}
-								u = KXmlUtils.getExtendedURL(v + s);
+								u = KXmlUtils.getExtendedURL(v + sid);
 								if (includeArray.contains(u)) {
 									continue;
 								}
@@ -442,16 +443,16 @@ public class XPreCompiler implements PreCompiler {
 								String p = new File(u.getFile()).
 									getCanonicalPath().replace('\\', '/');
 								int i = p.lastIndexOf('/');
-								s = i>0 ? p.substring(0, i + 1) + s : ('/' + s);
+								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
 							}
 						} catch (Exception ex) {
-							s = ""; // no file
+							sid = ""; // no file
 						}
 					}
 				}
-				File[] list = SUtils.getFileGroup(s);
+				File[] list = SUtils.getFileGroup(sid);
 				if (list.length == 0) {
-					myreporter.error(SYS.SYS024, s); //File doesn't exist: &{0}
+					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				} else {
 					for (File f: list) {
 						try {
@@ -465,7 +466,7 @@ public class XPreCompiler implements PreCompiler {
 							}
 						} catch (IOException ex) {}
 						//File doesn't exist: &{0}
-						myreporter.error(SYS.SYS024, s);
+						myreporter.error(SYS.SYS024, sid);
 					}
 				}
 			}
