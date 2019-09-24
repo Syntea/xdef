@@ -1,5 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.1, release-date 2019-09-24
+- Corected org.xdef.sys.SDatetime methods implemented from
+ javax.xml.datatype.XMLGregorianCalendar.
+- implemented the possibility to access the XML and X-definition data with
+  an URL with the "classpath" protocol, e.g.:
+	classpath://org.xdefimpl.compile.XdefOfXdef20.xdef
+
 # Version 32.5.0, release-date 2019-09-16
 - Prepared the version for processing of JSON data.
   The X-component interface has now new method to Json which returns a JSON
