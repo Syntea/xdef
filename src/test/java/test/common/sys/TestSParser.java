@@ -1,5 +1,6 @@
 package test.common.sys;
 
+import java.math.BigInteger;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
@@ -59,6 +60,25 @@ public class TestSParser extends STester {
 		if (d1.getTimezone() != d2.getTimezone()) {
 			result += (result.isEmpty() ? "" : "\n") +
 				"Timezone: " + d1.getTimezone() + "/" +  d2.getTimezone();
+		}
+		if (d1.getEon() == null) {
+			if (d2.getEon() != null) {
+				result += (result.isEmpty() ? "" : "\n")
+					+ "Eon: null/" +  d2.getEon();
+			}
+		} else if (!d1.getEon().equals(d2.getEon())) {
+			result += (result.isEmpty() ? "" : "\n")
+				+ "Eon: " + d1.getEon() + "/" +  d2.getEon();
+		}
+		if (d1.getEonAndYear()== null) {
+			if (d2.getEonAndYear() != null) {
+				result +=  (result.isEmpty() ? "" : "\n")
+					+ "EonAndYear: null/" +  d2.getEonAndYear();
+			}
+		} else if (!d1.getEonAndYear().equals(d2.getEonAndYear())) {
+			result +=  (result.isEmpty() ? "" : "\n")
+				 + "EonAndYear: " + d1.getEonAndYear()
+				+ "/" +  d2.getEonAndYear();
 		}
 		return result;
 	}
@@ -1239,8 +1259,53 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ(x,y));
 			x.reset(); y.reset();
 			assertEq("", checkDateEQ(x,y));
+			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
+			assertEq("", checkDateEQ(x,y));
+			x.reset(); y.reset();
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x,y));
+			x.setYear(new BigInteger("20000000000100"));
+			y.setYear(new BigInteger("20000000000100"));
+			assertEq("", checkDateEQ(x,y));
+			x.reset(); y.reset();
+			assertEq("", checkDateEQ(x,y));			
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ(x,y));
+			
+			y = new SDatetime("2010-01-11T21:11:01.123CEST");
+			g = y.toGregorianCalendar();
+			x = df.newXMLGregorianCalendar(g);
+			y = new SDatetime(g);
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.setTimezone(180); y.setTimezone(180);
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.setTimezone(-180); y.setTimezone(-180);
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.setTimezone(10); y.setTimezone(10);
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.setTimezone(-210); y.setTimezone(-210);
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.setYear(1999); y.setYear(1999);
+			assertEq("", checkDateEQ(x,y));
+			x.reset(); y.reset();
+			assertEq("", checkDateEQ(x,y));
+			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
+			assertEq("", checkDateEQ(x,y));
+			x.reset(); y.reset();
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x,y));
+			x.setYear(new BigInteger("20000000000100"));
+			y.setYear(new BigInteger("20000000000100"));
+			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			x.reset(); y.reset();
+			assertEq("", checkDateEQ(x,y));			
 
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();
