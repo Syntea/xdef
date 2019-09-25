@@ -12,7 +12,6 @@ import java.util.TimeZone;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import test.utils.STester;
-import static test.utils.STester.runTest;
 
 /** Test of simple parser and SDatetime.
  * @author Vaclav Trojan
@@ -27,8 +26,8 @@ public class TestSParser extends STester {
 	 * @return empty string if both arguments are equal. Otherwise returns
 	 * the string with information about differences.
 	 */
-	private static String checkDateEQ(XMLGregorianCalendar d1,
-		XMLGregorianCalendar d2) {
+	private static String checkDateEQ(final XMLGregorianCalendar d1,
+		final XMLGregorianCalendar d2) {
 		String result = "";
 		if (d1.getYear() != d2.getYear()) {
 			result += "Year: " + d1.getYear() + "/" +  d2.getYear();
@@ -81,6 +80,21 @@ public class TestSParser extends STester {
 				+ "/" +  d2.getEonAndYear();
 		}
 		return result;
+	}
+	
+	/** Check if both arguments with XMLGregorianCalendar values are equal.
+	 * (before and after normalization).
+	 * @param d1 first XMLGregorianCalendar value.
+	 * @param d2 SECOND XMLGregorianCalendar value.
+	 * @return empty string if both arguments are equal. Otherwise returns
+	 * the string with information about differences.
+	 */
+	private static String checkDateEQ2(final XMLGregorianCalendar d1,
+		final XMLGregorianCalendar d2) {
+		String r1 = checkDateEQ(d1, d2);
+		String r2 = checkDateEQ(d1.normalize(), d2.normalize());
+		r2 = r2.isEmpty() ? "" : ("normalized\n" + r2);
+		return r1.isEmpty() ? r2 : r1 + (r2.isEmpty() ? "" : ("\n" + r2));
 	}
 
 	@Override
@@ -1234,94 +1248,78 @@ public class TestSParser extends STester {
 			assertTrue(SDatetime.isLeapYear(2000));
 			assertFalse(SDatetime.isLeapYear(1900));
 		} catch (Exception ex) {fail(ex);}
-		try { // test XMLGregorianCalendar methods
-			SDatetime y = new SDatetime("2010-08-11T21:11:01.123CEST");
+		try {// test if XMLGregorianCalendar methods in SDatatiome are the same
+			SDatetime y = new SDatetime("2010-08-11T21:11:01.123CEST");  //DST
 			GregorianCalendar g = y.toGregorianCalendar();
 			DatatypeFactory df = DatatypeFactory.newInstance();
 			XMLGregorianCalendar x = df.newXMLGregorianCalendar(g);
 			y = new SDatetime(g);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(180); y.setTimezone(180);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(-180); y.setTimezone(-180);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(10); y.setTimezone(10);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(-210); y.setTimezone(-210);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("",checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));			
+			assertEq("", checkDateEQ2(x,y));			
 			x.clear(); y.clear();
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			
-			y = new SDatetime("2010-01-11T21:11:01.123CEST");
+			y = new SDatetime("2010-01-11T21:11:01.123CEST"); //No DST
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
 			y = new SDatetime(g);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(180); y.setTimezone(180);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(-180); y.setTimezone(-180);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(10); y.setTimezone(10);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setTimezone(-210); y.setTimezone(-210);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));			
+			assertEq("", checkDateEQ2(x,y));			
 
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
 			y = new SDatetime(g);
-			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
+			assertEq("", checkDateEQ2(x,y));
 			x.setMillisecond(123); y.setMillisecond(123);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.setMillisecond(Integer.MIN_VALUE);
 			y.setMillisecond(Integer.MIN_VALUE);
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 			x.reset(); y.reset();
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ2(x,y));
 		} catch (Exception ex) {fail(ex);}
 
 	}
