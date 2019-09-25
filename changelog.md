@@ -1,5 +1,23 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.1, release-date 2019-09-24
+- Corrected org.xdef.sys.SDatetime methods implemented from
+ javax.xml.datatype.XMLGregorianCalendar.
+- implemented the access to XML data or X-definition data with
+  an URL-like form where the protocol name is "classpath".
+  E.g.:
+	String urlName = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef";
+  This form may be used to parse XML source data:
+	Document dom = KXmlUtils.parseXml(urlName);
+  or to X-definition in compilation of XDPool:
+    XDPool xp = XDFactory.compileXD(null, urlName);
+  or in the attribute "xd:include" in header of X-definition:
+  <xd:def xmlns:xd ="http://www.syntea.cz/xdef/3.1"
+    xd:include = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef,
+       classpath://org.xdefimpl.compile.XdefOfXdef20.xdef,
+       classpath://org.xdefimpl.compile.XdefOfXdef31.xdef" 
+  >  ...
+
 # Version 32.5.0, release-date 2019-09-16
 - Prepared the version for processing of JSON data.
   The X-component interface has now new method to Json which returns a JSON

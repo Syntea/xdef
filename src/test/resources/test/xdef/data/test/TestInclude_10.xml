@@ -1,0 +1,6 @@
+<foo>
+  <bar b="1"/>
+  <bar b='2'>
+    <C>text</C>
+  </bar>
+</foo>

@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,6 +37,7 @@ import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import java.util.Properties;
+import org.xdef.xml.KXmlUtils;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -183,7 +183,7 @@ public final class XExtUtils {
 		XDParseResult pr = new DefParseResult(s);
 		if (s.length() > 0) {//we accept empty string?
 			try {
-				URL u = new URL(URLDecoder.decode(s, "UTF-8"));
+				URL u = KXmlUtils.getExtendedURL(s);
 			} catch (Exception ex) {
 				pr.error(XDEF.XDEF809, "url");//Incorrect value of &{0}
 			}

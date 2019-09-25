@@ -37,7 +37,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.LinkedHashMap;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
@@ -1466,8 +1465,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (level > 1 || !"macro".equals(pnode._localName)
 					|| (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
 					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI)
-					&& (XDConstants.XDEF32_NS_URI.equals(pnode._nsURI)
-						|| XConstants.XDEF32NS_OLD.equals(pnode._nsURI)))) {
+					&& XDConstants.XDEF32_NS_URI.equals(pnode._nsURI))) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);

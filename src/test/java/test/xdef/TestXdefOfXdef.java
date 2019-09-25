@@ -5,7 +5,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDPool;
 import org.xdef.impl.util.gencollection.XDGenCollection;
-import java.net.URL;
 import org.w3c.dom.Element;
 
 /** Test of X-definitions by X-definition.
@@ -18,17 +17,11 @@ public final class TestXdefOfXdef extends XDTester {
 	public TestXdefOfXdef() {
 		super();
 		setChkSyntax(false); // here it MUST be false!
-		URL[] sources = new URL[] {
-			ClassLoader.getSystemResource(
-				"org/xdef/impl/compile/XdefOfXdefBase.xdef"),
-			ClassLoader.getSystemResource(
-				"org/xdef/impl/compile/XdefOfXdef20.xdef"),
-			ClassLoader.getSystemResource(
-				"org/xdef/impl/compile/XdefOfXdef31.xdef"),
-			ClassLoader.getSystemResource(
-				"org/xdef/impl/compile/XdefOfXdef32.xdef"),
-		};
-		_xp = compile(sources);
+		_xp = compile(new String[] {
+			"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
+			"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
+			"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
+			"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef"});
 	}
 
 	final public ArrayReporter parse(final String xml) {

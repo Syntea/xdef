@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.net.URL;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import test.utils.XDTester;
@@ -54,9 +53,9 @@ public class TestXdScript extends XDTester {
 		String s;
 		BNFGrammar g;
 		try {
-			URL u =	ClassLoader.getSystemResource(
-				"org/xdef/impl/compile/XdefOfXdefBase.xdef");
-			Element e = KXmlUtils.parseXml(u).getDocumentElement();
+			Element e = KXmlUtils.parseXml(
+				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef")
+					.getDocumentElement();
 			e = KXmlUtils.firstElementChildNS(
 				e, e.getNamespaceURI(), "BNFGrammar");
 			String bnfOfBNF = KXmlUtils.getTextValue(e);
