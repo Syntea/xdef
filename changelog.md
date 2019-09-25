@@ -7,23 +7,23 @@
   an URL-like form where the protocol name is "classpath".
   E.g.:
   ```java
-String urlName = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef";
+  String urlName = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef";
   ```
   This form may be used to parse XML source data:
   ```java
-Document dom = KXmlUtils.parseXml(urlName);
+  Document dom = KXmlUtils.parseXml(urlName);
   ```
   or to X-definition in compilation of XDPool:
   ```java
-XDPool xp = XDFactory.compileXD(null, urlName);
+  XDPool xp = XDFactory.compileXD(null, urlName);
   ```
   or in the attribute "xd:include" in header of X-definition:
   ```xml
-<xd:def xmlns:xd ="http://www.syntea.cz/xdef/3.1"
-  xd:include = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef,
-    classpath://org.xdefimpl.compile.XdefOfXdef20.xdef,
-    classpath://org.xdefimpl.compile.XdefOfXdef31.xdef" 
-> ...
+  <xd:def xmlns:xd ="http://www.xdef.org/xdef/3.2"
+    xd:include = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef,
+      classpath://org.xdefimpl.compile.XdefOfXdef20.xdef,
+      classpath://org.xdefimpl.compile.XdefOfXdef31.xdef" 
+  > ...
   ```
   
 # Version 32.5.0, release-date 2019-09-16
