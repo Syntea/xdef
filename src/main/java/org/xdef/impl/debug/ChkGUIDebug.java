@@ -540,7 +540,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_sourceID = sourceID;
 			if (newSrc == null) {
 				try {
-					URL u = new URL(sourceID);
+					URL u = KXmlUtils.getExtendedURL(sourceID);
 					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());

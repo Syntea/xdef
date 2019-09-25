@@ -340,8 +340,8 @@ public final class XPool implements XDPool, Serializable {
 				_sourceInfo.getMap().put(s, new XDSourceItem(source));
 				_compiler.parseString(source, s);
 			} else if (source.startsWith("//") ||
-				(source.indexOf(":/") > 2 && source.indexOf(":/") < 7)) {
-				setSource(new URL(source));
+				(source.indexOf(":/") > 2 && source.indexOf(":/") < 11)) {
+				setSource(KXmlUtils.getExtendedURL(source));
 			} else {
 				File[] files = SUtils.getFileGroup(source);
 				if (files == null || files.length == 0) {

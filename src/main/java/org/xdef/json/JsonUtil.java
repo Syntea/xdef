@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -322,8 +321,7 @@ public class JsonUtil extends StringParser {
 		InputStream in = null;
 		String sysId = null;
 		try {
-			URL url = new URL(URLDecoder.decode(source,
-				System.getProperties().getProperty("file.encoding")));
+			URL url = KXmlUtils.getExtendedURL(source);
 			in = url.openStream();
 			sysId = url.toExternalForm();
 			result = JsonUtil.parse(in, sysId);

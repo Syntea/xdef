@@ -4,7 +4,6 @@ import org.xdef.xml.KDOMBuilder;
 import org.xdef.impl.util.conv.xsd2xd.Convertor;
 import org.xdef.xml.KXmlUtils;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,10 +40,7 @@ public abstract class Processor implements Convertor {
 /*VT*/
 		try {
 			String urlString = rootSchemaURL.toExternalForm();
-//			String replaced = urlString.replace('\\', '/');
-			String replaced =
-				URLDecoder.decode(urlString.replace('\\', '/'), "UTF-8");
-			URL newURL = new URL(replaced);
+			URL newURL = KXmlUtils.getExtendedURL(urlString);
 			_schemaElements = getSchemaElements(newURL);
 		} catch (Exception ex) {
 			throw new RuntimeException("Could not create URL from URL!", ex);

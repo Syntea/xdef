@@ -3554,7 +3554,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 
 		private void reset(final int sourcePos) {
-			super.reset();
+			super.clear();
 			_chain = null;
 			_weekDay = Integer.MIN_VALUE;
 			_yearDay = Integer.MIN_VALUE;

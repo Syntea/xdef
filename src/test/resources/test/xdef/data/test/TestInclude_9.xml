@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <A>
   <xi:include href="TestInclude/sub1/TestInclude_9_1.xml"
               xmlns:xi="http://www.w3.org/2001/XInclude"/>

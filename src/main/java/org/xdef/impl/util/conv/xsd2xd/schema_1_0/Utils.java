@@ -4,7 +4,6 @@ import org.xdef.impl.util.conv.xsd2xd.util.DOMUtils;
 import org.xdef.xml.KXmlUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.Set;
 import org.w3c.dom.Element;
@@ -276,7 +275,7 @@ public class Utils {
 			} else if (IMPORT.equals(type)) {
 				String namespace = external.getAttribute("namespace");
 				if (!"".equals(namespace)) {
-					url = new URL(namespace);
+					url = KXmlUtils.getExtendedURL(namespace);
 					ret.add(url);
 				}
 			}
@@ -310,7 +309,7 @@ public class Utils {
 			location = sourceBase + location;
 		}
 		try {
-			return new URL(location);
+			return KXmlUtils.getExtendedURL(location);
 		} catch (MalformedURLException ex) {
 			throw new RuntimeException(
 				"Error creating URL from String: " + location, ex);
@@ -372,14 +371,7 @@ public class Utils {
 					URL url = Utils.getURL(schemaURL, schemaLocation);
 					ret.add(url);
 				} else {
-					URL url;
-					try {
-						url = new URL(URLDecoder.decode(namespaceAttribute,
-							"UTF-8"));
-					} catch (Exception ex) {
-						url = new URL(namespaceAttribute);
-					}
-
+					URL url = KXmlUtils.getExtendedURL(namespaceAttribute);
 					ret.add(url);
 				}
 			}

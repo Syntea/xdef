@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.impl.XConstants;
 
 /** Generate formatted source of the X-definitions.
  * Also provides main method for calling the program from command line.
@@ -123,10 +122,8 @@ public class PrettyXdef {
 				input.getAttribute(oldPrefixNS))
 				&& !XDConstants.XDEF31_NS_URI.equals(
 					input.getAttribute(oldPrefixNS))
-				&& !(XDConstants.XDEF32_NS_URI.equals(
-					input.getAttribute(oldPrefixNS))
-					|| XConstants.XDEF32NS_OLD.equals(
-					input.getAttribute(oldPrefixNS)))) {
+				&& !XDConstants.XDEF32_NS_URI.equals(
+					input.getAttribute(oldPrefixNS))) {
 				System.err.println("Input is not X-definition");
 				return;
 			}
