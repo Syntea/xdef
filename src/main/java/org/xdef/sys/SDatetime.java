@@ -2347,8 +2347,8 @@ public class SDatetime extends XMLGregorianCalendar
 				day = day - maximumDayInMonthFor(year, month);
 				carry = 1;
 			} else {
-				return new SDatetime(
-					year, month, day, hour, minute, second, fract, _tz);
+				return new SDatetime(year == 0 ? Integer.MIN_VALUE : year,
+					month, day, hour, minute, second, fract, _tz);
 			}
 			temp = month + carry;
 			month = modulo(temp, 1, 13);
@@ -2520,11 +2520,10 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public final SDatetime normalize() {
 		SDatetime result = (SDatetime) clone();
-		if (_tz == null || _tz == NULL_ZONE) {
-		} else {
+		if (_tz != null && _tz != NULL_ZONE) {
 			result.addMillis(-getTimezone() * 60000);
+			result._tz = UTC_ZONE;
 		}
-		result._tz = UTC_ZONE;
 		return result;
 	}
 

@@ -1271,6 +1271,7 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ(x,y));			
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
 			
 			y = new SDatetime("2010-01-11T21:11:01.123CEST");
 			g = y.toGregorianCalendar();
@@ -1290,7 +1291,6 @@ public class TestSParser extends STester {
 			x.setTimezone(-210); y.setTimezone(-210);
 			assertEq("", checkDateEQ(x,y));
 			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
-			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("", checkDateEQ(x,y));
 			x.reset(); y.reset();
@@ -1299,7 +1299,7 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ(x,y));
 			x.reset(); y.reset();
 			assertEq("", checkDateEQ(x,y));
-			assertEq("", checkDateEQ(x,y));
+			assertEq("", checkDateEQ(x.normalize(),y.normalize()));
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ(x,y));
