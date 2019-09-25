@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 32.5.1, release-date 2019-09-24
+# Version 32.5.1, release-date 2019-09-25
 * Corrected org.xdef.sys.SDatetime methods implemented from
   javax.xml.datatype.XMLGregorianCalendar.
 * implemented the access to XML data or X-definition data with
