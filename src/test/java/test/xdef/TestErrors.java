@@ -439,9 +439,12 @@ public final class TestErrors extends XDTester {
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try { //test file names etc
-			String fName1 = dataDir + "test/TestErrors1.xdef";
-			String fName2 = dataDir + "test/TestErrors2.xdef";
-			reporter = test(props, new String[]{fName1, fName2}, getClass());
+			String fName1 = "TestErrors1.xdef";
+			String fName2 = "TestErrors2.xdef";
+			String[] sources = new String[] {
+				dataDir + "test/" + fName1,
+				dataDir + "test/" + fName2};
+			reporter = test(props, sources, getClass());
 			assertEq("", chkReport(reporter, "XDEF425", "10", "26", fName2));
 			rep = reporter.getReport();
 			if (!"".equals(chkReport(rep, "XDEF307", "4", "20", fName1))) {
