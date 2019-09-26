@@ -302,7 +302,7 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void parseFile(final File file) {
 		try {
-			URL url = file.toURI().toURL();
+			URL url = file.getCanonicalFile().toURI().toURL();
 			for (Object o: getSources()) {
 				if (o instanceof URL && url.equals(o)) {
 					return; //found in list
@@ -363,7 +363,11 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void parseURL(final URL url) {
 		try {
-			parseStream(url.openStream(), url.toExternalForm());
+			if ("file".equals(url.getProtocol())) {
+				parseFile(url.getFile());
+			} else {
+				parseStream(url.openStream(), url.toExternalForm());
+			}
 		} catch (Exception ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
@@ -379,8 +383,7 @@ public class XPreCompiler implements PreCompiler {
 	void processIncludeList(PNode pnode) {
 		/** let's check some attributes of X-definition.*/
 		SBuffer include = getXdefAttr(pnode, "include", false, true);
-		processIncludeList(include, _includeList,
-			pnode._name.getSysId(), getReportWriter());
+		processIncludeList(include, pnode._name.getSysId(), getReportWriter());
 	}
 
 	/** Process list of file specifications and/or URLs. Result of list is added
@@ -390,13 +393,11 @@ public class XPreCompiler implements PreCompiler {
 	 * <tt>null</tt> then an SRuntimeException is thrown.
 	 * @param include SBuffer with list of items, separator is ",". Wildcard
 	 * characters are permitted.
-	 * @param includeArray ArrayList with items.
 	 * @param actPath actual path.
 	 * @param reporter report writer or <tt>null</tt>.
 	 * @throws SRuntimeException if list contains error and reporter is null.
 	 */
-	private static void processIncludeList(final SBuffer include,
-		final ArrayList<Object> includeArray,
+	private void processIncludeList(final SBuffer include,
 		final String actPath,
 		final ReportWriter reporter) {
 		if (include == null) {
@@ -414,10 +415,10 @@ public class XPreCompiler implements PreCompiler {
 				|| sid.startsWith("classpath://")) {
 				try {
 					URL u = KXmlUtils.getExtendedURL(sid);
-					if (includeArray.contains(u)) {
+					if (_includeList.contains(u)) {
 						continue;
 					}
-					includeArray.add(u);
+					_includeList.add(u);
 				} catch (Exception ex) {
 					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				}
@@ -434,10 +435,10 @@ public class XPreCompiler implements PreCompiler {
 									v = v.substring(0, i + 1);
 								}
 								u = KXmlUtils.getExtendedURL(v + sid);
-								if (includeArray.contains(u)) {
+								if (_includeList.contains(u)) {
 									continue;
 								}
-								includeArray.add(u);
+								_includeList.add(u);
 								continue;
 							} else {
 								String p = new File(u.getFile()).
@@ -457,11 +458,11 @@ public class XPreCompiler implements PreCompiler {
 					for (File f: list) {
 						try {
 							if (f.canRead()) {
-								if (includeArray.contains(
+								if (_includeList.contains(
 									f.getCanonicalPath())) {
 									continue; //file already exists
 								}
-								includeArray.add(f);
+								_includeList.add(f);
 								continue;
 							}
 						} catch (IOException ex) {}

@@ -35,7 +35,7 @@ public final class XDSourceItem {
 	 */
 	public XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
-			_url = ((File) o).toURI().toURL();
+			_url = ((File) o).getCanonicalFile().toURI().toURL();
 		} else if (o instanceof URL) {
 			_url = (URL) o;
 		} else if ((o instanceof InputStream)) {

@@ -1660,6 +1660,12 @@ public final class KXmlUtils extends KDOMUtils {
 				}
 			} catch (Exception ex) {} // try regular URL constructor
 		}
-		return new URL(s);
+		URL u = new URL(s);
+		if ("file".equals(u.getProtocol())) {
+			try {
+				return new File(u.getFile()).getCanonicalFile().toURI().toURL();
+			} catch (Exception ex) {}
+		}
+		return u;
 	}
 }
