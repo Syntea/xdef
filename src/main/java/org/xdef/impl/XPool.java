@@ -404,9 +404,12 @@ public final class XPool implements XDPool, Serializable {
 			return;
 		}
 		try {
-			_sourceInfo.getMap().put(source.toURI().toASCIIString(),
-				new XDSourceItem(source));
-			_compiler.parseFile(source);
+			File f = source.getCanonicalFile();
+			String key = f.toURI().toASCIIString();
+			if (!_sourceInfo.getMap().containsKey(key)) {
+				_sourceInfo.getMap().put(key, new XDSourceItem(f));
+				_compiler.parseFile(f);
+			}
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
 				_compiler.getReportWriter().putReport(
