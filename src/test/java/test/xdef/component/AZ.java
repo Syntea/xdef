@@ -2,7 +2,7 @@
 // XDPosition: "A#A/Z".
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
-public class AZ extends test.xdef.TestXComponentsGen implements org.xdef.component.XComponent{
+public class AZ extends test.xdef.TestXComponents_G implements org.xdef.component.XComponent{
   public String getz() {return _z;}
   public void setz(String x){_z=x;}
   public String xposOfz(){return XD_XPos+"/@z";}
