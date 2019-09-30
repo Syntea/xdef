@@ -129,8 +129,8 @@ public abstract class ExternalXDEditor implements XEditor {
 	 * @return XDPool generated from the file from the argument defPool.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(
-		final String defPool) throws IOException {
+	public final static XDPool readXDPool(final String defPool)
+		throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
 		ObjectInputStream inpool = 
