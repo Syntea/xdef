@@ -62,11 +62,11 @@ public abstract class ExternalXDEditor implements XEditor {
 			reporter.writeReports(frw);
 			frw.close();
 			// we need file names to pass as parameters (see "main"  method)
-			String defPool = poolFile.getCanonicalPath();
-			String reports = reportFile.getCanonicalPath();
+			String defPool = poolFile.getAbsolutePath();
+			String reports = reportFile.getAbsolutePath();
 			// the name of file where the external process will write
 			// the result information
-			String resultInfo = resultFile.getCanonicalPath();
+			String resultInfo = resultFile.getAbsolutePath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
 			// wait max. 4 hours for the resultFile (14400 = 2*2*3600)
 			for (int i = 0; i < 14400 && !waitForFileExists(resultFile); i++) {}
