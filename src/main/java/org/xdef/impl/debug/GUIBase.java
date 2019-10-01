@@ -12,11 +12,11 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -243,7 +243,9 @@ public class GUIBase {
 				String s = (src._url != null
 					&& "file".equals(src._url.getProtocol())) ?
 					src._url.getFile() : key;
-				s = JOptionPane.showInputDialog("Source not found, change:", s);
+				try {
+					s =URLDecoder.decode(s,System.getProperty("file.encoding"));
+				} catch (Exception exx) {};
 				if(s != null) {//yes
 					if (s.length() > 0 && s.charAt(0) == '<') {
 						src._source = s;
