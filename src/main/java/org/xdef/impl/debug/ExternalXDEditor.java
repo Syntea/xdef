@@ -133,12 +133,12 @@ public abstract class ExternalXDEditor implements XEditor {
 		throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
-		ObjectInputStream inpool = 
+		ObjectInputStream inpool =
 			new ObjectInputStream(new FileInputStream(pool));
 		try {
 			XDPool result = (XDPool) inpool.readObject();
 			return result;
-		} catch (ClassNotFoundException ex) {			
+		} catch (ClassNotFoundException ex) {
 			throw new IOException(ex);
 		} finally {
 			inpool.close();
@@ -213,5 +213,4 @@ public abstract class ExternalXDEditor implements XEditor {
 				tmpFile.getAbsolutePath(), resultFile.getAbsolutePath());
 		}
 	}
-
 }
