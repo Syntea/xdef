@@ -545,7 +545,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					if (newSrc == null) {
 						File f = new File(u.getFile());
 						newSrc = _sources.get(
-							f.getAbsolutePath().replace('\\','/'));
+							f.getCanonicalPath().replace('\\','/'));
 					}
 				} catch (Exception ex) {
 					return;
@@ -598,7 +598,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_infoArea.setText("");
 		}
 	}
-	
+
 	@Override
 	/** Close debugger and display message.
 	 * @param msg message to be displayed.
@@ -911,7 +911,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					if (xnode instanceof ChkElement) {
 						ChkElement xc =(ChkElement) xnode;
 						for (;;) {
-							XVariableTable vars = 
+							XVariableTable vars =
 								((XElement) xc.getXMElement())._vartable;
 							names = vars!=null ? vars.getVariableNames() : null;
 							if (names != null && names.length > 0) {
@@ -998,7 +998,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				case DBG_SHOWTEXT:
 				case DBG_SETTEXT:
 					if (command == DBG_SHOWTEXT) {
-						display("'" + ((XXData) xnode).getTextValue() + "'");
+						display(xnode.getXPos()
+							+ ": = '" + ((XXData) xnode).getTextValue() + "'");
 					} else {
 						try {
 							if (_out != null) {

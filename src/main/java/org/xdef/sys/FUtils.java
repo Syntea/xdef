@@ -567,10 +567,10 @@ public class FUtils {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		if (inFile.length() + 10 > getUsableSpace(outFile)) {
-			if (outFile.getParentFile() != null && 
+			if (outFile.getParentFile() != null &&
 				!outFile.getParentFile().exists()) {
 				//File doesn't exist: &{0}
-				throw new SException(SYS.SYS024, outFile); 
+				throw new SException(SYS.SYS024, outFile);
 			}
 			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
@@ -581,9 +581,9 @@ public class FUtils {
 			//Can't write to file: &{0}
 			throw new SException(SYS.SYS023, outFile);
 		}
-		copyToFile(in,
-			inFile.getAbsolutePath(), out, outFile.getAbsolutePath());
 		try {
+			copyToFile(in,
+				inFile.getCanonicalPath(), out, outFile.getCanonicalPath());
 			in.close();
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
@@ -659,8 +659,10 @@ public class FUtils {
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS026, file); //Can't create file: &{0}
 		}
-		copyToFile(is, is.getClass().getName(), fos, file.getAbsolutePath());
-		try {fos.close();} catch(IOException ex) {
+		try {
+			copyToFile(is,is.getClass().getName(),fos,file.getCanonicalPath());
+			fos.close();
+		} catch(IOException ex) {
 			// Can't write to file: &{0}
 			throw new SException(SYS.SYS023, "java.io.OutputStream");
 		}
@@ -1664,7 +1666,7 @@ public class FUtils {
 		checkDir(fromDir, false);
 		if (!toDir.exists()) {
 			checkDir(toDir, true);
-			addMessage(sb, "Created dir: " + toDir.getAbsolutePath());
+			addMessage(sb, "Created dir: " + toDir.getCanonicalPath());
 		} else {
 			checkDir(toDir, true);
 		}
@@ -1678,7 +1680,7 @@ public class FUtils {
 					if (name != null) {
 						File g = new File(fromDir, name);
 						if (!g.exists()) {
-							addMessage(sb, "Deleted: " + f.getAbsolutePath());
+							addMessage(sb, "Deleted: " + f.getCanonicalPath());
 							FUtils.deleteFile(f);
 						}
 					}
@@ -1694,19 +1696,19 @@ public class FUtils {
 					if (g.isDirectory()) {
 						if (deleteOther) {
 							deleteAll(g, true);
-							addMessage(sb, "Deleted dir: "+g.getAbsolutePath());
+							addMessage(sb,"Deleted dir: "+g.getCanonicalPath());
 							FUtils.copyToFile(f, g);
-							addMessage(sb, "Added: " + g.getAbsolutePath());
+							addMessage(sb, "Added: " + g.getCanonicalPath());
 						}
 					} else {
 						if (compareFile(f, g) != -1L) {
 							FUtils.copyToFile(f, g);
-							addMessage(sb, "Replaced: " + g.getAbsolutePath());
+							addMessage(sb, "Replaced: " + g.getCanonicalPath());
 						}
 					}
 				} else {
 					FUtils.copyToFile(f, g);
-					addMessage(sb, "Added: " + g.getAbsolutePath());
+					addMessage(sb, "Added: " + g.getCanonicalPath());
 				}
 			}
 		}
@@ -1721,8 +1723,8 @@ public class FUtils {
 						File g = new File(fromDir, name);
 						if (!g.exists() || !g.isDirectory()) {
 							FUtils.deleteAll(f, true);
-							addMessage(sb, "Deleted dir: "
-								+ f.getAbsolutePath());
+							addMessage(sb,
+								"Deleted dir: "	+ f.getCanonicalPath());
 						}
 					}
 				}
@@ -1737,14 +1739,14 @@ public class FUtils {
 						} else {
 							//Can't create directory: &{0}
 							throw new SException(SYS.SYS020,
-								g.getAbsolutePath()
+								g.getCanonicalPath()
 									+ " exists and it is not directory!");
 						}
 					} else {
 						if (!g.exists()) {
 							checkDir(g, true);
 							addMessage(sb,
-								"Created dir: " + g.getAbsolutePath());
+								"Created dir: " + g.getCanonicalPath());
 						}
 						updateDirectories(
 							f, g, extension, subdirs, deleteOther, sb);
@@ -1842,8 +1844,8 @@ public class FUtils {
 	public static long filesToZip(final File[] list,
 		final String[] skipExtensions,
 		final File file) throws SException {
-		String zFileName = file.getAbsolutePath();
 		try {
+			String zFileName = file.getCanonicalPath();
 			OutputStream os = new FileOutputStream(file);
 			long result = filesToZip(list, skipExtensions, os, zFileName);
 			try {
@@ -1855,7 +1857,7 @@ public class FUtils {
 			return result;
 		} catch (IOException ex) {
 			//Can't write to file: &{0}
-			throw new SException(SYS.SYS023, zFileName);
+			throw new SException(SYS.SYS023, file.getAbsolutePath());
 		}
 	}
 
@@ -2052,9 +2054,10 @@ public class FUtils {
 		if (!dir.exists() || (!dir.isDirectory())) {
 			throw new SException(SYS.SYS032, dir); //File is not directory: &{0}
 		}
-		String path = dir.getAbsolutePath() + File.separatorChar;
+		String path;
 		ZipEntry z;
 		try {
+			path = dir.getCanonicalPath() + File.separatorChar;
 			z = zin.getNextEntry();
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS044);//Can't read entry from 'zip' file

@@ -154,7 +154,7 @@ final class ChkParser extends DomBaseHandler {
 			h._elemLocator = _elemLocator;
 		}
 	}
-	
+
 	private ChkParser(final ReportWriter reporter) {
 		super();
 		_sReporter = new SReporter(
@@ -202,8 +202,8 @@ final class ChkParser extends DomBaseHandler {
 				_in = u.openStream();
 			} catch (Exception ex) {
 				File f = new File(source);
-				_sysId = f.getAbsolutePath();
 				try {
+					_sysId = f.getCanonicalPath();
 					_in = new FileInputStream(s);
 				} catch (Exception exx) {
 					//File doesn't exist: &{0}
@@ -223,8 +223,8 @@ final class ChkParser extends DomBaseHandler {
 			//File doesn't exist: &{0}
 			throw new SRuntimeException(SYS.SYS024, "null");
 		}
-		_sysId = source.getAbsolutePath();
 		try {
+			_sysId = source.getCanonicalPath();
 			_in = new FileInputStream(source);
 		} catch (Exception ex) {
 			throw new SRuntimeException(SYS.SYS024,//File doesn't exist: &{0}
@@ -725,9 +725,6 @@ final class ChkParser extends DomBaseHandler {
 				XDConstants.XDPROPERTY_XINCLUDE, props);
 			_locationDetails = getBooleanProperty(xdp.isLocationsdetails(),
 				XDConstants.XDPROPERTY_LOCATIONDETAILS, props);
-//			_ignoreEntities = getBooleanProperty(
-//				_chkDoc.getXDPool().isIgnoreUnresolvedEntities(),
-//				XDConstants.XDPROPERTY_IGNOREUNRESOLVEDENTITIES, props);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);

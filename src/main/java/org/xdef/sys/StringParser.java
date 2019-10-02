@@ -3,7 +3,6 @@ package org.xdef.sys;
 import org.xdef.msg.SYS;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -951,12 +950,12 @@ public class StringParser extends SReporter implements SParser {
 				setSourceReader(new InputStreamReader(
 					new FileInputStream(file),charset));
 			}
-			setSysId("file:" + file.getAbsolutePath().replace('\\','/'));
+			setSysId("file:" + file.getCanonicalPath().replace('\\','/'));
 		} catch (UnsupportedEncodingException ex) {
 			setSourceBuffer("");
 			//Unsupported character set name: &{0}
 			throw new SRuntimeException(SYS.SYS035, charset);
-		} catch (FileNotFoundException ex) {
+		} catch (IOException ex) {
 			setSourceBuffer("");
 			//File doesn't exist: &{0}
 			throw new SRuntimeException(SYS.SYS024, file);

@@ -330,7 +330,7 @@ public class GUIScreen extends GUIBase {
 					if (newSrc == null) {
 						File f = new File(u.getFile());
 						newSrc = _sources.get(
-							f.getAbsolutePath().replace('\\','/'));
+							f.getCanonicalPath().replace('\\','/'));
 						if (newSrc == null) {
 							return;
 						}

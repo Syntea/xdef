@@ -300,7 +300,7 @@ public class XDGenCollection {
 			sourcePath = source.startsWith(file)
 				? source.substring(file.length()): source;
 			File f = new File(sourcePath);
-			sourcePath = f.getParentFile().getAbsolutePath();
+			sourcePath = f.getParentFile().getCanonicalPath();
 			sourcePath += File.separator;
 		}
 		String uri = getXDNodeNS(root);

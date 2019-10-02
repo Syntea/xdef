@@ -353,7 +353,7 @@ public class JsonUtil extends StringParser {
 		throws SRuntimeException {
 		try {
 			FileInputStream in = new FileInputStream(f);
-			return JsonUtil.parse(in, f.getAbsolutePath());
+			return JsonUtil.parse(in, f.getCanonicalPath());
 		} catch (Exception ex) {
 			/*IO error detected on &{0}&{1}{, reason: }*/
 			throw new SRuntimeException(SYS.SYS034, f, ex);
@@ -1024,30 +1024,36 @@ public class JsonUtil extends StringParser {
 		}
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
-		sb.append(isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, (byte) 10)
-				!= StringParser.XML_CHAR_NAME_START ? toHexChar(ch) : ch);
-		boolean firstcolon = true;
+		sb.append(isJChar(s, 0) || !Character.isJavaIdentifierStart(ch)
+			? genXmlHexChar(ch) : ch);
+//			|1 StringParser.getXmlCharType(ch, (byte) 10)
+//				!= StringParser.XML_CHAR_NAME_START ? genXmlHexChar(ch) : ch);
+		byte firstcolon = 0;
 		for (int i = 1; i < s.length(); i++) {
 			ch = s.charAt(i);
 			if (isJChar(s, i)) {
-				sb.append(toHexChar(ch));
-			} else if (ch == ':' && firstcolon) {
-				firstcolon = false;
+				sb.append(genXmlHexChar(ch));
+			} else if (ch == ':' && firstcolon == 0) {
+				firstcolon = 1;
 				sb.append(':');
-			} else if (StringParser.getXmlCharType(ch, (byte) 10) >
-				StringParser.XML_CHAR_COLON) {
+				if (i + 1 < s.length()) {
+					ch=s.charAt(++i);
+					sb.append(isJChar(s,i)||!Character.isJavaIdentifierStart(ch)
+					? genXmlHexChar(ch) : ch);
+				} else {
+					i--;
+				}
+			} else if (Character.isJavaIdentifierPart(ch)) {
 				sb.append(ch);
 			} else {
-				firstcolon = false;
-				sb.append(toHexChar(ch));
+				sb.append(genXmlHexChar(ch));
 			}
 		}
 		return sb.toString();
 	}
 
 	/** Convert character to representation used in XML names. */
-	private static String toHexChar(final char c) {
+	private static String genXmlHexChar(final char c) {
 		return "_x" + Integer.toHexString(c) + '_';
 	}
 

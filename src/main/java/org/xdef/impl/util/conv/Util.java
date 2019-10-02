@@ -473,9 +473,9 @@ public final class Util {
 		Iterator<Entry<String, Document>> it = schemas.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, Document> entry = it.next();
-			String fName =
-				new File(path, (String) entry.getKey()).getAbsolutePath();
 			try {
+				String fName =
+					new File(path, (String) entry.getKey()).getCanonicalPath();
 				KXmlUtils.writeXml(fName, (Document)entry.getValue(),true,true);
 			} catch (Exception ex) {
 				throw new RuntimeException(
