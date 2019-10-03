@@ -44,6 +44,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.proc.XDLexicon;
+import org.xdef.sys.SPosition;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -154,28 +155,25 @@ public final class CompileCode extends CompileBase {
 		_init = _initEnd = -1;
 		//predefined global variables
 		CompileVariable var = new CompileVariable("$stdOut",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdErr",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdIn",
-			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 /*UNS*/
 		var = new CompileVariable("$IDParser$", // use only internally
-			XD_PARSER,
-			_globalVariables.getNextOffset(),
-			(byte) 'G');
+			XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);  // prevent to report errors
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$IDuniqueSet$", // use only internally
 			CompileBase.UNIQUESET_M_VALUE,
-			_globalVariables.getNextOffset(),
-			(byte) 'G');
+			_globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
 //		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
 //		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
@@ -232,23 +230,25 @@ public final class CompileCode extends CompileBase {
 	/** Add new variable of given name.
 	 * @param name the name of variable.
 	 * @param kind the variable kind ('G': global, 'L': local, 'X': XModel).
+	 * @param spos source position where the variable was declared.
 	 * @return the CompileVariable object.
 	 */
 	final CompileVariable addVariable(final String name,
 		final short type,
-		final byte kind) {
+		final byte kind,
+		final SPosition spos) {
 		if (type != PARSEITEM_VALUE && getTypeId(name) >= 0) {
 			//Type identifier '&{0}' can't be used here
 			_parser.error(XDEF.XDEF463, name);
-			return new CompileVariable("?", type, -1, (byte) 'L');
+			return new CompileVariable("?", type, -1, (byte) 'L', spos);
 		}
-		CompileVariable result;
+		CompileVariable result = null;
 		switch (kind) {
 			case 'G':
 				result = (CompileVariable) _globalVariables.getVariable(name);
 				if (result == null) {
 					result = new CompileVariable(name,
-						type, _globalVariables.getNextOffset(), kind);
+						type, _globalVariables.getNextOffset(), kind, spos);
 					_globalVariables.addVariable(result);
 					return result;
 				} else {
@@ -263,7 +263,7 @@ public final class CompileCode extends CompileBase {
 			case 'X':
 				if (_varBlock.getVariable(name) == null) {
 					result = new CompileVariable(name,
-						type, _varBlock.getNextOffset(), kind);
+						type, _varBlock.getNextOffset(), kind, spos);
 					if (_varBlock.addVariable(result)) {
 						return result;
 					}
@@ -273,7 +273,7 @@ public final class CompileCode extends CompileBase {
 				result = _localVariables.get(name);
 				if (result == null) {
 					result = new CompileVariable(name, type,
-						++_localVariablesLastIndex, kind);
+						++_localVariablesLastIndex, kind, spos);
 					_localVariables.put(name, result);
 					if (_localVariablesLastIndex > _localVariablesMaxIndex) {
 						_localVariablesMaxIndex = _localVariablesLastIndex;
@@ -285,8 +285,10 @@ public final class CompileCode extends CompileBase {
 				//Internal error&{0}{: }
 				throw new SRuntimeException(SYS.SYS066, "variable kind: "+kind);
 		}
+/*var*/
+		SPosition sp = result != null ? result.getSourcePosition() : null;
 		_parser.error(XDEF.XDEF450, name); //Redefinition of variable '&{0}'
-		return new CompileVariable("?", type, -1, (byte) 'L');
+		return new CompileVariable("?", type, -1, (byte) 'L', null);
 	}
 
 	/** Check all unresolved declarations and try to resolve them. */
@@ -931,7 +933,8 @@ public final class CompileCode extends CompileBase {
 			CompileVariable var = getVariable(name);
 			if (var == null) {
 				_parser.error(XDEF.XDEF424, name);//Undefined variable &{0}
-				var = addVariable(CompileBase.genErrId(), xType, (byte) 'L');
+				var = addVariable(
+					CompileBase.genErrId(), xType, (byte) 'L', null);
 			}
 			if (xType != var.getType()) {
 				switch (xType) {

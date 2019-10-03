@@ -499,13 +499,14 @@ final class CompileXScript extends CompileStatement {
 				if (_sym == IDENTIFIER_SYM) { // was a type
 					short varType = getTypeCode(name);
 					name = _idName;
+					SPosition spos = getLastPosition();
 					nextSymbol();
 					if (_sym == NOCHAR || _sym == SEMICOLON_SYM
 						|| _sym == COLON_SYM || _sym == ASSGN_SYM
 						|| _sym == COMMA_SYM) {
 						//declaration of variable
 						varDeclaration(varType,
-							name, isFinal, false, (byte) 'X');
+							name, isFinal, false, (byte) 'X', spos);
 						checkSemicolon(String.valueOf(IDENTIFIER_SYM));
 					}
 				}
