@@ -315,6 +315,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * method ::= methodName (s? parameterList)?
 	 * parameterList ::= "(" s? ( expression ( s? "," s? expression )* )? s? ")"
 	 * @param name Name of method
+	 * @param spos source position where the method was declared.
 	 * @return true if method was parsed.
 	 */
 	private boolean method(final String name, final SPosition spos) {
@@ -2796,22 +2797,26 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile method declaration.
 	 * @param resultType code of result type of a method.
 	 * @param name name of method.
+	 * @param spos source position where the method was declared.
 	 */
 	private void compileMethodDeclaration(final short resultType,
-		final String name) {
+		final String name,
+		final SPosition spos) {
 		byte mode = (CompileBase.NO_MODE | CompileBase.ANY_MODE);
 		initCompilation(mode, resultType);
-		CodeI1 initCode = compileMethodParamsDeclaration(resultType, name);
+		CodeI1 initCode = compileMethodParamsDeclaration(resultType, name,spos);
 		compileMethodBody(resultType != XD_VOID, initCode);
 	}
 
 	/** Compile method parameters.
 	 * @param resultType code of result type of a method.
 	 * @param name name of method.
+	 * @param spos source position where the method was declared.
 	 * @return array with parameter names.
 	 */
 	private CodeI1 compileMethodParamsDeclaration(final short resultType,
-		final String name) {
+		final String name,
+		final SPosition spos) {
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<SPosition> spositions = new ArrayList<SPosition>();
 		int numPar = 0;
@@ -2917,7 +2922,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_g.addCode(initCode, 0);
 		int address = _g._lastCodeIndex;
 		_popNumParams = paramTypes.length;
-		_g.addMethod(resultType, name, address, paramTypes, _g._mode);
+		_g.addMethod(resultType, name, address, paramTypes, _g._mode, spos);
 		return initCode;
 	}
 
@@ -3078,10 +3083,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (var == null) { // OK
 			var = _g.addVariable(name, XD_BNFGRAMMAR, (byte) 'G', sName);
 		} else {// ERROR
-			SPosition sp = var.getSourcePosition();
-/*var*/
-			//Redefinition of variable '&{0}'
-			error(sName, XDEF.XDEF450, sName.getString());
+			//Repeated declaration of variable '&{0}'&{#SYS000}&{1}
+			//({; (already declared: }{)}
+			_g.putRedefinedError(sName, XDEF.XDEF450,
+				sName.getString(), var.getSourcePosition());
 		}
 		DefBNFGrammar di = null;
 		int extVar = -1;
@@ -3513,7 +3518,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							name = _actDefName + '#' + name;
 						}
 						if (nextSymbol() == LPAR_SYM) { // method
-							compileMethodDeclaration(varType, name);
+							compileMethodDeclaration(varType, name, spos);
 							continue;
 						} else if (_sym == NOCHAR || _sym == SEMICOLON_SYM
 							|| _sym == COLON_SYM || _sym == ASSGN_SYM
@@ -3693,9 +3698,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (varKind != 'X' && _g.getVariable(name) != null) {
-			SPosition sp = _g.getVariable(name).getSourcePosition();
-/*var*/
-			error(XDEF.XDEF450, name);//Redefinition of variable '&{0}'
+			//Repeated declaration of type '&{0}'&{#SYS000}&{1}
+			//({; (already declared: }{)}
+			_g.putRedefinedError(null, XDEF.XDEF470,
+				name, _g.getVariable(name).getSourcePosition());
 			name = CompileBase.genErrId(); // "UNDEF$$$";
 		}
 		nextSymbol();
@@ -3834,9 +3840,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 
 		if (varKind != 'X' && _g.getVariable(uniquesetName) != null) {
-			SPosition sp = _g.getVariable(uniquesetName).getSourcePosition();
-/*var*/
-			error(XDEF.XDEF450, uniquesetName);//Redefinition of variable '&{0}'
+			//Repeated declaration of variable '&{0}'&{#SYS000}&{1}
+			//({; (already declared: }{)}
+			_g.putRedefinedError(null, XDEF.XDEF450,
+				uniquesetName,
+				_g.getVariable(uniquesetName).getSourcePosition());
 			uniquesetName = CompileBase.genErrId(); // "UNDEF$$$";
 		}
 		List<CodeUniqueset.ParseItem> keyItems =

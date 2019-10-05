@@ -23,7 +23,7 @@ final class CompileVariable extends XVariable {
 	/** List of code code addresses where method was called (or null). */
 	private int[] _postdefs;
 	/** Source position where the variable was declared. */
-	private SPosition _spos;
+	private final SPosition _spos;
 
 	/** Creates a new instance of ScriptVariable.
 	 * @param name Name of variable.
@@ -38,6 +38,7 @@ final class CompileVariable extends XVariable {
 		final byte kind,
 		final SPosition spos) {
 		super(name, type, kind, offset, false, false, false);
+		_spos = spos;
 		_parseMethodAddr = -1;
 		_codeAddr = -1;
 		_parseResultType = XDValueID.XD_VOID;

@@ -62,8 +62,11 @@ public class XDGenCollection {
 	private final HashMap<String, XScriptMacro> _macros;
 
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
+	private static final Properties PROPS_NOEXT = new Properties();
 
 	static {
+		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		try {
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
@@ -1013,10 +1016,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(String source) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(source).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, source);
 	}
 
 	/** Check if given String sources contains correct X-definition.
@@ -1025,10 +1025,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(String... sources) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(sources).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, sources);
 	}
 
 	/** Check if given file contains correct X-definition.
@@ -1037,10 +1034,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(File file) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(file).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, file);
 	}
 
 	/** Check if given files contains correct X-definition.
@@ -1049,9 +1043,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(File[] files) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, "true");
-		return XDFactory.getXDBuilder(props).setSource(files).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, files);
 	}
 
 	/** Check if given URL contains correct X-definition.
@@ -1060,10 +1052,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(URL url) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(url).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, url);
 	}
 
 	/** Check if given URLs contains correct X-definition.
@@ -1072,10 +1061,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(URL[] urls) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(urls).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, urls);
 	}
 
 	/** Find namespace of child element on root level.

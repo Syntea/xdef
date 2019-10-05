@@ -362,9 +362,10 @@ public abstract class XDTester extends STester {
 				true, //removeActions
 				false);
 			return KXmlUtils.nodeToString(el, true);
+		} catch (RuntimeException ex) {
+			throw ex;
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "";
+			throw new RuntimeException("Can't create cpllection", ex);
 		}
 	}
 
