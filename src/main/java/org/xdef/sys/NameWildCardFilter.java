@@ -5,12 +5,10 @@ import java.io.File;
 /** File names filter for names with wild card chars (i.e '*' and/or '?').
  * @author Vaclav Trojan
  */
-class NameWildCardFilter implements java.io.FileFilter {
+public class NameWildCardFilter implements java.io.FileFilter {
 
 	/** The name with wildcards. */
 	private final String _wildName;
-	/** Length of the name with wildcards. */
-	private final int _wildNameLen;
 	/** switch if test is case insensitive. */
 	private final boolean _caseInsensitive;
 
@@ -23,9 +21,8 @@ class NameWildCardFilter implements java.io.FileFilter {
 	public NameWildCardFilter(final String wildName, boolean caseInsensitive) {
 		_wildName = (_caseInsensitive = caseInsensitive) ?
 			wildName.toLowerCase() : wildName;
-		_wildNameLen = _wildName.length() - 1;
 	}
-
+	
 	@Override
 	/** Check if the file suits wildcard conditions.
 	 * @param file The file to be checked.
@@ -38,62 +35,64 @@ class NameWildCardFilter implements java.io.FileFilter {
 		if (_wildName.length() == 0) {
 			return true;
 		}
-		String fname;
-		if (_caseInsensitive) {
-			fname = file.getName().toLowerCase();
-		} else {
-			fname = file.getName();
-		}
-		int fnameLen = fname.length() - 1;
-		int i = 0;
-		char ch = _wildName.charAt(0);
-		int j = 1;
-		while (i <= fnameLen) {
+		return chkWildcard(_wildName,
+			_caseInsensitive ? file.getName().toLowerCase() : file.getName());
+	}
+
+	/** Check if the file name represents the with name with wildcard.
+	 * @param wc wildcard name.
+	 * @param fn file name.
+	 * @return true if the file name represents the with name with wildcard.
+	 */
+	public static final boolean chkWildcard(final String wc, final String fn) {
+		int j = 1, i = 0;
+		int fnLen = fn.length() - 1, wcLen = wc.length() - 1;
+		char ch = wc.charAt(0);
+		while (i <= fnLen) {
 			switch (ch) {
 				case '*':
-					if (j > _wildNameLen) {
+					if (j > wcLen) {
 						return true;
 					}
-					if ((ch = _wildName.charAt(j++)) == '.'
-						&& _wildName.indexOf('.',j) < 0) {
-						int ndx = fname.lastIndexOf('.');
+					if ((ch = wc.charAt(j++)) == '.'
+						&& wc.indexOf('.',j) < 0) {
+						int ndx = fn.lastIndexOf('.');
 						if (ndx < i) {
 							return false;
 						}
 						i = ndx + 1;
-						ch = _wildName.charAt(j++);
+						ch = wc.charAt(j++);
 						continue;
 					} else {
-						i = fname.indexOf(ch, i);
+						i = fn.indexOf(ch, i);
 						if (i < 0) {
 							return false;
 						}
-						if (j > _wildNameLen) {
-							return (i == fnameLen);
+						if (j > wcLen) {
+							return (i == fnLen);
 						}
 						continue;
 					}
 				case '?':
-					if (i > fnameLen) {
+					if (i > fnLen) {
 						return false;
 					}
-					if (j > _wildNameLen) {
-						return (i == fnameLen);
+					if (j > wcLen) {
+						return (i == fnLen);
 					}
 					i++;
-					ch = _wildName.charAt(j++);
+					ch = wc.charAt(j++);
 					continue;
 				default:
-					if (ch != fname.charAt(i++)) {
+					if (ch != fn.charAt(i++)) {
 						return false;
 					}
-					if (j > _wildNameLen) {
-						return (i > fnameLen);
+					if (j > wcLen) {
+						return (i > fnLen);
 					}
-					ch = _wildName.charAt(j++);
+					ch = wc.charAt(j++);
 			}
 		}
 		return false;
 	}
-
 }

@@ -47,6 +47,7 @@ import org.xdef.impl.ChkElement;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XVariableTable;
 import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SUtils;
 
 /** Provides debugging tool for X-definition.
  * @author Vaclav Trojan
@@ -540,7 +541,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_sourceID = sourceID;
 			if (newSrc == null) {
 				try {
-					URL u = KXmlUtils.getExtendedURL(sourceID);
+					URL u = SUtils.getExtendedURL(sourceID);
 					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());

@@ -126,7 +126,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			}
 		} else {
 			try {
-				URL u = KXmlUtils.getExtendedURL(s);
+				URL u = SUtils.getExtendedURL(s);
 				_sysId = u.toExternalForm();
 				prepareSourceBytes(u.openStream());
 				prepareXReader();

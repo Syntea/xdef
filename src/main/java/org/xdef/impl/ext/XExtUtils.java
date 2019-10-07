@@ -37,7 +37,6 @@ import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import java.util.Properties;
-import org.xdef.xml.KXmlUtils;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -183,7 +182,7 @@ public final class XExtUtils {
 		XDParseResult pr = new DefParseResult(s);
 		if (s.length() > 0) {//we accept empty string?
 			try {
-				URL u = KXmlUtils.getExtendedURL(s);
+				URL u = SUtils.getExtendedURL(s);
 			} catch (Exception ex) {
 				pr.error(XDEF.XDEF809, "url");//Incorrect value of &{0}
 			}

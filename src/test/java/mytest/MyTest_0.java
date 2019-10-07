@@ -7,6 +7,7 @@ package mytest;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -323,6 +324,27 @@ public class MyTest_0 extends XDTester {
 //			assertNoErrors(reporter);
 //		} catch (Exception ex) {fail(ex);}
 //if(T){return;}
+		try {
+			xp = XDFactory.compileXD((Properties) null, 
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
+			xp = XDFactory.compileXD((Properties) null, 
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name=\"Test\" xd:root=\"A\">\n" +

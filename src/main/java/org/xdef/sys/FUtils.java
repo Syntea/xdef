@@ -14,8 +14,15 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -1573,6 +1580,134 @@ public class FUtils {
 		File[] result = new File[arr.size()];
 		arr.toArray(result);
 		return result;
+	}
+
+	/** Get group of URLs according to with wildcard from the directory.
+	 * @param urls list where to store created URLs.
+	 * @param dir directory where to search files.
+	 * @param wc wildcard.
+	 * @throws IOException if an error occurs.
+	 */
+	private static void getSourceFileGroup(final List<String> urls,
+		final String dir,
+		final String wc) throws Exception {
+		File f = new File(dir);
+		if (f.isDirectory()) {
+			File[] ff = SUtils.getFileGroup(
+				f.getAbsolutePath() + "/" + wc, true);
+			for (File x: ff) {
+				if (x.isFile() && x.exists()) {
+					urls.add(x.getCanonicalFile().toURI().toURL()
+						.toExternalForm());
+				}
+			}
+		} else {
+			throw new IOException("URL error");
+		}
+	}
+
+	/** Get group source URLs from source name which may contain the file name
+	 * containing wildcard.
+	 * @param src name which may contain the file name containing wildcard.
+	 * @return the array of URL names.
+	 * @throws Exception if an error occurs.
+	 */
+	public static String[] getSourceGroup(final String src) throws Exception {
+		List<String> urls = new ArrayList<String>();
+		if (src.startsWith("classpath://")) {
+			String t = src.substring(12);
+			int ndx = t.lastIndexOf('.');
+			t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
+			ndx = t.lastIndexOf('/');
+			String wc = t.substring(ndx+1); // wildcard of file name
+			String dir = t.substring(0,ndx).replace('.', '/');
+			if (wc.indexOf('?')>=0 || wc.indexOf('*')>=0) {
+				ndx = dir.lastIndexOf('.');
+				Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
+				while (eu.hasMoreElements()) {
+					URL u = eu.nextElement();
+					if ("file".equals(u.getProtocol())) {
+						getSourceFileGroup(urls, u.getFile(), wc);
+					} else if ("jar".equals(u.getProtocol())) {
+						String s = u.toExternalForm();
+						ndx = s.indexOf('!');
+						if (ndx >= 0) {
+							URL ux = new URL(s.substring(4, ndx));
+							JarFile jf = new JarFile(ux.getFile());
+							Enumeration<JarEntry> je = jf.entries();
+							while (je.hasMoreElements()) {
+								s = je.nextElement().getName();
+								if (s.startsWith(dir + "/")
+									&& s.length() > dir.length() + 1) {
+									s = s.substring(dir.length() + 1);
+									if (NameWildCardFilter.chkWildcard(wc, s)) {
+										urls.add("classpath://"+dir+"/"+s);
+									}
+								}
+							}
+						}
+					} else {
+						throw new RuntimeException(
+							"Unknown protocol: " + u.getProtocol());
+					}
+				}
+			} else {
+				urls.add(getExtendedURL(
+					src).toURI().toURL().toExternalForm());
+			}
+		} else if (src.startsWith("file:/")) {
+			int ndx = src.lastIndexOf('/');
+			String wc = src.substring(ndx+1); // wildcard of file name
+			if (wc.indexOf('?')>=0 || wc.indexOf('*')>=0) {
+				getSourceFileGroup(urls,
+					new URL(src.substring(0, ndx)).getFile(), wc);
+			} else {
+				urls.add(src);
+			}
+		} else if (src.startsWith("ftp:") || src.startsWith("ftps:")
+			|| src.startsWith("http:") || src.startsWith("https:")) {
+			urls.add(src);
+		} else { // try just pathname
+			File[] files = SUtils.getFileGroup(src);
+			for (File x: files) {
+				urls.add(x.getCanonicalFile().toURI().toURL().toExternalForm());
+			}
+		}
+		return urls.toArray(new String[urls.size()]);
+	}
+
+	/** Get URL from string (accept also protocol "classpath://").
+	 * @param source string with URL source (MAY BE ALSO protocol "classpath:").
+	 * @return URL created from the source string.
+	 * @throws MalformedURLException IF AN ERROR OCCURS.
+	 */
+	public static final URL getExtendedURL(final String source)
+		throws MalformedURLException{
+		String s;
+		try {
+			s = URLDecoder.decode(source,
+				System.getProperties().getProperty("file.encoding")).trim();
+		} catch (UnsupportedEncodingException ex) {
+			s = source.trim();
+		}
+		if (s.startsWith("classpath://")) {
+			try {
+				String t = s.substring(12);
+				int ndx = t.lastIndexOf('.');
+				t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
+				URL url = ClassLoader.getSystemResource(t);
+				if (url != null) {
+					return url;
+				}
+			} catch (Exception ex) {} // try regular URL constructor
+		}
+		URL u = new URL(s);
+		if ("file".equals(u.getProtocol())) {
+			try {
+				return new File(u.getFile()).getCanonicalFile().toURI().toURL();
+			} catch (Exception ex) {}
+		}
+		return u;
 	}
 
 	/** Update directories. If a file from the directory "fromDir" not exists

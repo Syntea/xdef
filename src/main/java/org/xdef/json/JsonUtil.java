@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
+import org.xdef.sys.SUtils;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
  * and create string with JSON source from JSON object.
@@ -321,7 +322,7 @@ public class JsonUtil extends StringParser {
 		InputStream in = null;
 		String sysId = null;
 		try {
-			URL url = KXmlUtils.getExtendedURL(source);
+			URL url = SUtils.getExtendedURL(source);
 			in = url.openStream();
 			sysId = url.toExternalForm();
 			result = JsonUtil.parse(in, sysId);

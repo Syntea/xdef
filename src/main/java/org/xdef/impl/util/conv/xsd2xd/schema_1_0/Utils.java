@@ -9,6 +9,7 @@ import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.sys.SUtils;
 
 /** Provides static methods for working with XML Schema 1.0 documents
  * and getting information.
@@ -275,7 +276,7 @@ public class Utils {
 			} else if (IMPORT.equals(type)) {
 				String namespace = external.getAttribute("namespace");
 				if (!"".equals(namespace)) {
-					url = KXmlUtils.getExtendedURL(namespace);
+					url = SUtils.getExtendedURL(namespace);
 					ret.add(url);
 				}
 			}
@@ -309,7 +310,7 @@ public class Utils {
 			location = sourceBase + location;
 		}
 		try {
-			return KXmlUtils.getExtendedURL(location);
+			return SUtils.getExtendedURL(location);
 		} catch (MalformedURLException ex) {
 			throw new RuntimeException(
 				"Error creating URL from String: " + location, ex);
@@ -371,7 +372,7 @@ public class Utils {
 					URL url = Utils.getURL(schemaURL, schemaLocation);
 					ret.add(url);
 				} else {
-					URL url = KXmlUtils.getExtendedURL(namespaceAttribute);
+					URL url = SUtils.getExtendedURL(namespaceAttribute);
 					ret.add(url);
 				}
 			}

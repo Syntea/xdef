@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
-import org.xdef.xml.KXmlUtils;
 
 /** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
  * with X-definitions created from source data.
@@ -412,13 +411,15 @@ public class XPreCompiler implements PreCompiler {
 			if (sid.startsWith("http:") || sid.startsWith("https:")
 				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
 				|| sid.startsWith("file:")
-				|| sid.startsWith("classpath://")) {
+				|| sid.startsWith("classpath:")) {
 				try {
-					URL u = KXmlUtils.getExtendedURL(sid);
-					if (_includeList.contains(u)) {
-						continue;
+					for (String x : SUtils.getSourceGroup(sid)) {
+						URL u = new URL(x);
+						if (_includeList.contains(u)) {
+							continue;
+						}
+						_includeList.add(u);
 					}
-					_includeList.add(u);
 				} catch (Exception ex) {
 					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				}
@@ -427,14 +428,14 @@ public class XPreCompiler implements PreCompiler {
 					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
 					if (actPath != null) {//take path from sysId
 						try {
-							URL u = KXmlUtils.getExtendedURL(actPath);
+							URL u = SUtils.getExtendedURL(actPath);
 							if (!"file".equals(u.getProtocol())) {
 								String v =u.toExternalForm().replace('\\', '/');
 								int i = v.lastIndexOf('/');
 								if (i >= 0) {
 									v = v.substring(0, i + 1);
 								}
-								u = KXmlUtils.getExtendedURL(v + sid);
+								u = SUtils.getExtendedURL(v + sid);
 								if (_includeList.contains(u)) {
 									continue;
 								}

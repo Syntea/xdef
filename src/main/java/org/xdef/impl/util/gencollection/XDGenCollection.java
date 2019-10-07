@@ -343,38 +343,22 @@ public class XDGenCollection {
 	/** Process include list from header of X-definition. */
 	private void processIncludeList(Element def, String sourcePath) {
 		/** let's check some attributes of X-definition.*/
-		String include =
-			getXdefAttr(def, def.getNamespaceURI(), "include", true);
+		String include = getXdefAttr(def,def.getNamespaceURI(),"include",true);
 		if (include.length() == 0) {
 			return;
 		}
 		StringTokenizer st = new StringTokenizer(include, " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system id
-			if (sid.startsWith("http:") || sid.startsWith("https:")
-				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
-				|| sid.startsWith("file:")
-				|| sid.startsWith("classpath://")) {
-				try {
-					URL url = KXmlUtils.getExtendedURL(sid);
-					if (_includeList.contains(url.toExternalForm())) {
-						continue;
+			try {
+				String[] urls = SUtils.getSourceGroup(sourcePath + sid);
+				for (String u : urls) {
+					u = SUtils.getExtendedURL(u).toExternalForm();
+					if (!_includeList.contains(u)) {
+						_includeList.add(u);
 					}
-					_includeList.add(url.toExternalForm());
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
 				}
-			} else {
-				File[] list = SUtils.getFileGroup(sourcePath + sid);
-				for (int i = 0; list != null && i < list.length; i++) {
-					try {
-						String fname = list[i].getCanonicalPath();
-						if (list[i].canRead() && !_includeList.contains(fname)){
-							_includeList.add(fname);
-						}
-					} catch (Exception ex) {} // igore
-				}
-			}
+			} catch (Exception ex) {} // igore
 		}
 	}
 

@@ -20,7 +20,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
-import org.xdef.xml.KXmlUtils;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -1162,7 +1161,7 @@ public class SUtils extends FUtils {
 			|| sid.startsWith("file:")
 			|| sid.startsWith("classpath://")) {
 			try {
-				return KXmlUtils.getExtendedURL(sid);
+				return getExtendedURL(sid);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, sid, ex);
@@ -1175,7 +1174,7 @@ public class SUtils extends FUtils {
 			try {
 				int ndx = actPath.lastIndexOf('/');
 				String s = actPath.substring(0, ndx+ 1) + sid;
-				return KXmlUtils.getExtendedURL(s);
+				return getExtendedURL(s);
 			} catch (Exception ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, sid, ex);

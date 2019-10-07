@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.SThrowable;
+import org.xdef.sys.SUtils;
 
 /** Provides utility for interactive editing and debugging X-definitions.
  * @author Vaclav Trojan
@@ -252,7 +253,7 @@ public class GUIEditor extends GUIScreen {
 		} else if (obj instanceof String) {
 			sourceId = "STRING";
 		} else if (obj instanceof URL) {
-			sourceId = KXmlUtils.getExtendedURL(((URL) obj).toExternalForm())
+			sourceId = SUtils.getExtendedURL(((URL) obj).toExternalForm())
 				.toExternalForm();
 		} else {
 			sourceId = obj.getClass().getName();

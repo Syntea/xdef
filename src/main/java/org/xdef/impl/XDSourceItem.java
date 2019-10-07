@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import org.xdef.xml.KXmlUtils;
 
 /** Contains information about X-definition source item.
  * @author Vaclav Trojan
@@ -37,7 +36,7 @@ public final class XDSourceItem {
 	 */
 	public XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
-			_url = KXmlUtils.getExtendedURL(((File) o).getCanonicalFile()
+			_url = SUtils.getExtendedURL(((File) o).getCanonicalFile()
 				.toURI().toURL().toExternalForm());
 		} else if (o instanceof URL) {
 			_url = (URL) o;

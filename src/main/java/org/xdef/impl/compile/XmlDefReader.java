@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.xml.KParsedAttr;
-import org.xdef.xml.KXmlUtils;
+import org.xdef.sys.SUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -357,7 +357,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 						} while (mr.nextChar() != 0);
 					}
 					try {
-						URL u = KXmlUtils.getExtendedURL(sysID);
+						URL u = SUtils.getExtendedURL(sysID);
 						in = u.openStream();
 						if (in == null) {
 							mr.setUnresolved(true);
@@ -411,7 +411,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		if (_isDTD && sysID != null && pubID == null) {
 			in = null;
 			try {
-				URL u = KXmlUtils.getExtendedURL(sysID);
+				URL u = SUtils.getExtendedURL(sysID);
 				in = u.openStream();
 			} catch (Exception ex) {}
 			if (in == null) {

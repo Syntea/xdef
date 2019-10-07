@@ -41,7 +41,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Node;
 import org.xdef.impl.xml.KParsedAttr;
-import org.xdef.xml.KXmlUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -197,7 +196,7 @@ final class ChkParser extends DomBaseHandler {
 			} catch (Exception ex) {}//never happens
 		} else {
 			try {
-				URL u = KXmlUtils.getExtendedURL(s);
+				URL u = SUtils.getExtendedURL(s);
 				_sysId = u.toExternalForm();
 				_in = u.openStream();
 			} catch (Exception ex) {
@@ -325,7 +324,7 @@ final class ChkParser extends DomBaseHandler {
 			} else if ((_isDTD && _chkDoc._xdef._resolveEntities != 'F')
 				|| !_isDTD) {
 				try {
-					URL u = KXmlUtils.getExtendedURL(sysID);
+					URL u = SUtils.getExtendedURL(sysID);
 					in = u.openStream();
 				} catch (Exception ex) {
 					//URL &{0} error: &{1}{; }
