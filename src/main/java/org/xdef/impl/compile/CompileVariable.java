@@ -4,35 +4,41 @@ import org.xdef.impl.code.CodeI1;
 import org.xdef.XDValue;
 import org.xdef.impl.XVariable;
 import org.xdef.XDValueID;
+import org.xdef.sys.SPosition;
 
-/** Represents information of compiler variables.
+/** Represents variable parameters used by compiler.
  * @author Vaclav Trojan
  */
 final class CompileVariable extends XVariable {
-	/** Object with value of the variable (used optionally). */
+	/** Object with initial value of a variable. */
 	private XDValue _value;
-	/** final constant (-1  .. such code not exists). */
+	/** Address of final constant (or  -1 such code address not exists). */
 	private int _codeAddr;
-	/** Code address of check method. */
-	private int _parseMethodAddr; //TYPECHK_VALUE
-	/** Type of parsed object. */
-	private short _parseResultType; //TYPECHK_VALUE
-	/** List of code code addresses where method was called. */
-	private int[] _postdefs;
+	/** Code address of check method or -1 if it not exists. */
+	private int _parseMethodAddr;
+	/** Type of parsed object or XDValueID.XD_VOID if it not exists. */
+	private short _parseResultType;
 	/** Reference name to declared type (valid only for uniqueset keys).*/
 	private String _refTypeName;
+	/** List of code code addresses where method was called (or null). */
+	private int[] _postdefs;
+	/** Source position where the variable was declared. */
+	private final SPosition _spos;
 
 	/** Creates a new instance of ScriptVariable.
 	 * @param name Name of variable.
 	 * @param type The type of variable.
 	 * @param offset The offset of variable.
 	 * @param kind kind of variable: 'G' .. global, 'L' .. local, 'X' .. XModel.
+	 * @param spos source position where the variable was declared.
 	 */
 	CompileVariable(final String name,
 		final short type,
 		final int offset,
-		final byte kind) {
+		final byte kind,
+		final SPosition spos) {
 		super(name, type, kind, offset, false, false, false);
+		_spos = spos;
 		_parseMethodAddr = -1;
 		_codeAddr = -1;
 		_parseResultType = XDValueID.XD_VOID;
@@ -53,8 +59,7 @@ final class CompileVariable extends XVariable {
 		setOffset(address);
 		if (_postdefs != null) {
 			for (int i = 0; i < _postdefs.length; i++) {
-				int pc = _postdefs[i];
-				((CodeI1) g.getCodeItem(pc)).setParam(address);
+				((CodeI1) g.getCodeItem(_postdefs[i])).setParam(address);
 			}
 			_postdefs = null;
 		}
@@ -81,17 +86,13 @@ final class CompileVariable extends XVariable {
 	final short getParseResultType() {return _parseResultType;}
 
 	/** Set parsed result type of variable. */
-	final void setParseResultType(short parseResultType) {
-		_parseResultType = parseResultType;
-	}
+	final void setParseResultType(short type) {_parseResultType = type;}
 
 	/** Get parse method address. */
 	final int getParseMethodAddr() {return _parseMethodAddr;}
 
 	/** Set parse method address. */
-	final void setParseMethodAddr(int parseMethod) {
-		_parseMethodAddr = parseMethod;
-	}
+	final void setParseMethodAddr(int method) {_parseMethodAddr = method;}
 
 	/** Get address of code (of constant).*/
 	final int getCodeAddr() {return _codeAddr;}
@@ -112,6 +113,11 @@ final class CompileVariable extends XVariable {
 			&& isFinal() && _value != null;
 	}
 
+	/** Get source position where the variable was declared.
+	 * @return source position where the variable was declared.
+	 */
+	final SPosition getSourcePosition() {return _spos;}
+
 	/** Get reference name of declared type (valid only for uniqueset keys).
 	 * @return reference name of declared type or null.
 	 */
@@ -129,5 +135,4 @@ final class CompileVariable extends XVariable {
 		+ ", parseResultType="  + CompileBase.getTypeName(_parseResultType)
 		+ ", val=" + _value;
 	}
-
 }

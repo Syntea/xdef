@@ -1,5 +1,20 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.2, release-date 2019-10-09
+* Corrected org.xdef.sys.SDatetime methods implemented from
+  javax.xml.datatype.XMLGregorianCalendar.
+* the parameters with sources of X-definitions and the items of the attribute
+  "xd:include" of root elements "xd:def" or "xd:collection" may contain the file
+  names with wildcard character "*" or "?".
+  E.g.:
+  ```java
+  XDPool xp = XDFactory.compileXD(props, "classpath://xxx.yyy.a*.xdef");
+  ```
+  or
+  ```xml
+  <xd:collection xmlns:xd = "..." xd:include = "classpath://xxx.yyy.a*.xdef"/>
+  ```
+
 # Version 32.5.1, release-date 2019-09-25
 * Corrected org.xdef.sys.SDatetime methods implemented from
   javax.xml.datatype.XMLGregorianCalendar.

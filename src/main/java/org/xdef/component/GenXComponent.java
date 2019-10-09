@@ -2890,11 +2890,11 @@ if (isRoot && xe._json == 2 && nodes.length == 1) {
 		try {
 			Object[] xdefs = new String[sources.size()];
 			sources.toArray(xdefs);
-			XDPool xp = XDFactory.compileXD(null, xdefs);
-			genXComponent(xp,xcDir.getAbsolutePath(),encoding,javadoc,false);
+			XDPool x = XDFactory.compileXD(null, xdefs);
+			genXComponent(x, xcDir.getCanonicalPath(), encoding,javadoc, false);
 			if (xpFile != null) {
 				ObjectOutputStream oos = new ObjectOutputStream(xpFile);
-				oos.writeObject(xp);
+				oos.writeObject(x);
 				oos.close();
 			}
 		} catch (RuntimeException ex) {

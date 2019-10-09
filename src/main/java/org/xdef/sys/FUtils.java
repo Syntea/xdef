@@ -14,8 +14,15 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -40,7 +47,7 @@ public class FUtils {
 	 * Long.MAX_VALUE if filesystem not exists or if it is not allowed to write
 	 * to the file.
 	 */
-	public static long getUsableSpace(final File file) {
+	public static final long getUsableSpace(final File file) {
 		File f = file;
 		for (;;) {
 			if (f.isDirectory()) {
@@ -66,7 +73,7 @@ public class FUtils {
 	 * <li>SYS032 File is not directory: {dir}</li>
 	 * </ul>
 	 */
-	public static File checkDir(final String path, final boolean create)
+	public static final File checkDir(final String path, final boolean create)
 	throws SException {
 		return checkDir(new File(path), create);
 	}
@@ -82,7 +89,7 @@ public class FUtils {
 	 * <li>SYS032 File is not directory: {dir}</li>
 	 * </ul>
 	 */
-	public static File checkDir(final File dir, final boolean create)
+	public static final File checkDir(final File dir, final boolean create)
 	throws SException {
 		if (!dir.exists()) {
 			if (!create) {
@@ -102,7 +109,7 @@ public class FUtils {
 
 	/** Check if path points to a file and create it if it doesn't exist (if the
 	 * argument create is true).
-	 * @param pathname full path to the file.
+	 * @param fname full pathname to the file.
 	 * @param create If true the directory is created if it not exists yet.
 	 * @return java.io.File object created according to arguments.
 	 * @throws SException
@@ -112,9 +119,9 @@ public class FUtils {
 	 * <li>SYS032 File is not directory: {dir}</li>
 	 * </ul>
 	 */
-	public static File checkFile(final String pathname, final boolean create)
+	public static final File checkFile(final String fname, final boolean create)
 	throws SException {
-		return checkFile(new File(pathname), create);
+		return checkFile(new File(fname), create);
 	}
 
 	/** Check if path points to a file and create it if it doesn't exist (if the
@@ -129,7 +136,7 @@ public class FUtils {
 	 * <li>SYS026 FCan't create file: {file}</li>
 	 * </ul>
 	 */
-	public static File checkFile(final File file, final boolean create)
+	public static final File checkFile(final File file, final boolean create)
 	throws SException {
 		if (!file.exists()) {
 			if (create) {
@@ -158,7 +165,7 @@ public class FUtils {
 	 * @param f2 new file.
 	 * @throws SException SYS031 Can't rename file {f1} to {f2}
 	 */
-	public static void renameFile(final File f1, final File f2)
+	public static final void renameFile(final File f1, final File f2)
 	throws SException {
 		if (!f1.renameTo(f2)) {
 			/*Can't rename file &{0} to &{1}*/
@@ -170,7 +177,7 @@ public class FUtils {
 	 * @param f file to be deleted.
 	 * @throws SException SYS021 Can't delete file: {file}
 	 */
-	public static void deleteFile(final File f) throws SException {
+	public static final void deleteFile(final File f) throws SException {
 		if (!f.exists()) {
 			return;
 		}
@@ -188,7 +195,7 @@ public class FUtils {
 	 * <li>SYS034 IO error detected on file.</li>
 	 * </ul>
 	 */
-	public static String getDirPath(final File dir) throws SException {
+	public static final String getDirPath(final File dir) throws SException {
 		try {
 			if (dir.isDirectory()) {
 				return dir.getCanonicalPath() + File.separatorChar;
@@ -208,7 +215,7 @@ public class FUtils {
 	 * first difference. If a file doesn't exist or if it is not readable
 	 * return 0;
 	 */
-	public static long compareFile(final String fn1, final String fn2) {
+	public static final long compareFile(final String fn1, final String fn2) {
 		return compareFile(new File(fn1), new File(fn2));
 	}
 
@@ -220,7 +227,7 @@ public class FUtils {
 	 * first difference. If a file doesn't exist or if it is not readable
 	 * return 0;
 	 */
-	public static long compareFile(final File f1, final File f2) {
+	public static final long compareFile(final File f1, final File f2) {
 		if (f1.exists() && f1.canRead() && f2.exists() && f2.canRead()) {
 			try {
 				InputStream fs1 = new FileInputStream(f1);
@@ -244,7 +251,7 @@ public class FUtils {
 	 * @return true if contents of files are equal, false otherwise.
 	 * If a file doesn't exist or if it is not readable return also false.
 	 */
-	public static boolean filesEqual(final File f1, final File f2) {
+	public static final boolean filesEqual(final File f1, final File f2) {
 		if (f1.exists() && f2.exists() && f1.length() == f2.length()) {
 			if (f1.equals(f2)) {
 				return true;
@@ -277,7 +284,8 @@ public class FUtils {
 	 * first difference. If a file doesn't exist or if it is not readable
 	 * return 0;
 	 */
-	public static long compareFile(final InputStream f1, final InputStream f2) {
+	public static final long compareFile(final InputStream f1,
+		final InputStream f2) {
 		long diff = 0;
 		try {
 			byte[] buf1 = new byte[4096], buf2 = new byte[4096];
@@ -332,10 +340,8 @@ public class FUtils {
 	 * @param is input stream.
 	 * @return number from input stream (always positive in range 0..65535).
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static int readInt2(final InputStream is)
-	throws SIOException, IOException {
+	public static final int readInt2(final InputStream is) throws IOException {
 		int i = is.read();
 		if (i < 0) {
 			throw new SIOException(SYS.SYS019); //Unexpected end of data
@@ -351,10 +357,8 @@ public class FUtils {
 	 * @param is input stream.
 	 * @return integer from input stream.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static int readInt4(final InputStream is)
-	throws SIOException, IOException {
+	public static final int readInt4(final InputStream is) throws IOException {
 		int i = is.read();
 		int j = is.read();
 		int k = is.read();
@@ -370,10 +374,9 @@ public class FUtils {
 	 * -32768 .. 32767).
 	 * @param os output stream.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS016 Argument out of bounds.
 	 */
 	public static void writeInt2(final int i, final OutputStream os)
-	throws SIOException, IOException {
+		throws IOException {
 		if (i < Short.MIN_VALUE || i > Short.MAX_VALUE) {
 			throw new SIOException(SYS.SYS016); //Argument out of bounds
 		}
@@ -385,7 +388,7 @@ public class FUtils {
 	 * @param os output stream.
 	 * @throws IOException if an error occurs.
 	 */
-	public static void writeInt4(final int i, final OutputStream os)
+	public static final void writeInt4(final int i, final OutputStream os)
 	throws IOException {
 		os.write(new byte[] {
 			(byte) (i >> 24), (byte) (i >> 16), (byte) (i >> 8), (byte) i});
@@ -395,10 +398,8 @@ public class FUtils {
 	 * @param is input stream.
 	 * @return integer from input stream.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static long readInt8(final InputStream is)
-	throws SIOException, IOException {
+	public static final long readInt8(final InputStream is) throws IOException {
 		long result = 0;
 		for (int i = 0; i < 8; i++) {
 			int j = is.read();
@@ -414,10 +415,9 @@ public class FUtils {
 	 * @param m long to be written.
 	 * @param os output stream.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static void writeInt8(final long m, final OutputStream os)
-	throws SIOException, IOException {
+	public static final void writeInt8(final long m, final OutputStream os)
+		throws IOException {
 		byte[] b = new byte[8];
 		long n = m;
 		for (int i = 7; i >= 0; i--) {
@@ -432,9 +432,8 @@ public class FUtils {
 	 * @param length length of data block to be read.
 	 * @return required length.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static byte[] readBlock(final InputStream is,
+	public static final byte[] readBlock(final InputStream is,
 		final int length) throws IOException {
 		if (length <= 0) {
 			if (length == 0) {
@@ -460,14 +459,13 @@ public class FUtils {
 	}
 
 	/** Read first length block from two bytes from the InputStream
-	 * and then read th block of bytes in given length.
+	 * and then read the block of bytes in given length.
 	 * @param is input stream.
 	 * @return byte array with data from input.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static byte[] readShortBlock(final InputStream is)
-	throws SIOException, IOException {
+	public static final byte[] readShortBlock(final InputStream is)
+		throws IOException {
 		return readBlock(is, readInt2(is));
 	}
 
@@ -476,10 +474,9 @@ public class FUtils {
 	 * @param is input stream.
 	 * @return byte array with data from input.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS019 Unexpected end of data.
 	 */
-	public static byte[] readLongBlock(final InputStream is)
-	throws SIOException, IOException {
+	public static final byte[] readLongBlock(final InputStream is)
+		throws IOException {
 		return readBlock(is, readInt2(is));
 	}
 
@@ -488,10 +485,9 @@ public class FUtils {
 	 * @param b block of bytes.
 	 * @param os output stream.
 	 * @throws IOException if an error occurs.
-	 * @throws SIOException SYS016 Argument out of bounds (block is too big)
 	 */
-	public static void writeShortBlock(final byte[] b, final OutputStream os)
-	throws SIOException, IOException {
+	public static final void writeShortBlock(final byte[] b,
+		final OutputStream os) throws IOException {
 		if (b == null || b.length == 0) {
 			os.write(new byte[] {0, 0});
 		} else {
@@ -506,8 +502,8 @@ public class FUtils {
 	 * @param os output stream.
 	 * @throws IOException if an error occurs.
 	 */
-	public static void writeLongBlock(final byte[] b, final OutputStream os)
-	throws IOException {
+	public static final void writeLongBlock(final byte[] b,
+		final OutputStream os) throws IOException {
 		if (b == null || b.length == 0) {
 			os.write(new byte[] {0, 0, 0, 0});
 		} else {
@@ -530,7 +526,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final String inName,
+	public static final void copyToFile(final String inName,
 		final String outName,
 		final boolean append) throws SException {
 		copyToFile(new File(inName), new File(outName), append);
@@ -554,7 +550,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final File inFile,
+	public static final void copyToFile(final File inFile,
 		final File outFile,
 		final boolean append) throws SException {
 		InputStream in;
@@ -567,10 +563,10 @@ public class FUtils {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		if (inFile.length() + 10 > getUsableSpace(outFile)) {
-			if (outFile.getParentFile() != null && 
+			if (outFile.getParentFile() != null &&
 				!outFile.getParentFile().exists()) {
 				//File doesn't exist: &{0}
-				throw new SException(SYS.SYS024, outFile); 
+				throw new SException(SYS.SYS024, outFile);
 			}
 			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
@@ -581,9 +577,9 @@ public class FUtils {
 			//Can't write to file: &{0}
 			throw new SException(SYS.SYS023, outFile);
 		}
-		copyToFile(in,
-			inFile.getAbsolutePath(), out, outFile.getAbsolutePath());
 		try {
+			copyToFile(in,
+				inFile.getCanonicalPath(), out, outFile.getCanonicalPath());
 			in.close();
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
@@ -610,7 +606,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final File inFile,
+	public static final void copyToFile(final File inFile,
 		final File outFile) throws SException {
 		copyToFile(inFile, outFile, false);
 	}
@@ -628,7 +624,7 @@ public class FUtils {
 	 * <li>SYS030 File already exists</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final InputStream is,
+	public static final void copyToFile(final InputStream is,
 		final String fname,
 		final boolean append) throws SException {
 		copyToFile(is, new File(fname), append);
@@ -647,7 +643,7 @@ public class FUtils {
 	 * <li>SYS030 File already exists</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final InputStream is,
+	public static final void copyToFile(final InputStream is,
 		final File file,
 		final boolean append) throws SException {
 		if (!append && file.exists()) {
@@ -659,8 +655,10 @@ public class FUtils {
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS026, file); //Can't create file: &{0}
 		}
-		copyToFile(is, is.getClass().getName(), fos, file.getAbsolutePath());
-		try {fos.close();} catch(IOException ex) {
+		try {
+			copyToFile(is,is.getClass().getName(),fos,file.getCanonicalPath());
+			fos.close();
+		} catch(IOException ex) {
 			// Can't write to file: &{0}
 			throw new SException(SYS.SYS023, "java.io.OutputStream");
 		}
@@ -677,8 +675,8 @@ public class FUtils {
 	 * <li>SYS036 Program exception</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final File inFile, final OutputStream os)
-	throws SException {
+	public static final void copyToFile(final File inFile,
+		final OutputStream os) throws SException {
 		FileInputStream is;
 		try {
 			is = new FileInputStream(inFile);
@@ -702,8 +700,8 @@ public class FUtils {
 	 * <li>SYS028 Can't read file: {file}</li>
 	 * </ul>
 	 */
-	public static void copyToFile(final InputStream is, final OutputStream os)
-	throws SException {
+	public static final void copyToFile(final InputStream is,
+		final OutputStream os) throws SException {
 		copyToFile(is, is.getClass().getName(), os, os.getClass().getName());
 	}
 
@@ -776,11 +774,10 @@ public class FUtils {
 	 * @param deep if false the directories are skipped.
 	 * @throws SException if an error occurs.
 	 */
-	public static void xcopy(final File[] from,
+	public static final void xcopy(final File[] from,
 		final File to,
 		final boolean deep,
-		final String... exclude)
-		throws SException {
+		final String... exclude) throws SException {
 		for (File x: from) {
 			if (!chkExclude(x, exclude)) {
 				if (x.isDirectory() && deep) {
@@ -805,7 +802,7 @@ public class FUtils {
 	 * directories.
 	 * @throws SException if an error occurs.
 	 */
-	public static void xcopy(final String fromDir,
+	public static final void xcopy(final String fromDir,
 		final String toDir,
 		final boolean deep,
 		final String... excludes) throws SException {
@@ -834,7 +831,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception</li>
 	 * </ul>
 	 */
-	public static StringBuffer readToStringBuffer(final InputStream in,
+	public static final StringBuffer readToStringBuffer(final InputStream in,
 		final StringBuffer sb,
 		final String encoding) throws SException {
 		InputStreamReader is;
@@ -874,7 +871,7 @@ public class FUtils {
 	 * @return StringBuffer with result.
 	 * @throws SException SYS029 Can't read input stream
 	 */
-	public static StringBuffer readToStringBuffer(final Reader is,
+	public static final StringBuffer readToStringBuffer(final Reader is,
 		final StringBuffer sb) throws SException {
 		StringBuffer mysb;
 		if (sb == null) {
@@ -914,7 +911,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception</li>
 	 * </ul>
 	 */
-	public static StringBuffer readToStringBuffer(final File file,
+	public static final StringBuffer readToStringBuffer(final File file,
 		final StringBuffer sb,
 		final String encoding) throws SException {
 		InputStream is;
@@ -949,7 +946,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static StringBuffer readToStringBuffer(final File file,
+	public static final StringBuffer readToStringBuffer(final File file,
 		final StringBuffer buf) throws SException {
 		return readToStringBuffer(file, buf, "UTF-8");
 	}
@@ -966,8 +963,8 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static String readString(final InputStream in, final String encoding)
-	throws SException {
+	public static final String readString(final InputStream in,
+		final String encoding) throws SException {
 		return readToStringBuffer(in, null, encoding).toString();
 	}
 
@@ -1000,7 +997,8 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static String readString(final InputStream in) throws SException {
+	public static final String readString(final InputStream in)
+		throws SException {
 		return readToStringBuffer(in, null, "UTF-8").toString();
 	}
 
@@ -1014,7 +1012,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static String readString(final File file) throws SException {
+	public static final String readString(final File file) throws SException {
 		return readString(file, "UTF-8");
 	}
 
@@ -1023,7 +1021,7 @@ public class FUtils {
 	 * @return String with result.
 	 * @throws SException SYS029 Can't read input stream.
 	 */
-	public static String readString(final Reader is) throws SException {
+	public static final String readString(final Reader is) throws SException {
 		StringBuilder mysb = new StringBuilder();
 		try {
 			int len;
@@ -1046,7 +1044,8 @@ public class FUtils {
 	 * @return byte array with result.
 	 * @throws SException SYS029 Can't read from input stream
 	 */
-	public static byte[] readBytes(final InputStream in) throws SException {
+	public static final byte[] readBytes(final InputStream in)
+		throws SException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] buf = new byte[4096];
 		try {
@@ -1074,7 +1073,7 @@ public class FUtils {
 	 * <li>SYS028 Can't read file: {file}</li>
 	 * </ul>
 	 */
-	public static byte[] readBytes(final File file) throws SException {
+	public static final byte[] readBytes(final File file) throws SException {
 		if (!file.exists()) {
 			throw new SException(SYS.SYS024, file); //File doesn't exist: &{0}
 		}
@@ -1110,7 +1109,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void writeStringBuffer(final File file,
+	public static final void writeStringBuffer(final File file,
 		final StringBuffer buf,
 		final String encoding) throws SException {
 		long estimatedSize = buf.length()*2 + 10;
@@ -1154,7 +1153,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void writeStringBuffer(final File file,
+	public static final void writeStringBuffer(final File file,
 		final StringBuffer buf) throws SException {
 		writeStringBuffer(file, buf, "UTF-8");
 	}
@@ -1171,8 +1170,8 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void writeString(final File file, final String str)
-	throws SException {
+	public static final void writeString(final File file, final String str)
+		throws SException {
 		writeString(file, str, "UTF-8");
 	}
 
@@ -1181,8 +1180,8 @@ public class FUtils {
 	 * @param str string to be written.
 	 * @throws SException SYS023 Can't write to file: {file}
 	 */
-	public static void writeString(final OutputStream out, final String str)
-	throws SException {
+	public static final void writeString(final OutputStream out,
+		final String str) throws SException {
 		writeString(out, str, "UTF-8");
 	}
 
@@ -1198,7 +1197,7 @@ public class FUtils {
 	 * <li>SYS035 Unsupported character set name</li>
 	 * </ul>
 	 */
-	public static void writeString(final OutputStream out,
+	public static final void writeString(final OutputStream out,
 		final String str,
 		final String encoding) throws SException {
 		OutputStreamWriter os;
@@ -1237,7 +1236,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void writeString(final File file,
+	public static final void writeString(final File file,
 		final String str,
 		final String encoding) throws SException {
 		long estimatedSize = str.length()*2 + 10;
@@ -1277,8 +1276,8 @@ public class FUtils {
 	 * <tt>null</tt> the default encoding is used.
 	 * @throws SException SYS027 Can't write to output stream: {msg}
 	 */
-	public static void writeString(final Writer out, final String str)
-	throws SException {
+	public static final void writeString(final Writer out, final String str)
+		throws SException {
 		try {
 			out.write(str);
 		} catch(IOException ex) {
@@ -1297,8 +1296,8 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void writeBytes(final File file, final byte[] buf)
-	throws SException {
+	public static final void writeBytes(final File file, final byte[] buf)
+		throws SException {
 		if (getUsableSpace(file) < buf.length + 10) {
 			throw new SException(SYS.SYS038, file); //File is too big: &{0}
 		}
@@ -1335,7 +1334,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void modifyFile(final File file,
+	public static final void modifyFile(final File file,
 		final String key,
 		final String rep) throws SException {
 		StringBuffer sb = readToStringBuffer(file, null, null);
@@ -1364,8 +1363,8 @@ public class FUtils {
 	 * @param subdir if <tt>true</tt> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
-	public static void deleteAll(final File file, final boolean subdir)
-	throws SException {
+	public static final void deleteAll(final File file, final boolean subdir)
+		throws SException {
 		if (!file.exists() || !file.isDirectory()) {
 			//Directory doesn't exist or isn't accessible: &{0}
 			throw new SException(SYS.SYS025, file);
@@ -1378,8 +1377,8 @@ public class FUtils {
 	 * @param subdir if <tt>true</tt> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
-	public static void deleteAll(final String fname, final boolean subdir)
-	throws SException {
+	public static final void deleteAll(final String fname, final boolean subdir)
+		throws SException {
 		deleteAll(new File(fname), subdir);
 	}
 
@@ -1401,8 +1400,8 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static void secureCopy(final InputStream is, final String pathname)
-	throws SException {
+	public final static void secureCopy(final InputStream is,
+		final String pathname) throws SException {
 		secureCopy(is, new File(pathname));
 	}
 
@@ -1423,15 +1422,15 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}</li>
 	 * </ul>
 	 */
-	public static void secureCopy(final InputStream is, final File file)
-	throws SException {
+	public static final void secureCopy(final InputStream is, final File file)
+		throws SException {
 		File temp = new File(file.getPath() + TEMPORARY_FILE_EXTENSION);
 		if (temp.exists()) {
 			if (!temp.delete()) {
 				throw new SException(SYS.SYS021, temp);//Can't delete file: &{0}
 			}
 		}
-		SUtils.copyToFile(is, temp, false);
+		copyToFile(is, temp, false);
 		if (file.exists()) {
 			File bak = new File(file.getPath() + BACKUP_FILE_EXTENSION);
 			if (bak.exists()) {
@@ -1469,8 +1468,8 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static void secureCopy(final File in, final File out)
-	throws SException {
+	public static final void secureCopy(final File in, final File out)
+		throws SException {
 		if (getUsableSpace(out) < in.length() + 10) {
 			throw new SException(SYS.SYS038, out); //File is too big: &{0}
 		}
@@ -1494,11 +1493,93 @@ public class FUtils {
 		}
 	}
 
+	/** Get temporary directory.
+	 * @return The path to the temporary directory.
+	 */
+	public static final String getTempDir() {
+		String s = System.getProperties().getProperty("java.io.tmpdir");
+		if (s != null && !s.endsWith(File.separator)) {
+			return s + File.separator;
+		}
+		return s;
+	}
+
+	/** Get class path.
+	 * @return The class path.
+	 */
+	public static final String[] getClassPath() {
+		String s = System.getProperties().getProperty("java.class.path");
+		if (s == null) {
+			return new String[0];
+		}
+		StringTokenizer st = new StringTokenizer(s, File.pathSeparator);
+		int length = st.countTokens();
+		String[] result = new String[length];
+		for (int i = 0; i < length; i++) {
+			result[i] = st.nextToken().trim();
+		}
+		return result;
+	}
+
+	/** Resolve SYSTEM id.
+	 * @param sid system id.
+	 * @param actPath actual file path.
+	 * @return URL created from id.
+	 * @throws SException if an error occurs.
+	 */
+	public static final URL resolveSystemID(final String sid,
+		final String actPath) throws SException {
+		if (sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12) { //URL
+			try {
+				return getExtendedURL(sid);
+			} catch (Exception ex) {
+				//URL &{0} error: &{1}{; }
+				throw new SException(SYS.SYS076, sid, ex);
+			}
+		} else if (actPath != null
+			&& actPath.indexOf(":/") > 2 && actPath.indexOf(":/") < 12) {
+			 // Actpath is URL and sid is not URL
+			try {
+				int ndx = actPath.lastIndexOf('/');
+				String s = ndx<0 ? actPath + '/' : actPath.substring(0, ndx+1);
+				return getExtendedURL(s + sid);
+			} catch (Exception ex) {
+				//URL &{0} error: &{1}{; }
+				throw new SException(SYS.SYS076, sid, ex);
+			}
+		}
+		// sid is file
+		File f = sid.indexOf(":/") > 0 || sid.startsWith("/")
+			? new java.io.File(sid) : actPath == null
+			? new java.io.File(sid) : new java.io.File(actPath, sid);
+		if (f.exists() && f.canRead()) {
+			try {
+				return f.toURI().toURL();
+			} catch (Exception ex) {
+				//URL &{0} error: &{1}{; }
+				throw new SException(SYS.SYS076, f.toURI(), ex);
+			}
+		} else {
+			throw new SException(SYS.SYS028, f); //Can't read file: &{0}
+		}
+	}
+
+	/** Get array of existing files represented by given argument array. The
+	 * argument array is an array of strings where each one can either represent
+	 * one concrete file or it can represent a set of files with wildcards
+	 * '*' and/or '?'. Comparing is case sensitive.
+	 * @param wildNames file names (may be array or list of arguments).
+	 * @return array of existing files according to argument.
+	 */
+	public static final File[] getFileGroup(final String... wildNames) {
+		return getFileGroup(wildNames, false);
+	}
+
 	/** Get actual path as string.
 	 * @return string with actual path.
 	 * @throws SRuntimeException SYS051 Actual path isn't accessible.
 	 */
-	public static String getActualPath() {
+	public static final String getActualPath() {
 		try {
 			File f = new File(".");
 			if (f.isDirectory()) {
@@ -1520,7 +1601,7 @@ public class FUtils {
 	 * @param caseInsensitive if true then name comparing is case insensitive.
 	 * @return array of existing files according to argument.
 	 */
-	public static File[] getFileGroup(final String wildName,
+	public static final File[] getFileGroup(final String wildName,
 		final boolean caseInsensitive) {
 		if (wildName.indexOf('*') < 0 && wildName.indexOf('?') < 0) {
 			File f = new File(wildName);
@@ -1541,23 +1622,12 @@ public class FUtils {
 	/** Get array of existing files represented by given argument array. The
 	 * argument array is an array of strings where each one can either represent
 	 * one concrete file or it can represent a set of files with wildcards
-	 * '*' and/or '?'. Comparing is case sensitive.
-	 * @param wildNames file names (may be array or list of arguments).
-	 * @return array of existing files according to argument.
-	 */
-	public static File[] getFileGroup(final String... wildNames) {
-		return getFileGroup(wildNames, false);
-	}
-
-	/** Get array of existing files represented by given argument array. The
-	 * argument array is an array of strings where each one can either represent
-	 * one concrete file or it can represent a set of files with wildcards
 	 * '*' and/or '?'.
 	 * @param wildNames array of file names.
 	 * @param caseInsensitive if true then name comparing is case insensitive.
 	 * @return array of existing files according to argument.
 	 */
-	public static File[] getFileGroup(final String[] wildNames,
+	public static final File[] getFileGroup(final String[] wildNames,
 		final boolean caseInsensitive) {
 		ArrayList<File> arr = new ArrayList<File>();
 		for (String x: wildNames) {
@@ -1571,6 +1641,135 @@ public class FUtils {
 		File[] result = new File[arr.size()];
 		arr.toArray(result);
 		return result;
+	}
+
+	/** Get group of URLs according to with wildcard from the directory.
+	 * @param urls list where to store created URLs.
+	 * @param dir directory where to search files.
+	 * @param wc wildcard.
+	 * @throws IOException if an error occurs.
+	 */
+	private static void getSourceFileGroup(final List<String> urls,
+		final String dir,
+		final String wc) throws Exception {
+		File f = new File(dir);
+		if (f.isDirectory()) {
+			File[] ff = getFileGroup(f.getAbsolutePath() + "/" + wc, true);
+			for (File x: ff) {
+				if (x.isFile() && x.exists()) {
+					urls.add(x.getCanonicalFile().toURI().toURL()
+						.toExternalForm());
+				}
+			}
+		} else {
+			throw new IOException("URL error");
+		}
+	}
+
+	/** Get group source URLs from source name which may contain the file name
+	 * containing wildcard.
+	 * @param src name which may contain the file name containing wildcard.
+	 * @return the array of URL names.
+	 * @throws Exception if an error occurs.
+	 */
+	public static final String[] getSourceGroup(final String src)
+		throws Exception {
+		List<String> urls = new ArrayList<String>();
+		if (src.startsWith("classpath://")) {
+			String t = src.substring(12);
+			int ndx = t.lastIndexOf('.');
+			t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
+			ndx = t.lastIndexOf('/');
+			String wc = t.substring(ndx+1); // wildcard of file name
+			String dir = t.substring(0,ndx).replace('.', '/');
+			if (wc.indexOf('?')>=0 || wc.indexOf('*')>=0) {
+				ndx = dir.lastIndexOf('.');
+				Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
+				while (eu.hasMoreElements()) {
+					URL u = eu.nextElement();
+					if ("file".equals(u.getProtocol())) {
+						getSourceFileGroup(urls, u.getFile(), wc);
+					} else if ("jar".equals(u.getProtocol())) {
+						String s = u.toExternalForm();
+						ndx = s.indexOf('!');
+						if (ndx >= 0) {
+							URL ux = new URL(s.substring(4, ndx));
+							JarFile jf = new JarFile(ux.getFile());
+							Enumeration<JarEntry> je = jf.entries();
+							while (je.hasMoreElements()) {
+								s = je.nextElement().getName();
+								if (s.startsWith(dir + "/")
+									&& s.length() > dir.length() + 1) {
+									s = s.substring(dir.length() + 1);
+									if (NameWildCardFilter.chkWildcard(wc, s)) {
+										urls.add("classpath://"
+											+ dir.replace('/', '.') + "."+s);
+									}
+								}
+							}
+						}
+					} else {
+						throw new RuntimeException(
+							"Unknown protocol: " + u.getProtocol());
+					}
+				}
+			} else {
+				urls.add(getExtendedURL(
+					src).toURI().toURL().toExternalForm());
+			}
+		} else if (src.startsWith("file:/")) {
+			int ndx = src.lastIndexOf('/');
+			String wc = src.substring(ndx+1); // wildcard of file name
+			if (wc.indexOf('?')>=0 || wc.indexOf('*')>=0) {
+				getSourceFileGroup(urls,
+					new URL(src.substring(0, ndx)).getFile(), wc);
+			} else {
+				urls.add(src);
+			}
+		} else if (src.startsWith("ftp:") || src.startsWith("ftps:")
+			|| src.startsWith("http:") || src.startsWith("https:")) {
+			urls.add(src);
+		} else { // try just pathname
+			File[] files = getFileGroup(src);
+			for (File x: files) {
+				urls.add(x.getCanonicalFile().toURI().toURL().toExternalForm());
+			}
+		}
+		return urls.toArray(new String[urls.size()]);
+	}
+
+	/** Get URL from string (accept also protocol "classpath://").
+	 * @param source string with URL source (MAY BE ALSO protocol "classpath:").
+	 * @return URL created from the source string.
+	 * @throws MalformedURLException IF AN ERROR OCCURS.
+	 */
+	public static final URL getExtendedURL(final String source)
+		throws MalformedURLException{
+		String s;
+		try {
+			s = URLDecoder.decode(source,
+				System.getProperties().getProperty("file.encoding")).trim();
+		} catch (UnsupportedEncodingException ex) {
+			s = source.trim();
+		}
+		if (s.startsWith("classpath://")) {
+			try {
+				String t = s.substring(12);
+				int ndx = t.lastIndexOf('.');
+				t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
+				URL url = ClassLoader.getSystemResource(t);
+				if (url != null) {
+					return url;
+				}
+			} catch (Exception ex) {} // try regular URL constructor
+		}
+		URL u = new URL(s);
+		if ("file".equals(u.getProtocol())) {
+			try {
+				return new File(u.getFile()).getCanonicalFile().toURI().toURL();
+			} catch (Exception ex) {}
+		}
+		return u;
 	}
 
 	/** Update directories. If a file from the directory "fromDir" not exists
@@ -1664,7 +1863,7 @@ public class FUtils {
 		checkDir(fromDir, false);
 		if (!toDir.exists()) {
 			checkDir(toDir, true);
-			addMessage(sb, "Created dir: " + toDir.getAbsolutePath());
+			addMessage(sb, "Created dir: " + toDir.getCanonicalPath());
 		} else {
 			checkDir(toDir, true);
 		}
@@ -1678,8 +1877,8 @@ public class FUtils {
 					if (name != null) {
 						File g = new File(fromDir, name);
 						if (!g.exists()) {
-							addMessage(sb, "Deleted: " + f.getAbsolutePath());
-							FUtils.deleteFile(f);
+							addMessage(sb, "Deleted: " + f.getCanonicalPath());
+							deleteFile(f);
 						}
 					}
 				}
@@ -1694,19 +1893,19 @@ public class FUtils {
 					if (g.isDirectory()) {
 						if (deleteOther) {
 							deleteAll(g, true);
-							addMessage(sb, "Deleted dir: "+g.getAbsolutePath());
-							FUtils.copyToFile(f, g);
-							addMessage(sb, "Added: " + g.getAbsolutePath());
+							addMessage(sb,"Deleted dir: "+g.getCanonicalPath());
+							copyToFile(f, g);
+							addMessage(sb, "Added: " + g.getCanonicalPath());
 						}
 					} else {
 						if (compareFile(f, g) != -1L) {
-							FUtils.copyToFile(f, g);
-							addMessage(sb, "Replaced: " + g.getAbsolutePath());
+							copyToFile(f, g);
+							addMessage(sb, "Replaced: " + g.getCanonicalPath());
 						}
 					}
 				} else {
-					FUtils.copyToFile(f, g);
-					addMessage(sb, "Added: " + g.getAbsolutePath());
+					copyToFile(f, g);
+					addMessage(sb, "Added: " + g.getCanonicalPath());
 				}
 			}
 		}
@@ -1720,9 +1919,9 @@ public class FUtils {
 						String name = f.getName();
 						File g = new File(fromDir, name);
 						if (!g.exists() || !g.isDirectory()) {
-							FUtils.deleteAll(f, true);
-							addMessage(sb, "Deleted dir: "
-								+ f.getAbsolutePath());
+							deleteAll(f, true);
+							addMessage(sb,
+								"Deleted dir: "	+ f.getCanonicalPath());
 						}
 					}
 				}
@@ -1737,14 +1936,14 @@ public class FUtils {
 						} else {
 							//Can't create directory: &{0}
 							throw new SException(SYS.SYS020,
-								g.getAbsolutePath()
+								g.getCanonicalPath()
 									+ " exists and it is not directory!");
 						}
 					} else {
 						if (!g.exists()) {
 							checkDir(g, true);
 							addMessage(sb,
-								"Created dir: " + g.getAbsolutePath());
+								"Created dir: " + g.getCanonicalPath());
 						}
 						updateDirectories(
 							f, g, extension, subdirs, deleteOther, sb);
@@ -1770,7 +1969,7 @@ public class FUtils {
 	 * <li>SYS073 Zip file list is empty</li>
 	 * </ul>
 	 */
-	public static long filesToZip(final String fileList,
+	public static final long filesToZip(final String fileList,
 		final String ignoreList,
 		final File file) throws SException {
 		String[] fnames;
@@ -1801,7 +2000,7 @@ public class FUtils {
 		}
 		ArrayList<File> ar = new ArrayList<File>();
 		for (String s: fnames) {
-			File[] list = SUtils.getFileGroup(s);
+			File[] list = getFileGroup(s);
 			for (File x: list) {
 				if (skipExtensions.size() > 0) {
 					String fname = x.getName();
@@ -1839,11 +2038,11 @@ public class FUtils {
 	 * <li>SYS073 Zip file list is empty</li>
 	 * </ul>
 	 */
-	public static long filesToZip(final File[] list,
+	public static final long filesToZip(final File[] list,
 		final String[] skipExtensions,
 		final File file) throws SException {
-		String zFileName = file.getAbsolutePath();
 		try {
+			String zFileName = file.getCanonicalPath();
 			OutputStream os = new FileOutputStream(file);
 			long result = filesToZip(list, skipExtensions, os, zFileName);
 			try {
@@ -1855,7 +2054,7 @@ public class FUtils {
 			return result;
 		} catch (IOException ex) {
 			//Can't write to file: &{0}
-			throw new SException(SYS.SYS023, zFileName);
+			throw new SException(SYS.SYS023, file.getAbsolutePath());
 		}
 	}
 
@@ -1875,7 +2074,7 @@ public class FUtils {
 	 * <li>SYS073 Zip file list is empty</li>
 	 * </ul>
 	 */
-	public static long filesToZip(final File[] list,
+	public static final long filesToZip(final File[] list,
 		final String[] skipExtensions,
 		final OutputStream out,
 		final String zFileName) throws SException {
@@ -2012,7 +2211,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static long filesFromZip(final File dir,
+	public static final long filesFromZip(final File dir,
 		final File archive,
 		final String backupExtension) throws SException {
 		try {
@@ -2044,7 +2243,7 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}</li>
 	 * </ul>
 	 */
-	public static long filesFromZip(final File dir,
+	public static final long filesFromZip(final File dir,
 		final InputStream archive,
 		final String backupExtension) throws SException {
 		long flen = 0;
@@ -2052,9 +2251,10 @@ public class FUtils {
 		if (!dir.exists() || (!dir.isDirectory())) {
 			throw new SException(SYS.SYS032, dir); //File is not directory: &{0}
 		}
-		String path = dir.getAbsolutePath() + File.separatorChar;
+		String path;
 		ZipEntry z;
 		try {
+			path = dir.getCanonicalPath() + File.separatorChar;
 			z = zin.getNextEntry();
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS044);//Can't read entry from 'zip' file

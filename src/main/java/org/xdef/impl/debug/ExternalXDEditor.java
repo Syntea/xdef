@@ -62,11 +62,11 @@ public abstract class ExternalXDEditor implements XEditor {
 			reporter.writeReports(frw);
 			frw.close();
 			// we need file names to pass as parameters (see "main"  method)
-			String defPool = poolFile.getAbsolutePath();
-			String reports = reportFile.getAbsolutePath();
+			String defPool = poolFile.getCanonicalPath();
+			String reports = reportFile.getCanonicalPath();
 			// the name of file where the external process will write
 			// the result information
-			String resultInfo = resultFile.getAbsolutePath();
+			String resultInfo = resultFile.getCanonicalPath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
 			// wait max. 4 hours for the resultFile (14400 = 2*2*3600)
 			for (int i = 0; i < 14400 && !waitForFileExists(resultFile); i++) {}
@@ -129,16 +129,16 @@ public abstract class ExternalXDEditor implements XEditor {
 	 * @return XDPool generated from the file from the argument defPool.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(
-		final String defPool) throws IOException {
+	public final static XDPool readXDPool(final String defPool)
+		throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
-		ObjectInputStream inpool = 
+		ObjectInputStream inpool =
 			new ObjectInputStream(new FileInputStream(pool));
 		try {
 			XDPool result = (XDPool) inpool.readObject();
 			return result;
-		} catch (ClassNotFoundException ex) {			
+		} catch (ClassNotFoundException ex) {
 			throw new IOException(ex);
 		} finally {
 			inpool.close();
@@ -213,5 +213,4 @@ public abstract class ExternalXDEditor implements XEditor {
 				tmpFile.getAbsolutePath(), resultFile.getAbsolutePath());
 		}
 	}
-
 }

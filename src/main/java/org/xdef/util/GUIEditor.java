@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.SThrowable;
+import org.xdef.sys.SUtils;
 
 /** Provides utility for interactive editing and debugging X-definitions.
  * @author Vaclav Trojan
@@ -54,7 +55,7 @@ public class GUIEditor extends GUIScreen {
 	static {
 		String xdef =
 "<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
-"  <Project>\n" +
+"  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
 "      <!-- Add a class to classpath -->\n" +
 "      <XDefinition xd:script=\"+\">\n" +
@@ -248,11 +249,12 @@ public class GUIEditor extends GUIScreen {
 		_sources.clear();
 		String sourceId;
 		if (obj instanceof File) {
-			sourceId = ((File) obj).getAbsolutePath();
+			sourceId = ((File) obj).getCanonicalPath();
 		} else if (obj instanceof String) {
 			sourceId = "STRING";
 		} else if (obj instanceof URL) {
-			sourceId = ((URL) obj).toExternalForm();
+			sourceId = SUtils.getExtendedURL(((URL) obj).toExternalForm())
+				.toExternalForm();
 		} else {
 			sourceId = obj.getClass().getName();
 		}
@@ -400,7 +402,9 @@ public class GUIEditor extends GUIScreen {
 			boolean changed = false;
 			for (String x: si.getMap().keySet()) {
 				XDSourceItem xsi = si.getMap().get(x);
-				changed |= xsi._changed;
+				if (!xsi._saved) {
+					changed |= xsi._changed;
+				}
 			}
 			if (changed) {
 				updateXdefList(project, si); //Update X-definitions elements
@@ -533,7 +537,13 @@ public class GUIEditor extends GUIScreen {
 			KXmlUtils.compareElements(project, originalProject, true, ar);
 			if (!"OK".equals(ar.printToString())) {
 				// if something changed in the project ask to save it
-				JFileChooser jf = new JFileChooser();
+				JFileChooser jf;
+				if (src.charAt(0) != '<') {
+					jf = new JFileChooser(src);
+				} else {
+					jf = new JFileChooser(new File(".").getCanonicalFile());
+				}
+
 				jf.setDialogTitle(
 					"Project changed. Do you want to save the project?");
 				jf.setToolTipText("Save THE PROJECT to a file");
@@ -552,7 +562,6 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
 			if (ex instanceof SThrowable) {
 				JOptionPane.showMessageDialog(null,
 					((SThrowable) ex).getReport().toString());

@@ -14,13 +14,10 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
-import org.xdef.xml.KXmlUtils;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -1119,88 +1116,6 @@ public class SUtils extends FUtils {
 		}
 		//Unsupported language code: &{0}
 		throw new SRuntimeException(SYS.SYS018, language);
-	}
-
-	/** Get temporary directory.
-	 * @return The path to the temporary directory.
-	 */
-	public static final String getTempDir() {
-		String s = System.getProperties().getProperty("java.io.tmpdir");
-		if (s != null && !s.endsWith(File.separator)) {
-			return s + File.separator;
-		}
-		return s;
-	}
-
-	/** Get class path.
-	 * @return The class path.
-	 */
-	public static final String[] getClassPath() {
-		String s = System.getProperties().getProperty("java.class.path");
-		if (s == null) {
-			return new String[0];
-		}
-		StringTokenizer st = new StringTokenizer(s, File.pathSeparator);
-		int length = st.countTokens();
-		String[] result = new String[length];
-		for (int i = 0; i < length; i++) {
-			result[i] = st.nextToken().trim();
-		}
-		return result;
-	}
-
-	/** Resolve SYSTEM id.
-	 * @param sid system id.
-	 * @param actPath actual file path.
-	 * @return URL created from id.
-	 * @throws SException if an error occurs.
-	 */
-	public static URL resolveSystemID(final String sid,
-		final String actPath) throws SException {
-		if (sid.startsWith("http:") || sid.startsWith("https:")
-			|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
-			|| sid.startsWith("file:")
-			|| sid.startsWith("classpath://")) {
-			try {
-				return KXmlUtils.getExtendedURL(sid);
-			} catch (Exception ex) {
-				//URL &{0} error: &{1}{; }
-				throw new SException(SYS.SYS076, sid, ex);
-			}
-		} else if (actPath != null &&
-			(actPath.startsWith("http:") || actPath.startsWith("https:")
-			|| actPath.startsWith("ftp:") || actPath.startsWith("sftp:")
-			|| actPath.startsWith("file:")
-			|| actPath.startsWith("classpath://"))) {
-			try {
-				int ndx = actPath.lastIndexOf('/');
-				String s = actPath.substring(0, ndx+ 1) + sid;
-				return KXmlUtils.getExtendedURL(s);
-			} catch (Exception ex) {
-				//URL &{0} error: &{1}{; }
-				throw new SException(SYS.SYS076, sid, ex);
-			}
-		}
-		File f;
-		if (sid.indexOf(":/") > 0 || sid.startsWith("/")) {
-			f = new java.io.File(sid);
-		} else {
-			if (actPath == null) {
-				f = new java.io.File(sid);
-			} else {
-				f = new java.io.File(actPath, sid);
-			}
-		}
-		if (f.exists() && f.canRead()) {
-			try {
-				return f.toURI().toURL();
-			} catch (Exception ex) {
-				//URL &{0} error: &{1}{; }
-				throw new SException(SYS.SYS076, f.toURI(), ex);
-			}
-		} else {
-			throw new SException(SYS.SYS028, f); //Can't read file: &{0}
-		}
 	}
 
 	/** Check if a class implements given interface.

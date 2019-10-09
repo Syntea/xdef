@@ -40,8 +40,8 @@ public final class TestDebugGUI extends XDTester {
 //"xdplugin.XdPlugin; C:/Program Files/Oxygen XML Editor 20/oxygen20.1.exe");
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef.display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
-			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
+			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
 		setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef.debug
 //			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
 			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true

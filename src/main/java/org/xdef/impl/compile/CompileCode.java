@@ -44,6 +44,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.proc.XDLexicon;
+import org.xdef.sys.SPosition;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -154,28 +155,25 @@ public final class CompileCode extends CompileBase {
 		_init = _initEnd = -1;
 		//predefined global variables
 		CompileVariable var = new CompileVariable("$stdOut",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdErr",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdIn",
-			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G');
+			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 /*UNS*/
 		var = new CompileVariable("$IDParser$", // use only internally
-			XD_PARSER,
-			_globalVariables.getNextOffset(),
-			(byte) 'G');
+			XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);  // prevent to report errors
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$IDuniqueSet$", // use only internally
 			CompileBase.UNIQUESET_M_VALUE,
-			_globalVariables.getNextOffset(),
-			(byte) 'G');
+			_globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
 //		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
 //		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
@@ -232,23 +230,25 @@ public final class CompileCode extends CompileBase {
 	/** Add new variable of given name.
 	 * @param name the name of variable.
 	 * @param kind the variable kind ('G': global, 'L': local, 'X': XModel).
+	 * @param spos source position where the variable was declared.
 	 * @return the CompileVariable object.
 	 */
 	final CompileVariable addVariable(final String name,
 		final short type,
-		final byte kind) {
+		final byte kind,
+		final SPosition spos) {
 		if (type != PARSEITEM_VALUE && getTypeId(name) >= 0) {
 			//Type identifier '&{0}' can't be used here
 			_parser.error(XDEF.XDEF463, name);
-			return new CompileVariable("?", type, -1, (byte) 'L');
+			return new CompileVariable("?", type, -1, (byte) 'L', spos);
 		}
-		CompileVariable result;
+		CompileVariable result = null;
 		switch (kind) {
 			case 'G':
 				result = (CompileVariable) _globalVariables.getVariable(name);
 				if (result == null) {
 					result = new CompileVariable(name,
-						type, _globalVariables.getNextOffset(), kind);
+						type, _globalVariables.getNextOffset(), kind, spos);
 					_globalVariables.addVariable(result);
 					return result;
 				} else {
@@ -263,7 +263,7 @@ public final class CompileCode extends CompileBase {
 			case 'X':
 				if (_varBlock.getVariable(name) == null) {
 					result = new CompileVariable(name,
-						type, _varBlock.getNextOffset(), kind);
+						type, _varBlock.getNextOffset(), kind, spos);
 					if (_varBlock.addVariable(result)) {
 						return result;
 					}
@@ -273,7 +273,7 @@ public final class CompileCode extends CompileBase {
 				result = _localVariables.get(name);
 				if (result == null) {
 					result = new CompileVariable(name, type,
-						++_localVariablesLastIndex, kind);
+						++_localVariablesLastIndex, kind, spos);
 					_localVariables.put(name, result);
 					if (_localVariablesLastIndex > _localVariablesMaxIndex) {
 						_localVariablesMaxIndex = _localVariablesLastIndex;
@@ -285,8 +285,36 @@ public final class CompileCode extends CompileBase {
 				//Internal error&{0}{: }
 				throw new SRuntimeException(SYS.SYS066, "variable kind: "+kind);
 		}
-		_parser.error(XDEF.XDEF450, name); //Redefinition of variable '&{0}'
-		return new CompileVariable("?", type, -1, (byte) 'L');
+		//Repeated declaration of variable '&{0}'&{#SYS000}&{1}
+		//({; (already declared: }{)}
+		putRedefinedError(null, XDEF.XDEF450,
+			name, result == null ? null : result.getSourcePosition());
+		return (result != null && result.getName().equals(name)
+			&& result.getType() == type) 
+			? result : new CompileVariable("?", type, -1, (byte) 'L', null);
+	}
+
+	/** Put error with the first declared item position.
+	 * @param actpos the actual source position or null.
+	 * @param id message ID.
+	 * @param name name of item.
+	 * @param sp Source position of declared item or null.
+	 */
+	final void putRedefinedError(SPosition actpos,
+		final long id,
+		final String name,
+		final SPosition sp) {
+		String s = null;
+		if (sp != null) {
+			s = "line="+ sp.getLineNumber() + "; column=" + sp.getColumnNumber()
+				+ "; source=\"" + sp.getSystemId() + "\"";
+		}
+		//Redefinition of item '&{0}'&{#SYS000}&{1}({; (see: }{)}
+		if (actpos == null) {
+			_parser.error(id, name, s); //Redefinition of variable '&{0}'
+		} else {
+			_parser.error(actpos, id, name,s); //Redefinition of variable '&{0}'
+		}
 	}
 
 	/** Check all unresolved declarations and try to resolve them. */
@@ -497,19 +525,24 @@ public final class CompileCode extends CompileBase {
 	 * @param address The code index of method start.
 	 * @param params Array of parameters types.
 	 * @param mode The mode of method.
+	 * @param spos source position where the method was declared.
 	 */
 	final void addMethod(final short resultType,
 		final String name,
 		final int address,
 		final short[] params,
-		final short mode) {
+		final short mode,
+		final SPosition spos) {
 		String extName = name + typeList(params);
 		ScriptMethod gm = _scriptMethods.get(extName);
 		if (gm == null) {
 			_scriptMethods.put(extName,
-				new ScriptMethod(resultType, address, params, mode));
+				new ScriptMethod(resultType, address, params, mode, spos));
 		} else if (!gm.resolvePostDef(address, this)) {
-			_parser.error(XDEF.XDEF462, name); //Redefinition of method '&{0}'
+			//Repeated declaration of method '&{0}'&{#SYS000}&{1}
+			//({; (already declared: }{)}
+			putRedefinedError(null, XDEF.XDEF462,
+				name, gm.getSourcePosition());
 		}
 	}
 
@@ -931,7 +964,8 @@ public final class CompileCode extends CompileBase {
 			CompileVariable var = getVariable(name);
 			if (var == null) {
 				_parser.error(XDEF.XDEF424, name);//Undefined variable &{0}
-				var = addVariable(CompileBase.genErrId(), xType, (byte) 'L');
+				var = addVariable(
+					CompileBase.genErrId(), xType, (byte) 'L', null);
 			}
 			if (xType != var.getType()) {
 				switch (xType) {
@@ -2582,22 +2616,27 @@ final class ScriptMethod {
 	private final short _mode;
 	/** List of code code addresses where method was called. */
 	private int[] _postdefs;
+	/** Source position where the method was declared. */
+	private final SPosition _spos;
 
 	/** Create new instance of ScriptMethod.
 	 * @param resultType The result type of method.
 	 * @param address The code index of method start.
 	 * @param params Array of parameters types.
 	 * @param mode The mode of method.
+	 * @param spos source position where the method was declared.
 	 */
 	ScriptMethod(final short resultType,
 		final int address,
 		final short[] params,
-		final short mode) {
+		final short mode,
+		final SPosition spos) {
 		_resultType = resultType;
 		_address = address;
 		_params = params;
 		_mode = mode;
 		_postdefs = null;
+		_spos = spos;
 	}
 
 	/** Add address of post defined item to the list. */
@@ -2654,6 +2693,11 @@ final class ScriptMethod {
 
 	/** Clear post-definition info. */
 	final void clearPostdefs() {_postdefs = null;}
+
+	/** Get source position where the method was declared.
+	 * @return source position where the method was declared.
+	 */
+	final SPosition getSourcePosition() {return _spos;}
 
 	@Override
 	public final String toString() {

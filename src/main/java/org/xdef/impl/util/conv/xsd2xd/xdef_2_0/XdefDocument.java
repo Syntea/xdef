@@ -153,7 +153,7 @@ public class XdefDocument implements Convertor {
 				folder.mkdir();
 				File f = new File(
 					folder, _xdefNames.get(entry.getKey()) + ".xdef");
-				KXmlUtils.writeXml(f.getAbsolutePath(), doc, true, true);
+				KXmlUtils.writeXml(f.getCanonicalPath(), doc, true, true);
 			}
 		} else {
 			Iterator<Map.Entry<URL, Element>> i =
@@ -834,7 +834,7 @@ public class XdefDocument implements Convertor {
 			Map.Entry<URL, Element> entry = i.next();
 			Document doc = entry.getValue().getOwnerDocument();
 			String fName = new File(folder,
-				(String) _xdefNames.get(entry.getKey())).getAbsolutePath();
+				(String) _xdefNames.get(entry.getKey())).getCanonicalPath();
 			KXmlUtils.writeXml(fName, doc, true, true);
 		}
 	}

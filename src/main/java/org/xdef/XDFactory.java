@@ -201,7 +201,7 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final String[] params) {
+		final String[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -214,7 +214,7 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final URL[] params) {
+		final URL[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -227,7 +227,7 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final File[] params) {
+		final File[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -240,7 +240,7 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final InputStream[] params) {
+		final InputStream[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -258,7 +258,7 @@ public final class XDFactory {
 	 */
 	public static XDPool compileXD(final Properties props,
 		final Object[] sources,
-		final String[] sourceIds) {
+		final String[] sourceIds) throws SRuntimeException {
 		XDBuilder builder = XDFactory.getXDBuilder(props);
 		setParam(builder, new Object[] {sources, sourceIds});
 		return builder.compileXD();
@@ -271,8 +271,7 @@ public final class XDFactory {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool compileXD(final Properties props,
-		final Object... params)
-		throws SRuntimeException {
+		final Object... params)	throws SRuntimeException {
 		return compileXD((ReportWriter) null, props, params);
 	}
 
@@ -285,8 +284,7 @@ public final class XDFactory {
 	 */
 	public static XDPool compileXD(final ReportWriter reporter,
 		final Properties props,
-		final Object... params)
-		throws SRuntimeException {
+		final Object... params)	throws SRuntimeException {
 		if (params == null || params.length == 0) {
 			throw new SRuntimeException(XDEF.XDEF903);
 		}
@@ -415,9 +413,9 @@ public final class XDFactory {
 	 * @return XDService object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDService createSQLService(String url,
-		String user,
-		String passw) throws SRuntimeException {
+	public static XDService createSQLService(final String url,
+		final String user,
+		final String passw) throws SRuntimeException {
 		return new org.xdef.impl.code.DefSQLService(url, user, passw);
 	}
 
@@ -425,7 +423,7 @@ public final class XDFactory {
 	 * @param conn Database connection.
 	 * @return XDService object.
 	 */
-	public static XDService createSQLService(Connection conn)
+	public static XDService createSQLService(final Connection conn)
 		throws SRuntimeException {
 		return new org.xdef.impl.code.DefSQLService(conn);
 	}
@@ -434,7 +432,8 @@ public final class XDFactory {
 	 * @param resultSet the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static XDResultSet createXDResultSet(java.sql.ResultSet resultSet) {
+	public static XDResultSet createXDResultSet(
+		final java.sql.ResultSet resultSet) {
 		return new org.xdef.impl.code.DefSQLResultSet(resultSet);
 	}
 
@@ -444,8 +443,8 @@ public final class XDFactory {
 	 * @param resultSet the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static XDResultSet createXDResultSet(String itemName,
-		java.sql.ResultSet resultSet) {
+	public static XDResultSet createXDResultSet(final String itemName,
+		final java.sql.ResultSet resultSet) {
 		return new org.xdef.impl.code.DefSQLResultSet(itemName,resultSet);
 	}
 

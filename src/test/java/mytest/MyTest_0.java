@@ -7,17 +7,13 @@ package mytest;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
-import org.xdef.XDValue;
-import org.xdef.XDValueID;
-import org.xdef.impl.compile.CompileBase;
-import org.xdef.impl.compile.CompileBase.InternalMethod;
-import org.xdef.impl.compile.CompileBase.KeyParam;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
@@ -31,82 +27,6 @@ import static test.utils.XDTester._xdNS;
 public class MyTest_0 extends XDTester {
 
 	public MyTest_0() {super(); setChkSyntax(true);}
-
-	private static String getMethodDescr(final String name) {
-		return "<" + name + "></" +  name + ">";
-	}
-
-	private static String getMethodParams(final String name) {
-		InternalMethod im =
-			CompileBase.getTypeMethod(CompileBase.NOTYPE_VALUE_ID, name);
-		String result = "<" + name + ">";
-//		result += "<description> . </description>";
-		short[] partypes = im.getParamTypes();
-		int maxparams = im.getMaxParams();
-		if (maxparams >= 1 && partypes != null) {
-			result += "<params>";
-			String params = "";
-			for (int i = 0; i < partypes.length; i++) {
-				if (!params.isEmpty()) {
-					params += ", ";
-				}
-				params += CompileBase.getTypeName(partypes[i]);
-				String[] sqpars = im.getSqParamNames();
-				if (i < sqpars.length) {
-					params += '(' + sqpars[i] + '}';
-				}
-			}
-			result += params;
-			if (maxparams > partypes.length) {
-				result += "...";
-			}
-			result += "</params>";
-		}
-//		String[] sqpars = im.getSqParamNames();
-//		if (sqpars != null && sqpars.length > 0) {
-//			result += "<params>";
-//			for (String x : sqpars) {
-//				result += ' ' + x;
-//			}
-//			result += "</params>";
-//		}
-		String keys;
-		KeyParam[] kpars = im.getKeyParams();
-		keys = "";
-		for (KeyParam x : kpars) {
-			if (!keys.isEmpty()) {
-				keys += " ";
-			}
-			XDValue deflt = x.getDefaultValue();
-			XDValue[] legals = x.getLegalValues();
-			String params = "";
-			if (legals != null && legals.length > 0) {
-				for (XDValue y : legals) {
-					if (!params.isEmpty()) {
-						params += "|";
-					}
-					params += (y.getItemId() == XDValueID.XD_STRING)
-						? '"' + y.toString() + '"' : y.toString();
-					if (y.equals(deflt)) {
-						params += '*';
-					}
-				}
-				if (!params.isEmpty()) {
-					params = '[' + params + ']';
-				}
-			} else {
-				params += '(' + CompileBase.getTypeName(x.getType()) + ')';
-			}
-			if (!params.isEmpty()) {
-				keys += '%' + x.getName() + params;
-			}
-		}
-		if (!keys.isEmpty()) {
-			result += "<keyParams>" + keys + "</keyParams>";
-		}
-		result += "</" + name + ">";
-		return result;
-	}
 	
 	@Override
 	/** Run test and print error information. */
@@ -122,150 +42,6 @@ public class MyTest_0 extends XDTester {
 				new File(tempDir).mkdir();
 			}
 		} catch (Exception ex) {fail(ex);}
-/*xx*
-		try {
-		String[] names = new String[] {
-			"anyURI",
-			"base64Binary",
-			"boolean",
-			"byte",
-			"date",
-			"dateTime",
-			"decimal",
-			"double",
-			"duration",
-			"ENTITIES",
-			"ENTITY",
-			"float",
-			"gDay",
-			"gMonth",
-			"gMonthDay",
-			"gYear",
-			"gYearMonth",
-			"hexBinary",
-			"ID",
-			"IDREF",
-			"IDREFS",
-			"int",
-			"integer",
-			"language",
-			"list",
-			"long",
-			"Name",
-			"NCName",
-			"negativeInteger",
-			"NMTOKEN",
-			"NMTOKENS",
-			"nonNegativeInteger",
-			"nonPositiveInteger",
-			"normalizedString",
-			"NOTATION",
-			"positiveInteger",
-			"QName",
-			"short",
-			"string",
-			"time",
-			"token",
-			"union",
-			"unsignedByte",
-			"unsignedInt",
-			"unsignedLong",
-			"unsignedShort",
-			"ID",
-			"IDREF",
-			"IDREFS",
-		};
-		s = "<SchemaValidationMethod>\n";
-		for (String x : names) {
-			s += getMethodParams(x);
-		}
-		s += "</SchemaValidationMethod>";
-		s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-		FUtils.writeString(new File("C:/temp/SchemaValidationMethod.xml"), s, "UTF-8");
-		s = "<SchemaValidationMethod>\n";
-		for (String x : names) {
-			s += getMethodDescr(x);
-		}
-		s += "</SchemaValidationMethod>";
-		s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-		FUtils.writeString(new File("C:/temp/SchemaValidationMethod.eng.xml"), s, "UTF-8");
-		names = new String[] {
-			"an",
-//			"base64",
-//			"bool",
-			"BNF",
-			"contains",
-			"containsi",
-			"dateYMDhms",
-//			"datetime",
-//			"dec",
-			"emailDate",
-			"empty",
-			"ends",
-			"endsi",
-			"enum",
-			"enumi",
-			"eq",
-			"eqi",
-//			"hex",
-//			"ISOdate",
-//			"ISOdateTime",
-//			"ISOday",
-//			"ISOduration",
-			"ISOlanguage",
-			"ISOlanguages",
-//			"ISOmonth",
-//			"ISOmonthDay",
-//			"ISOtime",
-//			"ISOyear",
-//			"ISOyearMonth",
-//			"jboolean",
-//			"jnull",
-//			"jnumber",
-//			"jstring",
-//			"jvalue",
-			"languages",
-			"letters",
-			"MD5",
-			"NCNameList",
-			"nmTokens",
-//			"normString",
-//			"normToken",
-//			"normTokens",
-			"num",
-//			"parseSequence",
-			"QNameList",
-			"QNameURI",
-			"QNameURIList",
-			"pic",
-//			"picture",
-			"regex",
-			"sequence",
-			"starts",
-			"startsi",
-			"xdatetime",
-			"CHKID",
-			"CHKIDS",
-			"SET"};
-		s = "<XDValidationMethod>\n";
-		for (String x : names) {
-			s += getMethodParams(x);
-		}
-		s += "</XDValidationMethod>";
-		s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-		FUtils.writeString(new File("C:/temp/XDValidationMethod.xml"), s, "UTF-8");
-		s = "<XDValidationMethod>\n";
-		for (String x : names) {
-			s += getMethodDescr(x);
-		}
-		s += "</XDValidationMethod>";
-		s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-		FUtils.writeString(new File("C:/temp/XDValidationMethod.eng.xml"), s, "UTF-8");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-//		System.exit(0);
-/*xx*/	
 
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
@@ -281,48 +57,23 @@ public class MyTest_0 extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 		final boolean T = true; //This flag is used to return from a test
 //		final boolean T = false; //This flag is used to return from a test
-//		try {
-////			xp = compile(
-//			xp = XDFactory.compileXD(null,
-//"<xd:def xmlns:xd='" + _xdNS + "' xmlns:x='a' root='M'>\n" +
-//"<M xd:script=\"var String s = '';\">\n" +
-//"    <Measurement xd:script=\"occurs 1..*;\n" +
-//"      var { int count = 0; float total = 0; }\n"+
-//"      finally s += @x:date +';n=' +count+ ',average='+ (total/count)+' ';\"\n"+
-//"      x:date='required dateTime'>\n" +
-//"      <Value xd:script='occurs 1..*; finally count++;'>\n" +
-//"        required double; onTrue total += (float) getParsedValue();\n" +
-//"      </Value>\n" +
-//"    </Measurement>\n" +
-//"    string; onAbsence addText(s);\n" +
-//"  </M>\n" +
-//"</xd:def>");
-//			xml =
-//"<M>" +
-//"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T11:31:05\">" +
-//"<Value>10</Value>" +
-//"<Value>11.8</Value>" +
-//"<Value>9.4</Value>" +
-//"</Measurement>" +
-//"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T13:01:27\">" +
-//"<Value>12.35</Value>" +
-//"</Measurement>" +
-//"</M>";
-//			assertEq(
-//"<M>" +
-//"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T11:31:05\">" +
-//"<Value>10</Value>" +
-//"<Value>11.8</Value>" +
-//"<Value>9.4</Value>" +
-//"</Measurement>" +
-//"<Measurement xmlns:x = \"a\" x:date=\"2017-08-10T13:01:27\">" +
-//"<Value>12.35</Value>" +
-//"</Measurement>" +
-//"2017-08-10T11:31:05;n=3,average=10.4 2017-08-10T13:01:27;n=1,average=12.35 "+
-//"</M>", parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
-//		} catch (Exception ex) {fail(ex);}
-//if(T){return;}
+		try {
+			s = "D:/cvs/DEV/java/xdef/src/main/resources/"
+				+ "org/xdef/impl/compile/XdefOfXdef*.xdef";
+			// filepath
+			xp = XDFactory.compileXD((Properties) null, s);//with wildcards
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='" + s + "'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='" + s + "'/>");
+			// URL (file:/filepath)
+			xp = XDFactory.compileXD((Properties) null, "file:/" + s);
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='file:/" + s + "'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='file:/" + s + "'/>");
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name=\"Test\" xd:root=\"A\">\n" +
@@ -331,7 +82,7 @@ public class MyTest_0 extends XDTester {
 "    <a:a xmlns:a='a.b' a=''></a:a>\n" +
 "  </A>\n" +
 "</xd:def>";
-			xp = compile(xdef);
+			xp = XDFactory.compileXD((Properties) null, xdef);
 			xml =
 "<A a='a'>\n" +
 "    <a:a xmlns:a='a.a' a='b'></a:a>\n" +
@@ -340,7 +91,7 @@ public class MyTest_0 extends XDTester {
 			parse(xp, "", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-//if(T){return;}
+if(T){return;}
 		try {
 boolean xxx;
 xxx = false;

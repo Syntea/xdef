@@ -439,9 +439,12 @@ public final class TestErrors extends XDTester {
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try { //test file names etc
-			String fName1 = dataDir + "test/TestErrors1.xdef";
-			String fName2 = dataDir + "test/TestErrors2.xdef";
-			reporter = test(props, new String[]{fName1, fName2}, getClass());
+			String fName1 = "TestErrors1.xdef";
+			String fName2 = "TestErrors2.xdef";
+			String[] sources = new String[] {
+				dataDir + "test/" + fName1,
+				dataDir + "test/" + fName2};
+			reporter = test(props, sources, getClass());
 			assertEq("", chkReport(reporter, "XDEF425", "10", "26", fName2));
 			rep = reporter.getReport();
 			if (!"".equals(chkReport(rep, "XDEF307", "4", "20", fName1))) {
@@ -452,6 +455,50 @@ public final class TestErrors extends XDTester {
 				assertEq("", chkReport(rep, "XDEF307", "4", "20", fName2));
 			}
 			assertNull(reporter.getReport(), reporter.printToString());
+		} catch (Exception ex) {fail(ex);}
+		try {// variable, mothod, type redefinition
+			reporter.clear();
+			xp = XDFactory.compileXD(reporter, (Properties) null, 
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    int i;\n"+
+"    int x(){return 0;}\n"+
+"    type t int();\n"+
+"  </xd:declaration>\n"+
+"  <a/>\n"+
+"</xd:def>",
+"<xd:declaration xmlns:xd='"+_xdNS+"'>\n"+
+"  int i; int x(){return 0;} type t int();\n"+
+"</xd:declaration>");
+			if (reporter.errorWarnings()) {
+				rep = reporter.getReport();
+				assertEq("", chkReport(rep, "XDEF450", "2", "8", "String_2"));
+				assertTrue(rep.toString().contains(
+					": line=3; column=9; source=\"String_1\")"));
+				rep = reporter.getReport();
+				if (rep == null) {
+					fail("Error not reported");
+				} else {
+					assertEq("", chkReport(rep,"XDEF462","2","17","String_2"));
+					assertTrue(rep.toString().contains(
+						": line=4; column=9; source=\"String_1\")"));
+				}
+				rep = reporter.getReport();
+				if (rep == null) {
+					fail("Error not reported");
+				} else {
+					assertEq("", chkReport(rep,"XDEF470","2","34","String_2"));
+					assertTrue(rep.toString().contains(
+						": line=5; column=10; source=\"String_1\")"));
+				}
+			} else {
+				fail("Error not reported");
+			}
+			assertNull(reporter.getReport(), reporter.printToString());
+			reporter.clear();
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

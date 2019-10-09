@@ -180,7 +180,7 @@ public class RegisterReportTables {
 	 * {@link org.xdef.sys.RegisterReportTables}) or it can be created
 	 * from the class of registered report table.
 	 */
-	abstract static class ReportTable implements Comparable<ReportTable> {		
+	abstract static class ReportTable implements Comparable<ReportTable> {
 		/** Minimal length of prefix of registered report. */
 		private static final int PREFIX_MINLENGTH = 2;
 		/** Maximal length of prefix of registered report. */
@@ -896,7 +896,7 @@ public class RegisterReportTables {
 	 * @param encoding required code table name for generated Java code.
 	 * If null the actual code of system is used.
 	 * @param pckg package name of generated classes. If null the package
-	 * name will be org.xdef.msg.
+	 * name will be org.common.msg.
 	 */
 	private static void genRegisteredJavaTables(
 		final ReportTableImpl[] msgTables,

@@ -120,7 +120,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 						}
 						try {
 							XDSourceItem src = new XDSourceItem(f);
-							String key = f.getAbsolutePath();
+							String key = f.getCanonicalPath();
 							_sources.put(key, src);
 							initSourceItem(key, src);
 							if (_sourceItem != null) {
@@ -251,5 +251,4 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 			_removeSource.removeAll();
 		}
 	}
-
 }

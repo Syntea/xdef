@@ -53,9 +53,13 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get XMDefinition assigned to this node.
-	 * @return root XMDefintion node.
+	 * @return MDefintion node.
 	 */
-	public final XMDefinition getXMDefinition() {return getXMDefinition();}
+	public final XMDefinition getXMDefinition() {
+		String s = getXDPosition();
+		int ndx = s.indexOf("#");
+		return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
+	}
 
 	@Override
 	// can't be final, can be overwritten!
@@ -282,7 +286,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	public final String getParserName() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
-			? ((XDParser) p).parserName() : "";
+			? ((XDParser) p).parserName() : "string";
 	}
 
 	/** Set type of value.

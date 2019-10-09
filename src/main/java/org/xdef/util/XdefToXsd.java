@@ -131,7 +131,7 @@ public final class XdefToXsd {
 		String[] srcs = new String[xdefs.length];
 		for (int i = 0; i < xdefs.length; i++) {
 			File f = xdefs[i];
-			srcs[i] = f.getAbsolutePath();
+			srcs[i] = f.getCanonicalPath();
 		}
 		genSchema(srcs,
 			outputDir, xdName, model,schemaPrefix, schemaFileExt, out);
@@ -216,8 +216,8 @@ public final class XdefToXsd {
 						XPool.XDEF20_INSTANCE_NS_URI, "root");
 				}
 				if (a == null) {
-					el.setAttributeNS(XDConstants.XDEF_INSTANCE_NS_URI,
-						"root", xdMode);
+					el.setAttributeNS(
+						XDConstants.XDEF_INSTANCE_NS_URI, "root", xdMode);
 				} else {
 					String value = a.getValue();
 					StringTokenizer st = new StringTokenizer(value, " |");

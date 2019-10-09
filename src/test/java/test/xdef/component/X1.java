@@ -2,7 +2,7 @@
 // XDPosition: "X#Y".
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
-public class X1 extends test.xdef.TestXComponentsGen implements org.xdef.component.XComponent{
+public class X1 extends test.xdef.TestXComponents_G implements org.xdef.component.XComponent{
   public java.util.List<X1.A> listOfA() {return _A;}
   public String get$value() {return _$value;}
   public X1.B getB() {return _B;}
