@@ -58,6 +58,23 @@ public class MyTest_0 extends XDTester {
 		final boolean T = true; //This flag is used to return from a test
 //		final boolean T = false; //This flag is used to return from a test
 		try {
+			s = "D:/cvs/DEV/java/xdef/src/main/resources/"
+				+ "org/xdef/impl/compile/XdefOfXdef*.xdef";
+			// filepath
+			xp = XDFactory.compileXD((Properties) null, s);//with wildcards
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='" + s + "'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='" + s + "'/>");
+			// URL (file:/filepath)
+			xp = XDFactory.compileXD((Properties) null, "file:/" + s);
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='file:/" + s + "'/>");
+			xp = XDFactory.compileXD((Properties) null,
+"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='file:/" + s + "'/>");
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name=\"Test\" xd:root=\"A\">\n" +
 "  <A a=''>\n" +
