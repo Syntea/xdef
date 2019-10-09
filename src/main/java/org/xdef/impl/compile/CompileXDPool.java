@@ -1720,8 +1720,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			throw new SRuntimeException(XDEF.XDEF203);
 		}
 		if (_sources.isEmpty()) {
+			Exception ex = null;
+			try {
+				getReportWriter().checkAndThrowErrorWarnings();
+			} catch (Exception e) {
+				ex = e;
+			}
 			//X-definition source is missing or null&{0}{: }
-			throw new SRuntimeException(XDEF.XDEF903);
+			throw new SRuntimeException(XDEF.XDEF903, ex);
 		}
 		_precomp.prepareMacros(); //find macro definitions and resolve macros
 		precompile(); //compile definitions and groups.

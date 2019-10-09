@@ -21,6 +21,7 @@ import org.xml.sax.SAXParseException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.xdef.sys.SUtils;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -175,7 +176,7 @@ public class KDOMBuilder extends DocumentBuilder {
 						if (publicId == null && systemId != null) { //
 							InputStream in;
 							try {
-								in = KXmlUtils.getExtendedURL(
+								in = SUtils.getExtendedURL(
 									systemId).openStream();
 							} catch (Exception ex) {
 								// if error occurs set the empty InputStream
@@ -469,7 +470,7 @@ public class KDOMBuilder extends DocumentBuilder {
 			if (source.startsWith("//") ||
 				(source.indexOf(":/") > 2 && source.indexOf(":/") < 11)) {
 				try { // try URL
-					return parse(KXmlUtils.getExtendedURL(source));
+					return parse(SUtils.getExtendedURL(source));
 				} catch (Exception ex) {}
 			}
 			doc = parse(new File(source));

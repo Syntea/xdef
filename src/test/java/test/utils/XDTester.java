@@ -362,9 +362,10 @@ public abstract class XDTester extends STester {
 				true, //removeActions
 				false);
 			return KXmlUtils.nodeToString(el, true);
+		} catch (RuntimeException ex) {
+			throw ex;
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "";
+			throw new RuntimeException("Can't create cpllection", ex);
 		}
 	}
 
@@ -516,17 +517,13 @@ public abstract class XDTester extends STester {
 	}
 
 	private void genXdOfXd() {
-		if (_xdOfxd != null) {
-			return; // already created
-		}
-		try {
-			_xdOfxd = XDFactory.compileXD(null,
-				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef");
-		} catch (Exception ex) {
-			new RuntimeException("XdefOfXdef is not available", ex);
+		if (_xdOfxd == null) {// _xdOfxd not created, create it
+			try {
+				_xdOfxd = XDFactory.compileXD(null,
+					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+			} catch (Exception ex) {
+				new RuntimeException("XdefOfXdef is not available", ex);
+			}
 		}
 	}
 

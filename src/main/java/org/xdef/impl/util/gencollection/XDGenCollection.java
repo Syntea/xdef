@@ -62,8 +62,11 @@ public class XDGenCollection {
 	private final HashMap<String, XScriptMacro> _macros;
 
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
+	private static final Properties PROPS_NOEXT = new Properties();
 
 	static {
+		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		try {
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
@@ -300,7 +303,7 @@ public class XDGenCollection {
 			sourcePath = source.startsWith(file)
 				? source.substring(file.length()): source;
 			File f = new File(sourcePath);
-			sourcePath = f.getParentFile().getAbsolutePath();
+			sourcePath = f.getParentFile().getCanonicalPath();
 			sourcePath += File.separator;
 		}
 		String uri = getXDNodeNS(root);
@@ -339,39 +342,23 @@ public class XDGenCollection {
 
 	/** Process include list from header of X-definition. */
 	private void processIncludeList(Element def, String sourcePath) {
-		/** let's check some attributes of X-definition.*/
-		String include =
-			getXdefAttr(def, def.getNamespaceURI(), "include", true);
+		/** let's check "include" attribute of X-definition.*/
+		String include = getXdefAttr(def,def.getNamespaceURI(),"include",true);
 		if (include.length() == 0) {
 			return;
 		}
 		StringTokenizer st = new StringTokenizer(include, " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system id
-			if (sid.startsWith("http:") || sid.startsWith("https:")
-				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
-				|| sid.startsWith("file:")
-				|| sid.startsWith("classpath://")) {
-				try {
-					URL url = KXmlUtils.getExtendedURL(sid);
-					if (_includeList.contains(url.toExternalForm())) {
-						continue;
+			try {
+				String[] urls = SUtils.getSourceGroup(sourcePath + sid);
+				for (String u : urls) {
+					u = SUtils.getExtendedURL(u).toExternalForm();
+					if (!_includeList.contains(u)) {
+						_includeList.add(u);
 					}
-					_includeList.add(url.toExternalForm());
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
 				}
-			} else {
-				File[] list = SUtils.getFileGroup(sourcePath + sid);
-				for (int i = 0; list != null && i < list.length; i++) {
-					try {
-						String fname = list[i].getCanonicalPath();
-						if (list[i].canRead() && !_includeList.contains(fname)){
-							_includeList.add(fname);
-						}
-					} catch (Exception ex) {} // igore
-				}
-			}
+			} catch (Exception ex) {} // ignore
 		}
 	}
 
@@ -1013,10 +1000,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(String source) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(source).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, source);
 	}
 
 	/** Check if given String sources contains correct X-definition.
@@ -1025,10 +1009,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(String... sources) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(sources).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, sources);
 	}
 
 	/** Check if given file contains correct X-definition.
@@ -1037,10 +1018,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(File file) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(file).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, file);
 	}
 
 	/** Check if given files contains correct X-definition.
@@ -1049,9 +1027,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(File[] files) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, "true");
-		return XDFactory.getXDBuilder(props).setSource(files).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, files);
 	}
 
 	/** Check if given URL contains correct X-definition.
@@ -1060,10 +1036,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(URL url) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(url).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, url);
 	}
 
 	/** Check if given URLs contains correct X-definition.
@@ -1072,10 +1045,7 @@ public class XDGenCollection {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static XDPool chkXdef(URL[] urls) throws SRuntimeException {
-		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		return XDFactory.getXDBuilder(props).setSource(urls).compileXD();
+		return XDFactory.compileXD(PROPS_NOEXT, urls);
 	}
 
 	/** Find namespace of child element on root level.

@@ -145,7 +145,8 @@ public class XBuilder implements XDBuilder {
 	 * may be <tt>null</tt>).
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final InputStream source, final String srcId) {
+	public final XDBuilder setSource(final InputStream source,
+		final String srcId) {
 		_xp.setSource(source, srcId);
 		return this;
 	}

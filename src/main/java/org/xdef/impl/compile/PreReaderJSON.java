@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.XMLConstants;
 import org.xdef.impl.XConstants;
+import org.xdef.sys.SUtils;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from JSON source data.
@@ -58,7 +59,8 @@ class PreReaderJSON implements PreReader {
 	 */
 	public final void parseFile(final File file) {
 		try {
-			URL url = file.toURI().toURL();
+			URL url = file.getCanonicalFile().toURI().toURL();
+			url = SUtils.getExtendedURL(url.toExternalForm());
 			for (Object o: _pcomp.getSources()) {
 				if (o instanceof URL && url.equals(o)) {
 					return; // nothing parse, found in the list of sources

@@ -7,7 +7,7 @@ import java.io.File;
 /** Update registered message files.
  * @author Trojan
  */
-public class UpdateRegisteredMessageTables {
+public class UpdateReportTables {
 
 	/** Generate error message files.
 	 * @param args not used

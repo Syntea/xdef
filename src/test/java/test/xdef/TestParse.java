@@ -2888,6 +2888,33 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {
 			if (!ex.getMessage().contains("XML099"))fail(ex);
 		}
+		try {// test "classpath" and "file" protocol in URL
+			xp = XDFactory.compileXD((Properties) null, //without wildcards
+				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef");
+			xp = XDFactory.compileXD((Properties) null, //with wildcards
+				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+			xp = XDFactory.compileXD((Properties) null, //without wildcards
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
+			xp = XDFactory.compileXD((Properties) null, //with wildcards
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+			xp = XDFactory.compileXD((Properties) null, //without wildcards
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
+			xp = XDFactory.compileXD((Properties) null, //with wildcards
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
 		new File(tempDir + "vystup.txt").delete();

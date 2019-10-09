@@ -5,7 +5,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.xdef.xml.KXmlUtils;
+import org.xdef.sys.SUtils;
 
 /** Provides general static methods for manipulating with Document Object Model
  * nodes.
@@ -23,7 +23,7 @@ public class DOMUtils {
 	 */
 	public static URL getURLFromNamespace(final String namespace)
 		throws Exception {
-		return KXmlUtils.getExtendedURL(namespace);
+		return SUtils.getExtendedURL(namespace);
 	}
 
 	/** Gets default namespace URI of given schema or empty string.

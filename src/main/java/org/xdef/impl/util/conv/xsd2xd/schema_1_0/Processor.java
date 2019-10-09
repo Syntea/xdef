@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 import org.w3c.dom.*;
+import org.xdef.sys.SUtils;
 
 /** Abstract class that represents converting logic of XML Schema 1.0. Contains
  * abstract methods for processing schema items.
@@ -40,7 +41,7 @@ public abstract class Processor implements Convertor {
 /*VT*/
 		try {
 			String urlString = rootSchemaURL.toExternalForm();
-			URL newURL = KXmlUtils.getExtendedURL(urlString);
+			URL newURL = SUtils.getExtendedURL(urlString);
 			_schemaElements = getSchemaElements(newURL);
 		} catch (Exception ex) {
 			throw new RuntimeException("Could not create URL from URL!", ex);

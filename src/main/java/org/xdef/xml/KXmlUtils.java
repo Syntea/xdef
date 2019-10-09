@@ -11,11 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -1633,39 +1630,5 @@ public final class KXmlUtils extends KDOMUtils {
 			}
 		}
 		return true;
-	}
-
-	/** Get URL from string (accept also protocol "classpath://").
-	 * @param source string with URL source (MAY BE ALSO protocol "classpath:").
-	 * @return URL created from the source string.
-	 * @throws MalformedURLException IF AN ERROR OCCURS.
-	 */
-	public static final URL getExtendedURL(final String source)
-		throws MalformedURLException{
-		String s;
-		try {
-			s = URLDecoder.decode(source,
-				System.getProperties().getProperty("file.encoding")).trim();
-		} catch (UnsupportedEncodingException ex) {
-			s = source.trim();
-		}
-		if (s.startsWith("classpath://")) {
-			try {
-				String t = s.substring(12); // remove protocol name
-				int ndx = t.lastIndexOf('.');
-				t = t.substring(0,ndx).replace('.', '/') + t.substring(ndx);
-				URL url = ClassLoader.getSystemResource(t);
-				if (url != null) {
-					return url;
-				}
-			} catch (Exception ex) {} // try regular URL constructor
-		}
-		URL u = new URL(s);
-		if ("file".equals(u.getProtocol())) {
-			try {
-				return new File(u.getFile()).getCanonicalFile().toURI().toURL();
-			} catch (Exception ex) {}
-		}
-		return u;
 	}
 }

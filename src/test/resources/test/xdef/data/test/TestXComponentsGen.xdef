@@ -2,10 +2,10 @@
 
 <xd:component>
  %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
- %bind g %with test.xdef.TestXComponentsGen %link G#G/@g;
- %bind XXX %with test.xdef.TestXComponentsGen %link G#G/XXX;
- %bind YYY %with test.xdef.TestXComponentsGen %link G#G/YYY;
- %class test.xdef.component.AZ extends test.xdef.TestXComponentsGen %link A#A/Z;
+ %bind g %with test.xdef.TestXComponents_G %link G#G/@g;
+ %bind XXX %with test.xdef.TestXComponents_G %link G#G/XXX;
+ %bind YYY %with test.xdef.TestXComponents_G %link G#G/YYY;
+ %class test.xdef.component.AZ extends test.xdef.TestXComponents_G %link A#A/Z;
  %class test.xdef.component.J %link J#A;
  %class test.xdef.component.Z %link SouborD1A#SouborD1A;
  %class test.xdef.component.Z1 %link SouborD1A#ZaznamPDN;
@@ -169,10 +169,10 @@
 
 <xd:def name='G' root='G'>
   <xd:declaration scope="local">
-     external method void test.xdef.TestXComponentsGen.genXC(XXNode);
+     external method void test.xdef.TestXComponents_G.genXC(XXNode);
   </xd:declaration>
   <xd:component>
-    %class test.xdef.component.G extends test.xdef.TestXComponentsGen %link G
+    %class test.xdef.component.G extends test.xdef.TestXComponents_G %link G
   </xd:component>
 
   <G xd:script = 'finally ;' g = 'string'>
@@ -325,11 +325,11 @@
 
 <xd:def name='X' root='X|Y'>
 <xd:declaration scope="local">
-   external method void test.xdef.TestXComponentsGen.setXX(XXNode,String);
+   external method void test.xdef.TestXComponents_G.setXX(XXNode,String);
 </xd:declaration>
   <xd:component>
     %class test.xdef.component.X %link X;
-    %class test.xdef.component.X1 extends test.xdef.TestXComponentsGen %link Y;
+    %class test.xdef.component.X1 extends test.xdef.TestXComponents_G %link Y;
   </xd:component>
 
    <X>

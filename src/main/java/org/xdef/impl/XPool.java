@@ -340,8 +340,10 @@ public final class XPool implements XDPool, Serializable {
 				_sourceInfo.getMap().put(s, new XDSourceItem(source));
 				_compiler.parseString(source, s);
 			} else if (source.startsWith("//") ||
-				(source.indexOf(":/") > 2 && source.indexOf(":/") < 11)) {
-				setSource(KXmlUtils.getExtendedURL(source));
+				(source.indexOf(":/") > 2 && source.indexOf(":/") < 12)) {
+				for (String x: SUtils.getSourceGroup(source)) {
+					setSource(SUtils.getExtendedURL(x));
+				}
 			} else {
 				File[] files = SUtils.getFileGroup(source);
 				if (files == null || files.length == 0) {
@@ -364,9 +366,7 @@ public final class XPool implements XDPool, Serializable {
 					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903, s);
-				//Program exception&{0}{: }
-				_compiler.getReportWriter().error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 			}
 		}
 	}

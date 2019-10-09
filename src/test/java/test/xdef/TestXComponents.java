@@ -424,7 +424,7 @@ public final class TestXComponents extends XDTester {
 		try {
 			xml = "<G g='g'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>";
 			xd = xp.createXDDocument("G");
-			TestXComponentsGen x = new TestXComponentsGen();
+			TestXComponents_G x = new TestXComponents_G();
 			xd.setUserObject(x);
 			test.xdef.component.G p = (test.xdef.component.G)
 				parseXC(xd, xml, null, null);

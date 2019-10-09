@@ -126,14 +126,14 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			}
 		} else {
 			try {
-				URL u = KXmlUtils.getExtendedURL(s);
+				URL u = SUtils.getExtendedURL(s);
 				_sysId = u.toExternalForm();
 				prepareSourceBytes(u.openStream());
 				prepareXReader();
 			} catch (Exception ex) {
 				File f = new File(s);
-				_sysId = f.getAbsolutePath();
 				try {
+					_sysId = f.getCanonicalPath();
 					prepareSourceBytes(new FileInputStream(s));
 					prepareXReader();
 				} catch (Exception exx) {
@@ -150,8 +150,8 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	 */
 	public GenDTD2XDEF(final File file, final ReportWriter rw)	{
 		this(rw);
-		_sysId = file.getAbsolutePath();
 		try {
+			_sysId = file.getCanonicalPath();
 			prepareSourceBytes(new FileInputStream(file));
 			prepareXReader();
 		} catch (Exception exx) {
@@ -543,7 +543,8 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					while (p.isChar('|')) {
 						isDeclSep(p);
 						if (p.isXMLName((byte) 10)) {
-							childList.add(new SeqItemRef(p.getParsedString(),'*'));
+							childList.add(
+								new SeqItemRef(p.getParsedString(),'*'));
 							skipDeclSep(p);
 						}
 					}

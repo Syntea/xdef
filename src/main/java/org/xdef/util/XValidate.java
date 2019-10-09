@@ -200,7 +200,7 @@ public class XValidate {
 						inpool.close();
 					} catch (Exception exx) {//Program exception &{0}
 						throw new SRuntimeException(SYS.SYS036, exx);
-					}						
+					}
 				}
 				return null;
 			}
@@ -227,7 +227,7 @@ public class XValidate {
 			}
 		}
 		try {
-			return XDFactory.xparse(xmlFile.getAbsolutePath(), repw);
+			return XDFactory.xparse(xmlFile.getCanonicalPath(), repw);
 		} catch (Exception ex) {
 			if (ex instanceof SThrowable) {
 				repw.putReport(((SThrowable)ex).getReport());
@@ -416,7 +416,7 @@ public class XValidate {
 				xmlFile, poolFile, xdefFiles, xdefName, repw);
 			int errors = repw.getErrorCount() + repw.getFatalErrorCount() +
 				repw.getWarningCount();
-			String fname = xmlFile.getAbsolutePath();
+			String fname = xmlFile.getCanonicalPath();
 			if (repw instanceof ArrayReporter) {
 				if (errors != 0) {
 					System.out.println("File OK: " + fname);

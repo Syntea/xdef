@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLDecoder;
 
 /** Contains information about X-definition source item.
  * @author Vaclav Trojan
@@ -35,7 +36,8 @@ public final class XDSourceItem {
 	 */
 	public XDSourceItem(Object o) throws Exception {
 		if (o instanceof File) {
-			_url = ((File) o).getCanonicalFile().toURI().toURL();
+			_url = SUtils.getExtendedURL(((File) o).getCanonicalFile()
+				.toURI().toURL().toExternalForm());
 		} else if (o instanceof URL) {
 			_url = (URL) o;
 		} else if ((o instanceof InputStream)) {
@@ -72,7 +74,12 @@ public final class XDSourceItem {
 		XDSourceItem result = new XDSourceItem();
 		String s = xr.readString();
 		if (s != null) {
-			result._url = new URL(s);
+			try {
+				result._url = new URL(URLDecoder.decode(s,
+					System.getProperties().getProperty("file.encoding")));
+			} catch (Exception ex) {
+				result._url = new URL(s);
+			}
 		}
 		result._encoding = xr.readString();
 		result._source = xr.readString();

@@ -2,7 +2,7 @@
 // XDPosition: "G#G".
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
-public class G extends test.xdef.TestXComponentsGen implements org.xdef.component.XComponent{
+public class G extends test.xdef.TestXComponents_G implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
