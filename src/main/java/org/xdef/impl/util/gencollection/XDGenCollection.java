@@ -342,7 +342,7 @@ public class XDGenCollection {
 
 	/** Process include list from header of X-definition. */
 	private void processIncludeList(Element def, String sourcePath) {
-		/** let's check some attributes of X-definition.*/
+		/** let's check "include" attribute of X-definition.*/
 		String include = getXdefAttr(def,def.getNamespaceURI(),"include",true);
 		if (include.length() == 0) {
 			return;
@@ -358,7 +358,7 @@ public class XDGenCollection {
 						_includeList.add(u);
 					}
 				}
-			} catch (Exception ex) {} // igore
+			} catch (Exception ex) {} // ignore
 		}
 	}
 

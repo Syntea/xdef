@@ -2894,31 +2894,26 @@ public final class TestParse extends XDTester {
 				"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef");
-//			xp = XDFactory.compileXD((Properties) null, //with wildcards
-//				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+			xp = XDFactory.compileXD((Properties) null, //with wildcards
+				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 			xp = XDFactory.compileXD((Properties) null, //without wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
-//			xp = XDFactory.compileXD((Properties) null, //with wildcards
-//"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
-//"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
-//			xp = XDFactory.compileXD((Properties) null, //without wildcards
-//"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
-//"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
-//"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
-//"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
-//"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
-//			xp = XDFactory.compileXD((Properties) null, //with wildcards
-//"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
-//"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
-			s ="D:/cvs/DEV/java/xdef/src/main/resources/org/xdef/impl/compile/";
-//			xp = XDFactory.compileXD((Properties) null, //with wildcards
-//				"file:/"+ s + "XdefOfXdef*.xdef");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
-				s + "XdefOfXdef*.xdef");
+"<xd:collection xmlns:xd='" + _xdNS + "'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+			xp = XDFactory.compileXD((Properties) null, //without wildcards
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
+			xp = XDFactory.compileXD((Properties) null, //with wildcards
+"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

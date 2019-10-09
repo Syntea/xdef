@@ -408,13 +408,11 @@ public class XPreCompiler implements PreCompiler {
 			new StringTokenizer(include.getString(), " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system ID
-			if (sid.startsWith("http:") || sid.startsWith("https:")
-				|| sid.startsWith("ftp:") || sid.startsWith("sftp:")
-				|| sid.startsWith("file:")
-				|| sid.startsWith("classpath:")) {
-				try {
+			if (sid.startsWith("//") ||
+				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) {
+				try { // is URL
 					for (String x : SUtils.getSourceGroup(sid)) {
-						URL u = new URL(x);
+						URL u = SUtils.getExtendedURL(x);
 						if (_includeList.contains(u)) {
 							continue;
 						}
