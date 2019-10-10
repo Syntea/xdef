@@ -69,7 +69,11 @@ public abstract class ExternalXDEditor implements XEditor {
 			String resultInfo = resultFile.getCanonicalPath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
 			// wait max. 4 hours for the resultFile (14400 = 2*2*3600)
-			for (int i = 0; i < 14400 && !waitForFileExists(resultFile); i++) {}
+			for (int i = 0; i < 14400; i++) {
+				if (waitForFileExists(resultFile)) {
+					break;
+				}
+			}
 			if (!resultFile.exists() || !resultFile.canRead()) {
 				//No response from the external editor
 				throw new SRuntimeException(XDEF.XDEF860);
