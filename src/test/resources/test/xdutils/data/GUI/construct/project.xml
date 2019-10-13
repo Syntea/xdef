@@ -1,10 +1,10 @@
 <Project>
-  <XDefinition>test/resources/test/xdutils/data/GUI/construct/xdef.xml</XDefinition>
+  <XDefinition>src/test/resources/test/xdutils/data/GUI/construct/xdef.xml</XDefinition>
   <Property Name = "xdef.warnings" Value = "true"/>
   <Property Name = "xdef.display" Value = "true"/>
   <Property Name = "xdef.debug" Value = "true"/>
   <Execute XDName = "test" Mode = "construct" DisplayResult = "true">
-    <Context>test/resources/test/xdutils/data/GUI/construct/data.xml</Context>
-    <SaveResult File = "test/resources/test/xdutils/data/GUI/construct/result1.html" />
+    <Context>src/test/resources/test/xdutils/data/GUI/construct/data.xml</Context>
+    <SaveResult File = "src/test/resources/test/xdutils/data/GUI/construct/result1.html" />
   </Execute>
 </Project>

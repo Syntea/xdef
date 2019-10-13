@@ -10,11 +10,11 @@
       Toto je test
     </Var>
     <Input>
-      test/resources/test/xdutils/data/GUI/validate/data.xml
+      src/test/resources/test/xdutils/data/GUI/validate/data.xml
     </Input>
-    <SaveResult File="test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
+    <SaveResult File="src/test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
   </Execute>
   <XDefinition>
-    file:/D:/cvs/DEV/java/xdef31/test/resources/test/xdutils/data/GUI/validate/xdef.xml
+   src/test/resources/test/xdutils/data/GUI/validate/xdef.xml
   </XDefinition>
 </Project>
