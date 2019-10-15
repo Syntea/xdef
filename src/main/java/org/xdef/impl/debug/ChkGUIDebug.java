@@ -1231,4 +1231,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 		}
 	}
+	
+	@Override
+	/** Get editor of X-definition sources (this method is never invoked here).
+	 * @return editor of X-definition sources.
+	 */
+	public XEditor getXEditor() {return null;}
 }

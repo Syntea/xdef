@@ -158,4 +158,9 @@ public interface XDDebug {
 	 */
 	public void removeXpos(String xpos);
 
+	/** Get editor of X-definition sources.
+	 * @return editor of X-definition sources.
+	 */
+	public XEditor getXEditor();
+
 }
