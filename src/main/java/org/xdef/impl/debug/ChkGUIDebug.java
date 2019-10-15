@@ -741,7 +741,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param callList call list.
 	 * @param stepMode step mode (NOSTEP, STEPINTO, STEPOVER).
 	 * @return step mode.
-	 * @throws Error if program should stop.
+	 * @throws Error if the X-definition is canceled.
 	 */
 	public int debug(final XXNode xnode,
 		final XDValue[] code,
@@ -1231,10 +1231,4 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 		}
 	}
-	
-	@Override
-	/** Get editor of X-definition sources (this method is never invoked here).
-	 * @return editor of X-definition sources.
-	 */
-	public XEditor getXEditor() {return null;}
 }

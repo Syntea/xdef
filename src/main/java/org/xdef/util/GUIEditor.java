@@ -58,9 +58,9 @@ public class GUIEditor extends GUIScreen {
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
 "      <!-- Add a class to classpath -->\n" +
-"      <XDefinition xd:script=\"+\">\n" +
+"      <Source xd:script=\"+\">\n" +
 "        string();\n" +
-"      </XDefinition>\n" +
+"      </Source>\n" +
 "      <!-- Set property -->\n" +
 "      <Property xd:script=\"*\"\n" +
 "        Name=\"string();\"\n" +
@@ -340,7 +340,7 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private static void updateXdefList(final Element project,
 		final XDSourceInfo si) {
-		NodeList nl = project.getElementsByTagName("XDefinition");
+		NodeList nl = project.getElementsByTagName("Source");
 		for (int i = 0; i < nl.getLength(); i++) {
 			project.removeChild(nl.item(i));
 		}
@@ -353,10 +353,47 @@ public class GUIEditor extends GUIScreen {
 			} else {
 				s = xsi._source;
 			}
-			Element e = doc.createElement("XDefinition");
+			Element e = doc.createElement("Source");
 			e.setTextContent(s);
 			project.appendChild(e);
 		}
+	}
+
+	private static Element canonizeXdefList(final Element project) {
+		NodeList nl = project.getElementsByTagName("Source");
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element e = (Element) nl.item(i);
+			String s = e.getTextContent();
+			try {
+				File f = new File(s);
+				if (f.exists()) {
+					s = f.getCanonicalFile().toURI().toURL().toExternalForm();
+				}
+				s = SUtils.getExtendedURL(s).toExternalForm();
+				e.setTextContent(s);
+			} catch (Exception ex) {}
+		}
+		// remove sources with the equal text content.
+		ArrayList<Element> ar = new ArrayList<Element>();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element e = (Element) nl.item(i);
+			String s = e.getTextContent();
+			for (int j = i + 1; j < nl.getLength(); j++) {
+				if (s.equals(((Element) nl.item(j)).getTextContent())){
+					ar.add(e);					
+				}
+			}
+		}
+		for (Element e: ar) {
+			project.removeChild(e);
+		}
+		nl = project.getElementsByTagName("Source");
+		ar = new ArrayList<Element>();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element e = (Element) nl.item(i);
+			ar.add(e);
+		}
+		return project;
 	}
 
 	/** Run project with GUIEditor.
@@ -385,7 +422,7 @@ public class GUIEditor extends GUIScreen {
 					e.getAttribute("Value"));
 			}
 			// get X-definition sources
-			nl = project.getElementsByTagName("XDefinition");
+			nl = project.getElementsByTagName("Source");
 			ArrayList<String> axdefs = new ArrayList<String>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				e = (Element) nl.item(i);
@@ -395,9 +432,8 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			// compile X-definitions
-			XDPool xp = XDFactory.getXDBuilder(props)
-				.setSource(axdefs.toArray(new String[axdefs.size()]))
-				.compileXD();
+			XDPool xp = XDFactory.compileXD(props,
+				axdefs.toArray(new String[axdefs.size()]));
 			XDSourceInfo si = xp.getXDSourceInfo();
 			boolean changed = false;
 			for (String x: si.getMap().keySet()) {
@@ -534,7 +570,8 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			ArrayReporter ar = new ArrayReporter();
-			KXmlUtils.compareElements(project, originalProject, true, ar);
+			KXmlUtils.compareElements(project = canonizeXdefList(project),
+				canonizeXdefList(originalProject), true, ar);
 			if (!"OK".equals(ar.printToString())) {
 				// if something changed in the project ask to save it
 				JFileChooser jf;
@@ -761,9 +798,9 @@ public class GUIEditor extends GUIScreen {
 			System.err.println(msg +	"\n" + info);
 			return;
 		}
-		// XDefinitions
+		// Sources
 		for (String x: xdefs) {
-			src += "  <XDefinition>" + x + "</XDefinition>\n";
+			src += "  <Source>" + x + "</Source>\n";
 		}
 		src +=
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
