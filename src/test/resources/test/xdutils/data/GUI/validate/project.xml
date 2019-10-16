@@ -15,9 +15,6 @@
     <SaveResult File="src/test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
   </Execute>
   <XDefinition>
-   src/test/resources/test/xdutils/data/GUI/validate/xdef1.xml
-  </XDefinition>
-  <XDefinition>
-   src/test/resources/test/xdutils/data/GUI/validate/xdef2.xml
+   src/test/resources/test/xdutils/data/GUI/validate/xdef*.xml
   </XDefinition>
 </Project>

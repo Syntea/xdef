@@ -343,21 +343,18 @@ public class GUIEditor extends GUIScreen {
 	private static void updateXdefList(final Element project,
 		final XDSourceInfo si) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
-		for (int i = 0; i < nl.getLength(); i++) {
-			project.removeChild(nl.item(i));
+		for (int i = nl.getLength() - 1; i >= 0 ; i--) {
+			project.removeChild(nl.item(i));  // romove all XDefinition items
 		}
 		Document doc = project.getOwnerDocument();
 		for (String x: si.getMap().keySet()) {
 			XDSourceItem xsi = si.getMap().get(x);
-			String s;
-			if (xsi._url != null) {
-				s = xsi._url.toExternalForm();
-			} else {
-				s = xsi._source;
+			String s = xsi._url!=null ? xsi._url.toExternalForm() : xsi._source;
+			if (s != null && !(s = s.trim()).isEmpty()) {
+				Element e = doc.createElement("XDefinition");
+				e.setTextContent(s);
+				project.appendChild(e);
 			}
-			Element e = doc.createElement("XDefinition");
-			e.setTextContent(s);
-			project.appendChild(e);
 		}
 	}
 
@@ -383,12 +380,32 @@ public class GUIEditor extends GUIScreen {
 
 	private static Element canonizeProject(final Element project) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
+		ArrayList<String> sources = new ArrayList<String>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
-			String s = getSourceURL(e.getTextContent());
-			if (s != null) {
-				e.setTextContent(s);
+			String s = e.getTextContent();
+			if (s != null && !(s=s.trim()).isEmpty()) {
+				String[] x;
+				try {
+					x = SUtils.getSourceGroup(s);
+				} catch (Exception ex) {
+					x = new String[]{s};
+				}
+				for (String t : x) {
+					if (!sources.contains(t)) {
+						sources.add(t);
+					}
+				}
 			}
+		}
+		for (int i = nl.getLength() - 1; i >= 0; i--) {
+			project.removeChild(nl.item(i));
+		}
+		Document doc = project.getOwnerDocument();
+		for (String s: sources) {
+			Element e = doc.createElement("XDefinition");
+			e.setTextContent(s);
+			project.appendChild(e);
 		}
 		// remove sources with the equal text content.
 		ArrayList<Element> ar = new ArrayList<Element>();
