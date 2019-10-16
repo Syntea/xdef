@@ -14,10 +14,10 @@
     </Input>
     <SaveResult File="src/test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
   </Execute>
-  <Source>
+  <XDefinition>
    src/test/resources/test/xdutils/data/GUI/validate/xdef1.xml
-  </Source>
-  <Source>
+  </XDefinition>
+  <XDefinition>
    src/test/resources/test/xdutils/data/GUI/validate/xdef2.xml
-  </Source>
+  </XDefinition>
 </Project>

@@ -58,9 +58,9 @@ public class GUIEditor extends GUIScreen {
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
 "      <!-- Add a class to classpath -->\n" +
-"      <Source xd:script=\"+\">\n" +
+"      <XDefinition xd:script=\"+\">\n" +
 "        string();\n" +
-"      </Source>\n" +
+"      </XDefinition>\n" +
 "      <!-- Set property -->\n" +
 "      <Property xd:script=\"*\"\n" +
 "        Name=\"string();\"\n" +
@@ -310,13 +310,15 @@ public class GUIEditor extends GUIScreen {
 		if (e == null) {
 			return null;
 		}
-		String data = e.getTextContent().trim();
+		String data = e.getTextContent();
 		if (data != null) {
+			data = data.trim();
 			if ("true".equals(e.getAttribute("Edit"))) {
 				if (data.startsWith("<")) {
 					editXml(null,"Input data: ", data, si, "Save");
 				} else {
-					editXml(null, "Input data: ", data, si,null);
+					URL u = SUtils.getExtendedURL(data);
+					editXml(null, "Input data: ", u, si, null);
 				}
 				XDSourceItem x = si.getMap().values().iterator().next();
 				if (x._changed && !data.equals(x._source.trim())){
@@ -340,7 +342,7 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private static void updateXdefList(final Element project,
 		final XDSourceInfo si) {
-		NodeList nl = project.getElementsByTagName("Source");
+		NodeList nl = project.getElementsByTagName("XDefinition");
 		for (int i = 0; i < nl.getLength(); i++) {
 			project.removeChild(nl.item(i));
 		}
@@ -353,25 +355,40 @@ public class GUIEditor extends GUIScreen {
 			} else {
 				s = xsi._source;
 			}
-			Element e = doc.createElement("Source");
+			Element e = doc.createElement("XDefinition");
 			e.setTextContent(s);
 			project.appendChild(e);
 		}
 	}
 
-	private static Element canonizeXdefList(final Element project) {
-		NodeList nl = project.getElementsByTagName("Source");
+	/** Get canonized form of source item as the external form of URL.
+	 * @param s source item.
+	 * @return canonized form of source item as the external form of URL.
+	 */
+	private static String getSourceURL(final String s) {
+		String t;
+		if (s != null && !(t = s.trim()).isEmpty()) {
+			try {
+				File f = new File(t);
+				if (f.exists()) {
+					f = f.getCanonicalFile();
+					return SUtils.getExtendedURL(
+						f.toURI().toURL().toExternalForm()).toExternalForm();
+				}
+				return SUtils.getExtendedURL(t).toExternalForm();
+			} catch (Exception ex) {}
+		}
+		return null;
+	}
+
+	private static Element canonizeProject(final Element project) {
+		NodeList nl = project.getElementsByTagName("XDefinition");
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
-			String s = e.getTextContent();
-			try {
-				File f = new File(s);
-				if (f.exists()) {
-					s = f.getCanonicalFile().toURI().toURL().toExternalForm();
-				}
-				s = SUtils.getExtendedURL(s).toExternalForm();
+			String s = getSourceURL(e.getTextContent());
+			if (s != null) {
 				e.setTextContent(s);
-			} catch (Exception ex) {}
+			}
 		}
 		// remove sources with the equal text content.
 		ArrayList<Element> ar = new ArrayList<Element>();
@@ -380,22 +397,75 @@ public class GUIEditor extends GUIScreen {
 			String s = e.getTextContent();
 			for (int j = i + 1; j < nl.getLength(); j++) {
 				if (s.equals(((Element) nl.item(j)).getTextContent())){
-					ar.add(e);					
+					ar.add(e);
 				}
 			}
 		}
 		for (Element e: ar) {
 			project.removeChild(e);
 		}
-		nl = project.getElementsByTagName("Source");
+		nl = project.getElementsByTagName("XDefinition");
 		ar = new ArrayList<Element>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
 			ar.add(e);
 		}
+		nl = project.getElementsByTagName("Execute");
+		for (int i = 0; i < nl.getLength(); i++) {
+			NodeList nl1 = ((Element) nl.item(i)).getElementsByTagName("Input");
+			for (int j = 0; j < nl1.getLength(); j++) {
+				Element e = (Element) nl1.item(j);
+				String s = getSourceURL(e.getTextContent());
+				if (s != null) {
+					e.setTextContent(s);
+				}
+			}
+			nl1 = ((Element) nl.item(i)).getElementsByTagName("SaveResult");
+			for (int j = 0; j < nl1.getLength(); j++) {
+				Element e = (Element) nl.item(j);
+				String s = getSourceURL(e.getAttribute("File"));
+				if (s != null) {
+					e.setAttribute("File", s);
+				}
+			}
+		}
 		return project;
 	}
 
+	private static boolean compareNodes(final Element p1,
+		final Element p2,
+		final String tagname) {
+		NodeList nl1,nl2;
+		nl1 = p1.getElementsByTagName(tagname);
+		nl2 = p2.getElementsByTagName(tagname);
+		if (nl1.getLength() != nl2.getLength()) {
+			return false;
+		}
+		ArrayReporter ar = new ArrayReporter();
+		for (int i = 0; i < nl1.getLength(); i++) {
+			Element el1 = (Element) nl1.item(i);
+			Element el2 = (Element) nl2.item(i);
+			KXmlUtils.compareElements(el1, el2, true, ar);
+			if (!"OK".equals(ar.printToString())) {
+				return false;
+			}
+			ar.clear();
+		}
+		return true;
+	}
+
+	private static boolean compareProjects(final Element p1, final Element p2) {
+		if (!p1.getAttribute("Show").equals(p2.getAttribute("Show"))) {
+			return false;
+		}
+		if (!compareNodes(p1, p2, "Property")) {
+			return false;
+		}
+		if (!compareNodes(p1, p2, "XDefinition")) {
+			return false;
+		}
+		return compareNodes(p1, p2, "Execute");
+	}
 	/** Run project with GUIEditor.
 	 * @param src source with the project.
 	 */
@@ -411,6 +481,7 @@ public class GUIEditor extends GUIScreen {
 				editXml(null, "Project", o, sinfo, null);
 				project = pxd.xparse(src, null);
 			}
+			project  = canonizeProject(project);
 			Element originalProject = (Element) project.cloneNode(true);
 			NodeList nl;
 			// set properties
@@ -422,7 +493,7 @@ public class GUIEditor extends GUIScreen {
 					e.getAttribute("Value"));
 			}
 			// get X-definition sources
-			nl = project.getElementsByTagName("Source");
+			nl = project.getElementsByTagName("XDefinition");
 			ArrayList<String> axdefs = new ArrayList<String>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				e = (Element) nl.item(i);
@@ -515,7 +586,7 @@ public class GUIEditor extends GUIScreen {
 				if (reporter.errorWarnings()) {
 					if (data != null && "validate".equals(mode)) {
 						// show result
-						File f = new File(data);
+						File f = new File(new URL(data).getFile());
 						if (data.startsWith("<") && !f.isFile()) {
 							editXml(reporter, "ERROR:", data, si,
 								"Input data changed, run again?");
@@ -569,10 +640,8 @@ public class GUIEditor extends GUIScreen {
 					}
 				}
 			}
-			ArrayReporter ar = new ArrayReporter();
-			KXmlUtils.compareElements(project = canonizeXdefList(project),
-				canonizeXdefList(originalProject), true, ar);
-			if (!"OK".equals(ar.printToString())) {
+			if (!compareProjects(
+				project = canonizeProject(project), originalProject)) {
 				// if something changed in the project ask to save it
 				JFileChooser jf;
 				if (src.charAt(0) != '<') {
@@ -800,7 +869,7 @@ public class GUIEditor extends GUIScreen {
 		}
 		// Sources
 		for (String x: xdefs) {
-			src += "  <Source>" + x + "</Source>\n";
+			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
 		src +=
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS

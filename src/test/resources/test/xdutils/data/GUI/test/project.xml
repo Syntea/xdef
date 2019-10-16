@@ -1,6 +1,6 @@
-<Project>
-  <Source>src/test/resources/test/xdutils/data/GUI/test/test1.xdef</Source>
-  <Source>src/test/resources/test/xdutils/data/GUI/test/test2.xdef</Source>
+<Project Show="true">
+  <XDefinition>src/test/resources/test/xdutils/data/GUI/test/test1.xdef</XDefinition>
+  <XDefinition>src/test/resources/test/xdutils/data/GUI/test/test2.xdef</XDefinition>
   <Property Name = "xdef.warnings" Value = "true"/>
   <Property Name = "xdef.display" Value = "true"/>
   <Property Name = "xdef.debug" Value = "true"/>
