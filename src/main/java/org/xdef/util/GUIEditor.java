@@ -34,6 +34,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.GenXDef;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
@@ -386,10 +387,14 @@ public class GUIEditor extends GUIScreen {
 			String s = e.getTextContent();
 			if (s != null && !(s=s.trim()).isEmpty()) {
 				String[] x;
-				try {
-					x = SUtils.getSourceGroup(s);
-				} catch (Exception ex) {
+				if (s.startsWith("<")) {
 					x = new String[]{s};
+				} else {
+					try {
+						x = SUtils.getSourceGroup(s);
+					} catch (Exception ex) {
+						x = new String[]{s};
+					}
 				}
 				for (String t : x) {
 					if (!sources.contains(t)) {
@@ -701,27 +706,33 @@ public class GUIEditor extends GUIScreen {
 	 * <li><tt>-p </tt>file with the project</li>
 	 * <li><tt>-v [switches]</tt>run validation mode</li>
 	 * <li><tt>-c [switches]</tt>run construction mode</li>
+	 * <li><tt>-g [XML source]</tt>Generate X-definition form XML data</li>
 	 * </ul>
 	 * Switches:
 	 * <ul>
 	 * <li><tt>-xdef file </tt>specifies the source with the X-definition</li>
 	 * <li><tt>-data file file</tt>specifies input data or context</li>
 	 * <li><tt>-debug </tt>sets the debug mode</li>
-	 * <li><tt>-editInput </tt>enables to runEditor input data before execution</li>
+	 * <li><tt>-editInput </tt>enables to runEditor input data before execution
+	 * </li>
 	 * <li><tt>-displayResult </tt>displays result XML element</li>
 	 * </ul>
 	 */
 	public static void main(String... args) {
 		final String info =
-"GUI - Edit and run X-definition in graphical user interface.\n"+
-"Usage: -p project_file | -v [switches] | [-c [switches\n\n"+
+"Edit and run X-definition in graphical user interface.\n"+
+" -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
 " -p runs a project file\n"+
-" -v compiles X-definition and runs validation mode\n"+
-" -c compiles X-definition and runs construction mode\n\n"+
+" -v compile X-definition and runs validation mode\n"+
+" -c compile X-definition and runs construction mode\n"+
+" -g generate X-definition and project from XML.\n"+
+"  Optionally the XML source specification may follow.\n\n"+
 "Switches\n"+
-" -xdef file with X-definition (may be specified more times)\n"+
-" -data file XML data (input file for validation mode and context\n"+
-"     for construction mode)\n"+
+" -xdef source with X-definition (input file or XML data; it may be\n"+
+"    specified more times)\n"+
+" -data xml source (input file or XML data used for validation\n"+
+"    mode and as the context for construction mode or for generation of\n"+
+"    X-definition).\n"+
 " -debug sets debugging mode when project is executed\n"+
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result XML data\n";
@@ -742,21 +753,58 @@ public class GUIEditor extends GUIScreen {
 			}
 			return;
 		}
-		char param;
-		if ("-c".equals(arg)) {
-			param = 'c';
-		} else if ("-v".equals(arg)) {
-			param = 'v';
-		} else {
-			System.err.println("Incorrect parameter: " + arg + "\n" + info);
-			return;
-		}
-		int i = 1;
+		String src = "<Project>\n";
 		ArrayList<String> xdefs = new ArrayList<String>();
 		String dataPath = null;
 		String debug = null;
 		String editInput = null;
 		String displayResult = null;
+		int i = 1;
+		char param;
+		if ("-c".equals(arg)) {
+			param = 'c';
+		} else if ("-v".equals(arg)) {
+			param = 'v';
+		} else if ("-g".equals(arg)) { // generate X-definition
+			src = "<Project Show=\"true\">\n";
+			param = 'g';
+			String xml = "<A><B/><B/></A>";
+			i = args.length;
+			if (i > 2) {
+				System.err.println("Too many parameters: " + arg + "\n" + info);
+				return;
+			} else if (i == 2) {
+				String x = args[1].trim();
+				if (!x.isEmpty()) {
+					xml = x;
+				}
+			}
+			try {
+				Document d = KXmlUtils.parseXml(xml);
+				Element w = d.createElement("W");
+				w.setTextContent(xml);
+				String s = KXmlUtils.nodeToString(w, true).substring(3);
+				s = s.substring(0, s.length()-4);
+				dataPath = s.trim();
+				Element e = d.getDocumentElement();
+				Element xd = GenXDef.genXdef(e);
+				xd.setAttribute("name", "test");
+				w.setTextContent(KXmlUtils.nodeToString(xd, true));
+				s = KXmlUtils.nodeToString(w).substring(3);
+				s = s.substring(0, s.length()-4).trim();
+				xdefs.add(s);
+				editInput = "true";
+				displayResult = "true";
+				debug = "true";
+				param = 'v';
+			} catch (Exception ex) {
+				ex.printStackTrace(System.err);
+				return;
+			}
+		} else {
+			System.err.println("Incorrect parameter: " + arg + "\n" + info);
+			return;
+		}
 		while (i < args.length) {
 			arg = args[i++];
 			if ("-xdef".equals(arg)) {
@@ -802,7 +850,6 @@ public class GUIEditor extends GUIScreen {
 			System.err.println("Incorrect parameter \"" + arg + "\"\n" + info);
 			return;
 		}
-		String src = "<Project>\n";
 		String msg = "";
 		switch (param) {
 			case 'c': { // create
