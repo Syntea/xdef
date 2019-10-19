@@ -315,20 +315,14 @@ public class GUIEditor extends GUIScreen {
 		if (data != null) {
 			data = data.trim();
 			if ("true".equals(e.getAttribute("Edit"))) {
-				if (data.startsWith("<")) {
-					editXml(null,"Input data: ", data, si, "Save");
-				} else {
-					URL u = SUtils.getExtendedURL(data);
-					editXml(null, "Input data: ", u, si, null);
-				}
-				XDSourceItem x = si.getMap().values().iterator().next();
+				XDSourceInfo xi = new XDSourceInfo();
+				Object o =
+					data.startsWith("<") ? data : SUtils.getExtendedURL(data);
+				xi.getMap().put(data, new XDSourceItem(o));
+				editXml(null, "Input data: ", o, xi, null);
+				XDSourceItem x = xi.getMap().values().iterator().next();
 				if (x._changed && !data.equals(x._source.trim())){
 					data = x._source.trim();
-//					if (JOptionPane.showConfirmDialog(null,
-//						"Data changed. Do you want to save the file?",
-//						null, JOptionPane.OK_CANCEL_OPTION) == 0) {
-////TODO save the file
-//					}
 					e.setTextContent(data);
 				}
 			}
@@ -766,9 +760,8 @@ public class GUIEditor extends GUIScreen {
 		} else if ("-v".equals(arg)) {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
-			src = "<Project Show=\"true\">\n";
 			param = 'g';
-			String xml = "<A><B/><B/></A>";
+			String xml = "<A><B b=\"1\"/><B/></A>";
 			i = args.length;
 			if (i > 2) {
 				System.err.println("Too many parameters: " + arg + "\n" + info);
