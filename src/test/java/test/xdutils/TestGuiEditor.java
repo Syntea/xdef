@@ -25,9 +25,11 @@ public class TestGuiEditor  extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 //		test(new String[] {"-v"});
 //		test(new String[] {"-c"});
+//		test(new String[] {"-g"});
+//		test(new String[] {"-p", getDataDir() + "GUI/test/project.xml"});
 		test(new String[] {"-p", getDataDir() + "GUI/validate/project.xml"});
 //		test(new String[] {"-p", getDataDir() + "GUI/construct/project.xml"});
-//		test(new String[] {"-p", getDataDir() + "GUI/test/project.xml"});
+//		test(new String[] {"-g", getDataDir() + "GUI/validate/data.xml"});
 	}
 
 	/** Run test

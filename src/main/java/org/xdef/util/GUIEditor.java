@@ -300,6 +300,39 @@ public class GUIEditor extends GUIScreen {
 		new GUIEditor(si).display(err, msg, o, si, true, runMenu);
 	}
 
+	/** Display and edit XMl given by src.
+	 * @param src may be pathname of file, url or XML.
+	 * @return source item of edited XML.
+	 * @throws Exception if an error occurs.
+	 */
+	private static String editData(final String src) throws Exception {
+		String data = src.trim();
+		XDSourceInfo xi = new XDSourceInfo();
+		Object o;
+		if (data.startsWith("<")) {
+			o = data;
+		} else {
+			String[] ss = SUtils.getSourceGroup(data);
+			String s = (ss != null && ss.length == 1) ? ss[0] : data;
+			if (!((File)(o = new File(s))).exists()) {
+				o = SUtils.getExtendedURL(s);
+			}
+		}
+		XDSourceItem xsi = new XDSourceItem(o);
+		xi.getMap().put(data, xsi);
+		ArrayReporter rep = new ArrayReporter();
+		editXml(rep, "Input XML data", o, xi, null);
+		xsi = xi.getMap().values().iterator().next();
+		if (xsi._saved || !data.equals(xsi._source.trim())) {
+			if (xsi._url != null) {
+				data = xsi._url.toExternalForm();
+			} else {
+				data = xsi._source.trim();
+			}
+		}
+		return data;
+	}
+
 	/** Read input data or context.
 	 * @param e element with data description.
 	 * @param si Source information.
@@ -315,15 +348,10 @@ public class GUIEditor extends GUIScreen {
 		if (data != null) {
 			data = data.trim();
 			if ("true".equals(e.getAttribute("Edit"))) {
-				XDSourceInfo xi = new XDSourceInfo();
-				Object o =
-					data.startsWith("<") ? data : SUtils.getExtendedURL(data);
-				xi.getMap().put(data, new XDSourceItem(o));
-				editXml(null, "Input data: ", o, xi, null);
-				XDSourceItem x = xi.getMap().values().iterator().next();
-				if (x._changed && !data.equals(x._source.trim())){
-					data = x._source.trim();
-					e.setTextContent(data);
+				String s = editData(data);
+				if (!data.equals(s)) {
+					e.setTextContent(s);
+					data = s;
 				}
 			}
 		}
@@ -760,7 +788,7 @@ public class GUIEditor extends GUIScreen {
 		} else if ("-v".equals(arg)) {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
-			param = 'g';
+			param = 'v';
 			String xml = "<A><B b=\"1\"/><B/></A>";
 			i = args.length;
 			if (i > 2) {
@@ -773,6 +801,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			try {
+				xml = editData(xml);
 				Document d = KXmlUtils.parseXml(xml);
 				Element w = d.createElement("W");
 				w.setTextContent(xml);
@@ -786,10 +815,9 @@ public class GUIEditor extends GUIScreen {
 				s = KXmlUtils.nodeToString(w).substring(3);
 				s = s.substring(0, s.length()-4).trim();
 				xdefs.add(s);
-				editInput = "true";
+//				editInput = "true";
 				displayResult = "true";
 				debug = "true";
-				param = 'v';
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 				return;
