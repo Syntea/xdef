@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.parsers.XDParseDateYMDhms;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseMD5;
 import org.xdef.impl.parsers.XSParseBase64Binary;
@@ -375,6 +376,9 @@ public class GenXDef implements XDConstants {
 	private static String genType(final String data) {
 		if (data.length() == 0) {
 			return ""; //TODO option Accept empty attributes?
+		}
+		if (new XDParseDateYMDhms().check(null, data).matches()) {
+			return "dateYMDhms()";
 		}
 		if (new XSParseInt().check(null, data).matches()) {
 			return "int()";
