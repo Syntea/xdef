@@ -301,11 +301,13 @@ public class GUIEditor extends GUIScreen {
 	}
 
 	/** Display and edit XMl given by src.
+	 * @param title title of window.
 	 * @param src may be pathname of file, url or XML.
 	 * @return source item of edited XML.
 	 * @throws Exception if an error occurs.
 	 */
-	private static String editData(final String src) throws Exception {
+	private static String editData(final String title,
+		final String src) throws Exception {
 		String data = src.trim();
 		XDSourceInfo xi = new XDSourceInfo();
 		Object o;
@@ -321,7 +323,7 @@ public class GUIEditor extends GUIScreen {
 		XDSourceItem xsi = new XDSourceItem(o);
 		xi.getMap().put(data, xsi);
 		ArrayReporter rep = new ArrayReporter();
-		editXml(rep, "Input XML data", o, xi, null);
+		editXml(rep, title, o, xi, null);
 		xsi = xi.getMap().values().iterator().next();
 		if (xsi._saved || !data.equals(xsi._source.trim())) {
 			if (xsi._url != null) {
@@ -348,7 +350,7 @@ public class GUIEditor extends GUIScreen {
 		if (data != null) {
 			data = data.trim();
 			if ("true".equals(e.getAttribute("Edit"))) {
-				String s = editData(data);
+				String s = editData("Input XML data", data);
 				if (!data.equals(s)) {
 					e.setTextContent(s);
 					data = s;
@@ -555,7 +557,7 @@ public class GUIEditor extends GUIScreen {
 			for (String x: si.getMap().keySet()) {
 				XDSourceItem xsi = si.getMap().get(x);
 				if (!xsi._saved) {
-					changed |= xsi._changed;					
+					changed |= xsi._changed;
 				}
 			}
 			if (changed) {
@@ -685,7 +687,9 @@ public class GUIEditor extends GUIScreen {
 					}
 				}
 			}
-			if (param == 'g' || !compareProjects(
+			if (param == 'g') {
+				editData("Generated project", src);
+			} else if (!compareProjects(
 				project = canonizeProject(project), originalProject)) {
 				// if something changed in the project ask to save it
 				JFileChooser jf;
@@ -694,8 +698,8 @@ public class GUIEditor extends GUIScreen {
 				} else {
 					jf = new JFileChooser(new File(".").getCanonicalFile());
 				}
-				jf.setDialogTitle((param != 'g' ? "Project changed. " : "")
-					+ "Do you want to save the project?");
+				jf.setDialogTitle(
+					"Project changed. Do you want to save the project?");
 				jf.setToolTipText("Save THE PROJECT to a file");
 				int retval = jf.showSaveDialog(null);
 				jf.setEnabled(false);
@@ -801,7 +805,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			try {
-				xml = editData(xml);
+				xml = editData("Input XML data", xml);
 				Document d = KXmlUtils.parseXml(xml);
 				Element w = d.createElement("W");
 				w.setTextContent(xml);
@@ -950,7 +954,7 @@ public class GUIEditor extends GUIScreen {
 			}
 		}
 		if (!msg.isEmpty()) {
-			System.err.println(msg +	"\n" + info);
+			System.err.println(msg + "\n" + info);
 			return;
 		}
 		// Sources
