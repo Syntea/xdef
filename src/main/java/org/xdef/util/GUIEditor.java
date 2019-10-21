@@ -511,9 +511,10 @@ public class GUIEditor extends GUIScreen {
 		return compareNodes(p1, p2, "Execute");
 	}
 	/** Run project with GUIEditor.
+	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
 	 * @param src source with the project.
 	 */
-	public static final void runEditor(final String src) {
+	public static final void runEditor(final char param, final String src) {
 		try {
 			Element e;
 			// Create element with project according to X-definition
@@ -554,7 +555,7 @@ public class GUIEditor extends GUIScreen {
 			for (String x: si.getMap().keySet()) {
 				XDSourceItem xsi = si.getMap().get(x);
 				if (!xsi._saved) {
-					changed |= xsi._changed;
+					changed |= xsi._changed;					
 				}
 			}
 			if (changed) {
@@ -684,7 +685,7 @@ public class GUIEditor extends GUIScreen {
 					}
 				}
 			}
-			if (!compareProjects(
+			if (param == 'g' || !compareProjects(
 				project = canonizeProject(project), originalProject)) {
 				// if something changed in the project ask to save it
 				JFileChooser jf;
@@ -693,9 +694,7 @@ public class GUIEditor extends GUIScreen {
 				} else {
 					jf = new JFileChooser(new File(".").getCanonicalFile());
 				}
-
-				jf.setDialogTitle(
-					"Project changed. Do you want to save the project?");
+				jf.setDialogTitle("Do you want to save the project?");
 				jf.setToolTipText("Save THE PROJECT to a file");
 				int retval = jf.showSaveDialog(null);
 				jf.setEnabled(false);
@@ -771,7 +770,7 @@ public class GUIEditor extends GUIScreen {
 			if (args.length == 1) {
 				System.err.println("Missing parameter with project\n" + info);
 			} else {
-				runEditor(args[1]);
+				runEditor('p', args[1]);
 			}
 			return;
 		}
@@ -788,7 +787,7 @@ public class GUIEditor extends GUIScreen {
 		} else if ("-v".equals(arg)) {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
-			param = 'v';
+			param = 'g';
 			String xml = "<A><B b=\"1\"/><B/></A>";
 			i = args.length;
 			if (i > 2) {
@@ -915,6 +914,7 @@ public class GUIEditor extends GUIScreen {
 				src += "  </Execute>\n";
 				break;
 			}
+			case 'g':  // generate X-definition
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
@@ -968,6 +968,6 @@ public class GUIEditor extends GUIScreen {
 			? XDConstants.XDPROPERTYVALUE_DEBUG_FALSE
 			: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE) + "\"/>\n" +
 		"</Project>";
-		runEditor(src);
+		runEditor(param, src);
 	}
 }
