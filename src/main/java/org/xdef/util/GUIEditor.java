@@ -694,7 +694,8 @@ public class GUIEditor extends GUIScreen {
 				} else {
 					jf = new JFileChooser(new File(".").getCanonicalFile());
 				}
-				jf.setDialogTitle("Do you want to save the project?");
+				jf.setDialogTitle((param != 'g' ? "Project changed. " : "")
+					+ "Do you want to save the project?");
 				jf.setToolTipText("Save THE PROJECT to a file");
 				int retval = jf.showSaveDialog(null);
 				jf.setEnabled(false);
