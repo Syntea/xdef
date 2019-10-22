@@ -556,9 +556,7 @@ public class GUIEditor extends GUIScreen {
 			boolean changed = false;
 			for (String x: si.getMap().keySet()) {
 				XDSourceItem xsi = si.getMap().get(x);
-				if (!xsi._saved) {
-					changed |= xsi._changed;
-				}
+				changed |= xsi._changed | xsi._saved;
 			}
 			if (changed) {
 				updateXdefList(project, si); //Update X-definitions elements
@@ -688,7 +686,8 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			if (param == 'g') {
-				editData("Generated project", src);
+				editData("Generated project",
+					KXmlUtils.nodeToString(project, true));
 			} else if (!compareProjects(
 				project = canonizeProject(project), originalProject)) {
 				// if something changed in the project ask to save it
