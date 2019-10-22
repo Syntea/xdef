@@ -778,7 +778,8 @@ public class GUIEditor extends GUIScreen {
 			}
 			return;
 		}
-		String src = "<Project>\n";
+		String src = 
+"<Project>\n";
 		ArrayList<String> xdefs = new ArrayList<String>();
 		String dataPath = null;
 		String debug = null;
@@ -960,7 +961,7 @@ public class GUIEditor extends GUIScreen {
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
-		src +=
+		src += 
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE	+ "\"/>\n" +
@@ -968,10 +969,11 @@ public class GUIEditor extends GUIScreen {
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE + "\"/>\n" +
 "  <Property Name = \"" + XDConstants.XDPROPERTY_DEBUG
-			+ "\" Value = \"" + (debug == null
-			? XDConstants.XDPROPERTYVALUE_DEBUG_FALSE
-			: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE) + "\"/>\n" +
-		"</Project>";
+			+ "\" Value = \"" 
+			+ (debug == null ? XDConstants.XDPROPERTYVALUE_DEBUG_FALSE
+				: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE)
+			+ "\"/>\n"+
+"</Project>";
 		runEditor(param, src);
 	}
 }
