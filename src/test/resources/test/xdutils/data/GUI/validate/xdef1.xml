@@ -1,11 +1,9 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name = "test" root="root">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name = "test1" root="root">
   <xd:declaration>
     external String xyz;
   </xd:declaration>
 
   <root a="int(); finally {outln('xyz=' + xyz);}" >
-    <b xd:script="*" >
-      ? string(2,3);
-    </b>
+    <b xd:script="*; ref test2#x" />
   </root>
 </xd:def>

@@ -363,6 +363,8 @@ public class GUIScreen extends GUIBase {
 		JFileChooser jf = new JFileChooser();
 		if (src._url != null && "file".equals(src._url.getProtocol())) {
 			jf.setSelectedFile(new File(src._url.getFile()));
+		} else {
+			jf.setSelectedFile(new File(".").getAbsoluteFile());
 		}
 		jf.setDialogTitle("Save to file");
 		jf.setToolTipText("Save content of the active window to a file");

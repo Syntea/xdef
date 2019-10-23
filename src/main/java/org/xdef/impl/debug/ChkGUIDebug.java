@@ -58,24 +58,24 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private boolean _opened = false;
 
 ////////////////////////////////////////////////////////////////////////////////
-// debug mode commands
+// debug mode internal commands
 ////////////////////////////////////////////////////////////////////////////////
-	private static final int DBG_CONTINUE = 0;
-	private static final int DBG_STEP = 1;
-	private static final int DBG_STEPINTO = 2;
-	private static final int DBG_CANCEL = 3;
-	private static final int DBG_DISABLLE = 4;
-	private static final int DBG_SHOWSTACK = 5;
-	private static final int DBG_SHOWLOCALVARS = 6;
-	private static final int DBG_SHOWGLOBALVARS = 7;
-	private static final int DBG_SHOWPOSITION = 8;
-	private static final int DBG_SHOWTEXT = 9;
-	private static final int DBG_SETTEXT = 10;
-	private static final int DBG_SHOWELEMENT = 11;
-	private static final int DBG_SHOWCONTEXT = 12;
-	private static final int DBG_SHOWERRORS = 13;
-	private static final int DBG_EXIT = 14;
-	private static final int DBG_HELP = 15;
+	private static final int DBG_CONTINUE = 0;							//0
+	private static final int DBG_STEP = DBG_CONTINUE + 1;				//1
+	private static final int DBG_STEPINTO = DBG_STEP + 1;				//2
+	private static final int DBG_CANCEL = DBG_STEPINTO + 1;				//3
+	private static final int DBG_DISABLLE = DBG_CANCEL + 1;				//4
+	private static final int DBG_SHOWSTACK = DBG_DISABLLE  + 1;			//5
+	private static final int DBG_SHOWLOCALVARS = DBG_SHOWSTACK + 1;		//6
+	private static final int DBG_SHOWGLOBALVARS = DBG_SHOWLOCALVARS + 1;//7
+	private static final int DBG_SHOWPOSITION = DBG_SHOWGLOBALVARS + 1;	//8
+	private static final int DBG_SHOWTEXT = DBG_SHOWPOSITION + 1;		//9
+	private static final int DBG_SETTEXT = DBG_SHOWTEXT + 1;			//10
+	private static final int DBG_SHOWELEMENT = DBG_SETTEXT + 1;			//11
+	private static final int DBG_SHOWCONTEXT = DBG_SHOWELEMENT + 1;		//12
+	private static final int DBG_SHOWERRORS = DBG_SHOWCONTEXT + 1;		//13
+	private static final int DBG_EXIT = DBG_SHOWERRORS + 1;				//14
+	private static final int DBG_HELP = DBG_EXIT + 1;					//15
 
 	private static final String[] DBG_COMMANDS = {
 		"go/Continue/F5",						// DBG_CONTINUE
@@ -741,7 +741,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param callList call list.
 	 * @param stepMode step mode (NOSTEP, STEPINTO, STEPOVER).
 	 * @return step mode.
-	 * @throws Error if program should stop.
+	 * @throws Error if the X-definition is canceled.
 	 */
 	public int debug(final XXNode xnode,
 		final XDValue[] code,
@@ -1230,15 +1230,5 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				}
 			}
 		}
-	}
-
-	@Override
-	/** Get editor of X-definition sources.
-	 * @return editor of X-definition sources.
-	 */
-	public XEditor getXEditor() {
-		XDSourceInfo si = _xdpool == null
-			? new XDSourceInfo() : _xdpool.getXDSourceInfo();
-		return new ChkGUIDisplay(si);
 	}
 }

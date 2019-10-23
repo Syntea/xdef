@@ -13,6 +13,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.impl.parsers.XDParseDateYMDhms;
+import org.xdef.impl.parsers.XDParseEmailDate;
+import org.xdef.impl.parsers.XDParseMD5;
+import org.xdef.impl.parsers.XSParseBase64Binary;
+import org.xdef.impl.parsers.XSParseBoolean;
+import org.xdef.impl.parsers.XSParseDate;
+import org.xdef.impl.parsers.XSParseDatetime;
+import org.xdef.impl.parsers.XSParseDecimal;
+import org.xdef.impl.parsers.XSParseDuration;
+import org.xdef.impl.parsers.XSParseGDay;
+import org.xdef.impl.parsers.XSParseGMonth;
+import org.xdef.impl.parsers.XSParseGMonthDay;
+import org.xdef.impl.parsers.XSParseGYear;
+import org.xdef.impl.parsers.XSParseGYearMonth;
+import org.xdef.impl.parsers.XSParseInt;
+import org.xdef.impl.parsers.XSParseLong;
+import org.xdef.impl.parsers.XSParseTime;
 
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
@@ -360,76 +377,63 @@ public class GenXDef implements XDConstants {
 		if (data.length() == 0) {
 			return ""; //TODO option Accept empty attributes?
 		}
-		final StringParser p = new StringParser(data);
-		if (p.isInteger() && p.eos()) {
-			return "num()";
-		}
-		p.setBufIndex(0);
-		if (p.isSignedInteger() && p.eos()) {
-			return "long()";
-		}
-		p.setBufIndex(0);
-		if ((p.isToken("true") || p.isToken("false")) && p.eos()) {
-			return "boolean()";
-		}
-		p.setBufIndex(0);
-		if (p.isSignedFloat() && p.eos()) {
-			return "double()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLDay() && p.eos()) {
-			return "gDay()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLMonth()&& p.eos()) {
-			return "gMonth()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLMonthDay()&& p.eos()) {
-			return "gMonthDay()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLYear()&& p.eos()) {
-			return "gYear()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLDate()&& p.eos()) {
-			return "date()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLDatetime() && p.eos()) {
-			return "dateTime()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLTime() && p.eos()) {
-			return "time()";
-		}
-		p.setBufIndex(0);
-		if (p.isXMLDuration() && p.eos()) {
-			return "ISOduration()";
-		}
-		p.setBufIndex(0);
-		if (p.isISO8601Date() && p.eos()) {
-			return "ISOdate()";
-		}
-		p.setBufIndex(0);
-		if (p.isISO8601Time() && p.eos()) {
-			return "ISOtime()";
-		}
-		p.setBufIndex(0);
-		if (p.isISO8601Datetime() && p.eos()) {
-			return "ISOdateTime()";
-		}
-		if (p.isRFC822Datetime() && p.eos()) {
-			return "emailDate()";
-		}
-		p.setBufIndex(0);
-		if (p.isDatetime("yyyyMMddHHmmss") && p.eos()) {
+		if (new XDParseDateYMDhms().check(null, data).matches()) {
 			return "dateYMDhms()";
 		}
+		if (new XSParseInt().check(null, data).matches()) {
+			return "int()";
+		}
+		if (new XSParseLong().check(null, data).matches()) {
+			return "long()";
+		}
+		if (new XSParseDecimal().check(null, data).matches()) {
+			return "decimal()";
+		}
+		if (new XSParseBoolean().check(null, data).matches()) {
+			return "boolean()";
+		}
+		if (new XSParseDatetime().check(null, data).matches()) {
+			return "dateTime()";
+		}
+		if (new XSParseDate().check(null, data).matches()) {
+			return "date()";
+		}
+		if (new XSParseTime().check(null, data).matches()) {
+			return "time()";
+		}
+		if (new XSParseDuration().check(null, data).matches()) {
+			return "duration()";
+		}
+		if (new XSParseGDay().check(null, data).matches()) {
+			return "gDay()";
+		}
+		if (new XSParseGMonth().check(null, data).matches()) {
+			return "gMonth()";
+		}
+		if (new XSParseGMonthDay().check(null, data).matches()) {
+			return "gMonthDay()";
+		}
+		if (new XSParseGYearMonth().check(null, data).matches()) {
+			return "gYearMonth()";
+		}
+		if (new XSParseGYear().check(null, data).matches()) {
+			return "gYear()";
+		}
+		if ((data.trim().endsWith("=") || data.trim().length() >= 16)
+			&& new XSParseBase64Binary().check(null, data).matches()) {
+			return "base64Binary()";
+		}
+		if (data.trim().length() == 16
+			&& new XDParseMD5().check(null, data).matches()) {
+			return "MD5()";
+		}
+		if (new XDParseEmailDate().check(null, data).matches()) {
+			return "emailDate()";
+		}
+		final StringParser p = new StringParser(data);
 		p.setBufIndex(0);
 		String mask;
-		if (p.isDatetime("d.M.yyyy") || p.isDatetime("d/M/yyy")) {
+		if (p.isDatetime("d.M.yyyy") || p.isDatetime("d/M/yyyy")) {
 			mask = "d.M.yyyy";
 		} else if (p.isDatetime("d.M.yy") || p.isDatetime("d/M/yy")) {
 			mask = "d.M.yy";
@@ -475,10 +479,6 @@ public class GenXDef implements XDConstants {
 				}
 			}
 		}
-		p.setBufIndex(0);
-		if (p.isXMLName((byte) 10) && p.eos()) {
-			return "Name()";
-		}
 		return "string()";
 	}
 
@@ -490,8 +490,8 @@ public class GenXDef implements XDConstants {
 	private static Element createElement(final Element el,
 		final String ns,
 		final String name) {
-		return ns == null ? el.getOwnerDocument().createElement(name) :
-			el.getOwnerDocument().createElementNS(ns, name);
+		return ns == null ? el.getOwnerDocument().createElement(name)
+			: el.getOwnerDocument().createElementNS(ns, name);
 	}
 
 	/** Recursive generation of X-definition model from given element.
@@ -501,8 +501,8 @@ public class GenXDef implements XDConstants {
 	 */
 	private static void genModel(final Element parent, final XModel x) {
 		if ("$text".equals(x._name)) {
-			String val =
-				(x._min == 0 ? "optional " : "required ") + x._value + ";";
+			String val = (x._min == 0 ? "optional " : "required ")
+				+ x._value + ";";
 			appendText(parent, val);
 			return;
 		}
