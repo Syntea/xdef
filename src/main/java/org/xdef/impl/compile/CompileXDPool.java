@@ -1989,7 +1989,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				XElement xel2 = xref.getTarget();
 				if (xel2 == null) { //Unresolved reference
 					xref.putTargetError(getReportWriter());
-					} else {
+				} else {
 					SPosition spos = xref.getSPosition();
 					_precomp.setSystemId(spos.getSysId());
 					if (errs) { // previous errors were reported
