@@ -148,6 +148,25 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	public final String getRefTypeName() {return _refTypeName;}
 
 	@Override
+	/** Check if the type of value is declared as local within the X-definition.
+	 * @return true if the type of value is declared as local within
+	 * the X-definition.
+	 */
+	public boolean isLocalType() {
+		if (_refTypeName == null) {
+			return false;
+		}
+		String defname = getXMDefinition().getName();
+		XDPool xp = getXDPool();
+		for (String x: xp.getVariableTable().getVariableNames()) {
+			if (x.equals(defname + '#' + _refTypeName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	/** Get parser used for parsing of value.
 	 * @return XDParser or null if parser is not available.
 	 */
