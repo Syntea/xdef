@@ -251,6 +251,23 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 */
 	public final byte getXmlVersion() {return _xmlVersion;}
 
+	@Override
+	/** Check if given name is declared as local in this X-definition.
+	 * @param name the name to be checked.
+	 * @return true if given name is declared as local in this X-definition.
+	 */
+	public final boolean isLocalName(final String name) {
+		if (name != null) {
+			String localName = getName() + '#' + name;
+			for (String s: getXDPool().getVariableTable().getVariableNames()) {
+				if (localName.equals(s)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/** Add new XElement as model.
 	 * @param newModel XElement
 	 * @return <tt>true</tt> if and only if the new model was added
