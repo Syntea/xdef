@@ -30,8 +30,8 @@ public interface XMData extends XMNode {
 	 */
 	public String getRefTypeName();
 
-	/** Check if the type of value is declared as local within the X-definition.
-	 * @return true if the type of value is declared as local within
+	/** Check if the value type is declared as local within the X-definition.
+	 * @return true if the value type is declared as local within
 	 * the X-definition.
 	 */
 	public boolean isLocalType();
