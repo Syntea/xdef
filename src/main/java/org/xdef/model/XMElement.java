@@ -53,13 +53,15 @@ public interface XMElement extends XMNode {
 	 */
 	public XDDocument createXDDocument();
 
-	/** If this model is just reference to other model return true.
-	 * @return If this model is just reference to other model return true.
+	/** If this object is clone of other model (reference) return true.
+	 * @return If this model is clone of other model (reference) return true.
 	 */
 	public boolean isReference();
 
-	/** Return reference position if this model was created from reference.
-	 * @return reference position if this model was created from reference.
+	/** Get reference position if this model was created from other model
+	 * (reference) or return null.
+	 * @return reference position if this model was created from other model
+	 * (reference) or return null.
 	 */
 	public String getReferencePos();
 

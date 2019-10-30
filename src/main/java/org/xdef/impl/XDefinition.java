@@ -258,7 +258,16 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 */
 	public final boolean isLocalName(final String name) {
 		if (name != null) {
-			String localName = getName() + '#' + name;
+			int ndx = name.indexOf('#');
+			String localName;
+			if (ndx >= 0) {
+				if (!getName().equals(name.substring(0,ndx))) {
+					return false;
+				}
+				localName = name;
+			} else {
+				localName = getName() + '#' + name;
+			}
 			for (String s: getXDPool().getVariableTable().getVariableNames()) {
 				if (localName.equals(s)) {
 					return true;
