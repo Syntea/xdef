@@ -54,7 +54,7 @@ public interface XMElement extends XMNode {
 	public XDDocument createXDDocument();
 
 	/** If this element model is equal to reference model return true.
-	 * @return return true if this element model is equal to reference model.
+	 * @return true if this element model is equal to reference model.
 	 */
 	public boolean isReference();
 
