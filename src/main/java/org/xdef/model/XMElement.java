@@ -53,8 +53,8 @@ public interface XMElement extends XMNode {
 	 */
 	public XDDocument createXDDocument();
 
-	/** If this object is clone of other model (reference) return true.
-	 * @return If this model is clone of other model (reference) return true.
+	/** If this element model is equal to reference model return true.
+	 * @return return true if this element model is equal to reference model.
 	 */
 	public boolean isReference();
 

@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.io.StringWriter;
 import test.utils.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.StringParser;
@@ -9,6 +10,7 @@ import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.XDFactory;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
@@ -48,6 +50,7 @@ public final class TestKeyAndRef extends XDTester {
 		XDPool xp;
 		final String dataDir = getDataDir() + "test/";
 		final ArrayReporter reporter = new ArrayReporter();
+		StringWriter strw;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -971,7 +974,7 @@ public final class TestKeyAndRef extends XDTester {
 // test uniqueSet setValue, getValoue
 // and order of attribute processing in X-definition
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration>uniqueSet u {a: string(); var Parser x}</xd:declaration>\n" +
 "  <A>\n" +
 "    <DefParams>\n" +
@@ -989,16 +992,16 @@ public final class TestKeyAndRef extends XDTester {
 "<A>\n" +
 "  <DefParams>\n" +
 "    <Param Name=\"name\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"stature\"/>\n" +
+"    <Param Type=\"dec()\" Name=\"xxx\"/>\n" +
 "    <Param Name=\"birthday\" Type=\"xdatetime('dd.MM.yyyy')\"/>\n" +
 "  </DefParams>\n" +
 "  <Params>\n" +
 "    <Param Name=\"name\" Value=\"John\"/>\n" +
-"    <Param Name=\"stature\" Value=\"184.8\"/>\n" +
+"    <Param Name=\"xxx\" Value=\"184.8\"/>\n" +
 "    <Param Name=\"birthday\" Value=\"01.02.1987\"/>\n" +
 "  </Params>\n" +
 "  <Params>\n" +
-"    <Param Value=\"1.8a\" Name=\"stature\"/>\n" +
+"    <Param Value=\"1.8a\" Name=\"xxx\"/>\n" +
 "  </Params>\n" +
 "</A>";
 			parse(xp, "", xml, reporter);
@@ -1006,6 +1009,53 @@ public final class TestKeyAndRef extends XDTester {
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
 				&& s.contains("birthday") && s.contains("name"),reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='a'>\n" +
+"  <xd:declaration>\n" +
+"    uniqueSet u {var Parser x; var int y; a: string(); var String z}\n" +
+"  </xd:declaration>\n" +
+"  <a>\n" +
+"    <DefParams>\n" +
+"       <Param xd:script=\"*; finally out(u.z)\"\n" +
+"          Name=\"u.a.ID(); onTrue u.z='x'; onFalse u.z='y';\"\n" +
+"          Type=\"xdType(); onTrue u.x=getParsedValue();\n" +
+"                          onFalse u.y=99;\n" +
+"                          finally out(u.y)\"/>\n" +
+"    </DefParams>\n" +
+"    <Params xd:script=\"*; init u.checkUnref()\">\n" +
+"       <Param xd:script=\"*;\"\n" +
+"              Name=\"u.a.CHKID();\"\n" +
+"              Value=\"u.x; onTrue out(u.x); \"/>\n" +
+"    </Params>\n" +
+"  </a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml =
+"<a>\n" +
+"  <DefParams>\n" +
+"    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
+"    <Param Type=\"dec()\" Name=\"Vyska\"/>\n" +
+"    <Param Name=\"DatumNarozeni\" Type=\"xdatetime('dd.MM.yyyy')\" />\n" +
+"  </DefParams>\n" +
+"  <Params>\n" +
+"    <Param Name=\"Jmeno\" Value=\"Jan\"/>\n" +
+"    <Param Name=\"Vyska\" Value=\"14.8\"/>\n" +
+"    <Param Name=\"DatumNarozeni\" Value=\"01.02.1987\"/>\n" +
+"  </Params>\n" +
+"  <Params>\n" +
+"    <Param Value=\"14.8a\" Name=\"Vyska\"/>\n" +
+"  </Params>\n" +
+"</a>";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			parse(xd, xml, reporter);
+			assertEq("xxxCDATAdecxdatetime", strw.toString());
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF804")
+				&& s.contains("XDEF524")
+				&& s.contains("DatumNarozeni") && s.contains("Jmeno"),
+				reporter);
 			xdef = // run parse twice
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
 "  <xd:declaration>uniqueSet u{s: string; e: string};</xd:declaration>\n" +

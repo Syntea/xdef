@@ -2117,7 +2117,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else if (!checkIntegrity(y, level+1, hs)) {
 				return false;
 			} else {
-				if (y.getName().indexOf('$') > 0) {
+				if (y.getName().indexOf('$') > 0) { //dummy element?
 					y = (XElement) y.getChildNodeModels()[0];
 				}
 			}
@@ -2263,7 +2263,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				return true;
 			} else {
 				xel.setReference(false);
-				xel.setReferencePos(null);
 				//copy old attributes and update XDPositions
 				String basePos = xel.getXDPosition();
 				for (String name: y.getXDAttrNames()) {

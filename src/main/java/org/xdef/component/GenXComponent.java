@@ -965,9 +965,10 @@ public final class GenXComponent {
 			final String s = xe.getXDPosition();
 			if (s == null) {// model still may be reference
 				//if null model is a reference
-				return _components.get(xe.getReferencePos());
+				return _components.get(
+					xe.isReference() ? xe.getReferencePos() : null);
 			} else {
-				final String t = xe.getReferencePos();
+				final String t = xe.isReference() ? xe.getReferencePos() : null;
 				if (t == null) { // if no reference exists
 					return _components.get(s); // we return model class
 				}
@@ -1009,7 +1010,8 @@ public final class GenXComponent {
 		if (ndx < 0) {
 			return null;
 		}
-		if (s == null && (s = xe.getReferencePos()) != null) {
+		if (s == null 
+			&& (s = xe.isReference() ? xe.getReferencePos() : null) != null) {
 			s = _binds.get(xe.getXDPosition() + xdPos.substring(ndx));
 		}
 		return s;
