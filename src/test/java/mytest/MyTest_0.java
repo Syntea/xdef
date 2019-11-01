@@ -18,8 +18,7 @@ import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
-import test.utils.XDTester;
-import static test.utils.XDTester._xdNS;
+import builtools.XDTester;
 
 /** Various tests.
  * @author Vaclav Trojan

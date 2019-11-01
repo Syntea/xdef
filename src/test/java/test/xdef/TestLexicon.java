@@ -3,7 +3,7 @@ package test.xdef;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;

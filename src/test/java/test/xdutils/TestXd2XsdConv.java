@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xdef.sys.ReportWriter;
 import org.xdef.util.XdefToXsd;
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** Test XDefinition to schema conversion.
  * @author Ilia Alexandrov

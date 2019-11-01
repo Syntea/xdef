@@ -1,6 +1,6 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
@@ -21,7 +21,6 @@ import org.xdef.impl.parsers.XSParseDecimal;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
-import static test.utils.XDTester._xdNS;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan

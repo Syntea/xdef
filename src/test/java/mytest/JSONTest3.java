@@ -15,7 +15,7 @@ import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.json.*;
 import org.xdef.sys.ArrayReporter;
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** Test names of getter/setter.
  * @author Vaclav Trojan

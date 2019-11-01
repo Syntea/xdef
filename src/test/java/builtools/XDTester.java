@@ -1,4 +1,4 @@
-package test.utils;
+package builtools;
 
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;

@@ -10,7 +10,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.util.DTDToXdef;
 import java.io.File;
 import org.w3c.dom.Element;
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** Test of conversion of DTD to X-definition.
  * @author Vaclav Trojan

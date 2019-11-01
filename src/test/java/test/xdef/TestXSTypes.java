@@ -1,6 +1,6 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
@@ -24,7 +24,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import static test.utils.XDTester._xdNS;
 
 /** Test XML schema and X-definition types.
  * @author Vaclav Trojan

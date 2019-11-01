@@ -1,6 +1,6 @@
 package test;
 
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** Execute all tests verbose.
  * @author Vaclav Trojan

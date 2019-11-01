@@ -1,6 +1,6 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
@@ -28,7 +28,6 @@ import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
-import static test.utils.XDTester._xdNS;
 
 /** Test construction mode of x-definition .
  * @author Vaclav Trojan

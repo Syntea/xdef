@@ -4,9 +4,7 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
-import static test.utils.STester.runTest;
-import test.utils.XDTester;
-import static test.utils.XDTester._xdNS;
+import builtools.XDTester;
 
 public class Test1 extends XDTester {
 

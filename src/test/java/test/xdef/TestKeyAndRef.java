@@ -1,7 +1,7 @@
 package test.xdef;
 
 import java.io.StringWriter;
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.StringParser;
 import org.xdef.XDConstants;

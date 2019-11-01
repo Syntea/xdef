@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import org.w3c.dom.Element;
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan

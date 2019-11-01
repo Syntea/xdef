@@ -14,7 +14,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.ReportWriter;
-import test.utils.STester;
+import builtools.STester;
 
 /** TestKXmlUtils
  * @author Vaclav Trojan

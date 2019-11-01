@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import org.xdef.sys.ReportReader;
-import test.utils.XDTester;
+import builtools.XDTester;
 
 /** TestValidate.
  * @author Vaclav Trojan

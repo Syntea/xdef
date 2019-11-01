@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
-import test.utils.STester;
+import builtools.STester;
 
 /** Test the class SUtils.
  * @author Vaclav Trojan

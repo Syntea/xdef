@@ -3,7 +3,7 @@ package test.common.bnf;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.StringParser;
 import java.io.File;
-import test.utils.STester;
+import builtools.STester;
 
 /** Test of BNF.
  * @author Vaclav Trojan

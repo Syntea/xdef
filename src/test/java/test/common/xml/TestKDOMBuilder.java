@@ -23,8 +23,8 @@ import org.w3c.dom.Text;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.UserDataHandler;
-import test.utils.STester;
-import test.utils.XDTester;
+import builtools.STester;
+import builtools.XDTester;
 
 /** Test KDOMBuilder.
  * @author  Vaclav Trojan

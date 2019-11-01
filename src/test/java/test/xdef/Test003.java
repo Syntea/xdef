@@ -1,7 +1,7 @@
 package test.xdef;
 
 import java.io.ByteArrayInputStream;
-import test.utils.XDTester;
+import builtools.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import org.w3c.dom.Document;
-import static test.utils.XDTester._xdNS;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
