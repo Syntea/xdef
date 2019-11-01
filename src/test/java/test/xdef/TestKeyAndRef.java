@@ -1012,11 +1012,11 @@ public final class TestKeyAndRef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='a'>\n" +
 "  <xd:declaration>\n" +
-"    uniqueSet u {var Parser x; var int y; a: string(); var String z}\n" +
+"    uniqueSet u {var Parser x, int y; a: string(); var String z}\n" +
 "  </xd:declaration>\n" +
 "  <a>\n" +
 "    <DefParams>\n" +
-"       <Param xd:script=\"*; finally out(u.z)\"\n" +
+"       <Param xd:script=\"init out(u.z==null);*;finally out(','+u.z+',')\"\n" +
 "          Name=\"u.a.ID(); onTrue u.z='x'; onFalse u.z='y';\"\n" +
 "          Type=\"xdType(); onTrue u.x=getParsedValue();\n" +
 "                          onFalse u.y=99;\n" +
@@ -1025,7 +1025,7 @@ public final class TestKeyAndRef extends XDTester {
 "    <Params xd:script=\"*; init u.checkUnref()\">\n" +
 "       <Param xd:script=\"*;\"\n" +
 "              Name=\"u.a.CHKID();\"\n" +
-"              Value=\"u.x; onTrue out(u.x); \"/>\n" +
+"              Value=\"u.x; onTrue out(u.x + ','); \"/>\n" +
 "    </Params>\n" +
 "  </a>\n" +
 "</xd:def>";
@@ -1050,7 +1050,8 @@ public final class TestKeyAndRef extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
-			assertEq("xxxCDATAdecxdatetime", strw.toString());
+			assertEq("true,x,false,x,false,x,CDATA,dec,xdatetime,",
+				strw.toString());
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
