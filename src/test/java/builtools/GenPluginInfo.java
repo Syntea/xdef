@@ -91,6 +91,8 @@ public class GenPluginInfo {
 	public static void main(String[] args) {
 		String s;
 		try {
+			File temp = new File("temp");
+			temp.mkdirs();
 			String[] names = new String[] {
 				"anyURI",
 				"base64Binary",
@@ -148,7 +150,7 @@ public class GenPluginInfo {
 			}
 			s += "</SchemaValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-			FUtils.writeString(new File("C:/temp/SchemaValidationMethod.xml"),
+			FUtils.writeString(new File(temp, "SchemaValidationMethod.xml"),
 				s, "UTF-8");
 			names = new String[] {
 				"an",
@@ -214,7 +216,7 @@ public class GenPluginInfo {
 			}
 			s += "</XDValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
-			FUtils.writeString(new File("C:/temp/XDValidationMethod.xml"),
+			FUtils.writeString(new File(temp, "XDValidationMethod.xml"),
 				s, "UTF-8");
 		} catch (Exception ex) {
 			ex.printStackTrace();
