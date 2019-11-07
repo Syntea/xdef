@@ -249,9 +249,9 @@ public class GUIEditor extends GUIScreen {
 	private void display(final ArrayReporter err,
 		final String msg,
 		final Object obj,
-		XDSourceInfo si,
-		boolean editable,
-		String runMenu) throws Exception {
+		final XDSourceInfo si,
+		final boolean editable,
+		final String runMenu) throws Exception {
 		_windowName = msg;
 		_si = si;
 		XDSourceItem xsi = new XDSourceItem(obj);

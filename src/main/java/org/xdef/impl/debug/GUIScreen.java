@@ -13,6 +13,7 @@ import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -373,9 +374,18 @@ public class GUIScreen extends GUIBase {
 		if (retval == JFileChooser.APPROVE_OPTION) {
 			try {
 				File f = jf.getSelectedFile();
-				SUtils.writeString(f, src._source, src._encoding);
-				src._saved = true;
-				src._url = f.toURI().toURL();
+				if (f.exists() && f.canWrite()) {
+					if (JOptionPane.showConfirmDialog(null,
+						"File exists, save it?",
+						null, JOptionPane.OK_CANCEL_OPTION) != 0) {
+						f = null;
+					}
+				}
+				if (f != null) {
+					SUtils.writeString(f, src._source, src._encoding);
+					src._saved = true;
+					src._url = f.toURI().toURL();
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 			}
