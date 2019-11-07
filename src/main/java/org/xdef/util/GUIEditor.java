@@ -43,18 +43,15 @@ import org.xdef.sys.SUtils;
  */
 public class GUIEditor extends GUIScreen {
 
-	/** Create instance of the screen to display the sources of X-definitions.
-	 * @param x X position of the left corner of the screen.
-	 * @param y Y position of the left corner of the screen.
-	 * @param width width of the screen.
-	 * @param height height of the screen.
+	/** Create instance of the screen to display the sources.
+	 * @param si source information.
 	 */
 	private GUIEditor(final XDSourceInfo si) {super(si);}
 
 	private static final XDPool PROJECTXDPOOL;
 
 	static {
-		String xdef =
+		String xdef = // X-definition of project description
 "<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
@@ -160,6 +157,9 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
+	/** Initialize menu bar
+	 * @param runMenu String with menu items.
+	 */
 	private void initMenuBar(final String runMenu) {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
 		fileMenu.getActionMap().remove("Compile");
@@ -237,6 +237,15 @@ public class GUIEditor extends GUIScreen {
 		_sourceArea.setCaretPosition(0);
 	}
 
+	/** Display an object.
+	 * @param err Array of reported errors and messages.
+	 * @param msg Text of header.
+	 * @param obj Object to be displayed/
+	 * @param si source information.
+	 * @param editable true if editing is allowed.
+	 * @param runMenu string with menu items.
+	 * @throws Exception if an error occurs.
+	 */
 	private void display(final ArrayReporter err,
 		final String msg,
 		final Object obj,
@@ -285,13 +294,29 @@ public class GUIEditor extends GUIScreen {
 		closeEdit();
 	}
 
+	/** Display (and optionally edit) string.
+	 * @param msg Text of header.
+	 * @param s string to be displayed.
+	 * @param si source information.
+	 * @param editable true if editing is allowed.
+	 * @throws Exception if an error occurs.
+	 */
 	private static void displayString(final String msg,
 		final String s,
-		final XDSourceInfo si) throws Exception {
+		final XDSourceInfo si,
+		final boolean editable) throws Exception {
 		GUIEditor ge = new GUIEditor(si);
-		ge.display(null, msg, s, si, false, null);
+		ge.display(null, msg, s, si, editable, null);
 	}
 
+	/** Display editable window with XML.
+	 * @param err ArrayReporter with reported errors and messages.
+	 * @param msg Text of header.
+	 * @param o Object with XML (may be Element, file etc.)
+	 * @param si source information.
+	 * @param runMenu string with menu items.
+	 * @throws Exception if an error occurs.
+	 */
 	private static void editXml(final ArrayReporter err,
 		final String msg,
 		final Object o,
@@ -403,6 +428,10 @@ public class GUIEditor extends GUIScreen {
 		return null;
 	}
 
+	/** Canonize project description.
+	 * @param project Element with project description.
+	 * @return canonized form of project description.
+	 */
 	private static Element canonizeProject(final Element project) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		ArrayList<String> sources = new ArrayList<String>();
@@ -478,6 +507,12 @@ public class GUIEditor extends GUIScreen {
 		return project;
 	}
 
+	/** Compare given element child elements in two elements.
+	 * @param p1 first element.
+	 * @param p2 second element.
+	 * @param tagname name of child  elements to be compared.
+	 * @return true if all child elements are equal.
+	 */
 	private static boolean compareNodes(final Element p1,
 		final Element p2,
 		final String tagname) {
@@ -500,6 +535,11 @@ public class GUIEditor extends GUIScreen {
 		return true;
 	}
 
+	/** Compare two elements with project description.
+	 * @param p1 first project.
+	 * @param p2 second project.
+	 * @return true if both projects are equal.
+	 */
 	private static boolean compareProjects(final Element p1, final Element p2) {
 		if (!p1.getAttribute("Show").equals(p2.getAttribute("Show"))) {
 			return false;
@@ -512,6 +552,7 @@ public class GUIEditor extends GUIScreen {
 		}
 		return compareNodes(p1, p2, "Execute");
 	}
+
 	/** Run project with GUIEditor.
 	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
 	 * @param src source with the project.
@@ -650,8 +691,9 @@ public class GUIEditor extends GUIScreen {
 								continue;
 							}
 						}
-					} else { // error, sixpaly result
-						displayString("ERROR:", reporter.printToString(), si);
+					} else { // error, display result, not editable
+						displayString("ERROR:",
+							reporter.printToString(), si, false);
 					}
 				}
 				e = KXmlUtils.firstElementChild(exe, "SaveResult");
@@ -680,8 +722,8 @@ public class GUIEditor extends GUIScreen {
 						s += s.isEmpty() ? "" : "\n\n";
 						s += "=== System.out ===\n" + strw.toString();
 					}
-					if (!s.isEmpty()) {
-						displayString("Result of processing:", s, si);
+					if (!s.isEmpty()) {// display result, allow editing
+						displayString("Result of processing:", s, si, true);
 					}
 				}
 			}
@@ -778,7 +820,7 @@ public class GUIEditor extends GUIScreen {
 			}
 			return;
 		}
-		String src = 
+		String src =
 "<Project>\n";
 		ArrayList<String> xdefs = new ArrayList<String>();
 		String dataPath = null;
@@ -961,7 +1003,7 @@ public class GUIEditor extends GUIScreen {
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
-		src += 
+		src +=
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE	+ "\"/>\n" +
@@ -969,7 +1011,7 @@ public class GUIEditor extends GUIScreen {
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE + "\"/>\n" +
 "  <Property Name = \"" + XDConstants.XDPROPERTY_DEBUG
-			+ "\" Value = \"" 
+			+ "\" Value = \""
 			+ (debug == null ? XDConstants.XDPROPERTYVALUE_DEBUG_FALSE
 				: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE)
 			+ "\"/>\n"+
