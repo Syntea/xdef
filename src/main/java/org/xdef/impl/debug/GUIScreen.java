@@ -361,35 +361,45 @@ public class GUIScreen extends GUIBase {
 	 */
 	public final void saveSource(final XDSourceItem src) {
 		updateSourceItem();
-		JFileChooser jf = new JFileChooser();
-		if (src._url != null && "file".equals(src._url.getProtocol())) {
-			jf.setSelectedFile(new File(src._url.getFile()));
-		} else {
-			jf.setSelectedFile(new File(".").getAbsoluteFile());
-		}
-		jf.setDialogTitle("Save to file");
-		jf.setToolTipText("Save content of the active window to a file");
-		int retval = jf.showSaveDialog(_frame);
-		jf.setEnabled(false);
-		if (retval == JFileChooser.APPROVE_OPTION) {
-			try {
-				File f = jf.getSelectedFile();
-				if (f.exists() && f.canWrite()) {
-					if (JOptionPane.showConfirmDialog(null,
-						"File exists, save it?",
-						null, JOptionPane.OK_CANCEL_OPTION) != 0) {
-						f = null;
-					}
-				}
-				if (f != null) {
-					SUtils.writeString(f, src._source, src._encoding);
-					src._saved = true;
-					src._url = f.toURI().toURL();
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
+		boolean again;
+		do {
+			again = false;
+			JFileChooser jf = new JFileChooser();
+			if (src._url != null && "file".equals(src._url.getProtocol())) {
+				jf.setSelectedFile(new File(src._url.getFile()));
+			} else {
+				jf.setSelectedFile(new File(".").getAbsoluteFile());
 			}
-		}
+			jf.setDialogTitle("Save to file");
+			jf.setToolTipText("Save content of the active window to a file");
+			int retval = jf.showSaveDialog(_frame);
+			jf.setEnabled(false);
+			if (retval == JFileChooser.APPROVE_OPTION) {
+				File f = jf.getSelectedFile();
+				try {
+					if (f.isFile() && f.exists() && f.canWrite()) {
+						if (JOptionPane.showConfirmDialog(null,
+							"File exists, save it?",
+							null, JOptionPane.OK_CANCEL_OPTION) != 0) {
+							f = null;
+						}
+					}
+					if (f != null) {
+						if (!f.isFile() || !f.canWrite()) {
+							JOptionPane.showMessageDialog(null,
+								"Can't write to this file.");
+								again = true;
+						} else {
+							SUtils.writeString(f, src._source, src._encoding);
+							src._saved = true;
+							src._url = f.toURI().toURL();
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace(System.err);
+				}
+			}
+		} while (again);
 	}
 
 	/** Close GUI: dispose window and remove allocated objects. */
