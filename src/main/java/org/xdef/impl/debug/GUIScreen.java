@@ -277,7 +277,8 @@ public class GUIScreen extends GUIBase {
 			public void actionPerformed(ActionEvent evt) {
 				updateSourceItem();
 				if (_sourceItem!=null
-					&& _sourceItem._changed && _sourceItem._url==null) {
+					&& _sourceItem._changed
+					&& _sourceItem._url==null) {
 					_sourceItem._source = _sourceArea.getText();
 					_sourceItem._saved = true;
 				}
@@ -358,8 +359,9 @@ public class GUIScreen extends GUIBase {
 
 	/** Save source text from XDSourceItem to a file.
 	 * @param src XDSourceItem object.
+	 * @return true is source was saved.
 	 */
-	public final void saveSource(final XDSourceItem src) {
+	public final boolean saveSource(final XDSourceItem src) {
 		updateSourceItem();
 		boolean again;
 		do {
@@ -376,30 +378,36 @@ public class GUIScreen extends GUIBase {
 			jf.setEnabled(false);
 			if (retval == JFileChooser.APPROVE_OPTION) {
 				File f = jf.getSelectedFile();
-				try {
-					if (f.isFile() && f.exists() && f.canWrite()) {
-						if (JOptionPane.showConfirmDialog(null,
-							"File exists, save it?",
-							null, JOptionPane.OK_CANCEL_OPTION) != 0) {
-							f = null;
-						}
+				if (f.isFile() && f.exists() && f.canWrite()) {
+					if (JOptionPane.showConfirmDialog(null,
+						"File " + f.getName() + " exists, save anyway?",
+						null, JOptionPane.OK_CANCEL_OPTION) != 0) {
+						f = null;
 					}
-					if (f != null) {
-						if (!f.isFile() || !f.canWrite()) {
-							JOptionPane.showMessageDialog(null,
-								"Can't write to this file.");
-								again = true;
-						} else {
+				}
+				if (f != null) {
+					if (f.isFile() && f.canWrite()) {
+						try {
 							SUtils.writeString(f, src._source, src._encoding);
-							src._saved = true;
 							src._url = f.toURI().toURL();
+							src._saved = true;
+							return true;
+						} catch (Exception ex) {
+							String s = ex.getMessage();
+							if (s == null || s.trim().isEmpty()) {
+								s = "" + ex;
+							}
+							JOptionPane.showConfirmDialog(null,
+								"Error when writing to " + f.getName()+": "+s);
 						}
 					}
-				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
+					JOptionPane.showMessageDialog(null,
+						"Can't write to file " + f.getName());
+					again = true;
 				}
 			}
 		} while (again);
+		return false;
 	}
 
 	/** Close GUI: dispose window and remove allocated objects. */
