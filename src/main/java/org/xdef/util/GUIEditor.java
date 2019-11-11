@@ -860,7 +860,7 @@ public class GUIEditor extends GUIScreen {
 		} else if ("-g".equals(arg)) { // generate X-definition
 			param = 'g';
 			String xml =
-"<!-- This is just an example. You can modify it. -->\n" +
+"<!-- This is just an example of XML data. You can modify it. -->\n" +
 "<root attr = \"123\">\n" +
 "  <a>text</a>\n" +
 "  <a/>\n" + 
