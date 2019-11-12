@@ -24,6 +24,8 @@ import java.util.Set;
  */
 public final class CodeUniqueset extends XDValueAbstract {
 
+	/** Null value. */
+	private static XDValue UNDEF_VALUE = DefNull.genNullValue(XD_ANY);
 	/** Map of key values. */
 	private final Map<Object, UniquesetItem> _map;
 	/** Set of markers. */
@@ -93,6 +95,13 @@ public final class CodeUniqueset extends XDValueAbstract {
 		CodeUniquesetKey keyValue = getKeyValue();
 		UniquesetItem uso = _map.get(keyValue);
 		if (uso == null) {
+//			for (XDValue v : keyValue._items) {
+//				if (v == UNDEF_VALUE) {
+//					//UniqueSet &{0}{"}{"} item is not complete
+//					return Report.error(XDEF.XDEF521,
+//						_name != null ? _name + " " : "");
+//				}
+//			}
 			_map.put(keyValue, new UniquesetItem(keyValue));
 			return null;
 		}
@@ -310,7 +319,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 						keys[i].setParsedObject(null);
 					}
 				} else {
-					items[i] = DefNull.genNullValue(XD_ANY);
+//					items[i] = DefNull.genNullValue(XD_ANY);
+					items[i] = UNDEF_VALUE;
+//					items[i] = null;
 				}
 			}
 			_items = items;

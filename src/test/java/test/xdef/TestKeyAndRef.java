@@ -468,174 +468,174 @@ public final class TestKeyAndRef extends XDTester {
 			assertTrue(reporter.printToString().indexOf("XDEF523") > 0,
 				"Error not reported; " + reporter.printToString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Zeme'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
 "<xd:declaration scope='local'>\n"+
 " /* tabulka slozenych klicu */\n"+
-" uniqueSet adresa {zeme: string; mesto: string; ulice: string; dum: int()};\n"+
+" uniqueSet addr {country:string;town:string;street:string;house: int()};\n"+
 "</xd:declaration>\n"+
-"<Zeme jmeno=\"adresa.zeme()\">\n"+
-"  <Mesto xd:script = \"occurs +\" nazev=\" adresa.mesto()\">\n"+
-"    <Ulice xd:script = \"occurs +\" nazev=\" adresa.ulice()\">\n"+
-"      <Dum xd:script = \"occurs +\" cislo=\"adresa.dum.ID()\"/> \n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa xd:script = \"occurs *; finally adresa.IDREF();\"\n"+
-"    Zeme=\"adresa.zeme()\"\n"+
-"    Mesto=\"adresa.mesto()\"\n"+
-"    Ulice=\"adresa.ulice()\"\n"+
-"    Dum=\"? adresa.dum()\" />\n"+
-"</Zeme>\n"+
+"<Country name=\"addr.country()\">\n"+
+"  <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
+"    <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
+"      <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/> \n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"    Country=\"addr.country()\"\n"+
+"    Town=\"addr.town()\"\n"+
+"    Street=\"addr.street()\"\n"+
+"    House=\"? addr.house()\" />\n"+
+"</Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
-"<Zeme jmeno=\"CS\">\n"+
-"  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouhá\">\n"+
-"      <Dum cislo=\"1\"/> \n"+
-"      <Dum cislo=\"3\"/> \n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"3\" />\n"+
-"</Zeme>";
+"<Country name=\"CS\">\n"+
+"  <Town name=\"Praha\">\n"+
+"    <Street name=\"Dlouhá\">\n"+
+"      <House number=\"1\"/> \n"+
+"      <House number=\"3\"/> \n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"1\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"3\" />\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml =
-"<Zeme jmeno=\"CS\">\n"+
-"  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouhá\">\n"+
-"      <Dum cislo=\"1\"/> \n"+
-"      <Dum cislo=\"3\"/> \n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"3\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouhá\" Dum=\"5\" />\n"+
-"</Zeme>";
+"<Country name=\"CS\">\n"+
+"  <Town name=\"Praha\">\n"+
+"    <Street name=\"Dlouhá\">\n"+
+"      <House number=\"1\"/> \n"+
+"      <House number=\"3\"/> \n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"1\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"3\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"5\" />\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
 			assertTrue(reporter.getErrorCount() == 1
-				&& s.indexOf("/Zeme/Adresa[3]") > 1, s);
+				&& s.indexOf("/Country/Address[3]") > 1, s);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Zeme'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
 "<xd:declaration scope='local'>\n"+
 " /* tabulka slozenych klicu */\n"+
-" uniqueSet mesto {zeme: string; jmeno: string};\n"+
-" uniqueSet adresa {zeme: mesto.zeme;\n"+
-"					mesto: mesto.jmeno;\n"+
-"					ulice: string;\n"+
-"					dum:?int()};\n"+
+" uniqueSet town {country: string; name: string};\n"+
+" uniqueSet addr {country: town.country;\n"+
+"					town: town.name;\n"+
+"					street: string;\n"+
+"					house:?int()};\n"+
 "</xd:declaration>\n"+
-"<Zeme jmeno=\"adresa.zeme(mesto.zeme())\">\n"+
-"  <Mesto xd:script=\"occurs +\" nazev=\"adresa.mesto(mesto.jmeno.SET());\">\n"+
-"    <Ulice xd:script = \"occurs +\" nazev=\"adresa.ulice.SET()\">\n"+
-"      <Dum xd:script = \"occurs *\" cislo=\"adresa.dum.ID()\"/> \n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa xd:script = \"occurs *; finally adresa.IDREF();\"\n"+
-"    Zeme=\"adresa.zeme()\"\n"+
-"    Mesto=\"adresa.mesto()\"\n"+
-"    Ulice=\"adresa.ulice()\"\n"+
-"    Dum=\"? adresa.dum()\" />\n"+
-"  <Lokalita xd:script=\"occurs *; finally mesto.IDREF();\"\n"+
-"    Zeme=\"mesto.zeme()\"\n"+
-"    Mesto=\"mesto.jmeno()\"/>\n"+
-"</Zeme>\n"+
+"<Country name=\"addr.country(town.country())\">\n"+
+"  <Town xd:script=\"occurs +\" name=\"addr.town(town.name.SET());\">\n"+
+"    <Street xd:script = \"occurs +\" name=\"addr.street.SET()\">\n"+
+"      <House xd:script = \"occurs *\" number=\"addr.house.ID()\"/> \n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"    Country=\"addr.country()\"\n"+
+"    Town=\"addr.town()\"\n"+
+"    Street=\"addr.street()\"\n"+
+"    House=\"? addr.house()\" />\n"+
+"  <Locality xd:script=\"occurs *; finally town.IDREF();\"\n"+
+"    Country=\"town.country()\"\n"+
+"    Town=\"town.name()\"/>\n"+
+"</Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
-"<Zeme jmeno=\"CS\">\n"+
-"  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouha\">\n"+
-"      <Dum cislo=\"1\"/> \n"+
-"      <Dum cislo=\"3\"/> \n"+
-"    </Ulice>\n"+
-"    <Ulice nazev=\"Kratka\"/>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Kratka\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"3\" />\n"+
-"  <Lokalita Zeme=\"CS\" Mesto=\"Praha\" />\n"+
-"</Zeme>";
+"<Country name=\"CS\">\n"+
+"  <Town name=\"Praha\">\n"+
+"    <Street name=\"Dlouha\">\n"+
+"      <House number=\"1\"/> \n"+
+"      <House number=\"3\"/> \n"+
+"    </Street>\n"+
+"    <Street name=\"Kratka\"/>\n"+
+"  </Town>\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Kratka\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"1\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"3\" />\n"+
+"  <Locality Country=\"CS\" Town=\"Praha\" />\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml =
-"<Zeme jmeno=\"CS\">\n"+
-"  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouha\">\n"+
-"      <Dum cislo=\"1\"/> \n"+
-"      <Dum cislo=\"3\"/> \n"+
-"    </Ulice>\n"+
-"    <Ulice nazev=\"Kratka\"/>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Kratka\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"3\" />\n"+
-"  <Lokalita Zeme=\"CS\" Mesto=\"Olomouc\" />\n"+
-"</Zeme>";
+"<Country name=\"CS\">\n"+
+"  <Town name=\"Praha\">\n"+
+"    <Street name=\"Dlouha\">\n"+
+"      <House number=\"1\"/> \n"+
+"      <House number=\"3\"/> \n"+
+"    </Street>\n"+
+"    <Street name=\"Kratka\"/>\n"+
+"  </Town>\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Kratka\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"1\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"3\" />\n"+
+"  <Locality Country=\"CS\" Town=\"Olomouc\" />\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
 			assertTrue(reporter.getErrorCount() == 1
-				&& s.indexOf("/Zeme/Lokalita[1]") > 1, s);
+				&& s.indexOf("/Country/Locality[1]") > 1, s);
 			xml =
-"<Zeme jmeno=\"CS\">\n"+
-"  <Mesto nazev=\"Praha\">\n"+
-"    <Ulice nazev=\"Dlouha\">\n"+
-"      <Dum cislo=\"1\"/> \n"+
-"      <Dum cislo=\"3\"/> \n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"1\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"3\" />\n"+
-"  <Adresa Zeme=\"CS\" Mesto=\"Praha\" Ulice=\"Dlouha\" Dum=\"5\" />\n"+
-"</Zeme>";
+"<Country name=\"CS\">\n"+
+"  <Town name=\"Praha\">\n"+
+"    <Street name=\"Dlouha\">\n"+
+"      <House number=\"1\"/> \n"+
+"      <House number=\"3\"/> \n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"1\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"3\" />\n"+
+"  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouha\" House=\"5\" />\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
 			assertTrue(reporter.getErrorCount() == 1
-				&& s.indexOf("/Zeme/Adresa[3]") > 1, s);
+				&& s.indexOf("/Country/Address[3]") > 1, s);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Zeme'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
 "<xd:declaration scope='local'>\n"+
 "   /* tabulka slozenych klicu */\n"+
-"   uniqueSet lokalita {zeme:string; mesto: ? string;};\n"+
-"   uniqueSet adresa {zeme: lokalita.zeme.SET;\n"+
-"                     mesto: lokalita.mesto.SET;\n"+
-"                     ulice:string; dum:int()};\n"+
+"   uniqueSet lokalita {country:string; town: ? string;};\n"+
+"   uniqueSet addr {country: lokalita.country.SET;\n"+
+"                     town: lokalita.town.SET;\n"+
+"                     street:string; house:int()};\n"+
 "</xd:declaration>\n"+
-"<Zeme nazev=\"adresa.zeme()\">\n"+
-"  <Mesto xd:script = \"occurs +\" nazev=\" adresa.mesto()\">\n"+
-"    <Ulice xd:script = \"occurs +\" nazev=\" adresa.ulice()\">\n"+
-"      <Dum xd:script = \"occurs +\" cislo=\"adresa.dum.ID()\"/>\n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa xd:script = \"occurs *; finally adresa.IDREF();\"\n"+
-"    Zeme=\"adresa.zeme()\"\n"+
-"    Mesto=\"adresa.mesto()\"\n"+
-"    Ulice=\"adresa.ulice()\"\n"+
-"    Dum=\"adresa.dum()\"/>\n"+
-"  <Lokalita xd:script = \"occurs *; finally lokalita.IDREF();\"\n"+
-"    Zeme=\"lokalita.zeme()\"\n"+
-"    Mesto=\"? lokalita.mesto()\"/>\n"+
-"</Zeme>\n"+
+"<Country name=\"addr.country()\">\n"+
+"  <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
+"    <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
+"      <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/>\n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"    Country=\"addr.country()\"\n"+
+"    Town=\"addr.town()\"\n"+
+"    Street=\"addr.street()\"\n"+
+"    House=\"addr.house()\"/>\n"+
+"  <Locality xd:script = \"occurs *; finally lokalita.IDREF();\"\n"+
+"    Country=\"lokalita.country()\"\n"+
+"    Town=\"? lokalita.town()\"/>\n"+
+"</Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
-"<Zeme nazev=\"CR\">\n"+
-"  <Mesto nazev='Praha'>\n"+
-"    <Ulice nazev='Dlouha'>\n"+
-"      <Dum cislo='1'/>\n"+
-"      <Dum cislo='3'/>\n"+
-"    </Ulice>\n"+
-"    <Ulice nazev='Kratka'>\n"+
-"      <Dum cislo='2'/>\n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa Zeme='CR' Mesto='Praha' Ulice='Dlouha' Dum='1'/>\n"+
-"  <Adresa Zeme='CR' Mesto='Praha' Ulice='Dlouha' Dum='3'/>\n"+
-"  <Adresa Zeme='CR' Mesto='Praha' Ulice='Kratka' Dum='2'/>\n"+
-"  <Lokalita Zeme='CR'/>\n"+
-"  <Lokalita Zeme='CR' Mesto='Praha'/>\n"+
-"</Zeme>";
+"<Country name=\"CR\">\n"+
+"  <Town name='Praha'>\n"+
+"    <Street name='Dlouha'>\n"+
+"      <House number='1'/>\n"+
+"      <House number='3'/>\n"+
+"    </Street>\n"+
+"    <Street name='Kratka'>\n"+
+"      <House number='2'/>\n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address Country='CR' Town='Praha' Street='Dlouha' House='1'/>\n"+
+"  <Address Country='CR' Town='Praha' Street='Dlouha' House='3'/>\n"+
+"  <Address Country='CR' Town='Praha' Street='Kratka' House='2'/>\n"+
+"  <Locality Country='CR'/>\n"+
+"  <Locality Country='CR' Town='Praha'/>\n"+
+"</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -660,69 +660,68 @@ public final class TestKeyAndRef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
 "    <xd:mixed>\n"+
-"      <Mesto xd:script='occurs 0..*;'\n"+
-"        jmeno='adresa.mesto()'>\n"+
-"        <Ulice xd:script='occurs 0..*'\n"+
-"          jmeno='adresa.ulice()'>\n"+
-"          <Dum xd:script='occurs 0..*'\n"+
-"            cislo='adresa.dum.ID()'/>\n"+
-"        </Ulice>\n"+
-"      </Mesto>\n"+
-"      <Vesnice xd:script='occurs 0..*;'\n"+
-"        jmeno='adresa.mesto()'>\n"+
-"        <Dum xd:script='occurs 0..*; init adresa.ulice.NEWKEY();'\n"+
-"          cislo='adresa.dum.ID();'/>\n"+
-"      </Vesnice>\n"+
+"      <Town xd:script='occurs 0..*;'\n"+
+"        name='addr.town()'>\n"+
+"        <Street xd:script='occurs 0..*'\n"+
+"          name='addr.street()'>\n"+
+"          <House xd:script='occurs 0..*'\n"+
+"            number='addr.house.ID()'/>\n"+
+"        </Street>\n"+
+"      </Town>\n"+
+"      <Village xd:script='occurs 0..*;'\n"+
+"        name='addr.town()'>\n"+
+"        <House xd:script='occurs 0..*; init addr.street.NEWKEY();'\n"+
+"          number='addr.house.ID();'/>\n"+
+"      </Village>\n"+
 "    </xd:mixed>\n"+
-"    <Adresa xd:script='occurs 0..*; finally adresa.IDREF()'\n"+
-"       mesto='adresa.mesto()'\n"+
-"       ulice='optional adresa.ulice(); onAbsence adresa.ulice.NEWKEY();'\n"+
-"       cislo='adresa.dum()' />\n"+
+"    <Address xd:script='occurs 0..*; finally addr.IDREF()'\n"+
+"       town='addr.town()'\n"+
+"       street='optional addr.street();onAbsence addr.street.NEWKEY();'\n"+
+"       number='addr.house()' />\n"+
 "  </a>\n"+
 "\n"+
 "	<xd:declaration scope='local'>\n"+
-"		uniqueSet adresa { mesto: string(); ulice: string(); dum: int(); }\n"+
+"		uniqueSet addr { town: string(); street: string(); house: int(); }\n"+
 "	</xd:declaration>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
 "<a>\n"+
-"  <Mesto jmeno='Praha'>\n"+
-"    <Ulice jmeno='Dlouha'>\n"+
-"      <Dum cislo='1'/>\n"+
-"      <Dum cislo='3'/>\n"+
-"    </Ulice>\n"+
-"    <Ulice jmeno='Kratka'>\n"+
-"      <Dum cislo='2'/>\n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Vesnice jmeno='Lhota'>\n"+
-"    <Dum cislo='1'/>\n"+
-"    <Dum cislo='2'/>\n"+
-"  </Vesnice>\n"+
-"  <Adresa mesto='Praha' ulice='Kratka' cislo='2'/>\n"+
-"  <Adresa mesto='Praha' ulice='Dlouha' cislo='3'/>\n"+
-"  <Adresa mesto='Praha' ulice='Dlouha' cislo='1'/>\n"+
-"  <Adresa mesto='Lhota' cislo='2'/>\n"+
-"  <Adresa mesto='Lhota' cislo='1'/>\n"+
+"  <Town name='Praha'>\n"+
+"    <Street name='Dlouha'>\n"+
+"      <House number='1'/>\n"+
+"      <House number='3'/>\n"+
+"    </Street>\n"+
+"    <Street name='Kratka'>\n"+
+"      <House number='2'/>\n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Village name='Lhota'>\n"+
+"    <House number='1'/>\n"+
+"    <House number='2'/>\n"+
+"  </Village>\n"+
+"  <Address town='Praha' street='Kratka' number='2'/>\n"+
+"  <Address town='Praha' street='Dlouha' number='3'/>\n"+
+"  <Address town='Praha' street='Dlouha' number='1'/>\n"+
+"  <Address town='Lhota' number='2'/>\n"+
+"  <Address town='Lhota' number='1'/>\n"+
 "</a>";
-//System.out.println(xml);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml =
 "<a>\n"+
-"  <Mesto jmeno='Praha'>\n"+
-"    <Ulice jmeno='Kratka'>\n"+
-"      <Dum cislo='1'/>\n"+
-"    </Ulice>\n"+
-"  </Mesto>\n"+
-"  <Adresa mesto='Praha' ulice='Kratka' cislo='1'/>\n"+
-"  <Adresa mesto='Praha' ulice='Kratka' cislo='2'/>\n"+
+"  <Town name='Praha'>\n"+
+"    <Street name='Kratka'>\n"+
+"      <House number='1'/>\n"+
+"    </Street>\n"+
+"  </Town>\n"+
+"  <Address town='Praha' street='Kratka' number='1'/>\n"+
+"  <Address town='Praha' street='Kratka' number='2'/>\n"+
 "</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
 			assertTrue(reporter.getErrorCount() == 1 &&
-				s.indexOf("xpath=/a/Adresa[2]") > 0, s);
+				s.indexOf("xpath=/a/Address[2]") > 0, s);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xp = compile(dataDir + "TestKeyAndRef2.xdef");
