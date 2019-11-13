@@ -681,7 +681,7 @@ public final class TestKeyAndRef extends XDTester {
 "  </a>\n"+
 "\n"+
 "	<xd:declaration scope='local'>\n"+
-"		uniqueSet addr { town: string(); street: string(); house: int(); }\n"+
+"		uniqueSet addr {town: string(); street: ? string(); house: int();}\n"+
 "	</xd:declaration>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -856,7 +856,6 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.contains("/Test/uA[1]/uB[1]")
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
 				reporter);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Test'>\n" +
 " <xd:declaration>\n" +
@@ -912,8 +911,7 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]/@c"),
 				reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {
- // check xdType
+		try { // check xdType
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration>\n" +
@@ -1058,7 +1056,7 @@ public final class TestKeyAndRef extends XDTester {
 				reporter);
 			xdef = // run parse twice
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"  <xd:declaration>uniqueSet u{s: string; e: string};</xd:declaration>\n" +
+"  <xd:declaration>uniqueSet u{s: ? string; e: ? string};</xd:declaration>\n" +
 "  <a>\n" +
 "    <b N=\"enum('A')\"><E xd:script='ref E' N=\"enum('B')\" /></b>\n" +
 "    <b N='u.s'><E xd:script='1..; ref E'/></b>\n" +
@@ -1075,7 +1073,6 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrors(reporter); // uniqeue set must be clear!
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter); // even here uniqeue set must be clear!
-
 			// method uniqueSet.toContainer()
 			xdef = // explicit variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='List'>\n" +
@@ -1134,6 +1131,28 @@ public final class TestKeyAndRef extends XDTester {
 "</xd:def>";
 			assertEq(parse(compile(xdef).createXDDocument(), xml, reporter), s);
 			assertNoErrors(reporter);
+			xdef = // test reporting iof incomplete key items,
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='T'>\n" +
+"  <xd:declaration>\n" +
+"    uniqueSet r {a: string(1,2); b: string(1,2)};\n" +
+"  </xd:declaration>\n" +
+"  <T>\n" +
+"    <R xd:script='*; finally r.ID()' A='r.a' B='r.b'/>\n" +
+"  </T>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml =
+"<T>\n" +
+"  <R A='xx' B='aaa'/>\n" +
+"  <R A='xxx' B='aa'/>\n" +
+"  <R A='xxx' B='aaa'/>\n" +
+"  <R A='xx' B='aa'/>\n" +
+"</T>";
+			parse(xd, xml, reporter);
+			s = reporter.printToString();
+			assertTrue(s.contains(" \"a\")") && s.contains(" \"b\")")
+				&& s.contains(" \"a\", \"b\"")&&reporter.getErrorCount()==7,s);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

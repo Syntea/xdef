@@ -464,7 +464,7 @@ public interface XDEF {
 	public static final long XDEF515 = 31159025891L;
 	/** Sequence has no required item&amp;{#SYS000} */
 	public static final long XDEF520 = 31159025892L;
-	/** UniqueSet &amp;{0}{"}{"} item is not complete&amp;{#SYS000} */
+	/** UniqueSet &amp;{0}{"}{"} item is not complete&amp;{1}{ {missing }{)}&amp;{#SYS000} */
 	public static final long XDEF521 = 31159025893L;
 	/** Unique value "&amp;{0}" was not set&amp;{#SYS000} */
 	public static final long XDEF522 = 31159025894L;
