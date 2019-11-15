@@ -10,7 +10,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Test of generation of DTD from XDefinition.
  * @author Vaclav Trojan

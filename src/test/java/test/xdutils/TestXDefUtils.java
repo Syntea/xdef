@@ -5,7 +5,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenCollection;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Test of xdef utilities.
  * @author  trojan

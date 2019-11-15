@@ -17,8 +17,8 @@ import test.common.xml.TestKDOMBuilder;
 import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
-import builtools.XDTester;
-import builtools.STester;
+import buildtools.XDTester;
+import buildtools.STester;
 
 /** Run all available basic tests for package org.xdef.sys.
  * @author Vaclav Trojan

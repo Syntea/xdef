@@ -8,7 +8,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXParseException;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Test of error reporting (in combination of CDATA section and text).
  * @author Vaclav Trojan

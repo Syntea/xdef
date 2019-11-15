@@ -1,4 +1,4 @@
-package builtools;
+package buildtools;
 
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;

@@ -7,7 +7,7 @@ import org.xdef.sys.FUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Generate X-components Java source files.
  * @author Vaclav Trojan

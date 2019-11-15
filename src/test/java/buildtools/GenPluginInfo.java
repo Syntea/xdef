@@ -1,4 +1,4 @@
-package builtools;
+package buildtools;
 
 import java.io.File;
 import org.xdef.XDValue;

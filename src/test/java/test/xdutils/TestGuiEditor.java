@@ -2,7 +2,7 @@ package test.xdutils;
 
 import org.xdef.proc.XXNode;
 import org.xdef.util.GUIEditor;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Test GUI editor
  * @author Vaclav Trojan

@@ -3,7 +3,7 @@ package test.common.bnf;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.StringParser;
 import java.io.File;
-import builtools.STester;
+import buildtools.STester;
 
 /** Simple XML grammar test.
  * @author Vaclav Trojan

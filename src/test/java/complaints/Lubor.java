@@ -2,7 +2,7 @@ package complaints;
 
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 public class Lubor extends XDTester {
 

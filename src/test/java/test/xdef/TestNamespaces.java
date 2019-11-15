@@ -1,7 +1,7 @@
 package test.xdef;
 
 import org.xdef.XDFactory;
-import builtools.XDTester;
+import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.XDPool;

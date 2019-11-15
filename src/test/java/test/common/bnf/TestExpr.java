@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
-import builtools.STester;
+import buildtools.STester;
 
 /** Test of parsing and executions of BNF expressions an assignment commands.
  * @author Vaclav Trojan

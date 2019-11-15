@@ -1,6 +1,6 @@
 package test.xdef;
 
-import builtools.XDTester;
+import buildtools.XDTester;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;

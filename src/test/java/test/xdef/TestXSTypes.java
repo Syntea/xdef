@@ -1,6 +1,6 @@
 package test.xdef;
 
-import builtools.XDTester;
+import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;

@@ -3,8 +3,8 @@ package test.xdutils;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import builtools.XDTester;
-import builtools.STester;
+import buildtools.XDTester;
+import buildtools.STester;
 
 /** Run all available tests for package org.xdef.util  with all features
  * of the tester.

@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 /** Test XDefinition script.
  * @author Vaclav Trojan

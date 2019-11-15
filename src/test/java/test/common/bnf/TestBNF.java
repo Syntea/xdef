@@ -8,7 +8,7 @@ import org.xdef.sys.StringParser;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Stack;
-import builtools.STester;
+import buildtools.STester;
 
 /** Test of BNF.
  * @author Vaclav Trojan

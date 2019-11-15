@@ -2,7 +2,7 @@ package complaints;
 
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
-import builtools.XDTester;
+import buildtools.XDTester;
 
 public class Kocman extends XDTester {
 
