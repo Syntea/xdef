@@ -1,16 +1,16 @@
 package test.xdef;
 
-import java.io.StringWriter;
 import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.StringParser;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
+import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.XDFactory;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
@@ -1047,7 +1047,7 @@ public final class TestKeyAndRef extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
-			assertEq("true,x,false,x,false,x,CDATA,dec,xdatetime,",
+			assertEq("true,x,false,x,false,x,string,dec,xdatetime,",
 				strw.toString());
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")

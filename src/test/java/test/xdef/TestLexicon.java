@@ -1,16 +1,16 @@
 package test.xdef;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.List;
 import builtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import org.w3c.dom.Element;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.sys.FUtils;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.List;
+import org.w3c.dom.Element;
 
 /** Test of Lexicon.
  * @author Vaclav Trojan

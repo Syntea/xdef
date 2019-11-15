@@ -309,10 +309,10 @@ public final class TestInclude extends XDTester {
 				reporter.printToString().indexOf("XML309") > 0);
 		} catch (Exception ex) {fail(ex);}
 
-		try { // xd:include='classpath:// ...
+		try { // xd:include='classpath://...
 			xp = compile(
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/3.2'\n" +
-"xd:include='classpath://test.xdef.data.test.TestInclude.xdef,\n"+
+"xd:include='classpath://test.xdef.data.test.TestInclude.xdef;\n"+
 "            classpath://test.xdef.data.test.TestInclude_10.xdef'/>");
 			xml = "<B b='123'/>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
@@ -328,7 +328,7 @@ public final class TestInclude extends XDTester {
 			assertEq("f", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='foo'\n"+
-" xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
+"xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
 "  <foo>\n"+
 "    <bar xd:script = '*; ref B#B'/>\n"+ // B is from include
 "  </foo>\n"+
