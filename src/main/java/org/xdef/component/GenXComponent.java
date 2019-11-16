@@ -306,6 +306,8 @@ public final class GenXComponent {
 				return result + "datetimeValue()";
 			case XDValueID.XD_BYTES:
 				return result + "getBytes()";
+			case XDValueID.XD_PARSER:
+				return result + "getParsedString()";
 		}
 		result += "stringValue()";
 		String enumType = checkEnumType(xdata);

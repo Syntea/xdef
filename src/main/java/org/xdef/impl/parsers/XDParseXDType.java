@@ -21,7 +21,6 @@ import java.util.Properties;
 public class XDParseXDType extends XDParserAbstract {
 
 	private static final String ROOTBASENAME = "xdType";
-	private String _value;
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
@@ -59,9 +58,7 @@ public class XDParseXDType extends XDParserAbstract {
 	}
 
 	@Override
-	public String toString() {return ROOTBASENAME + "()";}
-	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_CONTAINER;}
+	public short parsedType() {return XD_PARSER;}
 }

@@ -43,9 +43,5 @@ public class XDParseEmail extends XDParserAbstract {
 	}
 
 	@Override
-	public String toString() {return ROOTBASENAME + "()";}
-	@Override
 	public String parserName() {return ROOTBASENAME;}
-	@Override
-	public short parsedType() {return XD_CONTAINER;}
 }

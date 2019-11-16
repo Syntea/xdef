@@ -2,41 +2,23 @@ package org.xdef.impl.ext;
 
 import org.xdef.XDConstants;
 import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.Report;
-import org.xdef.sys.SBuffer;
 import org.xdef.sys.SError;
 import org.xdef.sys.StringParser;
-import org.xdef.XDParseResult;
 import org.xdef.XDValue;
-import org.xdef.proc.XXData;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefXPathExpr;
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.net.URI;
-import java.net.URL;
-import java.util.StringTokenizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDParser;
-import org.xdef.XDPool;
 import org.xdef.XDValueID;
-import org.xdef.impl.XPool;
-import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
-import java.util.Properties;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -138,260 +120,6 @@ public final class XExtUtils {
 	}
 	public static String getSourcePosition(final XXNode xnode) {
 		return "" + xnode.getSPosition();
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Predefined check value methots.
-////////////////////////////////////////////////////////////////////////////////
-
-	private static XDParseResult file(final String s) {
-		XDParseResult pr = new DefParseResult(s);
-		try {
-			new File(s).getCanonicalPath();
-		} catch (Exception ex) {
-			pr.error(XDEF.XDEF809, "file"); //Incorrect value of &{0}
-		}
-		return pr;
-	}
-
-	public final static XDParseResult file(final XXData chkel) {
-		return file(chkel.getTextValue().trim());
-	}
-
-	private static XDParseResult fileList(final String s) {
-		XDParseResult pr = new DefParseResult(s);
-		StringTokenizer st = new StringTokenizer(s, ", \n\t\r"); // TODO space?
-		if (!st.hasMoreTokens()) {
-			pr.error(XDEF.XDEF809, "fileList"); //Incorrect value of &{0}
-		}
-		XDContainer c = new DefContainer();
-		do {
-			String t = st.nextToken();
-			if (file(t).errors()) {
-				pr.error(XDEF.XDEF809, "fileList");//Incorrect value of &{0}
-				break;
-			}
-			c.addXDItem(t);
-		} while (st.hasMoreTokens());
-		pr.setParsedValue(c);
-		return pr;
-	}
-
-	private static XDParseResult url(final String url) {
-		String s = url.trim();
-		XDParseResult pr = new DefParseResult(s);
-		if (s.length() > 0) {//we accept empty string?
-			try {
-				URL u = SUtils.getExtendedURL(s);
-			} catch (Exception ex) {
-				pr.error(XDEF.XDEF809, "url");//Incorrect value of &{0}
-			}
-		}
-		return pr;
-	}
-
-	public final static XDParseResult url(final XXData chkel) {
-		return url(chkel.getTextValue());
-	}
-
-	public final static XDParseResult urlList(final XXData data) {
-		String s = data.getTextValue().trim();
-		XDParseResult pr;
-		StringTokenizer st = new StringTokenizer(s, ",; \n\t\r"); // TODO space?
-		if (!st.hasMoreTokens()) {
-			pr = new DefParseResult(s);
-			pr.error(XDEF.XDEF809, "urlList"); //Incorrect value of &{0}
-			return pr;
-		}
-		String t = null;
-		XDContainer val = new DefContainer();
-		do {
-			String x = st.nextToken();
-			if (url(x).errors()) {
-				pr = new DefParseResult(s);
-				pr.error(XDEF.XDEF809, "urlList"); //Incorrect value of &{0}
-				return pr;
-			}
-			if (t == null) {
-				t = x;
-			} else {
-				t += ' ' + x;
-			}
-			val.addXDItem(x);
-		} while (st.hasMoreTokens());
-		return new DefParseResult(s, val);
-	}
-
-	public final static XDParseResult fileList(final XXData data) {
-		return fileList(data.getTextValue());
-	}
-
-	public final static XDParseResult uri(final String uri) {
-		String s = uri.trim();
-		XDParseResult pr = new DefParseResult(s.trim());
-		if (s.length() == 0) { //we accept the empty string?
-			return pr;
-		}
-		try {
-			URI u = new URI(s);
-		} catch (Exception ex) {
-			pr.error(XDEF.XDEF809, "uri"); //Incorrect value of &{0}
-		}
-		return pr;
-	}
-
-	public final static XDParseResult uri(final XXData data) {
-		return uri(data.getTextValue().trim());
-	}
-
-	private static XDParseResult uriList(final String s) {
-		XDParseResult pr;
-		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
-		String t = null;
-		if (!st.hasMoreTokens()) {
-			pr = new DefParseResult(s);
-			pr.error(XDEF.XDEF809, "uriList"); //Incorrect value of &{0}
-			return pr;
-		}
-		XDContainer val = new DefContainer();
-		do {
-			String x = st.nextToken();
-			if (uri(x).errors()) {
-				pr = new DefParseResult(s);
-				pr.error(XDEF.XDEF809, "uriList"); //Incorrect value of &{0}
-				return pr;
-			}
-			if (t == null) {
-				t = x;
-			} else {
-				t += ' ' + x;
-			}
-			val.addXDItem(x);
-		} while (st.hasMoreTokens());
-		return new DefParseResult(t, val);
-	}
-
-	public final static XDParseResult uriList(final XXData data) {
-		return uriList(data.getTextValue());
-	}
-
-	/** Check email address.
-	 * @param email string with email address.
-	 * @return parsed result.
-	 */
-	private static XDParseResult email(final String email) {
-		//TODO this is just primitive test, implement syntax RFC2822!
-		String s = email.trim();
-		XDParseResult pr = new DefParseResult(s);
-		if (s == null || s.isEmpty()) {
-			pr.error(XDEF.XDEF809, "email"); //Incorrect value of &{0}
-		} else {			
-            String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*"
-				+ "@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-            if (!s.matches(emailregex)) {
-				pr.error(XDEF.XDEF809, "email"); //Incorrect value of &{0}
-			}
-		}
-		return pr;
-	}
-
-	/** Check email address.
-	 * @param data XXData with email.
-	 * @return parsed result.
-	 */
-	public final static XDParseResult email(final XXData data) {
-		return email(data.getTextValue());
-	}
-
-	/** Check email address.
-	 * @param s string with list of email address (separator space, ',' or ';').
-	 * @return parsed result.
-	 */
-	private static XDParseResult emailList(final String s) {
-		StringTokenizer st = new StringTokenizer(s, ";,");
-		if (!st.hasMoreTokens()) {
-			XDParseResult pr = new DefParseResult(s);
-			pr.error(XDEF.XDEF809, "emailList"); //Incorrect value of &{0}
-			return pr;
-		}
-		XDContainer val = new DefContainer();
-		String t = null;
-		do {
-			String x = st.nextToken().trim();
-			if (!s.isEmpty() ) {
-				if (email(x).errors()) {
-					XDParseResult pr = new DefParseResult(s);
-					//Incorrect value of &{0}
-					pr.error(XDEF.XDEF809, "emailList"); 
-					return pr;
-				}
-				if (t == null) {
-					t = x;
-				} else {
-					t += ' ' + x;
-				}
-				val.addXDItem(x);
-			}
-		} while (st.hasMoreTokens());
-		return new DefParseResult(t, val);
-	}
-	
-	/** Check email address.
-	 * @param data contains list of email address (separator space, ',' or ';').
-	 * @return parsed result.
-	 */
-	public final static XDParseResult emailList(final XXData data) {
-		return emailList(data.getTextValue());
-	}
-
-	public final static XDParseResult checkBNF(final XXData data) {
-		String s = data.getTextValue();
-		XDParseResult pr = new DefParseResult(s);
-		SBuffer sbr = new SBuffer(s, data.getSPosition());
-		ArrayReporter ar = new ArrayReporter();
-		BNFGrammar g = BNFGrammar.compile(null, sbr, ar);
-		if (ar.errorWarnings()) {
-			pr.addReports(ar);
-		} else {
-			pr.setParsedValue(new DefBNFGrammar(g));
-		}
-		return pr;
-	}
-
-	public static XDParseResult xdType(XXData xdata) {
-		String s = xdata.getTextValue();
-		XDParseResult result = new DefParseResult(s);
-		try {
-			String xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='A'>" +
-"<xd:declaration>" +
-"Parser x=" + xdata.getTextValue() + ";"+
-"</xd:declaration>" +
-"<A/>" +
-"</xd:def>";
-			Properties props = new Properties();
-			if (xdata.getXDPool().isChkWarnings()) {
-				props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-			}
-			XDPool xp = XDFactory.compileXD(props, xdef);
-			XDValue[] code  =((XPool) xp).getCode();
-			if (code.length == 3 && code[0].getCode() == 0
-				&& code[0].getItemId() == XDValueID.XD_PARSER
-				&& code[1].getCode() == CodeTable.ST_GLOBAL
-				&& code[2].getCode() == CodeTable.STOP_OP) {
-				result.setParsedValue(code[0]);
-				return result;
-			}
-			XDDocument xd = xp.createXDDocument();
-			xd.xparse("<A/>", null);
-			XDParser x = (XDParser) xd.getVariable("x");
-			result.setParsedValue(x);
-		} catch (Exception ex) {
-			// Value "&{0}" is not a valid value type specification
-			result.error(XDEF.XDEF817, s);
-		}
-		return result;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
