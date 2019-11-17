@@ -118,10 +118,10 @@ public class Y11Op implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@N")) {
       XD_Name_N = x.getNodeName();
-      setN(parseResult.getParsedValue().stringValue());
+      setN(parseResult.getParsedValue().toString());
     } else {
       XD_Name_M = x.getNodeName();
-      setM(parseResult.getParsedValue().stringValue());
+      setM(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -255,10 +255,10 @@ public static class Co implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@C")) {
       XD_Name_C = x.getNodeName();
-      setC(parseResult.getParsedValue().stringValue());
+      setC(parseResult.getParsedValue().toString());
     } else {
       XD_Name_I = x.getNodeName();
-      setI(parseResult.getParsedValue().stringValue());
+      setI(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -458,7 +458,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Y = x.getNodeName();
-    setY(parseResult.getParsedValue().stringValue());
+    setY(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

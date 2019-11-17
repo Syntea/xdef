@@ -248,10 +248,10 @@ public static class c implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@Kod")) {
       XD_Name_Kod = x.getNodeName();
-      setKod(parseResult.getParsedValue().stringValue());
+      setKod(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Cislo")) {
       XD_Name_Cislo = x.getNodeName();
-      setCislo(parseResult.getParsedValue().stringValue());
+      setCislo(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Rok = x.getNodeName();
       setRok(parseResult.getParsedValue().datetimeValue());

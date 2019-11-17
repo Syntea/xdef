@@ -108,7 +108,7 @@ public class N_Operation implements test.xdef.component.N_i,org.xdef.component.X
       setOne(parseResult.getParsedValue().intValue());
     } else {
       XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
+      setTwo(parseResult.getParsedValue().toString());
     }
   }
   @Override

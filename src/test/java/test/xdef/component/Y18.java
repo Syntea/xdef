@@ -122,10 +122,10 @@ public class Y18 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = x.getNodeName();
-      seta(parseResult.getParsedValue().stringValue());
+      seta(parseResult.getParsedValue().toString());
     } else {
       XD_Name_b = x.getNodeName();
-      setb(parseResult.getParsedValue().stringValue());
+      setb(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -266,20 +266,20 @@ public static class C implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$x=(char) XD_ndx++;
-    setx(parseResult.getParsedValue().stringValue());
+    setx(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@e")) {
       XD_Name_e = x.getNodeName();
-      sete(parseResult.getParsedValue().stringValue());
+      sete(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@c")) {
       XD_Name_c = x.getNodeName();
-      setc(parseResult.getParsedValue().stringValue());
+      setc(parseResult.getParsedValue().toString());
     } else {
       XD_Name_d = x.getNodeName();
-      setd(parseResult.getParsedValue().stringValue());
+      setd(parseResult.getParsedValue().toString());
     }
   }
   @Override

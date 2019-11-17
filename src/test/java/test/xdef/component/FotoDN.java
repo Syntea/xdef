@@ -97,7 +97,7 @@ public class FotoDN implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Foto_Ref = x.getNodeName();
-    setFoto_Ref(parseResult.getParsedValue().stringValue());
+    setFoto_Ref(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

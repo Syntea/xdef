@@ -420,7 +420,7 @@ public static class b_2 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_a = x.getNodeName();
-    seta(parseResult.getParsedValue().stringValue());
+    seta(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

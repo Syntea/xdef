@@ -1,5 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.4, release-date 2019-11-17
+* corrected bug that in the section "onStartElement" were ignored some errors
+  reported by methods of UniqueSet.
+* corrected bug in X-components where are used the validation methods "xdType".
+
 # Version 32.5.3, release-date 2019-10-22
 * improved the utility org.xdef.GUIEditor. Added parameter the "-g"
   which enables to create X-definition from given XML data

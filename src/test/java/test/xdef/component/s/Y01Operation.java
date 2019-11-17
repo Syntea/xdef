@@ -112,13 +112,13 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@x")) {
       XD_Name_x = x.getNodeName();
-      setx(parseResult.getParsedValue().stringValue());
+      setx(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_One = x.getNodeName();
-      setOne(parseResult.getParsedValue().stringValue());
+      setOne(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
+      setTwo(parseResult.getParsedValue().toString());
     }
   }
   @Override

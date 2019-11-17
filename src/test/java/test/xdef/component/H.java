@@ -113,7 +113,7 @@ public class H implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_s$encodingStyle = x.getNodeName();
-    sets$encodingStyle(parseResult.getParsedValue().stringValue());
+    sets$encodingStyle(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -365,10 +365,10 @@ public static class b$User implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@s:understand")) {
       XD_Name_s$understand = x.getNodeName();
-      sets$understand(parseResult.getParsedValue().stringValue());
+      sets$understand(parseResult.getParsedValue().toString());
     } else {
       XD_Name_IdentUser = x.getNodeName();
-      setIdentUser(parseResult.getParsedValue().stringValue());
+      setIdentUser(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -503,16 +503,16 @@ public static class b$Request implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@s:understand")) {
       XD_Name_s$understand = x.getNodeName();
-      sets$understand(parseResult.getParsedValue().stringValue());
+      sets$understand(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@IdentZpravy")) {
       XD_Name_IdentZpravy = x.getNodeName();
-      setIdentZpravy(parseResult.getParsedValue().stringValue());
+      setIdentZpravy(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@ReqMsgId")) {
       XD_Name_ReqMsgId = x.getNodeName();
       setReqMsgId(parseResult.getParsedValue().intValue());
     } else {
       XD_Name_Mode = x.getNodeName();
-      setMode(parseResult.getParsedValue().stringValue());
+      setMode(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -753,7 +753,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Flow = x.getNodeName();
-    setFlow(parseResult.getParsedValue().stringValue());
+    setFlow(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

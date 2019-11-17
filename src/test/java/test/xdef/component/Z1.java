@@ -264,13 +264,13 @@ public class Z1 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@Verze")) {
       XD_Name_Verze = x.getNodeName();
-      setVerze(parseResult.getParsedValue().stringValue());
+      setVerze(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@SeqRec")) {
       XD_Name_SeqRec = x.getNodeName();
       setSeqRec(parseResult.getParsedValue().intValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@KrajPolicie")) {
       XD_Name_KrajPolicie = x.getNodeName();
-      setKrajPolicie(parseResult.getParsedValue().stringValue());
+      setKrajPolicie(parseResult.getParsedValue().toString());
     } else {
       XD_Name_PlatnostOd = x.getNodeName();
       setPlatnostOd(parseResult.getParsedValue().datetimeValue());
@@ -437,7 +437,7 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,

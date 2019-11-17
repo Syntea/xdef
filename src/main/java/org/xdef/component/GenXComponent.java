@@ -270,46 +270,46 @@ public final class GenXComponent {
 	 * @return getter of ParsedResult.
 	 */
 	private static String getParsedResultGetter(final XMData xdata) {
-		String result = "parseResult.getParsedValue().";
+		String result = "parseResult.";
 		String parserName = xdata.getParserName();
 		if ("byte".equals(parserName)) {
-			return result + "byteValue()";
+			return result + "getParsedValue().byteValue()";
 		} else if ("short".equals(parserName)) {
-			return result + "shortValue()";
+			return result + "getParsedValue().shortValue()";
 		} else if ("int".equals(parserName)
 			|| "unsignedByte".equals(parserName)
 			|| "unsignedShort".equals(parserName)) {
-			return result + "intValue()";
+			return result + "getParsedValue().intValue()";
 		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
-			return result + "longValue()";
+			return result + "getParsedValue().longValue()";
 		} else if ("integer".equals(parserName)
 			|| "negativeInteger".equals(parserName)
 			|| "nonNegativeInteger".equals(parserName)
 			|| "PositiveInteger".equals(parserName)
 			|| "nonPositiveiveInteger".equals(parserName)) {
-			return result + "integerValue()";
+			return result + "getParsedValue().integerValue()";
 		} else if ("decimal".equals(parserName)) {
-			return result + "decimalValue()";
+			return result + "getParsedValue().decimalValue()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
-				return result + "booleanValue()";
+				return result + "getParsedValue().booleanValue()";
 			case XDValueID.XD_INT:
-				return result + "longValue()";
+				return result + "getParsedValue().longValue()";
 			case XDValueID.XD_FLOAT:
-				return result + "doubleValue()";
+				return result + "getParsedValue().doubleValue()";
 			case XDValueID.XD_DECIMAL:
-				return result + "decimalValue()";
+				return result + "getParsedValue().decimalValue()";
 			case XDValueID.XD_DURATION:
-				return result + "durationValue()";
+				return result + "getParsedValue().durationValue()";
 			case XDValueID.XD_DATETIME:
-				return result + "datetimeValue()";
+				return result + "getParsedValue().datetimeValue()";
 			case XDValueID.XD_BYTES:
-				return result + "getBytes()";
+				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
 				return result + "getParsedString()";
 		}
-		result += "stringValue()";
+		result += "getParsedValue().toString()";
 		String enumType = checkEnumType(xdata);
 		return enumType != null ? enumType+".toEnum("+ result+")" : result;
 	}

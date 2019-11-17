@@ -760,7 +760,25 @@
  </xd:component>
 </xd:def>
 
-<!-- Used in TestLexicon.java -->
+<xd:def name='Y25' root='a'>
+<xd:component> %class test.xdef.component.Y25 %link Y25#a; </xd:component>
+<xd:declaration>uniqueSet u {var Parser x, int y; a: string();}</xd:declaration>
+<a>
+  <DefParams>
+     <Param xd:script="*;"
+       Name="u.a.ID(); onTrue u.y=0; onFalse u.y=98;"
+       Type="xdType(); onTrue {u.x=getParsedValue(); u.y=1;} onFalse u.y=99;"/>
+  </DefParams>
+  <Params xd:script="+; init u.checkUnref()">
+     <Param xd:script="*;" Name="u.a.CHKID();" Value="u.x;"/>
+  </Params>
+</a>
+</xd:def>
+
+<!-- **************************
+  Used in TestLexicon.java
+******************************* -->
+
 <xd:def root="X" name="Lexicon">
   <X x="string">
     <Y xd:script="+"  y="int()"/>

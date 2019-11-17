@@ -152,25 +152,25 @@ public class Z2 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@KodUtvaruPolicie")) {
       XD_Name_KodUtvaruPolicie = x.getNodeName();
-      setKodUtvaruPolicie(parseResult.getParsedValue().stringValue());
+      setKodUtvaruPolicie(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@RokDN")) {
       XD_Name_RokDN = x.getNodeName();
       setRokDN(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloDN")) {
       XD_Name_CisloDN = x.getNodeName();
-      setCisloDN(parseResult.getParsedValue().stringValue());
+      setCisloDN(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloJednaciDN")) {
       XD_Name_CisloJednaciDN = x.getNodeName();
-      setCisloJednaciDN(parseResult.getParsedValue().stringValue());
+      setCisloJednaciDN(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@DatumCasOznameni")) {
       XD_Name_DatumCasOznameni = x.getNodeName();
       setDatumCasOznameni(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevDN")) {
       XD_Name_NazevDN = x.getNodeName();
-      setNazevDN(parseResult.getParsedValue().stringValue());
+      setNazevDN(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Zpracovatel = x.getNodeName();
-      setZpracovatel(parseResult.getParsedValue().stringValue());
+      setZpracovatel(parseResult.getParsedValue().toString());
     }
   }
   @Override

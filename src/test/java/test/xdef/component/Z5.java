@@ -118,7 +118,7 @@ public class Z5 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@NazevFirmy")) {
       XD_Name_NazevFirmy = x.getNodeName();
-      setNazevFirmy(parseResult.getParsedValue().stringValue());
+      setNazevFirmy(parseResult.getParsedValue().toString());
     } else {
       XD_Name_IC = x.getNodeName();
       setIC(parseResult.getParsedValue().intValue());
