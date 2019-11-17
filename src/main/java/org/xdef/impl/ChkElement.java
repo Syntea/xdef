@@ -2097,6 +2097,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return <tt>true</tt> if element is compliant with X-definition.
 	 */
 	public final boolean checkElement() {
+		_parseResult = null;
 		if (_attsChecked) {
 			return true;
 		}
@@ -2206,9 +2207,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					result = false;
 				}
 			}
+			_parseResult = null;
 			if (xatt._onStartElement >= 0) { // execute onStartElement action
 				_data = null;
-				_parseResult = null;
 				_attName = xname;
 				_elemValue = _element;
 				exec(xatt._onStartElement, (byte) 'A');
