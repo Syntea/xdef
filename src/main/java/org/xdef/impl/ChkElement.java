@@ -2215,6 +2215,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		_xPos = xPos;
+		_parseResult = null;
 		debugXPos(XDDebug.ONSTARTELEMENT);
 		if (_xElement._onStartElement >= 0) {// exec on end of attr list
 			_elemValue = _element;
@@ -2233,7 +2234,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		_xdata = null;
-		_parseResult = null;
 		return result;
 	}
 

@@ -193,6 +193,23 @@ public final class TestKeyAndRef extends XDTester {
 			assertTrue(reporter.getErrorCount() == 2
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter);
+			xdef = // test ID in onStartElement
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+" <xd:declaration scope=\"local\">\n" +
+"   uniqueSet tabulka {sloupec: string(1,3)}; \n" +
+" </xd:declaration>\n" +
+" <A>\n" +
+"    <B xd:script=\"*; onStartElement tabulka.ID()\"\n" +
+"        b=\"tabulka.sloupec()\"/>\n" +
+" </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B b='S-A'/><B b='S-B'/><B b='S-D'/></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<A><B b='S-A'/><B b='S-B'/><B b='S-A'/></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF523"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration scope='local'>\n"+
