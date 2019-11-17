@@ -2807,7 +2807,6 @@ public final class TestParse extends XDTester {
   "</xd:declaration>\n"+
 "  <a x='x'/>\n"+
 "</xd:def>";
-			xp = compile(xdef);
 			xml="<a x='x'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 // test variable parameter in validation method.
@@ -2823,7 +2822,7 @@ public final class TestParse extends XDTester {
 "          Number   =\"cislo1()\"/>\n" +
 "  </a>\n" +
 "</xd:def>");
-			xml = 
+			xml =
 "<a>\n" +
 "  <Item Size=\"1\" Number=\"1\"/>\n" +
 "  <Item Size=\"2\" Number=\"2\"/>\n" +
@@ -2831,7 +2830,7 @@ public final class TestParse extends XDTester {
 "</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xml = 
+			xml =
 "<a>\n" +
 "  <Item Size=\"1\" Number=\"1\"/>\n" +
 "  <Item Size=\"2\" Number=\"11\"/>\n" +
@@ -2866,7 +2865,7 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(s.contains("XDEF813"), s);
 // version 2.0
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
 "  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
 "  <a x='x'/>\n"+
