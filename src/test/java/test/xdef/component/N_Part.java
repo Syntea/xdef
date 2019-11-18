@@ -108,7 +108,7 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
       setOne(parseResult.getParsedValue().intValue());
     } else {
       XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
+      setTwo(parseResult.getParsedValue().toString());
     }
   }
   @Override

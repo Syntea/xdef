@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import org.w3c.dom.Element;
-import test.utils.XDTester;
+import buildtools.XDTester;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -414,11 +414,18 @@ public class TestJsonXdef extends XDTester {
 		// this code will be removed after Gelcollection will process JSON
 		boolean chkSyntax = getChkSyntax();
 		setChkSyntax(false);
-
 		// Generate all data (X-definitons, X-components, XML ddocuments).
-		XDPool xp = genAll("Test*");
-//		XDPool xp = genAll("Test001");
-
+		XDPool xp;
+		try {
+			xp = genAll("Test*");
+		} catch (RuntimeException ex) {
+			if (ex.getMessage().contains("Java compiler is not available")) {
+				getOutStream().println(ex.getMessage()
+					+ "; TestJsonXdef skipped");
+				return;
+			}
+			throw ex;
+		}
 		// run tests
 		for (File f: _jfiles) {
 			String s = testJdef(xp, getId(f));

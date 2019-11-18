@@ -97,7 +97,7 @@ public class Y12_S implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_V = x.getNodeName();
-    setV(parseResult.getParsedValue().stringValue());
+    setV(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

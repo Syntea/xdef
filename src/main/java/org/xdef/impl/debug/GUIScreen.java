@@ -13,6 +13,7 @@ import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -276,7 +277,8 @@ public class GUIScreen extends GUIBase {
 			public void actionPerformed(ActionEvent evt) {
 				updateSourceItem();
 				if (_sourceItem!=null
-					&& _sourceItem._changed && _sourceItem._url==null) {
+					&& _sourceItem._changed
+					&& _sourceItem._url==null) {
 					_sourceItem._source = _sourceArea.getText();
 					_sourceItem._saved = true;
 				}
@@ -357,29 +359,55 @@ public class GUIScreen extends GUIBase {
 
 	/** Save source text from XDSourceItem to a file.
 	 * @param src XDSourceItem object.
+	 * @return true is source was saved.
 	 */
-	public final void saveSource(final XDSourceItem src) {
+	public final boolean saveSource(final XDSourceItem src) {
 		updateSourceItem();
-		JFileChooser jf = new JFileChooser();
-		if (src._url != null && "file".equals(src._url.getProtocol())) {
-			jf.setSelectedFile(new File(src._url.getFile()));
-		} else {
-			jf.setSelectedFile(new File(".").getAbsoluteFile());
-		}
-		jf.setDialogTitle("Save to file");
-		jf.setToolTipText("Save content of the active window to a file");
-		int retval = jf.showSaveDialog(_frame);
-		jf.setEnabled(false);
-		if (retval == JFileChooser.APPROVE_OPTION) {
-			try {
-				File f = jf.getSelectedFile();
-				SUtils.writeString(f, src._source, src._encoding);
-				src._saved = true;
-				src._url = f.toURI().toURL();
-			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
+		boolean again;
+		do {
+			again = false;
+			JFileChooser jf = new JFileChooser();
+			if (src._url != null && "file".equals(src._url.getProtocol())) {
+				jf.setSelectedFile(new File(src._url.getFile()));
+			} else {
+				jf.setSelectedFile(new File(".").getAbsoluteFile());
 			}
-		}
+			jf.setDialogTitle("Save to file");
+			jf.setToolTipText("Save content of the active window to a file");
+			int retval = jf.showSaveDialog(_frame);
+			jf.setEnabled(false);
+			if (retval == JFileChooser.APPROVE_OPTION) {
+				File f = jf.getSelectedFile();
+				if (f.isFile() && f.exists() && f.canWrite()) {
+					if (JOptionPane.showConfirmDialog(null,
+						"File " + f.getName() + " exists, save anyway?",
+						null, JOptionPane.OK_CANCEL_OPTION) != 0) {
+						f = null;
+					}
+				}
+				if (f != null) {
+					if (f.isFile() && f.canWrite()) {
+						try {
+							SUtils.writeString(f, src._source, src._encoding);
+							src._url = f.toURI().toURL();
+							src._saved = true;
+							return true;
+						} catch (Exception ex) {
+							String s = ex.getMessage();
+							if (s == null || s.trim().isEmpty()) {
+								s = "" + ex;
+							}
+							JOptionPane.showConfirmDialog(null,
+								"Error when writing to " + f.getName()+": "+s);
+						}
+					}
+					JOptionPane.showMessageDialog(null,
+						"Can't write to file " + f.getName());
+					again = true;
+				}
+			}
+		} while (again);
+		return false;
 	}
 
 	/** Close GUI: dispose window and remove allocated objects. */

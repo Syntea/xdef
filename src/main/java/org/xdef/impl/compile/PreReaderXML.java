@@ -3,7 +3,6 @@ package org.xdef.impl.compile;
 import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.impl.XDefinition;
-import org.xdef.impl.ext.XExtUtils;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.msg.XML;
@@ -15,6 +14,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
+import java.net.URI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -97,7 +97,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						? XConstants.XD20
 						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD31 : XConstants.XD32;
-					if (XExtUtils.uri(projectNS).errors()) {
+					try {
+						if (projectNS.isEmpty()) {
+							throw new RuntimeException();
+						}
+						new URI(projectNS);
+					} catch (Exception ex) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
 					}

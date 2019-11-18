@@ -1,16 +1,16 @@
 package test.xdef;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.List;
-import test.utils.XDTester;
+import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import org.w3c.dom.Element;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.sys.FUtils;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.List;
+import org.w3c.dom.Element;
 
 /** Test of Lexicon.
  * @author Vaclav Trojan
@@ -264,7 +264,16 @@ public final class TestLexicon extends XDTester {
 			new File(dir).mkdirs();
 			assertNoErrors(GenXComponent.genXComponent(xp,
 				dir, null, false, true));
-			compileSources(dir);
+			try {
+				compileSources(dir);
+			} catch (RuntimeException ex) {
+				if (ex.getMessage().contains("Java compiler is not available")){
+					getOutStream().println(ex.getMessage()
+						+ "; TestLexicon skipped");
+					return;
+				}
+				throw ex;
+			}
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrors(reporter);

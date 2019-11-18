@@ -1,4 +1,4 @@
-package builtools;
+package buildtools;
 
 import org.xdef.sys.FUtils;
 import org.xdef.sys.RegisterReportTables;

@@ -105,10 +105,10 @@ public class Y05 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_One = x.getNodeName();
-      setOne(parseResult.getParsedValue().stringValue());
+      setOne(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
+      setTwo(parseResult.getParsedValue().toString());
     }
   }
   @Override

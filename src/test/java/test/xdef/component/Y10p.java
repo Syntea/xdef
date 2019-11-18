@@ -97,7 +97,7 @@ public class Y10p implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_x = x.getNodeName();
-    setx(parseResult.getParsedValue().stringValue());
+    setx(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

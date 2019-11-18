@@ -103,23 +103,25 @@ public final class XElement extends XCodeDescriptor
 	}
 
 	@Override
-	/** If this model is just reference to other model return true.
-	 * @return If this model is just reference to other model return true.
+	/** If this object is clone of other model (reference) return true.
+	 * @return If this model is clone of other model (reference) return true.
 	 */
 	public final boolean isReference() {return _reference;}
 
-	/** Set this model is reference to other model.
-	 * @param isref true if this model is reference to other model.
+	/** Set this if the model is clone of other model (reference).
+	 * @param isref true if this model is clone of other model (reference).
 -	 */
 	public final void setReference(boolean isref) {_reference = isref;}
 
 	@Override
-	/** Get reference position if this model was created from reference or null.
-	 * @return reference position if this model was created from reference.
+	/** Get reference position if this model was created from other model
+	 * (reference) or return null.
+	 * @return reference position if this model was created from other model
+	 * (reference) or return null.
 	 */
 	public final String getReferencePos() {return _refPosition;}
 
-	/** Set this model is reference to other model.
+	/** Set this model is created from other model (reference).
 	 * @param ref string of position of model reference.
 	 */
 	public final void setReferencePos(String ref) {_refPosition = ref;}

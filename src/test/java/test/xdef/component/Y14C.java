@@ -211,7 +211,7 @@ public static class X implements test.xdef.component.Y14A{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_a = x.getNodeName();
-    seta(parseResult.getParsedValue().stringValue());
+    seta(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

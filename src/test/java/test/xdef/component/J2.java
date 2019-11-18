@@ -125,13 +125,13 @@ public class J2 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult){
     if ("J#C/$text".equals(x.getXMNode().getXDPosition())){
       _$$value=(char) XD_ndx++;
-      set$value(parseResult.getParsedValue().stringValue());
+      set$value(parseResult.getParsedValue().toString());
     } else if ("J#C/$text[2]".equals(x.getXMNode().getXDPosition())){
       _$$value1=(char) XD_ndx++;
-      set$value1(parseResult.getParsedValue().stringValue());
+      set$value1(parseResult.getParsedValue().toString());
     } else if ("J#C/$text[3]".equals(x.getXMNode().getXDPosition())){
       _$$value2=(char) XD_ndx++;
-      set$value2(parseResult.getParsedValue().stringValue());
+      set$value2(parseResult.getParsedValue().toString());
     }
   }
   @Override

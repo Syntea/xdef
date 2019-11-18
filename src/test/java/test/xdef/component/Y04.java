@@ -101,10 +101,10 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@One")) {
       XD_Name_Jedna = x.getNodeName();
-      setJedna(parseResult.getParsedValue().stringValue());
+      setJedna(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Two = x.getNodeName();
-      setTwo(parseResult.getParsedValue().stringValue());
+      setTwo(parseResult.getParsedValue().toString());
     }
   }
   @Override

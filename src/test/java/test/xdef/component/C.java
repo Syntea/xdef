@@ -106,7 +106,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Name = x.getNodeName();
-    setName(parseResult.getParsedValue().stringValue());
+    setName(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -224,7 +224,7 @@ public static class Street implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Name = x.getNodeName();
-    setName(parseResult.getParsedValue().stringValue());
+    setName(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

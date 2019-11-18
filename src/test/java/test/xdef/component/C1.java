@@ -105,10 +105,10 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@FirstName")) {
       XD_Name_FirstName = x.getNodeName();
-      setFirstName(parseResult.getParsedValue().stringValue());
+      setFirstName(parseResult.getParsedValue().toString());
     } else {
       XD_Name_LastName = x.getNodeName();
-      setLastName(parseResult.getParsedValue().stringValue());
+      setLastName(parseResult.getParsedValue().toString());
     }
   }
   @Override

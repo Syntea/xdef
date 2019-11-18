@@ -1,6 +1,6 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.SDatetime;
@@ -1018,7 +1018,29 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, parseXC(
 				xp,"Y24",xml,test.xdef.component.Y24d.class,reporter).toXml());			
 			assertNoErrorwarnings(reporter);
+
+			xml =
+"<a>\n" +
+"  <DefParams>\n" +
+"    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
+"    <Param Type=\"dec()\" Name=\"Vyska\"/>\n" +
+"    <Param Name=\"DatumNarozeni\" Type=\"date()\" />\n" +
+"  </DefParams>\n" +
+"  <Params>\n" +
+"    <Param Name=\"Jmeno\" Value=\"Jan\"/>\n" +
+"    <Param Name=\"Vyska\" Value=\"14.8\"/>\n" +
+"    <Param Name=\"DatumNarozeni\" Value=\"1987-02-01\"/>\n" +
+"  </Params>\n" +
+"</a>";
+			test.xdef.component.Y25 y25 = (test.xdef.component.Y25)
+				parseXC(xp,"Y25", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, y25.toXml());
+			assertEq("dec()",y25.getDefParams().listOfParam().get(1).getType());
+			assertEq("14.8",
+				y25.listOfParams().get(0).listOfParam().get(1).getValue());
 		} catch (Exception ex) {fail(ex);}
+
 		try { // test theaurus from generated XDPool
 			xd = xp.createXDDocument("Lexicon");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";

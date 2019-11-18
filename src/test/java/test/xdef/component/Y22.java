@@ -106,7 +106,7 @@ public class Y22 implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Creator = x.getNodeName();
-    setCreator(parseResult.getParsedValue().stringValue());
+    setCreator(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -223,7 +223,7 @@ public static class Transfer implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Sender = x.getNodeName();
-    setSender(parseResult.getParsedValue().stringValue());
+    setSender(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -448,7 +448,7 @@ public static class Directory implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Path = x.getNodeName();
-    setPath(parseResult.getParsedValue().stringValue());
+    setPath(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -556,7 +556,7 @@ public static class File implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_Name = x.getNodeName();
-    setName(parseResult.getParsedValue().stringValue());
+    setName(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

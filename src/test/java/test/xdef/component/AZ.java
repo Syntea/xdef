@@ -97,7 +97,7 @@ public class AZ extends test.xdef.TestXComponents_G implements org.xdef.componen
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_z = x.getNodeName();
-    setz(parseResult.getParsedValue().stringValue());
+    setz(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

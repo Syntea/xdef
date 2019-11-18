@@ -1,14 +1,12 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import buildtools.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMData;
 import java.io.StringWriter;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
 import org.xdef.XDFactory;
@@ -21,7 +19,8 @@ import org.xdef.impl.parsers.XSParseDecimal;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
-import static test.utils.XDTester._xdNS;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
@@ -222,7 +221,7 @@ public final class TestTypes extends XDTester {
 				parse(xp, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			// name of type equals to name of internal type method
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
 "<a x='required string'>\n"+
@@ -252,7 +251,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<a x='xxx'>xxx</a>";
 			parse(xp, "", xml, reporter);
-			assertErrors(reporter);			
+			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { //element type
 			xdef =
@@ -593,7 +592,7 @@ public final class TestTypes extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);		
+			assertNoErrors(reporter);
 			xdef = // union with the a list of same items
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -728,7 +727,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a a='false 1' />";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not reported");		
+			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xdef =  // string whiteSpace=preserve (option trimAttr)
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -760,8 +759,7 @@ public final class TestTypes extends XDTester {
 			el = parse(xdef, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(el, "<a a='' b=' '/>");
-			
-		xdef = // Test of methods NCname(), QName(), QnameURI()
+			xdef = // Test of methods NCname(), QName(), QnameURI()
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:ws='abc' root='ws:message'>\n"+
 "  <xd:declaration>\n"+
 "    external method String test.xdef.TestTypes.tst(XXElement, String);\n"+
@@ -784,44 +782,44 @@ public final class TestTypes extends XDTester {
 "     </xd:choice>" +
 "  </ws:message>" +
 "</xd:def>\n";
-		xp = compile(xdef);
-		strw = new StringWriter();
-		xml =
+			xp = compile(xdef);
+			strw = new StringWriter();
+			xml =
 "<message name=\"GetEndorsingBoarderRequest\"\n"+
 "  xmlns='abc'\n"+
 "  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
 "  <part name=\"body\" element=\"esxsdX:GetEndorsingBoarder\"/>" +
 "</message>";
-		parse(xp, "", xml, reporter, strw, null, null);
-		s = strw.toString();
-		assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-			s.indexOf("/abc;abc;abc") < 0, s);
-		if (reporter.getErrorCount() == 0) {
-			fail("error not reported");
-		} else if (reporter.getErrorCount() != 1) {
-			fail(reporter.printToString());
-		} else if (!"XDEF554".equals(
-			reporter.getReport().getMsgID()) &&
-			!"XDEF515".equals(reporter.getReport().getMsgID())) {
-			fail(reporter.getReport().toString());
-		}
-		strw = new StringWriter();
-		xml =
+			parse(xp, "", xml, reporter, strw, null, null);
+			s = strw.toString();
+			assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
+				s.indexOf("/abc;abc;abc") < 0, s);
+			if (reporter.getErrorCount() == 0) {
+				fail("error not reported");
+			} else if (reporter.getErrorCount() != 1) {
+				fail(reporter.printToString());
+			} else if (!"XDEF554".equals(
+				reporter.getReport().getMsgID()) &&
+				!"XDEF515".equals(reporter.getReport().getMsgID())) {
+				fail(reporter.getReport().toString());
+			}
+			strw = new StringWriter();
+			xml =
 "<message name=\"GetEndorsingBoarderRequest\"" +
 "  xmlns='abc'" +
 "  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
 "  <part   name=\"body\" element=\"esxsd:GetEndorsingBoarder\"/>" +
 "</message>";
-		parse(xp, "", xml, reporter, strw, null, null);
-		s = strw.toString();
-		assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-			s.indexOf("esxsd/GetEndorsingBoarder/" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-			"http://schemas.snowboard-info.com/EndorsementSearch.xsd") < 0,
-			s);
-			assertNoErrorwarnings(reporter);
-			setChkSyntax(false);
+			parse(xp, "", xml, reporter, strw, null, null);
+			s = strw.toString();
+			assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
+				s.indexOf("esxsd/GetEndorsingBoarder/" +
+				"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+				"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+				"http://schemas.snowboard-info.com/EndorsementSearch.xsd") < 0,
+				s);
+				assertNoErrorwarnings(reporter);
+				setChkSyntax(false);
 			xdef = // expressions
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='int | string; finally out(int | string)'/>\n"+

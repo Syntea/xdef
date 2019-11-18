@@ -39,7 +39,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		final XDPool xp,
 		final short kind) {
 		super(name, nsUri, xp, kind);
-		setOccurrence(1,1); //???
+		setOccurrence(1,1); // required ???
 		_valueType = XD_STRING;
 	}
 
@@ -148,21 +148,24 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	public final String getRefTypeName() {return _refTypeName;}
 
 	@Override
+	/** Check if the value type is declared as local within the X-definition.
+	 * @return true if the value type is declared as local within
+	 * the X-definition.
+	 */
+	public final boolean isLocalType() {
+		return getXMDefinition().isLocalName(_refTypeName);
+	}
+
+	@Override
 	/** Get parser used for parsing of value.
 	 * @return XDParser or null if parser is not available.
 	 */
-	public final XDValue getParseMethod() {return getParseMethod(_check);}
-
-	/** Get parse method.
-	 * @param addr address (index to code) of validation method.
-	 * @return XDParser or null if parser is not available.
-	 */
-	public final XDValue getParseMethod(final int addr) {
-		final XDValue[] xv = ((XPool) getXDPool()).getCode();
-		int xs = addr; //start of code
+	public final XDValue getParseMethod() {
+		int xs = _check; //start of code
 		if (xs < 0) {
-			return null;
+			return null; // not declared (default, i.e. any string)
 		}
+		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xs];
 		if (y.getCode() == CodeTable.JMP_OP
 			|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP

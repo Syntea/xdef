@@ -69,4 +69,10 @@ public interface XMDefinition extends XMNode {
 	 */
 	public byte getXmlVersion();
 
+	/** Check if given name is declared as local in this X-definition.
+	 * @param name the name to be checked.
+	 * @return true if given name is declared as local in this X-definition.
+	 */
+	public boolean isLocalName(final String name);
+
 }

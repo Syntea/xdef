@@ -248,37 +248,37 @@ public class UcastnikDN implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
+      setOznSegmentu(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@TypUcastnika")) {
       XD_Name_TypUcastnika = x.getNodeName();
-      setTypUcastnika(parseResult.getParsedValue().stringValue());
+      setTypUcastnika(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PraxeRizeni")) {
       XD_Name_PraxeRizeni = x.getNodeName();
       setPraxeRizeni(parseResult.getParsedValue().intValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@AlkoholDech")) {
       XD_Name_AlkoholDech = x.getNodeName();
-      setAlkoholDech(parseResult.getParsedValue().stringValue());
+      setAlkoholDech(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@AlkoholKrev")) {
       XD_Name_AlkoholKrev = x.getNodeName();
-      setAlkoholKrev(parseResult.getParsedValue().stringValue());
+      setAlkoholKrev(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Zraneni")) {
       XD_Name_Zraneni = x.getNodeName();
-      setZraneni(parseResult.getParsedValue().stringValue());
+      setZraneni(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@ZdravPojistovna")) {
       XD_Name_ZdravPojistovna = x.getNodeName();
-      setZdravPojistovna(parseResult.getParsedValue().stringValue());
+      setZdravPojistovna(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PokutaKc")) {
       XD_Name_PokutaKc = x.getNodeName();
       setPokutaKc(parseResult.getParsedValue().intValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PokutaZapl")) {
       XD_Name_PokutaZapl = x.getNodeName();
-      setPokutaZapl(parseResult.getParsedValue().stringValue());
+      setPokutaZapl(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Pachatel")) {
       XD_Name_Pachatel = x.getNodeName();
-      setPachatel(parseResult.getParsedValue().stringValue());
+      setPachatel(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Poskozeny = x.getNodeName();
-      setPoskozeny(parseResult.getParsedValue().stringValue());
+      setPoskozeny(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -426,7 +426,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -538,7 +538,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -650,7 +650,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -762,7 +762,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -874,7 +874,7 @@ public static class Vazba implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,

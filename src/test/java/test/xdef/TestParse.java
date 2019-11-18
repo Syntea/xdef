@@ -1,6 +1,6 @@
 package test.xdef;
 
-import test.utils.XDTester;
+import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.FileReportReader;
@@ -2807,10 +2807,65 @@ public final class TestParse extends XDTester {
   "</xd:declaration>\n"+
 "  <a x='x'/>\n"+
 "</xd:def>";
-			xp = compile(xdef);
 			xml="<a x='x'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			xdef = // version 2.0
+// test variable parameter in validation method.
+			xp = compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n" +
+"  <xd:declaration scope=\"local\">\n" +
+"    int   max;\n" +
+"    type  cislo1 int(1,max); \n" +
+"  </xd:declaration>\n" +
+"  <a>\n" +
+"    <Item xd:script=\"*\"\n" +
+"          Size     =\"int(); onTrue max=parseInt(getText())\"\n" +
+"          Number   =\"cislo1()\"/>\n" +
+"  </a>\n" +
+"</xd:def>");
+			xml =
+"<a>\n" +
+"  <Item Size=\"1\" Number=\"1\"/>\n" +
+"  <Item Size=\"2\" Number=\"2\"/>\n" +
+"  <Item Size=\"3\" Number=\"3\"/>\n" +
+"</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml =
+"<a>\n" +
+"  <Item Size=\"1\" Number=\"1\"/>\n" +
+"  <Item Size=\"2\" Number=\"11\"/>\n" +
+"  <Item Size=\"3\" Number=\"3\"/>\n" +
+"</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			s = reporter.printToString();
+			assertTrue(s.contains("XDEF813") && s.contains("maxInclusive"), s);
+			xp = compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n" +
+"  <xd:declaration scope=\"local\">Parser  xtype;</xd:declaration>\n" +
+"  <a>\n" +
+"    <Item xd:script=\"*\"\n" +
+"          Type      =\"xdType(); onTrue xtype=getParsedValue()\" \n" +
+"          Value     =\"xtype()\"/>\n" +
+"  </a>\n" +
+"</xd:def>");
+			xml =
+"<a>\n" +
+"  <Item Value=\"Alfa\"     Type=\"string(1,5)\"/>\n" +
+"  <Item Value=\"99\"       Type=\"int(1,99)\"/>\n" +
+"  <Item Value=\"3.6.2002\" Type=\"xdatetime('d.M.yyyy')\"/>\n" +
+"</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml =
+"<a>\n" +
+"  <Item Value=\"Alfa\"     Type=\"string(1,5)\"/>\n" +
+"  <Item Value=\"Beta\"     Type=\"int(1,99)\"/>\n" +
+"  <Item Value=\"3.6.2002\" Type=\"xdatetime('d.M.yyyy')\"/>\n" +
+"</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(s.contains("XDEF813"), s);
+// version 2.0
+			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
 "  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
 "  <a x='x'/>\n"+

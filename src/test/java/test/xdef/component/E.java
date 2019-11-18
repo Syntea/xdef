@@ -204,7 +204,7 @@ public static class Clazz implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_try = x.getNodeName();
-    settry(parseResult.getParsedValue().stringValue());
+    settry(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
