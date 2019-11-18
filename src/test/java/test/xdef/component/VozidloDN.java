@@ -311,58 +311,58 @@ public class VozidloDN implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
+      setOznSegmentu(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@DruhVozidla")) {
       XD_Name_DruhVozidla = x.getNodeName();
-      setDruhVozidla(parseResult.getParsedValue().stringValue());
+      setDruhVozidla(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@SPZ")) {
       XD_Name_SPZ = x.getNodeName();
-      setSPZ(parseResult.getParsedValue().stringValue());
+      setSPZ(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@MPZ")) {
       XD_Name_MPZ = x.getNodeName();
-      setMPZ(parseResult.getParsedValue().stringValue());
+      setMPZ(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@VIN")) {
       XD_Name_VIN = x.getNodeName();
-      setVIN(parseResult.getParsedValue().stringValue());
+      setVIN(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Znacka")) {
       XD_Name_Znacka = x.getNodeName();
-      setZnacka(parseResult.getParsedValue().stringValue());
+      setZnacka(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@TypVozidla")) {
       XD_Name_TypVozidla = x.getNodeName();
-      setTypVozidla(parseResult.getParsedValue().stringValue());
+      setTypVozidla(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@RokVyroby")) {
       XD_Name_RokVyroby = x.getNodeName();
       setRokVyroby(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PlatnostSTK")) {
       XD_Name_PlatnostSTK = x.getNodeName();
-      setPlatnostSTK(parseResult.getParsedValue().stringValue());
+      setPlatnostSTK(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@MesicSTKDo")) {
       XD_Name_MesicSTKDo = x.getNodeName();
       setMesicSTKDo(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@TypBrzd")) {
       XD_Name_TypBrzd = x.getNodeName();
-      setTypBrzd(parseResult.getParsedValue().stringValue());
+      setTypBrzd(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@StavBrzd")) {
       XD_Name_StavBrzd = x.getNodeName();
-      setStavBrzd(parseResult.getParsedValue().stringValue());
+      setStavBrzd(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@KodPojistitele")) {
       XD_Name_KodPojistitele = x.getNodeName();
-      setKodPojistitele(parseResult.getParsedValue().stringValue());
+      setKodPojistitele(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@NazevPojistitele")) {
       XD_Name_NazevPojistitele = x.getNodeName();
-      setNazevPojistitele(parseResult.getParsedValue().stringValue());
+      setNazevPojistitele(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloDokladuPojisteni")) {
       XD_Name_CisloDokladuPojisteni = x.getNodeName();
-      setCisloDokladuPojisteni(parseResult.getParsedValue().stringValue());
+      setCisloDokladuPojisteni(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PojisteniText")) {
       XD_Name_PojisteniText = x.getNodeName();
-      setPojisteniText(parseResult.getParsedValue().stringValue());
+      setPojisteniText(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloZK")) {
       XD_Name_CisloZK = x.getNodeName();
-      setCisloZK(parseResult.getParsedValue().stringValue());
+      setCisloZK(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@VydalZK")) {
       XD_Name_VydalZK = x.getNodeName();
-      setVydalZK(parseResult.getParsedValue().stringValue());
+      setVydalZK(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PlatnostZKOd")) {
       XD_Name_PlatnostZKOd = x.getNodeName();
       setPlatnostZKOd(parseResult.getParsedValue().datetimeValue());
@@ -377,7 +377,7 @@ public class VozidloDN implements org.xdef.component.XComponent{
       setDatumUhradyHP(parseResult.getParsedValue().datetimeValue());
     } else {
       XD_Name_MistoUhradyHP = x.getNodeName();
-      setMistoUhradyHP(parseResult.getParsedValue().stringValue());
+      setMistoUhradyHP(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -501,7 +501,7 @@ public static class Drzitel implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,

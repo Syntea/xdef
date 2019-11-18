@@ -241,10 +241,10 @@ public static class B implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@N")) {
       XD_Name_N = x.getNodeName();
-      setN(parseResult.getParsedValue().stringValue());
+      setN(parseResult.getParsedValue().toString());
     } else {
       XD_Name_I = x.getNodeName();
-      setI(parseResult.getParsedValue().stringValue());
+      setI(parseResult.getParsedValue().toString());
     }
   }
   @Override

@@ -1,4 +1,4 @@
-package test.utils;
+package buildtools;
 
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -1092,6 +1092,9 @@ public abstract class XDTester extends STester {
 		}
 		// prepare compiler
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null) {
+			throw new RuntimeException("Java compiler is not available");
+		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ByteArrayOutputStream err = new ByteArrayOutputStream();
 		// compile sources

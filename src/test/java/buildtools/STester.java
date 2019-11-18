@@ -1,4 +1,4 @@
-package test.utils;
+package buildtools;
 
 import java.io.CharArrayWriter;
 import java.io.PrintStream;

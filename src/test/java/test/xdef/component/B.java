@@ -150,7 +150,7 @@ public class B implements org.xdef.component.XComponent{
       settime(parseResult.getParsedValue().datetimeValue());
     } else {
       XD_Name_name = x.getNodeName();
-      setname(parseResult.getParsedValue().stringValue());
+      setname(parseResult.getParsedValue().toString());
     }
   }
   @Override

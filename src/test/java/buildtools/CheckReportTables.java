@@ -1,10 +1,9 @@
-package builtools;
+package buildtools;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import test.utils.STester;
 
 /** Check message reports tables for not existing or unused messages.
  * @author Vaclav Trojan

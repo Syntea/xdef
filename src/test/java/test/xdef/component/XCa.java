@@ -226,13 +226,13 @@ public static class s implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_k = x.getNodeName();
-    setk(parseResult.getParsedValue().stringValue());
+    setk(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -348,13 +348,13 @@ public static class s_1 implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_k = x.getNodeName();
-    setk(parseResult.getParsedValue().stringValue());
+    setk(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

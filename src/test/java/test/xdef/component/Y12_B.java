@@ -232,7 +232,7 @@ public static class S implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_V = x.getNodeName();
-    setV(parseResult.getParsedValue().stringValue());
+    setV(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -338,7 +338,7 @@ public static class M implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_V = x.getNodeName();
-    setV(parseResult.getParsedValue().stringValue());
+    setV(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -444,7 +444,7 @@ public static class P implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_O = x.getNodeName();
-    setO(parseResult.getParsedValue().stringValue());
+    setO(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -550,7 +550,7 @@ public static class Q implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_O = x.getNodeName();
-    setO(parseResult.getParsedValue().stringValue());
+    setO(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

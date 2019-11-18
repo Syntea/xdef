@@ -1,7 +1,6 @@
 package test.xdef;
 
-import java.io.ByteArrayInputStream;
-import test.utils.XDTester;
+import buildtools.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -18,6 +17,7 @@ import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import org.w3c.dom.Element;
@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import org.w3c.dom.Document;
-import static test.utils.XDTester._xdNS;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
@@ -323,7 +322,7 @@ public final class Test003 extends XDTester {
 					_xx = 0;
 					_myErrFlg = false;
 					_count = 0;
-					Document doc = 
+					Document doc =
 						KXmlUtils.parseXml(dataDir + "SouborD1A.xml", false);
 					String encoding = doc.getXmlEncoding();
 					if (!"windows-1250".equalsIgnoreCase(encoding)) {
@@ -344,7 +343,7 @@ public final class Test003 extends XDTester {
 								(report1.getMsgID() == null ||
 							!report1.getMsgID().equals(report2.getMsgID())))) {
 							fail("Report " + count + "\nparser:     " +
-								(report2 == null ? "null" 
+								(report2 == null ? "null"
 									: report2.toString())+ "\n" +
 								"validation: " + report1.toString());
 							break;

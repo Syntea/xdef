@@ -43,18 +43,15 @@ import org.xdef.sys.SUtils;
  */
 public class GUIEditor extends GUIScreen {
 
-	/** Create instance of the screen to display the sources of X-definitions.
-	 * @param x X position of the left corner of the screen.
-	 * @param y Y position of the left corner of the screen.
-	 * @param width width of the screen.
-	 * @param height height of the screen.
+	/** Create instance of the screen to display the sources.
+	 * @param si source information.
 	 */
 	private GUIEditor(final XDSourceInfo si) {super(si);}
 
 	private static final XDPool PROJECTXDPOOL;
 
 	static {
-		String xdef =
+		String xdef = // X-definition of project description
 "<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
@@ -160,7 +157,10 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
-	private void initMenuBar(final String runMenu) {
+	/** Initialize menu bar
+	 * @param text the text of the <code>JMenuItem</code>
+	 */
+	private void initMenuBar(final String text) {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
 		fileMenu.getActionMap().remove("Compile");
 		_sourceArea.getActionMap().remove("Compile");
@@ -171,19 +171,16 @@ public class GUIEditor extends GUIScreen {
 		ji.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateSourceItem();
-				if (_sourceItem!=null
-					&& _sourceItem._changed&&_sourceItem._url == null) {
-					_sourceItem._source = _sourceArea.getText();
+				if (updateSourceItem()) {
 					_sourceItem._saved = true;
 				}
 				saveSource(_sourceItem);
 			}
 		});
 		fileMenu.add(ji);
-		if (runMenu != null) {
+		if (text != null) {
 			fileMenu.addSeparator();
-			ji = new JMenuItem(runMenu);
+			ji = new JMenuItem(text);
 			ji.setAccelerator(KeyStroke.getKeyStroke("F9"));
 			ji.addActionListener(new ActionListener() {
 				@Override
@@ -221,9 +218,9 @@ public class GUIEditor extends GUIScreen {
 		_menuBar.add(_sourcePositionInfo, BorderLayout.EAST);
 		_frame.setJMenuBar(_menuBar);
 		_sourceArea.getActionMap().remove("Compile");
-		if (runMenu != null) {
-			_sourceArea.getActionMap().put(runMenu,
-				new AbstractAction(runMenu){
+		if (text != null) {
+			_sourceArea.getActionMap().put(text,
+				new AbstractAction(text){
 				private static final long serialVersionUID =
 					4377386270269629176L;
 				@Override
@@ -237,12 +234,21 @@ public class GUIEditor extends GUIScreen {
 		_sourceArea.setCaretPosition(0);
 	}
 
+	/** Display an object.
+	 * @param err Array of reported errors and messages.
+	 * @param msg Text of header.
+	 * @param obj Object to be displayed/
+	 * @param si source information.
+	 * @param editable true if editing is allowed.
+	 * @param text the text of the <code>JMenuItem</code>
+	 * @throws Exception if an error occurs.
+	 */
 	private void display(final ArrayReporter err,
 		final String msg,
 		final Object obj,
-		XDSourceInfo si,
-		boolean editable,
-		String runMenu) throws Exception {
+		final XDSourceInfo si,
+		final boolean editable,
+		final String text) throws Exception {
 		_windowName = msg;
 		_si = si;
 		XDSourceItem xsi = new XDSourceItem(obj);
@@ -254,8 +260,8 @@ public class GUIEditor extends GUIScreen {
 		} else if (obj instanceof String) {
 			sourceId = "STRING";
 		} else if (obj instanceof URL) {
-			sourceId = SUtils.getExtendedURL(((URL) obj).toExternalForm())
-				.toExternalForm();
+			URL u = SUtils.getExtendedURL(((URL) obj).toExternalForm());
+			sourceId = u.toExternalForm();
 		} else {
 			sourceId = obj.getClass().getName();
 		}
@@ -264,7 +270,7 @@ public class GUIEditor extends GUIScreen {
 		initSourceMap();
 		initSourceWindow();
 		setInitialSource();
-		initMenuBar(runMenu);
+		initMenuBar(text);
 		if (err != null) {
 			initInfoArea(err);
 		}
@@ -285,19 +291,35 @@ public class GUIEditor extends GUIScreen {
 		closeEdit();
 	}
 
+	/** Display (and optionally edit) string.
+	 * @param msg Text of header.
+	 * @param s string to be displayed.
+	 * @param si source information.
+	 * @param editable true if editing is allowed.
+	 * @throws Exception if an error occurs.
+	 */
 	private static void displayString(final String msg,
 		final String s,
-		final XDSourceInfo si) throws Exception {
+		final XDSourceInfo si,
+		final boolean editable) throws Exception {
 		GUIEditor ge = new GUIEditor(si);
-		ge.display(null, msg, s, si, false, null);
+		ge.display(null, msg, s, si, editable, null);
 	}
 
+	/** Display editable window with XML.
+	 * @param err ArrayReporter with reported errors and messages.
+	 * @param msg Text of header.
+	 * @param o Object with XML (may be Element, file etc.)
+	 * @param si source information.
+	 * @param text the text of the <code>JMenuItem</code>
+	 * @throws Exception if an error occurs.
+	 */
 	private static void editXml(final ArrayReporter err,
 		final String msg,
 		final Object o,
 		final XDSourceInfo si,
-		final String runMenu) throws Exception {
-		new GUIEditor(si).display(err, msg, o, si, true, runMenu);
+		final String text) throws Exception {
+		new GUIEditor(si).display(err, msg, o, si, true, text);
 	}
 
 	/** Display and edit XMl given by src.
@@ -403,6 +425,10 @@ public class GUIEditor extends GUIScreen {
 		return null;
 	}
 
+	/** Canonize project description.
+	 * @param project Element with project description.
+	 * @return canonized form of project description.
+	 */
 	private static Element canonizeProject(final Element project) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		ArrayList<String> sources = new ArrayList<String>();
@@ -478,6 +504,12 @@ public class GUIEditor extends GUIScreen {
 		return project;
 	}
 
+	/** Compare given element child elements in two elements.
+	 * @param p1 first element.
+	 * @param p2 second element.
+	 * @param tagname name of child  elements to be compared.
+	 * @return true if all child elements are equal.
+	 */
 	private static boolean compareNodes(final Element p1,
 		final Element p2,
 		final String tagname) {
@@ -500,6 +532,11 @@ public class GUIEditor extends GUIScreen {
 		return true;
 	}
 
+	/** Compare two elements with project description.
+	 * @param p1 first project.
+	 * @param p2 second project.
+	 * @return true if both projects are equal.
+	 */
 	private static boolean compareProjects(final Element p1, final Element p2) {
 		if (!p1.getAttribute("Show").equals(p2.getAttribute("Show"))) {
 			return false;
@@ -512,6 +549,7 @@ public class GUIEditor extends GUIScreen {
 		}
 		return compareNodes(p1, p2, "Execute");
 	}
+
 	/** Run project with GUIEditor.
 	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
 	 * @param src source with the project.
@@ -539,158 +577,17 @@ public class GUIEditor extends GUIScreen {
 				props.setProperty(e.getAttribute("Name"),
 					e.getAttribute("Value"));
 			}
-			// get X-definition sources
-			nl = project.getElementsByTagName("XDefinition");
-			ArrayList<String> axdefs = new ArrayList<String>();
-			for (int i = 0; i < nl.getLength(); i++) {
-				e = (Element) nl.item(i);
-				String t = e.getTextContent().trim();
-				if (t != null && !t.isEmpty()) {
-					axdefs.add(t);
-				}
-			}
 			// compile X-definitions
-			XDPool xp = XDFactory.compileXD(props,
-				axdefs.toArray(new String[axdefs.size()]));
-			XDSourceInfo si = xp.getXDSourceInfo();
-			boolean changed = false;
-			for (String x: si.getMap().keySet()) {
-				XDSourceItem xsi = si.getMap().get(x);
-				changed |= xsi._changed | xsi._saved;
-			}
-			if (changed) {
-				updateXdefList(project, si); //Update X-definitions elements
-			}
+			XDPool xp = compileProject(project, props);
 			// execute project
-			nl = project.getElementsByTagName("Execute");
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element exe = (Element) nl.item(i);
-				// get name of X-definition
-				String xdName = exe.getAttribute("XDName").trim();
-				// get inpout data
-				e = KXmlUtils.firstElementChild(exe, "Input");
-				String data = getData(e, si);
-				// create XDDocument
-				XDDocument xd = xp.createXDDocument(xdName);
-				NodeList nl1 = KXmlUtils.getChildElements(exe, "Var");
-				// set variables
-				for (int j = 0; j < nl1.getLength(); j++) {
-					e = (Element) nl1.item(j);
-					String varName = e.getAttribute("Name");
-					String value = e.getTextContent();
-					xd.setVariable(varName, value);
-				}
-				// set context
-				e = KXmlUtils.firstElementChild(exe,"Context");
-				String context = getData(e, si);
-				if (context != null) {
-					xd.setXDContext(context);
-				}
-				Element result;
-				ArrayReporter reporter = new ArrayReporter();
-				// set properties
-				xd.setProperties(props);
-				// set stdout
-				StringWriter strw = new StringWriter();
-				XDOutput stdout =
-					XDFactory.createXDOutput(new PrintWriter(strw), false);
-				xd.setStdOut(stdout);
-				String mode = exe.getAttribute("Mode");
-				if ("construct".equals(mode)) { // run construction mode
-					String name;
-					String uri;
-					XMDefinition def =  xp.getXMDefinition();
-					XMElement[] x = xp.getXMDefinition().getModels();
-					name = x[0].getName();
-					uri = x[0].getNSUri();
-					if (data != null && data.trim().length() > 0) {
-						Element el = KXmlUtils.parseXml(data).
-							getDocumentElement();
-						xd.setXDContext(el);
-						String n = el.getLocalName();
-						String u = el.getNamespaceURI();
-						if (def != null && def.getModel(u, n) != null) {
-							uri = u;
-							name = n;
-						}
-					}
-					result = xd.xcreate(new QName(uri, name), reporter);
-				} else {  // run validation mode
-					result = xd.xparse(data, reporter);
-				}
-				// set bounds of the window from previous steps
-				if (xd.getXDPool().getXDSourceInfo() != si) {
-					XDSourceInfo si1 = xd.getXDPool().getXDSourceInfo();
-					si1._xpos = si._xpos;
-					si1._ypos = si._ypos;
-					si1._width = si._width;
-					si1._height = si._height;
-					si = si1;
-				}
-				stdout.close();
-				if (reporter.errorWarnings()) {
-					if (data != null && "validate".equals(mode)) {
-						// show result
-						File f = new File(new URL(data).getFile());
-						if (data.startsWith("<") && !f.isFile()) {
-							editXml(reporter, "ERROR:", data, si,
-								"Input data changed, run again?");
-						} else {
-							editXml(reporter, "ERROR:", f, si, null);
-						}
-						XDSourceItem x = si.getMap().values().iterator().next();
-						if (x._changed) {
-							data = x._source;
-							if (JOptionPane.showConfirmDialog(null,
-								"Input data changed, run again?",
-								null, JOptionPane.OK_CANCEL_OPTION) == 0) {
-								i--;
-								e = KXmlUtils.firstElementChild(exe, "Input");
-								e.setTextContent(data);
-								continue;
-							}
-						}
-					} else { // error, sixpaly result
-						displayString("ERROR:", reporter.printToString(), si);
-					}
-				}
-				e = KXmlUtils.firstElementChild(exe, "SaveResult");
-				if (e != null) { // save result XML
-					String name = e.getAttribute("File").trim();
-					boolean indent =
-						"true".equals(e.getAttribute("Indent"));
-					String encoding = e.getAttribute("Encoding");
-					if (encoding.isEmpty()) {
-						encoding = "UTF-8";
-					}
-					try {
-						KXmlUtils.writeXml(
-							new File(name), encoding, result, indent, true);
-					} catch (Exception ex) {
-						//GUIEditor can't write XML data to file &{0}
-						JOptionPane.showMessageDialog(null,
-							Report.error(XDEF.XDEF851,name).toString());
-					}
-				}
-				if ("true".equals(exe.getAttribute("DisplayResult"))) {
-					// display result XML
-					String s = result == null
-						? "" : KXmlUtils.nodeToString(result, true);
-					if (!strw.toString().isEmpty()) {
-						s += s.isEmpty() ? "" : "\n\n";
-						s += "=== System.out ===\n" + strw.toString();
-					}
-					if (!s.isEmpty()) {
-						displayString("Result of processing:", s, si);
-					}
-				}
-			}
-			if (param == 'g') {
+			executeProject(project, xp, props);
+
+			if (param == 'g') { // project was generated
 				editData("Generated project",
 					KXmlUtils.nodeToString(project, true));
 			} else if (!compareProjects(
 				project = canonizeProject(project), originalProject)) {
-				// if something changed in the project ask to save it
+				// something changed in the project; so ask to save it
 				JFileChooser jf;
 				if (src.charAt(0) != '<') {
 					jf = new JFileChooser(src);
@@ -725,6 +622,175 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
+	/** Compile project.
+	 * @param project element with project.
+	 * @param props properties.
+	 * @throws Exception if an error occurs.
+	 */
+	private static XDPool compileProject(final Element project,
+		final Properties props) throws Exception {
+		// get X-definition sources
+		NodeList nl = project.getElementsByTagName("XDefinition");
+			ArrayList<String> axdefs = new ArrayList<String>();
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element e = (Element) nl.item(i);
+				String t = e.getTextContent().trim();
+				if (t != null && !t.isEmpty()) {
+					axdefs.add(t);
+				}
+			}
+			XDPool xp = XDFactory.compileXD(props,
+				axdefs.toArray(new String[axdefs.size()]));
+			XDSourceInfo si = xp.getXDSourceInfo();
+			boolean changed = false;
+			for (String x: si.getMap().keySet()) {
+				XDSourceItem xsi = si.getMap().get(x);
+				changed |= xsi._changed | xsi._saved;
+			}
+			if (changed) {
+				updateXdefList(project, si); //Update X-definitions elements
+			}
+			return xp;
+	}
+
+	/** Execute project.
+	 * @param project element with project.
+	 * @param xp compiled XDPool.
+	 * @param props properties.
+	 * @throws Exception if an error occurs.
+	 */
+	private static void executeProject(final Element project,
+		final XDPool xp,
+		final Properties props) throws Exception {
+		Element e;
+		// execute project
+		NodeList nl = project.getElementsByTagName("Execute");
+		XDSourceInfo si = xp.getXDSourceInfo();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element exe = (Element) nl.item(i);
+			// get name of X-definition
+			String xdName = exe.getAttribute("XDName").trim();
+			// get inpout data
+			e = KXmlUtils.firstElementChild(exe, "Input");
+			String data = getData(e, si);
+			// create XDDocument
+			XDDocument xd = xp.createXDDocument(xdName);
+			NodeList nl1 = KXmlUtils.getChildElements(exe, "Var");
+			// set variables
+			for (int j = 0; j < nl1.getLength(); j++) {
+				e = (Element) nl1.item(j);
+				String varName = e.getAttribute("Name");
+				String value = e.getTextContent();
+				xd.setVariable(varName, value);
+			}
+			// set context
+			e = KXmlUtils.firstElementChild(exe,"Context");
+			String context = getData(e, si);
+			if (context != null) {
+				xd.setXDContext(context);
+			}
+			ArrayReporter reporter = new ArrayReporter();
+			// set properties
+			xd.setProperties(props);
+			// set stdout
+			StringWriter strw = new StringWriter();
+			XDOutput stdout =
+				XDFactory.createXDOutput(new PrintWriter(strw), false);
+			xd.setStdOut(stdout);
+			String mode = exe.getAttribute("Mode");
+			Element result;
+			if ("construct".equals(mode)) { // run construction mode
+				String name;
+				String uri;
+				XMDefinition def =  xp.getXMDefinition();
+				XMElement[] x = xp.getXMDefinition().getModels();
+				name = x[0].getName();
+				uri = x[0].getNSUri();
+				if (data != null && data.trim().length() > 0) {
+					Element el = KXmlUtils.parseXml(data).
+						getDocumentElement();
+					xd.setXDContext(el);
+					String n = el.getLocalName();
+					String u = el.getNamespaceURI();
+					if (def != null && def.getModel(u, n) != null) {
+						uri = u;
+						name = n;
+					}
+				}
+				result = xd.xcreate(new QName(uri, name), reporter);
+			} else {  // run validation mode
+				result = xd.xparse(data, reporter);
+			}
+			// set bounds of the window from previous steps
+			if (xd.getXDPool().getXDSourceInfo() != si) {
+				XDSourceInfo si1 = xd.getXDPool().getXDSourceInfo();
+				si1._xpos = si._xpos;
+				si1._ypos = si._ypos;
+				si1._width = si._width;
+				si1._height = si._height;
+				si = si1;
+			}
+			stdout.close();
+			if (reporter.errorWarnings()) {
+				if (data != null && "validate".equals(mode)) {
+					// show result
+					File f = new File(new URL(data).getFile());
+					if (data.startsWith("<") && !f.isFile()) {
+						editXml(reporter, "ERROR:", data, si,
+							"Input data changed, run again?");
+					} else {
+						editXml(reporter, "ERROR:", f, si, null);
+					}
+					XDSourceItem x = si.getMap().values().iterator().next();
+					if (x._changed) {
+						data = x._source;
+						if (JOptionPane.showConfirmDialog(null,
+							"Input data changed, run again?",
+							null, JOptionPane.OK_CANCEL_OPTION) == 0) {
+							i--;
+							e = KXmlUtils.firstElementChild(exe, "Input");
+							e.setTextContent(data);
+							continue;
+						}
+					}
+				} else { // error, display result, not editable
+					displayString("ERROR:",
+						reporter.printToString(), si, false);
+				}
+			}
+			e = KXmlUtils.firstElementChild(exe, "SaveResult");
+			if (e != null) { // save result XML
+				String name = e.getAttribute("File").trim();
+				boolean indent =
+					"true".equals(e.getAttribute("Indent"));
+				String encoding = e.getAttribute("Encoding");
+				if (encoding.isEmpty()) {
+					encoding = "UTF-8";
+				}
+				try {
+					KXmlUtils.writeXml(
+						new File(name), encoding, result, indent, true);
+				} catch (Exception ex) {
+					//GUIEditor can't write XML data to file &{0}
+					JOptionPane.showMessageDialog(null,
+						Report.error(XDEF.XDEF851,name).toString());
+				}
+			}
+			if ("true".equals(exe.getAttribute("DisplayResult"))) {
+				// display result XML
+				String s = result == null
+					? "" : KXmlUtils.nodeToString(result, true);
+				if (!strw.toString().isEmpty()) {
+					s += s.isEmpty() ? "" : "\n\n";
+					s += "=== System.out ===\n" + strw.toString();
+				}
+				if (!s.isEmpty()) {// display result, allow editing
+					displayString("Result of processing:", s, si, true);
+				}
+			}
+		}
+	}
+
 	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
@@ -747,11 +813,11 @@ public class GUIEditor extends GUIScreen {
 		final String info =
 "Edit and run X-definition in graphical user interface.\n"+
 " -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
-" -p runs a project file\n"+
+" -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
 " -c compile X-definition and runs construction mode\n"+
-" -g generate X-definition and project from XML.\n"+
-"  Optionally the XML source specification may follow.\n\n"+
+" -g generate X-definition and project from XML (optionally\n"+
+"  the source file name with an XML may follow).\n\n"+
 "Switches\n"+
 " -xdef source with X-definition (input file or XML data; it may be\n"+
 "    specified more times)\n"+
@@ -778,7 +844,7 @@ public class GUIEditor extends GUIScreen {
 			}
 			return;
 		}
-		String src = 
+		String src =
 "<Project>\n";
 		ArrayList<String> xdefs = new ArrayList<String>();
 		String dataPath = null;
@@ -793,7 +859,12 @@ public class GUIEditor extends GUIScreen {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
 			param = 'g';
-			String xml = "<A><B b=\"1\"/><B/></A>";
+			String xml =
+"<!-- This is just an example of XML data. You can modify it. -->\n" +
+"<root attr = \"123\">\n" +
+"  <a>text</a>\n" +
+"  <a/>\n" + 
+"</root>";
 			i = args.length;
 			if (i > 2) {
 				System.err.println("Too many parameters: " + arg + "\n" + info);
@@ -961,7 +1032,7 @@ public class GUIEditor extends GUIScreen {
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
-		src += 
+		src +=
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE	+ "\"/>\n" +
@@ -969,7 +1040,7 @@ public class GUIEditor extends GUIScreen {
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE + "\"/>\n" +
 "  <Property Name = \"" + XDConstants.XDPROPERTY_DEBUG
-			+ "\" Value = \"" 
+			+ "\" Value = \""
 			+ (debug == null ? XDConstants.XDPROPERTYVALUE_DEBUG_FALSE
 				: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE)
 			+ "\"/>\n"+

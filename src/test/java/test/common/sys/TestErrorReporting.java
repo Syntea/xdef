@@ -8,8 +8,8 @@ import org.xdef.sys.StringParser;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import org.xdef.sys.ReportReader;
-import test.utils.XDTester;
-import test.utils.STester;
+import buildtools.XDTester;
+import buildtools.STester;
 
 /** TestReport
  * @author  Vaclav Trojan

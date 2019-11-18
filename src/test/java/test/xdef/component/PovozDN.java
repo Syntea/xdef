@@ -134,10 +134,10 @@ public class PovozDN implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@OznSegmentu")) {
       XD_Name_OznSegmentu = x.getNodeName();
-      setOznSegmentu(parseResult.getParsedValue().stringValue());
+      setOznSegmentu(parseResult.getParsedValue().toString());
     } else {
       XD_Name_DruhPovozu = x.getNodeName();
-      setDruhPovozu(parseResult.getParsedValue().stringValue());
+      setDruhPovozu(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -261,7 +261,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,

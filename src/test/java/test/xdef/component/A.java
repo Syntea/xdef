@@ -154,7 +154,7 @@ public class A implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@a")) {
       XD_Name_a = x.getNodeName();
-      seta(parseResult.getParsedValue().stringValue());
+      seta(parseResult.getParsedValue().toString());
     } else {
       XD_Name_dec = x.getNodeName();
       setdec(parseResult.getParsedValue().decimalValue());
@@ -320,13 +320,13 @@ public static class W implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_w = x.getNodeName();
-    setw(parseResult.getParsedValue().stringValue());
+    setw(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -435,7 +435,7 @@ public static class Y implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -1007,7 +1007,7 @@ public static class s implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -1394,13 +1394,13 @@ public static class d_e_f implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_d_e_f = x.getNodeName();
-    setd_e_f(parseResult.getParsedValue().stringValue());
+    setd_e_f(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

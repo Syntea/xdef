@@ -185,25 +185,25 @@ public class Z8 implements org.xdef.component.XComponent{
       setDatumCasDoDN(parseResult.getParsedValue().datetimeValue());
     } else if (x.getXMNode().getXDPosition().endsWith("/@KodOkresu")) {
       XD_Name_KodOkresu = x.getNodeName();
-      setKodOkresu(parseResult.getParsedValue().stringValue());
+      setKodOkresu(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = x.getNodeName();
-      setObec(parseResult.getParsedValue().stringValue());
+      setObec(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
       XD_Name_Ulice = x.getNodeName();
-      setUlice(parseResult.getParsedValue().stringValue());
+      setUlice(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
       XD_Name_CisloPopisne = x.getNodeName();
-      setCisloPopisne(parseResult.getParsedValue().stringValue());
+      setCisloPopisne(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@SkodaTisKc")) {
       XD_Name_SkodaTisKc = x.getNodeName();
-      setSkodaTisKc(parseResult.getParsedValue().stringValue());
+      setSkodaTisKc(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@HlavniPricina")) {
       XD_Name_HlavniPricina = x.getNodeName();
-      setHlavniPricina(parseResult.getParsedValue().stringValue());
+      setHlavniPricina(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Pricina = x.getNodeName();
-      setPricina(parseResult.getParsedValue().stringValue());
+      setPricina(parseResult.getParsedValue().toString());
     }
   }
   @Override
@@ -315,7 +315,7 @@ public static class Misto implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().stringValue());
+    set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,

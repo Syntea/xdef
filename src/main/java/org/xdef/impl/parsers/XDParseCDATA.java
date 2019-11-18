@@ -53,7 +53,7 @@ public class XDParseCDATA extends XDParserAbstract {
 		}
 	}
 	@Override
-	public String toString() {return parserName();}
+	public String toString() {return "string";}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

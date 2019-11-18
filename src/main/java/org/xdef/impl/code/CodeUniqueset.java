@@ -1,5 +1,6 @@
 package org.xdef.impl.code;
 
+import java.util.ArrayList;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -24,6 +25,8 @@ import java.util.Set;
  */
 public final class CodeUniqueset extends XDValueAbstract {
 
+	/** No value value (if item is optional). */
+	private static final XDValue NO_VALUE = DefNull.genNullValue(XD_ANY);
 	/** Map of key values. */
 	private final Map<Object, UniquesetItem> _map;
 	/** Set of markers. */
@@ -59,7 +62,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return true if id exists, otherwise return false.
 	 */
 	public final boolean hasId() {
-		UniquesetItem uso = _map.get(getKeyValue());
+		CodeUniquesetKey key = getKeyValue();
+		UniquesetItem uso = _map.get(key);
 		if (uso == null) {
 			return false;
 		}
@@ -90,16 +94,26 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return error report or null.
 	 */
 	public final Report setId() {
-		CodeUniquesetKey keyValue = getKeyValue();
-		UniquesetItem uso = _map.get(keyValue);
+		CodeUniquesetKey key = getKeyValue();
+		if (key._missing != null && !key._missing.isEmpty()) {
+			String s = "";
+			for (int i : key._missing) {
+				if (!s.isEmpty()) {
+					s += ", ";
+				}
+				s += '"' + _parseItems[i]._name + '"';
+			}
+			//UniqueSet &{0}{"}{"} item is not complete&{1}{, missing }
+			return Report.error(XDEF.XDEF521, _name, s);
+		}
+		UniquesetItem uso = _map.get(key);
 		if (uso == null) {
-			_map.put(keyValue, new UniquesetItem(keyValue));
+			_map.put(key, new UniquesetItem(key));
 			return null;
 		}
 		if (uso._references.isEmpty()) {
 			//Value must be unique&{0}{: }
-			return Report.error(XDEF.XDEF523, (_name!=null ? _name+ " " : "")
-				+ keyValue);
+			return Report.error(XDEF.XDEF523, (_name!=null ? _name+" ":"")+key);
 		}
 		uso._references.clear();
 		return null;
@@ -295,6 +309,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		/** Values of parse items. */
 		private final XDValue[] _items;
+		/** List of indexes of incomplete items. */
+		private ArrayList<Integer> _missing;
 
 		/** Construct  CodeUniquesetKey object.
 		 * @param keys array with unique set parse items.
@@ -306,11 +322,17 @@ public final class CodeUniqueset extends XDValueAbstract {
 				if (x != null) {
 					items[i] = (x instanceof DefParseResult)
 						 ? ((DefParseResult) x).getParsedValue() : x;
-					if (keys[i].isOptional()) {
-						keys[i].setParsedObject(null);
-					}
 				} else {
-					items[i] = DefNull.genNullValue(XD_ANY);
+					if (keys[i].isOptional()) {
+						items[i] = NO_VALUE;
+					} else {
+						items[i] = null;
+						// add to list of incomplete items
+						if (_missing == null) {
+							 _missing = new ArrayList<Integer>();
+						}
+						_missing.add(i);
+					}
 				}
 			}
 			_items = items;

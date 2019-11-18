@@ -120,17 +120,17 @@ public class Y21 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult){
     if ("Y21#A/$text".equals(x.getXMNode().getXDPosition())){
       _$$value=(char) XD_ndx++;
-      set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
+      set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().toString()));
     } else if ("Y21#A/$text[2]".equals(x.getXMNode().getXDPosition())){
       _$$value1=(char) XD_ndx++;
-      set$value1(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
+      set$value1(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().toString()));
     }
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_b = x.getNodeName();
-    setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
+    setb(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().toString()));
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -248,13 +248,13 @@ public static class B implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().stringValue()));
+    set$value(test.xdef.component.Y21_enum.toEnum(parseResult.getParsedValue().toString()));
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_c = x.getNodeName();
-    setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().stringValue()));
+    setc(test.xdef.TestXComponents_Y21enum.toEnum(parseResult.getParsedValue().toString()));
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

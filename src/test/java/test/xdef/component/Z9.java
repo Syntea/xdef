@@ -154,31 +154,31 @@ public class Z9 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult) {
     if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
       XD_Name_Ulice = x.getNodeName();
-      setUlice(parseResult.getParsedValue().stringValue());
+      setUlice(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
       XD_Name_CisloOrientacni = x.getNodeName();
-      setCisloOrientacni(parseResult.getParsedValue().stringValue());
+      setCisloOrientacni(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
       XD_Name_CisloPopisne = x.getNodeName();
-      setCisloPopisne(parseResult.getParsedValue().stringValue());
+      setCisloPopisne(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
       XD_Name_Obec = x.getNodeName();
-      setObec(parseResult.getParsedValue().stringValue());
+      setObec(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@PSC")) {
       XD_Name_PSC = x.getNodeName();
-      setPSC(parseResult.getParsedValue().stringValue());
+      setPSC(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
       XD_Name_Okres = x.getNodeName();
-      setOkres(parseResult.getParsedValue().stringValue());
+      setOkres(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Stat")) {
       XD_Name_Stat = x.getNodeName();
-      setStat(parseResult.getParsedValue().stringValue());
+      setStat(parseResult.getParsedValue().toString());
     } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
       XD_Name_Telefon1 = x.getNodeName();
-      setTelefon1(parseResult.getParsedValue().stringValue());
+      setTelefon1(parseResult.getParsedValue().toString());
     } else {
       XD_Name_Telefon2 = x.getNodeName();
-      setTelefon2(parseResult.getParsedValue().stringValue());
+      setTelefon2(parseResult.getParsedValue().toString());
     }
   }
   @Override

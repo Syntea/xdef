@@ -100,7 +100,7 @@ public class G extends test.xdef.TestXComponents_G implements org.xdef.component
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_g = x.getNodeName();
-    setg(parseResult.getParsedValue().stringValue());
+    setg(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -216,7 +216,7 @@ public static class XXX implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_x = x.getNodeName();
-    setx(parseResult.getParsedValue().stringValue());
+    setx(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -322,7 +322,7 @@ public static class YYY implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_y = x.getNodeName();
-    sety(parseResult.getParsedValue().stringValue());
+    sety(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

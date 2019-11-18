@@ -113,10 +113,10 @@ public class Y15 implements org.xdef.component.XComponent{
     org.xdef.XDParseResult parseResult){
     if ("Y15#a/$text".equals(x.getXMNode().getXDPosition())){
       _$$value=(char) XD_ndx++;
-      set$value(parseResult.getParsedValue().stringValue());
+      set$value(parseResult.getParsedValue().toString());
     } else if ("Y15#a/$text[2]".equals(x.getXMNode().getXDPosition())){
       _$$value1=(char) XD_ndx++;
-      set$value1(parseResult.getParsedValue().stringValue());
+      set$value1(parseResult.getParsedValue().toString());
     }
   }
   @Override

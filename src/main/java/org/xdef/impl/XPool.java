@@ -814,6 +814,9 @@ public final class XPool implements XDPool, Serializable {
 	 * @return XMNode representing model or null if model was nod found.
 	 */
 	public final XMNode findModel(final String xdpos) {
+		if (xdpos == null) {
+			return null;
+		}
 		int ndx = xdpos.indexOf('#'), ndx1;
 		String xdName, path, s;
 		if (ndx >= 0) {

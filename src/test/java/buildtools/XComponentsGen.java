@@ -1,4 +1,4 @@
-package builtools;
+package buildtools;
 
 import test.xdef.TestXComponentsGen;
 
