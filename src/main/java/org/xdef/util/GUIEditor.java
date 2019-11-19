@@ -64,7 +64,7 @@ public class GUIEditor extends GUIScreen {
 "        Name=\"string();\"\n" +
 "        Value=\"string()\" />\n" +
 "      <!-- If the \"Execute\" elements are specified the compied XDPool\n" +
-"        is executed according to the desciged parameters. -->\n" +
+"        is executed according to the parameters. -->\n" +
 "      <Execute xd:script=\"*; ref Execute\"/>\n" +
 "    </xd:mixed>\n" +
 "  </Project>\n" +
