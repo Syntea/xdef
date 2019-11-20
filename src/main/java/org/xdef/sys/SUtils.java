@@ -50,6 +50,9 @@ public class SUtils extends FUtils {
 		} catch (Exception ex) {
 			s = System.getProperty("java.version");
 		}
+		if (s.startsWith("9.")) {
+			s = "1." + s;
+		}
 		String[] ss = s.split("\\.");
 		JAVA_RUNTIME_VERSION_ID = Integer.parseInt(ss[0]) * 100
 			+ Integer.parseInt(ss[1]);

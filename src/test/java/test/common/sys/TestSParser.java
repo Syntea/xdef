@@ -606,7 +606,7 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
+				if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
 						TimeZone.SHORT));
 				} else {
@@ -1265,17 +1265,22 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("",checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
-			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));			
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ2(x,y));
 			
@@ -1294,17 +1299,23 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));			
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();
@@ -1318,8 +1329,10 @@ public class TestSParser extends STester {
 			x.setMillisecond(Integer.MIN_VALUE);
 			y.setMillisecond(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 		} catch (Exception ex) {fail(ex);}
 
 	}
