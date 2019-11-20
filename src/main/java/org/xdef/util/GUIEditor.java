@@ -55,7 +55,7 @@ public class GUIEditor extends GUIScreen {
 "<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
-"      <!-- Add a class to classpath -->\n" +
+"      <!-- Sources of X-definitions -->\n" +
 "      <XDefinition xd:script=\"+\">\n" +
 "        string();\n" +
 "      </XDefinition>\n" +
@@ -63,8 +63,8 @@ public class GUIEditor extends GUIScreen {
 "      <Property xd:script=\"*\"\n" +
 "        Name=\"string();\"\n" +
 "        Value=\"string()\" />\n" +
-"      <!-- If the \"Execute\" elements are specified the compied XDPool\n" +
-"        is executed according to the parameters. -->\n" +
+"      <!-- If \"Execute\" elements are specified the compiled XDPool\n" +
+"        is executed according to the parameters specified there. -->\n" +
 "      <Execute xd:script=\"*; ref Execute\"/>\n" +
 "    </xd:mixed>\n" +
 "  </Project>\n" +
@@ -74,23 +74,23 @@ public class GUIEditor extends GUIScreen {
 "    Mode=\"? enum('construct', 'validate');\"\n" +
 "    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
-"      <!-- If the \"Var\" elements are specified the specified\n" +
-"        variables are set to the X-definition processor. -->\n" +
+"      <!-- If \"Var\" elements are specified\n" +
+"        the variables are set to the X-definition processor. -->\n" +
 "      <Var xd:script=\"*\" Name=\"string();\">\n" +
 "        string();\n" +
 "      </Var>\n" +
-"      <!-- If the \"Context\" element is specified the context\n" +
+"      <!-- If \"Context\" element is specified the context\n" +
 "        is set to the X-definition processor. -->\n" +
 "      <Context xd:script=\"?\" Edit=\"? enum('true', 'false');\" >\n" +
 "        string();\n" +
 "      </Context>\n" +
-"      <!-- If the \"Input\" element is specified the input data\n" +
+"      <!-- If \"Input\" element is specified the input data\n" +
 "        is set to the X-definition processor. -->\n" +
 "      <Input xd:script=\"?\" Edit=\"? enum('true', 'false');\">\n" +
 "        string();\n" +
 "      </Input>\n" +
-"      <!-- If the \"SaveResult\" element is specified the result\n" +
-"        element will be saved to the specified file. -->\n" +
+"      <!-- If \"SaveResult\" element is specified the result\n" +
+"        the processed element will be saved to the specified file. -->\n" +
 "      <SaveResult xd:script=\"?\"\n" +
 "        Indent=\"? string();\"\n" +
 "        Encoding=\"? string();\"\n" +
@@ -234,7 +234,7 @@ public class GUIEditor extends GUIScreen {
 		_sourceArea.setCaretPosition(0);
 	}
 
-	/** Display an object.
+	/** Display object.
 	 * @param err Array of reported errors and messages.
 	 * @param msg Text of header.
 	 * @param obj Object to be displayed/
@@ -322,15 +322,15 @@ public class GUIEditor extends GUIScreen {
 		new GUIEditor(si).display(err, msg, o, si, true, text);
 	}
 
-	/** Display and edit XMl given by src.
+	/** Display and edit XMl given by the argument source.
 	 * @param title title of window.
-	 * @param src may be pathname of file, url or XML.
+	 * @param source may be pathname of file, url or XML.
 	 * @return source item of edited XML.
 	 * @throws Exception if an error occurs.
 	 */
 	private static String editData(final String title,
-		final String src) throws Exception {
-		String data = src.trim();
+		final String source) throws Exception {
+		String data = source.trim();
 		XDSourceInfo xi = new XDSourceInfo();
 		Object o;
 		if (data.startsWith("<")) {
@@ -654,7 +654,7 @@ public class GUIEditor extends GUIScreen {
 	}
 
 	/** Execute project.
-	 * @param project element with project.
+	 * @param project element with the project.
 	 * @param xp compiled XDPool.
 	 * @param props properties.
 	 * @throws Exception if an error occurs.
@@ -802,7 +802,7 @@ public class GUIEditor extends GUIScreen {
 	 * Switches:
 	 * <ul>
 	 * <li><tt>-xdef file </tt>specifies the source with the X-definition</li>
-	 * <li><tt>-data file file</tt>specifies input data or context</li>
+	 * <li><tt>-data file</tt>specifies input data or context</li>
 	 * <li><tt>-debug </tt>sets the debug mode</li>
 	 * <li><tt>-editInput </tt>enables to runEditor input data before execution
 	 * </li>
@@ -816,7 +816,7 @@ public class GUIEditor extends GUIScreen {
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
 " -c compile X-definition and runs construction mode\n"+
-" -g generate X-definition and project from XML (optionally\n"+
+" -g generate X-definition and project from XML (optionally follows\n"+
 "  the source file name with an XML may follow).\n\n"+
 "Switches\n"+
 " -xdef source with X-definition (input file or XML data; it may be\n"+
@@ -905,6 +905,9 @@ public class GUIEditor extends GUIScreen {
 			arg = args[i++];
 			if ("-xdef".equals(arg)) {
 				xdefs.add(args[i++]);
+				while (i < args.length && !args[i].startsWith("-")) {
+					xdefs.add(args[i++]);
+				}
 				continue;
 			}
 			if ("-data".equals(arg)) {
