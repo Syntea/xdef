@@ -121,6 +121,7 @@ public final class XExtUtils {
 	public static String getSourcePosition(final XXNode xnode) {
 		return "" + xnode.getSPosition();
 	}
+	public static String getEnv(final String name) {return System.getenv(name);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.

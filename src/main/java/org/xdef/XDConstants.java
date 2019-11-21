@@ -55,14 +55,6 @@ public interface XDConstants {
 	/** Value "true" of property "xdef.xinclude (default)." */
 	public static final String XDPROPERTYVALUE_XINCLUDE_TRUE = "true";
 
-	/** Property defines if read from environmental variables is permitted
-	 *  (default is "true"). */
-	public static final String XDPROPERTY_ENV_GET = "xdef.envGet";
-	/** Value "true" of property "xdef.envGet" */
-	public static final String XDPROPERTYVALUE_ENV_GET_TRUE = "true";
-	/** Value "false" of property "xdef.envGet" */
-	public static final String XDPROPERTYVALUE_ENV_GET_FALSE = "false";
-
 	/** Property warning messages are checked {thrown} (default is "false")*/
 	public static final String XDPROPERTY_WARNINGS = "xdef.warnings";
 	/** Value "true" of property "xdef.warnings" */

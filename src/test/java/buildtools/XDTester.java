@@ -76,8 +76,6 @@ public abstract class XDTester extends STester {
 		}
 		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-		setProperty(XDConstants.XDPROPERTY_ENV_GET,
-			XDConstants.XDPROPERTYVALUE_ENV_GET_TRUE);
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		setProperty(XDConstants.XDPROPERTY_DEBUG,
