@@ -84,8 +84,6 @@ public abstract class XDTester extends STester {
 		setProperty(XDConstants.XDPROPERTY_DEBUG_IN, null);
 		setProperty(XDConstants.XDPROPERTY_DISPLAY,
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		setProperty(XDConstants.XDPROPERTY_VALIDATE,
-			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
 		setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,

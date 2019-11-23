@@ -2080,8 +2080,6 @@ public final class TestParse extends XDTester {
 			parse(xdef, "a", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_VALIDATE,
-			XDConstants.XDPROPERTYVALUE_VALIDATE_TRUE);
 		try {
 			xdef = // test nillable
 "<xd:def root='tns:DM' xmlns:tns='abc'\n"+

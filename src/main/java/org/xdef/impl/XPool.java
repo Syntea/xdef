@@ -69,8 +69,6 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _resolveIncludes;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private byte _debugMode;
-	/** flag to be set validation of names references in parsed/created nodes.*/
-	private boolean _validate;
 	/** Class name of debug editor.*/
 	private String _debugEditor;
 	/** Class name of X-definition editor.*/
@@ -187,12 +185,6 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE,
 				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE},
 			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE) == 0;
-
-		// Validation of attr names
-		_validate = readProperty(_props, XDConstants.XDPROPERTY_VALIDATE,
-			new String[] {XDConstants.XDPROPERTYVALUE_VALIDATE_TRUE,
-				XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE},
-			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE) == 0;
 		//check warnings
 		_chkWarnings = readProperty(_props, XDConstants.XDPROPERTY_WARNINGS,
 			new String[] {XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE,
@@ -220,15 +212,21 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	private static int readPropertyYear(final Properties props,
 		final String key) {
-		String s = props == null ? null : props.getProperty(key);
-		if (s == null || (s = s.trim()).length() == 0) {
+		String val = System.getenv(key.replace('.', '_'));
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = props == null ? null : props.getProperty(key);
+			if (val != null) {
+				val = val.trim();
+			}
+		}
+		if (val == null || val.isEmpty()) {
 			return Integer.MIN_VALUE;
 		} else {
 			try {
-				return Integer.parseInt(s);
+				return Integer.parseInt(val);
 			} catch (Exception ex) {
 				//Error of property &{0} = &{1} (it must be &{2}
-				throw new SRuntimeException(XDEF.XDEF214, key, s, "integer");
+				throw new SRuntimeException(XDEF.XDEF214, key, val, "integer");
 			}
 		}
 	}
@@ -238,12 +236,18 @@ public final class XPool implements XDPool, Serializable {
 	 * @return array with special dates or null.
 	 */
 	private static SDatetime[] readPropertySpecDates(final Properties props) {
-		String s = props == null ?
-			null : props.getProperty(XDConstants.XDPROPERTY_SPECDATES);
-		if (s == null || (s = s.trim()).length() == 0) {
+		String key = XDConstants.XDPROPERTY_SPECDATES;
+		String val = System.getenv(key.replace('.', '_'));
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = props == null ? null : props.getProperty(key);
+			if (val != null) {
+				val = val.trim();
+			}
+		}
+		if (val == null || val.isEmpty()) {
 			return null;
 		} else {
-			StringTokenizer st = new StringTokenizer(s, ", ");
+			StringTokenizer st = new StringTokenizer(val, ", ");
 			if (st.countTokens() == 0) {
 				return null;
 			}
@@ -255,7 +259,7 @@ public final class XPool implements XDPool, Serializable {
 					//Error of property &{0} = &{1} (it must be &{2}
 					throw new SRuntimeException(XDEF.XDEF214,
 						XDConstants.XDPROPERTY_SPECDATES,
-						s,
+						val,
 						"datetime [, datetime ...]");
 				}
 			}
@@ -274,14 +278,17 @@ public final class XPool implements XDPool, Serializable {
 		final String key,
 		final String[] values,
 		final String dflt) {
-		String value = props == null ? dflt : props.getProperty(key, dflt);
+		String val = System.getenv(key.replace('.', '_'));
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = (props==null ? dflt : props.getProperty(key, dflt)).trim();
+		}
 		for (int i = 0; i < values.length; i++) {
-			if (values[i].equals(value)) {
+			if (values[i].equals(val)) {
 				return i;
 			}
 		}
 		//Incorrect property value: &{0}
-		_compiler.getReportWriter().error(SYS.SYS082, key + "=" + value);
+		_compiler.getReportWriter().error(SYS.SYS082, key + "=" + val);
 		return 0; // default value
 	}
 
@@ -1133,7 +1140,6 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeBoolean(_illegalDoctype);
 		xw.writeBoolean(_ignoreUnresolvedExternals);
 		xw.writeBoolean(_locationdetails);
-		xw.writeBoolean(_validate);
 		xw.writeBoolean(_chkWarnings);
 		xw.writeBoolean(_resolveIncludes);
 		xw.writeByte(_displayMode);
@@ -1287,7 +1293,6 @@ public final class XPool implements XDPool, Serializable {
 		_illegalDoctype = xr.readBoolean();
 		_ignoreUnresolvedExternals = xr.readBoolean();
 		_locationdetails =  xr.readBoolean();
-		_validate = xr.readBoolean();
 		_chkWarnings = xr.readBoolean();
 		_resolveIncludes = xr.readBoolean();
 		_displayMode = xr.readByte();

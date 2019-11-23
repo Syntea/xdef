@@ -71,13 +71,6 @@ public interface XDConstants {
 	/** Value "false" of property "xdef.display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_FALSE = "false";
 
-	/** Property defines validation of attribute names (default is false). */
-	public static final String XDPROPERTY_VALIDATE = "xdef.validate";
-	/** Value "true" of property "validate.debug" */
-	public static final String XDPROPERTYVALUE_VALIDATE_TRUE = "true";
-	/** Value "false" of property "validate.debug" */
-	public static final String XDPROPERTYVALUE_VALIDATE_FALSE = "false";
-
 	/** Property defines minimal valid year of date (default is no minimum). */
 	public static final String XDPROPERTY_MINYEAR = "xdef.minyear";
 	/** Property defines maximal valid year of date (default is no maximum). */

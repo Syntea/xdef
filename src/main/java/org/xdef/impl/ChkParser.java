@@ -759,9 +759,15 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	private static boolean getBooleanProperty(final boolean x,
-		final String name,
+		final String key,
 		final Properties props) {
-		String val = props != null ? props.getProperty(name) : null;
+		String val = System.getenv(key.replace('.', '_'));
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = (props==null ? null : props.getProperty(key));
+			if (val != null) {
+				val = val.trim();
+			}
+		}
 		return "true".equals(val) ? true : "false".equals(val) ? false : x;
 	}
 
