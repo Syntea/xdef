@@ -606,13 +606,8 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
-					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
-						TimeZone.SHORT));
-				} else {
-					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
-						TimeZone.SHORT));
-				}
+				assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
+					TimeZone.SHORT));
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,
 					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
 			}
