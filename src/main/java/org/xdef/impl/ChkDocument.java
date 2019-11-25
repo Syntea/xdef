@@ -405,10 +405,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private Element chkAndGetRootElement(final SReporter reporter,
 		boolean noreporter) throws SRuntimeException {
 		if (noreporter) {
-			Properties props = getProperties();
-			if (props != null && "true".equals(getProperties().getProperty(
-				XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE))) {
+			if (XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE.equals(
+				SManager.getProperty(getProperties(),
+					XDConstants.XDPROPERTY_WARNINGS))) {
 				reporter.checkAndThrowErrorWarnings();
 			} else {
 				reporter.checkAndThrowErrors();

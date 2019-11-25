@@ -607,10 +607,10 @@ public class TestSParser extends STester {
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
 				if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
-					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
+					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
 						TimeZone.SHORT));
 				} else {
-					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
+					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
 						TimeZone.SHORT));
 				}
 				assertEq(c.getTimeZone().getRawOffset(), 3600000,
@@ -1270,6 +1270,7 @@ public class TestSParser extends STester {
 				assertEq("", checkDateEQ2(x,y));
 			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
+			assertEq("", checkDateEQ2(x,y));
 			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
@@ -1314,9 +1315,8 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 				x.reset(); y.reset();
-				assertEq("", checkDateEQ2(x,y));
+				assertEq("", checkDateEQ2(x,y));			
 			}
-
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);

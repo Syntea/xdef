@@ -47,6 +47,7 @@ import org.xdef.impl.ChkElement;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XVariableTable;
 import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SManager;
 import org.xdef.sys.SUtils;
 
 /** Provides debugging tool for X-definition.
@@ -627,18 +628,16 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private void init(final Properties props) {
 		_in = null;
 		_out = null;
-		String s = props != null ?
-			props.getProperty(XDConstants.XDPROPERTY_DEBUG_OUT) : null;
-		if (s != null) {
+		String s = SManager.getProperty(props,XDConstants.XDPROPERTY_DEBUG_OUT);
+		if (s != null && !(s = s.trim()).isEmpty()) {
 			try {
 				_out = new PrintStream(new FileOutputStream(s), true);
 			} catch (Exception ex) {
 				_out = System.out;
 			}
 		}
-		s = props != null ?
-			props.getProperty(XDConstants.XDPROPERTY_DEBUG_IN) : null;
-		if (s != null) {
+		s = SManager.getProperty(props, XDConstants.XDPROPERTY_DEBUG_IN);
+		if (s != null && !(s = s.trim()).isEmpty()) {
 			if (_out == null) {
 				_out = System.out;
 			}

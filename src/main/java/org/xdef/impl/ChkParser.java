@@ -41,6 +41,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Node;
 import org.xdef.impl.xml.KParsedAttr;
+import org.xdef.sys.SManager;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -761,13 +762,7 @@ final class ChkParser extends DomBaseHandler {
 	private static boolean getBooleanProperty(final boolean x,
 		final String key,
 		final Properties props) {
-		String val = System.getenv(key.replace('.', '_'));
-		if (val == null || (val = val.trim()).isEmpty()) {
-			val = (props==null ? null : props.getProperty(key));
-			if (val != null) {
-				val = val.trim();
-			}
-		}
+		String val = SManager.getProperty(props, key);
 		return "true".equals(val) ? true : "false".equals(val) ? false : x;
 	}
 

@@ -109,10 +109,12 @@ public abstract class XDTester extends STester {
 	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
 
 	public final void setProperty(final String key, final String value) {
+		String newKey = key.replace('.', '_');
+		_props.remove(key);
 		if (value == null) {
-			_props.remove(key);
+			_props.remove(newKey);
 		} else {
-			_props.setProperty(key, value);
+			_props.setProperty(newKey, value);
 		}
 	}
 

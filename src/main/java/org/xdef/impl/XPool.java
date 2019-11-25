@@ -59,7 +59,7 @@ public final class XPool implements XDPool, Serializable {
 	private static final String XD_VERSION = 
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 302005000L; // 32.5.0
+	private static final long XD_MIN_VERSION = 302005005L; // 32.5.0
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -166,8 +166,10 @@ public final class XPool implements XDPool, Serializable {
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
 				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		_debugEditor = _props.getProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR);
-		_xdefEditor = _props.getProperty(XDConstants.XDPROPERTY_XDEF_EDITOR);
+		_debugEditor =
+			SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG_EDITOR);
+		_xdefEditor =
+			SManager.getProperty(_props, XDConstants.XDPROPERTY_XDEF_EDITOR);
 		//set DOCTYPE illegal
 		_illegalDoctype = readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
@@ -212,21 +214,15 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	private static int readPropertyYear(final Properties props,
 		final String key) {
-		String val = System.getenv(key.replace('.', '_'));
-		if (val == null || (val = val.trim()).isEmpty()) {
-			val = props == null ? null : props.getProperty(key);
-			if (val != null) {
-				val = val.trim();
-			}
-		}
-		if (val == null || val.isEmpty()) {
+		String val = SManager.getProperty(props, key);
+		if (val == null) {
 			return Integer.MIN_VALUE;
 		} else {
 			try {
 				return Integer.parseInt(val);
 			} catch (Exception ex) {
 				//Error of property &{0} = &{1} (it must be &{2}
-				throw new SRuntimeException(XDEF.XDEF214, key, val, "integer");
+				throw new SRuntimeException(XDEF.XDEF214, key, val,"integer");
 			}
 		}
 	}
@@ -236,15 +232,9 @@ public final class XPool implements XDPool, Serializable {
 	 * @return array with special dates or null.
 	 */
 	private static SDatetime[] readPropertySpecDates(final Properties props) {
-		String key = XDConstants.XDPROPERTY_SPECDATES;
-		String val = System.getenv(key.replace('.', '_'));
-		if (val == null || (val = val.trim()).isEmpty()) {
-			val = props == null ? null : props.getProperty(key);
-			if (val != null) {
-				val = val.trim();
-			}
-		}
-		if (val == null || val.isEmpty()) {
+		String val =
+			SManager.getProperty(props, XDConstants.XDPROPERTY_SPECDATES);
+		if (val == null) {
 			return null;
 		} else {
 			StringTokenizer st = new StringTokenizer(val, ", ");
@@ -278,10 +268,8 @@ public final class XPool implements XDPool, Serializable {
 		final String key,
 		final String[] values,
 		final String dflt) {
-		String val = System.getenv(key.replace('.', '_'));
-		if (val == null || (val = val.trim()).isEmpty()) {
-			val = (props==null ? dflt : props.getProperty(key, dflt)).trim();
-		}
+		String val = SManager.getProperty(props, key);
+		val = (val == null) ? dflt : val.trim();
 		for (int i = 0; i < values.length; i++) {
 			if (values[i].equals(val)) {
 				return i;
