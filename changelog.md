@@ -1,5 +1,16 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.5, release-date 2019-11-26
+* implemented new X-script method String getEnv(String name) which reads
+  an environment variable.
+* it is now possible to use environment variables likewise as properties.
+  The property item has priority. If there are specified both, the environmental
+  variable and the property item, then it is used the property value instead of
+  value of the environmental variable. The names of properties and environment
+  variables are changed, the dots (".") in a names are replaced by
+  underlines ("_"), e.g. "xdef.debug" is now "xdef_debug" (see XDConstants).
+  However, since the names with dots are deprecated, they are still accepted.
+
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors
   reported by methods of UniqueSet.

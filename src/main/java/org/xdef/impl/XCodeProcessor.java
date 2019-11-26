@@ -89,6 +89,7 @@ import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.debug.ChkGUIDebug;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
+import org.xdef.XDConstants;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -236,20 +237,22 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			_props = new Properties();
 		} else {
 			_props = props;
-			_debug = "true".equals(_props.getProperty("xdef.debug"));
+			_debug = XDConstants.XDPROPERTYVALUE_DEBUG_TRUE.equals(
+				SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG));
 			SManager.setProperties(props);
 		}
 	}
 
-	/** Set property. If properties are null the new Properties object
-	 * will be created.
-	 * @param key name of property.
+	/** Set X-definition property to SManager. If properties are null 
+	 * the new properties  will be created.
+	 * @param key name of X-definition property.
 	 * @param value value of property or null. If the value is null the property
 	 * is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
-		if ("xdef.debug".equals(key)) {
-			_debug = "true".equals(value);
+		String newKey = key.startsWith("xdef.") ? key.replace('.', '_') : key;
+		if (XDConstants.XDPROPERTY_DEBUG.equals(newKey)) {
+			_debug = XDConstants.XDPROPERTYVALUE_DEBUG_TRUE.equals(value);
 		}
 		if (_props == null) {
 			if (value == null) {
@@ -257,14 +260,15 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			}
 			_props = new Properties();
 		}
-		if (value == null) {
-			_props.remove(key);
+		_props.remove(key);
+		if (value != null) {
+			_props.setProperty(newKey, value);
 		} else {
-			_props.setProperty(key, value);
+			_props.remove(newKey);
 		}
-		if (key.startsWith(SManager.XDPROPERTY_MESSAGES)
-			|| key.startsWith(SManager.XDPROPERTY_MSGLANGUAGE)) {
-			SManager.setProperty(key, value);
+		if (newKey.startsWith(XDConstants.XDPROPERTY_MESSAGES)
+			|| newKey.startsWith(XDConstants.XDPROPERTY_MSGLANGUAGE)) {
+			SManager.setProperty(newKey, value);
 		}
 	}
 
@@ -351,7 +355,8 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			_props = props;
 		}
 		_debug = xp.isDebugMode() || _props != null &&
-			"true".equals(_props.getProperty("xdef.debug"));
+			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE.equals(
+				SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG));
 		if (_debug) {
 			if (_debugger == null) {
 				String debugEditor = xp.getDebugEditor();

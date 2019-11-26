@@ -16,96 +16,83 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Property defines debug mode (default is false).*/
-	public static final String XDPROPERTY_DEBUG = "xdef.debug";
-	/** Value "true" of property "xdef.debug" */
+	public static final String XDPROPERTY_DEBUG = "xdef_debug";
+	/** Value "true" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
-	/** Value "false" of property "xdef.debug" */
+	/** Value "false" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
-	/** Value "showResult" of property "xdef.debug" */
+	/** Value "showResult" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_SHOWRESULT = "showResult";
 	/** Property defines stream used for debug output (default is stdOut). */
-	public static final String XDPROPERTY_DEBUG_OUT = "xdef.debug.out";
+	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
 	/** Property defines stream used for debug input (default is stdIn). */
-	public static final String XDPROPERTY_DEBUG_IN = "xdef.debug.in";
+	public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
+	
 	/** Property defines debug editor class name.*/
-	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef.debugeditor";
+	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
 	/** Property defines X-definition editor class name.*/
-	public static final String XDPROPERTY_XDEF_EDITOR = "xdef.editor";
-	/** Property defines X-definition editor class name.*/
-	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef.exteditor";
+	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
+	
+	/** Property defines X-definition external editor class name.*/
+	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
-	public static final String XDPROPERTY_DOCTYPE = "xdef.doctype";
-	/** Value "false" of property "xdef.doctype" */
+	public static final String XDPROPERTY_DOCTYPE = "xdef_doctype";
+	/** Value "false" of property "xdef_doctype" */
 	public static final String XDPROPERTYVALUE_DOCTYPE_FALSE = "false";
-	/** Value "true" of property "xdef.doctype" */
+	/** Value "true" of property "xdef_doctype" */
 	public static final String XDPROPERTYVALUE_DOCTYPE_TRUE = "true";
 
 	/** Set the XML parser will generate detailed location in reports. */
 	public static final String XDPROPERTY_LOCATIONDETAILS =
-		"xdef.locationsdetails";
-	/** Value "false" of property "xdef.locationsdetails" (default). */
+		"xdef_locationsdetails";
+	/** Value "false" of property "xdef_locationsdetails" (default). */
 	public static final String XDPROPERTYVALUE_LOCATIONDETAILS_FALSE = "false";
-	/** Value "true" of property "xdef.locationsdetails" */
+	/** Value "true" of property "xdef_locationsdetails" */
 	public static final String XDPROPERTYVALUE_LOCATIONDETAILS_TRUE = "true";
 
 	/** Property defines if XML include is permitted (default is "true"). */
-	public static final String XDPROPERTY_XINCLUDE = "xdef.xinclude";
-	/** Value "false" of property "xdef.xinclude" */
+	public static final String XDPROPERTY_XINCLUDE = "xdef_xinclude";
+	/** Value "false" of property "xdef_xinclude" */
 	public static final String XDPROPERTYVALUE_XINCLUDE_FALSE = "false";
-	/** Value "true" of property "xdef.xinclude (default)." */
+	/** Value "true" of property "xdef_xinclude (default)." */
 	public static final String XDPROPERTYVALUE_XINCLUDE_TRUE = "true";
 
-	/** Property defines if read from environmental variables is permitted
-	 *  (default is "true"). */
-	public static final String XDPROPERTY_ENV_GET = "xdef.envGet";
-	/** Value "true" of property "xdef.envGet" */
-	public static final String XDPROPERTYVALUE_ENV_GET_TRUE = "true";
-	/** Value "false" of property "xdef.envGet" */
-	public static final String XDPROPERTYVALUE_ENV_GET_FALSE = "false";
-
 	/** Property warning messages are checked {thrown} (default is "false")*/
-	public static final String XDPROPERTY_WARNINGS = "xdef.warnings";
-	/** Value "true" of property "xdef.warnings" */
+	public static final String XDPROPERTY_WARNINGS = "xdef_warnings";
+	/** Value "true" of property "xdef_warnings" */
 	public static final String XDPROPERTYVALUE_WARNINGS_TRUE = "true";
-	/** Value "false" of property "xdef.debug" */
+	/** Value "false" of property "xdef_warnings" */
 	public static final String XDPROPERTYVALUE_WARNINGS_FALSE = "false";
 
 	/** Property defines debug mode (default is false).*/
-	public static final String XDPROPERTY_DISPLAY = "xdef.display";
-	/** Value "true" of property "xdef.display" */
+	public static final String XDPROPERTY_DISPLAY = "xdef_display";
+	/** Value "true" of property "xdef_display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_TRUE = "true";
-	/** Value "errors" of property "xdef.display" */
+	/** Value "errors" of property "xdef_display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_ERRORS = "errors";
-	/** Value "false" of property "xdef.display" */
+	/** Value "false" of property "xdef_display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_FALSE = "false";
 
-	/** Property defines validation of attribute names (default is false). */
-	public static final String XDPROPERTY_VALIDATE = "xdef.validate";
-	/** Value "true" of property "validate.debug" */
-	public static final String XDPROPERTYVALUE_VALIDATE_TRUE = "true";
-	/** Value "false" of property "validate.debug" */
-	public static final String XDPROPERTYVALUE_VALIDATE_FALSE = "false";
-
 	/** Property defines minimal valid year of date (default is no minimum). */
-	public static final String XDPROPERTY_MINYEAR = "xdef.minyear";
+	public static final String XDPROPERTY_MINYEAR = "xdef_minyear";
 	/** Property defines maximal valid year of date (default is no maximum). */
-	public static final String XDPROPERTY_MAXYEAR = "xdef.maxyear";
+	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
-	public static final String XDPROPERTY_SPECDATES = "xdef.specdates";
+	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
 
 	/** Property defines if unresolved external methods are reported (used
 	 * for syntax checking of X-definition (default is "false"). */
 	public static final String XDPROPERTY_IGNORE_UNDEF_EXT =
-		"xdef.ignoreUnresolvedExternals";
-	/** Value "true" of property "xdef.ignoreUnresolvedExternals" */
+		"xdef_ignoreUnresolvedExternals";
+	/** Value "true" of property "xdef_ignoreUnresolvedExternals" */
 	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE = "true";
-	/** Value "false" of property "xdef.ignoreUnresolvedExternals" */
+	/** Value "false" of property "xdef_ignoreUnresolvedExternals" */
 	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE = "false";
 
 	/** Prefix of property names for setting of message table files. */
-	public static final String XDPROPERTY_MESSAGES = "xdef.msg.";
+	public static final String XDPROPERTY_MESSAGES = "xdef_msg_";
 	/** Name of property for setting language of messages. */
-	public static final String XDPROPERTY_MSGLANGUAGE = "xdef.language";
+	public static final String XDPROPERTY_MSGLANGUAGE = "xdef_language";
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML constants

@@ -76,8 +76,6 @@ public abstract class XDTester extends STester {
 		}
 		setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-		setProperty(XDConstants.XDPROPERTY_ENV_GET,
-			XDConstants.XDPROPERTYVALUE_ENV_GET_TRUE);
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		setProperty(XDConstants.XDPROPERTY_DEBUG,
@@ -86,8 +84,6 @@ public abstract class XDTester extends STester {
 		setProperty(XDConstants.XDPROPERTY_DEBUG_IN, null);
 		setProperty(XDConstants.XDPROPERTY_DISPLAY,
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		setProperty(XDConstants.XDPROPERTY_VALIDATE,
-			XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
 		setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -113,10 +109,12 @@ public abstract class XDTester extends STester {
 	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
 
 	public final void setProperty(final String key, final String value) {
+		String newKey = key.replace('.', '_');
+		_props.remove(key);
 		if (value == null) {
-			_props.remove(key);
+			_props.remove(newKey);
 		} else {
-			_props.setProperty(key, value);
+			_props.setProperty(newKey, value);
 		}
 	}
 
