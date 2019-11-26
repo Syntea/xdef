@@ -27,13 +27,15 @@ public class TestAll {
 	}
 		
 	/** run TestAll in test.xdef */
-	@Test(dependsOnMethods = {"testCommon"})
+	@Test
+//	@Test(dependsOnMethods = {"testCommon"})
 	public static void testXdef() {
 		Assert.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
 	
 	/** run TestAll in test.xdutil */
-	@Test(dependsOnMethods = {"testXdef"})
+	@Test
+//	@Test(dependsOnMethods = {"testXdef"})
 	public static void testXDUtils() {
 		Assert.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}
