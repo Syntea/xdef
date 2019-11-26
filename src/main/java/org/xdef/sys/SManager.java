@@ -81,16 +81,16 @@ public final class SManager implements XDConstants {
 	 */
 	public final static String getProperty(final Properties props,
 		final String key) {
-		if (props == null) {
-			return null;
-		}
-		String newKey = key.startsWith("xdef.") ? key.replace('.', '_') : key;
-		String val = System.getenv(newKey);
-		if (props != null && (val == null || (val = val.trim()).isEmpty())) {
+		String val = null;
+		if (props != null) {
+			String newKey = key.startsWith("xdef.") ? key.replace('.','_'): key;
 			val = props.getProperty(newKey);
-			if (val == null) {
+			if (val == null && !key.equals(newKey)) {
 				val = props.getProperty(key); //old value
 			}
+		}
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = System.getenv(key);
 		}
 		return (val != null && (val=val.trim()).isEmpty()) ? null : val;
 	}
