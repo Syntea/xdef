@@ -496,7 +496,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
-		_scp.setProperty(key, value);
+		String newKey = key.startsWith("xdef.") ? key.replace('.','_'): key;
+		_scp.setProperty(newKey, value);
+		if (!newKey.equals(key)) {
+			_scp.setProperty(key, null);
+		}
 	}
 
 	@Override
