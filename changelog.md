@@ -8,7 +8,7 @@
   instead of the relevant property item. The names of properties and environment
   variables are changed so, that the dots (".") in a name are replaced by
   underlines ("_"), (see org.xdef.XDConstants); e.g. "xdef.debug" is now
-  "xdef_debug"  However, since the names with dots are deprecated, they are
+  "xdef_debug". However, since the names with dots are deprecated, they are
   still accepted.
 
 # Version 32.5.4, release-date 2019-11-17
