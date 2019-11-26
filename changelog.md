@@ -2,7 +2,7 @@
 
 # Version 32.5.5, release-date 2019-11-26
 * implemented new X-script method String getEnv(String name) which reads
-  an environment variable
+  an environment variable.
 * it is now possible to use environment variables likewise as properties.
   The environment variable has priority, i.e. if specified then it is used
   instead of the relevant property item. The names of properties and environment
