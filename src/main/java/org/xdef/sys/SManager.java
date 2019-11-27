@@ -84,9 +84,17 @@ public final class SManager implements XDConstants {
 		String val = null;
 		if (props != null) {
 			String newKey = key.startsWith("xdef.") ? key.replace('.','_'): key;
-			val = props.getProperty(newKey);
-			if (val == null && !key.equals(newKey)) {
-				val = props.getProperty(key); //old value
+			val = props.getProperty(key);
+			if (key.equals(newKey)) {
+				if (val == null) {
+					String oldKey = key.startsWith("xdef_")
+						? key.replace('_','.'): key;
+					val = props.getProperty(oldKey);
+					if (val != null) {
+						props.remove(key);
+						props.setProperty(newKey, val);
+					}
+				}
 			}
 		}
 		if (val == null || (val = val.trim()).isEmpty()) {
