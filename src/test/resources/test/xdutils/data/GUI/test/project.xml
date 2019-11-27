@@ -1,9 +1,9 @@
 <Project Show="true">
   <XDefinition>src/test/resources/test/xdutils/data/GUI/test/test1.xdef</XDefinition>
   <XDefinition>src/test/resources/test/xdutils/data/GUI/test/test2.xdef</XDefinition>
-  <Property Name = "xdef.warnings" Value = "true"/>
-  <Property Name = "xdef.display" Value = "true"/>
-  <Property Name = "xdef.debug" Value = "true"/>
+  <Property Name = "xdef_warnings" Value = "true"/>
+  <Property Name = "xdef_display" Value = "true"/>
+  <Property Name = "xdef_debug" Value = "true"/>
   <Execute XDName = "test" Mode = "validate">
     <Var Name="xyz">Toto je test</Var>
     <Input>src/test/resources/test/xdutils/data/GUI/test/data.xml</Input>

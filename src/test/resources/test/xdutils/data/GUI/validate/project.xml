@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project Show="true">
-  <Property Name="xdef.warnings" Value="true"/>
-  <Property Name="xdef.display" Value="true"/>
-  <Property Name="xdef.debug" Value="true"/>
+  <Property Name="xdef_warnings" Value="true"/>
+  <Property Name="xdef_display" Value="true"/>
+  <Property Name="xdef_debug" Value="true"/>
   <Execute DisplayResult="true"
     Mode="validate"
     XDName="test1">
