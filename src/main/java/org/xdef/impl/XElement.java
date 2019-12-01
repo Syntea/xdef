@@ -546,16 +546,30 @@ public final class XElement extends XCodeDescriptor
 			reporter.error(XDEF.XDEF286, path);
 			return false;
 		}
-		if (x._deflt >= 0) {
-			if (y._deflt < 0) {
+		XDValue vx, vy;
+		if ((vx = x.getDefaultValue()) != null) {
+			if ((vy = y.getDefaultValue()) == null) {
 				if (full || cx != cy) {
 					result = false;
 				} else {
 					y._deflt = x._deflt;
 				}
 			} else if (cx != cy || y._deflt != x._deflt) {
-				String vx = x.getDefaultValue();
-				String vy = y.getDefaultValue();
+				if (vx == null || vy == null || !vx.equals(vy)) {
+					//Default or fixed values differs: &{0}
+					reporter.error(XDEF.XDEF286, path);
+					result = false;
+				}
+			}
+		}
+		if ((vx = x.getFixedValue()) != null) {
+			if ((vy = y.getFixedValue()) == null) {
+				if (full || cx != cy) {
+					result = false;
+				} else {
+					y._onAbsence = x._onAbsence;
+				}
+			} else if (cx != cy || y._onAbsence != x._onAbsence) {
 				if (vx == null || vy == null || !vx.equals(vy)) {
 					//Default or fixed values differs: &{0}
 					reporter.error(XDEF.XDEF286, path);

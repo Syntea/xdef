@@ -205,7 +205,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_OUPUT;}
+	public short getItemId() {return XDValueID.XD_OUTPUT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.

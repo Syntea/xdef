@@ -43,14 +43,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		String codeName = getCodeName(code);
 		switch (code) {
 			case LD_CONST:
-				return "CONST" + getTypeAbbrev(type) +
-					" " + (type == XD_STRING ?
-					((DefString) item).sourceValue() :
-					type == XD_REGEX ?
-						((DefRegex) item).sourceValue() :
-					type == XD_XPATH ?
-						((DefXPathExpr) item).sourceValue() :
-						item.toString());
+				return "CONST" + getTypeAbbrev(type)
+					+ " " + (type == XD_STRING ? item instanceof DefString
+					? ((DefString) item).sourceValue() : item.toString()
+					: type == XD_REGEX ? ((DefRegex) item).sourceValue()
+					: type == XD_XPATH ? ((DefXPathExpr) item).sourceValue()
+					: item.toString());
 			case LD_CODE:
 			case LD_LOCAL:
 			case LD_GLOBAL:
@@ -59,11 +57,9 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			case LD_XMODEL:
 			case ST_XMODEL:
 				return codeName + getTypeAbbrev(type)
-					+ " name=" + item.stringValue()
-					+ ", " + item.intValue();
+					+ " name=" + item.stringValue() + ", " + item.intValue();
 			case INIT_PARAMS_OP:
-				return codeName + " " + item.getParam()
-					+ "," + item.intValue();
+				return codeName + " " + item.getParam() + "," + item.intValue();
 			case ATTR_EXIST:
 			case ATTR_REF:
 				return codeName + " '" + item.stringValue() + "'";
@@ -165,8 +161,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	private static void displayDesriptor(final XCodeDescriptor sc,
 		final PrintStream out) {
 		out.print(sc.getName() + " " + sc.minOccurs() + ".."
-			+ (sc.maxOccurs() == Integer.MAX_VALUE ? "*" :
-				String.valueOf(sc.maxOccurs())));
+			+ (sc.maxOccurs() == Integer.MAX_VALUE
+				? "*" : String.valueOf(sc.maxOccurs())));
 		if (sc.getKind() == XNode.XMELEMENT) {
 			if (((XElement)sc)._forget != 0) {
 				out.print("forget= " + (char) ((XElement)sc)._forget);

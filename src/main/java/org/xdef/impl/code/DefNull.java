@@ -164,7 +164,7 @@ public final class DefNull extends XDValueAbstract {
 				return new DefBNFRule();
 			case XD_INPUT: // Input stream value
 				return new DefInStream();
-			case XD_OUPUT: // Output stream value
+			case XD_OUTPUT: // Output stream value
 				return new DefOutStream();
 			case XD_BYTES: // Byte array value
 				return new DefBytes();

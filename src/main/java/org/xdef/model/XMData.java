@@ -9,16 +9,16 @@ import org.xdef.XDContainer;
 public interface XMData extends XMNode {
 
 	/** Get value specified as default.
-	 * @return string with value specified as default or return <tt>null</tt>
+	 * @return value specified as default or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public String getDefaultValue();
+	public XDValue getDefaultValue();
 
 	/** Get value specified as fixed.
-	 * @return string with value specified as fixed or return <tt>null</tt>
+	 * @return value specified as fixed or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public String getFixedValue();
+	public XDValue getFixedValue();
 
 	/** Get type name of value.
 	 * @return type name of data value.

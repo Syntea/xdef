@@ -155,11 +155,11 @@ public final class CompileCode extends CompileBase {
 		_init = _initEnd = -1;
 		//predefined global variables
 		CompileVariable var = new CompileVariable("$stdOut",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
+			XD_OUTPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdErr",
-			XD_OUPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
+			XD_OUTPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$stdIn",
@@ -2305,7 +2305,7 @@ public final class CompileCode extends CompileBase {
 				break;
 			case PRINTF_STREAM: {
 				int maskPar;
-				if (_tstack[_sp - npar + 1] == XD_OUPUT) {
+				if (_tstack[_sp - npar + 1] == XD_OUTPUT) {
 					if (npar == 2) {
 						//More parameters required for method &{0}
 						_parser.error(XDEF.XDEF460, "printf");
@@ -2339,7 +2339,7 @@ public final class CompileCode extends CompileBase {
 				}
 			case PUT_ERROR:
 				if (npar > 0) {
-					if (_tstack[_sp + 1 - npar] == XD_OUPUT) { //first param
+					if (_tstack[_sp + 1 - npar] == XD_OUTPUT) { //first param
 						if (npar < 2) {
 							//More parameters required for method &{0}
 							_parser.error(XDEF.XDEF460, name);
@@ -2349,7 +2349,7 @@ public final class CompileCode extends CompileBase {
 							_parser.error(XDEF.XDEF461, name);
 							return;
 						}
-						method = getTypeMethod(XD_OUPUT, "error");
+						method = getTypeMethod(XD_OUTPUT, "error");
 						code = PUT_ERROR1;
 					} else {
 						if (npar > 1 && _tstack[_sp] == XD_REPORT) {

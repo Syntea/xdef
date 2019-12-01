@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
 import org.xdef.impl.compile.CompileBase;
+import org.xdef.impl.parsers.XDParseCDATA;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SRuntimeException;
 
@@ -21,6 +22,8 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XData extends XCodeDescriptor implements XMData, XDValueID {
+	/** Default parser. */
+	private static final XDParseCDATA DEFAULT_PARSER = new XDParseCDATA();
 	/** Type name of value of data. */
 	short _valueType;
 	/** Type name of value of data. */
@@ -53,7 +56,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get XMDefinition assigned to this node.
-	 * @return MDefintion node.
+	 * @return XMDefintion node.
 	 */
 	public final XMDefinition getXMDefinition() {
 		String s = getXDPosition();
@@ -88,10 +91,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get value specified as default.
-	 * @return string with value specified as default or return <tt>null</tt>
+	 * @return value specified as default or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public final String getDefaultValue() {
+	public final XDValue getDefaultValue() {
 		if (_deflt < 0) {
 			return null;
 		}
@@ -102,15 +105,15 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 			|| code[_deflt + 1].getCode() != CodeTable.STOP_OP) {
 			return null;
 		}
-		return x.toString();
+		return x;
 	}
 
 	@Override
 	/** Get value specified as fixed.
-	 * @return string with value specified as fixed or return <tt>null</tt>
+	 * @return value specified as fixed or return <tt>null</tt>
 	 * if there was not specified a default value.
 	 */
-	public final String getFixedValue() {
+	public final XDValue getFixedValue() {
 		if (_onAbsence < 0) {
 			return null;
 		}
@@ -132,14 +135,64 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 			|| code[_onAbsence + 2].getCode() != CodeTable.STOP_OP) {
 			return null;
 		}
-		return code[j + 1].toString();
+		return code[j + 1];
 	}
 
 	@Override
 	/** Get type name of value.
 	 * @return type name of data value.
 	 */
-	public final String getValueTypeName() {return _valueTypeName;}
+	public final String getValueTypeName() {
+		int xs = _check; //start of code of parse method.
+		if (xs >= 0) {
+			if (_valueTypeName.indexOf('.') < 0
+				|| _valueTypeName.endsWith("ID")
+				|| _valueTypeName.endsWith("IDREF")
+				|| _valueTypeName.endsWith("IDREFS")
+				|| _valueTypeName.endsWith("CHKID")
+				|| _valueTypeName.endsWith("CHKIDS")
+				|| _valueTypeName.endsWith("SET")) {
+				return _valueTypeName;
+			}
+			final XDValue[] xv = ((XPool) getXDPool()).getCode();
+			XDValue y = xv[xs];
+			if (y.getCode() == CodeTable.JMP_OP
+				|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
+					&& xv[xs+1].getCode() == CodeTable.STOP_OP)) {
+				y = xv[xs = y.getParam()];
+			} else if (xs + 2 < xv.length
+				&& (y.getCode() == CodeTable.LD_GLOBAL
+					|| y.getCode() == CodeTable.LD_XMODEL)) {
+				String uniquesetName = "";
+				switch (xv[xs+1].getCode()) {
+					case CodeTable.UNIQUESET_KEY_SET:
+					case CodeTable.UNIQUESET_SET:
+						uniquesetName = ".SET";
+						break;
+					case CodeTable.UNIQUESET_KEY_ID:
+					case CodeTable.UNIQUESET_ID:
+						uniquesetName = ".ID";
+						break;
+					case CodeTable.UNIQUESET_KEY_IDREF:
+					case CodeTable.UNIQUESET_IDREF:
+						uniquesetName = ".IDREF";
+						break;
+					case CodeTable.UNIQUESET_IDREFS:
+						uniquesetName = ".IDREFS";
+						break;
+					case CodeTable.UNIQUESET_KEY_CHKID:
+					case CodeTable.UNIQUESET_CHKID:
+						uniquesetName = ".CHKID";
+						break;
+					case CodeTable.UNIQUESET_CHKIDS:
+						uniquesetName = ".CHKIDS";
+						break;
+				}
+				return _valueTypeName + uniquesetName;
+			}
+		}
+		return _valueTypeName;
+	}
 
 	@Override
 	/** Get reference name to declared type.
@@ -161,9 +214,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @return XDParser or null if parser is not available.
 	 */
 	public final XDValue getParseMethod() {
-		int xs = _check; //start of code
+		int xs = _check; //start of code of parse method.
 		if (xs < 0) {
-			return null; // not declared (default, i.e. any string)
+			return DEFAULT_PARSER;
+//			return null; // not declared (default, i.e. any string)
 		}
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xs];
@@ -182,7 +236,9 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_ID
 				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_SET
 				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_IDREF
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_CHKID)
+				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_IDREFS
+				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_CHKID
+				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_CHKIDS)
 			&& xv[xs+2].getCode() == CodeTable.STOP_OP) {
 			y = xv[xs = xv[xs+1].intValue()]; // this should be parser
 		}
@@ -227,7 +283,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from org.xdef.XDValueTypes.
+	 * @return value from cz.syntea.xdef.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();

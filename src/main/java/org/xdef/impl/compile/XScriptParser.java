@@ -169,7 +169,7 @@ public class XScriptParser extends StringParser
 	public static final char BNFGRAMMAR_ID_SYM = (char) (BASE_ID+XD_BNFGRAMMAR);
 	public static final char BNFRULE_ID_SYM = (char) (BASE_ID + XD_BNFRULE);
 	public static final char INSTREAM_ID_SYM = (char) (BASE_ID + XD_INPUT);
-	public static final char OUTSTREAM_ID_SYM = (char) (BASE_ID + XD_OUPUT);
+	public static final char OUTSTREAM_ID_SYM = (char) (BASE_ID + XD_OUTPUT);
 	public static final char BYTES_ID_SYM = (char) (BASE_ID + XD_BYTES);
 	public static final char ELEMENT_ID_SYM = (char) (BASE_ID + XD_ELEMENT);
 	public static final char EXCEPTION_ID_SYM = (char) (BASE_ID + XD_EXCEPTION);

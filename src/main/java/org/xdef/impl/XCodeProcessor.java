@@ -528,7 +528,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 								((DefInStream) val).close();
 							}
 							break;
-						case CompileBase.XD_OUPUT:
+						case CompileBase.XD_OUTPUT:
 							if (xvar != null
 								&& xvar.getName().equals("$stdOut")
 								&& xvar.getName().equals("$stdErr")
@@ -1751,7 +1751,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue v = _stack[sp - npar + 1];
 					int ndx;
 					XDOutput out;
-					if (v.getItemId() != XD_OUPUT) {
+					if (v.getItemId() != XD_OUTPUT) {
 						out = (XDOutput) _globalVariables[0];
 						ndx = 1;
 					} else {

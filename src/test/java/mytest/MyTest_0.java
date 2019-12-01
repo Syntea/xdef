@@ -19,6 +19,9 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
+import org.xdef.model.XMData;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -27,21 +30,43 @@ public class MyTest_0 extends XDTester {
 
 	public MyTest_0() {super(); setChkSyntax(true);}
 	
+	boolean T = true; //This flag is used to return after a test
+	
+	private static void printXMData(final XMData x) {
+		System.out.println(x.getXDPosition()
+			+ ", Parse: " + x.getParseMethod()
+			+ ", Type: " + x.getValueTypeName()
+			+ ", Ref: " + x.getRefTypeName()
+			+ ", Default: " + x.getDefaultValue()
+			+ ", Fixed: " + x.getFixedValue());
+	}
+	private static void printXMData(final XMElement xe) {
+		for (XMData x: xe.getAttrs()) {
+			printXMData(x);
+		}
+		for (XMNode x: xe.getChildNodeModels()) {
+			if (x.getKind() == XMNode.XMTEXT) {
+				printXMData((XMData) x);
+			} else if (x.getKind() == XMNode.XMELEMENT) {
+				printXMData((XMElement) x);
+			}
+		}
+	}
+	
 	@Override
 	/** Run test and print error information. */
 	public void test() {
 		String tempDir = getTempDir();
-		XDPool xp;
-		String xdef;
-		String xml;
-		String s;
 		try {
 			if (new File(tempDir).exists()) {
 				FUtils.deleteAll(tempDir, true);
 				new File(tempDir).mkdir();
 			}
 		} catch (Exception ex) {fail(ex);}
-
+		XDPool xp;
+		String xdef;
+		String xml;
+		String s;
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
@@ -54,7 +79,70 @@ public class MyTest_0 extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
-		final boolean T = true; //This flag is used to return from a test
+		try {
+			xdef = //Incorrect fixed value
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <A a='?float; fixed 2.0' b='? float; default 3.1' c='default \"3.1\"' />\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp.display();
+			printXMData(xp.getXMDefinition().getModel(null, "A"));
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:declaration scope='local'>\n"+
+"  type flt float(1,6);\n"+
+"  uniqueSet u {x: flt; y : optional flt;}\n"+
+"</xd:declaration>\n"+
+"<A xd:script='var uniqueSet v {x: u.x}'>\n"+
+"  <b xd:script='+' a='v.x.ID(u.x.ID)'/>\n"+
+"  <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
+"</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp.display();
+			printXMData(xp.getXMDefinition().getModel(null, "A"));
+			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:declaration>\n"+
+"  uniqueSet u{x: int();}\n"+
+"</xd:declaration>\n"+
+"<A>\n"+
+"  <a xd:script='?' a='u.x()'/>\n"+
+"  <b xd:script='+' a='u.x.ID()'/>\n"+
+"  <c xd:script='?' a='u.x.IDREF()'/>\n"+
+"  <d xd:script='?' a='u.x.CHKID()'/>\n"+
+"  <e xd:script='?' a='u.x.SET()'/>\n"+
+"</A>\n"+
+"</xd:def>\n";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp.display();
+			printXMData(xp.getXMDefinition().getModel(null, "A"));
+			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <xd:declaration>\n"+
+"    uniqueSet r {a: int();};\n"+
+"  </xd:declaration>\n"+
+"  <A a = ''>\n"+
+"    <B xd:script='*;' c='? r.a' a='r.a.SET()' b='? r.a.SET'/>\n"+
+"    <C xd:script='*;' a='r.a.CHKIDS()'/>\n"+
+"    ? r.a.CHKIDS\n"+
+"  </A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp.display();
+			printXMData(xp.getXMDefinition().getModel(null, "A"));
+			xml = "<A a='x'><B a='1'/><C a='1'/></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 //		final boolean T = false; //This flag is used to return from a test
 		try {
 			s = "D:/cvs/DEV/java/xdef/src/main/resources/"
