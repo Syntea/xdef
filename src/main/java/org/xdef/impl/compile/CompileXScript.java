@@ -190,7 +190,6 @@ final class CompileXScript extends CompileStatement {
 			_g.genStop();
 			_g._sp  = -1;
 			_g._mode = gmode;
-			sc.setValueType(XD_STRING, "string");
 		} else {
 			compileCheckExpression(sc);
 		}
@@ -206,6 +205,7 @@ final class CompileXScript extends CompileStatement {
 		sc.clearOptions();
 		sc.clearActions();
 		XOccurrence occ = new XOccurrence();
+		sc.setValueType(XD_STRING, "string");
 		while (_sym != NOCHAR) {
 			if (_sym == SEMICOLON_SYM) {
 				nextSymbol();
@@ -261,7 +261,6 @@ final class CompileXScript extends CompileStatement {
 								&& _g._code.get(addr + 3).getCode() == STOP_OP){
 								XDValue value = _g._code.get(addr + 1);
 								XDParser p = (XDParser) _g._code.get(check);
-								sc.setValueType(p.parsedType(), p.parserName());
 								XDParseResult r =
 									p.check(null,value.toString());
 								if (r.errors()) {
@@ -270,8 +269,6 @@ final class CompileXScript extends CompileStatement {
 							} else {
 								sc.setValueType(XD_STRING, "string");
 							}
-						} else {
-							sc.setValueType(XD_STRING, "string");
 						}
 						sc._check = _g._lastCodeIndex + 1;
 						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
@@ -418,7 +415,6 @@ final class CompileXScript extends CompileStatement {
 			error(XDEF.XDEF422); //Duplicated script section
 		}
 		sc._check = -2;
-		sc.setValueType(XD_STRING, "string"); //default type
 		if (_sym == SEMICOLON_SYM) { //';'
 			nextSymbol();
 			return;

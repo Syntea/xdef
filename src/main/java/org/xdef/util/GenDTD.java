@@ -232,15 +232,15 @@ public class GenDTD {
 				_out.write("          ");
 				_out.write(xAttr.getName());
 				_out.write(' ');
-				String s;
 				if (!xAttr.isIllegal()) {
 					if (xAttr.isIgnore()) {
 						_out.write("CDATA #IMPLIED");
 					} else {
+						XDValue xv;
 						if (xAttr.isFixed() &&
-							(s = xAttr.getFixedValue()) != null) {
+							(xv = xAttr.getFixedValue()) != null) {
 							_out.write("CDATA #FIXED \"");
-							_out.write(s);
+							_out.write(xv.toString());
 							_out.write("\"");
 						} else {
 							String[] en =
@@ -256,10 +256,10 @@ public class GenDTD {
 							} else {
 								_out.write("CDATA ");
 							}
-							s = xAttr.getDefaultValue();
-							if (s != null) {
+							xv = xAttr.getDefaultValue();
+							if (xv != null) {
 								_out.write('"');
-								_out.write(s);
+								_out.write(xv.toString());
 								_out.write('"');
 							} else {
 								if (xAttr.isOptional()) {

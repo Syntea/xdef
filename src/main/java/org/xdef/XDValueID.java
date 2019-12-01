@@ -25,9 +25,9 @@ public interface XDValueID {
 	/** Input stream value. */
 	public static final short XD_INPUT = XD_FLOAT + 1; // 9
 	/** Output stream value. */
-	public static final short XD_OUPUT = XD_INPUT + 1; // 10
+	public static final short XD_OUTPUT = XD_INPUT + 1; // 10
 	/** Byte array value. */
-	public static final short XD_BYTES = XD_OUPUT + 1; // 11
+	public static final short XD_BYTES = XD_OUTPUT + 1; // 11
 	/** String value ID. */
 	public static final short XD_STRING = XD_BYTES + 1; // 12
 	/** Date value ID. */

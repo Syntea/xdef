@@ -1002,12 +1002,16 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 							+ ": = '" + ((XXData) xnode).getTextValue() + "'");
 					} else {
 						try {
+							String s;
 							if (_out != null) {
 								display("Set value: ");
-								((XXData) xnode).setTextValue(readLine());
+								s = readLine();
 							} else {
-								((XXData) xnode).setTextValue(JOptionPane
-									.showInputDialog(_frame,"Set value"));
+								s = JOptionPane.showInputDialog(_frame,
+									"Set value");
+							}
+							if (s != null) {
+								((XXData) xnode).setTextValue(s);
 							}
 						} catch (Exception ex) {
 							display("Error: can't set text value here");

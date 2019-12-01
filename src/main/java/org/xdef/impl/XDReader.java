@@ -198,7 +198,7 @@ public final class XDReader extends SObjectReader {
 						return new DefNamedValue(readString(), readXD());
 					case XDValueID.XD_OBJECT:
 						return new DefObject();
-					case XDValueID.XD_OUPUT:
+					case XDValueID.XD_OUTPUT:
 						return new DefOutStream();
 					case XDValueID.XD_PARSERESULT: {
 						DefParseResult y = new DefParseResult();
