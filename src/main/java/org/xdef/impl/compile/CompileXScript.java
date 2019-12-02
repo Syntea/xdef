@@ -112,7 +112,7 @@ final class CompileXScript extends CompileStatement {
 	 * @param sc XData model of attribute, text, comment, PI.
 	 * @param parent parent model
 	 */
-	final void genTemplateData(final XCodeDescriptor sc, final XNode parent) {
+	final void genTemplateData(final XData sc, final XNode parent) {
 		if (parent != null && parent.getKind() == XMNode.XMELEMENT) {
 			XElement p = (XElement) parent;
 			sc.copyOptions(p);
@@ -154,6 +154,7 @@ final class CompileXScript extends CompileStatement {
 			_g.genLDC(defTmp);
 			_g.internalMethod("eq", 1);
 			_g.topToBool();
+			sc.setValueType(XD_STRING, "eq");
 			_g.genStop();
 			sc._onAbsence = sc._onFalse = _g._lastCodeIndex + 1;
 			_g.genLDC(defTmp);
