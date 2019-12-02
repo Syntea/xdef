@@ -1,5 +1,0 @@
-<Products>
-  <Product Code="0001" Name="bicycle" Price="150.50"/>
-  <Product Code="0002" Name="motorcycle" Price="2340.00"/>
-  <Product Code="0003" Name="car" Price="7777.00"/>
-</Products>
