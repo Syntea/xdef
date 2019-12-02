@@ -154,8 +154,8 @@ final class CompileXScript extends CompileStatement {
 			_g.genLDC(defTmp);
 			_g.internalMethod("eq", 1);
 			_g.topToBool();
-			sc.setValueType(XD_STRING, "eq");
 			_g.genStop();
+			sc.setValueType(XD_STRING, "eq");
 			sc._onAbsence = sc._onFalse = _g._lastCodeIndex + 1;
 			_g.genLDC(defTmp);
 			if ("$text".equals(sc.getName())) {
@@ -205,8 +205,8 @@ final class CompileXScript extends CompileStatement {
 		_g._mode = CompileBase.TEXT_MODE;
 		sc.clearOptions();
 		sc.clearActions();
-		XOccurrence occ = new XOccurrence();
 		sc.setValueType(XD_STRING, "string");
+		XOccurrence occ = new XOccurrence(); // undefined occurrence
 		while (_sym != NOCHAR) {
 			if (_sym == SEMICOLON_SYM) {
 				nextSymbol();
@@ -382,15 +382,14 @@ final class CompileXScript extends CompileStatement {
 			errorAndSkip(XDEF.XDEF425, SCRIPT_SEPARATORS); //Script error
 		}
 		sc.setOccurrence(occ);
-		if (occ.isFixed() && sc._deflt >= 0) {
+		if (!sc.isSpecified()) {
+			sc.setOptional();
+		} else if (sc.isFixed() && sc._deflt >= 0) {
 			//Both actions 'fixed' and 'default' can't be specified
 			error(XDEF.XDEF415);
 			return;
 		}
-		if (!sc.isSpecified() && sc._deflt >= 0) {
-			sc.setMinOccur(0);
-		}
-		if (sc._onIllegalAttr != -1 && !occ.isIllegal() && sc._match < 0) {
+		if (sc._onIllegalAttr != -1 && !sc.isIllegal() && sc._match < 0) {
 			//Not allowed script for '&{0}'
 			warning(XDEF.XDEF494, "onIllegalAttr");
 		}
