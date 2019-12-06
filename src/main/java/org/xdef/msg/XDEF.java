@@ -492,176 +492,178 @@ public interface XDEF {
 	public static final long XDEF533 = 31159025905L;
 	/** Text value not declared&amp;{#SYS000} */
 	public static final long XDEF534 = 31159025906L;
+	/** Maximum occurrence in "xd:textcontent" attribute can not be higher then 1&amp;{#SYS000} */
+	public static final long XDEF535 = 31159025907L;
 	/** Incorrect type conversion from AnyValue&amp;{#SYS000} */
-	public static final long XDEF536 = 31159025907L;
+	public static final long XDEF536 = 31159025908L;
 	/** Required element '&amp;{0}' is missing&amp;{#SYS000} */
-	public static final long XDEF539 = 31159025908L;
+	public static final long XDEF539 = 31159025909L;
 	/** Missing required item(s) in a section&amp;{#SYS000} */
-	public static final long XDEF541 = 31159025909L;
+	public static final long XDEF541 = 31159025910L;
 	/** Can't convert the object of type&amp;{0}{ '}{'} to XDValue&amp;{#SYS000} */
-	public static final long XDEF542 = 31159025910L;
+	public static final long XDEF542 = 31159025911L;
 	/** In X-definition are errors&amp;{0}{: }&amp;{#SYS000} */
-	public static final long XDEF543 = 31159025911L;
+	public static final long XDEF543 = 31159025912L;
 	/** Missing required parameter: &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF545 = 31159025912L;
+	public static final long XDEF545 = 31159025913L;
 	/** QName expected&amp;{#SYS000} */
-	public static final long XDEF546 = 31159025913L;
+	public static final long XDEF546 = 31159025914L;
 	/** X-definition is not specified&amp;{#SYS000} */
-	public static final long XDEF550 = 31159025914L;
+	public static final long XDEF550 = 31159025915L;
 	/** Too many of recursive call: &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF553 = 31159025915L;
+	public static final long XDEF553 = 31159025916L;
 	/** Namespace is not defined&amp;{#SYS000} */
-	public static final long XDEF554 = 31159025916L;
+	public static final long XDEF554 = 31159025917L;
 	/** Minimum occurrence not reached for &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF555 = 31159025917L;
+	public static final long XDEF555 = 31159025918L;
 	/** Root element was not created */
-	public static final long XDEF556 = 31159025918L;
+	public static final long XDEF556 = 31159025919L;
 	/** Illegal element '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF557 = 31159025919L;
+	public static final long XDEF557 = 31159025920L;
 	/** Maximum occurrence limit of &amp;{0} exceeded&amp;{#SYS000} */
-	public static final long XDEF558 = 31159025920L;
+	public static final long XDEF558 = 31159025921L;
 	/** Both, qualified and unqualified attributes are not allowed with option 'acceptQualifiedAttr': &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF559 = 31159025921L;
+	public static final long XDEF559 = 31159025922L;
 	/** XQuery expression error&amp;{0}{: }&amp;{#SYS000} */
-	public static final long XDEF561 = 31159025922L;
+	public static final long XDEF561 = 31159025923L;
 	/** Variable '&amp;{0}' is 'final'; the value can't be assigned&amp;{#SYS000} */
-	public static final long XDEF562 = 31159025923L;
+	public static final long XDEF562 = 31159025924L;
 	/** Variable '&amp;{0}' doesn't exist&amp;{#SYS000} */
-	public static final long XDEF563 = 31159025924L;
+	public static final long XDEF563 = 31159025925L;
 	/** Value is not compatible with the type of variable '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF564 = 31159025925L;
+	public static final long XDEF564 = 31159025926L;
 	/** Too many iterator items for &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF565 = 31159025926L;
+	public static final long XDEF565 = 31159025927L;
 	/** Value doesn't fit to BNF rule '&amp;{0}' at position &amp;{1}&amp;{#SYS000} */
-	public static final long XDEF566 = 31159025927L;
+	public static final long XDEF566 = 31159025928L;
 	/** Script error: BNF rule '&amp;{0}' not exists&amp;{#SYS000} */
-	public static final long XDEF567 = 31159025928L;
+	public static final long XDEF567 = 31159025929L;
 	/** Database statement error&amp;{0}{: }{'}&amp;{#SYS000} */
-	public static final long XDEF568 = 31159025929L;
+	public static final long XDEF568 = 31159025930L;
 	/** Fatal error&amp;{0}{: }&amp;{#SYS000} */
-	public static final long XDEF569 = 31159025930L;
+	public static final long XDEF569 = 31159025931L;
 	/** '&amp;{0}' expected&amp;{#SYS000} */
-	public static final long XDEF570 = 31159025931L;
+	public static final long XDEF570 = 31159025932L;
 	/** Number of parameters must be multiple of 2&amp;{#SYS000} */
-	public static final long XDEF571 = 31159025932L;
+	public static final long XDEF571 = 31159025933L;
 	/** BNF rule '&amp;{0}' not exists&amp;{#SYS000} */
-	public static final long XDEF572 = 31159025933L;
+	public static final long XDEF572 = 31159025934L;
 	/** Null value of &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF573 = 31159025934L;
+	public static final long XDEF573 = 31159025935L;
 	/** Input XML source is empty or doesn't exist */
-	public static final long XDEF578 = 31159025935L;
+	public static final long XDEF578 = 31159025936L;
 	/** Attempt to access undeclared item&amp;{#SYS000} */
-	public static final long XDEF581 = 31159025936L;
+	public static final long XDEF581 = 31159025937L;
 	/** Attempt to access illegal item&amp;{#SYS000} */
-	public static final long XDEF582 = 31159025937L;
+	public static final long XDEF582 = 31159025938L;
 	/** Model of element '&amp;{0}' is missing in X-definition&amp;{1}{ }&amp;{#SYS000} */
-	public static final long XDEF601 = 31159025938L;
+	public static final long XDEF601 = 31159025939L;
 	/** The X-definition&amp;{0}{ '}{'} is missing */
-	public static final long XDEF602 = 31159025939L;
+	public static final long XDEF602 = 31159025940L;
 	/** '&amp;{0}' does not point to the model of element */
-	public static final long XDEF603 = 31159025940L;
+	public static final long XDEF603 = 31159025941L;
 	/** Incorrect regular expression: &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF650 = 31159025941L;
+	public static final long XDEF650 = 31159025942L;
 	/** Regex: unrecognized Unicode block name: "&amp;{0}" near position &amp;{1}&amp;{#SYS000} */
-	public static final long XDEF651 = 31159025942L;
+	public static final long XDEF651 = 31159025943L;
 	/** Regex: illegal escape char &amp;{0}{x} near position &amp;{1}&amp;{#SYS000} */
-	public static final long XDEF653 = 31159025943L;
+	public static final long XDEF653 = 31159025944L;
 	/** Regex: expected "&amp;{0}" near position &amp;{1}&amp;{#SYS000} */
-	public static final long XDEF654 = 31159025944L;
+	public static final long XDEF654 = 31159025945L;
 	/** Regex: expected a digit near position &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF655 = 31159025945L;
+	public static final long XDEF655 = 31159025946L;
 	/** Regex: lower bound of quantifier is greater than upper bound near position &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF658 = 31159025946L;
+	public static final long XDEF658 = 31159025947L;
 	/** Regex: error in expression near position &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF659 = 31159025947L;
+	public static final long XDEF659 = 31159025948L;
 	/** AttrProps declaration with name "&amp;{0}" in schema at URL "&amp;{1}" cannot be declared in X-definition 2.0. Reference will be replaced with attribute declaration. */
-	public static final long XDEF701 = 31159025948L;
+	public static final long XDEF701 = 31159025949L;
 	/** Redefined simple types can not be declared because of names collision. */
-	public static final long XDEF702 = 31159025949L;
+	public static final long XDEF702 = 31159025950L;
 	/** AttrProps group declaration with name="&amp;{0}" in schema at "&amp;{1}" cannot be converted to X-definition 2.0! reference to this attribute group will replaced with attribute declarations in group. */
-	public static final long XDEF703 = 31159025950L;
+	public static final long XDEF703 = 31159025951L;
 	/** Not valid X-definition document */
-	public static final long XDEF704 = 31159025951L;
+	public static final long XDEF704 = 31159025952L;
 	/** X-definition is null */
-	public static final long XDEF705 = 31159025952L;
+	public static final long XDEF705 = 31159025953L;
 	/** X-definition is empty string */
-	public static final long XDEF706 = 31159025953L;
+	public static final long XDEF706 = 31159025954L;
 	/** Reporter is null */
-	public static final long XDEF707 = 31159025954L;
+	public static final long XDEF707 = 31159025955L;
 	/** Error occurred when creating collection element: &amp;{0} */
-	public static final long XDEF708 = 31159025955L;
+	public static final long XDEF708 = 31159025956L;
 	/** Can't create X-definition document&amp;{0}{ } */
-	public static final long XDEF713 = 31159025956L;
+	public static final long XDEF713 = 31159025957L;
 	/** Can't create convertor&amp;{0}{ } */
-	public static final long XDEF714 = 31159025957L;
+	public static final long XDEF714 = 31159025958L;
 	/** Illegal parameter name '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF801 = 31159025958L;
+	public static final long XDEF801 = 31159025959L;
 	/** Parameter '&amp;{0}' respecified&amp;{#SYS000} */
-	public static final long XDEF802 = 31159025959L;
+	public static final long XDEF802 = 31159025960L;
 	/** After the value of type '&amp;{0}' follows an illegal character&amp;{#SYS000} */
-	public static final long XDEF804 = 31159025960L;
+	public static final long XDEF804 = 31159025961L;
 	/** Parsed value is null&amp;{#SYS000} */
-	public static final long XDEF805 = 31159025961L;
+	public static final long XDEF805 = 31159025962L;
 	/** Value of '&amp;{0}' is out of range&amp;{#SYS000} */
-	public static final long XDEF806 = 31159025962L;
+	public static final long XDEF806 = 31159025963L;
 	/** Both parameters can't be specified: '&amp;{0}', '&amp;{1}'&amp;{#SYS000} */
-	public static final long XDEF807 = 31159025963L;
+	public static final long XDEF807 = 31159025964L;
 	/** Incorrect combination of maximum and minimum&amp;{#SYS000} */
-	public static final long XDEF808 = 31159025964L;
+	public static final long XDEF808 = 31159025965L;
 	/** Incorrect value of '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF809 = 31159025965L;
+	public static final long XDEF809 = 31159025966L;
 	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF810 = 31159025966L;
+	public static final long XDEF810 = 31159025967L;
 	/** Doesn't fit any pattern from list for '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF811 = 31159025967L;
+	public static final long XDEF811 = 31159025968L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
-	public static final long XDEF812 = 31159025968L;
+	public static final long XDEF812 = 31159025969L;
 	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{#SYS000} */
-	public static final long XDEF813 = 31159025969L;
+	public static final long XDEF813 = 31159025970L;
 	/** Length of value of '&amp;{0}' is too short&amp;{#SYS000} */
-	public static final long XDEF814 = 31159025970L;
+	public static final long XDEF814 = 31159025971L;
 	/** Length of value of '&amp;{0}' is too long&amp;{#SYS000} */
-	public static final long XDEF815 = 31159025971L;
+	public static final long XDEF815 = 31159025972L;
 	/** Value of enumeration for 'eq' must be just one&amp;{#SYS000} */
-	public static final long XDEF816 = 31159025972L;
+	public static final long XDEF816 = 31159025973L;
 	/** "&amp;{0}" is not a valid value type&amp;{#SYS000} */
-	public static final long XDEF817 = 31159025973L;
+	public static final long XDEF817 = 31159025974L;
 	/** Range of values of year of date must be from &amp;{0} to &amp;{1}'&amp;{#SYS000} */
-	public static final long XDEF818 = 31159025974L;
+	public static final long XDEF818 = 31159025975L;
 	/** Value of &amp;{0} can't be null&amp;{#SYS000} */
-	public static final long XDEF819 = 31159025975L;
+	public static final long XDEF819 = 31159025976L;
 	/** Value of type "Parser" expected&amp;{0}{, found: }&amp;{#SYS000} */
-	public static final long XDEF820 = 31159025976L;
+	public static final long XDEF820 = 31159025977L;
 	/** Incorrect range specification of &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF821 = 31159025977L;
+	public static final long XDEF821 = 31159025978L;
 	/** Class with the external debug editor &amp;{0}{"}{"} is not available.  */
-	public static final long XDEF850 = 31159025978L;
+	public static final long XDEF850 = 31159025979L;
 	/** GUIEditor can't write XML data to file &amp;{0}. */
-	public static final long XDEF851 = 31159025979L;
+	public static final long XDEF851 = 31159025980L;
 	/** No response from the external editor */
-	public static final long XDEF860 = 31159025980L;
+	public static final long XDEF860 = 31159025981L;
 	/** In the external editor is already opened the other project */
-	public static final long XDEF861 = 31159025981L;
+	public static final long XDEF861 = 31159025982L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159025982L;
+	public static final long XDEF901 = 31159025983L;
 	/** Can't read X-definition&amp;{0}{: } */
-	public static final long XDEF902 = 31159025983L;
+	public static final long XDEF902 = 31159025984L;
 	/** X-definition source is missing or null&amp;{0}{: } */
-	public static final long XDEF903 = 31159025984L;
+	public static final long XDEF903 = 31159025985L;
 	/** Incorrect parameter of compiler of X-definitions&amp;{0}{: } */
-	public static final long XDEF904 = 31159025985L;
+	public static final long XDEF904 = 31159025986L;
 	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159025986L;
+	public static final long XDEF905 = 31159025987L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159025987L;
+	public static final long XDEF906 = 31159025988L;
 	/** Type declaration format "{parse: ...}" is deprecated; please use just validation method call&amp;{#SYS000} */
-	public static final long XDEF997 = 31159025988L;
+	public static final long XDEF997 = 31159025989L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025989L;
+	public static final long XDEF998 = 31159025990L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025990L;
+	public static final long XDEF_DESCRIPTION = 31159025991L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159025991L;
+	public static final long XDEF_LANGUAGE = 31159025992L;
 
 	/** Default language. */
 	public static final String XDEF = "eng";

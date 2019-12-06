@@ -10,6 +10,8 @@
   variables are changed, the dots (".") in a names are replaced by
   underlines ("_"), e.g. "xdef.debug" is now "xdef_debug" (see XDConstants).
   However, since the names with dots are deprecated, they are still accepted.
+. corrected the bug when it is specified attribute "xd:text" and a text node
+  follows the last one element int a sequence.
 
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors

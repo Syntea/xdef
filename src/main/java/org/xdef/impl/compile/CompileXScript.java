@@ -1221,6 +1221,13 @@ final class CompileXScript extends CompileStatement {
 					&& (result.getName().equals("$text")
 					|| result.getName().equals("$textcontent"))) {
 					result._cdata = 'T';
+					if ("textcontent".equals(result.getName())
+						&& result.maxOccurs() > 1) {
+						//Maximum occurrence in "xd:textcontent" attribute
+						// can not be higher then 1
+						warning(XDEF.XDEF535);
+						result.setOccurrence(result.minOccurs(), 1);
+					}
 				} else {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, _idName);
