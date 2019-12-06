@@ -1008,6 +1008,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						_scriptCompiler.compileDataScript(xdata);
 						xel.setDefAttr(xdata);
 						xel._moreText = 'T';
+						if ("textcontent".equals(localName)
+							&& xdata.maxOccurs() > 1) {
+							//Maximum occurrence in "xd:textcontent" attribute
+							// can not be higher then 1
+							error(sval, XDEF.XDEF535);
+						}
 					} else {
 						//Attribute '&{0}' not allowed here
 						error(sval, XDEF.XDEF254, key);

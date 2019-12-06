@@ -3970,7 +3970,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Compile a validation method.
 	 * @param keywords where to skip if a syntax error is reported.
-	 * @return code with the adress, type and refered name.
+	 * @return code with the address, type and referred name.
 	 */
 	final CodeS1 compileCheckMethod(final String keywords) {
 		int sp = _g._sp  = -1;

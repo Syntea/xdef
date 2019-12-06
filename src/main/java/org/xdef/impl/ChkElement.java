@@ -3120,6 +3120,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							appendTextNode(value, xtxt1);
 						}
 						int n = incRefNum();
+						if (xtxt != xtxt1) {
+							n--;
+						}
 						if (_actDefIndex > 0 && n > xtxt1.maxOccurs()) {
 							//Maximum occurrence limit of &amp;{0} exceeded
 							error(XDEF.XDEF558, "text");

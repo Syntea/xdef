@@ -221,7 +221,7 @@ public static class c implements org.xdef.component.XComponent{
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9E32D5241EE675A9AB950DBF62277C8D".equals(
+    if (!"E4152FB94327CE06C9417EFF61F6C7F4".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
