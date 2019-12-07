@@ -1549,7 +1549,52 @@ public final class Test002 extends XDTester {
 				&& s.contains("E XDEF804:")	&& s.contains("=/a/@c")
 				&& s.contains("=/a/@d")	&& s.contains("=/a/text()[3]")
 				&& s.contains("=/a/text()[4]"), s);
-
+			xdef =
+"<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/3.2\">\n" +
+"  <xd:def xd:root=\"A\">\n" +
+"    <A xd:script=\"ref RegistraceSU_RegistraceSU_cType\"/>\n" +
+"    <RegistraceSU_RegistraceSU_cType\n"+
+"       xd:script=\"ref L1_common_SU_cType\"/>\n" +
+"    <L1_common_Misto_cType xd:text=\"? string()\">\n" +
+"      <GPS xd:script=\"ref L1_common_GPS_cType; occurs ?\"/>\n" +
+"      <Adresa xd:script=\"ref L1_common_Adresa_cType; occurs ?\"/>\n" +
+"      <Vozovka xd:script=\"ref L1_common_Vozovka_cType; occurs ?\"/>\n" +
+"    </L1_common_Misto_cType>\n" +
+"    <L1_common_SU_cType>\n" +
+"      <Misto xd:script=\"ref L1_common_Misto_cType\"/>\n" +
+"    </L1_common_SU_cType>\n" +
+"    <L1_common_Adresa_cType CisloDomu=\"optional string(1, 10)\"\n" +
+"      Obec=\"optional string(1, 36)\"\n" +
+"      Okres=\"optional string(1, 36)\"\n" +
+"      PSC=\"optional string(1, 16)\"\n" +
+"      Stat=\"required string()\"\n" +
+"      Ulice=\"optional string(1, 36)\"/>\n" +
+"    <L1_common_Vozovka_cType/>\n" +
+"    <L1_common_GPS_cType/>\n" +
+"  </xd:def>\n" +
+"</xd:collection>";
+			xd = compile(xdef).createXDDocument();
+//"Testovací data OK\n" +
+			xml =
+"<A>\n" +
+"    <Misto>\n" +
+"      awdad\n" + // here
+"      <Adresa Okres=\"PRAHA 9\" Stat=\"CZ\"/>\n" +
+"    </Misto>\n" +
+"</A>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+//"Testovací data chyba\n" +
+			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xml =
+"<A>\n" +
+"    <Misto>\n" +
+"      <Adresa Okres=\"PRAHA 9\" Stat=\"CZ\"/>\n" +
+"        awdad\n" +
+"    </Misto>\n" +
+"</A>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:x='a.b.c' root='M'>\n" +
 "<M xd:script=\"var String s = '';\">\n" +
