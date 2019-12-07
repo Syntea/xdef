@@ -3119,13 +3119,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						if (_element != null) {
 							appendTextNode(value, xtxt1);
 						}
-						int n = incRefNum();
-						if (xtxt != xtxt1) {
-							n--;
-						}
-						if (_actDefIndex > 0 && n > xtxt1.maxOccurs()) {
-							//Maximum occurrence limit of &amp;{0} exceeded
-							error(XDEF.XDEF558, "text");
+						if (_actDefIndex >= 0
+							&& _defList[_actDefIndex].getKind()==XNode.XMTEXT) {
+							int n = xtxt == xtxt1 ? incRefNum() : getRefNum();
+							if (_actDefIndex > 0 && n > xtxt1.maxOccurs()) {
+								//Maximum occurrence limit of &amp;{0} exceeded
+								error(XDEF.XDEF558, "text");
+							}
 						}
 					}
 					_data = null;
