@@ -1932,48 +1932,41 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							String declName = p.getDeclaredName();
 							ndx = declName.indexOf('#');
 							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
-							if (!name.equals(s)) {
-								//Enumeration &{0} is not declared as a type
-								error(sbf, XDEF.XDEF380, name);
+							XDContainer xc = p.getNamedParams();
+							if (xc != null && (p instanceof XDParseEnum
+								&& (xv = xc.getXDNamedItemValue("argument"))
+								!= null)) {
+								xc = (XDContainer) xv;
 							} else {
-								XDContainer xc = p.getNamedParams();
-								if (xc != null && (p instanceof XDParseEnum
-									&& (xv = xc.getXDNamedItemValue("argument"))
-									!= null)) {
-									xc = (XDContainer) xv;
-								} else {
-									//Type &{0} can't be converted to enum
-									error(sbf, XDEF.XDEF381, name);
-									continue;
-								}
-								XDValue[] names = xc.getXDItems();
-								boolean wasError =
-									names == null || names.length == 0;
-								if (!wasError) {
-									for (XDValue item: names) {
-										s = item == null
-											? null : item.stringValue();
-										if (!StringParser.isJavaName(s)) {
-											wasError = true;
-											//Type &{0} can't be converted to
-											//enumeration &{1} because value
-											//"&{2}" is not Java identifier
-											error(sbf, XDEF.XDEF382,
-												name, clsname, s);
-										}
+								//Type &{0} can't be converted to enum
+								error(sbf, XDEF.XDEF381, name);
+								continue;
+							}
+							XDValue[] names = xc.getXDItems();
+							boolean wasError = names==null || names.length==0;
+							if (!wasError) {
+								for (XDValue item: names) {
+									s = item==null ? null : item.stringValue();
+									if (!StringParser.isJavaName(s)) {
+										wasError = true;
+										//Type &{0} can't be converted to
+										//enumeration &{1} because value
+										//"&{2}" is not Java identifier
+										error(sbf, XDEF.XDEF382,
+											name, clsname, s);
 									}
 								}
-								s = clsname; // get as string
-								if (!classNames.add(s)) {
-									//Class name &{0} is used in other command
-									error(sbf, XDEF.XDEF383, s);
+							}
+							s = clsname; // get as string
+							if (!classNames.add(s)) {
+								//Class name &{0} is used in other command
+								error(sbf, XDEF.XDEF383, s);
+							}
+							if (!wasError) {
+								for (XDValue item: names) {
+									s += " " + item.stringValue();
 								}
-								if (!wasError) {
-									for (XDValue item: names) {
-										s += " " + item.stringValue();
-									}
-									x.put(p.getDeclaredName(), s);
-								}
+								x.put(p.getDeclaredName(), s);
 							}
 						} else {
 							//Enumeration &{0} is not declared as a type
