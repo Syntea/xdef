@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 32.5.5, release-date 2019-11-26
+# Version 32.5.5, release-date 2019-12-09
 * implemented new X-script method String getEnv(String name) which reads
   an environment variable.
 * it is now possible to use environment variables likewise as properties.
@@ -10,8 +10,10 @@
   variables are changed, the dots (".") in a names are replaced by
   underlines ("_"), e.g. "xdef.debug" is now "xdef_debug" (see XDConstants).
   However, since the names with dots are deprecated, they are still accepted.
-. corrected the bug when it is specified attribute "xd:text" and a text node
+* corrected the bug when it is specified attribute "xd:text" and a text node
   follows the last one element int a sequence.
+* corrected the bug when in types "union" or "list" are references to declared
+  types.
 
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors
