@@ -699,11 +699,30 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					nextSymbol();
 				} else if (!assignment(name, true)) {
 					CompileVariable var = _g.getVariable(name);
+					XDValue x;
 					if (var != null
 						&& var.getType() == CompileBase.UNIQUESET_NAMED_VALUE) {
 						_g.genLD(var);
 						_g.addCode(new CodeS1(var.getParseResultType(),
 							UNIQUESET_GETVALUEX, var.getValue().toString()), 0);
+					// this is very nasty code. If the variable refers to a
+					// declared type and the parser is constant we use the
+					// code with the parser as a value (and it is constant).
+					// TODO if it is not a constant.
+					} else if (var != null
+						&& var.getType()==CompileBase.PARSEITEM_VALUE
+						&& var.getParseMethodAddr() >= 0 // parse method exists
+//						&& var.getValue() == null
+						&& (x=_g._code.get(var.getParseMethodAddr()))
+							.getCode() == 0 // constant
+						&& x.getItemId() == XD_PARSER
+						&& _g._code.get(var.getParseMethodAddr() + 1)
+							.getCode() == PARSE_OP
+						&& _g._code.get(var.getParseMethodAddr() + 2)
+							.getCode() == STOP_OP) { // declared type
+						_g.addCode(x, 1);
+						_g._tstack[_g._sp] = XD_PARSER; // it must be parser!
+						_g._cstack[_g._sp] = var.getParseMethodAddr();//constant
 					} else if (var == null || !_g.genLD(var)) {
 						int xsp = _g._sp;
 						if (_g.scriptMethod(name, 0)
@@ -715,10 +734,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						} else {
 							qualifiedMethod(name, false);
 						}
-					} else {
-						if (_sym == DOT_SYM) {
-							qualifiedMethod(name, true);
-						}
+					} else if (_sym == DOT_SYM) {
+						qualifiedMethod(name, true);
 					}
 				}
 				break;

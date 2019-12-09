@@ -218,6 +218,11 @@ public final class TestOptions extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
 			assertEq("bbb", strw.toString());
 			assertNoErrorwarnings(reporter);
+			xml = "<a>aaa<b/>bbb</a>";
+			strw = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			assertEq("aaabbb", strw.toString());
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
