@@ -462,7 +462,7 @@ public interface XDEF {
 	public static final long XDEF506 = 31159025890L;
 	/** Value error&amp;{#SYS000} */
 	public static final long XDEF515 = 31159025891L;
-	/** Sequence has no required item&amp;{#SYS000} */
+	/** Sequence "xd:mixed" has no required item&amp;{#SYS000} */
 	public static final long XDEF520 = 31159025892L;
 	/** UniqueSet &amp;{0}{"}{"} item is not complete&amp;{1}{ {missing }{)}&amp;{#SYS000} */
 	public static final long XDEF521 = 31159025893L;
