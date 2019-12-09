@@ -252,7 +252,39 @@ public final class TestTypes extends XDTester {
 			xml = "<a x='xxx'>xxx</a>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <xd:declaration scope='local'>\n" +
+"    type Test_enum enum(\"A\", \"B\", \"C\");\n" +
+"    type Test_int int(1, 10);\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <xd:choice xd:script=\"occurs *\">\n" +
+"      <Test1>required list(%item=Test_int);</Test1>\n" +
+"      <Test2>required list(%item=Test_int, %length='3');</Test2>\n" +
+"      <Test3>required list(%item=Test_enum, %length='3');</Test3>\n" +
+"      <Test4>required union(%item=[Test_enum, Test_int]);</Test4>\n" +
+"      <Test5>required union(%item=[Test_enum]);</Test5>\n" +
+"      <Test6>required union(%item=[Test_int]);</Test6>\n" +
+"    </xd:choice>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xml =
+"<A>\n" +
+"    <Test1>1</Test1>\n" +
+"    <Test1>1 2 3 4 5 6 7 8 9 10</Test1>\n" +
+"    <Test2>1 2 3</Test2>\n" +
+"    <Test3>A B C</Test3>\n" +
+"    <Test4>A</Test4>\n" +
+"    <Test4>5</Test4>\n" +
+"    <Test4>C</Test4>\n" +
+"    <Test5>C</Test5>\n" +
+"    <Test6>3</Test6>\n" +
+"</A>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+} catch (Exception ex) {fail(ex);}
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
