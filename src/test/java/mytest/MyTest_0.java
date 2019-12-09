@@ -22,6 +22,7 @@ import buildtools.XDTester;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import org.xdef.sys.Report;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -72,6 +73,7 @@ public class MyTest_0 extends XDTester {
 		Element el;
 		XDOutput out;
 		StringWriter strw;
+		Report rep;
 		boolean chkSynteax = getChkSyntax();
 //		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
@@ -79,6 +81,31 @@ public class MyTest_0 extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+		try {// check mixed, include
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a>\n"+
+"  <xd:mixed empty='false'>\n"+
+"    <b xd:script = 'occurs 0..' />\n"+
+"    optional string()\n"+
+"    <c xd:script = 'occurs 0..'/>\n"+
+"  </xd:mixed>\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			parse(xp, null, "<a>t1</a>", reporter);
+			assertNoErrors(reporter);
+			parse(xp, null, "<a>t1<b/></a>", reporter);
+			assertNoErrors(reporter);
+			parse(xp, null, "<a>t1<b/>t2</a>\n", reporter);
+			assertTrue(reporter.errorWarnings());
+			parse(xp, null, "<a/>", reporter);
+			rep = reporter.getReport();
+			assertTrue(rep != null && ("XDEF520".equals(rep.getMsgID())),
+				reporter.printToString());
+			System.out.println(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {
 			xdef = //Incorrect fixed value
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+

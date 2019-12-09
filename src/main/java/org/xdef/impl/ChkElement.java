@@ -795,8 +795,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				&& selector._prev._count >= selector._prev.minOccurs()) {
 				return required;
 			}
-			//Sequence has no required item in
-			error(XDEF.XDEF520, "&{xdpos}(<xd:mixed>)&{xpath}" + _xPos);
+			//Sequence "xd:mixed" has no required item
+			error(XDEF.XDEF520, "&{xdpos}"
+				+ _defList[selector._begIndex].getXDPosition()
+				+ "&{xpath}" + _xPos);
 		}
 		return required;
 	}
