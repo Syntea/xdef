@@ -656,6 +656,36 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("ab3", xd.getVariable("s").toString());
+			// test both text and textcontent
+			for (int i = 0; i < 2; i++) {
+				xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"   <A " + (i == 0 ? "xd:text='*" : "xd:textcontent='?") + " string()'>\n" +
+"     <B xd:script='*'/>\n" +
+"   </A>\n" +
+"</xd:def>";
+				xp = XDFactory.compileXD(null, xdef);
+				xml = "<A/>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				xml = "<A>test</A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				xml = "<A><B/>test</A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				xml = "<A>test<B/></A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				xml = "<A><B/><B/>test</A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				assertNoErrors(reporter);
+				xml = "<A>test<B/><B/>test</A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				assertNoErrors(reporter);
+				xml = "<A><B/>test<B/></A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				assertNoErrors(reporter);
+				xml = "<A>test<B/>test<B/>test</A>";
+				assertEq(xml, parse(xp, "", xml, reporter));
+				assertNoErrors(reporter);
+			}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration> String x='aBc|DeFg'; </xd:declaration>\n"+

@@ -362,7 +362,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		int nextDefIndex = _nextDefIndex; //save index for moreElement case
 		int actDefIndex = _actDefIndex;
 		ChkElement result = (ChkElement) findXNode(element);
-		if (appended && result == null) {
+		XMData textcontent =_xElement.getDefAttr("$textcontent",-1);
+		if (appended && result == null && textcontent == null) {
 			el.removeChild(element);
 		} else if (result != null && (result.getXMElement().isIgnore()
 			|| result.getXMElement().isIllegal())) {
@@ -388,7 +389,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						element.getNodeName()));
 					exec(_xElement._onIllegalElement, (byte) 'E');
 					copyTemporaryReports();
-				} else {
+				} else if (textcontent == null) {
 					//Not allowed element '&{0}'
 					error(XDEF.XDEF501, element.getNodeName());
 				}
