@@ -1016,6 +1016,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final int index,
 		final XData xtxt,
 		Node lastNode) {
+		Node lastNode1 = lastNode;
 		int i = index;
 		chkEl.setElemValue(sourceEl);
 		XNode xNode;
@@ -1027,8 +1028,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 						Node n = chkEl._element.getLastChild();
 						if (n == null || n.getNodeType() != Node.TEXT_NODE
 							&& n.getNodeType() != Node.CDATA_SECTION_NODE) {
-							lastNode = createTextNode(
-								chkEl,sourceEl,savedSource,xtxt,lastNode);
+							lastNode1 = createTextNode(
+								chkEl,sourceEl,savedSource,xtxt,lastNode1);
 						}
 					}
 					XElement childDef = (XElement) xNode;
@@ -1169,8 +1170,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 					}
 					if (xtxt != null) {
-						lastNode = createTextNode(chkEl,
-							sourceEl, savedSource, xtxt, lastNode);
+						lastNode1 = createTextNode(chkEl,
+							sourceEl, savedSource, xtxt, lastNode1);
 					}
 					if (chkEl._selector != null
 						&& chkEl._selector._kind == XNode.XMCHOICE
@@ -1186,7 +1187,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				case XNode.XMTEXT: {
 					count = chkEl.getRefNum(index);
 					createTextNode(chkEl,
-						sourceEl, savedSource, (XData) xNode, lastNode);
+						sourceEl, savedSource, (XData) xNode, lastNode1);
 					if (chkEl._selector != null
 						&& chkEl._selector._kind == XNode.XMCHOICE
 						&& count < chkEl.getRefNum(i)
@@ -1230,7 +1231,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						int xnum = (int) ((DefLong) result).intValue();
 						for(int j = 0; j < xsel.maxOccurs() && j < xnum; j++) {
 							createGroup(chkEl,xtxt, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
+								savedSource, i, lastNode1, savedUserObj);
 							if (chkEl._selector != null
 								&& xsel.getKind() != XNode.XMMIXED
 								&& chkEl._selector._count > xsel.maxOccurs()) {
@@ -1243,7 +1244,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 					} else if (result.getItemId() == XD_BOOLEAN) {
 						for(int j = 0; j < xsel.maxOccurs(); j++) {
 							createGroup(chkEl,xtxt, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
+								savedSource, i, lastNode1, savedUserObj);
 							result = chkEl.exec(addr, (byte) 'E');
 							chkEl.copyTemporaryReports();
 							if (!result.booleanValue()) {
@@ -1266,7 +1267,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 										null, chkEl._xElement);
 								}
 								createGroup(chkEl, xtxt, el,
-									null, i, lastNode, savedUserObj);
+									null, i, lastNode1, savedUserObj);
 								if (xsel.getKind() != XNode.XMMIXED &&
 									j + 1 >= xsel.maxOccurs()) {
 									//Maximum occurrence of &{0} exceeded
@@ -1297,7 +1298,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							len : xsel.maxOccurs();
 						for(int j = 0; j <= max && j < len; j++) {
 							createGroup(chkEl,xtxt,
-								el, null, i, lastNode, savedUserObj);
+								el, null, i, lastNode1, savedUserObj);
 							if (j + 1 >= dc.getXDItemsNumber()) {
 								break;
 							}
