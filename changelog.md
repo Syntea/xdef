@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 32.5.5, release-date 2019-12-10
+# Version 32.5.5, release-date 2019-12-12
 * implemented new X-script method String getEnv(String name) which reads
   an environment variable.
 * it is now possible to use environment variables likewise as properties.
@@ -15,6 +15,7 @@
 * corrected bug when in types "union" or "list" are references to declared
   types.
 * corrected bug in processing of elements with xd:textcontent.
+* reports error if xpath expression is empty string or null.
 
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors
