@@ -74,6 +74,9 @@ public class KXpathExpr {
 	 * @return -1 .. not simple, 0 .. element name, 1 .. attr, 6 .. self::.
 	 */
 	private int chkSimpleExpr() {
+		if (_source == null || _source.isEmpty()) {
+			return -1;
+		}
 		int ndx = _source.charAt(0) == '@' ? 1 :
 			_source.startsWith("self::") ? 6 : 0;
 		String s = _source.substring(ndx);

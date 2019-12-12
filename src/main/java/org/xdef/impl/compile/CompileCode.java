@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.msg.XML;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.SPosition;
 
@@ -1761,6 +1762,11 @@ public final class CompileCode extends CompileBase {
 			return false; // xpath expression is not string constant
 		}
 		String s = getCodeItem(constPar).toString();
+		if (s == null || (s = s.trim()).isEmpty()) {
+			//XPath error&{0}{: }
+			_parser.error(XML.XML505, "empty argument");
+			return false;
+		}
 		int ix = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		String name = s.substring(ix);
 		ix = StringParser.chkXMLName(name, (byte) 10) ?
