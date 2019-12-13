@@ -657,21 +657,20 @@ public final class TestParse extends XDTester {
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);				
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"   <B_cType xd:text=\"string()\">\n" +
-"     <C/>\n" +
-"     <D/>\n" +
-"   </B_cType>\n" +
-"   <A>\n" +
-"     <B xd:script=\"ref B_cType\" xd:text=\"3 string()\"/>\n" +
-"   </A>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <B xd:text=\"string()\"><c/><d/></B>\n" +
+"  <a>\n" +
+"    <b xd:script=\"ref B\" xd:text=\"3 string()\"/>\n" +
+"  </a>\n" +
 "</xd:def>";
-			xd = compile(xdef).createXDDocument();
-			xml = "<A><B>t1<C/>t2<D/>t3</B></A>";
-			assertEq(xml, parse(xd, xml, reporter));
+			xp = compile(xdef);
+			xml = "<a><b>t1<c/>t2<d/>t3</b></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xml = "<A><B><C/><D/>t</B></A>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xml = "<a><b><c/><d/>t</b></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
 			xdef = // xd:textcontent attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
