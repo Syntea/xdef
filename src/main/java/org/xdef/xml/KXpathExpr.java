@@ -74,9 +74,12 @@ public class KXpathExpr {
 	 * @return -1 .. not simple, 0 .. element name, 1 .. attr, 6 .. self::.
 	 */
 	private int chkSimpleExpr() {
-		int ndx = _source.charAt(0) == '@' ? 1 :
-			_source.startsWith("self::") ? 6 : 0;
-		String s = _source.substring(ndx);
+		String s;
+		if (_source == null || (s =_source.trim()).isEmpty()) {
+			return -1;
+		}
+		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
+		s = s.substring(ndx);
 		return s.indexOf("::") < 0
 			&& StringParser.chkXMLName(s, (byte) 10) ? ndx : -1;
 	}

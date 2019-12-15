@@ -545,13 +545,11 @@ final class ChkTranslate extends SReporter implements XDValueID {
 			if (attrName.charAt(0) == '$') { //special XDEF attribute
 				continue; // skip xd:text etc
 			}
-/*LEXICON*/
 			String attrName1 = _lexicon.findText(xatr.getXDPosition(),
 				_sourceLanguageID);
 			if (attrName1 != null) {
 				attrName = attrName1;
 			}
-/*LEXICON*/
 			chkElem._xPos = xpos + "/@" + attrName;
 			chkElem.debugXPos(XDDebug.CREATE);
 			//no source action, try to find attribute in source element.
@@ -570,13 +568,11 @@ final class ChkTranslate extends SReporter implements XDValueID {
 					||  xel._ignoreEmptyAttributes == 0
 					&& chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
 					// set attribute
-/*LEXICON*/
 					String newName = _lexicon.findText(xatr.getXDPosition(),
 						_destLanguageID);
 					if (newName != null) {
 						attrName = newName;
 					}
-/*LEXICON*/
 					if (xatr.getNSUri() == null) {
 						chkElem._element.setAttribute(attrName, s);
 					} else {
@@ -1215,12 +1211,10 @@ final class ChkTranslate extends SReporter implements XDValueID {
 				u = null;
 			}
 		}
-/*LEXICON*/
 		String s = _lexicon.findText(xel.getXDPosition(), _destLanguageID);
 		if (s != null) {
 			n = s;
 		}
-/*LEXICON*/
 		return chkElem._element.getOwnerDocument().createElementNS(u, n);
 	}
 
