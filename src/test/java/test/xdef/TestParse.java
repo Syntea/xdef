@@ -604,58 +604,99 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.toString().contains("XDEF533"),
 				reporter.toString());
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"   <a xd:text='* string()'>\n" +
-"     <b xd:script='*'/>\n" +
-"   </a>\n" +
+"   <a xd:text='* string()'/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a>t</a>";
+			xml = "<a>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a><b/>t</a>";
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"   <a xd:text='* string()'>\n" +
+"     <b xd:script='*'/>\n" +
+"   </a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a>t<b/></a>";
+			xml = "<a>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a><b/><b/>t</a>";
+			xml = "<a><b/>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a>t1<b/><b/>t2</a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);			
-			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
-			xml = "<a><b/>t<b/></a>";
+			xml = "<a>1<b/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xml = "<a>t1<b/>t2/>t3</a>";
+			xml = "<a><b/><b/>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);				
-			xml = "<a>t1<b/>t2<b/>t3<b/>t4</a>";
+			assertNoErrors(reporter);
+			xml = "<a>1<b/><b/>2</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);				
+			assertNoErrors(reporter);
+			xml = "<a><b/>1<b/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			assertEq(xml, create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xml = "<a>1<b/>2/>3</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			assertEq(xml, create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xml = "<a>1<b/>2<b/>3<b/>4</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			assertEq(xml, create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xdef = 
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"   <xd:declaration>int i = 0;</xd:declaration>\n" +
+"   <a xd:text='* string(); create ++i'/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xdef = 
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"   <xd:declaration>int i = 0;</xd:declaration>\n" +
+"   <a xd:text='* string(); create ++i'>\n" +
+"     <b xd:script='*'/>\n" +
+"   </a>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xml = "<a><b/></a>";
+			assertEq("<a>1<b/>2</a>", create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+			xml = "<a><b/><b/></a>";
+			assertEq("<a>1<b/>2<b/>3</a>", create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <B xd:text=\"string()\"><c/><d/></B>\n" +
