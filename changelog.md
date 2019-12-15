@@ -16,7 +16,7 @@
   types.
 * corrected bug in processing of elements with "xd:textcontent" attribute.
 * reports error if xpath expression is empty string or null.
-* corrected bugs in construction od elements with "xd:text" attribute.
+* corrected bugs in construction of elements with "xd:text" attribute.
 
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors
