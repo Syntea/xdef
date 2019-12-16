@@ -430,9 +430,7 @@ final class CompileXScript extends CompileStatement {
 			sc._check = check;
 			//we try to set type of checked object and the type method name.
 			sc.setValueType(CompileBase.getParsedType(typeName), typeName);
-			if (_g.getVariable(typeName) != null) {
-				sc.setRefTypeName(typeName);
-			}
+			XDParser p = null;
 			if (_g._lastCodeIndex > 0 && check < _g._code.size()) {
 				XDValue y = _g._code.get(check);
 				if (y.getCode() == CALL_OP) {// execute type method
@@ -444,11 +442,24 @@ final class CompileXScript extends CompileStatement {
 							&& y.getItemId() == XD_PARSER) {
 							j = _g._code.get(i+2).getCode();
 							if (j == PARSERESULT_MATCH || j == STOP_OP) {
-								XDParser p = (XDParser) y;
-								sc.setValueType(p.parsedType(), p.parserName());
+								p = (XDParser) y;
+//								sc.setValueType(p.parsedType(), p.parserName());
 							}
 						}
 					}
+				} else if (y instanceof XDParser) {
+					p = (XDParser) y;
+				}
+				if (p != null) {
+					sc.setValueType(p.parsedType(), p.toString());
+				}
+				if (_g.getVariable(typeName)==null && typeName.indexOf('.')>0) {
+					String s = typeName.substring(0, typeName.lastIndexOf('.'));
+					if (_g.getVariable(s) != null) {
+						sc.setRefTypeName(s);
+					}
+				} else if (typeName != null && _g.getVariable(typeName) != null) {
+					sc.setRefTypeName(typeName);
 				}
 			}
 		}
