@@ -29,7 +29,7 @@
     <properties>
         <revision>32.5.5</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-		<release.date>2019-11-18</release.date><!-- update when changed version -->
+		<release.date>2019-12-17</release.date><!-- update when changed version -->
         <specification.version>3.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
