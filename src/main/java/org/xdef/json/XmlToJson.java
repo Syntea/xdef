@@ -81,7 +81,7 @@ class XmlToJson extends JsonToXml {
 						return new BigDecimal(s);
 					} else {
 						try {
-							return new Long(s);
+							return Long.parseLong(s);
 						} catch (Exception ex) {
 							return new BigInteger(s);
 						}

@@ -405,10 +405,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private Element chkAndGetRootElement(final SReporter reporter,
 		boolean noreporter) throws SRuntimeException {
 		if (noreporter) {
-			Properties props = getProperties();
-			if (props != null && "true".equals(getProperties().getProperty(
-				XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE))) {
+			if (XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE.equals(
+				SManager.getProperty(getProperties(),
+					XDConstants.XDPROPERTY_WARNINGS))) {
 				reporter.checkAndThrowErrorWarnings();
 			} else {
 				reporter.checkAndThrowErrors();
@@ -497,7 +496,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
-		_scp.setProperty(key, value);
+		String newKey = key.startsWith("xdef.") ? key.replace('.','_'): key;
+		if (!newKey.equals(key)) {
+			_scp.setProperty(key, null); // remve odl version of property
+		}
+		_scp.setProperty(newKey, value);
 	}
 
 	@Override

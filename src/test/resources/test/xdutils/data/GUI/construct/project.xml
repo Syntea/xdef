@@ -1,8 +1,8 @@
 <Project>
   <XDefinition>src/test/resources/test/xdutils/data/GUI/construct/xdef.xml</XDefinition>
-  <Property Name = "xdef.warnings" Value = "true"/>
-  <Property Name = "xdef.display" Value = "true"/>
-  <Property Name = "xdef.debug" Value = "true"/>
+  <Property Name = "xdef_warnings" Value = "true"/>
+  <Property Name = "xdef_display" Value = "true"/>
+  <Property Name = "xdef_debug" Value = "true"/>
   <Execute XDName = "test" Mode = "construct" DisplayResult = "true">
     <Context>src/test/resources/test/xdutils/data/GUI/construct/data.xml</Context>
     <SaveResult File = "src/test/resources/test/xdutils/data/GUI/construct/result1.html" />

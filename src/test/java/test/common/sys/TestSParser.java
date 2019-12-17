@@ -572,8 +572,7 @@ public class TestSParser extends STester {
 			} else {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = s.replace('.', ',').replace('/', '.');
 			p = new StringParser(s);
@@ -582,8 +581,7 @@ public class TestSParser extends STester {
 			} else {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = s.replace('.', '?');
 			p = new StringParser(s);
@@ -592,8 +590,7 @@ public class TestSParser extends STester {
 			} else {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			SimpleDateFormat sdf =
 				new SimpleDateFormat("d/M/yyyy HH:mm:ss.S z");
@@ -606,15 +603,9 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertEq("SELČ", tz.getDisplayName(tz.useDaylightTime(),
-						TimeZone.SHORT));
-				} else {
-					assertEq("CEST", tz.getDisplayName(tz.useDaylightTime(),
-						TimeZone.SHORT));
-				}
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq("CEST",
+					tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = "11/10/2005 17:56:46.395 GMT+01:00";
 			p = new StringParser(s);
@@ -624,8 +615,7 @@ public class TestSParser extends STester {
 				c = p.getParsedCalendar();
 				assertTrue(p.eos());
 				assertEq("UTC", c.getTimeZone().getID());
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = "2005-10-11T17:56:46+01:00";
 			p = new StringParser(s);
@@ -635,8 +625,7 @@ public class TestSParser extends STester {
 				c = p.getParsedCalendar();
 				assertTrue(p.eos());
 				assertEq("UTC", c.getTimeZone().getID());
-				assertEq(c.getTimeZone().getRawOffset(), 3600000,
-					"ZoneRawOffset: " + c.getTimeZone().getRawOffset());
+				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			//Example: 2006W023 represents Wednesday (1 .. Monday)
 			//of the second week of 2006 (=> 2006-01-10).
@@ -1265,17 +1254,23 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("",checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));			
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ2(x,y));
 			
@@ -1294,18 +1289,23 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));			
-
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));			
+			}
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
@@ -1318,8 +1318,10 @@ public class TestSParser extends STester {
 			x.setMillisecond(Integer.MIN_VALUE);
 			y.setMillisecond(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			x.reset(); y.reset();
-			assertEq("", checkDateEQ2(x,y));
+			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+				x.reset(); y.reset();
+				assertEq("", checkDateEQ2(x,y));
+			}
 		} catch (Exception ex) {fail(ex);}
 
 	}

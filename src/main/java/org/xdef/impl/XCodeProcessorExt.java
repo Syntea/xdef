@@ -1118,7 +1118,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_REGEX:
 									case XD_REGEXRESULT:
 									case XD_INPUT:
-									case XD_OUPUT:
+									case XD_OUTPUT:
 									case XD_RESULTSET:
 									case XD_STATEMENT:
 									case XD_SERVICE:

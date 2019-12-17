@@ -111,7 +111,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
 		setType(XD_BNFRULE,"BNFRule", org.xdef.XDBNFRule.class);
 		setType(XD_INPUT,"Input", org.xdef.XDInput.class);
-		setType(XD_OUPUT,"Output", org.xdef.XDOutput.class);
+		setType(XD_OUTPUT,"Output", org.xdef.XDOutput.class);
 		setType(XX_ELEMENT, "", org.xdef.proc.XXElement.class);
 		setType(XX_DATA, "", org.xdef.proc.XXData.class);
 		setType(XD_BYTES, "Bytes", byte[].class);
@@ -169,7 +169,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XX_DATA) + ";XXData;" +
 			((char) XD_ELEMENT) + ";Element;" +
 			((char) XD_INPUT) + ";XDInput;" +
-			((char) XD_OUPUT) + ";XDOutput;" +
+			((char) XD_OUTPUT) + ";XDOutput;" +
 			((char) XD_REPORT) + ";Report;" +
 			((char) XD_XPATH) + ";KXpathExpr;" +
 			(DefXQueryExpr.isXQueryImplementation()
@@ -1082,22 +1082,22 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // OUTPUT STREAM
 ////////////////////////////////////////////////////////////////////////////////
-		ti = XD_OUPUT;
-		method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUPUT,
+		ti = XD_OUTPUT;
+		method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUTPUT,
 			GLOBAL_MODE, 1, 3, XD_STRING,XD_STRING,XD_BOOLEAN), "#");
 		method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN,
-			ANY_MODE, 2, 4, XD_OUPUT, XD_STRING, XD_STRING, XD_STRING),
+			ANY_MODE, 2, 4, XD_OUTPUT, XD_STRING, XD_STRING, XD_STRING),
 			"error");
 		method(ti, genInternalMethod(GET_REPORT, XD_REPORT,
-			ANY_MODE, 1, 1, XD_OUPUT), "getLastError");
+			ANY_MODE, 1, 1, XD_OUTPUT), "getLastError");
 		method(ti, genInternalMethod(OUT1_STREAM, XD_VOID,
-			ANY_MODE, 2, 2, XD_OUPUT, XD_STRING), "out");
+			ANY_MODE, 2, 2, XD_OUTPUT, XD_STRING), "out");
 		method(ti, genInternalMethod(OUTLN1_STREAM, XD_VOID,
-			ANY_MODE, 1, 2, XD_OUPUT, XD_STRING), "outln");
+			ANY_MODE, 1, 2, XD_OUTPUT, XD_STRING), "outln");
 		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,
-			ANY_MODE, 2, Integer.MAX_VALUE, XD_OUPUT, XD_ANY), "printf");
+			ANY_MODE, 2, Integer.MAX_VALUE, XD_OUTPUT, XD_ANY), "printf");
 		method(ti, genInternalMethod(PUT_REPORT, XD_VOID,
-			ANY_MODE, 2, 2, XD_OUPUT, XD_REPORT), "putReport");
+			ANY_MODE, 2, 2, XD_OUTPUT, XD_REPORT), "putReport");
 ////////////////////////////////////////////////////////////////////////////////
 // PARSER
 ////////////////////////////////////////////////////////////////////////////////

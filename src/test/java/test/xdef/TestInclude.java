@@ -242,8 +242,6 @@ public final class TestInclude extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		setChkSyntax(chkSyntax);
 		try {
-			setProperty(XDConstants.XDPROPERTY_VALIDATE,
-				XDConstants.XDPROPERTYVALUE_VALIDATE_TRUE);
 			xp = compile(dataDir + "TestInclude_8.xdef");
 			xml = dataDir + "TestInclude_8.xml";
 			parse(xp, "A", xml, reporter);
@@ -252,8 +250,6 @@ public final class TestInclude extends XDTester {
 			parse(xp, "A", xml, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_VALIDATE,
-				XDConstants.XDPROPERTYVALUE_VALIDATE_FALSE);
 		try {
 			//test Include default (not allowed)
 			xdef =

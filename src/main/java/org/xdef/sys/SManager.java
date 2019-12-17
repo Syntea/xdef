@@ -31,7 +31,7 @@ import org.xdef.xml.KXmlUtils;
  * }
  * </b></code></pre>
  *
- * @author Vaclav Trojan
+ * @author Vaclav Trojan &lt;vaclav.trojan@syntea.cz&gt;
  */
 public final class SManager implements XDConstants {
 	/** The unique instance of SManager. */
@@ -69,9 +69,38 @@ public final class SManager implements XDConstants {
 	/** This constructor can be invoked only from this class .*/
 	private SManager() {
 		_properties = (Properties) System.getProperties().clone();
-		String s = _properties.getProperty(XDPROPERTY_MSGLANGUAGE);
+		String s = getProperty(_properties, XDPROPERTY_MSGLANGUAGE);
 		s = (s == null) ? SUtils.getISO3Language() : SUtils.getISO3Language(s);
 		_language = new SLanguage(s, "eng");
+	}
+
+	/** Get value property or environment variable.
+	 * @param props Object with properties.
+	 * @param key name of property.
+	 * @return value property or environment variable.
+	 */
+	public final static String getProperty(final Properties props,
+		final String key) {
+		String val = null;
+		if (props != null) {
+			String newKey = key.startsWith("xdef.") ? key.replace('.','_'): key;
+			val = props.getProperty(key);
+			if (key.equals(newKey)) {
+				if (val == null) {
+					String oldKey = key.startsWith("xdef_")
+						? key.replace('_','.'): key;
+					val = props.getProperty(oldKey);
+					if (val != null) {
+						props.remove(key);
+						props.setProperty(newKey, val);
+					}
+				}
+			}
+		}
+		if (val == null || (val = val.trim()).isEmpty()) {
+			val = System.getenv(key);
+		}
+		return (val != null && (val=val.trim()).isEmpty()) ? null : val;
 	}
 
 	/** Get SManager property.
@@ -79,7 +108,7 @@ public final class SManager implements XDConstants {
 	 * @return string with property value or <tt>null</tt>.
 	 */
 	public static final String getProperty(final String name) {
-		return getInstance()._properties.getProperty(name);
+		return getProperty(getInstance()._properties, name);
 	}
 
 	/** Set properties to the SManager .
@@ -89,7 +118,7 @@ public final class SManager implements XDConstants {
 		SManager sm = getInstance();
 		synchronized (sm) {
 			sm._properties = (Properties) properties.clone();
-			String s = sm._properties.getProperty(XDPROPERTY_MSGLANGUAGE);
+			String s = getProperty(sm._properties,XDPROPERTY_MSGLANGUAGE);
 			if (s != null) {
 				s = (s == null)
 					? sm._language.getLanguage() : SUtils.getISO3Language(s);
@@ -106,22 +135,26 @@ public final class SManager implements XDConstants {
 	}
 
 	/** Set SManager property.
-	 * @param name property name.
+	 * @param key property name.
 	 * @param value property value (may be <tt>null</tt> - then the property
 	 * is removed).
 	 * @return string with original property value or <tt>null</tt>.
 	 */
-	public static final String setProperty(final String name,
+	public static final String setProperty(final String key,
 		final String value) {
 		SManager sm = getInstance();
+		String newKey = key.startsWith("xdef.") ? key.replace('.', '_') : key;
 		synchronized (sm) {
-			String result;
-			if (value == null) {
-				result = (String) sm._properties.remove(name);
-			} else {
-				result = (String) sm._properties.setProperty(name, value);
+			String result = getProperty(sm._properties, newKey);
+			if (result == null) {
+				result = getProperty(sm._properties, key);
 			}
-			if (XDPROPERTY_MSGLANGUAGE.equals(name)) {
+			sm._properties.remove(key);
+			sm._properties.remove(newKey);
+			if (value != null) {
+				sm._properties.setProperty(newKey, value);
+			}
+			if (XDPROPERTY_MSGLANGUAGE.equals(newKey)) {
 				String v = value;
 				if (v == null) {
 					v = SUtils.getISO3Language();
@@ -817,7 +850,7 @@ public final class SManager implements XDConstants {
 				return _tables[i];
 			}
 		}
-		String[] ids = null;
+		String[] ids = null; // list of report names in the registred table.
 		for (String packageName : _packages) {
 			try { // try to read properties from the package
 				String prefix = tableName.substring(0, tableName.length() - 4);
@@ -837,7 +870,7 @@ public final class SManager implements XDConstants {
 				ids = new String[ar.size()];
 				ar.toArray(ids);
 				Arrays.sort(ids);
-				// read properties with mmessages 
+				// read properties with mmessages
 				InputStream input =
 					c.getResourceAsStream(tableName + ".properties");
 				InputStreamReader in =
@@ -850,9 +883,9 @@ public final class SManager implements XDConstants {
 				return addReportTable(table);
 			} catch (Exception ex) {}
 			// not found, so we try to read the external data
-			String s = _properties.getProperty(XDPROPERTY_MESSAGES + tableName);
+			String s = getProperty(_properties, XDPROPERTY_MESSAGES+tableName);
 			if (s == null) {
-				s = _properties.getProperty(XDPROPERTY_MESSAGES
+				s = getProperty(_properties, XDPROPERTY_MESSAGES
 					+ ReportTable.getPrefixFromID(tableName));
 				if (s != null) {
 					File[] files = SUtils.getFileGroup(s);

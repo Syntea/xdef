@@ -138,6 +138,17 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XDEF410", "3", "7", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
+		try {// check of error reporting - xpath
+			xdef =
+//        1         2         3         4        5          6         7
+//234567890123456789012345678901234567890123456789012345678901234567890123456789
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a xd:script=\"create from(' ');\"/>\n"+
+"</xd:def>";
+			reporter = test(props, xdef);
+			assertEq("", chkReport(reporter, "XML505", "2", "33", null));
+			assertNull(reporter.getReport(), reporter.printToString());
+		} catch (Exception ex) {fail(ex);}
 		try {// check of error reporting - low number of parameters of method
 			xdef =
 //        1         2         3         4        5          6         7

@@ -1,5 +1,24 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.5, release-date 2019-12-17
+* implemented new X-script method String getEnv(String name) which reads
+  an environment variable.
+* it is now possible to use environment variables likewise as properties.
+  The property item has priority. If there are specified both, the environmental
+  variable and the property item, then it is used the property value instead of
+  value of the environmental variable. The names of properties and environment
+  variables are changed, the dots (".") in a names are replaced by
+  underlines ("&lowbar;"), e.g. "_xdef.debug_" is now "_xdef&lowbar;debug_"
+  (see _XDConstants_).
+  However, since the names with dots are deprecated, they are still accepted.
+* corrected bug when it is specified attribute "_xd:text_" and a text node
+  follows the last one element in a sequence.
+* corrected bug when in types "_union_" or "_list_" are references to declared
+  types.
+* corrected bug in processing of elements with "_xd:textcontent_" attribute.
+* reports error if xpath expression is empty string or null.
+* corrected bugs in construction of elements with "_xd:text_" attribute.
+
 # Version 32.5.4, release-date 2019-11-17
 * corrected bug that in the section "onStartElement" were ignored some errors
   reported by methods of UniqueSet.
