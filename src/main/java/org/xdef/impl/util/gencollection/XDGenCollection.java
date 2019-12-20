@@ -1073,7 +1073,8 @@ public class XDGenCollection {
 		String s = findXDNS(n);
 		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
 			: XDConstants.XDEF31_NS_URI.equals(s) ? XConstants.XD31
-			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32 : 0;
+			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32
+			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD33 : 0;
 	}
 
 	/** Get the element with X-definition where the node is declared.

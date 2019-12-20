@@ -116,6 +116,8 @@ public interface XDConstants {
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
+	/** URI of X-definition 3.3. */
+	public static final String XDEF33_NS_URI = "http://www.xdef.org/xdef/3.3";
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.xdef.org/xdef/instance";
