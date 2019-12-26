@@ -21,7 +21,8 @@ public final class TestXdefOfXdef extends XDTester {
 			"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
 			"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
 			"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
-			"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef"});
+			"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
+			"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef"});
 	}
 
 	final public ArrayReporter parse(final String xml) {

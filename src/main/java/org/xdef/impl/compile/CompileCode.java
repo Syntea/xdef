@@ -840,7 +840,7 @@ public final class CompileCode extends CompileBase {
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF32_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
-				|| XDConstants.XDEF33_NS_URI.equals(
+				|| XDConstants.XDEF40_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}

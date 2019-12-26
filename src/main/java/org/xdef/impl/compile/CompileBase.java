@@ -1345,19 +1345,22 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = UNIQUESET_M_VALUE;
 		method(ti, genInternalMethod(UNIQUESET_M_ID, XD_BOOLEAN,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE), "ID");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE), "ID");
 		method(ti, genInternalMethod(UNIQUESET_M_SET, XD_BOOLEAN,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE), "SET");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE), "SET");
 		method(ti, genInternalMethod(UNIQUESET_M_IDREF, XD_VOID,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE,XD_PARSERESULT), "IDREF");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2,
+			UNIQUESET_M_VALUE,XD_PARSERESULT), "IDREF");
 		method(ti, genInternalMethod(UNIQUESET_M_CHKID, XD_VOID,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE, XD_PARSERESULT), "CHKID");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE,
+			XD_PARSERESULT), "CHKID");
 		method(ti, genInternalMethod(UNIQUESET_M_NEWKEY, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "NEWKEY");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1, UNIQUESET_M_VALUE), "NEWKEY");
 		method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "CLEAR");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1, UNIQUESET_M_VALUE), "CLEAR");
 		method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "checkUnref");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1,
+			UNIQUESET_M_VALUE), "checkUnref");
 		method(ti, genInternalMethod(UNIQUESET_M_SIZE, XD_INT,
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "size");
 		method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
