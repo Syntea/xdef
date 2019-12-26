@@ -463,6 +463,24 @@ public class XScriptParser extends StringParser
 		}
 	}
 
+	/** If follows "(" then after last dot should follow a method name. So, set
+	 * as the actual character the dot and remove is from the identifier.
+	 */
+	final void separateMethodNameFromIdentifier() {
+		int i = _idName.lastIndexOf('.');
+		if (i > 0) {//contains '.'
+			int pos = getIndex();
+			skipBlanksAndComments();
+			if (getCurrentChar() == '(') { //follows "(" => method name
+				//we remove last part of the identifier and
+				//we set position to '.'
+				pos -= _idName.length() - i;
+				_idName = _idName.substring(0, i);
+				setBufIndex(pos);//set position to dot
+			}
+		}
+	}
+
 	/** Read next lexical symbol.
 	 * @return id of parsed symbol and save it to _sym. If the symbol was
 	 * an identifier, then the identifier is stored to _idName. If it is
@@ -554,21 +572,7 @@ public class XScriptParser extends StringParser
 					error(XDEF.XDEF402); //Name of attribute expected
 				}
 				_idName = getParsedString();
-				int i = _idName.lastIndexOf('.');
-				if (i > 0) { //in identifier is '.'
-					int pos = getIndex();
-					SPosition spos = getLastPosition(); //save last position
-					skipBlanksAndComments();
-					//check if follows '(' => may be methods
-					if (getCurrentChar() == '(') { //follows "(" => mehod
-						//we remove last part of the identifier and
-						//we set position to '.'
-						pos -= _idName.length() - i;
-						_idName = _idName.substring(0, i);
-						setBufIndex(pos);//set position to dot
-					}
-					_lastSPos = spos; //reset last position
-				}
+				separateMethodNameFromIdentifier();
 				return _sym = ATCHAR_SYM;
 			}
 			case '\'':
@@ -603,20 +607,6 @@ public class XScriptParser extends StringParser
 				} else if (s.endsWith(":") || s.endsWith(".")) {
 					s = s.substring(0, s.length() - 1);
 					setBufIndex(getIndex() - 1);//set position before ":"
-				}
-				int i = s.lastIndexOf('.');
-				if (i > 0) {//contains '.'
-					int pos = getIndex();
-					SPosition spos = getLastPosition(); //save last position
-					skipBlanksAndComments();
-					if (getCurrentChar() == '(') { //follows "(" => mehod name
-						//we remove last part of the identifier and
-						//we set position to '.'
-						pos -= s.length() - i;
-						s = s.substring(0, i);
-						setBufIndex(pos);//set position to dot
-					}
-					_lastSPos = spos; //reset last position
 				}
 				// find keyword index
 				int keyindex = KEYWORDS.indexOf(';' + s + ';');
@@ -693,7 +683,7 @@ public class XScriptParser extends StringParser
 			} // default
 		} // end of switch (ch = peekChar())
 	} // end of nextSymbol()
-
+	
 	/** get parsed symbol ID.
 	 * @return parsed symbol ID.
 	 */

@@ -27,11 +27,6 @@ public interface XMOccurrence {
 	 */
 	public boolean isSpecified();
 
-//	/** Return true if value of occurrence is not specified.
-//	 * @return <tt>true</tt> if and only if occurrence is not specified.
-//	 */
-//	public boolean notSpecified();
-
 	/** Return true if value of occurrence is set as illegal.
 	 * @return <tt>true</tt> if and only if occurrence is set as illegal.
 	 */
@@ -68,4 +63,9 @@ public interface XMOccurrence {
 	 */
 	public boolean isMaxUnlimited();
 
+	@Override
+	/** Get X-definition source form of Occurrence.
+	 * @return X-Definition source form of Occurrence.
+	 */
+	public String toString();
 }

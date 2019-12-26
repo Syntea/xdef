@@ -167,7 +167,6 @@ public final class CompileCode extends CompileBase {
 			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
-/*UNS*/
 		var = new CompileVariable("$IDParser$", // use only internally
 			XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);  // prevent to report errors
@@ -176,21 +175,13 @@ public final class CompileCode extends CompileBase {
 			CompileBase.UNIQUESET_M_VALUE,
 			_globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
 		_globalVariables.addVariable(var);
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
-/*UNS*/
 		_globalPredefSize = _globalVariables.getLastOffset();
 	}
 
 	/** Reinitialize fields to prepare the recompilation of code. */
 	final void  reInit() {
 		clearLocalVariables();
-//		clearModelVariables();
 		_localVariablesMaxIndex = -1;
 		_code.clear();
 		_lastCodeIndex = -1;
@@ -209,11 +200,6 @@ public final class CompileCode extends CompileBase {
 				v.setInitialized(false);
 			}
 		}
-/*UNS*/
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 0));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
-/*UNS*/
 	}
 
 	/** Set XScriptParser. */
@@ -853,6 +839,8 @@ public final class CompileCode extends CompileBase {
 				|| XDConstants.XDEF31_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF32_NS_URI.equals(
+					_namespaceURIs.get(item.getValue()))
+				|| XDConstants.XDEF40_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}
@@ -1590,7 +1578,6 @@ public final class CompileCode extends CompileBase {
 						numPar,
 						_extClasses[i],
 						null);
-//						_extObjects[i]);
 					if (method != null) {
 						break;
 					}

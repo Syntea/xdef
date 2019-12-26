@@ -1,5 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.6, release-date 2019-12-17
+
 # Version 32.5.5, release-date 2019-12-17
 * implemented new X-script method String getEnv(String name) which reads
   an environment variable.
