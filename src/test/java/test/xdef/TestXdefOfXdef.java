@@ -17,12 +17,7 @@ public final class TestXdefOfXdef extends XDTester {
 	public TestXdefOfXdef() {
 		super();
 		setChkSyntax(false); // here it MUST be false!
-		_xp = compile(new String[] {
-			"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
-			"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
-			"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
-			"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
-			"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef"});
+		_xp = compile("classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 	}
 
 	final public ArrayReporter parse(final String xml) {
