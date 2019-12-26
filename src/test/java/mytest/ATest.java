@@ -18,16 +18,15 @@ public class ATest {
 		XDDocument xd;
 		Properties props = new Properties();
 		Element el;
-/**/
-		xdef = 
+		xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='A'>\n" +
 "  <A xd:script='ref a;'/>\n"+
-"  <a xd:script='var uniqueSet v {x: int(1,3); y: int()}' a='string'>\n"+
+"  <a xd:script='var uniqueSet v {x: int (1,3); y: int()}' a='string'>\n"+
 "    <b xd:script='*; finally v.ID' x='v.x' y='v.y'/>\n"+
 "    <c xd:script='?;' x='v.x'> v.y.IDREFS </c>\n"+
-"    <d xd:script='?;' a='u . a(); onTrue u.x = null; finally u.ID' />\n" +
-"  </a>\n"+			
-"  <xd:declaration>\n"+			
+"    <d xd:script='?;' a='u.a (); onTrue u.x = null; finally u.ID' />\n" +
+"  </a>\n"+
+"  <xd:declaration>\n"+
 "    uniqueSet u{a: string(); var Parser x}\n" +
 "    external method void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
 "  </xd:declaration>\n"+
