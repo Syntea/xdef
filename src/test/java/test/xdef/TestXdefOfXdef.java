@@ -210,11 +210,11 @@ public final class TestXdefOfXdef extends XDTester {
 "   <a> <xd:mixed xd:script='ref m' /> </a>\n"+
 "   <b><xd:any xd:script='ref x' b='int()' /></b>\n"+
 "</xd:def>");
-				assertNoErrorwarnings(parse(xml), xml);
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 
-//				In this X-definition is <xd:def xmlns:xd = "METAXDef" ...
-//				xml = dataDir + "TestXdefOfXdef*.xdef";
+//				// In this X-definition is <xd:def xmlns:xd = "METAXDef" ...
+//				xml = "classpath:"
+//					+ "//org.xdef.impl.compile.XdefOfXdefBase.xdef";
 //				assertNoErrorwarnings(parse(xml), xml);
 			}
 		} catch (Exception ex) {fail(ex);}
