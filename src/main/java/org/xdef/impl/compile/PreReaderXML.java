@@ -92,7 +92,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
 						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) != null) {
+					|| (ka = parsedElem.getAttrNS(
+						XDConstants.XDEF40_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
 					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD20
@@ -229,8 +230,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
 			} else if ("lexicon".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
-				) {
+				|| ("thesaurus".equals(elemLocalName)
+					&&_actPNode._xdVersion <= 31)) {
 				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
@@ -239,10 +240,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("component".equals(elemLocalName)) {
 				_level++;
 				_pcomp.getPComponents().add(0, _actPNode);
-			} else {
-				if (!"def".equals(elemLocalName)) {
-					error(_actPNode._name, XDEF.XDEF259);//X-definition expected
-				}
+			} else { // def or jdef
 				_level++;
 				String defName = getNameAttr(_actPNode, false, true);
 				if (defName == null) {
@@ -463,7 +461,43 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("text".equals(_actPNode._localName)
+			if ("json".equals(_actPNode._localName)) {
+				if (_level != 1) {
+					//JSON model can be declared only as a child of X-definition
+					error(_actPNode._value, XDEF.XDEF310);
+				} else {
+					String s = "w3c";
+					SBuffer sb =
+						_pcomp.getXdefAttr(_actPNode, "mode", false, false);
+					if (sb != null) {
+						s = sb.getString().trim();
+					}
+					int jindex = XPreCompiler.NS_JSON_W3C_INDEX;
+					if ("xdef".equals(s)) {
+						jindex = XPreCompiler.NS_JSON_INDEX;
+					} else if (!"w3c".equals(s)) {
+						error(sb, XDEF.XDEF222, "mode", s); ///
+					}
+					String jprefix = s.equals("w3c") ? "jw" : "js";
+					sb = _pcomp.getXdefAttr(_actPNode, "prefix", false, false);
+					if (sb != null) {
+						jprefix = sb.getString().trim();
+						if (!StringParser.chkXMLName(s + ":x",(byte) 10)) {
+							error(sb, XDEF.XDEF222, "prefix", s); ///
+						}
+					}
+					// set namespace prefix to the X-definition
+					for (PNode x: _pcomp.getPXDefs()) {
+						for (PNode y: x.getChildNodes()) {
+							if (y == _actPNode) {
+								x._nsPrefixes.put(jprefix, jindex);
+								break;
+							}
+						}
+					}
+				}
+				return;
+			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)
 				|| "lexicon".equals(_actPNode._localName)
 				|| "thesaurus".equals(_actPNode._localName)
@@ -487,14 +521,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._value = null; //prevent repeated message
 				return;
 			}
-		} else if ("json".equals(_actPNode._localName)
-			&& (XDConstants.JSON_NS_URI_W3C.equals(_actPNode._nsURI)
-			|| XDConstants.JSON_NS_URI.equals(_actPNode._nsURI))) {
-			if (_level != 1) {
-				//JSON model can be declared only as a child of X-definition
-				error(_actPNode._value, XDEF.XDEF310);
-			}
-			return;
+//		} else if ("json".equals(_actPNode._localName)
+//			&& (XDConstants.JSON_NS_URI_W3C.equals(_actPNode._nsURI)
+//			|| XDConstants.JSON_NS_URI.equals(_actPNode._nsURI))) {
+//			if (_level != 1) {
+//				//JSON model can be declared only as a child of X-definition
+//				error(_actPNode._value, XDEF.XDEF310);
+//			}
+//			return;
 		}
 		if (_level == 0) {
 			//Text value not allowed here

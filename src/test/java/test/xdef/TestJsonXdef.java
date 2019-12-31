@@ -85,16 +85,15 @@ public class TestJsonXdef extends XDTester {
 				// Create X-definition from Jdef (W3C)
 				newFile = new File(_tempDir + "Test" + id + "a.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xmlns:jw='" + XDConstants.JSON_NS_URI_W3C
 					+ "'\n xd:name='" + "Test" + id + "a' xd:root='jw:json'>\n"
-					+ "<jw:json>\n" +jdef+ "\n</jw:json>\n</xd:def>";
+					+ "<xd:json>\n" + jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// Create X-definition from Jdef (X-definition)
 				newFile = new File(_tempDir + "Test" + id + "b.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xmlns:js='" + XDConstants.JSON_NS_URI
 					+ "'\n xd:name='" + "Test" + id + "b' xd:root='js:json'>\n"
-					+ "<js:json>\n" +jdef+ "\n</js:json>\n</xd:def>";
+					+ "<xd:json mode='xdef'>\n"
+					+ jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// create X-component items
 				String cls = "  %class test.common.json.component.Test" + id;

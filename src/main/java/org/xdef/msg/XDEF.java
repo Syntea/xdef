@@ -83,54 +83,54 @@ public interface XDEF {
 	public static final long XDEF220 = 31159025702L;
 	/** Attribute "scope" in the detached declaration section can be only "global" */
 	public static final long XDEF221 = 31159025703L;
+	/** Incorrect value of &amp;{0}&amp;{1}{: }&amp;{#SYS000} */
+	public static final long XDEF222 = 31159025704L;
 	/** After XDValue[] parameter can't follow other parameter&amp;{#SYS000} */
-	public static final long XDEF223 = 31159025704L;
+	public static final long XDEF223 = 31159025705L;
 	/** "var" section must be the first executive section of the script of element&amp;{#SYS000} */
-	public static final long XDEF224 = 31159025705L;
+	public static final long XDEF224 = 31159025706L;
 	/** External method '&amp;{0}' was not found in class '&amp;{1}' &amp;{#SYS000} */
-	public static final long XDEF225 = 31159025706L;
+	public static final long XDEF225 = 31159025707L;
 	/** Result type of the external method&amp;{0}{ '}{'} differs&amp;{#SYS000} */
-	public static final long XDEF226 = 31159025707L;
+	public static final long XDEF226 = 31159025708L;
 	/** Ambiguous repeated declaration of the external method&amp;{0}{ '}{'}&amp;{#SYS000} */
-	public static final long XDEF227 = 31159025708L;
+	public static final long XDEF227 = 31159025709L;
 	/** Class '&amp;{0}' not exists&amp;{#SYS000} */
-	public static final long XDEF228 = 31159025709L;
+	public static final long XDEF228 = 31159025710L;
 	/** Comparing of models is skipped due to previous errors&amp;{#SYS000} */
-	public static final long XDEF229 = 31159025710L;
+	public static final long XDEF229 = 31159025711L;
 	/** The attribute '&amp;{0}' can't be specified here simultaneously with and without namespace&amp;{#SYS000} */
-	public static final long XDEF230 = 31159025711L;
+	public static final long XDEF230 = 31159025712L;
 	/** Repeated root selection &amp;{0}&amp;{#SYS000} */
-	public static final long XDEF231 = 31159025712L;
+	public static final long XDEF231 = 31159025713L;
 	/** Child nodes of the element 'xd:includeChildNodes' are not allowed&amp;{#SYS000} */
-	public static final long XDEF232 = 31159025713L;
+	public static final long XDEF232 = 31159025714L;
 	/** Statement error&amp;{#SYS000} */
-	public static final long XDEF233 = 31159025714L;
+	public static final long XDEF233 = 31159025715L;
 	/** Ambiguous group '&amp;{0}' (equal items) in X-definition '&amp;{1}'&amp;{#SYS000} */
-	public static final long XDEF234 = 31159025715L;
+	public static final long XDEF234 = 31159025716L;
 	/** Ambiguous X-definition: minimum occurrence must be zero (or optional)&amp;{#SYS000} */
-	public static final long XDEF235 = 31159025716L;
+	public static final long XDEF235 = 31159025717L;
 	/** Repeated name of element model '&amp;{0}'&amp;{#SYS000} */
-	public static final long XDEF236 = 31159025717L;
+	public static final long XDEF236 = 31159025718L;
 	/** In model with reference can't be variable declaration&amp;{#SYS000} */
-	public static final long XDEF237 = 31159025718L;
+	public static final long XDEF237 = 31159025719L;
 	/** Ambiguous X-definition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
-	public static final long XDEF238 = 31159025719L;
+	public static final long XDEF238 = 31159025720L;
 	/** Ambiguous X-definition: text node can´t follow previous text node&amp;{#SYS000} */
-	public static final long XDEF239 = 31159025720L;
+	public static final long XDEF239 = 31159025721L;
 	/** Attribute 'metaNamespace' must contain a valid URI&amp;{#SYS000} */
-	public static final long XDEF253 = 31159025721L;
+	public static final long XDEF253 = 31159025722L;
 	/** Attribute '&amp;{0}' not allowed here&amp;{#SYS000} */
-	public static final long XDEF254 = 31159025722L;
-	/** X-definition or X-collection expected&amp;{#SYS000} */
-	public static final long XDEF255 = 31159025723L;
+	public static final long XDEF254 = 31159025723L;
+	/** Here expected xd:def, xd:collection, xd:lexicon, xd:declaration, xd:json or xd:BNFGrammar&amp;{#SYS000} */
+	public static final long XDEF255 = 31159025724L;
 	/** Namespace of X-definitions is required for this element&amp;{#SYS000} */
-	public static final long XDEF256 = 31159025724L;
+	public static final long XDEF256 = 31159025725L;
 	/** Namespace for prefix '&amp;{0}' is undefined&amp;{#SYS000} */
-	public static final long XDEF257 = 31159025725L;
+	public static final long XDEF257 = 31159025726L;
 	/** Incorrect name&amp;{#SYS000} */
-	public static final long XDEF258 = 31159025726L;
-	/** X-definition expected&amp;{#SYS000} */
-	public static final long XDEF259 = 31159025727L;
+	public static final long XDEF258 = 31159025727L;
 	/** Text value is not allowed here&amp;{#SYS000} */
 	public static final long XDEF260 = 31159025728L;
 	/** Occurrence of an attribute can't be more then one&amp;{#SYS000} */

@@ -851,28 +851,32 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		String name;
 		String nsURI = null;
 		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
-		if (ndx > 0 && (name = model.substring(ndx+1)).startsWith("json")) {
+		Element e;
+		if (ndx > 0) {
+			name = ndx >= 0 ? model.substring(ndx+1) : model;
 			XNode xn = _xdef._rootSelection.get(model);
+			XElement xe;
 			if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-				nsURI =_xdef._namespaces.get(model.substring(0,ndx));
-				if (XDConstants.JSON_NS_URI.equals(nsURI)
-					|| XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
-					_xElement = (XElement) xn;
-				} else {
-					nsURI = null;
+				xe = (XElement) xn;
+				if (xe._json != 0) {
+					_xElement = xe;
+					if (xe._json == 1) {
+						nsURI = XDConstants.JSON_NS_URI_W3C;
+					} else {
+						nsURI = XDConstants.JSON_NS_URI;
+					}
 				}
 			}
 			if (nsURI == null) {
-				for (XMElement xe: _xdef.getModels()) {
-					if (model.equals(xe.getName())) {
-						nsURI = xe.getNSUri();
+				for (XMElement x: _xdef.getModels()) {
+					if (model.equals(xn.getName())) {
+						nsURI = xn.getNSUri();
 						_xElement = _xdef.selectRoot(name, nsURI, -1);
 						break;
 					}
 				}
 			}
 		}
-		Element e;
 		if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
 			e = JsonUtil.jsonToXmlW3C(jsonData);
 		} else if (XDConstants.JSON_NS_URI.equals(nsURI)) {

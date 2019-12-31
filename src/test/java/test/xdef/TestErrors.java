@@ -397,11 +397,9 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XML047", null, null, null));
 			assertEq("", chkReport(reporter, "XML047", null, null, null));
 			assertEq("", chkReport(reporter, "XDEF255", "2", "2", null));
-			assertEq("", chkReport(reporter, "XDEF259", "2", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "6", null, null));
 			assertEq("", chkReport(reporter, "XDEF255", "6", "2", null));
-			assertEq("", chkReport(reporter, "XDEF259", "6", "2", null));
 			assertEq("", chkReport(reporter, "XDEF212", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "7", null, null));
 			assertEq("", chkReport(reporter, "XML075", "10", "8", null));
