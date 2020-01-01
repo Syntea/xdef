@@ -92,7 +92,7 @@ public class TestJsonXdef extends XDTester {
 				newFile = new File(_tempDir + "Test" + id + "b.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
 					+ "'\n xd:name='" + "Test" + id + "b' xd:root='js:json'>\n"
-					+ "<xd:json mode='xdef'>\n"
+					+ "<xd:json mode='xd'>\n"
 					+ jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// create X-component items

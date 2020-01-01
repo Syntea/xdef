@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mytest;
 
 import java.io.File;
@@ -81,6 +76,61 @@ public class MyTest_0 extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|X|Y|Z|jw:json'>\n"+
+"<xd:json>\n"+
+"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
+"</xd:json>\n"+
+"<xd:json name='X'>\n"+
+"[\"int()\"]\n"+
+"</xd:json>\n"+
+"<xd:json mode='xd' name='Y'>\n"+
+"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
+"</xd:json>\n"+
+"<xd:json name='Z'>\n"+
+"{\"a\":\"int\"}\n"+
+"</xd:json>\n"+
+"  <A/>\n"+
+"</xd:def>";
+			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xml = "<A/>";
+			assertEq(xml, parse(xd,xml, reporter));
+			assertNoErrors(reporter);
+			String json;
+			Object j;
+			json = "[{\"a\":true},\"x\",-1]";
+			j = xd.jparse(json, "jw:json", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			el = JsonUtil.jsonToXmlW3C(j);
+			xd.xparse(el, reporter);
+			assertNoErrors(reporter);
+			j = xd.jparse("[1]", "X", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse("[1]"), j),
+				JsonUtil.toJsonString(j, true));
+			el = JsonUtil.jsonToXmlW3C(j);
+			xd.xparse(el, reporter);
+			assertNoErrors(reporter);
+			j = xd.jparse(json, "Y", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			el = JsonUtil.jsonToXml(j);
+			xd.xparse(el, reporter);
+			assertNoErrors(reporter);
+			json = "{\"a\":1}";
+			j = xd.jparse(json, "Z", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			el = JsonUtil.jsonToXmlW3C(j);
+			xd.xparse(el, reporter);
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {// check mixed, include
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

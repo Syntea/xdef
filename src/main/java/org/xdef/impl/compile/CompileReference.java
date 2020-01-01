@@ -11,7 +11,6 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
 import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
@@ -167,10 +166,10 @@ final class CompileReference extends XNode {
 		}
 		int ndx = name.indexOf('/');
 		String mName = ndx > 0 ? name.substring(0, ndx) : name;
-		XMElement dn = xdef.getModel(getNSUri(), mName);
+		XElement dn = (XElement) xdef.getModel(getNSUri(), mName);
 		if (dn == null) {
 			String s = mName + "$any";
-			dn = xdef.getModel(getNSUri(), s);
+			dn = (XElement) xdef.getModel(getNSUri(), s);
 			if (dn != null) {
 				setName(s);
 			} else if (ndx > 0) {
@@ -192,23 +191,24 @@ final class CompileReference extends XNode {
 				}
 				return (XElement) xn;
 			}
+			if (dn == null) { // try to find json model
+				dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI_W3C,mName);
+				if (dn == null) {
+					dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI,mName);
+				}
+			}
 		}
 		if (dn != null) {
 			if(ndx > 0) {
-				XMNode xn = XPool.findXMNode(dn, name.substring(ndx + 1), 0, -1);
+				XMNode xn = XPool.findXMNode(dn, name.substring(ndx+1), 0, -1);
 				if (xn == null) {
 					return null;
 				}
-				dn = xn.getKind() == XMNode.XMELEMENT ? (XMElement) xn : null;
-			} else if (name.contains(":json")) {
-				String u = dn.getNSUri();
-				if (XDConstants.JSON_NS_URI.equals(u)
-					|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
-					XMNode[] models = dn.getChildNodeModels();
-					if (models.length == 1 && models[0].getKind()
-						== XMNode.XMELEMENT) {
-						dn = (XElement) models[0];
-					}
+				dn = xn.getKind() == XMNode.XMELEMENT ? (XElement) xn : null;
+			} else if (dn._json > 0) {
+				XMNode[] models = dn.getChildNodeModels();
+				if (models.length==1 && models[0].getKind()==XMNode.XMELEMENT) {
+					return (XElement) models[0];
 				}
 			}
 		}

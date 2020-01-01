@@ -847,46 +847,21 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final Object jsonData,
 		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		int ndx = model.indexOf(':');
-		String name;
-		String nsURI = null;
 		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
-		Element e;
-		if (ndx > 0) {
-			name = ndx >= 0 ? model.substring(ndx+1) : model;
-			XNode xn = _xdef._rootSelection.get(model);
-			XElement xe;
-			if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-				xe = (XElement) xn;
-				if (xe._json != 0) {
-					_xElement = xe;
-					if (xe._json == 1) {
-						nsURI = XDConstants.JSON_NS_URI_W3C;
-					} else {
-						nsURI = XDConstants.JSON_NS_URI;
-					}
-				}
-			}
-			if (nsURI == null) {
-				for (XMElement x: _xdef.getModels()) {
-					if (model.equals(xn.getName())) {
-						nsURI = xn.getNSUri();
-						_xElement = _xdef.selectRoot(name, nsURI, -1);
-						break;
-					}
-				}
+		XNode xn = _xdef._rootSelection.get(model);
+		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+			XElement xe = (XElement) xn;
+			if (xe._json != 0) {
+				_xElement = xe;
+				Element e = xe._json == 1
+					? JsonUtil.jsonToXmlW3C(jsonData)
+					: JsonUtil.jsonToXml(jsonData);
+				xparse(e, reporter);
+				return JsonUtil.xmlToJson(_element);
 			}
 		}
-		if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
-			e = JsonUtil.jsonToXmlW3C(jsonData);
-		} else if (XDConstants.JSON_NS_URI.equals(nsURI)) {
-			e = JsonUtil.jsonToXml(jsonData);
-		} else {
-			//JSON model &{0}{"}{" }is missing in X-definition
-			throw new SRuntimeException(XDEF.XDEF315, model);
-		}
-		xparse(e, reporter);
-		return JsonUtil.xmlToJson(_element);
+		//JSON model &{0}{"}{" }is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, model);
 	}
 
 	@Override

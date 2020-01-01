@@ -254,6 +254,7 @@ public class JsonUtil extends StringParser {
 			boolean plus = !minus && isChar('+');
 			Number number;
 			String s;
+			int pos = getIndex();
 			if (isFloat()) {
 				s = getParsedString();
 				number = new BigDecimal((minus ? "-" : "") + s);
@@ -270,6 +271,9 @@ public class JsonUtil extends StringParser {
 				}
 				if (plus) {
 					error(JSON.JSON017, "+");//Not allowed character '&{0}'
+				}
+				if (pos == getIndex()) {
+					findOneOfChars(",[]{}"); // skip to next item
 				}
 				return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 			}

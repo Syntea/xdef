@@ -473,24 +473,33 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						s = sb.getString().trim();
 					}
 					int jindex = XPreCompiler.NS_JSON_W3C_INDEX;
-					if ("xdef".equals(s)) {
+					if ("xd".equals(s)) {
 						jindex = XPreCompiler.NS_JSON_INDEX;
 					} else if (!"w3c".equals(s)) {
 						error(sb, XDEF.XDEF222, "mode", s); ///
 					}
 					String jprefix = s.equals("w3c") ? "jw" : "js";
-					sb = _pcomp.getXdefAttr(_actPNode, "prefix", false, false);
+					sb = _pcomp.getXdefAttr(_actPNode, "name", false, false);
 					if (sb != null) {
-						jprefix = sb.getString().trim();
-						if (!StringParser.chkXMLName(s + ":x",(byte) 10)) {
-							error(sb, XDEF.XDEF222, "prefix", s); ///
+						s = sb.getString().trim();
+						int ndx = s.indexOf(':');
+						if (ndx > 0) {
+							jprefix = s.substring(0, ndx);
 						}
 					}
 					// set namespace prefix to the X-definition
 					for (PNode x: _pcomp.getPXDefs()) {
 						for (PNode y: x.getChildNodes()) {
 							if (y == _actPNode) {
-								x._nsPrefixes.put(jprefix, jindex);
+								Integer i = x._nsPrefixes.get(jprefix);
+								if (i == null) {
+									x._nsPrefixes.put(jprefix, jindex);
+								} else if (i != jindex) {
+									//Namespace for prefix '&{0}' is already
+									//defined&{1}{ :}
+									error(sb, XDEF.XDEF259,
+										jprefix, _pcomp.getNSURI(i));
+								}
 								break;
 							}
 						}
@@ -521,14 +530,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._value = null; //prevent repeated message
 				return;
 			}
-//		} else if ("json".equals(_actPNode._localName)
-//			&& (XDConstants.JSON_NS_URI_W3C.equals(_actPNode._nsURI)
-//			|| XDConstants.JSON_NS_URI.equals(_actPNode._nsURI))) {
-//			if (_level != 1) {
-//				//JSON model can be declared only as a child of X-definition
-//				error(_actPNode._value, XDEF.XDEF310);
-//			}
-//			return;
 		}
 		if (_level == 0) {
 			//Text value not allowed here
