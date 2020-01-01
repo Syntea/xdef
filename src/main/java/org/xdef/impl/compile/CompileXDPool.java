@@ -1509,6 +1509,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 				}
 				pnode._nsPrefixes.put(jprefix, nsindex);
+				for (PAttr pattr:  pnode._attrs) {
+					//Attribute '&{0}' not allowed here
+					error(pattr._value, XDEF.XDEF254, pattr._name);
+				}
 				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(pnode._nsURI)
 					? (byte) 1 : (byte) 2;
 				XJson.genXdef(pnode, _precomp.getReportWriter());
