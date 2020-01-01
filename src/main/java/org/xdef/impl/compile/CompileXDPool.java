@@ -1502,7 +1502,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 					pnode._name.setString(jprefix + ":" + s);
 					pnode._localName = s;
-					if (!_jsonNames.add(s)) {
+					if (!_jsonNames.add(xdef.getName() + "#" + s)) {
 						//The name of JSON model "&{0}" already exists
 						//in X-definition
 						error(sb, XDEF.XDEF252, pnode._localName);
