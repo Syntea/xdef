@@ -90,6 +90,7 @@ public class N_Operation implements test.xdef.component.N_i,org.xdef.component.X
   private Integer _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Operation";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Operation";

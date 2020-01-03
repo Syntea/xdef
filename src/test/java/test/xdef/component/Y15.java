@@ -100,6 +100,7 @@ public class Y15 implements org.xdef.component.XComponent{
   private Y15.b _b;
   private String _$value1;
   private char _$$value1= (char) -1;
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -201,6 +202,7 @@ public static class b implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";

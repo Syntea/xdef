@@ -85,6 +85,7 @@ public class G extends test.xdef.TestXComponents_G implements org.xdef.component
     }
   }
   private String XD_Name_g="g";
+  public static final String XD_NAME="G";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "G";
@@ -202,6 +203,7 @@ public static class XXX implements org.xdef.component.XComponent{
   }
   private String XD_Name_x="x";
   private String _x;
+  public static final String XD_NAME="XXX";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "XXX";
@@ -308,6 +310,7 @@ public static class YYY implements org.xdef.component.XComponent{
   }
   private String XD_Name_y="y";
   private String _y;
+  public static final String XD_NAME="YYY";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "YYY";

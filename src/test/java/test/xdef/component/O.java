@@ -97,6 +97,7 @@ public class O implements org.xdef.component.XComponent{
   private final java.util.List<O.C> _C = new java.util.ArrayList<O.C>();
   private final java.util.List<Integer> _$value = new java.util.ArrayList<Integer>();
   private StringBuilder _$$value= new StringBuilder();
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -201,6 +202,7 @@ public static class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -291,6 +293,7 @@ public static class C implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";

@@ -1474,15 +1474,18 @@ public final class GenXComponent {
 		String extClazz = extClass;
 		String interfcName = interfaceName;
 		_components = components;
-		XElement xe = xelem;
-		if (isRoot && xe.getName().contains(":json")) {
-			String u = xe.getNSUri();
-			if ((XDConstants.JSON_NS_URI.equals(u)
-				|| XDConstants.JSON_NS_URI_W3C.equals(u))
-				&& xe._childNodes!=null && xe._childNodes.length==1
-				&& xe._childNodes[0].getKind()==XMNode.XMELEMENT) {
-				xe = (XElement) xe._childNodes[0];
+		XElement xe;
+		String xelName = xelem.getName();
+		if (isRoot && xelem.getJsonMode() > 0 //JSON
+			&& xelem._childNodes != null && xelem._childNodes.length == 1
+			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
+			xe = (XElement) xelem._childNodes[0];
+			int ndx = xelName.indexOf(':');
+			if (ndx >= 0) {
+				xelName = xelName.substring(ndx + 1);
 			}
+		} else {
+			xe = xelem;
 		}
 		final String model = xe.getName();
 		final Set<String> classNames = new HashSet<String>(RESERVED_NAMES);
@@ -2117,6 +2120,8 @@ if (isRoot && xe._json == 2 && nodes.length == 1) {
 "\t\t}"+LN+
 "\t}"+LN+
 		vars +
+(_genJavadoc ? "\t/** Name of element model.*/"+LN : "") +
+"\tpublic static final String XD_NAME=\"" + xelName + "\";"+LN+
 (_genJavadoc ? "\t/** Parent XComponent node.*/"+LN : "") +
 "\tprivate org.xdef.component.XComponent XD_Parent;"+LN+
 (_genJavadoc ? "\t/** User object.*/"+LN : "") +

@@ -83,6 +83,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
   }
   private String XD_Name_IdNeco="IdNeco";
   private Integer _IdNeco;
+  public static final String XD_NAME="ControlId";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "ControlId";

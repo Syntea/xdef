@@ -163,6 +163,7 @@ public class Z8 implements org.xdef.component.XComponent{
   private String XD_Name_Pricina="Pricina";
   private String _Pricina;
   private Z8.Misto _Misto;
+  public static final String XD_NAME="ObjStrankaDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "ObjStrankaDN";
@@ -303,6 +304,7 @@ public static class Misto implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Misto";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Misto";

@@ -14,6 +14,8 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
+import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -63,12 +65,15 @@ public class MyTest_0 extends XDTester {
 		String xdef;
 		String xml;
 		String s;
+		String json;
+		Object j;
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
 		XDOutput out;
 		StringWriter strw;
 		Report rep;
+		XComponent xc;
 		boolean chkSynteax = getChkSyntax();
 //		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
@@ -78,8 +83,127 @@ public class MyTest_0 extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|X|Y|Z|jw:json'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
 "<xd:json>\n"+
+"[\"int()\"]\n"+
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class mytest.xdef.component.TJ %link #json;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			GenXComponent.genXComponent(xp,
+				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
+			json = "[12]";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xp.createXDDocument().jparseXComponent(json,
+				null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+//		} catch (Exception ex) {fail(ex);}
+//	if(T){return;}
+//		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='X|Y|Z|jx:json'>\n"+
+"<xd:json xd:name='X'>\n"+
+"[\"int()\"]\n"+
+"</xd:json>\n"+
+"<xd:json xd:mode='xd' xd:name='Y'>\n"+
+"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
+"</xd:json>\n"+
+"<xd:json xd:name='Z'>\n"+
+"{\"a\":\"string()\"}\n" + 
+"</xd:json>\n"+
+"<xd:json xd:name='jx:json'>\n"+
+"[\"date()\"]\n"+
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class mytest.xdef.component.TX %link #X;\n"+
+"  %class mytest.xdef.component.TY %link #Y;\n"+
+"  %class mytest.xdef.component.TZ %link #Z;\n"+
+"  %class mytest.xdef.component.TJson %link #jx:json;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			reporter = GenXComponent.genXComponent(xp,
+				"src/test/java", "UTF-8", false, true);
+			reporter.checkAndThrowErrors();
+			Class clsJ, clsX, clsY, clsZ;
+			try {
+				clsX = Class.forName("mytest.xdef.component.TX");
+				clsY = Class.forName("mytest.xdef.component.TY");
+				clsZ = Class.forName("mytest.xdef.component.TZ");
+				clsJ = Class.forName("mytest.xdef.component.TJson");
+				System.out.println(
+					(String) clsX.getDeclaredField("XD_NAME").get(null));
+				System.out.println(
+					(String) clsY.getDeclaredField("XD_NAME").get(null));
+				System.out.println(
+					(String) clsZ.getDeclaredField("XD_NAME").get(null));
+				System.out.println(
+					(String) clsJ.getDeclaredField("XD_NAME").get(null));
+			} catch (Exception ex) {
+				fail("Compile package mytest.xdef.component");
+				clsJ = clsX = clsY = clsZ = clsJ = null;
+			}
+			if (clsX != null) {
+				json = "[\"2020-01-01\"]";
+				j = xp.createXDDocument().jparse(json, "jx:json", reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+					JsonUtil.toJsonString(j, true));
+				assertNoErrors(reporter);
+				reporter.clear();
+				xc = xp.createXDDocument().jparseXComponent(json,
+					clsJ, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				json = "[123]";
+				j = xp.createXDDocument().jparse(json, "X", reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+					JsonUtil.toJsonString(j, true));
+				assertNoErrors(reporter);
+				reporter.clear();
+				xc = xp.createXDDocument().jparseXComponent(json,
+					clsX, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				json = "[{\"a\":true},\"xxx\",125]";
+				j = xp.createXDDocument().jparse(json, "Y", reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+					JsonUtil.toJsonString(j, true));
+				xc = xp.createXDDocument().jparseXComponent(json,
+					clsY, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				json = "{\"a\":\"2020-01-01\"}";
+				j = xp.createXDDocument().jparse(json, "Z", reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+					JsonUtil.toJsonString(j, true));
+				xc = xp.createXDDocument().jparseXComponent(json,
+					clsZ, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+			}			
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|X|Y|Z|json'>\n"+
+"<xd:json name='json'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
 "</xd:json>\n"+
 "<xd:json name='X'>\n"+
@@ -93,41 +217,39 @@ public class MyTest_0 extends XDTester {
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xp = XDFactory.compileXD(null, xdef);
 			xml = "<A/>";
-			assertEq(xml, parse(xd,xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			String json;
-			Object j;
 			json = "[{\"a\":true},\"x\",-1]";
-			j = xd.jparse(json, "jw:json", reporter);
+			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			el = JsonUtil.jsonToXmlW3C(j);
-			xd.xparse(el, reporter);
+			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
-			j = xd.jparse("[1]", "X", reporter);
+			j = xp.createXDDocument().jparse("[1]", "X", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse("[1]"), j),
 				JsonUtil.toJsonString(j, true));
 			el = JsonUtil.jsonToXmlW3C(j);
-			xd.xparse(el, reporter);
+			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
-			j = xd.jparse(json, "Y", reporter);
+			j = xp.createXDDocument().jparse(json, "Y", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			el = JsonUtil.jsonToXml(j);
-			xd.xparse(el, reporter);
+			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
-			j = xd.jparse(json, "Z", reporter);
+			j = xp.createXDDocument().jparse(json, "Z", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			el = JsonUtil.jsonToXmlW3C(j);
-			xd.xparse(el, reporter);
+			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}

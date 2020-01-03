@@ -91,6 +91,7 @@ public class Lexicon implements org.xdef.component.XComponent{
   private String XD_Name_x="x";
   private String _x;
   private final java.util.List<Lexicon.Y> _Y = new java.util.ArrayList<Lexicon.Y>();
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";
@@ -200,6 +201,7 @@ public static class Y implements org.xdef.component.XComponent{
   }
   private String XD_Name_y="y";
   private Integer _y;
+  public static final String XD_NAME="Y";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y";

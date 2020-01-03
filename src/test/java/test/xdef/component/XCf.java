@@ -84,6 +84,7 @@ public class XCf implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<XCf.g> _g = new java.util.ArrayList<XCf.g>();
+  public static final String XD_NAME="f";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "f";
@@ -201,6 +202,7 @@ public static class g implements org.xdef.component.XComponent{
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="g";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "g";

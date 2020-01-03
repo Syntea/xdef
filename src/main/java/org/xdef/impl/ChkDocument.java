@@ -280,6 +280,17 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				: _xclass.getName();
 			while (className == null) {
 				if (!xe.isReference()) {
+					ndx = s.indexOf('/');
+					if (ndx > 0) { // separate root model name
+						s = s.substring(0, ndx);
+						className = getXDPool().getXComponents().get(s);
+						if (className == null) { // extract namespace prefix
+							ndx = s.indexOf('#') + 1;
+							int ndx1 = s.indexOf(':');
+							s = s.substring(0, ndx) + s.substring(ndx1 + 1);
+							className = getXDPool().getXComponents().get(s);
+						}
+					}
 					break;
 				}
 				s = xe.getReferencePos();
@@ -632,6 +643,29 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
 		_xclass = xClass;
+		if (xClass != null) {
+			try {
+				String s =(String) xClass.getDeclaredField("XD_NAME").get(null);
+				XNode xn = _xdef._rootSelection.get(s);
+				if (xn == null) {
+					for (String key: _xdef._rootSelection.keySet()) {
+						int ndx = key.indexOf(':');
+						if (ndx > 0 && s.equals(key.substring(ndx + 1))) {
+							xn = _xdef._rootSelection.get(key);
+							break;
+						}
+					}
+				}
+				if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+					XElement xe = (XElement) xn;
+					if (xe._json != 0) {
+						_xElement = xe;
+						xparse(xmlData, reporter);
+						return getPparsedComponent();
+					}
+				}
+			} catch (Exception ex) {}
+		}
 		xparse(xmlData, reporter);
 		return getPparsedComponent();
 	}
@@ -949,14 +983,38 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException {
 		Element e;
+		Class<?> yClass = xClass;
+		if (yClass == null) {
+			int ndx;
+			for (String s: getXDPool().getXComponents().keySet()) {
+				String className = getXDPool().getXComponents().get(s);
+				try {
+					yClass = Class.forName(className);
+					String jmodel =
+						(String) yClass.getDeclaredField("XD_NAME").get(null);
+					byte jVersion =
+						(Byte) yClass.getDeclaredField("JSON").get(null);
+					if (jVersion > 0) {
+						XElement xe = _xdef.selectRoot(jmodel,
+							jVersion == 1 ? XDConstants.JSON_NS_URI_W3C
+								: XDConstants.JSON_NS_URI,
+							-1);
+						if (xe != null && xe._json != 0) {
+							break;
+						}
+					}
+				} catch (Exception ex) {}
+				yClass = null;
+			}
+		}
 		try {
-			byte jVersion = (Byte) xClass.getDeclaredField("JSON").get(null);
+			byte jVersion = (Byte) yClass.getDeclaredField("JSON").get(null);
 			e = jVersion == 1 ?
 				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
 		} catch (Exception ex) {
-			e = JsonUtil.jsonToXml(json);
+			e = JsonUtil.jsonToXmlW3C(json);
 		}
-		return parseXComponent(e, xClass, reporter);
+		return parseXComponent(e, yClass, reporter);
 	}
 
 	@Override

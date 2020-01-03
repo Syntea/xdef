@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.LinkedHashMap;
+import javax.xml.namespace.QName;
 import org.xdef.model.XMNode;
 import org.xdef.proc.XDLexicon;
 
@@ -306,38 +307,23 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		String nm = name;
 		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
-		if (namespaceURI != null && namespaceURI.length() > 0) { // has NS URI
+		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
 			int i = name.indexOf(':');
 			nm = name.substring(i + 1);
+			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _rootSelection.keySet()) {
 				XElement xe = (XElement) _rootSelection.get(xName);
+				if (xe.getJsonMode() > 0 && qn.equals(xe.getQName())) {
+					return xe;
+				}
 				i = xName.indexOf(':');
-				String prefix = "";
 				if (i >= 0) {
-					prefix = xName.substring(0, i);
 					xName = xName.substring(i + 1); // XElement local name
 				}
 				if (t != null) {
 					String s = t.findText(xName, languageID);
 					if (s != null) {
 						xName = s;
-					}
-				}
-				if (xName.startsWith("json") && !prefix.isEmpty()) {
-					if (xe == null) {
-						String u = _namespaces.get(prefix);
-						if (XDConstants.JSON_NS_URI.equals(u)
-							|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
-							XElement xxe = (XElement) getModel(u,xName);
-							XMNode[] models = xxe.getChildNodeModels();
-							if (models != null && models.length == 1
-								&& models[0].getKind() == XMNode.XMELEMENT) {
-								xe = (XElement) models[0];
-							}
-						}
-					}
-					if (xe != null) {
-						xName = xe.getQName().getLocalPart();
 					}
 				}
 				if (nm.equals(xName) && xe != null

@@ -91,6 +91,7 @@ public class Y16c implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<Y16d> _d = new java.util.ArrayList<Y16d>();
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";

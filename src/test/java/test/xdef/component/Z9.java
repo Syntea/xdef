@@ -139,6 +139,7 @@ public class Z9 implements org.xdef.component.XComponent{
   private String _Telefon1;
   private String XD_Name_Telefon2="Telefon2";
   private String _Telefon2;
+  public static final String XD_NAME="Adresa";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Adresa";

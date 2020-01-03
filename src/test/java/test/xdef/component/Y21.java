@@ -107,6 +107,7 @@ public class Y21 implements org.xdef.component.XComponent{
   private final java.util.List<Y21.B> _B = new java.util.ArrayList<Y21.B>();
   private test.xdef.component.Y21_enum _$value1;
   private char _$$value1= (char) -1;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -236,6 +237,7 @@ public static class B implements org.xdef.component.XComponent{
   private test.xdef.TestXComponents_Y21enum _c;
   private test.xdef.component.Y21_enum _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

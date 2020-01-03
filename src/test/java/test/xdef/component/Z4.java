@@ -193,6 +193,7 @@ public class Z4 implements org.xdef.component.XComponent{
   private String _Profese;
   private Z9 _TrvalyPobyt;
   private Z9 _PrechodnyPobyt;
+  public static final String XD_NAME="Osoba";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Osoba";

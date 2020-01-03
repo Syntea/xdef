@@ -73,30 +73,30 @@ public class JSONTest3 extends XDTester {
 //		String knm = " a,\n\t?:b ";
 		try {
 			xp = XDFactory.compileXD(props, 
-"<xd:def xmlns:xd='" + _xdNS + "' name='A' root='js:json | jw:json'\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='A' root='json | a'\n" +
 "        xmlns:js='"+XDConstants.JSON_NS_URI+"'\n" +
 "        xmlns:jw='"+XDConstants.JSON_NS_URI_W3C+"'>\n" +
-"<js:json>\n" +
+"<xd:json>\n" +
 "{\""+knm+"\": \"optional jstring()\"}\n" +
-"</js:json>\n" +
-"<jw:json>\n" +
+"</xd:json>\n" +
+"<xd:json name='a'>\n" +
 "{\""+knm+"\": \"optional jstring()\"}\n" +
-"</jw:json>\n" +
+"</xd:json>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' name='B' root='js:json | jw:json'\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='B' root='json | a'\n" +
 "        xmlns:js='"+XDConstants.JSON_NS_URI+"'\n" +
 "        xmlns:jw='"+XDConstants.JSON_NS_URI_W3C+"'>\n" +
-"<js:json>\n" +
+"<xd:json>\n" +
 "{\""+knm+"\": \"optional int()\"}\n" +
-"</js:json>\n" +
-"<jw:json>\n" +
+"</xd:json>\n" +
+"<xd:json name='a'>\n" +
 "{\""+knm+"\": \"optional int()\"}\n" +
-"</jw:json>\n" +
+"</xd:json>\n" +
 "  <xd:component>\n" +
-"    %class mytest.component.Js3 %link A#js:json;\n" +
-"    %class mytest.component.Js3w %link A#jw:json;\n" +
-"    %class mytest.component.Js3i %link B#js:json;\n" +
-"    %class mytest.component.Js3wi %link B#jw:json;\n" +
+"    %class mytest.component.Js3 %link A#json;\n" +
+"    %class mytest.component.Js3w %link A#a;\n" +
+"    %class mytest.component.Js3i %link B#json;\n" +
+"    %class mytest.component.Js3wi %link B#a;\n" +
 "  </xd:component>\n" +
 "</xd:def>");
 			String dir = "src/test/java/";
@@ -112,7 +112,7 @@ public class JSONTest3 extends XDTester {
 //System.out.println(jname);
 			js1 = JsonUtil.parse(json);
 			xd = xp.createXDDocument("A");
-			js = xd.jparse(json, "js:json", reporter);
+			js = xd.jparse(json, "json", reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(js1, js));
@@ -127,7 +127,7 @@ public class JSONTest3 extends XDTester {
 			setJValue(xc, jname, "a\nb");
 			assertEq("a\nb", getJValue(xc, jname));
 			xd = xp.createXDDocument("A");
-			js = xd.jparse(json, "jw:json", reporter);
+			js = xd.jparse(json, "a", reporter);
 			assertTrue(JsonUtil.jsonEqual(js1, js));
 			xc = xd.jparseXComponent(json,
 				mytest.component.Js3w.class, reporter);

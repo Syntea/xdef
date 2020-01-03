@@ -109,9 +109,9 @@ class XmlToJson extends JsonToXml {
 			array.add(getJValue(s));
 		} else {
 			StringParser p = new StringParser(s);
-			if (p.isSignedFloat()) {
+			if (p.isSignedFloat() && p.eos()) {
 				array.add(new BigDecimal(p.getParsedString()));
-			} else if (p.isSignedInteger()) {
+			} else if (p.isSignedInteger() && p.eos()) {
 				array.add(new BigInteger(p.getParsedString()));
 			} else { //not quoted string ???
 				array.add(s);

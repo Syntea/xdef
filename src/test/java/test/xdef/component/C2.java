@@ -98,6 +98,7 @@ public class C2 implements org.xdef.component.XComponent{
   private String XD_Name_Num="Num";
   private Integer _Num;
   private final java.util.List<C1> _Person = new java.util.ArrayList<C1>();
+  public static final String XD_NAME="House";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "House";

@@ -88,6 +88,7 @@ public class Y25 implements org.xdef.component.XComponent{
   }
   private Y25.DefParams _DefParams;
   private final java.util.List<Y25.Params> _Params = new java.util.ArrayList<Y25.Params>();
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -204,6 +205,7 @@ public static class DefParams implements org.xdef.component.XComponent{
   }
   private final java.util.List<test.xdef.component.Y25.DefParams.Param> _Param =
     new java.util.ArrayList<test.xdef.component.Y25.DefParams.Param>();
+  public static final String XD_NAME="DefParams";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "DefParams";
@@ -317,6 +319,7 @@ public static class Param implements org.xdef.component.XComponent{
   private String _Name;
   private String XD_Name_Type="Type";
   private String _Type;
+  public static final String XD_NAME="Param";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Param";
@@ -431,6 +434,7 @@ public static class Params implements org.xdef.component.XComponent{
   }
   private final java.util.List<test.xdef.component.Y25.Params.Param> _Param =
     new java.util.ArrayList<test.xdef.component.Y25.Params.Param>();
+  public static final String XD_NAME="Params";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Params";
@@ -544,6 +548,7 @@ public static class Param implements org.xdef.component.XComponent{
   private String _Name;
   private String XD_Name_Value="Value";
   private String _Value;
+  public static final String XD_NAME="Param";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Param";

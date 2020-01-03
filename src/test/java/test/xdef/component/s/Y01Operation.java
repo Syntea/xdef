@@ -97,6 +97,7 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Operation";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Operation";

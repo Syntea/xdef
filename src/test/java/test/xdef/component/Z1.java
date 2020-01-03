@@ -248,6 +248,7 @@ public class Z1 implements org.xdef.component.XComponent{
   private final java.util.List<PredmetDN> _Predmet = new java.util.ArrayList<PredmetDN>();
   private final java.util.List<ZvireDN> _Zvire = new java.util.ArrayList<ZvireDN>();
   private final java.util.List<UcastnikDN> _Ucastnik = new java.util.ArrayList<UcastnikDN>();
+  public static final String XD_NAME="ZaznamPDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "ZaznamPDN";
@@ -425,6 +426,7 @@ public static class VyliceniDN implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="VyliceniDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "VyliceniDN";

@@ -90,6 +90,7 @@ public class Y05 implements org.xdef.component.XComponent{
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

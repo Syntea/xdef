@@ -95,6 +95,7 @@ public class Z3 implements org.xdef.component.XComponent{
   private String _TisKc;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Skoda";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Skoda";

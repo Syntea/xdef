@@ -88,6 +88,7 @@ public class Y18a1 implements org.xdef.component.XComponent{
   }
   private Integer _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
