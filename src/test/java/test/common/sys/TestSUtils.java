@@ -1031,14 +1031,13 @@ public class TestSUtils extends STester {
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
 					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
-				} if (SUtils.JAVA_RUNTIME_VERSION_ID == 108) {
+				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 108) {
 					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				} else {
 					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				}
-
 			} else {
 				fail();
 			}
