@@ -418,6 +418,7 @@ public class TestJsonXdef extends XDTester {
 		XDPool xp;
 		try {
 			xp = genAll("Test*");
+//			xp = genAll("Test0*");
 		} catch (RuntimeException ex) {
 			if (ex.getMessage().contains("Java compiler is not available")) {
 				getOutStream().println(ex.getMessage()

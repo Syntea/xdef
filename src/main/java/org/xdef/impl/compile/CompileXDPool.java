@@ -1501,12 +1501,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						s = s.substring(ndx + 1);
 					}
 					pnode._name.setString(jprefix + ":" + s);
-					pnode._localName = s;
 					if (!_jsonNames.add(xdef.getName() + "#" + s)) {
 						//The name of JSON model "&{0}" already exists
 						//in X-definition
 						error(sb, XDEF.XDEF252, pnode._localName);
 					}
+					pnode._localName = s;
 				}
 				pnode._nsPrefixes.put(jprefix, nsindex);
 				for (PAttr pattr:  pnode._attrs) {
@@ -1515,7 +1515,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(pnode._nsURI)
 					? (byte) 1 : (byte) 2;
-				XJson.genXdef(pnode, _precomp.getReportWriter());
+				XJson.genXdef(pnode, jsonMode, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {

@@ -72,7 +72,8 @@ public class XJson extends JsonToXml {
 		return a;
 	}
 
-	/** Parse X-script and return occurrence and executive part in separate fields.
+	/** Parse X-script and return occurrence and executive part in separate
+	 * fields.
 	 * @return array with SBuffer items from both parts.
 	 */
 	private SBuffer[] parseOccurrence() {
@@ -713,7 +714,8 @@ public class XJson extends JsonToXml {
 		PNode e = null;
 		if (!list.isEmpty() && list.get(0) instanceof JValue) {
 			JValue x = (JValue) list.get(0);
-			setSourceBuffer(new SBuffer(x.toString(), ((JValue)x).getPosition()));
+			setSourceBuffer(
+				new SBuffer(x.toString(), ((JValue)x).getPosition()));
 			skipBlanksAndComments();
 			if (isToken(_xdPrefix + ":script")) {
 				skipBlanksAndComments();
@@ -770,9 +772,12 @@ public class XJson extends JsonToXml {
 
 	/** Create X-definition model from PNode created from json XML element.
 	 * @param p PNode with JSON script.
+	 * @param jsonMode 1..w3c, 2..xd.
 	 * @param reporter report writer
 	 */
-	final static void genXdef(final PNode p, final ReportWriter reporter) {
+	final static void genXdef(final PNode p,
+		final byte jsonMode,
+		final ReportWriter reporter) {
 		XJson jx = new XJson();
 		jx.setGenJObjects();
 		jx.setReportWriter(reporter);
@@ -784,11 +789,12 @@ public class XJson extends JsonToXml {
 		jx.setSourceBuffer(p._value);
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JList)) {
-			jx._jsNamespace = p._nsURI;
 			jx._jsPrefix = p.getPrefix();
-			if (XDConstants.JSON_NS_URI_W3C.equals(p._nsURI)) {
+			if (jsonMode == 1) {
+				jx._jsNamespace = XDConstants.JSON_NS_URI_W3C;
 				jx.genJsonModelW3C(json, p);
 			} else if (XDConstants.JSON_NS_URI.equals(p._nsURI)) {
+				jx._jsNamespace = XDConstants.JSON_NS_URI;
 				jx.genJsonModelXD(json, p);
 			}
 		} else {

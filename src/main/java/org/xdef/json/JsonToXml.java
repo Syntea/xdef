@@ -186,9 +186,34 @@ public class JsonToXml extends JsonUtil {
 	 * @param val value which will be represented as value of created element.
 	 */
 	private void addValueToNodeXD(final Node node, final Object val) {
+/*xxx*
+		Element e;
+		if (val == null) {
+			e = genJElement(J_NULL);
+		} else if (val instanceof Map) {
+			Map m = (Map) val;
+			e = genMapW3C((Map) val);
+		} else if (val instanceof List) {
+			e = genArrayW3C((List) val);
+		} else {
+			if (val instanceof String) {
+				e = genJElement(J_STRING);
+				e.appendChild(_doc.createTextNode(
+					genSimpleValueToXml(val, false)));
+			} else if (val instanceof Number) {
+				e = genJElement(J_NUMBER);
+				e.appendChild(_doc.createTextNode(val.toString()));
+			} else {
+				e = genJElement(J_BOOLEAN);
+				e.appendChild(_doc.createTextNode(val.toString()));
+			}
+		}
+		node.appendChild(e);
+/*xxx*/
 		Element e = appendJSONElem(node, J_ITEM);
 		addValueAsText(e, val);
 		_ns.popContext();
+/*xxx*/
 	}
 
 	/** Append array of JSON values to node.

@@ -472,7 +472,7 @@ public class JsonUtil extends StringParser {
 	private static void objToJsonString(final Object obj,
 		final String indent,
 		final StringBuilder sb) {
-		if (obj == null) {
+		if (obj == null || obj instanceof JNull) {
 			sb.append("null");
 		} else if (obj instanceof String) {
 			String s = (String) obj;
@@ -717,12 +717,12 @@ public class JsonUtil extends StringParser {
 	 * @return true if and only if both values are equal.
 	 * @throws SRuntimeException if objects are incomparable
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "unchecked"})
 	private static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null) {
-			return o2 == null;
-		} else if (o2 == null) {
-			return false;
+		if (o1 == null || o2 instanceof JNull) {
+			return o2 == null || o2 instanceof JNull;
+		} else if (o2 == null || o1 instanceof JNull) {
+			return o1 == null || o1 instanceof JNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
