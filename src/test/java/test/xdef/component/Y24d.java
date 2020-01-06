@@ -91,6 +91,7 @@ public class Y24d implements org.xdef.component.XComponent{
   private String XD_Name_Y24d="Y24d";
   private String _Y24d;
   private Y24d.Y24d_1 _Y24d_1;
+  public static final String XD_NAME="Y24d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y24d";
@@ -187,6 +188,7 @@ public static class Y24d_1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="Y24d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y24d";

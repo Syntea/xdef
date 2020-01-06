@@ -137,6 +137,7 @@ public class Z2 implements org.xdef.component.XComponent{
   private String _NazevDN;
   private String XD_Name_Zpracovatel="Zpracovatel";
   private String _Zpracovatel;
+  public static final String XD_NAME="ProtokolDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "ProtokolDN";

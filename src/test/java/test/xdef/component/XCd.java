@@ -84,6 +84,7 @@ public class XCd implements org.xdef.component.XComponent{
     }
   }
   private XCd.e _e;
+  public static final String XD_NAME="d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d";
@@ -201,6 +202,7 @@ public static class e implements org.xdef.component.XComponent{
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="e";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "e";

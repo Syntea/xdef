@@ -84,6 +84,7 @@ public class X implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<X.A> _A = new java.util.ArrayList<X.A>();
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";
@@ -197,6 +198,7 @@ public static class A implements org.xdef.component.XComponent{
     new java.util.ArrayList<test.xdef.component.X.A.B>();
   private final java.util.List<test.xdef.component.X.A.C> _C =
     new java.util.ArrayList<test.xdef.component.X.A.C>();
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -312,6 +314,7 @@ public static class B implements org.xdef.component.XComponent{
     }
   }
   private test.xdef.component.X.A.B.E _E;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -423,6 +426,7 @@ public static class E implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="E";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "E";
@@ -518,6 +522,7 @@ public static class C implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";

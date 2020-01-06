@@ -91,6 +91,7 @@ public class Y22 implements org.xdef.component.XComponent{
   private String XD_Name_Creator="Creator";
   private String _Creator;
   private Y22.Transfer _Transfer;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -208,6 +209,7 @@ public static class Transfer implements org.xdef.component.XComponent{
   private String XD_Name_Sender="Sender";
   private String _Sender;
   private test.xdef.component.Y22.Transfer.DataFiles _DataFiles;
+  public static final String XD_NAME="Transfer";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Transfer";
@@ -318,6 +320,7 @@ public static class DataFiles implements org.xdef.component.XComponent{
     }
   }
   private test.xdef.component.Y22.Transfer.DataFiles.Directory _Directory;
+  public static final String XD_NAME="DataFiles";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "DataFiles";
@@ -433,6 +436,7 @@ public static class Directory implements org.xdef.component.XComponent{
   private String _Path;
   private final java.util.List<test.xdef.component.Y22.Transfer.DataFiles.Directory.File> _File =
     new java.util.ArrayList<test.xdef.component.Y22.Transfer.DataFiles.Directory.File>();
+  public static final String XD_NAME="Directory";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Directory";
@@ -542,6 +546,7 @@ public static class File implements org.xdef.component.XComponent{
   }
   private String XD_Name_Name="Name";
   private String _Name;
+  public static final String XD_NAME="File";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "File";

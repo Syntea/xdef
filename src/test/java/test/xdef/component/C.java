@@ -91,6 +91,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
   private String XD_Name_Name="Name";
   private String _Name;
   private final java.util.List<C.Street> _Street = new java.util.ArrayList<C.Street>();
+  public static final String XD_NAME="Town";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Town";
@@ -209,6 +210,7 @@ public static class Street implements org.xdef.component.XComponent{
   private String _Name;
   private final java.util.List<test.xdef.component.C2> _House =
     new java.util.ArrayList<test.xdef.component.C2>();
+  public static final String XD_NAME="Street";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Street";

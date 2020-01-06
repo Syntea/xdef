@@ -112,6 +112,7 @@ public class J2 implements org.xdef.component.XComponent{
   private final java.util.List<J2.D2> _D2 = new java.util.ArrayList<J2.D2>();
   private String _$value2;
   private char _$$value2= (char) -1;
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -224,6 +225,7 @@ public static class D implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="D";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "D";
@@ -314,6 +316,7 @@ public static class D2 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="D";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "D";

@@ -54,7 +54,7 @@ class XmlToJson extends JsonToXml {
 	private static Object getJValue(final String source) {
 		String s;
 		if (source == null || "null".equals(s = source.trim())) {
-			return null;
+			return JNull.JNULL;
 		}
 		if (s.isEmpty()) {
 			return "";
@@ -100,7 +100,7 @@ class XmlToJson extends JsonToXml {
 	private static void valueToArray(final List<Object> array,
 		final String s){
 		if ("null".equals(s)) {
-			array.add(null);
+			array.add(JNull.JNULL);
 		} else if ("false".equals(s)) {
 			array.add(Boolean.FALSE);
 		} else if ("true".equals(s)) {
@@ -109,9 +109,9 @@ class XmlToJson extends JsonToXml {
 			array.add(getJValue(s));
 		} else {
 			StringParser p = new StringParser(s);
-			if (p.isSignedFloat()) {
+			if (p.isSignedFloat() && p.eos()) {
 				array.add(new BigDecimal(p.getParsedString()));
-			} else if (p.isSignedInteger()) {
+			} else if (p.isSignedInteger() && p.eos()) {
 				array.add(new BigInteger(p.getParsedString()));
 			} else { //not quoted string ???
 				array.add(s);
@@ -230,7 +230,7 @@ class XmlToJson extends JsonToXml {
 						return createMap(e);
 					}
 					if (J_NULL.equals(name)) {
-						return null;
+						return JNull.JNULL;
 					} else if (J_STRING.equals(name)
 						|| J_NUMBER.equals(name)
 						|| J_BOOLEAN.equals(name)

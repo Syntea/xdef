@@ -84,6 +84,7 @@ public class Y11 implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<Y11.B> _B = new java.util.ArrayList<Y11.B>();
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -225,6 +226,7 @@ public static class B implements org.xdef.component.XComponent{
     new java.util.ArrayList<test.xdef.component.Y11Op>();
   private final java.util.List<test.xdef.component.Y11Op> _Op =
     new java.util.ArrayList<test.xdef.component.Y11Op>();
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

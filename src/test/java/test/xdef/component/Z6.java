@@ -124,6 +124,7 @@ public class Z6 implements org.xdef.component.XComponent{
   private String _MistoVydani;
   private String XD_Name_StatVydani="StatVydani";
   private String _StatVydani;
+  public static final String XD_NAME="Doklad";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Doklad";

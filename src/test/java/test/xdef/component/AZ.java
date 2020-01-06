@@ -83,6 +83,7 @@ public class AZ extends test.xdef.TestXComponents_G implements org.xdef.componen
   }
   private String XD_Name_z="z";
   private String _z;
+  public static final String XD_NAME="Z";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Z";

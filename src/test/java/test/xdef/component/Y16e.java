@@ -88,6 +88,7 @@ public class Y16e implements org.xdef.component.XComponent{
     }
   }
   private Y16f _f;
+  public static final String XD_NAME="e";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "e";

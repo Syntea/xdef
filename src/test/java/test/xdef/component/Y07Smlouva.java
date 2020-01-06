@@ -92,6 +92,7 @@ public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implement
   private String XD_Name_IdFlow="IdFlow";
   private Integer _IdFlow;
   private Y07Smlouva.Domain _Domain;
+  public static final String XD_NAME="Smlouva";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Smlouva";
@@ -216,6 +217,7 @@ public static class Domain implements org.xdef.component.XComponent{
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Domain";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Domain";

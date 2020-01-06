@@ -84,6 +84,7 @@ public class E implements org.xdef.component.XComponent{
     }
   }
   private E.Clazz _Clazz;
+  public static final String XD_NAME="if";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "if";
@@ -190,6 +191,7 @@ public static class Clazz implements org.xdef.component.XComponent{
   }
   private String XD_Name_try="try";
   private String _try;
+  public static final String XD_NAME="class";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "class";

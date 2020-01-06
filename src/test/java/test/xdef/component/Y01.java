@@ -84,6 +84,7 @@ public class Y01 implements org.xdef.component.XComponent{
     }
   }
   private test.xdef.component.s.Y01Operation _Operation;
+  public static final String XD_NAME="Test";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Test";

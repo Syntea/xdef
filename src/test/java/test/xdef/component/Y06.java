@@ -81,6 +81,7 @@ public class Y06 extends test.xdef.TestXComponents_Y06Container<test.xdef.TestXC
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";

@@ -83,6 +83,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final ArrayList<XNode> _nodeList;
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
+	/** Set of JSON names. */
+	Set<String> _jsonNames = new HashSet<String>();
 
 	/** External classes. */
 	private Class<?>[] _extClasses;
@@ -1467,12 +1469,57 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
+			} else if (pnode._localName.equals("json")) {
+				if (pnode._value == null || pnode._value.getString().isEmpty()){
+					//JSON model is missing in JSON definition
+					error(pnode._name, XDEF.XDEF315);
+					return;
+				}
+				SBuffer sb = _precomp.getXdefAttr(pnode, "mode", false, true);
+				String jsNS = XDConstants.JSON_NS_URI_W3C;
+				int nsindex = XPreCompiler.NS_JSON_W3C_INDEX;
+				if (sb != null) {
+					if ("xd".equals(sb.getString().trim())) {
+						jsNS = XDConstants.JSON_NS_URI;
+						nsindex = XPreCompiler.NS_JSON_INDEX;
+					} else if (!"w3c".equals(sb.getString().trim())) {
+						//Incorrect value of &{0}&{1}{: }
+						error(sb, XDEF.XDEF222, "mode", sb.getString());
+					}
+				}
+				String jprefix = nsindex==XPreCompiler.NS_JSON_INDEX ?"js":"jw";
+				sb = _precomp.getXdefAttr(pnode, "name", false, true);
+				pnode._nsURI = jsNS;
+				pnode._nsindex = nsindex;
+				if (sb == null) {
+					pnode._name.setString(jprefix + ":json");
+				} else {
+					String s = sb.getString().trim();
+					int ndx = s.indexOf(':');
+					if (ndx >= 0) {
+						jprefix = s.substring(0, ndx);
+						s = s.substring(ndx + 1);
+					}
+					pnode._name.setString(jprefix + ":" + s);
+					if (!_jsonNames.add(xdef.getName() + "#" + s)) {
+						//The name of JSON model "&{0}" already exists
+						//in X-definition
+						error(sb, XDEF.XDEF252, pnode._localName);
+					}
+					pnode._localName = s;
+				}
+				pnode._nsPrefixes.put(jprefix, nsindex);
+				for (PAttr pattr:  pnode._attrs) {
+					//Attribute '&{0}' not allowed here
+					error(pattr._value, XDEF.XDEF254, pattr._name);
+				}
+				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(pnode._nsURI)
+					? (byte) 1 : (byte) 2;
+				XJson.genXdef(pnode, jsonMode, _precomp.getReportWriter());
+				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
+				return;
 			} else {
-				if (level > 1 || !"macro".equals(pnode._localName)
-					&& (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
-					|| XDConstants.XDEF31_NS_URI.equals(pnode._nsURI)
-					|| XDConstants.XDEF32_NS_URI.equals(pnode._nsURI)
-					|| XDConstants.XDEF40_NS_URI.equals(pnode._nsURI))) {
+				if (level > 1 || !"macro".equals(pnode._localName)) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);
@@ -1634,9 +1681,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		_nodeList.add(0,def);
 		//compile xmodels
-//		for (PNode nodei: pnode._childNodes) {
-		for (int i = 0; i < pnode._childNodes.size(); i++) {
-			PNode nodei = pnode._childNodes.get(i);
+		for (PNode nodei: pnode._childNodes) {
 			String name = nodei._localName;
 			PAttr v = nodei.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
 			SBuffer gname = v == null ? null : v._value;
@@ -1680,24 +1725,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 				}
-				continue;
-			} else if (nodei._localName.startsWith("json")
-				&& (XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-				|| XDConstants.JSON_NS_URI.equals(nodei._nsURI))) {
-				if (!nodei._childNodes.isEmpty()) {
-					//XML element models are not allowed in JSON definition
-					error(nodei._childNodes.get(0)._name, XDEF.XDEF314);
-					nodei._childNodes.clear();
-				}
-				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-					? (byte) 1 : (byte) 2;
-				if (nodei._value == null || nodei._value.getString().isEmpty()){
-					//JSON model is missing in JSON definition
-					error(nodei._name, XDEF.XDEF315);
-					continue;
-				}
-				XJson.genXdef(nodei, _precomp.getReportWriter());
-				compileXChild(def, null, nodei, def, 1, jsonMode);
 				continue;
 			}
 			compileXChild(def, null, nodei, def, 1, (byte)0);

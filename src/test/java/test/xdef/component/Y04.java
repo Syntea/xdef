@@ -86,6 +86,7 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
   private String XD_Name_Jedna="Jedna";
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Part";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Part";

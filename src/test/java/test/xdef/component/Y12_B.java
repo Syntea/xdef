@@ -96,6 +96,7 @@ public class Y12_B implements org.xdef.component.XComponent{
   private final java.util.List<Y12_B.M> _M = new java.util.ArrayList<Y12_B.M>();
   private final java.util.List<Y12_B.P> _P = new java.util.ArrayList<Y12_B.P>();
   private final java.util.List<Y12_B.Q> _Q = new java.util.ArrayList<Y12_B.Q>();
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -218,6 +219,7 @@ public static class S implements org.xdef.component.XComponent{
   }
   private String XD_Name_V="V";
   private String _V;
+  public static final String XD_NAME="S";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "S";
@@ -324,6 +326,7 @@ public static class M implements org.xdef.component.XComponent{
   }
   private String XD_Name_V="V";
   private String _V;
+  public static final String XD_NAME="M";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "M";
@@ -430,6 +433,7 @@ public static class P implements org.xdef.component.XComponent{
   }
   private String XD_Name_O="O";
   private String _O;
+  public static final String XD_NAME="P";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "P";
@@ -536,6 +540,7 @@ public static class Q implements org.xdef.component.XComponent{
   }
   private String XD_Name_O="O";
   private String _O;
+  public static final String XD_NAME="Q";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Q";

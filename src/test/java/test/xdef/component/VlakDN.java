@@ -132,6 +132,7 @@ public class VlakDN implements org.xdef.component.XComponent{
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private VlakDN.Vlastnik _Vlastnik;
+  public static final String XD_NAME="VlakDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "VlakDN";
@@ -269,6 +270,7 @@ public static class Vlastnik implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Vlastnik";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Vlastnik";

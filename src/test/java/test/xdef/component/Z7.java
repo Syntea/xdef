@@ -101,6 +101,7 @@ public class Z7 implements org.xdef.component.XComponent{
   private org.xdef.sys.SDatetime _DatumRozhodnuti;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="RozhodnutiDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "RozhodnutiDN";

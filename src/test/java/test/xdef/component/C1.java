@@ -90,6 +90,7 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
   private String _FirstName;
   private String XD_Name_LastName="LastName";
   private String _LastName;
+  public static final String XD_NAME="Person";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Person";

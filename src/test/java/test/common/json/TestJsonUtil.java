@@ -108,7 +108,7 @@ public class TestJsonUtil extends STester {
 			_errors++;
 			return "Error in check XML and JSON:\n"
 				+ xml.getName() + ", " + json.getName() + "\n"
-				+ JsonUtil.toJsonString(o1);
+				+ JsonUtil.toJsonString(o1) + "\n" + JsonUtil.toJsonString(o2);
 		}
 		return "";
 	}

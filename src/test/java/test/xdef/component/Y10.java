@@ -109,6 +109,7 @@ public class Y10 implements org.xdef.component.XComponent{
   private String _c;
   private Y10p _p;
   private Y10q _q;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";

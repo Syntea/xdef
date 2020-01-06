@@ -87,6 +87,7 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
   }
   private String XD_Name_IdFlow="IdFlow";
   private Y08.Domain _Domain;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -203,6 +204,7 @@ public static class Domain implements org.xdef.component.XComponent{
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Domain";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Domain";

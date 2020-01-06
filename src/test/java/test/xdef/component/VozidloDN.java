@@ -295,6 +295,7 @@ public class VozidloDN implements org.xdef.component.XComponent{
   private Z3 _Skoda;
   private Z3 _JinaSkoda;
   private VozidloDN.Drzitel _Drzitel;
+  public static final String XD_NAME="VozidloDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "VozidloDN";
@@ -489,6 +490,7 @@ public static class Drzitel implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Drzitel";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Drzitel";

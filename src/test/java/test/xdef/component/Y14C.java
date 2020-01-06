@@ -88,6 +88,7 @@ public class Y14C implements test.xdef.component.Y14B,org.xdef.component.XCompon
     }
   }
   private Y14A _X;
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -197,6 +198,7 @@ public static class X implements test.xdef.component.Y14A{
   }
   private String XD_Name_a="a";
   private String _a;
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";

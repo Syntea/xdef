@@ -98,6 +98,7 @@ public class H implements org.xdef.component.XComponent{
   private String _s$encodingStyle;
   private H.s$Header _s$Header;
   private H.s$Body _s$Body;
+  public static final String XD_NAME="s:H";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:H";
@@ -223,6 +224,7 @@ public static class s$Header implements org.xdef.component.XComponent{
   }
   private test.xdef.component.H.s$Header.b$User _b$User;
   private test.xdef.component.H.s$Header.b$Request _b$Request;
+  public static final String XD_NAME="s:Header";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:Header";
@@ -350,6 +352,7 @@ public static class b$User implements org.xdef.component.XComponent{
   private String _s$understand;
   private String XD_Name_IdentUser="IdentUser";
   private String _IdentUser;
+  public static final String XD_NAME="b:User";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:User";
@@ -488,6 +491,7 @@ public static class b$Request implements org.xdef.component.XComponent{
   private Integer _ReqMsgId;
   private String XD_Name_Mode="Mode";
   private String _Mode;
+  public static final String XD_NAME="b:Request";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:Request";
@@ -622,6 +626,7 @@ public static class s$Body implements org.xdef.component.XComponent{
   }
   private test.xdef.component.I _b$Ping;
   private test.xdef.component.H.s$Body.b$PingFlow _b$PingFlow;
+  public static final String XD_NAME="s:Body";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:Body";
@@ -739,6 +744,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
   }
   private String XD_Name_Flow="Flow";
   private String _Flow;
+  public static final String XD_NAME="b:PingFlow";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:PingFlow";

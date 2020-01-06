@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Pro jazyk popisující Xdefinice je použit jmenný prostor
-  "http://www.syntea.cz/xdef/2.0-meta"
+  For the X-definition describing X-definition is used the namespace:
+  http://www.xdef/meta
 -->
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0-meta"
-  xmlns:META     = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.xdef/meta"
+  xmlns:META     = "http://www.xdef.org/xdef/3.2"
   root           = "META:def | META:collection"
   name           = "XdefOfXdef"
-  META:metaNamespace  = "http://www.syntea.cz/xdef/2.0-meta" >
+  META:metaNamespace  = "http://www.xdef/meta" >
 
   <xd:declaration>
 
-   final String DefaultUri = "http://www.syntea.cz/xdef/2.0";
+   final String DefaultUri = "http://www.xdef.org/xdef/3.2";
 
-   String NS = DefaultUri; /* proměnná pro hodnotu project namespace */
+   String NS = DefaultUri; /* this field holds project namespace */
 
-    /** Následující metody jsou ve skutečnosti jsou realizovány externími
-       metodami, které prováději syntaktickou analýzu podle pravidel uvedených
-       v následujících odstavcích. */
+    /** Following methods are the external methods providing syntactic analysis
+      according to rules which are described below. */
 
     boolean checkClassList() {return true;}
     boolean checkRootList() {return true;}
@@ -55,8 +54,8 @@
     script            = "optional checkXdefScript();
                          options acceptQualifiedAttr" >
 
-  <!-- Jmena atributu, které jsou specifikovany navíc oproti vyse vyjmenovanym
-    (viz option moreAttributes) musí zacinat sekvenci znaku "impl-" -->
+  <!-- Other attribute names must start with "impl-"
+    (see option moreAttributes) -->
 
     <xd:mixed>
 
@@ -98,7 +97,7 @@
 
   </META:def>
 
-  <!-- model elementu -->
+  <!-- element model -->
   <xelement xd:script = "options moreAttributes"
     xd:attr     = "occurs * checkAttributeScript()"
     xd:text     = "occurs * checkValueScript()"

@@ -86,6 +86,7 @@ public class Y16a implements org.xdef.component.XComponent{
   }
   private String XD_Name_y="y";
   private Integer _y;
+  public static final String XD_NAME="x:x";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "x:x";

@@ -90,6 +90,7 @@ public class Y18a implements org.xdef.component.XComponent{
   private String _c;
   private String XD_Name_d="d";
   private String _d;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

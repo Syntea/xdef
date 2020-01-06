@@ -102,6 +102,7 @@ public class Y11Op implements org.xdef.component.XComponent{
   private String _M;
   private final java.util.List<Y11Op.Co> _Co = new java.util.ArrayList<Y11Op.Co>();
   private Y11Op.Y _Y;
+  public static final String XD_NAME="Op";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Op";
@@ -239,6 +240,7 @@ public static class Co implements org.xdef.component.XComponent{
   private String XD_Name_I="I";
   private String _I;
   private test.xdef.component.Y11Op.Co.X _X;
+  public static final String XD_NAME="Co";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Co";
@@ -340,6 +342,7 @@ public static class X implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";
@@ -444,6 +447,7 @@ public static class Y implements org.xdef.component.XComponent{
   }
   private String XD_Name_Y="Y";
   private String _Y;
+  public static final String XD_NAME="Y";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y";

@@ -83,6 +83,7 @@ public class Y13B implements test.xdef.component.Y13C,org.xdef.component.XCompon
   }
   private String XD_Name_a="a";
   private String _a;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
