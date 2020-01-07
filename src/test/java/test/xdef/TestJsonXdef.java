@@ -396,10 +396,12 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		// this code will be removed after GenCollection will process JSON
+		// save actual value of chkSyntax
 		boolean chkSyntax = getChkSyntax();
-
+		// this code will be removed after GenCollection will process JSON
+		XDTester.setFulltestMode(false);
 		setChkSyntax(false);
+
 		String xdef, xml, json;
 		Object j;
 		ArrayReporter reporter = new ArrayReporter();
@@ -504,11 +506,11 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 
 		// this code will be removed after GenCollection will process JSON
-		setChkSyntax(chkSyntax);
+		setChkSyntax(chkSyntax); // reset orginal value of chkSyntax
 	}
 
 	public static void main(String[] args) {
-		XDTester.setFulltestMode(false);
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }
