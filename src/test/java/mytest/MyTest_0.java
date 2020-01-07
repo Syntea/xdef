@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
-import org.xdef.XDOutput;
 import org.xdef.XDPool;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
@@ -28,7 +27,7 @@ public class MyTest_0 extends XDTester {
 
 	public MyTest_0() {super(); setChkSyntax(true);}
 	
-	boolean T = true; //This flag is used to return after a test
+	boolean T; //This flag is used to return after a test
 	
 	private static void printXMData(final XMData x) {
 		System.out.println(x.getXDPosition()
@@ -54,6 +53,17 @@ public class MyTest_0 extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+/////////////////////////////		
+		T = false; // if false, all tests are invoked
+		T = true; // if true, only first test is invoked
+/////////////////////////////		
+		boolean chkSynteax = getChkSyntax();
+//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
+//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
+//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
+			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 		String tempDir = getTempDir();
 		try {
 			if (new File(tempDir).exists()) {
@@ -70,17 +80,9 @@ public class MyTest_0 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
-		XDOutput out;
 		StringWriter strw;
 		Report rep;
 		XComponent xc;
-		boolean chkSynteax = getChkSyntax();
-//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -426,7 +428,6 @@ if(T){return;}
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
-//		final boolean T = false; //This flag is used to return from a test
 		try {
 			s = "D:/cvs/DEV/java/xdef/src/main/resources/"
 				+ "org/xdef/impl/compile/XdefOfXdef*.xdef";
@@ -473,13 +474,13 @@ xxx = true;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xmlns:js='" + XDConstants.JSON_NS_URI + "'\n" +
-"   xd:name=\"Test\" xd:root=\"js:json\">\n" +
-"  <js:json>{\"A\":\"int();\"}</js:json>\n" +
+"   xd:name=\"Test\" xd:root=\"json\">\n" +
+"  <xd:json>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef, 
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xmlns:js='" + XDConstants.JSON_NS_URI + "'\n" +
-"   xd:name=\"Test1\" xd:root=\"Test#js:json\"/>");
+"   xd:name=\"Test1\" xd:root=\"Test#json\"/>");
 if (xxx) {
 baos = new java.io.ByteArrayOutputStream();
 outx = new java.io.ObjectOutputStream(baos);
@@ -491,26 +492,24 @@ xp = (XDPool) in.readObject();
 }
 			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":1234}";
-			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, "js:json", reporter),
+			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, "json", reporter),
 				JsonUtil.parse(s)));
 			assertNoErrors(reporter);
 			reporter.clear();
+			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":\"1234\"}";
-			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, "js:json", reporter),
-				JsonUtil.parse(s)));
+			xd.jparse(s, "json", reporter);
 			assertErrors(reporter);
 			reporter.clear();
 /*xx*/
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
-"  xmlns:js='" + XDConstants.JSON_NS_URI_W3C + "'\n" +
-"  xd:name=\"Test\" xd:root=\"js:json\">\n" +
-"  <js:json>{\"A\":\"int();\"}</js:json>\n" +
+"  xd:name=\"Test\" xd:root=\"json\">\n" +
+"  <xd:json>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef,
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
-"  xmlns:js='" + XDConstants.JSON_NS_URI_W3C + "'\n" +
-"   xd:name=\"Test1\" xd:root=\"Test#js:json\"/>");
+"   xd:name=\"Test1\" xd:root=\"Test#json\"/>");
 if (xxx) {
 baos = new java.io.ByteArrayOutputStream();
 outx = new java.io.ObjectOutputStream(baos);
@@ -522,12 +521,12 @@ xp = (XDPool) in.readObject();
 }
 			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":1234}";
-			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, "js:json", reporter),
+			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, "json", reporter),
 				JsonUtil.parse(s)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			s = "{\"A\":\"1234\"}";
-			assertTrue(!JsonUtil.jsonEqual(xd.jparse(s, "js:json", reporter),
+			assertTrue(!JsonUtil.jsonEqual(xd.jparse(s, "json", reporter),
 				JsonUtil.parse(s)));
 			assertErrors(reporter);
 			reporter.clear();
@@ -571,7 +570,7 @@ if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a xd:script='finally out(parseInt(\"12x3\"))'>\n" +
+"  <a xd:script='finally out(parseInt(\"123\"))'>\n" +
 "<xd:mixed>\n"+
 "    match getOccurrence() == 0; ? string(); \n" +
 "    <b xd:script = \"occurs 0..2;\" x = \"fixed 'S'\"/>\n" +
@@ -582,10 +581,9 @@ if(T){return;}
 			xd = compile(xdef).createXDDocument();
 			xml = "<a>t1<b x='S'/>t2<b x='S'/></a>";
 			strw = new StringWriter();
-			out = XDFactory.createXDOutput(strw, false);
-			xd.setStdOut(out);
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			assertEq(xml, parse(xd, xml, reporter));
-			assertEq("0", strw.toString());
+			assertEq("123", strw.toString());
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
@@ -631,14 +629,13 @@ if(T){return;}
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
-			assertEq("nullnullnullCDATAdecxdatetime", strw.toString());
+			assertEq("stringdecxdatetime", strw.toString());
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
 				&& s.contains("DatumNarozeni") && s.contains("Jmeno"),
 				reporter);
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
 	}
 	
 	/** Run test
