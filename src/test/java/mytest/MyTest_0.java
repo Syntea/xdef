@@ -53,10 +53,10 @@ public class MyTest_0 extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-/////////////////////////////		
+////////////////////////////////////////////////////////////////////////////////
 		T = false; // if false, all tests are invoked
 		T = true; // if true, only first test is invoked
-/////////////////////////////		
+////////////////////////////////////////////////////////////////////////////////
 		boolean chkSynteax = getChkSyntax();
 //		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
@@ -64,6 +64,8 @@ public class MyTest_0 extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+////////////////////////////////////////////////////////////////////////////////
+
 		String tempDir = getTempDir();
 		try {
 			if (new File(tempDir).exists()) {
@@ -87,6 +89,19 @@ public class MyTest_0 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
 "<xd:json>\n"+
+"{\"\": \"optional jstring()\"}\n" +
+"</xd:json>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			json = "{\"\":\"aaa\"}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			json = "{}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
+"<xd:json>\n"+
 "[\"? jnull()\", \"int()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
@@ -96,38 +111,38 @@ public class MyTest_0 extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
-//			json = "[null, 12]";
-//			j = xp.createXDDocument().jparse(json, "json", reporter);
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-//				JsonUtil.toJsonString(j, true));
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			mytest.xdef.component.TJ1 TJ1 = (mytest.xdef.component.TJ1)
-//				 xp.createXDDocument().jparseXComponent(json, null, reporter);
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			assertTrue(TJ1.jgetjnull() != null);
-//			assertEq(12, TJ1.jgetnumber());
-//			assertTrue(TJ1.getjw$null() != null);
-//			assertEq(12, TJ1.getjw$number().get$value());
-//			json = "[12]";
-//			j = xp.createXDDocument().jparse(json, "json", reporter);
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-//				JsonUtil.toJsonString(j, true));
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			TJ1 = (mytest.xdef.component.TJ1)
-//				 xp.createXDDocument().jparseXComponent(json, null, reporter);
-//			assertNoErrors(reporter);
-//			reporter.clear();
-//			assertTrue(TJ1.jgetjnull() == null);
-//			assertEq(12, TJ1.jgetnumber());
-//			assertTrue(TJ1.getjw$null() == null);
-//			assertEq(12, TJ1.getjw$number().get$value());
+			json = "[null, 12]";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			assertNoErrors(reporter);
+			reporter.clear();
+			mytest.xdef.component.TJ1 TJ1 = (mytest.xdef.component.TJ1)
+				 xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(TJ1.jgetjnull() != null);
+			assertEq(12, TJ1.jgetnumber());
+			assertTrue(TJ1.getjw$null() != null);
+			assertEq(12, TJ1.getjw$number().get$value());
+			json = "[12]";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			assertNoErrors(reporter);
+			reporter.clear();
+			TJ1 = (mytest.xdef.component.TJ1)
+				 xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(TJ1.jgetjnull() == null);
+			assertEq(12, TJ1.jgetnumber());
+			assertTrue(TJ1.getjw$null() == null);
+			assertEq(12, TJ1.getjw$number().get$value());
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
 "<xd:json>\n"+

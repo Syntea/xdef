@@ -446,6 +446,32 @@ public class TestJsonXdef extends XDTester {
 		////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
+"<xd:json mode='w3c'>\n"+
+"{\"\": \"optional jstring()\"}\n" +
+"</xd:json>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			json = "{\"\":\"aaa\"}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			json = "{}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
+"<xd:json mode='xd'>\n"+
+"{\"\": \"optional jstring()\"}\n" +
+"</xd:json>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			json = "{\"\":\"aaa\"}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			json = "{}";
+			j = xp.createXDDocument().jparse(json, "json", reporter);
+			reporter.checkAndThrowErrors();
+			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
 "<xd:json name='json'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
