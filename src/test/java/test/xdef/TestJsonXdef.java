@@ -396,7 +396,7 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		// this code will be removed after Gelcollection will process JSON
+		// this code will be removed after GenCollection will process JSON
 		boolean chkSyntax = getChkSyntax();
 
 		setChkSyntax(false);
@@ -455,7 +455,7 @@ public class TestJsonXdef extends XDTester {
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -477,7 +477,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 
-		// this code will be removed after Gelcollection will process JSON
+		// this code will be removed after GenCollection will process JSON
 		setChkSyntax(chkSyntax);
 	}
 
