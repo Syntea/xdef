@@ -1010,13 +1010,8 @@ public class TestSUtils extends STester {
 				c = p.getParsedSDatetime().getCalendar();
 				s2 = SDatetime.formatDate(c,
 					"{L(en)}EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID != 109) {
-					assertTrue("Mon, 23 Jan 2006 10:11:13 +0100 (CEST)".
-						equals(s2), s2);
-				} else {
-					assertTrue("Mon, 23 Jan 2006 10:11:13 +0100 (SELČ)".
-						equals(s2), s2);					
-				}
+				assertTrue("Mon, 23 Jan 2006 10:11:13 +0100 (CEST)".equals(s2),
+					s2);
 			} else {
 				fail();
 			}
@@ -1029,35 +1024,26 @@ public class TestSUtils extends STester {
 				assertEq(s,s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (SELČ)".
-						equals(s2), s2);
-				} else {
-					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
-						equals(s2), s2);
-				}
+				assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
+					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
 					assertTrue("Po, 23. leden 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
-				} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
+				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 108) {
 					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
-						equals(s2), s2);
-				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (SELČ)".
 						equals(s2), s2);
 				} else {
 					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				}
-
 			} else {
 				fail();
 			}
 			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
 				s = "Po, 23. leden 2006";
-			} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
+			} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 108) {
 				s = "Po, 23. ledna 2006";
 			} else {
 				s = "po, 23. ledna 2006";
@@ -1067,17 +1053,10 @@ public class TestSUtils extends STester {
 				"{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				if (SUtils.JAVA_RUNTIME_VERSION_ID != 109) {
-					s2 = SDatetime.formatDate(c,
-						"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
-						equals(s2), s2);
-				} else {
-					s2 = SDatetime.formatDate(c,
-						"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
-					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (SELČ)".
-						equals(s2), s2);
-				}
+				s2 = SDatetime.formatDate(c,
+					"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
+				assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
+					equals(s2), s2);
 				s2 = SDatetime.formatDate(c,
 					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ (z)");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
@@ -1086,22 +1065,12 @@ public class TestSUtils extends STester {
 				} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
-				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (SELČ)".
-						equals(s2), s2);
 				} else {
 					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
 				}
 			} else {
 				fail();
-			}
-			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
-				s = "Po, 23. leden 2006";
-			} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-				s = "Po, 23. ledna 2006";
-			} else {
-				s = "po, 23. ledna 2006";
 			}
 			p = new StringParser(s);
 			s1 = "{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y|" +
@@ -1113,9 +1082,6 @@ public class TestSUtils extends STester {
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
-				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (SELČ)".
-						equals(s2), s2);
 				} else {
 					assertTrue("lun., 23. janvier 2006 10:11:13 +0100 (CEST)".
 						equals(s2), s2);
@@ -1127,9 +1093,6 @@ public class TestSUtils extends STester {
 						equals(s2), s2);
 				} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertTrue("Po, 23. ledna 2006 10:11:13 +0100 (CEST)".
-						equals(s2), s2);
-				} else if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
-					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (SELČ)".
 						equals(s2), s2);
 				} else {
 					assertTrue("po, 23. ledna 2006 10:11:13 +0100 (CEST)".

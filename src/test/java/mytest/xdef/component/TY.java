@@ -5,11 +5,17 @@ package mytest.xdef.component;
 public class TY implements org.xdef.component.XComponent{
   public String getxmlns$js() {return "http://www.xdef.org/json/3.2";}
   public TY.a geta() {return _a;}
-  public Boolean jgeta_1(){return _a==null?null:_a.get$value();}
+  public Boolean jgeta_1(){
+    return _a==null?null:_a.get$value();
+  }
   public TY.js$item getjs$item() {return _js$item;}
-  public String jgetjs$item_1(){return _js$item==null?null:org.xdef.json.JsonUtil.jstringFromXML(_js$item.get$value());}
+  public String jgetjs$item_1(){
+    return _js$item==null?null:org.xdef.json.JsonUtil.jstringFromXML(_js$item.get$value());
+  }
   public TY.js$item_1 getjs$item_1() {return _js$item_1;}
-  public Integer jgetjs$item_1_1(){return _js$item_1==null?null:_js$item_1.get$value();}
+  public Integer jgetjs$item_1_1(){
+    return _js$item_1==null?null:_js$item_1.get$value();
+  }
   public void seta(TY.a x){_a=x;}
   public void jseta_1(Boolean x){
     if(_a==null)seta(new TY.a());

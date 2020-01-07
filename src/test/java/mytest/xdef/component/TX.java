@@ -5,7 +5,9 @@ package mytest.xdef.component;
 public class TX implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public TX.jw$number getjw$number() {return _jw$number;}
-  public Integer jgetnumber(){return _jw$number==null?null:_jw$number.get$value();}
+  public Integer jgetnumber(){
+    return _jw$number==null?null:_jw$number.get$value();
+  }
   public void setjw$number(TX.jw$number x){_jw$number=x;}
   public void jsetnumber(Integer x){
     if(_jw$number==null)setjw$number(new TX.jw$number());

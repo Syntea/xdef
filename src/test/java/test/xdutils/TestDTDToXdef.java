@@ -117,8 +117,8 @@ public class TestDTDToXdef extends XDTester {
 		xmlData = "<tutorial>text</tutorial>";
 		test(dtdData, "tutorial", xmlData, display);
 
-// START fails in Java 1.9 /////////////////////////////////////////////////////
-if (SUtils.JAVA_RUNTIME_VERSION_ID == 109) {
+// START fails in Java 1.9 and higher //////////////////////////////////////////
+if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
