@@ -5,7 +5,9 @@ package mytest.component;
 public class Js3 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public Js3.jw$string getjw$string() {return _jw$string;}
-  public String jget$_(){return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());}
+  public String jget$_(){
+    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());
+  }
   public void setjw$string(Js3.jw$string x){_jw$string=x;}
   public void jset$_(String x){
     if(_jw$string==null)setjw$string(new Js3.jw$string());
@@ -92,6 +94,7 @@ public class Js3 implements org.xdef.component.XComponent{
     }
   }
   private Js3.jw$string _jw$string;
+  public static final String XD_NAME="json";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "jw:map";
@@ -213,6 +216,7 @@ public static class jw$string implements org.xdef.component.XComponent{
   private String _key;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="jw:string";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "jw:string";
