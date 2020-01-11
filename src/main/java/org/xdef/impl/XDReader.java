@@ -109,11 +109,8 @@ public final class XDReader extends SObjectReader {
 
 	private XDValue readXPath() throws IOException {
 		int len = readLength();
-		KNamespace nc;
-		if (len == 0) {
-			nc = null;
-		} else {
-			nc = new KNamespace();
+		KNamespace nc = new KNamespace();
+		if (len > 0) {
 			for (int i = 0; i < len; i++) {
 				String prefix = readString();
 				String uri = readString();
