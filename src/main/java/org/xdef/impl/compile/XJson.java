@@ -335,18 +335,30 @@ public class XJson extends JsonToXml {
 					if (!parsedScript[0].getString().isEmpty()) { // occurrence
 						occ = parsedScript[0];
 					}
+					String x = parsedScript[1].getString().trim();
 					if (parsedScript[1].getString().isEmpty()) {
-						parsedScript[1] = new SBuffer("string();",
+						parsedScript[1] = new SBuffer("jstring();",
 							jo.getPosition());
-						itemName = J_STRING;
-					} else if (s.contains("jnull")) {
+						itemName = J_STRING; // default
+					} else if (x.startsWith("jnull")){
 						itemName = J_NULL;
 					} else {
-						if (s.contains("int") || s.contains("long")
-							|| s.contains("float") || s.contains("double")
-							|| s.contains("dec") || s.contains("jnum")) {
+						if (x.startsWith("unsigned")
+							|| x.startsWith("int")
+							|| x.startsWith("byte")
+							|| x.startsWith("short")
+							|| x.startsWith("long")
+							|| x.startsWith("double")
+							|| x.startsWith("float")
+							|| x.startsWith("double")
+							|| x.startsWith("decimal")
+							|| x.startsWith("dec")
+							|| x.startsWith("jnum")) {
 							itemName = J_NUMBER;
-						} else if (s.contains("boolean")) {
+						} else if (x.startsWith("jnull")) {
+							itemName = J_NULL;
+						} else if (x.startsWith("boolean")
+							|| x.startsWith("jboolean")) {
 							itemName = J_BOOLEAN;
 						} else {
 							itemName = J_STRING;
