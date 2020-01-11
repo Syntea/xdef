@@ -41,7 +41,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	 */
 	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of

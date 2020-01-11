@@ -75,7 +75,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	/** Array of classes corresponding to implemented types. */
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	private static final Map<String, InternalMethod>[] METHODS =
 		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/

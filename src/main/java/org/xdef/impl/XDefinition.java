@@ -47,7 +47,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Source ID of this X-definition. */
 	private final SPosition _sourcePosition;
 
-	@SuppressWarnings("deprecation")
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
 	 * @param xdp XPool object.
@@ -83,11 +82,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final XElement getXElement(final String key,
 		final String nsURI,
 		final int languageID) {
+		String lockey;
+		XDefinition def;
 		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		int ndx = key.lastIndexOf('#');
-		String lockey;
-		XDefinition def;
 		if (ndx < 0) { //reference to this set, element with the name from key.
 			lockey = key;
 			def = this;
@@ -114,28 +113,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					}
 				}
 			}
-		} else if (lockey.contains(":json")
-			&& (XDConstants.JSON_NS_URI.equals(nsURI)
-				|| XDConstants.JSON_NS_URI_W3C.equals(nsURI))) {
-			for (int i = 0; i < _xElements.size(); i++) {
-				XElement xel  = def._xElements.get(i);
-				String lname = xel.getName();
-				ndx = lname.indexOf(':');
-				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
-					return xel;
-				}
-			}
 		} else {
 			ndx = lockey.indexOf(':');
 			lockey = ndx >= 0 ? lockey.substring(ndx + 1) : lockey;
 			for (int i = 0; i < _xElements.size(); i++) {
-				XElement xel  = def._xElements.get(i);
-				String lname = xel.getName();
-				ndx = lname.indexOf(':');
-				if (ndx >= 0) {
-					lname = lname.substring(ndx + 1);
-				}
-				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
+				XElement xel = def._xElements.get(i);
+				if (nsURI.equals(xel.getNSUri())
+					&& lockey.equals(xel.getLocalName())){
 					return xel;
 				}
 			}
@@ -203,11 +187,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					return model;
 				}
 			} else if (nsURI.equals(model.getNSUri())) {
-				String lname = model.getName();
-				int ndx = lname.indexOf(':');
-				if (ndx >= 0) {
-					lname = lname.substring(ndx + 1);
-				}
+				String lname = model.getLocalName();
 				if (name.equals(lname)) {
 					return model;
 				}

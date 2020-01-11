@@ -84,6 +84,24 @@ public abstract class XNode implements XMNode {
 	public final String getName() {return _name;}
 
 	@Override
+	/** Get local name of node.
+	 * @return The local name of node.
+	 */
+	public final String getLocalName() {
+		int ndx = _name.indexOf(':');
+		return (ndx < 0) ? _name : _name.substring(ndx + 1);
+	}
+
+	@Override
+	/** Get prefix of name.
+	 * @return prefix of name..
+	 */
+	public final String getNamePrefix() {
+		int ndx = _name.indexOf(':');
+		return (ndx < 0) ? "" : _name.substring(0, ndx);
+	}
+
+	@Override
 	/** Get QName of model of the node.
 	 * @return QName of node.
 	 */

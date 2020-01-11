@@ -92,7 +92,7 @@ public class MyTest_0 extends XDTester {
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -105,10 +105,10 @@ public class MyTest_0 extends XDTester {
 "[\"? jnull()\", \"int()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
-"  %class mytest.xdef.component.TJ1 %link #json;\n"+
+"  %class mytest.component.TJ1 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -119,7 +119,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			mytest.xdef.component.TJ1 TJ1 = (mytest.xdef.component.TJ1)
+			mytest.component.TJ1 TJ1 = (mytest.component.TJ1)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -135,7 +135,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			TJ1 = (mytest.xdef.component.TJ1)
+			TJ1 = (mytest.component.TJ1)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -150,10 +150,10 @@ public class MyTest_0 extends XDTester {
 //"[\"? jnull()\", \"int()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
-"  %class mytest.xdef.component.TJ2 %link #json;\n"+
+"  %class mytest.component.TJ2 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -164,7 +164,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			mytest.xdef.component.TJ2 TJ2 = (mytest.xdef.component.TJ2)
+			mytest.component.TJ2 TJ2 = (mytest.component.TJ2)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -180,7 +180,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			TJ2 = (mytest.xdef.component.TJ2)
+			TJ2 = (mytest.component.TJ2)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -194,10 +194,10 @@ public class MyTest_0 extends XDTester {
 "{\"a\":\"? jnull()\", \"b\":\"int()\"}\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
-"  %class mytest.xdef.component.TJ3 %link #json;\n"+
+"  %class mytest.component.TJ3 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "{\"a\":null, \"b\":12}";
@@ -208,7 +208,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			mytest.xdef.component.TJ3 xx = (mytest.xdef.component.TJ3)
+			mytest.component.TJ3 xx = (mytest.component.TJ3)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -226,7 +226,7 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			xx = (mytest.xdef.component.TJ3)
+			xx = (mytest.component.TJ3)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -239,31 +239,31 @@ public class MyTest_0 extends XDTester {
 "<xd:json xd:name='X'>\n"+
 "[\"int()\"]\n"+
 "</xd:json>\n"+
-"<xd:json xd:mode='xd' xd:name='Y'>\n"+
+"<xd:json xd:mode='xd' name='Y'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
 "</xd:json>\n"+
-"<xd:json xd:name='Z'>\n"+
+"<xd:json name='Z'>\n"+
 "{\"a\":\"string()\"}\n" + 
 "</xd:json>\n"+
 "<xd:json xd:name='jx:json'>\n"+
 "[\"date()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
-"  %class mytest.xdef.component.TX %link #X;\n"+
-"  %class mytest.xdef.component.TY %link #Y;\n"+
-"  %class mytest.xdef.component.TZ %link #Z;\n"+
-"  %class mytest.xdef.component.TJson %link #jx:json;\n"+
+"  %class mytest.component.TX %link #X;\n"+
+"  %class mytest.component.TY %link #Y;\n"+
+"  %class mytest.component.TZ %link #Z;\n"+
+"  %class mytest.component.TJson %link #jx:json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			Class TJson, TX, TY, TZ;
 			try {
-				TX = Class.forName("mytest.xdef.component.TX");
-				TY = Class.forName("mytest.xdef.component.TY");
-				TZ = Class.forName("mytest.xdef.component.TZ");
-				TJson = Class.forName("mytest.xdef.component.TJson");
+				TX = Class.forName("mytest.component.TX");
+				TY = Class.forName("mytest.component.TY");
+				TZ = Class.forName("mytest.component.TZ");
+				TJson = Class.forName("mytest.component.TJson");
 				assertEq("X",
 					(String) TX.getDeclaredField("XD_NAME").get(null));
 				assertEq("Y",
@@ -273,7 +273,7 @@ public class MyTest_0 extends XDTester {
 				assertEq("json",
 					(String) TJson.getDeclaredField("XD_NAME").get(null));
 			} catch (Exception ex) {
-				fail("Compile package mytest.xdef.component");
+				fail("Compile package mytest.component");
 				TJson = TX = TY = TZ = TJson = null;
 			}
 			if (TX != null) {
@@ -332,7 +332,7 @@ public class MyTest_0 extends XDTester {
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);

@@ -3078,7 +3078,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Compile BNF grammar.
 	 * @param sName SBuffer with name of BNF grammar variable.
 	 * @param sExtends SBuffer with name of BNF grammar to be extended.

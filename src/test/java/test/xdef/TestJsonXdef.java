@@ -15,7 +15,6 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
-import org.xdef.XDFactory;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -396,12 +395,6 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		// save actual value of chkSyntax
-		boolean chkSyntax = getChkSyntax();
-		// this code will be removed after GenCollection will process JSON
-		XDTester.setFulltestMode(false);
-		setChkSyntax(false);
-
 		String xdef, xml, json;
 		Object j;
 		ArrayReporter reporter = new ArrayReporter();
@@ -453,7 +446,7 @@ public class TestJsonXdef extends XDTester {
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -466,7 +459,7 @@ public class TestJsonXdef extends XDTester {
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -504,9 +497,6 @@ public class TestJsonXdef extends XDTester {
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-
-		// this code will be removed after GenCollection will process JSON
-		setChkSyntax(chkSyntax); // reset orginal value of chkSyntax
 	}
 
 	public static void main(String[] args) {

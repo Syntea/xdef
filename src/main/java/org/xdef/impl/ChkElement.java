@@ -1434,18 +1434,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	private ChkElement chkElem(final XElement xel, final Element el) {
 		if (!"$any".equals(xel.getName())) {
-			String localName = xel.getName();
-			int ndx = localName.indexOf(':');
-			if (ndx >= 0) {
-				localName = localName.substring(ndx + 1);
-			}
-			String s;
-			s = _rootChkDocument.findInLexicon(xel.getXDPosition());
+			String localName = xel.getLocalName();
+			String s = _rootChkDocument.findInLexicon(xel.getXDPosition());
 			if (s != null) {
 				localName = s;
 			}
 			s = el.getNodeName();
-			if ((ndx = s.indexOf(':')) >= 0) {
+			int ndx = s.indexOf(':');
+			if (ndx >= 0) {
 				s = s.substring(ndx + 1);
 			}
 			if (!localName.equals(s)) {
