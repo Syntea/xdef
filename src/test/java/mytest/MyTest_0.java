@@ -92,7 +92,7 @@ public class MyTest_0 extends XDTester {
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -108,7 +108,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ1 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -153,7 +153,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ2 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -197,7 +197,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ3 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "{\"a\":null, \"b\":12}";
@@ -239,10 +239,10 @@ public class MyTest_0 extends XDTester {
 "<xd:json xd:name='X'>\n"+
 "[\"int()\"]\n"+
 "</xd:json>\n"+
-"<xd:json xd:mode='xd' xd:name='Y'>\n"+
+"<xd:json xd:mode='xd' name='Y'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
 "</xd:json>\n"+
-"<xd:json xd:name='Z'>\n"+
+"<xd:json name='Z'>\n"+
 "{\"a\":\"string()\"}\n" + 
 "</xd:json>\n"+
 "<xd:json xd:name='jx:json'>\n"+
@@ -255,7 +255,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJson %link #jx:json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			Class TJson, TX, TY, TZ;
@@ -332,7 +332,7 @@ public class MyTest_0 extends XDTester {
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);

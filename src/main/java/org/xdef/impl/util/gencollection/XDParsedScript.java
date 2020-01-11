@@ -616,7 +616,6 @@ public class XDParsedScript {
 			? null : getXdScript(s, defName, isValue);
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Create XdParsedScript object from the script.
 	 * @param script string with script.
 	 * @param defName name of X-definition.

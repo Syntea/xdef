@@ -900,11 +900,7 @@ public final class GenXComponent {
 			return true;
 		}
 		final XNode xe = nodes[index];
-		String name = xe.getName();
-		int ndx = name.indexOf(':');
-		if (ndx > 0) {
-			name = name.substring(ndx + 1); //remove prefix
-		}
+		String name = xe.getLocalName();
 		String ns = xe.getNSUri();
 		short kind = xe.getKind();
 		for ( int i = 0; i < nodes.length; i++) {
@@ -915,11 +911,7 @@ public final class GenXComponent {
 			if (node.getKind() != kind) {
 				continue;
 			}
-			String name1 = node.getName();
-			ndx = name1.indexOf(':');
-			if (ndx > 0) {
-				name1 = name1.substring(ndx + 1); //remove prefix
-			}
+			String name1 = node.getLocalName();
 			if (!name1.equals(name)) {
 				continue; // not equal names
 			}
@@ -1479,10 +1471,7 @@ public final class GenXComponent {
 			&& xelem._childNodes != null && xelem._childNodes.length == 1
 			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
 			xe = (XElement) xelem._childNodes[0];
-			int ndx = xelName.indexOf(':');
-			if (ndx >= 0) {
-				xelName = xelName.substring(ndx + 1);
-			}
+			xelName = xelem.getLocalName();
 		} else {
 			xe = xelem;
 		}
@@ -1495,8 +1484,7 @@ public final class GenXComponent {
 			classNames.add(className);
 		}
 		final String xdname = xe.getXMDefinition().getName();
-		int ndx = model.indexOf(':');
-		final String localName = ndx >= 0 ? model.substring(ndx+1) : model;
+		final String localName = xe.getLocalName();
 		final String clazz = className == null ? localName : className;
 		final StringBuilder vars = new StringBuilder();
 		final Set<String> varNames = new HashSet<String>();
@@ -1511,6 +1499,7 @@ public final class GenXComponent {
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
 		final Map<String, String> atttab = new LinkedHashMap<String, String>();
+		int ndx;
 		// attributes
 		for (XMData xmdata : xe.getAttrs()) {
 			if (xmdata.isIgnore() || xmdata.isIllegal()) {

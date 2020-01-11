@@ -227,7 +227,17 @@ public abstract class XDTester extends STester {
 			oos.close();
 			ObjectInputStream ois = new ObjectInputStream(
 				new ByteArrayInputStream(baos.toByteArray()));
-			return (XDPool) ois.readObject();
+			XDPool xp1 = (XDPool) ois.readObject();
+			ois.close();
+			baos = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp1);
+			oos.close();
+			ois = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			xp1 = (XDPool) ois.readObject();
+			ois.close();
+			return xp1;
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {

@@ -48,6 +48,7 @@
   type languageId XDScript.rule('LanguageId');
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
+  type json XDJson.rule('json');
 
   /** Check element name and namespace URI (used in the match section) */
   boolean xdName(String name) {
@@ -56,13 +57,13 @@
 </xd:declaration>
 
 /******************************************************************************/
-/* Declaration of BNF grammar of Script                                       */
+/* Declaration of BNF grammar for X-Script                                    */
 /******************************************************************************/
 
   <xd:BNFGrammar name = "XDScript">
 <![CDATA[
 /******************************************************************************/
-/* BNF grammar rules                                                          */
+/* x-Script BNF grammar rules                                                          */
 /*                                                                            */
 /* Note the inline BNF method "$rule" is used to generate code for the        */
 /* compiler of X-definitions. To understand the syntax you can simply         */
@@ -675,6 +676,51 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
 XCLink ::= "%link" S ("*" | XPosition)
 
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
+]]>
+  </xd:BNFGrammar>
+
+/******************************************************************************/
+/* Declaration of BNF grammar for JSON                                        */
+/******************************************************************************/
+  <xd:BNFGrammar name = "XDJson">
+<![CDATA[
+/******************************************************************************/
+/* JSON BNF grammar rules                                                     */
+/******************************************************************************/
+
+S ::= [#9#10#13 ]* /*skipped white spaces*/
+
+boolean ::= "true" | "false"
+
+number ::= int frac exp | int frac | int exp | int
+
+int ::= "-"? digits
+
+digits ::= [0-9]+
+
+frac ::= "." digits
+
+exp ::= [eE] ("+" | "-")? digits
+
+controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
+  ('\u' [0-9a-fA-F]{4})
+
+string ::= ('"' ([^\"] | controlcharacter)* '"' |
+  "'" ([^\'] | controlcharacter)* "'")
+
+object ::= "{" (members)* S "}"
+
+members ::= S pair (S "," S pair)*
+
+pair ::= string S ":" S value
+
+array ::= "[" S list? S "]"
+
+list ::= value (S "," S value )*
+
+value ::= S? (pair | "null" | boolean | number | string | array | object) S?
+
+json ::= array | object
 
 ]]>
   </xd:BNFGrammar>

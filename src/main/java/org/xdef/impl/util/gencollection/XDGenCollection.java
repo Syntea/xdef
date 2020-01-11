@@ -588,7 +588,6 @@ public class XDGenCollection {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Canonize script and generate type table.
 	 * @param script script source.
 	 * @param defName name of actual X-definition.
@@ -709,27 +708,19 @@ public class XDGenCollection {
 					|| "component".equals(el.getLocalName())
 					|| "BNFGrammar".equals(el.getLocalName())
 					|| "thesaurus".equals(el.getLocalName())
-					|| "lexicon".equals(el.getLocalName()))
+					|| "lexicon".equals(el.getLocalName())
+					|| "json".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();
-					if ("thesaurus".equals(el.getLocalName())
-						|| "lexicon".equals(el.getLocalName())) {
-						if (s.trim().isEmpty()) {
-							el.removeChild(n);
-						}
+					s = canonizeScript(s, defName, removeActions, true);
+					if (s.length() > 0){
+						Element txtEl =
+							doc.createElementNS(xdUri, "xd:text");
+						txtEl.appendChild(doc.createTextNode(s));
+						el.replaceChild(txtEl, txt);
 					} else {
-						if (!"macro".equals(el.getLocalName())) {
-							s = canonizeScript(s, defName, removeActions, true);
-							if (s.length() > 0){
-								Element txtEl =
-									doc.createElementNS(xdUri, "xd:text");
-								txtEl.appendChild(doc.createTextNode(s));
-								el.replaceChild(txtEl, txt);
-							} else {
-								el.removeChild(txt);
-							}
-						}
+						el.removeChild(txt);
 					}
 				}
 			}

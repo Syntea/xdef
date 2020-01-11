@@ -91,6 +91,12 @@
                             match @name || @XD3.1:name; ref XD3.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
 
+          <XD3.1:json  xd:script = "occurs *;"
+              name = "optional QName; options acceptQualifiedAttr"
+              mode = "optional enum('xd', 'w3c'); options acceptQualifiedAttr">
+              required json;
+          </XD3.1:json>
+
           <XD3.1:any xd:script = "occurs *;
                             match @XD3.1:name; ref XD3.1:anyDef;
                             options moreAttributes, moreElements"
