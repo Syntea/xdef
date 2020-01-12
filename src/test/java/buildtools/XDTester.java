@@ -564,7 +564,6 @@ public abstract class XDTester extends STester {
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
 
-
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
 		if (_chkSyntax) {
 			genXdOfXd();

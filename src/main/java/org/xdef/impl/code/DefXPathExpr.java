@@ -70,7 +70,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 				NodeList nl = (NodeList) o;
 				int size = nl.getLength();
 				return size == 0 ? new DefContainer() :
-					size == 1 ? new DefContainer(nl.item(0)) : new DefContainer(nl);
+					size==1 ? new DefContainer(nl.item(0)):new DefContainer(nl);
 			}
 			if (o instanceof Number) {
 				Number n = (Number) o;

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.xdef.sys.StringParser;
 
-/** JSON/X-definition utility.
+/** Create items from xd:json to X-definition.
  * @author Vaclav Trojan
  */
 public class XJson extends JsonToXml {
@@ -110,9 +110,9 @@ public class XJson extends JsonToXml {
 				}
 			}
 			result[0] = new SBuffer(getParsedBufferPartFrom(pos), spos);
-			if (!result[0].getString().isEmpty()) {
-				result[0].addString(";");
-			}
+//			if (!result[0].getString().isEmpty()) {
+//				result[0].addString(";");
+//			}
 			isChar(';');
 			skipBlanksAndComments();
 		}
@@ -325,10 +325,11 @@ public class XJson extends JsonToXml {
 			String itemName;
 			if (jo.getObject() != null) {
 				String s = jo.toString();
-				if (s.isEmpty()) {
-					itemName = J_STRING;
+				if (s.trim().isEmpty()) {
 					// set default required string()
-					sbf = new SBuffer("optional string();", jo.getPosition());
+					sbf = new SBuffer("jvalue()", jo.getPosition());
+					occ = new SBuffer("?", jo.getPosition());
+					itemName = J_STRING;
 				} else {
 					setSourceBuffer(jo.getSBuffer());
 					SBuffer[] parsedScript = parseOccurrence();
@@ -336,8 +337,8 @@ public class XJson extends JsonToXml {
 						occ = parsedScript[0];
 					}
 					String x = parsedScript[1].getString().trim();
-					if (parsedScript[1].getString().isEmpty()) {
-						parsedScript[1] = new SBuffer("jstring();",
+					if (x.isEmpty()) {
+						parsedScript[1] = new SBuffer("jvalue()",
 							jo.getPosition());
 						itemName = J_STRING; // default
 					} else if (x.startsWith("jnull")){
@@ -366,8 +367,8 @@ public class XJson extends JsonToXml {
 						if (!s.endsWith(";")) {
 							parsedScript[1].addString(";");
 						}
-						sbf = new SBuffer("optional "
-							+ parsedScript[1].getString(), parsedScript[1]);
+						sbf = new SBuffer('?' + parsedScript[1].getString(),
+							parsedScript[1]);
 					}
 				}
 			} else {
@@ -500,8 +501,7 @@ public class XJson extends JsonToXml {
 					if (simpleChoiceName != null) {
 						JValue x = (JValue) attrs.get(simpleChoiceName);
 						setAttr(ee, simpleChoiceName,
-							new SBuffer("optional "
-								+ x.getString(), x.getPosition()));
+							new SBuffer('?' + x.getString(), x.getPosition()));
 						attrs.remove(simpleChoiceName);
 					}
 					if (xscript != null) {
@@ -529,7 +529,7 @@ public class XJson extends JsonToXml {
 							att._value.addString(";optional");
 						} else {
 							setXDAttr(eee, "script",
-								new SBuffer("optional;", eee.getName()));//pos
+								new SBuffer("?;", eee.getName()));//pos
 						}
 					}
 				} else {
@@ -570,8 +570,7 @@ public class XJson extends JsonToXml {
 									simpleValue = i;
 									SBuffer s =
 										((JValue)list.get(i)).getSBuffer();
-									s = new SBuffer("optional " + s.getString(),
-										s); // Sposition
+									s = new SBuffer('?' + s.getString(), s);
 									setAttr(parent, name, s);
 								} else {
 									items.add(list.get(i));
@@ -579,7 +578,7 @@ public class XJson extends JsonToXml {
 							}
 							if (list.size() - 1 - simpleValue == 1) {
 								e = namedItemToXD(rawName,list.get(2),parent);
-								setXDAttr(e, "script", new SBuffer("optional"));
+								setXDAttr(e, "script", new SBuffer("?"));
 								list.remove(2);
 								return e;
 							}
@@ -603,13 +602,13 @@ public class XJson extends JsonToXml {
 			}
 			String s;
 			if ((s = parsedScript[1].getString().trim()).isEmpty()) {
-				parsedScript[1].addString("string();");
+				parsedScript[1].addString("jvalue();");
 			} else if (!s.endsWith(";")) {
 				parsedScript[1].addString(";");
 			}
 			PNode ee = genXDElement(e, "text", parsedScript[1]);
 			e._childNodes.add(ee);
-			ee._value = new SBuffer("optional " + s, parsedScript[1]);
+			ee._value = new SBuffer('?' + s, parsedScript[1]);
 			return e;
 		}
 	}
@@ -708,7 +707,7 @@ public class XJson extends JsonToXml {
 			e._childNodes.add(ee);
 			PNode eee = genXDElement(ee, "text", parsedScript[1]);
 			eee._value = new SBuffer(
-				"optional " + parsedScript[1].getString(), parsedScript[1]);
+				'?' + parsedScript[1].getString(), parsedScript[1]);
 			ee._childNodes.add(eee);
 			if (!parsedScript[0].getString().isEmpty()) {
 				setXDAttr(ee, "script", parsedScript[0]);
