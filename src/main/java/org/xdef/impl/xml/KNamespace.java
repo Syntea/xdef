@@ -12,16 +12,15 @@ import javax.xml.namespace.NamespaceContext;
  * @author Vaclav Trojan
  */
 public class KNamespace implements NamespaceContext {
-
-	/** Steps of stack size.*/
-	private final int STEP = 8; //must be >= 2
-	private final int STEP2 = 16; //must be >= STEP
-
+	/** First step of stack size (must be >= 2).*/
+	private final int STEP = 4;
+	/** Next steps of stack size (must be >= STEP).*/
+	private final int STEP2 = 8;
+	
 	/** Stack of sizes of namespace context.*/
 	private int[] _stack;
 	/** Top of stack.*/
 	private int _stackTop;
-
 	/** Table of namespace prefixes. */
 	private String[] _prefixes;
 	/** Table of namespace URIs. */
@@ -32,7 +31,9 @@ public class KNamespace implements NamespaceContext {
 	/** Creates a new instance of KNamespaceImpl with default items
 	 * for prefixes "xml" and "xmlns".
 	 */
-	public KNamespace() {
+	public KNamespace() {}
+	
+	private void init() {
 		//allocate arrays
 		_stack = new int[STEP];
 		_prefixes = new String[STEP];
@@ -53,7 +54,7 @@ public class KNamespace implements NamespaceContext {
 	 * @param uri namespace URI assigned to this prefix.
 	 */
 	public KNamespace(final String prefix, final String uri) {
-		this();
+		init();
 		setPrefix(prefix, uri);
 	}
 
@@ -64,7 +65,7 @@ public class KNamespace implements NamespaceContext {
 	 * @param uri array of strings with namespace URIa assigned to prefixes.
 	 */
 	public KNamespace(final String[] prefix, final String[] uri) {
-		this();
+		init();
 		if (prefix.length != uri.length) {
 			throw new SRuntimeException(SYS.SYS080); //Index out of array
 		}
@@ -77,14 +78,16 @@ public class KNamespace implements NamespaceContext {
 	 * @param ns Context from which new instance will be created.
 	 */
 	public KNamespace(KNamespace ns) {
-		_stack = new int[ns._stack.length];
-		System.arraycopy(ns._stack, 0, _stack, 0, _stack.length);
-		_stackTop = ns._stackTop;
-		_prefixes = new String[ns._prefixes.length];
-		System.arraycopy(ns._prefixes, 0, _prefixes, 0, _prefixes.length);
-		_URIs = new String[ns._URIs.length];
-		System.arraycopy(ns._URIs, 0, _URIs, 0, _URIs.length);
-		_size = ns._size;
+		if (ns != null || ns._size > 0) {
+			_stack = new int[ns._stack.length];
+			System.arraycopy(ns._stack, 0, _stack, 0, _stack.length);
+			_stackTop = ns._stackTop;
+			_prefixes = new String[ns._prefixes.length];
+			System.arraycopy(ns._prefixes, 0, _prefixes, 0, _prefixes.length);
+			_URIs = new String[ns._URIs.length];
+			System.arraycopy(ns._URIs, 0, _URIs, 0, _URIs.length);
+			_size = ns._size;
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +100,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return namespace URI or <tt>null</tt> if no URI was found.
 	 */
 	public final String getNamespaceURI(final String prefix) {
-		if (prefix != null) {
+		if (prefix != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
 				if (prefix.equals(_prefixes[i])) {
 					return _URIs[i];
@@ -113,7 +116,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return namespace prefix or <tt>null</tt>.
 	 */
 	public final String getPrefix(final String uri) {
-		if (uri != null) {
+		if (uri != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
 				String p;
 				if (uri.equals(getNamespaceURI(p = _prefixes[i]))) {
@@ -131,11 +134,13 @@ public class KNamespace implements NamespaceContext {
 	 */
 	public final Iterator<String> getPrefixes(final String uri) {
 		ArrayList<String> a = new ArrayList<String>();
-		for (int i = _size - 1; i >= 0; i--) {
-			String p;
-			if (uri.equals(getNamespaceURI(p = _prefixes[i]))) {
-				if (!a.contains(p)) {
-					a.add(p);
+		if (_size > 0) {
+			for (int i = _size - 1; i >= 0; i--) {
+				String p;
+				if (uri.equals(getNamespaceURI(p = _prefixes[i]))) {
+					if (!a.contains(p)) {
+						a.add(p);
+					}
 				}
 			}
 		}
@@ -148,6 +153,9 @@ public class KNamespace implements NamespaceContext {
 
 	/** Push new namespace context space. */
 	public final void pushContext() {
+		if (_size == 0) {
+			init();
+		}
 		int ndx = _stackTop++;
 		if (_stackTop >= _stack.length) {
 			int[] old = _stack;
@@ -159,7 +167,7 @@ public class KNamespace implements NamespaceContext {
 
 	/** Pop namespace context space (return to previous one). */
 	public final void popContext() {
-		if (_stackTop <= 0) {
+		if (_size == 0 || _stackTop <= 0) {
 			return;
 		}
 		int prevSize;
@@ -195,7 +203,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return array with prefixes from the top of context stack.
 	 */
 	public String[] getRecentPrefixes() {
-		if (_stackTop <= 0) {
+		if (_size == 0 || _stackTop <= 0) {
 			return new String[0];
 		}
 		int start = _stack[_stackTop - 1];
@@ -211,6 +219,9 @@ public class KNamespace implements NamespaceContext {
 	 * @throws SRuntimeException or NullpointerException if an error occurs.
 	 */
 	public final void setPrefix(final String prefix, final String uri) {
+		if (_size == 0) {
+			init();
+		}
 		String s = prefix == null ? "" : prefix.intern();
 		if (s.startsWith("xml")) {
 			throw new SRuntimeException(XML.XML802, s); //Cant set prefix &{0}
@@ -233,11 +244,13 @@ public class KNamespace implements NamespaceContext {
 	 */
 	public final String[] getAllNamespaceURIs() {
 		ArrayList<String> a = new ArrayList<String>();
-		String[] prefixes = getAllPrefixes();
-		for (int i = prefixes.length - 1; i >= 2; i--) {
-			String uri = getNamespaceURI(prefixes[i]);
-			if (uri != null && !a.contains(uri)) {
-				a.add(0, uri);
+		if (_size > 0) {
+			String[] prefixes = getAllPrefixes();
+			for (int i = prefixes.length - 1; i >= 2; i--) {
+				String uri = getNamespaceURI(prefixes[i]);
+				if (uri != null && !a.contains(uri)) {
+					a.add(0, uri);
+				}
 			}
 		}
 		return a.toArray(new String[a.size()]);
@@ -259,22 +272,24 @@ public class KNamespace implements NamespaceContext {
 	/** Clear the context stack (except of predefined namespaces for prefixes
 	 * "xml" and "xmlns"). */
 	public final void clearContext() {
-		if (_stack == null || _stack.length > STEP2) {
-			_stack = new int[STEP];
-		}
-		_stackTop = 0;
-		if (_prefixes.length > STEP2) {
-			_prefixes = new String[STEP];
-			_URIs = new String[STEP];
-			_prefixes[0] = XMLConstants.XML_NS_PREFIX;
-			_URIs[0] = XMLConstants.XML_NS_URI;
-			_prefixes[1] = XMLConstants.XMLNS_ATTRIBUTE;
-			_URIs[1] = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-			_size = 2;
-		} else {
-			for (int i = 2; i < _size; i++) {
-				_prefixes[i] = null;
-				_URIs[i] = null;
+		if (_size > 0) {
+			if (_stack == null || _stack.length > STEP2) {
+				_stack = new int[STEP];
+			}
+			_stackTop = 0;
+			if (_prefixes.length > STEP2) {
+				_prefixes = new String[STEP];
+				_URIs = new String[STEP];
+				_prefixes[0] = XMLConstants.XML_NS_PREFIX;
+				_URIs[0] = XMLConstants.XML_NS_URI;
+				_prefixes[1] = XMLConstants.XMLNS_ATTRIBUTE;
+				_URIs[1] = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+				_size = 2;
+			} else {
+				for (int i = 2; i < _size; i++) {
+					_prefixes[i] = null;
+					_URIs[i] = null;
+				}
 			}
 		}
 	}

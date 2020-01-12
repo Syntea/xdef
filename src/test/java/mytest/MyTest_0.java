@@ -13,6 +13,12 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URL;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.model.XMData;
@@ -25,10 +31,8 @@ import org.xdef.sys.Report;
  */
 public class MyTest_0 extends XDTester {
 
-	public MyTest_0() {super(); setChkSyntax(true);}
-	
-	boolean T; //This flag is used to return after a test
-	
+	public MyTest_0() {super();}
+		
 	private static void printXMData(final XMData x) {
 		System.out.println(x.getXDPosition()
 			+ ", Parse: " + x.getParseMethod()
@@ -37,6 +41,7 @@ public class MyTest_0 extends XDTester {
 			+ ", Default: " + x.getDefaultValue()
 			+ ", Fixed: " + x.getFixedValue());
 	}
+
 	private static void printXMData(final XMElement xe) {
 		for (XMData x: xe.getAttrs()) {
 			printXMData(x);
@@ -49,20 +54,86 @@ public class MyTest_0 extends XDTester {
 			}
 		}
 	}
-	
+
+	private XDPool compileXD(final InputStream source,
+		final String path,
+		final Class<?>... obj) {
+		return checkXD(compile(source, path, obj));
+	}
+
+	private XDPool compileXD(final InputStream[] sources,
+		final String[] path,
+		final Class<?>... obj) {
+		return checkXD(compile(sources, path, obj));
+	}
+
+	private XDPool compileXD(final URL[] source, final Class<?>... obj) {
+		return checkXD(compile(source,obj));
+	}
+
+	private XDPool compileXD(final URL url, final Class<?>... obj) {
+		return checkXD(compile(url, obj));
+	}
+
+	private XDPool compileXD(final File[] files, final Class... obj) {
+		return checkXD(compile(files, obj));
+	}
+
+	private XDPool compileXD(final File file, final Class... obj) {
+		return checkXD(compile(file, obj));
+	}
+
+	private XDPool compileXD(final String xdef, final Class<?>... obj) {
+		return checkXD(compile(xdef, obj));
+	}
+
+	private XDPool compileXD(String[] xdefs, final Class<?>... obj) {
+		return checkXD(compile(xdefs, obj));
+	}
+
+	private XDPool checkXD(final XDPool xp) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp);
+			oos.close();
+			ObjectInputStream ois = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			XDPool xp1 = (XDPool) ois.readObject();
+			ois.close();
+			baos = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp1);
+			oos.close();
+			ois = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			xp1 = (XDPool) ois.readObject();
+			ois.close();
+			return xp1;
+		} catch(RuntimeException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		} catch(Error e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@Override
 	/** Run test and print error information. */
 	public void test() {
 ////////////////////////////////////////////////////////////////////////////////
+		boolean T; //This flag is used to return after a test
 		T = false; // if false, all tests are invoked
 		T = true; // if true, only first test is invoked
-////////////////////////////////////////////////////////////////////////////////
-		boolean chkSynteax = getChkSyntax();
-//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
+
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
+			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); // true | errors | false
+//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef.warnings
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -85,6 +156,18 @@ public class MyTest_0 extends XDTester {
 		StringWriter strw;
 		Report rep;
 		XComponent xc;
+/**
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration> Element e;</xd:declaration>\n"+
+"<a xd:script=\"+; create xpath('y[2]', e)\">\n"+
+"</a>\n"+
+"</xd:def>\n";
+			xp = compileXD(xdef);
+		} catch (Exception ex) {ex.printStackTrace();}
+if(T){return;}
+/**/
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -92,7 +175,7 @@ public class MyTest_0 extends XDTester {
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -108,7 +191,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ1 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -153,7 +236,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ2 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -197,7 +280,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJ3 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "{\"a\":null, \"b\":12}";
@@ -255,7 +338,7 @@ public class MyTest_0 extends XDTester {
 "  %class mytest.component.TJson %link #jx:json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			Class TJson, TX, TY, TZ;
@@ -332,7 +415,7 @@ public class MyTest_0 extends XDTester {
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -365,7 +448,7 @@ if(T){return;}
 "  </xd:mixed>\n"+
 "</a>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			parse(xp, null, "<a>t1</a>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, null, "<a>t1<b/></a>", reporter);
@@ -556,7 +639,7 @@ if(T){return;}
 "</xd:def>";
 //			xp = XDFactory.compileXD(null, xdef);
 /*xx*
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			xd = xp.createXDDocument();
 			xml =
 //"<A>a\\\"</A>";
@@ -593,7 +676,7 @@ if(T){return;}
 "</xd:mixed>\n"+
 "  </a>\n" +
 "</xd:def>";
-			xd = compile(xdef).createXDDocument();
+			xd = compileXD(xdef).createXDDocument();
 			xml = "<a>t1<b x='S'/>t2<b x='S'/></a>";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -623,7 +706,7 @@ if(T){return;}
 "    </Params>\n" +
 "  </a>\n" +
 "</xd:def>";
-			xp = compile(xdef);
+			xp = compileXD(xdef);
 			xd = xp.createXDDocument();
 			xml =
 "<a>\n" +
