@@ -11,7 +11,7 @@ import javax.xml.namespace.NamespaceContext;
 /** Implementation of interface javax.xml.namespace.NamespaceContext.
  * @author Vaclav Trojan
  */
-public class KNamespace implements NamespaceContext, Cloneable {
+public class KNamespace implements NamespaceContext {
 	/** First step of stack size (must be >= 2).*/
 	private final int STEP = 4;
 	/** Next steps of stack size (must be >= STEP).*/
@@ -78,7 +78,7 @@ public class KNamespace implements NamespaceContext, Cloneable {
 	 * @param ns Context from which new instance will be created.
 	 */
 	public KNamespace(KNamespace ns) {
-		if (ns != null || ns._size > 0) {
+		if (ns != null && ns._size > 0) {
 			_stack = new int[ns._stack.length];
 			System.arraycopy(ns._stack, 0, _stack, 0, _stack.length);
 			_stackTop = ns._stackTop;
@@ -134,7 +134,7 @@ public class KNamespace implements NamespaceContext, Cloneable {
 	 */
 	public final Iterator<String> getPrefixes(final String uri) {
 		ArrayList<String> a = new ArrayList<String>();
-		if (_size > 0) {
+		if (uri != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
 				String p;
 				if (uri.equals(getNamespaceURI(p = _prefixes[i]))) {
@@ -167,7 +167,7 @@ public class KNamespace implements NamespaceContext, Cloneable {
 
 	/** Pop namespace context space (return to previous one). */
 	public final void popContext() {
-		if (_size == 0 || _stackTop <= 0) {
+		if (_stackTop <= 0) {
 			return;
 		}
 		int prevSize;
@@ -203,7 +203,7 @@ public class KNamespace implements NamespaceContext, Cloneable {
 	 * @return array with prefixes from the top of context stack.
 	 */
 	public String[] getRecentPrefixes() {
-		if (_size == 0 || _stackTop <= 0) {
+		if (_stackTop <= 0) {
 			return new String[0];
 		}
 		int start = _stack[_stackTop - 1];
@@ -222,7 +222,8 @@ public class KNamespace implements NamespaceContext, Cloneable {
 		if (_size == 0) {
 			init();
 		}
-		String s = prefix == null ? "" : prefix.intern();
+		String s = prefix == null
+			? XMLConstants.DEFAULT_NS_PREFIX : prefix.trim().intern();
 		if (s.startsWith("xml")) {
 			throw new SRuntimeException(XML.XML802, s); //Cant set prefix &{0}
 		}
@@ -236,7 +237,8 @@ public class KNamespace implements NamespaceContext, Cloneable {
 			System.arraycopy(w, 0, _uris, 0, ndx);
 		}
 		_prefixes[ndx] = s;
-		_uris[ndx] = "".equals(uri) ? null : uri!= null ? uri.intern(): null;
+		_uris[ndx] = uri == null || uri.trim().equals(XMLConstants.NULL_NS_URI)
+			? null : uri.trim().intern();
 	}
 
 	/** Get array with all available namespace URIs.
@@ -276,13 +278,4 @@ public class KNamespace implements NamespaceContext, Cloneable {
 			init();
 		}
 	}
-
-	@Override
-	/** Get clone of this context.
-	 * @return clone of this object.
-	 */
-	public KNamespace clone() {
-		return new KNamespace(this);
-	}
-
 }
