@@ -499,7 +499,7 @@ final class CompileXScript extends CompileStatement {
 			error(XDEF.XDEF411, "external");
 			nextSymbol();
 		}
-		switch(_sym) {
+		switch (_sym) {
 			case IDENTIFIER_SYM: {
 				String name = _idName;
 				nextSymbol();

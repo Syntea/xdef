@@ -2412,7 +2412,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case DB_CLOSE: {
 					XDValue dv =_stack[sp--];
 					if (dv != null && !dv.isNull()) {
-						switch(dv.getItemId()) {
+						switch (dv.getItemId()) {
 							case XD_SERVICE:
 								((XDService) dv).close();
 								continue;
@@ -2430,7 +2430,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv =_stack[sp];
 					boolean b = true;
 					if (dv != null && !dv.isNull()) {
-						switch(dv.getItemId()) {
+						switch (dv.getItemId()) {
 							case XD_SERVICE:
 								b = ((XDService) dv).isClosed();
 								break;

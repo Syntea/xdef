@@ -137,7 +137,7 @@ public final class DefNull extends XDValueAbstract {
 	public XDParseResult parseResultValue() {return null;}
 
 	public static XDValue genNullValue(final short type) {
-		switch(type) {
+		switch (type) {
 			case XD_INT: // integer (ie. long) value
 				return new DefLong();
 			case XD_DECIMAL: //BigDecimal value

@@ -137,7 +137,7 @@ public final class XDReader extends SObjectReader {
 			throw new SIOException(SYS.SYS066, "Illegal code: " + code);
 		}
 		short type = readShort();
-		switch(code) {
+		switch (code) {
 			case CodeTable.COMPILE_BNF:
 				return readBNF();
 			case CodeTable.COMPILE_XPATH:

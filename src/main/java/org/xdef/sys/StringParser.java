@@ -2649,7 +2649,7 @@ public class StringParser extends SReporter implements SParser {
 				} while (fpos < flen && format.charAt(fpos) == pat);
 				n = fpos - n;
 			}
-			switch(pat) {
+			switch (pat) {
 				case '|': //variant part
 					fpos = flen;
 					break;
