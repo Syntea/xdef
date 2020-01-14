@@ -649,7 +649,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			chkEl.copyTemporaryReports();
 			if (result != null && !result.isNull()) {
 				Element el = null;
-				switch(result.getItemId()) {
+				switch (result.getItemId()) {
 					case XD_RESULTSET: {
 						XDResultSet it = (XDResultSet) result;
 						try {

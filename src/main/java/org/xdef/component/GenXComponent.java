@@ -1228,14 +1228,12 @@ public final class GenXComponent {
 			&& "null".equals(xe.getQName().getLocalPart())) {
 			isNull = true;
 			typ = "org.xdef.json.JNull";
-			name = "jnull";
 		} else {
 			isNull = false;
 			typ = getJavaObjectTypeName((XData) childNodeModels[0]);
-			name = javaName(name);
+			name = getUniqueName(getUniqueName(getUniqueName(name,
+				RESERVED_NAMES), classNames), varNames);
 		}
-		name = getUniqueName(getUniqueName(getUniqueName(name,
-			RESERVED_NAMES), classNames), varNames);
 		String template;
 		// has only a text child
 		String jGet, jSet;

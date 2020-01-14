@@ -1726,7 +1726,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		if (op != ASSGN_SYM && var != null) {
 			short code = CompileBase.UNDEF_CODE;
-			switch(op) {
+			switch (op) {
 				case LSH_EQ_SYM:
 				case RSH_EQ_SYM:
 				case RRSH_EQ_SYM:
@@ -3497,7 +3497,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					nextSymbol();
 				}
 			} while (_sym == FINAL_SYM || _sym == EXTERNAL_SYM);
-			switch(_sym) {
+			switch (_sym) {
 				case IDENTIFIER_SYM: {
 					String name = _idName;
 					if ("method".equals(name)) {

@@ -786,7 +786,7 @@ public final class DefContainer extends XDValueAbstract
 					if (x.isNull()) {
 						return false;
 					}
-					switch(x.getItemId()) {
+					switch (x.getItemId()) {
 						case XD_BOOLEAN:
 							return x.booleanValue();
 						case XD_FLOAT:

@@ -5,7 +5,7 @@ package mytest.component;
 public class TJ2 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public java.util.List<TJ2.jw$null> listOfjw$null() {return _jw$null;}
-  public java.util.List<org.xdef.json.JNull> jlistOfjnull(){
+  public java.util.List<org.xdef.json.JNull> jlistOfnull(){
     java.util.List<org.xdef.json.JNull> x=new java.util.ArrayList<org.xdef.json.JNull>();
     for(TJ2.jw$null y: _jw$null) x.add(org.xdef.json.JNull.JNULL);
     return x;
@@ -15,12 +15,12 @@ public class TJ2 implements org.xdef.component.XComponent{
     return _jw$number==null?null:_jw$number.get$value();
   }
   public void addjw$null(TJ2.jw$null x) {if (x!=null) _jw$null.add(x);}
-  public void addjnull(org.xdef.json.JNull x){
+  public void addnull(org.xdef.json.JNull x){
     if (x!=null) {
       addjw$null(new TJ2.jw$null());
     }
   }
-  public void setjnull(java.util.List<org.xdef.json.JNull> x){
+  public void setnull(java.util.List<org.xdef.json.JNull> x){
     _jw$null.clear(); if (x==null) return;
     for (org.xdef.json.JNull y:x){
       addjw$null(new TJ2.jw$null());

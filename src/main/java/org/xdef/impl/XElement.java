@@ -875,7 +875,7 @@ public final class XElement extends XCodeDescriptor
 			}
 			for (XNode x: xe._childNodes) {
 				short kind = x.getKind();
-				switch(kind) {
+				switch (kind) {
 					case XNode.XMCHOICE:
 					case XNode.XMSEQUENCE:
 					case XNode.XMMIXED:

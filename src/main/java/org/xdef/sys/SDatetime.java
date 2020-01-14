@@ -1295,7 +1295,7 @@ public class SDatetime extends XMLGregorianCalendar
 		// to round up millisendonds and seconds fields
 		int optional = 0;
 		while (fpos < flen) {
-			switch(pat = format.charAt(fpos++)) {
+			switch (pat = format.charAt(fpos++)) {
 				case '|': //variant ???
 					continue;
 				case '[':
@@ -1471,7 +1471,7 @@ public class SDatetime extends XMLGregorianCalendar
 				fpos++;
 				i++;
 			}
-			switch(pat) {
+			switch (pat) {
 				case '[':
 					for (int j = 0; j < i; j++) {
 						optionals.push(sb.length() + 1);
@@ -2553,7 +2553,7 @@ public class SDatetime extends XMLGregorianCalendar
 
 	@Override
 	public final QName getXMLSchemaType() {
-		switch((_year != Integer.MIN_VALUE ?  0x20 : 0 )
+		switch ((_year != Integer.MIN_VALUE ?  0x20 : 0 )
 			| (_month != Integer.MIN_VALUE ?  0x10 : 0 )
 			| (_day != Integer.MIN_VALUE ?    0x08 : 0 )
 			| (_hour != Integer.MIN_VALUE ?   0x04 : 0 )

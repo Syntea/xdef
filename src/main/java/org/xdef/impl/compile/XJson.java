@@ -361,6 +361,8 @@ public class XJson extends JsonToXml {
 						} else if (x.startsWith("boolean")
 							|| x.startsWith("jboolean")) {
 							itemName = J_BOOLEAN;
+						} else if (x.startsWith("jvalue")) {
+							itemName = J_ITEM;
 						} else {
 							itemName = J_STRING;
 						}
@@ -374,15 +376,39 @@ public class XJson extends JsonToXml {
 			} else {
 				itemName = J_NULL;
 			}
-			e = genJElement(parent, itemName, jo.getPosition());
-			e._value = null;
-			if (occ != null) { // occurrence
-				setXDAttr(e, "script", occ);
-			}
-			if (sbf != null) {
+			if (J_ITEM.equals(itemName)) {
+				e = genXDElement(parent, "choice", jo.getPosition());
+				if (occ != null) { // occurrence
+					setXDAttr(e, "script", occ);
+				}
+				PNode f = genJElement(e, J_NULL, jo.getPosition());
+				e._childNodes.add(f);
+				f = genJElement(e, J_BOOLEAN, jo.getPosition());
 				PNode txt = genXDElement(e, "text", jo.getPosition());
-				txt._value = sbf;
-				e._childNodes.add(txt);
+				txt._value = new SBuffer("jboolean");
+				f._childNodes.add(txt);
+				e._childNodes.add(f);
+				f = genJElement(e, J_NUMBER, jo.getPosition());
+				txt = genXDElement(e, "text", jo.getPosition());
+				txt._value = new SBuffer("jnumber");
+				f._childNodes.add(txt);
+				e._childNodes.add(f);
+				f = genJElement(e, J_STRING, jo.getPosition());
+				txt = genXDElement(e, "text", jo.getPosition());
+				txt._value = new SBuffer("jstring");
+				f._childNodes.add(txt);
+				e._childNodes.add(f);
+			} else {
+				e = genJElement(parent, itemName, jo.getPosition());
+				e._value = null;
+				if (occ != null) { // occurrence
+					setXDAttr(e, "script", occ);
+				}
+				if (sbf != null) {
+					PNode txt = genXDElement(e, "text", jo.getPosition());
+					txt._value = sbf;
+					e._childNodes.add(txt);
+				}
 			}
 		}
 		parent._childNodes.add(e);
