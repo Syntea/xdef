@@ -5,7 +5,7 @@ package mytest.component;
 public class TJ3 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public TJ3.jw$null getjw$null() {return _jw$null;}
-  public org.xdef.json.JNull jgetjnull(){
+  public org.xdef.json.JNull jgeta(){
     return _jw$null==null?null:org.xdef.json.JNull.JNULL;
   }
   public TJ3.jw$number getjw$number() {return _jw$number;}
@@ -13,7 +13,7 @@ public class TJ3 implements org.xdef.component.XComponent{
     return _jw$number==null?null:_jw$number.get$value();
   }
   public void setjw$null(TJ3.jw$null x){_jw$null=x;}
-  public void jsetjnull(org.xdef.json.JNull x){
+  public void jseta(org.xdef.json.JNull x){
     if(_jw$null==null)setjw$null(x==null?null:new TJ3.jw$null());
   }
   public void setjw$number(TJ3.jw$number x){_jw$number=x;}
