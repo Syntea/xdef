@@ -604,14 +604,31 @@ public abstract class STester {
 	public final void assertEq(final Object a1,
 		final Object a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && !equals(a1,a2))) {
+		if (a1 != null && a1 != null) {
+			if (!equals(a1, a2)) {
+				fail((msg != null ? msg.toString().trim() + '\n' : "")
+					+ "a1=" + a1 + "; a2=" + a2);
+			}
+		} else if (a1 != null || a2 != null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 
+	/** Check if objects are equal.
+	 * @param a1 first object.
+	 * @param a2 second object.
+	 * @return true if and only if both objects are equal.
+	 */
 	public static boolean equals(Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
+			if (a1 instanceof BigDecimal) {
+				return (a2 instanceof BigDecimal) 
+					? a1.equals(a2) : a1.equals(new BigDecimal(a2.toString()));
+			} else if (a2 instanceof BigDecimal) {
+				return (a1 instanceof BigDecimal) 
+					? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
+			}
 			if ((a1 instanceof Byte || a1 instanceof Short ||
 				a1 instanceof Integer || a1 instanceof Long)
 				&& (a2 instanceof Byte || a2 instanceof Short ||
