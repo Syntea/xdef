@@ -336,38 +336,31 @@ public class XJson extends JsonToXml {
 					if (!parsedScript[0].getString().isEmpty()) { // occurrence
 						occ = parsedScript[0];
 					}
-					String x = parsedScript[1].getString().trim();
-					if (x.isEmpty()) {
+					StringParser p = new StringParser(parsedScript[1]);
+					p.skipSpaces();
+					if (p.eos()) {
 						parsedScript[1] = new SBuffer("jvalue()",
 							jo.getPosition());
 						itemName = J_STRING; // default
-					} else if (x.startsWith("jnull")){
+					} else if (p.isToken("jnull") && p.isLetter()==NOCHAR) {
 						itemName = J_NULL;
 					} else {
-						if (x.startsWith("unsigned")
-							|| x.startsWith("int")
-							|| x.startsWith("byte")
-							|| x.startsWith("short")
-							|| x.startsWith("long")
-							|| x.startsWith("double")
-							|| x.startsWith("float")
-							|| x.startsWith("double")
-							|| x.startsWith("decimal")
-							|| x.startsWith("dec")
-							|| x.startsWith("jnum")) {
-							itemName = J_NUMBER;
-						} else if (x.startsWith("jnull")) {
-							itemName = J_NULL;
-						} else if (x.startsWith("boolean")
-							|| x.startsWith("jboolean")) {
-							itemName = J_BOOLEAN;
-						} else if (x.startsWith("jvalue")) {
+						if (p.isToken("jvalue") && p.isLetter()==NOCHAR){
 							itemName = J_ITEM;
+						} else if (p.isOneOfTokens(new String[] {"boolean",
+							"jboolean"}) >= 0 && p.isLetter() == NOCHAR) {
+							itemName = J_BOOLEAN;
+						} else if (p.isOneOfTokens(new String[] {
+							"unsignedLong","unsignedInt", "unsignedShort",
+							"unsignedByte",
+							"negativeInteger", "nonNegativeInteger",
+							"positiveInteger", "nonPositiveInteger",
+							"jnumber", "byte", "short", "int", "long",
+							"float", "double", "decimal", "dec", "jnum"}) >= 0
+							&& p.isLetter() == NOCHAR) {
+							itemName = J_NUMBER;
 						} else {
 							itemName = J_STRING;
-						}
-						if (!s.endsWith(";")) {
-							parsedScript[1].addString(";");
 						}
 						sbf = new SBuffer('?' + parsedScript[1].getString(),
 							parsedScript[1]);

@@ -239,8 +239,10 @@ public final class GenXComponent {
 			|| "PositiveInteger".equals(parserName)
 			|| "nonPositiveiveInteger".equals(parserName)) {
 			return "java.math.BigInteger";
-		} else if ("decimal".equals(parserName)) {
+		} else if ("decimal".equals(parserName) || "dec".equals(parserName)) {
 			return "java.math.BigDecimal";
+		} else if ("jnumber".equals(parserName)) {
+			return "Number";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
