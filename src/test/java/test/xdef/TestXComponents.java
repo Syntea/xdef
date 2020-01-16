@@ -53,14 +53,26 @@ public final class TestXComponents extends XDTester {
 	/** Run test and print error information. */
 	public void test() {
 		XDPool xp;
+		String componentDir = getSourceDir();
 		try {
 			ObjectInputStream ois = new ObjectInputStream(
-				new FileInputStream(getSourceDir() + "component/Pool.xp"));
+				new FileInputStream(componentDir + "component/Pool.xp"));
 			xp = (XDPool) ois.readObject();
 			ois.close();
 		} catch (Exception ex) {
-			fail("XDPool is not available");
-			return;
+			xp = null;
+		}
+		if (xp == null) {
+			try {
+				componentDir = "test/test/xdef/";
+				ObjectInputStream ois = new ObjectInputStream(
+					new FileInputStream(componentDir + "component/Pool.xp"));
+				xp = (XDPool) ois.readObject();
+				ois.close();
+			} catch (Exception ex) {
+				fail("XDPool is not available");
+				return;
+			}
 		}
 		String xml;
 		Element el;
@@ -722,7 +734,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String source = FUtils.readString(
-				new File(getSourceDir(), "component/Y13.java"));
+				new File(componentDir, "component/Y13.java"));
 			if (source.indexOf("public static class B ") > 0) {
 				fail("Error Y13: "
 					+ "class test.xdef.component.Y13.A.B was generated.");
@@ -991,7 +1003,7 @@ public final class TestXComponents extends XDTester {
 				f.toXml());
 			lst.clear();
 			assertEq("<f/>", f.toXml());
-			g = new test.xdef.component.XCf.g();;
+			g = new test.xdef.component.XCf.g();
 			g.set$value(sd);
 			lst.add(g);
 			assertEq("<f><g>2019-04-03+02:00</g></f>", f.toXml());
