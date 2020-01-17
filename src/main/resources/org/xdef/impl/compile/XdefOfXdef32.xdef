@@ -14,7 +14,7 @@
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
   xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
   xmlns:w         = "http://www.xdef.org/xdef/3.2"
-  w:metaNamespace = "METAXD" >
+  w:metaNamespace = "METAXD">
 
 /******************************************************************************/
 /*X-definition of X-definitions ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
