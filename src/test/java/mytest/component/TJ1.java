@@ -21,7 +21,7 @@ public class TJ1 implements org.xdef.component.XComponent{
     return _jw$boolean==null?null:_jw$boolean.get$value();
   }
   public TJ1.jw$number_1 getjw$number_1() {return _jw$number_1;}
-  public java.math.BigDecimal jgetnumber_1(){
+  public Number jgetnumber_1(){
     return _jw$number_1==null?null:_jw$number_1.get$value();
   }
   public TJ1.jw$string getjw$string() {return _jw$string;}
@@ -47,7 +47,7 @@ public class TJ1 implements org.xdef.component.XComponent{
     _jw$boolean.set$value(x);
   }
   public void setjw$number_1(TJ1.jw$number_1 x){_jw$number_1=x;}
-  public void jsetnumber_1(java.math.BigDecimal x){
+  public void jsetnumber_1(Number x){
     if(_jw$number_1==null)setjw$number_1(new TJ1.jw$number_1());
     _jw$number_1.set$value(x);
   }
@@ -632,8 +632,8 @@ public static class jw$boolean implements org.xdef.component.XComponent{
 }
 public static class jw$number_1 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
-  public java.math.BigDecimal get$value() {return _$value;}
-  public void set$value(java.math.BigDecimal x){_$value=x;}
+  public Number get$value() {return _$value;}
+  public void set$value(Number x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
@@ -716,7 +716,7 @@ public static class jw$number_1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private java.math.BigDecimal _$value;
+  private Number _$value;
   private char _$$value= (char) -1;
   public static final String XD_NAME="jw:number";
   private org.xdef.component.XComponent XD_Parent;
