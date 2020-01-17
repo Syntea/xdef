@@ -81,10 +81,6 @@ public class CompileBase implements CodeTable, XDValueID {
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
 		new LinkedHashMap<String, Constructor<?>>();
-	/** No parameters parameter type list. */
-	private final static Class<?>[] NULLCLASSLIST = new Class<?>[0];
-	/** No parameters parameter list. */
-	private final static Object[] NULLPARLIST = new Object[0];
 	/* Error id (to ensure to generate the unique identifier).*/
 	private static int _errIdIndex = 1000;
 
@@ -371,6 +367,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
 		parser(im, org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
 		parser(im, org.xdef.impl.parsers.XDParseJString.class, "jstring");
+
+		im = genParserMetnod(0, 0, null, XD_ANY,
+			keyParam("enumeration", XD_ANY, true, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false));
 		parser(im, org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
 
 		im = genParserMetnod(0, 0, null, XD_ANY,
@@ -1412,7 +1412,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		final Class<?> clazz,
 		final String... names) {
 		try {
-			Constructor<?> c = ((Class<?>) clazz).getConstructor(NULLCLASSLIST);
+			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
 			if ((hm = METHODS[NOTYPE_VALUE_ID]) == null) {
 				METHODS[NOTYPE_VALUE_ID] = hm =
@@ -1634,8 +1634,8 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	static Class<?> getTypeClass(short type) {
 		Class<?> result = TYPECLASSES[type];
-		return result == null ?
-			org.xdef.impl.compile.CodeUndefined.class : result;
+		return result == null
+			? org.xdef.impl.compile.CodeUndefined.class : result;
 	}
 
 	/** Get instance of object parser with given name.
@@ -1644,8 +1644,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	public static final XDParser getParser(final String name) {
 		try {
-			return (XDParser)
-				((Constructor)PARSERS.get(name)).newInstance(NULLPARLIST);
+			return (XDParser) ((Constructor)PARSERS.get(name)).newInstance();
 		} catch (Exception ex) {
 			return null;
 		}
