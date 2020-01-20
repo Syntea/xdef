@@ -5,8 +5,10 @@ package test.xdef.component;
 public class XCa implements org.xdef.component.XComponent{
   public XCa.s gets() {return _s;}
   public XCa.s_1 gets_1() {return _s_1;}
-  public void sets(XCa.s x){_s=x;}
-  public void sets_1(XCa.s_1 x){_s_1=x;}
+  public void sets(XCa.s x){
+_s=x;}
+  public void sets_1(XCa.s_1 x){
+_s_1=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -126,8 +128,10 @@ public class XCa implements org.xdef.component.XComponent{
 public static class s implements org.xdef.component.XComponent{
   public String getk() {return _k;}
   public String get$value() {return _$value;}
-  public void setk(String x){_k=x;}
-  public void set$value(String x){_$value=x;}
+  public void setk(String x){
+_k=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOfk(){return XD_XPos+"/@k";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -249,8 +253,10 @@ public static class s implements org.xdef.component.XComponent{
 public static class s_1 implements org.xdef.component.XComponent{
   public String getk() {return _k;}
   public String get$value() {return _$value;}
-  public void setk(String x){_k=x;}
-  public void set$value(String x){_$value=x;}
+  public void setk(String x){
+_k=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOfk(){return XD_XPos+"/@k";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

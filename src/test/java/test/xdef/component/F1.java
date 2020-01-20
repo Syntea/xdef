@@ -5,8 +5,10 @@ package test.xdef.component;
 public class F1 implements org.xdef.component.XComponent{
   public F1.A getA() {return _A;}
   public F1.B getB() {return _B;}
-  public void setA(F1.A x){_A=x;}
-  public void setB(F1.B x){_B=x;}
+  public void setA(F1.A x){
+_A=x;}
+  public void setB(F1.B x){
+_B=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override

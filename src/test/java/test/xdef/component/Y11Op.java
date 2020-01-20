@@ -7,10 +7,13 @@ public class Y11Op implements org.xdef.component.XComponent{
   public String getM() {return _M;}
   public java.util.List<Y11Op.Co> listOfCo() {return _Co;}
   public Y11Op.Y getY() {return _Y;}
-  public void setN(String x){_N=x;}
-  public void setM(String x){_M=x;}
+  public void setN(String x){
+_N=x;}
+  public void setM(String x){
+_M=x;}
   public void addCo(Y11Op.Co x) {if (x!=null) _Co.add(x);}
-  public void setY(Y11Op.Y x){_Y=x;}
+  public void setY(Y11Op.Y x){
+_Y=x;}
   public String xposOfN(){return XD_XPos+"/@N";}
   public String xposOfM(){return XD_XPos+"/@M";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -149,9 +152,12 @@ public static class Co implements org.xdef.component.XComponent{
   public String getC() {return _C;}
   public String getI() {return _I;}
   public test.xdef.component.Y11Op.Co.X getX() {return _X;}
-  public void setC(String x){_C=x;}
-  public void setI(String x){_I=x;}
-  public void setX(test.xdef.component.Y11Op.Co.X x){_X=x;}
+  public void setC(String x){
+_C=x;}
+  public void setI(String x){
+_I=x;}
+  public void setX(test.xdef.component.Y11Op.Co.X x){
+_X=x;}
   public String xposOfC(){return XD_XPos+"/@C";}
   public String xposOfI(){return XD_XPos+"/@I";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -369,7 +375,8 @@ public static class X implements org.xdef.component.XComponent{
 }
 public static class Y implements org.xdef.component.XComponent{
   public String getY() {return _Y;}
-  public void setY(String x){_Y=x;}
+  public void setY(String x){
+_Y=x;}
   public String xposOfY(){return XD_XPos+"/@Y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

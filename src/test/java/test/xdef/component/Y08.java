@@ -4,7 +4,8 @@
 package test.xdef.component;
 public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.component.XComponent{
   public Y08.Domain getDomain() {return _Domain;}
-  public void setDomain(Y08.Domain x){_Domain=x;}
+  public void setDomain(Y08.Domain x){
+_Domain=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -120,8 +121,10 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
 public static class Domain implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(String x){_One=x;}
-  public void setTwo(String x){_Two=x;}
+  public void setOne(String x){
+_One=x;}
+  public void setTwo(String x){
+_Two=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

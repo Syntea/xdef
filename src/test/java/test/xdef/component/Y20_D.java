@@ -118,8 +118,10 @@ public class Y20_D implements org.xdef.component.XComponent{
 public static class Z implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public test.xdef.component.Y20_D.Z.C getC() {return _C;}
-  public void setb(String x){_b=x;}
-  public void setC(test.xdef.component.Y20_D.Z.C x){_C=x;}
+  public void setb(String x){
+_b=x;}
+  public void setC(test.xdef.component.Y20_D.Z.C x){
+_C=x;}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -352,8 +354,10 @@ public static class C implements org.xdef.component.XComponent{
 public static class Z_1 implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public test.xdef.component.Y20_D.Z.C getC_1() {return _C_1;}
-  public void setb(String x){_b=x;}
-  public void setC_1(test.xdef.component.Y20_D.Z.C x){_C_1=x;}
+  public void setb(String x){
+_b=x;}
+  public void setC_1(test.xdef.component.Y20_D.Z.C x){
+_C_1=x;}
   public String xposOfb(){return XD_XPos+"/@b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

@@ -12,15 +12,24 @@ public class Z6 implements org.xdef.component.XComponent{
   public java.util.Calendar calendarOfDatumVydani(){return org.xdef.sys.SDatetime.getCalendar(_DatumVydani);}
   public String getMistoVydani() {return _MistoVydani;}
   public String getStatVydani() {return _StatVydani;}
-  public void setTypDokladu(String x){_TypDokladu=x;}
-  public void setOpravneni(String x){_Opravneni=x;}
-  public void setCisloDokladu(String x){_CisloDokladu=x;}
-  public void setDatumVydani(org.xdef.sys.SDatetime x){_DatumVydani=x;}
-  public void setDatumVydani(java.util.Date x){_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumVydani(java.sql.Timestamp x){_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumVydani(java.util.Calendar x){_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMistoVydani(String x){_MistoVydani=x;}
-  public void setStatVydani(String x){_StatVydani=x;}
+  public void setTypDokladu(String x){
+_TypDokladu=x;}
+  public void setOpravneni(String x){
+_Opravneni=x;}
+  public void setCisloDokladu(String x){
+_CisloDokladu=x;}
+  public void setDatumVydani(org.xdef.sys.SDatetime x){
+_DatumVydani=x;}
+  public void setDatumVydani(java.util.Date x){
+_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumVydani(java.sql.Timestamp x){
+_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumVydani(java.util.Calendar x){
+_DatumVydani=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setMistoVydani(String x){
+_MistoVydani=x;}
+  public void setStatVydani(String x){
+_StatVydani=x;}
   public String xposOfTypDokladu(){return XD_XPos+"/@TypDokladu";}
   public String xposOfOpravneni(){return XD_XPos+"/@Opravneni";}
   public String xposOfCisloDokladu(){return XD_XPos+"/@CisloDokladu";}

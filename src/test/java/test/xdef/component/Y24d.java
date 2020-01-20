@@ -5,8 +5,10 @@ package test.xdef.component;
 public class Y24d implements org.xdef.component.XComponent{
   public String getY24d() {return _Y24d;}
   public Y24d.Y24d_1 getY24d_1() {return _Y24d_1;}
-  public void setY24d(String x){_Y24d=x;}
-  public void setY24d_1(Y24d.Y24d_1 x){_Y24d_1=x;}
+  public void setY24d(String x){
+_Y24d=x;}
+  public void setY24d_1(Y24d.Y24d_1 x){
+_Y24d_1=x;}
   public String xposOfY24d(){return XD_XPos+"/@Y24d";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

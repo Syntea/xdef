@@ -4,7 +4,8 @@
 package test.xdef.component;
 public class AZ extends test.xdef.TestXComponents_G implements org.xdef.component.XComponent{
   public String getz() {return _z;}
-  public void setz(String x){_z=x;}
+  public void setz(String x){
+_z=x;}
   public String xposOfz(){return XD_XPos+"/@z";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

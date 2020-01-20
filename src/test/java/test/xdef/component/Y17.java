@@ -6,9 +6,12 @@ public class Y17 implements org.xdef.component.XComponent{
   public Y17.b_1 getb_1() {return _b_1;}
   public Y17.c getc() {return _c;}
   public Y17.b_2 getb_2() {return _b_2;}
-  public void setb_1(Y17.b_1 x){_b_1=x;}
-  public void setc(Y17.c x){_c=x;}
-  public void setb_2(Y17.b_2 x){_b_2=x;}
+  public void setb_1(Y17.b_1 x){
+_b_1=x;}
+  public void setc(Y17.c x){
+_c=x;}
+  public void setb_2(Y17.b_2 x){
+_b_2=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -133,7 +136,8 @@ public class Y17 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class b_1 implements org.xdef.component.XComponent{
   public Integer geta() {return _a;}
-  public void seta(Integer x){_a=x;}
+  public void seta(Integer x){
+_a=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -331,7 +335,8 @@ public static class c implements org.xdef.component.XComponent{
 }
 public static class b_2 implements org.xdef.component.XComponent{
   public String geta() {return _a;}
-  public void seta(String x){_a=x;}
+  public void seta(String x){
+_a=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

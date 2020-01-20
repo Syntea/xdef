@@ -118,7 +118,8 @@ public class Y20_C implements org.xdef.component.XComponent{
 public static class B implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY() {return _Y;}
-  public void setb(String x){_b=x;}
+  public void setb(String x){
+_b=x;}
   public void addY(test.xdef.component.Y20_C.B.Y x) {
     if (x!=null) {
         if (x.xGetXPos()==null)
@@ -244,7 +245,8 @@ public static class B implements org.xdef.component.XComponent{
 public static class Y implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public java.util.List<test.xdef.component.Y20_C.B.Y> listOfY_1() {return _Y_1;}
-  public void setb(String x){_b=x;}
+  public void setb(String x){
+_b=x;}
   public void addY_1(test.xdef.component.Y20_C.B.Y x) {
     if (x!=null) {
         if (x.xGetXPos()==null)

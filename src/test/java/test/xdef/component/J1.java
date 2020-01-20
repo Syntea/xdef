@@ -8,11 +8,14 @@ public class J1 implements org.xdef.component.XComponent{
   public java.util.List<J1.X2> listOfX2() {return _X2;}
   public J1.C2 getC2() {return _C2;}
   public J1.X3 getX3() {return _X3;}
-  public void setX(J1.X x){_X=x;}
+  public void setX(J1.X x){
+_X=x;}
   public void addC(J1.C x) {if (x!=null) _C.add(x);}
   public void addX2(J1.X2 x) {if (x!=null) _X2.add(x);}
-  public void setC2(J1.C2 x){_C2=x;}
-  public void setX3(J1.X3 x){_X3=x;}
+  public void setC2(J1.C2 x){
+_C2=x;}
+  public void setX3(J1.X3 x){
+_X3=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -149,7 +152,8 @@ public class J1 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class X implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -353,7 +357,8 @@ public static class C implements org.xdef.component.XComponent{
 }
 public static class X2 implements org.xdef.component.XComponent{
   public String getx() {return _x;}
-  public void setx(String x){_x=x;}
+  public void setx(String x){
+_x=x;}
   public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -460,7 +465,8 @@ public static class X2 implements org.xdef.component.XComponent{
 }
 public static class C2 implements org.xdef.component.XComponent{
   public String getc() {return _c;}
-  public void setc(String x){_c=x;}
+  public void setc(String x){
+_c=x;}
   public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -567,7 +573,8 @@ public static class C2 implements org.xdef.component.XComponent{
 }
 public static class X3 implements org.xdef.component.XComponent{
   public String getxx() {return _xx;}
-  public void setxx(String x){_xx=x;}
+  public void setxx(String x){
+_xx=x;}
   public String xposOfxx(){return XD_XPos+"/@xx";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

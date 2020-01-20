@@ -44,44 +44,82 @@ public class VozidloDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VozidloDN.Drzitel getDrzitel() {return _Drzitel;}
-  public void setOznSegmentu(String x){_OznSegmentu=x;}
-  public void setDruhVozidla(String x){_DruhVozidla=x;}
-  public void setSPZ(String x){_SPZ=x;}
-  public void setMPZ(String x){_MPZ=x;}
-  public void setVIN(String x){_VIN=x;}
-  public void setZnacka(String x){_Znacka=x;}
-  public void setTypVozidla(String x){_TypVozidla=x;}
-  public void setRokVyroby(org.xdef.sys.SDatetime x){_RokVyroby=x;}
-  public void setRokVyroby(java.util.Date x){_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setRokVyroby(java.sql.Timestamp x){_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setRokVyroby(java.util.Calendar x){_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostSTK(String x){_PlatnostSTK=x;}
-  public void setMesicSTKDo(org.xdef.sys.SDatetime x){_MesicSTKDo=x;}
-  public void setMesicSTKDo(java.util.Date x){_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMesicSTKDo(java.sql.Timestamp x){_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMesicSTKDo(java.util.Calendar x){_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setTypBrzd(String x){_TypBrzd=x;}
-  public void setStavBrzd(String x){_StavBrzd=x;}
-  public void setKodPojistitele(String x){_KodPojistitele=x;}
-  public void setNazevPojistitele(String x){_NazevPojistitele=x;}
-  public void setCisloDokladuPojisteni(String x){_CisloDokladuPojisteni=x;}
-  public void setPojisteniText(String x){_PojisteniText=x;}
-  public void setCisloZK(String x){_CisloZK=x;}
-  public void setVydalZK(String x){_VydalZK=x;}
-  public void setPlatnostZKOd(org.xdef.sys.SDatetime x){_PlatnostZKOd=x;}
-  public void setPlatnostZKOd(java.util.Date x){_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostZKOd(java.sql.Timestamp x){_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostZKOd(java.util.Calendar x){_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostZKDo(org.xdef.sys.SDatetime x){_PlatnostZKDo=x;}
-  public void setPlatnostZKDo(java.util.Date x){_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostZKDo(java.sql.Timestamp x){_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostZKDo(java.util.Calendar x){_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPojistneHPKc(Integer x){_PojistneHPKc=x;}
-  public void setDatumUhradyHP(org.xdef.sys.SDatetime x){_DatumUhradyHP=x;}
-  public void setDatumUhradyHP(java.util.Date x){_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumUhradyHP(java.sql.Timestamp x){_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumUhradyHP(java.util.Calendar x){_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMistoUhradyHP(String x){_MistoUhradyHP=x;}
+  public void setOznSegmentu(String x){
+_OznSegmentu=x;}
+  public void setDruhVozidla(String x){
+_DruhVozidla=x;}
+  public void setSPZ(String x){
+_SPZ=x;}
+  public void setMPZ(String x){
+_MPZ=x;}
+  public void setVIN(String x){
+_VIN=x;}
+  public void setZnacka(String x){
+_Znacka=x;}
+  public void setTypVozidla(String x){
+_TypVozidla=x;}
+  public void setRokVyroby(org.xdef.sys.SDatetime x){
+_RokVyroby=x;}
+  public void setRokVyroby(java.util.Date x){
+_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setRokVyroby(java.sql.Timestamp x){
+_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setRokVyroby(java.util.Calendar x){
+_RokVyroby=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostSTK(String x){
+_PlatnostSTK=x;}
+  public void setMesicSTKDo(org.xdef.sys.SDatetime x){
+_MesicSTKDo=x;}
+  public void setMesicSTKDo(java.util.Date x){
+_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setMesicSTKDo(java.sql.Timestamp x){
+_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setMesicSTKDo(java.util.Calendar x){
+_MesicSTKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setTypBrzd(String x){
+_TypBrzd=x;}
+  public void setStavBrzd(String x){
+_StavBrzd=x;}
+  public void setKodPojistitele(String x){
+_KodPojistitele=x;}
+  public void setNazevPojistitele(String x){
+_NazevPojistitele=x;}
+  public void setCisloDokladuPojisteni(String x){
+_CisloDokladuPojisteni=x;}
+  public void setPojisteniText(String x){
+_PojisteniText=x;}
+  public void setCisloZK(String x){
+_CisloZK=x;}
+  public void setVydalZK(String x){
+_VydalZK=x;}
+  public void setPlatnostZKOd(org.xdef.sys.SDatetime x){
+_PlatnostZKOd=x;}
+  public void setPlatnostZKOd(java.util.Date x){
+_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostZKOd(java.sql.Timestamp x){
+_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostZKOd(java.util.Calendar x){
+_PlatnostZKOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostZKDo(org.xdef.sys.SDatetime x){
+_PlatnostZKDo=x;}
+  public void setPlatnostZKDo(java.util.Date x){
+_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostZKDo(java.sql.Timestamp x){
+_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostZKDo(java.util.Calendar x){
+_PlatnostZKDo=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPojistneHPKc(Integer x){
+_PojistneHPKc=x;}
+  public void setDatumUhradyHP(org.xdef.sys.SDatetime x){
+_DatumUhradyHP=x;}
+  public void setDatumUhradyHP(java.util.Date x){
+_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumUhradyHP(java.sql.Timestamp x){
+_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumUhradyHP(java.util.Calendar x){
+_DatumUhradyHP=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setMistoUhradyHP(String x){
+_MistoUhradyHP=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VozidloDN/$mixed/Skoda");
@@ -407,7 +445,8 @@ public class VozidloDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Drzitel implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

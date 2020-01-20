@@ -23,17 +23,28 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   public UcastnikDN.PoruseniZakTrest getPoruseniZakTrest() {return _PoruseniZakTrest;}
   public UcastnikDN.PoruseniZakOst getPoruseniZakOst() {return _PoruseniZakOst;}
   public UcastnikDN.Vazba getVazba() {return _Vazba;}
-  public void setOznSegmentu(String x){_OznSegmentu=x;}
-  public void setTypUcastnika(String x){_TypUcastnika=x;}
-  public void setPraxeRizeni(Integer x){_PraxeRizeni=x;}
-  public void setAlkoholDech(String x){_AlkoholDech=x;}
-  public void setAlkoholKrev(String x){_AlkoholKrev=x;}
-  public void setZraneni(String x){_Zraneni=x;}
-  public void setZdravPojistovna(String x){_ZdravPojistovna=x;}
-  public void setPokutaKc(Integer x){_PokutaKc=x;}
-  public void setPokutaZapl(String x){_PokutaZapl=x;}
-  public void setPachatel(String x){_Pachatel=x;}
-  public void setPoskozeny(String x){_Poskozeny=x;}
+  public void setOznSegmentu(String x){
+_OznSegmentu=x;}
+  public void setTypUcastnika(String x){
+_TypUcastnika=x;}
+  public void setPraxeRizeni(Integer x){
+_PraxeRizeni=x;}
+  public void setAlkoholDech(String x){
+_AlkoholDech=x;}
+  public void setAlkoholKrev(String x){
+_AlkoholKrev=x;}
+  public void setZraneni(String x){
+_Zraneni=x;}
+  public void setZdravPojistovna(String x){
+_ZdravPojistovna=x;}
+  public void setPokutaKc(Integer x){
+_PokutaKc=x;}
+  public void setPokutaZapl(String x){
+_PokutaZapl=x;}
+  public void setPachatel(String x){
+_Pachatel=x;}
+  public void setPoskozeny(String x){
+_Poskozeny=x;}
   public void setJinaSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "JinaSkoda", null, "SouborD1A#UcastnikDN/$mixed/JinaSkoda");
@@ -332,7 +343,8 @@ public class UcastnikDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -445,7 +457,8 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -558,7 +571,8 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -671,7 +685,8 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
 }
 public static class PoruseniZakOst implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -784,7 +799,8 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
 }
 public static class Vazba implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

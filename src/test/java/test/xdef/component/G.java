@@ -125,7 +125,8 @@ public class G extends test.xdef.TestXComponents_G implements org.xdef.component
 // </editor-fold>
 public static class XXX implements org.xdef.component.XComponent{
   public String getx() {return _x;}
-  public void setx(String x){_x=x;}
+  public void setx(String x){
+_x=x;}
   public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -232,7 +233,8 @@ public static class XXX implements org.xdef.component.XComponent{
 }
 public static class YYY implements org.xdef.component.XComponent{
   public String gety() {return _y;}
-  public void sety(String x){_y=x;}
+  public void sety(String x){
+_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

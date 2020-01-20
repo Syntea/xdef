@@ -8,9 +8,12 @@ public class PredmetDN implements org.xdef.component.XComponent{
   public String getDruhPredmetu() {return _DruhPredmetu;}
   public Z3 getSkoda() {return _Skoda;}
   public PredmetDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setOznSegmentu(String x){_OznSegmentu=x;}
-  public void setNazevPredmetu(String x){_NazevPredmetu=x;}
-  public void setDruhPredmetu(String x){_DruhPredmetu=x;}
+  public void setOznSegmentu(String x){
+_OznSegmentu=x;}
+  public void setNazevPredmetu(String x){
+_NazevPredmetu=x;}
+  public void setDruhPredmetu(String x){
+_DruhPredmetu=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#PredmetDN/$mixed/Skoda");
@@ -165,7 +168,8 @@ public class PredmetDN implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

@@ -23,13 +23,20 @@ public class Z1 implements org.xdef.component.XComponent{
   public java.util.List<PredmetDN> listOfPredmet() {return _Predmet;}
   public java.util.List<ZvireDN> listOfZvire() {return _Zvire;}
   public java.util.List<UcastnikDN> listOfUcastnik() {return _Ucastnik;}
-  public void setVerze(String x){_Verze=x;}
-  public void setSeqRec(Integer x){_SeqRec=x;}
-  public void setKrajPolicie(String x){_KrajPolicie=x;}
-  public void setPlatnostOd(org.xdef.sys.SDatetime x){_PlatnostOd=x;}
-  public void setPlatnostOd(java.util.Date x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostOd(java.sql.Timestamp x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setPlatnostOd(java.util.Calendar x){_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setVerze(String x){
+_Verze=x;}
+  public void setSeqRec(Integer x){
+_SeqRec=x;}
+  public void setKrajPolicie(String x){
+_KrajPolicie=x;}
+  public void setPlatnostOd(org.xdef.sys.SDatetime x){
+_PlatnostOd=x;}
+  public void setPlatnostOd(java.util.Date x){
+_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostOd(java.sql.Timestamp x){
+_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setPlatnostOd(java.util.Calendar x){
+_PlatnostOd=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void setProtokol(Z2 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Protokol", null, "SouborD1A#ZaznamPDN/$mixed/Protokol");
@@ -343,7 +350,8 @@ public class Z1 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class VyliceniDN implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

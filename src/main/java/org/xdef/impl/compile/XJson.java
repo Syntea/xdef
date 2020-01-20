@@ -218,6 +218,192 @@ public class XJson extends JsonToXml {
 				e._name));
 	}
 
+	private PNode genJsonMapW3C(final JMap map, final PNode parent) {
+		PNode e = genJElement(parent, "map", map.getPosition());
+		PNode ee = e;
+		Object val = map.get(_xdPrefix + ":script");
+		if (val != null && val instanceof JValue
+			&& ((JValue) val).getObject() != null) {
+			JValue jv =(JValue) val;
+			SBuffer s = jv.getSBuffer();
+			setSourceBuffer(s);
+			if (isToken(_xdPrefix + ':' + "choice")) {
+				ee = genXDElement(e, "choice", getPosition());
+				e._childNodes.add(ee);
+				skipSpaces();
+				if (isChar(';')) {
+					skipSpaces();
+					if (!eos()) {
+						s = new SBuffer(
+							getUnparsedBufferPart(), getPosition());
+					}
+				}
+				if (!s.getString().trim().isEmpty()) {
+					setXDAttr(ee, "script", s);
+				}
+			} else if (map.size() > 1) {
+				ee = genXDElement(e, "mixed", map.getPosition());
+				e._childNodes.add(ee);
+				if (!s.getString().trim().isEmpty()) {
+					setXDAttr(e, "script", s);
+				}
+			}
+		} else if (map.size() > 1) {
+			ee = genXDElement(e, "mixed", map.getPosition());
+				e._childNodes.add(ee);
+		}
+		for (Map.Entry<String, Object> entry: map.entrySet()) {
+			String key = entry.getKey();
+			val = entry.getValue();
+			if (key.equals(_xdPrefix + ":script")) {
+				continue;
+			}
+			PNode ee2 = genJsonModelW3C(val, ee);
+			if (_xdNamespace.equals(ee2._nsURI)
+				&& "choice".equals(ee2._localName)) {
+				for (PNode n : ee2._childNodes) {
+					updateKeyInfoW3C(n, key);
+				}
+			} else {
+				updateKeyInfoW3C(ee2, key);
+			}
+		}
+		return e;
+	}
+
+	private PNode genJsonListW3C(final JList array, final PNode parent) {
+		PNode e = genJElement(parent, "array", array.getPosition());
+		Iterator<Object> it = array.iterator();
+		if (it.hasNext()) {
+			Object jo = it.next();
+			Object o = jo == null ? null
+				: jo instanceof JValue ? ((JValue) jo).getObject() : jo;
+			if (o != null && o instanceof String) {
+				String s = (String) o;
+				setSourceBuffer(s);
+				skipBlanksAndComments();
+				if (isToken(_xdPrefix + ":script")) {
+					skipBlanksAndComments();
+					if (isChar('=')) {
+						skipBlanksAndComments();
+						if (isToken(_xdPrefix + ":choice")) {
+							skipBlanksAndComments();
+							if (isChar(';')) {
+								skipBlanksAndComments();
+							}
+							e = genXDElement(parent,
+								"choice", ((JValue) jo).getPosition());
+						}
+						s = getUnparsedBufferPart().trim();
+						if (!s.isEmpty()) {
+							setXDAttr(e, "script",
+								new SBuffer(s, ((JValue) jo).getSBuffer()));
+						}
+					} else {
+						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+						error(JSON.JSON002, "=");
+					}
+				} else {
+					genJsonModelW3C(jo, e);
+				}
+			} else {
+				genJsonModelW3C(jo, e);
+			}
+			while(it.hasNext()) {
+				genJsonModelW3C(it.next(), e);
+			}
+		}
+		return e;
+	}
+
+	private PNode genJsonValueW3C(final JValue jo, final PNode parent) {
+		PNode e;
+		SBuffer sbf = null, occ = null;
+		String itemName;
+		if (jo.getObject() != null) {
+			String s = jo.toString();
+			if (s.trim().isEmpty()) {
+				// set default required string()
+				sbf = new SBuffer("jvalue()", jo.getPosition());
+				occ = new SBuffer("?", jo.getPosition());
+				itemName = J_ITEM;
+			} else {
+				setSourceBuffer(jo.getSBuffer());
+				SBuffer[] parsedScript = parseOccurrence();
+				if (!parsedScript[0].getString().isEmpty()) { // occurrence
+					occ = parsedScript[0];
+				}
+				StringParser p = new StringParser(parsedScript[1]);
+				p.skipSpaces();
+				if (p.eos()) {
+					parsedScript[1] = new SBuffer("jvalue()",
+						jo.getPosition());
+					itemName = J_ITEM; // default
+				} else if (p.isToken("jnull") && p.isLetter()==NOCHAR) {
+					itemName = J_NULL;
+				} else {
+					if ((p.isToken("jvalue"))
+						&& p.isLetter()==NOCHAR){
+						itemName = J_ITEM;
+					} else if (p.isOneOfTokens(new String[] {"boolean",
+						"jboolean"}) >= 0 && p.isLetter() == NOCHAR) {
+						itemName = J_BOOLEAN;
+					} else if (p.isOneOfTokens(new String[] {
+						"unsignedLong","unsignedInt", "unsignedShort",
+						"unsignedByte",
+						"negativeInteger", "nonNegativeInteger",
+						"positiveInteger", "nonPositiveInteger",
+						"jnumber", "byte", "short", "int", "long",
+						"float", "double", "decimal", "dec", "jnum"}) >= 0
+						&& p.isLetter() == NOCHAR) {
+						itemName = J_NUMBER;
+					} else {
+						itemName = J_STRING;
+					}
+					sbf = new SBuffer('?' + parsedScript[1].getString(),
+						parsedScript[1]);
+				}
+			}
+		} else {
+			itemName = J_NULL;
+		}
+		if (J_ITEM.equals(itemName)) {
+			e = genXDElement(parent, "choice", jo.getPosition());
+			if (occ != null) { // occurrence
+				setXDAttr(e, "script", occ);
+			}
+			PNode f = genJElement(e, J_NULL, jo.getPosition());
+			e._childNodes.add(f);
+			f = genJElement(e, J_BOOLEAN, jo.getPosition());
+			PNode txt = genXDElement(e, "text", jo.getPosition());
+			txt._value = new SBuffer("jboolean");
+			f._childNodes.add(txt);
+			e._childNodes.add(f);
+			f = genJElement(e, J_NUMBER, jo.getPosition());
+			txt = genXDElement(e, "text", jo.getPosition());
+			txt._value = new SBuffer("jnumber");
+			f._childNodes.add(txt);
+			e._childNodes.add(f);
+			f = genJElement(e, J_STRING, jo.getPosition());
+			txt = genXDElement(e, "text", jo.getPosition());
+			txt._value = new SBuffer("jstring");
+			f._childNodes.add(txt);
+			e._childNodes.add(f);
+		} else {
+			e = genJElement(parent, itemName, jo.getPosition());
+			e._value = null;
+			if (occ != null) { // occurrence
+				setXDAttr(e, "script", occ);
+			}
+			if (sbf != null) {
+				PNode txt = genXDElement(e, "text", jo.getPosition());
+				txt._value = sbf;
+				e._childNodes.add(txt);
+			}
+		}
+		return e;
+	}
+
 	/** Create PNode with JSON model from JSON parsed data.
 	 * @param json JSON parsed data.
 	 * @param parent parent PNode,
@@ -226,183 +412,11 @@ public class XJson extends JsonToXml {
 	private PNode genJsonModelW3C(final Object json, final PNode parent) {
 		PNode e;
 		if (json instanceof JMap) {
-			JMap map = (JMap) json;
-			e = genJElement(parent, "map", map.getPosition());
-			PNode ee = e;
-			Object val = map.get(_xdPrefix + ":script");
-			if (val != null && val instanceof JValue
-				&& ((JValue) val).getObject() != null) {
-				JValue jv =(JValue) val;
-				SBuffer s = jv.getSBuffer();
-				setSourceBuffer(s);
-				if (isToken(_xdPrefix + ':' + "choice")) {
-					ee = genXDElement(e, "choice", getPosition());
-					e._childNodes.add(ee);
-					skipSpaces();
-					if (isChar(';')) {
-						skipSpaces();
-						if (!eos()) {
-							s = new SBuffer(
-								getUnparsedBufferPart(), getPosition());
-						}
-					}
-					if (!s.getString().trim().isEmpty()) {
-						setXDAttr(ee, "script", s);
-					}
-				} else if (map.size() > 1) {
-					ee = genXDElement(e, "mixed", map.getPosition());
-					e._childNodes.add(ee);
-					if (!s.getString().trim().isEmpty()) {
-						setXDAttr(e, "script", s);
-					}
-				}
-			} else if (map.size() > 1) {
-				ee = genXDElement(e, "mixed", map.getPosition());
-					e._childNodes.add(ee);
-			}
-			for (Map.Entry<String, Object> entry: map.entrySet()) {
-				String key = entry.getKey();
-				val = entry.getValue();
-				if (key.equals(_xdPrefix + ":script")) {
-					continue;
-				}
-				PNode ee2 = genJsonModelW3C(val, ee);
-				if (_xdNamespace.equals(ee2._nsURI)
-					&& "choice".equals(ee2._localName)) {
-					for (PNode n : ee2._childNodes) {
-						updateKeyInfoW3C(n, key);
-					}
-				} else {
-					updateKeyInfoW3C(ee2, key);
-				}
-			}
+			e = genJsonMapW3C((JMap) json, parent);
 		} else if (json instanceof JList) {
-			JList array = (JList) json;
-			e = genJElement(parent, "array", array.getPosition());
-			Iterator<Object> it = array.iterator();
-			if (it.hasNext()) {
-				Object jo = it.next();
-				Object o = jo == null ? null
-					: jo instanceof JValue ? ((JValue) jo).getObject() : jo;
-				if (o != null && o instanceof String) {
-					String s = (String) o;
-					setSourceBuffer(s);
-					skipBlanksAndComments();
-					if (isToken(_xdPrefix + ":script")) {
-						skipBlanksAndComments();
-						if (isChar('=')) {
-							skipBlanksAndComments();
-							if (isToken(_xdPrefix + ":choice")) {
-								skipBlanksAndComments();
-								if (isChar(';')) {
-									skipBlanksAndComments();
-								}
-								e = genXDElement(parent,
-									"choice", ((JValue) jo).getPosition());
-							}
-							s = getUnparsedBufferPart().trim();
-							if (!s.isEmpty()) {
-								setXDAttr(e, "script",
-									new SBuffer(s, ((JValue) jo).getSBuffer()));
-							}
-						} else {
-							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-							error(JSON.JSON002, "=");
-						}
-					} else {
-						genJsonModelW3C(jo, e);
-					}
-				} else {
-					genJsonModelW3C(jo, e);
-				}
-				while(it.hasNext()) {
-					genJsonModelW3C(it.next(), e);
-				}
-			}
+			e = genJsonListW3C((JList) json, parent);
 		} else {
-			JValue jo = (JValue) json;
-			SBuffer sbf = null, occ = null;
-			String itemName;
-			if (jo.getObject() != null) {
-				String s = jo.toString();
-				if (s.trim().isEmpty()) {
-					// set default required string()
-					sbf = new SBuffer("jvalue()", jo.getPosition());
-					occ = new SBuffer("?", jo.getPosition());
-					itemName = J_STRING;
-				} else {
-					setSourceBuffer(jo.getSBuffer());
-					SBuffer[] parsedScript = parseOccurrence();
-					if (!parsedScript[0].getString().isEmpty()) { // occurrence
-						occ = parsedScript[0];
-					}
-					StringParser p = new StringParser(parsedScript[1]);
-					p.skipSpaces();
-					if (p.eos()) {
-						parsedScript[1] = new SBuffer("jvalue()",
-							jo.getPosition());
-						itemName = J_STRING; // default
-					} else if (p.isToken("jnull") && p.isLetter()==NOCHAR) {
-						itemName = J_NULL;
-					} else {
-						if (p.isToken("jvalue") && p.isLetter()==NOCHAR){
-							itemName = J_ITEM;
-						} else if (p.isOneOfTokens(new String[] {"boolean",
-							"jboolean"}) >= 0 && p.isLetter() == NOCHAR) {
-							itemName = J_BOOLEAN;
-						} else if (p.isOneOfTokens(new String[] {
-							"unsignedLong","unsignedInt", "unsignedShort",
-							"unsignedByte",
-							"negativeInteger", "nonNegativeInteger",
-							"positiveInteger", "nonPositiveInteger",
-							"jnumber", "byte", "short", "int", "long",
-							"float", "double", "decimal", "dec", "jnum"}) >= 0
-							&& p.isLetter() == NOCHAR) {
-							itemName = J_NUMBER;
-						} else {
-							itemName = J_STRING;
-						}
-						sbf = new SBuffer('?' + parsedScript[1].getString(),
-							parsedScript[1]);
-					}
-				}
-			} else {
-				itemName = J_NULL;
-			}
-			if (J_ITEM.equals(itemName)) {
-				e = genXDElement(parent, "choice", jo.getPosition());
-				if (occ != null) { // occurrence
-					setXDAttr(e, "script", occ);
-				}
-				PNode f = genJElement(e, J_NULL, jo.getPosition());
-				e._childNodes.add(f);
-				f = genJElement(e, J_BOOLEAN, jo.getPosition());
-				PNode txt = genXDElement(e, "text", jo.getPosition());
-				txt._value = new SBuffer("jboolean");
-				f._childNodes.add(txt);
-				e._childNodes.add(f);
-				f = genJElement(e, J_NUMBER, jo.getPosition());
-				txt = genXDElement(e, "text", jo.getPosition());
-				txt._value = new SBuffer("jnumber");
-				f._childNodes.add(txt);
-				e._childNodes.add(f);
-				f = genJElement(e, J_STRING, jo.getPosition());
-				txt = genXDElement(e, "text", jo.getPosition());
-				txt._value = new SBuffer("jstring");
-				f._childNodes.add(txt);
-				e._childNodes.add(f);
-			} else {
-				e = genJElement(parent, itemName, jo.getPosition());
-				e._value = null;
-				if (occ != null) { // occurrence
-					setXDAttr(e, "script", occ);
-				}
-				if (sbf != null) {
-					PNode txt = genXDElement(e, "text", jo.getPosition());
-					txt._value = sbf;
-					e._childNodes.add(txt);
-				}
-			}
+			e = genJsonValueW3C((JValue) json, parent);
 		}
 		parent._childNodes.add(e);
 		return e;

@@ -364,6 +364,7 @@ public class TestJsonXdef extends XDTester {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("jget" + name);
+			m.setAccessible(true);
 			return m.invoke(xc);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -379,17 +380,29 @@ public class TestJsonXdef extends XDTester {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("jset" + name, val.getClass());
+			m.setAccessible(true);
 			m.invoke(xc, val);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
+	/** Get parsed XComponent.
+	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param id identifier test files.
+	 * @param json string with JSON to be parsed.
+	 * @return 
+	 */
 	private XComponent getXComponent(final XDPool xp,
-		final String id, final String json) throws Exception{
+		final String id,
+		final String json) {
 		XDDocument xd = xp.createXDDocument("Test" + id);
-		return xd.jparseXComponent(json,
-			Class.forName("test.common.json.component.Test" + id), null);
+		try {
+			return xd.jparseXComponent(json,
+				Class.forName("test.common.json.component.Test" + id), null);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	@Override

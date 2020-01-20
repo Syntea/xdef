@@ -5,8 +5,10 @@ package test.xdef.component;
 public class N_Operation implements test.xdef.component.N_i,org.xdef.component.XComponent{
   public Integer getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(Integer x){_One=x;}
-  public void setTwo(String x){_Two=x;}
+  public void setOne(Integer x){
+_One=x;}
+  public void setTwo(String x){
+_Two=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

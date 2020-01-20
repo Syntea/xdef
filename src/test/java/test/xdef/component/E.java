@@ -4,7 +4,8 @@
 package test.xdef.component;
 public class E implements org.xdef.component.XComponent{
   public E.Clazz getClazz() {return _Clazz;}
-  public void setClazz(E.Clazz x){_Clazz=x;}
+  public void setClazz(E.Clazz x){
+_Clazz=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -113,7 +114,8 @@ public class E implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Clazz implements org.xdef.component.XComponent{
   public String gettry() {return _try;}
-  public void settry(String x){_try=x;}
+  public void settry(String x){
+_try=x;}
   public String xposOftry(){return XD_XPos+"/@try";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

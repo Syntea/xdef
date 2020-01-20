@@ -19,21 +19,36 @@ public class Z8 implements org.xdef.component.XComponent{
   public String getHlavniPricina() {return _HlavniPricina;}
   public String getPricina() {return _Pricina;}
   public Z8.Misto getMisto() {return _Misto;}
-  public void setDatumCasDN(org.xdef.sys.SDatetime x){_DatumCasDN=x;}
-  public void setDatumCasDN(java.util.Date x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDN(java.sql.Timestamp x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDN(java.util.Calendar x){_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDoDN(org.xdef.sys.SDatetime x){_DatumCasDoDN=x;}
-  public void setDatumCasDoDN(java.util.Date x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDoDN(java.sql.Timestamp x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumCasDoDN(java.util.Calendar x){_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setKodOkresu(String x){_KodOkresu=x;}
-  public void setObec(String x){_Obec=x;}
-  public void setUlice(String x){_Ulice=x;}
-  public void setCisloPopisne(String x){_CisloPopisne=x;}
-  public void setSkodaTisKc(String x){_SkodaTisKc=x;}
-  public void setHlavniPricina(String x){_HlavniPricina=x;}
-  public void setPricina(String x){_Pricina=x;}
+  public void setDatumCasDN(org.xdef.sys.SDatetime x){
+_DatumCasDN=x;}
+  public void setDatumCasDN(java.util.Date x){
+_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasDN(java.sql.Timestamp x){
+_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasDN(java.util.Calendar x){
+_DatumCasDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasDoDN(org.xdef.sys.SDatetime x){
+_DatumCasDoDN=x;}
+  public void setDatumCasDoDN(java.util.Date x){
+_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasDoDN(java.sql.Timestamp x){
+_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumCasDoDN(java.util.Calendar x){
+_DatumCasDoDN=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setKodOkresu(String x){
+_KodOkresu=x;}
+  public void setObec(String x){
+_Obec=x;}
+  public void setUlice(String x){
+_Ulice=x;}
+  public void setCisloPopisne(String x){
+_CisloPopisne=x;}
+  public void setSkodaTisKc(String x){
+_SkodaTisKc=x;}
+  public void setHlavniPricina(String x){
+_HlavniPricina=x;}
+  public void setPricina(String x){
+_Pricina=x;}
   public void setMisto(Z8.Misto x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Misto", null, "SouborD1A#ObjStrankaDN/Misto");
@@ -221,7 +236,8 @@ public class Z8 implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Misto implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

@@ -5,7 +5,8 @@ package test.xdef.component;
 public class Lexicon implements org.xdef.component.XComponent{
   public String getx() {return _x;}
   public java.util.List<Lexicon.Y> listOfY() {return _Y;}
-  public void setx(String x){_x=x;}
+  public void setx(String x){
+_x=x;}
   public void addY(Lexicon.Y x) {if (x!=null) _Y.add(x);}
   public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -123,7 +124,8 @@ public class Lexicon implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class Y implements org.xdef.component.XComponent{
   public Integer gety() {return _y;}
-  public void sety(Integer x){_y=x;}
+  public void sety(Integer x){
+_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

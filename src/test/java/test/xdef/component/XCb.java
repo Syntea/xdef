@@ -4,7 +4,8 @@
 package test.xdef.component;
 public class XCb implements org.xdef.component.XComponent{
   public XCb.c getc() {return _c;}
-  public void setc(XCb.c x){_c=x;}
+  public void setc(XCb.c x){
+_c=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -113,7 +114,8 @@ public class XCb implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class c implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

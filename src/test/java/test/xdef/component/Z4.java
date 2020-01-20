@@ -21,22 +21,38 @@ public class Z4 implements org.xdef.component.XComponent{
   public String getProfese() {return _Profese;}
   public Z9 getTrvalyPobyt() {return _TrvalyPobyt;}
   public Z9 getPrechodnyPobyt() {return _PrechodnyPobyt;}
-  public void setJmeno(String x){_Jmeno=x;}
-  public void setPrijmeni(String x){_Prijmeni=x;}
-  public void setRodnePrijmeni(String x){_RodnePrijmeni=x;}
-  public void setTitulPred(String x){_TitulPred=x;}
-  public void setTitulZa(String x){_TitulZa=x;}
-  public void setRC(String x){_RC=x;}
-  public void setPohlavi(String x){_Pohlavi=x;}
-  public void setOsobniStav(String x){_OsobniStav=x;}
-  public void setDatumNarozeni(org.xdef.sys.SDatetime x){_DatumNarozeni=x;}
-  public void setDatumNarozeni(java.util.Date x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumNarozeni(java.sql.Timestamp x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumNarozeni(java.util.Calendar x){_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setMistoNarozeni(String x){_MistoNarozeni=x;}
-  public void setStatNarozeni(String x){_StatNarozeni=x;}
-  public void setStatniPrislusnost(String x){_StatniPrislusnost=x;}
-  public void setProfese(String x){_Profese=x;}
+  public void setJmeno(String x){
+_Jmeno=x;}
+  public void setPrijmeni(String x){
+_Prijmeni=x;}
+  public void setRodnePrijmeni(String x){
+_RodnePrijmeni=x;}
+  public void setTitulPred(String x){
+_TitulPred=x;}
+  public void setTitulZa(String x){
+_TitulZa=x;}
+  public void setRC(String x){
+_RC=x;}
+  public void setPohlavi(String x){
+_Pohlavi=x;}
+  public void setOsobniStav(String x){
+_OsobniStav=x;}
+  public void setDatumNarozeni(org.xdef.sys.SDatetime x){
+_DatumNarozeni=x;}
+  public void setDatumNarozeni(java.util.Date x){
+_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumNarozeni(java.sql.Timestamp x){
+_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumNarozeni(java.util.Calendar x){
+_DatumNarozeni=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setMistoNarozeni(String x){
+_MistoNarozeni=x;}
+  public void setStatNarozeni(String x){
+_StatNarozeni=x;}
+  public void setStatniPrislusnost(String x){
+_StatniPrislusnost=x;}
+  public void setProfese(String x){
+_Profese=x;}
   public void setTrvalyPobyt(Z9 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "TrvalyPobyt", null, "SouborD1A#Osoba/$mixed/TrvalyPobyt");

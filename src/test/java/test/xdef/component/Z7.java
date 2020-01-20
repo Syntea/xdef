@@ -8,11 +8,16 @@ public class Z7 implements org.xdef.component.XComponent{
   public java.sql.Timestamp timestampOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getTimestamp(_DatumRozhodnuti);}
   public java.util.Calendar calendarOfDatumRozhodnuti(){return org.xdef.sys.SDatetime.getCalendar(_DatumRozhodnuti);}
   public String get$value() {return _$value;}
-  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x){_DatumRozhodnuti=x;}
-  public void setDatumRozhodnuti(java.util.Date x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumRozhodnuti(java.sql.Timestamp x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setDatumRozhodnuti(java.util.Calendar x){_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(String x){_$value=x;}
+  public void setDatumRozhodnuti(org.xdef.sys.SDatetime x){
+_DatumRozhodnuti=x;}
+  public void setDatumRozhodnuti(java.util.Date x){
+_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumRozhodnuti(java.sql.Timestamp x){
+_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setDatumRozhodnuti(java.util.Calendar x){
+_DatumRozhodnuti=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(String x){
+_$value=x;}
   public String xposOfDatumRozhodnuti(){return XD_XPos+"/@DatumRozhodnuti";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

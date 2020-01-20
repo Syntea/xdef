@@ -235,7 +235,8 @@ public static class A implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class B implements org.xdef.component.XComponent{
   public test.xdef.component.X.A.B.E getE() {return _E;}
-  public void setE(test.xdef.component.X.A.B.E x){_E=x;}
+  public void setE(test.xdef.component.X.A.B.E x){
+_E=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -343,7 +344,8 @@ public static class B implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class E implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){_$value=x;}
+  public void set$value(String x){
+_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

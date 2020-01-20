@@ -3,10 +3,16 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class F implements org.xdef.component.XComponent{
-  public F.A getA() {return _A;}
   public F.B getB() {return _B;}
-  public void setA(F.A x){_A=x;}
-  public void setB(F.B x){_B=x;}
+  public F.A getA() {return _A;}
+  public void setB(F.B x){
+    _B=null;_A=null;
+    _B=x;
+    }
+  public void setA(F.A x){
+    _B=null;_A=null;
+    _A=x;
+    }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override

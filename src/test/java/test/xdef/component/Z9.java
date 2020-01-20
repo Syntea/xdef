@@ -12,15 +12,24 @@ public class Z9 implements org.xdef.component.XComponent{
   public String getStat() {return _Stat;}
   public String getTelefon1() {return _Telefon1;}
   public String getTelefon2() {return _Telefon2;}
-  public void setUlice(String x){_Ulice=x;}
-  public void setCisloOrientacni(String x){_CisloOrientacni=x;}
-  public void setCisloPopisne(String x){_CisloPopisne=x;}
-  public void setObec(String x){_Obec=x;}
-  public void setPSC(String x){_PSC=x;}
-  public void setOkres(String x){_Okres=x;}
-  public void setStat(String x){_Stat=x;}
-  public void setTelefon1(String x){_Telefon1=x;}
-  public void setTelefon2(String x){_Telefon2=x;}
+  public void setUlice(String x){
+_Ulice=x;}
+  public void setCisloOrientacni(String x){
+_CisloOrientacni=x;}
+  public void setCisloPopisne(String x){
+_CisloPopisne=x;}
+  public void setObec(String x){
+_Obec=x;}
+  public void setPSC(String x){
+_PSC=x;}
+  public void setOkres(String x){
+_Okres=x;}
+  public void setStat(String x){
+_Stat=x;}
+  public void setTelefon1(String x){
+_Telefon1=x;}
+  public void setTelefon2(String x){
+_Telefon2=x;}
   public String xposOfUlice(){return XD_XPos+"/@Ulice";}
   public String xposOfCisloOrientacni(){return XD_XPos+"/@CisloOrientacni";}
   public String xposOfCisloPopisne(){return XD_XPos+"/@CisloPopisne";}

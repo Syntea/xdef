@@ -4,7 +4,8 @@
 package test.xdef.component;
 public class Y10q implements org.xdef.component.XComponent{
   public String getx() {return _x;}
-  public void setx(String x){_x=x;}
+  public void setx(String x){
+_x=x;}
   public String xposOfx(){return XD_XPos+"/@x";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
