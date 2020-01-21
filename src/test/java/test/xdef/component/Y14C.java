@@ -119,8 +119,7 @@ public static class X implements test.xdef.component.Y14A{
   @Override
   public String geta() {return _a;}
   @Override
-  public void seta(String x){
-_a=x;}
+  public void seta(String x){_a=x;}
   @Override
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

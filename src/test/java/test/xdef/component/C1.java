@@ -5,10 +5,8 @@ package test.xdef.component;
 public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
   public String getFirstName() {return _FirstName;}
   public String getLastName() {return _LastName;}
-  public void setFirstName(String x){
-_FirstName=x;}
-  public void setLastName(String x){
-_LastName=x;}
+  public void setFirstName(String x){_FirstName=x;}
+  public void setLastName(String x){_LastName=x;}
   public String xposOfFirstName(){return XD_XPos+"/@FirstName";}
   public String xposOfLastName(){return XD_XPos+"/@LastName";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

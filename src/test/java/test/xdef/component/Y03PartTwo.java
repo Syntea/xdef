@@ -4,8 +4,7 @@
 package test.xdef.component;
 public class Y03PartTwo implements org.xdef.component.XComponent{
   public Integer getOne() {return _One;}
-  public void setOne(Integer x){
-_One=x;}
+  public void setOne(Integer x){_One=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

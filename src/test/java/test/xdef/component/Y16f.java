@@ -4,8 +4,7 @@
 package test.xdef.component;
 public class Y16f implements org.xdef.component.XComponent{
   public Integer gety() {return _y;}
-  public void sety(Integer x){
-_y=x;}
+  public void sety(Integer x){_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

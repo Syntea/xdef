@@ -5,8 +5,7 @@ package test.xdef.component;
 public class C2 implements org.xdef.component.XComponent{
   public Integer getNum() {return _Num;}
   public java.util.List<C1> listOfPerson() {return _Person;}
-  public void setNum(Integer x){
-_Num=x;}
+  public void setNum(Integer x){_Num=x;}
   public void addPerson(C1 x) {
     if (x!=null) {
         if (x.xGetXPos()==null)

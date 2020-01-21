@@ -116,10 +116,8 @@ public static class B implements org.xdef.component.XComponent{
   public String getI() {return _I;}
   public java.util.List<test.xdef.component.Y11Op> listOfEv() {return _Ev;}
   public java.util.List<test.xdef.component.Y11Op> listOfOp() {return _Op;}
-  public void setN(String x){
-_N=x;}
-  public void setI(String x){
-_I=x;}
+  public void setN(String x){_N=x;}
+  public void setI(String x){_I=x;}
   public void addEv(test.xdef.component.Y11Op x) {
     if (x!=null) {
         if (x.xGetXPos()==null)

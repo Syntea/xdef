@@ -10,14 +10,10 @@ public class VlakDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public VlakDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setOznSegmentu(String x){
-_OznSegmentu=x;}
-  public void setTypSoupravy(String x){
-_TypSoupravy=x;}
-  public void setSpoj(String x){
-_Spoj=x;}
-  public void setDruhSoupravy(String x){
-_DruhSoupravy=x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setTypSoupravy(String x){_TypSoupravy=x;}
+  public void setSpoj(String x){_Spoj=x;}
+  public void setDruhSoupravy(String x){_DruhSoupravy=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#VlakDN/$mixed/Skoda");
@@ -191,8 +187,7 @@ _DruhSoupravy=x;}
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){
-_$value=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

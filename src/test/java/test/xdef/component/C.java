@@ -5,8 +5,7 @@ package test.xdef.component;
 public class C extends test.xdef.TestXComponents_C implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<C.Street> listOfStreet() {return _Street;}
-  public void setName(String x){
-_Name=x;}
+  public void setName(String x){_Name=x;}
   public void addStreet(C.Street x) {if (x!=null) _Street.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -125,8 +124,7 @@ _Name=x;}
 public static class Street implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public java.util.List<test.xdef.component.C2> listOfHouse() {return _House;}
-  public void setName(String x){
-_Name=x;}
+  public void setName(String x){_Name=x;}
   public void addHouse(test.xdef.component.C2 x) {if (x!=null) _House.add(x);}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

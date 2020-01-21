@@ -5,10 +5,8 @@ package complaints.data;
 public class D implements org.xdef.component.XComponent{
   public String getD() {return _D;}
   public D.D_1 getD_1() {return _D_1;}
-  public void setD(String x){
-_D=x;}
-  public void setD_1(D.D_1 x){
-_D_1=x;}
+  public void setD(String x){_D=x;}
+  public void setD_1(D.D_1 x){_D_1=x;}
   public String xposOfD(){return XD_XPos+"/@D";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

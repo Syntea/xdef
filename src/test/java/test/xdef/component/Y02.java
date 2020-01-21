@@ -5,10 +5,8 @@ package test.xdef.component;
 public class Y02 implements test.xdef.component.s.Y01Part,org.xdef.component.XComponent{
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(String x){
-_One=x;}
-  public void setTwo(String x){
-_Two=x;}
+  public void setOne(String x){_One=x;}
+  public void setTwo(String x){_Two=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

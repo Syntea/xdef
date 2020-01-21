@@ -5,10 +5,8 @@ package test.xdef.component;
 public class Y07Smlouva extends test.xdef.TestXComponents_Y07Operation implements org.xdef.component.XComponent{
   public Integer getIdFlow() {return _IdFlow;}
   public Y07Smlouva.Domain getDomain() {return _Domain;}
-  public void setIdFlow(Integer x){
-_IdFlow=x;}
-  public void setDomain(Y07Smlouva.Domain x){
-_Domain=x;}
+  public void setIdFlow(Integer x){_IdFlow=x;}
+  public void setDomain(Y07Smlouva.Domain x){_Domain=x;}
   public String xposOfIdFlow(){return XD_XPos+"/@IdFlow";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -135,10 +133,8 @@ _Domain=x;}
 public static class Domain implements org.xdef.component.XComponent{
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setOne(String x){
-_One=x;}
-  public void setTwo(String x){
-_Two=x;}
+  public void setOne(String x){_One=x;}
+  public void setTwo(String x){_Two=x;}
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

@@ -6,12 +6,9 @@ public class A extends complaints.data.C implements org.xdef.component.XComponen
   public String getc() {return _c;}
   public C.D getD() {return _D;}
   public A.X getX() {return _X;}
-  public void setc(String x){
-_c=x;}
-  public void setD(C.D x){
-_D=x;}
-  public void setX(A.X x){
-_X=x;}
+  public void setc(String x){_c=x;}
+  public void setD(C.D x){_D=x;}
+  public void setX(A.X x){_X=x;}
   public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

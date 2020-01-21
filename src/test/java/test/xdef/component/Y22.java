@@ -5,10 +5,8 @@ package test.xdef.component;
 public class Y22 implements org.xdef.component.XComponent{
   public String getCreator() {return _Creator;}
   public Y22.Transfer getTransfer() {return _Transfer;}
-  public void setCreator(String x){
-_Creator=x;}
-  public void setTransfer(Y22.Transfer x){
-_Transfer=x;}
+  public void setCreator(String x){_Creator=x;}
+  public void setTransfer(Y22.Transfer x){_Transfer=x;}
   public String xposOfCreator(){return XD_XPos+"/@Creator";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -126,10 +124,8 @@ _Transfer=x;}
 public static class Transfer implements org.xdef.component.XComponent{
   public String getSender() {return _Sender;}
   public test.xdef.component.Y22.Transfer.DataFiles getDataFiles() {return _DataFiles;}
-  public void setSender(String x){
-_Sender=x;}
-  public void setDataFiles(test.xdef.component.Y22.Transfer.DataFiles x){
-_DataFiles=x;}
+  public void setSender(String x){_Sender=x;}
+  public void setDataFiles(test.xdef.component.Y22.Transfer.DataFiles x){_DataFiles=x;}
   public String xposOfSender(){return XD_XPos+"/@Sender";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -245,8 +241,7 @@ _DataFiles=x;}
 // </editor-fold>
 public static class DataFiles implements org.xdef.component.XComponent{
   public test.xdef.component.Y22.Transfer.DataFiles.Directory getDirectory() {return _Directory;}
-  public void setDirectory(test.xdef.component.Y22.Transfer.DataFiles.Directory x){
-_Directory=x;}
+  public void setDirectory(test.xdef.component.Y22.Transfer.DataFiles.Directory x){_Directory=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -355,8 +350,7 @@ _Directory=x;}
 public static class Directory implements org.xdef.component.XComponent{
   public String getPath() {return _Path;}
   public java.util.List<test.xdef.component.Y22.Transfer.DataFiles.Directory.File> listOfFile() {return _File;}
-  public void setPath(String x){
-_Path=x;}
+  public void setPath(String x){_Path=x;}
   public void addFile(test.xdef.component.Y22.Transfer.DataFiles.Directory.File x) {if (x!=null) _File.add(x);}
   public String xposOfPath(){return XD_XPos+"/@Path";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -474,8 +468,7 @@ _Path=x;}
 // </editor-fold>
 public static class File implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
-  public void setName(String x){
-_Name=x;}
+  public void setName(String x){_Name=x;}
   public String xposOfName(){return XD_XPos+"/@Name";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

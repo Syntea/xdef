@@ -6,12 +6,9 @@ public class Y01Operation implements test.xdef.component.s.Y01Part,org.xdef.comp
   public String getx() {return _x;}
   public String getOne() {return _One;}
   public String getTwo() {return _Two;}
-  public void setx(String x){
-_x=x;}
-  public void setOne(String x){
-_One=x;}
-  public void setTwo(String x){
-_Two=x;}
+  public void setx(String x){_x=x;}
+  public void setOne(String x){_One=x;}
+  public void setTwo(String x){_Two=x;}
   public String xposOfx(){return XD_XPos+"/@x";}
   public String xposOfOne(){return XD_XPos+"/@One";}
   public String xposOfTwo(){return XD_XPos+"/@Two";}

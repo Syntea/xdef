@@ -4,8 +4,7 @@
 package test.xdef.component;
 public class Y20_B implements org.xdef.component.XComponent{
   public Y20_B.X getX() {return _X;}
-  public void setX(Y20_B.X x){
-_X=x;}
+  public void setX(Y20_B.X x){_X=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -115,8 +114,7 @@ _X=x;}
 public static class X implements org.xdef.component.XComponent{
   public String getb() {return _b;}
   public java.util.List<test.xdef.component.Y20_B.X> listOfX_1() {return _X_1;}
-  public void setb(String x){
-_b=x;}
+  public void setb(String x){_b=x;}
   public void addX_1(test.xdef.component.Y20_B.X x) {
     if (x!=null) {
         if (x.xGetXPos()==null)

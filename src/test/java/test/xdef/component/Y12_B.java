@@ -141,8 +141,7 @@ public class Y12_B implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class S implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){
-_V=x;}
+  public void setV(String x){_V=x;}
   public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -249,8 +248,7 @@ _V=x;}
 }
 public static class M implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){
-_V=x;}
+  public void setV(String x){_V=x;}
   public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -357,8 +355,7 @@ _V=x;}
 }
 public static class P implements org.xdef.component.XComponent{
   public String getO() {return _O;}
-  public void setO(String x){
-_O=x;}
+  public void setO(String x){_O=x;}
   public String xposOfO(){return XD_XPos+"/@O";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -465,8 +462,7 @@ _O=x;}
 }
 public static class Q implements org.xdef.component.XComponent{
   public String getO() {return _O;}
-  public void setO(String x){
-_O=x;}
+  public void setO(String x){_O=x;}
   public String xposOfO(){return XD_XPos+"/@O";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

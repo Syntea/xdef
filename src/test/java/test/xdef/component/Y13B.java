@@ -4,8 +4,7 @@
 package test.xdef.component;
 public class Y13B implements test.xdef.component.Y13C,org.xdef.component.XComponent{
   public String geta() {return _a;}
-  public void seta(String x){
-_a=x;}
+  public void seta(String x){_a=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

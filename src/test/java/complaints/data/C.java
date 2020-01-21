@@ -5,10 +5,8 @@ package complaints.data;
 public class C implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public C.D getD() {return _D;}
-  public void setc(String x){
-_c=x;}
-  public void setD(C.D x){
-_D=x;}
+  public void setc(String x){_c=x;}
+  public void setD(C.D x){_D=x;}
   public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -125,8 +123,7 @@ _D=x;}
 // </editor-fold>
 public static class D implements org.xdef.component.XComponent{
   public String getd() {return _d;}
-  public void setd(String x){
-_d=x;}
+  public void setd(String x){_d=x;}
   public String xposOfd(){return XD_XPos+"/@d";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

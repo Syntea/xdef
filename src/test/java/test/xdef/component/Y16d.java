@@ -5,8 +5,7 @@ package test.xdef.component;
 public class Y16d implements org.xdef.component.XComponent{
   public Integer gety() {return _y;}
   public String getxmlns() {return "y.int";}
-  public void sety(Integer x){
-_y=x;}
+  public void sety(Integer x){_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

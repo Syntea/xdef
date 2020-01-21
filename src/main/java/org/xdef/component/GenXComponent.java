@@ -575,9 +575,8 @@ public final class GenXComponent {
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
-				x = LN + (nullChoice.isEmpty() ? "_&{name}=x;"
-					: (nullChoice + "\t\t_&{name}=x;"+LN + "\t\t"));
-
+				x = (nullChoice.isEmpty() ? "_&{name}=x;"
+					: (LN + nullChoice + "\t\t_&{name}=x;"+LN + "\t\t"));
 			}
 		}
 		if (sbi != null) {

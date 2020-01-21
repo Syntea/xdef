@@ -16,29 +16,19 @@ public class A implements org.xdef.component.XComponent{
   public A.d1 getd1() {return _d1;}
   public java.util.List<A.d2> listOfd2() {return _d2;}
   public A.d_e_f getd_e_f() {return _d_e_f;}
-  public void seta(String x){
-_a=x;}
-  public void setdec(java.math.BigDecimal x){
-_dec=x;}
+  public void seta(String x){_a=x;}
+  public void setdec(java.math.BigDecimal x){_dec=x;}
   public void addW(A.W x) {if (x!=null) _W.add(x);}
   public void addY(A.Y x) {if (x!=null) _Y.add(x);}
-  public void seti(A.i x){
-_i=x;}
-  public void setf(A.f x){
-_f=x;}
-  public void setd(A.d x){
-_d=x;}
-  public void sett(A.t x){
-_t=x;}
-  public void sets(A.s x){
-_s=x;}
-  public void setZ(AZ x){
-_Z=x;}
-  public void setd1(A.d1 x){
-_d1=x;}
+  public void seti(A.i x){_i=x;}
+  public void setf(A.f x){_f=x;}
+  public void setd(A.d x){_d=x;}
+  public void sett(A.t x){_t=x;}
+  public void sets(A.s x){_s=x;}
+  public void setZ(AZ x){_Z=x;}
+  public void setd1(A.d1 x){_d1=x;}
   public void addd2(A.d2 x) {if (x!=null) _d2.add(x);}
-  public void setd_e_f(A.d_e_f x){
-_d_e_f=x;}
+  public void setd_e_f(A.d_e_f x){_d_e_f=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfdec(){return XD_XPos+"/@dec";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -230,10 +220,8 @@ _d_e_f=x;}
 public static class W implements org.xdef.component.XComponent{
   public String getw() {return _w;}
   public String get$value() {return _$value;}
-  public void setw(String x){
-_w=x;}
-  public void set$value(String x){
-_$value=x;}
+  public void setw(String x){_w=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOfw(){return XD_XPos+"/@w";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -354,8 +342,7 @@ _$value=x;}
 }
 public static class Y implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){
-_$value=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -468,8 +455,7 @@ _$value=x;}
 }
 public static class i implements org.xdef.component.XComponent{
   public java.math.BigInteger get$value() {return _$value;}
-  public void set$value(java.math.BigInteger x){
-_$value=x;}
+  public void set$value(java.math.BigInteger x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -582,8 +568,7 @@ _$value=x;}
 }
 public static class f implements org.xdef.component.XComponent{
   public Double get$value() {return _$value;}
-  public void set$value(Double x){
-_$value=x;}
+  public void set$value(Double x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -699,14 +684,10 @@ public static class d implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public void set$value(org.xdef.sys.SDatetime x){
-_$value=x;}
-  public void set$value(java.util.Date x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.sql.Timestamp x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.util.Calendar x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
+  public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -822,14 +803,10 @@ public static class t implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public void set$value(org.xdef.sys.SDatetime x){
-_$value=x;}
-  public void set$value(java.util.Date x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.sql.Timestamp x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.util.Calendar x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
+  public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -942,8 +919,7 @@ _$value=x==null?null:new org.xdef.sys.SDatetime(x);}
 }
 public static class s implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){
-_$value=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -1063,22 +1039,14 @@ public static class d1 implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public void setd(org.xdef.sys.SDatetime x){
-_d=x;}
-  public void setd(java.util.Date x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setd(java.sql.Timestamp x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setd(java.util.Calendar x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(org.xdef.sys.SDatetime x){
-_$value=x;}
-  public void set$value(java.util.Date x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.sql.Timestamp x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.util.Calendar x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(org.xdef.sys.SDatetime x){_d=x;}
+  public void setd(java.util.Date x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(java.sql.Timestamp x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(java.util.Calendar x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
+  public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfd(){return XD_XPos+"/@d";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -1206,22 +1174,14 @@ public static class d2 implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public void setd(org.xdef.sys.SDatetime x){
-_d=x;}
-  public void setd(java.util.Date x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setd(java.sql.Timestamp x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void setd(java.util.Calendar x){
-_d=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(org.xdef.sys.SDatetime x){
-_$value=x;}
-  public void set$value(java.util.Date x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.sql.Timestamp x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.util.Calendar x){
-_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(org.xdef.sys.SDatetime x){_d=x;}
+  public void setd(java.util.Date x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(java.sql.Timestamp x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setd(java.util.Calendar x){_d=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
+  public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public String xposOfd(){return XD_XPos+"/@d";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -1343,10 +1303,8 @@ _$value=x==null?null:new org.xdef.sys.SDatetime(x);}
 public static class d_e_f implements org.xdef.component.XComponent{
   public String getd_e_f() {return _d_e_f;}
   public String get$value() {return _$value;}
-  public void setd_e_f(String x){
-_d_e_f=x;}
-  public void set$value(String x){
-_$value=x;}
+  public void setd_e_f(String x){_d_e_f=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOfd_e_f(){return XD_XPos+"/@d_e_f";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

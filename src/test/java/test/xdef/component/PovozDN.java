@@ -8,10 +8,8 @@ public class PovozDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public PovozDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setOznSegmentu(String x){
-_OznSegmentu=x;}
-  public void setDruhPovozu(String x){
-_DruhPovozu=x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setDruhPovozu(String x){_DruhPovozu=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#PovozDN/$mixed/Skoda");
@@ -169,8 +167,7 @@ _DruhPovozu=x;}
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){
-_$value=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

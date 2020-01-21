@@ -8,16 +8,11 @@ public class Y10 implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public Y10p getp() {return _p;}
   public Y10q getq() {return _q;}
-  public void seta(String x){
-_a=x;}
-  public void setb(String x){
-_b=x;}
-  public void setc(String x){
-_c=x;}
-  public void setp(Y10p x){
-_p=x;}
-  public void setq(Y10q x){
-_q=x;}
+  public void seta(String x){_a=x;}
+  public void setb(String x){_b=x;}
+  public void setc(String x){_c=x;}
+  public void setp(Y10p x){_p=x;}
+  public void setq(Y10q x){_q=x;}
   public String xposOfa(){return XD_XPos+"/@a";}
   public String xposOfb(){return XD_XPos+"/@b";}
   public String xposOfc(){return XD_XPos+"/@c";}

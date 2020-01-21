@@ -4,8 +4,7 @@
 package test.xdef.component;
 public class Y24 implements org.xdef.component.XComponent{
   public Y24.d getd() {return _d;}
-  public void setd(Y24.d x){
-_d=x;}
+  public void setd(Y24.d x){_d=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override

@@ -7,10 +7,8 @@ public class X1 extends test.xdef.TestXComponents_G implements org.xdef.componen
   public String get$value() {return _$value;}
   public X1.B getB() {return _B;}
   public void addA(X1.A x) {if (x!=null) _A.add(x);}
-  public void set$value(String x){
-_$value=x;}
-  public void setB(X1.B x){
-_B=x;}
+  public void set$value(String x){_$value=x;}
+  public void setB(X1.B x){_B=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -138,8 +136,7 @@ _B=x;}
 // </editor-fold>
 public static class A implements org.xdef.component.XComponent{
   public String getV() {return _V;}
-  public void setV(String x){
-_V=x;}
+  public void setV(String x){_V=x;}
   public String xposOfV(){return XD_XPos+"/@V";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

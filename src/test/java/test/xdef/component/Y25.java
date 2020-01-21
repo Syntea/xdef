@@ -5,8 +5,7 @@ package test.xdef.component;
 public class Y25 implements org.xdef.component.XComponent{
   public Y25.DefParams getDefParams() {return _DefParams;}
   public java.util.List<Y25.Params> listOfParams() {return _Params;}
-  public void setDefParams(Y25.DefParams x){
-_DefParams=x;}
+  public void setDefParams(Y25.DefParams x){_DefParams=x;}
   public void addParams(Y25.Params x) {if (x!=null) _Params.add(x);}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -236,10 +235,8 @@ public static class DefParams implements org.xdef.component.XComponent{
 public static class Param implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public String getType() {return _Type;}
-  public void setName(String x){
-_Name=x;}
-  public void setType(String x){
-_Type=x;}
+  public void setName(String x){_Name=x;}
+  public void setType(String x){_Type=x;}
   public String xposOfName(){return XD_XPos+"/@Name";}
   public String xposOfType(){return XD_XPos+"/@Type";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -467,10 +464,8 @@ public static class Params implements org.xdef.component.XComponent{
 public static class Param implements org.xdef.component.XComponent{
   public String getName() {return _Name;}
   public String getValue() {return _Value;}
-  public void setName(String x){
-_Name=x;}
-  public void setValue(String x){
-_Value=x;}
+  public void setName(String x){_Name=x;}
+  public void setValue(String x){_Value=x;}
   public String xposOfName(){return XD_XPos+"/@Name";}
   public String xposOfValue(){return XD_XPos+"/@Value";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

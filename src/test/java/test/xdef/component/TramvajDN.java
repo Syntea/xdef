@@ -18,30 +18,18 @@ public class TramvajDN implements org.xdef.component.XComponent{
   public Z3 getSkoda() {return _Skoda;}
   public Z3 getJinaSkoda() {return _JinaSkoda;}
   public TramvajDN.Vlastnik getVlastnik() {return _Vlastnik;}
-  public void setOznSegmentu(String x){
-_OznSegmentu=x;}
-  public void setLinka(String x){
-_Linka=x;}
-  public void setLinkaPoradi(Integer x){
-_LinkaPoradi=x;}
-  public void setEvidCislo(String x){
-_EvidCislo=x;}
-  public void setTypVozidla(String x){
-_TypVozidla=x;}
-  public void setTypBrzd(String x){
-_TypBrzd=x;}
-  public void setStavBrzd(String x){
-_StavBrzd=x;}
-  public void setKodPojistitele(String x){
-_KodPojistitele=x;}
-  public void setNazevPojistitele(String x){
-_NazevPojistitele=x;}
-  public void setCisloDokladuPojisteni(String x){
-_CisloDokladuPojisteni=x;}
-  public void setPojisteniText(String x){
-_PojisteniText=x;}
-  public void setDruhVozidla(String x){
-_DruhVozidla=x;}
+  public void setOznSegmentu(String x){_OznSegmentu=x;}
+  public void setLinka(String x){_Linka=x;}
+  public void setLinkaPoradi(Integer x){_LinkaPoradi=x;}
+  public void setEvidCislo(String x){_EvidCislo=x;}
+  public void setTypVozidla(String x){_TypVozidla=x;}
+  public void setTypBrzd(String x){_TypBrzd=x;}
+  public void setStavBrzd(String x){_StavBrzd=x;}
+  public void setKodPojistitele(String x){_KodPojistitele=x;}
+  public void setNazevPojistitele(String x){_NazevPojistitele=x;}
+  public void setCisloDokladuPojisteni(String x){_CisloDokladuPojisteni=x;}
+  public void setPojisteniText(String x){_PojisteniText=x;}
+  public void setDruhVozidla(String x){_DruhVozidla=x;}
   public void setSkoda(Z3 x){
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "Skoda", null, "SouborD1A#TramvajDN/$mixed/Skoda");
@@ -279,8 +267,7 @@ _DruhVozidla=x;}
 // </editor-fold>
 public static class Vlastnik implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
-  public void set$value(String x){
-_$value=x;}
+  public void set$value(String x){_$value=x;}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

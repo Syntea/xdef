@@ -6,12 +6,9 @@ public class Y09 implements org.xdef.component.XComponent{
   public String getx() {return _x;}
   public String gety() {return _y;}
   public Y09.$any get$any() {return _$any;}
-  public void setx(String x){
-_x=x;}
-  public void sety(String x){
-_y=x;}
-  public void set$any(Y09.$any x){
-_$any=x;}
+  public void setx(String x){_x=x;}
+  public void sety(String x){_y=x;}
+  public void set$any(Y09.$any x){_$any=x;}
   public String xposOfx(){return XD_XPos+"/@x";}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
