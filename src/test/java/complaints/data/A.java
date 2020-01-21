@@ -6,9 +6,12 @@ public class A extends complaints.data.C implements org.xdef.component.XComponen
   public String getc() {return _c;}
   public C.D getD() {return _D;}
   public A.X getX() {return _X;}
-  public void setc(String x){_c=x;}
-  public void setD(C.D x){_D=x;}
-  public void setX(A.X x){_X=x;}
+  public void setc(String x){
+_c=x;}
+  public void setD(C.D x){
+_D=x;}
+  public void setX(A.X x){
+_X=x;}
   public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -95,6 +98,7 @@ public class A extends complaints.data.C implements org.xdef.component.XComponen
   private String _c;
   private C.D _D;
   private A.X _X;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -110,7 +114,7 @@ public class A extends complaints.data.C implements org.xdef.component.XComponen
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_c = x.getNodeName();
-    setc(parseResult.getParsedValue().stringValue());
+    setc(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -199,6 +203,7 @@ public static class X implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";

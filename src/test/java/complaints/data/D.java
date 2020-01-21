@@ -5,8 +5,10 @@ package complaints.data;
 public class D implements org.xdef.component.XComponent{
   public String getD() {return _D;}
   public D.D_1 getD_1() {return _D_1;}
-  public void setD(String x){_D=x;}
-  public void setD_1(D.D_1 x){_D_1=x;}
+  public void setD(String x){
+_D=x;}
+  public void setD_1(D.D_1 x){
+_D_1=x;}
   public String xposOfD(){return XD_XPos+"/@D";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -91,6 +93,7 @@ public class D implements org.xdef.component.XComponent{
   private String XD_Name_D="D";
   private String _D;
   private D.D_1 _D_1;
+  public static final String XD_NAME="D";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "D";
@@ -106,7 +109,7 @@ public class D implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_D = x.getNodeName();
-    setD(parseResult.getParsedValue().stringValue());
+    setD(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -187,6 +190,7 @@ public static class D_1 implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="D";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "D";

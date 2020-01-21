@@ -5,8 +5,10 @@ package complaints.data;
 public class C implements org.xdef.component.XComponent{
   public String getc() {return _c;}
   public C.D getD() {return _D;}
-  public void setc(String x){_c=x;}
-  public void setD(C.D x){_D=x;}
+  public void setc(String x){
+_c=x;}
+  public void setD(C.D x){
+_D=x;}
   public String xposOfc(){return XD_XPos+"/@c";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -91,6 +93,7 @@ public class C implements org.xdef.component.XComponent{
   private String XD_Name_c="c";
   private String _c;
   private C.D _D;
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -106,7 +109,7 @@ public class C implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_c = x.getNodeName();
-    setc(parseResult.getParsedValue().stringValue());
+    setc(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
@@ -122,7 +125,8 @@ public class C implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class D implements org.xdef.component.XComponent{
   public String getd() {return _d;}
-  public void setd(String x){_d=x;}
+  public void setd(String x){
+_d=x;}
   public String xposOfd(){return XD_XPos+"/@d";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -200,6 +204,7 @@ public static class D implements org.xdef.component.XComponent{
   }
   private String XD_Name_d="d";
   private String _d;
+  public static final String XD_NAME="D";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "D";
@@ -214,7 +219,7 @@ public static class D implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_d = x.getNodeName();
-    setd(parseResult.getParsedValue().stringValue());
+    setd(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
