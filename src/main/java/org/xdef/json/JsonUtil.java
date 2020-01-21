@@ -954,7 +954,7 @@ public class JsonUtil extends StringParser {
 		final boolean isAttr) {
 		if (source.length() == 0 || "null".equals(source)
 			|| "true".equals(source) || "false".equals(source)) {
-			return "\"" + source + "\"";
+			return '"' + source + '"';
 		}
 		boolean addQuot = source.indexOf(' ') >= 0 || source.indexOf('\t') >= 0
 			|| source.indexOf('\n') >= 0 || source.indexOf('\r') >= 0
@@ -1012,7 +1012,7 @@ public class JsonUtil extends StringParser {
 				// does not contain leading or trailing white spaces,
 				return s;
 			} else {
-				return '\"' + s + '\"';
+				return '"' + s + '"';
 			}
 		} else {
 			return source;

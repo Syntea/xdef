@@ -1570,7 +1570,7 @@ public final class KXmlUtils extends KDOMUtils {
 				if (a == null) {
 					reporter.error(null, "<" + elem_A.getNodeName()
 						+ "> A: attr missing: " +
-						name + "=\"" + b.getNodeValue() + "\"");
+						name + "=\"" + b.getNodeValue() + '"');
 					return false;
 				}
 			}

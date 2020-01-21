@@ -563,9 +563,9 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				int ndx = qName.indexOf(':');
 				if (ndx > 0) {
 					s += " " + "xmlns:" + qName.substring(0, ndx)
-						+ "=\"" + nsuri + '\"';
+						+ "=\"" + nsuri + '"';
 				} else if (nsuri != null && !nsuri.isEmpty()) {
-					s += " " + "xmlns" + "=\"" + nsuri + '\"';
+					s += " " + "xmlns" + "=\"" + nsuri + '"';
 				}
 				if (_entities.isEmpty()) {
 					s += "/>";

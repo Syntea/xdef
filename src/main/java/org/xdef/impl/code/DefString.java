@@ -44,7 +44,7 @@ public final class DefString extends XDValueAbstract {
 				case '\'':
 					sb.append("\\'");
 					break;
-				case '\"':
+				case '"':
 					sb.append("\\\"");
 					break;
 				case '\\':

@@ -99,14 +99,14 @@ class XmlToJson extends JsonToXml {
 	 */
 	private static void valueToArray(final List<Object> array,
 		final String s){
-		if ("null".equals(s)) {
+		if (s.isEmpty() || s.charAt(0) == '"') {
+			array.add(getJValue(s));
+		} else if ("null".equals(s)) {
 			array.add(JNull.JNULL);
 		} else if ("false".equals(s)) {
 			array.add(Boolean.FALSE);
 		} else if ("true".equals(s)) {
 			array.add(Boolean.TRUE);
-		} else if (s.startsWith("\"")) {
-			array.add(getJValue(s));
 		} else {
 			StringParser p = new StringParser(s);
 			if (p.isSignedFloat() && p.eos()) {

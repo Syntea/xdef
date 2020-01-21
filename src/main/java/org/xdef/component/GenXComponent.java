@@ -560,7 +560,7 @@ public final class GenXComponent {
 "\t\tif (x!=null) {"+LN +
 "\t\t\t\tif (x.xGetXPos()==null)"+LN +
 "\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+LN+'\t';
 			} else {
@@ -571,7 +571,7 @@ public final class GenXComponent {
 				x = LN + nullChoice +
 "\t\tif (x!=null && x.xGetXPos() == null)"+LN +
 "\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
@@ -2217,7 +2217,7 @@ if (isRoot && xe._json == 2 && nodes.length == 1) {
 "\tprivate String XD_NodeName = \"" + xe.getName() + "\";"+LN+
 (_genJavadoc ? "\t/** Node namespace.*/"+LN : "") +
 "\tprivate String XD_NamespaceURI" +
-	(xe.getNSUri() != null ? " = \"" + xe.getNSUri() + "\"" : "") + ";"+LN+
+	(xe.getNSUri() != null ? " = \"" + xe.getNSUri() + '"' : "") + ";"+LN+
 (_genJavadoc ? "\t/** Node index.*/"+LN : "") +
 "\tprivate int XD_Index = -1;"+LN+
 (genNodeList.length() == 0 ? "" :
