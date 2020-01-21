@@ -1632,37 +1632,36 @@ public final class GenXComponent {
 					}
 					s += LN;
 					for (;choiceStack.size() >= 5;) {
-						int gmax = (Integer) choiceStack.pop();
-						String giname = (String) choiceStack.pop();
-						String gtypeName = (String) choiceStack.pop();
-						int gi = (Integer)choiceStack.pop();
-						boolean gext = (Boolean) choiceStack.pop();
-						XElement gxe1 = (XElement) nodes[gi];
-						if (gxe1._json >= 1) {
-							XNode[] x = (XNode[]) gxe1.getChildNodeModels();
+						int max = (Integer) choiceStack.pop();
+						String iname = (String) choiceStack.pop();
+						String typeName = (String) choiceStack.pop();
+						int j = (Integer)choiceStack.pop();
+						XElement xe1 = (XElement) nodes[j];
+						boolean ext = (Boolean) choiceStack.pop();
+						if (xe1._json >= 1) {
+							XNode[] x = (XNode[]) xe1.getChildNodeModels();
 							if ((x.length==1 && x[0].getKind() == XNode.XMTEXT)
-								|| (x.length == 0
-								&& gxe1.getQName().getLocalPart().equals(
-									"null"))) {
-							genJsonGetterAndSetters(gxe1,gtypeName,giname,gmax,
-								setters, getters, sbi, classNames, varNames);
+								|| (x.length == 0 && "null".equals(
+									xe1.getQName().getLocalPart()))) {
+								genJsonGetterAndSetters(xe1,typeName,iname,max,
+									setters,getters,sbi,classNames,varNames);
 							}
 						}
-						if (!gext) {
+						if (!ext) {
 							String mname = null;
 							String mURI = null;
 							String mXDPos = null;
-							if (gxe1.isReference()) {
-								mname = gxe1.getName();
-								mURI = gxe1.getNSUri();
-								mXDPos = gxe1.getXDPosition();
+							if (xe1.isReference()) {
+								mname = xe1.getName();
+								mURI = xe1.getNSUri();
+								mXDPos = xe1.getXDPosition();
 							}
-							genGetterMethodFromChildElement(gxe1,
-								gtypeName, giname, gmax, "element",getters,sbi);
-							genSetterMethodOfChildElement(gtypeName,giname,gmax,
+							genGetterMethodFromChildElement(xe1,
+								typeName, iname, max, "element",getters,sbi);
+							genSetterMethodOfChildElement(typeName,iname,max,
 								mname,mURI,mXDPos,"element",setters,sbi, s);
 						}
-						if (choiceStack.isEmpty() || gi == groupFirst) {
+						if (choiceStack.isEmpty() || j == groupFirst) {
 							break;
 						}
 					}
