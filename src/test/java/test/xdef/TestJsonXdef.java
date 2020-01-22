@@ -360,10 +360,10 @@ public class TestJsonXdef extends XDTester {
 	 * @param name name of setter.
 	 * @return value of getter.
 	 */
-	private static Object getJValue(XComponent xc, String name) {
+	private static Object getXCValue(XComponent xc, String name) {
 		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod("jget" + name);
+			Method m = cls.getDeclaredMethod(name);
 			m.setAccessible(true);
 			return m.invoke(xc);
 		} catch (Exception ex) {
@@ -376,30 +376,40 @@ public class TestJsonXdef extends XDTester {
 	 * @param name name of setter.
 	 * @param val value to be set.
 	 */
-	private static void setJValue(XComponent xc, String name, Object val) {
+	private static void setXCValue(XComponent xc, String name, Object val) {
 		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod("jset" + name, val.getClass());
+			Method m = cls.getDeclaredMethod(name, val.getClass());
 			m.setAccessible(true);
 			m.invoke(xc, val);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			try {
+				Method m = cls.getDeclaredMethod(name, Object.class);
+				m.setAccessible(true);
+				m.invoke(xc, val);
+			} catch (Exception exx) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 
-	/** Get parsed XComponent.
+	/** Get XComponent with parsed data.
 	 * @param xp compiled XDPool from generated X-definitions.
-	 * @param id identifier test files.
-	 * @param json string with JSON to be parsed.
-	 * @return 
+	 * @param test identifier test file.
+	 * @param p "a" or "b".
+	 * @param x file number.
+	 * @return XComponent with parsed data.
 	 */
 	private XComponent getXComponent(final XDPool xp,
-		final String id,
-		final String json) {
-		XDDocument xd = xp.createXDDocument("Test" + id);
+		final String test,
+		final String p,
+		final int x) {
 		try {
-			return xd.jparseXComponent(json,
-				Class.forName("test.common.json.component.Test" + id), null);
+			File f = new File(_tempDir + test +
+				(x > 0 ? "_" + x : "") + p+".xml");			
+			XDDocument xd = xp.createXDDocument(test + p);
+			return xd.parseXComponent(f, Class.forName(
+				"test.common.json.component." + test+p), null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -413,8 +423,6 @@ public class TestJsonXdef extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
-		XDDocument xd;
-		XComponent xc;
 
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
@@ -440,45 +448,102 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex); // should not happen!!!
 		}
-
+		
 		try {
-			xd = xp.createXDDocument("Test020a");
-			xc = xd.parseXComponent(_tempDir+"Test020a.xml", Class.forName(
-				"test.common.json.component.Test020a"), null);
-			assertEq("abc", getJValue(xc,"a$string"));
-			assertNull(getJValue(xc,"a$number"));
-			assertNull(getJValue(xc,"a$boolean"));
-			assertNull(getJValue(xc,"a$null"));
-			xc = xd.parseXComponent(_tempDir+"Test020_1a.xml", Class.forName(
-				"test.common.json.component.Test020a"), null);
-			assertEq(123, getJValue(xc,"a$number"));
-			setJValue(xc,"a$string", "");
-			assertEq("", getJValue(xc,"a$string"));
-			assertNull(getJValue(xc,"a$number"));
-			assertNull(getJValue(xc,"a$boolean"));
-			assertNull(getJValue(xc,"a$null"));
-			xc = xd.parseXComponent(_tempDir+"Test020_2a.xml", Class.forName(
-				"test.common.json.component.Test020a"), null);
-			assertEq(false, getJValue(xc,"a$boolean"));
-			xc = xd.parseXComponent(_tempDir+"Test020_3a.xml", Class.forName(
-				"test.common.json.component.Test020a"), null);
-			assertEq("null", getJValue(xc,"a$null").toString());
+			String test, p;
+			XComponent xc;
+			
+			test = "Test008";
+			p = "a";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq(1, getXCValue(xc,"jgetnumber"));
+			setXCValue(xc,"jsetnumber",3);
+			assertEq(3, getXCValue(xc,"jgetnumber"));
+//			setXCValue(xc,"jsetnumber",null);
+//			assertNull(getXCValue(xc,"jgetnumber"));
+//System.out.println(getXCValue(xc,"jgetmap"));
+			p = "b";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq(1, getXCValue(xc,"jgetitem"));
+			setXCValue(xc,"jsetitem",3);
+			assertEq(3, getXCValue(xc,"jgetitem"));
+//			setXCValue(xc,"jsetitem",null);
+//			assertNull(getXCValue(xc,"jgetitem"));
+//System.out.println(getXCValue(xc,"jgetmap"));
 
-			xd = xp.createXDDocument("Test020b");
-			xc = xd.parseXComponent(_tempDir+"Test020b.xml", Class.forName(
-				"test.common.json.component.Test020b"), null);
-			assertEq("abc", getJValue(xc,"a"));
-			xc = xd.parseXComponent(_tempDir+"Test020_1b.xml", Class.forName(
-				"test.common.json.component.Test020b"), null);
-			assertEq("123", getJValue(xc,"a"));
-			setJValue(xc,"a", "");
-			assertEq("", getJValue(xc,"a"));
-			xc = xd.parseXComponent(_tempDir+"Test020_2b.xml", Class.forName(
-				"test.common.json.component.Test020b"), null);
-			assertEq("false", getJValue(xc,"a"));
-			xc = xd.parseXComponent(_tempDir+"Test020_3b.xml", Class.forName(
-				"test.common.json.component.Test020b"), null);
-			assertNull(getJValue(xc,"a"));
+			test = "Test020";
+			p = "a";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq("abc", getXCValue(xc,"jgeta$string"));
+			assertNull(getXCValue(xc,"jgeta$number"));
+			assertNull(getXCValue(xc,"jgeta$boolean"));
+			assertNull(getXCValue(xc,"jgeta$null"));
+			xc = getXComponent(xp, test, p, 1);
+			assertEq(123, getXCValue(xc,"jgeta$number"));
+			setXCValue(xc,"jseta$string", "");
+			assertEq("", getXCValue(xc,"jgeta$string"));
+			assertNull(getXCValue(xc,"jgeta$number"));
+			assertNull(getXCValue(xc,"jgeta$boolean"));
+			assertNull(getXCValue(xc,"jgeta$null"));
+			xc = getXComponent(xp, test, p, 2);
+			assertEq(false, getXCValue(xc,"jgeta$boolean"));
+			xc = getXComponent(xp, test, p, 3);
+			assertEq("null", getXCValue(xc,"jgeta$null").toString());
+
+			p = "b";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq("abc", getXCValue(xc,"jgeta"));
+			xc = getXComponent(xp, test, p, 1);
+//			assertEq(123, getXCValue(xc,"jgeta"));
+			assertEq("123", getXCValue(xc,"jgeta"));
+			setXCValue(xc,"jseta", "");
+			assertEq("", getXCValue(xc,"jgeta"));
+			setXCValue(xc,"jseta", 456);
+			assertEq(456, getXCValue(xc,"jgeta"));
+			xc = getXComponent(xp, test, p, 2);
+//			assertEq(false, getXCValue(xc,"jgeta"));
+			assertEq("false", getXCValue(xc,"jgeta"));
+			xc = getXComponent(xp, test, p, 3);
+			assertNull(getXCValue(xc,"jgeta"));
+			
+			test = "Test021";
+			p = "a";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq("abc", getXCValue(xc,"jgetstring"));
+			assertNull(getXCValue(xc,"jgetnumber"));
+			assertNull(getXCValue(xc,"jgetboolean"));
+			assertNull(getXCValue(xc,"jgetnull"));
+			xc = getXComponent(xp, test, p, 1);
+			assertEq(123, getXCValue(xc,"jgetnumber"));
+			setXCValue(xc,"jsetstring", "");
+			assertEq("", getXCValue(xc,"jgetstring"));
+			assertNull(getXCValue(xc,"jgetnumber"));
+			assertNull(getXCValue(xc,"jgetboolean"));
+			assertNull(getXCValue(xc,"jgetnull"));
+			xc = getXComponent(xp, test, p, 2);
+			assertEq(false, getXCValue(xc,"jgetboolean"));
+			xc = getXComponent(xp, test, p, 3);
+			assertEq("null", getXCValue(xc,"jgetnull").toString());
+			xc = getXComponent(xp, test, p, 4);
+			assertNull(getXCValue(xc,"jgetnull"));
+			
+			p = "b";
+			xc = getXComponent(xp, test, p, 0);
+			assertEq("abc", getXCValue(xc,"jgetitem"));
+			xc = getXComponent(xp, test, p, 1);
+//			assertEq(123, getXCValue(xc,"jgetitem"));
+			assertEq("123", getXCValue(xc,"jgetitem"));
+			setXCValue(xc,"jsetitem", "");
+			assertEq("", getXCValue(xc,"jgetitem"));
+			setXCValue(xc,"jsetitem", 456);
+			assertEq(456, getXCValue(xc,"jgetitem"));
+			xc = getXComponent(xp, test, p, 2);
+//			assertEq(false, getXCValue(xc,"jgetitem"));
+			assertEq("false", getXCValue(xc,"jgetitem"));
+			xc = getXComponent(xp, test, p, 3);
+			assertEq("null", getXCValue(xc,"jgetitem"));
+			xc = getXComponent(xp, test, p, 4);
+			assertNull(getXCValue(xc,"jgetitem"));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.

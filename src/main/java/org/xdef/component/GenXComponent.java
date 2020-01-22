@@ -243,6 +243,12 @@ public final class GenXComponent {
 			return "java.math.BigDecimal";
 		} else if ("jnumber".equals(parserName)) {
 			return "Number";
+		} else if ("jboolean".equals(parserName)) {
+			return "Boolean";
+//		} else if ("jnull".equals(parserName)) {
+//			return "org.xdef.json.JNull";
+		} else if ("jvalue".equals(parserName)) {
+			return "Object";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -401,6 +407,16 @@ public final class GenXComponent {
 		genGetterMethodFromChildElement(xdata, typ, name, max, descr, sb, sbi);
 	}
 
+	/** Generate java code of getter method for child element classes.
+	 * @param typeName name of class representing the child element.
+	 * @param name name of variable.
+	 * @param max maximal number of items .
+	 * set name of this model, otherwise this argument is null.
+	 * @param descr Description text.
+	 * @param sb String builder where the code is generated.
+	 * @param sbi String builder where the code is generated for interface.
+	 * @return generated code.
+	 */
 	private void genGetterMethodFromChildElement(XNode xn,
 		final String typeName,
 		final String name,
@@ -510,7 +526,7 @@ public final class GenXComponent {
 			}
 		}
 	}
-
+	
 	/** Generate Java code of setter method for base types.
 	 * @param xdata XMData object.
 	 * @param name name of variable.
@@ -763,9 +779,8 @@ public final class GenXComponent {
 		final String name,
 		final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
-		final String fn =
-			uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
-//		final String qName = xdata.getName();
+		final String fn = uri != null
+			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -865,6 +880,14 @@ public final class GenXComponent {
 			case XDValueID.XD_NULL: //jnull
 				x = "\"null\"";
 				break;
+			case XDValueID.XD_CONTAINER: //jvalue
+				if ("jvalue".equals(xdata.getParserName())) {
+					x = (max > 1 ? "listOf" : "get") + "&{name}()"+y;
+					if (max <= 1) {
+						x += ".toString()";
+					}
+					break;
+				}
 			default:
 				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y;
 				if (checkEnumType(xdata) != null) {
@@ -1000,9 +1023,24 @@ public final class GenXComponent {
 		if (ndx < 0) {
 			return null;
 		}
-		if (s == null 
+		if (s == null
 			&& (s = xe.isReference() ? xe.getReferencePos() : null) != null) {
 			s = _binds.get(xe.getXDPosition() + xdPos.substring(ndx));
+		}
+		return s;
+	}
+
+	/** Create new name if the name from argument already exists in the set.
+	 * @param name the name to be checked.
+	 * @param set set with names.
+	 * @return new name if the the name from argument exists in the set or
+	 * return the original name;
+	 */
+	private static String getUniqueName(final String name,
+		final Set<String> set) {
+		String s = name;
+		for (int i = 1; set.contains(s); i++) {
+			s = name + "_" + i;
 		}
 		return s;
 	}
@@ -1036,21 +1074,6 @@ public final class GenXComponent {
 		return iname;
 	}
 
-	/** Create new name if the name from argument already exists in the set.
-	 * @param name the name to be checked.
-	 * @param set set with names.
-	 * @return new name if the the name from argument exists in the set or
-	 * return the original name;
-	 */
-	private static String getUniqueName(final String name,
-		final Set<String> set) {
-		String s = name;
-		for (int i = 1; set.contains(s); i++) {
-			s = name + "_" + i;
-		}
-		return s;
-	}
-
 	/** Create getter and setter of the model which have only one child
 	 * node which is a text node.
 	 * @param xe Element model from which setter/getter is generated.
@@ -1068,8 +1091,8 @@ public final class GenXComponent {
 		final StringBuilder sbi) {
 		String name = javaName(xe.getName());
 		String typ = getJavaObjectTypeName(xdata);
-		String jGet = "String".equals(typ) ?
-			"org.xdef.json.JsonUtil.jstringFromXML(get&{iname}())"
+		String jGet = "String".equals(typ)
+			? "org.xdef.json.JsonUtil.jstringFromXML(get&{iname}())"
 			: "get&{iname}()";
 		// getter
 		String template =
