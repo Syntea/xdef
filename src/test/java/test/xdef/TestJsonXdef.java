@@ -413,6 +413,8 @@ public class TestJsonXdef extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
+		XDDocument xd;
+		XComponent xc;
 
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
@@ -438,6 +440,46 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex); // should not happen!!!
 		}
+
+		try {
+			xd = xp.createXDDocument("Test020a");
+			xc = xd.parseXComponent(_tempDir+"Test020a.xml", Class.forName(
+				"test.common.json.component.Test020a"), null);
+			assertEq("abc", getJValue(xc,"a$string"));
+			assertNull(getJValue(xc,"a$number"));
+			assertNull(getJValue(xc,"a$boolean"));
+			assertNull(getJValue(xc,"a$null"));
+			xc = xd.parseXComponent(_tempDir+"Test020_1a.xml", Class.forName(
+				"test.common.json.component.Test020a"), null);
+			assertEq(123, getJValue(xc,"a$number"));
+			setJValue(xc,"a$string", "");
+			assertEq("", getJValue(xc,"a$string"));
+			assertNull(getJValue(xc,"a$number"));
+			assertNull(getJValue(xc,"a$boolean"));
+			assertNull(getJValue(xc,"a$null"));
+			xc = xd.parseXComponent(_tempDir+"Test020_2a.xml", Class.forName(
+				"test.common.json.component.Test020a"), null);
+			assertEq(false, getJValue(xc,"a$boolean"));
+			xc = xd.parseXComponent(_tempDir+"Test020_3a.xml", Class.forName(
+				"test.common.json.component.Test020a"), null);
+			assertEq("null", getJValue(xc,"a$null").toString());
+
+			xd = xp.createXDDocument("Test020b");
+			xc = xd.parseXComponent(_tempDir+"Test020b.xml", Class.forName(
+				"test.common.json.component.Test020b"), null);
+			assertEq("abc", getJValue(xc,"a"));
+			xc = xd.parseXComponent(_tempDir+"Test020_1b.xml", Class.forName(
+				"test.common.json.component.Test020b"), null);
+			assertEq("123", getJValue(xc,"a"));
+			setJValue(xc,"a", "");
+			assertEq("", getJValue(xc,"a"));
+			xc = xd.parseXComponent(_tempDir+"Test020_2b.xml", Class.forName(
+				"test.common.json.component.Test020b"), null);
+			assertEq("false", getJValue(xc,"a"));
+			xc = xd.parseXComponent(_tempDir+"Test020_3b.xml", Class.forName(
+				"test.common.json.component.Test020b"), null);
+			assertNull(getJValue(xc,"a"));
+		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
