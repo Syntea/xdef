@@ -377,14 +377,13 @@ public class TestJsonXdef extends XDTester {
 	 * @param val value to be set.
 	 */
 	private static void setXCValue(XComponent xc, String name, Object val) {
-		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod(name, val.getClass());
+			Method m = xc.getClass().getDeclaredMethod(name, val.getClass());
 			m.setAccessible(true);
 			m.invoke(xc, val);
 		} catch (Exception ex) {
 			try {
-				Method m = cls.getDeclaredMethod(name, Object.class);
+				Method m = xc.getClass().getDeclaredMethod(name, Object.class);
 				m.setAccessible(true);
 				m.invoke(xc, val);
 			} catch (Exception exx) {
@@ -406,7 +405,7 @@ public class TestJsonXdef extends XDTester {
 		final int x) {
 		try {
 			File f = new File(_tempDir + test +
-				(x > 0 ? "_" + x : "") + p+".xml");			
+				(x > 0 ? "_" + x : "") + p+".xml");
 			XDDocument xd = xp.createXDDocument(test + p);
 			return xd.parseXComponent(f, Class.forName(
 				"test.common.json.component." + test+p), null);
@@ -433,8 +432,7 @@ public class TestJsonXdef extends XDTester {
 				getOutStream().println(
 					ex.getMessage() + "; TestJsonXdef skipped");
 			} else {
-				fail("Can't generate data");
-				fail(ex);
+				fail(new RuntimeException("Can't generate data", ex));
 			}
 			return;
 		}
@@ -452,7 +450,7 @@ public class TestJsonXdef extends XDTester {
 		try {
 			String test, p;
 			XComponent xc;
-			
+
 			test = "Test008";
 			p = "a";
 			xc = getXComponent(xp, test, p, 0);
@@ -505,7 +503,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("false", getXCValue(xc,"jgeta"));
 			xc = getXComponent(xp, test, p, 3);
 			assertNull(getXCValue(xc,"jgeta"));
-			
+
 			test = "Test021";
 			p = "a";
 			xc = getXComponent(xp, test, p, 0);
@@ -526,7 +524,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("null", getXCValue(xc,"jgetnull").toString());
 			xc = getXComponent(xp, test, p, 4);
 			assertNull(getXCValue(xc,"jgetnull"));
-			
+
 			p = "b";
 			xc = getXComponent(xp, test, p, 0);
 			assertEq("abc", getXCValue(xc,"jgetitem"));
