@@ -355,7 +355,7 @@ public class TestJsonXdef extends XDTester {
 		return resulta + resultb;
 	}
 
-	/** Run a JSON getter on the X-component.
+	/** Invoke a JSON getter on the X-component.
 	 * @param xc X-component.
 	 * @param name name of setter.
 	 * @return value of getter.
@@ -371,25 +371,24 @@ public class TestJsonXdef extends XDTester {
 		}
 	}
 
-	/** Run a JSON setter on the X-component.
+	/** Invoke a JSON setter on the X-component.
 	 * @param xc X-component.
 	 * @param name name of setter.
 	 * @param val value to be set.
 	 */
 	private static void setXCValue(XComponent xc, String name, Object val) {
-		try {
-			Method m = xc.getClass().getDeclaredMethod(name, val.getClass());
-			m.setAccessible(true);
-			m.invoke(xc, val);
-		} catch (Exception ex) {
-			try {
-				Method m = xc.getClass().getDeclaredMethod(name, Object.class);
-				m.setAccessible(true);
-				m.invoke(xc, val);
-			} catch (Exception exx) {
-				throw new RuntimeException(ex);
+		for (Method m: xc.getClass().getDeclaredMethods()) {
+			Class<?>[] params = m.getParameterTypes();
+			if (name.equals(m.getName()) && params!=null && params.length==1) {
+				try {
+					m.setAccessible(true);
+					m.invoke(xc, val);
+					return;
+				} catch (Exception ex) {}
 			}
 		}
+		throw new RuntimeException("Setter " + xc.getClass().getName()
+			+ '.' + name + " not found");
 	}
 
 	/** Get XComponent with parsed data.
@@ -404,11 +403,9 @@ public class TestJsonXdef extends XDTester {
 		final String p,
 		final int x) {
 		try {
-			File f = new File(_tempDir + test +
-				(x > 0 ? "_" + x : "") + p+".xml");
-			XDDocument xd = xp.createXDDocument(test + p);
-			return xd.parseXComponent(f, Class.forName(
-				"test.common.json.component." + test+p), null);
+			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") +p+".xml");
+			return xp.createXDDocument(test+p).parseXComponent(f,
+				Class.forName("test.common.json.component." + test + p), null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -457,18 +454,17 @@ public class TestJsonXdef extends XDTester {
 			assertEq(1, getXCValue(xc,"jgetnumber"));
 			setXCValue(xc,"jsetnumber",3);
 			assertEq(3, getXCValue(xc,"jgetnumber"));
-//			setXCValue(xc,"jsetnumber",null);
-//			assertNull(getXCValue(xc,"jgetnumber"));
-//System.out.println(getXCValue(xc,"jgetmap"));
+			setXCValue(xc,"jsetnumber", null);
+			assertNull(getXCValue(xc,"jgetnumber"));
+
 			p = "b";
 			xc = getXComponent(xp, test, p, 0);
 			assertEq(1, getXCValue(xc,"jgetitem"));
 			setXCValue(xc,"jsetitem",3);
 			assertEq(3, getXCValue(xc,"jgetitem"));
-//			setXCValue(xc,"jsetitem",null);
-//			assertNull(getXCValue(xc,"jgetitem"));
-//System.out.println(getXCValue(xc,"jgetmap"));
-
+			setXCValue(xc,"jsetitem", null);
+			assertNull(getXCValue(xc,"jgetitem"));
+			
 			test = "Test020";
 			p = "a";
 			xc = getXComponent(xp, test, p, 0);
@@ -476,6 +472,9 @@ public class TestJsonXdef extends XDTester {
 			assertNull(getXCValue(xc,"jgeta$number"));
 			assertNull(getXCValue(xc,"jgeta$boolean"));
 			assertNull(getXCValue(xc,"jgeta$null"));
+			setXCValue(xc,"jseta$null", null);
+			assertTrue(getXCValue(xc,"jgeta$boolean") == null);
+			
 			xc = getXComponent(xp, test, p, 1);
 			assertEq(123, getXCValue(xc,"jgeta$number"));
 			setXCValue(xc,"jseta$string", "");
@@ -486,21 +485,21 @@ public class TestJsonXdef extends XDTester {
 			xc = getXComponent(xp, test, p, 2);
 			assertEq(false, getXCValue(xc,"jgeta$boolean"));
 			xc = getXComponent(xp, test, p, 3);
-			assertEq("null", getXCValue(xc,"jgeta$null").toString());
+			assertTrue(getXCValue(xc,"jgeta$null") != null);
 
 			p = "b";
 			xc = getXComponent(xp, test, p, 0);
 			assertEq("abc", getXCValue(xc,"jgeta"));
+			setXCValue(xc,"jseta", null);
+			assertTrue(getXCValue(xc,"jgeta") == null);
 			xc = getXComponent(xp, test, p, 1);
-//			assertEq(123, getXCValue(xc,"jgeta"));
-			assertEq("123", getXCValue(xc,"jgeta"));
+			assertEq(123, getXCValue(xc,"jgeta"));
 			setXCValue(xc,"jseta", "");
 			assertEq("", getXCValue(xc,"jgeta"));
 			setXCValue(xc,"jseta", 456);
 			assertEq(456, getXCValue(xc,"jgeta"));
 			xc = getXComponent(xp, test, p, 2);
-//			assertEq(false, getXCValue(xc,"jgeta"));
-			assertEq("false", getXCValue(xc,"jgeta"));
+			assertEq(false, getXCValue(xc,"jgeta"));
 			xc = getXComponent(xp, test, p, 3);
 			assertNull(getXCValue(xc,"jgeta"));
 
@@ -518,10 +517,12 @@ public class TestJsonXdef extends XDTester {
 			assertNull(getXCValue(xc,"jgetnumber"));
 			assertNull(getXCValue(xc,"jgetboolean"));
 			assertNull(getXCValue(xc,"jgetnull"));
+			setXCValue(xc,"jsetstring", " a    b \n ");
+			assertEq(" a    b \n ", getXCValue(xc,"jgetstring"));
 			xc = getXComponent(xp, test, p, 2);
 			assertEq(false, getXCValue(xc,"jgetboolean"));
 			xc = getXComponent(xp, test, p, 3);
-			assertEq("null", getXCValue(xc,"jgetnull").toString());
+			assertTrue(getXCValue(xc,"jgetnull") != null);
 			xc = getXComponent(xp, test, p, 4);
 			assertNull(getXCValue(xc,"jgetnull"));
 
@@ -529,17 +530,15 @@ public class TestJsonXdef extends XDTester {
 			xc = getXComponent(xp, test, p, 0);
 			assertEq("abc", getXCValue(xc,"jgetitem"));
 			xc = getXComponent(xp, test, p, 1);
-//			assertEq(123, getXCValue(xc,"jgetitem"));
-			assertEq("123", getXCValue(xc,"jgetitem"));
+			assertEq(123, getXCValue(xc,"jgetitem"));
 			setXCValue(xc,"jsetitem", "");
 			assertEq("", getXCValue(xc,"jgetitem"));
 			setXCValue(xc,"jsetitem", 456);
 			assertEq(456, getXCValue(xc,"jgetitem"));
 			xc = getXComponent(xp, test, p, 2);
-//			assertEq(false, getXCValue(xc,"jgetitem"));
-			assertEq("false", getXCValue(xc,"jgetitem"));
+			assertEq(false, getXCValue(xc,"jgetitem"));
 			xc = getXComponent(xp, test, p, 3);
-			assertEq("null", getXCValue(xc,"jgetitem"));
+			assertTrue(getXCValue(xc,"jgetitem") != null);
 			xc = getXComponent(xp, test, p, 4);
 			assertNull(getXCValue(xc,"jgetitem"));
 		} catch (Exception ex) {fail(ex);}

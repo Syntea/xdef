@@ -6,7 +6,7 @@ public class Js3 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
   public Js3.jw$string getjw$string() {return _jw$string;}
   public String jget$_(){
-    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());
+    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromSource(_jw$string.get$value());
   }
   public void setjw$string(Js3.jw$string x){_jw$string=x;}
   public void jset$_(String x){

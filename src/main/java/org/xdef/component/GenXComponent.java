@@ -298,6 +298,12 @@ public final class GenXComponent {
 			return result + "getParsedValue().integerValue()";
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
+		} else if ("jvalue".equals(parserName) || "jnull".equals(parserName)) {
+			return result + "getParsedValue().getObject()";
+		} else if ("jnumber".equals(parserName)) {
+			return "(Number)" + result + "getParsedValue().getObject()";
+		} else if ("jstring".equals(parserName)) {
+			return "(String)" + result + "getParsedValue().getObject()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -882,10 +888,8 @@ public final class GenXComponent {
 				break;
 			case XDValueID.XD_CONTAINER: //jvalue
 				if ("jvalue".equals(xdata.getParserName())) {
-					x = (max > 1 ? "listOf" : "get") + "&{name}()"+y;
-					if (max <= 1) {
-						x += ".toString()";
-					}
+					x = (max > 1 ? "listOf" : "get") + "&{name}()" + y
+						+ (max <= 1 ? ".toString()" : "");
 					break;
 				}
 			default:
@@ -1092,7 +1096,7 @@ public final class GenXComponent {
 		String name = javaName(xe.getName());
 		String typ = getJavaObjectTypeName(xdata);
 		String jGet = "String".equals(typ)
-			? "org.xdef.json.JsonUtil.jstringFromXML(get&{iname}())"
+			? "org.xdef.json.JsonUtil.jstringFromSource(get&{iname}())"
 			: "get&{iname}()";
 		// getter
 		String template =
@@ -1288,7 +1292,7 @@ public final class GenXComponent {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = "String".equals(typ) ?
-				"org.xdef.json.JsonUtil.jstringFromXML(y.get$value())"
+				"org.xdef.json.JsonUtil.jstringFromSource(y.get$value())"
 				: "y.get$value()";
 			// getter
 			template =
@@ -1373,7 +1377,7 @@ public final class GenXComponent {
 "\tpublic &{typ} jget&{name}(){"+LN+
 "\t\treturn _&{iname}==null?null:" +
 	("String".equals(typ) ?
-	"org.xdef.json.JsonUtil.jstringFromXML(_&{iname}.get$value())"
+	"org.xdef.json.JsonUtil.jstringFromSource(_&{iname}.get$value())"
 	: isNull ? typ + ".JNULL" : "_&{iname}.get$value()") + ";" + LN
 +"\t}"+LN;
 			getters.append(modify(template,

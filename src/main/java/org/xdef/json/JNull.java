@@ -4,8 +4,10 @@ package org.xdef.json;
  * @author Vaclav Trojan
  */
 public class JNull {
-	public static JNull JNULL = new JNull();
+	public static final JNull JNULL = new JNull();
 	private JNull() {}
 	@Override
-	public String toString() {return "null";}
+	public final String toString() {return "null";}
+	@Override
+	public final boolean equals(Object o){return o==null || o instanceof JNull;}
 }

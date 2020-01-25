@@ -4,15 +4,18 @@
 package mytest.component;
 public class TX implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
-  public TX.jw$number getjw$number() {return _jw$number;}
   public Integer jgetnumber(){
     return _jw$number==null?null:_jw$number.get$value();
   }
-  public void setjw$number(TX.jw$number x){_jw$number=x;}
+  public TX.jw$number getjw$number() {return _jw$number;}
   public void jsetnumber(Integer x){
-    if(_jw$number==null)setjw$number(new TX.jw$number());
-    _jw$number.set$value(x);
+    if(x==null) _jw$number=null;
+    else {
+      if(_jw$number==null) setjw$number(new TX.jw$number());
+      _jw$number.set$value(x);
+    }
   }
+  public void setjw$number(TX.jw$number x){_jw$number=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

@@ -4,17 +4,16 @@
 package mytest.component;
 public class TJ2 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
-  public java.util.List<TJ2.jw$null> listOfjw$null() {return _jw$null;}
   public java.util.List<org.xdef.json.JNull> jlistOfnull(){
     java.util.List<org.xdef.json.JNull> x=new java.util.ArrayList<org.xdef.json.JNull>();
     for(TJ2.jw$null y: _jw$null) x.add(org.xdef.json.JNull.JNULL);
     return x;
   }
-  public TJ2.jw$number getjw$number() {return _jw$number;}
+  public java.util.List<TJ2.jw$null> listOfjw$null() {return _jw$null;}
   public Integer jgetnumber(){
     return _jw$number==null?null:_jw$number.get$value();
   }
-  public void addjw$null(TJ2.jw$null x) {if (x!=null) _jw$null.add(x);}
+  public TJ2.jw$number getjw$number() {return _jw$number;}
   public void addnull(org.xdef.json.JNull x){
     if (x!=null) {
       addjw$null(new TJ2.jw$null());
@@ -26,11 +25,15 @@ public class TJ2 implements org.xdef.component.XComponent{
       addjw$null(new TJ2.jw$null());
     }
   }
-  public void setjw$number(TJ2.jw$number x){_jw$number=x;}
+  public void addjw$null(TJ2.jw$null x) {if (x!=null) _jw$null.add(x);}
   public void jsetnumber(Integer x){
-    if(_jw$number==null)setjw$number(new TJ2.jw$number());
-    _jw$number.set$value(x);
+    if(x==null) _jw$number=null;
+    else {
+      if(_jw$number==null) setjw$number(new TJ2.jw$number());
+      _jw$number.set$value(x);
+    }
   }
+  public void setjw$number(TJ2.jw$number x){_jw$number=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

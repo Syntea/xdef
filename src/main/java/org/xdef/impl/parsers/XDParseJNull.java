@@ -2,6 +2,8 @@ package org.xdef.impl.parsers;
 
 import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
+import org.xdef.impl.code.DefJNull;
+import org.xdef.json.JNull;
 import org.xdef.proc.XXNode;
 
 /** Parser of X-Script "jnull" type.
@@ -31,6 +33,7 @@ public class XDParseJNull  extends XSAbstractParser {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);
+			p.setParsedValue(new DefJNull(JNull.JNULL));
 			checkPatterns(p);
 		}
 	}

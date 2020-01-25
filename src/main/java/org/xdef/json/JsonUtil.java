@@ -464,21 +464,17 @@ public class JsonUtil extends StringParser {
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to string
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Add the string created from JSON object to StringBuilder.
+	
+	/** Add the string created from JSON jvalue object to StringBuilder.
 	 * @param obj JSON object to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
+	 * @return sb created string.
 	 */
-	@SuppressWarnings("unchecked")
-	private static void objToJsonString(final Object obj,
-		final String indent,
-		final StringBuilder sb) {
-		if (obj == null || obj instanceof JNull) {
-			sb.append("null");
+	public static String jvalueToString(final Object obj){
+		if (obj == null) {
+			return "null";
 		} else if (obj instanceof String) {
 			String s = (String) obj;
-			sb.append('"');
+			StringBuilder sb = new StringBuilder("\"");
 			for (int i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				if (Character.isDefined(c)) {
@@ -515,9 +511,23 @@ public class JsonUtil extends StringParser {
 					}
 				}
 			}
-			sb.append('"');
-		} else if (obj instanceof Boolean || obj instanceof Number) {
-			sb.append(obj.toString());
+			return sb.append('"').toString();
+		} 
+		return obj.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	/** Add the string created from JSON object to StringBuilder.
+	 * @param obj JSON object to be created to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 */
+	private static void objToJsonString(final Object obj,
+		final String indent,
+		final StringBuilder sb) {
+		if (obj == null || obj instanceof JNull || obj instanceof String
+			|| obj instanceof Boolean || obj instanceof Number) {
+			sb.append(jvalueToString(obj));
 		} else if (obj instanceof List) {
 			List<Object> x = (List) obj;
 			arrayToJsonString(x, indent, sb);
@@ -534,7 +544,7 @@ public class JsonUtil extends StringParser {
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 */
-	private static void arrayToJsonString (final List<Object> array,
+	private static void arrayToJsonString(final List<Object> array,
 		final String indent,
 		final StringBuilder sb) {
 		sb.append('[');
@@ -880,68 +890,124 @@ public class JsonUtil extends StringParser {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create JSON string from XML data.
-	 * @param source XML form of string.
-	 * @return XML form of string converted to JSON.
+	/** Get JSON value from source string.
+	 * @param source string with JSON simple value
+	 * @return object with JSOM value
 	 */
-	public static final String jstringFromXML(final String source) {
-		if (source == null || source.isEmpty()) {
-			return source;
+	public static Object getJValue(final String source) {
+		if (source == null) {
+			return null;
 		}
 		String src = source.trim();
-		if (src != null && src.length() > 1
-			&& src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
-			&& src.charAt(src.length() - 2) != '\\') {
-			String s = src.substring(1,  src.length() - 1); // remove '"'
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0;  i < s.length(); i++) {
-				char ch = s.charAt(i);
-				if (ch == '\\') {
-					if (++i >= s.length()) {
-						return s; // missing escape char (error)
-					}
-					switch (ch = s.charAt(i)) {
-						case '"':
-							ch = '"';
-							break;
-						case '\\':
-							ch = '\\';
-							break;
-						case '/':
-							ch = '/';
-							break;
-						case 'b':
-							ch = '\b';
-							break;
-						case 'f':
-							ch = '\f';
-							break;
-						case 'n':
-							ch = '\n';
-							break;
-						case 'r':
-							ch = '\r';
-							break;
-						case 't':
-							ch = '\t';
-							break;
-						case 'u':
-							try {
-								ch = (char) Short.parseShort(
-									s.substring(i+1, i+5), 16);
-								i += 4;
-								break;
-							} catch (Exception ex) {
-								return s; // incorrect UTF-8 char
-							}
-						default: return s; // illegal escape char (error)
-					}
-				}
-				sb.append(ch);
-			}
-			return sb.toString();
+		if (src.isEmpty()) {
+			return "";
+		} else if ("null".equals(src = source.trim())) {
+			return JNull.JNULL;
+		} else if ("true".equals(src)) {
+			return Boolean.TRUE;
+		} else if ("false".equals(src)) {
+			return Boolean.FALSE;
 		}
-		return src;
+		switch (src.charAt(0)) {
+			case '-':
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				try {
+					if (src.indexOf('.') > 0
+						|| src.indexOf('e') > 0 || src.indexOf('E') > 0) {
+						return new BigDecimal(src);
+					} else {
+						try {
+							return Long.parseLong(src);
+						} catch (Exception ex) {
+							return new BigInteger(src);
+						}
+					}
+				} catch (Exception ex) {
+					return src; // error; so return raw value ???
+				}
+		}
+		return jstringFromSource(src); // JSON String
+	}
+
+	/** Create JSON string from source string.
+	 * @param src XML form of string.
+	 * @return XML form of string converted to JSON.
+	 */
+	public static final String jstringFromSource(final String src) {
+		if (src == null || src.isEmpty()) {
+			return src;
+		}
+		// remove starting and ending '"'
+		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
+			&& src.charAt(src.length() - 1) != '\\')
+			? src.substring(1, src.length() - 1) : src;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0;  i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '\\') {
+				if (++i >= s.length()) {
+					return s; // missing escape char (error)
+				}
+				switch (ch = s.charAt(i)) {
+					case '"':
+						ch = '"';
+						break;
+					case '\\':
+						ch = '\\';
+						break;
+					case '/':
+						ch = '/';
+						break;
+					case 'b':
+						ch = '\b';
+						break;
+					case 'f':
+						ch = '\f';
+						break;
+					case 'n':
+						ch = '\n';
+						break;
+					case 'r':
+						ch = '\r';
+						break;
+					case 't':
+						ch = '\t';
+						break;
+					case 'u':
+						try {
+							ch = (char) Short.parseShort(
+								s.substring(i+1, i+5), 16);
+							i += 4;
+							break;
+						} catch (Exception ex) {
+							return src; // incorrect UTF-8 char (error)
+						}
+					default: return src; // illegal escape char (error)
+				}
+			}
+			sb.append(ch);
+		}
+		return sb.toString();
+	}
+
+	/** Create JSON string to XML from JSON source data.
+	 * @param obj JSON object.
+	 * @param isAttr if true then it is used in attribute, otherwise it will be
+	 * used in a text node.
+	 * @return XML string converted to JSON string.
+	 */
+	public static final String jvalueToXML(final Object obj,
+		final boolean isAttr) {
+		return jstringToXML(jvalueToString(obj), isAttr);
 	}
 
 	/** Create XML string created from JSON string.
@@ -963,8 +1029,7 @@ public class JsonUtil extends StringParser {
 			char ch = source.charAt(0);
 			if (ch == '-' || ch >= '0' && ch <= '9') {
 				StringParser p = new StringParser(source);
-				if ((p.isSignedFloat() || p.isSignedInteger())
-					&& p.eos()) {
+				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
 					return '"' + source + '"'; // value is number
 				}
 			}
