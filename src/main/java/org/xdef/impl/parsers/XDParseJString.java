@@ -64,16 +64,11 @@ public class XDParseJString extends XDParseAn {
 				}
 			}
 		} else {//not quoted string
-			if (p.isSpaces()) {
-				pos = p.getIndex();
-			}
 			if (p.eos()) {
 				return false;
 			}
-			char ch;
-			while (!p.eos() && (ch = p.getCurrentChar()) != '\t'
-				&& ch != '\r' && ch != '\n') {
-				ch = p.peekChar();
+			while (!p.eos()) {
+				p.nextChar();
 			}
 		}
 		p.setParsedValue(p.getBufferPart(pos, p.getIndex()));

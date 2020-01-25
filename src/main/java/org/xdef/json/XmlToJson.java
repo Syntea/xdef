@@ -47,66 +47,20 @@ class XmlToJson extends JsonToXml {
 		return null;
 	}
 
-	/** Get JSON value from string.
-	 * @param source string with JSON simple value
-	 * @return object with JSOM value
-	 */
-	private static Object getJValue(final String source) {
-		String s;
-		if (source == null || "null".equals(s = source.trim())) {
-			return JNull.JNULL;
-		}
-		if (s.isEmpty()) {
-			return "";
-		} else if ("true".equals(s)) {
-			return Boolean.TRUE;
-		} else if ("false".equals(s)) {
-			return Boolean.FALSE;
-		}
-		switch (s.charAt(0)) {
-			case '-':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				try {
-					if (s.indexOf('.') > 0
-						|| s.indexOf('e') > 0 || s.indexOf('E') > 0) {
-						return new BigDecimal(s);
-					} else {
-						try {
-							return Long.parseLong(s);
-						} catch (Exception ex) {
-							return new BigInteger(s);
-						}
-					}
-				} catch (Exception ex) {
-					return s; // error; so return raw value ???
-				}
-			default: return jstringFromXML(s); // JSON String
-		}
-	}
-
 	/** Add JSON value to the JSON array.
 	 * @param array JSON array.
 	 * @param s trimmed string with JSON value.
 	 */
 	private static void valueToArray(final List<Object> array,
 		final String s){
-		if ("null".equals(s)) {
+		if (s.isEmpty() || s.charAt(0) == '"') {
+			array.add(getJValue(s));
+		} else if ("null".equals(s)) {
 			array.add(JNull.JNULL);
 		} else if ("false".equals(s)) {
 			array.add(Boolean.FALSE);
 		} else if ("true".equals(s)) {
 			array.add(Boolean.TRUE);
-		} else if (s.startsWith("\"")) {
-			array.add(getJValue(s));
 		} else {
 			StringParser p = new StringParser(s);
 			if (p.isSignedFloat() && p.eos()) {

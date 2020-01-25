@@ -401,7 +401,7 @@ final class ChkParser extends DomBaseHandler {
 					int ndx = qName.indexOf(':');
 					String attrName = "xmlns"
 						+ (ndx > 0 ? ':' + qName.substring(0, ndx) : "");
-					s += " " + attrName + "=\"" + uri + '\"';
+					s += " " + attrName + "=\"" + uri + '"';
 				}
 				s += "/>";
 				InputStream in = new ByteArrayInputStream(

@@ -4,23 +4,26 @@
 package mytest.component;
 public class TJ3 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
-  public TJ3.jw$null getjw$null() {return _jw$null;}
-  public org.xdef.json.JNull jgeta(){
+  public org.xdef.json.JNull jgeta$null(){
     return _jw$null==null?null:org.xdef.json.JNull.JNULL;
   }
-  public TJ3.jw$number getjw$number() {return _jw$number;}
-  public Integer jgetb(){
+  public TJ3.jw$null getjw$null() {return _jw$null;}
+  public Integer jgetb$number(){
     return _jw$number==null?null:_jw$number.get$value();
   }
-  public void setjw$null(TJ3.jw$null x){_jw$null=x;}
-  public void jseta(org.xdef.json.JNull x){
+  public TJ3.jw$number getjw$number() {return _jw$number;}
+  public void jseta$null(org.xdef.json.JNull x){
     if(_jw$null==null)setjw$null(x==null?null:new TJ3.jw$null());
   }
-  public void setjw$number(TJ3.jw$number x){_jw$number=x;}
-  public void jsetb(Integer x){
-    if(_jw$number==null)setjw$number(new TJ3.jw$number());
-    _jw$number.set$value(x);
+  public void setjw$null(TJ3.jw$null x){_jw$null=x;}
+  public void jsetb$number(Integer x){
+    if(x==null) _jw$number=null;
+    else {
+      if(_jw$number==null) setjw$number(new TJ3.jw$number());
+      _jw$number.set$value(x);
+    }
   }
+  public void setjw$number(TJ3.jw$number x){_jw$number=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

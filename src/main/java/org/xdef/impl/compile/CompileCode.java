@@ -294,7 +294,7 @@ public final class CompileCode extends CompileBase {
 		String s = null;
 		if (sp != null) {
 			s = "line="+ sp.getLineNumber() + "; column=" + sp.getColumnNumber()
-				+ "; source=\"" + sp.getSystemId() + "\"";
+				+ "; source=\"" + sp.getSystemId() + '"';
 		}
 		//Redefinition of item '&{0}'&{#SYS000}&{1}({; (see: }{)}
 		if (actpos == null) {

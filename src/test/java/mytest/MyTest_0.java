@@ -2,7 +2,6 @@ package mytest;
 
 import java.io.File;
 import java.io.StringWriter;
-import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -13,12 +12,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.URL;
 import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.model.XMData;
@@ -55,76 +48,11 @@ public class MyTest_0 extends XDTester {
 		}
 	}
 
-	private XDPool compileXD(final InputStream source,
-		final String path,
-		final Class<?>... obj) {
-		return checkXD(compile(source, path, obj));
-	}
-
-	private XDPool compileXD(final InputStream[] sources,
-		final String[] path,
-		final Class<?>... obj) {
-		return checkXD(compile(sources, path, obj));
-	}
-
-	private XDPool compileXD(final URL[] source, final Class<?>... obj) {
-		return checkXD(compile(source,obj));
-	}
-
-	private XDPool compileXD(final URL url, final Class<?>... obj) {
-		return checkXD(compile(url, obj));
-	}
-
-	private XDPool compileXD(final File[] files, final Class... obj) {
-		return checkXD(compile(files, obj));
-	}
-
-	private XDPool compileXD(final File file, final Class... obj) {
-		return checkXD(compile(file, obj));
-	}
-
-	private XDPool compileXD(final String xdef, final Class<?>... obj) {
-		return checkXD(compile(xdef, obj));
-	}
-
-	private XDPool compileXD(String[] xdefs, final Class<?>... obj) {
-		return checkXD(compile(xdefs, obj));
-	}
-
-	private XDPool checkXD(final XDPool xp) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(xp);
-			oos.close();
-			ObjectInputStream ois = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			XDPool xp1 = (XDPool) ois.readObject();
-			ois.close();
-			baos = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(baos);
-			oos.writeObject(xp1);
-			oos.close();
-			ois = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			xp1 = (XDPool) ois.readObject();
-			ois.close();
-			return xp1;
-		} catch(RuntimeException e) {
-			throw e;
-		} catch(Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		} catch(Error e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	/** Run test and print error information. */
 	public void test() {
 ////////////////////////////////////////////////////////////////////////////////
-		boolean T; //This flag is used to return after a test
-		T = false; // if false, all tests are invoked
+		boolean T = false; // if false, all tests are invoked
 		T = true; // if true, only first test is invoked
 
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
@@ -164,7 +92,7 @@ public class MyTest_0 extends XDTester {
 "<a xd:script=\"+; create xpath('y[2]', e)\">\n"+
 "</a>\n"+
 "</xd:def>\n";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 		} catch (Exception ex) {ex.printStackTrace();}
 if(T){return;}
 /**/
@@ -176,7 +104,7 @@ if(T){return;}
 "      \"? jvalue()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
@@ -215,7 +143,7 @@ if(T){return;}
 "  %class mytest.component.TJ1 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -260,7 +188,7 @@ if(T){return;}
 "  %class mytest.component.TJ2 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "[null, 12]";
@@ -304,7 +232,7 @@ if(T){return;}
 "  %class mytest.component.TJ3 %link #json;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			json = "{\"a\":null, \"b\":12}";
@@ -319,11 +247,11 @@ if(T){return;}
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(xx.jgeta() != null
-				&& "null".equals(xx.jgeta().toString()));
-			assertEq(12, xx.jgetb());
+			assertTrue(xx.jgeta$null()!= null
+				&& "null".equals(xx.jgeta$null().toString()));
+			assertEq(12, xx.jgetb$number());
 			assertTrue(xx.getjw$null() != null
-				&& "null".equals(xx.jgeta().toString()));
+				&& "null".equals(xx.jgeta$null().toString()));
 			assertEq(12, xx.getjw$number().get$value());
 			json = "{\"b\":12}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
@@ -337,8 +265,8 @@ if(T){return;}
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertNull(xx.jgeta());
-			assertEq(12, xx.jgetb());
+			assertNull(xx.jgeta$null());
+			assertEq(12, xx.jgetb$number());
 			assertNull(xx.getjw$null());
 			assertEq(12, xx.getjw$number().get$value());
 			xdef =
@@ -364,7 +292,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>"+
 "</xd:collection>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			GenXComponent.genXComponent(xp,
 				"src/test/java", "UTF-8", false, true).checkAndThrowErrors();
 			Class<?> TX = mytest.component.TX.class;
@@ -425,7 +353,7 @@ if(T){return;}
 "</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -458,7 +386,7 @@ if(T){return;}
 "  </xd:mixed>\n"+
 "</a>\n"+
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			parse(xp, null, "<a>t1</a>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, null, "<a>t1<b/></a>", reporter);
@@ -477,7 +405,7 @@ if(T){return;}
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A a='?float; fixed 2.0' b='? float; default 3.1' c='default \"3.1\"' />\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 //			xp.display();
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xdef =
@@ -491,7 +419,7 @@ if(T){return;}
 "  <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
 "</A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 //			xp.display();
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
@@ -511,7 +439,7 @@ if(T){return;}
 "  <e xd:script='?' a='u.x.SET()'/>\n"+
 "</A>\n"+
 "</xd:def>\n";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 //			xp.display();
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
@@ -528,7 +456,7 @@ if(T){return;}
 "    ? r.a.CHKIDS\n"+
 "  </A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 //			xp.display();
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A a='x'><B a='1'/><C a='1'/></A>";
@@ -540,16 +468,16 @@ if(T){return;}
 			s = "D:/cvs/DEV/java/xdef/src/main/resources/"
 				+ "org/xdef/impl/compile/XdefOfXdef*.xdef";
 			// filepath
-			xp = XDFactory.compileXD((Properties) null, s);//with wildcards
-			xp = XDFactory.compileXD((Properties) null,
+			xp = XDFactory.compileXD(null, s);//with wildcards
+			xp = XDFactory.compileXD(null, 
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='" + s + "'/>");
-			xp = XDFactory.compileXD((Properties) null,
+			xp = XDFactory.compileXD(null, 
 "<xd:collection xmlns:xd='" + _xdNS + "' xd:include='" + s + "'/>");
 			// URL (file:/filepath)
-			xp = XDFactory.compileXD((Properties) null, "file:/" + s);
-			xp = XDFactory.compileXD((Properties) null,
+			xp = XDFactory.compileXD(null, "file:/" + s);
+			xp = XDFactory.compileXD(null, 
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='file:/" + s + "'/>");
-			xp = XDFactory.compileXD((Properties) null,
+			xp = XDFactory.compileXD(null, 
 "<xd:collection xmlns:xd='" + _xdNS + "' xd:include='file:/" + s + "'/>");
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
@@ -561,7 +489,7 @@ if(T){return;}
 "    <a:a xmlns:a='a.b' a=''></a:a>\n" +
 "  </A>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD((Properties) null, xdef);
+			xp = compile(xdef);
 			xml =
 "<A a='a'>\n" +
 "    <a:a xmlns:a='a.a' a='b'></a:a>\n" +
@@ -647,9 +575,9 @@ if(T){return;}
 "  xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'>\n" +
 "    <A a='optional jstring()'>optional jstring();</A>\n" +
 "</xd:def>";
-//			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 /*xx*
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml =
 //"<A>a\\\"</A>";
@@ -686,7 +614,7 @@ if(T){return;}
 "</xd:mixed>\n"+
 "  </a>\n" +
 "</xd:def>";
-			xd = compileXD(xdef).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xml = "<a>t1<b x='S'/>t2<b x='S'/></a>";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -716,7 +644,7 @@ if(T){return;}
 "    </Params>\n" +
 "  </a>\n" +
 "</xd:def>";
-			xp = compileXD(xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml =
 "<a>\n" +

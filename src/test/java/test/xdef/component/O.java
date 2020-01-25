@@ -3,12 +3,12 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class O implements org.xdef.component.XComponent{
-  public java.util.List<O.B> listOfB() {return _B;}
-  public java.util.List<O.C> listOfC() {return _C;}
   public java.util.List<Integer> listOf$value() {return _$value;}
-  public void addB(O.B x) {if (x!=null) _B.add(x);}
-  public void addC(O.C x) {if (x!=null) _C.add(x);}
+  public java.util.List<O.C> listOfC() {return _C;}
+  public java.util.List<O.B> listOfB() {return _B;}
   public void add$value(Integer x) {if (x!=null) _$value.add(x);}
+  public void addC(O.C x) {if (x!=null) _C.add(x);}
+  public void addB(O.B x) {if (x!=null) _B.add(x);}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;

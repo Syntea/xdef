@@ -4,58 +4,82 @@
 package mytest.component;
 public class TJ1 implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
-  public TJ1.jw$null getjw$null() {return _jw$null;}
   public org.xdef.json.JNull jgetnull(){
     return _jw$null==null?null:org.xdef.json.JNull.JNULL;
   }
-  public TJ1.jw$number getjw$number() {return _jw$number;}
+  public TJ1.jw$null getjw$null() {return _jw$null;}
   public Integer jgetnumber(){
     return _jw$number==null?null:_jw$number.get$value();
   }
-  public TJ1.jw$null_1 getjw$null_1() {return _jw$null_1;}
-  public org.xdef.json.JNull jgetnull_1(){
-    return _jw$null_1==null?null:org.xdef.json.JNull.JNULL;
+  public TJ1.jw$number getjw$number() {return _jw$number;}
+  public String jgetstring(){
+    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromSource(_jw$string.get$value());
   }
-  public TJ1.jw$boolean getjw$boolean() {return _jw$boolean;}
-  public Boolean jgetboolean_1(){
-    return _jw$boolean==null?null:_jw$boolean.get$value();
-  }
-  public TJ1.jw$number_1 getjw$number_1() {return _jw$number_1;}
+  public TJ1.jw$string getjw$string() {return _jw$string;}
   public Number jgetnumber_1(){
     return _jw$number_1==null?null:_jw$number_1.get$value();
   }
-  public TJ1.jw$string getjw$string() {return _jw$string;}
-  public String jgetstring(){
-    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());
+  public TJ1.jw$number_1 getjw$number_1() {return _jw$number_1;}
+  public Boolean jgetboolean(){
+    return _jw$boolean==null?null:_jw$boolean.get$value();
   }
-  public void setjw$null(TJ1.jw$null x){_jw$null=x;}
+  public TJ1.jw$boolean getjw$boolean() {return _jw$boolean;}
+  public org.xdef.json.JNull jgetnull_1(){
+    return _jw$null_1==null?null:org.xdef.json.JNull.JNULL;
+  }
+  public TJ1.jw$null_1 getjw$null_1() {return _jw$null_1;}
   public void jsetnull(org.xdef.json.JNull x){
     if(_jw$null==null)setjw$null(x==null?null:new TJ1.jw$null());
   }
-  public void setjw$number(TJ1.jw$number x){_jw$number=x;}
+  public void setjw$null(TJ1.jw$null x){_jw$null=x;}
   public void jsetnumber(Integer x){
-    if(_jw$number==null)setjw$number(new TJ1.jw$number());
-    _jw$number.set$value(x);
+    if(x==null) _jw$number=null;
+    else {
+      if(_jw$number==null) setjw$number(new TJ1.jw$number());
+      _jw$number.set$value(x);
+    }
   }
-  public void setjw$null_1(TJ1.jw$null_1 x){_jw$null_1=x;}
+  public void setjw$number(TJ1.jw$number x){_jw$number=x;}
+  public void jsetstring(String x){
+    if(x==null) _jw$string=null;
+    else {
+      if(_jw$string==null) setjw$string(new TJ1.jw$string());
+      _jw$string.set$value(x);
+    }
+  }
+  public void setjw$string(TJ1.jw$string x){
+    _jw$string=null;_jw$number_1=null;_jw$boolean=null;_jw$null_1=null;
+    _jw$string=x;
+    }
+  public void jsetnumber_1(Number x){
+    if(x==null) _jw$number_1=null;
+    else {
+      if(_jw$number_1==null) setjw$number_1(new TJ1.jw$number_1());
+      _jw$number_1.set$value(x);
+    }
+  }
+  public void setjw$number_1(TJ1.jw$number_1 x){
+    _jw$string=null;_jw$number_1=null;_jw$boolean=null;_jw$null_1=null;
+    _jw$number_1=x;
+    }
+  public void jsetboolean(Boolean x){
+    if(x==null) _jw$boolean=null;
+    else {
+      if(_jw$boolean==null) setjw$boolean(new TJ1.jw$boolean());
+      _jw$boolean.set$value(x);
+    }
+  }
+  public void setjw$boolean(TJ1.jw$boolean x){
+    _jw$string=null;_jw$number_1=null;_jw$boolean=null;_jw$null_1=null;
+    _jw$boolean=x;
+    }
   public void jsetnull_1(org.xdef.json.JNull x){
     if(_jw$null_1==null)setjw$null_1(x==null?null:new TJ1.jw$null_1());
   }
-  public void setjw$boolean(TJ1.jw$boolean x){_jw$boolean=x;}
-  public void jsetboolean_1(Boolean x){
-    if(_jw$boolean==null)setjw$boolean(new TJ1.jw$boolean());
-    _jw$boolean.set$value(x);
-  }
-  public void setjw$number_1(TJ1.jw$number_1 x){_jw$number_1=x;}
-  public void jsetnumber_1(Number x){
-    if(_jw$number_1==null)setjw$number_1(new TJ1.jw$number_1());
-    _jw$number_1.set$value(x);
-  }
-  public void setjw$string(TJ1.jw$string x){_jw$string=x;}
-  public void jsetstring(String x){
-    if(_jw$string==null)setjw$string(new TJ1.jw$string());
-    _jw$string.set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
-  }
+  public void setjw$null_1(TJ1.jw$null_1 x){
+    _jw$string=null;_jw$number_1=null;_jw$boolean=null;_jw$null_1=null;
+    _jw$null_1=x;
+    }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

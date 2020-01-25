@@ -4,21 +4,24 @@
 package mytest.component;
 public class TJson implements org.xdef.component.XComponent{
   public String getxmlns$jx() {return "http://www.w3.org/2005/xpath-functions";}
-  public TJson.jx$string getjx$string() {return _jx$string;}
   public org.xdef.sys.SDatetime jgetstring(){
     return _jx$string==null?null:_jx$string.get$value();
   }
   public java.util.Date jdateOfstring(){return org.xdef.sys.SDatetime.getDate(jgetstring());}
   public java.sql.Timestamp jtimestampOfstring(){return org.xdef.sys.SDatetime.getTimestamp(jgetstring());}
   public java.util.Calendar jcalendarOfstring(){return org.xdef.sys.SDatetime.getCalendar(jgetstring());}
-  public void setjx$string(TJson.jx$string x){_jx$string=x;}
+  public TJson.jx$string getjx$string() {return _jx$string;}
   public void jsetstring(org.xdef.sys.SDatetime x){
-    if(_jx$string==null)setjx$string(new TJson.jx$string());
-    _jx$string.set$value(x);
+    if(x==null) _jx$string=null;
+    else {
+      if(_jx$string==null) setjx$string(new TJson.jx$string());
+      _jx$string.set$value(x);
+    }
   }
   public void jsetstring(java.util.Date x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
   public void jsetstring(java.sql.Timestamp x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
   public void jsetstring(java.util.Calendar x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
+  public void setjx$string(TJson.jx$string x){_jx$string=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

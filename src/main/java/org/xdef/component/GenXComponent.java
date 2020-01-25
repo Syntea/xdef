@@ -243,6 +243,12 @@ public final class GenXComponent {
 			return "java.math.BigDecimal";
 		} else if ("jnumber".equals(parserName)) {
 			return "Number";
+		} else if ("jboolean".equals(parserName)) {
+			return "Boolean";
+//		} else if ("jnull".equals(parserName)) {
+//			return "org.xdef.json.JNull";
+		} else if ("jvalue".equals(parserName)) {
+			return "Object";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -292,6 +298,12 @@ public final class GenXComponent {
 			return result + "getParsedValue().integerValue()";
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
+		} else if ("jvalue".equals(parserName) || "jnull".equals(parserName)) {
+			return result + "getParsedValue().getObject()";
+		} else if ("jnumber".equals(parserName)) {
+			return "(Number)" + result + "getParsedValue().getObject()";
+		} else if ("jstring".equals(parserName)) {
+			return "(String)" + result + "getParsedValue().getObject()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -520,7 +532,7 @@ public final class GenXComponent {
 			}
 		}
 	}
-
+	
 	/** Generate Java code of setter method for base types.
 	 * @param xdata XMData object.
 	 * @param name name of variable.
@@ -536,7 +548,7 @@ public final class GenXComponent {
 		final StringBuilder sb,
 		final StringBuilder sbi) {
 		genSetterMethodOfChildElement(getJavaObjectTypeName(xdata),
-			name, max, null, null, null, descr, sb, sbi);
+			name, max, null, null, null, descr, sb, sbi, "");
 	}
 
 	/** Generate java code of setter method for child element classes.
@@ -548,6 +560,8 @@ public final class GenXComponent {
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
 	 * @param sbi String builder where the code is generated for interface.
+	 * @param nullchoice the command to set all variables of choice to null or
+	 * the empty string.
 	 */
 	private void genSetterMethodOfChildElement(final String typeName,
 		final String name,
@@ -557,7 +571,8 @@ public final class GenXComponent {
 		final String modelXDPos,
 		final String descr,
 		final StringBuilder sb,
-		final StringBuilder sbi) {
+		final StringBuilder sbi,
+		final String nullChoice) {
 		String x;
 		String d = descr;
 		if (max > 1) {
@@ -567,7 +582,7 @@ public final class GenXComponent {
 "\t\tif (x!=null) {"+LN +
 "\t\t\t\tif (x.xGetXPos()==null)"+LN +
 "\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+LN+'\t';
 			} else {
@@ -575,14 +590,15 @@ public final class GenXComponent {
 			}
 		} else {
 			if (modelName != null) {
-				x = LN +
+				x = LN + nullChoice +
 "\t\tif (x!=null && x.xGetXPos() == null)"+LN +
 "\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? "\"" + modelURI + "\"" : "null")
+				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
-				x = "_&{name}=x;";
+				x = (nullChoice.isEmpty() ? "_&{name}=x;"
+					: (LN + nullChoice + "\t\t_&{name}=x;"+LN + "\t\t"));
 			}
 		}
 		if (sbi != null) {
@@ -769,9 +785,8 @@ public final class GenXComponent {
 		final String name,
 		final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
-		final String fn =
-			uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
-//		final String qName = xdata.getName();
+		final String fn = uri != null
+			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -871,6 +886,12 @@ public final class GenXComponent {
 			case XDValueID.XD_NULL: //jnull
 				x = "\"null\"";
 				break;
+			case XDValueID.XD_CONTAINER: //jvalue
+				if ("jvalue".equals(xdata.getParserName())) {
+					x = (max > 1 ? "listOf" : "get") + "&{name}()" + y
+						+ (max <= 1 ? ".toString()" : "");
+					break;
+				}
 			default:
 				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y;
 				if (checkEnumType(xdata) != null) {
@@ -1006,9 +1027,24 @@ public final class GenXComponent {
 		if (ndx < 0) {
 			return null;
 		}
-		if (s == null 
+		if (s == null
 			&& (s = xe.isReference() ? xe.getReferencePos() : null) != null) {
 			s = _binds.get(xe.getXDPosition() + xdPos.substring(ndx));
+		}
+		return s;
+	}
+
+	/** Create new name if the name from argument already exists in the set.
+	 * @param name the name to be checked.
+	 * @param set set with names.
+	 * @return new name if the the name from argument exists in the set or
+	 * return the original name;
+	 */
+	private static String getUniqueName(final String name,
+		final Set<String> set) {
+		String s = name;
+		for (int i = 1; set.contains(s); i++) {
+			s = name + "_" + i;
 		}
 		return s;
 	}
@@ -1042,21 +1078,6 @@ public final class GenXComponent {
 		return iname;
 	}
 
-	/** Create new name if the name from argument already exists in the set.
-	 * @param name the name to be checked.
-	 * @param set set with names.
-	 * @return new name if the the name from argument exists in the set or
-	 * return the original name;
-	 */
-	private static String getUniqueName(final String name,
-		final Set<String> set) {
-		String s = name;
-		for (int i = 1; set.contains(s); i++) {
-			s = name + "_" + i;
-		}
-		return s;
-	}
-
 	/** Create getter and setter of the model which have only one child
 	 * node which is a text node.
 	 * @param xe Element model from which setter/getter is generated.
@@ -1074,8 +1095,8 @@ public final class GenXComponent {
 		final StringBuilder sbi) {
 		String name = javaName(xe.getName());
 		String typ = getJavaObjectTypeName(xdata);
-		String jGet = "String".equals(typ) ?
-			"org.xdef.json.JsonUtil.jstringFromXML(get&{iname}())"
+		String jGet = "String".equals(typ)
+			? "org.xdef.json.JsonUtil.jstringFromSource(get&{iname}())"
 			: "get&{iname}()";
 		// getter
 		String template =
@@ -1211,18 +1232,46 @@ public final class GenXComponent {
 		final Set<String> varNames) {
 		int ndx = iname.indexOf('$');
 		String name = iname.substring(ndx + 1);
-		if (xe._json == 2) {
-			name = javaName(xe.getName());
-		} else if (xe._match >= 0) {
+		name = javaName("jget" + name);
+		name = getUniqueName(getUniqueName(getUniqueName(name,
+			RESERVED_NAMES), classNames), varNames);
+		name = name.substring(4);
+		name = javaName("jget" + name);
+		name = getUniqueName(getUniqueName(getUniqueName(name,
+			RESERVED_NAMES), classNames), varNames);
+		name = name.substring(4);
+		if (xe._json == 1 && xe._match >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = xe._match; i < code.length; i++) {
 				XDValue item = code[i];
 				if (item.getCode() == CodeTable.CMPEQ) {
-					name = JsonUtil.toXmlName(code[i-1].stringValue());
+					String s = JsonUtil.toXmlName(code[i-1].stringValue());
+					name = javaName("jget" + s + '$' + name);
+					name = getUniqueName(getUniqueName(getUniqueName(name,
+						RESERVED_NAMES), classNames), varNames);
+					name = name.substring(4);
 					break;
 				}
 			}
 		}
+//		} else if (xe._match >= 0) {
+//			name = javaName("jget" + name);
+//			name = getUniqueName(getUniqueName(getUniqueName(name,
+//				RESERVED_NAMES), classNames), varNames);
+//			name = name.substring(4);
+//			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
+//			for (int i = xe._match; i < code.length; i++) {
+//				XDValue item = code[i];
+//				if (item.getCode() == CodeTable.CMPEQ) {
+//					name = JsonUtil.toXmlName(code[i-1].stringValue());
+//					name = javaName("jget" + name);
+//					name = getUniqueName(getUniqueName(getUniqueName(name,
+//						RESERVED_NAMES), classNames), varNames);
+//					name = name.substring(4);
+//					break;
+//				}
+//			}
+//		}
 		XMNode[] childNodeModels = xe.getChildNodeModels();
 		String typ;
 		boolean isNull;
@@ -1233,8 +1282,8 @@ public final class GenXComponent {
 		} else {
 			isNull = false;
 			typ = getJavaObjectTypeName((XData) childNodeModels[0]);
-			name = getUniqueName(getUniqueName(getUniqueName(name,
-				RESERVED_NAMES), classNames), varNames);
+//			name = getUniqueName(getUniqueName(getUniqueName(name,
+//				RESERVED_NAMES), classNames), varNames);
 		}
 		String template;
 		// has only a text child
@@ -1243,7 +1292,7 @@ public final class GenXComponent {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = "String".equals(typ) ?
-				"org.xdef.json.JsonUtil.jstringFromXML(y.get$value())"
+				"org.xdef.json.JsonUtil.jstringFromSource(y.get$value())"
 				: "y.get$value()";
 			// getter
 			template =
@@ -1328,7 +1377,7 @@ public final class GenXComponent {
 "\tpublic &{typ} jget&{name}(){"+LN+
 "\t\treturn _&{iname}==null?null:" +
 	("String".equals(typ) ?
-	"org.xdef.json.JsonUtil.jstringFromXML(_&{iname}.get$value())"
+	"org.xdef.json.JsonUtil.jstringFromSource(_&{iname}.get$value())"
 	: isNull ? typ + ".JNULL" : "_&{iname}.get$value()") + ";" + LN
 +"\t}"+LN;
 			getters.append(modify(template,
@@ -1387,8 +1436,11 @@ public final class GenXComponent {
 "\tpublic void jset&{name}(&{typ} x)";
 			s = isNull
 ? "\t\tif(_&{iname}==null)set&{iname}(x==null?null:new &{typeName}());"+LN
-: ("\t\tif(_&{iname}==null)set&{iname}(new &{typeName}());"+LN+
-"\t\t_&{iname}.set$value("+ jSet + ");"+LN);
+: ("\t\tif(x==null) _&{iname}=null;"+LN+
+"\t\telse {"+LN+
+"\t\t\tif(_&{iname}==null) set&{iname}(new &{typeName}());"+LN+
+"\t\t\t_&{iname}.set$value(x);"+LN+
+"\t\t}"+LN);
 			setters.append(modify(template+"{"+LN+ s + "\t}"+LN,
 				"&{name}", name,
 				"&{iname}", iname,
@@ -1575,7 +1627,9 @@ public final class GenXComponent {
 		final Map<String, String> xctab = new LinkedHashMap<String, String>();
 		final Map<String, String> txttab = new LinkedHashMap<String, String>();
 		final Stack<Integer> groupStack = new Stack<Integer>();
-		for (int i = 0, txtcount = 0, groupMax = 1; i < nodes.length; i++) {
+		final Stack<Object> choiceStack = new Stack<Object>();
+		for (int i=0, txtcount=0, groupMax=1, groupFirst=-1, groupKind=-1;
+			i < nodes.length; i++) {
 			final XNode node = nodes[i];
 			if (node.isIgnore() || node.isIllegal()) {
 				continue;
@@ -1583,14 +1637,65 @@ public final class GenXComponent {
 			if (node.getKind() == XMNode.XMCHOICE ||
 				node.getKind() == XMNode.XMMIXED ||
 				node.getKind() == XMNode.XMSEQUENCE) {
+				groupStack.push(groupFirst); // index of first item
+				groupStack.push(groupKind); // kind
+				groupStack.push(groupMax); // groupMax
 				if (node.maxOccurs() > 1) {
 					groupMax = groupMax > 1 ? groupMax : node.maxOccurs();
 				}
-				groupStack.push(groupMax);
+				groupFirst = i+1;
+				groupKind = node.getKind();
 				continue;
 			}
 			if (node.getKind() == XMNode.XMSELECTOR_END) {
-				groupMax = groupStack.pop();
+				if (groupKind == XMNode.XMCHOICE) {
+					String s = "\t\t";
+					for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
+						s += '_' + (String) choiceStack.get(j-1) + "=null;";
+						if (((Integer) choiceStack.get(j-3)) == groupFirst) {
+							break;
+						}
+					}
+					s += LN;
+					for (;choiceStack.size() >= 5;) {
+						int max = (Integer) choiceStack.pop();
+						String iname = (String) choiceStack.pop();
+						String typeName = (String) choiceStack.pop();
+						int j = (Integer)choiceStack.pop();
+						XElement xe1 = (XElement) nodes[j];
+						boolean ext = (Boolean) choiceStack.pop();
+						if (xe1._json >= 1) {
+							XNode[] x = (XNode[]) xe1.getChildNodeModels();
+							if ((x.length==1 && x[0].getKind() == XNode.XMTEXT)
+								|| (x.length == 0 && "null".equals(
+									xe1.getQName().getLocalPart()))) {
+								genJsonGetterAndSetters(xe1,typeName,iname,max,
+									setters,getters,sbi,classNames,varNames);
+							}
+						}
+						if (!ext) {
+							String mname = null;
+							String mURI = null;
+							String mXDPos = null;
+							if (xe1.isReference()) {
+								mname = xe1.getName();
+								mURI = xe1.getNSUri();
+								mXDPos = xe1.getXDPosition();
+							}
+							genGetterMethodFromChildElement(xe1,
+								typeName, iname, max, "element",getters,sbi);
+							genSetterMethodOfChildElement(typeName,iname,max,
+								mname,mURI,mXDPos,"element",setters,sbi, s);
+						}
+						if (choiceStack.isEmpty() || j == groupFirst) {
+							break;
+						}
+					}
+				}
+				groupMax = groupStack.pop(); // groupMax
+				groupKind = groupStack.pop(); // kind
+				groupFirst = groupStack.pop(); // index of first item
+				continue;
 			}
 			if (node.getKind() == XMNode.XMTEXT) {
 				final XData xdata = (XData) node;
@@ -1776,31 +1881,42 @@ if (isRoot && xe._json == 2 && nodes.length == 1) {
 					typeName = typeName.substring(ndx + 1);
 				}
 				typeName = typeName.replace('#', '.');
-				if (!ext) {
-					genVariableFromModel(typeName, iname, max, "element", vars);
-					String mname = null;
-					String mURI = null;
-					String mXDPos = null;
-					if (xe1.isReference()) {
-						mname = xe1.getName();
-						mURI = xe1.getNSUri();
-						mXDPos = xe1.getXDPosition();
-					}
-					genGetterMethodFromChildElement(node,
-						typeName, iname, max, "element", getters, sbi);
-					genSetterMethodOfChildElement(typeName, iname, max,
-						mname, mURI, mXDPos, "element", setters, sbi);
+				if (groupKind == XMNode.XMCHOICE) {
+					choiceStack.push(ext);
+					choiceStack.push(i);
+					choiceStack.push(typeName);
+					choiceStack.push(iname);
+					choiceStack.push(max);
 				}
-				if (xe1._json >= 1 ) {
+				if (xe1._json >= 1) {
 					XNode[] xns = (XNode[]) xe1.getChildNodeModels();
 					if ((xns.length==1 && xns[0].getKind() == XNode.XMTEXT)
 						|| (xns.length == 0
 						&& xe1.getQName().getLocalPart().equals("null"))) {
-						// Now Tne model is a JSON model and it has only one
+						// The model is a JSON model and it has only one
 						// child node which is a text node or it is null object.
 						// Then we generated JSON setters/getters.
-						genJsonGetterAndSetters(xe1, typeName, iname, max,
-							setters, getters, sbi, classNames, varNames);
+						if (groupKind != XMNode.XMCHOICE) {
+							genJsonGetterAndSetters(xe1, typeName, iname, max,
+								setters, getters, sbi, classNames, varNames);
+						}
+					}
+				}
+				if (!ext) {
+					genVariableFromModel(typeName, iname, max, "element", vars);
+					if (groupKind != XMNode.XMCHOICE){
+						String mname = null;
+						String mURI = null;
+						String mXDPos = null;
+						if (xe1.isReference()) {
+							mname = xe1.getName();
+							mURI = xe1.getNSUri();
+							mXDPos = xe1.getXDPosition();
+						}
+						genGetterMethodFromChildElement(xe1,
+							typeName, iname, max, "element", getters, sbi);
+						genSetterMethodOfChildElement(typeName, iname, max,
+							mname, mURI, mXDPos, "element", setters, sbi, "");
 					}
 				}
 				genChildElementCreator(iname, genNodeList, max > 1);
@@ -2126,7 +2242,7 @@ if (isRoot && xe._json == 2 && nodes.length == 1) {
 "\tprivate String XD_NodeName = \"" + xe.getName() + "\";"+LN+
 (_genJavadoc ? "\t/** Node namespace.*/"+LN : "") +
 "\tprivate String XD_NamespaceURI" +
-	(xe.getNSUri() != null ? " = \"" + xe.getNSUri() + "\"" : "") + ";"+LN+
+	(xe.getNSUri() != null ? " = \"" + xe.getNSUri() + '"' : "") + ";"+LN+
 (_genJavadoc ? "\t/** Node index.*/"+LN : "") +
 "\tprivate int XD_Index = -1;"+LN+
 (genNodeList.length() == 0 ? "" :

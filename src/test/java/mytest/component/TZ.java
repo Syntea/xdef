@@ -4,15 +4,18 @@
 package mytest.component;
 public class TZ implements org.xdef.component.XComponent{
   public String getxmlns$jw() {return "http://www.w3.org/2005/xpath-functions";}
+  public String jgeta$string(){
+    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromSource(_jw$string.get$value());
+  }
   public TZ.jw$string getjw$string() {return _jw$string;}
-  public String jgeta(){
-    return _jw$string==null?null:org.xdef.json.JsonUtil.jstringFromXML(_jw$string.get$value());
+  public void jseta$string(String x){
+    if(x==null) _jw$string=null;
+    else {
+      if(_jw$string==null) setjw$string(new TZ.jw$string());
+      _jw$string.set$value(x);
+    }
   }
   public void setjw$string(TZ.jw$string x){_jw$string=x;}
-  public void jseta(String x){
-    if(_jw$string==null)setjw$string(new TZ.jw$string());
-    _jw$string.set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
-  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override

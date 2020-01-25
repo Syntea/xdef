@@ -91,6 +91,7 @@ public class B extends complaints.data.C implements org.xdef.component.XComponen
   private String XD_Name_c="c";
   private String _c;
   private C.D _D;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -106,7 +107,7 @@ public class B extends complaints.data.C implements org.xdef.component.XComponen
   public void xSetAttr(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     XD_Name_c = x.getNodeName();
-    setc(parseResult.getParsedValue().stringValue());
+    setc(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(

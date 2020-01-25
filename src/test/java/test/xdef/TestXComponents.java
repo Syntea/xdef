@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.sys.JSONUtil;
+import org.xdef.json.JsonUtil;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -796,11 +796,11 @@ public final class TestXComponents extends XDTester {
 			test.xdef.component.Y16a r = new test.xdef.component.Y16a();
 			r.sety(1);
 			p.setx$b(r);
-			Object json =
-				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+			Object json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+				.getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
-			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
+			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
 				fail();
 			}
 			xml = "<c><d xmlns='y.int' y='1'/></c>";
@@ -820,13 +820,13 @@ public final class TestXComponents extends XDTester {
 			xml = "<a><b a='1'/><c/><b a='x'/></a>";
 			test.xdef.component.Y17 p = (test.xdef.component.Y17)
 				parseXC(xp, "Y17", xml, null, reporter);
-			Object json =
-				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+			Object json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+				.getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
 			assertEq(1, p.getb_1().geta());
 			assertEq("x", p.getb_2().geta());
-			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
+			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}

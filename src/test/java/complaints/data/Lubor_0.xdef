@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+ <!-- Věcné struktury (v "abecedním pořadí) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' name='A' root='A | B'>
+<!-- Věcné struktury (v "abecedním pořadí) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
+   <A xd:script='ref C' >
+	<!-- Věcné struktury (v "abecedním pořadí) -->
+	<!-- Věcné struktury (v "abecedním pořadí) -->
+      <X/>
+   </A>
+   <B xd:script='ref C' />
+   <C c='string'>
+     <D xd:script='occurs 0..1' d='string'/>
+   </C>
+<!-- Věcné struktury (v "abecedním pořadí) -->
+   <D D='string'>
+<!-- Věcné struktury (v "abecedním" pořadí) -->
+     <D/>
+   </D>
+<!-- Věcné struktury (v "abecedním" pořadí) -->
+</xd:def>
+<!-- Věcné struktury (v "abecedním" pořadí) -->
+
+<!-- Věcné struktury (v "abecedním" pořadí) -->

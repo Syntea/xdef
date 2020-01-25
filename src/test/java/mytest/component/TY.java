@@ -4,33 +4,42 @@
 package mytest.component;
 public class TY implements org.xdef.component.XComponent{
   public String getxmlns$js() {return "http://www.xdef.org/json/3.2";}
-  public TY.a geta() {return _a;}
-  public Boolean jgeta_1(){
+  public Boolean jgeta(){
     return _a==null?null:_a.get$value();
   }
-  public TY.js$item getjs$item() {return _js$item;}
-  public String jgetjs$item_1(){
-    return _js$item==null?null:org.xdef.json.JsonUtil.jstringFromXML(_js$item.get$value());
+  public TY.a geta() {return _a;}
+  public String jgetitem(){
+    return _js$item==null?null:org.xdef.json.JsonUtil.jstringFromSource(_js$item.get$value());
   }
-  public TY.js$item_1 getjs$item_1() {return _js$item_1;}
-  public Integer jgetjs$item_1_1(){
+  public TY.js$item getjs$item() {return _js$item;}
+  public Integer jgetitem_1(){
     return _js$item_1==null?null:_js$item_1.get$value();
   }
+  public TY.js$item_1 getjs$item_1() {return _js$item_1;}
+  public void jseta(Boolean x){
+    if(x==null) _a=null;
+    else {
+      if(_a==null) seta(new TY.a());
+      _a.set$value(x);
+    }
+  }
   public void seta(TY.a x){_a=x;}
-  public void jseta_1(Boolean x){
-    if(_a==null)seta(new TY.a());
-    _a.set$value(x);
+  public void jsetitem(String x){
+    if(x==null) _js$item=null;
+    else {
+      if(_js$item==null) setjs$item(new TY.js$item());
+      _js$item.set$value(x);
+    }
   }
   public void setjs$item(TY.js$item x){_js$item=x;}
-  public void jsetjs$item_1(String x){
-    if(_js$item==null)setjs$item(new TY.js$item());
-    _js$item.set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
+  public void jsetitem_1(Integer x){
+    if(x==null) _js$item_1=null;
+    else {
+      if(_js$item_1==null) setjs$item_1(new TY.js$item_1());
+      _js$item_1.set$value(x);
+    }
   }
   public void setjs$item_1(TY.js$item_1 x){_js$item_1=x;}
-  public void jsetjs$item_1_1(Integer x){
-    if(_js$item_1==null)setjs$item_1(new TY.js$item_1());
-    _js$item_1.set$value(x);
-  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 2;
   @Override

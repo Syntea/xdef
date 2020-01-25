@@ -532,17 +532,19 @@ public static class b$Request implements org.xdef.component.XComponent{
 }
 public static class s$Body implements org.xdef.component.XComponent{
   public String getxmlns$s() {return "soap";}
-  public test.xdef.component.I getb$Ping() {return _b$Ping;}
   public test.xdef.component.H.s$Body.b$PingFlow getb$PingFlow() {return _b$PingFlow;}
-  public void setb$Ping(test.xdef.component.I x){
-    if (x!=null && x.xGetXPos() == null)
-      x.xInit(this, "b:Ping", "request", "H#s:H/s:Body/$choice/b:Ping");
-    _b$Ping=x;
-  }
+  public test.xdef.component.I getb$Ping() {return _b$Ping;}
   public void setb$PingFlow(test.xdef.component.H.s$Body.b$PingFlow x){
+    _b$PingFlow=null;_b$Ping=null;
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "b:PingFlow", "request", "H#s:H/s:Body/$choice/b:PingFlow");
     _b$PingFlow=x;
+  }
+  public void setb$Ping(test.xdef.component.I x){
+    _b$PingFlow=null;_b$Ping=null;
+    if (x!=null && x.xGetXPos() == null)
+      x.xInit(this, "b:Ping", "request", "H#s:H/s:Body/$choice/b:Ping");
+    _b$Ping=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
