@@ -755,7 +755,7 @@ public static class jw$number_1 implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().decimalValue());
+    set$value((Number)parseResult.getParsedValue().getObject());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
@@ -871,7 +871,7 @@ public static class jw$string implements org.xdef.component.XComponent{
   public void xSetText(org.xdef.proc.XXNode x,
     org.xdef.XDParseResult parseResult){
     _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().toString());
+    set$value((String)parseResult.getParsedValue().getObject());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
