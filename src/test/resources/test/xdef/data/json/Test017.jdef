@@ -1,7 +1,7 @@
-[ 
-  {"xd:script": "occurs 1..*;",
+[
+  { $script: "occurs 1..*;",
     "Name": "string()",
-    "Genre": ["xd:script=xd:choice",
+    "Genre": [ $oneOf,
       "string()",
        ["occurs 1..*;string()"]
     ]

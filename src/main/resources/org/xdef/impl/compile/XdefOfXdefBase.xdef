@@ -707,17 +707,20 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-object ::= "{" (members)* S "}"
+xdscript ::= S ( ("$script" S ":" S string) | ( "$oneOf" (S ":" S string)? ) )
+  (S ",")?
+
+object ::= "{" xdscript? (members)* S "}"
 
 members ::= S pair (S "," S pair)*
 
 pair ::= string S ":" S value
 
-array ::= "[" S list? S "]"
+array ::= "[" xdscript? S list? S "]"
 
 list ::= value (S "," S value )*
 
-value ::= S? (pair | "null" | boolean | number | string | array | object) S?
+value ::= S (pair | "null" | boolean | number | string | array | object) S
 
 json ::= array | object
 

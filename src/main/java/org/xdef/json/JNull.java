@@ -3,7 +3,7 @@ package org.xdef.json;
 /** Representation of JSON object "null".
  * @author Vaclav Trojan
  */
-public class JNull {
+public final class JNull {
 	public static final JNull JNULL = new JNull();
 	private JNull() {}
 	@Override

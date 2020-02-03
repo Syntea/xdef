@@ -37,10 +37,12 @@ public interface JSON {
 	public static final long JSON016 = 13834649615L;
 	/** Not allowed character '&amp;{0}'&amp;{#SYS000} */
 	public static final long JSON017 = 13834649616L;
+	/** Value of $script must be string with X-script&amp;{#SYS000} */
+	public static final long JSON018 = 13834649617L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649617L;
+	public static final long JSON_DESCRIPTION = 13834649618L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649618L;
+	public static final long JSON_LANGUAGE = 13834649619L;
 
 	/** Default language. */
 	public static final String JSON = "eng";

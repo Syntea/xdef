@@ -62,13 +62,17 @@ public class JsonToXml extends JsonUtil {
 		return (i >= 0) ? s.substring(0, i) : "";
 	}
 
-	/** Check if the argument is a simple value.
+	/** Check if the argument is a simple value. Simple value is null,
+	 * number, boolean, string or JValue with object which is simple value.
 	 * @param val Object to be tested.
 	 * @return true if the argument is a simple value.
 	 */
-	public final static boolean isSimpleValue(final Object val) {
+	public static boolean isSimpleValue(final Object val) {
+		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof JValue;
+			|| val instanceof String || val instanceof JValue
+			&& ((o=((JValue) val).getObject()) == null || o instanceof Number
+				|| o instanceof Boolean || o instanceof String);
 	}
 
 	private Element genJElement(final String name) {

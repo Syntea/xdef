@@ -160,8 +160,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 
 	private static void displayDesriptor(final XCodeDescriptor sc,
 		final PrintStream out) {
-		out.print(sc.getName() + " " + sc.minOccurs() + ".."
-			+ (sc.maxOccurs() == Integer.MAX_VALUE
+		out.println(sc.getXDPosition() + ": " + sc.getName() + " "
+			+ sc.minOccurs() + ".." + (sc.maxOccurs() == Integer.MAX_VALUE
 				? "*" : String.valueOf(sc.maxOccurs())));
 		if (sc.getKind() == XNode.XMELEMENT) {
 			if (((XElement)sc)._forget != 0) {

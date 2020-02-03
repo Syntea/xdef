@@ -1,19 +1,19 @@
 {
   "Title": "optional jstring()",
   "Artists": [
-    { "xd:script": "occurs 1..*",
+    { $script: "occurs 1..*",
       "Name": "string()",
       "Albums": [
-        {"xd:script": "occurs 1..*",
+        {$script: "occurs 1..*",
           "Name": "string()",
-          "Genre": ["xd:script=xd:choice",
+          "Genre": [$oneOf,
                "string()",
                ["occurs 1..*;string()"]
            ],
           "ReleaseDate": "xdatetime('yyyy-MM-dd')",
           "Label": "string()",
           "Tracks": [
-            {"xd:script": "occurs 0..*",
+            {$script: "occurs 0..*",
               "Title": "string()",
               "Duration": "xdatetime('mm:ss')",
               "Writer": "optional string()"
