@@ -2,7 +2,7 @@
   "jnull()",
   "double()",
   "string()",
-  ["xd:script=optional",
+  [$script: "optional",
      "boolean();", 
      "optional int();"
   ]

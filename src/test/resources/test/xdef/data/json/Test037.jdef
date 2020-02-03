@@ -2,7 +2,7 @@
     "plat":  "int(1000, 1000000);",
     "jmeno": "jstring(1, 50); onFalse outln('Chyba ve jmene')",
     "zena":  "boolean();",
-    "kocka" : {"xd:script": "optional;",
+    "kocka" : {$script: "optional;",
         "jmeno": "optional jstring(2, 20);",
         "vek":   "optional int(1, 50);"
     }

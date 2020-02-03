@@ -707,7 +707,8 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-xdscript ::= S "$" S ":" S string (S ",")?
+xdscript ::= S ( ("$script" S ":" S string) | ( "$oneOf" (S ":" S string)? ) )
+  (S ",")?
 
 object ::= "{" xdscript? (members)* S "}"
 

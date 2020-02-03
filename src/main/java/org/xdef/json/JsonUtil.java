@@ -32,12 +32,18 @@ import org.xdef.sys.SUtils;
 public class JsonUtil extends StringParser {
 
 	/** Create instance of JsonUtil. */
-	JsonUtil() {}
+	JsonUtil() {
+		_acceptComments = false;
+		_genJObjects = false;
+		_jdef = false;
+	}
 
 	/** Flag to accept comments in JSON. */
-	private boolean _acceptComments = false; // default value
+	private boolean _acceptComments; // default value
 	/** Flag to generate SPositions when parsing JSON. */
-	private boolean _genJObjects = false; // default value
+	private boolean _genJObjects; // default value
+	/** Flag if the parsed data are in X-definition. */
+	private final boolean _jdef; // default value
 	/** Position of processed item.`*/
 	private SPosition _sPosition;
 
@@ -137,39 +143,84 @@ public class JsonUtil extends StringParser {
 			if (isChar('}')) {
 				return result;
 			}
+			boolean wasScript = false;
 			while(!eos()) {
-				Object o = readValue();
-				if (o != null && (o instanceof String ||
-					(_genJObjects && o instanceof XJson.JValue)
-					&& ((XJson.JValue) o).getObject() instanceof String)) {
-					 // parse JSON named pair
-					String name = _genJObjects ? o.toString() : (String) o;
+				int i;
+				if (!wasScript && _jdef && (i = isOneOfTokens(
+					XJson.SCRIPT_NAME, XJson.ONEOF_NAME)) >= 0) {
+					wasScript = true;
+					SPosition spos = getPosition();
 					skipBlanksAndComments();
-					if (!isChar(':')) {
-						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-						error(JSON.JSON002, ":");
-					}
-					skipBlanksAndComments();
-					result.put(name, readValue());
-					skipBlanksAndComments();
-					if (isChar('}')) {
-						skipBlanksAndComments();
-						return result;
-					}
-					if (isChar(',')) {
-						skipBlanksAndComments();
-					} else {
-						if (eos()) {
-							break;
+					Object o;
+					if (i == 1) {
+						String s;
+						if (isChar(':')) {
+							spos.setIndex(spos.getIndex() - 1);
+							skipBlanksAndComments();
+							o = readValue();
+							if (o instanceof XJson.JValue
+								&& ((XJson.JValue)o).getObject()
+								instanceof String) {
+								s = XJson.ONEOF_KEY +
+									((XJson.JValue)o).getObject();
+							} else {
+								//Value of $script must be string with X-script
+								error(JSON.JSON018);
+								s = XJson.ONEOF_KEY;
+							}
+						} else {
+							s = XJson.ONEOF_KEY;
 						}
-						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-						error(JSON.JSON002, ",", "}");
-						break;
+						o = new XJson.JValue(spos, s);
+					} else {
+						if (!isChar(':') && i != 1) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							error(JSON.JSON002, ",", "}");
+						}
+						skipBlanksAndComments();
+						o = readValue();
+					}
+					if (o != null && o instanceof XJson.JValue
+						&& ((XJson.JValue)o).getObject() instanceof String){
+						result.put(XJson.SCRIPT_KEY, o);
+					} else {
+						//Value of $script must be string with X-script
+						error(JSON.JSON018);
 					}
 				} else {
-					// String with name of item expected
-					fatal(JSON.JSON004);
+					Object o = readValue();
+					if (o != null && (o instanceof String ||
+						(_genJObjects && o instanceof XJson.JValue)
+						&& ((XJson.JValue) o).getObject() instanceof String)) {
+						 // parse JSON named pair
+						String name = _genJObjects ? o.toString() : (String) o;
+						skipBlanksAndComments();
+						if (!isChar(':')) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							error(JSON.JSON002, ",", "}");
+						}
+						skipBlanksAndComments();
+						result.put(name, readValue());
+					} else {
+						// String with name of item expected
+						fatal(JSON.JSON004);
+						return result;
+					}
+				}
+				skipBlanksAndComments();
+				if (isChar('}')) {
+					skipBlanksAndComments();
 					return result;
+				}
+				if (isChar(',')) {
+					skipBlanksAndComments();
+				} else {
+					if (eos()) {
+						break;
+					}
+					//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+					error(JSON.JSON002, ",", "}");
+					break;
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -186,8 +237,44 @@ public class JsonUtil extends StringParser {
 			if (isChar(']')) {
 				return result;
 			}
+			boolean wasScript = false;
 			while(!eos()) {
-				result.add(readValue());
+				int i;
+				if (!wasScript &&_jdef
+					&& (i = isOneOfTokens(XJson.SCRIPT_NAME,
+						XJson.ONEOF_NAME)) >= 0) {
+					wasScript = true;
+					if (isChar(':')) {
+						skipBlanksAndComments();
+						Object o = readValue();
+						if (o instanceof XJson.JValue
+							&& ((XJson.JValue)o).getObject() instanceof String){
+							XJson.JValue jv = (XJson.JValue) o;
+							if (i == 1) {
+								SPosition spos = jv.getPosition();
+								spos.setIndex(spos.getIndex() - 1);
+								String s = XJson.ONEOF_KEY + jv.getObject();
+								jv = new XJson.JValue(spos, s);
+							}
+							result.add(new XJson.JValue(null, jv));
+						} else {
+							//Value of $script must be string with X-script
+							error(JSON.JSON018);
+						}
+					} else {
+						if (i == 0) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+						   error(JSON.JSON002, ":");
+						} else {
+							SPosition spos = getPosition();
+							spos.setIndex(spos.getIndex() - 1);
+							result.add(new XJson.JValue(null,
+								new XJson.JValue(spos, XJson.ONEOF_KEY)));
+						}
+					}
+				} else {
+					result.add(readValue());
+				}
 				skipBlanksAndComments();
 				if (isChar(']')) {
 					return result;
@@ -318,7 +405,7 @@ public class JsonUtil extends StringParser {
 		throws SRuntimeException{
 		Object result;
 		if (source.charAt(0) == '{' && source.endsWith("}")
-			|| source.charAt(0) == '[' && source.endsWith("]")) {
+			|| (source.charAt(0) == '[' && source.endsWith("]"))) {
 			JsonUtil jx = new JsonUtil();
 			jx.setSourceBuffer(source);
 			result = jx.parse();
@@ -464,7 +551,7 @@ public class JsonUtil extends StringParser {
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to string
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	/** Add the string created from JSON jvalue object to StringBuilder.
 	 * @param obj JSON object to be created to String.
 	 * @return sb created string.
@@ -512,7 +599,7 @@ public class JsonUtil extends StringParser {
 				}
 			}
 			return sb.append('"').toString();
-		} 
+		}
 		return obj.toString();
 	}
 
@@ -544,7 +631,7 @@ public class JsonUtil extends StringParser {
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 */
-	private static void arrayToJsonString(final List<Object> array,
+	private static void arrayToJsonString (final List<Object> array,
 		final String indent,
 		final StringBuilder sb) {
 		sb.append('[');
@@ -1010,7 +1097,7 @@ public class JsonUtil extends StringParser {
 		return jstringToXML(jvalueToString(obj), isAttr);
 	}
 
-	/** Create XML string created from JSON string.
+	/** Create JSON string to XML from JSON source data.
 	 * @param source JSON form of string.
 	 * @param isAttr if true then it is used in attribute, otherwise it will be
 	 * used in a text node.

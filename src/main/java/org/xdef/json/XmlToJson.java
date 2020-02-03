@@ -54,7 +54,7 @@ class XmlToJson extends JsonToXml {
 	private static void valueToArray(final List<Object> array,
 		final String s){
 		if (s.isEmpty() || s.charAt(0) == '"') {
-			array.add(getJValue(s));
+			array.add(JsonUtil.getJValue(s));
 		} else if ("null".equals(s)) {
 			array.add(JNull.JNULL);
 		} else if ("false".equals(s)) {
