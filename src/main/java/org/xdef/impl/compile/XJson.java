@@ -119,7 +119,7 @@ public class XJson extends JsonToXml {
 	private boolean skipSemiconsBlanksAndComments() {
 		boolean result = false;
 		for(;;) {
-			skipBlanksAndComments();
+			skipWhiteSpaces();
 			if (eos() || !isChar(';')) {
 				break;
 			}
@@ -162,16 +162,16 @@ public class XJson extends JsonToXml {
 		} else {
 			spos = getPosition();
 			if (isToken("occurs")) {
-				skipBlanksAndComments();
+				skipWhiteSpaces();
 			}
 			pos = getIndex();
 			char ch = isOneOfChars("*+?");
 			if (ch == SParser.NOCHAR) {
-				skipBlanksAndComments();
+				skipWhiteSpaces();
 				if (isInteger()) {
-					skipBlanksAndComments();
+					skipWhiteSpaces();
 					if (isToken("..")) {
-						skipBlanksAndComments();
+						skipWhiteSpaces();
 						if (!isInteger()) {
 							isChar('*');
 						}
@@ -293,7 +293,7 @@ public class XJson extends JsonToXml {
 			map.remove(SCRIPT_KEY);
 			JValue jv =(JValue) val;
 			setSourceBuffer(jv.getSBuffer());
-			skipBlanksAndComments();
+			skipWhiteSpaces();
 			if (isToken(ONEOF_KEY)) {
 				ee = genXDElement(e, "choice", getPosition());
 				e._childNodes.add(ee);
@@ -339,7 +339,7 @@ public class XJson extends JsonToXml {
 				: jo instanceof JValue ? ((JValue) jo).getObject() : jo;
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
-				skipBlanksAndComments();
+				skipWhiteSpaces();
 				if (isToken(ONEOF_KEY)) {
 					skipSemiconsBlanksAndComments();
 					e = genXDElement(parent,
@@ -518,7 +518,7 @@ public class XJson extends JsonToXml {
 				Object o = map.get(key);
 				if (o instanceof JValue && SCRIPT_KEY.equals(key)) {
 					setSourceBuffer(((JValue) o).getSBuffer());
-					skipBlanksAndComments();
+					skipWhiteSpaces();
 					choicePosition = getPosition();
 					if (isToken(ONEOF_KEY)) {
 						choice = true;
@@ -622,7 +622,7 @@ public class XJson extends JsonToXml {
 				SBuffer sbf = getScriptValue((JValue) list.get(0));
 				if (sbf != null){
 					setSourceBuffer(sbf);
-					skipBlanksAndComments();
+					skipWhiteSpaces();
 					if (isToken(ONEOF_KEY)) {
 						PNode ee =
 							genPElement(parent, nsURI, name,list.getPosition());
@@ -673,7 +673,7 @@ public class XJson extends JsonToXml {
 			SBuffer[] parsedScript = parseOccurrence(jv.getSBuffer());
 			e = genPElement(parent, nsURI, name, jv.getPosition());
 			parent._childNodes.add(e);
-			skipBlanksAndComments();
+			skipWhiteSpaces();
 			if (!parsedScript[0].getString().trim().isEmpty()) { // occurrence
 				setXDAttr(e, "script", parsedScript[0]);
 			}
@@ -856,7 +856,7 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 			JValue jx = (JValue) o;
 			if ((o = jx.getObject()) != null && o instanceof String) {
 				setSourceBuffer(jx.getSBuffer());
-				skipBlanksAndComments();
+				skipWhiteSpaces();
 				map.remove(SCRIPT_KEY);
 				if (isToken(ONEOF_KEY)) {
 					skipSemiconsBlanksAndComments();
@@ -956,7 +956,7 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 			if (sbf != null) { // xd:script item
 				setSourceBuffer(sbf);
 				i = 1;
-				skipBlanksAndComments();
+				skipWhiteSpaces();
 				if (isToken(ONEOF_KEY)) {
 					e = genXDElement(parent, "choice", getPosition());
 					parent._childNodes.add(e);
