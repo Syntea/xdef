@@ -31,9 +31,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		new LinkedHashMap<String,String>();
 	/** root selection. */
 	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
-	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
+	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the X-definition was created. */
+	/** Version of XML from which the X-definition was created
+	 *  (see org.xdef.impl.XConstants.XDxx).
+	 */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
@@ -187,7 +189,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					return model;
 				}
 			} else if (nsURI.equals(model.getNSUri())) {
-				String lname = model.getLocalName();
+				String lname = model.getName();
+				int ndx = lname.indexOf(':');
+				if (ndx >= 0) {
+					lname = lname.substring(ndx + 1);
+				}
 				if (name.equals(lname)) {
 					return model;
 				}
@@ -222,8 +228,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
-	 * (see {@link org.xdef.XDConstants#XD2_0}
-	 * or {@link org.xdef.XDConstants#XD3_1}).
+	 * (see {@link cz.syntea.xdef.XDConstants#XD2_0}
+	 * or {@link cz.syntea.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 

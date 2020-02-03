@@ -103,7 +103,7 @@ public final class PNode {
 
 	/** Get version of XML document.
 	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11;
-	 * see XConstants.XML10 and XConstants.XML11).
+	 * see org.xdef.impl.XConstants.XMLxx).
 	 */
 	public final byte getXMLVersion() {return _xmlVersion;}
 

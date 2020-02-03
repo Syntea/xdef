@@ -65,7 +65,8 @@ public interface XMDefinition extends XMNode {
 	public byte getXDVersion();
 
 	/** Get XML version of X-definition source.
-	 * @return XML version of X-definition source (10 .. 1.0, 11 .. 1.1).
+	 * @return XML version of X-definition source (10 .. 1.0, 11 .. 1.1;
+	 * see org.xdef.impl.XConstants.XMLxx).
 	 */
 	public byte getXmlVersion();
 

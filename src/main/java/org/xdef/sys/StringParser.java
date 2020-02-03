@@ -4034,8 +4034,8 @@ public class StringParser extends SReporter implements SParser {
 	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)</p>
 	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)</p>
 	 *
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XConstants.XML10
-	 * and XConstants.XML11).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
@@ -4047,7 +4047,8 @@ public class StringParser extends SReporter implements SParser {
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
 	 * [7] Nmtoken::= (NameChar)+
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if rule passed.
 	 */
 	public final boolean isNMToken(final byte xmlVersion) {
@@ -4080,7 +4081,8 @@ public class StringParser extends SReporter implements SParser {
 	 * [4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
 	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
 	 *     | CombiningChar | Extender
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if NCNname was recognized.
 	 */
 	public final boolean isNCName(final byte xmlVersion) {
@@ -4110,7 +4112,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name and save result to _parsedString.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if XMLName was parsed.
 	 */
 	public final boolean isXMLName(final byte xmlVersion) {
@@ -4151,7 +4154,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse valid XML character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or ENDCHAR.
 	 */
 	public final char isXMLChar(final byte xmlVersion) {
@@ -4179,7 +4183,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name start character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or ENDCHAR.
 	 */
 	public final char isXMLNamestartChar(final byte xmlVersion) {
@@ -4192,7 +4197,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name extension character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or ENDCHAR.
 	 */
 	public final char isXMLNameExtensionChar(final byte xmlVersion) {
@@ -4625,17 +4631,20 @@ public class StringParser extends SReporter implements SParser {
 	/** Get type of character - static version of {@link
 	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public static final byte getXmlCharType(final char ch,
 		final byte xmlVersion) {
-		return xmlVersion == (byte) 11 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
+		return xmlVersion ==
+			XConstants.XML11 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
 	}
 
 	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NCName according to XML specification.
 	 */
 	public static final boolean chkNCName(final String name,
@@ -4653,7 +4662,8 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
 	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is XML name according to XML specification..
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
@@ -4675,6 +4685,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */

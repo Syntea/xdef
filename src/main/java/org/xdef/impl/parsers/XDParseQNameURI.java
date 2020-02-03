@@ -9,6 +9,7 @@ import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.ext.XExtUtils;
 import org.w3c.dom.Element;
+import org.xdef.impl.XConstants;
 
 /** Parser of X-Script "NCNameURI" type.
  * @author Vaclav Trojan
@@ -54,7 +55,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 		int pos = p.getIndex();
 		Element el = _elem == null ? xnode.getElement() : _elem;
 		byte xmlVersion1 = "1.1".equals(el.getOwnerDocument().getXmlVersion())
-			? (byte) 11 : (byte) 10;
+			? XConstants.XML11 : XConstants.XML10;
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parser.isXMLName(xmlVersion1)) {
 			p.error(XDEF.XDEF546); //QName expected
