@@ -600,7 +600,7 @@ public class XDGenCollection {
 		final String defName,
 		final boolean removeActions,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser((byte) 10);
+		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, XConstants.XD20);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);

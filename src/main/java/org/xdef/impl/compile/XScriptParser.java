@@ -210,7 +210,7 @@ public class XScriptParser extends StringParser
 
 	/** Name of actual X-definition. */
 	public String _actDefName;
-	/** Version of X-definition (see XD2_0, XD3_1). */
+	/** Version of X-definition (see XD2_0, XD3_1, XD3_2, XD4_0). */
 	public byte _xdVersion;
 	/** Last parsed identifier */
 	public String _idName;
@@ -377,7 +377,8 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Creates a new instance of ScriptParser.
-	 * @param xmlVersion 10 -&gt; "1.0", 11 -&gt; "1.1".
+	 * @param xmlVersion 10 .. "1.0" (see XConstants.XML10),
+	 * 11 .. "1.1"(see XConstants.XML11).
 	 */
 	public XScriptParser(final byte xmlVersion) {
 		super();

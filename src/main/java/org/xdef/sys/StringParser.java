@@ -18,6 +18,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.TimeZone;
+import org.xdef.impl.XConstants;
 
 /** String parser used for constructing specific parsers.
  * @author  Vaclav Trojan
@@ -4033,11 +4034,13 @@ public class StringParser extends SReporter implements SParser {
 	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)</p>
 	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)</p>
 	 *
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XConstants.XML10
+	 * and XConstants.XML11).
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
-		return xmlVersion == (byte) 11 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
+		return xmlVersion == XConstants.XML11
+			? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
 	/** Parse Nmtoken.
