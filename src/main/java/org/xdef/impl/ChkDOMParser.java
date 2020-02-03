@@ -294,12 +294,11 @@ class ChkDOMParser extends SReporter {
 		}
 
 		/** Parse XML source and process check and processing instructions.
-		 * @param chkDoc The ChkDocument object.
+		 * @param chkDoc the ChkDocument object.
+		 * @param elem the element to be validated.
 		 * @return The ChkDocument object.
-		 * @throws SRuntimeException if an error occurs.
 		 */
-		private void xvalidate(final ChkDocument chkDoc,
-			final Element sourceElem) {
+		private void xvalidate(final ChkDocument chkDoc, final Element elem) {
 			_chkDoc = chkDoc;
 			_chkDoc._node = null;
 			_chkDoc._element = null;
@@ -322,7 +321,7 @@ class ChkDOMParser extends SReporter {
 			}
 			_chkDoc._scp.initscript(); //Initialize variables and methods
 			_text = new StringBuilder();
-			processElement(null, sourceElem);
+			processElement(null, elem);
 		}
 
 		/** Creates a new empty instance of ChkDOMParser. */
