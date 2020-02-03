@@ -66,7 +66,7 @@ public class JsonUtil extends StringParser {
 			+ "&{sysId}" + getSysId();
 	}
 
-	/** Skip white spaces (and comments if they should be accepted. */
+	/** Skip white space separators (and comments if they should be accepted).*/
 	public final void skipWhiteSpaces() {
 		isSpaces();
 		if (_acceptComments) { // comments accepted
