@@ -66,24 +66,25 @@ public class JsonUtil extends StringParser {
 			+ "&{sysId}" + getSysId();
 	}
 
-	/** Skip white space separators (and comments if they should be accepted).*/
+	/** Skip white space separators (and comments if accepted).*/
 	public final void skipWhiteSpaces() {
 		isSpaces();
-		if (_acceptComments) { // comments accepted
-			boolean b = false;
-			while(isToken("/*") || (b=isToken("//"))) {
-				if (b) {
-					skipToNextLine();
-				} else {
-					if (!findTokenAndSkip("*/")) {
-						error(JSON.JSON015); //Unclosed comment
-						setEos();
-						return;
-					}
-				}
-				b = false;
-				isSpaces();
+		boolean b = false;
+		while(isToken("/*") || (b=isToken("//"))) {
+			if (!_acceptComments) { // omments not allowed
+				warning(JSON.JSON019);  //Comments are not allowed here
 			}
+			if (b) {
+				skipToNextLine();
+			} else {
+				if (!findTokenAndSkip("*/")) {
+					error(JSON.JSON015); //Unclosed comment
+					setEos();
+					return;
+				}
+			}
+			b = false;
+			isSpaces();
 		}
 	}
 
