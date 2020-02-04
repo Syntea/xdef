@@ -29,6 +29,8 @@ public final class PNode {
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template switch
+	/** JSON to XML transformation mode. */
+	byte _jsonMode = 0; // no JSON
 
 	/** Creates a new instance of PNode.
 	 * @param name The node name.

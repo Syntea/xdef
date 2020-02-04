@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.xdef.XDConstants;
+import org.xdef.impl.XConstants;
 import org.xdef.json.JsonToXml;
 import org.xdef.json.JsonUtil;
 import org.xdef.msg.JSON;
@@ -999,12 +1000,10 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create X-definition form of model from xd:json
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create X-definition model from PNode created from json XML element.
+	
+	/** Create X-definition model from PNode with JSON description.
 	 * @param p PNode with JSON script.
-	 * @param jsonMode 1..w3c, 2..xd.
+	 * @param jsonMode version of transformation JSON to XML(W3C, X-definition).
 	 * @param reporter report writer
 	 */
 	static final void genXdef(final PNode p,
@@ -1027,7 +1026,7 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JList)) {
 			jx._jsPrefix = p.getPrefix();
-			if (jsonMode == 1) {
+			if (jsonMode == XConstants.JSON_W3C) {
 				jx._jsNamespace = XDConstants.JSON_NS_URI_W3C;
 				jx.genJsonModelW3C(json, p);
 			} else if (XDConstants.JSON_NS_URI.equals(p._nsURI)) {
