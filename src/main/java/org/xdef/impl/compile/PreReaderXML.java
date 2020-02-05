@@ -468,12 +468,15 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				} else {
 					String s = "w3c";
 					SBuffer sb =
-						_pcomp.getXdefAttr(_actPNode, "mode", false, false);
+						_pcomp.getXdefAttr(_actPNode, "mode", false, true);
 					if (sb != null) {
 						s = sb.getString().trim();
 					}
+					//W3C transformation
+					_actPNode._jsonMode = XConstants.JSON_W3C;
 					int jindex = XPreCompiler.NS_JSON_W3C_INDEX;
 					if ("xd".equals(s)) {
+						_actPNode._jsonMode = XConstants.JSON_XD;
 						jindex = XPreCompiler.NS_JSON_INDEX;
 					} else if (!"w3c".equals(s)) {
 						error(sb, XDEF.XDEF222, "mode", s); ///

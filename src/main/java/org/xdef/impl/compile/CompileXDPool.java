@@ -58,6 +58,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
+	/** No JSON mode. */
+	private static final byte NOJSON = 0;
 
 	/** XPreCompiler instance.  */
 	private final PreCompiler _precomp;
@@ -1469,26 +1471,22 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
-			} else if (pnode._localName.equals("json")) {
+			} else if (pnode._jsonMode != 0) {
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315);
 					return;
 				}
-				SBuffer sb = _precomp.getXdefAttr(pnode, "mode", false, true);
 				String jsNS = XDConstants.JSON_NS_URI_W3C;
 				int nsindex = XPreCompiler.NS_JSON_W3C_INDEX;
-				if (sb != null) {
-					if ("xd".equals(sb.getString().trim())) {
-						jsNS = XDConstants.JSON_NS_URI;
-						nsindex = XPreCompiler.NS_JSON_INDEX;
-					} else if (!"w3c".equals(sb.getString().trim())) {
-						//Incorrect value of &{0}&{1}{: }
-						error(sb, XDEF.XDEF222, "mode", sb.getString());
-					}
+				byte jsonMode = pnode._jsonMode;
+				String jprefix = "jw";
+				if (pnode._jsonMode == XConstants.JSON_XD) {
+					jsNS = XDConstants.JSON_NS_URI;
+					nsindex = XPreCompiler.NS_JSON_INDEX;
+					jprefix = "js";
 				}
-				String jprefix = nsindex==XPreCompiler.NS_JSON_INDEX ?"js":"jw";
-				sb = _precomp.getXdefAttr(pnode, "name", false, true);
+				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
 				pnode._nsURI = jsNS;
 				pnode._nsindex = nsindex;
 				if (sb == null) {
@@ -1513,8 +1511,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(pnode._nsURI)
-					? (byte) 1 : (byte) 2;
 				XJson.genXdef(pnode, jsonMode, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
@@ -1716,18 +1712,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						if ("list".equals(name)) {
 							for (PNode pn: nodei._childNodes){
-								compileXChild(dummy, dummy, pn, def, 2,(byte)0);
+								compileXChild(dummy, dummy, pn, def, 2, NOJSON);
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2, (byte)0);
+							compileXChild(dummy, dummy, nodei, def, 2, NOJSON);
 						}
 					}
 				}
 				continue;
 			}
-			compileXChild(def, null, nodei, def, 1, (byte)0);
+			compileXChild(def, null, nodei, def, 1, NOJSON);
 		}
 		_nodeList.clear();
 		_scriptCompiler._actDefName = actDefName;
