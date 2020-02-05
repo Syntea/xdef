@@ -1803,7 +1803,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XNode xnode = entry.getValue();
 					if (xnode.getKind() == CompileReference.XMREFERENCE) {
 						CompileReference xref = (CompileReference) xnode;
-						XElement xel = xref.getTarget();
+						XElement xel = xref.getTargetXElement();
 						if (xel == null) { //Unresolved reference
 							xref.putTargetError(getReportWriter());
 						} else {
@@ -2009,7 +2009,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			// Note this must be done after all referrences are resolved
 			boolean errs = getReportWriter().errors();
 			for (CompileReference xref : _scriptCompiler._implList) {
-				XElement xel2 = xref.getTarget();
+				XElement xel2 = xref.getTargetXElement();
 				if (xel2 == null) { //Unresolved reference
 					xref.putTargetError(getReportWriter());
 				} else {
@@ -2114,7 +2114,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if ((lenx = xel._childNodes.length) > 0
 			&& (xel._childNodes[0].getKind() == CompileReference.XMREFERENCE)) {
 			CompileReference xref = (CompileReference) xel._childNodes[0];
-			XElement y = xref.getTarget();
+			XElement y = xref.getTargetXElement();
 			if (y == null) {
 				xref.putTargetError(getReportWriter()); //Unresolved reference
 				xel._childNodes = new XNode[0];
@@ -2322,7 +2322,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
 				return false;
 			}
-			XElement y = xref.getTarget();
+			XElement y = xref.getTargetXElement();
 			if (y == null) {
 				xref.putTargetError(getReportWriter());//Unresolved reference
 				XElement xe = new XElement("?", null, xel._definition);

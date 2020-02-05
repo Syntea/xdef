@@ -146,8 +146,19 @@ final class CompileReference extends XNode {
 		getSPosition().putReport(Report.error(XDEF.XDEF307, s), reporter);
 	}
 
-	/** Get reference target (XElement).
-	 * @return The definition element or null.
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	XElement getTargetXElement() {
+		XNode xn = getTarget();
+		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+			return (XElement) xn;
+		}
+		return null;
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
 	 */
 	XElement getTarget() {
 		String name = getName();

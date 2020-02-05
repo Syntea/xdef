@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.HashSet;
 import org.xdef.XDConstants;
 import org.xdef.XDValueID;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
@@ -1240,7 +1241,7 @@ public final class GenXComponent {
 		name = getUniqueName(getUniqueName(getUniqueName(name,
 			RESERVED_NAMES), classNames), varNames);
 		name = name.substring(4);
-		if (xe._json == 1 && xe._match >= 0) {
+		if (xe._json == XConstants.JSON_W3C && xe._match >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = xe._match; i < code.length; i++) {
 				XDValue item = code[i];
@@ -1761,9 +1762,10 @@ public final class GenXComponent {
 				genTextNodeCreator(xdata, name, groupMax, genNodeList);
 				txttab.put(node.getXDPosition(), (groupMax == 1 ? "1" : "2")
 					+ "," + getParsedResultGetter(xdata) + ";" + name);
-if (isRoot && xe._json == 2 && nodes.length == 1) {
-	genJsonDirectGetterSetter(xe, xdata, name, setters, getters, sbi);
-}
+				if (isRoot && xe._json==XConstants.JSON_XD && nodes.length==1) {
+					genJsonDirectGetterSetter(
+						xe, xdata, name, setters, getters, sbi);
+				}
 			} else if (node.getKind() == XMNode.XMELEMENT) {
 				XElement xe1 = (XElement) node;
 				final int max = groupMax > 1 ? groupMax : xe1.maxOccurs();
