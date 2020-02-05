@@ -689,7 +689,16 @@ final class ChkParser extends DomBaseHandler {
 
 	/////////////////////////////////////////////////////////////
 
-	final void closeReader() {} // needs the old version with KXmlParser
+	/** Close reader of parsed data. */
+	final void closeReader() {
+		if (_in != null) {
+			try {
+				_in.close();
+			} catch (IOException ex) {
+				throw new SRuntimeException(ex);
+			}
+		}
+	}
 
 	/** Get connected reporter.
 	 * @return connected SReporter.

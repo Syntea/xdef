@@ -310,7 +310,6 @@ public class XPreCompiler implements PreCompiler {
 			getSources().add(url);
 			InputStream in = new FileInputStream(file);
 			parseStream(in, url.toExternalForm());
-			in.close();
 		} catch (Exception ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
@@ -343,6 +342,7 @@ public class XPreCompiler implements PreCompiler {
 					}
 				}
 			}
+			in.close();
 		} catch (Exception ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;

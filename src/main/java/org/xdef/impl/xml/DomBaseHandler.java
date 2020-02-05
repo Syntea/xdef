@@ -73,6 +73,7 @@ public abstract class DomBaseHandler
 		myReader.setHandler(this);
 		myReader.setSysId(sysId);
 		doParse(myReader);
+		myReader.close();
 	}
 
 	public final void doParse(final XReader myReader)
