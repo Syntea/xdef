@@ -1559,34 +1559,34 @@ public final class CompileCode extends CompileBase {
 		if (_ignoreExternalMethods){
 			return false;
 		}
-		CodeExtMethod method = findExternalMethod(
-			name, numPar, org.xdef.impl.ext.XExtUtils.class, null);
+		// try to find this method in XExtUtils class
+		CodeExtMethod method = findExternalMethod(name,
+			numPar, org.xdef.impl.ext.XExtUtils.class, null);
 		if (method == null) {
-			method = findExternalMethod(name, numPar,java.lang.Math.class,null);
-		}
-		if (method == null) {
-			method = _extMethods.get(extName);
-		}
-		if (method == null) {
-			method = findExternalMethod(name, numPar, null, null);
-		}
-		if (method == null) {
-			//first occurrence
-			if (_extClasses != null) {
-				for (int i = 0; i < _extClasses.length; i++) {
-					method = findExternalMethod(name,
-						numPar,
-						_extClasses[i],
-						null);
-					if (method != null) {
-						break;
+			// not found, try to find it in the java.lang.Math class
+			method = findExternalMethod(name, numPar, Math.class, null);
+			if (method == null) { // not found, look to tthe ext methods list
+				method = _extMethods.get(extName);
+				if (method == null) {
+					method = findExternalMethod(name, numPar, null, null);
+					if (method == null && _extClasses != null) {
+						// not found, try to find it in extternal classes
+						for (int i = 0; i < _extClasses.length; i++) {
+							method = findExternalMethod(name,
+								numPar,
+								_extClasses[i],
+								null);
+							if (method != null) {
+								_extMethods.put(extName, method);
+								break;
+							}
+						}
+					}
+					if (method == null) {
+						return false; // method was not found
 					}
 				}
 			}
-			if (method == null) {
-				return false;
-			}
-			_extMethods.put(extName, method);
 		}
 		int np = numPar;
 		if (method._resultType != XD_VOID) {
