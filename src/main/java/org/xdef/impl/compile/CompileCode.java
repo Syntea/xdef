@@ -1565,7 +1565,7 @@ public final class CompileCode extends CompileBase {
 		if (method == null) {
 			// not found, try to find it in the java.lang.Math class
 			method = findExternalMethod(name, numPar, Math.class, null);
-			if (method == null) { // not found, look to tthe ext methods list
+			if (method == null) { // not found, look to external methods list
 				method = _extMethods.get(extName);
 				if (method == null) {
 					method = findExternalMethod(name, numPar, null, null);
