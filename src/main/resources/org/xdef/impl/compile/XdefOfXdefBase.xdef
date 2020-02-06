@@ -687,7 +687,11 @@ Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 /* JSON BNF grammar rules                                                     */
 /******************************************************************************/
 
-S ::= [#9#10#13 ]* /*skipped white spaces*/
+WhiteSpace ::= [#9#10#13 ]
+
+Comment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+
+S ::= (WhiteSpace | Comment)+ /* Optional sequence of whitespaces or comments */
 
 boolean ::= "true" | "false"
 
@@ -707,20 +711,20 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-xdscript ::= S ( ("$script" S ":" S string) | ( "$oneOf" (S ":" S string)? ) )
-  (S ",")?
+xdscript ::= S? ( ("$script" S? ":" S? string)
+  | ( "$oneOf" (S? ":" S? string)? ) ) (S? ",")?
 
-object ::= "{" xdscript? (members)* S "}"
+object ::= "{" xdscript? (members)* S? "}"
 
-members ::= S pair (S "," S pair)*
+members ::= S? pair (S? "," S? pair)*
 
-pair ::= string S ":" S value
+pair ::= string S? ":" S? value
 
-array ::= "[" xdscript? S list? S "]"
+array ::= "[" xdscript? S? list? S? "]"
 
-list ::= value (S "," S value )*
+list ::= value (S? "," S? value )*
 
-value ::= S (pair | "null" | boolean | number | string | array | object) S
+value ::= S? (pair | "null" | boolean | number | string | array | object) S?
 
 json ::= array | object
 
