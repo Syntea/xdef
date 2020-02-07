@@ -63,6 +63,7 @@ public class TestJsonXdef extends XDTester {
 				String id = getId(fdef); // get ID from jdef file name
 				// get all json files for this test
 				File[] data = SUtils.getFileGroup(_dataDir+"Test"+id +"*.json");
+				String rName = "Test"+id;
 				for (File f: data) {
 					String name = f.getName();
 					int ndx = name.indexOf(".json");
@@ -83,15 +84,15 @@ public class TestJsonXdef extends XDTester {
 				// Create X-definition from Jdef (W3C)
 				newFile = new File(_tempDir + "Test" + id + "a.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "a' xd:root='jw:json'>\n"
-					+ "<xd:json name='jw:json'>\n"
+					+ "'\n xd:name='" + "Test" + id + "a' xd:root='a'>\n"
+					+ "<xd:json name='a'>\n"
 					+ jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// Create X-definition from Jdef (X-definition)
 				newFile = new File(_tempDir + "Test" + id + "b.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "b' xd:root='js:json'>\n"
-					+ "<xd:json mode='xd' name='js:json'>\n"
+					+ "'\n xd:name='" + "Test" + id + "b' xd:root='b'>\n"
+					+ "<xd:json mode='xd' name='b'>\n"
 					+ jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// create X-component items
@@ -205,7 +206,6 @@ public class TestJsonXdef extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		// get all json files for this test
 		xd = xp.createXDDocument("Test" + id + ver);
-		String rootName = ("a".equals(ver) ? "jw" : "js") + ":json";
 		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml")) {
 			Object json;
 			String name = f.getName();
@@ -256,7 +256,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parse with jparse
 			try {
-				Object o = xd.jparse(json, rootName, null);
+				Object o = xd.jparse(json, ver, null);
 				if (!JsonUtil.jsonEqual(json, o)) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + ver + "\n"
@@ -323,7 +323,7 @@ public class TestJsonXdef extends XDTester {
 		for (File f: SUtils.getFileGroup(_dataDir+"Test"+id+"*.jerr")) {
 			try {
 				reporter.clear();
-				xd.jparse(f, rootName, reporter);
+				xd.jparse(f, ver, reporter);
 				if (!reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error not reported: "+f.getName()+" ("+ver+")";

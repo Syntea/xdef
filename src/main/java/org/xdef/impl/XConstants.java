@@ -23,5 +23,7 @@ public interface XConstants {
 	public static byte JSON_W3C = 1;
 	/** JSON to XML transformation according to X-definition implementation. */
 	public static byte JSON_XD = 2;
+	/** JSON root element. */
+	public static byte JSON_ROOT = 4;
 
 }

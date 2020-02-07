@@ -150,18 +150,20 @@ final class CompileReference extends XNode {
 	 * @return the found XElement or null.
 	 */
 	XElement getTargetXElement() {
-		XNode xn = getTarget();
-		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-			return (XElement) xn;
-		}
-		return null;
+		return getTargetXElement(getName());
 	}
 
 	/** Get reference target XElement.
 	 * @return the found XElement or null.
 	 */
-	XElement getTarget() {
-		String name = getName();
+	XElement getTargetXChoice() {
+		return getTargetXElement(getName() + "$choice");
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	private XElement getTargetXElement(final String name) {
 		if ("*".equals(name)) { // any in root selection
 			XElement result = new XElement("$any", null, _definition);
 			result.setSPosition(getSPosition());
@@ -201,12 +203,6 @@ final class CompileReference extends XNode {
 					setName(s + u + t);
 				}
 				return (XElement) xn;
-			}
-			if (dn == null) { // try to find json model
-				dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI_W3C,mName);
-				if (dn == null) {
-					dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI,mName);
-				}
 			}
 		}
 		if (dn != null) {

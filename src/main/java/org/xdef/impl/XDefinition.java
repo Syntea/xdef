@@ -289,12 +289,22 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
 			int i = name.indexOf(':');
-			nm = name.substring(i + 1);
+			nm = name.substring(i + 1);			
 			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _rootSelection.keySet()) {
 				XElement xe = (XElement) _rootSelection.get(xName);
-				if (xe.getJsonMode() > 0 && qn.equals(xe.getQName())) {
-					return xe;
+				if (xe._json > 0) {
+					if (qn.equals(xe.getQName())) {
+						return xe;
+					} else if ((xe._json) != 0) {
+						if (xe._childNodes.length > 0) {
+							for (XNode x: xe._childNodes) {
+								if (qn.equals(x.getQName())) {
+									return (XElement) x;
+								}
+							}
+						}
+					}
 				}
 				i = xName.indexOf(':');
 				if (i >= 0) {
@@ -322,7 +332,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		} else {  // not NS URI, not lexicon
 			for (XNode xe: _rootSelection.values()) {
 				if (xe != null && nm.equals(xe.getName()) &&
-					xe.getNSUri() == null){
+					xe.getNSUri() == null) {
 					return (XElement) xe;
 				}
 			}

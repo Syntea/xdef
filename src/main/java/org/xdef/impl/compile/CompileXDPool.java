@@ -40,7 +40,6 @@ import java.util.StringTokenizer;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
-import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 import java.io.File;
 import java.io.InputStream;
@@ -1471,47 +1470,41 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
-			} else if (pnode._jsonMode != 0) {
+			} else if ("json".equals(name)) {
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315);
 					return;
 				}
-				String jsNS = XDConstants.JSON_NS_URI_W3C;
-				int nsindex = XPreCompiler.NS_JSON_W3C_INDEX;
-				byte jsonMode = pnode._jsonMode;
-				String jprefix = "jw";
-				if (pnode._jsonMode == XConstants.JSON_XD) {
-					jsNS = XDConstants.JSON_NS_URI;
-					nsindex = XPreCompiler.NS_JSON_INDEX;
-					jprefix = "js";
+				SBuffer sb =
+					_precomp.getXdefAttr(pnode, "mode", false, true);
+				// w3c mode is default
+				String s = sb != null ? sb.getString().trim() : "w3c";
+				byte jsonMode =  XConstants.JSON_W3C; //W3C mode is default
+				if ("xd".equals(s)) {
+					jsonMode = XConstants.JSON_XD;
+				} else if (!"w3c".equals(s)) {
+					error(sb, XDEF.XDEF222, "mode", s); ///
 				}
-				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
-				pnode._nsURI = jsNS;
-				pnode._nsindex = nsindex;
+				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
+				sb = _precomp.getXdefAttr(pnode, "name", false, true);
 				if (sb == null) {
-					pnode._name.setString(jprefix + ":json");
+					sb = new SBuffer("json", pnode._name);
 				} else {
-					String s = sb.getString().trim();
-					int ndx = s.indexOf(':');
-					if (ndx >= 0) {
-						jprefix = s.substring(0, ndx);
-						s = s.substring(ndx + 1);
+					s = sb.getString();
+					if (!StringParser.isJavaName(s)) {
+						//The name of JSON model "&{0}" can't contain ":"
+						error(sb, XDEF.XDEF316, name);
 					}
-					pnode._name.setString(jprefix + ":" + s);
-					if (!_jsonNames.add(xdef.getName() + "#" + s)) {
-						//The name of JSON model "&{0}" already exists
-						//in X-definition
-						error(sb, XDEF.XDEF252, pnode._localName);
-					}
-					pnode._localName = s;
 				}
-				pnode._nsPrefixes.put(jprefix, nsindex);
+				pnode._name = sb;
 				for (PAttr pattr:  pnode._attrs) {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				XJson.genXdef(pnode, jsonMode, _precomp.getReportWriter());
+				pnode._nsURI = null; // set no namespace
+				pnode._nsindex = -1;
+				XJson.genXdef(pnode, jsonMode , _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {

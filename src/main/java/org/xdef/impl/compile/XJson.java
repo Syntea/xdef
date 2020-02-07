@@ -9,14 +9,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.XOccurrence;
 import org.xdef.json.JsonToXml;
 import org.xdef.json.JsonUtil;
 import org.xdef.msg.JSON;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
-import org.xdef.sys.SParser;
 import org.xdef.sys.SPosition;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
 /** Create items from xd:json to X-definition.
@@ -120,7 +122,7 @@ public class XJson extends JsonToXml {
 	private boolean skipSemiconsBlanksAndComments() {
 		boolean result = false;
 		for(;;) {
-			skipWhiteSpaces();
+			isSpacesOrComments();
 			if (eos() || !isChar(';')) {
 				break;
 			}
@@ -142,6 +144,55 @@ public class XJson extends JsonToXml {
 			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
 	}
 
+	/** Read occurrence.
+	 * Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
+	 *   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?"
+	 *   | (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))))
+	 * @return Occurrence object or null.
+	 */
+	private XOccurrence readOccurrence() {
+		if (isToken("occurs")) {
+			if (!isSpacesOrComments()) {
+				// here it is an error
+			}
+		}
+		final String[] tokens =
+			{"optional", "?", "*", "required", "ignore", "illegal"};
+		int ndx = isOneOfTokens(tokens);
+		if (ndx >= 0) {
+			switch (ndx) {
+				case  0:
+				case  1:
+				case  2:
+					return new XOccurrence(1,1); // required
+				case  3:
+					return new XOccurrence(0,Integer.MAX_VALUE); // unbounded
+				case  4:
+					return new XOccurrence(
+						XOccurrence.IGNORE,Integer.MAX_VALUE); // ignore
+				default:
+					return new XOccurrence(XOccurrence.ILLEGAL, 0); // illegal
+			}
+		}
+		int min = 0;
+		int max = Integer.MAX_VALUE;
+		if (isInteger()) {
+			min = max = getParsedInt();
+			isSpacesOrComments();
+			if (isToken("..")) {
+				isSpacesOrComments();
+				if (isInteger()) {
+					max = getParsedInt();
+				} else {
+					isChar('*');
+				}
+			}
+			return new XOccurrence(min,max);
+		} else {
+			return null;
+		}
+	}
+
 	/** Parse X-script and return occurrence and executive part in separate
 	 * fields.
 	 * @return array with SBuffer items from both parts.
@@ -151,34 +202,9 @@ public class XJson extends JsonToXml {
 		SBuffer[] result = new SBuffer[] {
 			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
 		int pos = getIndex();
-		// parse occurrence
-		// Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
-		//   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?" |
-		//   (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? )))) $rule
 		SPosition spos = getPosition();
-		String[] tokens = {"required","optional", "ignore","illegal"};
-		int ndx = isOneOfTokens(tokens);
-		if (ndx >= 0) {
-			result[0] = new SBuffer(tokens[ndx], spos);
-		} else {
-			spos = getPosition();
-			if (isToken("occurs")) {
-				skipWhiteSpaces();
-			}
-			pos = getIndex();
-			char ch = isOneOfChars("*+?");
-			if (ch == SParser.NOCHAR) {
-				skipWhiteSpaces();
-				if (isInteger()) {
-					skipWhiteSpaces();
-					if (isToken("..")) {
-						skipWhiteSpaces();
-						if (!isInteger()) {
-							isChar('*');
-						}
-					}
-				}
-			}
+		XOccurrence occ = readOccurrence();
+		if (occ != null) {
 			result[0] = new SBuffer(getParsedBufferPartFrom(pos), spos);
 		}
 		skipSemiconsBlanksAndComments();
@@ -294,7 +320,7 @@ public class XJson extends JsonToXml {
 			map.remove(SCRIPT_KEY);
 			JValue jv =(JValue) val;
 			setSourceBuffer(jv.getSBuffer());
-			skipWhiteSpaces();
+			isSpacesOrComments();
 			if (isToken(ONEOF_KEY)) {
 				ee = genXDElement(e, "choice", getPosition());
 				e._childNodes.add(ee);
@@ -340,7 +366,7 @@ public class XJson extends JsonToXml {
 				: jo instanceof JValue ? ((JValue) jo).getObject() : jo;
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
-				skipWhiteSpaces();
+				isSpacesOrComments();
 				if (isToken(ONEOF_KEY)) {
 					skipSemiconsBlanksAndComments();
 					e = genXDElement(parent,
@@ -377,7 +403,6 @@ public class XJson extends JsonToXml {
 				if (!parsedScript[0].getString().isEmpty()) { // occurrence
 					occ = parsedScript[0];
 				}
-//				StringParser p = new StringParser(parsedScript[1]);
 				if (eos()) {
 					parsedScript[1] = new SBuffer("jvalue()",
 						jo.getPosition());
@@ -452,6 +477,8 @@ public class XJson extends JsonToXml {
 	 * @return created PNode.
 	 */
 	private PNode genJsonModelW3C(final Object json, final PNode parent) {
+		setPrefix(parent,
+			XDConstants.JSON_NS_URI_W3C, "js", XPreCompiler.NS_JSON_W3C_INDEX);
 		PNode e;
 		if (json instanceof JMap) {
 			e = genJsonMapW3C((JMap) json, parent);
@@ -519,7 +546,7 @@ public class XJson extends JsonToXml {
 				Object o = map.get(key);
 				if (o instanceof JValue && SCRIPT_KEY.equals(key)) {
 					setSourceBuffer(((JValue) o).getSBuffer());
-					skipWhiteSpaces();
+					isSpacesOrComments();
 					choicePosition = getPosition();
 					if (isToken(ONEOF_KEY)) {
 						choice = true;
@@ -623,7 +650,7 @@ public class XJson extends JsonToXml {
 				SBuffer sbf = getScriptValue((JValue) list.get(0));
 				if (sbf != null){
 					setSourceBuffer(sbf);
-					skipWhiteSpaces();
+					isSpacesOrComments();
 					if (isToken(ONEOF_KEY)) {
 						PNode ee =
 							genPElement(parent, nsURI, name,list.getPosition());
@@ -674,7 +701,7 @@ public class XJson extends JsonToXml {
 			SBuffer[] parsedScript = parseOccurrence(jv.getSBuffer());
 			e = genPElement(parent, nsURI, name, jv.getPosition());
 			parent._childNodes.add(e);
-			skipWhiteSpaces();
+			isSpacesOrComments();
 			if (!parsedScript[0].getString().trim().isEmpty()) { // occurrence
 				setXDAttr(e, "script", parsedScript[0]);
 			}
@@ -778,7 +805,6 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 		if (item instanceof JList) {
 			jl = (JList) item;
 			if (!isSimpleValue(jl.get(0))) {
-				// TODO
 				SBuffer sbf = getScriptValue(jl.get(0));
 				if (sbf == null) {
 					return;
@@ -793,7 +819,6 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 			return;
 		}
 		for (int i = 0; i < ee._childNodes.size(); i++) {
-			
 			PNode x = ee._childNodes.get(i);
 			if (x._name.getString().equals(_xdPrefix + ":text")) {
 				ee._childNodes.remove(i);
@@ -857,10 +882,10 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 			JValue jx = (JValue) o;
 			if ((o = jx.getObject()) != null && o instanceof String) {
 				setSourceBuffer(jx.getSBuffer());
-				skipWhiteSpaces();
+				isSpacesOrComments();
 				map.remove(SCRIPT_KEY);
 				if (isToken(ONEOF_KEY)) {
-					skipSemiconsBlanksAndComments();
+					SBuffer[] parsedScript = parseOccurrence();
 					ee = genXDElement(parent, "choice", jx.getPosition());
 					parent._childNodes.add(ee);
 					if (!eos()) {
@@ -869,6 +894,14 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 					}
 					for (String key: map.keySet()) {
 						e = namedItemToXD(key, map.get(key), ee);
+					}
+					if (!parsedScript[0].getString().isEmpty()) {
+						setSourceBuffer(parsedScript[0]);
+						XOccurrence occ = readOccurrence();
+						if (occ != null && occ.minOccurs() == 0) {
+							e = genJElement(ee, J_MAP, map.getPosition());
+							ee._childNodes.add(e);
+						}
 					}
 					return ee;
 				}
@@ -957,7 +990,7 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 			if (sbf != null) { // xd:script item
 				setSourceBuffer(sbf);
 				i = 1;
-				skipWhiteSpaces();
+				isSpacesOrComments();
 				if (isToken(ONEOF_KEY)) {
 					e = genXDElement(parent, "choice", getPosition());
 					parent._childNodes.add(e);
@@ -992,6 +1025,8 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 	 * @param parent where to create child nodes.
 	 */
 	private PNode genJsonModelXD(final Object json, final PNode parent) {
+		setPrefix(parent,
+			XDConstants.JSON_NS_URI, "js", XPreCompiler.NS_JSON_INDEX);
 		if (json instanceof JMap) {
 			return mapToXD((JMap) json, parent);
 		} else {
@@ -1000,7 +1035,25 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-	
+
+	private void setPrefix(final PNode p, String nsURI,
+		String prefix, Integer nsindex) {
+		String s = prefix;
+		for (int i = 1;; i++) {
+			Integer x;
+			if ((x=p._nsPrefixes.get(s)) == null) {
+				p._nsPrefixes.put(s, nsindex);
+				break;
+			} else if (x.equals(nsindex)) {
+				break;
+			} else {
+				s = prefix + i;
+			}
+		}
+		_jsPrefix = s;
+		_jsNamespace = nsURI;
+	}
+
 	/** Create X-definition model from PNode with JSON description.
 	 * @param p PNode with JSON script.
 	 * @param jsonMode version of transformation JSON to XML(W3C, X-definition).
@@ -1025,19 +1078,19 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 		jx.setSourceBuffer(p._value);
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JList)) {
-			jx._jsPrefix = p.getPrefix();
 			if (jsonMode == XConstants.JSON_W3C) {
-				jx._jsNamespace = XDConstants.JSON_NS_URI_W3C;
 				jx.genJsonModelW3C(json, p);
-			} else if (XDConstants.JSON_NS_URI.equals(p._nsURI)) {
-				jx._jsNamespace = XDConstants.JSON_NS_URI;
+			} else if (jsonMode == XConstants.JSON_XD){
 				jx.genJsonModelXD(json, p);
+			} else {//never should happen!
+				//Internal error&{0}{: }
+				throw new SRuntimeException(SYS.SYS066, "Incorrect jsonMode");
 			}
 		} else {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
-//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+//System.out.println(cz.syntea.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1045,20 +1098,20 @@ error("XXXX", key + "=" + jv.getString()); //TODO ?????
 ////////////////////////////////////////////////////////////////////////////////
 
 	public static class JMap extends LinkedHashMap<String, Object>{
-		private final SPosition _position;
+		private final SPosition _position; // SPosition of parsed object
 		public JMap(final SPosition position) {super(); _position = position;}
 		private SPosition getPosition() {return _position;}
 	}
 
 	public static class JList extends ArrayList<Object> {
-		private final SPosition _position;
+		private final SPosition _position; // SPosition of parsed object
 		public JList(final SPosition position) {super(); _position = position;}
 		private SPosition getPosition() {return _position;}
 	}
 
 	public static class JValue {
-		private final SPosition _position;
-		private final Object _o;
+		private final SPosition _position; // SPosition of parsed object
+		private final Object _o; // parsed object
 		public JValue(final SPosition position, final Object val) {
 			_position = position;
 			_o = val;

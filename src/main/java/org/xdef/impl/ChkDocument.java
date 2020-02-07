@@ -1460,4 +1460,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_destLanguageID =
 			language == null ? -1 : xp._lexicon.getLanguageID(language);
 	}
+
+	@Override
+	public String toString() {return "ChkDocument: " + _xElement;}
 }
