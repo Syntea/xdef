@@ -163,10 +163,11 @@ public class XJson extends JsonToXml {
 			switch (ndx) {
 				case  0:
 				case  1:
+					return new XOccurrence(0, 1); // optional
 				case  2:
-					return new XOccurrence(1,1); // required
+					return new XOccurrence(1, Integer.MAX_VALUE); // unbounded
 				case  3:
-					return new XOccurrence(0,Integer.MAX_VALUE); // unbounded
+					return new XOccurrence(1, 1); // required
 				case  4:
 					return new XOccurrence(
 						XOccurrence.IGNORE,Integer.MAX_VALUE); // ignore
@@ -174,10 +175,8 @@ public class XJson extends JsonToXml {
 					return new XOccurrence(XOccurrence.ILLEGAL, 0); // illegal
 			}
 		}
-		int min = 0;
-		int max = Integer.MAX_VALUE;
 		if (isInteger()) {
-			min = max = getParsedInt();
+			int min = getParsedInt(), max = Integer.MAX_VALUE;
 			isSpacesOrComments();
 			if (isToken("..")) {
 				isSpacesOrComments();
@@ -187,7 +186,7 @@ public class XJson extends JsonToXml {
 					isChar('*');
 				}
 			}
-			return new XOccurrence(min,max);
+			return new XOccurrence(min, max);
 		} else {
 			return null;
 		}
