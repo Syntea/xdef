@@ -1605,23 +1605,25 @@ public final class GenXComponent {
 			atttab.put(xdata.getXDPosition(),
 				getParsedResultGetter(xdata) + ";" + name);
 		}
-		// Generate getters of namespace attributes
-		for (Map.Entry<Object,Object> item : nsmap.entrySet()) {
-			final String name = (String) item.getKey();
+		// Generate namespace attributes
+		for (Map.Entry<Object, Object> item : nsmap.entrySet()) {
 			final String value = (String) item.getValue();
-			final String xmlname = addVarName(varNames,
-				name.replace('$', ':'), xe.getXDPosition()+"/@"+name, false);
-			getters.append(modify(
-(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+LN+
-"\t * @return string with value of attribute"+LN+
-"\t */"+LN) : "")+
-"\tpublic String get&{name}() {return \"&{value}\";}"+LN,
-				"&{name}", name,
-				"&{xmlname}", xmlname,
-				"&{value}", value));
+			final String name = ((String) item.getKey());
+			int i = name.indexOf('$'); // The ":" in name is replaced with "$"!
+			String nsname = "xmlns" + (i>0 ? ':' + name.substring(i + 1) : "");
+			// Generate getter of namespace
+//			final String xmlname = addVarName(varNames,
+//				name, xe.getXDPosition()+"/@"+name, false);
+//			getters.append(modify(
+//(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+LN+
+//"\t * @return string with value of attribute"+LN+
+//"\t */"+LN) : "")+
+//"\tpublic String get&{name}() {return \"&{value}\";}"+LN,
+//				"&{name}", name,
+//				"&{value}", value));
 			String s =
-("\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+LN+
-"\t\t\t\"" + xmlname + "\", \"" + value + "\");"+LN);
+"\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+LN+
+"\t\t\t\"" + nsname + "\", \"" + value + "\");"+LN;
 			creators.append(s);
 		}
 		final XNode[] nodes = (XNode[]) xe.getChildNodeModels();
