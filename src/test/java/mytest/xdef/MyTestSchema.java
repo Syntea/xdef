@@ -1,4 +1,4 @@
-package mytest;
+package mytest.xdef;
 
 import org.xdef.sys.FUtils;
 import org.xdef.util.XdefToXsd;

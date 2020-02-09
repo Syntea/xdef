@@ -3186,8 +3186,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			errorAndSkip(XDEF.XDEF220, ";"); //Qualified method name expected
 			return;
 		}
-		separateMethodNameFromIdentifier();
 		//classified name of metohd
+		separateMethodNameFromIdentifier();
 		String cName = _idName; // className
 		Class<?> mClass;
 		try {
