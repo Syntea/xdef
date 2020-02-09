@@ -289,7 +289,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
 			int i = name.indexOf(':');
-			nm = name.substring(i + 1);			
+			nm = name.substring(i + 1);
 			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _rootSelection.keySet()) {
 				XElement xe = (XElement) _rootSelection.get(xName);
@@ -349,8 +349,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				}
 				if (xName.startsWith("json") && !prefix.isEmpty()) {
 					String u = _namespaces.get(prefix);
-					if (XDConstants.JSON_NS_URI.equals(u)
-						|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
+					if (XDConstants.JSON_NS_URI_W3C.equals(u)) {
 						XMElement xel =  getModel(u,xName);
 						if (xel != null) {
 							XMNode[] models = xel.getChildNodeModels();

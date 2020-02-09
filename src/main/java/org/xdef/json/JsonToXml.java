@@ -67,7 +67,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param val Object to be tested.
 	 * @return true if the argument is a simple value.
 	 */
-	public static boolean isSimpleValue(final Object val) {
+	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
 			|| val instanceof String || val instanceof JValue
@@ -388,7 +388,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element.
 	 */
-	public final Element toXmlXD(final Object json) {
+	final Element toXmlXD(final Object json) {
 		_doc = KXmlUtils.newDocument();
 		jsonToXmlXD(json, _doc);
 		return _doc.getDocumentElement();
@@ -448,7 +448,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	public final Element toXmlW3C(final Object json) {
+	final Element toXmlW3C(final Object json) {
 		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		_jsPrefix = "";
 		_doc = KXmlUtils.newDocument();

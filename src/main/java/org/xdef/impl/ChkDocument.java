@@ -903,15 +903,32 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final Object jsonData,
 		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
+		// Check if exists JSON root model and set xdVersion (xe._json != 0)
 		XNode xn = _xdef._rootSelection.get(model);
 		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
 			XElement xe = (XElement) xn;
 			if (xe._json != 0) {
 				_xElement = xe;
-				Element e = xe._json == 1
-					? JsonUtil.jsonToXmlW3C(jsonData)
-					: JsonUtil.jsonToXml(jsonData);
+				Element e = xe._json == XConstants.JSON_MODE
+					? JsonUtil.jsonToXml(jsonData)
+					: JsonUtil.jsonToXmlXdef(jsonData);
+				if (xe._childNodes.length > 0
+					&& xe._childNodes[0].getKind() == XMNode.XMCHOICE) {
+					// XMChoice is root of JSON model of XML
+					XChoice xch = (XChoice) xe._childNodes[0];
+					String url = e.getNamespaceURI();
+					QName eQname = url == null ? new QName(e.getTagName())
+						: new QName(url, e.getLocalName());
+					for (int i = xch.getBegIndex()+1; i<xch.getEndIndex(); i++){
+						XNode y = xe._childNodes[i];
+						if (y.getKind() == XMNode.XMELEMENT) {
+							if (y.getQName().equals(eQname)) {
+								_xElement = (XElement) y;
+								break;
+							}
+						}
+					}
+				}
 				xparse(e, reporter);
 				return JsonUtil.xmlToJson(_element);
 			}
@@ -1055,9 +1072,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		try {
 			byte jVersion = (Byte) yClass.getDeclaredField("JSON").get(null);
 			e = jVersion == 1 ?
-				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
+				JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXdef(json);
 		} catch (Exception ex) {
-			e = JsonUtil.jsonToXmlW3C(json);
+			e = JsonUtil.jsonToXml(json);
 		}
 		return parseXComponent(e, yClass, reporter);
 	}

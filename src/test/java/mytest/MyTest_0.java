@@ -736,7 +736,7 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			el = JsonUtil.jsonToXmlW3C(j);
+			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
@@ -744,7 +744,7 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			el = JsonUtil.jsonToXmlW3C(j);
+			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -969,7 +969,7 @@ if(T){return;}
 			assertTrue(JsonUtil.jsonEqual(o, XmlToJson.toJson(el)));
 /*xx*/
 			s = "{\"\":\"\\\\\\\"\\t\"}";
-			el = JsonUtil.jsonToXmlW3C(JsonUtil.parse(s));
+			el = JsonUtil.jsonToXml(JsonUtil.parse(s));
 			xml = KXmlUtils.nodeToString(el, true);
 			System.out.println(xml);
 			System.out.println(s);

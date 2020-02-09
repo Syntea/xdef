@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xdef.sys.SUtils;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
@@ -462,7 +463,11 @@ public class JsonUtil extends StringParser {
 	 */
 	public static final Object parse(final InputStream in)
 		throws SRuntimeException {
-		return JsonUtil.parse(in, null);
+		Object result = JsonUtil.parse(in, null);
+		try {
+			in.close();
+		} catch (IOException ex) {}
+		return result;
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -865,11 +870,11 @@ public class JsonUtil extends StringParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Convert XML element to JSON object.
-	 * @param e XML element.
+	 * @param node XML element or document.
 	 * @return JSON object.
 	 */
-	public static final Object xmlToJson(final Element e) {
-		return new XmlToJson().toJson(e);
+	public static final Object xmlToJson(final Node node) {
+		return new XmlToJson().toJson(node);
 	}
 
 	/** Convert XML document to JSON object.
@@ -904,75 +909,82 @@ public class JsonUtil extends StringParser {
 		return xmlToJson(KXmlUtils.parseXml(in).getDocumentElement());
 	}
 
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param json object with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final Object json) {
-		return new JsonToXml().toXmlW3C(json);
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param json path or string with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final String json) {
-		return new JsonToXml().toXmlW3C(parse(json));
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param file file with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final File file) {
-		return new JsonToXml().toXmlW3C(parse(file));
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param url URL with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final URL url) {
-		return new JsonToXml().toXmlW3C(parse(url));
-	}
-
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final Object json) {
-		return new JsonToXml().toXmlXD(json);
+		return new JsonToXml().toXmlW3C(json);
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param json path or string with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final String json) {
-		return new JsonToXml().toXmlXD(parse(json));
+		return new JsonToXml().toXmlW3C(parse(json));
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
-	 * @param file file JSON data.
+	/** Create XML from JSON object in W3C mode.
+	 * @param file file with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final File file) {
-		return new JsonToXml().toXmlXD(parse(file));
+		return new JsonToXml().toXmlW3C(parse(file));
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param url URL with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final URL url) {
-		return new JsonToXml().toXmlXD(parse(url));
+		return new JsonToXml().toXmlW3C(parse(url));
 	}
-
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param in InputStream with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final InputStream in) {
+		return new JsonToXml().toXmlW3C(parse(in));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param json object with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final Object json) {
+		return new JsonToXml().toXmlXD(json);
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param json path or string with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final String json) {
+		return new JsonToXml().toXmlXD(parse(json));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param file file JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final File file) {
+		return new JsonToXml().toXmlXD(parse(file));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param url URL with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final URL url) {
+		return new JsonToXml().toXmlXD(parse(url));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param in InputStream with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXDef(final InputStream in) {
 		return new JsonToXml().toXmlXD(parse(in));
 	}
 
@@ -1243,4 +1255,5 @@ public class JsonUtil extends StringParser {
 		}
 		return sb.toString();
 	}
+	
 }

@@ -44,10 +44,8 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1;		//4
 	/** index of NameSpace of XML Schema. */
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
-	/** index of NameSpace of JSON (xdef). */
-	static final int NS_JSON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
 	/** index of NameSpace of JSON (W3C). */
-	static final int NS_JSON_W3C_INDEX = NS_JSON_INDEX + 1;			//7
+	static final int NS_JSON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
 	/** Table of NameSpace prefixes. */
 	static final Map<String, Integer> DEFINED_PREFIXES =
 		new LinkedHashMap<String, Integer>();
@@ -109,11 +107,9 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
 		_codeGenerator._namespaceURIs.add(XDConstants.XLINK_NS_URI);
 		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
-		_codeGenerator._namespaceURIs.add(//schema
+		_codeGenerator._namespaceURIs.add( // XML schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.JSON_NS_URI);//JSON Xdef
-		_codeGenerator._namespaceURIs.add(//JSON W3C
-			XDConstants.JSON_NS_URI_W3C);
+		_codeGenerator._namespaceURIs.add(XDConstants.JSON_NS_URI_W3C); //JSON
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);
