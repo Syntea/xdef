@@ -513,7 +513,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						"<xd:declaration> external method { ... } ...");
 				}
 				String value = sval.getString();
-				Map<String,Class<?>> ht = new LinkedHashMap<String,Class<?>>();
+				Map<String, Class<?>> ht = new LinkedHashMap<String,Class<?>>();
 				for (Class<?> clazz : _codeGenerator._extClasses) {
 					ht.put(clazz.getName(), clazz);
 				}
@@ -1002,7 +1002,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					|| "textcontent".equals(localName)) {
 					if (newKind == XNode.XMELEMENT && xel != null/*must be!*/
 						&& !isAttlist) {
-						//here is "textcontent"
+						//here is "text" or "textcontent"
 						XData xdata = new XData('$' + localName,
 							null, xel.getXDPool(), XNode.XMTEXT);
 						xdata.setSPosition(copySPosition(sval));
@@ -1727,6 +1727,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 	}
 
+	private void setRootSelectionFromChoice(final Map<String, XNode> selection,
+		final XChoice xch,
+		final XElement x) {
+		for (int i = xch.getBegIndex() + 1; i < xch.getEndIndex(); i++) {
+			XNode y = x._childNodes[i];
+			if (selection.put(y.getName(),y)!=null) {
+				//The name of element in the root xd:choice must be unique&{0}
+				error(XDEF.XDEF364, y.getXDPosition());
+			}
+		}
+	}
+
 	/** Compile parsed definitions to the XPool.
 	 * @param xdp the XPool.
 	 */
@@ -1784,16 +1796,28 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//resolve root references for all XDefinitions
 		for (XDefinition d : _xdefs.values()) {
 			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
-			for (Map.Entry<String,XNode> entry: d._rootSelection.entrySet()) {
+			for (Map.Entry<String, XNode> entry: d._rootSelection.entrySet()) {
 				try {
 					XNode xnode = entry.getValue();
 					if (xnode.getKind() == CompileReference.XMREFERENCE) {
 						CompileReference xref = (CompileReference) xnode;
-						XElement xel = xref.getTargetXElement();
-						if (xel == null) { //Unresolved reference
-							xref.putTargetError(getReportWriter());
+						XElement x = xref.getTargetXElement();
+						if (x == null) { //Unresolved reference
+							// try named choice
+							if ((x = xref.getTargetXChoice()) != null) {
+								setRootSelectionFromChoice(rootSelection,
+									(XChoice) x._childNodes[0], x);
+							} else {
+								xref.putTargetError(getReportWriter());
+							}
+						} else if (x._json != 0 && x._childNodes.length > 0
+							&& x._childNodes[0].getKind() == XMNode.XMCHOICE) {
+							if (rootSelection.put(xref.getName(), x) != null) {
+								error(XDEF.XDEF309, //Internal error: &{0}
+									"reference to element model expected");
+							}
 						} else {
-							if (rootSelection.put(xref.getName(), xel) != null){
+							if (rootSelection.put(xref.getName(), x) != null) {
 								error(XDEF.XDEF309, //Internal error: &{0}
 									"reference to element model expected");
 							}
