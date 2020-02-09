@@ -1,4 +1,4 @@
-package mytest.xdef;
+package mytest;
 
 import java.util.Properties;
 import org.w3c.dom.Element;

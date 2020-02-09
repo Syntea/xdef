@@ -1,4 +1,4 @@
-package mytest.xdef;
+package mytest;
 
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
