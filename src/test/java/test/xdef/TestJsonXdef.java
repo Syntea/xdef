@@ -63,6 +63,7 @@ public class TestJsonXdef extends XDTester {
 				String id = getId(fdef); // get ID from jdef file name
 				// get all json files for this test
 				File[] data = SUtils.getFileGroup(_dataDir+"Test"+id +"*.json");
+				String rName = "Test"+id;
 				for (File f: data) {
 					String name = f.getName();
 					int ndx = name.indexOf(".json");
@@ -72,10 +73,11 @@ public class TestJsonXdef extends XDTester {
 					el = JsonUtil.jsonToXmlW3C(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
-					// Write JSON data as XML (XDEF modc)
-					el = JsonUtil.jsonToXml(json);
-					SUtils.writeString(new File(_tempDir + name + "b.xml"),
-						KXmlUtils.nodeToString(el,true),"UTF-8");
+					if (!JsonUtil.jsonEqual(JsonUtil.xmlToJson(el),
+						JsonUtil.xmlToJson(el = JsonUtil.jsonToXml(json)))) {
+						throw new RuntimeException(rName +
+							": xml transformation to JSON differs");
+					}
 				}
 				// read jdef file to string.
 				String jdef = SUtils.readString(
@@ -83,15 +85,8 @@ public class TestJsonXdef extends XDTester {
 				// Create X-definition from Jdef (W3C)
 				newFile = new File(_tempDir + "Test" + id + "a.xdef");
 				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "a' xd:root='jw:json'>\n"
-					+ "<xd:json name='jw:json'>\n"
-					+ jdef + "\n</xd:json>\n</xd:def>";
-				SUtils.writeString(newFile, xdef, "UTF-8");
-				// Create X-definition from Jdef (X-definition)
-				newFile = new File(_tempDir + "Test" + id + "b.xdef");
-				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "b' xd:root='js:json'>\n"
-					+ "<xd:json mode='xd' name='js:json'>\n"
+					+ "'\n xd:name='" + "Test" + id + "a' xd:root='a'>\n"
+					+ "<xd:json name='a'>\n"
 					+ jdef + "\n</xd:json>\n</xd:def>";
 				SUtils.writeString(newFile, xdef, "UTF-8");
 				// create X-component items
@@ -100,10 +95,6 @@ public class TestJsonXdef extends XDTester {
 					_tempDir + "Test" + id + "a.xdef").getDocumentElement();
 				components += cls +"a %link Test" + id
 					+ "a#" + el.getAttribute("xd:root") + ";\n";
-				el = KXmlUtils.parseXml(
-					_tempDir + "Test" + id + "b.xdef").getDocumentElement();
-				components += cls +"b %link Test" + id
-					+ "b#" + el.getAttribute("xd:root") + ";\n";
 			}
 			components += "</xd:component>";
 			// write X-component declaration to the file
@@ -137,13 +128,6 @@ public class TestJsonXdef extends XDTester {
 					rebuild = true; //force rebuild
 				}
 				newFile.delete();
-				newFile = new File(newComponentDir + "Test" + id + "b.java");
-				oldFile = new File(componentDir + "Test" + id + "b.java");
-				if (!oldFile.exists()||SUtils.compareFile(oldFile,newFile)>=0) {
-					SUtils.copyToFile(newFile, oldFile);
-					rebuild = true; //force rebuild
-				}
-				newFile.delete();
 			}
 			try {
 				SUtils.deleteAll(xdir, true);
@@ -159,11 +143,6 @@ public class TestJsonXdef extends XDTester {
 						}
 						clazz = Class.forName(
 							"test.common.json.component.Test" + id + 'a');
-						if (clazz == null) {
-							return null;  //force rebuild
-						}
-						clazz = Class.forName(
-							"test.common.json.component.Test" + id + 'b');
 						if (clazz == null) {
 							return null;  //force rebuild
 						}
@@ -191,25 +170,21 @@ public class TestJsonXdef extends XDTester {
 	/** Provides different tests on files with given ID.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param id identifier test.
-	 * @param ver version of test ('a'..w3c, 'b'.. XDEF)
 	 * @return the empty string if tests are OK, otherwise return the string
 	 * with error messages.
 	 */
-	private String testJdef(final XDPool xp,
-		final String id,
-		final String ver) {
+	private String testJdef(final XDPool xp, final String id) {
 		Element e;
 		XDDocument xd;
 		XComponent xc;
 		String result = "";
 		ArrayReporter reporter = new ArrayReporter();
 		// get all json files for this test
-		xd = xp.createXDDocument("Test" + id + ver);
-		String rootName = ("a".equals(ver) ? "jw" : "js") + ":json";
-		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*"+ver+".xml")) {
+		xd = xp.createXDDocument("Test" + id + "a");
+		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*a.xml")) {
 			Object json;
 			String name = f.getName();
-			String basename = name.substring(0, name.indexOf(ver + ".xml"));
+			String basename = name.substring(0, name.indexOf("a.xml"));
 			// read JSON data
 			try {
 				json = JsonUtil.parse(_dataDir + basename + ".json");
@@ -226,7 +201,7 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) { // check errors
 					result += (result.isEmpty() ? "" : "\n")
 						+ "ERRORS in " + name
-						+ " (xdef: Test" + id + ver +".xdef" +"):\n"
+						+ " (xdef: Test" + id +"a.xdef" +"):\n"
 						+ reporter.printToString();
 				} else {
 					KXmlUtils.compareElements(e,
@@ -256,10 +231,10 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parse with jparse
 			try {
-				Object o = xd.jparse(json, rootName, null);
+				Object o = xd.jparse(json, "a", null);
 				if (!JsonUtil.jsonEqual(json, o)) {
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error jparse Test" + id + ver + "\n"
+						+ "Error jparse Test" + id + "\n"
 						+ JsonUtil.toJsonString(json) + "\n"
 						+ JsonUtil.toJsonString(o) + "\n";
 				}
@@ -271,7 +246,7 @@ public class TestJsonXdef extends XDTester {
 			// parse with X-component
 			try {
 				xc = xd.parseXComponent(f, Class.forName(
-					"test.common.json.component.Test"+id+ver), null);
+					"test.common.json.component.Test" + id + "a"), null);
 				reporter.clear();
 				e = xc.toXml();
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
@@ -291,9 +266,9 @@ public class TestJsonXdef extends XDTester {
 			}
 			// Test X-component.
 			try {
-				xd = xp.createXDDocument("Test" + id + ver);
+				xd = xp.createXDDocument("Test" + id + "a");
 				xc = xd.parseXComponent(f, Class.forName(
-					"test.common.json.component.Test"+id+ver), null);
+					"test.common.json.component.Test"+id+"a"), null);
 				reporter.clear();
 				e = xc.toXml();
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
@@ -306,7 +281,7 @@ public class TestJsonXdef extends XDTester {
 				Object o = xc.toJson();
 				if (!JsonUtil.jsonEqual(json, o)) {
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error X-component toJsjon " + id + ver + "\n"
+						+ "Error X-component toJsjon " + id + "\n"
 						+ JsonUtil.toJsonString(json) + "\n"
 						+ JsonUtil.toJsonString(o) + "\n";
 				}
@@ -316,17 +291,17 @@ public class TestJsonXdef extends XDTester {
 				ex.printStackTrace(pw);
 				pw.close();
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component " + id + ver + "\n" + sw;
+					+ "Error X-component " + id + "\n" + sw;
 			}
 		}
 		// Test error reporting
 		for (File f: SUtils.getFileGroup(_dataDir+"Test"+id+"*.jerr")) {
 			try {
 				reporter.clear();
-				xd.jparse(f, rootName, reporter);
+				xd.jparse(f, "a", reporter);
 				if (!reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error not reported: "+f.getName()+" ("+ver+")";
+						+ "Error not reported: "+f.getName();
 				}
 			} catch (Exception ex) {
 				StringWriter sw = new StringWriter();
@@ -334,25 +309,10 @@ public class TestJsonXdef extends XDTester {
 				ex.printStackTrace(pw);
 				pw.close();
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error jerr: " + f.getName() + " (" + ver +")\n" + sw;
+					+ "Error jerr: " + f.getName() + "\n" + sw;
 			}
 		}
 		return result;
-	}
-
-	/** Provides different tests on files with given ID.
-	 * @param xp compiled XDPool from generated X-definitions.
-	 * @param id identifier test files.
-	 * @return the empty string if tests are OK, otherwise return the string
-	 * with error messages.
-	 */
-	private String testJdef(final XDPool xp, String id) {
-		String resulta = testJdef(xp, id, "a");
-		String resultb = testJdef(xp, id, "b");
-		if (!resulta.isEmpty() && !resultb.isEmpty()) {
-			resulta += '\n';
-		}
-		return resulta + resultb;
 	}
 
 	/** Invoke a JSON getter on the X-component.
@@ -360,7 +320,7 @@ public class TestJsonXdef extends XDTester {
 	 * @param name name of setter.
 	 * @return value of getter.
 	 */
-	private static Object getXCValue(XComponent xc, String name) {
+	private static Object getXCValue(Object xc, String name) {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod(name);
@@ -376,7 +336,7 @@ public class TestJsonXdef extends XDTester {
 	 * @param name name of setter.
 	 * @param val value to be set.
 	 */
-	private static void setXCValue(XComponent xc, String name, Object val) {
+	private static void setXCValue(Object xc, String name, Object val) {
 		for (Method m: xc.getClass().getDeclaredMethods()) {
 			Class<?>[] params = m.getParameterTypes();
 			if (name.equals(m.getName()) && params!=null && params.length==1) {
@@ -400,12 +360,11 @@ public class TestJsonXdef extends XDTester {
 	 */
 	private XComponent getXComponent(final XDPool xp,
 		final String test,
-		final String p,
 		final int x) {
 		try {
-			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") +p+".xml");
-			return xp.createXDDocument(test+p).parseXComponent(f,
-				Class.forName("test.common.json.component." + test + p), null);
+			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") + "a.xml");
+			return xp.createXDDocument(test + 'a').parseXComponent(f,
+				Class.forName("test.common.json.component." + test + 'a'), null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -414,6 +373,12 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+		// save actual value of chkSyntax
+//		boolean chkSyntax = getChkSyntax();
+		// this code will be removed after GenCollection will process JSON
+//		XDTester.setFulltestMode(false);
+//		setChkSyntax(false);
+
 		String xdef, xml, json;
 		Object j;
 		ArrayReporter reporter = new ArrayReporter();
@@ -423,7 +388,7 @@ public class TestJsonXdef extends XDTester {
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
-//			xp = genAll("Test0*");
+//			xp = genAll("Test017");
 		} catch (Exception ex) {
 			if (ex.getMessage().contains("Java compiler is not available")) {
 				getOutStream().println(
@@ -440,77 +405,48 @@ public class TestJsonXdef extends XDTester {
 				String s = testJdef(xp, getId(f));
 				assertTrue(s.isEmpty(), s);
 			}
-		} catch (Exception ex) {
-			throw new RuntimeException(ex); // should not happen!!!
-		}
-		
+		} catch (Exception ex) {fail(ex);} // should not happen!!!
 		try {
-			String test, p;
+/*xx*/
+			String test;
 			XComponent xc;
 
 			test = "Test008";
-			p = "a";
-			xc = getXComponent(xp, test, p, 0);
+			xc = getXComponent(xp, test, 0);
 			assertEq(1, getXCValue(xc,"jgetnumber"));
 			setXCValue(xc,"jsetnumber",3);
 			assertEq(3, getXCValue(xc,"jgetnumber"));
 			setXCValue(xc,"jsetnumber", null);
 			assertNull(getXCValue(xc,"jgetnumber"));
 
-			p = "b";
-			xc = getXComponent(xp, test, p, 0);
-			assertEq(1, getXCValue(xc,"jgetitem"));
-			setXCValue(xc,"jsetitem",3);
-			assertEq(3, getXCValue(xc,"jgetitem"));
-			setXCValue(xc,"jsetitem", null);
-			assertNull(getXCValue(xc,"jgetitem"));
-			
 			test = "Test020";
-			p = "a";
-			xc = getXComponent(xp, test, p, 0);
+			xc = getXComponent(xp, test, 0);
 			assertEq("abc", getXCValue(xc,"jgeta$string"));
 			assertNull(getXCValue(xc,"jgeta$number"));
 			assertNull(getXCValue(xc,"jgeta$boolean"));
 			assertNull(getXCValue(xc,"jgeta$null"));
 			setXCValue(xc,"jseta$null", null);
 			assertTrue(getXCValue(xc,"jgeta$boolean") == null);
-			
-			xc = getXComponent(xp, test, p, 1);
+
+			xc = getXComponent(xp, test, 1);
 			assertEq(123, getXCValue(xc,"jgeta$number"));
 			setXCValue(xc,"jseta$string", "");
 			assertEq("", getXCValue(xc,"jgeta$string"));
 			assertNull(getXCValue(xc,"jgeta$number"));
 			assertNull(getXCValue(xc,"jgeta$boolean"));
 			assertNull(getXCValue(xc,"jgeta$null"));
-			xc = getXComponent(xp, test, p, 2);
+			xc = getXComponent(xp, test, 2);
 			assertEq(false, getXCValue(xc,"jgeta$boolean"));
-			xc = getXComponent(xp, test, p, 3);
+			xc = getXComponent(xp, test, 3);
 			assertTrue(getXCValue(xc,"jgeta$null") != null);
 
-			p = "b";
-			xc = getXComponent(xp, test, p, 0);
-			assertEq("abc", getXCValue(xc,"jgeta"));
-			setXCValue(xc,"jseta", null);
-			assertTrue(getXCValue(xc,"jgeta") == null);
-			xc = getXComponent(xp, test, p, 1);
-			assertEq(123, getXCValue(xc,"jgeta"));
-			setXCValue(xc,"jseta", "");
-			assertEq("", getXCValue(xc,"jgeta"));
-			setXCValue(xc,"jseta", 456);
-			assertEq(456, getXCValue(xc,"jgeta"));
-			xc = getXComponent(xp, test, p, 2);
-			assertEq(false, getXCValue(xc,"jgeta"));
-			xc = getXComponent(xp, test, p, 3);
-			assertNull(getXCValue(xc,"jgeta"));
-
 			test = "Test021";
-			p = "a";
-			xc = getXComponent(xp, test, p, 0);
+			xc = getXComponent(xp, test, 0);
 			assertEq("abc", getXCValue(xc,"jgetstring"));
 			assertNull(getXCValue(xc,"jgetnumber"));
 			assertNull(getXCValue(xc,"jgetboolean"));
 			assertNull(getXCValue(xc,"jgetnull"));
-			xc = getXComponent(xp, test, p, 1);
+			xc = getXComponent(xp, test, 1);
 			assertEq(123, getXCValue(xc,"jgetnumber"));
 			setXCValue(xc,"jsetstring", "");
 			assertEq("", getXCValue(xc,"jgetstring"));
@@ -519,35 +455,20 @@ public class TestJsonXdef extends XDTester {
 			assertNull(getXCValue(xc,"jgetnull"));
 			setXCValue(xc,"jsetstring", " a    b \n ");
 			assertEq(" a    b \n ", getXCValue(xc,"jgetstring"));
-			xc = getXComponent(xp, test, p, 2);
+			xc = getXComponent(xp, test, 2);
 			assertEq(false, getXCValue(xc,"jgetboolean"));
-			xc = getXComponent(xp, test, p, 3);
+			xc = getXComponent(xp, test, 3);
 			assertTrue(getXCValue(xc,"jgetnull") != null);
-			xc = getXComponent(xp, test, p, 4);
+			xc = getXComponent(xp, test, 4);
 			assertNull(getXCValue(xc,"jgetnull"));
 
-			p = "b";
-			xc = getXComponent(xp, test, p, 0);
-			assertEq("abc", getXCValue(xc,"jgetitem"));
-			xc = getXComponent(xp, test, p, 1);
-			assertEq(123, getXCValue(xc,"jgetitem"));
-			setXCValue(xc,"jsetitem", "");
-			assertEq("", getXCValue(xc,"jgetitem"));
-			setXCValue(xc,"jsetitem", 456);
-			assertEq(456, getXCValue(xc,"jgetitem"));
-			xc = getXComponent(xp, test, p, 2);
-			assertEq(false, getXCValue(xc,"jgetitem"));
-			xc = getXComponent(xp, test, p, 3);
-			assertTrue(getXCValue(xc,"jgetitem") != null);
-			xc = getXComponent(xp, test, p, 4);
-			assertNull(getXCValue(xc,"jgetitem"));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
 			try {
-				SUtils.deleteAll(_tempDir, true); //delete all generated data
+//				SUtils.deleteAll(_tempDir, true); //delete all generated data
 			} catch (Exception ex) {
 				fail(ex);// should not happen; error when delete generated data
 			}
@@ -559,7 +480,7 @@ public class TestJsonXdef extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
-"<xd:json mode='w3c'>\n"+
+"<xd:json name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
@@ -572,7 +493,7 @@ public class TestJsonXdef extends XDTester {
 			reporter.checkAndThrowErrors();
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
-"<xd:json mode='xd'>\n"+
+"<xd:json name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
 "</xd:def>";
@@ -586,7 +507,7 @@ public class TestJsonXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
 "<xd:json name='json'>\n"+
-"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" + 
+"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
 "</xd:json>\n"+
 "<xd:json name='B'>\n"+
 "{\"a\":\"int\"}\n"+
@@ -613,6 +534,7 @@ public class TestJsonXdef extends XDTester {
 			el = JsonUtil.jsonToXmlW3C(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
+/*xx*/
 		} catch (Exception ex) {fail(ex);}
 	}
 

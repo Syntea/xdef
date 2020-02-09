@@ -16,7 +16,6 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.xdef.XDConstants;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -146,11 +145,24 @@ final class CompileReference extends XNode {
 		getSPosition().putReport(Report.error(XDEF.XDEF307, s), reporter);
 	}
 
-	/** Get reference target (XElement).
-	 * @return The definition element or null.
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
 	 */
-	XElement getTarget() {
-		String name = getName();
+	XElement getTargetXElement() {
+		return getTargetXElement(getName());
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	XElement getTargetXChoice() {
+		return getTargetXElement(getName() + "$choice");
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	private XElement getTargetXElement(final String name) {
 		if ("*".equals(name)) { // any in root selection
 			XElement result = new XElement("$any", null, _definition);
 			result.setSPosition(getSPosition());
@@ -190,12 +202,6 @@ final class CompileReference extends XNode {
 					setName(s + u + t);
 				}
 				return (XElement) xn;
-			}
-			if (dn == null) { // try to find json model
-				dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI_W3C,mName);
-				if (dn == null) {
-					dn = (XElement)xdef.getModel(XDConstants.JSON_NS_URI,mName);
-				}
 			}
 		}
 		if (dn != null) {
@@ -265,5 +271,4 @@ final class CompileReference extends XNode {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"this method can't be called here");
 	}
-
 }

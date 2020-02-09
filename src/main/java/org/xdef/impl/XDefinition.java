@@ -31,9 +31,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		new LinkedHashMap<String,String>();
 	/** root selection. */
 	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
-	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
+	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the X-definition was created. */
+	/** Version of XML from which the X-definition was created
+	 *  (see org.xdef.impl.XConstants.XDxx).
+	 */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
@@ -186,11 +188,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				if (model.getNSUri() == null && name.equals(model.getName())) {
 					return model;
 				}
-			} else if (nsURI.equals(model.getNSUri())) {
-				String lname = model.getLocalName();
-				if (name.equals(lname)) {
-					return model;
-				}
+			} else if (nsURI.equals(model.getNSUri())
+				&& name.equals(model.getLocalName())) {
+				return model;
 			}
 		}
 		return null;
@@ -289,12 +289,22 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
 			int i = name.indexOf(':');
-			nm = name.substring(i + 1);
+			nm = name.substring(i + 1);			
 			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _rootSelection.keySet()) {
 				XElement xe = (XElement) _rootSelection.get(xName);
-				if (xe.getJsonMode() > 0 && qn.equals(xe.getQName())) {
-					return xe;
+				if (xe._json > 0) {
+					if (qn.equals(xe.getQName())) {
+						return xe;
+					} else if ((xe._json) != 0) {
+						if (xe._childNodes.length > 0) {
+							for (XNode x: xe._childNodes) {
+								if (qn.equals(x.getQName())) {
+									return (XElement) x;
+								}
+							}
+						}
+					}
 				}
 				i = xName.indexOf(':');
 				if (i >= 0) {
@@ -322,7 +332,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		} else {  // not NS URI, not lexicon
 			for (XNode xe: _rootSelection.values()) {
 				if (xe != null && nm.equals(xe.getName()) &&
-					xe.getNSUri() == null){
+					xe.getNSUri() == null) {
 					return (XElement) xe;
 				}
 			}

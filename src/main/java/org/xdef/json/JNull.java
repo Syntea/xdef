@@ -9,5 +9,7 @@ public final class JNull {
 	@Override
 	public final String toString() {return "null";}
 	@Override
+	public final int hashCode(){return 0;}
+	@Override
 	public final boolean equals(Object o){return o==null || o instanceof JNull;}
 }

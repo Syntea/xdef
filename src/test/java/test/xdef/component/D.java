@@ -3,7 +3,6 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class D implements org.xdef.component.XComponent{
-  public String getxmlns$a() {return "a.b";}
   public D.$_ get$_() {return _$_;}
   public D.B getB() {return _B;}
   public D.I getI() {return _I;}
@@ -3688,7 +3687,6 @@ public static class E implements org.xdef.component.XComponent{
 }
 public static class T implements org.xdef.component.XComponent{
   public String gett() {return _t;}
-  public String getxmlns() {return "x.y";}
   public test.xdef.component.D.T.I_1 getI_1() {return _I_1;}
   public void sett(String x){_t=x;}
   public void setI_1(test.xdef.component.D.T.I_1 x){_I_1=x;}
@@ -3808,7 +3806,6 @@ public static class T implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class I_1 implements org.xdef.component.XComponent{
-  public String getxmlns() {return "x.y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -3910,7 +3907,6 @@ public static class I_1 implements org.xdef.component.XComponent{
 }
 public static class a$T implements org.xdef.component.XComponent{
   public String geta$t() {return _a$t;}
-  public String getxmlns$a() {return "a.b";}
   public test.xdef.component.D.a$T.a$I geta$I() {return _a$I;}
   public void seta$t(String x){_a$t=x;}
   public void seta$I(test.xdef.component.D.a$T.a$I x){_a$I=x;}
@@ -4030,7 +4026,6 @@ public static class a$T implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class a$I implements org.xdef.component.XComponent{
-  public String getxmlns$a() {return "a.b";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override

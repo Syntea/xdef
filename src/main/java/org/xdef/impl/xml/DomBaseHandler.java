@@ -45,7 +45,7 @@ public abstract class DomBaseHandler
 	private XMLReader _xr;
 	public boolean _isDTD;
 	public Locator _locator;
-	public final Map<String, String> _prefixes = 
+	public final Map<String, String> _prefixes =
 		new LinkedHashMap<String, String>();
 	private boolean _ignoreComments = true; //default
 	private XAbstractReader _mr ;
@@ -73,6 +73,7 @@ public abstract class DomBaseHandler
 		myReader.setHandler(this);
 		myReader.setSysId(sysId);
 		doParse(myReader);
+		myReader.close();
 	}
 
 	public final void doParse(final XReader myReader)

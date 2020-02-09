@@ -8,6 +8,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDValue;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefXPathExpr;
 import java.math.BigDecimal;
@@ -42,7 +43,7 @@ public final class XExtUtils {
 	public final static String getQnameNSUri(final String qname,
 		final Element elem) {
 		byte xmlVersion = "1.1".equals(elem.getOwnerDocument().getXmlVersion())
-			? (byte) 11 : 10;
+			? XConstants.XML11 : XConstants.XML10;
 		if (!StringParser.chkXMLName(qname, xmlVersion)) {
 			return "";
 		}

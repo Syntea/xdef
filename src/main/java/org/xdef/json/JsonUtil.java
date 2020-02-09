@@ -66,25 +66,24 @@ public class JsonUtil extends StringParser {
 			+ "&{sysId}" + getSysId();
 	}
 
-	/** Skip white spaces and comments. */
-	public final void skipBlanksAndComments() {
-		isSpaces();
-		if (_acceptComments) { // comments accepted
-			boolean b = false;
-			while(isToken("/*") || (b=isToken("//"))) {
-				if (b) {
-					skipToNextLine();
-				} else {
-					if (!findTokenAndSkip("*/")) {
-						error(JSON.JSON015); //Unclosed comment
-						setEos();
-						return;
-					}
-				}
-				b = false;
-				isSpaces();
+	/** Skip white space separators (and comments if accepted).
+	 * @return true if a space or comment was found.
+	 */
+	public final boolean isSpacesOrComments() {
+		boolean result = isSpaces();
+		while(isToken("/*")) {
+			result = true;
+			if (!_acceptComments) { // omments not allowed
+				warning(JSON.JSON019);  //Comments are not allowed here
 			}
+			if (!findTokenAndSkip("*/")) {
+				error(JSON.JSON015); //Unclosed comment
+				setEos();
+				return result;
+			}
+			isSpaces();
 		}
+		return result;
 	}
 
 	/** Check and get hexadecimal digit as integer.
@@ -139,7 +138,7 @@ public class JsonUtil extends StringParser {
 			} else {
 				result = new LinkedHashMap<String,Object>();
 			}
-			skipBlanksAndComments();
+			isSpacesOrComments();
 			if (isChar('}')) {
 				return result;
 			}
@@ -150,13 +149,13 @@ public class JsonUtil extends StringParser {
 					XJson.SCRIPT_NAME, XJson.ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					SPosition spos = getPosition();
-					skipBlanksAndComments();
+					isSpacesOrComments();
 					Object o;
 					if (i == 1) {
 						String s;
 						if (isChar(':')) {
 							spos.setIndex(spos.getIndex() - 1);
-							skipBlanksAndComments();
+							isSpacesOrComments();
 							o = readValue();
 							if (o instanceof XJson.JValue
 								&& ((XJson.JValue)o).getObject()
@@ -177,7 +176,7 @@ public class JsonUtil extends StringParser {
 							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							error(JSON.JSON002, ",", "}");
 						}
-						skipBlanksAndComments();
+						isSpacesOrComments();
 						o = readValue();
 					}
 					if (o != null && o instanceof XJson.JValue
@@ -194,12 +193,12 @@ public class JsonUtil extends StringParser {
 						&& ((XJson.JValue) o).getObject() instanceof String)) {
 						 // parse JSON named pair
 						String name = _genJObjects ? o.toString() : (String) o;
-						skipBlanksAndComments();
+						isSpacesOrComments();
 						if (!isChar(':')) {
 							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 							error(JSON.JSON002, ",", "}");
 						}
-						skipBlanksAndComments();
+						isSpacesOrComments();
 						result.put(name, readValue());
 					} else {
 						// String with name of item expected
@@ -207,20 +206,22 @@ public class JsonUtil extends StringParser {
 						return result;
 					}
 				}
-				skipBlanksAndComments();
+				isSpacesOrComments();
 				if (isChar('}')) {
-					skipBlanksAndComments();
+					isSpacesOrComments();
 					return result;
 				}
 				if (isChar(',')) {
-					skipBlanksAndComments();
+					isSpacesOrComments();
 				} else {
 					if (eos()) {
 						break;
 					}
 					//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "}");
-					break;
+					if (getCurrentChar() != '"') {
+						break;
+					}
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -233,7 +234,7 @@ public class JsonUtil extends StringParser {
 			} else {
 				result = new ArrayList<Object>();
 			}
-			skipBlanksAndComments();
+			isSpacesOrComments();
 			if (isChar(']')) {
 				return result;
 			}
@@ -245,7 +246,7 @@ public class JsonUtil extends StringParser {
 						XJson.ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					if (isChar(':')) {
-						skipBlanksAndComments();
+						isSpacesOrComments();
 						Object o = readValue();
 						if (o instanceof XJson.JValue
 							&& ((XJson.JValue)o).getObject() instanceof String){
@@ -275,19 +276,19 @@ public class JsonUtil extends StringParser {
 				} else {
 					result.add(readValue());
 				}
-				skipBlanksAndComments();
+				isSpacesOrComments();
 				if (isChar(']')) {
 					return result;
 				}
 				if (isChar(',')) {
-					skipBlanksAndComments();
+					isSpacesOrComments();
 				} else {
 					if (eos()) {
 						break;
 					}
 					 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "]");
-					break;
+//					break;
 				}
 			}
 			 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -380,14 +381,14 @@ public class JsonUtil extends StringParser {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public Object parse() throws SRuntimeException {
-		skipBlanksAndComments();
+		isSpacesOrComments();
 		char c = getCurrentChar();
 		if (c != '{' && c != '[' ) {
 			error(JSON.JSON009); // JSON object or array expected"
 			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 		}
 		Object result = readValue();
-		skipBlanksAndComments();
+		isSpacesOrComments();
 		_sPosition = getPosition();
 		if (!eos()) {
 			error(JSON.JSON008, genPosMod()); //Text after JSON not allowed

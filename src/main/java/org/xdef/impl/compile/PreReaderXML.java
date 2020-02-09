@@ -15,7 +15,6 @@ import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
 import java.net.URI;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -60,7 +59,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				parsedElem.getParsedNameSourcePosition(),
 				_actPNode,
 				_actPNode==null? (byte) 0 : _actPNode._xdVersion,
-				"1.1".equals(getXmlVersion()) ? (byte) 11 : (byte) 10);
+				"1.1".equals(getXmlVersion())
+					? XConstants.XML11 : XConstants.XML10);
 		}
 		String elemPrefix;
 		String elemLocalName;
@@ -418,32 +418,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_actPNode._childNodes.add(p);
 		_level--;
 	}
-//////////////////////////////////////////////////////////////////////////////
-
-	private static void pNodeToXML(final PNode p, Document doc, Node parent) {
-		Element e =
-			doc.createElementNS(p.getNamespace(), p.getName().getString());
-		parent.appendChild(e);
-		for (PAttr a: p.getAttrs()) {
-			e.setAttributeNS(
-				a.getNamespace(), a.getName(), a.getValue().getString());
-		}
-		for (PNode child: p.getChildNodes()) {
-			pNodeToXML(child, doc, e);
-		}
-		if (p.getValue() != null) {
-			e.appendChild(doc.createTextNode(p.getValue().getString()));
-		}
-	}
-
-	private static void displayPNode(final PNode p) {
-		Document doc = KXmlUtils.newDocument();
-		pNodeToXML(p, doc, doc);
-		System.out.println(
-			KXmlUtils.nodeToString(doc.getDocumentElement(), true));
-	}
-
-/////////////////////////////////////////////////////////////////////////////
 
 	private void processText() {
 		if (_actPNode._template && _level > 0
@@ -464,45 +438,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				if (_level != 1) {
 					//JSON model can be declared only as a child of X-definition
 					error(_actPNode._value, XDEF.XDEF310);
-				} else {
-					String s = "w3c";
-					SBuffer sb =
-						_pcomp.getXdefAttr(_actPNode, "mode", false, false);
-					if (sb != null) {
-						s = sb.getString().trim();
-					}
-					int jindex = XPreCompiler.NS_JSON_W3C_INDEX;
-					if ("xd".equals(s)) {
-						jindex = XPreCompiler.NS_JSON_INDEX;
-					} else if (!"w3c".equals(s)) {
-						error(sb, XDEF.XDEF222, "mode", s); ///
-					}
-					String jprefix = s.equals("w3c") ? "jw" : "js";
-					sb = _pcomp.getXdefAttr(_actPNode, "name", false, false);
-					if (sb != null) {
-						s = sb.getString().trim();
-						int ndx = s.indexOf(':');
-						if (ndx > 0) {
-							jprefix = s.substring(0, ndx);
-						}
-					}
-					// set namespace prefix to the X-definition
-					for (PNode x: _pcomp.getPXDefs()) {
-						for (PNode y: x.getChildNodes()) {
-							if (y == _actPNode) {
-								Integer i = x._nsPrefixes.get(jprefix);
-								if (i == null) {
-									x._nsPrefixes.put(jprefix, jindex);
-								} else if (i != jindex) {
-									//Namespace for prefix '&{0}' is already
-									//defined&{1}{ :}
-									error(sb, XDEF.XDEF259,
-										jprefix, _pcomp.getNSURI(i));
-								}
-								break;
-							}
-						}
-					}
+					_actPNode._value = null;
 				}
 				return;
 			} else if ("text".equals(_actPNode._localName)
