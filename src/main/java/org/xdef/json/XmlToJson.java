@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -318,7 +319,13 @@ class XmlToJson extends JsonToXml {
 		}
 	}
 
-	final Object toJson(final Element e) {
+	/** Convert XML element to JSON object.
+	 * @param node XML element or document.
+	 * @return JSON object.
+	 */
+	final Object toJson(final Node node) {
+		Element e = node instanceof Document
+			? ((Document) node).getDocumentElement() : (Element) node;
 		if (XDConstants.JSON_NS_URI_W3C.equals(e.getNamespaceURI())) {
 			_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 			_isW3C = true;

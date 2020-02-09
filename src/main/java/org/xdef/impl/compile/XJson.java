@@ -451,7 +451,7 @@ public class XJson extends JsonToXml {
 	 */
 	private PNode genJsonModelW3C(final Object json, final PNode parent) {
 		setPrefix(parent,
-			XDConstants.JSON_NS_URI_W3C, "js", XPreCompiler.NS_JSON_W3C_INDEX);
+			XDConstants.JSON_NS_URI_W3C, "js", XPreCompiler.NS_JSON_INDEX);
 		PNode e;
 		if (json instanceof JMap) {
 			e = genJsonMapW3C((JMap) json, parent);

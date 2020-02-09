@@ -70,13 +70,17 @@ public class TestJsonXdef extends XDTester {
 					name = name.substring(0, ndx);
 					Object json = JsonUtil.parse(f);
 					// write JSON as XML (W3C modc)
-					el = JsonUtil.jsonToXmlW3C(json);
+					el = JsonUtil.jsonToXml(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 					if (!JsonUtil.jsonEqual(JsonUtil.xmlToJson(el),
-						JsonUtil.xmlToJson(el = JsonUtil.jsonToXml(json)))) {
+						JsonUtil.xmlToJson(JsonUtil.jsonToXmlXdef(json)))) {
 						throw new RuntimeException(rName +
-							": xml transformation to JSON differs");
+							" xml transformation to JSON differs:\n" +
+							KXmlUtils.nodeToString(JsonUtil.jsonToXml(json),
+								true) + "\n" +
+							KXmlUtils.nodeToString(JsonUtil.jsonToXmlXdef(json),
+								true) + "\n");
 					}
 				}
 				// read jdef file to string.
@@ -523,7 +527,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			el = JsonUtil.jsonToXmlW3C(j);
+			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
@@ -531,7 +535,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			el = JsonUtil.jsonToXmlW3C(j);
+			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 /*xx*/
