@@ -16,7 +16,6 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.xdef.XDConstants;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -272,5 +271,4 @@ final class CompileReference extends XNode {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"this method can't be called here");
 	}
-
 }

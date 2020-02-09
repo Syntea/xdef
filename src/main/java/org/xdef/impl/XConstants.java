@@ -19,10 +19,8 @@ public interface XConstants {
 	/** XML version 1.1. */
 	public static final byte XML11 = 11;
 
-	/** JSON to XML transformation according to W3C specification. */
-	public static byte JSON_W3C = 1;
-	/** JSON to XML transformation according to X-definition implementation. */
-	public static byte JSON_XD = 2;
+	/** JSON mode. */
+	public static byte JSON_MODE = 1;
 	/** JSON root element. */
 	public static byte JSON_ROOT = 4;
 

@@ -27,12 +27,12 @@ public interface XDConstants {
 	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
 	/** Property defines stream used for debug input (default is stdIn). */
 	public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
-	
+
 	/** Property defines debug editor class name.*/
 	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
 	/** Property defines X-definition editor class name.*/
 	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
-	
+
 	/** Property defines X-definition external editor class name.*/
 	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */

@@ -219,7 +219,9 @@ public class JsonUtil extends StringParser {
 					}
 					//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "}");
-					break;
+					if (getCurrentChar() != '"') {
+						break;
+					}
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -286,7 +288,7 @@ public class JsonUtil extends StringParser {
 					}
 					 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "]");
-					break;
+//					break;
 				}
 			}
 			 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}

@@ -726,7 +726,7 @@ list ::= value (S? "," S? value )*
 
 value ::= S? (pair | "null" | boolean | number | string | array | object) S?
 
-json ::= array | object
+json ::= S? (array | object)
 
 ]]>
   </xd:BNFGrammar>

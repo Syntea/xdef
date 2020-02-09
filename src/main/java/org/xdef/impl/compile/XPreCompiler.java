@@ -408,7 +408,7 @@ public class XPreCompiler implements PreCompiler {
 			new StringTokenizer(include.getString(), " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system ID
-			if (sid.startsWith("//") ||
+			if (sid.startsWith("//") || // URL
 				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) {
 				try { // is URL
 					for (String x : SUtils.getSourceGroup(sid)) {

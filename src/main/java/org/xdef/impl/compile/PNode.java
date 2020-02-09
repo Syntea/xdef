@@ -5,6 +5,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.XDConstants;
+import org.xdef.xml.KXmlUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,7 @@ public final class PNode {
 		org.w3c.dom.Document doc;
 		org.w3c.dom.Node parent;
 		if (node == null) {
-			parent = doc = org.xdef.xml.KXmlUtils.newDocument();
+			parent = doc = KXmlUtils.newDocument();
 		} else {
 			doc = node.getOwnerDocument();
 			parent = node;
@@ -203,5 +204,4 @@ public final class PNode {
 		return e;
 	}
 /*#end*/
-
 }

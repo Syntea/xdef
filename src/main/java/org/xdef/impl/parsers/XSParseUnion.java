@@ -155,7 +155,7 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_CONTAINER;}
+	public short parsedType() {return XD_ANY;}
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XSParseUnion)) {

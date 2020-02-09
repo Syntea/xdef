@@ -870,6 +870,28 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
+	/** Parse and process XML data with JSON model.
+	 * @param xmlData org.w3c.dom.Document or org.w3c.dom.Element.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final Node xmlData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		if (xmlData instanceof Document) {
+			e = ((Document) xmlData).getDocumentElement();
+		} else {
+			e = (Element) xmlData;
+		}
+		return jparse(JsonUtil.xmlToJson(e), model, reporter);
+	}
+
+	@Override
 	/** Parse and process JSON data and return processed JSON object.
 	 * @param jsonData JSON data.
 	 * @param model qualified name of JSON root model.
@@ -966,6 +988,29 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException {
 		return jparseXComponent(JsonUtil.parse(json), xClass, reporter);
+	}
+
+	@Override
+	/** Parse XML data with JSON model and return XComponent as result.
+	 * @param xml org.w3c.dom.Document or org.w3c.dom.Element
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final XComponent jparseXComponent(final Node xmlData,
+		final Class<?> xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		if (xmlData instanceof Document) {
+			e = ((Document) xmlData).getDocumentElement();
+		} else {
+			e = (Element) xmlData;
+		}
+		return jparseXComponent(JsonUtil.xmlToJson(e), xClass, reporter);
 	}
 
 	@Override

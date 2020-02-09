@@ -33,6 +33,8 @@ import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
+import org.xdef.impl.parsers.XDParseCDATA;
+import org.xdef.impl.ext.XExtUtils;
 import org.xdef.model.XMVariable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -277,7 +279,7 @@ public final class CompileCode extends CompileBase {
 		putRedefinedError(null, XDEF.XDEF450,
 			name, result == null ? null : result.getSourcePosition());
 		return (result != null && result.getName().equals(name)
-			&& result.getType() == type) 
+			&& result.getType() == type)
 			? result : new CompileVariable("?", type, -1, (byte) 'L', null);
 	}
 
@@ -512,7 +514,7 @@ public final class CompileCode extends CompileBase {
 	 * @param address The code index of method start.
 	 * @param params Array of parameters types.
 	 * @param mode The mode of method.
-	 * @param spos source position where the method was declared.
+	 * @param spos source position where the variable was declared.
 	 */
 	final void addMethod(final short resultType,
 		final String name,
@@ -652,9 +654,8 @@ public final class CompileCode extends CompileBase {
 		}
 		if (m == null && _externalMode != 1) {//new
 			//new style, ChkElement and array: type m(ChkElement, DefItem[])
-			if ((m = getExtMethod(clazz, name, new Class<?>[] {
-				org.xdef.proc.XXElement.class,
-				XDValue[].class})) != null) {
+			if ((m = getExtMethod(clazz, name,
+				new Class<?>[] {XXElement.class, XDValue[].class})) != null) {
 				modifiers = m.getModifiers();
 				if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 					m1 = m;
@@ -1561,7 +1562,7 @@ public final class CompileCode extends CompileBase {
 		}
 		// try to find this method in XExtUtils class
 		CodeExtMethod method = findExternalMethod(name,
-			numPar, org.xdef.impl.ext.XExtUtils.class, null);
+			numPar, XExtUtils.class, null);
 		if (method == null) {
 			// not found, try to find it in the java.lang.Math class
 			method = findExternalMethod(name, numPar, Math.class, null);
@@ -1949,7 +1950,7 @@ public final class CompileCode extends CompileBase {
 					}
 					if (_tstack[_sp] != XD_CONTAINER) {
 						if ("string".equals(name)) {
-							p = new org.xdef.impl.parsers.XDParseCDATA();
+							p = new XDParseCDATA();
 						}
 						if (npar > sqParamNames.length) {
 							if (sqParamNames.length == 1) {

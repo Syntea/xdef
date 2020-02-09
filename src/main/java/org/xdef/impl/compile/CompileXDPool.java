@@ -1476,25 +1476,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(pnode._name, XDEF.XDEF315);
 					return;
 				}
-				SBuffer sb =
-					_precomp.getXdefAttr(pnode, "mode", false, true);
-				// w3c mode is default
-				String s = sb != null ? sb.getString().trim() : "w3c";
-				byte jsonMode =  XConstants.JSON_W3C; //W3C mode is default
-				if ("xd".equals(s)) {
-					jsonMode = XConstants.JSON_XD;
-				} else if (!"w3c".equals(s)) {
-					error(sb, XDEF.XDEF222, "mode", s); ///
-				}
+				byte jsonMode =  XConstants.JSON_MODE; //W3C mode is default
 				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
-				sb = _precomp.getXdefAttr(pnode, "name", false, true);
+				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
 				if (sb == null) {
-					sb = new SBuffer("json", pnode._name);
+					sb = new SBuffer("_json_", pnode._name);
+					//The name of JSON model is required
+					error(pnode._name, XDEF.XDEF317);
 				} else {
-					s = sb.getString();
-					if (!StringParser.isJavaName(s)) {
+					String s = sb.getString().trim();
+					if (!StringParser.chkNCName(s, XConstants.XML10)) {
 						//The name of JSON model "&{0}" can't contain ":"
-						error(sb, XDEF.XDEF316, name);
+						error(sb, XDEF.XDEF316, s);
 					}
 				}
 				pnode._name = sb;
