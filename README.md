@@ -8,7 +8,7 @@ processing and creation, this tool was developed by Syntea Software Group Inc.
 It allows the user to not only define the structure of XML documents,
 but also to describe specifically their processing and construction.
 
-Homepage: <https://www.xdef.org>
+Homepage: <http://www.xdef.org>
 
 # License
 The source code for this project is licensed under

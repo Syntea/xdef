@@ -21,7 +21,7 @@
 
     <name>xdef</name>
     <description>X-definition ${specification.version} (Open Source Software)</description>
-    <url>https://www.xdef.org</url>
+    <url>http://www.xdef.org</url>
     <organization>
         <name>Syntea software group a.s.</name>
         <url>https://www.syntea.cz</url>
