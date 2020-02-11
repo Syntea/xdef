@@ -35,7 +35,7 @@ Ex4: xd-script
 # Building
 
 Prerequisities:
-* download project X-definition, for example from GitHub: <https://github.com/Syntea/xdef>
+* download project X-definition, eg. from GitHub: <https://github.com/Syntea/xdef>
 * install _java_
 * install _maven_
 * configure _maven_
