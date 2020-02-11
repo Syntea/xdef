@@ -54,7 +54,7 @@ Frequent building operations:
   ```shell
   mvn package
   ```
-* build snapshot package avioding junit-tests:
+* build snapshot package avoiding junit-tests:
   ```shell
   mvn package -DskipTests=true
   ```
