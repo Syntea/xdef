@@ -79,7 +79,7 @@ Deploying:
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* release packages to the maven central repository (throw _oss.sonatype.org_):
+* release the version of X-definition to the maven central repository (throw _oss.sonatype.org_):
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
   ```
