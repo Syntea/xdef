@@ -1,4 +1,4 @@
-# X-definition
+# About X-definition
 
 X-definition is registered technology of the firm Syntea software group a.s.,
 for professional work with XML documents.
