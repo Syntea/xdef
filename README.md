@@ -68,7 +68,7 @@ Frequent building operations:
 # Deploying to maven central repository
 
 Prerequisities:
-* process prerequisities for building
+* satisfy prerequisities for building
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
 * configure _maven_:
     * access to pgp-key
