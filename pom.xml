@@ -11,9 +11,17 @@
     <version>${revision}${changelist}</version>
     <packaging>jar</packaging>
     
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <name>xdef</name>
     <description>X-definition ${specification.version} (Open Source Software)</description>
-    <url>https://www.xdef.org</url>
+    <url>http://www.xdef.org</url>
     <organization>
         <name>Syntea software group a.s.</name>
         <url>https://www.syntea.cz</url>
@@ -22,9 +30,14 @@
         <developer>
             <id>trojan</id>
             <name>Václav Trojan</name>
+            <email>trojan@syntea.cz</email>
             <roles><role>leader</role></roles>
         </developer>
     </developers>
+    <scm>
+        <url>https://github.com/Syntea/xdef</url>
+        <connection>scm:git:git@github.com:Syntea/xdef.git</connection>
+    </scm>
     
     <properties>
         <revision>32.5.6</revision><!-- when changed, change also ${release.date}, see below -->
@@ -199,6 +212,7 @@
                         <url/>
                         <organization/>
                         <developers/>
+                        <scm/>
                     </pomElements>
                 </configuration>
                 <executions>
@@ -274,6 +288,11 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.1.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -346,7 +365,37 @@
             </build>
         </profile>
         <profile>
-            <id>dm-config</id>
+            <id>dm-ossrh</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>dm-env</id>
             <distributionManagement>
                 <repository>
                     <id>private</id>
