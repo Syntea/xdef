@@ -42,13 +42,21 @@ Prerequisities:
     * configure maven-plugin _toolchain_
 
 Frequent building operations:
-* cleaning before any building and deploying:
+* cleaning before any compiling, building, deploying, etc.:
   ```shell
   mvn clean
+  ```
+* compile all java-resources, respectively all compilable resources:
+  ```shell
+  mvn compile
   ```
 * build snapshot package:
   ```shell
   mvn package
+  ```
+* build snapshot package avioding junit-tests:
+  ```shell
+  mvn package -DskipTests=true
   ```
 * build release packages including javadoc, sources, documentation:
   ```shell
@@ -64,14 +72,14 @@ Prerequisities:
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
 * configure _maven_:
     * access to pgp-key
-    * access to maven repository _oss.sonatype.org_ (having id "_ossrh_")
+    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_")
 
 Deploying:
 * deploy snapshot packages to snapshot-repository at _oss.sonatype.org_:
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* release packages to maven central repository (throw _oss.sonatype.org_):
+* release packages to the maven central repository (throw _oss.sonatype.org_):
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
   ```
