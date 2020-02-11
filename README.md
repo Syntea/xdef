@@ -66,8 +66,12 @@ Prerequisities:
     * access to pgp-key
     * access to maven repository _oss.sonatype.org_ (having id "_ossrh_")
 
-Deploying to maven central repository:
-* deploy release packages including javadoc, sources, documentation:
+Deploying:
+* deploy snapshot packages to snapshot-repository at _oss.sonatype.org_:
+  ```shell
+  mvn deploy -Pjavadoc,sources,dm-ossrh
+  ```
+* release packages to maven central repository (throw _oss.sonatype.org_):
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
   ```
