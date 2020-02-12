@@ -125,7 +125,11 @@ public class TX implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class js$number implements org.xdef.component.XComponent{
   public Integer get$value() {return _$value;}
+  public Integer jgetjs$number(){return _$value==null?null:get$value();}
   public void set$value(Integer x){_$value=x;}
+  public void jsetjs$number(Integer x){
+    set$value(x);
+  }
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;

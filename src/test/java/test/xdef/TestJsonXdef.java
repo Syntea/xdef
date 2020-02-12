@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
+import java.lang.reflect.Field;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -319,40 +320,89 @@ public class TestJsonXdef extends XDTester {
 		return result;
 	}
 
-	/** Invoke a JSON getter on the X-component.
-	 * @param xc X-component.
-	 * @param name name of setter.
-	 * @return value of getter.
+	/** Get value of the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @return value of field.
 	 */
-	private static Object getXCValue(Object xc, String name) {
-		Class<?> cls = xc.getClass();
+	private Object getXCField(Object o, String name) {
+		Class<?> cls = o.getClass();
 		try {
-			Method m = cls.getDeclaredMethod(name);
-			m.setAccessible(true);
-			return m.invoke(xc);
+			Field f = cls.getDeclaredField(name);
+			f.setAccessible(true);
+			try {
+				return f.get(o);
+			} catch (Exception ex) {
+				return f.get(null); //static
+			}
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Field not found: " + name);
 		}
 	}
 
-	/** Invoke a JSON setter on the X-component.
-	 * @param xc X-component.
+	/** Set to the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @param value the value to be set.
+	 */
+	private void setXCField(Object o, String name, Object value) {
+		Class<?> cls = o.getClass();
+		try {
+			Field f = cls.getDeclaredField(name);
+			f.setAccessible(true);
+			try {
+				f.set(o, value);
+			} catch (Exception ex) {
+				f.set(null, value); // static
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Field not found: " + name);
+		}
+	}
+
+	/** Invoke a getter on the object.
+	 * @param o object where is getter.
+	 * @param name name of setter.
+	 * @return value of getter.
+	 */
+	private Object getXCValue(Object o, String name) {
+		Class<?> cls = o.getClass();
+		try {
+			Method m = cls.getDeclaredMethod(name);
+			m.setAccessible(true);
+			try {
+				return m.invoke(o);
+			} catch (Exception ex) {
+				return m.invoke(null); //static
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Getter not found: " + name);
+		}
+	}
+
+	/** Invoke a setter on the object.
+	 * @param o the object where is setter.
 	 * @param name name of setter.
 	 * @param val value to be set.
 	 */
-	private static void setXCValue(Object xc, String name, Object val) {
-		for (Method m: xc.getClass().getDeclaredMethods()) {
+	private void setXCValue(Object o, String name, Object val) {
+		for (Method m: o.getClass().getDeclaredMethods()) {
 			Class<?>[] params = m.getParameterTypes();
 			if (name.equals(m.getName()) && params!=null && params.length==1) {
 				try {
 					m.setAccessible(true);
-					m.invoke(xc, val);
-					return;
+					try {
+						m.invoke(o, val);
+						return;
+					} catch (Exception ex) {
+						m.invoke(null, val); // static
+						return;
+					}
 				} catch (Exception ex) {}
 			}
 		}
-		throw new RuntimeException("Setter " + xc.getClass().getName()
-			+ '.' + name + " not found");
+		throw new RuntimeException(
+			"Setter " + o.getClass().getName() + '.' + name + " not found");
 	}
 
 	/** Get XComponent with parsed data.
@@ -370,7 +420,7 @@ public class TestJsonXdef extends XDTester {
 			return xp.createXDDocument(test + 'a').parseXComponent(f,
 				Class.forName("test.common.json.component." + test + 'a'), null);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("XComponent not found: " + test);
 		}
 	}
 
@@ -465,7 +515,6 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(getXCValue(xc,"jgetnull") != null);
 			xc = getXComponent(xp, test, 4);
 			assertNull(getXCValue(xc,"jgetnull"));
-
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.
