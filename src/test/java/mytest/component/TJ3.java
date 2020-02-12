@@ -253,8 +253,12 @@ public static class js$null implements org.xdef.component.XComponent{
 public static class js$number implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
   public Integer get$value() {return _$value;}
+  public Integer jgetjs$number(){return _$value==null?null:get$value();}
   public void setkey(String x){_key=x;}
   public void set$value(Integer x){_$value=x;}
+  public void jsetjs$number(Integer x){
+    set$value(x);
+  }
   public String xposOfkey(){return XD_XPos+"/@key";}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">

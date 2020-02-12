@@ -134,10 +134,20 @@ public static class js$string implements org.xdef.component.XComponent{
   public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
   public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
   public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
+  public org.xdef.sys.SDatetime jgetjs$string(){return _$value==null?null:get$value();}
+  public java.util.Date jdateOfjs$string(){return org.xdef.sys.SDatetime.getDate(jgetjs$string());}
+  public java.sql.Timestamp jtimestampOfjs$string(){return org.xdef.sys.SDatetime.getTimestamp(jgetjs$string());}
+  public java.util.Calendar jcalendarOfjs$string(){return org.xdef.sys.SDatetime.getCalendar(jgetjs$string());}
   public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
   public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
   public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void jsetjs$string(org.xdef.sys.SDatetime x){
+    set$value(x);
+  }
+  public void jsetjs$string(java.util.Date x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
+  public void jsetjs$string(java.sql.Timestamp x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
+  public void jsetjs$string(java.util.Calendar x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;

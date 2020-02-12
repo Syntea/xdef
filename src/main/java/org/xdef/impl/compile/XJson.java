@@ -56,6 +56,41 @@ public class XJson extends JsonToXml {
 		return a;
 	}
 
+	/** get X-def attribute.
+	 * @param e PNode where to set attribute.
+	 * @param name local name of attribute.
+	 * @return PAttr or null.
+	 */
+	private PAttr getXDAttr(final PNode e, final String name) {
+		int nsindex;
+		if (e._nsPrefixes.containsKey(_xdPrefix)) {
+			nsindex = e._nsPrefixes.get(_xdPrefix);
+			for (PAttr att: e._attrs) {
+				if (att._nsindex == nsindex && name.equals(att._localName)) {
+					return att;
+				}
+			}
+		}
+		return null;
+	}
+
+	private void addToXDScript(final PNode e, final String s) {
+		PAttr attr = getXDAttr(e, "script");
+		SBuffer val;
+		if (attr != null) {
+			val = attr._value;
+		} else {
+			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
+		}
+		if (!val.getString().trim().isEmpty()) {
+			if (!val.getString().trim().endsWith(";")) {
+				val.addString(";");
+			}
+			val.addString(" ");
+		}
+		val.addString(s);
+	}
+
 	/** Set X-def attribute.
 	 * @param e PNode where to set attribute.
 	 * @param name local name of attribute.
@@ -250,38 +285,16 @@ public class XJson extends JsonToXml {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfoW3C(final PNode e, final String key) {
-		int nsindex;
-		if (e._nsPrefixes.containsKey(_xdPrefix)) {
-			nsindex = e._nsPrefixes.get(_xdPrefix);
-		} else {
-			nsindex = e._nsPrefixes.size();
-			e._nsPrefixes.put(_xdPrefix, nsindex);
-		}
-		PAttr attr = e.getAttrNS("script", nsindex);
-		SBuffer val;
-		if (attr != null) {
-			val = attr._value;
-		} else {
-			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
-		}
-		if (!val.getString().trim().isEmpty()) {
-			if (!val.getString().trim().endsWith(";")) {
-				val.addString(";");
-			}
-			val.addString(" ");
-		}
-		val.addString("match @"+ J_KEYATTRW3C + "=='"+key+"';"
+		addToXDScript(e, "match @"+ J_KEYATTRW3C + "=='"+key+"';"
 			+ (key.isEmpty()
 				? " options preserveEmptyAttributes,noTrimAttr;" : ""));
-		setAttr(e, J_KEYATTRW3C,
-			new SBuffer(
+		setAttr(e, J_KEYATTRW3C, new SBuffer(
 			"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;",
 				e._name));
 	}
 
 	private PNode genJsonMapW3C(final JMap map, final PNode parent) {
-		PNode e = genJElement(parent, "map", map.getPosition());
-		PNode ee = e;
+		PNode e, ee;
 		Object val = map.get(SCRIPT_KEY);
 		if (val != null) {
 			map.remove(SCRIPT_KEY);
@@ -289,6 +302,8 @@ public class XJson extends JsonToXml {
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
 			if (isToken(ONEOF_KEY)) {
+				e = genJElement(parent, "map", map.getPosition());
+				ee = e;
 				ee = genXDElement(e, "choice", getPosition());
 				e._childNodes.add(ee);
 				skipSemiconsBlanksAndComments();
@@ -297,16 +312,37 @@ public class XJson extends JsonToXml {
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			} else if (map.size() > 1) {
-				ee = genXDElement(e, "mixed", map.getPosition());
+				e = genJElement(parent, "map", map.getPosition());
+				ee = e;
+				ee = genXDElement(e, "sequence", map.getPosition());
 				e._childNodes.add(ee);
+				if (!eos()) {
+					setXDAttr(e, "script",
+						new SBuffer(getUnparsedBufferPart(), getPosition()));
+				}
+			} else {
+				e = genJElement(parent, "map", map.getPosition());
+				ee = e;
 				if (!eos()) {
 					setXDAttr(e, "script",
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			}
 		} else if (map.size() > 1) {
+			e = genJElement(parent, "map", map.getPosition());
+//			if (!eos()) {
+//				setXDAttr(e, "script",
+//					new SBuffer(getUnparsedBufferPart(), getPosition()));
+//			}
 			ee = genXDElement(e, "mixed", map.getPosition());
-				e._childNodes.add(ee);
+			e._childNodes.add(ee);
+		} else {
+			e = genJElement(parent, "map", map.getPosition());
+			ee = e;
+//			if (!eos()) {
+//				setXDAttr(e, "script",
+//					new SBuffer(getUnparsedBufferPart(), getPosition()));
+//			}
 		}
 		for (Map.Entry<String, Object> entry: map.entrySet()) {
 			String key = entry.getKey();
@@ -450,8 +486,21 @@ public class XJson extends JsonToXml {
 	 * @return created PNode.
 	 */
 	private PNode genJsonModelW3C(final Object json, final PNode parent) {
-		setPrefix(parent,
-			XDConstants.JSON_NS_URI_W3C, "js", XPreCompiler.NS_JSON_INDEX);
+		// set fields _jsprefix and _jsNamespace
+		String s = XDConstants.JSON_NS_PREFIX; // default namespace prefix
+		for (int i = 1; ;i++) {
+			Integer x;
+			if ((x = parent._nsPrefixes.get(s)) == null) {
+				parent._nsPrefixes.put(s, XPreCompiler.NS_JSON_INDEX);
+				break;
+			} else if (x.equals(XPreCompiler.NS_JSON_INDEX)) {
+				break; // prefix is already set
+			} else { // the prefix is already used
+				s = XDConstants.JSON_NS_PREFIX + i; // change prefix
+			}
+		}
+		_jsPrefix = s;
+		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		PNode e;
 		if (json instanceof JMap) {
 			e = genJsonMapW3C((JMap) json, parent);
@@ -462,26 +511,6 @@ public class XJson extends JsonToXml {
 		}
 		parent._childNodes.add(e);
 		return e;
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-	private void setPrefix(final PNode p, String nsURI,
-		String prefix, Integer nsindex) {
-		String s = prefix;
-		for (int i = 1;; i++) {
-			Integer x;
-			if ((x=p._nsPrefixes.get(s)) == null) {
-				p._nsPrefixes.put(s, nsindex);
-				break;
-			} else if (x.equals(nsindex)) {
-				break;
-			} else {
-				s = prefix + i;
-			}
-		}
-		_jsPrefix = s;
-		_jsNamespace = nsURI;
 	}
 
 	/** Create X-definition model from PNode with JSON description.
@@ -513,7 +542,7 @@ public class XJson extends JsonToXml {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
-//System.out.println(cz.syntea.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -290,7 +290,11 @@ public static class js$null implements org.xdef.component.XComponent{
 }
 public static class js$boolean implements org.xdef.component.XComponent{
   public Boolean get$value() {return _$value;}
+  public Boolean jgetjs$boolean(){return _$value==null?null:get$value();}
   public void set$value(Boolean x){_$value=x;}
+  public void jsetjs$boolean(Boolean x){
+    set$value(x);
+  }
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
@@ -405,7 +409,11 @@ public static class js$boolean implements org.xdef.component.XComponent{
 }
 public static class js$number implements org.xdef.component.XComponent{
   public Number get$value() {return _$value;}
+  public Number jgetjs$number(){return _$value==null?null:get$value();}
   public void set$value(Number x){_$value=x;}
+  public void jsetjs$number(Number x){
+    set$value(x);
+  }
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
@@ -520,7 +528,11 @@ public static class js$number implements org.xdef.component.XComponent{
 }
 public static class js$string implements org.xdef.component.XComponent{
   public String get$value() {return _$value;}
+  public String jgetjs$string(){return _$value==null?null:org.xdef.json.JsonUtil.jstringFromSource(get$value());}
   public void set$value(String x){_$value=x;}
+  public void jsetjs$string(String x){
+    set$value(org.xdef.json.JsonUtil.jstringToXML(x,false));
+  }
   public String xposOf$value(){return XD_XPos+"/$text";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
