@@ -15,6 +15,7 @@ import buildtools.XDTester;
 import static buildtools.XDTester._xdNS;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
@@ -54,12 +55,14 @@ import org.xdef.util.XdefToXsd;
 public class MyTest_0 extends XDTester {
 
 	/** The directory where are generated X-components. */
-	private static final String COMPONENT_DIR = "src/test/java/";
+	private static final String COMPONENT_DIR = 
+		new File ("src/test/java/").exists()
+			? "src/test/java/" : "test/";
 	/** The package of X-components. */
 	private static final String COMPONENT_PACKAGE = "mytest.component";
 
-	final Stack<String> _stack = new Stack<String>();
-	String _item;
+	private final Stack<String> _stack = new Stack<String>();
+	private String _item;
 
 	public MyTest_0() {super();}
 
@@ -250,6 +253,24 @@ public class MyTest_0 extends XDTester {
 			"Setter " + o.getClass().getName() + '.' + name + " not found");
 	}
 
+		
+	private void genXComponent(final XDPool xp, final String... componentNames){
+		try {
+			GenXComponent.genXComponent(xp,
+				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			File f = new File (COMPONENT_DIR, "mytest/component");
+			File[] ff = new File[componentNames.length];
+			for (int i = 0; i < componentNames.length; i++) {
+				ff[i] = new File(f, componentNames[i] + ".java");
+			}
+			XDTester.compileSources(ff);
+		} catch (RuntimeException ex) {
+			throw ex;
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 	/** Get XComponent with parsed data.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param xdefName name of XDefinition.
@@ -257,21 +278,17 @@ public class MyTest_0 extends XDTester {
 	 * @param String data.
 	 * @return XComponent with parsed data.
 	 */
-	private XComponent getXComponent(final XDPool xp,
+	private XComponent jparseXComponent(final XDPool xp,
 		final String xdefName,
 		final String componentName,
 		final String data) {
 		Class<?> cls = null;
 		try {
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
-			File f = new File(COMPONENT_DIR,COMPONENT_PACKAGE.replace('.','/'));
-			f = new File(f, componentName + ".java");
-			XDTester.compileSources(f);
 			cls = Class.forName(COMPONENT_PACKAGE + "." + componentName);
 		} catch (Exception exx) {
 			exx.printStackTrace();
-			throw new RuntimeException("XComponent not found: "+componentName);
+			throw new RuntimeException(
+				"XComponent class not found: "+componentName);
 		}
 		try {
 			return xp.createXDDocument(xdefName).jparseXComponent(
@@ -373,7 +390,6 @@ System.out.println(json);
 			j = xp.createXDDocument("X").jparse(json, "A" , reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));			
-//if(T)return;
 /*xx*/
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='A'>\n" +
@@ -429,8 +445,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "Test");
 			json = "[[[]]]";
 //System.out.println(KXmlUtils.nodeToString(JsonUtil.jsonToXml(json), true));
 			j = xp.createXDDocument().jparse(json, "jsjson", reporter);
@@ -832,8 +847,7 @@ System.out.println(json);
 "</xd:def>";
 //			xp = XDFactory.compileXD(null, xdef);
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				"temp/", "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "TY");
 		} catch (Exception ex) {ex.printStackTrace();}
 //if(T){return;}
 /**/
@@ -848,9 +862,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
-
+			genXComponent(xp, "XAA");
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			assertNoErrors(reporter);
@@ -1031,8 +1043,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "XA", "XB");
 /* */
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
@@ -1239,8 +1250,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "XD");
 /* */
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
@@ -1310,8 +1320,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "TJ1");
 /* */
 			json = "[null, 12, \" a b \"]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
@@ -1370,8 +1379,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "TJ2");
 /* */
 			json = "[null, 12]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
@@ -1420,8 +1428,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "TJ3");
 /* */
 			json = "{\"a\":null, \"b\":12}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
@@ -1489,8 +1496,7 @@ System.out.println(json);
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			GenXComponent.genXComponent(xp,
-				COMPONENT_DIR, "UTF-8", false, true).checkAndThrowErrors();
+			genXComponent(xp, "TX", "TY", "TZ", "TJson");
 /* */
 			Class<?> TX = mytest.component.TX.class;
 			Class<?> TY = mytest.component.TY.class;
@@ -1903,9 +1909,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			assertNoErrors(GenXComponent.genXComponent(
-				xp, COMPONENT_DIR, null, false, true));
-//			XDTester.compileSources(componentDir + "T.java");		
+			genXComponent(xp, "T");
 			xd = xp.createXDDocument();
 			xml =
 "<T>\n" +
@@ -2310,8 +2314,7 @@ if(T){return;}
 "<a><c f='string'/></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			assertNoErrors(GenXComponent.genXComponent(
-				xp,COMPONENT_DIR, null, false, true));
+			genXComponent(xp, "A");
 //			XDTester.compileSources(componentDir + "A.java");
 			xd = xp.createXDDocument();
 
@@ -2451,9 +2454,7 @@ if(T){return;}
 "</xd:lexicon>",
 			};
 			xp = compile(params);
-			assertNoErrors(GenXComponent.genXComponent(
-				xp, COMPONENT_DIR, null, false, true));
-//			XDTester.compileSources(componentDir + "Contract.java");
+			genXComponent(xp, "Contract");
 			xd = xp.createXDDocument();
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
