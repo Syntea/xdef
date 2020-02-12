@@ -1071,7 +1071,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		try {
 			byte jVersion = (Byte) yClass.getDeclaredField("JSON").get(null);
-			e = jVersion == 1 ?
+			e = jVersion == XConstants.JSON_MODE ?
 				JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXdef(json);
 		} catch (Exception ex) {
 			e = JsonUtil.jsonToXml(json);
