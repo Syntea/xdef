@@ -32,6 +32,46 @@ Ex4: xd-script
 
 
 
+# Usage
+
+## Check and download available versions
+Links:
+* release versions from central maven repository: <https://search.maven.org/search?q=g:org.xdef>
+* release and snapshot versions from oss.sonatype.org: <https://oss.sonatype.org/#nexus-search;gav~org.xdef>
+
+## Maven
+Configuration file pom.xml:
+* dependency on release version in central maven repository:
+  ```xml
+  <dependencies>
+      <dependency>
+          <groupId>org.xdef</groupId>
+          <artifactId>xdef</artifactId>
+          <version>[release version]</version>
+      </dependency>
+  <dependencies>
+  ```
+* dependency on release or snapshot version in oss.sonatype.org:
+  ```xml
+  <dependencies>
+      <dependency>
+          <groupId>org.xdef</groupId>
+          <artifactId>xdef</artifactId>
+          <version>[release or snapshot version]</version>
+      </dependency>
+  <dependencies>
+  <distributionManagement>
+      <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+      <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      </repository>
+  </distributionManagement>
+  ```
+
 # Building
 
 Prerequisities:
