@@ -10,9 +10,12 @@ but also to describe specifically their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
+This project is implementation for platform Java 1.6+.
+
 
 
 # License
+
 The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
@@ -59,7 +62,8 @@ This is the complete X-definition file with the model of the XML data on the lef
             Number = "required int()"
             Town   = "required string()"
             State  = "required string()"
-            Zip    = "required int()" />
+            Zip    = "required int()"
+        />
         <Competence xd:script = "occurs 1..5">
             required string()
         </Competence>
@@ -168,16 +172,20 @@ containing the code of X‑definition language.
 
 
 
-# Usage
+# Usage in other projects
+
 
 ## Check and download available versions
+
 Links:
-* release versions from central maven repository: <https://search.maven.org/search?q=g:org.xdef>
+* release versions from the central maven repository: <https://search.maven.org/search?q=g:org.xdef>
 * release and snapshot versions from oss.sonatype.org: <https://oss.sonatype.org/#nexus-search;gav~org.xdef>
 
-## Maven
+
+## For maven projects
+
 Configuration file pom.xml:
-* dependency on release version in central maven repository:
+* dependency on release version in the central maven repository:
   ```xml
   <dependencies>
       <dependency>
@@ -211,7 +219,7 @@ Configuration file pom.xml:
 
 
 
-# Building
+# Building this project
 
 Source code at GitHub:
 * link to the release version: <https://github.com/Syntea/xdef>
@@ -249,7 +257,9 @@ Frequent building operations:
   ```shell
   mvn package -Prelease,javadoc,sources
   ```
-## Deploying to maven central repository
+
+
+## Deploying to the maven central repository
 
 Prerequisities:
 * satisfy prerequisities for building
