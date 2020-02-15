@@ -30,6 +30,49 @@ Ex3: repeating
 Ex4: xd-script
 ...
 
+<table border="0"><tr><td>
+Let´s have the following example of XML data:
+```xml
+<Employee
+    FirstName = "Andrew"
+    LastName = "Aardvark"
+    EnterDate = "1996-3-12"
+    Salary = "21700"
+/>
+    <Address
+        Street = "Broadway"
+        Number = "255"
+        Town = "Beverly Hills"
+        State = "CA"
+        Zip = "90210"
+    />
+    <Competence>electrician</Competence>
+    <Competence>carpenter</Competence>
+</Employee>
+```
+</td><td>
+```xml
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
+    <Employee
+        FirstName = "required string()"
+        LastName = "required string()"
+        EnterDate = "required date()"
+        Salary = "optional decimal()"
+    />
+        <Address
+            Street = "required string()"
+            Number = "required int()"
+            Town = "required string()"
+            State = "required string()"
+            Zip = "required int()" />
+        <Competence xd:script = "occurs 1..5">
+            required string()
+        </Competence>
+    </Employee>
+</xd:def>
+```xml
+</td></tr></table>
+
 
 
 # Usage
