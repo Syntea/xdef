@@ -44,7 +44,7 @@ Let´s have the following XML data:
 ```
 
 </td><td>
-This is the X-definition model of the XML data on the left:
+This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
