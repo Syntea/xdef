@@ -3080,12 +3080,26 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {
 			if (!ex.getMessage().contains("XML099"))fail(ex);
 		}
+		try {// test metanamespace
+			xdef =
+"<xd:def xmlns:xd='meta.b.cz' xmlns:w='http://www.xdef.org/xdef/4.0'\n" +
+"  w:metaNamespace='meta.b.cz' name='X' xd:root='A'>\n" +
+"<A a='string'>\n" +
+"  <w:B xd:script='*'/>\n" +
+"</A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.0'/></A>";
+			assertEq(xml, parse(xp, "X", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {// test "classpath" and "file" protocol in URL
 			xp = XDFactory.compileXD((Properties) null, //without wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef");
+				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 			xp = XDFactory.compileXD((Properties) null, //without wildcards
@@ -3093,16 +3107,11 @@ public final class TestParse extends XDTester {
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef40.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
-			xp = XDFactory.compileXD((Properties) null, //without wildcards
-"<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
-"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
-"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
-"    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
-"    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 "<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");

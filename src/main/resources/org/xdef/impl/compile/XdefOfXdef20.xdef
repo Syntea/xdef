@@ -1,6 +1,8 @@
 <!--
-  With the meta namespace "METAXD" (X-definition 3.2) is described
-  the input XML document which must fit the X-definition 2.0 specification.
+ The description of XML document which must fit the X-definition 2.0
+ specification.
+ The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/4.0).
+ The prefix of objects describing the X-definition 2.0 is XD2.0.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -9,8 +11,9 @@
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
-  xmlns:w         = "http://www.xdef.org/xdef/3.2"
-  w:metaNamespace = "METAXD" >
+  xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
+  xmlns:w         = "http://www.xdef.org/xdef/4.0"
+  w:metaNamespace = "METAXD">
 
 <xd:declaration scope = "local">
   BNFGrammar v20BNF = new BNFGrammar(

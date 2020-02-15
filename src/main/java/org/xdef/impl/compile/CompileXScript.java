@@ -37,7 +37,8 @@ final class CompileXScript extends CompileStatement {
 
 	/** Creates a new instance of CompileScript
 	 * @param g The code generator.
-	 * @param xmlVersion 10 -> "1.0", 11 -> "1.1".
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
+	 * (see org.xdef.impl.XConstants.XMLxx).
 	 * @param nsPrefixes array with name space prefixes.
 	 * @param clsLoader The Class loader (used for external objects).
 	 */
@@ -175,7 +176,7 @@ final class CompileXScript extends CompileStatement {
 	 * @param sc XData model of data value.
 	 */
 	private void compileTypeCheck(final XData sc) {
-		if (_sym == CONSTANT_SYM && _parsedValue.getItemId() == XD_STRING){
+		if (_sym == CONSTANT_SYM && _parsedValue.getItemId() == XD_STRING) {
 			sc._check = _g._lastCodeIndex + 1;
 			byte gmode = _g._mode;
 			_g._sp  = -1;
@@ -205,8 +206,8 @@ final class CompileXScript extends CompileStatement {
 		_g._mode = CompileBase.TEXT_MODE;
 		sc.clearOptions();
 		sc.clearActions();
-		sc.setValueType(XD_STRING, "string");
 		XOccurrence occ = new XOccurrence(); // undefined occurrence
+		sc.setValueType(XD_STRING, "string");
 		while (_sym != NOCHAR) {
 			if (_sym == SEMICOLON_SYM) {
 				nextSymbol();
@@ -443,7 +444,6 @@ final class CompileXScript extends CompileStatement {
 							j = _g._code.get(i+2).getCode();
 							if (j == PARSERESULT_MATCH || j == STOP_OP) {
 								p = (XDParser) y;
-//								sc.setValueType(p.parsedType(), p.parserName());
 							}
 						}
 					}
@@ -499,7 +499,7 @@ final class CompileXScript extends CompileStatement {
 			error(XDEF.XDEF411, "external");
 			nextSymbol();
 		}
-		switch(_sym) {
+		switch (_sym) {
 			case IDENTIFIER_SYM: {
 				String name = _idName;
 				nextSymbol();

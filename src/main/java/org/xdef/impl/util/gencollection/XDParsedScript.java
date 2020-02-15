@@ -616,7 +616,6 @@ public class XDParsedScript {
 			? null : getXdScript(s, defName, isValue);
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Create XdParsedScript object from the script.
 	 * @param script string with script.
 	 * @param defName name of X-definition.
@@ -626,7 +625,7 @@ public class XDParsedScript {
 	public static final XDParsedScript getXdScript(final String script,
 		final String defName,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser((byte) 10);
+		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		sp.setSource(new SBuffer(script), defName, XConstants.XD20);
 		return new XDParsedScript(sp, isValue);
 	}

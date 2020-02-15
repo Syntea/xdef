@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.sys.JSONUtil;
+import org.xdef.json.JsonUtil;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -53,14 +53,26 @@ public final class TestXComponents extends XDTester {
 	/** Run test and print error information. */
 	public void test() {
 		XDPool xp;
+		String componentDir = getSourceDir();
 		try {
 			ObjectInputStream ois = new ObjectInputStream(
-				new FileInputStream(getSourceDir() + "component/Pool.xp"));
+				new FileInputStream(componentDir + "component/Pool.xp"));
 			xp = (XDPool) ois.readObject();
 			ois.close();
 		} catch (Exception ex) {
-			fail("XDPool is not available");
-			return;
+			xp = null;
+		}
+		if (xp == null) {
+			try {
+				componentDir = "test/test/xdef/";
+				ObjectInputStream ois = new ObjectInputStream(
+					new FileInputStream(componentDir + "component/Pool.xp"));
+				xp = (XDPool) ois.readObject();
+				ois.close();
+			} catch (Exception ex) {
+				fail("XDPool is not available");
+				return;
+			}
 		}
 		String xml;
 		Element el;
@@ -722,7 +734,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String source = FUtils.readString(
-				new File(getSourceDir(), "component/Y13.java"));
+				new File(componentDir, "component/Y13.java"));
 			if (source.indexOf("public static class B ") > 0) {
 				fail("Error Y13: "
 					+ "class test.xdef.component.Y13.A.B was generated.");
@@ -784,11 +796,11 @@ public final class TestXComponents extends XDTester {
 			test.xdef.component.Y16a r = new test.xdef.component.Y16a();
 			r.sety(1);
 			p.setx$b(r);
-			Object json =
-				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+			Object json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+				.getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
-			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
+			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
 				fail();
 			}
 			xml = "<c><d xmlns='y.int' y='1'/></c>";
@@ -808,13 +820,13 @@ public final class TestXComponents extends XDTester {
 			xml = "<a><b a='1'/><c/><b a='x'/></a>";
 			test.xdef.component.Y17 p = (test.xdef.component.Y17)
 				parseXC(xp, "Y17", xml, null, reporter);
-			Object json =
-				JSONUtil.xmlToJson(KXmlUtils.parseXml(xml).getDocumentElement());
+			Object json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+				.getDocumentElement());
 			el = p.toXml();
 			assertEq(xml, el);
 			assertEq(1, p.getb_1().geta());
 			assertEq("x", p.getb_2().geta());
-			if (!JSONUtil.jsonEqual(json, JSONUtil.xmlToJson(el))) {
+			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}
@@ -991,7 +1003,7 @@ public final class TestXComponents extends XDTester {
 				f.toXml());
 			lst.clear();
 			assertEq("<f/>", f.toXml());
-			g = new test.xdef.component.XCf.g();;
+			g = new test.xdef.component.XCf.g();
 			g.set$value(sd);
 			lst.add(g);
 			assertEq("<f><g>2019-04-03+02:00</g></f>", f.toXml());

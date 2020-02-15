@@ -55,8 +55,8 @@ public class TestJsonUtil extends STester {
 			return "JSON error " + id + "\n" + ex;
 		}
 		try {
-			// test jsonToXml (XDEF)
-			el = JsonUtil.jsonToXml(o1);
+			// test jsonToXmlXdef (XDEF)
+			el = JsonUtil.jsonToXmlXdef(o1);
 		} catch (Exception ex) {
 			_errors++;
 			return "Error jsonToXmlXD: Test" + id + ".json\n"
@@ -79,7 +79,7 @@ public class TestJsonUtil extends STester {
 		}
 		try {
 			// test jsonToXMl (W3C)
-			el = JsonUtil.jsonToXmlW3C(o1);
+			el = JsonUtil.jsonToXml(o1);
 		} catch (Exception ex) {
 			_errors++;
 			return "Error jsonToXml (W3C): Test" + id + ".json\n"
@@ -108,7 +108,7 @@ public class TestJsonUtil extends STester {
 			_errors++;
 			return "Error in check XML and JSON:\n"
 				+ xml.getName() + ", " + json.getName() + "\n"
-				+ JsonUtil.toJsonString(o1);
+				+ JsonUtil.toJsonString(o1) + "\n" + JsonUtil.toJsonString(o2);
 		}
 		return "";
 	}

@@ -5,16 +5,16 @@
   "author"  : "jnull();",
   "cities"  : {
     "Brussels": [
-      {"xd:script":"occurs 1..5", "to": "jstring();", "distance": "int();"}
+      { $script: "occurs 1..5", "to": "jstring();", "distance": "int();"}
     ],
     "London": [
-      {"xd:script":"occurs 1..5", "to": "jstring();", "distance": "int();"}
+      { $script: "occurs 1..5", "to": "jstring();", "distance": "int();"}
     ],
     "Paris": [
-      {"xd:script":"occurs 1..5", "to": "jstring();", "distance": "int();"}
+      { $script: "occurs 1..5", "to": "jstring();", "distance": "int();"}
     ],
     "Amsterdam": [
-      {"xd:script":"occurs 1..5", "to": "jstring();", "distance": "int();"}
+      { $script: "occurs 1..5", "to": "jstring();", "distance": "int();"}
     ]
   }
 }

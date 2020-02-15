@@ -2,14 +2,15 @@ package org.xdef.impl.util.conv;
 
 import org.xdef.impl.compile.XScriptParser;
 import org.xdef.sys.SBuffer;
-import org.xdef.xml.KDOMBuilder;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import org.xdef.impl.XConstants;
+import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -498,7 +499,7 @@ public final class Util {
 				decl.getNamespaceURI(), "name");
 			localNamePrefix = xdName != null ? '_' + xdName + '.' : "_.";
 		}
-		XScriptParser p = new XScriptParser((byte) 10);
+		XScriptParser p = new XScriptParser(XConstants.XML10);
 		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
 		while (!p.eos()) {
 		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {

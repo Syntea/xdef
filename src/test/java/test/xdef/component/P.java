@@ -96,6 +96,7 @@ public class P implements org.xdef.component.XComponent{
   private final java.util.List<P.b> _b = new java.util.ArrayList<P.b>();
   private P.c _c;
   private P.d _d;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -231,6 +232,7 @@ public static class a implements org.xdef.component.XComponent{
   private Double _a;
   private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -355,6 +357,7 @@ public static class b implements org.xdef.component.XComponent{
   private Double _a;
   private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";
@@ -479,6 +482,7 @@ public static class c implements org.xdef.component.XComponent{
   private Double _a;
   private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";
@@ -603,6 +607,7 @@ public static class d implements org.xdef.component.XComponent{
   private Double _a;
   private String XD_Name_b="b";
   private org.xdef.sys.SDatetime _b;
+  public static final String XD_NAME="d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d";

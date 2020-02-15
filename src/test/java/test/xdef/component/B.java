@@ -123,6 +123,7 @@ public class B implements org.xdef.component.XComponent{
   private org.xdef.sys.SDatetime _time;
   private String XD_Name_name="name";
   private String _name;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";

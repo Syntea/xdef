@@ -98,6 +98,7 @@ public class Y09 implements org.xdef.component.XComponent{
   private String XD_Name_y="y";
   private String _y;
   private Y09.$any _$any;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -204,6 +205,7 @@ public static class $any implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="$any";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "$any";

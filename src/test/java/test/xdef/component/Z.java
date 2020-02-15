@@ -91,6 +91,7 @@ public class Z implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<Z1> _ZaznamPDN = new java.util.ArrayList<Z1>();
+  public static final String XD_NAME="SouborD1A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "SouborD1A";

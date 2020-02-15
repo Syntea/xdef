@@ -90,6 +90,7 @@ public class Y06B implements test.xdef.TestXComponents_Y06XCDomain,org.xdef.comp
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

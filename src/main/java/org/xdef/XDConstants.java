@@ -27,12 +27,12 @@ public interface XDConstants {
 	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
 	/** Property defines stream used for debug input (default is stdIn). */
 	public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
-	
+
 	/** Property defines debug editor class name.*/
 	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
 	/** Property defines X-definition editor class name.*/
 	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
-	
+
 	/** Property defines X-definition external editor class name.*/
 	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
@@ -116,6 +116,8 @@ public interface XDConstants {
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
+	/** URI of X-definition 4.0. */
+	public static final String XDEF40_NS_URI = "http://www.xdef.org/xdef/4.0";
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.xdef.org/xdef/instance";

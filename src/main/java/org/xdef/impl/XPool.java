@@ -857,6 +857,10 @@ public final class XPool implements XDPool, Serializable {
 		}
 		//search models of X-definition
 		for (XMElement xe: xd.getModels()) {
+			if (ndx < 0 && xe.getJsonMode() > 0 && s.indexOf(':') < 0
+				&& s.equals(xe.getQName().getLocalPart())){
+				return xe;
+			}
 			String x = xe.getName();
 			String y = s;
 			String z = null;

@@ -217,7 +217,6 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		int xs = _check; //start of code of parse method.
 		if (xs < 0) {
 			return DEFAULT_PARSER;
-//			return null; // not declared (default, i.e. any string)
 		}
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xs];
@@ -283,7 +282,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from cz.syntea.xdef.XDValueTypes.
+	 * @return value from org.xdef.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();

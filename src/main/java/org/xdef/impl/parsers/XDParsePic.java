@@ -32,7 +32,7 @@ public class XDParsePic extends XDParseEq {
 				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
 				return;
 			}
-			switch(_param.charAt(i)) {
+			switch (_param.charAt(i)) {
 				case '9':
 					if (p.isDigit() < 0) {
 						//Incorrect value of '&{0}'

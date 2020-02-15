@@ -401,7 +401,7 @@ final class ChkParser extends DomBaseHandler {
 					int ndx = qName.indexOf(':');
 					String attrName = "xmlns"
 						+ (ndx > 0 ? ':' + qName.substring(0, ndx) : "");
-					s += " " + attrName + "=\"" + uri + '\"';
+					s += " " + attrName + "=\"" + uri + '"';
 				}
 				s += "/>";
 				InputStream in = new ByteArrayInputStream(
@@ -689,17 +689,26 @@ final class ChkParser extends DomBaseHandler {
 
 	/////////////////////////////////////////////////////////////
 
-	final void closeReader() {} // needs the old version with KXmlParser
+	/** Close reader of parsed data. */
+	final void closeReader() {
+		if (_in != null) {
+			try {
+				_in.close();
+			} catch (IOException ex) {
+				throw new SRuntimeException(ex);
+			}
+		}
+	}
 
 	/** Get connected reporter.
 	 * @return connected SReporter.
 	 */
-	SReporter getReporter() {return _sReporter;}
+	final SReporter getReporter() {return _sReporter;}
 
 	/** Parse XML source and process check and processing instructions.
 	 * @param chkDoc The ChkDocument object.
 	 */
-	void xparse(ChkDocument chkDoc) {
+	final void xparse(final ChkDocument chkDoc) {
 		try {
 			_level = -1;
 			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
@@ -769,7 +778,7 @@ final class ChkParser extends DomBaseHandler {
 	////////////////////////////////////////////////////////////////////////////
 
 	/** This method adds cumulated text nodes to the result. */
-	private void processText(XAbstractReader mr) {
+	private void processText(final XAbstractReader mr) {
 		if (_text != null && _text.getString().length() > 0) {
 			SPosition myPos = new SPosition(_sReporter); //save position
 			//set position of text
@@ -780,9 +789,9 @@ final class ChkParser extends DomBaseHandler {
 			_text = null;
 		}
 		if (_locationDetails && mr != null) {
-			while (mr.scanCDATA()>=0 || mr.scanPI()>=0
-				|| mr.scanEntity()>=0 || mr.scanComment()>= 0
-				 || mr.scanText()>=0) {}
+			while (mr.scanCDATA() >= 0 ||  mr.scanPI() >= 0
+				|| mr.scanEntity() >= 0 || mr.scanComment() >= 0
+				 || mr.scanText() >= 0) {}
 		}
 	}
 
@@ -791,7 +800,7 @@ final class ChkParser extends DomBaseHandler {
 	 * @param p string parser
 	 * @return string.
 	 */
-	static String readString(final StringParser p) {
+	final static String readString(final StringParser p) {
 		p.skipSpaces();
 		char delimiter;
 		if ((delimiter = p.isOneOfChars("'\"")) == StringParser.NOCHAR) {

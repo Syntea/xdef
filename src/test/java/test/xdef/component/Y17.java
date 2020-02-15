@@ -92,6 +92,7 @@ public class Y17 implements org.xdef.component.XComponent{
   private Y17.b_1 _b_1;
   private Y17.c _c;
   private Y17.b_2 _b_2;
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -210,6 +211,7 @@ public static class b_1 implements org.xdef.component.XComponent{
   }
   private String XD_Name_a="a";
   private Integer _a;
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";
@@ -303,6 +305,7 @@ public static class c implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";
@@ -406,6 +409,7 @@ public static class b_2 implements org.xdef.component.XComponent{
   }
   private String XD_Name_a="a";
   private String _a;
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";

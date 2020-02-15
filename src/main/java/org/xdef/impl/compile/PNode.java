@@ -5,6 +5,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.XDConstants;
+import org.xdef.xml.KXmlUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ public final class PNode {
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template switch
+	/** JSON to XML transformation mode. */
+	byte _jsonMode = 0; // no JSON
 
 	/** Creates a new instance of PNode.
 	 * @param name The node name.
@@ -101,8 +104,9 @@ public final class PNode {
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 
-	/** Get version of the XML document.
-	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11 ).
+	/** Get version of XML document.
+	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11;
+	 * see org.xdef.impl.XConstants.XMLxx).
 	 */
 	public final byte getXMLVersion() {return _xmlVersion;}
 
@@ -140,7 +144,8 @@ public final class PNode {
 		if ("macro".equals(_localName)
 			&& (XDConstants.XDEF20_NS_URI.equals(_nsURI)
 				|| XDConstants.XDEF31_NS_URI.equals(_nsURI)
-				|| (XDConstants.XDEF32_NS_URI.equals(_nsURI)))) {
+				|| XDConstants.XDEF32_NS_URI.equals(_nsURI)
+				|| XDConstants.XDEF40_NS_URI.equals(_nsURI))) {
 			return; // it is not a macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(
@@ -178,7 +183,7 @@ public final class PNode {
 		org.w3c.dom.Document doc;
 		org.w3c.dom.Node parent;
 		if (node == null) {
-			parent = doc = org.xdef.xml.KXmlUtils.newDocument();
+			parent = doc = KXmlUtils.newDocument();
 		} else {
 			doc = node.getOwnerDocument();
 			parent = node;
@@ -199,5 +204,4 @@ public final class PNode {
 		return e;
 	}
 /*#end*/
-
 }

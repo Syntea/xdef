@@ -96,6 +96,7 @@ public class Y03 implements test.xdef.component.Y03i,org.xdef.component.XCompone
   }
   private Y03PartOne _PartOne;
   private Y03PartTwo _PartTwo;
+  public static final String XD_NAME="Part";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Part";

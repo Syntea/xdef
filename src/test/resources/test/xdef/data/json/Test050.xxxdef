@@ -1,0 +1,22 @@
+<!-- Example with a reference and all values are json values -->
+
+<xd:def xmlns:xd="http://www.xdef.org/3.2"
+  xd:name="test050"
+  xd:root="test050">
+
+<xd:json name="test050">
+[
+    "jvalue();",
+    "occurs 1..*; ref person"
+]
+</xd:json>
+
+<xd:json name="person">
+{
+   "jmeno": "jvalue();",
+   "plat": "jvalue()",
+   "nar": "jvalue()"
+}
+</xd:json>
+
+</xd:def>

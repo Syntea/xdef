@@ -121,6 +121,17 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public final String getReferencePos() {return _refPosition;}
 
+	@Override
+	/** Get mode of JSON model.
+	 * @return 0 .. no JSON, 1 .. w3c mode, 2 .. xd mode.
+	 */
+	public final byte getJsonMode() {return _json;}
+
+	/** Set mode of JSON model.
+	 * @param x 0 .. no JSON, 1 .. w3c mode, 2 .. xd mode.
+	 */
+	public final void setJsonMode(final byte x) {_json = x;}
+
 	/** Set this model is created from other model (reference).
 	 * @param ref string of position of model reference.
 	 */
@@ -864,7 +875,7 @@ public final class XElement extends XCodeDescriptor
 			}
 			for (XNode x: xe._childNodes) {
 				short kind = x.getKind();
-				switch(kind) {
+				switch (kind) {
 					case XNode.XMCHOICE:
 					case XNode.XMSEQUENCE:
 					case XNode.XMMIXED:

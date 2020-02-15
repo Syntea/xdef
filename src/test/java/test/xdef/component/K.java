@@ -96,6 +96,7 @@ public class K implements org.xdef.component.XComponent{
   private Integer _$value;
   private char _$$value= (char) -1;
   private K.d _d;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -233,6 +234,7 @@ public static class c implements org.xdef.component.XComponent{
   private String _Cislo;
   private String XD_Name_Rok="Rok";
   private org.xdef.sys.SDatetime _Rok;
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";
@@ -353,6 +355,7 @@ public static class d implements org.xdef.component.XComponent{
   }
   private String XD_Name_a="a";
   private org.xdef.sys.SDatetime _a;
+  public static final String XD_NAME="d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d";

@@ -109,11 +109,8 @@ public final class XDReader extends SObjectReader {
 
 	private XDValue readXPath() throws IOException {
 		int len = readLength();
-		KNamespace nc;
-		if (len == 0) {
-			nc = null;
-		} else {
-			nc = new KNamespace();
+		KNamespace nc = new KNamespace();
+		if (len > 0) {
 			for (int i = 0; i < len; i++) {
 				String prefix = readString();
 				String uri = readString();
@@ -140,7 +137,7 @@ public final class XDReader extends SObjectReader {
 			throw new SIOException(SYS.SYS066, "Illegal code: " + code);
 		}
 		short type = readShort();
-		switch(code) {
+		switch (code) {
 			case CodeTable.COMPILE_BNF:
 				return readBNF();
 			case CodeTable.COMPILE_XPATH:

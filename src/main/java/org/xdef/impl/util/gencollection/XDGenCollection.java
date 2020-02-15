@@ -310,7 +310,8 @@ public class XDGenCollection {
 		if ("collection".equals(root.getLocalName())
 			&& (XDConstants.XDEF20_NS_URI.equals(uri)
 			|| XDConstants.XDEF31_NS_URI.equals(uri)
-			|| XDConstants.XDEF32_NS_URI.equals(uri))) {
+			|| XDConstants.XDEF32_NS_URI.equals(uri)
+			|| XDConstants.XDEF40_NS_URI.equals(uri))) {
 			if (_collection == null) {
 				genCollection(uri);
 			}
@@ -328,7 +329,8 @@ public class XDGenCollection {
 		} else {
 			if (!XDConstants.XDEF20_NS_URI.equals(uri)
 				&& !XDConstants.XDEF31_NS_URI.equals(uri)
-				&& !XDConstants.XDEF32_NS_URI.equals(uri)) {
+				&& !XDConstants.XDEF32_NS_URI.equals(uri)
+				&& !XDConstants.XDEF40_NS_URI.equals(uri)) {
 				uri = XDConstants.XDEF32_NS_URI;
 			}
 			if (_collection == null && _doc.getDocumentElement() == null) {
@@ -376,7 +378,8 @@ public class XDGenCollection {
 			|| uri == null || uri.length() == 0
 			|| !(XDConstants.XDEF20_NS_URI.equals(uri)
 				|| XDConstants.XDEF31_NS_URI.equals(uri)
-				|| XDConstants.XDEF32_NS_URI.equals(uri))) {
+				|| XDConstants.XDEF32_NS_URI.equals(uri)
+				|| XDConstants.XDEF40_NS_URI.equals(uri))) {
 			return false;
 		}
 		String xdUri =
@@ -493,7 +496,7 @@ public class XDGenCollection {
 				addMacro((Element) n, xdUri, null, macros, resolve);
 			}
 		}
-		// Set macros from xd:def elements (compatibility with version 2.0. 3.1)
+		// Set macros from xd:def elements.
 		nl = KXmlUtils.getChildElements(collection);
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element el = (Element) nl.item(i);
@@ -551,7 +554,7 @@ public class XDGenCollection {
 		final HashMap<String, XScriptMacro> macros) {
 		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
 			"1.1".equals(el.getOwnerDocument().getXmlVersion())
-				? (byte) 11 : (byte) 10,
+				? XConstants.XML11 : XConstants.XML10,
 			macros,
 			new ArrayReporter());
 		NodeList nl = el.getChildNodes();
@@ -585,7 +588,6 @@ public class XDGenCollection {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Canonize script and generate type table.
 	 * @param script script source.
 	 * @param defName name of actual X-definition.
@@ -598,7 +600,7 @@ public class XDGenCollection {
 		final String defName,
 		final boolean removeActions,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser((byte) 10);
+		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, XConstants.XD20);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
@@ -706,27 +708,19 @@ public class XDGenCollection {
 					|| "component".equals(el.getLocalName())
 					|| "BNFGrammar".equals(el.getLocalName())
 					|| "thesaurus".equals(el.getLocalName())
-					|| "lexicon".equals(el.getLocalName()))
+					|| "lexicon".equals(el.getLocalName())
+					|| "json".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();
-					if ("thesaurus".equals(el.getLocalName())
-						|| "lexicon".equals(el.getLocalName())) {
-						if (s.trim().isEmpty()) {
-							el.removeChild(n);
-						}
+					s = canonizeScript(s, defName, removeActions, true);
+					if (s.length() > 0){
+						Element txtEl =
+							doc.createElementNS(xdUri, "xd:text");
+						txtEl.appendChild(doc.createTextNode(s));
+						el.replaceChild(txtEl, txt);
 					} else {
-						if (!"macro".equals(el.getLocalName())) {
-							s = canonizeScript(s, defName, removeActions, true);
-							if (s.length() > 0){
-								Element txtEl =
-									doc.createElementNS(xdUri, "xd:text");
-								txtEl.appendChild(doc.createTextNode(s));
-								el.replaceChild(txtEl, txt);
-							} else {
-								el.removeChild(txt);
-							}
-						}
+						el.removeChild(txt);
 					}
 				}
 			}
@@ -796,7 +790,8 @@ public class XDGenCollection {
 					if ("def".equals(e.getLocalName())
 						&& (XDConstants.XDEF20_NS_URI.equals(uri)
 							|| XDConstants.XDEF31_NS_URI.equals(uri)
-							|| XDConstants.XDEF32_NS_URI.equals(uri))) {
+							|| XDConstants.XDEF32_NS_URI.equals(uri)
+							|| XDConstants.XDEF40_NS_URI.equals(uri))) {
 						s = getXdefAttr(e, uri, "name", false);
 						if (xdName.equals(s)) {
 							xd = e;
@@ -1073,7 +1068,8 @@ public class XDGenCollection {
 		String s = findXDNS(n);
 		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
 			: XDConstants.XDEF31_NS_URI.equals(s) ? XConstants.XD31
-			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32 : 0;
+			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32
+			: XDConstants.XDEF40_NS_URI.equals(s) ? XConstants.XD40 : 0;
 	}
 
 	/** Get the element with X-definition where the node is declared.
@@ -1140,9 +1136,13 @@ public class XDGenCollection {
 			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF32_NS_URI;
 			}
+			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF40_NS_URI;
+			}
 			return uri.equals(XDConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
+				|| uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;
 		}
 		if ("def".equals(localName)) {
 			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
@@ -1154,9 +1154,13 @@ public class XDGenCollection {
 			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF32_NS_URI;
 			}
+			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
+				return XDConstants.XDEF40_NS_URI;
+			}
 			String s = uri.equals(XDConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
+				|| uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;
 			if (s != null) {
 				return s;
 			}
@@ -1165,7 +1169,8 @@ public class XDGenCollection {
 		if ("declaration".equals(localName)) {
 			String s = uri.equals(XDConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI) ? uri : null;
+				|| uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;
 			if (s != null) {
 				return s;
 			}

@@ -15,7 +15,6 @@ import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
 import java.io.InputStream;
 import java.net.URI;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -41,7 +40,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	 */
 	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
@@ -61,7 +59,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				parsedElem.getParsedNameSourcePosition(),
 				_actPNode,
 				_actPNode==null? (byte) 0 : _actPNode._xdVersion,
-				"1.1".equals(getXmlVersion()) ? (byte) 11 : (byte) 10);
+				"1.1".equals(getXmlVersion())
+					? XConstants.XML11 : XConstants.XML10);
 		}
 		String elemPrefix;
 		String elemLocalName;
@@ -91,12 +90,16 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					|| (ka = parsedElem.getAttrNS(
 						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null){
+						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(
+						XDConstants.XDEF40_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
 					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD20
 						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
-						? XConstants.XD31 : XConstants.XD32;
+						? XConstants.XD31
+						: XDConstants.XDEF32_NS_URI.equals(ka.getNamespaceURI())
+						? XConstants.XD32 : XConstants.XD40;
 					try {
 						if (projectNS.isEmpty()) {
 							throw new RuntimeException();
@@ -110,11 +113,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				} else {
 					if (XDConstants.XDEF20_NS_URI.equals(uri)
 						|| XDConstants.XDEF31_NS_URI.equals(uri)
-						|| XDConstants.XDEF32_NS_URI.equals(uri)) {
+						|| XDConstants.XDEF32_NS_URI.equals(uri)
+						|| XDConstants.XDEF40_NS_URI.equals(uri)) {
 						ver = XDConstants.XDEF20_NS_URI.equals(uri)
 							? XConstants.XD20
 							: XDConstants.XDEF31_NS_URI.equals(uri)
-							? XConstants.XD31 :  XConstants.XD32;
+							? XConstants.XD31
+							: XDConstants.XDEF32_NS_URI.equals(uri)
+							? XConstants.XD32 : XConstants.XD40;
 						projectNS = uri;
 					} else {
 						//Namespace of X-definitions is required
@@ -223,8 +229,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
 			} else if ("lexicon".equals(elemLocalName)
-				|| "thesaurus".equals(elemLocalName)//&&_actPNode._xdVersion==31
-				) {
+				|| ("thesaurus".equals(elemLocalName)
+					&&_actPNode._xdVersion <= 31)) {
 				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
@@ -233,10 +239,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("component".equals(elemLocalName)) {
 				_level++;
 				_pcomp.getPComponents().add(0, _actPNode);
-			} else {
-				if (!"def".equals(elemLocalName)) {
-					error(_actPNode._name, XDEF.XDEF259);//X-definition expected
-				}
+			} else { // def or jdef
 				_level++;
 				String defName = getNameAttr(_actPNode, false, true);
 				if (defName == null) {
@@ -415,32 +418,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_actPNode._childNodes.add(p);
 		_level--;
 	}
-//////////////////////////////////////////////////////////////////////////////
-
-	private static void pNodeToXML(final PNode p, Document doc, Node parent) {
-		Element e =
-			doc.createElementNS(p.getNamespace(), p.getName().getString());
-		parent.appendChild(e);
-		for (PAttr a: p.getAttrs()) {
-			e.setAttributeNS(
-				a.getNamespace(), a.getName(), a.getValue().getString());
-		}
-		for (PNode child: p.getChildNodes()) {
-			pNodeToXML(child, doc, e);
-		}
-		if (p.getValue() != null) {
-			e.appendChild(doc.createTextNode(p.getValue().getString()));
-		}
-	}
-
-	private static void displayPNode(final PNode p) {
-		Document doc = KXmlUtils.newDocument();
-		pNodeToXML(p, doc, doc);
-		System.out.println(
-			KXmlUtils.nodeToString(doc.getDocumentElement(), true));
-	}
-
-/////////////////////////////////////////////////////////////////////////////
 
 	private void processText() {
 		if (_actPNode._template && _level > 0
@@ -457,7 +434,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("text".equals(_actPNode._localName)
+			if ("json".equals(_actPNode._localName)) {
+				if (_level != 1) {
+					//JSON model can be declared only as a child of X-definition
+					error(_actPNode._value, XDEF.XDEF310);
+					_actPNode._value = null;
+				}
+				return;
+			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)
 				|| "lexicon".equals(_actPNode._localName)
 				|| "thesaurus".equals(_actPNode._localName)
@@ -481,14 +465,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._value = null; //prevent repeated message
 				return;
 			}
-		} else if ("json".equals(_actPNode._localName)
-			&& (XDConstants.JSON_NS_URI_W3C.equals(_actPNode._nsURI)
-			|| XDConstants.JSON_NS_URI.equals(_actPNode._nsURI))) {
-			if (_level != 1) {
-				//JSON model can be declared only as a child of X-definition
-				error(_actPNode._value, XDEF.XDEF310);
-			}
-			return;
 		}
 		if (_level == 0) {
 			//Text value not allowed here

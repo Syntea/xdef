@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.LinkedHashMap;
+import javax.xml.namespace.QName;
 import org.xdef.model.XMNode;
 import org.xdef.proc.XDLexicon;
 
@@ -30,9 +31,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		new LinkedHashMap<String,String>();
 	/** root selection. */
 	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
-	/** Version of X-definition (XDConstants.XD20 or XDConstants.XD31). */
+	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the X-definition was created. */
+	/** Version of XML from which the X-definition was created
+	 *  (see org.xdef.impl.XConstants.XDxx).
+	 */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
@@ -46,7 +49,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Source ID of this X-definition. */
 	private final SPosition _sourcePosition;
 
-	@SuppressWarnings("deprecation")
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
 	 * @param xdp XPool object.
@@ -62,7 +64,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
 		_xdVersion = XDConstants.XDEF20_NS_URI.equals(nsURI) ? XConstants.XD20
 			: XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
-			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32 : 0;
+			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32
+			: XDConstants.XDEF40_NS_URI.equals(nsURI) ? XConstants.XD40 : 0;
 		_xmlVersion = xmlVersion;
 		_sourcePosition = sourcePosition;
 		setXDPosition(name + '#');
@@ -81,11 +84,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final XElement getXElement(final String key,
 		final String nsURI,
 		final int languageID) {
+		String lockey;
+		XDefinition def;
 		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
 		int ndx = key.lastIndexOf('#');
-		String lockey;
-		XDefinition def;
 		if (ndx < 0) { //reference to this set, element with the name from key.
 			lockey = key;
 			def = this;
@@ -112,28 +115,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 					}
 				}
 			}
-		} else if (lockey.contains(":json")
-			&& (XDConstants.JSON_NS_URI.equals(nsURI)
-				|| XDConstants.JSON_NS_URI_W3C.equals(nsURI))) {
-			for (int i = 0; i < _xElements.size(); i++) {
-				XElement xel  = def._xElements.get(i);
-				String lname = xel.getName();
-				ndx = lname.indexOf(':');
-				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
-					return xel;
-				}
-			}
 		} else {
 			ndx = lockey.indexOf(':');
 			lockey = ndx >= 0 ? lockey.substring(ndx + 1) : lockey;
 			for (int i = 0; i < _xElements.size(); i++) {
-				XElement xel  = def._xElements.get(i);
-				String lname = xel.getName();
-				ndx = lname.indexOf(':');
-				if (ndx >= 0) {
-					lname = lname.substring(ndx + 1);
-				}
-				if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
+				XElement xel = def._xElements.get(i);
+				if (nsURI.equals(xel.getNSUri())
+					&& lockey.equals(xel.getLocalName())){
 					return xel;
 				}
 			}
@@ -200,15 +188,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				if (model.getNSUri() == null && name.equals(model.getName())) {
 					return model;
 				}
-			} else if (nsURI.equals(model.getNSUri())) {
-				String lname = model.getName();
-				int ndx = lname.indexOf(':');
-				if (ndx >= 0) {
-					lname = lname.substring(ndx + 1);
-				}
-				if (name.equals(lname)) {
-					return model;
-				}
+			} else if (nsURI.equals(model.getNSUri())
+				&& name.equals(model.getLocalName())) {
+				return model;
 			}
 		}
 		return null;
@@ -305,38 +287,33 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		String nm = name;
 		XDLexicon t =
 			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
-		if (namespaceURI != null && namespaceURI.length() > 0) { // has NS URI
+		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
 			int i = name.indexOf(':');
 			nm = name.substring(i + 1);
+			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _rootSelection.keySet()) {
 				XElement xe = (XElement) _rootSelection.get(xName);
+				if (xe._json > 0) {
+					if (qn.equals(xe.getQName())) {
+						return xe;
+					} else if ((xe._json) != 0) {
+						if (xe._childNodes.length > 0) {
+							for (XNode x: xe._childNodes) {
+								if (qn.equals(x.getQName())) {
+									return (XElement) x;
+								}
+							}
+						}
+					}
+				}
 				i = xName.indexOf(':');
-				String prefix = "";
 				if (i >= 0) {
-					prefix = xName.substring(0, i);
 					xName = xName.substring(i + 1); // XElement local name
 				}
 				if (t != null) {
 					String s = t.findText(xName, languageID);
 					if (s != null) {
 						xName = s;
-					}
-				}
-				if (xName.startsWith("json") && !prefix.isEmpty()) {
-					if (xe == null) {
-						String u = _namespaces.get(prefix);
-						if (XDConstants.JSON_NS_URI.equals(u)
-							|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
-							XElement xxe = (XElement) getModel(u,xName);
-							XMNode[] models = xxe.getChildNodeModels();
-							if (models != null && models.length == 1
-								&& models[0].getKind() == XMNode.XMELEMENT) {
-								xe = (XElement) models[0];
-							}
-						}
-					}
-					if (xe != null) {
-						xName = xe.getQName().getLocalPart();
 					}
 				}
 				if (nm.equals(xName) && xe != null
@@ -355,7 +332,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		} else {  // not NS URI, not lexicon
 			for (XNode xe: _rootSelection.values()) {
 				if (xe != null && nm.equals(xe.getName()) &&
-					xe.getNSUri() == null){
+					xe.getNSUri() == null) {
 					return (XElement) xe;
 				}
 			}
@@ -372,8 +349,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				}
 				if (xName.startsWith("json") && !prefix.isEmpty()) {
 					String u = _namespaces.get(prefix);
-					if (XDConstants.JSON_NS_URI.equals(u)
-						|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
+					if (XDConstants.JSON_NS_URI_W3C.equals(u)) {
 						XMElement xel =  getModel(u,xName);
 						if (xel != null) {
 							XMNode[] models = xel.getChildNodeModels();

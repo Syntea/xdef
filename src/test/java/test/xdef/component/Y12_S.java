@@ -83,6 +83,7 @@ public class Y12_S implements org.xdef.component.XComponent{
   }
   private String XD_Name_V="V";
   private String _V;
+  public static final String XD_NAME="S";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "S";

@@ -90,6 +90,7 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
   private Integer _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Part";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Part";

@@ -75,16 +75,12 @@ public class CompileBase implements CodeTable, XDValueID {
 	/** Array of classes corresponding to implemented types. */
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	private static final Map<String, InternalMethod>[] METHODS =
 		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
 		new LinkedHashMap<String, Constructor<?>>();
-	/** No parameters parameter type list. */
-	private final static Class<?>[] NULLCLASSLIST = new Class<?>[0];
-	/** No parameters parameter list. */
-	private final static Object[] NULLPARLIST = new Object[0];
 	/* Error id (to ensure to generate the unique identifier).*/
 	private static int _errIdIndex = 1000;
 
@@ -371,6 +367,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
 		parser(im, org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
 		parser(im, org.xdef.impl.parsers.XDParseJString.class, "jstring");
+
+		im = genParserMetnod(0, 0, null, XD_ANY,
+			keyParam("enumeration", XD_ANY, true, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false));
 		parser(im, org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
 
 		im = genParserMetnod(0, 0, null, XD_ANY,
@@ -1345,19 +1345,22 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = UNIQUESET_M_VALUE;
 		method(ti, genInternalMethod(UNIQUESET_M_ID, XD_BOOLEAN,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE), "ID");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE), "ID");
 		method(ti, genInternalMethod(UNIQUESET_M_SET, XD_BOOLEAN,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE), "SET");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE), "SET");
 		method(ti, genInternalMethod(UNIQUESET_M_IDREF, XD_VOID,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE,XD_PARSERESULT), "IDREF");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2,
+			UNIQUESET_M_VALUE,XD_PARSERESULT), "IDREF");
 		method(ti, genInternalMethod(UNIQUESET_M_CHKID, XD_VOID,
-			ELEMENT_MODE, 1, 2, UNIQUESET_M_VALUE, XD_PARSERESULT), "CHKID");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 2, UNIQUESET_M_VALUE,
+			XD_PARSERESULT), "CHKID");
 		method(ti, genInternalMethod(UNIQUESET_M_NEWKEY, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "NEWKEY");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1, UNIQUESET_M_VALUE), "NEWKEY");
 		method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "CLEAR");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1, UNIQUESET_M_VALUE), "CLEAR");
 		method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID,
-			ELEMENT_MODE, 1, 1, UNIQUESET_M_VALUE), "checkUnref");
+			(byte)(TEXT_MODE+ELEMENT_MODE), 1, 1,
+			UNIQUESET_M_VALUE), "checkUnref");
 		method(ti, genInternalMethod(UNIQUESET_M_SIZE, XD_INT,
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "size");
 		method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
@@ -1409,7 +1412,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		final Class<?> clazz,
 		final String... names) {
 		try {
-			Constructor<?> c = ((Class<?>) clazz).getConstructor(NULLCLASSLIST);
+			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
 			if ((hm = METHODS[NOTYPE_VALUE_ID]) == null) {
 				METHODS[NOTYPE_VALUE_ID] = hm =
@@ -1631,8 +1634,8 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	static Class<?> getTypeClass(short type) {
 		Class<?> result = TYPECLASSES[type];
-		return result == null ?
-			org.xdef.impl.compile.CodeUndefined.class : result;
+		return result == null
+			? org.xdef.impl.compile.CodeUndefined.class : result;
 	}
 
 	/** Get instance of object parser with given name.
@@ -1641,8 +1644,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	public static final XDParser getParser(final String name) {
 		try {
-			return (XDParser)
-				((Constructor)PARSERS.get(name)).newInstance(NULLPARLIST);
+			return (XDParser) ((Constructor)PARSERS.get(name)).newInstance();
 		} catch (Exception ex) {
 			return null;
 		}

@@ -4,7 +4,7 @@
       "prijmeni": "string()",
       "plat" : "optional int(100, 100000)",
       "kocky" : [
-            {"xd:script":"occurs 0..*",
+            {$script: "occurs 0..*",
               "kocka":"optional string()",
                "vek": "optional int()"
             }

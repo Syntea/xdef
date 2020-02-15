@@ -88,6 +88,7 @@ public class XCa implements org.xdef.component.XComponent{
   }
   private XCa.s _s;
   private XCa.s_1 _s_1;
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -214,6 +215,7 @@ public static class s implements org.xdef.component.XComponent{
   private String _k;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="s";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s";
@@ -336,6 +338,7 @@ public static class s_1 implements org.xdef.component.XComponent{
   private String _k;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="s";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s";

@@ -84,6 +84,7 @@ public class XCb implements org.xdef.component.XComponent{
     }
   }
   private XCb.c _c;
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";
@@ -195,6 +196,7 @@ public static class c implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";

@@ -33,6 +33,8 @@ import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
+import org.xdef.impl.parsers.XDParseCDATA;
+import org.xdef.impl.ext.XExtUtils;
 import org.xdef.model.XMVariable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -167,7 +169,6 @@ public final class CompileCode extends CompileBase {
 			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
-/*UNS*/
 		var = new CompileVariable("$IDParser$", // use only internally
 			XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);  // prevent to report errors
@@ -176,21 +177,13 @@ public final class CompileCode extends CompileBase {
 			CompileBase.UNIQUESET_M_VALUE,
 			_globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
 		_globalVariables.addVariable(var);
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 4));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
-/*UNS*/
 		_globalPredefSize = _globalVariables.getLastOffset();
 	}
 
 	/** Reinitialize fields to prepare the recompilation of code. */
 	final void  reInit() {
 		clearLocalVariables();
-//		clearModelVariables();
 		_localVariablesMaxIndex = -1;
 		_code.clear();
 		_lastCodeIndex = -1;
@@ -209,11 +202,6 @@ public final class CompileCode extends CompileBase {
 				v.setInitialized(false);
 			}
 		}
-/*UNS*/
-//		addCode(new CodeI1(XD_PARSER, LD_GLOBAL, 0));
-//		addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1));
-//		genStop();
-/*UNS*/
 	}
 
 	/** Set XScriptParser. */
@@ -291,7 +279,7 @@ public final class CompileCode extends CompileBase {
 		putRedefinedError(null, XDEF.XDEF450,
 			name, result == null ? null : result.getSourcePosition());
 		return (result != null && result.getName().equals(name)
-			&& result.getType() == type) 
+			&& result.getType() == type)
 			? result : new CompileVariable("?", type, -1, (byte) 'L', null);
 	}
 
@@ -308,7 +296,7 @@ public final class CompileCode extends CompileBase {
 		String s = null;
 		if (sp != null) {
 			s = "line="+ sp.getLineNumber() + "; column=" + sp.getColumnNumber()
-				+ "; source=\"" + sp.getSystemId() + "\"";
+				+ "; source=\"" + sp.getSystemId() + '"';
 		}
 		//Redefinition of item '&{0}'&{#SYS000}&{1}({; (see: }{)}
 		if (actpos == null) {
@@ -526,7 +514,7 @@ public final class CompileCode extends CompileBase {
 	 * @param address The code index of method start.
 	 * @param params Array of parameters types.
 	 * @param mode The mode of method.
-	 * @param spos source position where the method was declared.
+	 * @param spos source position where the variable was declared.
 	 */
 	final void addMethod(final short resultType,
 		final String name,
@@ -666,9 +654,8 @@ public final class CompileCode extends CompileBase {
 		}
 		if (m == null && _externalMode != 1) {//new
 			//new style, ChkElement and array: type m(ChkElement, DefItem[])
-			if ((m = getExtMethod(clazz, name, new Class<?>[] {
-				org.xdef.proc.XXElement.class,
-				XDValue[].class})) != null) {
+			if ((m = getExtMethod(clazz, name,
+				new Class<?>[] {XXElement.class, XDValue[].class})) != null) {
 				modifiers = m.getModifiers();
 				if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 					m1 = m;
@@ -853,6 +840,8 @@ public final class CompileCode extends CompileBase {
 				|| XDConstants.XDEF31_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF32_NS_URI.equals(
+					_namespaceURIs.get(item.getValue()))
+				|| XDConstants.XDEF40_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}
@@ -1571,35 +1560,34 @@ public final class CompileCode extends CompileBase {
 		if (_ignoreExternalMethods){
 			return false;
 		}
-		CodeExtMethod method = findExternalMethod(
-			name, numPar, org.xdef.impl.ext.XExtUtils.class, null);
+		// try to find this method in XExtUtils class
+		CodeExtMethod method = findExternalMethod(name,
+			numPar, XExtUtils.class, null);
 		if (method == null) {
-			method = findExternalMethod(name, numPar,java.lang.Math.class,null);
-		}
-		if (method == null) {
-			method = _extMethods.get(extName);
-		}
-		if (method == null) {
-			method = findExternalMethod(name, numPar, null, null);
-		}
-		if (method == null) {
-			//first occurrence
-			if (_extClasses != null) {
-				for (int i = 0; i < _extClasses.length; i++) {
-					method = findExternalMethod(name,
-						numPar,
-						_extClasses[i],
-						null);
-//						_extObjects[i]);
-					if (method != null) {
-						break;
+			// not found, try to find it in the java.lang.Math class
+			method = findExternalMethod(name, numPar, Math.class, null);
+			if (method == null) { // not found, look to external methods list
+				method = _extMethods.get(extName);
+				if (method == null) {
+					method = findExternalMethod(name, numPar, null, null);
+					if (method == null && _extClasses != null) {
+						// not found, try to find it in extternal classes
+						for (int i = 0; i < _extClasses.length; i++) {
+							method = findExternalMethod(name,
+								numPar,
+								_extClasses[i],
+								null);
+							if (method != null) {
+								_extMethods.put(extName, method);
+								break;
+							}
+						}
+					}
+					if (method == null) {
+						return false; // method was not found
 					}
 				}
 			}
-			if (method == null) {
-				return false;
-			}
-			_extMethods.put(extName, method);
 		}
 		int np = numPar;
 		if (method._resultType != XD_VOID) {
@@ -1962,7 +1950,7 @@ public final class CompileCode extends CompileBase {
 					}
 					if (_tstack[_sp] != XD_CONTAINER) {
 						if ("string".equals(name)) {
-							p = new org.xdef.impl.parsers.XDParseCDATA();
+							p = new XDParseCDATA();
 						}
 						if (npar > sqParamNames.length) {
 							if (sqParamNames.length == 1) {

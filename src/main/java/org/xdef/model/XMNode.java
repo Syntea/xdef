@@ -35,6 +35,16 @@ public interface XMNode extends XMOccurrence {
 	 * @return name of node.
 	 */
 	public String getName();
+	
+	/** Get name of node.
+	 * @return The name of node.
+	 */
+	public String getLocalName();
+
+	/** Get prefix of name.
+	 * @return prefix of name..
+	 */
+	public String getNamePrefix();
 
 	/** Get namespace URI of model of the node.
 	 * @return nasmespace URI.

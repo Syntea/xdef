@@ -1,19 +1,23 @@
-<!-- Common base types and BNF grammar ot of the X-script.
- The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/3.2).
+<!-- Common base types and BNF grammar of of the X-script.
+ The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/4.0).
  -->
 <xd:def xmlns:xd  = "METAXD"
-  xmlns:w         = "http://www.xdef.org/xdef/3.2"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
-  w:metaNamespace = "METAXD"
+  xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
+  xmlns:w         = "http://www.xdef.org/xdef/4.0"
   xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection
                      | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
 					 | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component 
                      | Ver3.1#XD3.1:thesaurus
                      | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection 
 					 | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component 
-                     | Ver3.2#XD3.2:lexicon" >
+                     | Ver3.2#XD3.2:lexicon
+                     | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection 
+					 | Ver4.0#XD4.0:declaration | Ver4.0#XD4.0:component 
+                     | Ver4.0#XD4.0:lexicon"
+  w:metaNamespace = "METAXD">
 
 <xd:declaration>
   /* Default namespace of XDefinition */
@@ -43,6 +47,7 @@
   type languageId XDScript.rule('LanguageId');
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
+  type json XDJson.rule('json');
 
   /** Check element name and namespace URI (used in the match section) */
   boolean xdName(String name) {
@@ -51,13 +56,13 @@
 </xd:declaration>
 
 /******************************************************************************/
-/* Declaration of BNF grammar of Script                                       */
+/* Declaration of BNF grammar for X-Script                                    */
 /******************************************************************************/
 
   <xd:BNFGrammar name = "XDScript">
 <![CDATA[
 /******************************************************************************/
-/* BNF grammar rules                                                          */
+/* x-Script BNF grammar rules                                                          */
 /*                                                                            */
 /* Note the inline BNF method "$rule" is used to generate code for the        */
 /* compiler of X-definitions. To understand the syntax you can simply         */
@@ -670,6 +675,58 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
 XCLink ::= "%link" S ("*" | XPosition)
 
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
+]]>
+  </xd:BNFGrammar>
+
+/******************************************************************************/
+/* Declaration of BNF grammar for JSON                                        */
+/******************************************************************************/
+  <xd:BNFGrammar name = "XDJson">
+<![CDATA[
+/******************************************************************************/
+/* JSON BNF grammar rules                                                     */
+/******************************************************************************/
+
+WhiteSpace ::= [#9#10#13 ]
+
+Comment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+
+S ::= (WhiteSpace | Comment)+ /* Optional sequence of whitespaces or comments */
+
+boolean ::= "true" | "false"
+
+number ::= int frac exp | int frac | int exp | int
+
+int ::= "-"? digits
+
+digits ::= [0-9]+
+
+frac ::= "." digits
+
+exp ::= [eE] ("+" | "-")? digits
+
+controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
+  ('\u' [0-9a-fA-F]{4})
+
+string ::= ('"' ([^\"] | controlcharacter)* '"' |
+  "'" ([^\'] | controlcharacter)* "'")
+
+xdscript ::= S? ( ("$script" S? ":" S? string)
+  | ( "$oneOf" (S? ":" S? string)? ) ) (S? ",")?
+
+object ::= "{" xdscript? (members)* S? "}"
+
+members ::= S? pair (S? "," S? pair)*
+
+pair ::= string S? ":" S? value
+
+array ::= "[" xdscript? S? list? S? "]"
+
+list ::= value (S? "," S? value )*
+
+value ::= S? (pair | "null" | boolean | number | string | array | object) S?
+
+json ::= S? (array | object)
 
 ]]>
   </xd:BNFGrammar>

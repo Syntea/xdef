@@ -97,6 +97,7 @@ public class Y12_a implements org.xdef.component.XComponent{
   private final java.util.List<Y12_a.c> _c = new java.util.ArrayList<Y12_a.c>();
   private final java.util.List<Integer> _$value = new java.util.ArrayList<Integer>();
   private StringBuilder _$$value= new StringBuilder();
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
@@ -201,6 +202,7 @@ public static class b implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="b";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b";
@@ -291,6 +293,7 @@ public static class c implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="c";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "c";

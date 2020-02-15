@@ -62,13 +62,17 @@ public class JsonToXml extends JsonUtil {
 		return (i >= 0) ? s.substring(0, i) : "";
 	}
 
-	/** Check if the argument is a simple value.
+	/** Check if the argument is a simple value. Simple value is null,
+	 * number, boolean, string or JValue with object which is simple value.
 	 * @param val Object to be tested.
 	 * @return true if the argument is a simple value.
 	 */
 	public final static boolean isSimpleValue(final Object val) {
+		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof JValue;
+			|| val instanceof String || val instanceof JValue
+			&& ((o=((JValue) val).getObject()) == null || o instanceof Number
+				|| o instanceof Boolean || o instanceof String);
 	}
 
 	private Element genJElement(final String name) {
@@ -186,9 +190,34 @@ public class JsonToXml extends JsonUtil {
 	 * @param val value which will be represented as value of created element.
 	 */
 	private void addValueToNodeXD(final Node node, final Object val) {
+/*xxx*
+		Element e;
+		if (val == null) {
+			e = genJElement(J_NULL);
+		} else if (val instanceof Map) {
+			Map m = (Map) val;
+			e = genMapW3C((Map) val);
+		} else if (val instanceof List) {
+			e = genArrayW3C((List) val);
+		} else {
+			if (val instanceof String) {
+				e = genJElement(J_STRING);
+				e.appendChild(_doc.createTextNode(
+					genSimpleValueToXml(val, false)));
+			} else if (val instanceof Number) {
+				e = genJElement(J_NUMBER);
+				e.appendChild(_doc.createTextNode(val.toString()));
+			} else {
+				e = genJElement(J_BOOLEAN);
+				e.appendChild(_doc.createTextNode(val.toString()));
+			}
+		}
+		node.appendChild(e);
+/*xxx*/
 		Element e = appendJSONElem(node, J_ITEM);
 		addValueAsText(e, val);
 		_ns.popContext();
+/*xxx*/
 	}
 
 	/** Append array of JSON values to node.
@@ -359,7 +388,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element.
 	 */
-	public final Element toXmlXD(final Object json) {
+	final Element toXmlXD(final Object json) {
 		_doc = KXmlUtils.newDocument();
 		jsonToXmlXD(json, _doc);
 		return _doc.getDocumentElement();
@@ -419,7 +448,7 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	public final Element toXmlW3C(final Object json) {
+	final Element toXmlW3C(final Object json) {
 		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		_jsPrefix = "";
 		_doc = KXmlUtils.newDocument();

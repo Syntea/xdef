@@ -45,7 +45,7 @@ import org.xdef.json.JsonUtil;
  * of the X-definition.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation") // xcreate(String,String,ReportWriter)
+//@SuppressWarnings("deprecation") // xcreate(String,String,ReportWriter)
 final class ChkDocument extends ChkNode	implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
@@ -280,6 +280,17 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				: _xclass.getName();
 			while (className == null) {
 				if (!xe.isReference()) {
+					ndx = s.indexOf('/');
+					if (ndx > 0) { // separate root model name
+						s = s.substring(0, ndx);
+						className = getXDPool().getXComponents().get(s);
+						if (className == null) { // extract namespace prefix
+							ndx = s.indexOf('#') + 1;
+							int ndx1 = s.indexOf(':');
+							s = s.substring(0, ndx) + s.substring(ndx1 + 1);
+							className = getXDPool().getXComponents().get(s);
+						}
+					}
 					break;
 				}
 				s = xe.getReferencePos();
@@ -632,6 +643,29 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final ReportWriter reporter) throws SRuntimeException {
 		_genXComponent = true;
 		_xclass = xClass;
+		if (xClass != null) {
+			try {
+				String s =(String) xClass.getDeclaredField("XD_NAME").get(null);
+				XNode xn = _xdef._rootSelection.get(s);
+				if (xn == null) {
+					for (String key: _xdef._rootSelection.keySet()) {
+						int ndx = key.indexOf(':');
+						if (ndx > 0 && s.equals(key.substring(ndx + 1))) {
+							xn = _xdef._rootSelection.get(key);
+							break;
+						}
+					}
+				}
+				if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+					XElement xe = (XElement) xn;
+					if (xe._json != 0) {
+						_xElement = xe;
+						xparse(xmlData, reporter);
+						return getPparsedComponent();
+					}
+				}
+			} catch (Exception ex) {}
+		}
 		xparse(xmlData, reporter);
 		return getPparsedComponent();
 	}
@@ -836,6 +870,28 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
+	/** Parse and process XML data with JSON model.
+	 * @param xmlData org.w3c.dom.Document or org.w3c.dom.Element.
+	 * @param model qualified name of JSON root model.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final Object jparse(final Node xmlData,
+		final String model,
+		final ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		if (xmlData instanceof Document) {
+			e = ((Document) xmlData).getDocumentElement();
+		} else {
+			e = (Element) xmlData;
+		}
+		return jparse(JsonUtil.xmlToJson(e), model, reporter);
+	}
+
+	@Override
 	/** Parse and process JSON data and return processed JSON object.
 	 * @param jsonData JSON data.
 	 * @param model qualified name of JSON root model.
@@ -847,42 +903,38 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final Object jsonData,
 		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		int ndx = model.indexOf(':');
-		String name;
-		String nsURI = null;
-		// Check if exists JSON root model and set xdVersion (XDEF=0 or W3C=1)
-		if (ndx > 0 && (name = model.substring(ndx+1)).startsWith("json")) {
-			XNode xn = _xdef._rootSelection.get(model);
-			if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-				nsURI =_xdef._namespaces.get(model.substring(0,ndx));
-				if (XDConstants.JSON_NS_URI.equals(nsURI)
-					|| XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
-					_xElement = (XElement) xn;
-				} else {
-					nsURI = null;
-				}
-			}
-			if (nsURI == null) {
-				for (XMElement xe: _xdef.getModels()) {
-					if (model.equals(xe.getName())) {
-						nsURI = xe.getNSUri();
-						_xElement = _xdef.selectRoot(name, nsURI, -1);
-						break;
+		// Check if exists JSON root model and set xdVersion (xe._json != 0)
+		XNode xn = _xdef._rootSelection.get(model);
+		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
+			XElement xe = (XElement) xn;
+			if (xe._json != 0) {
+				_xElement = xe;
+				Element e = xe._json == XConstants.JSON_MODE
+					? JsonUtil.jsonToXml(jsonData)
+					: JsonUtil.jsonToXmlXdef(jsonData);
+				if (xe._childNodes.length > 0
+					&& xe._childNodes[0].getKind() == XMNode.XMCHOICE) {
+					// XMChoice is root of JSON model of XML
+					XChoice xch = (XChoice) xe._childNodes[0];
+					String url = e.getNamespaceURI();
+					QName eQname = url == null ? new QName(e.getTagName())
+						: new QName(url, e.getLocalName());
+					for (int i = xch.getBegIndex()+1; i<xch.getEndIndex(); i++){
+						XNode y = xe._childNodes[i];
+						if (y.getKind() == XMNode.XMELEMENT) {
+							if (y.getQName().equals(eQname)) {
+								_xElement = (XElement) y;
+								break;
+							}
+						}
 					}
 				}
+				xparse(e, reporter);
+				return JsonUtil.xmlToJson(_element);
 			}
 		}
-		Element e;
-		if (XDConstants.JSON_NS_URI_W3C.equals(nsURI)) {
-			e = JsonUtil.jsonToXmlW3C(jsonData);
-		} else if (XDConstants.JSON_NS_URI.equals(nsURI)) {
-			e = JsonUtil.jsonToXml(jsonData);
-		} else {
-			//JSON model &{0}{"}{" }is missing in X-definition
-			throw new SRuntimeException(XDEF.XDEF315, model);
-		}
-		xparse(e, reporter);
-		return JsonUtil.xmlToJson(_element);
+		//JSON model &{0}{"}{" }is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, model);
 	}
 
 	@Override
@@ -956,6 +1008,29 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
+	/** Parse XML data with JSON model and return XComponent as result.
+	 * @param xml org.w3c.dom.Document or org.w3c.dom.Element
+	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
+	 * was reported.
+	 */
+	public final XComponent jparseXComponent(final Node xmlData,
+		final Class<?> xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		Element e;
+		if (xmlData instanceof Document) {
+			e = ((Document) xmlData).getDocumentElement();
+		} else {
+			e = (Element) xmlData;
+		}
+		return jparseXComponent(JsonUtil.xmlToJson(e), xClass, reporter);
+	}
+
+	@Override
 	/** Parse JSON data and return XComponent as result.
 	 * @param json XML <tt>org.w3c.dom.Node</tt>.
 	 * @param xClass XCompomnent class (if <tt>null</tt>, then XComponent class
@@ -970,14 +1045,38 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException {
 		Element e;
+		Class<?> yClass = xClass;
+		if (yClass == null) {
+			int ndx;
+			for (String s: getXDPool().getXComponents().keySet()) {
+				String className = getXDPool().getXComponents().get(s);
+				try {
+					yClass = Class.forName(className);
+					String jmodel =
+						(String) yClass.getDeclaredField("XD_NAME").get(null);
+					byte jVersion =
+						(Byte) yClass.getDeclaredField("JSON").get(null);
+					if (jVersion > 0) {
+						XElement xe = _xdef.selectRoot(jmodel,
+							jVersion == 1 ? XDConstants.JSON_NS_URI_W3C
+								: XDConstants.JSON_NS_URI,
+							-1);
+						if (xe != null && xe._json != 0) {
+							break;
+						}
+					}
+				} catch (Exception ex) {}
+				yClass = null;
+			}
+		}
 		try {
-			byte jVersion = (Byte) xClass.getDeclaredField("JSON").get(null);
-			e = jVersion == 1 ?
-				JsonUtil.jsonToXmlW3C(json) : JsonUtil.jsonToXml(json);
+			byte jVersion = (Byte) yClass.getDeclaredField("JSON").get(null);
+			e = jVersion == XConstants.JSON_MODE ?
+				JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXdef(json);
 		} catch (Exception ex) {
 			e = JsonUtil.jsonToXml(json);
 		}
-		return parseXComponent(e, xClass, reporter);
+		return parseXComponent(e, yClass, reporter);
 	}
 
 	@Override
@@ -1423,4 +1522,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_destLanguageID =
 			language == null ? -1 : xp._lexicon.getLanguageID(language);
 	}
+
+	@Override
+	public String toString() {return "ChkDocument: " + _xElement;}
 }

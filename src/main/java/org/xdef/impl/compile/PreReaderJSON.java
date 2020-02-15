@@ -911,11 +911,11 @@ class PreReaderJSON implements PreReader {
 					_pcomp.setURIOnIndex(0, pNode._nsURI);
 					int nsndx = 0;
 					pNode._nsPrefixes.put(prefix, nsndx);
-						pNode._xdef = new XDefinition(defName,
-							null, null, null, pNode._xmlVersion);
+					pNode._xdef = new XDefinition(defName,
+						null, null, null, pNode._xmlVersion);
 					pNode._nsindex = nsndx;
 					pNode._xdef = new XDefinition(defName,
-							null, null, null, pNode._xmlVersion);
+						null, null, null, pNode._xmlVersion);
 					PAttr patt = new PAttr("xmlns:" + prefix,
 						js.getValue(),
 						XMLConstants.XMLNS_ATTRIBUTE_NS_URI,

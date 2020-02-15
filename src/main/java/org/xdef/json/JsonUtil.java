@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xdef.sys.SUtils;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
@@ -32,12 +33,18 @@ import org.xdef.sys.SUtils;
 public class JsonUtil extends StringParser {
 
 	/** Create instance of JsonUtil. */
-	JsonUtil() {}
+	JsonUtil() {
+		_acceptComments = false;
+		_genJObjects = false;
+		_jdef = false;
+	}
 
 	/** Flag to accept comments in JSON. */
-	private boolean _acceptComments = false; // default value
+	private boolean _acceptComments; // default value
 	/** Flag to generate SPositions when parsing JSON. */
-	private boolean _genJObjects = false; // default value
+	private boolean _genJObjects; // default value
+	/** Flag if the parsed data are in X-definition. */
+	private final boolean _jdef; // default value
 	/** Position of processed item.`*/
 	private SPosition _sPosition;
 
@@ -60,25 +67,24 @@ public class JsonUtil extends StringParser {
 			+ "&{sysId}" + getSysId();
 	}
 
-	/** Skip white spaces and comments. */
-	public final void skipBlanksAndComments() {
-		isSpaces();
-		if (_acceptComments) { // comments accepted
-			boolean b = false;
-			while(isToken("/*") || (b=isToken("//"))) {
-				if (b) {
-					skipToNextLine();
-				} else {
-					if (!findTokenAndSkip("*/")) {
-						error(JSON.JSON015); //Unclosed comment
-						setEos();
-						return;
-					}
-				}
-				b = false;
-				isSpaces();
+	/** Skip white space separators (and comments if accepted).
+	 * @return true if a space or comment was found.
+	 */
+	public final boolean isSpacesOrComments() {
+		boolean result = isSpaces();
+		while(isToken("/*")) {
+			result = true;
+			if (!_acceptComments) { // omments not allowed
+				warning(JSON.JSON019);  //Comments are not allowed here
 			}
+			if (!findTokenAndSkip("*/")) {
+				error(JSON.JSON015); //Unclosed comment
+				setEos();
+				return result;
+			}
+			isSpaces();
 		}
+		return result;
 	}
 
 	/** Check and get hexadecimal digit as integer.
@@ -133,42 +139,90 @@ public class JsonUtil extends StringParser {
 			} else {
 				result = new LinkedHashMap<String,Object>();
 			}
-			skipBlanksAndComments();
+			isSpacesOrComments();
 			if (isChar('}')) {
 				return result;
 			}
+			boolean wasScript = false;
 			while(!eos()) {
-				Object o = readValue();
-				if (o != null && (o instanceof String ||
-					(_genJObjects && o instanceof XJson.JValue)
-					&& ((XJson.JValue) o).getObject() instanceof String)) {
-					 // parse JSON named pair
-					String name = _genJObjects ? o.toString() : (String) o;
-					skipBlanksAndComments();
-					if (!isChar(':')) {
-						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-						error(JSON.JSON002, ":");
-					}
-					skipBlanksAndComments();
-					result.put(name, readValue());
-					skipBlanksAndComments();
-					if (isChar('}')) {
-						skipBlanksAndComments();
-						return result;
-					}
-					if (isChar(',')) {
-						skipBlanksAndComments();
-					} else {
-						if (eos()) {
-							break;
+				int i;
+				if (!wasScript && _jdef && (i = isOneOfTokens(
+					XJson.SCRIPT_NAME, XJson.ONEOF_NAME)) >= 0) {
+					wasScript = true;
+					SPosition spos = getPosition();
+					isSpacesOrComments();
+					Object o;
+					if (i == 1) {
+						String s;
+						if (isChar(':')) {
+							spos.setIndex(spos.getIndex() - 1);
+							isSpacesOrComments();
+							o = readValue();
+							if (o instanceof XJson.JValue
+								&& ((XJson.JValue)o).getObject()
+								instanceof String) {
+								s = XJson.ONEOF_KEY +
+									((XJson.JValue)o).getObject();
+							} else {
+								//Value of $script must be string with X-script
+								error(JSON.JSON018);
+								s = XJson.ONEOF_KEY;
+							}
+						} else {
+							s = XJson.ONEOF_KEY;
 						}
-						//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-						error(JSON.JSON002, ",", "}");
+						o = new XJson.JValue(spos, s);
+					} else {
+						if (!isChar(':') && i != 1) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							error(JSON.JSON002, ",", "}");
+						}
+						isSpacesOrComments();
+						o = readValue();
+					}
+					if (o != null && o instanceof XJson.JValue
+						&& ((XJson.JValue)o).getObject() instanceof String){
+						result.put(XJson.SCRIPT_KEY, o);
+					} else {
+						//Value of $script must be string with X-script
+						error(JSON.JSON018);
 					}
 				} else {
-					// String with name of item expected
-					fatal(JSON.JSON004);
+					Object o = readValue();
+					if (o != null && (o instanceof String ||
+						(_genJObjects && o instanceof XJson.JValue)
+						&& ((XJson.JValue) o).getObject() instanceof String)) {
+						 // parse JSON named pair
+						String name = _genJObjects ? o.toString() : (String) o;
+						isSpacesOrComments();
+						if (!isChar(':')) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							error(JSON.JSON002, ",", "}");
+						}
+						isSpacesOrComments();
+						result.put(name, readValue());
+					} else {
+						// String with name of item expected
+						fatal(JSON.JSON004);
+						return result;
+					}
+				}
+				isSpacesOrComments();
+				if (isChar('}')) {
+					isSpacesOrComments();
 					return result;
+				}
+				if (isChar(',')) {
+					isSpacesOrComments();
+				} else {
+					if (eos()) {
+						break;
+					}
+					//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+					error(JSON.JSON002, ",", "}");
+					if (getCurrentChar() != '"') {
+						break;
+					}
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -181,24 +235,61 @@ public class JsonUtil extends StringParser {
 			} else {
 				result = new ArrayList<Object>();
 			}
-			skipBlanksAndComments();
+			isSpacesOrComments();
 			if (isChar(']')) {
 				return result;
 			}
+			boolean wasScript = false;
 			while(!eos()) {
-				result.add(readValue());
-				skipBlanksAndComments();
+				int i;
+				if (!wasScript &&_jdef
+					&& (i = isOneOfTokens(XJson.SCRIPT_NAME,
+						XJson.ONEOF_NAME)) >= 0) {
+					wasScript = true;
+					if (isChar(':')) {
+						isSpacesOrComments();
+						Object o = readValue();
+						if (o instanceof XJson.JValue
+							&& ((XJson.JValue)o).getObject() instanceof String){
+							XJson.JValue jv = (XJson.JValue) o;
+							if (i == 1) {
+								SPosition spos = jv.getPosition();
+								spos.setIndex(spos.getIndex() - 1);
+								String s = XJson.ONEOF_KEY + jv.getObject();
+								jv = new XJson.JValue(spos, s);
+							}
+							result.add(new XJson.JValue(null, jv));
+						} else {
+							//Value of $script must be string with X-script
+							error(JSON.JSON018);
+						}
+					} else {
+						if (i == 0) {
+							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+						   error(JSON.JSON002, ":");
+						} else {
+							SPosition spos = getPosition();
+							spos.setIndex(spos.getIndex() - 1);
+							result.add(new XJson.JValue(null,
+								new XJson.JValue(spos, XJson.ONEOF_KEY)));
+						}
+					}
+				} else {
+					result.add(readValue());
+				}
+				isSpacesOrComments();
 				if (isChar(']')) {
 					return result;
 				}
 				if (isChar(',')) {
-					skipBlanksAndComments();
+					isSpacesOrComments();
 				} else {
 					if (eos()) {
 						break;
 					}
 					 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 					error(JSON.JSON002, ",", "]");
+//					break;
 				}
 			}
 			 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
@@ -254,6 +345,7 @@ public class JsonUtil extends StringParser {
 			boolean plus = !minus && isChar('+');
 			Number number;
 			String s;
+			int pos = getIndex();
 			if (isFloat()) {
 				s = getParsedString();
 				number = new BigDecimal((minus ? "-" : "") + s);
@@ -271,6 +363,9 @@ public class JsonUtil extends StringParser {
 				if (plus) {
 					error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				}
+				if (pos == getIndex()) {
+					findOneOfChars(",[]{}"); // skip to next item
+				}
 				return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
@@ -287,14 +382,14 @@ public class JsonUtil extends StringParser {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public Object parse() throws SRuntimeException {
-		skipBlanksAndComments();
+		isSpacesOrComments();
 		char c = getCurrentChar();
 		if (c != '{' && c != '[' ) {
 			error(JSON.JSON009); // JSON object or array expected"
 			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
 		}
 		Object result = readValue();
-		skipBlanksAndComments();
+		isSpacesOrComments();
 		_sPosition = getPosition();
 		if (!eos()) {
 			error(JSON.JSON008, genPosMod()); //Text after JSON not allowed
@@ -312,7 +407,7 @@ public class JsonUtil extends StringParser {
 		throws SRuntimeException{
 		Object result;
 		if (source.charAt(0) == '{' && source.endsWith("}")
-			|| source.charAt(0) == '[' && source.endsWith("]")) {
+			|| (source.charAt(0) == '[' && source.endsWith("]"))) {
 			JsonUtil jx = new JsonUtil();
 			jx.setSourceBuffer(source);
 			result = jx.parse();
@@ -368,7 +463,11 @@ public class JsonUtil extends StringParser {
 	 */
 	public static final Object parse(final InputStream in)
 		throws SRuntimeException {
-		return JsonUtil.parse(in, null);
+		Object result = JsonUtil.parse(in, null);
+		try {
+			in.close();
+		} catch (IOException ex) {}
+		return result;
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -459,20 +558,16 @@ public class JsonUtil extends StringParser {
 // JSON to string
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Add the string created from JSON object to StringBuilder.
+	/** Add the string created from JSON jvalue object to StringBuilder.
 	 * @param obj JSON object to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
+	 * @return sb created string.
 	 */
-	@SuppressWarnings("unchecked")
-	private static void objToJsonString(final Object obj,
-		final String indent,
-		final StringBuilder sb) {
+	public static String jvalueToString(final Object obj){
 		if (obj == null) {
-			sb.append("null");
+			return "null";
 		} else if (obj instanceof String) {
 			String s = (String) obj;
-			sb.append('"');
+			StringBuilder sb = new StringBuilder("\"");
 			for (int i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				if (Character.isDefined(c)) {
@@ -509,9 +604,23 @@ public class JsonUtil extends StringParser {
 					}
 				}
 			}
-			sb.append('"');
-		} else if (obj instanceof Boolean || obj instanceof Number) {
-			sb.append(obj.toString());
+			return sb.append('"').toString();
+		}
+		return obj.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	/** Add the string created from JSON object to StringBuilder.
+	 * @param obj JSON object to be created to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 */
+	private static void objToJsonString(final Object obj,
+		final String indent,
+		final StringBuilder sb) {
+		if (obj == null || obj instanceof JNull || obj instanceof String
+			|| obj instanceof Boolean || obj instanceof Number) {
+			sb.append(jvalueToString(obj));
 		} else if (obj instanceof List) {
 			List<Object> x = (List) obj;
 			arrayToJsonString(x, indent, sb);
@@ -713,12 +822,12 @@ public class JsonUtil extends StringParser {
 	 * @return true if and only if both values are equal.
 	 * @throws SRuntimeException if objects are incomparable
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "unchecked"})
 	private static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null) {
-			return o2 == null;
-		} else if (o2 == null) {
-			return false;
+		if (o1 == null || o2 instanceof JNull) {
+			return o2 == null || o2 instanceof JNull;
+		} else if (o2 == null || o1 instanceof JNull) {
+			return o1 == null || o1 instanceof JNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
@@ -761,11 +870,11 @@ public class JsonUtil extends StringParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Convert XML element to JSON object.
-	 * @param e XML element.
+	 * @param node XML element or document.
 	 * @return JSON object.
 	 */
-	public static final Object xmlToJson(final Element e) {
-		return new XmlToJson().toJson(e);
+	public static final Object xmlToJson(final Node node) {
+		return new XmlToJson().toJson(node);
 	}
 
 	/** Convert XML document to JSON object.
@@ -800,145 +909,208 @@ public class JsonUtil extends StringParser {
 		return xmlToJson(KXmlUtils.parseXml(in).getDocumentElement());
 	}
 
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param json object with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final Object json) {
-		return new JsonToXml().toXmlW3C(json);
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param json path or string with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final String json) {
-		return new JsonToXml().toXmlW3C(parse(json));
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param file file with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final File file) {
-		return new JsonToXml().toXmlW3C(parse(file));
-	}
-
-	/** Create XML from JSON object according to W3C recommendation.
-	 * @param url URL with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXmlW3C(final URL url) {
-		return new JsonToXml().toXmlW3C(parse(url));
-	}
-
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final Object json) {
-		return new JsonToXml().toXmlXD(json);
+		return new JsonToXml().toXmlW3C(json);
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param json path or string with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final String json) {
-		return new JsonToXml().toXmlXD(parse(json));
+		return new JsonToXml().toXmlW3C(parse(json));
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
-	 * @param file file JSON data.
+	/** Create XML from JSON object in W3C mode.
+	 * @param file file with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final File file) {
-		return new JsonToXml().toXmlXD(parse(file));
+		return new JsonToXml().toXmlW3C(parse(file));
 	}
 
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param url URL with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final URL url) {
-		return new JsonToXml().toXmlXD(parse(url));
+		return new JsonToXml().toXmlW3C(parse(url));
 	}
-
-	/** Create XML from JSON object according (XDefinition form).
+	/** Create XML from JSON object in W3C mode.
 	 * @param in InputStream with JSON data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final InputStream in) {
+		return new JsonToXml().toXmlW3C(parse(in));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param json object with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final Object json) {
+		return new JsonToXml().toXmlXD(json);
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param json path or string with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final String json) {
+		return new JsonToXml().toXmlXD(parse(json));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param file file JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final File file) {
+		return new JsonToXml().toXmlXD(parse(file));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param url URL with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXdef(final URL url) {
+		return new JsonToXml().toXmlXD(parse(url));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param in InputStream with JSON data.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXDef(final InputStream in) {
 		return new JsonToXml().toXmlXD(parse(in));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create JSON string from XML data.
-	 * @param source XML form of string.
-	 * @return XML form of string converted to JSON.
+	/** Get JSON value from source string.
+	 * @param source string with JSON simple value
+	 * @return object with JSOM value
 	 */
-	public static final String jstringFromXML(final String source) {
-		if (source == null || source.isEmpty()) {
-			return source;
+	public static Object getJValue(final String source) {
+		if (source == null) {
+			return null;
 		}
 		String src = source.trim();
-		if (src != null && src.length() > 1
-			&& src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
-			&& src.charAt(src.length() - 2) != '\\') {
-			String s = src.substring(1,  src.length() - 1); // remove '"'
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0;  i < s.length(); i++) {
-				char ch = s.charAt(i);
-				if (ch == '\\') {
-					if (++i >= s.length()) {
-						return s; // missing escape char (error)
-					}
-					switch (ch = s.charAt(i)) {
-						case '"':
-							ch = '"';
-							break;
-						case '\\':
-							ch = '\\';
-							break;
-						case '/':
-							ch = '/';
-							break;
-						case 'b':
-							ch = '\b';
-							break;
-						case 'f':
-							ch = '\f';
-							break;
-						case 'n':
-							ch = '\n';
-							break;
-						case 'r':
-							ch = '\r';
-							break;
-						case 't':
-							ch = '\t';
-							break;
-						case 'u':
-							try {
-								ch = (char) Short.parseShort(
-									s.substring(i+1, i+5), 16);
-								i += 4;
-								break;
-							} catch (Exception ex) {
-								return s; // incorrect UTF-8 char
-							}
-						default: return s; // illegal escape char (error)
-					}
-				}
-				sb.append(ch);
-			}
-			return sb.toString();
+		if (src.isEmpty()) {
+			return "";
+		} else if ("null".equals(src = source.trim())) {
+			return JNull.JNULL;
+		} else if ("true".equals(src)) {
+			return Boolean.TRUE;
+		} else if ("false".equals(src)) {
+			return Boolean.FALSE;
 		}
-		return src;
+		switch (src.charAt(0)) {
+			case '-':
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				try {
+					if (src.indexOf('.') > 0
+						|| src.indexOf('e') > 0 || src.indexOf('E') > 0) {
+						return new BigDecimal(src);
+					} else {
+						try {
+							return Long.parseLong(src);
+						} catch (Exception ex) {
+							return new BigInteger(src);
+						}
+					}
+				} catch (Exception ex) {
+					return src; // error; so return raw value ???
+				}
+		}
+		return jstringFromSource(src); // JSON String
 	}
 
-	/** Create XML string created from JSON string.
+	/** Create JSON string from source string.
+	 * @param src XML form of string.
+	 * @return XML form of string converted to JSON.
+	 */
+	public static final String jstringFromSource(final String src) {
+		if (src == null || src.isEmpty()) {
+			return src;
+		}
+		// remove starting and ending '"'
+		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
+			&& src.charAt(src.length() - 1) != '\\')
+			? src.substring(1, src.length() - 1) : src;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0;  i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '\\') {
+				if (++i >= s.length()) {
+					return s; // missing escape char (error)
+				}
+				switch (ch = s.charAt(i)) {
+					case '"':
+						ch = '"';
+						break;
+					case '\\':
+						ch = '\\';
+						break;
+					case '/':
+						ch = '/';
+						break;
+					case 'b':
+						ch = '\b';
+						break;
+					case 'f':
+						ch = '\f';
+						break;
+					case 'n':
+						ch = '\n';
+						break;
+					case 'r':
+						ch = '\r';
+						break;
+					case 't':
+						ch = '\t';
+						break;
+					case 'u':
+						try {
+							ch = (char) Short.parseShort(
+								s.substring(i+1, i+5), 16);
+							i += 4;
+							break;
+						} catch (Exception ex) {
+							return src; // incorrect UTF-8 char (error)
+						}
+					default: return src; // illegal escape char (error)
+				}
+			}
+			sb.append(ch);
+		}
+		return sb.toString();
+	}
+
+	/** Create JSON string to XML from JSON source data.
+	 * @param obj JSON object.
+	 * @param isAttr if true then it is used in attribute, otherwise it will be
+	 * used in a text node.
+	 * @return XML string converted to JSON string.
+	 */
+	public static final String jvalueToXML(final Object obj,
+		final boolean isAttr) {
+		return jstringToXML(jvalueToString(obj), isAttr);
+	}
+
+	/** Create JSON string to XML from JSON source data.
 	 * @param source JSON form of string.
 	 * @param isAttr if true then it is used in attribute, otherwise it will be
 	 * used in a text node.
@@ -948,7 +1120,7 @@ public class JsonUtil extends StringParser {
 		final boolean isAttr) {
 		if (source.length() == 0 || "null".equals(source)
 			|| "true".equals(source) || "false".equals(source)) {
-			return "\"" + source + "\"";
+			return '"' + source + '"';
 		}
 		boolean addQuot = source.indexOf(' ') >= 0 || source.indexOf('\t') >= 0
 			|| source.indexOf('\n') >= 0 || source.indexOf('\r') >= 0
@@ -957,8 +1129,7 @@ public class JsonUtil extends StringParser {
 			char ch = source.charAt(0);
 			if (ch == '-' || ch >= '0' && ch <= '9') {
 				StringParser p = new StringParser(source);
-				if ((p.isSignedFloat() || p.isSignedInteger())
-					&& p.eos()) {
+				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
 					return '"' + source + '"'; // value is number
 				}
 			}
@@ -1006,7 +1177,7 @@ public class JsonUtil extends StringParser {
 				// does not contain leading or trailing white spaces,
 				return s;
 			} else {
-				return '\"' + s + '\"';
+				return '"' + s + '"';
 			}
 		} else {
 			return source;
@@ -1084,4 +1255,5 @@ public class JsonUtil extends StringParser {
 		}
 		return sb.toString();
 	}
+
 }

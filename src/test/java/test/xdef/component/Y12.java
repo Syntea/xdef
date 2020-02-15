@@ -84,6 +84,7 @@ public class Y12 implements org.xdef.component.XComponent{
     }
   }
   private final java.util.List<Y12_B> _B = new java.util.ArrayList<Y12_B>();
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";

@@ -102,6 +102,7 @@ public class Z5 implements org.xdef.component.XComponent{
   private String XD_Name_IC="IC";
   private Integer _IC;
   private Z9 _Sidlo;
+  public static final String XD_NAME="Firma";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Firma";

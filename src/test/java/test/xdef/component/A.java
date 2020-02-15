@@ -138,6 +138,7 @@ public class A implements org.xdef.component.XComponent{
   private A.d1 _d1;
   private final java.util.List<A.d2> _d2 = new java.util.ArrayList<A.d2>();
   private A.d_e_f _d_e_f;
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -308,6 +309,7 @@ public static class W implements org.xdef.component.XComponent{
   private String _w;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="W";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "W";
@@ -423,6 +425,7 @@ public static class Y implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Y";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y";
@@ -535,6 +538,7 @@ public static class i implements org.xdef.component.XComponent{
   }
   private java.math.BigInteger _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="i";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "i";
@@ -647,6 +651,7 @@ public static class f implements org.xdef.component.XComponent{
   }
   private Double _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="f";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "f";
@@ -765,6 +770,7 @@ public static class d implements org.xdef.component.XComponent{
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="d";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d";
@@ -883,6 +889,7 @@ public static class t implements org.xdef.component.XComponent{
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="t";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "t";
@@ -995,6 +1002,7 @@ public static class s implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="s";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s";
@@ -1126,6 +1134,7 @@ public static class d1 implements org.xdef.component.XComponent{
   private org.xdef.sys.SDatetime _d;
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="d1";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d1";
@@ -1260,6 +1269,7 @@ public static class d2 implements org.xdef.component.XComponent{
   private org.xdef.sys.SDatetime _d;
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="d2";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d2";
@@ -1382,6 +1392,7 @@ public static class d_e_f implements org.xdef.component.XComponent{
   private String _d_e_f;
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="d-e.f";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "d-e.f";

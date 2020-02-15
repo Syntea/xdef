@@ -88,6 +88,7 @@ public class Y20_C implements org.xdef.component.XComponent{
     }
   }
   private Y20_C.B _B;
+  public static final String XD_NAME="C";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "C";
@@ -210,6 +211,7 @@ public static class B implements org.xdef.component.XComponent{
   private String _b;
   private final java.util.List<test.xdef.component.Y20_C.B.Y> _Y =
     new java.util.ArrayList<test.xdef.component.Y20_C.B.Y>();
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";
@@ -335,6 +337,7 @@ public static class Y implements org.xdef.component.XComponent{
   private String _b;
   private final java.util.List<test.xdef.component.Y20_C.B.Y> _Y_1 =
     new java.util.ArrayList<test.xdef.component.Y20_C.B.Y>();
+  public static final String XD_NAME="Y";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Y";

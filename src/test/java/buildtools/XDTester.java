@@ -227,7 +227,17 @@ public abstract class XDTester extends STester {
 			oos.close();
 			ObjectInputStream ois = new ObjectInputStream(
 				new ByteArrayInputStream(baos.toByteArray()));
-			return (XDPool) ois.readObject();
+			XDPool xp1 = (XDPool) ois.readObject();
+			ois.close();
+			baos = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(xp1);
+			oos.close();
+			ois = new ObjectInputStream(
+				new ByteArrayInputStream(baos.toByteArray()));
+			xp1 = (XDPool) ois.readObject();
+			ois.close();
+			return xp1;
 		} catch(RuntimeException e) {
 			throw e;
 		} catch(Exception e) {
@@ -553,7 +563,6 @@ public abstract class XDTester extends STester {
 		}
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
-
 
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
 		if (_chkSyntax) {
@@ -1049,7 +1058,19 @@ public abstract class XDTester extends STester {
 		}
 	}
 
-	/** Compile sources from parameters and save files to the classes directory
+	/** Compile sources from parameter and save files to the classes directory
+	 *  of tester.
+	 * @param files files with Java sources (may be a file or a directory).
+	 */
+	public static final void compileSources(final File... files) {
+		String sources[] = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			sources[i] = files[i].getAbsolutePath();
+		}
+		compileSources(sources);
+	}
+
+	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param sources paths of Java sources (may be a file or a directory).
 	 */

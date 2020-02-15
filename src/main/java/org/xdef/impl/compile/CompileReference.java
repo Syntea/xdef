@@ -11,13 +11,11 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
 import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.xdef.XDConstants;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -147,11 +145,24 @@ final class CompileReference extends XNode {
 		getSPosition().putReport(Report.error(XDEF.XDEF307, s), reporter);
 	}
 
-	/** Get reference target (XElement).
-	 * @return The definition element or null.
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
 	 */
-	XElement getTarget() {
-		String name = getName();
+	XElement getTargetXElement() {
+		return getTargetXElement(getName());
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	XElement getTargetXChoice() {
+		return getTargetXElement(getName() + "$choice");
+	}
+
+	/** Get reference target XElement.
+	 * @return the found XElement or null.
+	 */
+	private XElement getTargetXElement(final String name) {
 		if ("*".equals(name)) { // any in root selection
 			XElement result = new XElement("$any", null, _definition);
 			result.setSPosition(getSPosition());
@@ -167,10 +178,10 @@ final class CompileReference extends XNode {
 		}
 		int ndx = name.indexOf('/');
 		String mName = ndx > 0 ? name.substring(0, ndx) : name;
-		XMElement dn = xdef.getModel(getNSUri(), mName);
+		XElement dn = (XElement) xdef.getModel(getNSUri(), mName);
 		if (dn == null) {
 			String s = mName + "$any";
-			dn = xdef.getModel(getNSUri(), s);
+			dn = (XElement) xdef.getModel(getNSUri(), s);
 			if (dn != null) {
 				setName(s);
 			} else if (ndx > 0) {
@@ -195,20 +206,15 @@ final class CompileReference extends XNode {
 		}
 		if (dn != null) {
 			if(ndx > 0) {
-				XMNode xn = XPool.findXMNode(dn, name.substring(ndx + 1), 0, -1);
+				XMNode xn = XPool.findXMNode(dn, name.substring(ndx+1), 0, -1);
 				if (xn == null) {
 					return null;
 				}
-				dn = xn.getKind() == XMNode.XMELEMENT ? (XMElement) xn : null;
-			} else if (name.contains(":json")) {
-				String u = dn.getNSUri();
-				if (XDConstants.JSON_NS_URI.equals(u)
-					|| XDConstants.JSON_NS_URI_W3C.equals(u)) {
-					XMNode[] models = dn.getChildNodeModels();
-					if (models.length == 1 && models[0].getKind()
-						== XMNode.XMELEMENT) {
-						dn = (XElement) models[0];
-					}
+				dn = xn.getKind() == XMNode.XMELEMENT ? (XElement) xn : null;
+			} else if (dn._json > 0) {
+				XMNode[] models = dn.getChildNodeModels();
+				if (models.length==1 && models[0].getKind()==XMNode.XMELEMENT) {
+					return (XElement) models[0];
 				}
 			}
 		}
@@ -265,5 +271,4 @@ final class CompileReference extends XNode {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"this method can't be called here");
 	}
-
 }

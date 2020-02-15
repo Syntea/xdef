@@ -83,6 +83,7 @@ public class Y03PartOne implements org.xdef.component.XComponent{
   }
   private String XD_Name_One="One";
   private String _One;
+  public static final String XD_NAME="PartOne";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PartOne";

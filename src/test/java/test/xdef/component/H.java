@@ -4,7 +4,6 @@
 package test.xdef.component;
 public class H implements org.xdef.component.XComponent{
   public String gets$encodingStyle() {return _s$encodingStyle;}
-  public String getxmlns$s() {return "soap";}
   public H.s$Header gets$Header() {return _s$Header;}
   public H.s$Body gets$Body() {return _s$Body;}
   public void sets$encodingStyle(String x){_s$encodingStyle=x;}
@@ -98,6 +97,7 @@ public class H implements org.xdef.component.XComponent{
   private String _s$encodingStyle;
   private H.s$Header _s$Header;
   private H.s$Body _s$Body;
+  public static final String XD_NAME="s:H";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:H";
@@ -136,7 +136,6 @@ public class H implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 public static class s$Header implements org.xdef.component.XComponent{
-  public String getxmlns$s() {return "soap";}
   public test.xdef.component.H.s$Header.b$User getb$User() {return _b$User;}
   public test.xdef.component.H.s$Header.b$Request getb$Request() {return _b$Request;}
   public void setb$User(test.xdef.component.H.s$Header.b$User x){_b$User=x;}
@@ -223,6 +222,7 @@ public static class s$Header implements org.xdef.component.XComponent{
   }
   private test.xdef.component.H.s$Header.b$User _b$User;
   private test.xdef.component.H.s$Header.b$Request _b$Request;
+  public static final String XD_NAME="s:Header";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:Header";
@@ -260,8 +260,6 @@ public static class s$Header implements org.xdef.component.XComponent{
 public static class b$User implements org.xdef.component.XComponent{
   public String gets$understand() {return _s$understand;}
   public String getIdentUser() {return _IdentUser;}
-  public String getxmlns$s() {return "soap";}
-  public String getxmlns$b() {return "request";}
   public void sets$understand(String x){_s$understand=x;}
   public void setIdentUser(String x){_IdentUser=x;}
   public String xposOfs$understand(){return XD_XPos+"/@s$understand";}
@@ -350,6 +348,7 @@ public static class b$User implements org.xdef.component.XComponent{
   private String _s$understand;
   private String XD_Name_IdentUser="IdentUser";
   private String _IdentUser;
+  public static final String XD_NAME="b:User";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:User";
@@ -386,8 +385,6 @@ public static class b$Request implements org.xdef.component.XComponent{
   public String getIdentZpravy() {return _IdentZpravy;}
   public Integer getReqMsgId() {return _ReqMsgId;}
   public String getMode() {return _Mode;}
-  public String getxmlns$s() {return "soap";}
-  public String getxmlns$b() {return "request";}
   public void sets$understand(String x){_s$understand=x;}
   public void setIdentZpravy(String x){_IdentZpravy=x;}
   public void setReqMsgId(Integer x){_ReqMsgId=x;}
@@ -488,6 +485,7 @@ public static class b$Request implements org.xdef.component.XComponent{
   private Integer _ReqMsgId;
   private String XD_Name_Mode="Mode";
   private String _Mode;
+  public static final String XD_NAME="b:Request";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:Request";
@@ -527,18 +525,19 @@ public static class b$Request implements org.xdef.component.XComponent{
 }
 }
 public static class s$Body implements org.xdef.component.XComponent{
-  public String getxmlns$s() {return "soap";}
-  public test.xdef.component.I getb$Ping() {return _b$Ping;}
   public test.xdef.component.H.s$Body.b$PingFlow getb$PingFlow() {return _b$PingFlow;}
-  public void setb$Ping(test.xdef.component.I x){
-    if (x!=null && x.xGetXPos() == null)
-      x.xInit(this, "b:Ping", "request", "H#s:H/s:Body/$choice/b:Ping");
-    _b$Ping=x;
-  }
+  public test.xdef.component.I getb$Ping() {return _b$Ping;}
   public void setb$PingFlow(test.xdef.component.H.s$Body.b$PingFlow x){
+    _b$PingFlow=null;_b$Ping=null;
     if (x!=null && x.xGetXPos() == null)
       x.xInit(this, "b:PingFlow", "request", "H#s:H/s:Body/$choice/b:PingFlow");
     _b$PingFlow=x;
+  }
+  public void setb$Ping(test.xdef.component.I x){
+    _b$PingFlow=null;_b$Ping=null;
+    if (x!=null && x.xGetXPos() == null)
+      x.xInit(this, "b:Ping", "request", "H#s:H/s:Body/$choice/b:Ping");
+    _b$Ping=x;
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
@@ -622,6 +621,7 @@ public static class s$Body implements org.xdef.component.XComponent{
   }
   private test.xdef.component.I _b$Ping;
   private test.xdef.component.H.s$Body.b$PingFlow _b$PingFlow;
+  public static final String XD_NAME="s:Body";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "s:Body";
@@ -658,7 +658,6 @@ public static class s$Body implements org.xdef.component.XComponent{
 // </editor-fold>
 public static class b$PingFlow implements org.xdef.component.XComponent{
   public String getFlow() {return _Flow;}
-  public String getxmlns$b() {return "request";}
   public void setFlow(String x){_Flow=x;}
   public String xposOfFlow(){return XD_XPos+"/@Flow";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -739,6 +738,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
   }
   private String XD_Name_Flow="Flow";
   private String _Flow;
+  public static final String XD_NAME="b:PingFlow";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "b:PingFlow";

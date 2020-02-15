@@ -3,10 +3,16 @@
 // Any modifications to this file will be lost upon recompilation.
 package test.xdef.component;
 public class F implements org.xdef.component.XComponent{
-  public F.A getA() {return _A;}
   public F.B getB() {return _B;}
-  public void setA(F.A x){_A=x;}
-  public void setB(F.B x){_B=x;}
+  public F.A getA() {return _A;}
+  public void setB(F.B x){
+    _B=null;_A=null;
+    _B=x;
+    }
+  public void setA(F.A x){
+    _B=null;_A=null;
+    _A=x;
+    }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 0;
   @Override
@@ -88,6 +94,7 @@ public class F implements org.xdef.component.XComponent{
   }
   private F.A _A;
   private F.B _B;
+  public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "X";
@@ -189,6 +196,7 @@ public static class A implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="A";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "A";
@@ -279,6 +287,7 @@ public static class B implements org.xdef.component.XComponent{
         org.xdef.msg.XDEF.XDEF374);
     }
   }
+  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

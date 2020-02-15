@@ -4,7 +4,6 @@
 package test.xdef.component;
 public class Y16a implements org.xdef.component.XComponent{
   public Integer gety() {return _y;}
-  public String getxmlns$x() {return "x.int";}
   public void sety(Integer x){_y=x;}
   public String xposOfy(){return XD_XPos+"/@y";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -86,6 +85,7 @@ public class Y16a implements org.xdef.component.XComponent{
   }
   private String XD_Name_y="y";
   private Integer _y;
+  public static final String XD_NAME="x:x";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "x:x";

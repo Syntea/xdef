@@ -232,6 +232,7 @@ public class UcastnikDN implements org.xdef.component.XComponent{
   private UcastnikDN.PoruseniZakTrest _PoruseniZakTrest;
   private UcastnikDN.PoruseniZakOst _PoruseniZakOst;
   private UcastnikDN.Vazba _Vazba;
+  public static final String XD_NAME="UcastnikDN";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "UcastnikDN";
@@ -414,6 +415,7 @@ public static class PoruseniZakProvoz implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="PoruseniZakProvoz";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PoruseniZakProvoz";
@@ -526,6 +528,7 @@ public static class PoruseniZakPrest implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="PoruseniZakPrest";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PoruseniZakPrest";
@@ -638,6 +641,7 @@ public static class PoruseniZakTrest implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="PoruseniZakTrest";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PoruseniZakTrest";
@@ -750,6 +754,7 @@ public static class PoruseniZakOst implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="PoruseniZakOst";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "PoruseniZakOst";
@@ -862,6 +867,7 @@ public static class Vazba implements org.xdef.component.XComponent{
   }
   private String _$value;
   private char _$$value= (char) -1;
+  public static final String XD_NAME="Vazba";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Vazba";

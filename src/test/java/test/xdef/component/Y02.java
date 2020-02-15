@@ -90,6 +90,7 @@ public class Y02 implements test.xdef.component.s.Y01Part,org.xdef.component.XCo
   private String _One;
   private String XD_Name_Two="Two";
   private String _Two;
+  public static final String XD_NAME="Test";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "Test";

@@ -9,11 +9,11 @@ import org.xdef.model.XMOccurrence;
  */
 public class XOccurrence implements XMOccurrence {
 	/** Object is accepted but ignored. */
-	static final int IGNORE = -1;
+	public static final int IGNORE = -1;
 	/** Object is illegal. */
-	static final int ILLEGAL = -2;
+	public static final int ILLEGAL = -2;
 	/** Object is undefined. */
-	static final int UNDEFINED = -3;
+	public static final int UNDEFINED = -3;
 
 	/** Minimum. */
 	private int _min;

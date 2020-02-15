@@ -1,6 +1,6 @@
 [
     "xdatetime('yyyy-MM-dd');",
-  {"xd:script": "occurs 0..*;",
+  { $script: "occurs 0..*;",
     "jmeno": "string(2, 50)",
     "plat": "int(1000, 1000000)",
     "nar": "xdatetime('yyyy-MM-dd')"

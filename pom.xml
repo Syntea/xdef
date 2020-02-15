@@ -24,7 +24,7 @@
     <url>http://www.xdef.org</url>
     <organization>
         <name>Syntea software group a.s.</name>
-        <url>https://www.syntea.cz</url>
+        <url>http://www.syntea.cz</url>
     </organization>
     <developers>
         <developer>
@@ -40,9 +40,9 @@
     </scm>
     
     <properties>
-        <revision>32.5.5</revision><!-- when changed, change also ${release.date}, see below -->
+        <revision>32.5.6</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2019-12-17</release.date><!-- update when changed version -->
+        <release.date>2020-02-15</release.date><!-- update when changed version -->
         <specification.version>3.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -212,7 +212,6 @@
                         <url/>
                         <organization/>
                         <developers/>
-                        <!-- <licenses/> -->
                         <scm/>
                     </pomElements>
                 </configuration>
@@ -265,11 +264,6 @@
                     <version>3.0.0-M3</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.1.0</version>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.1.0</version>
@@ -290,9 +284,19 @@
                     <version>3.1.1</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.1.0</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -382,6 +386,16 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
             <distributionManagement>
@@ -389,14 +403,16 @@
                     <id>ossrh</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
+                <!-- when using plugin nexus-staging-maven-plugin release-repository isn't needed
                 <repository>
                     <id>ossrh</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                 </repository>
+                -->
             </distributionManagement>
         </profile>
         <profile>
-            <id>dm-env</id>
+            <id>dm-syntea</id>
             <distributionManagement>
                 <repository>
                     <id>private</id>

@@ -1,6 +1,8 @@
 <!--
-  With the meta namespace "METAXD" (X-definition 3.2)  is described
-  the input XML document which must fit the X-definition 3.2 specification.
+ The description of XML document which must fit the X-definition 3.2
+ specification.
+ The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/4.0).
+ The prefix of objects describing the X-definition 3.2 is XD3.2.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -10,8 +12,9 @@
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
+  xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
   xmlns:w         = "http://www.xdef.org/xdef/3.2"
-  w:metaNamespace = "METAXD" >
+  w:metaNamespace = "METAXD">
 
 /******************************************************************************/
 /*X-definition of X-definitions ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
@@ -28,17 +31,22 @@
       <XD2.0:def xd:script = "occurs *; ref Ver2.0#XD2.0:def" />
       <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
       <XD3.2:def xd:script = "occurs *; ref XD3.2:def" />
+      <XD4.0:def xd:script = "occurs *; ref Ver4.0#XD4.0:def" />
       <XD3.1:declaration xd:script = "occurs *; ref Ver3.1#XD3.1:declaration" />
       <XD3.2:declaration xd:script = "occurs *; ref XD3.2:declaration" />
+      <XD4.0:declaration xd:script = "occurs *; ref Ver4.0#XD4.0:declaration" />
       <XD2.0:BNFGrammar xd:script = "occurs *; ref Ver2.0#XD2.0:BNFGrammar" />
       <XD3.1:BNFGrammar xd:script = "occurs *; ref Ver3.1#XD3.1:BNFGrammar" />
       <XD3.2:BNFGrammar xd:script = "occurs *; ref XD3.2:BNFGrammar" />
+      <XD4.0:BNFGrammar xd:script = "occurs *; ref Ver4.0#XD4.0:BNFGrammar" />
       <XD2.0:component xd:script = "occurs *; ref Ver2.0#XD2.0:component"/>
       <XD3.1:component xd:script = "occurs *; ref Ver3.1#XD3.1:component"/>
       <XD3.2:component xd:script = "occurs *; ref XD3.2:component"/>
+      <XD4.0:component xd:script = "occurs *; ref Ver4.0#XD4.0:component"/>
       <XD2.0:thesaurus xd:script = "occurs *; ref Ver2.0#XD2.0:thesaurus" />
       <XD3.1:thesaurus xd:script = "occurs *; ref Ver3.1#XD3.1:thesaurus" />
       <XD3.2:lexicon xd:script = "occurs *; ref XD3.2:lexicon" />
+      <XD4.0:lexicon xd:script = "occurs *; ref Ver4.0#XD4.0:lexicon" />
     </xd:mixed>
   </XD3.2:collection>
 
@@ -60,7 +68,7 @@
       <XD3.2:declaration xd:script = "occurs *; ref XD3.2:declaration"
         scope = "optional enum('global','local'); options acceptQualifiedAttr"/>
 
-      <XD3.2lexicon xd:script = "occurs *; ref XD3.2:lexicon" />
+      <XD3.2:lexicon xd:script = "occurs *; ref XD3.2:lexicon" />
 
       <XD3.2:BNFGrammar xd:script = "occurs *; ref XD3.2:BNFGrammar"/>
 
@@ -83,6 +91,11 @@
           <XD3.2:list xd:script = "occurs *;
                             match @name || @XD3.2:name; ref XD3.2:listDef"
               name = "required QName; options acceptQualifiedAttr" />
+
+          <XD3.2:json xd:script = "occurs *;"
+              name = "required QName; options acceptQualifiedAttr" >
+              required json;
+          </XD3.2:json>
 
           <XD3.2:any xd:script = "occurs *;
                             match @XD3.2:name; ref XD3.2:anyDef;

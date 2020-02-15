@@ -40,7 +40,6 @@ import java.util.StringTokenizer;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDContainer;
 import org.xdef.impl.XPool;
-import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 import java.io.File;
 import java.io.InputStream;
@@ -58,6 +57,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
+	/** No JSON mode. */
+	private static final byte NOJSON = 0;
 
 	/** XPreCompiler instance.  */
 	private final PreCompiler _precomp;
@@ -83,6 +84,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final ArrayList<XNode> _nodeList;
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
+	/** Set of JSON names. */
+	Set<String> _jsonNames = new HashSet<String>();
 
 	/** External classes. */
 	private Class<?>[] _extClasses;
@@ -116,7 +119,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listComponent = _precomp.getPComponents();
 		ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,
-			(byte) 10, XPreCompiler.DEFINED_PREFIXES, cloader);
+			XConstants.XML10, XPreCompiler.DEFINED_PREFIXES, cloader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
@@ -510,7 +513,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						"<xd:declaration> external method { ... } ...");
 				}
 				String value = sval.getString();
-				Map<String,Class<?>> ht = new LinkedHashMap<String,Class<?>>();
+				Map<String, Class<?>> ht = new LinkedHashMap<String,Class<?>>();
 				for (Class<?> clazz : _codeGenerator._extClasses) {
 					ht.put(clazz.getName(), clazz);
 				}
@@ -999,7 +1002,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					|| "textcontent".equals(localName)) {
 					if (newKind == XNode.XMELEMENT && xel != null/*must be!*/
 						&& !isAttlist) {
-						//here is "textcontent"
+						//here is "text" or "textcontent"
 						XData xdata = new XData('$' + localName,
 							null, xel.getXDPool(), XNode.XMTEXT);
 						xdata.setSPosition(copySPosition(sval));
@@ -1467,11 +1470,38 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
+			} else if ("json".equals(name)) {
+				if (pnode._value == null || pnode._value.getString().isEmpty()){
+					//JSON model is missing in JSON definition
+					error(pnode._name, XDEF.XDEF315);
+					return;
+				}
+				byte jsonMode =  XConstants.JSON_MODE; //W3C mode is default
+				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
+				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
+				if (sb == null) {
+					sb = new SBuffer("_json_", pnode._name);
+					//The name of JSON model is required
+					error(pnode._name, XDEF.XDEF317);
+				} else {
+					String s = sb.getString().trim();
+					if (!StringParser.chkNCName(s, XConstants.XML10)) {
+						//The name of JSON model "&{0}" can't contain ":"
+						error(sb, XDEF.XDEF316, s);
+					}
+				}
+				pnode._name = sb;
+				for (PAttr pattr:  pnode._attrs) {
+					//Attribute '&{0}' not allowed here
+					error(pattr._value, XDEF.XDEF254, pattr._name);
+				}
+				pnode._nsURI = null; // set no namespace
+				pnode._nsindex = -1;
+				XJson.genXdef(pnode, jsonMode , _precomp.getReportWriter());
+				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
+				return;
 			} else {
-				if (level > 1 || !"macro".equals(pnode._localName)
-					|| (XDConstants.XDEF20_NS_URI.equals(pnode._nsURI)
-					&& XDConstants.XDEF31_NS_URI.equals(pnode._nsURI)
-					&& XDConstants.XDEF32_NS_URI.equals(pnode._nsURI))) {
+				if (level > 1 || !"macro".equals(pnode._localName)) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
 					error(pnode. _name, XDEF.XDEF265, xchildName);
@@ -1633,9 +1663,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		_nodeList.add(0,def);
 		//compile xmodels
-//		for (PNode nodei: pnode._childNodes) {
-		for (int i = 0; i < pnode._childNodes.size(); i++) {
-			PNode nodei = pnode._childNodes.get(i);
+		for (PNode nodei: pnode._childNodes) {
 			String name = nodei._localName;
 			PAttr v = nodei.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
 			SBuffer gname = v == null ? null : v._value;
@@ -1670,36 +1698,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						if ("list".equals(name)) {
 							for (PNode pn: nodei._childNodes){
-								compileXChild(dummy, dummy, pn, def, 2,(byte)0);
+								compileXChild(dummy, dummy, pn, def, 2, NOJSON);
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2, (byte)0);
+							compileXChild(dummy, dummy, nodei, def, 2, NOJSON);
 						}
 					}
 				}
 				continue;
-			} else if (nodei._localName.startsWith("json")
-				&& (XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-				|| XDConstants.JSON_NS_URI.equals(nodei._nsURI))) {
-				if (!nodei._childNodes.isEmpty()) {
-					//XML element models are not allowed in JSON definition
-					error(nodei._childNodes.get(0)._name, XDEF.XDEF314);
-					nodei._childNodes.clear();
-				}
-				byte jsonMode = XDConstants.JSON_NS_URI_W3C.equals(nodei._nsURI)
-					? (byte) 1 : (byte) 2;
-				if (nodei._value == null || nodei._value.getString().isEmpty()){
-					//JSON model is missing in JSON definition
-					error(nodei._name, XDEF.XDEF315);
-					continue;
-				}
-				XJson.genXdef(nodei, _precomp.getReportWriter());
-				compileXChild(def, null, nodei, def, 1, jsonMode);
-				continue;
 			}
-			compileXChild(def, null, nodei, def, 1, (byte)0);
+			compileXChild(def, null, nodei, def, 1, NOJSON);
 		}
 		_nodeList.clear();
 		_scriptCompiler._actDefName = actDefName;
@@ -1714,6 +1724,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			XDValue p = ((XData)xn).getParseMethod();
 			return p.getItemId() == XDValueID.XD_PARSER ?
 				((XDParser) p).parsedType() : XDValueID.XD_STRING;
+		}
+	}
+
+	private void setRootSelectionFromChoice(final Map<String, XNode> selection,
+		final XChoice xch,
+		final XElement x) {
+		for (int i = xch.getBegIndex() + 1; i < xch.getEndIndex(); i++) {
+			XNode y = x._childNodes[i];
+			if (selection.put(y.getName(),y)!=null) {
+				//The name of element in the root xd:choice must be unique&{0}
+				error(XDEF.XDEF364, y.getXDPosition());
+			}
 		}
 	}
 
@@ -1774,16 +1796,28 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//resolve root references for all XDefinitions
 		for (XDefinition d : _xdefs.values()) {
 			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
-			for (Map.Entry<String,XNode> entry: d._rootSelection.entrySet()) {
+			for (Map.Entry<String, XNode> entry: d._rootSelection.entrySet()) {
 				try {
 					XNode xnode = entry.getValue();
 					if (xnode.getKind() == CompileReference.XMREFERENCE) {
 						CompileReference xref = (CompileReference) xnode;
-						XElement xel = xref.getTarget();
-						if (xel == null) { //Unresolved reference
-							xref.putTargetError(getReportWriter());
+						XElement x = xref.getTargetXElement();
+						if (x == null) { //Unresolved reference
+							// try named choice
+							if ((x = xref.getTargetXChoice()) != null) {
+								setRootSelectionFromChoice(rootSelection,
+									(XChoice) x._childNodes[0], x);
+							} else {
+								xref.putTargetError(getReportWriter());
+							}
+						} else if (x._json != 0 && x._childNodes.length > 0
+							&& x._childNodes[0].getKind() == XMNode.XMCHOICE) {
+							if (rootSelection.put(xref.getName(), x) != null) {
+								error(XDEF.XDEF309, //Internal error: &{0}
+									"reference to element model expected");
+							}
 						} else {
-							if (rootSelection.put(xref.getName(), xel) != null){
+							if (rootSelection.put(xref.getName(), x) != null) {
 								error(XDEF.XDEF309, //Internal error: &{0}
 									"reference to element model expected");
 							}
@@ -1985,7 +2019,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			// Note this must be done after all referrences are resolved
 			boolean errs = getReportWriter().errors();
 			for (CompileReference xref : _scriptCompiler._implList) {
-				XElement xel2 = xref.getTarget();
+				XElement xel2 = xref.getTargetXElement();
 				if (xel2 == null) { //Unresolved reference
 					xref.putTargetError(getReportWriter());
 				} else {
@@ -2090,7 +2124,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if ((lenx = xel._childNodes.length) > 0
 			&& (xel._childNodes[0].getKind() == CompileReference.XMREFERENCE)) {
 			CompileReference xref = (CompileReference) xel._childNodes[0];
-			XElement y = xref.getTarget();
+			XElement y = xref.getTargetXElement();
 			if (y == null) {
 				xref.putTargetError(getReportWriter()); //Unresolved reference
 				xel._childNodes = new XNode[0];
@@ -2298,7 +2332,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
 				return false;
 			}
-			XElement y = xref.getTarget();
+			XElement y = xref.getTargetXElement();
 			if (y == null) {
 				xref.putTargetError(getReportWriter());//Unresolved reference
 				XElement xe = new XElement("?", null, xel._definition);

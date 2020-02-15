@@ -7,7 +7,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-/** provide abstract class for implementation of readres.
+/** Provide abstract class for implementation of XML readers.
  * @author Vaclav Trojan
  */
 public abstract class XAbstractReader extends Reader {
@@ -83,11 +83,7 @@ public abstract class XAbstractReader extends Reader {
 	private boolean _includedText = false;
 	private boolean _unresolved = false;
 
-//	public final StringBuilder getBuf() {return _bf;}
-
 	public final int getPos() {return _pos;}
-//
-//	public final String getUnparsed() {return _bf.substring(_pos);}
 
 	public final String getBufPart(final int start, final int end) {
 		return _bf.substring(start, end);
@@ -110,16 +106,19 @@ public abstract class XAbstractReader extends Reader {
 	public final String getProlog() {
 		int start = _pos;
 		scanXMLDecl();
-		scanSpaces();
-		while (scanComment() >= 0 || scanPI() >= 0) {
-			scanSpaces();
-		}
+		scanSpacesCommentsAndPIs();
 		scanDoctype();
+		scanSpacesCommentsAndPIs();
+		return _pos > start ? _bf.substring(start, _pos) : "";
+	}
+
+	final int scanSpacesCommentsAndPIs() {
+		int start = _pos;
 		scanSpaces();
 		while (scanComment() >= 0 || scanPI() >= 0) {
 			scanSpaces();
 		}
-		return _pos > start ? _bf.substring(start, _pos) : "";
+		return start == _pos ? -1 : start;
 	}
 
 	final void addBuf(char c) {
@@ -603,10 +602,7 @@ public abstract class XAbstractReader extends Reader {
 			scanSpaces();
 			return start;
 		}
-		scanSpaces();
-		while (scanPI() >= 0 || scanComment() >= 0) {
-			scanSpaces();
-		}
+		scanSpacesCommentsAndPIs();
 		_pos = start;
 		_startLine = startLine;
 		return -1;
@@ -619,9 +615,6 @@ public abstract class XAbstractReader extends Reader {
 		int start = _pos - 4;
 		long startLine = _startLine;
 		do {
-			scanSpaces();
-			if (scanLiteral() >= 0)
-				scanSpaces();
 			if (isToken("-->")) {
 				return start;
 			}
@@ -698,9 +691,7 @@ public abstract class XAbstractReader extends Reader {
 		if (scanPI() >= 0) { // <?xml ... ?>
 			scanSpaces();
 		}
-		while (scanPI() >= 0 || scanComment() >= 0) {
-			scanSpaces();
-		}
+		scanSpacesCommentsAndPIs();
 		scanDoctype();
 		_prologParsed = true;
 	}
@@ -714,9 +705,8 @@ public abstract class XAbstractReader extends Reader {
 			scanProlog();
 			releaseScanned();
 		}
-		scanSpaces();
 		// skip to the start of element
-		while (scanPI() >= 0 || scanCDATA() >= 0 || scanComment() >= 0
+		while (scanSpacesCommentsAndPIs() > 0 || scanCDATA() >= 0
 			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {}
 		List<Object[]> result = new ArrayList<Object[]>();
 		String name;
@@ -774,7 +764,7 @@ public abstract class XAbstractReader extends Reader {
 		}
 		return result;
 	}
-	
+
 	/** Detect encoding from Byte Order Mark (BOM)
 	 * (see http://www.w3.org/TR/REC-xml/#charsets).
 	 * <UL>

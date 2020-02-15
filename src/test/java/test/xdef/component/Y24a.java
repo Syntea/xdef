@@ -84,6 +84,7 @@ public class Y24a extends test.xdef.component.Y24 implements org.xdef.component.
     }
   }
   private Y24.d _d;
+  public static final String XD_NAME="a";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "a";
