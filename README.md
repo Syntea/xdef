@@ -31,6 +31,7 @@ Ex4: xd-script
 ...
 
 <table border="0"><tr><td>
+
 Let´s have the following example of XML data:
 ```xml
 <Employee
@@ -50,7 +51,9 @@ Let´s have the following example of XML data:
     <Competence>carpenter</Competence>
 </Employee>
 ```
+
 </td><td>
+
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
     <Employee
@@ -70,7 +73,8 @@ Let´s have the following example of XML data:
         </Competence>
     </Employee>
 </xd:def>
-```xml
+```
+
 </td></tr></table>
 
 
