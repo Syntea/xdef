@@ -226,7 +226,7 @@ Source code at GitHub:
 * link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
 
 Prerequisities:
-* download project X-definition, eg. from GitHub: <https://github.com/Syntea/xdef>
+* download project X-definition, eg. from GitHub
 * install _java_
 * install _maven_
 * configure _maven_
