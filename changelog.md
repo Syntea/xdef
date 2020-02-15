@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 32.5.6, release-date 2019-12-17
+# Version 32.5.6, release-date 2020-02-15
 * implemented possibility of processing of JSON data in X-definition. This
   version is preliminary to the version 40.0.0 (the documentation of JSON usage
   will come with the version 40.0.0).
