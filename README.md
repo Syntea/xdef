@@ -166,8 +166,8 @@ For the complete documentation see _src/documentation_.
 
 ## Source code
 Source code at GitHub:
-* link to release: <https://github.com/Syntea/xdef>
-* link to snapshot: <https://github.com/Syntea/xdef/tree/master-snapshot>
+* link to the release version: <https://github.com/Syntea/xdef>
+* link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
 
 ## Check and download available versions
 Links:
