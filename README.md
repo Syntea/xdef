@@ -10,6 +10,8 @@ but also to describe specifically their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
+
+
 # License
 The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
@@ -117,6 +119,8 @@ Model of the XML data:
 
 </td></tr></table>
 
+
+
 # Annotation
 
 This document describes the programming language and the technology called
@@ -162,12 +166,9 @@ containing the code of X‑definition language.
 
 For the complete documentation see _src/documentation_.
 
-# Usage
 
-## Source code
-Source code at GitHub:
-* link to the release version: <https://github.com/Syntea/xdef>
-* link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
+
+# Usage
 
 ## Check and download available versions
 Links:
@@ -208,7 +209,13 @@ Configuration file pom.xml:
   </distributionManagement>
   ```
 
+
+
 # Building
+
+Source code at GitHub:
+* link to the release version: <https://github.com/Syntea/xdef>
+* link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
 
 Prerequisities:
 * download project X-definition, eg. from GitHub: <https://github.com/Syntea/xdef>
@@ -242,10 +249,7 @@ Frequent building operations:
   ```shell
   mvn package -Prelease,javadoc,sources
   ```
-
-
-
-# Deploying to maven central repository
+## Deploying to maven central repository
 
 Prerequisities:
 * satisfy prerequisities for building
