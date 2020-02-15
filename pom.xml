@@ -40,9 +40,9 @@
     </scm>
     
     <properties>
-        <revision>32.5.6</revision><!-- when changed, change also ${release.date}, see below -->
+        <revision>32.5.7</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2020-02-15</release.date><!-- update when changed version -->
+        <release.date>2020-02-16</release.date><!-- update when changed version -->
         <specification.version>3.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
