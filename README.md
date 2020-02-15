@@ -249,7 +249,7 @@ Frequent building operations:
   ```shell
   mvn package -Prelease,javadoc,sources
   ```
-## Deploying to maven central repository
+## Deploying to the maven central repository
 
 Prerequisities:
 * satisfy prerequisities for building
