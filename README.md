@@ -18,34 +18,23 @@ The source code for this project is licensed under
 
 # Examples
 
-Ex1: simple sequence of elements
-...
-
-Ex2: choice
-...
-
-Ex3: repeating
-...
-
-Ex4: xd-script
-...
-
-<table border="0"><tr><td>
+Example 1: **Essential concepts**
+<table><tr style="vertical-align: top;"><td>
 Let´s have the following XML data:
 
 ```xml
 <Employee
     FirstName = "Andrew"
-    LastName = "Aardvark"
+    LastName  = "Aardvark"
     EnterDate = "1996-3-12"
-    Salary = "21700"
+    Salary    = "21700"
 />
     <Address
         Street = "Broadway"
         Number = "255"
-        Town = "Beverly Hills"
-        State = "CA"
-        Zip = "90210"
+        Town   = "Beverly Hills"
+        State  = "CA"
+        Zip    = "90210"
     />
     <Competence>electrician</Competence>
     <Competence>carpenter</Competence>
@@ -53,22 +42,22 @@ Let´s have the following XML data:
 ```
 
 </td><td>
-This is the X-definition model of the XML data:
- 
+This is the X-definition model of the XML data on the left:
+
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
     <Employee
         FirstName = "required string()"
-        LastName = "required string()"
+        LastName  = "required string()"
         EnterDate = "required date()"
-        Salary = "optional decimal()"
+        Salary    = "optional decimal()"
     />
         <Address
             Street = "required string()"
             Number = "required int()"
-            Town = "required string()"
-            State = "required string()"
-            Zip = "required int()" />
+            Town   = "required string()"
+            State  = "required string()"
+            Zip    = "required int()" />
         <Competence xd:script = "occurs 1..5">
             required string()
         </Competence>
@@ -78,9 +67,107 @@ This is the X-definition model of the XML data:
 
 </td></tr></table>
 
+Example 2: **References**
+<table><tr style="vertical-align: top;"><td>
+XML data:
 
+```xml
+<Family>
+  <Father    GivenName  = "John"
+             FamilyName = "Smith"
+             PersonalID = "7107130345"
+             Salary     = "18800" />
+  <Mother    GivenName  = "Jane"
+             FamilyName = "Smith"
+             PersonalID = "7653220029"
+             Salary     = "19400" />
+  <Son       GivenName  = "John"
+             FamilyName = "Smith"
+             PersonalID = "9211090121" />
+  <Daughter  GivenName  = "Jane"
+             FamilyName = "Smith"
+             PersonalID = "9655270067" />
+  <Residence Street     = "Small"
+             Number     = "5"
+             Town       = "Big"
+             Zip        = "12300" />
+</Family>
+```
+
+</td><td>
+model of the XML data:
+
+```xml
+<Family>
+  <Father    xd:script = "occurs 0..1; ref Person" />
+  <Mother    xd:script = "occurs 1..1; ref Person" />
+  <Son       xd:script = "occurs 0..*; ref Person" />
+  <Daughter  xd:script = "occurs 0..*; ref Person " />
+  <Residence xd:script = "occurs 1;    ref Address" />
+</Family>
+
+<Person GivenName  = "string()" 
+        FamilyName = "string()" 
+        PersonalID = "int()" />
+<Address Street = "string()"
+         Number = "int()"
+         Town   = "string()"
+         Zip    = "int()" />
+```
+
+</td></tr></table>
+
+#Annotation
+
+This document describes the programming language and the technology called
+“X‑definition“. X‑definition is designed for description and processing of
+data in the form of XML.
+
+X-definition is a tool that provides the description of both the structure and
+the properties of data values in an XML document. Moreover, the X-definition
+allows the description of the processing of specified XML objects.
+Thus X‑definitions may replace existing technologies commonly used
+for XML validation - namely the DTD (Data Type Definition) or the XML schemas and
+Schematron. With X-definition it is also possible to describe the construction
+of XML documents (or the transformation of XML data).
+ 
+X-definition enables the merging in one source of both the validation
+of XML documents and processing of data (i.e. using actions assigned
+to events when XML objects are processed). Compared to the “classical”
+technologies based on DTD and XML schemas, the advantage of X-definitions is
+(not only) higher readability and easier maintenance.  X‑definition has been
+designed for processing of XML data files of unlimited size, up to many gigabytes.
+
+A principal property of X-definition is maximum respect for the structure
+of the described data. The form of X‑definition is an XML document with a structure
+similar to the described XML data. This makes possible quickly and intuitively describe
+given XML data and its processing. In many cases it requires just to replace the values
+in the XML data by the description written in the X‑definition X‑script language.
+You can also gradually add to your X‑script required actions providing data
+processing. You can take a step-by-step approach to your work.
+
+It is assumed that the reader already knows the elementary principles of XML.
+To get the most out of this document, you should also have at least basic
+knowledge of the Java programming language.
+
+X‑definition technology enables also to generate the source code
+of Java classes representing XML elements described by X‑definition.
+Such class is called X‑component. You can use the instances of XML data
+in the form of X‑components in Java programs (similar way as in the JAXB
+technology).
+
+The term "X‑definition" we use in the two different meanings:
+either as a name of the programming language or as an XML element
+containing the code of X‑definition language.
+
+For complete documentation see _src/documentation_.
 
 # Usage
+
+## Source code
+Source code at GitHub:
+* link to release: <https://github.com/Syntea/xdef>
+* link to snapshot: <https://github.com/Syntea/xdef/tree/master-snapshot>
 
 ## Check and download available versions
 Links:
@@ -100,6 +187,7 @@ Configuration file pom.xml:
   <dependencies>
   ```
 * dependency on release or snapshot version in oss.sonatype.org:
+  
   ```xml
   <dependencies>
       <dependency>
@@ -145,6 +233,10 @@ Frequent building operations:
 * build snapshot package avoiding junit-tests:
   ```shell
   mvn package -DskipTests=true
+  ```
+* build release package:
+  ```shell
+  mvn package -Prelease
   ```
 * build release packages including javadoc, sources, documentation:
   ```shell
