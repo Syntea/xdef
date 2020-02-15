@@ -19,7 +19,7 @@ The source code for this project is licensed under
 # Examples
 
 Example 1: **Essential concepts**
-<table><tr style="vertical-align: top;"><td style="vertical-align: top;>
+<table><tr style="vertical-align: top;"><td style="vertical-align: top;¨>
 Let´s have the following XML data:
 
 ```xml
