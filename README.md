@@ -31,8 +31,8 @@ Ex4: xd-script
 ...
 
 <table border="0"><tr><td>
-
 Let´s have the following XML data:
+
 ```xml
 <Employee
     FirstName = "Andrew"
@@ -53,8 +53,8 @@ Let´s have the following XML data:
 ```
 
 </td><td>
-
-This is the X-definition model of the XML data: 
+This is the X-definition model of the XML data:
+ 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
     <Employee
