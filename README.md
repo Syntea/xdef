@@ -117,7 +117,7 @@ model of the XML data:
 
 </td></tr></table>
 
-#Annotation
+# Annotation
 
 This document describes the programming language and the technology called
 “X‑definition“. X‑definition is designed for description and processing of
