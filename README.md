@@ -186,6 +186,7 @@ Links:
 
 Configuration file pom.xml:
 * dependency on release version in the central maven repository:
+
   ```xml
   <dependencies>
       <dependency>
@@ -196,7 +197,7 @@ Configuration file pom.xml:
   <dependencies>
   ```
 * dependency on release or snapshot version in oss.sonatype.org:
-  
+
   ```xml
   <dependencies>
       <dependency>
@@ -234,26 +235,32 @@ Prerequisities:
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
+
   ```shell
   mvn clean
   ```
 * compile all java-resources, respectively all compilable resources:
+
   ```shell
   mvn compile
   ```
 * build snapshot package:
+
   ```shell
   mvn package
   ```
 * build snapshot package avoiding junit-tests:
+
   ```shell
   mvn package -DskipTests=true
   ```
 * build release package:
+
   ```shell
   mvn package -Prelease
   ```
 * build release packages including javadoc, sources, documentation:
+
   ```shell
   mvn package -Prelease,javadoc,sources
   ```
@@ -270,10 +277,12 @@ Prerequisities:
 
 Deploying:
 * deploy snapshot packages to snapshot-repository at _oss.sonatype.org_:
+
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
 * release the version of X-definition to the maven central repository (throw _oss.sonatype.org_):
+
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
   ```
