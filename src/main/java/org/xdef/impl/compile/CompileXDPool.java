@@ -1490,14 +1490,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sb, XDEF.XDEF316, s);
 					}
 				}
-				pnode._name = sb;
-				for (PAttr pattr:  pnode._attrs) {
-					//Attribute '&{0}' not allowed here
-					error(pattr._value, XDEF.XDEF254, pattr._name);
-				}
-				pnode._nsURI = null; // set no namespace
-				pnode._nsindex = -1;
-				XJson.genXdef(pnode, jsonMode , _precomp.getReportWriter());
+				XJson.genXdef(pnode, jsonMode, sb, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {

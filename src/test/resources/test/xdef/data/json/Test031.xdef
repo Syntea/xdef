@@ -1,0 +1,24 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test031' xd:root='a'>
+<xd:json name='a'>
+{
+  "desc"    : "string();",
+  "updated" : "dateTime();",
+  "uptodate": "boolean();",
+  "author"  : "jnull();",
+  "cities"  : {
+    "Brussels": [
+      { $script: "occurs 1..5", "to": "jstring()", "distance": "int()"}
+    ],
+    "London": [
+      { $script: "occurs 1..5", "to": "jstring()", "distance": "int()"}
+    ],
+    "Paris": [
+      { $script: "occurs 1..5", "to": "jstring()", "distance": "int()"}
+    ],
+    "Amsterdam": [
+      { $script: "occurs 1..5", "to": "jstring()", "distance": "int()"}
+    ]
+  }
+}
+</xd:json>
+</xd:def>

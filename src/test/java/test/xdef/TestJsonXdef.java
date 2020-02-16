@@ -47,7 +47,7 @@ public class TestJsonXdef extends XDTester {
 	private XDPool genAll(final String filter) {
 		// Initialize fields, test files and directories
 		_dataDir = getDataDir() + "json/";
-		_jfiles = SUtils.getFileGroup(_dataDir + filter + ".jdef");
+		_jfiles = SUtils.getFileGroup(_dataDir + filter + ".xdef");
 		_tempDir = getTempDir() + "json/";
 		new File(_tempDir).mkdirs();
 		// Generate files and compile X-definitions and X-components.
@@ -84,22 +84,11 @@ public class TestJsonXdef extends XDTester {
 								true) + "\n");
 					}
 				}
-				// read jdef file to string.
-				String jdef = SUtils.readString(
-					new File(_dataDir + "Test" + id + ".jdef"), "UTF-8");
-				// Create X-definition from Jdef (W3C)
-				newFile = new File(_tempDir + "Test" + id + "a.xdef");
-				xdef = "<xd:def xmlns:xd='"+XDConstants.XDEF32_NS_URI
-					+ "'\n xd:name='" + "Test" + id + "a' xd:root='a'>\n"
-					+ "<xd:json name='a'>\n"
-					+ jdef + "\n</xd:json>\n</xd:def>";
-				SUtils.writeString(newFile, xdef, "UTF-8");
 				// create X-component items
 				String cls = "  %class test.common.json.component.Test" + id;
 				el = KXmlUtils.parseXml(
-					_tempDir + "Test" + id + "a.xdef").getDocumentElement();
-				components += cls +"a %link Test" + id
-					+ "a#" + el.getAttribute("xd:root") + ";\n";
+					_dataDir + "Test" + id + ".xdef").getDocumentElement();
+				components += cls +" %link Test" + id + "#a" + ";\n";
 			}
 			components += "</xd:component>";
 			// write X-component declaration to the file
@@ -108,10 +97,9 @@ public class TestJsonXdef extends XDTester {
 			// compile all X-definitions to XDPool
 			XDPool xp;
 			try {
-				File[] x = SUtils.getFileGroup(_tempDir+"Test*.xdef");
-				File[] files = new File[x.length + 1];
-				System.arraycopy(x, 0, files, 0, x.length);
-				files[x.length] = componentFile;
+				File[] files = new File[_jfiles.length + 1];
+				System.arraycopy(_jfiles, 0, files, 1, _jfiles.length);
+				files[0] = componentFile;
 				xp = compile(files);
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
@@ -126,8 +114,8 @@ public class TestJsonXdef extends XDTester {
 			String newComponentDir = xdir + "test/common/json/component/";
 			for (File fdef: _jfiles) { // check if something changed
 				String id = getId(fdef);
-				newFile = new File(newComponentDir + "Test" + id + "a.java");
-				oldFile = new File(componentDir + "Test" + id + "a.java");
+				newFile = new File(newComponentDir + "Test" + id + ".java");
+				oldFile = new File(componentDir + "Test" + id + ".java");
 				if (!oldFile.exists()||SUtils.compareFile(oldFile,newFile)>=0) {
 					SUtils.copyToFile(newFile, oldFile);
 					rebuild = true; //force rebuild
@@ -185,7 +173,7 @@ public class TestJsonXdef extends XDTester {
 		String result = "";
 		ArrayReporter reporter = new ArrayReporter();
 		// get all json files for this test
-		xd = xp.createXDDocument("Test" + id + "a");
+		xd = xp.createXDDocument("Test" + id);
 		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*a.xml")) {
 			Object json;
 			String name = f.getName();
@@ -251,7 +239,7 @@ public class TestJsonXdef extends XDTester {
 			// parse with X-component
 			try {
 				xc = xd.parseXComponent(f, Class.forName(
-					"test.common.json.component.Test" + id + "a"), null);
+					"test.common.json.component.Test" + id), null);
 				reporter.clear();
 				e = xc.toXml();
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
@@ -271,9 +259,9 @@ public class TestJsonXdef extends XDTester {
 			}
 			// Test X-component.
 			try {
-				xd = xp.createXDDocument("Test" + id + "a");
+				xd = xp.createXDDocument("Test" + id);
 				xc = xd.parseXComponent(f, Class.forName(
-					"test.common.json.component.Test"+id+"a"), null);
+					"test.common.json.component.Test"+id), null);
 				reporter.clear();
 				e = xc.toXml();
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
@@ -417,8 +405,8 @@ public class TestJsonXdef extends XDTester {
 		final int x) {
 		try {
 			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") + "a.xml");
-			return xp.createXDDocument(test + 'a').parseXComponent(f,
-				Class.forName("test.common.json.component." + test + 'a'), null);
+			return xp.createXDDocument(test).parseXComponent(f,
+				Class.forName("test.common.json.component." + test), null);
 		} catch (Exception ex) {
 			throw new RuntimeException("XComponent not found: " + test);
 		}
@@ -427,12 +415,6 @@ public class TestJsonXdef extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		// save actual value of chkSyntax
-//		boolean chkSyntax = getChkSyntax();
-		// this code will be removed after GenCollection will process JSON
-//		XDTester.setFulltestMode(false);
-//		setChkSyntax(false);
-
 		String xdef, xml, json;
 		Object j;
 		ArrayReporter reporter = new ArrayReporter();

@@ -1,3 +1,5 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test015' xd:root='a'>
+<xd:json name='a'>
 [
   "jnull()",
   "double()",
@@ -7,3 +9,5 @@
      "optional int();"
   ]
 ]
+</xd:json>
+</xd:def>

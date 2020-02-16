@@ -516,18 +516,20 @@ public class XJson extends JsonToXml {
 	/** Create X-definition model from PNode with JSON description.
 	 * @param p PNode with JSON script.
 	 * @param jsonMode version of transformation JSON to XML(W3C, X-definition).
+	 * @param name name of json model in X-definition.
 	 * @param reporter report writer
 	 */
 	static final void genXdef(final PNode p,
 		final byte jsonMode,
+		final SBuffer name,
 		final ReportWriter reporter) {
 		XJson jx = new XJson();
-		jx.setGenJObjects();
-		try {
-			Field field = JsonUtil.class.getDeclaredField("_jdef");
-			field.setAccessible(true);
-			field.setBoolean(jx, true);
-		} catch (Exception ex) {ex.printStackTrace();}
+		jx._xdNamespace = p._nsURI;
+		jx._xdPrefix = p.getPrefix();
+		p._name = new SBuffer("$json" + name.getString(), name);
+		p._nsURI = null; // set no namespace
+		p._nsindex = -1;	
+		jx.setXJsonMode();
 		jx.setReportWriter(reporter);
 		if (p._value == null) {
 			jx.setSourceBuffer(p._name);

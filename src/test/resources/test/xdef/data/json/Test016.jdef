@@ -1,8 +1,0 @@
-{
-  "foo": ["string()", "string()"],
-  "highly": {
-    "nested": {
-      "objects": "boolean();"
-    }
-  }
-}

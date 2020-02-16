@@ -32,21 +32,21 @@ import org.xdef.sys.SUtils;
  */
 public class JsonUtil extends StringParser {
 
+	/** Flag to accept comments in JSON. */
+	private boolean _acceptComments; // default value
+	/** Flag to generate SPositions when parsing JSON. */
+	private boolean _genJObjects; // default value
+	/** Flag if the parsed data are in X-definition. */
+	private boolean _jdef; // default value
+	/** Position of processed item.`*/
+	private SPosition _sPosition;
+
 	/** Create instance of JsonUtil. */
 	JsonUtil() {
 		_acceptComments = false;
 		_genJObjects = false;
 		_jdef = false;
 	}
-
-	/** Flag to accept comments in JSON. */
-	private boolean _acceptComments; // default value
-	/** Flag to generate SPositions when parsing JSON. */
-	private boolean _genJObjects; // default value
-	/** Flag if the parsed data are in X-definition. */
-	private final boolean _jdef; // default value
-	/** Position of processed item.`*/
-	private SPosition _sPosition;
 
 ////////////////////////////////////////////////////////////////////////////////
 // JSON parser
@@ -56,6 +56,12 @@ public class JsonUtil extends StringParser {
 	public final void setGenJObjects() {
 		_genJObjects = true;
 		_acceptComments = true;
+	}
+
+	/** Set mode that JSON is parsed in X-definition compiler. */
+	public final void setXJsonMode() {
+		setGenJObjects();
+		_jdef = true;
 	}
 
 	/** Create modification string with source position.
