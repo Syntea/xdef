@@ -186,7 +186,7 @@ Links:
 
 Configuration file pom.xml:
 * dependency on release version in the central maven repository:
-
+  
   ```xml
   <dependencies>
       <dependency>
