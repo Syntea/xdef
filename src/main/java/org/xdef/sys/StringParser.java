@@ -1,6 +1,7 @@
 package org.xdef.sys;
 
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -2021,6 +2022,17 @@ public class StringParser extends SReporter implements SParser {
 		setIndex(_endPos);
 		closeReader();
 		_ch = NOCHAR;
+	}
+
+	@Override
+	/** Put default parse error.
+	 * @return error message XDEF515 (value error) and put it.
+	 */
+	public Report putDefaultParseError() {
+		Report result = Report.error(XDEF.XDEF515, //Value error&{0}{: }
+			Report.prepareStringParameter(_source));
+		putReport(result);
+		return result;
 	}
 
 	@Override

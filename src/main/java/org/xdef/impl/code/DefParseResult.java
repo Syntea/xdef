@@ -469,7 +469,7 @@ public final class DefParseResult extends XDValueAbstract
 			return true;
 		}
 		if (_ar == null) {
-			error(XDEF.XDEF515); //Value error
+			putDefaultParseError(); //XDF515 Value error&{0}{ :}
 		}
 		return false;
 	}
@@ -491,13 +491,22 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		_ar.error(registeredID, mod);
 	}
-
 	@Override
 	public final void putReport(final Report report) {
 		if (_ar == null) {
 			_ar = new ArrayReporter();
 		}
 		_ar.putReport(report);
+	}
+	@Override
+	/** Put default parse error.
+	 * @return error message XDEF515 (value error) and put it.
+	 */
+	public Report putDefaultParseError() {
+		Report result = Report.error(XDEF.XDEF515, //Value error&{0}{: }
+			Report.prepareStringParameter(_source));
+		putReport(result);
+		return result;
 	}
 	@Override
 	public final void addReports(final ArrayReporter reporter) {

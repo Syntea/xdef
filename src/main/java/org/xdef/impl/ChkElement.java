@@ -1603,8 +1603,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_xComponent.xSetAttr(this, _parseResult);
 					}
 				} else {
-					//Value error
-					_parseResult.error(XDEF.XDEF515);
+					//XDEF515=Value error&{0}{ :}
+					_parseResult.putDefaultParseError();
 				}
 			}
 		} else {//default: do not check; i.e. always true
@@ -3064,7 +3064,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						} else {
 							_parseResult = new DefParseResult(_data);
 							if (!item.booleanValue()) {
-								_parseResult.error(XDEF.XDEF515); //Value error
+								//XDEF515=Value error&{0}{ :}
+								_parseResult.putDefaultParseError();
 							}
 						}
 						if (_parseResult.matches()) {
