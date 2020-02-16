@@ -240,7 +240,6 @@ Frequent building operations:
   ```shell
   mvn clean
   ```
-
 * compile all java-resources, respectively all compilable resources:
   ```shell
   mvn compile
