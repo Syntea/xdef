@@ -622,7 +622,7 @@ public interface XDEF {
 	public static final long XDEF807 = 31159025970L;
 	/** Incorrect combination of maximum and minimum&amp;{#SYS000} */
 	public static final long XDEF808 = 31159025971L;
-	/** Incorrect value of '&amp;{0}'&amp;{#SYS000} */
+	/** Incorrect value of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF809 = 31159025972L;
 	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF810 = 31159025973L;
