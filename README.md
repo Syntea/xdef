@@ -236,7 +236,7 @@ Prerequisities:
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
-  
+
   ```shell
   mvn clean
   ```
