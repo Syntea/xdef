@@ -186,7 +186,7 @@ Links:
 
 Configuration file pom.xml:
 * dependency on release version in the central maven repository:
-  
+
   ```xml
   <dependencies>
       <dependency>
@@ -196,6 +196,7 @@ Configuration file pom.xml:
       </dependency>
   <dependencies>
   ```
+
 * dependency on release or snapshot version in oss.sonatype.org:
   
   ```xml
