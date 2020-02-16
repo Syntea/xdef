@@ -1,0 +1,30 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test036' xd:root='a'>
+<xd:json name='a'>
+{
+  "Title": "optional jstring()",
+  "Artists": [
+    { $script: "occurs 1..*",
+      "Name": "string()",
+      "Albums": [
+        {$script: "occurs 1..*",
+          "Name": "string()",
+          "Genre": [$oneOf,
+               "string()",
+               ["occurs 1..*;string()"]
+           ],
+          "ReleaseDate": "xdatetime('yyyy-MM-dd')",
+          "Label": "string()",
+          "Tracks": [
+            {$script: "occurs 0..*",
+              "Title": "string()",
+              "Duration": "xdatetime('mm:ss')",
+              "Writer": "optional string()"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</xd:json>
+</xd:def>

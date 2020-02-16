@@ -131,7 +131,7 @@ class XmlToJson extends JsonToXml {
 				Element ee = (Element) n;
 				Object o = createItem(ee);
 				if (_isW3C) {
-					String key = ee.getAttribute(J_KEYATTRW3C);
+					String key = ee.getAttribute(J_KEYATTRNAME);
 					map.put(key, o);
 					continue;
 				}

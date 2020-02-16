@@ -165,10 +165,10 @@ public class JsonUtil extends StringParser {
 							isSpacesOrComments();
 							o = readValue();
 							if (o instanceof XJson.JValue
-								&& ((XJson.JValue)o).getObject()
+								&& ((XJson.JValue)o).getValue()
 								instanceof String) {
 								s = XJson.ONEOF_KEY +
-									((XJson.JValue)o).getObject();
+									((XJson.JValue)o).getValue();
 							} else {
 								//Value of $script must be string with X-script
 								error(JSON.JSON018);
@@ -180,14 +180,14 @@ public class JsonUtil extends StringParser {
 						o = new XJson.JValue(spos, s);
 					} else {
 						if (!isChar(':') && i != 1) {
-							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							//"&{0}"&{1}{ or "}{"} expected
 							error(JSON.JSON002, ",", "}");
 						}
 						isSpacesOrComments();
 						o = readValue();
 					}
 					if (o != null && o instanceof XJson.JValue
-						&& ((XJson.JValue)o).getObject() instanceof String){
+						&& ((XJson.JValue)o).getValue() instanceof String){
 						result.put(XJson.SCRIPT_KEY, o);
 					} else {
 						//Value of $script must be string with X-script
@@ -197,19 +197,18 @@ public class JsonUtil extends StringParser {
 					Object o = readValue();
 					if (o != null && (o instanceof String ||
 						(_genJObjects && o instanceof XJson.JValue)
-						&& ((XJson.JValue) o).getObject() instanceof String)) {
+						&& ((XJson.JValue) o).getValue() instanceof String)) {
 						 // parse JSON named pair
 						String name = _genJObjects ? o.toString() : (String) o;
 						isSpacesOrComments();
 						if (!isChar(':')) {
-							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							//"&{0}"&{1}{ or "}{"} expected
 							error(JSON.JSON002, ",", "}");
 						}
 						isSpacesOrComments();
 						result.put(name, readValue());
 					} else {
-						// String with name of item expected
-						fatal(JSON.JSON004);
+						fatal(JSON.JSON004); //String with name of item expected
 						return result;
 					}
 				}
@@ -219,12 +218,20 @@ public class JsonUtil extends StringParser {
 					return result;
 				}
 				if (isChar(',')) {
+					SPosition spos = getPosition();
 					isSpacesOrComments();
+					if (isChar('}')) {
+						SPosition spos1 = getPosition();
+						setPosition(spos);
+//						warning(JSON.JSON020); //redundant comma
+						setPosition(spos1);
+						return result;
+					}
 				} else {
 					if (eos()) {
 						break;
 					}
-					//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+					//"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, ",", "}");
 					if (getCurrentChar() != '"') {
 						break;
@@ -237,7 +244,7 @@ public class JsonUtil extends StringParser {
 		} else if (isChar('[')) {
 			List<Object> result;
 			if (_genJObjects) {
-				result = new XJson.JList(_sPosition);
+				result = new XJson.JArray(_sPosition);
 			} else {
 				result = new ArrayList<Object>();
 			}
@@ -256,12 +263,12 @@ public class JsonUtil extends StringParser {
 						isSpacesOrComments();
 						Object o = readValue();
 						if (o instanceof XJson.JValue
-							&& ((XJson.JValue)o).getObject() instanceof String){
+							&& ((XJson.JValue)o).getValue() instanceof String){
 							XJson.JValue jv = (XJson.JValue) o;
 							if (i == 1) {
 								SPosition spos = jv.getPosition();
 								spos.setIndex(spos.getIndex() - 1);
-								String s = XJson.ONEOF_KEY + jv.getObject();
+								String s = XJson.ONEOF_KEY + jv.getValue();
 								jv = new XJson.JValue(spos, s);
 							}
 							result.add(new XJson.JValue(null, jv));
@@ -271,7 +278,7 @@ public class JsonUtil extends StringParser {
 						}
 					} else {
 						if (i == 0) {
-							//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+							//"&{0}"&{1}{ or "}{"} expected
 						   error(JSON.JSON002, ":");
 						} else {
 							SPosition spos = getPosition();
@@ -288,18 +295,25 @@ public class JsonUtil extends StringParser {
 					return result;
 				}
 				if (isChar(',')) {
+					SPosition spos = getPosition();
 					isSpacesOrComments();
+					if (isChar(']')) {
+						SPosition spos1 = getPosition();
+						setPosition(spos);
+//						warning(JSON.JSON020); //redundant comma
+						setPosition(spos1);
+						return result;
+					}
 				} else {
 					if (eos()) {
 						break;
 					}
-					 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
+					 //"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, ",", "]");
 //					break;
 				}
 			}
-			 //"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-			error(JSON.JSON002, "]");
+			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
 			return result;
 		} else if (isChar('"')) { // string
 			StringBuilder sb = new StringBuilder();
@@ -336,8 +350,7 @@ public class JsonUtil extends StringParser {
 					sb.append(peekChar());
 				}
 			}
-			// end of string ('"') is missing
-			fatal(JSON.JSON001);
+			fatal(JSON.JSON001); // end of string ('"') is missing
 			return _genJObjects
 				? new XJson.JValue(_sPosition, sb.toString()) : sb.toString();
 		} else if (isToken("null")) {
@@ -360,11 +373,9 @@ public class JsonUtil extends StringParser {
 				number = new BigInteger((minus ? "-" : "") + s);
 			} else {
 				if (minus) {
-					// number expected
-					error(JSON.JSON003);
+					error(JSON.JSON003); // number expected
 				} else {
-					//JSON value expected
-					error(JSON.JSON010);
+					error(JSON.JSON010); //JSON value expected
 				}
 				if (plus) {
 					error(JSON.JSON017, "+");//Not allowed character '&{0}'
@@ -376,8 +387,7 @@ public class JsonUtil extends StringParser {
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
 				Character.isDigit(s.charAt(1))) {
-					// Illegal leading zero in number
-					warning(JSON.JSON014);
+					warning(JSON.JSON014); // Illegal leading zero in number
 			}
 			return _genJObjects ? new XJson.JValue(_sPosition,number) : number;
 		}
@@ -431,7 +441,7 @@ public class JsonUtil extends StringParser {
 			try {
 				result = JsonUtil.parse(new File(source));
 			} catch (Exception x) {
-				/*IO error detected on &{0}&{1}{, reason: }*/
+				//IO error detected on &{0}&{1}{, reason: }
 				throw new SRuntimeException(SYS.SYS034, source, x);
 			}
 		}
@@ -440,7 +450,7 @@ public class JsonUtil extends StringParser {
 				in.close();
 			}
 		} catch (IOException x) {
-			/*IO error detected on &{0}&{1}{, reason: }*/
+			//IO error detected on &{0}&{1}{, reason: }
 			throw new SRuntimeException(SYS.SYS034, source, x);
 		}
 		return result;
@@ -457,7 +467,7 @@ public class JsonUtil extends StringParser {
 			FileInputStream in = new FileInputStream(f);
 			return JsonUtil.parse(in, f.getCanonicalPath());
 		} catch (Exception ex) {
-			/*IO error detected on &{0}&{1}{, reason: }*/
+			//IO error detected on &{0}&{1}{, reason: }
 			throw new SRuntimeException(SYS.SYS034, f, ex);
 		}
 	}
@@ -489,8 +499,7 @@ public class JsonUtil extends StringParser {
 			int j = in.read(); //2nd byte from input stream
 			if (j < 0) {//EOF
 				// JSON object or array expected"
-				throw new SRuntimeException(JSON.JSON009,
-					"&{line}1&{column}1");
+				throw new SRuntimeException(JSON.JSON009, "&{line}1&{column}1");
 			}
 			String s;
 			Reader reader;
@@ -1204,7 +1213,7 @@ public class JsonUtil extends StringParser {
 		char ch = s.charAt(0);
 		sb.append(isJChar(s, 0) || !Character.isJavaIdentifierStart(ch)
 			? genXmlHexChar(ch) : ch);
-//			|1 StringParser.getXmlCharType(ch, (byte) 10)
+//			|| StringParser.getXmlCharType(ch, XConstants.XML10)
 //				!= StringParser.XML_CHAR_NAME_START ? genXmlHexChar(ch) : ch);
 		byte firstcolon = 0;
 		for (int i = 1; i < s.length(); i++) {
@@ -1221,10 +1230,9 @@ public class JsonUtil extends StringParser {
 				} else {
 					i--;
 				}
-			} else if (Character.isJavaIdentifierPart(ch)) {
-				sb.append(ch);
 			} else {
-				sb.append(genXmlHexChar(ch));
+				sb.append(Character.isJavaIdentifierPart(ch)
+					? ch : genXmlHexChar(ch));
 			}
 		}
 		return sb.toString();

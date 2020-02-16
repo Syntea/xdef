@@ -1,0 +1,17 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test035' xd:root='a'>
+<xd:json name='a'>
+{ 
+   "osoba" : {
+      "jmeno": "string()",
+      "prijmeni": "string()",
+      "plat" : "optional int(100, 100000)",
+      "kocky" : [
+            {$script: "occurs 0..*",
+              "kocka":"optional string()",
+               "vek": "optional int()"
+            }
+         ]
+      }
+}
+</xd:json>
+</xd:def>

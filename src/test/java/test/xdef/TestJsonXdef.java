@@ -503,7 +503,7 @@ public class TestJsonXdef extends XDTester {
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
 			try {
-				SUtils.deleteAll(_tempDir, true); //delete all generated data
+//				SUtils.deleteAll(_tempDir, true); //delete all generated data
 			} catch (Exception ex) {
 				fail(ex);// should not happen; error when delete generated data
 			}
