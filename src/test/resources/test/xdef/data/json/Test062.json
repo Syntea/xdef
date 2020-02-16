@@ -1,0 +1,6 @@
+[
+  { "Genre": ["classic"] },
+  { "Genre": [ "Rock", "pop" ] },
+  { "Genre": "Country" },
+  { "Genre": [] }
+]
