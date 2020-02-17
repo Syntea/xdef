@@ -260,13 +260,18 @@ public interface SParser {
 	 */
 	public void error(long registeredID, Object... mod);
 
+	/** Put the registered report object with type ERROR with the last
+	 * parameter containing the string from the ParseResult object.
+	 * @param registeredID registered report id.
+	 * @param mod modification string of report text.
+	 */
+	public void errorWithString(final long registeredID, final Object... mod);
+
+	/** Put default parse error message (XDEF515). */
+	public void putDefaultParseError();
+
 	/** Put report at position.
 	 * @param report The report.
 	 */
 	public void putReport(final Report report);
-
-	/** Put default parse error.
-	 * @return error message XDEF515 (value error) and put it.
-	 */
-	public Report putDefaultParseError();
 }

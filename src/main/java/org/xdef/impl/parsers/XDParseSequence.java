@@ -57,7 +57,7 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return 0;}
 	@Override
-	public boolean addTypeParser(XDParser x) {
+	public boolean addTypeParser(final XDParser x) {
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
 			_itemTypes[0] = (XDParser) x;
@@ -70,21 +70,21 @@ public class XDParseSequence extends XSAbstractParser {
 		return true;
 	}
 	@Override
-	public void setLength(long x) {_minLength = _maxLength = x;}
+	public void setLength(final long x) {_minLength = _maxLength = x;}
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) {_maxLength = x;}
+	public void setMaxLength(final long x) {_maxLength = x;}
 	@Override
 	public long getMaxLength() {return _maxLength;}
 	@Override
-	public void setMinLength(long x) {_minLength = x;}
+	public void setMinLength(final long x) {_minLength = x;}
 	@Override
 	public long getMinLength() {return _minLength;}
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}
@@ -95,7 +95,7 @@ public class XDParseSequence extends XSAbstractParser {
 		_enumeration = e;
 	}
 	@Override
-	public void setItem(XDValue item) {
+	public void setItem(final XDValue item) {
 		if (item.getItemId() != XDValueID.XD_CONTAINER) {
 			addTypeParser((XDParser) item);
 			return;

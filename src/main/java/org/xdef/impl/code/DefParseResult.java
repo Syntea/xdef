@@ -499,14 +499,31 @@ public final class DefParseResult extends XDValueAbstract
 		_ar.putReport(report);
 	}
 	@Override
-	/** Put default parse error.
-	 * @return error message XDEF515 (value error) and put it.
+	/** Put the registered report object with type ERROR with the last
+	 * parameter containing the string from the ParseResult object.
+	 * @param registeredID registered report id.
+	 * @param mod modification string of report text.
 	 */
-	public Report putDefaultParseError() {
-		Report result = Report.error(XDEF.XDEF515, //Value error&{0}{: }
-			Report.prepareStringParameter(_source));
-		putReport(result);
-		return result;
+	public void errorWithString(final long registeredID, final Object... mod) {
+		int len = mod == null ? 1 : mod.length + 1;
+		Object[] modpars = new Object[len];
+		if (len > 1) {
+			System.arraycopy(mod, 0, modpars, 0, len - 1);
+		}
+		String s = getParsedString();
+		String t = getUnparsedBufferPart();
+		if (s != null && t != null && t.length() > 0) {
+			s += t.length() > 3 ? t.substring(0, 3) : t;
+		}
+		modpars[len-1] = Report.prepareStringParameter(s);
+		error(registeredID, modpars);
+	}
+	@Override
+	/** Put default parse error message (XDEF515). */
+	public final void putDefaultParseError() {
+		//Value error&{0}{: }
+		putReport(Report.error(XDEF.XDEF515,
+			Report.prepareStringParameter(_source)));
 	}
 	@Override
 	public final void addReports(final ArrayReporter reporter) {

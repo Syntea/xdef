@@ -7,7 +7,7 @@ import org.xdef.XDValue;
 /** Parser of X-Script "jvalue" type.
  * @author Vaclav Trojan
  */
-public class XDParseJValue  extends XSParseUnion {
+public class XDParseJValue extends XSParseUnion {
 	private static final String ROOTBASENAME = "jvalue";
 
 	public XDParseJValue() {
@@ -50,7 +50,7 @@ public class XDParseJValue  extends XSParseUnion {
 			0;
 	}
 	@Override
-	public void addNamedParams(XDContainer map) {}
+	public void addNamedParams(final XDContainer map) {}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
