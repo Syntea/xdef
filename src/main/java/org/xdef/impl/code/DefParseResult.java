@@ -521,9 +521,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	/** Put default parse error message (XDEF515). */
 	public final void putDefaultParseError() {
-		//Value error&{0}{: }
-		putReport(Report.error(XDEF.XDEF515,
-			Report.prepareStringParameter(_source)));
+		errorWithString(XDEF.XDEF515); //Value error&{0}{: }
 	}
 	@Override
 	public final void addReports(final ArrayReporter reporter) {

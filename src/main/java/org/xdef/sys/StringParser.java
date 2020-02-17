@@ -2048,8 +2048,7 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Put default parse error message (XDEF515). */
 	public void putDefaultParseError() {
-		putReport(Report.error(XDEF.XDEF515, //Value error&{0}{: }
-			Report.prepareStringParameter(_source)));
+		errorWithString(XDEF.XDEF515); //Value error&{0}{: }
 	}
 
 	@Override
