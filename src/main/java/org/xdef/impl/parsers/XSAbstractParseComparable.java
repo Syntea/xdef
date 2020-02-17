@@ -81,15 +81,17 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 			try {
 				if (_minIncl != null && _minIncl.compareTo(val) > 0 ||
 					_minExcl != null && _minExcl.compareTo(val) >= 0) {
-					//Value of '&{0}' doesn't fit to '&{1}'
+					//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 					p.error(XDEF.XDEF813, parserName(),
-						"min" +(_minIncl != null ? "Inclusive" : "Exclusive"));
+						"min" +(_minIncl != null ? "Inclusive" : "Exclusive"),
+						p.getParsedString());
 					return;
 				}
 			} catch (SIllegalArgumentException ex) {
-				//Value of '&{0}' doesn't fit to '&{1}'
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 				p.error(XDEF.XDEF813, parserName(),
-					"min" + (_minIncl != null ? "Inclusive" : "Exclusive"));
+					"min" + (_minIncl != null ? "Inclusive" : "Exclusive"),
+					p.getParsedString());
 				Report r = ex.getReport();
 				p.error(r.getMsgID(), r.getText(), r.getModification());
 				return;
@@ -97,15 +99,17 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 			try {
 				if (_maxIncl != null && _maxIncl.compareTo(val) < 0 ||
 					_maxExcl != null && _maxExcl.compareTo(val) <= 0) {
-					//Value of '&{0}' doesn't fit to '&{1}'
+					//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 					p.error(XDEF.XDEF813, parserName(),
-						"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"));
+						"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"),
+						p.getParsedString());
 					return;
 				}
 			} catch (SIllegalArgumentException ex) {
-				//Value of '&{0}' doesn't fit to '&{1}'
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 				p.error(XDEF.XDEF813, parserName(),
-					"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"));
+					"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"),
+					p.getParsedString());
 				Report r = ex.getReport();
 				p.error(r.getMsgID(), r.getText(), r.getModification());
 				return;

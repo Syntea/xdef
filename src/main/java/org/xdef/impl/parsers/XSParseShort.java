@@ -21,8 +21,8 @@ public class XSParseShort extends XSParseLong {
 		if(p.matches()) {
 			long val =  p.getParsedValue().longValue();
 			if (val < Short.MIN_VALUE || val > Short.MAX_VALUE) {
-				//Value of '&{0}' is out of range
-				p.error(XDEF.XDEF806, parserName());
+				//Value of '&{0}' is out of range&{1}{: }
+				p.error(XDEF.XDEF806, parserName(), val);
 			}
 		}
 	}

@@ -24,7 +24,8 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parse(parser)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
@@ -35,7 +36,8 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		if (!d.chkDatetime()) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
 			//Range of values of year of date must be from &{0} to &{1}'

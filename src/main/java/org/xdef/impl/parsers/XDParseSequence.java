@@ -158,8 +158,8 @@ public class XDParseSequence extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 				return;
 			}
 		}
@@ -173,29 +173,15 @@ public class XDParseSequence extends XSAbstractParser {
 		p.replaceParsedBufferFrom(pos0, s);
 		if (isFinal) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 		}
 		//replace source from pos0 to actual position by 's' and set
 		//the actual position after it.
 	}
-	private char isSeparator(final XDParseResult p) {
-		if (_separator == null) {
-			return p.isSpaces() ? ' ' : 0;
-		} else {
-			char c;
-			if ((c = p.isOneOfChars(_separator)) == 0) {
-				return 0;
-			}
-			if (c > ' ') {
-				p.isOneOfChars(_separator);
-			}
-			return c;
-		}
-	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
 	}
 	@Override

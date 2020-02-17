@@ -20,7 +20,8 @@ public class XDParseEmailList extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		StringTokenizer st = new StringTokenizer(s, ";,");
 		if (!st.hasMoreTokens()) {
-			p.error(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of &{0}
+			//Incorrect value of &{0}&{1}{: }
+			p.error(XDEF.XDEF809, ROOTBASENAME, s);
 			return;
 		}
 		XDContainer val = new DefContainer();

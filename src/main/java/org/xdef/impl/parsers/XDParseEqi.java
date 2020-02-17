@@ -18,7 +18,8 @@ public class XDParseEqi extends XDParseEq {
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		if (!_param.equalsIgnoreCase(s)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), s); 
 		} else {
 			p.setEos();
 		}
@@ -36,7 +37,8 @@ public class XDParseEqi extends XDParseEq {
 		if (p.isTokenIgnoreCase(_param)) {
 			p.setParsedValue(_param);
 		} else {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer()); 
 		}
 	}
 	@Override

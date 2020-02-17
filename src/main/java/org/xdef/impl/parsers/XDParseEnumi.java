@@ -32,7 +32,8 @@ public class XDParseEnumi extends XDParseEnum {
 		if (len != -1) {
 			p.setBufIndex(pos + len);
 		} else {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 		}
 	}
 	@Override

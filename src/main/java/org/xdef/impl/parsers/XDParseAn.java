@@ -19,7 +19,8 @@ public class XDParseAn extends XSAbstractParseToken {
 		int pos = p.getIndex();
 		if (!parse(p)) {
 			if (p.matches()) {
-				p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 			}
 			return;
 		}

@@ -612,11 +612,11 @@ public interface XDEF {
 	public static final long XDEF801 = 31159025965L;
 	/** Parameter '&amp;{0}' respecified&amp;{#SYS000} */
 	public static final long XDEF802 = 31159025966L;
-	/** After the value of type '&amp;{0}' follows an illegal character&amp;{#SYS000} */
+	/** After the value of type '&amp;{0}' follows an illegal charactere&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF804 = 31159025967L;
-	/** Parsed value is null&amp;{#SYS000} */
+	/** Parsed value in &amp;{0} is null&amp;{#SYS000} */
 	public static final long XDEF805 = 31159025968L;
-	/** Value of '&amp;{0}' is out of range&amp;{#SYS000} */
+	/** Value of '&amp;{0}' is out of range:&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF806 = 31159025969L;
 	/** Both parameters can't be specified: '&amp;{0}', '&amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF807 = 31159025970L;
@@ -626,7 +626,7 @@ public interface XDEF {
 	public static final long XDEF809 = 31159025972L;
 	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF810 = 31159025973L;
-	/** Doesn't fit any pattern from list for '&amp;{0}'&amp;{#SYS000} */
+	/** Doesn't fit any pattern from list for '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF811 = 31159025974L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
 	public static final long XDEF812 = 31159025975L;

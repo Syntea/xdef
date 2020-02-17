@@ -25,7 +25,8 @@ public class XDParseContainsi extends XDParseEqi {
 		String s = p.getUnparsedBufferPart();
 		int i = s.length() - _param.length();
 		if (i < 0 || s.toLowerCase().indexOf(_param.toLowerCase()) < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}

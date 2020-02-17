@@ -103,13 +103,13 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		}
 		p.setParsedValue(new DefDecimal(s));
 		if (_totalDigits >= 0 && totalDigits > _totalDigits) {
-			//Value of '&{0}' doesn't fit to '&{1}'
-			p.error(XDEF.XDEF813, parserName(), "totalDigits");
+			//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+			p.error(XDEF.XDEF813, parserName(), "totalDigits", s);
 			return;
 		}
 		if (_fractionDigits >= 0 && fractionDigits > _fractionDigits) {
-			//Value of '&{0}' doesn't fit to '&{1}'
-			p.error(XDEF.XDEF813, parserName(), "fractionDigits");
+			//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+			p.error(XDEF.XDEF813, parserName(), "totalDigits", s);
 			return;
 		}
 		checkPatterns(p);

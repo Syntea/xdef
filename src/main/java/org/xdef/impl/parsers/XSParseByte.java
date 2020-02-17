@@ -16,13 +16,13 @@ public class XSParseByte extends XSParseLong {
 		super();
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		super.parseObject(xnode, p);
 		if (p.matches()) {
 			long parsed = p.getParsedValue().longValue();
 			if (parsed < -128 || parsed > 127) {
-				//Value of '&{0}' is out of range
-				p.error(XDEF.XDEF806, parserName());
+				//Value of '&{0}' is out of range&{1}{: }
+				p.error(XDEF.XDEF806, parserName(), parsed);
 			}
 		}
 	}

@@ -73,7 +73,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			p.isSpaces();
 		}
 		if (!p.eos()) {
-			//After the item '&{0}' follows an illegal character
+			//After the item '&{0}' follows an illegal charactere&{1}{: }
 			p.errorWithString(XDEF.XDEF804, parserName());
 		}
 		if (p.matches()) {
@@ -90,7 +90,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
 		if (p.getSourceBuffer() == null) {
-			p.error(XDEF.XDEF805); //Parsed value is null
+			p.error(XDEF.XDEF805, parserName()); //Parsed value in &{0} is null
 			return;
 		}
 		parseObject(xnode, p);
@@ -99,7 +99,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				p.isSpaces();
 			}
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
 				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 			finalCheck(xnode, p);
@@ -151,7 +151,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 
 	public void setItem(final XDValue item) {} //default: not specified
 	abstract public byte getDefaultWhiteSpace();
-	private int getKeyId(String name) {
+	private int getKeyId(final String name) {
 		int keyMask = getLegalKeys();
 		for (int i = 0, id = 1; i < PARAM_NAMES.length; i++, id += id) {
 			if (PARAM_NAMES[i].equals(name)) {
@@ -161,7 +161,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		return -1;
 	}
 
-	private XDValue getParam(XDValue[] params, int id) {
+	private XDValue getParam(final XDValue[] params, final int id) {
 		for (int i = 0, x = 1; i < PARAM_NAMES.length; i++,x += x) {
 			if (x == id) {
 				String name = PARAM_NAMES[i];
@@ -437,7 +437,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 						return;
 					}
 				}
-				//Doesn't fit enumeration list of '&{0}'
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}

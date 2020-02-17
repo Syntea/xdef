@@ -83,8 +83,8 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		p.setParsedValue(new DefDecimal(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
-				//Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813, parserName(), "totalDigits");
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+				p.error(XDEF.XDEF813, parserName(), "totalDigits", val);
 				return;
 			}
 

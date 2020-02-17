@@ -18,14 +18,16 @@ public class XDParseJNumber extends XSParseDouble {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		if (p.getCurrentChar() == '+') {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		int pos = p.getIndex();
 		if (p.isSignedFloat() || p.isSignedInteger()) {
 			p.setParsedValue(new DefDecimal(p.getBufferPart(pos, p.getIndex())));
 		} else {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 

@@ -18,8 +18,8 @@ public class XSParseInt extends XSParseLong {
 		if(p.matches()) {
 			long val =  p.getParsedValue().longValue();
 			if (val < Integer.MIN_VALUE || val > Integer.MAX_VALUE) {
-				//Value of '&{0}' is out of range
-				p.error(XDEF.XDEF806, parserName());
+				//Value of '&{0}' is out of range&{1}{: }
+				p.error(XDEF.XDEF806, parserName(), val);
 			}
 		}
 	}

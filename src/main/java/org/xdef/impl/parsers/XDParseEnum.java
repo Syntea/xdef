@@ -25,7 +25,8 @@ public class XDParseEnum extends XDParserAbstract {
 		if (p.isOneOfTokens(_list) >= 0) {
 			return;
 		}
-		p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		//Incorrect value of &{0}&{1}{: }
+		p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 	}
 	@Override
 	/** Set value of one "sequential" parameter of parser.
@@ -74,9 +75,9 @@ public class XDParseEnum extends XDParserAbstract {
 					}
 				}
 				if (_list == null || _list.length == 0) {
-					//Incorrect value of '&{0}'
+					//Incorrect value of '&{0}'&{1}{: }
 					throw new SException(XDEF.XDEF809,
-						parserName()+" ("+name+ ")");
+						parserName()+" ("+name+ ")", val);
 				}
 			} else {
 				//Illegal parameter name '&{0}'
@@ -105,8 +106,9 @@ public class XDParseEnum extends XDParserAbstract {
 		}
 		int num = context.getXDItemsNumber();
 		if (num == 0) {
-			//Incorrect value of '&{0}'
-			throw new SException(XDEF.XDEF809, parserName() + " (argument)");
+			//Incorrect value of '&{0}'&{1}{: }
+			throw new SException(XDEF.XDEF809, parserName() + " (argument)",
+				context);
 		}
 		ArrayList<String> list = new ArrayList<String>();
 		for(int j = num-1; j >= 0; j--) {

@@ -59,7 +59,8 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 				checkPatterns(p);
 				return;
 			}
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		p.addReports((ArrayReporter) parser.getReportWriter());

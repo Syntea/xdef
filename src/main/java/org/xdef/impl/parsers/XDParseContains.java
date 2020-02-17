@@ -18,7 +18,8 @@ public class XDParseContains extends XDParseEq {
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		if (s.indexOf(_param, p.getIndex()) < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}
@@ -27,7 +28,8 @@ public class XDParseContains extends XDParseEq {
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (p.getSourceBuffer().indexOf(_param, p.getIndex()) < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}

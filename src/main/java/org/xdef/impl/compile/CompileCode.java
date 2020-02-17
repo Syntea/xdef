@@ -1884,7 +1884,7 @@ public final class CompileCode extends CompileBase {
 									}
 									if (!found1) {
 										//Incorrect value of '&{0}'
-										_parser.error(XDEF.XDEF809, s);
+										_parser.error(XDEF.XDEF809, s, v);
 									}
 								}
 								found = true;
@@ -1904,8 +1904,8 @@ public final class CompileCode extends CompileBase {
 								h.setXDNamedItem(parName,par.getDefaultValue());
 								len++;
 							} else if (!val.equals(val)) {
-								//Incorrect value of '&{0}'
-								_parser.error(XDEF.XDEF809, parName);
+								//Incorrect value of '&{0}'&{1}{: }
+								_parser.error(XDEF.XDEF809, parName, val);
 							}
 						} else if (par.isRequired() && val == null) {
 							//Missing required parameter: &{0}

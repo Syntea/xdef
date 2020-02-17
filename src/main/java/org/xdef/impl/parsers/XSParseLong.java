@@ -65,17 +65,17 @@ public class XSParseLong extends XSAbstractParseComparable {
 		p.replaceParsedBufferFrom(pos0, s);
 		long val;
 		try {
-			val = Long.parseLong(sign == '+' ? s.substring(1) : s);
+			val = Long.parseLong(s = sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
-			//Value of '&{0}' is out of range'
-			p.error(XDEF.XDEF806, s);
+			//Value of '&{0}' is out of range&{1}{: }
+			p.error(XDEF.XDEF806, parserName(), s);
 			return;
 		}
 		p.setParsedValue(new DefLong(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
-				//Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813, s, "totalDigits");
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+				p.error(XDEF.XDEF813, s, "totalDigits", val);
 				return;
 			}
 		}

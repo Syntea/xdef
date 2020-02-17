@@ -93,8 +93,8 @@ public class XSParseENTITIES extends XSAbstractParseString {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}
 		if (_minLength!=-1 && val.getXDItemsNumber() < _minLength) {
@@ -113,8 +113,8 @@ public class XSParseENTITIES extends XSAbstractParseString {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}
 		if (_minLength != -1 && val.getXDItemsNumber() < _minLength) {
@@ -127,8 +127,8 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		}
 		if (isFinal) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			} else {
 				finalCheck(xnode, p);
 			}
