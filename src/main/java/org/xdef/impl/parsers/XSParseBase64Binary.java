@@ -95,7 +95,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			checkPatterns(p);
 			check(p);
 		} catch (Exception ex) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 		}
 	}
 	/** Check XDParseResult on pattern, enumeration, length.

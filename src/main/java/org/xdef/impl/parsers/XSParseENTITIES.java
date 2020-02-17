@@ -63,7 +63,8 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		p.setParsedValue(val);
 		String token = p.nextToken();
 		if (token == null || !StringParser.chkXMLName(token, (byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
 		val.addXDItem(new DefString(token));
@@ -135,18 +136,18 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		}
 	}
 	@Override
-	public void finalCheck(final XXNode xnode, final XDParseResult result) {
+	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			result.error(XDEF.XDEF573, //Null value of &{0}"
+			p.error(XDEF.XDEF573, //Null value of &{0}"
 				"xnode; in XSParseENTITIES.check(parser, xnode);");
 			return;
 		}
-		DefContainer val = (DefContainer) result.getParsedValue();
+		DefContainer val = (DefContainer) p.getParsedValue();
 		for (int i = 0; i < val.getXDItemsNumber(); i++) {
 			String id = val.getXDItem(i).toString();
 			if (!XSParseENTITY.chkEntity(id, xnode.getElement())) {
-				//Incorrect value of '&{0}'
-				result.error(XDEF.XDEF809, parserName()+": "+id);
+				//Incorrect value of '&{0}'&{1}{: }
+				p.error(XDEF.XDEF809, parserName(), id);
 			}
 		}
 	}

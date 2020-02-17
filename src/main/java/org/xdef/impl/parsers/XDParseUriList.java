@@ -20,7 +20,8 @@ public class XDParseUriList extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
 		if (!st.hasMoreTokens()) {
-			p.error(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of &{0}
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		XDContainer val = new DefContainer();

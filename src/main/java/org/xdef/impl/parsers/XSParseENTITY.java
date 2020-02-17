@@ -18,16 +18,16 @@ public class XSParseENTITY extends XSParseQName {
 		super();
 	}
 	@Override
-	public void finalCheck(final XXNode xnode, XDParseResult result) {
+	public void finalCheck(final XXNode xnode, XDParseResult p) {
 		if (xnode == null) {
-			result.error(XDEF.XDEF573, //Null value of &{0}"
+			p.error(XDEF.XDEF573, //Null value of &{0}"
 				"xnode; in XSParseENTITY.check(parser, xnode);");
 			return;
 		}
-		String id = result.getSourceBuffer();
+		String id = p.getSourceBuffer();
 		if (!chkEntity(id, xnode.getElement())) {
-			//Incorrect value of '&{0}'
-			result.error(XDEF.XDEF809, parserName() + ": " + id);
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), id);
 		}
 	}
 	@Override

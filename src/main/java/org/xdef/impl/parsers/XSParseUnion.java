@@ -146,7 +146,8 @@ public class XSParseUnion extends XSAbstractParser {
 			return;
 		}
 		p.setBufIndex(pos);
-		p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		//Incorrect value of '&{0}'&{1}{: }
+		p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 	}
 	@Override
 	public void addNamedParams(XDContainer map) {

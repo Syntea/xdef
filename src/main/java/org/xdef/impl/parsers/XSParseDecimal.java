@@ -71,8 +71,8 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		if (p.isChar('.')) {
 			if (p.isDigit() < 0) {
 				if (!wasNumber) {
-					//Incorrect value of '&{0}'
-					p.error(XDEF.XDEF809, parserName());
+					//Incorrect value of '&{0}'&{1}{: }
+					p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 					return;
 				}
 			} else {

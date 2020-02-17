@@ -53,7 +53,8 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		p.isSpaces();
 		int pos = p.getIndex();
 		if (!p.isSignedFloat()) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);

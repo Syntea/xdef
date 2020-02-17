@@ -20,7 +20,8 @@ public class XDParsePic extends XDParseEq {
 		parseObject(xnode, p);
 		if (!p.eos()) {
 			if (p.matches()) {
-				p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 			}
 		}
 		return p;
@@ -29,35 +30,36 @@ public class XDParsePic extends XDParseEq {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		for (int i = 0; (i < _param.length()); i++) {
 			if (p.eos()) {
-				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 				return;
 			}
 			switch (_param.charAt(i)) {
 				case '9':
 					if (p.isDigit() < 0) {
-						//Incorrect value of '&{0}'
-						p.error(XDEF.XDEF809, parserName());
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
 						return;
 					}
 					continue;
 				case 'A':
 					if (p.isLetter() <= 0) {
-						//Incorrect value of '&{0}'
-						p.error(XDEF.XDEF809, parserName());
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
 						return;
 					}
 					continue;
 				case 'X':
 					if (p.isLetterOrDigit() <= 0) {
-						//Incorrect value of '&{0}'
-						p.error(XDEF.XDEF809, parserName());
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
 						return;
 					}
 					continue;
 				default:
 					if (!p.isChar(_param.charAt(i))) {
-						//Incorrect value of '&{0}'
-						p.error(XDEF.XDEF809, parserName());
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
 						return;
 					}
 			}

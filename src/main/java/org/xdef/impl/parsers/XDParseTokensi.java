@@ -30,7 +30,8 @@ public class XDParseTokensi extends XDParseTokens {
 		if (len != -1) {
 			p.setBufIndex(pos + len);
 		} else {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 	}
 	@Override

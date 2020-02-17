@@ -86,8 +86,8 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			} else {
 				if (!p.eos()) {
 					p.setEos();
-					//Incorrect value of '&{0}'
-					p.error(XDEF.XDEF809, parserName());
+					//Incorrect value of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF809, parserName());
 					return;
 				}
 				if (_whiteSpace == 'r') { //replace

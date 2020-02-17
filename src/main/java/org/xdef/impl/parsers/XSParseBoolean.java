@@ -46,7 +46,8 @@ public class XSParseBoolean extends XSAbstractParser {
 		int pos = p.getIndex();
 		int i = p.isOneOfTokens("false", "0", "true", "1");
 		if (i < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 		} else {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();

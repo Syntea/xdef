@@ -59,10 +59,9 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			p.setSourceBuffer(s);
 			p.setParsedValue(s);
 			if (!XSParseENTITY.chkEntity(s, xnode.getElement())) {
-				//Incorrect value of '&{0}'
-				p.error(XDEF.XDEF809, parserName() + ": " + s);
-		}
-
+				//Incorrect value of '&{0}'&{1}{: }
+				p.error(XDEF.XDEF809, parserName(), s);
+			}
 		} else {//preserve or replace
 			String s = p.getUnparsedBufferPart().trim();
 			if (_whiteSpace == 'r') { //replace
@@ -76,15 +75,15 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		checkLength(p);
 	}
 	@Override
-	public void finalCheck(final XXNode xnode, XDParseResult result) {
+	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			result.error(XDEF.XDEF573, //Null value of &{0}"
+			p.error(XDEF.XDEF573, //Null value of &{0}"
 				"xnode; in XSParseNOTATION.check(parser, xnode);");
 			return;
 		}
 		Element el = xnode.getElement();
 		DocumentType dt = el.getOwnerDocument().getDoctype();
-		String id = result.getSourceBuffer();
+		String id = p.getSourceBuffer();
 		NamedNodeMap nm;
 		if (dt == null) {
 			nm = null;
@@ -105,8 +104,8 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			}
 		}
 		if (!notationFound) {
-			//Incorrect value of '&{0}'
-			result.error(XDEF.XDEF809, parserName() + ": " + id);
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), id);
 		}
 	}
 

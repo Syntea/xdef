@@ -27,7 +27,8 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		int totalDigits = 0;
 		int i;
 		if ((i = p.isDigit()) < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		} else if (i > 0) {
 			totalDigits++;

@@ -11,12 +11,12 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import org.xdef.msg.XDEF;
 
 /** Parser of X-Script "regex" type.
  * @author Vaclav Trojan
  */
-public class XDParseRegex extends XDParserAbstract
-	implements org.xdef.msg.XDEF {
+public class XDParseRegex extends XDParserAbstract {
 	private static final String ROOTBASENAME = "regex";
 	private XDRegex _regex;
 	public XDParseRegex() {
@@ -25,7 +25,8 @@ public class XDParseRegex extends XDParserAbstract
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (!_regex.matches(p.getUnparsedBufferPart())) {
-			p.error(XDEF809, parserName());//Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}
@@ -45,12 +46,12 @@ public class XDParseRegex extends XDParserAbstract
 				XDValue val = items[i].getValue();
 				if (val == null) {
 					//Value of enumeration for 'eq' must be just one
-					throw new SException(XDEF816);
+					throw new SException(XDEF.XDEF816);
 				}
 				_regex = new DefRegex(val.toString());
 			} else {
 				//Illegal parameter name '&{0}'
-				throw new SException(XDEF801, name);
+				throw new SException(XDEF.XDEF801, name);
 			}
 		}
 	}

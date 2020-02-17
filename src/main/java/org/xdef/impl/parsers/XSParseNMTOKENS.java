@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
@@ -22,8 +23,9 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isNMToken((byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		if (!parser.isNMToken(XConstants.XML10)) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
 		String s = parser.getParsedString();
@@ -31,8 +33,9 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		DefContainer val = new DefContainer();
 		val.addXDItem(new DefString(s));
 		while (parser.isSpaces() && !parser.eos()) {
-			if (!parser.isNMToken((byte) 10)) {
-				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			if (!parser.isNMToken(XConstants.XML10)) {
+				//Incorrect value of '&{0}'&{1}{: }
+				p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 				return;
 			}
 			sb.append(' ').append(s = parser.getParsedString());

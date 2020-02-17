@@ -24,7 +24,8 @@ public class XSParseLanguage extends XSAbstractParseToken {
 		while (p.isInInterval('a', 'z') != SParser.NOCHAR ||
 			p.isInInterval('A', 'Z') != SParser.NOCHAR) {
 			if (++count > 8) {
-				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 				return;
 			}
 		}

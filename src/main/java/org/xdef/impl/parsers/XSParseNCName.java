@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 
 /** Parser of Schema "NCName" type.
@@ -20,8 +21,9 @@ public class XSParseNCName extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isNCName((byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		if (!parser.isNCName((byte) XConstants.XML10)) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
 		String s = parser.getParsedString();

@@ -53,7 +53,8 @@ public class XSParseAnyURI extends XSAbstractParseString {
 		try {
 			URI u = new URI(s);
 		} catch (URISyntaxException ex) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
 		p.isSpaces();
