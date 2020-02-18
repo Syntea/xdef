@@ -12,10 +12,8 @@ import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
-import java.lang.reflect.Field;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
