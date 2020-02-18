@@ -308,91 +308,6 @@ public class TestJsonXdef extends XDTester {
 		return result;
 	}
 
-	/** Get value of the field of the class of an object.
-	 * @param o Object where is the filed.
-	 * @param name name of filed.
-	 * @return value of field.
-	 */
-	private Object getXCField(Object o, String name) {
-		Class<?> cls = o.getClass();
-		try {
-			Field f = cls.getDeclaredField(name);
-			f.setAccessible(true);
-			try {
-				return f.get(o);
-			} catch (Exception ex) {
-				return f.get(null); //static
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Field not found: " + name);
-		}
-	}
-
-	/** Set to the field of the class of an object.
-	 * @param o Object where is the filed.
-	 * @param name name of filed.
-	 * @param value the value to be set.
-	 */
-	private void setXCField(Object o, String name, Object value) {
-		Class<?> cls = o.getClass();
-		try {
-			Field f = cls.getDeclaredField(name);
-			f.setAccessible(true);
-			try {
-				f.set(o, value);
-			} catch (Exception ex) {
-				f.set(null, value); // static
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Field not found: " + name);
-		}
-	}
-
-	/** Invoke a getter on the object.
-	 * @param o object where is getter.
-	 * @param name name of setter.
-	 * @return value of getter.
-	 */
-	private Object getXCValue(Object o, String name) {
-		Class<?> cls = o.getClass();
-		try {
-			Method m = cls.getDeclaredMethod(name);
-			m.setAccessible(true);
-			try {
-				return m.invoke(o);
-			} catch (Exception ex) {
-				return m.invoke(null); //static
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Getter not found: " + name);
-		}
-	}
-
-	/** Invoke a setter on the object.
-	 * @param o the object where is setter.
-	 * @param name name of setter.
-	 * @param val value to be set.
-	 */
-	private void setXCValue(Object o, String name, Object val) {
-		for (Method m: o.getClass().getDeclaredMethods()) {
-			Class<?>[] params = m.getParameterTypes();
-			if (name.equals(m.getName()) && params!=null && params.length==1) {
-				try {
-					m.setAccessible(true);
-					try {
-						m.invoke(o, val);
-						return;
-					} catch (Exception ex) {
-						m.invoke(null, val); // static
-						return;
-					}
-				} catch (Exception ex) {}
-			}
-		}
-		throw new RuntimeException(
-			"Setter " + o.getClass().getName() + '.' + name + " not found");
-	}
-
 	/** Get XComponent with parsed data.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param test identifier test file.
@@ -449,54 +364,54 @@ public class TestJsonXdef extends XDTester {
 
 			test = "Test008";
 			xc = getXComponent(xp, test, 0);
-			assertEq(1, getXCValue(xc,"jgetnumber"));
-			setXCValue(xc,"jsetnumber",3);
-			assertEq(3, getXCValue(xc,"jgetnumber"));
-			setXCValue(xc,"jsetnumber", null);
-			assertNull(getXCValue(xc,"jgetnumber"));
+			assertEq(1, getValueFromGetter(xc,"jgetnumber"));
+			setValueToSetter(xc,"jsetnumber",3);
+			assertEq(3, getValueFromGetter(xc,"jgetnumber"));
+			setValueToSetter(xc,"jsetnumber", null);
+			assertNull(getValueFromGetter(xc,"jgetnumber"));
 
 			test = "Test020";
 			xc = getXComponent(xp, test, 0);
-			assertEq("abc", getXCValue(xc,"jgeta$string"));
-			assertNull(getXCValue(xc,"jgeta$number"));
-			assertNull(getXCValue(xc,"jgeta$boolean"));
-			assertNull(getXCValue(xc,"jgeta$null"));
-			setXCValue(xc,"jseta$null", null);
-			assertTrue(getXCValue(xc,"jgeta$boolean") == null);
+			assertEq("abc", getValueFromGetter(xc,"jgeta$string"));
+			assertNull(getValueFromGetter(xc,"jgeta$number"));
+			assertNull(getValueFromGetter(xc,"jgeta$boolean"));
+			assertNull(getValueFromGetter(xc,"jgeta$null"));
+			setValueToSetter(xc,"jseta$null", null);
+			assertTrue(getValueFromGetter(xc,"jgeta$boolean") == null);
 
 			xc = getXComponent(xp, test, 1);
-			assertEq(123, getXCValue(xc,"jgeta$number"));
-			setXCValue(xc,"jseta$string", "");
-			assertEq("", getXCValue(xc,"jgeta$string"));
-			assertNull(getXCValue(xc,"jgeta$number"));
-			assertNull(getXCValue(xc,"jgeta$boolean"));
-			assertNull(getXCValue(xc,"jgeta$null"));
+			assertEq(123, getValueFromGetter(xc,"jgeta$number"));
+			setValueToSetter(xc,"jseta$string", "");
+			assertEq("", getValueFromGetter(xc,"jgeta$string"));
+			assertNull(getValueFromGetter(xc,"jgeta$number"));
+			assertNull(getValueFromGetter(xc,"jgeta$boolean"));
+			assertNull(getValueFromGetter(xc,"jgeta$null"));
 			xc = getXComponent(xp, test, 2);
-			assertEq(false, getXCValue(xc,"jgeta$boolean"));
+			assertEq(false, getValueFromGetter(xc,"jgeta$boolean"));
 			xc = getXComponent(xp, test, 3);
-			assertTrue(getXCValue(xc,"jgeta$null") != null);
+			assertTrue(getValueFromGetter(xc,"jgeta$null") != null);
 
 			test = "Test021";
 			xc = getXComponent(xp, test, 0);
-			assertEq("abc", getXCValue(xc,"jgetstring"));
-			assertNull(getXCValue(xc,"jgetnumber"));
-			assertNull(getXCValue(xc,"jgetboolean"));
-			assertNull(getXCValue(xc,"jgetnull"));
+			assertEq("abc", getValueFromGetter(xc,"jgetstring"));
+			assertNull(getValueFromGetter(xc,"jgetnumber"));
+			assertNull(getValueFromGetter(xc,"jgetboolean"));
+			assertNull(getValueFromGetter(xc,"jgetnull"));
 			xc = getXComponent(xp, test, 1);
-			assertEq(123, getXCValue(xc,"jgetnumber"));
-			setXCValue(xc,"jsetstring", "");
-			assertEq("", getXCValue(xc,"jgetstring"));
-			assertNull(getXCValue(xc,"jgetnumber"));
-			assertNull(getXCValue(xc,"jgetboolean"));
-			assertNull(getXCValue(xc,"jgetnull"));
-			setXCValue(xc,"jsetstring", " a    b \n ");
-			assertEq(" a    b \n ", getXCValue(xc,"jgetstring"));
+			assertEq(123, getValueFromGetter(xc,"jgetnumber"));
+			setValueToSetter(xc,"jsetstring", "");
+			assertEq("", getValueFromGetter(xc,"jgetstring"));
+			assertNull(getValueFromGetter(xc,"jgetnumber"));
+			assertNull(getValueFromGetter(xc,"jgetboolean"));
+			assertNull(getValueFromGetter(xc,"jgetnull"));
+			setValueToSetter(xc,"jsetstring", " a    b \n ");
+			assertEq(" a    b \n ", getValueFromGetter(xc,"jgetstring"));
 			xc = getXComponent(xp, test, 2);
-			assertEq(false, getXCValue(xc,"jgetboolean"));
+			assertEq(false, getValueFromGetter(xc,"jgetboolean"));
 			xc = getXComponent(xp, test, 3);
-			assertTrue(getXCValue(xc,"jgetnull") != null);
+			assertTrue(getValueFromGetter(xc,"jgetnull") != null);
 			xc = getXComponent(xp, test, 4);
-			assertNull(getXCValue(xc,"jgetnull"));
+			assertNull(getValueFromGetter(xc,"jgetnull"));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.

@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -35,11 +36,14 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
+import org.xdef.component.GenXComponent;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -1123,4 +1127,197 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Get value of the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @return value of field.
+	 */
+	public final static Object getObjectField(Object o, String name) {
+		Class<?> cls = o.getClass();
+		try {
+			Field f = cls.getDeclaredField(name);
+			f.setAccessible(true);
+			try {
+				return f.get(o);
+			} catch (Exception ex) {
+				return f.get(null); //static
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Field not found: " + name);
+		}
+	}
+
+	/** Set to the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @param value the value to be set.
+	 */
+	public final static void setObjectField(Object o, String name, Object value) {
+		Class<?> cls = o.getClass();
+		try {
+			Field f = cls.getDeclaredField(name);
+			f.setAccessible(true);
+			try {
+				f.set(o, value);
+			} catch (Exception ex) {
+				f.set(null, value); // static
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Field not found: " + name);
+		}
+	}
+
+	/** Invoke a getter on the object.
+	 * @param o object where is getter.
+	 * @param name name of setter.
+	 * @return value of getter.
+	 */
+	public final static Object getValueFromGetter(Object o, String name) {
+		Class<?> cls = o.getClass();
+		try {
+			Method m = cls.getDeclaredMethod(name);
+			m.setAccessible(true);
+			try {
+				return m.invoke(o);
+			} catch (Exception ex) {
+				return m.invoke(null); //static
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Getter not found: " + name);
+		}
+	}
+
+	/** Invoke a setter on the object.
+	 * @param o the object where is setter.
+	 * @param name name of setter.
+	 * @param val value to be set.
+	 */
+	public final static void setValueToSetter(Object o, String name, Object val) {
+		for (Method m: o.getClass().getDeclaredMethods()) {
+			Class<?>[] params = m.getParameterTypes();
+			if (name.equals(m.getName()) && params!=null && params.length==1) {
+				try {
+					m.setAccessible(true);
+					try {
+						m.invoke(o, val);
+						return;
+					} catch (Exception ex) {
+						m.invoke(null, val); // static
+						return;
+					}
+				} catch (Exception ex) {}
+			}
+		}
+		throw new RuntimeException(
+			"Setter " + o.getClass().getName() + '.' + name + " not found");
+	}
+
+	public final static Class<?>[] genXComponent(final String componentDir,
+		final String packageName,
+		final XDPool xp,
+		final String... componentNames) {
+		try {
+			GenXComponent.genXComponent(xp,
+				componentDir, "UTF-8", false, true).checkAndThrowErrors();
+			Class<?>[] classes = new Class<?>[componentNames.length];
+			for (int i = 0; i < componentNames.length; i++) {
+				try {
+					classes[i] = 
+						Class.forName(packageName+'.' + componentNames[i]);
+				} catch (ClassNotFoundException ex) {
+					File f = new File (
+						componentDir, packageName.replace('.', '/'));
+					f = new File(f, componentNames[i] + ".java");
+					XDTester.compileSources(f);
+					classes[i] = 
+						Class.forName(packageName+'.'+componentNames[i]);
+				}
+			}
+			return classes;
+		} catch (RuntimeException ex) {
+			throw ex;
+		} catch (ClassNotFoundException ex) {
+			throw new RuntimeException(ex.getMessage());
+		} catch (IOException ex) {
+			throw new RuntimeException(ex.getMessage());
+		}
+	}
+
+	/** Get XComponent with parsed data.
+	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param xdefName name of XDefinition.
+	 * @param componentName class name (may be null).
+	 * @param json string with JSON data (file name or JSON).
+	 * @param reporter ReoprtWriter (may be null).
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and errors occurred.
+	 */
+	public final XComponent jparseXComponent(final XDPool xp,
+		final String xdefName,
+		final String componentName,
+		final String json,
+		final ArrayReporter reporter) throws SRuntimeException {
+		ArrayReporter rep;
+		if (reporter == null) {
+			rep = new ArrayReporter();
+		} else {
+			rep = reporter;
+			rep.clear();
+		}
+		Class<?> cls = null;
+		try {
+			if (componentName != null) {
+				cls = Class.forName(componentName);
+			}
+		} catch (ClassNotFoundException ex) {
+			throw new RuntimeException(
+				"XComponent class not found: " + componentName);
+		}
+		XComponent result =
+			xp.createXDDocument(xdefName).jparseXComponent(json, cls, rep);
+		if (reporter == null) {
+			rep.checkAndThrowErrors();
+		}
+		return result;
+	}
+
+	/** Get XComponent with parsed data.
+	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param xdefName name of XDefinition.
+	 * @param componentName class name (may be null).
+	 * @param xml string with XML data (file name or XML).
+	 * @param reporter ReoprtWriter (may be null).
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and errors occurred.
+	 */
+	public final XComponent xparseXComponent(final XDPool xp,
+		final String xdefName,
+		final String componentName,
+		final String xml,
+		final ArrayReporter reporter) throws SRuntimeException {
+		ArrayReporter rep;
+		if (reporter == null) {
+			rep = new ArrayReporter();
+		} else {
+			rep = reporter;
+			rep.clear();
+		}
+		Class<?> cls = null;
+		try {
+			if (componentName != null) {
+				cls = Class.forName(componentName);
+			}
+		} catch (ClassNotFoundException ex) {
+			throw new RuntimeException(
+				"XComponent class not found: " + componentName);
+		}
+		XComponent result = 
+			xp.createXDDocument(xdefName).jparseXComponent(xml, cls, reporter);
+		if (reporter == null) {
+			rep.checkAndThrowErrors();
+		}
+		return result;
+	}
 }
