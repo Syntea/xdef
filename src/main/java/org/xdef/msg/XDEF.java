@@ -624,21 +624,21 @@ public interface XDEF {
 	public static final long XDEF808 = 31159025971L;
 	/** Incorrect value of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF809 = 31159025972L;
-	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{#SYS000} */
+	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF810 = 31159025973L;
 	/** Doesn't fit any pattern from list for '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF811 = 31159025974L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
 	public static final long XDEF812 = 31159025975L;
-	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{#SYS000} */
+	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{2}{: }&amp;{#SYS000} */
 	public static final long XDEF813 = 31159025976L;
-	/** Length of value of '&amp;{0}' is too short&amp;{#SYS000} */
+	/** Length of value of '&amp;{0}' is too short&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF814 = 31159025977L;
-	/** Length of value of '&amp;{0}' is too long&amp;{#SYS000} */
+	/** Length of value of '&amp;{0}' is too long&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF815 = 31159025978L;
 	/** Value of enumeration for 'eq' must be just one&amp;{#SYS000} */
 	public static final long XDEF816 = 31159025979L;
-	/** "&amp;{0}" is not a valid value type&amp;{#SYS000} */
+	/** "&amp;{0}" is not a valid value parser (in &amp;{1})&amp;{#SYS000} */
 	public static final long XDEF817 = 31159025980L;
 	/** Range of values of year of date must be from &amp;{0} to &amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF818 = 31159025981L;
