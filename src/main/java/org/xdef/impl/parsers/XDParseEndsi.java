@@ -26,7 +26,7 @@ public class XDParseEndsi extends XDParseEqi {
 		int i = s.length() - _param.length();
 		if (i < 0 || !_param.equalsIgnoreCase(s.substring(i).toLowerCase())) {
 			//Incorrect value of &{0}&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), s);
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}

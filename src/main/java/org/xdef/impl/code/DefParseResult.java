@@ -499,7 +499,7 @@ public final class DefParseResult extends XDValueAbstract
 		_ar.putReport(report);
 	}
 	@Override
-	/** Put the registered report object with type ERROR with the last
+	/** Put the registered report object with type ERROR and add the last
 	 * parameter containing the string from the ParseResult object.
 	 * @param registeredID registered report id.
 	 * @param mod modification string of report text.
@@ -510,12 +510,9 @@ public final class DefParseResult extends XDValueAbstract
 		if (len > 1) {
 			System.arraycopy(mod, 0, modpars, 0, len - 1);
 		}
-		String s = getParsedString();
-		String t = getUnparsedBufferPart();
-		if (s != null && t != null && t.length() > 0) {
-			s += t.length() > 3 ? t.substring(0, 3) : t;
-		}
-		modpars[len-1] = Report.prepareStringParameter(s);
+		modpars[len-1] = _source == null ? "null"
+			: ( '"' + (_source.length() > 32 ? _source.substring(0,24)+"\"...\""
+				+ _source.substring(_source.length() - 3): _source) + '"');
 		error(registeredID, modpars);
 	}
 	@Override

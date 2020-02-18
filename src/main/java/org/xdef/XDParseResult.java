@@ -54,4 +54,13 @@ public interface XDParseResult extends XDValue, SParser {
 	 */
 	public void replaceParsedBufferFrom(int from, String s);
 
+	/** Put the registered report object with type ERROR with the last
+	 * parameter containing the string from the ParseResult object.
+	 * @param registeredID registered report id.
+	 * @param mod modification string of report text.
+	 */
+	public void errorWithString(final long registeredID, final Object... mod);
+
+	/** Put default parse error message (XDEF515). */
+	public void putDefaultParseError();
 }

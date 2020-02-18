@@ -17,19 +17,19 @@ public class XDParseEmailList extends XDParserAbstract {
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
-		String s = p.getUnparsedBufferPart().trim();
-		StringTokenizer st = new StringTokenizer(s, ";,");
+		StringTokenizer st = new StringTokenizer(
+			p.getUnparsedBufferPart().trim(), ";,");
 		if (!st.hasMoreTokens()) {
 			//Incorrect value of &{0}&{1}{: }
-			p.error(XDEF.XDEF809, ROOTBASENAME, s);
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		XDContainer val = new DefContainer();
 		String t = null;
 		do {
 			String x = st.nextToken().trim();
-			if (!s.isEmpty() ) {
-				if (!XDParseUri.chkUri(p, x, ROOTBASENAME)) {
+			if (!x.isEmpty() ) {
+				if (!XDParseUri.chkUri(p, x, parserName())) {
 					return;
 				}
 				if (t == null) {
@@ -44,8 +44,6 @@ public class XDParseEmailList extends XDParserAbstract {
 		p.setEos();
 	}
 
-	@Override
-	public String toString() {return ROOTBASENAME + "()";}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

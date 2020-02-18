@@ -23,7 +23,7 @@ public class XSParseNCName extends XSAbstractParseToken {
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parser.isNCName((byte) XConstants.XML10)) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = parser.getParsedString();

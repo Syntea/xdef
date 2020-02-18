@@ -895,17 +895,6 @@ public class Report {
 			"&{d}" + XDConstants.BUILD_DATE);
 	}
 
-	/** Prepare string parameter (if it id too long display few starting
-	 * characters and few characters on the end).
-	 * @param s the string to be prepared.
-	 * @return prepared string.
-	 */
-	public final static String prepareStringParameter(final String s) {
-		return s == null ? "null"
-			: ( '"' + (s.length() > 64 ? s.substring(0,52) + "\"...\""
-				+ s.substring(s.length() - 8): s) + '"');
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Writes the report to SObjectWriter.

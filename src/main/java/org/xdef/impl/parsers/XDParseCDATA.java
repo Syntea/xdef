@@ -28,12 +28,12 @@ public class XDParseCDATA extends XDParserAbstract {
 		XDParseResult p = new DefParseResult(s);
 		int len = s.length();
 		if (_maxLength >= 0 && len > _maxLength) {
-			//Length of value of '&{0}' is too long&{0}'{: }
-			p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
+			//Length of value of '&{0}' is too long&{1}{: }
+			p.errorWithString(XDEF.XDEF815, "string");
 		} else if (_minLength == -1 && len == 0 ||
 			_minLength >= 0 && len < _minLength) {
-			//Length of value of '&{0}' is too short&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF814, ROOTBASENAME);
+			//Length of value of '&{0}' is too short&{1}{: }
+			p.errorWithString(XDEF.XDEF814, "string");
 		} else {
 			p.setEos();
 		}
@@ -44,11 +44,11 @@ public class XDParseCDATA extends XDParserAbstract {
 		int len = p.getUnparsedBufferPart().length();
 		if (_maxLength >= 0 && len > _maxLength) {
 			//Length of value of '&{0}' is too long&{0}'{: }
-			p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
+			p.errorWithString(XDEF.XDEF815, "string");
 		} else if (_minLength == -1 && len == 0 ||
 			_minLength >= 0 && len < _minLength) {
 			//Length of value of '&{0}' is too short&{0}'{: }
-			p.errorWithString(XDEF.XDEF814, ROOTBASENAME);
+			p.errorWithString(XDEF.XDEF814, "string");
 		} else {
 			p.setEos();
 		}
@@ -56,7 +56,7 @@ public class XDParseCDATA extends XDParserAbstract {
 	@Override
 	public String toString() {return "string";}
 	@Override
-	public String parserName() {return ROOTBASENAME;}
+	public String parserName() {return "string";}
 	@Override
 	public final void setNamedParams(final XXNode xnode,
 		final XDContainer params) throws SException {

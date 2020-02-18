@@ -21,7 +21,7 @@ public class XDParseFileList extends XDParserAbstract {
 		StringTokenizer st = new StringTokenizer(s, ";: \n\t\r");
 		if (!st.hasMoreTokens()) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, ROOTBASENAME, "\"\""); 
+			p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 			return;
 		}
 		XDContainer val = new DefContainer();

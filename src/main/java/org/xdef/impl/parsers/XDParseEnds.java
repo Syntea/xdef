@@ -19,7 +19,7 @@ public class XDParseEnds extends XDParseEq {
 		XDParseResult p = new DefParseResult(s);
 		if (!s.endsWith(_param)) {
 			//Incorrect value of &{0}&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), s);
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}
@@ -29,7 +29,7 @@ public class XDParseEnds extends XDParseEq {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (!p.getUnparsedBufferPart().endsWith(_param)) {
 			//Incorrect value of &{0}&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 		p.setEos();
 	}

@@ -25,12 +25,13 @@ public class XSParseLanguage extends XSAbstractParseToken {
 			p.isInInterval('A', 'Z') != SParser.NOCHAR) {
 			if (++count > 8) {
 				//Incorrect value of '&{0}'&{1}{: }
-				p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+				p.errorWithString(XDEF.XDEF809, parserName());
 				return;
 			}
 		}
 		if (count == 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else {
 			while (fits && p.isChar('-')) {
@@ -39,14 +40,14 @@ public class XSParseLanguage extends XSAbstractParseToken {
 					p.isInInterval('A', 'Z') != SParser.NOCHAR ||
 					p.isInInterval('0', '9') != SParser.NOCHAR) {
 					if (++count > 8) {
-						//Incorrect value of '&{0}'
-						p.error(XDEF.XDEF809, parserName());
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
 						return;
 					}
 				}
 				if (count == 0) {
-					//Incorrect value of '&{0}'
-					p.error(XDEF.XDEF809, parserName());
+					//Incorrect value of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF809, parserName());
 					return;
 				}
 			}
@@ -59,5 +60,4 @@ public class XSParseLanguage extends XSAbstractParseToken {
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 }

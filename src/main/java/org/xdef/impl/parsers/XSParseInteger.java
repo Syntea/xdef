@@ -61,7 +61,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		int i;
 		if ((i = p.isDigit()) < 0) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (i > 0) {
 			totalDigits++;
@@ -76,7 +76,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		p.replaceParsedBufferFrom(pos0, s);
 		BigDecimal val;
 		try {
-			val = new BigDecimal(sign == '+' ? s.substring(1) : s);
+			val = new BigDecimal(s = sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.error(XDEF.XDEF809, parserName(), s);

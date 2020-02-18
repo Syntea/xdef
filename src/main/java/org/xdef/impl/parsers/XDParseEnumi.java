@@ -8,11 +8,11 @@ import org.xdef.proc.XXNode;
 import java.util.Arrays;
 import org.xdef.XDContainer;
 
-/** Parser of X-Script "listi" type.
+/** Parser of X-Script "enumi" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnumi extends XDParseEnum {
-	private static final String ROOTBASENAME = "listi";
+	private static final String ROOTBASENAME = "enumi";
 	public XDParseEnumi() {
 		super();
 	}
@@ -33,7 +33,7 @@ public class XDParseEnumi extends XDParseEnum {
 			p.setBufIndex(pos + len);
 		} else {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 	}
 	@Override

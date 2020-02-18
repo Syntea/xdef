@@ -26,7 +26,7 @@ public class XDParseEq extends XDParserAbstract {
 		XDParseResult p = new DefParseResult(s);
 		if (!_param.equals(s)) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), s); 
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}
@@ -38,7 +38,7 @@ public class XDParseEq extends XDParserAbstract {
 			p.setParsedValue(_param);
 		} else {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer()); 
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 	}
 	@Override

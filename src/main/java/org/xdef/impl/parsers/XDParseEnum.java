@@ -26,7 +26,7 @@ public class XDParseEnum extends XDParserAbstract {
 			return;
 		}
 		//Incorrect value of &{0}&{1}{: }
-		p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+		p.errorWithString(XDEF.XDEF809, parserName());
 	}
 	@Override
 	/** Set value of one "sequential" parameter of parser.
@@ -87,7 +87,7 @@ public class XDParseEnum extends XDParserAbstract {
 		}
 	}
 
-	/** Create _list of strings sorted descendent according to length
+	/** Create _list of strings sorted descendant according to length
 	 * and equal items are ignored.
 	 * @param val argument to be converted.
 	 * @throws SException if an error occurs.

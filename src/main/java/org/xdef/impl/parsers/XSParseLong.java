@@ -51,7 +51,7 @@ public class XSParseLong extends XSAbstractParseComparable {
 		int i;
 		if ((i = p.isDigit()) < 0) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (i > 0) {
 			totalDigits++;

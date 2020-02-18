@@ -31,7 +31,7 @@ public class XDParseEmail extends XDParserAbstract {
 		final String parserName) {
 		if (s == null || s.isEmpty()) {
 			//Incorrect value of &{0}&{1}{: }
-			p.error(XDEF.XDEF809, parserName, "\"\"");
+			p.errorWithString(XDEF.XDEF809, parserName);
 		} else {
 			String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*"
 				+ "@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -39,7 +39,7 @@ public class XDParseEmail extends XDParserAbstract {
 				return true;
 			}
 			//Incorrect value of &{0}&{1}&{: }
-			p.error(XDEF.XDEF809, parserName, s);
+			p.errorWithString(XDEF.XDEF809, parserName);
 		}
 		return false;
 	}

@@ -72,7 +72,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 			if (p.isDigit() < 0) {
 				if (!wasNumber) {
 					//Incorrect value of '&{0}'&{1}{: }
-					p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+					p.errorWithString(XDEF.XDEF809, parserName());
 					return;
 				}
 			} else {
@@ -89,7 +89,8 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 			}
 		}
 		if (!wasNumber) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);
@@ -109,7 +110,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		}
 		if (_fractionDigits >= 0 && fractionDigits > _fractionDigits) {
 			//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-			p.error(XDEF.XDEF813, parserName(), "totalDigits", s);
+			p.error(XDEF.XDEF813, parserName(), "fractionDigits", s);
 			return;
 		}
 		checkPatterns(p);

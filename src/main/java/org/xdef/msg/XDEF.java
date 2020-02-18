@@ -616,7 +616,7 @@ public interface XDEF {
 	public static final long XDEF804 = 31159025967L;
 	/** Parsed value in &amp;{0} is null&amp;{#SYS000} */
 	public static final long XDEF805 = 31159025968L;
-	/** Value of '&amp;{0}' is out of range:&amp;{1}{: }&amp;{#SYS000} */
+	/** Value of '&amp;{0}' is out of range&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF806 = 31159025969L;
 	/** Both parameters can't be specified: '&amp;{0}', '&amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF807 = 31159025970L;
@@ -624,17 +624,17 @@ public interface XDEF {
 	public static final long XDEF808 = 31159025971L;
 	/** Incorrect value of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF809 = 31159025972L;
-	/** Doesn't fit enumeration list of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
+	/** Doesn't fit enumeration declared in '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF810 = 31159025973L;
-	/** Doesn't fit any pattern from list for '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
+	/** Doesn't fit any pattern declared in '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF811 = 31159025974L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
 	public static final long XDEF812 = 31159025975L;
 	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{2}{: }&amp;{#SYS000} */
 	public static final long XDEF813 = 31159025976L;
-	/** Length of value of '&amp;{0}' is too short&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
+	/** Length of value of '&amp;{0}' is too short&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF814 = 31159025977L;
-	/** Length of value of '&amp;{0}' is too long&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
+	/** Length of value of '&amp;{0}' is too long&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF815 = 31159025978L;
 	/** Value of enumeration for 'eq' must be just one&amp;{#SYS000} */
 	public static final long XDEF816 = 31159025979L;

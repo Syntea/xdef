@@ -23,7 +23,7 @@ public class XSParseNMTOKEN extends XSAbstractParseToken {
 		String token = p.nextToken();
 		if (!StringParser.chkNMToken(token, XConstants.XML10)) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);

@@ -46,12 +46,12 @@ public class XDParseDec extends XSParseDecimal {
 		int j;
 		if ((j = s.length() - 1) < 0) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getParsedString());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		if (!wasdigit || i <= j) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getParsedString());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		if (_totalDigits == -1) {

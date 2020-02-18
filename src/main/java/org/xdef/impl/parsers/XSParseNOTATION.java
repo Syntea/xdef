@@ -60,7 +60,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			p.setParsedValue(s);
 			if (!XSParseENTITY.chkEntity(s, xnode.getElement())) {
 				//Incorrect value of '&{0}'&{1}{: }
-				p.error(XDEF.XDEF809, parserName(), s);
+				p.errorWithString(XDEF.XDEF809, parserName());
 			}
 		} else {//preserve or replace
 			String s = p.getUnparsedBufferPart().trim();

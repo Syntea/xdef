@@ -1,7 +1,6 @@
 package org.xdef.sys;
 
 import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -2022,33 +2021,6 @@ public class StringParser extends SReporter implements SParser {
 		setIndex(_endPos);
 		closeReader();
 		_ch = NOCHAR;
-	}
-
-	@Override
-	/** Put the registered report object with type ERROR with the last
-	 * parameter containing the string from the ParseResult object.
-	 * @param registeredID registered report id.
-	 * @param mod modification string of report text.
-	 */
-	public void errorWithString(final long registeredID, final Object... mod) {
-		int len = mod == null ? 1 : mod.length + 1;
-		Object[] modpars = new Object[len];
-		if (len > 1) {
-			System.arraycopy(mod, 0, modpars, 0, len - 1);
-		}
-		String s = getParsedString();
-		String t = getUnparsedBufferPart();
-		if (s != null && t != null && t.length() > 0) {
-			s += t.length() > 3 ? t.substring(0, 3) : t;
-		}
-		modpars[len-1] = Report.prepareStringParameter(s);
-		error(registeredID, modpars);
-	}
-
-	@Override
-	/** Put default parse error message (XDEF515). */
-	public void putDefaultParseError() {
-		errorWithString(XDEF.XDEF515); //Value error&{0}{: }
 	}
 
 	@Override

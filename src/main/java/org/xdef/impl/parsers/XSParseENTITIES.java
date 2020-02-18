@@ -64,7 +64,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		String token = p.nextToken();
 		if (token == null || !StringParser.chkXMLName(token, (byte) 10)) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		val.addXDItem(new DefString(token));

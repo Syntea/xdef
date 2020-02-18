@@ -28,9 +28,8 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 			p.nextChar();
 			if (((j="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar())) < 0)) {
 				//Incorrect value of '&{0}'&{1}{: }
-				p.error(XDEF.XDEF809, 
-					parserName() +" (must be multiple of 2 chars)",
-					p.getSourceBuffer());
+				p.errorWithString(XDEF.XDEF809,
+					parserName() +" (must be multiple of 2 chars)");
 				return;
 			}
 			baos.write(j >= 16 ? i + j - 6 : i + j);

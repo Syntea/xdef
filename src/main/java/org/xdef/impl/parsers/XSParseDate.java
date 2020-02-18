@@ -44,7 +44,7 @@ public class XSParseDate extends XSAbstractParseComparable {
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parse(parser)) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		p.setBufIndex(parser.getIndex());
@@ -60,7 +60,7 @@ public class XSParseDate extends XSAbstractParseComparable {
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
 		if (!d.chkDatetime()) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
 			//Range of values of year of date must be from &{0} to &{1}'
