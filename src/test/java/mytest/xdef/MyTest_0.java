@@ -1,6 +1,5 @@
 package mytest.xdef;
 
-import static buildtools.STester.runTest;
 import java.io.File;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
