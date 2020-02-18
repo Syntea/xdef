@@ -52,8 +52,8 @@ public class XDParseXDType extends XDParserAbstract {
 			}
 			p.setEos();
 		} catch (Exception ex) {
-			// Value "&{0}" is not a valid value type specification
-			p.error(XDEF.XDEF817, s);
+			// Value "&{0}" is not a valid value type specification (in &{1})
+			p.error(XDEF.XDEF817, s, parserName());
 		}
 	}
 

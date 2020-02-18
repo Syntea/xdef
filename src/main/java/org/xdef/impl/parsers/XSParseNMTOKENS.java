@@ -78,11 +78,11 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 			}
 		}
 		if (_minLength!=-1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName(), val);
 		} else if (_maxLength!=-1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 	}
 	@Override

@@ -158,8 +158,8 @@ public class XSParseList extends XSAbstractParser {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		if (_minLength != -1 && count < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName());
 			return;
 		}
 		if (_enumeration != null) {

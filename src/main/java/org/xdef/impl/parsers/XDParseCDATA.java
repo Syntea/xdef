@@ -15,6 +15,7 @@ import org.xdef.XDContainer;
  * @author Vaclav Trojan
  */
 public class XDParseCDATA extends XDParserAbstract {
+
 	private static final String ROOTBASENAME = "CDATA";
 	int _minLength, _maxLength;
 
@@ -24,30 +25,30 @@ public class XDParseCDATA extends XDParserAbstract {
 	}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult result = new DefParseResult(s);
+		XDParseResult p = new DefParseResult(s);
 		int len = s.length();
 		if (_maxLength >= 0 && len > _maxLength) {
-			//Length of value of '&{0}' is too long
-			result.error(XDEF.XDEF815, ROOTBASENAME);
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
 		} else if (_minLength == -1 && len == 0 ||
 			_minLength >= 0 && len < _minLength) {
-			//Length of value of '&{0}' is too short
-			result.error(XDEF.XDEF814, ROOTBASENAME);
+			//Length of value of '&{0}' is too short&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF814, ROOTBASENAME);
 		} else {
-			result.setEos();
+			p.setEos();
 		}
-		return result;
+		return p;
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int len = p.getUnparsedBufferPart().length();
 		if (_maxLength >= 0 && len > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, ROOTBASENAME);
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
 		} else if (_minLength == -1 && len == 0 ||
 			_minLength >= 0 && len < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, ROOTBASENAME);
+			//Length of value of '&{0}' is too short&{0}'{: }
+			p.errorWithString(XDEF.XDEF814, ROOTBASENAME);
 		} else {
 			p.setEos();
 		}
@@ -57,8 +58,8 @@ public class XDParseCDATA extends XDParserAbstract {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public final void setNamedParams(final XXNode xnode, final XDContainer params)
-		throws SException {
+	public final void setNamedParams(final XXNode xnode,
+		final XDContainer params) throws SException {
 		_minLength = _maxLength = -1;
 		XDNamedValue[] pars;
 		if (params == null || (pars = params.getXDNamedItems()) == null) {

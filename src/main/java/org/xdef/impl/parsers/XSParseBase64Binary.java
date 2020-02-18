@@ -109,11 +109,11 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			checkPatterns(p);
 			DefBytes bytes = (DefBytes) p.getParsedValue();
 			if (_minLength != -1 && bytes.getBytes().length < _minLength) {
-				//Length of value of '&{0}' is too short
-				p.error(XDEF.XDEF814,  parserName());
+				//Length of value of '&{0}' is too short&{0}'&{1}
+				p.errorWithString(XDEF.XDEF814,  parserName());
 			} else if (_maxLength != -1 && bytes.getBytes().length>_maxLength) {
-				//Length of value of '&{0}' is too long
-				p.error(XDEF.XDEF815, parserName());
+				//Length of value of '&{0}' is too long&{0}'{: }
+				p.errorWithString(XDEF.XDEF815, parserName());
 			}
 		}
 	}

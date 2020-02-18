@@ -110,12 +110,12 @@ public class XDParseSequence extends XSAbstractParser {
 		parse(xnode, p, true);
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, false);
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
-		boolean isFinal){
+		boolean isFinal) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos1 = p.getIndex();
@@ -164,11 +164,11 @@ public class XDParseSequence extends XSAbstractParser {
 			}
 		}
 		if (_minLength != -1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'{: }
+			p.errorWithString(XDEF.XDEF814, parserName());
 		} else if (_maxLength != -1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 		p.replaceParsedBufferFrom(pos0, s);
 		if (isFinal) {
