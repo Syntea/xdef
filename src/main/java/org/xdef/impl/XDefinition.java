@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.LinkedHashMap;
 import javax.xml.namespace.QName;
+import org.w3c.dom.Element;
 import org.xdef.model.XMNode;
 import org.xdef.proc.XDLexicon;
 
@@ -74,6 +75,17 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_onXmlError = -1;
 	}
 
+	/** Returns the available element model represented by given name or
+	 * <i>null</i> if definition item is not available.
+	 * @param elem the element which should be found.
+	 * @param languageID the actual lexicon language or null.
+	 * @return The required XElement or null.
+	 */
+	public final XElement getXElement(final Element elem, final int languageID){
+		return getXElement(elem.getNodeName(),
+			elem.getNamespaceURI(), languageID);
+	}	
+	
 	/** Returns the available element model represented by given name or
 	 * <i>null</i> if definition item is not available.
 	 * @param key a name of definition item used for search.
@@ -172,29 +184,29 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
-
-	@Override
-	/** Get the Element model with given NameSpace and name.
-	 * @param nsURI NameSpace URI of element or <tt>null</tt>.
-	 * @param name name of element (may be qualified).
-	 * @return Element model with given NameSpace and name or return
-	 * <tt>null</tt> if such model not exists.
-	 */
-	public final XMElement getRootModel(final String nsURI, final String name) {
-		XMElement[] models = getRootModels();
-		for (int i = 0; models != null && i < models.length; i++) {
-			XMElement model = models[i];
-			if (nsURI == null) {
-				if (model.getNSUri() == null && name.equals(model.getName())) {
-					return model;
-				}
-			} else if (nsURI.equals(model.getNSUri())
-				&& name.equals(model.getLocalName())) {
-				return model;
-			}
-		}
-		return null;
-	}
+//
+//	@Override
+//	/** Get the Element model with given NameSpace and name.
+//	 * @param nsURI NameSpace URI of element or <tt>null</tt>.
+//	 * @param name name of element (may be qualified).
+//	 * @return Element model with given NameSpace and name or return
+//	 * <tt>null</tt> if such model not exists.
+//	 */
+//	public final XMElement getRootModel(final String nsURI, final String name) {
+//		XMElement[] models = getRootModels();
+//		for (int i = 0; models != null && i < models.length; i++) {
+//			XMElement model = models[i];
+//			if (nsURI == null) {
+//				if (model.getNSUri() == null && name.equals(model.getName())) {
+//					return model;
+//				}
+//			} else if (nsURI.equals(model.getNSUri())
+//				&& name.equals(model.getLocalName())) {
+//				return model;
+//			}
+//		}
+//		return null;
+//	}
 
 	@Override
 	/** Get Element model with given namespace and name.
@@ -222,8 +234,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
-	 * (see {@link org.xdef.XDConstants#XD2_0}
-	 * or {@link org.xdef.XDConstants#XD3_1}).
+	 * (see {@link cz.syntea.xdef.XDConstants#XD2_0}
+	 * or {@link cz.syntea.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 
@@ -276,10 +288,19 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	/** Select root element.
+	 * @param elem the element which should be found.
+	 * @param languageID the actual lexicon language or null.
+	 * @return The X-element or <tt>null</tt> if not found.
+	 */
+	final XElement selectRoot(final Element elem, final int languageID) {
+		return selectRoot(elem.getNodeName(),elem.getNamespaceURI(),languageID);
+	}
+
+	/** Select root element.
 	 * @param name The name of element.
 	 * @param namespaceURI namespace URI or <tt>null</tt>.
 	 * @param languageID the actual lexicon language or null.
-	 * @return The X-element or <tt>null</tt> if not found.
+	 * @return X-element or <tt>null</tt> if not found.
 	 */
 	final XElement selectRoot(final String name,
 		final String namespaceURI,
@@ -346,25 +367,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 				if (i >= 0) {
 					prefix = xName.substring(0, i);
 					xName = xName.substring(i + 1); // XElement local name
-				}
-				if (xName.startsWith("json") && !prefix.isEmpty()) {
-					String u = _namespaces.get(prefix);
-					if (XDConstants.JSON_NS_URI_W3C.equals(u)) {
-						XMElement xel =  getModel(u,xName);
-						if (xel != null) {
-							XMNode[] models = xel.getChildNodeModels();
-							if (models != null && models.length == 1
-								&& models[0].getKind() == XMNode.XMELEMENT) {
-								XElement xxel = (XElement) models[0];
-								if ((namespaceURI != null
-									&& namespaceURI.equals(xxel.getNSUri())
-									|| namespaceURI==null
-									&&  xxel.getNSUri()==null)) {
-									return xxel;
-								}
-							}
-						}
-					}
 				}
 			}
 			String lockey = xe.getName();

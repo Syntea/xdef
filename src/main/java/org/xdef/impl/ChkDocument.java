@@ -189,21 +189,20 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	final ChkElement createRootChkElement(final Element element,
 		final boolean checkRoot) {
-		String name = element.getNodeName();
-		String nsURI = element.getNamespaceURI();
-		if (_xElement == null) {
-			int languageId = isCreateMode() ?_destLanguageID:_sourceLanguageID;
-			_xElement = checkRoot
-				? _xdef.selectRoot(name, nsURI, languageId)
-				: _xdef.getXElement(name, nsURI, languageId);
-		}
 		_element = element;
+		if (_xElement == null) {
+			int languageId = isCreateMode() ? _destLanguageID:_sourceLanguageID;
+			_xElement = checkRoot
+				? _xdef.selectRoot(element, languageId)
+				: _xdef.getXElement(element, languageId);
+		}
 		boolean ignore;
 		if (_xElement == null) {
 			ignore = true;
 			_xElement = _xdef.createAnyDefElement();
 			_chkRoot = new ChkElement(this, _element, _xElement, ignore);
-			String s= nsURI!=null&&nsURI.length()>0?" (xmlns=\""+nsURI+"\")":"";
+			String uri = element.getNamespaceURI();
+			String s = uri!=null&&uri.length()>0 ? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
 				//Element &{0} is not defined as root&{1}{ in X-definition }
