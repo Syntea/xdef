@@ -40,6 +40,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
 import org.xdef.json.JsonUtil;
+import org.xdef.proc.XDLexicon;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -176,6 +177,154 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 	}
 
+	/** Select root element.
+	 * @param name The name of element.
+	 * @param namespaceURI namespace URI or <tt>null</tt>.
+	 * @param languageID the actual lexicon language or null.
+	 * @return X-element or <tt>null</tt> if not found.
+	 */
+	private XElement selectRoot(final String name,
+		final String namespaceURI,
+		final int languageID) {
+		String nm = name;
+		XDLexicon t =
+			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
+		if (namespaceURI != null && !namespaceURI.isEmpty()) { // has NS URI
+			int i = name.indexOf(':');
+			nm = name.substring(i + 1);
+			QName qn = new QName(namespaceURI, nm);
+			for (String xName: _xdef._rootSelection.keySet()) {
+				XElement xe = (XElement) _xdef._rootSelection.get(xName);
+				if (xe._json > 0) {
+					if (qn.equals(xe.getQName())) {
+						return xe;
+					} else if ((xe._json) != 0) {
+						if (xe._childNodes.length > 0) {
+							for (XNode x: xe._childNodes) {
+								if (qn.equals(x.getQName())) {
+									return (XElement) x;
+								}
+							}
+						}
+					}
+				}
+				i = xName.indexOf(':');
+				if (i >= 0) {
+					xName = xName.substring(i + 1); // XElement local name
+				}
+				if (t != null) {
+					String s = t.findText(xName, languageID);
+					if (s != null) {
+						xName = s;
+					}
+				}
+				if (nm.equals(xName) && xe != null
+					&& namespaceURI.equals(xe.getNSUri())) {
+					return (XElement) xe;
+				}
+			}
+		} else if (t != null) { // not NS URI, lexicon
+			for (XNode xe: _xdef._rootSelection.values()) {
+				// get translated name
+				String newName = t.findText(xe.getXDPosition(), languageID);
+				if (nm.equals(newName) && xe.getNSUri() == null){
+					return (XElement) xe;
+				}
+			}
+		} else {  // not NS URI, not lexicon
+			for (XNode xe: _xdef._rootSelection.values()) {
+				if (xe != null && nm.equals(xe.getName()) &&
+					xe.getNSUri() == null) {
+					return (XElement) xe;
+				}
+			}
+		}
+		// not found, now try model renerence to an xd:any
+		for (String xName: _xdef._rootSelection.keySet()) {
+			XNode xe = _xdef._rootSelection.get(xName);
+			if (xe == null) {
+				int i = xName.indexOf(':');
+				String prefix = "";
+				if (i >= 0) {
+					prefix = xName.substring(0, i);
+					xName = xName.substring(i + 1); // XElement local name
+				}
+			}
+			String lockey = xe.getName();
+			if (lockey.endsWith("$any") && lockey.length() > 4) {
+				// reference of the named any
+				return ((XElement) xe)._childNodes.length == 0 ?
+					null : (XElement) ((XElement) xe)._childNodes[0];
+			}
+		}
+		// not found, try if there is "*"
+		return (XElement) _xdef._rootSelection.get("*");
+	}
+
+	/** Returns the available element model represented by given name or
+	 * <i>null</i> if definition item is not available.
+	 * @param key a name of definition item used for search.
+	 * @param nsURI an namespace URI.
+	 * @param languageID the actual lexicon language or null.
+	 * @return The required XElement or null.
+	 */
+	public final XElement getXElement(final String key,
+		final String nsURI,
+		final int languageID) {
+		String lockey;
+		XDefinition def;
+		XDLexicon t =
+			languageID >= 0 ? ((XPool) getXDPool())._lexicon : null;
+		int ndx = key.lastIndexOf('#');
+		if (ndx < 0) { //reference to this set, element with the name from key.
+			lockey = key;
+			def = _xdef;
+		} else {
+			def=(XDefinition) getXDPool().getXMDefinition(key.substring(0,ndx));
+			if (def == null) {
+				return null;
+			}
+			lockey = key.substring(ndx + 1);
+		}
+		if (nsURI == null || nsURI.length() == 0) {
+			for (XMElement xel: def.getModels()) {
+				if (xel.getNSUri() == null && key.equals(xel.getName())) {
+					return (XElement) xel;
+				}
+			}
+			if (t != null) { // lexicon
+				for (XMElement xel: def.getModels()) {
+					String lname = t.findText(xel.getXDPosition(),languageID);
+					if (xel.getNSUri() == null && lockey.equals(lname)){
+						return (XElement) xel;
+					}
+				}
+			}
+		} else {
+			ndx = lockey.indexOf(':');
+			lockey = ndx >= 0 ? lockey.substring(ndx + 1) : lockey;
+			for (XMElement xel: _xdef.getModels()) {
+				if (nsURI.equals(xel.getNSUri())
+					&& lockey.equals(xel.getLocalName())){
+					return (XElement) xel;
+				}
+			}
+			if (t != null) { // lexicon
+				for (XMElement xel: _xdef.getModels()) {
+					String lname = t.findText(xel.getXDPosition(),languageID);
+					ndx = lname.indexOf(':');
+					if (ndx >= 0) {
+						lname = lname.substring(ndx + 1);
+					}
+					if (nsURI.equals(xel.getNSUri()) && lockey.equals(lname)){
+						return (XElement) xel;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	/** Set create mode.
 	 * @param createMode true if create mode is running.
 	 */
@@ -189,19 +338,20 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	final ChkElement createRootChkElement(final Element element,
 		final boolean checkRoot) {
+		String uri = element.getNamespaceURI();
+		String name = element.getNodeName();
 		_element = element;
 		if (_xElement == null) {
 			int languageId = isCreateMode() ? _destLanguageID:_sourceLanguageID;
-			_xElement = checkRoot
-				? _xdef.selectRoot(element, languageId)
-				: _xdef.getXElement(element, languageId);
+			_xElement = checkRoot ? selectRoot(name, uri, languageId)
+				: getXElement(name, uri, languageId);
+
 		}
 		boolean ignore;
 		if (_xElement == null) {
 			ignore = true;
 			_xElement = _xdef.createAnyDefElement();
 			_chkRoot = new ChkElement(this, _element, _xElement, ignore);
-			String uri = element.getNamespaceURI();
 			String s = uri!=null&&uri.length()>0 ? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
@@ -1056,7 +1206,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					byte jVersion =
 						(Byte) yClass.getDeclaredField("JSON").get(null);
 					if (jVersion > 0) {
-						XElement xe = _xdef.selectRoot(jmodel,
+						XElement xe = selectRoot(jmodel,
 							jVersion == 1 ? XDConstants.JSON_NS_URI_W3C
 								: XDConstants.JSON_NS_URI,
 							-1);

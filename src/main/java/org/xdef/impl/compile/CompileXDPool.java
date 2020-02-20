@@ -1766,23 +1766,22 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//check integrity of all XDefinitions
 		HashSet<XNode> hs = new HashSet<XNode>();
 		for (XDefinition x : _xdefs.values()) {
-			for (XElement xel: x.getXElements()) {
-				result &= checkIntegrity(xel, 0, hs);
+			for (XMElement xel: x.getModels()) {
+				result &= checkIntegrity((XElement) xel, 0, hs);
 			}
 		}
 		//process clearing of adopted forgets
 		hs.clear();
 		for (XDefinition x: _xdefs.values()) {
-			for (XElement xel: x.getXElements()) {
-				clearAdoptedForgets(xel, false, hs);
+			for (XMElement xel: x.getModels()) {
+				clearAdoptedForgets((XElement) xel, false, hs);
 			}
 		}
 		hs.clear();
 		//update selectors
 		for (XDefinition x : _xdefs.values()) {
-			XElement[] elems = x.getXElements();
-			for (XElement xe: elems) {
-				updateSelectors(xe, 0, null, false, false, hs);
+			for (XMElement xel: x.getModels()) {
+				updateSelectors((XElement) xel, 0, null, false, false, hs);
 			}
 		}
 		hs.clear(); //let's gc do the job

@@ -205,7 +205,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 			chkDoc.setDestLexiconLanguage(destLanguage);
 			_destLanguageID = chkDoc._destLanguageID;
 			String nsuri = inElem.getNamespaceURI();
-			XElement xel = chkDoc._xdef.getXElement(inElem.getTagName(),
+			XElement xel = chkDoc.getXElement(inElem.getTagName(),
 				nsuri, _sourceLanguageID);
 			String name = ((XPool) chkDoc.getXDPool())._lexicon.findText(
 				xel.getXDPosition(), _destLanguageID);

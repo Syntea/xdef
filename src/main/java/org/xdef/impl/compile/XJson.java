@@ -550,7 +550,7 @@ public class XJson extends JsonToXml {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
-//System.out.println(cz.syntea.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
