@@ -661,11 +661,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator.setIgnoreExternalMethods(false);
 	}
 
-	/** Compile lexicon.
+	/** Compile lexicons.
 	 * @param lexicon list of lexicon declarations.
 	 * @param xp XDPool object.
 	 */
-	private void compileLexicon(final List<PNode> lexicon,
+	private void compileLexicons(final List<PNode> lexicon,
 		final XDPool xp) {
 		if (!lexicon.isEmpty()) { //Compile lexicon section
 			/** Array of properties for lexicon languages. */
@@ -1480,7 +1480,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
 				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
 				if (sb == null) {
-					sb = new SBuffer("_json_", pnode._name);
+					sb = new SBuffer("json", pnode._name);
 					//The name of JSON model is required
 					error(pnode._name, XDEF.XDEF317);
 				} else {
@@ -1489,6 +1489,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						//The name of JSON model "&{0}" can't contain ":"
 						error(sb, XDEF.XDEF316, s);
 					}
+				}
+				for (PAttr pattr:  pnode._attrs) {
+					//Attribute '&{0}' not allowed here
+					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
 				XJson.genXdef(pnode, jsonMode, sb, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
@@ -1686,13 +1690,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_scriptCompiler.error(pos, XDEF.XDEF213);
 					break;
 				}
-				XNode xn = new CompileReference(
-					CompileReference.XMREFERENCE, def, nsURI, refName, pos);
-				if (def._rootSelection.containsKey(xn.getName())) {
+				CompileReference xref = new CompileReference(
+					CompileReference.XMREFERENCE, def, nsURI, refName, pos);				
+				if (def._rootSelection.containsKey(xref.getName())) {
 					//Repeated root selection &{0}
 					_scriptCompiler.error(pos, XDEF.XDEF231, refName);
 				} else {
-					def._rootSelection.put(xn.getName(), xn);
+					XElement x = xref.getTargetXElement();
+					if (x == null) { //Unresolved reference
+						xref.putTargetError(getReportWriter());
+					} else {
+						def._rootSelection.put(xref.getName(), x);
+					}
 				}
 				_scriptCompiler.skipBlanksAndComments();
 				if (!_scriptCompiler.isChar('|')) {
@@ -1704,7 +1713,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
 			}
 		}
-
 		//process attributes of XDefinition
 		for (PAttr pattr:  pnode._attrs) {
 			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
@@ -1726,18 +1734,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			XDValue p = ((XData)xn).getParseMethod();
 			return p.getItemId() == XDValueID.XD_PARSER ?
 				((XDParser) p).parsedType() : XDValueID.XD_STRING;
-		}
-	}
-
-	private void setRootSelectionFromChoice(final Map<String, XNode> selection,
-		final XChoice xch,
-		final XElement x) {
-		for (int i = xch.getBegIndex() + 1; i < xch.getEndIndex(); i++) {
-			XNode y = x._childNodes[i];
-			if (selection.put(y.getName(),y)!=null) {
-				//The name of element in the root xd:choice must be unique&{0}
-				error(XDEF.XDEF364, y.getXDPosition());
-			}
 		}
 	}
 
@@ -1767,14 +1763,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (PNode p: _xdefPNodes) {
 			compileXDefinition(p);
 		}
-		for (PNode p: _xdefPNodes) {
-			compileRootSelection(p);
-		}
-		//just let GC do the job;
-		_xdefPNodes.clear();
-		_sources.clear();
-		_nodeList.clear();
 		boolean result = true;
+		//just let GC do the job;
 		//check integrity of all XDefinitions
 		HashSet<XNode> hs = new HashSet<XNode>();
 		for (XDefinition x : _xdefs.values()) {
@@ -1798,48 +1788,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		hs.clear(); //let's gc do the job
 		//resolve root references for all XDefinitions
-		for (XDefinition d : _xdefs.values()) {
-			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
-			for (Map.Entry<String, XNode> entry: d._rootSelection.entrySet()) {
-				try {
-					XNode xnode = entry.getValue();
-					if (xnode.getKind() == CompileReference.XMREFERENCE) {
-						CompileReference xref = (CompileReference) xnode;
-						XElement x = xref.getTargetXElement();
-						if (x == null) { //Unresolved reference
-							// try named choice
-							if ((x = xref.getTargetXChoice()) != null) {
-								setRootSelectionFromChoice(rootSelection,
-									(XChoice) x._childNodes[0], x);
-							} else {
-								xref.putTargetError(getReportWriter());
-							}
-						} else if (x._json != 0 && x._childNodes.length > 0
-							&& x._childNodes[0].getKind() == XMNode.XMCHOICE) {
-							if (rootSelection.put(xref.getName(), x) != null) {
-								error(XDEF.XDEF309, //Internal error: &{0}
-									"reference to element model expected");
-							}
-						} else {
-							if (rootSelection.put(xref.getName(), x) != null) {
-								error(XDEF.XDEF309, //Internal error: &{0}
-									"reference to element model expected");
-							}
-						}
-					} else {
-						error(XDEF.XDEF309, //Internal error: &{0}
-							"reference to element model expected");
-						result = false;
-					}
-				} catch(SRuntimeException ex) {
-					_precomp.putReport(ex.getReport());
-					result = false;
-					break;
-				}
-				d._rootSelection = rootSelection;
-			}
+		for (PNode p: _xdefPNodes) {
+			compileRootSelection(p);
 		}
-		compileLexicon(_lexicon, xdp); // compile lexicon
+		compileLexicons(_lexicon, xdp); // compile lexicon
+		_xdefPNodes.clear(); // Let GC make the job
+		_sources.clear(); 
+		_nodeList.clear();
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
 		} else {
