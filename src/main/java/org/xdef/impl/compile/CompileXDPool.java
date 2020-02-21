@@ -1577,71 +1577,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.setSource(sval, defName, def.getXDVersion());
 			_scriptCompiler.compileXDHeader(def);
 		}
-		sval = _precomp.getXdefAttr(pnode, "root", false, true);
-		if (sval != null) {
-			_scriptCompiler.setSource(sval,
-				defName, pnode._xdVersion, pnode._nsPrefixes);
-			while (true) {
-				_scriptCompiler.skipSpaces();
-				SPosition pos = new SPosition(_scriptCompiler);
-				String refName;
-				String nsURI = null;
-				if (_scriptCompiler.isChar('*')) {
-					refName = "*"; //any
-				} else if (_scriptCompiler.isXModelPosition()) {
-					refName = _scriptCompiler.getParsedString();
-					//get NSUri of the reference identifier.
-					int ndx = refName.indexOf('#') + 1;
-					int ndx1 = refName.indexOf(':', ndx);
-					Object obj;
-					if (ndx1 > 0) {// get nsURI assigned to the prefix
-						String prefix = refName.substring(ndx, ndx1);
-						if ((obj = pnode._nsPrefixes.get(prefix)) == null) {
-							//Namespace for prefix '&{0}' is undefined
-							sval.putReport(Report.error(XDEF.XDEF257, prefix),
-								_scriptCompiler.getReportWriter());
-						}
-					} else {
-						obj = pnode._nsPrefixes.get("");
-					}
-					if (obj != null) {
-						nsURI = _scriptCompiler._g._namespaceURIs.get(
-							((Integer) obj));
-					}
-				} else {
-					//Reference to element model expected
-					_scriptCompiler.error(pos, XDEF.XDEF213);
-					break;
-				}
-				XNode xn = new CompileReference(
-					CompileReference.XMREFERENCE, def, nsURI, refName, pos);
-				if (def._rootSelection.containsKey(xn.getName())) {
-					//Repeated root selection &{0}
-					_scriptCompiler.error(pos, XDEF.XDEF231, refName);
-				} else {
-					def._rootSelection.put(xn.getName(), xn);
-				}
-				_scriptCompiler.skipBlanksAndComments();
-				if (!_scriptCompiler.isChar('|')) {
-					break;
-				}
-			}
-			_scriptCompiler.skipBlanksAndComments();
-			if (!_scriptCompiler.eos()) {
-				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
-			}
-		}
-
-		//process attributes of XDefinition
-		for (PAttr pattr:  pnode._attrs) {
-			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
-				def._properties.put(pattr._name.substring(5),
-					pattr._value.getString());
-			} else {// unknown name
-				//Attribute '&{0}' not allowed here
-				error(pattr._value, XDEF.XDEF254, pattr._name);
-			}
-		}
 		if (_xdefs.containsKey(def.getName())) {
 			//XDefinition '&{0}' already exists
 			error(XDEF.XDEF303, def.getName());
@@ -1708,6 +1643,80 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = actDefName;
 	}
 
+	/** Compile root selection from xd:def header.
+	 * @param pnode PNode item.
+	 */
+	private void compileRootSelection(final PNode pnode) {
+		String defName = pnode._xdef.getName();
+		_scriptCompiler._actDefName = defName;
+		XDefinition def = pnode._xdef;
+		SBuffer sval = _precomp.getXdefAttr(pnode, "root", false, true);
+		if (sval != null) {
+			_scriptCompiler.setSource(sval,
+				defName, pnode._xdVersion, pnode._nsPrefixes);
+			while (true) {
+				_scriptCompiler.skipSpaces();
+				SPosition pos = new SPosition(_scriptCompiler);
+				String refName;
+				String nsURI = null;
+				if (_scriptCompiler.isChar('*')) {
+					refName = "*"; //any
+				} else if (_scriptCompiler.isXModelPosition()) {
+					refName = _scriptCompiler.getParsedString();
+					//get NSUri of the reference identifier.
+					int ndx = refName.indexOf('#') + 1;
+					int ndx1 = refName.indexOf(':', ndx);
+					Object obj;
+					if (ndx1 > 0) {// get nsURI assigned to the prefix
+						String prefix = refName.substring(ndx, ndx1);
+						if ((obj = pnode._nsPrefixes.get(prefix)) == null) {
+							//Namespace for prefix '&{0}' is undefined
+							sval.putReport(Report.error(XDEF.XDEF257, prefix),
+								_scriptCompiler.getReportWriter());
+						}
+					} else {
+						obj = pnode._nsPrefixes.get("");
+					}
+					if (obj != null) {
+						nsURI = _scriptCompiler._g._namespaceURIs.get(
+							((Integer) obj));
+					}
+				} else {
+					//Reference to element model expected
+					_scriptCompiler.error(pos, XDEF.XDEF213);
+					break;
+				}
+				XNode xn = new CompileReference(
+					CompileReference.XMREFERENCE, def, nsURI, refName, pos);
+				if (def._rootSelection.containsKey(xn.getName())) {
+					//Repeated root selection &{0}
+					_scriptCompiler.error(pos, XDEF.XDEF231, refName);
+				} else {
+					def._rootSelection.put(xn.getName(), xn);
+				}
+				_scriptCompiler.skipBlanksAndComments();
+				if (!_scriptCompiler.isChar('|')) {
+					break;
+				}
+			}
+			_scriptCompiler.skipBlanksAndComments();
+			if (!_scriptCompiler.eos()) {
+				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
+			}
+		}
+
+		//process attributes of XDefinition
+		for (PAttr pattr:  pnode._attrs) {
+			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
+				def._properties.put(pattr._name.substring(5),
+					pattr._value.getString());
+			} else {// unknown name
+				//Attribute '&{0}' not allowed here
+				error(pattr._value, XDEF.XDEF254, pattr._name);
+			}
+		}
+	}
+
 	/** Get identifier of type from a model.*/
 	private static short getTypeId(XMNode xn) {
 		if (xn.getKind() == XMNode.XMELEMENT) {
@@ -1757,6 +1766,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		for (PNode p: _xdefPNodes) {
 			compileXDefinition(p);
+		}
+		for (PNode p: _xdefPNodes) {
+			compileRootSelection(p);
 		}
 		//just let GC do the job;
 		_xdefPNodes.clear();

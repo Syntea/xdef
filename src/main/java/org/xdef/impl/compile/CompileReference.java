@@ -160,6 +160,7 @@ final class CompileReference extends XNode {
 	}
 
 	/** Get reference target XElement.
+	 * @param name the name of required model of element.
 	 * @return the found XElement or null.
 	 */
 	private XElement getTargetXElement(final String name) {
@@ -177,12 +178,12 @@ final class CompileReference extends XNode {
 			return null;
 		}
 		int ndx = name.indexOf('/');
-		String mName = ndx > 0 ? name.substring(0, ndx) : name;
-		XElement dn = (XElement) xdef.getModel(getNSUri(), mName);
-		if (dn == null) {
+		String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
+		XElement xe = (XElement) xdef.getModel(getNSUri(), mName);
+		if (xe == null) {
 			String s = mName + "$any";
-			dn = (XElement) xdef.getModel(getNSUri(), s);
-			if (dn != null) {
+			xe = (XElement) xdef.getModel(getNSUri(), s);
+			if (xe != null) {
 				setName(s);
 			} else if (ndx > 0) {
 				XPool xp = (XPool) xdef.getXDPool();
@@ -204,21 +205,21 @@ final class CompileReference extends XNode {
 				return (XElement) xn;
 			}
 		}
-		if (dn != null) {
+		if (xe != null) {
 			if(ndx > 0) {
-				XMNode xn = XPool.findXMNode(dn, name.substring(ndx+1), 0, -1);
+				XMNode xn = XPool.findXMNode(xe, name.substring(ndx+1), 0, -1);
 				if (xn == null) {
 					return null;
 				}
-				dn = xn.getKind() == XMNode.XMELEMENT ? (XElement) xn : null;
-			} else if (dn._json > 0) {
-				XMNode[] models = dn.getChildNodeModels();
+				xe = xn.getKind() == XMNode.XMELEMENT ? (XElement) xn : null;
+			} else if (xe._json > 0) {
+				XMNode[] models = xe.getChildNodeModels();
 				if (models.length==1 && models[0].getKind()==XMNode.XMELEMENT) {
 					return (XElement) models[0];
 				}
 			}
 		}
-		return (XElement) dn;
+		return (XElement) xe;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
