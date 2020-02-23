@@ -24,7 +24,7 @@ public class TestJsonXdef extends XDTester {
 
 	private String _dataDir; // dirsctory with test data
 	private File[] _jfiles; // array with jdef files
-	private String _tempDir; // dirsctory where to generate files
+	private String _tempDir; // directory where to generate files
 
 	/** Get ID number of a test from the file name.
 	 * @param f file name
@@ -309,7 +309,6 @@ public class TestJsonXdef extends XDTester {
 	/** Get XComponent with parsed data.
 	 * @param xp compiled XDPool from generated X-definitions.
 	 * @param test identifier test file.
-	 * @param p "a" or "b".
 	 * @param x file number.
 	 * @return XComponent with parsed data.
 	 */
@@ -333,21 +332,14 @@ public class TestJsonXdef extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
-
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
 //			xp = genAll("Test017");
 		} catch (Exception ex) {
-			if (ex.getMessage().contains("Java compiler is not available")) {
-				getOutStream().println(
-					ex.getMessage() + "; TestJsonXdef skipped");
-			} else {
-				fail(new RuntimeException("Can't generate data", ex));
-			}
+			fail(new RuntimeException(ex));
 			return;
 		}
-
 		// run all tests
 		try {
 			for (File f: _jfiles) {
@@ -355,8 +347,8 @@ public class TestJsonXdef extends XDTester {
 				assertTrue(s.isEmpty(), s);
 			}
 		} catch (Exception ex) {fail(ex);} // should not happen!!!
-		try {
 /*xx*/
+		try {
 			String test;
 			XComponent xc;
 
@@ -416,7 +408,7 @@ public class TestJsonXdef extends XDTester {
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
 			try {
-//				SUtils.deleteAll(_tempDir, true); //delete all generated data
+				SUtils.deleteAll(_tempDir, true); //delete all generated data
 			} catch (Exception ex) {
 				fail(ex);// should not happen; error when delete generated data
 			}
@@ -482,8 +474,8 @@ public class TestJsonXdef extends XDTester {
 			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
-/*xx*/
 		} catch (Exception ex) {fail(ex);}
+/*xx*/
 	}
 
 	public static void main(String[] args) {

@@ -227,15 +227,55 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			for (XNode xe: _xdef._rootSelection.values()) {
 				// get translated name
 				String newName = t.findText(xe.getXDPosition(), languageID);
-				if (nm.equals(newName) && xe.getNSUri() == null){
+				if (nm.equals(newName) && xe.getNSUri() == null) {
 					return (XElement) xe;
 				}
 			}
 		} else {  // not NS URI, not lexicon
 			for (XNode xe: _xdef._rootSelection.values()) {
-				if (xe != null && nm.equals(xe.getName()) &&
-					xe.getNSUri() == null) {
+				if (xe.getKind()  == XMNode.XMELEMENT && nm.equals(xe.getName())
+					&& xe.getNSUri() == null) {
 					return (XElement) xe;
+				}
+			}
+		}
+		// not found, now try model renerences of xd:choice
+		for (XNode x: _xdef._rootSelection.values()) {
+			if (x.getName().endsWith("$choice")) {
+				for (XNode xe: ((XElement)x)._childNodes) {
+					if (xe.getKind() == XMNode.XMELEMENT
+						&& nm.equals(xe.getName()) && xe.getNSUri() == null) {
+						XElement xel = (XElement) xe;
+						if (_element != null && xel._match >= 0) {
+							ChkElement chkEl =
+								new ChkElement(this, _element, xel, false);
+							chkEl.setXXType((byte) 'E');
+							chkEl.setElemValue(_element);
+							if (_scp.exec(xel._match, chkEl).booleanValue()) {
+								return xel;
+							}							
+						} else {
+							return xel;
+						}
+					}
+				}
+				// try to find xd:any
+				for (XNode xe: ((XElement)x)._childNodes) {
+					if (xe.getKind() == XMNode.XMELEMENT
+						&& "$any".equals(xe.getName())) {
+						XElement xel = (XElement) xe;
+						if (_element != null && xel._match >= 0) {
+							ChkElement chkEl =
+								new ChkElement(this, _element, xel, false);
+							chkEl.setXXType((byte) 'E');
+							chkEl.setElemValue(_element);
+							if (_scp.exec(xel._match, chkEl).booleanValue()) {
+								return xel;
+							}							
+						} else {
+							return xel;
+						}
+					}
 				}
 			}
 		}
@@ -256,7 +296,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				return ((XElement) xe)._childNodes.length == 0 ?
 					null : (XElement) ((XElement) xe)._childNodes[0];
 			}
-		}
+		}		
 		// not found, try if there is "*"
 		return (XElement) _xdef._rootSelection.get("*");
 	}
@@ -345,13 +385,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			int languageId = isCreateMode() ? _destLanguageID:_sourceLanguageID;
 			_xElement = checkRoot ? selectRoot(name, uri, languageId)
 				: getXElement(name, uri, languageId);
-
 		}
 		boolean ignore;
 		if (_xElement == null) {
 			ignore = true;
 			_xElement = _xdef.createAnyDefElement();
 			_chkRoot = new ChkElement(this, _element, _xElement, ignore);
+
 			String s = uri!=null&&uri.length()>0 ? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
@@ -1207,9 +1247,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						(Byte) yClass.getDeclaredField("JSON").get(null);
 					if (jVersion > 0) {
 						XElement xe = selectRoot(jmodel,
-							jVersion == 1 ? XDConstants.JSON_NS_URI_W3C
-								: XDConstants.JSON_NS_URI,
-							-1);
+							XDConstants.JSON_NS_URI_W3C, -1);
 						if (xe != null && xe._json != 0) {
 							break;
 						}
