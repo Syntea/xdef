@@ -371,16 +371,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				//Illegal element '&{0}'
 				error(XDEF.XDEF557, element.getNodeName());
 			}
-			result =
-				new ChkElement(this, el, _xElement.createAnyDefElement(), true);
+			result = new ChkElement(this,
+				el, _xElement.createAnyDefElement(), true);
 			if (el != null) {
 				el.removeChild(element);
 			}
 		}
-		boolean ignoreAll = false;
 		if (result == null) {
 			if (_xElement._moreElements!='T' && _xElement._moreElements!='I') {
-				ignoreAll = true;
 				debugXPos(XDDebug.ONILLEGALELEMENT);
 				if (_xElement._onIllegalElement >= 0) {
 					_elemValue = _element;
@@ -394,14 +392,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					error(XDEF.XDEF501, element.getNodeName());
 				}
 				result = new ChkElement(this,
-					element, _xElement.createAnyDefElement(), ignoreAll);
+					element, _xElement.createAnyDefElement(), true);
 			} else {//moreElements || ignoreOther
 				_nextDefIndex = nextDefIndex;
 				_actDefIndex = actDefIndex;
 				result = new ChkElement(this,
 					element,
 					_xElement.createAnyDefElement(),
-					_ignoreAll || ignoreAll || _xElement._moreElements == 'I');
+					_ignoreAll || _xElement._moreElements == 'I');
 			}
 		}
 		_chkChildNodes.add(result);
@@ -1603,8 +1601,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_xComponent.xSetAttr(this, _parseResult);
 					}
 				} else {
-					//Value error
-					_parseResult.error(XDEF.XDEF515);
+					//XDEF515=Value error&{0}{ :}
+					_parseResult.putDefaultParseError();
 				}
 			}
 		} else {//default: do not check; i.e. always true
@@ -3064,7 +3062,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						} else {
 							_parseResult = new DefParseResult(_data);
 							if (!item.booleanValue()) {
-								_parseResult.error(XDEF.XDEF515); //Value error
+								//XDEF515=Value error&{0}{ :}
+								_parseResult.putDefaultParseError();
 							}
 						}
 						if (_parseResult.matches()) {

@@ -21,7 +21,8 @@ public class XSParseToken extends XSAbstractParseToken {
 		}
 		String s = p.nextToken();
 		if (s == null) {
-			p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.error(XDEF.XDEF809, parserName(), s);
 			return;
 		}
 		String token;

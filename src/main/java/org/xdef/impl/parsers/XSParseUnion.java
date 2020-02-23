@@ -125,8 +125,8 @@ public class XSParseUnion extends XSAbstractParser {
 					}
 				}
 				if (!found) {
-					//Doesn't fit enumeration list of '&{0}'
-					p.error(XDEF.XDEF810, parserName());
+					//Doesn't fit enumeration list of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF810, parserName());
 					return;
 				}
 			}
@@ -136,8 +136,8 @@ public class XSParseUnion extends XSAbstractParser {
 					p.isSpaces();
 				}
 				if (!p.eos()) {
-					//After the item '&{0}' follows an illegal character
-					p.error(XDEF.XDEF804, parserName());
+					//After the item '&{0}' follows an illegal charactere&{1}{: }
+					p.errorWithString(XDEF.XDEF804, parserName());
 					p.setBufIndex(pos);
 					continue;
 				}
@@ -146,7 +146,8 @@ public class XSParseUnion extends XSAbstractParser {
 			return;
 		}
 		p.setBufIndex(pos);
-		p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		//Incorrect value of '&{0}'&{1}{: }
+		p.errorWithString(XDEF.XDEF809, parserName());
 	}
 	@Override
 	public void addNamedParams(XDContainer map) {

@@ -1,0 +1,6 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test014' xd:root='a'>
+<xd:json name='a'>
+{"a":{"b":"jnumber()"}}
+
+</xd:json>
+</xd:def>

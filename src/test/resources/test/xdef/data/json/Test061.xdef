@@ -1,0 +1,19 @@
+<xd:collection xmlns:xd="http://www.xdef.org/xdef/4.0">
+<xd:def name="Test061" root="a">
+<xd:json name="a">
+[ "jvalue()",
+  {
+    $script: "occurs 1..*; ref B#person"
+  }
+]
+</xd:json>
+</xd:def>
+<xd:def name="B">
+<xd:json name="person">
+{ "jmeno": "jvalue()",
+  "plat": "jvalue()",
+  "nar": "jvalue()"
+}
+</xd:json>
+</xd:def>
+</xd:collection>

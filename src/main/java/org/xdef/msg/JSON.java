@@ -41,10 +41,12 @@ public interface JSON {
 	public static final long JSON018 = 13834649617L;
 	/** Comments are not allowed here&amp;{#SYS000} */
 	public static final long JSON019 = 13834649618L;
+	/** Redundant comma&amp;{#SYS000} */
+	public static final long JSON020 = 13834649619L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649619L;
+	public static final long JSON_DESCRIPTION = 13834649620L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649620L;
+	public static final long JSON_LANGUAGE = 13834649621L;
 
 	/** Default language. */
 	public static final String JSON = "eng";

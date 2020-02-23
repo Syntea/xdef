@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 
 /** Parser of Schema "NMTOKEN" type.
@@ -20,8 +21,9 @@ public class XSParseNMTOKEN extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		String token = p.nextToken();
-		if (!StringParser.chkNMToken(token, (byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		if (!StringParser.chkNMToken(token, XConstants.XML10)) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);

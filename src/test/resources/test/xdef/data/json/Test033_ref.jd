@@ -7,13 +7,13 @@
 <js:X2a>
 [
     "jvalue();",
-    "xd:script occurs 1..*; ref js:person"
+    "xd:script occurs 1..* ref js:person"
 ]
 </js:X2a>
 
 <js:person>
 {
-   "jmeno": "jvalue();",
+   "jmeno": "jvalue()",
    "plat": "jvalue()",
    "nar": "jvalue()"
 }

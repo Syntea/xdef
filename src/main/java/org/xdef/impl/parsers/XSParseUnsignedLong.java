@@ -27,7 +27,8 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		int totalDigits = 0;
 		int i;
 		if ((i = p.isDigit()) < 0) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (i > 0) {
 			totalDigits++;
@@ -42,20 +43,20 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		p.replaceParsedBufferFrom(pos0, s);
 		BigDecimal val;
 		try {
-			val = new BigDecimal(plus ? s.substring(1) : s);
+			val = new BigDecimal(plus ? s = s.substring(1) : s);
 			if (val.signum() < 0 ||	val.compareTo(MAX_VALUE) > 0) {
 				throw new Exception();
 			}
 		} catch (Exception ex) {
-			//Value of '&{0}' is out of range'
-			p.error(XDEF.XDEF806, parserName());
+			//Value of '&{0}' is out of range&{1}{: }
+			p.error(XDEF.XDEF806, parserName(), s);
 			return;
 		}
 		p.setParsedValue(new DefDecimal(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
-				//Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813,parserName(), "totalDigits");
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+				p.error(XDEF.XDEF813,parserName(), "totalDigits", val);
 				return;
 			}
 		}

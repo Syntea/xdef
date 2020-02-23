@@ -30,14 +30,16 @@ public class XDParseEmail extends XDParserAbstract {
 		final String s,
 		final String parserName) {
 		if (s == null || s.isEmpty()) {
-			p.error(XDEF.XDEF809, parserName); //Incorrect value of &{0}
+			//Incorrect value of &{0}&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName);
 		} else {
 			String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*"
 				+ "@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 			if (s.matches(emailregex)) {
 				return true;
 			}
-			p.error(XDEF.XDEF809, parserName); //Incorrect value of &{0}
+			//Incorrect value of &{0}&{1}&{: }
+			p.errorWithString(XDEF.XDEF809, parserName);
 		}
 		return false;
 	}

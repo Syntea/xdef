@@ -1903,9 +1903,10 @@ public final class CompileCode extends CompileBase {
 							if (val == null) {
 								h.setXDNamedItem(parName,par.getDefaultValue());
 								len++;
-							} else if (!val.equals(val)) {
-								//Incorrect value of '&{0}'
-								_parser.error(XDEF.XDEF809, parName);
+							} else if (!val.equals(par)) {
+								//Incorrect value of '&{0}'&{1}{: }
+								_parser.error(XDEF.XDEF809, parName,
+									"\"" + val + '"');
 							}
 						} else if (par.isRequired() && val == null) {
 							//Missing required parameter: &{0}

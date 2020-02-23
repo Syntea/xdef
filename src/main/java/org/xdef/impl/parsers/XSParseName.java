@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 
 /** Parser of Schema "Name" type.
@@ -20,8 +21,9 @@ public class XSParseName extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isXMLName((byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		if (!parser.isXMLName(XConstants.XML10)) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = parser.getParsedString();

@@ -86,8 +86,8 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			} else {
 				if (!p.eos()) {
 					p.setEos();
-					//Incorrect value of '&{0}'
-					p.error(XDEF.XDEF809, parserName());
+					//Incorrect value of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF809, parserName());
 					return;
 				}
 				if (_whiteSpace == 'r') { //replace
@@ -97,11 +97,11 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			p.setParsedValue(s);
 			int len = s.length();
 			if (_maxLength != -1 && len > _maxLength) {
-				//Length of value of '&{0}' is too long
-				p.error(XDEF.XDEF815, ROOTBASENAME);
+				//Length of value of '&{0}' is too long&{0}'{: }
+				p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
 			} else if (_minLength != -1 && len < _minLength) {
-				//Length of value of '&{0}' is too short
-				p.error(XDEF.XDEF814, ROOTBASENAME);
+				//Length of value of '&{0}' is too short&{0}'{: }
+				p.errorWithString(XDEF.XDEF814, ROOTBASENAME, s);
 			}
 			checkPatterns(p);
 			checkEnumeration(p);

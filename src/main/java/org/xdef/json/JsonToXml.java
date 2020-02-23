@@ -31,7 +31,7 @@ public class JsonToXml extends JsonUtil {
 	/** JSON null item. */
 	public static final String J_NULL = "null";
 	/** JSON map key attribute name. */
-	public static final String J_KEYATTRW3C = "key";
+	public static final String J_KEYATTRNAME = "key";
 	/** JSON any item with JSON value (XDEF mode), */
 	public static final String J_ITEM = "item";
 
@@ -39,10 +39,6 @@ public class JsonToXml extends JsonUtil {
 	public String _jsPrefix = XDConstants.JSON_NS_PREFIX;
 	/** JSON namespace. */
 	public String _jsNamespace = XDConstants.JSON_NS_URI;
-	/** Prefix of X-definition namespace. */
-	public String _xdPrefix = XDConstants.XDEF_NS_PREFIX;
-	/** Namespace of X-definition.*/
-	public String _xdNamespace = XDConstants.XDEF32_NS_URI;
 
 	/** Document used to create X-definition. */
 	private Document _doc;
@@ -71,7 +67,7 @@ public class JsonToXml extends JsonUtil {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
 			|| val instanceof String || val instanceof JValue
-			&& ((o=((JValue) val).getObject()) == null || o instanceof Number
+			&& ((o=((JValue) val).getValue()) == null || o instanceof Number
 				|| o instanceof Boolean || o instanceof String);
 	}
 
@@ -221,24 +217,24 @@ public class JsonToXml extends JsonUtil {
 	}
 
 	/** Append array of JSON values to node.
-	 * @param list list with array of values.
+	 * @param array list with array of values.
 	 * @param parent node where to append array.
 	 */
-	private void listToNodeXD(final List list, final Node parent) {
-		if (list.size() == 2 && list.get(0) instanceof Map
-			&& isSimpleValue(list.get(1))) { // map and value
-			Element e = mapToXmlXD((Map) list.get(0), parent);
-			addValueAsText(e, list.get(1));
+	private void arrayToNodeXD(final List array, final Node parent) {
+		if (array.size() == 2 && array.get(0) instanceof Map
+			&& isSimpleValue(array.get(1))) { // map and value
+			Element e = mapToXmlXD((Map) array.get(0), parent);
+			addValueAsText(e, array.get(1));
 			return;
 		}
 		Element e = appendJSONElem(parent, J_ARRAY);
-		for (Object x: list) {
+		for (Object x: array) {
 			if (x == null) {
 				addValueToNodeXD(e, null);
 			} else if (x instanceof Map) {
 				mapToXmlXD((Map) x, e);
 			} else if (x instanceof List) {
-				listToNodeXD((List)x,  e);
+				arrayToNodeXD((List)x,  e);
 			} else {
 				addValueToNodeXD(e, x);
 			}
@@ -325,7 +321,7 @@ public class JsonToXml extends JsonUtil {
 			return e;
 		} else if (val instanceof List) {
 			Element e = appendElem(parent, namespace, name);
-			listToNodeXD((List) val, e);
+			arrayToNodeXD((List) val, e);
 			_ns.popContext();
 			return e;
 		} else {
@@ -377,7 +373,7 @@ public class JsonToXml extends JsonUtil {
 				return;
 			}
 			if (json instanceof List) {
-				listToNodeXD((List) json, parent);
+				arrayToNodeXD((List) json, parent);
 				return;
 			}
 		}
@@ -439,7 +435,7 @@ public class JsonToXml extends JsonUtil {
 			Map.Entry entry = (Map.Entry) it.next();
 			String key = (String) entry.getKey();
 			Element ee = genValueW3C(entry.getValue(), e);
-			ee.setAttribute(J_KEYATTRW3C, key);
+			ee.setAttribute(J_KEYATTRNAME, key);
 		}
 		return e;
 	}

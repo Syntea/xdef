@@ -63,7 +63,8 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		p.setParsedValue(val);
 		String token = p.nextToken();
 		if (token == null || !StringParser.chkXMLName(token, (byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		val.addXDItem(new DefString(token));
@@ -93,16 +94,16 @@ public class XSParseENTITIES extends XSAbstractParseString {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}
 		if (_minLength!=-1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName());
 		} else if (_maxLength!=-1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815,parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815,parserName());
 		}
 		if (_enumeration != null) {
 			boolean found = false;
@@ -113,40 +114,40 @@ public class XSParseENTITIES extends XSAbstractParseString {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}
 		if (_minLength != -1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short",
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short"&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName());
 		}
 		if (_maxLength != -1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 		if (isFinal) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			} else {
 				finalCheck(xnode, p);
 			}
 		}
 	}
 	@Override
-	public void finalCheck(final XXNode xnode, final XDParseResult result) {
+	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			result.error(XDEF.XDEF573, //Null value of &{0}"
+			p.error(XDEF.XDEF573, //Null value of &{0}"
 				"xnode; in XSParseENTITIES.check(parser, xnode);");
 			return;
 		}
-		DefContainer val = (DefContainer) result.getParsedValue();
+		DefContainer val = (DefContainer) p.getParsedValue();
 		for (int i = 0; i < val.getXDItemsNumber(); i++) {
 			String id = val.getXDItem(i).toString();
 			if (!XSParseENTITY.chkEntity(id, xnode.getElement())) {
-				//Incorrect value of '&{0}'
-				result.error(XDEF.XDEF809, parserName()+": "+id);
+				//Incorrect value of '&{0}'&{1}{: }
+				p.error(XDEF.XDEF809, parserName(), id);
 			}
 		}
 	}

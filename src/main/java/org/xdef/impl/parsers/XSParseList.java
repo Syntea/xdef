@@ -111,8 +111,8 @@ public class XSParseList extends XSAbstractParser {
 		DefContainer results = new DefContainer();
 		if (t == null) {
 			if (_minLength > 0) {
-				//"Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813, parserName(), "minLength");
+				//"Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+				p.error(XDEF.XDEF813, parserName(), "minLength", t);
 			}
 			return;
 		}
@@ -122,9 +122,9 @@ public class XSParseList extends XSAbstractParser {
 		while(t.length() > 0) {
 			count++;
 			if (_maxLength != -1 && count > _maxLength) {
-				//"Value of '&{0}' doesn't fit to '&{1}'
+				//"Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 				p.error(XDEF.XDEF813, parserName(),
-					(_maxLength == _minLength?"length":"maxLength"));
+					(_maxLength == _minLength?"length":"maxLength"), t);
 				return;
 			}
 			if (count == 1) {
@@ -158,8 +158,8 @@ public class XSParseList extends XSAbstractParser {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		if (_minLength != -1 && count < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName());
 			return;
 		}
 		if (_enumeration != null) {
@@ -171,8 +171,8 @@ public class XSParseList extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 				return;
 			}
 		}

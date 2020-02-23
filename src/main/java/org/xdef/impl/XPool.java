@@ -829,7 +829,7 @@ public final class XPool implements XDPool, Serializable {
 			return null;
 		}
 		if ("*".equals(path)) {
-			return xd._rootSelection!=null ? xd._rootSelection .get("*") : null;
+			return xd._rootSelection .get("*");
 		}
 		if (path.length() == 0) {
 			return xd;
@@ -1213,7 +1213,7 @@ public final class XPool implements XDPool, Serializable {
 		for(String name: _xdefs.keySet()) {
 			xw.writeString(name);
 			XDefinition xd = getDefinition(name);
-			len = xd._rootSelection == null ? 0 : xd._rootSelection.size();
+			len = xd._rootSelection.size();
 			xw.writeLength(len);
 			//here are references to models, so we write names and XPositions!
 			for (String key: xd._rootSelection.keySet()){

@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
@@ -22,8 +23,9 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isNMToken((byte) 10)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+		if (!parser.isNMToken(XConstants.XML10)) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		String s = parser.getParsedString();
@@ -31,8 +33,9 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		DefContainer val = new DefContainer();
 		val.addXDItem(new DefString(s));
 		while (parser.isSpaces() && !parser.eos()) {
-			if (!parser.isNMToken((byte) 10)) {
-				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			if (!parser.isNMToken(XConstants.XML10)) {
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 				return;
 			}
 			sb.append(' ').append(s = parser.getParsedString());
@@ -51,8 +54,8 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 				return;
 			}
 		}
@@ -69,17 +72,17 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 				return;
 			}
 		}
 		if (_minLength!=-1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'&{1}
+			p.errorWithString(XDEF.XDEF814, parserName(), val);
 		} else if (_maxLength!=-1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 	}
 	@Override

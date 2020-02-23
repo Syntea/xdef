@@ -57,11 +57,14 @@ public class SPosition {
 	 * @param sysId system ID or null.
 	 * @param pubId public ID or null.
 	 */
-	public SPosition(int line, int column, String sysId, String pubId) {
+	public SPosition(final int line,
+		final int column,
+		final String sysId,
+		final String pubId) {
 		_bufIndex = column > 0 ? column - 1 : 0;
 		_line = line == 0 ? 0 : line < 0 ? Integer.MAX_VALUE - line : line;
 		_sysId = pubId == null ? sysId : sysId == null
-			? "$pubid[" + pubId + ']' : (sysId += "$pubid[" + pubId + ']');
+			? "$pubid[" + pubId + ']' : (sysId + "$pubid[" + pubId + ']');
 //		_modificationInfo = null; _filePos = _startLine = 0L; //Java makes it!
 	}
 
@@ -107,11 +110,14 @@ public class SPosition {
 	 * @param sysId system ID or null.
 	 * @param pubId public ID or null.
 	 */
-	public void setPosition(int line, int column, String sysId, String pubId) {
+	public final void setPosition(final int line,
+		final int column,
+		final String sysId,
+		final String pubId) {
 		_bufIndex = column > 0 ? column - 1 : 0;
 		_line = line == 0 ? 0 : line < 0 ? Integer.MAX_VALUE - line : line;
 		_sysId = pubId == null ? sysId : sysId == null
-			? "$pubid[" + pubId + ']' : (sysId += "$pubid[" + pubId + ']');
+			? "$pubid[" + pubId + ']' : (sysId + "$pubid[" + pubId + ']');
 		_filePos = 0L;
 		_startLine = 0L;
 		_modificationInfo = null;
@@ -559,7 +565,7 @@ public class SPosition {
 	 * @param len length of text in buffer described by this position.
 	 * @param fixed if true then internal position is not printed.
 	 */
-	void appendPos(final int pos,
+	final void appendPos(final int pos,
 		final SPosition spos,
 		final int len,
 		final boolean fixed) {
@@ -752,7 +758,7 @@ public class SPosition {
 		return sb.toString();
 	}
 
-	public void writeObj(SObjectWriter w) throws IOException {
+	public final void writeObj(final SObjectWriter w) throws IOException {
 		w.writeInt(_bufIndex);
 		w.writeLong(_line);
 		w.writeLong(_startLine);
@@ -771,7 +777,8 @@ public class SPosition {
 		}
 	}
 
-	public static SPosition readObj(SObjectReader r) throws IOException {
+	public static final SPosition readObj(final SObjectReader r)
+		throws IOException {
 		SPosition x = new SPosition();
 		x._bufIndex = r.readInt();
 		x._line = r.readLong();

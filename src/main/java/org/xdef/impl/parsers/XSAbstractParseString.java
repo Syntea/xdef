@@ -164,9 +164,6 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		if (s == null) {
 			s = "";
 		}
-//		if (_trimTo && s.length() > _maxLength) {
-//			s = s.substring(0, (int) _maxLength);
-//		}
 		p.replaceParsedBufferFrom(pos0, s);
 		p.setParsedValue(s);
 		checkPatterns(p);
@@ -176,11 +173,11 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
 			if (_minLength != -1 && s.length() < _minLength) {
-				//Length of value of '&{0}' is too short",
-				p.error(XDEF.XDEF814, parserName());
+				//Length of value of '&{0}' is too short"&{0}'&{1}
+				p.errorWithString(XDEF.XDEF814, parserName());
 			} else if (_maxLength != -1 && s.length() > _maxLength) {
-				//Length of value of '&{0}' is too long
-				p.error(XDEF.XDEF815, parserName());
+				//Length of value of '&{0}' is too long&{0}'{: }
+				p.errorWithString(XDEF.XDEF815, parserName());
 			}
 		}
 	}
@@ -219,8 +216,8 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of &{0}
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of &{0}&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			} else {
 				p.setParsedValue(_enumeration[i]);
 			}

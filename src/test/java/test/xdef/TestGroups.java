@@ -2361,6 +2361,29 @@ public final class TestGroups extends XDTester {
 			assertEq("ia ib1 iT1 fT1 fb1 iSQ1 iT2 fT2 ic1 fc1 fSQ1 iT2 fT2 ic1"
 				+ " fc1 fSQ1 fSQ1 fSQ1 ib2 iT3 fT3 fb2 iSQ2 iT4 fT4 ic2 fc2"
 				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", strw.toString());
+			// test reference to choice from root selection
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:choice name = 'A'>\n" +
+"  <X xd:script='match @a' a='int'/>\n" +
+"  <X xd:script='match @b' b='string'/>\n" +
+"  <Y/>\n" +
+"</xd:choice>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<X a='1'/>";
+			assertEq(xml, parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xml = "<X b='x'/>";
+			assertEq(xml, parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xml = "<Y/>";
+			assertEq(xml, parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			parse(xp,"", "<X/>", reporter);
+			assertTrue(reporter.printToString().contains("XDEF502"));
+			parse(xp,"", "<Z/>", reporter);
+			assertTrue(reporter.printToString().contains("XDEF502"));
 		} catch (Exception ex) {fail(ex);}
 		try {//Sisma
 			xml = dataDir + "TestGroups01.xml";

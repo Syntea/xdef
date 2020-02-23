@@ -3291,7 +3291,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			case XD_BOOLEAN:
 				y =	new DefParseResult(chkElem.getTextValue());
 				if (!x.booleanValue()) {
-					y.error(XDEF.XDEF515); //Value error
+					y.putDefaultParseError(); //XDEF515 value error&{0}{ :}
 				}
 				break;
 			case XD_PARSERESULT:

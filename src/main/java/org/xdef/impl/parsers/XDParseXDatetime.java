@@ -60,8 +60,8 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!(parser.isDatetime(_format) && parser.testParsedDatetime())) {
-			//Incorrect value of '&{0}'
-			p.error(XDEF.XDEF809, parserName() + " (" + _format + ")");
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName() + " ("+_format+")");
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
@@ -70,7 +70,8 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.setBufIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		if (!d.chkDatetime()) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
 			//Range of values of year of date must be from &{0} to &{1}'

@@ -661,11 +661,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator.setIgnoreExternalMethods(false);
 	}
 
-	/** Compile lexicon.
+	/** Compile lexicons.
 	 * @param lexicon list of lexicon declarations.
 	 * @param xp XDPool object.
 	 */
-	private void compileLexicon(final List<PNode> lexicon,
+	private void compileLexicons(final List<PNode> lexicon,
 		final XDPool xp) {
 		if (!lexicon.isEmpty()) { //Compile lexicon section
 			/** Array of properties for lexicon languages. */
@@ -1480,7 +1480,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
 				SBuffer sb = _precomp.getXdefAttr(pnode, "name", false, true);
 				if (sb == null) {
-					sb = new SBuffer("_json_", pnode._name);
+					sb = new SBuffer("json", pnode._name);
 					//The name of JSON model is required
 					error(pnode._name, XDEF.XDEF317);
 				} else {
@@ -1490,14 +1490,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sb, XDEF.XDEF316, s);
 					}
 				}
-				pnode._name = sb;
 				for (PAttr pattr:  pnode._attrs) {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				pnode._nsURI = null; // set no namespace
-				pnode._nsindex = -1;
-				XJson.genXdef(pnode, jsonMode , _precomp.getReportWriter());
+				XJson.genXdef(pnode, jsonMode, sb, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {
@@ -1584,71 +1581,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.setSource(sval, defName, def.getXDVersion());
 			_scriptCompiler.compileXDHeader(def);
 		}
-		sval = _precomp.getXdefAttr(pnode, "root", false, true);
-		if (sval != null) {
-			_scriptCompiler.setSource(sval,
-				defName, pnode._xdVersion, pnode._nsPrefixes);
-			while (true) {
-				_scriptCompiler.skipSpaces();
-				SPosition pos = new SPosition(_scriptCompiler);
-				String refName;
-				String nsURI = null;
-				if (_scriptCompiler.isChar('*')) {
-					refName = "*"; //any
-				} else if (_scriptCompiler.isXModelPosition()) {
-					refName = _scriptCompiler.getParsedString();
-					//get NSUri of the reference identifier.
-					int ndx = refName.indexOf('#') + 1;
-					int ndx1 = refName.indexOf(':', ndx);
-					Object obj;
-					if (ndx1 > 0) {// get nsURI assigned to the prefix
-						String prefix = refName.substring(ndx, ndx1);
-						if ((obj = pnode._nsPrefixes.get(prefix)) == null) {
-							//Namespace for prefix '&{0}' is undefined
-							sval.putReport(Report.error(XDEF.XDEF257, prefix),
-								_scriptCompiler.getReportWriter());
-						}
-					} else {
-						obj = pnode._nsPrefixes.get("");
-					}
-					if (obj != null) {
-						nsURI = _scriptCompiler._g._namespaceURIs.get(
-							((Integer) obj));
-					}
-				} else {
-					//Reference to element model expected
-					_scriptCompiler.error(pos, XDEF.XDEF213);
-					break;
-				}
-				XNode xn = new CompileReference(
-					CompileReference.XMREFERENCE, def, nsURI, refName, pos);
-				if (def._rootSelection.containsKey(xn.getName())) {
-					//Repeated root selection &{0}
-					_scriptCompiler.error(pos, XDEF.XDEF231, refName);
-				} else {
-					def._rootSelection.put(xn.getName(), xn);
-				}
-				_scriptCompiler.skipBlanksAndComments();
-				if (!_scriptCompiler.isChar('|')) {
-					break;
-				}
-			}
-			_scriptCompiler.skipBlanksAndComments();
-			if (!_scriptCompiler.eos()) {
-				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
-			}
-		}
-
-		//process attributes of XDefinition
-		for (PAttr pattr:  pnode._attrs) {
-			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
-				def._properties.put(pattr._name.substring(5),
-					pattr._value.getString());
-			} else {// unknown name
-				//Attribute '&{0}' not allowed here
-				error(pattr._value, XDEF.XDEF254, pattr._name);
-			}
-		}
 		if (_xdefs.containsKey(def.getName())) {
 			//XDefinition '&{0}' already exists
 			error(XDEF.XDEF303, def.getName());
@@ -1715,6 +1647,91 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = actDefName;
 	}
 
+
+	/** Compile root selection from xd:def header.
+	 * @param pnode PNode item.
+	 */
+	private void compileRootSelection(final PNode pnode) {
+		String defName = pnode._xdef.getName();
+		_scriptCompiler._actDefName = defName;
+		XDefinition def = pnode._xdef;
+		SBuffer sval = _precomp.getXdefAttr(pnode, "root", false, true);
+		if (sval != null) {
+			_scriptCompiler.setSource(sval,
+				defName, pnode._xdVersion, pnode._nsPrefixes);
+			while (true) {
+				_scriptCompiler.skipSpaces();
+				SPosition pos = new SPosition(_scriptCompiler);
+				String refName;
+				String nsURI = null;
+				if (_scriptCompiler.isChar('*')) {
+					refName = "*"; //any
+				} else if (_scriptCompiler.isXModelPosition()) {
+					refName = _scriptCompiler.getParsedString();
+					//get NSUri of the reference identifier.
+					int ndx = refName.indexOf('#') + 1;
+					int ndx1 = refName.indexOf(':', ndx);
+					Object obj;
+					if (ndx1 > 0) {// get nsURI assigned to the prefix
+						String prefix = refName.substring(ndx, ndx1);
+						if ((obj = pnode._nsPrefixes.get(prefix)) == null) {
+							//Namespace for prefix '&{0}' is undefined
+							sval.putReport(Report.error(XDEF.XDEF257, prefix),
+								_scriptCompiler.getReportWriter());
+						}
+					} else {
+						obj = pnode._nsPrefixes.get("");
+					}
+					if (obj != null) {
+						nsURI = _scriptCompiler._g._namespaceURIs.get(
+							((Integer) obj));
+					}
+				} else {
+					//Reference to element model expected
+					_scriptCompiler.error(pos, XDEF.XDEF213);
+					break;
+				}
+				CompileReference xref = new CompileReference(
+					CompileReference.XMREFERENCE, def, nsURI, refName, pos);
+				if (def._rootSelection.containsKey(xref.getName())) {
+					//Repeated root selection &{0}
+					_scriptCompiler.error(pos, XDEF.XDEF231, refName);
+				} else {
+					XNode x = xref.getTargetModel();
+					if (x == null) { //Unresolved reference
+						xref.putTargetError(getReportWriter());
+					} else {
+						if (pnode._xdVersion < XConstants.XD40
+							&& x.getName().endsWith("$choice")) {
+							//Reference to "xd:choice" in the "xd:root"
+							// attribute is allowed in versions 4.0 and higher
+							_scriptCompiler.warning(pos, XDEF.XDEF803);
+						}
+						def._rootSelection.put(xref.getName(), x);
+					}
+				}
+				_scriptCompiler.skipBlanksAndComments();
+				if (!_scriptCompiler.isChar('|')) {
+					break;
+				}
+			}
+			_scriptCompiler.skipBlanksAndComments();
+			if (!_scriptCompiler.eos()) {
+				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
+			}
+		}
+		//process attributes of XDefinition
+		for (PAttr pattr:  pnode._attrs) {
+			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5){
+				def._properties.put(pattr._name.substring(5),
+					pattr._value.getString());
+			} else {// unknown name
+				//Attribute '&{0}' not allowed here
+				error(pattr._value, XDEF.XDEF254, pattr._name);
+			}
+		}
+	}
+
 	/** Get identifier of type from a model.*/
 	private static short getTypeId(XMNode xn) {
 		if (xn.getKind() == XMNode.XMELEMENT) {
@@ -1724,18 +1741,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			XDValue p = ((XData)xn).getParseMethod();
 			return p.getItemId() == XDValueID.XD_PARSER ?
 				((XDParser) p).parsedType() : XDValueID.XD_STRING;
-		}
-	}
-
-	private void setRootSelectionFromChoice(final Map<String, XNode> selection,
-		final XChoice xch,
-		final XElement x) {
-		for (int i = xch.getBegIndex() + 1; i < xch.getEndIndex(); i++) {
-			XNode y = x._childNodes[i];
-			if (selection.put(y.getName(),y)!=null) {
-				//The name of element in the root xd:choice must be unique&{0}
-				error(XDEF.XDEF364, y.getXDPosition());
-			}
 		}
 	}
 
@@ -1765,77 +1770,38 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (PNode p: _xdefPNodes) {
 			compileXDefinition(p);
 		}
-		//just let GC do the job;
-		_xdefPNodes.clear();
-		_sources.clear();
-		_nodeList.clear();
 		boolean result = true;
+		//just let GC do the job;
 		//check integrity of all XDefinitions
 		HashSet<XNode> hs = new HashSet<XNode>();
 		for (XDefinition x : _xdefs.values()) {
-			for (XElement xel: x.getXElements()) {
-				result &= checkIntegrity(xel, 0, hs);
+			for (XMElement xel: x.getModels()) {
+				result &= checkIntegrity((XElement) xel, 0, hs);
 			}
 		}
 		//process clearing of adopted forgets
 		hs.clear();
 		for (XDefinition x: _xdefs.values()) {
-			for (XElement xel: x.getXElements()) {
-				clearAdoptedForgets(xel, false, hs);
+			for (XMElement xel: x.getModels()) {
+				clearAdoptedForgets((XElement) xel, false, hs);
 			}
 		}
 		hs.clear();
 		//update selectors
 		for (XDefinition x : _xdefs.values()) {
-			XElement[] elems = x.getXElements();
-			for (XElement xe: elems) {
-				updateSelectors(xe, 0, null, false, false, hs);
+			for (XMElement xel: x.getModels()) {
+				updateSelectors((XElement) xel, 0, null, false, false, hs);
 			}
 		}
 		hs.clear(); //let's gc do the job
 		//resolve root references for all XDefinitions
-		for (XDefinition d : _xdefs.values()) {
-			Map<String, XNode> rootSelection =new LinkedHashMap<String,XNode>();
-			for (Map.Entry<String, XNode> entry: d._rootSelection.entrySet()) {
-				try {
-					XNode xnode = entry.getValue();
-					if (xnode.getKind() == CompileReference.XMREFERENCE) {
-						CompileReference xref = (CompileReference) xnode;
-						XElement x = xref.getTargetXElement();
-						if (x == null) { //Unresolved reference
-							// try named choice
-							if ((x = xref.getTargetXChoice()) != null) {
-								setRootSelectionFromChoice(rootSelection,
-									(XChoice) x._childNodes[0], x);
-							} else {
-								xref.putTargetError(getReportWriter());
-							}
-						} else if (x._json != 0 && x._childNodes.length > 0
-							&& x._childNodes[0].getKind() == XMNode.XMCHOICE) {
-							if (rootSelection.put(xref.getName(), x) != null) {
-								error(XDEF.XDEF309, //Internal error: &{0}
-									"reference to element model expected");
-							}
-						} else {
-							if (rootSelection.put(xref.getName(), x) != null) {
-								error(XDEF.XDEF309, //Internal error: &{0}
-									"reference to element model expected");
-							}
-						}
-					} else {
-						error(XDEF.XDEF309, //Internal error: &{0}
-							"reference to element model expected");
-						result = false;
-					}
-				} catch(SRuntimeException ex) {
-					_precomp.putReport(ex.getReport());
-					result = false;
-					break;
-				}
-				d._rootSelection = rootSelection;
-			}
+		for (PNode p: _xdefPNodes) {
+			compileRootSelection(p);
 		}
-		compileLexicon(_lexicon, xdp); // compile lexicon
+		compileLexicons(_lexicon, xdp); // compile lexicon
+		_xdefPNodes.clear(); // Let GC make the job
+		_sources.clear();
+		_nodeList.clear();
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
 		} else {
@@ -2019,8 +1985,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			// Note this must be done after all referrences are resolved
 			boolean errs = getReportWriter().errors();
 			for (CompileReference xref : _scriptCompiler._implList) {
-				XElement xel2 = xref.getTargetXElement();
-				if (xel2 == null) { //Unresolved reference
+				XNode xn = xref.getTargetModel();
+				if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
+					//Unresolved reference
 					xref.putTargetError(getReportWriter());
 				} else {
 					SPosition spos = xref.getSPosition();
@@ -2029,7 +1996,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						//Comparing of models is skipped due to previous errors
 						_precomp.putReport(Report.lightError(XDEF.XDEF229));
 					} else {
-						ArrayReporter rp = xel2.compareModel(
+						ArrayReporter rp = ((XElement) xn).compareModel(
 							(XElement) xref._parent, xref.getKind()==1);
 						if (rp != null) {
 							Report rep;
@@ -2110,26 +2077,32 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Resolve references.
 	 * @param xel the XElement.
 	 * @param level The recursion level.
-	 * @param ingnoreOccurrence if <tt>true</tt> the occurrence specification
+	 * @param ignoreOccurrence if <tt>true</tt> the occurrence specification
 	 * from the referred object is ignored.
 	 * @param ar node list.
 	 * @return true if reverence was resolved.
 	 */
 	private boolean resolveReference(final XElement xel,
 		final int level,
-		final boolean ingnoreOccurrence,
+		final boolean ignoreOccurrence,
 		final HashSet<XNode> hs) {
 		boolean result = true;
 		int lenx;
 		if ((lenx = xel._childNodes.length) > 0
 			&& (xel._childNodes[0].getKind() == CompileReference.XMREFERENCE)) {
 			CompileReference xref = (CompileReference) xel._childNodes[0];
-			XElement y = xref.getTargetXElement();
-			if (y == null) {
+			XNode x = xref.getTargetModel();
+			if (x == null || x.getKind() != XMNode.XMELEMENT) {
 				xref.putTargetError(getReportWriter()); //Unresolved reference
 				xel._childNodes = new XNode[0];
 				return false;
-			} else if (y == xel  //self reference
+			}
+			XElement y = (XElement) x;
+//			if (y._json > 0 && y._childNodes.length == 1
+//				&& y._childNodes[0].getKind() == XMNode.XMELEMENT) {
+//				y = (XElement) y._childNodes[0];
+//			}
+			if ((y = (XElement) x) == xel  //self reference
 				&& xel._childNodes.length==1 && xel.getAttrs().length==0) {
 				//Self reference is not allowed: &{0}
 				error(xref.getSPosition(), XDEF.XDEF321, xref.getXDPosition());
@@ -2145,7 +2118,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
 				return false;
 			} else if (!resolveReference(
-				y, level+1, ingnoreOccurrence && xel.isSpecified(), hs)) {
+				y, level+1, ignoreOccurrence && xel.isSpecified(), hs)) {
 				return false;
 			} else if (!checkIntegrity(y, level+1, hs)) {
 				return false;
@@ -2332,8 +2305,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
 				return false;
 			}
-			XElement y = xref.getTargetXElement();
-			if (y == null) {
+			XNode x = xref.getTargetModel();
+			if (x == null) {
 				xref.putTargetError(getReportWriter());//Unresolved reference
 				XElement xe = new XElement("?", null, xel._definition);
 				xe.setSPosition(xref.getSPosition());
@@ -2343,9 +2316,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				result = false;
 				continue;
 			}
-			result &= resolveReference(y, level+1,
-				ingnoreOccurrence && xel.isSpecified(),
-				hs);
+			XElement y = (XElement) x;
+			result &= resolveReference(y,
+				level+1, ignoreOccurrence && xel.isSpecified(), hs);
 			int leny = y._childNodes.length;
 			boolean isList = y.getName().endsWith("!list");
 			y = new XElement(y); //create clone of an element

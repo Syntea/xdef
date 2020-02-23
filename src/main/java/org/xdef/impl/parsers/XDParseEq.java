@@ -25,7 +25,8 @@ public class XDParseEq extends XDParserAbstract {
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		if (!_param.equals(s)) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			p.setEos();
 		}
@@ -36,7 +37,8 @@ public class XDParseEq extends XDParserAbstract {
 		if (p.isToken(_param)) {
 			p.setParsedValue(_param);
 		} else {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 	}
 	@Override

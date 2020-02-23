@@ -1,0 +1,12 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test016' xd:root='a'>
+<xd:json name='a'>
+{
+  "foo": ["string()", "string()"],
+  "highly": {
+    "nested": {
+      "objects": "boolean();"
+    }
+  }
+}
+</xd:json>
+</xd:def>

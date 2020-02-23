@@ -71,7 +71,8 @@ public class XSParseDuration extends XSAbstractParseComparable {
 */
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parser.isXMLDuration()) {
-			p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		p.setBufIndex(parser.getIndex());

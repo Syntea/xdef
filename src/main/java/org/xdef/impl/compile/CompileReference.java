@@ -145,24 +145,12 @@ final class CompileReference extends XNode {
 		getSPosition().putReport(Report.error(XDEF.XDEF307, s), reporter);
 	}
 
-	/** Get reference target XElement.
+	/** Get reference target model XNode.
+	 * @param name the name of required model of element.
 	 * @return the found XElement or null.
 	 */
-	XElement getTargetXElement() {
-		return getTargetXElement(getName());
-	}
-
-	/** Get reference target XElement.
-	 * @return the found XElement or null.
-	 */
-	XElement getTargetXChoice() {
-		return getTargetXElement(getName() + "$choice");
-	}
-
-	/** Get reference target XElement.
-	 * @return the found XElement or null.
-	 */
-	private XElement getTargetXElement(final String name) {
+	public XNode getTargetModel() {
+		String name = getName();
 		if ("*".equals(name)) { // any in root selection
 			XElement result = new XElement("$any", null, _definition);
 			result.setSPosition(getSPosition());
@@ -177,48 +165,57 @@ final class CompileReference extends XNode {
 			return null;
 		}
 		int ndx = name.indexOf('/');
-		String mName = ndx > 0 ? name.substring(0, ndx) : name;
-		XElement dn = (XElement) xdef.getModel(getNSUri(), mName);
-		if (dn == null) {
+		String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
+		XElement xe = (XElement) xdef.getModel(getNSUri(), mName);
+		if (xe == null) {
 			String s = mName + "$any";
-			dn = (XElement) xdef.getModel(getNSUri(), s);
-			if (dn != null) {
+			xe = (XElement) xdef.getModel(getNSUri(), s);
+			if (xe != null) {
 				setName(s);
-			} else if (ndx > 0) {
+			} else {
 				XPool xp = (XPool) xdef.getXDPool();
 				s = _refXdefName + '#' + mName;
-				String t = name.substring(ndx);
-				String u = "$choice/$choice";
-				XMNode xn = xp.findModel(s + u + t);
-				if (xn == null) {
-					u = "$mixed/$mixed";
-					xn = xp.findModel(s + u + t);
+				if (ndx > 0) {
+					String t = name.substring(ndx);
+					String u = "$choice/$choice";
+					XMNode xn = xp.findModel(s + u + t);
+					if (xn == null) {
+						u = "$mixed/$mixed";
+						xn = xp.findModel(s + u + t);
+					}
+					if (xn == null) {
+						u = "$sequence/$sequence";
+						xn = xp.findModel(s + u + t);
+					}
+					if (xn != null) {
+						setName(s + u + t);
+					}
+					return (XNode) xn;
+				} else {
+					XMNode xn = xp.findModel(s + "$choice");
+					if (xn != null) {
+						setName(s + "$choice");
+						return (XNode) xn;
+					}
 				}
-				if (xn == null) {
-					u = "$sequence/$sequence";
-					xn = xp.findModel(s + u + t);
-				}
-				if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-					setName(s + u + t);
-				}
-				return (XElement) xn;
-			}
+			} 
+				
 		}
-		if (dn != null) {
+		if (xe != null) {
 			if(ndx > 0) {
-				XMNode xn = XPool.findXMNode(dn, name.substring(ndx+1), 0, -1);
+				XMNode xn = XPool.findXMNode(xe, name.substring(ndx+1), 0, -1);
 				if (xn == null) {
 					return null;
 				}
-				dn = xn.getKind() == XMNode.XMELEMENT ? (XElement) xn : null;
-			} else if (dn._json > 0) {
-				XMNode[] models = dn.getChildNodeModels();
+				return (XNode) xn;
+			} else if (xe._json > 0) {
+				XMNode[] models = xe.getChildNodeModels();
 				if (models.length==1 && models[0].getKind()==XMNode.XMELEMENT) {
 					return (XElement) models[0];
 				}
 			}
 		}
-		return (XElement) dn;
+		return xe;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

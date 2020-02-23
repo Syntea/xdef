@@ -1,9 +1,0 @@
-[
-  "jnull()",
-  "double()",
-  "string()",
-  [$script: "optional",
-     "boolean();", 
-     "optional int();"
-  ]
-]

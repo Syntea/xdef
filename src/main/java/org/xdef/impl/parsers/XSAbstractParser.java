@@ -41,7 +41,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 
 	protected XSAbstractParser() {}
 
-	void setBase(XDParser item) {
+	final void setBase(XDParser item) {
 		_base = item;
 	}
 
@@ -73,8 +73,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			p.isSpaces();
 		}
 		if (!p.eos()) {
-			//After the item '&{0}' follows an illegal character
-			p.error(XDEF.XDEF804, parserName());
+			//After the item '&{0}' follows an illegal charactere&{1}{: }
+			p.errorWithString(XDEF.XDEF804, parserName());
 		}
 		if (p.matches()) {
 			return p.getParsedValue();
@@ -90,7 +90,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
 		if (p.getSourceBuffer() == null) {
-			p.error(XDEF.XDEF805); //Parsed value is null
+			p.error(XDEF.XDEF805, parserName()); //Parsed value in &{0} is null
 			return;
 		}
 		parseObject(xnode, p);
@@ -99,8 +99,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				p.isSpaces();
 			}
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 			finalCheck(xnode, p);
 		}
@@ -111,23 +111,23 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public byte getWhiteSpaceParam() {return _whiteSpace;}
 
-	public void setMinExclusive(XDValue x) {} //default: not specified
-	public void setMaxExclusive(XDValue x) {} //default: not specified
-	public void setMinInclusive(XDValue x) {} //default: not specified
-	public void setMaxInclusive(XDValue x) {} //default: not specified
-	public void setTotalDigits(long x) {} //default: not specified
-	public void setFractionDigits(long x) {
+	public void setMinExclusive(final XDValue x) {}//default not specified
+	public void setMaxExclusive(final XDValue x) {}//default not specified
+	public void setMinInclusive(final XDValue x) {}//default not specified
+	public void setMaxInclusive(final XDValue x) {}//default not specified
+	public void setTotalDigits(final long x) {} //default: not specified
+	public void setFractionDigits(final long x) {
 		if (x != 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812,
 				"fractionDigits", "0", parserName());
 		}
 	} //default: not specified
-	public void setLength(long x) {} //default: not specified
-	public void setMinLength(long x) {} //default: not specified
-	public void setMaxLength(long x) {} //default: not specified
+	public void setLength(final long x) {} //default: not specified
+	public void setMinLength(final long x) {} //default: not specified
+	public void setMaxLength(final long x) {} //default: not specified
 
-	public void setWhiteSpace(String s) {
+	public void setWhiteSpace(final String s) {
 		byte old = _whiteSpace;
 		if ("collapse".equals(s)) {
 			_whiteSpace = 'c';
@@ -149,9 +149,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 	}
 
-	public void setItem(XDValue item) {} //default: not specified
+	public void setItem(final XDValue item) {} //default: not specified
 	abstract public byte getDefaultWhiteSpace();
-	private int getKeyId(String name) {
+	private int getKeyId(final String name) {
 		int keyMask = getLegalKeys();
 		for (int i = 0, id = 1; i < PARAM_NAMES.length; i++, id += id) {
 			if (PARAM_NAMES[i].equals(name)) {
@@ -161,7 +161,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		return -1;
 	}
 
-	private XDValue getParam(XDValue[] params, int id) {
+	private XDValue getParam(final XDValue[] params, final int id) {
 		for (int i = 0, x = 1; i < PARAM_NAMES.length; i++,x += x) {
 			if (x == id) {
 				String name = PARAM_NAMES[i];
@@ -312,8 +312,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 	}
 	@Override
-	public void setNamedParams(final XXNode xnode, final XDContainer params)
-		throws SException {
+	public void setNamedParams(final XXNode xnode,
+		final XDContainer params) throws SException {
 		int len = params == null ? 0 : params.getXDNamedItemsNumber();
 		if (len == 0) {
 			return;
@@ -327,9 +327,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		setNamedParams(xnode, x);
 	}
 
-	public void setEnumeration(Object[] o) {}
+	public void setEnumeration(final Object[] o) {}
 
-	public final void setPatterns(final Object[] pats) {
+	public void setPatterns(final Object[] pats) {
 		if (pats == null || pats.length == 0) {
 			_patterns = null;
 		} else {
@@ -340,19 +340,19 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 	}
 
-	public void checkPatterns(XDParseResult result) {
-		if (_patterns != null && result.matches()) {
+	public void checkPatterns(final XDParseResult p) {
+		if (_patterns != null && p.matches()) {
 			for (int i = 0; i < _patterns.length; i++) {
-				if (_patterns[i].matches(result.getSourceBuffer())) {
+				if (_patterns[i].matches(p.getSourceBuffer())) {
 					return;
 				}
 			}
 			//Doesn't fit any pattern from list for '&{0}'
-			result.error(XDEF.XDEF811,  parserName());
+			p.errorWithString(XDEF.XDEF811, parserName());
 		}
 	}
 	@Override
-	public final XDContainer getNamedParams() {
+	public XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
 		addNamedParams(map);
 		long i;
@@ -414,7 +414,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		return map;
 	}
-	public void addNamedParams(XDContainer map) {}
+	public void addNamedParams(final XDContainer map) {}
 	public long getTotalDigits() { return -1; }//default 0
 	public long getFractionDigits() { return -1; } //default 0
 	public XDValue getMinExclusive() { return null; }; //default null
@@ -427,7 +427,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public long getMaxLength() { return -1; }
 	public byte getWhiteSpace() { return _whiteSpace; }
 	public XDValue[] getEnumeration() {return null;} //default null
-	public void checkEnumeration(XDParseResult p) {
+	public void checkEnumeration(final XDParseResult p) {
 		if (p.matches()) {
 			XDValue[] enumeration = getEnumeration();
 			if (enumeration != null) {
@@ -437,12 +437,12 @@ public abstract class XSAbstractParser extends XDParserAbstract
 						return;
 					}
 				}
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 			}
 		}
 	}
-	public final DefRegex[] getPatterns() {return _patterns;}
+	public DefRegex[] getPatterns() {return _patterns;}
 
 	@Override
 	/** Get result type ID of parsing.
@@ -450,7 +450,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public abstract short parsedType();
 
-	public boolean addTypeParser(XDParser x) { return true; }
+	public boolean addTypeParser(final XDParser x) { return true; }
 	public void setSeparator(String x) {}
 	public String getSeparator() { return null; }
 	public void setFormat(String x) {}
@@ -459,7 +459,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public String getOutFormat() { return null; }
 	public void setArgument(XDValue x) {}
 	public XDValue getArgument() { return null; }
-	protected int getIdIndex(int id, int[] legalIds) {
+	protected final int getIdIndex(final int id, final int[] legalIds) {
 		for (int i = 0; i < legalIds.length; i++) {
 			if (id == legalIds[i]) {
 				return i;
@@ -488,7 +488,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	/** Get parameter of operation (returns 0 here).
 	 * @return parameter.
 	 */
-	public final int getParam() {return 0;}
+	public int getParam() {return 0;}
 	@Override
 	/** Set parameter of operation (ignored here).
 	 * @param param value of operation parameter.

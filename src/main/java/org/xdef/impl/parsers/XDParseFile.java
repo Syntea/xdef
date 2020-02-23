@@ -36,7 +36,8 @@ public class XDParseFile extends XDParserAbstract {
 				return true;
 			} catch (Exception ex) {}
 		}
-		p.error(XDEF.XDEF809, parserName); //Incorrect value of &{0}
+		//Incorrect value of '&{0}'&{1}{: }
+		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
 

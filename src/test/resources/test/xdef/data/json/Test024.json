@@ -1,0 +1,5 @@
+[
+   [ 3, null, false ],
+   [ 3.14, "", false ],
+   [ "aa", true, false ]
+]

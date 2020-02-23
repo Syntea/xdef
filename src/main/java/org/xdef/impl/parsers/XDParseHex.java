@@ -32,7 +32,8 @@ public class XDParseHex extends XSParseBase64Binary {
 				s = "";
 				bytes = new byte[0];
 			} else {
-				p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
 				return;
 			}
 		} else {

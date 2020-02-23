@@ -1,0 +1,25 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test034' xd:root='a'>
+<xd:json name='a'>
+{
+   "glossary": {
+      "title": "string()",
+      "GlossDiv": {
+         "title": "string()",
+         "GlossList": {
+            "GlossEntry": {
+               "ID": "enum('SGML')",
+               "GlossDef": {
+                  "para": "optional string();",
+                  "GlossSeeAlso": [
+                     "string();",
+                      "string();"
+                  ]
+               },
+               "GlossSee": "string();"
+            }
+         }
+      }
+   }
+}
+</xd:json>
+</xd:def>

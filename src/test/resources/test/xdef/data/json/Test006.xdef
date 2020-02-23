@@ -1,0 +1,5 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test006' xd:root='a'>
+<xd:json name='a'>
+{ "_x5f_":[] }
+</xd:json>
+</xd:def>

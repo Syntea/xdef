@@ -28,7 +28,8 @@ public class XDParseJNull  extends XSAbstractParser {
 		p.isSpaces();
 		int pos = p.getIndex();
 		if (!p.isToken("null")) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();

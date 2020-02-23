@@ -469,7 +469,7 @@ public final class DefParseResult extends XDValueAbstract
 			return true;
 		}
 		if (_ar == null) {
-			error(XDEF.XDEF515); //Value error
+			putDefaultParseError(); //XDF515 Value error&{0}{ :}
 		}
 		return false;
 	}
@@ -491,13 +491,34 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		_ar.error(registeredID, mod);
 	}
-
 	@Override
 	public final void putReport(final Report report) {
 		if (_ar == null) {
 			_ar = new ArrayReporter();
 		}
 		_ar.putReport(report);
+	}
+	@Override
+	/** Put the registered report object with type ERROR and add the last
+	 * parameter containing the string from the ParseResult object.
+	 * @param registeredID registered report id.
+	 * @param mod modification string of report text.
+	 */
+	public void errorWithString(final long registeredID, final Object... mod) {
+		int len = mod == null ? 1 : mod.length + 1;
+		Object[] modpars = new Object[len];
+		if (len > 1) {
+			System.arraycopy(mod, 0, modpars, 0, len - 1);
+		}
+		modpars[len-1] = _source == null ? "null"
+			: ( '"' + (_source.length() > 32 ? _source.substring(0,24)+"\"...\""
+				+ _source.substring(_source.length() - 3): _source) + '"');
+		error(registeredID, modpars);
+	}
+	@Override
+	/** Put default parse error message (XDEF515). */
+	public final void putDefaultParseError() {
+		errorWithString(XDEF.XDEF515); //Value error&{0}{: }
 	}
 	@Override
 	public final void addReports(final ArrayReporter reporter) {

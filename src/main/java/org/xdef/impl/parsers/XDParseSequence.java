@@ -57,7 +57,7 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return 0;}
 	@Override
-	public boolean addTypeParser(XDParser x) {
+	public boolean addTypeParser(final XDParser x) {
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
 			_itemTypes[0] = (XDParser) x;
@@ -70,21 +70,21 @@ public class XDParseSequence extends XSAbstractParser {
 		return true;
 	}
 	@Override
-	public void setLength(long x) {_minLength = _maxLength = x;}
+	public void setLength(final long x) {_minLength = _maxLength = x;}
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) {_maxLength = x;}
+	public void setMaxLength(final long x) {_maxLength = x;}
 	@Override
 	public long getMaxLength() {return _maxLength;}
 	@Override
-	public void setMinLength(long x) {_minLength = x;}
+	public void setMinLength(final long x) {_minLength = x;}
 	@Override
 	public long getMinLength() {return _minLength;}
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}
@@ -95,7 +95,7 @@ public class XDParseSequence extends XSAbstractParser {
 		_enumeration = e;
 	}
 	@Override
-	public void setItem(XDValue item) {
+	public void setItem(final XDValue item) {
 		if (item.getItemId() != XDValueID.XD_CONTAINER) {
 			addTypeParser((XDParser) item);
 			return;
@@ -110,12 +110,12 @@ public class XDParseSequence extends XSAbstractParser {
 		parse(xnode, p, true);
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, false);
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
-		boolean isFinal){
+		boolean isFinal) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos1 = p.getIndex();
@@ -158,44 +158,30 @@ public class XDParseSequence extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'
-				p.error(XDEF.XDEF810, parserName());
+				//Doesn't fit enumeration list of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF810, parserName());
 				return;
 			}
 		}
 		if (_minLength != -1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short
-			p.error(XDEF.XDEF814, parserName());
+			//Length of value of '&{0}' is too short&{0}'{: }
+			p.errorWithString(XDEF.XDEF814, parserName());
 		} else if (_maxLength != -1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long
-			p.error(XDEF.XDEF815, parserName());
+			//Length of value of '&{0}' is too long&{0}'{: }
+			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 		p.replaceParsedBufferFrom(pos0, s);
 		if (isFinal) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 		}
 		//replace source from pos0 to actual position by 's' and set
 		//the actual position after it.
 	}
-	private char isSeparator(final XDParseResult p) {
-		if (_separator == null) {
-			return p.isSpaces() ? ' ' : 0;
-		} else {
-			char c;
-			if ((c = p.isOneOfChars(_separator)) == 0) {
-				return 0;
-			}
-			if (c > ' ') {
-				p.isOneOfChars(_separator);
-			}
-			return c;
-		}
-	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
 	}
 	@Override

@@ -95,12 +95,12 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 				XDValue val = p.getParsedValue();
 				String s = val.toString();
 				if (_minLength!=-1 && s.length() < _minLength) {
-					//Length of value of '&{0}' is too short
-					p.error(XDEF.XDEF814, parserName());
+					//Length of value of '&{0}' is too short&{0}'&{1}
+					p.error(XDEF.XDEF814, parserName(), s);
 					return;
 				} else if (_maxLength!=-1 && s.length() > _maxLength) {
-					//Length of value of '&{0}' is too long
-					p.error(XDEF.XDEF815, parserName());
+					//Length of value of '&{0}' is too long&{0}'{: }
+					p.error(XDEF.XDEF815, parserName(), s);
 					return;
 				}
 				checkEnumeration(p);

@@ -44,8 +44,8 @@ public abstract class XDParserAbstract extends XDValueAbstract
 		parseObject(xnode, p);
 		if (p.matches()) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character
-				p.error(XDEF.XDEF804, parserName());
+				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
 			} else {
 				finalCheck(xnode, p);
 			}

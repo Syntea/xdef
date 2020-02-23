@@ -81,9 +81,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
-//		int pos = p.getIndex();
 		try {
-//			StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 			XSParseReader r = new XSParseReader(p);
 			ByteArrayOutputStream bw = new ByteArrayOutputStream();
 			SUtils.decodeBase64(r, bw);
@@ -95,7 +93,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			checkPatterns(p);
 			check(p);
 		} catch (Exception ex) {
-			p.error(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 	}
 	/** Check XDParseResult on pattern, enumeration, length.
@@ -108,11 +107,11 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			checkPatterns(p);
 			DefBytes bytes = (DefBytes) p.getParsedValue();
 			if (_minLength != -1 && bytes.getBytes().length < _minLength) {
-				//Length of value of '&{0}' is too short
-				p.error(XDEF.XDEF814,  parserName());
+				//Length of value of '&{0}' is too short&{0}'&{1}
+				p.errorWithString(XDEF.XDEF814,  parserName());
 			} else if (_maxLength != -1 && bytes.getBytes().length>_maxLength) {
-				//Length of value of '&{0}' is too long
-				p.error(XDEF.XDEF815, parserName());
+				//Length of value of '&{0}' is too long&{0}'{: }
+				p.errorWithString(XDEF.XDEF815, parserName());
 			}
 		}
 	}

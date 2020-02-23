@@ -21,8 +21,8 @@ public class XSParseUnsignedInt extends XSParseLong {
 		}
 		long val = p.getParsedValue().longValue();
 		if (val > 4294967295L || val < 0) {
-			//Value of '&{0}' is out of range
-			p.error(XDEF.XDEF806, parserName());
+			//Value of '&{0}' is out of range&{1}{: }
+			p.error(XDEF.XDEF806, parserName(), val);
 		}
 	}
 	@Override

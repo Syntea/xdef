@@ -1,0 +1,13 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test037' xd:root='a'>
+<xd:json name='a'>
+{
+    "plat":  "int(1000, 1000000);",
+    "jmeno": "jstring(1, 50); onFalse outln('Chyba ve jmene')",
+    "zena":  "boolean();",
+    "kocka" : {$script: "optional;",
+        "jmeno": "optional jstring(2, 20);",
+        "vek":   "optional int(1, 50);"
+    }
+}
+</xd:json>
+</xd:def>

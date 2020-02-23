@@ -100,7 +100,8 @@ public final class PNode {
 	public final SBuffer getValue() {return _value;}
 
 	/** Get version of the X-Definition.
-	 * @return version of the X-Definition ("2.0" .. 20, "3.1" .. 31 ).
+	 * @return version of the X-Definition
+	 * ("2.0"....40 see org.xdef.impl.XConstants.XDxx).
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 

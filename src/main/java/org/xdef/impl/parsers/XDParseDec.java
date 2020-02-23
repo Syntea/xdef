@@ -45,18 +45,21 @@ public class XDParseDec extends XSParseDecimal {
 		String s = p.getParsedBufferPartFrom(pos);
 		int j;
 		if ((j = s.length() - 1) < 0) {
-			p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		if (!wasdigit || i <= j) {
-			p.error(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
 		if (_totalDigits == -1) {
 			if (_fractionDigits != -1) { // only fraction digits
 				if (((k != -1) ? j - k : 0) < _fractionDigits) {
-					//Value of '&{0}' doesn't fit to '&{1}'
-					p.error(XDEF.XDEF813, parserName(), "fractionDigits");
+					//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+					p.error(XDEF.XDEF813, parserName(), "fractionDigits",
+						p.getParsedString());
 					return;
 				}
 			}
@@ -66,8 +69,9 @@ public class XDParseDec extends XSParseDecimal {
 			if (!(_fractionDigits == -1 ? //dec(m)
 				i + j <= _totalDigits : //dec(m, n)
 				i <= _totalDigits - _fractionDigits && j <= _fractionDigits)) {
-				//Value of '&{0}' doesn't fit to '&{1}'
-				p.error(XDEF.XDEF813, parserName(), "totalDigits");
+				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+				p.error(XDEF.XDEF813, parserName(), "totalDigits",
+					p.getParsedString());
 				return;
 			}
 		}

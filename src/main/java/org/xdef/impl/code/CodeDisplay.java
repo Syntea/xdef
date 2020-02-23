@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Set;
 import org.xdef.XDValueID;
 import org.xdef.model.XMData;
+import org.xdef.model.XMElement;
 
 /** Display compiled objects.
  * @author Vaclav Trojan
@@ -328,7 +329,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				XDefinition def = (XDefinition)xn;
 				out.print("=== Start XMDefinition: ");
 				displayDesriptor(def, out);
-				if (def._rootSelection!=null && def._rootSelection.size() > 0) {
+				if (def._rootSelection.size() > 0) {
 					Iterator<String> e=def._rootSelection.keySet().iterator();
 					out.println("Root: " + e.next());
 					while (e.hasNext()) {
@@ -337,9 +338,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				} else {
 					out.println("Root: null");
 				}
-				XElement[] elems = def.getXElements();
-				for (int i = 0; i < elems.length; i++){
-					displayDefNode(elems[i], out, processed);
+				for (XMElement elem: def.getModels()){
+					displayDefNode((XElement) elem, out, processed);
 				}
 				out.println("=== End XMDefinition: " + def.getName() + "\n");
 				return;

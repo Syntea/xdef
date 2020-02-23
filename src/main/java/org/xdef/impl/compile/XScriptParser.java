@@ -1743,4 +1743,14 @@ public class XScriptParser extends StringParser
 		putReport(pos, Report.error(registeredID, mod));
 	}
 
+	/** Put warning message.
+	 * @param pos SPosition of source.
+	 * @param registeredID registered message ID.
+	 * @param mod Message modification parameters.
+	 */
+	public final void warning(final SPosition pos,
+		final long registeredID,
+		final Object... mod) {
+		putReport(pos, Report.warning(registeredID, mod));
+	}
 }
