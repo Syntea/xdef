@@ -51,7 +51,7 @@ public interface XMDefinition extends XMNode {
 	/** Get version of X-definition.
 	 * @return version of X-definition:
 	 * version 2.0, 3.1, 3.2 or 4.0.
-	 * (see {@link org.xdef.impl.XConstants#XDxx}.
+	 * (see org.xdef.impl.XConstants#XDxx).
 	 */
 	public byte getXDVersion();
 
