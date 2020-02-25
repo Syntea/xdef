@@ -75,7 +75,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "TypeDeclarationBody", s));
 //			s = "{if (true) return true else return error('xxx')}";
 //			assertEq(s, parse(g, "TypeDeclarationBody", s));
-if (true) return;
+//if (true) return;
 			s = "( x() == 'B' )";
 			assertEq(s, parse(g, "Expression", s));
 			s = "void x(int a) {out();}";

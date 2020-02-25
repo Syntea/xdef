@@ -21,7 +21,7 @@ public class XDParseCDATA extends XDParserAbstract {
 
 	public XDParseCDATA() {
 		super();
-		_minLength = _maxLength = -1;
+		_minLength = 1; _maxLength = -1;
 	}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {

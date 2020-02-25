@@ -59,7 +59,7 @@ public final class XPool implements XDPool, Serializable {
 	private static final String XD_VERSION = 
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool.*/
-	private static final long XD_MIN_VERSION = 302005005L; // 32.5.0
+	private static final long XD_MIN_VERSION = 302005007L; // 32.5.7
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -1202,6 +1202,20 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeInt(_init);
 		xw.writeInt(_globalVariablesSize);
 		xw.writeInt(_localVariablesMaxSize);
+		xw.writeInt(_stringItem);
+		xw.writeInt(_streamItem);
+		xw.writeInt(_sqId);
+		if (_props != null) {
+			for (Object o: _props.keySet()) {
+				String key = (String) o;
+				if (key.startsWith("xdef_")) { // write only xdef properties
+					xw.writeString(key);
+					xw.writeString((String)_props.get(o));
+				}
+			}
+		}
+		xw.writeString(null);
+
 		len = _xdefs.size();
 		xw.writeLength(len);
 		ArrayList<XNode> list = new ArrayList<XNode>();
@@ -1357,6 +1371,18 @@ public final class XPool implements XDPool, Serializable {
 		_init = xr.readInt();
 		_globalVariablesSize = xr.readInt();
 		_localVariablesMaxSize = xr.readInt();
+		_stringItem = xr.readInt();
+		_streamItem = xr.readInt();
+		_sqId = xr.readInt();
+		String s;
+		while((s = xr.readString()) != null) {
+			if (_props == null) {
+				_props = new Properties();
+			}
+			String val = xr.readString();
+			_props.put(s, val);
+		}
+
 		_xdefs = new LinkedHashMap<String, XDefinition>();
 		len = xr.readLength();
 		for(int i = 0; i < len; i++) {

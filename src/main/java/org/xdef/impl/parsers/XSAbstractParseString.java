@@ -172,10 +172,11 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	void checkLength(XDParseResult p) {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
-			if (_minLength != -1 && s.length() < _minLength) {
+			int len = s.length();
+			if (_minLength != -1 && len < _minLength) {
 				//Length of value of '&{0}' is too short"&{0}'&{1}
 				p.errorWithString(XDEF.XDEF814, parserName());
-			} else if (_maxLength != -1 && s.length() > _maxLength) {
+			} else if (_maxLength != -1 && len > _maxLength) {
 				//Length of value of '&{0}' is too long&{0}'{: }
 				p.errorWithString(XDEF.XDEF815, parserName());
 			}
