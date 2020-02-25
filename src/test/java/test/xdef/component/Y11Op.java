@@ -59,9 +59,9 @@ public class Y11Op implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getN() != null)
-      el.setAttribute(XD_Name_N, getN());
+      el.setAttribute(XD_Name_N, getN().toString());
     if (getM() != null)
-      el.setAttribute(XD_Name_M, getM());
+      el.setAttribute(XD_Name_M, getM().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -199,9 +199,9 @@ public static class Co implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getC() != null)
-      el.setAttribute(XD_Name_C, getC());
+      el.setAttribute(XD_Name_C, getC().toString());
     if (getI() != null)
-      el.setAttribute(XD_Name_I, getI());
+      el.setAttribute(XD_Name_I, getI().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -416,7 +416,7 @@ public static class Y implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getY() != null)
-      el.setAttribute(XD_Name_Y, getY());
+      el.setAttribute(XD_Name_Y, getY().toString());
     return el;
   }
   @Override

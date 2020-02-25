@@ -57,9 +57,9 @@ public class Y09 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx());
+      el.setAttribute(XD_Name_x, getx().toString());
     if (gety() != null)
-      el.setAttribute(XD_Name_y, gety());
+      el.setAttribute(XD_Name_y, gety().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

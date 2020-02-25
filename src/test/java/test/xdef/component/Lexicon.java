@@ -54,7 +54,7 @@ public class Lexicon implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx());
+      el.setAttribute(XD_Name_x, getx().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

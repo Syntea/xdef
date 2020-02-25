@@ -54,7 +54,7 @@ public class C extends test.xdef.TestXComponents_C implements org.xdef.component
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName());
+      el.setAttribute(XD_Name_Name, getName().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -172,7 +172,7 @@ public static class Street implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName());
+      el.setAttribute(XD_Name_Name, getName().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

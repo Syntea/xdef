@@ -63,9 +63,9 @@ public class Y18 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, geta());
+      el.setAttribute(XD_Name_a, geta().toString());
     if (getb() != null)
-      el.setAttribute(XD_Name_b, getb());
+      el.setAttribute(XD_Name_b, getb().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -207,11 +207,11 @@ public static class C implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gete() != null)
-      el.setAttribute(XD_Name_e, gete());
+      el.setAttribute(XD_Name_e, gete().toString());
     if (getc() != null)
-      el.setAttribute(XD_Name_c, getc());
+      el.setAttribute(XD_Name_c, getc().toString());
     if (getd() != null)
-      el.setAttribute(XD_Name_d, getd());
+      el.setAttribute(XD_Name_d, getd().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

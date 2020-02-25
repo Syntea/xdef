@@ -73,17 +73,17 @@ public class Z6 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getTypDokladu() != null)
-      el.setAttribute(XD_Name_TypDokladu, getTypDokladu());
+      el.setAttribute(XD_Name_TypDokladu, getTypDokladu().toString());
     if (getOpravneni() != null)
-      el.setAttribute(XD_Name_Opravneni, getOpravneni());
+      el.setAttribute(XD_Name_Opravneni, getOpravneni().toString());
     if (getCisloDokladu() != null)
-      el.setAttribute(XD_Name_CisloDokladu, getCisloDokladu());
+      el.setAttribute(XD_Name_CisloDokladu, getCisloDokladu().toString());
     if (getDatumVydani() != null)
       el.setAttribute(XD_Name_DatumVydani, getDatumVydani().formatDate("d.M.yyyy"));
     if (getMistoVydani() != null)
-      el.setAttribute(XD_Name_MistoVydani, getMistoVydani());
+      el.setAttribute(XD_Name_MistoVydani, getMistoVydani().toString());
     if (getStatVydani() != null)
-      el.setAttribute(XD_Name_StatVydani, getStatVydani());
+      el.setAttribute(XD_Name_StatVydani, getStatVydani().toString());
     return el;
   }
   @Override

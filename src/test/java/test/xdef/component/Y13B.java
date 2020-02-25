@@ -52,7 +52,7 @@ public class Y13B implements test.xdef.component.Y13C,org.xdef.component.XCompon
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, geta());
+      el.setAttribute(XD_Name_a, geta().toString());
     return el;
   }
   @Override

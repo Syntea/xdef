@@ -181,9 +181,9 @@ public static class B implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getN() != null)
-      el.setAttribute(XD_Name_N, getN());
+      el.setAttribute(XD_Name_N, getN().toString());
     if (getI() != null)
-      el.setAttribute(XD_Name_I, getI());
+      el.setAttribute(XD_Name_I, getI().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

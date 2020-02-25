@@ -52,7 +52,7 @@ public class FotoDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getFoto_Ref() != null)
-      el.setAttribute(XD_Name_Foto_Ref, getFoto_Ref());
+      el.setAttribute(XD_Name_Foto_Ref, getFoto_Ref().toString());
     return el;
   }
   @Override

@@ -370,7 +370,7 @@ public static class B2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getb() != null)
-      el.setAttribute(XD_Name_b, getb());
+      el.setAttribute(XD_Name_b, getb().toString());
     return el;
   }
   @Override
@@ -477,7 +477,7 @@ public static class C2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getc() != null)
-      el.setAttribute(XD_Name_c, getc());
+      el.setAttribute(XD_Name_c, getc().toString());
     return el;
   }
   @Override

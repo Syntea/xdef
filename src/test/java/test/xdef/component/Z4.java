@@ -106,31 +106,31 @@ public class Z4 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJmeno() != null)
-      el.setAttribute(XD_Name_Jmeno, getJmeno());
+      el.setAttribute(XD_Name_Jmeno, getJmeno().toString());
     if (getPrijmeni() != null)
-      el.setAttribute(XD_Name_Prijmeni, getPrijmeni());
+      el.setAttribute(XD_Name_Prijmeni, getPrijmeni().toString());
     if (getRodnePrijmeni() != null)
-      el.setAttribute(XD_Name_RodnePrijmeni, getRodnePrijmeni());
+      el.setAttribute(XD_Name_RodnePrijmeni, getRodnePrijmeni().toString());
     if (getTitulPred() != null)
-      el.setAttribute(XD_Name_TitulPred, getTitulPred());
+      el.setAttribute(XD_Name_TitulPred, getTitulPred().toString());
     if (getTitulZa() != null)
-      el.setAttribute(XD_Name_TitulZa, getTitulZa());
+      el.setAttribute(XD_Name_TitulZa, getTitulZa().toString());
     if (getRC() != null)
-      el.setAttribute(XD_Name_RC, getRC());
+      el.setAttribute(XD_Name_RC, getRC().toString());
     if (getPohlavi() != null)
-      el.setAttribute(XD_Name_Pohlavi, getPohlavi());
+      el.setAttribute(XD_Name_Pohlavi, getPohlavi().toString());
     if (getOsobniStav() != null)
-      el.setAttribute(XD_Name_OsobniStav, getOsobniStav());
+      el.setAttribute(XD_Name_OsobniStav, getOsobniStav().toString());
     if (getDatumNarozeni() != null)
       el.setAttribute(XD_Name_DatumNarozeni, getDatumNarozeni().formatDate("d.M.yy"));
     if (getMistoNarozeni() != null)
-      el.setAttribute(XD_Name_MistoNarozeni, getMistoNarozeni());
+      el.setAttribute(XD_Name_MistoNarozeni, getMistoNarozeni().toString());
     if (getStatNarozeni() != null)
-      el.setAttribute(XD_Name_StatNarozeni, getStatNarozeni());
+      el.setAttribute(XD_Name_StatNarozeni, getStatNarozeni().toString());
     if (getStatniPrislusnost() != null)
-      el.setAttribute(XD_Name_StatniPrislusnost, getStatniPrislusnost());
+      el.setAttribute(XD_Name_StatniPrislusnost, getStatniPrislusnost().toString());
     if (getProfese() != null)
-      el.setAttribute(XD_Name_Profese, getProfese());
+      el.setAttribute(XD_Name_Profese, getProfese().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
