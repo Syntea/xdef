@@ -76,10 +76,10 @@ public abstract class XCodeDescriptor extends XNode {
 	public byte _moreText; //0 not set, 'T' or 'F'
 	/** version of JSON transformation to XML (see XConstants: JSON_xx). */
 	public byte _json; //0 .. no JSON, JSON to XML mode: JSON_W3C or JSON_XD
-	/** flag to set a text as CDATA section. */
-	public byte _cdata; //0 not set 'T' or 'F'
 	/** flag to set element nillable. */
 	public byte _nillable; //0 not set 'T' or 'F'
+	/** flag to set a text as CDATA section. */
+	public byte _cdata; //0 not set 'T' or 'F'
 
 	////////////////////////////////////////////////////////////////////////////
 	// Variables
