@@ -52,9 +52,9 @@ public class Y04 extends test.xdef.TestXComponents_Y04 implements java.io.Serial
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getJedna() != null)
-      el.setAttribute(XD_Name_Jedna, getJedna());
+      el.setAttribute(XD_Name_Jedna, getJedna().toString());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo());
+      el.setAttribute(XD_Name_Two, getTwo().toString());
     return el;
   }
   @Override

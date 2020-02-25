@@ -57,7 +57,7 @@ public class N_Operation implements test.xdef.component.N_i,org.xdef.component.X
     if (getOne() != null)
       el.setAttribute(XD_Name_One, String.valueOf(getOne()));
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo());
+      el.setAttribute(XD_Name_Two, getTwo().toString());
     return el;
   }
   @Override

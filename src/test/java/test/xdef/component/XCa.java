@@ -175,7 +175,7 @@ public static class s implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getk() != null)
-      el.setAttribute(XD_Name_k, getk());
+      el.setAttribute(XD_Name_k, getk().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -298,7 +298,7 @@ public static class s_1 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getk() != null)
-      el.setAttribute(XD_Name_k, getk());
+      el.setAttribute(XD_Name_k, getk().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

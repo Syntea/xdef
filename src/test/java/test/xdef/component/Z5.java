@@ -61,7 +61,7 @@ public class Z5 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNazevFirmy() != null)
-      el.setAttribute(XD_Name_NazevFirmy, getNazevFirmy());
+      el.setAttribute(XD_Name_NazevFirmy, getNazevFirmy().toString());
     if (getIC() != null)
       el.setAttribute(XD_Name_IC, String.valueOf(getIC()));
     for (org.xdef.component.XComponent x: xGetNodeList())

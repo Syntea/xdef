@@ -52,7 +52,7 @@ public class Y12_S implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getV() != null)
-      el.setAttribute(XD_Name_V, getV());
+      el.setAttribute(XD_Name_V, getV().toString());
     return el;
   }
   @Override

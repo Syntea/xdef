@@ -169,9 +169,9 @@ public static class Domain implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, getOne());
+      el.setAttribute(XD_Name_One, getOne().toString());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo());
+      el.setAttribute(XD_Name_Two, getTwo().toString());
     return el;
   }
   @Override

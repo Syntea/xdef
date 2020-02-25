@@ -70,11 +70,11 @@ public class PredmetDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
     if (getNazevPredmetu() != null)
-      el.setAttribute(XD_Name_NazevPredmetu, getNazevPredmetu());
+      el.setAttribute(XD_Name_NazevPredmetu, getNazevPredmetu().toString());
     if (getDruhPredmetu() != null)
-      el.setAttribute(XD_Name_DruhPredmetu, getDruhPredmetu());
+      el.setAttribute(XD_Name_DruhPredmetu, getDruhPredmetu().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

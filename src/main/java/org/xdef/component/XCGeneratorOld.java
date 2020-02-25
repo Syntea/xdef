@@ -819,7 +819,7 @@ class XCGeneratorOld implements XCGenerator {
 				break;
 			default:
 				x = checkEnumType(xdata) == null ?
-					"get&{name}())" : "get&{name}().name())";
+					"get&{name}().toString())" : "get&{name}().name())";
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+LN+

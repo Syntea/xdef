@@ -70,11 +70,11 @@ public class ZvireDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
     if (getNazevZvirete() != null)
-      el.setAttribute(XD_Name_NazevZvirete, getNazevZvirete());
+      el.setAttribute(XD_Name_NazevZvirete, getNazevZvirete().toString());
     if (getDruhZvirete() != null)
-      el.setAttribute(XD_Name_DruhZvirete, getDruhZvirete());
+      el.setAttribute(XD_Name_DruhZvirete, getDruhZvirete().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

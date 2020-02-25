@@ -54,7 +54,7 @@ public class Y24d implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getY24d() != null)
-      el.setAttribute(XD_Name_Y24d, getY24d());
+      el.setAttribute(XD_Name_Y24d, getY24d().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

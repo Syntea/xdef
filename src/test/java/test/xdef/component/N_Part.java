@@ -57,7 +57,7 @@ public class N_Part implements test.xdef.component.N_i,java.io.Serializable,org.
     if (getOne() != null)
       el.setAttribute(XD_Name_One, String.valueOf(getOne()));
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo());
+      el.setAttribute(XD_Name_Two, getTwo().toString());
     return el;
   }
   @Override

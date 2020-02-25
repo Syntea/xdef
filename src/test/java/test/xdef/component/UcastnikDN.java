@@ -139,27 +139,27 @@ public class UcastnikDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
     if (getTypUcastnika() != null)
-      el.setAttribute(XD_Name_TypUcastnika, getTypUcastnika());
+      el.setAttribute(XD_Name_TypUcastnika, getTypUcastnika().toString());
     if (getPraxeRizeni() != null)
       el.setAttribute(XD_Name_PraxeRizeni, String.valueOf(getPraxeRizeni()));
     if (getAlkoholDech() != null)
-      el.setAttribute(XD_Name_AlkoholDech, getAlkoholDech());
+      el.setAttribute(XD_Name_AlkoholDech, getAlkoholDech().toString());
     if (getAlkoholKrev() != null)
-      el.setAttribute(XD_Name_AlkoholKrev, getAlkoholKrev());
+      el.setAttribute(XD_Name_AlkoholKrev, getAlkoholKrev().toString());
     if (getZraneni() != null)
-      el.setAttribute(XD_Name_Zraneni, getZraneni());
+      el.setAttribute(XD_Name_Zraneni, getZraneni().toString());
     if (getZdravPojistovna() != null)
-      el.setAttribute(XD_Name_ZdravPojistovna, getZdravPojistovna());
+      el.setAttribute(XD_Name_ZdravPojistovna, getZdravPojistovna().toString());
     if (getPokutaKc() != null)
       el.setAttribute(XD_Name_PokutaKc, String.valueOf(getPokutaKc()));
     if (getPokutaZapl() != null)
-      el.setAttribute(XD_Name_PokutaZapl, getPokutaZapl());
+      el.setAttribute(XD_Name_PokutaZapl, getPokutaZapl().toString());
     if (getPachatel() != null)
-      el.setAttribute(XD_Name_Pachatel, getPachatel());
+      el.setAttribute(XD_Name_Pachatel, getPachatel().toString());
     if (getPoskozeny() != null)
-      el.setAttribute(XD_Name_Poskozeny, getPoskozeny());
+      el.setAttribute(XD_Name_Poskozeny, getPoskozeny().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

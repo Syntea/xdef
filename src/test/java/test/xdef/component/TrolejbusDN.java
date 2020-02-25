@@ -103,29 +103,29 @@ public class TrolejbusDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
     if (getLinka() != null)
-      el.setAttribute(XD_Name_Linka, getLinka());
+      el.setAttribute(XD_Name_Linka, getLinka().toString());
     if (getLinkaPoradi() != null)
       el.setAttribute(XD_Name_LinkaPoradi, String.valueOf(getLinkaPoradi()));
     if (getEvidCislo() != null)
-      el.setAttribute(XD_Name_EvidCislo, getEvidCislo());
+      el.setAttribute(XD_Name_EvidCislo, getEvidCislo().toString());
     if (getTypVozidla() != null)
-      el.setAttribute(XD_Name_TypVozidla, getTypVozidla());
+      el.setAttribute(XD_Name_TypVozidla, getTypVozidla().toString());
     if (getTypBrzd() != null)
-      el.setAttribute(XD_Name_TypBrzd, getTypBrzd());
+      el.setAttribute(XD_Name_TypBrzd, getTypBrzd().toString());
     if (getStavBrzd() != null)
-      el.setAttribute(XD_Name_StavBrzd, getStavBrzd());
+      el.setAttribute(XD_Name_StavBrzd, getStavBrzd().toString());
     if (getKodPojistitele() != null)
-      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele());
+      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele().toString());
     if (getNazevPojistitele() != null)
-      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele());
+      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele().toString());
     if (getCisloDokladuPojisteni() != null)
-      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni());
+      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni().toString());
     if (getPojisteniText() != null)
-      el.setAttribute(XD_Name_PojisteniText, getPojisteniText());
+      el.setAttribute(XD_Name_PojisteniText, getPojisteniText().toString());
     if (getDruhVozidla() != null)
-      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla());
+      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

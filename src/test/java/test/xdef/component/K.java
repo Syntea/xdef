@@ -195,9 +195,9 @@ public static class c implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getKod() != null)
-      el.setAttribute(XD_Name_Kod, getKod());
+      el.setAttribute(XD_Name_Kod, getKod().toString());
     if (getCislo() != null)
-      el.setAttribute(XD_Name_Cislo, getCislo());
+      el.setAttribute(XD_Name_Cislo, getCislo().toString());
     if (getRok() != null)
       el.setAttribute(XD_Name_Rok, getRok().formatDate("yy"));
     return el;
