@@ -3,18 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package mytest.component;
 public class TX implements org.xdef.component.XComponent{
-  public Integer jgetnumber(){
-    return _js$number==null?null:_js$number.get$value();
-  }
-  public TX.js$number getjs$number() {return _js$number;}
-  public void jsetnumber(Integer x){
-    if(x==null) _js$number=null;
-    else {
-      if(_js$number==null) setjs$number(new TX.js$number());
-      _js$number.set$value(x);
-    }
-  }
-  public void setjs$number(TX.js$number x){_js$number=x;}
+  public TX.js$item getjs$item() {return _js$item;}
+  public void setjs$item(TX.js$item x){_js$item=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override
@@ -72,7 +62,7 @@ public class TX implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, getjs$number());
+    org.xdef.component.XComponentUtil.addXC(a, getjs$item());
     return a;
   }
   public TX() {}
@@ -89,13 +79,13 @@ public class TX implements org.xdef.component.XComponent{
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"48C3440962236CE4D2E3211B2705C745".equals(
+    if (!"27F0CF857F7BCA01B84005C023DFCBDB".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private TX.js$number _js$number;
+  private TX.js$item _js$item;
   public static final String XD_NAME="X";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -114,23 +104,19 @@ public class TX implements org.xdef.component.XComponent{
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x)
-    {return new js$number(this, x);}
+    {return new js$item(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
-    setjs$number((js$number) x); //#X/js:array/js:number
+    setjs$item((js$item) x); //#X/js:array/js:item
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
-public static class js$number implements org.xdef.component.XComponent{
-  public Integer get$value() {return _$value;}
-  public Integer jgetjs$number(){return _$value==null?null:get$value();}
-  public void set$value(Integer x){_$value=x;}
-  public void jsetjs$number(Integer x){
-    set$value(x);
-  }
-  public String xposOf$value(){return XD_XPos+"/$text";}
+public static class js$item implements org.xdef.component.XComponent{
+  public Integer getval() {return _val;}
+  public void setval(Integer x){_val=x;}
+  public String xposOfval(){return XD_XPos+"/@val";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override
@@ -175,63 +161,57 @@ public static class js$number implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
+    if (getval() != null)
+      el.setAttribute(XD_Name_val, String.valueOf(getval()));
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:js", "http://www.w3.org/2005/xpath-functions");
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
     return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "#X/js:array/js:number/$text", a, get$value().toString(), _$$value);
-    return a;
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
-  public js$number() {}
-  public js$number(org.xdef.component.XComponent p,
+  public js$item() {}
+  public js$item(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
     XD_NodeName=name; XD_NamespaceURI=ns;
     XD_XPos=xPos;
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public js$number(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+  public js$item(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
     org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"FB1665E057747D56C1B4735E2FBA7956".equals(
+    if (!"9A2841BB564AB72624F5B7B34AB22CE1".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private Integer _$value;
-  private char _$$value= (char) -1;
-  public static final String XD_NAME="js:number";
+  private String XD_Name_val="val";
+  private Integer _val;
+  public static final String XD_NAME="js:item";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
-  private String XD_NodeName = "js:number";
+  private String XD_NodeName = "js:item";
   private String XD_NamespaceURI = "http://www.w3.org/2005/xpath-functions";
   private int XD_Index = -1;
-  private int XD_ndx;
   private String XD_XPos;
-  private String XD_Model="#X/js:array/js:number";
+  private String XD_Model="#X/js:array/js:item";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().intValue());
-  }
+    org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){
+    XD_Name_val = x.getNodeName();
+    setval(parseResult.getParsedValue().intValue());
+  }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x)

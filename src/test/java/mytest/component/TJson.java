@@ -3,24 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package mytest.component;
 public class TJson implements org.xdef.component.XComponent{
-  public org.xdef.sys.SDatetime jgetstring(){
-    return _js$string==null?null:_js$string.get$value();
-  }
-  public java.util.Date jdateOfstring(){return org.xdef.sys.SDatetime.getDate(jgetstring());}
-  public java.sql.Timestamp jtimestampOfstring(){return org.xdef.sys.SDatetime.getTimestamp(jgetstring());}
-  public java.util.Calendar jcalendarOfstring(){return org.xdef.sys.SDatetime.getCalendar(jgetstring());}
-  public TJson.js$string getjs$string() {return _js$string;}
-  public void jsetstring(org.xdef.sys.SDatetime x){
-    if(x==null) _js$string=null;
-    else {
-      if(_js$string==null) setjs$string(new TJson.js$string());
-      _js$string.set$value(x);
-    }
-  }
-  public void jsetstring(java.util.Date x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void jsetstring(java.sql.Timestamp x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void jsetstring(java.util.Calendar x){jsetstring(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void setjs$string(TJson.js$string x){_js$string=x;}
+  public TJson.js$item getjs$item() {return _js$item;}
+  public void setjs$item(TJson.js$item x){_js$item=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override
@@ -78,7 +62,7 @@ public class TJson implements org.xdef.component.XComponent{
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
     java.util.List<org.xdef.component.XComponent> a=
       new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, getjs$string());
+    org.xdef.component.XComponentUtil.addXC(a, getjs$item());
     return a;
   }
   public TJson() {}
@@ -95,13 +79,13 @@ public class TJson implements org.xdef.component.XComponent{
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"A64A995E2E4CB290AD64D24D4BD11E9B".equals(
+    if (!"27F0CF857F7BCA01B84005C023DFCBDB".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private TJson.js$string _js$string;
+  private TJson.js$item _js$item;
   public static final String XD_NAME="json";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
@@ -120,35 +104,25 @@ public class TJson implements org.xdef.component.XComponent{
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x)
-    {return new js$string(this, x);}
+    {return new js$item(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
     x.xSetNodeIndex(XD_ndx++);
-    setjs$string((js$string) x); //#json/js:array/js:string
+    setjs$item((js$item) x); //#json/js:array/js:item
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
-public static class js$string implements org.xdef.component.XComponent{
-  public org.xdef.sys.SDatetime get$value() {return _$value;}
-  public java.util.Date dateOf$value(){return org.xdef.sys.SDatetime.getDate(_$value);}
-  public java.sql.Timestamp timestampOf$value(){return org.xdef.sys.SDatetime.getTimestamp(_$value);}
-  public java.util.Calendar calendarOf$value(){return org.xdef.sys.SDatetime.getCalendar(_$value);}
-  public org.xdef.sys.SDatetime jgetjs$string(){return _$value==null?null:get$value();}
-  public java.util.Date jdateOfjs$string(){return org.xdef.sys.SDatetime.getDate(jgetjs$string());}
-  public java.sql.Timestamp jtimestampOfjs$string(){return org.xdef.sys.SDatetime.getTimestamp(jgetjs$string());}
-  public java.util.Calendar jcalendarOfjs$string(){return org.xdef.sys.SDatetime.getCalendar(jgetjs$string());}
-  public void set$value(org.xdef.sys.SDatetime x){_$value=x;}
-  public void set$value(java.util.Date x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.sql.Timestamp x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void set$value(java.util.Calendar x){_$value=x==null?null:new org.xdef.sys.SDatetime(x);}
-  public void jsetjs$string(org.xdef.sys.SDatetime x){
-    set$value(x);
-  }
-  public void jsetjs$string(java.util.Date x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void jsetjs$string(java.sql.Timestamp x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public void jsetjs$string(java.util.Calendar x){jsetjs$string(x==null?null:new org.xdef.sys.SDatetime(x));}
-  public String xposOf$value(){return XD_XPos+"/$text";}
+public static class js$item implements org.xdef.component.XComponent{
+  public org.xdef.sys.SDatetime getval() {return _val;}
+  public java.util.Date dateOfval(){return org.xdef.sys.SDatetime.getDate(_val);}
+  public java.sql.Timestamp timestampOfval(){return org.xdef.sys.SDatetime.getTimestamp(_val);}
+  public java.util.Calendar calendarOfval(){return org.xdef.sys.SDatetime.getCalendar(_val);}
+  public void setval(org.xdef.sys.SDatetime x){_val=x;}
+  public void setval(java.util.Date x){_val=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setval(java.sql.Timestamp x){_val=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public void setval(java.util.Calendar x){_val=x==null?null:new org.xdef.sys.SDatetime(x);}
+  public String xposOfval(){return XD_XPos+"/@val";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   public final static byte JSON = 1;
   @Override
@@ -193,63 +167,57 @@ public static class js$string implements org.xdef.component.XComponent{
     } else {
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
+    if (getval() != null)
+      el.setAttribute(XD_Name_val, getval().formatDate("y-MM-dd[Z]"));
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:js", "http://www.w3.org/2005/xpath-functions");
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
     return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "#json/js:array/js:string/$text", a, get$value().formatDate("y-MM-dd[Z]"), _$$value);
-    return a;
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
-  public js$string() {}
-  public js$string(org.xdef.component.XComponent p,
+  public js$item() {}
+  public js$item(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
     XD_NodeName=name; XD_NamespaceURI=ns;
     XD_XPos=xPos;
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
-  public js$string(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
+  public js$item(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
     org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
     XD_XPos=x.getXPos();
     XD_Model=x.getXMElement().getXDPosition();
     XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"0910234F72E1C44A8BE7FACC65B26267".equals(
+    if (!"666676889124535C72C3A490074F47CD".equals(
       x.getXMElement().getDigest())) { //incompatible element model
       throw new org.xdef.sys.SRuntimeException(
         org.xdef.msg.XDEF.XDEF374);
     }
   }
-  private org.xdef.sys.SDatetime _$value;
-  private char _$$value= (char) -1;
-  public static final String XD_NAME="js:string";
+  private String XD_Name_val="val";
+  private org.xdef.sys.SDatetime _val;
+  public static final String XD_NAME="js:item";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
-  private String XD_NodeName = "js:string";
+  private String XD_NodeName = "js:item";
   private String XD_NamespaceURI = "http://www.w3.org/2005/xpath-functions";
   private int XD_Index = -1;
-  private int XD_ndx;
   private String XD_XPos;
-  private String XD_Model="#json/js:array/js:string";
+  private String XD_Model="#json/js:array/js:item";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().datetimeValue());
-  }
+    org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){
+    XD_Name_val = x.getNodeName();
+    setval(parseResult.getParsedValue().datetimeValue());
+  }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
     org.xdef.proc.XXNode x)

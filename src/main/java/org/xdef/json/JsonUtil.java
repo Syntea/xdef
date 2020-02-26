@@ -223,7 +223,7 @@ public class JsonUtil extends StringParser {
 					if (isChar('}')) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-//						warning(JSON.JSON020); //redundant comma
+						warning(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 						return result;
 					}
@@ -300,7 +300,7 @@ public class JsonUtil extends StringParser {
 					if (isChar(']')) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-//						warning(JSON.JSON020); //redundant comma
+						warning(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 						return result;
 					}
@@ -308,9 +308,7 @@ public class JsonUtil extends StringParser {
 					if (eos()) {
 						break;
 					}
-					 //"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, ",", "]");
-//					break;
+					error(JSON.JSON002,",","]"); //"&{0}"&{1}{ or "}{"} expected
 				}
 			}
 			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
@@ -1269,5 +1267,4 @@ public class JsonUtil extends StringParser {
 		}
 		return sb.toString();
 	}
-
 }

@@ -188,13 +188,23 @@ class XmlToJson extends JsonToXml {
 						return JNull.JNULL;
 					} else if (J_STRING.equals(name)
 						|| J_NUMBER.equals(name)
-						|| J_BOOLEAN.equals(name)
-						|| J_ITEM.equals(name)) {
+						|| J_BOOLEAN.equals(name)) {
+						/*xx*/
+						if (e.hasAttribute("val")) {
+							return getJValue(e.getAttribute("val"));
+						}
+						/*xx*/
 						String s = ((Element) n).getTextContent();
 						return getJValue(s);
 					} else if (J_ITEM.equals(name)) {
+						/*xx*/
+						if (e.hasAttribute("val")) {
+							return getJValue(e.getAttribute("val"));
+						}
+						/*xx*/
 						String s = ((Element) n).getTextContent();
 						return getJValue(s);
+						/*xx*/
 					}
 					// Illegal JSON XML model &{0}
 					throw new SRuntimeException(XDEF.XDEF313, n.getNodeName());
