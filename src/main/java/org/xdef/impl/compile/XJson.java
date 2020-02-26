@@ -443,13 +443,20 @@ public class XJson extends JsonToXml {
 			for(; index < len; index++) {
 				PNode ee = genJsonModel(array.get(index), e);
 				PAttr script = getXDAttr(ee, "script");
-				if (index + 1 < len && script != null) { // not last
+				PAttr val;
+				// if it is not last and has xd:script attribute where
+				// the min occurrence differs from max occurrence
+				// and it has the attrbute with a value description
+				if (index + 1 < len && script != null
+					&& (val = getAttr(ee, "val")) != null) {
 					XOccurrence occ = readOccurrence(script.getValue());
 					if (occ.minOccurs() != occ.maxOccurs()) {
-						PAttr val = getAttr(ee, "val");
 						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
-						if (sbs[1].getString().startsWith("jnull")) {
-							addMatchExpression(ee, "@val=='null'");
+						setSourceBuffer(sbs[1]);
+						if (isJavaName()) { // parser name
+							String s = getParsedString();
+							addMatchExpression(ee,
+								s + "().parse((String) @a).matches()");
 						}
 					}
 				}
