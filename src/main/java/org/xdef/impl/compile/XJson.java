@@ -1,7 +1,6 @@
 package org.xdef.impl.compile;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.xdef.XDConstants;
@@ -58,6 +57,19 @@ public class XJson extends JsonToXml {
 		a._localName = name;
 		e._attrs.add(a);
 		return a;
+	}
+	/** get attribute without namespace.
+	 * @param e PNode where to set attribute.
+	 * @param name local name of attribute.
+	 * @return PAttr or null.
+	 */
+	private PAttr getAttr(final PNode e, final String name) {
+		for (PAttr att: e._attrs) {
+			if (att._nsindex == -1 && name.equals(att._localName)) {
+				return att;
+			}
+		}
+		return null;
 	}
 
 	/** get X-def attribute.
@@ -138,18 +150,15 @@ public class XJson extends JsonToXml {
 		return result;
 	}
 
-	/** Parse X-script and return occurrence and executive part in separate
-	 * fields.
-	 * @param sbuf JValue from which is used the value
-	 * @return array with SBuffer items from both parts.
+	/** Read occurrence.
+	 * Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
+	 *   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?"
+	 *   | (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))))
+	 * @return Occurrence object or null.
 	 */
-	private SBuffer[] parseOccurrence(final SBuffer sbuf) {
-		if (sbuf != null) {
-			setSourceBuffer(sbuf);
-			return parseOccurrence();
-		}
-		return new SBuffer[] {
-			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
+	private XOccurrence readOccurrence(final SBuffer sbuf) {
+		setSourceBuffer(sbuf);
+		return readOccurrence();
 	}
 
 	/** Read occurrence.
@@ -199,11 +208,25 @@ public class XJson extends JsonToXml {
 		}
 	}
 
-	/** Parse X-script and return occurrence and executive part in separate
-	 * fields.
+	/** Parse X-script and return occurrence and executive part
+	 * (type declaration) in separate fields.
+	 * @param sbuf JValue from which is used the value
+	 * @return array with SBuffer items from both parts.
+	 */
+	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
+		if (sbuf != null) {
+			setSourceBuffer(sbuf);
+			return parseTypeDeclaration();
+		}
+		return new SBuffer[] {
+			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
+	}
+
+	/** Parse X-script and return occurrence and executive part
+	 * (type declaration) in separate fields.
 	 * @return array os SBuffer with the occurrence part and remaining part.
 	 */
-	private SBuffer[] parseOccurrence() {
+	private SBuffer[] parseTypeDeclaration() {
 		skipSemiconsBlanksAndComments();
 		SBuffer[] result = new SBuffer[] {
 			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
@@ -284,14 +307,44 @@ public class XJson extends JsonToXml {
 // Create X-definition model from xd:json (W3C transformation)
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Add match section to xd:script attribute. If match section already
+	 * in this attribute exists then add the argument to the expression with
+	 * the operator "AAND".
+	 * @param e PNode where to set or update the xd:script attribute.
+	 * @param matchexpr the match expression.
+	 */
+	private void addMatchExpression(final PNode e, final String matchexpr) {
+		PAttr attr = getXDAttr(e, "script");
+		SBuffer val;
+		if (attr != null) {
+			val = attr._value;
+			String s = val.getString().trim();
+			int ndx;
+			if ((ndx = s.indexOf("match ")) < 0) {
+				if (!s.isEmpty() && !s.endsWith(";")) {
+					s += ';';
+				}
+				s += "match " + matchexpr + ';';
+			} else {
+				s = s.substring(0, ndx + 6) + matchexpr
+					+ " AAND " + s.substring(ndx + 6);
+			}
+			val = new SBuffer(s, val);
+		} else {
+			val = new SBuffer("match " + matchexpr + ';', e._name);
+		}
+		setXDAttr(e, "script", val);
+	}
+
 	/** Update key information to xd:script attribute.
 	 * @param e PNode where to update.
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		addToXDScript(e, "match @"+ J_KEYATTRNAME + "=='"+key+"';"
-			+ (key.isEmpty()
-				? " options preserveEmptyAttributes,noTrimAttr;" : ""));
+		if (key.isEmpty()) {
+			addToXDScript(e, " options preserveEmptyAttributes,noTrimAttr;");
+		}
+		addMatchExpression(e, '@' + J_KEYATTRNAME + "=='"+key+"'");
 		setAttr(e, J_KEYATTRNAME, new SBuffer(
 			"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;",
 				e._name));
@@ -336,19 +389,11 @@ public class XJson extends JsonToXml {
 			}
 		} else if (map.size() > 1) {
 			e = genJElement(parent, "map", map.getPosition());
-//			if (!eos()) {
-//				setXDAttr(e, "script",
-//					new SBuffer(getUnparsedBufferPart(), getPosition()));
-//			}
 			ee = genXDElement(e, "mixed", map.getPosition());
 			e._childNodes.add(ee);
 		} else {
 			e = genJElement(parent, "map", map.getPosition());
 			ee = e;
-//			if (!eos()) {
-//				setXDAttr(e, "script",
-//					new SBuffer(getUnparsedBufferPart(), getPosition()));
-//			}
 		}
 		for (Map.Entry<String, Object> entry: map.entrySet()) {
 			String key = entry.getKey();
@@ -368,9 +413,10 @@ public class XJson extends JsonToXml {
 
 	private PNode genJsonArray(final JArray array, final PNode parent) {
 		PNode e = genJElement(parent, "array", array.getPosition());
-		Iterator<Object> it = array.iterator();
-		if (it.hasNext()) {
-			Object jo = it.next();
+		int index = 0;
+		int len = array.size();
+		if (len > 0) {
+			Object jo = array.get(0);
 			Object o = jo == null ? null
 				: jo instanceof JValue ? ((JValue) jo).getValue() : jo;
 			if (o != null && o instanceof JValue) {
@@ -392,96 +438,49 @@ public class XJson extends JsonToXml {
 							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
 					}
 				}
-			} else {
-				genJsonModel(jo, e);
+				index = 1;
 			}
-			while(it.hasNext()) {
-				genJsonModel(it.next(), e);
+			for(; index < len; index++) {
+				PNode ee = genJsonModel(array.get(index), e);
+				PAttr script = getXDAttr(ee, "script");
+				if (index + 1 < len && script != null) { // not last
+					XOccurrence occ = readOccurrence(script.getValue());
+					if (occ.minOccurs() != occ.maxOccurs()) {
+						PAttr val = getAttr(ee, "val");
+						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
+						if (sbs[1].getString().startsWith("jnull")) {
+							addMatchExpression(ee, "@val=='null'");
+						}
+					}
+				}
 			}
 		}
 		return e;
 	}
 
 	private PNode genJsonValue(final JValue jo, final PNode parent) {
-		PNode e;
-		SBuffer sbf = null, occ = null;
-		String itemName;
-		if (jo.getValue() != null) {
-			String s = jo.toString();
-			if (s.trim().isEmpty()) {
-				// set default required string()
-				sbf = new SBuffer("jvalue()", jo.getPosition());
+		SBuffer sbf, occ = null;
+		PNode e = genJElement(parent, J_ITEM, jo.getPosition());
+		if (jo.getValue() == null) {
+			sbf = new SBuffer("jnull()");
+		} else {
+			if (jo.toString().trim().isEmpty()) {
+				sbf = new SBuffer("jvalue()", jo.getPosition()); // => any value
 				occ = new SBuffer("?", jo.getPosition());
-				itemName = J_ITEM;
 			} else {
-				SBuffer[] parsedScript = parseOccurrence(jo.getSBuffer());
+				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
 				if (!parsedScript[0].getString().isEmpty()) { // occurrence
 					occ = parsedScript[0];
 				}
 				if (eos()) {
-					parsedScript[1] = new SBuffer("jvalue()",
-						jo.getPosition());
-					itemName = J_ITEM; // default
-				} else if (isToken("jnull") && isLetter()==NOCHAR) {
-					itemName = J_NULL;
-				} else {
-					if ((isToken("jvalue")) && isLetter()==NOCHAR) {
-						itemName = J_ITEM;
-					} else if (isOneOfTokens(new String[] {"boolean",
-						"jboolean"}) >= 0 && isLetter() == NOCHAR) {
-						itemName = J_BOOLEAN;
-					} else if (isOneOfTokens(new String[] {
-						"unsignedLong","unsignedInt", "unsignedShort",
-						"unsignedByte",
-						"negativeInteger", "nonNegativeInteger",
-						"positiveInteger", "nonPositiveInteger",
-						"jnumber", "byte", "short", "int", "long",
-						"float", "double", "decimal", "dec"}) >= 0
-						&& isLetter() == NOCHAR) {
-						itemName = J_NUMBER;
-					} else {
-						itemName = J_STRING;
-					}
-					sbf = new SBuffer('?' + parsedScript[1].getString(),
-						parsedScript[1]);
+					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
 				}
+				sbf = parsedScript[1];
 			}
-		} else {
-			itemName = J_NULL;
-		}
-		if (J_ITEM.equals(itemName)) {
-			e = genXDElement(parent, "choice", jo.getPosition());
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			PNode f = genJElement(e, J_NULL, jo.getPosition());
-			e._childNodes.add(f);
-			f = genJElement(e, J_BOOLEAN, jo.getPosition());
-			PNode txt = genXDElement(e, "text", jo.getPosition());
-			txt._value = new SBuffer("jboolean");
-			f._childNodes.add(txt);
-			e._childNodes.add(f);
-			f = genJElement(e, J_NUMBER, jo.getPosition());
-			txt = genXDElement(e, "text", jo.getPosition());
-			txt._value = new SBuffer("jnumber");
-			f._childNodes.add(txt);
-			e._childNodes.add(f);
-			f = genJElement(e, J_STRING, jo.getPosition());
-			txt = genXDElement(e, "text", jo.getPosition());
-			txt._value = new SBuffer("jstring");
-			f._childNodes.add(txt);
-			e._childNodes.add(f);
-		} else {
-			e = genJElement(parent, itemName, jo.getPosition());
-			e._value = null;
-			if (occ != null) { // occurrence
-				setXDAttr(e, "script", occ);
-			}
-			if (sbf != null) {
-				PNode txt = genXDElement(e, "text", jo.getPosition());
-				txt._value = sbf;
-				e._childNodes.add(txt);
-			}
+			setAttr(e, "val", sbf);
 		}
 		return e;
 	}
@@ -545,7 +544,7 @@ public class XJson extends JsonToXml {
 		jx.setSourceBuffer(p._value);
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JArray)) {
-			jx.genJsonModel(json, p);
+			PNode e = jx.genJsonModel(json, p);
 		} else {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}

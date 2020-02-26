@@ -351,57 +351,55 @@ public class TestJsonXdef extends XDTester {
 		try {
 			String test;
 			XComponent xc;
+			Object o;
 
 			test = "Test008";
 			xc = getXComponent(xp, test, 0);
-			assertEq(1, getValueFromGetter(xc,"jgetnumber"));
-			setValueToSetter(xc,"jsetnumber",3);
-			assertEq(3, getValueFromGetter(xc,"jgetnumber"));
-			setValueToSetter(xc,"jsetnumber", null);
-			assertNull(getValueFromGetter(xc,"jgetnumber"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq(1, getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval",3);
+			assertEq(3, getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval", null);
+			assertNull(getValueFromGetter(o,"getval"));
 
 			test = "Test020";
 			xc = getXComponent(xp, test, 0);
-			assertEq("abc", getValueFromGetter(xc,"jgeta$string"));
-			assertNull(getValueFromGetter(xc,"jgeta$number"));
-			assertNull(getValueFromGetter(xc,"jgeta$boolean"));
-			assertNull(getValueFromGetter(xc,"jgeta$null"));
-			setValueToSetter(xc,"jseta$null", null);
-			assertTrue(getValueFromGetter(xc,"jgeta$boolean") == null);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("abc", getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval", null);
+			assertTrue(getValueFromGetter(o,"getval") == null);
 
 			xc = getXComponent(xp, test, 1);
-			assertEq(123, getValueFromGetter(xc,"jgeta$number"));
-			setValueToSetter(xc,"jseta$string", "");
-			assertEq("", getValueFromGetter(xc,"jgeta$string"));
-			assertNull(getValueFromGetter(xc,"jgeta$number"));
-			assertNull(getValueFromGetter(xc,"jgeta$boolean"));
-			assertNull(getValueFromGetter(xc,"jgeta$null"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq(123, getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval", "");
+			assertEq("", getValueFromGetter(o,"getval"));
 			xc = getXComponent(xp, test, 2);
-			assertEq(false, getValueFromGetter(xc,"jgeta$boolean"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq(false, getValueFromGetter(o,"getval"));
 			xc = getXComponent(xp, test, 3);
-			assertTrue(getValueFromGetter(xc,"jgeta$null") != null);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertTrue(getValueFromGetter(o,"getval") != null);
 
 			test = "Test021";
 			xc = getXComponent(xp, test, 0);
-			assertEq("abc", getValueFromGetter(xc,"jgetstring"));
-			assertNull(getValueFromGetter(xc,"jgetnumber"));
-			assertNull(getValueFromGetter(xc,"jgetboolean"));
-			assertNull(getValueFromGetter(xc,"jgetnull"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("abc", getValueFromGetter(o,"getval"));
 			xc = getXComponent(xp, test, 1);
-			assertEq(123, getValueFromGetter(xc,"jgetnumber"));
-			setValueToSetter(xc,"jsetstring", "");
-			assertEq("", getValueFromGetter(xc,"jgetstring"));
-			assertNull(getValueFromGetter(xc,"jgetnumber"));
-			assertNull(getValueFromGetter(xc,"jgetboolean"));
-			assertNull(getValueFromGetter(xc,"jgetnull"));
-			setValueToSetter(xc,"jsetstring", " a    b \n ");
-			assertEq(" a    b \n ", getValueFromGetter(xc,"jgetstring"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq(123, getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval", "");
+			assertEq("", getValueFromGetter(o,"getval"));
+			setValueToSetter(o,"setval", " a    b \n ");
+			assertEq(" a    b \n ", getValueFromGetter(o,"getval"));
 			xc = getXComponent(xp, test, 2);
-			assertEq(false, getValueFromGetter(xc,"jgetboolean"));
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq(false, getValueFromGetter(o,"getval"));
 			xc = getXComponent(xp, test, 3);
-			assertTrue(getValueFromGetter(xc,"jgetnull") != null);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertTrue(getValueFromGetter(o,"getval") != null);
 			xc = getXComponent(xp, test, 4);
-			assertNull(getValueFromGetter(xc,"jgetnull"));
+			assertNull(getValueFromGetter(xc,"getjs$item"));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.

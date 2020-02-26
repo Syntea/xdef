@@ -160,7 +160,7 @@ public static class c implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getf() != null)
-      el.setAttribute(XD_Name_f, getf());
+      el.setAttribute(XD_Name_f, getf().toString());
     return el;
   }
   @Override
