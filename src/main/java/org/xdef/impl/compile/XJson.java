@@ -456,7 +456,7 @@ public class XJson extends JsonToXml {
 						if (isJavaName()) { // parser name
 							String s = getParsedString();
 							addMatchExpression(ee,
-								s + "().parse((String) @a).matches()");
+								s + "().parse((String)@val).matches()");
 						}
 					}
 				}
