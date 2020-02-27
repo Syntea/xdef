@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
+import static buildtools.XDTester.getValueFromGetter;
+import java.util.List;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -400,6 +402,38 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(getValueFromGetter(o,"getval") != null);
 			xc = getXComponent(xp, test, 4);
 			assertNull(getValueFromGetter(xc,"getjs$item"));
+
+			test = "Test025";
+			xc = getXComponent(xp, test, 0);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("null", getValueFromGetter(o, "getval").toString());
+			o = getValueFromGetter(xc,"getjs$item_1");
+			assertEq(12, getValueFromGetter(o,"getval"));
+			o = getValueFromGetter(xc,"getjs$item_2");
+			assertEq("\" a b \"", getValueFromGetter(o,"getval"));
+			xc = getXComponent(xp, test, 1);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("null", getValueFromGetter(o, "getval").toString());
+			assertNull(getValueFromGetter(xc,"getjs$item_1"));
+			assertNull(getValueFromGetter(xc,"getjs$item_2"));
+
+			test = "Test026";
+			xc = getXComponent(xp, test, 0);
+			o = getValueFromGetter(xc,"listOfjs$item");
+			assertEq(2, ((List) o).size());
+			o = ((List) o).get(0);
+			assertEq("null", getValueFromGetter(o,"getval").toString());
+			o = getValueFromGetter(xc,"listOfjs$item");
+			o = ((List) o).get(1);
+			assertEq("null", getValueFromGetter(o,"getval").toString());
+			xc = getXComponent(xp, test, 0);
+			o = getValueFromGetter(xc,"listOfjs$item_1");
+			assertEq(2, ((List) o).size());
+			o = ((List) o).get(0);
+			assertEq(12, getValueFromGetter(o,"getval"));
+			o = getValueFromGetter(xc,"listOfjs$item_1");
+			o = ((List) o).get(1);
+			assertEq(13, getValueFromGetter(o,"getval"));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.

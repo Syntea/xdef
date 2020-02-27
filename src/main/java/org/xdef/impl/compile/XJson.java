@@ -442,23 +442,32 @@ public class XJson extends JsonToXml {
 			}
 			for(; index < len; index++) {
 				PNode ee = genJsonModel(array.get(index), e);
-				PAttr script = getXDAttr(ee, "script");
 				PAttr val;
 				// if it is not last and has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attrbute with a value description
-				if (index + 1 < len && script != null
+				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
 					&& (val = getAttr(ee, "val")) != null) {
-					XOccurrence occ = readOccurrence(script.getValue());
-					if (occ.minOccurs() != occ.maxOccurs()) {
-						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
-						setSourceBuffer(sbs[1]);
-						if (isJavaName()) { // parser name
-							String s = getParsedString();
-							addMatchExpression(ee,
-								s + "().parse((String)@val).matches()");
+					SBuffer[] sbs = parseTypeDeclaration(val.getValue());
+					String s = sbs[1].getString();
+					int i;
+					// remove comments!
+					while ((i = s.indexOf("/*")) >= 0) {
+						int j = s.indexOf("*/", i);
+						if (j > i) {
+							s = s.substring(0, i) + s.substring(j+2) + ' ';
 						}
 					}
+					if ((i = s.lastIndexOf(';')) > 0) { // remove ";" at end
+						s = s.substring(0, i);
+					}
+					s = s.trim();
+					if (s.isEmpty()) { //type not specified
+						s = "jvalue()";
+					} else if (!s.endsWith(")")) {
+						s += "()"; // add brackets
+					}
+					addMatchExpression(ee, s+".parse((String)@val).matches()");
 				}
 			}
 		}
@@ -556,7 +565,7 @@ public class XJson extends JsonToXml {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
-//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+//System.out.println(cz.syntea.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
