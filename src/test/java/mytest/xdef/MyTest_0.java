@@ -1166,13 +1166,13 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			mytest.component.TJ3 xx = (mytest.component.TJ3)
+			mytest.component.TJ3 TJ3 = (mytest.component.TJ3)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(xx.getjs$item().getval()!= null
-				&& "null".equals(xx.getjs$item().getval().toString()));
-			assertEq(12, xx.getjs$item_1().getval());
+			assertTrue(TJ3.getjs$item().getval()!= null
+				&& "null".equals(TJ3.getjs$item().getval().toString()));
+			assertEq(12, TJ3.getjs$item_1().getval());
 			json = "{\"b\":12}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -1181,11 +1181,11 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			xx = (mytest.component.TJ3)
+			TJ3 = (mytest.component.TJ3)
 				 xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertNull(xx.getjs$item());
+			assertNull(TJ3.getjs$item());
 /* */
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='X|Y|Z|json'>\n"+
