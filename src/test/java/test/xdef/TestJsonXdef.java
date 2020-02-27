@@ -403,6 +403,20 @@ public class TestJsonXdef extends XDTester {
 			xc = getXComponent(xp, test, 4);
 			assertNull(getValueFromGetter(xc,"getjs$item"));
 
+			test = "Test025";
+			xc = getXComponent(xp, test, 0);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("null", getValueFromGetter(o, "getval").toString());
+			o = getValueFromGetter(xc,"getjs$item_1");
+			assertEq(12, getValueFromGetter(o,"getval"));
+			o = getValueFromGetter(xc,"getjs$item_2");
+			assertEq("\" a b \"", getValueFromGetter(o,"getval"));
+			xc = getXComponent(xp, test, 1);
+			o = getValueFromGetter(xc,"getjs$item");
+			assertEq("null", getValueFromGetter(o, "getval").toString());
+			assertNull(getValueFromGetter(xc,"getjs$item_1"));
+			assertNull(getValueFromGetter(xc,"getjs$item_2"));
+
 			test = "Test026";
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"listOfjs$item");
