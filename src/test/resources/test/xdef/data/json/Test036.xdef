@@ -1,4 +1,8 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test036' xd:root='a'>
+<xd:declaration>
+  type genre enum("Classic", "Country", "Folk", "Jazz", "Pop", "Pop punk",
+             "Punk", "Punk rock", "Rap", "Rock", "R&amp;B", "Other");
+</xd:declaration> 
 <xd:json name='a'>
 {
   "Title": "optional jstring()",
@@ -9,8 +13,8 @@
         {$script: "occurs 1..*",
           "Name": "string()",
           "Genre": [$oneOf,
-               "string()",
-               ["occurs 1..*;string()"]
+               "genre()",
+               ["occurs 1..*; genre()"]
            ],
           "ReleaseDate": "xdatetime('yyyy-MM-dd')",
           "Label": "string()",
