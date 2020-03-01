@@ -1045,7 +1045,7 @@ public class XDGenCollection {
 
 	/** Find namespace of child element on root level.
 	 * @param n node to be checked.
-	 * @return
+	 * @return namespaace of given node.
 	 */
 	public static String findXDNS(final Node n) {
 		if (n != null) {

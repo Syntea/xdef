@@ -333,10 +333,37 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		} else {
 			numPar = paramList(name).getNumpars();
 			CompileVariable var;
-			if (numPar == 0 && (var =_g.getVariable(name)) != null
+			int addr;
+			if ((var =_g.getVariable(name)) != null && numPar == 0
 				&& var.getType() == XD_PARSER) {
 				_g.genLD(name);
-				_g.addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
+				if (_sym != DOT_SYM) {
+					_g.addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
+				}
+			} else if (numPar == 0 && var != null && var.getKind() == 'G'
+				&& var.getType() == CompileBase.PARSEITEM_VALUE
+				&& (addr = var.getParseMethodAddr()) >= 0
+				&& _sym == DOT_SYM
+				&& _g._code.get(addr).getItemId()== XD_PARSER) {
+				 // it is  parser and follows a class method
+				 // so we load just the parser
+				short code;
+				byte kind = var.getKind();
+				if (kind == 'G' && _g._code.get(addr).getCode() == LD_CONST) {
+					code = LD_CODE; 
+					_g._cstack[++_g._sp] = addr;
+				} else {
+					if (kind == 'G') {
+						code = LD_GLOBAL;
+					} else if (kind == 'X') {
+						code = LD_XMODEL;
+					} else {
+						code = LD_LOCAL;
+					}
+					_g._cstack[++_g._sp] = -1;
+				}
+				_g.addCode(new CodeS1(XD_PARSER, code, addr, var.getName()));
+				_g._tstack[_g._sp] = XD_PARSER;
 			} else {
 				String err = _g.genMethod(name, numPar);
 				if (err != null) {
