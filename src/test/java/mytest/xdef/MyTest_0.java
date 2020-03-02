@@ -12,6 +12,8 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
 import static buildtools.XDTester._xdNS;
+import static buildtools.XDTester.genXComponent;
+import static buildtools.XDTester.getValueFromGetter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
