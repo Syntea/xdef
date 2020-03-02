@@ -14,8 +14,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
-import static buildtools.XDTester.getValueFromGetter;
 import java.util.List;
+import org.xdef.json.JsonToXml;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -358,62 +358,66 @@ public class TestJsonXdef extends XDTester {
 			test = "Test008";
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq(1, getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval",3);
-			assertEq(3, getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval", null);
-			assertNull(getValueFromGetter(o,"getval"));
+			assertEq(1, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, 3);
+			assertEq(3, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, null);
+			assertNull(getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 
 			test = "Test020";
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq("abc", getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval", null);
-			assertTrue(getValueFromGetter(o,"getval") == null);
+			assertEq("abc", getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, null);
+			assertTrue(getValueFromGetter(o,"get"+JsonToXml.J_VALUEATTR)==null);
 
 			xc = getXComponent(xp, test, 1);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq(123, getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval", "");
-			assertEq("", getValueFromGetter(o,"getval"));
+			assertEq(123, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, "");
+			assertEq("", getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 2);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq(false, getValueFromGetter(o,"getval"));
+			assertEq(false, getValueFromGetter(o,"get"+JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 3);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertTrue(getValueFromGetter(o,"getval") != null);
+			assertTrue(getValueFromGetter(o,"get"+JsonToXml.J_VALUEATTR)!=null);
 
 			test = "Test021";
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq("abc", getValueFromGetter(o,"getval"));
+			assertEq("abc", getValueFromGetter(o,"get" +JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq(123, getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval", "");
-			assertEq("", getValueFromGetter(o,"getval"));
-			setValueToSetter(o,"setval", " a    b \n ");
-			assertEq(" a    b \n ", getValueFromGetter(o,"getval"));
+			assertEq(123, getValueFromGetter(o,"get" +JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, "");
+			assertEq("", getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
+			setValueToSetter(o,"set" + JsonToXml.J_VALUEATTR, " a    b \n ");
+			assertEq(" a    b \n ", getValueFromGetter(o,
+				"get" + JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 2);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq(false, getValueFromGetter(o,"getval"));
+			assertEq(false, getValueFromGetter(o,"get" +JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 3);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertTrue(getValueFromGetter(o,"getval") != null);
+			assertTrue(getValueFromGetter(o,"get"+JsonToXml.J_VALUEATTR)!=null);
 			xc = getXComponent(xp, test, 4);
 			assertNull(getValueFromGetter(xc,"getjs$item"));
 
 			test = "Test025";
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq("null", getValueFromGetter(o, "getval").toString());
+			assertEq("null", getValueFromGetter(o,
+				"get" + JsonToXml.J_VALUEATTR).toString());
 			o = getValueFromGetter(xc,"getjs$item_1");
-			assertEq(12, getValueFromGetter(o,"getval"));
+			assertEq(12, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			o = getValueFromGetter(xc,"getjs$item_2");
-			assertEq("\" a b \"", getValueFromGetter(o,"getval"));
+			assertEq("\" a b \"", 
+				getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
 			o = getValueFromGetter(xc,"getjs$item");
-			assertEq("null", getValueFromGetter(o, "getval").toString());
+			assertEq("null", getValueFromGetter(o,
+				"get" + JsonToXml.J_VALUEATTR).toString());
 			assertNull(getValueFromGetter(xc,"getjs$item_1"));
 			assertNull(getValueFromGetter(xc,"getjs$item_2"));
 
@@ -422,18 +426,20 @@ public class TestJsonXdef extends XDTester {
 			o = getValueFromGetter(xc,"listOfjs$item");
 			assertEq(2, ((List) o).size());
 			o = ((List) o).get(0);
-			assertEq("null", getValueFromGetter(o,"getval").toString());
+			assertEq("null", getValueFromGetter(o,
+				"get" + JsonToXml.J_VALUEATTR).toString());
 			o = getValueFromGetter(xc,"listOfjs$item");
 			o = ((List) o).get(1);
-			assertEq("null", getValueFromGetter(o,"getval").toString());
+			assertEq("null", getValueFromGetter(o,
+				"get" + JsonToXml.J_VALUEATTR).toString());
 			xc = getXComponent(xp, test, 0);
 			o = getValueFromGetter(xc,"listOfjs$item_1");
 			assertEq(2, ((List) o).size());
 			o = ((List) o).get(0);
-			assertEq(12, getValueFromGetter(o,"getval"));
+			assertEq(12, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			o = getValueFromGetter(xc,"listOfjs$item_1");
 			o = ((List) o).get(1);
-			assertEq(13, getValueFromGetter(o,"getval"));
+			assertEq(13, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 		} catch (Exception ex) {fail(ex);}
 
 		// If no errors were reported delete all generated data.

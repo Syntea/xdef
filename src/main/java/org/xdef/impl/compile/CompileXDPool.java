@@ -1647,7 +1647,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = actDefName;
 	}
 
-
 	/** Compile root selection from xd:def header.
 	 * @param pnode PNode item.
 	 */
