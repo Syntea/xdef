@@ -400,7 +400,8 @@ public abstract class STester {
 	 * @param msg message to be printed or null.
 	 */
 	public void assertEq(Boolean a1, Boolean a2, Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a1.compareTo(a2)!=0)) {
+		if ((a1 == null && a2 != null) || (a1 != null && a2 == null)
+			|| (a1 == null && a2 == null) || (!a1.equals(a2))) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -422,7 +423,8 @@ public abstract class STester {
 	public final void assertEq(final Character a1,
 		final Character a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a1.compareTo(a2)!=0)) {
+		if ((a1 != null && a2 != null && !a1.equals(a2))
+			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+"a1='" + a1 + "'(" + ((int) a1) + "); a2='" +
 				a2 + "'(" + ((int) a2) + ")");
@@ -443,7 +445,8 @@ public abstract class STester {
 	 * @param msg message to be printed or null.
 	 */
 	public final void assertEq(final Long a1, final Long a2, final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a1.compareTo(a2)!=0)) {
+		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
+			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -465,7 +468,8 @@ public abstract class STester {
 	public final void assertEq(final Double a1,
 		final Double a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a1.compareTo(a2)!=0)) {
+		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
+			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -487,7 +491,8 @@ public abstract class STester {
 	public final void assertEq(final BigDecimal a1,
 		final BigDecimal a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a1.compareTo(a2)!=0)) {
+		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
+			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
