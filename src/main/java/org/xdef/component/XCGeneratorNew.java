@@ -893,7 +893,6 @@ class XCGeneratorNew implements XCGenerator {
 				break;
 			case XDValueID.XD_ANY: //jvalue
 				if ("jvalue".equals(xdata.getParserName())) {
-//"\t\t\t\torg.xdef.component.XComponentUtil.jvalueToString("
 					x = (max > 1 ? "listOf" : "get") + "&{name}()" +y
 						+ (max <= 1 ? ".toString()" : "");
 					break;
@@ -1518,23 +1517,6 @@ class XCGeneratorNew implements XCGenerator {
 					break;
 				}
 			}
-//		} else if (xe._match >= 0) {
-//			name = javaName("jget" + name);
-//			name = getUniqueName(getUniqueName(getUniqueName(name,
-//				RESERVED_NAMES), classNames), varNames);
-//			name = name.substring(4);
-//			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
-//			for (int i = xe._match; i < code.length; i++) {
-//				XDValue item = code[i];
-//				if (item.getCode() == CodeTable.CMPEQ) {
-//					name = JsonUtil.toXmlName(code[i-1].stringValue());
-//					name = javaName("jget" + name);
-//					name = getUniqueName(getUniqueName(getUniqueName(name,
-//						RESERVED_NAMES), classNames), varNames);
-//					name = name.substring(4);
-//					break;
-//				}
-//			}
 		}
 		XMNode[] childNodeModels = xe.getChildNodeModels();
 		String typ;
@@ -1546,8 +1528,6 @@ class XCGeneratorNew implements XCGenerator {
 		} else {
 			isNull = false;
 			typ = getJavaObjectTypeName((XData) childNodeModels[0]);
-//			name = getUniqueName(getUniqueName(getUniqueName(name,
-//				RESERVED_NAMES), classNames), varNames);
 		}
 		String template;
 		// has only a text child
@@ -1874,15 +1854,6 @@ class XCGeneratorNew implements XCGenerator {
 			int i = name.indexOf('$'); // The ":" in name is replaced with "$"!
 			String nsname = "xmlns" + (i>0 ? ':' + name.substring(i + 1) : "");
 			// Generate getter of namespace
-//			final String xmlname = addVarName(varNames,
-//				name, xe.getXDPosition()+"/@"+name, false);
-//			getters.append(modify(
-//(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+LN+
-//"\t * @return string with value of attribute"+LN+
-//"\t */"+LN) : "")+
-//"\tpublic String get&{name}() {return \"&{value}\";}"+LN,
-//				"&{name}", name,
-//				"&{value}", value));
 			String s =
 "\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+LN+
 "\t\t\t\"" + nsname + "\", \"" + value + "\");"+LN;
@@ -1925,33 +1896,12 @@ class XCGeneratorNew implements XCGenerator {
 						if ((x.length==1 && x[0].getKind() == XNode.XMTEXT)
 							|| (x.length == 0 && "null".equals(
 								xe1.getQName().getLocalPart()))) {
-//						int n = t.lastIndexOf('.');
-//						t = '_' + t.substring(n+1);
 							ar.add(t);
 						}
 						if (k == groupFirst) {
 							break;
 						}
 					}
-//  public Object jgeta() {
-//	if (_jw$null != null) return jgeta$null();
-//	if (_jw$boolean != null) return jgeta$boolean();
-//	if (_jw$number != null) return jgeta$number();
-//	if (_jw$string != null) return jgeta$string();
-//	return null;
-//  }
-//  public void jseta(Object x) {
-//	  if (x==null || x instanceof org.xdef.json.JNull)
-//        jseta$null((org.xdef.json.JNull) x);
-//	  else if (x instanceof Boolean) jseta$boolean((Boolean)x);
-//	  else if (x instanceof Number) jseta$number((Number)x);
-//	  else if (x instanceof String) jseta$string((String)x);
-//	  else throw new org.xdef.sys.SRuntimeException(//Incorrect type &{0}
-//        org.xdef.msg.XDEF.XDEF377, x.getClass().getName());
-//  }
-if (ar.size() > 1) {
-//	System.out.println(ar);
-}
 					s += LN;
 					for (;choiceStack.size() >= 5;) {
 						int max = (Integer) choiceStack.pop();
@@ -1961,15 +1911,6 @@ if (ar.size() > 1) {
 						XElement xe1 = (XElement) nodes[k];
 						boolean ext = (Boolean) choiceStack.pop();
 						if (xe1._json >= 1) {
-//XData valAttr = (XData) xe1.getAttr(org.xdef.json.JsonToXml.J_VALUEATTR);
-//if (valAttr != null) {
-//	System.out.println("val=" + valAttr);	
-//}
-//XData keyAttr = (XData) xe1.getAttr(org.xdef.json.JsonToXml.J_KEYATTR);
-//if (keyAttr != null) {
-//	System.out.println("key=" + keyAttr.getFixedValue());
-//	System.out.println(xe1.getName() + "=" + xe1._match);
-//}
 							XNode[] x = (XNode[]) xe1.getChildNodeModels();
 							if ((x.length==1 && x[0].getKind() == XNode.XMTEXT)
 								|| (x.length == 0 && "null".equals(
