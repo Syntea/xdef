@@ -289,7 +289,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final File file,
 		final ReportReader reports,
 		final boolean lineNumbers) {
-		Reader in;
+		Reader in = null;
 		try {
 			in = new java.io.FileReader(file);
 		} catch (Exception ex) {
@@ -367,6 +367,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final int maxLineLength,
 		final boolean lineNumbers,
 		final String language) {
+		LineNumberReader ln = null;
 		try {
 			ArrayList<ReportPrinter> arr = new ArrayList<ReportPrinter>();
 			ReportPrinter sp;
@@ -388,8 +389,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			int fatals = 0;
 			sp = (sortedArray.length > 0) ? sortedArray[0] : null;
 			int lineNum = 0;
-/**/
-			LineNumberReader ln = new LineNumberReader(reader);
+			ln = new LineNumberReader(reader);
 			String line;
 			while ((line = ln.readLine()) != null) {
 				lineNum++;
@@ -424,132 +424,6 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 						? sortedArray[index] : null;
 				}
 			}
-/**
-			long filePos = 0;
-			long linePos = 0;
-			int ch = 0;
-			while (ch >= 0) {
-				long begLinePos = filePos;
-				boolean contLine = false;
-				StringBuilder sb = new StringBuilder();
-				while (((ch = reader.read()) >= 0)) {
-					filePos++;
-					if (ch == '\r') {
-						continue;
-					}
-					if (ch == '\n') {
-						lineNum++;
-						linePos = filePos;
-						break;
-					}
-					sb.append((char)ch);
-					if (lineNumbers && sb.length() > maxLineLength) {
-						contLine = true;
-						break;
-					}
-				}
-				if (sp != null && sp._line == lineNum + 1) {
-					sp._pos = linePos + sp._column - 1;
-				}
-				if (ch < 0) {
-					if (sb.length() == 0) {
-						if (sp == null) {
-							break; // do not print last empty line
-						}
-					}
-					lineNum++;
-				}
-				String line = sb.toString();
-				int endline = line.length();
-				if ((endline == 0) && (ch < 0) &&
-					sp != null && sp._pos == filePos) {
-					if (lineNumbers) {
-						out.write(LINE_NUM_FORMAT.format(lineNum));
-					}
-					while (sp != null && sp._line == lineNum) {
-						switch (sp.getType()) {
-							case Report.FATAL:
-								fatals++;
-								break;
-							case Report.ERROR:
-								errors++;
-								break;
-							case Report.WARNING:
-								warnings++;
-								break;
-							default:
-						}
-						sp.setModification(
-							extractPosition(sp.getModification()));
-						if (lineNumbers) {
-							out.write("\n *****  ");
-						}
-						out.write("|\n");
-						out.write(sp.toString(language));
-						out.write('\n');
-						sp = (++index < sortedArray.length)
-							? sortedArray[index] : null;
-					}
-					break; //end of listing;
-				}
-				if (contLine) {
-					out.write("  ...   ");
-				} else {
-					if (lineNumbers) {
-						String s = LINE_NUM_FORMAT.format(lineNum);
-						out.write(s);
-					}
-				}
-				out.write(line);
-				out.write('\n');
-				long lastMsgPos = -1;
-				while (sp != null) {
-					long msgPos = sp._pos;
-					if (msgPos >= filePos) {
-						if (index + 1 == sortedArray.length && //last error
-							msgPos > filePos) {
-							break;
-						} else {
-							break;
-						}
-					}
-					if (lastMsgPos != msgPos) {
-						if (lineNumbers) {
-							out.write(" *****  ");
-						}
-						if (msgPos != filePos + 1) {
-							for (int i = 0; i < msgPos - begLinePos; i++) {
-								if (i < line.length()) {
-									out.write((line.charAt(i)=='\t'?'\t':' '));
-								}
-							}
-						}
-						out.write("|\n");
-						lastMsgPos = msgPos;
-					}
-					switch (sp.getType()) {
-						case Report.FATAL:
-							fatals++;
-							break;
-						case Report.ERROR:
-							errors++;
-							break;
-						case Report.WARNING:
-							warnings++;
-							break;
-						default:
-					}
-					sp.setModification(extractPosition(sp.getModification()));
-					out.write(sp.toString(language));
-					out.write('\n');
-					if (++index < sortedArray.length) {
-						sp = sortedArray[index];
-					} else {
-						sp = null;
-					}
-				}
-			}
-/**/
 			// print messages which were not reported yet
 			boolean wasNoPos = false;
 			while (index < sortedArray.length) {
@@ -605,16 +479,14 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 				out.write(Report.text(SYS.SYS068, fatals, errors, warnings)
 					.toString(language));
 				out.write('\n');
-//			} else {
-//				//No errors found
-//				out.write(Report.text(SYS.SYS069).toString(language));
-//				out.write('\n');
 			}
 			out.flush();
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
 			throw new SRuntimeException(SYS.SYS036, ex);
 		}
+		try {ln.close();}catch (Exception ex) {}
+		try {out.close();}catch (Exception ex) {}
 	}
 
 	/** print message and help information and finish program.
@@ -689,10 +561,11 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		if (inputFname == null) {
 			printUsage("Input file parameter is missing");
 		}
+		FileReportReader frr = null;
+		PrintStream out = null;
 		try {
-			FileReportReader frr = new FileReportReader(
+			frr = new FileReportReader(
 				new InputStreamReader(new FileInputStream(inputFname)), true);
-			PrintStream out;
 			if (outputFname != null) {
 				out = new PrintStream(new FileOutputStream(outputFname));
 			} else {
@@ -705,6 +578,8 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		} catch (Exception ex) {
 			printUsage("Error: " + ex);
 		}
+		try {out.close();} catch (Exception ex) {}
+		try {frr.close();} catch (Exception ex) {}
 	}
 
 }

@@ -878,6 +878,7 @@ public final class SManager implements XDConstants {
 				Properties props = new Properties();
 				props.load(in);
 				in.close();
+				input.close();
 				ReportTable table = RegisterReportTables.genReportTable(props);
 				table._ids = ids;
 				return addReportTable(table);

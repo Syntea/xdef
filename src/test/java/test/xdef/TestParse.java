@@ -1384,6 +1384,7 @@ public final class TestParse extends XDTester {
 			}
 			frep.close();
 			fr.close();
+			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
@@ -1484,6 +1485,7 @@ public final class TestParse extends XDTester {
 				sb.append('\n');
 			}
 			br.close();
+			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
 			if (getFailCount() == 0) {
 				try {
@@ -3142,7 +3144,11 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
-		new File(tempDir + "vystup.txt").delete();
+		try {
+			SUtils.deleteAll(tempDir, true); //delete all generated data
+		} catch (Exception ex) {
+			fail(ex);// should not happen; error when delete generated data
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

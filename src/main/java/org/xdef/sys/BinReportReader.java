@@ -22,14 +22,9 @@ public class BinReportReader implements ReportReader {
 		}
 	}
 
-
 	@Override
 	public final void close() {
-		try {
-			_in.getStream().close();
-		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-		}
+		try {_in.getStream().close();} catch (Exception ex) {}
 	}
 
 	@Override
@@ -55,5 +50,4 @@ public class BinReportReader implements ReportReader {
 			reporter.putReport(rep);
 		}
 	}
-
 }

@@ -35,7 +35,7 @@ public class MichalTest {
 			_in.close();
 		}
 	}
-	
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -56,5 +56,4 @@ public class MichalTest {
         xdDocument.xparse(in, null);  // pokud se tento  radek zaremuje nedojde z zaseknuti
 		System.out.println("closed = " + in._closed);
 	}
-	
 }
