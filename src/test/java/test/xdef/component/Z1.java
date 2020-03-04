@@ -175,11 +175,11 @@ public class Z1 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getVerze() != null)
-      el.setAttribute(XD_Name_Verze, getVerze().toString());
+      el.setAttribute(XD_Name_Verze, getVerze());
     if (getSeqRec() != null)
-      el.setAttribute(XD_Name_SeqRec, String.valueOf(getSeqRec()));
+      el.setAttribute(XD_Name_SeqRec, getSeqRec().toString());
     if (getKrajPolicie() != null)
-      el.setAttribute(XD_Name_KrajPolicie, getKrajPolicie().toString());
+      el.setAttribute(XD_Name_KrajPolicie, getKrajPolicie());
     if (getPlatnostOd() != null)
       el.setAttribute(XD_Name_PlatnostOd, getPlatnostOd().formatDate("d.M.yyyy H:mm"));
     for (org.xdef.component.XComponent x: xGetNodeList())

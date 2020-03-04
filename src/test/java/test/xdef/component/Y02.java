@@ -55,9 +55,9 @@ public class Y02 implements test.xdef.component.s.Y01Part,org.xdef.component.XCo
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, getOne().toString());
+      el.setAttribute(XD_Name_One, getOne());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo().toString());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override

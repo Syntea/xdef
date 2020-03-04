@@ -98,19 +98,19 @@ public class Z8 implements org.xdef.component.XComponent{
     if (getDatumCasDoDN() != null)
       el.setAttribute(XD_Name_DatumCasDoDN, getDatumCasDoDN().formatDate("d.M.yyyy H:mm"));
     if (getKodOkresu() != null)
-      el.setAttribute(XD_Name_KodOkresu, getKodOkresu().toString());
+      el.setAttribute(XD_Name_KodOkresu, getKodOkresu());
     if (getObec() != null)
-      el.setAttribute(XD_Name_Obec, getObec().toString());
+      el.setAttribute(XD_Name_Obec, getObec());
     if (getUlice() != null)
-      el.setAttribute(XD_Name_Ulice, getUlice().toString());
+      el.setAttribute(XD_Name_Ulice, getUlice());
     if (getCisloPopisne() != null)
-      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne().toString());
+      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
     if (getSkodaTisKc() != null)
-      el.setAttribute(XD_Name_SkodaTisKc, getSkodaTisKc().toString());
+      el.setAttribute(XD_Name_SkodaTisKc, getSkodaTisKc());
     if (getHlavniPricina() != null)
-      el.setAttribute(XD_Name_HlavniPricina, getHlavniPricina().toString());
+      el.setAttribute(XD_Name_HlavniPricina, getHlavniPricina());
     if (getPricina() != null)
-      el.setAttribute(XD_Name_Pricina, getPricina().toString());
+      el.setAttribute(XD_Name_Pricina, getPricina());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

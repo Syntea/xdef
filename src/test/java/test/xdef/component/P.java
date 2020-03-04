@@ -197,7 +197,7 @@ public static class a implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, geta().toString());
     if (getb() != null)
       el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
@@ -322,7 +322,7 @@ public static class b implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, geta().toString());
     if (getb() != null)
       el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
@@ -447,7 +447,7 @@ public static class c implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, geta().toString());
     if (getb() != null)
       el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;
@@ -572,7 +572,7 @@ public static class d implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, String.valueOf(geta()));
+      el.setAttribute(XD_Name_a, geta().toString());
     if (getb() != null)
       el.setAttribute(XD_Name_b, getb().formatDate("M.d.yyyy"));
     return el;

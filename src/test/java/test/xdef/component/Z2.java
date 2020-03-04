@@ -82,19 +82,19 @@ public class Z2 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getKodUtvaruPolicie() != null)
-      el.setAttribute(XD_Name_KodUtvaruPolicie, getKodUtvaruPolicie().toString());
+      el.setAttribute(XD_Name_KodUtvaruPolicie, getKodUtvaruPolicie());
     if (getRokDN() != null)
       el.setAttribute(XD_Name_RokDN, getRokDN().formatDate("yyyy"));
     if (getCisloDN() != null)
-      el.setAttribute(XD_Name_CisloDN, getCisloDN().toString());
+      el.setAttribute(XD_Name_CisloDN, getCisloDN());
     if (getCisloJednaciDN() != null)
-      el.setAttribute(XD_Name_CisloJednaciDN, getCisloJednaciDN().toString());
+      el.setAttribute(XD_Name_CisloJednaciDN, getCisloJednaciDN());
     if (getDatumCasOznameni() != null)
       el.setAttribute(XD_Name_DatumCasOznameni, getDatumCasOznameni().formatDate("d.M.yyyy H:mm"));
     if (getNazevDN() != null)
-      el.setAttribute(XD_Name_NazevDN, getNazevDN().toString());
+      el.setAttribute(XD_Name_NazevDN, getNazevDN());
     if (getZpracovatel() != null)
-      el.setAttribute(XD_Name_Zpracovatel, getZpracovatel().toString());
+      el.setAttribute(XD_Name_Zpracovatel, getZpracovatel());
     return el;
   }
   @Override

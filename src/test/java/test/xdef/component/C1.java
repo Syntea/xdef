@@ -55,9 +55,9 @@ public class C1 implements test.xdef.component.CI,org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getFirstName() != null)
-      el.setAttribute(XD_Name_FirstName, getFirstName().toString());
+      el.setAttribute(XD_Name_FirstName, getFirstName());
     if (getLastName() != null)
-      el.setAttribute(XD_Name_LastName, getLastName().toString());
+      el.setAttribute(XD_Name_LastName, getLastName());
     return el;
   }
   @Override

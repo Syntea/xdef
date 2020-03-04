@@ -55,9 +55,9 @@ public class Y06B implements test.xdef.TestXComponents_Y06XCDomain,org.xdef.comp
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, getOne().toString());
+      el.setAttribute(XD_Name_One, getOne());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo().toString());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override

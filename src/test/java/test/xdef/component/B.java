@@ -76,15 +76,15 @@ public class B implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getid() != null)
-      el.setAttribute(XD_Name_id, String.valueOf(getid()));
+      el.setAttribute(XD_Name_id, getid().toString());
     if (getnum() != null)
-      el.setAttribute(XD_Name_num, String.valueOf(getnum()));
+      el.setAttribute(XD_Name_num, getnum().toString());
     if (getdate() != null)
       el.setAttribute(XD_Name_date, getdate().formatDate("yyyy-MM-dd"));
     if (gettime() != null)
       el.setAttribute(XD_Name_time, gettime().formatDate("HH:mm:ss"));
     if (getname() != null)
-      el.setAttribute(XD_Name_name, getname().toString());
+      el.setAttribute(XD_Name_name, getname());
     return el;
   }
   @Override

@@ -52,7 +52,7 @@ public class AZ extends test.xdef.TestXComponents_G implements org.xdef.componen
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getz() != null)
-      el.setAttribute(XD_Name_z, getz().toString());
+      el.setAttribute(XD_Name_z, getz());
     return el;
   }
   @Override

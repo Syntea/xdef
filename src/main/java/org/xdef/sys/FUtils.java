@@ -228,20 +228,19 @@ public class FUtils {
 	 * return 0;
 	 */
 	public static final long compareFile(final File f1, final File f2) {
+		long result = 0;
+		InputStream fs1 = null;
+		InputStream fs2 = null;
 		if (f1.exists() && f1.canRead() && f2.exists() && f2.canRead()) {
 			try {
-				InputStream fs1 = new FileInputStream(f1);
-				InputStream fs2 = new FileInputStream(f2);
-				long result = compareFile(fs1, fs2);
-				try {
-					fs1.close();
-					fs2.close();
-				} catch (Exception ex) {}
-				return result;
-			} catch (Exception ex) {
-			}
+				fs1 = new FileInputStream(f1);
+				fs2 = new FileInputStream(f2);
+				result = compareFile(fs1, fs2);
+			} catch (Exception ex) {}
 		}
-		return 0;
+		try {fs1.close();} catch (Exception ex) {}
+		try {fs2.close();} catch (Exception ex) {}
+		return result;
 	}
 
 	/** Check if contents of files are equal. Returns true if files are equal,
@@ -296,9 +295,9 @@ public class FUtils {
 				} else {
 					if (len1 < 0) {
 						if (f2.read() < 0) {
-							return -1L;
+							diff = -1L;
 						}
-						return diff;
+						break;
 					}
 					int len2 = f2.read(buf2, 0, len1);
 					int len = len2;
@@ -311,7 +310,7 @@ public class FUtils {
 							off += len;
 							len = f2.read(buf2, off, len1 - len2);
 							if (len == -1) {
-								return diff;
+								throw new Exception();
 							}
 							len2 += len;
 						}
@@ -319,15 +318,17 @@ public class FUtils {
 					//compare buffers
 					for (int i = 0; i < len1; i++) {
 						if (buf1[i] != buf2[i]) {
-							return diff + i;
+							diff = diff + i;
+							throw new Exception();
 						}
 					}
 					diff += len1;
 				}
 			}
-		} catch (Exception ex) {
-			return diff;
-		}
+		} catch (Exception ex) {}
+		try {f1.close();} catch (Exception ex) {}
+		try {f2.close();} catch (Exception ex) {}
+		return diff;
 	}
 
 	private static void sleep1() {
@@ -553,7 +554,7 @@ public class FUtils {
 	public static final void copyToFile(final File inFile,
 		final File outFile,
 		final boolean append) throws SException {
-		InputStream in;
+		InputStream in = null;
 		if (!inFile.exists()) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
@@ -570,7 +571,7 @@ public class FUtils {
 			}
 			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
-		OutputStream out;
+		OutputStream out = null;
 		try {
 			out = new FileOutputStream(outFile, append);
 		} catch (Exception ex) {
@@ -580,15 +581,11 @@ public class FUtils {
 		try {
 			copyToFile(in,
 				inFile.getCanonicalPath(), out, outFile.getCanonicalPath());
-			in.close();
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
-		try {
-			out.close();
-		} catch (Exception ex) {
-			throw new SException(SYS.SYS023, outFile);//Can't write to file: &{0}
-		}
+		try {in.close();} catch (Exception ex) {}
+		try {out.close();} catch (Exception ex) {}
 	}
 
 	/** Copy input file to the output file given by the name.
@@ -657,11 +654,11 @@ public class FUtils {
 		}
 		try {
 			copyToFile(is,is.getClass().getName(),fos,file.getCanonicalPath());
-			fos.close();
 		} catch(IOException ex) {
 			// Can't write to file: &{0}
 			throw new SException(SYS.SYS023, "java.io.OutputStream");
 		}
+		try {fos.close();} catch (Exception ex) {}
 	}
 
 	/** Copy InputStream to the file.
@@ -677,18 +674,14 @@ public class FUtils {
 	 */
 	public static final void copyToFile(final File inFile,
 		final OutputStream os) throws SException {
-		FileInputStream is;
+		FileInputStream is = null;
 		try {
 			is = new FileInputStream(inFile);
 		} catch (Exception ex) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		copyToFile(is, is.getClass().getName(), os, os.getClass().getName());
-		try {
-			is.close();
-		} catch (Exception ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
-		}
+		try {is.close();} catch (Exception ex) {}
 	}
 
 	/** Copy InputStream to the file.
@@ -857,6 +850,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
+			try {is.close();} catch (Exception ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -889,6 +883,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
+			try {is.close();} catch (Exception ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -927,6 +922,7 @@ public class FUtils {
 			} catch (Exception ex) {
 				throw new SException(SYS.SYS036, ex); //Program exception &{0}
 			}
+			try {is.close();} catch (Exception ex) {}
 			return mysb;
 		} catch (SException ex) {
 			try {is.close();} catch(Exception exx) {}
@@ -1033,6 +1029,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
+			try {is.close();} catch (Exception ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -1057,6 +1054,7 @@ public class FUtils {
 					bos.write(buf, 0, len);
 				}
 			}
+			try {in.close();} catch (Exception ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -1284,6 +1282,7 @@ public class FUtils {
 			//Can't write to output stream&{0}
 			throw new SException(SYS.SYS027, ex);
 		}
+		try {out.close();} catch (Exception ex) {}
 	}
 
 	/** Write byte array to file item.

@@ -51,7 +51,7 @@ public class Y08 extends test.xdef.TestXComponents_Y08 implements org.xdef.compo
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getIdFlow() != null)
-      el.setAttribute(XD_Name_IdFlow, String.valueOf(getIdFlow()));
+      el.setAttribute(XD_Name_IdFlow, getIdFlow().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -169,9 +169,9 @@ public static class Domain implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, getOne().toString());
+      el.setAttribute(XD_Name_One, getOne());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo().toString());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override

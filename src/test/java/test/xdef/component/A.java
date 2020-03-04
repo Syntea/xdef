@@ -77,7 +77,7 @@ public class A implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, geta().toString());
+      el.setAttribute(XD_Name_a, geta());
     if (getdec() != null)
       el.setAttribute(XD_Name_dec, getdec().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
@@ -269,7 +269,7 @@ public static class W implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getw() != null)
-      el.setAttribute(XD_Name_w, getw().toString());
+      el.setAttribute(XD_Name_w, getw());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -1352,7 +1352,7 @@ public static class d_e_f implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getd_e_f() != null)
-      el.setAttribute(XD_Name_d_e_f, getd_e_f().toString());
+      el.setAttribute(XD_Name_d_e_f, getd_e_f());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

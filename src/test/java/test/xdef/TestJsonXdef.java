@@ -58,8 +58,6 @@ public class TestJsonXdef extends XDTester {
 			String components =
 				"<xd:component xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n";
 			for (File fdef: _jfiles) {
-				File newFile;
-				String xdef;
 				Element el;
 				String id = getId(fdef); // get ID from jdef file name
 				// get all json files for this test
@@ -334,6 +332,8 @@ public class TestJsonXdef extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
+		XDDocument xd;
+		StringWriter strw;
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
@@ -412,7 +412,7 @@ public class TestJsonXdef extends XDTester {
 			o = getValueFromGetter(xc,"getjs$item_1");
 			assertEq(12, getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			o = getValueFromGetter(xc,"getjs$item_2");
-			assertEq("\" a b \"", 
+			assertEq("\" a b \"",
 				getValueFromGetter(o,"get" + JsonToXml.J_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
 			o = getValueFromGetter(xc,"getjs$item");
@@ -512,6 +512,20 @@ public class TestJsonXdef extends XDTester {
 			el = JsonUtil.jsonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
+"<xd:json name='B'>\n"+
+"[$script: \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
+"</xd:json>\n"+
+"</xd:def>\n";
+			xd = compile(xdef).createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(strw);
+			json = "[123]";
+			j = xd.jparse(json, "B", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));
+			assertEq("axb", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 /*xx*/
 	}

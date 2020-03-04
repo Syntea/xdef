@@ -160,7 +160,7 @@ public static class Clazz implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gettry() != null)
-      el.setAttribute(XD_Name_try, gettry().toString());
+      el.setAttribute(XD_Name_try, gettry());
     return el;
   }
   @Override

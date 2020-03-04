@@ -52,7 +52,7 @@ public class Y10p implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx().toString());
+      el.setAttribute(XD_Name_x, getx());
     return el;
   }
   @Override

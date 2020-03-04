@@ -49,7 +49,7 @@ public class G extends test.xdef.TestXComponents_G implements org.xdef.component
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getg() != null)
-      el.setAttribute(XD_Name_g, getg().toString());
+      el.setAttribute(XD_Name_g, getg());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -172,7 +172,7 @@ public static class XXX implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx().toString());
+      el.setAttribute(XD_Name_x, getx());
     return el;
   }
   @Override
@@ -279,7 +279,7 @@ public static class YYY implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gety() != null)
-      el.setAttribute(XD_Name_y, gety().toString());
+      el.setAttribute(XD_Name_y, gety());
     return el;
   }
   @Override

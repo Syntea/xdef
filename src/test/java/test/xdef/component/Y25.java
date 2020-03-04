@@ -284,7 +284,7 @@ public static class Param implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName().toString());
+      el.setAttribute(XD_Name_Name, getName());
     if (getType() != null)
       el.setAttribute(XD_Name_Type, getType().toString());
     return el;
@@ -513,9 +513,9 @@ public static class Param implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName().toString());
+      el.setAttribute(XD_Name_Name, getName());
     if (getValue() != null)
-      el.setAttribute(XD_Name_Value, getValue().toString());
+      el.setAttribute(XD_Name_Value, getValue());
     return el;
   }
   @Override
