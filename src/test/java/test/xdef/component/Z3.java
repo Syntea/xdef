@@ -55,7 +55,7 @@ public class Z3 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getTisKc() != null)
-      el.setAttribute(XD_Name_TisKc, getTisKc().toString());
+      el.setAttribute(XD_Name_TisKc, getTisKc());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

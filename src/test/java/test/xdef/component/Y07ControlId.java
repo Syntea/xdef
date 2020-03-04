@@ -52,7 +52,7 @@ public class Y07ControlId implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getIdNeco() != null)
-      el.setAttribute(XD_Name_IdNeco, String.valueOf(getIdNeco()));
+      el.setAttribute(XD_Name_IdNeco, getIdNeco().toString());
     return el;
   }
   @Override

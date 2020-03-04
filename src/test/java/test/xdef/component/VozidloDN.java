@@ -166,51 +166,51 @@ public class VozidloDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getDruhVozidla() != null)
-      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla().toString());
+      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla());
     if (getSPZ() != null)
-      el.setAttribute(XD_Name_SPZ, getSPZ().toString());
+      el.setAttribute(XD_Name_SPZ, getSPZ());
     if (getMPZ() != null)
-      el.setAttribute(XD_Name_MPZ, getMPZ().toString());
+      el.setAttribute(XD_Name_MPZ, getMPZ());
     if (getVIN() != null)
-      el.setAttribute(XD_Name_VIN, getVIN().toString());
+      el.setAttribute(XD_Name_VIN, getVIN());
     if (getZnacka() != null)
-      el.setAttribute(XD_Name_Znacka, getZnacka().toString());
+      el.setAttribute(XD_Name_Znacka, getZnacka());
     if (getTypVozidla() != null)
-      el.setAttribute(XD_Name_TypVozidla, getTypVozidla().toString());
+      el.setAttribute(XD_Name_TypVozidla, getTypVozidla());
     if (getRokVyroby() != null)
       el.setAttribute(XD_Name_RokVyroby, getRokVyroby().formatDate("yyyy"));
     if (getPlatnostSTK() != null)
-      el.setAttribute(XD_Name_PlatnostSTK, getPlatnostSTK().toString());
+      el.setAttribute(XD_Name_PlatnostSTK, getPlatnostSTK());
     if (getMesicSTKDo() != null)
       el.setAttribute(XD_Name_MesicSTKDo, getMesicSTKDo().formatDate("M/yyyy"));
     if (getTypBrzd() != null)
-      el.setAttribute(XD_Name_TypBrzd, getTypBrzd().toString());
+      el.setAttribute(XD_Name_TypBrzd, getTypBrzd());
     if (getStavBrzd() != null)
-      el.setAttribute(XD_Name_StavBrzd, getStavBrzd().toString());
+      el.setAttribute(XD_Name_StavBrzd, getStavBrzd());
     if (getKodPojistitele() != null)
-      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele().toString());
+      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele());
     if (getNazevPojistitele() != null)
-      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele().toString());
+      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele());
     if (getCisloDokladuPojisteni() != null)
-      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni().toString());
+      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni());
     if (getPojisteniText() != null)
-      el.setAttribute(XD_Name_PojisteniText, getPojisteniText().toString());
+      el.setAttribute(XD_Name_PojisteniText, getPojisteniText());
     if (getCisloZK() != null)
-      el.setAttribute(XD_Name_CisloZK, getCisloZK().toString());
+      el.setAttribute(XD_Name_CisloZK, getCisloZK());
     if (getVydalZK() != null)
-      el.setAttribute(XD_Name_VydalZK, getVydalZK().toString());
+      el.setAttribute(XD_Name_VydalZK, getVydalZK());
     if (getPlatnostZKOd() != null)
       el.setAttribute(XD_Name_PlatnostZKOd, getPlatnostZKOd().formatDate("d.M.yyyy"));
     if (getPlatnostZKDo() != null)
       el.setAttribute(XD_Name_PlatnostZKDo, getPlatnostZKDo().formatDate("d.M.yyyy"));
     if (getPojistneHPKc() != null)
-      el.setAttribute(XD_Name_PojistneHPKc, String.valueOf(getPojistneHPKc()));
+      el.setAttribute(XD_Name_PojistneHPKc, getPojistneHPKc().toString());
     if (getDatumUhradyHP() != null)
       el.setAttribute(XD_Name_DatumUhradyHP, getDatumUhradyHP().formatDate("d.M.yyyy"));
     if (getMistoUhradyHP() != null)
-      el.setAttribute(XD_Name_MistoUhradyHP, getMistoUhradyHP().toString());
+      el.setAttribute(XD_Name_MistoUhradyHP, getMistoUhradyHP());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

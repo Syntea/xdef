@@ -139,27 +139,27 @@ public class UcastnikDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getTypUcastnika() != null)
-      el.setAttribute(XD_Name_TypUcastnika, getTypUcastnika().toString());
+      el.setAttribute(XD_Name_TypUcastnika, getTypUcastnika());
     if (getPraxeRizeni() != null)
-      el.setAttribute(XD_Name_PraxeRizeni, String.valueOf(getPraxeRizeni()));
+      el.setAttribute(XD_Name_PraxeRizeni, getPraxeRizeni().toString());
     if (getAlkoholDech() != null)
-      el.setAttribute(XD_Name_AlkoholDech, getAlkoholDech().toString());
+      el.setAttribute(XD_Name_AlkoholDech, getAlkoholDech());
     if (getAlkoholKrev() != null)
-      el.setAttribute(XD_Name_AlkoholKrev, getAlkoholKrev().toString());
+      el.setAttribute(XD_Name_AlkoholKrev, getAlkoholKrev());
     if (getZraneni() != null)
-      el.setAttribute(XD_Name_Zraneni, getZraneni().toString());
+      el.setAttribute(XD_Name_Zraneni, getZraneni());
     if (getZdravPojistovna() != null)
-      el.setAttribute(XD_Name_ZdravPojistovna, getZdravPojistovna().toString());
+      el.setAttribute(XD_Name_ZdravPojistovna, getZdravPojistovna());
     if (getPokutaKc() != null)
-      el.setAttribute(XD_Name_PokutaKc, String.valueOf(getPokutaKc()));
+      el.setAttribute(XD_Name_PokutaKc, getPokutaKc().toString());
     if (getPokutaZapl() != null)
-      el.setAttribute(XD_Name_PokutaZapl, getPokutaZapl().toString());
+      el.setAttribute(XD_Name_PokutaZapl, getPokutaZapl());
     if (getPachatel() != null)
-      el.setAttribute(XD_Name_Pachatel, getPachatel().toString());
+      el.setAttribute(XD_Name_Pachatel, getPachatel());
     if (getPoskozeny() != null)
-      el.setAttribute(XD_Name_Poskozeny, getPoskozeny().toString());
+      el.setAttribute(XD_Name_Poskozeny, getPoskozeny());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

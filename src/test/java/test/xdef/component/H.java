@@ -56,7 +56,7 @@ public class H implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (gets$encodingStyle() != null)
-      el.setAttributeNS("soap", XD_Name_s$encodingStyle, gets$encodingStyle().toString());
+      el.setAttributeNS("soap", XD_Name_s$encodingStyle, gets$encodingStyle());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     for (org.xdef.component.XComponent x: xGetNodeList())
@@ -309,9 +309,9 @@ public static class b$User implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gets$understand() != null)
-      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand().toString());
+      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand());
     if (getIdentUser() != null)
-      el.setAttribute(XD_Name_IdentUser, getIdentUser().toString());
+      el.setAttribute(XD_Name_IdentUser, getIdentUser());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -438,13 +438,13 @@ public static class b$Request implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gets$understand() != null)
-      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand().toString());
+      el.setAttributeNS("soap", XD_Name_s$understand, gets$understand());
     if (getIdentZpravy() != null)
-      el.setAttribute(XD_Name_IdentZpravy, getIdentZpravy().toString());
+      el.setAttribute(XD_Name_IdentZpravy, getIdentZpravy());
     if (getReqMsgId() != null)
-      el.setAttribute(XD_Name_ReqMsgId, String.valueOf(getReqMsgId()));
+      el.setAttribute(XD_Name_ReqMsgId, getReqMsgId().toString());
     if (getMode() != null)
-      el.setAttribute(XD_Name_Mode, getMode().toString());
+      el.setAttribute(XD_Name_Mode, getMode());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:s", "soap");
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -705,7 +705,7 @@ public static class b$PingFlow implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getFlow() != null)
-      el.setAttribute(XD_Name_Flow, getFlow().toString());
+      el.setAttribute(XD_Name_Flow, getFlow());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:b", "request");
     return el;

@@ -400,7 +400,7 @@ public static class X2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx().toString());
+      el.setAttribute(XD_Name_x, getx());
     return el;
   }
   @Override
@@ -507,7 +507,7 @@ public static class C2 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getc() != null)
-      el.setAttribute(XD_Name_c, getc().toString());
+      el.setAttribute(XD_Name_c, getc());
     return el;
   }
   @Override
@@ -614,7 +614,7 @@ public static class X3 implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getxx() != null)
-      el.setAttribute(XD_Name_xx, getxx().toString());
+      el.setAttribute(XD_Name_xx, getxx());
     return el;
   }
   @Override

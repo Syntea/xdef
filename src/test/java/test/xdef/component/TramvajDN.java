@@ -103,29 +103,29 @@ public class TramvajDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getLinka() != null)
-      el.setAttribute(XD_Name_Linka, getLinka().toString());
+      el.setAttribute(XD_Name_Linka, getLinka());
     if (getLinkaPoradi() != null)
-      el.setAttribute(XD_Name_LinkaPoradi, String.valueOf(getLinkaPoradi()));
+      el.setAttribute(XD_Name_LinkaPoradi, getLinkaPoradi().toString());
     if (getEvidCislo() != null)
-      el.setAttribute(XD_Name_EvidCislo, getEvidCislo().toString());
+      el.setAttribute(XD_Name_EvidCislo, getEvidCislo());
     if (getTypVozidla() != null)
-      el.setAttribute(XD_Name_TypVozidla, getTypVozidla().toString());
+      el.setAttribute(XD_Name_TypVozidla, getTypVozidla());
     if (getTypBrzd() != null)
-      el.setAttribute(XD_Name_TypBrzd, getTypBrzd().toString());
+      el.setAttribute(XD_Name_TypBrzd, getTypBrzd());
     if (getStavBrzd() != null)
-      el.setAttribute(XD_Name_StavBrzd, getStavBrzd().toString());
+      el.setAttribute(XD_Name_StavBrzd, getStavBrzd());
     if (getKodPojistitele() != null)
-      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele().toString());
+      el.setAttribute(XD_Name_KodPojistitele, getKodPojistitele());
     if (getNazevPojistitele() != null)
-      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele().toString());
+      el.setAttribute(XD_Name_NazevPojistitele, getNazevPojistitele());
     if (getCisloDokladuPojisteni() != null)
-      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni().toString());
+      el.setAttribute(XD_Name_CisloDokladuPojisteni, getCisloDokladuPojisteni());
     if (getPojisteniText() != null)
-      el.setAttribute(XD_Name_PojisteniText, getPojisteniText().toString());
+      el.setAttribute(XD_Name_PojisteniText, getPojisteniText());
     if (getDruhVozidla() != null)
-      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla().toString());
+      el.setAttribute(XD_Name_DruhVozidla, getDruhVozidla());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

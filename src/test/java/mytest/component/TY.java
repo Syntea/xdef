@@ -341,7 +341,7 @@ public static class js$item implements org.xdef.component.XComponent{
     if (getvalue() != null)
       el.setAttribute(XD_Name_value, String.valueOf(getvalue()));
     if (getkey() != null)
-      el.setAttribute(XD_Name_key, getkey().toString());
+      el.setAttribute(XD_Name_key, getkey());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:js", "http://www.w3.org/2005/xpath-functions");
     return el;
@@ -458,7 +458,7 @@ public static class js$item implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getvalue() != null)
-      el.setAttribute(XD_Name_value, getvalue().toString());
+      el.setAttribute(XD_Name_value, getvalue());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:js", "http://www.w3.org/2005/xpath-functions");
     return el;

@@ -54,7 +54,7 @@ public class Y22 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getCreator() != null)
-      el.setAttribute(XD_Name_Creator, getCreator().toString());
+      el.setAttribute(XD_Name_Creator, getCreator());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -172,7 +172,7 @@ public static class Transfer implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getSender() != null)
-      el.setAttribute(XD_Name_Sender, getSender().toString());
+      el.setAttribute(XD_Name_Sender, getSender());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -398,7 +398,7 @@ public static class Directory implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getPath() != null)
-      el.setAttribute(XD_Name_Path, getPath().toString());
+      el.setAttribute(XD_Name_Path, getPath());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -515,7 +515,7 @@ public static class File implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName().toString());
+      el.setAttribute(XD_Name_Name, getName());
     return el;
   }
   @Override

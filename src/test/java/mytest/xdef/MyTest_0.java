@@ -20,7 +20,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Properties;
 import java.util.Stack;
-import mytest.component.XAA;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;

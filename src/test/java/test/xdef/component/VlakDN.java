@@ -79,13 +79,13 @@ public class VlakDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getTypSoupravy() != null)
-      el.setAttribute(XD_Name_TypSoupravy, getTypSoupravy().toString());
+      el.setAttribute(XD_Name_TypSoupravy, getTypSoupravy());
     if (getSpoj() != null)
-      el.setAttribute(XD_Name_Spoj, getSpoj().toString());
+      el.setAttribute(XD_Name_Spoj, getSpoj());
     if (getDruhSoupravy() != null)
-      el.setAttribute(XD_Name_DruhSoupravy, getDruhSoupravy().toString());
+      el.setAttribute(XD_Name_DruhSoupravy, getDruhSoupravy());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

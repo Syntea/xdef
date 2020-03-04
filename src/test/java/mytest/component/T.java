@@ -163,9 +163,9 @@ public static class R implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
+      el.setAttribute(XD_Name_A, getA());
     if (getB() != null)
-      el.setAttribute(XD_Name_B, getB().toString());
+      el.setAttribute(XD_Name_B, getB());
     return el;
   }
   @Override

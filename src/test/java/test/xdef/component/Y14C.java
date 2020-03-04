@@ -167,7 +167,7 @@ public static class X implements test.xdef.component.Y14A{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, geta().toString());
+      el.setAttribute(XD_Name_a, geta());
     return el;
   }
   @Override

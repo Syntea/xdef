@@ -52,7 +52,7 @@ public class Y16a implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (gety() != null)
-      el.setAttribute(XD_Name_y, String.valueOf(gety()));
+      el.setAttribute(XD_Name_y, gety().toString());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:x", "x.int");
     return el;

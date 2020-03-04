@@ -176,7 +176,7 @@ public static class js$item implements org.xdef.component.XComponent{
     if (getvalue() != null)
       el.setAttribute(XD_Name_value, getvalue().toString());
     if (getkey() != null)
-      el.setAttribute(XD_Name_key, getkey().toString());
+      el.setAttribute(XD_Name_key, getkey());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:js", "http://www.w3.org/2005/xpath-functions");
     return el;

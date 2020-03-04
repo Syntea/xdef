@@ -794,17 +794,6 @@ class XCGeneratorNew implements XCGenerator {
 			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
 		switch (xdata.getParserType()) {
-			case XDValueID.XD_BOOLEAN:
-			case XDValueID.XD_INT:
-			case XDValueID.XD_FLOAT:
-				x = "String.valueOf(get&{name}()))";
-				break;
-			case XDValueID.XD_DECIMAL:
-				x = "get&{name}().toString())";
-				break;
-			case XDValueID.XD_DURATION:
-				x = "get&{name}().toString())";
-				break;
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
 				x = "get&{name}()." +
@@ -812,15 +801,16 @@ class XCGeneratorNew implements XCGenerator {
 				break;
 			}
 			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2 ? "encodeHex"
-					:"encodeBase64") + "(get&{name}()))";
+				x = (getBytesType(xdata) == 2 
+					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
 				break;
 			case XDValueID.XD_NULL: //jnull
 				x = "\"null\")";
 				break;
 			default:
-				x = checkEnumType(xdata) == null ?
-					"get&{name}().toString())" : "get&{name}().name())";
+				x = checkEnumType(xdata) != null ? "get&{name}().name())"
+					: xdata.getParserType() == XDValueID.XD_STRING
+						? "get&{name}())" : "get&{name}().toString())";
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+LN+
