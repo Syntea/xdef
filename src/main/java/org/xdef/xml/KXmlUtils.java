@@ -416,7 +416,7 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			}
 			case Node.ELEMENT_NODE: {
-				Map<String, String> unresolved = 
+				Map<String, String> unresolved =
 					new LinkedHashMap<String, String>();
 				if (encoding != null) {
 					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(),

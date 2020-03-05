@@ -671,7 +671,7 @@ public final class TestParse extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'/>\n" +
@@ -680,7 +680,7 @@ public final class TestParse extends XDTester {
 			xml = "<a/>";
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'>\n" +

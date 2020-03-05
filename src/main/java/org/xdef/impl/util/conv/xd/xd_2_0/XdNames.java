@@ -62,7 +62,7 @@ public interface XdNames {
 	/** X-definition <code>datetime</code> type name.*/
 	public static final String DATE = "date";
 	/** X-definition <code>datetime</code> type name (deprecated).*/
-	public static final String DATE_TIME = "datetime"; 
+	public static final String DATE_TIME = "datetime";
 	/** X-definition <code>xdatetime</code> type name.*/
 	public static final String XDATE_TIME = "xdatetime"; /*VT*/
 	/** X-definition <code>dateYMDhms</code> type name.*/

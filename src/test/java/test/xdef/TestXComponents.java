@@ -1011,7 +1011,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("<f><g>2019-04-01+02:00</g></f>", f.toXml());
 			f.listOfg().clear();
 			assertEq("<f/>", f.toXml());
-			
+
 			xml = "<a><d/></a>";
 			test.xdef.component.Y24a y24a = (test.xdef.component.Y24a)
 				parseXC(xp,"Y24", xml , null, reporter);
@@ -1028,7 +1028,7 @@ public final class TestXComponents extends XDTester {
 				y24.getd().getClass().getName()));
 			xml = "<Y24d Y24d='Y24d'><Y24d/></Y24d>";
 			assertEq(xml, parseXC(
-				xp,"Y24",xml,test.xdef.component.Y24d.class,reporter).toXml());			
+				xp,"Y24",xml,test.xdef.component.Y24d.class,reporter).toXml());
 			assertNoErrorwarnings(reporter);
 
 			xml =

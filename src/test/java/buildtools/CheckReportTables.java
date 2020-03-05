@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Vaclav Trojan
  */
 public class CheckReportTables  extends STester {
-	
+
 	public CheckReportTables() {super();}
 
 	static boolean hasField(File f, String name) throws Exception {
@@ -141,7 +141,7 @@ public class CheckReportTables  extends STester {
 			chkUnusedMesssges(msgdir,"XML", dirs);
 		} catch (Exception ex) {fail(ex);}
 	}
-	
+
 	/** Run checking reports.
 	 * @param args the command line arguments
 	 */

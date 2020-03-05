@@ -678,7 +678,6 @@ class XCGeneratorNew implements XCGenerator {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
 					"&{x}", modify(x,
-						typeName, typeName1,
 						"_&{name}.add(x)",
 						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
@@ -688,7 +687,6 @@ class XCGeneratorNew implements XCGenerator {
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
 					"&{x}", modify(x,
-						typeName, typeName1,
 						"_&{name}.add(x)",
 						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
@@ -698,7 +696,6 @@ class XCGeneratorNew implements XCGenerator {
 				typeName1 = "java.util.Calendar";
 				sb.append(modify(template,
 					"&{x}", modify(x,
-						typeName, typeName1,
 						"_&{name}.add(x)", "_&{name}.add(new SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -721,7 +718,6 @@ class XCGeneratorNew implements XCGenerator {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
 					"&{x}", modify(x,
-						typeName, typeName1,
 						"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
@@ -731,7 +727,6 @@ class XCGeneratorNew implements XCGenerator {
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
 					"&{x}", modify(x,
-						typeName, typeName1,
 						"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
@@ -741,7 +736,6 @@ class XCGeneratorNew implements XCGenerator {
 				typeName1 = "java.util.Calendar";
 				sb.append(modify(template,
 						"&{x}", modify(x,
-							typeName, typeName1,
 							"_&{name}=x;",
 "_&{name}=x==null?null:new org.xdef.sys.SDatetime(x);"),
 					"&{name}", name,
@@ -801,7 +795,7 @@ class XCGeneratorNew implements XCGenerator {
 				break;
 			}
 			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2 
+				x = (getBytesType(xdata) == 2
 					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
 				break;
 			case XDValueID.XD_NULL: //jnull

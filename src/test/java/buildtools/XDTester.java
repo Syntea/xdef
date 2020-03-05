@@ -1224,14 +1224,14 @@ public abstract class XDTester extends STester {
 			Class<?>[] classes = new Class<?>[componentNames.length];
 			for (int i = 0; i < componentNames.length; i++) {
 				try {
-					classes[i] = 
+					classes[i] =
 						Class.forName(packageName+'.' + componentNames[i]);
 				} catch (ClassNotFoundException ex) {
 					File f = new File (
 						componentDir, packageName.replace('.', '/'));
 					f = new File(f, componentNames[i] + ".java");
 					XDTester.compileSources(f);
-					classes[i] = 
+					classes[i] =
 						Class.forName(packageName+'.'+componentNames[i]);
 				}
 			}
@@ -1313,7 +1313,7 @@ public abstract class XDTester extends STester {
 			throw new RuntimeException(
 				"XComponent class not found: " + componentName);
 		}
-		XComponent result = 
+		XComponent result =
 			xp.createXDDocument(xdefName).jparseXComponent(xml, cls, reporter);
 		if (reporter == null) {
 			rep.checkAndThrowErrors();

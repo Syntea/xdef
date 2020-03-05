@@ -67,7 +67,7 @@ public interface XDDebug {
 	 * @param xp XDPool.
 	 */
 	public void openDebugger(Properties props, XDPool xp);
-	
+
 	/** Close debugger and display message.
 	 * @param msg message to be displayed.
 	 */

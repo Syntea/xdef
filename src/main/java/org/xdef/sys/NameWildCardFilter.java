@@ -22,7 +22,7 @@ public class NameWildCardFilter implements java.io.FileFilter {
 		_wildName = (_caseInsensitive = caseInsensitive) ?
 			wildName.toLowerCase() : wildName;
 	}
-	
+
 	@Override
 	/** Check if the file suits wildcard conditions.
 	 * @param file The file to be checked.

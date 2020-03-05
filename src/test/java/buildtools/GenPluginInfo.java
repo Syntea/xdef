@@ -8,7 +8,7 @@ import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 
 /** This class generates XML document with the information about implemented
- * methods used in GUI plugins. 
+ * methods used in GUI plugins.
  * @author Vaclav Trojan
  */
 public class GenPluginInfo {
@@ -222,5 +222,5 @@ public class GenPluginInfo {
 			ex.printStackTrace();
 		}
 	}
-	
+
 }

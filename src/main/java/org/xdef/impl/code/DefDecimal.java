@@ -106,7 +106,7 @@ public final class DefDecimal extends XDValueAbstract {
 		if (isNull()) {
 			return arg == null || arg.isNull();
 		}
-		return (arg == null || arg.isNull()) 
+		return (arg == null || arg.isNull())
 			? false : _value.equals(arg.decimalValue());
 	}
 

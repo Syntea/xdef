@@ -47,10 +47,10 @@ public class GenReportTables {
 				"-p", packageName,
 				"-c", "UTF-8",
 				"-o", temp.getAbsolutePath()});
-			String msg = 
+			String msg =
 				FUtils.updateDirectories(temp, srcDir, "java", true, false);
 			System.out.println(// print info about changes
-				msg.isEmpty() ? "Nothing changed in report files" : msg); 			
+				msg.isEmpty() ? "Nothing changed in report files" : msg);
 			FUtils.deleteAll(temp, true); // delete temp directory
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

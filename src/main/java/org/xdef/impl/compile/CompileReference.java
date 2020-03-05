@@ -198,8 +198,8 @@ final class CompileReference extends XNode {
 						return (XNode) xn;
 					}
 				}
-			} 
-				
+			}
+
 		}
 		if (xe != null) {
 			if(ndx > 0) {

@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * Class to read info from pom.xml (see maven). That's: <ul>
- * <li>project.groupId</li> 
+ * <li>project.groupId</li>
  * <li>project.artifactId</li>
  * <li>project.version</li>
  * <li>project.name</li>
@@ -25,38 +25,38 @@ import java.util.Properties;
  * </p>
  */
 public class PomInfo {
-	
-	
+
+
 	/**
 	 * init instance - load pominfo.properties
 	 */
 	public PomInfo() {
 		try {
 			InputStream ppIs = PomInfo.class.getResourceAsStream(pomInfoPropsName);
-			
+
 			if (ppIs == null) {
-			    throw new FileNotFoundException("java-resource " + pomInfoPropsName + " not found");
+				throw new FileNotFoundException("java-resource " + pomInfoPropsName + " not found");
 			}
-			
-		    loadProps(ppIs);
+
+			loadProps(ppIs);
 		} catch (IOException ex) {
-		    throw new RuntimeException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
-	
-	
-	
+
+
+
 	private void loadProps(InputStream ppIs) throws IOException {
 		Properties properties = new Properties();
 		try {
-		    properties.load(new InputStreamReader(ppIs, charset));
+			properties.load(new InputStreamReader(ppIs, charset));
 		} finally {
-		    ppIs.close();
+			ppIs.close();
 		}
-		
+
 		loadProps(properties);
 	}
-	
+
 
 
 	private void loadProps(Properties pp) {
@@ -67,9 +67,9 @@ public class PomInfo {
 		description = pp.getProperty("project.description");
 		releaseDate = pp.getProperty("release.date");
 	}
-	
-	
-	
+
+
+
 	public String getGroupId() {
 		return groupId;
 	}
@@ -102,20 +102,20 @@ public class PomInfo {
 	public String getProductIdentifier() {
 		return artifactId + "(" + version + ", " + releaseDate + ")";
 	}
-	
-	
-	
+
+
+
 	private String groupId        = null;
 	private String artifactId     = null;
 	private String version        = null;
 	private String name           = null;
 	private String description    = null;
 	private String releaseDate    = null;
-	
+
 	private static final String     pomInfoPropsName = "pominfo.properties";
 	/** default charset */
 	private static final Charset    charset          = Charset.forName("UTF-8");
-	
+
 	/** singleton instance */
 	public static final PomInfo     pomInfo          = new PomInfo();
 }

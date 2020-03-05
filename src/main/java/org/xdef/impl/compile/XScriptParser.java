@@ -684,7 +684,7 @@ public class XScriptParser extends StringParser
 			} // default
 		} // end of switch (ch = peekChar())
 	} // end of nextSymbol()
-	
+
 	/** get parsed symbol ID.
 	 * @return parsed symbol ID.
 	 */

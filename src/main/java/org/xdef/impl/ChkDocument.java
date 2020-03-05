@@ -253,7 +253,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 							chkEl.setElemValue(_element);
 							if (_scp.exec(xel._match, chkEl).booleanValue()) {
 								return xel;
-							}							
+							}
 						} else {
 							return xel;
 						}
@@ -271,7 +271,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 							chkEl.setElemValue(_element);
 							if (_scp.exec(xel._match, chkEl).booleanValue()) {
 								return xel;
-							}							
+							}
 						} else {
 							return xel;
 						}
@@ -296,7 +296,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				return ((XElement) xe)._childNodes.length == 0 ?
 					null : (XElement) ((XElement) xe)._childNodes[0];
 			}
-		}		
+		}
 		// not found, try if there is "*"
 		return (XElement) _xdef._rootSelection.get("*");
 	}

@@ -581,13 +581,13 @@ public class CompileBase implements CodeTable, XDValueID {
 		// This type is deprecated, replace with "list(%item=typ)"
 		parser(im, org.xdef.impl.parsers.XDParseTokens.class, "?tokens");
 		parser(im, org.xdef.impl.parsers.XDParseTokensi.class, "?tokensi");
-		
+
 		im = genParserMetnod(1, 2, new short[] {XD_ANY, XD_STRING},
 			XD_STRING,
 			keyParam("a2", XD_ANY, true, 1, false),
 			keyParam("a1", XD_ANY, true, 0, false));
 		parser(im, org.xdef.impl.parsers.XDParseBNF.class, "BNF");
-		
+
 		im = genParserMetnod(0, 0, new short[] {XD_PARSER}, XD_STRING);
 		parser(im,org.xdef.impl.parsers.XDParseEmail.class, "email");
 		parser(im,org.xdef.impl.parsers.XDParseEmailList.class,
@@ -599,7 +599,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
 		parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
 		parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
-		
+
 		// This type is deprecated, replace with "list(%item=typ)"
 		im = genParserMetnod(1, 1, new short[] {XD_PARSER}, XD_STRING,
 			keyParam("item", XD_PARSER, true, 0, false));
@@ -1755,7 +1755,7 @@ public class CompileBase implements CodeTable, XDValueID {
 
 		final short getCode() {return _code;}
 		final byte getRestrictions() {return _restrictions;}
-		
+
 		public final int getMinParams() {return _minParams;}
 		public final int getMaxParams() {return _maxParams;}
 		public final String[] getSqParamNames() {return _sqKeynames;}

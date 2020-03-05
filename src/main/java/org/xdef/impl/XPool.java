@@ -56,7 +56,7 @@ public final class XPool implements XDPool, Serializable {
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 	/** XDPool version.*/
-	private static final String XD_VERSION = 
+	private static final String XD_VERSION =
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool.*/
 	private static final long XD_MIN_VERSION = 302005007L; // 32.5.7
@@ -120,7 +120,7 @@ public final class XPool implements XDPool, Serializable {
 	Map<String, XDefinition> _xdefs;
 	/** Table of source objects.*/
 	private XDSourceInfo _sourceInfo;
-	
+
 	// valid date parameters
 	/** Maximal accepted value of the year.*/
 	private int _maxYear;
@@ -204,7 +204,7 @@ public final class XPool implements XDPool, Serializable {
 			_extClasses,
 			_xdefs);
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Read MIN_YEAR or MAX_YEAR from properties.
