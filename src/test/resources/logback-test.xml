@@ -35,6 +35,6 @@
 		<appender-ref ref="testNG"/>
 	</root>
 
-	<logger name="cz.syntea.xdef" level="DEBUG"/>
-	<logger name="test"           level="DEBUG"/>
+	<logger name="org.xdef" level="DEBUG"/>
+	<logger name="test"     level="DEBUG"/>
 </configuration>
