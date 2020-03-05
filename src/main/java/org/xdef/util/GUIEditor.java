@@ -863,7 +863,7 @@ public class GUIEditor extends GUIScreen {
 "<!-- This is just an example of XML data. You can modify it. -->\n" +
 "<root attr = \"123\">\n" +
 "  <a>text</a>\n" +
-"  <a/>\n" + 
+"  <a/>\n" +
 "</root>";
 			i = args.length;
 			if (i > 2) {

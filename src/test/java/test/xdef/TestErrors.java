@@ -467,7 +467,7 @@ public final class TestErrors extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {// variable, mothod, type redefinition
 			reporter.clear();
-			xp = XDFactory.compileXD(reporter, (Properties) null, 
+			xp = XDFactory.compileXD(reporter, (Properties) null,
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    int i;\n"+

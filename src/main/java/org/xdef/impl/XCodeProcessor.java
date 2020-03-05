@@ -243,7 +243,7 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		}
 	}
 
-	/** Set X-definition property to SManager. If properties are null 
+	/** Set X-definition property to SManager. If properties are null
 	 * the new properties  will be created.
 	 * @param key name of X-definition property.
 	 * @param value value of property or null. If the value is null the property

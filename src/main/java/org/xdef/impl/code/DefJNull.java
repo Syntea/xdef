@@ -64,7 +64,7 @@ public final class DefJNull extends XDValueAbstract {
 	public int hashCode() {return _value==null ? 0 : _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
-		return arg==null || 
+		return arg==null ||
 			arg instanceof XDValue ? equals((XDValue) arg) : false;
 	}
 	@Override

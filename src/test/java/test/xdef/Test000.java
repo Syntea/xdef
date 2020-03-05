@@ -327,7 +327,7 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"string(1,8);onTrue{if (!'1'.equals(toString(@a)))error('á');}\"/>\n"+
+"  <a a=\"string(1,8);onTrue{if (!'1'.equals(toString(@a)))error('Ăˇ');}\"/>\n"+
 "</xd:def>";
 			xml = "<a a=\"1\"/>";
 			assertFalse(test(xdef, xml, "",'P'));
@@ -1157,16 +1157,16 @@ public final class Test000 extends XDTester {
 			xd.setXDContext(xml);
 			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
 			assertNoErrors(reporter);
- 			xml = "<A><X x='1'/></A>";
+				xml = "<A><X x='1'/></A>";
 			xd = xp.createXDDocument();
 			xd.setXDContext(xml);
 			assertEq(xd.xcreate("B", reporter), "<B><C y='A'/></B>");
 			assertNoErrors(reporter);
- 			xml = "<A><X/></A>";
+				xml = "<A><X/></A>";
 			xd = xp.createXDDocument();
 			xd.setXDContext(xml);
 			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
-			assertNoErrors(reporter);			
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
@@ -1237,10 +1237,10 @@ public final class Test000 extends XDTester {
 	public static void setPreBody(XXNode x) {}
 	public static void answerIOR(XXNode x, String s) {}
 	public static void ctlIOR(XXNode x) {}
-    public static String convertBoolean(XXElement el, XDContainer boolContainer){
-        return boolContainer.getXDItemsNumber() == 1 
+	public static String convertBoolean(XXElement el, XDContainer boolContainer){
+		return boolContainer.getXDItemsNumber() == 1
 			&& "1".equals(boolContainer.getXDItem(0).toString()) ? "A" : "N";
-    }
+	}
 ////////////////////////////////////////////////////////////////////////////////
 	/** Run test
 	 * @param args the command line arguments

@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
  * @author Vaclav Trojan
  */
 public final class TestXdefOfXdef extends XDTester {
-	
+
 	private final XDPool _xp;
 
 	public TestXdefOfXdef() {
@@ -44,7 +44,7 @@ public final class TestXdefOfXdef extends XDTester {
 	public void test() {
 		String xml;
 		final String dataDir = getDataDir() + "test/";
-		try { //check xdefinition of xdefinitions		
+		try { //check xdefinition of xdefinitions
 			xml = genCollection(new String[] {
 "<xd:declaration xmlns:xd='" + _xdNS + "'>\n" +
 "  <xd:macro name='a'>'aaa'</xd:macro>\n"+

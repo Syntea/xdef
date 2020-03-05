@@ -19,7 +19,7 @@ public class XComponentsClean {
 			if (!f.isDirectory()) {
 				throw new Exception("Test directory is not available!");
 			}
-		}		
+		}
 		if ((f=new File(f, "test/xdef/component")).exists() && f.isDirectory()){
 			SUtils.deleteAll(f, true);
 			System.out.println("All XComponents deleted.");

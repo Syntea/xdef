@@ -35,7 +35,7 @@ public interface XMNode extends XMOccurrence {
 	 * @return name of node.
 	 */
 	public String getName();
-	
+
 	/** Get name of node.
 	 * @return The name of node.
 	 */

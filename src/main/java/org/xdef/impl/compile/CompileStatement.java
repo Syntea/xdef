@@ -348,9 +348,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				 // it is  parser and follows a class method
 				 // so we load just the parser
 				short code;
-				if (var.getKind() == 'G' 
+				if (var.getKind() == 'G'
 					&& _g._code.get(addr).getCode() == LD_CONST) {
-					code = LD_CODE; 
+					code = LD_CODE;
 					_g._cstack[++_g._sp] = addr;
 					_g.addCode(new CodeS1(XD_PARSER, code, addr, name));
 					_g._tstack[_g._sp] = XD_PARSER;
@@ -572,7 +572,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			return false;
 		}
 	}
-	
+
 	/** Parse and compile factor.
 	 * Factor ::= ( Cast )? ( UnaryOperator )? ( "(" Expression ")" | Value )
 	 * Cast ::= "(" TypeName ")"

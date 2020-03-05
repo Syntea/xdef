@@ -106,7 +106,7 @@ public interface XDBuilder {
 	 * @return XDBuilde object.
 	 */
 	public XDBuilder setExternals(Class<?>... extClasses);
-//	
+//
 //	@Deprecated
 //	/** Set reporter. This method is should be used only for incremental
 //	 * message reporting. The reporter must be set before setting sources.

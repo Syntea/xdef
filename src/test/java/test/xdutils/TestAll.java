@@ -35,11 +35,11 @@ public class TestAll {
 			new TestGenDTD(),
 		};
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF31_NS_URI;		
+		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.1");
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
-		XDTester._xdNS = XDConstants.XDEF32_NS_URI;		
+		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.2");
 		result += STester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);

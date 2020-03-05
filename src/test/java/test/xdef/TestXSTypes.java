@@ -3665,7 +3665,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("1999"), _msg);
 		assertTrue(parse("1999-10-11"), _msg);
 		assertTrue(parse("1999-10-11T10:11:12"), _msg);
-		
+
 //------------------------------------------------------------------------------
 //                          TESTING list
 //------------------------------------------------------------------------------
@@ -3769,7 +3769,7 @@ public final class TestXSTypes extends XDTester {
 			"list(%item=union(%item=[string(%length=1),dateTime,date,int]))"),
 			_msg);
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
-		
+
 ////////////////////////////////////////////////////////////////////////////////
 
 		resetTester();

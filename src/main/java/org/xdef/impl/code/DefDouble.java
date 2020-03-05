@@ -84,8 +84,8 @@ public final class DefDouble extends XDValueAbstract {
 
 	@Override
 	public int hashCode() {
-        long bits = Double.doubleToLongBits(_value);
-        return (int)(bits ^ (bits >>> 32));
+		long bits = Double.doubleToLongBits(_value);
+		return (int)(bits ^ (bits >>> 32));
 	}
 
 	@Override

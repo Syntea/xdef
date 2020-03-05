@@ -465,7 +465,7 @@ public class XJson extends JsonToXml {
 					} else if (!s.endsWith(")")) {
 						s += "()"; // add brackets
 					}
-					addMatchExpression(ee, 
+					addMatchExpression(ee,
 						s + ".parse((String)@"+J_VALUEATTR + ").matches()");
 				}
 			}

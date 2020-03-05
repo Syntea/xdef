@@ -628,10 +628,10 @@ public abstract class STester {
 	public static boolean equals(Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
 			if (a1 instanceof BigDecimal) {
-				return (a2 instanceof BigDecimal) 
+				return (a2 instanceof BigDecimal)
 					? a1.equals(a2) : a1.equals(new BigDecimal(a2.toString()));
 			} else if (a2 instanceof BigDecimal) {
-				return (a1 instanceof BigDecimal) 
+				return (a1 instanceof BigDecimal)
 					? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
 			}
 			if ((a1 instanceof Byte || a1 instanceof Short ||

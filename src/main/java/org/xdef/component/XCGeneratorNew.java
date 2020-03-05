@@ -795,7 +795,7 @@ class XCGeneratorNew implements XCGenerator {
 				break;
 			}
 			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2 
+				x = (getBytesType(xdata) == 2
 					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
 				break;
 			case XDValueID.XD_NULL: //jnull
