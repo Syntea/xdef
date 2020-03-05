@@ -61,7 +61,7 @@ public class C2 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNum() != null)
-      el.setAttribute(XD_Name_Num, String.valueOf(getNum()));
+      el.setAttribute(XD_Name_Num, getNum().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

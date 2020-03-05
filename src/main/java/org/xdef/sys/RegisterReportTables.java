@@ -482,12 +482,17 @@ public class RegisterReportTables {
 		 * @return Properties object.
 		 */
 		final static Properties readProperties(final String fileName) {
+			FileInputStream in = null;
+			Properties props = null;
 			try {
-				return readProperties(new FileInputStream(fileName));
+				in = new FileInputStream(fileName);
+				props = readProperties(in);
 			} catch (IOException ex) {
 				//Can't read properties with reports: &{0}
 				throw new SRuntimeException(SYS.SYS226, fileName);
 			}
+			try {in.close();} catch (Exception ex) {}
+			return props;
 		}
 
 		/** Read properties from file.

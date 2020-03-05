@@ -131,7 +131,7 @@ class XmlToJson extends JsonToXml {
 				Element ee = (Element) n;
 				Object o = createItem(ee);
 				if (_isW3C) {
-					String key = ee.getAttribute(J_KEYATTRNAME);
+					String key = ee.getAttribute(J_KEYATTR);
 					map.put(key, o);
 					continue;
 				}
@@ -190,16 +190,16 @@ class XmlToJson extends JsonToXml {
 						|| J_NUMBER.equals(name)
 						|| J_BOOLEAN.equals(name)) {
 						/*xx*/
-						if (e.hasAttribute("val")) {
-							return getJValue(e.getAttribute("val"));
+						if (e.hasAttribute(J_VALUEATTR)) {
+							return getJValue(e.getAttribute(J_VALUEATTR));
 						}
 						/*xx*/
 						String s = ((Element) n).getTextContent();
 						return getJValue(s);
 					} else if (J_ITEM.equals(name)) {
 						/*xx*/
-						if (e.hasAttribute("val")) {
-							return getJValue(e.getAttribute("val"));
+						if (e.hasAttribute(J_VALUEATTR)) {
+							return getJValue(e.getAttribute(J_VALUEATTR));
 						}
 						/*xx*/
 						String s = ((Element) n).getTextContent();

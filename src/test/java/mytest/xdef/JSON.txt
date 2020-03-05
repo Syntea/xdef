@@ -1,9 +1,0 @@
-{
-	"plat":20000,
-	"jmeno":"Alena",
-	"zena": true,
-	"kocka" : {
-			"jmeno": "Mnau",
-			"vek":1
-		}
-}

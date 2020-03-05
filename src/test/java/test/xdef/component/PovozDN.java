@@ -73,9 +73,9 @@ public class PovozDN implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOznSegmentu() != null)
-      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu().toString());
+      el.setAttribute(XD_Name_OznSegmentu, getOznSegmentu());
     if (getDruhPovozu() != null)
-      el.setAttribute(XD_Name_DruhPovozu, getDruhPovozu().toString());
+      el.setAttribute(XD_Name_DruhPovozu, getDruhPovozu());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;

@@ -54,7 +54,7 @@ public class Lexicon implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getx() != null)
-      el.setAttribute(XD_Name_x, getx().toString());
+      el.setAttribute(XD_Name_x, getx());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -170,7 +170,7 @@ public static class Y implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gety() != null)
-      el.setAttribute(XD_Name_y, String.valueOf(gety()));
+      el.setAttribute(XD_Name_y, gety().toString());
     return el;
   }
   @Override

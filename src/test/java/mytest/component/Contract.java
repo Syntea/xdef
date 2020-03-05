@@ -54,7 +54,7 @@ public class Contract implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getNumber() != null)
-      el.setAttribute(XD_Name_Number, getNumber().toString());
+      el.setAttribute(XD_Name_Number, getNumber());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -188,15 +188,15 @@ public static class Client implements org.xdef.component.XComponent{
     if (getType() != null)
       el.setAttribute(XD_Name_Type, String.valueOf(getType()));
     if (getName() != null)
-      el.setAttribute(XD_Name_Name, getName().toString());
+      el.setAttribute(XD_Name_Name, getName());
     if (getID() != null)
-      el.setAttribute(XD_Name_ID, getID().toString());
+      el.setAttribute(XD_Name_ID, getID());
     if (getGivenName() != null)
-      el.setAttribute(XD_Name_GivenName, getGivenName().toString());
+      el.setAttribute(XD_Name_GivenName, getGivenName());
     if (getLastName() != null)
-      el.setAttribute(XD_Name_LastName, getLastName().toString());
+      el.setAttribute(XD_Name_LastName, getLastName());
     if (getPersonalID() != null)
-      el.setAttribute(XD_Name_PersonalID, getPersonalID().toString());
+      el.setAttribute(XD_Name_PersonalID, getPersonalID());
     return el;
   }
   @Override

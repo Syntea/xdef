@@ -55,9 +55,9 @@ public class N_Operation implements test.xdef.component.N_i,org.xdef.component.X
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, String.valueOf(getOne()));
+      el.setAttribute(XD_Name_One, getOne().toString());
     if (getTwo() != null)
-      el.setAttribute(XD_Name_Two, getTwo().toString());
+      el.setAttribute(XD_Name_Two, getTwo());
     return el;
   }
   @Override

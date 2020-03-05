@@ -389,7 +389,7 @@ public static class B implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getA() != null)
-      el.setAttribute(XD_Name_A, String.valueOf(getA()));
+      el.setAttribute(XD_Name_A, getA().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -765,7 +765,7 @@ public static class I implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getA() != null)
-      el.setAttribute(XD_Name_A, String.valueOf(getA()));
+      el.setAttribute(XD_Name_A, getA().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -1123,7 +1123,7 @@ public static class F implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getA() != null)
-      el.setAttribute(XD_Name_A, String.valueOf(getA()));
+      el.setAttribute(XD_Name_A, getA().toString());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -3289,7 +3289,7 @@ public static class S implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
+      el.setAttribute(XD_Name_A, getA());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
@@ -3736,7 +3736,7 @@ public static class T implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (gett() != null)
-      el.setAttribute(XD_Name_t, gett().toString());
+      el.setAttribute(XD_Name_t, gett());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns", "x.y");
     for (org.xdef.component.XComponent x: xGetNodeList())
@@ -3956,7 +3956,7 @@ public static class a$T implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (geta$t() != null)
-      el.setAttributeNS("a.b", XD_Name_a$t, geta$t().toString());
+      el.setAttributeNS("a.b", XD_Name_a$t, geta$t());
     el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
       "xmlns:a", "a.b");
     for (org.xdef.component.XComponent x: xGetNodeList())

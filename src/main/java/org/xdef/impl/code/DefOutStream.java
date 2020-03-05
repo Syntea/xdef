@@ -165,7 +165,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 
 	@Override
 	/** Close output stream. */
-	public void close() {_out.close();}
+	public void close() {if (_out != null) _out.close();}
 
 	@Override
 	/** Flush buffer of the output stream. */

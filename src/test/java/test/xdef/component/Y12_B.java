@@ -188,7 +188,7 @@ public static class S implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getV() != null)
-      el.setAttribute(XD_Name_V, getV().toString());
+      el.setAttribute(XD_Name_V, getV());
     return el;
   }
   @Override
@@ -295,7 +295,7 @@ public static class M implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getV() != null)
-      el.setAttribute(XD_Name_V, getV().toString());
+      el.setAttribute(XD_Name_V, getV());
     return el;
   }
   @Override
@@ -402,7 +402,7 @@ public static class P implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getO() != null)
-      el.setAttribute(XD_Name_O, getO().toString());
+      el.setAttribute(XD_Name_O, getO());
     return el;
   }
   @Override
@@ -509,7 +509,7 @@ public static class Q implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getO() != null)
-      el.setAttribute(XD_Name_O, getO().toString());
+      el.setAttribute(XD_Name_O, getO());
     return el;
   }
   @Override

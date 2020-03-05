@@ -76,23 +76,23 @@ public class Z9 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getUlice() != null)
-      el.setAttribute(XD_Name_Ulice, getUlice().toString());
+      el.setAttribute(XD_Name_Ulice, getUlice());
     if (getCisloOrientacni() != null)
-      el.setAttribute(XD_Name_CisloOrientacni, getCisloOrientacni().toString());
+      el.setAttribute(XD_Name_CisloOrientacni, getCisloOrientacni());
     if (getCisloPopisne() != null)
-      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne().toString());
+      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
     if (getObec() != null)
-      el.setAttribute(XD_Name_Obec, getObec().toString());
+      el.setAttribute(XD_Name_Obec, getObec());
     if (getPSC() != null)
-      el.setAttribute(XD_Name_PSC, getPSC().toString());
+      el.setAttribute(XD_Name_PSC, getPSC());
     if (getOkres() != null)
-      el.setAttribute(XD_Name_Okres, getOkres().toString());
+      el.setAttribute(XD_Name_Okres, getOkres());
     if (getStat() != null)
-      el.setAttribute(XD_Name_Stat, getStat().toString());
+      el.setAttribute(XD_Name_Stat, getStat());
     if (getTelefon1() != null)
-      el.setAttribute(XD_Name_Telefon1, getTelefon1().toString());
+      el.setAttribute(XD_Name_Telefon1, getTelefon1());
     if (getTelefon2() != null)
-      el.setAttribute(XD_Name_Telefon2, getTelefon2().toString());
+      el.setAttribute(XD_Name_Telefon2, getTelefon2());
     return el;
   }
   @Override

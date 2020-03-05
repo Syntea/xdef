@@ -1384,6 +1384,7 @@ public final class TestParse extends XDTester {
 			}
 			frep.close();
 			fr.close();
+			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
@@ -1484,6 +1485,7 @@ public final class TestParse extends XDTester {
 				sb.append('\n');
 			}
 			br.close();
+			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
 			if (getFailCount() == 0) {
 				try {
@@ -3063,6 +3065,30 @@ public final class TestParse extends XDTester {
 			el = parse(xdef, "", xml, reporter);
 			assertTrue(el.getOwnerDocument().getDoctype() != null, "NULL");
 			assertNoErrors(reporter);
+//test matches with parsers and declared types
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='xx'>\n"+
+"<xd:declaration scope='local'>\n"+
+"  int i=3, j=4;\n"+
+"  type t int(i,j);\n"+
+"  void m() {\n"+
+"    out('x' + int(i,j).parse(\"3\").matches());\n"+
+"    out(t.parse(\"1\").matches());\n"+
+"    Parser p=int(i,j);\n"+
+"    out(p.parse(\"3\").matches());\n"+
+"  }\n"+
+"</xd:declaration>\n"+
+"<xx xd:script='var {\n"+
+"    int i=1, j=2; type t int(i,j); boolean b=t.parse(\"3\").matches();}'\n"+
+"  b = 't; finally {out(b); m();}'/>\n"+
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
+			xml = "<xx b='1'/>";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("falsextruefalsetrue", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
@@ -3118,7 +3144,11 @@ public final class TestParse extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
-		new File(tempDir + "vystup.txt").delete();
+		try {
+			SUtils.deleteAll(tempDir, true); //delete all generated data
+		} catch (Exception ex) {
+			fail(ex);// should not happen; error when delete generated data
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

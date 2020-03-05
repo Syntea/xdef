@@ -55,9 +55,9 @@ public class Y18a implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getc() != null)
-      el.setAttribute(XD_Name_c, getc().toString());
+      el.setAttribute(XD_Name_c, getc());
     if (getd() != null)
-      el.setAttribute(XD_Name_d, getd().toString());
+      el.setAttribute(XD_Name_d, getd());
     return el;
   }
   @Override

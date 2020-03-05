@@ -52,7 +52,7 @@ public class Y03PartTwo implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (getOne() != null)
-      el.setAttribute(XD_Name_One, String.valueOf(getOne()));
+      el.setAttribute(XD_Name_One, getOne().toString());
     return el;
   }
   @Override

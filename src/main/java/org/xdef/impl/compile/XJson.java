@@ -341,13 +341,11 @@ public class XJson extends JsonToXml {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		if (key.isEmpty()) {
-			addToXDScript(e, " options preserveEmptyAttributes,noTrimAttr;");
-		}
-		addMatchExpression(e, '@' + J_KEYATTRNAME + "=='"+key+"'");
-		setAttr(e, J_KEYATTRNAME, new SBuffer(
-			"string(%minLength=0,%whiteSpace='preserve');options noTrimAttr;",
-				e._name));
+//		if (key.isEmpty()) {
+//			addToXDScript(e, " options preserveEmptyAttributes,noTrimAttr;");
+//		}
+		addMatchExpression(e, '@' + J_KEYATTR + "=='"+key+"'");
+		setAttr(e, J_KEYATTR, new SBuffer("fixed(\""+ key +"\");", e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
@@ -447,7 +445,7 @@ public class XJson extends JsonToXml {
 				// the min occurrence differs from max occurrence
 				// and it has the attrbute with a value description
 				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
-					&& (val = getAttr(ee, "val")) != null) {
+					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
 					SBuffer[] sbs = parseTypeDeclaration(val.getValue());
 					String s = sbs[1].getString();
 					int i;
@@ -467,7 +465,8 @@ public class XJson extends JsonToXml {
 					} else if (!s.endsWith(")")) {
 						s += "()"; // add brackets
 					}
-					addMatchExpression(ee, s+".parse((String)@val).matches()");
+					addMatchExpression(ee, 
+						s + ".parse((String)@"+J_VALUEATTR + ").matches()");
 				}
 			}
 		}
@@ -496,7 +495,7 @@ public class XJson extends JsonToXml {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, "val", sbf);
+			setAttr(e, J_VALUEATTR, sbf);
 		}
 		return e;
 	}
@@ -560,12 +559,12 @@ public class XJson extends JsonToXml {
 		jx.setSourceBuffer(p._value);
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JArray)) {
-			PNode e = jx.genJsonModel(json, p);
+			jx.genJsonModel(json, p);
 		} else {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
-//System.out.println(cz.syntea.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

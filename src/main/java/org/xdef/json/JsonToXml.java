@@ -31,9 +31,11 @@ public class JsonToXml extends JsonUtil {
 	/** JSON null item. */
 	public static final String J_NULL = "null";
 	/** JSON map key attribute name. */
-	public static final String J_KEYATTRNAME = "key";
+	public static final String J_KEYATTR = "key";
 	/** JSON any item with JSON value (XDEF mode), */
 	public static final String J_ITEM = "item";
+	/** JSON value attribute name. */
+	public static final String J_VALUEATTR = "value";
 
 	/** Prefix of JSON namespace. */
 	public String _jsPrefix = XDConstants.JSON_NS_PREFIX;
@@ -373,7 +375,7 @@ public class JsonToXml extends JsonUtil {
 		Element e;
 		if (val == null) {
 			e = genJElement(J_ITEM);
-			e.setAttribute("val", genSimpleValueToXml(val, true));
+			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
 		} else if (val instanceof Map) {
 			Map m = (Map) val;
 			e = genMapW3C((Map) val);
@@ -381,7 +383,7 @@ public class JsonToXml extends JsonUtil {
 			e = genArrayW3C((List) val);
 		} else {
 			e = genJElement(J_ITEM);
-			e.setAttribute("val", genSimpleValueToXml(val, true));
+			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
 		}
 		parent.appendChild(e);
 		return e;
@@ -402,7 +404,7 @@ public class JsonToXml extends JsonUtil {
 			Map.Entry entry = (Map.Entry) it.next();
 			String key = (String) entry.getKey();
 			Element ee = genValueW3C(entry.getValue(), e);
-			ee.setAttribute(J_KEYATTRNAME, key);
+			ee.setAttribute(J_KEYATTR, key);
 		}
 		return e;
 	}

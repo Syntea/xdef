@@ -62,11 +62,11 @@ public class Y10 implements org.xdef.component.XComponent{
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
     if (geta() != null)
-      el.setAttribute(XD_Name_a, geta().toString());
+      el.setAttribute(XD_Name_a, geta());
     if (getb() != null)
-      el.setAttribute(XD_Name_b, getb().toString());
+      el.setAttribute(XD_Name_b, getb());
     if (getc() != null)
-      el.setAttribute(XD_Name_c, getc().toString());
+      el.setAttribute(XD_Name_c, getc());
     for (org.xdef.component.XComponent x: xGetNodeList())
       el.appendChild(x.toXml(doc));
     return el;
