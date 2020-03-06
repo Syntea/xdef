@@ -521,23 +521,24 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 								}
 							}
 							break;
-						case CompileBase.XD_INPUT:
+						case CompileBase.XD_INPUT: //close input streams
 							if (xvar != null && !xvar.isExternal()
-								&& xvar.getName().equals("$stdIn")) {
-								// close local inStreams
+								&& !xvar.getName().equals("$stdIn")) {
+								// close if not $stdIn and not external
 								((DefInStream) val).close();
 							}
 							break;
-						case CompileBase.XD_OUTPUT:
-							if (xvar != null
-								&& xvar.getName().equals("$stdOut")
-								&& xvar.getName().equals("$stdErr")
-								&& !xvar.isExternal()) {
-								// close local outStream
-								((DefOutStream) val).close();
-							} else {
-								// the external outstream will be just flushed
-								((DefOutStream) val).flush();// flush outStreams
+						case CompileBase.XD_OUTPUT: //close out streams
+							if (xvar != null) {
+								DefOutStream out = (DefOutStream) val;
+								if (xvar.isExternal()
+									|| xvar.getName().equals("$stdOut")
+									|| xvar.getName().equals("$stdErr")) {
+									// external, stdOut and stdErr just flush
+									out.flush();
+								} else {
+									out.close(); // other streams close
+								}
 							}
 							break;
 					}
