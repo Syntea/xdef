@@ -1,5 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 32.5.7, release-date 2020-03-06
+* corrected invoking methods in referred types.
+* improved JSON implementation.
+
 # Version 32.5.6, release-date 2020-02-15
 * implemented possibility of processing of JSON data in X-definition. This
   version is preliminary to the version 40.0.0 (the documentation of JSON usage
