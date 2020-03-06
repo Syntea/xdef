@@ -2,7 +2,6 @@ package test.xdef;
 
 import buildtools.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
@@ -1279,7 +1278,7 @@ public final class TestParse extends XDTester {
 "</xd:declaration>\n"+
 "<xd:declaration>\n"+
 "  void testparams(String i, int j, Datetime k) {\n"+
-"    outln('testparams ' + i + ', ' + j + ', ' + k);\n"+
+"    outln('testparams ' + i + ',' + j + ',' + k);\n"+
 "  }\n"+
 "\n"+
 "  String myStringa() { return 'myString'; }\n"+
@@ -1366,7 +1365,7 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			el = parse(xp, "abc", xml, reporter, strw, null, null);
 			assertEq("<root any='12000'/>\n"+
-				"myString xxx\n123\ntestparams a, 1, 1999-05-01T20:43:09+01:00\n",
+				"myString xxx\n123\ntestparams a,1,1999-05-01T20:43:09+01:00\n",
 				strw.toString());
 			assertNoErrors(reporter);
 			assertEq("2.0", el.getAttribute("Verze"));
@@ -1399,7 +1398,7 @@ public final class TestParse extends XDTester {
 "</xd:declaration>\n"+
 "<xd:declaration>\n"+
 "  void testparams(String i, int j, String s) {\n"+
-"    outln('testparams ' + i + ', ' + j + ', ' + s);\n"+
+"    outln('testparams ' + i + ',' + j + ',' + s);\n"+
 "  }\n"+
 "\n"+
 "  String myStringa() { return 'myString'; }\n"+
@@ -1475,23 +1474,22 @@ public final class TestParse extends XDTester {
 			strw = new StringWriter();
 			parse(xp, "abc", xml, null, strw, null, null);
 			assertEq("<root EwqRef='1'/>\n<root any='12000'/>\n"+
-				"myString xxx\n123\ntestparams a, 1, EwqRef\n" +
-				"testparams a, 1, any\n",
+				"myString xxx\n123\ntestparams a,1,EwqRef\n" +
+				"testparams a,1,any\n",
 				strw.toString());
-			BufferedReader br = new BufferedReader(new FileReader(tempFile));
+			strw.close();
+			fr = new FileReader(tempFile);
+			BufferedReader br = new BufferedReader(fr);
 			sb = new StringBuffer();
 			while ((s = br.readLine()) != null) {
 				sb.append(s);
 				sb.append('\n');
 			}
 			br.close();
+			fr.close();
 			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
-			if (getFailCount() == 0) {
-				try {
-					FUtils.deleteAll(tempDir, true);
-				} catch (Exception ex) {fail(ex);}
-			}
+			// test DOCTYPE and entity
 			xdef =
 "<!DOCTYPE xd:def [\n"+
 "  <!ENTITY jmeno \"required string(5,30)\">\n"+
@@ -1552,6 +1550,7 @@ public final class TestParse extends XDTester {
 				fail("incorrect data: '"
 					+ xd.getElement().getChildNodes().item(0) + "'");
 			}
+			// test messages
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='messages'>\n"+
 "<messages>\n"+
@@ -1572,8 +1571,8 @@ public final class TestParse extends XDTester {
 			parse(xp, "a", xml, reporter);
 			s = reporter.printToString().trim();
 			assertTrue(s.indexOf("XDEF500&{line}{; řádka=}&{column}{;"
-				+ " sloupec=}&{sysId}{; zdroj='}{'}") == 0 &&
-				s.indexOf("XDEF501Výskyt nepovoleného elementu '&{child}"
+				+ " sloupec=}&{sysId}{; zdroj='}{'}") == 0
+				&& s.indexOf("XDEF501Výskyt nepovoleného elementu '&{child}"
 				+ "'&{xpath}{ v }&{#XDEF500}") > 0 &&
 				s.endsWith("XDEF502Element '&{child}' není definován jako "
 				+ "'root'{ v }&{#XDEF500}"), s);
@@ -1593,20 +1592,17 @@ public final class TestParse extends XDTester {
 "</xd:collection>\n";
 			xml =
 "<messages>\n"+
-"  <X00 ces=\"&amp;{line}{; řádka=}&amp;{column}{; sloupec=}&amp;{sysId}"+
-"{; zdroj='}{'}\"/>\n"+
-"  <X01 ces=\"Výskyt nepovoleného elementu '&amp;{child}'&amp;{xpath}"+
- "{ v }&amp;{#X00}\"/>\n"+
-"  <X02 ces=\"Element '&amp;{child}' není definován jako 'root'"+
-"{ v }&amp;{#X00}\"/>\n"+
+"  <X00 ces=\"&amp;{line}{; x=}&amp;{column}{; y=}&amp;{sysId}{; z='}{'}\"/>\n"+
+"  <X01 ces=\"Element error '&amp;{child}'&amp;{xpath}{ in }&amp;{#X00}\"/>\n"+
+"  <X02 ces=\"Element '&amp;{child}' is not 'root'{ in }&amp;{#X00}\"/>\n"+
 "</messages>\n";
 			xp = compile(xdef);
 			strw = new StringWriter();
 			parse(xp, "messages", xml, null, strw, null, null);
 			assertEq(
-"X00 &{LINE}{; ŘÁDKA=}&{COLUMN}{; SLOUPEC=}&{SYSID}{; ZDROJ='}{'}\n"+
-"X01 VÝSKYT NEPOVOLENÉHO ELEMENTU '&{CHILD}'&{XPATH}{ V }&{#X00}\n"+
-"X02 ELEMENT '&{CHILD}' NENÍ DEFINOVÁN JAKO 'ROOT'{ V }&{#X00}\n",
+"X00 &{LINE}{; X=}&{COLUMN}{; Y=}&{SYSID}{; Z='}{'}\n"+
+"X01 ELEMENT ERROR '&{CHILD}'&{XPATH}{ IN }&{#X00}\n"+
+"X02 ELEMENT '&{CHILD}' IS NOT 'ROOT'{ IN }&{#X00}\n",
 				strw.toString());
 			//test macro
 			xdef =
@@ -1638,7 +1634,7 @@ public final class TestParse extends XDTester {
 "<xd:macro name = \"m1\">${mac#m2()}</xd:macro>\n"+
 "<xd:macro name = \"m2\">out</xd:macro>\n"+
 "<xd:macro name = \"m3\" op=\"${mac#m1}\" p1=\"'Hi'\" p2=\"Sir\""+
-"                          p3=\"Bye\" end=\"outln('End');\">\n"+
+"                        p3=\"Bye\" end=\"outln('End');\">\n"+
 "; finally {#{op}(#{p1});#{op}('#{p2}');#{op}('#{p3}');#{end}}\n"+
 "</xd:macro>\n"+
 "<xd:macro name = \"m4\">out</xd:macro>\n"+
@@ -3146,9 +3142,7 @@ public final class TestParse extends XDTester {
 		resetTester();
 		try {
 			SUtils.deleteAll(tempDir, true); //delete all generated data
-		} catch (Exception ex) {
-			fail(ex);// should not happen; error when delete generated data
-		}
+		} catch (Exception ex) {}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
