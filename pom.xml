@@ -7,9 +7,9 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>org.xdef</groupId>
-    <artifactId>xdef</artifactId>
+    <artifactId>xdef-parent</artifactId>
     <version>${revision}${changelist}</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     
     <licenses>
         <license>
@@ -19,8 +19,8 @@
         </license>
     </licenses>
 
-    <name>xdef</name>
-    <description>X-definition ${specification.version} (Open Source Software)</description>
+    <name>xdef-parent</name>
+    <description>parent-pom for the project X-definition (Open Source Software)</description>
     <url>http://www.xdef.org</url>
     <organization>
         <name>Syntea software group a.s.</name>
@@ -62,121 +62,14 @@
         <!-- <testng.version>6.14.3</testng.version> -->
         <testng.version>6.8.21</testng.version>
     </properties>
-    
-    <dependencies>
-        <!-- third parties -->
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <classifier>xqj</classifier>
-        </dependency>
-        
-        <!-- test-phase -->
-        <!-- ========== -->
-        
-        <!-- core -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <!-- third parties -->
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <!-- logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sbabcoc</groupId>
-            <artifactId>logback-testng</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- -->
-    </dependencies>
-    
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>org/xdef/sys/config/pominfo.properties</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <useIncrementalCompilation>false</useIncrementalCompilation>
-                    <compilerArgs>
-                        <arg>-Xpkginfo:always</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
 
-            <!-- Automatically write version with timestamp to manifest file -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                        <manifestEntries>
-                            <Specification-Title>${project.groupId}:${project.artifactId} (${project.url})</Specification-Title>
-                            <Specification-Version>${specification.version}</Specification-Version>
-                            <Specification-Vendor>${project.organization.name} (${project.organization.url})</Specification-Vendor>
-                            <Implementation-Title>${project.groupId}:${project.artifactId}:${project.version} (release-date: ${release.date})</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Vendor>${project.organization.name} (${project.organization.url})</Implementation-Vendor>
-                            <Comment>${project.description}</Comment>
-                            <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            
+    <modules>
+        <!-- main module X-definition -->
+        <module>xdef</module>
+    </modules>
+
+    <build>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
@@ -194,17 +87,6 @@
                             <vendor>${jdk.vendor}</vendor>
                         </jdk>
                     </toolchains>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds> -->
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
                 </configuration>
             </plugin>
 
@@ -241,8 +123,29 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <compilerArgs>
+                        <arg>-Xpkginfo:always</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
+                </configuration>
+            </plugin>
         </plugins>
-        
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -308,131 +211,7 @@
             </plugins>
         </pluginManagement>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>release</id>
-            <properties>
-                <changelist/>
-            </properties>
-        </profile>
-        <profile>
-            <id>javadoc</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <excludePackageNames>org.xdef.impl*</excludePackageNames>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>sources</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>maven/assembly/src.xml</descriptor>
-                                <descriptor>maven/assembly/userdoc.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>make-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>dm-ossrh</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <!-- when using plugin nexus-staging-maven-plugin release-repository isn't needed
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-                </repository>
-                -->
-            </distributionManagement>
-        </profile>
-        <profile>
-            <id>dm-syntea</id>
-            <distributionManagement>
-                <repository>
-                    <id>private</id>
-                    <url>${mrmUrl}/private</url>
-                </repository>
-                <snapshotRepository>
-                    <id>private-snapshot</id>
-                    <url>${mrmUrl}/private-snapshot</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
-    </profiles>
-    
+
     <dependencyManagement>
         <dependencies>
             <!-- third parties -->
