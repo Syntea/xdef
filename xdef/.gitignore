@@ -14,10 +14,4 @@
 /.project
 /.settings/
 /.wtpmodules/
-/temp/
-/derby.log
 /nb-configuration.xml
-/testCommon.log
-/testUtils.log
-/testXdef.log
-/run/output/*

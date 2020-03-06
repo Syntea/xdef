@@ -69,6 +69,9 @@
         
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
+        
+        <!-- module with tests of X-definition -->
+        <module>xdef-test</module>
     </modules>
 
     <build>
