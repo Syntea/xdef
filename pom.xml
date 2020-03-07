@@ -66,12 +66,17 @@
     <modules>
         <!-- main module X-definition -->
         <module>xdef</module>
-        
+
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
-        
-        <!-- module with tests of X-definition -->
+
+        <!-- module with tests of X-definition, executing under default java -->
         <module>xdef-test</module>
+
+        <!-- tests executing under java-11 -->
+        <!-- malfunctional for now, disabled - ->
+        <module>xdef-test11</module>
+        <!- - -->
     </modules>
 
     <build>
@@ -266,6 +271,12 @@
             <dependency>
                 <groupId>org.xdef</groupId>
                 <artifactId>xdef-buildtools</artifactId>
+                <version>${revision}${changelist}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xdef</groupId>
+                <artifactId>xdef-test</artifactId>
+                <type>test-jar</type>
                 <version>${revision}${changelist}</version>
             </dependency>
             
