@@ -23,6 +23,8 @@ The source code for this project is licensed under
 
 # Examples
 
+You can try following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+
 Example 1: **Essential concepts**
 <table><tr style="vertical-align: top;"><td>
 Let´s have the following XML data:
