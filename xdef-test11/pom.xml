@@ -14,21 +14,31 @@
 
     <artifactId>xdef-test11</artifactId>
     <packaging>jar</packaging>
-    
+
     <name>xdef-test11</name>
-    <description>tests executing under java-11 for X-definition (Open Source Software)</description>
+    <description>executing test under java-11 for X-definition, alfa-version</description>
 
     <properties>
+        <!-- use default java instead of java-11 temporarily - ->
         <jdk.version>11</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
+        <!- - -->
     </properties>
-    
+
     <dependencies>
         <!-- xdef modules -->
+        <!-- test11 is alfa-version, including xdef-test is disabled for now - ->
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef-test</artifactId>
             <type>test-jar</type>
+        </dependency>
+        <!- - -->
+        
+        <!-- junit-test -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
         </dependency>
     </dependencies>
 
@@ -46,5 +56,5 @@
             </plugin>
         </plugins>
     </build>
-            
+
 </project>

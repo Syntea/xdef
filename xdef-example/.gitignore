@@ -1,0 +1,17 @@
+/.flattened-pom.xml
+/.idea
+*.ipr
+*.iws
+*.iml
+*.pyc
+#*
+/overlays/
+/target/
+/nbproject/
+/nbactions.xml
+/local/
+/.classpath
+/.project
+/.settings/
+/.wtpmodules/
+/nb-configuration.xml

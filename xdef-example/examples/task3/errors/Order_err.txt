@@ -1,0 +1,2 @@
+E POBJ001: Incorrect customer code: 'AGFA'; line=2; column=35; source="file:/D:/cvs/DEV/java/XdExample1/task3/input/Order_err.xml"; xpath=/Order/@CustomerCode; X-position=Order#Order
+E XDEF515: Value error; line=2; column=35; source="file:/D:/cvs/DEV/java/XdExample1/task3/input/Order_err.xml"; xpath=/Order/@CustomerCode; X-position=Order#Order/@CustomerCode

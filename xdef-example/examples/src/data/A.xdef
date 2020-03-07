@@ -1,0 +1,18 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="A" root="Town">
+  <xd:declaration>
+    external method void data.MyClass.isSmith(XXData);
+  </xd:declaration>
+
+  <Town Name="string">
+     <Street xd:script="*;" Name="string">
+        <House xd:script="*; ref House"/>
+     </Street>
+  </Town>
+
+  <House Num="int" Address="optional string;">
+     <Person xd:script="*; ref Person" />
+  </House>
+
+  <Person FirstName="string" LastName="string(); onTrue isSmith();"/>
+
+</xd:def>

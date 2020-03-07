@@ -12,7 +12,8 @@
 	</appender>
 
 	<!-- log to file -->
-	<appender name="file" class="ch.qos.logback.core.FileAppender">
+	<appender name="file"
+        class="ch.qos.logback.core.FileAppender">
 		<file>target/test-output/test.log</file>
 		<encoder>
 			<pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
@@ -28,7 +29,9 @@
 		</encoder>
 	</appender>
 
-	<!-- loggers -->
+
+
+    <!-- loggers -->
 	<root level="INFO">
 		<appender-ref ref="stdout"/>
 		<appender-ref ref="file"/>

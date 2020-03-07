@@ -1,0 +1,14 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:root="dropSchema">
+
+  <xd:declaration scope = "local">
+    external Service service;
+  </xd:declaration>
+
+  <dropSchema name="string; finally
+                    service.execute('DROP SCHEMA '+ getText() + ' RESTRICT');" >
+    <table xd:script="occurs *"
+           name = "string; onTrue service.execute('DROP TABLE '
+                   + xpath('../../@name') + '.' + getText());" />
+  </dropSchema>
+
+</xd:def>

@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
     
     <name>xdef-buildtools</name>
-    <description>build-tools for a building of X-definition (Open Source Software)</description>
+    <description>some build-tools for building of X-definition</description>
 
     <dependencies>
         <dependency>

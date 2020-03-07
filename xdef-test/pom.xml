@@ -63,13 +63,13 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-        </dependency>        
+        </dependency>
         <!-- DEBUG -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13</version>
-        </dependency>        
+            <version>4.12</version>
+        </dependency>
         <!-- -->
     </dependencies>
 
