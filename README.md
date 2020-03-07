@@ -33,9 +33,9 @@ Let´s have the following XML data:
 <Employee
     FirstName = "Andrew"
     LastName  = "Aardvark"
-    EnterDate = "1996-3-12"
+    EnterDate = "1996-03-12"
     Salary    = "21700"
-/>
+>
     <Address
         Street = "Broadway"
         Number = "255"
@@ -52,13 +52,13 @@ Let´s have the following XML data:
 This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:root="Employee">
     <Employee
         FirstName = "required string()"
         LastName  = "required string()"
         EnterDate = "required date()"
         Salary    = "optional decimal()"
-    />
+    >
         <Address
             Street = "required string()"
             Number = "required int()"
@@ -116,7 +116,8 @@ Model of the XML data:
 
 <Person GivenName  = "string()" 
         FamilyName = "string()" 
-        PersonalID = "int()" />
+        PersonalID = "long()"
+        Salary     = "optional int()" />
 <Address Street = "string()"
          Number = "int()"
          Town   = "string()"
