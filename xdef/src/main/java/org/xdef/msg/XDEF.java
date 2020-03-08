@@ -650,7 +650,7 @@ public interface XDEF {
 	public static final long XDEF820 = 31159025984L;
 	/** Incorrect range specification of &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF821 = 31159025985L;
-	/** Class with the external debug editor &amp;{0}{"}{"} is not available.  */
+	/** Class with the external debug editor &amp;{0}{"}{"} is not available. */
 	public static final long XDEF850 = 31159025986L;
 	/** GUIEditor can't write XML data to file &amp;{0}. */
 	public static final long XDEF851 = 31159025987L;
