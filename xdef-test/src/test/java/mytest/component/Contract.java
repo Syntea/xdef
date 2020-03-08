@@ -186,7 +186,7 @@ public static class Client implements org.xdef.component.XComponent{
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
     }
     if (getType() != null)
-      el.setAttribute(XD_Name_Type, String.valueOf(getType()));
+      el.setAttribute(XD_Name_Type, getType().toString());
     if (getName() != null)
       el.setAttribute(XD_Name_Name, getName());
     if (getID() != null)

@@ -41,6 +41,6 @@ public class Example6_DBInsert1 {
 		if (reporter.errors()) {
 			reporter.printReports(System.err);
 		}
-    }
+	}
 
 }

@@ -19,21 +19,21 @@ public class Example4a {
 		// 1. Create XDPool
 		Properties props = System.getProperties();
 		XDPool xpool = XDFactory.compileXD(props, xdef);
-		
+
 		// 2. Create XDDocument
 		XDDocument xdoc = xpool.createXDDocument();
 
 		// 3. set name of the input file to variable "source"
 		xdoc.setVariable("source", xmlData);
-		
-		// 4. Because the model used for cconstruction of result has 
+
+		// 4. Because the model used for cconstruction of result has
 		// the namespance we must create the QNname with
 		// the namespace URI and local name.
 		String modelNamespace = "http://www.w3.org/1999/xhtml";
 		String modelLocalname = "html";
 		QName modelName = new QName(modelNamespace, modelLocalname);
 
-		// 5. create result from model.		
+		// 5. create result from model.
 		Element element = xdoc.xcreate(modelName, null);
 
 		// 6. print it!

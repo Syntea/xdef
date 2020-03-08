@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class Orders3ext {
-	
+
 	private final String _outputFile;  // Output file
 	private final String _errorFile;  // Error file
 	private XDXmlOutStream _outputWriter;  // writer for output
@@ -23,13 +23,13 @@ public class Orders3ext {
 	private int _errCount;  // error counter
 	private int _errCountOld;  // previous value of the error counter
 	private int _count;  // counter of correct orders
-	
+
 	// Create instance of this class.
 	public Orders3ext(String outputFile, String errorFile) throws IOException {
 		_outputFile = outputFile; // output file name.
 		_errorFile = errorFile; // error file name.
 		// writers will be created when an item to bew written occurs
-		_errorWriter = _outputWriter = null; 
+		_errorWriter = _outputWriter = null;
 		// Prepare XPath expression to get customer code from an order
 		// Because of the command "forget" it will be in the processed document
 		// only one (the actually processed) order.
@@ -38,14 +38,14 @@ public class Orders3ext {
 		// Clear counters
 		_errCount = _errCountOld = _count = 0;
 	}
-	
+
 	// Write the order (only if no error was reported
 	public static void writeOrder(XXNode xnode) {
 		// Get "User object" (i.e. the instance of this class).
 		Orders3ext x = (Orders3ext) xnode.getUserObject();
 		if (x._errCount != x._errCountOld) { // an error was reported?
 			// set old error counter (i.e. no errors reported for next item)
-			x._errCountOld = x._errCount; 
+			x._errCountOld = x._errCount;
 		} else {
 			// No error reported, so writ the order the result.
 			Element el = xnode.getElement();
@@ -66,7 +66,7 @@ public class Orders3ext {
 			x._outputWriter.writeNode(el);
 		}
 	}
-	
+
 	// Create the writeOrder and set the variable "_error".
 	public static void err(XXNode xnode, long code) {
 		// Get "User object" (i.e. the instance of this class).
@@ -87,7 +87,7 @@ public class Orders3ext {
 		// Create the element to be written.
 		Element el = x._errorDoc.createElement("Error");
 		el.setAttribute("ErrorCode", String.valueOf(code));
-		String customer = 
+		String customer =
 			(String) x._xpath.evaluate(xnode.getElement(), XPathConstants.STRING);
 		el.setAttribute("Customer", customer);
 		SPosition pos = xnode.getSPosition();
@@ -95,10 +95,10 @@ public class Orders3ext {
 		el.setAttribute("Column", String.valueOf(pos.getColumnNumber()));
 		x._errorWriter.writeNode(el);
 	}
-	
+
 	// Get number of errors
 	public int errNum() {return _errCount;}
-	
+
 	// Close created files
 	public void closeAll() {
 		// close result output stream (if something was written)
@@ -109,5 +109,5 @@ public class Orders3ext {
 		if (_errorWriter != null) {
 			_errorWriter.closeStream(); // write root end tag and close the stream
 		}
-	}	
+	}
 }

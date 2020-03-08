@@ -15,7 +15,7 @@
       City="string(2,100)"
       ZIP="num(5)"/>
   </DeliveryPlace>
-	
+
   <Item xd:script="occurs 1..10"
     ProductCode="xpath('Product[@Code=&quot;' + getText() + '&quot;]', products).getLength() != 0"
     Quantity="int(1,1000)"/>

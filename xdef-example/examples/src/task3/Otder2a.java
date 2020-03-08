@@ -20,26 +20,26 @@ public class Otder2a {
 		// Set files with reports
 		xdoc.setProperty(XDConstants.XDPROPERTY_MESSAGES + "POBJ",
 			"src/task3/POBJ*.properties");
-		
+
 		// Set the actual language for reporter (you can also try to set "ces")
 		xdoc.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng"); // English
-		
+
 		// Set external variables "products" and "customers"
 		xdoc.setVariable("products", "task3/input/Products.xml");
 		xdoc.setVariable("customers", "task3/input/Customers.xml");
-		
+
 		// Prepare error reporter
 		ArrayReporter reporter = new ArrayReporter();
-		
+
 		// Run the validation mode (you can also try task3/input/Order_err.xml)
 		xdoc.xparse("task3/input/Order.xml", reporter);
-		
+
 		// Check errors
 		if (reporter.errorWarnings()) {
 			// print errors to the file
 			PrintStream ps = new PrintStream("task3/errors/Order_err.txt");
 			reporter.printReports(ps); //vytisteni chyb
-			ps.close(); 
+			ps.close();
 			// print the message to the system consloe
 			Report rep = Report.error("POBJ003", null);
 			System.err.println(rep.toString());
@@ -48,7 +48,7 @@ public class Otder2a {
 			KXmlUtils.writeXml("task3/output/Order.xml", xdoc.getElement());
 			// print the message to the system consloe
 			Report rep = Report.info("POBJ004", null);
-			System.out.println(rep.toString()); 
+			System.out.println(rep.toString());
 		}
 	}
 }

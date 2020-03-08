@@ -22,10 +22,10 @@ public class Example6_DBRead1 {
 		String user = "myself";
 		String password = "blabla";
 		XDService service = XDFactory.createSQLService(url, user, password);
-		
+
 		// Set external variable with database connection to XDDocument
 		xd.setVariable("inventory#service", service);
-		
+
 		// Construct element with books
 		Element el = xd.xcreate("Inventory", null); //execute construction
 		// Print created element

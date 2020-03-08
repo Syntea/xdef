@@ -14,7 +14,7 @@
   <Weather date = "optional datetime('yyyy-M-d')">
      <Measurement xd:script = "occurs 1..;"
         wind        = "required float()"
-		time        = "required datetime('HH:mm')" 
+        time        = "required datetime('HH:mm')"
         temperature = "required float(-99, +99);
            onTrue {/* process value of temperature. */
              n++; /* increase number of measurements. */
@@ -39,5 +39,5 @@
       </h3>
     </body>
   </html>
-	
+
 </xd:def>

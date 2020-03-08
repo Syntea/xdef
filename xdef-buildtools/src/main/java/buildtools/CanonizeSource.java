@@ -97,8 +97,8 @@ public class CanonizeSource {
 			input += _mask;
 			files = getWildCardFiles(input);
 			if (files != null) {
-				for (int i = 0; i < files.length; i++) {
-					processFile(files[i], outDir, createDirectory);
+				for (File f: files) {
+					processFile(f, outDir, createDirectory);
 				}
 			}
 			String s;
@@ -734,7 +734,7 @@ public class CanonizeSource {
 		if (err != null) {
 			err.flush();
 		}
-		if (verbose && out != null) {
+		if (verbose && out != null && cs._processedCount > 0) {
 			out.println("Inspected " + cs._processedCount
 				+ " file(s), changed " + cs._modifyCount + ".");
 			out.flush();

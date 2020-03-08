@@ -21,16 +21,16 @@ public class Order1 {
 
 		// Prepare error reporter
 		ArrayReporter reporter = new ArrayReporter();
-		
+
 		// Run validation mode (you can also try task3/input/Order_err.xml)
-		xdoc.xparse("task3/input/Order.xml", reporter);				
+		xdoc.xparse("task3/input/Order.xml", reporter);
 
 		// Check if an error was reported
 		if (reporter.errorWarnings()) {
 			// Print errors to the file
 			PrintStream ps = new PrintStream("task3/errors/Order_err.txt");
 			reporter.printReports(ps);
-			ps.close(); 
+			ps.close();
 			System.err.println("Incorrect input data");
 		} else {
 			// write porocessed document

@@ -1,6 +1,6 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
 
-<Order Number="int" CustomerCode="string(1,20)">		
+<Order Number="int" CustomerCode="string(1,20)">
   <DeliveryPlace>
     <Address Street="string(2,100)"
       House="int(1,9999)"

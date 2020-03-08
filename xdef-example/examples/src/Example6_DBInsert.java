@@ -16,7 +16,7 @@ public class Example6_DBInsert {
 
 		// Create XDDocument
 		XDDocument xd = xp.createXDDocument();
-		
+
 		// Create database connection
 		String url = GenDerby.DB_URL;
 		String user = "myself";
@@ -40,6 +40,6 @@ public class Example6_DBInsert {
 		if (reporter.errors()) {
 			reporter.printReports(System.err);
 		}
-    }
+	}
 
 }

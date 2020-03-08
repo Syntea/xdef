@@ -41,48 +41,50 @@ public class Canonize {
 	 * root directory <tt>java</tt> (under which are projects). If the value
 	 * of this argument is <tt>false</tt> then the end source remains unchanged.
 	 */
-	private static void doSources(
-		String filename,
-		boolean recurse,
-		boolean tabs) {
-		if (filename.endsWith("/data")) {
-			return;
+	private static void doSources(final String filename,
+		final boolean recurse,
+		final boolean tabs) {
+		try {
+			File f = new File(filename).getCanonicalFile();
+			String home = f.getAbsolutePath().replace('\\', '/');
+			if (!home.endsWith("/")) {
+				home += '/';
+			}
+			if (home.endsWith("/data/")) {
+				return; //do not process data directories
+			}
+
+			String hdrTemplate = null;
+			String tailTemplate = null;
+			System.out.println("Directory: " + home);
+			CanonizeSource.canonize(home + "*.java",
+				recurse,
+				tabs,
+				tabs ? 4 : 2,
+				hdrTemplate, tailTemplate, GenConstants.JAVA_SOURCE_CHARSET);
+			CanonizeSource.canonize(home + "*.xml",
+				recurse,
+				false,
+				tabs ? 4 : 2,
+				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+			CanonizeSource.canonize(home + "*.html",
+				recurse,
+				false,
+				tabs ? 4 : 2,
+				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+			CanonizeSource.canonize(home + "*.xdef",
+				recurse,
+				false,
+				tabs ? 4 : 2,
+				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+			CanonizeSource.canonize(home + "*.properties",
+				recurse,
+				false,
+				tabs ? 4 : 2,
+				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
 		}
-		String home = Preproc.getProjectHomeDir(Canonize.class);
-		if (home.endsWith("/")) {
-			home = home.substring(0, home.length() - 1);
-		}
-		int i = home.lastIndexOf('/');
-		if (i < 0) {
-			throw new RuntimeException("Unknown build structure");
-		}
-		String hdrTemplate = null;
-		String tailTemplate = null;
-		if (recurse) {
-			System.out.println("Directory: " + home + "/" + filename);
-		} else {
-			System.out.println("Directories: " + home + "/" + filename);
-		}
-		CanonizeSource.canonize(home + "/" + filename + "/*.java",
-			recurse,
-			tabs,
-			tabs ? 4 : 2,
-			hdrTemplate, tailTemplate, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.xml",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.html",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.xdef",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
 	}
 
 	/** Canonize sources.
@@ -94,24 +96,21 @@ public class Canonize {
 		String projectBase;
 		try {
 			projectBase = new File(".").getCanonicalPath().replace('\\', '/');
+			
 		} catch (Exception ex) {
 			throw new RuntimeException("Can't find project base directory");
-		}
-		if (projectBase.endsWith("/")) {
-			projectBase = projectBase.substring(0, projectBase.length() - 1);
 		}
 		int i = projectBase.lastIndexOf('/');
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
 		}
 		// Java source files: recurse directories, the second parameter is true.
-		doSources("src/main/java/org", true, true);
-		doSources("src/test/java/test/common", false, true);
-		doSources("src/test/java/test/utils", false, true);
-		doSources("src/test/java/test/xdef", false, true);
-		doSources("src/test/java/test/xdutils", false, true);
-		doSources("src/test/java/mytest", false, true);
-		doSources("src/test/java/buildtools", true, true); //this directory
+		doSources("../xdef/src/main/java/org", true, true);
+		doSources("../xdef/src/main/resources/org", true, true);
+		doSources("../xdef-test/src/test/java", false, true);
+		doSources("../xdef-test/src/test/resources", false, true);
+		doSources("src/main/java/buildtools", true, true); //this directory
+		doSources("../xdef-example/examples", true, true); //this directory
 		GenReportTables.main();
 	}
 

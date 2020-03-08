@@ -12,7 +12,7 @@
     if (errCount++ == 0) {
       errStream = new XmlOutStream(errFile);
       /* Document header and start of the root element */
-      errStream.writeElementStart(new Element("Errors")); 
+      errStream.writeElementStart(new Element("Errors"));
     }
     Element e = new Element('Error'); /* Pripravime element. */
     /* Set attributes. */
@@ -22,7 +22,7 @@
     e.setAttr("Column", toString(getSourceColumn()));
     errStream.writeElement(e); /* Write the element with error information */
   }
-  
+
   /* Write result */
   void writeResult() {
     if (errCount != errCountOld) { /* V objednavce byla chyba */
@@ -36,7 +36,7 @@
     }
     outStream.writeElement(getElement()); /* write the processed order */
   }
-  
+
   /* Close the output stream and the file with errors */
   void closeAll() {
     if (errCount > 0) { /* check if errors were reported */
@@ -64,7 +64,7 @@
     </DeliveryPlace>
     <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
       ProductCode="num(4); onFalse err(23); onAbsence err(24)"
-      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>		
+      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
   </Order>
 </Orders>
 

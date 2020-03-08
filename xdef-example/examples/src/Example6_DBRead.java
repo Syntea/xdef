@@ -14,7 +14,7 @@ public class Example6_DBRead {
 		String xdef = "./src/Example6_DBRead.xdef";
 		Properties props = System.getProperties();
 		XDPool xp = XDFactory.compileXD(props, xdef);
-		
+
 		// Create database connection
 		String url = GenDerby.DB_URL;
 		String user = "myself";
@@ -23,13 +23,13 @@ public class Example6_DBRead {
 
 		// Create XDDocument
 		XDDocument xd = xp.createXDDocument();
-		
+
 		// Set external variable with database connection to XDDocument
 		xd.setVariable("query#service", service);
 
 		// Construct XML data with books
 		Element el = xd.xcreate("Books", null);
-		
+
 		// Close database connection
 		service.close();
 
