@@ -36,7 +36,7 @@ public class TestXComponentsGen extends XDTester {
 		}
 		// generate XCDPool from sources
 		try {
-			// ensure following classes are compiled!
+			// ensure thhat following classes are compiled!
 			TestXComponents_C.class.getClass();
 			TestXComponents_G.class.getClass();
 			TestXComponents_Y04.class.getClass();
@@ -64,6 +64,8 @@ public class TestXComponentsGen extends XDTester {
 				dir + "test/xdef/component/Pool.xp"));
 			os.writeObject(xp);
 			os.close();
+			compileSources(dir + "test/xdef/component",
+				dir + "test/xdef/component/s");
 			// update components with generated files
 			String msg = FUtils.updateDirectories(
 				new File(f, "test/xdef/component"),

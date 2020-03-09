@@ -9,13 +9,13 @@ public class E implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-	String name, String ns, String xdPos) {
-	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+    String name, String ns, String xdPos) {
+    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -41,47 +41,47 @@ public class E implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return -1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-	org.w3c.dom.Element el;
-	if (doc==null) {
-	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-		XD_NodeName, null);
-	  el = doc.getDocumentElement();
-	} else {
-	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-	  if (doc.getDocumentElement()==null) doc.appendChild(el);
-	}
-	for (org.xdef.component.XComponent x: xGetNodeList())
-	  el.appendChild(x.toXml(doc));
-	return el;
+    org.w3c.dom.Element el;
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
+      el = doc.getDocumentElement();
+    } else {
+      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
+    }
+    for (org.xdef.component.XComponent x: xGetNodeList())
+      el.appendChild(x.toXml(doc));
+    return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-	java.util.List<org.xdef.component.XComponent> a=
-	  new java.util.ArrayList<org.xdef.component.XComponent>();
-	org.xdef.component.XComponentUtil.addXC(a, getClazz());
-	return a;
+    java.util.List<org.xdef.component.XComponent> a=
+      new java.util.ArrayList<org.xdef.component.XComponent>();
+    org.xdef.component.XComponentUtil.addXC(a, getClazz());
+    return a;
   }
   public E() {}
   public E(org.xdef.component.XComponent p,
-	String name, String ns, String xPos, String XDPos) {
-	XD_NodeName=name; XD_NamespaceURI=ns;
-	XD_XPos=xPos;
-	XD_Model=XDPos;
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    String name, String ns, String xPos, String XDPos) {
+    XD_NodeName=name; XD_NamespaceURI=ns;
+    XD_XPos=xPos;
+    XD_Model=XDPos;
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public E(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-	org.w3c.dom.Element el=x.getElement();
-	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-	XD_XPos=x.getXPos();
-	XD_Model=x.getXMElement().getXDPosition();
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-	if (!"DA9BC5F50E56C102716B1275E263484B".equals(
-	  x.getXMElement().getDigest())) { //incompatible element model
-	  throw new org.xdef.sys.SRuntimeException(
-		org.xdef.msg.XDEF.XDEF374);
-	}
+    org.w3c.dom.Element el=x.getElement();
+    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    if (!"DA9BC5F50E56C102716B1275E263484B".equals(
+      x.getXMElement().getDigest())) { //incompatible element model
+      throw new org.xdef.sys.SRuntimeException(
+        org.xdef.msg.XDEF.XDEF374);
+    }
   }
   private E.Clazz _Clazz;
   public static final String XD_NAME="if";
@@ -95,18 +95,18 @@ public class E implements org.xdef.component.XComponent{
   private String XD_Model="E#if";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-	org.xdef.proc.XXNode x)
-	{return new Clazz(this, x);}
+    org.xdef.proc.XXNode x)
+    {return new Clazz(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-	x.xSetNodeIndex(XD_ndx++);
-	setClazz((Clazz) x); //E#if/class
+    x.xSetNodeIndex(XD_ndx++);
+    setClazz((Clazz) x); //E#if/class
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -119,13 +119,13 @@ public static class Clazz implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-	String name, String ns, String xdPos) {
-	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+    String name, String ns, String xdPos) {
+    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -151,43 +151,43 @@ public static class Clazz implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-	org.w3c.dom.Element el;
-	if (doc==null) {
-	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-		XD_NodeName, null);
-	  el = doc.getDocumentElement();
-	} else {
-	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-	}
-	if (gettry() != null)
-	  el.setAttribute(XD_Name_try, gettry());
-	return el;
+    org.w3c.dom.Element el;
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
+      el = doc.getDocumentElement();
+    } else {
+      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+    }
+    if (gettry() != null)
+      el.setAttribute(XD_Name_try, gettry());
+    return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-	return new java.util.ArrayList<org.xdef.component.XComponent>();
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public Clazz() {}
   public Clazz(org.xdef.component.XComponent p,
-	String name, String ns, String xPos, String XDPos) {
-	XD_NodeName=name; XD_NamespaceURI=ns;
-	XD_XPos=xPos;
-	XD_Model=XDPos;
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    String name, String ns, String xPos, String XDPos) {
+    XD_NodeName=name; XD_NamespaceURI=ns;
+    XD_XPos=xPos;
+    XD_Model=XDPos;
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Clazz(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-	org.w3c.dom.Element el=x.getElement();
-	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-	XD_XPos=x.getXPos();
-	XD_Model=x.getXMElement().getXDPosition();
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-	if (!"4234629C237D76C0DB1D4F45F998CB97".equals(
-	  x.getXMElement().getDigest())) { //incompatible element model
-	  throw new org.xdef.sys.SRuntimeException(
-		org.xdef.msg.XDEF.XDEF374);
-	}
+    org.w3c.dom.Element el=x.getElement();
+    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    if (!"4234629C237D76C0DB1D4F45F998CB97".equals(
+      x.getXMElement().getDigest())) { //incompatible element model
+      throw new org.xdef.sys.SRuntimeException(
+        org.xdef.msg.XDEF.XDEF374);
+    }
   }
   private String XD_Name_try="try";
   private String _try;
@@ -201,17 +201,17 @@ public static class Clazz implements org.xdef.component.XComponent{
   private String XD_Model="E#if/class";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult){
-	XD_Name_try = x.getNodeName();
-	settry(parseResult.getParsedValue().toString());
+    org.xdef.XDParseResult parseResult){
+    XD_Name_try = x.getNodeName();
+    settry(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-	org.xdef.proc.XXNode x)
-	{return null;}
+    org.xdef.proc.XXNode x)
+    {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override

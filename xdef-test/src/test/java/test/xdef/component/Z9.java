@@ -34,13 +34,13 @@ public class Z9 implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-	String name, String ns, String xdPos) {
-	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+    String name, String ns, String xdPos) {
+    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -66,60 +66,60 @@ public class Z9 implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return -1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-	org.w3c.dom.Element el;
-	if (doc==null) {
-	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-		XD_NodeName, null);
-	  el = doc.getDocumentElement();
-	} else {
-	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-	  if (doc.getDocumentElement()==null) doc.appendChild(el);
-	}
-	if (getUlice() != null)
-	  el.setAttribute(XD_Name_Ulice, getUlice());
-	if (getCisloOrientacni() != null)
-	  el.setAttribute(XD_Name_CisloOrientacni, getCisloOrientacni());
-	if (getCisloPopisne() != null)
-	  el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
-	if (getObec() != null)
-	  el.setAttribute(XD_Name_Obec, getObec());
-	if (getPSC() != null)
-	  el.setAttribute(XD_Name_PSC, getPSC());
-	if (getOkres() != null)
-	  el.setAttribute(XD_Name_Okres, getOkres());
-	if (getStat() != null)
-	  el.setAttribute(XD_Name_Stat, getStat());
-	if (getTelefon1() != null)
-	  el.setAttribute(XD_Name_Telefon1, getTelefon1());
-	if (getTelefon2() != null)
-	  el.setAttribute(XD_Name_Telefon2, getTelefon2());
-	return el;
+    org.w3c.dom.Element el;
+    if (doc==null) {
+      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+        XD_NodeName, null);
+      el = doc.getDocumentElement();
+    } else {
+      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+      if (doc.getDocumentElement()==null) doc.appendChild(el);
+    }
+    if (getUlice() != null)
+      el.setAttribute(XD_Name_Ulice, getUlice());
+    if (getCisloOrientacni() != null)
+      el.setAttribute(XD_Name_CisloOrientacni, getCisloOrientacni());
+    if (getCisloPopisne() != null)
+      el.setAttribute(XD_Name_CisloPopisne, getCisloPopisne());
+    if (getObec() != null)
+      el.setAttribute(XD_Name_Obec, getObec());
+    if (getPSC() != null)
+      el.setAttribute(XD_Name_PSC, getPSC());
+    if (getOkres() != null)
+      el.setAttribute(XD_Name_Okres, getOkres());
+    if (getStat() != null)
+      el.setAttribute(XD_Name_Stat, getStat());
+    if (getTelefon1() != null)
+      el.setAttribute(XD_Name_Telefon1, getTelefon1());
+    if (getTelefon2() != null)
+      el.setAttribute(XD_Name_Telefon2, getTelefon2());
+    return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-	return new java.util.ArrayList<org.xdef.component.XComponent>();
+    return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public Z9() {}
   public Z9(org.xdef.component.XComponent p,
-	String name, String ns, String xPos, String XDPos) {
-	XD_NodeName=name; XD_NamespaceURI=ns;
-	XD_XPos=xPos;
-	XD_Model=XDPos;
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    String name, String ns, String xPos, String XDPos) {
+    XD_NodeName=name; XD_NamespaceURI=ns;
+    XD_XPos=xPos;
+    XD_Model=XDPos;
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Z9(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-	org.w3c.dom.Element el=x.getElement();
-	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-	XD_XPos=x.getXPos();
-	XD_Model=x.getXMElement().getXDPosition();
-	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-	if (!"7070EC0A858206E367DABF38B96DB80C".equals(
-	  x.getXMElement().getDigest())) { //incompatible element model
-	  throw new org.xdef.sys.SRuntimeException(
-		org.xdef.msg.XDEF.XDEF374);
-	}
+    org.w3c.dom.Element el=x.getElement();
+    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+    XD_XPos=x.getXPos();
+    XD_Model=x.getXMElement().getXDPosition();
+    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+    if (!"7070EC0A858206E367DABF38B96DB80C".equals(
+      x.getXMElement().getDigest())) { //incompatible element model
+      throw new org.xdef.sys.SRuntimeException(
+        org.xdef.msg.XDEF.XDEF374);
+    }
   }
   private String XD_Name_Ulice="Ulice";
   private String _Ulice;
@@ -149,43 +149,43 @@ public class Z9 implements org.xdef.component.XComponent{
   private String XD_Model="SouborD1A#Adresa";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult){}
+    org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-	org.xdef.XDParseResult parseResult) {
-	if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
-	  XD_Name_Ulice = x.getNodeName();
-	  setUlice(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
-	  XD_Name_CisloOrientacni = x.getNodeName();
-	  setCisloOrientacni(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
-	  XD_Name_CisloPopisne = x.getNodeName();
-	  setCisloPopisne(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
-	  XD_Name_Obec = x.getNodeName();
-	  setObec(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@PSC")) {
-	  XD_Name_PSC = x.getNodeName();
-	  setPSC(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
-	  XD_Name_Okres = x.getNodeName();
-	  setOkres(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@Stat")) {
-	  XD_Name_Stat = x.getNodeName();
-	  setStat(parseResult.getParsedValue().toString());
-	} else if (x.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
-	  XD_Name_Telefon1 = x.getNodeName();
-	  setTelefon1(parseResult.getParsedValue().toString());
-	} else {
-	  XD_Name_Telefon2 = x.getNodeName();
-	  setTelefon2(parseResult.getParsedValue().toString());
-	}
+    org.xdef.XDParseResult parseResult) {
+    if (x.getXMNode().getXDPosition().endsWith("/@Ulice")) {
+      XD_Name_Ulice = x.getNodeName();
+      setUlice(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloOrientacni")) {
+      XD_Name_CisloOrientacni = x.getNodeName();
+      setCisloOrientacni(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@CisloPopisne")) {
+      XD_Name_CisloPopisne = x.getNodeName();
+      setCisloPopisne(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Obec")) {
+      XD_Name_Obec = x.getNodeName();
+      setObec(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@PSC")) {
+      XD_Name_PSC = x.getNodeName();
+      setPSC(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Okres")) {
+      XD_Name_Okres = x.getNodeName();
+      setOkres(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Stat")) {
+      XD_Name_Stat = x.getNodeName();
+      setStat(parseResult.getParsedValue().toString());
+    } else if (x.getXMNode().getXDPosition().endsWith("/@Telefon1")) {
+      XD_Name_Telefon1 = x.getNodeName();
+      setTelefon1(parseResult.getParsedValue().toString());
+    } else {
+      XD_Name_Telefon2 = x.getNodeName();
+      setTelefon2(parseResult.getParsedValue().toString());
+    }
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-	org.xdef.proc.XXNode x)
-	{return null;}
+    org.xdef.proc.XXNode x)
+    {return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
