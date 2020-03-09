@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250" ?>
 <Products>
   <Product Code="0001" Name="bicycle" Price="120.50"/>
   <Product Code="0002" Name="motorcycle" Price="2340.00"/>

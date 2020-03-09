@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <firm>
   <department code="management">
     <employee funtion="director" pay="32000" name="John Brown"/>

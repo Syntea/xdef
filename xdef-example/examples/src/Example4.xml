@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Weather date = "2005-05-11" >
   <Measurement wind = "5.3" temperature ="13.0" time = "05:00" />
   <Measurement wind = "7.2" temperature ="15.2" time = "11:00" />

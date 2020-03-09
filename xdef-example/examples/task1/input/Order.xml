@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250" ?>
 <Order Number="123" CustomerCode="ALFA">
   <DeliveryPlace>
     <Address Street="Oldroad" House="5" City="NewTown" ZIP="32321" />
