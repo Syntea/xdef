@@ -3,7 +3,7 @@ package buildtools;
 import java.io.File;
 
 /** Canonize sources.
- * <p>1. Remove all white spaces after last nonblank character
+ * <p>1. Remove all white spaces after last non-blank character
  * at the end of line and replace leading spaces by tabs.</p>
  * <p>2. Check and generate message report classes.</p>
  * @author  Vaclav Trojan
@@ -85,7 +85,7 @@ public class Canonize {
 	}
 
 	/** Canonize sources.
-	 * @param args array with command line parameters.
+	 * @param args array with command line parameters (no parameters used).
 	 */
 	public static void main(String[] args) {
 		_hdr = false;
@@ -101,7 +101,7 @@ public class Canonize {
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
 		}
-		// canonize sources: replace leading spaces with tabelators and remove
+		// Canonize sources: replace leading spaces with tabs and remove
 		// trailing white spaces.
 		doSources("../xdef/src/main/java/org", true);
 		doSources("../xdef/src/main/resources/org", true);
@@ -115,5 +115,4 @@ public class Canonize {
 		// register report messages
 		GenReportTables.main();
 	}
-
 }

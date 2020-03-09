@@ -9,7 +9,7 @@
  * <li>
  * <h2><tt>CanonizeSource</tt></h2>
  * provides canonization of sources (in the Java source files it replaces the
- * leading spaces with tabelators - 4 spaces are replaced by one tabelator)
+ * leading spaces with tabs - 4 spaces are replaced by one tab)
  * and it removes all trailing white spaces.
  * </li>
  *
@@ -20,7 +20,7 @@
  *
  * <li>
  * <h2><tt>JavaPreprocessor</tt></h2>
- * you can run preprocessor with swithes and arguments.
+ * you can run preprocessor with switches and arguments on command line.
  * </li>
  *
  * <li>
