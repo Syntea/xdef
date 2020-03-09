@@ -771,7 +771,7 @@ public class CanonizeSource {
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
 				if (dirTree) {
-					return "'-r' is redefined (dirTree).";
+					return "'-r' is redefined (directory tree switch).";
 				}
 				dirTree = true;
 			} else if (args[i].equals("-encoding")) {
