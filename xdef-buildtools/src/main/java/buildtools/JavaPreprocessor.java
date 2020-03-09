@@ -1552,27 +1552,6 @@ public class JavaPreprocessor {
 			_strings[strings.length] = s;
 		}
 
-//		/** Add string to list*/
-//		private void add(final int i, final String s) {
-//			if (i < 0 || i > _strings.length) {
-//				throw new java.lang.IndexOutOfBoundsException();
-//			}
-//			String[] strings = _strings;
-//			_strings = new String[strings.length + 1];
-//			if (i > 0) {
-//				System.arraycopy(strings, 0, _strings, 0, i);
-//			}
-//			if (i < strings.length) {
-//				System.arraycopy(strings, i, _strings, i + 1, strings.length - i);
-//			}
-//			_strings[i] = s;
-//		}
-//
-//		/** Get string from given index. */
-//		private String get(final int ndx) {
-//			return ndx < _strings.length && ndx >= 0 ? _strings[ndx] : null;
-//		}
-
 		/** Get index of given string. */
 		private int indexOf(final String s) {
 			for (int i = 0; i < _strings.length; i++) {
@@ -1619,11 +1598,5 @@ public class JavaPreprocessor {
 		private boolean remove(final String s) {
 			return remove(indexOf(s));
 		}
-//
-//		private String[] toArray() {
-//			String[] result = new String[_strings.length];
-//			System.arraycopy(_strings, 0, result, 0, _strings.length);
-//			return result;
-//		}
 	}
 }
