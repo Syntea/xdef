@@ -33,13 +33,13 @@ public class D implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -65,87 +65,87 @@ public class D implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return -1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement()==null) doc.appendChild(el);
-    }
-    el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-      "xmlns:a", "a.b");
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	  if (doc.getDocumentElement()==null) doc.appendChild(el);
+	}
+	el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+	  "xmlns:a", "a.b");
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, get$_());
-    org.xdef.component.XComponentUtil.addXC(a, getB());
-    org.xdef.component.XComponentUtil.addXC(a, getI());
-    org.xdef.component.XComponentUtil.addXC(a, getF());
-    org.xdef.component.XComponentUtil.addXC(a, getG());
-    org.xdef.component.XComponentUtil.addXC(a, getH());
-    org.xdef.component.XComponentUtil.addXC(a, getP());
-    org.xdef.component.XComponentUtil.addXC(a, getQ());
-    org.xdef.component.XComponentUtil.addXC(a, getR());
-    org.xdef.component.XComponentUtil.addXC(a, getS());
-    org.xdef.component.XComponentUtil.addXC(a, getE());
-    org.xdef.component.XComponentUtil.addXC(a, getT());
-    org.xdef.component.XComponentUtil.addXC(a, geta$T());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, get$_());
+	org.xdef.component.XComponentUtil.addXC(a, getB());
+	org.xdef.component.XComponentUtil.addXC(a, getI());
+	org.xdef.component.XComponentUtil.addXC(a, getF());
+	org.xdef.component.XComponentUtil.addXC(a, getG());
+	org.xdef.component.XComponentUtil.addXC(a, getH());
+	org.xdef.component.XComponentUtil.addXC(a, getP());
+	org.xdef.component.XComponentUtil.addXC(a, getQ());
+	org.xdef.component.XComponentUtil.addXC(a, getR());
+	org.xdef.component.XComponentUtil.addXC(a, getS());
+	org.xdef.component.XComponentUtil.addXC(a, getE());
+	org.xdef.component.XComponentUtil.addXC(a, getT());
+	org.xdef.component.XComponentUtil.addXC(a, geta$T());
+	return a;
   }
   private static byte[] decodeBase64(String s) {
-    try {
-      return org.xdef.sys.SUtils.decodeBase64(s);
-    } catch (org.xdef.sys.SException ex) {
-      throw new org.xdef.sys.SRuntimeException(ex.getReport());
-    }
+	try {
+	  return org.xdef.sys.SUtils.decodeBase64(s);
+	} catch (org.xdef.sys.SException ex) {
+	  throw new org.xdef.sys.SRuntimeException(ex.getReport());
+	}
   }
   /** Encode byte array to Base64 string.
    * @param b byte array.
    * @return string with encoded byte array.
    */
   private static String encodeBase64(byte[] b) {
-      return new String(org.xdef.sys.SUtils.encodeBase64(b),
-      java.nio.charset.Charset.forName("UTF-8"));
+	  return new String(org.xdef.sys.SUtils.encodeBase64(b),
+	  java.nio.charset.Charset.forName("UTF-8"));
   }
   private static byte[] decodeHex(String s) {
-    try {
-      return org.xdef.sys.SUtils.decodeHex(s);
-    } catch (org.xdef.sys.SException ex) {
-      throw new org.xdef.sys.SRuntimeException(ex.getReport());
-    }
+	try {
+	  return org.xdef.sys.SUtils.decodeHex(s);
+	} catch (org.xdef.sys.SException ex) {
+	  throw new org.xdef.sys.SRuntimeException(ex.getReport());
+	}
   }
   private static String encodeHex(byte[] b) {
-    return new String(org.xdef.sys.SUtils.encodeHex(b),
-      java.nio.charset.Charset.forName("UTF-8"));
+	return new String(org.xdef.sys.SUtils.encodeHex(b),
+	  java.nio.charset.Charset.forName("UTF-8"));
   }
   public D() {}
   public D(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public D(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7C6B63EA43759BD6AFC0B1E0E3F8F27D".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"7C6B63EA43759BD6AFC0B1E0E3F8F27D".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private D.$_ _$_;
   private D.B _B;
@@ -171,70 +171,70 @@ public class D implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/_".equals(s))
-      return new $_(this, x);
-    if ("D#a:A/B".equals(s))
-      return new B(this, x);
-    if ("D#a:A/I".equals(s))
-      return new I(this, x);
-    if ("D#a:A/F".equals(s))
-      return new F(this, x);
-    if ("D#a:A/G".equals(s))
-      return new G(this, x);
-    if ("D#a:A/H".equals(s))
-      return new H(this, x);
-    if ("D#a:A/P".equals(s))
-      return new P(this, x);
-    if ("D#a:A/Q".equals(s))
-      return new Q(this, x);
-    if ("D#a:A/R".equals(s))
-      return new R(this, x);
-    if ("D#a:A/S".equals(s))
-      return new S(this, x);
-    if ("D#a:A/E".equals(s))
-      return new E(this, x);
-    if ("D#a:A/T".equals(s))
-      return new T(this, x);
-    return new a$T(this, x); // D#a:A/a:T
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/_".equals(s))
+	  return new $_(this, x);
+	if ("D#a:A/B".equals(s))
+	  return new B(this, x);
+	if ("D#a:A/I".equals(s))
+	  return new I(this, x);
+	if ("D#a:A/F".equals(s))
+	  return new F(this, x);
+	if ("D#a:A/G".equals(s))
+	  return new G(this, x);
+	if ("D#a:A/H".equals(s))
+	  return new H(this, x);
+	if ("D#a:A/P".equals(s))
+	  return new P(this, x);
+	if ("D#a:A/Q".equals(s))
+	  return new Q(this, x);
+	if ("D#a:A/R".equals(s))
+	  return new R(this, x);
+	if ("D#a:A/S".equals(s))
+	  return new S(this, x);
+	if ("D#a:A/E".equals(s))
+	  return new E(this, x);
+	if ("D#a:A/T".equals(s))
+	  return new T(this, x);
+	return new a$T(this, x); // D#a:A/a:T
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/_".equals(s))
-      set$_(($_)x);
-    else if ("D#a:A/B".equals(s))
-      setB((B)x);
-    else if ("D#a:A/I".equals(s))
-      setI((I)x);
-    else if ("D#a:A/F".equals(s))
-      setF((F)x);
-    else if ("D#a:A/G".equals(s))
-      setG((G)x);
-    else if ("D#a:A/H".equals(s))
-      setH((H)x);
-    else if ("D#a:A/P".equals(s))
-      setP((P)x);
-    else if ("D#a:A/Q".equals(s))
-      setQ((Q)x);
-    else if ("D#a:A/R".equals(s))
-      setR((R)x);
-    else if ("D#a:A/S".equals(s))
-      setS((S)x);
-    else if ("D#a:A/E".equals(s))
-      setE((E)x);
-    else if ("D#a:A/T".equals(s))
-      setT((T)x);
-    else
-      seta$T((a$T)x); //D#a:A/a:T
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/_".equals(s))
+	  set$_(($_)x);
+	else if ("D#a:A/B".equals(s))
+	  setB((B)x);
+	else if ("D#a:A/I".equals(s))
+	  setI((I)x);
+	else if ("D#a:A/F".equals(s))
+	  setF((F)x);
+	else if ("D#a:A/G".equals(s))
+	  setG((G)x);
+	else if ("D#a:A/H".equals(s))
+	  setH((H)x);
+	else if ("D#a:A/P".equals(s))
+	  setP((P)x);
+	else if ("D#a:A/Q".equals(s))
+	  setQ((Q)x);
+	else if ("D#a:A/R".equals(s))
+	  setR((R)x);
+	else if ("D#a:A/S".equals(s))
+	  setS((S)x);
+	else if ("D#a:A/E".equals(s))
+	  setE((E)x);
+	else if ("D#a:A/T".equals(s))
+	  setT((T)x);
+	else
+	  seta$T((a$T)x); //D#a:A/a:T
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -244,13 +244,13 @@ public static class $_ implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -276,35 +276,35 @@ public static class $_ implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    return doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)
-      : org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
+	return doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)
+	  : org.xdef.xml.KXmlUtils.newDocument(
+		XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();
+	return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public $_() {}
   public $_(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public $_(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D26D585D3A61EFB5AB28B3933A54995C".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"D26D585D3A61EFB5AB28B3933A54995C".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   public static final String XD_NAME="_";
   private org.xdef.component.XComponent XD_Parent;
@@ -316,14 +316,14 @@ public static class $_ implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/_";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -348,13 +348,13 @@ public static class B implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -380,62 +380,62 @@ public static class B implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().toString());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/B/$text", a, get$value(), _$$value);
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    if (get$value1() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/B/$text[2]", a, get$value1(), _$$value1);
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/B/$text", a, get$value(), _$$value);
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	if (get$value1() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/B/$text[2]", a, get$value1(), _$$value1);
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public B() {}
   public B(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public B(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D5A3B99D21757AC3BC487C7B31FFAEE2".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"D5A3B99D21757AC3BC487C7B31FFAEE2".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private Boolean _A;
   private String _$value;
   private char _$$value= (char) -1;
   private final java.util.List<test.xdef.component.D.B.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.B.X>();
+	new java.util.ArrayList<test.xdef.component.D.B.X>();
   private String _$value1;
   private char _$$value1= (char) -1;
   private test.xdef.component.D.B.Y _Y;
@@ -450,37 +450,37 @@ public static class B implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/B";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    if ("D#a:A/B/$text".equals(x.getXMNode().getXDPosition())){
-      _$$value=(char) XD_ndx++;
-      set$value(parseResult.getParsedValue().toString());
-    } else if ("D#a:A/B/$text[2]".equals(x.getXMNode().getXDPosition())){
-      _$$value1=(char) XD_ndx++;
-      set$value1(parseResult.getParsedValue().toString());
-    }
+	org.xdef.XDParseResult parseResult){
+	if ("D#a:A/B/$text".equals(x.getXMNode().getXDPosition())){
+	  _$$value=(char) XD_ndx++;
+	  set$value(parseResult.getParsedValue().toString());
+	} else if ("D#a:A/B/$text[2]".equals(x.getXMNode().getXDPosition())){
+	  _$$value1=(char) XD_ndx++;
+	  set$value1(parseResult.getParsedValue().toString());
+	}
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().booleanValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().booleanValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/B/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/B/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/B/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/B/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/B/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/B/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/B/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/B/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -493,13 +493,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -525,48 +525,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/B/X/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/B/X/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"1DF95B18F0B79C3FDC171A1C27D18682".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"1DF95B18F0B79C3FDC171A1C27D18682".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Boolean _$value;
   private char _$$value= (char) -1;
@@ -581,17 +581,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/B/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().booleanValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().booleanValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -606,13 +606,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -638,48 +638,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 3;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/B/Y/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/B/Y/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"793FAF7EC059DEC4B9A3D20A5B39DDDE".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"793FAF7EC059DEC4B9A3D20A5B39DDDE".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Boolean _$value;
   private char _$$value= (char) -1;
@@ -694,17 +694,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/B/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().booleanValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().booleanValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -724,13 +724,13 @@ public static class I implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -756,54 +756,54 @@ public static class I implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 2;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().toString());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public I() {}
   public I(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public I(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7902F667558B3D7F4BE3E92049F4EF58".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"7902F667558B3D7F4BE3E92049F4EF58".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private Integer _A;
   private final java.util.List<test.xdef.component.D.I.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.I.X>();
+	new java.util.ArrayList<test.xdef.component.D.I.X>();
   private test.xdef.component.D.I.Y _Y;
   public static final String XD_NAME="I";
   private org.xdef.component.XComponent XD_Parent;
@@ -816,29 +816,29 @@ public static class I implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/I";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().intValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().intValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/I/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/I/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/I/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/I/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/I/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/I/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/I/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/I/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -851,13 +851,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -883,48 +883,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/I/X/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/I/X/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"62003330763485028305DB27DB889B90".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"62003330763485028305DB27DB889B90".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Integer _$value;
   private char _$$value= (char) -1;
@@ -939,17 +939,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/I/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().intValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().intValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -964,13 +964,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -996,48 +996,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/I/Y/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/I/Y/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"2DBC382D9B5EA4103ECE973D4C50AA99".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"2DBC382D9B5EA4103ECE973D4C50AA99".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Integer _$value;
   private char _$$value= (char) -1;
@@ -1052,17 +1052,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/I/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().intValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().intValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -1082,13 +1082,13 @@ public static class F implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1114,54 +1114,54 @@ public static class F implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 3;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().toString());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public F() {}
   public F(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public F(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AAE368B4B02A21CCC923B50A0625D9C8".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"AAE368B4B02A21CCC923B50A0625D9C8".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private Double _A;
   private final java.util.List<test.xdef.component.D.F.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.F.X>();
+	new java.util.ArrayList<test.xdef.component.D.F.X>();
   private test.xdef.component.D.F.Y _Y;
   public static final String XD_NAME="F";
   private org.xdef.component.XComponent XD_Parent;
@@ -1174,29 +1174,29 @@ public static class F implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/F";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().doubleValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().doubleValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/F/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/F/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/F/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/F/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/F/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/F/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/F/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/F/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -1209,13 +1209,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1241,48 +1241,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/F/X/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/F/X/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"FC69444B73DF3162D88C09A0E6E43086".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"FC69444B73DF3162D88C09A0E6E43086".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Double _$value;
   private char _$$value= (char) -1;
@@ -1297,17 +1297,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/F/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().doubleValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().doubleValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -1322,13 +1322,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1354,48 +1354,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/F/Y/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/F/Y/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D19B87138EFE8A690AD2C3ED6D57250B".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"D19B87138EFE8A690AD2C3ED6D57250B".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private Double _$value;
   private char _$$value= (char) -1;
@@ -1410,17 +1410,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/F/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().doubleValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().doubleValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -1440,13 +1440,13 @@ public static class G implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1472,54 +1472,54 @@ public static class G implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 4;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, encodeBase64(getA()));
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, encodeBase64(getA()));
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public G() {}
   public G(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public G(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BBDA62BA305834B4DD3B4D56909CEBCC".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"BBDA62BA305834B4DD3B4D56909CEBCC".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private byte[] _A;
   private final java.util.List<test.xdef.component.D.G.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.G.X>();
+	new java.util.ArrayList<test.xdef.component.D.G.X>();
   private test.xdef.component.D.G.Y _Y;
   public static final String XD_NAME="G";
   private org.xdef.component.XComponent XD_Parent;
@@ -1532,29 +1532,29 @@ public static class G implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/G";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().getBytes());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/G/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/G/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/G/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/G/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/G/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/G/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/G/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/G/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -1567,13 +1567,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1599,48 +1599,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/G/X/$text", a, encodeBase64(get$value()), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/G/X/$text", a, encodeBase64(get$value()), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"62B3C6AF680CD17379173B4AB3053E73".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"62B3C6AF680CD17379173B4AB3053E73".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private byte[] _$value;
   private char _$$value= (char) -1;
@@ -1655,17 +1655,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/G/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().getBytes());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -1680,13 +1680,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1712,48 +1712,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/G/Y/$text", a, encodeBase64(get$value()), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/G/Y/$text", a, encodeBase64(get$value()), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"EE1CFF10E7F066A5A626F3124059CAF0".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"EE1CFF10E7F066A5A626F3124059CAF0".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private byte[] _$value;
   private char _$$value= (char) -1;
@@ -1768,17 +1768,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/G/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().getBytes());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -1798,13 +1798,13 @@ public static class H implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1830,54 +1830,54 @@ public static class H implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 5;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, encodeHex(getA()));
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, encodeHex(getA()));
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public H() {}
   public H(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public H(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"C6585F00398D5EFF7AC53ADAE45AEAC4".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"C6585F00398D5EFF7AC53ADAE45AEAC4".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private byte[] _A;
   private final java.util.List<test.xdef.component.D.H.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.H.X>();
+	new java.util.ArrayList<test.xdef.component.D.H.X>();
   private test.xdef.component.D.H.Y _Y;
   public static final String XD_NAME="H";
   private org.xdef.component.XComponent XD_Parent;
@@ -1890,29 +1890,29 @@ public static class H implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/H";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().getBytes());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/H/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/H/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/H/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/H/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/H/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/H/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/H/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/H/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -1925,13 +1925,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -1957,48 +1957,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/H/X/$text", a, encodeHex(get$value()), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/H/X/$text", a, encodeHex(get$value()), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"62B3C6AF680CD17379173B4AB3053E73".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"62B3C6AF680CD17379173B4AB3053E73".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private byte[] _$value;
   private char _$$value= (char) -1;
@@ -2013,17 +2013,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/H/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().getBytes());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2038,13 +2038,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2070,48 +2070,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/H/Y/$text", a, encodeHex(get$value()), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/H/Y/$text", a, encodeHex(get$value()), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"EE1CFF10E7F066A5A626F3124059CAF0".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"EE1CFF10E7F066A5A626F3124059CAF0".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private byte[] _$value;
   private char _$$value= (char) -1;
@@ -2126,17 +2126,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/H/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().getBytes());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().getBytes());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2156,13 +2156,13 @@ public static class P implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2188,54 +2188,54 @@ public static class P implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 6;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().toString());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public P() {}
   public P(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public P(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"826C82DD388E41CB012F2300D974A657".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"826C82DD388E41CB012F2300D974A657".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private java.math.BigDecimal _A;
   private final java.util.List<test.xdef.component.D.P.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.P.X>();
+	new java.util.ArrayList<test.xdef.component.D.P.X>();
   private test.xdef.component.D.P.Y _Y;
   public static final String XD_NAME="P";
   private org.xdef.component.XComponent XD_Parent;
@@ -2248,29 +2248,29 @@ public static class P implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/P";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().decimalValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().decimalValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/P/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/P/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/P/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/P/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/P/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/P/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/P/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/P/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -2283,13 +2283,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2315,48 +2315,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/P/X/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/P/X/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"B3AA3037719892B70CF5C0BD6A7DCB10".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"B3AA3037719892B70CF5C0BD6A7DCB10".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private java.math.BigDecimal _$value;
   private char _$$value= (char) -1;
@@ -2371,17 +2371,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/P/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().decimalValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().decimalValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2396,13 +2396,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2428,48 +2428,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/P/Y/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/P/Y/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"FD70C300C27EE55DE9747E292C1849E1".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"FD70C300C27EE55DE9747E292C1849E1".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private java.math.BigDecimal _$value;
   private char _$$value= (char) -1;
@@ -2484,17 +2484,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/P/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().decimalValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().decimalValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2520,13 +2520,13 @@ public static class Q implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2552,54 +2552,54 @@ public static class Q implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 7;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().formatDate("yyyy-MM-dd"));
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().formatDate("yyyy-MM-dd"));
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public Q() {}
   public Q(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Q(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"3E619F8802B259ACD8092A45D022A90D".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"3E619F8802B259ACD8092A45D022A90D".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private org.xdef.sys.SDatetime _A;
   private final java.util.List<test.xdef.component.D.Q.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.Q.X>();
+	new java.util.ArrayList<test.xdef.component.D.Q.X>();
   private test.xdef.component.D.Q.Y _Y;
   public static final String XD_NAME="Q";
   private org.xdef.component.XComponent XD_Parent;
@@ -2612,29 +2612,29 @@ public static class Q implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/Q";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().datetimeValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().datetimeValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/Q/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/Q/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/Q/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/Q/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/Q/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/Q/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/Q/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/Q/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -2653,13 +2653,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2685,48 +2685,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/Q/X/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/Q/X/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"2E70B5D8FF568E36A6ABF45E8E69099F".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"2E70B5D8FF568E36A6ABF45E8E69099F".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
@@ -2741,17 +2741,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/Q/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().datetimeValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().datetimeValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2772,13 +2772,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2804,48 +2804,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/Q/Y/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/Q/Y/$text", a, get$value().formatDate("yyyy-MM-dd"), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D9938139D1E9F4FE8FAA5BC67D26E900".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"D9938139D1E9F4FE8FAA5BC67D26E900".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private org.xdef.sys.SDatetime _$value;
   private char _$$value= (char) -1;
@@ -2860,17 +2860,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/Q/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().datetimeValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().datetimeValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -2890,13 +2890,13 @@ public static class R implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -2922,54 +2922,54 @@ public static class R implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 8;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA().toString());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA().toString());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public R() {}
   public R(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public R(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"7D2B90B57041B6ADB39E45FD18F8FE15".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"7D2B90B57041B6ADB39E45FD18F8FE15".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private org.xdef.sys.SDuration _A;
   private final java.util.List<test.xdef.component.D.R.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.R.X>();
+	new java.util.ArrayList<test.xdef.component.D.R.X>();
   private test.xdef.component.D.R.Y _Y;
   public static final String XD_NAME="R";
   private org.xdef.component.XComponent XD_Parent;
@@ -2982,29 +2982,29 @@ public static class R implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/R";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().durationValue());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().durationValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/R/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/R/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/R/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/R/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/R/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/R/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/R/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/R/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -3017,13 +3017,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3049,48 +3049,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/R/X/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/R/X/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"72B05E4C59F577408EBE4757141FF6ED".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"72B05E4C59F577408EBE4757141FF6ED".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private org.xdef.sys.SDuration _$value;
   private char _$$value= (char) -1;
@@ -3105,17 +3105,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/R/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().durationValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().durationValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3130,13 +3130,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3162,48 +3162,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/R/Y/$text", a, get$value().toString(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/R/Y/$text", a, get$value().toString(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"9BEC5503B724A526970F8B5B80BDAB78".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"9BEC5503B724A526970F8B5B80BDAB78".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private org.xdef.sys.SDuration _$value;
   private char _$$value= (char) -1;
@@ -3218,17 +3218,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/R/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().durationValue());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().durationValue());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3248,13 +3248,13 @@ public static class S implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3280,54 +3280,54 @@ public static class S implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 9;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (getA() != null)
-      el.setAttribute(XD_Name_A, getA());
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getA() != null)
+	  el.setAttribute(XD_Name_A, getA());
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, listOfX());
-    org.xdef.component.XComponentUtil.addXC(a, getY());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, listOfX());
+	org.xdef.component.XComponentUtil.addXC(a, getY());
+	return a;
   }
   public S() {}
   public S(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public S(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"5E65EBBA2297B74A0F41D9245B938DC7".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"5E65EBBA2297B74A0F41D9245B938DC7".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_A="A";
   private String _A;
   private final java.util.List<test.xdef.component.D.S.X> _X =
-    new java.util.ArrayList<test.xdef.component.D.S.X>();
+	new java.util.ArrayList<test.xdef.component.D.S.X>();
   private test.xdef.component.D.S.Y _Y;
   public static final String XD_NAME="S";
   private org.xdef.component.XComponent XD_Parent;
@@ -3340,29 +3340,29 @@ public static class S implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/S";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_A = x.getNodeName();
-    setA(parseResult.getParsedValue().toString());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_A = x.getNodeName();
+	setA(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x) {
-    String s = x.getXMElement().getXDPosition();
-    if ("D#a:A/S/X".equals(s))
-      return new X(this, x);
-    return new Y(this, x); // D#a:A/S/Y
+	org.xdef.proc.XXNode x) {
+	String s = x.getXMElement().getXDPosition();
+	if ("D#a:A/S/X".equals(s))
+	  return new X(this, x);
+	return new Y(this, x); // D#a:A/S/Y
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    String s = x.xGetModelPosition();
-    if ("D#a:A/S/X".equals(s))
-      listOfX().add((X)x);
-    else
-      setY((Y)x); //D#a:A/S/Y
+	x.xSetNodeIndex(XD_ndx++);
+	String s = x.xGetModelPosition();
+	if ("D#a:A/S/X".equals(s))
+	  listOfX().add((X)x);
+	else
+	  setY((Y)x); //D#a:A/S/Y
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -3375,13 +3375,13 @@ public static class X implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3407,48 +3407,48 @@ public static class X implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/S/X/$text", a, get$value(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/S/X/$text", a, get$value(), _$$value);
+	return a;
   }
   public X() {}
   public X(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public X(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"79F5A99B2A6C9501E6278EF37C200E85".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"79F5A99B2A6C9501E6278EF37C200E85".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String _$value;
   private char _$$value= (char) -1;
@@ -3463,17 +3463,17 @@ public static class X implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/S/X";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().toString());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3488,13 +3488,13 @@ public static class Y implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3520,48 +3520,48 @@ public static class Y implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 1;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.ArrayList<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    if (get$value() != null)
-      org.xdef.component.XComponentUtil.addText(this,
-        "D#a:A/S/Y/$text", a, get$value(), _$$value);
-    return a;
+	java.util.ArrayList<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	if (get$value() != null)
+	  org.xdef.component.XComponentUtil.addText(this,
+		"D#a:A/S/Y/$text", a, get$value(), _$$value);
+	return a;
   }
   public Y() {}
   public Y(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public Y(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"3790E766C70372D3FC9B82CB47367DCB".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"3790E766C70372D3FC9B82CB47367DCB".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String _$value;
   private char _$$value= (char) -1;
@@ -3576,17 +3576,17 @@ public static class Y implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/S/Y";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    _$$value=(char) XD_ndx++;
-    set$value(parseResult.getParsedValue().toString());
+	org.xdef.XDParseResult parseResult){
+	_$$value=(char) XD_ndx++;
+	set$value(parseResult.getParsedValue().toString());
   }
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3599,13 +3599,13 @@ public static class E implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3631,35 +3631,35 @@ public static class E implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 10;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    return doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)
-      : org.xdef.xml.KXmlUtils.newDocument(
-        XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
+	return doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)
+	  : org.xdef.xml.KXmlUtils.newDocument(
+		XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();
+	return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public E() {}
   public E(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public E(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"38018B99AE9147AC4703D8AB60F24873".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"38018B99AE9147AC4703D8AB60F24873".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   public static final String XD_NAME="E";
   private org.xdef.component.XComponent XD_Parent;
@@ -3671,14 +3671,14 @@ public static class E implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/E";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3695,13 +3695,13 @@ public static class T implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3727,50 +3727,50 @@ public static class T implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 11;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (gett() != null)
-      el.setAttribute(XD_Name_t, gett());
-    el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-      "xmlns", "x.y");
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (gett() != null)
+	  el.setAttribute(XD_Name_t, gett());
+	el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+	  "xmlns", "x.y");
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, getI_1());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, getI_1());
+	return a;
   }
   public T() {}
   public T(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public T(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"35B1B3BDFAF5E160AFBE3DD57A051957".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"35B1B3BDFAF5E160AFBE3DD57A051957".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_t="t";
   private String _t;
@@ -3786,21 +3786,21 @@ public static class T implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/T";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_t = x.getNodeName();
-    sett(parseResult.getParsedValue().toString());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_t = x.getNodeName();
+	sett(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return new I_1(this, x);}
+	org.xdef.proc.XXNode x)
+	{return new I_1(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    setI_1((I_1) x); //D#a:A/T/I
+	x.xSetNodeIndex(XD_ndx++);
+	setI_1((I_1) x); //D#a:A/T/I
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -3810,13 +3810,13 @@ public static class I_1 implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3842,43 +3842,43 @@ public static class I_1 implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-      "xmlns", "x.y");
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+	  "xmlns", "x.y");
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();
+	return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public I_1() {}
   public I_1(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public I_1(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"AE3AB2DF7189E1EFADAA8FF28C55E6B3".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"AE3AB2DF7189E1EFADAA8FF28C55E6B3".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   public static final String XD_NAME="I";
   private org.xdef.component.XComponent XD_Parent;
@@ -3890,14 +3890,14 @@ public static class I_1 implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/T/I";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override
@@ -3915,13 +3915,13 @@ public static class a$T implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -3947,50 +3947,50 @@ public static class a$T implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 12;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    if (geta$t() != null)
-      el.setAttributeNS("a.b", XD_Name_a$t, geta$t());
-    el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-      "xmlns:a", "a.b");
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (geta$t() != null)
+	  el.setAttributeNS("a.b", XD_Name_a$t, geta$t());
+	el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+	  "xmlns:a", "a.b");
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=
-      new java.util.ArrayList<org.xdef.component.XComponent>();
-    org.xdef.component.XComponentUtil.addXC(a, geta$I());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=
+	  new java.util.ArrayList<org.xdef.component.XComponent>();
+	org.xdef.component.XComponentUtil.addXC(a, geta$I());
+	return a;
   }
   public a$T() {}
   public a$T(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public a$T(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"D895AE841A8977C6CA11FAD5841C73C3".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"D895AE841A8977C6CA11FAD5841C73C3".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   private String XD_Name_a$t="a$t";
   private String _a$t;
@@ -4006,21 +4006,21 @@ public static class a$T implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/a:T";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){
-    XD_Name_a$t = x.getNodeName();
-    seta$t(parseResult.getParsedValue().toString());
+	org.xdef.XDParseResult parseResult){
+	XD_Name_a$t = x.getNodeName();
+	seta$t(parseResult.getParsedValue().toString());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return new a$I(this, x);}
+	org.xdef.proc.XXNode x)
+	{return new a$I(this, x);}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){
-    x.xSetNodeIndex(XD_ndx++);
-    seta$I((a$I) x); //D#a:A/a:T/a:I
+	x.xSetNodeIndex(XD_ndx++);
+	seta$I((a$I) x); //D#a:A/a:T/a:I
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
@@ -4030,13 +4030,13 @@ public static class a$I implements org.xdef.component.XComponent{
   public final static byte JSON = 0;
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -4062,43 +4062,43 @@ public static class a$I implements org.xdef.component.XComponent{
   public int xGetModelIndex() {return 0;}
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
-        XD_NodeName, null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-    }
-    el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-      "xmlns:a", "a.b");
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,
+		XD_NodeName, null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	el.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+	  "xmlns:a", "a.b");
+	return el;
   }
   @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    return new java.util.ArrayList<org.xdef.component.XComponent>();
+	return new java.util.ArrayList<org.xdef.component.XComponent>();
   }
   public a$I() {}
   public a$I(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
   }
   public a$I(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
-    if (!"BDEE9B9AC28896DD0BB801FCEDC3F69E".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;
+	if (!"BDEE9B9AC28896DD0BB801FCEDC3F69E".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   public static final String XD_NAME="a:I";
   private org.xdef.component.XComponent XD_Parent;
@@ -4110,14 +4110,14 @@ public static class a$I implements org.xdef.component.XComponent{
   private String XD_Model="D#a:A/a:T/a:I";
   @Override
   public void xSetText(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x,
-    org.xdef.XDParseResult parseResult){}
+	org.xdef.XDParseResult parseResult){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(
-    org.xdef.proc.XXNode x)
-    {return null;}
+	org.xdef.proc.XXNode x)
+	{return null;}
   @Override
   public void xAddXChild(org.xdef.component.XComponent x){}
   @Override

@@ -13,7 +13,7 @@ import buildtools.XDTester;
  * @author Vaclav Trojan
  */
 public class TestAll {
-	
+
 	/** prepare tests */
 	@BeforeTest
 	public static void beforeTests() {
@@ -25,14 +25,14 @@ public class TestAll {
 	public static void testCommon() {
 		Assert.assertEquals(test.common.TestAll.runTests(new String[0]), 0);
 	}
-		
+
 	/** run TestAll in test.xdef */
 	@Test
 //	@Test(dependsOnMethods = {"testCommon"})
 	public static void testXdef() {
 		Assert.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
-	
+
 	/** run TestAll in test.xdutil */
 	@Test
 //	@Test(dependsOnMethods = {"testXdef"})
@@ -45,7 +45,7 @@ public class TestAll {
 		String[] suiteList = {
 			"src/test/resources/testng.xml"
 		};
-		
+
 		TestNG testNG = new TestNG();
 		testNG.setTestSuites(Arrays.asList(suiteList));
 		testNG.setOutputDirectory("target/test-reports");
@@ -56,7 +56,7 @@ public class TestAll {
 	@SuppressWarnings("unused")
 	private static void mainTest() {
 		beforeTests();
-		
+
 		testCommon();
 		testXdef();
 		testXDUtils();

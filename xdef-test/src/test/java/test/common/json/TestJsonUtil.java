@@ -117,7 +117,7 @@ public class TestJsonUtil extends STester {
 	/** Run test and print error information. */
 	public void test() {
 		init("Test*"); //init directories and test files
-//		init("Test009"); 
+//		init("Test009");
 		for (File json: _files) {
 			String id = getId(json);
 			// test JSOMN parser
