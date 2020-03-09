@@ -59,7 +59,7 @@ public interface XDEF {
 	public static final long XDEF150 = 31159025690L;
 	/** Error of X-definitions integrity */
 	public static final long XDEF201 = 31159025691L;
-	/** Attempt to recompile compiled collection of X-definitions&amp;&amp;{#SYS000} */
+	/** Attempt to recompile compiled collection of X-definitions&amp;{#SYS000} */
 	public static final long XDEF203 = 31159025692L;
 	/** Overflow of compiler internal stack&amp;{#SYS000} */
 	public static final long XDEF204 = 31159025693L;
