@@ -22,10 +22,10 @@ public class Canonize {
 	 * <tt>tabs</tt>.
 	 * Insert or update header or _tail information to sources
 	 * according to value of arguments <tt>_hdr</tt> and <tt>_tail</tt>. If the
-	 * argument <tt>recurse</tt> is true, do it with all specified files in
+	 * argument <tt>dirTree</tt> is true, do it with all specified files in
 	 * child directories.
 	 * @param filename The name of file (wildcards are possible).
-	 * @param recurse If <tt>true<tt> then recurse process in child
+	 * @param dirTree If <tt>true<tt> then dirTree process in child
 	 * subdirectories.
 	 * @param hdr If <tt>true</tt> then leading standard copyright information
 	 * is inserted before the first line of Java source or it replaces the
@@ -40,7 +40,7 @@ public class Canonize {
 	 * of this argument is <tt>false</tt> then the end source remains unchanged.
 	 */
 	private static void doSources(final String filename,
-		final boolean recurse) {
+		final boolean dirTree) {
 		try {
 			File f = new File(filename).getCanonicalFile();
 			String home = f.getAbsolutePath().replace('\\', '/');
@@ -55,27 +55,27 @@ public class Canonize {
 			String tailTemplate = null;
 			System.out.println("Directory: " + home);
 			CanonizeSource.canonize(home + "*.java",
-				recurse,
+				dirTree,
 				true,
 				4,
 				hdrTemplate, tailTemplate, GenConstants.JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.xml",
-//				recurse,
+//				dirTree,
 //				false,
 //				-1,
 //				null, null, GenConstants.JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.html",
-//				recurse,
+//				dirTree,
 //				false,
 //				-1,
 //				null, null, GenConstants.JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.xdef",
-//				recurse,
+//				dirTree,
 //				false,
 //				-1,
 //				null, null, GenConstants.JAVA_SOURCE_CHARSET);
 			CanonizeSource.canonize(home + "*.properties",
-				recurse,
+				dirTree,
 				false,
 				-1,
 				null, null, GenConstants.JAVA_SOURCE_CHARSET);

@@ -82,7 +82,7 @@ import java.nio.charset.Charset;
  * be used to specify group of files. If this parameter specified a directory
  * only files with the extension '.java' are processed. The parameter
  *  is obligatory.</li>
- * <li> -r recurse input directory. The parameter is optional and forces to
+ * <li> -r dirTree input directory. The parameter is optional and forces to
  * process all subdirectories of the directory where process started.</li>
  * <li> -s switch[,switch..]: the comma separated list of switch names. Each
  * switch name is composed from letters, digits, '.' or '_'s. If switch should
@@ -112,7 +112,7 @@ import java.nio.charset.Charset;
  * parameters:</p>
  * <p>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]</p>
  * <p>where</p>
- * <p>-r recurse input directory. The parameter is optional.</p>
+ * <p>-r dirTree process directory tree. The parameter is optional.</p>
  * <p>-t delete trailing spaces. The parameter is optional.</p>
  * <p>-v make verbose output. The parameter is optional.</p>
  * <p>-s switches: The list of switch names. Each switch name is composed from
@@ -302,7 +302,7 @@ public class JavaPreprocessor {
 
 	private void processFiles(final File[] files,
 		final String outDir,
-		final boolean recurse,
+		final boolean dirTree,
 		final boolean createDirectory) {
 		for (int i = 0; i < files.length; i++) {
 			File f = files[i];
@@ -310,7 +310,7 @@ public class JavaPreprocessor {
 				processFile(f, outDir, createDirectory);
 			}
 		}
-		if (recurse) {
+		if (dirTree) {
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].isDirectory()) {
 					String s = files[i].getName();
@@ -322,7 +322,7 @@ public class JavaPreprocessor {
 						}
 						processFiles(files[i].listFiles(), //process file list
 							s, //outDir
-							true, //recurse
+							true, //dirTree
 							true);// subdirectories can be created
 					}
 				}
@@ -1212,7 +1212,7 @@ public class JavaPreprocessor {
 "usage: [-h] [-r] [-t] [-v] [-x] -i input [-o output] [-encoding charset]\n"+
 "       [-s switches]\n"+
 "where:\n"+
-"-r recurse input directory. The parameter is optional.\n"+
+"-r process directory tree. The parameter is optional.\n"+
 "-t delete trailing spaces. The parameter is optional.\n"+
 "-v make verbose output. The parameter is optional.\n"+
 "-s switches: The list of switch names. Each switch name is composed from \n"+
@@ -1239,7 +1239,7 @@ public class JavaPreprocessor {
 	 * @param outDir The directory where put the changed files. If this argument
 	 * is <tt>null</tt> the changed file will replace the input file.
 	 * @param keys The array with switches used for preprocessing.
-	 * @param recurse If the value of this argument is <tt>true</tt> the
+	 * @param dirTree If the value of this argument is <tt>true</tt> the
 	 * preprocessor will scan also subdirectories..
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
@@ -1255,7 +1255,7 @@ public class JavaPreprocessor {
 	private static String proc(final String input,
 		final String outDir,
 		final MyStringList keys,
-		final boolean recurse,
+		final boolean dirTree,
 		final PrintStream out,
 		final PrintStream err,
 		final String charset,
@@ -1285,7 +1285,7 @@ public class JavaPreprocessor {
 			s = f.getAbsolutePath() + File.separatorChar;
 		}
 		if ((f = new File(input)).isDirectory()) {
-			jp.processFiles(f.listFiles(), s, recurse, false);
+			jp.processFiles(f.listFiles(), s, dirTree, false);
 		} else {
 			File[] files = jp.getWildCardFiles(input);
 			if (files == null || files.length == 0) {
@@ -1296,7 +1296,7 @@ public class JavaPreprocessor {
 			for (int i = 0; i < files.length; i++) {
 				jp.processFile(files[i], s, false); //not create first directory
 			}
-			if (recurse) {
+			if (dirTree) {
 				String inp = input.replace('\\', '/');
 				int i = inp.lastIndexOf('/');
 				if (i < 0) {
@@ -1355,7 +1355,7 @@ public class JavaPreprocessor {
 		String input = null;
 		String outDir = null;
 		MyStringList keys = new MyStringList();
-		boolean recurse = false;
+		boolean dirTree = false;
 		String switches = "";
 		boolean verbose = false;
 		boolean extract = false;
@@ -1363,10 +1363,10 @@ public class JavaPreprocessor {
 		boolean cutTrailingSpaces = false;
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
-				if (recurse) {
+				if (dirTree) {
 					return "'-r' redefined.";
 				}
-				recurse = true;
+				dirTree = true;
 			} else if (args[i].equals("-t")) {
 				if (cutTrailingSpaces) {
 					return "'-t' redefined.";
@@ -1486,7 +1486,7 @@ public class JavaPreprocessor {
 		}
 		File f = new File(input);
 		if (!f.exists() || !f.isDirectory()) {
-			if (recurse) {
+			if (dirTree) {
 				return "Recurse parameter \"-r\" allowed only for directories.";
 			}
 		}
@@ -1504,7 +1504,7 @@ public class JavaPreprocessor {
 				out.flush();
 			}
 		}
-		return proc(input, outDir, keys, recurse, out, err,
+		return proc(input, outDir, keys, dirTree, out, err,
 			charset, verbose, extract, cutTrailingSpaces);
 	}
 

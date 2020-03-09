@@ -603,7 +603,7 @@ public class CanonizeSource {
 	 * directory.
 	 * @param outDir The directory where put the changed files. If this argument
 	 * is <tt>null</tt> the changed file will replace the input file.
-	 * @param recurse If the value of this argument is <tt>true</tt> the
+	 * @param dirTree If the value of this argument is <tt>true</tt> the
 	 * program will scan also subdirectories..
 	 * @param out The printstream where will be printed output messages.
 	 * @param err The printstream where will be printed input messages.
@@ -628,7 +628,7 @@ public class CanonizeSource {
 	 */
 	public static String canonize(final String input,
 		final String outDir,
-		final boolean recurse,
+		final boolean dirTree,
 		final PrintStream out,
 		final PrintStream err,
 		final boolean verbose,
@@ -704,7 +704,7 @@ public class CanonizeSource {
 		String inp = input.replace('\\', '/');
 		cs._genCR = genCR;
 		File dir = null;
-		if (recurse) {
+		if (dirTree) {
 			int i = inp.lastIndexOf('/');
 			if (i >= 0) {
 				cs._mask = inp.substring(i + 1);
@@ -757,7 +757,7 @@ public class CanonizeSource {
 		}
 		String input = null;
 		String outDir = null;
-		boolean recurse = false;
+		boolean dirTree = false;
 		boolean verbose = false;
 		String header = null;
 		boolean headerKeep = false;
@@ -770,10 +770,10 @@ public class CanonizeSource {
 		String charset = null;
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
-				if (recurse) {
-					return "'-r' is redefined (recurse).";
+				if (dirTree) {
+					return "'-r' is redefined (dirTree).";
 				}
-				recurse = true;
+				dirTree = true;
 			} else if (args[i].equals("-encoding")) {
 				if (charset != null) {
 					return "'-encoding' is redefined.";
@@ -941,7 +941,7 @@ public class CanonizeSource {
 
 		return canonize(input,
 			outDir,
-			recurse,
+			dirTree,
 			out,
 			err,
 			verbose,
@@ -958,7 +958,7 @@ public class CanonizeSource {
 
 	/** Canonize sources according to arguments. and print results.
 	 * @param sources Source file(s) (may contain wildcards).
-	 * @param recurse if <tt>true</tt> the child directories are processed too.
+	 * @param dirTree if <tt>true</tt> the child directories are processed too.
 	 * @param tabs if true, leading spaces are replaced by tabs, if false
 	 * the leading tabs are replaced by spaces.
 	 * @param n the number of spaces per tab. If this argument is -1 then
@@ -979,7 +979,7 @@ public class CanonizeSource {
 	 * default system encoding is used.
 	 */
 	public static void canonize(final String sources,
-		final boolean recurse,
+		final boolean dirTree,
 		final boolean tabs,
 		final int n,
 		final String header,
@@ -987,7 +987,7 @@ public class CanonizeSource {
 		final String charset) {
 		try {
 			int len = 3;
-			if (recurse) {
+			if (dirTree) {
 				len++;
 			}
 			if (n >= 0) {
@@ -1007,7 +1007,7 @@ public class CanonizeSource {
 			myArgs[1] = sources;
 			myArgs[2] = "-v";
 			int ndx = 3;
-			if (recurse) {
+			if (dirTree) {
 				myArgs[ndx++] = "-r";
 			}
 			if (n >= 0) {
