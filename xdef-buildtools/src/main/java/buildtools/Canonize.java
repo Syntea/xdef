@@ -3,7 +3,7 @@ package buildtools;
 import java.io.File;
 
 /** Canonize sources.
- * <p>1. Remove all white spaces after last nonblank character
+ * <p>1. Remove all white spaces after last non-blank character
  * at the end of line and replace leading spaces by tabs.</p>
  * <p>2. Check and generate message report classes.</p>
  * @author  Vaclav Trojan
@@ -22,13 +22,11 @@ public class Canonize {
 	 * <tt>tabs</tt>.
 	 * Insert or update header or _tail information to sources
 	 * according to value of arguments <tt>_hdr</tt> and <tt>_tail</tt>. If the
-	 * argument <tt>recurse</tt> is true, do it with all specified files in
+	 * argument <tt>dirTree</tt> is true, do it with all specified files in
 	 * child directories.
 	 * @param filename The name of file (wildcards are possible).
-	 * @param recurse If <tt>true<tt> then recurse process in child
+	 * @param dirTree If <tt>true<tt> then dirTree process in child
 	 * subdirectories.
-	 * @param tabs If <tt>true</tt> then leading spaces are replaced
-	 * by the tabelator (4 spaces for 1 tab).
 	 * @param hdr If <tt>true</tt> then leading standard copyright information
 	 * is inserted before the first line of Java source or it replaces the
 	 * existing one. The template for the copyright information is taken from
@@ -41,52 +39,53 @@ public class Canonize {
 	 * root directory <tt>java</tt> (under which are projects). If the value
 	 * of this argument is <tt>false</tt> then the end source remains unchanged.
 	 */
-	private static void doSources(
-		String filename,
-		boolean recurse,
-		boolean tabs) {
-		if (filename.endsWith("/data")) {
-			return;
+	private static void doSources(final String filename,
+		final boolean dirTree) {
+		try {
+			File f = new File(filename).getCanonicalFile();
+			String home = f.getAbsolutePath().replace('\\', '/');
+			if (!home.endsWith("/")) {
+				home += '/';
+			}
+			if (home.endsWith("/data/")) {
+				return; //do not process data directories
+			}
+
+			String hdrTemplate = null;
+			String tailTemplate = null;
+			System.out.println("Directory: " + home);
+			CanonizeSource.canonize(home + "*.java",
+				dirTree,
+				true,
+				4,
+				hdrTemplate, tailTemplate, GenConstants.JAVA_SOURCE_CHARSET);
+//			CanonizeSource.canonize(home + "*.xml",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+//			CanonizeSource.canonize(home + "*.html",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+//			CanonizeSource.canonize(home + "*.xdef",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+			CanonizeSource.canonize(home + "*.properties",
+				dirTree,
+				false,
+				-1,
+				null, null, GenConstants.JAVA_SOURCE_CHARSET);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
 		}
-		String home = Preproc.getProjectHomeDir(Canonize.class);
-		if (home.endsWith("/")) {
-			home = home.substring(0, home.length() - 1);
-		}
-		int i = home.lastIndexOf('/');
-		if (i < 0) {
-			throw new RuntimeException("Unknown build structure");
-		}
-		String hdrTemplate = null;
-		String tailTemplate = null;
-		if (recurse) {
-			System.out.println("Directory: " + home + "/" + filename);
-		} else {
-			System.out.println("Directories: " + home + "/" + filename);
-		}
-		CanonizeSource.canonize(home + "/" + filename + "/*.java",
-			recurse,
-			tabs,
-			tabs ? 4 : 2,
-			hdrTemplate, tailTemplate, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.xml",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.html",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
-		CanonizeSource.canonize(home + "/" + filename + "/*.xdef",
-			recurse,
-			false,
-			tabs ? 4 : 2,
-			null, null, GenConstants.JAVA_SOURCE_CHARSET);
 	}
 
 	/** Canonize sources.
-	 * @param args array with command line parameters.
+	 * @param args array with command line parameters (no parameters used).
 	 */
 	public static void main(String[] args) {
 		_hdr = false;
@@ -94,25 +93,26 @@ public class Canonize {
 		String projectBase;
 		try {
 			projectBase = new File(".").getCanonicalPath().replace('\\', '/');
+
 		} catch (Exception ex) {
 			throw new RuntimeException("Can't find project base directory");
-		}
-		if (projectBase.endsWith("/")) {
-			projectBase = projectBase.substring(0, projectBase.length() - 1);
 		}
 		int i = projectBase.lastIndexOf('/');
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
 		}
-		// Java source files: recurse directories, the second parameter is true.
-		doSources("src/main/java/org", true, true);
-		doSources("src/test/java/test/common", false, true);
-		doSources("src/test/java/test/utils", false, true);
-		doSources("src/test/java/test/xdef", false, true);
-		doSources("src/test/java/test/xdutils", false, true);
-		doSources("src/test/java/mytest", false, true);
-		doSources("src/test/java/buildtools", true, true); //this directory
+		// Canonize sources: replace leading spaces with tabs and remove
+		// trailing white spaces.
+		doSources("../xdef/src/main/java/org", true);
+		doSources("../xdef/src/main/resources/org", true);
+
+		doSources("../xdef-test/src/test/java", true);
+
+		doSources("../xdef-example/examples", true);
+
+		doSources("src/main/java/buildtools", true); //this project
+
+		// register report messages
 		GenReportTables.main();
 	}
-
 }

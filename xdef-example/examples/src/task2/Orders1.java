@@ -15,7 +15,7 @@ public class Orders1 {
 
 		// Create the instance of XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Orders");
-		
+
 		// The file where to rite result
 		File vystup = new File("task2/output/Orders.xml");
 		OutputStream out = new FileOutputStream(vystup);
@@ -26,14 +26,14 @@ public class Orders1 {
 
 		// Prepasre the error reporter (write error directly to the file)
 		FileReportWriter reporter = new FileReportWriter(chyby);
-		
+
 		// Run validation mode (you can also try task2/input/Order_err.xml)
 		xdoc.xparse("task2/input/Orders.xml", reporter);
-		
+
 		// close the output stream.
 		out.close();
 		reporter.close();
-		
+
 		// Check if errors reported
 		if (reporter.errorWarnings()) {
 			System.err.println("Incorrect input data");

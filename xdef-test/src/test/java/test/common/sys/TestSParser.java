@@ -19,7 +19,7 @@ import buildtools.STester;
 public class TestSParser extends STester {
 
 	public TestSParser() {super();}
-	
+
 	/** Check if both arguments with XMLGregorianCalendar values are equal.
 	 * @param d1 first XMLGregorianCalendar value.
 	 * @param d2 SECOND XMLGregorianCalendar value.
@@ -81,7 +81,7 @@ public class TestSParser extends STester {
 		}
 		return result;
 	}
-	
+
 	/** Check if both arguments with XMLGregorianCalendar values are equal.
 	 * (before and after normalization).
 	 * @param d1 first XMLGregorianCalendar value.
@@ -1273,7 +1273,7 @@ public class TestSParser extends STester {
 			}
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ2(x,y));
-			
+
 			y = new SDatetime("2010-01-11T21:11:01.123CEST"); //No DST
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
@@ -1304,7 +1304,7 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 				x.reset(); y.reset();
-				assertEq("", checkDateEQ2(x,y));			
+				assertEq("", checkDateEQ2(x,y));
 			}
 			y = SDatetime.parse("2010-08-11T21:11:01", "yyyy-MM-ddTHH:mm:ss");
 			g = y.toGregorianCalendar();

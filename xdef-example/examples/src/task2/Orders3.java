@@ -5,7 +5,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 
 public class Orders3 {
-	public static void main(String[] args) throws Exception {	
+	public static void main(String[] args) throws Exception {
 		// Compile X-definition to XDPool
 		XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders3.xdef");
 

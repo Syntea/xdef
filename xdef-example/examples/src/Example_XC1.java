@@ -6,7 +6,7 @@ import org.xdef.*;
 import org.w3c.dom.Element;
 
 public class Example_XC1 {
-	
+
 	public static void main(String[] args) throws Exception {
 
 		// 1. Get compiled XDPool
@@ -29,7 +29,7 @@ public class Example_XC1 {
 			for (House house: ulice.listOfHouse()) {
 				System.out.print("House No. " + house.getNum() + ". ");
 				if (house.listOfPerson().size() > 0) {
-					System.out.println("Tenants :");			
+					System.out.println("Tenants :");
 					for (Citizen citizen: house.listOfPerson()){
 						System.out.println(citizen.getFirstName()
 							+ " " + citizen.getLastName());
@@ -49,13 +49,13 @@ public class Example_XC1 {
 		}
 
 		// 6. Save XML with addresses to the file data.xml (marshall)
-		Element el = city.toXml();		
+		Element el = city.toXml();
 		KXmlUtils.writeXml("temp/data1.xml", el);
 		System.out.println("\nElement City written to: temp/data1.xml");
-		
+
 		// 7. Print how many "Smith" family names are in the town
 		System.out.println("Number of the name 'Smith' in the town: "
 			+ city.getNumSmith());
-		
+
 	}
 }

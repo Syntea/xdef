@@ -10,7 +10,7 @@ public class Example1 {
 		// Prepare path to X-definition and XML data.
 		String xdef = "./src/Example1.xdef";
 		String xmlData = "./src/Example1.xml";
-		
+
 		// 1. Create XDPool.
 		Properties props = System.getProperties();
 		XDPool xp = XDFactory.compileXD(props, xdef);

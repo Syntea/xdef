@@ -15,7 +15,7 @@ public class Example6_DBDrop {
 
 		// Create XDDocument
 		XDDocument xd = xp.createXDDocument();
-		
+
 		// Create database connection
 		String url = GenDerby.DB_URL;
 		String user = "myself";
@@ -35,6 +35,6 @@ public class Example6_DBDrop {
 		}
 		//close database connection
 		service.close();
-    }
+	}
 
 }

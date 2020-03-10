@@ -12,7 +12,7 @@ public class Order2a {
 	public static void main(String[] args) throws Exception {
 		// Compile X-definitions to XDPool
 		XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2a.xdef");
-		
+
 		// Create instance of XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
 
@@ -28,7 +28,7 @@ public class Order2a {
 		// Check if an error was reported
 		if (errs != null && !errs.isNull()) {
 			// Write errors to the file
-			KXmlUtils.writeXml("task1/errors/Order_err.xml", errs.getElement()); 
+			KXmlUtils.writeXml("task1/errors/Order_err.xml", errs.getElement());
 			System.err.println("Incorrect input data");
 		} else {
 			// No errors, write parsed document to the file

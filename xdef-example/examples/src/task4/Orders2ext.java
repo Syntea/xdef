@@ -17,8 +17,8 @@ import org.w3c.dom.NodeList;
 
 /** External methods called from Order2.xdef */
 public class Orders2ext {
-	
-	Element _items, _customers; 
+
+	Element _items, _customers;
 	int _errors, _errorsOld, _count;
 	KXmlOutStream _output;
 	XDPool _xpool;
@@ -43,7 +43,7 @@ public class Orders2ext {
 		try {
 			/* Find the customer. */
 			XPathExpression xExpr = u._xp.compile("Customer[@CustomerCode='" + s + "']");
-			NodeList nl = 
+			NodeList nl =
 				(NodeList) xExpr.evaluate(u._customers, XPathConstants.NODESET);
 			if (nl == null || nl.getLength() == 0) {
 				/* customer not found, increase erro counter and report an error. */
@@ -62,7 +62,7 @@ public class Orders2ext {
 	public static boolean item(XXData xdata) {
 		/* Get the instance of this class. */
 		Orders2ext u = (Orders2ext) xdata.getUserObject();
-		String s = xdata.getTextValue(); /* get attribute value. */ 
+		String s = xdata.getTextValue(); /* get attribute value. */
 		try {
 			/* Find description of the Item according to code. */
 			XPathExpression xExpr = u._xp.compile("Product[@Code='" + s + "']");
@@ -85,16 +85,16 @@ public class Orders2ext {
 	public static void writeObj(XXNode xnode) {
 		/* Get the instance of this class. */
 		Orders2ext u = (Orders2ext) xnode.getUserObject();
-		if (u._errors != u._errorsOld) { 
+		if (u._errors != u._errorsOld) {
 			/* an new error occured, do not write recore*/
 			u._errorsOld = u._errors; /* save error counter to "errorsOld". */
 		} else {
 			/* Check if this the first record. */
 			if (u._count++ == 0) {
 				/* first time, so write the root element. */
-				u._output.setIndenting(true); /* nastaveni indentace na vystupu. */ 
+				u._output.setIndenting(true); /* nastaveni indentace na vystupu. */
 				u._output.writeElementStart(
-				xnode.getElement().getOwnerDocument().getDocumentElement()); 
+				xnode.getElement().getOwnerDocument().getDocumentElement());
 			}
 			/* Prepare XDDocument for the construction according model "Order". */
 			XDDocument xdoc = u._xpool.createXDDocument("Orders");
@@ -125,7 +125,7 @@ public class Orders2ext {
 		if (u._count != 0) {
 			/* Yes, close the stream. */
 			u._output.writeElementEnd();
-			u._output.closeStream(); 
+			u._output.closeStream();
 		}
 	}
 
@@ -141,7 +141,7 @@ public class Orders2ext {
 			NodeList nl = (NodeList) xExpr.evaluate(u._items, XPathConstants.NODESET);
 			Element el1 = (Element) nl.item(0);
 			/* get qouantity as a number */
-			int pocet = Integer.parseInt(el.getAttribute("Quantity")); 
+			int pocet = Integer.parseInt(el.getAttribute("Quantity"));
 			/* compute price */
 			float cena = Float.parseFloat(el1.getAttribute("Price")) * pocet;
 			/* Return it as a string */

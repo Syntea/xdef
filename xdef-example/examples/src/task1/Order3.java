@@ -24,7 +24,7 @@ public class Order3 {
 		ArrayReporter reporter = new ArrayReporter();
 
 		// Prepare XML element for recording of errors
-		Element errors = 
+		Element errors =
 			KXmlUtils.newDocument(null, "Errors", null).getDocumentElement();
 		xdoc.setUserObject(errors);
 
@@ -42,7 +42,7 @@ public class Order3 {
 			System.out.println("OK");
 		}
 	}
-	
+
 	// External method called from the Script of X-definition
 	public static void err(XXNode xnode, long code) {
 		Document doc = ((Element) xnode.getUserObject()).getOwnerDocument();

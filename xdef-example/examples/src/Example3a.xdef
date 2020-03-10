@@ -14,14 +14,14 @@
       if (s.substring(6,7) != '/') /* on 6th position must be '/'*/
          return error('Missing slash character');
       if (!isNumeric(s.substring(0,6))) /* first 6 characters must be numeric */
-			return error('Second part is not numeric');
+            return error('Second part is not numeric');
       if (!isNumeric(s.substring(7))) /* atfer slash must be numeric */
-			return error('First part is not numeric');
+            return error('First part is not numeric');
       return true;
    }
 </xd:declaration>
 
-<Contract xd:script="create xparse(source)" 
+<Contract xd:script="create xparse(source)"
       cId = "required string(10)" >
 
   <Owner xd:script="occurs 1; create from('Client[@role=\'1\']')"

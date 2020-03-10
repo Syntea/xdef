@@ -21,7 +21,7 @@ import java.util.Date;
  * All lines of the source is checked for leading and trailing spaces and tabs.
  * First, trailing spaces and tabs are removed. Then behavior depends on the
  * switches -t and -s. If switch - t is set all sequences of leading spaces are
- * replaced by tabelators, otherwise the tabelators are replaced by spaces.
+ * replaced by tabs, otherwise the tabs are replaced by spaces.
  * All occurrences of couples id carriage return characters (CR - 0x0d) and line
  * feed characters (LF - 0x0a) are replaced by line feed characters. If the
  * switch "-CR" is specified, the couple of both characters is generated.</p>
@@ -33,13 +33,13 @@ import java.util.Date;
  * <li> -i input Input may be specified as the file with input source or as the
  * directory. If the parameter is not directory, also wildcards '*' or '?' may
  * be used to specify group of files. The parameter is obligatory.</li>
- * <li> -r recurse input directory. The parameter is optional and forces to
+ * <li> -r process directory tree. The parameter is optional and forces to
  * process all subdirectories of the directory where process started.</li>
  * <li> -o outputDirectory: The directory where output files are stored. The
  * parameter is optional. If it is not specified the source file is
  * overwritten.</li>
- * <li> -t spaces are replaced by tabelators The parameter is optional.</li>
- * <li> -s tabelators are replaced by spaces The parameter is optional.</li>
+ * <li> -t spaces are replaced by tabs The parameter is optional.</li>
+ * <li> -s tabs are replaced by spaces The parameter is optional.</li>
  * <li> -cr lines are separated by the couple of CR and LF The parameter
  * is optional.</li>
  * <li> -h The parameter displays help text.</li>
@@ -81,8 +81,7 @@ public class CanonizeSource {
 	int _firstCommentStart;
 	int _firstCommentEnd;
 
-	/** Creates a new instance of ToNewPrepoc - just prevent the user to do it.
-	 */
+	/** Creates new instance of ToNewPrepoc - just prevent the user to do it.*/
 	private CanonizeSource() {}
 
 	private void processFiles(final File dir,
@@ -97,8 +96,8 @@ public class CanonizeSource {
 			input += _mask;
 			files = getWildCardFiles(input);
 			if (files != null) {
-				for (int i = 0; i < files.length; i++) {
-					processFile(files[i], outDir, createDirectory);
+				for (File f: files) {
+					processFile(f, outDir, createDirectory);
 				}
 			}
 			String s;
@@ -604,7 +603,7 @@ public class CanonizeSource {
 	 * directory.
 	 * @param outDir The directory where put the changed files. If this argument
 	 * is <tt>null</tt> the changed file will replace the input file.
-	 * @param recurse If the value of this argument is <tt>true</tt> the
+	 * @param dirTree If the value of this argument is <tt>true</tt> the
 	 * program will scan also subdirectories..
 	 * @param out The printstream where will be printed output messages.
 	 * @param err The printstream where will be printed input messages.
@@ -613,7 +612,7 @@ public class CanonizeSource {
 	 * program will generate the couple of CR LF as line separators. Otherwise
 	 * only LF characters are generated.
 	 * @param spacesToTab If the value of this argument is <tt>true</tt>
-	 * the program will convert all leading spaces to tabelators.
+	 * the program will convert all leading spaces to tabs.
 	 * @param indentSize The number of position for indenting used in original
 	 * source.
 	 * @param newIndent Tne new indenting parameter if it should be changed (or
@@ -629,7 +628,7 @@ public class CanonizeSource {
 	 */
 	public static String canonize(final String input,
 		final String outDir,
-		final boolean recurse,
+		final boolean dirTree,
 		final PrintStream out,
 		final PrintStream err,
 		final boolean verbose,
@@ -705,7 +704,7 @@ public class CanonizeSource {
 		String inp = input.replace('\\', '/');
 		cs._genCR = genCR;
 		File dir = null;
-		if (recurse) {
+		if (dirTree) {
 			int i = inp.lastIndexOf('/');
 			if (i >= 0) {
 				cs._mask = inp.substring(i + 1);
@@ -734,7 +733,7 @@ public class CanonizeSource {
 		if (err != null) {
 			err.flush();
 		}
-		if (verbose && out != null) {
+		if (verbose && out != null && cs._processedCount > 0) {
 			out.println("Inspected " + cs._processedCount
 				+ " file(s), changed " + cs._modifyCount + ".");
 			out.flush();
@@ -758,7 +757,7 @@ public class CanonizeSource {
 		}
 		String input = null;
 		String outDir = null;
-		boolean recurse = false;
+		boolean dirTree = false;
 		boolean verbose = false;
 		String header = null;
 		boolean headerKeep = false;
@@ -771,10 +770,10 @@ public class CanonizeSource {
 		String charset = null;
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
-				if (recurse) {
-					return "'-r' is redefined (recurse).";
+				if (dirTree) {
+					return "'-r' is redefined (directory tree switch).";
 				}
-				recurse = true;
+				dirTree = true;
 			} else if (args[i].equals("-encoding")) {
 				if (charset != null) {
 					return "'-encoding' is redefined.";
@@ -817,7 +816,7 @@ public class CanonizeSource {
 					spacesToTab = 1;
 				} else {
 					if (spacesToTab == 2) {
-						return "'-t' is redefined (set tabelators).";
+						return "'-t' is redefined (set tabs).";
 					} else if (spacesToTab == 1) {
 						return "both '-t' and '-s' can't be specified.";
 					}
@@ -942,7 +941,7 @@ public class CanonizeSource {
 
 		return canonize(input,
 			outDir,
-			recurse,
+			dirTree,
 			out,
 			err,
 			verbose,
@@ -959,12 +958,12 @@ public class CanonizeSource {
 
 	/** Canonize sources according to arguments. and print results.
 	 * @param sources Source file(s) (may contain wildcards).
-	 * @param recurse if <tt>true</tt> the child directories are processed too.
-	 * @param tabs if true, leading spaces are replaced by tabelators, if false
-	 * the leading tabelators are replaced by spaces.
-	 * @param n the number of spaces per tabelator. If this agument is -1 then
+	 * @param dirTree if <tt>true</tt> the child directories are processed too.
+	 * @param tabs if true, leading spaces are replaced by tabs, if false
+	 * the leading tabs are replaced by spaces.
+	 * @param n the number of spaces per tab. If this argument is -1 then
 	 * no modifications of leading spaces is done.
-	 * @param header the name of file containing string with header ("copygight")
+	 * @param header the name of file containing string with header ("copyright")
 	 * information which will be inserted or replaced as the top of the source.
 	 * If the file is the empty (i.e. it has the zero length) the header
 	 * information is deleted. If this argument is <tt>null</tt> no header
@@ -980,7 +979,7 @@ public class CanonizeSource {
 	 * default system encoding is used.
 	 */
 	public static void canonize(final String sources,
-		final boolean recurse,
+		final boolean dirTree,
 		final boolean tabs,
 		final int n,
 		final String header,
@@ -988,7 +987,7 @@ public class CanonizeSource {
 		final String charset) {
 		try {
 			int len = 3;
-			if (recurse) {
+			if (dirTree) {
 				len++;
 			}
 			if (n >= 0) {
@@ -1008,7 +1007,7 @@ public class CanonizeSource {
 			myArgs[1] = sources;
 			myArgs[2] = "-v";
 			int ndx = 3;
-			if (recurse) {
+			if (dirTree) {
 				myArgs[ndx++] = "-r";
 			}
 			if (n >= 0) {
@@ -1060,9 +1059,9 @@ public class CanonizeSource {
 		"CanonizeSource. Copyright 2004 Syntea Software Group.\n"
 +"All lines of the source data are checked for leading and trailing white spaces.\n"
 +"Trailing spaces and tabs are removed and leading spaces are replaced by\n"
-+"tabelators or by spaces according to the value of switches -t or -s.If the\n"
++"tabs or by spaces according to the value of switches -t or -s.If the\n"
 +"switch -n n is defined it is used as number of indenting positions for\n"
-+"tabelators. If -c switch is set on then the header (copyright) information is\n"
++"tabs. If -c switch is set on then the header (copyright) information is\n"
 +"inserted (or the old one is replaced) as a comment on the top of source data.\n"
 +"If -e switch is set on then the final information is added to the end of source\n"
 +"data. If the switch is -cc or -ee the existing information is not replaced.\n"
@@ -1072,7 +1071,7 @@ public class CanonizeSource {
 +"where\n"
 +"-i input The input may be specified as a file or as the group of files\n"
 +"   specified by wildcards '*' or '?'. The parameter is obligatory.\n"
-+"-r recurse input directory. The parameter is optional.\n"
++"-r process directory tree. The parameter is optional.\n"
 +"-o outDir The directory where the output files are stored. The switch\n"
 +"   is optional. If it is missing the source files are overwritten.\n"
 +"-t [n] n is the number of spaces which are replaced by tab key codes.\n"
@@ -1121,5 +1120,4 @@ public class CanonizeSource {
 			}
 		}
 	}
-
 }

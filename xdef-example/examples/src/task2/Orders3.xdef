@@ -17,7 +17,7 @@
     </DeliveryPlace>
     <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
       ProductCode="num(4); onFalse err(23); onAbsence err(24)"
-      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>		
+      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
   </Order>
 </Orders>
 

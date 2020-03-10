@@ -31,7 +31,7 @@ public class Orders2 {
 			// write log file with errors
 			PrintStream ps = new PrintStream("task4/errors/Orders_err.txt");
 			reporter.printReports(ps);
-			ps.close(); 
+			ps.close();
 			System.err.println("Incorrect input data");
 		} else {
 			System.out.println("OK");

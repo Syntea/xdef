@@ -1,9 +1,8 @@
-<?xml version = "1.0" encoding="windows-1250" ?>
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
 
 <xd:declaration>
   external Element products, /* information about products. */
-	customers; /* information about customers. */
+    customers; /* information about customers. */
   external XmlOutStream output; /* Output stream (set by the external program). */
 
   Container c; /* information about customer created by the method "customer". */
@@ -11,10 +10,10 @@
 
   /* Check customer code */
   boolean customer() {
-    String s = getText(); /* get attribute value. */  
+    String s = getText(); /* get attribute value. */
     c = xpath('Customer[@CustomerCode="' + s + '"]', customers); /* Find the customer. */
-    /* Check if the customer found */ 
-    if (c.getLength()==0) { 
+    /* Check if the customer found */
+    if (c.getLength()==0) {
       /* Customer not found, increase error counter and report an error. */
       errors++;
       return error("Incorrect customer code: " + s); /* sets error message and returns false. */
@@ -25,9 +24,9 @@
   /* Check the item code */
   boolean item() {
       String s = getText(); /* get attribute value. */
-      /* Find the description of the item. */ 
+      /* Find the description of the item. */
       Container c = xpath('Product[@Code="' + s + '"]', products);
-      if (c.getLength()==0) { /* Item found? */ 
+      if (c.getLength()==0) { /* Item found? */
         /* Item not found, increase the error counter and report error. */
         errors++;
         return error("Incorrect item number: " + s);
@@ -45,8 +44,8 @@
       /* Is it the first record? */
       if (count++ == 0) {
          /* nothing was written yet, write XML header and root element. */
-         output.setIndenting(true); /* set output indentation. */ 
-         output.writeElementStart(getRootElement()); 
+         output.setIndenting(true); /* set output indentation. */
+         output.writeElementStart(getRootElement());
       }
       /* Create object from the context with the actual order and write it. */
       output.writeElement(xcreate('Order', getElement()));
@@ -58,7 +57,7 @@
     /* Something was written?. */
     if (count != 0) {
       /* yes, close output. */
-      output.close(); 
+      output.close();
     }
   }
 
@@ -77,7 +76,7 @@
 
 <Orders xd:script="finally output.close();" id="string(9)">
   <Order xd:script="occurs +; finally writeObj(); forget"
-      Number="checkObjId.ID()" 
+      Number="checkObjId.ID()"
       CustomerCode="customer()">
     <Item xd:script="occurs 1..100;" ProductCode="item()" Quantity="int"/>
   </Order>

@@ -11,7 +11,7 @@ public class Example6_DBCreate {
 	public static void main(String[] args) {
 		 // Deletes teh old one Derby database and creates the new one.
 		GenDerby.prepare();
-		
+
 		// Generate XDPool
 		String xdef = "./src/Example6_DBCreate.xdef";
 		Properties props = System.getProperties();
@@ -19,7 +19,7 @@ public class Example6_DBCreate {
 
 		// Create XDDocument
 		XDDocument xd = xp.createXDDocument();
-		
+
 		// Create database connection
 		String url = GenDerby.DB_URL;
 		String user = "myself";
@@ -32,9 +32,9 @@ public class Example6_DBCreate {
 		// Execute processing of XML data with XDefinition
 		String xml = "./src/Example6_DBCreate.xml";
 		xd.xparse(xml, null);
-		
+
 		//close database connection
 		service.close();
-    }
+	}
 
 }

@@ -27,15 +27,15 @@ public class MvnJamTst {
 
 	String DATA="<Pokus><a/></Pokus>";
 
-    @Test
-    public void testPokus()  {
-        XDBuilder xdBuilder = XDFactory.getXDBuilder(null);
-        xdBuilder.setSource(XDEF);
-        XDPool xdPool = xdBuilder.compileXD();
+	@Test
+	public void testPokus()  {
+		XDBuilder xdBuilder = XDFactory.getXDBuilder(null);
+		xdBuilder.setSource(XDEF);
+		XDPool xdPool = xdBuilder.compileXD();
 		xdBuilder = null;
-        XDDocument xdDocument=xdPool.createXDDocument("Pokus#Pokus");
+		XDDocument xdDocument=xdPool.createXDDocument("Pokus#Pokus");
 		xdPool = null;
-        xdDocument.xparse(DATA, null);  // pokud se tento  radek zaremuje nedojde z zaseknuti
+		xdDocument.xparse(DATA, null);  // pokud se tento  radek zaremuje nedojde z zaseknuti
 		xdDocument = null;
 		System.out.println("Hotovo");
 		ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
@@ -58,5 +58,5 @@ public class MvnJamTst {
 				System.out.println();
 			}
 		}
-    }
+	}
 }

@@ -12,8 +12,8 @@
           '.' + @name + ' (' + getText() + ')');
       } catch (Exception ex) {
         error(toString(ex));
-	  }
+      }
     </table>
   </schema>
-  
+
 </xd:def>

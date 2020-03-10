@@ -1,7 +1,7 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="inventory" >
   <xd:declaration scope = "local">
     external Service service;
-    Statement statement = service.prepareStatement( 
+    Statement statement = service.prepareStatement(
         "SELECT TITLE, ISBN FROM BOOKS.TITLE ORDER BY TITLE ASC");
   </xd:declaration>
 

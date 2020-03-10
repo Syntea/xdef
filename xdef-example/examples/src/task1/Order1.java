@@ -15,10 +15,10 @@ public class Order1 {
 	public static void main(String[] args) throws Exception {
 		// Create the instance of XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
-		
+
 		// Create reporter
 		ArrayReporter reporter = new ArrayReporter();
-		
+
 		// Run validation mode (you can also try task1/input/Order_err.xml)
 		Element result = xdoc.xparse("task1/input/Order.xml", reporter);
 
@@ -27,7 +27,7 @@ public class Order1 {
 			// Print errors to the file
 			PrintStream ps = new PrintStream("task1/errors/Order_err.txt ");
 			reporter.printReports(ps);
-			ps.close(); 
+			ps.close();
 			System.err.println("Incorrect input data");
 		} else {
 			// No errors, write the processed document to the file

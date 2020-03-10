@@ -31,7 +31,7 @@
         int mod =  n % 10;
         int num = rok*10000000+mesic*100000+den*1000+(n/10);
         if (num % 11 != mod) {
-           return error("MYERR03", "Control check error: &{0}", "" + n);
+           return error("MYERR03", "Control check error: &{0}", "" + num);
         }
     }
     return true;

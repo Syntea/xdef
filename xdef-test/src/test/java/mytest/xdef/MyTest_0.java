@@ -51,7 +51,7 @@ import org.xdef.util.XdefToXsd;
 public class MyTest_0 extends XDTester {
 
 	/** The directory where are generated X-components. */
-	private static final String COMPONENT_DIR = 
+	private static final String COMPONENT_DIR =
 		new File ("src/test/java/").exists()
 			? "src/test/java/" : "test/";
 	/** The package of X-components. */
@@ -96,7 +96,7 @@ public class MyTest_0 extends XDTester {
 	}
 
 	private static void displayData(XMData x) {
-		System.out.println(x.getName());		
+		System.out.println(x.getName());
 		System.out.println(x.getValueTypeName());
 		String s = x.getRefTypeName();
 		if (s != null) {
@@ -331,7 +331,7 @@ if(T){return;}
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
 				JsonUtil.toJsonString(XAA.toJson(), true));
-	
+
 			assertEq(123, XAA.getjs$item().getvalue());
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
@@ -752,10 +752,10 @@ if(T){return;}
 "[\"int()\"]\n"+
 "</xd:json>\n"+
 "<xd:json name='Y'>\n"+
-"[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" + 
+"[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
 "</xd:json>\n"+
 "<xd:json name='Z'>\n"+
-"{\"a\":\"string()\"}\n" + 
+"{\"a\":\"string()\"}\n" +
 "</xd:json>\n"+
 "<xd:json xd:name='json'>\n"+
 "[\"date()\"]\n"+
@@ -846,7 +846,7 @@ if(T){return;}
 "  {\"a\":\"boolean\"},\n"+
 "  \"string()\",\n"+
 "  \"int()\"\n"+
-"]\n" + 
+"]\n" +
 "</xd:json>\n"+
 "<xd:json name='B'>\n"+
 "{\"a\":\"int\"}\n"+
@@ -899,7 +899,7 @@ if(T){return;}
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
 "     type T4_str enum(%argument=['a','b']);\n"+
-"	  type T4_int int(1, 10);\n"+				
+"	  type T4_int int(1, 10);\n"+
 "  </xd:declaration>\n"+
 "  <A a = ''>\n"+
 "  <X xd:script='var uniqueSet r {a: string();};'>\n"+
@@ -1012,7 +1012,7 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'/>\n" +
@@ -1021,7 +1021,7 @@ if(T){return;}
 			xml = "<a/>";
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'>\n" +
@@ -1080,7 +1080,7 @@ if(T){return;}
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
 "     type T4_str enum(%argument=['a','b']);\n"+
-"	  type T4_int int(1, 10);\n"+				
+"	  type T4_int int(1, 10);\n"+
 "  </xd:declaration>\n"+
 "  <A a = ''>\n"+
 //"  <X>\n"+
@@ -1219,7 +1219,7 @@ if(T){return;}
 "  <xd:declaration>\n" +
 "    type name string(1, 128);\n" +
 "  </xd:declaration>\n" +
-"  <A>name()</A>" + 
+"  <A>name()</A>" +
 "</xd:def>\n";
 			f = new File(tempDir + "x.xdef");
 			SUtils.writeString(f, xdef);
@@ -1254,7 +1254,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			reporter.clear();
-			xp = XDFactory.compileXD(reporter, (Properties) null, 
+			xp = XDFactory.compileXD(reporter, (Properties) null,
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    int i;\n"+
@@ -1283,7 +1283,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"A\">\n" +
 "<xd:declaration scope = 'local'>\n" +
-"type t string(1,10,%pattern=[\"[a-z]+\", \"d+\"], %whiteSpace=\"replace\");\n"+				
+"type t string(1,10,%pattern=[\"[a-z]+\", \"d+\"], %whiteSpace=\"replace\");\n"+
 "</xd:declaration>\n" +
 "  <A a='?'\n" +
 "     b='? t'\n" +
@@ -1312,7 +1312,7 @@ if(T){return;}
 "   xd:name=\"Test\" xd:root=\"json\">\n" +
 "  <xd:json name='json'>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef, 
+			xp = XDFactory.compileXD(null, xdef,
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xd:name=\"Test1\" xd:root=\"Test#json\"/>"
 			);
@@ -1349,7 +1349,7 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			xml = 
+			xml =
 "<A_ IdFlow=\"181131058\">\n" +
 "    <XXX IdDefPartner=\"163\"/>\n" +
 "    <YYY DruhSouboru=\"W1A\"/>\n" +

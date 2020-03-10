@@ -505,7 +505,7 @@ public class TestBNF extends STester {
 "quantif1 ::= 'A'{3}\n"+
 "quantif2 ::= 'A'{3,4}\n"+
 "quantif3 ::= 'A' { 3 , * }\n"+
-"tabelator ::= #9\n"+
+"tab ::= #9\n"+
 "backslash ::= '\\'\n"+
 "NL ::= #10\n"+
 "CR ::= #13\n"+
@@ -565,7 +565,7 @@ public class TestBNF extends STester {
 			assertEq(" \t \n ",parse(g, "S", " \t \n -123  456"));
 			assertEq("", parse(g, "S")); //nothing parsed
 			assertEq("  ", parse(g, "S", "  "));
-			assertEq("\t", parse(g, "tabelator", "\t blabla \n"));
+			assertEq("\t", parse(g, "tab", "\t blabla \n"));
 			assertEq("-123",parse(g, "e", "-123"));
 			assertEq(-123, _result, printStack());
 			assertEq("456", parse(g, "e", "456"));
@@ -709,7 +709,7 @@ public class TestBNF extends STester {
 "quantif1 ::= \"A\"{3} \n" +
 "quantif2 ::= \"A\"{3,4} \n" +
 "quantif3 ::= \"A\"{3,} \n" +
-"tabelator ::= #9 \n" +
+"tab ::= #9 \n" +
 "backslash ::= \"\\\" \n" +
 "NL ::= #10 \n" +
 "CR ::= #13 \n" +
@@ -771,7 +771,7 @@ public class TestBNF extends STester {
 			assertEq("test(123,a\"\n\\)", _s);
 			assertEq(" \t \n ",parse(g, "S", " \t \n -123  456"));
 			assertEq("", parse(g, "S")); //nothing parsed
-			assertEq("\t", parse(g, "tabelator", "\txxx"));
+			assertEq("\t", parse(g, "tab", "\txxx"));
 			assertEq("-123",parse(g, "e", "-123"));
 			assertEq(-123, _result, printStack());
 			assertEq("456", parse(g, "e", "456"));
@@ -896,7 +896,7 @@ public class TestBNF extends STester {
 			assertEq("test(123,a\"\n\\)", _s);
 			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
 			assertEq("", parse(g1, "S")); //nothing parsed
-			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq("\t", parse(g1, "tab", "\txxx"));
 			assertEq("\n\n  -\n123+\t456",parse(g1, "e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
@@ -1022,7 +1022,7 @@ public class TestBNF extends STester {
 			assertEq("test(123,a\"\n\\)", _s);
 			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
 			assertEq("", parse(g1, "S")); //nothing parsed
-			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq("\t", parse(g1, "tab", "\txxx"));
 			assertEq("\n\n  -\n123+\t456", parse(g1,"e", "\n\n  -\n123+\t456"));
 			assertEq(333, _result, printStack());
 			assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
@@ -1140,7 +1140,7 @@ public class TestBNF extends STester {
 			assertEq("test(123,a\"\n\\)", _s);
 			assertEq(" \t \n ",parse(g1, "S", " \t \n -123  456"));
 			assertEq("", parse(g1, "S")); //nothing parsed
-			assertEq("\t", parse(g1, "tabelator", "\txxx"));
+			assertEq("\t", parse(g1, "tab", "\txxx"));
 			assertEq(";", parse(g1, "program",	"; xxx"));
 			assertEq("a", parse(g1, "set1", "a"));
 			assertEq("123", parse(g1, "myInteger", "123"));
