@@ -59,13 +59,22 @@ public class TestXComponentsGen extends XDTester {
 				|| !reporter.printToString().contains("Y20#")) {
 				System.err.println(reporter.printToString());
 			}
-			// save XDPool object to the file
+			// compile X-components
+			String classDir = compileSources(dir + "test/xdef/component",
+				dir + "test/xdef/component/s").replace('\\','/');
+			if (!classDir.endsWith("/")) {
+				classDir += '/';
+			}
+			System.out.println("ClassDir = " + classDir);
+			// save XDPool object to the classpath
 			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(
+				classDir + "test/xdef/component/Pool.xp"));
+			os.writeObject(xp);
+			os.close();
+			os = new ObjectOutputStream(new FileOutputStream(
 				dir + "test/xdef/component/Pool.xp"));
 			os.writeObject(xp);
 			os.close();
-			compileSources(dir + "test/xdef/component",
-				dir + "test/xdef/component/s");
 			// update components with generated files
 			String msg = FUtils.updateDirectories(
 				new File(f, "test/xdef/component"),
