@@ -73,7 +73,7 @@
         <module>xdef-buildtools</module>
 
         <!-- module with tests of X-definition, executing under default java -->
-        <module>xdef-test</module>
+        <!-- <module>xdef-test</module> -->
 
         <!-- tests executing under java-11 -->
         <module>xdef-test11</module>
