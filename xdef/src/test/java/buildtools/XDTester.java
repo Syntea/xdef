@@ -1154,6 +1154,33 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Get value of the field of the class of an object.
+	 * @param className name of class.
+	 * @param name name of filed.
+	 * @return value of field.
+	 */
+	public final static Object getObjectField(String className, String name) {
+		Class<?> cls;
+		try {
+			cls = Class.forName(className);
+		} catch (Exception ex) {
+			throw new RuntimeException("Class not found: " + className);
+		}
+		for (;;) {
+			try {
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				return f.get(null); //static
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		throw new RuntimeException("Field not found: " + name);
+	}
+
+	/** Get value of the field of the class of an object.
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
 	 * @return value of field.
@@ -1275,14 +1302,14 @@ public abstract class XDTester extends STester {
 			Class<?>[] classes = new Class<?>[componentNames.length];
 			for (int i = 0; i < componentNames.length; i++) {
 				try {
-					classes[i] =
+					classes[i] = 
 						Class.forName(packageName+'.' + componentNames[i]);
 				} catch (ClassNotFoundException ex) {
 					File f = new File (
 						componentDir, packageName.replace('.', '/'));
 					f = new File(f, componentNames[i] + ".java");
 					XDTester.compileSources(f);
-					classes[i] =
+					classes[i] = 
 						Class.forName(packageName+'.'+componentNames[i]);
 				}
 			}
@@ -1364,7 +1391,7 @@ public abstract class XDTester extends STester {
 			throw new RuntimeException(
 				"XComponent class not found: " + componentName);
 		}
-		XComponent result =
+		XComponent result = 
 			xp.createXDDocument(xdefName).jparseXComponent(xml, cls, reporter);
 		if (reporter == null) {
 			rep.checkAndThrowErrors();

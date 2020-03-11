@@ -39,7 +39,7 @@
   %interface test.xdef.component.CI %link C#Person;
 </xd:component>
 
-<xd:declaration scope="global"> type XY enum('XX','YY');
+<xd:declaration> type XY enum('XX','YY');
   type flt float(); type dat xdatetime('yyyy-MM-dd');
   uniqueSet uflt flt; uniqueSet udat dat;
 </xd:declaration>
