@@ -11,9 +11,6 @@ import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import buildtools.XDTester;
-import static buildtools.XDTester._xdNS;
-import static buildtools.XDTester.genXComponent;
-import static buildtools.XDTester.getValueFromGetter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -26,13 +23,13 @@ import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.impl.XDefinition;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.parsers.XSAbstractParser;
 import org.xdef.impl.parsers.XSParseDecimal;
 import org.xdef.json.JNull;
-import org.xdef.json.JsonToXml;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
@@ -49,11 +46,6 @@ import org.xdef.util.XdefToXsd;
  * @author Vaclav Trojan
  */
 public class MyTest_0 extends XDTester {
-
-	/** The directory where are generated X-components. */
-	private static final String COMPONENT_DIR =
-		new File ("src/test/java/").exists()
-			? "src/test/java/" : "test/";
 	/** The package of X-components. */
 	private static final String COMPONENT_PACKAGE = "mytest.component";
 
@@ -162,6 +154,27 @@ public class MyTest_0 extends XDTester {
 		}
 	}
 
+	/** Crate and compile X-components form XDPool.
+	 * @param tempSrcDir the directory where are generated Java sources.
+	 * @param xp XDPool from which the X-components created.
+	 */
+	private static void genXComponent(final String tempSrcDir, final XDPool xp){
+		try {
+			File f = new File(tempSrcDir);
+			if (f.exists()) {
+				SUtils.deleteAll(f, true);
+			}
+			f.mkdirs();
+			GenXComponent.genXComponent(xp,
+				tempSrcDir, "UTF-8", false, true).checkAndThrowErrors();
+			compileSources(tempSrcDir);
+		} catch (RuntimeException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			throw new RuntimeException(ex.getMessage());
+		}
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -179,17 +192,20 @@ public class MyTest_0 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		String tempDir = getTempDir();
-		try {
-			File f = new File(tempDir);
-			if (f.exists()) {
-				SUtils.deleteAll(f, true);
-			}
-			f.mkdirs();
-		} catch (Exception ex) {
-			fail(ex);
+		File f = new File(getTempDir());
+		if (f.exists() && !f.isDirectory()) {
+			throw new RuntimeException(f.getAbsolutePath()
+				+ " is not directory");
+		}
+		f.mkdir();
+		tempDir = f.getAbsolutePath().replace('\\', '/');
+		if (!tempDir.endsWith("/")) {
+			tempDir += '/';
+		}
+		if (!f.isDirectory()) {
+			fail('\"' + tempDir + "\" is not directory");
 			return;
 		}
-		File f;
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -234,6 +250,35 @@ public class MyTest_0 extends XDTester {
 //if(T)return;
 		try {
 			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='Y'>\n"+
+"<xd:json name='Y'>\n"+
+"[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" + 
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class mytest.component.TY_X %link #Y;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(tempDir, xp);
+			json = "[{\"a\":true},\"xxx\",125, true]";
+			j = xp.createXDDocument().jparse(json, "Y", reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+			xc = xp.createXDDocument().jparseXComponent(json,
+				null, reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("xxx", getValueFromGetter(xc, "jgetitem"));
+			assertEq(125, getValueFromGetter(xc, "jgetitem_1"));
+			assertEq(true, getValueFromGetter(xc, "jgetitem_2"));
+		} catch (Exception ex) {fail(ex);}
+//if(true)return;
+		try {
+			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='a'\n"+
 "        xmlns:js=\"http://www.w3.org/2005/xpath-functions\">\n" +
 "<xd:declaration scope='local'>\n" +
@@ -253,8 +298,8 @@ public class MyTest_0 extends XDTester {
 "}\n" +
 "</xd:json>"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-//xp.displayCode();
+//			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json = "{\"Genre\": \"Classic\"}";
 			j = xp.createXDDocument().jparse(json, "a", reporter);
 			assertNoErrors(reporter);
@@ -271,20 +316,6 @@ public class MyTest_0 extends XDTester {
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
-"<xd:json name='B'>\n"+
-"[$script: \"finally outln('xxx')\", \"int()\"]\n" +
-"</xd:json>\n"+
-"</xd:def>\n";
-			xp = compile(xdef);
-			json = "[123]";
-			j = xp.createXDDocument().jparse(json, "B", reporter);
-			assertNoErrors(reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));
-		} catch (Exception ex) {ex.printStackTrace();}
-if(T){return;}
-		try {
-			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "<xd:json name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
@@ -294,154 +325,119 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "XAA");
+			genXComponent(tempDir, xp);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			mytest.component.XAA XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertEq("aaa", XAA.getjs$item().getvalue());
-			assertEq("aaa", XAA.jgeta());
-//			XAA.getjs$item().setvalue(123);
-			XAA.jseta(123);
-//			assertEq(123, XAA.getjs$item().getvalue());
-			assertEq(123, XAA.jgeta());
-//			XAA.getjs$item().setvalue(null);
-			XAA.jseta(null);
-//			assertNull(XAA.getjs$item().getvalue());
-			assertNull(XAA.jgeta());
-//			XAA.getjs$item().setvalue(" a b \t");
-			XAA.jseta(" a b \t");
-//			assertEq(" a b \t", XAA.getjs$item().getvalue());
-			assertEq(" a b \t", XAA.jgeta());
-if(T){return;}
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq("aaa", getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", 123);
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", null);
+			assertNull(getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", " a b \t");
+			assertEq(" a b \t", getValueFromGetter(xc, "jgeta"));
 
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-
-			assertEq(123, XAA.getjs$item().getvalue());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(123, getValueFromGetter(getValueFromGetter(
+				xc, "getjs$item"), "getvalue"));
+			
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-			assertEq(false, XAA.getjs$item().getvalue());
-			XAA.getjs$item().setvalue(123);
-			assertEq(123, XAA.getjs$item().getvalue());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(false, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", 123);
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
 
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertEq(JNull.JNULL, XAA.getjs$item().getvalue());
-			assertEq(JNull.JNULL, XAA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgeta"));
+			
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertNull(XAA.getjs$item());
-			assertNull(XAA.jgeta());
-
-//			XAA.setjs$item(new XAA.js$item());
-//			XAA.getjs$item().setvalue(123);
-			XAA.jseta(123);
-//			assertEq(123, XAA.getjs$item().getvalue());
-			assertEq(123, XAA.jgeta());
-//			XAA.getjs$item().setvalue(null);
-			XAA.jseta(null);
-//			assertNull(XAA.getjs$item().getvalue());
-			assertNull(XAA.jgeta());
-
-//			XAA.getjs$item().setvalue(" a b \t");
-			XAA.jseta(" a b \t");
-//			assertEq(" a b \t", XAA.getjs$item().getvalue());
-			assertEq(" a b \t", XAA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertNull(getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", 123);
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", null);
+			assertNull(getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", " a b \t");
+			assertEq(" a b \t", getValueFromGetter(xc, "jgeta"));
 
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertEq(123, XAA.getjs$item().getvalue());
-			assertEq(123, XAA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
+			
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertEq(false, XAA.getjs$item().getvalue());
-			assertEq(false, XAA.jgeta());
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
-			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			XAA.getjs$item().setvalue(JNull.JNULL);
-			XAA.jseta(JNull.JNULL);
-//			assertEq("null", XAA.getjs$item().getvalue().toString());
-			assertEq("null", XAA.jgeta().toString());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(false, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", JNull.JNULL);
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgeta"));
 
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
-//			assertEq(JNull.JNULL, XAA.getjs$item().getvalue());
-			assertEq(JNull.JNULL, XAA.jgeta());
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgeta"));
+			
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XAA = (mytest.component.XAA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XAA.toJson()),
-				JsonUtil.toJsonString(XAA.toJson(), true));
-//			assertNull(XAA.getjs$item());
-			assertNull(XAA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertNull(getValueFromGetter(xc, "jgeta"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A | B'>\n"+
@@ -457,132 +453,109 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "XA", "XB");
+			genXComponent(tempDir, xp);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			mytest.component.XA XA = (mytest.component.XA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XA.toJson()),
-				JsonUtil.toJsonString(XA.toJson(), true));
-//			assertEq("aaa", XA.getjs$item().getvalue());
-			assertEq("aaa", XA.jgeta());
-//			XA.getjs$item().setvalue(123);
-			XA.jseta(123);
-//			assertEq(123, XA.getjs$item().getvalue());
-			assertEq(123, XA.jgeta());
-//			XA.getjs$item().setvalue(null);
-			XA.jseta(null);
-//			assertNull(XA.getjs$item().getvalue());
-			assertNull(XA.jgeta());
-//			XA.getjs$item().setvalue("xyz");
-			XA.jseta("xyz");
-//			assertEq("xyz", XA.getjs$item().getvalue());
-			assertEq("xyz", XA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq("aaa", getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", 123);
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", null);
+			assertNull(getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", "xyz");
+			assertEq("xyz", getValueFromGetter(xc, "jgeta"));
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XA = (mytest.component.XA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XA.toJson()),
-				JsonUtil.toJsonString(XA.toJson(), true));
-//			assertEq(123, XA.getjs$item().getvalue());
-			assertEq(123, XA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XA = (mytest.component.XA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XA.toJson()),
-				JsonUtil.toJsonString(XA.toJson(), true));
-//			assertEq(false, XA.getjs$item().getvalue());
-			assertEq(false, XA.jgeta());
-//			XA.getjs$item().setvalue(123);
-			XA.jseta(123);
-//			assertEq(123, XA.getjs$item().getvalue());
-			assertEq(123, XA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(false, getValueFromGetter(xc, "jgeta"));
+			setValueToSetter(xc, "jseta", 123);
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
+			
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XA = (mytest.component.XA)
-			xp.createXDDocument().jparseXComponent(json, null, reporter);
-		   reporter.checkAndThrowErrors();
-		   assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XA.toJson()),
-				JsonUtil.toJsonString(XA.toJson(), true));
-//		   assertEq(JNull.JNULL, XA.getjs$item().getvalue());
-		   assertEq(JNull.JNULL, XA.jgeta());
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			reporter.checkAndThrowErrors();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgeta"));
+			
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, "A", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XA = (mytest.component.XA)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XA.toJson()),
-				JsonUtil.toJsonString(XA.toJson(), true));
-//			assertNull(XA.getjs$item());
-			assertNull(XA.jgeta());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertNull(getValueFromGetter(xc, "jgeta"));
+			
 			json = "[null]";
 			j = xp.createXDDocument().jparse(json, "B", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			mytest.component.XB XB = (mytest.component.XB)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XB.class, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json,
+				Class.forName("mytest.component.XB"), reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XB.toJson()),
-				JsonUtil.toJsonString(XB.toJson(), true));
-//			assertEq(JNull.JNULL, XB.getjs$item().getvalue());
-			assertEq(JNull.JNULL, XB.jgetitem());
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgetitem"));
 			json = "[123]";
 			j = xp.createXDDocument().jparse(json, "B", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XB = (mytest.component.XB)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XB.class, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XB.toJson()),
-				JsonUtil.toJsonString(XB.toJson(), true));
-//			assertEq(123, XB.getjs$item().getvalue());
-			assertEq(123, XB.jgetitem());
+			xc = xp.createXDDocument().jparseXComponent(json,
+				Class.forName("mytest.component.XB"), reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(123, getValueFromGetter(xc, "jgetitem"));
 			json = "[true]";
 			j = xp.createXDDocument().jparse(json, "B", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XB = (mytest.component.XB)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XB.class, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XB.toJson()),
-				JsonUtil.toJsonString(XB.toJson(), true));
-//			assertTrue(((Boolean) XB.getjs$item().getvalue()));
-			assertTrue(((Boolean) XB.jgetitem()));
+			xc = xp.createXDDocument().jparseXComponent(json,
+				Class.forName("mytest.component.XB"), reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(true, getValueFromGetter(xc, "jgetitem"));
 			json = "[]";
 			j = xp.createXDDocument().jparse(json, "B", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XB = (mytest.component.XB)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XB.class, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json),XB.toJson()),
-				JsonUtil.toJsonString(XB.toJson(), true));
-//			assertNull(XB.getjs$item());
-			assertNull(XB.jgetitem());
+			xc = xp.createXDDocument().jparseXComponent(json,
+				Class.forName("mytest.component.XB"), reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertNull(getValueFromGetter(xc, "jgetitem"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -594,68 +567,61 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "XD");
+			genXComponent(tempDir, xp);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			mytest.component.XD XD = (mytest.component.XD)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XD.class, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XD.toJson()),
-				JsonUtil.toJsonString(XD.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 			reporter.checkAndThrowErrors();
-			assertEq("aaa", XD.jgeta());
+			assertEq("aaa", getValueFromGetter(xc, "jgeta"));
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XD = (mytest.component.XD)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XD.class, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XD.toJson()),
-				JsonUtil.toJsonString(XD.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 			reporter.checkAndThrowErrors();
-			assertEq(123, XD.jgeta());
+			assertEq(123, getValueFromGetter(xc, "jgeta"));
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XD = (mytest.component.XD)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XD.class, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XD.toJson()),
-				JsonUtil.toJsonString(XD.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 			reporter.checkAndThrowErrors();
-			assertTrue(!(Boolean) XD.jgeta());
+			assertTrue(!(Boolean) getValueFromGetter(xc, "jgeta"));
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XD = (mytest.component.XD)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XD.class, reporter);
-			assertEq(JNull.JNULL, XD.jgeta());
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			reporter.checkAndThrowErrors();
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgeta"));
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			reporter.checkAndThrowErrors();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
-			XD = (mytest.component.XD)
-				xp.createXDDocument().jparseXComponent(json,
-					mytest.component.XD.class, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), XD.toJson()),
-				JsonUtil.toJsonString(XD.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 			reporter.checkAndThrowErrors();
-			assertNull(XD.jgeta());
+			assertNull(getValueFromGetter(xc, "jgeta"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -671,7 +637,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "TJ1");
+			genXComponent(tempDir, xp);
 			json = "[null, 12, \" a b \"]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -680,17 +646,12 @@ if(T){return;}
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			mytest.component.TJ1 TJ1 = (mytest.component.TJ1)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-//			assertTrue(TJ1.getjs$item().getvalue()!= null
-//				&& "null".equals(TJ1.getjs$item().getvalue().toString()));
-			assertEq(JNull.JNULL, TJ1.jgetitem());
-//			assertEq(12, TJ1.getjs$item_1().getvalue());
-			assertEq(12, TJ1.jgetitem_1());
-//			assertEq("\" a b \"", TJ1.getjs$item_2().getvalue());
-			assertEq(" a b ", TJ1.jgetitem_2());
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgetitem"));
+			assertEq(12, getValueFromGetter(xc, "jgetitem_1"));
+			assertEq(" a b ", getValueFromGetter(xc, "jgetitem_2"));
 			json = "[null]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -699,16 +660,11 @@ if(T){return;}
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			TJ1 = (mytest.component.TJ1)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-//			assertTrue(TJ1.getjs$item().getvalue()!= null
-//				&& "null".equals(TJ1.getjs$item().getvalue().toString()));
-			assertEq(JNull.JNULL, TJ1.jgetitem());
-//			assertNull(TJ1.getjs$item_1());
-			assertNull(TJ1.jgetitem_1());
-//			assertNull(TJ1.getjs$item_2());
-			assertNull(TJ1.jgetitem_2());
+			assertEq(JNull.JNULL, getValueFromGetter(xc, "jgetitem"));
+			assertNull(getValueFromGetter(xc, "jgetitem_1"));
+			assertNull(getValueFromGetter(xc, "jgetitem_2"));
 			json = "[12]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -717,15 +673,11 @@ if(T){return;}
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			TJ1 = (mytest.component.TJ1)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-//			assertNull(TJ1.getjs$item());
-			assertNull(TJ1.jgetitem());
-//			assertEq(12, TJ1.getjs$item_1().getvalue());
-			assertEq(12, TJ1.jgetitem_1());
-//			assertNull(TJ1.getjs$item_2());
-			assertNull(TJ1.jgetitem_2());
+			assertNull(getValueFromGetter(xc, "jgetitem"));
+			assertEq(12, getValueFromGetter(xc, "jgetitem_1"));
+			assertNull(getValueFromGetter(xc, "jgetitem_2"));
 			json = "[\"\"]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -734,15 +686,11 @@ if(T){return;}
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			TJ1 = (mytest.component.TJ1)
-				xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-//			assertNull(TJ1.getjs$item());
-			assertNull(TJ1.jgetitem());
-//			assertNull(TJ1.getjs$item_1());
-			assertNull(TJ1.jgetitem_1());
-//			assertEq("\"\"", TJ1.getjs$item_2().getvalue());
-			assertEq("", TJ1.jgetitem_2());
+			assertNull(getValueFromGetter(xc, "jgetitem"));
+			assertNull(getValueFromGetter(xc, "jgetitem_1"));
+			assertEq("", getValueFromGetter(xc, "jgetitem_2"));
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -752,10 +700,10 @@ if(T){return;}
 "[\"int()\"]\n"+
 "</xd:json>\n"+
 "<xd:json name='Y'>\n"+
-"[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
+"[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" + 
 "</xd:json>\n"+
 "<xd:json name='Z'>\n"+
-"{\"a\":\"string()\"}\n" +
+"{\"a\":\"string()\"}\n" + 
 "</xd:json>\n"+
 "<xd:json xd:name='json'>\n"+
 "[\"date()\"]\n"+
@@ -768,16 +716,11 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			Class<?>[] classes = genXComponent(COMPONENT_DIR,
-				COMPONENT_PACKAGE, xp, "TX", "TY", "TZ", "TJson");
-//			Class<?> TX = classes[0];
-//			Class<?> TY = classes[1];
-//			Class<?> TZ = classes[2];
-//			Class<?> TJson = classes[3];
-			Class<?> TX = mytest.component.TX.class;
-			Class<?> TY = mytest.component.TY.class;
-			Class<?> TZ = mytest.component.TZ.class;
-			Class<?> TJson = mytest.component.TJson.class;
+			genXComponent(tempDir, xp);
+			Class<?> TX = Class.forName("mytest.component.TX");
+			Class<?> TY = Class.forName("mytest.component.TY");
+			Class<?> TZ = Class.forName("mytest.component.TZ");
+			Class<?> TJson = Class.forName("mytest.component.TJson");
 			json = "[\"2020-01-01\"]";
 			j = xp.createXDDocument().jparse(json, "json", reporter);
 			assertNoErrors(reporter);
@@ -786,8 +729,7 @@ if(T){return;}
 				JsonUtil.toJsonString(j, true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			xc = xp.createXDDocument().jparseXComponent(json,
-				TJson, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, TJson, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
@@ -809,25 +751,21 @@ if(T){return;}
 			xc = xp.createXDDocument().jparseXComponent(json, TX, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			o = getValueFromGetter(xc, "getjs$item");
-			assertEq(123, getValueFromGetter(o, "get" + JsonToXml.J_VALUEATTR));
-			json = "[{\"a\":true},\"xxx\",125]";
+			assertEq(123, getValueFromGetter(xc, "jgetitem"));
+			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, "Y", reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, TY, reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			o = getValueFromGetter(xc, "getjs$map");
-			o = getValueFromGetter(o, "getjs$item");
-			assertTrue((Boolean) getValueFromGetter(o,
-				"get" + JsonToXml.J_VALUEATTR));
-			o = getValueFromGetter(xc, "getjs$item");
-			assertEq("xxx", getValueFromGetter(o, "get"+JsonToXml.J_VALUEATTR));
-			o = getValueFromGetter(xc, "getjs$item_1");
-			assertEq(125, getValueFromGetter(o, "get" + JsonToXml.J_VALUEATTR));
+			assertEq("xxx", getValueFromGetter(xc, "jgetitem"));
+			assertEq(125, getValueFromGetter(xc, "jgetitem_1"));
+			assertEq(true, getValueFromGetter(xc, "jgetitem_2"));
 			json = "{\"a\":\"2020-01-01\"}";
 			j = xp.createXDDocument().jparse(json, "Z", reporter);
 			assertNoErrors(reporter);
@@ -837,8 +775,8 @@ if(T){return;}
 			xc = xp.createXDDocument().jparseXComponent(json, TZ, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq("2020-01-01",
-				((mytest.component.TZ) xc).getjs$item().getvalue());
+			assertEq("2020-01-01", getValueFromGetter(xc, "jgeta"));
+			
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
 "<xd:json name='json'>\n"+
@@ -846,7 +784,7 @@ if(T){return;}
 "  {\"a\":\"boolean\"},\n"+
 "  \"string()\",\n"+
 "  \"int()\"\n"+
-"]\n" +
+"]\n" + 
 "</xd:json>\n"+
 "<xd:json name='B'>\n"+
 "{\"a\":\"int\"}\n"+
@@ -899,7 +837,7 @@ if(T){return;}
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
 "     type T4_str enum(%argument=['a','b']);\n"+
-"	  type T4_int int(1, 10);\n"+
+"	  type T4_int int(1, 10);\n"+				
 "  </xd:declaration>\n"+
 "  <A a = ''>\n"+
 "  <X xd:script='var uniqueSet r {a: string();};'>\n"+
@@ -1012,7 +950,7 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef =
+			xdef = 
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'/>\n" +
@@ -1021,7 +959,7 @@ if(T){return;}
 			xml = "<a/>";
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
 			assertNoErrors(reporter);
-			xdef =
+			xdef = 
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'>\n" +
@@ -1080,7 +1018,7 @@ if(T){return;}
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
 "     type T4_str enum(%argument=['a','b']);\n"+
-"	  type T4_int int(1, 10);\n"+
+"	  type T4_int int(1, 10);\n"+				
 "  </xd:declaration>\n"+
 "  <A a = ''>\n"+
 //"  <X>\n"+
@@ -1116,7 +1054,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "T");
+			genXComponent(tempDir, xp);
 			xd = xp.createXDDocument();
 			xml =
 "<T>\n" +
@@ -1129,7 +1067,6 @@ if(T){return;}
 			s = reporter.printToString();
 			assertTrue(s.contains(" \"a\")") && s.contains(" \"b\")")
 				&& s.contains(" \"a\", \"b\"")&&reporter.getErrorCount()==7,s);
-			Class c = mytest.component.T.class;
 //			Class.forName("mytest.component.T");
 			xml =
 "<T>\n" +
@@ -1219,7 +1156,7 @@ if(T){return;}
 "  <xd:declaration>\n" +
 "    type name string(1, 128);\n" +
 "  </xd:declaration>\n" +
-"  <A>name()</A>" +
+"  <A>name()</A>" + 
 "</xd:def>\n";
 			f = new File(tempDir + "x.xdef");
 			SUtils.writeString(f, xdef);
@@ -1254,7 +1191,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			reporter.clear();
-			xp = XDFactory.compileXD(reporter, (Properties) null,
+			xp = XDFactory.compileXD(reporter, (Properties) null, 
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    int i;\n"+
@@ -1283,7 +1220,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"A\">\n" +
 "<xd:declaration scope = 'local'>\n" +
-"type t string(1,10,%pattern=[\"[a-z]+\", \"d+\"], %whiteSpace=\"replace\");\n"+
+"type t string(1,10,%pattern=[\"[a-z]+\", \"d+\"], %whiteSpace=\"replace\");\n"+				
 "</xd:declaration>\n" +
 "  <A a='?'\n" +
 "     b='? t'\n" +
@@ -1312,7 +1249,7 @@ if(T){return;}
 "   xd:name=\"Test\" xd:root=\"json\">\n" +
 "  <xd:json name='json'>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef,
+			xp = XDFactory.compileXD(null, xdef, 
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xd:name=\"Test1\" xd:root=\"Test#json\"/>"
 			);
@@ -1349,7 +1286,7 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			xml =
+			xml = 
 "<A_ IdFlow=\"181131058\">\n" +
 "    <XXX IdDefPartner=\"163\"/>\n" +
 "    <YYY DruhSouboru=\"W1A\"/>\n" +
@@ -1492,8 +1429,7 @@ if(T){return;}
 "<a><c f='string'/></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "A");
-//			XDTester.compileSources(componentDir + "A.java");
+			genXComponent(tempDir, xp);
 			xd = xp.createXDDocument();
 
 			xd.setLexiconLanguage("eng");
@@ -1516,14 +1452,13 @@ if(T){return;}
 			xd = xp.createXDDocument();
 			xd.setLexiconLanguage("ces");
 			xml = "<a><c f='a'/></a>";
-			XComponent xcA =
-				parseXC(xd, xml, mytest.component.A.class, reporter);
+			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrors(reporter);
-			assertEq(xml, xcA.toXml());
+			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument();
 			xd.setLexiconLanguage("eng");
 			xml = "<a><b e='a'/></a>";
-			xc = parseXC(xd, xml, mytest.component.A.class, reporter);
+			xc = parseXC(xd, xml, null, reporter);
 //			xd.setDestLexiconLanguage("eng");
 			assertNoErrors(reporter);
 			assertEq("<a><b e='a'/></a>", xc.toXml());
@@ -1632,7 +1567,7 @@ if(T){return;}
 "</xd:lexicon>",
 			};
 			xp = compile(params);
-			genXComponent(COMPONENT_DIR, COMPONENT_PACKAGE, xp, "Contract");
+			genXComponent(tempDir, xp);
 			xd = xp.createXDDocument();
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
@@ -2632,7 +2567,6 @@ if(T){return;}
 			}
 		} catch (Exception ex) {fail(ex);}
 	}
-
 	/** Run test
 	 * @param args the command line arguments
 	 */

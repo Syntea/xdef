@@ -53,22 +53,22 @@ public final class TestXComponents extends XDTester {
 		return before.equals(after)? "" : ("Before:\n"+before+"After:\n"+after);
 	}
 
-	/** generate and compile X-components from X-definition sources.
+	/** Generate and compile X-components from X-definition sources.
 	 * @param xdsources array with path names of sources of X-definitions.
 	 */
 	private void genComponents(final String... xdsources) {
-		File f = new File("temp");
+		File f = new File(getTempDir());
 		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath() 
+			throw new RuntimeException(f.getAbsolutePath()
 				+ " is not directory");
 		}
 		f.mkdir();
-		String dir = f.getAbsolutePath().replace('\\', '/');
-		if (!dir.endsWith("/")) {
-			dir += '/';
+		String tempDir = f.getAbsolutePath().replace('\\', '/');
+		if (!tempDir.endsWith("/")) {
+			tempDir += '/';
 		}
 		if (!f.isDirectory()) {
-			throw new RuntimeException('\"' + dir + "\" is not directory");
+			throw new RuntimeException('\"' + tempDir + "\" is not directory");
 		}
 		// ensure that following classes are compiled!
 		TestXComponents_C.class.getClass();
@@ -86,7 +86,7 @@ public final class TestXComponents extends XDTester {
 		try {
 			// generate XComponents from xp
 			ArrayReporter reporter = GenXComponent.genXComponent(xp,
-				dir, "UTF-8", false, true);
+				tempDir, "UTF-8", false, true);
 			reporter.checkAndThrowErrors();
 			// should generate warnings on xdef Y19 and xdef Y20
 			if (reporter.errors()
@@ -96,8 +96,8 @@ public final class TestXComponents extends XDTester {
 				reporter.checkAndThrowErrors();
 			}
 			// compile X-components
-			String classDir = compileSources(dir + "test/xdef/component",
-				dir + "test/xdef/component/s").replace('\\','/');
+			String classDir = compileSources(tempDir + "test/xdef/component",
+				tempDir + "test/xdef/component/s").replace('\\','/');
 			if (!classDir.endsWith("/")) {
 				classDir += '/';
 			}
@@ -110,7 +110,7 @@ public final class TestXComponents extends XDTester {
 			throw ex;
 		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	/** Run test and print error information. */
@@ -738,7 +738,7 @@ public final class TestXComponents extends XDTester {
 			xml = "<A x='X' y='Y'><a b='x'><b/></a></A>";
 			xc = parseXC(xp, "Y09", xml, null, null);
 			assertEq(xml, xc.toXml());
-			assertEq("<a b='x'><b/></a>", 
+			assertEq("<a b='x'><b/></a>",
 				((XComponent) getValueFromGetter(xc, "get$any")).toXml());
 			assertEq("/A", getValueFromGetter(xc, "xGetXPos"));
 			assertEq("/A/a[1]", getValueFromGetter(getValueFromGetter(
@@ -825,7 +825,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(1, getValueFromGetter(
 				getValueFromGetter(getValueFromGetter(
 				getValueFromGetter(getValueFromGetter(xc, "getB"),
-					"getB_1"), "getC"), "getB_2"), "getb"));			
+					"getB_1"), "getC"), "getB_2"), "getb"));
 			s = (String) getValueFromGetter(getValueFromGetter(
 				getValueFromGetter(getValueFromGetter(
 				getValueFromGetter(getValueFromGetter(xc, "getB"),
@@ -958,7 +958,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
 			setValueToSetter(xc, "set$value", null);
-            obj = getObjectField("test.xdef.component.Y21_enum", "y");
+			obj = getObjectField("test.xdef.component.Y21_enum", "y");
 			setValueToSetter(xc, "setb", obj);
 			list = (List) getValueFromGetter(xc, "listOfB");
 			obj = getObjectField("test.xdef.TestXComponents_Y21enum", "b");
@@ -1013,7 +1013,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(new SDatetime("2019-04-01+02:00"),
 				getValueFromGetter(getValueFromGetter(xc,"gete"), "get$value"));
 			sd = new SDatetime("2019-04-02+02:00");
-			setValueToSetter(getValueFromGetter(xc, "gete"), "set$value", sd);			
+			setValueToSetter(getValueFromGetter(xc, "gete"), "set$value", sd);
 			assertTrue(getValueFromGetter(getValueFromGetter(
 				xc,"gete"), "get$value").equals(sd));
 			assertTrue(new SDatetime((Timestamp)getValueFromGetter(
@@ -1024,7 +1024,7 @@ public final class TestXComponents extends XDTester {
 				.equals(sd));
 			assertEq("<d><e>2019-04-02+02:00</e></d>", xc.toXml());
 			sd = new SDatetime("2019-04-03+02:00");
-			setValueToSetter(getValueFromGetter(xc, "gete"), "set$value", sd);			
+			setValueToSetter(getValueFromGetter(xc, "gete"), "set$value", sd);
 			assertEq(sd,
 				getValueFromGetter(getValueFromGetter(xc,"gete"), "get$value"));
 			assertEq("<d><e>2019-04-03+02:00</e></d>", xc.toXml());
@@ -1042,7 +1042,7 @@ public final class TestXComponents extends XDTester {
 			setValueToSetter(xc, "set$value", sd);
 			assertEq(sd, getValueFromGetter(xc,"get$value"));
 			assertEq("<e>2019-04-02+02:00</e>", xc.toXml());
-			
+
 			xml = "<f><g>2019-04-02+02:00</g></f>";
 			xc = parseXC(xp, "Y23", xml, null, reporter);
 			sd = new SDatetime("2019-04-03+02:00");
@@ -1161,7 +1161,6 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		try {
-			//just force compilation
 			xc = parseXC(xp, "SouborD1A",
 				dataDir + "TestXComponent_Z.xml", null, null);
 			list = (List) getValueFromGetter(xc, "listOfZaznamPDN");
@@ -1175,6 +1174,13 @@ public final class TestXComponents extends XDTester {
 			assertEq(xc.toXml(), el);
 			assertEq("", checkXPos(xc));
 		} catch (Exception ex) {fail(ex);}
+
+		// delete temporary files.
+		if (new File(getTempDir()).exists()) {
+			try {
+				SUtils.deleteAll(getTempDir(), true);//delete all generated data
+			} catch (Exception ex) {}
+		}
 
 		resetTester();
 	}
