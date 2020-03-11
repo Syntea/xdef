@@ -248,7 +248,7 @@ public class MyTest_0 extends XDTester {
 			assertEq(125, getValueFromGetter(xc, "jgetitem_1"));
 			assertEq(true, getValueFromGetter(xc, "jgetitem_2"));
 		} catch (Exception ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='a'\n"+
@@ -270,7 +270,6 @@ public class MyTest_0 extends XDTester {
 "}\n" +
 "</xd:json>"+
 "</xd:def>";
-//			xp = XDFactory.compileXD(null, xdef);
 			xp = compile(xdef);
 			json = "{\"Genre\": \"Classic\"}";
 			j = xp.createXDDocument().jparse(json, "a", reporter);
