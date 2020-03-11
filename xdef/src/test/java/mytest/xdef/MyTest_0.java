@@ -220,34 +220,6 @@ public class MyTest_0 extends XDTester {
 		StringWriter strw;
 		Report rep;
 		XComponent xc;
-//		try {
-//			xdef =
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='A | B'>\n" +
-//"<xd:choice name='A'>\n" +
-//"  <A/>\n" +
-//"  <B/>\n" +
-//"</xd:choice>\n" +
-//"<xd:choice name='B'>\n" +
-//"  <C/>\n" +
-//"  <D/>\n" +
-//"</xd:choice>\n" +
-//"</xd:def>";
-//			xp = XDFactory.compileXD(null, xdef);
-////			xp = compile(xdef);
-//			xml = "<A/>";
-//			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
-//			xml = "<B/>";
-//			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
-//			xml = "<C/>";
-//			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
-//			xml = "<D/>";
-//			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
-//		} catch (Exception ex) {fail(ex);}
-//if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='Y'>\n"+

@@ -3085,6 +3085,43 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			assertEq("falsextruefalsetrue", strw.toString());
+// test choice in root specification
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|Z'>\n" +
+"<xd:choice name='A'>\n" +
+"  <A/>\n" +
+"  <B xd:script='match !@a'/>\n" +
+"  <B a='int()'><X/></B>\n" +
+"</xd:choice>\n" +
+"<xd:choice name='B'>\n" +
+"  <C/>\n" +
+"  <D xd:script='match @b' b='int()'><Y/></D>\n" +
+"  <D/>\n" +
+"</xd:choice>\n" +
+"<Z/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<B/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<B a='1'><X/></B>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<C/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<D/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<D b='2'><Y/></D>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<Z/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);			
 		} catch (Exception ex) {fail(ex);}
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
