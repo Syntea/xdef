@@ -39,7 +39,6 @@ import java.lang.reflect.Constructor;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
-//@SuppressWarnings("deprecation") // see setReporter method
 public class XBuilder implements XDBuilder {
 
 	private XPool _xp;

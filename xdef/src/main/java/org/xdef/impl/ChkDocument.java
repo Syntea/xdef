@@ -46,7 +46,6 @@ import org.xdef.proc.XDLexicon;
  * of the X-definition.
  * @author Vaclav Trojan
  */
-//@SuppressWarnings("deprecation") // xcreate(String,String,ReportWriter)
 final class ChkDocument extends ChkNode	implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options

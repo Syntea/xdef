@@ -1,5 +1,10 @@
 package buildtools;
 
+import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
@@ -7,16 +12,12 @@ import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.component.XComponent;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
-import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
-import org.xdef.impl.code.DefOutStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,6 +37,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ import java.util.List;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
-import org.xdef.component.GenXComponent;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -1065,20 +1066,22 @@ public abstract class XDTester extends STester {
 	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param files files with Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
 	 */
-	public static final void compileSources(final File... files) {
+	public static String compileSources(final File... files) {
 		String sources[] = new String[files.length];
 		for (int i = 0; i < files.length; i++) {
 			sources[i] = files[i].getAbsolutePath();
 		}
-		compileSources(sources);
+		return compileSources(sources);
 	}
 
 	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param sources paths of Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
 	 */
-	public static final void compileSources(final String... sources) {
+	public static String compileSources(final String... sources) {
 		// where are compiled classes of X-definitions
 		Class<?> clazz = XDConstants.class;
 		String className = clazz.getName().replace('.', '/') + ".class";
@@ -1125,9 +1128,57 @@ public abstract class XDTester extends STester {
 			throw new RuntimeException("Java compilation failed:\n"
 				+ new String(err.toByteArray()));
 		}
+		return classDir;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Get new instance of object.
+	 * @param name name of class.
+	 * @param params Object where is the filed.
+	 * @return new instance of object.
+	 */
+	public final static Object getNewInstance(String name, Object... params) {
+		try {
+			Class<?> cls = Class.forName(name);
+			Class<?>[] paramTypes = new Class<?>[params.length];
+			for (int i = 0; i < params.length; i++) {
+				paramTypes[i] = params[i].getClass();
+			}
+			Constructor<?> constructor = cls.getConstructor(paramTypes);
+			constructor.setAccessible(true);
+			return constructor.newInstance(params);
+		} catch (Exception ex) {
+			throw new RuntimeException("Constructor not found: " + name);
+		}
+	}
+
+	/** Get value of the field of the class of an object.
+	 * @param className name of class.
+	 * @param name name of filed.
+	 * @return value of field.
+	 */
+	public final static Object getObjectField(String className, String name) {
+		Class<?> cls;
+		try {
+			cls = Class.forName(className);
+		} catch (Exception ex) {
+			throw new RuntimeException("Class not found: " + className);
+		}
+		for (;;) {
+			try {
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				return f.get(null); //static
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		throw new RuntimeException("Field not found: " + name);
+	}
 
 	/** Get value of the field of the class of an object.
 	 * @param o Object where is the filed.
@@ -1136,37 +1187,51 @@ public abstract class XDTester extends STester {
 	 */
 	public final static Object getObjectField(Object o, String name) {
 		Class<?> cls = o.getClass();
-		try {
-			Field f = cls.getDeclaredField(name);
-			f.setAccessible(true);
+		for (;;) {
 			try {
-				return f.get(o);
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				try {
+					return f.get(o);
+				} catch (Exception ex) {
+					return f.get(null); //static
+				}
 			} catch (Exception ex) {
-				return f.get(null); //static
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
 			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Field not found: " + name);
 		}
+		throw new RuntimeException("Field not found: " + name);
 	}
 
 	/** Set to the field of the class of an object.
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
-	 * @param value the value to be set.
+	 * @param v the value to be set.
 	 */
-	public final static void setObjectField(Object o, String name, Object value) {
+	public final static void setObjectField(Object o, String name, Object v) {
 		Class<?> cls = o.getClass();
-		try {
-			Field f = cls.getDeclaredField(name);
-			f.setAccessible(true);
+		for (;;) {
 			try {
-				f.set(o, value);
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				try {
+					f.set(o, v);
+					return;
+				} catch (Exception ex) {
+					f.set(null, v); // static
+					return;
+				}
 			} catch (Exception ex) {
-				f.set(null, value); // static
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
 			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Field not found: " + name);
 		}
+		throw new RuntimeException("Field not found: " + name);
 	}
 
 	/** Invoke a getter on the object.
@@ -1176,42 +1241,55 @@ public abstract class XDTester extends STester {
 	 */
 	public final static Object getValueFromGetter(Object o, String name) {
 		Class<?> cls = o.getClass();
-		try {
-			Method m = cls.getDeclaredMethod(name);
-			m.setAccessible(true);
+		for (;;) {
 			try {
-				return m.invoke(o);
+				Method m = cls.getDeclaredMethod(name);
+				m.setAccessible(true);
+				try {
+					return m.invoke(o);
+				} catch (Exception ex) {
+					return m.invoke(null); //static
+				}
 			} catch (Exception ex) {
-				return m.invoke(null); //static
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
 			}
-		} catch (Exception ex) {
-			throw new RuntimeException("Getter not found: " + name);
 		}
+		throw new RuntimeException("Getter not found: " + name);
 	}
 
 	/** Invoke a setter on the object.
 	 * @param o the object where is setter.
 	 * @param name name of setter.
-	 * @param val value to be set.
+	 * @param v value to be set.
 	 */
-	public final static void setValueToSetter(Object o, String name, Object val) {
-		for (Method m: o.getClass().getDeclaredMethods()) {
-			Class<?>[] params = m.getParameterTypes();
-			if (name.equals(m.getName()) && params!=null && params.length==1) {
-				try {
-					m.setAccessible(true);
+	public final static void setValueToSetter(Object o, String name, Object v) {
+		Class<?> cls = o.getClass();
+		for (;;) {
+			for (Method m: cls.getDeclaredMethods()) {
+				Class<?>[] params = m.getParameterTypes();
+				if (name.equals(m.getName()) && params!=null && params.length==1) {
 					try {
-						m.invoke(o, val);
-						return;
-					} catch (Exception ex) {
-						m.invoke(null, val); // static
-						return;
-					}
-				} catch (Exception ex) {}
+						m.setAccessible(true);
+						try {
+							m.invoke(o, v);
+							return;
+						} catch (Exception ex) {
+							m.invoke(null, v); // static
+							return;
+						}
+					} catch (Exception ex) {}
+				}
+			}
+			cls = cls.getSuperclass();
+			if (cls == null) {
+				break;
 			}
 		}
-		throw new RuntimeException(
-			"Setter " + o.getClass().getName() + '.' + name + " not found");
+		throw new RuntimeException("Setter " + o.getClass().getName() + '.'
+			+ name + " not found");
 	}
 
 	public final static Class<?>[] genXComponent(final String componentDir,
@@ -1224,14 +1302,14 @@ public abstract class XDTester extends STester {
 			Class<?>[] classes = new Class<?>[componentNames.length];
 			for (int i = 0; i < componentNames.length; i++) {
 				try {
-					classes[i] =
+					classes[i] = 
 						Class.forName(packageName+'.' + componentNames[i]);
 				} catch (ClassNotFoundException ex) {
 					File f = new File (
 						componentDir, packageName.replace('.', '/'));
 					f = new File(f, componentNames[i] + ".java");
 					XDTester.compileSources(f);
-					classes[i] =
+					classes[i] = 
 						Class.forName(packageName+'.'+componentNames[i]);
 				}
 			}
@@ -1313,7 +1391,7 @@ public abstract class XDTester extends STester {
 			throw new RuntimeException(
 				"XComponent class not found: " + componentName);
 		}
-		XComponent result =
+		XComponent result = 
 			xp.createXDDocument(xdefName).jparseXComponent(xml, cls, reporter);
 		if (reporter == null) {
 			rep.checkAndThrowErrors();
