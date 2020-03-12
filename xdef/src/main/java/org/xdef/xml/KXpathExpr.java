@@ -6,7 +6,6 @@ import org.xdef.sys.SRuntimeException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.StringParser;
-import java.lang.reflect.Constructor;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
@@ -34,9 +33,9 @@ public class KXpathExpr {
 		XPathFactory x;
 		try {
 			Class<?> cls = Class.forName("net.sf.saxon.xpath.XPathFactoryImpl");
-			Constructor<?> c = cls.getConstructor();
-			Object obj = c.newInstance();
-			x = (XPathFactory) obj;
+			x =(XPathFactory) cls.getDeclaredMethod("newInstance").invoke(null);
+		} catch (Error ex) {
+			x = null;
 		} catch (Exception ex) {
 			x = null;
 		}
