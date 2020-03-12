@@ -33,11 +33,11 @@ import org.xdef.sys.SUtils;
 public class JsonUtil extends StringParser {
 
 	/** Flag to accept comments in JSON. */
-	private boolean _acceptComments; // default value
+	private boolean _acceptComments; // default value = false
 	/** Flag to generate SPositions when parsing JSON. */
-	private boolean _genJObjects; // default value
+	private boolean _genJObjects; // default value = false
 	/** Flag if the parsed data are in X-definition. */
-	private boolean _jdef; // default value
+	private boolean _jdef; // default value = false
 	/** Position of processed item.`*/
 	private SPosition _sPosition;
 
@@ -357,6 +357,21 @@ public class JsonUtil extends StringParser {
 			return _genJObjects ? new XJson.JValue(_sPosition, true) : true;
 		} else if (isToken("false")) {
 			return _genJObjects ? new XJson.JValue(_sPosition, false) : false;
+		} else if (_jdef && isToken(XJson.ANY_NAME)) {
+			isSpacesOrComments();
+			if (isChar(':')) {
+				isSpacesOrComments();
+				Object val = readValue();
+				if (!(val instanceof XJson.JValue)
+					|| (((XJson.JValue) val).getValue() instanceof String)) {
+					//After ":" in the command $any must follow a string value
+					error(JSON.JSON021);
+				} else {
+					return new XJson.JAny(
+						_sPosition, ((XJson.JValue) val).getSBuffer());
+				}
+			}
+			return new XJson.JAny(_sPosition, null);
 		} else {
 			boolean minus = isChar('-');
 			boolean plus = !minus && isChar('+');

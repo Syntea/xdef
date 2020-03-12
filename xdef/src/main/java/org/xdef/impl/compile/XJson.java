@@ -17,17 +17,23 @@ import org.xdef.sys.SPosition;
  */
 public class XJson extends JsonToXml {
 
-	/** This is the special character used for the X-script specification. */
+	/** This is the special character used for the $script specification. */
 	public static final String SCRIPT_KEY = "]";
 
-	/** This is the special character used for the xd:choice specification. */
+	/** This is the special character used for the $oneOf specification. */
 	public static final String ONEOF_KEY = ")";
 
-	/** This keyword used for the X-script specification. */
+	/** This keyword used for the &script specification in X-definition. */
 	public static final String SCRIPT_NAME = "$script";
 
-	/** This keyword used for the xd:choice specification. */
+	/** This keyword used for the $oneOf specification in X-definition. */
 	public static final String ONEOF_NAME = "$oneOf";
+
+	/** This keyword used for $any specification in X-definition. */
+	public static final String ANY_NAME = "$any";
+
+	/** This is the special character used for the $any specification. */
+	public static final String ANY_KEY = ")";
 
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix = XDConstants.XDEF_NS_PREFIX;
@@ -617,6 +623,19 @@ public class XJson extends JsonToXml {
 		public JOneOf(final SPosition position, final JValue val) {
 			_position = position;
 			_val = val != null ? val.getSBuffer() : null;
+		}
+		public SBuffer getSBuffer() {return _val;}
+		public SPosition getPosition() {return _position;}
+		@Override
+		public String toString() {return _val==null ? "null" : _val.toString();}
+	}
+
+	public static class JAny {
+		private final SPosition _position; // SPosition of parsed object
+		private final SBuffer _val; // parsed object
+		public JAny(final SPosition position, final SBuffer val) {
+			_position = position;
+			_val = val != null ? val : null;
 		}
 		public SBuffer getSBuffer() {return _val;}
 		public SPosition getPosition() {return _position;}
