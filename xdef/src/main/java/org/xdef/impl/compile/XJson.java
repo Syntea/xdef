@@ -23,7 +23,7 @@ public class XJson extends JsonToXml {
 	/** This is the special character used for the $oneOf specification. */
 	public static final String ONEOF_KEY = ")";
 
-	/** This keyword used for the &script specification in X-definition. */
+	/** This keyword used for the $script specification in X-definition. */
 	public static final String SCRIPT_NAME = "$script";
 
 	/** This keyword used for the $oneOf specification in X-definition. */
