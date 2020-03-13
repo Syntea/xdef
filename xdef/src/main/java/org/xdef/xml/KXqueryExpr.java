@@ -1,7 +1,6 @@
 package org.xdef.xml;
 
 import org.xdef.sys.SRuntimeException;
-import java.lang.reflect.Constructor;
 import java.util.TimeZone;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Node;
@@ -22,9 +21,8 @@ public class KXqueryExpr implements KXquery {
 		KXquery x;
 		try {
 			Class<?> cls = Class.forName(
-				"org.xdef.impl.saxon.XQuerySaxonExpr");
-			Constructor<?> c = cls.getConstructor();
-			x = (KXquery) c.newInstance();
+				"cz.syntea.xdef.impl.saxon.XQuerySaxonExpr");
+			x = (KXquery) cls.getConstructor().newInstance();
 		} catch (Error ex) {
 			x = null;
 		} catch (Exception ex) {

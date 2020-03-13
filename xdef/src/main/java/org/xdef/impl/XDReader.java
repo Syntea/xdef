@@ -92,6 +92,9 @@ public final class XDReader extends SObjectReader {
 		} catch (ClassNotFoundException ex) {
 			//Internal error&{0}{: }
 			throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex);
+		} catch (Error ex) {
+			//Internal error&{0}{: }
+			throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex);
 		}
 	}
 
