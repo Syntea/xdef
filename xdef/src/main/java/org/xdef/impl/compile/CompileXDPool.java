@@ -559,7 +559,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
 		SBuffer scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
-		boolean local = false;
+		boolean local = nodei._xdef!=null
+			&& nodei._xdef.getXDVersion() >= XConstants.XD40;
 		if (scope != null) {
 			String s = scope.getString();
 			local = ("local".equals(s));
