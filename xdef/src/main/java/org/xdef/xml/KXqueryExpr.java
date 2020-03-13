@@ -20,12 +20,11 @@ public class KXqueryExpr implements KXquery {
 	static {
 		KXquery x;
 		try {
-			Class<?> cls = Class.forName(
-				"cz.syntea.xdef.impl.saxon.XQuerySaxonExpr");
+			Class<?> cls = Class.forName("org.xdef.impl.saxon.XQuerySaxonExpr");
 			x = (KXquery) cls.getConstructor().newInstance();
-		} catch (Error ex) {
-			x = null;
 		} catch (Exception ex) {
+			x = null;
+		} catch (Error ex) {
 			x = null;
 		}
 		XDS = x;
