@@ -1,6 +1,5 @@
 package org.xdef.xml;
 
-import java.lang.reflect.Constructor;
 import org.xdef.impl.xml.KNodeList;
 import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
