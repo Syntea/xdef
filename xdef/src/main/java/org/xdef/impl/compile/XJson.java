@@ -179,19 +179,21 @@ public class XJson extends JsonToXml {
 			if (!isSpacesOrComments()) {}
 		}
 		final String[] tokens =
-			{"optional", "?", "*", "required", "ignore", "illegal"};
+			{"optional", "?", "*", "+", "required", "ignore", "illegal"};
 		switch (isOneOfTokens(tokens)) {
 			case  0:
 			case  1:
 				return new XOccurrence(0, 1); // optional
 			case  2:
-				return new XOccurrence(1, Integer.MAX_VALUE); // unbounded
+				return new XOccurrence(0, Integer.MAX_VALUE); // unbounded
 			case  3:
-				return new XOccurrence(1, 1); // required
+				return new XOccurrence(1, Integer.MAX_VALUE); // one or more
 			case  4:
+				return new XOccurrence(1, 1); // required
+			case  5:
 				return new XOccurrence(
 					XOccurrence.IGNORE,Integer.MAX_VALUE); // ignore
-			case  5:
+			case  6:
 				return new XOccurrence(XOccurrence.ILLEGAL, 0); // illegal
 		}
 		if (isInteger()) {
