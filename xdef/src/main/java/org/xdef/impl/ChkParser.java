@@ -355,8 +355,7 @@ final class ChkParser extends DomBaseHandler {
 	private void updateLocator() {
 		if (_locator != null) {
 			_elemLocator = new SPosition(_locator.getLineNumber(),
-				_locator.getColumnNumber(), _sysId,
-				_locator.getPublicId());
+				_locator.getColumnNumber(), _sysId, _locator.getPublicId());
 		}
 	}
 
@@ -561,14 +560,10 @@ final class ChkParser extends DomBaseHandler {
 	}
 
 	@Override
-	public void startEntity(String name) {
-		updateLocator();
-	}
+	public void startEntity(String name) {updateLocator();}
 
 	@Override
-	public void endEntity(String name) {
-		updateLocator();
-	}
+	public void endEntity(String name) {updateLocator();}
 
 	@Override
 	public void startCDATA() {updateLocator();}

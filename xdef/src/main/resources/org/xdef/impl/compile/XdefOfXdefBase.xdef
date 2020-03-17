@@ -571,7 +571,7 @@ TypeDeclarationBody ::= TypeExplicitCode | Expression
   /* Expression or TypeExplicitCode must return either
      a boolean or a ParseResult value.*/
 
-TypeExplicitCode ::= /* X-defintion version 2.0 */
+TypeExplicitCode ::= /* only X-defintion version 2.0 */
   ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}")
   | /* X-defintion version 3.1 and higher */ ExplicitCode
 

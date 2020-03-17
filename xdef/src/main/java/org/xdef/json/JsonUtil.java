@@ -253,6 +253,7 @@ public class JsonUtil extends StringParser {
 				return result;
 			}
 			boolean wasScript = false;
+			boolean wasErrorReported = false;
 			while(!eos()) {
 				int i;
 				if (!wasScript &&_jdef
@@ -305,10 +306,14 @@ public class JsonUtil extends StringParser {
 						return result;
 					}
 				} else {
-					if (eos()) {
+					if (wasErrorReported) {
 						break;
 					}
 					error(JSON.JSON002,",","]"); //"&{0}"&{1}{ or "}{"} expected
+					if (eos()) {
+						break;
+					}
+					wasErrorReported = true;
 				}
 			}
 			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected

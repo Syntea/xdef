@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 32.5.7, release-date 2020-03-06
+# Version 40.0.0, release-date 2020-03-17
 * corrected invoking methods in referred types.
-* improved JSON implementation.
+* JSON implementation.
+* xd:root may refer also to named xd:choice.
 
 # Version 32.5.6, release-date 2020-02-15
 * implemented possibility of processing of JSON data in X-definition. This
