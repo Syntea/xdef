@@ -89,7 +89,7 @@ public class XComponentUtil {
 
 	/** Create the new XML element from XComponent according to model.
 	 * @param xc XComponent.
-	 * @param xd XDocument for creation on new Element.
+	 * @param xd XDDocument for creation on new Element.
 	 * @param modelName name of model to be created.
 	 * @return new Element.
 	 */
@@ -128,7 +128,7 @@ public class XComponentUtil {
 
 	/** Create the JSON object from XComponent according to model.
 	 * @param xc XComponent.
-	 * @param xd XDocument for creation on new Element.
+	 * @param xd XDDocument for creation on new Element.
 	 * @param modelName name of model to be created.
 	 * @return JSON object created from XComponent according to model..
 	 */
@@ -166,7 +166,7 @@ public class XComponentUtil {
 
 	/** Create XComponent from XComponent according to model.
 	 * @param xc XComponent.
-	 * @param xd XDocument for creation on new Element.
+	 * @param xd XDDocument for creation on new Element.
 	 * @param modelName name of model to be created.
 	 * @return new XComponent.
 	 */
