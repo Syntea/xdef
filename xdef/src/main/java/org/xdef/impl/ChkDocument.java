@@ -31,6 +31,8 @@ import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
@@ -1091,8 +1093,22 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final Object jsonData,
 		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		// Check if exists JSON root model and set xdVersion (xe._json != 0)
-		XNode xn = _xdef._rootSelection.get(model);
+		XNode xn = null;
+		if (model == null || model.trim().isEmpty()) {
+			for (XNode x: _xdef._rootSelection.values()) {
+				if (x.getKind() == XMNode.XMELEMENT
+					&& ((XElement) x)._json != 0
+					&& (jsonData instanceof List
+					&& "array".equals(x.getLocalName()))
+					|| (jsonData instanceof Map
+					&& "map".equals(x.getLocalName()))) {
+					xn = x;
+					break;
+				}
+			}
+		} else { 
+			xn = _xdef._rootSelection.get(model);
+		}
 		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
 			XElement xe = (XElement) xn;
 			if (xe._json != 0) {
