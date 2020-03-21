@@ -10,8 +10,8 @@ import javax.xml.namespace.QName;
 public interface XMNode extends XMOccurrence {
 	/** X-definition ID. */
 	public static final short XMDEFINITION = 1;
-	/** Model of XML element ID. */
-	public static final short XMDOCUMENT = 2;
+//	/** Model of XML element ID - reserved. */
+//	public static final short XMDOCUMENT = 2;
 	/** Model of XML element ID. */
 	public static final short XMELEMENT = 3;
 	/** Model of Text ID. */

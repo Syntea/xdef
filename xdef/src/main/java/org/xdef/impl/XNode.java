@@ -188,8 +188,6 @@ public abstract class XNode implements XMNode {
 		switch (kind) {
 			case -1:
 				return list.get(xr.readInt());
-			case XMDOCUMENT:
-				return XDocument.readXDocument(xr, xd, list);
 			case XMATTRIBUTE:
 				return XData.readXData(xr, XMATTRIBUTE, xd);
 			case XMCOMMENT:
