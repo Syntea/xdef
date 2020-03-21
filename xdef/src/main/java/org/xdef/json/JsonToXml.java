@@ -40,7 +40,7 @@ public class JsonToXml extends JsonUtil {
 	/** Prefix of JSON namespace. */
 	public String _jsPrefix = XDConstants.JSON_NS_PREFIX;
 	/** JSON namespace. */
-	public String _jsNamespace = XDConstants.JSON_NS_URI;
+	public String _jsNamespace = XDConstants.JSON_NS_URI_XD;
 
 	/** Document used to create X-definition. */
 	private Document _doc;

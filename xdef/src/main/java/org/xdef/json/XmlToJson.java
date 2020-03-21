@@ -340,7 +340,7 @@ class XmlToJson extends JsonToXml {
 			_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 			_isW3C = true;
 		} else {
-			_jsNamespace = XDConstants.JSON_NS_URI;
+			_jsNamespace = XDConstants.JSON_NS_URI_XD;
 			_isW3C = false;
 		}
 		return getJsonObject(e);
