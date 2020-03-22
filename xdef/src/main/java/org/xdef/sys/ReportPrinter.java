@@ -486,7 +486,6 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			throw new SRuntimeException(SYS.SYS036, ex);
 		}
 		try {ln.close();}catch (Exception ex) {}
-		try {out.close();}catch (Exception ex) {}
 	}
 
 	/** print message and help information and finish program.
@@ -579,11 +578,11 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			printUsage("Error: " + ex);
 		}
 		try {frr.close();} catch (Exception ex) {}
-		try {
-			if (outputFname != null) {
-				out.close();
-			}
-		} catch (Exception ex) {}
+		if (outputFname != null) {
+			try {out.close();} catch (Exception ex) {}
+		} else {
+			out.flush();
+		}
 	}
 
 }
