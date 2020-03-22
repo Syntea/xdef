@@ -578,8 +578,12 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		} catch (Exception ex) {
 			printUsage("Error: " + ex);
 		}
-		try {out.close();} catch (Exception ex) {}
 		try {frr.close();} catch (Exception ex) {}
+		try {
+			if (outputFname != null) {
+				out.close();
+			}
+		} catch (Exception ex) {}
 	}
 
 }
