@@ -996,7 +996,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	/** Parse and process JSON source and return JSON object.
 	 * @param jsonData string with pathname of JSON file or JSON source data.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -1004,15 +1003,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * was reported.
 	 */
 	public final Object jparse(final String jsonData,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jparse(JsonUtil.parse(jsonData), model, reporter);
+		return jparse(JsonUtil.parse(jsonData), reporter);
 	}
 
 	@Override
 	/** Parse and process JSON source and return JSON object.
 	 * @param jsonData file with JSON source data.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -1020,15 +1017,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * was reported.
 	 */
 	public final Object jparse(final File jsonData,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jparse(JsonUtil.parse(jsonData), model, reporter);
+		return jparse(JsonUtil.parse(jsonData), reporter);
 	}
 
 	@Override
 	/** Parse and process JSON source and return JSON object.
 	 * @param jsonData URL with JSON source data.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -1036,16 +1031,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * was reported.
 	 */
 	public final Object jparse(final URL jsonData,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jparse(JsonUtil.parse(jsonData), model, reporter);
+		return jparse(JsonUtil.parse(jsonData), reporter);
 	}
 
 	@Override
 	/** Parse and process JSON data and return processed JSON object.
 	 * @param jsonData input stream with JSON data.
 	 * @param sourceId name of source or <tt>null</tt>.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -1054,15 +1047,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jparse(final InputStream jsonData,
 		final String sourceId,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jparse(JsonUtil.parse(jsonData, sourceId), model, reporter);
+		return jparse(JsonUtil.parse(jsonData, sourceId), reporter);
 	}
 
 	@Override
 	/** Parse and process XML data with JSON model.
 	 * @param xmlData org.w3c.dom.Document or org.w3c.dom.Element.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -1070,7 +1061,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * was reported.
 	 */
 	public final Object jparse(final Node xmlData,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
 		Element e;
 		if (xmlData instanceof Document) {
@@ -1078,67 +1068,54 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else {
 			e = (Element) xmlData;
 		}
-		return jparse(JsonUtil.xmlToJson(e), model, reporter);
+		return jparse(JsonUtil.xmlToJson(e), reporter);
 	}
 
 	@Override
 	/** Parse and process JSON data and return processed JSON object.
 	 * @param jsonData JSON data.
-	 * @param model qualified name of JSON root model.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeExcception if model is not found.
 	 */
 	public final Object jparse(final Object jsonData,
-		final String model,
 		final ReportWriter reporter) throws SRuntimeException {
-		XNode xn = null;
-		if (model == null || model.trim().isEmpty()) {
-			for (XNode x: _xdef._rootSelection.values()) {
-				if (x.getKind() == XMNode.XMELEMENT
-					&& ((XElement) x)._json != 0
-					&& (jsonData instanceof List
-					&& "array".equals(x.getLocalName()))
-					|| (jsonData instanceof Map
-					&& "map".equals(x.getLocalName()))) {
-					xn = x;
-					break;
-				}
-			}
-		} else { 
-			xn = _xdef._rootSelection.get(model);
-		}
-		if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
-			XElement xe = (XElement) xn;
-			if (xe._json != 0) {
-				_xElement = xe;
-				Element e = xe._json == XConstants.JSON_MODE
-					? JsonUtil.jsonToXml(jsonData)
-					: JsonUtil.jsonToXmlXdef(jsonData);
-				if (xe._childNodes.length > 0
+		Element e = JsonUtil.jsonToXml(jsonData);
+		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
+			: new QName(e.getNamespaceURI(), e.getLocalName());
+		_xElement = null;
+		for (XNode x: _xdef._rootSelection.values()) {
+			if (x.getKind() == XMNode.XMELEMENT) {
+				XElement xe = (XElement) x;
+				if (xe.getJsonMode() != 0) {
+					if (qName.equals(xe.getQName())) {
+						_xElement = xe;
+						break;
+					}
+				} else if (xe._childNodes.length > 0
 					&& xe._childNodes[0].getKind() == XMNode.XMCHOICE) {
 					// XMChoice is root of JSON model of XML
 					XChoice xch = (XChoice) xe._childNodes[0];
-					String url = e.getNamespaceURI();
-					QName eQname = url == null ? new QName(e.getTagName())
-						: new QName(url, e.getLocalName());
-					for (int i = xch.getBegIndex()+1; i<xch.getEndIndex(); i++){
+					for (int i = xch.getBegIndex()+1;
+						i<xch.getEndIndex(); i++){
 						XNode y = xe._childNodes[i];
 						if (y.getKind() == XMNode.XMELEMENT) {
-							if (y.getQName().equals(eQname)) {
+							if (y.getQName().equals(qName)) {
 								_xElement = (XElement) y;
 								break;
 							}
 						}
 					}
 				}
-				xparse(e, reporter);
-				return JsonUtil.xmlToJson(_element);
 			}
 		}
-		//JSON model &{0}{"}{" }is missing in X-definition
-		throw new SRuntimeException(XDEF.XDEF315, model);
+		if (_xElement != null) {
+			xparse(e, reporter);
+			return JsonUtil.xmlToJson(_element);
+		}
+		//JSON root model&{0}{ of "}{" } is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
 	}
 
 	@Override

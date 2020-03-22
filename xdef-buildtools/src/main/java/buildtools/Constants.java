@@ -4,7 +4,7 @@ package buildtools;
 /** Constants for preprocessing.
  * @author Vaclav Trojan
  */
-public interface GenConstants {
+public interface Constants {
 	public static final String JAVA_SOURCE_CHARSET = "UTF-8";
 //	public static final String DEBUG = "NODEBUG";
 	public static final String DEBUG = "DEBUG";
