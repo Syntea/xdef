@@ -1,5 +1,6 @@
 package test.xdef;
 
+import static buildtools.STester.runTest;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
@@ -14,6 +15,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 import buildtools.XDTester;
+import static buildtools.XDTester._xdNS;
+import static buildtools.XDTester.getValueFromGetter;
+import static buildtools.XDTester.setValueToSetter;
 import java.util.List;
 import org.xdef.json.JsonToXml;
 
@@ -222,7 +226,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parse with jparse
 			try {
-				Object o = xd.jparse(json, "a", null);
+				Object o = xd.jparse(json, null);
 				if (!JsonUtil.jsonEqual(json, o)) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + "\n"
@@ -289,7 +293,7 @@ public class TestJsonXdef extends XDTester {
 		for (File f: SUtils.getFileGroup(_dataDir+"Test"+id+"*.jerr")) {
 			try {
 				reporter.clear();
-				xd.jparse(f, "a", reporter);
+				xd.jparse(f, reporter);
 				if (!reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error not reported: "+f.getName();
@@ -464,10 +468,10 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
-			j = xp.createXDDocument().jparse(json, "json", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
 			json = "{}";
-			j = xp.createXDDocument().jparse(json, "json", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -477,10 +481,10 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
-			j = xp.createXDDocument().jparse(json, "json", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
 			json = "{}";
-			j = xp.createXDDocument().jparse(json, "json", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
@@ -497,7 +501,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			json = "[{\"a\":true},\"x\",-1]";
-			j = xp.createXDDocument().jparse(json, "json", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
@@ -505,7 +509,7 @@ public class TestJsonXdef extends XDTester {
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
-			j = xp.createXDDocument().jparse(json, "B", reporter);
+			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
@@ -522,7 +526,7 @@ public class TestJsonXdef extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(strw);
 			json = "[123]";
-			j = xd.jparse(json, "B", reporter);
+			j = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));
 			assertEq("axb", strw.toString());
