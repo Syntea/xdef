@@ -1,4 +1,4 @@
-<js:array xmlns:js='http://www.xdef.org/json/3.2'>
+<js:array xmlns:js='http://www.xdef.org/json/4.0'>
   <a x="1" y="true"/>
   <js:array>
     <b y="x"/>

@@ -129,7 +129,7 @@ public interface XDConstants {
 	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
 	public static final String JSON_NS_PREFIX = "js";
 	/** URI of JSON/XML X-definition conversion. */
-	public static final String JSON_NS_URI_XD = "http://www.xdef.org/json/3.2";
+	public static final String JSON_NS_URI_XD = "http://www.xdef.org/json/4.0";
 	/** URI of JSON/XML W3C conversion (https://www.w3.org/TR/xslt-30/#json). */
 	public static final String JSON_NS_URI_W3C =
 		"http://www.w3.org/2005/xpath-functions";
