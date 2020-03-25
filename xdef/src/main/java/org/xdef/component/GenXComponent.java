@@ -10,7 +10,6 @@ import org.xdef.XDPool;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -510,9 +509,7 @@ public final class GenXComponent {
 			XDPool x = XDFactory.compileXD(null, xdefs);
 			genXComponent(x, xcDir.getCanonicalPath(), encoding,javadoc, false);
 			if (xpFile != null) {
-				ObjectOutputStream oos = new ObjectOutputStream(xpFile);
-				oos.writeObject(x);
-				oos.close();
+				XDFactory.writeXDPool(xpFile, x);
 			}
 		} catch (RuntimeException ex) {
 			throw ex;

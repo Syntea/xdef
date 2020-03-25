@@ -33,8 +33,6 @@ import org.w3c.dom.Element;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
 import org.xdef.impl.util.gencollection.XDGenCollection;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -225,21 +223,14 @@ public abstract class XDTester extends STester {
 		if (!_genObj) {return xp;}
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(xp);
-			oos.close();
-			ObjectInputStream ois = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			XDPool xp1 = (XDPool) ois.readObject();
-			ois.close();
+			XDFactory.writeXDPool(baos, xp);
+			ByteArrayInputStream bais = 
+				new ByteArrayInputStream(baos.toByteArray());
+			XDPool xp1 = XDFactory.readXDPool(bais);
 			baos = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(baos);
-			oos.writeObject(xp1);
-			oos.close();
-			ois = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			xp1 = (XDPool) ois.readObject();
-			ois.close();
+			XDFactory.writeXDPool(baos, xp1);
+			bais = new ByteArrayInputStream(baos.toByteArray());
+			xp1 =  XDFactory.readXDPool(bais);
 			return xp1;
 		} catch(RuntimeException e) {
 			throw e;

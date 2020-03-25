@@ -14,12 +14,9 @@ import org.xdef.XDPool;
 import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefOutStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import org.xdef.sys.SRuntimeException;
 
 /** Validation of XML document with given X-definition.
  * <p>
@@ -184,23 +181,13 @@ public class XValidate {
 				return null;
 			}
 		} else if (poolFile != null) {
-			ObjectInputStream inpool = null;
 			try {
-				inpool = new ObjectInputStream(new FileInputStream(poolFile));
-				xp = (XDPool) inpool.readObject();
-				inpool.close();
+				xp = XDFactory.readXDPool(poolFile);
 			} catch (Exception ex) {
 				if (ex instanceof SThrowable) {
 					repw.putReport(((SThrowable)ex).getReport());
 				} else {
 					repw.fatal(SYS.SYS036, ex); //Program exception &{0}
-				}
-				if (inpool != null) {
-					try {
-						inpool.close();
-					} catch (Exception exx) {//Program exception &{0}
-						throw new SRuntimeException(SYS.SYS036, exx);
-					}
 				}
 				return null;
 			}

@@ -81,6 +81,28 @@ public class SUtils extends FUtils {
 	private static final Map<String, String> LANGUAGES =
 		 new LinkedHashMap<String, String>();
 
+	/** Get X-definition version ID.
+	 * @param ver string with version.
+	 * @return version as a long integer or -1 if an error occurs.
+	 */
+	public static final long getXDVersionID(final String ver) {
+		String[] verParts = ver.split("\\."); // verion parts
+		long x;
+		if (verParts.length == 3) {
+			x = Integer.parseInt(verParts[0]);
+			x = (x / 10) * 100 + (x % 10);
+			x = x * 1000 + Integer.parseInt(verParts[1]);
+			return x * 1000 + Integer.parseInt(verParts[2]);
+		} else if (verParts.length==4) {
+			x = Integer.parseInt(verParts[0]) * 100
+				+ Integer.parseInt(verParts[1]);
+			x = x * 1000 + Integer.parseInt(verParts[2]);
+			return x * 1000 + Integer.parseInt(verParts[3]);
+		} else {
+			return -1;
+		}
+	}
+
 	/** Encodes a byte array to hexadecimal format, no blanks or line breaks
 	 * are inserted.
 	 * @param bytes The array of bytes to be encoded.

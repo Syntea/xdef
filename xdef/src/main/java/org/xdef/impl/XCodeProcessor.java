@@ -2155,23 +2155,6 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				case GET_XPOS://get actual xpath position
 					_stack[++sp] = new DefString(chkNode.getXPos());
 					continue;
-				case GET_XQUERY_FROM_SOURCE: {//get source object via xquery
-					Object obj = chkNode.getCreateContext();
-					Element elem;
-					if (item.getParam() == 2) {
-						elem = _stack[--sp].getElement();
-						_stack[sp] = _stack[sp + 1];
-						_stack[sp + 1] = null;
-					} else if (obj != null && (obj instanceof Element)) {
-						elem = (Element) obj;
-					} else {
-						elem = chkNode.getElemValue();
-					}
-					_stack[sp] = (elem != null)
-						? ((DefXQueryExpr) _stack[sp]).exec(elem, chkNode)
-						: new DefContainer();
-					continue;
-				}
 				case GET_XQUERY: {//execute xquery
 					Node node;
 					if (item.getParam() == 1) {

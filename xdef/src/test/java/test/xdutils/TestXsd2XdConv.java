@@ -1,17 +1,11 @@
 package test.xdutils;
 
 import org.xdef.XDDocument;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.util.XsdToXdef;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -109,16 +103,7 @@ public class TestXsd2XdConv extends XDTester {
 			return false;
 		}
 		try {
-			Properties props = new Properties();
-			props.put("xdef.warnings", "true");
-			XDPool xdPool = XDFactory.compileXD(props, xdefFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(xdPool);
-			out.close();
-			ObjectInputStream in = new ObjectInputStream(
-				new ByteArrayInputStream(baos.toByteArray()));
-			xdPool = (XDPool) in.readObject();
+			XDPool xdPool = compile(xdefFile);
 			if (!xdPool.exists(testName)) {
 				setMessage(new ErrMessage(
 					"Main XDefinition is missing", xdefFile, null));

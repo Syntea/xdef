@@ -1,6 +1,8 @@
 package test.xdef;
 
+import static buildtools.STester.runTest;
 import buildtools.XDTester;
+import static buildtools.XDTester._xdNS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
@@ -41,11 +43,11 @@ public class TestSaxon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
 "<root>\n"+
-" <xd:sequence xd:script=\"occurs *; create fromXQ('//a')\">\n"+
-"  <a a = \"required string; create fromXQ('@A')\">\n"+
-"    <b xd:script=\"occurs *; create fromXQ('B')\"\n"+
-"       x = \"required string; create fromXQ('@c')\"\n"+
-"       y = \"required string; create fromXQ('@d')\"/>\n"+
+" <xd:sequence xd:script=\"occurs *; create xquery('//a')\">\n"+
+"  <a a = \"required string; create xquery('@A')\">\n"+
+"    <b xd:script=\"occurs *; create xquery('B')\"\n"+
+"       x = \"required string; create xquery('@c')\"\n"+
+"       y = \"required string; create xquery('@d')\"/>\n"+
 "  </a>\n"+
 " </xd:sequence>\n"+
 "</root>\n"+
@@ -200,74 +202,60 @@ public class TestSaxon extends XDTester {
 			assertErrors(reporter);
 		} catch(Exception ex) {fail(ex);}
 		try {
+			xml =
+"<les>\n"+
+"  <zvirata>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>kralovna</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>samec</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>samec</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>vojak</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>kralovna</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>vojak</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>vojak</kasta>\n"+
+"    </hmyz>\n"+
+"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
+"      <rod>mravenec</rod>\n"+
+"      <kasta>vojak</kasta>\n"+
+"    </hmyz>\n"+
+"  </zvirata>\n"+
+"  <objekty>\n"+
+"    <mraveniste jmeno=\"vedleJahody\" />\n"+
+"    <mraveniste jmeno=\"podSmrkem\" />\n"+
+"  </objekty>\n"+
+"</les>";
+			//mraveniste, kde jsou vic nez dva vojaci
 			xdef =
 "<xd:def xmlns:xd='"+ _xdNS + "'>\n"+
-"\n"+
 "  <mraveniste jmeno='string; create xquery(&apos;\n"+
 "    for $i in (//mraveniste)\n"+
 "      return $i[count(//hmyz[kasta/text() = \"vojak\" and\n"+
 "                 @mraveniste = $i/@jmeno]) > 2]/@jmeno\n"+
 "               &apos;)' />\n"+
-"\n"+
 "</xd:def>";
-
-			xp = compile(xdef);
-			xml =
-"<les>\n"+
-"\n"+
-"  <zvirata>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>kralovna</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>samec</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>samec</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>kralovna</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\"\n"+
-"      mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"  </zvirata>\n"+
-"\n"+
-"  <objekty>\n"+
-"    <mraveniste jmeno=\"vedleJahody\" />\n"+
-"    <mraveniste jmeno=\"podSmrkem\" />\n"+
-"  </objekty>\n"+
-"\n"+
-"</les>";
-			xd = xp.createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xd.setXDContext(KXmlUtils.parseXml(xml).getDocumentElement());
-			//mraveniste, kde jsou vic nez dva vojaci
-			el = xd.xcreate("mraveniste", reporter);
+			el = create(xd, "mraveniste", reporter);
+			assertNoErrors(reporter);
 			assertTrue("podSmrkem".equals(el.getAttribute("jmeno")),
 				el.getAttribute("jmeno"));
 		} catch (Exception ex) {fail(ex);}

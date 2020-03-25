@@ -8,8 +8,6 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.util.XValidate;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import org.xdef.sys.ReportReader;
 import buildtools.XDTester;
 
@@ -84,10 +82,7 @@ public class TestValidate extends XDTester {
 			new File(getTempDir() + "TestValidate2.log").delete();
 			new File(getTempDir()).delete();
 			XDPool xp =	XDFactory.compileXD(null, dataDir+"TestValidate.xdef");
-			ObjectOutputStream outpool = new ObjectOutputStream(
-				new FileOutputStream(getTempDir() + "TestValidate3.xp"));
-			outpool.writeObject(xp);
-			outpool.close();
+			XDFactory.writeXDPool(getTempDir() + "TestValidate3.xp", xp);
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate2.xml",
 				"-p", getTempDir() + "TestValidate3.xp",
 				"-x", "Test1",

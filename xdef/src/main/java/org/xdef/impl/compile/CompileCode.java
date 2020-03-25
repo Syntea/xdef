@@ -2168,7 +2168,7 @@ public final class CompileCode extends CompileBase {
 					}
 				}
 				break;
-			case GET_XQUERY_FROM_SOURCE:
+			case GET_XQUERY:
 				if (npar == 1 || npar == 2) {
 					int cnstLast = _cstack[_sp];
 					if (_tstack[_sp] != XD_STRING) {
