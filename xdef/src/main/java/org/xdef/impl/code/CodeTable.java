@@ -519,10 +519,8 @@ public interface CodeTable {
 	static final short RESULTSET_NEXT = HAS_RESULTSET_NEXT + 1;
 	/** Get number of processed items from ResultSet. */
 	static final short GET_RESULTSET_COUNT = RESULTSET_NEXT + 1;
-	/** Get XQuery from source element. */
-	static final short GET_XQUERY_FROM_SOURCE = GET_RESULTSET_COUNT + 1;
 	/** get actual XPath position. */
-	static final short GET_XPOS = GET_XQUERY_FROM_SOURCE + 1;
+	static final short GET_XPOS = GET_RESULTSET_COUNT + 1;
 	/** Call compose method. */
 	static final short COMPOSE_OP = GET_XPOS + 1;
 	////////////////////////////////////////////////////////////////////////////

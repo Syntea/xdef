@@ -14,9 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Map;
+import org.xdef.XDFactory;
 
 /** Provides tools for connection of an external editor of X-definitions.
  * @author Vaclav Trojan
@@ -54,10 +53,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			resultFile.deleteOnExit();
 			resultFile.delete();
 			// write XDPool files
-			ObjectOutputStream outpool =
-				new ObjectOutputStream(new FileOutputStream(poolFile));
-			outpool.writeObject(xpool);
-			outpool.close();
+			XDFactory.writeXDPool(poolFile, xpool);
 			FileReportWriter frw = new FileReportWriter(reportFile);
 			reporter.writeReports(frw);
 			frw.close();
@@ -137,15 +133,11 @@ public abstract class ExternalXDEditor implements XEditor {
 		throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
-		ObjectInputStream inpool =
-			new ObjectInputStream(new FileInputStream(pool));
 		try {
-			XDPool result = (XDPool) inpool.readObject();
+			XDPool result = XDFactory.readXDPool(pool);
+			pool.delete();
 			return result;
-		} catch (ClassNotFoundException ex) {
-			throw new IOException(ex);
 		} finally {
-			inpool.close();
 			pool.delete();
 		}
 	}

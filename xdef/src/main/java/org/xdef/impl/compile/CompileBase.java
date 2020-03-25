@@ -629,12 +629,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			0, 2, XD_ANY, XD_STRING),"from");
 		method(ti, genInternalMethod(FROM_ELEMENT, XD_CONTAINER,
 			ELEMENT_MODE, 1, 1, XD_ELEMENT), "fromElement");
-		if (DefXQueryExpr.isXQueryImplementation()) {
-			method(ti, genInternalMethod(GET_XQUERY_FROM_SOURCE,
-				XD_CONTAINER,
-				(byte) (TEXT_MODE + ELEMENT_MODE), 1, 2,
-				XD_ANY, XD_STRING), "fromXQ");
-		}
 		method(ti, genInternalMethod(GET_ATTR, XD_STRING,
 			(byte) (TEXT_MODE + ELEMENT_MODE), 1, 2,
 			XD_STRING, XD_STRING), "getAttr");
@@ -765,7 +759,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 2, XD_STRING,XD_ANY), "xpath");
 		if (DefXQueryExpr.isXQueryImplementation()) {
 			method(ti, genInternalMethod(GET_XQUERY, XD_CONTAINER,
-				ANY_MODE, 1, 2, XD_STRING,XD_ANY), "xquery");
+				ANY_MODE, 1, 2, XD_STRING,XD_ANY), "xquery", "?fromXQ");
 		}
 
 ////////////////////////////////////////////////////////////////////////////////

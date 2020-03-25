@@ -1,9 +1,14 @@
 package org.xdef;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.net.URL;
@@ -12,6 +17,7 @@ import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
+import org.xdef.sys.FUtils;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
@@ -507,4 +513,89 @@ public final class XDFactory {
 	public static XDValue createXDValue(final Object obj) {
 		return org.xdef.impl.XBuilder.createXDValue(obj);
 	}
+
+	/** Write the XDPool to output stream.
+	 * @param out output stream where to write XDPool.
+	 * @param xp XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static void writeXDPool(final OutputStream out,final XDPool xp)
+		throws IOException {
+		ObjectOutputStream oout = new ObjectOutputStream(out);
+		oout.writeObject(xp);
+		oout.close();
+	}
+
+	/** Write the XDPool to output stream.
+	 * @param file file where to write XDPool.
+	 * @param xp XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static void writeXDPool(final File file, final XDPool xp)
+		throws IOException {
+		FileOutputStream fos = new FileOutputStream(file);
+		writeXDPool(fos, xp);
+	}
+
+	/** Write the XDPool to output stream.
+	 * @param fname pathname where to write XDPool.
+	 * @param xp XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static void writeXDPool(final String fname, final XDPool xp)
+		throws IOException {
+		FileOutputStream fos = new FileOutputStream(fname);
+		writeXDPool(fos, xp);
+	}
+
+	/** Read the XDPool from the input stream.
+	 * @param in input stream with X-definition.
+	 * @return XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDPool readXDPool(final InputStream in)
+		throws IOException {
+		try {
+			ObjectInputStream oin = new ObjectInputStream(in);
+			XDPool result = (XDPool) oin.readObject();
+			oin.close();
+			return result;
+		} catch (ClassNotFoundException ex) {
+			in.close();
+			throw new IOException(ex);
+		}
+	}
+
+	/** Read the XDPool from the input stream.
+	 * @param file file with X-definition.
+	 * @return XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDPool readXDPool(final File file) throws IOException {
+		return readXDPool(new FileInputStream(file));
+	}
+
+	/** Read the XDPool from the input stream.
+	 * @param fname pathname of file or string with URL with X-definition (it
+	 * may be also "classpath://.....").
+	 * @return XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDPool readXDPool(final String fname)throws IOException{
+		if (!new File(fname).exists() && fname.indexOf("://") > 0) {
+			return readXDPool(FUtils.getExtendedURL(fname).openStream());
+		} else {
+			return readXDPool(new FileInputStream(fname));
+		}
+	}
+
+	/** Read the XDPool from the input stream.
+	 * @param url URL where is data with XDPool.
+	 * @return XDPool object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDPool readXDPool(final URL url) throws IOException {
+		return readXDPool(url.openStream());
+	}
+
 }

@@ -1,29 +1,28 @@
 package test.xdef;
 
 import buildtools.XDTester;
-import java.io.File;
+import org.xdef.XDPool;
+import org.xdef.XDFactory;
+import org.xdef.XDDocument;
+import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
+import org.xdef.json.JsonUtil;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.component.XComponent;
-import org.xdef.component.XComponentUtil;
-import org.xdef.XDDocument;
-import org.xdef.XDPool;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.component.GenXComponent;
-import org.xdef.json.JsonUtil;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -101,11 +100,7 @@ public final class TestXComponents extends XDTester {
 			if (!classDir.endsWith("/")) {
 				classDir += '/';
 			}
-			// save XDPool object to the classpath
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(
-				classDir + "test/xdef/component/Pool.xp"));
-			os.writeObject(xp);
-			os.close();
+			XDFactory.writeXDPool(classDir + "test/xdef/component/Pool.xp", xp);
 		} catch (RuntimeException ex) {
 			throw ex;
 		} catch (Exception ex) {throw new RuntimeException(ex);}
