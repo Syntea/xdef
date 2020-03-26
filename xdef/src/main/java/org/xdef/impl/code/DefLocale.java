@@ -2,7 +2,6 @@ package org.xdef.impl.code;
 
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.util.Locale;
 
@@ -65,7 +64,7 @@ public final class DefLocale extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_LOCALE;}
+	public short getItemId() {return XD_LOCALE;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -103,18 +102,14 @@ public final class DefLocale extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (arg.getItemId() == XDValueID.XD_LOCALE) {
-			return equals(((DefLocale)arg));
+		if (isNull()) {
+			return arg == null || arg.isNull();
 		}
-		return false;
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_LOCALE) {
+			return false;
+		}
+		return _value.equals(((DefLocale)arg)._value);
 	}
-	/** Check whether some other DefString object is "equal to" this one.
-	 * @param arg other DefString object to which is to be compared.
-	 * @return true if the value of the argument is equal to this one.
-	 */
-	public boolean equals(final DefLocale arg) {
-		return _value == null ? arg._value == null : _value.equals(arg._value);}
-
 	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns

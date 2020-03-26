@@ -2,7 +2,6 @@ package org.xdef.impl.code;
 
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import org.xdef.json.JNull;
 import org.xdef.msg.SYS;
@@ -38,7 +37,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_NULL;}
+	public short getItemId() {return XD_NULL;}
 
 	@Override
 	/** Get ID of the type of value
@@ -74,7 +73,7 @@ public final class DefJNull extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg == null || arg.getItemId() == XDValueID.XD_NULL;
+		return arg == null || arg.getItemId() == XD_NULL;
 	}
 	@Override
 	/** Compares this object with the other DefBoolean object.
@@ -83,7 +82,7 @@ public final class DefJNull extends XDValueAbstract {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg == null || arg.getItemId() == XDValueID.XD_NULL) {
+		if (arg == null || arg.getItemId() == XD_NULL) {
 			return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments

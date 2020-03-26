@@ -9,7 +9,6 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** DefParseResult contains information about parsing.
@@ -58,7 +57,7 @@ public final class DefParseResult extends XDValueAbstract
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public final short getItemId() {return XDValueID.XD_PARSERESULT;}
+	public final short getItemId() {return XD_PARSERESULT;}
 
 	@Override
 	public XDValueType getItemType() {return XDValueType.PARSERESULT;}

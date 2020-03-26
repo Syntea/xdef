@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefDBIterator implements the internal object with database query.
@@ -280,7 +279,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	@Override
 	public Element getElement() {
 		if (_item != null) {
-			if (_item.getItemId() == XDValueID.XD_ELEMENT) {
+			if (_item.getItemId() == XD_ELEMENT) {
 				return _item.getElement();
 			}
 			Element el = DOC.createElement("_");
@@ -295,7 +294,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 */
 	public Object getObject() {return _resultSet;}
 	@Override
-	public short getItemId() {return XDValueID.XD_RESULTSET;}
+	public short getItemId() {return XD_RESULTSET;}
 	@Override
 	public XDValueType getItemType() {return XDValueType.RESULTSET;}
 

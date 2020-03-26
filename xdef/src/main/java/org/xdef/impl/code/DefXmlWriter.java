@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
@@ -113,7 +112,7 @@ public class DefXmlWriter extends KXmlOutStream
 // Implementation of XDValue
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public short getItemId() {return XDValueID.XD_XMLWRITER;}
+	public short getItemId() {return XD_XMLWRITER;}
 	@Override
 	public XDValueType getItemType() {return XDValueType.XMLWRITER;}
 	@Override

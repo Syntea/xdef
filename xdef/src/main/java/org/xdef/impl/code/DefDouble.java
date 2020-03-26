@@ -103,6 +103,12 @@ public final class DefDouble extends XDValueAbstract {
 	 * value of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull()) {
+			return false;
+		}
 		return Double.isNaN(_value)
 			? Double.isNaN(arg.doubleValue()) :  _value == arg.doubleValue();
 	}

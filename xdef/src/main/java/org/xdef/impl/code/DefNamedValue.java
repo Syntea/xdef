@@ -8,7 +8,6 @@ import org.xdef.XDNamedValue;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** Implementation of XDNamedValue (key, value)
@@ -25,10 +24,10 @@ public final class DefNamedValue extends XDValueAbstract
 	public DefNamedValue(String key, XDValue value) {_name=key;setValue(value);}
 
 	@Override
-	/** Get ID of the type of value (org.xdef.XDValueTypes.NAMED_VALUE).
-	 * @return item type (org.xdef.XDValueTypes.NAMED_VALUE).
+	/** Get ID of the type of value (cz.syntea.xdef.XDValueTypes.NAMED_VALUE).
+	 * @return item type (cz.syntea.xdef.XDValueTypes.NAMED_VALUE).
 	 */
-	public short getItemId() {return XDValueID.XD_NAMEDVALUE;}
+	public short getItemId() {return XD_NAMEDVALUE;}
 
 	@Override
 	/** Get ID of the type of value
@@ -79,16 +78,13 @@ public final class DefNamedValue extends XDValueAbstract
 	 * to the result value of the argument; otherwise return <tt>false</tt>.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (arg.getItemId() != XDValueID.XD_NAMEDVALUE) {
-			if (_value == null) {
-				return false;
-			}
-			return _value.equals(arg);
+		if (isNull()) {
+			return arg == null || arg.isNull();
 		}
-		if (_value == null) {
-			return ((XDNamedValue) arg).getValue() == null;
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_NAMEDVALUE) {
+			return false;
 		}
-		return _value.equals(((XDNamedValue) arg).getValue());
+		return compareTo(arg) == 0;
 	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
@@ -97,7 +93,7 @@ public final class DefNamedValue extends XDValueAbstract
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) {
-		if (arg.getItemId() != XDValueID.XD_NAMEDVALUE) {
+		if (arg.getItemId() != XD_NAMEDVALUE) {
 			if (_value == null) {
 				//Incomparable arguments
 				throw new SIllegalArgumentException(SYS.SYS085);

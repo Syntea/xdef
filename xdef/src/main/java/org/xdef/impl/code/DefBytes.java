@@ -250,8 +250,13 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg.getItemId() != XDValueID.XD_BYTES ?
-			false : Arrays.equals(_value, ((XDBytes) arg).getBytes());
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_BYTES) {
+			return false;
+		}
+		return Arrays.equals(_value, ((XDBytes) arg).getBytes());
 	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.

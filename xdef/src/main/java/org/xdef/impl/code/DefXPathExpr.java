@@ -21,7 +21,6 @@ import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
@@ -102,7 +101,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_XPATH;}
+	public short getItemId() {return XD_XPATH;}
 
 	@Override
 	/** Get ID of the type of value

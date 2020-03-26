@@ -6,7 +6,6 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** Implementation of script value with org.w3c.dom.CharacterData node.
@@ -40,7 +39,7 @@ public final class DefText extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_TEXT;}
+	public short getItemId() {return XD_TEXT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -80,14 +79,14 @@ public final class DefText extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg.getItemId() != XDValueID.XD_TEXT ?
-			false : equals((DefText) arg);
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_TEXT) {
+			return false;
+		}
+		return _value.equals(((DefText) arg)._value);
 	}
-	/** Check whether some other DefText object is "equal to" this one.
-	 * @param arg other DefText object to which is to be compared.
-	 * @return true if the value of the argument is equal to this one.
-	 */
-	public boolean equals(final DefText arg) {return _value.equals(arg._value);}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.

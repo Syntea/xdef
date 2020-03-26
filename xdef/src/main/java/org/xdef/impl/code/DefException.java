@@ -4,7 +4,6 @@ import org.xdef.sys.Report;
 import org.xdef.XDException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** CodeException
@@ -75,7 +74,7 @@ public final class DefException extends XDValueAbstract implements XDException {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_EXCEPTION;}
+	public short getItemId() {return XD_EXCEPTION;}
 
 	@Override
 	/** Get ID of the type of value

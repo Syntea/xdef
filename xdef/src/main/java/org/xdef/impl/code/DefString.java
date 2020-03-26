@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.sys.StringParser;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefString implements items with string values.
@@ -77,7 +76,7 @@ public final class DefString extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_STRING;}
+	public short getItemId() {return XD_STRING;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -121,14 +120,13 @@ public final class DefString extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (arg.getItemId() == XDValueID.XD_STRING) {
-			String s = arg.stringValue();
-			if (_value == null) {
-				return  s == null;
-			}
-			return _value.equals(s);
+		if (isNull()) {
+			return arg == null || arg.isNull();
 		}
-		return false;
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_STRING) {
+			return false;
+		}
+		return _value.equals(arg.stringValue());
 	}
 	/** Check whether some other DefString object is "equal to" this one.
 	 * @param arg other DefString object to which is to be compared.

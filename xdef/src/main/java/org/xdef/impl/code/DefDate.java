@@ -7,7 +7,6 @@ import org.xdef.XDDatetime;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.util.Calendar;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefDate implements the internal object with date value.
@@ -68,7 +67,7 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_DATETIME;}
+	public short getItemId() {return XD_DATETIME;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -106,15 +105,15 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 		if (isNull()) {
 			return arg == null || arg.isNull();
 		}
-		if (arg == null || arg.isNull()) {
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_DATETIME) {
 			return false;
 		}
-		return arg.getItemId() == XDValueID.XD_DATETIME ?
-			_value.equals(arg.datetimeValue()) : false;
+		return _value.equals(arg.datetimeValue());
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg.getItemId() == XDValueID.XD_DATETIME) {
+		if (arg.getItemId() == XD_DATETIME) {
 			try {
 				return _value.compareTo(arg.datetimeValue());
 			} catch (RuntimeException ex) {}

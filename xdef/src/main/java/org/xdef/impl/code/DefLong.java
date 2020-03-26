@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
@@ -45,7 +44,7 @@ public final class DefLong extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_INT;}
+	public short getItemId() {return XD_INT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -79,7 +78,15 @@ public final class DefLong extends XDValueAbstract {
 	 * @return <tt>true</tt> if argument is same type as this XDValue and the
 	 * value of the object is comparable and equals to this one.
 	 */
-	public boolean equals(final XDValue arg) {return _value == arg.longValue();}
+	public boolean equals(final XDValue arg) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull()) {
+			return false;
+		}
+		return _value == arg.longValue();
+	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.

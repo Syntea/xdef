@@ -7,7 +7,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.XDDuration;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefDate implements the internal object with duration value.
@@ -52,7 +51,7 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 	@Override
 	public Object getObject() {return _value;}
 	@Override
-	public short getItemId() {return XDValueID.XD_DURATION;}
+	public short getItemId() {return XD_DURATION;}
 	@Override
 	public XDValueType getItemType() {return XDValueType.DURATION;}
 	@Override
@@ -80,15 +79,14 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 		if (isNull()) {
 			return arg == null || arg.isNull();
 		}
-		if (arg == null || arg.isNull()) {
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_DURATION) {
 			return false;
 		}
-		return arg.getItemId() == XDValueID.XD_DURATION ?
-			_value.equals(arg.durationValue()) : false;
+		return _value.equals(arg.durationValue());
 	}
 	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg.getItemId() == XDValueID.XD_DURATION) {
+		if (arg.getItemId() == XD_DURATION) {
 			return _value.compareTo(arg.durationValue());
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments

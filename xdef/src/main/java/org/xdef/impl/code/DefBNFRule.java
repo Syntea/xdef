@@ -7,7 +7,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDBNFRule;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -116,7 +115,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_BNFRULE;}
+	public short getItemId() {return XD_BNFRULE;}
 
 	@Override
 	/** Get ID of the type of value
@@ -168,8 +167,13 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	 * @return always <tt>false</tt>.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg == this || arg instanceof DefBNFRule
-			&& toString().equals(((DefBNFRule) arg).toString());
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_BNFRULE) {
+			return false;
+		}
+		return arg == this || toString().equals(arg.toString());
 	}
 
 }

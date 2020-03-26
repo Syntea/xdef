@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefNull implements the internal object with null value.
@@ -24,7 +23,7 @@ public final class DefNull extends XDValueAbstract {
 	private final short _type;
 
 	/** Creates a new instance of DefNull. */
-	public DefNull() {_type = XDValueID.XD_NULL;}
+	public DefNull() {_type = XD_NULL;}
 
 	/** Creates a new instance of DefNull with type from argument.
 	 * @param type type of null object.
