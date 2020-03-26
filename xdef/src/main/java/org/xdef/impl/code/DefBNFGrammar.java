@@ -146,9 +146,13 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 
 	@Override
 	public boolean equals(final XDValue arg) {
-		return arg == this ||
-			arg != null && arg instanceof DefBNFGrammar
-			&& toString().equals(arg.toString());
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_BNFGRAMMAR) {
+			return false;
+		}
+		return arg == this || toString().equals(arg.toString());
 	}
 
 	@Override

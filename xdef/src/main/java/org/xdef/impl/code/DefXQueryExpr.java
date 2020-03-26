@@ -17,7 +17,6 @@ import org.xdef.XDValue;
 import org.xdef.XDXQueryExpr;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
@@ -89,7 +88,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override
-	public short getItemId() {return XDValueID.XD_XQUERY;}
+	public short getItemId() {return XD_XQUERY;}
 	@Override
 	public XDValueType getItemType() {return XDValueType.XQUERY;}
 	@Override

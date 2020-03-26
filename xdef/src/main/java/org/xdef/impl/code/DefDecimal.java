@@ -4,7 +4,6 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
@@ -48,7 +47,7 @@ public final class DefDecimal extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_DECIMAL;}
+	public short getItemId() {return XD_DECIMAL;}
 
 	@Override
 	/** Get ID of the type of value
@@ -106,8 +105,10 @@ public final class DefDecimal extends XDValueAbstract {
 		if (isNull()) {
 			return arg == null || arg.isNull();
 		}
-		return (arg == null || arg.isNull())
-			? false : _value.equals(arg.decimalValue());
+		if (arg == null || arg.isNull()) {
+			return false;
+		}
+		return _value.equals(arg.decimalValue());
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.XDRegexResult;
 import org.xdef.XDValueAbstract;
 import java.util.regex.Matcher;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** DefRegexResult.
@@ -72,7 +71,7 @@ public final class DefRegexResult extends XDValueAbstract
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_REGEXRESULT;}
+	public short getItemId() {return XD_REGEXRESULT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.

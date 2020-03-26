@@ -1230,7 +1230,10 @@ public final class DefContainer extends XDValueAbstract
 	 * of the object is comparable and equals to this one.
 	 */
 	public final boolean equals(final XDValue arg) {
-		if (arg.getItemId() != XD_CONTAINER) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_CONTAINER) {
 			return false;
 		}
 		XDContainer x = (XDContainer) arg;

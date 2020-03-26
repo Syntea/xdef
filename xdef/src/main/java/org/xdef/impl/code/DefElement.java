@@ -14,7 +14,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** Implementation of item with org.w3c.dom.Element.
@@ -382,7 +381,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_ELEMENT;}
+	public short getItemId() {return XD_ELEMENT;}
 
 	@Override
 	/** Get ID of the type of value
@@ -429,16 +428,13 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg.getItemId() != XDValueID.XD_ELEMENT ?
-			false : equals((DefElement) arg);
-	}
-
-	/** Check whether some other DefElement object is "equal to" this one.
-	 * @param arg other DefElement object to which is to be compared.
-	 * @return true if the value of the argument is equal to this one.
-	 */
-	public boolean equals(final DefElement arg) {
-		return _value.equals(arg._value);
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_ELEMENT) {
+			return false;
+		}
+		return _value.equals(((DefElement) arg)._value);
 	}
 
 	@Override

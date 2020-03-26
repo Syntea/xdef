@@ -2,7 +2,6 @@ package org.xdef.impl.code;
 
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** DefObject
@@ -38,7 +37,7 @@ public final class DefObject extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_OBJECT;}
+	public short getItemId() {return XD_OBJECT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -75,17 +74,12 @@ public final class DefObject extends XDValueAbstract {
 	 * @return always <tt>false</tt>.
 	 */
 	public boolean equals(final XDValue arg) {
-		return arg.getItemId() == XDValueID.XD_OBJECT ?
-			 equals((DefObject) arg) : false;
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_OBJECT) {
+			return false;
+		}
+		return _value.equals(((DefObject) arg)._value);
 	}
-
-	/** Check whether some other DefBigDecimal object is "equal to" this one.
-	 * @param arg other DefBigDecimal object to which is to be compared.
-	 * @return true if the object is identical to the argument otherwise return
-	 * <tt>false</tt>.
-	 */
-	public boolean equals(final DefObject arg) {
-		return _value.equals(arg._value);
-	}
-
 }

@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import org.xdef.sys.StringParser;
 
@@ -208,7 +207,7 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 	public String stringValue() {return _xpath == null ? "XmlIterator":_xpath;}
 
 	@Override
-	public short getItemId() {return XDValueID.XD_RESULTSET;}
+	public short getItemId() {return XD_RESULTSET;}
 
 	@Override
 	/** Get ID of the type of value

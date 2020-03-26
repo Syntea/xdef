@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import org.xdef.sys.ReportReader;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** Implementation of input stream.
@@ -219,7 +218,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_INPUT;}
+	public short getItemId() {return XD_INPUT;}
 
 	@Override
 	/** Get ID of the type of value
@@ -247,5 +246,4 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	 * @return this object.
 	 */
 	public XDValue cloneItem() {return this;}
-
 }

@@ -9,7 +9,6 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefDBIterator implements the internal object with database query.
@@ -67,7 +66,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 		}
 		try {
 			switch (value.getItemId()) {
-				case XDValueID.XD_CONTAINER: {
+				case XD_CONTAINER: {
 					DefContainer list = (DefContainer) value;
 					for (int i = 0; i < list.getXDItemsNumber(); i++) {
 						String s = list.getXDItem(i).stringValue();
@@ -168,7 +167,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	 * the interface org.xdef.XDValueTypes).
 	 * @return item type.
 	 */
-	public short getItemId() {return XDValueID.XD_STATEMENT;}
+	public short getItemId() {return XD_STATEMENT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.

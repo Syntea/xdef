@@ -111,8 +111,13 @@ public final class DefBoolean extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		return (arg.getItemId() != XDValueID.XD_BOOLEAN)
-			? false : _value == arg.booleanValue();
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull()) {
+			return false;
+		}
+		return _value == arg.booleanValue();
 	}
 
 	@Override

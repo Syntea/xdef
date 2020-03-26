@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Stack;
 import org.xdef.XDContainer;
@@ -213,13 +214,13 @@ public class MyTest_0 extends XDTester {
 		String json;
 		Object j;
 		Object o;
-		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
 		XDOutput xout;
 		StringWriter strw;
 		Report rep;
 		XComponent xc;
+		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////		
 //		Throwable throwable = new Throwable("");
 //		System.out.println(throwable.getClass().getName() +
@@ -257,6 +258,15 @@ public class MyTest_0 extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			Class<?> clazz = MyTest_0.class;
+			String className = clazz.getName().replace('.', '/') + ".class";
+			URL u = clazz.getClassLoader().getResource(className);
+			String classDir =
+				new File(u.getFile()).getAbsolutePath().replace('\\', '/');
+			classDir = classDir.substring(0, classDir.indexOf(className));
+			System.out.println(classDir + "mytest/xdef/xp.xp");
+			XDFactory.writeXDPool(classDir + "mytest/xdef/xp.xp", xp);
+			xp = XDFactory.readXDPool("classpath://mytest.xdef.xp.xp");			
 			genXComponent(tempDir, xp);
 			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);

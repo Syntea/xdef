@@ -7,7 +7,6 @@ import org.xdef.XDRegexResult;
 import org.xdef.XDValueAbstract;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import org.xdef.msg.XDEF;
 
@@ -78,7 +77,7 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_REGEX;}
+	public short getItemId() {return XD_REGEX;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -97,8 +96,13 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	public String stringValue() {return _source;}
 	@Override
 	public boolean equals(final XDValue arg) {
-		return arg != null && arg instanceof DefRegex &&
-			_source != null && _source.equals(arg.stringValue());
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_REGEX) {
+			return false;
+		}
+		return _source.equals(arg.stringValue());
 	}
 	@Override
 	/** Clone the item (here return just this item).

@@ -4,7 +4,6 @@ import org.xdef.sys.Report;
 import org.xdef.XDReport;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** Implementation of XDReport
@@ -129,7 +128,7 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_REPORT;}
+	public short getItemId() {return XD_REPORT;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -171,16 +170,13 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (arg.getItemId() != XDValueID.XD_REPORT) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_REPORT) {
 			return false;
 		}
 		DefReport rep = (DefReport) arg;
-		if (isNull()) {
-			return rep.isNull();
-		}
-		if (rep.isNull()) {
-			return false;
-		}
 		if (_value.getType() != rep._value.getType()) {
 			return false;
 		}

@@ -9,7 +9,6 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 
 /** The class DefSQLService implements the internal object with JDBC database
@@ -207,7 +206,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_SERVICE;}
+	public short getItemId() {return XD_SERVICE;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
