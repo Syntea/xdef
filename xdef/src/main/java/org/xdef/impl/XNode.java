@@ -9,6 +9,8 @@ import org.xdef.model.XMOccurrence;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.namespace.QName;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
 
 /** Abstract XNode (part of X-definition implementation.
  * @author Vaclav Trojan
@@ -288,6 +290,66 @@ public abstract class XNode implements XMNode {
 	 */
 	public final XMOccurrence getOccurence() {
 		return new XOccurrence(_occ);
+	}
+////////////////////////////////////////////////////////////////////////////////
+// Protected methods
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Compare local name of node from argument with the name of this node.
+	 * @param y XNode to be compared.
+	 * @param rep reporter where to put errors.
+	 * @return true if both local names are equal.
+	 */
+	protected final boolean compareName(final XNode y, final ArrayReporter rep){
+		if (!getLocalName().equals(y.getLocalName())) {
+			//Names differs: &{0}, &{1}
+			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition());
+			compareNamespace(y, rep);
+			return false;
+		}
+		return compareNamespace(y, rep);
+	}
+
+	/** Compare namespace of node from argument with the namespace of this node.
+	 * @param y XNode to be compared.
+	 * @param rep reporter where to put errors.
+	 * @return true if both local namespaces are equal.
+	 */
+	protected boolean compareNamespace(final XNode y, final ArrayReporter rep) {
+		String ux = getNSUri();
+		String uy = y.getNSUri();
+		if (ux == null) {
+			if (uy == null) {
+				return true;
+			}
+		} else if (ux.equals(uy)) {
+			return true;
+		}
+		String path = getXDPosition() + "; " + y.getXDPosition();
+		rep.error(XDEF.XDEF288, path); //Namespace differs: &{0}
+		return false;
+	}
+
+	protected final boolean compareOccurrence(final XNode y,
+		final ArrayReporter rep) {
+		if (maxOccurs()==y.maxOccurs() && minOccurs()==y.minOccurs()) {
+			return true;
+		}
+		String path = getXDPosition() + "; " + y.getXDPosition();
+		rep.error(XDEF.XDEF287, path); //Occurrence differs: &{0}
+		return false;
+	}
+
+	/** Compare name, namespace and occurrence of the node from argument with
+	 * the this node.
+	 * @param y XNode to be compared.
+	 * @param rep reporter where to put errors.
+	 * @return true names, namespaces and occurrences are equal.
+	 */
+	protected final boolean compareNameAndOccurrence(final XNode y,
+		final ArrayReporter rep) {
+		return compareName(y, rep)
+			&& compareNamespace(y, rep) && compareOccurrence(y, rep);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
