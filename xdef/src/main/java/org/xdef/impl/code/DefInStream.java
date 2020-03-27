@@ -231,7 +231,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	 * @return The string from value.
 	 */
 	public String toString() {
-		return "org.xdef.impl.DefInputStream(" + _fname + ")";
+		return "org.xdef.impl.code.DefInStream(" + _fname + ")";
 	}
 
 	@Override

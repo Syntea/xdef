@@ -1,6 +1,9 @@
 package test.xdef;
 
 import buildtools.XDTester;
+import java.io.StringWriter;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
 
@@ -21,6 +24,8 @@ public final class TestImplementsAndUses extends XDTester {
 		String xml;
 		String s;
 		XDPool xp;
+		XDDocument xd;
+		StringWriter strw;
 		ArrayReporter reporter = new ArrayReporter();
 		boolean	chkSyntax = getChkSyntax();
 		setChkSyntax(false);
@@ -226,7 +231,7 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef = //this is a question
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  boolean a() {return true}\n"+
 "  boolean b() {return true}\n"+
 "</xd:declaration>\n"+
@@ -330,27 +335,41 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
-"<A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
+"<A xd:script='ref X' a='int(1,2); onTrue out(1);'/>\n"+
 "<X xd:script=\"create [%a='a','b'].toElement()\"\n"+
 "   a='enum(1,2)'> <B/> enum('A', 'B') <C/></X>\n"+
 "</xd:def>\n"+
-"<xd:def name='Y' root='A'>\n"+
-"<A xd:script=\"finally outln('x'); implements X#A\"\n"+
+"<xd:def name='Y' root='A|Z'>\n"+
+"<A xd:script=\"finally out('a'); implements X#A\"\n"+
 "   a='int(1,2)'><B/> enum('A', 'B') <C/></A>\n"+
 "<X xd:script='ref X#X' a='enum(2,3)'/>\n"+
 "<root>\n"+
-"  <A xd:script=\"finally outln('x'); implements X#A\"\n"+
+"  <A xd:script=\"finally out('x'); implements X#A\"\n"+
 "     a='int(1,2)'> <B/> enum('A', 'B') <C/></A>\n"+
 "</root>\n"+
 "<Y>\n"+
-" <P xd:script=\"*; finally outln('x'); uses X#A\"\n"+
+" <P xd:script=\"*; finally out('y'); uses X#A\"\n"+
 "   a='required '> <B/> required <C/></P>\n"+
 "</Y>\n"+
-"<Z xd:script=\"finally outln('y'); uses Y#root; ref root\">\n"+
+"<Z xd:script=\"finally out('z'); uses Y#root; ref root\">\n"+
 "</Z>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Y");
+			xml = "<A a='1'><B/>A<C/></A>";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("a", strw.toString());
+			xd = xp.createXDDocument("Y");
+			xml = "<Z><A a='2'><B/>A<C/></A></Z>";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("xz", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='P'>\n"+
 "<P xd:script='uses A' a='required '> <B/> required <C xd:script='+'/> </P>\n"+

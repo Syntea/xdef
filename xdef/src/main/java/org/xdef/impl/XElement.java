@@ -8,7 +8,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.XDDocument;
-import org.xdef.XDValue;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -460,251 +459,48 @@ public final class XElement extends XCodeDescriptor
 		return result;
 	}
 
-	private boolean compareName(final XNode x, final XNode y,
-		final ArrayReporter reporter,
-		final String path) {
-		if (!x.getName().equals(y.getName())) {
-			//Names differs: &{0}, &{1}
-			reporter.error(XDEF.XDEF289, path+x.getName(), path+y.getName());
-			return false;
-		}
-		return compareNamespace(x, y, reporter, path);
-	}
-
-	private boolean compareNamespace(final XNode x, final XNode y,
-		final ArrayReporter reporter,
-		final String path) {
-		String ux = x.getNSUri();
-		String uy = y.getNSUri();
-		if (ux == null) {
-			if (uy == null) {
-				return true;
-			}
-		} else if (ux.equals(uy)) {
-			return true;
-		}
-		reporter.error(XDEF.XDEF288, path); //Namespace differs: &{0}
-		return false;
-	}
-
-	private boolean compareOccurrence(final XNode x, final XNode y,
-		final ArrayReporter reporter,
-		final String path) {
-		if (x.maxOccurs()==y.maxOccurs() && x.minOccurs()==y.minOccurs()) {
-			return true;
-		}
-		reporter.error(XDEF.XDEF287, path); //Occurrence differs: &{0}
-		return false;
-	}
-
-	private boolean compareData(final XData x, final XData y,
-		final ArrayReporter reporter,
-		final String path,
-		final boolean full) {
-		boolean result = compareName(x, y, reporter, path) &&
-			compareOccurrence(x, y, reporter, path);
-		if ("$text".equals(x.getName())) {
-			if (x._textValuesCase != y._textValuesCase ||
-				x._textWhiteSpaces != y._textWhiteSpaces ||
-				x._textValuesCase != y._textValuesCase ||
-				x._trimText != y._trimText) {
-				reporter.error(XDEF.XDEF290, path); //Options differs: &{0}
-				result = false;
-			}
-		} else {
-			if (x._attrValuesCase != y._attrValuesCase ||
-				x._acceptQualifiedAttr != y._acceptQualifiedAttr ||
-				x._ignoreEmptyAttributes != y._ignoreEmptyAttributes ||
-				x._attrValuesCase != y._attrValuesCase ||
-				x._attrWhiteSpaces != y._attrWhiteSpaces ||
-				x._trimAttr != y._trimAttr) {
-				reporter.error(XDEF.XDEF290, path); //Options differs: &{0}
-				result = false;
-			}
-		}
-		XDValue[] cx = ((XPool) x.getXDPool()).getCode();
-		XDValue[] cy = ((XPool) y.getXDPool()).getCode();
-		if (x.isFixed()) {
-			if (!y.isFixed()) {
-				if (y._check>=0||y._onAbsence>=0||y._onFalse>=0) {
-					//Default or fixed values differs: &{0}
-					reporter.error(XDEF.XDEF286, path);
-					return false;
-				}
-				if (full || cx != cy) {
-					return false;
-				} else {
-					y._check = x._check;
-					y._onAbsence = x._onAbsence;
-					y._onFalse = x._onFalse;
-					return result;
-				}
-			}
-			if (cx == cy && x._check == y._check && x._onAbsence == y._onAbsence
-				&& x._onFalse == y._onFalse) {
-				return result;
-			}
-			if (compareCode(cx, cy, x._check, y._check, false)
-				&& compareCode(cx, cy, x._onAbsence, y._onAbsence, false)
-				&& compareCode(cx, cy, x._onFalse, y._onFalse, false)) {
-				return result;
-			}
-			//Default or fixed values differs:&{0}
-			reporter.error(XDEF.XDEF286, path);
-			return false;
-		} else if (y.isFixed()) {
-			//Default or fixed values differs:&{0}
-			reporter.error(XDEF.XDEF286, path);
-			return false;
-		}
-		XDValue vx, vy;
-		if ((vx = x.getDefaultValue()) != null) {
-			if ((vy = y.getDefaultValue()) == null) {
-				if (full || cx != cy) {
-					result = false;
-				} else {
-					y._deflt = x._deflt;
-				}
-			} else if (cx != cy || y._deflt != x._deflt) {
-				if (vx == null || vy == null || !vx.equals(vy)) {
-					//Default or fixed values differs: &{0}
-					reporter.error(XDEF.XDEF286, path);
-					result = false;
-				}
-			}
-		}
-		if ((vx = x.getFixedValue()) != null) {
-			if ((vy = y.getFixedValue()) == null) {
-				if (full || cx != cy) {
-					result = false;
-				} else {
-					y._onAbsence = x._onAbsence;
-				}
-			} else if (cx != cy || y._onAbsence != x._onAbsence) {
-				if (vx == null || vy == null || !vx.equals(vy)) {
-					//Default or fixed values differs: &{0}
-					reporter.error(XDEF.XDEF286, path);
-					result = false;
-				}
-			}
-		}
-		int ix = x._check;
-		int iy = y._check;
-		if (ix == iy) {
-			return result;
-		}
-		if (ix < 0) {
-			return iy < 0 && result;
-		} else {
-			if (iy < 0) {
-				if (full || cx != cy) {
-					return false;
-				}
-				y._check = x._check;
-				return result;
-			} else {
-				if (compareCode(cx, cy, ix,	iy, full)) {
-					return result;
-				}
-			}
-			reporter.error(XDEF.XDEF285, path); //Type of value differs: &{0}
-			return false;
-		}
-	}
-
-	private boolean compareCode(final XDValue[] cx,
-		final XDValue[] cy,
-		final int x,
-		final int y,
-		final boolean full) {
-		if (x == y && (x == -1 || cx == cy)) {
-			return true;
-		}
-		int p;
-		int ix = x, iy = y;
-		XDValue xx,xy;
-		while (ix < cx.length && iy < cx.length &&
-			(p = (xx = cx[ix]).getCode()) == (xy = cy[iy]).getCode()) {
-			switch (p) {
-				case STOP_OP:
-					return true;
-				case CALL_OP: {
-					if (cx == cy && xx.getParam() == xy.getParam() ||
-						!full && compareCode(cx,
-							cy, xx.getParam(), xy.getParam(), full)) {
-						ix++;
-						iy++;
-						continue;
-					} else {
-						return false;
-					}
-				}
-				case JMPEQ:
-				case JMPNE:
-				case JMPLE:
-				case JMPGE:
-				case JMPLT:
-				case JMPGT:
-				case JMP_OP:
-				case JMPF_OP:
-				case JMPT_OP: {
-					int m = xx.getParam();
-					int n = xy.getParam();
-					if (m - ix == n - iy) {
-						ix++;
-						iy++;
-					} else {
-						ix = Integer.MAX_VALUE;
-					}
-					continue;
-				}
-				default:
-					if (!xx.equals(xy)) {
-						return false;
-					}
-					ix++;
-					iy++;
-			}
-		}
-		return false;
-	}
-
+	/** Compare child nodes of this element model with the model from argument.
+	 * @param y model to be compared.
+	 * @param rep reporter where write error reports.
+	 * @param full if true, then names of both models must be equal
+	 * (i.e. as "implements").
+	 * @return true if structures are compatible.
+	 */
 	private int compareGroup(final XNode[] x,
 		final XNode[] y,
 		final int i,
-		final ArrayReporter reporter,
-		final String path,
+		final ArrayReporter rep,
 		final boolean full) {
 		int j = i;
 		for (; j < x.length; j++) {
 			XNode ix = x[j];
 			XNode iy = y[j];
+			String path = ix.getXDPosition() + "; " + iy.getXDPosition();
 			if (ix.getKind() != iy.getKind()) {
-				reporter.error(XDEF.XDEF283, path); //Child nodes differs: &{0}
+				rep.error(XDEF.XDEF283, path); //Child nodes differs: &{0}
 				return -1;
 			}
 			switch (ix.getKind()) {
 				case XMNode.XMELEMENT:
-					if (!compareElement((XElement) ix,
-						(XElement) iy, reporter, path, full)) {
+					if (!((XElement) ix).compareElement((XElement) iy,
+						rep, full)) {
 						//Child nodes differs:&{0}
-						reporter.error(XDEF.XDEF283, path);
+						rep.error(XDEF.XDEF283, path);
 						return -1;
 					}
 					continue;
 				case XMNode.XMATTRIBUTE:
 				case XMNode.XMTEXT:
-					if (!compareData((XData) ix,
-						(XData) iy, reporter, path + "text()", full)){
+					if (!((XData) ix).compareData((XData) iy, rep, full)){
 						return -1;
 					}
 					continue;
 				case XMNode.XMCHOICE:
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
-					if ((j=compareGroup(x, y, j+1, reporter, path, full)) < 0) {
+					if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
 						//Child nodes differs:&{0}
-						reporter.error(XDEF.XDEF283, path);
+						rep.error(XDEF.XDEF283, path);
 						return -1;
 					}
 					continue;
@@ -715,39 +511,40 @@ public final class XElement extends XCodeDescriptor
 		return j;
 	}
 
-	private boolean compareNameAndOccurrence(final XNode x,
-		final XNode y,
+	/** Compare structure of this element model with the model from argument.
+	 * @param y model to be compared.
+	 * @param rep reporter where write error reports.
+	 * @param full if true, then names of both models must be equal
+	 * (i.e. as "implements").
+	 * @return true if structures are compatible.
+	 */
+	private boolean compareElement(final XElement y,
 		final ArrayReporter reporter,
-		String path) {
-		return compareName(x, y, reporter, path) &&
-			compareOccurrence(x, y, reporter, path);
+		final boolean full) {
+		return compareNameAndOccurrence(y, reporter)
+			& compareElementStructure(y, reporter, full);
 	}
 
-	private boolean compareElement(final XElement x,
-		final XElement y,
+	/** Compare structure of this element model with the model from argument.
+	 * @param y model to be compared.
+	 * @param full if true, then names of both models must be equal
+	 * (i.e. as "implements").
+	 * @return reporter with messages with differences, or returns null.
+	 */
+	private boolean compareElementStructure(final XElement y,
 		final ArrayReporter reporter,
-		String path,
 		final boolean full) {
-		path += "/";
-		return compareNameAndOccurrence(x, y, reporter, path) &
-			compareElementStructure(x, y, reporter, path, full);
-	}
-
-	private boolean compareElementStructure(final XElement x,
-		final XElement y,
-		final ArrayReporter reporter,
-		final String path,
-		final boolean full) {
-		boolean result = compareNamespace(x, y, reporter, path);
-		if (x._nillable != y._nillable ||
-			x._moreAttributes != y._moreAttributes ||
-			x._moreElements != y._moreElements ||
-			x._moreText != y._moreText) {
+		boolean result = compareNamespace(y, reporter);
+		String path = getXDPosition() + "; " + y.getXDPosition();
+		if (_nillable != y._nillable ||
+			_moreAttributes != y._moreAttributes ||
+			_moreElements != y._moreElements ||
+			_moreText != y._moreText) {
 			reporter.error(XDEF.XDEF290, path); //Options differs: &{0}
 			result = false;
 		}
 		//compare options
-		XData[] ax = (XData[]) x.getAttrs();
+		XData[] ax = (XData[]) getAttrs();
 		XData[] ay = (XData[]) y.getAttrs();
 		if (ax == null) {
 			if (ay != null) {
@@ -763,16 +560,16 @@ public final class XElement extends XCodeDescriptor
 				XData dx = ax[i];
 				XData dy = y.getDefAttrNS(dx.getNSUri(), dx.getName(), -1);
 				if (dy == null) {
+					String s = dx.getXDPosition() + "; null";
 					//List of attributes differs: &{0}
-					reporter.error(XDEF.XDEF284, path + "@" + dx.getName());
+					reporter.error(XDEF.XDEF284, s);
 					result = false;
-				} else if (!compareData(dx,
-					dy, reporter, path + "@" + dx.getName(), full)) {
+				} else if (!dx.compareData(dy, reporter, full)) {
 					result = false;
 				}
 			}
 		}
-		XNode[] nx = x._childNodes;
+		XNode[] nx = _childNodes;
 		XNode[] ny = y._childNodes;
 		if (nx == null) {
 			if (ny != null) {
@@ -787,7 +584,7 @@ public final class XElement extends XCodeDescriptor
 				reporter.error(XDEF.XDEF283, path);
 				return false;
 			}
-			if (compareGroup(nx, ny, 0, reporter, path, full) < 0) {
+			if (compareGroup(nx, ny, 0, reporter, full) < 0) {
 				return false;
 			}
 			return result;
@@ -796,23 +593,29 @@ public final class XElement extends XCodeDescriptor
 
 	/** Compare structure of this element model with the model from argument.
 	 * @param y model to be compared.
-	 * @param eq if true, then names of both models must be equal
+	 * @param full if true, then names of both models must be equal
 	 * (i.e. as "implements").
 	 * @return reporter with messages with differences, or returns null.
 	 */
-	public final ArrayReporter compareModel(final XMElement y,final boolean eq){
+	public final ArrayReporter compareModel(final XMElement y,
+		final boolean full) {
 		ArrayReporter reporter = new ArrayReporter();
 		if (!(y instanceof XElement)) {
-			reporter.error(XDEF.XDEF281); //Can't compare different XDPools
+			//Can't compare different X-definition objects&{0}{ :}
+			reporter.error(XDEF.XDEF281,
+				getXDPosition() + "; " + getXDPosition());
 			return reporter;
 		}
 		XElement yy = (XElement) y;
 		if (getXDPool() != y.getXDPool()) {
-			reporter.error(XDEF.XDEF281); //Can't compare different XDPools
+			reporter.error(XDEF.XDEF281,  //Can't compare different XDPools
+				getXDPosition() + "; " + getXDPosition());
 			return reporter;
 		}
-		if  (eq ? !compareElement(this, yy, reporter, getName(), eq) :
-			!compareElementStructure(this, yy, reporter, getName(),eq)){
+		if  (full ? !compareElement(yy, reporter, full) :
+			!compareElementStructure(yy, reporter, full)) {
+			//Models are differrent: &{0}
+
 			reporter.error(XDEF.XDEF282); //Models are differrent
 			return reporter;
 		}

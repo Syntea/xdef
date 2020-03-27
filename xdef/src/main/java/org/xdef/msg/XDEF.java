@@ -149,9 +149,9 @@ public interface XDEF {
 	public static final long XDEF267 = 31159025735L;
 	/** X-definition &amp;{0}{'}{' }does not exist */
 	public static final long XDEF269 = 31159025736L;
-	/** Can't compare different XDPool objects&amp;{#SYS000} */
+	/** Can't compare different X-definition objects&amp;{0}{ :}&amp;{#SYS000} */
 	public static final long XDEF281 = 31159025737L;
-	/** Models are different&amp;{#SYS000} */
+	/** Models are different&amp;{0}{ :}&amp;{#SYS000} */
 	public static final long XDEF282 = 31159025738L;
 	/** Child nodes differs: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF283 = 31159025739L;

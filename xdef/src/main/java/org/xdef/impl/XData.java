@@ -16,12 +16,15 @@ import org.xdef.XDValueID;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.parsers.XDParseCDATA;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 
 /** Implementation of the model of attributes or text nodes.
  * @author Vaclav Trojan
  */
-public class XData extends XCodeDescriptor implements XMData, XDValueID {
+public class XData extends XCodeDescriptor
+	implements XMData, XDValueID, CodeTable {
 	/** Default parser. */
 	private static final XDParseCDATA DEFAULT_PARSER = new XDParseCDATA();
 	/** Type name of value of data. */
@@ -143,6 +146,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 	 * @return type name of data value.
 	 */
 	public final String getValueTypeName() {
+//		return _valueTypeName;
 		int xs = _check; //start of code of parse method.
 		if (xs >= 0) {
 			if (_valueTypeName.indexOf('.') < 0
@@ -411,4 +415,193 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID {
 		return result;
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Check compatibility of this object and XDData.
+	 * @param y XDData object to be compared.
+	 * @param rep Reporter where to put errors.
+	 * @param full of all must be tested (implements/uses).
+	 * @return true if the XDData object from argument is compatible.
+	 */
+	protected final boolean compareData(final XData y,
+		final ArrayReporter rep,
+		final boolean full) {
+		boolean result = compareName(y, rep) &&
+			compareOccurrence(y, rep);
+		String path = getXDPosition() + "; " + y.getXDPosition();
+		if ("$text".equals(getName())) {
+			if (_textValuesCase != y._textValuesCase ||
+				_textWhiteSpaces != y._textWhiteSpaces ||
+				_textValuesCase != y._textValuesCase ||
+				_trimText != y._trimText) {
+				rep.error(XDEF.XDEF290, path); //Options differs: &{0}
+				result = false;
+			}
+		} else {
+			if (_attrValuesCase != y._attrValuesCase ||
+				_acceptQualifiedAttr != y._acceptQualifiedAttr ||
+				_ignoreEmptyAttributes != y._ignoreEmptyAttributes ||
+				_attrValuesCase != y._attrValuesCase ||
+				_attrWhiteSpaces != y._attrWhiteSpaces ||
+				_trimAttr != y._trimAttr) {
+				rep.error(XDEF.XDEF290, path); //Options differs: &{0}
+				result = false;
+			}
+		}
+		XDValue[] cx = ((XPool) getXDPool()).getCode();
+		XDValue[] cy = ((XPool) y.getXDPool()).getCode();
+		if (isFixed()) {
+			if (!y.isFixed()) {
+				if (y._check>=0||y._onAbsence>=0||y._onFalse>=0) {
+					//Default or fixed values differs: &{0}
+					rep.error(XDEF.XDEF286, path);
+					return false;
+				}
+				if (full || cx != cy) {
+					return false;
+				} else {
+					y._check = _check;
+					y._onAbsence = _onAbsence;
+					y._onFalse = _onFalse;
+					return result;
+				}
+			}
+			if (cx == cy && _check == y._check && _onAbsence == y._onAbsence
+				&& _onFalse == y._onFalse) {
+				return result;
+			} else {
+				if (compareCode(cx, cy, _check, y._check, false)
+					&& compareCode(cx, cy, _onAbsence, y._onAbsence, false)
+					&& compareCode(cx, cy, _onFalse, y._onFalse, false)) {
+					return result;
+				}
+			}
+			//Default or fixed values differs:&{0}
+			rep.error(XDEF.XDEF286, path);
+			return false;
+		} else if (y.isFixed()) {
+			//Default or fixed values differs:&{0}
+			rep.error(XDEF.XDEF286, path);
+			return false;
+		}
+		XDValue vx, vy;
+		if ((vx = getDefaultValue()) != null) {
+			if ((vy = y.getDefaultValue()) == null) {
+				if (full || cx != cy) {
+					result = false;
+				} else {
+					y._deflt = _deflt;
+				}
+			} else if (cx != cy || y._deflt != _deflt) {
+				if (vx == null || vy == null || !vx.equals(vy)) {
+					//Default or fixed values differs: &{0}
+					rep.error(XDEF.XDEF286, path);
+					result = false;
+				}
+			}
+		}
+		if ((vx = getFixedValue()) != null) {
+			if ((vy = y.getFixedValue()) == null) {
+				if (full || cx != cy) {
+					result = false;
+				} else {
+					y._onAbsence = _onAbsence;
+				}
+			} else if (cx != cy || y._onAbsence != _onAbsence) {
+				if (vx == null || vy == null || !vx.equals(vy)) {
+					//Default or fixed values differs: &{0}
+					rep.error(XDEF.XDEF286, path);
+					result = false;
+				}
+			}
+		}
+		int ix = _check;
+		int iy = y._check;
+		if (ix == iy) {
+			return result;
+		}
+		if (ix < 0) {
+			return iy < 0 && result;
+		} else {
+			if (iy < 0) {
+				if (full || cx != cy) {
+					return false;
+				}
+				y._check = _check;
+				return result;
+			} else {
+				if (compareCode(cx, cy, ix,	iy, full)) {
+					return result;
+				}
+			}
+			rep.error(XDEF.XDEF285, path); //Type of value differs: &{0}
+			return false;
+		}
+	}
+
+	/** Compare code of actions in two nodes.
+	 * @param cx code of XDPool x.
+	 * @param cy code of XDPool y.
+	 * @param x address to code of XDPool x.
+	 * @param y address to code of XDPool y.
+	 * @param full of all must be tested (implements/uses).
+	 * @return true if cods in both objects are compatible. Otherwise
+	 * return false.
+	 */
+	private static boolean compareCode(final XDValue[] cx,
+		final XDValue[] cy,
+		final int x,
+		final int y,
+		final boolean full) {
+		if (x == y && (x == -1 || cx == cy)) {
+			return true;
+		}
+		int p;
+		int ix = x, iy = y;
+		XDValue xx,xy;
+		while (ix < cx.length && iy < cx.length &&
+			(p = (xx = cx[ix]).getCode()) == (xy = cy[iy]).getCode()) {
+			switch (p) {
+				case STOP_OP:
+					return true;
+				case CALL_OP: {
+					if (cx == cy && xx.getParam() == xy.getParam() ||
+						!full && compareCode(cx,
+							cy, xx.getParam(), xy.getParam(), full)) {
+						ix++;
+						iy++;
+						continue;
+					} else {
+						return false;
+					}
+				}
+				case JMPEQ:
+				case JMPNE:
+				case JMPLE:
+				case JMPGE:
+				case JMPLT:
+				case JMPGT:
+				case JMP_OP:
+				case JMPF_OP:
+				case JMPT_OP: {
+					int m = xx.getParam();
+					int n = xy.getParam();
+					if (m - ix == n - iy) {
+						ix++;
+						iy++;
+					} else {
+						ix = Integer.MAX_VALUE;
+					}
+					continue;
+				}
+				default:
+					if (!xx.equals(xy)) {
+						return false;
+					}
+					ix++;
+					iy++;
+			}
+		}
+		return false;
+	}
 }
