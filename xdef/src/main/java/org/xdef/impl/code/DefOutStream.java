@@ -220,7 +220,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 	 * @return The string from value.
 	 */
 	public String toString() {
-		return "org.xdef.impl.DefOutputStream(" + _out + ")";
+		return "org.xdef.impl.code.DefOutStream(" + _out + ")";
 	}
 	@Override
 	/** Get string value of this object.
