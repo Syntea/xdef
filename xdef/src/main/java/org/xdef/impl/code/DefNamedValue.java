@@ -24,8 +24,8 @@ public final class DefNamedValue extends XDValueAbstract
 	public DefNamedValue(String key, XDValue value) {_name=key;setValue(value);}
 
 	@Override
-	/** Get ID of the type of value (cz.syntea.xdef.XDValueTypes.NAMED_VALUE).
-	 * @return item type (cz.syntea.xdef.XDValueTypes.NAMED_VALUE).
+	/** Get ID of the type of value (org.xdef.XDValueTypes.NAMED_VALUE).
+	 * @return item type (org.xdef.XDValueTypes.NAMED_VALUE).
 	 */
 	public short getItemId() {return XD_NAMEDVALUE;}
 
