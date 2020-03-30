@@ -1809,6 +1809,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//resolve root references for all XDefinitions
 		for (PNode p: _xdefPNodes) {
 			compileRootSelection(p);
+			for (int i = 1; i < p._xdef._acceptLocals.length; i++) {
+				String s = p._xdef._acceptLocals[i];
+				if (xdp.getXMDefinition(s.substring(0,s.length()-1)) == null) {
+					//Item "&{0}" in the attribute "xd:acceptLocals" is not
+					//name of X-definition&{#SYS000}
+					_scriptCompiler.error(p._name,
+						XDEF.XDEF413, s.substring(0,s.length()-1));
+				}
+			}
 		}
 		compileLexicons(_lexicon, xdp); // compile lexicon
 		_xdefPNodes.clear(); // Let GC make the job

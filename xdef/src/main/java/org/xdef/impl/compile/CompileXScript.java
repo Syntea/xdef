@@ -52,15 +52,22 @@ final class CompileXScript extends CompileStatement {
 
 	/** Compile acceptLocal attribute from XDef header. */
 	final void compileAcceptLocal(final List<String> locals) {
-		while (nextSymbol() == IDENTIFIER_SYM) {
-			String idName = _idName + '#';
+		for (;;) {
+			String idName;
+			if (nextSymbol() == IDENTIFIER_SYM) {
+				idName = _idName + '#';
+			} else if (_sym == '#') {
+				idName = "#";
+			} else {
+				break;
+			}
 			if (locals.contains(idName)) {
 				error(XDEF.XDEF422); //Duplicated script section
 			} else {
 				locals.add(idName);
 			}
 			if (nextSymbol() != XScriptParser.COMMA_SYM) {
-				return;
+				break;
 			}
 		}
 		if (_sym != NOCHAR) {
