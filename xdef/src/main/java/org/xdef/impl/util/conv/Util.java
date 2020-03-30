@@ -500,7 +500,8 @@ public final class Util {
 			localNamePrefix = xdName != null ? '_' + xdName + '.' : "_.";
 		}
 		XScriptParser p = new XScriptParser(XConstants.XML10);
-		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)), "", (byte) 10);
+		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)),
+			"", null, XConstants.XD32); /*aa*/
 		while (!p.eos()) {
 		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
 				int pos = p.getIndex();

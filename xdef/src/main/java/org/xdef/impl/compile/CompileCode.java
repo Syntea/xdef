@@ -377,19 +377,19 @@ public final class CompileCode extends CompileBase {
 		if (_varBlock == null) {
 			return false;
 		}
-			CompileVariable var = (CompileVariable)_varBlock.getXVariable(name);
-			if (var == null || var.getKind() == 'G') {
-				CompileVariable v = (CompileVariable) _varBlock.getXVariable(
-					_parser._actDefName + '#' + name);
-				if (v != null) {
-					var = v;
-				}
+		CompileVariable var = (CompileVariable)_varBlock.getXVariable(name);
+		if (var == null || var.getKind() == 'G') {
+			CompileVariable v = (CompileVariable) _varBlock.getXVariable(
+				_parser._actDefName + '#' + name);
+			if (v != null) {
+				var = v;
 			}
-			if (var != null) {
-				if (var.getOffset() == -1) {
-					return false;
-				}
+		}
+		if (var != null) {
+			if (var.getOffset() == -1) {
+				return false;
 			}
+		}
 		return var != null;
 	}
 

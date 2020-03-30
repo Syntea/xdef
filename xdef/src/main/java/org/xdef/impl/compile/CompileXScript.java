@@ -1,5 +1,6 @@
 package org.xdef.impl.compile;
 
+import java.util.List;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SBuffer;
@@ -49,17 +50,35 @@ final class CompileXScript extends CompileStatement {
 		super(g, xmlVersion, CompileBase.NO_MODE, nsPrefixes, clsLoader);
 	}
 
+	/** Compile acceptLocal attribute from XDef header. */
+	final void compileAcceptLocal(final List<String> locals) {
+		while (nextSymbol() == IDENTIFIER_SYM) {
+			String idName = _idName + '#';
+			if (locals.contains(idName)) {
+				error(XDEF.XDEF422); //Duplicated script section
+			} else {
+				locals.add(idName);
+			}
+			if (nextSymbol() != XScriptParser.COMMA_SYM) {
+				return;
+			}
+		}
+		if (_sym != NOCHAR) {
+			error(XDEF.XDEF425); //Script error
+		}
+	}
+
 	/** Compile external methods list from XDef header. */
-	final void compileExtMethods(String xdname, boolean local) {
+	final void compileExtMethods() {
 		while (nextSymbol() == SEMICOLON_SYM) {}
 		while(_sym == IDENTIFIER_SYM) {
-			compileExtMethod(local);
+			compileExtMethod(false); // not local here!
 			// method list separator
 			if (_sym != SEMICOLON_SYM) {
 				if (_sym == END_SYM || _sym == NOCHAR) {
 					break;
 				}
-				errorAndSkip(XDEF.XDEF525, ";}", ";"); //Script error
+				errorAndSkip(XDEF.XDEF425, ";}", ";"); //Script error
 			} else {
 				nextSymbol();
 			}

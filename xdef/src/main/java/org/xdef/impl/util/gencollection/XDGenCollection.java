@@ -602,7 +602,7 @@ public class XDGenCollection {
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		SBuffer sb = new SBuffer(script.trim());
-		sp.setSource(sb, defName, XConstants.XD20);
+		sp.setSource(sb, defName, null, XConstants.XD32);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
 		return xp.getCanonizedScript(removeActions);
 	}
