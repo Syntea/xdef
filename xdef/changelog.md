@@ -3,6 +3,7 @@
 # Version 40.0.0, release-date 2020-03-17
 * corrected invoking methods in referred types.
 * JSON implementation.
+* xd:def may contain attribute xd:acceptLocals.
 * xd:root may refer also to named xd:choice.
 
 # Version 32.5.6, release-date 2020-02-15

@@ -210,6 +210,8 @@ public class XScriptParser extends StringParser
 
 	/** Name of actual X-definition. */
 	public String _actDefName;
+	/** Array of X-definitions names from where to accept local declarations. */
+	public String[] _acceptLocals;
 	/** Version of X-definition (see XD2_0, XD3_1, XD3_2, XD4_0). */
 	public byte _xdVersion;
 	/** Last parsed identifier */
@@ -385,6 +387,7 @@ public class XScriptParser extends StringParser
 		super.setLineInfoFlag(true); // generate line information
 		_xmlVersion = xmlVersion;
 		_actDefName = "";
+		_acceptLocals = new String[0];
 //		_lastPos=0;idName=null;_parsedValue=null;_unaryMinus=false;// Java makes
 	}
 
@@ -395,12 +398,17 @@ public class XScriptParser extends StringParser
 	/** Set source buffer to parser and expand macros.
 	 * @param source buffer with source code.
 	 * @param actDefName name of actually processed X-definition.
+	 * @param acceptLocals array of X-definition names to accept locals.
 	 * @param xdVersion version ID of XDefinition
 	 */
 	public final void setSource(final SBuffer source,
 		final String actDefName,
+		final String[] acceptLocals,
 		final byte xdVersion) {
 		_actDefName = actDefName;
+		_acceptLocals = acceptLocals != null ? acceptLocals
+			: actDefName == null ? new String[] {actDefName + '#'}
+			: new String[0];
 		_xdVersion = xdVersion;
 		if(source != null) {
 			setSourceBuffer(source);

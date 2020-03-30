@@ -47,8 +47,8 @@ import javax.xml.namespace.QName;
  */
 public abstract class XDTester extends STester {
 //	public static String _xdNS = XDConstants.XDEF20_NS_URI;
-//	public static String _xdNS = XDConstants.XDEF31_NS_URI;
-	public static String _xdNS = XDConstants.XDEF32_NS_URI;
+	public static String _xdNS = XDConstants.XDEF31_NS_URI;
+//	public static String _xdNS = XDConstants.XDEF32_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 
@@ -107,7 +107,9 @@ public abstract class XDTester extends STester {
 
 	public final static boolean getFulltestMode() {return _fulltestMode;}
 
-	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
+	public final static void setFulltestMode(boolean fulltest) {
+		_fulltestMode = fulltest;
+	}
 
 	public final void setProperty(final String key, final String value) {
 		String newKey = key.replace('.', '_');

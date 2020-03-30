@@ -496,7 +496,7 @@ public class XDGenCollection {
 				addMacro((Element) n, xdUri, null, macros, resolve);
 			}
 		}
-		// Set macros from xd:def elements.
+		// Set macros from xd:def elements (compatibility with version 2.0. 3.1)
 		nl = KXmlUtils.getChildElements(collection);
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element el = (Element) nl.item(i);
@@ -602,7 +602,7 @@ public class XDGenCollection {
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		SBuffer sb = new SBuffer(script.trim());
-		sp.setSource(sb, defName, XConstants.XD20);
+		sp.setSource(sb, defName, null, XConstants.XD32);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
 		return xp.getCanonizedScript(removeActions);
 	}

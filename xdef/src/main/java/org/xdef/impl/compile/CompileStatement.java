@@ -39,6 +39,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.XDefinition;
 
 /** Compiler of statements in script.
  * @author Vaclav Trojan
@@ -149,13 +150,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Set source buffer with code to be compiled.
 	 * @param source buffer wit source code.
 	 * @param actDefName name of actually processed X-definition.
+	 * @param xdVersion version of X-definition.
 	 * @param nsPrefixes table with prefixes and name spaces.
 	 */
 	final void setSource(final SBuffer source,
 		final String actDefName,
+		final XDefinition xdef,
 		final byte xdVersion,
 		final Map<String, Integer> nsPrefixes) {
-		super.setSource(source, actDefName, xdVersion);
+		String[] acceptLocals = xdef != null ? xdef._acceptLocals : null;
+		setSource(source, actDefName, acceptLocals, xdVersion);
 		_g._nsPrefixes = nsPrefixes;
 	}
 
@@ -1694,11 +1698,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		return false;
 	}
 	private CompileVariable getVariable(final String name) {
-		CompileVariable var;
-		if ((var = _g.getVariable(_actDefName + '#' + name)) == null) {
-			var = _g.getVariable(name);
+		for (String s: _acceptLocals) {
+			CompileVariable var = _g.getVariable(s + name);
+			if (var != null) {
+				return var;
+			}
 		}
-		return var;
+		return _g.getVariable(name);
 	}
 
 	private CompileVariable getVariableAndErr(final String name) {
@@ -3016,7 +3022,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, XConstants.XD31, null);
+		setSource(source, defName, null, XConstants.XD31, null);
 		if (lang == null) {
 			error(XDEF.XDEF410, "language");//'&{0}' expected
 			return;
@@ -3115,7 +3121,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String defName,
 		final boolean local,
 		final Map<String, Integer> nsPrefixes) { // namespace
-		setSource(sName, defName, XConstants.XD20, nsPrefixes);
+		setSource(sName, defName, null, XConstants.XD20, nsPrefixes);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;
@@ -3613,8 +3619,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeI1 jmp = null;
 		int addr;
 		short type;
+/*XXX*
+		int srcPos = getIndex();
+/*XXX*/
 		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
+/*XXX*
+				String typeName =
+					_sym==IDENTIFIER_SYM ? _idName : symToName(_sym);
+//				CodeS1 info = new CodeS1(XD_STRING, TYPEINFO_CODE, 0, "");
+//				_g.addCode(info, 0);
+/*XXX*/
 				CompileVariable rVar =
 					(CompileVariable) _g._globalVariables.getXVariable(_idName);
 				int dx = addDebugInfo(true);
@@ -3683,6 +3698,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						_sym = IDENTIFIER_SYM;
 						_idName = "parse";
 					}
+//				} else if (_xdVersion < XConstants.XD31) {//old X-def versions
+//					errorAndSkip(XDEF.XDEF410, //'&{0}' expected
+//						String.valueOf(END_SYM), "parse:");
+//					return;
 				}
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
@@ -3853,6 +3872,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile declaration of a uniqueSet.
 	 * @param varKind variable kind ('G' .. global or 'X' .. model).
 	 * @param local true if it is in the declaration part with the local scope.
+	 * @param spos source position where the variable was declared.
 	 */
 	final void compileUniqueset(final byte varKind, final boolean local) {
 		short varType;
