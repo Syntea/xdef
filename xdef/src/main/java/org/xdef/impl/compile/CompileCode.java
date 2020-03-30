@@ -379,10 +379,13 @@ public final class CompileCode extends CompileBase {
 		}
 		CompileVariable var = (CompileVariable)_varBlock.getXVariable(name);
 		if (var == null || var.getKind() == 'G') {
-			CompileVariable v = (CompileVariable) _varBlock.getXVariable(
-				_parser._actDefName + '#' + name);
-			if (v != null) {
-				var = v;
+			for (String s: _parser._acceptLocals) {
+				CompileVariable v  =
+					(CompileVariable) _varBlock.getXVariable(s + name);
+				if (v != null) {
+					var = v;
+					break;
+				}
 			}
 		}
 		if (var != null) {
@@ -403,10 +406,13 @@ public final class CompileCode extends CompileBase {
 		if (var == null && _varBlock != null) {
 			var = (CompileVariable) _varBlock.getXVariable(name);
 			if (var == null || var.getKind() == 'G') {
-				CompileVariable v = (CompileVariable) _varBlock.getXVariable(
-					_parser._actDefName + '#' + name);
-				if (v != null) {
-					var = v;
+				for (String s: _parser._acceptLocals) {
+					CompileVariable v =
+						(CompileVariable) _varBlock.getXVariable(s + name);
+					if (v != null) {
+						var = v;
+						break;
+					}
 				}
 			}
 			if (var != null) {
@@ -603,8 +609,13 @@ public final class CompileCode extends CompileBase {
 			}
 			return null;
 		}
-		Method m = getDeclaredMethod(_parser._actDefName + '#' + name, params);
-		return (m != null) ? m : getDeclaredMethod(name, params);
+		for (String s: _parser._acceptLocals) {
+			Method m = getDeclaredMethod(s + name, params);
+			if (m != null) {
+				return m;
+			}
+		}
+		return getDeclaredMethod(name, params);
 	}
 
 	/** Find external method in given class.
@@ -1518,7 +1529,13 @@ public final class CompileCode extends CompileBase {
 	}
 
 	final boolean scriptMethod(final String name, final int numPar) {
-		ScriptMethod lm = _scriptMethods.get(_parser._actDefName + '#' +name);
+		ScriptMethod lm = null;
+		for (String s: _parser._acceptLocals) {
+			lm = _scriptMethods.get(s + name);
+			if (lm != null) {
+				break;
+			}
+		}
 		if (lm == null) {
 			lm = _scriptMethods.get(name);
 			if (lm == null) {
@@ -1883,7 +1900,7 @@ public final class CompileCode extends CompileBase {
 										}
 									}
 									if (!found1) {
-										//Incorrect value of '&{0}'
+										//Incorrect value of '&{0}'&{1}{: }
 										_parser.error(XDEF.XDEF809, s);
 									}
 								}

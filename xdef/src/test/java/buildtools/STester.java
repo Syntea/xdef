@@ -514,8 +514,8 @@ public abstract class STester {
 	public final void assertEq(final String a1,
 		final String a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) ||
-			(a1 != null && !a1.equals(a2))) {
+		if ((a1 != null && a2 != null && !a1.equals(a2))
+			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + (a1 == null ? "null" : "'" + a1 + "'")
 				+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
@@ -628,10 +628,10 @@ public abstract class STester {
 	public static boolean equals(Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
 			if (a1 instanceof BigDecimal) {
-				return (a2 instanceof BigDecimal)
+				return (a2 instanceof BigDecimal) 
 					? a1.equals(a2) : a1.equals(new BigDecimal(a2.toString()));
 			} else if (a2 instanceof BigDecimal) {
-				return (a1 instanceof BigDecimal)
+				return (a1 instanceof BigDecimal) 
 					? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
 			}
 			if ((a1 instanceof Byte || a1 instanceof Short ||
@@ -670,7 +670,7 @@ public abstract class STester {
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
 	 */
-	public final void assertNull(final Object a) {assertNull(a, null);}
+	public final void assertNull(final Object a) {assertNull(a, ""+a);}
 
 	/** Check if the argument is <tt>null</tt>. If not then invoke the method
 	 * <tt>fail</tt>.

@@ -496,7 +496,7 @@ public class XDGenCollection {
 				addMacro((Element) n, xdUri, null, macros, resolve);
 			}
 		}
-		// Set macros from xd:def elements.
+		// Set macros from xd:def elements (compatibility with version 2.0. 3.1)
 		nl = KXmlUtils.getChildElements(collection);
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element el = (Element) nl.item(i);

@@ -14,7 +14,7 @@
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
   xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
   xmlns:w         = "http://www.xdef.org/xdef/4.0"
-  w:metaNamespace = "METAXD">
+  w:metaNamespace = "METAXD" >
 
 /******************************************************************************/
 /*X-definition of X-definitions ver 4.0, metanamespace: METAXD, prefix: XD4.0 */
@@ -58,6 +58,7 @@
     root            = "optional rootList; options acceptQualifiedAttr"
     include         = "optional uriList; options acceptQualifiedAttr"
     script          = "optional xdefScript; options acceptQualifiedAttr"
+    acceptLocals    = "optional acceptLocals; options acceptQualifiedAttr"
     xd:attr         = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
@@ -215,5 +216,4 @@
 
   <XD4.0:anyRef XD4.0:script = "optional groupScript;
                     options moreAttributes, moreElements" />
-
 </xd:def>

@@ -55,6 +55,7 @@
     root            = "optional rootList; options acceptQualifiedAttr"
     include         = "optional uriList; options acceptQualifiedAttr"
     script          = "optional xdefScript; options acceptQualifiedAttr"
+    acceptLocals    = "optional acceptLocals; options acceptQualifiedAttr"
     xd:attr         = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
@@ -91,7 +92,7 @@
                             match @name || @XD3.1:name; ref XD3.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
 
-          <XD3.1:json  xd:script = "occurs *;"
+          <XD3.1:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
               required json;
           </XD3.1:json>
