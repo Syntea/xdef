@@ -29,7 +29,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** root selection. */
 	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
 	/** Array of X-definitions names from where to accept local declarations. */
-	public String[] _acceptLocals;
+	public String[] _importLocal;
 
 	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
@@ -281,8 +281,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		for (int i = 0; i < len; i++) {
 			_xElements.get(i).writeXNode(xw, list);
 		}
-		xw.writeLength(len = _acceptLocals.length);
-		for (String s: _acceptLocals) {
+		xw.writeLength(len = _importLocal.length);
+		for (String s: _importLocal) {
 			xw.writeString(s);
 		}
 	}
@@ -320,9 +320,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			}
 			x._xElements.add(XElement.readXElement(xr, x, list));
 		}
-		x._acceptLocals = new String[len = xr.readLength()];
+		x._importLocal = new String[len = xr.readLength()];
 		for (int i = 0; i < len; i++) {
-			x._acceptLocals[i] = xr.readString();
+			x._importLocal[i] = xr.readString();
 		}
 		return x;
 	}

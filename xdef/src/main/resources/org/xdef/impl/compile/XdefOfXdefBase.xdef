@@ -47,7 +47,7 @@
   type languageId XDScript.rule('LanguageId');
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
-  type acceptLocals XDScript.rule('acceptLocals');
+  type importLocal XDScript.rule('importLocal');
   type json XDJson.rule('json');
 
   /** Check element name and namespace URI (used in the match section) */
@@ -160,7 +160,7 @@ XDefName ::= XMLName
 
 XModelName ::= XMLName
 
-acceptLocals ::= S? (XMLName S? ("," S? XMLName S?)*)?
+importLocal ::= S? (XMLName S? ("," S? XMLName S?)*)?
 
 XPosition ::= (XDefName? "#")? XModelName
   ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex?)*

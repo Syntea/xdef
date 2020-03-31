@@ -3153,37 +3153,37 @@ public final class TestParse extends XDTester {
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
-            xdef = // test acceptLocals attribute
+            xdef = // test importLocal attribute
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
-"<xd:def name='A' root='A'>\n"+ // no acceptLocals
+"<xd:def name='A' root='A'>\n"+ // no importLocal
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
 "  uniqueSet u {c: x}\n"+
 "</xd:declaration>\n"+
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
 "</xd:def>\n"+   
-"<xd:def name='B' root='A' acceptLocals='X'>\n"+ // acceptLocals from X
+"<xd:def name='B' root='A' importLocal='X'>\n"+ // importLocal from X
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
 "  uniqueSet u {c: x}\n"+
 "</xd:declaration>\n"+
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
 "</xd:def>\n"+
-"<xd:def name='C' root='A' acceptLocals='Y'>\n"+ // acceptLocals from Y
+"<xd:def name='C' root='A' importLocal='Y'>\n"+ // importLocal from Y
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
 "  uniqueSet u {c: x}\n"+
 "</xd:declaration>\n"+
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
 "</xd:def>\n"+
-"<xd:def name='D' root='A' acceptLocals='X,Y'>\n"+ // acceptLocals from X,Y
+"<xd:def name='D' root='A' importLocal='X,Y'>\n"+ // importLocal from X,Y
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
 "  uniqueSet u {c: x}\n"+
 "</xd:declaration>\n"+
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
 "</xd:def>\n"+
-"<xd:def name='E' root='A' acceptLocals='X,Y'>\n"+ // local and acceptLocals
+"<xd:def name='E' root='A' importLocal='X,Y'>\n"+ // local and importLocal
 "<xd:declaration scope='local'>\n"+
 "  String xx() {return 'Exx';}\n"+       
 "  type x eq('Ex');\n"+       
