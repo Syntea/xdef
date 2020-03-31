@@ -251,7 +251,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				// internal declarations, BNGGrammars, components and
 				// lexicon items).
 				_actPNode._xdef = new XDefinition(defName,
-					null, null, null, _actPNode._xmlVersion);
+					null, _actPNode._nsURI, null, _actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
 				if (defName != null) {
 					// check duplicate of X-definition

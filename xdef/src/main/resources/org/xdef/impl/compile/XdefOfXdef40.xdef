@@ -58,7 +58,7 @@
     root            = "optional rootList; options acceptQualifiedAttr"
     include         = "optional uriList; options acceptQualifiedAttr"
     script          = "optional xdefScript; options acceptQualifiedAttr"
-    acceptLocals    = "optional acceptLocals; options acceptQualifiedAttr"
+    importLocal    = "optional importLocal; options acceptQualifiedAttr"
     xd:attr         = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 

@@ -158,8 +158,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final XDefinition xdef,
 		final byte xdVersion,
 		final Map<String, Integer> nsPrefixes) {
-		String[] acceptLocals = xdef != null ? xdef._acceptLocals : null;
-		setSource(source, actDefName, acceptLocals, xdVersion);
+		String[] importLocal = xdef != null ? xdef._importLocal : null;
+		setSource(source, actDefName, importLocal, xdVersion);
 		_g._nsPrefixes = nsPrefixes;
 	}
 
@@ -1698,7 +1698,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		return false;
 	}
 	private CompileVariable getVariable(final String name) {
-		for (String s: _acceptLocals) {
+		for (String s: _importLocal) {
 			CompileVariable var = _g.getVariable(s + name);
 			if (var != null) {
 				return var;

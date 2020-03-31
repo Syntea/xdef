@@ -541,7 +541,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator.setExternals(exts);
 				}
 			}
-			sval = _precomp.getXdefAttr(pnode, "acceptLocals", false, true);
+			sval = _precomp.getXdefAttr(pnode, "importLocal", false, true);
 			ArrayList<String> locals = new ArrayList<String>();
 			locals.add(pnode._xdef.getName() + '#');
 			if (sval != null) {
@@ -552,8 +552,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					pnode._nsPrefixes);
 				_scriptCompiler.compileAcceptLocal(locals);
 			}
-			pnode._xdef._acceptLocals = new String[locals.size()];
-			locals.toArray(pnode._xdef._acceptLocals);
+			pnode._xdef._importLocal = new String[locals.size()];
+			locals.toArray(pnode._xdef._importLocal);
 		}
 	}
 
@@ -562,23 +562,27 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * @return true if the attribute "scope" is "local".
 	 */
 	private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
-		SBuffer scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
 		boolean local = nodei._xdef!=null
 			&& nodei._xdef.getXDVersion() >= XConstants.XD40;
-		if (scope != null) {
-			String s = scope.getString();
-			local = ("local".equals(s));
-			if (local && nodei._xdef == null) {
-				//Attribute "scope" in selfstanding declaration section
-				//can be only "global"
-				error(scope, XDEF.XDEF221);
-				_precomp.getXdefAttr(nodei, "scope", false, true);
-				return false;
-			} else if (!local  && !"global".equals(s)) {
-				//Incorrect attribute "scope" in declaration section: &{0}
-				// (must be "local" or "global")
-				error(scope, XDEF.XDEF215);
+		SBuffer scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
+		if (scope == null) {
+			return local;
+		}
+		String s = scope.getString();
+		if ("global".equals(s)) {
+			return false;
+		} else if ("local".equals(s)) {
+			if (nodei._xdef == null) {
+				//Attribute '&{0}' not allowed here&{#SYS000}
+				error(scope, XDEF.XDEF254, "scope");
+			} else {
+				return true;
 			}
+		} else {
+			//Attribute "scope" in selfstanding declaration section
+			//can be only "global"
+			error(scope, XDEF.XDEF221);
+			_precomp.getXdefAttr(nodei, "scope", false, true);
 		}
 		return local;
 	}
@@ -1580,9 +1584,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		XDefinition def = new XDefinition(defName,
 			xdp, pnode._nsURI, pnode._name, pnode._xmlVersion);
-		//copy _acceptLocals!
-		_scriptCompiler._acceptLocals =
-			def._acceptLocals = pnode._xdef._acceptLocals;
+		//copy _importLocal!
+		_scriptCompiler._importLocal =
+			def._importLocal = pnode._xdef._importLocal;
 		pnode._xdef = def;
 		for (Entry<String, Integer> e: pnode._nsPrefixes.entrySet()) {
 			def._namespaces.put(e.getKey(),
@@ -1591,7 +1595,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		SBuffer sval = _precomp.getXdefAttr(pnode, "script", false, true);
 		if (sval != null) {
 			_scriptCompiler.setSource(sval, defName,
-				pnode._xdef._acceptLocals, def.getXDVersion());
+				pnode._xdef._importLocal, def.getXDVersion());
 			_scriptCompiler.compileXDHeader(def);
 		}
 		if (_xdefs.containsKey(def.getName())) {
@@ -1809,10 +1813,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		//resolve root references for all XDefinitions
 		for (PNode p: _xdefPNodes) {
 			compileRootSelection(p);
-			for (int i = 1; i < p._xdef._acceptLocals.length; i++) {
-				String s = p._xdef._acceptLocals[i];
+			for (int i = 1; i < p._xdef._importLocal.length; i++) {
+				String s = p._xdef._importLocal[i];
 				if (xdp.getXMDefinition(s.substring(0,s.length()-1)) == null) {
-					//Item "&{0}" in the attribute "xd:acceptLocals" is not
+					//Item "&{0}" in the attribute "xd:importLocal" is not
 					//name of X-definition&{#SYS000}
 					_scriptCompiler.error(p._name,
 						XDEF.XDEF413, s.substring(0,s.length()-1));
@@ -1945,8 +1949,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XDefinition xdef = /*aa*/
 						(XDefinition) xdp.getXMDefinition(s.substring(0, ndx));
 					if (xdef != null) {
-						_codeGenerator._parser._acceptLocals =
-							xdef._acceptLocals;
+						_codeGenerator._parser._importLocal =
+							xdef._importLocal;
 						var = _codeGenerator.getVariable(name);
 					}
 					if (var == null) {
