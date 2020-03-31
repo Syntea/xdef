@@ -36,7 +36,8 @@ public abstract class XdDoc {
 		String namespace = xdef.getDocumentElement().getNamespaceURI();
 		if (XDConstants.XDEF20_NS_URI.equals(namespace)
 			|| XDConstants.XDEF31_NS_URI.equals(namespace)
-			|| XDConstants.XDEF32_NS_URI.equals(namespace)) {
+			|| XDConstants.XDEF32_NS_URI.equals(namespace)
+			|| XDConstants.XDEF40_NS_URI.equals(namespace)) {
 			return new XdDoc_2_0(xdef);
 		} else {
 			//Not valid X-definition document

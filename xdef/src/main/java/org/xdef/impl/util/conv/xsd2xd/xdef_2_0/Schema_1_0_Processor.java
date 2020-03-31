@@ -42,10 +42,10 @@ public class Schema_1_0_Processor extends Processor {
 	public Schema_1_0_Processor(String xdefPrefix, Reporter reporter,
 		URL rootSchemaURL, boolean separately) {
 /*VT*/
-		super(rootSchemaURL, XDConstants.XDEF31_NS_URI, xdefPrefix);
+		super(rootSchemaURL, XDConstants.XDEF40_NS_URI, xdefPrefix);
 /*VT*/
 		_xdef = new XdefDocument(_schemaElements,
-			xdefPrefix, XDConstants.XDEF31_NS_URI, separately);
+			xdefPrefix, XDConstants.XDEF40_NS_URI, separately);
 		_xdefPrefix = xdefPrefix;
 		_reporter = reporter;
 		_separately = separately;

@@ -125,8 +125,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					} else {
 						//Namespace of X-definitions is required
 						error(_actPNode._name, XDEF.XDEF256);
-						projectNS = XDConstants.XDEF31_NS_URI;
-						ver = XConstants.XD31;
+						projectNS = XDConstants.XDEF40_NS_URI;
+						ver = XConstants.XD40;
 					}
 				}
 				if ("thesaurus".equals(elemLocalName)) {

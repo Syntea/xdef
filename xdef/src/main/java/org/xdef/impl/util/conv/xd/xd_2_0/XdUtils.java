@@ -40,8 +40,10 @@ public final class XdUtils {
 			XDConstants.XDEF20_NS_URI, XdNames.COLLECTION)
 			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.COLLECTION)
-			|| (Util.isElement(node,
-				XDConstants.XDEF32_NS_URI, XdNames.COLLECTION));
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.COLLECTION)
+			|| Util.isElement(node,
+				XDConstants.XDEF40_NS_URI, XdNames.COLLECTION);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
@@ -53,7 +55,8 @@ public final class XdUtils {
 	public static boolean isDef(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.DEF)
 			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
-			|| (Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.DEF));
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.DEF)
+			|| Util.isElement(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
@@ -65,7 +68,8 @@ public final class XdUtils {
 	public static boolean isModel(final Node node) {
 		return Util.isChild(node, XDConstants.XDEF20_NS_URI, XdNames.DEF)
 			|| Util.isChild(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
-			|| (Util.isChild(node, XDConstants.XDEF32_NS_URI, XdNames.DEF));
+			|| Util.isChild(node, XDConstants.XDEF32_NS_URI, XdNames.DEF)
+			|| Util.isChild(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -77,7 +81,8 @@ public final class XdUtils {
 	public static boolean isMixed(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.MIXED)
 			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.MIXED)
-			|| (Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.MIXED));
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.MIXED)
+			|| Util.isElement(node, XDConstants.XDEF40_NS_URI,XdNames.MIXED);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -89,7 +94,8 @@ public final class XdUtils {
 	public static boolean isChoice(final Node node) {
 		return Util.isElement(node, XDConstants.XDEF20_NS_URI, XdNames.CHOICE)
 			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.CHOICE)
-			|| (Util.isElement(node, XDConstants.XDEF32_NS_URI,XdNames.CHOICE));
+			|| Util.isElement(node, XDConstants.XDEF32_NS_URI,XdNames.CHOICE)
+			|| Util.isElement(node,XDConstants.XDEF40_NS_URI,XdNames.CHOICE);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -101,7 +107,8 @@ public final class XdUtils {
 	public static boolean isSequence(final Node node) {
 		return Util.isElement(node,XDConstants.XDEF20_NS_URI, XdNames.SEQUENCE)
 			|| Util.isElement(node,XDConstants.XDEF31_NS_URI, XdNames.SEQUENCE)
-			||(Util.isElement(node,XDConstants.XDEF32_NS_URI,XdNames.SEQUENCE));
+			|| Util.isElement(node,XDConstants.XDEF32_NS_URI, XdNames.SEQUENCE)
+			|| Util.isElement(node,XDConstants.XDEF40_NS_URI, XdNames.SEQUENCE);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-definition
@@ -115,8 +122,10 @@ public final class XdUtils {
 			XDConstants.XDEF20_NS_URI, XdNames.DECLARATION)
 			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.DECLARATION)
-			|| (Util.isElement(node,
-				XDConstants.XDEF32_NS_URI, XdNames.DECLARATION));
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.DECLARATION)
+			|| Util.isElement(node,
+				XDConstants.XDEF40_NS_URI, XdNames.DECLARATION);
 	}
 
 	/** Returns <tt>true</tt> if given node is a valid X-macro
@@ -130,8 +139,10 @@ public final class XdUtils {
 			XDConstants.XDEF20_NS_URI, XdNames.MACRO)
 			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.MACRO)
-			|| (Util.isElement(node,
-				XDConstants.XDEF32_NS_URI, XdNames.MACRO));
+			|| Util.isElement(node,
+				XDConstants.XDEF32_NS_URI, XdNames.MACRO)
+			|| Util.isElement(node,
+				XDConstants.XDEF40_NS_URI, XdNames.MACRO);
 	}
 
 	/** Returns <tt>true</tt> if given model is declared as root model.
@@ -199,8 +210,13 @@ public final class XdUtils {
 		}
 		result = Util.getAttrValue(element,
 			XDConstants.XDEF31_NS_URI, XdNames.NAME);
+		if (result != null) {
+			return result;
+		}
+		result = Util.getAttrValue(element,
+			XDConstants.XDEF32_NS_URI, XdNames.NAME);
 		return (result != null) ? result :
-			Util.getAttrValue(element, XDConstants.XDEF32_NS_URI, XdNames.NAME);
+			Util.getAttrValue(element, XDConstants.XDEF40_NS_URI, XdNames.NAME);
 	}
 
 	/** Gets instance of element properties of given element.
@@ -233,6 +249,10 @@ public final class XdUtils {
 		if (textValues.getLength() == 0) {
 			textValues = KXmlUtils.getChildElementsNS(element,
 			XDConstants.XDEF32_NS_URI, XdNames.TEXT);
+		}
+		if (textValues.getLength() == 0) {
+			textValues = KXmlUtils.getChildElementsNS(element,
+			XDConstants.XDEF40_NS_URI, XdNames.TEXT);
 		}
 		//one text value specified
 		if (textValues.getLength() == 1) {
@@ -468,8 +488,9 @@ public final class XdUtils {
 		//attribute xd:text is present
 		if (Util.hasAttrDecl(element, XDConstants.XDEF20_NS_URI, XdNames.TEXT)
 			|| Util.hasAttrDecl(element, XDConstants.XDEF31_NS_URI,XdNames.TEXT)
-			|| (Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,
-				XdNames.TEXT))) {
+			|| Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,XdNames.TEXT)
+			|| Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,
+				XdNames.TEXT)) {
 			return true;
 		}
 		//child element xd:text is present
@@ -477,8 +498,10 @@ public final class XdUtils {
 			XDConstants.XDEF20_NS_URI, XdNames.TEXT).getLength() > 0
 			||  KXmlUtils.getChildElementsNS(element,
 				XDConstants.XDEF31_NS_URI, XdNames.TEXT).getLength() > 0
-			||  (KXmlUtils.getChildElementsNS(element,
-				XDConstants.XDEF32_NS_URI, XdNames.TEXT).getLength() > 0);
+			||  KXmlUtils.getChildElementsNS(element,
+				XDConstants.XDEF32_NS_URI, XdNames.TEXT).getLength() > 0
+			||  KXmlUtils.getChildElementsNS(element,
+				XDConstants.XDEF40_NS_URI, XdNames.TEXT).getLength() > 0;
 	}
 
 	/** Returns <tt>true</tt> if given X-definition element declaration contains
@@ -494,7 +517,8 @@ public final class XdUtils {
 			String attrNS = attr.getNamespaceURI();
 			if (!XDConstants.XDEF20_NS_URI.equals(attrNS)
 				&& !XDConstants.XDEF31_NS_URI.equals(attrNS)
-				&& !XDConstants.XDEF32_NS_URI.equals(attrNS)) {
+				&& !XDConstants.XDEF32_NS_URI.equals(attrNS)
+				&& !XDConstants.XDEF40_NS_URI.equals(attrNS)) {
 				return true;
 			} else {
 				if (XdNames.ATTR.equals(Util.getAttrLocalName(attr))) {
@@ -519,7 +543,8 @@ public final class XdUtils {
 			Element child = (Element) children.item(i);
 			if (!XDConstants.XDEF20_NS_URI.equals(child.getNamespaceURI())
 				&& !XDConstants.XDEF31_NS_URI.equals(child.getNamespaceURI())
-				&& !XDConstants.XDEF32_NS_URI.equals(child.getNamespaceURI())) {
+				&& !XDConstants.XDEF32_NS_URI.equals(child.getNamespaceURI())
+				&& !XDConstants.XDEF40_NS_URI.equals(child.getNamespaceURI())) {
 				return true;
 			} else {
 				String elemName = child.getLocalName();

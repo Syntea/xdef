@@ -475,6 +475,7 @@ public class XdefDocument implements Convertor {
 		String declaration) {
 		Element element = addXdefElement(defElement, XdNames.DECLARATION);
 /*VT2*/
+		element.setAttribute("scope", "global");
 		if (declaration.isEmpty()) {
 			declaration = "string()";
 		}
