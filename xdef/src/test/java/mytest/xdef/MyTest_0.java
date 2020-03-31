@@ -287,8 +287,8 @@ public class MyTest_0 extends XDTester {
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' root='a'>\n" +
-"<xd:declaration scope='local'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n" +
+"<xd:declaration>\n" +
 "  type genre enum(\"Classic\", \"Country\", \"Folk\", \"Jazz\", \"Pop\", \"Pop_punk\",\n" +
 "             \"Punk\", \"Punk_rock\", \"Rap\", \"Rock\", \"R&amp;B\", \"Other\");\n" +
 "  boolean yy = genre().parse('Country').matches();\n"+
