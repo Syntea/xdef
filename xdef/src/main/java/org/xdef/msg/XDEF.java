@@ -285,7 +285,7 @@ public interface XDEF {
 	public static final long XDEF411 = 31159025803L;
 	/** Type identifier expected&amp;{#SYS000} */
 	public static final long XDEF412 = 31159025804L;
-	/** The item "&amp;{0}" in the attribute "xd:acceptLocals" is not a name of X-definition&amp;{#SYS000} */
+	/** The item "&amp;{0}" in the attribute "xd:importLocal" is not a name of X-definition&amp;{#SYS000} */
 	public static final long XDEF413 = 31159025805L;
 	/** Assignment statement expected&amp;{#SYS000} */
 	public static final long XDEF414 = 31159025806L;
