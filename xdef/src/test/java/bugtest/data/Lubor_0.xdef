@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="windows-1250" ?>
- <!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
+ <!-- Věcné struktury (v "abecedním pořadí) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
 <xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' name='A' root='A | B'>
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
    <A xd:script='ref C' >
-    <!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
-    <!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
+	<!-- Věcné struktury (v "abecedním pořadí) -->
+	<!-- Věcné struktury (v "abecedním pořadí) -->
       <X/>
    </A>
    <B xd:script='ref C' />
    <C c='string'>
      <D xd:script='occurs 0..1' d='string'/>
    </C>
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním pořadí) -->
    <D D='string'>
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m" poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním" pořadí) -->
      <D/>
    </D>
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m" poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním" pořadí) -->
 </xd:def>
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m" poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním" pořadí) -->
 
-<!-- Vďż˝cnďż˝ struktury (v "abecednďż˝m" poďż˝adďż˝) -->
+<!-- Věcné struktury (v "abecedním" pořadí) -->

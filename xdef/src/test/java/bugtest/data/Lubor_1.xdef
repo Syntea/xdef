@@ -7,13 +7,13 @@
 <xd:component>
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
-  %class complaints.data.C %link A#C;
+  %class bugtest.data.C %link A#C;
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
-  %class complaints.data.B extends complaints.data.C %link A#B;
+  %class bugtest.data.B extends bugtest.data.C %link A#B;
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
-  %class complaints.data.A extends complaints.data.C %link A#A;
+  %class bugtest.data.A extends bugtest.data.C %link A#A;
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
-  %class complaints.data.D %link A#D;
+  %class bugtest.data.D %link A#D;
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
 </xd:component>
 <!-- Vìcné struktury (v "abecedním" poøadí) -->
