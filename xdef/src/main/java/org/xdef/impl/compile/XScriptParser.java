@@ -211,7 +211,7 @@ public class XScriptParser extends StringParser
 	/** Name of actual X-definition. */
 	public String _actDefName;
 	/** Array of X-definitions names from where to accept local declarations. */
-	public String[] _importLocal;
+	public String[] _importLocals;
 	/** Version of X-definition (see XD2_0, XD3_1, XD3_2, XD4_0). */
 	public byte _xdVersion;
 	/** Last parsed identifier */
@@ -387,7 +387,7 @@ public class XScriptParser extends StringParser
 		super.setLineInfoFlag(true); // generate line information
 		_xmlVersion = xmlVersion;
 		_actDefName = "";
-		_importLocal = new String[0];
+		_importLocals = new String[0];
 //		_lastPos=0;idName=null;_parsedValue=null;_unaryMinus=false;// Java makes
 	}
 
@@ -406,7 +406,7 @@ public class XScriptParser extends StringParser
 		final String[] importLocal,
 		final byte xdVersion) {
 		_actDefName = actDefName;
-		_importLocal = importLocal != null ? importLocal
+		_importLocals = importLocal != null ? importLocal
 			: actDefName == null ? new String[] {actDefName + '#'}
 			: new String[0];
 		_xdVersion = xdVersion;

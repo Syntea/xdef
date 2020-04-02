@@ -10,7 +10,7 @@ import org.xdef.XDPool;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
-import buildtools.XDTester;
+import test.XDTester;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;

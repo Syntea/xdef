@@ -5,7 +5,7 @@ import org.xdef.util.GenCollection;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
 import org.w3c.dom.Element;
-import buildtools.XDTester;
+import test.XDTester;
 
 /** Test for the XdCollection.
  * @author Vaclav Trojan

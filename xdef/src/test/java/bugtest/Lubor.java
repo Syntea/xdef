@@ -1,9 +1,9 @@
-package complaints;
+package bugtest;
 
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import buildtools.XDTester;
+import test.XDTester;
 import java.io.File;
 
 public class Lubor extends XDTester {
@@ -27,12 +27,12 @@ public class Lubor extends XDTester {
 			}
 /*xx*/
 			xml = "<A c='c'><D d='d'/><X/></A>";
-			complaints.data.A p = (complaints.data.A)
+			bugtest.data.A p = (bugtest.data.A)
 				parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
 			xml = "<B c='c'><D d='d'/></B>";
-			complaints.data.B q = (complaints.data.B)
+			bugtest.data.B q = (bugtest.data.B)
 				parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, q.toXml());

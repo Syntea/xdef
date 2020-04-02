@@ -1,4 +1,4 @@
-package buildtools;
+package test;
 
 import org.xdef.component.XComponent;
 import org.xdef.impl.code.DefOutStream;

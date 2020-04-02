@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.XDPool;
@@ -511,12 +511,12 @@ public final class TestDTDTypes extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name=\"test1\">\n"+
-" <xd:declaration>\n"+
+" <xd:declaration scope='global'>\n"+
 "   uniqueSet id2 {c: cislo};\n"+
 " </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:root='a' name='test'>\n"+
-" <xd:declaration>\n"+
+" <xd:declaration scope='global'>\n"+
 "   int i = 1;\n"+
 "   uniqueSet id1 {s: string()};" +
 "   int j = 2;\n"+

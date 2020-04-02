@@ -13,7 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import buildtools.STester;
+import test.STester;
 
 /** Test XML writer.
  * @author Vaclav Trojan

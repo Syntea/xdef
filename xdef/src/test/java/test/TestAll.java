@@ -7,7 +7,6 @@ import org.testng.TestNG;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import buildtools.XDTester;
 
 /** Execute all tests fast.
  * @author Vaclav Trojan

@@ -783,6 +783,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_precomp.getXdefAttr(nodei, "extends", false, remove),
 			nodei._value,
 			defName,
+			nodei._xdef,
 			isLocalScope(nodei, remove),
 			nodei._nsPrefixes);
 	}
@@ -1542,6 +1543,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (PNode nodei: pnode._childNodes) {
 			XElement x = newNode.getKind() == XMNode.XMELEMENT ?
 				(XElement) newNode : lastElement;
+			if (nodei._xdef == null) {
+				nodei._xdef = xdef;
+			}
 			compileXChild(newNode, x, nodei, xdef, level + 1, json);
 		}
 		short newKind = newNode.getKind();
@@ -1585,7 +1589,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		XDefinition def = new XDefinition(defName,
 			xdp, pnode._nsURI, pnode._name, pnode._xmlVersion);
 		//copy _importLocal!
-		_scriptCompiler._importLocal =
+		_scriptCompiler._importLocals =
 			def._importLocal = pnode._xdef._importLocal;
 		pnode._xdef = def;
 		for (Entry<String, Integer> e: pnode._nsPrefixes.entrySet()) {
@@ -1949,7 +1953,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XDefinition xdef = /*aa*/
 						(XDefinition) xdp.getXMDefinition(s.substring(0, ndx));
 					if (xdef != null) {
-						_codeGenerator._parser._importLocal =
+						_codeGenerator._parser._importLocals =
 							xdef._importLocal;
 						var = _codeGenerator.getVariable(name);
 					}

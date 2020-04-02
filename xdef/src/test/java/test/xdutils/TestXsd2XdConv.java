@@ -12,7 +12,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import buildtools.XDTester;
+import test.XDTester;
 
 /** Tests schema to XDefinition conversion.
  * @author Alexandrov

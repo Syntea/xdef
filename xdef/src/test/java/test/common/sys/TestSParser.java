@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import buildtools.STester;
+import test.STester;
 
 /** Test of simple parser and SDatetime.
  * @author Vaclav Trojan

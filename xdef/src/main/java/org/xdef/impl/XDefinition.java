@@ -74,7 +74,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_onXmlError = -1;
 	}
 
-
 	@Override
 	/** Get source position of this X-definition.
 	 * @return source ID of this X-definition..
@@ -222,6 +221,22 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return result;
 	}
 
+	/** Find variable in local declarations or in global declaration.
+	 * @param name name of variable.
+	 * @return XVariable object or null if it is not found.
+	 */
+	public XVariable findVariable(final String name) {
+		XPool xp = (XPool) getDefPool();
+		for (String s: _importLocal) {
+			// first look to the list of local declarations
+			XVariable xv = xp.getVariable(s + name);
+			if (xv != null) {
+				return xv;
+			}
+		}
+		return xp.getVariable(name); // not found in locals, get global
+	}
+
 	@Override
 	/** Compare X-definition with an object.
 	 * @param o object to be compared.
@@ -320,7 +335,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			}
 			x._xElements.add(XElement.readXElement(xr, x, list));
 		}
-		x._importLocal = new String[len = xr.readLength()];
+		len = xr.readLength();
+		x._importLocal = new String[len];
 		for (int i = 0; i < len; i++) {
 			x._importLocal[i] = xr.readString();
 		}

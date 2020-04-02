@@ -74,9 +74,6 @@ public class XVariableTable implements XMVariableTable {
 			return result;
 		}
 		XVariableTable parent = getParent();
-		if (parent == null) {
-			return null;
-		}
 		while (parent != null) {
 			result = (XVariable) parent.getVariable(name);
 			if (result != null) {

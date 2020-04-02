@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
-import buildtools.STester;
+import test.STester;
 
 /** Test reporter.
  * @author  Vaclav Trojan

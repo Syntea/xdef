@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
@@ -944,9 +944,9 @@ public final class TestScript extends XDTester {
 			+ " onFalse setResult(true); "); // top domain missing
 		testAttr("tro@volny.c","onTrue setResult(true); required emailList();"
 			+ " onFalse setResult(true); "); // top domain too short
-		testAttr("t@v.cc, a@b.cc","onTrue setResult(true);required emailList();"
+		testAttr("t@v.cc,a@bb.cc","onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(false); "); // OK
-		testAttr(" t@v.cc\t;\n a@b.cc ", // Ok, white spaces re allowed
+		testAttr(" t@v.cc\t ;\n a@bb.cc ", // Ok, white spaces re allowed
 			"onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(false); ");
 		testAttr("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"

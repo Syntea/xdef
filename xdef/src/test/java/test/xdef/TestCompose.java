@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
@@ -1935,14 +1935,14 @@ final public class TestCompose extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name = 'a' root = 'a'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    external int $x;\n"+
 "    int $y = $x + 1;\n"+
 "  </xd:declaration>\n"+
 "  <a>required int(); finally $y = $y + 1;</a>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'b'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    external String $s;\n"+
 "    int $z;\n"+
 "  </xd:declaration>\n"+
@@ -1963,7 +1963,7 @@ final public class TestCompose extends XDTester {
 			assertEq(xd.getVariable("$z").intValue(), 13);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  /** This variable must be set from calling program! */\n"+
 "   external String $source;\n"+
 "   /** Check ID values. */\n"+
@@ -2335,7 +2335,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration> external Element e;</xd:declaration>\n"+
+"<xd:declaration scope='global'> external Element e;</xd:declaration>\n"+
 "<a xd:script=\"+; create e\">\n"+
 "  <b xd:script=\"+; create xpath('y[2]', e)\">\n"+
 "    <c a='string'/>\n"+

@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportPrinter;
@@ -63,7 +63,7 @@ public final class TestDebug extends XDTester {
 "         }\" />\n"+											//11
 "</x:def>\n"+													//12
 "<x:def>\n"+													//13
-" <x:declaration>\n"+											//14
+" <x:declaration scope='global'>\n"+							//14
 "  String x(int n, String s){\n"+								//15
 "    String result = s;\n"+										//16
 "    for (int i = 0; i LT n; i++) {\n"+							//17

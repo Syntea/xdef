@@ -3,8 +3,8 @@ package test.xdutils;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import buildtools.XDTester;
-import buildtools.STester;
+import test.XDTester;
+import test.STester;
 
 /** Run all available basic tests for package org.xdef.util.
  * @author Vaclav Trojan
@@ -35,12 +35,12 @@ public class TestAll {
 			new TestGenDTD(),
 		};
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
-		System.out.println("Testing X-definition utilities version 3.1");
-		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.2");
+		int result = STester.runTests(System.out, System.err, log,
+			tests, "package xdutils", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
+		System.out.println("Testing X-definition utilities version 4.0");
 		result += STester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {

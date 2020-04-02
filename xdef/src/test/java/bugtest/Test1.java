@@ -1,10 +1,10 @@
-package complaints;
+package bugtest;
 
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
-import buildtools.XDTester;
+import test.XDTester;
 
 public class Test1 extends XDTester {
 

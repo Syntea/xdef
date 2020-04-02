@@ -164,10 +164,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 			String name = qname.toString();
 			String uri;
 			if ((uri = qname.getNamespaceURI()) == null || uri.length() == 0) {
-				XVariable xv =
-					((XPool)_xd.getXDPool()).getVariable('$' + name);
+				XVariable xv = _xd.findVariable('$' + name);
 				if (xv == null) {
-					xv = ((XPool)_xd.getXDPool()).getVariable(name);
+					xv = _xd.findVariable(name);
 				}
 				if (xv != null) {
 					XDValue value = _globalVariables[xv.getOffset()];
@@ -553,20 +552,16 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	 * @return XDValue object or <ttt>null</tt>.
 	 */
 	final XDValue getVariable(final String name) {
-		XVariable xv = _xd != null ?
-			((XPool) _xd.getXDPool()).getVariable(name) : null;
-		int index = xv != null ? xv.getOffset() : -1;
-		return index >= 0 ? _globalVariables[index] : null;
-	}
-
-	/** Get value of variable from global variables.
-	 * @param value XDValue object to be set.
-	 * @param index index to variable block.
-	 */
-	final void setVariable(final XDValue value, final int index) {
-		if (index >= 0 && index < _globalVariables.length) {
-			_globalVariables[index] = value;
+		if (_xd != null) {
+			XVariable xv = _xd.findVariable(name);
+			if (xv != null) {
+				int addr = xv.getOffset();
+				if (addr >= 0) {
+					return _globalVariables[addr];
+				}
+			}
 		}
+		return null;
 	}
 
 	/** Get value of variable from global variables.

@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.json.JsonUtil;
-import buildtools.STester;
+import test.STester;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
 public class TestJsonUtil extends STester {

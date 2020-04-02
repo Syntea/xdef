@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import buildtools.STester;
+import test.STester;
 
 /** Test SObjectWriter.
  * @author  Vaclav Trojan
