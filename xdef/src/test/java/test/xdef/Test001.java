@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
@@ -574,7 +574,7 @@ public final class Test001  extends XDTester {
 "</aaa>\n"+
 "</xd:def>\n"+
 "<xd:def name='y'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  int test = 1;\n"+
 "  int i = 0, q = i;\n"+
 "  int j = i;\n"+
@@ -586,7 +586,7 @@ public final class Test001  extends XDTester {
 "</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'x'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  int x;\n"+
 "  int y;\n"+
 "  int z;\n"+
@@ -604,7 +604,7 @@ public final class Test001  extends XDTester {
 "</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name  = 'z'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  int k = 1;\n"+
 "</xd:declaration>\n"+
 "</xd:def>\n"+
@@ -1004,7 +1004,7 @@ public final class Test001  extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Misto|Udaj|Base'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "external Element base; /*V tomto elementu je nase databaze. */\n"+
 "\n"+
 "/*Pridame do databaze novy element “Misto”pokud jeste neexistuje*/\n"+

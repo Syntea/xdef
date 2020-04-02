@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import java.io.StringWriter;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -138,7 +138,7 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='X'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  boolean a(int i) {return true}\n"+
 "</xd:declaration>\n"+
 "<A a='a(1)'/>\n"+
@@ -304,7 +304,9 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
-"<xd:declaration> boolean a(int i) {return true;} </xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
+ " boolean a(int i) {return true;}\n"+
+"</xd:declaration>\n"+
 "<A a='a(1)'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='Y' root='A'>\n"+

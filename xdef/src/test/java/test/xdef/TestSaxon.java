@@ -1,8 +1,8 @@
 package test.xdef;
 
-import static buildtools.STester.runTest;
-import buildtools.XDTester;
-import static buildtools.XDTester._xdNS;
+import static test.STester.runTest;
+import test.XDTester;
+import static test.XDTester._xdNS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;

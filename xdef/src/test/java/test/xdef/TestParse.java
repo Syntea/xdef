@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.Report;
@@ -580,6 +580,8 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("a3b3", xd.getVariable("s").toString());
+			xd.setVariable("s", "xxx");
+			assertEq("xxx", xd.getVariable("s").toString());
 			xdef = // xd:text attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<a xd:text=\"occurs 2..3 int();\"><b/><c/><d/></a>\n"+
@@ -1111,7 +1113,7 @@ public final class TestParse extends XDTester {
 			xdef =  // Test fixed from a field
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "   String verze = '1.23';\n"+
 "   String x = '???';\n"+
 "</xd:declaration>\n"+
@@ -1268,7 +1270,7 @@ public final class TestParse extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='xxx'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "   String child = 'CHILD';\n"+
 "   String verze = '2.0';\n"+
 "   Output vystup = new Output('" + tempFile + "');\n"+
@@ -1276,7 +1278,7 @@ public final class TestParse extends XDTester {
 "   Output err = new Output('#System.err');\n"+
 "   int count = 0;\n"+
 "</xd:declaration>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  void testparams(String i, int j, Datetime k) {\n"+
 "    outln('testparams ' + i + ',' + j + ',' + k);\n"+
 "  }\n"+
@@ -1299,7 +1301,7 @@ public final class TestParse extends XDTester {
 "</xd:def>\n"+
 "\n"+
 "<xd:def name='abc' root='root | *'>\n"+
-"   <xd:declaration>\n"+
+"   <xd:declaration scope='global'>\n"+
 "     void myOut() {vystup.outln(child);}\n"+
 "     boolean myCheck(){return tokens('A|B|C');}\n"+
 "   </xd:declaration>\n"+
@@ -1388,7 +1390,7 @@ public final class TestParse extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name=\"a\">\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "   String child = 'CHILD';\n"+
 "   String verze = '2.0';\n"+
 "   Output vystup = new Output('" + tempFile + "','',false);\n"+
@@ -1396,7 +1398,7 @@ public final class TestParse extends XDTester {
 "   Output err = new Output('#System.err');\n"+
 "   int count = 0;\n"+
 "</xd:declaration>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  void testparams(String i, int j, String s) {\n"+
 "    outln('testparams ' + i + ',' + j + ',' + s);\n"+
 "  }\n"+
@@ -1420,7 +1422,7 @@ public final class TestParse extends XDTester {
 "\n"+
 "<xd:def name = \"abc\"\n"+
 "          root = \"root | *\">\n"+
-"   <xd:declaration>\n"+
+"   <xd:declaration scope='global'>\n"+
 "     void myOut() {vystup.outln(child);}\n"+
 "     boolean myCheck(){return tokens('A|B|C');}\n"+
 "   </xd:declaration>\n"+
@@ -3029,10 +3031,10 @@ public final class TestParse extends XDTester {
 			} catch (Exception ex) {
 				if(!ex.toString().contains("W XDEF997")) fail(ex);
 			}
-//test ver 20 and 31 in collection
+//test version 20, 32 and 40 in collection
 			xp = compile(
 "<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>"+
-"<xd:def xd:name='X' xd:root='A' xmlns:xd='" + _xdNS + "'>"+
+"<xd:def xd:name='X' xd:root='A' xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>"+
 "<A a='string()'>"+
 "  <B xd:script='+; ref X#R'/>"+
 "</A>"+
@@ -3121,7 +3123,7 @@ public final class TestParse extends XDTester {
 			assertNoErrors(reporter);
 			xml = "<Z/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);			
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
@@ -3152,8 +3154,21 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try {// test metanamespace
+			xdef =
+"<xd:def xmlns:xd='meta.b.cz' xmlns:w='http://www.xdef.org/xdef/4.0'\n" +
+"  w:metaNamespace='meta.b.cz' name='X' xd:root='A'>\n" +
+"<A a='string'>\n" +
+"  <w:B xd:script='*'/>\n" +
+"</A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.0'/></A>";
+			assertEq(xml, parse(xp, "X", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {
-            xdef = // test importLocal attribute
+			xdef = // test importLocal attribute
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 "<xd:def name='A' root='A'>\n"+ // no importLocal
 "<xd:declaration scope='local'>\n"+
@@ -3161,7 +3176,7 @@ public final class TestParse extends XDTester {
 "  uniqueSet u {c: x}\n"+
 "</xd:declaration>\n"+
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
-"</xd:def>\n"+   
+"</xd:def>\n"+
 "<xd:def name='B' root='A' importLocal='X'>\n"+ // importLocal from X
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
@@ -3185,9 +3200,9 @@ public final class TestParse extends XDTester {
 "</xd:def>\n"+
 "<xd:def name='E' root='A' importLocal='X,Y'>\n"+ // local and importLocal
 "<xd:declaration scope='local'>\n"+
-"  String xx() {return 'Exx';}\n"+       
-"  type x eq('Ex');\n"+       
-"  type y eq('Ey');\n"+       
+"  String xx() {return 'Exx';}\n"+
+"  type x eq('Ex');\n"+
+"  type y eq('Ey');\n"+
 "  int xxx = 1;\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
 "  uniqueSet u {c: x}\n"+
@@ -3195,62 +3210,62 @@ public final class TestParse extends XDTester {
 "<A a = 'x' b = 'y' c = 'u.c.ID' xd:script='finally a();' />\n"+
 "</xd:def>\n"+
 "<xd:def name = 'X'>\n"+ // define locals  X
-"<xd:declaration scope='local'>\n"+       
-"  String xx() {return 'Xxx';}\n"+       
-"  type x eq('Xx');\n"+       
+"<xd:declaration scope='local'>\n"+
+"  String xx() {return 'Xxx';}\n"+
+"  type x eq('Xx');\n"+
 "  int xxx = 2;\n"+
-"</xd:declaration>\n"+       
+"</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def name = 'Y'>\n"+ // define locals  Y
-"<xd:declaration scope='local'>\n"+       
-"  String yy() {return 'Yyy';}\n"+       
-"  type y eq('Yy');\n"+       
+"<xd:declaration scope='local'>\n"+
+"  String yy() {return 'Yyy';}\n"+
+"  type y eq('Yy');\n"+
 "  int yyy = 3;\n"+
-"</xd:declaration>\n"+       
+"</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def name = 'Z'>\n"+ // define globals
 "<xd:declaration scope='global'>\n"+
-"  String xx() {return 'Zxx';}\n"+       
-"  String yy() {return 'Zyy';}\n"+       
-"  type x eq('Zx');\n"+       
+"  String xx() {return 'Zxx';}\n"+
+"  String yy() {return 'Zyy';}\n"+
+"  type x eq('Zx');\n"+
 "  type y eq('Zy');\n"+
 "  int xxx = 4;\n"+
 "  int yyy = 2;\n"+
 "  uniqueSet u {c: x}\n"+
-"</xd:declaration>\n"+       
+"</xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("A");
-            xd.setStdOut(strw = new StringWriter());
-            xml = "<A a='Zx' b='Zy' c='Zx'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrors(reporter);
-            assertEq("Zxx4Zyy2", strw.toString());
-            xd = xp.createXDDocument("B");
-            xd.setStdOut(strw = new StringWriter());
-            xml = "<A a='Xx' b='Zy' c='Xx'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrors(reporter);
-            assertEq("Xxx2Zyy2", strw.toString());
-            xd = xp.createXDDocument("C");
-            xd.setStdOut(strw = new StringWriter());
-            xml = "<A a='Zx' b='Yy' c='Zx'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrors(reporter);
-            assertEq("Zxx4Yyy3", strw.toString());
-            xd = xp.createXDDocument("D");
-            xd.setStdOut(strw = new StringWriter());
-            xml = "<A a='Xx' b='Yy' c='Xx'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrors(reporter);
-            assertEq("Xxx2Yyy3", strw.toString());
-            xd = xp.createXDDocument("E");
-            xd.setStdOut(strw = new StringWriter());
-            xml = "<A a='Ex' b='Ey' c='Ex'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrors(reporter);
-            assertEq("Exx1Yyy3", strw.toString());
+			xp = compile(xdef);
+			xd = xp.createXDDocument("A");
+			xd.setStdOut(strw = new StringWriter());
+			xml = "<A a='Zx' b='Zy' c='Zx'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("Zxx4Zyy2", strw.toString());
+			xd = xp.createXDDocument("B");
+			xd.setStdOut(strw = new StringWriter());
+			xml = "<A a='Xx' b='Zy' c='Xx'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("Xxx2Zyy2", strw.toString());
+			xd = xp.createXDDocument("C");
+			xd.setStdOut(strw = new StringWriter());
+			xml = "<A a='Zx' b='Yy' c='Zx'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("Zxx4Yyy3", strw.toString());
+			xd = xp.createXDDocument("D");
+			xd.setStdOut(strw = new StringWriter());
+			xml = "<A a='Xx' b='Yy' c='Xx'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("Xxx2Yyy3", strw.toString());
+			xd = xp.createXDDocument("E");
+			xd.setStdOut(strw = new StringWriter());
+			xml = "<A a='Ex' b='Ey' c='Ex'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("Exx1Yyy3", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {// test "classpath" and "file" protocol in URL
 			xp = XDFactory.compileXD((Properties) null, //without wildcards

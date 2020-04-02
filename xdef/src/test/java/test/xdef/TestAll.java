@@ -1,11 +1,11 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import buildtools.STester;
+import test.STester;
 
 /** Run all available basic tests for package org.xdef.
  * @author Vaclav Trojan
@@ -72,12 +72,12 @@ public class TestAll {
 			new TestXmlWriter(),
 		};
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
-		System.out.println("Testing X-definition version 3.1");
-		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
 		System.out.println("Testing X-definition version 3.2");
+		int result = STester.runTests(System.out, System.err, log,
+			tests, "package xdef", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
+		System.out.println("Testing X-definition version 4.0");
 		result += STester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {

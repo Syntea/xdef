@@ -1698,7 +1698,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		return false;
 	}
 	private CompileVariable getVariable(final String name) {
-		for (String s: _importLocal) {
+		for (String s: _importLocals) {
 			CompileVariable var = _g.getVariable(s + name);
 			if (var != null) {
 				return var;
@@ -3112,6 +3112,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param sExtends SBuffer with name of BNF grammar to be extended.
 	 * @param source SBuffer BNF grammar.
 	 * @param defName name of X-definition.
+	 * @param xdef X-definition.
 	 * @param local true if it is in the declaration part with the local scope.
 	 * @param nsPrefixes table of name space prefixes.
 	 */
@@ -3119,9 +3120,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer sExtends,
 		final SBuffer source,
 		final String defName,
+		final XDefinition xdef,
 		final boolean local,
 		final Map<String, Integer> nsPrefixes) { // namespace
-		setSource(sName, defName, null, XConstants.XD20, nsPrefixes);
+		setSource(sName,
+			defName,
+			xdef,
+			xdef==null ? XConstants.XD40 : xdef.getXDVersion(),
+			nsPrefixes);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;
@@ -3178,7 +3184,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_g.genLDC(dd);
 		_g.genST(name);
 		_g.addInitCode(actAdr, lastStop);
-
 	}
 
 	/** Compile external method declaration.

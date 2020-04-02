@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDBuilder;
 import org.xdef.XDDocument;

@@ -9,7 +9,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.util.PrettyXdef;
 import java.io.File;
 import org.xdef.sys.ReportWriter;
-import buildtools.XDTester;
+import test.XDTester;
 
 /** Test pretty indentation of XDefinition.
  * @author Trojan

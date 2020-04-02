@@ -356,14 +356,25 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return _scp.getVariable(name);
 	}
 
+	/** Find variable for setVariable (it Can't be final).
+	 * @param name name of variable.
+	 * @return suitable variable.
+	 */
 	private XVariable findVariable(final String name) {
-		XVariable xv =
-			((XPool) _rootChkDocument._xdef.getXDPool()).getVariable(name);
+		XPool xp = (XPool) _rootChkDocument._xdef.getXDPool();
+		XVariable xv = xp.getVariable(name);
 		if (xv == null) {
-			//Variable '&{0}' doesn't exist
-			throw new SRuntimeException(XDEF.XDEF563, name);
+			xv = _rootChkDocument._xdef.findVariable(name);
 		}
-		return xv;
+		if (xv != null) {
+			if (xv.isFinal() && _scp.getVariable(name) != null) {
+				//Variable '&{0}' is 'final'; the value can't be assigned
+				throw new SRuntimeException(XDEF.XDEF562, name);
+			}
+			return xv;
+		}
+		//Variable '&{0}' doesn't exist
+		throw new SRuntimeException(XDEF.XDEF563, name);
 	}
 
 	@Override
@@ -377,10 +388,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return;
 		}
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		if (value == null) {
 			_scp.setVariable(xv, DefNull.genNullValue(xv.getType()));
 			return;
@@ -476,10 +483,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setVariable(final String name, final long value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		switch (xv.getType()) {
 			case XD_FLOAT:
 				_scp.setVariable(xv, new DefDouble(value));
@@ -505,10 +508,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setVariable(final String name, final double value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		switch (xv.getType()) {
 			case XD_FLOAT:
 				_scp.setVariable(xv, new DefDouble(value));
@@ -531,10 +530,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setVariable(final String name, final boolean value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		switch (xv.getType()) {
 			case XD_BOOLEAN:
 				_scp.setVariable(xv, new DefBoolean(value));
@@ -553,10 +548,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	private void setVariable(final String name, final XDValue value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		if (xv.getType() == value.getItemId()) {
 			_scp.setVariable(xv, value);
 		} else {
@@ -602,10 +593,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	private void setVariable(final String name, final String value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		switch (xv.getType()) {
 			case XD_STRING:
 			case XD_CONTAINER:
@@ -643,10 +630,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	private void setVariable(final String name, final BigDecimal value) {
 		XVariable xv = findVariable(name);
-		if (xv.isFinal() && _scp.getVariable(name) != null) {
-			//Variable '&{0}' is 'final'; the value can't be assigned
-			throw new SRuntimeException(XDEF.XDEF562, name);
-		}
 		switch (xv.getType()) {
 			case XD_INT:
 				_scp.setVariable(xv, new DefLong(value.longValue()));

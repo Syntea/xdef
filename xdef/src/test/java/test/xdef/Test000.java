@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.FileReportReader;
@@ -104,7 +104,7 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "test",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  String targetNS='';\n"+
 "  String unq='';\n"+
 "  boolean chkUnique() {\n"+
@@ -180,7 +180,7 @@ public final class Test000 extends XDTester {
 "  optional string(); finally {outln('text: '+getText()); setText('text2');\n"+
 "    hanoi(3); if ((test!=1) | (k!=1)) outln('error');}\n"+
 "</a>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  int test=1;\n"+
 "  int i=0, q=i;\n"+
 "  int j=i;\n"+
@@ -201,7 +201,7 @@ public final class Test000 extends XDTester {
 "</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='y'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  void hanoi(int v) {\n"+
 "    outln('v=' + v + ':');\n"+
 "    move(v, 1, 2, 3);\n"+
@@ -209,7 +209,7 @@ public final class Test000 extends XDTester {
 "</xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='z'>\n"+
-"<xd:declaration>int k=1;</xd:declaration>\n"+
+"<xd:declaration scope='global'>int k=1;</xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
 			xml = "<a><b attr='x' />orig1</a>\n";

@@ -379,7 +379,7 @@ public final class CompileCode extends CompileBase {
 		}
 		CompileVariable var = (CompileVariable)_varBlock.getXVariable(name);
 		if (var == null || var.getKind() == 'G') {
-			for (String s: _parser._importLocal) {
+			for (String s: _parser._importLocals) {
 				CompileVariable v  =
 					(CompileVariable) _varBlock.getXVariable(s + name);
 				if (v != null) {
@@ -406,7 +406,7 @@ public final class CompileCode extends CompileBase {
 		if (var == null && _varBlock != null) {
 			var = (CompileVariable) _varBlock.getXVariable(name);
 			if (var == null || var.getKind() == 'G') {
-				for (String s: _parser._importLocal) {
+				for (String s: _parser._importLocals) {
 					CompileVariable v =
 						(CompileVariable) _varBlock.getXVariable(s + name);
 					if (v != null) {
@@ -609,7 +609,7 @@ public final class CompileCode extends CompileBase {
 			}
 			return null;
 		}
-		for (String s: _parser._importLocal) {
+		for (String s: _parser._importLocals) {
 			Method m = getDeclaredMethod(s + name, params);
 			if (m != null) {
 				return m;
@@ -994,10 +994,12 @@ public final class CompileCode extends CompileBase {
 						convertTopToType(var.getType());
 						break;
 					default:
-						_parser.error(XDEF.XDEF457, //Incompatible types&{0}{: }
-							getTypeName(var.getType()) + "," +
-							getTypeName(xType));
-						return;
+						if (var.getType() != XD_ANY) {
+							_parser.error(XDEF.XDEF457,//Incompatible types &{0}
+								getTypeName(var.getType()) + "," +
+								getTypeName(xType));
+							return;
+						}
 				}
 			}
 			genST(var);
@@ -1530,7 +1532,7 @@ public final class CompileCode extends CompileBase {
 
 	final boolean scriptMethod(final String name, final int numPar) {
 		ScriptMethod lm = null;
-		for (String s: _parser._importLocal) {
+		for (String s: _parser._importLocals) {
 			lm = _scriptMethods.get(s + name);
 			if (lm != null) {
 				break;

@@ -1,4 +1,4 @@
-package buildtools;
+package test;
 
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
@@ -302,32 +302,10 @@ public abstract class STester {
 	 * @param msg Text of error message.
 	 */
 	public final void putErrInfo(final String msg) {
-		String text = msg;
-		if (msg == null || msg.trim().length() == 0) {
-			text = _name + " fail";
-		} else {
-			//we remove all leading new lines;
-			char c;
-			int i = 0;
-			int len = text.length();
-			while (i < len && ((c=text.charAt(i))=='\n' || c=='\r')){
-				i++;
-			}
-			if (i > 0) {
-				text = text.substring(i);
-			}
-			//we remove all trailing new lines;
-			i = text.length() - 1;
-			while (i > 0 && text.charAt(i) <=' '){
-				i--;
-			}
-			if (i < text.length() - 1) {
-				text = text.substring(0, i+1);
-			}
-			text = _name + " fail\n" + text;
-		}
+		String text = _name + " fail" +
+			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
 		_errors++;
-		// in Java 1.3 is not avalable the method Throwable.getStackTrace()
+		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
 		// so we grab the information from printStackTrace and we create
 		// the info string from it.
 		CharArrayWriter caw = new CharArrayWriter();
@@ -335,26 +313,14 @@ public abstract class STester {
 		new Throwable("").printStackTrace(pw);
 		pw.close();
 		String s = caw.toString();
-		int i = s.lastIndexOf(_className + ".");
-		int j = s.indexOf('\n', i) + 1;
-		j = s.indexOf('\n', j);
-		if (j < 0) {
-			i = s.indexOf(_className + ".");
-			while (i > 0 && s.charAt(i-1) != '\n') {i--;}
-			j = s.indexOf('\n', i);
+		int i = s.indexOf(_className + ".");
+		i = s.indexOf('\n', i);
+		if (i >= 0) {
+			s = s.substring(0, i);
 		}
-		if (i >= 0 && j > 0) {
-			if (s.charAt(j - 1) == '\r') {
-				j--; //windows ends line with CR LF!
-			}
-			s = s.substring(i, j);
-			j = s.indexOf('\n');
-			if (j > 0 && s.charAt(j - 1) == '\r') {
-				j--; //windows ends line with CR LF!
-			}
-			if (j > 0) {
-				s = s.substring(0, j);
-			}
+		i = s.lastIndexOf('\n');
+		if (i >= 0) {
+			s = s.substring(i +1);
 		}
 		printErr(text + "\n" + s + '\n');
 	}

@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
@@ -469,7 +469,7 @@ public final class TestErrors extends XDTester {
 			reporter.clear();
 			xp = XDFactory.compileXD(reporter, (Properties) null,
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    int i;\n"+
 "    int x(){return 0;}\n"+
 "    type t int();\n"+

@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
@@ -771,7 +771,7 @@ public final class Test002 extends XDTester {
 			xb.setSource(
 "<xd:def xmlns:xd='" + _xdNS + "' name='b'>\n"+
 "  <A xd:script='init j = 3;'/>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  int i;\n"+
 "  int j;\n"+
 "</xd:declaration>\n"+
@@ -800,15 +800,15 @@ public final class Test002 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='a'>\n"+
-"  <xd:declaration> int j = k; </xd:declaration>\n"+
+"  <xd:declaration scope='global'> int j = k; </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def name='b' root='a'>\n"+
 "  <a xd:script = \"finally {h(); if (k != 1) outln('error');}\"/>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    int k = 1, y = x, i = 0;\n"+
 "    void h() {if (i != 0 || k != 1 || x != 1 ||  y != 1) outln('error');}\n"+
 "  </xd:declaration>\n"+
-"  <xd:declaration> int x = 1; </xd:declaration>\n"+
+"  <xd:declaration scope='global'> int x = 1; </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
 			strw = new StringWriter();
@@ -1425,7 +1425,7 @@ public final class Test002 extends XDTester {
 			}
 			xdef = // test of reentrance (variable ids)
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
+"<xd:declaration scope='global'>\n"+
 "  Container ids=[];\n"+
 "  void code(String result) {\n"+
 "    ids.addItem(result);\n"+
@@ -1511,7 +1511,7 @@ public final class Test002 extends XDTester {
 			assertNoErrors(reporter);
 			xdef = //variable x with leading "$"
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> String $x = 'xyz'; </xd:declaration>\n"+
+"  <xd:declaration scope='global'> String $x = 'xyz'; </xd:declaration>\n"+
 "  <a xd:script = \"create from('b[@a=$x]')\">string</a>\n"+
 "</xd:def>";
 			xml = "<w><b a='x'/><b a='xyz'>zxy</b><b>xx</b></w>";

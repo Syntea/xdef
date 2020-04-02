@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.SDatetime;
 import org.xdef.util.XDChecker;
 import org.xdef.XDParseResult;

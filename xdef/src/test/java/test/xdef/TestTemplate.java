@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
@@ -288,10 +288,6 @@ public final class TestTemplate extends XDTester {
 			xdef = //collection
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='test1'>\n"+
-"<xd:declaration>\n"+
-"  String a1() {return 'a1';}\n"+
-"  String aa() {return 'aa';}\n"+
-"</xd:declaration>\n"+
 "<a xd:script=\"template; options trimText\"\n"+
 "   a1=\"syntea.cz\">\n"+
 "  <b>\n"+
@@ -310,6 +306,10 @@ public final class TestTemplate extends XDTester {
 "</xd:def>\n"+
 "\n"+
 "<xd:def xd:name = \"test2\" xd:root = \"x\" >\n"+
+"<xd:declaration>\n"+
+"  String a1() {return 'a1';}\n"+
+"  String aa() {return 'aa';}\n"+
+"</xd:declaration>\n"+
 "<x xd:script=\"ref test1#a\"\n"+
 "  a1=\"required string(); create a1()\"\n"+
 "  aa=\"required string(); create aa()\" >\n"+
@@ -317,6 +317,7 @@ public final class TestTemplate extends XDTester {
 "</xd:def>\n"+
 "\n"+
 "</xd:collection>\n";
+			xp = compile(xdef);
 			xml =
 "<x a1=\"a1\" aa = \"aa\">" +
 "<b>" +
@@ -332,7 +333,6 @@ public final class TestTemplate extends XDTester {
 "</c>" +
 "<c/>" +
 "</x>";
-			xp = compile(xdef);
 			parse(xp, "test2", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "test2", "x", reporter));

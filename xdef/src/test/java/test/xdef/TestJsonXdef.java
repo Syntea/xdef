@@ -1,6 +1,6 @@
 package test.xdef;
 
-import static buildtools.STester.runTest;
+import static test.STester.runTest;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
@@ -14,10 +14,10 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
-import buildtools.XDTester;
-import static buildtools.XDTester._xdNS;
-import static buildtools.XDTester.getValueFromGetter;
-import static buildtools.XDTester.setValueToSetter;
+import test.XDTester;
+import static test.XDTester._xdNS;
+import static test.XDTester.getValueFromGetter;
+import static test.XDTester.setValueToSetter;
 import java.util.List;
 import org.xdef.json.JsonToXml;
 

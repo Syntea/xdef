@@ -9,7 +9,7 @@ import org.xdef.XDPool;
 import org.xdef.util.XValidate;
 import java.io.File;
 import org.xdef.sys.ReportReader;
-import buildtools.XDTester;
+import test.XDTester;
 
 /** TestValidate.
  * @author Vaclav Trojan

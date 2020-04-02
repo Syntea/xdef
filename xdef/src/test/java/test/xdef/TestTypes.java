@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
@@ -284,7 +284,7 @@ public final class TestTypes extends XDTester {
 "</A>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
-} catch (Exception ex) {fail(ex);}
+		} catch (Exception ex) {fail(ex);}
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
@@ -1079,7 +1079,7 @@ public final class TestTypes extends XDTester {
 			xdef = // check xml schema types
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
-" <xd:declaration>\n"+
+" <xd:declaration scope='global'>\n"+
 "   type ID ID();\n"+
 "   type normalizedString normalizedString();\n"+
 "   type tokens NMTOKENS();\n"+

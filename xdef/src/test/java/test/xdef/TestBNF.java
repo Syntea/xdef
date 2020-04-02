@@ -1,6 +1,6 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
 
@@ -23,15 +23,15 @@ public final class TestBNF extends XDTester {
 "  <root> required myType() </root>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "     type myType $rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
-"  <xd:BNFGrammar name = \"$base\">\n"+
+"  <xd:BNFGrammar name = \"base\">\n"+
 "    integer ::= [0-9]+\n"+
 "    S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "  </xd:BNFGrammar>\n"+
-"  <xd:BNFGrammar name = \"$rrr\" extends = \"$base\" >\n"+
+"  <xd:BNFGrammar name = \"$rrr\" extends = \"base\" >\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
@@ -47,17 +47,17 @@ public final class TestBNF extends XDTester {
 "  <root> required myType; </root>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "     final String myInt = \"intList\"; /* modify as intList or fullName */\n"+
 "     BNFRule $r = $rrr.rule(myInt);\n"+
 "     type myType $r.check();\n"+
 "  </xd:declaration>\n"+
-"  <xd:BNFGrammar name = \"$base\">\n"+
+"  <xd:BNFGrammar scope='global' name = \"$base\">\n"+
 "    integer ::= [0-9]+\n"+
 "    S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "  </xd:BNFGrammar>\n"+
-"  <xd:BNFGrammar name = \"$rrr\" extends = \"$base\" >\n"+
+"  <xd:BNFGrammar scope='global' name = \"$rrr\" extends = \"$base\" >\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
@@ -69,7 +69,7 @@ public final class TestBNF extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
@@ -101,7 +101,7 @@ public final class TestBNF extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
@@ -123,7 +123,7 @@ public final class TestBNF extends XDTester {
 "  <a>required myType()</a>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      S        ::= $whitespace+ /*skipped white spaces*/\n"+
 "      intList  ::= $integer (S? \",\" S? $integer)*\n"+
@@ -156,7 +156,7 @@ public final class TestBNF extends XDTester {
 "  <root> required myType() </root>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "     String x = \"list\";\n"+
 "     BNFGrammar rrr = new BNFGrammar('\n"+
 "        integer ::= [0-9]+\n"+

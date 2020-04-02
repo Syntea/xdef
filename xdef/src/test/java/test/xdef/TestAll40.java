@@ -1,11 +1,11 @@
 package test.xdef;
 
-import buildtools.XDTester;
+import test.XDTester;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import buildtools.STester;
+import test.STester;
 
 /** Run all available basic tests for package org.xdef.
  * @author Vaclav Trojan
