@@ -83,7 +83,7 @@ public final class XExtUtils {
 			el.getOwnerDocument().createComment(s != null? s : ""));
 	}
 	public final static void insertComment(final XXNode x, final String s) {
-		addComment(x.getElement(), s);
+		insertComment(x.getElement(), s);
 	}
 	public final static void insertComment(final Element el, final String s) {
 		el.getParentNode().insertBefore(
