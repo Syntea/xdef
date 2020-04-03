@@ -564,9 +564,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		return null;
 	}
 
-	/** Get value of variable from global variables.
+	/** Set global value of variable from variables.
 	 * @param value XDValue object to be set.
-	 * @param xvar variable descriptor.
+	 * @param xvar global XVariable.
 	 */
 	final void setVariable(final XVariable xvar, final XDValue value) {
 		_globalVariables[xvar.getOffset()] = value;
