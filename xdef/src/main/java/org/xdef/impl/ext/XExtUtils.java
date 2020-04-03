@@ -79,7 +79,15 @@ public final class XExtUtils {
 		addComment(x.getElement(), s);
 	}
 	public final static void addComment(final Element el, final String s) {
-		el.appendChild(el.getOwnerDocument().createComment(s != null? s : ""));
+		el.getParentNode().appendChild(
+			el.getOwnerDocument().createComment(s != null? s : ""));
+	}
+	public final static void insertComment(final XXNode x, final String s) {
+		addComment(x.getElement(), s);
+	}
+	public final static void insertComment(final Element el, final String s) {
+		el.getParentNode().insertBefore(
+			el.getOwnerDocument().createComment(s), el);
 	}
 	public final static void addPI(final XXNode x,
 		final String target,
@@ -89,8 +97,19 @@ public final class XExtUtils {
 	public final static void addPI(final Element el,
 		final String target,
 		final String data) {
-		el.appendChild(el.getOwnerDocument().createProcessingInstruction(
-			target, data));
+		el.getParentNode().appendChild(
+			el.getOwnerDocument().createProcessingInstruction(target, data));
+	}
+	public final static void insertPI(final XXNode x,
+		final String target,
+		final String data) {
+		insertPI(x.getElement(), target, data);
+	}
+	public final static void insertPI(final Element el,
+		final String target,
+		final String data) {
+		el.getParentNode().insertBefore(
+			el.getOwnerDocument().createProcessingInstruction(target,data), el);
 	}
 	public final static void addText(final XXNode x, final String s) {
 		addText(x.getElement(), s);
