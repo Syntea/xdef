@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
@@ -247,8 +248,6 @@ class XCGeneratorOld implements XCGenerator {
 			return "Number";
 		} else if ("jboolean".equals(parserName)) {
 			return "Boolean";
-//		} else if ("jnull".equals(parserName)) {
-//			return "org.xdef.json.JNull";
 		} else if ("jvalue".equals(parserName)) {
 			return "Object";
 		}
@@ -892,7 +891,6 @@ class XCGeneratorOld implements XCGenerator {
 				break;
 			case XDValueID.XD_ANY: //jvalue
 				if ("jvalue".equals(xdata.getParserName())) {
-//"\t\t\t\torg.xdef.component.XComponentUtil.jvalueToString("
 					x = (max > 1 ? "listOf" : "get") + "&{name}()" +y
 						+ (max <= 1 ? ".toString()" : "");
 					break;
@@ -1082,137 +1080,6 @@ class XCGeneratorOld implements XCGenerator {
 		}
 		return iname;
 	}
-//
-//	/** Create getter and setter of the model which have only one child
-//	 * node which is a text node.
-//	 * @param xe Element model from which setter/getter is generated.
-//	 * @param xdata text model.
-//	 * @param iname name of getter/setter of this model.
-//	 * @param setters where to generate setter.
-//	 * @param getters where to generate getter.
-//	 * @param sbi where to generate interface.
-//	 */
-//	private void genJsonDirectGetterSetter(XElement xe,
-//		XData xdata,
-//		String iname,
-//		final StringBuilder setters,
-//		final StringBuilder getters,
-//		final StringBuilder sbi) {
-//		String name = javaName(xe.getName());
-//		String typ = getJavaObjectTypeName(xdata);
-//		String jGet = "String".equals(typ)
-//			? "org.xdef.json.JsonUtil.jstringFromSource(get&{iname}())"
-//			: "get&{iname}()";
-//		// getter
-//		String template =
-//(_genJavadoc ? "\t/** Get JSON value of textnode of &{d}."+LN+
-//"\t * @return value of text of &{d}"+LN+
-//"\t */"+LN : "")+
-//"\tpublic &{typ} jget&{name}()";
-//		getters.append(modify(template
-//			+"{return _&{iname}==null?null:" + jGet + ";}"+LN,
-//			"&{name}", name,
-//			"&{iname}", iname,
-//			"&{d}", xe.getName(),
-//			"&{typ}", typ));
-//		if ("org.xdef.sys.SDatetime".equals(typ)) {
-//			getters.append(modify(
-//(_genJavadoc ? "\t/** Get value of &{d} as java.util.Date."+LN+
-//"\t * @return value of &{d} as java.util.Date or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.util.Date jdateOf&{name}(){"+
-//"return org.xdef.sys.SDatetime.getDate(jget&{name}());}"+LN+
-//(_genJavadoc ? "\t/** Get &{d} as java.sql.Timestamp."+LN+
-//"\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.sql.Timestamp jtimestampOf&{name}(){"+
-//"return org.xdef.sys.SDatetime.getTimestamp(jget&{name}());}"+LN+
-//(_genJavadoc ? "\t/** Get  &{d}  as java.util.Calendar."+LN+
-//"\t * @return value of &{d} as java.util.Calendar or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.util.Calendar jcalendarOf&{name}(){"+
-//"return org.xdef.sys.SDatetime.getCalendar(jget&{name}());}"+LN,
-//				"&{d}" , xe.getName(),
-//				"&{name}", name));
-//		}
-//		if (sbi != null) { // generate interface
-//			sbi.append(modify(template + ";" + LN,
-//				"&{name}", name,
-//				"&{d}", xe.getName(),
-//				"&{typ}", typ));
-//			if ("org.xdef.sys.SDatetime".equals(typ)) {
-//				getters.append(modify(
-//(_genJavadoc ? "\t/** Get value of &{d} as java.util.Date."+LN+
-//"\t * @return value of &{d} as java.util.Date or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.util.Date jdateOf&{name};"+LN+
-//(_genJavadoc ? "\t/** Get &{d} as java.sql.Timestamp."+LN+
-//"\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.sql.Timestamp jtimestampOf&{name}();"+LN+
-//(_genJavadoc ? "\t/** Get  &{d}  as java.util.Calendar."+LN+
-//"\t * @return value of &{d} as java.util.Calendar or null."+LN+
-//"\t */"+LN : "")+
-//"\tpublic java.util.Calendar jcalendarOf&{name}();"+LN,
-//					"&{d}" , xe.getName(),
-//					"&{name}", name));
-//			}
-//		}
-//		String jSet = "String".equals(typ)
-//			? "org.xdef.json.JsonUtil.jstringToXML(x,false)":"x";
-//		// setter
-//		template =
-//(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
-//"\tpublic void jset&{name}(&{typ} x)";
-//			setters.append(modify(template+"{"+LN+
-//"\t\tset&{iname}("+ jSet + ");"+LN+
-//"\t}"+LN,
-//				"&{name}", name,
-//				"&{iname}", iname,
-//				"&{d}", xe.getName(),
-//				"&{typ}", typ));
-//		if ("org.xdef.sys.SDatetime".equals(typ)) {
-//			template =
-//(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
-//"\tpublic void jset&{name}(&{typ} x)"+
-//"{jset&{name}(x==null?null:new org.xdef.sys.SDatetime(x));}"+LN;
-//			setters.append(modify(template,
-//				"&{name}", name,
-//				"&{d}", xe.getName(),
-//				"&{typ}", "java.util.Date"));
-//			setters.append(modify(template,
-//				"&{name}", name,
-//				"&{d}", xe.getName(),
-//				"&{typ}", "java.sql.Timestamp"));
-//			setters.append(modify(template,
-//				"&{name}", name,
-//				"&{d}", xe.getName(),
-//				"&{typ}", "java.util.Calendar"));
-//		}
-//		if (sbi != null) { // generate interface
-//			sbi.append(modify(template +  ";" + LN,
-//				"&{name}", name,
-//				"&{d}", xe.getName(),
-//				"&{typ}", typ));
-//			if ("org.xdef.sys.SDatetime".equals(typ)) {
-//				template =
-//(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
-//"\tpublic void jset&{name}(&{typ} x);"+LN;
-//				setters.append(modify(template,
-//					"&{name}", name,
-//					"&{d}", xe.getName(),
-//					"&{typ}", "java.util.Date"));
-//				setters.append(modify(template,
-//					"&{name}", name,
-//					"&{d}", xe.getName(),
-//					"&{typ}", "java.sql.Timestamp"));
-//				setters.append(modify(template,
-//					"&{name}", name,
-//					"&{d}", xe.getName(),
-//					"&{typ}", "java.util.Calendar"));
-//			}
-//		}
-//	}
 
 	/** Create getter and setter of the model which have only one child
 	 * node which is a text node or if it is null element.
@@ -1259,24 +1126,6 @@ class XCGeneratorOld implements XCGenerator {
 				}
 			}
 		}
-//		} else if (xe._match >= 0) {
-//			name = javaName("jget" + name);
-//			name = getUniqueName(getUniqueName(getUniqueName(name,
-//				RESERVED_NAMES), classNames), varNames);
-//			name = name.substring(4);
-//			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
-//			for (int i = xe._match; i < code.length; i++) {
-//				XDValue item = code[i];
-//				if (item.getCode() == CodeTable.CMPEQ) {
-//					name = JsonUtil.toXmlName(code[i-1].stringValue());
-//					name = javaName("jget" + name);
-//					name = getUniqueName(getUniqueName(getUniqueName(name,
-//						RESERVED_NAMES), classNames), varNames);
-//					name = name.substring(4);
-//					break;
-//				}
-//			}
-//		}
 		XMNode[] childNodeModels = xe.getChildNodeModels();
 		String typ;
 		boolean isNull;
@@ -1287,8 +1136,6 @@ class XCGeneratorOld implements XCGenerator {
 		} else {
 			isNull = false;
 			typ = getJavaObjectTypeName((XData) childNodeModels[0]);
-//			name = getUniqueName(getUniqueName(getUniqueName(name,
-//				RESERVED_NAMES), classNames), varNames);
 		}
 		String template;
 		// has only a text child
@@ -1615,16 +1462,6 @@ class XCGeneratorOld implements XCGenerator {
 			final String name = ((String) item.getKey());
 			int i = name.indexOf('$'); // The ":" in name is replaced with "$"!
 			String nsname = "xmlns" + (i>0 ? ':' + name.substring(i + 1) : "");
-			// Generate getter of namespace
-//			final String xmlname = addVarName(varNames,
-//				name, xe.getXDPosition()+"/@"+name, false);
-//			getters.append(modify(
-//(_genJavadoc ? ("\t/** Get value of \"&{xmlname}\" attribute."+LN+
-//"\t * @return string with value of attribute"+LN+
-//"\t */"+LN) : "")+
-//"\tpublic String get&{name}() {return \"&{value}\";}"+LN,
-//				"&{name}", name,
-//				"&{value}", value));
 			String s =
 "\t\tel.setAttributeNS(javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI,"+LN+
 "\t\t\t\"" + nsname + "\", \"" + value + "\");"+LN;
@@ -1675,25 +1512,6 @@ class XCGeneratorOld implements XCGenerator {
 							break;
 						}
 					}
-//  public Object jgeta() {
-//	if (_jw$null != null) return jgeta$null();
-//	if (_jw$boolean != null) return jgeta$boolean();
-//	if (_jw$number != null) return jgeta$number();
-//	if (_jw$string != null) return jgeta$string();
-//	return null;
-//  }
-//  public void jseta(Object x) {
-//	  if (x==null || x instanceof org.xdef.json.JNull)
-//        jseta$null((org.xdef.json.JNull) x);
-//	  else if (x instanceof Boolean) jseta$boolean((Boolean)x);
-//	  else if (x instanceof Number) jseta$number((Number)x);
-//	  else if (x instanceof String) jseta$string((String)x);
-//	  else throw new org.xdef.sys.SRuntimeException(//Incorrect type &{0}
-//        org.xdef.msg.XDEF.XDEF377, x.getClass().getName());
-//  }
-if (ar.size() > 1) {
-//	System.out.println(ar);
-}
 					s += LN;
 					for (;choiceStack.size() >= 5;) {
 						int max = (Integer) choiceStack.pop();
@@ -1799,10 +1617,6 @@ if (ar.size() > 1) {
 				genTextNodeCreator(xdata, name, groupMax, genNodeList);
 				txttab.put(node.getXDPosition(), (groupMax == 1 ? "1" : "2")
 					+ "," + getParsedResultGetter(xdata) + ";" + name);
-//				if (isRoot && xe._json==XConstants.JSON_XD && nodes.length==1) {
-//					genJsonDirectGetterSetter(
-//						xe,xdata,name,setters,getters,sbi);
-//				}
 			} else if (node.getKind() == XMNode.XMELEMENT) {
 				XElement xe1 = (XElement) node;
 				final int max = groupMax > 1 ? groupMax : xe1.maxOccurs();
@@ -2305,7 +2119,7 @@ if (ar.size() > 1) {
 "\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
 "\t\torg.xdef.XDParseResult parseResult){}"+LN;
 		} else if (txttab.size() == 1) {
-			Map.Entry<String, String> e = txttab.entrySet().iterator().next();
+			Entry<String, String> e = txttab.entrySet().iterator().next();
 			String val = e.getValue();
 			ndx = val.indexOf(';');
 			String name = val.substring(ndx + 1);
@@ -2324,7 +2138,7 @@ if (ar.size() > 1) {
 "\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
 "\t\torg.xdef.XDParseResult parseResult){"+LN;
 			String s = "";
-			for(Map.Entry<String, String> e: txttab.entrySet()) {
+			for(Entry<String, String> e: txttab.entrySet()) {
 				s += (s.length() == 0 ? "\t\t" : "\t\t} else ")
 					+ "if (\"" + e.getKey()
 					+ "\".equals(x.getXMNode().getXDPosition())){"+LN;
@@ -2363,9 +2177,9 @@ if (ar.size() > 1) {
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
 "\t\torg.xdef.XDParseResult parseResult) {"+LN;
 			String s = "";
-			for (Iterator<Map.Entry<String, String>> it =
+			for (Iterator<Entry<String, String>> it =
 				atttab.entrySet().iterator(); it.hasNext();) {
-				Map.Entry<String, String> en = it.next();
+				Entry<String, String> en = it.next();
 				s += s.length() == 0 ? "\t\t" : " else ";
 				String key = en.getKey();
 				ndx = key.lastIndexOf('/');
@@ -2394,7 +2208,7 @@ if (ar.size() > 1) {
 "\t\torg.xdef.proc.XXNode x)"+LN+
 "\t\t{return null;}"+LN;
 		} else if (xctab.size() == 1) {
-			Map.Entry<String, String> e = xctab.entrySet().iterator().next();
+			Entry<String, String> e = xctab.entrySet().iterator().next();
 			String s = e.getValue().replace('#', '.');
 			s = s.length() != 0
 				? "new "+s.substring(s.indexOf(";") + 1)+"(this, x)" : "this";
@@ -2409,9 +2223,9 @@ if (ar.size() > 1) {
 "\t\torg.xdef.proc.XXNode x) {"+LN;
 			result +=
 "\t\tString s = x.getXMElement().getXDPosition();"+LN;
-			for (Iterator<Map.Entry<String, String>>i=xctab.entrySet().iterator();
+			for (Iterator<Entry<String, String>>i=xctab.entrySet().iterator();
 				i.hasNext();) {
-				Map.Entry<String, String> e = i.next();
+				Entry<String, String> e = i.next();
 				String s = e.getValue().replace('#', '.');
 				if (s.length() == 0) {
 					dflt = true;
@@ -2456,9 +2270,9 @@ if (ar.size() > 1) {
 "\tpublic void xAddXChild(org.xdef.component.XComponent x){"+LN+
 "\t\tx.xSetNodeIndex(XD_ndx++);"+LN+
 "\t\tString s = x.xGetModelPosition();"+LN;
-			for (Iterator<Map.Entry<String, String>> i=xctab.entrySet().iterator();
+			for (Iterator<Entry<String, String>> i=xctab.entrySet().iterator();
 				i.hasNext();) {
-				Map.Entry<String, String> e = i.next();
+				Entry<String, String> e = i.next();
 				String s = e.getValue().replace('#', '.');
 				if (s.length() > 0) {
 					String typ = s.substring(s.indexOf(";") + 1);

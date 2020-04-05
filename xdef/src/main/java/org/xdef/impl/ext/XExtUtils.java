@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
+import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
@@ -173,6 +174,9 @@ public final class XExtUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+	public final static Element getCreateContextElement(final XXElement xElem) {
+		return ((ChkNode)xElem).getElemValue();
+	}
 	public final static Element getParentContextElement(final XXElement xElem) {
 		XDValue val = ((XXElement) xElem.getParent()).getXDContext();
 		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {

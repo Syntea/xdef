@@ -3267,7 +3267,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Get work element value.
 	 * @return work element value.
 	 */
-	final Element getElemValue() {return _elemValue;}
+	public final Element getElemValue() {return _elemValue;}
 
 	@Override
 	/** Set work element value.

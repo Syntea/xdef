@@ -31,8 +31,6 @@ import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
@@ -1345,7 +1343,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get Element value assigned to this node.
 	 * @return Element value assigned to this node.
 	 */
-	final Element getElemValue() {return _chkRoot.getElemValue();}
+	public final Element getElemValue() {return _chkRoot.getElemValue();}
 
 	@Override
 	/** Assign Element value to this node.
