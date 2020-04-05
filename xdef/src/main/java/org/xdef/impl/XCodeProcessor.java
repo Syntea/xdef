@@ -170,6 +170,10 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 				if (xv != null) {
 					XDValue value = _globalVariables[xv.getOffset()];
+					if (DefXPathExpr.isXPath2()) { //Xpath2
+//TODO SAXON //////////////////////////////////////// bind variables?
+						return  value.stringValue();
+					}
 					switch (value.getItemId()) {
 						case XD_DECIMAL:
 							return value.decimalValue();
@@ -1243,25 +1247,24 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 						}
 					} else {
 						try {
+							DefXPathExpr x;
 							if (_stack[sp].getItemId() == XD_XPATH) {
-								_stack[sp]= ((DefXPathExpr) _stack[sp]).exec(e);
+								x = (DefXPathExpr) _stack[sp];
+								x.setNamespaceContext(
+									chkNode.getXXNamespaceContext());
+								x.setFunctionResolver(_functionResolver);
+								x.setVariableResolver(_variableResolver);
 							} else {
-								String s = _stack[sp].toString();
-								if (s.startsWith("@")) {
-									_stack[sp] = new DefContainer(
-										e.getAttributeNode(s.substring(1)));
-								} else {
-									DefXPathExpr x = new DefXPathExpr(s,
-										chkNode.getXXNamespaceContext(),
-										_functionResolver,
-										_variableResolver);
-									if (_code[pc-2].equals(_stack[sp])) {
-										x.setCode(LD_CONST_I);
-										_code[pc-2] = x;
-									}
-									_stack[sp] = x.exec(e);
+								x = new DefXPathExpr(_stack[sp].toString(),
+									chkNode.getXXNamespaceContext(),
+									_functionResolver,
+									_variableResolver);
+								if (_code[pc-2].equals(_stack[sp])) {
+									x.setCode(LD_CONST_I);
+									_code[pc-2] = x;
 								}
 							}
+							_stack[sp] = x.exec(e);
 						} catch (SRuntimeException ex) {
 							putReport(chkNode, ex.getReport());
 							_stack[sp] = new DefContainer();

@@ -24,13 +24,19 @@ import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
-/** Contains compiled XPath expression.
+/** Implementation of compiled XPath expression.
  * @author Vaclav Trojan
  */
 public final class DefXPathExpr extends KXpathExpr implements XDValue {
 
+	public XPathFunctionResolver _fr;
+	public XPathVariableResolver _vr;
+	public NamespaceContext _nc;
 	/** Creates a new empty instance of DefXpathExpr. */
-	DefXPathExpr() {super("*", (NamespaceContext) null);}
+	DefXPathExpr() {super("*");}
+
+	/** Creates a new empty instance of DefXpathExpr. */
+	DefXPathExpr(final String source) {this(source, null, null, null);}
 
 	/** Creates a new instance of DefXpathExpr
 	 * @param source the String with XPath expression.
@@ -68,21 +74,24 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 			if (o instanceof NodeList) {
 				NodeList nl = (NodeList) o;
 				int size = nl.getLength();
-				return size == 0 ? new DefContainer() :
-					size==1 ? new DefContainer(nl.item(0)):new DefContainer(nl);
+				return size == 0 ? new DefContainer() : size == 1
+					? new DefContainer(nl.item(0)): new DefContainer(nl);
 			}
+			DefContainer result;
 			if (o instanceof Number) {
 				Number n = (Number) o;
-				if (o instanceof Long || o instanceof Integer)
-					return new DefContainer(n.longValue());
-				double d = n.doubleValue();
-				if (Math.floor(d) == n.longValue())
-					return new DefContainer(n.longValue());
-				return new DefContainer(n.floatValue());
+				if (o instanceof Long || o instanceof Integer) {
+					result = new DefContainer(n);
+				} else {
+					double d = n.doubleValue();
+					result = (Math.floor(d) == n.longValue())
+						? new DefContainer(n.longValue()) : new DefContainer(d);
+				}
+			} else {
+				result = (o instanceof Node || o instanceof String) 
+					? new DefContainer(o) : new DefContainer((Boolean) o);
 			}
-			if (o instanceof Node || o instanceof String)
-				return new DefContainer(o);
-			return new DefContainer((Boolean) o);
+			return result;
 		} catch (Exception ex) {
 			try {
 				return new DefContainer(

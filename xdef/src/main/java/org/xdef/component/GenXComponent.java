@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import java.util.HashSet;
 import org.xdef.XDConstants;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.XElement;
 import org.xdef.model.XMNode;
 import org.xdef.sys.Report;
@@ -27,9 +28,6 @@ import org.xdef.sys.Report;
  * @author Vaclav Trojan
  */
 public final class GenXComponent {
-
-	/** version of generation of X-components. */
-	public static boolean oldVersion = false;
 
 	/** Generate sources of enumerations.
 	 * @param xdpool XDPool object.
@@ -296,8 +294,8 @@ public final class GenXComponent {
 					continue;
 				}
 				XCGenerator genxc;
-//				if (oldVersion && ((XElement) xn)._json == 0) {
-				if (oldVersion && ((XElement) xn)._json == 0) {
+				if (xn.getXMDefinition().getXDVersion() >= XConstants.XD40 
+					|| ((XElement) xn)._json != 0) {
 					genxc = new XCGeneratorOld(xdpool, reporter);
 				} else {
 					genxc = new XCGeneratorNew(xdpool, reporter);

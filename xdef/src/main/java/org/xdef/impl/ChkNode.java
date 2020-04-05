@@ -716,7 +716,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get Element value assigned to this node.
 	 * @return Element value assigned to this node.
 	 */
-	abstract Element getElemValue();
+	public abstract Element getElemValue();
 
 	@Override
 	/** Get actual element.

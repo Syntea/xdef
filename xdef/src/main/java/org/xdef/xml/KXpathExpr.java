@@ -1,11 +1,6 @@
 package org.xdef.xml;
 
-import org.xdef.impl.xml.KNodeList;
-import org.xdef.msg.XML;
-import org.xdef.sys.SRuntimeException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xdef.sys.StringParser;
+import java.util.Iterator;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
@@ -13,10 +8,18 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFunction;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.impl.xml.KNodeList;
+import org.xdef.msg.XML;
+import org.xdef.sys.SRuntimeException;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xdef.impl.XConstants;
+import org.xdef.sys.StringParser;
 
 /** XPath expression.
  * @author Vaclav Trojan
@@ -29,6 +32,9 @@ public class KXpathExpr {
 	private String _source;
 	private XPathExpression _value;
 	private XPath _xp;
+	private XPathFunctionResolver _fr;
+	private XPathVariableResolver _vr;
+	private NamespaceContext _nc;
 	static {
 		XPathFactory x;
 		try {
@@ -42,61 +48,19 @@ public class KXpathExpr {
 		XPF = (x == null) ? XPathFactory.newInstance() : x;
 		XP2 = x != null;
 	}
-
-	/** Creates a new instance of KXpathExpr from other expression with
-	 * compiled new expression. The NameSpace context, functions and variables
-	 * are retrieved  from the argument.
-	 * @param expr String with XPath expression.
-	 * @param xp NameSpace context or <tt>null</tt>.
-	 */
-	public KXpathExpr(String expr, final XPath xp) {
-		_source = expr.trim();
-		if (chkSimpleExpr() >= 0) {
-			return;
-		}
-		try {
-			_value = _xp.compile(expr);
-		} catch (XPathExpressionException ex) {
-			throw new SRuntimeException(XML.XML505, ex); //XPath error&{0}{: }
-		}
-	}
-
+	
 	/** Creates a new instance of KXpathExpr without NameSpace context,
 	 * variables and functions.
 	 * @param expr String with XPath expression.
 	 */
-	public KXpathExpr(final String expr) {
-		this(expr, (NamespaceContext) null);
-	}
-
-	/** check if this expression can be converted to w3c.dom operations.
-	 * @return -1 .. not simple, 0 .. element name, 1 .. attr, 6 .. self::.
-	 */
-	private int chkSimpleExpr() {
-		String s;
-		if (_source == null || (s =_source.trim()).isEmpty()) {
-			return -1;
-		}
-		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
-		s = s.substring(ndx);
-		return s.indexOf("::") < 0
-			&& StringParser.chkXMLName(s, (byte) 10) ? ndx : -1;
-	}
+	public KXpathExpr(final String expr) {this(expr, null, null, null);}
 
 	/** Creates a new instance of KXpathExpr
 	 * @param expr String with XPath expression.
 	 * @param nc NameSpace context or <tt>null</tt>.
 	 */
 	public KXpathExpr(final String expr, final NamespaceContext nc) {
-		_source = expr;
-		if (chkSimpleExpr() >= 0 && nc == null) return;
-		try {//return compiled XPath as XPathExpressionImpl object
-			_xp = XPF.newXPath();
-			if (nc != null) _xp.setNamespaceContext(nc);
-			_value = _xp.compile(expr);
-		} catch (XPathExpressionException ex) {
-			throw new SRuntimeException(XML.XML505, ex); //XPath error&{0}{: }
-		}
+		this(expr, nc, null, null);
 	}
 
 	/** Creates a new instance of KXpathExpr
@@ -111,25 +75,34 @@ public class KXpathExpr {
 		final XPathVariableResolver vr) {
 		_source = expr.trim();
 		try {//return compiled XPath as XPathExpressionImpl object
-			if (nc != null) {
-				_xp = XPF.newXPath();
-				_xp.setNamespaceContext(nc);
-			}
-			if (fr != null) {
-				if (_xp == null) _xp = XPF.newXPath();
-				_xp.setXPathFunctionResolver(fr);
-			}
-			if (vr != null) {
-				if (_xp == null) _xp = XPF.newXPath();
-				_xp.setXPathVariableResolver(vr);
-			}
-			if (chkSimpleExpr() >= 0)
+			if (chkSimpleExpr() >= 0) {
 				return;
-			if (_xp == null) _xp = XPF.newXPath();
+			}
+			_xp = XPF.newXPath();
+			_xp.setNamespaceContext(nc!=null? nc : new KNsContext());
+			_xp.setXPathFunctionResolver(fr!=null ? fr : new KFunResolver());
+			_xp.setXPathVariableResolver(vr!=null ? vr : new KVarResolver());
 			_value = _xp.compile(expr);
 		} catch (XPathExpressionException ex) {
-			throw new SRuntimeException(XML.XML505, ex); //XPath error&{0}{: }
+			String s = ex.getMessage();
+			s = (s != null && !s.trim().isEmpty()
+				? ": " + s.trim() : "XPathExpressionException");
+			throw new SRuntimeException(XML.XML505, s);
 		}
+	}
+
+	/** Check if expression can be converted to w3c.dom operations (optimize).
+	 * @return -1 .. not simple, 0 .. element name, 1 .. attr, 6 .. self::.
+	 */
+	private int chkSimpleExpr() {
+		String s;
+		if (_source == null || (s =_source.trim()).isEmpty()) {
+			return -1;
+		}
+		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
+		s = s.substring(ndx);
+		return s.indexOf("::") < 0
+			&& StringParser.chkXMLName(s, XConstants.XML10) ? ndx : -1;
 	}
 
 	/** Get variable resolver.
@@ -152,6 +125,21 @@ public class KXpathExpr {
 	public NamespaceContext getNamespaceContext() {
 		return _xp == null ? null : _xp.getNamespaceContext();
 	}
+
+	/** Set namespace context.
+	 * @param nc namespace context.
+	 */
+	public void setNamespaceContext(final NamespaceContext nc) {_nc = nc;}
+
+	/** Get function resolver.
+	 * @param fr function resolver.
+	 */
+	public void setFunctionResolver(final XPathFunctionResolver fr) {_fr = fr;}
+
+	/** Set variable resolver.
+	 * @param vr variable resolver.
+	 */
+	public void setVariableResolver(final XPathVariableResolver vr) {_vr = vr;}
 
 	/** Execute XPath expression and return result.
 	 * If result type is <tt>null</tt> then result types are checked in
@@ -353,5 +341,33 @@ public class KXpathExpr {
 	 * @return true if XPath2 implementation is available.
 	 */
 	public static final boolean isXPath2() {return XP2;}
+
+	private final class KFunResolver implements XPathFunctionResolver {
+		@Override
+		public final XPathFunction resolveFunction(final QName functionName,
+			final int arity) {
+			return _fr!=null ? _fr.resolveFunction(functionName, arity) : null;
+		}
+	}
+	private final class KVarResolver implements XPathVariableResolver{
+		@Override
+		public final Object resolveVariable(final QName variableName) {
+			return _vr!=null ? _vr.resolveVariable(variableName) : null;
+		}
+	}
+	private final class KNsContext implements NamespaceContext {
+		@Override
+		public final String getNamespaceURI(final String prefix) {
+			return _nc!=null ? _nc.getNamespaceURI(prefix) : null;
+		}
+		@Override
+		public final String getPrefix(final String namespaceURI) {
+			return _nc!=null ? _nc.getPrefix(namespaceURI) : null;
+		}
+		@Override
+		public final Iterator getPrefixes(final String namespaceURI) {
+			return _nc!=null ? _nc.getPrefixes(namespaceURI) : null;
+		}
+	}
 
 }
