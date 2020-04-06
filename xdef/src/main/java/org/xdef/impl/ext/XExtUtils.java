@@ -208,17 +208,17 @@ public final class XExtUtils {
 		return null;
 	}
 
-	public final static XDContainer fromParent(final XXElement elem,
+	public final static XDContainer fromParent(final XXElement xElem,
 		final String expr){
-		XDValue val = elem.getParent().getXDContext();
+		XDValue val = xElem.getParent().getXDContext();
 		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {
 			return new DefContainer();
 		}
 		Element el = val.getElement();
 		DefXPathExpr xe = new DefXPathExpr(expr,
-			elem.getXXNamespaceContext(),
-			elem.getXXFunctionResolver(),
-			elem.getXXVariableResolver());
+			xElem.getXXNamespaceContext(),
+			xElem.getXXFunctionResolver(),
+			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
 

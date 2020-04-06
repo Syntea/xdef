@@ -48,7 +48,7 @@ public class KXpathExpr {
 		XPF = (x == null) ? XPathFactory.newInstance() : x;
 		XP2 = x != null;
 	}
-	
+
 	/** Creates a new instance of KXpathExpr without NameSpace context,
 	 * variables and functions.
 	 * @param expr String with XPath expression.
@@ -251,7 +251,7 @@ public class KXpathExpr {
 							if (s.toUpperCase().contains("NUMBER"))
 								return _value.evaluate(node,
 									XPathConstants.NUMBER);
-						} catch (Exception exx) {}
+						} catch (Exception exx) {}// try evaluate STRING or NODE
 					}
 				}
 				try {

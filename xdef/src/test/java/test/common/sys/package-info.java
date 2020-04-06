@@ -1,2 +1,2 @@
-/** Provides tests of package cz.syntea.common.sys. */
+/** Provides tests of package org.xdef.sys. */
 package test.common.sys;

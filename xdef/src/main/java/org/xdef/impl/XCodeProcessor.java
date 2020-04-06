@@ -94,7 +94,7 @@ import org.xdef.XDConstants;
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
  */
-final class XCodeProcessor implements XDValueID, CodeTable {
+public final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
@@ -147,56 +147,10 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects =
 		new LinkedHashMap<String, Object>();
-
 	/** XPath function resolver. */
-	XPathFunctionResolver _functionResolver = new XPathFunctionResolver() {
-		@Override
-		public XPathFunction resolveFunction(final QName functionName,
-			final int arity) {
-			return null;
-		}
-	};
-
+	final XPathFunctionResolver _functionResolver = new XDFunctionResolver();
 	/** XPath variable resolver. */
-	XPathVariableResolver _variableResolver = new XPathVariableResolver() {
-		@Override
-		public final Object resolveVariable(final QName qname) {
-			String name = qname.toString();
-			String uri;
-			if ((uri = qname.getNamespaceURI()) == null || uri.length() == 0) {
-				XVariable xv = _xd.findVariable('$' + name);
-				if (xv == null) {
-					xv = _xd.findVariable(name);
-				}
-				if (xv != null) {
-					XDValue value = _globalVariables[xv.getOffset()];
-					if (DefXPathExpr.isXPath2()) { //Xpath2
-//TODO SAXON //////////////////////////////////////// bind variables?
-						return  value.stringValue();
-					}
-					switch (value.getItemId()) {
-						case XD_DECIMAL:
-							return value.decimalValue();
-						case XD_BOOLEAN:
-							return value.booleanValue() ?
-								Boolean.TRUE : Boolean.FALSE;
-						case XD_INT:
-							return value.longValue();
-						case XD_FLOAT:
-							return value.doubleValue();
-						case XD_ELEMENT:
-							return value.getElement();
-						default:
-							return value.stringValue();
-					}
-				}
-			}
-			return null;
-		}
-	};
-
-	/** Get root XDefinition. */
-	final XDefinition getXDefinition() {return _xd;}
+	final XPathVariableResolver _variableResolver = new XDVariableResolver();
 
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd XDefinition.
@@ -231,6 +185,9 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		_initialized1 = true;
 		_initialized2 = true;
 	}
+
+	/** Get root XDefinition. */
+	final XDefinition getXDefinition() {return _xd;}
 
 	/** Set properties.
 	 * @param props properties used by processor.
@@ -3442,6 +3399,55 @@ final class XCodeProcessor implements XDValueID, CodeTable {
 		SError err = new SError(Report.fatal(XDEF.XDEF569, s), ex);
 		err.setStackTrace(ex.getStackTrace());
 		throw err;
+	}
+
+	public class XDFunctionResolver implements XPathFunctionResolver {
+		@Override
+		public XPathFunction resolveFunction(final QName functionName,
+			final int arity) { //TODO
+			return null; 
+		}
+	}
+
+	public class XDVariableResolver implements XPathVariableResolver {
+		public final boolean XPATH2 = DefXPathExpr.isXPath2();
+		public boolean convertToString;
+		@Override
+		public Object resolveVariable(final QName qname) {
+			String name = qname.toString();
+			String uri;
+			if ((uri = qname.getNamespaceURI()) == null || uri.length() == 0) {
+				XVariable xv = _xd.findVariable('$' + name);
+				if (xv == null) {
+					xv = _xd.findVariable(name);
+				}
+				if (xv != null) {
+					XDValue value = _globalVariables[xv.getOffset()];
+					if (XPATH2 && convertToString) {
+						//Xpath2 ???? bind??? this is a nasted trick!!
+						convertToString = false;
+						return  value.stringValue();
+					}
+					switch (value.getItemId()) {
+						case XD_DECIMAL:
+							return value.decimalValue();
+						case XD_BOOLEAN:
+							return value.booleanValue() ?
+								Boolean.TRUE : Boolean.FALSE;
+						case XD_INT:
+							return value.longValue();
+						case XD_FLOAT:
+							return value.doubleValue();
+						case XD_ELEMENT:
+							return value.getElement();
+						default:
+							return value.stringValue();
+					}
+				}
+			}
+			convertToString = false;
+			return null;
+		}
 	}
 
 	/** try/catch block {throws link}. */
