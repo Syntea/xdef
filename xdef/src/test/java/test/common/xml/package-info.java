@@ -1,2 +1,2 @@
-/** Provides tests of package cz.syntea.common.xml. */
+/** Provides tests of package org.xdef.xml. */
 package test.common.xml;

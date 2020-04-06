@@ -247,6 +247,48 @@ public class MyTest_0 extends XDTester {
 //			xp = XDFactory.compileXD(null, xdef);
 //		} catch (Exception ex) {fail(ex);}
 //if(true)return;
+		try {//test binding of XPath variables with XDefinition variables
+/*xx*
+			xdef = //integer variable x without leading "$"
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration>int x=123;</xd:declaration>\n"+
+"  <a a='string()' xd:script=\"finally outln(xpath('/a/@a=$x'));\"/>"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xml = "<a a='123'/>";
+			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);	
+/*xx*/
+ //XML505 XPath error:
+			xdef = //variable x with leading "$"
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration> int x = 123; </xd:declaration>\n"+
+"  <a xd:script = \"create from('b[@a=$x]')\">string</a>\n"+
+//"  <a xd:script = \"create xpath('b[@a=$x]', getCreateContextElement())\">string</a>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp.displayCode();
+			xml = "<w><b a='x'/><b a='123'>zxy</b><b>xx</b></w>";
+			assertEq("<a>zxy</a>", create(xp, "", "a", reporter, xml));
+			assertNoErrors(reporter);
+/*xx*/
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"  <xd:declaration scope='global'> int $typ = 1; </xd:declaration>\n"+
+"  <a>\n"+
+"    <xd:choice xd:script='occurs 2..3; create true'>\n"+  //creates max
+"      <b xd:script=\"create $typ EQ 1; finally $typ = 2;\"/>\n"+
+"      <c xd:script=\"create $typ EQ 2;\"/>\n"+
+"    </xd:choice>\n"+
+"  </a>\n"+
+"</xd:def>";
+			assertEq("<a><b/><c/><c/></a>", create(xdef,"","a",reporter,null));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='Y'>\n"+
@@ -1165,7 +1207,7 @@ if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='A'>\n"+
-"  <xd:declaration>\n" +
+"  <xd:declaration scope='global'>\n" +
 "    type name string(1, 128);\n" +
 "  </xd:declaration>\n" +
 "  <A>name()</A>" + 
@@ -1205,7 +1247,7 @@ if(T){return;}
 			reporter.clear();
 			xp = XDFactory.compileXD(reporter, (Properties) null, 
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    int i;\n"+
 "    int x(){return 0;}\n"+
 "    type t int();\n"+
@@ -2253,7 +2295,7 @@ if(T){return;}
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='Example' root='a'> <a>required myType()</a> </xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "    BNFGrammar $rrr = new BNFGrammar('\n"+
 "      S        ::= $whitespace+ /*skipped white spaces*/\n"+
 "      intList  ::= $integer (S? \",\" S? $integer)*\n"+
@@ -2280,10 +2322,10 @@ if(T){return;}
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='Example' root='a'> <a> required myType() </a> </xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
-"  <xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
 "     type myType $rrr.check('intList');\n"+
 "  </xd:declaration>\n"+
-"  <xd:BNFGrammar name = \"$base\">\n"+
+"  <xd:BNFGrammar name = \"$base\" scope='global'>\n"+
 "    integer ::= [0-9]+\n"+
 "    S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+

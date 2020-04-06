@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import org.xdef.impl.XCodeProcessor;
 
 /** Implementation of compiled XPath expression.
  * @author Vaclav Trojan
@@ -66,6 +67,15 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	 * @return result of XPath expression.
 	 */
 	public XDContainer exec(final Node node) {
+		return exec(node, false);
+	}
+
+	/** Execute XPath expression and return result (it can repeat execution).
+	 * @param node node or <tt>null</tt>.
+	 * @param invoked if false it can be invoke again (if exception thrown)
+	 * @return result of XPath expression.
+	 */
+	private XDContainer exec(final Node node, final boolean invoked) {
 		try {
 			Object o = evaluate(node, (QName) null);
 			if (o == null) {
@@ -88,7 +98,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 						? new DefContainer(n.longValue()) : new DefContainer(d);
 				}
 			} else {
-				result = (o instanceof Node || o instanceof String) 
+				result = (o instanceof Node || o instanceof String)
 					? new DefContainer(o) : new DefContainer((Boolean) o);
 			}
 			return result;
@@ -97,6 +107,17 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 				return new DefContainer(
 					(String) evaluate(node, XPathConstants.STRING));
 			} catch (Exception ex1) {
+				// Very nasted trick!!! (maybe bind???)
+				if (!invoked) {
+					XPathVariableResolver xpvr = getVariableResolver();
+					XCodeProcessor.XDVariableResolver x;
+					if (xpvr != null
+						&& (xpvr instanceof XCodeProcessor.XDVariableResolver)
+						&& (x=(XCodeProcessor.XDVariableResolver) xpvr).XPATH2){
+						x.convertToString = true;
+						return exec(node, true);// try to execute it again
+					}
+				}
 				throw new SRuntimeException(ex1.toString());
 			}
 		}

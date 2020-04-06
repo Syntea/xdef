@@ -14,7 +14,6 @@ interface XCGenerator {
 	 * @param interfaceName name of interface
 	 * @param packageName the package of generated class (may be null).
 	 * @param components Map with components.
-	 * @param genJavadoc switch to generate JavaDoc.
 	 * @return String with generated Java source code.
 	 */
 	public String genXComponent(final String model,
@@ -22,8 +21,7 @@ interface XCGenerator {
 		final String extClass,
 		final String interfaceName,
 		final String packageName,
-		final Map<String, String> components,
-		final boolean genJavadoc);
+		final Map<String, String> components);
 
 	/** Get StringBuilder with interface specifications. */
 	public StringBuilder getIinterfaces();
