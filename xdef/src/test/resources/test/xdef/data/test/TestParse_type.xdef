@@ -54,8 +54,6 @@
             <enum_n xd:script="occurs *">enum('abc', 'def')</enum_n>
             <enumi_n xd:script="occurs *">enumi('aBc', 'DeF')</enumi_n>
             <ListOf_m xd:script="occurs *">list(%item=int(1,10))</ListOf_m>
-            <tokens_1 xd:script="occurs *">tokens('abc|def')</tokens_1>
-            <tokensi_1 xd:script="occurs *">tokensi('abc |def')</tokensi_1>
             <MD5 xd:script="occurs *">MD5</MD5>
             <NCname xd:script="occurs *">NCName</NCname>
             <NCnameList xd:script="occurs *">NCNameList(' ')</NCnameList>

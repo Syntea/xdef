@@ -23,13 +23,12 @@ import org.w3c.dom.Text;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.UserDataHandler;
-import test.STester;
 import test.XDTester;
 
 /** Test KDOMBuilder.
  * @author  Vaclav Trojan
  */
-public class TestKDOMBuilder extends STester {
+public class TestKDOMBuilder extends XDTester {
 
 	public TestKDOMBuilder() {super();}
 

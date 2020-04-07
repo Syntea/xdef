@@ -19,9 +19,9 @@
                 Poradi="required int();                                             onFalse setErr(4208);   onAbsence setErr(4202)"
                 MD5="required string(32);                                        onFalse setErr(4208);   onAbsence setErr(4202)"
                 Delka="required int(1,99_999_999);                                 onFalse setErr(4208);   onAbsence setErr(4202)"
-                Format="required list('JPG','PDF');                                 onFalse setErr(4225);   onAbsence setErr(4202)"
+                Format="required enum('JPG','PDF');                                 onFalse setErr(4225);   onAbsence setErr(4202)"
                 SeqSouboru="required int(1,999_999);                                    onFalse setErr(4208);   onAbsence setErr(4202)"
-                Repeat="optional list('A');                                         onFalse setErr(4225)"/>
+                Repeat="optional enum('A');                                         onFalse setErr(4225)"/>
   </xdef:def>
   <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
             xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"

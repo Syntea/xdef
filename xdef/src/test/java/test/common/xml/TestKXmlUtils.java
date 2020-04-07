@@ -1,5 +1,6 @@
 package test.common.xml;
 
+import org.xdef.sys.STester;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xml.KXpathExpr;
 import java.io.ByteArrayInputStream;
@@ -14,7 +15,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.ReportWriter;
-import test.STester;
 
 /** TestKXmlUtils
  * @author Vaclav Trojan

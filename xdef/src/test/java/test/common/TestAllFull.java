@@ -2,6 +2,7 @@ package test.common;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import org.xdef.sys.STester;
 import test.common.bnf.TestBNF;
 import test.common.bnf.TestExpr;
 import test.common.bnf.TestBNFJSON;
@@ -18,7 +19,6 @@ import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
 import test.XDTester;
-import test.STester;
 
 /** Run all available tests for package org.xdef.sys with all features
  * of the tester.

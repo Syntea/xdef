@@ -12,12 +12,12 @@
        dp2="required dec(4,1)"
        xd:script="options moreAttributes">
    <File Name="required string(1,256)"
-         Format="required list('TXT','XML','CTL')"
+         Format="required enum('TXT','XML','CTL')"
          Kind="required string(3,3)&amp;(eq('abc')|eq('xyz'))"
          RecNum="required num(8)"
          xd:script="occurs 1.." >
        <xd:mixed>
-       <CheckSum Type="required list('MD5','CRC')"
+       <CheckSum Type="required enum('MD5','CRC')"
                 Value="required string()"
                 xd:script="occurs 1">
          <xd:text>optional</xd:text>

@@ -25,9 +25,9 @@
       KodPojistitele          = "required num(4)"
       CisloSmlouvy            = "required string(1,35)"
       PoradiVozidla           = "required num(1,10)"
-      StavSmlouvy             = "required list('T','U')"
+      StavSmlouvy             = "required enum('T','U')"
       Blokace                 = "optional num(4)"
-      AltIdentPSP             = "optional list('A')" >
+      AltIdentPSP             = "optional enum('A')" >
 
       <UsekPojisteni          xd:script = "occurs 1..; ref UsekPojisteni" />
    </PSP>
@@ -48,7 +48,7 @@
       Vyplaceno               = "required int(0,999999999)"
       Regres                  = "required int(0,999999999)"
       DatumCasSU              = "required datetime('yyyyMMddHHmm')"
-      KlasifikovanaUdalost    = "required list('A','N')"
+      KlasifikovanaUdalost    = "required enum('A','N')"
    />
 
    <ZdrojovyPSP
@@ -63,9 +63,9 @@
 
   <AnswerId
          Program           ="required string()"
-         Status            ="required list('OK', 'Pending', 'Fault')"
+         Status            ="required enum('OK', 'Pending', 'Fault')"
   />
-<!--     Mode              ="optional list('STD','TST')"	-->
+<!--     Mode              ="optional enum('STD','TST')"	-->
 
   <Fault>
      <Detail>
@@ -122,7 +122,7 @@
   />
 
   <NositelPSP
-         AddInfo           ="optional list('0','1')">
+         AddInfo           ="optional enum('0','1')">
     <PSP                   xd:script="occurs 0..; ref PSP" />
   </NositelPSP>
 
@@ -146,7 +146,7 @@
          IdentZpravy       ="required int()"
          RefMsgID          ="optional int()"
   />
-<!--     Mode              ="optional list('STD','TST')"	-->
+<!--     Mode              ="optional enum('STD','TST')"	-->
 
   <Set_BlokujPSP
          IdPojistitel      ="required int()">
@@ -179,7 +179,7 @@
   </UvolniPSP>
 
   <VolnePSP
-        AddInfo            ="optional list('0', '1')" >
+        AddInfo            ="optional enum('0', '1')" >
     <PSP                   xd:script="occurs 0..; ref PSP" />
   </VolnePSP>
 

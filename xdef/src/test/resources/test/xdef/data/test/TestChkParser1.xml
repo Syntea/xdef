@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1250"?>
-   <ZaznamPDN xmlns:xdi="http://www.syntea.cz/xdef/instance"
+   <ZaznamPDN xmlns:xdi="http://www.xdef.org/xdef/instance"
               xdi:location="SYSTEM 'TestChkParser1.xdef'"
               xdi:xdefName="ZaznamPDN"
       Verze="1.2"

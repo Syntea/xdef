@@ -108,7 +108,7 @@
 
    <VozidloUcastnika
       PoradiVozidlaSU          = "required int(2,999);                                             onFalse setErr(4208); onAbsence setErr(4202)"
-      Zruseni                  = "optional list('A');                                              onFalse setErr(4208)" >
+      Zruseni                  = "optional enum('A');                                              onFalse setErr(4208)" >
 
       <VozidloPS               xd:script = "occurs 1;    ref VozidloPS;                                                onAbsence setErr(4304)"/>
       <Ridic                   xd:script = "occurs 0..;  ref Osoba"/>
@@ -158,7 +158,7 @@
       DatumCasOznameniSU       = "optional datetime('yyyyMMddHHmm');                               onFalse setErr(4208)"
       CJRelacePolicie          = "optional string(1,50);                                           onFalse setErr(4208)"
       StavSetreniPolicie       = "optional tab('CC_StavSetreniPolicie','KodStavuSetreniPolicie');  onFalse setErr(4225)"
-      RozhodnaUdalost          = "required list('A','N');                                          onFalse setErr(4225); onAbsence setErr(4202)"
+      RozhodnaUdalost          = "required enum('A','N');                                          onFalse setErr(4225); onAbsence setErr(4202)"
       DatumUcinnosti           = "required datetime('yyyyMMddHHmm');                               onFalse setErr(4208); onAbsence setErr(4202)">
 
       <Misto                   xd:script = "occurs 1; ref Misto;                                                       onAbsence setErr(4306)" />

@@ -4,12 +4,12 @@ import org.xdef.sys.SObjectReader;
 import org.xdef.sys.SObjectWriter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
+import org.xdef.sys.STester;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import test.STester;
 
 /** Test SObjectWriter.
  * @author  Vaclav Trojan

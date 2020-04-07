@@ -1,6 +1,5 @@
 package test.xdef;
 
-import static test.STester.runTest;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import org.xdef.sys.ArrayReporter;

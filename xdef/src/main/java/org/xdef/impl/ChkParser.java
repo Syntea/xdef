@@ -821,14 +821,6 @@ final class ChkParser extends DomBaseHandler {
 		if (_level == 0) {
 			int ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
 				"location");
-			if (ndx < 0) { // deprecated instance specification
-				ndx = parsedElem.indexOfNS(XPool.XDEF31_INSTANCE_NS_URI,
-					"location");
-			}
-			if (ndx < 0) { // deprecated instance specification
-				ndx = parsedElem.indexOfNS(XPool.XDEF20_INSTANCE_NS_URI,
-					"location");
-			}
 			KParsedAttr ka;
 			String s;
 			if (ndx >= 0 &&	(ndx =

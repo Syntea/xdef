@@ -1,4 +1,4 @@
-package test;
+package org.xdef.sys;
 
 import java.io.CharArrayWriter;
 import java.io.PrintStream;
@@ -8,28 +8,24 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Arrays;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.ReportPrinter;
 import org.xdef.xml.KXmlUtils;
 
-/** Abstract class for creating test classes.
+/** Abstract class for creating test classes. This class enables to run tests
+ * without test tools and it provides few more tests using xdef (junit etc.).
  * You can create a test class as an extension of this class. You have to
  * implement the public void method test(). In this method you implement fail
  * methods and/or assertEq, assertTrue methods. You start the testing if you
  * invoke static method runTest(args) (usually in main method). This method
  * returns number of errors. Example:
  * <pre><code>
- public class TestMyCode extends org.xdef.sys.STester {
-   public TestMyCode() {}
+ public class TestMyCode extends cz.syntea.xdef.sys.STester {
+   TestMyCode() {}
    public void test() {
 	 try {
 	   int i = 2*5;
@@ -100,7 +96,6 @@ public abstract class STester {
 			_outStream.flush();
 		}
 	}
-
 	private void printErr(final String s) {
 		flushOut();
 		_err.print(s);
@@ -108,7 +103,6 @@ public abstract class STester {
 			_outStream.print(s);
 		}
 	}
-
 	private void printlnErr(final String s) {
 		flushOut();
 		_err.println(s);
@@ -116,14 +110,12 @@ public abstract class STester {
 			_outStream.println(s);
 		}
 	}
-
 	private void flushErr() {
 		_err.flush();
 		if (_outStream != null) {
 			_outStream.flush();
 		}
 	}
-
 	/** Create empty instance.
 	 * @param out where to print messages.
 	 * @param err where to print errors.
@@ -132,38 +124,30 @@ public abstract class STester {
 		_out = out;
 		_err = err;
 	}
-
 	/** Get arguments.
 	 * @return array of command line arguments or <tt>null</tt>.
 	 */
 	public final String[] getArguments() {return _arguments;}
-
 	/** Set arguments.
 	 * @param args list of command line arguments.
 	 */
 	public final void setArguments(final String... args) {_arguments = args;}
-
 	/** Get path to project home directory. If the directory doesn't exist put
 	 *  an error message and return <tt>null</tt>.
 	 *
 	 * @return The string with the path to data directory or <tt>null</tt>.
 	 */
 	public final String getHomeDir() {return _homeDir;}
-
 	/** Get path to Java source directory of this class source. If the directory
 	 * doesn't exist put an error message and return <tt>null</tt>.
-	 *
 	 * @return The string with the path to source directory or <tt>null</tt>.
 	 */
 	public final String getSourceDir() {return _sourceDir;}
-
 	/** Get path to data directory. If data doesn't exist put an error
 	 * message and return <tt>null</tt>.
-	 *
 	 * @return The string with the path to data directory or <tt>null</tt>.
 	 */
 	public final String getDataDir() {return _dataDir;}
-
 	/** Get path to temporary directory. If the directory doesn't exist try
 	 * to create it. If the directory can't be created put error message
 	 * and return <tt>null</tt>.
@@ -185,23 +169,19 @@ public abstract class STester {
 				"Home directory doesn't exist or isn't accessible");
 		}
 	}
-
 	/** Get name of test (the name of class without package prefix).
 	 * @return The name of test class.
 	 */
 	public final String getName() {return _name;}
-
 	/** Get path and name of Java source file. If the file is unknown
 	 * return <tt>null</tt>.
 	 * @return The string with the path to source directory or <tt>null</tt>.
 	 */
 	public final String getSourceName() {return _sourceName;}
-
 	/** Get output stream.
-	 * @return The print stream or <tt>null</tt> if the output is not defined.
+	 * @return print stream or <tt>null</tt> if the output is not defined.
 	 */
 	public final PrintStream getOutStream() {return _out;}
-
 	/** Set output stream.
 	 * @param out print stream or <tt>null</tt>.
 	 */
@@ -210,12 +190,10 @@ public abstract class STester {
 			_out = System.out;
 		}
 	}
-
 	/** Get error stream.
 	 * @return The print stream or <tt>null</tt> if err stream is not defined.
 	 */
 	public final PrintStream getErrStream() {return _err;}
-
 	/** Set error stream.
 	 * @param err print stream or <tt>null</tt>.
 	 */
@@ -224,14 +202,12 @@ public abstract class STester {
 			_err = System.err;
 		}
 	}
-
 	/** Get time in milliseconds when the instance of this object
 	 * was initialized.
 	 * @return The time in milliseconds when the instance of this object was
 	 * created.
 	 */
 	public final long getTimeStamp() {return _timeStamp;}
-
 	/** Set new value of time in time stamp which is considered as the initial
 	 * time of test.
 	 * @return The value of time stamp (in milliseconds).
@@ -239,29 +215,23 @@ public abstract class STester {
 	public final long newTimeStamp() {
 		return _timeStamp = System.currentTimeMillis();
 	}
-
 	/** Get number of errors.
 	 * @return The number of errors.
 	 */
 	public final int getFailCount() {return _errors;}
-
 	/** Get errors counter. */
 	public final void clearFailCount() {_errors = 0;}
-
 	/** Increase number of errors by one. */
 	public final void incFailCount() {_errors++;}
-
 	/** Get the value of debug flag.
 	 * @return The debug flag.
 	 */
 	public final boolean isDebug() {return _debug;}
-
 	/** Set debug flag. If true some additional information is printed (such as
 	 * the stack trace after fail method with an exception is invoked).
 	 * @param debug the debug flag.
 	 */
 	public final void setDebug(final boolean debug) {_debug = debug;}
-
 	/** Set additional result information (printed after test method
 	 * is finished).
 	 * @param info the string with result information.
@@ -278,7 +248,6 @@ public abstract class STester {
 			}
 		}
 	}
-
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
 	 * <tt>_className</tt> field.
@@ -295,7 +264,6 @@ public abstract class STester {
 		flushOut();
 		printErr(s.substring(i+1));
 	}
-
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
 	 * <tt>_className</tt> field.
@@ -324,12 +292,10 @@ public abstract class STester {
 		}
 		printErr(text + "\n" + s + '\n');
 	}
-
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is <tt>null</tt> the message is ignored.
 	 */
 	public final void fail() {putErrInfo("*");}
-
 	/** Increase error counter and write information of given object.
 	 * If the print stream is <tt>null</tt> the message is ignored.
 	 * @param obj the report to be displayed as a fail information.
@@ -351,7 +317,6 @@ public abstract class STester {
 			}
 		}
 	}
-
 	/** Check booleans.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -359,7 +324,6 @@ public abstract class STester {
 	public final void assertEq(final Boolean a1, final Boolean a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check booleans.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -372,7 +336,6 @@ public abstract class STester {
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
-
 	/** Check characters.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -380,7 +343,6 @@ public abstract class STester {
 	public final void assertEq(final Character a1, final Character a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check characters.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -396,7 +358,6 @@ public abstract class STester {
 				a2 + "'(" + ((int) a2) + ")");
 		}
 	}
-
 	/** Check integer numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -404,7 +365,6 @@ public abstract class STester {
 	public final void assertEq(final Long a1, final Long a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check integer numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -417,7 +377,6 @@ public abstract class STester {
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
-
 	/** Check float numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -425,7 +384,6 @@ public abstract class STester {
 	public final void assertEq(final Double a1, final Double a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check float numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -440,7 +398,6 @@ public abstract class STester {
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
-
 	/** Check BigDecimal numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -448,7 +405,6 @@ public abstract class STester {
 	public final void assertEq(final BigDecimal a1, final BigDecimal a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check BigDecimal numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -463,7 +419,6 @@ public abstract class STester {
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
-
 	/** Check strings.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -471,7 +426,6 @@ public abstract class STester {
 	public final void assertEq(final String a1, final String a2) {
 		assertEq(a1, a2, null);
 	}
-
 	/** Check strings.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -487,7 +441,6 @@ public abstract class STester {
 				+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
 		}
 	}
-
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -495,7 +448,6 @@ public abstract class STester {
 	public final void assertEq(final String a1, final Element a2) {
 		assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2);
 	}
-
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -506,7 +458,6 @@ public abstract class STester {
 		final String msg) {
 		assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2, msg);
 	}
-
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -514,7 +465,6 @@ public abstract class STester {
 	public final void assertEq(final Element a1, final String a2) {
 		assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement());
 	}
-
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -525,13 +475,11 @@ public abstract class STester {
 		final String msg) {
 		assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement(), msg);
 	}
-
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
 	public void assertEq(Element a1, Element a2) {assertEq(a1, a2, null);}
-
 	/** Check elements are equal (text nodes are trimmed).
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -542,7 +490,6 @@ public abstract class STester {
 		final String msg) {
 		assertEq(a1, a2, msg, true);
 	}
-
 	/** Check elements are equal (text nodes are trimmed if argument trim
 	 * is true).
 	 * @param a1 first value.
@@ -560,13 +507,11 @@ public abstract class STester {
 				"\narg2:\n"+KXmlUtils.nodeToString(a2));
 		}
 	}
-
 	/** Check objects.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
 	public void assertEq(Object a1, Object a2) {assertEq(a1, a2, null);}
-
 	/** Check objects.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -585,7 +530,6 @@ public abstract class STester {
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
 	}
-
 	/** Check if objects are equal.
 	 * @param a1 first object.
 	 * @param a2 second object.
@@ -631,13 +575,11 @@ public abstract class STester {
 		}
 		return a1.equals(a2);
 	}
-
 	/** Check if the argument is <tt>null</tt>. If not then invoke the method
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
 	 */
 	public final void assertNull(final Object a) {assertNull(a, ""+a);}
-
 	/** Check if the argument is <tt>null</tt>. If not then invoke the method
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
@@ -648,13 +590,11 @@ public abstract class STester {
 			fail(msg);
 		}
 	}
-
 	/** Check if the argument is <tt>true</tt>. If not then invoke the method
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for true.
 	 */
 	public final void assertTrue(final boolean a) {assertFalse(!a, null);}
-
 	/** Check if the argument <tt>a</tt> is <tt>true</tt>. If not then invoke
 	 * the method <tt>fail</tt> with the argument msg.
 	 * @param a argument to be checked for true.
@@ -663,13 +603,11 @@ public abstract class STester {
 	public final void assertTrue(final boolean a, final Object msg) {
 		assertFalse(!a, msg);
 	}
-
 	/** Check if the argument is <tt>false</tt>. If not then invoke the method
 	 * <tt>fail</tt>.
 	 * @param a argument to be checked for false.
 	 */
 	public final void assertFalse(final boolean a) {assertFalse(a, null);}
-
 	/** Check if the argument <tt>a</tt> is <tt>false</tt>. If not then invoke
 	 * the method <tt>fail</tt> with the argument msg.
 	 * @param a argument to be checked for false.
@@ -680,7 +618,6 @@ public abstract class STester {
 			fail(msg);
 		}
 	}
-
 	/** Check if the reporter does not contain an error.
 	 * @param reporter the reporter to be checked for no errors.
 	 */
@@ -689,7 +626,6 @@ public abstract class STester {
 			fail(reporter.toString());
 		}
 	}
-
 	/** Check if the reporter contains an error.
 	 * @param reporter reporter to be checked for no errors.
 	 */
@@ -698,7 +634,6 @@ public abstract class STester {
 			fail("Error not reported");
 		}
 	}
-
 	private static String getListing(final ReportWriter reporetr,
 		final Object msg) {
 		if (msg == null) {
@@ -729,7 +664,6 @@ public abstract class STester {
 		}
 		return xml;
 	}
-
 	/** Check if the reporter does not contain an error. If yes then invoke
 	 * the method <tt>fail</tt> with the argument msg.
 	 * @param reporter reporter to be checked for no errors.
@@ -745,7 +679,6 @@ public abstract class STester {
 			}
 		}
 	}
-
 	/** Check if the reporter does not contain an error or warning. If yes then
 	 * invoke the method <tt>fail</tt> with the argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
@@ -756,7 +689,6 @@ public abstract class STester {
 			fail(reporter.toString());
 		}
 	}
-
 	/** Check if the reporter does not contain an error or warning. If yes then
 	 * invoke the method <tt>fail</tt> with the argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
@@ -773,11 +705,9 @@ public abstract class STester {
 			}
 		}
 	}
-
 	/** Run test and print result information. This method executes all tests
 	 * and must be implemented by user extension of this class. */
 	public abstract void test();
-
 	/** Initialize fields of this class. It is automatically called by the
 	 * method runTest, or it may be called by user. Note all fields are
 	 * reinitialized.
@@ -897,7 +827,6 @@ public abstract class STester {
 		_tempDir =  _homeDir + "temp/";
 		_timeStamp = System.currentTimeMillis();
 	}
-
 	/** Run test and print result information.
 	 * @param out The print stream for result information or <tt>null</tt>
 	 * @param err The print stream for error messages or <tt>null</tt>.
@@ -948,7 +877,6 @@ public abstract class STester {
 		}
 		return _errors;
 	}
-
 	/** Creates the instance of the class from which this method was called.
 	 * @return The new instance of the class (from which the method was called).
 	 */
@@ -963,13 +891,14 @@ public abstract class STester {
 		}
 		className = st[i].getClassName();
 		try {
-			return (STester) Class.forName(className).getConstructor(
-				new Class<?>[0]).newInstance(new Object[0]);
+			Constructor c = Class.forName(className).getDeclaredConstructor(
+				new Class<?>[0]);
+			c.setAccessible(true);
+			return (STester) c.newInstance(new Object[0]);
 		} catch (Exception ex) {
 			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
 	}
-
 	private static void cancel(final String msg) {
 		System.out.flush();
 		if (msg != null) {
@@ -1075,7 +1004,6 @@ public abstract class STester {
 		}
 		return at.runTest(out, err, log, printOK);
 	}
-
 	/** Run test and print result information on System.out. If the argument
 	 * printOK is false only error information is printed.
 	 * @param printOK if <tt>false</tt> then the result is printed only if
@@ -1087,7 +1015,6 @@ public abstract class STester {
 		return getInstance().runTest(
 			System.out, System.err, (PrintStream) null, printOK);
 	}
-
 	/** Run test of the object given by argument and print result information.
 	 * @param out The print stream for result information or <tt>null</tt>
 	 * @param err The print stream for error messages or <tt>null</tt>.
@@ -1106,7 +1033,6 @@ public abstract class STester {
 		final String... arguments) {
 		return test.runTest(out, err, log, printOK, arguments);
 	}
-
 	/** Run tests of the object given by argument and print result information.
 	 * @param out The print stream for result information or <tt>null</tt>
 	 * @param err The print stream for error messages or <tt>null</tt>.
@@ -1154,7 +1080,6 @@ public abstract class STester {
 		}
 		return errors;
 	}
-
 	/** Run tests of the object given by argument and print detailed
 	 * information.
 	 * @param out The print stream for result information or <tt>null</tt>
@@ -1174,5 +1099,4 @@ public abstract class STester {
 		final String... args) {
 		return runTests(out, err, log, tests, info, true, args);
 	}
-
 }

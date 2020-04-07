@@ -1,6 +1,5 @@
 package test.xdef;
 
-import static test.STester.runTest;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;

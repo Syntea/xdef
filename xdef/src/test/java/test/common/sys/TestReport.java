@@ -6,6 +6,7 @@ import org.xdef.msg.XML;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
+import org.xdef.sys.STester;
 import org.xdef.sys.Report;
 import org.xdef.sys.SManager;
 import org.xdef.xml.KXmlUtils;
@@ -13,7 +14,6 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
-import test.STester;
 
 /** Test reporter.
  * @author  Vaclav Trojan

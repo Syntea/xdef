@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
 import test.XDTester;
-import test.STester;
 
 /** Run all available basic tests for package org.xdef.util.
  * @author Vaclav Trojan
@@ -24,7 +23,7 @@ public class TestAll {
 		} catch (Exception ex) {
 			log = null;
 		}
-		STester[] tests = new STester[]{
+		XDTester[] tests = new XDTester[]{
 			new TestValidate(),
 			new TestDTDToXdef(),
 			new TestGenCollection(),
@@ -37,11 +36,11 @@ public class TestAll {
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.2");
-		int result = STester.runTests(System.out, System.err, log,
+		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition utilities version 4.0");
-		result += STester.runTests(System.out, System.err, log,
+		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {
 			log.close();

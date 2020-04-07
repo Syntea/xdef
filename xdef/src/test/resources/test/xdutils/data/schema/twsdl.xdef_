@@ -13,13 +13,13 @@
 		<s:Header>
 			<xd:mixed>
 				<b1a:Request
-					s:mustUnderstand ="optional list('true', '1')"
+					s:mustUnderstand ="optional enum('true', '1')"
 					IdentZpravy      ="required int()"
 					ReqMsgID         ="optional int()"
 					Mode             ="required string()"
 				/>
 				<b1a:User
-					s:mustUnderstand ="optional list('true', '1')"
+					s:mustUnderstand ="optional enum('true', '1')"
 					IdentUser        ="required string(1,32)"
 				/>
 			</xd:mixed>

@@ -25,7 +25,7 @@
       <Adresa xdef:script="occurs 0..1; ref Adresa"/>
     </Osoba>
     <Subjekt xdef:script="finally {                                   subjekt_OsobaOrFirma(4314);                                   setDefault_ifEx('@StatPrislusnost','CZ','@RC','@IC');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','CZ');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','SK');                                   chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','CZ');                                   chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','SK');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','CZ');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','SK');                                }"
-             Zruseni="optional list('A');                                              onFalse setErr(4208)"
+             Zruseni="optional enum('A');                                              onFalse setErr(4208)"
              Jmeno="optional string(1,24);                                           onFalse setErr(4208)"
              Prijmeni="optional string(1,36);                                           onFalse setErr(4208)"
              RC="optional string(1,14);                                           onFalse setErr(4208)"
@@ -43,7 +43,7 @@
              Stat="required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"/>
     <GPS X="required dec(9,5);                                               onFalse setErr(4208); onAbsence setErr(4202)"
          Y="required dec(9,5);                                               onFalse setErr(4208); onAbsence setErr(4202)"
-         SSyst="required list('WGS84');                                          onFalse setErr(4225); onAbsence setErr(4202)"/>
+         SSyst="required enum('WGS84');                                          onFalse setErr(4225); onAbsence setErr(4202)"/>
     <Misto xdef:script="finally {notEmptyMisto(4300); equal(4301,'Adresa@Stat','Vozovka@Stat');}">
       <GPS xdef:script="occurs 0..1; ref GPS"/>
       <Adresa xdef:script="occurs 0..1; ref Adresa"/>
@@ -85,7 +85,7 @@
       <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
     </VozidloPojistnika>
     <VozidloUcastnika PoradiVozidlaSU="required int(2,999);                                             onFalse setErr(4208); onAbsence setErr(4202)"
-                      Zruseni="optional list('A');                                              onFalse setErr(4208)">
+                      Zruseni="optional enum('A');                                              onFalse setErr(4208)">
       <VozidloPS xdef:script="occurs 1;    ref VozidloPS;                                                onAbsence setErr(4304)"/>
       <Ridic xdef:script="occurs 0..;  ref Osoba"/>
       <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
@@ -96,26 +96,26 @@
       <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
     </VozidloNepojistene>
     <VozidloNezjistene PoradiVozidlaSU="required int(1);                                                 onFalse setErr(4208); onAbsence setErr(4202)"/>
-    <Rezerva Zruseni="optional list('A');                                              onFalse setErr(4208)"
+    <Rezerva Zruseni="optional enum('A');                                              onFalse setErr(4208)"
              TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
              Zmena="required dec(11,2);                                              onFalse setErr(4208); onAbsence setErr(4202)"
              Rezerva="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
              Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"/>
     <Plneni xdef:script="finally chk_TypMinusPlneni_Platba(4202,4204,'@TypMinusPlneni','@Platba')"
-            Zruseni="optional list('A');                                              onFalse setErr(4208)"
+            Zruseni="optional enum('A');                                              onFalse setErr(4208)"
             TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
             Platba="required dec(11,2);                                              onFalse setErr(4208); onAbsence setErr(4202)"
             Vyplaceno="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
             Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
             Ucet="optional string(1,35);                                           onFalse setErr(4208)"
             TypMinusPlneni="optional tab('CC_TypMinusPlneni','KodTypMinusPlneni');           onFalse setErr(4208)"/>
-    <Regres Zruseni="optional list('A');                                              onFalse setErr(4208)"
+    <Regres Zruseni="optional enum('A');                                              onFalse setErr(4208)"
             TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
             Platba="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
             Vyplaceno="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
             Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
             TypRegresu="required tab('CC_TypRegresu','KodTypRegresu');                   onFalse setErr(4225); onAbsence setErr(4202)"/>
-    <Indikator Zruseni="optional list('A');                                              onFalse setErr(4208)"
+    <Indikator Zruseni="optional enum('A');                                              onFalse setErr(4208)"
                Indikator="required tab('CC_Indikator','Indikator');                        onFalse setErr(4225); onAbsence setErr(4202)"/>
     <SU IdentZaznamu="required string(1,12);                                           onFalse setErr(4208); onAbsence setErr(4202)"
         CisloSU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
@@ -124,7 +124,7 @@
         DatumCasOznameniSU="optional datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208)"
         CJRelacePolicie="optional string(1,50);                                           onFalse setErr(4208)"
         StavSetreniPolicie="optional tab('CC_StavSetreniPolicie','KodStavuSetreniPolicie');  onFalse setErr(4225)"
-        RozhodnaUdalost="required list('A','N');                                          onFalse setErr(4225); onAbsence setErr(4202)"
+        RozhodnaUdalost="required enum('A','N');                                          onFalse setErr(4225); onAbsence setErr(4202)"
         DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)">
       <Misto xdef:script="occurs 1; ref Misto;                                                       onAbsence setErr(4306)"/>
       <xdef:choice>
@@ -357,7 +357,7 @@
             CisloSU="required string(3,35)"
             DatumCasSU="optional datetime('yyyyMMddHHmm')"
             MistoStatSU="optional tab('CC_Stat','KodStatu')"
-            RozhodnaUdalost="optional list('A','N')"
+            RozhodnaUdalost="optional enum('A','N')"
             DatumUzavreniSU="optional datetime('yyyyMMddHHmm')"
             CisloSmlouvy="optional string(3,35)"
             PoradiVozidla="optional string(1,10)"

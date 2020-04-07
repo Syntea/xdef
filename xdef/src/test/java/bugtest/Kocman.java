@@ -5,9 +5,6 @@ import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 
 public class Kocman extends XDTester {
-
-	public Kocman() {super();}
-
 	@Override
 	public void test() {
 		ArrayReporter reporter = new ArrayReporter();

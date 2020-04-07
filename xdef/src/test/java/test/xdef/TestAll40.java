@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import test.STester;
 
 /** Run all available basic tests for package org.xdef.
  * @author Vaclav Trojan
@@ -32,7 +31,7 @@ public class TestAll40 {
 			}
 			log = null;
 		}
-		STester[] tests = new STester[] {
+		XDTester[] tests = new XDTester[] {
 			new Test000(),
 			new Test001(),
 			new Test002(),
@@ -74,7 +73,7 @@ public class TestAll40 {
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition version 4.0");
-		int result = STester.runTests(System.out, System.err, log,
+		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();

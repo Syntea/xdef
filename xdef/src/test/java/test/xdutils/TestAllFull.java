@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
 import test.XDTester;
-import test.STester;
 
 /** Run all available tests for package org.xdef.util  with all features
  * of the tester.
@@ -26,7 +25,7 @@ public class TestAllFull {
 		} catch (Exception ex) {
 			log = null;
 		}
-		STester[] tests = new STester[]{
+		XDTester[] tests = new XDTester[]{
 			new TestValidate(),
 			new TestDTDToXdef(),
 			new TestGenCollection(),
@@ -39,15 +38,15 @@ public class TestAllFull {
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.1");
-		int result = STester.runTests(System.out, System.err, log,
+		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.2");
-		result += STester.runTests(System.out, System.err, log,
+		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition utilities version 4.0");
-		result += STester.runTests(System.out, System.err, log,
+		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {
 			log.close();

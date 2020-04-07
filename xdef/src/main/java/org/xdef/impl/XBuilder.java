@@ -183,20 +183,6 @@ public class XBuilder implements XDBuilder {
 		return this;
 	}
 
-//	@Override
-//	/** Set reporter. This method is should be used only for incremental
-//	 * message reporting. The reporter must be set before setting sources.
-//	 * @deprecated pleas use XDFactrory.getXDBuilder(ReportWriter, Properties)
-//	 * @param reporter the reporter to be set to this builder.
-//	 * @return this XDBuilde object.
-//	 */
-//	public final XDBuilder setReporter(final ReportWriter reporter) {
-//		if (reporter != null) {
-//			_xp._compiler.setReportWriter(reporter);
-//		}
-//		_xp._reporter = reporter;
-//		return this;
-//	}
 
 	/** Get compiler.
 	 * @return created XDPool.

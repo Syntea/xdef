@@ -102,7 +102,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -209,7 +209,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -430,7 +430,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -623,7 +623,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -656,7 +656,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -667,7 +667,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('WGS84')
+          enum('WGS84')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -717,7 +717,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('POV','HAVPOV','HAV')
+          enum('POV','HAVPOV','HAV')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -924,7 +924,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('HAV','POV')
+          enum('HAV','POV')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -933,7 +933,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -1031,7 +1031,7 @@
       use="required">
       <xs:annotation>
         <xs:documentation>
-          list('A','N')
+          enum('A','N')
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>

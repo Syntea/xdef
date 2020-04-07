@@ -4,6 +4,7 @@ import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.STester;
 import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
-import test.STester;
 
 /** Test of parsing and executions of BNF expressions an assignment commands.
  * @author Vaclav Trojan
