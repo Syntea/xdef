@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
-import test.STester;
+import org.xdef.sys.STester;
 
 /** Run all available basic tests for package org.xdef.
  * @author Vaclav Trojan

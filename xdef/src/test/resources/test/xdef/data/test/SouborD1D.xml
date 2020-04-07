@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--SouborD1A xmlns:xd="http://www.syntea.cz/xdef/instance"
+<!--SouborD1A xmlns:xd="http://www.xdef.org/xdef/instance"
  xd:location="SYSTEM 'SouborD1A.xdef'"
  xd:xdefName="SouborD1A" -->
    <xi:include xmlns:xi = "http://http://www.w3.org/2001/XInclude"

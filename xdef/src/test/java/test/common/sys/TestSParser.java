@@ -5,13 +5,13 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.STester;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import test.STester;
 
 /** Test of simple parser and SDatetime.
  * @author Vaclav Trojan

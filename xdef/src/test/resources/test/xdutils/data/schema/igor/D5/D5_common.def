@@ -36,15 +36,15 @@
  />
 
  <Answer
-         RequestAccepted     ="required list('Y','N');                              ${listErr};   ${absErr}"
-         RequestPending      ="optional list('Y','N');                              ${listErr}"
+         RequestAccepted     ="required enum('Y','N');                              ${listErr};   ${absErr}"
+         RequestPending      ="optional enum('Y','N');                              ${listErr}"
          ReqMsgID            ="optional int()"
-         Mode                ="required list('STD','TST');                          ${listErr};   ${absErr}"
+         Mode                ="required enum('STD','TST');                          ${listErr};   ${absErr}"
  />
 
   <AnswerId
          Program           ="required string()"
-         Status            ="required list('OK', 'Pending', 'Fault')"
+         Status            ="required enum('OK', 'Pending', 'Fault')"
   />
 
  <Doklad
@@ -173,7 +173,7 @@
          Prijmeni            ="required string(1,36);                               ${formatErr}; ${absErr}"
          RodnePrijmeni       ="optional string(1,36);                               ${formatErr}"
          RC                  ="optional string(10,11);                              ${formatErr}"
-         Pohlavi             ="optional list('M','Ž');                              ${listErr}"
+         Pohlavi             ="optional enum('M','Ž');                              ${listErr}"
          OsobniStav          ="optional string(1,30);                               ${formatErr}"
          DatumNarozeni       ="optional datetime('dd.MM.yyyy');                     ${formatErr}"
          MistoNarozeni       ="optional string(1,60);                               ${formatErr}"
@@ -189,7 +189,7 @@
  <Ping/>
 
  <PingFlow
-         Flow                ="required list('D5_GetBlk') ;                          ${listErr};   ${absErr}"
+         Flow                ="required enum('D5_GetBlk') ;                          ${listErr};   ${absErr}"
  />
 
  <PingStatus>
@@ -232,7 +232,7 @@
          RokDN               ="required datetime('yyyy');                           ${formatErr}; ${absErr}"
          CisloDN             ="required num(5);                                     ${formatErr}; ${absErr}"
          Poradi              ="required int(1,99_999);                              ${formatErr}; ${absErr}"
-         Format              ="required list('JPG','PDF');                          ${listErr};   ${absErr}"
+         Format              ="required enum('JPG','PDF');                          ${listErr};   ${absErr}"
          href                ="optional"
  />
 
@@ -252,7 +252,7 @@
          KodPartnera         ="required tab('VR_DefPartner','KodPartnera');         ${listErr};   ${absErr}"
          IdentZpravy         ="required int(1,9_999_999_999);                       ${formatErr}; ${absErr}"
          RefMsgID            ="optional int(1,9_999_999_999);                       ${formatErr}"
-         Mode                ="required list('STD','TST') AND checkAppMode();       onFalse setErr(1090); ${absErr}"
+         Mode                ="required enum('STD','TST') AND checkAppMode();       onFalse setErr(1090); ${absErr}"
  />
 
   <RequestId
@@ -297,7 +297,7 @@
          StavBrzd            ="optional tab('DN_StavBrzd','StavBrzdPopis');         ${listErr}"
          KodPojistitele      ="optional num(4);                                     ${formatErr}; "
          CisloDokladuPojisteni="optional string(1,35);                              ${formatErr}"
-         PojisteniText       ="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena');      ${listErr}"
+         PojisteniText       ="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena');      ${listErr}"
          DruhVozidla         ="required string(1,30);                               ${formatErr}; ${absErr}" >
       <xd:mixed>
          <Skoda              xd:script="occurs 0..1; ref Skoda" />
@@ -316,7 +316,7 @@
          StavBrzd            ="optional tab('DN_StavBrzd','StavBrzdPopis');         ${listErr}"
          KodPojistitele      ="optional num(4);                                     ${formatErr}"
          CisloDokladuPojisteni="optional string(1,35);                              ${formatErr}"
-         PojisteniText       ="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena');      ${listErr}"
+         PojisteniText       ="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena');      ${listErr}"
          DruhVozidla         ="required string(1,30);                               ${formatErr}; ${absErr}" >
      <xd:mixed>
         <Skoda               xd:script="occurs 0..1; ref Skoda" />
@@ -334,9 +334,9 @@
          Zraneni             ="optional tab('DN_Zraneni','Zraneni');                ${listErr}"
          ZdravPojistovna     ="optional string(1,100);                              ${formatErr}"
          PokutaKc            ="optional string(1,7);                                ${formatErr}"
-         PokutaZapl          ="optional list('nezaplacena','zaplacena');            ${listErr}"
-         Pachatel            ="optional list('Pachatel DN');                        ${listErr}"
-         Poskozeny           ="optional list('Poškozený');                          ${listErr}" >
+         PokutaZapl          ="optional enum('nezaplacena','zaplacena');            ${listErr}"
+         Pachatel            ="optional enum('Pachatel DN');                        ${listErr}"
+         Poskozeny           ="optional enum('Poškozený');                          ${listErr}" >
      <xd:mixed>
         <JinaSkoda           xd:script="occurs 0..1; ref Skoda" />
         <Osoba               xd:script="occurs 0..1; ref Osoba" />
@@ -354,7 +354,7 @@
          OznSegmentu         ="required string(1,5);                                ${formatErr}; ${absErr}"
          TypSoupravy         ="required string(1,40);                               ${formatErr}; ${absErr}"
          Spoj                ="optional string(1,50);                               ${formatErr}"
-         DruhSoupravy        ="required list('vlak');                               ${listErr};   ${absErr}" >
+         DruhSoupravy        ="required enum('vlak');                               ${listErr};   ${absErr}" >
      <xd:mixed>
         <Skoda               xd:script="occurs 0..1; ref Skoda" />
         <JinaSkoda           xd:script="occurs 0..1; ref Skoda" />
@@ -371,13 +371,13 @@
          ZnackaVozidla       ="optional string(1,30);                               ${formatErr}"
          TypVozidla          ="optional string(1,50);                               ${formatErr}"
          RokVyroby           ="optional datetime('yyyy');                           ${formatErr}"
-         PlatnostSTK         ="optional list('platná','neplatná','nezjištěno');     ${listErr}"
+         PlatnostSTK         ="optional enum('platná','neplatná','nezjištěno');     ${listErr}"
          MesicSTKDo          ="optional datetime('MM/yyyy');                        ${formatErr}"
          TypBrzd             ="optional tab('DN_TypBrzd','TypBrzdPopis');           ${listErr}"
          StavBrzd            ="optional tab('DN_StavBrzd','StavBrzdPopis');         ${listErr}"
          KodPojistitele      ="optional num(4);                                     ${formatErr}"
          CisloDokladuPojisteni ="optional string(1,35);                             ${formatErr}"
-         PojisteniText       ="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); ${listErr}"
+         PojisteniText       ="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); ${listErr}"
          CisloZK             ="optional string(1,40);                               ${formatErr}"
          VydalZK             ="optional string(1,255);                              ${formatErr}"
          PlatnostZKOd        ="optional datetime('dd.MM.yyyy');                     ${formatErr}"
@@ -393,7 +393,7 @@
  </VozidloDN>
 
  <ZaznamDN
-         Verze               ="optional list('2.4');                                ${listErr}"
+         Verze               ="optional enum('2.4');                                ${listErr}"
          PlatnostOd          ="required datetime('dd.MM.yyyy');                     ${formatErr}; ${absErr}" >
       <AlternativniObraz   xd:script="occurs 0.."
          PlatnostOd          ="required datetime('dd.MM.yyyy')" 

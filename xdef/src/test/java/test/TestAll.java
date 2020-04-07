@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.TestNG;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.xdef.impl.code.DefXQueryExpr;
 
 
 /** Execute all tests fast.
@@ -17,6 +18,10 @@ public class TestAll {
 	@BeforeTest
 	public static void beforeTests() {
 		XDTester.setFulltestMode(false);
+		System.out.println("Testing java version: "
+			+System.getProperty("java.version") + " (with"
+			+ (DefXQueryExpr.isXQueryImplementation() ? "" : "out")
+			+ " Saxon library) ...");
 	}
 
 	/** run TestAll in test.common */
@@ -55,7 +60,7 @@ public class TestAll {
 	@SuppressWarnings("unused")
 	private static void mainTest() {
 		beforeTests();
-
+		
 		testCommon();
 		testXdef();
 		testXDUtils();

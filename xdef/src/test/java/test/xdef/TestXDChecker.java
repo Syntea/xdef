@@ -52,7 +52,7 @@ public class TestXDChecker extends XDTester {
 			x.getParsedValue().getBytes()));
 		assertTrue(chk.checkType("hex()", "0").matches());
 		assertTrue(chk.checkType("hex()", " .").errors());
-		assertTrue(chk.checkType("tokens('||||Q|XY|A')", "||Q").matches());
+		assertTrue(chk.checkType("enum('|Q','XY','A')", "|Q").matches());
 		assertTrue(chk.checkType("typX", "xxx").matches()); //external method
 		assertTrue(chk.checkType("typX", "aa").errors());
 		assertTrue(chk.checkType("typY", "yyy").matches()); //declared method

@@ -16,13 +16,13 @@
     type Delka_Type{parse: int(1, 99999999);}
   </xd:declaration>
   <xd:declaration>
-    type Format_Type{parse: string() &amp; list("PDF", "JPG");}
+    type Format_Type{parse: string() &amp; enum("PDF", "JPG");}
   </xd:declaration>
   <xd:declaration>
     type SeqSouboru_Type{parse: int(1, 999999);}
   </xd:declaration>
   <xd:declaration>
-    type Repeat_Type{parse: string() &amp; list("A");}
+    type Repeat_Type{parse: string() &amp; enum("A");}
   </xd:declaration>
   <PrilohaPDN_PrilohaPDN_type_cType SeqRec="required int()"
     IdentSouboru="required int()"

@@ -4,6 +4,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.STester;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import java.io.ByteArrayInputStream;
@@ -23,7 +24,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
-import test.STester;
 
 /** Test the class SUtils.
  * @author Vaclav Trojan

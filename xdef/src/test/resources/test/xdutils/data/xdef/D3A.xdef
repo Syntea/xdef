@@ -88,7 +88,7 @@
     type TypVozidla_Type{parse: string(1, 50);}
   </xd:declaration>
   <xd:declaration>
-    type PlatnostSTK_Type{parse: string() &amp; list("neplatná",
+    type PlatnostSTK_Type{parse: string() &amp; enum("neplatná",
     "nezjištěno", "platná");}
   </xd:declaration>
   <xd:declaration>
@@ -107,7 +107,7 @@
     type CisloDokladuPojisteni_Type{parse: string(1, 35);}
   </xd:declaration>
   <xd:declaration>
-    type PojisteniText_Type{parse: string() &amp; list("Nepodléhá
+    type PojisteniText_Type{parse: string() &amp; enum("Nepodléhá
     pojištění", "Potvrzení nepředloženo", "Smlouva neuzavřena", "Doklad
     o pojištění nepředložen");}
   </xd:declaration>
@@ -148,7 +148,7 @@
     type Spoj_Type{parse: string(1, 50);}
   </xd:declaration>
   <xd:declaration>
-    type DruhSoupravy_Type{parse: string() &amp; list("vlak");}
+    type DruhSoupravy_Type{parse: string() &amp; enum("vlak");}
   </xd:declaration>
   <xd:declaration>
     type DruhPovozu_Type{parse: string(1, 30);}
@@ -190,7 +190,7 @@
     type RC_Type{parse: string(8, 11);}
   </xd:declaration>
   <xd:declaration>
-    type Pohlavi_Type{parse: string() &amp; list("M", "Ž");}
+    type Pohlavi_Type{parse: string() &amp; enum("M", "Ž");}
   </xd:declaration>
   <xd:declaration>
     type OsobniStav_Type{parse: string(1, 30);}
@@ -253,14 +253,14 @@
     type PokutaKc_Type{parse: string(1, 7);}
   </xd:declaration>
   <xd:declaration>
-    type PokutaZapl_Type{parse: string() &amp; list("zaplacena",
+    type PokutaZapl_Type{parse: string() &amp; enum("zaplacena",
     "nezaplacena");}
   </xd:declaration>
   <xd:declaration>
-    type Pachatel_Type{parse: string() &amp; list("Pachatel DN");}
+    type Pachatel_Type{parse: string() &amp; enum("Pachatel DN");}
   </xd:declaration>
   <xd:declaration>
-    type Poskozeny_Type{parse: string() &amp; list("Poškozený");}
+    type Poskozeny_Type{parse: string() &amp; enum("Poškozený");}
   </xd:declaration>
   <xd:declaration>
     type KodPojistitele_Xdnum_Type{parse: string() &amp; regex("\\d{4}");}
@@ -278,13 +278,13 @@
     type Poradi_Type{parse: int(1, 99999);}
   </xd:declaration>
   <xd:declaration>
-    type Format_Type{parse: string() &amp; list("PDF", "JPG");}
+    type Format_Type{parse: string() &amp; enum("PDF", "JPG");}
   </xd:declaration>
   <xd:declaration>
     type SeqSouboru_Type{parse: int(1, 999999);}
   </xd:declaration>
   <xd:declaration>
-    type Repeat_Type{parse: string() &amp; list("A");}
+    type Repeat_Type{parse: string() &amp; enum("A");}
   </xd:declaration>
   <InfoZaznamPDN_InfoZaznamPDN_type_cType Verze="optional string()"
     SeqRec="required int()"

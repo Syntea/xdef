@@ -128,13 +128,13 @@
                  ZnackaVozidla         = "optional string(); onTrue trString(4101,16)"
                  TypVozidla            = "optional string(); onTrue trString(4101,30)"
                  RokVyroby             = "optional rokVyroby(4108)"
-                 PlatnostSTK           = "optional tokens('platnï¿½|neplatnï¿½|nezjiï¿½tï¿½no'); onFalse valueErr(4105)"
+                 PlatnostSTK           = "optional enum('platnï¿½','neplatnï¿½','nezjiï¿½tï¿½no'); onFalse valueErr(4105)"
                  MesicSTKDo            = "optional tMesicSTKDo(4107)"
                  TypBrzd               = "optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')"
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional enum('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
                  CisloZK               = "optional string(); onTrue trString(4101,40)"
                  VydalZK               = "optional string(); onTrue trString(4101,255)"
                  PlatnostZKOd          = "optional tDate(4102)"
@@ -158,7 +158,7 @@
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional enum('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
                  DruhVozidla           = "required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" >
       <xd:mixed >
          <Skoda     xd:script = "occurs 0..1; ref Skoda" />
@@ -176,7 +176,7 @@
                  StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
                  KodPojistitele        = "optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni = "optional string(); onTrue trString(4101,30)"
-                 PojisteniText         = "optional list('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
+                 PojisteniText         = "optional enum('Doklad o pojiï¿½tï¿½nï¿½ nepï¿½edloï¿½en','Potvrzenï¿½ nepï¿½edloï¿½eno','Nepodlï¿½hï¿½ pojiï¿½tï¿½nï¿½','Smlouva neuzavï¿½ena'); onFalse valueErr(4105)"
                  DruhVozidla           = "required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" >
       <xd:mixed >
          <Skoda     xd:script = "occurs 0..1; ref Skoda" />
@@ -188,7 +188,7 @@
    <VlakDN       OznSegmentu  = "required string(); onTrue trString(4101,5); onFalse requiredErr(4100)"
                  TypSoupravy  = "required string(); onTrue trString(4101,40); onFalse requiredErr(4100)"
                  Spoj         = "optional string(); onTrue trString(4101,50)"
-                 DruhSoupravy = "required list('vlak'); onFalse {requiredErr(4100); valueErr(4103);}" >
+                 DruhSoupravy = "required enum('vlak'); onFalse {requiredErr(4100); valueErr(4103);}" >
       <xd:mixed >
          <Skoda     xd:script = "occurs 0..1; ref Skoda" />
          <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
@@ -226,14 +226,14 @@
    <UcastnikDN   OznSegmentu     = "required string(); onTrue trString(4101,5); onFalse requiredErr(4100)"
                  TypUcastnika    = "required string(); onTrue trString(4101,30); onFalse requiredErr(4100)"
                  PraxeRizeni     = "optional praxeRizeni(4108)"
-                 AlkoholDech     = "optional list('Alkohol'); onFalse valueErr(4105)"
+                 AlkoholDech     = "optional enum('Alkohol'); onFalse valueErr(4105)"
                  AlkoholKrev     = "optional string(); onTrue trString(4101,10)"
                  Zraneni         = "optional ciselnik(4103,'DN_Zraneni','Zraneni')"
                  ZdravPojistovna = "optional ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')"
                  PokutaKc        = "optional string(); onTrue trString(4101,7)"
-                 PokutaZapl      = "optional list('nezaplacena','zaplacena'); onFalse valueErr(4105)"
-                 Pachatel        = "optional list('Pachatel DN'); onFalse valueErr(4105)"
-                 Poskozeny       = "optional list('Poï¿½kozenï¿½'); onFalse valueErr(4105)" >
+                 PokutaZapl      = "optional enum('nezaplacena','zaplacena'); onFalse valueErr(4105)"
+                 Pachatel        = "optional enum('Pachatel DN'); onFalse valueErr(4105)"
+                 Poskozeny       = "optional enum('Poï¿½kozenï¿½'); onFalse valueErr(4105)" >
       <xd:mixed >
          <JinaSkoda         xd:script = "occurs 0..1; ref Skoda" />
          <Osoba             xd:script = "occurs 0..1; ref Osoba" />
@@ -255,7 +255,7 @@
                  TitulPred         = "optional string(); onTrue trString(4101,36)"
                  TitulZa           = "optional string(); onTrue trString(4101,36)"
                  RC                = "optional rodneCislo(4108)"
-                 Pohlavi           = "optional list('M','ï¿½'); onFalse valueErr(4105)"
+                 Pohlavi           = "optional enum('M','Ž½'); onFalse valueErr(4105)"
                  OsobniStav        = "optional string(); onTrue trString(4101,30)"
                  DatumNarozeni     = "optional tDate(4102)"
                  MistoNarozeni     = "optional string(); onTrue trString(4101,36)"

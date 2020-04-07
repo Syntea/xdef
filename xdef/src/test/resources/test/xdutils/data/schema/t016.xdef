@@ -26,8 +26,8 @@
     integer="required int(-0x80000000,0x7fffffff)/*integer*/"
     integer1="required int(-0x8000000,0x7ffffff)/*integer with limits*/"
     long="required int()/*long*/"
-    list="required list('ab','cd')"
-    tokens="required tokens('ab|cd')">
+    list="required enum('ab','cd')"
+    tokens="required enum('ab','cd')">
     <date1 xd:script="occurs 1..*">
       datetime('yyyyMMdd|dd.MM.yyyy')
     </date1>
@@ -101,10 +101,10 @@
       int()
     </long>
     <list xd:script="occurs 1..*">
-      list('ab','cd')
+      enum('ab','cd')
     </list>
     <tokens xd:script="occurs 1..*">
-      tokens('ab|cd')
+      enum('ab','cd')
     </tokens>
   </root>
 </xd:def>

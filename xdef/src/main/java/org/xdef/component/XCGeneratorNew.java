@@ -444,8 +444,8 @@ class XCGeneratorNew extends XCGeneratorBase implements XCGenerator {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-System.out.println(xe.getXMDefinition().getName() + '#'
-	+ xe.getName() + '(' + iname + ',' + typeName + ',' + (max > 1) + ")");
+//System.out.println(xe.getXMDefinition().getName() + '#'
+//	+ xe.getName() + '(' + iname + ',' + typeName + ',' + (max > 1) + ")");
 	}
 //
 //	/** Create getter and setter of the item model of js:item.

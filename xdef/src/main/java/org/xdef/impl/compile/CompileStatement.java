@@ -3690,8 +3690,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
-							//Type declaration format "{parse: ...}" is deprecated;
-							//please use just validation method call
+							//Type declaration format "{parse: ...}" is
+							//deprecated; please use just validation method call
 							if (_xdVersion == XConstants.XD31) {
 								warning(XDEF.XDEF997);
 							} else {

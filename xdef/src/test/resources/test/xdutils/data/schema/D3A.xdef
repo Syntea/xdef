@@ -19,10 +19,10 @@
                     MD5="required string(32)"
                     Delka="required int(1,99_999_999)"
                     Poradi="required int(1,99_999)"
-                    Format="required list('JPG','PDF')"
+                    Format="required enum('JPG','PDF')"
                     IdentSouboru="required int()"
                     SeqSouboru="required int(1,999_999)"
-                    Repeat="optional list('A')"/>
+                    Repeat="optional enum('A')"/>
   </xdef:def>
   <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
             xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
@@ -100,13 +100,13 @@
                ZnackaVozidla="optional string(1,30)"
                TypVozidla="optional string(1,50)"
                RokVyroby="optional datetime('yyyy')"
-               PlatnostSTK="optional list('platná','neplatná','nezjištěno')"
+               PlatnostSTK="optional enum('platná','neplatná','nezjištěno')"
                MesicSTKDo="optional tMesicSTKDo(4107)"
                TypBrzd="optional tab('DN_TypBrzd','TypBrzdPopis');             onFalse setErr(4225)"
                StavBrzd="optional tab('DN_StavBrzd','StavBrzdPopis');           onFalse setErr(4225)"
                KodPojistitele="optional tab('CC_Pojistitel','KodPojistitele')"
                CisloDokladuPojisteni="optional string(1,35)"
-               PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
+               PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
                CisloZK="optional string(1,40)"
                VydalZK="optional string(1,255)"
                PlatnostZKOd="optional tDate(4102)"
@@ -129,7 +129,7 @@
                StavBrzd="optional tab('DN_StavBrzd','StavBrzdPopis');           onFalse setErr(4225)"
                KodPojistitele="optional tab('CC_Pojistitel','KodPojistitele')"
                CisloDokladuPojisteni="optional string(1,35)"
-               PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
+               PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
                DruhVozidla="required string(1,30)">
       <xdef:mixed>
         <Skoda xdef:script="occurs 0..1; ref Skoda"/>
@@ -146,7 +146,7 @@
                  StavBrzd="optional tab('DN_StavBrzd','StavBrzdPopis');           onFalse setErr(4225)"
                  KodPojistitele="optional tab('CC_Pojistitel','KodPojistitele')"
                  CisloDokladuPojisteni="optional string(1,35)"
-                 PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
+                 PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"
                  DruhVozidla="required string(1,30)">
       <xdef:mixed>
         <Skoda xdef:script="occurs 0..1; ref Skoda"/>
@@ -157,7 +157,7 @@
     <VlakDN OznSegmentu="required string(1,5)"
             TypSoupravy="optional string(1,40)"
             Spoj="optional string(1,50)"
-            DruhSoupravy="required list('vlak')">
+            DruhSoupravy="required enum('vlak')">
       <xdef:mixed>
         <Skoda xdef:script="occurs 0..1; ref Skoda"/>
         <JinaSkoda xdef:script="occurs 0..1; ref Skoda"/>
@@ -196,9 +196,9 @@
                 Zraneni="optional tab('DN_Zraneni','Zraneni')"
                 ZdravPojistovna="optional string(1,100)"
                 PokutaKc="optional string(1,7)"
-                PokutaZapl="optional list('nezaplacena','zaplacena')"
-                Pachatel="optional list('Pachatel DN')"
-                Poskozeny="optional list('Poškozený')">
+                PokutaZapl="optional enum('nezaplacena','zaplacena')"
+                Pachatel="optional enum('Pachatel DN')"
+                Poskozeny="optional enum('Poškozený')">
       <xdef:mixed>
         <JinaSkoda xdef:script="occurs 0..1; ref Skoda"/>
         <Osoba xdef:script="occurs 0..1; ref Osoba"/>
@@ -215,7 +215,7 @@
            Prijmeni="required string(1,36)"
            RodnePrijmeni="optional string(1,36)"
            RC="optional string(8,11)"
-           Pohlavi="optional list('M','Ž')"
+           Pohlavi="optional enum('M','Ž')"
            OsobniStav="optional string(1,30)"
            DatumNarozeni="optional tDate(4102)"
            MistoNarozeni="optional string(1,60)"

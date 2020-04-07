@@ -77,13 +77,13 @@
 <action name="A56" target="attr" onTrue="trString(4101,16)"/>
 <action name="A58" target="attr" onTrue="trString(4101,30)"/>
 <attr name="T60" type="rokVyroby(4108)"/>
-<attr name="T62" type="tokens('platná|neplatná|nezjištěno')"/>
+<attr name="T62" type="enum('platná'|'neplatná','nezjištěno')"/>
 <action name="A64" target="attr" onFalse="valueErr(4105)"/>
 <attr name="T66" type="tMesicSTKDo(4107)"/>
 <attr name="T68" type="ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')"/>
 <attr name="T70" type="ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"/>
 <attr name="T72" type="ciselnik(4103,'DN_Pojistitel','KodPojistitele')"/>
-<attr name="T74" type="list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"/>
+<attr name="T74" type="enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena')"/>
 <action name="A76" target="attr" onTrue="trString(4101,40)"/>
 <action name="A78" target="attr" onTrue="trString(4101,255)"/>
 <action name="A80" target="attr" onFalse="valueErr(4108)"/>
@@ -91,18 +91,18 @@
 <action name="A84" target="attr" onTrue="trString(4101,20)"/>
 <action name="A86" target="attr" onTrue="trString(4101,40)" onFalse="requiredErr(4100)"/>
 <action name="A88" target="attr" onTrue="trString(4101,50)"/>
-<attr name="T90" type="list('vlak')"/>
+<attr name="T90" type="enum('vlak')"/>
 <action name="A92" target="attr" onFalse="{requiredErr(4100)"/>
 <attr name="T94" type="praxeRizeni(4108)"/>
-<attr name="T96" type="list('Alkohol')"/>
+<attr name="T96" type="enum('Alkohol')"/>
 <attr name="T98" type="ciselnik(4103,'DN_Zraneni','Zraneni')"/>
 <attr name="T100" type="ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')"/>
 <action name="A102" target="attr" onTrue="trString(4101,7)"/>
-<attr name="T104" type="list('nezaplacena','zaplacena')"/>
-<attr name="T106" type="list('Pachatel DN')"/>
-<attr name="T108" type="list('Poškozený')"/>
+<attr name="T104" type="enum('nezaplacena','zaplacena')"/>
+<attr name="T106" type="enum('Pachatel DN')"/>
+<attr name="T108" type="enum('Poškozený')"/>
 <attr name="T110" type="rodneCislo(4108)"/>
-<attr name="T112" type="list('M','Ž')"/>
+<attr name="T112" type="enum('M','Ž')"/>
 <action name="A114" target="attr" onTrue="trString(4101,100)" onFalse="requiredErr(4100)"/>
 <attr name="T116" type="num(1,12)"/>
 <attr name="T118" type="normOkres() AND ciselnik(4103,'CC_Okres','Okres')"/>
@@ -136,28 +136,28 @@
       <Misto xd:script="occurs 1; onAbsence elementErr(4104); ref Text255"/>
    </ObjStrankaDN>
 <FotoDN Foto_Ref="required blobref(); onFalse requiredErr(4100)"/>
-<VozidloDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" SPZ="optional string(); onTrue trString(4101,10)" MPZ="optional string(); onTrue trString(4101,3)" VIN="optional string(); onTrue trString(4101,26)" ZnackaVozidla="optional string(); onTrue trString(4101,16)" TypVozidla="optional string(); onTrue trString(4101,30)" RokVyroby="optional rokVyroby(4108)" PlatnostSTK="optional tokens('platná|neplatná|nezjištěno'); onFalse valueErr(4105)" MesicSTKDo="optional tMesicSTKDo(4107)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" CisloZK="optional string(); onTrue trString(4101,40)" VydalZK="optional string(); onTrue trString(4101,255)" PlatnostZKOd="optional tDate(4102)" PlatnostZKDo="optional tDate(4102)" PojistneHPKc="optional int(); onFalse valueErr(4108)" DatumUhradyHP="optional tDate(4102)" MistoUhradyHP="optional string(); onTrue trString(4101,255)">
+<VozidloDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" SPZ="optional string(); onTrue trString(4101,10)" MPZ="optional string(); onTrue trString(4101,3)" VIN="optional string(); onTrue trString(4101,26)" ZnackaVozidla="optional string(); onTrue trString(4101,16)" TypVozidla="optional string(); onTrue trString(4101,30)" RokVyroby="optional rokVyroby(4108)" PlatnostSTK="optional enum('platná','neplatná','nezjištěno'); onFalse valueErr(4105)" MesicSTKDo="optional tMesicSTKDo(4107)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" CisloZK="optional string(); onTrue trString(4101,40)" VydalZK="optional string(); onTrue trString(4101,255)" PlatnostZKOd="optional tDate(4102)" PlatnostZKDo="optional tDate(4102)" PojistneHPKc="optional int(); onFalse valueErr(4108)" DatumUhradyHP="optional tDate(4102)" MistoUhradyHP="optional string(); onTrue trString(4101,255)">
       <xd:mixed>
          <Skoda xd:script="occurs 0..1; ref Skoda"/>
          <JinaSkoda xd:script="occurs 0..1; ref Skoda"/>
          <Drzitel xd:script="occurs 0..1; ref Text255"/>
       </xd:mixed>
    </VozidloDN>
-<TramvajDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" Linka="required string(); onTrue trString(4101,20); onFalse requiredErr(4100)" LinkaPoradi="optional int(); onFalse valueErr(4108)" EvidCislo="optional string(); onTrue trString(4101,20)" TypVozidla="optional string(); onTrue trString(4101,30)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)">
+<TramvajDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" Linka="required string(); onTrue trString(4101,20); onFalse requiredErr(4100)" LinkaPoradi="optional int(); onFalse valueErr(4108)" EvidCislo="optional string(); onTrue trString(4101,20)" TypVozidla="optional string(); onTrue trString(4101,30)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)">
       <xd:mixed>
          <Skoda xd:script="occurs 0..1; ref Skoda"/>
          <JinaSkoda xd:script="occurs 0..1; ref Skoda"/>
          <Vlastnik xd:script="occurs 0..1; ref Text255"/>
       </xd:mixed>
    </TramvajDN>
-<TrolejbusDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" Linka="required string(); onTrue trString(4101,20); onFalse requiredErr(4100)" LinkaPoradi="optional int(); onFalse valueErr(4108)" EvidCislo="optional string(); onTrue trString(4101,20)" TypVozidla="optional string(); onTrue trString(4101,30)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional list('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)">
+<TrolejbusDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" Linka="required string(); onTrue trString(4101,20); onFalse requiredErr(4100)" LinkaPoradi="optional int(); onFalse valueErr(4108)" EvidCislo="optional string(); onTrue trString(4101,20)" TypVozidla="optional string(); onTrue trString(4101,30)" TypBrzd="optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')" StavBrzd="optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')" KodPojistitele="optional ciselnik(4103,'DN_Pojistitel','KodPojistitele')" CisloDokladuPojisteni="optional string(); onTrue trString(4101,30)" PojisteniText="optional enum('Doklad o pojištění nepředložen','Potvrzení nepředloženo','Nepodléhá pojištění','Smlouva neuzavřena'); onFalse valueErr(4105)" DruhVozidla="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)">
       <xd:mixed>
          <Skoda xd:script="occurs 0..1; ref Skoda"/>
          <JinaSkoda xd:script="occurs 0..1; ref Skoda"/>
          <Vlastnik xd:script="occurs 0..1; ref Text255"/>
       </xd:mixed>
    </TrolejbusDN>
-<VlakDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" TypSoupravy="required string(); onTrue trString(4101,40); onFalse requiredErr(4100)" Spoj="optional string(); onTrue trString(4101,50)" DruhSoupravy="required list('vlak'); onFalse {requiredErr(4100); valueErr(4103);}">
+<VlakDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" TypSoupravy="required string(); onTrue trString(4101,40); onFalse requiredErr(4100)" Spoj="optional string(); onTrue trString(4101,50)" DruhSoupravy="required enum('vlak'); onFalse {requiredErr(4100); valueErr(4103);}">
       <xd:mixed>
          <Skoda xd:script="occurs 0..1; ref Skoda"/>
          <JinaSkoda xd:script="occurs 0..1; ref Skoda"/>
@@ -183,7 +183,7 @@
          <Vlastnik xd:script="occurs 0..1; ref Text255"/>
       </xd:mixed>
    </ZvireDN>
-<UcastnikDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" TypUcastnika="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" PraxeRizeni="optional praxeRizeni(4108)" AlkoholDech="optional list('Alkohol'); onFalse valueErr(4105)" AlkoholKrev="optional string(); onTrue trString(4101,10)" Zraneni="optional ciselnik(4103,'DN_Zraneni','Zraneni')" ZdravPojistovna="optional ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')" PokutaKc="optional string(); onTrue trString(4101,7)" PokutaZapl="optional list('nezaplacena','zaplacena'); onFalse valueErr(4105)" Pachatel="optional list('Pachatel DN'); onFalse valueErr(4105)" Poskozeny="optional list('Poškozený'); onFalse valueErr(4105)">
+<UcastnikDN OznSegmentu="required string(); onTrue trString(4101,5); onFalse requiredErr(4100)" TypUcastnika="required string(); onTrue trString(4101,30); onFalse requiredErr(4100)" PraxeRizeni="optional praxeRizeni(4108)" AlkoholDech="optional enum('Alkohol'); onFalse valueErr(4105)" AlkoholKrev="optional string(); onTrue trString(4101,10)" Zraneni="optional ciselnik(4103,'DN_Zraneni','Zraneni')" ZdravPojistovna="optional ciselnik(4103,'CC_ZdravPojistovna','KodZdravPojistovny')" PokutaKc="optional string(); onTrue trString(4101,7)" PokutaZapl="optional enum('nezaplacena','zaplacena'); onFalse valueErr(4105)" Pachatel="optional enum('Pachatel DN'); onFalse valueErr(4105)" Poskozeny="optional enum('Poškozený'); onFalse valueErr(4105)">
       <xd:mixed>
          <JinaSkoda xd:script="occurs 0..1; ref Skoda"/>
          <Osoba xd:script="occurs 0..1; ref Osoba"/>
@@ -198,7 +198,7 @@
          <PrechodnyPobyt xd:script="occurs 0..1; ref Adresa"/>
       </xd:mixed>
    </UcastnikDN>
-<Osoba Jmeno="optional string(); onTrue trString(4101,36)" Prijmeni="required string(); onTrue trString(4101,36); onFalse requiredErr(4100)" RodnePrijmeni="optional string(); onTrue trString(4101,36)" TitulPred="optional string(); onTrue trString(4101,36)" TitulZa="optional string(); onTrue trString(4101,36)" RC="optional rodneCislo(4108)" Pohlavi="optional list('M','Ž'); onFalse valueErr(4105)" OsobniStav="optional string(); onTrue trString(4101,30)" DatumNarozeni="optional tDate(4102)" MistoNarozeni="optional string(); onTrue trString(4101,36)" StatNarozeni="optional string(); onTrue trString(4101,50)" StatniPrislusnost="optional string(); onTrue trString(4101,50)" Profese="optional string(); onTrue trString(4101,50)">
+<Osoba Jmeno="optional string(); onTrue trString(4101,36)" Prijmeni="required string(); onTrue trString(4101,36); onFalse requiredErr(4100)" RodnePrijmeni="optional string(); onTrue trString(4101,36)" TitulPred="optional string(); onTrue trString(4101,36)" TitulZa="optional string(); onTrue trString(4101,36)" RC="optional rodneCislo(4108)" Pohlavi="optional enum('M','Ž'); onFalse valueErr(4105)" OsobniStav="optional string(); onTrue trString(4101,30)" DatumNarozeni="optional tDate(4102)" MistoNarozeni="optional string(); onTrue trString(4101,36)" StatNarozeni="optional string(); onTrue trString(4101,50)" StatniPrislusnost="optional string(); onTrue trString(4101,50)" Profese="optional string(); onTrue trString(4101,50)">
       <xd:mixed>
          <TrvalyPobyt xd:script="occurs 0..1; ref Adresa"/>
          <PrechodnyPobyt xd:script="occurs 0..1; ref Adresa"/>

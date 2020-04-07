@@ -167,14 +167,6 @@ public final class XdefToXsd {
 		if (xdName != null) {
 			NodeList nl = KXmlUtils.getChildElementsNS(collection,
 				XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
-			if (nl.getLength() == 0) {
-				nl = KXmlUtils.getChildElementsNS(collection,
-					XPool.XDEF31_INSTANCE_NS_URI, "xdef");
-			}
-			if (nl.getLength() == 0) {
-				nl = KXmlUtils.getChildElementsNS(collection,
-					XPool.XDEF20_INSTANCE_NS_URI, "xdef");
-			}
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element el = (Element) nl.item(i);
 				Attr a = el.getAttributeNode("name");
@@ -184,14 +176,6 @@ public final class XdefToXsd {
 				} else {
 					a = el.getAttributeNodeNS(
 						XDConstants.XDEF_INSTANCE_NS_URI, "name");
-					if (a == null) {
-						a = el.getAttributeNodeNS( // deprecated version
-							XPool.XDEF31_INSTANCE_NS_URI, "name");
-					}
-					if (a == null) {
-						a = el.getAttributeNodeNS( // deprecated version
-							XPool.XDEF20_INSTANCE_NS_URI, "name");
-					}
 					if (a != null) {
 						name = a.getValue();
 					}
@@ -206,14 +190,6 @@ public final class XdefToXsd {
 				if (a == null) {
 					a = el.getAttributeNodeNS(
 						XDConstants.XDEF_INSTANCE_NS_URI, "root");
-				}
-				if (a == null) {
-					a = el.getAttributeNodeNS(
-						XPool.XDEF31_INSTANCE_NS_URI, "root");
-				}
-				if (a == null) {
-					a = el.getAttributeNodeNS(
-						XPool.XDEF20_INSTANCE_NS_URI, "root");
 				}
 				if (a == null) {
 					el.setAttributeNS(

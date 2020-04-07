@@ -5,10 +5,10 @@ import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.STester;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Stack;
-import test.STester;
 
 /** Test of BNF.
  * @author Vaclav Trojan

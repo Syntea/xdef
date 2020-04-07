@@ -46,7 +46,7 @@
     type RokVyroby_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type PlatnostSTK_Type{parse: string() &amp; list("neplatná",
+    type PlatnostSTK_Type{parse: string() &amp; enum("neplatná",
     "nezjištěno", "platná");}
   </xd:declaration>
   <xd:declaration>
@@ -62,7 +62,7 @@
     type KodPojistitele_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type PojisteniText_Type{parse: string() &amp; list("Nepodléhá
+    type PojisteniText_Type{parse: string() &amp; enum("Nepodléhá
     pojištění", "Potvrzení nepředloženo", "Smlouva neuzavřena", "Doklad
     o pojištění nepředložen");}
   </xd:declaration>
@@ -76,7 +76,7 @@
     type DatumUhradyHP_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type DruhSoupravy_Type{parse: string() &amp; list("vlak");}
+    type DruhSoupravy_Type{parse: string() &amp; enum("vlak");}
   </xd:declaration>
   <xd:declaration>
     type Okres_user_Type{parse: string();}
@@ -85,7 +85,7 @@
     type RC_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type Pohlavi_Type{parse: string() &amp; list("M", "Ž");}
+    type Pohlavi_Type{parse: string() &amp; enum("M", "Ž");}
   </xd:declaration>
   <xd:declaration>
     type DatumNarozeni_user_Type{parse: string();}
@@ -100,7 +100,7 @@
     type PraxeRizeni_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type AlkoholDech_Type{parse: string() &amp; list("Alkohol");}
+    type AlkoholDech_Type{parse: string() &amp; enum("Alkohol");}
   </xd:declaration>
   <xd:declaration>
     type Zraneni_user_Type{parse: string();}
@@ -109,14 +109,14 @@
     type ZdravPojistovna_user_Type{parse: string();}
   </xd:declaration>
   <xd:declaration>
-    type PokutaZapl_Type{parse: string() &amp; list("zaplacena",
+    type PokutaZapl_Type{parse: string() &amp; enum("zaplacena",
     "nezaplacena");}
   </xd:declaration>
   <xd:declaration>
-    type Pachatel_Type{parse: string() &amp; list("Pachatel DN");}
+    type Pachatel_Type{parse: string() &amp; enum("Pachatel DN");}
   </xd:declaration>
   <xd:declaration>
-    type Poskozeny_Type{parse: string() &amp; list("Poškozený");}
+    type Poskozeny_Type{parse: string() &amp; enum("Poškozený");}
   </xd:declaration>
   <xd:declaration>
     type Verze_user_Type{parse: string();}

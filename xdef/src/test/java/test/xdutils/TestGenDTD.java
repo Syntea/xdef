@@ -61,14 +61,13 @@ public class TestGenDTD extends XDTester {
 "       Date=\"required datetime('d.M.yyyy')\">\n" +
 "   <xd:mixed>\n" +
 "   <File Name=\"required string(256)\"\n" +
-//"         Format=\"required tokens('TXT|XML|CTL')\"\n" +
 "         Format=\"required enum('TXT','XML','CTL')\"\n" +
 "         Kind=\"required string(3,3)\"\n" +
 "         RecNum=\"required num(8)\"\n" +
 "         ref=\"optional\"\n" +
 "         xd:script=\"occurs 0..\">\n" +
 "       <xd:mixed>\n" +
-"       <CheckSum Type=\"required tokens('MD5|CRC')\"\n" +
+"       <CheckSum Type=\"required enum('MD5','CRC')\"\n" +
 "                Value=\"required string\"\n" +
 "                xd:script=\"occurs 3..5\">\n" +
 "       </CheckSum>\n" +
@@ -126,7 +125,6 @@ public class TestGenDTD extends XDTester {
 			wr.close();
 			bos.close();
 			s = bos.toString();
-//			System.out.println(s);
 			 // Parse
 			InputSource inputSource = new InputSource(
 				new java.io.ByteArrayInputStream(xml.getBytes()));

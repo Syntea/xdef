@@ -41,6 +41,7 @@ import java.util.List;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
+import org.xdef.sys.STester;
 
 /** Support of tests.
  * @author Vaclav Trojan

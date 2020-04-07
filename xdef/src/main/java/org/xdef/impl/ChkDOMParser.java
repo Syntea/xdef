@@ -89,9 +89,7 @@ class ChkDOMParser extends SReporter {
 					String name = atrs.item(i).getNodeName();
 					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
-						if (XDConstants.XDEF_INSTANCE_NS_URI.equals(val)
-							|| XPool.XDEF31_INSTANCE_NS_URI.equals(val)
-							|| XPool.XDEF20_INSTANCE_NS_URI.equals(val)) {
+						if (XDConstants.XDEF_INSTANCE_NS_URI.equals(val)) {
 							xdefInstancePrefix = name.substring(6);
 							xdefInstanceNSAttr = name;
 							break;

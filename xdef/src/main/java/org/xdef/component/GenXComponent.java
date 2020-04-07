@@ -129,32 +129,6 @@ public final class GenXComponent {
 		}
 	}
 
-	@Deprecated
-	/** Generate XComponent Java source class from X-definition.
-	 * @deprecated switch to generate JAXB annotations  is ignored. Please use
-	 * method GenXComponent.genXComponent(...) without "jaxb" parameter.
-	 * @param xdpool XDPool object where is the X-definition with model
-	 * from which Java source will be generated.
-	 * @param dir path to directory where write the source code. The file name
-	 * will be constructed from the argument className as "className.java".
-	 * @param charset the character set name or null (if null then it is used
-	 * the system character set name).
-	 * @param genJavadoc switch to generate JavaDoc.
-	 * @param jaxb switch to generate JAXB annotations.
-	 * @param suppressPrintWarnings suppress print of warnings.
-	 * @return ArrayReporter with errors and warnings
-	 * @throws IOException if an error occurs.
-	 */
-	public static ArrayReporter genXComponent(XDPool xdpool,
-		String dir,
-		String charset,
-		boolean genJavadoc,
-		boolean jaxb,
-		boolean suppressPrintWarnings) throws IOException {
-		return genXComponent(xdpool,
-			dir, charset, genJavadoc, suppressPrintWarnings);
-	}
-
 	/** Generate XComponent Java source class from X-definition.
 	 * @param xdpool XDPool object where is the X-definition with model
 	 * from which Java source will be generated.

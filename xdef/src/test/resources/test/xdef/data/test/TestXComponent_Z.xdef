@@ -253,7 +253,7 @@
           TitulPred         = "optional string()"
           TitulZa           = "optional string()"
           RC                = "optional rodneCislo()"
-          Pohlavi           = "optional tokens('M|ï¿½')"
+          Pohlavi           = "optional enum('M','Ž½')"
           OsobniStav        = "optional string()"
           DatumNarozeni     = "optional xdatetime('d.M.yy')"
           MistoNarozeni     = "optional string()"

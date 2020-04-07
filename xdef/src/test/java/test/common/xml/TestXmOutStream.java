@@ -1,5 +1,6 @@
 package test.common.xml;
 
+import org.xdef.sys.STester;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlOutStream;
 import java.io.StringWriter;
@@ -7,7 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import test.STester;
 
 /** Test XmOutStream.
  * @author Vaclav Trojan

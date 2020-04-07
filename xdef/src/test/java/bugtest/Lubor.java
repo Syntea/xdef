@@ -8,8 +8,6 @@ import java.io.File;
 
 public class Lubor extends XDTester {
 
-	public Lubor() {super();}
-
 	@Override
 	public void test() {
 		ArrayReporter reporter = new ArrayReporter();

@@ -2,8 +2,8 @@ package test.common.bnf;
 
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.StringParser;
+import org.xdef.sys.STester;
 import java.io.File;
-import test.STester;
 
 /** Simple XML grammar test.
  * @author Vaclav Trojan
