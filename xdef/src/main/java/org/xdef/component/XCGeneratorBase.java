@@ -23,7 +23,7 @@ import org.xdef.sys.SUtils;
 /** Methods for generation of setters and getters in Java.
  * @author Vaclav Trojan
  */
-public class XCGeneratorBase {
+class XCGeneratorBase {
 
 	/** Platform-dependent newline. */
 	static final String LN = XDConstants.LINE_SEPARATOR;

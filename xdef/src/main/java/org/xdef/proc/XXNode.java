@@ -281,16 +281,6 @@ public interface XXNode extends XDValue {
 	 * @return XPathVariableResolver.
 	 */
 	public XPathVariableResolver getXXVariableResolver();
-//
-//	/** Get value of the actual attribute or Text node.
-//	 * @return The value of attribute or text node.
-//	 */
-//	public String getTextValue();
-//
-//	/** Get value of the actual attribute or Text node.
-//	 * @param value the value to be set to attribute or text node.
-//	 */
-//	public void setTextValue(String value);
 
 	/** Get parsed result of an attribute or text node.
 	 * @return parsed result of an attribute or text node.

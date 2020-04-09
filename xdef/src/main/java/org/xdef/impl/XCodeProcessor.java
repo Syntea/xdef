@@ -3405,7 +3405,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 		@Override
 		public XPathFunction resolveFunction(final QName functionName,
 			final int arity) { //TODO
-			return null; 
+			return null;
 		}
 	}
 

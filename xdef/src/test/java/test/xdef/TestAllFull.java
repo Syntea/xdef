@@ -56,7 +56,7 @@ public class TestAllFull {
 			new TestLexicon(),
 			new TestNamespaces(),
 			new TestOptions(),
-			new TestParse(),
+			new TestXdef(),
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),

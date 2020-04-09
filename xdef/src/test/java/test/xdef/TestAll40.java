@@ -54,7 +54,7 @@ public class TestAll40 {
 			new TestLexicon(),
 			new TestNamespaces(),
 			new TestOptions(),
-			new TestParse(),
+			new TestXdef(),
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),

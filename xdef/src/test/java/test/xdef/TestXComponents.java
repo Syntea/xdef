@@ -2,9 +2,7 @@ package test.xdef;
 
 import test.XDTester;
 import org.xdef.XDPool;
-import org.xdef.XDFactory;
 import org.xdef.XDDocument;
-import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
 import org.xdef.json.JsonUtil;
@@ -15,8 +13,6 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -55,7 +51,7 @@ public final class TestXComponents extends XDTester {
 	/** Generate and compile X-components from X-definition sources.
 	 * @param xdsources array with path names of sources of X-definitions.
 	 */
-	private void genComponents(final String... xdsources) {
+	private XDPool genComponents(final String... xdsources) {
 		File f = new File(getTempDir());
 		if (f.exists() && !f.isDirectory()) {
 			throw new RuntimeException(f.getAbsolutePath()
@@ -82,52 +78,15 @@ public final class TestXComponents extends XDTester {
 		TestXComponents_Y21enum.class.getClass();
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
-		try {
-			// generate XComponents from xp
-			ArrayReporter reporter = GenXComponent.genXComponent(xp,
-				tempDir, "UTF-8", false, true);
-			reporter.checkAndThrowErrors();
-			// should generate warnings on xdef Y19 and xdef Y20
-			if (reporter.errors()
-				|| !reporter.printToString().contains("XDEF360")
-				|| !reporter.printToString().contains("Y19#A/B/B_1/C/B")
-				|| !reporter.printToString().contains("Y20#")) {
-				reporter.checkAndThrowErrors();
-			}
-			// compile X-components
-			String classDir = compileSources(tempDir + "test/xdef/component",
-				tempDir + "test/xdef/component/s").replace('\\','/');
-			if (!classDir.endsWith("/")) {
-				classDir += '/';
-			}
-			XDFactory.writeXDPool(classDir + "test/xdef/component/Pool.xp", xp);
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		// generate and compile XComponents from xp
+		genXComponent(xp, tempDir);
+		return xp;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	/** Run test and print error information. */
 	public void test() {
-		try {
-			genComponents(getDataDir() + "test/TestXComponentsGen.xdef",
-				getDataDir()+ "test/TestXComponent_Z.xdef");
-		} catch (Exception ex) {
-			fail("X-components are not generated");
-			return;
-		}
-		XDPool xp;
-		try {
-			InputStream is = ClassLoader.getSystemResourceAsStream(
-				"test/xdef/component/Pool.xp");
-			ObjectInputStream in = new ObjectInputStream(is);
-			xp = (XDPool) in.readObject();
-			in.close();
-		} catch (Exception ex) {
-			fail(ex);
-			return;
-		}
 		String xml;
 		Element el;
 		XDDocument xd;
@@ -138,6 +97,8 @@ public final class TestXComponents extends XDTester {
 		SDatetime sd;
 		ArrayReporter reporter = new ArrayReporter();
 		final String dataDir = getDataDir() + "test/";
+		XDPool xp = genComponents(getDataDir() + "test/TestXComponentsGen.xdef",
+			dataDir + "TestXComponent_Z.xdef");
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
 			parseXC(xp, "A", xml, null, reporter);

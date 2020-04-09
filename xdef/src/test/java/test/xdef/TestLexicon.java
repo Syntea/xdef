@@ -4,7 +4,6 @@ import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.sys.FUtils;
 import java.io.File;
@@ -262,18 +261,7 @@ public final class TestLexicon extends XDTester {
 			// try X-component
 			String dir = tempDir + "components";
 			new File(dir).mkdirs();
-			assertNoErrors(GenXComponent.genXComponent(xp,
-				dir, null, false, true));
-			try {
-				compileSources(dir);
-			} catch (RuntimeException ex) {
-				if (ex.getMessage().contains("Java compiler is not available")){
-					getOutStream().println(ex.getMessage()
-						+ "; TestLexicon skipped");
-					return;
-				}
-				throw ex;
-			}
+			genXComponent(xp, dir);
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrors(reporter);

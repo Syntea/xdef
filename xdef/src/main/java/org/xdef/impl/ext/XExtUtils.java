@@ -76,41 +76,57 @@ public final class XExtUtils {
 			el = (Element) n;
 		}
 	}
-	public final static void addComment(final XXNode x, final String s) {
-		addComment(x.getElement(), s);
+	private static Node getActualNode(final XXNode x) {
+		Element el = x.getElement();
+		return x.getItemId() == XXNode.XX_ELEMENT ? el : el.getLastChild();
 	}
-	public final static void addComment(final Element el, final String s) {
-		el.getParentNode().appendChild(
-			el.getOwnerDocument().createComment(s != null? s : ""));
+	public final static void addComment(final XXNode x, final String s) {
+		Node n = getActualNode(x);
+		if (n != null) {
+			addComment(n, s);
+		}
+	}
+	public final static void addComment(final Node n, final String s) {
+		n.getParentNode().appendChild(
+			n.getOwnerDocument().createComment(s != null? s : ""));
 	}
 	public final static void insertComment(final XXNode x, final String s) {
-		insertComment(x.getElement(), s);
+		Node n = getActualNode(x);
+		if (n != null) {
+			insertComment(n, s);
+		}
 	}
-	public final static void insertComment(final Element el, final String s) {
-		el.getParentNode().insertBefore(
-			el.getOwnerDocument().createComment(s), el);
+	public final static void insertComment(final Node n, final String s) {
+		n.getParentNode().insertBefore(
+			n.getOwnerDocument().createComment(s), n);
 	}
 	public final static void addPI(final XXNode x,
 		final String target,
 		final String data) {
-		addPI(x.getElement(), target, data);
+		Node n = getActualNode(x);
+		if (n != null) {
+			addPI(n, target, data);
+		}
 	}
-	public final static void addPI(final Element el,
+	public final static void addPI(final Node n,
 		final String target,
 		final String data) {
-		el.getParentNode().appendChild(
-			el.getOwnerDocument().createProcessingInstruction(target, data));
+		n.getParentNode().appendChild(
+			n.getOwnerDocument().createProcessingInstruction(target, data));
 	}
 	public final static void insertPI(final XXNode x,
 		final String target,
 		final String data) {
-		insertPI(x.getElement(), target, data);
+		Node n = getActualNode(x);
+		if (n != null) {
+			insertPI(n, target, data);
+		}
 	}
-	public final static void insertPI(final Element el,
+	public final static void insertPI(final Node n,
 		final String target,
 		final String data) {
-		el.getParentNode().insertBefore(
-			el.getOwnerDocument().createProcessingInstruction(target,data), el);
+		n.getParentNode().insertBefore(
+			n.getOwnerDocument().createProcessingInstruction(target,data), n);
 	}
 	public final static void addText(final XXNode x, final String s) {
 		addText(x.getElement(), s);

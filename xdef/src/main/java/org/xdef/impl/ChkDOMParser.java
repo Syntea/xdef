@@ -30,6 +30,7 @@ import org.xdef.sys.ReportWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.w3c.dom.ProcessingInstruction;
 
 /** Provides processing of an XML document in the form of org.w3c.dom object.
  * @author  Vaclav Trojan
@@ -282,6 +283,8 @@ class ChkDOMParser extends SReporter {
 						continue;
 					case Node.PROCESSING_INSTRUCTION_NODE:
 						addText(chkEl);
+						chkEl.addPI(((ProcessingInstruction) item).getTarget(),
+							((ProcessingInstruction) item).getData());
 				}
 			}
 			addText(chkEl);
