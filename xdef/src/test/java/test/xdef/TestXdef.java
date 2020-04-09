@@ -386,7 +386,7 @@ public final class TestXdef extends XDTester {
 				"<a:x xmlns:a='a'><a:y xmlns:a='a'/><y/>t<z a='a'/></a:x>");
 			xdef = //test of exception in external method.
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>" +
-"    <a xd:script='finally test.xdef.TestParse.myError()' />" +
+"    <a xd:script='finally test.xdef.TestXdef.myError()' />" +
 "</xd:def>";
 			parse(xdef, "", "<a/>", reporter);
 			fail("Exception not thrown");
@@ -401,7 +401,7 @@ public final class TestXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>" +
 "<xd:declaration>\n"+
-	"external method long test.xdef.TestParse.myError();\n"+
+	"external method long test.xdef.TestXdef.myError();\n"+
 	"int i = myError();\n"+
 "</xd:declaration>\n"+
 "    <a/>" +
@@ -785,7 +785,7 @@ public final class TestXdef extends XDTester {
 				"1,1.1; 2,2.2; 1,1,1; 2,2,2; 1,1.1; 2,2.2; 1,1,1; 2,2,2");
 			xdef = // "$" identifiers, miscellaneous
 "<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>\n"+
-"<xd:def xd:classes = 'test.xdef.TestParse' impl-version = '2.0'\n"+
+"<xd:def xd:classes = 'test.xdef.TestXdef' impl-version = '2.0'\n"+
 "   name='abc' script='options trimText' root='Davka'>\n"+
 "<xd:declaration>\n"+
 "  final String myversion = getImplProperty('version');\n"+
@@ -2350,9 +2350,9 @@ public final class TestXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("x", strw.toString());
 			//test complex types
-			xdef = dataDir + "TestParse_type.xdef";
+			xdef = dataDir + "TestXdef_type.xdef";
 			xp = compile(xdef);
-			xml = dataDir + "TestParse_type_valid_1.xml";
+			xml = dataDir + "TestXdef_type_valid_1.xml";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = // optional
@@ -2514,7 +2514,7 @@ public final class TestXdef extends XDTester {
 
 			xdef = // Test fully qualified method call
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"   <a xd:script='finally out(test.xdef.TestParse.getInt5());'/>\n"+
+"   <a xd:script='finally out(test.xdef.TestXdef.getInt5());'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -2527,7 +2527,7 @@ public final class TestXdef extends XDTester {
 			assertEq("5", strw.toString());
 			xdef = //X-definition ver 2.0 //////////////////////////////////////
 "<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'\n"+
-"  methods= 'XDParser test.xdef.TestParse.licheCislo()' >\n"+
+"  methods= 'XDParser test.xdef.TestXdef.licheCislo()' >\n"+
 "  <a a='licheCislo'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -2538,7 +2538,7 @@ public final class TestXdef extends XDTester {
 			xdef = //X-definition ver 3.1 //////////////////////////////////////
 "<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  external method XDParser test.xdef.TestParse.licheCislo();\n"+
+"  external method XDParser test.xdef.TestXdef.licheCislo();\n"+
 "</xd:declaration>\n"+
 "  <a a='licheCislo'/>\n"+
 "</xd:def>\n";
