@@ -16,7 +16,7 @@ interface XCGenerator {
 	 * @param components Map with components.
 	 * @return String with generated Java source code.
 	 */
-	public String genXComponent(final String model,
+	String genXComponent(final String model,
 		final String className,
 		final String extClass,
 		final String interfaceName,
@@ -24,5 +24,5 @@ interface XCGenerator {
 		final Map<String, String> components);
 
 	/** Get StringBuilder with interface specifications. */
-	public StringBuilder getIinterfaces();
+	StringBuilder getIinterfaces();
 }

@@ -36,7 +36,7 @@ public final class GenXComponent {
 	 * @param genJavadoc switch to generate JavaDoc.
 	 * @param reporter where to write report,.
 	 */
-	static void genEnumerations(final XDPool xdpool,
+	private static void genEnumerations(final XDPool xdpool,
 		final File fdir,
 		final String charset,
 		final boolean genJavadoc,
@@ -146,11 +146,31 @@ public final class GenXComponent {
 		String charset,
 		boolean genJavadoc,
 		boolean suppressPrintWarnings) throws IOException {
+		return genXComponent(xdpool,
+			new File(dir), charset, genJavadoc, suppressPrintWarnings);
+	}
+
+	/** Generate XComponent Java source class from X-definition.
+	 * @param xdpool XDPool object where is the X-definition with model
+	 * from which Java source will be generated.
+	 * @param fdir directory where write the source code. The file name
+	 * will be constructed from the argument className as "className.java".
+	 * @param charset the character set name or null (if null then it is used
+	 * the system character set name).
+	 * @param genJavadoc switch to generate JavaDoc.
+	 * @param suppressPrintWarnings suppress print of warnings.
+	 * @return ArrayReporter with errors and warnings
+	 * @throws IOException if an error occurs.
+	 */
+	public static final ArrayReporter genXComponent(XDPool xdpool,
+		final File fdir,
+		final String charset,
+		final boolean genJavadoc,
+		final boolean suppressPrintWarnings) throws IOException {
 		final ArrayReporter reporter = new ArrayReporter();
-		File fdir = new File(dir);
-		if (!fdir.isDirectory()) {
+		if (!fdir.exists() || !fdir.isDirectory()) {
 			//Argument &{0} must be a directory
-			throw new SRuntimeException(XDEF.XDEF368, dir);
+			throw new SRuntimeException(XDEF.XDEF368, fdir.getAbsolutePath());
 		}
 		final Map<String, String> components =
 			new LinkedHashMap<String, String>(xdpool.getXComponents());
@@ -244,7 +264,7 @@ public final class GenXComponent {
 				if (packageName.length() == 0) {
 					fparent = fdir;
 				} else {
-					fparent = new File(dir, packageName.replace('.', '/'));
+					fparent = new File(fdir, packageName.replace('.', '/'));
 					fparent.mkdirs();
 				}
 				String fName = className.replace('\n', ' ')
@@ -294,7 +314,7 @@ public final class GenXComponent {
 						packageName = interfaceName.substring(0, ndx);
 						interfaceName = interfaceName.substring(ndx + 1);
 					}
-					fparent = new File(dir, packageName.replace('.', '/'));
+					fparent = new File(fdir, packageName.replace('.', '/'));
 					fparent.mkdirs();
 					File f = new File(fparent, interfaceName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);

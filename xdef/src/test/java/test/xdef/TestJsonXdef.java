@@ -3,7 +3,6 @@ package test.xdef;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
@@ -107,9 +106,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			File oldFile, newFile;
 			// Generate X-components to the directory test
-			ArrayReporter reporter = GenXComponent.genXComponent(xp,
-				xdir, "UTF-8", false, true);
-			reporter.checkAndThrowErrors();
+			ArrayReporter reporter = genXComponent(xp, xdir);
 			String componentDir = _tempDir + "test/common/json/component/";
 			new File(componentDir).mkdirs();
 			String newComponentDir = xdir + "test/common/json/component/";

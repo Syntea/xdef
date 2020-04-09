@@ -1411,7 +1411,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_parseResult = null;
 	}
 
-	private void appendTextNode(final String data, final XData xtxt) {
+	private Node appendTextNode(final String data, final XData xtxt) {
 		Node txt = xtxt._cdata == 'T'
 			? _rootChkDocument._doc.createCDATASection(data)
 			: _rootChkDocument._doc.createTextNode(data);
@@ -1423,6 +1423,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				putReport(ex.getReport());
 			}
 		}
+		return txt;
 	}
 
 	/** Check if element complies with model.
@@ -3106,15 +3107,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (value != null) {
 					debugXPos(XDDebug.FINALLY);
 					if (xtxt1._finaly >= 0) {
-						_data = value;
 						_elemValue = _element;
+						Node txt = appendTextNode(
+							(_data = value) == null ? "" : value, xtxt1);
 						exec(xtxt1._finaly, (byte) 'T');
-						value = _data;
+						if ((value = _data) == null || value.isEmpty()) {
+							_element.removeChild(txt);
+						} else {
+							txt.setNodeValue(value);
+						}
+					} else if (value != null && !value.isEmpty()) {
+						appendTextNode(value, xtxt1);
 					}
 					if (value != null && value.length() > 0) {
-						if (_element != null) {
-							appendTextNode(value, xtxt1);
-						}
 						if (_actDefIndex >= 0
 							&& _defList[_actDefIndex].getKind()==XNode.XMTEXT) {
 							int n = xtxt == xtxt1 ? incRefNum() : getRefNum();

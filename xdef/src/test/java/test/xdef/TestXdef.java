@@ -35,13 +35,12 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
 import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 
-/** Test of parsing of source XML according to XDefinition.
+/** All sorts of tests of X-definition.
  * @author Vaclav Trojan
  */
-public final class TestParse extends XDTester {
-
-	public TestParse() {super();}
+public final class TestXdef extends XDTester {
 
 	private static int _myX;
 
@@ -3167,8 +3166,34 @@ public final class TestParse extends XDTester {
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef = // test importLocal attribute
+		try {//test addComment, insertComment, addPI and insertPI
+			xdef = 
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a xd:script=\"finally {\n"+
+"insertComment('a0');addComment('a1');insertPI('a','0');addPI('a','1')}\">\n"+
+"    string(); finally {\n"+
+"insertComment('10');addComment('11');insertPI('_1','0');addPI('_1','1')}\n"+
+"    <b xd:script=\"finally {\n"+
+"insertComment('b0');addComment('b1');insertPI('b','0');addPI('b','1')}\">\n"+
+"       string(); finally {\n"+
+"insertComment('20');addComment('21');insertPI('_2','0'); addPI('_2','1')}\n"+
+"    </b>\n"+
+"    string(); finally {\n"+
+"insertComment('30');addComment('31');insertPI('_3','0'); addPI('_3','1')}\n"+
+"  </a>\n"+
+"</xd:def>";
+			xml = "<a>1<b>2</b>3</a>";
+			assertEq(
+				KXmlUtils.nodeToString(parse(xdef, "", xml).getOwnerDocument()),
+"<?xml version=\"1.0\"?>\n" +
+"<!--a0--><?a 0?><a>"+
+"<!--10-->1<?_1 0?><!--11--><?_1 1?><!--b0--><?b 0?>"+
+"<b><!--20-->2<?_2 0?><!--21--><?_2 1?></b><!--b1--><?b 1?>"+
+"<!--30-->3<?_3 0?><!--31--><?_3 1?>"+
+"</a><!--a1--><?a 1?>");
+		} catch (Exception ex) {fail(ex);}
+		try {// test importLocal attribute
+			xdef = 
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 "<xd:def name='A' root='A'>\n"+ // no importLocal
 "<xd:declaration scope='local'>\n"+
@@ -3320,7 +3345,7 @@ public final class TestParse extends XDTester {
 	public static void myCheck(final XXElement xel,
 		final String s, final byte[] b) {
 		if (!s.equals(new String(b))) {
-			((TestParse) xel.getXDDocument().getUserObject()).fail("Check");
+			((TestXdef) xel.getXDDocument().getUserObject()).fail("Check");
 		}
 	}
 	public void myProc(final String s) {_myX = 1;}
