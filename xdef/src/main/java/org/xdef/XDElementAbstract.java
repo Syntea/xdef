@@ -339,7 +339,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public String getXDNamedItemAsString(String name) {
 		String s = getAttribute(name);
-		return s.length() == 0 && !hasAttribute(name) ? null : s;
+		return s.isEmpty() && !hasAttribute(name) ? null : s;
 	}
 	@Override
 	public XDValue getXDNamedItemValue(String name) {

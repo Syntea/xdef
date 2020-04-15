@@ -65,7 +65,7 @@ public final class GenXComponent {
 			try {
 				final String LN = XDConstants.LINE_SEPARATOR;
 				fos = new FileOutputStream(f);
-				Writer out = charset == null || charset.length() == 0 ?
+				Writer out = charset == null || charset.isEmpty() ?
 					new OutputStreamWriter(fos) :
 					new OutputStreamWriter(fos, charset);
 				out.write(
@@ -261,7 +261,7 @@ public final class GenXComponent {
 					packageName = className.substring(0, ndx);
 					className = className.substring(ndx + 1);
 				}
-				if (packageName.length() == 0) {
+				if (packageName.isEmpty()) {
 					fparent = fdir;
 				} else {
 					fparent = new File(fdir, packageName.replace('.', '/'));
@@ -303,7 +303,7 @@ public final class GenXComponent {
 				if (result != null) {
 					File f = new File(fparent, fName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);
-					Writer out = charset == null || charset.length() == 0 ?
+					Writer out = charset == null || charset.isEmpty() ?
 						new OutputStreamWriter(fos) :
 						new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(result, "\t", "  ")).close();
@@ -318,7 +318,7 @@ public final class GenXComponent {
 					fparent.mkdirs();
 					File f = new File(fparent, interfaceName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);
-					Writer out = charset == null || charset.length() == 0 ?
+					Writer out = charset == null || charset.isEmpty() ?
 						new OutputStreamWriter(fos) :
 						new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(
@@ -395,7 +395,7 @@ public final class GenXComponent {
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
-			if (arg == null || arg.length() == 0
+			if (arg == null || arg.isEmpty()
 				|| arg.charAt(0) != '-' || arg.length() != 2) {
 				throw new RuntimeException(
 					"Incorrect parameter " + (i+1) + ": " + arg + '\n' + info);

@@ -453,7 +453,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		if (_reporter != null) {
 			_reporter.clear();
 		}
-		if (source == null || source.length() == 0) {
+		if (source == null || source.isEmpty()) {
 			//Invalid file name: '&{0}'
 			throw new SRuntimeException(SYS.SYS065, source);
 		}

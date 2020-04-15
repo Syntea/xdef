@@ -286,7 +286,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final String source, final String sourceId) {
 		if (getDisplayMode() == DISPLAY_TRUE && sourceId == null
-			&& (source.startsWith("?") || source.length() == 0)) {
+			&& (source.startsWith("?") || source.isEmpty())) {
 			if (source.length() <= 1) {
 				setSource(
 "<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root=\"a\" name=\"a\">\n"+
@@ -315,7 +315,7 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 		String s = sourceId;
-		if (source == null || source.length() == 0) {
+		if (source == null || source.isEmpty()) {
 			//X-definition source is missing or null&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903, sourceId);
 			return;
@@ -323,7 +323,7 @@ public final class XPool implements XDPool, Serializable {
 		try {
 			char c;
 			if ((c = source.charAt(0)) == '<' || c == '[') {
-				if (s == null || (s = sourceId.trim()).length() == 0) {
+				if (s == null || (s = sourceId.trim()).isEmpty()) {
 					s = "String_"+ (++_stringItem);
 				}
 				_sourceInfo.getMap().put(s, new XDSourceItem(source));
@@ -473,7 +473,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final InputStream source, final String sourceId) {
 		String s = sourceId;
-		if (s == null || (s = sourceId.trim()).length() == 0) {
+		if (s == null || (s = sourceId.trim()).isEmpty()) {
 			s = "Stream_" + (++_streamItem);
 		}
 		if (source == null) {
@@ -484,7 +484,7 @@ public final class XPool implements XDPool, Serializable {
 		try {
 			XDSourceItem xsi = new XDSourceItem(source);
 			_sourceInfo.getMap().put(s, xsi);
-			if (xsi._source != null && xsi._source.length() > 0) {
+			if (xsi._source != null && !xsi._source.isEmpty()) {
 				_compiler.parseString(xsi._source, s);
 			} else {
 				_compiler.parseStream(source, s);

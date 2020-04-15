@@ -1151,7 +1151,7 @@ public class JsonUtil extends StringParser {
 	 */
 	public static final String jstringToXML(final String source,
 		final boolean isAttr) {
-		if (source.length() == 0 || "null".equals(source)
+		if (source.isEmpty() || "null".equals(source)
 			|| "true".equals(source) || "false".equals(source)) {
 			return '"' + source + '"';
 		}
@@ -1222,7 +1222,7 @@ public class JsonUtil extends StringParser {
 	 * @return XML name.
 	 */
 	public final static String toXmlName(final String s) {
-		if (s.length() == 0) {
+		if (s.isEmpty()) {
 			return "_"; // empty string
 		} else if (("_").equals(s)) {
 			return "_x5f_";

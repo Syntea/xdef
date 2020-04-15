@@ -71,10 +71,10 @@ public class XCompose {
 			Document sourceDoc = db.parse(sourceFile);
 			sourceElem = repw.errors() ? null :
 				sourceDoc != null ? sourceDoc.getDocumentElement() : null;
-			if (encoding == null || encoding.length() == 0) {
+			if (encoding == null || encoding.isEmpty()) {
 				encoding = sourceDoc.getXmlEncoding();
 			}
-			if (encoding == null || encoding.length() == 0) {
+			if (encoding == null || encoding.isEmpty()) {
 				 encoding = "UTF-8";
 			}
 		} catch (Exception ex) {}

@@ -1431,7 +1431,7 @@ public class KDOMUtils {
 	 */
 	public static final String getNSURI(final String prefix,
 		final Element elem) {
-		final String nsAttr = prefix == null || prefix.length() == 0 ?
+		final String nsAttr = prefix == null || prefix.isEmpty() ?
 			"xmlns" : "xmlns:" + prefix;
 		Element element = elem;
 		for (;;) {
@@ -1564,7 +1564,7 @@ public class KDOMUtils {
 	public static final Node resolveXPosition(final Node n,
 		final String xpos,
 		final NamespaceContext context) {
-		if (n == null || xpos == null || xpos.length() == 0) {
+		if (n == null || xpos == null || xpos.isEmpty()) {
 			return null;
 		}
 		Node m;

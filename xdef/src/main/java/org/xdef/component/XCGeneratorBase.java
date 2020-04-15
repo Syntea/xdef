@@ -20,7 +20,7 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
-/** Methods for generation of setters and getters in Java.
+/** Methods for generation Java source code of getters/setters.
  * @author Vaclav Trojan
  */
 class XCGeneratorBase {
@@ -331,22 +331,6 @@ class XCGeneratorBase {
 		return enumType != null ? enumType+".toEnum("+ result+")" : result;
 	}
 
-	/** Generate declaration of variable as Java object from an attribute or
-	 * text node(s).
-	 * @param xdata XMData object.
-	 * @param name name of variable.
-	 * @param max maximal number of items .
-	 * @param descr JavaDoc description.
-	 * @param sb String builder where the code is generated.
-	 */
-	final void genBaseVariable(final XMData xdata,
-		final String name,
-		final int max,
-		final String descr,
-		final StringBuilder sb) {
-		genVariableFromModel(getJavaObjectTypeName(xdata),name,max,descr,sb);
-	}
-
 	/** Generate declaration of variable of attribute name.
 	 * @param name name of variable.
 	 * @param sb String builder where the code is generated.
@@ -391,22 +375,71 @@ class XCGeneratorBase {
 			"&{name}", name));
 	}
 
-	/** Generate Java code of getter method for base types.
-	 * @param xdata XMData object.
-	 * @param name name of variable.
-	 * @param max maximal number of items .
-	 * @param descr Description text.
-	 * @param sb String builder where the code is generated.
-	 * @param sbi String builder where the code is generated for interface.
-	 */
-	final void genBaseGetterMethod(final XData xdata,
+	final void genBaseVarsGettersSetters(final XData xdata,
 		final String name,
 		final int max,
 		final String descr,
-		final StringBuilder sb,
+		final StringBuilder vars,
+		final StringBuilder getters,
+		final StringBuilder setters,
+		final StringBuilder xpathes,
 		final StringBuilder sbi) {
 		final String typ = getJavaObjectTypeName(xdata);
-		genGetterMethodFromChildElement(xdata, typ, name, max, descr, sb, sbi);
+		genVariableFromModel(typ,name,max,descr,vars);
+		genGetterMethodFromChildElement(xdata,typ,name,max,descr,getters,sbi);
+		genSetterMethodOfChildElement(typ,
+			name, max, null, null, null, descr, setters, sbi, "");
+		// gen "xposOf" method
+		if (sbi != null) {
+			xpathes.append("\t@Override").append(LN);
+			sbi.append(modify(
+(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+"\tpublic String xposOf&{name}();"+LN,
+				"&{name}", name,
+				"&{descr}", descr));
+		}
+		final String x = "attribute".equals(descr) ? "@" + name : "$text";
+		xpathes.append(modify(
+(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+"\tpublic String xposOf&{name}(){return XD_XPos+\"/&{x}\";}"+LN,
+			"&{name}", name,
+			"&{x}", x,
+			"&{descr}", descr));
+	}
+
+	/** Generate java code of getter method for child element classes.
+	 * @param xel node from which to generate methods.
+	 * @param className name of class representing the child element.
+	 * @param name name of variable.
+	 * @param max maximal occurrence number of items .
+	 * set name of this model, otherwise this argument is null.
+	 * @param descr Description text.
+	 * @param getters String builder where generate getters.
+	 * @param setters String builder where generate setters.
+	 * @param sbi String builder where the code is generated for interface.
+	 * @return generated code.
+	 */
+	final void genChildElementGetterSetter(XElement xel,
+		final String className,
+		final String name,
+		final int max,
+		final String descr,
+		final StringBuilder getters,
+		final StringBuilder setters,
+		final StringBuilder sbi,
+		final String nullChoice) {
+		genGetterMethodFromChildElement(xel,
+			className, name, max, descr, getters, sbi);
+		String mname = null;
+		String mURI = null;
+		String mXDPos = null;
+		if (xel.isReference()) {
+			mname = xel.getName();
+			mURI = xel.getNSUri();
+			mXDPos = xel.getXDPosition();
+		}
+		genSetterMethodOfChildElement(className, name, max,
+			mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
 	}
 
 	/** Generate java code of getter method for child element classes.
@@ -415,11 +448,11 @@ class XCGeneratorBase {
 	 * @param max maximal number of items .
 	 * set name of this model, otherwise this argument is null.
 	 * @param descr Description text.
-	 * @param sb String builder where the code is generated.
+	 * @param sb String builder where to generate code.
 	 * @param sbi String builder where the code is generated for interface.
 	 * @return generated code.
 	 */
-	final void genGetterMethodFromChildElement(XNode xn,
+	private void genGetterMethodFromChildElement(XNode xn,
 		final String typeName,
 		final String name,
 		final int max,
@@ -529,37 +562,19 @@ class XCGeneratorBase {
 		}
 	}
 
-	/** Generate Java code of setter method for base types.
-	 * @param xdata XMData object.
-	 * @param name name of variable.
-	 * @param descr Description text.
-	 * @param max maximal number of items .
-	 * @param sb String builder where the code is generated.
-	 * @param sbi String builder where the code is generated for interface.
-	 */
-	final void genBaseSetterMethod(final XMData xdata,
-		final String name,
-		final int max,
-		final String descr,
-		final StringBuilder sb,
-		final StringBuilder sbi) {
-		genSetterMethodOfChildElement(getJavaObjectTypeName(xdata),
-			name, max, null, null, null, descr, sb, sbi, "");
-	}
-
 	/** Generate java code of setter method for child element classes.
-	 * @param typeName name typ (class etc).
+	 * @param className name typ (class etc).
 	 * @param name name of variable.
 	 * @param modelName if the node references other model of node
 	 * @param modelURI if the node references other model of node
 	 * @param modelXDPos if the node references other model of node
 	 * @param descr Description text.
-	 * @param sb String builder where the code is generated.
+	 * @param sb String builder where to generate code.
 	 * @param sbi String builder where the code is generated for interface.
 	 * @param nullchoice the command to set all variables of choice to null or
 	 * the empty string.
 	 */
-	final void genSetterMethodOfChildElement(final String typeName,
+	private void genSetterMethodOfChildElement(final String className,
 		final String name,
 		final int max,
 		final String modelName,
@@ -608,8 +623,8 @@ class XCGeneratorBase {
 				sbi.append(modify(template,
 					"&{name}", name,
 					"&{xmlName}", name.replace('$', ':'),
-					"&{typ}", typeName));
-				if ("org.xdef.sys.SDatetime".equals(typeName)) {
+					"&{typ}", className));
+				if ("org.xdef.sys.SDatetime".equals(className)) {
 					sbi.append(modify(template,
 						"&{name}", name,
 						"&{xmlName}", name.replace('$', ':'),
@@ -633,8 +648,8 @@ class XCGeneratorBase {
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
-					"&{typ}", typeName));
-				if ("org.xdef.sys.SDatetime".equals(typeName)) {
+					"&{typ}", className));
+				if ("org.xdef.sys.SDatetime".equals(className)) {
 					sbi.append(modify(template,
 						"&{name}", name,
 						"&{d}" , d,
@@ -664,8 +679,8 @@ class XCGeneratorBase {
 				"&{name}", name,
 				"&{d}" , d,
 				"&{xmlName}", name.replace('$', ':'),
-				"&{typ}", typeName));
-			if ("org.xdef.sys.SDatetime".equals(typeName)) {
+				"&{typ}", className));
+			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
 					"&{x}", modify(x,
@@ -704,8 +719,8 @@ class XCGeneratorBase {
 				"&{name}", name,
 				"&{d}" , d,
 				"&{xmlName}", name.replace('$', ':'),
-				"&{typ}", typeName));
-			if ("org.xdef.sys.SDatetime".equals(typeName)) {
+				"&{typ}", className));
+			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
 					"&{x}", modify(x,
@@ -735,35 +750,6 @@ class XCGeneratorBase {
 					"&{typ}", typeName1));
 			}
 		}
-	}
-
-	/** Generate Java code of getter of xpath for attributes and text nodes.
-	 * @param name name of variable.
-	 * @param descr Description text.
-	 * @param max maximal number of items .
-	 * @param sb String builder where the code is generated.
-	 * @param sbi String builder where the code is generated.
-	 */
-	final void genBaseXPosMethod(
-		final String name,
-		final String descr,
-		final StringBuilder sb,
-		final StringBuilder sbi) {
-		if (sbi != null) {
-			sb.append("\t@Override").append(LN);
-			sbi.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
-"\tpublic String xposOf&{name}();"+LN,
-				"&{name}", name,
-				"&{descr}", descr));
-		}
-		final String x = "attribute".equals(descr) ? "@" + name : "$text";
-		sb.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
-"\tpublic String xposOf&{name}(){return XD_XPos+\"/&{x}\";}"+LN,
-			"&{name}", name,
-			"&{x}", x,
-			"&{descr}", descr));
 	}
 
 	/** Generation Java code of attribute setting.
@@ -1056,5 +1042,67 @@ class XCGeneratorBase {
 			return false;
 		}
 		return true;
+	}
+
+	final String genToXmlMethods(final XElement xe,
+		final boolean isRoot,
+		final StringBuilder creators,
+		final StringBuilder genNodeList) {
+		String toXml =
+"\t@Override"+LN+
+(_genJavadoc ? ("\t/** Create XML element or text node from default model"+LN+
+"\t * as an element created from given document."+LN+
+"\t * @param doc XML Document or <tt>null</tt>."+LN+
+"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
+"\t * created document element."+LN+
+"\t * @return XML element belonging to given document from default model."+LN+
+"\t */"+LN) : "")+
+"\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+LN;
+		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
+			toXml +=
+"\t\tif (doc==null) {"+LN+
+"\t\t\treturn org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
+"\t\t\t\t.getDocumentElement();"+LN+
+"\t\t} else {"+LN+
+"\t\t\treturn (org.w3c.dom.Element)"+LN+
+"\t\t\t\tdoc.adoptNode(org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
+"\t\t\t\t\t.getDocumentElement());"+LN+
+"\t\t}"+LN+
+"\t}"+LN;
+		} else if (creators.length() == 0 && genNodeList.length() == 0) {
+			toXml +=
+"\t\treturn doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
+"\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
+"\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
+"\t}"+LN;
+		} else {
+			toXml +=
+"\t\torg.w3c.dom.Element el;"+LN+
+"\t\tif (doc==null) {"+LN+
+"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,"+LN+
+"\t\t\t\tXD_NodeName, null);"+LN+
+"\t\t\tel = doc.getDocumentElement();"+LN+
+"\t\t} else {"+LN+
+(isRoot ? "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN+
+"\t\t\tif (doc.getDocumentElement()==null) doc.appendChild(el);"+LN
+: "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN
+)+
+"\t\t}"+LN+ creators;
+			if (genNodeList.length() > 0) {
+				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
+					" xGetNodeList())"+LN+
+"\t\t\tel.appendChild(x.toXml(doc));"+LN;
+			}
+			toXml += "\t\treturn el;"+LN+"\t}"+LN;
+		}
+		toXml +=
+"\t@Override"+LN+
+(_genJavadoc ? (
+"\t/** Create JSON object from this XComponent (marshal to JSON)"+LN+
+"\t * @return JSON object created from this XComponent."+LN+
+"\t */"+LN) : "")+
+"\tpublic Object toJson() {"+
+	"return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
+		return toXml;
 	}
 }

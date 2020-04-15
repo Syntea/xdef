@@ -4720,7 +4720,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param source the source buffer.
 	 */
 	final void setBuffer(final String source) {
-		if (source == null || source.length() == 0) {
+		if (source == null || source.isEmpty()) {
 			_source = "";
 			_endPos = 0;
 		} else {

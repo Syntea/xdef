@@ -522,7 +522,7 @@ public final class SManager implements XDConstants {
 		final String language,
 		final boolean resolveReferences) {
 		String id;
-		if ((id = reportID) == null || (id = id.trim()).length() == 0) {
+		if ((id = reportID) == null || (id = id.trim()).isEmpty()) {
 			return null;
 		}
 		ReportTable table = getReportTable(id, language);

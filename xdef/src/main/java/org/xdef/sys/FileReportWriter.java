@@ -213,7 +213,7 @@ public class FileReportWriter implements ReportWriter {
 		this(xmlFormat);
 		try {
 			_file = file;
-			if (encoding == null || encoding.length() == 0) {
+			if (encoding == null || encoding.isEmpty()) {
 				_out = new PrintWriter(new FileOutputStream(file), true);
 			} else {
 				_out = new PrintWriter(

@@ -99,7 +99,7 @@ public class GenXDefinition {
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
-			if (arg == null || arg.length() == 0) {
+			if (arg == null || arg.isEmpty()) {
 				throw new RuntimeException(info
 					+ "Empty parameter " + (i + 1));
 			}

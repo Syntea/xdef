@@ -346,7 +346,7 @@ public class XDGenCollection {
 	private void processIncludeList(Element def, String sourcePath) {
 		/** let's check "include" attribute of X-definition.*/
 		String include = getXdefAttr(def,def.getNamespaceURI(),"include",true);
-		if (include.length() == 0) {
+		if (include.isEmpty()) {
 			return;
 		}
 		StringTokenizer st = new StringTokenizer(include, " \t\n\r\f,;");
@@ -375,7 +375,7 @@ public class XDGenCollection {
 	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
 		if (n.getNodeType() != Node.ELEMENT_NODE
-			|| uri == null || uri.length() == 0
+			|| uri == null || uri.isEmpty()
 			|| !(XDConstants.XDEF20_NS_URI.equals(uri)
 				|| XDConstants.XDEF31_NS_URI.equals(uri)
 				|| XDConstants.XDEF32_NS_URI.equals(uri)
@@ -645,7 +645,7 @@ public class XDGenCollection {
 			if (n.getNodeType() == Node.TEXT_NODE) {
 				Text c = (Text) n;
 				String s = c.getData().trim();
-				if (s.length() == 0) {
+				if (s.isEmpty()) {
 					el.removeChild(c);
 				} else {
 					c.setData(s);
@@ -683,7 +683,7 @@ public class XDGenCollection {
 							getXdefAttr(e, xdUri, "script", true)
 							: KXmlUtils.getTextValue(e);
 						s = canonizeScript(s, defName, removeActions, true);
-						if (s.length() == 0) {
+						if (s.isEmpty()) {
 							s = "required string()";
 						}
 						Element txtEl = doc.createElementNS(xdUri, "xd:text");
@@ -943,7 +943,7 @@ public class XDGenCollection {
 									+ (t.length() > 0 ? ";" + t : "")
 									+ ";ref " + ref + "_" + id);
 							}
-							if (t1.length() == 0) {
+							if (t1.isEmpty()) {
 								t1 = t2;
 							}
 							//set the attribute description in the model.

@@ -154,6 +154,30 @@ public class MyTest_0 extends XDTester {
 		}
 	}
 
+	/** Create X-components from XDPool to the directory from argument "srcDir"
+	 * and compile it. Clear tempDir before generation.
+	 * @param xp XDPool from which the X-components created.
+	 * @param tempDir the directory where to generate Java sources.
+	 * @return reporter with reported errors and warnings.
+	 * @throws RuntimeException if an error occurs.
+	 */
+	public static final ArrayReporter genXComponent(final XDPool xp,
+		final String tempDir) {
+		File fdir = new File(tempDir);
+		if (fdir.exists()) { // ensure the src directory exists.
+			if (fdir.isFile()) {
+				throw new RuntimeException(tempDir + " is not directory");
+			}
+			try {
+				SUtils.deleteAll(tempDir, true); // delete this directory
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		fdir.mkdirs();
+		return genXComponent(xp, fdir);
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {

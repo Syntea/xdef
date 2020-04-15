@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import org.w3c.dom.Element;
+import org.xdef.XDFactory;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SRuntimeException;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -77,9 +80,22 @@ public final class TestXComponents extends XDTester {
 		TestXComponents_Y08.class.getClass();
 		TestXComponents_Y21enum.class.getClass();
 		// generate XCDPool from sources
-		XDPool xp = compile(xdsources);
+		XDPool xp = XDFactory.compileXD(null,xdsources);
 		// generate and compile XComponents from xp
-		genXComponent(xp, tempDir);
+		File fdir = new File(tempDir);
+		if (fdir.exists() && !fdir.isDirectory()) {
+			//Directory doesn't exist or isn't accessible: &{0}
+			throw new SRuntimeException(SYS.SYS025, fdir.getAbsolutePath());
+		}
+		if (fdir.exists()) { // ensure the src directory exists.
+			try {
+				SUtils.deleteAll(tempDir, true); // clear this directory
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		fdir.mkdirs();
+		genXComponent(xp, fdir);
 		return xp;
 	}
 
@@ -1117,6 +1133,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		try {
+			//just force compilation
 			xc = parseXC(xp, "SouborD1A",
 				dataDir + "TestXComponent_Z.xml", null, null);
 			list = (List) getValueFromGetter(xc, "listOfZaznamPDN");

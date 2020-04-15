@@ -44,7 +44,6 @@ import javax.xml.namespace.QName;
 import org.xdef.component.GenXComponent;
 import org.xdef.msg.SYS;
 import org.xdef.sys.STester;
-import org.xdef.sys.SUtils;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -1131,42 +1130,24 @@ public abstract class XDTester extends STester {
 	/** Create X-components from XDPool to the directory from argument "srcDir"
 	 * and compile it.
 	 * @param xp XDPool from which the X-components created.
-	 * @param srcDir the directory where to generate Java sources.
+	 * @param dir directory where to generate Java sources.
 	 * @return reporter with reported errors and warnings.
 	 * @throws RuntimeException if an error occurs.
 	 */
 	public static final ArrayReporter genXComponent(final XDPool xp,
-		final String srcDir) {
-		return genXComponent(xp, new File(srcDir));
-	}
-
-	/** Create X-components from XDPool to the directory from argument "srcDir"
-	 * and compile it.
-	 * @param xp XDPool from which the X-components created.
-	 * @param f the directory where to generate Java sources.
-	 * @return reporter with reported errors and warnings.
-	 * @throws RuntimeException if an error occurs.
-	 */
-	public static final ArrayReporter genXComponent(final XDPool xp,
-		final File f) {
+		final File dir) {
 		try {
-			if (f.exists() && !f.isDirectory()) {
+			if (!dir.exists() && !dir.isDirectory()) {
 				//Directory doesn't exist or isn't accessible: &{0}
-				throw new SRuntimeException(SYS.SYS025, f.getAbsolutePath());
+				throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
 			}
-			if (f.exists()) { // ensure the src directory exists.
-				SUtils.deleteAll(f, true); // clear this directory
-			}
-			f.mkdirs();
-			ArrayReporter result = GenXComponent.genXComponent(xp,
-				f, "UTF-8", false, true);
+			ArrayReporter result =
+				GenXComponent.genXComponent(xp, dir, "UTF-8", false, true);
 			result.checkAndThrowErrors(); // throw exceptiojn if error reported
-			compileSources(f);
+			compileSources(dir);
 			return result;
-		} catch (RuntimeException ex) {
-			throw ex;
 		} catch (Exception ex) {
-			throw new SRuntimeException(ex);
+			throw new SRuntimeException(ex.toString(), ex);
 		}
 	}
 

@@ -121,7 +121,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			}
 			lockey = name.substring(ndx + 1);
 		}
-		if (nsURI == null || nsURI.length() == 0) {
+		if (nsURI == null || nsURI.isEmpty()) {
 			for (int i = 0; i < def._xElements.size(); i++) {
 				XElement xel  = def._xElements.get(i);
 				if (xel.getNSUri() == null && name.equals(xel.getName())) {
