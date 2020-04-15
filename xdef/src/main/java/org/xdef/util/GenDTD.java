@@ -193,7 +193,7 @@ public class GenDTD {
 					return result;
 				} else {
 					String s;
-					if ((s = v.toString()) == null || s.length() == 0) {
+					if ((s = v.toString()) == null || s.isEmpty()) {
 						return null;
 					}
 					if ("tokens".equals(name)) {

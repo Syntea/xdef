@@ -112,7 +112,7 @@ public class GenCollection {
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
-			if (arg == null || arg.length() == 0) {
+			if (arg == null || arg.isEmpty()) {
 				throw new RuntimeException(
 					"Incorrect parameter: " + arg + "\n" + info);
 			}

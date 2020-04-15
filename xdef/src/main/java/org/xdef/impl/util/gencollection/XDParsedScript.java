@@ -612,7 +612,7 @@ public class XDParsedScript {
 			? XDGenCollection.getXdefAttr(
 				(Element) n, xdUri, "script", false)
 			: n.getNodeValue();
-		return s == null || (s = s.trim()).length() == 0
+		return s == null || (s = s.trim()).isEmpty()
 			? null : getXdScript(s, defName, isValue);
 	}
 

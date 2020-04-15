@@ -88,7 +88,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 		final StringBuilder genNodeList = new StringBuilder();
 		final StringBuilder innerClasses = new StringBuilder();
 		final StringBuilder sbi = // interface
-			interfcName.length() == 0 ? null : new StringBuilder();
+			interfcName.isEmpty() ? null : new StringBuilder();
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
 		final Map<String, String> atttab = new LinkedHashMap<String, String>();
@@ -136,10 +136,8 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 			genAttrNameVariable(name, vars);
 			if (!ext) {
-				genBaseVariable(xdata, name, 1, "attribute", vars);
-				genBaseGetterMethod(xdata, name, 1, "attribute", getters, sbi);
-				genBaseSetterMethod(xdata, name, 1, "attribute",setters,sbi);
-				genBaseXPosMethod(name, "attribute", xpathes, sbi);
+				genBaseVarsGettersSetters(xdata, name,
+					1, "attribute", vars, getters, setters, xpathes, sbi);
 			}
 			genCreatorOfAttribute(xdata, name, creators);
 			atttab.put(xdata.getXDPosition(),
@@ -210,18 +208,8 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 						XElement xe1 = (XElement) nodes[k];
 						boolean ext = (Boolean) choiceStack.pop();
 						if (!ext) {
-							String mname = null;
-							String mURI = null;
-							String mXDPos = null;
-							if (xe1.isReference()) {
-								mname = xe1.getName();
-								mURI = xe1.getNSUri();
-								mXDPos = xe1.getXDPosition();
-							}
-							genGetterMethodFromChildElement(xe1,
-								typeName, iname, max, "element",getters,sbi);
-							genSetterMethodOfChildElement(typeName,iname,max,
-								mname,mURI,mXDPos,"element",setters,sbi, s);
+							genChildElementGetterSetter(xe1, typeName, iname,
+								max, "element", getters, setters, sbi, s);
 						}
 						if (choiceStack.isEmpty() || k == groupFirst) {
 							break;
@@ -281,12 +269,8 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 				classNames.add(newClassName);
 				if (!ext) {
-					genBaseVariable(xdata, name, groupMax, "text node", vars);
-					genBaseGetterMethod(xdata,
-						name, groupMax, "text node", getters, sbi);
-					genBaseSetterMethod(xdata,
-						name, groupMax, "text node", setters, sbi);
-					genBaseXPosMethod(name, "text node", xpathes, sbi);
+					genBaseVarsGettersSetters(xdata, name, groupMax,
+						"text node", vars, getters, setters, xpathes, sbi);
 				}
 				String s =
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
@@ -424,18 +408,8 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				if (!ext) {
 					genVariableFromModel(typeName, iname, max, "element", vars);
 					if (groupKind != XMNode.XMCHOICE){
-						String mname = null;
-						String mURI = null;
-						String mXDPos = null;
-						if (xe1.isReference()) {
-							mname = xe1.getName();
-							mURI = xe1.getNSUri();
-							mXDPos = xe1.getXDPosition();
-						}
-						genGetterMethodFromChildElement(xe1,
-							typeName, iname, max, "element", getters, sbi);
-						genSetterMethodOfChildElement(typeName, iname, max,
-							mname, mURI, mXDPos, "element", setters, sbi, "");
+						genChildElementGetterSetter(xe1, typeName,
+							iname, max, "element", getters, setters, sbi, "");
 					}
 				}
 				genChildElementCreator(iname, genNodeList, max > 1);
@@ -468,7 +442,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				interfcName = interfcName.substring(i + 1);
 			}
 		}
-		if (clazz.length() == 0) {
+		if (clazz.isEmpty()) {
 			return null;
 		}
 		if (xe.isReference()) {
@@ -488,61 +462,8 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				}
 			}
 		}
-		String toXml =
-"\t@Override"+LN+
-(_genJavadoc ? ("\t/** Create XML element or text node from default model"+LN+
-"\t * as an element created from given document."+LN+
-"\t * @param doc XML Document or <tt>null</tt>."+LN+
-"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
-"\t * created document element."+LN+
-"\t * @return XML element belonging to given document from default model."+LN+
-"\t */"+LN) : "")+
-"\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+LN;
-		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
-			toXml +=
-"\t\tif (doc==null) {"+LN+
-"\t\t\treturn org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
-"\t\t\t\t.getDocumentElement();"+LN+
-"\t\t} else {"+LN+
-"\t\t\treturn (org.w3c.dom.Element)"+LN+
-"\t\t\t\tdoc.adoptNode(org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
-"\t\t\t\t\t.getDocumentElement());"+LN+
-"\t\t}"+LN+
-"\t}"+LN;
-		} else if (creators.length() == 0 && genNodeList.length() == 0) {
-			toXml +=
-"\t\treturn doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
-"\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
-"\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
-"\t}"+LN;
-		} else {
-			toXml +=
-"\t\torg.w3c.dom.Element el;"+LN+
-"\t\tif (doc==null) {"+LN+
-"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,"+LN+
-"\t\t\t\tXD_NodeName, null);"+LN+
-"\t\t\tel = doc.getDocumentElement();"+LN+
-"\t\t} else {"+LN+
-(isRoot ? "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN+
-"\t\t\tif (doc.getDocumentElement()==null) doc.appendChild(el);"+LN
-: "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN
-)+
-"\t\t}"+LN+ creators;
-			if (genNodeList.length() > 0) {
-				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
-					" xGetNodeList())"+LN+
-"\t\t\tel.appendChild(x.toXml(doc));"+LN;
-			}
-			toXml += "\t\treturn el;"+LN+"\t}"+LN;
-		}
-		toXml +=
-"\t@Override"+LN+
-(_genJavadoc ? (
-"\t/** Create JSON object from this XComponent (marshal to JSON)"+LN+
-"\t * @return JSON object created from this XComponent."+LN+
-"\t */"+LN) : "")+
-"\tpublic Object toJson() {"+
-	"return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
+		// generate toXml methods
+		String toXml = genToXmlMethods(xe, isRoot, creators, genNodeList);
 ////////////////////////////////////////////////////////////////////////////////
 		String result =
 (_genJavadoc ?
@@ -805,7 +726,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 "\t\torg.xdef.XDParseResult parseResult){"+LN;
 			String s = "";
 			for(Entry<String, String> e: txttab.entrySet()) {
-				s += (s.length() == 0 ? "\t\t" : "\t\t} else ")
+				s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
 					+ "if (\"" + e.getKey()
 					+ "\".equals(x.getXMNode().getXDPosition())){"+LN;
 				String val = e.getValue();
@@ -846,7 +767,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 			for (Iterator<Entry<String, String>> it =
 				atttab.entrySet().iterator(); it.hasNext();) {
 				Entry<String, String> en = it.next();
-				s += s.length() == 0 ? "\t\t" : " else ";
+				s += s.isEmpty() ? "\t\t" : " else ";
 				String key = en.getKey();
 				ndx = key.lastIndexOf('/');
 				key = key.substring(ndx);
@@ -893,7 +814,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				i.hasNext();) {
 				Entry<String, String> e = i.next();
 				String s = e.getValue().replace('#', '.');
-				if (s.length() == 0) {
+				if (s.isEmpty()) {
 					dflt = true;
 				} else {
 					result += ((i.hasNext() || dflt)
@@ -1040,7 +961,7 @@ class XCGeneratorOld extends XCGeneratorBase implements XCGenerator {
 				+" extends org.xdef.component.XComponent {"+LN;
 			_interfaces.insert(0, s).append("}");
 		}
-		if (className.length() == 0) {
+		if (className.isEmpty()) {
 			return null;
 		}
 		StringBuilder sb = new StringBuilder(

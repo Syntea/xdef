@@ -13,11 +13,14 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
 import test.XDTester;
-import static test.XDTester._xdNS;
-import static test.XDTester.getValueFromGetter;
-import static test.XDTester.setValueToSetter;
 import java.util.List;
 import org.xdef.json.JsonToXml;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SRuntimeException;
+import static test.XDTester._xdNS;
+import static test.XDTester.genXComponent;
+import static test.XDTester.getValueFromGetter;
+import static test.XDTester.setValueToSetter;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -56,7 +59,16 @@ public class TestJsonXdef extends XDTester {
 		try {
 			boolean rebuild = false;
 			String xdir = _tempDir + "x/";
-			new File(xdir).mkdirs();
+			File fdir = new File(xdir);
+			if (fdir.exists() && !fdir.isDirectory()) {
+				//Directory doesn't exist or isn't accessible: &{0}
+				throw new SRuntimeException(SYS.SYS025, fdir.getAbsolutePath());
+			}
+			fdir.mkdirs();
+			if (fdir.exists()) { // ensure the src directory exists.
+				SUtils.deleteAll(fdir, true); // clear this directory
+			}
+			fdir.mkdirs();
 			String components =
 				"<xd:component xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n";
 			for (File fdef: _jfiles) {
@@ -106,7 +118,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			File oldFile, newFile;
 			// Generate X-components to the directory test
-			ArrayReporter reporter = genXComponent(xp, xdir);
+			genXComponent(xp, fdir);
 			String componentDir = _tempDir + "test/common/json/component/";
 			new File(componentDir).mkdirs();
 			String newComponentDir = xdir + "test/common/json/component/";

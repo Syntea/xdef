@@ -32,7 +32,7 @@ public class NameWildCardFilter implements java.io.FileFilter {
 		if (file.isDirectory()) {
 			return false;
 		}
-		if (_wildName.length() == 0) {
+		if (_wildName.isEmpty()) {
 			return true;
 		}
 		return chkWildcard(_wildName,

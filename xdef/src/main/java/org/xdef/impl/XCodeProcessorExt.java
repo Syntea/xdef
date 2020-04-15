@@ -280,7 +280,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case ELEMENT_ADDTEXT: { // Add text to element as child
 				Element el = p1.getElement();
 				String s = p2.stringValue();
-				if (s != null && s.length() > 0) {
+				if (s != null && !s.isEmpty()) {
 					el.appendChild(el.getOwnerDocument().createTextNode(s));
 				}
 				return;
@@ -652,7 +652,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case REPORT_SETTYPE: {
 				String s = stack[sp--].toString();
 				stack[sp] = ((XDReport) stack[sp]).setType(
-					(byte) (s == null || s.length() == 0 ? 'T' : s.charAt(0)));
+					(byte) (s == null || s.isEmpty() ? 'T' : s.charAt(0)));
 				return sp;
 			}
 ////////////////////////////////////////////////////////////////////////////////

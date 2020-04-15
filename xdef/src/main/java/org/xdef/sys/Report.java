@@ -273,11 +273,11 @@ public class Report {
 				_type = UNDEF;
 		}//switch
 		String id = element.getAttribute("id");
-		_reportID = id.length() == 0 ? null : id;
-		if ((_text = element.getAttribute("txt")).length() == 0) {
+		_reportID = id.isEmpty() ? null : id;
+		if ((_text = element.getAttribute("txt")).isEmpty()) {
 			_text = null;
 		}
-		if ((_modification = element.getAttribute("mod")).length() == 0) {
+		if ((_modification = element.getAttribute("mod")).isEmpty()) {
 			_modification = null;
 		}
 		if ((s = element.getAttribute("time")).length() > 0) {
@@ -305,7 +305,7 @@ public class Report {
 		StringBuilder sb = new StringBuilder();
 		switch (_type) {
 			case STRING:
-				return ((_text == null || _text.length() == 0) ?
+				return ((_text == null || _text.isEmpty()) ?
 					sb : sb.append(_text)).toString();
 			case TEXT:
 			   break;

@@ -58,7 +58,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			? "_ANY_" : chkEl._xElement.getName();
 		Document doc = chkEl._element.getOwnerDocument();
 		Element e = doc.createElementNS(chkEl._xElement.getNSUri(), qname);
-		if (value.length() != 0) {
+		if (!value.isEmpty()) {
 			e.appendChild(doc.createTextNode(value));
 		}
 		return e;
@@ -455,7 +455,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 								continue;
 							}
 						} else if (item.getItemId() == XD_STRING) {
-							if (item.stringValue().length() > 0) {
+							if (!item.stringValue().isEmpty()) {
 								el = it.getElement();
 								if (el != null) {
 									chkElem.setElemValue(el);
@@ -569,7 +569,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			chkElem.copyTemporaryReports();
 			if (result != null && !result.isNull()) {
 				String s = result.toString();
-				if (s.length() > 0 || mode == 'A') {
+				if (!s.isEmpty() || mode == 'A') {
 					//attribute may have empty string value
 					chkElem.setTextValue(s);
 				}
@@ -810,9 +810,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			}
 			String s = chkElem.getTextValue();
 			if (s != null) {
-				if (s.length() > 0 ||
-					// if length is 0 and acceptEmptyEttributes set empty attr!
-					xatr._ignoreEmptyAttributes != 0
+				if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 // set attr
 					|| xatr._ignoreEmptyAttributes == 0
 					&& xel._ignoreEmptyAttributes != 0
 					||  xel._ignoreEmptyAttributes == 0
@@ -885,7 +883,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			} else {
 				if (sourceElem != null) {//default;
 					String s = KXmlUtils.getTextContent(sourceElem).trim();
-					chkElem.setTextValue(s.length() > 0 ? s : null);
+					chkElem.setTextValue(!s.isEmpty() ? s : null);
 				}
 			}
 			chkElem._xPos = xpos;
@@ -1187,7 +1185,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						if (result.getItemId() == XD_STRING) {
 							//we create a dummy element with the text child
 							String text = result.stringValue();
-							if (text != null && text.length() > 0) {
+							if (text != null && !text.isEmpty()) {
 								Element el = stringToElement(childChkEl, text);
 								childChkEl.setElemValue(el);
 								createElement(childChkEl, el);

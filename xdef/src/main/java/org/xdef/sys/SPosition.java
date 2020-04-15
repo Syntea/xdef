@@ -350,7 +350,7 @@ public class SPosition {
 				(_line <= 0 ? "" : "&{line}" + _line) +
 				(_line <= 0 || getColumnNumber() < 0 ?
 					"" : "&{column}" + getColumnNumber()) +
-				((sysId = getSystemId()) == null || sysId.length() == 0 ?
+				((sysId = getSystemId()) == null || sysId.isEmpty() ?
 					"" : "&{sysId}" + sysId);
 			if (modification.indexOf("&{line}") >= 0 &&
 				text.indexOf("&{#SYS000}") < 0 &&

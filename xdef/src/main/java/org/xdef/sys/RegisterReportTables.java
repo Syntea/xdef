@@ -702,7 +702,7 @@ public class RegisterReportTables {
 	}
 
 	static final boolean chkReportID(final String s) {
-		if (s == null || s.length() == 0) {
+		if (s == null || s.isEmpty()) {
 			return false;
 		}
 		for (int j = 0; j < s.length(); j++) {

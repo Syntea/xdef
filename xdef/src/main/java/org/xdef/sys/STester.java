@@ -717,7 +717,7 @@ public abstract class STester {
 	 * @param clazz The class from which the method is called.
 	 * @param arguments list of arguments.
 	 */
-	public final void init(final PrintStream out,
+	private void init(final PrintStream out,
 		final PrintStream err,
 		final PrintStream log,
 		final Class<?> clazz,
@@ -880,7 +880,7 @@ public abstract class STester {
 	/** Creates the instance of the class from which this method was called.
 	 * @return The new instance of the class (from which the method was called).
 	 */
-	public final static STester getInstance() {
+	private static STester getInstance() {
 		String className;
 		//get class name
 		StackTraceElement[] st = new Throwable().getStackTrace();
@@ -913,7 +913,6 @@ public abstract class STester {
 " [-h] help");
 		System.exit(msg == null ? 0 : 1);
 	}
-
 	/** Run test and print result information on System.out (both, OK and error
 	 * information).
 	 * @param args the command line arguments (the first one is home directory).
@@ -1004,35 +1003,6 @@ public abstract class STester {
 		}
 		return at.runTest(out, err, log, printOK);
 	}
-	/** Run test and print result information on System.out. If the argument
-	 * printOK is false only error information is printed.
-	 * @param printOK if <tt>false</tt> then the result is printed only if
-	 * an error was reported.
-	 * @param args list of arguments or <tt>null</tt>.
-	 * @return the number of errors.
-	 */
-	public final static int runTest(final boolean printOK,final String... args){
-		return getInstance().runTest(
-			System.out, System.err, (PrintStream) null, printOK);
-	}
-	/** Run test of the object given by argument and print result information.
-	 * @param out The print stream for result information or <tt>null</tt>
-	 * @param err The print stream for error messages or <tt>null</tt>.
-	 * @param log The print stream all messages or <tt>null</tt>.
-	 * @param test The object to be tested.
-	 * @param printOK if <tt>false</tt> then the result is printed only if
-	 * an error was reported.
-	 * @param arguments list of arguments.
-	 * @return the number of errors.
-	 */
-	public final static int runTest(final PrintStream out,
-		final PrintStream err,
-		final PrintStream log,
-		final STester test,
-		final boolean printOK,
-		final String... arguments) {
-		return test.runTest(out, err, log, printOK, arguments);
-	}
 	/** Run tests of the object given by argument and print result information.
 	 * @param out The print stream for result information or <tt>null</tt>
 	 * @param err The print stream for error messages or <tt>null</tt>.
@@ -1053,8 +1023,8 @@ public abstract class STester {
 		final String... args) {
 		int errors = 0;
 		long t = System.currentTimeMillis();
-		for (int i = 0, j = tests.length; i < j; i++) {
-			errors += tests[i].runTest(out, err, log, printOK, args);
+		for (STester x: tests) {
+			errors += x.runTest(out, err, log, printOK, args);
 		}
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
@@ -1079,24 +1049,5 @@ public abstract class STester {
 			out.println(s);
 		}
 		return errors;
-	}
-	/** Run tests of the object given by argument and print detailed
-	 * information.
-	 * @param out The print stream for result information or <tt>null</tt>
-	 * @param err The print stream for error messages or <tt>null</tt>.
-	 * @param log The print stream all messages or <tt>null</tt>.
-	 * @param tests The array of objects to be tested.
-	 * @param info The information text.
-	 * an error was reported.
-	 * @param args array with arguments or <tt>null</tt>.
-	 * @return the number of errors.
-	 */
-	public final static int runTests(final PrintStream out,
-		final PrintStream err,
-		final PrintStream log,
-		final STester[] tests,
-		final String info,
-		final String... args) {
-		return runTests(out, err, log, tests, info, true, args);
 	}
 }

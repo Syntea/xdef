@@ -3152,17 +3152,18 @@ public final class TestXdef extends XDTester {
 			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.0'/></A>";
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {// test metanamespace
 			xdef =
-"<xd:def xmlns:xd='meta.b.cz' xmlns:w='http://www.xdef.org/xdef/4.0'\n" +
-"  w:metaNamespace='meta.b.cz' name='X' xd:root='A'>\n" +
+"<xd:def xmlns:w='meta.b.cz' xmlns:xd='http://www.xdef.org/xdef/4.0'\n" +
+"  xd:metaNamespace='meta.b.cz' name='X' w:root='A'>\n" +
 "<A a='string'>\n" +
-"  <w:B xd:script='*'/>\n" +
+"  <xd:B w:script='*'/>\n" +
 "</A>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.0'/></A>";
+			xp = XDFactory.compileXD(null, xdef);
+			xml =
+"<A a='a'>\n"+
+"  <xd:B xmlns:xd='http://www.xdef.org/xdef/4.0'/>\n"+
+"</A>";
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}

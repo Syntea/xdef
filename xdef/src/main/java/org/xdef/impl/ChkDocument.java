@@ -325,7 +325,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			lockey = key.substring(ndx + 1);
 		}
-		if (nsURI == null || nsURI.length() == 0) {
+		if (nsURI == null || nsURI.isEmpty()) {
 			for (XMElement xel: def.getModels()) {
 				if (xel.getNSUri() == null && key.equals(xel.getName())) {
 					return (XElement) xel;
@@ -391,7 +391,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_xElement = _xdef.createAnyDefElement();
 			_chkRoot = new ChkElement(this, _element, _xElement, ignore);
 
-			String s = uri!=null&&uri.length()>0 ? " (xmlns=\""+uri+"\")" : "";
+			String s = uri!=null && !uri.isEmpty()? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
 				//Element &{0} is not defined as root&{1}{ in X-definition }
@@ -646,13 +646,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final XXElement prepareRootXXElementNS(final String nsURI,
 		final String qname,
 		final boolean checkRoot) {
-		String uri = nsURI == null || nsURI.length() == 0 ? null : nsURI;
+		String uri = nsURI == null || nsURI.isEmpty() ? null : nsURI;
 		try {
 			Element root = _doc.createElementNS(uri, qname);
 			if (uri != null) {
 				String s = root.getPrefix();
 				root.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-					(s != null && s.length()>0) ? "xmlns:"+s : "xmlns", nsURI);
+					(s != null && !s.isEmpty()) ? "xmlns:"+s : "xmlns", nsURI);
 			}
 			return createRootChkElement(root, checkRoot);
 		} catch (Exception ex) {
@@ -885,7 +885,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Element xparse(final String xmlData,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
-		if(xmlData == null || xmlData.length() == 0) {
+		if(xmlData == null || xmlData.isEmpty()) {
 			// Input XML source is empty or doesn't exist.
 			throw new SRuntimeException(Report.error(XDEF.XDEF578));
 		}

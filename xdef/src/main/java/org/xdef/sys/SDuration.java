@@ -218,28 +218,28 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param milliseconds number of milliseconds.
 	 */
 	public void setMilliseconds(final int milliseconds) {
-		_fraction = milliseconds * 0.001;
+		_fraction = milliseconds * 0.001D;
 	}
 
 	/** Get number of milliseconds of period.
 	 * @return milliseconds.
 	 */
 	public int getMilliseconds() {
-		return (int) java.lang.Math.round(_fraction * 1000.0);
+		return (int) java.lang.Math.round(_fraction * 1000.0D);
 	}
 
 	/** Set number of nanoseconds of period.
 	 * @param nanoseconds number of nanoseconds.
 	 */
 	public void setNanoseconds(final int nanoseconds) {
-		_fraction = nanoseconds * 0.000000001;
+		_fraction = nanoseconds * 0.000000001D;
 	}
 
 	/** Get number of nanoseconds of period.
 	 * @return nanoseconds.
 	 */
 	public int getNanoseconds() {
-		return (int) java.lang.Math.round(_fraction * 1000000000.0);
+		return (int) java.lang.Math.round(_fraction * 1000000000.0D);
 	}
 
 	/** Set fraction of second.
@@ -248,7 +248,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 */
 	public void setFraction(final double fraction)
 	throws SRuntimeException {
-		if (fraction < 0 || fraction >= 1.0) {
+		if (fraction < 0 || fraction >= 1.0D) {
 			throw new SRuntimeException(SYS.SYS072, //Data error&{0}{: }
 				"fraction of second out of interval 0..1");
 		} else {
@@ -299,8 +299,8 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 				sb.append(String.valueOf(_minutes));
 				sb.append('M');
 			}
-			if (_seconds != 0 || _fraction != 0.0) {
-				if (_fraction > 0.0) {
+			if (_seconds != 0 || _fraction != 0.0D) {
+				if (_fraction > 0.0D) {
 					sb.append(String.valueOf(_fraction + _seconds));
 				} else {
 					sb.append(String.valueOf(_seconds));
@@ -458,7 +458,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		result += _end == null ? 0 : 3*_end.hashCode();
 		return 5*(result + 7*(_years + 13*(_months + 17*(_days +
 			19*(_hours + 23*(_minutes + 29*(_seconds + 31*(_recurrence +
-			(_fraction == 0.0 ? 0 : 37) + (_negative == -1 ? 1 : 0)))))))));
+			(_fraction == 0.0D ? 0 : 37) + (_negative == -1 ? 1 : 0)))))))));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -552,5 +552,4 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		throw new IllegalArgumentException(
 			"Not supported for " + duration.getClass());
 	}
-
 }

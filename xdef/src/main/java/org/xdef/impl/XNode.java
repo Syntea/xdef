@@ -153,7 +153,7 @@ public abstract class XNode implements XMNode {
 	public String toString() {
 		switch (_kind) {
 			case XMDEFINITION:
-				return "XMDEFINITION: "+(_name.length()==0 ?"(nameless)":_name);
+				return "XMDEFINITION: "+(_name.isEmpty() ? "(nameless)":_name);
 			case XMELEMENT:
 				return "XMELEMENT: " + _name;
 			case XMTEXT:

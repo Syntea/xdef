@@ -106,7 +106,7 @@ public class PrettyXdef {
 		String encoding,
 		String newPrefix) {
 		try {
-			if (encoding == null || encoding.length() == 0) {
+			if (encoding == null || encoding.isEmpty()) {
 				encoding = "UTF-8";
 			}
 			String oldPrefix;
@@ -130,7 +130,7 @@ public class PrettyXdef {
 				return;
 			}
 			String xdNS = input.getAttribute(oldPrefixNS);
-			if (newPrefix == null || newPrefix.length() == 0) {
+			if (newPrefix == null || newPrefix.isEmpty()) {
 				newPrefix = oldPrefix;
 			} else if (!newPrefix.endsWith(":")) {
 				newPrefix += ":";
@@ -206,7 +206,7 @@ public class PrettyXdef {
 								continue;
 							}
 							s = s.trim();
-							if (s.length() == 0) {
+							if (s.isEmpty()) {
 								continue;
 							}
 							out.write("\n<!-- "	+ s + " -->\n");
@@ -398,7 +398,7 @@ public class PrettyXdef {
 							continue;
 						}
 						s = s.trim();
-						if (s.length() == 0) {
+						if (s.isEmpty()) {
 							continue;
 						}
 						out.write("\n" + getSpaces(indent + 3) + "<![CDATA[\n");
@@ -411,7 +411,7 @@ public class PrettyXdef {
 							continue;
 						}
 						s = s.trim();
-						if (s.length() == 0) {
+						if (s.isEmpty()) {
 							continue;
 						}
 						out.write("\n" + getSpaces(indent + 3) + s);
@@ -422,7 +422,7 @@ public class PrettyXdef {
 							continue;
 						}
 						s = s.trim();
-						if (s.length() == 0) {
+						if (s.isEmpty()) {
 							continue;
 						}
 						out.write("\n" + getSpaces(indent + 3) + "<!-- " +
@@ -605,7 +605,7 @@ public class PrettyXdef {
 							continue;
 						}
 						s = s.trim();
-						if (s.length() == 0) {
+						if (s.isEmpty()) {
 							continue;
 						}
 						out.write("\n" + getSpaces(3) + "<!-- "

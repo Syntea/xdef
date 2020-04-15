@@ -97,11 +97,11 @@ class ChkDOMParser extends SReporter {
 						}
 					}
 				}
-				if (xdefInstancePrefix.length() > 0 && _chkDoc == null) {
+				if (!xdefInstancePrefix.isEmpty() && _chkDoc == null) {
 					//xdi:location
 					String key = xdefInstancePrefix + ":location";
 					String val = sourceElem.getAttribute(key);
-					if (val != null && val.length() > 0) {
+					if (val != null && !val.isEmpty()) {
 						StringParser p = new StringParser(val);
 						p.skipSpaces();
 						String systemLiteral;
@@ -166,7 +166,7 @@ class ChkDOMParser extends SReporter {
 						key = xdefInstancePrefix+":xdefName"; // xdi:definition
 						val = sourceElem.getAttribute(key).trim();
 						String value = null;
-						if (val.length() > 0) {
+						if (!val.isEmpty()) {
 							if (xdp != null) {
 								value = val;
 							}
@@ -179,7 +179,7 @@ class ChkDOMParser extends SReporter {
 								XDOutput stdOut = null;
 								key = xdefInstancePrefix+":stdOut"; // xd:stdOut
 								val = sourceElem.getAttribute(key).trim();
-								if (val.length() > 0 && _chkDoc != null) {
+								if (!val.isEmpty() && _chkDoc != null) {
 									value = val.trim();
 									int index = value.indexOf(',');
 									if (index >= 0) {
@@ -194,7 +194,7 @@ class ChkDOMParser extends SReporter {
 								}
 								key = xdefInstancePrefix+":stdErr"; // xd:stdErr
 								val = sourceElem.getAttribute(key).trim();
-								if (val.length() > 0 && _chkDoc != null) {
+								if (!val.isEmpty() && _chkDoc != null) {
 									value = val;
 									int index = value.indexOf(',');
 									if (index >= 0) {

@@ -1536,7 +1536,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else {
 			result = data;
 		}
-		if (result.length() == 0) {
+		if (result.isEmpty()) {
 			if ((xatt != null && xatt._ignoreEmptyAttributes != 0)
 				? xatt._ignoreEmptyAttributes == 'T'
 				: (_xElement._ignoreEmptyAttributes != 0)
@@ -1787,7 +1787,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						//set to "acceptEmptyAttributes" at any level then
 						//set the result of the check method to "true" (do NOT
 						//report and/or process an error)!
-						if (_data.length() == 0
+						if (_data.isEmpty()
 							&& ((xatt._ignoreEmptyAttributes == 'A'
 								|| xatt._ignoreEmptyAttributes == 'P'
 								&& xatt.isOptional())
@@ -2522,7 +2522,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else {
 			result = data;
 		}
-		if (result.length() == 0 || xd != null && xd.isFixed()) {
+		if (result.isEmpty() || xd != null && xd.isFixed()) {
 			return result;
 		}
 		byte b = (xd != null && xd._textValuesCase != 0) ?
@@ -2725,7 +2725,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if ((xatt = _xElement.getDefAttr("$textcontent", -1)) != null) {
 				_xPos = xPos + "/text()";
 				String orig = _data = KXmlUtils.getTextContent(_element);
-				if (orig.length() > 0) {
+				if (!orig.isEmpty()) {
 					_numText = 1;
 					debugXPos(XDDebug.PARSE);
 					XDValue item = xatt._check >= 0 ?
@@ -2882,7 +2882,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			return true; //all checks are ignored (undef element)
 		}
 		if (_nil) {
-			if (data.trim().length() == 0) {
+			if (data.trim().isEmpty()) {
 				return true;
 			} else {
 				//Text value not declared
@@ -2890,7 +2890,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				return false;
 			}
 		}
-		if ((_data = textWhitespaces(null, data)).length() == 0) {
+		if ((_data = textWhitespaces(null, data)).isEmpty()) {
 			_data = null;
 			_parseResult = null;
 			return true;
@@ -2910,7 +2910,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (xtxt1 != null) {// found
 			txtname = "$text" + txtname;
 			_attNames.add(txtname);
-			if (value.length() == 0) {
+			if (value.isEmpty()) {
 				debugXPos(XDDebug.ONABSENCE);
 				if (xtxt1._onAbsence >= 0) {
 					_elemValue = _element;
@@ -2924,7 +2924,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 				}
 				value = _data == null ? "" : _data;
-				if (value.length() == 0) {
+				if (value.isEmpty()) {
 					_data = null;
 					_parseResult = null;
 					_nextDefIndex = nextDefIndex;
@@ -2934,7 +2934,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					return true;
 				}
 			} else {
-				if (value.length() == 0) {
+				if (value.isEmpty()) {
 					_data = null;
 					_parseResult = null;
 					_nextDefIndex = nextDefIndex;
@@ -2946,7 +2946,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			_numText++;
 		} else {// not found
-			if (value.trim().length() == 0) {
+			if (value.trim().isEmpty()) {
 				_data = null;
 				_parseResult = null;
 				// we ignore empty text
@@ -3016,7 +3016,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_xPos = xPos;
 				return true;
 			case XOccurrence.ILLEGAL: // illegal
-				if (value.length() == 0) {
+				if (value.isEmpty()) {
 					_xdata = null;
 					_xPos = xPos;
 					return true;
@@ -3041,8 +3041,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_xdata = null;
 				_xPos = xPos;
 				return false;
-			default : // required(1) or implied(0)
-				if (value.length() == 0) {// the text node without text ???
+			default : // required(1) or optional(0)
+				if (value.isEmpty()) {// the text node without text ???
 					_data = null;
 					_parseResult = null;
 					debugXPos(XDDebug.ONFALSE);
@@ -3119,7 +3119,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					} else if (value != null && !value.isEmpty()) {
 						appendTextNode(value, xtxt1);
 					}
-					if (value != null && value.length() > 0) {
+					if (value != null && !value.isEmpty()) {
 						if (_actDefIndex >= 0
 							&& _defList[_actDefIndex].getKind()==XNode.XMTEXT) {
 							int n = xtxt == xtxt1 ? incRefNum() : getRefNum();
@@ -3411,7 +3411,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	public final boolean checkAttributeNSLegal(final String uri,
 		final String name) {
-		XData xatt = uri == null || uri.length() == 0 ?
+		XData xatt = uri == null || uri.isEmpty()?
 			getXAttr(name) : getXAttr(uri, name);
 		return xatt != null && !xatt.isIllegal();
 	}
