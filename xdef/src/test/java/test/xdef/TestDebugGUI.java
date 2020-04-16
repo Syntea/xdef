@@ -53,7 +53,7 @@ public final class TestDebugGUI extends XDTester {
 			xdef =
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+                 	//01
 "<x:def name = 'a' root = 'a'>\n"+								//02
-"<a a = \"required eq('a');\n"+									//03
+"  <a a = \"required eq('a');\n"+								//03
 "         create 'a';\n"+										//04
 "         finally {\n"+											//04
 "           int i = 1; int j = 2;\n"+							//05
@@ -63,19 +63,17 @@ public final class TestDebugGUI extends XDTester {
 "           j = 0;\n"+											//10
 "         }\" />\n"+											//11
 "</x:def>\n"+													//12
-"<x:def>\n"+													//13
-" <x:declaration>\n"+											//14
-"  String x(int n, String s){\n"+								//15
-"    String result = s;\n"+										//16
-"    for (int i = 0; i LT n; i++) {\n"+							//17
-"      result += ',' + i;\n"+									//18
-"    }\n"+														//19
-"    return result;\n"+											//20
-"  }\n"+														//21
-"  String s = 'a';\n"+											//22
-" </x:declaration>\n"+											//23
-"</x:def>\n"+													//24
-"</x:collection>";												//25
+"<x:declaration>\n"+											//13
+"  String x(int n, String s){\n"+								//14
+"    String result = s;\n"+										//15
+"    for (int i = 0; i LT n; i++) {\n"+							//16
+"      result += ',' + i;\n"+									//17
+"    }\n"+														//18
+"    return result;\n"+											//19
+"  }\n"+														//20
+"  String s = 'a';\n"+											//21
+"</x:declaration>\n"+											//22
+"</x:collection>";												//23
 			xp = compile(xdef);
 			XMDebugInfo xm = xp.getDebugInfo();
 			// create mode

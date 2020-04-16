@@ -24,7 +24,7 @@ import org.xdef.xml.KXmlUtils;
  * invoke static method runTest(args) (usually in main method). This method
  * returns number of errors. Example:
  * <pre><code>
- public class TestMyCode extends cz.syntea.xdef.sys.STester {
+ public class TestMyCode extends org.xdef.sys.STester {
    TestMyCode() {}
    public void test() {
 	 try {

@@ -133,7 +133,7 @@ class XCGeneratorJSON extends XCGeneratorBase {
 "\tpublic &{typ} get$&{name}() {"+LN+
 "\t\t&{typ} y ="+LN+
 "\t\t\tnew &{typ1}();"+LN+
-"\t\tfor (&{name} z : listOfa()) {"+LN+
+"\t\tfor (&{name} z : listOf&{name}()) {"+LN+
 "\t\t\ty.add(z.get$value());"+LN+
 "\t\t}"+LN+
 "\t\treturn y;"+LN+
@@ -253,11 +253,11 @@ class XCGeneratorJSON extends XCGeneratorBase {
 (_genJavadoc ? ("\t/** Set values from list to \"&{xmlName}\"."+LN+
 "\t * @param x value to be added."+LN+
 "\t */"+LN) : "")+
-"\tpublic void set$&{name}(&{typ} x) {"+LN+
+"\tpublic void set$&{name}(java.util.List<&{typ}> x) {"+LN+
 "\t\tjava.util.List<&{name}> y = listOf&{name}();"+LN+
 "\t\ty.clear();"+LN+
 "\t\tif (x==null)return;"+LN+
-"\t\tfor (org.xdef.sys.SDatetime w : x) {"+LN+
+"\t\tfor (&{typ} w : x) {"+LN+
 "\t\t\tif (w != null) {"+LN+
 "\t\t\t\t&{name} z = new &{name}();"+LN+
 "\t\t\t\tz.set$value(w);"+LN+
@@ -270,7 +270,7 @@ class XCGeneratorJSON extends XCGeneratorBase {
 				"&{name}", name,
 				"&{d}" , d,
 				"&{xmlName}", name.replace('$', ':'),
-				"&{typ}", "java.util.List<" + typeName + '>'));
+				"&{typ}", typeName));
 		} else {
 			final String template =
 (_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
@@ -562,5 +562,5 @@ class XCGeneratorJSON extends XCGeneratorBase {
 				}
 			}
 		}
-	}	
+	}
 }

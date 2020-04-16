@@ -94,6 +94,13 @@ public interface XDConstants {
 	/** Name of property for setting language of messages. */
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef_language";
 
+	/** Property defines X=component old version mode (default is false).*/
+	public static final String XDPROPERTY_OLDCOMPONENT = "xdef_oldcomponent";
+	/** Value "true" of property "xdef.oldcomponent" */
+	public static final String XDPROPERTYVALUE_OLDCOMPONENT_TRUE = "true";
+	/** Value "false" of property "xdef.oldcomponent" */
+	public static final String XDPROPERTYVALUE_OLDCOMPONENT_FALSE = "false";
+
 ////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////

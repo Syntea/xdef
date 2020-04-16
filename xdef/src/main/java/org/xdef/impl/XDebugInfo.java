@@ -108,14 +108,15 @@ public class XDebugInfo implements XMDebugInfo {
 		final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo x = _statementList.get(i);
-			if (line == x._line && ((xdName==null && x._xdName==null ||
-				x._xdName.isEmpty()) || xdName.equals(x._xdName))) {
+			if (line == x._line
+				&& ((xdName==null && (x._xdName==null || x._xdName.isEmpty()))
+				|| xdName.equals(x._xdName == null ? "" : x._xdName))) {
 				int min = i, max = i;
 				for (int j = i + 1; j < _statementList.size(); j++) {
 					XStatementInfo y = _statementList.get(j);
 					if (line == y._line && ((xdName==null &&
-						y._xdName==null || y._xdName.isEmpty()) ||
-						xdName.equals(y._xdName))) {
+						(y._xdName==null || y._xdName.isEmpty()))
+						|| xdName.equals(y._xdName == null ? "" : y._xdName))) {
 						max = j;
 					} else {
 						break;
