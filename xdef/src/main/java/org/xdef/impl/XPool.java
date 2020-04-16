@@ -5,7 +5,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
-import org.xdef.sys.SIOException;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
@@ -52,15 +51,13 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION =
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
-	/** Last compatible version of XDPool (i.e. 3.2.002.121: 30200002112L). */
-	private static final long XD_MIN_VERSION = 400000000L; // 4.0.000.000
+	/** Last compatible version of XDPool (e.g. 3.2.002.121: 30200002112L). */
+	private static final long XD_MIN_VERSION = 400000000L; // 4.0.000.001
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
 	private boolean _illegalDoctype;
-	/** Switch to allow/restrict includes in XML.*/
-	private boolean _resolveIncludes;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private byte _debugMode;
 	/** Class name of debug editor.*/
@@ -73,6 +70,10 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _ignoreUnresolvedExternals;
 	/** Switch if location details will be generated.*/
 	private boolean _locationdetails;
+	/** Switch to allow/restrict includes in XML.*/
+	private boolean _resolveIncludes;
+	/** Switch to generate old version of X-components.*/
+	public boolean _oldXomponents; // (will be removed!)
 	/** External objects.*/
 	private Class<?>[] _extClasses;
 	/** Properties.*/
@@ -190,6 +191,12 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0;
+		// old version of X-components (will be removed!)
+		_oldXomponents = readProperty(_props,
+			XDConstants.XDPROPERTY_OLDCOMPONENT,
+			new String[] {XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_TRUE,
+				XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_FALSE},
+			XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_FALSE) == 0;
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
@@ -1127,7 +1134,8 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeBoolean(_ignoreUnresolvedExternals);
 		xw.writeBoolean(_locationdetails);
 		xw.writeBoolean(_chkWarnings);
-		xw.writeBoolean(_resolveIncludes);
+		xw.writeBoolean(_resolveIncludes); // (will be removed!)
+		xw.writeBoolean(_oldXomponents);
 		xw.writeByte(_displayMode);
 		xw.writeInt(_minYear);
 		xw.writeInt(_maxYear);
@@ -1256,14 +1264,14 @@ public final class XPool implements XDPool, Serializable {
 		XDReader xr = new XDReader(in);
 		if (XD_MAGIC_ID != xr.readShort()) {
 			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Incorrect file format");
+			throw new SRuntimeException(SYS.SYS039, "Incorrect file format");
 		}
 		String ver = xr.readString(); //XDPool version
 		// check if version is compatible with this implementation
 		if (!ver.startsWith("XD") ||
 			SUtils.getXDVersionID(ver.substring(2)) < XD_MIN_VERSION) {
 			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Version error: " + ver);
+			throw new SRuntimeException(SYS.SYS039, "Version error: " + ver);
 		}
 		_debugMode = xr.readByte();
 		_debugEditor = xr.readString();
@@ -1273,6 +1281,7 @@ public final class XPool implements XDPool, Serializable {
 		_locationdetails =  xr.readBoolean();
 		_chkWarnings = xr.readBoolean();
 		_resolveIncludes = xr.readBoolean();
+		_oldXomponents = xr.readBoolean(); // (will be removed!)
 		_displayMode = xr.readByte();
 		_minYear = xr.readInt();
 		_maxYear = xr.readInt();
@@ -1289,7 +1298,7 @@ public final class XPool implements XDPool, Serializable {
 					false, Thread.currentThread().getContextClassLoader());
 			} catch (ClassNotFoundException ex) {
 				//SObject reader: incorrect format of data&{0}{: }
-				throw new SIOException(SYS.SYS039, ex);
+				throw new SRuntimeException(SYS.SYS039, ex);
 			}
 		}
 		len = xr.readLength();
@@ -1334,7 +1343,7 @@ public final class XPool implements XDPool, Serializable {
 				_code[i] = xr.readXD();
 			} catch (Exception ex) {
 				//SObject reader: incorrect format of data&{0}{: }
-				throw new SIOException(SYS.SYS039,
+				throw new SRuntimeException(SYS.SYS039,
 					ex, "code["+i+"]; " + _code[i]);
 			}
 		}
@@ -1363,7 +1372,7 @@ public final class XPool implements XDPool, Serializable {
 					XDefinition.readXDefinition(xr, this, list));
 			} catch (Exception ex) {
 				//SObject reader: incorrect format of data&{0}{: }
-				throw new SIOException(SYS.SYS039, ex);
+				throw new SRuntimeException(SYS.SYS039, ex);
 			}
 		}
 		//resolve root selections - references to models!
@@ -1396,7 +1405,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 		if (XD_MAGIC_ID != xr.readShort()) {
 			//SObject reader: incorrect format of data&{0}{: }
-			throw new SIOException(SYS.SYS039, "Incorrect file format");
+			throw new SRuntimeException(SYS.SYS039, "Incorrect file format");
 		}
 		ArrayList<XElement> reflist = new ArrayList<XElement>();
 		Set<XElement> refset = new HashSet<XElement>();

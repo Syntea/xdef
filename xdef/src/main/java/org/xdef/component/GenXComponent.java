@@ -19,8 +19,8 @@ import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import java.util.HashSet;
 import org.xdef.XDConstants;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.XElement;
+import org.xdef.impl.XPool;
 import org.xdef.model.XMNode;
 import org.xdef.sys.Report;
 
@@ -288,8 +288,7 @@ public final class GenXComponent {
 					continue;
 				}
 				XCGenerator genxc;
-				if (xn.getXMDefinition().getXDVersion() < XConstants.XD40
-					&& ((XElement) xn)._json == 0) {
+				if (((XPool)xdpool)._oldXomponents && ((XElement) xn)._json==0){
 					genxc = new XCGeneratorOld(xdpool, reporter, genJavadoc);
 				} else {
 					genxc = new XCGeneratorNew(xdpool, reporter, genJavadoc);
