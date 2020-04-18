@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 
 <xd:def
-   xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
    xd:name      = "BM_common"
    impl-version = "2.4.0.0"
    impl-date    = "28.9.2006" >

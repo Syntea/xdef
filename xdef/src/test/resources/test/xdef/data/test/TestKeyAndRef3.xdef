@@ -1,4 +1,4 @@
-<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='root'>
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='root'>
 <root xd:script='var uniqueSet kADRESA {Obec:string; Ulice:?string; Dum:int()}'>
   <SeznamPracovist>
     <Obec xd:script='+; finally kADRESA.NEWKEY()'

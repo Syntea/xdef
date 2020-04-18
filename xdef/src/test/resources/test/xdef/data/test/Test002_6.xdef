@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
    xmlns:ldn = "http://www.syntea.cz/dn/ldn/1.0"
    xd:name   = "LDN"
    xd:root   = "ldn:DnSearch | ldn:DnSearch_Answer |

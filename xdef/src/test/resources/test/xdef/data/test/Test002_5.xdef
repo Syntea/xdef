@@ -6,12 +6,12 @@
     Description: XDefinition of BPEL instance.
 -->
 
-<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0'
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1'
         xd:name = 'instance' xd:root ='instance'>
 
   <instance instanceSeq      = "required int()"
           instanceVersion    = "required string()"
-          processStatus      = "required tokens('create|running|finished|fault')"
+          processStatus      = "required enum('create','running','finished','fault')"
           now                = "required xdatetime('yyyyMMddHHmmss')"
           createdTime        = "required xdatetime('yyyyMMddHHmmss')"
           breakTime          = "required xdatetime('yyyyMMddHHmmss')"

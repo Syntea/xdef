@@ -113,7 +113,7 @@ public final class TestXComponents extends XDTester {
 		SDatetime sd;
 		ArrayReporter reporter = new ArrayReporter();
 		final String dataDir = getDataDir() + "test/";
-		XDPool xp = genComponents(getDataDir() + "test/TestXComponentsGen.xdef",
+		XDPool xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
 			dataDir + "TestXComponent_Z.xdef");
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
@@ -124,20 +124,12 @@ public final class TestXComponents extends XDTester {
 			assertTrue(reporter.errors());
 			xml =
 "<A a='a' dec='123.45'>"+
-"<W w='w'/>"+
-"<W w='w1'>blabla</W>"+
-"<Y>1</Y>"+
-"<Y>2</Y>"+
-"<i>1</i>"+
-"<d>2013-09-14</d>"+
-"<t>10:20:30</t>"+
-"<s>Franta</s>"+
-"<Z z='z'/>"+
+"<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>1</i><Y>3</Y>"+
+"<d>2013-09-14</d><t>10:20:30</t><s>Franta</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+				
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>";
 			xc = parseXC(xp, "A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
@@ -147,6 +139,10 @@ public final class TestXComponents extends XDTester {
 				getValueFromGetter(xc, "getd"), "xposOf$value").toString());
 			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"get$value").toString(), "2013-09-14");
+			list = (List) getValueFromGetter(xc,"get$Y");			
+			assertEq("1", list.get(0));
+			assertEq("2", list.get(1));
+			assertEq("3", getValueFromGetter(xc,"get$Y_1"));			
 			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"get$value"), getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"dateOf$value"));
@@ -175,20 +171,12 @@ public final class TestXComponents extends XDTester {
 			assertEq("/A/d2[2]", getValueFromGetter(list.get(1),"xGetXPos"));
 			assertEq(xc.toXml(),
 "<A a='a' dec = '123.45'>"+
-"<W w='w'/>"+
-"<W w='w1'>blabla</W>"+
-"<Y>1</Y>"+
-"<Y>2</Y>"+
-"<i>2</i>"+
-"<d>2013-09-14</d>"+
-"<t>10:20:30</t>"+
-"<s>Pepik</s>"+
-"<Z z='z'/>"+
+"<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>2</i><Y>3</Y>"+
+"<d>2013-09-14</d><t>10:20:30</t><s>Pepik</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
 			setValueToSetter(getValueFromGetter(xc, "geti"),
 				"set$value", BigInteger.valueOf(3));
@@ -205,58 +193,34 @@ public final class TestXComponents extends XDTester {
 			el = xc.toXml();
 			assertEq(el,
 "<A a='a' dec = '123.45'>"+
-"<W w='w'/>"+
-"<W w='w1'>blabla</W>"+
-"<Y>1</Y>"+
-"<Y>2</Y>"+
-"<i>3</i>"+
-"<d>2013-09-01</d>"+
-"<t>11:21:31</t>"+
-"<s>Pepik</s>"+
-"<Z z='z'/>"+
+"<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>3</i><Y>3</Y>"+
+"<d>2013-09-01</d><t>11:21:31</t><s>Pepik</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
 			assertEq("", checkXPos(xc));
 			xc = parseXC(xp, "A", el, null, null);
 			el = xc.toXml();
 			assertEq(el,
 "<A a='a' dec = '123.45'>"+
-"<W w='w'/>"+
-"<W w='w1'>blabla</W>"+
-"<Y>1</Y>"+
-"<Y>2</Y>"+
-"<i>3</i>"+
-"<d>2013-09-01</d>"+
-"<t>11:21:31</t>"+
-"<s>Pepik</s>"+
-"<Z z='z'/>"+
+"<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>3</i><Y>3</Y>"+
+"<d>2013-09-01</d><t>11:21:31</t><s>Pepik</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
 			setValueToSetter(xc, "setdec", new BigDecimal("456.01"));
 			assertEq(xc.toXml(),
 "<A a='a' dec='456.01'>"+
-"<W w='w'/>"+
-"<W w='w1'>blabla</W>"+
-"<Y>1</Y>"+
-"<Y>2</Y>"+
-"<i>3</i>"+
-"<d>2013-09-01</d>"+
-"<t>11:21:31</t>"+
-"<s>Pepik</s>"+
-"<Z z='z'/>"+
+"<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>3</i><Y>3</Y>"+
+"<d>2013-09-01</d><t>11:21:31</t><s>Pepik</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
 			setValueToSetter(xc, "setdec", new BigDecimal("123.45"));
 			list = (List) getValueFromGetter(xc, "listOfW");
@@ -268,13 +232,11 @@ public final class TestXComponents extends XDTester {
 				"set$value", BigInteger.valueOf(99));
 			assertEq(xc.toXml(), //clone
 "<A a='a' dec='123.45'>"+
-"<i>99</i><d>2013-09-01</d><t>11:21:31</t><s>Pepik</s>"+
-"<Z z='z'/>"+
+"<i>99</i><Y>3</Y><d>2013-09-01</d><t>11:21:31</t><s>Pepik</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>"+
-"Thu, 15 Oct 2009 01:02:04 +0200"+
-"</d2>"+
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
+"<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
 			el = XComponentUtil.toXml(xc, xp.createXDDocument("B"), "A");
 			xml = "<A id='99' date='2013-09-01' time='11:21:31' name='Pepik'/>";
@@ -1079,49 +1041,41 @@ public final class TestXComponents extends XDTester {
 			list = (List) getValueFromGetter(list.get(0), "listOfParam");
 			assertEq("14.8", getValueFromGetter(list.get(1), "getValue"));
 		} catch (Exception ex) {fail(ex);}
-		try { // test theaurus from generated XDPool
-			xd = xp.createXDDocument("Lexicon");
+		try { // test lexicon
+			xd = xp.createXDDocument("LEX");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
 			el = xd.xtranslate(xml, "eng", "eng", reporter);
 			assertNoErrors(reporter);
 
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = xd.xtranslate(xml, "eng", "ces", reporter);
+			xd = xp.createXDDocument("LEX");
+			assertEq("<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>",
+				 xd.xtranslate(xml, "eng", "ces", reporter));
 			assertNoErrors(reporter);
 
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			el = xd.xtranslate(xml, "ces", "eng", reporter);
-			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
-			el = xd.xtranslate(xml, "ces", "deu", reporter);
-			assertNoErrors(reporter);
-
-			xd = xp.createXDDocument("Lexicon");
+			xd = xp.createXDDocument("LEX");
 			xd.setLexiconLanguage("eng");
-			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = parse(xd, xml, reporter);
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
-			assertEq(xml, el);
 
-			xd = xp.createXDDocument("Lexicon");
+			xd = xp.createXDDocument("LEX");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
 			xd.setLexiconLanguage("ces");
-			el = parse(xd, xml, reporter);
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
-			assertEq(xml, el);
 
+			xd = xp.createXDDocument("LEX");
 			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
-			xd = xp.createXDDocument("Lexicon");
-			xd.setLexiconLanguage("ces");
-			el = parse(xd, xml, reporter);
+			assertEq("<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>",
+				xd.xtranslate(xml, "ces", "eng", reporter));
 			assertNoErrors(reporter);
-			assertEq(xml, el);
-			// test theaurus with X-component
-			xd = xp.createXDDocument("Lexicon");
-			xml = "<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>";
+
+			xd = xp.createXDDocument("LEX");
+			assertEq("<S s=\"x\"><T t=\"1\"/><T t=\"2\"/><T t=\"3\"/></S>",
+				xd.xtranslate(xml, "ces", "deu", reporter));
+			assertNoErrors(reporter);
+
+			// test lexicon with X-component
+			xd = xp.createXDDocument("LEX");
 			xd.setLexiconLanguage("ces");
 			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrors(reporter);

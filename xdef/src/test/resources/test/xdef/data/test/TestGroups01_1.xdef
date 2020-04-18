@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xd:collection
-    xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
+    xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
     xmlns        = "http://www.syntea.cz/ISDN/SOD/2.0"
     xmlns:sod    = "http://www.syntea.cz/ISDN/SOD/2.0"
 

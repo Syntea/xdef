@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="windows-1250"?>
-<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/2.0">
 <xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
    xd:name    = "L1_common"
    xd:classes = "test.xdef.Test000"
@@ -203,4 +202,3 @@
    </PN>
 
 </xd:def>
-</xd:collection>

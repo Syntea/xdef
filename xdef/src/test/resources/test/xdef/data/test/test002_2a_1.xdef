@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250" ?>
 
 <xd:def
-   xmlns:xd   = "http://www.syntea.cz/xdef/2.0"
+   xmlns:xd   = "http://www.syntea.cz/xdef/3.1"
    xd:name    = "P1"
    xd:include = "test002_2a_2.xdef, test002_2a_3.xdef, test002_2a_4.xdef"
    impl-version = "2.3.2.0"
