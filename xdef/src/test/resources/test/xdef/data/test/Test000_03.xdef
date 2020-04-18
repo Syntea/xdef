@@ -1,4 +1,4 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
     xd:root      = "statOnDemandInputParam"
     xd:script    = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces"
     impl-version = "1.17.17"

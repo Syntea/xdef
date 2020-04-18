@@ -1,4 +1,4 @@
-<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1">
+<xd:collection xmlns:xd = "http://www.xdef.org/xdef/4.0">
 
 <xd:component>
  %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
@@ -28,15 +28,10 @@
  %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
  %class test.xdef.component.A %link A#A;
  %class test.xdef.component.B %link B#A;
-</xd:component>
-
-<xd:component>
-  %class test.xdef.component.C extends test.xdef.TestXComponents_C
-         %link C#Town;
-  %class test.xdef.component.C1 implements test.xdef.component.CI
-         %link C#Person;
-  %class test.xdef.component.C2 %link C#Town/Street/House;
-  %interface test.xdef.component.CI %link C#Person;
+ %class test.xdef.component.C extends test.xdef.TestXComponents_C %link C#Town;
+ %class test.xdef.component.C1 implements test.xdef.component.CI %link C#Person;
+ %class test.xdef.component.C2 %link C#Town/Street/House;
+ %interface test.xdef.component.CI %link C#Person;
 </xd:component>
 
 <xd:declaration> type XY enum('XX','YY');
@@ -49,6 +44,7 @@
     <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>
     <Y xd:script='*'>?num</Y>
     <i xd:script='?'>integer();</i>
+    <Y xd:script='?'>?num</Y>
     <f xd:script='?'>uflt()</f>
     <d xd:script='?'>udat()</d>
     <t xd:script='?'>xdatetime('HH:mm:ss')</t>
@@ -57,6 +53,7 @@
     <d1 xd:script='?' d='dateYMDhms'>dateYMDhms</d1>
     <d2 xd:script='*' d='emailDate'>emailDate</d2>
     <d-e.f xd:script='?' d-e.f='string'>string</d-e.f>
+    <g-h.i xd:script='?'>string</g-h.i>
   </A>
 </xd:def>
 
@@ -72,7 +69,6 @@
   <xd:declaration scope="local">
     external method void test.xdef.TestXComponents_C.test(XXData);
   </xd:declaration>
-
   <Town Name="string">
     <Street xd:script="+" Name="string">
       <House xd:script='*' Num='int'>
@@ -91,9 +87,7 @@
 </xd:def>
 
 <xd:def name='D' root='a:A' xmlns:a='a.b'>
-
   <xd:component>%class test.xdef.component.D %link a:A</xd:component>
-
   <a:A>
     <_ xd:script='?'/>
     <B A='boolean'>
@@ -143,7 +137,6 @@
     %class test.xdef.component.E %link if;
     %bind Clazz %link if/class;
   </xd:component>
-
   <if><class try='string'/></if>
 </xd:def>
 
@@ -152,7 +145,6 @@
     %class test.xdef.component.F %link X;
     %class test.xdef.component.F1 %link Y
   </xd:component>
-
   <X>
     <xd:choice>
         <A/>
@@ -183,7 +175,6 @@
 
 <xd:def xmlns:s='soap' xmlns:b='request' name='H' root='s:H'>
   <xd:component>%class test.xdef.component.H %link s:H</xd:component>
-
   <s:H s:encodingStyle = "fixed 'encoding'">
     <s:Header>
       <b:User xd:script = 'occurs 1; ref I#User'
@@ -223,7 +214,6 @@
     %bind X3 %link J#B/X[3];
     %bind D2 %link J#C/D[2];
   </xd:component>
-
   <A>
     <B xd:script='?'/>
     <C xd:script='*'/>
@@ -249,11 +239,11 @@
 <xd:def name='K' root='A'>
   <xd:component>%class test.xdef.component.K %link A</xd:component>
   <A>
-      <c xd:script='+' Kod="fixed '1'"
-         Cislo=''
-         Rok="xdatetime('yy');"/>
-       int;
-      <d xd:script='?' a="xdatetime('d.M.y')"/>
+    <c xd:script='+' Kod="fixed '1'"
+       Cislo=''
+       Rok="xdatetime('yy');"/>
+     int;
+    <d xd:script='?' a="xdatetime('d.M.y')"/>
   </A>
 </xd:def>
 
@@ -262,7 +252,6 @@
     %class test.xdef.component.L %link L;
     %class test.xdef.component.L1 %link *
   </xd:component>
-
   <L>
     <xd:any xd:script='ref X'/>
   </L>
@@ -285,7 +274,6 @@
     %class test.xdef.component.N_Operation
       implements test.xdef.component.N_i %link A/Operation;
   </xd:component>
-
   <A>
     <Operation xd:script='ref Part'/>
   </A>
@@ -294,7 +282,6 @@
 
 <xd:def name = 'O' root = "A">
   <xd:component>%class test.xdef.component.O %link O#A;</xd:component>
-
   <A>
     <xd:choice xd:script='+'>
       <B/>
@@ -311,10 +298,7 @@
     uniqueSet ppdat{x: pdat;}
     uniqueSet ppflt{x: pflt;}
   </xd:declaration>
-  <xd:component>
-    %class test.xdef.component.P %link P#A;
-  </xd:component>
-
+  <xd:component> %class test.xdef.component.P %link P#A; </xd:component>
   <A>
     <a xd:script='?' a='ppflt.x()' b='ppdat.x()'/>
     <b xd:script='+' a='ppflt.x.ID()' b='ppdat.x.ID()'/>
@@ -331,7 +315,6 @@
     %class test.xdef.component.X %link X;
     %class test.xdef.component.X1 extends test.xdef.TestXComponents_G %link Y;
   </xd:component>
-
    <X>
      <A xd:script = '+;'>
        <xd:mixed>
@@ -356,12 +339,10 @@
     %class test.xdef.component.s.Y01Operation
       implements test.xdef.component.s.Y01Part %link Test/Operation;
   </xd:component>
-
   <Test>
     <Operation xd:script='ref Part;' x='? string();'/>
   </Test>
-  <Part One = 'optional string()'
-        Two = 'optional string()'/>
+  <Part One = 'optional string()' Two = 'optional string()'/>
 </xd:def>
 
 <xd:def name='Y02' root='Test'>
@@ -379,7 +360,6 @@
     %class test.xdef.component.Y03PartOne %link PartOne;
     %class test.xdef.component.Y03PartTwo %link PartTwo
   </xd:component>
-
   <PartOne One = 'required string()' />
   <PartTwo One = 'required int()' />
   <Part>
@@ -394,7 +374,6 @@
       extends test.xdef.TestXComponents_Y04
         implements java.io.Serializable, Runnable %link Part
   </xd:component>
-
   <Part One='required string()' Two='required string()'/>
 </xd:def>
 
@@ -413,12 +392,9 @@
       extends test.xdef.TestXComponents_Y06Container
         &lt;test.xdef.TestXComponents_Y06Domain&gt; %link A;
     %class test.xdef.component.Y06B
-      implements test.xdef.TestXComponents_Y06XCDomain
-        %link  A/B;
-    %bind Domain %with test.xdef.TestXComponents_Y06Container
-        %link A/B;
+      implements test.xdef.TestXComponents_Y06XCDomain %link A/B;
+    %bind Domain %with test.xdef.TestXComponents_Y06Container %link A/B;
   </xd:component>
-
   <A>
     <B One='required string()' Two='required string()'/>
   </A>
@@ -434,7 +410,6 @@
     %bind ControlId %with test.xdef.TestXComponents_Y07Operation
       %link Nehoda/ControlId;
   </xd:component>
-
   <Smlouva xd:script = 'ref Nehoda'>
     <Domain One='required string()' Two='required string()'/>
   </Smlouva>
@@ -446,11 +421,9 @@
 
 <xd:def name='Y08' root='A'>
 <xd:component>
- %class test.xdef.component.Y08
-    extends test.xdef.TestXComponents_Y08 %link A;
+ %class test.xdef.component.Y08 extends test.xdef.TestXComponents_Y08 %link A;
  %bind IdFlow %with test.xdef.TestXComponents_Y08 %link A/@Id;
 </xd:component>
-
 <A xd:script='ref B'>
    <Domain One='required string()' Two='required string()'/>
 </A>
@@ -458,10 +431,7 @@
 </xd:def>
 
 <xd:def name='Y09' root='A'>
-  <xd:component>
-    %class test.xdef.component.Y09 %link A;
-  </xd:component>
-
+  <xd:component> %class test.xdef.component.Y09 %link A; </xd:component>
   <A x='required string()' y='required string()'>
     <xd:any xd:script='occurs 0..1;
       options moreAttributes, moreElements, moreText'/>
@@ -476,7 +446,6 @@
     %bind p %link A/$mixed/a;
     %bind q %link A/$mixed/b;
  </xd:component>
-
  <A a='required string()' b='required string()' c="XY">
    <xd:mixed>
       <a x='string()'/>
@@ -486,27 +455,26 @@
 </xd:def>
 
 <xd:def name='Y11' root='A'>
-    <xd:component>
-        %class test.xdef.component.Y11 %link A;
-        %class test.xdef.component.Y11Op %link Op;
-    </xd:component>
-
-    <A>
-      <B xd:script='occurs 1..'
-         N ='required string();' I ='required'>
-          <xd:mixed>
-            <Ev xd:script='ref Op; occurs *'/>
-            <Op xd:script='ref Op; occurs *'/>
-          </xd:mixed>
-      </B>
-    </A>
-    <Op N='required string();' M='required;'>
-      <Co xd:script='occurs 0..'
-        C='required;' I="required enum('Yes', 'No', 'Join', 'Var')">
-        <X/>
-      </Co>
-      <Y Y='required;'/>
-    </Op>
+  <xd:component>
+      %class test.xdef.component.Y11 %link A;
+      %class test.xdef.component.Y11Op %link Op;
+  </xd:component>
+  <A>
+    <B xd:script='occurs 1..'
+      N ='required string();' I ='required'>
+      <xd:mixed>
+        <Ev xd:script='ref Op; occurs *'/>
+         <Op xd:script='ref Op; occurs *'/>
+      </xd:mixed>
+    </B>
+  </A>
+  <Op N='required string();' M='required;'>
+    <Co xd:script='occurs 0..'
+      C='required;' I="required enum('Yes', 'No', 'Join', 'Var')">
+      <X/>
+    </Co>
+    <Y Y='required;'/>
+  </Op>
 </xd:def>
 
 <xd:def name='Y12' root='A|a'>
@@ -516,7 +484,6 @@
     %class test.xdef.component.Y12_B %link A/B;
     %class test.xdef.component.Y12_a %link a;
   </xd:component>
-
   <A>
     <B xd:script='occurs 1..'>
       <xd:mixed xd:script='ref Actions'/>
@@ -529,7 +496,7 @@
     <Q xd:script='occurs *' O='required'/>
   </xd:mixed>
   <a>
-    <xd:sequence script='2'>
+    <xd:sequence script='occurs 2'>
       <xd:mixed>
         <b />
         <c />
@@ -548,7 +515,6 @@
     %class test.xdef.component.Y13 %link A;
     %class test.xdef.component.Y13B %link A/B;
   </xd:component>
-
   <A><B xd:script='ref C' /></A>
   <C a='string'/>
 </xd:def>
@@ -559,17 +525,13 @@
     %interface test.xdef.component.Y14B %link B;
     %class test.xdef.component.Y14C %link C;
   </xd:component>
-
   <A a='string'/>
   <B><X xd:script='ref A'/></B>
   <C xd:script='ref B'/>
 </xd:def>
 
 <xd:def name='Y15' root='a'>
-  <xd:component>
-    %class test.xdef.component.Y15 %link a;
-  </xd:component>
-
+  <xd:component> %class test.xdef.component.Y15 %link a; </xd:component>
   <a>
     <xd:text>string</xd:text>
     <b xd:script='?'/>
@@ -586,7 +548,6 @@
     %class test.xdef.component.Y16e %link e;
     %class test.xdef.component.Y16f %link g;
   </xd:component>
-
   <a><x:b xd:script='ref x:x'/></a>
   <x:x y='int'/>
   <c>
@@ -605,7 +566,6 @@
     %bind b_1 %link a/b[1];
     %bind b_2 %link a/b[2];
   </xd:component>
-
   <a>
     <b a='int'/>
     <c/>
@@ -621,7 +581,6 @@
       </C>
       <D xd:script = 'optional; ref Y18a#C'/>
    </A>
-
    <xd:component>
       %class test.xdef.component.Y18 %link A;
       %bind x %link A/C/$text;
@@ -648,10 +607,7 @@
        </B_1>
      </B>
   </A>
-
-  <xd:component>
-    %class test.xdef.component.Y19 %link Y19#A;
-  </xd:component>
+  <xd:component> %class test.xdef.component.Y19 %link Y19#A; </xd:component>
 </xd:def>
 
 <xd:def root='A|B|C|D' name='Y20'>
@@ -680,7 +636,6 @@
       <Z xd:script='*; ref Z'/>
     </C>
   </Z>
-
   <xd:component>
     %class test.xdef.component.Y20_A %link Y20#A;
     %class test.xdef.component.Y20_B %link Y20#B;
@@ -701,7 +656,6 @@
     %enum test.xdef.component.Y21_enum eType;
     %ref %enum test.xdef.TestXComponents_Y21enum eType1;
   </xd:component>
-
   <A b='myType;' >
     ? myType;
     <B xd:script='*' c='eType1;'>
@@ -713,7 +667,6 @@
 
 <xd:def name='Y22' xd:root ='A'>
   <xd:component>%class test.xdef.component.Y22 %link Y22#A;</xd:component>
-
   <A xd:script='options ignoreOther'
     Creator ='required string()' >
     <Transfer xd:script='options ignoreOther'
@@ -775,35 +728,27 @@
 </a>
 </xd:def>
 
-<!-- **************************
-  Used in TestLexicon.java
-******************************* -->
-
-<xd:def root="X" name="Lexicon">
+<!-- ********************** Lexicon test ********************** -->
+<xd:def root="X" name="LEX">
   <X x="string">
     <Y xd:script="+"  y="int()"/>
   </X>
-
-  <xd:component>
-    %class test.xdef.component.Lexicon %link Lexicon#X;
-  </xd:component>
-
+  <xd:component> %class test.xdef.component.Lex %link LEX#X; </xd:component>
   <xd:declaration>
     type state enum("draft", "processed");
   </xd:declaration>
-
   <xd:lexicon language="eng" default="yes"/>
   <xd:lexicon language="ces">
-    Lexicon#X =      P
-    Lexicon#X/@x =   p
-    Lexicon#X/Y =    Q
-    Lexicon#X/Y/@y = q
+    LEX#X =      P
+    LEX#X/@x =   p
+    LEX#X/Y =    Q
+    LEX#X/Y/@y = q
   </xd:lexicon>
   <xd:lexicon language="deu">
-    Lexicon#X =      S
-    Lexicon#X/@x =   s
-    Lexicon#X/Y =    T
-    Lexicon#X/Y/@y = t
+    LEX#X =      S
+    LEX#X/@x =   s
+    LEX#X/Y =    T
+    LEX#X/Y/@y = t
   </xd:lexicon>
 </xd:def>
 

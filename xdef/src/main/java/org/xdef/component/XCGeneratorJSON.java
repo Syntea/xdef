@@ -19,7 +19,7 @@ import org.xdef.sys.SRuntimeException;
 /** Generation of Java source code methods for JSON getters/setters.
  * @author Vaclav Trojan
  */
-class XCGeneratorJSON extends XCGeneratorBase {
+class XCGeneratorJSON extends XCGeneratorBase1 {
 
 	XCGeneratorJSON(final XDPool xp,
 		final ArrayReporter reporter,
@@ -30,13 +30,15 @@ class XCGeneratorJSON extends XCGeneratorBase {
 	/** Generate direct getters/seters for value of the text child node.
 	 * @param xel model of element (has only a text child and no attributes).
 	 * @param name name of variable.
-	 * @param isRoot if it is a root element of X-component.
+	 * @param iType name of item variable type.
+	 * @param isRoot true if it is a root element of X-component.
 	 * @param setters StringBuilder where to generate getters.
 	 * @param getters StringBuilder where to generate setters.
 	 * @param sbi StringBuilder where to generate interfaces (may be null).
 	 */
 	final void genDirectSetterAndGetter(final XElement xel,
 		final String name,
+		final String iType,
 		final boolean isRoot,
 		final StringBuilder setters,
 		final StringBuilder getters,
@@ -46,14 +48,14 @@ class XCGeneratorJSON extends XCGeneratorBase {
 		String descr = "text node from element";
 		int max = xel.maxOccurs();
 		genDirectGetter(xel, typeName, name, isRoot, max, descr, getters, sbi);
-		genDirectSetter(typeName, name, isRoot, max, descr, setters, sbi);
+		genDirectSetter(typeName, name, iType, isRoot, max, descr, setters,sbi);
 	}
 
 	/** Generate java code of getter method for child element classes.
 	 * @param typeName name of class representing the child element.
 	 * @param name name of variable.
-	 * @param max maximal number of items .
-	 * set name of this model, otherwise this argument is null.
+	 * @param isRoot true if it is a root element of X-component.
+	 * @param max maximal number of items.
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
 	 * @param sbi String builder where the code is generated for interface.
@@ -144,12 +146,12 @@ class XCGeneratorJSON extends XCGeneratorBase {
 				"&{typ}", typ,
 				"&{typ1}", typ.replace("List<", "ArrayList<")));
 		} else {
-			String x = isRoot ? "" : "_&{name}.";
+			String x = isRoot ? "" : "_&{name}==null?null:_&{name}.";
 			sb.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} get$&{name}() {return " + x +"get$value();}"+LN,
+"\tpublic &{typ} get$&{name}() {return "+ x +"get$value();}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -161,17 +163,17 @@ class XCGeneratorJSON extends XCGeneratorBase {
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.util.Date dateOf$&{name}(){"+
-"return " + x + "dateOf$value();}"+LN+
+"return "+x+"dateOf$value();}"+LN+
 (_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
 "\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.sql.Timestamp timestampOf$&{name}(){"+
-"return " + x + "timestampOf$value();}"+LN+
+"return "+x+"timestampOf$value();}"+LN+
 (_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.util.Calendar calendarOf$&{name}(){"+
-"return " + x + "calendarOf$value();}"+LN,
+"return "+x+"calendarOf$value();}"+LN,
 					"&{xmlName}", xmlName,
 					"&{d}" , d,
 					"&{name}", name));
@@ -182,17 +184,16 @@ class XCGeneratorJSON extends XCGeneratorBase {
 	/** Generate java code of setter method for child element classes.
 	 * @param typeName name typ (class etc).
 	 * @param name name of variable.
-	 * @param modelName if the node references other model of node
-	 * @param modelURI if the node references other model of node
-	 * @param modelXDPos if the node references other model of node
+	 * @param iType name of item variable type.
+	 * @param isRoot true if it is a root element of X-component.
+	 * @param max maximal number of items.
 	 * @param descr Description text.
 	 * @param sb String builder where the code is generated.
 	 * @param sbi String builder where the code is generated for interface.
-	 * @param nullchoice the command to set all variables of choice to null or
-	 * the empty string.
 	 */
 	private void genDirectSetter(final String typeName,
 		final String name,
+		final String iType,
 		final boolean isRoot,
 		final int max,
 		final String descr,
@@ -202,9 +203,10 @@ class XCGeneratorJSON extends XCGeneratorBase {
 		String d = descr;
 		if (max > 1) {
 			d += 's';
-			x = "if (x!=null) _&{name}.add(x);";
+			x = "if(x!=null)_&{name}.add(x);";
 		} else {
-			x = (isRoot ? "" : "_&{name}.") + "set$value(x);";
+			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "
+				+ iType + "();_&{name}.") + "set$value(x);";
 		}
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);

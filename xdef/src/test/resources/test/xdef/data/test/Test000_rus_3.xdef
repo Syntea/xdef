@@ -5,7 +5,7 @@
     Author     : Alexandrov
     Description: Test of cyrillic
     -->
-<xd:def xmlns:xd    = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd    = "http://www.syntea.cz/xdef/3.1"
         xmlns:нс    = "http://www.mail.ru/xdef"
          xd:name    = "test"
          xd:root    = "нс:элемент" >

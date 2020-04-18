@@ -129,7 +129,7 @@
                      <uid type  = "fixed 'attribute'"
                           value = "required string()" />
                      <employeeType type = "fixed 'attribute'"
-                                   value = "required tokens('A|N')" />
+                                   value = "required enum('A','N')" />
                      <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
                                      type = "required string()"
                                      value = "required string()" />

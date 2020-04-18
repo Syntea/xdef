@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
 <!--  date: 22.08.2003  -->
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
         xd:name  = "ZaznamPDN"
         xd:root  = "ZaznamPDN#ZaznamPDN" >
 
@@ -112,7 +112,7 @@
               ZnackaVozidla         = "optional string(); onTrue trString(4101,16)"
               TypVozidla            = "optional string(); onTrue trString(4101,30)"
               RokVyroby             = "optional rokVyroby(4108)"
-              PlatnostSTK           = "optional tokens('platn�|neplatn�|nezji�t�no'); onFalse valueErr(4105)"
+              PlatnostSTK           = "optional enum('platn�','neplatn�','nezji�t�no'); onFalse valueErr(4105)"
               MesicSTKDo            = "optional tMesicSTKDo(4107)"
               TypBrzd               = "optional ciselnik(4103,'DN_TypBrzd','TypBrzdPopis')"
               StavBrzd              = "optional ciselnik(4103,'DN_StavBrzd','StavBrzdPopis')"
