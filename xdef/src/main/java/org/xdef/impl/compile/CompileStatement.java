@@ -13,7 +13,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -3023,15 +3022,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
 		setSource(source, defName, null, XConstants.XD31, null);
-		if (lang == null) {
-			error(XDEF.XDEF410, "language");//'&{0}' expected
-			return;
-		}
 		String language;
-		try {
-			language = SUtils.getISO3Language(lang.getString());
-		} catch (Exception ex) {
-			error(lang, XDEF.XDEF410, "language");//'&{0}' expected
+		if (lang == null || (language = lang.getString().trim()).isEmpty()
+			|| !isJavaName(language)) {
+			error(XDEF.XDEF410, "language name");//'&{0}' expected
 			return;
 		}
 		Map<String,String> props = null;
