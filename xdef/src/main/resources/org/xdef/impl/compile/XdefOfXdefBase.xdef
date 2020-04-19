@@ -45,6 +45,7 @@
   type bnfGrammar XDScript.rule('BNFGrammar');
   type xcomponent XDScript.rule('XCComponent');
   type languageId XDScript.rule('LanguageId');
+  type javaIdentifier XDScript.rule('JavaIdentifier');
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
@@ -105,18 +106,17 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
 PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
   "$PI" |"$E" | "$NEGATIVEINFINITY" | "$POSITIVEINFINITY" | "null") $rule
 
-Identifier ::= BaseIdentifier - Keyword
-  /* Identifier ::= BaseIdentifier (':' BaseIdentifier)? ) - Keyword */
+Identifier ::= JavaIdentifier - Keyword
 
 LanguageId ::= [a-z] {2,3}
 
 YesNo ::= "yes" | "no"
 
-BaseIdentifier ::= ((Letter | "_" | "$")  (Letter | Digit | "_")* )
+JavaIdentifier ::= ((Letter | "_" | "$")  (Letter | Digit | "_" | "$")* )
 
 RawIdentifier ::= (Letter | "_")  (Letter | Digit | "_")*
 
-QualifiedIdentifier ::= BaseIdentifier ("." BaseIdentifier)+ | BaseIdentifier
+QualifiedIdentifier ::= JavaIdentifier ("." JavaIdentifier)+ | JavaIdentifier
 
 BooleanLiteral ::= ("true" | "false") $rule
 
