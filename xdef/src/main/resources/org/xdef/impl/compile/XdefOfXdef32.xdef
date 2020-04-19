@@ -136,7 +136,7 @@
       required xcomponent;
   </XD3.2:component>
 
-  <XD3.2:lexicon language = "languageId()" default = "optional yesNo()">
+  <XD3.2:lexicon language = "javaIdentifier" default = "optional yesNo">
     optional thesaurus();
   </XD3.2:lexicon>
 

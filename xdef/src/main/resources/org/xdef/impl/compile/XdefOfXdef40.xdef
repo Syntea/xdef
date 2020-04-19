@@ -136,7 +136,7 @@
       required xcomponent;
   </XD4.0:component>
 
-  <XD4.0:lexicon language = "languageId()" default = "optional yesNo()">
+  <XD4.0:lexicon language = "javaIdentifier" default = "optional yesNo">
     optional thesaurus();
   </XD4.0:lexicon>
 

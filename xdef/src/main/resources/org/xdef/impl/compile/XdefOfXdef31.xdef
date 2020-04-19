@@ -135,11 +135,11 @@
       required xcomponent;
   </XD3.1:component>
 
-  <XD3.1:thesaurus language = "languageId()" default = "optional yesNo()">
+  <XD3.1:thesaurus language = "javaIdentifier" default = "optional yesNo">
     optional thesaurus();
   </XD3.1:thesaurus>
 
-  <XD3.1:lexicon language = "languageId()" default = "optional yesNo()">
+  <XD3.1:lexicon language = "javaIdentifier" default = "optional yesNo">
     optional thesaurus();
   </XD3.1:lexicon>
 
