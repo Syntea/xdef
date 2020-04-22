@@ -210,7 +210,7 @@ public class XJson extends JsonToXml {
 			return new XOccurrence(min, max);
 		} else {
 			if (wasOccurs) {
-				error(XDEF.XDEF429);
+				error(XDEF.XDEF429);//After 'occurs' is expected the interval
 			}
 			return null;
 		}
@@ -378,7 +378,7 @@ public class XJson extends JsonToXml {
 				e = genJElement(parent, "map", map.getPosition());
 				ee = e;
 				if (map.size() > 2) {
-					ee = genXDElement(e, "sequence", map.getPosition());
+					ee = genXDElement(e, "mixed", map.getPosition());
 					e._childNodes.add(ee);
 				}
 				if (!eos()) {

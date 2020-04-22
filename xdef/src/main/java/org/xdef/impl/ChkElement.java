@@ -63,7 +63,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private String _attURI;
 	/** List of names of attributes. */
 	private HashSet<String> _attNames;
-	/** The Map to store the element XPath occurrence. */
+	/** The Map with child XPath occurrences. */
 	private final Map<String, XPosInfo> _xPosOccur;
 	/** Array of X-definitions. */
 	private XNode[] _defList;
@@ -109,11 +109,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		final XElement xelement,
 		boolean ignoreAll) {
 		super(element==null ? xelement.getName(): element.getNodeName(),parent);
-//		_sourceElem = _elemValue = null;  //Java makes it!
-//		_selector = null; //Java makes it!
+//		_sourceElem = _elemValue = null;  _selector = null; //Java makes it!
 //		Arrays.fill(_counters, 0); //Java makes it!
-//		_nextDefIndex = _numText = 0; //Java makes it!
-//		_nil = false; //Java makes it!
+//		_nextDefIndex = _numText = 0; _nil = false; //Java makes it!
 		_element = element;
 		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
 		if (xelement.isIgnore() || xelement.isIllegal()) {
@@ -121,15 +119,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		_xElement = xelement;
 		_xPosOccur = new LinkedHashMap<String, XPosInfo>();
-		StringBuilder sb =
-			new StringBuilder(_parent.getXPos()).append('/').append(_name);
+		_xPos = _parent.getXPos() + '/' + _name;
 		if (_parent.getParent() != null) {
-			int xPosCnt =
-				getElemXPos(((ChkElement)_parent)._xPosOccur, sb.toString());
-			sb.append('[').append(String.valueOf(xPosCnt)).append(']');
+			int xPosCnt = getElemXPos(((ChkElement)_parent)._xPosOccur, _xPos);
+			_xPos += '[' + String.valueOf(xPosCnt)+ ']';
 		}
 		_errCount=getReporter().getErrorCount()+_scp._reporter.getErrorCount();
-		_xPos = sb.toString();
 		_defList = _xElement._childNodes;
 		_actDefIndex = -1; //index of actual X-definition
 		_counters = new int[_defList.length + 1]; //one more for '*'
@@ -452,14 +447,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			_actDefIndex = -1;
 		} else {
+			/*xx*/
 			putTemporaryReport(_counters[index] == 0 ?
 				//Required element '&{0}' is missing
-				Report.error(XDEF.XDEF539,
-					xelem.getName() + "&{xdpos}" + xelem.getXDPosition()) :
+				Report.error(XDEF.XDEF539, xelem.getName()
+					+ getPosMod(xelem.getXDPosition(), null)) :
 				//Minimum occurrence not reached for &amp;{0}
 				Report.error(XDEF.XDEF555, xelem.getName() +
-					"&{xpath}" + _xPos + "/" + xelem.getName()
-					+ "&{xdpos}" + xelem.getXDPosition()));
+					getPosMod(xelem.getXDPosition(),
+						_xPos + "/" + xelem.getName())));
 		}
 		copyTemporaryReports();
 	}
@@ -794,10 +790,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				&& selector._prev._count >= selector._prev.minOccurs()) {
 				return required;
 			}
-			//Sequence "xd:mixed" has no required item
-			error(XDEF.XDEF520, "&{xdpos}"
-				+ _defList[selector._begIndex].getXDPosition()
-				+ "&{xpath}" + _xPos);
+			error(XDEF.XDEF520, //Sequence "xd:mixed" has no required item
+				getPosMod(_defList[selector._begIndex].getXDPosition(), _xPos));
 		}
 		return required;
 	}
@@ -906,7 +900,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			// do not report error if onAbsence
 			if (((XSelector) _defList[selector._begIndex])._onAbsence < 0) {
 				//Missing required items in a section
-				error(XDEF.XDEF541, "&{xdpos}(<xd:choice>)&{xpath}" +_xPos);
+				error(XDEF.XDEF541, getPosMod(getXDPosition()+"/#choice",_xPos));
 			}
 		}
 		return required;
@@ -1466,6 +1460,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			XDValue result = _scp.exec(xel._match, chkEl);
 			copyTemporaryReports();
 			if(result == null || !result.booleanValue()) {
+				String s = _xPos + '/' + chkEl._name;
+				XPosInfo x = _xPosOccur.get(s);
+				if (x != null) { // never should be null!
+					if (x.subCount() <= 0) { // decrease xpath counter
+						_xPosOccur.remove(s); // if it is the first remove it
+					}
+				}
 				return null;
 			}
 		}
@@ -1617,9 +1618,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!_parseResult.matches()) { //error
 			for (Report rep: _parseResult.getReporter()) {
 				String s = rep.getModification();
-				if (s == null) s = "";
-				rep.setModification(
-					s+"&{xpath}"+_xPos+"&{xdpos}"+xdata.getXDPosition());
+				if (s == null) {
+					s = "";
+				}
+				rep.setModification(s + getPosMod(xdata.getXDPosition(),_xPos));
 				if (putTempErrors) {
 					_scp.getTemporaryReporter().putReport(rep);
 				}
@@ -1664,7 +1666,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_nil) {// XML schema; xsi:nil & options nillable
 			error(XDEF.XDEF525, //Attribute not allowed
-				qname, "&{xpath}" + _xPos + "&{xdpos}" + getXDPosition());
+				qname, getPosMod(getXDPosition(), _xPos));
 			return false;
 		}
 		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
@@ -1702,8 +1704,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (xatt.minOccurs() != XOccurrence.IGNORE) {
 					if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
 						//Attribute not allowed
-						putTemporaryReport(Report.error(XDEF.XDEF525, qname,
-							"&{xpath}" + _xPos + "&{xdpos}" + getXDPosition()));
+						putTemporaryReport(Report.error(XDEF.XDEF525,
+							qname, getPosMod(getXDPosition(), _xPos)));
 					}
 					if (xatt._onIllegalAttr >= 0) {
 						exec(xatt._onIllegalAttr, (byte) 'A');
@@ -1950,8 +1952,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		debugXPos(XDDebug.ONILLEGALATTR);
 		if (_xElement._onIllegalAttr >= 0) {
 			//Attribute not allowed
-			putTemporaryReport(Report.error(XDEF.XDEF525, qname,
-				"&{xpath}" + _xPos + "&{xdpos}" + getXDPosition()));
+			putTemporaryReport(Report.error(XDEF.XDEF525,
+				qname, getPosMod(getXDPosition(), _xPos)));
 			_elemValue = _element;
 			_data = adata;
 			exec(_xElement._onIllegalAttr, (byte) 'E');
@@ -1973,8 +1975,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			copyTemporaryReports();
 		} else {
 			//Attribute not allowed
-			error(XDEF.XDEF525, qname,
-				"&{xpath}" + _xPos + "&{xdpos}" + getXDPosition());
+			error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos));
 			if (nsURI != null) {
 				_element.removeAttributeNS(nsURI, qname);
 			} else {
@@ -2711,15 +2712,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 					if (_numText < xatt.minOccurs()) {
 						if (!_nil || _numText > 0) {
-							//Missing required text
-							error(XDEF.XDEF527,"&{xdpos}"+xatt.getXDPosition());
+							error(XDEF.XDEF527, //Missing required text
+								getPosMod(xatt.getXDPosition(), null));
 						}
 					}
 				}
 				if (_numText > xatt.maxOccurs() && !xatt.isIllegal()) {
 					//Maximum number of text nodes declared as "xd:text"
 					// was exceeded
-					error(XDEF.XDEF533, "&{xdpos}" + xatt.getXDPosition());
+					error(XDEF.XDEF533, getPosMod(xatt.getXDPosition(), null));
 				}
 			}
 			if ((xatt = _xElement.getDefAttr("$textcontent", -1)) != null) {
@@ -2787,8 +2788,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							}
 						}
 					} else if (_numText < xatt.minOccurs() && !_nil) {
-						//Missing required text
-						error(XDEF.XDEF527, "&{xdpos}" + xatt.getXDPosition());
+						error(XDEF.XDEF527,//Missing required text
+							getPosMod(xatt.getXDPosition(), null));
 					}
 				}
 			}
@@ -2843,7 +2844,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_chkChildNodes = null;
 			_xElement = null;
 			_element = null;
-			_xPosOccur.clear();
 		}
 		if (_variables != null) {
 			for(int i = 0; i < _variables.length; i++) {
@@ -2858,6 +2858,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			_variables = null;
 		}
+		_xPosOccur.clear();
 		_defList = new XNode[0];
 		_counters = new int[0];
 		_actDefIndex = -1;
@@ -3348,11 +3349,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		 */
 		XPosInfo() {_counter = 1;}
 
-		/** Another occurrence of this XPath in the input XML source.
-		 * @return total number of this XPath occurrences in the input
-		 *	XML source.
+		/** Increase counter of occurrence of XPath .
+		 * @return increased occurrence of this XPath .
 		 */
 		int addCount() {return ++_counter;}
+
+		/** Decrease counter of occurrence of XPath.
+		 * @return decreased occurrence of this XPath .
+		 */
+		int subCount() {return --_counter;}
 	}
 
 	/** Mark unique set with this instance of ChkElement.

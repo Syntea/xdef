@@ -378,16 +378,15 @@ public final class Test002 extends XDTester {
 			parse(xp, "", xml, reporter);
 			if (!reporter.errorWarnings()) {
 				fail("No errors reported!");
-			} else if ((rep = reporter.getReport()) == null ||
-				rep.getModification().indexOf(
-				"&{0}p:Header&{xpath}/q:Envelope") < 0 ||
-				(rep = reporter.getReport()) == null ||
-				rep.getModification().indexOf(
-				"&{xpath}/q:Envelope/q:Body") < 0 ||
-				(rep = reporter.getReport()) == null ||
-				rep.getModification().indexOf(
-				"&{0}q:Ping&{xpath}/q:Envelope/q:Body") < 0 ||
-				reporter.getReport() != null) {
+			} else if ((rep = reporter.getReport()) == null
+				|| rep.getModification().indexOf("&{0}p:Header") < 0
+				|| rep.getModification().indexOf("&{xpath}/q:Envelope") < 0
+				|| (rep = reporter.getReport()) == null
+				|| rep.getModification().indexOf("&{xpath}/q:Envelope/q:Body")<0
+				|| (rep = reporter.getReport()) == null
+				|| rep.getModification().indexOf("&{0}q:Ping") < 0
+				|| rep.getModification().indexOf("&{xpath}/q:Envelope/q:Body")<0
+				|| reporter.getReport() != null) {
 				reporter.reset();
 				fail(reporter.printToString());
 			}

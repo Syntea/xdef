@@ -53,6 +53,8 @@ import org.xdef.XDContainer;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefLocale;
 import java.util.Locale;
+import org.xdef.model.XMData;
+import org.xdef.model.XMNode;
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
@@ -787,22 +789,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param report report to be added to the temporary reporter.
 	 */
 	public final void putTemporaryReport(Report report) {
-		String mod = report.getModification();
-		if (mod == null) {
-			mod = "";
-		}
-		if (mod.indexOf("&{xpath}") < 0) {
-			mod += "&{xpath}" + getXPos();
-		}
-		if (mod.indexOf("&{xdpos}") < 0) {
-			String s = getXDPosition();
-			if (!s.isEmpty()) {
-				mod += "&{xdpos}" + s;
-			}
-		}
-		if (!mod.equals(report.getModification())) {
-			report.setModification(mod);
-		}
+		ensurePosInfo(report);
 		_scp.getTemporaryReporter().putReport(report);
 	}
 
@@ -932,22 +919,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param report The report.
 	 */
 	public final void putReport(final Report report) {
-		String mod = report.getModification();
-		if (mod == null) {
-			mod = "";
-		}
-		if (mod.indexOf("&{xpath}") < 0) {
-			mod += "&{xpath}" + getXPos();
-		}
-		if (mod.indexOf("&{xdpos}") < 0) {
-			String s = getXDPosition();
-			if (!s.isEmpty()) {
-				mod += "&{xdpos}" + getXDPosition();
-			}
-		}
-		if (!mod.equals(report.getModification())) {
-			report.setModification(mod);
-		}
+		ensurePosInfo(report);
 		_rootChkDocument._reporter.putReport(report);
 	}
 
@@ -991,4 +963,267 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public XDParseResult getParseResult() {return _parseResult;}
 
+////////////////////////////////////////////////////////////////////////////////
+
+	public final void ensurePosInfo(final Report report) {
+		String mod = report.getModification();
+		String s = getPosMod(getXDPosition(), getXPos());
+		if (mod == null) {
+			mod = s;
+		} else {
+			int ndx = s.indexOf("&{xpath}");
+			if (mod.indexOf("&{xdpos}") < 0) {
+				mod += s.substring(0, ndx);
+			}
+			if (mod.indexOf("&{xpath}") < 0) {
+				mod += s.substring(ndx);
+			}
+			if (mod.indexOf("&{line}") < 0) {
+				SPosition t = getSPosition();
+				if (t != null) {
+					mod += "&{line}" + t.getLineNumber();
+					mod += "&{column}" + t.getColumnNumber();
+					if (t.getSysId() != null && !t.getSysId().isEmpty()) {
+						mod += "&{sysId}" + t.getSysId();
+					}
+				}
+			}
+		}
+		if (!mod.equals(report.getModification())) {
+			report.setModification(mod);
+		}
+	}
+
+	private static String genJinfo(final XMNode x) {
+		XMData key = ((XMElement)x).getAttr("key");
+		if (key != null) {
+			return ".['"+key.getFixedValue().toString() + "']";
+		}
+		return "";
+	}
+
+	/** Get X-position information; if it is JSON, then get modified JSON
+	 * X-position.
+	 * @param base the XElement with r root model.
+	 * @param xpos X-position of model.
+	 * @return string with modified X-position.
+	 */
+	private static String xposToJpos(XMElement base, final String xpos) {
+		XMNode[] xx = base.getChildNodeModels();
+		int ndx = 0, ndx1;
+		String result =  xpos.substring(0, xpos.indexOf('/')) + "/$";
+		boolean wasArray = false;
+		String arrayInfo = "";
+		while ((ndx1 = xpos.indexOf('/', ndx)) >= 0) {
+			String s = xpos.substring(ndx, ndx1);
+			int k = s.indexOf(':');
+			if (k >= 0) {
+				s = s.substring(k + 1);
+			}
+			k = 0;
+			if (s.endsWith("]")) {
+				int i = s.indexOf('[');
+				if (i > 0) {
+					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
+					if (k > 0) {
+						k--;
+					}
+				}
+			}
+			if (wasArray) {
+				arrayInfo = "[" + k + "]";
+				wasArray = false;
+			}
+			if (s.startsWith("array")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("array".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							wasArray = true;
+							break;
+						}
+						j++;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpos.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("map")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("map".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							break;
+						}
+						j++;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpos.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("item")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("item".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							return result;
+						}
+						j++;
+					}
+				}
+				System.out.println("NOT FOUND: " + xpos.substring(ndx));
+				return result;
+			}
+			ndx = ndx1 + 1;
+		}
+		return result;
+	}
+
+	/** Get X-position and xpath information. If it is JSON, then create
+	 * modified JSON path.
+	 * @param xpos X-position of model.
+	 * @param xpath Xpath of data (may be null).
+	 * @return array with two items - the first one is X-position and the
+	 * second one is Xpath.
+	 */
+	private String[] getPosInfo(final String xpos, final String xpath) {
+		int ndx = xpos.indexOf('#');
+		if (ndx < 0) {
+			return new String[]{xpos, xpath};
+		}
+		XMDefinition xd = getXDPool().getXMDefinition(xpos.substring(0, ndx));
+		int ndx1 = xpos.indexOf('/');
+		if (ndx1 < 0) {
+			return new String[]{xpos, xpath};
+		}
+		XMElement base = xd.getModel(null, xpos.substring(ndx + 1, ndx1));
+		if (base == null) {
+			return new String[]{xpos, xpath};
+		}
+		if (base.getJsonMode() == 0) {
+			return new String[]{xpos, xpath};
+		}
+		String jpos = xposToJpos(base, xpos);
+		if (xpath == null) {
+			return new String[]{jpos, null};
+		}
+		ndx = 0;
+		XMNode[] xx = base.getChildNodeModels();
+		String result = "$";
+		boolean wasArray = false;
+		String arrayInfo = "";
+		while ((ndx1 = xpath.indexOf('/', ndx)) >= 0) {
+			String s = xpath.substring(ndx, ndx1);
+			int k = s.indexOf(':');
+			if (k >= 0) {
+				s = s.substring(k + 1);
+			}
+			k = 0;
+			if (s.endsWith("]")) {
+				int i = s.indexOf('[');
+				if (i > 0) {
+					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
+					k--;
+				}
+			}
+			if (wasArray) {
+				arrayInfo = "[" + k + "]";
+				wasArray = false;
+			}
+			if (s.startsWith("array")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("array".equals(x.getLocalName())) {
+						result += genJinfo(x) + arrayInfo;
+						arrayInfo = "";
+						xx = ((XMElement)x).getChildNodeModels();
+						wasArray = true;
+						break;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpath.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("map")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("map".equals(x.getLocalName())) {
+						result += genJinfo(x) + arrayInfo;
+						arrayInfo = "";
+						xx = ((XMElement)x).getChildNodeModels();
+						break;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpath.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("item")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("item".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							return new String[]{jpos, result};
+						}
+						j++;
+					}
+				}
+				System.out.println("NOT FOUND: " + xpath.substring(ndx));
+				return new String[]{jpos, result};
+			}
+			ndx = ndx1 + 1;
+		}
+		return new String[]{jpos, result};
+	}
+
+	/** Get XPosition, XPath and source position for modification information
+	 * in message reporting.
+	 * @param xpos string with X-position.
+	 * @param xpath XPath of data (may be null).
+	 * @return modification information (convert to JSON format if JSON).
+	 */
+	public final String getPosMod(final String xpos, final String xpath) {
+		String[] x = getPosInfo(xpos, xpath);
+		String result = "";
+		if (x[0] != null) {
+			result += "&{xdpos}" + x[0];
+		}
+		if (x[1] != null) {
+			result += "&{xpath}" + x[1];
+		}
+		SPosition t = getSPosition();
+		if (t != null) {
+			result += "&{line}" + t.getLineNumber();
+			result += "&{column}" + t.getColumnNumber();
+			if (t.getSysId() != null && !t.getSysId().isEmpty()) {
+				result += "&{sysId}" + t.getSysId();
+			}
+		}
+		return result;
+	}
 }
