@@ -178,6 +178,197 @@ public class MyTest_0 extends XDTester {
 		return genXComponent(xp, fdir);
 	}
 
+	private static String xposToJpos(XMElement base,
+		final String xpos) {
+//		System.out.println(xpos);
+//		System.out.println(xp.findModel(xpos));
+//		System.out.println(base);
+		XMNode[] xx = base.getChildNodeModels();
+		int ndx = 0, ndx1;
+		String result =  xpos.substring(0, xpos.indexOf('/')) + "/$";
+		boolean wasArray = false;
+		String arrayInfo = "";
+		while ((ndx1 = xpos.indexOf('/', ndx)) >= 0) {
+			String s = xpos.substring(ndx, ndx1);
+			int k = s.indexOf(':');
+			if (k >= 0) {
+				s = s.substring(k + 1);
+			}
+			k = 0;
+			if (s.endsWith("]")) {
+				int i = s.indexOf('[');
+				if (i > 0) {
+					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
+					if (k > 0) {
+						k--;
+					}
+				}
+			}
+			if (wasArray) {
+				arrayInfo = "[" + k + "]";
+				wasArray = false;
+			}
+			if (s.startsWith("array")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("array".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							wasArray = true;
+							break;
+						}
+						j++;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpos.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("map")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("map".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							break;
+						}
+						j++;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpos.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("item")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("item".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							return result;
+						}
+						j++;
+					}
+				}
+				System.out.println("NOT FOUND: " + xpos.substring(ndx));
+				return result;
+			}
+			ndx = ndx1 + 1;
+		}
+		return result;
+	}
+
+	private static String genJinfo(final XMNode x) {
+		XMData key = ((XMElement)x).getAttr("key");
+		if (key != null) {
+			return ".['"+key.getFixedValue().toString() + "']";
+		}
+		return "";
+	}
+	
+	private static String[] xpathToJpath(final XDPool xp,
+		final String xpos,
+		final String xpath){
+		int ndx = xpos.indexOf('#');
+		XMDefinition xd = xp.getXMDefinition(xpos.substring(0, ndx));
+		int ndx1 = xpos.indexOf('/');
+		XMElement base = xd.getModel(null, xpos.substring(ndx + 1, ndx1));
+		String jpos = xposToJpos(base, xpos);
+		ndx = 0;
+		XMNode[] xx = base.getChildNodeModels();
+		String result = "$";
+		boolean wasArray = false;
+		String arrayInfo = "";
+		while ((ndx1 = xpath.indexOf('/', ndx)) >= 0) {
+			String s = xpath.substring(ndx, ndx1);
+			int k = s.indexOf(':');
+			if (k >= 0) {
+				s = s.substring(k + 1);
+			}
+			k = 0;
+			if (s.endsWith("]")) {
+				int i = s.indexOf('[');
+				if (i > 0) {
+					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
+					k--;
+				}
+			}
+			if (wasArray) {
+				arrayInfo = "[" + k + "]";
+				wasArray = false;
+			}
+			if (s.startsWith("array")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("array".equals(x.getLocalName())) {
+						result += genJinfo(x) + arrayInfo;
+						arrayInfo = "";
+						xx = ((XMElement)x).getChildNodeModels();
+						wasArray = true;
+						break;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpath.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("map")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("map".equals(x.getLocalName())) {
+						result += genJinfo(x) + arrayInfo;
+						arrayInfo = "";
+						xx = ((XMElement)x).getChildNodeModels();
+						break;
+					}
+				}
+				if (xx==null) {
+					System.out.println("NOT FOUND: "+xpath.substring(ndx));
+					break;
+				}
+			} else if (s.startsWith("item")) {
+				XMNode[] yy = xx;
+				xx = null;
+				for (int i=0, j=0; i < yy.length; i++) {
+					XMNode x = yy[i];
+					if ("item".equals(x.getLocalName())) {
+						if (j == k) {
+							result += genJinfo(x) + arrayInfo;
+							arrayInfo = "";
+							return new String[]{jpos, result};
+						}
+						j++;
+					}
+				}
+				System.out.println("NOT FOUND: " + xpath.substring(ndx));
+				return new String[]{jpos, result};
+			}
+			ndx = ndx1 + 1;
+		}
+		return new String[]{jpos, result};
+	}
+
+	private static void printJpos(XDPool xp, String xpos, String xpath) {
+		System.out.print(xpath + "; ");
+		String[] x = xpathToJpath(xp, xpos, xpath);
+		System.out.println(x[0] + "; " + x[1]);
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -249,6 +440,88 @@ public class MyTest_0 extends XDTester {
 //			xp = XDFactory.compileXD(null, xdef);
 //		} catch (Exception ex) {fail(ex);}
 //if(true)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
+"<xd:json name='A'>\n"+
+"{\n" +
+"  \"firstName\": \"string; /**/finally outln(getXPos());/**/\",\n" +
+"  \"lastName\" : \"string; /**/finally outln(getXPos());/**/\",\n" +
+"  \"age\"      : \"int; /**/finally outln(getXPos());/**/\",\n" +
+"  \"address\"  : {\n" +
+"    \"streetAddress\": \"string; /**/finally outln(getXPos());/**/\",\n" +
+"    \"city\"         : \"string; /**/finally outln(getXpos());/**/\",\n" +
+"    \"postalCode\"   : \"string; /**/finally outln(getXpos());/**/\"\n" +
+"  },\n" +
+"  \"phoneNumbers\": [\n" +
+"    {\n" +
+"      $script: \"occurs +\",\n" +
+"      \"type\"  : \"string; /**/finally outln(getXPos());/**/\",\n" +
+"      \"number\": \"string; /**/finally outln(getXpos());/**/\"\n" +
+"    }\n" +
+"  ]\n" +
+"}\n" +
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class mytest.component.A0 %link #A;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//firstName
+printJpos(xp, "#A/js:map/$mixed/js:item/@value", "/map/item[1]/@value"); 
+//lastName
+printJpos(xp, "#A/js:map/$mixed/js:item[2]/@value", "/map/item[2]/@value"); 
+//age
+printJpos(xp, "#A/js:map/$mixed/js:item[3]/@value", "/map/item[3]/@value");
+//streetAddress
+printJpos(xp, "#A/js:map/$mixed/js:map/$mixed/js:item/@value",
+	"/map/map[1]/item[1]/@value");
+//city
+printJpos(xp, "#A/js:map/$mixed/js:map/$mixed/js:item[2]/@value",
+	"/map/map[1]/item[2]/@value");
+//postalCode
+printJpos(xp, "#A/js:map/$mixed/js:map/$mixed/js:item[3]/@value",
+	"/map/map[1]/item[3]/@value");
+//type [1]
+printJpos(xp, "#A/js:map/$mixed/js:array/js:map/js:item/@value",
+	"/map/array[1]/map[1]/item[1]/@value");
+//number [1]
+printJpos(xp, "#A/js:map/$mixed/js:array/js:map/js:item[2]/@value",
+	"/map/array[1]/map[1]/item[2]/@value");
+//type [2]
+printJpos(xp, "#A/js:map/$mixed/js:array/js:map/js:item/@value",
+	"/map/array[1]/map[2]/item[1]/@value");
+//number [2]
+printJpos(xp, "#A/js:map/$mixed/js:array/js:map/js:item[2]/@value",
+	"/map/array[1]/map[2]/item[2]/@value");
+			json =
+"{\n" +
+"  \"firstName\": \"John\",\n" +
+"  \"lastName\" : \"doe\",\n" +
+"  \"age\"      : 26,\n" +
+"  \"address\"  : {\n" +
+"    \"streetAddress\": \"naist street\",\n" +
+"    \"city\"         : \"Nara\",\n" +
+"    \"postalCode\"   : \"630-0192\"\n" +
+"  },\n" +
+"  \"phoneNumbers\": [\n" +
+"    {\n" +
+"      \"type\"  : \"iPhone\",\n" +
+"      \"number\": \"0123-4567-8888\"\n" +
+"    },\n" +
+"    {\n" +
+"      \"type\"  : \"home\",\n" +
+"      \"number\": \"0123-4567-8910\"\n" +
+"    }\n" +
+"  ]\n" +
+"}";				
+			j = xp.createXDDocument().jparse(json, reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+				JsonUtil.toJsonString(j, true));
+//System.out.println(JsonUtil.toJsonString(j, true));
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
 		try {//test binding of XPath variables with XDefinition variables
 /*xx*
 			xdef = //integer variable x without leading "$"

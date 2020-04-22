@@ -3151,48 +3151,10 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	}
 
 	private static Report updateReport(final Report rep, final ChkNode chkNode){
-		if (rep != null) {
-			String s = rep.getModification();
-			if (s == null) {
-				s = "";
-			}
-			String m = updateModification(s, chkNode);
-			if (!s.equals(m)) {
-				rep.setModification(s + m);
-			}
+		if (rep != null && chkNode != null) {
+			chkNode.ensurePosInfo(rep);
 		}
 		return rep;
-	}
-
-	private static String updateModification(final String s,
-		final ChkNode chkNode) {
-		if (chkNode == null) {
-			return s;
-		}
-		String m = "";
-		if (s.indexOf("&{xdpos}") < 0) {
-			String t = chkNode.getXDPosition();
-			if (t != null && !t.isEmpty()) {
-				m = "&{xdpos}" + t;
-			}
-		}
-		if (s.indexOf("&{xpath}") < 0) {
-			String t = chkNode.getXPos();
-			if (t != null && !t.isEmpty()) {
-				m += "&{xpath}" + t;
-			}
-		}
-		if (s.indexOf("&{line}") < 0) {
-			SPosition t = chkNode.getSPosition();
-			if (t != null) {
-				m += "&{line}" + t.getLineNumber();
-				m += "&{column}" + t.getColumnNumber();
-				if (t.getSysId() != null && !t.getSysId().isEmpty()) {
-					m += "&{sysId}" + t.getSysId();
-				}
-			}
-		}
-		return s + m;
 	}
 
 	/** Generate script exception.
