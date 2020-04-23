@@ -73,7 +73,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			p.isSpaces();
 		}
 		if (!p.eos()) {
-			//After the item '&{0}' follows an illegal charactere&{1}{: }
+			//After the item '&{0}' follows an illegal character&{1}{: }
 			p.errorWithString(XDEF.XDEF804, parserName());
 		}
 		if (p.matches()) {
@@ -99,7 +99,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				p.isSpaces();
 			}
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				//After the item '&{0}' follows an illegal character&{1}{: }
 				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 			finalCheck(xnode, p);
