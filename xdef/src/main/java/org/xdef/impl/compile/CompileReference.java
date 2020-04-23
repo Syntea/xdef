@@ -115,11 +115,12 @@ final class CompileReference extends XNode {
 				throw new SRuntimeException(XDEF.XDEF309,//Internal error:&{0}
 					"Incorrect reference node: " + parent.getKind() +
 					": " + getName() +
-					(position != null ?
+					(position != null && position.getLineNumber() > 0 ?
 					"&{line}" + position.getLineNumber()
-					+ "&{column}" + position.getColumnNumber()
-					+ (position.getSystemId() == null
-						? "" : "&{sysId}" + position.getSystemId()) : ""));
+					+ "&{column}" + position.getColumnNumber() : "")
+					+ (position.getSystemId()==null
+						&& !position.getSystemId().isEmpty()
+						? "&{sysId}" + position.getSystemId() : ""));
 		}
 		int ndx = refName.lastIndexOf('#');
 		_refXdefName = ndx > 0 ?
