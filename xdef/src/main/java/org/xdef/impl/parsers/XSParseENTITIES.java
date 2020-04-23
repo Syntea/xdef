@@ -128,7 +128,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 		}
 		if (isFinal) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal charactere&{1}{: }
+				//After the item '&{0}' follows an illegal character&{1}{: }
 				p.errorWithString(XDEF.XDEF804, parserName());
 			} else {
 				finalCheck(xnode, p);
