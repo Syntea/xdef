@@ -241,9 +241,10 @@ class PreReaderJSON implements PreReader {
 		private String genPosMod() {
 			if (_p instanceof StringParser) {
 				StringParser p = (StringParser) _p;
-				return "&{line}" + p.getLineNumber()
-					+ "&{column}" + p.getColumnNumber()
-					+ "&{sysId}" + p.getSysId();
+				return (p.getLineNumber() > 0 ? "&{line}" + p.getLineNumber()
+					+ "&{column}" + p.getColumnNumber() : "")
+					+ (p.getSysId() != null && !p.getSysId().isEmpty() 
+					? "&{sysId}" + p.getSysId(): "");
 			} else {
 				return null;
 			}

@@ -980,7 +980,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			}
 			if (mod.indexOf("&{line}") < 0) {
 				SPosition t = getSPosition();
-				if (t != null) {
+				if (t != null && t.getLineNumber() > 0) {
 					mod += "&{line}" + t.getLineNumber();
 					mod += "&{column}" + t.getColumnNumber();
 					if (t.getSysId() != null && !t.getSysId().isEmpty()) {
@@ -1218,8 +1218,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		}
 		SPosition t = getSPosition();
 		if (t != null) {
-			result += "&{line}" + t.getLineNumber();
-			result += "&{column}" + t.getColumnNumber();
+			if (t.getLineNumber() > 0) {
+				result += "&{line}" + t.getLineNumber();
+				result += "&{column}" + t.getColumnNumber();
+			}
 			if (t.getSysId() != null && !t.getSysId().isEmpty()) {
 				result += "&{sysId}" + t.getSysId();
 			}
