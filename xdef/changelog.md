@@ -1,11 +1,25 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 40.0.0, release-date 2020-03-17
-* corrected invoking methods in referred types.
-* JSON implementation.
-* xd:def may contain attribute xd:importLocal (the list of X-definition names
-  from where are imported local declarations).
+* new implementation of processing of JSON data.
+* xd:def may now contain attribute xd:importLocal (the list of X-definition
+  names from where are imported local declarations).
 * xd:root may refer also to named xd:choice.
+* corrected bug in error reporting (in some special cases was incorrect xpath).
+* corrected bug in invoking methods from referred types.
+* to the class org.xdef.XDFactory are implemented methods writeXDPool
+  and readXDPool.
+* in X-script is implemented method getCreateContextElement() which in
+  the construction mode returns the actual element from context, otherwise it
+  returns null.
+* the default scope of accessibility of items from the xd:declaration declared
+  as child of xd:def is now local (in previous versions it was global).
+* to xd:def element is no possible to write the attribute "importLocal". The
+  value of this attribute is the comma separated list of names of X-definitions
+  from which are imported items from local xd:declarations (the "noname"
+  X-definition is specified by the character "#").
+* NOTE that the implementation of JSON is preliminary, it may be changed in
+  future versions.
 
 # Version 32.5.6, release-date 2020-02-15
 * implemented possibility of processing of JSON data in X-definition. This
