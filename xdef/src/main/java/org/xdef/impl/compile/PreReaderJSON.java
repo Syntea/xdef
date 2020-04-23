@@ -243,7 +243,7 @@ class PreReaderJSON implements PreReader {
 				StringParser p = (StringParser) _p;
 				return (p.getLineNumber() > 0 ? "&{line}" + p.getLineNumber()
 					+ "&{column}" + p.getColumnNumber() : "")
-					+ (p.getSysId() != null && !p.getSysId().isEmpty() 
+					+ (p.getSysId() != null && !p.getSysId().isEmpty()
 					? "&{sysId}" + p.getSysId(): "");
 			} else {
 				return null;

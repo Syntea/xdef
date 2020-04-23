@@ -1002,99 +1002,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return "";
 	}
 
-	/** Get X-position information; if it is JSON, then get modified JSON
-	 * X-position.
-	 * @param base the XElement with r root model.
-	 * @param xpos X-position of model.
-	 * @return string with modified X-position.
-	 */
-	private static String xposToJpos(XMElement base, final String xpos) {
-		XMNode[] xx = base.getChildNodeModels();
-		int ndx = 0, ndx1;
-		String result =  xpos.substring(0, xpos.indexOf('/')) + "/$";
-		boolean wasArray = false;
-		String arrayInfo = "";
-		while ((ndx1 = xpos.indexOf('/', ndx)) >= 0) {
-			String s = xpos.substring(ndx, ndx1);
-			int k = s.indexOf(':');
-			if (k >= 0) {
-				s = s.substring(k + 1);
-			}
-			k = 0;
-			if (s.endsWith("]")) {
-				int i = s.indexOf('[');
-				if (i > 0) {
-					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
-					if (k > 0) {
-						k--;
-					}
-				}
-			}
-			if (wasArray) {
-				arrayInfo = "[" + k + "]";
-				wasArray = false;
-			}
-			if (s.startsWith("array")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
-					if ("array".equals(x.getLocalName())) {
-						if (j == k) {
-							result += genJinfo(x) + arrayInfo;
-							arrayInfo = "";
-							xx = ((XMElement)x).getChildNodeModels();
-							wasArray = true;
-							break;
-						}
-						j++;
-					}
-				}
-				if (xx==null) {
-					System.out.println("NOT FOUND: "+xpos.substring(ndx));
-					break;
-				}
-			} else if (s.startsWith("map")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
-					if ("map".equals(x.getLocalName())) {
-						if (j == k) {
-							result += genJinfo(x) + arrayInfo;
-							arrayInfo = "";
-							xx = ((XMElement)x).getChildNodeModels();
-							break;
-						}
-						j++;
-					}
-				}
-				if (xx==null) {
-					System.out.println("NOT FOUND: "+xpos.substring(ndx));
-					break;
-				}
-			} else if (s.startsWith("item")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
-					if ("item".equals(x.getLocalName())) {
-						if (j == k) {
-							result += genJinfo(x) + arrayInfo;
-							arrayInfo = "";
-							return result;
-						}
-						j++;
-					}
-				}
-				System.out.println("NOT FOUND: " + xpos.substring(ndx));
-				return result;
-			}
-			ndx = ndx1 + 1;
-		}
-		return result;
-	}
-
 	/** Get X-position and xpath information. If it is JSON, then create
 	 * modified JSON path.
 	 * @param xpos X-position of model.
@@ -1103,47 +1010,75 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * second one is Xpath.
 	 */
 	private String[] getPosInfo(final String xpos, final String xpath) {
-		int ndx = xpos.indexOf('#');
-		if (ndx < 0) {
-			return new String[]{xpos, xpath};
+		String[] result = new String[]{xpos, xpath};
+		int ndx, ndx1, ndy, ndy1;
+		if ((ndx = xpos.indexOf('#')) < 0) {
+			return result;
+		}
+		if ((ndx1 = xpos.indexOf('/')) < 0) {
+			return result;
 		}
 		XMDefinition xd = getXDPool().getXMDefinition(xpos.substring(0, ndx));
-		int ndx1 = xpos.indexOf('/');
-		if (ndx1 < 0) {
-			return new String[]{xpos, xpath};
+		if ((ndx1 = xpos.indexOf('/')) < 0) {
+			return result;
 		}
 		XMElement base = xd.getModel(null, xpos.substring(ndx + 1, ndx1));
 		if (base == null) {
-			return new String[]{xpos, xpath};
+			return result;
 		}
-		if (base.getJsonMode() == 0) {
-			return new String[]{xpos, xpath};
-		}
-		String jpos = xposToJpos(base, xpos);
-		if (xpath == null) {
-			return new String[]{jpos, null};
-		}
-		ndx = 0;
 		XMNode[] xx = base.getChildNodeModels();
-		String result = "$";
-		boolean wasArray = false;
-		String arrayInfo = "";
-		while ((ndx1 = xpath.indexOf('/', ndx)) >= 0) {
-			String s = xpath.substring(ndx, ndx1);
-			int k = s.indexOf(':');
-			if (k >= 0) {
-				s = s.substring(k + 1);
+		if (xx == null || base.getJsonMode() == 0) {
+			return result;
+		}
+		ndx = ndx1 + 1;
+		String xdpath =  xpos.substring(0, xpos.indexOf('/')) + "/$";
+		String jpath = "";
+		if (xpath == null) {
+			ndy = 0;
+		} else {
+			jpath =  xpath.substring(0, xpath.indexOf('/')) + "$";
+			if ((ndy = xpath.indexOf('/')) >= 0) {
+				ndy = ndy + 1;
 			}
-			k = 0;
+		}
+		boolean wasArray = false;
+		String arrayInfo1 = "";
+		String arrayInfo2 = "";
+		while ((ndx1 = xpos.indexOf('/', ndx)) >= 0
+			&& (ndy1 = xpath != null ? xpath.indexOf('/', ndy) : -1) >= -1) {
+			String s = xpos.substring(ndx, ndx1);
+			String t = xpath!=null && ndy1>=0 ? xpath.substring(ndy, ndy1) : "";
+			int m = s.indexOf(':');
+			if (m >= 0) {
+				s = s.substring(m + 1);
+			}
+			m = 0;
 			if (s.endsWith("]")) {
 				int i = s.indexOf('[');
 				if (i > 0) {
-					k = Integer.parseInt(s.substring(i + 1, s.length() -1));
-					k--;
+					m = Integer.parseInt(s.substring(i + 1, s.length() -1));
+					if (m > 0) {
+						m--;
+					}
+				}
+			}
+			int n = t.indexOf(':');
+			if (n >= 0) {
+				t = t.substring(n + 1);
+			}
+			n = 0;
+			if (t.endsWith("]")) {
+				int i = t.indexOf('[');
+				if (i > 0) {
+					n = Integer.parseInt(t.substring(i + 1, t.length() -1));
+					if (n > 0) {
+						n--;
+					}
 				}
 			}
 			if (wasArray) {
-				arrayInfo = "[" + k + "]";
+				arrayInfo1 = "[" + m + "]";
+				arrayInfo2 = !t.isEmpty() ? "[" + n + "]" : "";
 				wasArray = false;
 			}
 			if (s.startsWith("array")) {
@@ -1152,16 +1087,19 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				for (int i=0, j=0; i < yy.length; i++) {
 					XMNode x = yy[i];
 					if ("array".equals(x.getLocalName())) {
-						result += genJinfo(x) + arrayInfo;
-						arrayInfo = "";
-						xx = ((XMElement)x).getChildNodeModels();
-						wasArray = true;
-						break;
+						if (j == m) {
+							xdpath += genJinfo(x) + arrayInfo1;
+							jpath += !t.isEmpty() ? genJinfo(x)+arrayInfo2 : "";
+							arrayInfo1 = arrayInfo2 = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							wasArray = true;
+							break;
+						}
+						j++;
 					}
 				}
 				if (xx==null) {
-					System.out.println("NOT FOUND: "+xpath.substring(ndx));
-					break;
+					return result;
 				}
 			} else if (s.startsWith("map")) {
 				XMNode[] yy = xx;
@@ -1169,15 +1107,18 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				for (int i=0, j=0; i < yy.length; i++) {
 					XMNode x = yy[i];
 					if ("map".equals(x.getLocalName())) {
-						result += genJinfo(x) + arrayInfo;
-						arrayInfo = "";
-						xx = ((XMElement)x).getChildNodeModels();
-						break;
+						if (j == m) {
+							xdpath += genJinfo(x) + arrayInfo1;
+							jpath += !t.isEmpty() ? genJinfo(x)+arrayInfo2 : "";
+							arrayInfo1 = arrayInfo2 = "";
+							xx = ((XMElement)x).getChildNodeModels();
+							break;
+						}
+						j++;
 					}
 				}
 				if (xx==null) {
-					System.out.println("NOT FOUND: "+xpath.substring(ndx));
-					break;
+					return result;
 				}
 			} else if (s.startsWith("item")) {
 				XMNode[] yy = xx;
@@ -1185,20 +1126,23 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				for (int i=0, j=0; i < yy.length; i++) {
 					XMNode x = yy[i];
 					if ("item".equals(x.getLocalName())) {
-						if (j == k) {
-							result += genJinfo(x) + arrayInfo;
-							arrayInfo = "";
-							return new String[]{jpos, result};
+						if (j == m) {
+							xdpath += genJinfo(x) + arrayInfo1;
+							jpath += !t.isEmpty() ? genJinfo(x)+arrayInfo2 : "";
+							arrayInfo1 = arrayInfo2 = "";
+							return new String[]{xdpath, xpath!=null?jpath:null};
 						}
 						j++;
 					}
 				}
-				System.out.println("NOT FOUND: " + xpath.substring(ndx));
-				return new String[]{jpos, result};
+				return result;
 			}
 			ndx = ndx1 + 1;
+			if (!s.startsWith("$")) {
+				ndy = ndy1 + 1;
+			}
 		}
-		return new String[]{jpos, result};
+		return result;
 	}
 
 	/** Get XPosition, XPath and source position for modification information
