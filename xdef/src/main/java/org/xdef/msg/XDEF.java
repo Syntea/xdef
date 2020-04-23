@@ -616,7 +616,7 @@ public interface XDEF {
 	public static final long XDEF802 = 31159025967L;
 	/** Reference to "xd:choice" in the "xd:root" attribute is allowed in versions 4.0 and higher{#SYS000} */
 	public static final long XDEF803 = 31159025968L;
-	/** After the value of type '&amp;{0}' follows an illegal charactere&amp;{1}{: }&amp;{#SYS000} */
+	/** After the value of type '&amp;{0}' follows an illegal character&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF804 = 31159025969L;
 	/** Parsed value in &amp;{0} is null&amp;{#SYS000} */
 	public static final long XDEF805 = 31159025970L;
