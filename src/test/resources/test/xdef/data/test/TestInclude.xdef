@@ -1,8 +1,0 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-        xd:include = "TestInclude_1.xdef"
-        xd:name  = "a"
-        xd:root  = "foo" >
-  <foo xd:script = "finally out('f')">
-    <bar xd:script = "occurs 0..; ref b#bar"/>
-  </foo>
-</xd:def>

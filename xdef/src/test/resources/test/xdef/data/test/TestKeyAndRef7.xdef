@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="Mondial" root="mondial" >
+
+<xd:declaration>
+    type laketype enum("impact", "caldera", "saline", "crater", "dam", "naturaldam", "acid", "asphalt");
+    type islandtype enum("atoll", "coral", "lime", "volcanic");
+    type mountaintype enum("monolith", "granite", "volcano", "volcanic");
+    type deserttype enum("salt", "sand", "lime");
+    type watertype enum("sea", "lake", "river");
+    type yes_no enum("yes", "no");
+
+    uniqueSet org QName();
+    uniqueSet city QName();
+    uniqueSet country QName();
+    uniqueSet continent QName();
+    uniqueSet island QName();
+    uniqueSet river QName();
+    uniqueSet province QName();
+    uniqueSet mountain QName();
+    uniqueSet lake QName();
+    uniqueSet sea QName();
+    uniqueSet desert QName();
+    uniqueSet iatacode QName();
+</xd:declaration>
+
+<mondial>
+ <xd:mixed>
+    <country xd:script="*"
+      car_code="country.ID();"
+      area="double()"
+      capital="? city.IDREF()"
+      memberships="? org.IDREFS;" >
+      <name xd:script="+" > string; </name>
+      <localname xd:script="*" > string; </localname>
+      <population xd:script="*; ref population" />
+      <population_growth xd:script="?" > double; </population_growth>
+      <infant_mortality xd:script="?" > double; </infant_mortality>
+      <gdp_total xd:script="?" > double; </gdp_total>
+      <gdp_agri xd:script="?" > double; </gdp_agri>
+      <gdp_ind xd:script="?" > double; </gdp_ind>
+      <gdp_serv xd:script="?" > double; ;</gdp_serv>
+      <inflation xd:script="?" > double; </inflation>
+      <unemployment xd:script="?" > double; </unemployment>
+      <dependent xd:script="?" country="country.IDREF;" />
+      <indep_date xd:script="?" from="? string;" > date; </indep_date>
+      <government xd:script="?" > string; </government>
+      <encompassed xd:script="*"
+        continent="continent.IDREFS"
+        percentage="double" />
+      <ethnicgroup xd:script="*" percentage="double" > string; </ethnicgroup>
+      <religion xd:script="*" percentage="double" > string; </religion>
+      <language xd:script="*" percentage="double" > string; </language>
+      <border xd:script="*" country="country.IDREF;" length="double" />
+      <province xd:script="*; ref province" />
+      <city xd:script="*; ref city" />
+    </country>
+
+    <continent xd:script="*"
+      id="continent.ID" >
+      <name xd:script="+" > string; </name>
+      <area> double; </area>
+    </continent>
+
+    <organization xd:script="*"
+      id="org.ID;"
+      headq="? city.IDREF;" >
+      <name xd:script="+" > string; </name>
+      <abbrev xd:script="+" > string; </abbrev>
+      <established xd:script="?" > date; </established>
+      <members xd:script="*"
+        type="string;"
+        country="country.IDREFS;" />
+    </organization>
+
+    <sea xd:script="*"
+      id="sea.ID;"
+      country="? country.IDREFS;"
+      bordering="? list(%item=QName); " >
+      <name> string; </name>
+      <located xd:script="*"
+        country="country.IDREF;"
+        province="? province.IDREFS;" />
+      <area xd:script="?" > double; </area>
+      <depth xd:script="?" > double; </depth>
+    </sea>
+
+    <river xd:script="*"
+      id="river.ID;"
+      country="country.IDREFS;"
+      island="? island.IDREF" >
+      <name xd:script="+" > string; </name>
+      <xd:mixed>
+        <located xd:script="*"
+          country="country.IDREF;"
+          province="? province.IDREFS;" />
+        <to xd:script="*" watertype="watertype;" water="string;" />
+        <through xd:script="*" lake="lake.IDREF" />
+        <length xd:script="?"> double; </length>
+        <area xd:script="?" > double; </area>
+      </xd:mixed>
+      <source country="country.IDREFS;" >
+        <mountains xd:script="?"> string; </mountains>
+        <located xd:script="*"
+          country="country.IDREF"
+          province="? province.IDREFS;" />
+        <from xd:script="*" watertype="watertype;" water="string" />
+        <latitude> double; </latitude>
+        <longitude> double; </longitude>
+        <elevation xd:script="?" > double; </elevation>
+      </source>
+      <estuary country="country.IDREFS;" >
+        <located xd:script="*"
+          country="country.IDREF;"
+          province="? province.IDREFS;" />
+        <latitude> double; </latitude>
+        <longitude> double; </longitude>
+        <elevation xd:script="?" > double; </elevation>
+      </estuary>
+    </river>
+
+    <lake xd:script="*"
+     id="lake.ID;"
+     country="country.IDREFS;"
+     salinity="? double"
+     type="? laketype;"
+     island="? island.IDREF" >
+     <name xd:script="+" > string; </name>
+     <xd:mixed>
+       <located xd:script="*"
+         country="country.IDREF;"
+         province="province.IDREFS;" />
+       <to xd:script="?" watertype="watertype;" water="string;" />
+     </xd:mixed>
+     <area> double; </area>
+     <latitude> double; </latitude>
+     <longitude> double; </longitude>
+     <elevation xd:script="?" > double; </elevation>
+     <depth xd:script="?" > double; </depth>
+     <heigth xd:script="?" > double; </heigth>
+    </lake>
+
+    <island xd:script="*"
+      id="island.ID;"
+      country="country.IDREFS;"
+      type="? islandtype;"
+      lake="? lake.IDREF;"
+      river="? river.IDREFS;"
+      sea="? sea.IDREFS;" >
+      <name xd:script="+" > string; </name>
+      <islands xd:script="*" > string; </islands>
+      <located xd:script="*"
+        country="country.IDREF;"
+        province="province.IDREFS;" />
+      <area xd:script="?" > double; </area>
+      <latitude> double; </latitude>
+      <longitude> double; </longitude>
+      <elevation xd:script="?" > double; </elevation>
+    </island>
+
+    <mountain xd:script="*"
+      id="mountain.ID;"
+      country="country.IDREFS;"
+      type="? mountaintype;"
+      last_eruption="? date;"
+      island="? island.IDREF;" >
+      <name xd:script="+" > string; </name>
+      <mountains xd:script="?" > string; </mountains>
+      <located xd:script="*"
+        country="country.IDREF;"
+        province="province.IDREFS;" />
+      <latitude> double; </latitude>
+      <longitude> double; </longitude>
+      <elevation> double; </elevation>
+    </mountain>
+
+    <desert xd:script="*"
+      id="desert.ID;"
+      type="? deserttype;"
+      country="country.IDREFS;" >
+      <name xd:script="*" > string; </name>
+      <located xd:script="*"
+        country="country.IDREF;"
+        province="province.IDREFS;" />
+      <area xd:script="?" > double; </area>
+      <latitude xd:script="?" > double; </latitude>
+      <longitude xd:script="?" > double; </longitude>
+    </desert>
+
+    <airport xd:script="*"
+      iatacode="iatacode.ID;"
+      city="? city.IDREF;"
+      country="country.IDREF;" >
+      <name> string; </name>
+      <latitude> double; </latitude>
+      <longitude> double; </longitude>
+      <elevation xd:script="?" > double; </elevation>
+      <gmtOffset> double; </gmtOffset>
+      <located_on xd:script="?" island="island.IDREF" />
+    </airport>
+  </xd:mixed>
+</mondial>
+
+<population measured="? string; " year="gYear;"> long; </population>
+
+<city id="city.ID;"
+  country="country.IDREF;"
+  is_country_cap="? yes_no;"
+  province="? province.IDREF;">
+  <name xd:script="+"> string; </name>
+  <localname xd:script="*"> string; </localname>
+  <latitude xd:script="?"> double; </latitude>
+  <longitude xd:script="?"> double; </longitude>
+  <elevation xd:script="?" > double; </elevation>
+  <population xd:script="*; ref population" />
+  <located_at xd:script="*"
+    watertype="watertype;"
+    sea="? string; /*???*/"
+    lake="? string; /*???*/"
+    river="? string; /*???*/"  />
+  <located_on xd:script="*"
+    island="island.IDREF;"/>
+</city>
+
+<province id="province.ID;"
+  country="country.IDREF;"
+  capital="? city.IDREF" >
+  <name xd:script="+" > string; </name>
+  <localname xd:script="*" > string; </localname>
+  <area xd:script="?" > double; </area>
+  <population xd:script="*; ref population" />
+  <population_growth xd:script="?" > double; </population_growth>
+  <city xd:script="*; ref city" />
+</province>
+
+</xd:def>

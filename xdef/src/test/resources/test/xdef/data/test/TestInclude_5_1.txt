@@ -1,0 +1,3 @@
+<messages xmlns:xd="http://www.syntea.cz/xdef/3.1" xd:script="occurs ?">
+  <message xd:script="occurs *" />
+</messages>

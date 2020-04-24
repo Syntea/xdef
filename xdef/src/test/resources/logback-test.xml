@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <!-- appenders -->
+    <!-- log to std-output -->
+    <appender name="stdout"
+        class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
+            <!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%-5thread][%-40logger{40} %4line]%message%n</pattern> -->
+        </encoder>
+    </appender>
+
+    <!-- log to file -->
+    <appender name="file"
+        class="ch.qos.logback.core.FileAppender">
+        <file>target/test-output/test.log</file>
+        <encoder>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- log to testNG reporter -->
+    <appender name="testNG"
+        class="com.github.sbabcoc.logback.testng.ReporterAppender">
+        <encoder>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level]%message</pattern>
+            <!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][%-5thread][%-40logger{40} %4line]%message</pattern> -->
+        </encoder>
+    </appender>
+
+
+
+    <!-- loggers -->
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="file"/>
+        <appender-ref ref="testNG"/>
+    </root>
+
+    <logger name="org.xdef" level="DEBUG"/>
+    <logger name="test"     level="DEBUG"/>
+</configuration>

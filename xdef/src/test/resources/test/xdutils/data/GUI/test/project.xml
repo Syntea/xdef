@@ -1,0 +1,18 @@
+<Project Show="true">
+  <XDefinition>test/resources/test/xdutils/data/GUI/test/test1.xdef</XDefinition>
+  <XDefinition>test/resources/test/xdutils/data/GUI/test/test2.xdef</XDefinition>
+  <Property Name = "xdef_warnings" Value = "true"/>
+  <Property Name = "xdef_display" Value = "true"/>
+  <Property Name = "xdef_debug" Value = "true"/>
+  <Execute XDName = "test" Mode = "validate">
+    <Var Name="xyz">Toto je test</Var>
+    <Input>test/resources/test/xdutils/data/GUI/test/data.xml</Input>
+    <SaveResult File = "test/resources/test/xdutils/data/GUI/test/result1.xml" />
+  </Execute>
+  <Execute XDName = "test" Mode = "validate" DisplayResult = "true" >
+    <Var Name="xyz">Toto je druhy test</Var>
+    <Context>test/resources/test/xdutils/data/GUI/test/context.xml</Context>
+    <Input>test/resources/test/xdutils/data/GUI/test/data.xml</Input>
+    <SaveResult Indent = "true" Encoding="windows-1250" File = "test/resources/test/xdutils/data/GUI/test/result2.xml"/>
+  </Execute>
+</Project>

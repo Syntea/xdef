@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  root="root"
+  name="_NAME_">
+  <root date1="required datetime('yyyyMMdd|dd.MM.yyyy')"
+    date2="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm')"
+    date3="required datetime('dd.MM.yyyy HH:mm:ss')"
+    date4="required datetime('yyyy')"
+    date5="required datetime('yyyyMMdd')"
+    date6="required datetime('yyyyMMddHHmm')"
+    date7="required datetime('yyyyMMddHHmmss')"
+    date8="required datetime('yyyy.MM.dd')"
+    date9="required datetime('yyyy.MM.dd HH:mm')"
+    date10="required datetime('yyyy.MM.dd HH:mm:ss')"
+    date="required ISOdate()"
+    time="required ISOtime()"
+    dateTime="required ISOdateTime()"
+    day="required ISOday()"
+    month="required ISOmonth()"
+    year="required ISOyear()"
+    monthDay="required ISOmonthDay()"
+    yearMonth="required ISOyearMonth()"
+    duration="required ISOduration"
+    byte="required int(-0x80,0x7f)/*byte*/"
+    short="required int(-0x8000,0x7fff)/*short*/"
+    integer="required int(-0x80000000,0x7fffffff)/*integer*/"
+    integer1="required int(-0x8000000,0x7ffffff)/*integer with limits*/"
+    long="required int()/*long*/"
+    list="required enum('ab','cd')"
+    tokens="required enum('ab','cd')">
+    <date1 xd:script="occurs 1..*">
+      datetime('yyyyMMdd|dd.MM.yyyy')
+    </date1>
+    <date2 xd:script="occurs 1..*">
+      datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm')
+    </date2>
+    <date3 xd:script="occurs 1..*">
+      datetime('dd.MM.yyyy HH:mm:ss')
+    </date3>
+    <date4 xd:script="occurs 1..*">
+      ISOyear()
+    </date4>
+    <date5 xd:script="occurs 1..*">
+      datetime('yyyyMMdd')
+    </date5>
+    <date6 xd:script="occurs 1..*">
+      datetime('yyyyMMddHHmm')
+    </date6>
+    <date7 xd:script="occurs 1..*">
+      datetime('yyyyMMddHHmmss')
+    </date7>
+    <date8 xd:script="occurs 1..*">
+      datetime('yyyy.MM.dd')
+    </date8>
+    <date9 xd:script="occurs 1..*">
+      datetime('yyyy.MM.dd HH:mm')
+    </date9>
+    <date10 xd:script="occurs 1..*">
+      datetime('yyyy.MM.dd HH:mm:ss')
+    </date10>
+    <date xd:script="occurs 1..*">
+      ISOdate()
+    </date>
+    <time xd:script="occurs 1..*">
+      ISOtime()
+    </time>
+    <dateTime xd:script="occurs 1..*">
+      ISOdateTime()
+    </dateTime>
+    <day xd:script="occurs 1..*">
+      ISOday()
+    </day>
+    <month xd:script="occurs 1..*">
+      ISOmonth()
+    </month>
+    <year xd:script="occurs 1..*">
+      ISOyear()
+    </year>
+    <monthDay xd:script="occurs 1..*">
+      ISOmonthDay()
+    </monthDay>
+    <yearMonth xd:script="occurs 1..*">
+      ISOyearMonth()
+    </yearMonth>
+    <duration xd:script="occurs 1..*">
+      ISOduration
+    </duration>
+    <byte xd:script="occurs 1..*">
+      int(-0x80,0x7f)
+    </byte>
+    <short xd:script="occurs 1..*">
+      int(-0x8000,0x7fff)
+    </short>
+    <integer xd:script="occurs 1..*">
+      int(-0x80000000,0x7fffffff)
+    </integer>
+    <integer1 xd:script="occurs 1..*">
+      int(-0x8000000,0x7ffffff)
+    </integer1>
+    <long xd:script="occurs 1..*">
+      int()
+    </long>
+    <list xd:script="occurs 1..*">
+      enum('ab','cd')
+    </list>
+    <tokens xd:script="occurs 1..*">
+      enum('ab','cd')
+    </tokens>
+  </root>
+</xd:def>

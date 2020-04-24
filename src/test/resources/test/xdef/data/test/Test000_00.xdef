@@ -1,7 +1,0 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
-  xd:script = "options ignoreEntities"
-  xd:name = "empty" xd:root = "empty" >
-
-  <empty></empty>
-
-</xd:def>

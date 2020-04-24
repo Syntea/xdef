@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+   xmlns:ldn = "http://www.syntea.cz/dn/ldn/1.0"
+   xd:name   = "LDN"
+   xd:root   = "ldn:DnSearch | ldn:DnSearch_Answer |
+                ldn:DnBasicLustrace_Request | ldn:DnBasicLustrace_Answer |
+                ldn:DnFullLustrace_Request | ldn:DnFullLustrace_Answer"
+   impl-version = "1.17.17.62"
+   impl-date    = "17.1.2011">
+
+  <xd:macro name="JMENO">string(1,24)</xd:macro>
+  <xd:macro name="PRIJMENI">string(1,36)</xd:macro>
+  <xd:macro name="RC">string(1,10)</xd:macro>
+  <xd:macro name="TEXTVETA">string(1,80)</xd:macro>
+  <xd:macro name="TEXTODSTAVEC">string(1,512)</xd:macro>
+  <xd:macro name="TEXTSTRANKA">string(1,4000)</xd:macro>
+  <xd:macro name="TEXTDOKUMENT">string(1,4000)</xd:macro>
+  <xd:macro name="DATEFORMAT">xdatetime('d.M.y')</xd:macro>
+  <xd:macro name="DATETIME">xdatetime('d.M.y H:m')</xd:macro>
+  <xd:macro name="TIME">xdatetime('H:m')</xd:macro>
+  <xd:macro name="TELCISLO">string(1,16)</xd:macro>
+  <xd:macro name="CASTKA">int()</xd:macro>
+  <xd:macro name="options">options ignoreEmptyAttributes, preserveTextCase</xd:macro>
+
+  <xd:macro name="ONFALSE">onFalse{
+            /*setErr(4208);*/
+            outln('XDOUT: ISDN_LDN - ISDN4208'+getXpos());
+            error('ISDN4208','Wrong type of value','&amp;{xpath}'+getXpos());
+            }</xd:macro>
+  <xd:macro name="ONABSENCE">onAbsence{
+        /*setErr(4202);*/
+        outln('XDOUT: ISDN_LDN - ISDN4202'+getXpos());
+        error('ISDN4202','Value of required item is missing','&amp;{xpath}'+getXpos());
+            }</xd:macro>
+
+<!-- ldn ******************************************************************** -->
+
+ <ldn:DnSearch
+   KodNdnDuvodLustrace  ="required string(); ${ONFALSE}; ${ONABSENCE};">
+   <xd:choice xd:script= "occurs 1">
+      <ldn:DnSearch_PodleVozidla
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleVozidla" />
+      <ldn:DnSearch_PodleOsoby
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleOsoby" />
+      <ldn:DnSearch_PodleKnihy
+          xd:script= "occurs 1; ref ldn:DnSearch_PodleKnihy" />
+      <ldn:DnSearch_PodlePisemnosti
+          xd:script= "occurs 1; ref ldn:DnSearch_PodlePisemnosti" />
+   </xd:choice>
+ </ldn:DnSearch>
+
+ <ldn:DnSearch_Casove_Mistni_Skodni_Vymezeni
+   KodSednOkres               ="${options}; optional string(4); ${ONFALSE}"
+   KodNdnKraj                 ="${options}; optional string(2); ${ONFALSE}"
+   DatumCas                   ="${options}; optional ${DATETIME}; ${ONFALSE}"
+   DatumCasDo                 ="${options}; optional ${DATETIME}; ${ONFALSE}"
+   VerzeCisloKomunikace       ="${options}; optional string(1,7); ${ONFALSE}"
+   VerzeObec                  ="${options}; optional ${TEXTVETA}; ${ONFALSE}"
+
+   KodNdnTypZraneni           ="${options}; optional string(); ${ONFALSE}"
+   PocetZraneni               ="${options}; optional string(1,4); ${ONFALSE}"
+   CelkovaSkoda               ="${options}; optional string(1,20); ${ONFALSE}"
+ />
+
+ <ldn:DnSearch_PodleVozidla
+   xd:script="occurs 1; ref ldn:DnSearch_Casove_Mistni_Skodni_Vymezeni"
+   SilVIN                     ="${options}; optional string(1,26); ${ONFALSE}"
+   SilCisloEv                 ="${options}; optional string(1,12); ${ONFALSE}"
+   KodNdn1ZnackaTyp           ="${options}; optional string(); ${ONFALSE}"
+   KodNdn2ZnackaTyp           ="${options}; optional string(); ${ONFALSE}"
+   KodSednStatRegVoz          ="${options}; optional string(); ${ONFALSE}"
+ />
+
+ <ldn:DnSearch_PodleOsoby
+   xd:script ="occurs 1; ref ldn:DnSearch_Casove_Mistni_Skodni_Vymezeni"
+   Jmeno                   ="${options}; optional ${JMENO}; ${ONFALSE}"
+   Prijmeni                ="${options}; optional ${PRIJMENI}; ${ONFALSE}"
+   DenNarozeni             ="${options}; optional int(1,31); ${ONFALSE}"
+   MesicNarozeni           ="${options}; optional int(1,12); ${ONFALSE}"
+   RokNarozeni             ="${options}; optional int(1900, 2010); ${ONFALSE}"
+   Rc                      ="${options}; optional ${RC}; ${ONFALSE}"
+   KodSednStatPrislus      ="${options}; optional string(); ${ONFALSE}"
+   KodNdnKvalUcastnikProvoz="${options}; optional string(); ${ONFALSE}"
+ />
+
+<ldn:DnSearch_PodleKnihy
+ KodNdnKniha    ="${options}; required string(4,6); ${ONFALSE}; ${ONABSENCE}"
+ VerzeRokKniha   ="${options}; required int(1,99); ${ONFALSE}; ${ONABSENCE}"
+ VerzeCisloKniha ="${options}; required int(0,1000000); ${ONFALSE};${ONABSENCE}"
+ />
+
+<ldn:DnSearch_PodlePisemnosti
+   DnCj ="${options}; required string(1,35); ${ONFALSE}; ${ONABSENCE}"/>
+
+<ldn:DnSearch_Answer
+   pocetDN                       ="${options}; required int()">
+   <ldn:DnInfo xd:script="occurs 0..50;ref ldn:DnInfo"/>
+</ldn:DnSearch_Answer>
+
+<ldn:DnInfo
+   SeqDnCentrum                  ="${options}; required int()"
+   KnihaRok                      ="${options}; optional int(1,99)"
+   DnCislo                       ="${options}; required string()"
+   TextNdnUtvar                  ="${options}; required ${TEXTVETA}">
+   <ldn:DnInfoVerze xd:script="occurs 1..; ref ldn:DnInfoVerze"/>
+</ldn:DnInfo>
+
+<!-- zpracovatel DN -->
+
+<ldn:DNZpracovatel
+   UserHodnost                   ="${options}; optional string(1,32)"
+   UserJmeno                     ="${options}; required ${JMENO}"
+   UserPrijmeni                  ="${options}; required ${PRIJMENI}"
+   >
+</ldn:DNZpracovatel>
+
+<ldn:DnInfoVerze
+   DetailAvailable               ="${options}; required enum('A', 'N')"
+   SeqDnVerze                    ="${options}; required int()"
+   DnCj                          ="${options}; optional string(1,35)"
+   VerzeDatumCas                 ="${options}; required ${DATETIME}"
+   VerzeDatumCasDo               ="${options}; optional ${DATETIME}"
+
+   TextNdnKniha                  ="${options}; required ${TEXTVETA}"
+   VerzeRokKniha                 ="${options}; required int(1,99)"
+   VerzeCisloKniha               ="${options}; optional string()"
+
+   TextNdnStavSetreni            ="${options}; required ${TEXTVETA}"
+   TextNdnStavEvidence           ="${options}; required ${TEXTVETA}"
+
+   KodNdnUtvar			 ="${options}; required ${TEXTVETA}"
+
+   KodSednOkres                  ="${options}; required string(4)"
+   VerzeUzemiUtvar               ="${options}; required string(2)">
+   <ldn:DNZpracovatel xd:script="occurs 1; ref ldn:DNZpracovatel"/>
+</ldn:DnInfoVerze>
+
+<ldn:DnBasicLustrace_Request
+  KodNdnDuvodLustrace ="${options}; required string(); ${ONFALSE}; ${ONABSENCE}"
+  seqDnCentrum        ="${options}; required int(); ${ONFALSE}; ${ONABSENCE}"
+  seqDnVerze          ="${options}; optional int(); ${ONFALSE}"/>
+
+<ldn:DnBasicLustrace_Answer>
+    <ldn:DNNdn xd:script= "occurs 1; ref ldn:DNNdnBasic"/>
+</ldn:DnBasicLustrace_Answer>
+
+<ldn:DnFullLustrace_Request
+    KodNdnDuvodLustrace      ="${options}; required string(); ${ONFALSE}; ${ONABSENCE}"
+    seqDnCentrum             ="${options}; required int(); ${ONFALSE}; ${ONABSENCE}"
+    seqDnVerze               ="${options}; optional int(); ${ONFALSE}"
+/>
+
+<ldn:DnFullLustrace_Answer>
+  <ldn:DNNdn  xd:script= "occurs 1; ref ldn:DNNdnFull"/>
+</ldn:DnFullLustrace_Answer>
+
+<!-- dn a jeji verze ******************************************************************** -->
+<!-- Kniha
+    pred 2010 ... TextNdnKniha, VerzeRokKniha, VerzeCisloKniha
+    po 2010	... TextNdnUtvar, VerzeRokKniha, VerzeCisloKniha-->
+<ldn:DNNdn
+   TextNdnDuvodLustrace       = "${options}; required ${TEXTVETA}"
+   TextKdoLustroval           = "${options}; required ${TEXTVETA}"
+
+   TextNdnKniha               = "${options}; required ${TEXTVETA}"
+   KodNdnKniha                = "${options}; required ${TEXTVETA}"
+   VerzeRokKniha              = "${options}; required int(1,99)"
+   VerzeCisloKniha            = "${options}; optional string()"
+
+   TextNdnUtvar               = "${options}; required ${TEXTVETA}"
+
+   KodNdnUtvar                = "${options}; required ${TEXTVETA}"
+   KnihaRok                   = "${options}; required int()"
+   DnCislo                    = "${options}; required int(0,99999)"
+   SeqDnCentrum               = "${options}; required int()"
+   SeqDnKlient                = "${options}; required int()"
+   SeqDnVerze                 = "${options}; required int()"
+    >
+   <ldn:DNZpracovatel xd:script="occurs 1; ref ldn:DNZpracovatel"/>
+</ldn:DNNdn>
+
+<!-- DnCislo - cislo DN v online knize dopravnich nehod vztazenych k utvarum,
+     kteri setri DN  -->
+<!-- KodNdnUtvar kod utvar, ktery setri  -->
+
+<ldn:DNNdnBasic xd:script= "occurs 1; ref ldn:DNNdn">
+  <ldn:NdnVerze xd:script= "occurs 1; ref ldn:NdnVerzeBasic"/>
+</ldn:DNNdnBasic>
+
+<ldn:DNNdnFull xd:script= "occurs 1; ref ldn:DNNdn">
+  <ldn:NdnVerze xd:script= "occurs 1; ref ldn:NdnVerzeFull"/>
+</ldn:DNNdnFull>
+
+
+   <!-- Ndn Verze DN -->
+   <ldn:NdnVerze
+      DnCj                       = "${options}; optional string(1,35)"
+
+      SeqDnVerze                 = "${options}; required int()"
+      VerzeOznaceni              = "${options}; required ${TEXTVETA}"
+
+      VerzeDatumCas              = "${options}; required ${DATETIME}"
+      VerzeDatumCasDo            = "${options}; optional ${DATETIME}"
+      TextSednOkres              = "${options}; required string()"
+      KodSednOkres               = "${options}; required ${TEXTVETA}"
+      VerzeUzemiUtvar            = "${options}; required string(2)"
+
+      PodnetDatumCas             = "${options}; required ${DATETIME}"
+
+      TextSednVObci              = "${options}; required string()"
+      TextSednMistoDn            = "${options}; required string()"
+      TextSednDruhKomunikace     = "${options}; required string()"
+      TextSednDruhKomunikaceKriz = "${options}; required string()"
+      VerzeCisloKomunikace       = "${options}; optional string(1,7)"
+      KodNdnSufixKomunikace      = "${options}; required string()"
+      VerzeKm                    = "${options}; optional int(0,999_999_999)"
+      VerzeCisloUzlu1            = "${options}; optional num(3,4)"
+      VerzeCisloUzlu2            = "${options}; optional num(3,4)"
+      VerzePopisMista            = "${options}; optional ${TEXTODSTAVEC}"
+      VerzeObec                  = "${options}; optional ${TEXTVETA}"
+
+      TextNdnStavSetreni         = "${options}; required string()"
+      TextNdnStavEvidence        = "${options}; required string()"
+      TextNdnKvalEvidence        = "${options}; required string()"
+      TextNdnKvalUdalost         = "${options}; required string()"
+
+      ZraneniPocetUsmrcene       = "${options}; optional int()"
+      ZraneniPocetTezce          = "${options}; optional int()"
+      ZraneniPocetLehce          = "${options}; optional int()"
+      SkodaCelkovaVec            = "${options}; optional ${CASTKA}"
+      SkodaCelkovaNaklad         = "${options}; optional ${CASTKA}"
+
+      >
+
+    </ldn:NdnVerze>
+
+<ldn:NdnVerzeBasic						xd:script= "occurs 1; ref ldn:NdnVerze">
+     <xd:mixed>
+         <ldn:Osoba                  xd:script= "occurs 0..; ref ldn:OsobaBasic" />
+         <ldn:Vec                    xd:script= "occurs 0..; ref ldn:VecBasic" />
+         <ldn:Ohledani               xd:script= "occurs 0..; ref ldn:OhledaniBasic" />
+       </xd:mixed>
+</ldn:NdnVerzeBasic>
+
+<ldn:NdnVerzeFull						xd:script= "occurs 1; ref ldn:NdnVerze">
+     <xd:mixed>
+         <ldn:Osoba                  xd:script= "occurs 0..; ref ldn:OsobaFull" />
+         <ldn:Vec                    xd:script= "occurs 0..; ref ldn:VecFull" />
+         <ldn:Ohledani               xd:script= "occurs 0..; ref ldn:OhledaniFull" />
+         <ldn:VerzePrubeh            xd:script= "occurs 0..; ref ldn:VerzePrubeh" />
+       </xd:mixed>
+</ldn:NdnVerzeFull>
+
+<!-- vozdila ******************************************************************** -->
+
+   <!-- Vec na miste nehody -->
+   <ldn:Vec
+         IdVec                 = "required int()"
+         VecOznaceni           = "${options}; required ${TEXTVETA}"
+         VecSkodaEUR           = "${options}; required ${CASTKA}"
+         VecPopisSkoda         = "${options}; optional ${TEXTSTRANKA}"
+         VecSkodaNakladEUR     = "${options}; required ${CASTKA}"
+         VecPopisSkodaNaklad   = "${options}; optional ${TEXTSTRANKA}"
+         PripojenaNaIdVec      = "optional int()"
+     Textndntypvazbavecvec = "optional string()"
+   >
+   </ldn:Vec>
+
+  <!-- Silnicni vozidlo -->
+  <ldn:Vozidlo
+         TextNdn1DruhVozidla = "${options}; required string()"
+         TextNdn2DruhVozidla = "${options}; required string()"
+         TextNdnStavPoNehode = "${options}; required string()"
+
+         SilCisloEv          = "${options}; required string(1,12)"
+         TextSednStat        = "${options}; required string()"
+
+         SilVIN              = "${options}; optional string(1,26)"
+         SilCisloTP          = "${options}; optional string(1,12)"
+         SilCisloEvOsvedceni = "${options}; optional ${TEXTVETA}"
+         SilCisloEvidence    = "${options}; optional string(1,8)"
+         SilDatum1Evidence   = "${options}; optional ${DATEFORMAT}"
+         TextNdn1ZnackaTyp   = "${options}; required string()"
+         TextNdn2ZnackaTyp   = "${options}; required string()"
+         SilRokVyroby        = "${options}; optional xdatetime('y')"
+         SilKm               = "${options}; optional int(0,9_999_999)"
+         SilVykon            = "${options}; optional int(0,99_999)"
+         SilCelkHmotnost     = "${options}; optional int(0,999_999)"
+         SilMistSezeni       = "${options}; optional int(0,999)"
+         SilMistStani        = "${options}; optional int(0,999)"
+         SilMistLuzek        = "${options}; optional int(0,999)"
+         TextNdnBarva        = "${options}; required string()"
+
+         TextNdnTypBrzd      = "${options}; required string()"
+         SilStavBrzd         = "${options}; optional ${TEXTVETA}"
+         SilPocetValcu       = "${options}; optional int(0,999)"
+         SilObjemValcu       = "${options}; optional ${TEXTVETA}"
+         SilPovoleneZatizeni = "${options}; optional int(0,999_999)"
+
+         TextNdnTypPoistenie = "${options}; required string()"
+         SilCisloPoistenieEv = "${options}; optional ${TEXTVETA}"
+         KodNdnPoistovna     = "${options}; required string()"
+         SilPoistovna        = "${options}; optional ${TEXTVETA}"
+         SilPoisteniePlatneOd= "${options}; optional ${DATEFORMAT}"
+
+         TextSednDruhVozidla = "${options}; required string()"
+         TextSednProvozovatel= "${options}; required string()"
+         TextSednDruhPrepravy= "${options}; required string()"
+         TextSednStavPoNehode= "${options}; required string()"
+         TextSednVyprosteniOsob="${options}; required string()"
+         TextSednSmerJizdy   = "${options}; required string()"
+
+         SilBrzdnaDraha      = "${options}; optional int(0,99_999)"
+
+         DrazniSpoj          = "${options}; optional ${TEXTVETA}"
+         DrazniOznaceni      = "${options}; optional ${TEXTVETA}"
+  />
+
+   <!-- jina vec -->
+   <ldn:JinaVec
+        TextNdnDruhJinaVec     ="${options}; required string()"
+    TextSednPrekazka       ="${options}; required string()">
+   </ldn:JinaVec>
+
+<ldn:VecBasic					xd:script= "occurs 1; ref ldn:Vec">
+    <xd:choice>
+        <ldn:Vozidlo           xd:script= "ref ldn:Vozidlo" />
+        <ldn:JinaVec           xd:script= "ref ldn:JinaVec" />
+    </xd:choice>
+    <ldn:Osoba             xd:script= "occurs 0..; ref ldn:OsobaBasic" /> <!-- Osoby ve vozidle -->
+</ldn:VecBasic>
+
+<ldn:VecFull					xd:script= "occurs 1; ref ldn:Vec">
+    <xd:choice>
+        <ldn:Vozidlo           xd:script= "ref ldn:Vozidlo" />
+        <ldn:JinaVec           xd:script= "ref ldn:JinaVec" />
+    </xd:choice>
+    <ldn:Osoba             xd:script= "occurs 0..; ref ldn:OsobaFull" /> <!-- Osoby ve vozidle -->
+</ldn:VecFull>
+
+<!-- osoby ******************************************************************** -->
+
+  <!-- Osoba -->
+  <ldn:Osoba
+         TextNdnKvalOsoba    = "${options}; required string()">
+  </ldn:Osoba>
+
+  <!-- Fyzicka osoba -->
+  <ldn:FO
+         FoTitul             = "${options}; optional ${JMENO}"
+         FoJmeno             = "${options}; required ${JMENO}"
+         FoPrijmeni          = "${options}; required ${PRIJMENI}"
+         TextSednStat        = "${options}; required string()"
+         KodNdnKvalUcastnikProvoz="${options}; required string()"
+         TextNdnKvalUcastnikProvoz="${options}; required string()"
+
+         FoDatumNarozeni     = "${options}; optional ${DATEFORMAT}"
+         FoRC                = "${options}; optional ${RC}"
+         TextNdnPohlavi      = "${options}; required string()"
+         TextNdnRoleFo       = "${options}; required string()"
+
+         TextNdnTypZraneni   = "${options}; required string()"
+         TextNdnStavUcastnika = "${options}; required string()"
+         FoUcastnikPopisUcinku="${options}; optional ${TEXTSTRANKA}"
+         FoPocetDnuUmrti     = "${options}; optional int(0,99)"
+  />
+
+  <!-- Pravnicka osoba -->
+  <ldn:PO
+         PoObchodniJmeno     = "${options}; required string(1,36)"
+         PoIC                = "${options}; required string(1,8)"
+         TextSednStat        = "${options}; required string()"
+         PoPredmetCinnosti   = "${options}; optional ${TEXTVETA}"
+  />
+
+  <!-- Adresa -->
+  <ldn:Adresa
+         AdresaObec          = "${options}; optional string(1,36)"
+         AdresaUlice         = "${options}; optional string(1,64)"
+         AdresaCisloPopisne  = "${options}; optional string(1,64)"
+         AdresaCisloEvidencni= "${options}; optional string(1,64)"
+         AdresaPSC           = "${options}; optional string(1,8)"
+         AdresaOkres         = "${options}; optional string(1,54)"
+         TextSednStat        = "${options}; required string()"
+  />
+
+
+  <!-- Procesni ukon: Test na alkohol nebo jinou navykovou latku -->
+  <ldn:OsobaTest
+         TextNdnAlkoholDruhTestu="${options}; required string()"
+         TextNdnAlkoholTypPristroje="${options}; required string()"
+         TextTypPristroje    = "${options}; optional ${TEXTVETA}"
+         TextCisloPristroje  = "${options}; optional ${TEXTVETA}"
+         TextNdnAlkoholVyhodTestu="${options}; required string()"
+         TestVysledek1       = "${options}; optional ${TEXTVETA}"
+         TestVysledek2       = "${options}; optional ${TEXTVETA}"
+         TestVysledek3       = "${options}; optional ${TEXTVETA}"
+         CasOdberu1          = "${options}; optional ${TIME}"
+         CasOdberu2          = "${options}; optional ${TIME}"
+         CasOdberu3          = "${options}; optional ${TIME}"
+         TestHodnoceni       = "${options}; optional ${TEXTSTRANKA}"
+  />
+
+  <!-- Procesni ukon: sankce -->
+  <ldn:Sankce
+     SankceCastkaEUR     ="${options}; required ${CASTKA}"
+         TextNdnZpusobPlatby ="${options}; required ${TEXTVETA}"
+         SankceSerieCislo    ="${options}; required ${TEXTVETA}"
+  />
+
+
+<ldn:POBasic					xd:script= "occurs 1; ref ldn:PO"/>
+<ldn:POFull					xd:script= "occurs 1; ref ldn:PO"/>
+
+<ldn:FOBasic					xd:script= "occurs 1; ref ldn:FO"
+         FoDatumNarozeni     	= "illegal"
+         FoRC                	= "illegal"
+         TextNdnPohlavi       	= "illegal"
+         TextNdnRoleFo        	= "illegal"
+
+         TextNdnTypZraneni    	= "illegal"
+         TextNdnStavUcastnika 	= "illegal"
+         FoUcastnikPopisUcinku	= "illegal"
+         FoPocetDnuUmrti     	= "illegal"
+/>
+<ldn:FOFull					xd:script= "occurs 1; ref ldn:FO"/>
+
+<ldn:OsobaBasic						xd:script= "occurs 1; ref ldn:Osoba">
+    <xd:choice xd:script= "occurs 1">
+       <ldn:FO                 xd:script= "occurs 0..1; ref ldn:FOBasic" />
+       <ldn:PO                 xd:script= "occurs 0..1; ref ldn:POBasic" />
+    </xd:choice >
+</ldn:OsobaBasic>
+
+<ldn:OsobaFull						xd:script= "occurs 1; ref ldn:Osoba">
+    <xd:choice xd:script= "occurs 1">
+       <ldn:FO                 xd:script= "occurs 0..1; ref ldn:FOFull" />
+       <ldn:PO                 xd:script= "occurs 0..1; ref ldn:POFull" />
+    </xd:choice >
+    <xd:mixed>
+       <ldn:Adresa             xd:script= "occurs 0..1; ref ldn:Adresa"/>
+       <ldn:OsobaTest  	       xd:script= "occurs 0..; ref ldn:OsobaTest" />
+       <ldn:Sankce  	       xd:script= "occurs 0..; ref ldn:Sankce" />
+    </xd:mixed>
+</ldn:OsobaFull>
+
+<!-- prubeh dn  ******************************************************************** -->
+
+  <!-- Stanoveni verze : popis prubehu DN jako pravni skutecnosti -->
+  <ldn:VerzePrubeh
+         PrubehPopis          = "${options}; optional ${TEXTSTRANKA}"
+         TextSednAlkohol      = "${options}; required string()">
+      <ldn:VerzePricina    xd:script= "occurs 0..; ref ldn:VerzePricina " />
+  </ldn:VerzePrubeh>
+
+  <!-- Stanoveni verze : popis pricin a nasledku DN -->
+  <ldn:VerzePricina
+         KodNdnKvalObecObjekt = "${options}; required enum('1', '2')"
+         TextNdnPricinyTc1    = "${options}; optional string()"
+         TextNdnPricinyTc2    = "${options}; optional string()"
+         TextNdnNasKvalTc1    = "${options}; optional string()"
+         TextNdnNasKvalTc2    = "${options}; optional string()"
+         TextNdnPriciny1      = "${options}; optional string()"
+         TextNdnPriciny2      = "${options}; optional string()"
+         TextNdnNasKval1      = "${options}; optional string()"
+         TextNdnNasKval2      = "${options}; optional string()"
+         TextNdnSanKval1      = "${options}; optional string()"
+         TextNdnSanKval2      = "${options}; optional string()">
+      <ldn:Osoba             xd:script= "occurs 0..1; ref ldn:OsobaFull" /> <!-- Osoba vazana na pricinu -->
+  </ldn:VerzePricina>
+
+<!-- ohledani ******************************************************************** -->
+
+  <!-- Procesni ukon: Ohledani -->
+  <ldn:Ohledani
+         OhledDopravniSituace = "${options}; optional ${TEXTODSTAVEC}"/>
+
+
+<ldn:OhledaniBasic					xd:script= "occurs 1; ref ldn:Ohledani"/>
+<ldn:OhledaniFull					xd:script= "occurs 1; ref ldn:Ohledani"/>
+
+</xd:def>

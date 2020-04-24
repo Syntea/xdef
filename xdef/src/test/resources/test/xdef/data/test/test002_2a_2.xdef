@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xd:def
+   xmlns:xd   = "http://www.syntea.cz/xdef/3.1"
+   xd:name    = "SouborP1A"
+   xd:root    = "SouborP1A"
+   xd:script  = "options ${P1#Options}"
+   impl-version = "2.3.2.0"
+   impl-date    = "05.09.2006" >
+
+<SouborP1A
+       Davka            = "required"
+       ZeDne            = "required" >
+
+   <xd:mixed>
+     <OpravaXPolPS  xd:script = "occurs 0..; forget; ref OpravaXPolPS#OpravaXPolPS" />
+     <xd:any      xd:script = "occurs 0..; forget; options moreElements, moreText, moreAttributes"
+        KodChyby    = "fixed '1012'"
+     />
+   </xd:mixed>
+
+</SouborP1A>
+</xd:def>

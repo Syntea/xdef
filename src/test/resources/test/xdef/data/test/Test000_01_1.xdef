@@ -1,5 +1,0 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
-  xd:script = "options resolveEntities"
-  xd:name = "root" xd:root = "root" >
-  <root a = "required string()" />
-</xd:def>

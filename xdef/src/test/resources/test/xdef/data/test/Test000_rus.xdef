@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    Document   : rusTest.xdef
+    Created on : 10.2.2010, 14:43:32
+    Author     : Alexandrov
+    Description: Test of cyrillic
+    -->
+<xd:def xmlns:xd    = "http://www.syntea.cz/xdef/3.1"
+        xmlns:нс    = "http://www.mail.ru/xdef"
+        xd:name    = "test"
+        xd:root    = "нс:элемент" >
+
+        <нс:элемент нс:атрибут="required string()">
+           required string()
+        </нс:элемент>
+</xd:def>

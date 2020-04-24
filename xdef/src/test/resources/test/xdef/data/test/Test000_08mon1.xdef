@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xd:def
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xd:name      = "BM_common"
+   impl-version = "2.4.0.0"
+   impl-date    = "28.9.2006" >
+
+   <PSP
+      ORD                     = "required int(-9999,9999)"
+      InfoDatum               = "required xdatetime('yyyyMMdd')"
+      KodPojistitele          = "required num(4)"
+      CisloSmlouvy            = "required string(1,35)"
+      PoradiVozidla           = "required num(1,10)" >
+
+      <UsekPojisteni          xd:script = "occurs 1..; ref UsekPojisteni" />
+   </PSP>
+
+   <UsekPojisteni
+      KodPojistitele          = "required num(4)"
+      CisloSmlouvy            = "required string(1,35)"
+      PoradiVozidla           = "required num(1,10)"
+      DruhVozidla             = "required string(1,2)"
+      UsekPojisteniOd         = "required xdatetime('yyyyMMdd')"
+      UsekPojisteniDo         = "optional xdatetime('yyyyMMdd')">
+
+      <RozhodnaUdalost        xd:script="occurs 0..; ref RozhodnaUdalost" />
+   </UsekPojisteni>
+
+   <RozhodnaUdalost
+      Rezerva                 = "required int(0,999999999)"
+      Vyplaceno               = "required int(0,999999999)"
+      DatumCasSU              = "required xdatetime('yyyyMMddHHmm')" />
+
+   <ZdrojovyPSP
+      KodPojistitele          = "required string(1,4)"
+      CisloSmlouvy            = "required string(1,35)"
+      PoradiVozidla           = "required num(1,10)"
+      CisloDokladuPojisteni   = "required string(1,35)">
+
+      <PSP                    xd:script = "occurs 1; ref PSP" />
+   </ZdrojovyPSP>
+
+<!-- Pozor musí se přidat k již existujícímu BM_common pro dávkové zpracování -->
+
+  <AnswerId
+         Program           ="required string()"
+         Status            ="required enum('OK', 'Pending', 'Fault')"
+  />
+
+  <Fault>
+     <Detail>
+         <Chyba            xd:script="occurs 1.."
+              KodChyby     ="required int()"
+              Xpath        ="optional string()"
+              Hodnota      ="optional string()"
+              PopisChyby   ="optional string()"
+         />
+     </Detail>
+  </Fault>
+
+  <Get_NositelPSP>
+   <xd:choice>
+     <Nositel              xd:script="ref Id_Nositel" />
+     <CilovaSmlouva        xd:script="ref Id_Smlouva" />
+   </xd:choice>
+  </Get_NositelPSP>
+
+  <Get_PSP                 xd:script="ref Id_Smlouva" />
+
+  <Get_SmlouvyPSP          xd:script="ref Id_Smlouva" />
+
+  <Get_VolnePSP>
+   <xd:choice>
+     <Nositel              xd:script="ref Id_Nositel"
+         InfoDatum         ="required xdatetime('yyyyMMdd')">
+     </Nositel>
+     <CilovaSmlouva        xd:script="ref Id_Smlouva" />
+   </xd:choice>
+  </Get_VolnePSP>
+
+  <Id_Nositel
+         Jmeno             ="optional string()"
+         Prijmeni          ="optional string()"
+         RC                ="optional num()"
+         DatumNarozeni     ="optional xdatetime('yyyyMMdd')"
+         IdStatPrislusnost ="optional int()"
+         NazevFirmy        ="optional string()"
+         IC                ="optional int()"
+  />
+
+  <Id_Smlouva
+         IdPojistitel      ="required int()"
+         CisloSmlouvy      ="required string()"
+         PoradiVozidla     ="required num()"
+  />
+
+  <NositelPSP
+         AddInfo           ="optional enum('0','1')">
+    <PSP                   xd:script="occurs 0..; ref PSP" />
+  </NositelPSP>
+
+  <PingStatus>
+   <xd:mixed>
+      <Program             xd:script="occurs 1.."
+         Name              ="optional string()"
+         Version           ="optional string()"
+         InstallationDate  ="optional xdatetime('d.M.y H:m')"
+      />
+      <Db                  xd:script="occurs 1.."
+         Part              ="optional string()"
+         Version           ="optional string()"
+         InstallationDate  ="optional xdatetime('d.M.y H:m')"
+      />
+   </xd:mixed>
+  </PingStatus>
+
+  <RequestId
+         IdPartner         ="required int()"
+         IdentZpravy       ="required int()"
+         RefMsgID          ="optional int()"
+  />
+
+  <Set_MultiPrenosPSP
+         IdPojistitel      ="required int()"
+         CisloSmlouvy      ="required string()"
+         PoradiVozidla     ="required num()" >
+    <ZdrojovaSmlouva       xd:script="occurs 1..; ref Id_Smlouva" />
+  </Set_MultiPrenosPSP>
+
+  <Set_PrenosPSP
+         IdPojistitel      ="required int()"
+         CisloSmlouvy      ="required string()"
+         PoradiVozidla     ="required num()" >
+    <ZdrojovaSmlouva       xd:script="ref Id_Smlouva" />
+  </Set_PrenosPSP>
+
+  <SmlouvyPSP>
+    <PSP                   xd:script="occurs 0..; ref PSP" />
+  </SmlouvyPSP>
+
+  <VolnePSP
+        AddInfo            ="optional enum('0', '1')" >
+    <PSP                   xd:script="occurs 0..; ref PSP" />
+  </VolnePSP>
+
+</xd:def>

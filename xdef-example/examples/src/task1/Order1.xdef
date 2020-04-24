@@ -1,0 +1,13 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+
+<Order Number="int" CustomerCode="string(1,20)">
+  <DeliveryPlace>
+    <Address Street="string(2,100)"
+      House="int(1,9999)"
+      City="string(2,100)"
+      ZIP="num(5)"/>
+  </DeliveryPlace>
+  <Item xd:script="1..10" ProductCode="num(4)" Quantity="int(1,1000)"/>
+</Order>
+
+</xd:def>

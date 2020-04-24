@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <Execute DisplayResult="true"
+    Mode="validate"
+    XDName="test1">
+    <Var Name="xyz">
+      Toto je test
+    </Var>
+    <Input Edit="true">
+      test/resources/test/xdutils/data/GUI/validate/data.xml
+    </Input>
+    <SaveResult File="test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
+  </Execute>
+  <XDefinition>
+    test/resources/test/xdutils/data/GUI/validate/xdef*.xml
+  </XDefinition>
+</Project>

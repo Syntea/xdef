@@ -1,0 +1,755 @@
+<xd:collection xmlns:xd = "http://www.xdef.org/xdef/4.0">
+
+<xd:component>
+ %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;
+ %bind g %with test.xdef.TestXComponents_G %link G#G/@g;
+ %bind XXX %with test.xdef.TestXComponents_G %link G#G/XXX;
+ %bind YYY %with test.xdef.TestXComponents_G %link G#G/YYY;
+ %class test.xdef.component.AZ extends test.xdef.TestXComponents_G %link A#A/Z;
+ %class test.xdef.component.J %link J#A;
+ %class test.xdef.component.Z %link SouborD1A#SouborD1A;
+ %class test.xdef.component.Z1 %link SouborD1A#ZaznamPDN;
+ %class test.xdef.component.Z2 %link SouborD1A#ProtokolDN;
+ %class test.xdef.component.Z3 %link SouborD1A#Skoda;
+ %class test.xdef.component.Z4 %link SouborD1A#Osoba;
+ %class test.xdef.component.Z5 %link SouborD1A#Firma;
+ %class test.xdef.component.Z6 %link SouborD1A#Doklad;
+ %class test.xdef.component.Z7 %link SouborD1A#RozhodnutiDN;
+ %class test.xdef.component.Z8 %link SouborD1A#ObjStrankaDN;
+ %class test.xdef.component.Z9 %link SouborD1A#Adresa;
+ %class test.xdef.component.FotoDN %link SouborD1A#FotoDN;
+ %class test.xdef.component.VozidloDN %link SouborD1A#VozidloDN;
+ %class test.xdef.component.TramvajDN %link SouborD1A#TramvajDN;
+ %class test.xdef.component.TrolejbusDN %link SouborD1A#TrolejbusDN;
+ %class test.xdef.component.VlakDN %link SouborD1A#VlakDN;
+ %class test.xdef.component.PovozDN %link SouborD1A#PovozDN;
+ %class test.xdef.component.PredmetDN %link SouborD1A#PredmetDN;
+ %class test.xdef.component.ZvireDN %link SouborD1A#ZvireDN;
+ %class test.xdef.component.UcastnikDN %link SouborD1A#UcastnikDN;
+ %class test.xdef.component.A %link A#A;
+ %class test.xdef.component.B %link B#A;
+ %class test.xdef.component.C extends test.xdef.TestXComponents_C %link C#Town;
+ %class test.xdef.component.C1 implements test.xdef.component.CI %link C#Person;
+ %class test.xdef.component.C2 %link C#Town/Street/House;
+ %interface test.xdef.component.CI %link C#Person;
+</xd:component>
+
+<xd:declaration> type XY enum('XX','YY');
+  type flt float(); type dat xdatetime('yyyy-MM-dd');
+  uniqueSet uflt flt; uniqueSet udat dat;
+</xd:declaration>
+
+<xd:def name='A' root='A'>
+  <A a='string' dec='?dec(5,2)'>
+    <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>
+    <Y xd:script='*'>?num</Y>
+    <i xd:script='?'>integer();</i>
+    <Y xd:script='?'>?num</Y>
+    <f xd:script='?'>uflt()</f>
+    <d xd:script='?'>udat()</d>
+    <t xd:script='?'>xdatetime('HH:mm:ss')</t>
+    <s xd:script='?'>string</s>
+    <Z xd:script='?' z='string'/>
+    <d1 xd:script='?' d='dateYMDhms'>dateYMDhms</d1>
+    <d2 xd:script='*' d='emailDate'>emailDate</d2>
+    <d-e.f xd:script='?' d-e.f='string'>string</d-e.f>
+    <g-h.i xd:script='?'>string</g-h.i>
+  </A>
+</xd:def>
+
+<xd:def name='B' root='A'>
+  <A id = "? int; create from('i/text()')"
+    num = "? float; create from('f/text()')"
+    date = "? xdatetime('yyyy-MM-dd'); create from('d/text()')"
+    time = "? xdatetime('HH:mm:ss'); create from('t/text()')"
+    name = "? string; create from('s/text()')"/>
+</xd:def>
+
+<xd:def name='C' root='Town | Persons'>
+  <xd:declaration scope="local">
+    external method void test.xdef.TestXComponents_C.test(XXData);
+  </xd:declaration>
+  <Town Name="string">
+    <Street xd:script="+" Name="string">
+      <House xd:script='*' Num='int'>
+        <Person xd:script="*; ref Person" />
+      </House>
+    </Street>
+  </Town>
+  <Person FirstName="string" LastName="string; finally test()"/>
+  <Persons>
+    <Person xd:script="*; create from('//Person');">
+      string; create
+        from('@FirstName') + " " + from('@LastName') + "; " +
+        from('../../@Name')+' '+from('../@Num')+', '+from('/Town/@Name')
+    </Person>
+  </Persons>
+</xd:def>
+
+<xd:def name='D' root='a:A' xmlns:a='a.b'>
+  <xd:component>%class test.xdef.component.D %link a:A</xd:component>
+  <a:A>
+    <_ xd:script='?'/>
+    <B A='boolean'>
+      string; <X xd:script='*'>boolean</X> string;
+      <Y>boolean</Y>
+    </B>
+    <I A='int'>
+      <X xd:script='*'>int</X>
+      <Y>int</Y>
+    </I>
+    <F A='flt'>
+      <X xd:script='*'>float</X>
+      <Y>float</Y>
+    </F>
+    <G A='base64Binary'>
+      <X xd:script='*'>base64Binary</X>
+      <Y>base64Binary</Y>
+    </G>
+    <H A='hexBinary'>
+      <X xd:script='*'>hexBinary</X>
+      <Y>hexBinary</Y>
+    </H>
+    <P A='dec'>
+      <X xd:script='*'>dec</X>
+      <Y>dec</Y>
+    </P>
+    <Q A='xdatetime("yyyy-MM-dd")'>
+      <X xd:script='*'>xdatetime('yyyy-MM-dd')</X>
+      <Y>dat</Y>
+    </Q>
+    <R A='duration'>
+      <X xd:script='*'>duration</X>
+      <Y>duration</Y>
+    </R>
+    <S A='string'>
+      <X xd:script='*'>string</X>
+      <Y>string</Y>
+    </S>
+    <E/>
+    <T xd:script='?' xmlns='x.y' t='string'><I/></T>
+    <a:T xd:script='?' a:t='?string'><a:I/></a:T>
+  </a:A>
+</xd:def>
+
+<xd:def name='E' root='if'>
+  <xd:component>
+    %class test.xdef.component.E %link if;
+    %bind Clazz %link if/class;
+  </xd:component>
+  <if><class try='string'/></if>
+</xd:def>
+
+<xd:def name='F' root='X|Y'>
+  <xd:component>
+    %class test.xdef.component.F %link X;
+    %class test.xdef.component.F1 %link Y
+  </xd:component>
+  <X>
+    <xd:choice>
+        <A/>
+        <B/>
+    </xd:choice>
+  </X>
+  <Y>
+    <xd:mixed>
+        <A/>
+        <B/>
+    </xd:mixed>
+  </Y>
+</xd:def>
+
+<xd:def name='G' root='G'>
+  <xd:declaration scope="local">
+     external method void test.xdef.TestXComponents_G.genXC(XXNode);
+  </xd:declaration>
+  <xd:component>
+    %class test.xdef.component.G extends test.xdef.TestXComponents_G %link G
+  </xd:component>
+
+  <G xd:script = 'finally ;' g = 'string'>
+    <XXX x = 'string; finally genXC()'/>
+    <YYY xd:script = '+' y = 'string; finally genXC()'/>
+  </G>
+</xd:def>
+
+<xd:def xmlns:s='soap' xmlns:b='request' name='H' root='s:H'>
+  <xd:component>%class test.xdef.component.H %link s:H</xd:component>
+  <s:H s:encodingStyle = "fixed 'encoding'">
+    <s:Header>
+      <b:User xd:script = 'occurs 1; ref I#User'
+        s:understand = "fixed 'true'"
+        s:actor = 'illegal' />
+      <b:Request xd:script = 'occurs 1; ref I#Request'
+        s:understand = "fixed 'true'"
+        s:actor = 'illegal' />
+    </s:Header>
+    <s:Body>
+     <xd:choice>
+       <b:Ping xd:script = 'occurs 1; ref I#Ping'/>
+       <b:PingFlow xd:script = 'occurs 1; ref I#PingFlow'/>
+     </xd:choice>
+    </s:Body>
+  </s:H>
+</xd:def>
+
+<xd:def xd:name='I' root = 'User|Request|Ping|PingFlow'>
+  <xd:component>%class test.xdef.component.I %link Ping</xd:component>
+  <User IdentUser = 'required string(1,32)'/>
+  <Request IdentZpravy = 'required string(1,32)'
+     ReqMsgId    = 'optional int()'
+     Mode = "optional enum('STD', 'TST')"/>
+  <Ping/>
+  <PingFlow Flow = "required enum('B1', 'B1B')"/>
+</xd:def>
+
+<xd:def xd:name='J' root='A|B|C'>
+  <xd:component>
+    %class test.xdef.component.J1 %link B;
+    %class test.xdef.component.J2 %link C;
+    %bind B2 %link J#A/B[2];
+    %bind C2 %link J#A/C[2];
+    %bind X2 %link J#B/X[2];
+    %bind C2 %link J#B/C[2];
+    %bind X3 %link J#B/X[3];
+    %bind D2 %link J#C/D[2];
+  </xd:component>
+  <A>
+    <B xd:script='?'/>
+    <C xd:script='*'/>
+    <B b='string'/>
+    <C c='string'/>
+  </A>
+  <B>
+    <X>string</X>
+    <C xd:script='*'/>
+    <X xd:script='*' x='string'/>
+    <C c='string'/>
+    <X xx='string'/>
+  </B>
+  <C>
+    string
+    <D/>
+    string
+    <D xd:script='1..3'/>
+    string
+  </C>
+</xd:def>
+
+<xd:def name='K' root='A'>
+  <xd:component>%class test.xdef.component.K %link A</xd:component>
+  <A>
+    <c xd:script='+' Kod="fixed '1'"
+       Cislo=''
+       Rok="xdatetime('yy');"/>
+     int;
+    <d xd:script='?' a="xdatetime('d.M.y')"/>
+  </A>
+</xd:def>
+
+<xd:def name='L' root='L|*'>
+  <xd:component>
+    %class test.xdef.component.L %link L;
+    %class test.xdef.component.L1 %link *
+  </xd:component>
+  <L>
+    <xd:any xd:script='ref X'/>
+  </L>
+  <xd:any xd:name='X'
+    xd:script='options moreAttributes, moreElements, moreText'/>
+</xd:def>
+
+<xd:def name='M' root='X'>
+  <xd:component>%class test.xdef.component.M %link X</xd:component>
+  <xd:any xd:name='X'
+     xd:script='options moreAttributes, moreElements, moreText'/>
+</xd:def>
+
+<xd:def name='N' root='A'>
+  <xd:component>
+    %class test.xdef.component.N %link A;
+    %class test.xdef.component.N_Part
+      implements test.xdef.component.N_i, java.io.Serializable
+    %interface test.xdef.component.N_i %link Part;
+    %class test.xdef.component.N_Operation
+      implements test.xdef.component.N_i %link A/Operation;
+  </xd:component>
+  <A>
+    <Operation xd:script='ref Part'/>
+  </A>
+  <Part One='optional int()' Two='optional string()' />
+</xd:def>
+
+<xd:def name = 'O' root = "A">
+  <xd:component>%class test.xdef.component.O %link O#A;</xd:component>
+  <A>
+    <xd:choice xd:script='+'>
+      <B/>
+      <C/>
+      int
+    </xd:choice>
+  </A>
+</xd:def>
+
+<xd:def name='P' root="A">
+  <xd:declaration scope="local">
+    type pflt float(1,6);
+    type pdat xdatetime('M.d.yyyy');
+    uniqueSet ppdat{x: pdat;}
+    uniqueSet ppflt{x: pflt;}
+  </xd:declaration>
+  <xd:component> %class test.xdef.component.P %link P#A; </xd:component>
+  <A>
+    <a xd:script='?' a='ppflt.x()' b='ppdat.x()'/>
+    <b xd:script='+' a='ppflt.x.ID()' b='ppdat.x.ID()'/>
+    <c xd:script='?' a='ppflt.x.IDREF()' b='ppdat.x.IDREF()'/>
+    <d xd:script='?' a='ppflt.x.CHKID()' b='ppdat.x.CHKID()'/>
+  </A>
+</xd:def>
+
+<xd:def name='X' root='X|Y'>
+<xd:declaration scope="local">
+   external method void test.xdef.TestXComponents_G.setXX(XXNode,String);
+</xd:declaration>
+  <xd:component>
+    %class test.xdef.component.X %link X;
+    %class test.xdef.component.X1 extends test.xdef.TestXComponents_G %link Y;
+  </xd:component>
+   <X>
+     <A xd:script = '+;'>
+       <xd:mixed>
+         <B xd:script = '*'>
+            <E xd:script = '?;' >string;</E>
+         </B>
+         <C xd:script = '*'/>
+       </xd:mixed>
+     </A>
+   </X>
+   <Y>
+     <A xd:script='*' V="fixed '2'"></A>
+     string; onTrue setXX('abc');
+     <B/>
+  </Y>
+</xd:def>
+
+<xd:def xd:name='Y01' xd:root='Test'>
+  <xd:component>
+    %class test.xdef.component.Y01 %link Test;
+    %interface test.xdef.component.s.Y01Part %link Part;
+    %class test.xdef.component.s.Y01Operation
+      implements test.xdef.component.s.Y01Part %link Test/Operation;
+  </xd:component>
+  <Test>
+    <Operation xd:script='ref Part;' x='? string();'/>
+  </Test>
+  <Part One = 'optional string()' Two = 'optional string()'/>
+</xd:def>
+
+<xd:def name='Y02' root='Test'>
+  <xd:component>
+    %class test.xdef.component.Y02
+      implements test.xdef.component.s.Y01Part %link Test
+  </xd:component>
+  <Test One = 'optional string()' Two = 'optional string()'/>
+</xd:def>
+
+<xd:def name='Y03' root='Part'>
+  <xd:component>
+    %class test.xdef.component.Y03 %link Part;
+    %interface test.xdef.component.Y03i %link Part;
+    %class test.xdef.component.Y03PartOne %link PartOne;
+    %class test.xdef.component.Y03PartTwo %link PartTwo
+  </xd:component>
+  <PartOne One = 'required string()' />
+  <PartTwo One = 'required int()' />
+  <Part>
+     <PartOne xd:script='ref PartOne'/>
+     <PartTwo xd:script='ref PartTwo'/>
+  </Part>
+</xd:def>
+
+<xd:def name='Y04' root='Part'>
+  <xd:component>
+    %class test.xdef.component.Y04
+      extends test.xdef.TestXComponents_Y04
+        implements java.io.Serializable, Runnable %link Part
+  </xd:component>
+  <Part One='required string()' Two='required string()'/>
+</xd:def>
+
+<xd:def name='Y05' root='B'>
+  <xd:component>%class test.xdef.component.Y05 %link B</xd:component>
+  <B One='required string()' Two='required string()'/>
+</xd:def>
+
+<xd:def name='Y05a' root='A'>
+  <A xd:script="ref Y05#B"/>
+</xd:def>
+
+<xd:def name='Y06' root='A'>
+  <xd:component>
+    %class test.xdef.component.Y06
+      extends test.xdef.TestXComponents_Y06Container
+        &lt;test.xdef.TestXComponents_Y06Domain&gt; %link A;
+    %class test.xdef.component.Y06B
+      implements test.xdef.TestXComponents_Y06XCDomain %link A/B;
+    %bind Domain %with test.xdef.TestXComponents_Y06Container %link A/B;
+  </xd:component>
+  <A>
+    <B One='required string()' Two='required string()'/>
+  </A>
+</xd:def>
+
+<xd:def name='Y07' root='Smlouva'>
+  <xd:component>
+    %class test.xdef.component.Y07Smlouva
+      extends test.xdef.TestXComponents_Y07Operation %link Smlouva;
+    %class test.xdef.component.Y07ControlId %link ControlId;
+    %bind IdFlow %with test.xdef.TestXComponents_Y07Operation
+      %link Nehoda/@IdFlow;
+    %bind ControlId %with test.xdef.TestXComponents_Y07Operation
+      %link Nehoda/ControlId;
+  </xd:component>
+  <Smlouva xd:script = 'ref Nehoda'>
+    <Domain One='required string()' Two='required string()'/>
+  </Smlouva>
+  <Nehoda IdFlow='required int()'>
+    <ControlId xd:script='ref ControlId'/>
+    </Nehoda>
+  <ControlId IdNeco = 'required int()'/>
+</xd:def>
+
+<xd:def name='Y08' root='A'>
+<xd:component>
+ %class test.xdef.component.Y08 extends test.xdef.TestXComponents_Y08 %link A;
+ %bind IdFlow %with test.xdef.TestXComponents_Y08 %link A/@Id;
+</xd:component>
+<A xd:script='ref B'>
+   <Domain One='required string()' Two='required string()'/>
+</A>
+<B Id='required int()'/>
+</xd:def>
+
+<xd:def name='Y09' root='A'>
+  <xd:component> %class test.xdef.component.Y09 %link A; </xd:component>
+  <A x='required string()' y='required string()'>
+    <xd:any xd:script='occurs 0..1;
+      options moreAttributes, moreElements, moreText'/>
+  </A>
+</xd:def>
+
+<xd:def name='Y10' root='A'>
+ <xd:component>
+    %class test.xdef.component.Y10 %link A;
+    %class test.xdef.component.Y10p %link A/$mixed/a;
+    %class test.xdef.component.Y10q %link A/$mixed/b;
+    %bind p %link A/$mixed/a;
+    %bind q %link A/$mixed/b;
+ </xd:component>
+ <A a='required string()' b='required string()' c="XY">
+   <xd:mixed>
+      <a x='string()'/>
+      <b x='string()'/>
+   </xd:mixed>
+ </A>
+</xd:def>
+
+<xd:def name='Y11' root='A'>
+  <xd:component>
+      %class test.xdef.component.Y11 %link A;
+      %class test.xdef.component.Y11Op %link Op;
+  </xd:component>
+  <A>
+    <B xd:script='occurs 1..'
+      N ='required string();' I ='required'>
+      <xd:mixed>
+        <Ev xd:script='ref Op; occurs *'/>
+         <Op xd:script='ref Op; occurs *'/>
+      </xd:mixed>
+    </B>
+  </A>
+  <Op N='required string();' M='required;'>
+    <Co xd:script='occurs 0..'
+      C='required;' I="required enum('Yes', 'No', 'Join', 'Var')">
+      <X/>
+    </Co>
+    <Y Y='required;'/>
+  </Op>
+</xd:def>
+
+<xd:def name='Y12' root='A|a'>
+  <xd:component>
+    %class test.xdef.component.Y12_S %link Actions/S;
+    %class test.xdef.component.Y12 %link A;
+    %class test.xdef.component.Y12_B %link A/B;
+    %class test.xdef.component.Y12_a %link a;
+  </xd:component>
+  <A>
+    <B xd:script='occurs 1..'>
+      <xd:mixed xd:script='ref Actions'/>
+    </B>
+  </A>
+  <xd:mixed name='Actions'>
+    <S xd:script='occurs *' V='required'/>
+    <M xd:script='occurs *' V='required'/>
+    <P xd:script='occurs *' O='required'/>
+    <Q xd:script='occurs *' O='required'/>
+  </xd:mixed>
+  <a>
+    <xd:sequence script='occurs 2'>
+      <xd:mixed>
+        <b />
+        <c />
+        int
+      </xd:mixed>
+    </xd:sequence>
+  </a>
+</xd:def>
+
+<xd:def name='R001'>
+</xd:def>
+
+<xd:def name='Y13' root='A'>
+  <xd:component>
+    %interface test.xdef.component.Y13C %link C;
+    %class test.xdef.component.Y13 %link A;
+    %class test.xdef.component.Y13B %link A/B;
+  </xd:component>
+  <A><B xd:script='ref C' /></A>
+  <C a='string'/>
+</xd:def>
+
+<xd:def name='Y14' root='C'>
+  <xd:component>
+    %interface test.xdef.component.Y14A %link A;
+    %interface test.xdef.component.Y14B %link B;
+    %class test.xdef.component.Y14C %link C;
+  </xd:component>
+  <A a='string'/>
+  <B><X xd:script='ref A'/></B>
+  <C xd:script='ref B'/>
+</xd:def>
+
+<xd:def name='Y15' root='a'>
+  <xd:component> %class test.xdef.component.Y15 %link a; </xd:component>
+  <a>
+    <xd:text>string</xd:text>
+    <b xd:script='?'/>
+    <xd:text>? string</xd:text>
+   </a>
+</xd:def>
+
+<xd:def name='Y16' xmlns:x='x.int' root='a|c|e'>
+  <xd:component>
+    %class test.xdef.component.Y16 %link a;
+    %class test.xdef.component.Y16a %link x:x;
+    %class test.xdef.component.Y16c %link c;
+    %class test.xdef.component.Y16d %link y;
+    %class test.xdef.component.Y16e %link e;
+    %class test.xdef.component.Y16f %link g;
+  </xd:component>
+  <a><x:b xd:script='ref x:x'/></a>
+  <x:x y='int'/>
+  <c>
+    <d xmlns='y.int' xd:script='+; ref y'/>
+  </c>
+  <y xmlns='y.int' y='int'/>
+  <e>
+    <f xd:script='ref g'/>
+  </e>
+  <g y='int'/>
+</xd:def>
+
+<xd:def root='a' name='Y17'>
+  <xd:component>
+    %class test.xdef.component.Y17 %link a;
+    %bind b_1 %link a/b[1];
+    %bind b_2 %link a/b[2];
+  </xd:component>
+  <a>
+    <b a='int'/>
+    <c/>
+    <b a='string'/>
+  </a>
+</xd:def>
+
+<xd:def root='A' name='Y18'>
+   <A a='string()' b='string()'>
+      <C xd:script = 'ref Y18a#B'
+        e='optional string()'>
+        <xd:text> optional string(); </xd:text>
+      </C>
+      <D xd:script = 'optional; ref Y18a#C'/>
+   </A>
+   <xd:component>
+      %class test.xdef.component.Y18 %link A;
+      %bind x %link A/C/$text;
+      %bind y %link A/D/$text;
+   </xd:component>
+</xd:def>
+
+<xd:def name='Y18a'>
+   <B c='optional string()' d='optional string()'/>
+   <C>int()</C>
+   <xd:component>
+      %class test.xdef.component.Y18a %link B;
+      %class test.xdef.component.Y18a1 %link C;
+   </xd:component>
+</xd:def>
+
+<xd:def root='A' name='Y19'>
+  <A>
+     <B>
+       <B_1>
+         <C>
+           <B b='int'/>
+         </C>
+       </B_1>
+     </B>
+  </A>
+  <xd:component> %class test.xdef.component.Y19 %link Y19#A; </xd:component>
+</xd:def>
+
+<xd:def root='A|B|C|D' name='Y20'>
+  <A>
+    <X xd:script='0..1; ref X'/>
+  </A>
+  <X b='? string()' >
+    <X xd:script='*; ref X'/>
+  </X>
+  <B>
+    <X b='? string()'>
+      <X xd:script='*; ref B/X'/>
+    </X>
+  </B>
+  <C>
+    <B xd:script='ref Y'/>
+  </C>
+  <Y b='? string()' >
+    <Y xd:script='*; ref Y'/>
+  </Y>
+  <D>
+    <Z xd:script='0..1; ref Z'/>
+  </D>
+  <Z b='? string()' >
+    <C>
+      <Z xd:script='*; ref Z'/>
+    </C>
+  </Z>
+  <xd:component>
+    %class test.xdef.component.Y20_A %link Y20#A;
+    %class test.xdef.component.Y20_B %link Y20#B;
+    %class test.xdef.component.Y20_C %link Y20#C;
+    %class test.xdef.component.Y20_D %link Y20#D;
+  </xd:component>
+</xd:def>
+
+<xd:def root='A' name='Y21'>
+  <xd:declaration scope="local" >
+    type eType enum('x', 'y', 'A1_b', 'z', '_1', 'A1_b2', '$');
+    type myType eType;
+    type eType1 enum('a', 'b', 'c');
+    type extType eType1;
+  </xd:declaration>
+  <xd:component>
+    %class test.xdef.component.Y21 %link Y21#A;
+    %enum test.xdef.component.Y21_enum eType;
+    %ref %enum test.xdef.TestXComponents_Y21enum eType1;
+  </xd:component>
+  <A b='myType;' >
+    ? myType;
+    <B xd:script='*' c='eType1;'>
+      myType;
+    </B>
+    ? myType;
+  </A>
+</xd:def>
+
+<xd:def name='Y22' xd:root ='A'>
+  <xd:component>%class test.xdef.component.Y22 %link Y22#A;</xd:component>
+  <A xd:script='options ignoreOther'
+    Creator ='required string()' >
+    <Transfer xd:script='options ignoreOther'
+      Sender ='required num(4)' >
+      <DataFiles>
+        <Directory Path ='required string()' >
+          <File xd:script='occurs +;'
+          Name ='required string()' />
+        </Directory>
+      </DataFiles>
+    </Transfer>
+  </A>
+</xd:def>
+
+<xd:def name='Y23' root='a | b | d | e | f'>
+  <a xd:script="occurs 1..*;">
+   <xd:mixed>
+     <s xd:script="match @k=='p'" k="">string();</s>
+	  <s xd:script="match @k=='q'" k="">string();</s>
+   </xd:mixed>
+  </a>
+  <b><c>string()</c></b>
+  <d><e>date()</e></d>
+  <e>date()</e>
+  <f><g xd:script="occurs *">date()</g></f>
+  <xd:component>
+    %class test.xdef.component.XCa %link Y23#a;
+    %class test.xdef.component.XCb %link Y23#b;
+    %class test.xdef.component.XCd %link Y23#d;
+    %class test.xdef.component.XCe %link Y23#e;
+    %class test.xdef.component.XCf %link Y23#f;
+  </xd:component>
+</xd:def>
+
+<xd:def name="Y24" root="a | c | Y24d">
+  <a xd:script="ref c" />
+  <c><d xd:script="occurs 0..1"/></c>
+  <!-- Same class name and element name -->
+  <Y24d Y24d="string"><Y24d/></Y24d>
+ <xd:component>
+   %class test.xdef.component.Y24a extends test.xdef.component.Y24 %link Y24#a;
+   %class test.xdef.component.Y24 %link Y24#c;
+   %class test.xdef.component.Y24d %link Y24#Y24d;
+ </xd:component>
+</xd:def>
+
+<xd:def name='Y25' root='a'>
+<xd:component> %class test.xdef.component.Y25 %link Y25#a; </xd:component>
+<xd:declaration>uniqueSet u {var Parser x, int y; a: string();}</xd:declaration>
+<a>
+  <DefParams>
+     <Param xd:script="*;"
+       Name="u.a.ID(); onTrue u.y=0; onFalse u.y=98;"
+       Type="xdType(); onTrue {u.x=getParsedValue(); u.y=1;} onFalse u.y=99;"/>
+  </DefParams>
+  <Params xd:script="+; init u.checkUnref()">
+     <Param xd:script="*;" Name="u.a.CHKID();" Value="u.x;"/>
+  </Params>
+</a>
+</xd:def>
+
+<!-- ********************** Lexicon test ********************** -->
+<xd:def root="X" name="LEX">
+  <X x="string">
+    <Y xd:script="+"  y="int()"/>
+  </X>
+  <xd:component> %class test.xdef.component.Lex %link LEX#X; </xd:component>
+  <xd:declaration>
+    type state enum("draft", "processed");
+  </xd:declaration>
+  <xd:lexicon language="eng" default="yes"/>
+  <xd:lexicon language="ces">
+    LEX#X =      P
+    LEX#X/@x =   p
+    LEX#X/Y =    Q
+    LEX#X/Y/@y = q
+  </xd:lexicon>
+  <xd:lexicon language="deu">
+    LEX#X =      S
+    LEX#X/@x =   s
+    LEX#X/Y =    T
+    LEX#X/Y/@y = t
+  </xd:lexicon>
+</xd:def>
+
+</xd:collection>

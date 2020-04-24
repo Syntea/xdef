@@ -1,0 +1,7 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test009' xd:root='a'>
+<xd:json name='a'>
+<![CDATA[
+{"a&b":"jnull()","1":["jnull()"]}
+]]>
+</xd:json>
+</xd:def>

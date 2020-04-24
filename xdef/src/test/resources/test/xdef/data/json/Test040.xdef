@@ -1,0 +1,14 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test040' xd:root='a'>
+<xd:json name='a'>
+{ "cities"  : [
+    { $script: "occurs 1..*",
+      "from": [
+         "string()",
+         { $script: "occurs 1..*", "to": "jstring()", "distance": "int()" }
+	  ]
+    }
+  ]
+}
+
+</xd:json>
+</xd:def>

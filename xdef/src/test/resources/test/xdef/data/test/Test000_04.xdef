@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<!-- Příklad xdefinice divadelnďího souboru -->
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+        xd:name = "Divadelni_soubor"
+        xd:root = "SOUBOR" >
+  <SOUBOR>
+    <HISTORIE_SOUBORU>required string(1,$MAXINT)</HISTORIE_SOUBORU>
+    <REZISER xd:script = "occurs 1..2; ref OSOBA"/>
+    <ASISTENT_REZIE xd:script = "occurs 0..2; ref OSOBA"/>
+    <DRAMATURG xd:script = "occurs 1..2; ref OSOBA"/>
+    <SCENARISTA xd:script = "occurs 1..2; ref OSOBA"/>
+    <HEREC xd:script = "occurs 0..50; ref OSOBA" >
+      <ODEHRANE_ROLE xd:script = "occurs 0..100; ref HRA"
+        typ_role      = "required enum('hlavní','vedlejší','davový')"
+        nazev_postavy = "required string(1,50)"
+                pocet_repriz = "optional int(0,1000)"/>
+      <CHARAKTERISTIKA xd:script = "occurs 0..1">required string(1,*)</CHARAKTERISTIKA>
+      <OHLASY_OD_DIVAKU xd:script = "occurs 0..50">required string(1,*)</OHLASY_OD_DIVAKU>
+    </HEREC>
+  </SOUBOR>
+  <OSOBA jmeno = "required string(2,40)"
+         prijmeni = "required string(2,40)"
+         pohlavi = "required enum('muz','zena')"
+                 datum_narozeni = "required xdatetime('dd.mm.yyyy')"/>
+  <HRA nazev = "required string(2,60)">
+    <AUTOR jmeno  = "required string(2,40)"
+               prijmeni = "required string(2,40)"/>
+  </HRA>
+</xd:def>

@@ -1,0 +1,8 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="C" root="Residents">
+  <Residents>
+    <Resident xd:script="*; create from('//Person');"
+      GivenName="string; create from('@FirstName')"
+      FamilyName="string; create from('@LastName')"
+      Address="string; create from('../@Address')" />
+  </Residents>
+</xd:def>

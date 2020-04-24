@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="Windows-1250" ?>
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.0"
+        name = "SouborD1A" root = "SouborD1A">
+
+<xd:declaration>
+<![CDATA[
+/* typ kontrolujici validitu rodneho cisla. */
+  boolean rodneCislo() {
+      String s = getText(); /* ziskame hodnotu testovaneho typu*/
+      int rok = parseInt(s.substring(0,2));
+      int mesic = parseInt(s.substring(2,4));
+      if ((mesic < 1) || ((mesic > 12) && (mesic < 51)) || (mesic > 62)) {
+        return error("MYERR01", "Chybny mesic: &{p}", "&{p}" + mesic);
+      }
+      int den = parseInt(s.substring(4,6));
+      if ((den < 1) || (den > 31)) {
+        return error("MYERR02", "Chybny den: &{p}", "&{p}" + den);
+      }
+      int i = 6;
+      if (s.substring(i, i + 1) == '/') {
+        i++;
+        if (s.substring(i, i + 1) == 'C') {
+          return true; /*OK - cizinec*/
+        }
+      }
+      int n = parseInt(s.substring(i));
+      if (s.length() > i + 3) {
+          int mod =  n % 10;
+          int num = rok*10000000+mesic*100000+den*1000+(n/10);
+          if (num % 11 != mod) {
+             return error("MYERR03",
+                "Chybny kontrolni soucet: &{p}", "&{p} + n");
+          }
+      }
+      return true;
+  }
+  boolean skodaTisice() {
+      String s = getText();
+      int ndx = s.indexOf(',');
+      int x;
+      boolean parsedError = false;
+      if (ndx < 0) {
+        x = parseInt(s);
+        parsedError = x == $MININT;
+      } else {
+          x = parseInt(s.substring(0, ndx));
+          parsedError = x == $MININT;
+          x = parseInt(s.substring(ndx + 1));
+          parsedError |= x == $MININT;
+      }
+      if (parsedError) {
+        return error("XDEF532", "Incorrect skodaTisice: &{m}", "&{m}" + s);
+      }
+      return true;
+  }
+  boolean blobref() {return true;}
+  Element myErr(int code) {
+    error('OK Error myErr: ' + getXpos() + "/" + occurrence());
+    return getElement();
+  }
+  void konecZaznamu() {}
+  void trString(int i1, int i2) {}
+]]>
+</xd:declaration>
+
+   <SouborD1A>
+      <ZaznamPDN xd:script = "occurs +; ref ZaznamPDN" />
+   </SouborD1A>
+
+   <ZaznamPDN xd:script   = "finally konecZaznamu();"
+              Verze       = "fixed '2.0'"
+              SeqRec      = "required int()"
+              KrajPolicie = "required string(2)"
+              PlatnostOd  = "optional xdatetime('d.M.yyyy H:mm')" >
+      <xd:mixed>
+         <Protokol     xd:script = "occurs 1; ref ProtokolDN" />
+         <RozhodnutiDN xd:script = "occurs ?; ref RozhodnutiDN" />
+         <VyliceniDN   xd:script = "occurs +; ref VyliceniDN" />
+         <ObjStranka   xd:script = "occurs 1; ref ObjStrankaDN" />
+         <Foto         xd:script = "occurs *; ref FotoDN" />
+         <Vozidlo      xd:script = "occurs *; ref VozidloDN" />
+         <Tramvaj      xd:script = "occurs *; ref TramvajDN" />
+         <Trolejbus    xd:script = "occurs *; ref TrolejbusDN" />
+         <Vlak         xd:script = "occurs *; ref VlakDN" />
+         <Povoz        xd:script = "occurs *; ref PovozDN" />
+         <Predmet      xd:script = "occurs *; ref PredmetDN" />
+         <Zvire        xd:script = "occurs *; ref ZvireDN" />
+         <Ucastnik     xd:script = "occurs *; ref UcastnikDN" />
+      </xd:mixed>
+   </ZaznamPDN>
+
+   <ProtokolDN KodUtvaruPolicie = "required num(6)"
+               RokDN            = "required xdatetime('yyyy')"
+               CisloDN          = "required num(5)"
+               CisloJednaciDN   = "required string()"
+               DatumCasOznameni = "required xdatetime('d.M.yyyy H:mm')"
+               NazevDN          = "required string()"
+               Zpracovatel      = "required string()" />
+
+   <RozhodnutiDN DatumRozhodnuti = "optional xdatetime('d.M.yyyy')" >
+      required string;
+   </RozhodnutiDN>
+
+   <VyliceniDN xd:script = "?; onAbsence myErr(123); ref text" />
+
+   <ObjStrankaDN DatumCasDN    = "required xdatetime('d.M.yyyy H:mm')"
+                 DatumCasDoDN  = "optional xdatetime('d.M.yyyy H:mm')"
+                 KodOkresu     = "required num(4)"
+                 Obec          = "optional string()"
+                 Ulice         = "optional string()"
+                 CisloPopisne  = "optional string()"
+                 SkodaTisKc    = "optional skodaTisice()"
+                 HlavniPricina = "optional string()"
+                 Pricina       = "optional num(3)" >
+      <Misto xd:script = "occurs 0..1; ref text" />
+   </ObjStrankaDN>
+
+   <FotoDN       Foto_Ref = "required blobref()" />
+
+   <VozidloDN OznSegmentu           = "required string()"
+              DruhVozidla           = "required string()"
+              SPZ                   = "optional string()"
+              MPZ                   = "required string()"
+              VIN                   = "optional string()"
+              Znacka                = "optional string()"
+              TypVozidla            = "optional string()"
+              RokVyroby             = "optional xdatetime('yyyy')"
+              PlatnostSTK           = "optional string()"
+              MesicSTKDo            = "optional xdatetime('M/yyyy')"
+              TypBrzd               = "optional string()"
+              StavBrzd              = "optional string()"
+              KodPojistitele        = "optional num(4)"
+              NazevPojistitele      = "optional string()"
+              CisloDokladuPojisteni = "optional string()"
+              PojisteniText         = "optional string()"
+              CisloZK               = "optional string()"
+              VydalZK               = "optional string()"
+              PlatnostZKOd          = "optional xdatetime('d.M.yyyy')"
+              PlatnostZKDo          = "optional xdatetime('d.M.yyyy')"
+              PojistneHPKc          = "optional int()"
+              DatumUhradyHP         = "optional xdatetime('d.M.yyyy')"
+              MistoUhradyHP         = "optional string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
+         <Drzitel xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </VozidloDN>
+
+   <TramvajDN OznSegmentu           = "required string()"
+              Linka                 = "required string()"
+              LinkaPoradi           = "optional int()"
+              EvidCislo             = "optional string()"
+              TypVozidla            = "optional string()"
+              TypBrzd               = "optional string()"
+              StavBrzd              = "optional string()"
+              KodPojistitele        = "optional num(4)"
+              NazevPojistitele      = "optional string()"
+              CisloDokladuPojisteni = "optional string()"
+              PojisteniText         = "optional string()"
+              DruhVozidla           = "required string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </TramvajDN>
+
+   <TrolejbusDN OznSegmentu           = "required string()"
+                Linka                 = "required string()"
+                LinkaPoradi           = "optional int()"
+                EvidCislo             = "optional string()"
+                TypVozidla            = "optional string()"
+                TypBrzd               = "optional string()"
+                StavBrzd              = "optional string()"
+                KodPojistitele        = "optional num(4)"
+                NazevPojistitele      = "optional string()"
+                CisloDokladuPojisteni = "optional string()"
+                PojisteniText         = "optional string()"
+                DruhVozidla           = "required string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </TrolejbusDN>
+
+   <VlakDN OznSegmentu  = "required string()"
+           TypSoupravy  = "optional string()"
+           Spoj         = "optional string()"
+           DruhSoupravy = "required string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik  xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </VlakDN>
+
+   <PovozDN OznSegmentu = "required string()"
+            DruhPovozu  = "required string()" >
+      <xd:mixed>
+         <Skoda     xd:script = "occurs 0..1; ref Skoda" />
+         <JinaSkoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik  xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </PovozDN>
+
+   <PredmetDN OznSegmentu   = "required string()"
+              NazevPredmetu = "required string()"
+              DruhPredmetu  = "required string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </PredmetDN>
+
+   <ZvireDN OznSegmentu  = "required string()"
+            NazevZvirete = "required string()"
+            DruhZvirete  = "required string()" >
+      <xd:mixed>
+         <Skoda xd:script = "occurs 0..1; ref Skoda" />
+         <Vlastnik xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </ZvireDN>
+
+   <UcastnikDN OznSegmentu     = "required string()"
+               TypUcastnika    = "required string()"
+               PraxeRizeni     = "optional int()"
+               AlkoholDech     = "optional string()"
+               AlkoholKrev     = "optional string()"
+               Zraneni         = "optional string()"
+               ZdravPojistovna = "optional string()"
+               PokutaKc        = "optional int()"
+               PokutaZapl      = "optional string()"
+               Pachatel        = "optional string()"
+               Poskozeny       = "optional string()" >
+      <xd:mixed>
+         <JinaSkoda         xd:script = "occurs 0..1; ref Skoda" />
+         <Osoba             xd:script = "occurs 0..1; ref Osoba" />
+         <Firma             xd:script = "occurs 0..1; ref Firma" />
+         <Doklad            xd:script = "occurs 0..; ref Doklad" />
+         <PoruseniZakProvoz xd:script = "occurs 0..1; ref text" />
+         <PoruseniZakPrest  xd:script = "occurs 0..1; ref text" />
+         <PoruseniZakTrest  xd:script = "occurs 0..1; ref text" />
+         <PoruseniZakOst    xd:script = "occurs 0..1; ref text" />
+         <Vazba             xd:script = "occurs 0..1; ref text" />
+      </xd:mixed>
+   </UcastnikDN>
+
+   <Osoba Jmeno             = "required string()"
+          Prijmeni          = "required string()"
+          RodnePrijmeni     = "optional string()"
+          TitulPred         = "optional string()"
+          TitulZa           = "optional string()"
+          RC                = "optional rodneCislo()"
+          Pohlavi           = "optional enum('M','Ž˝')"
+          OsobniStav        = "optional string()"
+          DatumNarozeni     = "optional xdatetime('d.M.yy')"
+          MistoNarozeni     = "optional string()"
+          StatNarozeni      = "optional string()"
+          StatniPrislusnost = "optional string()"
+          Profese           = "optional string()" >
+      <xd:mixed>
+         <TrvalyPobyt    xd:script = "occurs 0..1; ref Adresa" />
+         <PrechodnyPobyt xd:script = "occurs 0..1; ref Adresa" />
+      </xd:mixed>
+   </Osoba>
+
+   <Firma NazevFirmy = "optional string()" IC = "optional int()" >
+      <Sidlo xd:script = "occurs 0..1; ref Adresa" />
+   </Firma>
+
+   <Adresa Ulice           = "optional string(1, 99999)"
+           CisloOrientacni = "optional string()"
+           CisloPopisne    = "optional string()"
+           Obec            = "optional string()"
+           PSC             = "optional string()"
+           Okres           = "optional string()"
+           Stat            = "optional string()"
+           Telefon1        = "optional string()"
+           Telefon2        = "optional string()" />
+
+   <Doklad TypDokladu   = "required string()"
+           Opravneni    = "optional string()"
+           CisloDokladu = "optional string()"
+           DatumVydani  = "optional xdatetime('d.M.yyyy')"
+           MistoVydani  = "optional string()"
+           StatVydani   = "optional string()" />
+
+   <Skoda xd:script = "occurs 0..1" TisKc = "optional skodaTisice()" >
+      optional string(); onTrue trString(4101,4000)
+   </Skoda>
+
+   <text>required string;</text>
+
+</xd:def>

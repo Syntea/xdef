@@ -1,0 +1,55 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+
+<xd:declaration>
+  /* Here will be XML document with error messages. */
+  Element errs = null;
+  /* Container, to which we store the information about errors. */
+  Container errors = [];
+  /*Saved customer code from the input data - see "onStartElement". */
+  String customer;
+
+  void err(int code) {
+    /* Create container. */
+    Container c = [ %Customer = customer,
+    %ErrorCode = code,
+    %Line = getSourceLine(),
+    %Column = getSourceColumn()];
+    /* Add the item to the Container errors. */
+    errors.addItem(c);
+  }
+
+  void createErrors() {
+    /* Check if errors were generated. */
+    if (errors() GT 0 || errors.getLength() GT 0) {
+      /* Create element with errors to the variable "errs". */
+      errs = xcreate("Errors");
+    }
+  }
+ </xd:declaration>
+
+<Order
+  xd:script="onStartElement customer = (String) @CustomerCode; finally createErrors();"
+  Number="int; onFalse err(1); onAbsence err(2);"
+  CustomerCode="string; onAbsence {err(3); setText('error');}">
+
+  <DeliveryPlace xd:script="onAbsence err(11);">
+    <Address Street="string(2,100); onFalse err(12); onAbsence err(13);"
+      House="int(1,9999); onFalse err(14); onAbsence err(15);"
+      City="string(2,100); onFalse err(16); onAbsence err(17);"
+      ZIP="num(5); onFalse err(18); onAbsence err(19);"/>
+  </DeliveryPlace>
+
+  <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
+    ProductCode="num(4); onFalse err(23); onAbsence err(24)"
+    Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
+</Order>
+
+<Errors>
+    <Error xd:script="occurs +; create errors"
+      ErrorCode="int"
+      Customer="string"
+      Line="int"
+      Column="int"/>
+</Errors>
+
+</xd:def>

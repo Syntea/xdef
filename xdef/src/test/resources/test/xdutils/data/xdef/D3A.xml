@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="Windows-1250"?>
+
+<SouborD3A Davka="606/1" ZeDne="20050722150026"
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='D3A.xsd'>
+
+<InfoPrilohaPDN SeqRec="1311"
+                KodUtvaruPolicie="123456"
+                RokDN="2005"
+                CisloDN="12345"
+                Poradi="1"
+                MD5="d149d7aaec7394061d1e0e00a118b291"
+                Delka="53158"
+                Format="JPG"
+                IdentSouboru="1505305"
+                SeqSouboru="1048"/>
+<InfoPrilohaPDN SeqRec="1312"
+                KodUtvaruPolicie="123456"
+                RokDN="2005"
+                CisloDN="12345"
+                Poradi="2"
+                MD5="65e27da548b2e27cfff1e52879b02500"
+                Delka="56720"
+                Format="JPG"
+                IdentSouboru="1505306"
+                SeqSouboru="1049"/>
+
+<InfoZaznamPDN SeqRec="1"
+               PlatnostOd="22.07.2005">
+  <Protokol KodUtvaruPolicie="123456"
+            RokDN="2005"
+            CisloDN="12345"
+            CJ="AAA-1234/BB-2005-124"
+            DatumCasOznameni="22.03.2005 16:30"
+            NazevDN="DOPRAVN� NEHODA BEZ ZRAN�N�"
+            Zpracovatel="NPRAP. BC. Venda KLAUS"/>
+  <Rozhodnuti DatumRozhodnuti="22.07.2005">
+    Odlo�eno dle � 58 odst. 3 p�sm. b) z�kona �. 200/1990 Sb. o p�estupc�ch
+    ve zn�n� pozd�j��ch p�edpis�
+  </Rozhodnuti>
+  <Vyliceni>
+    Dne 22. b�ezna 2005 v 13:11 hodin ��dil dosud neztoto�n�n� �idi�
+    nezji�t�n� n�kladn� vozidlo couval
+    s n�m pod�l n�kladov� rampy, nev�noval se pln� ��zen�
+    vozidla, p�ehl�dl za sebou rozvodnou sk��� a pravou zadn� ��st�
+    do n� narazil do jej�ho krytu a po�kodil jej. P�i nehod� vznikla
+    hmotn� �koda rozvodn� sk��ni. Neztoto�n�n� �idi� po nehod� z
+    m�sta odjel ani� by nehodu ohl�sil. Ke zran�n� osob nedo�lo.
+    Dechov� zkou�ka nebyla provedena. Technick� z�vada, jako p���ina
+    dopravn� nehody, nebyla na m�st� ohled�n�m zji�t�na ani uplatn�na.
+    Nehoda zaznamen�na kamerov�m syst�mem, ze z�znamu v�ak
+    nelze zjistit typ a ani reg. zn. vozidla pachatele..
+  </Vyliceni>
+  <ObjStranka DatumCasDN="22.03.2005 13:11"
+              Okres="VELKY KOCOURKOV 4"
+              Obec="VELKY KOCOURKOV 4"
+              Ulice="MAL�"
+              CisloPopisne="19"
+              CelkovaSkodaKc="10000"
+              HlavniPricina="ZP�SOB J�ZDY"
+              Pricina="508">
+    <Misto>
+      VELKY KOCOURKOV 4, ulice MAL� 19 - ��elov� komunikace, n�kladov�
+      rampa OC Chodov ( sou�adnice GPS -123456,200/-999999,470 )
+    </Misto>
+  </ObjStranka>
+  <Vozidlo OznSegmentu="1"
+           DruhVozidla="nezji�t�no, �idi� ujel"/>
+  <Predmet OznSegmentu="P-1"
+           NazevPredmetu="rozvodn� sk��� -"
+           DruhPredmetu="rozvodn� sk���">
+    <Skoda Kc="10000">
+      ura�en� plastov� kryt
+    </Skoda>
+    <Vlastnik>
+      OC Chodov, Roztylsk� �. 2321/19, PS� 123 00, VELKY KOCOURKOV 4, st�t:
+      �R
+    </Vlastnik>
+  </Predmet>
+  <Ucastnik OznSegmentu="P-1"
+            TypUcastnika="majitel (pr�vnick� osoba)"
+            Poskozeny="Po�kozen�">
+    <Firma NazevFirmy="Firma">
+      <Sidlo Ulice="MAL�"
+             CisloOrientacni="19"
+             CisloPopisne="2321"
+             Obec="VELKY KOCOURKOV 4"
+             PSC="123 00"
+             Okres="VELKY KOCOURKOV 4"
+             Stat="�ESK� REPUBLIKA"/>
+    </Firma>
+    <Vazba>
+      rozvodn� sk���
+    </Vazba>
+  </Ucastnik>
+</InfoZaznamPDN>
+<InfoZaznamPDN SeqRec="2"
+               PlatnostOd="22.07.2005">
+  <Protokol KodUtvaruPolicie="123456"
+            RokDN="2005"
+            CisloDN="12345"
+            CJ="AAA-1234/BB-2005-124"
+            DatumCasOznameni="15.07.2005 15:11"
+            NazevDN="DOPRAVN� NEHODA BEZ ZRAN�N�"
+            Zpracovatel="NPRAP. Venda KLAUS"/>
+  <Rozhodnuti DatumRozhodnuti="21.07.2005">
+    Rozhodnut� nabylo pr�vn� moci
+  </Rozhodnuti>
+  <Vyliceni>
+    Dne 15. �ervence 2005 v 15:10 hod.��dil �idi� vozidlo � Octavia
+    ulici Mal� vjel na tramvajov� p�s a zachytil levou ��st�
+    sv�ho vozidla o pravou p�edn� ��st p�edn�ho vozu tramvaje linky.
+    na vozidlech. Dechov� zkou�ka na alkohol byla provedena p��strojem
+    DR�GER, jej� v�sledek byl negativn�. Ke zran�n� osob nedo�lo.
+    Technick� z�vada, jako p���ina dopravn� nehody, nebyla na m�st�
+    ohled�n�m zji�t�na ani uplatn�na. Vznikla hmotn� �koda na vozidle
+    �koda Octavia a na p�edn�m voze tramvaje.
+  </Vyliceni>
+  <ObjStranka DatumCasDN="15.07.2005 15:10"
+              Okres="VELKY KOCOURKOV 3"
+              Obec="VELKY KOCOURKOV 3"
+              Ulice="MAL�"
+              CelkovaSkodaKc="40000"
+              HlavniPricina="ZP�SOB J�ZDY"
+              Pricina="508">
+    <Misto>
+      VELKY KOCOURKOV 3, k�i�ovatka ulic JI��nsk� x Vinohradsk�
+    </Misto>
+  </ObjStranka>
+  <Vozidlo OznSegmentu="1"
+           DruhVozidla="osobn� automobil"
+           SPZ="1X123456"
+           MPZ="CZ"
+           VIN="ABCCS123456789012"
+           ZnackaVozidla="�KODA"
+           TypVozidla="OCTAVIA 1Z"
+           RokVyroby="2005"
+           PlatnostSTK="platn�"
+           MesicSTKDo="02/2009">
+    <Skoda Kc="20000">
+      lev� bok, lev� p�edn� dve�e, lev� p�edn� blatn�k,
+    </Skoda>
+    <Drzitel>
+      LEASE PLAN �ESK� REPUBLIKA ,S.R.O., I�O: 12345678, Peka�sk�
+      �. 14, PS� 123 00, VELKY KOCOURKOV 5, st�t: �R
+    </Drzitel>
+  </Vozidlo>
+  <Tramvaj OznSegmentu="2"
+           Linka="10"
+           LinkaPoradi="3"
+           EvidCislo="8512"
+           TypVozidla="8513"
+           StavBrzd="dobr�"
+           KodPojistitele="0010"
+           CisloDokladuPojisteni="123456789"
+           DruhVozidla="tramvaj">
+    <Skoda Kc="20000">
+      prav� bok p�edn�ho vozu od�en� lak ,
+    </Skoda>
+    <Vlastnik>
+      Dopravn� podnik hl. m Prahy A.S., I�O: 12345678, 217 �. 42,
+      PS� 123 00, SOKOLOVSK�, st�t: �R
+    </Vlastnik>
+  </Tramvaj>
+  <Ucastnik OznSegmentu="1-1"
+            TypUcastnika="�idi�"
+            PraxeRizeni="25"
+            PokutaKc="500"
+            PokutaZapl="nezaplacena"
+            Pachatel="Pachatel DN">
+    <Osoba Jmeno="Svatopluk"
+           Prijmeni="NOVAK"
+           RC="770829/130"
+           Pohlavi="M"
+           DatumNarozeni="29.08.1977"
+           MistoNarozeni="KOCOURKOV"
+           StatNarozeni="�ESK� REPUBLIKA"
+           StatniPrislusnost="�ESK� REPUBLIKA">
+      <Pobyt Ulice="MAL�"
+             CisloOrientacni="8"
+             CisloPopisne="231"
+             Obec="VELKY KOCOURKOV 6"
+             PSC="123 00"
+             Okres="VELKY KOCOURKOV 6"
+             Stat="�ESK� REPUBLIKA"/>
+    </Osoba>
+    <Doklad TypDokladu="ob�ansk� pr�kaz"
+            CisloDokladu="123456789"
+            DatumVydani="26.10.2005"
+            MistoVydani="VELKY KOCOURKOV 6"
+            StatVydani="�ESK� REPUBLIKA"/>
+    <Doklad TypDokladu="�idi�sk� pr�kaz"
+            Opravneni="A B C T"
+            CisloDokladu="123456789"
+            StatVydani="�ESK� REPUBLIKA"/>
+    <PoruseniZakProvoz>
+      � 4 p�sm. a), � 4 p�sm. b), � 13 odst. 2
+    </PoruseniZakProvoz>
+    <PoruseniZakPrest>
+      � 22 odst.1 p�sm. l) z�kona �. 200/1990 Sb. o p�estupc�ch
+    </PoruseniZakPrest>
+    <Vazba>
+      osobn� automobil - �KODA OCTAVIA
+    </Vazba>
+  </Ucastnik>
+  <Ucastnik OznSegmentu="1-2"
+            TypUcastnika="vlastn�k (pr�vnick� osoba)"
+            Poskozeny="Po�kozen�">
+    <Firma NazevFirmy="Firma"
+           IC="123456">
+      <Sidlo Ulice="MAL�"
+             CisloPopisne="14"
+             Obec="VELKY KOCOURKOV 5"
+             PSC="123 00"
+             Stat="�ESK� REPUBLIKA"/>
+    </Firma>
+    <Vazba>
+      osobn� automobil - �KODA OCTAVIA
+    </Vazba>
+  </Ucastnik>
+  <Ucastnik OznSegmentu="2-1"
+            TypUcastnika="�idi�"
+            PraxeRizeni="20"
+            Poskozeny="Po�kozen�">
+    <Osoba Jmeno="Milan"
+           Prijmeni="NOVAK"
+           RC="770123/180"
+           Pohlavi="M"
+           DatumNarozeni="23.01.1977"
+           MistoNarozeni="KOCOURKOV 7"
+           StatNarozeni="�ESK� REPUBLIKA"
+           StatniPrislusnost="�ESK� REPUBLIKA">
+      <Pobyt Ulice="MAL�"
+             CisloPopisne="460"
+             Obec="VELKY KOCOURKOV 9"
+             PSC="123 00"
+             Okres="VELKY KOCOURKOV 9"
+             Stat="�ESK� REPUBLIKA"/>
+    </Osoba>
+    <Doklad TypDokladu="ob�ansk� pr�kaz"
+            CisloDokladu="123456789"
+            DatumVydani="04.01.2005"
+            MistoVydani="VELKY KOCOURKOV 18"
+            StatVydani="�ESK� REPUBLIKA"/>
+    <Doklad TypDokladu="�idi�sk� pr�kaz"
+            Opravneni="A18 A1 A21 B"
+            CisloDokladu="123456789"
+            MistoVydani="VELKY KOCOURKOV"
+            StatVydani="�ESK� REPUBLIKA"/>
+    <Doklad TypDokladu="Povolen� k ��zen� dr�n�ch vozidel"
+            CisloDokladu="123456789"/>
+    <Vazba>
+      tramvaj
+    </Vazba>
+  </Ucastnik>
+  <Ucastnik OznSegmentu="2-2"
+            TypUcastnika="vlastn�k (pr�vnick� osoba)"
+            Poskozeny="Po�kozen�">
+    <Firma NazevFirmy="Firma"
+           IC="123456">
+      <Sidlo Ulice="MAL�"
+             CisloPopisne="42"
+             Obec="SOKOLOVSK�"
+             PSC="123 00"
+             Stat="�ESK� REPUBLIKA"/>
+    </Firma>
+    <Vazba>
+      tramvaj
+    </Vazba>
+  </Ucastnik>
+  <InfoPojistitel KodPojistitele="0008"
+                  CisloSmlouvy="123456789"
+                  PoradiVozidla="1"
+                  CisloDokladuPojisteni="123456789"
+                  SPZ="1X123456"
+                  VIN="ABCCS123456789012"
+                  CisloTP="BF866918"
+                  DuvodOdeslani="SPZ+VIN"/>
+  <InfoPojistitel KodPojistitele="0010"
+                  CisloDokladuPojisteni="123456789"
+                  DuvodOdeslani="Protokol"/>
+</InfoZaznamPDN>
+<InfoZaznamPDN SeqRec="3"
+               PlatnostOd="22.07.2005">
+  <Protokol KodUtvaruPolicie="123456"
+            RokDN="2005"
+            CisloDN="12345"
+            CJ="AAA-1234/BB-2005-124"
+            DatumCasOznameni="18.07.2005 16:25"
+            NazevDN="DOPRAVN� NEHODA BEZ ZRAN�N�"
+            Zpracovatel="NPRAP. Venda KLAUS"/>
+  <Rozhodnuti>
+    V�c je v �et�en� - o pachateli p�estupku resp. T� nebylo rozhodnuto
+  </Rozhodnuti>
+  <Vyliceni>
+    K dopravn� nehod� do�lo v dob� od 18. �ervence 2005 07:00 hod.
+    do 18. �ervence 2005 16:20 hod., kdy v uveden� dob� ��dil dosud
+    neztoto�n�n� �idi� vozidlo, nezji�t�n� tov�rn� a reg. zna�ky,
+    narazil do zaparkovan�ho vozidla t.z. Renault Megane,
+    kter� zde nepo�kozen� zaparkoval oznamovatel dopravn� nehody
+    Jaroslav. Dosud neztoto�n�n� �idi� z m�sta dopravn� nehody
+    odjel ani� by v�c ozn�mil P�R. Do�lo k hmotn� �kod� na vozidle
+    t.z. Renault Megan. Ke zran�n� osob nedo�lo. Dechov�
+    zkou�ka vzhledem k uveden�mu neprov�d�na. Technick� z�vada, jako
+    p���ina dopravn� nehody, nebyla na m�st� ohled�n�m zji�t�na ani
+    uplatn�na.
+  </Vyliceni>
+  <ObjStranka DatumCasDN="18.07.2005 07:00"
+              DatumCasDoDN="18.07.2005 16:20"
+              Okres="VELKY KOCOURKOV 1"
+              Obec="VELKY KOCOURKOV 1"
+              Ulice="MAL�"
+              CisloPopisne="1065/13"
+              CelkovaSkodaKc="30000"
+              HlavniPricina="ZP�SOB J�ZDY"
+              Pricina="508">
+    <Misto>
+      VELKY KOCOURKOV 1 , ulice MAL� 1065/13 - m�stn� komunikace
+      ( sou�adnice GPS -123456,170/-9999999,140 )
+    </Misto>
+  </ObjStranka>
+  <Vozidlo OznSegmentu="1"
+           DruhVozidla="nezji�t�no, �idi� ujel"/>
+  <Vozidlo OznSegmentu="2"
+           DruhVozidla="osobn� automobil"
+           SPZ="1X123456"
+           MPZ="CZ"
+           VIN="ABCCS123456789012"
+           ZnackaVozidla="RENAULT"
+           TypVozidla="MEGANE SCENIC N1 JM"
+           RokVyroby="2007"
+           PlatnostSTK="platn�"
+           MesicSTKDo="09/2011"
+           KodPojistitele="0008"
+           CisloDokladuPojisteni="123456789">
+    <Skoda Kc="30000">
+      LZ blatn�k, Z n�razn�k,
+    </Skoda>
+    <Drzitel>
+      Josef Selichar Setrans, I�O: 12345678, Pet�rkova �. 1953/24,
+      PS� 123 00, VELKY KOCOURKOV 4, st�t: �R
+    </Drzitel>
+  </Vozidlo>
+  <Ucastnik OznSegmentu="2-1"
+            TypUcastnika="vlastn�k (pr�vnick� osoba)"
+            Poskozeny="Po�kozen�">
+    <Firma NazevFirmy="Firma"
+           IC="123456">
+      <Sidlo Ulice="MAL�"
+             CisloOrientacni="24"
+             CisloPopisne="1953"
+             Obec="VELKY KOCOURKOV 4"
+             PSC="123 00"
+             Okres="VELKY KOCOURKOV 4"
+             Stat="�ESK� REPUBLIKA"/>
+    </Firma>
+    <Vazba>
+      osobn� automobil - RENAULT MEGANE SCENIC
+    </Vazba>
+  </Ucastnik>
+  <InfoPojistitel KodPojistitele="0008"
+                  CisloSmlouvy="123456789"
+                  PoradiVozidla="1"
+                  CisloDokladuPojisteni="123456789"
+                  SPZ="1X123456"
+                  VIN="ABCCS123456789012"
+                  CisloTP="UC073786"
+                  DuvodOdeslani="Doklad+SPZ+VIN"/>
+  <InfoPojistitel KodPojistitele="0008"
+                  CisloDokladuPojisteni="123456789"
+                  SPZ="1X123456"
+                  VIN="ABCCS123456789012"
+                  DuvodOdeslani="Protokol"/>
+</InfoZaznamPDN>
+</SouborD3A>

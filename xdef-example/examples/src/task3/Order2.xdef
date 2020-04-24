@@ -1,0 +1,34 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+
+<xd:declaration>
+  /* Information about the customers and products. */
+  external Element customers, products;
+
+  boolean customer() {
+    String s = getText();
+    Container c = xpath('Customer[@CustomerCode="' + s + '"]', customers);
+    return c.getLength()==0 ? error("Incorrect customer code: " + s) : true;
+  }
+
+  boolean item() {
+    String s = getText();
+    Container c = xpath('Product[@Code="' + s + '"]', products);
+    return c.getLength()==0 ? error("Incorrect item code: " + s) : true;
+  }
+</xd:declaration>
+
+<Order Number="int" CustomerCode= "customer()">
+
+  <DeliveryPlace>
+    <Address Street="string(2,100)"
+      House="int(1,9999)"
+      City="string(2,100)"
+      ZIP="num(5)"/>
+  </DeliveryPlace>
+
+  <Item xd:script="occurs 1..10"
+    ProductCode="item()"
+    Quantity="int(1,1000)"/>
+</Order>
+
+</xd:def>

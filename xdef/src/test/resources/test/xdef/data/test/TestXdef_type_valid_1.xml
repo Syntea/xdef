@@ -1,0 +1,108 @@
+<Types xmlns:ns="http://testNamespace.com">
+    <an>a1b2c</an>
+    <an_1>a1b</an_1>
+    <an_2>a1b</an_2>
+    <an_2>a1b2</an_2>
+    <base64>c3VyZQ==</base64>
+    <base64_1>c3U=</base64_1>
+    <base64_2>c3VyZQ==</base64_2>
+    <boolean>true</boolean>
+    <boolean>0</boolean>
+    <!--
+    <BNF>4</BNF>
+    -->
+    <contains_1>ababcde</contains_1>
+    <containsi_1>ABABCDE</containsi_1>
+    <datetime_1>2000-01-01</datetime_1>
+    <dateYMDhms>20000101000000</dateYMDhms>
+    <dec>123.123</dec>
+    <dec>123,123</dec>
+    <dec_1>123.45</dec_1>
+    <dec_1>123,45</dec_1>
+    <dec_2>1.234</dec_2>
+    <dec_2>1,234</dec_2>
+    <!--
+    <ENTITY>&entita;</ENTITY>
+    <ENTITIES>&entita; &entita2;</ENTITIES>
+    -->
+    <ID>id</ID>
+    <IDREF>id</IDREF>
+    <IDREFS>id id</IDREFS>
+    <ISOdateTime>2000-01-01T00:00:00</ISOdateTime>
+    <ISOdate>2000-01-01</ISOdate>
+    <ISOtime>00:00:00</ISOtime>
+    <ISOday>---15</ISOday>
+    <ISOlanguage>ces</ISOlanguage>
+    <ISOlanguages>ces eng</ISOlanguages>
+    <ISOmonth>--01</ISOmonth>
+    <ISOmonthDay>--01-01</ISOmonthDay>
+    <ISOyear>2000</ISOyear>
+    <ISOyearMonth>2000-01</ISOyearMonth>
+    <ISOduration>P01Y20M12D</ISOduration>
+    <email>john.doe@server.com</email>
+    <emailList>john.doe@server.com, joe.smith@another.server.com</emailList>
+    <!--
+    <emailDate></emailDate>
+    -->
+    <ends_1>abdef</ends_1>
+    <endsi_1>ABCDEF</endsi_1>
+    <eq_1>abcde</eq_1>
+    <eqi_1>ABCDE</eqi_1>
+    <file>c://file.txt</file>
+    <float>123E12</float>
+    <float_1>0.123</float_1>
+    <float_2>0</float_2>
+    <float_2>100</float_2>
+    <hex>1A3F</hex>
+    <!--
+    <hex_1>AFA</hex_1>
+    <hex_2>00</hex_2>
+    -->
+    <hex_2>ffff</hex_2>
+    <int>-123</int>
+    <int_1>10000</int_1>
+    <int_2>0</int_2>
+    <int_2>100</int_2>
+    <enum_n>abc</enum_n>
+    <enum_n>def</enum_n>
+    <enumi_n>ABC</enumi_n>
+    <enumi_n>def</enumi_n>
+    <ListOf_m>1 2 3 4</ListOf_m>
+    <MD5>e4d909c290d0fb1ca068ffaddf22cbd0</MD5>
+    <NCname>ncname</NCname>
+    <NCnameList>ncname ncname</NCnameList>
+    <NMTOKEN>nmtoken</NMTOKEN>
+    <NMTOKENS>nmtoken nmtoken</NMTOKENS>
+    <!--
+    <NOTATION></NOTATION>
+    -->
+    <normString>Normalized String</normString>
+    <normToken>normalizedToken</normToken>
+    <normTokens>normalizedToken normalizedToken</normTokens>
+    <num>123456789</num>
+    <num_1>1234</num_1>
+    <num_2>123</num_2>
+    <num_2>12345</num_2>
+    <!--
+    <pic_1></pic_1>
+    -->
+    <Qname>ns:ncname</Qname>
+    <QnameURI>ns:name</QnameURI>
+    <QnameList_1>ns:name ns:anotherName</QnameList_1>
+    <QnameListURI>ns:name ns:anotherName</QnameListURI>
+    <regex_1>aaa</regex_1>
+    <starts_1>abcde</starts_1>
+    <startsi_1>ABCDE</startsi_1>
+    <string>Ahoj!</string>
+    <string_1>abcde</string_1>
+    <string_2>ab</string_2>
+    <string_2>abcd</string_2>
+    <uri>../text/text.txt</uri>
+    <!--
+    <uriList>text.txt ../../text.txt</uriList>
+    -->
+    <url>file:C://text.txt:4568</url>
+    <!--
+    <urlList>file:C://text.txt:4568 http://:file.bat:6958</urlList>
+    -->
+</Types>

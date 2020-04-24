@@ -1,0 +1,32 @@
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='A' >
+ <xd:declaration>
+    type code string(4);
+    uniqueSet User {usr: string()};
+    uniqueSet Projekt {prj: code};
+    uniqueSet TymProjektu {prj: Projekt.prj; usr: User.usr;}
+ </xd:declaration>
+
+ <A>
+    <Pracovnik xd:script='occurs +'
+       UserID='required User.usr.ID()' Jmeno='required string()'/>
+    <Projekt xd:script='occurs +'
+          KodProjektu='
+            /* MUSI PRIDAT a nesmi byt v Projekt!*/
+            required TymProjektu.prj(Projekt.prj.ID());'
+          NazevProjektu='required string()'>
+      <Tym xd:script='occurs +;'
+          UserID='required TymProjektu.usr.ID()'/>
+    </Projekt>
+    <AktivitaProjekt xd:script='occurs +'
+          KodProjektu='
+            /*NESMI PRIDAT ale musi byt v Projekt!*/
+            required TymProjektu.prj.IDREF(Projekt.prj.ID())'>
+      <AktivitaPracovnik xd:script='occurs +'
+          UserID='required TymProjektu.usr.IDREF()'>
+        <Aktivita xd:script='occurs +'
+          Datum='required date()'
+          DobaHodiny='required int()'/>
+      </AktivitaPracovnik>
+    </AktivitaProjekt>
+  </A>
+</xd:def>

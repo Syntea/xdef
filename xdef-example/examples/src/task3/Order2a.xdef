@@ -1,0 +1,46 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+
+<xd:declaration>
+<![CDATA[
+  /* Information about the customers and products. */
+  external Element customers, products;
+
+  /* Validation of customer code. */
+  boolean customer() {
+    String s = getText();/* get value of the attribute. */
+    /* find customer description and save it to Container. */
+    Container c = xpath('Customer[@CustomerCode="' + s + '"]', customers);
+    /* Check if the customer was found. If yes, return true; otherwise
+     * call the method error, which writes the error report and returns false. */
+    return c.getLength()==0 ?
+      error("POBJ001", "Customer code: &{0}", "&{0}" + s) : true;
+  }
+
+  /* Validate product code from Item. */
+  boolean item() {
+    String s = getText(); /* get attribute value. */
+    /* Find product description and save it to Container. */
+    Container c = xpath('Product[@Code="' + s + '"]', products);
+    /* Check if the code was found. If yes, return true; otherwise
+     * call the method error, which writes the error report and returns false. */
+    return c.getLength()==0 ?
+      error("POBJ002", "Product code: &{0}", "&{0}" + s) : true;
+  }
+]]>
+</xd:declaration>
+
+<Order Number="int" CustomerCode= "customer()">
+
+  <DeliveryPlace>
+    <Address Street="string(2,100)"
+      House="int(1,9999)"
+      City="string(2,100)"
+      ZIP="num(5)"/>
+  </DeliveryPlace>
+
+  <Item xd:script="occurs 1..10"
+    ProductCode="item()"
+    Quantity="int(1,1000)"/>
+</Order>
+
+</xd:def>

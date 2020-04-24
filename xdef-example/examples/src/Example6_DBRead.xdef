@@ -1,0 +1,26 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:name="query">
+  <xd:declaration scope = "local">
+    external Service service; /* connection to database from outside */
+    String qry = "SELECT AUTHOR
+         FROM BOOKS.AUTHOR, BOOKS.TITLE_AUTHOR, BOOKS.TITLE
+         WHERE BOOKS.AUTHOR.IDAUTHOR = BOOKS.TITLE_AUTHOR.IDAUTHOR AND
+         BOOKS.TITLE.IDTITLE = BOOKS.TITLE_AUTHOR.IDTITLE AND
+         BOOKS.TITLE.IDTITLE = ? ORDER BY AUTHOR ASC";
+    ResultSet rs = service.query('SELECT * FROM BOOKS.TITLE ORDER BY TITLE ASC');
+  </xd:declaration>
+
+  <Books>
+    <Book xd:script="occurs *; create rs /*iterator used for generation of Book*/"
+     title="string()"
+     isbn="regex('\\d{8,10}')"
+     editor="optional string()"
+     issued="optional gYear()">
+      <Author xd:script="occurs *;
+          /* queryValue('Author', getItem('IDTITLE')) returns iterator of value 'AUTHOR'.
+           * The parameter getItem('IDTITLE') is associated with instance of Book. */
+          create service.queryItem(qry, 'AUTHOR', rs.getItem('IDTITLE'));">
+        string();
+      </Author>
+    </Book>
+  </Books>
+</xd:def>

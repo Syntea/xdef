@@ -1,0 +1,24 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+
+<xd:declaration>
+  /* Information about the customers and products. */
+  external Element customers, products;
+</xd:declaration>
+
+<Order Number="int"
+  CustomerCode=
+    "xpath('Customer[@CustomerCode=&quot;' + getText() + '&quot;]', customers).getLength()!=0" >
+
+  <DeliveryPlace>
+    <Address Street="string(2,100)"
+      House="int(1,9999)"
+      City="string(2,100)"
+      ZIP="num(5)"/>
+  </DeliveryPlace>
+
+  <Item xd:script="occurs 1..10"
+    ProductCode="xpath('Product[@Code=&quot;' + getText() + '&quot;]', products).getLength() != 0"
+    Quantity="int(1,1000)"/>
+</Order>
+
+</xd:def>

@@ -1,5 +1,0 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" xd:name  = "b">
-  <bar>
-    <foo xd:script = "occurs 1..; finally out('b'); ref a#foo"/>
-  </bar>
-</xd:def>

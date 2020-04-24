@@ -1,9 +1,0 @@
-<js:map xmlns:js="http://www.w3.org/2005/xpath-functions">
-	<js:number key="plat">1000</js:number>
-	<js:string key="jmeno">Alena</js:string>
-	<js:boolean key="zena">true</js:boolean>
-	<js:map key="kocka">
-		<js:string key="jmeno">Mnau</js:string>
-		<js:number key="vek">1</js:number>
-	</js:map>
-</js:map>

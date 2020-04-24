@@ -1,0 +1,14 @@
+<js:map xmlns:js="http://www.xdef.org/json/4.0" b="null">
+  <a>
+    <js:array>
+      <js:item value="1"/>
+      <js:item value="null"/>
+      <js:item value="-1.23E+4"/>
+      <js:array>
+        <js:item value="true"/>
+        <js:item value="5"/>
+      </js:array>
+      <js:item value='\a"'/>
+    </js:array>
+  </a>
+</js:map>

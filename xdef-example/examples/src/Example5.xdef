@@ -1,0 +1,10 @@
+<xd:def  xmlns:xd="http://www.xdef.org/xdef/3.2" root="company">
+<xd:declaration> external Element source;</xd:declaration>
+<company>
+  <employee xd:script="*; create from(source,'//employee')">
+    <department> string; create from('../@code') </department>
+    <name> string; create from('@name') </name>
+    <pay> int; create from('@pay') </pay>
+  </employee>
+</company>
+</xd:def>

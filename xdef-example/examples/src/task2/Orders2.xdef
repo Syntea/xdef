@@ -1,0 +1,71 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
+
+<xd:declaration>
+<![CDATA[
+  /* File names of files with constomers and commodity oodes. */
+  external String outFile, errFile;
+  int errCount = 0, errCountOld = 0, count = 0;
+  XmlOutStream outStream, errStream;
+
+  /* write file with errors */
+  void err(int code) {
+    if (errCount++ == 0) {
+      errStream = new XmlOutStream(errFile);
+      /* Document header and start of the root element */
+      errStream.writeElementStart(new Element("Errors"));
+    }
+    Element e = new Element('Error'); /* Pripravime element. */
+    /* Set attributes. */
+    e.setAttr("Customer", xpath("/Orders/Order/@CustomerCode").toString());
+    e.setAttr("ErrorCode", toString(code));
+    e.setAttr("Line", toString(getSourceLine()));
+    e.setAttr("Column", toString(getSourceColumn()));
+    errStream.writeElement(e); /* Write the element with error information */
+  }
+
+  /* Write result */
+  void writeResult() {
+    if (errCount != errCountOld) { /* V objednavce byla chyba */
+      errCountOld = errCount; /* Save number of errors, to know in new error occurred */
+      return; /* write nothing */
+    }
+    if (count++ == 0) {
+      /* this is the first item*/
+      outStream = new XmlOutStream(outFile, "windows-1250"); /* Prepare data stream */
+      outStream.writeElementStart(getRootElement()); /* Write document header and root element */
+    }
+    outStream.writeElement(getElement()); /* write the processed order */
+  }
+
+  /* Close the output stream and the file with errors */
+  void closeAll() {
+    if (errCount > 0) { /* check if errors were reported */
+      errStream.writeElementEnd(); /* write root element end tag */
+      errStream.close(); /* close the data stream */
+    }
+    if (count > 0) { /* Check if a correct order exists */
+      outStream.writeElementEnd(); /* write root element end tag */
+      outStream.close(); /* close the data stream */
+    }
+  }
+]]>
+</xd:declaration>
+
+<Orders xd:script="finally closeAll();"
+    id="num(9); onFalse err(98)">
+  <Order xd:script = "occurs +; onAbsence err(99); finally writeResult()"
+    Number="int; onFalse err(1); onAbsence err(2);"
+    CustomerCode="string; onAbsence err(3);">
+    <DeliveryPlace xd:script="onAbsence err(11);">
+      <Address Street="string(2,100); onFalse err(12); onAbsence err(13);"
+        House="int(1,9999); onFalse err(14); onAbsence err(15);"
+        City="string(2,100); onFalse err(16); onAbsence err(17);"
+        ZIP="num(5); onFalse err(18); onAbsence err(19);"/>
+    </DeliveryPlace>
+    <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
+      ProductCode="num(4); onFalse err(23); onAbsence err(24)"
+      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
+  </Order>
+</Orders>
+
+</xd:def>

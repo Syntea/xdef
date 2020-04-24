@@ -1,0 +1,1 @@
+<Order CustomerCode="ALFA" Number="123"><DeliveryPlace><Address City="NewTown" House="5" Street="Oldroad" ZIP="32321"/></DeliveryPlace><Item ProductCode="0002" Quantity="2"/><Item ProductCode="0003" Quantity="1"/></Order>

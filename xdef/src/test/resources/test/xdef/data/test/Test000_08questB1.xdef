@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xd:def
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xd:name      = "SoapRequestB1"
+   xd:root      = "Envelope"
+   impl-version = "2.4.0.0"
+   impl-date    = "28.9.2006" >
+
+   <xd:macro name="moreAll">options moreAttributes, moreElements, moreText</xd:macro>
+
+ <Envelope>
+   <Header>
+     <Request              xd:script="occurs 1; ref B1_common#Request" />
+   </Header>
+   <Body>
+    <xd:choice>
+       <Ping               xd:script="occurs 1; ref B1_common#Ping;               finally ctlIOR()"/>
+       <PingFlow           xd:script="occurs 1; ref B1_common#PingFlow;           finally outputIOR('PingFlow_#PingFlow_')"/>
+       <Get_PSP            xd:script="occurs 1; ref B1_common#Get_PSP;            finally outputIOR('Get_PSP_#Get_PSP_')"/>
+       <Get_VolnePSP       xd:script="occurs 1; ref B1_common#Get_VolnePSP;       finally outputIOR('Get_VolnePSP_#Get_VolnePSP_')"/>
+       <Get_NositelPSP     xd:script="occurs 1; ref B1_common#Get_NositelPSP;     finally outputIOR('Get_NositelPSP_#Get_NositelPSP_')"/>
+       <Get_SmlouvyPSP     xd:script="occurs 1; ref B1_common#Get_SmlouvyPSP;     finally outputIOR('Get_SmlouvyPSP_#Get_SmlouvyPSP_')"/>
+       <Set_PrenosPSP      xd:script="occurs 1; ref B1_common#Set_PrenosPSP;      finally outputIOR('Set_PrenosPSP_#Set_PrenosPSP_')"/>
+       <Set_MultiPrenosPSP xd:script="occurs 1; ref B1_common#Set_MultiPrenosPSP; finally outputIOR('Set_MultiPrenosPSP_#Set_MultiPrenosPSP_')"/>
+       <xd:any             xd:script = "occurs 1; ${moreAll}; finally setErr(1010)" />
+     </xd:choice>
+   </Body>
+ </Envelope>
+</xd:def>

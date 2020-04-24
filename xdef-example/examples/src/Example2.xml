@@ -1,0 +1,26 @@
+<Company name = "Bill &amp; John">
+  <address>
+    <street>Parker St.</street>
+    <city>London</city>
+    <state>GB</state>
+    <zip>423456</zip>
+  </address>
+  <employes>
+    <person status = "director">
+      <name>Bill Gates</name>
+      <salary>3000</salary>
+    </person>
+    <person status = "worker">
+      <name>John S. Brown</name>
+      <salary>500</salary>
+    </person>
+    <person status = "worker">
+      <name>Mary Caldor</name>
+      <salary>1903</salary>
+    </person>
+    <person status = "worker">
+      <name>James Walker</name>
+      <salary>300</salary>
+    </person>
+  </employes>
+</Company>

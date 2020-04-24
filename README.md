@@ -10,15 +10,20 @@ but also to describe specifically their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
+This project is implementation for platform Java 1.6+.
+
 
 
 # License
+
 The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
 
 
 # Examples
+
+You can try following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
 
 Example 1: **Essential concepts**
 <table><tr style="vertical-align: top;"><td>
@@ -28,9 +33,9 @@ Let´s have the following XML data:
 <Employee
     FirstName = "Andrew"
     LastName  = "Aardvark"
-    EnterDate = "1996-3-12"
+    EnterDate = "1996-03-12"
     Salary    = "21700"
-/>
+>
     <Address
         Street = "Broadway"
         Number = "255"
@@ -47,19 +52,20 @@ Let´s have the following XML data:
 This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:root="Employee">
     <Employee
         FirstName = "required string()"
         LastName  = "required string()"
         EnterDate = "required date()"
         Salary    = "optional decimal()"
-    />
+    >
         <Address
             Street = "required string()"
             Number = "required int()"
             Town   = "required string()"
             State  = "required string()"
-            Zip    = "required int()" />
+            Zip    = "required int()"
+        />
         <Competence xd:script = "occurs 1..5">
             required string()
         </Competence>
@@ -110,7 +116,8 @@ Model of the XML data:
 
 <Person GivenName  = "string()" 
         FamilyName = "string()" 
-        PersonalID = "int()" />
+        PersonalID = "long()"
+        Salary     = "optional int()" />
 <Address Street = "string()"
          Number = "int()"
          Town   = "string()"
@@ -164,20 +171,25 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
-**For the complete documentation see the directory _src/documentation_.**
+For the **complete documentation** see the directory **_xdef/src/documentation_**.
 
 
 
-# Usage
+# Usage in other projects
+
 
 ## Check and download available versions
+
 Links:
-* release versions from central maven repository: <https://search.maven.org/search?q=g:org.xdef>
+* release versions from the central maven repository: <https://search.maven.org/search?q=g:org.xdef>
 * release and snapshot versions from oss.sonatype.org: <https://oss.sonatype.org/#nexus-search;gav~org.xdef>
 
-## Maven
+
+## For maven projects
+
 Configuration file pom.xml:
-* dependency on release version in central maven repository:
+* dependency on release version in the central maven repository:
+
   ```xml
   <dependencies>
       <dependency>
@@ -188,7 +200,7 @@ Configuration file pom.xml:
   <dependencies>
   ```
 * dependency on release or snapshot version in oss.sonatype.org:
-  
+
   ```xml
   <dependencies>
       <dependency>
@@ -211,14 +223,14 @@ Configuration file pom.xml:
 
 
 
-# Building
+# Building this project
 
 Source code at GitHub:
 * link to the release version: <https://github.com/Syntea/xdef>
 * link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
 
 Prerequisities:
-* download project X-definition, eg. from GitHub: <https://github.com/Syntea/xdef>
+* download project X-definition, eg. from GitHub
 * install _java_
 * install _maven_
 * configure _maven_
@@ -226,30 +238,38 @@ Prerequisities:
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
+
   ```shell
   mvn clean
   ```
 * compile all java-resources, respectively all compilable resources:
+
   ```shell
   mvn compile
   ```
 * build snapshot package:
+
   ```shell
   mvn package
   ```
 * build snapshot package avoiding junit-tests:
+
   ```shell
   mvn package -DskipTests=true
   ```
 * build release package:
+
   ```shell
   mvn package -Prelease
   ```
 * build release packages including javadoc, sources, documentation:
+
   ```shell
   mvn package -Prelease,javadoc,sources
   ```
-## Deploying to maven central repository
+
+
+## Deploying to the maven central repository
 
 Prerequisities:
 * satisfy prerequisities for building
@@ -260,10 +280,12 @@ Prerequisities:
 
 Deploying:
 * deploy snapshot packages to snapshot-repository at _oss.sonatype.org_:
+
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
 * release the version of X-definition to the maven central repository (throw _oss.sonatype.org_):
+
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
   ```

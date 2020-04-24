@@ -1,0 +1,26 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" root="Company">
+
+<xd:declaration scope = "global">
+    int count = 0;
+    int salary = 0;
+    float average;
+</xd:declaration>
+
+  <Company xd:script="finally average = salary / count;"
+      name="string(1,200)">
+    <address>
+      <street>string(1,100)</street>
+      <city>string(1,50)</city>
+      <state>string(2)</state>
+      <zip>int</zip>
+    </address>
+    <employes>
+      <person xd:script="occurs *"
+        status = "enum('director','worker');">
+        <name>string(1,100)</name>
+        <salary>int; onTrue {salary += getParsedFloat(); count++;} </salary>
+      </person>
+    </employes>
+  </Company>
+
+</xd:def>

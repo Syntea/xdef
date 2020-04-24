@@ -1,9 +1,0 @@
-[
-  { $script: "occurs 1..*;",
-    "Name": "string()",
-    "Genre": [ $oneOf,
-      "string()",
-       ["occurs 1..*;string()"]
-    ]
-  }
-]

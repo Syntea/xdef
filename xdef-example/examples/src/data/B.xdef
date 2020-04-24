@@ -1,0 +1,13 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="B">
+<xd:component>
+  /* X-Component generated from the X-definition A */
+  %class components.City extends data.MyClass %link A#Town;
+  %class components.House %link A#House;
+
+  /* Generate interface according to X-component A#Person */
+  %interface components.Citizen %link A#Person;
+
+  /* The generated X-component "Person" implements the interface "Citizen" */
+  %class components.Person implements components.Citizen %link A#Person;
+</xd:component>
+</xd:def>

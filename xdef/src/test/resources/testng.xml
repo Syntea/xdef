@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Main Suite" verbose="1" group-by-instances="true" parallel="none" thread-count="4">
+    <test name="Main Test">
+        <packages>
+            <package name="test.*"/>
+        </packages>
+    </test>
+</suite>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<SOUBOR>
+  <HISTORIE_SOUBORU>
+    Zaloďż˝en 1999.
+  </HISTORIE_SOUBORU>
+  <REZISER jmeno = "Jan"
+         prijmeni = "Novák"
+         pohlavi = "muz"
+         datum_narozeni = "11.12.1950"/>
+  <ASISTENT_REZIE jmeno = "Jana"
+         prijmeni = "Nováková"
+         pohlavi = "zena"
+         datum_narozeni = "11.12.1950"/>
+  <DRAMATURG jmeno = "Libor"
+         prijmeni = "Novák"
+         pohlavi = "muz"
+         datum_narozeni = "11.12.1950"/>
+  <SCENARISTA jmeno = "Marie"
+         prijmeni = "Nováková˝"
+         pohlavi = "zena"
+         datum_narozeni = "11.12.1950"/>
+  <HEREC jmeno = "Dalibor"
+         prijmeni = "Novák"
+         pohlavi = "muz"
+         datum_narozeni = "11.12.1950">
+    <ODEHRANE_ROLE
+      nazev = "Novákovi"
+      typ_role = "hlavní"
+      nazev_postavy = "Maruska"
+      pocet_repriz = "10">
+      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+    </ODEHRANE_ROLE>
+    <CHARAKTERISTIKA>Skvélé</CHARAKTERISTIKA>
+    <OHLASY_OD_DIVAKU>Nejlepší</OHLASY_OD_DIVAKU>
+  </HEREC>
+  <HEREC jmeno = "Magda"
+         prijmeni = "Nováková"
+         pohlavi = "zena"
+         datum_narozeni = "11.12.1950">
+    <ODEHRANE_ROLE
+      nazev = "Novákovi"
+      typ_role = "vedlejší"
+      nazev_postavy = "Pepíček"
+      pocet_repriz = "10">
+      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+    </ODEHRANE_ROLE>
+    <ODEHRANE_ROLE
+      nazev = "Loupežnice"
+      typ_role = "hlavní"
+      nazev_postavy = "Loupežníci"
+      pocet_repriz = "2">
+      <AUTOR jmeno  = "Franta" prijmeni = "Novák"/>
+    </ODEHRANE_ROLE>
+    <CHARAKTERISTIKA>Skvělé</CHARAKTERISTIKA>
+    <OHLASY_OD_DIVAKU>Nejlepší</OHLASY_OD_DIVAKU>
+  </HEREC>
+</SOUBOR>

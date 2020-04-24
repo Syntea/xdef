@@ -1,0 +1,78 @@
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+    xd:root      = "statOnDemandInputParam"
+    xd:script    = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces"
+    impl-version = "1.17.17"
+    impl-date    = "2011-03-25">
+
+<xd:declaration>
+
+    uniqueSet column {t: string()};
+    type op_bool_equi enum('and', 'or');
+    type op_bool_comp enum('eq', 'lt', 'le', 'gt', 'ge', 'ne');
+    type op_bool_tern enum('in');
+    type ctype enum('int', 'string');
+    type op_val_fcn enum('count', 'sum', 'max', 'min');
+    type op_val_equi enum('add', 'mul');
+    type op_val_bi enum('diff', 'div');
+    type op_val_mono enum('plus', 'minus', 'bracket');
+</xd:declaration>
+
+<statOnDemandInputParam>
+    <visualisation>
+        <title>required string()</title>
+
+        <rovne  xd:script="ref dimension"/>
+        <svisle xd:script="ref dimension"/>
+    </visualisation>
+
+    <select>
+        <xd:choice xd:script="ref expr_val; occurs 1..*"/>
+    </select>
+
+    <group_by>
+        <column name="required column.t.ID()" xd:script="occurs 2..2"/>
+    </group_by>
+
+    <where>
+        <xd:choice xd:script="ref expr_bool; occurs 0..1"/>
+    </where>
+</statOnDemandInputParam>
+
+<dimension>
+    <column name="required column.t.IDREF()"/>
+    <soucet value="required boolean()"/>
+</dimension>
+
+<xd:choice xd:name="expr_bool">
+    <op_bool_equi operator="required op_bool_equi()">
+        <xd:choice xd:script="ref expr_bool; occurs 0..*"/>
+    </op_bool_equi>
+    <op_bool_comp operator="required op_bool_comp()">
+        <xd:choice xd:script="ref expr_val; occurs 2"/>
+    </op_bool_comp>
+    <op_bool_tern operator="required op_bool_tern()">
+        <xd:choice xd:script="ref expr_val"/>
+        <values>
+            <xd:choice xd:script="ref expr_val; occurs 1..*"/>
+        </values>
+    </op_bool_tern>
+</xd:choice>
+
+<xd:choice xd:name="expr_val">
+    <const value="required string()" type="required ctype()"/>
+    <column name="required string()"/>
+    <op_val_fcn name="required op_val_fcn()">
+        <xd:choice xd:script="ref expr_val; occurs 0..*"/>
+    </op_val_fcn>
+    <op_val_equi name="required op_val_equi()">
+        <xd:choice xd:script="ref expr_val; occurs 0..*"/>
+    </op_val_equi>
+    <op_val_bi name="required op_val_bi()">
+        <xd:choice xd:script="ref expr_val; occurs 2"/>
+    </op_val_bi>
+    <op_val_mono name="required op_val_mono()">
+        <xd:choice xd:script="ref expr_val"/>
+    </op_val_mono>
+</xd:choice>
+
+</xd:def>

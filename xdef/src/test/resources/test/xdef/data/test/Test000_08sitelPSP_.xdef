@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xd:def
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xd:name      = "Get_NositelPSP_"
+   xd:root      = "Get_NositelPSP_"
+   impl-version = "2.4.0.0"
+   impl-date    = "28.09.2006" >
+
+  <Get_NositelPSP_
+     IdPrace           = "required int(); create getIdPrace()" >
+
+     <RequestId        xd:script="occurs 1; ref B1_common_#RequestId" />
+     <Get_NositelPSP   xd:script="occurs 1; ref B1_common_#Get_NositelPSP" />
+  </Get_NositelPSP_>
+
+</xd:def>

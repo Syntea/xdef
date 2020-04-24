@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='windows-1250'?>
+<!--======================================================================-->
+<!-- XDEF pro Bpel verze 1.0                                              -->
+<!--                                                                      -->
+<!-- Xdef je specifikovana pro cely Bpel                                  -->
+<!-- Nejsou uvedeny specifikace pro WSDL rozšíření BPelu                  -->
+<!--                                                                      -->
+<!-- Nepřesnosti popisu Bpelu:                                            -->
+<!-- Nepřesně je specifikován příkaz ASSIGN                               -->
+<!-- nezajištěny výběry buď je tento atribut či jiný (Choise na atributy) -->
+<!--======================================================================-->
+
+   <!--======================================-->
+   <!-- Dosud nerealizovane metody pro BPEL  -->
+   <!--                                      -->
+   <!-- anyUri   ()   ->                     -->
+   <!-- QName    ()   ->                     -->
+   <!-- NCName   ()   ->                     -->
+   <!-- boolExpr ()   ->                     -->
+   <!-- QNameList()   ->                     -->
+   <!-- durationExpr()->                     -->
+   <!-- deadlineExpr()->                     -->
+   <!--======================================-->
+
+<xd:def   xmlns:xd='http://www.syntea.cz/xdef/3.1'
+          impl-version ='0.9.0.0" impl-date="17.10.2006'
+          xmlns:bl     ='http://www.syntea.cz/xbpel/'
+          xd:name      ='BPEL_com'
+          xd:root      ='process'>
+   <!--======================================-->
+   <!-- Macra                                -->
+   <!--======================================-->
+<xd:macro name = "anyUri">string()</xd:macro>
+<xd:macro name = "booleanExpr">string()</xd:macro>
+<xd:macro name = "IntExpr">string()</xd:macro>
+<xd:macro name = "integerUnsignedExpr">string()</xd:macro>
+<xd:macro name = "durationExpr">string()</xd:macro>
+<xd:macro name = "deadlineExpr">string()</xd:macro>
+<xd:macro name = "QueryExpr">string()</xd:macro>
+
+
+   <!--======================================-->
+   <!-- StdActivity                          -->
+   <!--======================================-->
+<source  linkName="required NCName ()"
+         transitionCondition="optional ${booleanExpr}"/>
+
+<target  linkName="required NCName ()"/>
+
+<StdActivity
+         name ="optional NCName()"
+         joinCondition="optional ${booleanExpr}"
+         suppressJoinFailure="optional enum('yes','no')">
+
+        <source     xd:script="occurs 0.. ; ref source"/>
+        <target     xd:script="occurs 0.. ; ref target"/>
+
+</StdActivity>
+   <!--======================================-->
+   <!-- Activity                             -->
+   <!--======================================-->
+<Activity>
+  <xd:choice>
+     <receive          xd:script="occurs 1;  ref receive" />
+     <reply            xd:script="occurs 1;  ref reply" />
+     <invoke           xd:script="occurs 1;  ref invoke" />
+     <assign           xd:script="occurs 1;  ref assign" />
+     <throw            xd:script="occurs 1;  ref throw" />
+     <terminate        xd:script="occurs 1;  ref terminate" />
+     <wait             xd:script="occurs 1;  ref wait" />
+     <empty            xd:script="occurs 1;  ref empty" />
+     <sequence         xd:script="occurs 1;  ref sequence" />
+     <switch           xd:script="occurs 1;  ref switch" />
+     <while            xd:script="occurs 1;  ref while" />
+     <pick             xd:script="occurs 1;  ref pick" />
+     <flow             xd:script="occurs 1;  ref flow" />
+     <scope            xd:script="occurs 1;  ref scope" />
+     <compensate       xd:script="occurs 1;  ref compensate" />
+  </xd:choice>
+</Activity>
+
+   <!--======================================-->
+   <!-- Correlations,Correlation             -->
+   <!--======================================-->
+<correlation       set = "required  num () "
+              initiate = "optional enum('yes','no')"/>
+
+<correlations>
+    <correlation     xd:script="occurs 1..;  ref correlation" />
+</correlations>
+
+<correlationsInOut>
+    <correlation     xd:script="occurs 1..;  ref correlation"
+              pattern= "optional enum('in','out','out-in')"/>
+</correlationsInOut>
+   <!--======================================-->
+   <!-- Catch  CatchAll  CompensatinsHandler -->
+   <!--======================================-->
+<catch         faultName = "optional NCName()"
+           faultVariable = "optional NCName()">
+    <Activity          xd:script="occurs 1;  ref Activity" />
+</catch>
+
+<catchAll>
+    <Activity          xd:script="occurs 1;  ref Activity" />
+</catchAll>
+
+   <!--======================================-->
+   <!-- Invoke                               -->
+   <!--======================================-->
+<invoke xd:script      = "ref StdActivity"
+        partnerLink    = "required  NCName ()"
+        portType       = "required  NCName ()"
+        operation      = "required  NCName ()"
+        inputVariable  = "optional  NCName ()"
+        ounputVariable = "optional  NCName ()">
+
+    <correlations        xd:script= "occurs 0..1;  ref correlationsInOut" />
+    <catch               xd:script= "occurs 0.. ;  ref catch" />
+    <catchAll            xd:script= "occurs 0..1;  ref catchAll" />
+    <compensationHandler xd:script= "occurs 0..1;  ref compensationHandler" />
+</invoke>
+   <!--======================================-->
+   <!-- receive                               -->
+   <!--======================================-->
+<receive     xd:script = "ref StdActivity"
+           partnerLink = "required  NCName ()"
+              portType = "required  NCName ()"
+             operation = "required  NCName ()"
+              variable = "optional  NCName ()"
+        createInstance = "optional enum('yes','no')">
+
+    <correlations        xd:script= "occurs 0..1;  ref correlations" />
+</receive>
+   <!--======================================-->
+   <!-- reply                               -->
+   <!--======================================-->
+<reply       xd:script = "ref StdActivity"
+           partnerLink = "required  NCName ()"
+              portType = "required  NCName ()"
+             operation = "required  NCName ()"
+              variable = "optional  NCName ()"
+             faultName = "optional  QName  ()">
+
+    <correlations        xd:script= "occurs 0..1;  ref correlations" />
+</reply>
+   <!--======================================-->
+   <!-- pick                                 -->
+   <!--======================================-->
+<pick        xd:script = "ref StdActivity"
+        createInstance = "optional enum('yes','no')">
+
+    <onMessage    xd:script="occurs 1.. ; ref onMessage" />
+    <onAlarm      xd:script="occurs 0.. ; ref onAlarm" />
+</pick>
+   <!--======================================-->
+   <!-- wait                                 -->
+   <!--======================================-->
+<wait        xd:script = "ref StdActivity"
+            for = "optional ${durationExpr}"
+          until = "optional ${deadlineExpr}"/>
+                <!-- Note: Bud For nebo Until. -->
+   <!--======================================-->
+   <!-- empty                                -->
+   <!--======================================-->
+<empty       xd:script = "ref StdActivity"/>
+   <!--======================================-->
+   <!-- terminate                            -->
+   <!--======================================-->
+<terminate   xd:script = "ref StdActivity"/>
+
+   <!--======================================-->
+   <!-- throw                                -->
+   <!--======================================-->
+<throw      xd:script = "ref StdActivity"
+            faultName = "required  QName  ()"
+        faultVariable = "optional  NCName ()"/>
+   <!--======================================-->
+   <!-- sequence                             -->
+   <!--======================================-->
+<sequence  xd:script = "ref StdActivity">
+         <Activity    xd:script="occurs 1.. ;    ref Activity" />
+</sequence>
+   <!--======================================-->
+   <!-- compensate                           -->
+   <!--======================================-->
+<compensate xd:script = "ref StdActivity"
+            scope     = "optional  NCName ()"/>
+   <!--======================================-->
+   <!-- flow                                 -->
+   <!--======================================-->
+<flow     xd:script = "ref StdActivity">
+         <links       xd:script="occurs 0..1;    ref links" />
+         <Activity    xd:script="occurs 1.. ;    ref Activity" />
+</flow>
+
+<link                 name="required NCName ()"/>
+<links>
+         <link        xd:script="occurs 1.. ;    ref link" />
+</links>
+   <!--======================================-->
+   <!-- switch                               -->
+   <!--======================================-->
+<switch   xd:script = "ref StdActivity">
+       <case      xd:script="occurs 1.. ;    ref case" />
+       <otherwise xd:script="occurs 0..1;    ref otherwise" />
+</switch>
+
+<case    condition  = "required ${booleanExpr} ">
+      <Activity   xd:script="occurs 1   ;    ref Activity" />
+</case>
+
+<otherwise>
+      <Activity   xd:script="occurs 1   ;    ref Activity" />
+</otherwise>
+   <!--======================================-->
+   <!-- while                               -->
+   <!--======================================-->
+<while    xd:script  = "ref StdActivity"
+          condition  = "required ${booleanExpr}">
+         <Activity    xd:script="occurs 1 ;  ref Activity" />
+</while>
+   <!--======================================-->
+   <!-- scope                                -->
+   <!--======================================-->
+<scope    xd:script  = "ref StdActivity"
+          variableAccessSerializable = "required enum('yes','no')">
+
+   <variables           xd:script= "occurs 0..1;  ref variables" />
+   <correlationSets     xd:script= "occurs 0..1;  ref correlationSets" />
+   <faultHandlers       xd:script= "occurs 0..1;  ref faultHandlers" />
+   <compensationHandler xd:script= "occurs 0..1;  ref compensationHandler" />
+   <eventHandlers       xd:script= "occurs 0..1;  ref eventHandlers" />
+
+   <Activity />
+</scope>
+   <!--======================================-->
+   <!-- assign                               -->
+   <!--======================================-->
+<assign   xd:script  = "ref StdActivity">
+         <copy      xd:script="occurs 1.. ;    ref copy" />
+</assign>
+
+<copy>
+         <FromSpec      xd:script="occurs 1;    ref FromSpec"/>
+         <ToSpec        xd:script="occurs 1;    ref ToSpec"  />
+</copy>
+
+<FromSpec>
+  <xd:choice>
+     <from xd:script="match(@expression)"
+         expression  = "required "/>
+     <from xd:script="match(@partnerLink)"
+         partnerLink        = "required NCName ()"
+         endpointReference  = "required NCName ()"/>
+     <from xd:script="match(@endpointReference)"
+         partnerLink        = "required NCName ()"
+         endpointReference  = "required NCName ()"/>
+     <from xd:script = "match(@variable AND @property)"
+           variable  = "required NCName ()"
+           property  = "optional NCName ()"/>
+     <from xd:script="match(@variable)"
+           variable  = "required NCName ()"
+               part  = "optional NCName ()"/>
+     <from>required string()</from>
+  </xd:choice>
+</FromSpec>
+
+<ToSpec>
+  <xd:choice>
+     <to   xd:script = "match(@partnerLink)"
+         partnerLink = "required NCName ()"/>
+     <to   xd:script = "match(@variable AND @property)"
+           variable  = "required NCName ()"
+           property  = "optional NCName ()"/>
+     <to   xd:script="match(@variable)"
+           variable  = "required NCName ()"
+               part  = "optional NCName ()"/>
+  </xd:choice>
+</ToSpec>
+   <!--======================================-->
+   <!-- partnerLink    partner               -->
+   <!--======================================-->
+<partnerLink           name = "required NCName ()"
+           partnerLinkType  = "required NCName ()"
+                     myRole = "optional NCName ()"
+                partnerRole = "optional NCName ()"/>
+                <!-- Note: At least one role must be specified. -->
+
+<partnerLinks>
+    <partnerLink    xd:script= "occurs 1.. ;  ref partnerLink" />
+</partnerLinks>
+
+<partner>
+    <partnerLink    xd:script= "occurs 1.. ;  "
+                    name = "required NCName ()"/>
+</partner>
+
+<partners>
+    <partner        xd:script= "occurs 1.. ;  ref partner" />
+</partners>
+   <!--======================================-->
+   <!-- variables                            -->
+   <!--======================================-->
+<variables>
+    <variable        xd:script= "occurs 1.. ;  ref variable" />
+</variables>
+
+<variable          name = "required NCName ()"
+            messageType = "optional QName ()"
+                   type = "optional QName ()"
+                element = "optional QName ()"/>
+   <!--======================================-->
+   <!-- correlationSets                      -->
+   <!--======================================-->
+<correlationSets>
+    <correlationSet xd:script= "occurs 1.. ;  ref correlationSet" />
+</correlationSets>
+
+<correlationSet   name = "required NCName ()"
+            properties = "required QNameList ()"/>
+
+   <!--======================================-->
+   <!-- faultHandlers                        -->
+   <!--======================================-->
+<faultHandlers>
+      <catch       xd:script="occurs 0..;  ref catch" />
+      <catchAll    xd:script="occurs 0..1; ref catchAll" />
+      <Activity    xd:script="occurs 1;    ref Activity" />
+</faultHandlers>
+   <!--======================================-->
+   <!-- compensationHandler                  -->
+   <!--======================================-->
+<compensationHandler>
+      <Activity    xd:script="occurs 1;  ref Activity" />
+</compensationHandler>
+   <!--======================================-->
+   <!-- eventHandlers                        -->
+   <!--======================================-->
+<eventHandlers>
+    <!-- Note: There must be at least one onMessage or onAlarm handler. -->
+    <onMessage    xd:script="occurs 0.. ; ref onMessage" />
+    <onAlarm      xd:script="occurs 0.. ; ref onAlarm" />
+</eventHandlers>
+
+<onAlarm    for = "optional ${durationExpr}"
+          until = "optional ${deadlineExpr}">
+                <!-- Note: Bud For nebo Until. -->
+         <Activity    xd:script="occurs 1;    ref Activity" />
+</onAlarm>
+
+<onMessage    partnerLink = "required NCName()"
+                 portType = "required QName ()"
+                operation = "required NCName()"
+                 variable = "optional NCName()">
+         <correlations  xd:script="occurs 0..1; ref correlations" />
+         <Activity      xd:script="ref Activity" />
+</onMessage>
+   <!--======================================-->
+   <!-- process                              -->
+   <!--======================================-->
+<process                   name = "required NCName ()"
+                targetNamespace = "required ${anyUri}"
+                  queryLanguage = "optional ${anyUri}"
+             expressionLanguage = "optional ${anyUri}"
+            suppressJoinFailure = "optional enum('yes','no')"
+     enableInstanceCompensation = "optional enum('yes','no')"
+                abstractProcess = "optional enum('yes','no')">
+
+   <partnerLinks        xd:script= "occurs 0..1;  ref partnerLinks" />
+   <partners            xd:script= "occurs 0..1;  ref partners" />
+   <variables           xd:script= "occurs 0..1;  ref variables" />
+   <correlationSets     xd:script= "occurs 0..1;  ref correlationSets" />
+   <faultHandlers       xd:script= "occurs 0..1;  ref faultHandlers" />
+   <compensationHandler xd:script= "occurs 0..1;  ref compensationHandler" />
+   <eventHandlers       xd:script= "occurs 0..1;  ref eventHandlers" />
+
+   <Activity  xd:script="ref Activity" />
+
+</process>
+</xd:def>

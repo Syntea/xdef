@@ -1,0 +1,28 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" root="purchaseOrder">
+
+  <purchaseOrder orderDate="date">
+    <shipTo xd:script="ref address"/>
+    <billTo xd:script="ref address"/>
+    <comment xd:script="occurs ?">string</comment>
+    <items>
+      <item xd:script="occurs 1..*; ref item"/>
+    </items>
+  </purchaseOrder>
+
+  <address country="string">
+    <name>string</name>
+    <street>string</street>
+    <city>string</city>
+    <state>string</state>
+    <zip>int</zip>
+  </address>
+
+  <item partNum="regex('\\d{3}-[A-Z]{2}')">
+    <productName>string</productName>
+    <quantity>int</quantity>
+    <USPrice>decimal</USPrice>
+    <shipDate xd:script="occurs ?">date</shipDate>
+    <comment xd:script="occurs ?">string</comment>
+  </item>
+
+</xd:def>

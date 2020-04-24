@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+  xd:name="P1A"
+  xd:root="SouborP1A">
+  <xd:declaration>
+    type Ulice_Type{parse: string(1, 36);}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloDomu_Type{parse: string(1, 10);}
+  </xd:declaration>
+  <xd:declaration>
+    type Obec_Type{parse: string(1, 36);}
+  </xd:declaration>
+  <xd:declaration>
+    type Okres_Type{parse: string(1, 36);}
+  </xd:declaration>
+  <xd:declaration>
+    type Stat_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type PSC_Type{parse: string(1, 16);}
+  </xd:declaration>
+  <xd:declaration>
+    type Jmeno_Type{parse: string(1, 24);}
+  </xd:declaration>
+  <xd:declaration>
+    type Prijmeni_Type{parse: string(1, 36);}
+  </xd:declaration>
+  <xd:declaration>
+    type RC_Type{parse: string(1, 14);}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumNarozeni_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type NazevFirmy_Type{parse: string(1, 100);}
+  </xd:declaration>
+  <xd:declaration>
+    type IC_Type{parse: string(1, 12);}
+  </xd:declaration>
+  <xd:declaration>
+    type StatPrislusnost_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloTP_Xdpic_Type{parse: string() &amp; regex("[a-zA-Z][a-zA-Z]\\d\\d\\d\\d\\d\\d");}
+  </xd:declaration>
+  <xd:declaration>
+    type VIN_Type{parse: string(1, 26);}
+  </xd:declaration>
+  <xd:declaration>
+    type SPZ_Type{parse: string(2, 12);}
+  </xd:declaration>
+  <xd:declaration>
+    type DruhVozidla_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type ZnackaText_Type{parse: string(1, 30);}
+  </xd:declaration>
+  <xd:declaration>
+    type ModelText_Type{parse: string(1, 40);}
+  </xd:declaration>
+  <xd:declaration>
+    type KodModeluVozidla_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type BarvaText_Type{parse: string(1, 20);}
+  </xd:declaration>
+  <xd:declaration>
+    type ZdvihovyObjem_Type{parse: int(0, 99999);}
+  </xd:declaration>
+  <xd:declaration>
+    type VykonMotoru_Type{parse: int(0, 9999);}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloMotoru_Type{parse: string(1, 26);}
+  </xd:declaration>
+  <xd:declaration>
+    type CelkovaHmotnost_Type{parse: int(1, 999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type PocetMistCelkem_Type{parse: int(0, 999);}
+  </xd:declaration>
+  <xd:declaration>
+    type TarifniSkupina_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type LimitPlneniMajetek_Type{parse: int(1, 999999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type LimitPlneniZdravi_Type{parse: int(1, 999999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type Leasing_Type{parse: string() &amp; enum("A", "N");}
+  </xd:declaration>
+  <xd:declaration>
+    type Pojistne_Type{parse: int(1, 999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type PojistneBM_Type{parse: int(1, 999999);}
+  </xd:declaration>
+  <xd:declaration>
+    type PojisteniOd_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type PojisteniDo_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloZK_Type{parse: string(1, 11);}
+  </xd:declaration>
+  <xd:declaration>
+    type PlatnostZKOd_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type PlatnostZKDo_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumZneplatneni_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type KodPojistitele_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloSmlouvy_Type{parse: string(1, 35);}
+  </xd:declaration>
+  <xd:declaration>
+    type PoradiVozidla_Xdnum_Type{parse: string() &amp; regex("\\d{1,10}");}
+  </xd:declaration>
+  <xd:declaration>
+    type CisloDokladuPojisteni_Type{parse: string(1, 35);}
+  </xd:declaration>
+  <xd:declaration>
+    type KontrolaNositele_Type{parse: string() &amp; enum("A", "N");}
+  </xd:declaration>
+  <xd:declaration>
+    type IdentZaznamu_Type{parse: string(1, 12);}
+  </xd:declaration>
+  <xd:declaration>
+    type NositelPSP_Type{parse: string() &amp; enum("S", "V");}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumUzavreni_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumUkonceni_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DuvodZanikuSmlouvy_user_Type{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumReaktivace_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumZmeny_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumUcinnosti_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type DuvodZanikuSmlouvy_user_Type1{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type DruhVozidla_user_Type1{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type KodModeluVozidla_user_Type1{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type TarifniSkupina_user_Type1{parse: string();}
+  </xd:declaration>
+  <xd:declaration>
+    type DatumZruseni_XdDatetime_Type{parse: string() &amp; regex("(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(19|20)[0-9]{2}");}
+  </xd:declaration>
+  <xd:declaration>
+    type KodChyby_Xdnum_Type{parse: string() &amp; regex("\\d{4}");}
+  </xd:declaration>
+  <xd:declaration>
+    type Hodnota_Type{parse: string(1, 255);}
+  </xd:declaration>
+  <xd:declaration>
+    type Xpath_Type{parse: string(1, 128);}
+  </xd:declaration>
+  <xd:declaration>
+    type KodChyby_user_Type{parse: string();}
+  </xd:declaration>
+  <P1_common_Subjekt_type_cType PlatnostOd="optional string()"
+    Jmeno="optional Jmeno_Type()"
+    Prijmeni="optional Prijmeni_Type()"
+    RC="optional RC_Type()"
+    DatumNarozeni="optional DatumNarozeni_XdDatetime_Type()"
+    NazevFirmy="optional NazevFirmy_Type()"
+    IC="optional IC_Type()"
+    StatPrislusnost="optional StatPrislusnost_user_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Adresa xd:script="occurs 0..1; ref P1_common_Adresa_type_cType"/>
+    </xd:sequence>
+  </P1_common_Subjekt_type_cType>
+  <P1_common_Adresa_type_cType Ulice="optional Ulice_Type()"
+    CisloDomu="required CisloDomu_Type()"
+    Obec="required Obec_Type()"
+    Okres="optional Okres_Type()"
+    Stat="required Stat_user_Type()"
+    PSC="required PSC_Type()"/>
+  <P1_common_Pojistnik_type_cType xd:script="ref P1_common_Subjekt_type_cType"/>
+  <P1_common_Provozovatel_type_cType xd:script="ref P1_common_Subjekt_type_cType"/>
+  <P1_common_Vlastnik_type_cType xd:script="ref P1_common_Subjekt_type_cType"/>
+  <P1_common_VozidloSmlouvy_type_cType PlatnostOd="optional string()"
+    TarifniSkupina="required TarifniSkupina_user_Type()"
+    LimitPlneniMajetek="required LimitPlneniMajetek_Type()"
+    LimitPlneniZdravi="required LimitPlneniZdravi_Type()"
+    Leasing="required Leasing_Type()"
+    Pojistne="required Pojistne_Type()"
+    PojistneBM="required PojistneBM_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Vozidlo xd:script="occurs 1; ref P1_common_Vozidlo_type_cType"/>
+    </xd:sequence>
+  </P1_common_VozidloSmlouvy_type_cType>
+  <P1_common_Vozidlo_type_cType CisloTP="optional CisloTP_Xdpic_Type()"
+    VIN="optional VIN_Type()"
+    SPZ="optional SPZ_Type()"
+    DruhVozidla="required DruhVozidla_user_Type()"
+    ZnackaText="optional ZnackaText_Type()"
+    ModelText="optional ModelText_Type()"
+    KodModeluVozidla="required KodModeluVozidla_user_Type()"
+    RokDoProvozu="optional ISOyear()"
+    BarvaText="optional BarvaText_Type()"
+    ZdvihovyObjem="optional ZdvihovyObjem_Type()"
+    VykonMotoru="optional VykonMotoru_Type()"
+    CisloMotoru="optional CisloMotoru_Type()"
+    CelkovaHmotnost="optional CelkovaHmotnost_Type()"
+    PocetMistCelkem="optional PocetMistCelkem_Type()"/>
+  <P1_common_DobaPojisteni_type_cType PojisteniOd="required PojisteniOd_XdDatetime_Type()"
+    PojisteniDo="optional PojisteniDo_XdDatetime_Type()"/>
+  <P1_common_ZelenaKarta_1_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <NovaPS_NovaPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="required CisloDokladuPojisteni_Type()"
+    NositelPSP="required NositelPSP_Type()"
+    DatumUzavreni="required DatumUzavreni_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 1; ref P1_common_Pojistnik_type_cType"/>
+      <Provozovatel xd:script="occurs 1; ref P1_common_Provozovatel_type_cType"/>
+      <Vlastnik xd:script="occurs 1; ref P1_common_Vlastnik_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 1; ref P1_common_VozidloSmlouvy_type_cType"/>
+      <DobaPojisteni xd:script="occurs 1; ref P1_common_DobaPojisteni_type_cType"/>
+      <ZelenaKarta xd:script="occurs 0..1; ref P1_common_ZelenaKarta_1_type_cType"/>
+      <ZdrojovaSmlouva xd:script="occurs 0..1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </NovaPS_NovaPS_type_cType>
+  <P1_common_ZdrojovaSmlouva_type_cType KodPojistitele="required KodPojistitele_user_Type()"
+    CisloSmlouvy="optional CisloSmlouvy_Type()"
+    PoradiVozidla="optional PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="optional CisloDokladuPojisteni_Type()"
+    KontrolaNositele="optional KontrolaNositele_Type()"/>
+  <UkonceniPS_UkonceniPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    DatumUkonceni="required DatumUkonceni_XdDatetime_Type()"
+    DuvodZanikuSmlouvy="required DuvodZanikuSmlouvy_user_Type()"
+    SPZ="optional string()"
+    CisloTP="optional string()"
+    PojisteniDo="required PojisteniDo_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <ZelenaKarta xd:script="occurs 0..1; ref P1_common_ZelenaKarta_type_cType"/>
+    </xd:sequence>
+  </UkonceniPS_UkonceniPS_type_cType>
+  <P1_common_ZelenaKarta_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <ReaktivacePS_ReaktivacePS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="required CisloDokladuPojisteni_Type()"
+    DatumReaktivace="required DatumReaktivace_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 1; ref P1_common_Pojistnik_type_cType"/>
+      <Provozovatel xd:script="occurs 1; ref P1_common_Provozovatel_type_cType"/>
+      <Vlastnik xd:script="occurs 1; ref P1_common_Vlastnik_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 1; ref P1_common_VozidloSmlouvy_type_cType"/>
+      <DobaPojisteni xd:script="occurs 1; ref P1_common_DobaPojisteni_type_cType"/>
+      <ZelenaKarta xd:script="occurs 0..1; ref P1_common_ZelenaKarta_3_type_cType"/>
+    </xd:sequence>
+  </ReaktivacePS_ReaktivacePS_type_cType>
+  <P1_common_ZelenaKarta_3_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <P1_common_ZelenaKarta_5_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <ZmenaPS_ZmenaPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="required CisloDokladuPojisteni_Type()"
+    DatumZmeny="required DatumZmeny_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 1; ref P1_common_Pojistnik_type_cType"/>
+      <Provozovatel xd:script="occurs 1; ref P1_common_Provozovatel_type_cType"/>
+      <Vlastnik xd:script="occurs 1; ref P1_common_Vlastnik_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 1; ref P1_common_VozidloSmlouvy_type_cType"/>
+      <DobaPojisteni xd:script="occurs 1; ref P1_common_DobaPojisteni_type_cType"/>
+      <ZelenaKarta xd:script="occurs 0..1; ref P1_common_ZelenaKarta_5_type_cType"/>
+      <ZdrojovaSmlouva xd:script="occurs 0..1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </ZmenaPS_ZmenaPS_type_cType>
+  <PrenosPSP_PrenosPSP_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <ZdrojovaSmlouva xd:script="occurs 1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </PrenosPSP_PrenosPSP_type_cType>
+  <NovaIdentPS_NovaIdentPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    DatumZmeny="required DatumZmeny_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <PuvodniIdentPS xd:script="occurs 1"
+        KodPojistitele="required KodPojistitele_user_Type()"
+        CisloSmlouvy="required CisloSmlouvy_Type()"
+        PoradiVozidla="required PoradiVozidla_Xdnum_Type()"/>
+    </xd:sequence>
+  </NovaIdentPS_NovaIdentPS_type_cType>
+  <P1_common_ZelenaKarta_2_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <OpravaPS_OpravaPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="required CisloDokladuPojisteni_Type()"
+    NositelPSP="required NositelPSP_Type()"
+    DatumUzavreni="required DatumUzavreni_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 1; ref P1_common_Pojistnik_type_cType"/>
+      <Provozovatel xd:script="occurs 1; ref P1_common_Provozovatel_type_cType"/>
+      <Vlastnik xd:script="occurs 1; ref P1_common_Vlastnik_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 1; ref P1_common_VozidloSmlouvy_type_cType"/>
+      <DobaPojisteni xd:script="occurs 1; ref P1_common_DobaPojisteni_type_cType"/>
+      <ZelenaKarta xd:script="occurs 0..1; ref P1_common_ZelenaKarta_2_type_cType"/>
+      <ZdrojovaSmlouva xd:script="occurs 0..1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </OpravaPS_OpravaPS_type_cType>
+  <OpravaPolPS_OpravaPolPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="required CisloDokladuPojisteni_Type()"
+    NositelPSP="required NositelPSP_Type()"
+    DatumUcinnosti="optional DatumUcinnosti_XdDatetime_Type()"
+    DatumUzavreni="optional DatumUzavreni_XdDatetime_Type()"
+    DatumUkonceni="optional DatumUkonceni_XdDatetime_Type()"
+    DuvodZanikuSmlouvy="optional DuvodZanikuSmlouvy_user_Type1()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 1; ref P1_common_Pojistnik_type_cType"/>
+      <Provozovatel xd:script="occurs 1; ref P1_common_Provozovatel_type_cType"/>
+      <Vlastnik xd:script="occurs 1; ref P1_common_Vlastnik_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 1; ref P1_common_VozidloSmlouvy_type_cType"/>
+      <DobaPojisteni xd:script="occurs 1; ref P1_common_DobaPojisteni_type_cType"/>
+      <ZdrojovaSmlouva xd:script="occurs 0..1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </OpravaPolPS_OpravaPolPS_type_cType>
+  <P1_common_DobaPojisteni_1_type_cType PojisteniOd="optional PojisteniOd_XdDatetime_Type()"
+    PojisteniDo="optional PojisteniDo_XdDatetime_Type()"/>
+  <OpravaXPolPS_OpravaXPolPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    CisloDokladuPojisteni="optional CisloDokladuPojisteni_Type()"
+    NositelPSP="optional NositelPSP_Type()"
+    DatumUcinnosti="optional DatumUcinnosti_XdDatetime_Type()"
+    DatumUzavreni="optional DatumUzavreni_XdDatetime_Type()"
+    DatumUkonceni="optional DatumUkonceni_XdDatetime_Type()"
+    DuvodZanikuSmlouvy="optional DuvodZanikuSmlouvy_user_Type1()">
+    <xd:sequence xd:script="occurs 1">
+      <Pojistnik xd:script="occurs 0..1; ref P1_common_Subjekt_type_cType"/>
+      <Provozovatel xd:script="occurs 0..1; ref P1_common_Subjekt_type_cType"/>
+      <Vlastnik xd:script="occurs 0..1; ref P1_common_Subjekt_type_cType"/>
+      <VozidloSmlouvy xd:script="occurs 0..1"
+        PlatnostOd="optional string()"
+        TarifniSkupina="optional TarifniSkupina_user_Type1()"
+        LimitPlneniMajetek="optional LimitPlneniMajetek_Type()"
+        LimitPlneniZdravi="optional LimitPlneniZdravi_Type()"
+        Leasing="optional Leasing_Type()"
+        Pojistne="optional Pojistne_Type()"
+        PojistneBM="optional PojistneBM_Type()">
+        <xd:sequence xd:script="occurs 1">
+          <Vozidlo xd:script="occurs 0..1"
+            CisloTP="optional CisloTP_Xdpic_Type()"
+            VIN="optional VIN_Type()"
+            SPZ="optional SPZ_Type()"
+            DruhVozidla="optional DruhVozidla_user_Type1()"
+            ZnackaText="optional ZnackaText_Type()"
+            ModelText="optional ModelText_Type()"
+            KodModeluVozidla="optional KodModeluVozidla_user_Type1()"
+            RokDoProvozu="optional ISOyear()"
+            BarvaText="optional BarvaText_Type()"
+            ZdvihovyObjem="optional ZdvihovyObjem_Type()"
+            VykonMotoru="optional VykonMotoru_Type()"
+            CisloMotoru="optional CisloMotoru_Type()"
+            CelkovaHmotnost="optional CelkovaHmotnost_Type()"
+            PocetMistCelkem="optional PocetMistCelkem_Type()"/>
+        </xd:sequence>
+      </VozidloSmlouvy>
+      <DobaPojisteni xd:script="occurs 0..1; ref P1_common_DobaPojisteni_1_type_cType"/>
+      <ZdrojovaSmlouva xd:script="occurs 0..1; ref P1_common_ZdrojovaSmlouva_type_cType"/>
+    </xd:sequence>
+  </OpravaXPolPS_OpravaXPolPS_type_cType>
+  <ZruseniPS_ZruseniPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    DatumZruseni="required DatumZruseni_XdDatetime_Type()"/>
+  <VydaniZK_VydaniZK_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <ZelenaKarta xd:script="occurs 1; ref P1_common_ZelenaKarta_4_type_cType"/>
+    </xd:sequence>
+  </VydaniZK_VydaniZK_type_cType>
+  <P1_common_ZelenaKarta_4_type_cType CisloZK="required CisloZK_Type()"
+    PlatnostZKOd="required PlatnostZKOd_XdDatetime_Type()"
+    PlatnostZKDo="required PlatnostZKDo_XdDatetime_Type()"
+    DatumZneplatneni="optional DatumZneplatneni_XdDatetime_Type()"/>
+  <ZneplatneniZK_ZneplatneniZK_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <ZelenaKarta xd:script="occurs 1; ref P1_common_ZelenaKarta_type_cType"/>
+    </xd:sequence>
+  </ZneplatneniZK_ZneplatneniZK_type_cType>
+  <ZruseniZK_ZruseniZK_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    DatumZruseni="required DatumZruseni_XdDatetime_Type()">
+    <xd:sequence xd:script="occurs 1">
+      <ZelenaKarta xd:script="occurs 1; ref P1_common_ZelenaKarta_type_cType"/>
+    </xd:sequence>
+  </ZruseniZK_ZruseniZK_type_cType>
+  <DotazPS_DotazPS_type_cType IdentZaznamu="required IdentZaznamu_Type()"
+    CisloSmlouvy="required CisloSmlouvy_Type()"
+    PoradiVozidla="required PoradiVozidla_Xdnum_Type()"
+    DatumUcinnosti="optional DatumUcinnosti_XdDatetime_Type()"/>
+  <ChybnyZaznam_ChybnyZaznam_type_cType KodChyby="required KodChyby_Xdnum_Type()"
+    Hodnota="optional Hodnota_Type()"
+    Xpath="optional Xpath_Type()"
+    IdentZaznamu="optional string()"
+    CisloSmlouvy="optional string()"
+    PoradiVozidla="optional string()"/>
+  <SouborP1A Davka="required string()"
+    ZeDne="required string()">
+    <xd:sequence xd:script="occurs 1">
+      <xd:choice xd:script="occurs 1..*">
+        <NovaPS xd:script="occurs 0..*; ref NovaPS_NovaPS_type_cType"/>
+        <UkonceniPS xd:script="occurs 0..*; ref UkonceniPS_UkonceniPS_type_cType"/>
+        <ReaktivacePS xd:script="occurs 0..*; ref ReaktivacePS_ReaktivacePS_type_cType"/>
+        <ZmenaPS xd:script="occurs 0..*; ref ZmenaPS_ZmenaPS_type_cType"/>
+        <PrenosPSP xd:script="occurs 0..*; ref PrenosPSP_PrenosPSP_type_cType"/>
+        <NovaIdentPS xd:script="occurs 0..*; ref NovaIdentPS_NovaIdentPS_type_cType"/>
+        <OpravaPS xd:script="occurs 0..*; ref OpravaPS_OpravaPS_type_cType"/>
+        <OpravaPolPS xd:script="occurs 0..*; ref OpravaPolPS_OpravaPolPS_type_cType"/>
+        <OpravaXPolPS xd:script="occurs 0..*; ref OpravaXPolPS_OpravaXPolPS_type_cType"/>
+        <ZruseniPS xd:script="occurs 0..*; ref ZruseniPS_ZruseniPS_type_cType"/>
+        <VydaniZK xd:script="occurs 0..*; ref VydaniZK_VydaniZK_type_cType"/>
+        <ZneplatneniZK xd:script="occurs 0..*; ref ZneplatneniZK_ZneplatneniZK_type_cType"/>
+        <ZruseniZK xd:script="occurs 0..*; ref ZruseniZK_ZruseniZK_type_cType"/>
+        <DotazPS xd:script="occurs 0..*; ref DotazPS_DotazPS_type_cType"/>
+        <ChybnyZaznam xd:script="occurs 0..*; ref ChybnyZaznam_ChybnyZaznam_type_cType"/>
+        <any xd:script="occurs 0..*"
+          KodChyby="fixed '1012'"/>
+      </xd:choice>
+    </xd:sequence>
+  </SouborP1A>
+</xd:def>

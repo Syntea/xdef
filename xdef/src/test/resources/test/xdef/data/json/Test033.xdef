@@ -1,0 +1,12 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test033' xd:root='a'>
+<xd:json name='a'>
+[
+    "xdatetime('yyyy-MM-dd');",
+  { $script: "occurs 0..*",
+    "jmeno": "string(2, 50)",
+    "plat": "int(1000, 1000000)",
+    "nar": "xdatetime('yyyy-MM-dd')"
+  }
+]
+</xd:json>
+</xd:def>

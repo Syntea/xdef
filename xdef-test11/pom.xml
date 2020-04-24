@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<project
+    xmlns             ="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.xdef</groupId>
+        <artifactId>xdef-parent</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>xdef-test11</artifactId>
+    <packaging>jar</packaging>
+
+    <name>xdef-test11</name>
+    <description>executing test under java-11 for X-definition, alfa-version</description>
+
+    <properties>
+        <!-- use default java instead of java-11 temporarily - ->
+        <jdk.version>11</jdk.version>
+        <jdk.vendor>sun</jdk.vendor>
+        <!- - -->
+    </properties>
+
+    <dependencies>
+        <!-- xdef modules -->
+        <!-- test11 is alfa-version, including xdef-test is disabled for now - ->
+        <dependency>
+            <groupId>org.xdef</groupId>
+            <artifactId>xdef-test</artifactId>
+            <type>test-jar</type>
+        </dependency>
+        <!- - -->
+        
+        <!-- junit-test -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

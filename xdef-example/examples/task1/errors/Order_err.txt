@@ -1,0 +1,1 @@
+E XDEF809: Chybná hodnota 'int'; řádka=6; sloupec=38; zdroj="file:/D:/cvs/DEV/java/XdExample1/task1/input/Order_err.xml"; xpath=/Order/Item[1]/@Quantity; X-pozice=Order#Order/Item/@Quantity

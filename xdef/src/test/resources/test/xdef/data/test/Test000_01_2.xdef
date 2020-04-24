@@ -1,0 +1,4 @@
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+  xd:name = "root" xd:root = "root" >
+  <root a = "required string()" />
+</xd:def>

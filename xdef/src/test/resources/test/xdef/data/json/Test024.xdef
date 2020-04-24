@@ -1,0 +1,8 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test024' xd:root='a'>
+<xd:json name='a'>
+/* Matrix 3 x 3 */
+[
+   [$script: "occurs 3", "occurs 3 jvalue()" ]
+]
+</xd:json>
+</xd:def>

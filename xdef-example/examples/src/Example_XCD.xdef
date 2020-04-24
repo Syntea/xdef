@@ -1,0 +1,12 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="D">
+<xd:component>
+  /* XKomponents generated from the X-definition C */
+  %class components.Tenants %link C#Residents;
+  %class components.Tenant implements components.Citizen
+    %link C#Residents/Resident;
+  /* Binds */
+  %bind FirstName %link C#Residents/Resident/@GivenName;
+  %bind LastName %link C#Residents/Resident/@FamilyName;
+  %bind Address %link C#Residents/Resident/@Address;
+</xd:component>
+</xd:def>

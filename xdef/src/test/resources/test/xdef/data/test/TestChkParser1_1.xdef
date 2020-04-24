@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1" >
+<xd:def xd:name    = "CKP"
+        xd:root    = "CKP#organization" >
+
+   <organization xd:script = "occurs 1;"
+                 type = "fixed 'entry'"
+                 rdn = "fixed 'o=ČKP'"
+                 dn = "fixed 'o=ČKP,dc=ckp,dc=cz'">
+      <xd:mixed>
+         <o xd:script = "occurs 1"
+              type = "fixed 'attribute'"
+              value = "fixed 'ČKP'"/>
+         <organizationalUnit xd:script = "match @rdn == 'ou=AccessControl'; occurs 1; options moreAttributes"
+                             type="fixed 'entry'">
+           <xd:mixed>
+              <ou type="fixed 'attribute'"
+                  value="fixed 'AccessControl'" />
+               <organizationalUnit xd:script = "match @rdn == 'ou=Applications'; occurs 0..1; options moreAttributes"
+                                   type = "fixed 'entry'">
+                 <xd:mixed>
+                   <ou type = "fixed 'attribute'"
+                       value = "fixed 'Applications'" />
+                    <applicationProcess xd:script = "occurs 1..; options moreAttributes"
+                                        type = "fixed 'entry'">
+                      <xd:mixed>
+                        <cn type = "fixed 'attribute'"
+                            value = "required string()"/>
+                         <accessRole xd:script = "occurs 1..; options moreAttributes"
+                                     type = "fixed 'entry'">
+                           <xd:mixed>
+                             <cn type = "fixed 'attribute'"
+                                 value = "required string()"/>
+                              <member xd:script = "occurs 1.."
+                                      value = "required string()" />
+                              <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                                        value = "required string()" />
+                           </xd:mixed>
+                         </accessRole>
+                         <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                                   value = "required string()" />
+                      </xd:mixed>
+                   </applicationProcess>
+                    <xd:any xd:script = "match @type == 'attribute'; occurs 0..; options moreAttributes" />
+                 </xd:mixed>
+               </organizationalUnit>
+               <organizationalUnit xd:script = "match @rdn == 'ou=BusinessRoles'; occurs 1; options moreAttributes"
+                                   type = "fixed 'entry'">
+                 <xd:mixed>
+                   <ou type = "fixed 'attribute'"
+                       value = "fixed 'BusinessRoles'" />
+                    <accessRole xd:script = "occurs 1..; options moreAttributes"
+                                type = "fixed 'entry'">
+                      <xd:mixed>
+                        <cn type = "fixed 'attribute'"
+                            value = "required string()" />
+                         <member xd:script = "occurs 1.."
+                                 type = "optional string()"
+                                 value = "required string()" />
+                         <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                                   type = "fixed 'attribute'"
+                                   value = "required string()" />
+                      </xd:mixed>
+                    </accessRole>
+                    <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                              value = "required string()" />
+                 </xd:mixed>
+               </organizationalUnit>
+               <organizationalUnit xd:script = "match @rdn == 'ou=Parameters'; occurs 1; options moreAttributes"
+                                   type = "fixed 'entry'">
+                 <xd:mixed>
+                   <ou type = "fixed 'attribute'"
+                       value = "fixed 'Parameters'"/>
+                    <accessParameter xd:script = "occurs 1..; options moreAttributes"
+                                     type = "fixed 'entry'">
+                      <xd:mixed>
+                        <cn type = "fixed 'attribute'"
+                            value = "required string()"/>
+                        <parameter xd:script = "occurs 1"
+                                   type = "fixed 'attribute'"
+                                   value = "required string()"/>
+                         <!-- // TODO: occurs 1..2 -->
+                        <relatedTo xd:script = "occurs 2"
+                                   type = "fixed 'attribute'"
+                                   value = "required string()"/>
+                        <value xd:script = "occurs 0..1"
+                               type = "fixed 'attribute'"
+                               value = "required string()"/>
+                         <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                                   value = "required string()" />
+                      </xd:mixed>
+                    </accessParameter>
+                    <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                              value = "required string()" />
+                 </xd:mixed>
+               </organizationalUnit>
+               <xd:any xd:script = "match @type == 'attribute'; occurs 0..; options moreAttributes"/>
+           </xd:mixed>
+         </organizationalUnit>
+         <organizationalUnit xd:script = "match @rdn == 'ou=OrganizationalSchema'; occurs 0..1; options moreAttributes"
+                             type="fixed 'entry'">
+           <xd:mixed>
+              <ou type = "fixed 'attribute'"
+                  value = "fixed 'OrganizationalSchema'" />
+               <organizationalUnit xd:script = "occurs 1..; options moreAttributes"
+                                   type = "fixed 'entry'">
+                 <xd:mixed>
+                    <ou type = "fixed 'attribute'"
+                        value = "required string()" />
+                     <xd:any xd:script="occurs 0..; options moreAttributes, moreElements"
+                               type = "required string()"
+                               value = "optional string()" />
+                 </xd:mixed>
+               </organizationalUnit>
+               <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                         value = "required string()" />
+           </xd:mixed>
+         </organizationalUnit>
+         <organizationalUnit xd:script = "match @rdn == 'ou=People'; occurs 1; options moreAttributes"
+                             type="fixed 'entry'">
+           <xd:mixed>
+               <ou type = "fixed 'attribute'"
+                   value = "fixed 'People'" />
+                <inetOrgPerson xd:script = "occurs 1..; options moreAttributes"
+                               type = "fixed 'entry'">
+                  <xd:mixed>
+                     <cn type   = "fixed 'attribute'"
+                         value  = "required string()" />
+                     <uid type  = "fixed 'attribute'"
+                          value = "required string()" />
+                     <employeeType type = "fixed 'attribute'"
+                                   value = "required enum('A','N')" />
+                     <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                                     type = "required string()"
+                                     value = "required string()" />
+                  </xd:mixed>
+                </inetOrgPerson>
+                <xd:any xd:script = "match @type == 'attribute'; occurs 0.."
+                          value = "required string()" />
+           </xd:mixed>
+         </organizationalUnit>
+         <xd:any xd:script = "match @type == 'attribute'; occurs 0..; options moreAttributes"
+                     value = "required string()" />
+      </xd:mixed>
+   </organization>
+
+</xd:def>
+</xd:collection>

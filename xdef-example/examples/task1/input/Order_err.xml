@@ -1,0 +1,7 @@
+<Order Number="123" CustomerCode="ALFA">
+  <DeliveryPlace>
+    <Address Street="Oldroad" House="5" City="NewTown" ZIP="32321" />
+  </DeliveryPlace>
+  <Item ProductCode="0002" Quantity="xx" />
+  <Item ProductCode="0003" Quantity="1" />
+</Order>

@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            impl-version="2.3.3.0"
+            impl-date="15.09.2006"
+            name="L1"/>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.4.0.0"
+            impl-date="05.11.2007"
+            name="L1_common">
+    <Adresa Ulice="optional string(1,36);                                           onFalse setErr(4208)"
+            CisloDomu="optional string(1,10);                                           onFalse setErr(4208)"
+            Obec="optional string(1,36);                                           onFalse setErr(4208)"
+            Okres="optional string(1,36);                                           onFalse setErr(4208)"
+            Stat="required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"
+            PSC="optional string(1,16);                                           onFalse setErr(4208)"/>
+    <Osoba xdef:script="finally {                                   emptySubjHasAddr(4266,'Adresa');                                   setDefault_ifEx('@StatPrislusnost','CZ','@RC');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','CZ');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','SK');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','CZ');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','SK');                                }"
+           Jmeno="required string(1,24);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+           Prijmeni="required string(1,36);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+           RC="optional string(1,14);                                           onFalse setErr(4208)"
+           DatumNarozeni="optional datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');           onTrue dateDavka(4221);           onFalse setErr(4208)"
+           StatPrislusnost="optional tab('CC_Stat','KodStatu');                              onFalse setErr(4225)">
+      <Adresa xdef:script="occurs 0..1; ref Adresa"/>
+    </Osoba>
+    <Subjekt xdef:script="finally {                                   subjekt_OsobaOrFirma(4314);                                   setDefault_ifEx('@StatPrislusnost','CZ','@RC','@IC');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','CZ');                                   chkOpt_RC_ifEQ(4208,'@RC','@StatPrislusnost','SK');                                   chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','CZ');                                   chkOpt_IC_ifEQ(4208,'@IC','@StatPrislusnost','SK');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','CZ');                                   chk_RC_DatNar_ifEQ(4224,'@RC','@DatumNarozeni','@StatPrislusnost','SK');                                }"
+             Zruseni="optional enum('A');                                              onFalse setErr(4208)"
+             Jmeno="optional string(1,24);                                           onFalse setErr(4208)"
+             Prijmeni="optional string(1,36);                                           onFalse setErr(4208)"
+             RC="optional string(1,14);                                           onFalse setErr(4208)"
+             DatumNarozeni="optional datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');           onTrue dateDavka(4221);           onFalse setErr(4208)"
+             NazevFirmy="optional string(1,100);                                          onFalse setErr(4208)"
+             IC="optional string(1,12);                                           onFalse setErr(4208)"
+             StatPrislusnost="optional tab('CC_Stat','KodStatu');                              onFalse setErr(4225)">
+      <Adresa xdef:script="occurs 0..1; ref Adresa"/>
+    </Subjekt>
+    <Vozovka CisloSilnice="optional string(1,15);                                           onFalse setErr(4208)"
+             ZObce="optional string(3,30);                                           onFalse setErr(4208)"
+             DoObce="optional string(3,30);                                           onFalse setErr(4208)"
+             Km="optional dec(5,1);                                               onFalse setErr(4208)"
+             Okres="optional string(1,36);                                           onFalse setErr(4208)"
+             Stat="required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"/>
+    <GPS X="required dec(9,5);                                               onFalse setErr(4208); onAbsence setErr(4202)"
+         Y="required dec(9,5);                                               onFalse setErr(4208); onAbsence setErr(4202)"
+         SSyst="required enum('WGS84');                                          onFalse setErr(4225); onAbsence setErr(4202)"/>
+    <Misto xdef:script="finally {notEmptyMisto(4300); equal(4301,'Adresa@Stat','Vozovka@Stat');}">
+      <GPS xdef:script="occurs 0..1; ref GPS"/>
+      <Adresa xdef:script="occurs 0..1; ref Adresa"/>
+      <Vozovka xdef:script="occurs 0..1; ref Vozovka"/>
+      optional string(1,512)
+    </Misto>
+    <Vozidlo xdef:script="finally {                                   chkOpt_CisloTP_ifEQ(4208,'@CisloTP','@MPZ','CZ');                                }"
+             SPZ="optional string(2,12);                                           onFalse setErr(4208)"
+             MPZ="required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"
+             VIN="optional string(1,26);                                           onFalse setErr(4208)"
+             CisloTP="optional string(1,12);                                           onFalse setErr(4208)"
+             DruhVozidla="required fil0(2) AND tab('CC_DruhVozidla','KodDruhuVozidla');    onFalse setErr(4225); onAbsence setErr(4202)"
+             ZnackaText="optional string(1,30);                                           onFalse setErr(4208)"
+             ModelText="optional string(1,40);                                           onFalse setErr(4208)"
+             KodModeluVozidla="optional tab('CC_ModelVozidla','KodModeluVozidla');              onFalse setErr(4225)"
+             RokDoProvozu="optional datetime('yyyy');                                       onFalse setErr(4208)"
+             BarvaText="optional string(2,20);                                           onFalse setErr(4208)"/>
+    <VozidloPS>
+      <Vozidlo xdef:script="occurs 1;    ref Vozidlo;                                                  onAbsence setErr(4302)"/>
+      <Vlastnik xdef:script="occurs 0..1; ref Subjekt"/>
+      <Provozovatel xdef:script="occurs 0..1; ref Subjekt"/>
+    </VozidloPS>
+    <Smlouva xdef:script="finally {                                  hasElement_if(4311,'@DruhPojisteni','HAV','Pojistnik');                                  hasElement_if(4304,'@DruhPojisteni','HAV','VozidloPS');                                }"
+             CisloSmlouvy="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+             PoradiVozidla="required num(1,10);                                              onFalse setErr(4208); onAbsence setErr(4202)"
+             DruhPojisteni="required tab('DS_DruhPojisteni','DruhPojisteni');                onFalse setErr(4225); onAbsence setErr(4202)">
+      <Pojistnik xdef:script="occurs 0..1; ref Subjekt"/>
+      <VozidloPS xdef:script="occurs 0..1; ref VozidloPS"/>
+    </Smlouva>
+    <SkodaVozidla PlatnostDoTK="optional datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');                                             onFalse setErr(4208)"
+                  PocetKm="optional int(0,9_999_999);                                       onFalse setErr(4208)"
+                  Kvadrant="optional kvadrant();                                             onFalse setErr(4208)"
+                  Skoda="optional int(1,99_999_999);                                      onFalse setErr(4208)"
+                  Mena="optional tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence { if(@Skoda) setText('CZK'); }"
+                  KodOpravny="optional tab('CC_Opravna','KodOpravny');                         onFalse setErr(4225)"/>
+    <VozidloPojistnika PoradiVozidlaSU="required int(1);                                                 onFalse setErr(4208); onAbsence setErr(4202)">
+      <Smlouva xdef:script="occurs 1; ref Smlouva;                                                     onAbsence setErr(4303)"/>
+      <Ridic xdef:script="occurs 0..;  ref Osoba"/>
+      <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
+    </VozidloPojistnika>
+    <VozidloUcastnika PoradiVozidlaSU="required int(2,999);                                             onFalse setErr(4208); onAbsence setErr(4202)"
+                      Zruseni="optional enum('A');                                              onFalse setErr(4208)">
+      <VozidloPS xdef:script="occurs 1;    ref VozidloPS;                                                onAbsence setErr(4304)"/>
+      <Ridic xdef:script="occurs 0..;  ref Osoba"/>
+      <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
+    </VozidloUcastnika>
+    <VozidloNepojistene PoradiVozidlaSU="required int(1);                                                 onFalse setErr(4208); onAbsence setErr(4202)">
+      <VozidloPS xdef:script="occurs 1;    ref VozidloPS;                                                onAbsence setErr(4304)"/>
+      <Ridic xdef:script="occurs 0..;  ref Osoba"/>
+      <SkodaVozidla xdef:script="occurs 0..1; ref SkodaVozidla"/>
+    </VozidloNepojistene>
+    <VozidloNezjistene PoradiVozidlaSU="required int(1);                                                 onFalse setErr(4208); onAbsence setErr(4202)"/>
+    <Rezerva Zruseni="optional enum('A');                                              onFalse setErr(4208)"
+             TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
+             Zmena="required dec(11,2);                                              onFalse setErr(4208); onAbsence setErr(4202)"
+             Rezerva="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
+             Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"/>
+    <Plneni xdef:script="finally chk_TypMinusPlneni_Platba(4202,4204,'@TypMinusPlneni','@Platba')"
+            Zruseni="optional enum('A');                                              onFalse setErr(4208)"
+            TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
+            Platba="required dec(11,2);                                              onFalse setErr(4208); onAbsence setErr(4202)"
+            Vyplaceno="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
+            Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
+            Ucet="optional string(1,35);                                           onFalse setErr(4208)"
+            TypMinusPlneni="optional tab('CC_TypMinusPlneni','KodTypMinusPlneni');           onFalse setErr(4208)"/>
+    <Regres Zruseni="optional enum('A');                                              onFalse setErr(4208)"
+            TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
+            Platba="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
+            Vyplaceno="required dec(11,2); onTrue chk_dec_nonNegative(4208);            onFalse setErr(4208); onAbsence setErr(4202)"
+            Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
+            TypRegresu="required tab('CC_TypRegresu','KodTypRegresu');                   onFalse setErr(4225); onAbsence setErr(4202)"/>
+    <Indikator Zruseni="optional enum('A');                                              onFalse setErr(4208)"
+               Indikator="required tab('CC_Indikator','Indikator');                        onFalse setErr(4225); onAbsence setErr(4202)"/>
+    <SU IdentZaznamu="required string(1,12);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+        CisloSU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+        DatumCasSU="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)"
+        DatumCasDoSU="optional datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208)"
+        DatumCasOznameniSU="optional datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208)"
+        CJRelacePolicie="optional string(1,50);                                           onFalse setErr(4208)"
+        StavSetreniPolicie="optional tab('CC_StavSetreniPolicie','KodStavuSetreniPolicie');  onFalse setErr(4225)"
+        RozhodnaUdalost="required enum('A','N');                                          onFalse setErr(4225); onAbsence setErr(4202)"
+        DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)">
+      <Misto xdef:script="occurs 1; ref Misto;                                                       onAbsence setErr(4306)"/>
+      <xdef:choice>
+        <VozidloPojistnika xdef:script="occurs 1; ref VozidloPojistnika;                                           onAbsence setErr(4307)"/>
+        <VozidloNezjistene xdef:script="occurs 1; ref VozidloNezjistene;                                           onAbsence setErr(4307)"/>
+        <VozidloNepojistene xdef:script="occurs 1; ref VozidloNepojistene;                                          onAbsence setErr(4307)"/>
+      </xdef:choice>
+      <VozidloUcastnika xdef:script="occurs 0..;  ref VozidloUcastnika "/>
+      <Svedek xdef:script="occurs 0..;  ref Osoba"/>
+      <Znalec xdef:script="occurs 0..;  ref Osoba"/>
+      <Indikator xdef:script="occurs 0..;  ref Indikator"/>
+      <Likvidator xdef:script="occurs 0..1; ref Osoba "/>
+    </SU>
+    <PU IdentZaznamu="required string(1,12);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+        CisloSU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+        CisloPU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+        DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)">
+      <Poskozeny xdef:script="occurs 1;    ref Subjekt;                                                  onAbsence setErr(4308)"/>
+      <Indikator xdef:script="occurs 0..;  ref Indikator"/>
+      <Likvidator xdef:script="occurs 0..1; ref Osoba "/>
+    </PU>
+    <Naroky IdentZaznamu="required string(1,12);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+            CisloSU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+            CisloPU="optional string(3,35);                                           onFalse setErr(4208)"
+            PoradiVozidlaSU="optional int(1,999);                                             onFalse setErr(4208)"
+            DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)">
+      <RezervaSU xdef:script="occurs 0..;  ref Rezerva"/>
+      <RezervaPU xdef:script="occurs 0..;  ref Rezerva"/>
+      <PlneniSU xdef:script="occurs 0..;  ref Plneni"/>
+      <RegresSU xdef:script="occurs 0..;  ref Regres"/>
+      <PlneniPU xdef:script="occurs 0..;  ref Plneni"/>
+      <RegresPU xdef:script="occurs 0..;  ref Regres"/>
+      <Indikator xdef:script="occurs 0..;  ref Indikator"/>
+      <Likvidator xdef:script="occurs 0..1; ref Osoba"/>
+    </Naroky>
+    <ZruseniNaroku IdentZaznamu="required string(1,12);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+                   CisloSU="required string(3,35);                                           onFalse setErr(4208); onAbsence setErr(4202)"
+                   CisloPU="optional string(3,35);                                           onFalse setErr(4208)"
+                   TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody');                onFalse setErr(4225); onAbsence setErr(4202)"
+                   Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
+                   DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            impl-version="2.4.0.0"
+            impl-date="05.11.2007"
+            name="L1_common_">
+    <OsobaId IdOsoba="required int();                                                                                 create getIdOsoba()"
+             IdAdresa="required int();                                                                                 create getIdAdresa()"/>
+    <SubjektId Zruseni="optional"
+               IdSubjekt="required int();                                                                                 create getIdSubjekt()"
+               IdAdresa="optional int();                                                                                 create getIdAdresa()"/>
+    <VozovkaId xdef:script="                                                                                    create from('Vozovka')"
+               CisloSilnice="optional"
+               ZObce="optional"
+               DoObce="optional"
+               Km="optional;                                                                                       create getNormalizedDec('@Km')"
+               Okres="optional"
+               IdStat="required; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                create from('@Stat')"/>
+    <GPS X="required;                                                                                         create getNormalizedDec('@X')"
+         Y="required;                                                                                         create getNormalizedDec('@Y')"
+         SSyst="required"/>
+    <MistoId xdef:script="                                                                                    create from('Misto')"
+             IdStat="optional; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                create getNonEmptyAttr('Adresa@Stat','Vozovka@Stat')"
+             IdAdresa="optional int();                                                                                 create getIdAdresa()">
+      <GPS xdef:script="occurs 0..1; ref GPS"/>
+      <VozovkaId xdef:script="occurs 0..1; ref VozovkaId"/>
+      optional
+    </MistoId>
+    <VozidloId xdef:script="                                                                                    create from('Vozidlo')"
+               SPZ="optional"
+               IdMPZ="required; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                create from('@MPZ')"
+               VIN="optional"
+               CisloTP="optional"
+               IdDruhVozidla="required; onTrue setText(getTab('CC_DruhVozidla','KodDruhuVozidla','IdDruhVozidla'));           create from('@DruhVozidla')"
+               IdModelText="optional int();                                                                                 create getIdModelText('@ZnackaText','@ModelText')"
+               IdModelVozidla="optional; onTrue setText(getTab('CC_ModelVozidla','KodModeluVozidla','IdModelVozidla'));        create from('@KodModeluVozidla')"
+               RokDoProvozu="optional"
+               IdBarvaText="optional; onTrue setText(getTabId('BarvaTxt.FindBarvaText'));                                   create from('@BarvaText')"/>
+    <VozidloPSId xdef:script="                                                                                    create from('VozidloPS')">
+      <VozidloId xdef:script="occurs 1;    ref VozidloId"/>
+      <VlastnikId xdef:script="occurs 0..1; ref SubjektId;                                                         create from('Vlastnik')"/>
+      <ProvozovatelId xdef:script="occurs 0..1; ref SubjektId;                                                         create from('Provozovatel')"/>
+    </VozidloPSId>
+    <SmlouvaId xdef:script="                                                                                    create from('Smlouva')"
+               CisloSmlouvy="required"
+               PoradiVozidla="required"
+               IdDruhPojisteni="required; onTrue setText(getTab('DS_DruhPojisteni','DruhPojisteni','IdDruhPojisteni'));         create from('@DruhPojisteni')">
+      <PojistnikId xdef:script="occurs 0..1; ref SubjektId;                                                         create from('Pojistnik')"/>
+      <VozidloPSId xdef:script="occurs 0..1; ref VozidloPSId"/>
+    </SmlouvaId>
+    <SkodaVozidlaId xdef:script="                                                                                    create from('SkodaVozidla')"
+                    PlatnostDoTK="optional"
+                    PocetKm="optional"
+                    Kvadrant="optional"
+                    Skoda="optional"
+                    IdMena="optional"
+                    IdOpravna="optional; onTrue setText(getTab('CC_Opravna','KodOpravny','IdOpravna'));                        create from('@KodOpravny')"/>
+    <VozidloPojistnikaId xdef:script="                                                                                    create from('VozidloPojistnika')"
+                         PoradiVozidlaSU="required">
+      <SmlouvaId xdef:script="occurs 1;   ref SmlouvaId"/>
+      <RidicId xdef:script="occurs 0..;  ref OsobaId;                                                           create from('Ridic')"/>
+      <SkodaVozidlaId xdef:script="occurs 0..1; ref SkodaVozidlaId"/>
+    </VozidloPojistnikaId>
+    <VozidloUcastnikaId xdef:script="                                                                                    create from('VozidloUcastnika')"
+                        PoradiVozidlaSU="required"
+                        Zruseni="optional">
+      <VozidloPSId xdef:script="occurs 1;    ref VozidloPSId"/>
+      <RidicId xdef:script="occurs 0..;  ref OsobaId;                                                           create from('Ridic')"/>
+      <SkodaVozidlaId xdef:script="occurs 0..1; ref SkodaVozidlaId"/>
+    </VozidloUcastnikaId>
+    <VozidloNepojisteneId xdef:script="                                                                                    create from('VozidloNepojistene')"
+                          PoradiVozidlaSU="required">
+      <VozidloPSId xdef:script="occurs 1;    ref VozidloPSId "/>
+      <RidicId xdef:script="occurs 0..;  ref OsobaId;                                                           create from('Ridic')"/>
+      <SkodaVozidlaId xdef:script="occurs 0..1; ref SkodaVozidlaId "/>
+    </VozidloNepojisteneId>
+    <VozidloNezjisteneId xdef:script="                                                                                    create from('VozidloNezjistene')"
+                         PoradiVozidlaSU="required"/>
+    <RezervaId Zruseni="optional"
+               IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));           create from('@TypSkody')"
+               Zmena="required;                                                                                       create getNormalizedDec('@Zmena')"
+               Rezerva="required;                                                                                       create getNormalizedDec('@Rezerva')"
+               IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                 create from('@Mena')"/>
+    <PlneniId Zruseni="optional"
+              IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));           create from('@TypSkody')"
+              Platba="required;                                                                                       create getNormalizedDec('@Platba')"
+              Vyplaceno="required;                                                                                       create getNormalizedDec('@Vyplaceno')"
+              IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                 create from('@Mena')"
+              IdUcet="optional; onTrue setText(getTabId('Ucet.FindUcet'));                                            create from('@Ucet')"
+              IdTypMinusPlneni="optional; onTrue setText(getTab('CC_TypMinusPlneni','KodTypMinusPlneni','IdTypMinusPlneni'));   create from('@TypMinusPlneni')"/>
+    <RegresId Zruseni="optional"
+              IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));           create from('@TypSkody')"
+              Platba="required;                                                                                       create getNormalizedDec('@Platba')"
+              Vyplaceno="required;                                                                                       create getNormalizedDec('@Vyplaceno')"
+              IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                 create from('@Mena')"
+              IdTypRegresu="required; onTrue setText(getTab('CC_TypRegresu','KodTypRegresu','IdTypRegresu'));               create from('@TypRegresu')"/>
+    <IndikatorId xdef:script="                                                                                    create from('Indikator')"
+                 Zruseni="optional"
+                 IdIndikator="required; onTrue setText(getTab('CC_Indikator','Indikator','IdIndikator'));                     create from('@Indikator')"/>
+    <SUId IdPrace="required int();                                                                                 create getIdPrace()"
+          SeqRec="required int();                                                                                 create getSeqRec()"
+          IdPojistitel="required int();                                                                                 create getIdPojistitel()"
+          IdentZaznamu="required"
+          CisloSU="required"
+          DatumCasSU="required"
+          DatumCasDoSU="optional"
+          DatumCasOznameniSU="optional"
+          CJRelacePolicie="optional"
+          IdStavSetreniPolicie="optional; onTrue setText(getTab('CC_StavSetreniPolicie','KodStavuSetreniPolicie','IdStavSetreniPolicie')); create from('@StavSetreniPolicie')"
+          RozhodnaUdalost="required"
+          DatumUcinnosti="required">
+      <MistoId xdef:script="occurs 1;    ref MistoId "/>
+      <VozidloPojistnikaId xdef:script="occurs 0..1; ref VozidloPojistnikaId"/>
+      <VozidloNezjisteneId xdef:script="occurs 0..1; ref VozidloNezjisteneId"/>
+      <VozidloNepojisteneId xdef:script="occurs 0..1; ref VozidloNepojisteneId"/>
+      <VozidloUcastnikaId xdef:script="occurs 0..;  ref VozidloUcastnikaId"/>
+      <SvedekId xdef:script="occurs 0..;  ref OsobaId;                                                           create from('Svedek')"/>
+      <ZnalecId xdef:script="occurs 0..;  ref OsobaId;                                                           create from('Znalec')"/>
+      <IndikatorId xdef:script="occurs 0..;  ref IndikatorId"/>
+      <LikvidatorId xdef:script="occurs 0..1; ref OsobaId;                                                           create from('Likvidator')"/>
+    </SUId>
+    <PUId IdPrace="required int();                                                                                 create getIdPrace()"
+          SeqRec="required int();                                                                                 create getSeqRec()"
+          IdPojistitel="required int();                                                                                 create getIdPojistitel()"
+          IdentZaznamu="required"
+          CisloSU="required"
+          CisloPU="required"
+          DatumUcinnosti="required">
+      <PoskozenyId xdef:script="occurs 1;    ref SubjektId;                                                         create from('Poskozeny')"/>
+      <IndikatorId xdef:script="occurs 0..;  ref IndikatorId"/>
+      <LikvidatorId xdef:script="occurs 0..1; ref OsobaId;                                                           create from('Likvidator')"/>
+    </PUId>
+    <NarokyId IdPrace="required int();                                                                                 create getIdPrace()"
+              SeqRec="required int();                                                                                 create getSeqRec()"
+              IdPojistitel="required int();                                                                                 create getIdPojistitel()"
+              IdentZaznamu="required"
+              CisloSU="required"
+              CisloPU="optional"
+              PoradiVozidlaSU="optional"
+              DatumUcinnosti="required">
+      <RezervaSUId xdef:script="occurs 0..;  ref RezervaId;                                                         create from('RezervaSU')"/>
+      <RezervaPUId xdef:script="occurs 0..;  ref RezervaId;                                                         create from('RezervaPU')"/>
+      <PlneniSUId xdef:script="occurs 0..;  ref PlneniId;                                                          create from('PlneniSU')"/>
+      <RegresSUId xdef:script="occurs 0..;  ref RegresId;                                                          create from('RegresSU')"/>
+      <PlneniPUId xdef:script="occurs 0..;  ref PlneniId;                                                          create from('PlneniPU')"/>
+      <RegresPUId xdef:script="occurs 0..;  ref RegresId;                                                          create from('RegresPU')"/>
+      <IndikatorId xdef:script="occurs 0..;  ref IndikatorId"/>
+      <LikvidatorId xdef:script="occurs 0..1; ref OsobaId;                                                           create from('Likvidator')"/>
+    </NarokyId>
+    <ZruseniNarokuId IdPrace="required int();                                                                                 create getIdPrace()"
+                     SeqRec="required int();                                                                                 create getSeqRec()"
+                     IdPojistitel="required int();                                                                                 create getIdPojistitel()"
+                     IdentZaznamu="required"
+                     CisloSU="required"
+                     CisloPU="optional"
+                     IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));           create from('@TypSkody')"
+                     IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                 create from('@Mena')"
+                     DatumUcinnosti="required"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.4.0.0"
+            impl-date="05.11.2007"
+            root="Naroky"
+            name="Naroky">
+    <Naroky xdef:script="finally outputIVR('Naroky_'); ref L1_common#Naroky"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.4.0.0"
+            impl-date="05.11.2007"
+            root="Naroky_"
+            name="Naroky_">
+    <Naroky_ xdef:script="ref L1_common_#NarokyId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            impl-version="2.3.2.6"
+            impl-date="15.02.2006"
+            root="OperaceL1"
+            name="OperaceL1">
+    <OperaceL1 xdef:script="finally outputIVR('OperaceL1_')"
+               IdentZaznamu="required string(1,12)"
+               Operace="required string(1,30)">
+      <xdef:choice occurs="0..1">
+        <SU xdef:script="occurs 0..1"
+            CisloSU="required string(3,35)"
+            DatumCasSU="optional datetime('yyyyMMddHHmm')"
+            MistoStatSU="optional tab('CC_Stat','KodStatu')"
+            RozhodnaUdalost="optional enum('A','N')"
+            DatumUzavreniSU="optional datetime('yyyyMMddHHmm')"
+            CisloSmlouvy="optional string(3,35)"
+            PoradiVozidla="optional string(1,10)"
+            StavSU="optional tab('DS_Stav','Stav')">
+          <VozidloSU xdef:script="occurs 0.."
+                     PoradiVozidlaSU="required int(1,999)"
+                     SPZ="optional string(2,12)"
+                     MPZ="required tab('CC_Stat','KodStatu')"
+                     KodModeluVozidla="optional tab('CC_ModelVozidla','KodModeluVozidla')"/>
+        </SU>
+        <PU xdef:script="occurs 0..1"
+            CisloSU="required string(3,35)"
+            CisloPU="required string(3,35)"
+            DatumUzavreniPU="optional datetime('yyyyMMddHHmm')"
+            StavSU="optional tab('DS_Stav','Stav')"
+            StavPU="optional tab('DS_Stav','Stav')"/>
+        <Naroky CisloSU="required string(3,35)"
+                CisloPU="optional string(3,35)"
+                StavSU="optional tab('DS_Stav','Stav')"
+                StavPU="optional tab('DS_Stav','Stav')">
+          <RezervaSU xdef:script="occurs 0.."
+                     PlatnostOd="required datetime('yyyyMMddHHmm')"
+                     TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody')"
+                     Rezerva="required dec(11,2)"
+                     Mena="required tab('CC_Mena','KodMeny')"/>
+          <PlneniSU xdef:script="occurs 0.."
+                    PlatnostOd="required datetime('yyyyMMddHHmm')"
+                    TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody')"
+                    Vyplaceno="required dec(11,2)"
+                    Mena="required tab('CC_Mena','KodMeny')"/>
+          <RezervaPU xdef:script="occurs 0.."
+                     PlatnostOd="required datetime('yyyyMMddHHmm')"
+                     TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody')"
+                     Rezerva="required dec(11,2)"
+                     Mena="required tab('CC_Mena','KodMeny')"/>
+          <PlneniPU xdef:script="occurs 0.."
+                    PlatnostOd="required datetime('yyyyMMddHHmm')"
+                    TypSkody="required tab('CC_PodtypSkody','KodPodtypuSkody')"
+                    Vyplaceno="required dec(11,2)"
+                    Mena="required tab('CC_Mena','KodMeny')"/>
+        </Naroky>
+        <ChybnyZaznam xdef:script="occurs 0..1"
+                      SeqRec="required int(1,99_999_999)"/>
+      </xdef:choice>
+      <Chyby xdef:script="occurs 0..1; ref Chyby"/>
+    </OperaceL1>
+    <Chyby>
+      <Chyba xdef:script="occurs 1..; ref Chyba"/>
+    </Chyby>
+    <Chyba KodChyby="required num(4)"
+           Typ="required string(1)"
+           Xpath="optional string(1,128)"
+           Hodnota="optional string(1,255)"
+           Popis="optional string(1,255)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            impl-version="2.3.2.6"
+            impl-date="15.02.2006"
+            root="OperaceL1_"
+            name="OperaceL1_">
+    <OperaceL1_ IdPrace="required int(); create getIdPrace()"
+                SeqRec="required int(); create getSeqRec()"
+                IdPojistitel="required int(); create getIdPojistitel()"
+                IdentZaznamu="required"
+                Operace="required">
+      <SUId xdef:script="occurs 0..1;                                                                              create from('SU')"
+            CisloSU="required"
+            DatumCasSU="optional"
+            IdMistoStatSU="optional; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                      create from('@MistoStatSU')"
+            RozhodnaUdalost="optional"
+            DatumUzavreniSU="optional"
+            CisloSmlouvy="optional"
+            PoradiVozidla="optional"
+            IdStavSU="optional; onTrue setText(getTab('DS_Stav','Stav','IdStav'));                                          create from('@StavSU')">
+        <VozidloSUId xdef:script="occurs 0..;                                                                               create from('VozidloSU')"
+                     PoradiVozidlaSU="required"
+                     SPZ="optional"
+                     IdMPZ="required; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                      create from('@MPZ')"
+                     IdModelVozidla="optional; onTrue setText(getTab('CC_ModelVozidla','KodModeluVozidla','IdModelVozidla'));              create from('@KodModeluVozidla')"/>
+      </SUId>
+      <PUId xdef:script="occurs 0..1;                                                                              create from('PU')"
+            CisloSU="required"
+            CisloPU="required"
+            DatumUzavreniPU="optional"
+            IdStavSU="optional; onTrue setText(getTab('DS_Stav','Stav','IdStav'));                                          create from('@StavSU')"
+            IdStavPU="optional; onTrue setText(getTab('DS_Stav','Stav','IdStav'));                                          create from('@StavPU')"/>
+      <NarokyId xdef:script="occurs 0..1;                                                                              create from('Naroky')"
+                CisloSU="required"
+                CisloPU="optional"
+                IdStavSU="optional; onTrue setText(getTab('DS_Stav','Stav','IdStav'));                                          create from('@StavSU')"
+                IdStavPU="optional; onTrue setText(getTab('DS_Stav','Stav','IdStav'));                                          create from('@StavPU')">
+        <RezervaSUId xdef:script="occurs 0..;                                                                               create from('RezervaSU')"
+                     PlatnostOd="required"
+                     IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));                 create from('@TypSkody')"
+                     Rezerva="required"
+                     IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                       create from('@Mena')"/>
+        <PlneniSUId xdef:script="occurs 0..;                                                                                create from('PlneniSU')"
+                    PlatnostOd="required"
+                    IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));                 create from('@TypSkody')"
+                    Vyplaceno="required"
+                    IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                       create from('@Mena')"/>
+        <RezervaPUId xdef:script="occurs 0..;                                                                               create from('RezervaPU')"
+                     PlatnostOd="required"
+                     IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));                 create from('@TypSkody')"
+                     Rezerva="required"
+                     IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                       create from('@Mena')"/>
+        <PlneniPUId xdef:script="occurs 0..;                                                                                create from('PlneniPU')"
+                    PlatnostOd="required"
+                    IdPodtypSkody="required; onTrue setText(getTab('CC_PodtypSkody','KodPodtypuSkody','IdPodtypSkody'));                 create from('@TypSkody')"
+                    Vyplaceno="required"
+                    IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                       create from('@Mena')"/>
+      </NarokyId>
+      <Chyby xdef:script="occurs 0..1; ref Chyby"/>
+    </OperaceL1_>
+    <Chyby>
+      <Chyba xdef:script="occurs 1..; ref Chyba"/>
+    </Chyby>
+    <Chyba KodChyby="required"
+           Typ="required"
+           Xpath="optional"
+           Hodnota="optional"
+           Popis="optional"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            root="ReaktivacePU"
+            name="ReaktivacePU">
+    <ReaktivacePU xdef:script="finally outputIVR('ReaktivacePU_'); ref L1_common#PU"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ReaktivacePU_"
+            name="ReaktivacePU_">
+    <ReaktivacePU_ xdef:script="ref L1_common_#PUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.6"
+            impl-date="24.05.2006"
+            root="ReaktivaceSU"
+            name="ReaktivaceSU">
+    <ReaktivaceSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('ReaktivaceSU_');                         }"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ReaktivaceSU_"
+            name="ReaktivaceSU_">
+    <ReaktivaceSU_ xdef:script="ref L1_common_#SUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            root="RegistracePU"
+            name="RegistracePU">
+    <RegistracePU xdef:script="finally outputIVR('RegistracePU_'); ref L1_common#PU"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="RegistracePU_"
+            name="RegistracePU_">
+    <RegistracePU_ xdef:script="ref L1_common_#PUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.6"
+            impl-date="24.05.2006"
+            root="RegistraceSU"
+            name="RegistraceSU">
+    <RegistraceSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('RegistraceSU_');                         }"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="RegistraceSU_"
+            name="RegistraceSU_">
+    <RegistraceSU_ xdef:script="ref L1_common_#SUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.2"
+            impl-date="19.07.2005"
+            root="SouborL1A"
+            name="SouborL1A">
+    <SouborL1A xdef:script="init initParams()"
+               Davka="required"
+               ZeDne="required">
+      <xdef:mixed>
+        <RegistraceSU xdef:script="forget; occurs 0..; ref RegistraceSU#RegistraceSU"/>
+        <ZmenaSU xdef:script="forget; occurs 0..; ref ZmenaSU#ZmenaSU"/>
+        <UzavreniSU xdef:script="forget; occurs 0..; ref UzavreniSU#UzavreniSU"/>
+        <ReaktivaceSU xdef:script="forget; occurs 0..; ref ReaktivaceSU#ReaktivaceSU"/>
+        <ZruseniSU xdef:script="forget; occurs 0..; ref ZruseniSU#ZruseniSU"/>
+        <RegistracePU xdef:script="forget; occurs 0..; ref RegistracePU#RegistracePU"/>
+        <ZmenaPU xdef:script="forget; occurs 0..; ref ZmenaPU#ZmenaPU"/>
+        <UzavreniPU xdef:script="forget; occurs 0..; ref UzavreniPU#UzavreniPU"/>
+        <ReaktivacePU xdef:script="forget; occurs 0..; ref ReaktivacePU#ReaktivacePU"/>
+        <ZruseniPU xdef:script="forget; occurs 0..; ref ZruseniPU#ZruseniPU"/>
+        <Naroky xdef:script="forget; occurs 0..; ref Naroky#Naroky"/>
+        <ZruseniNaroku xdef:script="forget; occurs 0..; ref ZruseniNaroku#ZruseniNaroku"/>
+        <xdef:any xdef:script="forget; occurs 0..; options moreElements, moreText, moreAttributes; finally {chybaNVR('@KodChyby'); outputIVR(''); }"
+                  KodChyby="fixed '1012'"/>
+      </xdef:mixed>
+    </SouborL1A>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="SouborL1D"
+            name="SouborL1D">
+    <SouborL1D xdef:script="init initParams()"
+               Davka="required"
+               ZeDne="required">
+      <OperaceL1 xdef:script="occurs 0..; forget; ref OperaceL1#OperaceL1"/>
+    </SouborL1D>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            root="UzavreniPU"
+            name="UzavreniPU">
+    <UzavreniPU xdef:script="finally outputIVR('UzavreniPU_'); ref L1_common#PU"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="UzavreniPU_"
+            name="UzavreniPU_">
+    <UzavreniPU_ xdef:script="ref L1_common_#PUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.3.0"
+            impl-date="15.09.2006"
+            root="UzavreniSU"
+            name="UzavreniSU">
+    <UzavreniSU xdef:script="finally outputIVR('UzavreniSU_')"
+                IdentZaznamu="required string(1,12);                                      onFalse setErr(4208); onAbsence setErr(4202)"
+                CisloSU="required string(3,35);                                      onFalse setErr(4208); onAbsence setErr(4202)"
+                KodDuvoduUzavreni="required tab('CC_DuvodUzavreniSU','KodDuvoduUzavreniSU');   onFalse setErr(4225); onAbsence setErr(4202)"
+                DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208); onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            impl-version="2.3.2.6"
+            impl-date="15.05.2006"
+            root="UzavreniSU_"
+            name="UzavreniSU_">
+    <UzavreniSU_ IdPrace="required int(); create getIdPrace()"
+                 SeqRec="required int(); create getSeqRec()"
+                 IdPojistitel="required int(); create getIdPojistitel()"
+                 IdentZaznamu="required"
+                 CisloSU="required"
+                 IdDuvodUzavreni="required; onTrue setText(getTab('CC_DuvodUzavreniSU','KodDuvoduUzavreniSU','IdDuvodUzavreniSU')); create from('@KodDuvoduUzavreni')"
+                 DatumUcinnosti="required"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            root="ZmenaPU"
+            name="ZmenaPU">
+    <ZmenaPU xdef:script="finally outputIVR('ZmenaPU_'); ref L1_common#PU"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ZmenaPU_"
+            name="ZmenaPU_">
+    <ZmenaPU_ xdef:script="ref L1_common_#PUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.6"
+            impl-date="24.05.2006"
+            root="ZmenaSU"
+            name="ZmenaSU">
+    <ZmenaSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('ZmenaSU_');                         }"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ZmenaSU_"
+            name="ZmenaSU_">
+    <ZmenaSU_ xdef:script="ref L1_common_#SUId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.2"
+            impl-date="19.07.2005"
+            root="ZruseniNaroku"
+            name="ZruseniNaroku">
+    <ZruseniNaroku xdef:script="finally outputIVR('ZruseniNaroku_'); ref L1_common#ZruseniNaroku"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.2.2"
+            impl-date="19.07.2005"
+            root="ZruseniNaroku_"
+            name="ZruseniNaroku_">
+    <ZruseniNaroku_ xdef:script="ref L1_common_#ZruseniNarokuId"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.3.0"
+            impl-date="15.09.2006"
+            root="ZruseniPU"
+            name="ZruseniPU">
+    <ZruseniPU xdef:script="finally outputIVR('ZruseniPU_')"
+               IdentZaznamu="required string(1,12);                                      onFalse setErr(4208); onAbsence setErr(4202)"
+               CisloSU="required string(3,35);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
+               CisloPU="required string(3,35);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
+               DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208);   onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ZruseniPU_"
+            name="ZruseniPU_">
+    <ZruseniPU_ IdPrace="required int();                              create getIdPrace()"
+                SeqRec="required int();                              create getSeqRec()"
+                IdentZaznamu="required"
+                IdPojistitel="required int();                              create getIdPojistitel()"
+                CisloSU="required"
+                CisloPU="required"
+                DatumUcinnosti="required"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            xdef:script="options setAttrUpperCase,ignoreEntities"
+            impl-version="2.3.3.0"
+            impl-date="15.09.2006"
+            root="ZruseniSU"
+            name="ZruseniSU">
+    <ZruseniSU xdef:script="finally outputIVR('ZruseniSU_')"
+               IdentZaznamu="required string(1,12);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
+               CisloSU="required string(3,35);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
+               DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208);   onAbsence setErr(4202)"/>
+  </xdef:def>
+  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
+            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+            root="ZruseniSU_"
+            name="ZruseniSU_">
+    <ZruseniSU_ IdPrace="required int();                              create getIdPrace()"
+                SeqRec="required int();                              create getSeqRec()"
+                IdentZaznamu="required"
+                IdPojistitel="required int();                              create getIdPojistitel()"
+                CisloSU="required"
+                DatumUcinnosti="required"/>
+  </xdef:def>
+</xd:collection>

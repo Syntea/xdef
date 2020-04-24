@@ -1,0 +1,5 @@
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1" >
+<xd:def xd:name="L1">
+   <xd:macro name="Options">setAttrUpperCase</xd:macro>
+</xd:def>
+</xd:collection>

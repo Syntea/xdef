@@ -1,0 +1,158 @@
+<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' name='DefSystemStatistics'
+        root='DefSystemStatistics'>
+
+<xd:declaration>
+  String unq = ';;';
+  String k1 = '';
+  String k2 = '';
+  boolean keyDef1(String s) {
+    if (unq.indexOf(';' + s + ';') GE 0) {
+      return error('Not Unique');
+    } else {
+      unq += s + ';';
+      return true;
+    }
+  }
+  boolean keyDef(String s) {
+    if (unq.indexOf(';' + s + ';') GE 0) {
+      return error('Not Unique');
+    } else {
+      unq += s + ';';
+      return true;
+    }
+  }
+
+  boolean keyRef(String s) {
+    String qname = getText();
+    String localName = getQnameLocalpart(qname);
+    if (localName.length() == 0) {
+      return error('Local name error');
+    }
+    int ndx;
+    if (s NE getQnameURI(qname)) {
+      return error('Incorrect namespace: \'' + getQnameURI(qname)
+                   + '\', ns:' + s);
+    }
+    if (unq.indexOf(';' + localName + ';') > 0) {
+      String prefix=(ndx=qname.indexOf(':'))>0?qname.substring(0,ndx) : '';
+      outln('xy="' + s + '", localName="' + localName +
+            '", prefix="' + prefix + '"');
+      return true;
+    } else {
+      return error('Unknown local name');
+    }
+  }
+
+   uniqueSet DimName     {x: string(1, 30)};
+   uniqueSet AggrName    {x: string(1, 30)};
+   uniqueSet StatName    {x: string(1, 60)};
+   uniqueSet SQLNameDef  {x: string(1, 30)};
+   uniqueSet SQLNameDist {x: string(1, 30)};
+</xd:declaration>
+
+<DefSystemStatistics
+         KodSystemu     = 'required string(1,4)'
+         KodPartnera    = 'required num(4,7)'
+         System         = 'required string(1,50)'
+         Verze          = 'required string(1,15)'
+         ZeDne          = "required xdatetime('dd.MM.yyyy')">
+    <Macros             xd:script= 'occurs 0..1; ref Macros' />
+    <DefSQLs            xd:script= 'occurs 0..1; ref DefSQLs' />
+    <DefDimensions      xd:script= 'occurs 1; ref DefDimensions' />
+    <DefAggregations    xd:script= 'occurs 1; ref DefAggregations' />
+    <DefStatistics      xd:script= 'occurs 1; ref DefStatistics' />
+    <DefDistributions   xd:script= 'occurs 1; ref DefDistributions' />
+    <DefSchedules       xd:script= 'occurs 1; ref DefSchedules' />
+</DefSystemStatistics>
+
+ <Macros xd:script= 'occurs 0..1'>
+    <Macro              xd:script= 'occurs 1..'
+         Name           = 'required string(1,30)'>
+      <xd:text>required string(1,256)</xd:text>
+    </Macro>
+ </Macros>
+
+ <DefSQLs>
+    <DefSQL xd:script= 'occurs 1..'
+        DimText='optional string'
+        SQLName= 'required SQLNameDef.x.ID()'>
+        <xd:text>required string(1,4000)</xd:text>
+    </DefSQL>
+ </DefSQLs>
+ <DefDimensions>
+   <DefDim xd:script='occurs +'
+         DimName   ='required DimName.x.ID()'
+         ValueType ="required string">
+      <DimSQL xd:script= 'occurs +'
+         SQLName='optional SQLNameDef.x.IDREF()'
+         DimText='optional string(1,100)'>
+         <xd:text>optional string(1,4000)</xd:text>
+      </DimSQL>
+   </DefDim>
+ </DefDimensions>
+ <DefAggregations xd:script= 'occurs +'>
+    <DefAggr xd:script= 'occurs +'
+         AggrName='required AggrName.x.ID()'
+         AggrType="required string"/>
+ </DefAggregations>
+ <DefStatistics>
+  <xd:mixed>
+    <Statistics
+         StatText      ='required string(1,100)'
+         StatName      ='required StatName.x.ID()'
+        PeriodIdSource="optional enum('FROM','TO')" >
+      <Dim xd:script= 'occurs +'
+         DimName='required DimName.x.IDREF()'
+         DimText='required string(1,50)'/>
+      <Aggr xd:script='occurs +'
+         AggrName='required AggrName.x.IDREF()'
+         AggrText='required string(1,50)'/>
+      <Param xd:script='occurs *'
+         ParamName='required string(1,30)'
+         ValueType="required string"
+         DefaultValue='optional string(1,1024)'/>
+      <SQL>
+         required string(1,4000)
+      </SQL>
+    </Statistics>
+    <ContingStatistics
+         StatText       ='required string(1,100)'
+         StatName       ='required StatName.x.ID()'
+         OrigStatName   ='required StatName.x.IDREF()'>
+         <DimMinus xd:script= 'occurs +' DimName='required DimName.x.IDREF()'/>
+    </ContingStatistics>
+    <SuperStatistics
+         StatText     ='required string(1,100)'
+         StatName     ='required StatName.x.ID()'
+         OrigStatName ='required StatName.x.IDREF()' >
+      <DimPlus xd:script='occurs +' DimName='required DimName.x.IDREF()'/>
+    </SuperStatistics>
+  </xd:mixed>
+ </DefStatistics>
+ <DefDistributions xd:script='occurs *'>
+   <DistrSQL xd:script='occurs +' SQLName='required SQLNameDist.x.ID()'>
+     required string(1,4000)
+   </DistrSQL>
+   <Distribution  xd:script='occurs +'
+         ChannelType="required string"
+         PartnerClass="optional string"
+         PartnerElement="optional string"
+         SQLName='optional SQLNameDist.x.IDREF()'>
+     <File xd:script= 'occurs +'
+         FileType="required string"
+         StatName='required StatName.x.IDREF()'>
+       <Select xd:script='occurs *'
+         DimName='required DimName.x.IDREF()'
+         SQLName='required SQLNameDist.x.IDREF()'/>
+     </File>
+   </Distribution>
+ </DefDistributions>
+ <DefSchedules xd:script='occurs *'>
+    <Schedule xd:script= 'occurs +'
+         StatName='required StatName.x.IDREF()'
+         Time="optional xdatetime('d.M.yyyy H:m[:s]')"
+         Reccur='optional string(1,50)'
+         Class="optional enum('STATISTICS')"
+         Element='optional string(1,30)'/>
+ </DefSchedules>
+</xd:def>

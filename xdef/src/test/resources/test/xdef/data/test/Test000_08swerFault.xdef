@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xd:def
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xd:name      = "SoapAnswerFault"
+   xd:root      = "Envelope"
+   impl-version = "2.4.0.0"
+   impl-date    = "11.10.2006" >
+
+  <Envelope>
+    <Header>
+      <Request             xd:script="occurs 1"
+         RemotePartner     ="required"
+         IdentZpravy       ="required"
+         RefMsgID          ="optional"
+      />
+      <Answer
+         RequestAcepted    ="fixed 'N'"
+         RequestPending    ="fixed 'N'"
+      />
+    </Header>
+    <Body>
+         <Fault            xd:script="occurs 1; ref BM_common#Fault"/>
+    </Body>
+  </Envelope>
+</xd:def>

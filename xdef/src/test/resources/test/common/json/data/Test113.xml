@@ -1,0 +1,11 @@
+<js:array xmlns:js='http://www.xdef.org/json/4.0'>
+  <a x="1" y="true"/>
+  <js:array>
+    <b y="x"/>
+    <js:item value="1"/>
+  </js:array>
+  <js:array>
+    <c y="y"/>
+    <js:item value="2"/>
+  </js:array>
+</js:array>
