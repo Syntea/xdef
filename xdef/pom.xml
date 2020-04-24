@@ -193,6 +193,7 @@
         </profile>
         <profile>
             <id>dm-ossrh</id>
+            <!-- activation of profiles sources, javadoc are required with this profile -->
             <build>
                 <plugins>
                     <plugin>
