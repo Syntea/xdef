@@ -464,7 +464,7 @@ public class XJson extends JsonToXml {
 							s = s.substring(0, i) + s.substring(j+2) + ' ';
 						}
 					}
-					if ((i = s.indexOf(';')) > 0) { // remove ";" at end
+					if ((i = s.lastIndexOf(';')) > 0) { // remove ";" at end
 						s = s.substring(0, i);
 					}
 					s = s.trim();
