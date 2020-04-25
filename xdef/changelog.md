@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.0.1, release-date 2020-04-25
+* improved JSON error reporting
+
 # Version 40.0.0, release-date 2020-04-24
 * new implementation of processing of JSON data.
 * xd:def may now contain attribute xd:importLocal (the list of X-definition
