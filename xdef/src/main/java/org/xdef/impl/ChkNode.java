@@ -1047,21 +1047,26 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return result;
 		}
 		ndx = ndx1 + 1;
-		String xdpath =  xpos.substring(0, xpos.indexOf('/')) + "/$";
-		String jpath = "";
+		if ((ndx1 = xpos.indexOf('/', ndx)) < 0) {
+			ndx1 = xpos.length();
+		}
+		String xdpath =  xpos.substring(0, ndx) + '$';
+		String jpath;
 		if (xpath == null) {
-			ndy = 0;
+			jpath = "";
+			ndy1 = ndy = 0;
 		} else {
-			jpath =  xpath.substring(0, xpath.indexOf('/')) + "$";
-			if ((ndy = xpath.indexOf('/')) >= 0) {
-				ndy = ndy + 1;
+			jpath = "$";
+			ndy = xpath.indexOf('/') + 1;
+			ndy1 = xpath.indexOf('/', ndy);
+			if (ndy1 < 0) {
+				ndy1 = xpath.length();
 			}
 		}
 		boolean wasArray = false;
 		String arrayInfo1 = "";
 		String arrayInfo2 = "";
-		while ((ndx1 = xpos.indexOf('/', ndx)) >= 0
-			&& (ndy1 = xpath != null ? xpath.indexOf('/', ndy) : -1) >= -1) {
+		while (ndx1 >= 0 && (ndy1 >= 0 || xpath == null)) {
 			String s = xpos.substring(ndx, ndx1);
 			int m = s.indexOf(':');
 			if (m >= 0) {
@@ -1077,7 +1082,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 					}
 				}
 			}
-			String t = xpath!=null && ndy1>=0 ? xpath.substring(ndy, ndy1) : "";
+			String t = xpath!=null ? xpath.substring(ndy, ndy1) : "";
 			int n = t.indexOf(':');
 			if (n >= 0) {
 				t = t.substring(n + 1);
@@ -1156,11 +1161,23 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				return result;
 			}
 			ndx = ndx1 + 1;
-			if (!s.startsWith("$")) {
+			if (ndx >= xpos.length()) {
+				break;
+			}
+			if ((ndx1 = xpos.indexOf('/', ndx)) < 0) {
+				ndx1 = xpos.length();
+			}
+			if (!s.startsWith("$") && xpath != null) {
 				ndy = ndy1 + 1;
+				if (ndy >= xpath.length()) {
+					break;
+				}
+				if ((ndy1 = xpath.indexOf('/', ndy)) < 0) {
+					ndy1 = xpath.length();
+				}
 			}
 		}
-		return result;
+		return new String[]{xdpath, xpath!=null?jpath:null};
 	}
 
 	/** Get XPosition, XPath and source position for modification information
