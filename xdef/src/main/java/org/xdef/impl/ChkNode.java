@@ -1050,7 +1050,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		if ((ndx1 = xpos.indexOf('/', ndx)) < 0) {
 			ndx1 = xpos.length();
 		}
-		String xdpath =  xpos.substring(0, ndx1) + "/$";
+		String xdpath =  xpos.substring(0, ndx) + '$';
 		String jpath;
 		if (xpath == null) {
 			jpath = "";
