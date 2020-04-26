@@ -38,6 +38,9 @@ public class XJson extends JsonToXml {
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix = XDConstants.XDEF_NS_PREFIX;
 
+	/** Index of X-definition namespace. */
+	private int _xdIndex;
+
 	/** Namespace of X-definition.*/
 	private String _xdNamespace = XDConstants.XDEF40_NS_URI;
 
@@ -454,27 +457,38 @@ public class XJson extends JsonToXml {
 				// and it has the attrbute with a value description
 				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
 					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
-					SBuffer[] sbs = parseTypeDeclaration(val.getValue());
-					String s = sbs[1].getString();
-					int i;
-					// remove comments!
-					while ((i = s.indexOf("/*")) >= 0) {
-						int j = s.indexOf("*/", i);
-						if (j > i) {
-							s = s.substring(0, i) + s.substring(j+2) + ' ';
+					PAttr script = getXDAttr(ee, "script");
+					XOccurrence occ = null;
+					if (script != null) {
+						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
+						occ = readOccurrence(sbs[0]);
+					}
+					if (e.getNSIndex() == _xdIndex &&
+						("mixed".equals(e.getLocalName())
+							|| "choice".equals(e.getLocalName()))
+						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
+						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
+						String s = sbs[1].getString();
+						int i;
+						// remove comments!
+						while ((i = s.indexOf("/*")) >= 0) {
+							int j = s.indexOf("*/", i);
+							if (j > i) {
+								s = s.substring(0, i) + s.substring(j+2) + ' ';
+							}
 						}
+						if ((i = s.indexOf(';')) > 0) { // remove ";" at end
+							s = s.substring(0, i);
+						}
+						s = s.trim();
+						if (s.isEmpty()) { //type not specified
+							s = "jvalue()";
+						} else if (!s.endsWith(")")) {
+							s += "()"; // add brackets
+						}
+						addMatchExpression(ee,
+							s + ".parse((String)@"+J_VALUEATTR + ").matches()");
 					}
-					if ((i = s.indexOf(';')) > 0) { // remove ";" at end
-						s = s.substring(0, i);
-					}
-					s = s.trim();
-					if (s.isEmpty()) { //type not specified
-						s = "jvalue()";
-					} else if (!s.endsWith(")")) {
-						s += "()"; // add brackets
-					}
-					addMatchExpression(ee,
-						s + ".parse((String)@"+J_VALUEATTR + ").matches()");
 				}
 			}
 		}
@@ -554,6 +568,7 @@ public class XJson extends JsonToXml {
 		XJson jx = new XJson();
 		jx._xdNamespace = p._nsURI;
 		jx._xdPrefix = p.getPrefix();
+		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;

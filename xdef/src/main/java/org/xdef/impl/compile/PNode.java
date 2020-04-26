@@ -74,6 +74,15 @@ public final class PNode {
 		return ndx < 0 ? "" : s.substring(0, ndx);
 	}
 
+	/** Get local part of name.
+	 * @return local part of name.
+	 */
+	public final String getLocalName() {
+		String s = _name.getString();
+		int ndx = s.indexOf(':');
+		return ndx < 0 ? s : s.substring(ndx + 1);
+	}
+
 	/** Get namsepace index of the node .
 	 * @return node name (as SBufer).
 	 */

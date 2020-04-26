@@ -105,10 +105,9 @@ public class Canonize {
 		// trailing white spaces.
 		doSources("../xdef/src/main/java/org", true);
 		doSources("../xdef/src/main/resources/org", true);
-
 		doSources("../xdef-test/src/test/java", true);
-
-		doSources("../xdef-example/examples", true);
+		doSources("../xdef-test/src/test/java", true);
+//		doSources("../xdef-example/examples", true);
 
 		doSources("src/main/java/buildtools", true); //this project
 
