@@ -1,4 +1,4 @@
-<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test036' xd:root='a'>
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' xd:name='Test036' xd:root='a'>
 <xd:declaration>
   type genre enum("Classic", "Country", "Folk", "Jazz", "Pop", "Pop punk",
              "Punk", "Punk rock", "Rap", "Rock", "R&amp;B", "Other");

@@ -64,7 +64,8 @@ public class XDParseJString extends XDParseAn {
 				}
 			}
 		} else {//not quoted string
-			if (p.eos()) {
+			if (p.eos() || (p.isSignedFloat() || p.isToken("false")
+				|| p.isToken("true") || p.isToken("null")) && p.eos()) {
 				return false;
 			}
 			while (!p.eos()) {
@@ -74,6 +75,8 @@ public class XDParseJString extends XDParseAn {
 		p.setParsedValue(p.getBufferPart(pos, p.getIndex()));
 		return true;
 	}
+	@Override
+	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

@@ -1,4 +1,4 @@
-<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' xd:name='Test021' xd:root='a'>
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' xd:name='Test021' xd:root='a'>
 <xd:json name='a'>
 ["? jvalue()"]
 </xd:json>

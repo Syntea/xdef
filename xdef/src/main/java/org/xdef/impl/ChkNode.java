@@ -99,15 +99,9 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param parent The parent node.
 	 */
 	ChkNode(final String name, final ChkNode parent) {
-//		_xElement = null; //Java makes it!
-//		_node = null; //Java makes it!
-//		_element = null; //Java makes it!
-//		_xPos = null; //Java makes it!
-//		_variables = null; //Java makes it!
-//		_userObject = null; //Java makes it!
-//		_sourceElem = null; //Java makes it!
-//		_iterator = null; //Java makes it!
-//		_scp = null; //Java makes it!
+//		_xElement=null; _node=null; _element=null;_xPos=null; //Java makes it!
+//		_variables=null; _userObject=null; _sourceElem=null; //Java makes it!
+//		_iterator= null; _scp=null; //Java makes it!
 		_name = name;
 		_parent = parent;
 		if (parent == null) {//root ChkDocument
