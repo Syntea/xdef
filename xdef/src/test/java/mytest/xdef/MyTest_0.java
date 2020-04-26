@@ -276,7 +276,7 @@ public class MyTest_0 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "<xd:json name='A'>\n"+
-"[\"jstring()\"]\n"+
+"[\"int()\", \"int\", \"jstring()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
 "  %class mytest.component.A00 %link #A;\n"+
@@ -284,7 +284,7 @@ public class MyTest_0 extends XDTester {
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, tempDir);
-			json = "[123]"; //error (not string but number!)
+			json = "[1, \"2\", 3]"; //error (not string but number!)
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
 			reporter.clear();
@@ -292,11 +292,13 @@ public class MyTest_0 extends XDTester {
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				null, reporter);
-			assertTrue(reporter.printToString().contains("XDEF809"));
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse("[\"\"]"),xc.toJson()),
+			assertTrue(reporter.getErrorCount() == 2
+				&& reporter.printToString().contains("XDEF809"));
+			assertTrue(JsonUtil.jsonEqual(
+				JsonUtil.parse("[1,\"\",\"\"]"),xc.toJson()),
 				JsonUtil.toJsonString(xc.toJson(), true));
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -353,7 +355,8 @@ if(true)return;
 "]";
 			xd = xp.createXDDocument();
 			j = xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& reporter.printToString().contains("XDEF809"));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 		} catch (Exception ex) {fail(ex);}
@@ -428,7 +431,8 @@ $.store.book[0].title			$['store']['book'][0]['title']
 //System.out.println(json);
 //System.out.println(xdef);
 			j = xp.createXDDocument().jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& reporter.printToString().contains("XDEF809"));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 //System.out.println(JsonUtil.toJsonString(j, true));
@@ -457,7 +461,8 @@ if(T)return;
 			genXComponent(xp, tempDir);
 			json = "[{\"a\":false},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& reporter.printToString().contains("XDEF809"));
 			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));

@@ -463,8 +463,10 @@ public class XJson extends JsonToXml {
 						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
 						occ = readOccurrence(sbs[0]);
 					}
-					if (e.getNSIndex() == _xdIndex &&
-						("mixed".equals(e.getLocalName())
+					if (index < len-1
+//						&& array.get(index+1) instanceof XJson.JValue
+						&& e.getNSIndex() == _xdIndex //xdef
+						&& ("mixed".equals(e.getLocalName()) // mixed or choice
 							|| "choice".equals(e.getLocalName()))
 						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
 						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
