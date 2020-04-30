@@ -1,6 +1,7 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
+import org.xdef.sys.SParser;
 
 /** Parser of X-Script "jstring" (JSON string) type.
  * @author Vaclav Trojan
@@ -47,14 +48,14 @@ public class XDParseJString extends XDParseAn {
 					if (p.eos()) {
 						return false;
 					}
-
-					if (p.isChar('"')) {
+					if (p.isChar('"')) { // quote
 						if (p.eos()) {
-							break;
+							p.setParsedValue(p.getParsedString());
+							return true;
 						}
 					} else {
 						if (p.isChar('\\')) {
-							if (p.isOneOfChars("\\\"tnrf") < 0) {
+							if (p.isOneOfChars("\\\"tnrf") == SParser.NOCHAR) {
 								return false;
 							}
 						} else {

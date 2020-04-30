@@ -1226,7 +1226,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		Element e;
 		Class<?> yClass = xClass;
 		if (yClass == null) {
-			int ndx;
 			for (String s: getXDPool().getXComponents().keySet()) {
 				String className = getXDPool().getXComponents().get(s);
 				try {
