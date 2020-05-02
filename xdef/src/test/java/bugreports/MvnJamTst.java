@@ -1,4 +1,4 @@
-package mytest.xdef;
+package bugreports;
 
 import org.junit.Test;
 //import org.testng.annotations.Test;
