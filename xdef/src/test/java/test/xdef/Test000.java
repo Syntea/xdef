@@ -243,12 +243,14 @@ public final class Test000 extends XDTester {
 			xdef = //xpath: integer variable x (without '$')
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>int x=123;</xd:declaration>\n"+
-"  <a a='string()' xd:script=\"finally outln(xpath('/a/@a=$x'));\"/>"+
+"  <a a='string()' xd:script=\"finally out(xpath('/a/@a=$x'));\"/>"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xml = "<a a='123'/>";
-			assertEq(xml, el = parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);	
+			strw = new StringWriter();
+			assertEq(xml, el = parse(xp, "", xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			assertEq("true", strw.toString());
 			xdef = //test of recursion in X-definition
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a x='optional int();' y='optional string()'>\n"+
