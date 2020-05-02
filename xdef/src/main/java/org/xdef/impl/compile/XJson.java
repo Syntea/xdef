@@ -11,6 +11,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
+import org.xdef.sys.SUtils;
 
 /** Create items from xd:json to X-definition.
  * @author Vaclav Trojan
@@ -355,8 +356,10 @@ public class XJson extends JsonToXml {
 //		if (key.isEmpty()) {
 //			addToXDScript(e, " options preserveEmptyAttributes,noTrimAttr;");
 //		}
-		addMatchExpression(e, '@' + J_KEYATTR + "=='"+key+"'");
-		setAttr(e, J_KEYATTR, new SBuffer("fixed(\""+ key +"\");", e._name));
+		String s = SUtils.modifyString(SUtils.modifyString(
+			jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
+		addMatchExpression(e, '@' + J_KEYATTR + "=='"+ s +"'");
+		setAttr(e, J_KEYATTR, new SBuffer("fixed('"+ s +"');", e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
@@ -452,9 +455,9 @@ public class XJson extends JsonToXml {
 			for(; index < len; index++) {
 				PNode ee = genJsonModel(array.get(index), e);
 				PAttr val;
-				// if it is not last and has xd:script attribute where
+				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
-				// and it has the attrbute with a value description
+				// and it has the attribute with a value description
 				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
 					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
@@ -463,8 +466,10 @@ public class XJson extends JsonToXml {
 						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
 						occ = readOccurrence(sbs[0]);
 					}
-					if (e.getNSIndex() == _xdIndex &&
-						("mixed".equals(e.getLocalName())
+					if (index < len-1
+//						&& array.get(index+1) instanceof XJson.JValue
+						&& e.getNSIndex() == _xdIndex //xdef
+						&& ("mixed".equals(e.getLocalName()) // mixed or choice
 							|| "choice".equals(e.getLocalName()))
 						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
 						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
