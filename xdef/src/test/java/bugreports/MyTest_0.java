@@ -191,7 +191,7 @@ public class MyTest_0 extends XDTester {
 	public void test() {
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = false; // if false, all tests are invoked
-//		T = true; // if true, only first test is invoked
+//		T = true; // if true, only the first one test is invoked
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
