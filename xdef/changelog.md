@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.1, release-date 2020-04-30
+# Version 40.0.1, release-date 2020-05-03
 * improved JSON error reporting.
 * corrected bug when a JSON string value contains some of escape characters.
 
