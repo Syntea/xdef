@@ -237,7 +237,7 @@ public class MyTest_0 extends XDTester {
 //			xdef =
 //"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 //"<xd:def name='A'>\n"+
-//"  <xd:declaration> Parser p; uniqueSet u {x: p} </xd:declaration>\n"+
+//" <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
 //"</xd:def>\n"+
 //"<xd:def name='B' root='A'>\n"+
 //"  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
