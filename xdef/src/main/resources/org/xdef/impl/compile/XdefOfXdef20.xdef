@@ -28,11 +28,11 @@
   <XD2.0:collection xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/2.0';
       options moreAttributes"
-    classes        = "optional classList; options acceptQualifiedAttr"
-    include        = "optional uriList; options acceptQualifiedAttr"
-    methods        = "optional methodList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    classes       = "optional classList; options acceptQualifiedAttr"
+    include       = "optional uriList; options acceptQualifiedAttr"
+    methods       = "optional methodList; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
 
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->
@@ -62,60 +62,46 @@
   <XD2.0:def xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/2.0';
       options moreAttributes"
-    name            = "optional QName; options acceptQualifiedAttr"
-    metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    classes         = "optional classList; options acceptQualifiedAttr"
-    methods         = "optional methodList; options acceptQualifiedAttr"
-    include         = "optional uriList; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr"
-    script          = "optional xdefScript; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    name          = "optional QName; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    classes       = "optional classList; options acceptQualifiedAttr"
+    methods       = "optional methodList; options acceptQualifiedAttr"
+    include       = "optional uriList; options acceptQualifiedAttr"
+    root          = "optional rootList; options acceptQualifiedAttr"
+    script        = "optional xdefScript; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
     <xd:mixed>
-
       <XD2.0:macro xd:script = "occurs *; options moreAttributes"
         name    = "required QName; options acceptQualifiedAttr"
         xd:attr = "occurs * xdIdentifier" >
         optional string;
       </XD2.0:macro>
-
       <XD2.0:declaration xd:script = "occurs *">
          optional declarationScript;
       </XD2.0:declaration>
-
       <XD2.0:BNFGrammar xd:script = "occurs *; ref XD2.0:BNFGrammar" />
-
       <XD2.0:component xd:script = "occurs *; ref XD2.0:component" />
-
       <XD2.0:thesaurus xd:script = "occurs *; ref XD2.0:thesaurus" />
-
       <xd:choice occurs = "*">
-
           <XD2.0:choice xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:choiceDef"
             name = "required QName; options acceptQualifiedAttr" />
-
           <XD2.0:mixed xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:mixedDef"
             name = "required QName; options acceptQualifiedAttr" />
-
           <XD2.0:sequence xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:sequenceDef"
             name = "required QName; options acceptQualifiedAttr" />
-
           <XD2.0:list xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:listDef"
             name = "required QName; options acceptQualifiedAttr" />
-
           <XD2.0:any xd:script = "occurs *;
                             match @name || @XD2.0:name; ref XD2.0:anyDef"
             name = "required QName; options acceptQualifiedAttr" />
-
           <xd:any xd:script = "occurs *; ref xelement" />
-
           optional valueScript;
-
       </xd:choice>
     </xd:mixed>
 
@@ -155,11 +141,11 @@
     <XD2.0:sequence xd:script = "occurs *;
                        match @ref || @XD2.0:ref; ref XD2.0:sequenceRef" />
     <XD2.0:sequence xd:script = "occurs *; ref XD2.0:sequenceDef" />
-    <XD2.0:list  xd:script = "occurs *;
-                       match @ref || @XD2.0:ref; ref XD2.0:listRef"/>
+    <XD2.0:list xd:script = "occurs *;
+                     match @ref || @XD2.0:ref; ref XD2.0:listRef"/>
     <XD2.0:any  xd:script = "occurs *; match @XD2.0:ref; ref XD2.0:anyRef"/>
     <XD2.0:any  xd:script = "occurs *; match !@XD2.0:ref; ref xelement"/>
-    <xd:any xd:script  =  "occurs *; ref xelement" />
+    <xd:any     xd:script  =  "occurs *; ref xelement" />
     <XD2.0:text> optional valueScript; </XD2.0:text>
     optional valueScript;
   </xd:choice>
@@ -170,10 +156,8 @@
     ref    = "required QName; options acceptQualifiedAttr"
     script = "optional string; options acceptQualifiedAttr" />
 
-  <XD2.0:choiceDef occurs = "optional Occurrence;
-              options acceptQualifiedAttr"
-    create = "optional elementCreateCode;
-              options acceptQualifiedAttr"
+  <XD2.0:choiceDef occurs = "optional Occurrence; options acceptQualifiedAttr"
+    create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >
      <xd:choice ref = "xcontent" occurs = "*" />
@@ -184,8 +168,7 @@
     ref    = "required QName; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" />
 
-  <XD2.0:sequenceDef occurs = "optional Occurrence;
-              options acceptQualifiedAttr"
+  <XD2.0:sequenceDef occurs = "optional Occurrence; options acceptQualifiedAttr"
     create = "optional elementCreateCode; options acceptQualifiedAttr"
     ref    = "illegal; options acceptQualifiedAttr"
     script = "optional groupScript; options acceptQualifiedAttr" >

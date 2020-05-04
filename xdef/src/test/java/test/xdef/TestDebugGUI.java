@@ -34,7 +34,7 @@ public final class TestDebugGUI extends XDTester {
 		XDOutput out;
 		Element el;
 		String s;
-
+		String json;
 		// set external editor
 //		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR,
 //"xdplugin.XdPlugin; C:/Program Files/Oxygen XML Editor 20/oxygen20.1.exe");
@@ -289,6 +289,61 @@ public final class TestDebugGUI extends XDTester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
+		try {// JSON
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"JSON\" root=\"a\">\n"+
+"<xd:json name=\"a\" >\n" +
+"{ \"personnel\": { \"person\": \n" +
+"      [ $script: \"occurs 1..*\",\n" +
+"        { $script: \"occurs 1..*; ref B\" }\n" +
+"      ]\n" +
+"  }\n" +
+"}\n" +
+"</xd:json>\n" +
+"<xd:json name=\"B\" >\n" +
+"{ \"id\": \"string()\",\n" +
+"   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
+"   \"email\": \"email();\",\n" +
+"   \"link\": { $script: \"ref C\" }\n" +
+"}\n" +
+"</xd:json>\n" +
+"<xd:json name=\"C\" >\n" +
+"{  $oneOf: \"optional;\",\n" +
+"   \"manager\": \"jstring()\",\n" +
+"   \"subordinates\":[ \"* jstring();\" ]\n" +
+"}\n" +
+"</xd:json>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("JSON");
+			json =
+"{ \"personnel\": { \"person\":\n" +
+"    [\n" +
+"      { \"id\": \"Big.Boss\",\n" +
+"        \"name\": { \"family\": \"Boss\",\n" +
+"        \"given\": \"Big\" },\n" +
+"        \"email\": \"chief@oxygenxml.com\",\n" +
+"        \"link\": { \"subordinates\": [\"one.worker\", \"two.worker\" ] }\n" +
+"      },\n" +
+"      { \"id\": \"one.worker\",\n" +
+"        \"name\": { \"family\": \"Worker\", \"given\": \"One\" },\n" +
+"        \"email\": \"one@oxygenxml.com\",\n" +
+"        \"link\": {\"manager\": \"Big.Boss\"}\n" +
+"      },\n" +
+"      { \"id\": \"two.worker\",\n" +
+"        \"name\": { \"family\": \"Worker\", \"given\": \"Two\" },\n" +
+"        \"email\": \"two@oxygenxml.com\",\n" +
+"        \"link\": {\"manager\": \"Big.Boss\"}\n" +
+"      }\n" +
+"    ]\n" +
+"  }\n" +
+"}";
+			xd.jparse(json, reporter);
+			if (reporter.errors()) {
+				System.out.println(reporter);
+			}
+		} catch (Exception ex) {fail(ex);}
+		
 		resetTester();
 	}
 

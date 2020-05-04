@@ -23,9 +23,9 @@
     <XD4.0:collection xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.0';
       options moreAttributes"
-    include        = "optional uriList; options acceptQualifiedAttr"
-    metaNamespace  = "optional uri; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    include       = "optional uriList; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->
       <XD2.0:def xd:script = "occurs *; ref Ver2.0#XD2.0:def" />
@@ -53,62 +53,46 @@
   <XD4.0:def xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.0';
       options moreAttributes"
-    name            = "optional QName; options acceptQualifiedAttr"
-    metaNamespace   = "optional uri; options acceptQualifiedAttr"
-    root            = "optional rootList; options acceptQualifiedAttr"
-    include         = "optional uriList; options acceptQualifiedAttr"
-    script          = "optional xdefScript; options acceptQualifiedAttr"
-    importLocal    = "optional importLocal; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    name          = "optional QName; options acceptQualifiedAttr"
+    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    root          = "optional rootList; options acceptQualifiedAttr"
+    include       = "optional uriList; options acceptQualifiedAttr"
+    script        = "optional xdefScript; options acceptQualifiedAttr"
+    importLocal   = "optional importLocal; options acceptQualifiedAttr"
+    xd:attr       = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
     <xd:mixed>
-
       <XD4.0:macro xd:script = "occurs *; ref XD4.0:macro" />
-
       <XD4.0:declaration xd:script = "occurs *; ref XD4.0:declaration"
         scope = "optional enum('global','local'); options acceptQualifiedAttr"/>
-
       <XD4.0:lexicon xd:script = "occurs *; ref XD4.0:lexicon" />
-
       <XD4.0:BNFGrammar xd:script = "occurs *; ref XD4.0:BNFGrammar"/>
-
       <XD4.0:component xd:script = "occurs *; ref XD4.0:component"/>
-
       <xd:choice occurs = "*">
-
           <XD4.0:choice xd:script = "occurs *;
                             match @name || @XD4.0:name; ref XD4.0:choiceDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD4.0:mixed xd:script = "occurs *;
                             match @name || @XD4.0:name; ref XD4.0:mixedDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD4.0:sequence xd:script = "occurs *;
                             match @name || @XD4.0:name; ref XD4.0:sequenceDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD4.0:list xd:script = "occurs *;
                             match @name || @XD4.0:name; ref XD4.0:listDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD4.0:json  xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
               required json;
           </XD4.0:json>
-
           <XD4.0:any xd:script = "occurs *;
                             match @XD4.0:name; ref XD4.0:anyDef;
                             options moreAttributes, moreElements"
               XD4.0:name = "required QName;" />
-
           <xd:any xd:script = "occurs *; ref xelement" />
-
           optional valueScript;
-
       </xd:choice>
-
     </xd:mixed>
 
   </XD4.0:def>
