@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.Properties;
 import org.xdef.sys.ReportWriter;
 import java.lang.reflect.Constructor;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SThrowable;
 
 /** Builder of XPool.
  * @author Vaclav Trojan
@@ -204,14 +206,24 @@ public class XBuilder implements XDBuilder {
 		result._compiler = null;
 		ReportWriter userReporter = result._reporter; // user's reporter
 		result._reporter = null;
-		p.compileXPool(result);
 		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
 		byte displayMode = result.getDisplayMode();
 		boolean display = displayMode == XPool.DISPLAY_TRUE
 			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));
+		try {
+			p.compileXPool(result);
+		} catch (RuntimeException ex) {
+			if (!display) {
+				throw ex;
+			}
+			if (!(ex instanceof SThrowable)) {
+				//Program exception&{0}{: }
+				reporter.putReport(Report.error(SYS.SYS036, ex));
+			}
+		}
+		ArrayReporter ar = reporter;
 		if (display) {
 			Class<?>[] externals = p.getExternals(); //save external classes
-			ArrayReporter ar = (ArrayReporter) reporter;
 			XEditor xeditor = null;
 			try {
 				String xdefEditor = result.getXdefEditor();
@@ -255,8 +267,16 @@ public class XBuilder implements XDBuilder {
 				}
 				// compile again
 				p = result._compiler;
-				p.compileXPool(result);
-				ar = (ArrayReporter) p.getReportWriter();
+				try {
+					p.compileXPool(result);
+					ar = (ArrayReporter) p.getReportWriter();
+				} catch (Exception ex) {
+					ar = (ArrayReporter) p.getReportWriter();
+					if (!(ex instanceof SThrowable)) {
+						//Program exception&{0}{: }
+						reporter.putReport(Report.error(SYS.SYS036, ex));
+					}
+				}
 				result._compiler = null;
 			}
 		}
