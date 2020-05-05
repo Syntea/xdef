@@ -13,16 +13,16 @@
 
     <Root>
         <xd:mixed>
-            <Test01>xs:int</Test01>
-            <Test02>xs:int()</Test02>
-            <Test03>xs:int(%minInclusive=0, %maxInclusive=100)</Test03>
-            <Test04>xs:list(%item=xs:int)</Test04>
-            <Test05>xs:list(%item=xs:int())</Test05>
-            <Test06>xs:list(%item=xs:int(%minInclusive=0, %maxInclusive=100), %length=3)</Test06>
-            <Test08>xs:union(%item=[xs:int, xs:string])</Test08>
-            <Test09>xs:union(%item=[xs:int(), xs:string(%minLength=1, %maxLength=30)])</Test09>
-            <Test10>xs:union(%item=[xs:int(%minInclusive=0, %maxInclusive=100), xs:string(%minLength=1, %maxLength=30)])</Test10>
-            <Test11>xs:union(%item=[xs:list(%item=xs:int(%minInclusive=0, %maxInclusive=100), %length=3), xs:string(%minLength=1, %maxLength=30)])</Test11>
+            <Test01>int</Test01>
+            <Test02>int()</Test02>
+            <Test03>int(%minInclusive=0, %maxInclusive=100)</Test03>
+            <Test04>list(%item=int)</Test04>
+            <Test05>list(%item=int())</Test05>
+            <Test06>list(%item=int(%minInclusive=0, %maxInclusive=100), %length=3)</Test06>
+            <Test08>union(%item=[int, string])</Test08>
+            <Test09>union(%item=[int(), string(%minLength=1, %maxLength=30)])</Test09>
+            <Test10>union(%item=[int(%minInclusive=0, %maxInclusive=100), string(%minLength=1, %maxLength=30)])</Test10>
+            <Test11>union(%item=[list(%item=int(%minInclusive=0, %maxInclusive=100), %length=3), string(%minLength=1, %maxLength=30)])</Test11>
         </xd:mixed>
     </Root>
 

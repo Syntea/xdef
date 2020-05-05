@@ -29,6 +29,13 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -38,7 +45,7 @@ public final class TestUserQuery extends XDTester {
 "  </firma>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			el = create(xp, "Example", (Element) null, "root");
 			assertEq(el,
 				"<root>" +
@@ -57,6 +64,12 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root>\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -66,7 +79,7 @@ public final class TestUserQuery extends XDTester {
 "  </firma>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			xd.setUserObject(new UserTable());
 			el = xd.xcreate("root", null);
@@ -86,6 +99,13 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -95,7 +115,7 @@ public final class TestUserQuery extends XDTester {
 "  </firma>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			xd.setUserObject(new UserTable());
 			el = xd.xcreate("root", null);
@@ -115,6 +135,13 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 " <xd:sequence xd:script='occurs *; create getNext()'>\n"+
 "  <firma\n"+
@@ -126,7 +153,7 @@ public final class TestUserQuery extends XDTester {
 " </xd:sequence>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			xd.setUserObject(new UserTable());
 			el = xd.xcreate("root", null);
@@ -146,6 +173,12 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root>\n"+
 " <xd:sequence>\n"+
 "  <firma xd:script='occurs *;create getNext()'\n"+
@@ -157,7 +190,7 @@ public final class TestUserQuery extends XDTester {
 " </xd:sequence>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			xd.setUserObject(new UserTable());
 			el = xd.xcreate("root", null);
@@ -175,6 +208,13 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "<root xd:script=\"create userQuery('some query expression')\">\n"+
 "  <firma xd:script='occurs *; create getNext()'\n"+
 "     name = \"required string; create getValue('name')\">\n"+
@@ -191,7 +231,7 @@ public final class TestUserQuery extends XDTester {
 "  </firma>\n"+
 "</root>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			xd.setUserObject(new UserTable());
 			el = xd.xcreate("root", null);
@@ -224,6 +264,12 @@ public final class TestUserQuery extends XDTester {
 		try {//create books from simulated select (with element qualifier "*")
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+
@@ -231,7 +277,7 @@ public final class TestUserQuery extends XDTester {
 "    </book>\n"+
 "  </test>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("test");
 			s = KXmlUtils.nodeToString(xd.xcreate("test", null));
 			assertEq("<test>" +
@@ -242,6 +288,12 @@ public final class TestUserQuery extends XDTester {
 		try {// the same with sequence (qualifier "*")
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "  <test>\n"+
 "    <xd:sequence script = \"*; create select('??')\">\n"+
 "      <book cover=\"optional string(); create getColumn('cover')\">"+
@@ -250,7 +302,7 @@ public final class TestUserQuery extends XDTester {
 "    </xd:sequence>\n"+
 "  </test>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			Object userObj = new SelectResult();
 			xd = xp.createXDDocument("test");
 			xd.setUserObject(userObj);
@@ -264,6 +316,12 @@ public final class TestUserQuery extends XDTester {
 		try {//this is the example of an external user object passed to creator
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+
@@ -271,7 +329,7 @@ public final class TestUserQuery extends XDTester {
 "    </book>\n"+
 "  </test>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			Object userObj = new SelectResult();
 			xd = xp.createXDDocument("test");
 			xd.setUserObject(userObj);

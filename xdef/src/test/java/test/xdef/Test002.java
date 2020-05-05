@@ -116,7 +116,7 @@ public final class Test002 extends XDTester {
 					"\n"+
 					";}}Example - end\n", strw.toString());
 			xdef = dataDir + "Test002_4.xdef";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = dataDir + "Test002_4_1.xml";
 			strw = new StringWriter();
 			parse(xp, "DefSystemStatistics", xml, reporter, strw,null,null);
@@ -316,6 +316,11 @@ public final class Test002 extends XDTester {
 			assertEq("OK", strw.toString());
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method void test.xdef.Test002.setHeaderEl();\n"+
+"  external method void test.xdef.Test002.setRequestEl();\n"+
+"  external method void test.xdef.Test002.setKodPartnera();\n"+
+"</xd:declaration>\n"+
 "<xd:def xmlns:s='http://www.w3c.org/2003/05/soap-envelope'\n"+
 "        xmlns:p='http://ws.ckp.cz/pis/B1/2006/10'\n"+
 "        impl-version='0.0.1' impl-date='18.9.2006' root='s:Envelope'>\n"+
@@ -346,7 +351,7 @@ public final class Test002 extends XDTester {
 "</s:Envelope>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml =
 "<?xml version=\"1.0\"?>\n"+
 "<s:Envelope xmlns:s=\"http://www.w3c.org/2003/05/soap-envelope\"\n"+
@@ -407,6 +412,9 @@ public final class Test002 extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method String test.xdef.Test002.getIdPrace();\n"+
+"</xd:declaration>\n"+
 "<xd:def name='test' impl-version='2.4.1.0' impl-date='28.12.2006'>\n"+
 "<Set_BlokujPSP_\n"+
 "  IdPrace=\"required int(); create getIdPrace()\" >\n"+
@@ -428,7 +436,7 @@ public final class Test002 extends XDTester {
 "</xd:def>\n"+
 "</xd:collection>\n";
 			reporter = new ArrayReporter();
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = "<Set_BlokujPSP KodPojistitele=\"0002\">" +
 				"<ZdrojovaSmlouva PoradiVozidla=\"1\"" +
 				" CisloSmlouvy=\"3060000030\"" +
@@ -443,7 +451,15 @@ public final class Test002 extends XDTester {
 			assertEq("0062", s, KXmlUtils.nodeToString(el, true));
 
 			// we try array of xdefinitions
-			String xdef1, xdef2, xdef3, data;
+			String xdef0, xdef1, xdef2, xdef3, data;
+			xdef0 =
+"<x:declaration xmlns:x='" + _xdNS + "'>\n"+
+" external method boolean test.xdef.Test002.tab(String, String);\n"+
+" external method void test.xdef.Test002.setErr(XXNode, long);\n"+
+" external method boolean test.xdef.Test002.fil0(long);\n"+
+" external method String test.xdef.Test002.modelVozidlaNeuveden();\n"+
+" external method void test.xdef.Test002.setNullIfZero();\n"+
+"</x:declaration>";
 			xdef1 =
 "<x:def xmlns:x='" + _xdNS + "' name='P1_common'>\n"+
 "<Vozidlo\n"+
@@ -488,13 +504,13 @@ public final class Test002 extends XDTester {
 "                      onFalse setErr(4225)\" />\n"+
 "</a>\n"+
 "</x:def>\n";
-			String[] xdefs = new String[]{xdef1, xdef2, xdef3};
+			String[] xdefs = new String[]{xdef0, xdef1, xdef2, xdef3};
 			data = "<a><Vozidlo SPZ=\"6A84013\" /></a>";
 			_errorCount = 0;
 			_errorCode = 0;
 			//should be reported 4202
 			if (test(xdefs, data, "test",'P',
-				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "", getClass())) {
+				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "")) {
 				fail();
 			}
 			if (_errorCount != 1) {
@@ -507,7 +523,7 @@ public final class Test002 extends XDTester {
 			_errorCount = 0;
 			_errorCode = 0;
 			if (test(xdefs, data, "test1",'P',
-				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "", getClass())) {
+				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "")) {
 				fail();
 			}
 			if (_errorCount != 0) {
@@ -520,7 +536,7 @@ public final class Test002 extends XDTester {
 			_errorCount = 0;
 			_errorCode = 0;
 			if (test(xdefs, data, "test1",'P',
-				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "", getClass())) {
+				"<a><Vozidlo SPZ=\"6A84013\" /></a>", "")) {
 				fail();
 			}
 			if (_errorCount != 0) {
@@ -545,13 +561,13 @@ public final class Test002 extends XDTester {
 			_errorCount = 0;
 			_errorCode = 0;
 			//should be reported 4202
-			test(xdefs1, data1, "SouborP1A", null, reporter, 'P', getClass());
+			test(xdefs1, data1, "SouborP1A", null, reporter, 'P');
 			if (_errorCount != 1 || _errorCode != 4202) {
 				fail("ErrorCount:"+_errorCount+", errorCode:"+_errorCode);
 			}
 			_errorCount = 0;
 			_errorCode = 0;
-			xp = compile(dataDir + "test002_2a_1.xdef", getClass());
+			xp = compile(dataDir + "test002_2a_1.xdef");
 			parse(xp, "SouborP1A", dataDir + "test002_2.xml", reporter);
 			//should be reported 4202
 			if (_errorCount != 1 || _errorCode != 4202) {
@@ -561,13 +577,17 @@ public final class Test002 extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<x:declaration xmlns:x='" + _xdNS + "'>\n"+
+" external method boolean test.xdef.Test002.unknown(XXData, XDValue[]);\n"+
+" external method boolean test.xdef.Test002.known(XXData);\n"+
+"</x:declaration>\n"+
 "  <a a1=\"optional unknown() OOR pic('AA999999'); onFalse out('ERR1')\"\n"+
 "   a2=\"optional NOT known()||pic('AA999999'); onFalse out('ERR2')\"/>\n"+
 "</xd:def>\n";
 			xml = "<a a1='???' a2='???'/>";
-			assertFalse(test(xdef, xml, "",'P', xml, "", getClass()));
+			assertFalse(test(xdef, xml, "",'P', xml, ""));
 			xml = "<a a1='AA999991' a2='AA999992'/>";
-			assertFalse(test(xdef, xml, "",'P', xml, "", getClass()));
+			assertFalse(test(xdef, xml, "",'P', xml, ""));
 			xdef = dataDir + "Test002_6.xdef"; //test macros, errors etc.
 			xml = dataDir + "Test002_6.xml";
 			strw = new StringWriter();
@@ -928,7 +948,7 @@ public final class Test002 extends XDTester {
 "  </b>\n"+
 "</a>\n"+
 "</x:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = "<a x='a'><b y='b'>c</b></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
@@ -940,13 +960,16 @@ public final class Test002 extends XDTester {
 			assertEq(strw.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
+"<x:declaration>\n"+
+" external method String test.xdef.Test002.testGetXPos(XXNode);\n"+
+"</x:declaration>\n"+
 "<a x = 'string; finally out(testGetXPos())'>\n"+
 "  <b y = 'string; finally out(testGetXPos())'>\n"+
 "    string; finally out(testGetXPos())\n"+
 "  </b>\n"+
 "</a>\n"+
 "</x:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = "<a x='a'><b y='b'>c</b></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));

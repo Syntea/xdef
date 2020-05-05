@@ -7,7 +7,7 @@
   <xd:declaration scope = "local">
     /* xxx */
     int i = 0;
-    type pom1 datetime('d.M.yyyy');
+    type pom1 xdatetime('d.M.yyyy');
     type pom2 xdatetime('d.M.yyyy');
     type x pom1;
     type y pom2;

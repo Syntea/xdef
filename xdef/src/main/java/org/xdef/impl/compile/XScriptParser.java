@@ -1162,7 +1162,7 @@ public class XScriptParser extends StringParser
 						}
 						if (occ.minOccurs() == 0 && occ.maxOccurs() == 0) {
 							//'occurs 0' is not allowed - use 'illegal'
-							warning(XDEF.XDEF428);
+							lightError(XDEF.XDEF428);
 						}
 						nextSymbol();
 					} else {

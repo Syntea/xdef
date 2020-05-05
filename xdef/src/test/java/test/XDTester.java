@@ -124,6 +124,10 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+	public final String getProperty(final String key) {
+		return	_props.getProperty(key.replace('.', '_'));
+	}
+
 	public final void setGenObjFile(final boolean genObj) {_genObj = genObj;}
 
 	public final boolean getGenObjFile() {return _genObj;}

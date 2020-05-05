@@ -67,6 +67,8 @@ public final class TestScript extends XDTester {
 		String xml = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
+				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
 			xp = compile(xdef, getClass());
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;

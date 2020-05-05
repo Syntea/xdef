@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
-<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
         name = "SouborD1A" root = "SouborD1A">
 
 <xd:declaration>

@@ -57,11 +57,11 @@ public interface XDConstants {
 	/** Value "true" of property "xdef_xinclude (default)." */
 	public static final String XDPROPERTYVALUE_XINCLUDE_TRUE = "true";
 
-	/** Property warning messages are checked {thrown} (default is "false")*/
+	/** Property warning messages are generated and checked, default is "true"*/
 	public static final String XDPROPERTY_WARNINGS = "xdef_warnings";
-	/** Value "true" of property "xdef_warnings" */
+	/** Value "true" of property "xdef_warnings" - warnings are generated- */
 	public static final String XDPROPERTYVALUE_WARNINGS_TRUE = "true";
-	/** Value "false" of property "xdef_warnings" */
+	/** Value "false" of property "xdef_warnings" - warnings not generated.*/
 	public static final String XDPROPERTYVALUE_WARNINGS_FALSE = "false";
 
 	/** Property defines debug mode (default is false).*/

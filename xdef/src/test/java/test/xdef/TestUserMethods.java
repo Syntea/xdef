@@ -171,7 +171,7 @@ public final class TestUserMethods extends XDTester {
 "   <d xd:script=\"1;${n(p='d')}; create from('/a/d')\"/>\n"+
 " </a>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = "<a><b/><c/><d/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));

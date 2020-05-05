@@ -250,7 +250,7 @@ public class MyTest_0 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "<xd:json name='A'>\n"+
-"{\"\\\\\": \"jstring()\"}\n"+
+"{\"\\\\\": \"jstring();\"}\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A001 %link #A;\n"+
@@ -2031,6 +2031,11 @@ if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"  <xd:declaration>\n"+
+"    external method boolean bugreports.MyTest_0.next(XXElement);\n"+
+"    external method boolean bugreports.MyTest_0.methodA(XXElement);\n"+
+"    external method boolean bugreports.MyTest_0.methodB(XXElement);\n"+
+"  </xd:declaration>\n"+
 "  <A>\n"+
 "    <xd:sequence xd:script='occurs *; create next()'>\n"+
 "      <a xd:script=\"occurs 0..1; create methodA();\n"+
@@ -2042,7 +2047,7 @@ if(T){return;}
 "    </xd:sequence>\n"+
 "  </A>\n"+
 "</xd:def>";
-			xd = compile(xdef, getClass()).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			_stack.push("A");
 			_stack.push("A");
 			_stack.push("B");
@@ -2274,7 +2279,7 @@ setChkSyntax(chkSynteax);
 " </A>\n"+
 "</xd:def>";
 			xml = "<A><B/><C/><D/></A>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xout = XDFactory.createXDOutput(strw, false);
@@ -2305,7 +2310,7 @@ setChkSyntax(chkSynteax);
 " </a>\n"+
 "</xd:def>";
 			xml = "<a><b/><x/><c/></a>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xout = XDFactory.createXDOutput(strw, false);
@@ -2432,10 +2437,13 @@ if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' xd:root = \"err\" >\n"+
+"<xd:declaration>\n"+
+"  external method void bugreports.MyTest_0.exc()\n"+
+"</xd:declaration>\n"+
 "<err xd:script = \"finally exc();\">\n"+
 "</err>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			parse(xp, "", "<err/>", reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
@@ -2447,6 +2455,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
+"  external method boolean bugreports.MyTest_0.cPar(XDContainer);\n"+
 "  NamedValue n = %y = 'Y';\n"+
 "  Container m1 = [n, %a='A',%b='B', 1];\n"+
 "  Container m2 = new Container();\n"+
@@ -2466,7 +2475,7 @@ if(T){return;}
 "   }\n"+
 " </a>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			el = parse(xp, "", "<a>x</a>", reporter);
 			assertEq("<a>A,B,1,Y,Z,1,12,%q=Q,Q,Y,1,true</a>", el);
 			xdef =
@@ -2718,9 +2727,12 @@ if(T){return;}
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDParseResult bugreports.MyTest_0.kp(XXNode, XDValue[]);\n"+
+"</xd:declaration>\n"+
 "<a a='kp(1,5,%totalDigits=1,%enumeration=[1,3],%pattern=[\"\\\\d\"])'/>\n"+
 "</xd:def>";
-			xd = compile(xdef, getClass()).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xd, "<a a='2'/>", reporter);

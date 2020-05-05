@@ -363,8 +363,6 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(prepare("dateTimeTest"), popMessage());
 		assertTrue(parse("dateTimeTest_valid_1"), popMessage());
 
-		/*VT*/
-		setProperty("xdef.warnings", "false");//do not check validity of 3.1
 		assertTrue(prepare("declarationTest"), popMessage());
 		assertTrue(parse("declarationTest_valid_1"), popMessage());
 		assertTrue(parse("declarationTest_valid_2"), popMessage());
