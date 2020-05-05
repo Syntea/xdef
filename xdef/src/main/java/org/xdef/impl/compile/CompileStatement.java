@@ -4027,6 +4027,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeS1 result = new CodeS1(XD_STRING, (short) 0, start + 1, null);
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
+			if (_xdVersion > XConstants.XD31) {
+				//&{0}" is deprecated. Please use "&{1}" instead
+				warning(XDEF.XDEF998, "explicit type code",
+					"declaration of type method");
+			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
 			_g.addCode(call, 0);

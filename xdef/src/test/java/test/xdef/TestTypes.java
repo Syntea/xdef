@@ -711,8 +711,7 @@ public final class TestTypes extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			xdef = // gYear - invoked in if command (see method "check")
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a = \"required {return gYear(%minInclusive='1999',\n"+
-"   %maxInclusive='2000');}\"/>\n"+
+"<a a = \"required gYear(%minInclusive='1999', %maxInclusive='2000');\"/>\n"+
 "</xd:def>";
 			xml = "<a a='1999'/>";
 			parse(xdef, "", xml, reporter);
@@ -1218,5 +1217,4 @@ public final class TestTypes extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest() != 0) {System.exit(1);}
 	}
-
 }
