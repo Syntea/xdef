@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.xdef.XDConstants;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
@@ -360,16 +361,20 @@ public class TestXsd2XdConv extends XDTester {
 		assertTrue(prepare("test_Inf"), popMessage());
 		assertTrue(parse("test_Inf_valid"), popMessage());
 
+		//do not check deprecated
+		setProperty(XDConstants.XDPROPERTY_WARNINGS,
+			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 		// my tests
 		assertTrue(prepare("basicTestSchema"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
 
 		assertTrue(prepare("typeTestSchema"), popMessage());
 		assertTrue(parse("typeTest_valid_1"), popMessage());
-
-		// test Sisma
+		// Sisma
 		assertTrue(prepare("Sisma_RegistraceSU"), popMessage());
 		assertTrue(parse("Sisma_RegistaceSU"), popMessage());
+
+		resetProperties();
 
 		try {
 			FUtils.deleteAll(_tempDir, true);

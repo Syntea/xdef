@@ -853,7 +853,11 @@ public final class TestTypes extends XDTester {
 				setChkSyntax(false);
 			xdef = // expressions
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='int | string; finally out(int | string)'/>\n"+
+"<xd:declaration>\n"+
+" boolean x(){return int | string;}\n"+
+"</xd:declaration>\n"+
+"<A a=\"x()\"/>\n"+
+"<a a='x(); finally out(int | string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -868,22 +872,10 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='int || string; finally out(int || string)'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='1'/>";
-			strw = new StringWriter();
-			parse(xp, null, xml, reporter, strw, null, null);
-			assertEq("true", strw.toString());
-			assertNoErrors(reporter);
-			xml = "<a a='x'/>";
-			strw = new StringWriter();
-			parse(xp, null, xml, reporter, strw, null, null);
-			assertEq("true", strw.toString());
-			assertNoErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='int AND string; finally out(int AND string)'/>\n"+
+"<xd:declaration>\n"+
+" boolean x(){return int AND string;}\n"+
+"</xd:declaration>\n"+
+"<a a='x(); finally out(int AND string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -898,7 +890,10 @@ public final class TestTypes extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='int AAND string; finally out(int AAND string)'/>\n"+
+"<xd:declaration>\n"+
+" boolean x(){return int AAND string;}\n"+
+"</xd:declaration>\n"+
+"<a a='x(); finally out(int AAND string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";

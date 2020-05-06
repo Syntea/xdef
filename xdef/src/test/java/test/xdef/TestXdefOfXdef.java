@@ -119,7 +119,7 @@ public final class TestXdefOfXdef extends XDTester {
 "       default: return true;\n" +
 "     }\n" +
 "     return true;\n" +
-"  }\n" +	
+"  }\n" +
 "</xd:declaration>\n"+
 "<a b=\"optional x(); default 'abc'; finally outln();\"/>\n" +
 "</xd:def>");

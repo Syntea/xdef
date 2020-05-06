@@ -17,7 +17,6 @@ import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.msg.XDEF;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -446,7 +445,10 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //check type expression
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
-"<A a=\"(eq('abc') | eq('xyz')) AAND string(2, 50);\"/>\n"+
+"<xd:declaration>\n"+
+" boolean x(){return (eq('abc') || eq('xyz')) AAND string(2, 50);}\n"+
+"</xd:declaration>\n"+
+"<A a=\"x()\"/>\n"+
 "</xd:def>";
 			xml = "<A a='abc'/>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
@@ -897,11 +899,14 @@ public final class TestXdef extends XDTester {
 			//test direct expression as type check
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a|b|c|d'>\n"+
-"  <xd:declaration> boolean x() { return !eq('hi'); } </xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"   boolean x() { return !eq('hi'); }\n"+
+"   boolean y() { return true; }\n"+
+"  </xd:declaration>\n"+
 "  <a p=\"'hi';\"/>\n"+
-"  <b p=\"!eq('hi');\"/>\n"+
-"  <c p=\"true;\"/>\n"+
-"  <d p=\"x\"/>\n"+
+"  <b p=\"x();\"/>\n"+
+"  <c p=\"y()\"/>\n"+
+"  <d p=\"x()\"/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a p='hi'/>", reporter);

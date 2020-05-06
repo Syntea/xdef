@@ -233,7 +233,7 @@ public abstract class XDTester extends STester {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			XDFactory.writeXDPool(baos, xp);
-			ByteArrayInputStream bais = 
+			ByteArrayInputStream bais =
 				new ByteArrayInputStream(baos.toByteArray());
 			XDPool xp1 = XDFactory.readXDPool(bais);
 			baos = new ByteArrayOutputStream();

@@ -529,10 +529,13 @@ public final class Test000 extends XDTester {
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.Test000.known(XXNode, XDValue[]);\n"+
 "    external method boolean test.xdef.Test000.unknown(XXNode, XDValue[]);\n"+
+"    boolean x() {return unknown() OR regex('[A-Z0-9]{6,7}');}\n"+
+"    boolean y() {return known() AND string(1,26);}\n"+
+"    boolean z() {return unknown() OR pic('AA999999');}\n"+
 "  </xd:declaration>\n"+
-"  <Vozidlo SPZ=\"optional unknown() OR regex('[A-Z0-9]{6,7}');\"\n"+
-"    VIN       =\"optional known() AND string(1,26);\"\n"+
-"    CisloTP   =\"optional unknown() OR pic('AA999999');\" />\n"+
+"  <Vozidlo SPZ=\"optional x();\"\n"+
+"    VIN       =\"optional y();\"\n"+
+"    CisloTP   =\"optional z();\" />\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
@@ -1050,6 +1053,9 @@ public final class Test000 extends XDTester {
 "<mog attr='required'></mog>\n"+
 "</xd:def>\n"+
 "<xd:def name='abc' root='abc#Davka'>\n"+
+"<xd:declaration>\n"+
+"  boolean x() {return string(3,3) AND (eq('abc')|eq('xyz'));}\n"+
+"</xd:declaration>\n"+
 "<Davka Verze=\"fixed '2.0'\" xmlns:a='abc'\n"+
 "       a:Kanal=\"required\"\n"+
 "       Seq=\"required int()\"\n"+
@@ -1058,7 +1064,7 @@ public final class Test000 extends XDTester {
 "       xd:script=\"options moreAttributes\">\n"+
 "   <File Name=\"required string(1,256)\"\n"+
 "         Format=\"required tokens('TXT|XML|CTL')\"\n"+
-"         Kind=\"required string(3,3)&amp;(eq('abc')|eq('xyz'))\"\n"+
+"         Kind=\"required x();\"\n"+
 "         RecNum=\"required num(8)\"\n"+
 "         xd:script=\"occurs 1..\">\n"+
 "       <xd:mixed>\n"+

@@ -60,7 +60,7 @@ public class TestAll {
 	@SuppressWarnings("unused")
 	private static void mainTest() {
 		beforeTests();
-		
+
 		testCommon();
 		testXdef();
 		testXDUtils();
