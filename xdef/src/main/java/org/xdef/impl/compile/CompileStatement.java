@@ -4027,6 +4027,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeS1 result = new CodeS1(XD_STRING, (short) 0, start + 1, null);
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
+			if (_xdVersion > XConstants.XD31) {
+				//&{0}" is deprecated. Please use "&{1}" instead
+				warning(XDEF.XDEF998, "explicit type code",
+					"declaration of type method");
+			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
 			_g.addCode(call, 0);
@@ -4078,6 +4083,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				}
 				case XD_BOOLEAN:
+					if (_xdVersion > XConstants.XD31) {
+						XDValue val = _g.getLastCodeItem();
+						if (STARTSWITH != val.getCode()
+							&& CALL_OP != val.getCode()
+							&& PARSERESULT_MATCH != val.getCode()
+							&& !(val instanceof CodeExtMethod)) {
+							//&{0}" is deprecated. Please use "&{1}" instead
+							warning(XDEF.XDEF998, "expression in type check",
+								"union, base, or declaration of a type method");
+						}
+					}
 					_g.genStop();
 					break;
 				case CompileBase.PARSEITEM_VALUE:

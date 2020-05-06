@@ -105,6 +105,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_precomp = new XPreCompiler(reporter,
 			extClasses,
 			xp.getDisplayMode(),
+			xp.isChkWarnings(),
 			xp.isDebugMode(),
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
@@ -293,16 +294,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_nodeList.add(level, xNode);
 	}
 
-	/** Report deprecated symbol.
+	/** Report deprecated item.
 	 * @param spos position where to report.
-	 * @param symbol deprecated symbol.
+	 * @param old deprecated item.
 	 * @param replace what should be done.
 	 */
 	private void reportDeprecated(final SPosition spos,
-		final String symbol,
+		final String old,
 		final String replace) {
 		//&{0} is deprecated. Please use &{1} instead
-		_precomp.warning(spos, XDEF.XDEF998, symbol, replace);
+		_precomp.warning(spos, XDEF.XDEF998, old, replace);
 	}
 
 	void compileComponentDeclaration() {
@@ -486,6 +487,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	}
 
 	private void compileMethodsAndClassesAttrs() {
+		if (_extClasses != null && _extClasses.length > 0) {
+			reportDeprecated(new SPosition(), "Compile parameter with class",
+				"<xd:declaration> external method { ... } ...");
+		}
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);
 			SBuffer sval;
@@ -1725,7 +1730,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							&& x.getName().endsWith("$choice")) {
 							//Reference to "xd:choice" in the "xd:root"
 							// attribute is allowed in versions 4.0 and higher
-							_scriptCompiler.warning(pos, XDEF.XDEF803);
+							_precomp.warning(pos, XDEF.XDEF803);
 						}
 						def._rootSelection.put(xref.getName(), x);
 					}

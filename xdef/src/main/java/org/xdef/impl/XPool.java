@@ -186,7 +186,7 @@ public final class XPool implements XDPool, Serializable {
 		_chkWarnings = readProperty(_props, XDConstants.XDPROPERTY_WARNINGS,
 			new String[] {XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE,
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE},
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE) == 0;
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE) == 0;
 		_resolveIncludes = readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},

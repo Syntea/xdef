@@ -128,7 +128,7 @@ public final class TestXComponents extends XDTester {
 "<d>2013-09-14</d><t>10:20:30</t><s>Franta</s><Z z='z'/>"+
 "<d1 d='20130903113600'>20130903113601</d1>"+
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
-"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+				
+"<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
 "<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>";
 			xc = parseXC(xp, "A", xml, null, reporter);
@@ -139,10 +139,10 @@ public final class TestXComponents extends XDTester {
 				getValueFromGetter(xc, "getd"), "xposOf$value").toString());
 			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"get$value").toString(), "2013-09-14");
-			list = (List) getValueFromGetter(xc,"get$Y");			
+			list = (List) getValueFromGetter(xc,"get$Y");
 			assertEq("1", list.get(0));
 			assertEq("2", list.get(1));
-			assertEq("3", getValueFromGetter(xc,"get$Y_1"));			
+			assertEq("3", getValueFromGetter(xc,"get$Y_1"));
 			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"get$value"), getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"dateOf$value"));

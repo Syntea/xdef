@@ -46,7 +46,7 @@
   <META:def xd:script = "init NS = @metaNamespace ?
                          (String) @metaNamespace : DefaultUri;
                          options moreAttributes"
-    name              = "optional Qname(); options acceptQualifiedAttr"
+    name              = "optional QName(); options acceptQualifiedAttr"
     metaNamespace  = "optional uri(); options acceptQualifiedAttr"
     classes           = "optional checkClassList(); options acceptQualifiedAttr"
     include           = "optional uriList(); options acceptQualifiedAttr"
@@ -60,7 +60,7 @@
     <xd:mixed>
 
       <META:macro xd:script = "occurs *; options moreAttributes"
-        name                = "required Qname(); options acceptQualifiedAttr"
+        name                = "required QName(); options acceptQualifiedAttr"
         xd:attr             = "occurs * checkIdentifier()" >
 
         optional string();
@@ -77,15 +77,15 @@
 
           <META:choice xd:script = "occurs *;
                                     match @name AND !@ref; ref META:choiceDef"
-            name = "required Qname(); options acceptQualifiedAttr" />
+            name = "required QName(); options acceptQualifiedAttr" />
 
           <META:mixed xd:script="occurs *;
                                  match @name AND !@ref; ref META:mixedDef"
-            name = "required Qname(); options acceptQualifiedAttr" />
+            name = "required QName(); options acceptQualifiedAttr" />
 
           <META:sequence xd:script="occurs *;
                                     match @name AND !@ref; ref META:sequenceDef"
-            name = "required Qname(); options acceptQualifiedAttr" />
+            name = "required QName(); options acceptQualifiedAttr" />
 
           <xd:any xd:script = "occurs *; ref xelement" />
 
@@ -121,7 +121,7 @@
 
     <META:sequence xd:script = "occurs *; match !@ref; ref META:sequenceDef" />
 
-    <META:includeChildNodes  ref = "required Qname()" />
+    <META:includeChildNodes  ref = "required QName()" />
 
     <xd:any xd:script = "occurs *; ref xelement" />
 
@@ -133,7 +133,7 @@
               options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr"
-    ref    = "required Qname(); options acceptQualifiedAttr" />
+    ref    = "required QName(); options acceptQualifiedAttr" />
 
   <META:choiceDef occurs = "optional checkElementOccurrenceSection();
               options acceptQualifiedAttr"
@@ -149,7 +149,7 @@
               options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr"
-    ref    = "required Qname(); options acceptQualifiedAttr" />
+    ref    = "required QName(); options acceptQualifiedAttr" />
 
   <META:sequenceDef occurs = "optional checkElementOccurrenceSection();
               options acceptQualifiedAttr"
@@ -161,7 +161,7 @@
 
   </META:sequenceDef>
 
-  <META:mixedRef ref = "required Qname(); options acceptQualifiedAttr"
+  <META:mixedRef ref = "required QName(); options acceptQualifiedAttr"
     empty  = "optional checkBooleanLiteral(); options acceptQualifiedAttr"
     create = "optional checkElementCreateExpression();
               options acceptQualifiedAttr" />

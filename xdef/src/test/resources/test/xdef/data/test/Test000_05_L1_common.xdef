@@ -5,6 +5,10 @@
    xd:include = "Test000_05_L1Macros.xdef"
    xd:script  = "options ${L1#Options}" >
 
+<xd:declaration>
+	boolean x() {return fil0(2) AND tab('CC_DruhVozidla','KodDruhuVozidla');}
+</xd:declaration>
+
    <Adresa
       Ulice                    = "optional string(1,36);                                           onFalse setErr(4208)"
       CisloDomu                = "optional string(1,10);                                           onFalse setErr(4208)"
@@ -63,7 +67,7 @@
       MPZ                      = "required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"
       VIN                      = "optional string(1,26);                                           onFalse setErr(4208)"
       CisloTP                  = "optional string(1,12);                                           onFalse setErr(4208)"
-      DruhVozidla              = "required fil0(2) AND tab('CC_DruhVozidla','KodDruhuVozidla');    onFalse setErr(4225); onAbsence setErr(4202)"
+      DruhVozidla              = "required x();    onFalse setErr(4225); onAbsence setErr(4202)"
       ZnackaText               = "optional string(1,30);                                           onFalse setErr(4208)"
       ModelText                = "optional string(1,40);                                           onFalse setErr(4208)"
       KodModeluVozidla         = "optional tab('CC_ModelVozidla','KodModeluVozidla');              onFalse setErr(4225)"

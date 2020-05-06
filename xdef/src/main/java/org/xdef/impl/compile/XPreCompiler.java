@@ -87,12 +87,14 @@ public class XPreCompiler implements PreCompiler {
 	 * @param reporter The reporter.
 	 * @param extClasses The array with external classes declared by user.
 	 * @param displayMode display mode: 0 .. false, 1 .. true, 2 .. errors
+	 * @param chkWarnings if false warnings are generated as error.
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
 	public XPreCompiler(final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final byte displayMode,
+		final boolean chkWarnings,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 		_displayMode = displayMode;
@@ -101,7 +103,7 @@ public class XPreCompiler implements PreCompiler {
 		//"xmlns",
 		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
 		_codeGenerator = new CompileCode(extClasses,
-			2, debugMode, ignoreUnresolvedExternals);
+			2, chkWarnings, debugMode, ignoreUnresolvedExternals);
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
 		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
@@ -697,6 +699,12 @@ public class XPreCompiler implements PreCompiler {
 	final byte getDispalyMode() {return _displayMode;}
 
 	@Override
+	/** Get switch if the parser will check warnings as errors.
+	 * @return true if the parser checks warnings as errors.
+	 */
+	final public boolean isChkWarnings() {return _codeGenerator._chkWarnings;}
+
+	@Override
 	/** Put fatal error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
@@ -733,7 +741,7 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Put error message.
+	/** Put warning message ( or error if warning flag is false).
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.

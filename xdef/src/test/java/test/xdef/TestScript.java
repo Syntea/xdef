@@ -67,6 +67,8 @@ public final class TestScript extends XDTester {
 		String xml = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
+				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
 			xp = compile(xdef, getClass());
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;
@@ -292,22 +294,30 @@ public final class TestScript extends XDTester {
 		test("AB''CD","{setResult(eq('ab\\'\\'cd'.toUpper()));}");
 		test("AB''CD",
 			"{setText(getText().toLower());setResult(eq('ab\\'\\'cd'));}");
-		test("M","setResult(enum('M'));");
-		test("","setResult(enum('M',''));");
-		test("","setResult(enum(''));");
-		test("","setResult(!enum('M'));");
-		test("Z","setResult(!enum('M'));");
-		test("M","setResult(enum('M','Z'));");
-		test("Z","setResult(enum('M','Z'));");
-		test("XY","setResult(enum('XY','ABC','DE'));");
-		test("ABC","setResult(enum('P','Q','XY','ABC','DE'));");
-		test("DE","setResult(enum('XY','ABC','P','Q','DE'));");
-		test("P|Q","setResult(enum('P|Q','XY','ABC','DE'));");
-		test("||Q","setResult(enum('||Q','XY','ABC','DE'));");
-		test("P","{String s = 'DE', t='P'; setResult(enum(s,t));}");
-		test("XY","setResult(enumi('XY','ABC','DE'));");
-		test("aBc","setResult(enumi('XY','ABC','DE'));");
+		test("M","setResult(tokens('M'));");
+		test("","setResult(tokens('M|'));");
+		test("","setResult(tokens('|'));");
+		test("","setResult(tokens(''));");
+		test("","setResult(!tokens('M'));");
+		test("Z","setResult(!tokens('M'));");
+		test("M","setResult(tokens('M|Z'));");
+		test("Z","setResult(tokens('M|Z'));");
+		test("XY","setResult(tokens('XY|ABC|DE'));");
+		test("ABC","setResult(tokens('P||Q|XY|ABC|DE'));");
+		test("DE","setResult(tokens('XY|ABC|P||Q|DE'));");
+		test("P|Q","setResult(tokens('P||Q|XY|ABC|DE'));");
+		test("P||Q","setResult(tokens('P||||Q|XY|ABC|DE'));");
+		test("||Q","setResult(tokens('||||Q|XY|ABC|DE'));");
+		test("P|Q","setResult(tokens('XY|ABC|P||Q|DE'));");
+		test("P|Q","setResult(tokens('XY|ABC|DE|P||Q'));");
+		test("P|","setResult(tokens('XY|ABC|DE|P||'));");
+		test("P||","setResult(tokens('XY|ABC|DE|P||||'));");
+		test("P","{String s = 'DE|P'; setResult(tokens(s));}");
+		test("XY","setResult(tokensi('XY|ABC|DE'));");
+		test("aBc","setResult(tokensi('XY|ABC|DE'));");
 		test("de","setResult(tokensi('XY|ABC|DE'));");
+		test("p","{String s = 'DE|P'; setResult(tokensi(s));}");
+		test("P","{String s = 'DE|P'; setResult(tokensi(s));}");
 		test("de","setResult(NCName());");
 		test("de:ef","setResult(!NCName());");
 		test("de","setResult(NCNameList());");
@@ -804,17 +814,15 @@ public final class TestScript extends XDTester {
 //		testAttr("+1.21","onTrue setResult(true); required decimal(3,2);"
 //			+ " onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr("ahoj","required {String i = 'nazdar'; String j = 'ahoj';" +
-			" return enum(i,j);} onTrue setResult(true);"
+		testAttr("ahoj","required enum('nazdar','ahoj');onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr("hoj","required {String i = 'nazdar'; String j = 'ahoj';" +
-			" return enum(i,j);} onTrue setResult(false);"
+		testAttr("hoj","required enum('nazdar','ahoj');onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-		testAttr("Ahoj","required {String i = 'nazdar'; String j = 'ahoj';" +
-			" return enumi(i,j);} onTrue setResult(true);"
-			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr("hoj","required {String i = 'nazdar'; String j = 'ahoj';" +
-			" return enumi(i,j);} onTrue setResult(false);"
+		testAttr("Ahoj","required enum('nazdar','ahoj');"+
+			"onTrue setResult(false);"
+			+ "onFalse {clearReports(); setResult(true);}");
+		testAttr("hoj","required  enum('nazdar','ahoj');" +
+			"onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
 		_printCode = true;
 		_printCode = false;
@@ -826,33 +834,13 @@ public final class TestScript extends XDTester {
 		testAttr("ahoj", "required; onTrue setResult(true);");
 		testAttr("ahoj", "required eq('ahoj');"
 			+ "onTrue setResult(true); onFalse setResult(false);");
-		testAttr("ahoj",
-			"required {return eq('nazdar');} onTrue setResult(false); "
+		testAttr("ahoj", "required eq('nazdar'); onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
 		testAttr("ahoj", "required eq('ahoj'); onTrue setResult(false);"
 			+ "onFalse setResult(false); finally setResult(true);");
-		testAttr("nazdar","required {return eq('nazdar');}\n"
+		testAttr("nazdar","required eq('nazdar');\n"
 			+ " onFalse setResult(false); onTrue setResult(true);");
-		testAttr("nazdar","required {if (eq('nazdar'))\n"
-			+ "return true; else return false;}\n"
-			+ " onFalse setResult(false); onTrue setResult(true);");
-		testAttr("nazdar", "required {if (eq('nazdar')) {"
-			+ "return parseDate('2000-5-1T20:43+01:00').isLeapYear();}"
-			+ " return false;}"
-			+ " onFalse setResult(false); onTrue setResult(true);");
-		testAttr("nazdar","required {if (eq('nazdar'))\n"
-			+ "{Datetime d = parseDate('2000-5-1T20:43+01:00');"
-			+ "d = d.setZoneName('CEST'); return d.getZoneName() == 'CEST';}"
-			+ "return false;}"
-			+ "onFalse setResult(false); onTrue setResult(true);");
-		testAttr("nazdar","onTrue setResult(true);  onFalse setResult(false);"
-			+ "required {if (eq('ahoj')) {return false;} clearReports();"
-			+ "return true;}");
-		testAttr("nazdar","onTrue setResult(true); required {if (eq('ahoj'))"
-			+ "return false; return true;}"
-			+ " onFalse setResult(false);");
-		testAttr("nazdar","onTrue setResult(true); required {if (string(1,100))"
-			+ "{return true;} clearReports(); return false;}\n"
+		testAttr("nazdar","onTrue setResult(true); required string(1,100);\n"
 			+ " onFalse setResult(false); ");
 		testAttr("+1.21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
@@ -1179,5 +1167,4 @@ public final class TestScript extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

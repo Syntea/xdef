@@ -842,6 +842,7 @@ public final class TestKeyAndRef extends XDTester {
 "    type bt   string();\n" +
 "    type ct   enum('Y','N');\n" +
 "    uniqueSet s3 {a: at(); b: bt(); c: string()};\n" + // c accepts anything
+"    boolean x() {return ct() AND s3.c();}\n"+
 " </xd:declaration>\n" +
 " <Test> \n" +
 "   <A xd:script=\"*\" a=\"s3.a()\">\n" +
@@ -850,7 +851,7 @@ public final class TestKeyAndRef extends XDTester {
 "   <uA xd:script=\"*\" a=\"s3.a()\">\n" +
 "     <uB xd:script=\"*; finally s3.CHKID()\" \n" +
 "          b=\"s3.b()\"\n" +
-"          c=\"ct() AND s3.c()\"/>\n" +
+"          c=\"x()\"/>\n" +
 "   </uA>\n" +
 " </Test>\n" +
 " <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
@@ -872,60 +873,6 @@ public final class TestKeyAndRef extends XDTester {
 				&& (s = reporter.printToString()).contains("XDEF522")
 				&& s.contains("/Test/uA[1]/uB[1]")
 				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
-				reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Test'>\n" +
-" <xd:declaration>\n" +
-"    type at   int();\n" +
-"    type bt   string();\n" +
-"    type ct   enum('Y','N');\n" +
-"    uniqueSet s3 {a: at(); b: bt(); c: string()};\n" + // c must be ct
-" </xd:declaration>\n" +
-" <Test> \n" +
-"   <A xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <B xd:script=\"*; ref B; finally s3.ID()\"/>\n" +
-"   </A>\n" +
-"   <uA xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <uB xd:script=\"*; finally s3.CHKID()\" \n" +
-"          b=\"s3.b()\"\n" +
-"          c=\"ct() AND s3.c()\"/>\n" +
-"   </uA>\n" +
-" </Test>\n" +
-" <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF522")
-				&& s.contains("/Test/uA[1]/uB[1]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
-				reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Test'>\n" +
-" <xd:declaration>\n" +
-"    type at   int();\n" +
-"    type bt   string();\n" +
-"    type ct   enum('Y','N');\n" +
-"    uniqueSet s3 {a: at(); b: bt(); c: ct()};\n" +
-" </xd:declaration>\n" +
-" <Test> \n" +
-"   <A xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <B xd:script=\"*; ref B; finally s3.ID()\"/>\n" +
-"   </A>\n" +
-"   <uA xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <uB xd:script=\"*; finally s3.CHKID()\" \n" +
-"          b=\"s3.b()\"\n" +
-"          c=\"s3.c() AND ct()\"/>\n" + // switched  arguments of AND
-"   </uA>\n" +
-" </Test>\n" +
-" <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF522")
-				&& s.contains("/Test/uA[1]/uB[2]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]/@c"),
 				reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // check xdType

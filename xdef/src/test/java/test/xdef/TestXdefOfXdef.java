@@ -111,15 +111,17 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"<a b=\"optional { int i=1;\n" +
-"                  switch(i) {\n" +
-"                     case 1: i=2;\n" +
-"                     default: return true;\n" +
-"                  }\n" +
-"                  return true;\n" +
-"                }\n" +
-"	default 'abc';\n" +
-"   finally outln();\"/>\n" +
+"<xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
+"  boolean x() {\n"+
+"     int i=1;\n" +
+"     switch(i) {\n" +
+"       case 1: i=2;\n" +
+"       default: return true;\n" +
+"     }\n" +
+"     return true;\n" +
+"  }\n" +
+"</xd:declaration>\n"+
+"<a b=\"optional x(); default 'abc'; finally outln();\"/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));

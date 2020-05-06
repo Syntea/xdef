@@ -345,6 +345,9 @@ final public class TestCompose extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method long test.xdef.TestCompose.myMethod(long);\n"+
+"</xd:declaration>\n"+
 "<a pi='required float(); create $PI' >\n"+
 "  <B a='required num(); create myMethod(1)'\n"+
 "     b=\"required string(1,30); create 'c';\" >\n"+
@@ -352,7 +355,7 @@ final public class TestCompose extends XDTester {
 "  </B>\n"+
 "</a>\n"+
 "</xd:def>";
-			assertEq(create(compile(xdef, getClass()), null,"a",reporter,null),
+			assertEq(create(compile(xdef), null,"a",reporter,null),
 				"<a pi='3.141592653589793'><B a='123457' b='c'>d</B></a>");
 			assertNoErrors(reporter);
 			xdef =
@@ -554,6 +557,11 @@ final public class TestCompose extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "xd:script=\"options trimAttr\" root=\"Old | New\" >\n"+
+"<xd:declaration>\n"+
+" external method String test.xdef.TestCompose.myProc1(XXElement,XDValue[]);\n"+
+" external method void test.xdef.TestCompose.myProc2(XXNode, XDValue[]);\n"+
+" external method void test.xdef.TestCompose.myOutput(XXNode, XDValue[]);\n"+
+"</xd:declaration>\n"+
 "<New xd:script=\"create from('/Old/Old1');finally {myProc2();myOutput();}\"\n"+
 "     VER=\"fixed '2.0'\"\n"+
 "     myOutput=\"optional\">\n"+
@@ -582,7 +590,7 @@ final public class TestCompose extends XDTester {
 "</Old1>\n"+
 "</Old>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml =
 "<Old>\n"+
 "<Old1 ver=\"1.0\">\n"+
@@ -610,39 +618,46 @@ final public class TestCompose extends XDTester {
 "<New1 P1=\"Q1\" P2=\"Q2\" X=\"Q1\"/>"+
 "<inside2 Q1=\"Q1\" Q2=\"Q2\" X=\"Q1\"/>"+
 "</New></Old>");
-			xdef = ""
-+ "<xd:def xmlns:xd='" + _xdNS + "' root=\"Old | New\" >\n"
-+ "<New xd:script=\"create from('/Old'); finally myProc2();\"\n"
-+ "     VER=\"fixed '2.0'\"\n"
-+ "     P1=\"required string(); create toString(from('@Q1'));\"\n"
-+ "     P2=\"required string(); create toString(from('@Q2'));\"\n"
-+ "     X=\"required; create myProc1('@Q1','/Old/@ver');\">\n"
-+ "</New>\n"
-+ "<Old ver=\"fixed '1.0'\"\n"
-+ "     Q1=\"required string();\"\n"
-+ "     Q2=\"required string();\">\n"
-+ "</Old>\n"
-+ "</xd:def>";
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"Old | New\" >\n"+
+"<xd:declaration>\n"+
+" external method String test.xdef.TestCompose.myProc1(XXElement,XDValue[]);\n"+
+" external method void test.xdef.TestCompose.myProc2(XXNode, XDValue[]);\n"+
+"</xd:declaration>\n"+
+"<New xd:script=\"create from('/Old'); finally myProc2();\"\n"+
+"     VER=\"fixed '2.0'\"\n"+
+"     P1=\"required string(); create toString(from('@Q1'));\"\n"+
+"     P2=\"required string(); create toString(from('@Q2'));\"\n"+
+"     X=\"required; create myProc1('@Q1','/Old/@ver');\">\n"+
+"</New>\n"+
+"<Old ver=\"fixed '1.0'\"\n"+
+"     Q1=\"required string();\"\n"+
+"     Q2=\"required string();\">\n"+
+"</Old>\n"+
+"</xd:def>";
 			xml ="<Old ver=\"1.0\" Q1=\"Q1\" Q2=\"Q2\"/>";
 			assertEq("<New P1=\"Q1\" P2=\"Q2\" X=\"Q1 1.0\" VER=\"2.0\"/>",
-				create(compile(xdef, getClass()), "", "New", reporter, xml));
+				create(compile(xdef), "", "New", reporter, xml));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"Old | New\" >\n"
-+ "<New xd:script=\"create from('/Old/inside');\"\n"
-+ "     VER=\"fixed '2.0'\"\n"
-+ "     P1=\"required string(); create from('@Q1');\"\n"
-+ "     P2=\"required string(); create from('@Q2');\"\n"
-+ "     X=\"required; create myProc1('@Q1','/Old/@ver');\">\n"
-+ "</New>\n"
-+ "<Old ver=\"fixed '1.0'\">\n"
-+ "  <inside xd:script=\"occurs 1..\"\n"
-+ "    Q1=\"required string();\"\n"
-+ "    Q2=\"required string();\"/>\n"
-+ "</Old>\n"
-+ "</xd:def>";
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"Old | New\" >\n"+
+"<xd:declaration>\n"+
+" external method String test.xdef.TestCompose.myProc1(XXElement,XDValue[]);\n"+
+"</xd:declaration>\n"+
+"<New xd:script=\"create from('/Old/inside');\"\n"+
+"     VER=\"fixed '2.0'\"\n"+
+"     P1=\"required string(); create from('@Q1');\"\n"+
+"     P2=\"required string(); create from('@Q2');\"\n"+
+"     X=\"required; create myProc1('@Q1','/Old/@ver');\">\n"+
+"</New>\n"+
+"<Old ver=\"fixed '1.0'\">\n"+
+"  <inside xd:script=\"occurs 1..\"\n"+
+"    Q1=\"required string();\"\n"+
+"    Q2=\"required string();\"/>\n"+
+"</Old>\n"+
+"</xd:def>";
 			xml = "<Old ver=\"1.0\"><inside Q1=\"Q1\" Q2=\"Q2\"/></Old>";
 			assertEq("<New P1=\"Q1\" P2=\"Q2\" X=\"Q1 1.0\" VER=\"2.0\"/>",
-				create(compile(xdef, getClass()), "", "New", reporter, xml));
+				create(compile(xdef), "", "New", reporter, xml));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "xd:script=\"options ignoreEmptyAttributes\" root=\"Old | New\" >\n"+
@@ -678,6 +693,10 @@ final public class TestCompose extends XDTester {
 				create(compile(xdef), null, "New", reporter, xml));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"N\">\n"+
+"<xd:declaration>\n"+
+"  external method void test.xdef.TestCompose.hasElement(\n"+
+"           XXElement, XDValue[]);\n"+
+"</xd:declaration>\n"+
 " <N xd:script=\"finally {hasElement(4260,'D'); hasElement(4261,'V');}\"\n"+
 "   V=\"fixed '2.0'\"\n"+
 "   E=\"optional\">\n"+
@@ -688,7 +707,7 @@ final public class TestCompose extends XDTester {
 "</xd:def>\n";
 			xml = "<N V='2.0'>\n  <P/>\n  <Z A='20040221'/>\n</N>";
 			assertEq("<N V='2.0' E='D, V'><P/></N>",
-				create(compile(xdef, getClass()), null, "N", reporter, xml));
+				create(compile(xdef), null, "N", reporter, xml));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='B64'>\n"+
 "  <B64 Data=\"required; create 'Data';\">\n"+
@@ -706,29 +725,31 @@ final public class TestCompose extends XDTester {
 			assertEq("<Hex Data=\"Data\">af0dFFFFFF</Hex>",
 				create(xdef, null, (Element) null,"Hex"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'\n"
-+ "root=\"EndPrgInfo | Complex\" >\n"
-+ "  <EndPrgInfo Verze=\"fixed '2.0'\"\n"
-+ "       Program=\"required string(1,4);\n"
-+ "                 create getAttr('Programx');\"\n"
-+ "       IdProces=\"required int()\"\n"
-+ "       Prg=\"required string(3,3)\"\n"
-+ "       Vysledek=\"required enum('OK','ERR')\"\n"
-+ "       MyAttr=\"required enumi('ab','cd'); create 'AB';\"\n"
-+ "       Kanal=\"optional num(2,2)\"\n"
-+ "       Souhrn=\"required; create MyProc('@Prg',\n"
-+ "                '/omplex/x[1]/text()',\n"
-+ "                '/omplex/x[2]/@attr');\">\n"
-+ "  </EndPrgInfo>\n"
-+ "\n"
-+ "<Complex ver=\"fixed '1.0'\">\n"
-+ "  <inside xd:script=\"occurs 1..;ref EndPrgInfo; create from('insidx')\"/>\n"
-+ "  <x xd:script=\"occurs 0..2\"\n"
-+ "     attr=\"optional string(); create getAttr('bttr');\">\n"
-+ "    optional\n"
-+ "  </x>\n"
-+ "</Complex>\n"
-+ "</xd:def>";
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"EndPrgInfo | Complex\" >\n"+
+"<xd:declaration>\n"+
+" external method String test.xdef.TestCompose.MyProc(XXElement, XDValue[]);\n"+
+"</xd:declaration>\n"+
+"  <EndPrgInfo Verze=\"fixed '2.0'\"\n"+
+"       Program=\"required string(1,4);\n"+
+"                 create getAttr('Programx');\"\n"+
+"       IdProces=\"required int()\"\n"+
+"       Prg=\"required string(3,3)\"\n"+
+"       Vysledek=\"required tokens('OK|ERR')\"\n"+
+"       MyAttr=\"required tokensi('ab|cd'); create 'AB';\"\n"+
+"       Kanal=\"optional num(2,2)\"\n"+
+"       Souhrn=\"required; create MyProc('@Prg',\n"+
+"                '/omplex/x[1]/text()',\n"+
+"                '/omplex/x[2]/@attr');\">\n"+
+"  </EndPrgInfo>\n"+
+"\n"+
+"<Complex ver=\"fixed '1.0'\">\n"+
+"  <inside xd:script=\"occurs 1..;ref EndPrgInfo; create from('insidx')\"/>\n"+
+"  <x xd:script=\"occurs 0..2\"\n"+
+"     attr=\"optional string(); create getAttr('bttr');\">\n"+
+"    optional\n"+
+"  </x>\n"+
+"</Complex>\n"+
+"</xd:def>";
 			xml =
 "<omplex>\n"+
 "  <insidx Verze=\"2.0\"\n"+
@@ -741,7 +762,7 @@ final public class TestCompose extends XDTester {
 "  <x>test</x>\n"+
 "  <x bttr=\"neco\"></x>\n"+
 "</omplex>\n";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			assertEq(create(xp, "", "Complex", reporter, xml),
 "<Complex ver=\"1.0\"><inside Verze=\"2.0\" Program=\"abcd\"" +
 " IdProces=\"123\" Prg=\"xyz\" Vysledek=\"OK\" MyAttr=\"AB\"" +
@@ -752,20 +773,24 @@ final public class TestCompose extends XDTester {
 + "  <ZaznamA attrA=\"aaa1\"/>\n"
 + "  <ZaznamA attrA=\"aaa2\">ahoj</ZaznamA>\n"
 + "</DavkaA>\n";
-			xdef = ""
-+ "<xd:def xmlns:xd='" + _xdNS + "' root='DavkaA'>\n"
-+ "<DavkaA xd:script=\"finally setUserResult(); forget\">\n"
-+ "  <ZaznamA xd:script=\"+; finally setElement(xcreate('ZaznamB'));\"\n"
-+ "           attrA=\"required\">\n"
-+ "    optional\n"
-+ "  </ZaznamA>\n"
-+ "</DavkaA>\n"
-+ "<ZaznamB attrB=\"required; create from('@attrA');\">\n"
-+ "  optional;onTrue setText('&quot;nazdar, '\n"
-+ "    +getText().toUpper()+', tepic&quot;');\n"
-+ "</ZaznamB>\n"
-+ "</xd:def>";
-			xd = compile(xdef, getClass()).createXDDocument();
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='DavkaA'>\n"+
+"<xd:declaration>\n"+
+"  external method \n"+
+"     void test.xdef.TestCompose.setUserResult(XXElement, XDValue[]);\n"+
+"</xd:declaration>\n"+
+"<DavkaA xd:script=\"finally setUserResult(); forget\">\n"+
+"  <ZaznamA xd:script=\"+; finally setElement(xcreate('ZaznamB'));\"\n"+
+"           attrA=\"required\">\n"+
+"    optional\n"+
+"  </ZaznamA>\n"+
+"</DavkaA>\n"+
+"<ZaznamB attrB=\"required; create from('@attrA');\">\n"+
+"  optional;onTrue setText('&quot;nazdar, '\n"+
+"    +getText().toUpper()+', tepic&quot;');\n"+
+"</ZaznamB>\n"+
+"</xd:def>";
+			xd = compile(xdef).createXDDocument();
 			parse(xd, xml, reporter);
 			assertEq("<DavkaA><ZaznamB attrB=\"aaa1\"/>"+
 "<ZaznamB attrB=\"aaa2\">\"nazdar, AHOJ, tepic\"</ZaznamB></DavkaA>",
@@ -867,8 +892,8 @@ final public class TestCompose extends XDTester {
 + "       Program=\"required string(1,4); create getAttr('Programx');\"\n"
 + "       IdProces=\"required int()\"\n"
 + "       Prg=\"required string(3,3)\"\n"
-+ "       Vysledek=\"required enum('OK','ERR')\"\n"
-+ "       MyAttr=\"required enumi('ab','cd'); create 'AB'\"\n"
++ "       Vysledek=\"required tokens('OK|ERR')\"\n"
++ "       MyAttr=\"required tokensi('ab|cd'); create 'AB'\"\n"
 + "       Kanal=\"required num(2,2)\">\n"
 + "  </EndPrgInfo>\n"
 + "  <Complex ver=\"fixed '1.0'\">\n"
@@ -1063,6 +1088,10 @@ final public class TestCompose extends XDTester {
 				"<N E=\"E\" V=\"2.0\"><P/><Z A=\"20040221\"/></N>");
 			xdef =
 "<xd:collection xmlns:xd= '" + _xdNS + "'>\n"
++"<xd:declaration>\n"
++" external method\n"
++"   void test.xdef.TestCompose.mySetAttrFromXpath(XXData, String);\n"
++"</xd:declaration>\n"
 +"<xd:def name=\"a\" root=\"DN\" >\n"
 +"<DN>\n"
 +"  <Osoba xd:script = \"occurs 0..\" id=\"required num()\">\n"
@@ -1166,7 +1195,7 @@ final public class TestCompose extends XDTester {
 +"</DN>";
 			setProperty("xdef.debug", "true");
 			setProperty("xdef.externalmode", "both");
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument("a");
 			parse(xd, xml, reporter);
 			assertNoErrors(reporter);
@@ -1462,7 +1491,7 @@ final public class TestCompose extends XDTester {
 "      </s:Body>\n"+
 "   </s:Envelope>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			el = xd.xcreate(new QName(
 				"http://schemas.xmlsoap.org/soap/envelope/",
@@ -1508,7 +1537,7 @@ final public class TestCompose extends XDTester {
 "      </s:Body>\n"+
 "   </s:Envelope>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			el = xd.xcreate(new QName(
 				"http://schemas.xmlsoap.org/soap/envelope/",
@@ -1585,6 +1614,10 @@ final public class TestCompose extends XDTester {
 // test sequence methods and external create methods
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDContainer test.xdef.TestCompose.ctx();\n"+
+"  external method XDContainer test.xdef.TestCompose.ctx(long);\n"+
+"</xd:declaration>\n"+
 "  <a>\n"+
 "    <xd:sequence xd:script= \"init outln('start'); finally outln('end')\">\n"+
 "      <b xd:script = 'occurs 0..*; create ctx(3)'/>\n"+
@@ -1592,7 +1625,7 @@ final public class TestCompose extends XDTester {
 "    </xd:sequence>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			strw = new StringWriter();
 			el = create(xp, "a", "a", reporter, null, strw, null);
 			assertNoErrors(reporter);
@@ -2116,9 +2149,12 @@ final public class TestCompose extends XDTester {
 		try { //test of exception in external method.
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"    <a xd:script='finally throwExc()' />" +
+"  <xd:declaration>" +
+"    external method void test.xdef.TestCompose.throwExc();" +
+"  </xd:declaration>" +
+"  <a xd:script='finally throwExc()' />\n" +
 "</xd:def>";
-			create(compile(xdef, getClass()), "", "a", reporter, null);
+			create(compile(xdef), "", "a", reporter, null);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			if(!reporter.errorWarnings()) {
@@ -2247,7 +2283,7 @@ final public class TestCompose extends XDTester {
 "    <a a='4'/>\n"+
 "  </a>\n"+
 "</a>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			el = parse(xp, "", xml, reporter);
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument();
@@ -2260,6 +2296,10 @@ final public class TestCompose extends XDTester {
 			//external method with context
 			xdef = //1 method with context - default, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
+"    XXElement, XDContainer, String); \n"+
+"</xd:declaration>\n"+
 "  <a>\n"+
 "   <b xd:script='occurs *'>\n"+
 "    <xd:choice xd:script=\"occurs 0..1;"+
@@ -2281,10 +2321,14 @@ final public class TestCompose extends XDTester {
 				+ "<b><d k=\"30\"/></b>"
 				+ "<b><c k=\"88\"/></b>"
 				+ "<b><d k=\"99\"/></b></a>",
-				create(compile(xdef, getClass()), "", "a",reporter, xml));
+				create(compile(xdef), "", "a",reporter, xml));
 			assertNoErrors(reporter);
 			xdef = //2 method with context - specified, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
+"    XXElement, XDContainer, String); \n"+
+"</xd:declaration>\n"+
 "  <a>\n"+
 "   <b xd:script=\"occurs *; create from('b')\" >\n"+
 "    <xd:choice xd:script=\"occurs 0..1; "
@@ -2306,10 +2350,14 @@ final public class TestCompose extends XDTester {
 				"<b><d k=\"30\"/></b>"+
 				"<b><c k=\"88\"/></b>"+
 				"<b><d k=\"99\"/></b></a>",
-				create(compile(xdef, getClass()), "", "a",reporter, xml));
+				create(compile(xdef), "", "a",reporter, xml));
 			assertNoErrors(reporter);
 			xdef = //3 method with context -  specified, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
+"    XXElement, XDContainer, String); \n"+
+"</xd:declaration>\n"+
 "  <a>\n"+
 "   <b xd:script=\"occurs *; create from('b')\" a=\"create from('@a')\" >\n"+
 "    <xd:choice xd:script=\"occurs 0..1;"
@@ -2331,7 +2379,7 @@ final public class TestCompose extends XDTester {
 				"<b a=\"3\"><d k=\"30\"/></b>"+
 				"<b a=\"4\"><c k=\"88\"/></b>"+
 				"<b a=\"5\"><d k=\"99\"/></b></a>",
-				create(compile(xdef, getClass()), "", "a",reporter, xml));
+				create(compile(xdef), "", "a",reporter, xml));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -2349,6 +2397,10 @@ final public class TestCompose extends XDTester {
 			assertNoErrors(reporter);
 			xdef = //4 method with context - see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
+"    XXElement, XDContainer, String); \n"+
+"</xd:declaration>\n"+
 "  <a>\n"+
 "   <b xd:script=\"occurs *; create from('b')\" >\n"+
 "    <xd:choice xd:script=\"occurs 0..1;"+
@@ -2360,7 +2412,7 @@ final public class TestCompose extends XDTester {
 "  </a>\n"+
 "  <z k = \"string; create from('@c') \"/>\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<r><b a='1'><x c='10'/></b>"
 				+ "<b a='2'><x c='20'/></b>"
@@ -2595,22 +2647,28 @@ final public class TestCompose extends XDTester {
 
 			xdef = // create from element
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method Element test.xdef.TestCompose.getChybyElement(XXElement);\n"+
+"</xd:declaration>\n"+
 "  <a xd:script=\"create getChybyElement();\" >\n"+
 "    <b xd:script = \"occurs 1..\"\n"+
 "        Kod   = \"required num(3)\"\n"+
 "        Typ   = \"required string(1)\" />\n"+
 "  </a>\n"+
 "</xd:def>";
-			xp = compile(xdef, this.getClass());
+			xp = compile(xdef);
 			el = create(xp, "", "a", reporter, null);
 			assertNoErrors(reporter);
 			assertEq(el,"<a><b Kod='123' Typ='T'/><b Kod='456' Typ='T'/></a>");
 
 			xdef = // check external method xx in create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method String test.xdef.TestCompose.xx(XXElement, XDContainer);\n"+
+"</xd:declaration>\n"+
 "  <a><c f=\"? string; create xx(from('@f'))\"/></a>\n"+
 "</xd:def>";
-			xp = compile(xdef, this.getClass());
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<a><c f='xx'/></a>";
 			xd.setXDContext(xml);
@@ -2650,6 +2708,14 @@ final public class TestCompose extends XDTester {
 
 			xdef = // test create objects from null
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:declaration>\n"+
+"  external method String test.xdef.TestCompose.nulString(XXData);\n"+
+"  external method Long test.xdef.TestCompose.nulLong(XXData);\n"+
+"  external method Float test.xdef.TestCompose.nulFloat(XXData);\n"+
+"  external method SDatetime test.xdef.TestCompose.nulDatetime(XXData);\n"+
+"  external method SDuration test.xdef.TestCompose.nulDuration(XXData);\n"+
+"  external method XDContainer test.xdef.TestCompose.nulContainer(XXData);\n"+
+"</xd:declaration>\n"+
 "<A b='optional string(); create nulString()'\n" +
 "   c='optional long(); create nulLong()'\n"+
 "   d='optional float(); create nulFloat()'\n"+
@@ -2668,7 +2734,7 @@ final public class TestCompose extends XDTester {
 "  <Z xd:script='*;; create nulContainer()'/>\n"+
 "</A>\n"+
 "</xd:def>";
-			xp = compile(xdef, this.getClass());
+			xp = compile(xdef);
 			el = create(xp, "", "A", reporter, null);
 			assertNoErrors(reporter);
 			assertEq(el,"<A><B/><C/><D/><E/><F/><G/></A>");

@@ -397,9 +397,11 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XML047", null, null, null));
 			assertEq("", chkReport(reporter, "XML047", null, null, null));
 			assertEq("", chkReport(reporter, "XDEF255", "2", "2", null));
+//			assertEq("", chkReport(reporter, "XDEF259", "2", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "6", null, null));
 			assertEq("", chkReport(reporter, "XDEF255", "6", "2", null));
+//			assertEq("", chkReport(reporter, "XDEF259", "6", "2", null));
 			assertEq("", chkReport(reporter, "XDEF212", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "7", null, null));
 			assertEq("", chkReport(reporter, "XML075", "10", "8", null));
@@ -453,7 +455,7 @@ public final class TestErrors extends XDTester {
 			String[] sources = new String[] {
 				dataDir + "test/" + fName1,
 				dataDir + "test/" + fName2};
-			reporter = test(props, sources, getClass());
+			reporter = test(props, sources);
 			assertEq("", chkReport(reporter, "XDEF425", "10", "26", fName2));
 			rep = reporter.getReport();
 			if (!"".equals(chkReport(rep, "XDEF307", "4", "20", fName1))) {
@@ -464,50 +466,6 @@ public final class TestErrors extends XDTester {
 				assertEq("", chkReport(rep, "XDEF307", "4", "20", fName2));
 			}
 			assertNull(reporter.getReport(), reporter.printToString());
-		} catch (Exception ex) {fail(ex);}
-		try {// variable, mothod, type redefinition
-			reporter.clear();
-			xp = XDFactory.compileXD(reporter, (Properties) null,
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration scope='global'>\n"+
-"    int i;\n"+
-"    int x(){return 0;}\n"+
-"    type t int();\n"+
-"  </xd:declaration>\n"+
-"  <a/>\n"+
-"</xd:def>",
-"<xd:declaration xmlns:xd='"+_xdNS+"'>\n"+
-"  int i; int x(){return 0;} type t int();\n"+
-"</xd:declaration>");
-			if (reporter.errorWarnings()) {
-				rep = reporter.getReport();
-				assertEq("", chkReport(rep, "XDEF450", "2", "8", "String_2"));
-				assertTrue(rep.toString().contains(
-					": line=3; column=9; source=\"String_1\")"));
-				rep = reporter.getReport();
-				if (rep == null) {
-					fail("Error not reported");
-				} else {
-					assertEq("", chkReport(rep,"XDEF462","2","17","String_2"));
-					assertTrue(rep.toString().contains(
-						": line=4; column=9; source=\"String_1\")"));
-				}
-				rep = reporter.getReport();
-				if (rep == null) {
-					fail("Error not reported");
-				} else {
-					assertEq("", chkReport(rep,"XDEF470","2","34","String_2"));
-					assertTrue(rep.toString().contains(
-						": line=5; column=10; source=\"String_1\")"));
-				}
-			} else {
-				fail("Error not reported");
-			}
-			assertNull(reporter.getReport(), reporter.printToString());
-			reporter.clear();
-			xml = "<a/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -727,6 +685,50 @@ public final class TestErrors extends XDTester {
 			}
 			reporter.clear();
 		} catch (Exception ex) {fail(ex);}
+		try {// variable, mothod, type redefinition
+			reporter.clear();
+			xp = XDFactory.compileXD(reporter, (Properties) null,
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    int i;\n"+
+"    int x(){return 0;}\n"+
+"    type t int();\n"+
+"  </xd:declaration>\n"+
+"  <a/>\n"+
+"</xd:def>",
+"<xd:declaration xmlns:xd='"+_xdNS+"'>\n"+
+"  int i; int x(){return 0;} type t int();\n"+
+"</xd:declaration>");
+			if (reporter.errorWarnings()) {
+				rep = reporter.getReport();
+				assertEq("", chkReport(rep, "XDEF450", "2", "8", "String_2"));
+				assertTrue(rep.toString().contains(
+					": line=3; column=9; source=\"String_1\")"));
+				rep = reporter.getReport();
+				if (rep == null) {
+					fail("Error not reported");
+				} else {
+					assertEq("", chkReport(rep,"XDEF462","2","17","String_2"));
+					assertTrue(rep.toString().contains(
+						": line=4; column=9; source=\"String_1\")"));
+				}
+				rep = reporter.getReport();
+				if (rep == null) {
+					fail("Error not reported");
+				} else {
+					assertEq("", chkReport(rep,"XDEF470","2","34","String_2"));
+					assertTrue(rep.toString().contains(
+						": line=5; column=10; source=\"String_1\")"));
+				}
+			} else {
+				fail("Error not reported");
+			}
+			assertNull(reporter.getReport(), reporter.printToString());
+			reporter.clear();
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
 //        1         2         3         4        5          6         7
@@ -747,7 +749,7 @@ public final class TestErrors extends XDTester {
 "      <b xd:script='occurs 1..; finally test();' />\n"+		//14
 "   </a>\n"+													//15
 "</xd:def>\n";													//16
-			reporter = test(props, new String[] {xdef}, getClass());
+			reporter = test(props, new String[] {xdef});
 			strw = new StringWriter();
 			ReportPrinter.printListing(
 				strw, new java.io.StringReader(xdef), reporter, true);
@@ -786,7 +788,7 @@ public final class TestErrors extends XDTester {
 "      <a xd:script='occurs 1..; finally test();' />\n"+		//14
 "   </a>\n"+													//15
 "</xd:def>\n";													//16
-			reporter = test(props, new String[] {xdef}, getClass());
+			reporter = test(props, new String[] {xdef});
 			strw = new StringWriter();
 			ReportPrinter.printListing(
 				strw, new java.io.StringReader(xdef), reporter, true);
@@ -809,7 +811,7 @@ public final class TestErrors extends XDTester {
 			//test error reporting
 			reporter.clear();
 			xb = XDFactory.getXDBuilder(reporter,props);
-			xb.setExternals(getClass());
+//			xb.setExternals(getClass());
 			xb.setSource(dataDir + "test/TestErrors3.xdef");
 			xp = xb.compileXD();
 			if (reporter.errorWarnings()) {
@@ -830,7 +832,11 @@ public final class TestErrors extends XDTester {
 "	  <b xd:script='occurs 0..1; match matchFault();' />\n"+	//03<=
 "   </a>\n"+													//04
 "</xd:def>\n";													//05
-			reporter = test(props, new String[] {xdef}, getClass());
+			s =
+"<xd:declaration xmlns:xd='" + _xdNS + "'>\n"+
+" external method void test.xdef.TestErrors.matchFault();\n"+
+"</xd:declaration>";
+			reporter = test(props, new String[] {xdef, s});
 			if (reporter.getErrorCount() > 0) {
 				assertEq("", chkReport(reporter, "XDEF423", "3", "49", null));
 				if (reporter.getErrorCount() > 1) {
@@ -1013,6 +1019,7 @@ public final class TestErrors extends XDTester {
 				fail(ex);
 			}
 		}
+
 		resetTester();
 	}
 

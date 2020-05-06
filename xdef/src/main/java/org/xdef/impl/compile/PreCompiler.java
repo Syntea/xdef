@@ -209,4 +209,8 @@ public interface PreCompiler {
 	 */
 	public void putReport(final Report rep);
 
- }
+	/** Get switch if the parser will check warnings as errors.
+	 * @return true if the parser checks warnings as errors.
+	 */
+	public boolean isChkWarnings();
+}

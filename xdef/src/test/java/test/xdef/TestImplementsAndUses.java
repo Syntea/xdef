@@ -398,6 +398,9 @@ public final class TestImplementsAndUses extends XDTester {
 			setChkSyntax(false); // follows comparing of external method
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"external method boolean test.xdef.TestImplementsAndUses.x();\n"+
+"</xd:declaration>\n"+
 "<xd:def name='X'>\n"+
 "<A a='x();'/>\n"+
 "</xd:def>\n"+
@@ -406,15 +409,18 @@ public final class TestImplementsAndUses extends XDTester {
 "  a='x(); finally outln()'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef, getClass());
+			compile(xdef);
 			setChkSyntax(chkSyntax);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"external method boolean test.xdef.TestImplementsAndUses.x();\n"+
+"</xd:declaration>\n"+
 "<B a='x();'/>\n"+
 "<A xd:script=\"uses B; finally outln()\"\n"+
 "  a='required; finally outln()'/>\n"+
 "</xd:def>";
-			compile(xdef, getClass());
+			compile(xdef);
 //REGEX
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+

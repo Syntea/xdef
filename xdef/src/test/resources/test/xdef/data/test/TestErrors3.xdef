@@ -3,6 +3,7 @@
    xmlns:xdef   = "http://www.syntea.cz/xdef/2.0"
    xdef:name    = "DefSystem"
    xdef:root    = "DefSystem"
+   xdef:classes = "test.xdef.TestErrors"
    impl-classes = "cz.syntea.common.load.MyChkParser"
    xdef:script  = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces"
    impl-version = "2.5.0.0"
