@@ -80,6 +80,11 @@ public interface XDParser extends XDValue {
 	 */
 	public XDParser getBase();
 
+	/** Set base parser.
+	 * @param x base XDParser or null.
+	 */
+	public void setBase(final XDParser x);
+
 	/** Create parseResult object from String. After parsing it skips white
 	 * spaces (if whiteSpace='collapse') and provides final check.
 	 * @param source string to be checked.
