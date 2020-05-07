@@ -514,7 +514,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (pnode._xdVersion >= XConstants.XD31) {
 					reportDeprecated(sval,
 						"Attribute \"classes\"",
-						"<xd:declaration> external method { ... } ...");
+						"<xd:declaration> external method ...");
 				}
 				String value = sval.getString();
 				Map<String, Class<?>> ht = new LinkedHashMap<String,Class<?>>();

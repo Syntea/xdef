@@ -3021,7 +3021,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, null, XConstants.XD31, null);
+		setSource(source, defName, null, XConstants.XD40, null);
 		String language;
 		if (lang == null || (language = lang.getString().trim()).isEmpty()
 			|| !isJavaName(language)) {
@@ -3686,21 +3686,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (_xdVersion >= XConstants.XD31) {
 							//Type declaration format "{parse: ...}" is
 							//deprecated; please use just validation method call
-							if (_xdVersion == XConstants.XD31) {
-								warning(XDEF.XDEF997);
-							} else {
-								error(XDEF.XDEF997);
-							}
+							warning(XDEF.XDEF997);
 						}
 						return;
 					} else {
 						_sym = IDENTIFIER_SYM;
 						_idName = "parse";
 					}
-//				} else if (_xdVersion < XConstants.XD31) {//old X-def versions
-//					errorAndSkip(XDEF.XDEF410, //'&{0}' expected
-//						String.valueOf(END_SYM), "parse:");
-//					return;
 				}
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
