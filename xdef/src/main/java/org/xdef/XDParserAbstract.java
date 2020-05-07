@@ -17,12 +17,20 @@ public abstract class XDParserAbstract extends XDValueAbstract
 
 	/** Name of type how it was declared, */
 	private String _declaredName;
+	/** Base parser. */
+	private XDParser _base;
 
 	@Override
 	/** Get base parser.
 	 * @return base XDParser or null.
 	 */
-	public XDParser getBase() {return null;}
+	public XDParser getBase() {return _base;}
+
+	@Override
+	/** Set base parser.
+	 * @param x base XDParser or null.
+	 */
+	public void setBase(final XDParser x) {_base = x;};
 
 	@Override
 	/** Check value of string.
