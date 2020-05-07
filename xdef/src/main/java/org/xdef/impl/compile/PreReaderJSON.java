@@ -640,7 +640,7 @@ class PreReaderJSON implements PreReader {
 		final String localName,
 		final SPosition spos) {
 		PNode pn = new PNode(xdPrefix + ":" + localName,
-			spos, parent, XConstants.XD31, (byte) 10);
+			spos, parent, XConstants.XD31, XConstants.XML10);
 		pn._localName = localName;
 		pn._nsURI = XDConstants.XDEF31_NS_URI;
 		pn._xdVersion = XConstants.XD31;
@@ -895,7 +895,7 @@ class PreReaderJSON implements PreReader {
 				String prefix = js.getValue().getString().split(":")[0];
 				jo = jm.get(js);
 				pNode = new PNode(prefix + ":def",
-					jl.getPosition(), null, XConstants.XD31, (byte) 10);
+					jl.getPosition(), null, XConstants.XD31, XConstants.XML10);
 				pNode._localName = "def";
 				JMap pars;
 				if (jo.getType() == 'M') { // map

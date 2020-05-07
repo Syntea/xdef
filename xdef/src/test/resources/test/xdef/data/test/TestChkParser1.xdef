@@ -51,6 +51,9 @@
   void elementErr(int e) {}
   void valueErr(int e) {}
   void trString(int i1, int i2) {}
+  boolean normOkresAndCheck() {
+    return normOkres() AND ciselnik(4103,'CC_Okres','Okres');
+  }
 ]]></xd:declaration>
 
    <ZaznamPDN Verze       = "fixed '1.2'"
@@ -281,7 +284,7 @@
            CisloPopisne    = "optional string(); onTrue trString(4101,10)"
            Obec            = "optional string(); onTrue trString(4101,36)"
            PSC             = "optional string(); onTrue trString(4101,10)"
-           Okres           = "optional normOkres() AND ciselnik(4103,'CC_Okres','Okres')"
+           Okres           = "optional normOkresAndCheck()"
            Stat            = "optional string(); onTrue trString(4101,50)"
            Telefon1        = "optional string(); onTrue trString(4101,14)"
            Telefon2        = "optional string(); onTrue trString(4101,14)" />

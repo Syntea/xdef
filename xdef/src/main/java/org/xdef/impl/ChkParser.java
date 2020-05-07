@@ -857,8 +857,7 @@ final class ChkParser extends DomBaseHandler {
 						xdp =(XPool)new XBuilder(null).setSource(u).compileXD();
 					} catch (Exception ex) {
 						//In X-definition are errors&{0}{: }
-						_sReporter.putReport(ka.getPosition(),
-							Report.fatal(XDEF.XDEF543, ex));
+						_sReporter.putReport(Report.fatal(XDEF.XDEF543, ex));
 						return;
 					}
 					//xdi:definition
