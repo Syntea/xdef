@@ -367,7 +367,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 			}
 			if ("ListOf".equals(name)) {
-				warning(XDEF.XDEF998,name, "list(type)");
+				_g.reportDeprecated(name, "list(type)");
 			}
 		}
 		classMethod();
@@ -3684,9 +3684,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
-							//Type declaration format "{parse: ...}" is
-							//deprecated; please use just validation method call
-							warning(XDEF.XDEF997);
+							_g.reportDeprecated("parse:... in type declaration",
+								"validation method call");
 						}
 						return;
 					} else {
@@ -4021,7 +4020,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (_sym == BEG_SYM) { // explicite code (method body)
 			if (_xdVersion > XConstants.XD31) {
 				//&{0}" is deprecated. Please use "&{1}" instead
-				warning(XDEF.XDEF998, "explicit type code",
+				_g.reportDeprecated("explicit type code",
 					"declaration of type method");
 			}
 			// generate call of following method
@@ -4082,8 +4081,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							&& PARSERESULT_MATCH != val.getCode()
 							&& !(val instanceof CodeExtMethod)) {
 							//&{0}" is deprecated. Please use "&{1}" instead
-							warning(XDEF.XDEF998, "expression in type check",
-								"union, base, or declaration of a type method");
+							_g.reportDeprecated("expression in type check",
+								"union or declaration of a type method");
 						}
 					}
 					_g.genStop();

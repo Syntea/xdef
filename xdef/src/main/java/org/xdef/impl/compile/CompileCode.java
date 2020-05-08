@@ -1689,7 +1689,9 @@ public final class CompileCode extends CompileBase {
 	 * @param replace text to be deprecated/
 	 */
 	final void reportDeprecated(final String old, final String replace) {
-		_parser.warning(XDEF.XDEF998, old, replace);
+		if (_chkWarnings) {
+			_parser.warning(XDEF.XDEF998, old, replace);
+		}
 	}
 
 	/** Generation of internal method code.

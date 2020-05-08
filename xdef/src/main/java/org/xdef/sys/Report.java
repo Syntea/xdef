@@ -212,7 +212,7 @@ public class Report {
 						o instanceof String ?
 						(String) o : o instanceof File ?
 						((File) o).getAbsolutePath() : o.toString();
-					if (s.startsWith("&{")) {
+					if (s.startsWith("&{") && !s.startsWith("&{#")) {
 						sb.append(s);
 					} else if (s.length() > 2 && s.charAt(0) == '{'
 						&& Character.isDigit(s.charAt(1)) && s.charAt(2)=='}') {

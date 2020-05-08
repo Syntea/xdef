@@ -302,11 +302,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private void reportDeprecated(final SPosition spos,
 		final String old,
 		final String replace) {
-		//&{0} is deprecated. Please use &{1} instead
-		_precomp.warning(spos, XDEF.XDEF998, old, replace);
+		if (_precomp.isChkWarnings()) {
+			//&{0} is deprecated. Please use &{1} instead
+			_precomp.warning(spos, XDEF.XDEF998, old, replace);
+		}
 	}
 
-	void compileComponentDeclaration() {
+	private void compileComponentDeclaration() {
 		for (;;) {
 			_scriptCompiler.skipBlanksAndComments();
 			if (_scriptCompiler.eos()) {
@@ -914,28 +916,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		return defName + '#' + name;
 	}
 
-	/** check boolean value. */
-	final boolean chkeckTrueFalse(final SBuffer sval, final boolean dflt)  {
-		if (sval == null) {
-			return dflt;
-		}
-		String s = sval.getString();
-		if ("no".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s)) {
-			if ("no".equalsIgnoreCase(s)) {
-				reportDeprecated(sval, "no", "false");
-			}
-			return false;
-		} else if (!"yes".equalsIgnoreCase(s) && !"true".equalsIgnoreCase(s)) {
-			error(sval, XDEF.XDEF410, "false"); //'&{0}' expected
-			return dflt;
-		} else {
-			if ("yes".equalsIgnoreCase(s)) {
-				reportDeprecated(sval, "yes", "true");
-			}
-			return true;
-		}
-	}
-
 	/** Create copy of SPosition (without modifications). */
 	private SPosition copySPosition(final SPosition sval) {
 		return new SPosition(sval.getIndex(),
@@ -1104,7 +1084,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (sval != null) {
 				_scriptCompiler.setSource(sval,
 					_scriptCompiler._actDefName,
-/*aa*/				pnode._xdef,
+					pnode._xdef,
 					pnode._xdVersion,
 					pnode._nsPrefixes);
 				SBuffer s = _scriptCompiler.compileGroupScript(newNode);
@@ -1121,7 +1101,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
@@ -1138,7 +1118,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XOccurrence occ = new XOccurrence();
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
@@ -1155,7 +1135,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (sval != null){
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
@@ -1168,7 +1148,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
@@ -1181,7 +1161,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (sval != null) {
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.nextSymbol();
@@ -1344,7 +1324,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					xtxt.setXDPosition(parentNode.getXDPosition()+"/$text");
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes); //???
 					_scriptCompiler.skipSpaces();
@@ -1380,7 +1360,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //						"/#comment");
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-/*aa*/					pnode._xdef,
+						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes); //???=
 					_scriptCompiler.skipSpaces();
@@ -1431,14 +1411,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						"script declared as a text value of model");
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
-						xdef, /*aa*/
+						xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					_scriptCompiler.compileDataScript(xtext);
 				} else if (pnode._value != null) {
 					_scriptCompiler.setSource(pnode._value,
 						_scriptCompiler._actDefName,
-						xdef, /*aa*/
+						xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes);
 					pnode._value = null;
@@ -1954,8 +1934,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._parser._actDefName = s.substring(0, ndx);
 					// qualified name of class
 					String clsname = s.substring(ndx + 1);
-					CompileVariable var = null; /*aa*/
-					XDefinition xdef = /*aa*/
+					CompileVariable var = null;
+					XDefinition xdef =
 						(XDefinition) xdp.getXMDefinition(s.substring(0, ndx));
 					if (xdef != null) {
 						_codeGenerator._parser._importLocals =
@@ -2139,10 +2119,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				return false;
 			}
 			XElement y = (XElement) x;
-//			if (y._json > 0 && y._childNodes.length == 1
-//				&& y._childNodes[0].getKind() == XMNode.XMELEMENT) {
-//				y = (XElement) y._childNodes[0];
-//			}
 			if ((y = (XElement) x) == xel  //self reference
 				&& xel._childNodes.length==1 && xel.getAttrs().length==0) {
 				//Self reference is not allowed: &{0}
