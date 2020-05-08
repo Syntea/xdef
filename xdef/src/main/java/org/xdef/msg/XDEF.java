@@ -672,14 +672,12 @@ public interface XDEF {
 	public static final long XDEF905 = 31159025995L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
 	public static final long XDEF906 = 31159025996L;
-	/** Type declaration format "{parse: ...}" is deprecated; please use just validation method call&amp;{#SYS000} */
-	public static final long XDEF997 = 31159025997L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025998L;
+	public static final long XDEF998 = 31159025997L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025999L;
+	public static final long XDEF_DESCRIPTION = 31159025998L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159026000L;
+	public static final long XDEF_LANGUAGE = 31159025999L;
 
 	/** Default language. */
 	public static final String XDEF = "eng";

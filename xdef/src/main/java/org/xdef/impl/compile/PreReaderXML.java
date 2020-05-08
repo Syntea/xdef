@@ -130,7 +130,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 				}
 				if ("thesaurus".equals(elemLocalName)) {
-					warning(_actPNode._name,XDEF.XDEF998,"thesaurus","lexicon");
+					//"&{0}" is deprecated. Please use "&{1}" instead
+					warning(_actPNode._name,
+						XDEF.XDEF998, "thesaurus","lexicon");
 				}
 				_actPNode._xdVersion = ver;
 				_pcomp.setURIOnIndex(0, projectNS);

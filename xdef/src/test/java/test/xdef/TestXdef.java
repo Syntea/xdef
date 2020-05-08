@@ -2949,7 +2949,7 @@ public final class TestXdef extends XDTester {
 				xdef = SUtils.modifyFirst(xdef, "xdef/2.0'", "xdef/3.1'");
 				compile(xdef);
 			} catch (Exception ex) {
-				if(!ex.toString().contains("W XDEF997")) fail(ex);
+				if(!ex.toString().contains("W XDEF998")) fail(ex);
 			}
 //test version 20, 32 and 40 in collection
 			xp = compile(

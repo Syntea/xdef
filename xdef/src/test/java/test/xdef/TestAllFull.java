@@ -56,7 +56,6 @@ public class TestAllFull {
 			new TestLexicon(),
 			new TestNamespaces(),
 			new TestOptions(),
-			new TestXdef(),
 			new TestSaxon(),
 			new TestScript(),
 			new TestTemplate(),
@@ -69,6 +68,7 @@ public class TestAllFull {
 			new TestXDGen(),
 			new TestXDService(),
 			new TestXSTypes(),
+			new TestXdef(),
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
 		};
