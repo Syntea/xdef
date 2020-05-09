@@ -143,5 +143,4 @@ public abstract class DomBaseHandler
 
 	@Override
 	public void comment(char[] ch, int start, int length) {}
-
 }

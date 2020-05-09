@@ -129,7 +129,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						ver = XConstants.XD40;
 					}
 				}
-				if ("thesaurus".equals(elemLocalName)) {
+				if (_pcomp.isChkWarnings()&&"thesaurus".equals(elemLocalName)) {
 					//"&{0}" is deprecated. Please use "&{1}" instead
 					warning(_actPNode._name,
 						XDEF.XDEF998, "thesaurus","lexicon");
