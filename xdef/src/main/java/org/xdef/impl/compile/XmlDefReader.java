@@ -45,7 +45,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	private int _level; // nesting level of a node
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private ReportWriter _reporter;
-	private final Stack<HandlerInfo> _stackReader=new Stack<HandlerInfo>();
+	private final Stack<HandlerInfo> _stackReader = new Stack<HandlerInfo>();
 	private Map<String, String> _entities;
 	private SBuffer _text;
 	public final StringBuilder _sb = new StringBuilder();
@@ -709,10 +709,22 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 
 	@Override
 	public void processingInstruction(final String target,final String data) {
+//TODO
 //		if (_lev != 0) {
 //			_el.appendChild(_doc.createProcessingInstruction(target, data));
 //		} else if (_doc != null) {
 //			_doc.appendChild(_doc.createProcessingInstruction(target, data));
+//		}
+	}
+
+	@Override
+	public void comment(char[] ch, int start, int length) {
+//TODO
+//		String s = String.valueOf(ch,start,len);
+//		if (_lev != 0) {
+//			_el.appendChild(_doc.createComment(s));
+//		} else if (_doc != null) {
+//			_doc.appendChild(_doc.createComment(s));
 //		}
 	}
 
@@ -864,22 +876,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param pos SPosition
 	 * @param rep Report.
 	 */
-	final void putReport(final SPosition pos, final Report rep) {
+	private void putReport(final SPosition pos, final Report rep) {
 		pos.putReport(rep, _reporter);
-	}
-
-	/** Put error to compiler reporter.
-	 * @param registeredID registered report id.
-	 * @param mod Message modification parameters.
-	 */
-	final void error(final long registeredID, final Object... mod) {
-		_reporter.error(registeredID, mod);
-	}
-
-	/** Put report to compiler reporter.
-	 * @param rep Report.
-	 */
-	final void putReport(final Report rep) {
-		_reporter.putReport(rep);
 	}
 }

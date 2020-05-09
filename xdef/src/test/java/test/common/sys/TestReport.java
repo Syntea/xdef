@@ -427,7 +427,17 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS013).toString("deu");
 			assertEq("Too many errors", s);
 		} catch (Exception ex) {fail(ex);}
-		new File(getTempDir()).delete();
+		try {// test report references in parameters
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
+			r = Report.error(SYS.SYS031, "&{#SYS042}", "&{#SYS047}");
+			assertEq("E SYS031: Can't rename file Incorrect format of report."
+				+ " to Hexadecimal format error", r.toString());
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
+			assertEq("E SYS031: Nelze přejmenovat soubor Nesprávný format "
+				+ "reportu. na Chyba hexadecimálního formátu", r.toString());
+		} catch (Exception ex) {fail(ex);}
+
+		new File(getTempDir()).delete(); // clear temporary data
 	}
 
 	/** Run test
