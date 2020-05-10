@@ -15,23 +15,23 @@ import java.util.LinkedHashMap;
  * @author Trojan
  */
 public final class PNode {
-	final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
-	final List<PNode> _childNodes = new ArrayList<PNode>(); //child nodes
+	private final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
+	private final List<PNode> _childNodes = new ArrayList<PNode>();//child nodes
 	// namespace prefixes
 	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<String,Integer>();
 	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI
-	byte _xdVersion;  // version of X-definion
-	byte _xmlVersion;  // version of xml
+	byte _xdVersion;  //version of X-definion
+	byte _xmlVersion;  //version of xml
 	XDefinition _xdef;  //XDefinition associated with this node
-	SBuffer _value; //String node assigned to this node
+	SBuffer _value; //value of this node
 	PNode _parent; //parent PNode
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template switch
-	/** JSON to XML transformation mode. */
-	byte _jsonMode = 0; // no JSON
+	byte _jsonMode = 0; // JSON to XML transformation mode
+	String _xpathPos; // xpath position
 
 	/** Creates a new instance of PNode.
 	 * @param name The node name.
@@ -103,6 +103,36 @@ public final class PNode {
 	 */
 	public final List<PNode> getChildNodes() {return _childNodes;}
 
+	/** Get XPath position of this node.
+	 * @return XPath position of this node.
+	 */
+	private String getXPath() {
+		String name = _name.getString();
+		if (_parent == null) {
+			return '/' + name;
+		}
+		int index = 1;
+		for (int i = 0; i < _parent._childNodes.size(); i++) {
+			PNode x = _parent._childNodes.get(i);
+			if (x == this) {
+				break;
+			}
+			if (name.equals(x.getName().getString())) {
+				index++;
+			}
+		}
+		return _parent.getXPath() + "/" + name + "[" + index + "]";
+	}
+
+	/** Add child node.
+	 * @param p PNode to add.
+	 */
+	public final void addChildNode(final PNode p) {
+		_childNodes.add(p);
+		_xpathPos = getXPath();
+
+	}
+
 	/** Get text value of PNode.
 	 * @return text value of PNode or null.
 	 */
@@ -120,13 +150,6 @@ public final class PNode {
 	 */
 	public final byte getXMLVersion() {return _xmlVersion;}
 
-	/** Remove child nodes.
-	 * @param list The list of nodes to be removed.
-	 */
-	final void removeChildNodes(final ArrayList<PNode> list) {
-		_childNodes.removeAll(list);
-	}
-
 	/** Get attribute of given name with X=definition name space.
 	 * If required attribute doesn't exist return null.
 	 * @param localName key name of attribute.
@@ -141,6 +164,38 @@ public final class PNode {
 			}
 		}
 		return xattr;
+	}
+
+	/** Set attribute.
+	 * @param attr the attribute.
+	 * @return true if the attribute was set.
+	 */
+	final boolean setAttr(final PAttr attr) {
+		attr._xpathPos = getXPath() + "/@" + attr._name;
+		attr._parent = this;
+		return _attrs.add(attr);
+	}
+
+	/** Remove attribute.
+	 * @param patt the attribute to be removed..
+	 * @return true if the attribute was removed.
+	 */
+	final boolean removeAttr(final PAttr patt) {
+		return removeAttr(patt.getName());
+	}
+
+	/** Remove attribute.
+	 * @param name the name of attribute.
+	 * @return true if the attribute was removed.
+	 */
+	final boolean removeAttr(final String name) {
+		for (PAttr att: _attrs) {
+			if (att.getName().equals(name)) {
+				_attrs.remove(att);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Expand macros.

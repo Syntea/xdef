@@ -130,9 +130,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 				}
 				if (_pcomp.isChkWarnings()&&"thesaurus".equals(elemLocalName)) {
-					//"&{0}" is deprecated. Please use "&{1}" instead
-					warning(_actPNode._name,
-						XDEF.XDEF998, "thesaurus","lexicon");
+					warning(_actPNode._name,XDEF.XDEF998,"thesaurus","lexicon");
 				}
 				_actPNode._xdVersion = ver;
 				_pcomp.setURIOnIndex(0, projectNS);
@@ -191,7 +189,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					item._localName = key;
 					item._nsindex = -1;
 				}
-				_actPNode._attrs.add(item);
+				_actPNode.setAttr(item);
 			}
 		}
 		Integer nsuriIndex = _actPNode._nsPrefixes.get(elemPrefix);
@@ -208,7 +206,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						nsuri, _actPNode._name.getString());
 					_includeElement.appendChild(el);
 				}
-				for (PAttr aval: _actPNode._attrs) {
+				for (PAttr aval: _actPNode.getAttrs()) {
 					if (aval._nsindex < 0) {
 						el.setAttribute(aval._name, aval._value.getString());
 					} else {
@@ -278,7 +276,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			}
 		} else {
 			_level++;
-			_actPNode._parent._childNodes.add(_actPNode);
+			_actPNode._parent.addChildNode(_actPNode);
 		}
 	}
 
@@ -293,19 +291,19 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	private String getNameAttr(final PNode pnode,
 		final boolean required,
 		final boolean remove) {
-		SBuffer sval = _pcomp.getXdefAttr(pnode, "name", required, remove);
-		if (sval == null) {
+		PAttr pa = _pcomp.getXdefAttr(pnode, "name", required, remove);
+		if (pa == null) {
 			// if required do not return null!
 			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
 		}
-		String name = sval.getString();
+		String name = pa._value.getString();
 		if (name.length() == 0) {
 			//Incorrect name
-			error(sval, XDEF.XDEF258);
+			error(pa._value, XDEF.XDEF258);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
 		if (!PreReaderXML.chkDefName(name, pnode._xmlVersion)) {
-			error(sval, XDEF.XDEF258); //Incorrect name
+			error(pa._value, XDEF.XDEF258); //Incorrect name
 			return "__UNKNOWN_INCORRECT_NAME_";
 		}
 		return name;
@@ -417,7 +415,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		p._value = _actPNode._value;
 		_actPNode._value = null;
 		_level++;
-		_actPNode._childNodes.add(p);
+		_actPNode.addChildNode(p);
 		_level--;
 	}
 

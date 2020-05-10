@@ -135,9 +135,9 @@ public interface PreCompiler {
 	 * @param localName The local name of attribute.
 	 * @param required if true the attribute is required.
 	 * @param remove if true the attribute is removed.
-	 * @return the object SParsedData with the attribute value or null.
+	 * @return PAttr object or null.
 	 */
-	public SBuffer getXdefAttr(final PNode pnode,
+	public PAttr getXdefAttr(final PNode pnode,
 		final String localName,
 		final boolean required,
 		final boolean remove);

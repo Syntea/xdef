@@ -25,32 +25,6 @@ public class SPosition {
 	/** Creates a new empty instance of SPosition. */
 	public SPosition() {}
 
-	/** Creates a new instance of SPosition from the source string.
-	 * @param source Source format of SSposition (see toStrin() merthod)
-	 * @param bufIndex Source buffer index.
-	 */
-	public SPosition(final String source,
-		final int bufIndex) {
-		StringParser sp = new StringParser(source);
-		if (!(sp.isToken("Line: ") && sp.isInteger())) {
-			throw new SRuntimeException();
-		}
-		_line = sp.getParsedLong();
-		if (!(sp.isToken(", column: ") && sp.isInteger())) {
-			throw new SRuntimeException();
-		}
-		long col = sp.getParsedInt();
-		if (!(sp.isToken(", position: ") && sp.isInteger())) {
-			throw new SRuntimeException();
-		}
-		if (!(sp.isToken(", startLine: ") && sp.isInteger())) {
-			throw new SRuntimeException();
-		}
-		_startLine = sp.getParsedInt();
-		_bufIndex = bufIndex;
-		_filePos = _startLine - 1 + col - bufIndex;
-	}
-
 	/** Creates a new instance of SPosition as copy of given position.
 	 * @param line line number.
 	 * @param column column number.

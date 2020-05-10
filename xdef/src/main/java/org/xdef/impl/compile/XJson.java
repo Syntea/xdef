@@ -57,16 +57,10 @@ public class XJson extends JsonToXml {
 	private PAttr setAttr(final PNode e,
 		final String name,
 		final SBuffer val) {
-		PAttr a = new PAttr(name, val, null, -1);
-		for (PAttr att: e._attrs) {
-			if (att.getName().equals(name)) {
-				e._attrs.remove(att);
-				break;
-			}
-		}
-		a._localName = name;
-		e._attrs.add(a);
-		return a;
+		PAttr patt = new PAttr(name, val, null, -1);
+		patt._localName = name;
+		e.setAttr(patt);
+		return patt;
 	}
 	/** get attribute without namespace.
 	 * @param e PNode where to set attribute.
@@ -74,9 +68,9 @@ public class XJson extends JsonToXml {
 	 * @return PAttr or null.
 	 */
 	private PAttr getAttr(final PNode e, final String name) {
-		for (PAttr att: e._attrs) {
-			if (att._nsindex == -1 && name.equals(att._localName)) {
-				return att;
+		for (PAttr patt: e.getAttrs()) {
+			if (patt._nsindex == -1 && name.equals(patt._localName)) {
+				return patt;
 			}
 		}
 		return null;
@@ -91,7 +85,7 @@ public class XJson extends JsonToXml {
 		int nsindex;
 		if (e._nsPrefixes.containsKey(_xdPrefix)) {
 			nsindex = e._nsPrefixes.get(_xdPrefix);
-			for (PAttr att: e._attrs) {
+			for (PAttr att: e.getAttrs()) {
 				if (att._nsindex == nsindex && name.equals(att._localName)) {
 					return att;
 				}
@@ -133,15 +127,15 @@ public class XJson extends JsonToXml {
 			nsindex = e._nsPrefixes.size();
 			e._nsPrefixes.put(_xdPrefix, nsindex);
 		}
-		PAttr a = new PAttr(_xdPrefix + ":" + name, val, _xdNamespace, nsindex);
-		for (PAttr att: e._attrs) {
-			if (att._nsindex == nsindex && name.equals(att._localName)) {
-				e._attrs.remove(att);
+		PAttr a = new PAttr(_xdPrefix+":"+name, val, _xdNamespace, nsindex);
+		for (PAttr patt: e.getAttrs()) {
+			if (patt._nsindex == nsindex && name.equals(patt._localName)) {
+				e.removeAttr(patt);
 				break; // attribute will be replaced
 			}
 		}
 		a._localName = name;
-		e._attrs.add(a);
+		e.setAttr(a);
 		return a;
 	}
 
@@ -374,7 +368,7 @@ public class XJson extends JsonToXml {
 				e = genJElement(parent, "map", map.getPosition());
 				ee = e;
 				ee = genXDElement(e, "choice", getPosition());
-				e._childNodes.add(ee);
+				e.addChildNode(ee);
 				skipSemiconsBlanksAndComments();
 				if (!eos()) {
 					setXDAttr(ee, "script",
@@ -385,7 +379,7 @@ public class XJson extends JsonToXml {
 				ee = e;
 				if (map.size() > 2) {
 					ee = genXDElement(e, "mixed", map.getPosition());
-					e._childNodes.add(ee);
+					e.addChildNode(ee);
 				}
 				if (!eos()) {
 					setXDAttr(e, "script",
@@ -402,7 +396,7 @@ public class XJson extends JsonToXml {
 		} else if (map.size() > 1) {
 			e = genJElement(parent, "map", map.getPosition());
 			ee = genXDElement(e, "mixed", map.getPosition());
-			e._childNodes.add(ee);
+			e.addChildNode(ee);
 		} else {
 			e = genJElement(parent, "map", map.getPosition());
 			ee = e;
@@ -413,7 +407,7 @@ public class XJson extends JsonToXml {
 			PNode ee2 = genJsonModel(val, ee);
 			if (_xdNamespace.equals(ee2._nsURI)
 				&& "choice".equals(ee2._localName)) {
-				for (PNode n : ee2._childNodes) {
+				for (PNode n : ee2.getChildNodes()) {
 					updateKeyInfo(n, key);
 				}
 			} else {
@@ -556,7 +550,7 @@ public class XJson extends JsonToXml {
 		} else {
 			e = genJsonValue((JValue) json, parent);
 		}
-		parent._childNodes.add(e);
+		parent.addChildNode(e);
 		return e;
 	}
 

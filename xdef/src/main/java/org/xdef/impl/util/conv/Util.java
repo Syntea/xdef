@@ -501,7 +501,7 @@ public final class Util {
 		}
 		XScriptParser p = new XScriptParser(XConstants.XML10);
 		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)),
-			"", null, XConstants.XD32); /*aa*/
+			"", null, XConstants.XD32, null);
 		while (!p.eos()) {
 		   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {
 				int pos = p.getIndex();

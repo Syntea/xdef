@@ -156,9 +156,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String actDefName,
 		final XDefinition xdef,
 		final byte xdVersion,
-		final Map<String, Integer> nsPrefixes) {
+		final Map<String, Integer> nsPrefixes,
+		final String xpath) {
 		String[] importLocal = xdef != null ? xdef._importLocal : null;
-		setSource(source, actDefName, importLocal, xdVersion);
+		setSource(source, actDefName, importLocal, xdVersion, xpath);
 		_g._nsPrefixes = nsPrefixes;
 	}
 
@@ -3109,6 +3110,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param xdef X-definition.
 	 * @param local true if it is in the declaration part with the local scope.
 	 * @param nsPrefixes table of name space prefixes.
+	 * @param xpath XPath position of the node.
 	 */
 	final void compileBNFGrammar(final SBuffer sName,
 		final SBuffer sExtends,
@@ -3116,12 +3118,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String defName,
 		final XDefinition xdef,
 		final boolean local,
-		final Map<String, Integer> nsPrefixes) { // namespace
+		final Map<String, Integer> nsPrefixes,
+		final String xpath) { // namespace
 		setSource(sName,
 			defName,
 			xdef,
 			xdef==null ? XConstants.XD40 : xdef.getXDVersion(),
-			nsPrefixes);
+			nsPrefixes,
+			xpath);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;

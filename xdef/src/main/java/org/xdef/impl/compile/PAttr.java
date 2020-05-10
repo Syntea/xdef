@@ -11,12 +11,15 @@ public final class PAttr {
 	public final SBuffer _value; //Value of attribute
 	int _nsindex; //Index to the namespace id (-1 in no namespace)
 	public String _nsURI;  //namespace URI
+	String _xpathPos; // xpath position
+	PNode _parent; // parent node
 
 	/** Create new instance of AttrValue.
 	 * @param name the quoted name of attribute.
+	 * @param value the SBuffer object with the value of attribute.
 	 * @param nsURI namespace.
 	 * @param nsindex index to the namespace list.
-	 * @param value the SBuffer object with the value of attribute.
+	 * @param parent parent node.
 	 */
 	PAttr(final String name,
 		final SBuffer value,
@@ -27,6 +30,7 @@ public final class PAttr {
 		_nsURI = nsURI;
 		_nsindex = nsindex;
 		_value = value;
+		// _parent = null; // java makes it
 	}
 
 	/** Get node name.
@@ -75,5 +79,4 @@ public final class PAttr {
 
 	@Override
 	public String toString() {return _name + "=" + _value.getString();}
-
 }
