@@ -129,7 +129,7 @@ public final class PNode {
 	 */
 	public final void addChildNode(final PNode p) {
 		_childNodes.add(p);
-		_xpathPos = getXPath();
+		p._xpathPos = getXPath();
 
 	}
 
