@@ -606,7 +606,7 @@ class PreReaderJSON implements PreReader {
 		return (JString) o;
 	}
 
-	private PAttr setPAttr(final PNode pnode,
+	private PAttr setPAttr(final PNode pNode,
 		final JMap map,
 		final String name,
 		final boolean alsoNoPrefixed,
@@ -625,11 +625,11 @@ class PreReaderJSON implements PreReader {
 				pattr._nsURI = null;
 				pattr._nsindex = -1;
 			}
-			pnode._attrs.add(pattr);
+			pNode.setAttr(pattr);
 			return pattr;
 		}
 		if (ndx > 0 && alsoNoPrefixed) {
-			return setPAttr(pnode,
+			return setPAttr(pNode,
 				map, name.substring(ndx + 1), alsoNoPrefixed, remove);
 		}
 		return null;
@@ -680,7 +680,7 @@ class PreReaderJSON implements PreReader {
 			copyAttrs(pn, (JMap) jo);
 		}
 		pn._xdef = parent._xdef;
-		parent._childNodes.add(pn);
+		parent.addChildNode(pn);
 		_pcomp.getPDeclarations().add(pn);
 	}
 
@@ -785,7 +785,7 @@ class PreReaderJSON implements PreReader {
 		child._localName = ndx > 0 ? name.substring(ndx + 1) : name;
 		child._xdVersion = pnode._xdVersion;
 		child._xmlVersion = pnode._xmlVersion;
-		pnode._childNodes.add(child);
+		pnode.addChildNode(child);
 	}
 
 	private void genModel(final JList list,
@@ -838,7 +838,7 @@ class PreReaderJSON implements PreReader {
 				XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				XPreCompiler.NS_XMLNS_INDEX);
 			patt._localName = "xmlns";
-			pNode._attrs.add(patt);
+			pNode.setAttr(patt);
 			getJAttr(pars, "xmlns", true);
 			int ndx = _pcomp.setNSURI(
 				((JString) jo).getValue().getString());
@@ -852,7 +852,7 @@ class PreReaderJSON implements PreReader {
 				XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				XPreCompiler.NS_XMLNS_INDEX);
 			String ns = patt._localName = name.substring(6);
-			pNode._attrs.add(patt);
+			pNode.setAttr(patt);
 			int ndx = _pcomp.setNSURI(
 				((JString) jo).getValue().getString());
 			pNode._nsPrefixes.put(ns, ndx);
@@ -912,17 +912,17 @@ class PreReaderJSON implements PreReader {
 					_pcomp.setURIOnIndex(0, pNode._nsURI);
 					int nsndx = 0;
 					pNode._nsPrefixes.put(prefix, nsndx);
-					pNode._xdef = new XDefinition(defName,
-						null, null, null, pNode._xmlVersion);
+						pNode._xdef = new XDefinition(defName,
+							null, null, null, pNode._xmlVersion);
 					pNode._nsindex = nsndx;
 					pNode._xdef = new XDefinition(defName,
-						null, null, null, pNode._xmlVersion);
+							null, null, null, pNode._xmlVersion);
 					PAttr patt = new PAttr("xmlns:" + prefix,
 						js.getValue(),
 						XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 						XPreCompiler.NS_XMLNS_INDEX);
 					patt._localName = prefix;
-					pNode._attrs.add(patt);
+					pNode.setAttr(patt);
 					// copy other attributes to pNode (xmlns:j was processed)
 					copyAttrs(pNode, pars);
 					// get name of X-definition

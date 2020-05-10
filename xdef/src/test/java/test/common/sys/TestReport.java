@@ -429,12 +429,15 @@ public class TestReport extends STester {
 		} catch (Exception ex) {fail(ex);}
 		try {// test report references in parameters
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
-			r = Report.error(SYS.SYS031, "&{#SYS042}", "&{#SYS047}");
-			assertEq("E SYS031: Can't rename file Incorrect format of report."
-				+ " to Hexadecimal format error", r.toString());
+			r = Report.error(SYS.SYS076, "&{#SYS069}", "&{#SYS091}");
+			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+				r.toString());
+			r = Report.error(SYS.SYS076, "&{0}&{#SYS069}", "&{1}&{#SYS091}");
+			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+				r.toString());
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
-			assertEq("E SYS031: Nelze přejmenovat soubor Nesprávný format "
-				+ "reportu. na Chyba hexadecimálního formátu", r.toString());
+			assertEq("E SYS076: Chyba URL Nebyly nalezeny žádné chyby: ;"
+				+ " Čtení za koncem souboru", r.toString());
 		} catch (Exception ex) {fail(ex);}
 
 		new File(getTempDir()).delete(); // clear temporary data

@@ -99,7 +99,7 @@ public final class XdDoc_2_0 extends XdDoc {
 				Element declaration = (Element) nodes.item(i);
 				XScriptParser p = new XScriptParser(XConstants.XML10);
 				p.setSource(new SBuffer(KXmlUtils.getTextValue(declaration)),
-					xdname, null, XConstants.XD32);
+					xdname, null, XConstants.XD32, null);
 				// find dedlartation of types
 				while (!p.eos()) {
 				   if (XScriptParser.TYPE_SYM == p.nextSymbol()) {

@@ -403,7 +403,7 @@ public final class TestXSTypes extends XDTester {
 "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
 "<xs:simpleType name='mytype'>\n");
 		XScriptParser p = new XScriptParser((byte) 10);
-		p.setSource(new SBuffer(params), null, null, XConstants.XD31);
+		p.setSource(new SBuffer(params), null, null, XConstants.XD31, null);
 		p.nextSymbol();
 		genSchemaType(p, "  ", sb);
 		sb.append(
