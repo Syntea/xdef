@@ -1431,7 +1431,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						_scriptCompiler._actDefName,
 						xdef,
 						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos);
+						pnode._nsPrefixes, pnode._xpathPos+"/text()");
 					pnode._value = null;
 					_scriptCompiler.compileDataScript(xtext);
 				} else { //default text script
