@@ -966,7 +966,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler._actDefName,
 				(XDefinition) xNode.getXMDefinition(),
 				pnode._xdVersion,
-				pnode._nsPrefixes, pnode._xpathPos);
+				pnode._nsPrefixes, pattr._xpathPos);
 			if (pattr._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 				String localName = pattr._localName;
 				if ("script".equals(localName)) {
@@ -1336,7 +1336,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						_scriptCompiler._actDefName,
 						pnode._xdef,
 						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos);
+						pnode._nsPrefixes, pnode._xpathPos+"/text()");
 					_scriptCompiler.skipSpaces();
 					if (_scriptCompiler.isToken("$$$script:")) {
 						_scriptCompiler.skipSpaces();
