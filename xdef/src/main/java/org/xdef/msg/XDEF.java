@@ -179,11 +179,11 @@ public interface XDEF {
 	public static final long XDEF310 = 31159025750L;
 	/** Only one JSON simple value allowed{#SYS000} */
 	public static final long XDEF311 = 31159025751L;
-	/** Illegal JSON XML mode &amp;{0} */
+	/** Illegal JSON XML mode &amp;{0}{#SYS000} */
 	public static final long XDEF313 = 31159025752L;
-	/** XML element models are not allowed in X-definition */
+	/** XML element models are not allowed in X-definition{#SYS000} */
 	public static final long XDEF314 = 31159025753L;
-	/** JSON root model&amp;{0}{ of "}{" } is missing in X-definition */
+	/** JSON root model&amp;{0}{ of "}{" } is missing in X-definition&amp;{#SYS000} */
 	public static final long XDEF315 = 31159025754L;
 	/** The name of JSON model "&amp;{0}" can't contain ":"{#SYS000} */
 	public static final long XDEF316 = 31159025755L;

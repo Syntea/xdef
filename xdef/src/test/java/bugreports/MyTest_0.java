@@ -16,9 +16,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
+import org.xdef.XDBuilder;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;
@@ -230,7 +230,7 @@ public class MyTest_0 extends XDTester {
 		StringWriter strw;
 		Report rep;
 		XComponent xc;
-		List<Object> list;
+		XDBuilder xb;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
 //		try {
@@ -243,23 +243,33 @@ public class MyTest_0 extends XDTester {
 //"  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
 //"</xd:def>\n"+
 //"</xd:collection>";
-//			xp = XDFactory.compileXD(null, xdef);
+//			xb = XDFactory.getXDBuilder(null, null);
+//			xb.setSource(xdef);
+//			xb.compileXD();;
 //		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 		try {
 			xdef =
+"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "<xd:json name='A'>\n"+
-"{\"\\\\\": \"jstring();\"}\n"+
+"{\"\\\\\n\": \"jstring();\"}\n"+
+"</xd:json>\n"+
+"<xd:json name='B'>\n"+
+//"[\"xstring();\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A001 %link #A;\n"+
 "</xd:component>\n"+
-"</xd:def>";
+"</xd:def>\n"+
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='X'/>\n"+
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Y'/>\n"+
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='X'/>\n"+
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0'/>\n"+
+"</xd:collection>";
 			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, tempDir);
-
-			json = "{\"\\\\\":\"x\"}"; //error (not string but number!)
+			json = "{\"\\\\\n\":\"\\\\\n\"}"; //error (not string but number!)
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
