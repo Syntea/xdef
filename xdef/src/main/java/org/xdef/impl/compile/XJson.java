@@ -20,30 +20,24 @@ public class XJson extends JsonToXml {
 
 	/** This is the special character used for the $script specification. */
 	public static final String SCRIPT_KEY = "]";
-
 	/** This is the special character used for the $oneOf specification. */
 	public static final String ONEOF_KEY = ")";
-
 	/** This keyword used for the $script specification in X-definition. */
 	public static final String SCRIPT_NAME = "$script";
-
 	/** This keyword used for the $oneOf specification in X-definition. */
 	public static final String ONEOF_NAME = "$oneOf";
-
 	/** This keyword used for $any specification in X-definition. */
 	public static final String ANY_NAME = "$any";
-
 	/** This is the special character used for the $any specification. */
 	public static final String ANY_KEY = ")";
-
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix = XDConstants.XDEF_NS_PREFIX;
-
 	/** Index of X-definition namespace. */
 	private int _xdIndex;
-
 	/** Namespace of X-definition.*/
 	private String _xdNamespace = XDConstants.XDEF40_NS_URI;
+	/** XPath position of JSON description.*/
+	private String _basePos;
 
 	/** Prepare instance of XJSON. */
 	private XJson() {super();}
@@ -60,6 +54,7 @@ public class XJson extends JsonToXml {
 		PAttr patt = new PAttr(name, val, null, -1);
 		patt._localName = name;
 		e.setAttr(patt);
+		patt._xpathPos = _basePos;
 		return patt;
 	}
 	/** get attribute without namespace.
@@ -136,6 +131,7 @@ public class XJson extends JsonToXml {
 		}
 		a._localName = name;
 		e.setAttr(a);
+		a._xpathPos = _basePos;
 		return a;
 	}
 
@@ -282,6 +278,7 @@ public class XJson extends JsonToXml {
 		result._nsURI = nsURI;
 		result._localName = localName;
 		result._level = parent._level + 1;
+		result._xpathPos = _basePos;
 		return result;
 	}
 
@@ -347,9 +344,6 @@ public class XJson extends JsonToXml {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-//		if (key.isEmpty()) {
-//			addToXDScript(e, " options preserveEmptyAttributes,noTrimAttr;");
-//		}
 		String s = SUtils.modifyString(SUtils.modifyString(
 			jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
 		addMatchExpression(e, '@' + J_KEYATTR + "=='"+ s +"'");
@@ -460,9 +454,7 @@ public class XJson extends JsonToXml {
 						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
 						occ = readOccurrence(sbs[0]);
 					}
-					if (index < len-1
-//						&& array.get(index+1) instanceof XJson.JValue
-						&& e.getNSIndex() == _xdIndex //xdef
+					if (index < len-1 && e.getNSIndex() == _xdIndex //xdef
 						&& ("mixed".equals(e.getLocalName()) // mixed or choice
 							|| "choice".equals(e.getLocalName()))
 						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
@@ -579,6 +571,7 @@ public class XJson extends JsonToXml {
 			return;
 		}
 		jx.setSourceBuffer(p._value);
+		jx._basePos = p._xpathPos + "/text()";
 		Object json = jx.parse();
 		if (json != null && (json instanceof JMap || json instanceof JArray)) {
 			jx.genJsonModel(json, p);
