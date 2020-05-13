@@ -252,11 +252,12 @@ public class MyTest_0 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
+"string()\n"+
 "<xd:json name='A'>\n"+
 "{\"\\\\\n\": \"jstring();\"}\n"+
 "</xd:json>\n"+
 "<xd:json name='B'>\n"+
-//"[\"xstring();\"]\n"+
+"[\"xstring();\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A001 %link #A;\n"+
@@ -1918,7 +1919,7 @@ if(T){return;}
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
 "<a>required {\n"+
 "              switch(getText()) {\n"+
 "                case '1': return true;\n"+
@@ -1931,7 +1932,7 @@ if(T){return;}
 			assertEq(xml, parse(xdef, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' root='a'>\n"+
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
 "<xd:declaration>\n"+
 " type t {\n" +
 "          switch(getText()) {\n"+

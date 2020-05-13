@@ -3009,20 +3009,19 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile lexicon specification
-	 * @param source source data.
-	 * @param defName the name of X-definition.
+	 * @param pnode PNode with source data.
 	 * @param lang language of lexicon.
 	 * @param deflt default language.
 	 * @param xp XDPool object.
 	 * @param languages List of languages in this lexicon.
 	 */
-	final void compileLexicon(final SBuffer source,
-		final String defName,
+	final void compileLexicon(final PNode pnode,
 		final SBuffer lang,
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, null, XConstants.XD40, null);
+		setSource(pnode._value, pnode._xdef==null ? "": pnode._xdef.getName(),
+			pnode._xdef, pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
 		String language;
 		if (lang == null || (language = lang.getString().trim()).isEmpty()
 			|| !isJavaName(language)) {
@@ -3105,27 +3104,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile BNF grammar.
 	 * @param sName SBuffer with name of BNF grammar variable.
 	 * @param sExtends SBuffer with name of BNF grammar to be extended.
-	 * @param source SBuffer BNF grammar.
-	 * @param defName name of X-definition.
-	 * @param xdef X-definition.
+	 * @param pnode PNode with BNF grammar.
 	 * @param local true if it is in the declaration part with the local scope.
-	 * @param nsPrefixes table of name space prefixes.
-	 * @param xpath XPath position of the node.
 	 */
 	final void compileBNFGrammar(final SBuffer sName,
 		final SBuffer sExtends,
-		final SBuffer source,
-		final String defName,
-		final XDefinition xdef,
-		final boolean local,
-		final Map<String, Integer> nsPrefixes,
-		final String xpath) { // namespace
-		setSource(sName,
-			defName,
-			xdef,
-			xdef==null ? XConstants.XD40 : xdef.getXDVersion(),
-			nsPrefixes,
-			xpath);
+		final PNode pnode,
+		final boolean local) { // namespace
+		String defName = pnode._xdef == null ? null : pnode._xdef.getName();
+		setSource(sName, defName, pnode._xdef, pnode._xdVersion,
+			pnode._nsPrefixes, pnode._xpathPos);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;
@@ -3164,7 +3152,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 			}
 		}
-		SBuffer s = source == null ? new SBuffer("") : source;
+		SBuffer s = pnode._value == null ? new SBuffer("") : pnode._value;
 		int actAdr = _g._lastCodeIndex;
 		CodeI1 lastStop = _g.getLastStop();
 		DefBNFGrammar dd;
@@ -3359,8 +3347,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				errorAndSkip(XDEF.XDEF362, ";"); //Alias name expected
 				return;
 			}
-		} else if (_sym != SEMICOLON_SYM && _sym != END_SYM
-			&& _sym != NOCHAR) {
+		} else if (_sym != SEMICOLON_SYM && _sym != END_SYM && _sym != NOCHAR) {
 			errorAndSkip(XDEF.XDEF410, ";}", ";"); //'&{0}' expected
 		}
 		if (wasError) {
