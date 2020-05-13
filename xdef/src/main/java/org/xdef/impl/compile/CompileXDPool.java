@@ -260,7 +260,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_scriptCompiler._g.getXDNamespaceContext());
 			} else if (nodeKind == XNode.XMTEXT) {
 				 //Text value not allowed here
-				error(pos, XDEF.XDEF260);
+				_precomp.lightError(pos, XDEF.XDEF260);
 			}
 		} else {
 			XElement parentXel;
@@ -690,9 +690,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				SBuffer lang = pa == null ? null : pa._value;
 				pa = _precomp.getXdefAttr(nodei, "default", false, true);
 				SBuffer deflt = pa == null ? null : pa._value;
-				_scriptCompiler.compileLexicon(nodei._value,
-					nodei._xdef == null ? "" : nodei._xdef.getName(),
-					lang, deflt, xp, languages);
+				_scriptCompiler.compileLexicon(nodei,lang,deflt,xp,languages);
 				_precomp.reportNotAllowedAttrs(nodei);
 			}
 			if (!languages .isEmpty()) {
@@ -784,16 +782,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if (pa == null) {
 			return; //required name is missing.
 		}
-		SBuffer sName = pa == null ? null : pa._value;
-		String defName = nodei._xdef == null ? null : nodei._xdef.getName();
+		SBuffer sName = pa._value;
 		pa = _precomp.getXdefAttr(nodei, "extends", false, remove);
-		_scriptCompiler.compileBNFGrammar(sName,
-			pa == null ? null : pa._value,
-			nodei._value,
-			defName,
-			nodei._xdef,
-			isLocalScope(nodei, remove),
-			nodei._nsPrefixes, nodei._xpathPos);
+		_scriptCompiler.compileBNFGrammar(sName, pa==null ? null : pa._value,
+			nodei,  isLocalScope(nodei, remove));
 	}
 
 	/** Compile list of BNFs declaration and of variables/methods declaration.
@@ -1483,7 +1475,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else if ("json".equals(name)) {
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
-					error(pnode._name, XDEF.XDEF315);
+					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
 					return;
 				}
 				byte jsonMode =  XConstants.JSON_MODE; //W3C mode is default
@@ -1564,7 +1556,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.skipSpaces();
 			if (!_scriptCompiler.eos()) {
 				//Text value not allowed here
-				_scriptCompiler.lightError(XDEF.XDEF260);
+				_scriptCompiler.lightError(XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);
 			}
 			pnode._value = null; //prevent repeated message
 		}
