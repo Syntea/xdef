@@ -250,47 +250,6 @@ public class MyTest_0 extends XDTester {
 //if(true)return;
 		try {
 			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
-"string()\n"+
-"<xd:json name='A'>\n"+
-"{\"\\\\\n\": \"jstring();\"}\n"+
-"</xd:json>\n"+
-"<xd:json name='B'>\n"+
-"[\"xstring();\"]\n"+
-"</xd:json>\n"+
-"<xd:component>\n"+
-"  %class bugreports.data.A001 %link #A;\n"+
-"</xd:component>\n"+
-"</xd:def>\n"+
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='X'/>\n"+
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Y'/>\n"+
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='X'/>\n"+
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0'/>\n"+
-"</xd:collection>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, tempDir);
-			json = "{\"\\\\\n\":\"\\\\\n\"}"; //error (not string but number!)
-			j = xp.createXDDocument().jparse(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				JsonUtil.toJsonString(j, true));
-			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(JsonUtil.jsonEqual(
-				JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson()));
-			el = JsonUtil.jsonToXml(json);
-			KXmlUtils.compareElements(xc.toXml(), el, true, reporter);
-			assertNoErrors(reporter);
-			o = xc.toJson();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), o),
-				JsonUtil.toJsonString(JsonUtil.parse(json))
-					+"\n"+ JsonUtil.toJsonString(o));
-		} catch (Exception ex) {fail(ex);}
-if(T)return;
-		try {
-			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "<xd:json name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
@@ -1584,7 +1543,7 @@ if(T){return;}
 			XMElement xmel = xmdef.getModel(null, "a");
 			XMData xmd = xmel.getAttr("a");
 			assertEq(xmd.getParserType(),  XDValue.XD_STRING);
-System.out.println("RefTypeName: " + xmd.getRefTypeName());
+			System.out.println("RefTypeName: " + xmd.getRefTypeName());
 			assertEq(xmd.getRefTypeName(), "t");
 			assertEq(xmd.getParserName(), "enum");
 			o = xmd.getParseParams();
@@ -1664,7 +1623,7 @@ if(T){return;}
 "  <A xd:script='${moreAll}'/>\n"+
 "</xd:def>"
 			});
-			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
+			parse(xp, "", "<A a='a'><XXX xx='xx'>xx</XXX></A>", reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
@@ -1712,8 +1671,7 @@ if(T){return;}
 			xd.setLexiconLanguage("ces");
 			xml = "<a><c f='a'/></a>";
 			XComponent xcA =
-				parseXC(xd,
-					xml, Class.forName("bugreports.data.A"), reporter);
+				parseXC(xd, xml, Class.forName("bugreports.data.A"), reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xcA.toXml());
 			xd = xp.createXDDocument();
@@ -1721,7 +1679,6 @@ if(T){return;}
 			xml = "<a><b e='a'/></a>";
 			xc = parseXC(xd,
 				xml, Class.forName("bugreports.data.A"), reporter);
-//			xd.setDestLexiconLanguage("eng");
 			assertNoErrors(reporter);
 			assertEq("<a><b e='a'/></a>", xc.toXml());
 			xdef =
@@ -1920,11 +1877,10 @@ if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
-"<a>required {\n"+
-"              switch(getText()) {\n"+
+"<a>required { switch(getText()) {\n"+
 "                case '1': return true;\n"+
 "                default: return false;\n"+
-"              }\n"+
+"              };\n"+
 "            }\n"+
 "</a>\n"+
 "</xd:def>";
@@ -1934,11 +1890,10 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
 "<xd:declaration>\n"+
-" type t {\n" +
-"          switch(getText()) {\n"+
+" type t { switch(getText()) {\n"+
 "            case '1': return true;\n"+
 "            default: return false;\n"+
-"          }\n"+
+"          };\n"+
 "        }\n"+
 "</xd:declaration>\n"+
 "<a>required t; </a>\n"+
@@ -1948,11 +1903,10 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-" boolean t() {\n" +
-"          switch(getText()) {\n"+
-"            case '1': return true;\n"+
-"            default: return false;\n"+
-"          }\n"+
+" boolean t() { switch(getText()) {\n"+
+"                 case '1': return true;\n"+
+"                 default: return false;\n"+
+"               };\n"+
 "        }\n"+
 "</xd:declaration>\n"+
 "<a>required t; </a>\n"+

@@ -335,12 +335,12 @@ WhilBooleanExpression ::= $rule ParentalExpression
 
 SwitchStatement ::=
   "switch" $rule ParentalExpression "{" SwitchBlockStatementVariant* S? "}"
-  /* Result of ParentalExpression must be integer. Any variant may occur in the
-     switch statement only once. */
+  /* Result of ParentalExpression must be integer or string. A variant
+     may occur in the switch statement only once. */
 
 SwitchBlockStatementVariant ::=
    S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
-  /* Type  of ConstantExpression must be integer. */
+  /* Type of ConstantExpression must be integer or string. */
 
 DefaultVariant ::= "default" S? $rule
 

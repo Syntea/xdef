@@ -1991,14 +1991,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				closeBlock();
 				return true;
 			case SEMICOLON_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
 				// empty statement
 				nextSymbol();
 				return true;
 			case INC_SYM:
 			case DEC_SYM: {
+				if (_wasReturn || _wasContinue || _wasBreak) {
+					error(XDEF.XDEF453); //Unreachable statement
+				}
 				int dx = addDebugInfo(false);
 				isIncStatement();
 				setDebugEndPosition(dx);
