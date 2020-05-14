@@ -28,7 +28,7 @@ public class XDParseXDType extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		try {
 			String xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF32_NS_URI + "' root='A'>" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='A'>" +
 "<xd:declaration>Parser x=" + s + ";</xd:declaration>" +
 "<A/>" +
 "</xd:def>";

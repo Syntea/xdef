@@ -317,9 +317,9 @@ public class GenXDef implements XDConstants {
 		Element elem = (Element) data.cloneNode(true);
 		canonizeXML(elem);
 		Element rootDef = elem.getOwnerDocument().getImplementation()
-			.createDocument(XDEF32_NS_URI, XDEF_NS_PREFIX + ":def", null)
+			.createDocument(XDEF40_NS_URI, XDEF_NS_PREFIX + ":def", null)
 			.getDocumentElement();
-		rootDef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF32_NS_URI);
+		rootDef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF40_NS_URI);
 		final String s = elem.getNodeName();
 		rootDef.setAttribute("root", s);
 		if (elem.getNamespaceURI() != null) {
@@ -508,11 +508,11 @@ public class GenXDef implements XDConstants {
 		}
 		Element model = createElement(parent, x._nsuri, x._name);
 		if (x._max > 1) {
-			model.setAttributeNS(XDEF32_NS_URI, XDEF_NS_PREFIX + ":script",
+			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script",
 				"occurs " + (x._min == 0 ? "*;" : "+;"));
 		} else {
 			if (x._min == 0) {
-				model.setAttributeNS(XDEF32_NS_URI, XDEF_NS_PREFIX + ":script",
+				model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script",
 					"occurs ?;");
 			}
 		}
@@ -536,7 +536,7 @@ public class GenXDef implements XDConstants {
 		parent.appendChild(model);
 		if (x._mixed) {
 			final Element el =
-				createElement(model, XDEF32_NS_URI, XDEF_NS_PREFIX + ":mixed");
+				createElement(model, XDEF40_NS_URI, XDEF_NS_PREFIX + ":mixed");
 			model.appendChild(el);
 			model = el;
 		}
