@@ -142,7 +142,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			}
 		} else {
 			_actPNode._parent.addChildNode(_actPNode);
-		}			
+		}
 		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
 			KParsedAttr ka = parsedElem.getAttr(i);
 			String key = ka.getName();
@@ -175,11 +175,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						item._nsURI = _pcomp.getNSURI(nsndx);
 						if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
 							&& "script".equals(item._localName)) {
-							XScriptParser xp = 
+							XScriptParser xp =
 								new XScriptParser(_actPNode._xmlVersion);
-							xp.setSource(new SBuffer(value, ka.getPosition()), 
+							xp.setSource(new SBuffer(value, ka.getPosition()),
 								_actPNode._xdef == null ? null
-									: _actPNode._xdef.getName(), 
+									: _actPNode._xdef.getName(),
 								null,_actPNode._xmlVersion, item._xpathPos);
 							xp.skipBlanksAndComments();
 							if (xp.isToken("template")) {
@@ -260,12 +260,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					// check duplicate of X-definition
 					for (PNode p: _pcomp.getPXDefs()) {
 						if (defName.equals(p._xdef.getName())) {
-							XScriptParser xp = 
+							XScriptParser xp =
 								new XScriptParser(_actPNode._xmlVersion);
-							xp.setSource(_actPNode._name, 
+							xp.setSource(_actPNode._name,
 								_actPNode._xdef == null ? null
-									: _actPNode._xdef.getName(), 
-								null,_actPNode._xmlVersion,_actPNode._xpathPos);							
+									: _actPNode._xdef.getName(),
+								null,_actPNode._xmlVersion,_actPNode._xpathPos);
 							if (defName.length() == 0) {
 								//Only one X-definition in the compiled XDPool
 								// may be without name

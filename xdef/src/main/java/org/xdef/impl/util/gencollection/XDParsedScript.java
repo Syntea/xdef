@@ -404,7 +404,6 @@ public class XDParsedScript {
 					if (sp._sym == XScriptParser.CASE_SYM) {
 						sp.nextSymbol();
 						sb.append("case ").append(parseScriptSection(sp));
-						sb.append(parseScriptSection(sp));
 					} else if (sp._sym == XScriptParser.DEFAULT_SYM) {
 						sp.nextSymbol();
 						if (sp._sym == XScriptParser.COLON_SYM) {
