@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.1, release-date 2020-05-12
+# Version 40.0.1, release-date 2020-05-15
 * improved error reporting.
 * corrected bug when a JSON string value contains some of escape characters.
 * The default value of property xdef_warnings was changed to true.
