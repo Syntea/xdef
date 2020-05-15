@@ -67,6 +67,8 @@ public class XDGenCollection {
 	static {
 		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
+		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_WARNINGS,
+			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 		try {
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
@@ -602,7 +604,7 @@ public class XDGenCollection {
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser(XConstants.XML10);
 		SBuffer sb = new SBuffer(script.trim());
-		sp.setSource(sb, defName, null, XConstants.XD32);
+		sp.setSource(sb, defName, null, XConstants.XD32, null);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);
 		return xp.getCanonizedScript(removeActions);
 	}

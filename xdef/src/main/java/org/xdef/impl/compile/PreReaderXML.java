@@ -74,6 +74,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 		_actPNode._nsURI = parsedElem.getParsedNSURI();
 		if (_level == -1) {
+			_actPNode._xpathPos = qName + "[1]";
 			String uri = parsedElem.getParsedNSURI();
 			if ("def".equals(elemLocalName)
 				|| "lexicon".equals(elemLocalName)
@@ -129,7 +130,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						ver = XConstants.XD40;
 					}
 				}
-				if ("thesaurus".equals(elemLocalName)) {
+				if (_pcomp.isChkWarnings()&&"thesaurus".equals(elemLocalName)) {
 					warning(_actPNode._name,XDEF.XDEF998,"thesaurus","lexicon");
 				}
 				_actPNode._xdVersion = ver;
@@ -139,6 +140,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				//X-definition or X-collection expected
 				error(_actPNode._name, XDEF.XDEF255);
 			}
+		} else {
+			_actPNode._parent.addChildNode(_actPNode);
 		}
 		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
 			KParsedAttr ka = parsedElem.getAttr(i);
@@ -156,6 +159,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else {
 				PAttr item = new PAttr(key,
 					new SBuffer(value, ka.getPosition()), null, -1);
+				_actPNode.setAttr(item);
 				if ((ndx = key.indexOf(':')) >= 0) {
 					String prefix = key.substring(0, ndx);
 					item._localName = key.substring(ndx + 1);
@@ -171,13 +175,17 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						item._nsURI = _pcomp.getNSURI(nsndx);
 						if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
 							&& "script".equals(item._localName)) {
-							StringParser p = new StringParser(
-								new SBuffer(value, ka.getPosition()));
-							p.skipSpaces();
-							if (p.isToken("template")) {
-								p.skipSpaces();
-								if (!p.eos() && !p.isChar(';')) {
-									error(p, XDEF.XDEF425);//Script error
+							XScriptParser xp =
+								new XScriptParser(_actPNode._xmlVersion);
+							xp.setSource(new SBuffer(value, ka.getPosition()),
+								_actPNode._xdef == null ? null
+									: _actPNode._xdef.getName(),
+								null,_actPNode._xmlVersion, item._xpathPos);
+							xp.skipBlanksAndComments();
+							if (xp.isToken("template")) {
+								xp.skipBlanksAndComments();
+								if (!xp.eos() && !xp.isChar(';')) {
+									xp.error(XDEF.XDEF425);//Script error
 								}
 								_actPNode._template = true;
 							}
@@ -189,7 +197,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					item._localName = key;
 					item._nsindex = -1;
 				}
-				_actPNode._attrs.add(item);
 			}
 		}
 		Integer nsuriIndex = _actPNode._nsPrefixes.get(elemPrefix);
@@ -206,7 +213,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						nsuri, _actPNode._name.getString());
 					_includeElement.appendChild(el);
 				}
-				for (PAttr aval: _actPNode._attrs) {
+				for (PAttr aval: _actPNode.getAttrs()) {
 					if (aval._nsindex < 0) {
 						el.setAttribute(aval._name, aval._value.getString());
 					} else {
@@ -220,27 +227,23 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._nsindex = urindx;
 			}
 		}
-		if (_level == -1) {
+		if (_level++ == -1) { // root level
 			if ("collection".equals(elemLocalName)) {
 				_pcomp.processIncludeList(_actPNode);
 				_pcomp.reportNotAllowedAttrs(_actPNode);
 				_pcomp.getPCollections().add(_actPNode);
+				_level = -1; // collection must be -1!
 			} else if ("BNFGrammar".equals(elemLocalName)) {
-				_level++;
 				 _pcomp.getPBNFs().add(_actPNode);
 			} else if ("lexicon".equals(elemLocalName)
 				|| ("thesaurus".equals(elemLocalName)
 					&&_actPNode._xdVersion <= 31)) {
-				_level++;
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
-				_level++;
 				_pcomp.getPDeclarations().add(0, _actPNode);
 			} else if ("component".equals(elemLocalName)) {
-				_level++;
 				_pcomp.getPComponents().add(0, _actPNode);
-			} else { // def or jdef
-				_level++;
+			} else { // def
 				String defName = getNameAttr(_actPNode, false, true);
 				if (defName == null) {
 					defName = "";
@@ -257,13 +260,19 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					// check duplicate of X-definition
 					for (PNode p: _pcomp.getPXDefs()) {
 						if (defName.equals(p._xdef.getName())) {
+							XScriptParser xp =
+								new XScriptParser(_actPNode._xmlVersion);
+							xp.setSource(_actPNode._name,
+								_actPNode._xdef == null ? null
+									: _actPNode._xdef.getName(),
+								null,_actPNode._xmlVersion,_actPNode._xpathPos);
 							if (defName.length() == 0) {
 								//Only one X-definition in the compiled XDPool
 								// may be without name
-								error(_actPNode._name, XDEF.XDEF212);
+								xp.error(_actPNode._name, XDEF.XDEF212);
 							} else {
 								//X-definition '&{0}' already exists
-								error(_actPNode._name, XDEF.XDEF303, defName);
+								xp.error(_actPNode._name,XDEF.XDEF303, defName);
 							}
 							defName = null;
 							break;
@@ -274,9 +283,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 				}
 			}
-		} else {
-			_level++;
-			_actPNode._parent._childNodes.add(_actPNode);
 		}
 	}
 
@@ -291,19 +297,19 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	private String getNameAttr(final PNode pnode,
 		final boolean required,
 		final boolean remove) {
-		SBuffer sval = _pcomp.getXdefAttr(pnode, "name", required, remove);
-		if (sval == null) {
+		PAttr pa = _pcomp.getXdefAttr(pnode, "name", required, remove);
+		if (pa == null) {
 			// if required do not return null!
 			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
 		}
-		String name = sval.getString();
+		String name = pa._value.getString();
 		if (name.length() == 0) {
 			//Incorrect name
-			error(sval, XDEF.XDEF258);
+			error(pa._value, XDEF.XDEF258);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
 		if (!PreReaderXML.chkDefName(name, pnode._xmlVersion)) {
-			error(sval, XDEF.XDEF258); //Incorrect name
+			error(pa._value, XDEF.XDEF258); //Incorrect name
 			return "__UNKNOWN_INCORRECT_NAME_";
 		}
 		return name;
@@ -415,7 +421,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		p._value = _actPNode._value;
 		_actPNode._value = null;
 		_level++;
-		_actPNode._childNodes.add(p);
+		_actPNode.addChildNode(p);
 		_level--;
 	}
 

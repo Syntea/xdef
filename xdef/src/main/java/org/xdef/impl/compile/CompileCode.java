@@ -89,6 +89,8 @@ public final class CompileCode extends CompileBase {
 	boolean _ignoreUnresolvedExternals;
 	/** Mode of external method interface: 0 - both modes, 1 - old, 2 - new. */
 	private final int _externalMode;
+	/** Flag if warnings should be checked.*/
+	boolean _chkWarnings;
 	/** Debug mode. */
 	boolean _debugMode;
 	/** Array of external classes. */
@@ -129,16 +131,19 @@ public final class CompileCode extends CompileBase {
 	/** Creates a new instance of GenCodeObj.
 	 * @param extClasses Array of external classes.
 	 * @param externalMode id of mode external methods (old=1, new=2, both=0).
+	 * @param chkWarnings if false warnings are generated as error.
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
 	CompileCode(final Class<?>[] extClasses,
 		final int externalMode,
+		final boolean chkWarnings,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 //		_spMax = 0; _parser = null; //java makes it
 		_ignoreUnresolvedExternals = ignoreUnresolvedExternals;
 		_externalMode = externalMode;
+		_chkWarnings = chkWarnings;
 		_debugMode = debugMode;
 		_tstack = new short[STACK_SIZE];
 		_cstack = new int[STACK_SIZE];
@@ -1684,7 +1689,9 @@ public final class CompileCode extends CompileBase {
 	 * @param replace text to be deprecated/
 	 */
 	final void reportDeprecated(final String old, final String replace) {
-		_parser.warning(XDEF.XDEF998,old, replace);
+		if (_chkWarnings) {
+			_parser.warning(XDEF.XDEF998, old, replace);
+		}
 	}
 
 	/** Generation of internal method code.

@@ -21,7 +21,7 @@
       options moreAttributes"
     include        = "optional uriList; options acceptQualifiedAttr"
     metaNamespace  = "optional uri; options acceptQualifiedAttr"
-    xd:attr         = "occurs * getAttrName().startsWith('impl-');">
+    xd:attr        = "occurs * getAttrName().startsWith('impl-');">
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->
       <XD2.0:def xd:script = "occurs *; ref Ver2.0#XD2.0:def" />
@@ -59,55 +59,38 @@
     xd:attr         = "occurs * getAttrName().startsWith('impl-');">
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
-      <xd:mixed>
-
+    <xd:mixed>
       <XD3.1:macro xd:script = "occurs *; ref XD3.1:macro" />
-
       <XD3.1:declaration xd:script = "occurs *; ref XD3.1:declaration"
         scope = "optional enum('global','local'); options acceptQualifiedAttr"/>
-
       <XD3.1:thesaurus xd:script = "occurs *; ref XD3.1:thesaurus" />
-
       <XD3.1:lexicon xd:script = "occurs *; ref XD3.1:lexicon" />
-
       <XD3.1:BNFGrammar xd:script = "occurs *; ref XD3.1:BNFGrammar" />
-
       <XD3.1:component xd:script = "occurs *; ref XD3.1:component"/>
-
       <xd:choice occurs = "*">
-
           <XD3.1:choice xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:choiceDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD3.1:mixed xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:mixedDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD3.1:sequence xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:sequenceDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD3.1:list xd:script = "occurs *;
                             match @name || @XD3.1:name; ref XD3.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
-
           <XD3.1:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
               required json;
           </XD3.1:json>
-
           <XD3.1:any xd:script = "occurs *;
                             match @XD3.1:name; ref XD3.1:anyDef;
                             options moreAttributes, moreElements"
               XD3.1:name = "required QName;" />
-
           <xd:any xd:script = "occurs *; ref xelement" />
-
           optional valueScript;
-
       </xd:choice>
-
     </xd:mixed>
 
   </XD3.1:def>

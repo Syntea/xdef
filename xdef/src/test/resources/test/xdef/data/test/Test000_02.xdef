@@ -4,6 +4,8 @@
  <xd:declaration>
 <![CDATA[
   external method String test.xdef.Test000.b(XXNode, XDValue[]);
+  external method void test.xdef.Test002.setErr(XXNode, long);
+  external method String test.xdef.Test002.modelVozidlaNeuveden();
   Bytes b = new Bytes(16);
   boolean rodneCislo() {
     String s = getText();

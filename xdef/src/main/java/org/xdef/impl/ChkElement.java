@@ -109,9 +109,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		final XElement xelement,
 		boolean ignoreAll) {
 		super(element==null ? xelement.getName(): element.getNodeName(),parent);
-//		_sourceElem = _elemValue = null;  _selector = null; //Java makes it!
-//		Arrays.fill(_counters, 0); //Java makes it!
-//		_nextDefIndex = _numText = 0; _nil = false; //Java makes it!
+//		_sourceElem=_elemValue=null; _selector=null; _nil=false;//Java makes it!
+//		Arrays.fill(_counters, 0); _nextDefIndex=_numText=0; //Java makes it!
 		_element = element;
 		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
 		if (xelement.isIgnore() || xelement.isIllegal()) {

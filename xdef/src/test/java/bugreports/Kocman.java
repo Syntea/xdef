@@ -1,4 +1,4 @@
-package bugtest;
+package bugreports;
 
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
@@ -14,7 +14,7 @@ public class Kocman extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' name='M' root='X'>\n"+
-"<xd:component>%class bugtest.data.M %link X</xd:component>\n"+
+"<xd:component>%class bugreports.data.M %link X</xd:component>\n"+
 "  <xd:any xd:name='X'\n"+
 "     xd:script='options moreAttributes, moreElements, moreText'/>\n"+
 "</xd:def>";
@@ -33,7 +33,7 @@ public class Kocman extends XDTester {
 			xml = "<A><X b='1'><X b='2'><X b='3'/></X><X b='4'/></X></A>";
 			assertEq(xml, parse(xp, "M", xml , reporter));
 			assertNoErrors(reporter);
-			bugtest.data.M p = (bugtest.data.M)
+			bugreports.data.M p = (bugreports.data.M)
 				parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());

@@ -43,6 +43,11 @@ public class Canonize {
 		final boolean dirTree) {
 		try {
 			File f = new File(filename).getCanonicalFile();
+			if (!f.exists() || !f.isDirectory()) {
+				System.err.println(f.getAbsolutePath()
+					+ " not exists or it is not directory");
+				return;
+			}
 			String home = f.getAbsolutePath().replace('\\', '/');
 			if (!home.endsWith("/")) {
 				home += '/';
@@ -103,12 +108,9 @@ public class Canonize {
 		}
 		// Canonize sources: replace leading spaces with tabs and remove
 		// trailing white spaces.
-		doSources("../xdef/src/main/java/org", true);
+		doSources("../xdef/src/main/java", true);
 		doSources("../xdef/src/main/resources/org", true);
-
-		doSources("../xdef-test/src/test/java", true);
-
-		doSources("../xdef-example/examples", true);
+		doSources("../xdef/src/test/java", true);
 
 		doSources("src/main/java/buildtools", true); //this project
 

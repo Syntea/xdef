@@ -186,7 +186,7 @@ public final class XPool implements XDPool, Serializable {
 		_chkWarnings = readProperty(_props, XDConstants.XDPROPERTY_WARNINGS,
 			new String[] {XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE,
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE},
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE) == 0;
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE) == 0;
 		_resolveIncludes = readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
@@ -296,7 +296,7 @@ public final class XPool implements XDPool, Serializable {
 			&& (source.startsWith("?") || source.isEmpty())) {
 			if (source.length() <= 1) {
 				setSource(
-"<xd:def xmlns:xd='"+ XDConstants.XDEF32_NS_URI + "' root=\"a\" name=\"a\">\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF40_NS_URI + "' root=\"a\" name=\"a\">\n"+
 "  <a/>\n"+
 "</xd:def>", "String[1]");
 				return;

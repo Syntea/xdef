@@ -1,4 +1,4 @@
-package bugtest;
+package bugreports;
 
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDFactory;
@@ -25,12 +25,12 @@ public class Lubor extends XDTester {
 			}
 /*xx*/
 			xml = "<A c='c'><D d='d'/><X/></A>";
-			bugtest.data.A p = (bugtest.data.A)
+			bugreports.data.A p = (bugreports.data.A)
 				parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
 			xml = "<B c='c'><D d='d'/></B>";
-			bugtest.data.B q = (bugtest.data.B)
+			bugreports.data.B q = (bugreports.data.B)
 				parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, q.toXml());

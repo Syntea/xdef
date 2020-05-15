@@ -427,7 +427,20 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS013).toString("deu");
 			assertEq("Too many errors", s);
 		} catch (Exception ex) {fail(ex);}
-		new File(getTempDir()).delete();
+		try {// test report references in parameters
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
+			r = Report.error(SYS.SYS076, "&{#SYS069}", "&{#SYS091}");
+			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+				r.toString());
+			r = Report.error(SYS.SYS076, "&{0}&{#SYS069}", "&{1}&{#SYS091}");
+			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+				r.toString());
+			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
+			assertEq("E SYS076: Chyba URL Nebyly nalezeny žádné chyby: ;"
+				+ " Čtení za koncem souboru", r.toString());
+		} catch (Exception ex) {fail(ex);}
+
+		new File(getTempDir()).delete(); // clear temporary data
 	}
 
 	/** Run test

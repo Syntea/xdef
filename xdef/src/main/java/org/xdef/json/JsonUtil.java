@@ -591,6 +591,98 @@ public class JsonUtil extends StringParser {
 // JSON to string
 ////////////////////////////////////////////////////////////////////////////////
 
+	public static String sourceToJstring(final String s )  {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0;  i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '\\') {
+				if (++i >= s.length()) {
+					return s; // missing escape char (error)
+				}
+				switch (ch = s.charAt(i)) {
+					case '"':
+						ch = '"';
+						break;
+					case '\\':
+						ch = '\\';
+						break;
+					case '/':
+						ch = '/';
+						break;
+					case 'b':
+						ch = '\b';
+						break;
+					case 'f':
+						ch = '\f';
+						break;
+					case 'n':
+						ch = '\n';
+						break;
+					case 'r':
+						ch = '\r';
+						break;
+					case 't':
+						ch = '\t';
+						break;
+					case 'u':
+						try {
+							ch = (char) Short.parseShort(
+								s.substring(i+1, i+5), 16);
+							i += 4;
+							break;
+						} catch (Exception ex) {
+							return s; // incorrect UTF-8 char (error)
+						}
+					default: return s; // illegal escape char (error)
+				}
+			}
+			sb.append(ch);
+		}
+		return sb.toString();
+	}
+
+	public static String jstringToSource(final String str) {
+		StringBuilder sb = new StringBuilder();
+		char[] chars = str.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			char ch = chars[i];
+			switch (ch) {
+				case '\\':
+					sb.append("\\\\");
+					continue;
+				case '"':
+					sb.append("\\\"");
+					continue;
+				case '\b':
+					sb.append("\\b");
+					continue;
+				case '\f':
+					sb.append("\\f");
+					continue;
+				case '\n':
+					sb.append("\\n");
+					continue;
+				case '\r':
+					sb.append("\\r");
+					continue;
+				case '\t':
+					sb.append("\\t");
+					continue;
+				default:
+					if (ch >= ' ' && Character.isDefined(ch)) {
+						sb.append(ch);
+					} else { // create \\uxxxx
+						sb.append("\\u");
+						for (int x = 12; x >= 0; x -=4) {
+							sb.append("0123456789abcdef"
+								.charAt((ch >> x) & 0xf));
+						}
+					}
+			}
+		}
+		return sb.toString();
+	}
+
 	/** Add the string created from JSON jvalue object to StringBuilder.
 	 * @param obj JSON object to be created to String.
 	 * @return sb created string.
@@ -599,45 +691,7 @@ public class JsonUtil extends StringParser {
 		if (obj == null) {
 			return "null";
 		} else if (obj instanceof String) {
-			String s = (String) obj;
-			StringBuilder sb = new StringBuilder("\"");
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (Character.isDefined(c)) {
-					switch (c) {
-						case '\n':
-							sb.append("\\n");
-							break;
-						case '\r':
-							sb.append("\\r");
-							break;
-						case '\b':
-							sb.append("\\b");
-							break;
-						case '\t':
-							sb.append("\\t");
-							break;
-						case '\f':
-							sb.append("\\f");
-							break;
-						case '\\':
-							sb.append("\\\\");
-							break;
-						case '"':
-							sb.append("\\\"");
-							break;
-						default:
-							sb.append(c);
-					}
-				} else {
-					sb.append("\\u");
-					int x = c;
-					for (int j=12; j >= 0; j-= 4) {
-						sb.append("0123456789ABCDEF".charAt((x >> j) & 15));
-					}
-				}
-			}
-			return sb.append('"').toString();
+			return '"' + jstringToSource((String) obj) + '"';
 		}
 		return obj.toString();
 	}
@@ -747,11 +801,11 @@ public class JsonUtil extends StringParser {
 	@SuppressWarnings("unchecked")
 	public final static String toJsonString(final Object obj, boolean indent) {
 		StringBuilder sb = new StringBuilder();
-		String ind = indent ? "\n" : null;
+		String indt = indent ? "\n" : null;
 		if (obj instanceof List) {
-			arrayToJsonString((List) obj, ind, sb);
+			arrayToJsonString((List) obj, indt, sb);
 		} else if (obj instanceof Map) {
-			mapToJsonString((Map) obj, ind, sb);
+			mapToJsonString((Map) obj, indt, sb);
 		} else {
 			//Not JSON object &{0}{: }
 			throw new SRuntimeException(JSON.JSON011, obj);
@@ -1083,53 +1137,7 @@ public class JsonUtil extends StringParser {
 		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
 			&& src.charAt(src.length() - 1) != '\\')
 			? src.substring(1, src.length() - 1) : src;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0;  i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (ch == '\\') {
-				if (++i >= s.length()) {
-					return s; // missing escape char (error)
-				}
-				switch (ch = s.charAt(i)) {
-					case '"':
-						ch = '"';
-						break;
-					case '\\':
-						ch = '\\';
-						break;
-					case '/':
-						ch = '/';
-						break;
-					case 'b':
-						ch = '\b';
-						break;
-					case 'f':
-						ch = '\f';
-						break;
-					case 'n':
-						ch = '\n';
-						break;
-					case 'r':
-						ch = '\r';
-						break;
-					case 't':
-						ch = '\t';
-						break;
-					case 'u':
-						try {
-							ch = (char) Short.parseShort(
-								s.substring(i+1, i+5), 16);
-							i += 4;
-							break;
-						} catch (Exception ex) {
-							return src; // incorrect UTF-8 char (error)
-						}
-					default: return src; // illegal escape char (error)
-				}
-			}
-			sb.append(ch);
-		}
-		return sb.toString();
+		return sourceToJstring(s);
 	}
 
 	/** Create JSON string to XML from JSON source data.
@@ -1157,7 +1165,8 @@ public class JsonUtil extends StringParser {
 		}
 		boolean addQuot = source.indexOf(' ') >= 0 || source.indexOf('\t') >= 0
 			|| source.indexOf('\n') >= 0 || source.indexOf('\r') >= 0
-			|| source.indexOf('\f') >= 0 || source.indexOf('\b') >= 0;
+			|| source.indexOf('\f') >= 0 || source.indexOf('\b') >= 0
+			|| source.indexOf('\\') >= 0 || source.indexOf('"') >= 0;
 		if (!addQuot) {
 			char ch = source.charAt(0);
 			if (ch == '-' || ch >= '0' && ch <= '9') {
@@ -1168,43 +1177,7 @@ public class JsonUtil extends StringParser {
 			}
 		}
 		if (addQuot) {
-			StringBuilder sb = new StringBuilder();
-			for (char ch: source.toCharArray()) {
-				switch (ch) {
-					case '\\':
-						sb.append("\\\\");
-						continue;
-					case '"':
-						sb.append("\\\"");
-						continue;
-					case '\b':
-						sb.append("\\b");
-						continue;
-					case '\f':
-						sb.append("\\f");
-						continue;
-					case '\n':
-						sb.append("\\n");
-						continue;
-					case '\r':
-						sb.append("\\r");
-						continue;
-					case '\t':
-						sb.append("\\t");
-						continue;
-					default:
-						if (ch >= ' ' && Character.isDefined(ch)) {
-							sb.append(ch);
-						} else { // create \\uxxxx
-							sb.append("\\u");
-							for (int i = 12; i >= 0; i -=4) {
-								sb.append("0123456789abcdef"
-									.charAt((ch >> i) & 0xf));
-							}
-						}
-				}
-			}
-			String s = sb.toString();
+			String s = jstringToSource(source);
 			if (isAttr && s.equals(s.trim())) {
 				// For attributes it is not necessary to add quotes if the data
 				// does not contain leading or trailing white spaces,

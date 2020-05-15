@@ -125,10 +125,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		super("$root", null);
 		XPool xp = (XPool) new XBuilder(props).setExternals(extObjects)
 			.setSource(
-				"<xd:collection xmlns:xd='"+XDConstants.XDEF32_NS_URI+"'/>")
+				"<xd:collection xmlns:xd='"+XDConstants.XDEF40_NS_URI+"'/>")
 			.compileXD();
 		XDefinition xd = new XDefinition("#",
-			xp, XDConstants.XDEF32_NS_URI, null, XConstants.XD32);
+			xp, XDConstants.XDEF40_NS_URI, null, XConstants.XD40);
 		xp._xdefs.put("#", xd);
 		//create dummy X-definition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);
@@ -1226,7 +1226,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		Element e;
 		Class<?> yClass = xClass;
 		if (yClass == null) {
-			int ndx;
 			for (String s: getXDPool().getXComponents().keySet()) {
 				String className = getXDPool().getXComponents().get(s);
 				try {

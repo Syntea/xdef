@@ -1,4 +1,4 @@
-<xd:collection xmlns:xd = "http://www.xdef.org/xdef/4.0">
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1">
 
 <xd:component>
  %bind Jedna %with test.xdef.TestXComponents_Y04 %link Y04#Part/@One;

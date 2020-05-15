@@ -156,9 +156,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		final String actDefName,
 		final XDefinition xdef,
 		final byte xdVersion,
-		final Map<String, Integer> nsPrefixes) {
+		final Map<String, Integer> nsPrefixes,
+		final String xpath) {
 		String[] importLocal = xdef != null ? xdef._importLocal : null;
-		setSource(source, actDefName, importLocal, xdVersion);
+		setSource(source, actDefName, importLocal, xdVersion, xpath);
 		_g._nsPrefixes = nsPrefixes;
 	}
 
@@ -367,7 +368,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 			}
 			if ("ListOf".equals(name)) {
-				warning(XDEF.XDEF998,name, "list(type)");
+				_g.reportDeprecated(name, "list(type)");
 			}
 		}
 		classMethod();
@@ -1990,14 +1991,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				closeBlock();
 				return true;
 			case SEMICOLON_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
 				// empty statement
 				nextSymbol();
 				return true;
 			case INC_SYM:
 			case DEC_SYM: {
+				if (_wasReturn || _wasContinue || _wasBreak) {
+					error(XDEF.XDEF453); //Unreachable statement
+				}
 				int dx = addDebugInfo(false);
 				isIncStatement();
 				setDebugEndPosition(dx);
@@ -3008,20 +3009,19 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile lexicon specification
-	 * @param source source data.
-	 * @param defName the name of X-definition.
+	 * @param pnode PNode with source data.
 	 * @param lang language of lexicon.
 	 * @param deflt default language.
 	 * @param xp XDPool object.
 	 * @param languages List of languages in this lexicon.
 	 */
-	final void compileLexicon(final SBuffer source,
-		final String defName,
+	final void compileLexicon(final PNode pnode,
 		final SBuffer lang,
 		final SBuffer deflt,
 		final XDPool xp,
 		final List<Map<String,String>> languages) {
-		setSource(source, defName, null, XConstants.XD31, null);
+		setSource(pnode._value, pnode._xdef==null ? "": pnode._xdef.getName(),
+			pnode._xdef, pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
 		String language;
 		if (lang == null || (language = lang.getString().trim()).isEmpty()
 			|| !isJavaName(language)) {
@@ -3104,24 +3104,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile BNF grammar.
 	 * @param sName SBuffer with name of BNF grammar variable.
 	 * @param sExtends SBuffer with name of BNF grammar to be extended.
-	 * @param source SBuffer BNF grammar.
-	 * @param defName name of X-definition.
-	 * @param xdef X-definition.
+	 * @param pnode PNode with BNF grammar.
 	 * @param local true if it is in the declaration part with the local scope.
-	 * @param nsPrefixes table of name space prefixes.
 	 */
 	final void compileBNFGrammar(final SBuffer sName,
 		final SBuffer sExtends,
-		final SBuffer source,
-		final String defName,
-		final XDefinition xdef,
-		final boolean local,
-		final Map<String, Integer> nsPrefixes) { // namespace
-		setSource(sName,
-			defName,
-			xdef,
-			xdef==null ? XConstants.XD40 : xdef.getXDVersion(),
-			nsPrefixes);
+		final PNode pnode,
+		final boolean local) { // namespace
+		String defName = pnode._xdef == null ? null : pnode._xdef.getName();
+		setSource(sName, defName, pnode._xdef, pnode._xdVersion,
+			pnode._nsPrefixes, pnode._xpathPos);
 		String name = sName.getString();
 		if (local) {
 			name = defName+'#'+name;
@@ -3160,7 +3152,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 			}
 		}
-		SBuffer s = source == null ? new SBuffer("") : source;
+		SBuffer s = pnode._value == null ? new SBuffer("") : pnode._value;
 		int actAdr = _g._lastCodeIndex;
 		CodeI1 lastStop = _g.getLastStop();
 		DefBNFGrammar dd;
@@ -3355,8 +3347,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				errorAndSkip(XDEF.XDEF362, ";"); //Alias name expected
 				return;
 			}
-		} else if (_sym != SEMICOLON_SYM && _sym != END_SYM
-			&& _sym != NOCHAR) {
+		} else if (_sym != SEMICOLON_SYM && _sym != END_SYM && _sym != NOCHAR) {
 			errorAndSkip(XDEF.XDEF410, ";}", ";"); //'&{0}' expected
 		}
 		if (wasError) {
@@ -3684,23 +3675,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
-							//Type declaration format "{parse: ...}" is
-							//deprecated; please use just validation method call
-							if (_xdVersion == XConstants.XD31) {
-								warning(XDEF.XDEF997);
-							} else {
-								error(XDEF.XDEF997);
-							}
+							_g.reportDeprecated("parse:... in type declaration",
+								"validation method call");
 						}
 						return;
 					} else {
 						_sym = IDENTIFIER_SYM;
 						_idName = "parse";
 					}
-//				} else if (_xdVersion < XConstants.XD31) {//old X-def versions
-//					errorAndSkip(XDEF.XDEF410, //'&{0}' expected
-//						String.valueOf(END_SYM), "parse:");
-//					return;
 				}
 				if (varKind == 'X') {
 					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
@@ -4027,6 +4009,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeS1 result = new CodeS1(XD_STRING, (short) 0, start + 1, null);
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
+			if (_xdVersion > XConstants.XD31) {
+				//&{0}" is deprecated. Please use "&{1}" instead
+				_g.reportDeprecated("explicit type code",
+					"declaration of type method");
+			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
 			_g.addCode(call, 0);
@@ -4078,6 +4065,17 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				}
 				case XD_BOOLEAN:
+					if (_xdVersion > XConstants.XD31) {
+						XDValue val = _g.getLastCodeItem();
+						if (STARTSWITH != val.getCode()
+							&& CALL_OP != val.getCode()
+							&& PARSERESULT_MATCH != val.getCode()
+							&& !(val instanceof CodeExtMethod)) {
+							//&{0}" is deprecated. Please use "&{1}" instead
+							_g.reportDeprecated("expression in type check",
+								"union or declaration of a type method");
+						}
+					}
 					_g.genStop();
 					break;
 				case CompileBase.PARSEITEM_VALUE:

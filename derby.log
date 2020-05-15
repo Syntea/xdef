@@ -1,0 +1,19 @@
+----------------------------------------------------------------
+Mon Jan 06 15:34:32 CET 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-016f-7b47-5dc6-000044d93ad0 
+on database directory D:\cvs\DEV\java\masterSNAPSHOT\xdef\temp\derby-store\test with class loader sun.misc.Launcher$AppClassLoader@4aa298b7 
+Loaded from file:/C:/Users/trojan/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_191-b12
+user.dir=D:\cvs\DEV\java\masterSNAPSHOT\xdef
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Jan 06 15:34:33 CET 2020: Shutting down Derby engine
+----------------------------------------------------------------
+Mon Jan 06 15:34:33 CET 2020:
+Shutting down instance a816c00e-016f-7b47-5dc6-000044d93ad0 on database directory D:\cvs\DEV\java\masterSNAPSHOT\xdef\temp\derby-store\test with class loader sun.misc.Launcher$AppClassLoader@4aa298b7 
+----------------------------------------------------------------

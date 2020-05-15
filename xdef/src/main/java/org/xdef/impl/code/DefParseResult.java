@@ -510,8 +510,8 @@ public final class DefParseResult extends XDValueAbstract
 			System.arraycopy(mod, 0, modpars, 0, len - 1);
 		}
 		modpars[len-1] = _source == null ? "null"
-			: ( '"' + (_source.length() > 32 ? _source.substring(0,24)+"\"...\""
-				+ _source.substring(_source.length() - 3): _source) + '"');
+			: (_source.length() > 32 ? _source.substring(0,24)+" ... "
+				+ _source.substring(_source.length() - 3): _source);
 		error(registeredID, modpars);
 	}
 	@Override

@@ -1,4 +1,4 @@
-package bugtest;
+package bugreports;
 
 import java.io.StringWriter;
 import org.w3c.dom.Element;

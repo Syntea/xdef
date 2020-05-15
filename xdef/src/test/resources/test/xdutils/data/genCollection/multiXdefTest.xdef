@@ -18,7 +18,7 @@
         <hr:Person>
             <hr:Name>required string(1,30)</hr:Name>
             <hr:Surname>required string(1,50)</hr:Surname>
-            <hr:DateOfBirth>required datetime('dd.MM.yyyy')</hr:DateOfBirth>
+            <hr:DateOfBirth>required xdatetime('dd.MM.yyyy')</hr:DateOfBirth>
             <ext:Position xd:script="ref ext_2#ext:Position; occurs +" />
             <ext:Salary xd:script="ref ext_2#ext:Salary; occurs 1" />
         </hr:Person>

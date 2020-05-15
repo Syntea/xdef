@@ -9,13 +9,13 @@
   xmlns:w         = "http://www.xdef.org/xdef/4.0"
   xd:root         = "Ver2.0#XD2.0:def | Ver2.0#XD2.0:collection
                      | Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
-					 | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component 
+                     | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component
                      | Ver3.1#XD3.1:thesaurus
-                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection 
-					 | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component 
+                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection
+                     | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component
                      | Ver3.2#XD3.2:lexicon
-                     | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection 
-					 | Ver4.0#XD4.0:declaration | Ver4.0#XD4.0:component 
+                     | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection
+                     | Ver4.0#XD4.0:declaration | Ver4.0#XD4.0:component
                      | Ver4.0#XD4.0:lexicon"
   w:metaNamespace = "METAXD">
 
@@ -335,12 +335,12 @@ WhilBooleanExpression ::= $rule ParentalExpression
 
 SwitchStatement ::=
   "switch" $rule ParentalExpression "{" SwitchBlockStatementVariant* S? "}"
-  /* Result of ParentalExpression must be integer. Any variant may occur in the
-     switch statement only once. */
+  /* Result of ParentalExpression must be integer or string. A variant
+     may occur in the switch statement only once. */
 
 SwitchBlockStatementVariant ::=
    S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
-  /* Type  of ConstantExpression must be integer. */
+  /* Type of ConstantExpression must be integer or string. */
 
 DefaultVariant ::= "default" S? $rule
 
@@ -575,7 +575,7 @@ TypeDeclarationBody ::= TypeExplicitCode | Expression
      a boolean or a ParseResult value.*/
 
 TypeExplicitCode ::= /* only X-defintion version 2.0 */
-  ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}") 
+  ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}")
   | /* X-defintion version 3.1 and higher */ ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"

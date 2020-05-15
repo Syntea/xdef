@@ -226,6 +226,8 @@ public class XScriptParser extends StringParser
 	public byte _xmlVersion;
 	/** Saved position of last symbol (for error reports) */
 	private SPosition _lastSPos;
+	/** Actual XPath position. */
+	private String _xpath;
 
 	private static final String KEYWORDS = ";" +
 		// script command names
@@ -399,13 +401,15 @@ public class XScriptParser extends StringParser
 	 * @param source buffer with source code.
 	 * @param actDefName name of actually processed X-definition.
 	 * @param importLocal array of X-definition names to accept locals.
-	 * @param xdVersion version ID of XDefinition
+	 * @param xdVersion version ID of XDefinition.
 	 */
 	public final void setSource(final SBuffer source,
 		final String actDefName,
 		final String[] importLocal,
-		final byte xdVersion) {
+		final byte xdVersion,
+		final String xpath) {
 		_actDefName = actDefName;
+		_xpath = xpath;
 		_importLocals = importLocal != null ? importLocal
 			: actDefName == null ? new String[] {actDefName + '#'}
 			: new String[0];
@@ -1162,7 +1166,7 @@ public class XScriptParser extends StringParser
 						}
 						if (occ.minOccurs() == 0 && occ.maxOccurs() == 0) {
 							//'occurs 0' is not allowed - use 'illegal'
-							warning(XDEF.XDEF428);
+							lightError(XDEF.XDEF428);
 						}
 						nextSymbol();
 					} else {
@@ -1760,5 +1764,22 @@ public class XScriptParser extends StringParser
 		final long registeredID,
 		final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
+	}
+
+	@Override
+	/** Put report at position.
+	 * @param pos Source position.
+	 * @param report The report.
+	 */
+	public void putReport(final SPosition pos, final Report report) {
+		if (_xpath != null && !_xpath.isEmpty()) {
+			String s = report.getModification();
+			if (s == null || (s=s.trim()).isEmpty()) {
+				s = "";
+			}
+			s += "&{xpath}" + _xpath;
+			report.setModification(s);
+		}
+		pos.putReport(report, getReportWriter());
 	}
 }

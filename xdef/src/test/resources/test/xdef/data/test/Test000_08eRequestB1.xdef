@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="windows-1250"?>
 
 <xd:def
-   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
    xd:name      = "SoapPreRequestB1"
    xd:root      = "Envelope"
+   xd:classes   = "test.xdef.Test000"
    impl-version = "2.4.0.0"
    impl-date    = "28.9.2006" >
 

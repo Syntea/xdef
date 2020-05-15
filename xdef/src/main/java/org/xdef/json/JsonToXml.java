@@ -402,8 +402,8 @@ public class JsonToXml extends JsonUtil {
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();
-			String key = (String) entry.getKey();
 			Element ee = genValueW3C(entry.getValue(), e);
+			String key = jstringToSource((String) entry.getKey());
 			ee.setAttribute(J_KEYATTR, key);
 		}
 		return e;

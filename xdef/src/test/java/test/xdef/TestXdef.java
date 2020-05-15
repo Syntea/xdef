@@ -17,7 +17,6 @@ import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.msg.XDEF;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -350,12 +349,16 @@ public final class TestXdef extends XDTester {
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='a'>\n"+
+"<xd:declaration>\n"+
+" external method\n"+
+"    boolean test.xdef.TestXdef.testExt(XXElement, String, String, String);\n"+
+"</xd:declaration>\n"+
 "<a xd:script = \"\n"+
 "       finally {if (!testExt('a','b', 'c'))\n"+
 "                throw new Exception('Error!');}\">\n"+
 "</a>\n"+
 "</xd:def>";
-			parse(compile(xdef, getClass()), "a", "<a/>", reporter);
+			parse(compile(xdef), "a", "<a/>", reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(_myX, 0);
 			//no namespace prefix fro XDefinition
@@ -442,7 +445,10 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //check type expression
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
-"<A a=\"(eq('abc') | eq('xyz')) AAND string(2, 50);\"/>\n"+
+"<xd:declaration>\n"+
+" boolean x(){return (eq('abc') || eq('xyz')) AAND string(2, 50);}\n"+
+"</xd:declaration>\n"+
+"<A a=\"x()\"/>\n"+
 "</xd:def>";
 			xml = "<A a='abc'/>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
@@ -531,8 +537,8 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"enum('abc','defg')\">\n"+
-"    <x xd:script='occurs *'>enum('abc','defg')</x>\n"+
+"  <a a=\"tokens('abc|defg')\">\n"+
+"    <x xd:script='occurs *'>tokens('abc|defg')</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -543,9 +549,9 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> String x='abc',y='defg'; </xd:declaration>\n"+
-"  <a a=\"enum(x,y)\">\n"+
-"    <x xd:script='occurs *'>enum(x,y)</x>\n"+
+"  <xd:declaration> String x='abc|defg'; </xd:declaration>\n"+
+"  <a a=\"tokens(x)\">\n"+
+"    <x xd:script='occurs *'>tokens(x)</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -556,8 +562,8 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"enumi('aBc','DeF')\">\n"+
-"    <x xd:script='occurs *'>enumi('aBc','DeFg')</x>\n"+
+"  <a a=\"tokensi('aBc|DeF')\">\n"+
+"    <x xd:script='occurs *'>tokensi('aBc|DeFg')</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -758,9 +764,9 @@ public final class TestXdef extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> String x='aBc', y='DeFg'; </xd:declaration>\n"+
-"  <a a=\"enumi(x,y)\">\n"+
-"    <x xd:script='occurs *'>enumi(x,y)</x>\n"+
+"  <xd:declaration> String x='aBc|DeFg'; </xd:declaration>\n"+
+"  <a a=\"tokensi(x)\">\n"+
+"    <x xd:script='occurs *'>tokensi(x)</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -829,7 +835,7 @@ public final class TestXdef extends XDTester {
 "       xd:script  = \"finally myProc(1,0.5,'xxx')\">\n"+
 "   <File\n"+
 "           Name       = \"required string(1,256)\"\n"+
-"           Format     = \"required enum('TXT','XML','CTL')\"\n"+
+"           Format     = \"required tokens('TXT|XML|CTL')\"\n"+
 "           Kind       = \"required string(3,3)&amp;(eq('abc')|eq('xyz'))\"\n"+
 "           RecNum     = \"required num(8)\"\n"+
 "           xd:script= \"occurs 1..\">\n"+
@@ -886,18 +892,21 @@ public final class TestXdef extends XDTester {
 "   <y><fff attr=\"attr\"/></y> \n"+
 "   <z bttr=\"bttr\"/>\n"+
 "</Davka>";
-			el = parse(compile(xdef, getClass()), "abc", xml, reporter);
+			el = parse(compile(xdef), "abc", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq("2.0", el.getAttribute("Verze"));
 			assertEq(_myX, 3);
 			//test direct expression as type check
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a|b|c|d'>\n"+
-"  <xd:declaration> boolean x() { return !eq('hi'); } </xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"   boolean x() { return !eq('hi'); }\n"+
+"   boolean y() { return true; }\n"+
+"  </xd:declaration>\n"+
 "  <a p=\"'hi';\"/>\n"+
-"  <b p=\"!eq('hi');\"/>\n"+
-"  <c p=\"true;\"/>\n"+
-"  <d p=\"x\"/>\n"+
+"  <b p=\"x();\"/>\n"+
+"  <c p=\"y()\"/>\n"+
+"  <d p=\"x()\"/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a p='hi'/>", reporter);
@@ -914,6 +923,9 @@ public final class TestXdef extends XDTester {
 			assertTrue(reporter.errorWarnings());
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
+"<x:declaration>\n"+
+" external method void test.xdef.TestXdef.myCheck(XXElement,String,byte[]);\n"+
+"</x:declaration>\n"+
 "<a Ver     =\"fixed '1.2'\"\n"+
 "   Class   =''\n"+
 "   Recurr  ='?'\n"+
@@ -922,7 +934,7 @@ public final class TestXdef extends XDTester {
 "   <x:any x:attr='?' x:script='*; options moreElements, moreText'/>\n"+
 "</a>\n"+
 "</x:def>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml =
 "<a Ver='1.2' Class='Cls' Recurr='recurr'>"+
 "<any xx='nn'>"+
@@ -938,10 +950,14 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+" external method\n"+
+"    XDParseResult test.xdef.TestXdef.dateToLocal(XXData, XDValue[]);\n"+
+"</xd:declaration>\n"+
 "<a date=\"required dateToLocal('yyyyMMddTHHmmssZ','yyyyMMddTHHmmssZ')\"/>"+
 "</xd:def>";
 			xml = "<a date='20080225T000000Z'/>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			el = parse(xp, "", xml, reporter);
 			assertNoErrors(reporter);
 			s = el.getAttribute("date");
@@ -1138,9 +1154,9 @@ public final class TestXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
 "<xd:declaration>\n"+
-"  boolean myCheck() {boolean b = enum('A','B','C'); return b;}\n"+
+"  boolean myCheck() {boolean b = tokens('A|B|C'); return b;}\n"+
 "</xd:declaration>\n"+
-"<A a=\"?{boolean b = enum('A','B','C'); return b;}\" b = 'myCheck'/>\n"+
+"<A a=\"?myCheck\" b='myCheck'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A b='C'/>";
@@ -1296,20 +1312,23 @@ public final class TestXdef extends XDTester {
 "        throw new Exception('vyjimka1');\n"+
 "      }\n"+
 "  }\n"+
+"  boolean myCheckInt1(){\n"+
+"    try {return myCheckInt();}\n"+
+"    catch(Exception ex) {return error('vyjimka2');}\n"+
+"  }\n"+
 "</xd:declaration>\n"+
 "</xd:def>\n"+
 "\n"+
 "<xd:def name='abc' root='root | *'>\n"+
 "   <xd:declaration scope='global'>\n"+
 "     void myOut() {vystup.outln(child);}\n"+
-"     boolean myCheck(){return enum('A','B','C');}\n"+
+"     boolean myCheck(){return tokens('A|B|C');}\n"+
 "   </xd:declaration>\n"+
 "<root Verze=\"fixed verze\"\n"+
 "       PlatnostOd=\"optional xdatetime('d.M.yyyy H:mm');\n"+
 "                   onAbsence setText('11');\n"+
 "                   finally {outln(myString()); outln((String)@Kanal);}\"\n"+
-"       Kanal=\"required {try {return myCheckInt();} catch(Exception ex)\n"+
-"               {return error('vyjimka2');}}\"\n"+
+"       Kanal=\"required myCheckInt1();\"\n"+
 "       Seq=\"required myCheck()\"\n"+
 "       SeqRef=\"optional 'xyz'\"\n"+
 "       Date=\"required xdatetime('d.M.y')\"\n"+
@@ -1373,7 +1392,7 @@ public final class TestXdef extends XDTester {
 			FileReader fr = new FileReader(tempFile);
 			FileReportReader frep = new FileReportReader(fr, true);
 			Report r;
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			while ((r = frep.getReport()) != null) {
 				s = r.toString();
 				if (" ".equals(s)) {
@@ -1383,110 +1402,6 @@ public final class TestXdef extends XDTester {
 				}
 			}
 			frep.close();
-			fr.close();
-			new File(tempFile).delete();
-			assertEq("CHILD\nCHILD\n", sb.toString());
-			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name=\"a\">\n"+
-"<xd:declaration scope='global'>\n"+
-"   String child = 'CHILD';\n"+
-"   String verze = '2.0';\n"+
-"   Output vystup = new Output('" + tempFile + "','',false);\n"+
-"   Input vstup = new Input('" + tempFile + "');\n"+
-"   Output err = new Output('#System.err');\n"+
-"   int count = 0;\n"+
-"</xd:declaration>\n"+
-"<xd:declaration scope='global'>\n"+
-"  void testparams(String i, int j, String s) {\n"+
-"    outln('testparams ' + i + ',' + j + ',' + s);\n"+
-"  }\n"+
-"\n"+
-"  String myStringa() { return 'myString'; }\n"+
-"  String myString(String p) {return myStringa() + ' ' + p;}\n"+
-"  String myString() { return myString('xxx'); }\n"+
-"  boolean myCheckInt() {\n"+
-"      try {\n"+
-"        if (int()) {\n"+
-"          return true;\n"+
-"		 } else {\n"+
-"          throw new Exception('vyjimka');\n"+
-"        }\n"+
-"      } catch (Exception ex) {\n"+
-"        throw new Exception('vyjimka1');\n"+
-"      }\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"</xd:def>\n"+
-"\n"+
-"<xd:def name = \"abc\"\n"+
-"          root = \"root | *\">\n"+
-"   <xd:declaration scope='global'>\n"+
-"     void myOut() {vystup.outln(child);}\n"+
-"     boolean myCheck(){return enum('A','B','C');}\n"+
-"   </xd:declaration>\n"+
-"<root Verze=\"fixed verze\"\n"+
-"       PlatnostOd=\"optional xdatetime('d.M.yyyy H:mm');\n"+
-"                   onAbsence setText('11');\n"+
-"                   finally {outln(myString()); outln((String)@Kanal);}\"\n"+
-"       Kanal=\"required {try {return myCheckInt();} catch(Exception ex)\n"+
-"               {return error('vyjimka2');}}\"\n"+
-"       Seq=\"required myCheck()\"\n"+
-"       SeqRef=\"optional 'xyz'\"\n"+
-"       Date=\"required xdatetime('d.M.y')\"\n"+
-"       xd:attr=\"occurs 1.. int();\n"+
-"                   onTrue outln('&lt;' + getElementName() + ' '\n"+
-"                       + getAttrName() + '=\\'' + getText()+ '\\'/&gt;' );\n"+
-"                   finally testparams('a',1, getAttrName());\"\n"+
-"       xd:script= \"match (@Kanal == '123') AND @SeqRef\">\n"+
-"  <child xd:script=\"occurs 1..2; ref abc#child\"/>\n"+
-"  <xd:choice occurs= \"?\">\n"+
-"    <a xd:script=\"occurs 0..2\"/>\n"+
-"    <b xd:script=\"occurs 0..2\"/>\n"+
-"  </xd:choice>\n"+
-"  <end xd:script=\"occurs 0..\"/>\n"+
-"</root>\n"+
-"<child xd:script=\"finally {myOut();}\">\n"+
-"  optional string(1,100);\n"+
-"             onTrue setText('text');\n"+
-"             onFalse setText('empty');\n"+
-"             onAbsence setText('absence')\n"+
-"</child>\n"+
-"</xd:def>\n"+
-"</xd:collection>";
-			xp = compile(xdef);
-			xml =
-" <root\n"+
-"       Verze=\"2.0\"\n"+
-"       PlatnostOd=\"1.1.2000 20:00\"\n"+
-"       Kanal=\"123\"\n"+
-"       Seq=\"C\"\n"+
-"       EwqRef=\"1\"\n"+
-"       SeqRef=\"xyz\"\n"+
-"       any=\"12000\"\n"+
-"       Date=\"1.1.2000\">\n"+
-"   <child>\n"+
-"      toto je text...\n"+
-"   </child>\n"+
-"   <child/>\n"+
-"   <a/>\n"+
-"   <end/>\n"+
-" </root>";
-			strw = new StringWriter();
-			parse(xp, "abc", xml, null, strw, null, null);
-			assertEq("<root EwqRef='1'/>\n<root any='12000'/>\n"+
-				"myString xxx\n123\ntestparams a,1,EwqRef\n" +
-				"testparams a,1,any\n",
-				strw.toString());
-			strw.close();
-			fr = new FileReader(tempFile);
-			BufferedReader br = new BufferedReader(fr);
-			sb = new StringBuffer();
-			while ((s = br.readLine()) != null) {
-				sb.append(s);
-				sb.append('\n');
-			}
-			br.close();
 			fr.close();
 			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
@@ -2277,11 +2192,14 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef = //getXPos, getSourcePosdition
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+" external method void test.xdef.TestXdef.testPos(XXNode);\n"+
+"</xd:declaration>\n"+
 " <a a='string; onTrue testPos()'>\n"+
 "   string; onTrue testPos()\n"+
 " </a>\n"+
 "</xd:def>";
-			xd = compile(xdef, getClass()).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xd.xparse("<a\n a = '123'\n>\nx</a>", null);
 			xdef = //test getXDPosition, getXPos
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -2289,7 +2207,7 @@ public final class TestXdef extends XDTester {
 "   string; onTrue outln(getXDPosition() + '; ' + getXPos())\n"+
 " </a>\n"+
 "</xd:def>";
-			xd = compile(xdef, getClass()).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			strw = new StringWriter();
 			out = XDFactory.createXDOutput(strw, false);
 			xd.setStdOut(out);
@@ -2470,14 +2388,17 @@ public final class TestXdef extends XDTester {
 
 			xdef = // forced conversion of ParseResult to boolean
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a=\"optional {boolean b = eq('ho'); boolean c = b; return c;}\"/>\n"+
+"<xd:declaration>\n"+
+"  boolean myCheck() {boolean b = eq('ho'); boolean c = b; return c;}\n"+
+"</xd:declaration>\n"+
+"<a a=\"optional myCheck()\"/>\n"+
 "</xd:def>\n";
 			parse(xdef, "", "<a a='ho'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>boolean x(boolean b) {return b;}</xd:declaration>\n"+
-"<a a=\"optional {boolean b = x((boolean) eq('ho')); return b;}\"/>\n"+
+"<a a=\"optional x((boolean) eq('ho'));\"/>\n"+
 "</xd:def>\n";
 			parse(xdef, "", "<a a='ho'/>", reporter);
 			assertNoErrorwarnings(reporter);
@@ -3028,7 +2949,7 @@ public final class TestXdef extends XDTester {
 				xdef = SUtils.modifyFirst(xdef, "xdef/2.0'", "xdef/3.1'");
 				compile(xdef);
 			} catch (Exception ex) {
-				if(!ex.toString().contains("W XDEF997")) fail(ex);
+				if(!ex.toString().contains("W XDEF998")) fail(ex);
 			}
 //test version 20, 32 and 40 in collection
 			xp = compile(
@@ -3168,7 +3089,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {//test addComment, insertComment, addPI and insertPI
-			xdef = 
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=\"finally {\n"+
 "insertComment('a0');addComment('a1');insertPI('a','0');addPI('a','1')}\">\n"+
@@ -3194,7 +3115,7 @@ public final class TestXdef extends XDTester {
 "</a><!--a1--><?a 1?>");
 		} catch (Exception ex) {fail(ex);}
 		try {// test importLocal attribute
-			xdef = 
+			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
 "<xd:def name='A' root='A'>\n"+ // no importLocal
 "<xd:declaration scope='local'>\n"+

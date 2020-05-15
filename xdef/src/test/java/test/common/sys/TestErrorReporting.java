@@ -162,8 +162,6 @@ public class TestErrorReporting extends STester {
 			while ((report = reporter.getReport()) != null) {
 				printReport(report, source);
 			}
-//			reporter = (ArrayReporter) reporter.getReportReader();
-//			printToString(reporter, source);
 		} catch (Exception ex) {
 			fail(ex);
 		}

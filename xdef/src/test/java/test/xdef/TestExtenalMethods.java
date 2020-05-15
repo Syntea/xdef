@@ -16,6 +16,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.parsers.XSParseInt;
 import org.xdef.impl.parsers.XSParseName;
 import java.io.StringWriter;
+import java.util.Properties;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
 
@@ -144,6 +145,9 @@ public final class TestExtenalMethods extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		StringWriter strw;
 		String s;
+		Properties props = new Properties();
+		props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
+			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -394,11 +398,11 @@ public final class TestExtenalMethods extends XDTester {
 "m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
 "/>\n"+
 "</xd:def>";
-			xp = compile(xdef,
+			xp = XDFactory.compileXD(props, xdef,
 				TestExtenalMethods_1.class,	TestExtenalMethods_2.class);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xp = compile(xdef, TestExtenalMethods_2.class);
+			xp = XDFactory.compileXD(props, xdef, TestExtenalMethods_2.class);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -411,8 +415,7 @@ public final class TestExtenalMethods extends XDTester {
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "</xd:declaration>\n"+
 "  <Test xd:script=\"finally g1('Hello...')\" />\n"+
-"</xd:def>"
-			);
+"</xd:def>");
 			xdb.setClassLoader(new TestFailClassLoader());
 			xdb.compileXD();
 			fail("TestFailClassLoader had to cause an error that external "
@@ -509,7 +512,7 @@ public final class TestExtenalMethods extends XDTester {
 "     p4(4)+p5(5) + p8(b) + b.size()); p6(a); p7(); p7(1,'x',2,true);}\"/>\n"+
 "</xd:def>\n";
 			xml ="<a/>";
-			xp = compile(xdef, getClass());
+			xp = XDFactory.compileXD(props, xdef, getClass());
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
@@ -589,7 +592,7 @@ public final class TestExtenalMethods extends XDTester {
 "  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
 "        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
 "</xd:def>";
-			xp = compile(xdef, getClass());
+			xp = XDFactory.compileXD(props, xdef, getClass());
 			xml = "<a a = 'a'/>";
 			xd = xp.createXDDocument();
 			xd.setUserObject(this);

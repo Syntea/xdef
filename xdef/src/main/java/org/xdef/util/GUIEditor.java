@@ -52,7 +52,7 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef = // X-definition of project description
-"<xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" root=\"Project\">\n" +
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI + "\" root=\"Project\">\n" +
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
 "      <!-- Sources of X-definitions -->\n" +
@@ -99,12 +99,12 @@ public class GUIEditor extends GUIScreen {
 "  </Execute>\n" +
 "</xd:def>";
 		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-		props.setProperty(XDConstants.XDPROPERTY_DEBUG,
-			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
-		props.setProperty(XDConstants.XDPROPERTY_DISPLAY,
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
+//		props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
+//			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+//		props.setProperty(XDConstants.XDPROPERTY_DEBUG,
+//			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+//		props.setProperty(XDConstants.XDPROPERTY_DISPLAY,
+//			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
 		PROJECTXDPOOL = XDFactory.compileXD(props, xdef);
 	}
 
@@ -954,12 +954,15 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"HTML\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI
+	+ "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
-"  &lt;HEAD>&lt;TITLE> create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
+"  &lt;HEAD>&lt;TITLE>"
+		+ " create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
 "  &lt;BODY>\n" +
 "    &lt;h1>\n" +
-"      create \"Hello! Today is \" + now().toString(\"EEEE, d. MMMM GG yyyy, hh:mm a.\");\n" +
+"      create \"Hello! Today is"
+	+ " \"+now().toString(\"EEEE,d. MMMM GG yyyy, hh:mm a.\");\n" +
 "    &lt;/h1>\n" +
 "    &lt;h2>\n" +
 "      create \"This is an example of compose mode.\";\n" +
@@ -997,7 +1000,8 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF32_NS_URI + "\" name=\"test\" root=\"root\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI
+	+ "\" name=\"test\" root=\"root\">\n" +
 "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
 "      ? string(2,3);\n" +

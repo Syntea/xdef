@@ -404,7 +404,6 @@ public class XDParsedScript {
 					if (sp._sym == XScriptParser.CASE_SYM) {
 						sp.nextSymbol();
 						sb.append("case ").append(parseScriptSection(sp));
-						sb.append(parseScriptSection(sp));
 					} else if (sp._sym == XScriptParser.DEFAULT_SYM) {
 						sp.nextSymbol();
 						if (sp._sym == XScriptParser.COLON_SYM) {
@@ -626,7 +625,7 @@ public class XDParsedScript {
 		final String defName,
 		final boolean isValue) {
 		XScriptParser sp = new XScriptParser(XConstants.XML10);
-		sp.setSource(new SBuffer(script), defName, null, XConstants.XD32);
+		sp.setSource(new SBuffer(script), defName, null, XConstants.XD32, null);
 		return new XDParsedScript(sp, isValue);
 	}
 

@@ -36,14 +36,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 * </ul>
 	 */
 	protected byte _whiteSpace; //r replace, c collapse, 0 preserve
-	protected XDParser _base;
 	protected DefRegex[] _patterns;
 
 	protected XSAbstractParser() {}
-
-	final void setBase(XDParser item) {
-		_base = item;
-	}
 
 	public abstract void initParams();
 
@@ -92,6 +87,12 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (p.getSourceBuffer() == null) {
 			p.error(XDEF.XDEF805, parserName()); //Parsed value in &{0} is null
 			return;
+		}
+		XDParser base = getBase();
+		if (base != null) {
+			int i = p.getIndex();
+			base.check(xnode, p);
+			p.setBufIndex(i);
 		}
 		parseObject(xnode, p);
 		if (p.matches()) {
@@ -355,6 +356,10 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
 		addNamedParams(map);
+		XDParser base = getBase();
+		if (base != null) {
+			map.setXDNamedItem("base", base);
+		}
 		long i;
 		if ((i = getTotalDigits()) >= 0) {
 			map.setXDNamedItem("totalDigits", new DefLong(i));
@@ -508,12 +513,12 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (!parserName().equals(x.parserName())) {
 			return false;
 		}
-		if (_base == null) {
-			if (x._base != null) {
+		if (getBase() == null) {
+			if (x.getBase() != null) {
 				return false;
 			}
 		} else {
-			if (!_base.equals(x._base)) {
+			if (!getBase().equals(x.getBase())) {
 				return false;
 			}
 		}

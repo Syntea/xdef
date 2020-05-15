@@ -53,12 +53,12 @@ public class TestGenDTD extends XDTester {
 "<xd:def xd:name=\"abc\"\n" +
 "          xd:root=\"abc#Data | aaa#log\">\n" +
 "<Data Verze=\"fixed '2.0'\"\n" +
-"       PlatnostOd=\"optional datetime('d.M.yyyy HH:mm:ss');\n" +
+"       PlatnostOd=\"optional xdatetime('d.M.yyyy HH:mm:ss');\n" +
 "                    onTrue set('11')\"\n" +
 "       Kanal=\"required; onAbsence setText('123')\"\n" +
 "       Seq=\"required int\"\n" +
 "       SeqRef=\"optional int\"\n" +
-"       Date=\"required datetime('d.M.yyyy')\">\n" +
+"       Date=\"required xdatetime('d.M.yyyy')\">\n" +
 "   <xd:mixed>\n" +
 "   <File Name=\"required string(256)\"\n" +
 "         Format=\"required enum('TXT','XML','CTL')\"\n" +

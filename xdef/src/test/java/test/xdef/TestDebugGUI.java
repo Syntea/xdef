@@ -34,20 +34,20 @@ public final class TestDebugGUI extends XDTester {
 		XDOutput out;
 		Element el;
 		String s;
-
+		String json;
 		// set external editor
 //		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR,
 //"xdplugin.XdPlugin; C:/Program Files/Oxygen XML Editor 20/oxygen20.1.exe");
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef.display
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef_display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
 			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
-		setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef.debug
+		setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef_debug
 //			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
 			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef.warnings
-//			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
-			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef_warnings
+			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
+//			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
 		try {
 			// XScript breakpoints
 			xdef =
@@ -111,12 +111,12 @@ public final class TestDebugGUI extends XDTester {
 			// XPos breakpoints
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
-"<a a = \"required;\">\n"+
-"  <b x:script='*'/>\n"+
-"</a>\n"+
-" <x:declaration>\n"+
-"  String s = 'a';\n"+
-" </x:declaration>\n"+
+"  <a a = \"required;\">\n"+
+"    <b x:script='*'/>\n"+
+"  </a>\n"+
+"  <x:declaration>\n"+
+"    String s = 'a';\n"+
+"  </x:declaration>\n"+
 "</x:def>";
 			xp = compile(xdef);
 			// create mode
@@ -143,7 +143,7 @@ public final class TestDebugGUI extends XDTester {
 "      RegexResult r = x.getMatcher('DCBA');\n"+
 "      trace(r.toString());\n"+
 "      }\" />\n"+
-"</a>\n"+
+" </a>\n"+
 "</xd:def>";
 			xml = "<a a='1'> <b/></a>";
 			xp = compile(xdef);
@@ -196,22 +196,22 @@ public final class TestDebugGUI extends XDTester {
 "       impl-version = '1.0.0'\n"+
 "       impl-date    = '1.11.2000'\n"+
 "       script       = 'options ignoreEmptyAttributes' >\n"+
-"<x:declaration>\n"+
-"   String $verze = '1.23';\n"+
-"   String $x = '???';\n"+
-"  void $myPause(String i, int j, Datetime k) {\n"+
-"    pause(i);\n"+
-"  }\n"+
-"</x:declaration>\n"+
-"<a>\n"+
-"<b x:script = 'occurs 1..'\n"+
-"   a = \"required eq('b'); onFalse" +
-	" pause('Error setText to b!');\n"+
-"       finally {\n"+
-"           String s = getImplProperty('version');\n"+
-"           trace('getImplProperty(\\'version\\'): ' + s);\n"+
+"  <x:declaration>\n"+
+"    String $verze = '1.23';\n"+
+"    String $x = '???';\n"+
+"    void $myPause(String i, int j, Datetime k) {\n"+
+"      pause(i);\n"+
+"    }\n"+
+"  </x:declaration>\n"+
+"  <a>\n"+
+"    <b x:script = 'occurs 1..'\n"+
+"       a = \"required eq('b'); onFalse" +
+"           pause('Error setText to b!');\n"+
+"           finally {\n"+
+"             String s = getImplProperty('version');\n"+
+"             trace('getImplProperty(\\'version\\'): ' + s);\n"+
 	"       }\" />\n"+
-"</a>\n"+
+"  </a>\n"+
 "</x:def>\n"+
 "<x:def name         = 'b'\n"+
 "       impl-version = '2.0.0'\n"+
@@ -233,7 +233,7 @@ public final class TestDebugGUI extends XDTester {
 "       impl-version = '1.0.0'\n"+
 "       impl-date    = '1.11.2000'\n"+
 "       script       = 'options ignoreEmptyAttributes' >\n"+
-"<a a = \"required eq('a');\n"+
+"  <a a = \"required eq('a');\n"+
 "         finally {\n"+
 "           String s = getImplProperty('version');\n"+
 "           trace(s);\n"+
@@ -289,6 +289,61 @@ public final class TestDebugGUI extends XDTester {
 				}
 			}
 		} catch (Exception ex) {fail(ex);}
+		try {// JSON
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"JSON\" root=\"a\">\n"+
+"<xd:json name=\"a\" >\n" +
+"{ \"personnel\": { \"person\": \n" +
+"      [ $script: \"occurs 1..*\",\n" +
+"        { $script: \"occurs 1..*; ref B\" }\n" +
+"      ]\n" +
+"  }\n" +
+"}\n" +
+"</xd:json>\n" +
+"<xd:json name=\"B\" >\n" +
+"{ \"id\": \"string()\",\n" +
+"   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
+"   \"email\": \"email();\",\n" +
+"   \"link\": { $script: \"ref C\" }\n" +
+"}\n" +
+"</xd:json>\n" +
+"<xd:json name=\"C\" >\n" +
+"{  $oneOf: \"optional;\",\n" +
+"   \"manager\": \"jstring()\",\n" +
+"   \"subordinates\":[ \"* jstring();\" ]\n" +
+"}\n" +
+"</xd:json>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("JSON");
+			json =
+"{ \"personnel\": { \"person\":\n" +
+"    [\n" +
+"      { \"id\": \"Big.Boss\",\n" +
+"        \"name\": { \"family\": \"Boss\",\n" +
+"        \"given\": \"Big\" },\n" +
+"        \"email\": \"chief@oxygenxml.com\",\n" +
+"        \"link\": { \"subordinates\": [\"one.worker\", \"two.worker\" ] }\n" +
+"      },\n" +
+"      { \"id\": \"one.worker\",\n" +
+"        \"name\": { \"family\": \"Worker\", \"given\": \"One\" },\n" +
+"        \"email\": \"one@oxygenxml.com\",\n" +
+"        \"link\": {\"manager\": \"Big.Boss\"}\n" +
+"      },\n" +
+"      { \"id\": \"two.worker\",\n" +
+"        \"name\": { \"family\": \"Worker\", \"given\": \"Two\" },\n" +
+"        \"email\": \"two@oxygenxml.com\",\n" +
+"        \"link\": {\"manager\": \"Big.Boss\"}\n" +
+"      }\n" +
+"    ]\n" +
+"  }\n" +
+"}";
+			xd.jparse(json, reporter);
+			if (reporter.errors()) {
+				System.out.println(reporter);
+			}
+		} catch (Exception ex) {fail(ex);}
+
 		resetTester();
 	}
 

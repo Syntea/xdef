@@ -124,6 +124,10 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+	public final String getProperty(final String key) {
+		return	_props.getProperty(key.replace('.', '_'));
+	}
+
 	public final void setGenObjFile(final boolean genObj) {_genObj = genObj;}
 
 	public final boolean getGenObjFile() {return _genObj;}
@@ -229,7 +233,7 @@ public abstract class XDTester extends STester {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			XDFactory.writeXDPool(baos, xp);
-			ByteArrayInputStream bais = 
+			ByteArrayInputStream bais =
 				new ByteArrayInputStream(baos.toByteArray());
 			XDPool xp1 = XDFactory.readXDPool(bais);
 			baos = new ByteArrayOutputStream();

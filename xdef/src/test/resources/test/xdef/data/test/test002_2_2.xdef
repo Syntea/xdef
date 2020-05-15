@@ -8,6 +8,11 @@
    impl-version = "2.3.2.0"
    impl-date    = "05.09.2006" >
 
+<xd:declaration scope = "global">
+  external method void test.xdef.Test002.setErr(XXNode, long);
+  external method String test.xdef.Test002.modelVozidlaNeuveden();
+</xd:declaration>
+
 <SouborP1A
        Davka            = "required"
        ZeDne            = "required" >

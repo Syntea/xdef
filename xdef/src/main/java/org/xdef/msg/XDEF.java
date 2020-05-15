@@ -179,11 +179,11 @@ public interface XDEF {
 	public static final long XDEF310 = 31159025750L;
 	/** Only one JSON simple value allowed{#SYS000} */
 	public static final long XDEF311 = 31159025751L;
-	/** Illegal JSON XML mode &amp;{0} */
+	/** Illegal JSON XML mode &amp;{0}{#SYS000} */
 	public static final long XDEF313 = 31159025752L;
-	/** XML element models are not allowed in X-definition */
+	/** XML element models are not allowed in X-definition{#SYS000} */
 	public static final long XDEF314 = 31159025753L;
-	/** JSON root model&amp;{0}{ of "}{" } is missing in X-definition */
+	/** JSON root model&amp;{0}{ of "}{" } is missing in X-definition&amp;{#SYS000} */
 	public static final long XDEF315 = 31159025754L;
 	/** The name of JSON model "&amp;{0}" can't contain ":"{#SYS000} */
 	public static final long XDEF316 = 31159025755L;
@@ -672,14 +672,12 @@ public interface XDEF {
 	public static final long XDEF905 = 31159025995L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
 	public static final long XDEF906 = 31159025996L;
-	/** Type declaration format "{parse: ...}" is deprecated; please use just validation method call&amp;{#SYS000} */
-	public static final long XDEF997 = 31159025997L;
 	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025998L;
+	public static final long XDEF998 = 31159025997L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025999L;
+	public static final long XDEF_DESCRIPTION = 31159025998L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159026000L;
+	public static final long XDEF_LANGUAGE = 31159025999L;
 
 	/** Default language. */
 	public static final String XDEF = "eng";

@@ -26,14 +26,15 @@ public class TestAllFull {
 			log = null;
 		}
 		XDTester[] tests = new XDTester[]{
-			new TestValidate(),
 			new TestDTDToXdef(),
 			new TestGenCollection(),
+			new TestGenDTD(),
+			new TestGenXdef(),
+			new TestPrettyXdef(),
+			new TestValidate(),
+			new TestXDefUtils(),
 			new TestXd2XsdConv(),
 			new TestXsd2XdConv(),
-			new TestPrettyXdef(),
-			new TestXDefUtils(),
-			new TestGenDTD(),
 		};
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF31_NS_URI;

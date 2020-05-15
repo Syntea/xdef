@@ -417,8 +417,10 @@ final class CompileXScript extends CompileStatement {
 			return;
 		}
 		if (sc._onIllegalAttr != -1 && !sc.isIllegal() && sc._match < 0) {
-			//Not allowed script for '&{0}'
-			warning(XDEF.XDEF494, "onIllegalAttr");
+			if (_g._chkWarnings) {
+				//Not allowed script for '&{0}'
+				warning(XDEF.XDEF494, "onIllegalAttr");
+			}
 		}
 		if (sc._check == -1) {
 			if (sc._onTrue != -1) {
@@ -429,7 +431,9 @@ final class CompileXScript extends CompileStatement {
 				_g._sp  = -1;
 			}
 			if (sc._onFalse != -1) {
-				warning(XDEF.XDEF114); //Action 'OnFalse' never invoked
+				if (_g._chkWarnings) {
+					warning(XDEF.XDEF114); //Action 'OnFalse' never invoked
+				}
 			}
 		}
 	}
@@ -1014,8 +1018,11 @@ final class CompileXScript extends CompileStatement {
 		}
 		if (occ.isIgnore() || occ.isIllegal()) {
 			if (sc.getInitCode() >= 0 || sc.getComposeCode() >= 0) {
-				//Not allowed script for '&{0}'
-				warning(XDEF.XDEF494, (occ.isIgnore() ? "ignore" : "illegal"));
+				if (_g._chkWarnings) {
+					//Not allowed script for '&{0}'
+					warning(XDEF.XDEF494,
+						(occ.isIgnore() ? "ignore" : "illegal"));
+				}
 			}
 		}
 		sc.setOccurrence(occ);
@@ -1260,9 +1267,11 @@ final class CompileXScript extends CompileStatement {
 					result._cdata = 'T';
 					if ("textcontent".equals(result.getName())
 						&& result.maxOccurs() > 1) {
-						//Maximum occurrence in "xd:textcontent" attribute
-						// can not be higher then 1
-						warning(XDEF.XDEF535);
+						if (_g._chkWarnings) {
+							//Maximum occurrence in "xd:textcontent" attribute
+							// can not be higher then 1
+							warning(XDEF.XDEF535);
+						}
 						result.setOccurrence(result.minOccurs(), 1);
 					}
 				} else {

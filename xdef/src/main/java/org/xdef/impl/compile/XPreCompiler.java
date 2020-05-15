@@ -87,12 +87,14 @@ public class XPreCompiler implements PreCompiler {
 	 * @param reporter The reporter.
 	 * @param extClasses The array with external classes declared by user.
 	 * @param displayMode display mode: 0 .. false, 1 .. true, 2 .. errors
+	 * @param chkWarnings if false warnings are generated as error.
 	 * @param debugMode debug mode flag.
 	 * @param ignoreUnresolvedExternals ignore unresolved externals flag.
 	 */
 	public XPreCompiler(final ReportWriter reporter,
 		final Class<?>[] extClasses,
 		final byte displayMode,
+		final boolean chkWarnings,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 		_displayMode = displayMode;
@@ -101,7 +103,7 @@ public class XPreCompiler implements PreCompiler {
 		//"xmlns",
 		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
 		_codeGenerator = new CompileCode(extClasses,
-			2, debugMode, ignoreUnresolvedExternals);
+			2, chkWarnings, debugMode, ignoreUnresolvedExternals);
 		_codeGenerator._namespaceURIs.add("."); //dummy namespace
 		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
@@ -164,11 +166,11 @@ public class XPreCompiler implements PreCompiler {
 	 * @param pnode node to be checked.
 	 */
 	public final void reportNotAllowedAttrs(final PNode pnode) {
-		for (PAttr attr: pnode._attrs) {
+		for (PAttr attr: pnode.getAttrs()) {
 			 //Attribute '&{0}' not allowed here
 			error(attr._value, XDEF.XDEF254, attr._name);
 		}
-		pnode._attrs.clear();
+		pnode.getAttrs().clear();
 	}
 
 	@Override
@@ -180,15 +182,15 @@ public class XPreCompiler implements PreCompiler {
 	 * @param localName The local name of attribute.
 	 * @param required if true the attribute is required.
 	 * @param remove if true the attribute is removed.
-	 * @return the object SParsedData with the attribute value or null.
+	 * @return PAttr object or null.
 	 */
-	public final SBuffer getXdefAttr(final PNode pnode,
+	public final PAttr getXdefAttr(final PNode pnode,
 		final String localName,
 		final boolean required,
 		final boolean remove) {
 		PAttr attr = null;
 		PAttr xattr = null;
-		for (PAttr a : pnode._attrs) {
+		for (PAttr a : pnode.getAttrs()) {
 			if (localName.equals(a._localName) && a._nsindex <= 0) {
 				if (a._nsindex == 0) {
 					xattr = a;
@@ -212,9 +214,9 @@ public class XPreCompiler implements PreCompiler {
 			return null;
 		} else {
 			if (remove) {
-				pnode._attrs.remove(xattr);
+				pnode.removeAttr(xattr);
 			}
-			return xattr._value;
+			return xattr;
 		}
 	}
 
@@ -229,19 +231,19 @@ public class XPreCompiler implements PreCompiler {
 	final String getNameAttr(final PNode pnode,
 		final boolean required,
 		final boolean remove) {
-		SBuffer sval = getXdefAttr(pnode, "name", required, remove);
-		if (sval == null) {
+		PAttr pa = getXdefAttr(pnode, "name", required, remove);
+		if (pa == null) {
 			// if required do not return null!
 			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
 		}
-		String name = sval.getString();
+		String name = pa._value.getString().trim();
 		if (name.length() == 0) {
 			//Incorrect name
-			error(sval, XDEF.XDEF258);
+			error(pa._value, XDEF.XDEF258);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
 		if (!XPreCompiler.chkDefName(name, pnode._xmlVersion)) {
-			error(sval, XDEF.XDEF258); //Incorrect name
+			error(pa._value, XDEF.XDEF258); //Incorrect name
 			return "__UNKNOWN_INCORRECT_NAME_";
 		}
 		return name;
@@ -377,8 +379,12 @@ public class XPreCompiler implements PreCompiler {
 	/** Process include list from header of X-definition. */
 	void processIncludeList(PNode pnode) {
 		/** let's check some attributes of X-definition.*/
-		SBuffer include = getXdefAttr(pnode, "include", false, true);
-		processIncludeList(include, pnode._name.getSysId(), getReportWriter());
+		/** let's check some attributes of X-definition.*/
+		PAttr pa = getXdefAttr(pnode, "include", false, true);
+		if (pa != null) {
+			processIncludeList(pa._value,
+				pnode._name.getSysId(), getReportWriter());
+		}
 	}
 
 	/** Process list of file specifications and/or URLs. Result of list is added
@@ -509,7 +515,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param pnode PNode to be tested.
 	 */
 	public final void chkNestedElements(final PNode pnode) {
-		for (PNode p: pnode._childNodes) {
+		for (PNode p: pnode.getChildNodes()) {
 			if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName)
 				|| !"macro".equals(p._localName)) {
 				//Nested child elements are not allowed here
@@ -523,14 +529,14 @@ public class XPreCompiler implements PreCompiler {
 			chkNestedElements(macro);
 			Map<String, String> params = new LinkedHashMap<String, String>();
 			String def = null;
-			for (PAttr val : macro._attrs) {
-				if ("#def".equals(val._name)) {
-					def = val.getValue().getString();
-					macro._attrs.remove(val);
+			for (PAttr patt : macro.getAttrs()) {
+				if ("#def".equals(patt._name)) {
+					def = patt.getValue().getString();
+					macro.removeAttr(patt);
 					break;
 				}
 			}
-			for (PAttr val : macro._attrs) {
+			for (PAttr val : macro.getAttrs()) {
 				params.put(val._name, val._value.getString());
 			}
 			XScriptMacro m = new XScriptMacro(
@@ -565,7 +571,7 @@ public class XPreCompiler implements PreCompiler {
 		}
 		List<PNode> macros = new ArrayList<PNode>();
 		for (PNode xd: _listDecl) {
-			for (PNode pnode : xd._childNodes) {
+			for (PNode pnode : xd.getChildNodes()) {
 				if (pnode._localName.equals("macro")) {
 					macros.add(pnode);
 				}
@@ -573,25 +579,29 @@ public class XPreCompiler implements PreCompiler {
 		}
 		for (PNode xd: _xdefPNodes) {
 			String defName = xd._xdef.getName();
-			PAttr defAttr = new PAttr("#def", new SBuffer(defName), "", -1);
-			defAttr._localName = "#def";
-			for (PNode pnode : xd._childNodes) {
+			for (PNode pnode : xd.getChildNodes()) {
 				if (pnode._nsindex == 0) {
 					if (pnode._localName.equals("macro")) {
-						pnode._attrs.add(defAttr);
+						PAttr defAttr =
+							new PAttr("#def", new SBuffer(defName), "", -1);
+						defAttr._localName = "#def";
+						pnode.setAttr(defAttr);
 						macros.add(pnode);
 					} else if (pnode._localName.equals("declaration")) {
 						boolean local = false;
-						for (PAttr pa : pnode._attrs) {
+						for (PAttr pa : pnode.getAttrs()) {
 							if ("scope".equals(pa._localName)) {
 								local = "local".equals(pa._value.getString());
 							}
 						}
-						for (PNode x : pnode._childNodes) {
+						for (PNode x : pnode.getChildNodes()) {
 							if (x._nsindex==0 && "macro".equals(x._localName)) {
 								if (local) {
 									// local mactro
-									x._attrs.add(defAttr);
+									PAttr defAttr = new PAttr("#def",
+										new SBuffer(defName), "", -1);
+									defAttr._localName = "#def";
+									x.setAttr(defAttr);
 								}
 								macros.add(x);
 							}
@@ -697,6 +707,12 @@ public class XPreCompiler implements PreCompiler {
 	final byte getDispalyMode() {return _displayMode;}
 
 	@Override
+	/** Get switch if the parser will check warnings as errors.
+	 * @return true if the parser checks warnings as errors.
+	 */
+	final public boolean isChkWarnings() {return _codeGenerator._chkWarnings;}
+
+	@Override
 	/** Put fatal error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
@@ -733,7 +749,7 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Put error message.
+	/** Put warning message ( or error if warning flag is false).
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
