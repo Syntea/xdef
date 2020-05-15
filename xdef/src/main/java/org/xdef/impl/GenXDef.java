@@ -39,24 +39,24 @@ public class GenXDef implements XDConstants {
 	/** Prevent create an instance of this class.*/
 	private GenXDef() {}
 
-	private static class XAtt {
+	private final static class XAttr {
 		String _type;
 		boolean _required;
-		XAtt(String type) {_type = type; _required = true;}
+		XAttr(String type) {_type = type; _required = true;}
 		@Override
 		public String toString() {
 			return (_required ? "required " : "optional ") + _type;
 		}
 	}
 
-	private static class XModel {final private String _name;
+	private final static class XModel {final private String _name;
 		final private String _nsuri;
-		private final Map<String,XAtt> _atts = new LinkedHashMap<String,XAtt>();
+		private final Map<String,XAttr> _atts=new LinkedHashMap<String,XAttr>();
 		private final List<XModel> _models = new ArrayList<XModel>();
+		private final Set<String> _options = new HashSet<String>();
 		private String _value;
 		private int _min = 1;
 		private int _max = 1;
-		private boolean _emptyAtts;
 		private boolean _mixed;
 
 		XModel(final String name, final String nsuri) {_name=name;_nsuri=nsuri;}
@@ -66,11 +66,11 @@ public class GenXDef implements XDConstants {
 			result._value = _value;
 			result._min =  _min;
 			result._max =  _max;
-			result._emptyAtts =  _emptyAtts;
+			result._options.addAll(_options);
 			result._mixed =  _mixed;
 			for (String name : _atts.keySet()) {
-				final XAtt attx = _atts.get(name);
-				final XAtt atty = new XAtt(attx._type);
+				final XAttr attx = _atts.get(name);
+				final XAttr atty = new XAttr(attx._type);
 				atty._required = attx._required;
 				result._atts.put(name, atty);
 			}
@@ -83,7 +83,7 @@ public class GenXDef implements XDConstants {
 		XModel(final String text) {
 			_name = "$text";
 			_nsuri = null;
-			_value = genType(text);
+			_value = genType(this, text);
 		}
 
 		XModel(final Element elem) {
@@ -95,11 +95,12 @@ public class GenXDef implements XDConstants {
 				final Node att = nnm.item(i);
 				String s = att.getNodeName();
 				if (s.startsWith("xmlns")) {
-					_atts.put(s, new XAtt(att.getNodeValue()));
+					_atts.put(s, new XAttr(att.getNodeValue()));
 				} else {
 					String t = att.getNamespaceURI();
 					s = (t != null ? "{"+ t + "}" : "") + s;
-					_atts.put(s, new XAtt(genType(att.getNodeValue().trim())));
+					_atts.put(s,
+						new XAttr(genType(this, att.getNodeValue().trim())));
 				}
 			}
 			final NodeList nl = elem.getChildNodes();
@@ -153,6 +154,7 @@ public class GenXDef implements XDConstants {
 							}
 							i = 0;
 						}
+						y._options.addAll(x._options);
 					}
 					final Set<String> names = new HashSet<String>();
 					for (int i = 0; i < _models.size(); i++) {
@@ -163,6 +165,7 @@ public class GenXDef implements XDConstants {
 								if(_models.get(j)._name.equals(name)) {
 									XModel z = _models.get(j)
 										.compareModel(_models.get(i));
+									z._options.addAll(_models.get(i)._options);
 									if (z != null) {
 										z._max++;
 										_models.set(j, z);
@@ -180,11 +183,20 @@ public class GenXDef implements XDConstants {
 
 		private void mergeAttrs(final XModel x) {
 			for (String name: _atts.keySet()){
-				final XAtt yattr = _atts.get(name);
-				final XAtt xattr = x._atts.get(name);
+				final XAttr yattr = _atts.get(name);
+				final XAttr xattr = x._atts.get(name);
 				if (xattr != null) { //has attribute
 					if (!yattr._type.equals(xattr._type)) {
-						yattr._type = "string()";
+						if (xattr._type.startsWith("string(")
+							&& yattr._type.startsWith("string(")) {
+							if (!"string()".equals(xattr._type)) {
+								yattr._type = xattr._type;
+							} else {
+								xattr._type = yattr._type;
+							}
+						} else {
+							yattr._type = "string()";
+						}
 					}
 					if (!xattr._required) {
 						yattr._required = false;
@@ -194,10 +206,10 @@ public class GenXDef implements XDConstants {
 				}
 			}
 			for (String name: x._atts.keySet()){
-				XAtt yattr = _atts.get(name);
+				XAttr yattr = _atts.get(name);
 				if (yattr == null) {
-					final XAtt xattr = x._atts.get(name);
-					yattr = new XAtt(xattr._type);
+					final XAttr xattr = x._atts.get(name);
+					yattr = new XAttr(xattr._type);
 					yattr._required = false;
 					_atts.put(name, yattr);
 				}
@@ -211,6 +223,9 @@ public class GenXDef implements XDConstants {
 			}
 			// names are equal
 			final XModel y = this.cloneModel();
+			y._options.addAll(x._options);
+			x._options.addAll(y._options);
+			_options.addAll(x._options);
 			y.mergeAttrs(x);
 			if (y._max < x._max) {
 				y._max = x._max;
@@ -290,44 +305,26 @@ public class GenXDef implements XDConstants {
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param source XML element.
-	 * @return String with X-definition.
-	 * @throws Exception if an error occurs.
-	 */
-	public static final Element genXdef(final String source) throws Exception {
-		return genXdef(KXmlUtils.parseXml(source).getDocumentElement());
-	}
-
-	/** Generate X-definition from a document to given output stream writer.
 	 * @param elem XML element.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
 	public static final Element genXdef(final Element elem) {
-		Element newElem = (Element) elem.cloneNode(true);
-		newElem.normalize();
-		KXmlUtils.trimTextNodes(newElem, true);
-		return genXDefinition(newElem);
-	}
-
-	/** Creates a new instance of GenX-definition.
-	 * @param data Object from which we'll create a X-definition.
-	 * @return element with X-definition.
-	 */
-	public static final Element genXDefinition(final Element data) {
-		Element elem = (Element) data.cloneNode(true);
-		canonizeXML(elem);
-		Element rootDef = elem.getOwnerDocument().getImplementation()
+		Element el = (Element) elem.cloneNode(true);
+		el.normalize();
+		KXmlUtils.trimTextNodes(el, true);
+		canonizeXML(el);
+		Element rootDef = el.getOwnerDocument().getImplementation()
 			.createDocument(XDEF40_NS_URI, XDEF_NS_PREFIX + ":def", null)
 			.getDocumentElement();
 		rootDef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF40_NS_URI);
-		final String s = elem.getNodeName();
+		final String s = el.getNodeName();
 		rootDef.setAttribute("root", s);
-		if (elem.getNamespaceURI() != null) {
+		if (el.getNamespaceURI() != null) {
 			int i = s.indexOf(':');
 			String t = i > 0 ? "xmlns:" + s.substring(0, i) : "xmlns";
-			rootDef.setAttribute(t, elem.getNamespaceURI());
+			rootDef.setAttribute(t, el.getNamespaceURI());
 		}
-		XModel x = new XModel(elem);
+		XModel x = new XModel(el);
 		x.optimize();
 		genModel(rootDef, x);
 		return rootDef;
@@ -373,9 +370,10 @@ public class GenXDef implements XDConstants {
 		}
 	}
 
-	private static String genType(final String data) {
-		if (data.length() == 0) {
-			return ""; //TODO option Accept empty attributes?
+	private static String genType(final XModel model, final String data) {
+		if (data.isEmpty()) {
+			model._options.add("acceptEmptyAttributes");
+			return "string()";
 		}
 		if (new XDParseDateYMDhms().check(null, data).matches()) {
 			return "dateYMDhms()";
@@ -479,7 +477,7 @@ public class GenXDef implements XDConstants {
 				}
 			}
 		}
-		return "string()";
+		return data.trim().isEmpty() ? "string(0,*)" : "string()";
 	}
 
 
@@ -507,17 +505,33 @@ public class GenXDef implements XDConstants {
 			return;
 		}
 		Element model = createElement(parent, x._nsuri, x._name);
+		String s = "";
 		if (x._max > 1) {
-			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script",
-				"occurs " + (x._min == 0 ? "*;" : "+;"));
+			s = "occurs " + (x._min == 0 ? "*;" : "+;");
 		} else {
 			if (x._min == 0) {
-				model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script",
-					"occurs ?;");
+				s = "occurs ?";
 			}
 		}
+		if (!x._options.isEmpty()) {
+			String t = null;
+			for (String y : x._options) {
+				if (t == null) {
+					t = "options " + y;
+				} else {
+					t += "," + y;
+				}
+			}
+			if (!s.isEmpty()) {
+				s += "; ";
+			}
+			s += t;
+		}
+		if (!s.isEmpty()) {
+			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script", s);
+		}
 		for (String name: x._atts.keySet()){
-			final XAtt att = x._atts.get(name);
+			final XAttr att = x._atts.get(name);
 			if (name.startsWith("xmlns")) {
 				model.setAttribute(name, att._type);
 			} else {
@@ -544,5 +558,4 @@ public class GenXDef implements XDConstants {
 			genModel(model, y);
 		}
 	}
-
 }

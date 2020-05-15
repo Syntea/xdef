@@ -16,14 +16,6 @@ public class GenXDefinition {
 	/** Prevent create an instance of this class.*/
 	private GenXDefinition() {}
 
-	/** Creates a new instance of GenX-definition.
-	 * @param data Object from which we'll create a X-definition.
-	 * @return element with X-definition.
-	 */
-	public static final Element genXDefinition(final Element data) {
-		return GenXDef.genXDefinition(data);
-	}
-
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param source XML element.
 	 * @return String with X-definition.

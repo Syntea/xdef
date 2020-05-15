@@ -6,8 +6,8 @@ import org.testng.Assert;
 import org.testng.TestNG;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.xdef.XDFactory;
 import org.xdef.impl.code.DefXQueryExpr;
-
 
 /** Execute all tests fast.
  * @author Vaclav Trojan
@@ -60,7 +60,6 @@ public class TestAll {
 	@SuppressWarnings("unused")
 	private static void mainTest() {
 		beforeTests();
-
 		testCommon();
 		testXdef();
 		testXDUtils();
@@ -68,6 +67,7 @@ public class TestAll {
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
+		System.out.println("Build: " + XDFactory.getXDVersion());
 		//mainTest();
 		mainTestNG();
 	}

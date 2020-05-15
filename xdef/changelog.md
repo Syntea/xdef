@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.0.2, release-date 2020-05-15
+- improved generation of X-definition from XML data.
+
 # Version 40.0.1, release-date 2020-05-15
 * improved error reporting.
 * corrected bug when a JSON string value contains some of escape characters.
