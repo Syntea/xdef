@@ -3,9 +3,11 @@
     xmlns             ="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-    
-    child.project.url.inherit.append.path="false"
 >
+    <!-- nasledujici atribut je potreba pro nemodifikovani URL, ale windows-maven na tom pada ("neznamy atribut") 
+        ./@child.project.url.inherit.append.path="false"
+    -->
+
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>org.xdef</groupId>
@@ -36,10 +38,11 @@
             <roles><role>leader</role></roles>
         </developer>
     </developers>
-    <scm
-        child.scm.url.inherit.append.path       ="false"
-        child.scm.connection.inherit.append.path="false"
-    >
+    <scm>
+        <!-- nasledujici atributy jsou potreba pro nemodifikovani URL, connection, ale windows-maven na tom pada ("neznamy atribut") 
+            child.scm.url.inherit.append.path       ="false"
+            child.scm.connection.inherit.append.path="false"
+        -->
         <url>https://github.com/Syntea/xdef</url>
         <connection>scm:git:git@github.com:Syntea/xdef.git</connection>
     </scm>
