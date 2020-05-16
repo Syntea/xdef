@@ -28,6 +28,7 @@ import org.xdef.impl.parsers.XSParseGMonthDay;
 import org.xdef.impl.parsers.XSParseGYear;
 import org.xdef.impl.parsers.XSParseGYearMonth;
 import org.xdef.impl.parsers.XSParseInt;
+import org.xdef.impl.parsers.XSParseInteger;
 import org.xdef.impl.parsers.XSParseLong;
 import org.xdef.impl.parsers.XSParseTime;
 
@@ -194,6 +195,32 @@ public class GenXDef implements XDConstants {
 							} else {
 								xattr._type = yattr._type;
 							}
+						} else if (xattr._type.equals("dateYMDhms()")
+							&& yattr._type.equals("long()")) {
+							yattr._type = "long()";
+						} else if (xattr._type.equals("int()")
+							&& (yattr._type.equals("long()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("int()")
+							&& yattr._type.equals("integer()")) {
+								yattr._type = "integer()";
+						} else if (xattr._type.equals("long()")
+							&& (yattr._type.equals("int()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("long()")
+							&& (yattr._type.equals("int()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("long()")
+							&& yattr._type.equals("integer()")) {
+								yattr._type = "integer()";
+						} else if (xattr._type.equals("integer()")
+							 && (yattr._type.equals("int()")
+								|| yattr._type.equals("long()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "integer()";
 						} else {
 							yattr._type = "string()";
 						}
@@ -375,14 +402,21 @@ public class GenXDef implements XDConstants {
 			model._options.add("acceptEmptyAttributes");
 			return "string()";
 		}
-		if (new XDParseDateYMDhms().check(null, data).matches()) {
-			return "dateYMDhms()";
-		}
 		if (new XSParseInt().check(null, data).matches()) {
-			return "int()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "int()";
+		}
+		if ((data.trim().startsWith("19") || data.trim().startsWith("20"))
+			&& new XDParseDateYMDhms().check(null, data).matches()) {
+			return "dateYMDhms()"; //"yyyyMMddHHmmss"
 		}
 		if (new XSParseLong().check(null, data).matches()) {
-			return "long()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "long()";
+		}
+		if (new XSParseInteger().check(null, data).matches()) {
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "integer()";
 		}
 		if (new XSParseDecimal().check(null, data).matches()) {
 			return "decimal()";
@@ -526,6 +560,9 @@ public class GenXDef implements XDConstants {
 				s += "; ";
 			}
 			s += t;
+		}
+		if (s.isEmpty() && !"xd:def".equals(parent.getNodeName())) {
+			s = "occurs 1";
 		}
 		if (!s.isEmpty()) {
 			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script", s);
