@@ -526,8 +526,6 @@ public class CanonizeSource {
 			while ((line = in.readLine()) != null) { //process all lines
 				//cut final white spaces
 				int len = line.length();
-//				int i = len;
-//				int k;
 				//remove final white spaces.
 				while((len > 0)
 					&& line.charAt(len - 1) <= ' ') {
@@ -545,8 +543,7 @@ public class CanonizeSource {
 				sb.append('\n'); //add new line
 			}
 		} catch (Exception ex) {
-			throw new Exception("Can't read "+ name + " template file:\n"
-				+ info);
+			throw new Exception("Can't read "+name+" template file:\n"+info);
 		}
 		String result = sb.toString().trim();
 		if (result.length() == 0) {
@@ -670,11 +667,7 @@ public class CanonizeSource {
 			//read tail template file
 			cs._tail = updateInfo(tail, datetime, user, "tail", charset);
 			if (cs._tail != null && cs._tail.length() > 0) {
-				if (genCR) {
-					cs._tail = "\r\n\r\n" + cs._tail;
-				} else  {
-					cs._tail = "\n\n" + cs._tail;
-				}
+				cs._tail = (genCR ? "\r\n\r\n" :"\n\n") + cs._tail;
 			}
 			cs._tailKeep = tailKeep;
 		} catch (Exception ex) {
