@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashMap;
 import javax.xml.namespace.QName;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -32,25 +33,28 @@ import org.xdef.impl.parsers.XSParseInt;
 import org.xdef.impl.parsers.XSParseInteger;
 import org.xdef.impl.parsers.XSParseLong;
 import org.xdef.impl.parsers.XSParseTime;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.SRuntimeException;
 
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
 public class GenXDef implements XDConstants {
-
-	/** Prevent create an instance of this class.*/
+	/** Prevent user to create an instance of this class.*/
 	private GenXDef() {}
 
+	/** Model of attribute. */
 	private final static class XAttr {
 		String _type;
 		boolean _required;
 		XAttr(String type) {_type = type; _required = true;}
 		@Override
 		public String toString() {
-			return (_required ? "required " : "optional ") + _type;
+			return (_required ? "" : "optional ") + _type;
 		}
 	}
 
+	/** Model of element or text node. */
 	private final static class XModel {
 		final private QName _qname;
 		private final Map<QName,XAttr> _atts = new LinkedHashMap<QName,XAttr>();
@@ -63,7 +67,7 @@ public class GenXDef implements XDConstants {
 
 		XModel(final QName qname) {_qname = qname;}
 
-		XModel(final String name, final String uri) {this(getQName(name, uri));}
+		XModel(final String name, final String uri) {this(getQName(name,uri));}
 
 		private XModel cloneModel() {
 			final XModel result = new XModel(_qname);
@@ -97,7 +101,7 @@ public class GenXDef implements XDConstants {
 				final Node att = nnm.item(i);
 				QName qname = getQName(att);
 				if (att.getNodeName().startsWith("xmlns")) {
-					_atts.put(qname, new XAttr(att.getNodeValue()));
+					_atts.put(qname, new XAttr(att.getNodeValue().trim()));
 				} else {
 					_atts.put(qname,
 						new XAttr(genType(this, att.getNodeValue().trim())));
@@ -326,20 +330,35 @@ public class GenXDef implements XDConstants {
 		}
 	}
 
+	private static QName checkQName(final QName qname) {
+		String uri = qname.getNamespaceURI();
+		if (XDEF40_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri)
+			|| XDEF31_NS_URI.equals(uri) || XDEF20_NS_URI.equals(uri)) {
+			//Namespace of X-definition is not allowed in XML input data
+			throw new SRuntimeException(XDEF.XDEF882);
+		}
+		if (XDEF_NS_PREFIX.equals(qname.getPrefix())) {
+			//Prefix "xd" is not allowed in XML input data
+			throw new SRuntimeException(XDEF.XDEF881);
+		}
+		return qname;
+	}
+
 	private static QName getQName(final String name, final String uri) {
 		if (uri == null || uri.isEmpty()) {
-			return new QName(name);
+			return checkQName(new QName(name));
 		} else {
 			int ndx = name.indexOf(':');
 			String prefix = ndx > 0 ? name.substring(0, ndx) : "";
 			String localName = ndx > 0 ? name.substring(ndx + 1) : name;
-			return new QName(uri, localName, prefix);
+			return checkQName(new QName(uri, localName, prefix));
 		}
 	}
 
 	private static QName getQName(Node node) {
-		return new QName(node.getNamespaceURI(), node.getLocalName(),
+		QName qn = new QName(node.getNamespaceURI(), node.getLocalName(),
 			node.getPrefix() == null ? "" : node.getPrefix());
+		return checkQName(qn);
 	}
 
 	private static String getNameFromQName(final QName name) {
@@ -360,21 +379,22 @@ public class GenXDef implements XDConstants {
 		el.normalize();
 		KXmlUtils.trimTextNodes(el, true);
 		canonizeXML(el);
-		Element rootDef = el.getOwnerDocument().getImplementation()
-			.createDocument(XDEF40_NS_URI, XDEF_NS_PREFIX + ":def", null)
-			.getDocumentElement();
-		rootDef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF40_NS_URI);
+		Document doc = el.getOwnerDocument();
+		doc = doc.getImplementation().createDocument(
+			XDEF40_NS_URI, XDEF_NS_PREFIX + ":def", doc.getDoctype());
+		Element xdef = doc.getDocumentElement();
+		xdef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF40_NS_URI);
 		final String s = el.getNodeName();
-		rootDef.setAttribute("root", s);
 		if (el.getNamespaceURI() != null) {
 			int i = s.indexOf(':');
 			String t = i > 0 ? "xmlns:" + s.substring(0, i) : "xmlns";
-			rootDef.setAttribute(t, el.getNamespaceURI());
+			xdef.setAttribute(t, el.getNamespaceURI());
 		}
+		xdef.setAttribute("root", s);
 		XModel x = new XModel(el);
 		x.optimize();
-		genModel(rootDef, x);
-		return rootDef;
+		genModel(xdef, x);
+		return xdef;
 	}
 
 	/** Remove all comments, processing instructions, entity references and
@@ -565,7 +585,7 @@ public class GenXDef implements XDConstants {
 			s = "occurs " + (x._min == 0 ? "*;" : "+;");
 		} else {
 			if (x._min == 0) {
-				s = "occurs ?";
+				s = "occurs ?;";
 			}
 		}
 		if (!x._options.isEmpty()) {
@@ -577,19 +597,22 @@ public class GenXDef implements XDConstants {
 					t += "," + y;
 				}
 			}
-			if (!s.isEmpty()) {
-				s += "; ";
-			}
-			s += t;
+			s += t + ';';
 		}
 		if (s.isEmpty() && !"xd:def".equals(parent.getNodeName())) {
-			s = "occurs 1";
+			s = "occurs 1;";
 		}
 		if (!s.isEmpty()) {
 			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script", s);
 		}
+		XAttr att = x._atts.get(new QName(XDEF40_NS_URI, "script"));
+		if (att != null) { // to be the first attribute
+			model.setAttributeNS(XDEF40_NS_URI,
+				XDEF_NS_PREFIX + ":script", att._type);
+			x._atts.remove(att);
+		}
 		for (QName name: x._atts.keySet()) {
-			final XAttr att = x._atts.get(name);
+			att = x._atts.get(name);
 			String qn = getNameFromQName(name);
 			String uri = name.getNamespaceURI();
 			if (qn.startsWith("xmlns")) {

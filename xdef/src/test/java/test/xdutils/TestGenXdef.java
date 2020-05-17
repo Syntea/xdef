@@ -1,6 +1,7 @@
 package test.xdutils;
 
 import org.w3c.dom.Element;
+import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.util.GenXDefinition;
@@ -21,8 +22,12 @@ public class TestGenXdef extends XDTester {
 			fail("Data directory is missing, test canceled");
 			return;
 		}
+		Element el;
+		String xdef;
+		String xml;
+		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
-		for (String xml: new String[] {
+		for (String x: new String[] {
 "<a/>\n",
 "<a>\n"+
 "  <b c='20190521214531'/>\n"+
@@ -124,12 +129,38 @@ dataDir + "../../data/schema/D1A.xml",
 dataDir + "../../data/schema/L1A.xml",
 		}) {
 			try {
-				Element el = GenXDefinition.genXdef(xml);
-				String xdef = KXmlUtils.nodeToString(el, true);
-				XDPool xp = compile(xdef);
-				assertEq(xml, parse(xp, "", xml, reporter));
+				el = GenXDefinition.genXdef(x);
+				xdef = KXmlUtils.nodeToString(el, true);
+				xp = compile(xdef);
+				assertEq(x, parse(xp, "", x, reporter));
 				assertNoErrors(reporter);
-			} catch (Exception ex) {
+			} catch (Exception ex) {fail(ex);}
+		}
+		try {
+			xml =
+"<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n" +
+"  <xd:Y xd:y=\"z\"> x </xd:Y>\n" +
+"  <xd:Y y=\"z\"/>\n" +
+"  <xd:Y/>\n" +
+"</xd:X>";
+			el = GenXDefinition.genXdef(xml);
+			fail("Exception not thrown");
+		} catch (Exception ex) {
+			if (!ex.getMessage().contains("XDEF881")) {
+				fail(ex);
+			}
+		}
+		try {
+			xml =
+"<d:X xmlns:d=\""+ XDConstants.XDEF20_NS_URI + "\" d:x=\"123\">\n" +
+"  <d:Y d:y=\"z\"> x </d:Y>\n" +
+"  <d:Y y=\"z\"/>\n" +
+"  <d:Y/>\n" +
+"</d:X>";
+			el = GenXDefinition.genXdef(xml);
+			fail("Exception not thrown");
+		} catch (Exception ex) {
+			if (!ex.getMessage().contains("XDEF882")) {
 				fail(ex);
 			}
 		}
