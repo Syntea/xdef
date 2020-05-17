@@ -29,9 +29,9 @@
                         IC="12345678"
                         StatPrislusnost="CR">
                             <Adresa
-                                Ulice="Krï¿½tkï¿½"
+                                Ulice="Krátká"
                                 CisloDomu="1"
-                                Obec="Kotï¿½hï¿½lky"
+                                Obec="Kotìhùlky"
                                 Okres="Nicov"
                                 Stat="CR"
                                 PSC="123456" />
@@ -65,9 +65,9 @@
                         IC="12345678"
                         StatPrislusnost="CR">
                             <Adresa
-                                Ulice="Krï¿½tkï¿½"
+                                Ulice="Krátká"
                                 CisloDomu="1"
-                                Obec="Kotï¿½hï¿½lky"
+                                Obec="Kotìhúlky"
                                 Okres="Nicov"
                                 Stat="CR"
                                 PSC="123456"/>
@@ -101,9 +101,9 @@
                         IC="12345678"
                         StatPrislusnost="CR">
                             <Adresa
-                                Ulice="Krï¿½tkï¿½"
+                                Ulice="Krátká"
                                 CisloDomu="1"
-                                Obec="Kotï¿½hï¿½lky"
+                                Obec="Kotìhùlky"
                                 Okres="Nicov"
                                 Stat="CR"
                                 PSC="123456"/>

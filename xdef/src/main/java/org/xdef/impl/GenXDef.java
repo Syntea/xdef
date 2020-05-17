@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashMap;
+import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -28,6 +29,7 @@ import org.xdef.impl.parsers.XSParseGMonthDay;
 import org.xdef.impl.parsers.XSParseGYear;
 import org.xdef.impl.parsers.XSParseGYearMonth;
 import org.xdef.impl.parsers.XSParseInt;
+import org.xdef.impl.parsers.XSParseInteger;
 import org.xdef.impl.parsers.XSParseLong;
 import org.xdef.impl.parsers.XSParseTime;
 
@@ -49,9 +51,9 @@ public class GenXDef implements XDConstants {
 		}
 	}
 
-	private final static class XModel {final private String _name;
-		final private String _nsuri;
-		private final Map<String,XAttr> _atts=new LinkedHashMap<String,XAttr>();
+	private final static class XModel {
+		final private QName _qname;
+		private final Map<QName,XAttr> _atts = new LinkedHashMap<QName,XAttr>();
 		private final List<XModel> _models = new ArrayList<XModel>();
 		private final Set<String> _options = new HashSet<String>();
 		private String _value;
@@ -59,16 +61,18 @@ public class GenXDef implements XDConstants {
 		private int _max = 1;
 		private boolean _mixed;
 
-		XModel(final String name, final String nsuri) {_name=name;_nsuri=nsuri;}
+		XModel(final QName qname) {_qname = qname;}
+
+		XModel(final String name, final String uri) {this(getQName(name, uri));}
 
 		private XModel cloneModel() {
-			final XModel result = new XModel(_name, _nsuri);
+			final XModel result = new XModel(_qname);
 			result._value = _value;
 			result._min =  _min;
 			result._max =  _max;
 			result._options.addAll(_options);
 			result._mixed =  _mixed;
-			for (String name : _atts.keySet()) {
+			for (QName name : _atts.keySet()) {
 				final XAttr attx = _atts.get(name);
 				final XAttr atty = new XAttr(attx._type);
 				atty._required = attx._required;
@@ -81,25 +85,21 @@ public class GenXDef implements XDConstants {
 		}
 
 		XModel(final String text) {
-			_name = "$text";
-			_nsuri = null;
+			this(new QName("#text"));
 			_value = genType(this, text);
 		}
 
 		XModel(final Element elem) {
-			_name = elem.getNodeName();
-			_nsuri = elem.getNamespaceURI();
+			this(getQName(elem));
 			_value = null;
 			NamedNodeMap nnm = elem.getAttributes();
 			for (int i = 0; nnm != null && i < nnm.getLength(); i++) {
 				final Node att = nnm.item(i);
-				String s = att.getNodeName();
-				if (s.startsWith("xmlns")) {
-					_atts.put(s, new XAttr(att.getNodeValue()));
+				QName qname = getQName(att);
+				if (att.getNodeName().startsWith("xmlns")) {
+					_atts.put(qname, new XAttr(att.getNodeValue()));
 				} else {
-					String t = att.getNamespaceURI();
-					s = (t != null ? "{"+ t + "}" : "") + s;
-					_atts.put(s,
+					_atts.put(qname,
 						new XAttr(genType(this, att.getNodeValue().trim())));
 				}
 			}
@@ -137,9 +137,7 @@ public class GenXDef implements XDConstants {
 						XModel y = _models.get(i);
 						XModel z = y.compareModel(x);
 						int min = 0;
-						if (z == null) {
-							y._min = 0;
-						} else {
+						if (z != null) {
 							int max = ++z._max;
 							while (z != null && i > 0) {
 								_models.remove(i);
@@ -156,13 +154,13 @@ public class GenXDef implements XDConstants {
 						}
 						y._options.addAll(x._options);
 					}
-					final Set<String> names = new HashSet<String>();
+					final Set<QName> names = new HashSet<QName>();
 					for (int i = 0; i < _models.size(); i++) {
-						final String name;
-						if (!names.add(name = _models.get(i)._name)) {
+						final QName name;
+						if (!names.add(name = _models.get(i)._qname)) {
 							_mixed = true;
 							for (int j = 0; j < i; j++) {
-								if(_models.get(j)._name.equals(name)) {
+								if(_models.get(j)._qname.equals(name)) {
 									XModel z = _models.get(j)
 										.compareModel(_models.get(i));
 									z._options.addAll(_models.get(i)._options);
@@ -182,7 +180,7 @@ public class GenXDef implements XDConstants {
 		}
 
 		private void mergeAttrs(final XModel x) {
-			for (String name: _atts.keySet()){
+			for (QName name: _atts.keySet()){
 				final XAttr yattr = _atts.get(name);
 				final XAttr xattr = x._atts.get(name);
 				if (xattr != null) { //has attribute
@@ -194,6 +192,32 @@ public class GenXDef implements XDConstants {
 							} else {
 								xattr._type = yattr._type;
 							}
+						} else if (xattr._type.equals("dateYMDhms()")
+							&& yattr._type.equals("long()")) {
+							yattr._type = "long()";
+						} else if (xattr._type.equals("int()")
+							&& (yattr._type.equals("long()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("int()")
+							&& yattr._type.equals("integer()")) {
+								yattr._type = "integer()";
+						} else if (xattr._type.equals("long()")
+							&& (yattr._type.equals("int()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("long()")
+							&& (yattr._type.equals("int()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "long()";
+						} else if (xattr._type.equals("long()")
+							&& yattr._type.equals("integer()")) {
+								yattr._type = "integer()";
+						} else if (xattr._type.equals("integer()")
+							 && (yattr._type.equals("int()")
+								|| yattr._type.equals("long()")
+								|| yattr._type.equals("dateYMDhms()"))) {
+								yattr._type = "integer()";
 						} else {
 							yattr._type = "string()";
 						}
@@ -205,7 +229,7 @@ public class GenXDef implements XDConstants {
 					yattr._required = false;
 				}
 			}
-			for (String name: x._atts.keySet()){
+			for (QName name: x._atts.keySet()){
 				XAttr yattr = _atts.get(name);
 				if (yattr == null) {
 					final XAttr xattr = x._atts.get(name);
@@ -217,8 +241,7 @@ public class GenXDef implements XDConstants {
 		}
 
 		private XModel compareModel(final XModel x) {
-			if (!_name.equals(x._name) || _nsuri!=null
-				&& !_nsuri.equals(x._nsuri)	|| _nsuri==null && _nsuri!=null) {
+			if (!_qname.equals(x._qname)) {
 				return null; // names not equal
 			}
 			// names are equal
@@ -298,10 +321,34 @@ public class GenXDef implements XDConstants {
 
 		@Override
 		public String toString() {
-			return (_nsuri != null ? '{' + _nsuri + '}' : "")
-				+ _name + " " + _min + ".." + _max
+			return _qname + " " + _min + ".." + _max
 				+ "; size=" + _models.size();
 		}
+	}
+
+	private static QName getQName(final String name, final String uri) {
+		if (uri == null || uri.isEmpty()) {
+			return new QName(name);
+		} else {
+			int ndx = name.indexOf(':');
+			String prefix = ndx > 0 ? name.substring(0, ndx) : "";
+			String localName = ndx > 0 ? name.substring(ndx + 1) : name;
+			return new QName(uri, localName, prefix);
+		}
+	}
+
+	private static QName getQName(Node node) {
+		return new QName(node.getNamespaceURI(), node.getLocalName(),
+			node.getPrefix() == null ? "" : node.getPrefix());
+	}
+
+	private static String getNameFromQName(final QName name) {
+		String uri = name.getNamespaceURI();
+		String prefix = name.getPrefix();
+		if (uri==null || uri.isEmpty() || prefix==null || prefix.isEmpty()) {
+			return name.getLocalPart();
+		}
+		return prefix + ':' + name.getLocalPart();
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
@@ -375,14 +422,21 @@ public class GenXDef implements XDConstants {
 			model._options.add("acceptEmptyAttributes");
 			return "string()";
 		}
-		if (new XDParseDateYMDhms().check(null, data).matches()) {
-			return "dateYMDhms()";
-		}
 		if (new XSParseInt().check(null, data).matches()) {
-			return "int()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "int()";
+		}
+		if ((data.trim().startsWith("19") || data.trim().startsWith("20"))
+			&& new XDParseDateYMDhms().check(null, data).matches()) {
+			return "dateYMDhms()"; //"yyyyMMddHHmmss"
 		}
 		if (new XSParseLong().check(null, data).matches()) {
-			return "long()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "long()";
+		}
+		if (new XSParseInteger().check(null, data).matches()) {
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
+				? "num()" : "integer()";
 		}
 		if (new XSParseDecimal().check(null, data).matches()) {
 			return "decimal()";
@@ -498,13 +552,14 @@ public class GenXDef implements XDConstants {
 	 * @param x model from which a model is generated.
 	 */
 	private static void genModel(final Element parent, final XModel x) {
-		if ("$text".equals(x._name)) {
+		if (new QName("#text").equals(x._qname)) {
 			String val = (x._min == 0 ? "optional " : "required ")
 				+ x._value + ";";
 			appendText(parent, val);
 			return;
 		}
-		Element model = createElement(parent, x._nsuri, x._name);
+		String qname = getNameFromQName(x._qname);
+		Element model = createElement(parent, x._qname.getNamespaceURI(),qname);
 		String s = "";
 		if (x._max > 1) {
 			s = "occurs " + (x._min == 0 ? "*;" : "+;");
@@ -527,23 +582,26 @@ public class GenXDef implements XDConstants {
 			}
 			s += t;
 		}
+		if (s.isEmpty() && !"xd:def".equals(parent.getNodeName())) {
+			s = "occurs 1";
+		}
 		if (!s.isEmpty()) {
 			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script", s);
 		}
-		for (String name: x._atts.keySet()){
+		for (QName name: x._atts.keySet()) {
 			final XAttr att = x._atts.get(name);
-			if (name.startsWith("xmlns")) {
-				model.setAttribute(name, att._type);
+			String qn = getNameFromQName(name);
+			String uri = name.getNamespaceURI();
+			if (qn.startsWith("xmlns")) {
+				model.setAttributeNS(uri, qn, att._type);
 			} else {
 				final String value =
 					(att._required ? "required" : "optional") +
 					(att._type.length() != 0 ? " " + att._type : "") + ";";
-				final int i = name.indexOf('}');
-				if (i < 0) {
-					model.setAttribute(name, value);
+				if (uri == null || uri.isEmpty()) {
+					model.setAttribute(qn, value);
 				} else {
-					String uri = name.substring(1, i);
-					model.setAttributeNS(uri, name.substring(i + 1), value);
+					model.setAttributeNS(uri, qn, value);
 				}
 			}
 		}
