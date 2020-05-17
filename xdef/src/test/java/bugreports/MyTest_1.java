@@ -120,7 +120,7 @@ public class MyTest_1 extends XDTester {
 			try {
 				Element el = GenXDefinition.genXdef(xml);
 				String xdef = KXmlUtils.nodeToString(el, true);
-System.out.println("xml:\n" + xml);
+System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
 System.out.println("xdef:\n" + xdef);
 System.out.println("===========");
 				XDPool xp = compile(xdef);

@@ -42,11 +42,16 @@ public class TestGenXdef extends XDTester {
 "  <R A='xxx' B='aaa'/>\n" +
 "  <R A='xx' B='aa'/>\n" +
 "</T>",
-"<X x=\"123\">\n" +
-"  <Y> xxxxx  </Y>\n" +
+"<X xmlns=\"a.b.c\" x=\"123\">\n" +
+"  <Y> x </Y>\n" +
 "  <Y/>\n" +
 "  <Z/>\n" +
 "</X>",
+"<x:X xmlns:x=\"a.b.c\" x:x=\"123\">\n" +
+"  <x:Y x:y=\"z\"> x </x:Y>\n" +
+"  <x:Y/>\n" +
+"  <x:Z x:y=\"z\"/>\n" +
+"</x:X>",
 "<Contract Number = \"0123456789\">\n"+
 "  <Client Type  = \"1\"\n"+
 "          Name = \"Company LTD\"\n"+
@@ -116,6 +121,7 @@ public class TestGenXdef extends XDTester {
 dataDir + "Matej3_out.xml",
 dataDir + "TestValidate2.xml",
 dataDir + "../../data/schema/D1A.xml",
+dataDir + "../../data/schema/L1A.xml",
 		}) {
 			try {
 				Element el = GenXDefinition.genXdef(xml);
@@ -123,7 +129,9 @@ dataDir + "../../data/schema/D1A.xml",
 				XDPool xp = compile(xdef);
 				assertEq(xml, parse(xp, "", xml, reporter));
 				assertNoErrors(reporter);
-			} catch (Exception ex) {fail(ex);}
+			} catch (Exception ex) {
+				fail(ex);
+			}
 		}
 	}
 

@@ -11,28 +11,28 @@
             KodUtvaruPolicie="123456"
             CJ="ABCD-123/DN-2005-XY"
             DatumCasOznameni="20050618131500"
-            NazevDN="DOPRAVNï¿½ NEHODA BEZ ZRANï¿½Nï¿½"
+            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANÌNÍ"
             RokDN="2005"
             Zpracovatel="PRAP. MARTIN NOVAK"/>
   <Rozhodnuti DatumRozhodnuti="20050618000000">
-    Rozhodnutï¿½ nabylo prï¿½vnï¿½ moci
+    Rozhodnutí nabylo právní moci
   </Rozhodnuti>
   <Vyliceni>
-    Dne 18. ï¿½ervna 2005 v 13:00 hod. doï¿½lo v obci k dopravnï¿½ nehodï¿½
-    k dopravnï¿½ nehodï¿½ a to tï¿½m zpï¿½sobem, ï¿½e ï¿½idiï¿½ Vajda najï¿½dï¿½l
-    ve smï¿½ru ke kostelu, pï¿½iï¿½emï¿½ zachytil pravou zadnï¿½ ï¿½ï¿½stï¿½ nï¿½vï¿½su.
-    Ke zranï¿½nï¿½ osob nedoï¿½lo. Technickï¿½ zï¿½vada, jako pï¿½ï¿½ï¿½ina dopravnï¿½
-    nehody, nebyla na mï¿½stï¿½ ohledï¿½nï¿½m zjiï¿½tï¿½na ani uplatnï¿½na.
+    Dne 18. èervna 2005 v 13:00 hod. došlo v obci k dopravní nehodì
+     to tím zpùsobem, že øidiè Vajda najíždìl
+    ve smìru ke kostelu, pøièemž zachytil pravou zadní èástí návìsu.
+    Ke zranìní osob nedošlo. Technická závada, jako pøièina dopravní
+    nehody, nebyla na místì ohledáním zjištìna ani uplatnìna.
   </Vyliceni>
-  <ObjStranka Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
+  <ObjStranka Obec="BUDIÈOVICE NAD BUDIÈOVKOU"
               Pricina="516"
               CelkovaSkodaKc="30000"
-              HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
+              HlavniPricina="ZPÙSOB JÍZDY"
               KodOkresu="1234"
               DatumCasDN="20050618130000">
     <Misto>
-      BUDIï¿½OVICE, ulice KRATKA - mï¿½stnï¿½ komunikace, v areï¿½lu Lana
-      ( souï¿½adnice GPS -123456,123/-1234571,456 )
+      BUDIÈOVICE, ulice KRATKA - místní komunikace, v areálu Lana
+      ( souøadnice GPS -123456,123/-1234571,456 )
     </Misto>
   </ObjStranka>
   <Vozidlo KodPojistitele="0001"
@@ -41,14 +41,14 @@
            TypVozidla="TGA"
            CisloDokladuPojisteni="0123456000"
            RokVyroby="2006"
-           DruhVozidla="nï¿½kladnï¿½ automobil s nï¿½vï¿½sem"
+           DruhVozidla="nákladní automobil s návìsem"
            VIN="ABCDEF12345678905"
            ZnackaVozidla="MAN"
            MPZ="CZ">
     <Skoda Kc="0"/>
     <Drzitel>
-      ing Jan Vï¿½K, STARï¿½ MALï¿½ ï¿½. 124, PSï¿½ 123 45, Dï¿½D POD PRADï¿½DEM,
-      stï¿½t: ï¿½R
+      ing Jan VÍK, STARÁ MALÁ è. 124, PSÈ 123 45, DÌD POD PRADÌDEM,
+      stát: ÈR
     </Drzitel>
   </Vozidlo>
   <Vozidlo KodPojistitele="0001"
@@ -57,12 +57,12 @@
            TypVozidla="SPA"
            RokVyroby="2006"
            CisloDokladuPojisteni="0123456789"
-           DruhVozidla="nï¿½vï¿½s"
+           DruhVozidla="návìs"
            VIN="ABCDEF12345678906"
-           ZnackaVozidla="SCHWARZMï¿½LLER"
+           ZnackaVozidla="SCHWARZMÜLLER"
            MPZ="CZ">
     <Skoda Kc="0">
-      otï¿½r na pravï¿½ zadnï¿½ ï¿½ï¿½stï¿½ nï¿½kladovï¿½ho prostoru,
+      otìr na pravé zadní èásti nákladového prostoru,
     </Skoda>
   </Vozidlo>
   <Vozidlo KodPojistitele="0034"
@@ -71,85 +71,84 @@
            TypVozidla="Espace"
            RokVyroby="1999"
            CisloDokladuPojisteni="0123456788"
-           DruhVozidla="osobnï¿½ automobil"
+           DruhVozidla="osobní automobil"
            VIN="ABCDEF12345678902"
            ZnackaVozidla="RENAULT"
            MPZ="CZ">
     <Skoda Kc="30000">
-      LEVï¿½ Pï¿½EDNï¿½ BLATNï¿½K, LEVï¿½ Pï¿½EDNï¿½ DVEï¿½E. LEVï¿½ PRï¿½H,
+      LEVÝ PØEDNÍ BLATNÍK, LEVÉ PØEDNÍ DVEØE. LEVÝ PRÁH,
     </Skoda>
     <Drzitel>
-      Jan NOWï¿½K, STARï¿½ MALï¿½ ï¿½. 1123, PSï¿½ 123 45, Dï¿½D POD PRADï¿½DEM,
-      stï¿½t: ï¿½R
+      Jan NOWÁK, STARÁ MALÁ è. 1123, PSÈ 123 45, DÌD POD PRADÌDEM,
+      stát: ÈR
     </Drzitel>
   </Vozidlo>
   <Ucastnik OznSegmentu="1-1"
-            TypUcastnika="ï¿½idiï¿½"
+            TypUcastnika="øidiè"
             PokutaZapl="nezaplacena"
             PraxeRizeni="25"
             Pachatel="Pachatel DN"
             PokutaKc="500">
     <Osoba Prijmeni="BREZINA"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19550304000000"
            Jmeno="Jan">
-      <Pobyt Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
+      <Pobyt Obec="BUDIÈOVICE NAD BUDIÈOVKOU"
              CisloPopisne="24"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Osoba>
-    <Doklad TypDokladu="ï¿½idiï¿½skï¿½ prï¿½kaz"
+    <Doklad TypDokladu="øidièský prùkaz"
             CisloDokladu="123456789"
             Opravneni="A B BE C CE D DE T"
-            StatVydani="ï¿½R"/>
+            StatVydani="ÈR"/>
     <PoruseniZakProvoz>
-      ï¿½ 4 pï¿½sm. a)
+      è 4 písm. a)
     </PoruseniZakProvoz>
     <PoruseniZakPrest>
-      ï¿½ 22 odst.1 pï¿½sm. l) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
+      è 22 odst.1 písm. l) zákona è. 200/1990 Sb. o pøestupcích
     </PoruseniZakPrest>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="1-2"
-            TypUcastnika="vlastnï¿½k (prï¿½vnickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (právnická osoba)"
+            Poskozeny="Poškozený">
     <Firma NazevFirmy="Firma sro"
            IC="12345678">
       <Sidlo Obec="MALA"
              CisloPopisne="81"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Firma>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
-      CZ
+      nákladní automobil s návìsem
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="3-1"
-            TypUcastnika="vlastnï¿½k (fyzickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (fyzická osoba)"
+            Poskozeny="Poškozený">
     <Osoba Prijmeni="NOVAK"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19720720000000"
            Jmeno="Miroslav">
-      <Pobyt Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
-             Ulice="STARï¿½ RUDNï¿½"
+      <Pobyt Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
+             Ulice="STARÁ RUDNÁ"
              CisloPopisne="164"
              PSC="793 31"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Osoba>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
@@ -162,29 +161,29 @@
             KodUtvaruPolicie="123456"
             CJ="ABCD-123/DN-2005-XYZ"
             DatumCasOznameni="20050618081500"
-            NazevDN="DOPRAVNï¿½ NEHODA BEZ ZRANï¿½Nï¿½"
+            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANÌNÍ"
             RokDN="2005"
             Zpracovatel="PRAP. MARCEL NOVAK"/>
   <Rozhodnuti DatumRozhodnuti="20050618000000">
-    Rozhodnutï¿½ nabylo prï¿½vnï¿½ moci
+    Rozhodnutí nabylo právní moci
   </Rozhodnuti>
   <Vyliceni>
-    Dne 18. ï¿½ervna 2005 v 13:00 hod. doï¿½lo v obci k dopravnï¿½ nehodï¿½
-    k dopravnï¿½ nehodï¿½ a to tï¿½m zpï¿½sobem, ï¿½e ï¿½idiï¿½ Vajda najï¿½dï¿½l
-    ve smï¿½ru ke kostelu, pï¿½iï¿½emï¿½ zachytil pravou zadnï¿½ ï¿½ï¿½stï¿½ nï¿½vï¿½su.
-    Ke zranï¿½nï¿½ osob nedoï¿½lo. Technickï¿½ zï¿½vada, jako pï¿½ï¿½ï¿½ina dopravnï¿½
-    nehody, nebyla na mï¿½stï¿½ ohledï¿½nï¿½m zjiï¿½tï¿½na ani uplatnï¿½na.
+    Dne 18. èervna 2005 v 13:00 hod. došlo v obci k dopravní nehodì
+    a to tím zpùsobem, že øidiè Vajda najížïìl
+    ve smìru ke kostelu, pøièemž zachytil pravou zadní èástí návìsu.
+    Ke zranìní osob nedošlo. Technická závada, jako pøíèina dopravní
+    nehody, nebyla na místì ohledáním zjištìna ani uplatnìna.
   </Vyliceni>
-  <ObjStranka Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
+  <ObjStranka Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
               Ulice="SVOBODY"
               Pricina="504"
               CelkovaSkodaKc="20000"
-              HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
+              HlavniPricina="ZPÙSOB JÍZDY"
               KodOkresu="1234"
               DatumCasDN="20050618080000">
     <Misto>
-      BUDIï¿½OVICE, ulice KRATKA - mï¿½stnï¿½ komunikace, v areï¿½lu Lana
-      ( souï¿½adnice GPS -123456,123/-1234571,456 )
+      BUDIŠOVICE, ulice KRATKA - místní komunikace, v areálu Lana
+      ( souøadnice GPS -123456,123/-1234571,456 )
     </Misto>
   </ObjStranka>
   <Vozidlo KodPojistitele="0028"
@@ -193,13 +192,13 @@
            TypVozidla="P124LA4X2NA360"
            CisloDokladuPojisteni="0123456799"
            RokVyroby="1997"
-           DruhVozidla="nï¿½kladnï¿½ automobil s nï¿½vï¿½sem"
+           DruhVozidla="nákladní automobil s návìsem"
            ZnackaVozidla="SCANIA"
            MPZ="CZ">
     <Skoda Kc="0"/>
     <Drzitel>
-      Jan NOVï¿½K, STARï¿½ MALï¿½ ï¿½. 124, PSï¿½ 123 45, Dï¿½D POD PRADï¿½DEM,
-      stï¿½t: ï¿½R
+      Jan NOVÁK, STARÁ MALÁ è. 124, PSÈ 123 45, DÌD POD PRADÌDEM,
+      stát: ÈR
     </Drzitel>
   </Vozidlo>
   <Vozidlo KodPojistitele="0001"
@@ -208,15 +207,15 @@
            TypVozidla="Spa"
            RokVyroby="1999"
            CisloDokladuPojisteni="0123456700"
-           DruhVozidla="nï¿½vï¿½s"
-           ZnackaVozidla="SCGWARZMï¿½LLER"
+           DruhVozidla="návìs"
+           ZnackaVozidla="SCGWARZMÜLLER"
            MPZ="CZ">
     <Skoda Kc="0">
-      otï¿½r pravï¿½ zadnï¿½ ï¿½ï¿½sti nï¿½vï¿½su,
+      otìr pravé zadní èásti návìsu,
     </Skoda>
     <Drzitel>
-      Jan NOVï¿½K, STARï¿½ MALï¿½ ï¿½. 124, PSï¿½ 123 45, Dï¿½D POD PRADï¿½DEM,
-      stï¿½t: ï¿½R
+      Jan NOVÁK, STARÁ MALÁ è. 124, PSÈ 123 45, DÌD POD PRADÌDEM,
+      stát: ÈR
     </Drzitel>
   </Vozidlo>
   <Vozidlo KodPojistitele="0001"
@@ -225,16 +224,16 @@
            TypVozidla="FH12"
            RokVyroby="2003"
            CisloDokladuPojisteni="0123456701"
-           DruhVozidla="nï¿½kladnï¿½ automobil s nï¿½vï¿½sem"
+           DruhVozidla="nákladní automobil s návìsem"
            ZnackaVozidla="VOLVO"
            MPZ="CZ">
     <Skoda Kc="20000">
-      levï¿½ pï¿½ednï¿½ dveï¿½e, pï¿½ednï¿½ nï¿½raznï¿½k, levï¿½ pï¿½ednï¿½ blatnï¿½k, levï¿½
-      pï¿½ednï¿½ blikaï¿½, levï¿½ pï¿½ednï¿½ oblina,
+      levé pøední dveøe, pøední nárazník, levý pøední blatník, levý
+      pøední blikaè, levá pøední oblina,
     </Skoda>
     <Drzitel>
-      Jan NOVï¿½K, STARï¿½ MALï¿½ ï¿½. 124, PSï¿½ 123 45, Dï¿½D POD PRADï¿½DEM,
-      stï¿½t: ï¿½R
+      Jan NOVÁK, STARÁ MALÁ è. 124, PSÈ 123 45, DÌD POD PRADÌDEM,
+      stát: ÈR
     </Drzitel>
   </Vozidlo>
   <Vozidlo KodPojistitele="0001"
@@ -243,87 +242,87 @@
            TypVozidla="Spa"
            RokVyroby="2003"
            CisloDokladuPojisteni="0123456702"
-           DruhVozidla="nï¿½vï¿½s"
-           ZnackaVozidla="SCHWAZMï¿½LLER"
+           DruhVozidla="návìs"
+           ZnackaVozidla="SCHWAZMÜLLER"
            MPZ="CZ">
     <Skoda Kc="0"/>
   </Vozidlo>
   <Ucastnik OznSegmentu="1-1"
-            TypUcastnika="ï¿½idiï¿½"
+            TypUcastnika="øidiè"
             PokutaZapl="nezaplacena"
             PraxeRizeni="10"
             Pachatel="Pachatel DN"
             PokutaKc="1000">
     <Osoba Prijmeni="BREZINA"
-           StatniPrislusnost="ï¿½R"
+           StatniPrislusnost="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19660304000000"
-           Jmeno="Zdenï¿½k">
-      <Pobyt Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
-             Ulice="Tï¿½. OSVOBOZENï¿½"
+           Jmeno="Zdenìk">
+      <Pobyt Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
+             Ulice="Tø. OSVOBOZENÍ"
              CisloPopisne="1675"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"
              CisloOrientacni="33"/>
     </Osoba>
-    <Doklad TypDokladu="ï¿½idiï¿½skï¿½ prï¿½kaz"
+    <Doklad TypDokladu="øidièský prùkaz"
             CisloDokladu="123456789"
             Opravneni="A B C E T"
-            StatVydani="ï¿½R"/>
+            StatVydani="ÈR"/>
     <PoruseniZakProvoz>
-      ï¿½ 4 pï¿½sm. a)
+      è 4 písm. a)
     </PoruseniZakProvoz>
     <PoruseniZakPrest>
-      ï¿½ 22 odst.1 pï¿½sm. l) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
+      è 22 odst.1 písm. l) zákona è. 200/1990 Sb. o pøestupcích
     </PoruseniZakPrest>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="1-2"
-            TypUcastnika="vlastnï¿½k (prï¿½vnickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (právnická osoba)"
+            Poskozeny="Poškozený">
     <Firma NazevFirmy="Firma sro"
            IC="12345678">
       <Sidlo Obec="MALA"
              CisloPopisne="81"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Firma>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-1"
-            TypUcastnika="vlastnï¿½k (prï¿½vnickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (právnická osoba)"
+            Poskozeny="Poškozený">
     <Firma NazevFirmy="Firma sro"
            IC="12345678">
       <Sidlo Obec="MALA"
              CisloPopisne="81"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Firma>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="3-1"
-            TypUcastnika="vlastnï¿½k (prï¿½vnickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (právnická osoba)"
+            Poskozeny="Poškozený">
     <Firma NazevFirmy="Firma sro"
            IC="12345678">
       <Sidlo Obec="MALA"
              CisloPopisne="81"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Firma>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
@@ -336,28 +335,26 @@
             KodUtvaruPolicie="123456"
             CJ="ABCD-123/DN-2005-XYA"
             DatumCasOznameni="20050615171500"
-            NazevDN="DOPRAVNï¿½ NEHODA BEZ ZRANï¿½Nï¿½, ALKOHOL"
+            NazevDN="DOPRAVNÍ NEHODA BEZ ZRANÌNÍ, ALKOHOL"
             RokDN="2005"
             Zpracovatel="PRAP. MARCEL MARCEL"/>
   <Rozhodnuti DatumRozhodnuti="20050618000000">
-    Rozhodnutï¿½ nabylo prï¿½vnï¿½ moci
+    Rozhodnutí nabylo právní moci
   </Rozhodnuti>
   <Vyliceni>
-    Dne 18. ï¿½ervna 2005 v 13:00 hod. doï¿½lo v obci k dopravnï¿½ nehodï¿½
-    k dopravnï¿½ nehodï¿½ a to tï¿½m zpï¿½sobem, ï¿½e ï¿½idiï¿½ Vajda najï¿½dï¿½l
-    ve smï¿½ru ke kostelu, pï¿½iï¿½emï¿½ zachytil pravou zadnï¿½ ï¿½ï¿½stï¿½ nï¿½vï¿½su.
-    Ke zranï¿½nï¿½ osob nedoï¿½lo. Technickï¿½ zï¿½vada, jako pï¿½ï¿½ï¿½ina dopravnï¿½
-    nehody, nebyla na mï¿½stï¿½ ohledï¿½nï¿½m zjiï¿½tï¿½na ani uplatnï¿½na.
+    Dne 18. èervna 2005 v 13:00 hod. došlo v obci k dopravní nehodì
+    a to tím zpùsobem, že øidiè Vajda najíždìl
+    ve smìru ke kostelu, pøièemž zachytil pravou zadní èástí návìsu.
   </Vyliceni>
-  <ObjStranka Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
+  <ObjStranka Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
               Pricina="504"
               CelkovaSkodaKc="3000"
-              HlavniPricina="ZPï¿½SOB Jï¿½ZDY"
+              HlavniPricina="ZPÙSOB JÍZDY"
               KodOkresu="1234"
               DatumCasDN="20050615170000">
     <Misto>
-      BUDIï¿½OVICE, ulice KRATKA - mï¿½stnï¿½ komunikace, v areï¿½lu Lana
-      ( souï¿½adnice GPS -123456,123/-1234571,456 )
+      BUDIŠOVICE, ulice KRATKA - místní komunikace, v areálu Lana
+      ( souøadnice GPS -123456,123/-1234571,456 )
     </Misto>
   </ObjStranka>
   <Vozidlo KodPojistitele="0024"
@@ -366,12 +363,12 @@
            TypVozidla="FIESTA JH1"
            CisloDokladuPojisteni="0123456703"
            RokVyroby="2002"
-           DruhVozidla="osobnï¿½ automobil"
+           DruhVozidla="osobní automobil"
            VIN="ABCDEF12345678903"
            ZnackaVozidla="FORD"
            MPZ="CZ">
     <Skoda Kc="1000">
-      zadnï¿½ nï¿½raznï¿½k LZ roh, LZ mlhovka,
+      zadní nárazník LZ roh, LZ mlhovka,
     </Skoda>
   </Vozidlo>
   <Vozidlo KodPojistitele="0034"
@@ -380,122 +377,122 @@
            TypVozidla="FELICIA LX 1.9 D TMBEHH613"
            RokVyroby="2003"
            CisloDokladuPojisteni="0123456704"
-           DruhVozidla="osobnï¿½ automobil"
+           DruhVozidla="osobní automobil"
            VIN="ABCDEF12345678904"
-           ZnackaVozidla="ï¿½KODA"
+           ZnackaVozidla="ŠKODA"
            MPZ="CZ">
     <Skoda Kc="2000">
-      pï¿½ednï¿½ nï¿½raznï¿½k,
+      pøední nárazník,
     </Skoda>
   </Vozidlo>
   <Ucastnik OznSegmentu="1-1"
-            AlkoholDech="Pozitivnï¿½ 0,18"
-            TypUcastnika="ï¿½idiï¿½"
+            AlkoholDech="Pozitivní 0,18"
+            TypUcastnika="øidiè"
             PraxeRizeni="20"
             Pachatel="Pachatel DN">
     <Osoba Prijmeni="BREZINA"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19540304000000"
            Jmeno="Eduard">
       <Pobyt Telefon2="789 123 456"
-             Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
-             Ulice="Vï¿½VOZ"
+             Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
+             Ulice="VÝVOZ"
              CisloPopisne="190"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Osoba>
-    <Doklad TypDokladu="obï¿½anskï¿½ prï¿½kaz"
+    <Doklad TypDokladu="obèanský prùkaz"
             CisloDokladu="123456789"
-            StatVydani="ï¿½R"/>
-    <Doklad TypDokladu="ï¿½idiï¿½skï¿½ prï¿½kaz"
+            StatVydani="ÈR"/>
+    <Doklad TypDokladu="øidièský prùkaz"
             CisloDokladu="123456789"
             Opravneni="A1 B"
-            StatVydani="ï¿½R"/>
+            StatVydani="ÈR"/>
     <PoruseniZakProvoz>
-      ï¿½ 5 odst. 1 pï¿½sm. f), ï¿½ 5 odst. 2 pï¿½sm. b), ï¿½ 24 odst. 2
+      è 5 odst. 1 písm. f), è 5 odst. 2 písm. b), è 24 odst. 2
     </PoruseniZakProvoz>
     <PoruseniZakPrest>
-      ï¿½ 22 odst.1 pï¿½sm.b) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch ï¿½
-      22 odst.1 pï¿½sm.d) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch ï¿½ 22
-      odst.1 pï¿½sm. l) zï¿½kona ï¿½. 200/1990 Sb. o pï¿½estupcï¿½ch
+      è 22 odst.1 písm.b) zákona è. 200/1990 Sb. o pøestupcích è 22 odst.1
+      písm.d) zákona è. 200/1990 Sb. o pøestupcích è 22
+      odst.1 písm. l) zákona è. 200/1990 Sb. o pøestupcích
     </PoruseniZakPrest>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="1-2"
-            TypUcastnika="vlastnï¿½k (fyzickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (fyzická osoba)"
+            Poskozeny="Poškozený">
     <Osoba Prijmeni="BREZINA"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19850304000000"
            Jmeno="Jan">
-      <Pobyt Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
-             Stat="ï¿½R"
+      <Pobyt Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
+             Stat="ÈR"
              Okres="VELKY"/>
     </Osoba>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-1"
-            TypUcastnika="ï¿½idiï¿½"
+            TypUcastnika="øidiè"
             PraxeRizeni="2"
-            Poskozeny="Poï¿½kozenï¿½">
-    <Osoba Prijmeni="BREZINOVï¿½"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+            Poskozeny="Poškozený">
+    <Osoba Prijmeni="BREZINOVÁ"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="905101/9989"
-           Pohlavi="ï¿½"
+           Pohlavi="Ž"
            DatumNarozeni="19840304000000"
            Jmeno="Martina">
       <Pobyt Telefon2="789 123 456"
-             Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
+             Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
              Ulice="JANA NERUDY"
              CisloPopisne="870"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"
              CisloOrientacni="6"/>
     </Osoba>
-    <Doklad TypDokladu="obï¿½anskï¿½ prï¿½kaz"
+    <Doklad TypDokladu="obèanský prùkaz"
             CisloDokladu="123456789"
-            StatVydani="ï¿½R"/>
-    <Doklad TypDokladu="ï¿½idiï¿½skï¿½ prï¿½kaz"
+            StatVydani="ÈR"/>
+    <Doklad TypDokladu="øidièský prùkaz"
             CisloDokladu="123456789"
             Opravneni="B"
-            StatVydani="ï¿½R"/>
+            StatVydani="ÈR"/>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
   <Ucastnik OznSegmentu="2-2"
-            TypUcastnika="vlastnï¿½k (fyzickï¿½ osoba)"
-            Poskozeny="Poï¿½kozenï¿½">
+            TypUcastnika="vlastník (fyzická osoba)"
+            Poskozeny="Poškozený">
     <Osoba Prijmeni="BREZINA"
-           StatniPrislusnost="ï¿½R"
-           StatNarozeni="ï¿½R"
+           StatniPrislusnost="ÈR"
+           StatNarozeni="ÈR"
            RC="900101/9995"
            Pohlavi="M"
            DatumNarozeni="19760304000000"
-           Jmeno="Aleï¿½">
-      <Pobyt Obec="BUDIï¿½OVICE NAD BUDIï¿½OVKOU"
-             Ulice="ORï¿½ï¿½OVA"
+           Jmeno="Aleš">
+      <Pobyt Obec="BUDIŠOVICE NAD BUDIŠOVKOU"
+             Ulice="ORÁŽOVA"
              CisloPopisne="1327"
-             Stat="ï¿½R"
+             Stat="ÈR"
              Okres="VELKY"
              CisloOrientacni="3"/>
     </Osoba>
     <Vazba>
-      nï¿½kladnï¿½ automobil s nï¿½vï¿½sem
+      nákladní automobil s návìsem
       CZ
     </Vazba>
   </Ucastnik>
