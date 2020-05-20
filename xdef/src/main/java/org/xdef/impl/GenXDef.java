@@ -16,6 +16,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.parsers.XDParseDateYMDhms;
+import org.xdef.impl.parsers.XDParseEmail;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseMD5;
 import org.xdef.impl.parsers.XSParseBase64Binary;
@@ -502,23 +503,25 @@ public class GenXDef implements XDConstants {
 		if (new XDParseEmailDate().check(null, data).matches()) {
 			return "emailDate()";
 		}
+		if (new XDParseEmail().check(null, data).matches()) {
+			return "email()";
+		}
 		final StringParser p = new StringParser(data);
 		p.setBufIndex(0);
 		String mask;
-		if (p.isDatetime("d.M.yyyy") || p.isDatetime("d/M/yyyy")) {
+		if (p.isDatetime("d.M.yyyy")) {
 			mask = "d.M.yyyy";
-		} else if (p.isDatetime("d.M.yy") || p.isDatetime("d/M/yy")) {
+		} else if (p.isDatetime("d/M/yyyy")) {
+			mask = "d/M/yyyy";
+		} else if (p.isDatetime("d.M.yy")) {
 			mask = "d.M.yy";
+		} else if (p.isDatetime("d/M/yy")) {
+			mask = "d/M/yy";
 		} else {
 			mask = "";
 			p.setBufIndex(0);
 		}
 		if (mask.length() > 0) {
-			final String s = p.getParsedBufferPart();
-			final int i = s.indexOf('.');
-			if (i < 0) {
-				mask = mask.replace('.', '/');
-			}
 			if (p.eos()) {
 				return "xdatetime('" + mask + "')";
 			}
@@ -553,7 +556,6 @@ public class GenXDef implements XDConstants {
 		}
 		return data.trim().isEmpty() ? "string(0,*)" : "string()";
 	}
-
 
 	private static void appendText(final Element el, final String text) {
 		el.appendChild(el.getOwnerDocument().createTextNode(text));

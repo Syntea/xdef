@@ -27,6 +27,7 @@ public class MyTest_1 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		for (String xml: new String[] {
 //"<a/>\n",
+"<a a='a@cz'/>\n",
 //"<a>\n"+
 //"  <b>\n"+
 //"    <c/>\n"+
@@ -50,11 +51,11 @@ public class MyTest_1 extends XDTester {
 //"  <xd:Y y=\"z\"/>\n" +
 //"  <xd:Y/>\n" +
 //"</xd:X>",
-"<X xmlns=\"a.b.c\" x=\"123\">\n" +
-"  <Y y=\"z\"> x </Y>\n" +
-"  <Y/>\n" +
-"  <Z/>\n" +
-"</X>",
+//"<X xmlns=\"a.b.c\" x=\"123\">\n" +
+//"  <Y y=\"z\"> x </Y>\n" +
+//"  <Y/>\n" +
+//"  <Z/>\n" +
+//"</X>",
 //"<A>\n"+
 //"  <B a='11.06.87'/><B a='11.06.1987'/>\n"+
 //"  <C a='11.06.87'/><C a='11.06.1987'/>\n"+
