@@ -27,7 +27,7 @@ public class MyTest_1 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		for (String xml: new String[] {
 //"<a/>\n",
-"<a a='a@cz'/>\n",
+"<a a='a@cz' b='2019-10-20' c='20-10-2019'/>\n",
 //"<a>\n"+
 //"  <b>\n"+
 //"    <c/>\n"+

@@ -509,7 +509,9 @@ public class GenXDef implements XDConstants {
 		final StringParser p = new StringParser(data);
 		p.setBufIndex(0);
 		String mask;
-		if (p.isDatetime("d.M.yyyy")) {
+		if (p.isDatetime("d-M-yyyy")) {
+			mask = "d-M-yyyy";
+		} else if (p.isDatetime("d.M.yyyy")) {
 			mask = "d.M.yyyy";
 		} else if (p.isDatetime("d/M/yyyy")) {
 			mask = "d/M/yyyy";
