@@ -447,10 +447,6 @@ public class GenXDef implements XDConstants {
 			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
 				? "num()" : "int()";
 		}
-		if ((data.trim().startsWith("19") || data.trim().startsWith("20"))
-			&& new XDParseDateYMDhms().check(null, data).matches()) {
-			return "dateYMDhms()"; //"yyyyMMddHHmmss"
-		}
 		if (new XSParseLong().check(null, data).matches()) {
 			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
 				? "num()" : "long()";
@@ -515,10 +511,6 @@ public class GenXDef implements XDConstants {
 			mask = "d.M.yyyy";
 		} else if (p.isDatetime("d/M/yyyy")) {
 			mask = "d/M/yyyy";
-		} else if (p.isDatetime("d.M.yy")) {
-			mask = "d.M.yy";
-		} else if (p.isDatetime("d/M/yy")) {
-			mask = "d/M/yy";
 		} else {
 			mask = "";
 			p.setBufIndex(0);
