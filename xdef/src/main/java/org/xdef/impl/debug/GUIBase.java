@@ -360,7 +360,7 @@ public class GUIBase {
 			// mark line (errors, breakpoints etc)
 			for (int j = 0; j < _positions.length; j++) {
 				SourcePos spos = _positions[j];
-				if (_sourceID.equals(spos._sysId) && spos._line == n) {
+				if (spos._sysId.equals(_sourceID) && spos._line == n) {
 					style = STYLE_ERROR;
 					break;
 				}
