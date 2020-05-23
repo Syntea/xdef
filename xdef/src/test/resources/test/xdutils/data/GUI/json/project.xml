@@ -4,17 +4,15 @@
   <Property Name="xdef.display" Value="true"/>
   <Property Name="xdef.debug" Value="true"/>
   <Execute DisplayResult="true"
+    DataType="JSON"
     Mode="validate"
-    XDName="test1">
-    <Var Name="xyz">
-      Toto je test
-    </Var>
+    XDName="test">
     <Input Edit="true">
-      src/test/resources/test/xdutils/data/GUI/validate/data.xml
+      src/test/resources/test/xdutils/data/GUI/json/data.json
     </Input>
-    <SaveResult File="src/test/resources/test/xdutils/data/GUI/validate/result1.xml"/>
+    <SaveResult File="src/test/resources/test/xdutils/data/GUI/json/result.json"/>
   </Execute>
   <XDefinition>
-    src/test/resources/test/xdutils/data/GUI/validate/xdef*.xml
+    src/test/resources/test/xdutils/data/GUI/json/xdef.xml
   </XDefinition>
 </Project>

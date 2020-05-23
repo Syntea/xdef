@@ -149,25 +149,25 @@ public interface XDEF {
 	public static final long XDEF267 = 31159025735L;
 	/** X-definition &amp;{0}{'}{' }does not exist */
 	public static final long XDEF269 = 31159025736L;
-	/** Can't compare different X-definition objects&amp;{0}{ :}&amp;{#SYS000} */
+	/** Can't compare different XDPool objects&amp;{0}{ :} */
 	public static final long XDEF281 = 31159025737L;
-	/** Models are different&amp;{0}{ :}&amp;{#SYS000} */
+	/** Models are different&amp;{0}{ :} */
 	public static final long XDEF282 = 31159025738L;
-	/** Child nodes differs: &amp;{0}&amp;{#SYS000} */
+	/** Child nodes differs: &amp;{0} */
 	public static final long XDEF283 = 31159025739L;
-	/** List of attributes differs: &amp;{0}&amp;{#SYS000} */
+	/** List of attributes differs: &amp;{0} */
 	public static final long XDEF284 = 31159025740L;
-	/** Type of value differs: &amp;{0}&amp;{#SYS000} */
+	/** Type of value differs: &amp;{0} */
 	public static final long XDEF285 = 31159025741L;
-	/** Default or fixed values differs: &amp;{0}&amp;{#SYS000} */
+	/** Default or fixed values differs: &amp;{0} */
 	public static final long XDEF286 = 31159025742L;
-	/** Occurrence differs: &amp;{0}&amp;{#SYS000} */
+	/** Occurrence differs: &amp;{0} */
 	public static final long XDEF287 = 31159025743L;
-	/** Namespace differs: &amp;{0}&amp;{#SYS000} */
+	/** Namespace differs: &amp;{0} */
 	public static final long XDEF288 = 31159025744L;
-	/** Names differs: &amp;{0}, &amp;{1}&amp;{#SYS000} */
+	/** Names differs: &amp;{0}, &amp;{1} */
 	public static final long XDEF289 = 31159025745L;
-	/** Options differs: &amp;{0}&amp;{#SYS000} */
+	/** Options differs: &amp;{0} */
 	public static final long XDEF290 = 31159025746L;
 	/** X-definition '&amp;{0}' already exists&amp;{#SYS000} */
 	public static final long XDEF303 = 31159025747L;

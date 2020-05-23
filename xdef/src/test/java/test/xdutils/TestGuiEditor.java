@@ -1,5 +1,6 @@
 package test.xdutils;
 
+import java.io.File;
 import org.xdef.proc.XXNode;
 import org.xdef.util.GUIEditor;
 import test.XDTester;
@@ -24,10 +25,12 @@ public class TestGuiEditor  extends XDTester {
 	public void test() {
 ////////////////////////////////////////////////////////////////////////////////
 //		test(new String[] {"-v"});
+//		test(new String[] {"-v", "-format", "JSON",});
 //		test(new String[] {"-c"});
 //		test(new String[] {"-g"});
 //		test(new String[] {"-p", getDataDir() + "GUI/test/project.xml"});
-		test(new String[] {"-p", getDataDir() + "GUI/validate/project.xml"});
+//		test(new String[] {"-p", getDataDir() + "GUI/validate/project.xml"});
+		test(new String[] {"-p", getDataDir() + "GUI/json/project.xml"});
 //		test(new String[] {"-p", getDataDir() + "GUI/construct/project.xml"});
 //		test(new String[] {"-g", getDataDir() + "GUI/validate/data.xml"});
 	}

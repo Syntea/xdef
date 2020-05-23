@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.GenXDef;
+import org.xdef.json.JsonUtil;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
@@ -71,6 +72,7 @@ public class GUIEditor extends GUIScreen {
 "\n" +
 "  <Execute\n" +
 "    XDName=\"? string(1, 1000);\"\n" +
+"    DataType=\"? enum('XML', 'JSON');\"\n" +
 "    Mode=\"? enum('construct', 'validate');\"\n" +
 "    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
@@ -372,7 +374,7 @@ public class GUIEditor extends GUIScreen {
 		if (data != null) {
 			data = data.trim();
 			if ("true".equals(e.getAttribute("Edit"))) {
-				String s = editData("Input XML data", data);
+				String s = editData("Input data", data);
 				if (!data.equals(s)) {
 					e.setTextContent(s);
 					data = s;
@@ -552,9 +554,12 @@ public class GUIEditor extends GUIScreen {
 
 	/** Run project with GUIEditor.
 	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
+	 * @param dataType 'x' (XML) or 'j' (JSON)
 	 * @param src source with the project.
 	 */
-	public static final void runEditor(final char param, final String src) {
+	public static final void runEditor(final char param,
+		final char dataType,
+		final String src) {
 		try {
 			Element e;
 			// Create element with project according to X-definition
@@ -631,6 +636,7 @@ public class GUIEditor extends GUIScreen {
 		final Properties props) throws Exception {
 		// get X-definition sources
 		NodeList nl = project.getElementsByTagName("XDefinition");
+		try {
 			ArrayList<String> axdefs = new ArrayList<String>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element e = (Element) nl.item(i);
@@ -651,6 +657,9 @@ public class GUIEditor extends GUIScreen {
 				updateXdefList(project, si); //Update X-definitions elements
 			}
 			return xp;
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/** Execute project.
@@ -670,6 +679,7 @@ public class GUIEditor extends GUIScreen {
 			Element exe = (Element) nl.item(i);
 			// get name of X-definition
 			String xdName = exe.getAttribute("XDName").trim();
+			char type = exe.getAttribute("DataType").equals("JSON") ? 'j' : 'x';
 			// get inpout data
 			e = KXmlUtils.firstElementChild(exe, "Input");
 			String data = getData(e, si);
@@ -698,7 +708,7 @@ public class GUIEditor extends GUIScreen {
 				XDFactory.createXDOutput(new PrintWriter(strw), false);
 			xd.setStdOut(stdout);
 			String mode = exe.getAttribute("Mode");
-			Element result;
+			Object result;
 			if ("construct".equals(mode)) { // run construction mode
 				String name;
 				String uri;
@@ -719,7 +729,11 @@ public class GUIEditor extends GUIScreen {
 				}
 				result = xd.xcreate(new QName(uri, name), reporter);
 			} else {  // run validation mode
-				result = xd.xparse(data, reporter);
+				if (type == 'x') {
+					result = xd.xparse(data, reporter);
+				} else {
+					result = xd.jparse(data, reporter);
+				}
 			}
 			// set bounds of the window from previous steps
 			if (xd.getXDPool().getXDSourceInfo() != si) {
@@ -768,8 +782,13 @@ public class GUIEditor extends GUIScreen {
 					encoding = "UTF-8";
 				}
 				try {
-					KXmlUtils.writeXml(
-						new File(name), encoding, result, indent, true);
+					if (type == 'x') {
+						KXmlUtils.writeXml(new File(name), encoding,
+							(Element) result, indent, true);
+					} else { // type = 'j'
+						String s =JsonUtil.toJsonString(result, indent);
+						SUtils.writeString(new File(name), s, "UTF-8");
+					}
 				} catch (Exception ex) {
 					//GUIEditor can't write XML data to file &{0}
 					JOptionPane.showMessageDialog(null,
@@ -777,9 +796,13 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			if ("true".equals(exe.getAttribute("DisplayResult"))) {
-				// display result XML
-				String s = result == null
-					? "" : KXmlUtils.nodeToString(result, true);
+				String s;
+				if (type == 'x') {// // display result XML
+					s = result == null
+						? "" : KXmlUtils.nodeToString((Element) result, true);
+				} else {
+					s = JsonUtil.toJsonString(result, true);
+				}
 				if (!strw.toString().isEmpty()) {
 					s += s.isEmpty() ? "" : "\n\n";
 					s += "=== System.out ===\n" + strw.toString();
@@ -816,17 +839,17 @@ public class GUIEditor extends GUIScreen {
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
 " -c compile X-definition and runs construction mode\n"+
-" -g generate X-definition and project from XML (optionally follows\n"+
-"  the source file name with an XML may follow).\n\n"+
+" -g generate X-definition and project from input data (optionally follows\n"+
+"  the source file name may follow).\n\n"+
 "Switches\n"+
-" -xdef source with X-definition (input file or XML data; it may be\n"+
+" -xdef source with X-definition (input file or data; it may be\n"+
 "    specified more times)\n"+
-" -data xml source (input file or XML data used for validation\n"+
-"    mode and as the context for construction mode or for generation of\n"+
-"    X-definition).\n"+
+" -format specification of data format XML or JSON (default XML) \n"+
+" -data source (input file or data used for validation mode and as\n"+
+"    the context for construction mode or for generation of X-definition).\n"+
 " -debug sets debugging mode when project is executed\n"+
 " -editInput enables to edit input data before execution\n"+
-" -displayResult displays result XML data\n";
+" -displayResult displays result data\n";
 		if (args == null || args.length == 0) {
 			System.err.println("No parameters.\n" + info);
 			return;
@@ -840,7 +863,7 @@ public class GUIEditor extends GUIScreen {
 			if (args.length == 1) {
 				System.err.println("Missing parameter with project\n" + info);
 			} else {
-				runEditor('p', args[1]);
+				runEditor('p', (char) 0, args[1]);
 			}
 			return;
 		}
@@ -853,6 +876,7 @@ public class GUIEditor extends GUIScreen {
 		String displayResult = null;
 		int i = 1;
 		char param;
+		char format = (char) 0;
 		if ("-c".equals(arg)) {
 			param = 'c';
 		} else if ("-v".equals(arg)) {
@@ -876,7 +900,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			try {
-				xml = editData("Input XML data", xml);
+				xml = editData("Input data", xml);
 				Document d = KXmlUtils.parseXml(xml);
 				Element w = d.createElement("W");
 				w.setTextContent(xml);
@@ -910,6 +934,33 @@ public class GUIEditor extends GUIScreen {
 				}
 				continue;
 			}
+			if ("-XML".equals(arg)) {
+				if (format != 0) {
+					System.err.println(
+						"Redefinition of format parameter\n" + info);
+					return;
+				}
+				format = 'x';
+			}
+			if ("-format".equals(arg)) {
+				if (format != 0) {
+					System.err.println(
+						"Redefinition of format parameter -format\n" + info);
+					return;
+				}
+				String s = args[i++];
+				if (s.equalsIgnoreCase("XML")) {
+					format = 'x';
+				} else if (s.equalsIgnoreCase("JSON")) {
+					format = 'j';
+				} else {
+					System.err.println(
+						"Incorrect parameter -format (must be XML or JSON)\n"
+							+ info);
+					return;
+				}
+				continue;
+			}
 			if ("-data".equals(arg)) {
 				if (dataPath != null) {
 					System.err.println(
@@ -918,6 +969,9 @@ public class GUIEditor extends GUIScreen {
 				}
 				dataPath = args[i++];
 				continue;
+			}
+			if ("-form".equals(arg)) {
+
 			}
 			if ("-debug".equals(arg)) {
 				if (debug != null) {
@@ -950,6 +1004,9 @@ public class GUIEditor extends GUIScreen {
 			return;
 		}
 		String msg = "";
+		if (format == 0) {
+			format = 'x'; // default is XML
+		}
 		switch (param) {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
@@ -1002,24 +1059,42 @@ public class GUIEditor extends GUIScreen {
 					xdefs.add(
 "&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI
 	+ "\" name=\"test\" root=\"root\">\n" +
-"  &lt;root a=\"int();\" >\n" +
+(format == 'x'
+? "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
 "      ? string(2,3);\n" +
 "    &lt;/b>\n" +
-"  &lt;/root>\n" +
+"  &lt;/root>\n"
+: "&lt;xd:json name=\"root\">\n"+
+"{\"a\": [\"occurs 3 int()\"]}\n"+
+"&lt;/xd:json>\n") +
 "&lt;/xd:def>");
 					if (displayResult == null) {
 						displayResult = "true";
 					}
 				}
 				if (dataPath == null) {
-					dataPath =
-"&lt;root a=\"1\">\n  &lt;b>xyz&lt;/b>\n&lt;/root>";
+					if (format == 'x') {
+						dataPath =
+						 "&lt;root a=\"1\">\n  &lt;b>xyz&lt;/b>\n&lt;/root>";
+					} else {
+						try {
+							File f = File.createTempFile("data", ".json");
+							f.deleteOnExit();
+							SUtils.writeString(f,"{\"a\": [1, 2, 3]}","UTF-8");
+							dataPath = f.getAbsolutePath();
+						} catch (Exception ex) {
+							throw new RuntimeException(ex);
+						}
+					}
 					debug = editInput = displayResult = "true";
 				}
-				src += "  <Execute Mode = \"validate\"";
+				src += "  <Execute Mode=\"validate\"";
+				if (format == 'j') {
+					src += " DataType=\"JSON\"";
+				}
 				if (displayResult != null) {
-					src += " DisplayResult = \"true\"";
+					src += " DisplayResult=\"true\"";
 				}
 				src += ">\n";
 				src += "    <Input";
@@ -1052,6 +1127,6 @@ public class GUIEditor extends GUIScreen {
 				: XDConstants.XDPROPERTYVALUE_DEBUG_TRUE)
 			+ "\"/>\n"+
 "</Project>";
-		runEditor(param, src);
+		runEditor(param, format, src);
 	}
 }

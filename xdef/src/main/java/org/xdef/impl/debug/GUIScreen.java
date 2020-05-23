@@ -91,7 +91,7 @@ public class GUIScreen extends GUIBase {
 				setSource(_sources.keySet().iterator().next());
 			}
 			_sourceArea.setCaretPosition(
-				_sourceItem._pos >= 0 ? _sourceItem._pos : 0);
+				_sourceItem!=null && _sourceItem._pos>=0 ? _sourceItem._pos : 0);
 			_sourceArea.requestFocus();
 		}
 	}
@@ -418,5 +418,4 @@ public class GUIScreen extends GUIBase {
 		_positions = null;
 		_actionFinished = true;
 	}
-
 }

@@ -27,14 +27,35 @@ public class MyTest_1 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		for (String xml: new String[] {
 //"<a/>\n",
-"<a>\n"+
-"  <b c='20190521214531'/>\n"+
-"  <b c='1'/>\n"+
-"  <b c='9223372036854775807'/>\n"+
-"  <b c='-807'/>\n"+
-"  <b c='92233720368547758099'/>\n"+
-"</a>",
+"<a a='a@cz' b='2019-10-20' c='20-10-2019'/>\n",
+//"<a>\n"+
+//"  <b>\n"+
+//"    <c/>\n"+
+//"    <d/>\n"+
+//"  </b>\n"+
+//"  <b>\n"+
+//"    <c/>\n"+
+//"    <d/>\n"+
+//"  </b>\n"+
+//"</a>\n",
+//"<a>\n"+
+//"  <b c='20190521214531'/>\n"+
+//"  <b c='1'/>\n"+
+//"  <b c='9223372036854775807'/>\n"+
+//"  <b c='-807'/>\n"+
+//"  <b c='92233720368547758099'/>\n"+
+//"</a>",
 //"<A a='a' b='bb' c='1' d='true'></A>",
+//"<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n" +
+//"  <xd:Y xd:y=\"z\"> x  </xd:Y>\n" +
+//"  <xd:Y y=\"z\"/>\n" +
+//"  <xd:Y/>\n" +
+//"</xd:X>",
+//"<X xmlns=\"a.b.c\" x=\"123\">\n" +
+//"  <Y y=\"z\"> x </Y>\n" +
+//"  <Y/>\n" +
+//"  <Z/>\n" +
+//"</X>",
 //"<A>\n"+
 //"  <B a='11.06.87'/><B a='11.06.1987'/>\n"+
 //"  <C a='11.06.87'/><C a='11.06.1987'/>\n"+
@@ -117,16 +138,22 @@ public class MyTest_1 extends XDTester {
 //"   <log cttr=\"xxx\" />\n" +
 //"</Values>",
 		}) {
+			String xdef = null;
 			try {
 				Element el = GenXDefinition.genXdef(xml);
-				String xdef = KXmlUtils.nodeToString(el, true);
+				xdef = KXmlUtils.nodeToString(el, true);
 System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
 System.out.println("xdef:\n" + xdef);
 System.out.println("===========");
 				XDPool xp = compile(xdef);
 				assertEq(xml, parse(xp, "", xml, reporter));
 				assertNoErrors(reporter);
-			} catch (Exception ex) {fail(ex);}
+			} catch (Exception ex) {
+System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
+System.out.println("xdef:\n" + xdef);
+System.out.println("===========");
+				fail(ex);
+			}
 		}
 	}
 
