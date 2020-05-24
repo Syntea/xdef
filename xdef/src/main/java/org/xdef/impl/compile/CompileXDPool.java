@@ -281,7 +281,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				if (parentXel == null) {
 					//Internal error: &{0}
-					throw new SError(XDEF.XDEF309, "No XElement");
+					throw new SError(XDEF.XDEF202, "No XElement");
 				}
 			}
 			if (nodeKind == XNode.XMELEMENT) {
@@ -1595,7 +1595,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		if (_xdefs.containsKey(def.getName())) {
 			//XDefinition '&{0}' already exists
-			error(XDEF.XDEF303, def.getName());
+			error(XDEF.XDEF268, def.getName());
 		}
 		_xdefs.put(def.getName(), def);
 	}

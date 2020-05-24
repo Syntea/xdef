@@ -272,7 +272,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 								xp.error(_actPNode._name, XDEF.XDEF212);
 							} else {
 								//X-definition '&{0}' already exists
-								xp.error(_actPNode._name,XDEF.XDEF303, defName);
+								xp.error(_actPNode._name,XDEF.XDEF268, defName);
 							}
 							defName = null;
 							break;

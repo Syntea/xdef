@@ -428,13 +428,13 @@ public class XData extends XCodeDescriptor
 		final boolean full) {
 		boolean result = compareName(y, rep) &&
 			compareOccurrence(y, rep);
-		String path = getXDPosition() + "; " + y.getXDPosition();
 		if ("$text".equals(getName())) {
 			if (_textValuesCase != y._textValuesCase ||
 				_textWhiteSpaces != y._textWhiteSpaces ||
 				_textValuesCase != y._textValuesCase ||
 				_trimText != y._trimText) {
-				rep.error(XDEF.XDEF290, path); //Options differs: &{0}
+				//Options differs: &{0} and &{1}
+				rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());
 				result = false;
 			}
 		} else {
@@ -444,7 +444,8 @@ public class XData extends XCodeDescriptor
 				_attrValuesCase != y._attrValuesCase ||
 				_attrWhiteSpaces != y._attrWhiteSpaces ||
 				_trimAttr != y._trimAttr) {
-				rep.error(XDEF.XDEF290, path); //Options differs: &{0}
+				//Options differs: &{0} and &{1}
+				rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());
 				result = false;
 			}
 		}
@@ -453,8 +454,8 @@ public class XData extends XCodeDescriptor
 		if (isFixed()) {
 			if (!y.isFixed()) {
 				if (y._check>=0||y._onAbsence>=0||y._onFalse>=0) {
-					//Default or fixed values differs: &{0}
-					rep.error(XDEF.XDEF286, path);
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
 					return false;
 				}
 				if (full || cx != cy) {
@@ -476,12 +477,12 @@ public class XData extends XCodeDescriptor
 					return result;
 				}
 			}
-			//Default or fixed values differs:&{0}
-			rep.error(XDEF.XDEF286, path);
+			//Default or fixed values differs: &{0} and &{1}
+			rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
 			return false;
 		} else if (y.isFixed()) {
-			//Default or fixed values differs:&{0}
-			rep.error(XDEF.XDEF286, path);
+			//Default or fixed values differs: &{0} and &{1}
+			rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
 			return false;
 		}
 		XDValue vx, vy;
@@ -494,8 +495,8 @@ public class XData extends XCodeDescriptor
 				}
 			} else if (cx != cy || y._deflt != _deflt) {
 				if (vx == null || vy == null || !vx.equals(vy)) {
-					//Default or fixed values differs: &{0}
-					rep.error(XDEF.XDEF286, path);
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
 					result = false;
 				}
 			}
@@ -509,8 +510,8 @@ public class XData extends XCodeDescriptor
 				}
 			} else if (cx != cy || y._onAbsence != _onAbsence) {
 				if (vx == null || vy == null || !vx.equals(vy)) {
-					//Default or fixed values differs: &{0}
-					rep.error(XDEF.XDEF286, path);
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
 					result = false;
 				}
 			}
@@ -534,7 +535,8 @@ public class XData extends XCodeDescriptor
 					return result;
 				}
 			}
-			rep.error(XDEF.XDEF285, path); //Type of value differs: &{0}
+			//Type of value differs: &{0} and &{1}
+			rep.error(XDEF.XDEF285, getXDPosition(), y.getXDPosition());
 			return false;
 		}
 	}
