@@ -116,7 +116,7 @@ public class TestGenXdef extends XDTester {
 "   </File>\n" +
 "   <File Name=\"sss.bb\"\n" +
 "           Format=\"TXT\"\n" +
-"           Kind=\" \"\n" +
+"           Kind=\"\"\n" +
 "           RecNum=\"12345678\">\n" +
 "   </File>\n" +
 "   xxxx\n" +

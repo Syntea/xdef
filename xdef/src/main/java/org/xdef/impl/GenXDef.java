@@ -104,7 +104,7 @@ public class GenXDef implements XDConstants {
 					_atts.put(qname, new XAttr(att.getNodeValue().trim()));
 				} else {
 					_atts.put(qname,
-						new XAttr(genType(this, att.getNodeValue().trim())));
+						new XAttr(genType(this,att.getNodeValue().trim())));
 				}
 			}
 			final NodeList nl = elem.getChildNodes();
@@ -440,7 +440,7 @@ public class GenXDef implements XDConstants {
 	private static String genType(final XModel model, final String data) {
 		if (data.isEmpty()) {
 			model._options.add("acceptEmptyAttributes");
-			return "string()";
+			return "string(0,*)";
 		}
 		if (new XSParseInt().check(null, data).matches()) {
 			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
@@ -514,7 +514,7 @@ public class GenXDef implements XDConstants {
 			mask = "";
 			p.setBufIndex(0);
 		}
-		if (mask.length() > 0) {
+		if (!mask.isEmpty()) {
 			if (p.eos()) {
 				return "xdatetime('" + mask + "')";
 			}
@@ -547,7 +547,7 @@ public class GenXDef implements XDConstants {
 				}
 			}
 		}
-		return data.trim().isEmpty() ? "string(0,*)" : "string()";
+		return "string()";
 	}
 
 	private static void appendText(final Element el, final String text) {

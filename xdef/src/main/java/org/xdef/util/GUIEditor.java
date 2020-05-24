@@ -39,7 +39,7 @@ import org.xdef.json.JsonUtil;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
-/** Provides utility for interactive editing and debugging X-definitions.
+/** Provides interactive editing and debugging of X-definitions.
  * @author Vaclav Trojan
  */
 public class GUIEditor extends GUIScreen {
