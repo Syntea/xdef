@@ -499,6 +499,12 @@ public class CompileBase implements CodeTable, XDValueID {
 				new DefLong(16)));
 		parser(im, org.xdef.impl.parsers.XDParseMD5.class, "MD5");
 
+		im = genParserMetnod(0, 0, null, XD_STRING,
+			keyParam("enumeration", XD_BYTES, true, -1,false),
+			keyParam("length", XD_INT, false, -1, true,/*fixed*/
+				new DefLong(20)));
+		parser(im, org.xdef.impl.parsers.XDParseSHA1.class, "SHA1");
+
 		im = genParserMetnod(0, 1, new short[]{XD_ELEMENT}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1,false),
 			keyParam("length", XD_INT, false, -1,false),

@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.impl.parsers.XDParseEmail;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseMD5;
+import org.xdef.impl.parsers.XDParseSHA1;
 import org.xdef.impl.parsers.XSParseBase64Binary;
 import org.xdef.impl.parsers.XSParseBoolean;
 import org.xdef.impl.parsers.XSParseDate;
@@ -29,6 +30,7 @@ import org.xdef.impl.parsers.XSParseGMonth;
 import org.xdef.impl.parsers.XSParseGMonthDay;
 import org.xdef.impl.parsers.XSParseGYear;
 import org.xdef.impl.parsers.XSParseGYearMonth;
+import org.xdef.impl.parsers.XSParseHexBinary;
 import org.xdef.impl.parsers.XSParseInt;
 import org.xdef.impl.parsers.XSParseInteger;
 import org.xdef.impl.parsers.XSParseLong;
@@ -183,49 +185,50 @@ public class GenXDef implements XDConstants {
 			}
 		}
 
+		private static String mergeTypes(final String x, final String y) {
+			if (x.equals(y)) {
+				return x;
+			}
+			if (x.startsWith("string(")
+				&& y.startsWith("string(")) {
+				return !"string()".equals(x) ? x : y;
+			} else if (x.equals("dateYMDhms()") && y.equals("long()")) {
+				return "long()";
+			} else if (x.equals("int()")
+				&& (y.equals("long()") || y.equals("dateYMDhms()"))) {
+				return "long()";
+			} else if (x.equals("int()") && y.equals("integer()")) {
+				return "integer()";
+			} else if (x.equals("long()") && (y.equals("int()")
+				|| y.equals("dateYMDhms()"))) {
+				return "long()";
+			} else if (x.equals("long()") && (y.equals("int()")
+				|| y.equals("dateYMDhms()"))) {
+				return "long()";
+			} else if (x.equals("long()") && y.equals("integer()")) {
+				return "integer()";
+			} else if (x.equals("integer()") && (y.equals("int()")
+				|| y.equals("long()") || y.equals("dateYMDhms()"))) {
+				return "integer()";
+			} else if (x.equals("MD5()")
+				&& (y.equals("SHA1()") || y.equals("hexBinary()"))) {
+				return "hexBinary()";
+			} else if (x.equals("SHA1()")
+				&& (y.equals("MD5()") || y.equals("hexBinary()"))) {
+				return "hexBinary()";
+			} else if (x.equals("hexBinary()")
+				&& (y.equals("MD5()") || y.equals("SHA1()"))) {
+				return "hexBinary()";
+			}
+			return "string()";
+		}
+
 		private void mergeAttrs(final XModel x) {
 			for (QName name: _atts.keySet()){
 				final XAttr yattr = _atts.get(name);
 				final XAttr xattr = x._atts.get(name);
 				if (xattr != null) { //has attribute
-					if (!yattr._type.equals(xattr._type)) {
-						if (xattr._type.startsWith("string(")
-							&& yattr._type.startsWith("string(")) {
-							if (!"string()".equals(xattr._type)) {
-								yattr._type = xattr._type;
-							} else {
-								xattr._type = yattr._type;
-							}
-						} else if (xattr._type.equals("dateYMDhms()")
-							&& yattr._type.equals("long()")) {
-							yattr._type = "long()";
-						} else if (xattr._type.equals("int()")
-							&& (yattr._type.equals("long()")
-								|| yattr._type.equals("dateYMDhms()"))) {
-								yattr._type = "long()";
-						} else if (xattr._type.equals("int()")
-							&& yattr._type.equals("integer()")) {
-								yattr._type = "integer()";
-						} else if (xattr._type.equals("long()")
-							&& (yattr._type.equals("int()")
-								|| yattr._type.equals("dateYMDhms()"))) {
-								yattr._type = "long()";
-						} else if (xattr._type.equals("long()")
-							&& (yattr._type.equals("int()")
-								|| yattr._type.equals("dateYMDhms()"))) {
-								yattr._type = "long()";
-						} else if (xattr._type.equals("long()")
-							&& yattr._type.equals("integer()")) {
-								yattr._type = "integer()";
-						} else if (xattr._type.equals("integer()")
-							 && (yattr._type.equals("int()")
-								|| yattr._type.equals("long()")
-								|| yattr._type.equals("dateYMDhms()"))) {
-								yattr._type = "integer()";
-						} else {
-							yattr._type = "string()";
-						}
-					}
+					yattr._type = mergeTypes(xattr._type, yattr._type);
 					if (!xattr._required) {
 						yattr._required = false;
 					}
@@ -487,13 +490,21 @@ public class GenXDef implements XDConstants {
 		if (new XSParseGYear().check(null, data).matches()) {
 			return "gYear()";
 		}
-		if ((data.trim().endsWith("=") || data.trim().length() >= 16)
-			&& new XSParseBase64Binary().check(null, data).matches()) {
-			return "base64Binary()";
-		}
-		if (data.trim().length() == 16
+		if (data.length() == 32
 			&& new XDParseMD5().check(null, data).matches()) {
 			return "MD5()";
+		}
+		if (data.length() == 40
+			&& new XDParseSHA1().check(null, data).matches()) {
+			return "SHA1()";
+		}
+		if (data.length() > 16
+			&& new XSParseHexBinary().check(null, data).matches()) {
+			return "hexBinary()";
+		}
+		if (data.length() > 16
+			&& new XSParseBase64Binary().check(null, data).matches()) {
+			return "base64Binary()";
 		}
 		if (new XDParseEmailDate().check(null, data).matches()) {
 			return "emailDate()";
@@ -625,8 +636,8 @@ public class GenXDef implements XDConstants {
 		}
 		parent.appendChild(model);
 		if (x._mixed) {
-			final Element el =
-				createElement(model, XDEF40_NS_URI, XDEF_NS_PREFIX + ":mixed");
+			final Element el = createElement(model,
+				XDEF40_NS_URI, XDEF_NS_PREFIX + ":mixed");
 			model.appendChild(el);
 			model = el;
 		}
