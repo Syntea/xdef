@@ -255,6 +255,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			"?ISOyearMonth");
 		parser(im, org.xdef.impl.parsers.XDParseDateYMDhms.class, "dateYMDhms");
 		parser(im, org.xdef.impl.parsers.XDParseEmailDate.class, "emailDate");
+		parser(im, org.xdef.impl.parsers.XDParsePrintableDate.class,
+			"printableDate");
 		parser(im, org.xdef.impl.parsers.XDParseISOYear.class, "?ISOyear");
 		parser(im, org.xdef.impl.parsers.XDParseISODate.class, "?ISOdate");
 		parser(im, org.xdef.impl.parsers.XDParseISODateTime.class,

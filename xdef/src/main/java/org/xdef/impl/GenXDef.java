@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.impl.parsers.XDParseEmail;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseMD5;
+import org.xdef.impl.parsers.XDParsePrintableDate;
 import org.xdef.impl.parsers.XDParseSHA1;
 import org.xdef.impl.parsers.XSParseBase64Binary;
 import org.xdef.impl.parsers.XSParseBoolean;
@@ -511,6 +512,9 @@ public class GenXDef implements XDConstants {
 		}
 		if (new XDParseEmail().check(null, data).matches()) {
 			return "email()";
+		}
+		if (new XDParsePrintableDate().check(null, data).matches()) {
+			return "printableDate()";
 		}
 		final StringParser p = new StringParser(data);
 		p.setBufIndex(0);

@@ -27,9 +27,9 @@ public class MyTest_1 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		for (String xml: new String[] {
 "<a>\n"+
-" <b a='5dd302b28bd9b807728f081d7ca61a282d9377bd'/>\n"+
-" <b a='8bd9b807728f081d7ca61a282d9377bd'/>\n"+
 " <b a='b807728f081d7ca61a282d9377bd'/>\n"+
+" <b a='8bd9b807728f081d7ca61a282d9377bd'/>\n"+
+" <b a='5dd302b28bd9b807728f081d7ca61a282d9377bd' c='Mon May 11 23:39:07 CEST 2020'/>\n"+
 "</a>",
 //"<a/>\n",
 //"<a a='a@cz' b='2019-10-20' c='20-10-2019'/>\n",
