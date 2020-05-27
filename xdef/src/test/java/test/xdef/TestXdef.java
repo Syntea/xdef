@@ -33,6 +33,7 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
+import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
@@ -51,6 +52,7 @@ public final class TestXdef extends XDTester {
 		String xml;
 		String s;
 		ArrayReporter reporter = new ArrayReporter();
+		FileReportWriter frw;
 		XDDocument xd;
 		Element el;
 		Report rep;
@@ -3044,6 +3046,16 @@ public final class TestXdef extends XDTester {
 			xml = "<Z/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try { // test FileReportWriter as parameter of compilation.
+			xdef =
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>\n"+
+"  <A a='xxxx()'/>\n"+
+"</xd:def>";
+			frw = new FileReportWriter(tempDir + "a.rep");
+			xp = XDFactory.compileXD(frw, null, xdef);
+			assertTrue(frw.getReportReader().printToString().contains(
+				"XDEF443"));
 		} catch (Exception ex) {fail(ex);}
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");

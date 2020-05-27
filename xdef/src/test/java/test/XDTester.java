@@ -250,6 +250,7 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public final Element test(final InputStream[] xdefs,
 		final InputStream data,
 		final String name,
@@ -380,6 +381,7 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	final public Element test(final Class[] objs,
 		final String xdef,
 		final String data,

@@ -88,6 +88,7 @@ public final class TestErrors extends XDTester {
 		return test(props, new String[] {xdef});
 	}
 
+	@SuppressWarnings("deprecation")
 	/** Compile the source.
 	 * @param props properties connected to compilation.
 	 * @param xdef array of sources wit XDefinitions.
