@@ -1133,7 +1133,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										break;
 									default:
 										//Internal error: &{0}
-										throw new SError(XDEF.XDEF309,
+										throw new SError(XDEF.XDEF202,
 											"Undefined type on PC=" +
 											(pc - 1) + "; " +
 											cmd.getClass().getName() +
@@ -1251,7 +1251,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								break;
 							default:
 								//Internal error: &{0}
-								throw new SError(XDEF.XDEF309,
+								throw new SError(XDEF.XDEF202,
 									"Undefined result type on PC = "+
 									(pc - 1) + "; " +
 									cmd.getClass().getName() + "; code= " +
@@ -1269,7 +1269,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			default:
 				//Internal error: &{0}
-				throw new XXException(XDEF.XDEF309,
+				throw new XXException(XDEF.XDEF202,
 					"Undefined code on PC = " + (pc - 1) + "; " +
 					cmd.toString() + "; code=" +
 					CodeDisplay.getCodeName(cmd.getCode()));

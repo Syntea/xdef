@@ -88,6 +88,7 @@ public final class TestErrors extends XDTester {
 		return test(props, new String[] {xdef});
 	}
 
+	@SuppressWarnings("deprecation")
 	/** Compile the source.
 	 * @param props properties connected to compilation.
 	 * @param xdef array of sources wit XDefinitions.
@@ -455,12 +456,12 @@ public final class TestErrors extends XDTester {
 			reporter = test(props, sources);
 			assertEq("", chkReport(reporter, "XDEF425", "10", "26", fName2));
 			rep = reporter.getReport();
-			if (!"".equals(chkReport(rep, "XDEF307", "4", "20", fName1))) {
-				assertEq("", chkReport(rep, "XDEF307", "4", "20", fName2));
+			if (!"".equals(chkReport(rep, "XDEF122", "4", "20", fName1))) {
+				assertEq("", chkReport(rep, "XDEF122", "4", "20", fName2));
 			}
 			rep = reporter.getReport();
-			if (!"".equals(chkReport(rep, "XDEF307", "4", "20", fName1))) {
-				assertEq("", chkReport(rep, "XDEF307", "4", "20", fName2));
+			if (!"".equals(chkReport(rep, "XDEF122", "4", "20", fName1))) {
+				assertEq("", chkReport(rep, "XDEF122", "4", "20", fName2));
 			}
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
@@ -1003,7 +1004,7 @@ public final class TestErrors extends XDTester {
 					assertTrue(s.contains("E XDEF903")||!s.contains("xd1"), s);
 					s = reporter.getReport().toString();
 					assertTrue(s.contains("E XDEF903")||!s.contains("xd2"), s);
-					assertEq("", chkReport(reporter, "XDEF307","1","73",null));
+					assertEq("", chkReport(reporter, "XDEF122","1","73",null));
 					assertNull(reporter.getReport(), reporter.printToString());
 				}
 			}

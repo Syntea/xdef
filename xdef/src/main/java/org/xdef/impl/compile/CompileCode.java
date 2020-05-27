@@ -1860,7 +1860,7 @@ public final class CompileCode extends CompileBase {
 			case LD_CONST: {
 				if (resultType != XD_PARSER) {
 					//Internal error: &{0}
-					_parser.error(XDEF.XDEF309,"const type: "+resultType);
+					_parser.error(XDEF.XDEF202,"const type: "+resultType);
 					break; // this should never happen!
 				}
 				// parsers

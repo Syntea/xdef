@@ -2452,6 +2452,13 @@ public class StringParser extends SReporter implements SParser {
 		return isDatetime("EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]");
 	}
 
+	/** Parse date in the printable format.
+	 * @return <tt>true</tt> if date on current position is in printable format.
+	 */
+	public final boolean isPrintableDatetime() {
+		return isDatetime("EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
+	}
+
 	/** Parse date in ISO8601 date or date and time (see
 	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).

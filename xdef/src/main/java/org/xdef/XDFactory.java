@@ -84,6 +84,7 @@ public final class XDFactory {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	/** Set object from parameter to be prepared for compiling.
 	 * @param b Instance of XDBuilder.
 	 * @param param Object to be analyzed for compiling.

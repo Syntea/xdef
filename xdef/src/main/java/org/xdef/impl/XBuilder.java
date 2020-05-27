@@ -36,6 +36,7 @@ import java.util.Properties;
 import org.xdef.sys.ReportWriter;
 import java.lang.reflect.Constructor;
 import org.xdef.msg.SYS;
+import org.xdef.sys.ReportReader;
 import org.xdef.sys.SThrowable;
 
 /** Builder of XPool.
@@ -176,7 +177,10 @@ public class XBuilder implements XDBuilder {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	/** Set external classes with external methods.
+	 * @deprecated setExternals will be no more supported. Please use
+	 * declaration of external methods in X-definition.
 	 * @param ext array of classes with external methods.
 	 * @return this XDBuilde object.
 	 */
@@ -185,11 +189,43 @@ public class XBuilder implements XDBuilder {
 		return this;
 	}
 
-
 	/** Get compiler.
 	 * @return created XDPool.
 	 */
 	public final CompileXDPool getCompiler() {return _xp._compiler;}
+
+	/** Finish compilation and return compiled XDPool.
+	 * @param result compiled XDPool.
+	 * @param p compiler of X-definitions.
+	 * @param userReporter the reporter which was set by user.
+	 * @param reporter actual reporter.
+	 * @return compiled XDPool.
+	 */
+	private XDPool finishCompilation(final XPool result,
+		final CompileXDPool p,
+		final ReportWriter userReporter,
+		final ReportWriter reporter) {
+		if (userReporter == null) { // reporter was no set.
+			if (result.isChkWarnings()) {
+				p.getReportWriter().checkAndThrowErrorWarnings();
+			} else {
+				p.getReportWriter().checkAndThrowErrors();
+			}
+		} else if (reporter != userReporter) {
+			Report rep;
+			ReportReader rr;
+			if (reporter instanceof ArrayReporter) {
+				rr = (ArrayReporter) reporter;
+			} else {
+				rr = reporter.getReportReader();
+			}
+			while ((rep = rr.getReport()) != null) {
+				userReporter.putReport(rep);
+			}
+		}
+		result.clearSourcesMap(!result.isDebugMode());
+		return result;
+	}
 
 	@Override
 	/** Build XDPool from prepared sources.
@@ -206,94 +242,87 @@ public class XBuilder implements XDBuilder {
 		result._compiler = null;
 		ReportWriter userReporter = result._reporter; // user's reporter
 		result._reporter = null;
-		ArrayReporter reporter = (ArrayReporter) p.getReportWriter();
+		ReportWriter reporter = p.getReportWriter();
 		byte displayMode = result.getDisplayMode();
 		boolean display = displayMode == XPool.DISPLAY_TRUE
 			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));
 		try {
 			p.compileXPool(result);
 		} catch (RuntimeException ex) {
-			if (!display) {
-				throw ex;
-			}
-			if (!(ex instanceof SThrowable)) {
-				//Program exception&{0}{: }
-				reporter.putReport(Report.error(SYS.SYS036, ex));
-			}
+			//Program exception&{0}{: }
+			reporter.putReport(display
+				? Report.error(SYS.SYS036, ex) : Report.fatal(SYS.SYS036, ex));
 		}
-		ArrayReporter ar = reporter;
-		if (display) {
-			Class<?>[] externals = p.getExternals(); //save external classes
-			XEditor xeditor = null;
-			try {
-				String xdefEditor = result.getXdefEditor();
-				if (xdefEditor != null) {
-					Class<?> cls = Class.forName(xdefEditor);
-					Constructor<?> c = cls.getDeclaredConstructor();
-					c.setAccessible(true);
-					xeditor = (XEditor) c.newInstance();
-				}
-			} catch (Exception ex) {
-				xeditor = null;
-				// Class with the external debug editor &{0}{"}{"}
-				// is not available.
-				throw new SRuntimeException(
-					XDEF.XDEF850, ex, result.getXdefEditor());
-			}
-			if (xeditor == null) {
-				// create editor with the default screen position.
-				xeditor = new ChkGUIDisplay(result.getXDSourceInfo());
-			}
-			while(!xeditor.setXEditor(result, ar)) {
-				XDSourceInfo is = result.getXDSourceInfo();
-				Map<String, XDSourceItem> map = is.getMap();
-				// compile again
-				result = new XPool(result.getProperties(),null, externals);
-				XDSourceInfo is1 = result.getXDSourceInfo();
-				// update source info (something might be changed)
-				is1._xpos = is._xpos;
-				is1._ypos = is._ypos;
-				is1._width = is._width;
-				is1._height = is._height;
-				for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
-					String key = e.getKey();
-					XDSourceItem src = e.getValue();
-					if (src._source != null) {
-						result.setSource(src._source, key);
-						result.getXDSourceInfo().getMap().put(key, src);
-					} else if (src._url != null) {
-						result.setSource(src._url);
-					}
-				}
-				// compile again
-				p = result._compiler;
-				try {
-					p.compileXPool(result);
-					ar = (ArrayReporter) p.getReportWriter();
-				} catch (Exception ex) {
-					ar = (ArrayReporter) p.getReportWriter();
-					if (!(ex instanceof SThrowable)) {
-						//Program exception&{0}{: }
-						reporter.putReport(Report.error(SYS.SYS036, ex));
-					}
-				}
-				result._compiler = null;
-			}
+		if (!display) {
+			return finishCompilation(result, p, userReporter, reporter);
 		}
-		if (userReporter == null) {
-			if (result.isChkWarnings()) {
-				p.getReportWriter().checkAndThrowErrorWarnings();
-			} else {
-				p.getReportWriter().checkAndThrowErrors();
-			}
-		} else if (reporter != userReporter) {
+		ArrayReporter ar;
+		if (reporter instanceof ArrayReporter) {
+			ar = (ArrayReporter) reporter;
+		} else {
+			ar = new ArrayReporter();
+			ReportReader rr = reporter.getReportReader();
 			Report rep;
-			while ((rep = reporter.getReport()) != null) {
-				userReporter.putReport(rep);
+			while((rep = rr.getReport()) != null) {
+				ar.putReport(rep);
 			}
+			rr.close();
 		}
-		result.clearSourcesMap(!result.isDebugMode());
-		return result;
+		Class<?>[] externals = p.getExternals(); //save external classes
+		XEditor xeditor = null;
+		try {
+			String xdefEditor = result.getXdefEditor();
+			if (xdefEditor != null) {
+				Class<?> cls = Class.forName(xdefEditor);
+				Constructor<?> c = cls.getDeclaredConstructor();
+				c.setAccessible(true);
+				xeditor = (XEditor) c.newInstance();
+			}
+		} catch (Exception ex) {
+			xeditor = null;
+			// Class with the external debug editor &{0}{"}{"}
+			// is not available.
+			throw new SRuntimeException(
+				XDEF.XDEF850, ex, result.getXdefEditor());
+		}
+		if (xeditor == null) {
+			// create editor with the default screen position.
+			xeditor = new ChkGUIDisplay(result.getXDSourceInfo());
+		}
+		while(!xeditor.setXEditor(result, ar)) {
+			XDSourceInfo is = result.getXDSourceInfo();
+			Map<String, XDSourceItem> map = is.getMap();
+			// compile again
+			result = new XPool(result.getProperties(),null, externals);
+			XDSourceInfo is1 = result.getXDSourceInfo();
+			// update source info (something might be changed)
+			is1._xpos = is._xpos;
+			is1._ypos = is._ypos;
+			is1._width = is._width;
+			is1._height = is._height;
+			for (Map.Entry<String, XDSourceItem> e: map.entrySet()) {
+				String key = e.getKey();
+				XDSourceItem src = e.getValue();
+				if (src._source != null) {
+					result.setSource(src._source, key);
+					result.getXDSourceInfo().getMap().put(key, src);
+				} else if (src._url != null) {
+					result.setSource(src._url);
+				}
+			}
+			// compile again
+			p = result._compiler;
+			try {
+				p.compileXPool(result);
+			} catch (Exception ex) {
+				if (!(ex instanceof SThrowable)) {
+					//Program exception&{0}{: }
+					reporter.putReport(Report.error(SYS.SYS036, ex));
+				}
+			}
+			result._compiler = null;
+		}
+		return finishCompilation(result, p, userReporter, reporter);
 	}
 
 	/** Parse XML with X-definition declared in source input stream.

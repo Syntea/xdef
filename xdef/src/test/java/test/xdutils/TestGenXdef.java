@@ -33,8 +33,9 @@ public class TestGenXdef extends XDTester {
 "  <b c='20190521214531'/>\n"+
 "  <b c='1'/>\n"+
 "  <b c='9223372036854775807'/>\n"+
-"  <b c='-807'/>\n"+
-"  <b c='92233720368547758099'/>\n"+
+"  <b c='-807' d='5dd302b28bd9b807728f081d7ca61a282d9377bd'/>\n"+
+"  <b c='0' e='d302b28bd9b807728f081d7ca61a282d'/>\n"+
+"  <b c='92233720368547758099' f='0deff0012000012345'/>\n"+
 "</a>",
 "<A a='a' b='bb' c='1' d='true'></A>",
 "<A>\n"+
@@ -116,7 +117,7 @@ public class TestGenXdef extends XDTester {
 "   </File>\n" +
 "   <File Name=\"sss.bb\"\n" +
 "           Format=\"TXT\"\n" +
-"           Kind=\" \"\n" +
+"           Kind=\"\"\n" +
 "           RecNum=\"12345678\">\n" +
 "   </File>\n" +
 "   xxxx\n" +

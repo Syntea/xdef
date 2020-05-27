@@ -302,7 +302,7 @@ public abstract class XNode implements XMNode {
 	 */
 	protected final boolean compareName(final XNode y, final ArrayReporter rep){
 		if (!getLocalName().equals(y.getLocalName())) {
-			//Names differs: &{0}, &{1}
+			//Names differs: &{0} and &{1}
 			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition());
 			compareNamespace(y, rep);
 			return false;
@@ -325,8 +325,8 @@ public abstract class XNode implements XMNode {
 		} else if (ux.equals(uy)) {
 			return true;
 		}
-		String path = getXDPosition() + "; " + y.getXDPosition();
-		rep.error(XDEF.XDEF288, path); //Namespace differs: &{0}
+		//Namespace differs: &{0} and &{1}
+		rep.error(XDEF.XDEF288, getXDPosition(), y.getXDPosition());
 		return false;
 	}
 
@@ -335,8 +335,8 @@ public abstract class XNode implements XMNode {
 		if (maxOccurs()==y.maxOccurs() && minOccurs()==y.minOccurs()) {
 			return true;
 		}
-		String path = getXDPosition() + "; " + y.getXDPosition();
-		rep.error(XDEF.XDEF287, path); //Occurrence differs: &{0}
+		//Occurrence differs: &{0} and &{1}
+		rep.error(XDEF.XDEF287, getXDPosition(), y.getXDPosition());
 		return false;
 	}
 
@@ -387,5 +387,4 @@ public abstract class XNode implements XMNode {
 
 	/** Set value of occurrence as unbounded. */
 	public final void setUnbounded() {_occ.setUnbounded();}
-
 }

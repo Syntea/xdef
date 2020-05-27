@@ -112,7 +112,7 @@ final class CompileReference extends XNode {
 				_varinit = -1;
 				break;
 			default:
-				throw new SRuntimeException(XDEF.XDEF309,//Internal error:&{0}
+				throw new SRuntimeException(XDEF.XDEF202,//Internal error:&{0}
 					"Incorrect reference node: " + parent.getKind() +
 					": " + getName() +
 					(position != null && position.getLineNumber() > 0 ?
@@ -143,7 +143,7 @@ final class CompileReference extends XNode {
 			? (_definition.getName() + '#' + getName())
 			: (_refXdefName + '#' + getName())));
 		//Referred object doesn't exist: &{0}
-		getSPosition().putReport(Report.error(XDEF.XDEF307, s), reporter);
+		getSPosition().putReport(Report.error(XDEF.XDEF122, s), reporter);
 	}
 
 	/** Get reference target model XNode.

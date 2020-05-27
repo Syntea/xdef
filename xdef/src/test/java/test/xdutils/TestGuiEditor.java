@@ -1,6 +1,5 @@
 package test.xdutils;
 
-import java.io.File;
 import org.xdef.proc.XXNode;
 import org.xdef.util.GUIEditor;
 import test.XDTester;

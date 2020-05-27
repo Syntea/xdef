@@ -475,17 +475,18 @@ public final class XElement extends XCodeDescriptor
 		for (; j < x.length; j++) {
 			XNode ix = x[j];
 			XNode iy = y[j];
-			String path = ix.getXDPosition() + "; " + iy.getXDPosition();
 			if (ix.getKind() != iy.getKind()) {
-				rep.error(XDEF.XDEF283, path); //Child nodes differs: &{0}
+				 //Child nodes differs: &{0} and &{1}
+				rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
 				return -1;
 			}
 			switch (ix.getKind()) {
 				case XMNode.XMELEMENT:
 					if (!((XElement) ix).compareElement((XElement) iy,
 						rep, full)) {
-						//Child nodes differs:&{0}
-						rep.error(XDEF.XDEF283, path);
+						//Child nodes differs: &{0} and &{1}
+						rep.error(XDEF.XDEF283,
+							ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
@@ -499,8 +500,9 @@ public final class XElement extends XCodeDescriptor
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
 					if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
-						//Child nodes differs:&{0}
-						rep.error(XDEF.XDEF283, path);
+						//Child nodes differs: &{0} and &{1}
+						rep.error(XDEF.XDEF283,
+							ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
@@ -535,12 +537,12 @@ public final class XElement extends XCodeDescriptor
 		final ArrayReporter reporter,
 		final boolean full) {
 		boolean result = compareNamespace(y, reporter);
-		String path = getXDPosition() + "; " + y.getXDPosition();
 		if (_nillable != y._nillable ||
 			_moreAttributes != y._moreAttributes ||
 			_moreElements != y._moreElements ||
 			_moreText != y._moreText) {
-			reporter.error(XDEF.XDEF290, path); //Options differs: &{0}
+			 //Options differs: &{0} and &{1}
+			reporter.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());
 			result = false;
 		}
 		//compare options
@@ -548,21 +550,22 @@ public final class XElement extends XCodeDescriptor
 		XData[] ay = (XData[]) y.getAttrs();
 		if (ax == null) {
 			if (ay != null) {
-				//List of attributes differs: &{0}
-				reporter.error(XDEF.XDEF284, path);
+				//List of attributes differs: &{0} and &{1}
+				reporter.error(XDEF.XDEF284, getXDPosition(),y.getXDPosition());
 				result = false;
 			}
 		} else {
 			if (ax.length != ay.length) {
+				//List of attributes differs: &{0} and &{1}
+				reporter.error(XDEF.XDEF284, getXDPosition(),y.getXDPosition());
 				result = false;
 			}
 			for (int i = 0; i < ax.length; i++) {
 				XData dx = ax[i];
 				XData dy = y.getDefAttrNS(dx.getNSUri(), dx.getName(), -1);
 				if (dy == null) {
-					String s = dx.getXDPosition() + "; null";
-					//List of attributes differs: &{0}
-					reporter.error(XDEF.XDEF284, s);
+					//List of attributes differs: &{0} and &{1}
+					reporter.error(XDEF.XDEF284, getXDPosition(), "null");
 					result = false;
 				} else if (!dx.compareData(dy, reporter, full)) {
 					result = false;
@@ -573,15 +576,15 @@ public final class XElement extends XCodeDescriptor
 		XNode[] ny = y._childNodes;
 		if (nx == null) {
 			if (ny != null) {
-				//Number of child nodes differs: &{0}
-				reporter.error(XDEF.XDEF283, path);
+				//Child nodes differs: &{0} and &{1}
+				reporter.error(XDEF.XDEF283, getXDPosition(),y.getXDPosition());
 				return false;
 			}
 			return result;
 		} else {
 			if (nx.length != ny.length) {
-				//Number of child nodes differs: &{0}
-				reporter.error(XDEF.XDEF283, path);
+				//Child nodes differs: &{0} and &{1}
+				reporter.error(XDEF.XDEF283, getXDPosition(),y.getXDPosition());
 				return false;
 			}
 			if (compareGroup(nx, ny, 0, reporter, full) < 0) {
@@ -601,22 +604,20 @@ public final class XElement extends XCodeDescriptor
 		final boolean full) {
 		ArrayReporter reporter = new ArrayReporter();
 		if (!(y instanceof XElement)) {
-			//Can't compare different X-definition objects&{0}{ :}
-			reporter.error(XDEF.XDEF281,
-				getXDPosition() + "; " + getXDPosition());
+			//Can't compare different XDPool objects: &{0} and &{1}
+			reporter.error(XDEF.XDEF281, getXDPosition(), getXDPosition());
 			return reporter;
 		}
 		XElement yy = (XElement) y;
 		if (getXDPool() != y.getXDPool()) {
-			reporter.error(XDEF.XDEF281,  //Can't compare different XDPools
-				getXDPosition() + "; " + getXDPosition());
+			//Can't compare different XDPool objects: &{0} and &{1}
+			reporter.error(XDEF.XDEF281, getXDPosition(), getXDPosition());
 			return reporter;
 		}
 		if  (full ? !compareElement(yy, reporter, full) :
 			!compareElementStructure(yy, reporter, full)) {
-			//Models are differrent: &{0}
-
-			reporter.error(XDEF.XDEF282); //Models are differrent
+			//Models are differrent: &{0} and &{1}
+			reporter.error(XDEF.XDEF282, getXDPosition(), y.getXDPosition());
 			return reporter;
 		}
 		return null;

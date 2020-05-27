@@ -26,8 +26,14 @@ public class MyTest_1 extends XDTester {
 		}
 		ArrayReporter reporter = new ArrayReporter();
 		for (String xml: new String[] {
+"<a>\n"+
+" <b a='b807728f081d7ca61a282d9377bd'/>\n"+
+" <b a='8bd9b807728f081d7ca61a282d9377bd'/>\n"+
+" <b a='5dd302b28bd9b807728f081d7ca61a282d9377bd'\n"+
+"    c='Mon May 11 23:39:07 CEST 2020'/>\n"+
+"</a>",
 //"<a/>\n",
-"<a a='a@cz' b='2019-10-20' c='20-10-2019'/>\n",
+//"<a a='a@cz' b='2019-10-20' c='20-10-2019'/>\n",
 //"<a>\n"+
 //"  <b>\n"+
 //"    <c/>\n"+
@@ -37,14 +43,14 @@ public class MyTest_1 extends XDTester {
 //"    <c/>\n"+
 //"    <d/>\n"+
 //"  </b>\n"+
-//"</a>\n",
-//"<a>\n"+
-//"  <b c='20190521214531'/>\n"+
-//"  <b c='1'/>\n"+
-//"  <b c='9223372036854775807'/>\n"+
-//"  <b c='-807'/>\n"+
-//"  <b c='92233720368547758099'/>\n"+
-//"</a>",
+"<a>\n"+
+"  <b c='20190521214531'/>\n"+
+"  <b c='1'/>\n"+
+"  <b c='9223372036854775807'/>\n"+
+"  <b c='-807' d='5dd302b28bd9b807728f081d7ca61a282d9377bd'/>\n"+
+"  <b c='0' e='d302b28bd9b807728f081d7ca61a282d'/>\n"+
+"  <b c='92233720368547758099' f='0deff0012000012345'/>\n"+
+"</a>",
 //"<A a='a' b='bb' c='1' d='true'></A>",
 //"<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n" +
 //"  <xd:Y xd:y=\"z\"> x  </xd:Y>\n" +

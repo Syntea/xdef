@@ -15,6 +15,7 @@ public class CheckXdef {
 	/** Prevent user to instantiate this class. */
 	private CheckXdef() {}
 
+	@SuppressWarnings("deprecation")
 	/** Check X-definitions.
 	 * @param ext Array of classes with external procedures.
 	 * @param sources Array of file names or URLs with X-definitions.

@@ -72,6 +72,7 @@ public class XDChecker {
 		XDFactory.compileXD(_properties, xdef);
 	}
 
+	@SuppressWarnings("deprecation")
 	/** Check if the value is correct type.
 	 * @param type the string with type.
 	 * @param value value to be checked.
