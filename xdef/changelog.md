@@ -2,13 +2,13 @@
 
 # Version 40.0.2, release-date 2020-05-15
 - improved generation of X-definition from XML data.
-- corrected bug in GenCollection when in X-script is a switch command.
-- the utility GUIEditor now supports  also JSON data.
-- added the new validation method "SHA1"
-- added the new validation "printableDate" for  the date time values. Eg.:
-   "Mon May 11 23:39:07 CEST 2020"
+- corrected bug in GenCollection when in X-script is command "switch".
+- the utility GUIEditor now supports also JSON data.
+  of date time values. Eg.: "Mon May 11 23:39:07 CEST 2020"
 - corrected bug in v XDFactory when for the compilation of X-definition
   is specified a reporter of other type then ArrayReporter.
+- added the new validation method "SHA1"
+- added the new validation method "printableDate" for the printable form 
 
 # Version 40.0.1, release-date 2020-05-15
 * improved error reporting.
