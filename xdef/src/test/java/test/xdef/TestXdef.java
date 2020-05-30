@@ -52,7 +52,6 @@ public final class TestXdef extends XDTester {
 		String xml;
 		String s;
 		ArrayReporter reporter = new ArrayReporter();
-		FileReportWriter frw;
 		XDDocument xd;
 		Element el;
 		Report rep;
@@ -3052,7 +3051,7 @@ public final class TestXdef extends XDTester {
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>\n"+
 "  <A a='xxxx()'/>\n"+
 "</xd:def>";
-			frw = new FileReportWriter(tempDir + "a.rep");
+			FileReportWriter frw = new FileReportWriter(tempDir + "a.rep");
 			xp = XDFactory.compileXD(frw, null, xdef);
 			assertTrue(frw.getReportReader().printToString().contains(
 				"XDEF443"));
