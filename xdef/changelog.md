@@ -1,20 +1,22 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.2, release-date 2020-05-15
-- improved generation of X-definition from XML data.
-- corrected bug in GenCollection when in X-script is a switch command.
-- the utility GUIEditor now supports  also JSON data.
-- added the new validation method "SHA1"
-- added the new validation "printableDate" for  the date time values. Eg.:
-   "Mon May 11 23:39:07 CEST 2020"
-- corrected bug in v XDFactory when for the compilation of X-definition
-  is specified a reporter of other type then ArrayReporter.
+# Version 40.0.2, release-date 2020-05-28
+- improved generation of X-definition from XML data in
+  org.xdef.util.GenXDefinition.
+- the utility org.xdef.util.GUIEditor now supports also JSON data.
+  of date time values. Eg.: Mon May 11 23:39:07 CEST 2020.
+- corrected bug in v org.xdef.XDFactory when for the compilation of
+  X-definition is specified a org.xdef.sys.ReportWriter of other type
+  then org.xdef.ArrayReporter.
+- implemented new validation method "SHA1".
+- implemented new validation method "printableDate" for the printable format.
 
 # Version 40.0.1, release-date 2020-05-15
 * improved error reporting.
 * corrected bug when a JSON string value contains some of escape characters.
 * The default value of property xdef_warnings was changed to true.
-* The parameters with type Class in the method XDFactory.compileXD are deprecated.
+* The parameters with the type Class in the method org.xdef.XDFactory.compileXD
+  are deprecated.
 
 # Version 40.0.0, release-date 2020-04-24
 * new implementation of processing of JSON data.
@@ -51,7 +53,7 @@
   value of the environmental variable. The names of properties and environment
   variables are changed, the dots (".") in a names are replaced by
   underlines ("&lowbar;"), e.g. "_xdef.debug_" is now "_xdef&lowbar;debug_"
-  (see _XDConstants_).
+  (see org.xdef.XDConstants).
   However, since the names with dots are deprecated, they are still accepted.
 * corrected bug when it is specified attribute "_xd:text_" and a text node
   follows the last one element in a sequence.
