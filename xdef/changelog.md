@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.2, release-date 2020-05-28
+# Version 40.0.2, release-date 2020-05-31
 - improved generation of X-definition from XML data in
   org.xdef.util.GenXDefinition.
 - the utility org.xdef.util.GUIEditor now supports also JSON data.

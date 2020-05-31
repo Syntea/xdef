@@ -11,8 +11,8 @@ public class FullTestAll {
 	public static void main(String... args) {
 		System.out.println("Build: " + XDFactory.getXDVersion());
 		System.out.println("Testing java version: "
-			+System.getProperty("java.version") + " (with"
-			+ (DefXQueryExpr.isXQueryImplementation() ? "" : "out")
+			+ System.getProperty("java.version")
+			+ (DefXQueryExpr.isXQueryImplementation() ? " with" : " without")
 			+ " Saxon library) ...");
 		XDTester.setFulltestMode(true);
 		test.common.TestAll.runTests(args);
