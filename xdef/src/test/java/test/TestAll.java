@@ -19,8 +19,8 @@ public class TestAll {
 	public static void beforeTests() {
 		XDTester.setFulltestMode(false);
 		System.out.println("Testing java version: "
-			+ System.getProperty("java.version")
-			+ (DefXQueryExpr.isXQueryImplementation() ? " with" : " without")
+			+ System.getProperty("java.version") + " ("
+			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without")
 			+ " Saxon library) ...");
 	}
 
