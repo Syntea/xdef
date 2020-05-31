@@ -42,87 +42,87 @@ public class TestGenXdef extends XDTester {
 "  <B a='11.06.87'/><B a='11.06.1987'/>\n"+
 "  <C a='11.06.87'/><C a='11.06.1987'/>\n"+
 "</A>",
-"<T>\n" +
-"  <R A='xx' B='aaa'/>\n" +
-"  <R A='xxx' B='aa'/>\n" +
-"  <R A='xxx' B='aaa'/>\n" +
-"  <R A='xx' B='aa'/>\n" +
+"<T>\n"+
+"  <R A='xx' B='aaa'/>\n"+
+"  <R A='xxx' B='aa'/>\n"+
+"  <R A='xxx' B='aaa'/>\n"+
+"  <R A='xx' B='aa'/>\n"+
 "</T>",
-"<X xmlns=\"a.b.c\" x=\"123\">\n" +
-"  <Y> x </Y>\n" +
-"  <Y/>\n" +
-"  <Z/>\n" +
+"<X xmlns=\"a.b.c\" x=\"123\">\n"+
+"  <Y> x </Y>\n"+
+"  <Y/>\n"+
+"  <Z/>\n"+
 "</X>",
-"<x:X xmlns:x=\"a.b.c\" x:x=\"123\">\n" +
-"  <x:Y x:y=\"z\"> x </x:Y>\n" +
-"  <x:Y/>\n" +
-"  <x:Z x:y=\"z\"/>\n" +
+"<x:X xmlns:x=\"a.b.c\" x:x=\"123\">\n"+
+"  <x:Y x:y=\"z\"> x </x:Y>\n"+
+"  <x:Y/>\n"+
+"  <x:Z x:y=\"z\"/>\n"+
 "</x:X>",
-"<Contract Number = \"0123456789\">\n"+
-"  <Client Type  = \"1\"\n"+
+"<Contract Number = \"0123456789\" date = \"2011-12-13\" >\n"+
+"  <Client Type = \"1\"\n"+
 "          Name = \"Company LTD\"\n"+
 "          ID   = \"12345678\" />\n"+
 "  <Client Type       = \"2\"\n"+
-"          GivenName = \"John\"\n"+
+"          GivenName  = \"John\"\n"+
 "          LastName   = \"Smith\"\n"+
 "          PersonalID = \"311270/1234\" />\n"+
-"  <Client Type        = \"3\"\n"+
+"  <Client Type       = \"3\"\n"+
 "          GivenName  = \"Bill\"\n"+
 "          LastName   = \"White\"\n"+
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>",
-"<A_ IdFlow=\"181131058\" date=\"20190521214531\">\n" +
-"    <XXX IdDefPartner=\"163\"/>\n" +
-"    <YYY FileKind=\"W1A\"/>\n" +
-"    <A a=\"SLP\">\n" +
-"        <B b=\"b\">\n" +
-"            <Z x=\"3\" />\n" +
-"            <Z x=\"4\" />\n" +
-"        </B>\n" +
-"   </A>\n" +
+"<A_ IdFlow=\"181131058\" date=\"20190521214531\">\n"+
+"    <XXX IdDefPartner=\"163\"/>\n"+
+"    <YYY FileKind=\"W1A\"/>\n"+
+"    <A a=\"SLP\">\n"+
+"        <B b=\"b\">\n"+
+"            <Z x=\"3\" />\n"+
+"            <Z x=\"4\" />\n"+
+"        </B>\n"+
+"   </A>\n"+
 "</A_>",
-"<a>\n" +
-"  <DefParams>\n" +
-"    <Param Name=\"Name\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"Height\"/>\n" +
-"    <Param Name=\"Date of birth\" Type=\"xdatetime('dd.MM.yyyy')\" />\n" +
-"  </DefParams>\n" +
-"  <Params>\n" +
-"    <Param Name=\"Name\" Value=\"John\"/>\n" +
-"    <Param Name=\"Height\" Value=\"14.8\"/>\n" +
-"    <Param Name=\"Date of birth\" Value=\"01.02.1987\"/>\n" +
-"  </Params>\n" +
-"  <Params>\n" +
-"    <Param Value=\"14.8a\" Name=\"Height\"/>\n" +
-"  </Params>\n" +
+"<a>\n"+
+"  <DefParams>\n"+
+"    <Param Name=\"Name\" Type=\"string()\" />\n"+
+"    <Param Type=\"dec()\" Name=\"Height\"/>\n"+
+"    <Param Name=\"Date of birth\" Type=\"xdatetime('dd.MM.yyyy')\" />\n"+
+"  </DefParams>\n"+
+"  <Params>\n"+
+"    <Param Name=\"Name\" Value=\"John\"/>\n"+
+"    <Param Name=\"Height\" Value=\"14.8\"/>\n"+
+"    <Param Name=\"Date of birth\" Value=\"01.02.1987\"/>\n"+
+"  </Params>\n"+
+"  <Params>\n"+
+"    <Param Value=\"14.8a\" Name=\"Height\"/>\n"+
+"  </Params>\n"+
 "</a>",
-"<Values Ver=\"2.0\"\n" +
-"       Valid=\"1.1.2000 00:00:01\"\n" +
-"       Channel=\"A\"\n" +
-"       Seq=\"1\"\n" +
-"       SeqRef=\"1\"\n" +
-"       Date=\"1.1.2000\">\n" +
-"   <File Name=\"abcdef\"\n" +
-"           Format=\"TXT\"\n" +
-"           Kind=\"xyz\"\n" +
-"           RecNum=\"12345678\"\n" +
-"           ref=\"111\">\n" +
-"       <CheckSum Type=\"MD5\"\n" +
+"<Values Ver=\"2.0\"\n"+
+"       Valid=\"1.1.2000 00:00:01\"\n"+
+"       Channel=\"A\"\n"+
+"       Seq=\"1\"\n"+
+"       SeqRef=\"1\"\n"+
+"       Date=\"1.1.2000\">\n"+
+"   <File Name=\"abcdef\"\n"+
+"           Format=\"TXT\"\n"+
+"           Kind=\"xyz\"\n"+
+"           RecNum=\"12345678\"\n"+
+"           ref=\"111\">\n"+
+"       <CheckSum Type=\"MD5\"\n"+
 "           Value=\"\n"+
 "123456789A123456789A123456789A12123456789A123456789A123456789A12\n"+
-"                 \"/>\n" +
-"       <xxxx/>\n" +
-"       <yyyy/>\n" +
-"   </File>\n" +
-"   <File Name=\"sss.bb\"\n" +
-"           Format=\"TXT\"\n" +
-"           Kind=\"\"\n" +
-"           RecNum=\"12345678\">\n" +
-"   </File>\n" +
-"   xxxx\n" +
-"   <y><fff attr=\"???\"/></y>\n" +
-"   <log cttr=\"xxx\" />\n" +
+"                 \"/>\n"+
+"       <xxxx/>\n"+
+"       <yyyy/>\n"+
+"   </File>\n"+
+"   <File Name=\"sss.bb\"\n"+
+"           Format=\"TXT\"\n"+
+"           Kind=\"\"\n"+
+"           RecNum=\"12345678\">\n"+
+"   </File>\n"+
+"   xxxx\n"+
+"   <y><fff attr=\"???\"/></y>\n"+
+"   <log cttr=\"xxx\" />\n"+
 "</Values>",
 dataDir + "Matej3_out.xml",
 dataDir + "TestValidate2.xml",
@@ -139,10 +139,10 @@ dataDir + "../../data/schema/L1A.xml",
 		}
 		try {
 			xml =
-"<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n" +
-"  <xd:Y xd:y=\"z\"> x </xd:Y>\n" +
-"  <xd:Y y=\"z\"/>\n" +
-"  <xd:Y/>\n" +
+"<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n"+
+"  <xd:Y xd:y=\"z\"> x </xd:Y>\n"+
+"  <xd:Y y=\"z\"/>\n"+
+"  <xd:Y/>\n"+
 "</xd:X>";
 			el = GenXDefinition.genXdef(xml);
 			fail("Exception not thrown");
@@ -153,10 +153,10 @@ dataDir + "../../data/schema/L1A.xml",
 		}
 		try {
 			xml =
-"<d:X xmlns:d=\""+ XDConstants.XDEF20_NS_URI + "\" d:x=\"123\">\n" +
-"  <d:Y d:y=\"z\"> x </d:Y>\n" +
-"  <d:Y y=\"z\"/>\n" +
-"  <d:Y/>\n" +
+"<d:X xmlns:d=\""+ XDConstants.XDEF20_NS_URI + "\" d:x=\"123\">\n"+
+"  <d:Y d:y=\"z\"> x </d:Y>\n"+
+"  <d:Y y=\"z\"/>\n"+
+"  <d:Y/>\n"+
 "</d:X>";
 			el = GenXDefinition.genXdef(xml);
 			fail("Exception not thrown");
