@@ -579,8 +579,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseRegex.class, "regex");
 
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
-			XD_STRING,
-			keyParam("argument", XD_CONTAINER, true,  0, false));
+			XD_STRING, keyParam("argument", XD_CONTAINER, true,  0, false));
 		parser(im, org.xdef.impl.parsers.XDParseEnum.class, "enum");
 		parser(im, org.xdef.impl.parsers.XDParseEnumi.class, "enumi", "?listi");
 
@@ -591,8 +590,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseTokensi.class, "?tokensi");
 
 		im = genParserMetnod(1, 2, new short[] {XD_ANY, XD_STRING},
-			XD_STRING,
-			keyParam("a2", XD_ANY, true, 1, false),
+			XD_STRING, keyParam("a2", XD_ANY, true, 1, false),
 			keyParam("a1", XD_ANY, true, 0, false));
 		parser(im, org.xdef.impl.parsers.XDParseBNF.class, "BNF");
 
@@ -861,9 +859,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_CONTAINER), "getLength");
 		method(ti, genInternalMethod(GET_NAMEDVALUE, XD_ANY,
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "getNamedItem");
-		method(ti, genInternalMethod(GET_NAMED_AS_STRING, XD_STRING,
-			ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING),
-			"getNamedString", "?fromAttr");
+		method(ti, genInternalMethod(GET_NAMED_AS_STRING, XD_STRING, ANY_MODE,
+			2, 2, XD_CONTAINER, XD_STRING),"getNamedString", "?fromAttr");
 		method(ti, genInternalMethod(CONTEXT_GETTEXT, XD_STRING,
 			ANY_MODE, 1, 2, XD_CONTAINER, XD_INT), "getText");
 		method(ti, genInternalMethod(HAS_NAMEDVALUE, XD_BOOLEAN,
@@ -950,8 +947,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_INT), "setMinute");
 		method(ti, genInternalMethod(SET_MILLIS, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME, XD_INT),
-			"setMillis", "?setMillisecond");
+			ANY_MODE, 2, 2, XD_DATETIME, XD_INT),"setMillis","?setMillisecond");
 		method(ti, genInternalMethod(SET_MONTH, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_INT), "setMonth");
 		method(ti, genInternalMethod(SET_NANOS, XD_DATETIME,
@@ -1016,9 +1012,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_ELEMENT), "getTagName");
 		method(ti, genInternalMethod(ELEMENT_GETTEXT, XD_STRING,
 			ANY_MODE, 1, 1, XD_ELEMENT), "getText");
-		method(ti, genInternalMethod(ELEMENT_GETATTR, XD_STRING,
-			ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING),
-			"getAttribute", "?getAttr");
+		method(ti, genInternalMethod(ELEMENT_GETATTR, XD_STRING, ANY_MODE, 2, 3,
+			XD_ELEMENT, XD_STRING, XD_STRING), "getAttribute", "?getAttr");
 		method(ti, genInternalMethod(ELEMENT_HASATTR, XD_BOOLEAN,
 			ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING), "hasAttribute");
 		method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN,
@@ -1082,21 +1077,20 @@ public class CompileBase implements CodeTable, XDValueID {
 // OUTPUT STREAM
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_OUTPUT;
-		method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUTPUT,
-			GLOBAL_MODE, 1, 3, XD_STRING,XD_STRING,XD_BOOLEAN), "#");
-		method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN,
-			ANY_MODE, 2, 4, XD_OUTPUT, XD_STRING, XD_STRING, XD_STRING),
-			"error");
-		method(ti, genInternalMethod(GET_REPORT, XD_REPORT,
-			ANY_MODE, 1, 1, XD_OUTPUT), "getLastError");
-		method(ti, genInternalMethod(OUT1_STREAM, XD_VOID,
-			ANY_MODE, 2, 2, XD_OUTPUT, XD_STRING), "out");
-		method(ti, genInternalMethod(OUTLN1_STREAM, XD_VOID,
-			ANY_MODE, 1, 2, XD_OUTPUT, XD_STRING), "outln");
-		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,
-			ANY_MODE, 2, Integer.MAX_VALUE, XD_OUTPUT, XD_ANY), "printf");
-		method(ti, genInternalMethod(PUT_REPORT, XD_VOID,
-			ANY_MODE, 2, 2, XD_OUTPUT, XD_REPORT), "putReport");
+		method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUTPUT,GLOBAL_MODE, 1, 3,
+			XD_STRING,XD_STRING,XD_BOOLEAN), "#");
+		method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN, ANY_MODE, 2, 4,
+			XD_OUTPUT, XD_STRING, XD_STRING, XD_STRING), "error");
+		method(ti, genInternalMethod(GET_REPORT, XD_REPORT, ANY_MODE, 1, 1,
+			XD_OUTPUT), "getLastError");
+		method(ti, genInternalMethod(OUT1_STREAM, XD_VOID, ANY_MODE, 2, 2,
+			XD_OUTPUT, XD_STRING), "out");
+		method(ti, genInternalMethod(OUTLN1_STREAM, XD_VOID, ANY_MODE, 1, 2,
+			XD_OUTPUT, XD_STRING), "outln");
+		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID, ANY_MODE, 2,
+			Integer.MAX_VALUE, XD_OUTPUT, XD_ANY), "printf");
+		method(ti, genInternalMethod(PUT_REPORT, XD_VOID, ANY_MODE, 2, 2,
+			XD_OUTPUT, XD_REPORT), "putReport");
 ////////////////////////////////////////////////////////////////////////////////
 // PARSER
 ////////////////////////////////////////////////////////////////////////////////
