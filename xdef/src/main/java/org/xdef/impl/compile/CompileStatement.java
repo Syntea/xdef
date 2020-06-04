@@ -547,14 +547,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					&& (var = getVariable(cName)) != null
 					&& var.getType() == CompileBase.UNIQUESET_KEY_VALUE)) {
 				if (numPar==1) {
-					short yType;
-					if ((yType=_g._tstack[_g._sp])!=XD_PARSER
-						&& yType!=CompileBase.PARSEITEM_VALUE
-						&& yType!=XD_PARSERESULT&&yType!=XD_BOOLEAN) {
+					short yType=_g._tstack[_g._sp];
+					if (yType==XD_PARSER || yType==CompileBase.PARSEITEM_VALUE
+						|| yType==XD_PARSERESULT || yType==XD_BOOLEAN
+						|| yType==XD_NULL) {
+						_g.genPop();
+					} else {
 						error(spos, XDEF.XDEF467); //Incorrect parameter type
 						return false;
-					} else {
-						_g.genPop();
 					}
 				}
 				_g.genLD(cName.substring(0, ndx));
@@ -620,27 +620,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					//type casting
 					checkNextSymbol(RPAR_SYM);
 					if (factor()) {
-						switch (castRequest) {
-							case XD_BOOLEAN:
-								if (_g._tstack[_g._sp] == XD_PARSERESULT) {
-									_g.topToBool(); // force conversion!
-									break;
-								}
-							case XD_PARSER:
-							case XD_STRING:
-							case XD_DECIMAL:
-							case XD_INT:
-							case XD_FLOAT:
-							case XD_CONTAINER:
-							case XD_ELEMENT:
-							case XD_ANY: {
-								_g.convertTopToType(castRequest);
-								break;
-							}
-							default:
-								//Incorrect cast request: &{0}
-								error(XDEF.XDEF474, _idName);
-						}
+						_g.convertTopToType(castRequest);
 						return true;
 					}
 					error(XDEF.XDEF437); //Error in expression
