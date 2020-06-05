@@ -1118,7 +1118,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertTrue(s.contains(" \"a\")") && s.contains(" \"b\")")
 				&& s.contains(" \"a\", \"b\"")&&reporter.getErrorCount()==7,s);
 		} catch (Exception ex) {fail(ex);}
-		try { // SET(null)
+		try { // test ID(null), SET(null)
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='Town'>\n"+
 "  <xd:declaration scope=\"local\">\n" +
@@ -1126,7 +1126,7 @@ public final class TestKeyAndRef extends XDTester {
 "    int count = 0;\n" +
 "  </xd:declaration>\n" +
 "  <Town>\n" +
-"    <Street xd:script=\"*; init items.house.SET(null);\"\n" +
+"    <Street xd:script=\"*; init items.house.ID(null);\"\n" +
 "            Name=\"items.street.ID();\">\n" +
 "      <House xd:script=\"*\"\n" +
 "             Number=\"items.house.ID();\n" +
