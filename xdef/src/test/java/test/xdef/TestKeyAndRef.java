@@ -1118,6 +1118,56 @@ public final class TestKeyAndRef extends XDTester {
 			assertTrue(s.contains(" \"a\")") && s.contains(" \"b\")")
 				&& s.contains(" \"a\", \"b\"")&&reporter.getErrorCount()==7,s);
 		} catch (Exception ex) {fail(ex);}
+		try { // test ID(null), SET(null)
+			xdef =
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='Town'>\n"+
+"  <xd:declaration scope=\"local\">\n" +
+"    uniqueSet items {street:string(2,50); house: ? int(1,999);var int x;};\n" +
+"    int count = 0;\n" +
+"  </xd:declaration>\n" +
+"  <Town>\n" +
+"    <Street xd:script=\"*; init items.house.ID(null);\"\n" +
+"            Name=\"items.street.ID();\">\n" +
+"      <House xd:script=\"*\"\n" +
+"             Number=\"items.house.ID();\n" +
+"               finally {items.x=++count; out(items.x + ',');}\"/>\n" +
+"    </Street>\n" +
+"    <Houses>\n" +
+"      <House xd:script=\"*;\" Street=\"items.street()\"\n" +
+"         Number=\"items.house.IDREF(); onTrue {out(items.x+',');}\"/>\n" +
+"    </Houses>\n" +
+"    <Streets xd:script='init items.house.SET(null);'>\n" +
+"      <Street xd:script=\"*;\" Name=\"items.street.IDREF()\"/>\n" +
+"    </Streets>\n" +
+"  </Town>\n" +
+"</xd:def>";
+			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xml =
+"<Town>\n" +
+"  <Street Name=\"Empty\" />\n" +
+"  <Street Name=\"Long\" >\n" +
+"    <House Number=\"1\"/><House Number=\"2\"/><House Number=\"3\"/>\n" +
+"  </Street>\n" +
+"  <Street Name=\"Short\" >\n" +
+"    <House Number=\"1\"/><House Number=\"2\"/>\n" +
+"  </Street>\n" +
+"  <Houses>\n" +
+"    <House Street=\"Long\" Number=\"2\"/>\n" +
+"    <House Street=\"Short\" Number=\"2\"/>\n" +
+"    <House Number=\"1\" Street=\"Long\"/>\n" +
+"    <House Number=\"1\" Street=\"Short\"/>\n" +
+"    <House Street=\"Long\" Number=\"3\"/>\n" +
+"  </Houses>\n" +
+"  <Streets>\n" +
+"    <Street Name=\"Short\"/><Street Name=\"Long\"/><Street Name=\"Empty\"/>\n"+
+"  </Streets>\n" +
+"</Town>";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("1,2,3,4,5,2,5,1,4,3,", strw.toString());
+		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
 	}

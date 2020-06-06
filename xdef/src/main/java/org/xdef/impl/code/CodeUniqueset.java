@@ -209,15 +209,19 @@ public final class CodeUniqueset extends XDValueAbstract {
 	}
 
 	/** Set named named value assigned to to the actual unique set item.
-	 * If the key not exists this method does nothing.
+	 * If the key not exists this method returns false, otherwise it returns
+	 * true.
 	 * @param name name of value.
 	 * @param value value to be set.
+	 * @return true if value was assigned to the item of unique set.
 	 */
-	public final void setNamedValue(final String name, final XDValue value) {
+	public final boolean setNamedValue(final String name, final XDValue value) {
 		UniquesetItem uso = _map.get(getKeyValue());
-		if (uso != null) {
-			uso.setValue(name, value);
+		if (uso == null) {
+			return false;
 		}
+		uso.setValue(name, value);
+		return true;
 	}
 
 	/** Get named named value assigned to the actual unique set item.

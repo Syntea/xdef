@@ -1582,7 +1582,11 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 				case UNIQUESET_SETVALUEX: {
 					CodeUniqueset u = (CodeUniqueset) _stack[sp--];
-					u.setNamedValue(((CodeS1)item).stringValue(), _stack[sp--]);
+					String s = ((CodeS1)item).stringValue();
+					if (!u.setNamedValue(s, _stack[sp--])) {
+						//The uniqueSet item not exists, value "{0}" was not set
+						putError(chkNode, XDEF.XDEF537, s);
+					}
 					continue;
 				}
 				case UNIQUESET_GETVALUEX: {
