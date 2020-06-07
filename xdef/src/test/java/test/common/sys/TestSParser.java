@@ -496,13 +496,32 @@ public class TestSParser extends STester {
 			assertTrue(p.isDatetime(
 				"yyyy-MM-ddTHH:mm[:ss][Z]|dd.MM.yyyy|dd/MM/yyyy"));
 			p = new StringParser("20/11/2005");
-			if (!p.isDatetime("{H23m59s58}dd/MM/yyyy[ HH:mm:ss][ HH:mm]")) {
+			if (!p.isDatetime("{H23m59s58}d/M/yyyy[ HH:mm:ss]|d.M.yyyy")) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
 				assertEq(c.get(Calendar.HOUR_OF_DAY), 23);
 				assertEq(c.get(Calendar.MINUTE), 59);
 				assertEq(c.get(Calendar.SECOND), 58);
+			}
+			p = new StringParser("20.11.2005");
+			if (!p.isDatetime("{H23m59s58}d/M/yyyy[ HH:mm:ss]|d.M.yyyy")) {
+				fail();
+			} else {
+				c = p.getParsedCalendar();
+				assertEq(c.get(Calendar.HOUR_OF_DAY), 23);
+				assertEq(c.get(Calendar.MINUTE), 59);
+				assertEq(c.get(Calendar.SECOND), 58);
+			}
+			p = new StringParser("20.11.2005");
+			if (!p.isDatetime(
+				"{H23m59s58}d/M/yyyy[ HH:mm:ss]|{H22m33s44}d.M.yyyy")) {
+				fail();
+			} else {
+				c = p.getParsedCalendar();
+				assertEq(c.get(Calendar.HOUR_OF_DAY), 22);
+				assertEq(c.get(Calendar.MINUTE), 33);
+				assertEq(c.get(Calendar.SECOND), 44);
 			}
 			p = new StringParser("20/11/2005");
 			if (!p.isDatetime("{H23m59s58S543}d/M/y[[ H:m[:s[?',.'S]]]")) {
@@ -1101,6 +1120,20 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
+			p = new StringParser("7/6");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			p = new StringParser("7/6/2020");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			p = new StringParser("7.6");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			p = new StringParser("7.6.2020");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			p = new StringParser("7.6.2020");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy")&&p.eos());
+			p = new StringParser("7.6.2020:16");
+			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy")&&p.eos());
+			p = new StringParser("Sun Jun 07 18:00:00 CEST 2020");
+			assertTrue(p.isPrintableDatetime()&&p.eos());
 		} catch (Error ex) {
 			fail(ex);
 		} catch (Exception ex) {fail(ex);}
