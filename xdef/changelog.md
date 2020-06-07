@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.2, release-date 2020-06-05
+# Version 40.0.2, release-date 2020-06-08
 - improved generation of X-definition from XML data in
   org.xdef.util.GenXDefinition.
 - the utility org.xdef.util.GUIEditor now supports also JSON data.
@@ -10,6 +10,8 @@
   then org.xdef.ArrayReporter.
 - implemented new validation method "SHA1".
 - implemented new validation method "printableDate" for the printable format.
+- corrected bug in parsing of datetime with a mask with variants when
+  the simpler variant precedes the more complex one.
 
 # Version 40.0.1, release-date 2020-05-15
 * improved error reporting.

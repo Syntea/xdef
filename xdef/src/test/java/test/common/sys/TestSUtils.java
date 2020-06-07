@@ -1084,7 +1084,7 @@ public class TestSUtils extends STester {
 
 			s = "12/6/1961";
 			p = new StringParser(s);
-			s1 = "d/M/y|{('cs)}d/MMM/y|{L(en)}d/MMM/y";
+			s1 = "d/M/y|{L(cs)}d/MMM/y|{L(*)}d/MMM/y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
 				s2 = SDatetime.formatDate(c,"d/M/y");

@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.text.DateFormatSymbols;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -889,8 +890,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param reporter Report writer connected to parser.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public StringParser(final Reader reader,
-		final ReportWriter reporter) {
+	public StringParser(final Reader reader, final ReportWriter reporter) {
 		super(reporter);
 		setSourceReader(reader);
 	}
@@ -2452,11 +2452,12 @@ public class StringParser extends SReporter implements SParser {
 		return isDatetime("EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]");
 	}
 
-	/** Parse date in the printable format.
-	 * @return <tt>true</tt> if date on current position is in printable format.
+	/** Parse date in the printable form.
+	 * @return <tt>true</tt> if date on current position is in printable form.
 	 */
 	public final boolean isPrintableDatetime() {
-		return isDatetime("EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
+		return isDatetime("EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y"
+			+ "|{L(*)}EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
 	}
 
 	/** Parse date in ISO8601 date or date and time (see
@@ -2567,7 +2568,7 @@ public class StringParser extends SReporter implements SParser {
 	 * preceed each variant specification (e.g.</p>
 	 * <p><b><tt>"{H8m30}[HH:mm]ss|{H8m30}yyyyMMdd[HH:mm]"</tt></b></p>
 	 * - if hours and minutes are not specified the value is set to 08:30).
-	 * @param format String with date format.
+	 * @param mask String with date format.
 	 * @return <tt>true</tt> if the date source on current position suits
 	 * to given format.
 	 * @throws SRuntimeException if mask format is incorrect:
@@ -2576,15 +2577,14 @@ public class StringParser extends SReporter implements SParser {
 	 * <li>SYS049 unclosed quoted literal</li>
 	 * </ul>
 	 */
-	public final boolean isDatetime(final String format)
-		throws SRuntimeException {
+	public final boolean isDatetime(final String mask) throws SRuntimeException{
 		if (getIndex() + 10 >= _endPos && !readNextBuffer()) {
 			return false;
 		}
-		_parsedDatetime = new MyDate(getIndex());
+		MyDate myDate = new MyDate(getIndex());
 		keepBuffer();
 		int startPos = getIndex();
-		int flen = format.length();
+		int flen = mask.length();
 		//(year,month,date,hour,minute,second)
 		int fpos = 0;
 		boolean failVariant = false; //true if variant fails
@@ -2592,23 +2592,24 @@ public class StringParser extends SReporter implements SParser {
 		char hourKind = ' ';
 		int ampm = -1;
 		int era = 0;
+		ArrayList<MyDate> _variants = null;
 	loop:
 		while (fpos < flen || failVariant) {
 			char pat;
 			if (failVariant) {
-				if (_parsedDatetime._chain != null) {
-					setBufIndex(_parsedDatetime._sourcePos);
+				if (myDate._chain != null) {
+					setBufIndex(myDate._startPos);
 					//(year,month,date,hour,minute,second)
-					_parsedDatetime = _parsedDatetime._chain;
+					myDate = myDate._chain;
 					while (fpos < flen) {
-						if ((pat = format.charAt(fpos++)) == ']') {//reset
+						if ((pat = mask.charAt(fpos++)) == ']') {//reset
 							failVariant = false;
 							continue loop;
 						} else if (pat == '\'' || pat == '"') {// literal
 							while (fpos + 1 < flen) {
-								if (format.charAt(fpos++) == pat) {
+								if (mask.charAt(fpos++) == pat) {
 									if (fpos < flen
-										&& format.charAt(fpos) == pat) {
+										&& mask.charAt(fpos) == pat) {
 										fpos++;
 										continue;
 									}
@@ -2620,16 +2621,16 @@ public class StringParser extends SReporter implements SParser {
 				} else {
 					setBufIndex(startPos); //reset position
 					while (fpos < flen) {
-						if ((pat = format.charAt(fpos++)) == '|') {// reset
-							_parsedDatetime.reset(startPos);
+						if ((pat = mask.charAt(fpos++)) == '|') {// reset
+							myDate.reset(startPos);
 							failVariant = false;
 							break;
 						} else if (pat == '\'') {// literal
 							fpos++;
 							while (fpos < flen) {
-								if (format.charAt(fpos++) == '\'') {
+								if (mask.charAt(fpos++) == '\'') {
 									if (fpos < flen &&
-										format.charAt(fpos) == '\'') {
+										mask.charAt(fpos) == '\'') {
 										fpos++;
 										continue;
 									}
@@ -2641,42 +2642,52 @@ public class StringParser extends SReporter implements SParser {
 					if (fpos < flen) {
 						continue;
 					} else {
-						freeBuffer();
-						return false;
+						if (_variants == null) {
+							freeBuffer();
+							return false;
+						}
+						break;
 					}
 				}
 			}
 			int n;
-			pat = format.charAt(fpos++);
-			if (fpos >= flen || pat == '\'' || format.charAt(fpos) != pat) {
+			pat = mask.charAt(fpos++);
+			if (fpos >= flen || pat == '\'' || mask.charAt(fpos) != pat) {
 				n = 0; //one character of specified format item
 			} else {
 				n = fpos - 1;
 				do {
 					fpos++;
-				} while (fpos < flen && format.charAt(fpos) == pat);
+				} while (fpos < flen && mask.charAt(fpos) == pat);
 				n = fpos - n;
 			}
 			switch (pat) {
 				case '|': //variant part
-					fpos = flen;
-					break;
+					if (_variants == null) {
+						_variants = new ArrayList<MyDate>();
+					}
+					MyDate md = new MyDate(myDate);
+					md._endPos = getIndex();
+					_variants.add(md);
+					myDate.reset(startPos);
+					setBufIndex(myDate._startPos);
+					continue;
 				case '{': //initialize part
-					_parsedDatetime.reset(startPos); //???
-					StringParser p = new StringParser(format, fpos);
-					p._parsedDatetime = _parsedDatetime;
-					Report r;
-					if ((r = p.checkDateFormatDefaults()) != null) {
-						throw new SRuntimeException(r);
+					myDate.reset(startPos); //???
+					StringParser p = new StringParser(mask, fpos);
+					Report r = p.checkDateFormatDefaults();
+					if (r != null) {
+						throw new SRuntimeException(r); // error in mask
 					}
 					fpos = p.getIndex();
+					myDate.setDefaults(p._parsedDatetime);
 					continue;
 				case '[': //optional part
-					_parsedDatetime = new MyDate(_parsedDatetime, getIndex());
+					myDate = new MyDate(myDate, getIndex());
 					continue;
 				case ']': //optional part
-					if (_parsedDatetime._chain != null) {
-						_parsedDatetime._chain = null;
+					if (myDate._chain != null) {
+						myDate._chain = null;
 					}
 					continue;
 				case 'D': //day in year
@@ -2684,32 +2695,32 @@ public class StringParser extends SReporter implements SParser {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._yearDay = i;
+					myDate._yearDay = i;
 					continue;
 				case 'F': //day of week in month
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._dayOfWeekInMonth = i;
+					myDate._dayOfWeekInMonth = i;
 					continue;
 				case 'w': //week in year
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._weekInYear = i;
+					myDate._weekInYear = i;
 					continue;
 				case 'W': //week in month
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._weekInMonth = i;
+					myDate._weekInMonth = i;
 					continue;
 				case 'G': //era designator (BC, AD)
 					i = isOneOfTokens(
-						_parsedDatetime.getLocaleFormatSymbols().getEras());
+						myDate.getLocaleFormatSymbols().getEras());
 					if (i < 0) { //error
 						failVariant = true;
 						continue;
@@ -2721,13 +2732,13 @@ public class StringParser extends SReporter implements SParser {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._day = i;
+					myDate._day = i;
 					continue;
 				case 'M': //month in year
 					i = n < 3 ? readUnsignedIntSpecifiedLength(n) :
-						n == 3 ? isOneOfTokens(_parsedDatetime.
+						n == 3 ? isOneOfTokens(myDate.
 							getLocaleFormatSymbols().getShortMonths()) :
-						isOneOfTokens(_parsedDatetime.
+						isOneOfTokens(myDate.
 							getLocaleFormatSymbols().getMonths());
 					if (i < 0) {
 						failVariant = true;
@@ -2736,21 +2747,21 @@ public class StringParser extends SReporter implements SParser {
 					if ((n >= 3)) {
 						i++;
 					}
-					_parsedDatetime._month = i;
+					myDate._month = i;
 					continue;
 				case 'm': //minute
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._minute = i;
+					myDate._minute = i;
 					continue;
 				case 's': //second
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._second = i;
+					myDate._second = i;
 					continue;
 				case 'S': {//millisecond
 					i = isDigit();
@@ -2772,11 +2783,11 @@ public class StringParser extends SReporter implements SParser {
 						}
 						fraction += k / (exp *= 10.0);
 					}
-					_parsedDatetime._fraction = fraction;
+					myDate._fraction = fraction;
 					continue;
 				}
 				case 'a': { //AM/PM marker
-					int pm = isOneOfTokens(_parsedDatetime.
+					int pm = isOneOfTokens(myDate.
 						getLocaleFormatSymbols().getAmPmStrings());
 					if (pm < 0) { //error
 						failVariant = true;
@@ -2786,15 +2797,15 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				}
 				case 'E': //day of week (text)
-					i = (n > 3) ? isOneOfTokens(_parsedDatetime.
+					i = (n > 3) ? isOneOfTokens(myDate.
 							getLocaleFormatSymbols().getWeekdays())
-						: isOneOfTokens(_parsedDatetime.
+						: isOneOfTokens(myDate.
 							getLocaleFormatSymbols().getShortWeekdays());
 					if (i < 0) {//error
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._weekDay = i;
+					myDate._weekDay = i;
 					continue;
 				case 'e': //day of week (number)
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
@@ -2803,25 +2814,25 @@ public class StringParser extends SReporter implements SParser {
 					}
 					switch (i) {
 						case 1:
-							_parsedDatetime._weekDay = Calendar.MONDAY;
+							myDate._weekDay = Calendar.MONDAY;
 							break;
 						case 2:
-							_parsedDatetime._weekDay = Calendar.TUESDAY;
+							myDate._weekDay = Calendar.TUESDAY;
 							break;
 						case 3:
-							_parsedDatetime._weekDay = Calendar.WEDNESDAY;
+							myDate._weekDay = Calendar.WEDNESDAY;
 							break;
 						case 4:
-							_parsedDatetime._weekDay = Calendar.THURSDAY;
+							myDate._weekDay = Calendar.THURSDAY;
 							break;
 						case 5:
-							_parsedDatetime._weekDay = Calendar.FRIDAY;
+							myDate._weekDay = Calendar.FRIDAY;
 							break;
 						case 6:
-							_parsedDatetime._weekDay = Calendar.SATURDAY;
+							myDate._weekDay = Calendar.SATURDAY;
 							break;
 						case 7:
-							_parsedDatetime._weekDay = Calendar.SUNDAY;
+							myDate._weekDay = Calendar.SUNDAY;
 							break;
 						default:
 							failVariant = true;
@@ -2837,7 +2848,7 @@ public class StringParser extends SReporter implements SParser {
 						failVariant = true;
 						continue;
 					}
-					_parsedDatetime._hour = i;
+					myDate._hour = i;
 					continue;
 				case 'Y': //year - two digits, century from the actual year
 					if (n != 0 && n != 2) {
@@ -2859,12 +2870,12 @@ public class StringParser extends SReporter implements SParser {
 					if (n == 2) {
 						//actual century
 						int c = new GregorianCalendar().get(Calendar.YEAR)/100;
-						_parsedDatetime._year = c * 100 + i;
+						myDate._year = c * 100 + i;
 					} else if (pos - getIndex() > 4 && first == '0') {
 						failVariant = true;
 						continue;
 					} else {
-						_parsedDatetime._year = minus ? -i : i;
+						myDate._year = minus ? -i : i;
 					}
 					continue;
 				case 'y': //year
@@ -2880,7 +2891,7 @@ public class StringParser extends SReporter implements SParser {
 							nextChar();
 						}
 						int q = (fpos >= flen ||
-							"MD".indexOf(format.charAt(fpos)) < 0) ? 0 : n;
+							"MD".indexOf(mask.charAt(fpos)) < 0) ? 0 : n;
 						int k = getIndex();
 						i = readUnsignedIntSpecifiedLength(q);
 						if (i >= 0 && n == 4 && getIndex() - k < 4) {
@@ -2896,7 +2907,7 @@ public class StringParser extends SReporter implements SParser {
 					if (n == 2 && i < 100) {
 						i += (i < 10) ? 2000 : 1900;
 					}
-					_parsedDatetime._year = i * sign;
+					myDate._year = i * sign;
 					continue;
 				case 'R': {//year - two digits (database)
 /*
@@ -2924,13 +2935,10 @@ public class StringParser extends SReporter implements SParser {
 					int y = new GregorianCalendar().get(Calendar.YEAR);
 					int c = y /100; //actual century
 					y = y % 100; //last two digits of the actual year
-					if (i < 50) {//actual years in the actual century < 50
-						_parsedDatetime._year =
-							y < 50 ? c * 100 + i : ((c + 1) * 100 + i);
-					} else {
-						_parsedDatetime._year =
-							y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
-					}
+					//actual years in the actual century < 50
+					myDate._year = i < 50
+						? y < 50 ? c * 100 + i : ((c + 1) * 100 + i)
+						: y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
 					continue;
 				}
 				case 'Z': //ISO
@@ -2943,7 +2951,7 @@ public class StringParser extends SReporter implements SParser {
 					}
 					TimeZone tz = readTimeZone(n, pat);
 					if (tz != null) {
-						_parsedDatetime._tz = tz;
+						myDate._tz = tz;
 						continue;
 					} else {
 						failVariant = true; //not parsed
@@ -2955,19 +2963,19 @@ public class StringParser extends SReporter implements SParser {
 					char delim = pat;
 					int beg = fpos - 1;
 					while (fpos < flen) {
-						if ((pat = format.charAt(fpos++)) == delim) {
-							if (fpos >= flen || format.charAt(fpos) != delim) {
+						if ((pat = mask.charAt(fpos++)) == delim) {
+							if (fpos >= flen || mask.charAt(fpos) != delim) {
 								break;
 							}
-							pat = format.charAt(fpos++); //double apos
+							pat = mask.charAt(fpos++); //double apos
 						}
 						if (_ch == pat) {
 							nextChar();
 						} else {
 							while (fpos < flen) {
-								if (format.charAt(fpos++) == delim) {
+								if (mask.charAt(fpos++) == delim) {
 									if (fpos < flen
-										&& format.charAt(fpos) == delim) {
+										&& mask.charAt(fpos) == delim) {
 										fpos++;
 										continue;
 									}
@@ -2990,17 +2998,17 @@ public class StringParser extends SReporter implements SParser {
 				case '?': {//one of chars
 					char delim;
 					if (fpos < flen &&
-						((delim =format.charAt(fpos))=='\'' || delim == '"')) {
+						((delim =mask.charAt(fpos))=='\'' || delim == '"')) {
 						//follows string specification
 						int beg = fpos++;
 						boolean foundChar = false;
 						while (fpos < flen) {
-							if ((pat = format.charAt(fpos++)) == delim) {
+							if ((pat = mask.charAt(fpos++)) == delim) {
 								if (fpos >= flen ||
-									format.charAt(fpos) != delim) {
+									mask.charAt(fpos) != delim) {
 									break;
 								}
-								pat = format.charAt(fpos++); //double apos
+								pat = mask.charAt(fpos++); //double apos
 							}
 							if (!foundChar && _ch == pat) {
 								foundChar = true;
@@ -3054,47 +3062,62 @@ public class StringParser extends SReporter implements SParser {
 					} while (--n > 0);
 			}
 		}
+		if (_variants != null) {
+			MyDate x = myDate;
+			x._endPos = getIndex();
+			int endPos = 0;
+			_variants.add(x);
+			for (MyDate y: _variants) {
+				if (y._endPos > endPos) {
+					endPos = y._endPos;
+					x = y;
+				}
+			}
+			myDate = x;
+			setBufIndex(myDate._endPos);
+		}
 		_parsedString = _source.substring(startPos, getIndex());
 		if (ampm == 1 && (hourKind == 'h' || hourKind == 'K')) {
-			_parsedDatetime._hour += 12;
+			myDate._hour += 12;
 		}
-		if (_parsedDatetime._hour == 24 &&
+		if (myDate._hour == 24 &&
 			(hourKind == 'h' || hourKind == 'k')) {
-			_parsedDatetime._hour = 0;
+			myDate._hour = 0;
 		}
 		if (era < 0) {
-			_parsedDatetime._year = - _parsedDatetime._year;
+			myDate._year = - myDate._year;
 		}
-		if (_parsedDatetime._year != Integer.MIN_VALUE &&
-			_parsedDatetime._month == Integer.MIN_VALUE &&
-			_parsedDatetime._day == Integer.MIN_VALUE) {
-			if (_parsedDatetime._yearDay != Integer.MIN_VALUE) {
+		if (myDate._year != Integer.MIN_VALUE &&
+			myDate._month == Integer.MIN_VALUE &&
+			myDate._day == Integer.MIN_VALUE) {
+			if (myDate._yearDay != Integer.MIN_VALUE) {
 				GregorianCalendar gc =//compute month and date from year day
-					new GregorianCalendar(_parsedDatetime._year, 0, 1);
-				gc.add(Calendar.DAY_OF_YEAR, _parsedDatetime._yearDay - 1);
-				_parsedDatetime._yearDay = Integer.MIN_VALUE;
-				_parsedDatetime._year = gc.get(Calendar.YEAR);
-				_parsedDatetime._month = gc.get(Calendar.MONTH) + 1;
-				_parsedDatetime._day = gc.get(Calendar.DAY_OF_MONTH);
-			} else if (_parsedDatetime._weekInYear != Integer.MIN_VALUE &&
-				_parsedDatetime._weekDay != Integer.MIN_VALUE) {
+					new GregorianCalendar(myDate._year, 0, 1);
+				gc.add(Calendar.DAY_OF_YEAR, myDate._yearDay - 1);
+				myDate._yearDay = Integer.MIN_VALUE;
+				myDate._year = gc.get(Calendar.YEAR);
+				myDate._month = gc.get(Calendar.MONTH) + 1;
+				myDate._day = gc.get(Calendar.DAY_OF_MONTH);
+			} else if (myDate._weekInYear != Integer.MIN_VALUE &&
+				myDate._weekDay != Integer.MIN_VALUE) {
 				GregorianCalendar gc =//compute month and date from week and day
-					new GregorianCalendar(_parsedDatetime._year, 0, 1);
-				if (Calendar.SUNDAY == _parsedDatetime._weekDay) {
-					_parsedDatetime._weekInYear++;
+					new GregorianCalendar(myDate._year, 0, 1);
+				if (Calendar.SUNDAY == myDate._weekDay) {
+					myDate._weekInYear++;
 				}
 				//Week is between 1 to 52 (or 53 the last week in year)
-				gc.add(Calendar.WEEK_OF_YEAR, _parsedDatetime._weekInYear -1);
+				gc.add(Calendar.WEEK_OF_YEAR, myDate._weekInYear -1);
 				gc.add(Calendar.DATE,
-					_parsedDatetime._weekDay - gc.get(Calendar.DAY_OF_WEEK));
-				_parsedDatetime._weekInYear = Integer.MIN_VALUE;
-				_parsedDatetime._weekDay = Integer.MIN_VALUE;
-				_parsedDatetime._year = gc.get(Calendar.YEAR);
-				_parsedDatetime._month = gc.get(Calendar.MONTH) + 1;
-				_parsedDatetime._day = gc.get(Calendar.DAY_OF_MONTH);
+					myDate._weekDay - gc.get(Calendar.DAY_OF_WEEK));
+				myDate._weekInYear = Integer.MIN_VALUE;
+				myDate._weekDay = Integer.MIN_VALUE;
+				myDate._year = gc.get(Calendar.YEAR);
+				myDate._month = gc.get(Calendar.MONTH) + 1;
+				myDate._day = gc.get(Calendar.DAY_OF_MONTH);
 			}
 		}
 		freeBuffer();
+		_parsedDatetime = myDate;
 		return true;
 	}
 
@@ -3276,8 +3299,8 @@ public class StringParser extends SReporter implements SParser {
 				return true;
 			}
 		} catch (SRuntimeException ex) {}
+		setBufIndex(startPos);
 		freeBuffer();
-		setIndex(startPos);
 		return false;
 	}
 
@@ -3389,30 +3412,36 @@ public class StringParser extends SReporter implements SParser {
 							if (years) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	if (months || weeks || days) {
+							}
+							if (months || weeks || days) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	years = true;
+							}
+							years = true;
 							_parsedDuration.setYears(getParsedInt());
 							break;
 						case 'M':
 							if (months) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	if (weeks || days) {
+							}
+							if (weeks || days) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	months = true;
+							}
+							months = true;
 							_parsedDuration.setMonths(getParsedInt());
 							break;
 						case 'W':
 							if (weeks) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	if (days) {
+							}
+							if (days) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	weeks = true;
+							}
+							weeks = true;
 							iweeks = getParsedInt();
 							break;
 						default:
@@ -3420,7 +3449,8 @@ public class StringParser extends SReporter implements SParser {
 							if (days) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	days = true;
+							}
+							days = true;
 							_parsedDuration.setDays(getParsedInt());
 							break;
 					}
@@ -3519,100 +3549,12 @@ public class StringParser extends SReporter implements SParser {
 		return date || time;
 	}
 
-	private class MyDate extends SDatetime {
-		private MyDate _chain;
-		int _weekDay;
-		int _yearDay;
-		int _dayOfWeekInMonth;
-		int _weekInYear;
-		int _weekInMonth;
-		int _sourcePos;
-
-		private MyDate(int sourcePos) {
-			super();
-			_weekDay = Integer.MIN_VALUE;
-			_yearDay = Integer.MIN_VALUE;
-			_dayOfWeekInMonth = Integer.MIN_VALUE;
-			_weekInYear = Integer.MIN_VALUE;
-			_weekInMonth = Integer.MIN_VALUE;
-			_sourcePos = sourcePos;
-		}
-
-		private MyDate(MyDate chain, int sourcePos) {
-			_day = chain._day;
-			_month = chain._month;
-			_year = chain._year;
-			_hour = chain._hour;
-			_minute = chain._minute;
-			_second = chain._second;
-			_fraction = chain._fraction;
-			_tz = chain._tz;
-			_calendar = null;
-			_weekDay = chain._weekDay;
-			_yearDay = chain._yearDay;
-			_dayOfWeekInMonth = chain._dayOfWeekInMonth;
-			_weekInYear = chain._weekInYear;
-			_weekInMonth = chain._weekInMonth;
-			if (chain._tz != null) {
-				_tz = (TimeZone) chain._tz.clone();
-			}
-			_chain = chain;
-			_sourcePos = sourcePos;
-		}
-
-		private void reset(final int sourcePos) {
-			super.clear();
-			_chain = null;
-			_weekDay = Integer.MIN_VALUE;
-			_yearDay = Integer.MIN_VALUE;
-			_dayOfWeekInMonth = Integer.MIN_VALUE;
-			_weekInYear = Integer.MIN_VALUE;
-			_weekInMonth = Integer.MIN_VALUE;
-			_sourcePos = sourcePos;
-		}
-
-		private boolean check() {
-			if (chkDatetime()) {
-				if(_weekDay >= 0) {
-					if (getCalendar().get(Calendar.DAY_OF_WEEK) != _weekDay) {
-						return false;
-					}
-				}
-				if(_yearDay >= 0) {
-					if (getCalendar().get(Calendar.DAY_OF_YEAR) != _yearDay) {
-						return false;
-					}
-				}
-				if(_dayOfWeekInMonth >= 0) {
-					if (getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH) !=
-						_dayOfWeekInMonth) {
-						return false;
-					}
-				}
-				if(_weekInYear >= 0) {
-					if (getCalendar().get(Calendar.WEEK_OF_YEAR)!=_weekInYear) {
-						return false;
-					}
-				}
-				if(_weekInMonth >= 0) {
-					if (getCalendar().get(Calendar.WEEK_OF_MONTH)!=_weekInYear){
-						return false;
-					}
-				}
-				return true;
-			}
-			return false;
-		}
-	}
-
 	/** Parse initial defaults section of datetime mask.
 	 * @return position where parsing has finished.
 	 */
 	final Report checkDateFormatDefaults() {
 		int beg = getIndex();
-		if (_parsedDatetime == null) {
-			_parsedDatetime = new MyDate(beg);
-		}
+		_parsedDatetime = new MyDate(beg);
 		for (;;) {
 			Report r;
 			switch (_ch) {
@@ -4733,6 +4675,124 @@ public class StringParser extends SReporter implements SParser {
 		} else {
 			_source = source;
 			_endPos = _source.length();
+		}
+	}
+
+	/** This class is used in the datetime parser. */
+	private static class MyDate extends SDatetime {
+		private MyDate _chain;
+		private int _weekDay;
+		private int _yearDay;
+		private int _dayOfWeekInMonth;
+		private int _weekInYear;
+		private int _weekInMonth;
+		private int _startPos;
+		private int _endPos;
+		private SDatetime _defaults;
+
+		private MyDate(final MyDate date) {
+			super(date);
+			_weekDay = date._weekDay;
+			_yearDay = date._yearDay;
+			_dayOfWeekInMonth = date._dayOfWeekInMonth;
+			_weekInYear = date._weekInYear;
+			_weekInMonth = date._weekInMonth;
+			_startPos = date._startPos;
+			_defaults = date._defaults;
+		}
+
+		private MyDate(final int sourcePos) {
+			super();
+			_weekDay = Integer.MIN_VALUE;
+			_yearDay = Integer.MIN_VALUE;
+			_dayOfWeekInMonth = Integer.MIN_VALUE;
+			_weekInYear = Integer.MIN_VALUE;
+			_weekInMonth = Integer.MIN_VALUE;
+			_startPos = sourcePos;
+		}
+
+		private MyDate(final MyDate chain, final int sourcePos) {
+			_defaults = chain._defaults;
+			_day = chain._day;
+			_month = chain._month;
+			_year = chain._year;
+			_hour = chain._hour;
+			_minute = chain._minute;
+			_second = chain._second;
+			_fraction = chain._fraction;
+			if (chain._tz != null) {
+				_tz = (TimeZone) chain._tz.clone();
+			}
+			_calendar = null;
+			_weekDay = chain._weekDay;
+			_yearDay = chain._yearDay;
+			_dayOfWeekInMonth = chain._dayOfWeekInMonth;
+			_weekInYear = chain._weekInYear;
+			_weekInMonth = chain._weekInMonth;
+			_chain = chain;
+			_startPos = sourcePos;
+			_endPos = 0;
+		}
+
+		private void setDefaults(SDatetime defaults) {
+			_defaults = new SDatetime(defaults);
+			resetDefaults();
+		}
+
+		private void resetDefaults() {
+			if (_defaults != null) {
+				_dfs = _defaults._dfs;
+				_day = _defaults._day;
+				_eon = _defaults._eon;
+				_fraction = _defaults._fraction;
+				_hour = _defaults._hour;
+				_minute = _defaults._minute;
+				_month = _defaults._month;
+				_second = _defaults._second;
+				_tz = _defaults._tz;
+				_year = _defaults._year;
+			}
+		}
+
+		private void reset(final int sourcePos) {
+			clear();
+			_chain = null;
+			resetDefaults();
+			_weekDay = Integer.MIN_VALUE;
+			_yearDay = Integer.MIN_VALUE;
+			_dayOfWeekInMonth = Integer.MIN_VALUE;
+			_weekInYear = Integer.MIN_VALUE;
+			_weekInMonth = Integer.MIN_VALUE;
+			_startPos = sourcePos;
+			_endPos = 0;
+		}
+
+		private boolean check() {
+			if (!chkDatetime()) {
+				return false;
+			}
+			if (_weekDay >= 0
+				&& getCalendar().get(Calendar.DAY_OF_WEEK) != _weekDay) {
+				return false;
+			}
+			if (_yearDay >= 0
+				&& getCalendar().get(Calendar.DAY_OF_YEAR) != _yearDay) {
+				return false;
+			}
+			if (_dayOfWeekInMonth >= 0
+				&& getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH) !=
+					_dayOfWeekInMonth) {
+				return false;
+			}
+			if (_weekInYear >= 0
+				&& getCalendar().get(Calendar.WEEK_OF_YEAR)!=_weekInYear) {
+				return false;
+			}
+			if (_weekInMonth >= 0
+				&& getCalendar().get(Calendar.WEEK_OF_MONTH)!=_weekInYear){
+				return false;
+			}
+			return true;
 		}
 	}
 }
