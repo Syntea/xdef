@@ -10,7 +10,7 @@
   then org.xdef.ArrayReporter.
 - implemented new validation method "SHA1".
 - implemented new validation method "printableDate" for the printable format.
-- corrected bug in parsing of datetime with a mask with variants when
+- corrected bug in parsing of datetime by mask with variants when
   the simpler variant precedes the more complex one.
 
 # Version 40.0.1, release-date 2020-05-15

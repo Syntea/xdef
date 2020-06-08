@@ -3012,7 +3012,7 @@ public class StringParser extends SReporter implements SParser {
 							}
 							if (!foundChar && _ch == pat) {
 								foundChar = true;
-								do  {
+								do {
 									if (_ch != pat) {
 										foundChar = false;
 									} else {
@@ -3038,7 +3038,7 @@ public class StringParser extends SReporter implements SParser {
 							continue;
 						}
 					}
-					do  {
+					do {
 						if (_ch != pat) {
 							failVariant = true;
 						} else {
@@ -3052,7 +3052,7 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				}
 				default:
-					do  {
+					do {
 						if (_ch != pat) {
 							failVariant = true;
 							break;
