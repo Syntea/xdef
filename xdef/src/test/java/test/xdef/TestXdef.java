@@ -3252,10 +3252,10 @@ public final class TestXdef extends XDTester {
 
 //Test default property "xdef_warning"s and values "true" and "false".
 		props.clear();
-		xml = "<a a='y'></a>";
+		xml = "<a a='y' b='z'/>";
 		xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
-" <a a=\"list('x','y')\">\n"+
+" <a a=\"list('x','y')\" b=\"x()\">\n"+
 " </a>\n"+
 "</xd:def>";
 		try {
@@ -3402,6 +3402,7 @@ public final class TestXdef extends XDTester {
 		public String parserName() {return "licheCislo";}
 	}
 	final public static XDParser licheCislo() {return new LicheCislo();}
+	public static boolean x(XXData x) {return true;}
 
 	/** Run test
 	 * @param args the command line arguments
