@@ -1134,6 +1134,17 @@ public class TestSParser extends STester {
 			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy")&&p.eos());
 			p = new StringParser("Sun Jun 07 18:00:00 CEST 2020");
 			assertTrue(p.isPrintableDatetime()&&p.eos());
+			p = new StringParser("12/6/1961");
+			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y")
+				&& p.eos());
+			p = new StringParser(
+				p.getParsedSDatetime().formatDate("{L(cs)}d/MMM/y"));
+			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y")
+				&& p.eos());
+			p = new StringParser(
+				p.getParsedSDatetime().formatDate("{L(en)}d/MMM/y"));
+			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y")
+				&& p.eos());
 		} catch (Error ex) {
 			fail(ex);
 		} catch (Exception ex) {fail(ex);}
