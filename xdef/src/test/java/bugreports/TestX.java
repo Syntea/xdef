@@ -39,9 +39,7 @@ public class TestX extends XDTester {
 			fail("Error not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || !s.contains("XDEF998")) {
-				ex.printStackTrace();
-			}
+			if (s == null || !s.contains("XDEF998")) {fail(ex);}
 		}
 		try {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
@@ -52,9 +50,7 @@ public class TestX extends XDTester {
 			fail("Error not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || !s.contains("XDEF998")) {
-				ex.printStackTrace();
-			}
+			if (s == null || !s.contains("XDEF998")) {fail(ex);}
 		}
 		try {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
