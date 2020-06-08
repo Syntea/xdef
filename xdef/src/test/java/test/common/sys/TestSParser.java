@@ -103,7 +103,10 @@ public class TestSParser extends STester {
 		SDatetime d;
 		StringParser p;
 		String s;
-		try {//test intervals
+		int ce;
+		Calendar c;
+		try {
+			//test intervals
 			p = new StringParser("abcQ");
 			assertTrue(p.isInInterval('a', 'c') == 'a' &&
 				p.isInInterval('a', 'c') == 'b' &&
@@ -112,7 +115,8 @@ public class TestSParser extends STester {
 				p.isInInterval('A', 'Z') == 'Q' &&
 				p.eos());
 		} catch (Exception ex) {fail(ex);}
-		try {//datetime format literals in mask
+		try {
+			//datetime format literals in mask
 			p = new StringParser("11.2009");
 			if (p.isDatetime("M'-'y|M'.'y")) {
 				assertEq("11/2009", p.getParsedSDatetime().formatDate("M'/'y"));
@@ -212,8 +216,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-		} catch (Exception ex) {fail(ex);}
-		try {//datetime format ISO
+			//datetime format ISO
 			p = new StringParser("2009-11-09");
 			if (p.isDatetime("y-MM-dd")) {
 				assertEq("2009-11-09",
@@ -326,8 +329,6 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-		} catch (Exception ex) {fail(ex);}
-		try {
 			p = new StringParser("TEXT?\n" +
 				" 123 \n" + //integer
 				" +123 \n" + //signed integer
@@ -361,7 +362,6 @@ public class TestSParser extends STester {
 			assertTrue(p.isToken("TEXT"));
 			p.skipSpaces();
 			assertTrue(p.isChar('?'));
-
 			p.skipSpaces();
 			assertTrue(p.isInteger() && (p.getParsedInt() == 123),
 				"b) isInteger() fails: " + p.getParsedInt());
@@ -408,7 +408,6 @@ public class TestSParser extends STester {
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.e1),
 				"l) isFloat() fails: " + p.getParsedFloat());
 			p.skipSpaces();
-			Calendar c;
 			if (p.isDatetime("d.M.yyyy")) {
 				c = p.getParsedCalendar();
 				assertEq(29, c.get(Calendar.DAY_OF_MONTH));
@@ -759,10 +758,6 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 1);
 				assertEq(c.get(Calendar.DATE), 14);
 			}
-		} catch (Error ex) {
-			fail(ex);
-		} catch (Exception ex) {fail(ex);}
-		try {
 			p = new StringParser("abc");
 			assertTrue(p.isToken("abc"));
 			assertTrue(p.eos());
@@ -783,7 +778,7 @@ public class TestSParser extends STester {
 			assertEq(p.getColumnNumber(), 2);
 			assertEq(p.getSourcePosition(), 2);
 			if (p.isISO8601Datetime()) {
-				Calendar c= p.getParsedCalendar();
+				c = p.getParsedCalendar();
 				if (c.get(Calendar.DAY_OF_MONTH) != 11 ||
 					c.get(Calendar.MONTH) != 2 ||
 					c.get(Calendar.YEAR) != 2005 ||
@@ -848,7 +843,7 @@ public class TestSParser extends STester {
 			s = "2005-03-11T13:46:05+01:00";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
-				Calendar c= p.getParsedCalendar();
+				c = p.getParsedCalendar();
 				if (c.get(Calendar.DAY_OF_MONTH) != 11 ||
 					c.get(Calendar.MONTH) != 2 ||
 					c.get(Calendar.YEAR) != 2005 ||
@@ -1061,10 +1056,10 @@ public class TestSParser extends STester {
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
 				int y = new GregorianCalendar().get(Calendar.YEAR);
-				int c = y /100; //actual century
+				ce = y /100; //actual century
 				y = y % 100; //last two digitsd of the actual year
 				int i = d.getYear() % 100;
-				int r =	y < 50 ? c * 100 + i : ((c + 1) * 100 + i);
+				int r =	y < 50 ? ce * 100 + i : ((ce + 1) * 100 + i);
 				assertTrue(d.getYear() == r, d.toISO8601());
 				assertTrue(s.equals(d.formatDate("RR-MM-dd")),
 					d.formatDate("RR-MM-dd"));
@@ -1078,10 +1073,10 @@ public class TestSParser extends STester {
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
 				int y = new GregorianCalendar().get(Calendar.YEAR);
-				int c = y /100; //actual century
+				ce = y /100; //actual century
 				y = y % 100; //last two digits of the actual year
 				int i = d.getYear() % 100;
-				int r =	y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
+				int r =	y < 50 ? (ce - 1) * 100 + i : (ce * 100 + i);
 				assertTrue(d.getYear() == r, d.toISO8601());
 				assertTrue(s.equals(d.formatDate("RR-MM-dd")),
 					d.formatDate("RR-MM-dd"));
@@ -1095,9 +1090,9 @@ public class TestSParser extends STester {
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
 				 //actual century
-				int c = new GregorianCalendar().get(Calendar.YEAR) /100;
+				ce = new GregorianCalendar().get(Calendar.YEAR) /100;
 				int i = d.getYear() % 100;
-				int r =	c * 100 + i;
+				int r =	ce * 100 + i;
 				assertTrue(d.getYear() == r, d.toISO8601());
 				assertTrue(s.equals(d.formatDate("YY-MM-dd")),
 					d.formatDate("YY-MM-dd"));
@@ -1111,9 +1106,9 @@ public class TestSParser extends STester {
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
 				 //actual century
-				int c = new GregorianCalendar().get(Calendar.YEAR) /100;
+				ce = new GregorianCalendar().get(Calendar.YEAR) /100;
 				int i = d.getYear() % 100;
-				int r =	c * 100 + i;
+				int r =	ce * 100 + i;
 				assertTrue(d.getYear() == r, d.toISO8601());
 				assertTrue(s.equals(d.formatDate("yy-MM-dd")),
 					d.formatDate("yy-MM-dd"));
@@ -1145,143 +1140,19 @@ public class TestSParser extends STester {
 				p.getParsedSDatetime().formatDate("{L(en)}d/MMM/y"));
 			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y")
 				&& p.eos());
-		} catch (Error ex) {
-			fail(ex);
-		} catch (Exception ex) {fail(ex);}
-		try {//SDuration
-			SDuration du;
-			du = new SDuration("1999-11-05T23:11:05/P2Y1M3DT11H");
-			assertEq("1999-11-05T23:11:05/P2Y1M3DT11H", du.toString());
-			du = new SDuration("1999-11-05T23:11:05/P2Y1M3D");
-			assertEq("1999-11-05T23:11:05/P2Y1M3D", du.toString());
-			du = new SDuration("P2Y1M3DT11H");
-			assertEq("P2Y1M3DT11H", du.toString());
-			du = new SDuration("P6W/2009-09-08");
-			assertEq("P42D/2009-09-08", du.toString());
-			du = new SDuration("P6W");
-			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
-			assertEq("20090212", d.formatDate("yyyyMMdd"));
-			du = new SDuration("P3M");
-			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
-			assertEq("20090401", d.formatDate("yyyyMMdd"));
-			du = new SDuration("P3M/2009-04-02");
-			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
-			assertEq("20090401", d.formatDate("yyyyMMdd"));
-			du = new SDuration("P3M/2009-04-01");
-			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
-			assertEq(null, d);
-			du = new SDuration("-P1Y"); // negative
-			assertEq("-P1Y", du.toString());
-			du = new SDuration("-P2M10D");  // negative
-			assertEq("-P2M10D", du.toString());
-			du = new SDuration("P5Y");
-			assertEq("P5Y", du.toString());
-			du = new SDuration("P1DT2S");
-			assertEq("P1DT2S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.001S");
-			assertEq("P1Y2M3DT5H20M30.001S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.01S");
-			assertEq("P1Y2M3DT5H20M30.01S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.1S");
-			assertEq("P1Y2M3DT5H20M30.1S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.12S");
-			assertEq("P1Y2M3DT5H20M30.12S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.123S");
-			assertEq("P1Y2M3DT5H20M30.123S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.1234S");
-			assertEq("P1Y2M3DT5H20M30.1234S", du.toString());
-			du = new SDuration("P1Y2M3DT5H20M30.1236S");
-			assertEq("P1Y2M3DT5H20M30.1236S", du.toString());
-			du = new SDuration("P5Y2M10D");
-			assertEq("P5Y2M10D", du.toString());
-			du = new SDuration("P5Y2M10DT15H");
-			assertEq("P5Y2M10DT15H", du.toString());
-			du = new SDuration("PT15H");
-			assertEq("PT15H", du.toString());
-			du = new SDuration("PT1004199059S");
-			assertEq("PT1004199059S", du.toString());
-			du = new SDuration("PT130S");
-			assertEq("PT130S", du.toString());
-			du = new SDuration("PT2M10S");
-			assertEq("PT2M10S", du.toString());
-			du = new SDuration("P2DT3H20M");
-			assertEq("P2DT3H20M", du.toString());
-			du = new SDuration("R12/P2DT3H20M");
-			assertEq("R12/P2DT3H20M", du.toString());
-			du = new SDuration("P0001-10-11T23:01:55/2009-11-05T23:11:05");
-			assertEq("P1Y10M11DT23H1M55S/2009-11-05T23:11:05", du.toString());
-			du = new SDuration("2009-11-05T23:11:05/P0001-10-11T23:01:55");
-			assertEq("2009-11-05T23:11:05/P1Y10M11DT23H1M55S", du.toString());
-			du = new SDuration("1999-11-05T23:11:05/P0001-10-11T23:01:55/" +
-				"2009-11-05T23:11:05");
-			assertEq(
-				"1999-11-05T23:11:05/P1Y10M11DT23H1M55S/2009-11-05T23:11:05",
-				du.toString());
-			try {
-				if (new SDuration("P1M2Y") != null) {}
-				fail("parts order - Y must precede M");
-			} catch (Exception ex) {}
-			try {
-				if (new SDuration("P1Y-1M") != null) {}
-				fail("all parts must be positive");
-			} catch (Exception ex) {}
-		} catch (Exception ex) {fail(ex);}
-		try {
-			SDuration sp;
-			sp = new SDuration("1999-111-5T23:11:05/P2Y3D1MT11H");
-			fail("error not thrown");
-		} catch (Exception ex) {
-			String msg = "" + ex.getMessage();
-			if (msg.indexOf("SYS056") < 0) {
-				fail(ex);
-			}
-		}
-		try {//SDuration
-			//2000-01-12T12:13:14Z, P1Y3M5DT7H10M3.3S => 2001-04-17T19:23:17.3Z
-			SDuration sd = new SDuration("P1Y3M5DT7H10M3.3S");
-			SDatetime st = new SDatetime("2000-01-12T12:13:14Z");
-			SDatetime st1 = sd.getNextTime(st);
-			s = st1.formatDate("yyyy-MM-ddTHH-mm-ss.SZ");
-			assertEq("2001-04-17T19-23-17.3Z", s);
-			//2000-01  -P3M => 1999-10
-			sd = new SDuration("-P3M");
-			st = SDatetime.parse("2000-01", "yyyy-MM");
-			st1 = sd.getNextTime(st);
-			s = st1.toISO8601();
-			assertEq("1999-10-01T00:00:00", s);
-			//2000-01-12  PT33H => 2000-01-13
-			sd = new SDuration("PT33H");
-			st = SDatetime.parse("2000-01-12", "yyyy-MM-dd");
-			st1 = sd.getNextTime(st);
-			s = st1.toISO8601();
-			assertEq("2000-01-13T09:00:00", s);
-			//2000-03-30 + P1D) + P1M = 2000-03-31 + P1M = 2000-04-30
-			sd = new SDuration("P1D");
-			st = SDatetime.parse("2000-03-30", "yyyy-MM-dd");
-			st1 = sd.getNextTime(st);
-			s = st1.toISO8601();
-			assertEq("2000-03-31T00:00:00", s);
-			sd = new SDuration("P1M");
-			st1 = sd.getNextTime(st1);
-			s = st1.toISO8601();
-			assertEq("2000-04-30T00:00:00", s);
-			//(2000-03-30 + P1M) + P1D = 2000-04-30 + P1D = 2000-05-01
-			sd = new SDuration("P1M");
-			st = SDatetime.parse("2000-03-30", "yyyy-MM-dd");
-			st1 = sd.getNextTime(st);
-			s = st1.toISO8601();
-			assertEq("2000-04-30T00:00:00", s);
-			sd = new SDuration("P1D");
-			st1 = sd.getNextTime(st1);
-			s = st1.toISO8601();
-			assertEq("2000-05-01T00:00:00", s);
-		} catch (Exception ex) {fail(ex);}
-		try {
+			p = new StringParser("20.11.");
+			assertTrue(!p.isDatetime("d.M.yyyy[ HH:mm]"));
+			p = new StringParser("20.11.2005 23:");
+			assertTrue(!(p.isDatetime("d.M.yyyy[ HH:mm]") && p.eos()));
+			assertEq(" 23:", p.getUnparsedBufferPart());
+			p = new StringParser("20.11.");
+			assertTrue(!p.isDatetime("d/M/yyyy[ HH:mm]|d.M.yyyy[ HH:mm]"));
+			//isLeapYear method
+			assertTrue(!SDatetime.isLeapYear(1970));
 			assertTrue(SDatetime.isLeapYear(1972));
 			assertTrue(SDatetime.isLeapYear(2000));
 			assertFalse(SDatetime.isLeapYear(1900));
-		} catch (Exception ex) {fail(ex);}
-		try {// test if XMLGregorianCalendar methods in SDatatiome are the same
+			// test if XMLGregorianCalendar methods in SDatatiome are the same
 			SDatetime y = new SDatetime("2010-08-11T21:11:01.123CEST");  //DST
 			GregorianCalendar g = y.toGregorianCalendar();
 			DatatypeFactory df = DatatypeFactory.newInstance();
@@ -1366,8 +1237,139 @@ public class TestSParser extends STester {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
+		} catch (Error ex) {
+			fail(ex);
 		} catch (Exception ex) {fail(ex);}
-
+		try {//SDuration
+			SDuration du;
+			du = new SDuration("1999-11-05T23:11:05/P2Y1M3DT11H");
+			assertEq("1999-11-05T23:11:05/P2Y1M3DT11H", du.toString());
+			du = new SDuration("1999-11-05T23:11:05/P2Y1M3D");
+			assertEq("1999-11-05T23:11:05/P2Y1M3D", du.toString());
+			du = new SDuration("P2Y1M3DT11H");
+			assertEq("P2Y1M3DT11H", du.toString());
+			du = new SDuration("P6W/2009-09-08");
+			assertEq("P42D/2009-09-08", du.toString());
+			du = new SDuration("P6W");
+			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
+			assertEq("20090212", d.formatDate("yyyyMMdd"));
+			du = new SDuration("P3M");
+			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
+			assertEq("20090401", d.formatDate("yyyyMMdd"));
+			du = new SDuration("P3M/2009-04-02");
+			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
+			assertEq("20090401", d.formatDate("yyyyMMdd"));
+			du = new SDuration("P3M/2009-04-01");
+			d = du.getNextTime(SDatetime.parseISO8601("2009-01-01"));
+			assertEq(null, d);
+			du = new SDuration("-P1Y"); // negative
+			assertEq("-P1Y", du.toString());
+			du = new SDuration("-P2M10D");  // negative
+			assertEq("-P2M10D", du.toString());
+			du = new SDuration("P5Y");
+			assertEq("P5Y", du.toString());
+			du = new SDuration("P1DT2S");
+			assertEq("P1DT2S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.001S");
+			assertEq("P1Y2M3DT5H20M30.001S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.01S");
+			assertEq("P1Y2M3DT5H20M30.01S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.1S");
+			assertEq("P1Y2M3DT5H20M30.1S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.12S");
+			assertEq("P1Y2M3DT5H20M30.12S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.123S");
+			assertEq("P1Y2M3DT5H20M30.123S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.1234S");
+			assertEq("P1Y2M3DT5H20M30.1234S", du.toString());
+			du = new SDuration("P1Y2M3DT5H20M30.1236S");
+			assertEq("P1Y2M3DT5H20M30.1236S", du.toString());
+			du = new SDuration("P5Y2M10D");
+			assertEq("P5Y2M10D", du.toString());
+			du = new SDuration("P5Y2M10DT15H");
+			assertEq("P5Y2M10DT15H", du.toString());
+			du = new SDuration("PT15H");
+			assertEq("PT15H", du.toString());
+			du = new SDuration("PT1004199059S");
+			assertEq("PT1004199059S", du.toString());
+			du = new SDuration("PT130S");
+			assertEq("PT130S", du.toString());
+			du = new SDuration("PT2M10S");
+			assertEq("PT2M10S", du.toString());
+			du = new SDuration("P2DT3H20M");
+			assertEq("P2DT3H20M", du.toString());
+			du = new SDuration("R12/P2DT3H20M");
+			assertEq("R12/P2DT3H20M", du.toString());
+			du = new SDuration("P0001-10-11T23:01:55/2009-11-05T23:11:05");
+			assertEq("P1Y10M11DT23H1M55S/2009-11-05T23:11:05", du.toString());
+			du = new SDuration("2009-11-05T23:11:05/P0001-10-11T23:01:55");
+			assertEq("2009-11-05T23:11:05/P1Y10M11DT23H1M55S", du.toString());
+			du = new SDuration("1999-11-05T23:11:05/P0001-10-11T23:01:55/" +
+				"2009-11-05T23:11:05");
+			assertEq(
+				"1999-11-05T23:11:05/P1Y10M11DT23H1M55S/2009-11-05T23:11:05",
+				du.toString());
+			try {
+				if (new SDuration("P1M2Y") != null) {}
+				fail("parts order - Y must precede M");
+			} catch (Exception ex) {}
+			try {
+				if (new SDuration("P1Y-1M") != null) {}
+				fail("all parts must be positive, error not thrown");
+			} catch (Exception ex) {
+				String msg = "" + ex.getMessage();
+				if (msg.indexOf("SYS056") < 0) {
+					fail(ex);
+				}
+			}
+			try {
+				new SDuration("1999-111-5T23:11:05/P2Y3D1MT11H");
+				fail("Incorrect format of time period: not thrown");
+			} catch (Exception ex) {
+				String msg = "" + ex.getMessage();
+				if (msg.indexOf("SYS056") < 0) {
+					fail(ex);
+				}
+			}
+			//2000-01-12T12:13:14Z, P1Y3M5DT7H10M3.3S => 2001-04-17T19:23:17.3Z
+			SDuration sd = new SDuration("P1Y3M5DT7H10M3.3S");
+			SDatetime st = new SDatetime("2000-01-12T12:13:14Z");
+			SDatetime st1 = sd.getNextTime(st);
+			s = st1.formatDate("yyyy-MM-ddTHH-mm-ss.SZ");
+			assertEq("2001-04-17T19-23-17.3Z", s);
+			//2000-01  -P3M => 1999-10
+			sd = new SDuration("-P3M");
+			st = SDatetime.parse("2000-01", "yyyy-MM");
+			st1 = sd.getNextTime(st);
+			s = st1.toISO8601();
+			assertEq("1999-10-01T00:00:00", s);
+			//2000-01-12  PT33H => 2000-01-13
+			sd = new SDuration("PT33H");
+			st = SDatetime.parse("2000-01-12", "yyyy-MM-dd");
+			st1 = sd.getNextTime(st);
+			s = st1.toISO8601();
+			assertEq("2000-01-13T09:00:00", s);
+			//2000-03-30 + P1D) + P1M = 2000-03-31 + P1M = 2000-04-30
+			sd = new SDuration("P1D");
+			st = SDatetime.parse("2000-03-30", "yyyy-MM-dd");
+			st1 = sd.getNextTime(st);
+			s = st1.toISO8601();
+			assertEq("2000-03-31T00:00:00", s);
+			sd = new SDuration("P1M");
+			st1 = sd.getNextTime(st1);
+			s = st1.toISO8601();
+			assertEq("2000-04-30T00:00:00", s);
+			//(2000-03-30 + P1M) + P1D = 2000-04-30 + P1D = 2000-05-01
+			sd = new SDuration("P1M");
+			st = SDatetime.parse("2000-03-30", "yyyy-MM-dd");
+			st1 = sd.getNextTime(st);
+			s = st1.toISO8601();
+			assertEq("2000-04-30T00:00:00", s);
+			sd = new SDuration("P1D");
+			st1 = sd.getNextTime(st1);
+			s = st1.toISO8601();
+			assertEq("2000-05-01T00:00:00", s);
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test

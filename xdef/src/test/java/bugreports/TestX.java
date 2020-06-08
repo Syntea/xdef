@@ -4,38 +4,38 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.proc.XXData;
 import java.util.Properties;
+import test.XDTester;
 
 /** Test default property "xdef_warning"s and values "true" and "false".
  * @author Vaclav Trojan
  */
-public class TestX {
-	public static boolean myErr(XXData x) {return false;}
-	/** Run test.
-	 * @param args not used.
-	 */
-	public static void main(String[] args) {
-		Properties props = new Properties();
+public class TestX extends XDTester {
+	public TestX() {super();}
+
+	@Override
+	/** Run test and display error information. */
+	public void test() {
 		XDPool xp;
 		XDDocument xd;
 		String xml;
 		String s;
-		String xdef =
+		String xdef;
+		xml = "<a a='y'></a>";
+		xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <a a=\"list('x','y')\">\n"+
 " </a>\n"+
 "</xd:def>";
-			xml = "<a a='y'></a>";
+		Properties props = new Properties();
 		try {
 			xp = XDFactory.compileXD(props, xdef, TestX.class); // no property
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);
+			fail("Error not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s.contains("XDEF998")) {
-				System.out.println("OK1");
-			} else {
+			if (s == null || !s.contains("XDEF998")) {
 				ex.printStackTrace();
 			}
 		}
@@ -45,11 +45,10 @@ public class TestX {
 			xp = XDFactory.compileXD(null, xdef, TestX.class);
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);
+			fail("Error not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s.contains("XDEF998")) {
-				System.out.println("OK2");
-			} else {
+			if (s == null || !s.contains("XDEF998")) {
 				ex.printStackTrace();
 			}
 		}
@@ -59,9 +58,13 @@ public class TestX {
 			xp = XDFactory.compileXD(props, xdef, TestX.class);
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);
-			System.out.println("OK3");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		} catch (Exception ex) {fail(ex);}
+	}
+
+	/** Run test.
+	 * @param args not used.
+	 */
+	public static void main(String[] args) {
+		if (runTest(args) > 0) {System.exit(1);}
 	}
 }
