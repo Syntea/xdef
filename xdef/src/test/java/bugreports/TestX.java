@@ -43,7 +43,7 @@ public class TestX extends XDTester {
 		}
 		try {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
 			xp = XDFactory.compileXD(null, xdef, TestX.class);
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);

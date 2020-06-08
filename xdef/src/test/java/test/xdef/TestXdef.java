@@ -3269,7 +3269,7 @@ public final class TestXdef extends XDTester {
 		}
 		try {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,// xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
 			xp = XDFactory.compileXD(null, xdef, TestXdef.class);
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);
