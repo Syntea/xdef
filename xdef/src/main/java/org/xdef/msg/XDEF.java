@@ -472,7 +472,7 @@ public interface XDEF {
 	public static final long XDEF505 = 31159025895L;
 	/** Error in Java XComponent class for element &amp;{0}: &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF506 = 31159025896L;
-	/** Value error&amp;{0}{: }&amp;{#SYS000} */
+	/** Incorrect value&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF515 = 31159025897L;
 	/** Sequence "xd:mixed" has no required item&amp;{#SYS000} */
 	public static final long XDEF520 = 31159025898L;
