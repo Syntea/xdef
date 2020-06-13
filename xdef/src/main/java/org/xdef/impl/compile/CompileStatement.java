@@ -3655,7 +3655,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
-							_g.reportDeprecated("parse:... in type declaration",
+							_g.reportDeprecated(
+								"\"parse:...\" in type declaration",
 								"validation method call");
 						}
 						return;
@@ -4053,7 +4054,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							&& !(val instanceof CodeExtMethod)) {
 							//&{0}" is deprecated. Please use "&{1}" instead
 							_g.reportDeprecated("expression in type check",
-								"union or declaration of a type method");
+								"union or declaration of validation method");
 						}
 					}
 					_g.genStop();

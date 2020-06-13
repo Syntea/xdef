@@ -490,8 +490,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	private void compileMethodsAndClassesAttrs() {
 		if (_extClasses != null && _extClasses.length > 0) {
-			reportDeprecated(new SPosition(), "Compile parameter with class",
-						"<xd:declaration> external method { ... } ...");
+			reportDeprecated(new SPosition(),
+				"Class parameter of compileXD method",
+				"declaration of external method");
 		}
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);

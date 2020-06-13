@@ -676,7 +676,7 @@ public interface XDEF {
 	public static final long XDEF905 = 31159025997L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
 	public static final long XDEF906 = 31159025998L;
-	/** "&amp;{0}" is deprecated. Please use "&amp;{1}" instead&amp;{#SYS000} */
+	/** &amp;{0} is deprecated.&amp;{1}{ Please use }{ instead.}&amp;{#SYS000} */
 	public static final long XDEF998 = 31159025999L;
 	/** Error messages of X-definitions */
 	public static final long XDEF_DESCRIPTION = 31159026000L;
