@@ -3656,8 +3656,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
 							_g.reportDeprecated(
-								"\"parse:...\" in type declaration",
-								"validation method call");
+								"parse:", "validation method call");
 						}
 						return;
 					} else {
@@ -3991,9 +3990,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
 			if (_xdVersion > XConstants.XD31) {
-				//&{0}" is deprecated. Please use "&{1}" instead
-				_g.reportDeprecated("explicit type code",
-					"declaration of type method");
+				//&{0} is deprecated.&{1}{ Please use }{ instead.}
+				_g.reportDeprecated("explicit validation code",
+					"union or declare a validation method");
 			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
@@ -4052,9 +4051,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							&& CALL_OP != val.getCode()
 							&& PARSERESULT_MATCH != val.getCode()
 							&& !(val instanceof CodeExtMethod)) {
-							//&{0}" is deprecated. Please use "&{1}" instead
-							_g.reportDeprecated("expression in type check",
-								"union or declaration of validation method");
+							//&{0} is deprecated.&{1}{ Please use }{ instead.}
+							_g.reportDeprecated("explicit validation code",
+								"union or declare a validation method");
 						}
 					}
 					_g.genStop();
