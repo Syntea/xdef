@@ -240,17 +240,34 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final String printActualKey() {return getKeyValue().printKey();}
 
-	/** Get keys of the table.
-	 * @return the Container with keys of the table.
+	/** Create Container from uniqueSet item.
+	 * @param x value of UniquesetItem to be converted.
+	 * @return Container created from uniqueSet item.
 	 */
-	public final XDContainer getKeys() {
+	private DefContainer usiToContainer(final UniquesetItem x) {
+		DefContainer item = new DefContainer();
+		for (int i = 0; x._key != null && i < x._key._items.length; i++) {
+			item.setXDNamedItem(_parseItems[i]._name, x._key._items[i]);
+		}
+		if (x._assignedValues != null) {
+			DefContainer values = new DefContainer();
+			for (Map.Entry<String,XDValue>y : x._assignedValues.entrySet()){
+				values.setXDNamedItem(y.getKey(), y.getValue());
+			}
+			if (!values.isEmpty()) {
+				item.addXDItem(values);
+			}
+		}
+		return item;
+	}
+
+	/** Get key items from the table.
+	 * @return the Container with key items of the table.
+	 */
+	public final XDContainer getKeyItems() {
 		DefContainer result = new DefContainer();
 		for (UniquesetItem x: _map.values()) {
-			DefContainer items = new DefContainer();
-			for (int i = 0; x._key != null && i < x._key._items.length; i++) {
-				items.setXDNamedItem(_parseItems[i]._name, x._key._items[i]);
-			}
-			result.addXDItem(items);
+			result.addXDItem(usiToContainer(x));
 		}
 		return result;
 	}

@@ -1521,7 +1521,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						((CodeUniqueset) _stack[sp]).size());
 					continue;
 				case UNIQUESET_M_TOCONTAINER:
-					_stack[sp] = ((CodeUniqueset) _stack[sp]).getKeys();
+					_stack[sp] = ((CodeUniqueset) _stack[sp]).getKeyItems();
 					continue;
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {

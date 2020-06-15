@@ -19,7 +19,9 @@ import org.xdef.XDValueType;
  * @author Vaclav Trojan
  */
 public final class DefNull extends XDValueAbstract {
-
+	/** NULL Value. */
+	public static final XDValue NULL_VALUE = new DefNull();
+	
 	private final short _type;
 
 	/** Creates a new instance of DefNull. */
