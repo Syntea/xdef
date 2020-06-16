@@ -125,7 +125,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_NAMEDVALUE, "NamedValue", org.xdef.XDNamedValue.class);
 		setType(XD_XMLWRITER, "XmlOutStream", org.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
-		setType(XD_UNIQUESET_ITEM, "uniqueSetItem", java.lang.Object.class);
+		setType(XD_UNIQUESET_ITEM, "uniqueSetItem",
+			org.xdef.impl.code.CodeUniqueset.UniquesetItem.class);
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(UNIQUESET_M_VALUE, "uniqueSet", null);
