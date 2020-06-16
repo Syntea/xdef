@@ -1108,10 +1108,6 @@ public abstract class XDTester extends STester {
 		ar.add(classpath + File.pathSeparatorChar + classDir); // classpath
 		ar.add("-d");
 		ar.add(classDir); // where to write compiled classes
-		ar.add("-source");
-		ar.add("1.6"); // sources are in version 1.6
-		ar.add("-target");
-		ar.add("1.6"); // generate classes in version 1.6
 		// source files
 		for (String source: sources) {
 			addJavaSource(new File (source), ar);

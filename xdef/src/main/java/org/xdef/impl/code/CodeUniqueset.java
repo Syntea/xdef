@@ -26,14 +26,14 @@ import java.util.Set;
  */
 public final class CodeUniqueset extends XDValueAbstract {
 
-	/** Map of key values ("table"). */
+	/** Name of this uniqueSet. */
+	private final String _name;
+	/** Map of unique items ("table"). */
 	private final Map<UniquesetKey, UniquesetValue> _map;
 	/** Set of markers. */
 	private final Set<Object> _markers = new HashSet<Object>();
 	/** Array with parse items. */
 	private final ParseItem[] _parseItems;
-	/** Name of this uniqueSet. */
-	private final String _name;
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
@@ -212,15 +212,15 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * If the key not exists this method returns false, otherwise it returns
 	 * true.
 	 * @param name name of value.
-	 * @param value value to be set.
+	 * @param val value to be set.
 	 * @return true if value was assigned to the item of unique set.
 	 */
-	public final boolean setNamedValue(final String name, final XDValue value) {
+	public final boolean setNamedValue(final String name, final XDValue val) {
 		UniquesetValue usv = _map.get(getKeyValue());
 		if (usv == null) {
 			return false;
 		}
-		usv.setValue(name, value);
+		usv.setValue(name, val);
 		return true;
 	}
 
@@ -450,13 +450,13 @@ public final class CodeUniqueset extends XDValueAbstract {
 
 		/** Set named value to this item.
 		 * @param name name of value.
-		 * @param value value to be set.
+		 * @param val value to be set.
 		 */
-		private void setValue(final String name, final XDValue value) {
+		private void setValue(final String name, final XDValue val) {
 			if (_assignedValues == null) {
 				_assignedValues = new HashMap<String, XDValue>();
 			}
-			_assignedValues.put(name, value);
+			_assignedValues.put(name, val);
 		}
 
 		/** Set named value from this item.
@@ -645,9 +645,9 @@ public final class CodeUniqueset extends XDValueAbstract {
 		public final String getDeclaredTypeName() {return _refName;}
 
 		/** Set parsed object (used in XDCodeProcessor).
-		 * @param value the value of parsed object.
+		 * @param val the value of parsed object.
 		 */
-		public final void setParsedObject(XDValue value) {_itemValue = value;}
+		public final void setParsedObject(XDValue val) {_itemValue = val;}
 
 		/** Check if this item is optional or required.
 		 * @return true if this item is required.
@@ -703,7 +703,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		}
 
 		////////////////////////////////////////////////////////////////////////
-		// Methods used in CodeUniquset.
+		// Methods used in CodeUniqueset.
 		////////////////////////////////////////////////////////////////////////
 
 		/** Get index of actual uniqueSet parse item.
