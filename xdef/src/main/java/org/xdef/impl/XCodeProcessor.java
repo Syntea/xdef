@@ -29,7 +29,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SError;
-import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
@@ -568,7 +567,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	 */
 	final CodeUniqueset getIdRefTable() {
 		if (_globalVariables[4] == null) {
-//			_idrefTable = (CodeUniqueset) _globalVariables[4];
 			 CodeUniqueset.ParseItem[] parseItems =
 				new CodeUniqueset.ParseItem[] {
 					new CodeUniqueset.ParseItem("", // no key name
@@ -579,7 +577,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						true) // required item
 				}; // optional
 			_globalVariables[3] = CompileBase.getParser("QName");
-			_globalVariables[4] = new CodeUniqueset(parseItems,	"");
+			_globalVariables[4] =
+				new CodeUniqueset(parseItems, new String[0], "");
 		}
 		return (CodeUniqueset) _globalVariables[4];
 	}
@@ -1469,8 +1468,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_NEWINSTANCE: {
 					CodeXD x = (CodeXD) item;
 					CodeUniqueset u = (CodeUniqueset) x.getParam2().cloneItem();
-					_stack[++sp] =
-						new CodeUniqueset(u.getParsedItems(), u.getName());
+					_stack[++sp] = new CodeUniqueset(u.getParsedItems(),
+						u.getVarNames(), u.getName());
 					continue;
 				}
 				case UNIQUESET_M_NEWKEY: {
@@ -1521,7 +1520,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						((CodeUniqueset) _stack[sp]).size());
 					continue;
 				case UNIQUESET_M_TOCONTAINER:
-					_stack[sp] = ((CodeUniqueset) _stack[sp]).getKeyItems();
+					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems();
 					continue;
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
@@ -2468,7 +2467,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							CodeUniqueset x = (CodeUniqueset)xv;
 							idrefTables.put(j, x);
 							_globalVariables[j] = new CodeUniqueset(
-								x.getParsedItems(), x.getName());
+								x.getParsedItems(),x.getVarNames(),x.getName());
 						}
 					}
 					Element elem = ChkComposer.compose(_reporter,

@@ -253,7 +253,14 @@ public final class XDReader extends SObjectReader {
 									readBoolean()); // optional flag
 							}
 						}
-						return new CodeUniqueset(keys, readString());
+						len = readLength();
+						String[] varNames = new String[len];
+						if (len > 0) {
+							for (int i = 0; i < len; i++) {
+								varNames[i] = readString();
+							}
+						}
+						return new CodeUniqueset(keys, varNames, readString());
 					}
 					case XDValueID.XD_SERVICE:
 						return new DefSQLService();

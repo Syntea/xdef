@@ -26,6 +26,11 @@ public interface XDUniqueSetItem extends XDValue {
 	 */
 	public XDValue getKeyPart(final String name);
 
+	/** Get names of assigned variables.
+	 * @return array with names of assigned variables.
+	 */
+	public String[] getVarNames();
+
 	/** Get value of an assigned value.
 	 * @param name the name of assigned value.
 	 * @return assigned value.

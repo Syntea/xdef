@@ -1,6 +1,5 @@
 package org.xdef.impl.code;
 
-import java.util.ArrayList;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -34,22 +33,27 @@ public final class CodeUniqueset extends XDValueAbstract {
 	private final Set<Object> _markers = new HashSet<Object>();
 	/** Array with parse items. */
 	private final ParseItem[] _parseItems;
+	/** Array with names of assigned values. */
+	private final String[] _valueNames;
 	/** Index of actual key item of multiple key. */
 	private int _keyIndex;
 
 	/** Creates a new instance of CodeUniqueSet.
 	 * @param parseItems CodeUniquesetKey array from which the new instance
 	 * will be created.
+	 * @param valueNames array with names of assigned variables
 	 * @param name name of unique set object.
 	 */
 	public CodeUniqueset(final ParseItem[] parseItems,
+		final String[] valueNames,
 		final String name) {
+		_name = name;
 		_map = new HashMap<UniquesetKey, UniquesetValue>();
 		_parseItems = new ParseItem[parseItems.length];
 		for(int i = 0; i < parseItems.length; i++) {
 			_parseItems[i] = (ParseItem) parseItems[i].cloneItem();
 		}
-		_name = name;
+		_valueNames = valueNames;
 	}
 
 	/** Set index of multiple key  (0 if key is simple).
@@ -61,8 +65,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return true if id exists, otherwise return false.
 	 */
 	public final boolean hasId() {
-		UniquesetKey key = getKeyValue();
-		UniquesetValue usv = _map.get(key);
+		UniquesetValue usv = _map.get(new UniquesetKey(_parseItems));
 		if (usv == null) {
 			return false;
 		}
@@ -75,7 +78,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * reports.
 	 */
 	public final ArrayReporter chkId() {
-		UniquesetKey key = getKeyValue();
+		UniquesetKey key = new UniquesetKey(_parseItems);
 		UniquesetValue usv = _map.get(key);
 		if (usv == null) {
 			usv = new UniquesetValue(); //empty report list
@@ -93,8 +96,8 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return error report or null.
 	 */
 	public final Report setId() {
-		UniquesetKey key = getKeyValue();
-		if (key._missing != null && !key._missing.isEmpty()) {//not complete?
+		UniquesetKey key = new UniquesetKey(_parseItems);
+		if (key._missing != null && key._missing.length != 0) {//not complete?
 			String s = "";
 			for (int i : key._missing) {
 				if (!s.isEmpty()) {
@@ -123,18 +126,16 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 */
 	public final ParseItem[] getParsedItems() {return _parseItems;}
 
+	/** Get array with names of assigned variables.
+	 * @return array with names of assigned variables.
+	 */
+	public final String[] getVarNames() {return _valueNames;}
+
 	/** Get address of parsing method for key item with given index.
 	 * @param i index of key in multiple key array.
 	 * @return parse item of key in multiple key array.
 	 */
 	public final ParseItem getParseKeyItem(final int i) {return _parseItems[i];}
-
-	/** Create value of unique set key object.
-	 * @return new value of unique set key object.
-	 */
-	private UniquesetKey getKeyValue() {
-		return new UniquesetKey(_parseItems);
-	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDUniqueset interface.
@@ -216,7 +217,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return true if value was assigned to the item of unique set.
 	 */
 	public final boolean setNamedValue(final String name, final XDValue val) {
-		UniquesetValue usv = _map.get(getKeyValue());
+		UniquesetValue usv = _map.get(new UniquesetKey(_parseItems));
 		if (usv == null) {
 			return false;
 		}
@@ -230,7 +231,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	 * @return saved value.
 	 */
 	public final XDValue getNamedValue(final String name) {
-		UniquesetValue usv = _map.get(getKeyValue());
+		UniquesetValue usv = _map.get(new UniquesetKey(_parseItems));
 		XDValue result = usv == null ? null : usv.getValue(name);
 		return result == null ? DefNull.NULL_VALUE : result;
 	}
@@ -238,13 +239,15 @@ public final class CodeUniqueset extends XDValueAbstract {
 	/** Get printable form of actual value of the key.
 	 * @return printable form of actual value of the key.
 	 */
-	public final String printActualKey() {return getKeyValue().toString();}
+	public final String printActualKey() {
+		return new UniquesetKey(_parseItems).toString();
+	}
 
 	/** Get Container created from actual uniqueSet item.
 	 * @return the Container created from actual uniqueSet item.
 	 */
 	public DefContainer getUniqueSetItemAsContainer() {
-		UniquesetKey key = getKeyValue();
+		UniquesetKey key = new UniquesetKey(_parseItems);
 		UniquesetValue val = _map.get(key);
 		if (val == null) {
 			return null;
@@ -277,7 +280,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 	/** Get key items from the table.
 	 * @return the Container with key items of the table.
 	 */
-	public final XDContainer getKeyItems() {
+	public final XDContainer getUniqueSetItems() {
 		DefContainer result = new DefContainer();
 		for (Map.Entry<UniquesetKey, UniquesetValue> x: _map.entrySet()) {
 			result.addXDItem(usiToContainer(
@@ -308,12 +311,14 @@ public final class CodeUniqueset extends XDValueAbstract {
 	public final XDValueType getItemType() {return  XDValueType.OBJECT;}
 
 	@Override
-	public XDValue cloneItem() {return new CodeUniqueset(_parseItems, _name);}
+	public XDValue cloneItem() {
+		return new CodeUniqueset(_parseItems, _valueNames, _name);
+	}
 
 	@Override
 	public String toString() {
 		String result = "UNIQUESET: " + _name;
-		UniquesetKey key = getKeyValue();
+		UniquesetKey key = new UniquesetKey(_parseItems);
 		UniquesetValue usv = _map.get(key);
 		result += ", actual key: ";
 		if (_parseItems.length > 1) {
@@ -346,7 +351,7 @@ public final class CodeUniqueset extends XDValueAbstract {
 		/** Values of parse items. */
 		private final XDValue[] _items;
 		/** List of indexes of incomplete items. */
-		private ArrayList<Integer> _missing;
+		private int[] _missing;
 
 		/** Construct UniquesetKey object.
 		 * @param keys array with unique set parse items.
@@ -365,9 +370,13 @@ public final class CodeUniqueset extends XDValueAbstract {
 						items[i] = null;
 						// add to list of incomplete items
 						if (_missing == null) {
-							 _missing = new ArrayList<Integer>();
+							 _missing = new int[]{i};
+						} else {
+							int[] old = _missing;
+							_missing = new int[old.length + 1];
+							System.arraycopy(old, 0, _missing, 0, old.length);
+							_missing[old.length] = i;
 						}
-						_missing.add(i);
 					}
 				}
 			}
@@ -563,6 +572,12 @@ public final class CodeUniqueset extends XDValueAbstract {
 			}
 			throw new RuntimeException("Kye part " + name + " not exists");
 		}
+
+		@Override
+		/** Get names of assigned variables.
+		 * @return array with names of assigned variables.
+		 */
+		public final String[] getVarNames() {return _uniqueSet._valueNames;}
 
 		@Override
 		/** Get value of an assigned value.

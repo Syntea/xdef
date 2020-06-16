@@ -213,6 +213,14 @@ public final class XDWriter extends SObjectWriter {
 							writeShort(key.getParsedType());
 							writeBoolean(key.isOptional());
 						}
+						String[] varNames = y.getVarNames();
+						int len = varNames == null ? 0 : varNames.length;
+						writeLength(len);
+						if (len > 0) {
+							for (int i = 0; i < len; i++) {
+								writeString(varNames[i]);
+							}
+						}
 						writeString(y.getName());
 						return;
 					}
