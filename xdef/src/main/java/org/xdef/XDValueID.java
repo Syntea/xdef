@@ -68,10 +68,10 @@ public interface XDValueID {
 	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 30
 	/** Item with Locale values. */
 	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 31
-	/** Item of uniqueSet table. */
-	public static final short XD_UNIQUESET_ITEM = XD_LOCALE + 1; // 32
+	/** Key of uniqueSet table. */
+	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 32
 	/** Any value (may be null). */
-	public static final short XD_ANY = XD_UNIQUESET_ITEM + 1; // 33
+	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 33
 	/** Object value. */
 	public static final short XD_OBJECT = XD_ANY + 1; // 34
 	/** Null type. */

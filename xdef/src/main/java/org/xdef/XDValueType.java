@@ -69,7 +69,7 @@ public enum XDValueType {
 	/** Item with Locale values. */
 	LOCALE,
 	/** Item of uniqueSet table. */
-	UNIQUESET_ITEM,
+	UNIQUESET_KEY,
 	/** Any value (may be null). */
 	ANY,
 	/** Object value. */

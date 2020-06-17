@@ -125,8 +125,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_NAMEDVALUE, "NamedValue", org.xdef.XDNamedValue.class);
 		setType(XD_XMLWRITER, "XmlOutStream", org.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
-		setType(XD_UNIQUESET_ITEM, "uniqueSetItem",
-			org.xdef.impl.code.CodeUniqueset.UniquesetItem.class);
+		setType(XD_UNIQUESET_KEY, "uniqueSetKey",
+			org.xdef.XDUniqueSetKey.class);
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(UNIQUESET_M_VALUE, "uniqueSet", null);
@@ -160,7 +160,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
-			((char) XD_UNIQUESET_ITEM) + ";uniqueSetItem;" +
+			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
 
 			((char) XX_ELEMENT) + ";XXNode;" + //???
 			((char) XX_ELEMENT) + ";XXElement;" +
@@ -1361,6 +1361,15 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "size");
 		method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "toContainer");
+		method(ti, genInternalMethod(UNIQUESET_GET_ACTUAL_KEY, XD_UNIQUESET_KEY,
+			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "getActualKey");
+
+////////////////////////////////////////////////////////////////////////////////
+// UNIQUESET_KEY (key uniqueSet)
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_UNIQUESET_KEY;
+		method(ti, genInternalMethod(UNIQUESET_KEY_RESET, XD_VOID,
+			ANY_MODE, 1, 1, XD_UNIQUESET_KEY), "resetKey");
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)

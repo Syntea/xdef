@@ -1,9 +1,9 @@
 package org.xdef;
 
-/** Implements item of unique set (row of table).
+/** Implements key of uniqueSet table.
  * @author Vaclav Trojan
  */
-public interface XDUniqueSetItem extends XDValue {
+public interface XDUniqueSetKey extends XDValue {
 
 	/** Get name of uniqueSet table.
 	 * @return name of uniqueSet table.
@@ -36,4 +36,10 @@ public interface XDUniqueSetItem extends XDValue {
 	 * @return assigned value.
 	 */
 	public XDValue getValue(final String name);
+
+	/** Reset actual key of the table from this position.
+	 * @return true if the key was reset to the value from this object
+	 * or return false if item not exists in the set.
+	 */
+	public boolean resetKey();
 }

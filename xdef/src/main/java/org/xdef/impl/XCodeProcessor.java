@@ -89,6 +89,7 @@ import org.xdef.impl.debug.ChkGUIDebug;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import org.xdef.XDConstants;
+import org.xdef.XDUniqueSetKey;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -1522,6 +1523,25 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_M_TOCONTAINER:
 					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems();
 					continue;
+				case UNIQUESET_GET_ACTUAL_KEY:
+					_stack[sp]=((CodeUniqueset)_stack[sp]).getActualKey();
+					if (_stack[sp] == null || _stack[sp].isNull()) {
+						//The key is not in the uniqueSet
+						Report rep = Report.error(XDEF.XDEF538, pc - 1,
+							((XDException) _stack[sp--]).toString());
+						updateReport(rep, chkNode);
+						_stack[sp] = DefNull.NULL_VALUE;
+					}
+					continue;
+				case UNIQUESET_KEY_RESET: {
+					XDUniqueSetKey usk = (XDUniqueSetKey)_stack[sp--];
+					if (usk == null || usk.isNull() || !usk.resetKey()) {
+						Report rep = Report.error(XDEF.XDEF540, pc - 1,
+							((XDException) _stack[sp--]).toString());
+						updateReport(rep, chkNode);
+					}
+					continue;
+				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
