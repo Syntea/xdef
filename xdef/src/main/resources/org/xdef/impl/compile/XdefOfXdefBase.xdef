@@ -234,8 +234,8 @@ UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule
 TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
-  | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "AnyValue"
-  | "Output" | "Input" | "NamedValue" ) $rule
+  | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
+  | "AnyValue" | "Output" | "Input" | "NamedValue" ) $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName
