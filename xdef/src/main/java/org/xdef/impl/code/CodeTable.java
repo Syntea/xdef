@@ -726,12 +726,16 @@ public interface CodeTable {
 	static final short UNIQUESET_GETVALUEX = UNIQUESET_SETVALUEX + 1;
 	/** Set index of multiple key  (0 if key is simple). */
 	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUEX + 1;
+	/** Get the actual key of uniqueSet. */
+	static final short UNIQUESET_GET_ACTUAL_KEY = UNIQUESET_KEY_LOAD + 1;
+	/** Reset actual key of the uniqueSet from saved key. */
+	static final short UNIQUESET_KEY_RESET = UNIQUESET_GET_ACTUAL_KEY + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//Object
 	////////////////////////////////////////////////////////////////////////////
 	/** Get User Object. */
-	static final short GET_USEROBJECT = UNIQUESET_KEY_LOAD + 1;
+	static final short GET_USEROBJECT = UNIQUESET_KEY_RESET + 1;
 	/** Get User Object. */
 	static final short SET_USEROBJECT = GET_USEROBJECT + 1;
 
@@ -858,5 +862,4 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	/** Last code - this is the last code value. */
 	static final short LAST_CODE = SRCINFO_CODE + 10;
-
 }

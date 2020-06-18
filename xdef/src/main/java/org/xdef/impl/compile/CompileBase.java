@@ -26,20 +26,20 @@ public class CompileBase implements CodeTable, XDValueID {
 	// Non public Value types
 	////////////////////////////////////////////////////////////////////////////
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//47
+	public static final short ATTR_REF_VALUE = XD_UNDEF + 1;				//48
 	/** Value of PARSEITEM. */
-	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//48
+	public static final short PARSEITEM_VALUE = ATTR_REF_VALUE + 1;			//49
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//49
+	public static final short UNIQUESET_M_VALUE = PARSEITEM_VALUE + 1;		//50
 	/** Value type: reference to attribute; used by compiler. */
-	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//50
+	public static final short UNIQUESET_KEY_VALUE = UNIQUESET_M_VALUE + 1;	//51
 	/** Named value of UNIQUESET. */
-	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//51
+	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//52
 	/** attribute ref, undefined type and methods which are not above a type. */
-	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//52
+	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//53
 
 	/** Value of UNIQUESET. */
-	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//53
+	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//54
 
 	////////////////////////////////////////////////////////////////////////////
 	//Compilation modes (context where code can be executed)
@@ -125,6 +125,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_NAMEDVALUE, "NamedValue", org.xdef.XDNamedValue.class);
 		setType(XD_XMLWRITER, "XmlOutStream", org.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
+		setType(XD_UNIQUESET_KEY, "uniqueSetKey",
+			org.xdef.XDUniqueSetKey.class);
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(UNIQUESET_M_VALUE, "uniqueSet", null);
@@ -158,6 +160,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
+			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
 
 			((char) XX_ELEMENT) + ";XXNode;" + //???
 			((char) XX_ELEMENT) + ";XXElement;" +
@@ -1358,6 +1361,15 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "size");
 		method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
 			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "toContainer");
+		method(ti, genInternalMethod(UNIQUESET_GET_ACTUAL_KEY, XD_UNIQUESET_KEY,
+			ANY_MODE, 1, 1, UNIQUESET_M_VALUE), "getActualKey");
+
+////////////////////////////////////////////////////////////////////////////////
+// UNIQUESET_KEY (key uniqueSet)
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_UNIQUESET_KEY;
+		method(ti, genInternalMethod(UNIQUESET_KEY_RESET, XD_VOID,
+			ANY_MODE, 1, 1, XD_UNIQUESET_KEY), "resetKey");
 
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)

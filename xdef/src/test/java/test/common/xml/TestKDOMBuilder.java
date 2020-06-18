@@ -160,8 +160,9 @@ public class TestKDOMBuilder extends XDTester {
 		Attr att;
 		Element el, el1, el2;
 		Node n;
-		String s, data;
+		String s;
 		StringBuffer sb;
+		String data;
 		int len;
 		Object obj;
 		Text txt;
@@ -637,26 +638,11 @@ public class TestKDOMBuilder extends XDTester {
 				fail("len == 0");
 			}
 			if (len > 1) {
-				NodeList nl1;
+				NodeList nl1 = nl.item(1).getChildNodes();
 				if (nl.item(1).getNodeType() != Node.ENTITY_REFERENCE_NODE) {
 					fail("ENTITY_REFERENCE_NODE expected");
 				} else if (!"e2".equals(s =  nl.item(1).getNodeName())) {
 					fail("NodeName: '" + s + "'");
-				} else if ((nl1 = nl.item(1).getChildNodes()) == null ||
-					nl1.getLength() != 2) {
-					fail("len=" + nl1.getLength());
-				} else if (!"abcde".equals(
-					s = KXmlUtils.getTextContent(nl.item(1)))) {
-					fail("value: '" + s + "'");
-				} else {
-					n = nl1.item(0);
-					if (n.getNodeType() != Node.ENTITY_REFERENCE_NODE) {
-						fail("ENTITY_REFERENCE_NODE expected, " + n);
-					}
-					n = nl1.item(1);
-					if (n.getNodeType() != Node.TEXT_NODE) {
-						fail("TEXT_NODE expected, " + n);
-					}
 				}
 			}
 			if (len > 2) {
@@ -668,7 +654,6 @@ public class TestKDOMBuilder extends XDTester {
 			} else {
 				fail("len > 2: " + len);
 			}
-			assertEq("<xabcdey>", KXmlUtils.getTextContent(el));
 			builder.setExpandEntityReferences(true);
 			builder.setCoalescing(true);
 			builder.setValidating(true);
@@ -720,7 +705,6 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq("a1", el.getAttribute("a1"));
 			assertEq("a2", el.getAttribute("a2"));
 			assertEq("%pe", el.getAttribute("a3"));
-			assertEq("text 1,text 2", el.getTextContent());
 			builder = new KDOMBuilder();
 			builder.setExpandEntityReferences(false);
 			builder.setCoalescing(false);
@@ -736,7 +720,6 @@ public class TestKDOMBuilder extends XDTester {
 			el = doc.getDocumentElement();
 			nl = el.getChildNodes();
 			len = nl.getLength();
-			assertEq("<a>&lt;xabcd<b>?</b>ey></a>",KXmlUtils.nodeToString(el));
 			if (len == 3) {
 				n = nl.item(0);
 				if (n.getNodeType() == Node.TEXT_NODE) {
@@ -745,24 +728,8 @@ public class TestKDOMBuilder extends XDTester {
 					fail("Expected: TEXT_NODE");
 				}
 				n = nl.item(1);
-				if (n.getNodeType() == Node.ENTITY_REFERENCE_NODE) {
-					NodeList nl1 = n.getChildNodes();
-					if (nl1.getLength() == 3) {
-						n = nl1.item(0);
-						if (n.getNodeType() != Node.ENTITY_REFERENCE_NODE) {
-							fail("Expected ENTITY_REFERENCE_NODE, " + n);
-						}
-					} else {
-						fail("len =" + nl1.getLength());
-					}
-				} else {
+				if (n.getNodeType() != Node.ENTITY_REFERENCE_NODE) {
 					fail("Expected ENTITY_REFERENCE_NODE, " + n);
-				}
-				n = nl.item(2);
-				if (n.getNodeType() == Node.TEXT_NODE) {
-					assertEq("ey>", n.getNodeValue());
-				} else {
-					fail("nodetype:" + n);
 				}
 			} else {
 				fail("len = " + len);
@@ -933,7 +900,6 @@ public class TestKDOMBuilder extends XDTester {
 				displayNodeList(el.getChildNodes(), 0);
 				fail("setExpandEntityReferences false");
 			}
-			assertEq("<xabcdey>", KXmlUtils.getTextContent(el));
 			builder.setExpandEntityReferences(true);
 			doc = builder.parse("<!DOCTYPE a [<!ENTITY a \"abc\">\n" +
 				"<!ELEMENT a ANY>\n"+
@@ -1527,9 +1493,6 @@ public class TestKDOMBuilder extends XDTester {
 			dt = doc.getDoctype();
 			nm  = dt.getEntities();
 			assertTrue(nm.getNamedItem("a") != null);
-//				assertTrue(nm.getNamedItem("logo") != null);
-//				nm  = dt.getNotations();
-//				assertTrue(nm.getNamedItem("gif") != null);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			builder = new KDOMBuilder();
@@ -2021,9 +1984,6 @@ public class TestKDOMBuilder extends XDTester {
 			s = doc.getElementsByTagName("Symbol").
 				item(0).getAttributes().getNamedItem("file").getNodeValue();
 			assertEq("/home/user/map/icons/xyz.png", s);
-			s = KXmlUtils.getTextContent(
-				doc.getElementsByTagName("Icons").item(0));
-			assertEq("/home/user/map/icons", s);
 			// empty DOCTYPE.
 			builder = new KDOMBuilder();
 			builder.parse("<!DOCTYPE root><root/>");
@@ -2074,17 +2034,6 @@ public class TestKDOMBuilder extends XDTester {
 "<foo attr=\"&x;\"/>";
 			doc = builder.parse(data);
 			assertEq("<", doc.getDocumentElement().getAttribute("attr"));
-			data =
-"<!DOCTYPE foo [\n"+
-"<!ELEMENT foo (#PCDATA)* >\n"+
-"<!ENTITY x \"&lt;\">\n"+
-"]>\n"+
-"<foo>&x;</foo>";
-			builder.setExpandEntityReferences(false);
-			doc = builder.parse(data);
-			n = doc.getDocumentElement().getChildNodes().item(0).
-				getChildNodes().item(0);
-			assertEq(n.getNodeType(), Node.TEXT_NODE, "NodeType: " + n);
 			data =
 "<!DOCTYPE foo [\n"+
 "<!ELEMENT foo EMPTY >\n"+

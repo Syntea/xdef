@@ -1690,7 +1690,7 @@ public final class CompileCode extends CompileBase {
 	 */
 	final void reportDeprecated(final String old, final String replace) {
 		if (_chkWarnings) {
-			_parser.warning(XDEF.XDEF998, old, replace);
+			_parser.warning(XDEF.XDEF998, '"' + old + '"', '"' + replace + '"');
 		}
 	}
 

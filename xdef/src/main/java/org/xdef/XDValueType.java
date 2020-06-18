@@ -66,10 +66,12 @@ public enum XDValueType {
 	NAMEDVALUE,
 	/** XML stream writer. */
 	XMLWRITER,
+	/** Item with Locale values. */
+	LOCALE,
+	/** Item of uniqueSet table. */
+	UNIQUESET_KEY,
 	/** Any value (may be null). */
 	ANY,
-	/** Any value (may be null). */
-	LOCALE,
 	/** Object value. */
 	OBJECT,
 	/** Null type. */

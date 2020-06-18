@@ -66,36 +66,38 @@ public interface XDValueID {
 	public static final short XD_NAMEDVALUE = XD_PARSERESULT + 1; // 29
 	/** XML stream writer. */
 	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 30
-	/** Any value (may be null). */
+	/** Item with Locale values. */
 	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 31
+	/** Key of uniqueSet table. */
+	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 32
 	/** Any value (may be null). */
-	public static final short XD_ANY = XD_LOCALE + 1; // 32
+	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 33
 	/** Object value. */
-	public static final short XD_OBJECT = XD_ANY + 1; // 33
+	public static final short XD_OBJECT = XD_ANY + 1; // 34
 	/** Null type. */
-	static final short XD_NULL = XD_OBJECT + 1; // 34
+	static final short XD_NULL = XD_OBJECT + 1; // 35
 	/** XXElement value. */
-	public static final short XX_ELEMENT = XD_NULL + 1; // 35
+	public static final short XX_ELEMENT = XD_NULL + 1; // 36
 	/** XXText value. */
-	public static final short XX_TEXT = XX_ELEMENT + 1; // 36
+	public static final short XX_TEXT = XX_ELEMENT + 1; // 37
 	/** XXAttr value. */
-	public static final short XX_ATTR = XX_TEXT + 1; // 37
+	public static final short XX_ATTR = XX_TEXT + 1; // 38
 	/** XXData value (supertype for both XXATTR and XXTEXT). */
-	public static final short XX_DATA = XX_ATTR + 1; // 38
+	public static final short XX_DATA = XX_ATTR + 1; // 39
 	/** XXDocument value. */
-	public static final short XX_DOCUMENT = XX_DATA + 1; // 39
+	public static final short XX_DOCUMENT = XX_DATA + 1; // 40
 	/** XXPI (Processing instruction) value. */
-	public static final short XX_PI = XX_DOCUMENT + 1; // 40
+	public static final short XX_PI = XX_DOCUMENT + 1; // 41
 	/** XXComment (comment) value. */
-	public static final short XX_COMMENT = XX_PI + 1; // 41
+	public static final short XX_COMMENT = XX_PI + 1; // 42
 	/** XXChoice value. */
-	public static final short XX_CHOICE = XX_COMMENT + 1; // 42
+	public static final short XX_CHOICE = XX_COMMENT + 1; // 43
 	/** XXMixed value. */
-	public static final short XX_MIXED = XX_CHOICE + 1; // 43
+	public static final short XX_MIXED = XX_CHOICE + 1; // 44
 	/** XXsequence value. */
-	public static final short XX_SEQUENCE = XX_MIXED + 1; // 44
+	public static final short XX_SEQUENCE = XX_MIXED + 1; // 45
 	/** XModel value. */
-	public static final short XM_MODEL = XX_SEQUENCE + 1; // 45
+	public static final short XM_MODEL = XX_SEQUENCE + 1; // 46
 	/** Undefined type. */
-	public static final short XD_UNDEF = XM_MODEL + 1; // 46
+	public static final short XD_UNDEF = XM_MODEL + 1; // 47
 }

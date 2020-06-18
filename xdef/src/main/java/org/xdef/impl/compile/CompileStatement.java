@@ -3655,8 +3655,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						checkSymbol(END_SYM);
 						if (_xdVersion >= XConstants.XD31) {
-							_g.reportDeprecated("parse:... in type declaration",
-								"validation method call");
+							_g.reportDeprecated(
+								"parse:", "validation method call");
 						}
 						return;
 					} else {
@@ -3925,8 +3925,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		var.setParseMethodAddr(keys[0].getParseMethodAddr());
 		var.setParseResultType(keys[0].getParsedType());
 		CodeI1 lastStop = varKind == 'G' ? _g.getLastStop() : null;
-		CodeUniqueset u = new CodeUniqueset(keys, uniquesetName);
 		var.setValue(new DefLong(0));
+		String[] assinedValueNames = new String[0];
 		if (namedKey) {
 			var.setValue(new DefLong(-1));
 			var.setParseMethodAddr(-1);
@@ -3953,24 +3953,32 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				x.setParseMethodAddr(key.getParseMethodAddr());
 				x.setParseResultType(key.getParsedType());
 			}
-			for (String keyName: varMap.keySet()) {
-				CompileVariable x = new CompileVariable(
-					uniquesetName + "." + keyName,
-					CompileBase.UNIQUESET_NAMED_VALUE,
-					var.getOffset(), varKind, spos);
-				x.setCodeAddr(var.getCodeAddr());
-				if (varKind == 'G') {
-					_g._globalVariables.addVariable(x);
-				} else {
-					_g._varBlock.addVariable(x);
+			int varNumber = varMap.size(); // number of assigned variables
+			if (varNumber > 0) {
+				assinedValueNames = new String[varNumber];
+				int i = 0;
+				for (String keyName: varMap.keySet()) {
+					assinedValueNames[i++] = keyName;
+					CompileVariable x = new CompileVariable(
+						uniquesetName + "." + keyName,
+						CompileBase.UNIQUESET_NAMED_VALUE,
+						var.getOffset(), varKind, spos);
+					x.setCodeAddr(var.getCodeAddr());
+					if (varKind == 'G') {
+						_g._globalVariables.addVariable(x);
+					} else {
+						_g._varBlock.addVariable(x);
+					}
+					x.setParseResultType(varMap.get(keyName));
+					x.setValue(new DefString(keyName));
+					x.setInitialized(true);
+					x.setFinal(true);
 				}
-				x.setParseResultType(varMap.get(keyName));
-				x.setValue(new DefString(keyName));
-				x.setInitialized(true);
-				x.setFinal(true);
 			}
 		}
 		int actAdr = _g._lastCodeIndex;
+		CodeUniqueset u =
+			new CodeUniqueset(keys, assinedValueNames, uniquesetName);
 		_g.addCode(new CodeXD(u.getItemId(),
 			UNIQUESET_NEWINSTANCE, actAdr, u), 1);
 		_g.genST(var);
@@ -3990,9 +3998,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
 			if (_xdVersion > XConstants.XD31) {
-				//&{0}" is deprecated. Please use "&{1}" instead
-				_g.reportDeprecated("explicit type code",
-					"declaration of type method");
+				//&{0} is deprecated.&{1}{ Please use }{ instead.}
+				_g.reportDeprecated("explicit validation code",
+					"union or declare a validation method");
 			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
@@ -4051,9 +4059,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							&& CALL_OP != val.getCode()
 							&& PARSERESULT_MATCH != val.getCode()
 							&& !(val instanceof CodeExtMethod)) {
-							//&{0}" is deprecated. Please use "&{1}" instead
-							_g.reportDeprecated("expression in type check",
-								"union or declaration of a type method");
+							//&{0} is deprecated.&{1}{ Please use }{ instead.}
+							_g.reportDeprecated("explicit validation code",
+								"union or declare a validation method");
 						}
 					}
 					_g.genStop();

@@ -303,7 +303,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final String old,
 		final String replace) {
 		if (_precomp.isChkWarnings()) {
-			//&{0} is deprecated. Please use &{1} instead
+			//&{0} is deprecated.&{1}{ Please use }{ instead.}
 			_precomp.warning(spos, XDEF.XDEF998, old, replace);
 		}
 	}
@@ -490,8 +490,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	private void compileMethodsAndClassesAttrs() {
 		if (_extClasses != null && _extClasses.length > 0) {
-			reportDeprecated(new SPosition(), "Compile parameter with class",
-						"<xd:declaration> external method { ... } ...");
+			reportDeprecated(new SPosition(),
+				"Class parameter of compileXD method",
+				"<xd:declaration> external method { ... } ...");
 		}
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);
@@ -841,7 +842,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if ("lexicon".equals(nodeName)) {
 					_lexicon.add(nodei);
 				} else if ("thesaurus".equals(nodeName)) {
-					reportDeprecated(nodei._name, "thesaurus", "lexicon");
+					reportDeprecated(nodei._name,"\"thesaurus\"","\"lexicon\"");
 					_lexicon.add(nodei);
 				} else if ("BNFGrammar".equals(nodeName)) {
 					_listBNF.add(0, nodei);
@@ -1111,7 +1112,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (pa != null) {
 					SBuffer sval = pa._value;
 					if (kind == XNode.XMMIXED) {
-						reportDeprecated(pnode._name, "occurs", "script");
+						reportDeprecated(pnode._name, "attribute \"occurs\"",
+							"attribute \"script\"");
 					}
 					XOccurrence occ = new XOccurrence();
 					_scriptCompiler.setSource(sval,
@@ -1401,7 +1403,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if ("data".equals(name) || "text".equals(name)) {
 				_precomp.chkNestedElements(pnode);
 				if ("data".equals(name)) {
-					reportDeprecated(pnode._name, "data", "text");
+					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
 				}
 				XData xtext =
 					new XData("$text", null, xdef.getXDPool(), XNode.XMTEXT);
@@ -1411,7 +1413,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				sval = pa == null ? null : pa._value;
 				if (sval != null) {
 					reportDeprecated(sval, "<xd:text xd:script=...",
-						"script declared as a text value of model");
+						"declaration of text value of model");
 					_scriptCompiler.setSource(sval,
 						_scriptCompiler._actDefName,
 						xdef,
@@ -1434,7 +1436,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else if ("list".equals(name) || "includeChildNodes".equals(name)){
 				if ("includeChildNodes".equals(name)) {
 					reportDeprecated(pnode._name,
-						"includeChildNodes", "list");
+						"\"includeChildNodes\"", "\"list\"");
 				}
 				_precomp.chkNestedElements(pnode);
 				if (level == 1) {

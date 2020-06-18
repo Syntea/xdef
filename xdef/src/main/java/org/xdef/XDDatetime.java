@@ -17,13 +17,4 @@ public interface XDDatetime extends XDValue {
 	 * @param value SDatetime object.
 	 */
 	public void setCalendar(Calendar value);
-
-//	/** Check value of datetime.
-//	 * Check if the year of date in the interval
-//	 * (YEAR_MIN .. YEAR_MAX) or the value of date is
-//	 * one of UNDEF_YEAR[].
-//	 * @return true if date is legal.
-//	 */
-//	public boolean isLegalDate();
-
 }

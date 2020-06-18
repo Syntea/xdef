@@ -29,7 +29,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SError;
-import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
@@ -90,6 +89,7 @@ import org.xdef.impl.debug.ChkGUIDebug;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import org.xdef.XDConstants;
+import org.xdef.XDUniqueSetKey;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -568,7 +568,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	 */
 	final CodeUniqueset getIdRefTable() {
 		if (_globalVariables[4] == null) {
-//			_idrefTable = (CodeUniqueset) _globalVariables[4];
 			 CodeUniqueset.ParseItem[] parseItems =
 				new CodeUniqueset.ParseItem[] {
 					new CodeUniqueset.ParseItem("", // no key name
@@ -579,7 +578,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						true) // required item
 				}; // optional
 			_globalVariables[3] = CompileBase.getParser("QName");
-			_globalVariables[4] = new CodeUniqueset(parseItems,	"");
+			_globalVariables[4] =
+				new CodeUniqueset(parseItems, new String[0], "");
 		}
 		return (CodeUniqueset) _globalVariables[4];
 	}
@@ -1469,8 +1469,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_NEWINSTANCE: {
 					CodeXD x = (CodeXD) item;
 					CodeUniqueset u = (CodeUniqueset) x.getParam2().cloneItem();
-					_stack[++sp] =
-						new CodeUniqueset(u.getParsedItems(), u.getName());
+					_stack[++sp] = new CodeUniqueset(u.getParsedItems(),
+						u.getVarNames(), u.getName());
 					continue;
 				}
 				case UNIQUESET_M_NEWKEY: {
@@ -1521,8 +1521,27 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						((CodeUniqueset) _stack[sp]).size());
 					continue;
 				case UNIQUESET_M_TOCONTAINER:
-					_stack[sp] = ((CodeUniqueset) _stack[sp]).getKeys();
+					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems();
 					continue;
+				case UNIQUESET_GET_ACTUAL_KEY:
+					_stack[sp]=((CodeUniqueset)_stack[sp]).getActualKey();
+					if (_stack[sp] == null || _stack[sp].isNull()) {
+						//The key is not in the uniqueSet
+						Report rep = Report.error(XDEF.XDEF538, pc - 1,
+							((XDException) _stack[sp--]).toString());
+						updateReport(rep, chkNode);
+						_stack[sp] = DefNull.NULL_VALUE;
+					}
+					continue;
+				case UNIQUESET_KEY_RESET: {
+					XDUniqueSetKey usk = (XDUniqueSetKey)_stack[sp--];
+					if (usk == null || usk.isNull() || !usk.resetKey()) {
+						Report rep = Report.error(XDEF.XDEF540, pc - 1,
+							((XDException) _stack[sp--]).toString());
+						updateReport(rep, chkNode);
+					}
+					continue;
+				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
@@ -2468,7 +2487,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							CodeUniqueset x = (CodeUniqueset)xv;
 							idrefTables.put(j, x);
 							_globalVariables[j] = new CodeUniqueset(
-								x.getParsedItems(), x.getName());
+								x.getParsedItems(),x.getVarNames(),x.getName());
 						}
 					}
 					Element elem = ChkComposer.compose(_reporter,
