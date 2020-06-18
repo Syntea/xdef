@@ -862,5 +862,4 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	/** Last code - this is the last code value. */
 	static final short LAST_CODE = SRCINFO_CODE + 10;
-
 }
