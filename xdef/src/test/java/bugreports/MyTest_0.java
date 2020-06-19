@@ -228,8 +228,8 @@ public class MyTest_0 extends XDTester {
 "     type version             string(1,20);\n" +
 "     type xdate               xdatetime('yyyy-MM-dd');\n" +
 "\n" +
-"     uniqueSet nodeSet        {Node:   name(); var int AttrCount};\n" +
-"     uniqueSet attrSet        {Node:   name(); Attr:  name()};\n" +
+"     uniqueSet nodeSet        {Node: name(); var int AttrCount};\n" +
+"     uniqueSet attrSet        {Node: name(); Attr: name()};\n" +
 "\n" +
 "     boolean idNode() {return nodeSet.Node.ID() AAND attrSet.Node();}\n"+
 "     boolean chkNode() {return nodeSet.Node.CHKID() AAND attrSet.Node();}\n"+

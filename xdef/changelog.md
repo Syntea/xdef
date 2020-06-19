@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.2, release-date 2020-06-08
+# Version 40.0.2, release-date 2020-06-19
 - improved generation of X-definition from XML data in
   org.xdef.util.GenXDefinition.
 - the utility org.xdef.util.GUIEditor now supports also JSON data.
@@ -8,10 +8,20 @@
 - corrected bug in v org.xdef.XDFactory when for the compilation of
   X-definition is specified a org.xdef.sys.ReportWriter of other type
   then org.xdef.ArrayReporter.
-- implemented new validation method "SHA1".
-- implemented new validation method "printableDate" for the printable format.
 - corrected bug in parsing of datetime by mask with variants when
   the simpler variant precedes the more complex one.
+- in X-script implemented new validation method SHA1(...).
+- in X-script implemented new validation method printableDate(...) for the
+  printable format.
+- implemented new X-script type of variable uniqueSetKey which holds the key
+  of an item in uniqueSet table.
+- in X-script is implemented new method getActualKey() on uniqueSet objects. The
+  result of this method is object uniqueSetKey which holds the actual item
+  in the uniqueSet table (i.e. after invoking methods ID(), SET(), IDREF(),
+  CHECK()).
+- in X-script is implemented new method resetKey() of uniqueSetKey objects.
+  This method sets the actual value of key to the value which is saved
+  in an uniqueSetKey object.
 
 # Version 40.0.1, release-date 2020-05-15
 * improved error reporting.
