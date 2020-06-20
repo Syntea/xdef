@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 
 /** Generate formatted source of the X-definitions.
  * Also provides main method for calling the program from command line.
- * (see {@link cz.syntea.xdef.util.PrettyXdef#main(String[])})
+ * (see {@link org.xdef.util.PrettyXdef#main(String[])})
  * @author Vaclav Trojan
  */
 public class PrettyXdef {
