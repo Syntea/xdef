@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 
 /** Generate formatted source of the X-definitions.
  * Also provides main method for calling the program from command line.
- * (see {@link org.xdef.util.PrettyXdef#main(String[])})
+ * (see {@link cz.syntea.xdef.util.PrettyXdef#main(String[])})
  * @author Vaclav Trojan
  */
 public class PrettyXdef {
@@ -27,28 +27,32 @@ public class PrettyXdef {
 	/** Write pretty formatted files with source X-definitions.
 	 * @param files Array of files.
 	 * @param outDir directory where to put result files.
+	 * @param indentStep number of indent spaces..
 	 * @param encoding The character encoding name or null.
 	 * @param newPrefix The new name space prefix (if null the prefix remains
 	 * unchanged.
 	 */
 	public static void prettyWrite(File[] files,
 		File outDir,
+		int indentStep,
 		String encoding,
 		String newPrefix) {
 		for (int i = 0; i < files.length; i++) {
-			prettyWriteToDir(files[i], outDir, encoding, newPrefix);
+			prettyWriteToDir(files[i], outDir, indentStep, encoding, newPrefix);
 		}
 	}
 
 	/** Write pretty formatted file with source X-definition to given directory.
 	 * @param file The input file.
 	 * @param outDir directory where to put result files.
+	 * @param indentStep number of indent spaces..
 	 * @param encoding The character encoding name or null.
 	 * @param newPrefix The new name space prefix (if null the prefix remains
 	 * unchanged.
 	 */
 	public static void prettyWriteToDir(File file,
 		File outDir,
+		int indentStep,
 		String encoding,
 		String newPrefix) {
 		String outDirName = outDir.getAbsolutePath().replace('\\','/');
@@ -66,19 +70,21 @@ public class PrettyXdef {
 		} else {
 			fname = outDirName + fname.substring(index + 1);
 		}
-		prettyWrite(file, fname, encoding, newPrefix);
+		prettyWrite(file, fname, indentStep, encoding, newPrefix);
 
 	}
 
 	/** Write pretty formatted file with source X-definition.
 	 * @param input the source file.
 	 * @param fname the name of result file.
+	 * @param indentStep number of indent spaces..
 	 * @param encoding The character encoding name or null.
 	 * @param newPrefix The new name space prefix (if null the prefix remains
 	 * unchanged.
 	 */
 	public static void prettyWrite(File input,
 		String fname,
+		int indentStep,
 		String encoding,
 		String newPrefix) {
 		try {
@@ -88,7 +94,7 @@ public class PrettyXdef {
 			kb.setExpandEntityReferences(true);
 			kb.setIgnoringComments(false);
 			Element elem = kb.parse(input).getDocumentElement();
-			prettyWrite(elem, fname, encoding, newPrefix);
+			prettyWrite(elem, fname, indentStep, encoding, newPrefix);
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}
@@ -97,12 +103,14 @@ public class PrettyXdef {
 	/** Write pretty formatted X-definition.
 	 * @param input the element with pool of definitions or X-definition.
 	 * @param fname the name of output file.
+	 * @param indentStep number of indent spaces..
 	 * @param encoding The character encoding name or null.
 	 * @param newPrefix The new name space prefix (if null the prefix remains
 	 * unchanged).
 	 */
 	private static void prettyWrite(Element input,
 		String fname,
+		int indentStep,
 		String encoding,
 		String newPrefix) {
 		try {
@@ -130,7 +138,7 @@ public class PrettyXdef {
 				return;
 			}
 			String xdNS = input.getAttribute(oldPrefixNS);
-			if (newPrefix == null || newPrefix.isEmpty()) {
+			if (newPrefix == null || newPrefix.length() == 0) {
 				newPrefix = oldPrefix;
 			} else if (!newPrefix.endsWith(":")) {
 				newPrefix += ":";
@@ -149,7 +157,7 @@ public class PrettyXdef {
 					xdNS,
 					false,
 					1,
-					newPrefix.length() + 2,
+					newPrefix.length() + indentStep,
 					maxlen,
 					oldPrefix,
 					newPrefix);
@@ -168,7 +176,7 @@ public class PrettyXdef {
 						value,
 						true,
 						1,
-						newPrefix.length() + 2,
+						newPrefix.length() + indentStep,
 						maxlen,
 						oldPrefix,
 						newPrefix);
@@ -185,7 +193,7 @@ public class PrettyXdef {
 						item.getNodeValue(),
 						true,
 						1,
-						newPrefix.length() + 7,
+						newPrefix.length() + indentStep,
 						maxlen,
 						oldPrefix,
 						newPrefix);
@@ -197,6 +205,7 @@ public class PrettyXdef {
 						case Node.ELEMENT_NODE:
 							writeDefinition(out,
 								(Element)item,
+								indentStep,
 								oldPrefix,
 								newPrefix);
 							continue;
@@ -216,7 +225,7 @@ public class PrettyXdef {
 				out.write("<" + defPoolName + " xmlns:" +
 					newPrefix.substring(0, newPrefix.length() - 1) +
 					" = \"" + xdNS + "\" >\n");
-				writeDefinition(out, input, oldPrefix, newPrefix);
+				writeDefinition(out, input, indentStep, oldPrefix, newPrefix);
 			} else {
 				System.err.println("Definition error");
 			}
@@ -325,6 +334,7 @@ public class PrettyXdef {
 	/** Write element to output stream.
 	 * @param out The output stream.
 	 * @param xel The element.
+	 * @param indentStep number of indent spaces..
 	 * @param indent The indent of following attributes.
 	 * @param maxElemLen The length of longest element tag name.
 	 * @param oldPrefix the old namespace prefix.
@@ -332,8 +342,8 @@ public class PrettyXdef {
 	 */
 	private static void writeElem(OutputStreamWriter out,
 		Element xel,
+		int indentStep,
 		int indent,
-		int maxElemLen,
 		String oldPrefix,
 		String newPrefix) throws IOException {
 		String elName =  updateName(xel.getNodeName(), oldPrefix, newPrefix);
@@ -341,8 +351,8 @@ public class PrettyXdef {
 		NamedNodeMap nm = xel.getAttributes();
 		int maxlen = getMaxAttrLen(nm, oldPrefix, newPrefix);
 		boolean first = false;
-		int attrIndent = indent + maxElemLen + 2;
-		int firstAttrIndent = maxElemLen + 1 - elName.length();
+		int attrIndent = indent + elName.length() + 2;
+		int firstAttrIndent = 1;
 		Node item = nm.getNamedItem(oldPrefix + "script");
 		String s;
 		if (item != null) {
@@ -387,8 +397,8 @@ public class PrettyXdef {
 					case Node.ELEMENT_NODE:
 						writeElem(out,
 							(Element) item,
-							indent + 3,
-							maxlen,
+							indentStep,
+							indent + indentStep,
 							oldPrefix,
 							newPrefix);
 						continue;
@@ -401,9 +411,10 @@ public class PrettyXdef {
 						if (s.isEmpty()) {
 							continue;
 						}
-						out.write("\n" + getSpaces(indent + 3) + "<![CDATA[\n");
+						out.write("\n" + getSpaces(indent + indentStep)
+							+ "<![CDATA[\n");
 						out.write(s);
-						out.write("\n" + getSpaces(indent + 3) + "]]>");
+						out.write("\n" + getSpaces(indent + indentStep)+"]]>");
 						continue;
 					case Node.TEXT_NODE:
 						s = item.getNodeValue();
@@ -414,7 +425,7 @@ public class PrettyXdef {
 						if (s.isEmpty()) {
 							continue;
 						}
-						out.write("\n" + getSpaces(indent + 3) + s);
+						out.write("\n" + getSpaces(indent + indentStep) + s);
 						continue;
 					case Node.COMMENT_NODE:
 						s = item.getNodeValue();
@@ -425,8 +436,8 @@ public class PrettyXdef {
 						if (s.isEmpty()) {
 							continue;
 						}
-						out.write("\n" + getSpaces(indent + 3) + "<!-- " +
-							s + " -->");
+						out.write("\n" + getSpaces(indent + indentStep)
+							+ "<!-- " + s + " -->");
 				}
 
 			}
@@ -461,11 +472,13 @@ public class PrettyXdef {
 	/** Write X-definition to output stream.
 	 * @param out output stream.
 	 * @param xdef X-definition.
+	 * @param indentStep number of indent spaces..
 	 * @param oldPrefix old name space prefix.
 	 * @param newPrefix new name space prefix.
 	 */
 	private static void writeDefinition(OutputStreamWriter out,
 		Element xdef,
+		int indentStep,
 		String oldPrefix,
 		String newPrefix) throws IOException {
 		String defName = newPrefix + "def";
@@ -591,11 +604,10 @@ public class PrettyXdef {
 				item = nl.item(i);
 				switch (item.getNodeType()) {
 					case Node.ELEMENT_NODE:
-						writeElem(
-							out,
+						writeElem(out,
 							(Element)item,
-							3,
-							maxlen,
+							indentStep,
+							indentStep,
 							oldPrefix,
 							newPrefix);
 						continue;
@@ -608,7 +620,7 @@ public class PrettyXdef {
 						if (s.isEmpty()) {
 							continue;
 						}
-						out.write("\n" + getSpaces(3) + "<!-- "
+						out.write("\n" + getSpaces(indentStep) + "<!-- "
 							+ s + " -->");
 				}
 			}
@@ -627,7 +639,7 @@ public class PrettyXdef {
 		 * specified the formated files will be replaced by the the formated
 		 * version.</li>
 		 *  <li><tt>-i n</tt> - number of spaces used for indentation. If this
-		 * parameter is not specified the parameter is set to 3.</li>
+		 * parameter is not specified the parameter is set to 2.</li>
 		 *  <li><tt>-e encoding</tt> - name of character set. If this parameter
 		 * is not specified it will be used the original character set.</li>
 		 *  <li><tt>-p prefix</tt> - the prefix of the X-definition name space.
@@ -640,14 +652,14 @@ public class PrettyXdef {
 "PrettyXdef - Formating of source files with X-definitions.\n"+
 "Usage: [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
 "where:\n"+
-"-o outFile  Output file or out directory. If this parameter is not specified\n"+
-"            then input file is replaced by the formated version.\n"+
+"-o outFile  Output file or out directory. If this parameter is not\n"+
+"            specified then input file is replaced by the formated version.\n"+
 "-d outDir   Output directory. If this parameter is not specified the\n"+
 "            formated files will be replaced by the the formated version.\n"+
 "-i n        Number of spaces used for indentation. If this parameter is\n"+
-"            not specified the parameter is set to 3.\n"+
-"-e encoding Name of character set. If this parameter is not specified it will\n"+
-"            be used the original character set.\n"+
+"            not specified the parameter is set to 2.\n"+
+"-e encoding Name of character set. If this parameter is not specified\n"+
+"            it will be used the original character set.\n"+
 "-p prefix   The prefix of the X-definition namespace. If this parameter\n"+
 "            is not specified it will be used the original prefix.\n"+
 "file        The file with source X-definition.\n"+
@@ -714,7 +726,7 @@ public class PrettyXdef {
 							"': missing following argument\n";
 						continue;
 					}
-					if (indent != -1) {
+					if (indent == -1) {
 						try {
 							indent = Integer.parseInt(s);
 							if (indent >= 0) {
@@ -815,16 +827,19 @@ public class PrettyXdef {
 		if (msg.length() > 0) {
 			throw new RuntimeException(msg + info);
 		}
+		if (indent <= 0) {
+			indent = 2;
+		}
 		if (xdefs.size() == 1 && fileName != null) {
 			prettyWrite((File)xdefs.values().toArray()[0],
-				fileName, encoding, newPrefix);
+				fileName, indent, encoding, newPrefix);
 		} else if (fileName != null) {
 			throw new RuntimeException(
 				"'-o' switch can't be used for group of files\n" + info);
 		} else {
 			File[] files = new File[xdefs.values().size()];
 			xdefs.values().toArray(files);
-			prettyWrite(files, outDir, encoding, newPrefix);
+			prettyWrite(files, outDir, indent, encoding, newPrefix);
 		}
 	}
 }

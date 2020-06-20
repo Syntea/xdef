@@ -607,7 +607,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		// do not ignore unresolved externals at this point of compilation ->
 		// leads to mismatch result in case of using 'true' value for
 		// XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT
-		boolean ignoreUnresolvedExternals = 
+		boolean ignoreUnresolvedExternals =
 			_codeGenerator._ignoreUnresolvedExternals;
 		_codeGenerator._ignoreUnresolvedExternals = false;
 		//Smid
