@@ -10,11 +10,6 @@ public interface XDUniqueSetKey extends XDValue {
 	 */
 	public String getTableName();
 
-	/** Get names of key parts.
-	 * @return array with names of key parts.
-	 */
-	public String[] getKeyPartNames();
-
 	/** Get values of key parts.
 	 * @return array with values of key parts.
 	 */
@@ -25,11 +20,6 @@ public interface XDUniqueSetKey extends XDValue {
 	 * @return value of key part.
 	 */
 	public XDValue getKeyPart(final String name);
-
-	/** Get names of assigned variables.
-	 * @return array with names of assigned variables.
-	 */
-	public String[] getVarNames();
 
 	/** Get value of an assigned value.
 	 * @param name the name of assigned value.

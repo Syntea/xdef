@@ -49,7 +49,6 @@ public class TestPrettyXdef extends XDTester {
 		try {
 			PrettyXdef.main(new String[] {
 				"-o", tempDir + "Matej2_L1_common.txt",
-				"-i", "8",
 				"-e", "UTF-8",
 				"-p", "xd",
 				dataDir + "test/Matej2_L1_common.def"});
@@ -83,5 +82,4 @@ public class TestPrettyXdef extends XDTester {
 		XDTester.setFulltestMode(true);
 		runTest();
 	}
-
 }
