@@ -502,6 +502,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		private final UniquesetKey _key;
 
 		/** Constructor of UniquesetItem.
+		 * @param uniqueSet the uniqueSet table.
 		 * @param key unique set key.
 		 */
 		private UniquesetKeyItem(final CodeUniqueset uniqueSet,
