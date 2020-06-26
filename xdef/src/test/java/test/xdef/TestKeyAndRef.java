@@ -1170,67 +1170,53 @@ public final class TestKeyAndRef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // test of uniqueSetKey
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"CodeBook\">\n" +
-"  <xd:declaration>\n" +
-"    int  AttrCount;\n" +
-"    type attrValue    string(1,511);\n" +
-"    type description  string(1,511);\n" +
-"    type name         string(1,30);\n" +
-"    type version      string(1,20);\n" +
-"    type xdate        xdatetime('yyyy-MM-dd');\n" +
-"    uniqueSet nodeSet {Node: name(); var int AttrCount};\n" +
-"    uniqueSet attrSet {Node: name(); Attr: name()};\n" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='CodeBook'>\n"+
+" <xd:declaration scope=\"local\">\n" +
+"     int  AttrCount;\n" +
+"     type attrValue           string(1,511);\n" +
+"     type description         string(1,511);\n" +
+"     type name                string(1,30);\n" +
+"     type version             string(1,20);\n" +
+"     type xdate               xdatetime('yyyy-MM-dd');\n" +
+"     uniqueSet nodeSet        {Node: name(); var int AttrCount};\n" +
+"     uniqueSet attrSet        {Node: name(); Attr: name()};\n" +
 "\n" +
-"    /* Declared validation methods: */\n" +
-"    boolean idNode()  {return nodeSet.Node.ID() AAND attrSet.Node();}\n"+
-"    boolean chkNode() {return nodeSet.Node.CHKID() AAND attrSet.Node();}\n"+
-"  </xd:declaration>\n" +
+"     boolean idNode() {return nodeSet.Node.ID() AAND attrSet.Node();}\n"+
+"     boolean chkNode() {return nodeSet.Node.CHKID() AAND attrSet.Node();}\n"+
+" </xd:declaration>\n" +
 "\n" +
-"  <CodeBook Name       =\"name()\"\n" +
-"            Version    =\"version()\"\n" +
-"            Description=\"? description()\">\n" +
-"    <Def xd:script=\"0..1;\"> <!-- Code list -->\n" +
-"      <Node xd:script=\"1..*; ref NodeDef\"/> \n" +
-"    </Def>\n" +
-"    <Values xd:script=\"0..1; ref Values\"/> <!-- Code list values -->\n" +
-"  </CodeBook>\n" +
-"\n" +
-"  <NodeDef Name=\"idNode();\">\n" +
-"    <Attr xd:script=\"1..*;\" Name =\"attrSet.Attr.ID()\"/>\n" +
-"    <Node xd:script=\"0..*; ref NodeDef\"/>\n" +
-"  </NodeDef>\n" +
-"\n" +
-"  <Values>\n" +
-"    <Node xd:script=\"1..*; ref NodeValue\"/> \n" +
-"  </Values>\n" +
-"\n" +
-"  <NodeValue xd:script=\"var uniqueSetKey key;\n"+
-"                        init key=attrSet.getActualKey();\n"+
-"                        finally key.resetKey();\"\n"+
-"             Name=\"chkNode();\">\n" +
-"    <xd:sequence xd:script=\"1..*\">\n" +
-"      <Row  xd:script=\"1..*; ref RowValues\"/>\n" +
-"      <Node xd:script=\"0..*; ref NodeValue\"/>\n" +
-"    </xd:sequence>\n" +
-"  </NodeValue>\n" +
-"\n" +
-"  <RowValues>\n" +
-"    <Attr xd:script=\"1..*;\" Name=\"attrSet.Attr.CHKID()\">\n" +
-"      attrValue();\n" +
-"    </Attr>\n" +
-"  </RowValues>\n" +
+" <CodeBook Name=\"name()\"\n" +
+"           Version=\"version()\"\n" +
+"           Description=\"? description()\">\n" +
+"   <Def xd:script=\"0..1;\"> <!-- Code list definitions -->\n" +
+"     <Node  xd:script=\"1..;\" Name=\"idNode();\">\n" +
+"       <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.ID()\"/>\n" +
+"       <Node xd:script=\"0..; ref CodeBook/Def/Node\"/>\n" +
+"     </Node>\n" +
+"   </Def>\n" +
+"   <Values xd:script=\"0..1;\"> <!-- Code list values  -->\n" +
+"     <Node xd:script=\"var uniqueSetKey x; 1..;\n" +
+"                     init x=attrSet.getActualKey();finally x.resetKey();\"\n" +
+"         Name=\"chkNode();\">\n" +
+"       <xd:sequence xd:script=\"1..\">\n" +
+"         <Row xd:script=\"1..;\">\n" +
+"           <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.CHKID()\">\n" +
+"             attrValue()\n" +
+"           </Attr>\n" +
+"         </Row>\n" +
+"         <Node xd:script=\"0..; ref CodeBook/Values/Node\"/>\n" +
+"       </xd:sequence>\n" +
+"     </Node>\n" +
+"   </Values>\n" +
+" </CodeBook>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml =
 "<CodeBook Name=\"Tabulka\" Version=\"1\">\n" +
 "  <Def>\n" +
 "    <Node Name=\"Tab_V\">\n" +
-"      <Attr Name=\"A\"/>\n" +
-"      <Attr Name=\"B\"/>\n" +
-"      <Node Name=\"Tab_m\">\n" +
-"        <Attr Name=\"c\"/>\n" +
-"        <Attr Name=\"d\"/>\n" +
-"      </Node>\n" +
+"      <Attr Name=\"A\"/><Attr Name=\"B\"/>\n" +
+"      <Node Name=\"Tab_m\"><Attr Name=\"c\"/><Attr Name=\"d\"/></Node>\n" +
 "    </Node>\n" +
 "  </Def>\n" +
 "  <Values>\n" +
@@ -1240,7 +1226,7 @@ public final class TestKeyAndRef extends XDTester {
 "        <Row><Attr Name=\"c\">1c1</Attr><Attr Name=\"d\">1d1</Attr></Row>\n" +
 "        <Row><Attr Name=\"c\">1c2</Attr><Attr Name=\"d\">1d2</Attr></Row>\n" +
 "      </Node>\n" +
-"      <Row><Attr Name=\"A\">A2</Attr><Attr Name=\"B\">B2</Attr></Row>\n" +
+"      <Row> <Attr Name=\"A\">A2</Attr><Attr Name=\"B\">B2</Attr></Row>\n" +
 "      <Node Name=\"Tab_m\">\n" +
 "        <Row><Attr Name=\"c\">2c1</Attr><Attr Name=\"d\">2d1</Attr></Row>\n" +
 "        <Row><Attr Name=\"c\">2c2</Attr><Attr Name=\"d\">2d2</Attr></Row>\n" +

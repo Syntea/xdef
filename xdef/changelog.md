@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 40.0.3, release-date 2020-06-25
-* preparing new build...
+* corrected bug in ObjectReader when the code contains item with uniqueSetKey.
 
 # Version 40.0.2, release-date 2020-06-22
 * improved generation of X-definition from XML data in
