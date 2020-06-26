@@ -1195,8 +1195,7 @@ public final class TestKeyAndRef extends XDTester {
 "     </Node>\n" +
 "   </Def>\n" +
 "   <Values xd:script=\"0..1;\"> <!-- Code list values  -->\n" +
-"     <Node xd:script=\"var uniqueSetKey x; 1..;\n" +
-"                     init x=attrSet.getActualKey();finally x.resetKey();\"\n" +
+"     <Node xd:script=\"var uniqueSetKey x; 1..;\"\n" +
 "         Name=\"chkNode();\">\n" +
 "       <xd:sequence xd:script=\"1..\">\n" +
 "         <Row xd:script=\"1..;\">\n" +
@@ -1204,7 +1203,8 @@ public final class TestKeyAndRef extends XDTester {
 "             attrValue()\n" +
 "           </Attr>\n" +
 "         </Row>\n" +
-"         <Node xd:script=\"0..; ref CodeBook/Values/Node\"/>\n" +
+"         <Node xd:script=\"0..; ref CodeBook/Values/Node;\n"+
+"                  init x=attrSet.getActualKey();finally x.resetKey();\"/>\n" +
 "       </xd:sequence>\n" +
 "     </Node>\n" +
 "   </Values>\n" +
