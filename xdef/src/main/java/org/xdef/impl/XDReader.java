@@ -268,6 +268,7 @@ public final class XDReader extends SObjectReader {
 						return new DefSQLStatement();
 					case XDValueID.XD_RESULTSET:
 						return new DefSQLResultSet();
+					case XDValueID.XD_UNIQUESET_KEY:
 					case CompileBase.PARSEITEM_VALUE: // TODO ???
 					case XDValueID.XD_NULL:
 						return new DefNull(type);
