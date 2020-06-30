@@ -36,6 +36,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.XDUniqueSetKey;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -92,6 +93,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private byte _mode;
 	/** XComponent if exists or null. */
 	private XComponent _xComponent;
+	/** Array of bound keys.*/
+	XDUniqueSetKey[] _boundKeys;
 	/** Model of the processed data object.*/
 	XMData _xdata;
 
@@ -111,6 +114,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		super(element==null ? xelement.getName(): element.getNodeName(),parent);
 //		_sourceElem=_elemValue=null; _selector=null; _nil=false;//Java makes it!
 //		Arrays.fill(_counters, 0); _nextDefIndex=_numText=0; //Java makes it!
+//		_boundKeys = null; _nextDefIndex=_numText=0; //Java makes it!
 		_element = element;
 		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
 		if (xelement.isIgnore() || xelement.isIllegal()) {
@@ -2869,6 +2873,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_attNames = null;
 		_selector = null;
 		_userObject = null;
+		if (_boundKeys != null) {
+			for (XDUniqueSetKey x: _boundKeys) {
+				if (x != null) {
+					x.resetKey();
+				}
+			}
+		}
 	}
 
 	@Override

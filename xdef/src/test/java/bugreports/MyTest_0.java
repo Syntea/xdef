@@ -222,44 +222,38 @@ public class MyTest_0 extends XDTester {
 "     type name                string(1,30);\n" +
 "     type version             string(1,20);\n" +
 "     type xdate               xdatetime('yyyy-MM-dd');\n" +
-"     uniqueSet nodeSet        {Node: name(); var int AttrCount};\n" +
-"     uniqueSet attrSet        {Node: name(); Attr: name()};\n" +
+"     uniqueSet nodes        {Node: name(); var int AttrCount};\n" +
+"     uniqueSet attrs        {Node: name(); Attr: name()};\n" +
 "\n" +
-"     boolean idNode() {return nodeSet.Node.ID() AAND attrSet.Node();}\n"+
-"     boolean chkNode() {return nodeSet.Node.CHKID() AAND attrSet.Node();}\n"+
+"     boolean idNode() {return nodes.Node.ID() AAND attrs.Node();}\n"+
+"     boolean chkNode() {return nodes.Node.CHKID() AAND attrs.Node();}\n"+
 " </xd:declaration>\n" +
 "\n" +
 " <CodeBook Name=\"name()\"\n" +
 "           Version=\"version()\"\n" +
 "           Description=\"? description()\">\n" +
-"   <Def xd:script=\"0..1;\"> <!-- Code list definitions -->\n" +
+"   <Def> <!-- Code list definitions -->\n" +
 "     <Node  xd:script=\"1..;\" Name=\"idNode();\">\n" +
-"       <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.ID()\"/>\n" +
+"       <Attr xd:script=\"1..;\" Name=\"attrs.Attr.ID()\"/>\n" +
 "       <Node xd:script=\"0..; ref CodeBook/Def/Node\"/>\n" +
 "     </Node>\n" +
 "   </Def>\n" +
-"   <Values xd:script=\"0..1;\"> <!-- Code list values  -->\n" +
-//"     <Node xd:script=\"var uniqueSetKey x; 1..;\n" +
-//"                     init x=attrSet.getActualKey();finally x.resetKey();\"\n" +
-"     <Node xd:script=\"1..; var uniqueSetKey x;\"\n" +
+"   <Values> <!-- Code list values  -->\n" +
+"     <Node xd:script=\"1..;\"\n" +
 "         Name=\"chkNode();\">\n" +
 "       <xd:sequence xd:script=\"1..\">\n" +
 "         <Row xd:script=\"1..;\">\n" +
-"           <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.CHKID()\">\n" +
+"           <Attr xd:script=\"1..;\" Name=\"attrs.Attr.CHKID()\">\n" +
 "             attrValue()\n" +
 "           </Attr>\n" +
 "         </Row>\n" +
-//"         <Node xd:script=\"0..; ref CodeBook/Values/Node\"/>\n" +
-"         <Node xd:script=\"0..; init x=attrSet.getActualKey();finally x.resetKey(); ref CodeBook/Values/Node\"/>\n" +
+"         <Node xd:script=\"0..; init bindSet(attrs); ref CodeBook/Values/Node;\"/>\n" +
 "       </xd:sequence>\n" +
 "     </Node>\n" +
 "   </Values>\n" +
 " </CodeBook>\n" +
 "</xd:def>";
-//			xp = XDFactory.compileXD(null, xdef);
-//			xp.displayCode();
 			xp = compile(xdef);
-//			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml =
 "<CodeBook Name=\"Tabulka\" Version=\"1\">\n" +
 "  <Def>\n" +
@@ -283,8 +277,6 @@ public class MyTest_0 extends XDTester {
 "    </Node>\n" +
 "  </Values>\n" +
 "</CodeBook>";
-//			System.out.println(xdef);
-//			System.out.println(xml);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
