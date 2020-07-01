@@ -726,8 +726,10 @@ public interface CodeTable {
 	static final short UNIQUESET_GETVALUEX = UNIQUESET_SETVALUEX + 1;
 	/** Set index of multiple key  (0 if key is simple). */
 	static final short UNIQUESET_KEY_LOAD = UNIQUESET_GETVALUEX + 1;
+	/** Bind uniqueSet list. */
+	static final short UNIQUESET_BIND = UNIQUESET_KEY_LOAD + 1;
 	/** Get the actual key of uniqueSet. */
-	static final short UNIQUESET_GET_ACTUAL_KEY = UNIQUESET_KEY_LOAD + 1;
+	static final short UNIQUESET_GET_ACTUAL_KEY = UNIQUESET_BIND + 1;
 	/** Reset actual key of the uniqueSet from saved key. */
 	static final short UNIQUESET_KEY_RESET = UNIQUESET_GET_ACTUAL_KEY + 1;
 

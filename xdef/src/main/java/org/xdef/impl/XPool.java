@@ -52,7 +52,7 @@ public final class XPool implements XDPool, Serializable {
 	private static final String XD_VERSION =
 		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
 	/** Last compatible version of XDPool (e.g. 3.2.002.121: 30200002112L). */
-	private static final long XD_MIN_VERSION = 400000002L; // 4.0.000.002
+	private static final long XD_MIN_VERSION = 400000003L; // 4.0.000.003
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;

@@ -89,6 +89,7 @@ import org.xdef.impl.debug.ChkGUIDebug;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import org.xdef.XDConstants;
+import org.xdef.XDUniqueSet;
 import org.xdef.XDUniqueSetKey;
 
 /** Provides processor engine of script code.
@@ -1586,6 +1587,18 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp--] = null;
 					CodeUniqueset.ParseItem[] o = dt.getParsedItems();
 					o[item.getParam()].setParsedObject(null);
+					continue;
+				}
+				case UNIQUESET_BIND: {
+					if (chkNode.getXXType() == 'E') {
+						int npar = item.getParam();
+						chkNode._boundKeys = new XDUniqueSetKey[npar];
+						for (int i = 0; i < npar; i++) {
+							XDUniqueSet v = (XDUniqueSet) _stack[sp + i];
+							chkNode._boundKeys[i] = v.getActualKey();
+						}
+						sp -= npar;
+					} else throw new RuntimeException("xxx");
 					continue;
 				}
 				case UNIQUESET_CLOSE:

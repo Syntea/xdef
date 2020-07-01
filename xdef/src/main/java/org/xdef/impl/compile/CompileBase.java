@@ -617,6 +617,8 @@ public class CompileBase implements CodeTable, XDValueID {
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
 		short ti = NOTYPE_VALUE_ID; // no base methods
+		method(ti, genInternalMethod(UNIQUESET_BIND, XD_VOID,
+			ELEMENT_MODE, 1, Integer.MAX_VALUE, XD_ANY), "bindSet");
 		method(ti, genInternalMethod(CLEAR_REPORTS, XD_VOID,
 			ANY_MODE, 0, 0), "clearReports");
 		method(ti, genInternalMethod(COMPILE_REGEX, XD_REGEX, ANY_MODE, 1,1,
