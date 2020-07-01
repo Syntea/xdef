@@ -1590,15 +1590,13 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				case UNIQUESET_BIND: {
-					if (chkNode.getXXType() == 'E') {
-						int npar = item.getParam();
-						chkNode._boundKeys = new XDUniqueSetKey[npar];
-						for (int i = 0; i < npar; i++) {
-							XDUniqueSet v = (XDUniqueSet) _stack[sp + i];
-							chkNode._boundKeys[i] = v.getActualKey();
-						}
-						sp -= npar;
-					} else throw new RuntimeException("xxx");
+					int npar = item.getParam();
+					chkNode._boundKeys = new XDUniqueSetKey[npar];
+					for (int i = 0; i < npar; i++) {
+						XDUniqueSet v = (XDUniqueSet) _stack[sp + i];
+						chkNode._boundKeys[i] = v.getActualKey();
+					}
+					sp -= npar;
 					continue;
 				}
 				case UNIQUESET_CLOSE:

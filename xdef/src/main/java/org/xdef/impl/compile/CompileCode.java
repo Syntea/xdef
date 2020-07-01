@@ -127,6 +127,8 @@ public final class CompileCode extends CompileBase {
 	XDLexicon _lexicon = null;
 	/** Flag if external method should be searched. */
 	private boolean _ignoreExternalMethods;
+	/** Flag bindSet method is allowed. */
+	boolean _allowBindSet = false;
 
 	/** Creates a new instance of GenCodeObj.
 	 * @param extClasses Array of external classes.
@@ -2085,6 +2087,13 @@ public final class CompileCode extends CompileBase {
 				}
 				return;
 			}
+			case UNIQUESET_BIND:
+				if (_mode != imethod.getRestrictions() || !_allowBindSet) {
+					//Method '&{0}' not allowed here
+					_parser.error(XDEF.XDEF472, name);
+					code = UNDEF_CODE;
+				}
+				break;
 			case GET_DBQUERY: {
 				if (npar < 1) {
 					break;

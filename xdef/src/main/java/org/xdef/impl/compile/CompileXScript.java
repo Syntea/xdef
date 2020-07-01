@@ -709,8 +709,10 @@ final class CompileXScript extends CompileStatement {
 					if (xel._init != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
+					_g._allowBindSet = true; // allow bindSet method
 					xel._init =
 						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+					_g._allowBindSet = false;
 					continue;
 				case ON_EXCESS_SYM:
 					if (xel._onExcess != -1) {
