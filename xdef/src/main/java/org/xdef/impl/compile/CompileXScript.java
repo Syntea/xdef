@@ -653,15 +653,6 @@ final class CompileXScript extends CompileStatement {
 		initElementScript(xel);
 		xel._template = false;
 		XOccurrence occ = new XOccurrence();
-		if (isOccurrence(occ)) {
-			checkSemicolon(SCRIPT_SEPARATORS);
-		}
-		// variable section (must be declared as the first one section!)
-		if (_sym == VAR_SYM) {
-			nextSymbol();
-			elementVarDeclaration(xel);
-		}
-		// other sections
 		boolean wasRef = false, wasImpl = false;
 		while (_sym != NOCHAR) {
 			if (_sym == SEMICOLON_SYM) {
@@ -693,9 +684,8 @@ final class CompileXScript extends CompileStatement {
 			nextSymbol();
 			switch (sym) {
 				case VAR_SYM:
-					//"var" section must be the first executive section
-					// of the script of element
-					error(XDEF.XDEF224);
+					//"var" section must be declared before a varialbe is
+					// refered
 					elementVarDeclaration(xel);
 					continue;
 				case OPTIONS_SYM:
