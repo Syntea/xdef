@@ -2093,6 +2093,7 @@ public final class CompileCode extends CompileBase {
 					_parser.error(XDEF.XDEF472, name);
 					code = UNDEF_CODE;
 				}
+				_allowBindSet = false;
 				break;
 			case GET_DBQUERY: {
 				if (npar < 1) {
