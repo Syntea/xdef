@@ -2923,6 +2923,21 @@ public final class TestXdef extends XDTester {
 "</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(s.contains("XDEF813"), s);
+			xdef = // variants in xdatetime
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <A>\n"+
+"    <B xd:script='occurs 2' a=\"xdatetime('dd.MM.yy|dd.MM.yyyy')\"/>\n"+
+"    <C xd:script='occurs 2' a=\"xdatetime('dd.MM.yyyy|dd.MM.yy')\"/>\n"+
+"  </A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<A>\n"+
+"  <B a='11.06.87'/><B a='11.06.1987'/>\n"+
+"  <C a='11.06.87'/><C a='11.06.1987'/>\n"+
+"</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 // version 2.0
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
