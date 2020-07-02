@@ -3,6 +3,8 @@
 # Version 40.0.3, release-date 2020-06-25
 * corrected bug Illegal type in ObjectReader when the code contains an item
   with uniqueSetKey.
+* implemented new X-script method bindSet. This method can be specified only
+  in the init section of the script of Element model.
 
 # Version 40.0.2, release-date 2020-06-22
 * improved generation of X-definition from XML data in
