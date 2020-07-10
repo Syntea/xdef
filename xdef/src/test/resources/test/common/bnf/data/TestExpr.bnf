@@ -6,7 +6,7 @@ comment  ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
 S        ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
 keyword  ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch" 
              | "case" | "for" | "return" | "try" | "catch" | "throw" | "finally"
-             | "true" | "false"
+             | "true" | "false" | "null"
 
 /* Constant values */
 boolConst ::= ("true" | "false") $rule
@@ -14,10 +14,12 @@ strConst  ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule
 intConst  ::= [0-9]+ $rule
 fltConst  ::= ([0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
               | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
+nullConst ::= "null" $rule
 
 /* Identifiers */
 name      ::= ($JavaName - keyword) $rule
-idRef     ::= name S $rule /* name which refers to an object */
+
+idRef     ::= name S $rule /* name which refers to an object (variable) */
 
 /* Operators */
 OR        ::= S "|" bxor $rule
@@ -57,7 +59,7 @@ ASSLSH    ::= "<<=" expr $rule
 ASSRSH    ::= ">>=" expr $rule
 ASSRRSH   ::= ">>>=" expr $rule
 
-/* expression */
+/* Expression */
 expr      ::= S bxor OR*
 bxor      ::= band XOR*
 band      ::= equal AND*
@@ -69,7 +71,7 @@ mul       ::= term (MUL | DIV | MOD)*
 term      ::= INCAFTER | DECAFTER | INCBEFORE | DECBEFORE 
               | MINUS | NOT | NEG | (S "+" )? value
 value     ::= S (const | function | idRef | "(" S expr S ")") S
-const     ::= fltConst | intConst | boolConst | strConst
+const     ::= fltConst | intConst | boolConst | strConst | nullConst
 function  ::= name paramList $rule
 param     ::= expr $rule
 paramList ::= S "(" S $rule ( param (S "," S param )* )? S ")"
@@ -77,8 +79,8 @@ paramList ::= S "(" S $rule ( param (S "," S param )* )? S ")"
 /* Statements */
 assign    ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
               | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
-declItem  ::= name (ASS)?
-type      ::= ("boolean" | "int" | "float" | "String") $rule
+declItem  ::= name S (ASS)?
+type      ::= ("boolean" | "int" | "float" | "String" | "Object") $rule
 method    ::= name paramList $rule
 vardecl   ::= type S declItem (S "," S declItem)*
 command   ::= S ($info (vardecl | method | assign) S $rule)? ";"
