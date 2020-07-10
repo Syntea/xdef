@@ -32,7 +32,7 @@ public class TestExpr extends STester {
 	private static final int TYPE_OBJECT = 5;
 
 	/** Switch to print generated code. */
-	private static boolean _displayCode = true;
+	private static boolean _displayCode = false;
 	/** used to get printed text. */
 	private static ByteArrayOutputStream _byteArray;
 	/** used for printing. */
@@ -203,7 +203,7 @@ public class TestExpr extends STester {
 			SourceItem(final String s, final Operator o){_s = s; _o = o;}
 			SourceItem(final String s) {_s = s; _o = new Operator("");}
 		}
-		
+
 		Stack<SourceItem> stack = new Stack<SourceItem>();
 		Stack<Stack<SourceItem>> stackOfStack = new Stack<Stack<SourceItem>>();
 		StringBuilder result = new StringBuilder();
@@ -263,7 +263,7 @@ public class TestExpr extends STester {
 							Integer.parseInt(ii[2]));
 						int type = ch == 'B' ? TYPE_BOOLEAN
 							: ch == 'I' ? TYPE_INT
-							: ch == 'F' ? TYPE_FLOAT 
+							: ch == 'F' ? TYPE_FLOAT
 							: ch == 'S' ? TYPE_STRING : TYPE_OBJECT;
 						SourceItem val = new SourceItem("");
 						variables.put(name, val);
@@ -401,7 +401,7 @@ public class TestExpr extends STester {
 						String name = code[i += 2].toString();
 						int type = ch == 'B' ? TYPE_BOOLEAN
 							: ch == 'I' ? TYPE_INT
-							: ch == 'F' ? TYPE_FLOAT 
+							: ch == 'F' ? TYPE_FLOAT
 							: ch == 'S' ? TYPE_STRING : TYPE_OBJECT;
 						variables.put(name, null);
 						stack.push(name);
@@ -1020,7 +1020,7 @@ public class TestExpr extends STester {
 
 			assertEq("", prog(g, "i=null;"));
 			assertEq(null, getVar("i"));
-			
+
 			assertEq("", prog(g, "Object i; i = 0.0; i += sin(3.14);"));
 			assertEq(Math.sin(3.14), getVar("i"));
 
@@ -1035,12 +1035,12 @@ public class TestExpr extends STester {
 			prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("3, 4, 5\nx\n", s);
-			
+
 			prog(g, "println(null);println(1);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("null\n1\n", s);
-			
-			prog(g, "Object i = 3; i = null; println(i);");
+
+			prog(g, "Object i=3; i=null; println(i);");
 			s = SUtils.modifyString(_byteArray.toString("UTF-8"), "\r\n", "\n");
 			assertEq("null\n", s);
 		} catch (Exception ex) {fail(ex);}
