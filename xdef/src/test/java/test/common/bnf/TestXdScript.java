@@ -1,14 +1,14 @@
 package test.common.bnf;
 
-import org.xdef.sys.BNFGrammar;
-import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 /** Test XDefinition script.

@@ -1,14 +1,14 @@
 package test.common.bnf;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Stack;
 import org.xdef.sys.BNFExtMethod;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Stack;
 
 /** Test of BNF.
  * @author Vaclav Trojan

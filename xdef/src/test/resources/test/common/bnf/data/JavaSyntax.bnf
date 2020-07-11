@@ -273,7 +273,7 @@ keyword ::= 'abstract' | 'boolean' | 'break' | 'byte' | 'case' | 'catch'
  * Also, <identifier> includes none of the keywords given above - these are
  * reserved words in Java. 
  *
- * The only BNF extention used here is the optional construct which is written
+ * The only BNF extension used here is the optional construct which is written
  * with '?' added as a suffix to a terminal or non-terminal. Note that '*', '{',
  * and '}' are all terminal symbols. This BNF definition does not address such
  * pragmatic issues as comment conventions and the use of "white space" to

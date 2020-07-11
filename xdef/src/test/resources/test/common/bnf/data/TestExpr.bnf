@@ -3,47 +3,50 @@
 /******************************************************************************/
 
 comment  ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
-S        ::= ( [#9#10#13 ]+ | comment )*
-keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch" 
-  | "case" | "for" | "return" | "try" | "catch" | "throw" | "finally"
-  | "true" | "false"
+S        ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
+keyword  ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch" 
+             | "case" | "for" | "return" | "try" | "catch" | "throw" | "finally"
+             | "true" | "false" | "null"
 
 /* Constant values */
 boolConst ::= ("true" | "false") $rule
 strConst  ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule
 intConst  ::= [0-9]+ $rule
 fltConst  ::= ([0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
-             | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
+              | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
+nullConst ::= "null" $rule
 
 /* Identifiers */
-name     ::= ($JavaName - keyword) $rule
-idRef    ::= name S $rule /* name which refers to an object */
+name      ::= ($JavaName - keyword) $rule
+
+idRef     ::= name S $rule /* name which refers to an object (variable) */
 
 /* Operators */
-OR       ::= S "|" bxor $rule
-XOR       ::= S "|" band $rule
-AND       ::= S "&" equal $rule
-EQ        ::= S "==" rel $rule
-NE        ::= S "!=" rel $rule
-LT        ::= S "<" shift $rule
-GT        ::= S ">" shift $rule
-LE        ::= S "<=" shift $rule
-GE        ::= S ">=" shift $rule
-RRSH      ::= S ">>>" add $rule
-RSH       ::= S ">>" add $rule
-LSH       ::= S "<<" add $rule
-ADD       ::= S "+" mul $rule
-SUB       ::= S "-" mul $rule
-MUL       ::= S "*" term $rule
-DIV       ::= S "/" term $rule
-MOD       ::= S "%" term $rule
-INCAFTER  ::= name "++" $rule
-DECAFTER  ::= name "--" $rule
-INCBEFORE ::= "++" name $rule
-DECBEFORE ::= "--" name $rule
-MINUS     ::= S "-" value $rule
-NOT       ::= S "!" value $rule
-NEG       ::= S "~" value $rule
+OR        ::= "|" bxor $rule
+XOR       ::= "^" band $rule
+AND       ::= "&" equal $rule
+EQ        ::= "==" rel $rule
+NE        ::= "!=" rel $rule
+LT        ::= "<" shift $rule
+GT        ::= ">" shift $rule
+LE        ::= "<=" shift $rule
+GE        ::= ">=" shift $rule
+RRSH      ::= ">>>" add $rule
+RSH       ::= ">>" add $rule
+LSH       ::= "<<" add $rule
+ADD       ::= "+" mul $rule
+SUB       ::= "-" mul $rule
+MUL       ::= "*" term $rule
+DIV       ::= "/" term $rule
+MOD       ::= "%" term $rule
+INCAFTER  ::= name S "++" $rule
+DECAFTER  ::= name S "--" $rule
+INCBEFORE ::= "++" S name $rule
+DECBEFORE ::= "--" S name $rule
+PLUS      ::= "+" value /* ignore unary plus (rule not generated) */
+MINUS     ::= "-" value $rule
+NOT       ::= "!" value $rule
+NEG       ::= "~" value $rule
 ASS       ::= "=" expr $rule
 ASSADD    ::= "+=" expr $rule
 ASSSUB    ::= "-=" expr $rule
@@ -57,31 +60,29 @@ ASSLSH    ::= "<<=" expr $rule
 ASSRSH    ::= ">>=" expr $rule
 ASSRRSH   ::= ">>>=" expr $rule
 
-/* expression */
-expr     ::= S bxor OR*
-bxor     ::= band XOR*
-band     ::= equal AND*
-equal    ::= rel (EQ | NE)*
-rel      ::= shift (LT | GT | LE | GE)*
-shift    ::= add (RRSH | RSH | LSH)*
-add      ::= mul (ADD | SUB)*
-mul      ::= term (MUL | DIV | MOD)*
-term     ::= INCAFTER | DECAFTER | INCBEFORE | DECBEFORE 
-             | MINUS | NOT | NEG | (S "+" )? value
-value    ::= S (const | function | idRef | "(" S expr S ")") S
-const    ::= fltConst | intConst | boolConst | strConst
-function ::= name paramList $rule
-param    ::= expr $rule
-paramList::= S "(" S $rule ( param (S "," S param )* )? S ")"
+/* Expression */
+expr      ::= bxor OR*
+bxor      ::= band XOR*
+band      ::= equal AND*
+equal     ::= rel (EQ | NE)*
+rel       ::= shift (LT | GT | LE | GE)*
+shift     ::= add (RRSH | RSH | LSH)*
+add       ::= mul (ADD | SUB)*
+mul       ::= term S (MUL | DIV | MOD)*
+term      ::= S (INCAFTER | DECAFTER | INCBEFORE | DECBEFORE 
+              | MINUS | NOT | NEG | PLUS | value)
+value     ::= S (const | function | idRef | "(" S expr S ")")
+const     ::= fltConst | intConst | boolConst | strConst | nullConst
+function  ::= name paramList $rule
+param     ::= expr $rule
+paramList ::= S "(" S $rule ( param (S "," param )* )? S ")"
 
 /* Statements */
-assign   ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
-             | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
-declItem ::= name (ASS)?
-type     ::= ("boolean" | "int" | "float" | "String") $rule
-method   ::= name paramList $rule
-vardecl  ::= type S declItem (S "," S declItem)*
-command  ::= S ($info (vardecl | method | assign) S $rule)? ";"
-program  ::= command+ S
-
-/******************************************************************************/
+assign    ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
+              | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
+declItem  ::= name S (ASS)?
+type      ::= ("boolean" | "int" | "float" | "String" | "Object") $rule
+method    ::= name paramList $rule
+vardecl   ::= type S declItem (S "," S declItem)*
+command   ::= S ($info (vardecl | method | assign) S $rule)? ";"
+program   ::= command+ S

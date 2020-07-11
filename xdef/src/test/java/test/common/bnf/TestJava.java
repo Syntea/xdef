@@ -41,11 +41,11 @@ public class TestJava extends STester {
 			g = BNFGrammar.compile(
 				null, new File(getDataDir() + "JavaSyntax.bnf"), null);
 			s = "i+1";
-			assertEq(s, parse(g, "additive_expression", s));
+			assertEq(s, parse(g, "expression", s));
 //			s =
 //"/*soubor LICENSE.TXT.*/\n"+
 //"package test.common.bnf;\n" +
-//"import org.xdef.sys.STester;\n" +
+//"import cz.syntea.xdef.sys.STester;\n" +
 //"import x.Y;\n" +
 //"public final class TestJava extends STester implements a.b, c.d {n" +
 //"	public TestJava() {super();}\n" +
