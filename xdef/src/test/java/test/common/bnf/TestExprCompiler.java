@@ -71,15 +71,7 @@ public class TestExprCompiler {
 			} else if (item.endsWith("type")) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
-				if ("boolean".equals(s) || "int".equals(s) || "float".equals(s)
-					|| "String".equals(s) || "Object".equals(s)) {
-					// type decl
-					char ch = item.charAt(0);
-					if (i + 2 < code.length && "name".equals(code[i + 1])) {
-						String name = code[i += 2].toString();
-						newCode.add(new CodeItem(item, ch + ' ' + s));
-					}
-				}
+				newCode.add(new CodeItem(item, s));
 			} else {// unary operator minus
 				newCode.add(new CodeItem(item, null));
 			}
