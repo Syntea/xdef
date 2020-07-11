@@ -1,9 +1,9 @@
 package test.common.bnf;
 
+import java.io.File;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
-import java.io.File;
 
 /** Test of BNF.
  * @author Vaclav Trojan
