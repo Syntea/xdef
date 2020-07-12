@@ -2,7 +2,6 @@ package test.common.bnf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,30 +63,16 @@ public class TestExprCompiler {
 				newCode.add(new CodeItem(item, s));
 			} else if ("nullConst".equals(item)) {
 				newCode.add(new CodeItem(item, null));
-			} else if ("name".equals(item)) {
+			} else if ("name".equals(item) || item.endsWith("type")) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
 				newCode.add(new CodeItem(item, s));
-			} else if (item.endsWith("type")) {
-				String s = source.substring(Integer.parseInt(ii[1]),
-					Integer.parseInt(ii[2]));
-				if ("boolean".equals(s) || "int".equals(s) || "float".equals(s)
-					|| "String".equals(s) || "Object".equals(s)) {
-					// type decl
-					char ch = item.charAt(0);
-					if (i + 2 < code.length && "name".equals(code[i + 1])) {
-						String name = code[i += 2].toString();
-						newCode.add(new CodeItem(item, ch + ' ' + s));
-					}
-				}
-			} else {// unary operator minus
+			} else {// operators
 				newCode.add(new CodeItem(item, null));
 			}
 		}
 		return newCode;
 	}
-
-	private static PrintStream _out;
 
 	/** Execute generated code.
 	 * @param source source text.
@@ -100,12 +85,15 @@ public class TestExprCompiler {
 		final Map<String, Object> variables,
 		ByteArrayOutputStream byteArray) {
 		final Stack<Object> stack = new Stack<Object>();
+		PrintStream out;
 		variables.clear();
 		byteArray.reset();
-		try { // prepare printing
+		try { // prepare printing commands
 			byteArray.reset();
-			_out = new PrintStream(byteArray, true, "UTF-8");
-		} catch (UnsupportedEncodingException ex) {/* never happens */}
+			out = new PrintStream(byteArray, true, "UTF-8");
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 		List<CodeItem> pc = precompile(source, code);
 		for (int i = 0; i < pc.size(); i++) {
 			CodeItem item = pc.get(i);
@@ -373,7 +361,7 @@ public class TestExprCompiler {
 				// procedure or function
 				PredefinedMethod x = (PredefinedMethod) stack.pop();
 				if ("function".equals(item._op)) {
-					Object y = x.invoke();
+					Object y = x.invoke(out);
 					if (y != null) {
 						stack.push(y);
 					} else {
@@ -381,7 +369,7 @@ public class TestExprCompiler {
 							+ x._name + " expected");
 					}
 				} else {
-					x.invoke();
+					x.invoke(out);
 				}
 			} else if ("command".equals(item._op)) {
 				stack.clear();
@@ -398,27 +386,27 @@ public class TestExprCompiler {
 
 		private PredefinedMethod(final String name) {
 			super();
-			_name = name.intern();
+			_name = name;
 		}
 
-		private Object invoke() {
+		private Object invoke(PrintStream out) {
 			if (isEmpty()) { // no parameters
 				if ("random".equals(_name)) {
 					return Math.random();
 				} else if ("empty".equals(_name)) {
 					return "";
 				} else if ("println".equals(_name)) {
-					_out.println();
+					out.println();
 					return null;
 				}
 			} else {
 				Object o1 = get(0);
 				if (size() == 1) { // one parameter
 					if ("println".equals(_name)) {
-						_out.println(o1);
+						out.println(o1);
 						return null;
 					} else if ("print".equals(_name)) {
-						_out.print(o1);
+						out.print(o1);
 						return null;
 					}
 					if (o1 instanceof Number) {
@@ -478,7 +466,7 @@ public class TestExprCompiler {
 				}
 				if ("printf".equals(_name)) { // one or more parameters
 					remove(0); // we have the first parametr in o1
-					_out.printf(o1.toString(), toArray());
+					out.printf(o1.toString(), toArray());
 					return null;
 				} else if (size() == 2) {
 					Object o2 = get(1);
