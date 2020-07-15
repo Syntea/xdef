@@ -152,6 +152,9 @@ public class TestExprDeCompiler {
 					result.append(Report.error("",
 						"Stack item: " + stack.pop()).toString());
 				}
+			} else if ("boolexpr".equals(item)) {  //???
+			} else if ("if".equals(item)) {  //???
+			} else if ("then".equals(item)) {  //???
 			} else {
 				result.append(
 					Report.error("", "Unknown code: " + item).toString());
@@ -163,6 +166,13 @@ public class TestExprDeCompiler {
 			stack.clear();
 		}
 		return result.toString().trim();
+	}
+
+	static void printCode(Object[] code) {
+		for (int i = 0; code != null && i < code.length; i++) {
+			System.out.printf("%3d: ", i);
+			System.out.println(code[i]);
+		}
 	}
 
 	/** Contains information about operator. */

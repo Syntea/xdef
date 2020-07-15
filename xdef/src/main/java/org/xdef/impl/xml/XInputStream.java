@@ -95,7 +95,7 @@ public class XInputStream extends InputStream {
 	private static String getXMLDeclParam(String paramName, String source) {
 		int ndx = source.indexOf(paramName);
 		if (ndx > 0) {
-			int ndx1 = source.indexOf('=', ndx + 8);
+			int ndx1 = source.indexOf('=', ndx + paramName.length());
 			if (ndx1 > 0) {
 				int ndx2 = source.indexOf('"', ndx1 + 1);
 				if (ndx2 == -1) {
