@@ -32,7 +32,6 @@ public class TestPrettyXdef extends XDTester {
 				"-o", tempDir + "Igor02_xd.txt",
 				"-i", "8",
 				"-e", "UTF-8",
-				"-p", "xd",
 				dataDir + "test/Igor02_xd.xml"});
 			KDOMBuilder kd = new KDOMBuilder();
 			kd.setNamespaceAware(true);
@@ -43,6 +42,8 @@ public class TestPrettyXdef extends XDTester {
 			if (rw.errorWarnings()) {
 				fail();
 			}
+		} catch (Exception ex) {
+			fail(ex);
 		} catch (Error ex) {
 			fail(ex);
 		}
@@ -50,7 +51,6 @@ public class TestPrettyXdef extends XDTester {
 			PrettyXdef.main(new String[] {
 				"-o", tempDir + "Matej2_L1_common.txt",
 				"-e", "UTF-8",
-				"-p", "xd",
 				dataDir + "test/Matej2_L1_common.def"});
 			KDOMBuilder kd = new KDOMBuilder();
 			kd.setNamespaceAware(true);
@@ -65,6 +65,8 @@ public class TestPrettyXdef extends XDTester {
 				}
 				fail();
 			}
+		} catch (Exception ex) {
+			fail(ex);
 		} catch (Error ex) {
 			fail(ex);
 		}
