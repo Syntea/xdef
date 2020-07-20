@@ -34,6 +34,11 @@ public class PrettyXdef extends XReader {
 	/** flag to trim text attribute values. */
 	private final boolean _trimAttr = false;
 
+	/** Create new instance of PrettyXdef.
+	 * @param mi XInputStream reader.
+	 * @param indentStep number of indent spaces (0 .. no indenting).
+	 * @throws IOException if an error occurs,
+	 */
 	private PrettyXdef(XInputStream mi, int indentStep) throws IOException {
 		super(mi);
 		_indentStep = indentStep;
@@ -44,6 +49,9 @@ public class PrettyXdef extends XReader {
 	 * @return The string with given number of spaces.
 	 */
 	private String getIndentSpaces(int num) {
+		if (_indentStep <= 0) {
+			return "";
+		}
 		StringBuilder sb = _result.length() == 0
 			? new StringBuilder() : new StringBuilder("\n");
 		for (int i = 0; i < num; i++) {
@@ -158,15 +166,15 @@ public class PrettyXdef extends XReader {
 			boolean wasAttr = false;
 			for (Attr a : attrs) {
 				if (a._name.startsWith("xmlns")) {//write first xmlns attributes
-					String indent = wasAttr ?
-						getIndentSpaces(_level*_indentStep+name.length()+2):" ";
+					String indent = wasAttr && _indentStep > 0 ?
+						getIndentSpaces(name.length()+2)+_level*_indentStep:" ";
 					_result.append(indent).append(a.toString());
 					wasAttr = true;
 				}
 			}
 			for (Attr a : attrs) {//otehr attributes
 				if (!a._name.startsWith("xml")) {
-					String indent = wasAttr ?
+					String indent = wasAttr && _indentStep > 0 ?
 						getIndentSpaces(_level*_indentStep+name.length()+2):" ";
 					_result.append(indent).append(a.toString());
 					wasAttr = true;
@@ -199,7 +207,7 @@ public class PrettyXdef extends XReader {
 
 	/** Write pretty formatted file with source X-definition to given directory.
 	 * @param source The input file or the string with XML data.
-	 * @param indentStep number of indent spaces..
+	 * @param indentStep number of indent spaces.
 	 * @param out OutputStream where to write formatted XML.
 	 * @param encoding The character encoding name or null.
 	 * @return the encoding of written XML.
@@ -221,7 +229,7 @@ public class PrettyXdef extends XReader {
 
 	/** Write pretty formatted file with source X-definition to given directory.
 	 * @param in The input stream with XML data.
-	 * @param indentStep number of indent spaces..
+	 * @param indentStep number of indent spaces.
 	 * @param out OutputStream where to write formatted XML.
 	 * @param encoding The character encoding name or null.
 	 * @return the encoding of written XML.
@@ -232,10 +240,10 @@ public class PrettyXdef extends XReader {
 		OutputStream out,
 		String encoding) throws IOException {
 		XInputStream mi = new XInputStream(in);
-		PrettyXdef p = new PrettyXdef(mi, indentStep);
-		p.parse();
 		String enc = encoding != null ? encoding : mi.getXMLEncoding();
 		String ver = mi.getXMLVersion();
+		PrettyXdef p = new PrettyXdef(mi, indentStep);
+		p.parse();
 		OutputStreamWriter wr = new OutputStreamWriter(out, enc);
 		if (!"1.0".equals(ver) || !"UTF-8".equals(enc)
 			|| mi.getXMLStandalone()) {
@@ -250,7 +258,7 @@ public class PrettyXdef extends XReader {
 	/** Write pretty formatted file with source X-definition to given directory.
 	 * @param file The input file.
 	 * @param outDir directory where to put result files.
-	 * @param indentStep number of indent spaces..
+	 * @param indentStep number of indent spaces.
 	 * @param encoding The character encoding name or null.
 	 * @return the encoding of written XML.
 	 * @throws IOException if an error occurs.
@@ -282,7 +290,7 @@ public class PrettyXdef extends XReader {
 	/** Write pretty formatted files with source X-definitions.
 	 * @param files Array of files.
 	 * @param outDir directory where to put result files.
-	 * @param indentStep number of indent spaces..
+	 * @param indentStep number of indent spaces.
 	 * @param encoding The character encoding name or null.
 	 * @throws IOException if an error occurs.
 	 */
@@ -306,7 +314,8 @@ public class PrettyXdef extends XReader {
 	 * specified the formated files will be replaced by the the formated
 	 * version.</li>
 	 *  <li><tt>-i n</tt> - number of spaces used for indentation. If this
-	 * parameter is not specified the parameter is set to 2.</li>
+	 * parameter is not specified the parameter is set to 2.
+	 * If n is equal to 0 no indentation is provided.</li>
 	 *  <li><tt>-e encoding</tt> - name of character set. If this parameter
 	 * is not specified it will be used the original character set.</li>
 	 *  <li><tt>file</tt> - the file with source X-definition.</li>
@@ -324,6 +333,7 @@ public class PrettyXdef extends XReader {
 "            formated files will be replaced by the the formated version.\n"+
 "-i n        Number of spaces used for indentation. If this parameter is\n"+
 "            not specified the parameter is set to 2.\n"+
+"            If n is equal to 0 no indentation is provided.\n"+
 "-e encoding Name of character set. If this parameter is not specified\n"+
 "            it will be used the original character set.\n"+
 "file        The file with source X-definition.\n"+
@@ -331,8 +341,8 @@ public class PrettyXdef extends XReader {
 		HashMap<String, File> xdefs = new HashMap<String, File>();
 		File outDir = null;
 		String fileName = null;
-		String encoding = "UTF-8";
-		int indent = -1;
+		String encoding = null;
+		int indent = Integer.MIN_VALUE;
 		int i = 0;
 		String msg = "";
 		while (i < args.length && args[i].startsWith("-")) {
@@ -389,10 +399,13 @@ public class PrettyXdef extends XReader {
 							"': missing following argument\n";
 						continue;
 					}
-					if (indent == -1) {
+					if (indent == Integer.MIN_VALUE) {
 						try {
 							indent = Integer.parseInt(s);
 							if (indent >= 0) {
+								if (indent == 0) {
+									indent = -1;
+								}
 								continue;
 							}
 						} catch (Exception ex) {
@@ -465,6 +478,9 @@ public class PrettyXdef extends XReader {
 		}
 		if (msg.length() > 0) {
 			throw new RuntimeException(msg + info);
+		}
+		if (indent == Integer.MIN_VALUE) {
+			indent = 2;
 		}
 		if (xdefs.size() == 1 && fileName != null) {
 			InputStream in =
