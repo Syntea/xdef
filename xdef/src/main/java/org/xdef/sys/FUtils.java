@@ -1762,6 +1762,12 @@ public class FUtils {
 				}
 			} catch (Exception ex) {} // try regular URL constructor
 		}
+		File f = new File(s);
+		if (f.exists()) {
+			try {
+				return f.getCanonicalFile().toURI().toURL();
+			} catch (Exception ex) {}
+		}
 		URL u = new URL(s);
 		if ("file".equals(u.getProtocol())) {
 			try {

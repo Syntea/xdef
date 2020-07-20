@@ -1,8 +1,6 @@
 package test.xdutils;
 
-import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
-import org.xdef.sys.Report;
 import org.xdef.sys.SException;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlUtils;
@@ -18,54 +16,37 @@ public class TestPrettyXdef extends XDTester {
 
 	public TestPrettyXdef() {super();}
 
+	private ReportWriter chkPrettyXDef(final String... params) throws Exception{
+		PrettyXdef.main(params);
+		KDOMBuilder kd = new KDOMBuilder();
+		kd.setNamespaceAware(true);
+		kd.parse(params[1]); //just check XML
+		return KXmlUtils.compareXML(
+			params[1], params[params.length - 1], true);
+	}
+
 	@Override
 	public void test() {
 		String dataDir = getDataDir();
-		String tempDir = dataDir + "temp/";
+		String tempDir = getTempDir();
 		File f = new File(tempDir);
 		if (!f.exists()) {
 			f.mkdirs();
 		}
-
 		try {
-			PrettyXdef.main(new String[] {
-				"-o", tempDir + "Igor02_xd.txt",
+			assertNoErrors(chkPrettyXDef(
+				"-o", tempDir + "TestValidate.xdef",
+				dataDir + "test/TestValidate.xdef"));
+			assertNoErrors(chkPrettyXDef(
+				"-o", tempDir + "Igor02_xd.xml",
 				"-i", "8",
 				"-e", "UTF-8",
-				"-p", "xd",
-				dataDir + "test/Igor02_xd.xml"});
-			KDOMBuilder kd = new KDOMBuilder();
-			kd.setNamespaceAware(true);
-			kd.parse(tempDir + "Igor02_xd.txt"); //just check XML
-			ReportWriter rw =
-				KXmlUtils.compareXML(tempDir + "Igor02_xd.txt",
-				dataDir + "test/Igor02_xd.xml");
-			if (rw.errorWarnings()) {
-				fail();
-			}
-		} catch (Error ex) {
-			fail(ex);
-		}
-		try {
-			PrettyXdef.main(new String[] {
-				"-o", tempDir + "Matej2_L1_common.txt",
-				"-e", "UTF-8",
-				"-p", "xd",
-				dataDir + "test/Matej2_L1_common.def"});
-			KDOMBuilder kd = new KDOMBuilder();
-			kd.setNamespaceAware(true);
-			kd.parse(tempDir + "Matej2_L1_common.txt"); //just check XML
-			ReportWriter rw =
-				KXmlUtils.compareXML(tempDir + "Matej2_L1_common.txt",
-				dataDir + "test/Matej2_L1_common.def");
-			if (rw.errorWarnings()) {
-				Report rep;
-				while ((rep = ((ArrayReporter) rw).getReport()) != null) {
-					fail(rep);
-				}
-				fail();
-			}
-		} catch (Error ex) {
+				dataDir + "test/Igor02_xd.xml"));
+			assertNoErrors(chkPrettyXDef(
+				"-o", tempDir + "Matej2_L1_common.xdef",
+				"-i", "0",
+				dataDir + "test/Matej2_L1_common.def"));
+		} catch (Exception ex) {
 			fail(ex);
 		}
 		try {

@@ -110,15 +110,12 @@ public abstract class DomBaseHandler
 	/////////////////////////////////////////////////////////////
 	@Override
 	public void setDocumentLocator(final Locator locator) {_locator = locator;}
-
 	@Override
 	public void startPrefixMapping(final String prefix, final String uri) {
 		_prefixes.put(prefix, uri);
 	}
-
 	@Override
 	public void endPrefixMapping(final String prefix){}
-
 	@Override
 	public void skippedEntity(final String name) {}
 
@@ -133,14 +130,17 @@ public abstract class DomBaseHandler
 	public void startCDATA() {}
 	@Override
 	public void endCDATA() {}
-
 	@Override
 	public void startDTD(String name, String publicId, String systemId)
 	{_isDTD = true;}
-
 	@Override
 	public void endDTD() {_isDTD = false;}
-
 	@Override
 	public void comment(char[] ch, int start, int length) {}
+
+	/////////////////////////////////////////////////////////////
+	// XHandler
+	/////////////////////////////////////////////////////////////
+	@Override
+	public void popReader(){}
 }
