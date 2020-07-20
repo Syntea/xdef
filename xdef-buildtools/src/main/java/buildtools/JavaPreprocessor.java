@@ -1174,7 +1174,7 @@ public class JavaPreprocessor {
 		System.err.flush();
 		System.out.flush();
 		System.out.println(
-"JavaPreprocessor. Copyright 2004 Syntea Software Group.\n" +
+"JavaPreprocessor.\n" +
 "Preprocessor commands separates source sections by special Java comments.\n"+
 "Comments in the form '/* ... */' inside of processed sections are allowed\n"+
 "only on separated lines. Preprocessor modifies last character of the command\n"+
@@ -1206,7 +1206,7 @@ public class JavaPreprocessor {
 	private static void cancel(final int exitCode, final String msg) {
 		System.out.flush();
 		System.err.println(
-"JavaPreprocessor. Copyright 2004 Syntea Software Group.\n" +
+"JavaPreprocessor.\n" +
 			(msg == null ? "" :
 				msg.length() > 0 ? "Error: " + msg + "\n" : "\n")+
 "usage: [-h] [-r] [-t] [-v] [-x] -i input [-o output] [-encoding charset]\n"+

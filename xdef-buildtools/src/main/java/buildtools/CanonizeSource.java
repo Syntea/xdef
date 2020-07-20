@@ -1049,7 +1049,7 @@ public class CanonizeSource {
 		System.out.flush();
 		System.err.flush();
 		System.err.println((msg == null ?
-		"CanonizeSource. Copyright 2004 Syntea Software Group.\n"
+		"CanonizeSource.\n"
 +"All lines of the source data are checked for leading and trailing white spaces.\n"
 +"Trailing spaces and tabs are removed and leading spaces are replaced by\n"
 +"tabs or by spaces according to the value of switches -t or -s.If the\n"
