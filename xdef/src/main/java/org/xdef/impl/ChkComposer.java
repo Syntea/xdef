@@ -784,7 +784,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		if (chkElem._parent._parent != null) { // not root
 			chkElem.initElem();
 		}
-		XData[] xattrs = xel.getXDAttrs();
+		XData[] xattrs = (XData[]) xel.getAttrs();
 		chkElem.setXXType((byte) 'A');
 		for (XData xatr: xattrs) {
 			chkElem._xdata = xatr;

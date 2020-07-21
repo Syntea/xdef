@@ -752,6 +752,9 @@ public abstract class STester {
 		} else {
 			ndx = s.indexOf("/build/classes/" + cname);
 			if (ndx < 0) {
+				ndx = s.indexOf("/build/test/classes/" + cname);
+			}
+			if (ndx < 0) {
 				ndx = s.indexOf("/target/test-classes/" + cname);
 				if (ndx < 0) {
 					ndx = s.indexOf("/temp/classes/" + cname);
@@ -778,18 +781,13 @@ public abstract class STester {
 					_sourceName = s + cname + ".java";
 				} else {
 					_sourceName = s + "src/test/java/" + cname + ".java";
-					if (!new File(_sourceName).exists()) {
-						_sourceName = null;
-						_timeStamp = System.currentTimeMillis();
-						return;
-					}
-				}
-				if (!new File(_sourceName).exists()) {
-					_sourceName = null;
-					_timeStamp = System.currentTimeMillis();
-					return;
 				}
 			}
+		}
+		if (!new File(_sourceName).exists()) {
+			_sourceName = null;
+			_timeStamp = System.currentTimeMillis();
+			return;
 		}
 		_sourceDir = _sourceName.substring(0, _sourceName.lastIndexOf('/') + 1);
 		if (!new File(_sourceDir).isDirectory()) {

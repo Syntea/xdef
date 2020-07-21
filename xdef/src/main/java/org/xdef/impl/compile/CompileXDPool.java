@@ -2302,7 +2302,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			int leny = y._childNodes.length;
 			xel.setReferencePos(y.getXDPosition());
 			if (xel._childNodes.length == 1 && xel.getAttrs().length == 0) {
-				xel._attrs = y._attrs;
+				xel._attrs.putAll(y._attrs);
 				xel._childNodes = y._childNodes;
 				xel.setReference(true);
 				return true;

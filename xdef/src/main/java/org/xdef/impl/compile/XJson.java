@@ -88,23 +88,23 @@ public class XJson extends JsonToXml {
 		}
 		return null;
 	}
-
-	private void addToXDScript(final PNode e, final String s) {
-		PAttr attr = getXDAttr(e, "script");
-		SBuffer val;
-		if (attr != null) {
-			val = attr._value;
-		} else {
-			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
-		}
-		if (!val.getString().trim().isEmpty()) {
-			if (!val.getString().trim().endsWith(";")) {
-				val.addString(";");
-			}
-			val.addString(" ");
-		}
-		val.addString(s);
-	}
+//
+//	private void addToXDScript(final PNode e, final String s) {
+//		PAttr attr = getXDAttr(e, "script");
+//		SBuffer val;
+//		if (attr != null) {
+//			val = attr._value;
+//		} else {
+//			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
+//		}
+//		if (!val.getString().trim().isEmpty()) {
+//			if (!val.getString().trim().endsWith(";")) {
+//				val.addString(";");
+//			}
+//			val.addString(" ");
+//		}
+//		val.addString(s);
+//	}
 
 	/** Set X-def attribute.
 	 * @param e PNode where to set attribute.

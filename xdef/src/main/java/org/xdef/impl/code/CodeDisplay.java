@@ -2,6 +2,10 @@ package org.xdef.impl.code;
 
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
+import org.xdef.model.XMData;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
 import org.xdef.impl.XCodeDescriptor;
 import org.xdef.impl.XData;
 import org.xdef.impl.XDebugInfo;
@@ -15,9 +19,6 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Set;
-import org.xdef.XDValueID;
-import org.xdef.model.XMData;
-import org.xdef.model.XMElement;
 
 /** Display compiled objects.
  * @author Vaclav Trojan
@@ -307,12 +308,11 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				XElement defEl = (XElement)xn;
 				out.print("-- Start XMElement: ");
 				displayDesriptor(defEl, out);
-				XNode[] attrs = defEl.getXDAttrs();
-				for(int i = 0; i < attrs.length; i++) {
-					displayDefNode(attrs[i], out, processed);
+				for (XMData x: defEl.getAttrs()) {
+					displayDefNode((XData) x, out, processed);
 				}
-				for (int i = 0; i < defEl._childNodes.length; i++) {
-					displayDefNode(defEl._childNodes[i], out, processed);
+				for (XMNode x: defEl.getChildNodeModels()) {
+					displayDefNode((XNode) x, out, processed);
 				}
 				out.println("-- End XMElement: " + xn.getName());
 				return;
