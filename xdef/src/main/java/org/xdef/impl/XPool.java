@@ -723,7 +723,7 @@ public final class XPool implements XDPool, Serializable {
 					XElement xe1 = (XElement)
 						xe.getXDPool().findModel(xe.getReferencePos());
 					if (xe1 != null && xe1._childNodes != null) {
-						xe._attrs = xe1._attrs;
+						xe._attrs.putAll(xe1._attrs);
 						xe._childNodes = xe1._childNodes;
 					} else {
 						reflist.add(xe);
@@ -1425,7 +1425,7 @@ public final class XPool implements XDPool, Serializable {
 					XElement xe1 = (XElement) xm;
 					if (xe1._childNodes != null) {
 						xe._childNodes = xe1._childNodes;
-						xe._attrs = xe1._attrs;
+						xe._attrs.putAll(xe1._attrs);
 						reflist.remove(i);
 					}
 				}

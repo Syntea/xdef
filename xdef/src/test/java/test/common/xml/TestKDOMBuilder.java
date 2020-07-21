@@ -963,9 +963,9 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq(":a", el.getTagName());
 			assertEq(":a", el.getNodeName());
 			s = el.getLocalName();
-			assertTrue(s == null || "a".equals(s), s);//java: null, syntea: "a"
+			assertTrue(s == null || "a".equals(s), s);
 			s = el.getPrefix();
-			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
+			assertTrue(s == null || "".equals(s), s);
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);
 			builder.setValidating(false);
@@ -985,9 +985,9 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq("a:", el.getTagName());
 			assertEq("a:", el.getNodeName());
 			s = el.getLocalName();
-			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
+			assertTrue(s == null || "".equals(s), s);
 			s = el.getPrefix();
-			assertTrue(s == null || "a".equals(s), s); //java: null, syntea: "a"
+			assertTrue(s == null || "a".equals(s), s);
 			data = "<:>\n</:>";
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(false);
@@ -997,9 +997,9 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq(":", el.getTagName());
 			assertEq(":", el.getNodeName());
 			s = el.getLocalName();
-			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
+			assertTrue(s == null || "".equals(s), s);
 			s = el.getPrefix();
-			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
+			assertTrue(s == null || "".equals(s), s);
 			data = "<::>\n</::>";
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(false);
@@ -1009,9 +1009,9 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq("::", el.getTagName());
 			assertEq("::", el.getNodeName());
 			s = el.getLocalName();
-			assertTrue(s == null || "".equals(s), s); //java: null, syntea: ""
+			assertTrue(s == null || "".equals(s), s);
 			s = el.getPrefix();
-			assertTrue(s == null || ":".equals(s), s); //java: null, syntea: ":"
+			assertTrue(s == null || ":".equals(s), s);
 		} catch (Exception ex) {fail(ex);}
 		if (XDTester.getFulltestMode()) {// run this test only in fullmode
 			try {//test XML from URL (internet connection required))

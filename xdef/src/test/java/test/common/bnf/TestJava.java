@@ -45,7 +45,7 @@ public class TestJava extends STester {
 //			s =
 //"/*soubor LICENSE.TXT.*/\n"+
 //"package test.common.bnf;\n" +
-//"import cz.syntea.xdef.sys.STester;\n" +
+//"import org.xdef.sys.STester;\n" +
 //"import x.Y;\n" +
 //"public final class TestJava extends STester implements a.b, c.d {n" +
 //"	public TestJava() {super();}\n" +
