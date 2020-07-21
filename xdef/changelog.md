@@ -3,8 +3,10 @@
 # Version 40.0.3, release-date 2020-06-25
 * corrected bug Illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
-* implemented the new X-script method `bindSet`. This method can be specified
-  only in the `init` section of the X-script of model of an Element.
+* implemented the new X-script method `bindSet(uniqueSet u1[,uniqueSet u2 ...])`.
+  This method can be specified only in the `init` section of the X-script
+  of model of an Element and at the end of precessing of the element it sets
+  to all specified uniqueSet the value of the actual key which was at init time.
 
 # Version 40.0.2, release-date 2020-06-22
 * improved generation of X-definition from XML data in
