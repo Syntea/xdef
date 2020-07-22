@@ -55,10 +55,10 @@ final class ChkParser extends DomBaseHandler {
 	/** SAXParserFactory used in this class. */
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	/** The namespace URI for X-definition instance (version 2.0; deprecated).*/
-	private static final String XDEF20_INSTANCE_NS_URI =
+	static final String XDEF20_INSTANCE_NS_URI =
 		"http://www.syntea.cz/xdef/2.0/instance";
 	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
-	private static final String XDEF31_INSTANCE_NS_URI =
+	static final String XDEF31_INSTANCE_NS_URI =
 		"http://www.syntea.cz/xdef/instance";
 	static { // set features to SAXParserFactory.
 		try {
