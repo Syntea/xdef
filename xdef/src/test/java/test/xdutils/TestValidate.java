@@ -1,14 +1,15 @@
 package test.xdutils;
 
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FileReportReader;
-import org.xdef.sys.Report;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FileReportReader;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportReader;
 import org.xdef.util.XValidate;
 import java.io.File;
-import org.xdef.sys.ReportReader;
 import test.XDTester;
 
 /** TestValidate.
@@ -27,11 +28,6 @@ public class TestValidate extends XDTester {
 			return;
 		}
 		String tempDir = getTempDir();
-		if (tempDir == null) {
-			fail("Data directory is missing, test canceled");
-			return;
-		}
-		new File(tempDir).mkdirs();
 		File xmlFile;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
@@ -66,10 +62,10 @@ public class TestValidate extends XDTester {
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate1.xml",
 				"-l",  tempDir + "TestValidate1.log"});
 			repr = new FileReportReader(tempDir + "TestValidate1.log");
-			assertEq(((rep = repr.getReport()) == null ?
-				null: rep.toString()).indexOf("E "), 0, rep);
-			assertEq(((rep = repr.getReport()) == null ?
-				null: rep.toString()).indexOf("E "), 0, rep);
+			assertEq(((rep = repr.getReport()) == null
+				? 999 : rep.toString().indexOf("E ")), 0, rep);
+			assertEq(((rep = repr.getReport()) == null
+				? 999 : rep.toString().indexOf("E ")), 0, rep);
 			assertEq(null, rep = repr.getReport(), rep);
 			repr.close();
 			new File(tempDir + "TestValidate1.log").delete();
@@ -91,16 +87,16 @@ public class TestValidate extends XDTester {
 				"-x", "Test1",
 				"-l", tempDir + "TestValidate3.log"});
 			repr = new FileReportReader(tempDir + "TestValidate3.log");
-			assertEq(((rep = repr.getReport()) == null ?
-				null: rep.toString()).indexOf("I: File OK: "), 0, rep);
+			assertEq(((rep = repr.getReport()) == null
+				? 999 : rep.toString().indexOf("I: File OK: ")), 0, rep);
 			assertNull(rep = repr.getReport(), rep);
 			repr.close();
 		} catch (Exception ex) {
 			fail(ex);
 		}
-		new File(tempDir + "TestValidate3.xp").delete();
-		new File(tempDir + "TestValidate3.log").delete();
-		new File(tempDir).delete();
+		try {
+			FUtils.deleteAll(tempDir, true);
+		} catch (Exception ex) {}
 	}
 
 	/** Run test

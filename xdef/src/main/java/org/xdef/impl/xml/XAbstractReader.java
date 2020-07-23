@@ -106,13 +106,13 @@ public abstract class XAbstractReader extends Reader {
 	public final String getProlog() {
 		int start = _pos;
 		scanXMLDecl();
-		scanSpacesCommentsAndPIs();
+		scanMisc();
 		scanDoctype();
-		scanSpacesCommentsAndPIs();
+		scanMisc();
 		return _pos > start ? _bf.substring(start, _pos) : "";
 	}
 
-	final int scanSpacesCommentsAndPIs() {
+	final int scanMisc() {
 		int start = _pos;
 		scanSpaces();
 		while (scanComment() >= 0 || scanPI() >= 0) {
@@ -567,7 +567,7 @@ public abstract class XAbstractReader extends Reader {
 	// EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
 	// NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
 	// PublicID ::= 'PUBLIC' S PubidLiteral
-	private int scanDoctype() {
+	public int scanDoctype() {
 		scanSpaces();
 		if (!isToken("<!DOCTYPE")) {
 			return -1;
@@ -602,7 +602,7 @@ public abstract class XAbstractReader extends Reader {
 			scanSpaces();
 			return start;
 		}
-		scanSpacesCommentsAndPIs();
+		scanMisc();
 		_pos = start;
 		_startLine = startLine;
 		return -1;
@@ -691,7 +691,7 @@ public abstract class XAbstractReader extends Reader {
 		if (scanPI() >= 0) { // <?xml ... ?>
 			scanSpaces();
 		}
-		scanSpacesCommentsAndPIs();
+		scanMisc();
 		scanDoctype();
 		_prologParsed = true;
 	}
@@ -706,7 +706,7 @@ public abstract class XAbstractReader extends Reader {
 			releaseScanned();
 		}
 		// skip to the start of element
-		while (scanSpacesCommentsAndPIs() > 0 || scanCDATA() >= 0
+		while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
 			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {}
 		List<Object[]> result = new ArrayList<Object[]>();
 		String name;
@@ -871,5 +871,4 @@ public abstract class XAbstractReader extends Reader {
 		}
 		return "41UTF-8"; // other
 	}
-
 }

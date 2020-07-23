@@ -31,7 +31,7 @@ public final class XElement extends XCodeDescriptor
 	implements XMElement, CodeTable {
 
 	/** attributes. */
-	public Map<String, XData> _attrs;
+	public final Map<String, XData> _attrs;
 	/** Child nodes. */
 	public XNode[] _childNodes;
 	/** The Definition object (or null). */
@@ -136,7 +136,7 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public final void setReferencePos(String ref) {_refPosition = ref;}
 
-	/** Get definition of attribute of given name.
+	/** Get model of attribute of given name.
 	 * @param key The name of attribute.
 	 * @param languageID language ID of the actual language in lexicon.
 	 * @return the value of attribute definition.
@@ -154,7 +154,7 @@ public final class XElement extends XCodeDescriptor
 		return _attrs.get(key);
 	}
 
-	/** Get definition of attribute of given name.
+	/** Get model of attribute of given name.
 	 * @param key The name of attribute (both local and/or prefixed).
 	 * @param nsURI namespace URI.
 	 * @param languageID language ID of the actual language in lexicon.
@@ -235,15 +235,6 @@ public final class XElement extends XCodeDescriptor
 		return result;
 	}
 
-	/** Get attributes of this XElement.
-	 * @return The array of XData models of attributes.
-	 */
-	public final XData[] getXDAttrs() {
-		XData[] result = new XData[_attrs.size()];
-		_attrs.values().toArray(result);
-		return result;
-	}
-
 	/** Returns true if the option "isMoreAttributes" is specified or
 	 * if there is specified an attribute "xd:any".
 	 * @return value of option "isMoreAttributes".
@@ -305,7 +296,7 @@ public final class XElement extends XCodeDescriptor
 		xw.writeInt(_sqId);
 		int len;
 		if (!_reference) {
-			XData[] xattrs = getXDAttrs();
+			XData[] xattrs = (XData[]) getAttrs();
 			len = xattrs.length;
 			xw.writeLength(len);
 			for (int i = 0; i < xattrs.length; i++) {
@@ -371,7 +362,7 @@ public final class XElement extends XCodeDescriptor
 				x._childNodes[i] = XNode.readXNode(xr, xd, list);
 			}
 		} else {
-			x._attrs = null;
+			x._attrs.clear();
 			x._childNodes = null;
 		}
 		x._forget = xr.readByte();
@@ -451,9 +442,6 @@ public final class XElement extends XCodeDescriptor
 	 * @return array of models of attributes.
 	 */
 	public final XMData[] getAttrs() {
-		if (_attrs == null) {
-			return null;
-		}
 		XData[] result = new XData[_attrs.size()];
 		_attrs.values().toArray(result);
 		return result;

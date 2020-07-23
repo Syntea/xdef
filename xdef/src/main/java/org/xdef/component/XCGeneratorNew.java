@@ -60,7 +60,7 @@ final class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
 		XElement xe;
 		String xelName = xelem.getName();
 		if (isRoot && xelem.getJsonMode() > 0 //JSON
-			&& xelem._childNodes != null && xelem._childNodes.length == 1
+			&& xelem._childNodes.length == 1
 			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
 			xe = (XElement) xelem._childNodes[0];
 			xelName = xelem.getLocalName();

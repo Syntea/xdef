@@ -2106,7 +2106,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		boolean result = true;
 		//check if there are missing required attributes
-		XData[] xattrs = _xElement.getXDAttrs();
+		XData[] xattrs = (XData[]) _xElement.getAttrs();
 		String xPos = _xPos;
 		for (int i = 0; i < xattrs.length && ! _nil; i++) {
 			XData xatt = xattrs[i];
@@ -2600,7 +2600,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			XData xatt;
 			String name;
 			String xPos	= _xPos;
-			XData[] xattrs = _xElement.getXDAttrs();
+			XData[] xattrs = (XData[]) _xElement.getAttrs();
 			int anyAttrs = 0;
 			for (int i = 0; i < xattrs.length; i++) {
 				xatt = xattrs[i];
