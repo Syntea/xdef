@@ -1,17 +1,17 @@
 # About X-definition
 
-X-definition is registered technology of the firm Syntea software group a.s.,
-for professional work with XML documents.
+X-definition is registered technology of the Syntea software group a.s.,
+for processing of the XML documents or JSON data.
 
-For the purpose of describing the structure of XML documents, their validation,
-processing and creation, this tool was developed by Syntea Software Group Inc.
-It allows the user to not only define the structure of XML documents,
-but also to describe specifically their processing and construction.
+For the purpose of describing the structure of XML documents or JSON data,
+their validation, processing and creation, this tool was developed
+by Syntea Software Group Inc. It allows the user to not only define
+the structure of XML documents or JSON data, but also to describe specifically
+their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
 This project is implementation for platform Java 1.6+.
-
 
 
 # License
@@ -132,7 +132,7 @@ Model of the XML data:
 
 This document describes the programming language and the technology called
 “X‑definition“. X‑definition is designed for description and processing of
-data in the form of XML.
+data in the form of XML or JSON.
 
 X-definition is a tool that provides the description of both the structure and
 the properties of data values in an XML document. Moreover, the X-definition
@@ -140,7 +140,8 @@ allows the description of the processing of specified XML objects.
 Thus X‑definitions may replace existing technologies commonly used
 for XML validation - namely the DTD (Data Type Definition) or the XML schemas and
 Schematron. With X-definition it is also possible to describe the construction
-of XML documents (or the transformation of XML data).
+of XML documents (or the transformation of XML data). X-definitions provides 
+also generation of JAVA class objects similar way as JAXB technology.
  
 X-definition enables the merging in one source of both the validation
 of XML documents and processing of data (i.e. using actions assigned
@@ -220,7 +221,6 @@ Configuration file pom.xml:
       </repository>
   </distributionManagement>
   ```
-
 
 
 # Building this project
