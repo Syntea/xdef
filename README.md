@@ -20,7 +20,6 @@ The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
 
-
 # Examples
 
 You can try following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
