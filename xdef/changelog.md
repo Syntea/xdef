@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.0.3, release-date 2020-06-25
+# Version 40.1.0, release-date 2020-07-26
 * corrected bug Illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
 * in the X-script is implemented the new type `uniqueSetKey`. This type of
