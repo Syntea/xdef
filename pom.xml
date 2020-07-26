@@ -48,9 +48,9 @@
     </scm>
     
     <properties>
-        <revision>40.0.3</revision><!-- when changed, change also ${release.date}, see below -->
+        <revision>40.1.0</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2020-06-22</release.date><!-- update when changed version -->
+        <release.date>2020-07-26</release.date><!-- update when changed version -->
         <specification.version>4.0</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
