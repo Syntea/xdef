@@ -3,6 +3,14 @@
 # Version 40.0.3, release-date 2020-06-25
 * corrected bug Illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
+* in the X-script is implemented the new type `uniqueSetKey`. This type of
+  object enables to save the actual value of the key of an `uniqueSet`. To do it 
+  you can invoke the new implemented method `getActualKey()` from `uniqueSet`
+  object. With the new method `resetKey` form `uniqueSetKey` the actulal key
+  of given `uniqueSet` object is set to the saved value. E.g.:
+   <NodeValue xd:script=
+     'var uniqueSetKey k; init k=nodeSet.getActualKey(); finally k.resetKey();'>
+   ...
 * implemented the new X-script method `bindSet(uniqueSet u1[,uniqueSet u2 ...])`.
   This method can be specified only in the `init` section of the X-script
   of model of an Element and at the end of precessing of the element it sets
