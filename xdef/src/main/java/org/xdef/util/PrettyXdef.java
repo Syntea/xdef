@@ -455,15 +455,13 @@ public class PrettyXdef extends XReader {
 		if (i < args.length) {
 			File[] files = SUtils.getFileGroup(args[i]);
 			for (int j = 0; j < files.length; j++) {
-				if (files[j].exists()
-					&& files[j].isFile()
-					&& files[j].canRead())
-				{
+				if (files[j].exists() && files[j].isFile()
+					&& files[j].canRead()) {
 					try {
 						xdefs.put(files[j].getCanonicalPath(),files[j]);
 					} catch (Exception ex) {
-						msg += "Error on file " +
-							files[j].getAbsoluteFile() + "\n";
+						msg += "Error on file "
+							+ files[j].getAbsoluteFile() + "\n";
 					}
 				} else {
 					msg += "Error on file " + files[j].getAbsoluteFile() + "\n";
