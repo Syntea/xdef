@@ -11,10 +11,11 @@
    <NodeValue xd:script=
      'var uniqueSetKey k; init k=nodeSet.getActualKey(); finally k.resetKey();'>
    ...
-* implemented the new X-script method `bindSet(uniqueSet u1[,uniqueSet u2 ...])`.
+* implemented the new X-script method `bindSet(uniqueSet u1[,uniqueSet u2...])`.
   This method can be specified only in the `init` section of the X-script
-  of model of an Element and at the end of precessing of the element it sets
-  to all specified uniqueSet the value of the actual key which was at init time.
+  of model of Element. At the end of processing of the element where it was
+  invoked it sets to all specified `uniqueSet` parameters the value of the
+  actual key which was at init time (it happens after `finally` event).
 
 # Version 40.0.2, release-date 2020-06-22
 * improved generation of X-definition from XML data in
