@@ -429,14 +429,14 @@ public class TestReport extends STester {
 		} catch (Exception ex) {fail(ex);}
 		try {// test report references in parameters
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
-			r = Report.error(SYS.SYS076, "&{#SYS069}", "&{#SYS091}");
-			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+			r = Report.error(SYS.SYS076, "&{#SYS072}", "&{#SYS091}");
+			assertEq("E SYS076: URL Data error error: ; Read after EOF",
 				r.toString());
-			r = Report.error(SYS.SYS076, "&{0}&{#SYS069}", "&{1}&{#SYS091}");
-			assertEq("E SYS076: URL No errors found error: ; Read after EOF",
+			r = Report.error(SYS.SYS076, "&{0}&{#SYS072}", "&{1}&{#SYS091}");
+			assertEq("E SYS076: URL Data error error: ; Read after EOF",
 				r.toString());
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "ces");
-			assertEq("E SYS076: Chyba URL Nebyly nalezeny žádné chyby: ;"
+			assertEq("E SYS076: Chyba URL Chyba dat: ;"
 				+ " Čtení za koncem souboru", r.toString());
 		} catch (Exception ex) {fail(ex);}
 

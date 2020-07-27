@@ -29,7 +29,7 @@ public class PomInfo {
 	/** init instance - load pominfo.properties. */
 	public PomInfo() {
 		try {
-			InputStream ppIs = 
+			InputStream ppIs =
 				PomInfo.class.getResourceAsStream(pomInfoPropsName);
 			if (ppIs == null) {
 				throw new FileNotFoundException("java-resource "
