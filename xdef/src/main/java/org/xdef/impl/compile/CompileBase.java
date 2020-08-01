@@ -599,8 +599,7 @@ public class CompileBase implements CodeTable, XDValueID {
 
 		im = genParserMetnod(0, 0, new short[] {XD_PARSER}, XD_STRING);
 		parser(im,org.xdef.impl.parsers.XDParseEmail.class, "email");
-		parser(im,org.xdef.impl.parsers.XDParseEmailList.class,
-			"emailList");
+		parser(im,org.xdef.impl.parsers.XDParseEmailList.class, "emailList");
 		parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
 		parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
 		parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");
