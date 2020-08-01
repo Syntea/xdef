@@ -76,7 +76,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
 	@SuppressWarnings("unchecked")
-	private static final Map<String, InternalMethod>[] METHODS =
+	public static final Map<String, InternalMethod>[] METHODS =
 		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
@@ -455,7 +455,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseBase64Binary.class,
-			"base64Binary", "?xs:base64Binary", "base64");
+			"base64Binary", "?xs:base64Binary", "?base64");
 		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class,
 			"hexBinary", "?xs:hexBinary");
 		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
