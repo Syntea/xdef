@@ -1085,7 +1085,7 @@ public class TestSParser extends STester {
 			}
 			s = "05-03-11";
 			p = new StringParser(s);
-			if (p.isDatetime("YY-M-d")) {
+			if (p.isDatetime("yy-M-d")) {
 				d = p.getParsedSDatetime();
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
@@ -1094,8 +1094,8 @@ public class TestSParser extends STester {
 				int i = d.getYear() % 100;
 				int r =	ce * 100 + i;
 				assertTrue(d.getYear() == r, d.toISO8601());
-				assertTrue(s.equals(d.formatDate("YY-MM-dd")),
-					d.formatDate("YY-MM-dd"));
+				assertTrue(s.equals(d.formatDate("yy-MM-dd")),
+					d.formatDate("yy-MM-dd"));
 			} else {
 				fail();
 			}
