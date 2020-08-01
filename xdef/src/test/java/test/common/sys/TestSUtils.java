@@ -1253,16 +1253,16 @@ public class TestSUtils extends STester {
 				fail();
 			}
 			p = new StringParser("95");
-			if (p.isDatetime("Y") && p.eos()) {
+			if (p.isDatetime("y") && p.eos()) {
 				Calendar c = p.getParsedSDatetime().getCalendar();
 				assertEq(95,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
 			p = new StringParser("95");
-			if (p.isDatetime("YY") && p.eos()) {
+			if (p.isDatetime("yy") && p.eos()) {
 				Calendar c = p.getParsedSDatetime().getCalendar();
-				assertEq(2095,c.get(Calendar.YEAR));
+				assertEq(1995,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
