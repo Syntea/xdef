@@ -9,7 +9,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SReporter;
 
-/** Parser of Schema "IDREF" type.
+/** Parser of "CHKID" type.
  * @author Vaclav Trojan
  */
 public class XDParseCHKID extends XSParseQName {
@@ -21,8 +21,9 @@ public class XDParseCHKID extends XSParseQName {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
-			result.error(XDEF.XDEF573, //Null value of &{0}"
-				"xnode in XDParseCHKID.finalCheck(parser, xnode);");
+			//The validation method &{0} can be called only from the X-script
+			//of attribute or text node
+			result.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
 		CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();

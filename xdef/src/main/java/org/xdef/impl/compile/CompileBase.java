@@ -76,7 +76,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
 	@SuppressWarnings("unchecked")
-	private static final Map<String, InternalMethod>[] METHODS =
+	public static final Map<String, InternalMethod>[] METHODS =
 		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
@@ -455,7 +455,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseBase64Binary.class,
-			"base64Binary", "?xs:base64Binary", "base64");
+			"base64Binary", "?xs:base64Binary", "?base64");
 		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class,
 			"hexBinary", "?xs:hexBinary");
 		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
@@ -599,8 +599,7 @@ public class CompileBase implements CodeTable, XDValueID {
 
 		im = genParserMetnod(0, 0, new short[] {XD_PARSER}, XD_STRING);
 		parser(im,org.xdef.impl.parsers.XDParseEmail.class, "email");
-		parser(im,org.xdef.impl.parsers.XDParseEmailList.class,
-			"emailList");
+		parser(im,org.xdef.impl.parsers.XDParseEmailList.class, "emailList");
 		parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
 		parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
 		parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");

@@ -13,11 +13,11 @@ import org.xdef.xml.KXmlUtils;
  */
 public class GenPluginInfo {
 
-	private static String getMethodParams(final String name) {
+	private static String getMethodParams(final String name,
+		final short baseType) {
 		CompileBase.InternalMethod im =
-			CompileBase.getTypeMethod(CompileBase.NOTYPE_VALUE_ID, name);
+			CompileBase.getTypeMethod(baseType, name);
 		String result = "<" + name + ">";
-//		result += "<description> . </description>";
 		short[] partypes = im.getParamTypes();
 		int maxparams = im.getMaxParams();
 		if (maxparams >= 1 && partypes != null) {
@@ -29,8 +29,10 @@ public class GenPluginInfo {
 				}
 				params += CompileBase.getTypeName(partypes[i]);
 				String[] sqpars = im.getSqParamNames();
-				if (i < sqpars.length) {
-					params += '(' + sqpars[i] + ')';
+				if (sqpars != null) {
+					if (i < sqpars.length) {
+						params += '(' + sqpars[i] + ')';
+					}
 				}
 			}
 			result += params;
@@ -39,43 +41,37 @@ public class GenPluginInfo {
 			}
 			result += "</params>";
 		}
-//		String[] sqpars = im.getSqParamNames();
-//		if (sqpars != null && sqpars.length > 0) {
-//			result += "<params>";
-//			for (String x : sqpars) {
-//				result += ' ' + x;
-//			}
-//			result += "</params>";
-//		}
 		String keys;
 		CompileBase.KeyParam[] kpars = im.getKeyParams();
 		keys = "";
-		for (CompileBase.KeyParam x : kpars) {
-			if (!keys.isEmpty()) {
-				keys += " ";
-			}
-			XDValue deflt = x.getDefaultValue();
-			XDValue[] legals = x.getLegalValues();
-			String params = "";
-			if (legals != null && legals.length > 0) {
-				for (XDValue y : legals) {
+		if (kpars != null) {
+			for (CompileBase.KeyParam x : kpars) {
+				if (!keys.isEmpty()) {
+					keys += " ";
+				}
+				XDValue deflt = x.getDefaultValue();
+				XDValue[] legals = x.getLegalValues();
+				String params = "";
+				if (legals != null && legals.length > 0) {
+					for (XDValue y : legals) {
+						if (!params.isEmpty()) {
+							params += " | ";
+						}
+						params += (y.getItemId() == XDValueID.XD_STRING)
+							? '"' + y.toString() + '"' : y.toString();
+						if (y.equals(deflt)) {
+							params += '*';
+						}
+					}
 					if (!params.isEmpty()) {
-						params += " | ";
+						params = '[' + params + ']';
 					}
-					params += (y.getItemId() == XDValueID.XD_STRING)
-						? '"' + y.toString() + '"' : y.toString();
-					if (y.equals(deflt)) {
-						params += '*';
-					}
+				} else {
+					params += '(' + CompileBase.getTypeName(x.getType()) + ')';
 				}
 				if (!params.isEmpty()) {
-					params = '[' + params + ']';
+					keys += '%' + x.getName() + params;
 				}
-			} else {
-				params += '(' + CompileBase.getTypeName(x.getType()) + ')';
-			}
-			if (!params.isEmpty()) {
-				keys += '%' + x.getName() + params;
 			}
 		}
 		if (!keys.isEmpty()) {
@@ -146,7 +142,7 @@ public class GenPluginInfo {
 			};
 			s = "<SchemaValidationMethod>\n";
 			for (String x : names) {
-				s += getMethodParams(x);
+				s += getMethodParams(x, CompileBase.NOTYPE_VALUE_ID);
 			}
 			s += "</SchemaValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
@@ -156,7 +152,7 @@ public class GenPluginInfo {
 				"an",
 	//			"base64",
 	//			"bool",
-				"BNF",
+//				"BNF",
 				"contains",
 				"containsi",
 				"dateYMDhms",
@@ -212,7 +208,7 @@ public class GenPluginInfo {
 				"SET"};
 			s = "<XDValidationMethod>\n";
 			for (String x : names) {
-				s += getMethodParams(x);
+				s += getMethodParams(x, CompileBase.NOTYPE_VALUE_ID);
 			}
 			s += "</XDValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);

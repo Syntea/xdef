@@ -20,8 +20,9 @@ public class XSParseENTITY extends XSParseQName {
 	@Override
 	public void finalCheck(final XXNode xnode, XDParseResult p) {
 		if (xnode == null) {
-			p.error(XDEF.XDEF573, //Null value of &{0}"
-				"xnode; in XSParseENTITY.check(parser, xnode);");
+			//The validation method &{0} can be called only from the X-script
+			//of attribute or text node
+			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
 		String id = p.getSourceBuffer();
