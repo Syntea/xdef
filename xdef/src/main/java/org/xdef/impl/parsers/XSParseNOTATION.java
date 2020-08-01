@@ -77,19 +77,15 @@ public class XSParseNOTATION extends XSAbstractParseString {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			p.error(XDEF.XDEF573, //Null value of &{0}"
-				"xnode; in XSParseNOTATION.check(parser, xnode);");
+			//The validation method &{0} can be called only from the X-script
+			//of attribute or text node
+			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
 		Element el = xnode.getElement();
 		DocumentType dt = el.getOwnerDocument().getDoctype();
 		String id = p.getSourceBuffer();
-		NamedNodeMap nm;
-		if (dt == null) {
-			nm = null;
-		} else {
-			nm = dt.getNotations();
-		}
+		NamedNodeMap nm = dt == null ? null : dt.getNotations();
 		boolean notationFound;
 		if (nm == null || nm.getLength() == 0) {
 			notationFound = false;

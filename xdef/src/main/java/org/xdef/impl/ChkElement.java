@@ -3206,7 +3206,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * 'D' - document, 'P' - processing instruction,'U' undefined.
 	 * @return mode.
 	 */
-	final byte getXXType() {return _mode;}
+	public final byte getXXType() {return _mode;}
 
 	@Override
 	public final short getItemId() {
