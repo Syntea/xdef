@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.0, release-date 2020-07-26
+# Version 40.1.0, release-date 2020-08-03
 * corrected bug Illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
 * in the X-script is implemented the new type `uniqueSetKey`. This type of
@@ -15,7 +15,7 @@
   This method can be specified only in the `init` section of the X-script
   of model of Element. At the end of processing of the element where it was
   invoked it sets to all specified `uniqueSet` parameters the value of the
-  actual key which was at init time (it happens after `finally` event).
+  actual key from the init time (it happens after `finally` event).
 
 # Version 40.0.2, release-date 2020-06-22
 * improved generation of X-definition from XML data in
