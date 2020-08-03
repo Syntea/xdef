@@ -1,17 +1,17 @@
 package test.common.sys;
 
 import java.math.BigInteger;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SDuration;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.StringParser;
-import org.xdef.sys.STester;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.STester;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 
 /** Test of simple parser and SDatetime.
  * @author Vaclav Trojan
@@ -961,15 +961,6 @@ public class TestSParser extends STester {
 				d = p.getParsedSDatetime();
 				s = d.toString();
 				assertEq("---02", s);
-			} else {
-				fail();
-			}
-			s = "--2";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("--02", s);
 			} else {
 				fail();
 			}
