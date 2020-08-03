@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /** End mark of selector.
- *  deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public class XSelectorEnd extends XNode {

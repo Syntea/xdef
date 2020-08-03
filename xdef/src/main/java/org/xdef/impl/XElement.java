@@ -24,7 +24,6 @@ import java.util.Map;
 import org.xdef.proc.XDLexicon;
 
 /** Implementation of the model of an element.
- *  deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public final class XElement extends XCodeDescriptor

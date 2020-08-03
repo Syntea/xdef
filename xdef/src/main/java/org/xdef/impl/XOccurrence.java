@@ -4,7 +4,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.model.XMOccurrence;
 
 /** Contains minimum and maximum occurrence requirement.
- *  deprecated - will be not public in future versions
  * @author Trojan
  */
 public class XOccurrence implements XMOccurrence {
