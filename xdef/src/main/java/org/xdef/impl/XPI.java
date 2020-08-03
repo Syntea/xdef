@@ -5,9 +5,7 @@ import org.xdef.model.XMNode;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 /** Implementation of the model of processing instruction.
- *  deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public class XPI extends XData {
@@ -25,7 +23,6 @@ public class XPI extends XData {
 	@Override
 	public final void writeXNode(final XDWriter xw,
 		final ArrayList<XNode> list) throws IOException {
-		 //TODO!
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
 		writeXCodeDescriptor(xw);

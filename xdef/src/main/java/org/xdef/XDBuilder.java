@@ -100,6 +100,7 @@ public interface XDBuilder {
 	 */
 	public XDBuilder setClassLoader(ClassLoader loader);
 
+	@Deprecated
 	/** Set external classes with external methods.
 	 * @deprecated setExternals will be no more supported. Please use
 	 * declaration of external methods in X-definition.

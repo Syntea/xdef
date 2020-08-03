@@ -5,7 +5,6 @@ import org.xdef.model.XMVariableTable;
 import java.io.IOException;
 
 /** Contains table of variables.
- * deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public class XVariableTable implements XMVariableTable {

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /** Implementation of mixture, choice or sequence.
- *  deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public class XSelector extends XNode implements XMSelector {

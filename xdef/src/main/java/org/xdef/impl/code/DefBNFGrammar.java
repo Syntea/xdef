@@ -12,7 +12,6 @@ import org.xdef.XDValueType;
 
 /** Implementation object containing compiled grammar extended
  * Backus-Naur form.
- *  deprecated - will be not public in future versions
  * @author Vaclav Trojan
  */
 public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
@@ -172,5 +171,4 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 
 	@Override
 	public void setCode(final short code) {}
-
 }
