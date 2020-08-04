@@ -55,7 +55,6 @@ import org.xdef.sys.SPosition;
 public final class CompileCode extends CompileBase {
 	/** Internal stack size. */
 	private final static int STACK_SIZE = 512; //20 for tests is enough!
-
 	/** The parser (just for error reporting). */
 	XScriptParser _parser;
 	/** Mode of compilation:<br/>
@@ -129,6 +128,8 @@ public final class CompileCode extends CompileBase {
 	private boolean _ignoreExternalMethods;
 	/** Flag bindSet method is allowed. */
 	boolean _allowBindSet = false;
+	/* Error id (to ensure to generate the unique identifier).*/
+	private int _errIdIndex = 1000;
 
 	/** Creates a new instance of GenCodeObj.
 	 * @param extClasses Array of external classes.
@@ -210,6 +211,9 @@ public final class CompileCode extends CompileBase {
 			}
 		}
 	}
+
+	/** Gen error identifier.*/
+	final String genErrId() {return "#UNDEF#" + _errIdIndex++;}
 
 	/** Set XScriptParser. */
 	final void setParser(final XScriptParser parser) {_parser = parser;}
@@ -972,8 +976,7 @@ public final class CompileCode extends CompileBase {
 			CompileVariable var = getVariable(name);
 			if (var == null) {
 				_parser.error(XDEF.XDEF424, name);//Undefined variable &{0}
-				var = addVariable(
-					CompileBase.genErrId(), xType, (byte) 'L', null);
+				var = addVariable(genErrId(), xType, (byte) 'L', null);
 			}
 			if (xType != var.getType()) {
 				switch (xType) {
