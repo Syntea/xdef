@@ -1848,7 +1848,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (var == null) {
-			name = CompileBase.genErrId(); // "#UNDEF" + _g._lastCodeIndex;
+			name = _g.genErrId(); // "#UNDEF" + _g._lastCodeIndex;
 			_g.addVariable(name, xType, (byte) 'L', null);
 		} else if (var.isFinal()) {
 			//Variable '&{0}' is 'final'; the value can't be assigned
@@ -3698,7 +3698,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		SPosition spos;
 		if (nextSymbol() != IDENTIFIER_SYM) {
 			error(XDEF.XDEF329); //Identifier expected
-			name = CompileBase.genErrId(); // "UNDEF$$$";
+			name = _g.genErrId(); // "UNDEF$$$";
 			spos = null;
 		} else {
 			name = _idName;
@@ -3712,7 +3712,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			//({; (already declared: }{)}
 			_g.putRedefinedError(null, XDEF.XDEF470,
 				name, _g.getVariable(name).getSourcePosition());
-			name = CompileBase.genErrId(); // "UNDEF$$$";
+			name = _g.genErrId(); // "UNDEF$$$";
 		}
 		nextSymbol();
 		compileType(varKind, local, name, spos);
@@ -3841,7 +3841,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		SPosition spos = null;
 		if (nextSymbol() != IDENTIFIER_SYM) {
 			error(XDEF.XDEF329); //Identifier expected
-			uniquesetName = CompileBase.genErrId(); // "UNDEF$$$";
+			uniquesetName = _g.genErrId(); // "UNDEF$$$";
 		} else {
 			uniquesetName = _idName;
 			spos = getLastPosition();
@@ -3856,7 +3856,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_g.putRedefinedError(null, XDEF.XDEF450,
 				uniquesetName,
 				_g.getVariable(uniquesetName).getSourcePosition());
-			uniquesetName = CompileBase.genErrId(); // "UNDEF$$$";
+			uniquesetName = _g.genErrId(); // "UNDEF$$$";
 		}
 		List<CodeUniqueset.ParseItem> keyItems =
 			new ArrayList<CodeUniqueset.ParseItem>();

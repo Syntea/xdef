@@ -10,8 +10,10 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.xdef.XDValueID;
 import java.util.Locale;
 
@@ -37,7 +39,6 @@ public class CompileBase implements CodeTable, XDValueID {
 	public static final short UNIQUESET_NAMED_VALUE = UNIQUESET_KEY_VALUE+1;//52
 	/** attribute ref, undefined type and methods which are not above a type. */
 	public static final short NOTYPE_VALUE_ID = UNIQUESET_NAMED_VALUE + 1;	//53
-
 	/** Value of UNIQUESET. */
 	public static final short UNIQUESET_VALUE = NOTYPE_VALUE_ID + 1;		//54
 
@@ -75,22 +76,17 @@ public class CompileBase implements CodeTable, XDValueID {
 	/** Array of classes corresponding to implemented types. */
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
-	@SuppressWarnings("unchecked")
-	public static final Map<String, InternalMethod>[] METHODS =
-		(Map<String, InternalMethod>[]) new Map[NOTYPE_VALUE_ID + 1];
+	private static final List<Map<String, InternalMethod>> METHODS =
+		new ArrayList<Map<String, InternalMethod>>(NOTYPE_VALUE_ID + 1);
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
 		new LinkedHashMap<String, Constructor<?>>();
-	/* Error id (to ensure to generate the unique identifier).*/
-	private static int _errIdIndex = 1000;
-
-	/** Gen error identifier.*/
-	static final String genErrId() {return "#UNDEF#" + _errIdIndex++;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Initialization.
 ////////////////////////////////////////////////////////////////////////////////
 	static {
+		for (int i = 0; i < NOTYPE_VALUE_ID + 1; i++) METHODS.add(null);
 		// Set type tables.
 		setType(XD_VOID, "void", Void.TYPE);
 		setType(XD_INT, "int", Long.TYPE);
@@ -1420,9 +1416,9 @@ public class CompileBase implements CodeTable, XDValueID {
 		try {
 			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
-			if ((hm = METHODS[NOTYPE_VALUE_ID]) == null) {
-				METHODS[NOTYPE_VALUE_ID] = hm =
-					new LinkedHashMap<String, InternalMethod>();
+			if ((hm = METHODS.get(NOTYPE_VALUE_ID)) == null) {
+				METHODS.set(NOTYPE_VALUE_ID,
+					hm = new LinkedHashMap<String, InternalMethod>());
 			}
 			for (int i = 0; i < names.length; i++) {
 				InternalMethod im1 = im;
@@ -1456,8 +1452,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		final InternalMethod im,
 		final String... names) {
 		Map<String, InternalMethod> hm;
-		if ((hm = METHODS[typeId]) == null) {
-			METHODS[typeId] = hm = new LinkedHashMap<String, InternalMethod>();
+		if ((hm = METHODS.get(typeId)) == null) {
+			METHODS.set(typeId, hm=new LinkedHashMap<String, InternalMethod>());
 		}
 		for (int i = 0; i < names.length; i++) {
 			InternalMethod im1 = im;
@@ -1615,7 +1611,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	public final static InternalMethod getTypeMethod(final short type,
 		final String name) {
-		Map<String, InternalMethod> hm = METHODS[type];
+		Map<String, InternalMethod> hm = METHODS.get(type);
 		return hm == null ? null : hm.get(name);
 	}
 
