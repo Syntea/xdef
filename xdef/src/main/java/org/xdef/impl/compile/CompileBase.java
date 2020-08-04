@@ -1416,7 +1416,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		try {
 			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
-			if ((hm = METHODS.get(NOTYPE_VALUE_ID)) == null) {
+			if ((hm = getTypeMethods(NOTYPE_VALUE_ID)) == null) {
 				METHODS.set(NOTYPE_VALUE_ID,
 					hm = new LinkedHashMap<String, InternalMethod>());
 			}
@@ -1452,7 +1452,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		final InternalMethod im,
 		final String... names) {
 		Map<String, InternalMethod> hm;
-		if ((hm = METHODS.get(typeId)) == null) {
+		if ((hm = getTypeMethods(typeId)) == null) {
 			METHODS.set(typeId, hm=new LinkedHashMap<String, InternalMethod>());
 		}
 		for (int i = 0; i < names.length; i++) {
@@ -1604,6 +1604,15 @@ public class CompileBase implements CodeTable, XDValueID {
 		return (m == null) ? XD_STRING : m.getParsedResult();
 	}
 
+	/** Get type methods.
+	 * @param type base type.
+	 * @return map with method names and internal method objects.
+	 */
+	public final static Map<String, InternalMethod> getTypeMethods(
+		final short type) {
+		return METHODS.get(type);
+	}
+
 	/** Get internal method.
 	 * @param type base type.
 	 * @param name name of method.
@@ -1611,7 +1620,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	public final static InternalMethod getTypeMethod(final short type,
 		final String name) {
-		Map<String, InternalMethod> hm = METHODS.get(type);
+		Map<String, InternalMethod> hm = getTypeMethods(type);
 		return hm == null ? null : hm.get(name);
 	}
 
