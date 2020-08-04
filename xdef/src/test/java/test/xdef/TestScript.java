@@ -58,18 +58,31 @@ public final class TestScript extends XDTester {
 		System.out.flush();
 		System.err.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + _xdNS + "'\n"+
-			"   script='options preserveEmptyAttributes," +
-			"           preserveAttrWhiteSpaces, noTrimAttr'\n"+
-			"    root='a'>\n"+
-			"  <a a=\"optional; finally " + source + "\"/>\n"+
-			"</xd:def>\n";
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
+"   script='options preserveEmptyAttributes," +
+"           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
+"     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
+"     void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
+"     boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
+"     String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck3();\n"+
+"     long test.xdef.TestScript.myCheck4();\n"+
+"     long test.xdef.TestScript.myCheck4(long);\n"+
+"     long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
+"   }\n"+
+"</xd:declaration>\n"+
+"  <a a=\"optional; finally " + source + "\"/>\n"+
+"</xd:def>\n";
 		String xml = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;
 			XDDocument xd = xp.createXDDocument();
@@ -103,13 +116,27 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-			"  <a a=\"" + source + "\"/>\n"+
-			"</xd:def>\n";
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
+"     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
+"     void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
+"     boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
+"     String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck3();\n"+
+"     long test.xdef.TestScript.myCheck4();\n"+
+"     long test.xdef.TestScript.myCheck4(long);\n"+
+"     long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
+"   }\n"+
+"</xd:declaration>\n"+
+"  <a a=\"" + source + "\"/>\n"+
+"</xd:def>\n";
 		String xml = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;
 			XDDocument xd = xp.createXDDocument();
@@ -139,10 +166,12 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-			"  <xd:declaration>String result='?';</xd:declaration>\n"+
-			"  <a a='string' xd:script='finally result=" + source + "'/>\n"+
-			"</xd:def>\n";
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  String result='?';\n"+
+"</xd:declaration>\n"+
+"  <a a='string' xd:script='finally result=" + source + "'/>\n"+
+"</xd:def>\n";
 		String xml = "<a a='abc'/>";
 		XDPool xp = null;
 		try {
@@ -178,15 +207,29 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-			"  <xd:declaration>\n"+ source + "</xd:declaration>\n"+
-			"\n"+
-			"  <a a=\"optional " + call + "\"/>\n"+
-			"</xd:def>\n";
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
+"     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
+"     void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
+"     boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
+"     String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
+"     void test.xdef.TestScript.myCheck3();\n"+
+"     long test.xdef.TestScript.myCheck4();\n"+
+"     long test.xdef.TestScript.myCheck4(long);\n"+
+"     long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
+"  }\n"+
+ source +
+"</xd:declaration>\n"+
+"\n"+
+"  <a a=\"optional " + call + "\"/>\n"+
+"</xd:def>\n";
 		String data = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;
 			XDDocument xd = xp.createXDDocument();

@@ -137,8 +137,7 @@ public abstract class XDTester extends STester {
 		final String name,
 		final OutputStream out,
 		final ReportWriter reporter,
-		final char mode,
-		final Class[] exts) {
+		final char mode) {
 		System.out.flush();
 		System.err.flush();
 		try {
@@ -150,7 +149,7 @@ public abstract class XDTester extends STester {
 			if (data != null && data.length() > 0) {
 				in = new java.io.ByteArrayInputStream(data.getBytes("ASCII"));
 			}
-			return test(xdin, in, name, out, reporter, mode, exts);
+			return test(xdin, in, name, out, reporter, mode);
 		} catch (Exception ex) {
 			fail(ex);
 		}
@@ -164,9 +163,8 @@ public abstract class XDTester extends STester {
 		final String name,
 		final OutputStream out,
 		final ReportWriter reporter,
-		final char mode,
-		final Class[] exts) {
-		return test(new String[] {xdef}, data, name, out, reporter, mode, exts);
+		final char mode) {
+		return test(new String[] {xdef}, data, name, out, reporter, mode);
 	}
 
 	/** Returns the available element model represented by given name or
@@ -381,38 +379,6 @@ public abstract class XDTester extends STester {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	final public Element test(final Class[] objs,
-		final String xdef,
-		final String data,
-		final String name,
-		final OutputStream out,
-		final ArrayReporter reporter,
-		final char mode) throws Exception { // 'P' => parse, 'C' => create
-		if (_chkSyntax) {
-			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
-		}
-		XDBuilder xb = XDFactory.getXDBuilder(_props);
-		xb.setExternals(objs);
-		xb.setSource(xdef);
-		XDPool xp = checkExtObjects(xb.compileXD());
-		XDDocument xd = xp.createXDDocument(name);
-		xd.setProperties(_props);
-		DefOutStream stdout =
-			new DefOutStream(new OutputStreamWriter(out), false);
-		if (mode == 'C') {
-			Element el = null;
-			if (data != null && data.length() > 0) {
-				el = KXmlUtils.parseXml(data).getDocumentElement();
-			}
-			return createElement(xp, name, reporter, el, stdout);
-		} else {
-			xd.setStdOut(stdout);
-			return xd.xparse(data, reporter);
-		}
-	}
-
 	final public boolean test(final String xdef,
 		final String data,
 		final String name,
@@ -425,9 +391,8 @@ public abstract class XDTester extends STester {
 		final String name,
 		final char mode,  // 'P' => parse, 'C' => create
 		final String result,
-		final String stdout,
-		final Class<?>... exts) {
-		return test(new String[]{xdef}, data, name, mode, result, stdout, exts);
+		final String stdout) {
+		return test(new String[]{xdef}, data, name, mode, result, stdout);
 	}
 
 	final public boolean test(final String[] xdef,
@@ -435,8 +400,7 @@ public abstract class XDTester extends STester {
 		final String name,
 		final char mode,  // 'P' => parse, 'C' => create
 		final String result,
-		final String stdout,
-		final Class<?>... exts) {
+		final String stdout) {
 		if (_chkSyntax) {
 			genXdOfXd();
 			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
@@ -447,7 +411,7 @@ public abstract class XDTester extends STester {
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ArrayReporter reporter = new ArrayReporter();
-			Element el = test(xdef, data, name, bos, reporter, mode, exts);
+			Element el = test(xdef, data, name, bos, reporter, mode);
 			if (reporter.errors()) {
 				error = true;
 				ReportPrinter.printListing(System.out, data, reporter, true);
