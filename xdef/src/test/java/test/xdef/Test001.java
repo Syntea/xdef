@@ -1000,7 +1000,7 @@ public final class Test001  extends XDTester {
 				fail();
 			} else {
 				assertEq("<a><b/><b/><b/>OK1<c/></a>",
-					test(xdef, xml, "", null, reporter, 'P', null));
+					test(xdef, xml, "", null, reporter, 'P'));
 			}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Misto|Udaj|Base'>\n"+

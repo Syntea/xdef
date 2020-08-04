@@ -83,6 +83,12 @@ public final class TestImplementsAndUses extends XDTester {
 		try {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     boolean test.xdef.TestImplementsAndUses.x();\n"+
+"     boolean test.xdef.TestImplementsAndUses.y();\n"+
+"   }\n"+
+"</xd:declaration>\n"+
 "<xd:def name='X'>\n"+
 "<A a='x();'/>\n"+
 "</xd:def>\n"+
@@ -90,7 +96,7 @@ public final class TestImplementsAndUses extends XDTester {
 "<A xd:script=\"implements X#A\" a='y(); finally outln()'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef, getClass());
+			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
 			s = ex.getMessage();
@@ -101,6 +107,12 @@ public final class TestImplementsAndUses extends XDTester {
 		try {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     boolean test.xdef.TestImplementsAndUses.x();\n"+
+"     boolean test.xdef.TestImplementsAndUses.y();\n"+
+"   }\n"+
+"</xd:declaration>\n"+
 "<xd:def name='X'>\n"+
 "<A>x();</A>\n"+
 "</xd:def>\n"+
@@ -108,7 +120,7 @@ public final class TestImplementsAndUses extends XDTester {
 "<A xd:script=\"implements X#A\">y(); finally outln()</A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef, getClass());
+			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
 			s = ex.getMessage();
