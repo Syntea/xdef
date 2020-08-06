@@ -50,7 +50,7 @@
     <properties>
         <revision>40.1.0</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2020-08-03</release.date><!-- update when changed version -->
+        <release.date>2020-08-04</release.date><!-- update when changed version -->
         <specification.version>4.0</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -61,6 +61,10 @@
         <maven.compiler.testSource>1.6</maven.compiler.testSource>
         <jdk.version>1.8</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
+        
+        <!-- default skip install and deploy -->
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
         
         <saxon-he.version>9.7.0-18</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
@@ -110,15 +114,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
                 <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <pomElements>
-                        <name/>
-                        <description/>
-                        <url/>
-                        <organization/>
-                        <developers/>
-                        <scm/>
-                    </pomElements>
+                    <flattenMode>ossrh</flattenMode>
                 </configuration>
                 <executions>
                     <!-- enable flattening -->
@@ -182,14 +178,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
@@ -335,6 +323,12 @@
             <id>release</id>
             <properties>
                 <changelist/>
+            </properties>
+        </profile>
+        <profile>
+            <id>skipTests</id>
+            <properties>
+                <skipTests>true</skipTests>
             </properties>
         </profile>
         <profile>

@@ -1,16 +1,18 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.0, release-date 2020-08-03
-* corrected bug Illegal type in `ObjectReader` when the code contains an item
+# Version 40.1.0, release-date 2020-08-04
+* corrected bug illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
 * in the X-script is implemented the new type `uniqueSetKey`. This type of
   object enables to save the actual value of the key of an `uniqueSet`. To do it 
   you can invoke the new implemented method `getActualKey()` from `uniqueSet`
-  object. With the new method `resetKey` form `uniqueSetKey` the actulal key
+  object. With the new method `resetKey` form `uniqueSetKey` the actual key
   of given `uniqueSet` object is set to the saved value. E.g.:
-   <NodeValue xd:script=
-     'var uniqueSetKey k; init k=nodeSet.getActualKey(); finally k.resetKey();'>
-   ...
+  ```xml
+  <NodeValue xd:script=
+    'var uniqueSetKey k; init k=nodeSet.getActualKey(); finally k.resetKey();'>
+  ...
+  ```
 * implemented the new X-script method `bindSet(uniqueSet u1[,uniqueSet u2...])`.
   This method can be specified only in the `init` section of the X-script
   of model of Element. At the end of processing of the element where it was
@@ -108,10 +110,13 @@
   `xd:include` of root elements `xd:def` or `xd:collection` may contain the file
   names with wildcard character `*` or `?`.
   E.g.:
-  java`
-  XDPool xp = XDFactory.compileXD(props, "classpath://xxx.yyy.a*.xdef");`
-  or xml`
-  <xd:collection xmlns:xd = "..." xd:include = "classpath://xxx.yyy.a*.xdef"/>`
+  ```java
+  XDPool xp = XDFactory.compileXD(props, "classpath://xxx.yyy.a*.xdef");
+  ```
+  or
+  ```xml
+  <xd:collection xmlns:xd = "..." xd:include = "classpath://xxx.yyy.a*.xdef"/>
+  ```
   
 # Version 32.5.1, release-date 2019-09-25
 * Corrected `org.xdef.sys.SDatetime` methods implemented from
@@ -119,22 +124,25 @@
 * implemented the access to XML data or X-definition data with
   an URL-like form where the protocol name is `classpath`.
   E.g.:
-  java`
-  String urlName = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef";`
+  ```java
+  String urlName = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef";
+  ```
   This form may be used to parse XML source data:
-  java`
-  Document dom = KXmlUtils.parseXml(urlName);`
+  ```java
+  Document dom = KXmlUtils.parseXml(urlName);
+  ```
   or to X-definition in compilation of XDPool:
-  java`
+  ```java
   XDPool xp = XDFactory.compileXD(null, urlName);
-  `
+  ```
   or in the attribute `xd:include` in header of X-definition:
-  xml`
+  ```xml
   <xd:def xmlns:xd ="http://www.xdef.org/xdef/3.2"
     xd:include = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef,
       classpath://org.xdefimpl.compile.XdefOfXdef20.xdef,
       classpath://org.xdefimpl.compile.XdefOfXdef31.xdef" 
-  > ...`
+  > ...
+  ```
   
 # Version 32.5.0, release-date 2019-09-16
 * Prepared the version for processing of JSON data.

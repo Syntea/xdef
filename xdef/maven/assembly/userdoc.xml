@@ -20,8 +20,9 @@
     </fileSets>
     <files>
         <file>
-            <source>pom.xml</source>
+            <source>.flattened-pom.xml</source>
             <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
+            <destName>pom.xml</destName>
         </file>
     </files>
 </assembly>

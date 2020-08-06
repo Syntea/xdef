@@ -11,11 +11,17 @@
     <fileSets>
         <fileSet>
             <includes>
-                <include>README.md</include>
-                <include>apache-license-2.0.md</include>
                 <include>changelog.md</include>
             </includes>
             <outputDirectory>META-INF</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <!-- FIXME: files are not included -->
+            <includes>
+                <include>../README.md</include>
+                <include>../apache-license-2.0.md</include>
+            </includes>
+            <outputDirectory>META-INF/maven</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/java</directory>
@@ -23,21 +29,19 @@
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
-            <excludes>
-                <exclude>org/xdef/sys/config/pominfo.properties</exclude>
-            </excludes>
             <outputDirectory></outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources-filters</directory>
+            <outputDirectory></outputDirectory>
+            <filtered>true</filtered>
         </fileSet>
     </fileSets>
     <files>
         <file>
-            <source>src/main/resources/org/xdef/sys/config/pominfo.properties</source>
-            <outputDirectory>org/xdef/sys/config</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-        <file>
-            <source>pom.xml</source>
+            <source>.flattened-pom.xml</source>
             <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
+            <destName>pom.xml</destName>
         </file>
     </files>
 </assembly>
