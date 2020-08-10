@@ -254,7 +254,7 @@ Frequent building operations:
 * build snapshot package avoiding junit-tests:
 
   ```shell
-  mvn package -DskipTests=true
+  mvn package -PskipTests
   ```
 * build release package:
 
@@ -275,15 +275,15 @@ Prerequisities:
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
 * configure _maven_:
     * access to pgp-key
-    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_")
+    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file _pom.xml_)
 
 Deploying:
-* deploy snapshot packages to snapshot-repository at _oss.sonatype.org_:
+* deploy snapshot packages to the snapshot-repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* release the version of X-definition to the maven central repository (throw _oss.sonatype.org_):
+* release the version of X-definition to the maven central repository (throw the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
