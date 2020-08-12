@@ -168,7 +168,15 @@ public final class XScriptMacro {
 	 */
 	public final ArrayList<String> getParamNames() {return _paramNames;}
 
+	/** Get array with values of parameters,
+	 * @return array with values of parameters,
+	 */
 	public final String[] getParamValues()  {return _paramValues;}
+
+	/** Get string with value of macro.
+	 * @return string with value of macro.
+	 */
+	public final String getParamValue()  {return _value;}
 
 	void writeScriptMacro(XDWriter xw) throws IOException {
 		xw.writeString(_name);

@@ -336,8 +336,8 @@ public final class XPool implements XDPool, Serializable {
 				}
 				_sourceInfo.getMap().put(s, new XDSourceItem(source));
 				_compiler.parseString(source, s);
-			} else if (source.startsWith("//") ||
-				(source.indexOf(":/") > 2 && source.indexOf(":/") < 12)) {
+			} else if (source.startsWith("//")
+				|| (source.indexOf(":/") > 2 && source.indexOf(":/") < 12)) {
 				for (String x: SUtils.getSourceGroup(source)) {
 					setSource(SUtils.getExtendedURL(x));
 				}

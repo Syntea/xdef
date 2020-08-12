@@ -61,8 +61,7 @@
 /* Declaration of BNF grammar for X-Script                                    */
 /******************************************************************************/
 
-  <xd:BNFGrammar name = "XDScript">
-<![CDATA[
+  <xd:BNFGrammar name = "XDScript"><![CDATA[
 /******************************************************************************/
 /* x-Script BNF grammar rules                                                          */
 /*                                                                            */
@@ -96,11 +95,9 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
   | "onIllegalElement" | "onIllegalRoot" | "create" | "init" | "options"
   | "ref" | "match" | "final" | "forget" | "template" | "type" | "uniqueSet"
-  | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE"
-  | "LSH" | "RSH" | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG"
-  | "OOR" | "AAND"
-  | "true" | "false" | "implements" | "extends"
-  | "onFalse"
+  | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" | "RRSH" | "AND"
+  | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND" | "true" | "false"
+  | "implements" | "extends" | "onFalse" | "$$$script"
 
 /* Predefined constants */
 PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
@@ -235,7 +232,7 @@ TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
-  | "AnyValue" | "Output" | "Input" | "NamedValue" ) $rule
+  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex") $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName
@@ -286,6 +283,7 @@ KeyParameter ::= KeyName S? "=" S? (TypeIdentifier | ConstantExpression)
 ParameterName ::= Identifier
 
 ParentalExpression ::= S? "(" S? Expression S? ")" S?
+  /* Result of ParentalExpression must be boolean. */
 
 StatementExpression ::= Expression
 
@@ -299,7 +297,7 @@ Statement1 ::= (Block | SwitchStatement | TryStatement)
 
 Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement
   | ReturnStatement | ThrowStatement | BreakStatement | ContinueStatement
-  | Method | Increment | AssignmentStatement S? (";" S? | $eos)? )
+  | Method | Increment | AssignmentStatement)
   $info | EmptyStatement
 
 EmptyStatement ::= ";"
@@ -312,7 +310,6 @@ SimpleStatement ::= S? (Statement1 | (Statement2? S? ";" S?)) | EmptyStatement
 
 IfStatement ::= "if" ParentalExpression SimpleStatement
   (S? "else" S? SimpleStatement)?
-  /* Result of ParentalExpression must be boolean. */
 
 ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S?
   ForBooleanExpression? S? ";" S? ForStep? S? ")" S? SimpleStatement
@@ -326,17 +323,15 @@ ForStepStatement ::= $rule (Method | Increment | AssignmentStatement)
 ForStep ::= ForStepStatement (S? "," S? ForStepStatement)*
 
 WhileStatement ::= "while" $rule ParentalExpression SimpleStatement
-  /* Result of ParentalExpression must be boolean. */
 
-DoStatement ::= "do" S? $rule Statement S? "while" ParentalExpression
-  /* Result of ParentalExpression must be boolean. */
+DoStatement ::= "do" $rule (S? Block | S  Statement) WhileCondition
 
-WhilBooleanExpression ::= $rule ParentalExpression
+WhileCondition ::= S? "while" $rule ParentalExpression
 
-SwitchStatement ::=
-  "switch" $rule ParentalExpression "{" SwitchBlockStatementVariant* S? "}"
-  /* Result of ParentalExpression must be integer or string. A variant
-     may occur in the switch statement only once. */
+SwitchStatement ::= "switch" $rule S? "(" S? Expression S? ")" S?
+   "{" SwitchBlockStatementVariant* S? "}"
+  /* Result of Expression must be integer or string. Each variant may occur
+     in the switch statement only once. */
 
 SwitchBlockStatementVariant ::=
    S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
@@ -369,8 +364,8 @@ AssignmentStatement ::= (Identifier S? ((AssignmentOperator S? Expression) |
  (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) |
   S? AssignmentOperator S? Expression)
 
-AssignmentOperator ::= (("|" | "^" | "+" | "-" | "*" | "/" | "&"
-  | "%" | "<<" | ">>>" | ">>")? "=") $rule
+AssignmentOperator ::= (("|" | "OR" | "^" | "+" | "-" | "*" | "/" | "&" | "AND"
+  | "%" | "<<" | "LSH" | ">>>"| "RRSH"  | ">>" | "RSH" )? "=") $rule
 
 VariableModifier ::= ("final" | "external") $rule S
 
@@ -379,9 +374,9 @@ VariableDeclaration ::= VariableModifier*
 
 VariableDeclarator ::= S? (AssignmentStatement | Identifier)
 
-Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
-  | "+" | "?" | (("occurs" S)? ("*" | "+" | "?" |
-  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? )))) $rule
+Occurrence ::= ("occurs" S)? ("required" | "optional" | "ignore" | "illegal"
+  | "*" | "+" | "?" | ("*" | "+" | "?" |
+  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))) $rule
   /* The value of the second IntegerLiteral (after "..")  must be greater or
      equal to the first one. */
 
@@ -404,10 +399,10 @@ XdefOnXmlError ::= "onXmlError" S Statement
 
 XdefOptions ::= "options" S XdefOptionsList
 
-XdefOptionsList ::= XdefOptionItem (S? "," S? XdefOptionItem)*
-  /* Each item can be specified only once. */
+XdefOptionsList ::= XdefOption (S? "," S? XdefOption)*
+  /* Each option can be specified only once. */
 
-XdefOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
+XdefOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "forget" | "notForget" | "clearAdoptedForgets"
   | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes"
   | "preserveComments" | "ignoreComments" | "acceptEmptyAttributes"
@@ -426,22 +421,19 @@ XdefOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
 /* Script of text nodes and attributes                                        */
 /******************************************************************************/
 
-AttributeScript ::= (ValueExecutivePart* S?)?
+AttributeScript ::= ValueScript
 
-ValueScript ::= (ValueExecutivePart* S?)?
-
-ValueExecutivePart ::= "$$$script:"? S?
-  (ValueValidationSection | ValueInitSection | ValueOnTrueSection
-  | ValueOnErrorSection | ValueOnAbsenceSection | ValueDefaultSection
-  | ValueCreateSection | ValueFinallySection | ValueMatchSection
-  | AttributeOptions | Reference | AttributeOnStartSection | S | ";") S?
-  /* Each item can be specified only once. */
+ValueScript ::= ("$$$script:"? S?) ((ValueValidationSection | ValueInitSection
+  | ValueOnTrueSection | ValueOnErrorSection | ValueOnAbsenceSection
+  | ValueDefaultSection | ValueCreateSection | ValueFinallySection
+  | ValueMatchSection | AttributeOptions | Reference | AttributeOnStartSection
+  | ";") S?)*
+  /* The keyword "$$$script" can be specified only in the template mode.
+     Each section can be specified only once.*/
 
 AttributeOnStartSection ::= "onStartElement" S? Statement?
 
-FixedModifier ::= "fixed" S $rule
-
-ValueValidationSection ::= FixedModifier (Expression | Block)
+ValueValidationSection ::= "fixed" S $rule (Expression | Block)
   | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
@@ -470,7 +462,7 @@ ValueOnTrueSection ::= "onTrue" S? (ExplicitCode | Statement)
 
 ValueOnErrorSection ::= ("onError" | "onFalse") S? (ExplicitCode | Statement)
 
-ValueOnAbsenceSection ::= "onAbsence" S (ExplicitCode | Statement)
+ValueOnAbsenceSection ::= "onAbsence" S? (ExplicitCode | Statement)
 
 ValueCreateSection ::= "create" S? (ExplicitCode | ValueCreateExpression)
   /* ExplicitCode must return a value of String type. */
@@ -481,14 +473,14 @@ ValueCreateExpression ::= Expression
 ValueDefaultSection ::= "default" S? (ExplicitCode | Expression)
   /* Expression nebo ExplicitCode must return the value of the String. */
 
-ValueFinallySection ::= "finally" S? (ExplicitCode | Statement)
+ValueFinallySection ::= "finally" S? Statement
 
 AttributeOptions ::= ValueOptions
 
 ValueOptions ::= "options" S? ValueOptionsList
 
-ValueOptionsList ::=  ValueOption (S? "," S? ValueOption)*
-  /* Each item can be specified only once. */
+ValueOptionsList ::= ValueOption (S? "," S? ValueOption)*
+  /* Each option can be specified only once. */
 
 ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
   | "setTextUpperCase" | "setTextLowerCase" | "trimText" | "noTrimText"
@@ -508,12 +500,11 @@ ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
   | ElementOnAbsenceSection | ElementOnExcessSection | ElementCreateSection
   | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
   | ElementOnStartSection | ElementStructureCompare | ";")
+  /* Each item can be specified only once. If the occurrence is not specified,
+     the implicit value is "required". The keyword "$$$script" can be specified
+     only in the template model. */
 
-
-  /* Each item can be specified only once.
-   * If the occurrence is not specified, the implicite value is "required" */
-
-TemplateSection ::= "template"
+TemplateSection ::= "template" $rule
 
 ElementVarSection ::= "var" S?
   (("{"(S? ElementVarSectionItem S?)* "}") | ElementVarSectionItem S?)
@@ -523,7 +514,7 @@ ElementVarSectionItem ::= TypeDeclaration | VariableDeclaration S? ";"  | S? ";"
 ElementInitSection ::= "init" S? Statement?
 
 ElementMatchSection ::= "match" S? (Expression | ExplicitCode)
-  /* Expression nebo ExplicitCode must here return a value of boolean type. */
+  /* Expression or ExplicitCode must here return a value of boolean type. */
 
 ElementOnStartSection ::= "onStartElement" S? Statement?
 
@@ -544,10 +535,10 @@ ElementStructureCompare ::= ("implements" | "uses") S XPosition
 
 ElementOptions ::= "options" S? ElementOptionsList
 
-ElementOptionsList ::=  ElementOptionItem (S?  "," S? ElementOptionItem)*
-  /* Each item can be specified only once. */
+ElementOptionsList ::=  ElementOption (S?  "," S? ElementOption)*
+  /* Each option can be specified only once. */
 
-ElementOptionItem ::= "moreAttributes" | "moreElements" | "moreText"
+ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "forget" | "notForget" | "acceptEmptyAttributes" | "clearAdoptedForgets"
   | "preserveEmptyAttributes" | "ignoreEmptyAttributes"
   | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
@@ -730,8 +721,5 @@ list ::= value (S? "," S? value )*
 value ::= S? (pair | "null" | boolean | number | string | array | object) S?
 
 json ::= S? (array | object)
-
-]]>
-  </xd:BNFGrammar>
-
+]]></xd:BNFGrammar>
 </xd:def>
