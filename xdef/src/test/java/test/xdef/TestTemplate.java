@@ -26,6 +26,8 @@ public final class TestTemplate extends XDTester {
 		String s;
 		String xml;
 		Element el;
+		boolean savedChksyntax = getChkSyntax();
+		setChkSyntax(false); // do not check BNF syntax here
 		try {
 			//default trimtext
 			xdef =
@@ -612,6 +614,7 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
+		setChkSyntax(savedChksyntax);
 		resetTester();
 	}
 

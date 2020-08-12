@@ -4088,8 +4088,7 @@ public class StringParser extends SReporter implements SParser {
 			new StringBuilder(_source.substring(pos, getIndex()));
 		while (incIndex() < _endPos || readNextBuffer()) {
 			_ch = _source.charAt(getIndex());
-			if (getXmlCharType(xmlVersion) <
-				XML_CHAR_COLON) {
+			if (getXmlCharType(xmlVersion) < XML_CHAR_COLON) {
 				break;
 			}
 			result.append(_ch);

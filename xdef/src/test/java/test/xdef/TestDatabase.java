@@ -775,7 +775,7 @@ public final class TestDatabase extends XDTester {
 "\n"+
 "  <A xd:script= \"create 1\">\n"+
 "    <BB xd:script= \"occurs *; create service.query('SELECT * \n"+
-"       FROM " + TABLE_B + "'); finally doSQL(parseInt(toString(@a)))\" \n"+
+"       FROM " + TABLE_B + "'); finally doSQL(parseInt(toString(@a)));\" \n"+
 "         a = \"int\"\n"+
 "         b = \"string\">\n"+
 "    </BB>\n"+
