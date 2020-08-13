@@ -235,14 +235,17 @@ public final class PNode {
 	@Override
 	public String toString() {return "PNode: " + _name.getString();}
 
-/*#if DEBUG*/
 	/** Create XML element from this PNode.
 	 * @return XML element created from this PNode.
 	 */
-	public org.w3c.dom.Element toXML() {
-		return pnodeToXML(this, null);
-	}
+	public org.w3c.dom.Element toXML() {return pnodeToXML(this, null);}
 
+	/** Create XML element from PNode.
+	 * @param p the PNode.
+	 * @param node w3c.dom.Node where to create child element (if null, then
+	 * root element is created).
+	 * @return created element.
+	 */
 	private static org.w3c.dom.Element pnodeToXML(final PNode p,
 		final org.w3c.dom.Node node) {
 		org.w3c.dom.Document doc;
@@ -268,5 +271,4 @@ public final class PNode {
 		}
 		return e;
 	}
-/*#end*/
 }
