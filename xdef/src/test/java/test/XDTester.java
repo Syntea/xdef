@@ -20,8 +20,14 @@ import java.util.Properties;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.compile.PNode;
+import org.xdef.impl.compile.XPreCompiler;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.msg.SYS;
@@ -35,19 +41,13 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlUtils;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xdef.component.GenXComponent;
-import org.xdef.impl.compile.PNode;
-import org.xdef.impl.compile.XPreCompiler;
+import org.xdef.xml.KXmlUtils;
 
 /** Support of tests.
  * @author Vaclav Trojan
