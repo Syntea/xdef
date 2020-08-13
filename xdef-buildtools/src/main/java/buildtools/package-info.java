@@ -1,11 +1,12 @@
 /**
  * Prepares building of X-definition project.
  * <UL>
+ * 
  * <li>
- * <h2><tt>GenXComponent</tt></h2>
- * generates X-components for the tests (into the test resources).
+ * <h2><tt>Canonize</tt></h2>
+ * provides canonization of sources and generates registered message tables.
  * </li>
- *
+ * 
  * <li>
  * <h2><tt>CanonizeSource</tt></h2>
  * provides canonization of sources (in the Java source files it replaces the
@@ -27,6 +28,13 @@
  * <h2><tt>GenConstants</tt></h2>
  * defines constants used in canonizing.
  *  </li>
+ *
+ * <li>
+ * <h2><tt>GenPluginInfo</tt></h2>
+ * generates XML document with the information about implemented
+ * methods used in GUI plugins.
+ *  </li>
+ * 
  * </UL>
  */
 package buildtools;
