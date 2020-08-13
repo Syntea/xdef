@@ -520,7 +520,7 @@ public final class TestDatabase extends XDTester {
 "  </Books>\n"+
 "  <Book xd:script=\"ref item\"/>\n"+
 "  <item xd:script=\"onStartElement {\n"+
-"            String s = @TITLE.toString ( );\n"+
+"            String s = @TITLE .toString ( );\n"+
 "            if (ignored = isTitle.hasItem(s)) {\n"+
 "               error('Book \\'' + @TITLE + '\\' already exists');\n"+
 "            } else {\n"+
