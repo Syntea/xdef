@@ -1,12 +1,12 @@
 /**
  * Prepares building of X-definition project.
  * <UL>
- * 
+ *
  * <li>
  * <h2><tt>Canonize</tt></h2>
  * provides canonization of sources and generates registered message tables.
  * </li>
- * 
+ *
  * <li>
  * <h2><tt>CanonizeSource</tt></h2>
  * provides canonization of sources (in the Java source files it replaces the
@@ -34,7 +34,7 @@
  * generates XML document with the information about implemented
  * methods used in GUI plugins.
  *  </li>
- * 
+ *
  * </UL>
  */
 package buildtools;
