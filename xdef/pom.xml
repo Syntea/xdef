@@ -80,14 +80,14 @@
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- DEBUG: for bugreports/MvnJamTst.java -->
+        <!-- DEBUG: for bugreports/MvnJamTst.java 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <!-- -->
+        -->
     </dependencies>
     
     <build>

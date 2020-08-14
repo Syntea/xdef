@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.1, release-date 2020-08-14
+* corrected bugs in BNF syntax of X-definitions
+
 # Version 40.1.0, release-date 2020-08-04
 * corrected bug illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
