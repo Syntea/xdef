@@ -1031,8 +1031,8 @@ public final class TestScript extends XDTester {
 		testAttr1("(String) @a", "abc");
 		testAttr1("toString(@a)", "abc");
 		testAttr1("toString (@b )", "");
-//		testAttr1("@a.toString()", "abc");
-		testAttr1("@a .toString()", "abc");
+		testAttr1("@a.toString()", "abc");
+		testAttr1("@a. toString()", "abc");
 		testAttr1("@a . toString()", "abc");
 		testAttr1("@a . toString ()", "abc");
 		testAttr1("@a . toString ( )", "abc");
