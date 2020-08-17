@@ -49,10 +49,9 @@ public final class XPool implements XDPool, Serializable {
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
 	/** XDPool version.*/
-	private static final String XD_VERSION =
-		"XD" + XDConstants.BUILD_VERSION.split("-")[0]; // ignore snapshot
-	/** Last compatible version of XDPool (e.g. 3.2.002.121: 30200002112L). */
-	private static final long XD_MIN_VERSION = 400000003L; // 4.0.000.003
+	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
+	/** Last compatible version of XDPool (e.g. 3.2.002.121). */
+	private static final String XD_MIN_VERSION = "4.0.000.003";
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -766,6 +765,28 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final XDValue[] getCode() {return _code;}
 
+	/** Get X-definition version ID.
+	 * @param ver string with version.
+	 * @return XDVersionID as a long integer or -1 if version is incorrect.
+	 */
+	private static long getXDVersionID(final String ver) {
+		String[] verParts = ver.split("-"); // separate information after "-"
+		verParts = verParts[0].split("\\."); // verion parts
+		if (verParts.length == 3) {
+			long x = Integer.parseInt(verParts[0]);
+			x = (x / 10) * 100 + (x % 10);
+			x = x * 1000 + Integer.parseInt(verParts[1]);
+			return x * 1000 + Integer.parseInt(verParts[2]);
+		} else if (verParts.length==4) { // old format
+			long x = Integer.parseInt(verParts[0]) * 100
+				+ Integer.parseInt(verParts[1]);
+			x = x * 1000 + Integer.parseInt(verParts[2]);
+			return x * 1000 + Integer.parseInt(verParts[3]);
+		} else {
+			return -1;
+		}
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XDPool
 ////////////////////////////////////////////////////////////////////////////////
@@ -775,6 +796,16 @@ public final class XPool implements XDPool, Serializable {
 	 * @return version information.
 	 */
 	public final String getVersionInfo() {return XD_VERSION;}
+
+	@Override
+	/** Check compatibility of this instance of XDPool with given version.
+	 * @param version the version to be checked.
+	 * @return true if this instance of XDPool is compatible with given version.
+	 * Otherwise return false.
+	 */
+	public final boolean chkCompatibility(final String version) {
+		return getXDVersionID(version) >= getXDVersionID(XD_MIN_VERSION);
+	}
 
 	@Override
 	/** Get array with all XMDefinitions from this XDPool.
@@ -1253,7 +1284,7 @@ public final class XPool implements XDPool, Serializable {
 		gout.finish();
 	}
 
-	/** This method uses the Serializable interface.
+	/** This method uses the interface Serializable.
 	 * @param input from where to read.
 	 * @throws IOException if an error occurs.
 	 */
@@ -1269,8 +1300,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 		String ver = xr.readString(); //XDPool version
 		// check if version is compatible with this implementation
-		if (!ver.startsWith("XD") ||
-			SUtils.getXDVersionID(ver.substring(2)) < XD_MIN_VERSION) {
+		if (!ver.startsWith("XD") || !chkCompatibility(ver.substring(2))) {
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SRuntimeException(SYS.SYS039, "Version error: " + ver);
 		}

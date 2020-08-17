@@ -34,6 +34,13 @@ public interface XDPool extends Serializable {
 	 */
 	public String getVersionInfo();
 
+	/** Check compatibility of this instance of XDPool with given version.
+	 * @param version the version to be checked.
+	 * @return true if this instance of XDPool is compatible with given version.
+	 * Otherwise return false.
+	 */
+	public boolean chkCompatibility(final String version);
+
 	/** Create new XDDocument.
 	 * @param name name of X-definition (or <tt>null</tt>) or path to model.
 	 * @return Created XDDocument.
