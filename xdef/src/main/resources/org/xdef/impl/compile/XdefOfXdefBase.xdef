@@ -178,14 +178,15 @@ RootList ::= S? RootSpecification (S? "|" S? RootSpecification)* S?
 
 RootSpecification ::= XPosition | "*"
 
-ExternalType ::= QualifiedIdentifier (S?"[" S? "]")?
+ExternalMethodType ::= QualifiedIdentifier (S?"[" S? "]")?
 
-MethodListItem ::= ExternalType S?
-  QualifiedIdentifier S? "(" S? MethodListItemParamList? S? ")" S?
-  ("as" S? Identifier)?
+ExternalMethod ::= ExternalMethodType S? QualifiedIdentifier S?
+  "(" S? ExternalMethodParamList? S? ")" S? ("as" S? Identifier)?
 
-MethodListItemParamList ::= ExternalType
-  (S? "," S? QualifiedIdentifier (S?"[" S? "]")? )*
+ExternalMethodParam ::= ExternalMethodType (S JavaIdentifier)?
+  /* the parameter name (JavaIdentifier) is optional and ignoreed */
+
+ExternalMethodParamList ::= ExternalMethodParam (S? "," S? ExternalMethodParam)*
 
 MacroReference ::= "$" "{" S? XMLName S? MacroParams? S? "}"
 
@@ -570,8 +571,8 @@ TypeExplicitCode ::= /* only X-defintion version 2.0 */
   | /* X-defintion version 3.1 and higher */ ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"
-  ( S? "{" S? (MethodListItem S? ";" S? )* MethodListItem? S? ";"? S? "}"
-  | (S MethodListItem) ) S? ";"?
+  ( S? "{" S? (ExternalMethod S? ";" S? )* ExternalMethod? S? ";"? S? "}"
+  | (S ExternalMethod) ) S? ";"?
 
 UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
 
