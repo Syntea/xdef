@@ -269,7 +269,7 @@ public class TestXdScript extends XDTester {
 "  %ref test.xdef.TestXComponents_B %link B#A;\n";
 			assertEq(s, parse(g, "XCComponent", s));
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
-			assertEq(s, parse(g, "MethodListItem", s));
+			assertEq(s, parse(g, "ExternalMethod", s));
 			s = "";
 //			printCode(g);
 
