@@ -1517,10 +1517,12 @@ public class StringParser extends SReporter implements SParser {
 		return _parsedDatetime.getCalendar();
 	}
 
-	/** Skip white spaces. */
-	public final void skipSpaces() {
+	/** Skip white spaces.
+	 * @return true if a space was skipped.
+	 */
+	public final boolean skipSpaces() {
 		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
-			return;
+			return false;
 		}
 		if (_ch == '\n') {
 			setNewLine();
@@ -1539,6 +1541,7 @@ public class StringParser extends SReporter implements SParser {
 		} else {
 			_ch = NOCHAR;
 		}
+		return true;
 	}
 
 	@Override
@@ -4066,35 +4069,42 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if XMLName was parsed.
 	 */
 	public final boolean isXMLName(final byte xmlVersion) {
-		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START &&
-			_ch != ':') {
+		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START && _ch != ':') {
 			return false;
 		}
-		if (getIndex() >= _endPos && !readNextBuffer()) {
+		int pos = getIndex();
+		if (pos >= _endPos && !increaseBuffer()) {
 			_parsedString = String.valueOf(_ch);
 			setIndex(_endPos);
 			_ch = NOCHAR;
 			return true;
 		}
-		int pos = getIndex();
-		while (incIndex() < _endPos) {
+		while (incIndex() < _endPos || increaseBuffer()) {
 			_ch = _source.charAt(getIndex());
 			if (getXmlCharType(xmlVersion) < XML_CHAR_COLON) {
-				_parsedString = _source.substring(pos, getIndex());
-				return true;
-			}
-		}
-		StringBuilder result =
-			new StringBuilder(_source.substring(pos, getIndex()));
-		while (incIndex() < _endPos || readNextBuffer()) {
-			_ch = _source.charAt(getIndex());
-			if (getXmlCharType(xmlVersion) <
-				XML_CHAR_COLON) {
 				break;
 			}
-			result.append(_ch);
 		}
-		_parsedString = result.toString();
+		int pos1 = getIndex();
+		SPosition spos = getPosition();
+		skipSpaces();
+		if (isChar('(')) {
+			int lastDot = _source.substring(pos, pos1).lastIndexOf('.');
+			if (lastDot > 0) {
+				pos1 = pos + lastDot;
+			}
+		} else if (_source.charAt(pos1 - 1) == '.') {
+			skipSpaces();
+			if (isJavaName()) {
+				skipSpaces();
+				if (isChar('(')) {
+					pos1--;
+				}
+			}
+		}
+		setPosition(spos);
+		setBufIndex(pos1);
+		_parsedString = _source.substring(pos, pos1);
 		if (getIndex() >= _endPos) {
 			setIndex(_endPos);
 			_ch = NOCHAR;

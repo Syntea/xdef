@@ -1,12 +1,18 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.1, release-date 2020-08-17
+* corrected bugs in BNF syntax of X-definitions
+* implemented the new method `chkCompatibility(String version)` to XDPool.
+  This allows to check the version of `XDPool` object with the actual
+  X-definition software.
+
 # Version 40.1.0, release-date 2020-08-04
 * corrected bug illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
-* in the X-script is implemented the new type `uniqueSetKey`. This type of
+* in the X-script was implemented the new type `uniqueSetKey`. This type of
   object enables to save the actual value of the key of an `uniqueSet`. To do it 
   you can invoke the new implemented method `getActualKey()` from `uniqueSet`
-  object. With the new method `resetKey` form `uniqueSetKey` the actual key
+  object. With the new method `resetKey` from `uniqueSetKey` the actual key
   of given `uniqueSet` object is set to the saved value. E.g.:
   ```xml
   <NodeValue xd:script=

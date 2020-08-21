@@ -520,7 +520,7 @@ public final class TestDatabase extends XDTester {
 "  </Books>\n"+
 "  <Book xd:script=\"ref item\"/>\n"+
 "  <item xd:script=\"onStartElement {\n"+
-"            String s = @TITLE.toString ( );\n"+
+"            String s = @TITLE.toString();\n"+
 "            if (ignored = isTitle.hasItem(s)) {\n"+
 "               error('Book \\'' + @TITLE + '\\' already exists');\n"+
 "            } else {\n"+
@@ -775,7 +775,7 @@ public final class TestDatabase extends XDTester {
 "\n"+
 "  <A xd:script= \"create 1\">\n"+
 "    <BB xd:script= \"occurs *; create service.query('SELECT * \n"+
-"       FROM " + TABLE_B + "'); finally doSQL(parseInt(toString(@a)))\" \n"+
+"       FROM " + TABLE_B + "'); finally doSQL(parseInt(toString(@a)));\" \n"+
 "         a = \"int\"\n"+
 "         b = \"string\">\n"+
 "    </BB>\n"+

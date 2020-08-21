@@ -1032,7 +1032,7 @@ public final class TestScript extends XDTester {
 		testAttr1("toString(@a)", "abc");
 		testAttr1("toString (@b )", "");
 		testAttr1("@a.toString()", "abc");
-		testAttr1("@a .toString()", "abc");
+		testAttr1("@a. toString()", "abc");
 		testAttr1("@a . toString()", "abc");
 		testAttr1("@a . toString ()", "abc");
 		testAttr1("@a . toString ( )", "abc");
@@ -1047,7 +1047,7 @@ public final class TestScript extends XDTester {
 		testAttr1("toString((boolean) @a)", "true");
 		testAttr1("toString((boolean) @b)", "false");
 		testAttr1("toString(!@a)", "false");
-		testAttr1("toString(!@a.exists())", "false");
+		testAttr1("toString(!@a .exists())", "false");
 		testAttr1("toString(!(@a).exists())", "false");
 		testAttr1("toString(!@a AND !@b)", "false");
 		testAttr1("(String) (!@a OOR !@b)", "true");

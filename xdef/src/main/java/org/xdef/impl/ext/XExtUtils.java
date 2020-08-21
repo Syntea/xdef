@@ -20,6 +20,7 @@ import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 
 /** External utilities for key definition and key reference.
@@ -34,8 +35,6 @@ public final class XExtUtils {
 		return XDConstants.BUILD_VERSION + " " +
 			XDConstants.BUILD_DATE + " (" + XDConstants.JAVA_VERSION + ")";
 	}
-
-
 	/**	Get name space URI of qualified name.
 	 * @param qname qualified name
 	 * @param elem element where name space URI is searched.
@@ -53,7 +52,6 @@ public final class XExtUtils {
 		prefix = (ndx = qname.indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
 		return getNSUri(prefix, elem);
 	}
-
 	/** Get name space URI of given prefix from the context of an element.
 	 * @param pfx string with the prefix.
 	 * @param elem the element.
@@ -84,6 +82,8 @@ public final class XExtUtils {
 		Node n = getActualNode(x);
 		if (n != null) {
 			addComment(n, s);
+		} else {
+			addComment(x.getElement(), s);
 		}
 	}
 	public final static void addComment(final Node n, final String s) {
@@ -94,6 +94,8 @@ public final class XExtUtils {
 		Node n = getActualNode(x);
 		if (n != null) {
 			insertComment(n, s);
+		} else {
+			addComment(x.getElement(), s);
 		}
 	}
 	public final static void insertComment(final Node n, final String s) {
@@ -106,6 +108,8 @@ public final class XExtUtils {
 		Node n = getActualNode(x);
 		if (n != null) {
 			addPI(n, target, data);
+		} else {
+			addPI(x.getElement(), target, data);
 		}
 	}
 	public final static void addPI(final Node n,
@@ -120,6 +124,8 @@ public final class XExtUtils {
 		Node n = getActualNode(x);
 		if (n != null) {
 			insertPI(n, target, data);
+		} else {
+			addPI(x.getElement(), target, data);
 		}
 	}
 	public final static void insertPI(final Node n,
@@ -136,6 +142,20 @@ public final class XExtUtils {
 			el.appendChild(el.getOwnerDocument().createTextNode(s));
 		}
 	}
+	public final static void insertText(final XXNode x, final String s) {
+		Node n = getActualNode(x);
+		if (n != null) {
+			insertText(n, s);
+		} else {
+			addText(x.getElement(), s);
+		}
+	}
+	public final static void insertText(final Node n, final String s) {
+		if (s != null && !s.isEmpty()) {
+			n.getParentNode().insertBefore(
+				n.getOwnerDocument().createTextNode(s), n);
+		}
+	}
 	public final static String getTextContent(final XXNode x) {
 		return getTextContent(x.getElement());
 	}
@@ -147,16 +167,20 @@ public final class XExtUtils {
 		return xnode.getXMNode().getXDPosition();
 	}
 	public static long getSourceLine(final XXNode xnode) {
-		return xnode.getSPosition().getLineNumber();
+		SPosition spos = xnode.getSPosition();
+		return spos != null ? spos.getLineNumber() : 0;
 	}
 	public static long getSourceColumn(final XXNode xnode) {
-		return xnode.getSPosition().getColumnNumber();
+		SPosition spos = xnode.getSPosition();
+		return spos != null ? spos.getColumnNumber() : 0;
 	}
 	public static String getSysId(final XXNode xnode) {
-		return xnode.getSPosition().getSysId();
+		SPosition spos = xnode.getSPosition();
+		return spos != null ? spos.getSysId() : "";
 	}
 	public static String getSourcePosition(final XXNode xnode) {
-		return "" + xnode.getSPosition();
+		SPosition spos = xnode.getSPosition();
+		return spos != null ? spos.toString() : "";
 	}
 	public static String getEnv(final String name) {return System.getenv(name);}
 
@@ -167,12 +191,10 @@ public final class XExtUtils {
 	public final static void cancel() {
 		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
 	}
-
 	public final static void cancel(final String msg) {
 		 //X-definition canceled&{0}{; }
 		throw new SError(Report.error(XDEF.XDEF906, msg));
 	}
-
 	public final static byte[] parseBase64(final String s) {
 		try {
 			return SUtils.decodeBase64(s);
@@ -180,7 +202,6 @@ public final class XExtUtils {
 			return null;
 		}
 	}
-
 	public final static byte[] parseHex(final String s) {
 		try {
 			return SUtils.decodeHex(s);
@@ -200,7 +221,6 @@ public final class XExtUtils {
 		}
 		return val.getElement();
 	}
-
 	public final static Element getParentContextElement(final XXElement xElem,
 		final long level) {
 		if (level == 0) {
@@ -223,7 +243,6 @@ public final class XExtUtils {
 		}
 		return null;
 	}
-
 	public final static XDContainer fromParent(final XXElement xElem,
 		final String expr){
 		XDValue val = xElem.getParent().getXDContext();
@@ -237,12 +256,10 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
-
 	public final static XDContainer fromParentContext(final XXElement e,
 		final String x) {
 		return fromParent(e, x);
 	}
-
 	public final static XDContainer fromRoot(final XXNode xElem,
 		final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
@@ -256,12 +273,10 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
-
 	public final static XDContainer fromRootContext(final XXNode xElem,
 		final String expr) {
 		return fromRoot(xElem, expr);
 	}
-
 	public final static XDContainer fromRoot(final XXElement xElem,
 		final String expr,
 		final Element elem) {
@@ -271,7 +286,6 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
-
 	public static XDContainer fromRootContext(final XXElement xElem,
 		final String expr,
 		final Element elem) {

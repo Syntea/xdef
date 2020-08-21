@@ -547,20 +547,11 @@ public final class Test002 extends XDTester {
 			/////////// now we check files and input stream
 			File[] files =
 				SUtils.getFileGroup(dataDir + "test002_2_*.xdef");
-			InputStream[] xdefs1 = new InputStream[files.length];
-			for (int i = 0; i < xdefs1.length; i++) {
-				try {
-					xdefs1[i] = new FileInputStream(files[i]);
-				} catch (Exception ex) {
-					fail(ex);
-					return;
-				}
-			}
 			InputStream data1 = new FileInputStream(dataDir + "test002_2.xml");
 			_errorCount = 0;
 			_errorCode = 0;
 			//should be reported 4202
-			test(xdefs1, data1, "SouborP1A", null, reporter, 'P');
+			test(files, data1, "SouborP1A", null, reporter, 'P');
 			if (_errorCount != 1 || _errorCode != 4202) {
 				fail("ErrorCount:"+_errorCount+", errorCode:"+_errorCode);
 			}

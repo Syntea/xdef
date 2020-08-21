@@ -58,8 +58,9 @@ public final class TestXdef extends XDTester {
 		XDOutput out;
 		StringWriter strw;
 		String tempDir = getTempDir();
-		_myX = 1;
 		Properties props = new Properties();
+		_myX = 1;
+		boolean chkSyntax = getChkSyntax();
 		try {
 			XDFactory.getXDBuilder(null).compileXD(); // no sources
 			fail("Exception not thrown");
@@ -906,7 +907,7 @@ public final class TestXdef extends XDTester {
 "   boolean y() { return true; }\n"+
 "  </xd:declaration>\n"+
 "  <a p=\"'hi';\"/>\n"+
-"  <b p=\"x();\"/>\n"+
+"  <b p=\"x()\"/>\n"+
 "  <c p=\"y()\"/>\n"+
 "  <d p=\"x()\"/>\n"+
 "</xd:def>";
@@ -2017,6 +2018,9 @@ public final class TestXdef extends XDTester {
 			parse(xp, "", "<a><b/><b/><b/><c/></a>", reporter, strw,null,null);
 			assertEq(reporter.errorWarnings(), false, reporter.printToString());
 			assertEq("start\nend\n", strw.toString());
+		} catch(Exception ex) {fail(ex);}
+		try { //test collection, metaNamespace, any and match
+			setChkSyntax(false);
 			xdef = //test collection, metaNamespace, any and match
 "<xd:collection xmlns:xd='my.meta.ns'\n"+
 "  xmlns:x='" + _xdNS + "'\n"+
@@ -2046,6 +2050,9 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
 			assertEq(reporter.errorWarnings(), false, reporter.printToString());
 			assertEq("OK", s = strw.toString(), s);
+		} catch(Exception ex){fail(ex);}
+		setChkSyntax(chkSyntax);
+		try {
 			xdef =  //test recursive references
 "<xd:def xmlns:xd='" + _xdNS + "' root='foo'>\n"+
 "<foo><bar xd:script='occurs ?; ref foo'/></foo>\n"+
@@ -2645,9 +2652,9 @@ public final class TestXdef extends XDTester {
 			xml = "<A x='1' y='2' z = '3'><B><C/>z</B><B/>abc</A>";
 			assertEq("<A/>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			// test ignoreOther
+			// test option ignoreOther
 			xp = compile("<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n"+
-"  <A xd:script='option ignoreOther' x='? int'/>\n"+
+"  <A xd:script='options ignoreOther' x='? int'/>\n"+
 "</xd:def>");
 			xml = "<A x='1' y='2' z = '3'><B a='a'><C/>z</B><B/>abc</A>";
 			assertEq("<A x='1'/>", parse(xp, "", xml, reporter));
@@ -2655,9 +2662,9 @@ public final class TestXdef extends XDTester {
 			xml = "<A y='2' z = '3'><B a='a'><C/>z</B><B/>abc</A>";
 			assertEq("<A/>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			// test acceptOther
+			// test option acceptOther
 			xp = compile("<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n"+
-"  <A xd:script='option acceptOther' x='? int'/>\n"+
+"  <A xd:script='options acceptOther' x='? int'/>\n"+
 "</xd:def>");
 			xml = "<A x='1' y='2' z = '3'><B a='a'><C/>z</B><B/>abc</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -3115,7 +3122,7 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {//test addComment, insertComment, addPI and insertPI
+		try { //test addComment,insertComment,addPI,insertPI,addText,insertText
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=\"finally {\n"+
@@ -3140,6 +3147,16 @@ public final class TestXdef extends XDTester {
 "<b><!--20-->2<?_2 0?><!--21--><?_2 1?></b><!--b1--><?b 1?>"+
 "<!--30-->3<?_3 0?><!--31--><?_3 1?>"+
 "</a><!--a1--><?a 1?>");
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a xd:script=\"finally addText('def');\">\n"+
+"    <b xd:script=\"finally insertText('abc');\"/>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a><b/></a>";
+			assertEq("<a>abc<b/>def</a>", parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {// test importLocal attribute
 			xdef =

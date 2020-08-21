@@ -39,6 +39,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.SThrowable;
 
+@SuppressWarnings("deprecation")
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
@@ -177,7 +178,6 @@ public class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	/** Set external classes with external methods.
 	 * @deprecated setExternals will be no more supported. Please use
 	 * declaration of external methods in X-definition.

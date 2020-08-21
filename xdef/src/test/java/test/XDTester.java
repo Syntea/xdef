@@ -1,22 +1,5 @@
 package test;
 
-import org.xdef.component.XComponent;
-import org.xdef.impl.code.DefOutStream;
-import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportPrinter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.XDBuilder;
-import org.xdef.XDConstants;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDOutput;
-import org.xdef.XDPool;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,23 +10,44 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.Properties;
-import org.w3c.dom.Element;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.ReportWriter;
-import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import javax.xml.namespace.QName;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.compile.PNode;
+import org.xdef.impl.compile.XPreCompiler;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
+import org.xdef.sys.SUtils;
+import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDOutput;
+import org.xdef.XDPool;
+import org.xdef.xml.KXmlUtils;
 
 /** Support of tests.
  * @author Vaclav Trojan
@@ -114,6 +118,127 @@ public abstract class XDTester extends STester {
 		_fulltestMode = fulltest;
 	}
 
+	private ArrayReporter chkSyntax(final String[] xdefs) {
+		return chkSyntax((Object[]) xdefs);
+	}
+
+	private ArrayReporter chkSyntax(final File[] xdefs) {
+		return chkSyntax((Object[]) xdefs);
+	}
+
+	private ArrayReporter chkSyntax(final URL[] xdefs) {
+		return chkSyntax((Object[]) xdefs);
+	}
+
+	private ArrayReporter chkSyntax(final InputStream[] xdefs) {
+		return chkSyntax((Object[]) xdefs);
+	}
+
+	private static void removeMacros(final Element el) {
+		NodeList nl = el.getElementsByTagNameNS(el.getNamespaceURI(), "macro");
+		for (int i = nl.getLength() - 1; i >= 0; i--) {
+			Node n = nl.item(i);
+			n.getParentNode().removeChild(n); // remove macros
+		}
+	}
+
+	private void genXdOfXd() {
+		if (_xdOfxd == null) {// _xdOfxd not created, create it
+			try {
+				_xdOfxd = XDFactory.compileXD(null,
+					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+			} catch (Exception ex) {
+				new RuntimeException("XdefOfXdef is not available", ex);
+			}
+		}
+	}
+
+	public final ArrayReporter chkSyntax(final Object... xdefs) {
+		ArrayReporter reporter = new ArrayReporter();
+		if (!_chkSyntax) {
+			return reporter;
+		}
+		genXdOfXd();
+		XPreCompiler xpc =
+			new XPreCompiler(reporter, null, (byte) 0, false, false, true);
+		for (int i = 0; i < xdefs.length; i++) {
+			Object x = xdefs[i];
+			if (x instanceof String) {
+				String s = (String) x;
+				if (s.startsWith("<")) {
+					xpc.parseString(s);
+				} else if (s.startsWith("//")
+					|| (s.indexOf(":/") > 2 && s.indexOf(":/") < 12)) {
+					try {
+						for (String y: SUtils.getSourceGroup(s)) {
+							xpc.parseURL(SUtils.getExtendedURL(y));
+						}
+					} catch (Exception ex) {}
+				} else {
+					File[] xf = SUtils.getFileGroup(s);
+					for (int j=0; j < xf.length; j++) {
+						xpc.parseFile(xf[j]);
+					}
+				}
+			} else if (x instanceof File) {
+				xpc.parseFile((File) x);
+			} else if (x instanceof URL) {
+				xpc.parseURL((URL) x);
+			} else if (x instanceof InputStream) {
+				String s = "STREEM_"+1;
+				if (i+1 < xdefs.length && xdefs[i+1] instanceof String) {
+					String t = (String) xdefs[i+1];
+					if (t.charAt(0) != '<') {
+						s = t;
+						i++;
+					}
+				}
+				xpc.parseStream((InputStream) x, s);
+				try {
+					((InputStream) x).reset();
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			} else if (x instanceof String[]) {
+				String[] xs = (String[]) x;
+				for (int j=0; j < xs.length; j++) {
+					xpc.parseString(xs[j]);
+				}
+			} else if (x instanceof File[]) {
+				File[] xf = (File[]) x;
+				for (int j=0; j < xf.length; j++) {
+					xpc.parseFile(xf[j]);
+				}
+			} else {
+				throw new RuntimeException("Incorrect parameter type: " + x);
+			}
+		}
+		xpc.prepareMacros();
+		List<PNode> x;
+		x = xpc.getPDeclarations();
+		for (PNode y: x) {
+			Element el = y.toXML();
+			removeMacros(el);
+			String s = KXmlUtils.nodeToString(el, true);
+			_xdOfxd.createXDDocument("").xparse(s, reporter);
+		}
+		x = xpc.getPCollections();
+		for (PNode y: x) {
+			Element el = y.toXML();
+			removeMacros(el);
+			String s = KXmlUtils.nodeToString(el, true);
+			_xdOfxd.createXDDocument("").xparse(s, reporter);
+		}
+		x = xpc.getPXDefs();
+		for (PNode y: x) {
+			Element el = y.toXML();
+			removeMacros(el);
+			String s = KXmlUtils.nodeToString(el, true);
+			_xdOfxd.createXDDocument("").xparse(s, reporter);
+		}
+		return reporter;
+	}
+
 	public final void setProperty(final String key, final String value) {
 		String newKey = key.replace('.', '_');
 		_props.remove(key);
@@ -132,40 +257,6 @@ public abstract class XDTester extends STester {
 
 	public final boolean getGenObjFile() {return _genObj;}
 
-	final public Element test(final String[] xdefs,
-		final String data,
-		final String name,
-		final OutputStream out,
-		final ReportWriter reporter,
-		final char mode) {
-		System.out.flush();
-		System.err.flush();
-		try {
-			InputStream[] xdin = new InputStream[xdefs.length];
-			for (int i = 0; i <xdefs.length; i++) {
-				xdin[i] = new ByteArrayInputStream(xdefs[i].getBytes("ASCII"));
-			}
-			InputStream in = null;
-			if (data != null && data.length() > 0) {
-				in = new java.io.ByteArrayInputStream(data.getBytes("ASCII"));
-			}
-			return test(xdin, in, name, out, reporter, mode);
-		} catch (Exception ex) {
-			fail(ex);
-		}
-		System.err.flush();
-		System.out.flush();
-		return null;
-	}
-
-	final public Element test(final String xdef,
-		final String data,
-		final String name,
-		final OutputStream out,
-		final ReportWriter reporter,
-		final char mode) {
-		return test(new String[] {xdef}, data, name, out, reporter, mode);
-	}
 
 	/** Returns the available element model represented by given name or
 	 * <i>null</i> if definition item is not available.
@@ -248,8 +339,92 @@ public abstract class XDTester extends STester {
 		}
 	}
 
+	final public void checkResult(final Element el, final String expected) {
+		if (expected == null) {
+			return;
+		}
+		checkResult(el, KXmlUtils.parseXml(expected).getDocumentElement());
+	}
+
+	final public void checkResult(final Element el, final Element expected) {
+		ReportWriter rw = KXmlUtils.compareElements(el, expected);
+		if (!rw.errorWarnings()) {
+			return;
+		}
+		System.err.flush();
+		System.out.flush();
+		StringWriter swr = new StringWriter();
+		Report rep;
+		ReportReader rri = rw.getReportReader();
+		while((rep = rri.getReport()) != null) {
+			swr.write(rep.toString() + '\n');
+		}
+		fail(swr.toString());
+	}
+
+	final public Element test(final String[] xdefs,
+		final String data,
+		final String name,
+		final OutputStream out,
+		final ReportWriter reporter,
+		final char mode) {
+		System.out.flush();
+		System.err.flush();
+		try {
+			if (reporter != null) {
+				reporter.clear();
+			}
+			chkSyntax(xdefs).checkAndThrowErrors();
+			XDBuilder xb = XDFactory.getXDBuilder(_props);
+//			xb.setExternals(exts);
+			xb.setSource(xdefs, null);
+			XDPool xp = xb.compileXD();
+			xp = checkExtObjects(xp);
+			if (out != null) {
+				out.flush();
+			}
+			if (xdefs == null) {
+				throw new Exception("XDefinition " + name + " doesn't exist");
+			}
+			DefOutStream stdout;
+			if (out == null) {
+				stdout = null;
+			} else {
+				stdout =new DefOutStream(new OutputStreamWriter(out), false);
+			}
+			if (mode == 'C') {
+				Element el = null;
+				if (data != null) {
+					el = KXmlUtils.parseXml(data, true).getDocumentElement();
+				}
+				return createElement(xp, name , reporter, el, stdout);
+			} else {
+				XDDocument xd = xp.createXDDocument(name);
+				xd.setProperties(_props);
+				if (stdout != null) {
+					xd.setStdOut(stdout);
+				}
+				return xd.xparse(data, "", reporter);
+			}
+		} catch (Exception ex) {
+			fail(ex);
+		}
+		System.err.flush();
+		System.out.flush();
+		return null;
+	}
+
+	final public Element test(final String xdef,
+		final String data,
+		final String name,
+		final OutputStream out,
+		final ReportWriter reporter,
+		final char mode) {
+		return test(new String[] {xdef}, data, name, out, reporter, mode);
+	}
+
 	@SuppressWarnings("deprecation")
-	public final Element test(final InputStream[] xdefs,
+	public final Element test(final File[] xdefs,
 		final InputStream data,
 		final String name,
 		final OutputStream out,
@@ -257,12 +432,13 @@ public abstract class XDTester extends STester {
 		final char mode,
 		final Class<?>... exts) {
 		try {
+			chkSyntax(xdefs).checkAndThrowErrors();
 			if (reporter != null) {
 				reporter.clear();
 			}
 			XDBuilder xb = XDFactory.getXDBuilder(_props);
 			xb.setExternals(exts);
-			xb.setSource(xdefs, null);
+			xb.setSource(xdefs);
 			XDPool xp = xb.compileXD();
 			xp = checkExtObjects(xp);
 			if (out != null) {
@@ -299,18 +475,18 @@ public abstract class XDTester extends STester {
 
 	/* if reporter is not null checking of result of data proecessin is
 	 * skipped! */
-	final public Element test(final InputStream xn,
+	final public Element test(final File xn,
 		final InputStream data,
 		final String name,
 		final OutputStream os,
 		final ReportWriter reporter,
 		final Class[] exts) {
-		return test(new InputStream[]{xn}, data, name, os, reporter, exts);
+		return test(new File[]{xn}, data, name, os, reporter, exts);
 	}
 
 	// if reporter is not null checking of result of data proecessin is
 	// skipped!
-	final public Element test(final InputStream[] xdefs,
+	final public Element test(final File[] xdefs,
 		final InputStream data,
 		final String name,
 		final OutputStream os,
@@ -342,43 +518,6 @@ public abstract class XDTester extends STester {
 		return null;
 	}
 
-	final public void checkResult(final Element el, final String expected) {
-		if (expected == null) {
-			return;
-		}
-		checkResult(el, KXmlUtils.parseXml(expected).getDocumentElement());
-	}
-
-	final public void checkResult(final Element el, final Element expected) {
-		ReportWriter rw = KXmlUtils.compareElements(el, expected);
-		if (!rw.errorWarnings()) {
-			return;
-		}
-		System.err.flush();
-		System.out.flush();
-		StringWriter swr = new StringWriter();
-		Report rep;
-		ReportReader rri = rw.getReportReader();
-		while((rep = rri.getReport()) != null) {
-			swr.write(rep.toString() + '\n');
-		}
-		fail(swr.toString());
-	}
-
-	private static String genCollection(final String... sources) {
-		try {
-			Element el = XDGenCollection.genCollection(sources,
-				true, //resolvemacros
-				true, //removeActions
-				false);
-			return KXmlUtils.nodeToString(el, true);
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new RuntimeException("Can't create cpllection", ex);
-		}
-	}
-
 	final public boolean test(final String xdef,
 		final String data,
 		final String name,
@@ -395,23 +534,19 @@ public abstract class XDTester extends STester {
 		return test(new String[]{xdef}, data, name, mode, result, stdout);
 	}
 
-	final public boolean test(final String[] xdef,
+	final public boolean test(final String[] xdefs,
 		final String data,
 		final String name,
 		final char mode,  // 'P' => parse, 'C' => create
 		final String result,
 		final String stdout) {
-		if (_chkSyntax) {
-			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
-		}
 		boolean error = false;
 		System.err.flush();
 		System.out.flush();
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ArrayReporter reporter = new ArrayReporter();
-			Element el = test(xdef, data, name, bos, reporter, mode);
+			Element el = test(xdefs, data, name, bos, reporter, mode);
 			if (reporter.errors()) {
 				error = true;
 				ReportPrinter.printListing(System.out, data, reporter, true);
@@ -485,59 +620,33 @@ public abstract class XDTester extends STester {
 		return checkExtObjects(XDFactory.compileXD(_props, sources, path, obj));
 	}
 
-	final public XDPool compile(final URL[] source, final Class<?>... obj) {
-		return checkExtObjects(XDFactory.compileXD(_props, source, obj));
+	final public XDPool compile(final URL[] urls, final Class<?>... obj) {
+		chkSyntax(urls).checkAndThrowErrors();
+		return checkExtObjects(XDFactory.compileXD(_props, urls, obj));
 	}
 
 	final public XDPool compile(final URL url, final Class<?>... obj) {
+		chkSyntax(url).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
 	}
 
-	private void genXdOfXd() {
-		if (_xdOfxd == null) {// _xdOfxd not created, create it
-			try {
-				_xdOfxd = XDFactory.compileXD(null,
-					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-			} catch (Exception ex) {
-				new RuntimeException("XdefOfXdef is not available", ex);
-			}
-		}
-	}
-
 	final public XDPool compile(final File[] files, final Class... obj) {
-		if (_chkSyntax) {
-			genXdOfXd();
-			String[] sources = new String[files.length];
-			for (int i = 0; i < sources.length; i++) {
-				sources[i] = files[i].getAbsolutePath();
-			}
-			_xdOfxd.createXDDocument().xparse(genCollection(sources), null);
-		}
+		chkSyntax(files).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, files, obj));
 	}
 
 	final public XDPool compile(final File file, final Class... obj) {
-		if (_chkSyntax) {
-			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(
-				genCollection(file.getAbsolutePath()), null);
-		}
+		chkSyntax(file).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, file, obj));
 	}
 
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
-		if (_chkSyntax) {
-			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdef), null);
-		}
+		chkSyntax(xdef).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
 
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
-		if (_chkSyntax) {
-			genXdOfXd();
-			_xdOfxd.createXDDocument().xparse(genCollection(xdefs), null);
-		}
+		chkSyntax(xdefs).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
 
