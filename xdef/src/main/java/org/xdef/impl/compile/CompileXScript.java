@@ -85,7 +85,7 @@ final class CompileXScript extends CompileStatement {
 				if (_sym == END_SYM || _sym == NOCHAR) {
 					break;
 				}
-				errorAndSkip(XDEF.XDEF425, ";}", ";"); //Script error
+				errorAndSkip(XDEF.XDEF410, ";}", ";"); //";" expected
 			} else {
 				nextSymbol();
 			}
@@ -415,12 +415,6 @@ final class CompileXScript extends CompileStatement {
 			//Both actions 'fixed' and 'default' can't be specified
 			error(XDEF.XDEF415);
 			return;
-		}
-		if (sc._onIllegalAttr != -1 && !sc.isIllegal() && sc._match < 0) {
-			if (_g._chkWarnings) {
-				//Not allowed script for '&{0}'
-				warning(XDEF.XDEF494, "onIllegalAttr");
-			}
 		}
 		if (sc._check == -1) {
 			if (sc._onTrue != -1) {
@@ -1007,15 +1001,6 @@ final class CompileXScript extends CompileStatement {
 				break;
 			}
 			errorAndSkip(XDEF.XDEF425, SCRIPT_SEPARATORS); //Script error
-		}
-		if (occ.isIgnore() || occ.isIllegal()) {
-			if (sc.getInitCode() >= 0 || sc.getComposeCode() >= 0) {
-				if (_g._chkWarnings) {
-					//Not allowed script for '&{0}'
-					warning(XDEF.XDEF494,
-						(occ.isIgnore() ? "ignore" : "illegal"));
-				}
-			}
 		}
 		sc.setOccurrence(occ);
 		if (_sym != NOCHAR) {

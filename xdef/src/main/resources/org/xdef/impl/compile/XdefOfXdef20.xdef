@@ -19,7 +19,7 @@
   BNFGrammar v20BNF = new BNFGrammar(
       "ClassList  ::= (QualifiedIdentifier (S? (',' | ';') S?
         QualifiedIdentifier)*)? S?
-      MethodList ::= (S? MethodListItem (S? ';' S? MethodListItem)*)? S? ';'? ",
+      MethodList ::= (S? ExternalMethod (S? ';' S? ExternalMethod)*)? S? ';'? ",
     XDScript);
   type classList v20BNF.rule('ClassList');
   type methodList v20BNF.rule('MethodList');

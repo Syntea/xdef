@@ -3161,7 +3161,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			errorAndSkip(XDEF.XDEF412, ";"); //Type identifier expected
 			return;
 		}
-		separateMethodNameFromIdentifier();
+		String cName;
+		Class<?> mClass;
+		boolean wasError = false;
+		String rType;
 		String s = _idName;
 		// in s we have now the name of type of result or "void"
 		if (nextSymbol() == LSQ_SYM) {
@@ -3172,8 +3175,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			nextSymbol();
 			s += "[]";
 		}
-		boolean wasError = false;
-		String rType = s; // result type of method
+		rType = s; // result type of method
 		short resultType = CompileBase.getClassTypeID(rType, cl);
 		if (resultType == CompileBase.XD_UNDEF) {
 			error(XDEF.XDEF412);//Type identifier expected
@@ -3183,29 +3185,27 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		// The symbol is an identifier - either class name, or class with
 		// method name; class name can contain the used language name
 		if (_sym != IDENTIFIER_SYM) {
-			errorAndSkip(XDEF.XDEF220, ";"); //Qualified method name expected
+			errorAndSkip(XDEF.XDEF220, ";");//Qualified method name expected
 			return;
 		}
-		//classified name of metohd
+		//classified name of method
 		separateMethodNameFromIdentifier();
-		String cName = _idName; // className
-		Class<?> mClass;
+		cName = _idName; // className
 		try {
-			// the class where is the method
-			mClass = Class.forName(cName, false, cl);
+			mClass = Class.forName(_idName, false, cl);
 		} catch (ClassNotFoundException ex) {
 			if (!_g._ignoreUnresolvedExternals) {
-				error(XDEF.XDEF228, cName); //Class '&{0}' not exists
-				wasError = true;
+				error(XDEF.XDEF228, _idName); //Class '&{0}' not exists
 			}
 			mClass = null;
+			wasError = true;
 		}
 		if (nextSymbol() != DOT_SYM){
-			errorAndSkip(XDEF.XDEF220, ";"); //Qualified method name expected
+			errorAndSkip(XDEF.XDEF220, ";");//Qualified method name expected
 			return;
 		}
 		if (nextSymbol() != IDENTIFIER_SYM) {
-			errorAndSkip(XDEF.XDEF220, ";"); //Qualified method name expected
+			errorAndSkip(XDEF.XDEF220, ";");//Qualified method name expected
 			return;
 		}
 		String methodName = _idName;
@@ -3223,8 +3223,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			nextSymbol();
 			if (s.startsWith("org.xdef.proc.")) {
 				s = s.substring("org.xdef.proc.".length());
-			}
-			if (s.startsWith("org.xdef.")) {
+			} else if (s.startsWith("org.xdef.")) {
 				s = s.substring("org.xdef.".length());
 			}
 			if ("XXElement".equals(s) || "XXData".equals(s)
@@ -3264,6 +3263,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					params.add(s);
 				}
 			}
+			if (_sym == IDENTIFIER_SYM) { // the name of parameter we ignore
+				nextSymbol(); // just read it
+			}
 			// read following parameters
 			while (_sym == COMMA_SYM) {
 				if (nextSymbol() != IDENTIFIER_SYM) {
@@ -3275,8 +3277,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				nextSymbol();
 				if (s.startsWith("org.xdef.proc.")) {
 					s = s.substring("org.xdef.proc.".length());
-				}
-				if (s.startsWith("org.xdef.")) {
+				} else if (s.startsWith("org.xdef.")) {
 					s = s.substring("org.xdef.".length());
 				}
 				// check first parameter, it can be XXNode
@@ -3311,6 +3312,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						error(XDEF.XDEF412); //Type identifier expected
 					}
 					params.add(s);
+				}
+				if (_sym == IDENTIFIER_SYM) {
+					nextSymbol();
 				}
 			}
 		}
