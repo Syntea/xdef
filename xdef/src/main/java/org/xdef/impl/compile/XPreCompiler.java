@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 
 /** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
- * with X-definitions created from source data.
+ * created from source data.
  * @author Trojan
  */
 public class XPreCompiler implements PreCompiler {
@@ -72,7 +72,7 @@ public class XPreCompiler implements PreCompiler {
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
 	/** Include list of URL's. */
-	private final ArrayList<Object> _includeList = new ArrayList<Object>();
+	private final List<URL> _includeList = new ArrayList<URL>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new LinkedHashMap<String, XScriptMacro>();
@@ -237,7 +237,7 @@ public class XPreCompiler implements PreCompiler {
 			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
 		}
 		String name = pa._value.getString().trim();
-		if (name.length() == 0) {
+		if (name.isEmpty()) {
 			//Incorrect name
 			error(pa._value, XDEF.XDEF258);
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
@@ -379,7 +379,6 @@ public class XPreCompiler implements PreCompiler {
 	/** Process include list from header of X-definition. */
 	void processIncludeList(PNode pnode) {
 		/** let's check some attributes of X-definition.*/
-		/** let's check some attributes of X-definition.*/
 		PAttr pa = getXdefAttr(pnode, "include", false, true);
 		if (pa != null) {
 			processIncludeList(pa._value,
@@ -459,11 +458,10 @@ public class XPreCompiler implements PreCompiler {
 					for (File f: list) {
 						try {
 							if (f.canRead()) {
-								if (_includeList.contains(
-									f.getCanonicalPath())) {
-									continue; //file already exists
-								}
-								_includeList.add(f);
+								URL u = f.toURI().toURL();
+								if (!_includeList.contains(u)) {
+									_includeList.add(u);
+								}								
 								continue;
 							}
 						} catch (IOException ex) {}
@@ -562,12 +560,7 @@ public class XPreCompiler implements PreCompiler {
 		}
 		// doParse of definitions from include list
 		for (int i = 0; i < _includeList.size(); i++) {
-			Object o = _includeList.get(i);
-			if (o instanceof URL) {
-				parseURL((URL) o);
-			} else {
-				parseFile((File) o);
-			}
+			parseURL(_includeList.get(i));
 		}
 		List<PNode> macros = new ArrayList<PNode>();
 		for (PNode xd: _listDecl) {
@@ -646,6 +639,8 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public CompileCode getCodeGenerator() {return _codeGenerator;}
 
+	public Map<String, XScriptMacro> getMacros() {return _macros;}
+
 	@Override
 	/** Get sources of X-definitions.
 	 * @return array with sources of X-definitions.
@@ -714,9 +709,9 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put fatal error message.
-	 * @param pos SPosition
+	 * @param pos SPosition.
 	 * @param registeredID registered report id.
-	 * @param mod Message modification parameters.
+	 * @param mod Array with message modification parameters.
 	 */
 	public void fatal(final SPosition pos,
 		final long registeredID,
@@ -726,7 +721,7 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put error message.
-	 * @param pos SPosition
+	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
@@ -738,7 +733,7 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put ligthError message.
-	 * @param pos SPosition
+	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
@@ -750,7 +745,7 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put warning message ( or error if warning flag is false).
-	 * @param pos SPosition
+	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
@@ -762,7 +757,7 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put report to reporter.
-	 * @param pos SPosition
+	 * @param pos SPosition.
 	 * @param rep Report.
 	 */
 	public final void putReport(final SPosition pos, final Report rep) {
@@ -785,5 +780,4 @@ public class XPreCompiler implements PreCompiler {
 	public final void putReport(final Report rep) {
 		getReportWriter().putReport(rep);
 	}
-
 }
