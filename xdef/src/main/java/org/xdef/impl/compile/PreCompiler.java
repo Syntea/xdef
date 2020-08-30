@@ -2,14 +2,13 @@ package org.xdef.impl.compile;
 
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-/** Interface for source pre compiler (XML, JSON etc)
+/** Interface for preparing PNodes from sources for compiler (XML, JSON etc)
  * @author Vaclav Trojan
  */
 public interface PreCompiler {
