@@ -27,13 +27,13 @@ import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 
-/** Reads source X-definitions (XML or JSON) and prepares the list of PNodes
- * created from source data.
+/** Reads source X-definitions and prepares the list of PNodes created
+ * from source data.
  * @author Trojan
  */
 public class XPreCompiler implements PreCompiler {
 	/** index of NameSpace of X-definitions. */
-	static final int NS_XDEF_INDEX = 0;
+	static final int NS_XDEF_INDEX = 0;								//0
 	/** index of NameSpace of XML. */
 	static final int NS_XML_INDEX = NS_XDEF_INDEX + 1;				//1
 	/** index of NameSpace of XML NameSpace. */
@@ -46,6 +46,7 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
 	/** index of NameSpace of JSON (W3C). */
 	static final int NS_JSON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
+
 	/** Table of NameSpace prefixes. */
 	static final Map<String, Integer> DEFINED_PREFIXES =
 		new LinkedHashMap<String, Integer>();
@@ -648,37 +649,37 @@ public class XPreCompiler implements PreCompiler {
 	public List<Object> getSources() {return _sources;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of X-definition items.
+	/** Get prepared sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of lexicon items.
+	/** Get prepared sources (PNodes) of lexicon items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPLexiconList() {return _lexicons;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of collection items.
+	/** Get prepared sources (PNodes) of collection items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPCollections() {return _listCollection;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of declaration items.
+	/** Get prepared sources (PNodes) of declaration items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPDeclarations() {return _listDecl;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of components items.
+	/** Get prepared sources (PNodes) of components items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPComponents() {return _listComponent;}
 
 	@Override
-	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	/** Get prepared sources (PNodes) of BNF Grammar items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPBNFs() {return _listBNF;}
