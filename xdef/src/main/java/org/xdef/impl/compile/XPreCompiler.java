@@ -627,6 +627,11 @@ public class XPreCompiler implements PreCompiler {
 		_macrosProcessed = true;
 	}
 
+	/** Get map with macros.
+	 * @return map with macros.
+	 */
+	public Map<String, XScriptMacro> getMacros() {return _macros;}
+
 	@Override
 	/** Set System ID for error reporting.
 	 * @param sysId System id.
@@ -640,8 +645,6 @@ public class XPreCompiler implements PreCompiler {
 	 * @return the code generator.
 	 */
 	public CompileCode getCodeGenerator() {return _codeGenerator;}
-
-	public Map<String, XScriptMacro> getMacros() {return _macros;}
 
 	@Override
 	/** Get sources of X-definitions.
