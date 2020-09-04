@@ -462,7 +462,7 @@ public class XPreCompiler implements PreCompiler {
 								URL u = f.toURI().toURL();
 								if (!_includeList.contains(u)) {
 									_includeList.add(u);
-								}								
+								}
 								continue;
 							}
 						} catch (IOException ex) {}
