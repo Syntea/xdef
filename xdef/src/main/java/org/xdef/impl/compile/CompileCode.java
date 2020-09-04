@@ -372,9 +372,12 @@ public final class CompileCode extends CompileBase {
 	 * @param extObjects Array of external classes.
 	 */
 	final void setExternals(final Class<?>... extObjects) {
-		Class<?>[] extObj = extObjects == null ? new Class<?>[0] : extObjects;
-		_extClasses = new Class<?>[extObj.length];
-		System.arraycopy(extObj, 0, _extClasses, 0, extObj.length);
+		if (extObjects != null && extObjects.length > 0) {
+			_extClasses = new Class<?>[extObjects.length];
+			System.arraycopy(extObjects, 0, _extClasses, 0, extObjects.length);
+		} else {
+			_extClasses = new Class<?>[0];
+		}
 	}
 
 	/** Check if given identifier refers to a variable.

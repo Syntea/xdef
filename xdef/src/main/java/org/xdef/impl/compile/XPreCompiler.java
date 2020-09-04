@@ -553,6 +553,7 @@ public class XPreCompiler implements PreCompiler {
 			}
 		}
 	}
+
 	@Override
 	/** Prepare list of declared macros and expand macro references. */
 	public final void prepareMacros() {
@@ -644,43 +645,43 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Get sources of X-definitions.
-	 * @return array with sources of X-definitions.
+	 * @return List with sources of X-definitions.
 	 */
 	public List<Object> getSources() {return _sources;}
 
 	@Override
 	/** Get prepared sources (PNodes) of X-definition items.
-	 * @return array with PNodes with X-definitions.
+	 * @return List with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
 	@Override
 	/** Get prepared sources (PNodes) of lexicon items.
-	 * @return array with PNodes.
+	 * @return List with PNodes.
 	 */
 	public final List<PNode> getPLexiconList() {return _lexicons;}
 
 	@Override
 	/** Get prepared sources (PNodes) of collection items.
-	 * @return array with PNodes.
+	 * @return List with PNodes.
 	 */
 	public final List<PNode> getPCollections() {return _listCollection;}
 
 	@Override
 	/** Get prepared sources (PNodes) of declaration items.
-	 * @return array with PNodes.
+	 * @return List with PNodes.
 	 */
 	public final List<PNode> getPDeclarations() {return _listDecl;}
 
 	@Override
 	/** Get prepared sources (PNodes) of components items.
-	 * @return array with PNodes.
+	 * @return List with PNodes.
 	 */
 	public final List<PNode> getPComponents() {return _listComponent;}
 
 	@Override
 	/** Get prepared sources (PNodes) of BNF Grammar items.
-	 * @return array with PNodes.
+	 * @return List with PNodes.
 	 */
 	public final List<PNode> getPBNFs() {return _listBNF;}
 
