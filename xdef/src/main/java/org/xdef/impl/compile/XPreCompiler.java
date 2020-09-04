@@ -73,7 +73,7 @@ public class XPreCompiler implements PreCompiler {
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
 	/** Include list of URL's. */
-	private final List<URL> _includeList = new ArrayList<URL>();
+	private final ArrayList<Object> _includeList = new ArrayList<Object>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new LinkedHashMap<String, XScriptMacro>();
@@ -117,6 +117,210 @@ public class XPreCompiler implements PreCompiler {
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);
 		_jsonReader = new PreReaderJSON(this);
+	}
+
+	/** Get "name" (or "prefix:name") of node.
+	 * If the argument required is set to true put error message that
+	 * required attribute is missing.
+	 * @param pnode PNode where the attribute "name" is required.
+	 * @param required if true the attribute is required.
+	 * @param remove if true the attribute is removed.
+	 * @return the name or null.
+	 */
+	final String getNameAttr(final PNode pnode,
+		final boolean required,
+		final boolean remove) {
+		PAttr pa = getXdefAttr(pnode, "name", required, remove);
+		if (pa == null) {
+			// if required do not return null!
+			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
+		}
+		String name = pa._value.getString().trim();
+		if (name.isEmpty()) {
+			//Incorrect name
+			error(pa._value, XDEF.XDEF258);
+			return "__UNKNOWN_ATTRIBUTE_NAME_";
+		}
+		if (!XPreCompiler.chkDefName(name, pnode._xmlVersion)) {
+			error(pa._value, XDEF.XDEF258); //Incorrect name
+			return "__UNKNOWN_INCORRECT_NAME_";
+		}
+		return name;
+	}
+
+	/** Process include list from header of X-definition. */
+	void processIncludeList(PNode pnode) {
+		/** let's check some attributes of X-definition.*/
+		PAttr pa = getXdefAttr(pnode, "include", false, true);
+		if (pa != null) {
+			processIncludeList(pa._value,
+				pnode._name.getSysId(), getReportWriter());
+		}
+	}
+
+	/** Process list of file specifications and/or URLs. Result of list is added
+	 * to the includeList (if the includeList already contains an item the
+	 * item is skipped. If the argument reporter is not <tt>null</tt> and an
+	 * error occurs then the error is written to reporter. If reporter is
+	 * <tt>null</tt> then an SRuntimeException is thrown.
+	 * @param include SBuffer with list of items, separator is ",". Wildcard
+	 * characters are permitted.
+	 * @param actPath actual path.
+	 * @param reporter report writer or <tt>null</tt>.
+	 * @throws SRuntimeException if list contains error and reporter is null.
+	 */
+	private void processIncludeList(final SBuffer include,
+		final String actPath,
+		final ReportWriter reporter) {
+		if (include == null) {
+			return;
+		}
+		ReportWriter myreporter =
+			reporter == null ? new ArrayReporter() : reporter;
+		StringTokenizer st =
+			new StringTokenizer(include.getString(), " \t\n\r\f,;");
+		while (st.hasMoreTokens()) {
+			String sid = st.nextToken(); // system ID
+			if (sid.startsWith("//") || // URL
+				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) {
+				try { // is URL
+					for (String x : SUtils.getSourceGroup(sid)) {
+						URL u = SUtils.getExtendedURL(x);
+						if (_includeList.contains(u)) {
+							continue;
+						}
+						_includeList.add(u);
+					}
+				} catch (Exception ex) {
+					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
+				}
+			} else {
+				if (sid.indexOf(':') < 0 &&
+					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
+					if (actPath != null) {//take path from sysId
+						try {
+							URL u = SUtils.getExtendedURL(actPath);
+							if (!"file".equals(u.getProtocol())) {
+								String v =u.toExternalForm().replace('\\', '/');
+								int i = v.lastIndexOf('/');
+								if (i >= 0) {
+									v = v.substring(0, i + 1);
+								}
+								u = SUtils.getExtendedURL(v + sid);
+								if (_includeList.contains(u)) {
+									continue;
+								}
+								_includeList.add(u);
+								continue;
+							} else {
+								String p = new File(u.getFile()).
+									getCanonicalPath().replace('\\', '/');
+								int i = p.lastIndexOf('/');
+								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
+							}
+						} catch (Exception ex) {
+							sid = ""; // no file
+						}
+					}
+				}
+				File[] list = SUtils.getFileGroup(sid);
+				if (list.length == 0) {
+					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
+				} else {
+					for (File f: list) {
+						try {
+							if (f.canRead()) {
+								if (_includeList.contains(
+									f.getCanonicalPath())) {
+									continue; //file already exists
+								}
+								_includeList.add(f);
+								continue;
+							}
+						} catch (IOException ex) {}
+						//File doesn't exist: &{0}
+						myreporter.error(SYS.SYS024, sid);
+					}
+				}
+			}
+		}
+		if (reporter == null && myreporter.errors()) {
+			myreporter.checkAndThrowErrors();
+		}
+	}
+
+	/** Check if the name of X-definition is OK.
+	 * @param name name of X-definition
+	 * @return true if the name of X-definition is OK.
+	 */
+	final static boolean chkDefName(final String name, byte xmlVersion) {
+		if (name.length() == 0) {
+			return true; //nameless is also name
+		}
+		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) !=
+			StringParser.XML_CHAR_NAME_START) {
+			return false;
+		}
+		char c;
+		boolean wasColon = false;
+		for (int i = 1; i < name.length(); i++) {
+			if (StringParser.getXmlCharType(c = name.charAt(i),  xmlVersion) !=
+				StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
+				if (!wasColon && c == ':') { // we allow one colon inside name
+					wasColon = true;
+					if (i + 1 < name.length()
+						&& StringParser.getXmlCharType(
+							name.charAt(++i), xmlVersion)
+						!= StringParser.XML_CHAR_NAME_START){//must follow name
+						continue;
+					}
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** Get map with macros.
+	 * @return map with macros.
+	 */
+	public Map<String, XScriptMacro> getMacros() {return _macros;}
+
+	/** Get display mode.
+	 * @return display mode (see XDPool.DISPLAY_FALSE,
+	 * XPool.DISPLAY_TRUE, DISPLAY_ERRORS).
+	 */
+	final byte getDispalyMode() {return _displayMode;}
+
+	private void setMacros(final List<PNode> macros) {
+		for (PNode macro : macros) {
+			chkNestedElements(macro);
+			Map<String, String> params = new LinkedHashMap<String, String>();
+			String def = null;
+			for (PAttr patt : macro.getAttrs()) {
+				if ("#def".equals(patt._name)) {
+					def = patt.getValue().getString();
+					macro.removeAttr(patt);
+					break;
+				}
+			}
+			for (PAttr val : macro.getAttrs()) {
+				params.put(val._name, val._value.getString());
+			}
+			XScriptMacro m = new XScriptMacro(
+				getNameAttr(macro, true, true),
+				def,
+				params,
+				macro._value,
+				getReportWriter());
+			if (_macros.containsKey(m.getName())) {
+				//Macro '&{0}' redefinition
+				Report rep = Report.error(XDEF.XDEF482, m.getName());
+				macro._name.putReport(rep, getReportWriter());
+			} else {
+				_macros.put(m.getName(), m);
+			}
+		}
 	}
 
 	@Override
@@ -219,35 +423,6 @@ public class XPreCompiler implements PreCompiler {
 			}
 			return xattr;
 		}
-	}
-
-	/** Get "name" (or "prefix:name") of node.
-	 * If the argument required is set to true put error message that
-	 * required attribute is missing.
-	 * @param pnode PNode where the attribute "name" is required.
-	 * @param required if true the attribute is required.
-	 * @param remove if true the attribute is removed.
-	 * @return the name or null.
-	 */
-	final String getNameAttr(final PNode pnode,
-		final boolean required,
-		final boolean remove) {
-		PAttr pa = getXdefAttr(pnode, "name", required, remove);
-		if (pa == null) {
-			// if required do not return null!
-			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
-		}
-		String name = pa._value.getString().trim();
-		if (name.isEmpty()) {
-			//Incorrect name
-			error(pa._value, XDEF.XDEF258);
-			return "__UNKNOWN_ATTRIBUTE_NAME_";
-		}
-		if (!XPreCompiler.chkDefName(name, pnode._xmlVersion)) {
-			error(pa._value, XDEF.XDEF258); //Incorrect name
-			return "__UNKNOWN_INCORRECT_NAME_";
-		}
-		return name;
 	}
 
 	@Override
@@ -377,138 +552,6 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	/** Process include list from header of X-definition. */
-	void processIncludeList(PNode pnode) {
-		/** let's check some attributes of X-definition.*/
-		PAttr pa = getXdefAttr(pnode, "include", false, true);
-		if (pa != null) {
-			processIncludeList(pa._value,
-				pnode._name.getSysId(), getReportWriter());
-		}
-	}
-
-	/** Process list of file specifications and/or URLs. Result of list is added
-	 * to the includeList (if the includeList already contains an item the
-	 * item is skipped. If the argument reporter is not <tt>null</tt> and an
-	 * error occurs then the error is written to reporter. If reporter is
-	 * <tt>null</tt> then an SRuntimeException is thrown.
-	 * @param include SBuffer with list of items, separator is ",". Wildcard
-	 * characters are permitted.
-	 * @param actPath actual path.
-	 * @param reporter report writer or <tt>null</tt>.
-	 * @throws SRuntimeException if list contains error and reporter is null.
-	 */
-	private void processIncludeList(final SBuffer include,
-		final String actPath,
-		final ReportWriter reporter) {
-		if (include == null) {
-			return;
-		}
-		ReportWriter myreporter =
-			reporter == null ? new ArrayReporter() : reporter;
-		StringTokenizer st =
-			new StringTokenizer(include.getString(), " \t\n\r\f,;");
-		while (st.hasMoreTokens()) {
-			String sid = st.nextToken(); // system ID
-			if (sid.startsWith("//") || // URL
-				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) {
-				try { // is URL
-					for (String x : SUtils.getSourceGroup(sid)) {
-						URL u = SUtils.getExtendedURL(x);
-						if (_includeList.contains(u)) {
-							continue;
-						}
-						_includeList.add(u);
-					}
-				} catch (Exception ex) {
-					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
-				}
-			} else {
-				if (sid.indexOf(':') < 0 &&
-					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
-					if (actPath != null) {//take path from sysId
-						try {
-							URL u = SUtils.getExtendedURL(actPath);
-							if (!"file".equals(u.getProtocol())) {
-								String v =u.toExternalForm().replace('\\', '/');
-								int i = v.lastIndexOf('/');
-								if (i >= 0) {
-									v = v.substring(0, i + 1);
-								}
-								u = SUtils.getExtendedURL(v + sid);
-								if (_includeList.contains(u)) {
-									continue;
-								}
-								_includeList.add(u);
-								continue;
-							} else {
-								String p = new File(u.getFile()).
-									getCanonicalPath().replace('\\', '/');
-								int i = p.lastIndexOf('/');
-								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
-							}
-						} catch (Exception ex) {
-							sid = ""; // no file
-						}
-					}
-				}
-				File[] list = SUtils.getFileGroup(sid);
-				if (list.length == 0) {
-					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
-				} else {
-					for (File f: list) {
-						try {
-							if (f.canRead()) {
-								URL u = f.toURI().toURL();
-								if (!_includeList.contains(u)) {
-									_includeList.add(u);
-								}
-								continue;
-							}
-						} catch (IOException ex) {}
-						//File doesn't exist: &{0}
-						myreporter.error(SYS.SYS024, sid);
-					}
-				}
-			}
-		}
-		if (reporter == null && myreporter.errors()) {
-			myreporter.checkAndThrowErrors();
-		}
-	}
-
-	/** Check if the name of X-definition is OK.
-	 * @param name name of X-definition
-	 * @return true if the name of X-definition is OK.
-	 */
-	final static boolean chkDefName(final String name, byte xmlVersion) {
-		if (name.length() == 0) {
-			return true; //nameless is also name
-		}
-		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) !=
-			StringParser.XML_CHAR_NAME_START) {
-			return false;
-		}
-		char c;
-		boolean wasColon = false;
-		for (int i = 1; i < name.length(); i++) {
-			if (StringParser.getXmlCharType(c = name.charAt(i),  xmlVersion) !=
-				StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
-				if (!wasColon && c == ':') { // we allow one colon inside name
-					wasColon = true;
-					if (i + 1 < name.length()
-						&& StringParser.getXmlCharType(
-							name.charAt(++i), xmlVersion)
-						!= StringParser.XML_CHAR_NAME_START){//must follow name
-						continue;
-					}
-				}
-				return false;
-			}
-		}
-		return true;
-	}
-
 	@Override
 	/** Check if the node has no nested child nodes.
 	 * @param pnode PNode to be tested.
@@ -523,37 +566,6 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	private void setMacros(final List<PNode> macros) {
-		for (PNode macro : macros) {
-			chkNestedElements(macro);
-			Map<String, String> params = new LinkedHashMap<String, String>();
-			String def = null;
-			for (PAttr patt : macro.getAttrs()) {
-				if ("#def".equals(patt._name)) {
-					def = patt.getValue().getString();
-					macro.removeAttr(patt);
-					break;
-				}
-			}
-			for (PAttr val : macro.getAttrs()) {
-				params.put(val._name, val._value.getString());
-			}
-			XScriptMacro m = new XScriptMacro(
-				getNameAttr(macro, true, true),
-				def,
-				params,
-				macro._value,
-				getReportWriter());
-			if (_macros.containsKey(m.getName())) {
-				//Macro '&{0}' redefinition
-				Report rep = Report.error(XDEF.XDEF482, m.getName());
-				macro._name.putReport(rep, getReportWriter());
-			} else {
-				_macros.put(m.getName(), m);
-			}
-		}
-	}
-
 	@Override
 	/** Prepare list of declared macros and expand macro references. */
 	public final void prepareMacros() {
@@ -562,7 +574,12 @@ public class XPreCompiler implements PreCompiler {
 		}
 		// doParse of definitions from include list
 		for (int i = 0; i < _includeList.size(); i++) {
-			parseURL(_includeList.get(i));
+			Object o = _includeList.get(i);
+			if (o instanceof URL) {
+				parseURL((URL) o);
+			} else {
+				parseFile((File) o);
+			}
 		}
 		List<PNode> macros = new ArrayList<PNode>();
 		for (PNode xd: _listDecl) {
@@ -627,18 +644,11 @@ public class XPreCompiler implements PreCompiler {
 		_macrosProcessed = true;
 	}
 
-	/** Get map with macros.
-	 * @return map with macros.
-	 */
-	public Map<String, XScriptMacro> getMacros() {return _macros;}
-
 	@Override
 	/** Set System ID for error reporting.
 	 * @param sysId System id.
 	 */
-	public final void setSystemId(final String sysId) {
-		_xmlReader._sysId = sysId;
-	}
+	public final void setSystemId(final String sysId) {_xmlReader._sysId=sysId;}
 
 	@Override
 	/** Get code generator.
@@ -648,43 +658,43 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Get sources of X-definitions.
-	 * @return List with sources of X-definitions.
+	 * @return array with sources of X-definitions.
 	 */
 	public List<Object> getSources() {return _sources;}
 
 	@Override
 	/** Get prepared sources (PNodes) of X-definition items.
-	 * @return List with PNodes with X-definitions.
+	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
 	@Override
 	/** Get prepared sources (PNodes) of lexicon items.
-	 * @return List with PNodes.
+	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPLexiconList() {return _lexicons;}
 
 	@Override
 	/** Get prepared sources (PNodes) of collection items.
-	 * @return List with PNodes.
+	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPCollections() {return _listCollection;}
 
 	@Override
 	/** Get prepared sources (PNodes) of declaration items.
-	 * @return List with PNodes.
+	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPDeclarations() {return _listDecl;}
 
 	@Override
 	/** Get prepared sources (PNodes) of components items.
-	 * @return List with PNodes.
+	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPComponents() {return _listComponent;}
 
 	@Override
 	/** Get prepared sources (PNodes) of BNF Grammar items.
-	 * @return List with PNodes.
+	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPBNFs() {return _listBNF;}
 
@@ -699,12 +709,6 @@ public class XPreCompiler implements PreCompiler {
 	 * @param x the report writer to be set.
 	 */
 	public final void setReportWriter(final ReportWriter x) {_reporter = x;}
-
-	/** Get display mode.
-	 * @return display mode (see XDPool.DISPLAY_FALSE,
-	 * XPool.DISPLAY_TRUE, DISPLAY_ERRORS).
-	 */
-	final byte getDispalyMode() {return _displayMode;}
 
 	@Override
 	/** Get switch if the parser will check warnings as errors.
