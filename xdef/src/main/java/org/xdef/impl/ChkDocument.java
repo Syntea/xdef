@@ -612,6 +612,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				reporter.checkAndThrowErrors();
 			}
 		}
+		KXmlUtils.removeRedundantXmlnsAttrs(_element); //???
 		return _element;
 	}
 
@@ -1291,7 +1292,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Element xcreate(final QName qname, final ReportWriter reporter)
 		throws SRuntimeException {
-		return xcreate(qname.getNamespaceURI(), qname.getLocalPart(), reporter);
+		String s = qname.getPrefix();
+		s = (s != null && !s.isEmpty() ? s + ':' : "") + qname.getLocalPart();
+		return xcreate(qname.getNamespaceURI(), s, reporter);
 	}
 
 	@Override
