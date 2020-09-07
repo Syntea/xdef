@@ -1,5 +1,7 @@
 package org.xdef.xml;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.xdef.impl.xml.KNodeList;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.impl.xml.KNamedNodeMap;
@@ -972,6 +974,59 @@ public class KDOMUtils {
 			}
 		}
 		return null;
+	}
+
+	/** Remove redundant xmlns attributes.
+	 * @param el element where redundant xmlns attributes are removed.
+	 */
+	public static final void removeRedundantXmlnsAttrs(final Element el) {
+		if (el == null) {
+			return;
+		}
+		Map<String, String> namespaces = new HashMap<String, String>();
+		NamedNodeMap nnm = el.getAttributes();
+		for (int i = 0; i < nnm.getLength(); i++) {
+			Node a = nnm.item(i);
+			if (a.getNodeName().startsWith("xmlns")) {
+				namespaces.put(a.getNodeName(), a.getNodeValue());
+			}
+		}
+		removeRedundantXmlnsAttrs(el, namespaces);
+	}
+
+	/** Remove redundant xmlns attributes from child elements of el.
+	 * @param el element where redundant xmlns attributes of child elements
+	 * are removed.
+	 */
+	private static void removeRedundantXmlnsAttrs(final Element el,
+		final Map<String, String> namespaces) {
+		NodeList nl = el.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				Map<String, String> namespaces1 =
+					new HashMap<String, String>(namespaces);
+				NamedNodeMap nnm = n.getAttributes();
+				for (int j = nnm.getLength() - 1; j >= 0 ; j--) {
+					Node a = nnm.item(j);
+					String name = a.getNodeName();
+					if (name.startsWith("xmlns")) {
+						String val = a.getNodeValue();
+						String ns = namespaces1.get(name);
+						if (ns != null && ns.equals(val)) {
+							((Element) n).removeAttribute(name);
+						} else {
+							if (val == null || val.isEmpty()) {
+								namespaces1.remove(name);
+							} else {
+								namespaces1.put(name, val);
+							}
+						}
+					}
+				}
+				removeRedundantXmlnsAttrs((Element) n, namespaces1);
+			}
+		}
 	}
 
 	/** Set necessary xmlns attributes to this element and all child elements.

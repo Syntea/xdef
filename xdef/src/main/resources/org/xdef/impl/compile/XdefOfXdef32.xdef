@@ -1,8 +1,7 @@
 <!--
- The description of XML document which must fit the X-definition 3.2
- specification.
- The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/4.0).
- The prefix of objects describing the X-definition 3.2 is XD3.2.
+ Description of XML document which must fit X-definition 3.2 specification.
+ Meta namespace of X-definition is "METAXD".
+ Prefix of objects describing X-definition 3.2 is XD3.2.
 -->
 
 <xd:def xmlns:xd  = "METAXD"

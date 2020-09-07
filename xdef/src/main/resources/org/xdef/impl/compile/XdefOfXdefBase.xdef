@@ -1,6 +1,7 @@
-<!-- Common base types and BNF grammar of of the X-script.
- The meta namespace of X-definition ("METAXD" is http://www.xdef.org/xdef/4.0).
- -->
+<!--
+ Common base types and BNF grammar of X-script.
+ Meta namespace of X-definition is "METAXD".
+-->
 <xd:def xmlns:xd  = "METAXD"
   xmlns:XD2.0     = "http://www.syntea.cz/xdef/2.0"
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
@@ -20,9 +21,7 @@
   w:metaNamespace = "METAXD">
 
 <xd:declaration>
-  /* Default namespace of XDefinition */
-  String xdUri;
-  /* Variable id used as the namespace of checked source; default is xdUri.*/
+  /* Variable NS used as namespace of checked source.*/
   String NS;
 
 /******************************************************************************/
@@ -51,7 +50,7 @@
   type importLocal XDScript.rule('importLocal');
   type json XDJson.rule('json');
 
-  /** Check element name and namespace URI (used in the match section) */
+  /** Check element name and namespace URI (used in match section) */
   boolean xdName(String name) {
     return getElementLocalName() EQ name AND getNamespaceURI() EQ NS;
   }

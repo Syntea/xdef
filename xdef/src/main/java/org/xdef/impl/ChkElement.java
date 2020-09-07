@@ -1653,11 +1653,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if ("xmlns".equals(qname) || qname.startsWith("xmlns:")
 			|| qname.startsWith("xml:")) {
-			String uri;
-			if ((uri = nsURI) == null) {
-				uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI
-					: XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-			}
+			String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI
+				: XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
 			_element.setAttributeNS(uri, qname, data);
 			return true;
 		}

@@ -1797,7 +1797,13 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 								name.equals(chkNode._node.getNodeName())) {
 								chkNode.setTextValue(s);
 							} else {
-								e.setAttribute(name, s);
+								if (name.equals("xmlns")
+									|| name.startsWith("xmlns:")) {
+									e.setAttributeNS(javax.xml.XMLConstants
+										.XMLNS_ATTRIBUTE_NS_URI, name, s);
+								} else {
+									e.setAttribute(name, s);
+								}
 							}
 						} else {
 							if (chkNode._node != null &&
