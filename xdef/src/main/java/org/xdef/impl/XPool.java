@@ -1287,6 +1287,7 @@ public final class XPool implements XDPool, Serializable {
 	/** This method uses the interface Serializable.
 	 * @param input from where to read.
 	 * @throws IOException if an error occurs.
+	 * @throws ClassNotFoundException if class not found.
 	 */
 	private void readObject(java.io.ObjectInputStream input)
 		throws IOException, ClassNotFoundException {
