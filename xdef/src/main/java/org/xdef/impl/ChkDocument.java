@@ -612,7 +612,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				reporter.checkAndThrowErrors();
 			}
 		}
-		KXmlUtils.removeRedundantXmlnsAttrs(_element); //???
 		return _element;
 	}
 
@@ -1278,7 +1277,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		ChkComposer chkp =
 			new ChkComposer(reporter == null ? new ArrayReporter() : reporter);
 		chkp.xcreate(this, nsUri, name);
-		return chkAndGetRootElement(chkp, reporter == null);
+		Element result = chkAndGetRootElement(chkp, reporter == null);
+		KXmlUtils.removeRedundantXmlnsAttrs(result);
+		return result;
 	}
 
 	@Override
