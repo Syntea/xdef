@@ -402,6 +402,7 @@ public class XScriptParser extends StringParser
 	 * @param actDefName name of actually processed X-definition.
 	 * @param importLocal array of X-definition names to accept locals.
 	 * @param xdVersion version ID of XDefinition.
+	 * @param xpath XPath to source.
 	 */
 	public final void setSource(final SBuffer source,
 		final String actDefName,

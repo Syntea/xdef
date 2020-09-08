@@ -984,14 +984,46 @@ public class KDOMUtils {
 			return;
 		}
 		Map<String, String> namespaces = new HashMap<String, String>();
+		createXmlnsMap(el, namespaces);
+		// put all unambiguous xmlns attributes to root element
+		for (Map.Entry<String, String> e: namespaces.entrySet()) {
+			String val = e.getValue();
+			if (val.equals(" ")) {
+				namespaces.remove(e.getKey());
+			} else {
+				el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+					e.getKey(), val);
+			}
+		}
+		removeRedundantXmlnsAttrs(el, namespaces);
+	}
+
+	/** Find xmlns attributes in el and all child elements.
+	 * @param el element where find xmlns attributes in el and child elements.
+	 */
+	private static void createXmlnsMap(final Element el,
+		final Map<String, String> namespaces) {
 		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
 			Node a = nnm.item(i);
 			if (a.getNodeName().startsWith("xmlns")) {
-				namespaces.put(a.getNodeName(), a.getNodeValue());
+				String name = a.getNodeName();
+				String value = a.getNodeValue().trim();
+				String s = namespaces.get(name);
+				if (s == null) {
+					namespaces.put(name, value);
+				} else if (!value.equals(s)) {
+					namespaces.put(name, " ");
+				}
 			}
 		}
-		removeRedundantXmlnsAttrs(el, namespaces);
+		NodeList nl = el.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				createXmlnsMap((Element)n, namespaces);
+			}
+		}
 	}
 
 	/** Remove redundant xmlns attributes from child elements of el.
@@ -1013,10 +1045,10 @@ public class KDOMUtils {
 					if (name.startsWith("xmlns")) {
 						String val = a.getNodeValue();
 						String ns = namespaces1.get(name);
-						if (ns != null && ns.equals(val)) {
+						if (val.equals(ns)) {
 							((Element) n).removeAttribute(name);
 						} else {
-							if (val == null || val.isEmpty()) {
+							if (val.isEmpty()) { // shouldn't happen
 								namespaces1.remove(name);
 							} else {
 								namespaces1.put(name, val);
