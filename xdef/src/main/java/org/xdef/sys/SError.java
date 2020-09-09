@@ -4,7 +4,8 @@ package org.xdef.sys;
  * @author  Vaclav Trojan
  */
 public class SError extends Error implements SThrowable {
-
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = -3563569770933955376L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Report identifier (may be null). */

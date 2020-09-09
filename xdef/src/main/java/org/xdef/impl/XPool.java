@@ -43,7 +43,6 @@ import org.xdef.proc.XDLexicon;
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool, Serializable {
-
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -4736745770531753457L;
 	/** Magic ID.*/

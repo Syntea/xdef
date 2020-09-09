@@ -7,7 +7,8 @@ import java.io.IOException;
  * @author Trojan
  */
 public class SIOException extends IOException implements SThrowable {
-
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = 7775290621161790690L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Report identifier (may be null). */

@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
  * @author Vaclav Trojan
  */
 public class SExternalError extends SError implements SThrowable {
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = -2215124767325702209L;
 
 	/** Creates a new instance of SExternalError.
 	 * @param ex The object which caused the error.

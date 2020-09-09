@@ -6,7 +6,8 @@ package org.xdef.sys;
  */
 public class SUnsupportedOperationException
 	extends UnsupportedOperationException implements SThrowable {
-
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = -7555233586913590382L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Report identifier (may be null). */

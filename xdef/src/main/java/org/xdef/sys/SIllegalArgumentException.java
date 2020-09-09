@@ -6,6 +6,8 @@ package org.xdef.sys;
  */
 public class SIllegalArgumentException
 	extends IllegalArgumentException implements SThrowable {
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = -3440796080459280150L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Report identifier (may be null). */

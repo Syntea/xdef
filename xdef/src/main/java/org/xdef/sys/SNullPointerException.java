@@ -5,7 +5,8 @@ package org.xdef.sys;
  */
 public class SNullPointerException extends NullPointerException
 	implements SThrowable {
-
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = 8580697295102513610L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Report identifier (may be null). */
