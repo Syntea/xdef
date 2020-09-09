@@ -80,6 +80,7 @@ public class CanonizeSource {
 	int _lastCommentLine;
 	int _firstCommentStart;
 	int _firstCommentEnd;
+	int _lines = 0;
 
 	/** Creates new instance of ToNewPrepoc - just prevent the user to do it.*/
 	private CanonizeSource() {}
@@ -138,6 +139,7 @@ public class CanonizeSource {
 		String line;
 		boolean modified = false;
 		while ((line = in.readLine()) != null) {
+			_lines++;
 			//cut final white spaces
 			int len = line.length();
 			int i = len;
@@ -731,6 +733,7 @@ public class CanonizeSource {
 				+ " file(s), changed " + cs._modifyCount + ".");
 			out.flush();
 		}
+		System.out.println("Processed " + cs._lines + " lines.");
 		return null;
 	}
 

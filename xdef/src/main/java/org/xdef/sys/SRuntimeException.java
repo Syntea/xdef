@@ -4,6 +4,8 @@ package org.xdef.sys;
  * @author  Vaclav Trojan
  */
 public class SRuntimeException extends RuntimeException implements SThrowable {
+	/** This constant is used in the ObjectStream reader/writer. */
+	private static final long serialVersionUID = -55319058851477379L;
 	/** Cause of exception. */
 	private Throwable _cause;
 	/** Message identifier (may be null).*/
