@@ -1011,15 +1011,17 @@ public class KDOMUtils {
 		removeRedundantXmlnsAttrs(el, namespaces);
 	}
 
-	/** Find xmlns attributes in el and all child elements.
-	 * @param el element where find xmlns attributes in el and child elements.
+	/** Create prefix item if node has namespaceURI.
+	 * @param n the Node to be processed.
+	 * @param namespaces map with namespace items.
 	 */
-	private static void createXmlnsMap(final Element el,
+	private static void createPrefixItem(final Node n,
 		final Map<String, NsItem> namespaces) {
-		String value = el.getNamespaceURI();
+		String value = n.getNamespaceURI();
 		if (value != null) {
-			String prefix = el.getPrefix();
-			String name = "xmlns"+(prefix.isEmpty() ? "" : ':'+prefix);
+			String prefix = n.getPrefix();
+			String name = "xmlns" +
+				(prefix == null || prefix.isEmpty() ? "" : ':' + prefix);
 			NsItem x = namespaces.get(name);
 			if (x == null) {
 				x = new NsItem(value);
@@ -1031,26 +1033,30 @@ public class KDOMUtils {
 				x._counter++;
 			}
 		}
+	}
+
+	/** Find xmlns attributes in el and all child elements.
+	 * @param el element where find xmlns attributes in el and child elements.
+	 */
+	private static void createXmlnsMap(final Element el,
+		final Map<String, NsItem> namespaces) {
+		createPrefixItem(el, namespaces);
 		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
 			Node a = nnm.item(i);
 			String name = a.getNodeName();
+			String value;
 			if (a.getNodeName().startsWith("xmlns")) {
 				value = a.getNodeValue().trim();
-			} else {
-				value = a.getNamespaceURI();
-				if (value == null) {
-					continue;
+				NsItem x = namespaces.get(name);
+				if (x == null) {
+					namespaces.put(name, new NsItem(value));
+				} else if (!value.equals(x._value)) {
+					x._ignore = true;
+					x._counter = 0;
 				}
-				String prefix = a.getPrefix();
-				name = "xmlns" + (prefix.isEmpty() ? "" : ':' + prefix);
-			}
-			NsItem x = namespaces.get(name);
-			if (x == null) {
-				namespaces.put(name, new NsItem(value));
-			} else if (!value.equals(x._value)) {
-				x._ignore = true;
-				x._counter = 0;
+			} else {
+				createPrefixItem(el, namespaces);
 			}
 		}
 		NodeList nl = el.getChildNodes();
