@@ -976,6 +976,18 @@ public class KDOMUtils {
 		return null;
 	}
 
+	/** This class is used in method removeRedundantXmlnsAttrs. */
+	private static class NsItem {
+		String _value; // value of namespace URI
+		int _counter; // number of usage
+		boolean _ignore; // if this namespace item should be ignored
+		NsItem(final String value) {
+			_value = value;
+			_counter = 0;
+			_ignore = false;
+		}
+	}
+
 	/** Remove redundant xmlns attributes.
 	 * @param el element where redundant xmlns attributes are removed.
 	 */
@@ -983,16 +995,17 @@ public class KDOMUtils {
 		if (el == null) {
 			return;
 		}
-		Map<String, String> namespaces = new HashMap<String, String>();
+		Map<String, NsItem> namespaces = new HashMap<String, NsItem>();
 		createXmlnsMap(el, namespaces);
 		// put all unambiguous xmlns attributes to root element
-		for (Map.Entry<String, String> e: namespaces.entrySet()) {
-			String val = e.getValue();
-			if (val.equals(" ")) {
-				namespaces.remove(e.getKey());
-			} else {
+		for (Map.Entry<String, NsItem> e: namespaces.entrySet()) {
+			NsItem val = e.getValue();
+			String name = e.getKey();
+			if (val._counter <= 0) {
+				el.removeAttribute(name);
+			} else  if (!val._ignore) {
 				el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-					e.getKey(), val);
+					name, val._value);
 			}
 		}
 		removeRedundantXmlnsAttrs(el, namespaces);
@@ -1002,19 +1015,42 @@ public class KDOMUtils {
 	 * @param el element where find xmlns attributes in el and child elements.
 	 */
 	private static void createXmlnsMap(final Element el,
-		final Map<String, String> namespaces) {
+		final Map<String, NsItem> namespaces) {
+		String value = el.getNamespaceURI();
+		if (value != null) {
+			String prefix = el.getPrefix();
+			String name = "xmlns"+(prefix.isEmpty() ? "" : ':'+prefix);
+			NsItem x = namespaces.get(name);
+			if (x == null) {
+				x = new NsItem(value);
+				x._counter++;
+				namespaces.put(name, x);
+			} else if (!value.equals(x._value)) {
+				x._ignore = true;
+			} else if (!x._ignore) {
+				x._counter++;
+			}
+		}
 		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
 			Node a = nnm.item(i);
+			String name = a.getNodeName();
 			if (a.getNodeName().startsWith("xmlns")) {
-				String name = a.getNodeName();
-				String value = a.getNodeValue().trim();
-				String s = namespaces.get(name);
-				if (s == null) {
-					namespaces.put(name, value);
-				} else if (!value.equals(s)) {
-					namespaces.put(name, " ");
+				value = a.getNodeValue().trim();
+			} else {
+				value = a.getNamespaceURI();
+				if (value == null) {
+					continue;
 				}
+				String prefix = a.getPrefix();
+				name = "xmlns" + (prefix.isEmpty() ? "" : ':' + prefix);
+			}
+			NsItem x = namespaces.get(name);
+			if (x == null) {
+				namespaces.put(name, new NsItem(value));
+			} else if (!value.equals(x._value)) {
+				x._ignore = true;
+				x._counter = 0;
 			}
 		}
 		NodeList nl = el.getChildNodes();
@@ -1031,32 +1067,31 @@ public class KDOMUtils {
 	 * are removed.
 	 */
 	private static void removeRedundantXmlnsAttrs(final Element el,
-		final Map<String, String> namespaces) {
+		final Map<String, NsItem> namespaces) {
 		NodeList nl = el.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				Map<String, String> namespaces1 =
-					new HashMap<String, String>(namespaces);
 				NamedNodeMap nnm = n.getAttributes();
 				for (int j = nnm.getLength() - 1; j >= 0 ; j--) {
 					Node a = nnm.item(j);
 					String name = a.getNodeName();
 					if (name.startsWith("xmlns")) {
 						String val = a.getNodeValue();
-						String ns = namespaces1.get(name);
-						if (val.equals(ns)) {
-							((Element) n).removeAttribute(name);
-						} else {
-							if (val.isEmpty()) { // shouldn't happen
-								namespaces1.remove(name);
+						NsItem x = namespaces.get(name);
+						if (x != null) {
+							if (val.equals(x._value)) {
+								((Element) n).removeAttribute(name);
 							} else {
-								namespaces1.put(name, val);
+								x._ignore = true;
+								x._counter = 0;
 							}
+						} else {
+							namespaces.put(name, new NsItem(val));//never happen
 						}
 					}
 				}
-				removeRedundantXmlnsAttrs((Element) n, namespaces1);
+				removeRedundantXmlnsAttrs((Element) n, namespaces);
 			}
 		}
 	}
