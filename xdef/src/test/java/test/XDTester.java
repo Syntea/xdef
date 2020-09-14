@@ -797,6 +797,32 @@ public abstract class XDTester extends STester {
 		return create(xd, qname, reporter, xml, strw, userObj);
 	}
 	final public Element create(final XDDocument xd,
+		final String name,
+		final ArrayReporter reporter,
+		final String xml,
+		final StringWriter strw,
+		final Object userObj) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		XDOutput out = null;
+		if (strw != null) {
+			out = XDFactory.createXDOutput(strw, false);
+			xd.setStdOut(out);
+		}
+		if (xml != null && xml.length() > 0) {
+			xd.setXDContext(xml);
+		}
+		if (userObj != null) {
+			xd.setUserObject(userObj);
+		}
+		Element result = xd.xcreate(name, reporter);
+		if (out != null) {
+			out.close();
+		}
+		return result;
+	}
+	final public Element create(final XDDocument xd,
 		final QName qname,
 		final ArrayReporter reporter,
 		final String xml,
@@ -822,7 +848,6 @@ public abstract class XDTester extends STester {
 		}
 		return result;
 	}
-
 	final public Element create(final String xdef,
 		final String xdName,
 		final QName qname,
@@ -832,7 +857,6 @@ public abstract class XDTester extends STester {
 		final Object userObj) {
 		return create(compile(xdef), xdName, qname, reporter, xml,strw,userObj);
 	}
-
 	final public Element create(final XDPool xp,
 		final String xdName,
 		final String name,
@@ -840,9 +864,9 @@ public abstract class XDTester extends STester {
 		final String xml,
 		final StringWriter strw,
 		final Object userObj) {
-		return create(xp, xdName, new QName(name),reporter, xml, strw, userObj);
+		XDDocument xd = xp.createXDDocument(xdName);
+		return create(xd, name, reporter, xml, strw, userObj);
 	}
-
 	final public Element create(final String xdef,
 		final String xdName,
 		final String name,
@@ -852,7 +876,6 @@ public abstract class XDTester extends STester {
 		final Object userObj) {
 		return create(compile(xdef), xdName, name, reporter, xml, strw,userObj);
 	}
-
 	final public Element create(final XDPool xp,
 		final String xdName,
 		final String name,
@@ -860,26 +883,22 @@ public abstract class XDTester extends STester {
 		final String xml) {
 		return create(xp, xdName, name, reporter, xml, null, null);
 	}
-
 	final public Element create(final XDDocument xd,
 		final String name,
 		final ArrayReporter reporter) {
-		return create(xd, new QName(name), reporter, null, null, null);
+		return create(xd, name, reporter, null, null, null);
 	}
-
 	final public Element create(final XDDocument xd,
 		final QName qname,
 		final ArrayReporter reporter) {
 		return create(xd, qname, reporter, null, null, null);
 	}
-
 	final public Element create(final XDDocument xd,
 		final String name,
 		final ArrayReporter reporter,
 		final String xml) {
-		return create(xd, new QName(name), reporter, xml, null, null);
+		return create(xd, name, reporter, xml, null, null);
 	}
-
 	final public Element create(final String xdef,
 		final String xdName,
 		final String name,
@@ -887,7 +906,6 @@ public abstract class XDTester extends STester {
 		final String xml) {
 		return create(xdef, xdName, name, reporter, xml, null, null);
 	}
-
 	final public Element create(final XDDocument xd,
 		final QName qname,
 		final ArrayReporter reporter,
