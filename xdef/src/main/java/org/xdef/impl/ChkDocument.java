@@ -1309,6 +1309,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Element xcreate(final String name,
 		final ReportWriter reporter) throws SRuntimeException {
+		for (XMElement x : _scp.getXDefinition().getModels()) {
+			if (name.equals(x.getName())) {
+				return xcreate(x.getQName(), reporter); // model found
+			}
+		}
 		return xcreate(null, name, reporter);
 	}
 
