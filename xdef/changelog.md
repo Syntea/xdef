@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.1, release-date 2020-08-17
+# Version 40.1.1, release-date 2020-08-16
 * corrected bugs in BNF syntax of X-definitions
 * implemented the new method `chkCompatibility(String version)` to XDPool.
   This allows to check the version of `XDPool` object with the actual

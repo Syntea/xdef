@@ -225,8 +225,7 @@ Configuration file pom.xml:
 # Building this project
 
 Source code at GitHub:
-* link to the release version: <https://github.com/Syntea/xdef>
-* link to the snapshot version: <https://github.com/Syntea/xdef/tree/master-snapshot>
+* link to the last stable version (to the branch "master"): <https://github.com/Syntea/xdef>
 
 Prerequisities:
 * download project X-definition, eg. from GitHub
