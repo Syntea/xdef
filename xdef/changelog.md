@@ -5,6 +5,12 @@
 * implemented the new method `chkCompatibility(String version)` to XDPool.
   This allows to check the version of `XDPool` object with the actual
   X-definition software.
+* in the class `org.xdef.KDOMUtils` is implemented new static method
+  'public static void removeRedundantXmlnsAttrs(Element el)'. This method
+  removes unused `xmlns` attributes and moves repeatable used xmlns attributes
+  to the element el.
+  This method is now invoked in the construction mode of X-definition on the
+  constructed element.
 
 # Version 40.1.0, release-date 2020-08-04
 * corrected bug illegal type in `ObjectReader` when the code contains an item
