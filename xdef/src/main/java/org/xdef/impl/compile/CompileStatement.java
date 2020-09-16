@@ -4057,17 +4057,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				}
 				case XD_BOOLEAN:
-					if (_xdVersion > XConstants.XD31) {
-						XDValue val = _g.getLastCodeItem();
-						if (STARTSWITH != val.getCode()
-							&& CALL_OP != val.getCode()
-							&& PARSERESULT_MATCH != val.getCode()
-							&& !(val instanceof CodeExtMethod)) {
-							//&{0} is deprecated.&{1}{ Please use }{ instead.}
-							_g.reportDeprecated("explicit validation code",
-								"union or declare a validation method");
-						}
-					}
 					_g.genStop();
 					break;
 				case CompileBase.PARSEITEM_VALUE:
