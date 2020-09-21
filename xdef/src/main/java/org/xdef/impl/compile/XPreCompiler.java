@@ -150,31 +150,17 @@ public class XPreCompiler implements PreCompiler {
 
 	/** Process include list from header of X-definition. */
 	void processIncludeList(PNode pnode) {
-		/** let's check some attributes of X-definition.*/
 		PAttr pa = getXdefAttr(pnode, "include", false, true);
-		if (pa != null) {
-			processIncludeList(pa._value,
-				pnode._name.getSysId(), getReportWriter());
+		if (pa == null) {
+			return; // Attribute "include" is not declared in X-definition
 		}
-	}
-
-	/** Process list of file specifications and/or URLs. Result of list is added
-	 * to the includeList (if the includeList already contains an item the
-	 * item is skipped. If the argument reporter is not <tt>null</tt> and an
-	 * error occurs then the error is written to reporter. If reporter is
-	 * <tt>null</tt> then an SRuntimeException is thrown.
-	 * @param include SBuffer with list of items, separator is ",". Wildcard
-	 * characters are permitted.
-	 * @param actPath actual path.
-	 * @param reporter report writer or <tt>null</tt>.
-	 * @throws SRuntimeException if list contains error and reporter is null.
-	 */
-	private void processIncludeList(final SBuffer include,
-		final String actPath,
-		final ReportWriter reporter) {
-		if (include == null) {
-			return;
-		}
+		/* Process list of file specifications and/or URLs. Result of list
+		 * is added to the includeList (if the includeList already contains
+		 * an item the item it is skipped. If reporter is null then
+		 * SRuntimeException is thrown.*/
+		SBuffer include = pa._value;
+		String actPath = pnode._name.getSysId();
+		ReportWriter reporter = getReportWriter();
 		ReportWriter myreporter =
 			reporter == null ? new ArrayReporter() : reporter;
 		StringTokenizer st =
