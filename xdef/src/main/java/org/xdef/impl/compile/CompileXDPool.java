@@ -62,12 +62,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** XPreCompiler instance.  */
 	private final PreCompiler _precomp;
-
 	/** Table of definitions */
 	private final Map<String, XDefinition> _xdefs;
-
-	/** Source files table - to prevent to doParse the source twice. */
-	private final List<Object> _sources;
 	/** PNodes with parsed source items. */
 	private final List<PNode> _xdefPNodes;
 	/** Array of lexicon sources item. */
@@ -84,13 +80,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final ArrayList<XNode> _nodeList;
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
-	/** Set of JSON names. */
-	Set<String> _jsonNames = new HashSet<String>();
-
-	/** External classes. */
-	private Class<?>[] _extClasses;
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
+	/** External classes. */
+	private Class<?>[] _extClasses;
+	/** Set of JSON names. */
+	Set<String> _jsonNames = new HashSet<String>();
 
 	/** Creates a new instance of XDefCompiler
 	 * @param xp The XDefPool object.
@@ -111,7 +106,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_xdefs = xdefs;
 		_nodeList = new ArrayList<XNode>();
 		_codeGenerator = _precomp.getCodeGenerator();
-		_sources = _precomp.getSources();
 		_xdefPNodes = _precomp.getPXDefs();
 		_lexicon = _precomp.getPLexiconList();
 		_listBNF = _precomp.getPBNFs();
@@ -1779,7 +1773,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			//Attempt to recompile compiled pool
 			throw new SRuntimeException(XDEF.XDEF203);
 		}
-		if (_sources.isEmpty()) {
+		if (_precomp.getSources().isEmpty()) {
 			Exception ex = null;
 			try {
 				getReportWriter().checkAndThrowErrorWarnings();
@@ -1836,7 +1830,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		compileLexicons(_lexicon, xdp); // compile lexicon
 		_xdefPNodes.clear(); // Let GC make the job
-		_sources.clear();
+		_precomp.getSources().clear();
 		_nodeList.clear();
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
