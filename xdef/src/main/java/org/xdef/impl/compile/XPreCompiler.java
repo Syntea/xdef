@@ -73,7 +73,7 @@ public class XPreCompiler implements PreCompiler {
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
 	/** Include list of URL's. */
-	private final ArrayList<Object> _includeList = new ArrayList<Object>();
+	private final ArrayList<URL> _includeList = new ArrayList<URL>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new LinkedHashMap<String, XScriptMacro>();
@@ -167,15 +167,14 @@ public class XPreCompiler implements PreCompiler {
 			new StringTokenizer(include.getString(), " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system ID
-			if (sid.startsWith("//") || // URL
-				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) {
-				try { // is URL
+			URL u;
+			if (sid.startsWith("//") ||
+				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) { // is URL
+				try {
 					for (String x : SUtils.getSourceGroup(sid)) {
-						URL u = SUtils.getExtendedURL(x);
-						if (_includeList.contains(u)) {
-							continue;
+						if (!_includeList.contains(u=SUtils.getExtendedURL(x))){
+							_includeList.add(u); // file is not in list
 						}
-						_includeList.add(u);
 					}
 				} catch (Exception ex) {
 					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
@@ -185,18 +184,17 @@ public class XPreCompiler implements PreCompiler {
 					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
 					if (actPath != null) {//take path from sysId
 						try {
-							URL u = SUtils.getExtendedURL(actPath);
+							u = SUtils.getExtendedURL(actPath);
 							if (!"file".equals(u.getProtocol())) {
-								String v =u.toExternalForm().replace('\\', '/');
+								String v = u.toExternalForm().replace('\\','/');
 								int i = v.lastIndexOf('/');
 								if (i >= 0) {
 									v = v.substring(0, i + 1);
 								}
 								u = SUtils.getExtendedURL(v + sid);
-								if (_includeList.contains(u)) {
-									continue;
+								if (!_includeList.contains(u)) {
+									_includeList.add(u); // file is not in list
 								}
-								_includeList.add(u);
 								continue;
 							} else {
 								String p = new File(u.getFile()).
@@ -205,6 +203,8 @@ public class XPreCompiler implements PreCompiler {
 								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
 							}
 						} catch (Exception ex) {
+							//File doesn't exist: &{0}
+							myreporter.error(SYS.SYS024, sid);
 							sid = ""; // no file
 						}
 					}
@@ -216,11 +216,10 @@ public class XPreCompiler implements PreCompiler {
 					for (File f: list) {
 						try {
 							if (f.canRead()) {
-								if (_includeList.contains(
-									f.getCanonicalPath())) {
-									continue; //file already exists
+								u = SUtils.getExtendedURL(f.getCanonicalPath());
+								if (!_includeList.contains(u)) {
+									_includeList.add(u); // file is not in list
 								}
-								_includeList.add(f);
 								continue;
 							}
 						} catch (IOException ex) {}
