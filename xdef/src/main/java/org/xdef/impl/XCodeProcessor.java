@@ -2852,7 +2852,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					pr.setParsedValue(v);
 					continue;
 				}
-				case GET_PARSED_VALUE: {//result.setSourceString
+				case GET_PARSED_VALUE: {//get result of parsed value
 					XDParseResult pr = (item.getParam() == 1)
 						? (XDParseResult) _stack[sp--]
 						: chkNode._parseResult;

@@ -617,7 +617,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(CLEAR_REPORTS, XD_VOID,
 			ANY_MODE, 0, 0), "clearReports");
 		method(ti, genInternalMethod(COMPILE_REGEX, XD_REGEX, ANY_MODE, 1,1,
-			XD_STRING), " new Regex", "?compilePattern");
+			XD_STRING), "?compilePattern"); ////////////// remove
 		method(ti, genInternalMethod(DEFAULT_ERROR, XD_BOOLEAN,
 			ANY_MODE, 0, 0), "defaultError");
 		method(ti, genInternalMethod(GET_EASTERMONDAY, XD_DATETIME,
