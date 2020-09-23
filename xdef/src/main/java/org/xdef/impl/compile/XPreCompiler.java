@@ -16,7 +16,6 @@ import org.xdef.XDConstants;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -72,8 +71,8 @@ public class XPreCompiler implements PreCompiler {
 	private final byte _displayMode;
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
-	/** Include list of URL's. */
-	private final ArrayList<URL> _includeList = new ArrayList<URL>();
+	/** List of included sources. */
+	private final ArrayList<Object> _includeList = new ArrayList<Object>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros =
 		new LinkedHashMap<String, XScriptMacro>();
@@ -214,15 +213,12 @@ public class XPreCompiler implements PreCompiler {
 					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				} else {
 					for (File f: list) {
-						try {
-							if (f.canRead()) {
-								u = SUtils.getExtendedURL(f.getCanonicalPath());
-								if (!_includeList.contains(u)) {
-									_includeList.add(u); // file is not in list
-								}
-								continue;
+						if (f.canRead()) {
+							if (!_includeList.contains(f)) {
+								_includeList.add(f); // file is not in list
 							}
-						} catch (IOException ex) {}
+							continue;
+						}
 						//File doesn't exist: &{0}
 						myreporter.error(SYS.SYS024, sid);
 					}
@@ -646,6 +642,12 @@ public class XPreCompiler implements PreCompiler {
 	 * @return array with sources of X-definitions.
 	 */
 	public List<Object> getSources() {return _sources;}
+
+	@Override
+	/** Get list with included sources of X-definitions (URL or File).
+	 * @return list with included sources of X-definitions (URL or File).
+	 */
+	public List<Object> getIncluded() {return _includeList;}
 
 	@Override
 	/** Get prepared sources (PNodes) of X-definition items.

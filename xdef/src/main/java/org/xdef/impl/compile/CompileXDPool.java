@@ -139,6 +139,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setClassLoader(loader);
 	}
 
+	
+	
 	/** Get the ClassLoader used to load Java classes.
 	 * @return ClassLoader used to load Java classes.
 	 */
@@ -1831,6 +1833,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		compileLexicons(_lexicon, xdp); // compile lexicon
 		_xdefPNodes.clear(); // Let GC make the job
 		_precomp.getSources().clear();
+		_precomp.getIncluded().clear();
 		_nodeList.clear();
 		if (!result) {
 			error(XDEF.XDEF201); //Error of XDefinitions integrity
@@ -2046,6 +2049,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 	}
+
+	/** Get PreCompiler.
+	 * @return PreCompiler object.
+	 */
+	public final PreCompiler getPrecompiler() {return _precomp;}
 
 	/** Modify new selector and return null or new selector. */
 	private XSelector modifyReferredSelector(final CompileReference xref,
