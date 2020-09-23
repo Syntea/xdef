@@ -60,6 +60,11 @@ public interface PreCompiler {
 	 */
 	public List<Object> getSources();
 
+	/** Get list with included sources of X-definitions (URL or File).
+	 * @return list with included sources of X-definitions (URL or File).
+	 */
+	public List<Object> getIncluded();
+
 	/** Get precompiled sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
 	 */

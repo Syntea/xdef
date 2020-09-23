@@ -253,6 +253,13 @@ public class XBuilder implements XDBuilder {
 			reporter.putReport(display
 				? Report.error(SYS.SYS036, ex) : Report.fatal(SYS.SYS036, ex));
 		}
+		for (Object x: p.getPrecompiler().getIncluded()) { // add imported items
+			if (x instanceof URL) {
+				setSource((URL) x);
+			} else {
+				setSource((File) x);
+			}
+		}			
 		if (!display) {
 			return finishCompilation(result, p, userReporter, reporter);
 		}
