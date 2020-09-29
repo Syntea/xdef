@@ -9,6 +9,7 @@ import org.xdef.model.XMVariableTable;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Properties;
 
 /** Provides the interface to object containing compiled code of set of
  * X-definitions. You can create from XDPool the XDDocument.
@@ -199,6 +200,11 @@ public interface XDPool extends Serializable {
 	 */
 	public XDSourceInfo getXDSourceInfo();
 
+	/** Get properties from XDPool.
+	 * @return properties from XDPool.
+	 */
+	public Properties getProperties();
+
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null the default debug editor
 	 * will be used).
@@ -209,5 +215,4 @@ public interface XDPool extends Serializable {
 	 * @return class name of the editor of X-definition which will be used).
 	 */
 	public String getXdefEditor();
-
 }

@@ -82,8 +82,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final CompileXScript _scriptCompiler;
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
-	/** External classes. */
-	private Class<?>[] _extClasses;
 	/** Set of JSON names. */
 	Set<String> _jsonNames = new HashSet<String>();
 
@@ -121,7 +119,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Get external classes used in x-definition methods.
 	 * @return array of objects.
 	 */
-	public Class<?>[] getExternals() {return _extClasses;}
+	public Class<?>[] getExternals() {return _codeGenerator._extClasses;}
 
 	/** Set User objects. This method is just to keep compatibility with
 	 * previous versions.
@@ -129,7 +127,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	public void setExternals(final Class<?>... extObjects) {
 		_codeGenerator.setExternals(extObjects);
-		_extClasses = _codeGenerator.getExternals();
 	}
 
 	/** Set class loader. The class loader must be set before setting sources.
@@ -139,8 +136,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setClassLoader(loader);
 	}
 
-	
-	
+
+
 	/** Get the ClassLoader used to load Java classes.
 	 * @return ClassLoader used to load Java classes.
 	 */
@@ -485,7 +482,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	}
 
 	private void compileMethodsAndClassesAttrs() {
-		if (_extClasses != null && _extClasses.length > 0) {
+		if (getExternals() != null && getExternals().length > 0) {
 			reportDeprecated(new SPosition(),
 				"Class parameter of compileXD method",
 				"<xd:declaration> external method { ... } ...");

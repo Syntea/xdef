@@ -259,7 +259,7 @@ public class XBuilder implements XDBuilder {
 			} else {
 				setSource((File) x);
 			}
-		}			
+		}
 		if (!display) {
 			return finishCompilation(result, p, userReporter, reporter);
 		}
