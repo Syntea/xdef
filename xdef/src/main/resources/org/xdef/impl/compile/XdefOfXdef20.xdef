@@ -27,8 +27,8 @@
   <XD2.0:collection xd:script = "init NS = @metaNamespace
       ? (String) @metaNamespace : 'http://www.syntea.cz/xdef/2.0';
       options moreAttributes"
-    classes       = "optional classList; options acceptQualifiedAttr"
     include       = "optional uriList; options acceptQualifiedAttr"
+    classes       = "optional classList; options acceptQualifiedAttr"
     methods       = "optional methodList; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr"
     xd:attr       = "occurs * getAttrName().startsWith('impl-');">
