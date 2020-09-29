@@ -1017,7 +1017,11 @@ public final class XPool implements XDPool, Serializable {
 	/** Display debugging information of XDPool on System.out. */
 	public final void displayDebugInfo() {displayDebugInfo(System.out);}
 
-	final Properties getProperties() {return _props;}
+	@Override
+	/** Get properties from XDPool.
+	 * @return properties from XDPool.
+	 */
+	public final Properties getProperties() {return _props;}
 
 	@Override
 	/** Create new XDDocument with default X-definition.

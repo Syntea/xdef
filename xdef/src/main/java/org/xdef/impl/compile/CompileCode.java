@@ -1,53 +1,54 @@
 package org.xdef.impl.compile;
 
-import org.xdef.impl.code.CodeS1;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.xdef.XDBNFGrammar;
+import org.xdef.XDBNFRule;
+import org.xdef.XDConstants;
+import org.xdef.XDContainer;
+import org.xdef.XDParser;
+import org.xdef.XDValue;
+import org.xdef.impl.XDebugInfo;
+import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeParser;
-import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.Report;
-import org.xdef.sys.SBuffer;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SThrowable;
-import org.xdef.sys.StringParser;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.XDBNFGrammar;
-import org.xdef.XDBNFRule;
-import org.xdef.XDParser;
-import org.xdef.XDValue;
-import org.xdef.proc.XXData;
-import org.xdef.proc.XXElement;
-import org.xdef.proc.XXNode;
+import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.DefBNFGrammar;
-import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
-import org.xdef.impl.XDebugInfo;
-import org.xdef.impl.XVariableTable;
-import org.xdef.impl.parsers.XDParseCDATA;
 import org.xdef.impl.ext.XExtUtils;
+import org.xdef.impl.parsers.XDParseCDATA;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMVariable;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import org.xdef.XDConstants;
-import org.xdef.XDContainer;
-import org.xdef.impl.code.DefLocale;
+import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.msg.XML;
 import org.xdef.proc.XDLexicon;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.Report;
+import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SThrowable;
+import org.xdef.sys.StringParser;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -368,15 +369,24 @@ public final class CompileCode extends CompileBase {
 	 */
 	final Class<?>[] getExternals() {return _extClasses;}
 
-	/** Set external classes.
+	/** Set external classes. Adds externals to the list.
 	 * @param extObjects Array of external classes.
 	 */
 	final void setExternals(final Class<?>... extObjects) {
+		if (_extClasses == null) {
+			_extClasses = _extClasses = new Class<?>[0];
+		}
 		if (extObjects != null && extObjects.length > 0) {
-			_extClasses = new Class<?>[extObjects.length];
-			System.arraycopy(extObjects, 0, _extClasses, 0, extObjects.length);
-		} else {
-			_extClasses = new Class<?>[0];
+			ArrayList<Class<?>> ar =
+				new ArrayList<Class<?>>(Arrays.asList(_extClasses));
+			for (Class<?> x: extObjects) {
+				if (x != null && !ar.contains(x)) {
+					ar.add(x);
+				}
+			}
+			if (ar.size() != _extClasses.length) {
+				_extClasses = ar.toArray(_extClasses);
+			}
 		}
 	}
 
