@@ -490,8 +490,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);
 			PAttr pa = _precomp.getXdefAttr(pnode, "methods", false, true);
-			if (pa!= null
-				&& !_codeGenerator._ignoreUnresolvedExternals) {
+			if (pa!= null && !_codeGenerator._ignoreUnresolvedExternals) {
 				if (pnode._xdVersion > XConstants.XD31) {
 					reportDeprecated(pa._value,
 						"Attribute \"methods\"",
