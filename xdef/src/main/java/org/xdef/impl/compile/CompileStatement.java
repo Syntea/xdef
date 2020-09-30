@@ -3152,6 +3152,21 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_g.addInitCode(actAdr, lastStop);
 	}
 
+	/** Remove redundant part of type name.
+	 * @param typeName source type name.
+	 * @return type name without redundant part.
+	 */
+	private static String canonizeTypeName(final String typeName) {
+		if (typeName.startsWith("java.lang.") && typeName.indexOf('.', 10) < 0){
+			return typeName.substring(10);
+		} else if (typeName.startsWith("org.xdef.proc.")) {
+			return typeName.substring("org.xdef.proc.".length());
+		} else if (typeName.startsWith("org.xdef.")) {
+			return typeName.substring("org.xdef.".length());
+		}
+		return typeName;
+	}
+
 	/** Compile external method declaration.
 	 * @param local true if it is in the declaration part with the local scope.
 	 */
@@ -3164,8 +3179,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		String cName;
 		Class<?> mClass;
 		boolean wasError = false;
-		String rType;
-		String s = _idName;
+		String rType = canonizeTypeName(_idName); // result type of method
 		// in s we have now the name of type of result or "void"
 		if (nextSymbol() == LSQ_SYM) {
 			if (nextSymbol() != RSQ_SYM) {
@@ -3173,9 +3187,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return;
 			}
 			nextSymbol();
-			s += "[]";
+			rType += "[]";
 		}
-		rType = s; // result type of method
 		short resultType = CompileBase.getClassTypeID(rType, cl);
 		if (resultType == CompileBase.XD_UNDEF) {
 			error(XDEF.XDEF412);//Type identifier expected
@@ -3219,13 +3232,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		String classPar = null;
 		// read first parameter
 		if (nextSymbol() == IDENTIFIER_SYM) {
-			s = _idName;
+			String s = canonizeTypeName(_idName);
 			nextSymbol();
-			if (s.startsWith("org.xdef.proc.")) {
-				s = s.substring("org.xdef.proc.".length());
-			} else if (s.startsWith("org.xdef.")) {
-				s = s.substring("org.xdef.".length());
-			}
 			if ("XXElement".equals(s) || "XXData".equals(s)
 				|| "XXNode".equals(s)) {
 				classPar = "org.xdef.proc." + s;
@@ -3273,13 +3281,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					wasError = true;
 					continue;
 				}
-				s = _idName;
+				s = canonizeTypeName(_idName);
 				nextSymbol();
-				if (s.startsWith("org.xdef.proc.")) {
-					s = s.substring("org.xdef.proc.".length());
-				} else if (s.startsWith("org.xdef.")) {
-					s = s.substring("org.xdef.".length());
-				}
 				// check first parameter, it can be XXNode
 				if (("XDValue".equals(s)) && _sym == LSQ_SYM) {
 					if (nextSymbol() != RSQ_SYM) {
