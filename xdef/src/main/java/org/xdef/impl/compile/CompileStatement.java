@@ -3157,11 +3157,24 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @return type name without redundant part.
 	 */
 	private static String canonizeTypeName(final String typeName) {
-		if (typeName.startsWith("java.lang.") && typeName.indexOf('.', 10) < 0){
-			return typeName.substring(10);
-		} else if (typeName.startsWith("org.xdef.proc.")) {
+		if (typeName.startsWith("java.lang.")
+			&& typeName.indexOf('.', "java.lang.".length()) < 0){
+			return typeName.substring("java.lang.".length());
+		} else if (typeName.startsWith("java.math.BigDecimal")) {
+			return "BigDecimal";
+		} else if (typeName.startsWith("java.math.BigInteger")) {
+			return "BigInteger";
+		} else if (typeName.startsWith("org.xdef.proc.")
+			&& typeName.indexOf('.', "org.xdef.proc.".length()) < 0) {
 			return typeName.substring("org.xdef.proc.".length());
-		} else if (typeName.startsWith("org.xdef.")) {
+		} else if (typeName.startsWith("org.xdef.model.")
+			&& typeName.indexOf('.', "org.xdef.model.".length()) < 0) {
+			return typeName.substring("org.xdef.model.".length());
+		} else if (typeName.startsWith("org.xdef.sys.")
+			&& typeName.indexOf('.', "org.xdef.sys.".length()) < 0) {
+			return typeName.substring("org.xdef.sys.".length());
+		} else if (typeName.startsWith("org.xdef.")
+			&& typeName.indexOf('.', "org.xdef.".length()) < 0) {
 			return typeName.substring("org.xdef.".length());
 		}
 		return typeName;
