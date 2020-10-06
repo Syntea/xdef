@@ -650,24 +650,26 @@ public interface XDEF {
 	public static final long XDEF881 = 31159025984L;
 	/** Namespace of X-definition is not allowed in XML input data */
 	public static final long XDEF882 = 31159025985L;
+	/** Incorrect type of input data */
+	public static final long XDEF883 = 31159025986L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159025986L;
+	public static final long XDEF901 = 31159025987L;
 	/** Can't read X-definition&amp;{0}{: } */
-	public static final long XDEF902 = 31159025987L;
+	public static final long XDEF902 = 31159025988L;
 	/** X-definition source is missing or null&amp;{0}{: } */
-	public static final long XDEF903 = 31159025988L;
+	public static final long XDEF903 = 31159025989L;
 	/** Incorrect parameter of compiler of X-definitions&amp;{0}{: } */
-	public static final long XDEF904 = 31159025989L;
+	public static final long XDEF904 = 31159025990L;
 	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159025990L;
+	public static final long XDEF905 = 31159025991L;
 	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159025991L;
+	public static final long XDEF906 = 31159025992L;
 	/** &amp;{0} is deprecated.&amp;{1}{ Please use }{ instead.}&amp;{#SYS000} */
-	public static final long XDEF998 = 31159025992L;
+	public static final long XDEF998 = 31159025993L;
 	/** Error messages of X-definitions */
-	public static final long XDEF_DESCRIPTION = 31159025993L;
+	public static final long XDEF_DESCRIPTION = 31159025994L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159025994L;
+	public static final long XDEF_LANGUAGE = 31159025995L;
 
 	/** Default language. */
 	public static final String XDEF = "eng";

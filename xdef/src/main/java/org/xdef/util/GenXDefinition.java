@@ -1,12 +1,15 @@
 package org.xdef.util;
 
 import org.xdef.impl.GenXDef;
-import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.SRuntimeException;
 
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
@@ -16,21 +19,31 @@ public class GenXDefinition {
 	/** Prevent create an instance of this class.*/
 	private GenXDefinition() {}
 
-	/** Generate X-definition from a document to given output stream writer.
-	 * @param source XML element.
-	 * @return String with X-definition.
-	 * @throws Exception if an error occurs.
+	/** Generate X-definition from XML data to X-definition.
+	 * @param obj object with XML data (File, InputStream, URL, pathname,
+	 * or string with XML document).
+	 * @return org.w3c.dom.Element object with X-definition.
 	 */
-	public static final Element genXdef(final String source) throws Exception {
-		return genXdef(KXmlUtils.parseXml(source).getDocumentElement());
-	}
-
-	/** Generate X-definition from a document to given output stream writer.
-	 * @param elem XML element.
-	 * @return org.w3c.dom.Document object with X-definition.
-	 */
-	public static final Element genXdef(final Element elem) {
-		return GenXDef.genXdef(elem);
+	public static final Element genXdef(final Object obj) {
+		Element el = null;
+		if (obj instanceof Element) {
+			el = (Element) obj;
+		} else if (obj instanceof Document) {
+			el = ((Document) obj).getDocumentElement();
+		} else if (obj instanceof String) {
+			el = KXmlUtils.parseXml(((String) obj).trim()).getDocumentElement();
+		} else if (obj instanceof URL) {
+			el = KXmlUtils.parseXml((URL) obj).getDocumentElement();
+		} else if (obj instanceof File) {
+			el = KXmlUtils.parseXml((File) obj).getDocumentElement();
+		} else if (obj instanceof InputStream) {
+			el = KXmlUtils.parseXml((InputStream) obj).getDocumentElement();
+		}
+		if (el != null) {
+			return GenXDef.genXdef(el);
+		}
+		//XDEF883=Incorrect type of input data
+		throw new SRuntimeException(XDEF.XDEF883);
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
@@ -42,10 +55,11 @@ public class GenXDefinition {
 	public static final void genXdef(final String source,
 		final String outFile,
 		final String encoding) throws IOException {
-		final KDOMBuilder kb = new KDOMBuilder();
-		final Document doc = kb.parse(source);
 		KXmlUtils.writeXml(outFile,
-			encoding, genXdef(doc.getDocumentElement()), true, true);
+			encoding,
+			GenXDef.genXdef(KXmlUtils.parseXml(source).getDocumentElement()),
+			true,
+			true);
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
@@ -56,10 +70,11 @@ public class GenXDefinition {
 	 */
 	public static final void genXdef(final File source,
 		final File outFile, final String encoding) throws IOException {
-		final KDOMBuilder kb = new KDOMBuilder();
-		final Document doc = kb.parse(source);
 		KXmlUtils.writeXml(outFile,
-			encoding, genXdef(doc.getDocumentElement()), true, true);
+			encoding,
+			GenXDef.genXdef(KXmlUtils.parseXml(source).getDocumentElement()),
+			true,
+			true);
 	}
 
 	/** Generate X-definition from XML (command line parameters).
