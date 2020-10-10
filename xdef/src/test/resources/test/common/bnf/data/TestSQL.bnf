@@ -1,0 +1,125 @@
+Command::= S? (Select | UpsertValues | UpsertSelect | Delete | Create
+   | Constraint | Drop | AlterTable | CreateIndex | DropIndex | AlterIndex
+   | Explain ) S?
+Commands::= Command (';' Command)* (';' S?)?
+
+/********************/
+Comment ::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
+   | ('--' | '//') $skipToNextLine
+S::= ([#9#10#13 ]+ | Comment)+
+Comma ::= S? ',' S?
+QuotedName ::= '"' ('""' | [^"])+ '"'
+Keywords ::= 'ALL'% | 'AS'% | 'ASC'% | 'BETWEEN'% | 'BY'%
+   | 'CASE'% | 'DESC'% | 'DISTINCT'% | 'ELSE'% | 'END'% | 'EXISTS'%
+   | 'FALSE'% | 'FIRST'% | 'FROM'% | 'GROUP'% | 'HAVING' | 'IN'% | 'IS'%
+   | 'LAST'% | 'LIKE'% | 'LIMIT'% | 'NOT'% | 'NULL'% | 'OR'%
+   | 'ORDER'% | 'SELECT'% | 'THAN'% | 'TRUE'% | 'WHERE'% | 'WHEN'%
+Name ::= (([a-zA-Z] | '_') ([a-zA-Z0-9] | '_')*) - Keywords | QuotedName
+String ::= "'" ("''" | [^'])+ "'"
+Numeric ::= ('-' S?)? [0-9]+ ('.' [0-9]+)?
+Boolean ::= 'TRUE'% | 'FALSE'%
+Constant ::= String | Numeric | Boolean
+Hint::= '/*' S? '+' S? (Name | Function) S? '*/' S?
+SelectExpression::= S? ('*' | Name '.' S? '*' | Term (S? 'AS'% S? Name)?)
+Order::= Expression (S? ('ASC'% | 'DESC'%)? S?)
+   ( S? 'NULLS'% S? ('FIRST'% | 'LAST'%) S? )?
+Term::= Name (S? '.' S? Name){0, 2} | Value | BindParameter | Function
+   | Case | CaseWhen | '(' S? Operand S? ')' | RowValueConstructor
+Value::= String | Numeric | Boolean | 'NULL'% | Variable
+Variable ::= (Name S? '.' S?)? Name (S? '(' S? '+' S? ')')?
+BindParameter::= '?' | ':' S? Numeric
+Case::= 'CASE'% S  Term 'WHEN'% S Expression
+   'THEN'% Term (S? 'ELSE'% Expression)? S? 'END'%
+CaseWhen::= 'CASE'% S 'WHEN'% S Expression
+   'THEN'% Term (S? 'ELSE'% Term)? S? 'END'%
+Operand::= Summand (S? '|' S? '|' S? Summand)*
+Summand::= Factor (S? ('+' | '-') S? Factor)*
+RowValueConstructor::= S? '(' S? Term (Comma Term)* S? ')' S?
+Factor::= Term (S? ('*' | '/') S? Term)*
+Expression::= AndCondition (S? 'OR'% S? AndCondition)*
+AndCondition::= Condition (S? 'AND'% S? Condition)*
+Condition::= (Operand (Compare Operand
+   | (S? 'NOT'% S?)? S? 'IN'% S? '(' S? Operand (Comma Operand)* S? ')'
+   | (S? 'NOT'% S?)? S? 'LIKE'% S? Operand
+   | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
+   | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
+   | S? 'IS'% S? ('NOT'% S?)? S? 'NULL')?
+   (S?'NOT'% S? Expression
+   | S? '(' S? Expression S? ')')?)
+Compare::= S? ('<'S?'>' | '<'S?'=' | '>'S?'=' | '=' | '<' | '>' | '!'S?'=') S?
+TableExpression::= S? Name (S? '.' S? Name)? (S? 'AS'% S? Name)?
+ColumnRef::= (Name S? '.' S?)? Name
+TableRef::= (Name S? '.' S?)? Name
+ColumnDef::= ColumnRef (S DataType)?
+   ((S? 'NOT'%)? S? 'NULL'%)? (S? 'PRIMARY'% S 'KEY'% (S? ('ASC'%|'DESC'%))?)?
+DataType::= 'BINARY'% S? '(' S? Numeric S? ')'
+   | 'CHAR'% S? '(' S? Numeric S? ')'
+   | 'VARCHAR'% S? '(' S? Numeric S? ')'
+   | 'BIGINT'% | 'DECIMAL'% | 'DATE'% | 'DOUBLE'% | 'FLOAT'% | 'INTEGER'%
+   | 'SMALLINT'% | 'TIME'% | 'TIMESTAMP'% | 'TINYINT'%
+   | 'UNSIGNED_DOUBLE'% | 'UNSIGNED_FLOAT'% | 'UNSIGNED_INT'% | 'UNSIGNED_LONG'%
+   | 'UNSIGNED_SMALLINT'% | 'UNSIGNED_TINYINT'% | 'VARBINARY'%
+Options::= (Name S? '.' S?)? Name S? '=' S? SplitPoint (Comma SplitPoint)*
+SplitPoint::= Value | BindParameter
+Function::= 'COUNT'% S? '(' S? ('DISTINCT'% S?)? ('*' | Term) S? ')'
+   | ('PERCENTILE_CONT'% | 'PERCENTILE_DISC'% | 'PERCENT_RANK '%) S?
+      '(' S? Numeric S? ')' S? 'WITHIN'% S 'GROUP'% S?
+      '(' S? 'ORDER'% S 'BY' S? Term S?
+      ('ASC%'|'DESC%') S? ')'
+   | ('CURRENT_DATE'% | 'CURRENT_TIME') S? '(' S? ')'%
+   | 'TO_NUMBER'% S? '(' ? Term (Comma String)? S? ')'
+   | 'COALESCE'% S? '(' ? Term (Comma Term)? S? ')'
+   | 'SUBSTR'% S? '(' ? Term (Comma Term){1, 2} S? ')'
+   | 'REGEXP_SUBSTR'% S? '(' ? Term Comma String (Comma Numeric)? S? ')'
+   | 'REGEXP_REPLACE'% S? '(' ? Term Comma String (Comma String)? S? ')'
+   | ('ROUND'% | 'TRUNC'%) S? '(' S?
+      "'" S? ('DAY'% | 'HOUR'% | 'MINUTE'% | 'SECOND'% | 'MILLISECOND'%) S? "'"
+      Comma Numeric S? ')'
+   | 'TO_CHAR'% S? '(' ? Term (Comma String)? S? ')'
+   | 'TO_DATE'% S? '(' ? Term (Comma String)? S? ')'
+   | ('AVG'% | 'MAX'% | 'MIN'% | 'SUM'% | 'STDDEV_POP'% | 'STDDEV_SAMP'%
+      | 'MD5'% | 'INVERT'% | 'TRIM'% | 'LTRIM'% | 'RTRIM'% | 'LENGTH'%
+      | 'UPPER'% | 'LOWER'% | 'REVERSE'% | 'TO_NUMBER'%)
+      S? '(' ? Term S? ')'
+ConstraintColumn::= 'PRIMARY'% S 'KEY'% S? '(' S? Name S? ('ASC'% | 'DESC'%)?
+   (Comma Name S? ('ASC'% | 'DESC'%)?)* S? ')'
+
+/**** Statements ****/
+Select::= 'SELECT'% S? Hint? (S? ('DISTINCT'% | 'ALL'%) S?)?
+   SelectExpression (Comma SelectExpression)*
+   (S? 'FROM'% S? TableExpression S? ( '(' S? ColumnDef S? ')')? )?
+   (S? 'WHERE'% S? Expression S?)?
+   (S? 'GROUP'% S 'BY'% S? Expression (Comma Expression)*
+   ( S? 'HAVING'% S? Expression)? )?
+   ( (S? 'ORDER'% S? 'BY'% Order (Comma Order)* )?
+   (S? 'LIMIT'% S? (Numeric | BindParameter))? )?
+UpsertValues::= 'UPSERT'% S 'INTO'% S? Name S?
+   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   'VALUES'% S? '(' S? Term (Comma Term)* S? ')'
+UpsertSelect::= 'UPSERT'% S? Hint? S? 'INTO'% S? TableExpression S?
+   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   Select
+Delete::= 'DELETE'% S? Hint? 'FROM'% S? TableExpression?
+   (S? 'WHERE'% S? Expression)?
+   (S? 'ORDER'% S? 'BY'% Order (Comma Order)*)?
+   (S? 'LIMIT'% S? (Numeric | BindParameter)? )?
+Create::= 'CREATE'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'NOT'% S 'EXISTS'%)?
+    S? TableRef S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
+    Options? ('SPLIT'% S 'ON'% S? '(' S? SplitPoint (Comma SplitPoint)* S? ')')?
+Drop::= 'DROP' S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'EXISTS'%)? TableRef
+AlterTable::= 'ALTER'%S'TABLE'% S? TableRef (
+   (S 'ADD'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? ColumnDef (S? Options)?)
+   | (S 'DROP'% S 'COLUMN'% (S 'IF'% S 'EXISTS'%)? S? ColumnRef)
+   | (S 'SET'% S? Options) )
+CreateIndex::= 'CREATE'% S 'INDEX'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? Name
+   S? 'ON'% S? TableRef S? '(' S? ColumnRef (S? ('ASC'% | 'DESC'%))?
+      (Comma ColumnRef (S? ('ASC'% | 'DESC'%)?))* S? ')'
+   (S? 'INCLUDE'% S?'(' S? ColumnRef (Comma ColumnRef)* S? ')')?
+   (S? Options? (S? 'SPLIT'%S'ON'% S?
+      '(' S? SplitPoint (Comma SplitPoint)* S?')')?)?
+DropIndex::= 'DROP' %S 'INDEX' (S 'IF'% S 'EXISTS'%)? S? Name S? 'ON'% S? TableRef
+AlterIndex::= 'ALTER'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S?
+   'ON'% S? TableRef S? ('DISABLE'% | 'REBUILD'% | 'UNUSABLE'% | 'USABLE'%)
+Explain::= 'EXPLAIN'% S? (Select | UpsertSelect | Delete)
+Constraint::= 'CONSTRAINT'% S? Name S? 'PRIMARY'% S 'KEY'% S?
+   '(' S? Name S? (('ASC'%|'DESC'%) S?)? (Comma Name S? ('ASC'%|'DESC'%)?)* ')'

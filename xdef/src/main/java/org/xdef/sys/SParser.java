@@ -216,6 +216,14 @@ public interface SParser {
 	 */
 	public int isOneOfTokens(final String... tokens);
 
+	/** If on source position is one of tokens (ignored case) specified
+	 * in the argument the method returns index to this item and sets position
+	 * to the next position after a token. Otherwise it returns -1.
+	 * @param tokens Array of tokens be checked.
+	 * @return Index of found token or -1.
+	 */
+	public int isOneOfTokensIgnoreCase(final String... tokens);
+
 	/** Find token. If the token was found returns <tt>true</tt> and sets
 	 * position <b>to</b> the position of token. Otherwise returns
 	 * <tt>false</tt> and sets position to the end of source.

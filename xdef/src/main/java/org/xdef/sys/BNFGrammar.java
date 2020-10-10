@@ -74,6 +74,7 @@ public final class BNFGrammar {
 		"true",  				//39
 		"false",  				//40
 		"stop",  				//41
+		"skipToNextLine",		//42
 	};
 
 	/** Inline methods code identifiers. */
@@ -119,6 +120,7 @@ public final class BNFGrammar {
 	private static final int INL_TRUE = INL_RULE + 1;
 	private static final int INL_FALSE = INL_TRUE + 1;
 	private static final int INL_STOP = INL_FALSE + 1;
+	private static final int INL_SKIPTONEXTLINE = INL_STOP + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -501,8 +503,12 @@ public final class BNFGrammar {
 		_rules.add(rule);
 		return true;
 	}
-	private BNFChar newItemChar(final char c) {return new BNFChar(c);}
-	private BNFToken newItemToken(final String s) {return new BNFToken(s);}
+	private BNFChar newItemChar(final boolean i,final char c) {
+		return new BNFChar(i, c);
+	}
+	private BNFToken newItemToken(final boolean i, final String s) {
+		return new BNFToken(i, s);
+	}
 	private BNFSequence newItemSequence() {return new BNFSequence();}
 	private BNFSelection newItemUnion() {return new BNFSelection();}
 	private BNFConstrain newItemConstraint() {return new BNFConstrain();}
@@ -842,17 +848,17 @@ public final class BNFGrammar {
 	}
 
 	private final class BNFChar extends BNFItem {
-		char _c;
-		BNFChar(final char c) {super(); _c = c;}
-		final char getChar() {return _c;}
+		final char _c;
+		final boolean _i;
+		BNFChar(boolean i, final char c) {super(); _c = c; _i = i;}
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return _p.isChar(_c) || _min == 0;
+				return _i?_p.isCharIgnoreCase(_c):_p.isChar(_c) || _min == 0;
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
-				if (!_p.isChar(_c)) {
+				if (!(_i?_p.isCharIgnoreCase(_c):_p.isChar(_c))) {
 					if (count < _min) {
 						resetPosition();
 						return false;
@@ -864,30 +870,37 @@ public final class BNFGrammar {
 		}
 		@Override
 		final BNFItem adoptTo(final BNFGrammar grammar) {
-			BNFChar item = grammar.newItemChar(_c);
+			BNFChar item = grammar.newItemChar(_i, _c);
 			item._min = _min;
 			item._max = _max;
 			return item;
 		}
 		@Override
 		final void display(final StringBuilder sb) {
-			sb.append(genBNFString(String.valueOf(_c), false))
-				.append(genQuantifier());
+			sb.append(genBNFString(String.valueOf(_c), false));
+			if (_i) {
+				sb.append('%');
+			}
+			sb.append(genQuantifier());
 		}
 	}
 
 	private final class BNFToken extends BNFItem {
 		final String _token;
-		String getToken() {return _token;}
-		BNFToken(String token) {super(); _token = token.intern();}
+		final boolean _i;
+		BNFToken(final boolean i, final String token) {
+			super(); _token = token.intern();
+			_i = i;
+		}
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return _p.isToken(_token) || _min == 0;
+				return _i ? _p.isTokenIgnoreCase(_token) : _p.isToken(_token)
+					|| _min == 0;
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
-				if (!_p.isToken(_token)) {
+				if (!(_i ? _p.isTokenIgnoreCase(_token) : _p.isToken(_token))) {
 					if (count < _min) {
 						resetPosition();
 						return false;
@@ -899,33 +912,40 @@ public final class BNFGrammar {
 		}
 		@Override
 		final BNFItem adoptTo(final BNFGrammar grammar) {
-			BNFItem item = grammar.newItemToken(_token);
+			BNFItem item = grammar.newItemToken(_i, _token);
 			item._min = _min;
 			item._max = _max;
 			return item;
 		}
 		@Override
 		final void display(final StringBuilder sb) {
-			sb.append(genBNFString(_token, true)).append(genQuantifier());
+			sb.append(genBNFString(_token, true));
+			if (_i) {
+				sb.append('%');
+			}
+			sb.append(genQuantifier());
 		}
 	}
 
 	private final class BNFTokens extends BNFItem {
 		final String[] _tokens;
-
-		BNFTokens(final String... tokens) {
+		final boolean _i;
+		BNFTokens(final boolean i, final String... tokens) {
 			super();
 			_tokens = tokens;
+			_i = i;
 		}
 
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return _p.isOneOfTokens(_tokens) >= 0;
+				return (_i ? _p.isOneOfTokensIgnoreCase(_tokens)
+					: _p.isOneOfTokens(_tokens)) >= 0;
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
-				if (_p.isOneOfTokens(_tokens) < 0) {
+				if ((_i ? _p.isOneOfTokensIgnoreCase(_tokens)
+					: _p.isOneOfTokens(_tokens)) < 0) {
 					if (count < _min) {
 						resetPosition();
 						return false;
@@ -938,7 +958,7 @@ public final class BNFGrammar {
 
 		@Override
 		final BNFItem adoptTo(final BNFGrammar grammar) {
-			BNFItem item = new BNFTokens(_tokens);
+			BNFItem item = new BNFTokens(_i, _tokens);
 			item._min = _min;
 			item._max = _max;
 			return item;
@@ -950,6 +970,9 @@ public final class BNFGrammar {
 			sb.append(genBNFString(_tokens[0], true));
 			for (int i=1; i < _tokens.length; i++) {
 				sb.append(" | ").append(genBNFString(_tokens[i], true));
+				if (_i) {
+					sb.append('%');
+				}
 			}
 			sb.append(")").append(genQuantifier());
 		}
@@ -959,8 +982,6 @@ public final class BNFGrammar {
 		String _chars;
 		char[] _intervals;
 		BNFSet() {}
-		String getChars() {return _chars;}
-		char[] getIntervals() {return _intervals;}
 		abstract boolean isNot();
 		@Override
 		final void display(final StringBuilder sb) {
@@ -1084,9 +1105,6 @@ public final class BNFGrammar {
 	private abstract class BNFGroup extends BNFItem {
 		BNFItem[] _items;
 		BNFGroup() {super();}
-
-		BNFItem[] getItems() {return _items;}
-
 		final void addItem(final BNFItem item) {
 			if (item == this) {
 				throw new SRuntimeException(BNF.BNF035); //Internal loop
@@ -1172,8 +1190,8 @@ public final class BNFGrammar {
 			sb.append(")").append(genQuantifier());
 		}
 
-		BNFTokens newTokens(final String... tokens) {
-			return new BNFTokens(tokens);
+		BNFTokens newTokens(final boolean i, final String... tokens) {
+			return new BNFTokens(i, tokens);
 		}
 	}
 
@@ -1309,7 +1327,6 @@ public final class BNFGrammar {
 	private final class BNFReference extends BNFItem {
 		BNFRuleObj _rule;
 		BNFReference() {super();}
-		final BNFRuleObj getRule() {return _rule;}
 
 		@Override
 		final boolean perform() {
@@ -1890,6 +1907,8 @@ public final class BNFGrammar {
 					}
 					throw new SError("BNF stop");
 				}
+				case INL_SKIPTONEXTLINE:
+					return _p.skipToNextLine() || true;
 				default:
 					//Illegal BNF runtime code: &{0}
 					throw new SRuntimeException(BNF.BNF040, _code);
@@ -2338,14 +2357,24 @@ public final class BNFGrammar {
 				return _sym = MINUS_SYM;
 			} else if ((c = isOneOfChars("#'\"")) != NOCHAR) {
 				readLiteral(c);
+				skipSeparators();
+				boolean i = isChar('%'); // case insensitive
 				if (_parsedChars.length() > 1) {
-					_item = _grammar.newItemToken(_parsedChars.toString());
+					_item = _grammar.newItemToken(i, _parsedChars.toString());
 				} else if (_parsedChars.length() == 1) {
-					_item = _grammar.newItemChar(_parsedChars.charAt(0));
+					_item = _grammar.newItemChar(i, _parsedChars.charAt(0));
 				} else {
-					_item = _grammar.newItemChar('?');
+					_item = _grammar.newItemChar(i, '?');
 					error(BNF009); //Empty literal
 				}
+//				if (_parsedChars.length() > 1) {
+//					_item = _grammar.newItemToken(_parsedChars.toString());
+//				} else if (_parsedChars.length() == 1) {
+//					_item = _grammar.newItemChar(_parsedChars.charAt(0));
+//				} else {
+//					_item = _grammar.newItemChar('?');
+//					error(BNF009); //Empty literal
+//				}
 				checkQuantifier(_item);
 				return _sym = ITEM_SYM;
 			} else if (isChar('[')) {
@@ -2703,20 +2732,30 @@ public final class BNFGrammar {
 				BNFSelection sel = (BNFSelection) item;
 				if (sel._items != null) {
 					boolean allTokens = true;
+					BNFToken first = null;
 					for (int i = 0; i < sel._items.length; i++) {
 						BNFItem bi = optimize(sel._items[i]);
 						sel._items[i] = bi;
 						if (bi._max!=1 || bi._min!=1
 							|| !(bi instanceof BNFToken)) {
 							allTokens = false;
+							break;
+						} else {
+							if (first == null) {
+								first = (BNFToken) bi;
+							} else if (first._i != ((BNFToken) bi)._i) {
+								allTokens = false;
+								break;
+							}
 						}
 					}
-					if (allTokens && sel instanceof BNFSelection) {
+					if (allTokens && first!=null
+						&& sel instanceof BNFSelection) {
 						String[] tokens = new String[sel._items.length];
 						for (int i = 0; i < tokens.length; i++) {
 							tokens[i] = ((BNFToken) sel._items[i])._token;
 						}
-						item = sel.newTokens(tokens);
+						item = sel.newTokens(first._i, tokens);
 					}
 				}
 			} else if (item instanceof BNFConstrain) {

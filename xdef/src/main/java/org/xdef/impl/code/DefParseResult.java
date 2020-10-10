@@ -372,6 +372,27 @@ public final class DefParseResult extends XDValueAbstract
 	}
 
 	@Override
+	public final int isOneOfTokensIgnoreCase(final String... tokens) {
+		int result = -1, len = -1;
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			int tlen = token.length();
+			if (_srcIndex + tlen < _source.length()
+				&& token.equalsIgnoreCase(
+					_source.substring(_srcIndex, _srcIndex + tlen))) {
+				if (tlen > len) {
+					result = i;
+					len = tlen;
+				}
+			}
+		}
+		if (result != -1) {
+			_srcIndex += len;
+		}
+		return result;
+	}
+
+	@Override
 	public final boolean isTokenIgnoreCase(String token) {
 		int len = token.length();
 		int end = _source.length();

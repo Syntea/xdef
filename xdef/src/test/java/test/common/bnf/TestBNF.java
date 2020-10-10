@@ -358,6 +358,18 @@ public class TestBNF extends STester {
 			assertEq("implements #A", parse(g, "ElementLink", "implements #A"));
 			assertEq("implements A", parse(g, "ElementLink", "implements A"));
 			assertEq("uses A#B", parse(g, "ElementLink", "uses A#B"));
+			g = BNFGrammar.compile("X::='A' 'A'%");
+			assertEq("AA", parse(g, "X", "AA"));
+			assertEq("Aa", parse(g, "X", "Aa"));
+			g = BNFGrammar.compile("X::= \"ABC\"% \"ABC\"");
+			assertEq("ABCABC", parse(g, "X", "ABCABC"));
+			assertEq("abcABC", parse(g, "X", "abcABC"));
+			g = BNFGrammar.compile("X::=('AA'|'BC')('AA'%|'BC'%|'ACC'%)");
+			assertEq("AAAA", parse(g, "X", "AAAA"));
+			assertEq("AAaa", parse(g, "X", "AAaa"));
+			assertEq("AAbc", parse(g, "X", "AAbc"));
+			assertEq("BCacc", parse(g, "X", "BCacc"));
+			assertEq("BCACC", parse(g, "X", "BCACC"));
 ////////////////////////////////////////////////////////////////////////////////
 			bnf =
 "%define $x: $test.common.bnf.TestBNF.xxx\n"+
