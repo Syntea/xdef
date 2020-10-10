@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-/** Collection of utilities to handle with files.
+/** Utilities to handle with files.
  * @author Vaclav Trojan
  */
 public class FUtils {
@@ -1681,36 +1681,40 @@ public class FUtils {
 			ndx = t.lastIndexOf('/');
 			String wc = t.substring(ndx+1); // wildcard of file name
 			String dir = t.substring(0,ndx).replace('.', '/');
-			ndx = dir.lastIndexOf('.');
-			Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
-			while (eu.hasMoreElements()) {
-				URL u = eu.nextElement();
-				if ("file".equals(u.getProtocol())) {
-					getSourceFileGroup(urls, u.getFile(), wc);
-				} else if ("jar".equals(u.getProtocol())) {
-					String s = u.toExternalForm();
-					ndx = s.indexOf('!');
-					if (ndx >= 0) {
-						URL ux = new URL(s.substring(4, ndx));
-						JarFile jf = new JarFile(ux.getFile());
-						Enumeration<JarEntry> je = jf.entries();
-						while (je.hasMoreElements()) {
-							s = je.nextElement().getName();
-							if (s.startsWith(dir + "/")
-								&& s.length() > dir.length() + 1) {
-								s = s.substring(dir.length() + 1);
-								if (NameWildCardFilter.chkWildcard(wc, s)) {
-									urls.add("classpath://"
-										+ dir.replace('/', '.') + "."+s);
+				ndx = dir.lastIndexOf('.');
+				Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
+				while (eu.hasMoreElements()) {
+					URL u = eu.nextElement();
+					if ("file".equals(u.getProtocol())) {
+						getSourceFileGroup(urls, u.getFile(), wc);
+					} else if ("jar".equals(u.getProtocol())) {
+						String s = u.toExternalForm();
+						ndx = s.indexOf('!');
+						if (ndx >= 0) {
+							URL ux = new URL(s.substring(4, ndx));
+							JarFile jf = new JarFile(ux.getFile());
+							Enumeration<JarEntry> je = jf.entries();
+							while (je.hasMoreElements()) {
+								s = je.nextElement().getName();
+								if (s.startsWith(dir + "/")
+									&& s.length() > dir.length() + 1) {
+									s = s.substring(dir.length() + 1);
+									if (NameWildCardFilter.chkWildcard(wc, s)) {
+										urls.add("classpath://"
+											+ dir.replace('/', '.') + "."+s);
+									}
 								}
 							}
 						}
+					} else {
+						throw new RuntimeException(
+							"Unknown protocol: " + u.getProtocol());
 					}
-				} else {
-					throw new RuntimeException(
-						"Unknown protocol: " + u.getProtocol());
 				}
-			}
+//			} else {
+//				urls.add(getExtendedURL(
+//					src).toURI().toURL().toExternalForm());
+//			}
 		} else if (src.startsWith("file:/")) {
 			int ndx = src.lastIndexOf('/');
 			String wc = src.substring(ndx+1); // wildcard of file name
@@ -2324,5 +2328,4 @@ public class FUtils {
 		} catch (IOException ex) {}
 		return flen;
 	}
-
 }
