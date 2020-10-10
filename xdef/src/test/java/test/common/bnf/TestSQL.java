@@ -40,7 +40,9 @@ public class TestSQL extends STester {
 			BNFGrammar g = BNFGrammar.compile(
 				null, new File(getDataDir() + "TestSQL.bnf"), null);
 			String s =
-"/* Comment */ select * /* Comment*/ from /* Comment*/ xxx;\n"+
+"select * /* Comment*/ from // Comment\n"+
+"   -- Comment\n"+
+"   xxx;\n"+
 "select XX from xxx;\n"+
 "select a, b as \"xx yy\" from xxx;\n"+
 "select 'a' as \"xx yy\" from xxx;\n"+
