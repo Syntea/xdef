@@ -4,8 +4,9 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.sys.STester;
 import test.common.bnf.TestBNF;
-import test.common.bnf.TestExpr;
 import test.common.bnf.TestBNFJSON;
+import test.common.bnf.TestExpr;
+import test.common.bnf.TestSQL;
 import test.common.bnf.TestXML;
 import test.common.bnf.TestXdScript;
 import test.common.json.TestJsonUtil;
@@ -55,8 +56,9 @@ public class TestAll {
 			new TestXmOutStream(),
 			// BNF
 			new TestBNF(),
-			new TestExpr(),
 			new TestBNFJSON(),
+			new TestExpr(),
+			new TestSQL(),
 			new TestXML(),
 			new TestXdScript(),
 		};

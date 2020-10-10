@@ -19,6 +19,7 @@ import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
 import test.XDTester;
+import test.common.bnf.TestSQL;
 
 /** Run all available tests for package org.xdef.sys with all features
  * of the tester.
@@ -56,8 +57,9 @@ public class TestAllFull {
 			new TestXmOutStream(),
 			// BNF
 			new TestBNF(),
-			new TestExpr(),
 			new TestBNFJSON(),
+			new TestExpr(),
+			new TestSQL(),
 			new TestXML(),
 			new TestXdScript(),
 		};

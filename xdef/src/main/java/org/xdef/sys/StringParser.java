@@ -1714,6 +1714,36 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
+	/** If on source position is one of tokens (ignored case) specified
+	 * in the argument the method returns index to this item and sets position
+	 * to the next position after a token. Otherwise it returns -1.
+	 * @param tokens Array of tokens be checked.
+	 * @return Index of found token or -1.
+	 */
+	public final int isOneOfTokensIgnoreCase(final String... tokens) {
+		int result = -1, len = -1;
+		int pos = getIndex();
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			int tlen = token.length();
+			if (ensureBuffer(tlen) &&
+				token.equalsIgnoreCase(_source.substring(pos, pos + tlen))) {
+				if (tlen > len) {
+					result = i;
+					len = tlen;
+				}
+			}
+		}
+		if (result != -1) {
+			ensureBuffer(len+1);
+			setIndex(pos += len);
+			_ch = pos + len < _endPos || readNextBuffer()
+				? _source.charAt(getIndex()) : NOCHAR;
+		}
+		return result;
+	}
+
+	@Override
 	/** Check if actual position points to given token (case insensitive). Set
 	 * the actual position to the next character after the token if given token
 	 * was recognized.
