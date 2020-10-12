@@ -4,21 +4,21 @@ Statement::= S? ( AlterIndex | AlterTable | Constraint | Create | CreateIndex
    | InsertSelect | InsertValues | Select | Update) S?
 
 /********************/
-Comment ::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
+S::= ([#9#10#13 ]+ | Comment)+ /* white spaces and comments */
+Comment::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
    | ('--' | '//') $skipToNextLine
-S::= ([#9#10#13 ]+ | Comment)+
-Comma ::= S? ',' S?
-QuotedName ::= '"' ('""' | [^"])+ '"'
-Keywords ::= 'ALL'% | 'AS'% | 'ASC'% | 'BETWEEN'% | 'BY'%
+QuotedName::= '"' ('""' | [^"])+ '"'
+Keywords::= 'ALL'% | 'AS'% | 'ASC'% | 'BETWEEN'% | 'BY'%
    | 'CASE'% | 'DESC'% | 'DISTINCT'% | 'ELSE'% | 'END'% | 'EXISTS'%
    | 'FALSE'% | 'FIRST'% | 'FROM'% | 'GROUP'% | 'HAVING' | 'IN'% | 'IS'%
    | 'LAST'% | 'LIKE'% | 'LIMIT'% | 'NOT'% | 'NULL'% | 'OR'%
    | 'ORDER'% | 'SELECT'% | 'THAN'% | 'TRUE'% | 'WHERE'% | 'WHEN'%
-Name ::= (([a-zA-Z] | '_') ([a-zA-Z0-9] | '_')*) - Keywords | QuotedName
-String ::= "'" ("''" | [^'])+ "'"
-Numeric ::= ('-' S?)? [0-9]+ ('.' [0-9]+)?
-Boolean ::= 'TRUE'% | 'FALSE'%
-Constant ::= String | Numeric | Boolean
+Name::= (([a-zA-Z] | '_') ([a-zA-Z0-9] | '_')*) - Keywords | QuotedName
+String::= "'" ("''" | [^'])+ "'"
+Numeric::= ('-' S?)? [0-9]+ ('.' [0-9]+)?
+Boolean::= 'TRUE'% | 'FALSE'%
+Constant::= String | Numeric | Boolean
+Comma::= S? ',' S? /* comma separator */
 Hint::= '/*' S? '+' S? (Name | Function) S? '*/' S?
 SelectExpression::= S? ('*' | Name '.' S? '*' | Term (S? 'AS'% S? Name)?)
 Order::= Expression (S? ('ASC'% | 'DESC'%)? S? )
