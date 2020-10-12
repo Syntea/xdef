@@ -209,7 +209,7 @@ array_access ::= expression_name '[' expression ']'
 S ::= ([#9#10#13 ]+ | comment)+ /* spaces or comments */
 comment ::= "/*" ([^*]+ | "*" [^/])* "*/"
 identifier ::= $JavaName
-input_character ::= $xmlChar
+input_character ::= $UTFChar - [#0-#8#11-#12$14-#31]
 escape_character ::= '\'
 escape_sequence ::= '\' [nrfbt]
 type_name ::= identifier ('.' identifier)*
@@ -224,14 +224,13 @@ integer_literal ::= decimal_integer_literal | hex_integer_literal
 decimal_integer_literal ::= decimal_numeral integer_type_suffix?
 hex_integer_literal ::= hex_numeral integer_type_suffix?
 octal_integer_literal ::= octal_numeral integer_type_suffix?
-integer_type_suffix ::= 'l' | 'L'
+integer_type_suffix ::= [lL]
 decimal_numeral ::= '0' | non_zero_digit digits?
 digits ::= digit+
 digit ::= '0' | non_zero_digit
 non_zero_digit ::= [0-9]
 hex_numeral ::= '0' [xX] hex_digit+
 hex_digit ::= [0-9] | [a-f] | [A-F]
-  | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 octal_numeral ::= '0' octal_digit | octal_numeral octal_digit
 octal_digit ::= [0-7] 
 floating_point_literal ::= digits '.' digits? exponent_part? float_type_suffix?
@@ -249,11 +248,11 @@ string_character ::= [^"\] | escape_sequence
 null_literal ::= 'null'
 keyword ::= 'abstract' | 'boolean' | 'break' | 'byte' | 'case' | 'catch'
   | 'char' | 'class' | 'const' | 'continue' | 'default' | 'do' | 'double'
-  | 'else' | 'extends' | 'final' | 'finally' | 'float' | 'for' | 'goto'
-  | 'if' | 'implements' | 'import' | 'instanceof' | 'int' | 'interface'
-  | 'long' | 'native' | 'new' | 'package' | 'private' | 'protected'
+  | 'else' | 'extends' | 'false' | 'final' | 'finally' | 'float' | 'for'
+  | 'goto' | 'if' | 'implements' | 'import' | 'instanceof' | 'int' | 'interface'
+  | 'long' | 'native' | 'new' | 'null' | 'package' | 'private' | 'protected'
   | 'public' | 'return' | 'short' | 'static' | 'super' | 'switch'
-  | 'synchronized' | 'this' | 'throw' | 'throws' | 'transient' | 'try'
+  | 'synchronized' | 'this' | 'throw' | 'throws' | 'transient' | 'true' | 'try'
   | 'void' | 'volatile' | 'while' 
 
 /*

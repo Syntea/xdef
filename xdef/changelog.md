@@ -2,6 +2,7 @@
 
 # Version 40.1.2, release-date 2020-09-18
 * to BNF grammar implemented new inline function `$skipToNextLine`
+* to BNF grammar implemented new inline function `$UTFChar`
 * to BNF grammar implemented possibility to specify case insensitive termilal
   symbols (when the terminal symbol specification follows percentage character).
 

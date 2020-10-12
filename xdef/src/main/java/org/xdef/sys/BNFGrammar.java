@@ -73,8 +73,9 @@ public final class BNFGrammar {
 		"rule",  				//38
 		"true",  				//39
 		"false",  				//40
-		"stop",  				//41
-		"skipToNextLine",		//42
+		"skipToNextLine",		//41
+		"UTFChar",				//42
+		"stop",  				//43
 	};
 
 	/** Inline methods code identifiers. */
@@ -119,8 +120,9 @@ public final class BNFGrammar {
 	private static final int INL_RULE = INL_EOS + 1;
 	private static final int INL_TRUE = INL_RULE + 1;
 	private static final int INL_FALSE = INL_TRUE + 1;
-	private static final int INL_STOP = INL_FALSE + 1;
-	private static final int INL_SKIPTONEXTLINE = INL_STOP + 1;
+	private static final int INL_SKIPTONEXTLINE = INL_FALSE + 1;
+	private static final int INL_UTFCHAR = INL_SKIPTONEXTLINE + 1;
+	private static final int INL_STOP = INL_UTFCHAR + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -1901,14 +1903,19 @@ public final class BNFGrammar {
 					return true;
 				case INL_FALSE:
 					return true;
-				case INL_STOP: {
+				case INL_SKIPTONEXTLINE:
+					return _p.skipToNextLine() || true;
+				case INL_UTFCHAR:
+					if (!_p.eos() && Character.isDefined(_p.getCurrentChar())) {
+						_p.nextChar();
+						return true;
+					}
+					return false;
+				case INL_STOP:
 					if (_param != null) {
 						pushObject("STOP " + _param);
 					}
 					throw new SError("BNF stop");
-				}
-				case INL_SKIPTONEXTLINE:
-					return _p.skipToNextLine() || true;
 				default:
 					//Illegal BNF runtime code: &{0}
 					throw new SRuntimeException(BNF.BNF040, _code);
