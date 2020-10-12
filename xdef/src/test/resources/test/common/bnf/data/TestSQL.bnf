@@ -1,7 +1,7 @@
-Command::= S? (Select | UpsertValues | UpsertSelect | Delete | Create
-   | Constraint | Drop | AlterTable | CreateIndex | DropIndex | AlterIndex
-   | Explain ) S?
-Commands::= Command (';' Command)* (';' S?)?
+StatementList::= Statement (';' Statement)* (';' S?)?
+Statement::= S? ( AlterIndex | AlterTable | Constraint | Create | CreateIndex
+   | Delete | DropIndex | DropSchema | DropTable | Explain
+   | InsertSelect | InsertValues | Select ) S?
 
 /********************/
 Comment ::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
@@ -21,33 +21,33 @@ Boolean ::= 'TRUE'% | 'FALSE'%
 Constant ::= String | Numeric | Boolean
 Hint::= '/*' S? '+' S? (Name | Function) S? '*/' S?
 SelectExpression::= S? ('*' | Name '.' S? '*' | Term (S? 'AS'% S? Name)?)
-Order::= Expression (S? ('ASC'% | 'DESC'%)? S?)
+Order::= Expression (S? ('ASC'% | 'DESC'%)? S? )
    ( S? 'NULLS'% S? ('FIRST'% | 'LAST'%) S? )?
-Term::= Name (S? '.' S? Name){0, 2} | Value | BindParameter | Function
-   | Case | CaseWhen | '(' S? Operand S? ')' | RowValueConstructor
-Value::= String | Numeric | Boolean | 'NULL'% | Variable
-Variable ::= (Name S? '.' S?)? Name (S? '(' S? '+' S? ')')?
+Value::= String | Numeric | Boolean | 'NULL'% | (Name S? '.' S?)? Name
 BindParameter::= '?' | ':' S? Numeric
-Case::= 'CASE'% S  Term 'WHEN'% S Expression
-   'THEN'% Term (S? 'ELSE'% Expression)? S? 'END'%
-CaseWhen::= 'CASE'% S 'WHEN'% S Expression
-   'THEN'% Term (S? 'ELSE'% Term)? S? 'END'%
-Operand::= Summand (S? '|' S? '|' S? Summand)*
-Summand::= Factor (S? ('+' | '-') S? Factor)*
 RowValueConstructor::= S? '(' S? Term (Comma Term)* S? ')' S?
+Case::= S? 'CASE'% S  Term 'WHEN'% S Expression
+   S? 'THEN'% Term (S? 'ELSE'% Expression)? S? 'END'%
+CaseWhen::= S? 'CASE'% S 'WHEN'% S Expression
+   S? 'THEN'% Term (S? 'ELSE'% Term)? S? 'END'%
+Expression::= AndCondition (S? 'OR'% S AndCondition)*
+AndCondition::= Condition (S? 'AND'% S Condition)*
 Factor::= Term (S? ('*' | '/') S? Term)*
-Expression::= AndCondition (S? 'OR'% S? AndCondition)*
-AndCondition::= Condition (S? 'AND'% S? Condition)*
-Condition::= (Operand (Compare Operand
+Summand::= Factor (S? ('+' | '-') S? Factor)*
+Term::= Name (S? '.' S? Name){0, 2} | BindParameter | Value | Function
+   | Case | CaseWhen | '(' S? Operand S? ')' | RowValueConstructor
+Operand::= Summand (S? '|' S? '|' S? Summand)*
+Condition::= (Operand (
+   (Compare Operand)
    | (S? 'NOT'% S?)? S? 'IN'% S? '(' S? Operand (Comma Operand)* S? ')'
    | (S? 'NOT'% S?)? S? 'LIKE'% S? Operand
    | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
-   | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
-   | S? 'IS'% S? ('NOT'% S?)? S? 'NULL')?
-   (S?'NOT'% S? Expression
-   | S? '(' S? Expression S? ')')?)
+   | S? 'IS'% S? ('NOT'% S?)? S? 'NULL')? )
+   | S? 'NOT'% S? Expression 
+   | S? '(' S? Expression S? ')'?
 Compare::= S? ('<'S?'>' | '<'S?'=' | '>'S?'=' | '=' | '<' | '>' | '!'S?'=') S?
-TableExpression::= S? Name (S? '.' S? Name)? (S? 'AS'% S? Name)?
+TableExpressionItem ::= S? Name (S? '.' S? Name)? (S? 'AS'% S? Name)?
+TableExpression::= TableExpressionItem (Comma TableExpressionItem)*
 ColumnRef::= (Name S? '.' S?)? Name
 TableRef::= (Name S? '.' S?)? Name
 ColumnDef::= ColumnRef (S DataType)?
@@ -85,41 +85,47 @@ ConstraintColumn::= 'PRIMARY'% S 'KEY'% S? '(' S? Name S? ('ASC'% | 'DESC'%)?
    (Comma Name S? ('ASC'% | 'DESC'%)?)* S? ')'
 
 /**** Statements ****/
-Select::= 'SELECT'% S? Hint? (S? ('DISTINCT'% | 'ALL'%) S?)?
-   SelectExpression (Comma SelectExpression)*
-   (S? 'FROM'% S? TableExpression S? ( '(' S? ColumnDef S? ')')? )?
-   (S? 'WHERE'% S? Expression S?)?
-   (S? 'GROUP'% S 'BY'% S? Expression (Comma Expression)*
-   ( S? 'HAVING'% S? Expression)? )?
-   ( (S? 'ORDER'% S? 'BY'% Order (Comma Order)* )?
-   (S? 'LIMIT'% S? (Numeric | BindParameter))? )?
-UpsertValues::= 'UPSERT'% S 'INTO'% S? Name S?
-   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
-   'VALUES'% S? '(' S? Term (Comma Term)* S? ')'
-UpsertSelect::= 'UPSERT'% S? Hint? S? 'INTO'% S? TableExpression S?
-   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
-   Select
-Delete::= 'DELETE'% S? Hint? 'FROM'% S? TableExpression?
-   (S? 'WHERE'% S? Expression)?
-   (S? 'ORDER'% S? 'BY'% Order (Comma Order)*)?
-   (S? 'LIMIT'% S? (Numeric | BindParameter)? )?
-Create::= 'CREATE'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'NOT'% S 'EXISTS'%)?
-    S? TableRef S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
-    Options? ('SPLIT'% S 'ON'% S? '(' S? SplitPoint (Comma SplitPoint)* S? ')')?
-Drop::= 'DROP' S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'EXISTS'%)? TableRef
+AlterIndex::= 'ALTER'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S?
+   'ON'% S? TableRef S? ('DISABLE'% | 'REBUILD'% | 'UNUSABLE'% | 'USABLE'%)
 AlterTable::= 'ALTER'%S'TABLE'% S? TableRef (
    (S 'ADD'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? ColumnDef (S? Options)?)
    | (S 'DROP'% S 'COLUMN'% (S 'IF'% S 'EXISTS'%)? S? ColumnRef)
    | (S 'SET'% S? Options) )
+Constraint::= 'CONSTRAINT'% S? Name S? 'PRIMARY'% S 'KEY'% S?
+   '(' S? Name S? (('ASC'%|'DESC'%) S?)? (Comma Name S? ('ASC'%|'DESC'%)?)* ')'
+Create::= 'CREATE'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'NOT'% S 'EXISTS'%)?
+    S? TableRef S? '(' S? CreateDef (Comma CreateDef)* S? ')' S?
+    Options? ('SPLIT'% S 'ON'% S? '(' S? SplitPoint (Comma SplitPoint)* S? ')')?
+CreateDef::= (('PRIMARY'% S 'KEY'% S?) | 'UNIQUE'%)?
+   S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
+   | 'FOREIGN'% S 'KEY' S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
+      (S? 'REFERENCES' S? ColumnRef S? '(' S? Name (Comma Name)*  S? ')')?
+   | ColumnDef
 CreateIndex::= 'CREATE'% S 'INDEX'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? Name
    S? 'ON'% S? TableRef S? '(' S? ColumnRef (S? ('ASC'% | 'DESC'%))?
       (Comma ColumnRef (S? ('ASC'% | 'DESC'%)?))* S? ')'
    (S? 'INCLUDE'% S?'(' S? ColumnRef (Comma ColumnRef)* S? ')')?
    (S? Options? (S? 'SPLIT'%S'ON'% S?
       '(' S? SplitPoint (Comma SplitPoint)* S?')')?)?
-DropIndex::= 'DROP' %S 'INDEX' (S 'IF'% S 'EXISTS'%)? S? Name S? 'ON'% S? TableRef
-AlterIndex::= 'ALTER'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S?
-   'ON'% S? TableRef S? ('DISABLE'% | 'REBUILD'% | 'UNUSABLE'% | 'USABLE'%)
-Explain::= 'EXPLAIN'% S? (Select | UpsertSelect | Delete)
-Constraint::= 'CONSTRAINT'% S? Name S? 'PRIMARY'% S 'KEY'% S?
-   '(' S? Name S? (('ASC'%|'DESC'%) S?)? (Comma Name S? ('ASC'%|'DESC'%)?)* ')'
+Delete::= 'DELETE'% S? Hint? 'FROM'% S? TableExpression?
+   ( S? 'WHERE'% S? Expression )?
+   ( S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
+   ( S? 'LIMIT'% S? (Numeric | BindParameter) )?
+DropIndex::= 'DROP'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S? 'ON'% S? TableRef
+DropSchema::= 'DROP'% S 'SCHEMA'% (S ('IF'% S 'EXISTS'%))? S? TableRef (S? 'RESTRICT'%)?
+DropTable::= 'DROP'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'EXISTS'%)? TableRef
+Explain::= 'EXPLAIN'% S? (Select | InsertSelect | Delete)
+InsertSelect::= ('UPSERT'% | 'INSERT'%) S? Hint? S? 'INTO'% S? TableExpression S?
+   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   Select
+InsertValues::= ('UPSERT'% | 'INSERT'%) S 'INTO'% S? TableRef S?
+   ('(' S? (ColumnRef | ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   'VALUES'% S? '(' S? ('(' S? Select S?')'|Term) (Comma ('(' S? Select S?')'|Term))* S? ')'
+Select::= 'SELECT'% S? Hint? (S? ('DISTINCT'% | 'ALL'%) S?)?
+   SelectExpression (Comma SelectExpression)*
+   S? 'FROM'% S? TableExpression S? ( '(' S? ColumnDef S? ')')?
+   (S? 'WHERE'% S? Expression)?
+   (S? 'GROUP'% S 'BY'% S? Expression (Comma Expression)*)?
+   (S? 'HAVING'% S? Expression)?
+   (S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
+   (S? 'LIMIT'% S? (Numeric | BindParameter))?
