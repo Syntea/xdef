@@ -19,7 +19,7 @@ Numeric::= ('-' S?)? [0-9]+ ('.' [0-9]+)?
 Boolean::= 'TRUE'% | 'FALSE'%
 Constant::= String | Numeric | Boolean
 Comma::= S? ',' S? /* comma separator */
-Hint::= '/*' S? '+' S? (Name | Function) S? '*/' S?
+Hint::= [#9#10#13 ]* '/*+' S? (Name | Function) S? '*/' S?
 SelectExpression::= S? ('*' | Name '.' S? '*' | Term (S? 'AS'% S? Name)?)
 Order::= Expression (S? ('ASC'% | 'DESC'%)? S? )
    ( S? 'NULLS'% S? ('FIRST'% | 'LAST'%) S? )?
@@ -107,7 +107,7 @@ CreateIndex::= 'CREATE'% S 'INDEX'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? Name
    (S? 'INCLUDE'% S?'(' S? ColumnRef (Comma ColumnRef)* S? ')')?
    (S? Options? (S? 'SPLIT'%S'ON'% S?
       '(' S? SplitPoint (Comma SplitPoint)* S?')')?)?
-Delete::= 'DELETE'% S? Hint? 'FROM'% S? TableExpression?
+Delete::= 'DELETE'% Hint? S? 'FROM'% S? TableExpression?
    ( S? 'WHERE'% S? Expression )?
    ( S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
    ( S? 'LIMIT'% S? (Numeric | BindParameter) )?
@@ -115,13 +115,13 @@ DropIndex::= 'DROP'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S? 'ON'% S? Table
 DropSchema::= 'DROP'% S 'SCHEMA'% (S ('IF'% S 'EXISTS'%))? S? TableRef (S? 'RESTRICT'%)?
 DropTable::= 'DROP'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'EXISTS'%)? TableRef
 Explain::= 'EXPLAIN'% S? (Select | InsertSelect | Delete)
-InsertSelect::= ('UPSERT'% | 'INSERT'%) S? Hint? S? 'INTO'% S? TableExpression S?
+InsertSelect::= ('UPSERT'% | 'INSERT'%) Hint? S? 'INTO'% S? TableExpression S?
    ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
    Select
 InsertValues::= ('UPSERT'% | 'INSERT'%) S 'INTO'% S? TableRef S?
    ('(' S? (ColumnRef | ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
    'VALUES'% S? '(' S? ('(' S? Select S?')'|Term) (Comma ('(' S? Select S?')'|Term))* S? ')'
-Select::= 'SELECT'% S? Hint? (S? ('DISTINCT'% | 'ALL'%) S?)?
+Select::= 'SELECT'% Hint? S? (('DISTINCT'% | 'ALL'%) S?)?
    SelectExpression (Comma SelectExpression)*
    S? 'FROM'% S? TableExpression S? ( '(' S? ColumnDef S? ')')?
    (S? 'WHERE'% S? Expression)?
