@@ -55,7 +55,24 @@ public class TestSQL extends STester {
 "SELECT NAME, SUM(VAL) FROM TEST GROUP BY NAME HAVING COUNT(1) > 2;\n"+
 "SELECT 'ID', COL, MAX('ID') AS MAX FROM TEST;\n"+
 "SELECT * FROM TEST LIMIT 1000;\n"+
-"UPSERT INTO TEST VALUES('foo','bar',3);\n"+
+"DROP SCHEMA BOOKS RESTRICT;\n"+
+"SELECT AUTHOR FROM BOOKS.AUTHOR WHERE BOOKS.AUTHOR.AUTHOR = ?;\n"+
+"SELECT TITLE FROM BOOKS.TITLE WHERE BOOKS.TITLE.TITLE = ?;\n"+
+"INSERT INTO BOOKS.AUTHOR(AUTHOR) VALUES (?);\n"+
+"INSERT INTO BOOKS.TITLE(TITLE,ISBN,ISSUED) VALUES (?,?,?);\n"+
+"INSERT INTO BOOKS.TITLE_AUTHOR(IDAUTHOR,IDTITLE)\n"+
+"   VALUES ((SELECT IDAUTHOR FROM BOOKS.AUTHOR WHERE AUTHOR=?),\n"+
+"   (SELECT IDTITLE FROM BOOKS.TITLE WHERE TITLE=?));\n"+
+"SELECT * FROM BOOKS.TITLE ORDER BY TITLE ASC;\n"+
+"SELECT TITLE, ISBN FROM BOOKS.TITLE ORDER BY TITLE ASC;\n"+
+"SELECT AUTHOR\n" +
+"  FROM BOOKS.AUTHOR, BOOKS.TITLE_AUTHOR, BOOKS.TITLE\n" +
+"    WHERE BOOKS.AUTHOR.IDAUTHOR = BOOKS.TITLE_AUTHOR.IDAUTHOR\n" +
+"      AND BOOKS.TITLE.IDTITLE = BOOKS.TITLE_AUTHOR.IDTITLE\n" +
+"      AND BOOKS.TITLE.IDTITLE = 1\n"+
+"      ORDER BY AUTHOR ASC\n"+
+"      LIMIT 10;\n"+
+"UPSERT INTO TEST VALUES ('foo','bar',3);\n"+
 "UPSERT INTO TEST(NAME, ID) VALUES('foo',123);\n"+
 "SELECT col3, col4 FROM test WHERE col5 < 100;\n"+
 "UPSERT INTO foo SELECT * FROM bar;\n" +
@@ -81,6 +98,23 @@ public class TestSQL extends STester {
 "CREATE INDEX my_idx ON sales.opportunity(last_updated_date DESC);\n" +
 "CREATE INDEX my_idx ON log.event(created_date DESC) INCLUDE (name, payload) SALT_BUCKETS=10;\n" +
 "CREATE INDEX IF NOT EXISTS my_comp_idx ON server_metrics ( gc_time DESC, created_date DESC );\n" +
+"CREATE TABLE BOOKS.AUTHOR (IDAUTHOR INTEGER NOT NULL,\n" +
+"    AUTHOR VARCHAR(100) NOT NULL,\n" +
+"    PRIMARY KEY(IDAUTHOR),\n" +
+"    UNIQUE (AUTHOR));\n" +
+"CREATE TABLE BOOKS.TITLE (IDTITLE INTEGER NOT NULL,\n" +
+"    TITLE VARCHAR(100) NOT NULL,\n" +
+"    ISSUED INTEGER,\n" +
+"    ISBN VARCHAR(10) NOT NULL,\n" +
+"    PRIMARY KEY(IDTITLE),\n" +
+"    UNIQUE (TITLE, ISBN));\n" +
+"CREATE TABLE BOOKS.TITLE_AUTHOR (IDTITLE_AUTHOR INTEGER NOT NULL,\n" +
+"    IDAUTHOR INTEGER NOT NULL,\n" +
+"    IDTITLE INTEGER NOT NULL,\n" +
+"    PRIMARY KEY(IDTITLE_AUTHOR),\n" +
+"    UNIQUE (IDAUTHOR, IDTITLE),\n" +
+"    FOREIGN KEY (IDAUTHOR) REFERENCES BOOKS.AUTHOR(IDAUTHOR),\n" +
+"    FOREIGN KEY (IDTITLE) REFERENCES BOOKS.TITLE(IDTITLE));\n"+
 "DROP INDEX my_idx ON sales.opportunity;\n"+
 "DROP INDEX IF EXISTS my_idx ON server_metrics;\n"+
 "ALTER INDEX my_idx ON sales.opportunity DISABLE;\n" +
@@ -89,10 +123,11 @@ public class TestSQL extends STester {
 "EXPLAIN SELECT entity_id FROM CORE.CUSTOM_ENTITY_DATA\n"+
 "   WHERE organization_id='00D300000000XHP' AND SUBSTR(entity_id,1,3) = '002'\n"+
 "      AND created_date < CURRENT_DATE()-1\n;"+
-"--This is line comment\n"+
-"//This is line comment\n"+
-"/* Comment */";
-			assertEq(s, parse(g, "Commands", s));
+"UPDATE Customers SET ContactName='Alfred Schmidt', City='Frankfurt'\n"+
+"  WHERE CustomerID = 1;\n"+
+//"  ;\n"+
+"";
+			assertEq(s, parse(g, "StatementList", s));
 		} catch (Exception ex) {
 			fail(ex);
 		}
