@@ -123,6 +123,9 @@ public class TestSQL extends STester {
 "EXPLAIN SELECT entity_id FROM CORE.CUSTOM_ENTITY_DATA\n"+
 "   WHERE organization_id='00D300000000XHP' AND SUBSTR(entity_id,1,3) = '002'\n"+
 "      AND created_date < CURRENT_DATE()-1\n;"+
+"UPDATE Customers SET ContactName='Alfred Schmidt', City='Frankfurt'\n"+
+"  WHERE CustomerID = 1;\n"+
+//"  ;\n"+
 "";
 			assertEq(s, parse(g, "StatementList", s));
 		} catch (Exception ex) {

@@ -1,7 +1,7 @@
 StatementList::= Statement (';' Statement)* (';' S?)?
 Statement::= S? ( AlterIndex | AlterTable | Constraint | Create | CreateIndex
    | Delete | DropIndex | DropSchema | DropTable | Explain
-   | InsertSelect | InsertValues | Select ) S?
+   | InsertSelect | InsertValues | Select | Update) S?
 
 /********************/
 Comment ::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
@@ -129,3 +129,6 @@ Select::= 'SELECT'% S? Hint? (S? ('DISTINCT'% | 'ALL'%) S?)?
    (S? 'HAVING'% S? Expression)?
    (S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
    (S? 'LIMIT'% S? (Numeric | BindParameter))?
+Update::= 'UPDATE'% S? ColumnRef S?
+  'SET'% S? Name '=' S? Value (Comma Name S? '=' S? Value)*
+   (S? 'WHERE'% S? Condition)?
