@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 40.1.2, release-date 2020-09-18
+* corrected bug in the X-script method 's.contains(s)'.
 * to BNF grammar implemented new inline function `$skipToNextLine`
 * to BNF grammar implemented new inline function `$UTFChar`
 * to BNF grammar implemented possibility to specify case insensitive termilal
