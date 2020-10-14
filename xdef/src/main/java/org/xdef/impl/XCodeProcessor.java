@@ -1309,18 +1309,15 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case CONTAINS: {
 					String s = _stack[sp--].stringValue();
 					String t = _stack[sp].stringValue();
-					_stack[sp] = (s == null || t == null)
-						? new DefBoolean(false)
-						: new DefBoolean(s.indexOf(t) >= 0);
+					_stack[sp] = new DefBoolean((s == null || t == null)
+						? false : t.indexOf(s) >= 0);
 					continue;
 				}
 				case CONTAINSI: {
 					String s = _stack[sp--].stringValue();
 					String t = _stack[sp].stringValue();
-					_stack[sp] = (s == null || t == null)
-						? new DefBoolean(false)
-						: new DefBoolean(
-							s.toLowerCase().indexOf(t.toLowerCase()) >= 0);
+					_stack[sp] = new DefBoolean((s == null || t == null)
+						? false : t.toLowerCase().indexOf(s.toLowerCase())>=0);
 					continue;
 				}
 				case IS_NUM: {
