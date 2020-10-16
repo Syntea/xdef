@@ -422,5 +422,4 @@ class ChkDOMParser extends SReporter {
 		setReportWriter(chkDoc.getReportWriter());
 		new DOMValidate().xvalidate(chkDoc, _elem);
 	}
-
 }
