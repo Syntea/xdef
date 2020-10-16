@@ -2,6 +2,14 @@
 
 # Version 40.1.2, release-date 2020-09-18
 * corrected bug in the X-script method 's.contains(s)'.
+* corrected bug in the construction node.
+* to `org.xdef.XDDocument`  is implemented the new method
+    `Object jcreate(String name, ReportWriter reporter)`
+  This method allows to construct JSON data acccording to JSON model with given
+  name. The method returns constructed JSON object.
+* to `org.xdef.proc.XXNode` is implemented the new method
+    `public void setJSONContext(Object data)`
+  This method sets the context with JSON data used in the construction mode.
 * to BNF grammar implemented new inline function `$skipToNextLine`
 * to BNF grammar implemented new inline function `$UTFChar`
 * to BNF grammar implemented possibility to specify case insensitive termilal

@@ -186,7 +186,13 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final String nsURI,
 		final String qname) {
 		XElement oldXElement = chkDoc._xElement; //Save XElement
+/**XXX*/
+		if (oldXElement == null || oldXElement._json == 0) {
+			chkDoc._xElement = null;
+		}
+/**XXX*
 		chkDoc._xElement = null;
+/**XXX*/
 		setReportWriter(chkDoc.getReportWriter());
 		boolean oldMode = chkDoc.isCreateMode();
 		chkDoc.setCreateMode(true);
@@ -599,31 +605,82 @@ final class ChkComposer extends SReporter implements XDValueID {
 		}
 		int n = qname.indexOf(':');
 		String localName = n < 0 ? qname : qname.substring(n + 1);
-		String lName = elem.getLocalName();
-		if (lName == null) {
-			lName = elem.getNodeName();
+		String lnm = elem.getLocalName();
+		if (lnm == null) {
+			lnm = elem.getNodeName();
 		}
-		if (localName.equals(lName)) {
-			if (uri == null || uri.equals(elem.getNamespaceURI())) {
+		NodeList nl = elem.getChildNodes();
+		n = nl.getLength();
+		if (localName.equals(lnm)
+			&& (uri == null || uri.equals(elem.getNamespaceURI()))) {
+			for (int i = 0; i < n; i++) {
+				Node node = nl.item(i);
+				String u = node.getNamespaceURI();
+				lnm = u==null ? node.getNodeName() : node.getLocalName();
+				if ((u == null	&& "_".equals(lnm) || ((localName.equals(lnm))
+					&& ((uri == null || uri.equals(u)))))) {
+					if (chkEl._xElement._match > 0) {
+						Element el = chkEl.getElemValue();
+						chkEl.setElemValue((Element) node);
+						XDValue value = chkEl.exec(chkEl._xElement._match,
+							(byte) 'E');
+						chkEl.setElemValue(el);
+						if (value == null || value.isNull()
+							|| !value.booleanValue()) {
+							continue;
+						}
+					}
+					result.addXDItem(new DefElement((Element) node));
+				}
+			}
+			if (result.isEmpty()) {
 				result.addXDItem(new DefElement(elem));
 				return true; //element is the element itself
 			}
+			n = result.getXDItemsNumber();
 		}
-		NodeList nl = elem.getChildNodes();
-		if ((n = nl.getLength()) == 0) {
+		if (n == 0) {
 			return false; //nothing found
 		}
-		int max = chkEl.getXMElement().maxOccurs();
 		int m = 0;
+		int max = chkEl.getXMElement().maxOccurs();
+		for (int i = 0; i < result.getXDItemsNumber(); i++) {
+			Element e = result.getXDElement(i);
+			String u = e.getNamespaceURI();
+			lnm = u==null ? e.getNodeName() : e.getLocalName();
+			if ("_".equals(lnm) && u == null
+				|| (localName.equals(lnm) && ((uri == null || uri.equals(u))))){
+				if (chkEl._xElement._match > 0) {
+					Element el = chkEl.getElemValue();
+					chkEl.setElemValue(e);
+					XDValue value = chkEl.exec(chkEl._xElement._match, (byte) 'E');
+					chkEl.setElemValue(el);
+					if (value == null || value.isNull()
+						|| !value.booleanValue()) {
+						continue;
+					}
+				}
+				if (++m >= max) {//the element added
+					break; // we do not nead others
+				}
+			}
+		}
 		for (int i = 0; i < n; i++) {
 			Node node = nl.item(i);
-			lName = node.getLocalName();
-			if (lName == null) {
-				lName = node.getNodeName();
-			}
-			if ("_".equals(lName) && node.getNamespaceURI() == null
-				|| (localName.equals(lName)
-				&& ((uri == null || uri.equals(node.getNamespaceURI()))))) {
+			String u = node.getNamespaceURI();
+			lnm = u==null ? node.getNodeName() : node.getLocalName();
+			if ("_".equals(lnm) && u == null
+				|| (localName.equals(lnm) && ((uri == null || uri.equals(u))))){
+				if (chkEl._xElement._match > 0) {
+					Element el = chkEl.getElemValue();
+					chkEl.setElemValue((Element) node);
+					XDValue value = chkEl.exec(chkEl._xElement._match, (byte) 'E');
+					chkEl.setElemValue(el);
+					if (value == null || value.isNull()
+						|| !value.booleanValue()) {
+						continue;
+					}
+				}
 				result.addXDItem(new DefElement((Element) node));
 				if (++m >= max) {//the element added
 					break; // we do not nead others
@@ -810,7 +867,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			}
 			String s = chkElem.getTextValue();
 			if (s != null) {
-				if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 // set attr
+				if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 //set attr
 					|| xatr._ignoreEmptyAttributes == 0
 					&& xel._ignoreEmptyAttributes != 0
 					||  xel._ignoreEmptyAttributes == 0

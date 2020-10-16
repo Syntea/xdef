@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.List;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.xdef.sys.ReportWriter;
@@ -53,6 +54,8 @@ import org.xdef.XDContainer;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefLocale;
 import java.util.Locale;
+import java.util.Map;
+import org.xdef.json.JsonUtil;
 import org.xdef.model.XMData;
 import org.xdef.model.XMNode;
 
@@ -310,6 +313,43 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else {
 			_sourceElem = node.getOwnerDocument().getDocumentElement();
 		}
+	}
+
+	@Override
+	/** Set JSON data as context for create mode.
+	 * @param data the JSON data. It can be either JSON object or
+	 * String with pathname, File, URL or InputStream with JSON data
+	 * or XDResultSet.
+	 * or XML data to be converted to JSON.
+	 * @throws SRuntimeException if data is incorrect or if model is not found.
+	 */
+	public final void setJSONContext(final Object data) {
+		Element e = null;
+		if (data != null) {
+			if (data instanceof Map || data instanceof List) {
+				e = JsonUtil.jsonToXml(data);
+			} else if (data instanceof String) {
+				e = JsonUtil.jsonToXml(JsonUtil.parse((String) data));
+			} else if (data instanceof File) {
+				e = JsonUtil.jsonToXml(JsonUtil.parse((File) data));
+			} else if (data instanceof URL) {
+				e = JsonUtil.jsonToXml(JsonUtil.parse((URL) data));
+			} else if (data instanceof InputStream) {
+				e = JsonUtil.jsonToXml(JsonUtil.parse((InputStream) data));
+			} else if (data instanceof Document) {
+				e = ((Document) data).getDocumentElement();
+			} else if (data instanceof Element){
+				e = (Element) data;
+			} else if (data instanceof XDResultSet) {
+				_iterator = (XDResultSet) data;
+				return;
+			}
+		}
+		if (e != null) {
+			setXDContext(e);
+			return;
+		}
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
 	}
 
 	@Override
@@ -1180,7 +1220,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param xpath XPath of data (may be null).
 	 * @return modification information (convert to JSON format if JSON).
 	 */
-	public final String getPosMod(final String xpos, final String xpath) {
+	final String getPosMod(final String xpos, final String xpath) {
 		String[] x = getPosInfo(xpos, xpath);
 		String result = "";
 		if (x[0] != null) {

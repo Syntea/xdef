@@ -26,17 +26,10 @@
  * of input data may be many gigabytes and it is not limited by the size of
  * internal memory of the Java virtual machine. The speed of processor is
  * typically over 1 megabyte per second. The method which provides this mode
- * is {@link org.xdef.XDDocument#xparse(java.io.File,
- * org.xdef.sys.ReportWriter)}.</li>
- *
- * <li>
- * Similar way of processing is the mode, where the XML document is available to
- * the processor in the form of object of the <tt>org.w3c.dom.Document</tt>
- * or <tt>org.w3c.dom.Element</tt> type. The input data are processed
- * by recursive walking in the DOM tree. The size of the input data is of course
- * in this case limited by the available memory. The method which provides this
- * mode is {@link org.xdef.XDDocument#xparse(org.w3c.dom.Node,
+ * is {@link org.xdef.XDDocument#xparse(Object,
  * org.xdef.sys.ReportWriter)}.
+ * The Object in the first parameter can be a string with pathname, file, URL,
+ * input stream or XML or.w3v.dom.Node with data to be parsed.
  * </li>
  *
  * <li>
@@ -49,6 +42,8 @@
  * org.xdef.sys.ReportWriter)} or
  * {@link org.xdef.XDDocument#xcreate(javax.xml.namespace.QName,
  * org.xdef.sys.ReportWriter)}.
+ * The first parameter contains the name of model according which the tesult
+ * will be constructed.
  * </li>
  * </UL>
  *
@@ -82,7 +77,7 @@
  * <li>
  * <h2><tt>XDDocument</tt></h2>
  * Validates XML source data (see
- * {@link org.xdef.XDDocument#xparse(java.io.File,
+ * {@link org.xdef.XDDocument#xparse(Object,
  * org.xdef.sys.ReportWriter)}).
  * <p><b>Example:</b></p>
  * <pre><tt>

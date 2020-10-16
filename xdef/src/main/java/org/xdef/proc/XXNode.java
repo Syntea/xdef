@@ -19,6 +19,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
+import org.xdef.sys.SRuntimeException;
 
 /** Interface of models in X-definition.
 * @author Vaclav Trojan
@@ -311,6 +312,15 @@ public interface XXNode extends XDValue {
 	 * @param source string with pathname, URL or source of XML node.
 	 */
 	public void setXDContext(String source);
+
+	/** Set JSON data as context for create mode.
+	 * @param data the JSON data. It can be either JSON object or
+	 * String with pathname, File, URL or InputStream with JSON data
+	 * or XDResultSet.
+	 * or XML data to be converted to JSON.
+	 * @throws SRuntimeException if data is incorrect or if model is not found.
+	 */
+	public void setJSONContext(Object data) throws SRuntimeException;
 
 	/** Get actual model.
 	 * @return actual model.

@@ -66,7 +66,8 @@ public final class TestUserMethods extends XDTester {
 			assertEq("<a><b/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
-			assertEq(strw.toString(), "ia sa iCH ib sb fb fCH ic sc fc fa ");
+			assertEq(strw.toString(),
+				"ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:macro name='m' p='?'>\n"+
@@ -95,7 +96,8 @@ public final class TestUserMethods extends XDTester {
 			assertEq("<a><b/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
-			assertEq(strw.toString(), "ia sa iMX ib sb fb fMX ic sc fc fa ");
+			assertEq(strw.toString(),
+				"ia sa iMX mb ib sb fb fMX mc ic sc fc fa ");
 			xml = "<a><b/><x/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
@@ -106,7 +108,7 @@ public final class TestUserMethods extends XDTester {
 			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"ia sa iMX ib sb fb ix sx fx fMX ic sc fc fa ");
+				"ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -138,7 +140,7 @@ public final class TestUserMethods extends XDTester {
 				create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"ia sa iCH ix sx fx fCH ic sc fc fa ");
+				"ia sa iCH ix sx fx fCH mc ic sc fc fa ");
 			xml = "<a><p/><x/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
@@ -150,19 +152,17 @@ public final class TestUserMethods extends XDTester {
 				create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"ia sa ip sp fp iCH ix sx fx fCH ic sc fc fa ");
+				"ia sa mp ip sp fp iCH ix sx fx fCH mc ic sc fc fa ");
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n" +
-"  <xd:macro name='m' p='?'>\n"+
-"    match {out('m#{p} '); return true;};\n"+
-"    init out('i#{p} ');finally out('f#{p} ')\n"+
-"  </xd:macro>\n"+
-"  <xd:macro name='n' p='?'>\n"+
-"    ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
-"  </xd:macro>\n"+
-"</xd:declaration>\n" +
+" <xd:macro name='m' p='?'>\n"+
+"   match {out('m#{p} '); return true;};\n"+
+"   init out('i#{p} ');finally out('f#{p} ')\n"+
+" </xd:macro>\n"+
+" <xd:macro name='n' p='?'>\n"+
+"   ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
+" </xd:macro>\n"+
 " <a xd:script=\"1;${n(p='a')}\">\n"+
 "   <xd:sequence xd:script=\"1;${m(p='SQ')}\">\n"+
 "      <b xd:script=\"1;${n(p='b')}; create from('/a/b')\"/>\n"+

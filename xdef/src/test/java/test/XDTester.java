@@ -594,74 +594,40 @@ public abstract class XDTester extends STester {
 		return error;
 	}
 
-	final public String getListing(final ReportReader r,
-		final String xdef) {
-		if (xdef.charAt(0) == '<') {
-			return ReportPrinter.printListing(xdef, r);
-		} else {
-			try {
-				return "File: " + xdef + "\n" + ReportPrinter.printListing(
-					FUtils.readString(new File(xdef)), r);
-			} catch (Exception ex) {
-				return "File: " + xdef + "\n" + ex;
-			}
-		}
-	}
-
 	final public XDPool compile(final InputStream source,
 		final String path,
 		final Class<?>... obj) {
 		return checkExtObjects(XDFactory.compileXD(_props, source, path, obj));
 	}
-
 	final public XDPool compile(final InputStream[] sources,
 		final String[] path,
 		final Class<?>... obj) {
 		return checkExtObjects(XDFactory.compileXD(_props, sources, path, obj));
 	}
-
 	final public XDPool compile(final URL[] urls, final Class<?>... obj) {
 		chkSyntax(urls).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, urls, obj));
 	}
-
 	final public XDPool compile(final URL url, final Class<?>... obj) {
 		chkSyntax(url).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
 	}
-
 	final public XDPool compile(final File[] files, final Class... obj) {
 		chkSyntax(files).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, files, obj));
 	}
-
 	final public XDPool compile(final File file, final Class... obj) {
 		chkSyntax(file).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, file, obj));
 	}
-
 	final public XDPool compile(final String xdef, final Class<?>... obj) {
 		chkSyntax(xdef).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
-
 	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
 		chkSyntax(xdefs).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
-
-	final public String createListnig(final String data,
-		final ArrayReporter reporter) {
-		if (!reporter.errorWarnings()) {
-			return "";
-		}
-		StringWriter sw = new StringWriter();
-		PrintWriter out = new PrintWriter(sw);
-		ReportPrinter.printListing(out, data, reporter, true);
-		out.close();
-		return sw.toString();
-	}
-
 	final public Element create(final XDPool xp,
 		final String defName,
 		final ReportWriter reporter,
@@ -676,7 +642,6 @@ public abstract class XDTester extends STester {
 		return xd.xcreate(new QName(el.getNamespaceURI(),
 			el.getNodeName()), reporter);
 	}
-
 	final public Element create(final XDPool xp,
 		final String defName,
 		final String name,
@@ -688,7 +653,6 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xcreate(name, reporter);
 	}
-
 	final public Element create(final XDPool xp,
 		final String defName,
 		final QName qname,
@@ -700,14 +664,12 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xcreate(qname, reporter);
 	}
-
 	final public Element create(final String xdef,
 		final String defName,
 		final QName qname,
 		final ReportWriter reporter) {
 		return create(compile(xdef), defName, qname, reporter);
 	}
-
 	final public Element create(final XDPool xp,
 		final String defName,
 		final Element el,
@@ -721,14 +683,12 @@ public abstract class XDTester extends STester {
 			? xd.xcreate(new QName(el.getNamespaceURI(), el.getTagName()), null)
 			: xd.xcreate(name, null);
 	}
-
 	final public Element create(final String xdef,
 		final String defName,
 		final Element el,
 		final String name) {
 		return create(compile(xdef), defName, el, name);
 	}
-
 	/**
 	 Compose a new XML document from the specified data.
 	 * @param xdef the X-Definition as source for data construction.
@@ -749,7 +709,6 @@ public abstract class XDTester extends STester {
 		final ArrayReporter reporter) {
 		return create(compile(xdef), defName, el, name, param, obj, reporter);
 	}
-
 	/**
 	 Compose a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
@@ -913,6 +872,77 @@ public abstract class XDTester extends STester {
 		return create(xd, qname, reporter, xml, null, null);
 	}
 
+	final public Object jcreate(final XDDocument xd,
+		final String modelName,
+		final ArrayReporter reporter,
+		final Object json,
+		final StringWriter strw,
+		final Object userObj) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		XDOutput out = null;
+		if (strw != null) {
+			out = XDFactory.createXDOutput(strw, false);
+			xd.setStdOut(out);
+		}
+		if (json != null) {
+			xd.setJSONContext(json);
+		}
+		if (userObj != null) {
+			xd.setUserObject(userObj);
+		}
+		Object result = xd.jcreate(modelName, reporter);
+		if (out != null) {
+			out.close();
+		}
+		return result;
+	}
+	final public Object jcreate(final String xdef,
+		final String xdName,
+		final String name,
+		final ArrayReporter reporter,
+		final Object xml,
+		final StringWriter strw,
+		final Object userObj) {
+		return jcreate(compile(xdef), xdName, name, reporter, xml,strw,userObj);
+	}
+	final public Object jcreate(final XDPool xp,
+		final String xdName,
+		final String modelName,
+		final ArrayReporter reporter,
+		final Object json,
+		final StringWriter strw,
+		final Object userObj) {
+		XDDocument xd = xp.createXDDocument(xdName);
+		return jcreate(xd, modelName, reporter, json, strw, userObj);
+	}
+	final public Object jcreate(final XDPool xp,
+		final String xdName,
+		final String modeName,
+		final ArrayReporter reporter,
+		final Object json) {
+		return jcreate(xp, xdName, modeName, reporter, json, null, null);
+	}
+	final public Object jcreate(final XDDocument xd,
+		final String name,
+		final ArrayReporter reporter) {
+		return jcreate(xd, name, reporter, null, null, null);
+	}
+	final public Object jcreate(final XDDocument xd,
+		final String modelName,
+		final ArrayReporter reporter,
+		final Object json) {
+		return jcreate(xd, modelName, reporter, json, null, null);
+	}
+	final public Object jcreate(final String xdef,
+		final String xdName,
+		final String modelName,
+		final ArrayReporter reporter,
+		final Object json) {
+		return jcreate(xdef, xdName, modelName, reporter, json, null, null);
+	}
+
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final String xml,
@@ -924,14 +954,12 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xparse(xml, reporter);
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final String xml,
 		final ReportWriter reporter) {
 		return parse(compile(xdef), defName, xml, reporter);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final Element el,
@@ -943,14 +971,12 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xparse(el, reporter);
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final Element el,
 		final ReportWriter reporter) {
 		return parse(compile(xdef), defName, el, reporter);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final Element el) {
@@ -958,13 +984,11 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xparse(el, null);
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final Element el) {
 		return parse(compile(xdef), defName, el);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final String xml) {
@@ -972,13 +996,11 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xparse(xml, null);
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final String xml) {
 		return parse(compile(xdef), defName, xml);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final String xml,
@@ -994,7 +1016,6 @@ public abstract class XDTester extends STester {
 		}
 		return xd.xparse(xml, reporter);
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final ArrayReporter reporter,
@@ -1002,7 +1023,6 @@ public abstract class XDTester extends STester {
 		final Object obj) {
 		return parse(compile(xdef), defName, xml, reporter, obj);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final String xml,
@@ -1017,20 +1037,17 @@ public abstract class XDTester extends STester {
 		}
 		return parse(xd, xml, reporter, strw, input, obj);
 	}
-
 	final public Element parse(final XDDocument xd,
 		final String xml,
 		final ArrayReporter reporter) {
 		return parse(xd, xml, reporter, null, null, null);
 	}
-
 	final public Element parse(final XDDocument xd,
 		final String xml,
 		final ArrayReporter reporter,
 		final StringWriter strw) {
 		return parse(xd, xml, reporter, strw, null, null);
 	}
-
 	final public Element parse(final XDDocument xd,
 		final String xml,
 		final ArrayReporter reporter,
@@ -1038,7 +1055,6 @@ public abstract class XDTester extends STester {
 		final Object obj) {
 		return parse(xd, xml, reporter, strw, null, obj);
 	}
-
 	final public Element parse(final XDDocument xd,
 		final String xml,
 		final ArrayReporter reporter,
@@ -1074,7 +1090,6 @@ public abstract class XDTester extends STester {
 		}
 		return xd.getElement();
 	}
-
 	final public Element parse(final String xdef,
 		final String defName,
 		final String xml,
@@ -1083,6 +1098,160 @@ public abstract class XDTester extends STester {
 		final Object input,
 		final Object obj) {
 		return parse(compile(xdef), defName, xml, reporter, strw, input, obj);
+	}
+
+	final public Object jparse(final XDPool xp,
+		final String defName,
+		final Object json,
+		final ReportWriter reporter) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		return xd.jparse(json, reporter);
+	}
+	final public Object jparse(final String xdef,
+		final String defName,
+		final Object json,
+		final ReportWriter reporter) {
+		return jparse(compile(xdef), defName, json, reporter);
+	}
+	final public Object jparse(final XDPool xp,
+		final String defName,
+		final Object json) {
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		return xd.jparse(json, null);
+	}
+	final public Object jparse(final String xdef,
+		final String defName,
+		final Object json) {
+		return jparse(compile(xdef), defName, json);
+	}
+	final public Object jparse(final XDPool xp,
+		final String defName,
+		final Object json,
+		final ArrayReporter reporter,
+		final Object obj) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		if (obj != null) {
+			xd.setUserObject(obj);
+		}
+		return xd.jparse(json, reporter);
+	}
+	final public Object jparse(final String xdef,
+		final String defName,
+		final ArrayReporter reporter,
+		final Object json,
+		final Object obj) {
+		return jparse(compile(xdef), defName, json, reporter, obj);
+	}
+	final public Object jparse(final XDPool xp,
+		final String defName,
+		final Object json,
+		final ArrayReporter reporter,
+		final StringWriter strw,
+		final Object input,
+		final Object obj) {
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		if (strw != null) {
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+		}
+		return jparse(xd, json, reporter, strw, input, obj);
+	}
+	final public Object jparse(final XDDocument xd,
+		final Object json,
+		final ArrayReporter reporter) {
+		return jparse(xd, json, reporter, null, null, null);
+	}
+	final public Object jparse(final XDDocument xd,
+		final Object json,
+		final ArrayReporter reporter,
+		final StringWriter strw) {
+		return jparse(xd, json, reporter, strw, null, null);
+	}
+	final public Object jparse(final XDDocument xd,
+		final Object json,
+		final ArrayReporter reporter,
+		final StringWriter strw,
+		final Object obj) {
+		return jparse(xd, json, reporter, strw, null, obj);
+	}
+	final public Object jparse(final XDDocument xd,
+		final Object json,
+		final ArrayReporter reporter,
+		final StringWriter strw,
+		final Object input,
+		final Object obj) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		if (input != null) {
+			if (input instanceof String) {
+				xd.setStdIn(XDFactory.createXDInput(
+					new ByteArrayInputStream(((String)input).getBytes()),
+					false));
+			} else if (input instanceof InputStreamReader) {
+				xd.setStdIn(XDFactory.createXDInput(
+					(InputStreamReader) input, false));
+			} else if (input instanceof InputStream) {
+				xd.setStdIn(XDFactory.createXDInput(
+					(InputStream) input, false));
+			}
+		}
+		if (obj != null) {
+			xd.setUserObject(obj);
+		}
+		Object result = xd.jparse(json, reporter);
+		if (strw != null) {
+			try {
+				strw.close();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		return result;
+	}
+	final public Object jparse(final String xdef,
+		final String defName,
+		final Object json,
+		final ArrayReporter reporter,
+		final StringWriter strw,
+		final Object input,
+		final Object obj) {
+		return jparse(compile(xdef), defName, json, reporter, strw, input, obj);
+	}
+
+	final public String getListing(final ReportReader r,
+		final String xdef) {
+		if (xdef.charAt(0) == '<') {
+			return ReportPrinter.printListing(xdef, r);
+		} else {
+			try {
+				return "File: " + xdef + "\n" + ReportPrinter.printListing(
+					FUtils.readString(new File(xdef)), r);
+			} catch (Exception ex) {
+				return "File: " + xdef + "\n" + ex;
+			}
+		}
+	}
+
+	final public String createListnig(final String data,
+		final ArrayReporter reporter) {
+		if (!reporter.errorWarnings()) {
+			return "";
+		}
+		StringWriter sw = new StringWriter();
+		PrintWriter out = new PrintWriter(sw);
+		ReportPrinter.printListing(out, data, reporter, true);
+		out.close();
+		return sw.toString();
 	}
 
 	final public void printReports(final ReportReader reporter,
