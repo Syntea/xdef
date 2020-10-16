@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2020-09-18
-* corrected bug in the X-script method 's.contains(s)'.
+# Version 40.1.2, release-date 2020-10-16
+* corrected bug in the X-script method `s.contains(s)`.
 * corrected bug in the construction node.
 * to `org.xdef.XDDocument`  is implemented the new method
     `Object jcreate(String name, ReportWriter reporter)`
