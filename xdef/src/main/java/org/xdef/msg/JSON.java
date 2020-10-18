@@ -45,10 +45,12 @@ public interface JSON {
 	public static final long JSON020 = 13834649619L;
 	/** After ":" in the command $any must follow a string value&amp;{#SYS000} */
 	public static final long JSON021 = 13834649620L;
+	/** Value pair &amp;{0} already exists */
+	public static final long JSON022 = 13834649621L;
 	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649621L;
+	public static final long JSON_DESCRIPTION = 13834649622L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649622L;
+	public static final long JSON_LANGUAGE = 13834649623L;
 
 	/** Default language. */
 	public static final String JSON = "eng";

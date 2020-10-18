@@ -469,8 +469,8 @@ public class TestJsonXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Osoba' root='Osoba'>\n"+
 "<xd:json name=\"Osoba\">\n"+
-"{ \"Osoba\": { \"Jmeno\": \"string();\",\n" +
-"    \"Plat\": \"int(100, 99999);\",\n" +
+"{ \"Osoba\": { \"Jmeno\": \"string(1, 50);\",\n" +
+"    \"Plat\": \"int(1000, 99999);\",\n" +
 "    \"Nar.\": \"date();\"\n" +
 "  }\n" +
 "}\n" +
@@ -491,15 +491,14 @@ public class TestJsonXdef extends XDTester {
 			xd.setJSONContext(j);
 			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Osoba", reporter)));
 			assertNoErrors(reporter);
-////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Seznam_osob'>\n"+
 "<xd:json name=\"Seznam_osob\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
 "    { $script: \"occurs 1..*;\",\n"+
-"      \"Osoba\": { \"Jmeno\": \"string()\",\n" +
-"         \"Plat\": \"int(100, 99999)\",\n" +
+"      \"Osoba\": { \"Jmeno\": \"string(1, 50)\",\n" +
+"         \"Plat\": \"int(1000, 99999)\",\n" +
 "         \"Nar.\": \"date()\"\n" +
 "      }\n" +
  "   }\n"+
@@ -539,7 +538,6 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j,
 				jcreate(xd, "Seznam_osob", reporter)));
 			assertNoErrors(reporter);
-////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Seznam_osob'>\n"+
 "<xd:json name=\"Seznam_osob\">\n"+
@@ -550,8 +548,8 @@ public class TestJsonXdef extends XDTester {
 "}\n"+
 "</xd:json>\n"+
 "<xd:json name=\"Osoba\">\n"+
-"{ \"Osoba\": { \"Jmeno\": \"string()\",\n" +
-"    \"Plat\": \"int(100, 99999)\",\n" +
+"{ \"Osoba\": { \"Jmeno\": \"string(1, 50)\",\n" +
+"    \"Plat\": \"int(1000, 99999)\",\n" +
 "    \"Nar.\": \"date()\"\n" +
 "  }\n" +
 "}\n" +
@@ -589,7 +587,6 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j,
 				jcreate(xd, "Seznam_osob", reporter)));
 			assertNoErrors(reporter);
-////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matice'>\n"+
 "<xd:json name=\"Matice\">\n"+

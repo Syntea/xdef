@@ -188,7 +188,12 @@ public class JsonUtil extends StringParser {
 					}
 					if (o != null && o instanceof XJson.JValue
 						&& ((XJson.JValue)o).getValue() instanceof String){
-						result.put(XJson.SCRIPT_KEY, o);
+						if (result.containsKey(XJson.SCRIPT_KEY)) {
+							//Value pair &{0} already exists
+							error(JSON.JSON022, XJson.SCRIPT_KEY);
+						} else {
+							result.put(XJson.SCRIPT_KEY, o);
+						}
 					} else {
 						//Value of $script must be string with X-script
 						error(JSON.JSON018);
@@ -206,7 +211,17 @@ public class JsonUtil extends StringParser {
 							error(JSON.JSON002, ",", "}");
 						}
 						isSpacesOrComments();
-						result.put(name, readValue());
+						o = readValue();
+						if (result.containsKey(name)) {
+							String s = jstringToSource(name);
+							if (!s.startsWith("\"") || !s.endsWith("\"")) {
+								s = '"' + s + '"';
+							}
+							//Value pair &{0} already exists
+							error(JSON.JSON022, s);
+						} else {
+							result.put(name, o);
+						}
 					} else {
 						fatal(JSON.JSON004); //String with name of item expected
 						return result;
