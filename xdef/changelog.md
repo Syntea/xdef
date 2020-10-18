@@ -3,6 +3,7 @@
 # Version 40.1.2, release-date 2020-10-16
 * corrected bug in the X-script method `s.contains(s)`.
 * corrected bug in the construction node.
+* corrected bug in JSON parser: duplicated name in object was not reported
 * to `org.xdef.XDDocument`  is implemented the new method
     `Object jcreate(String name, ReportWriter reporter)`
   This method allows to construct JSON data acccording to JSON model with given
