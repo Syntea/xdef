@@ -186,7 +186,8 @@ class XmlToJson extends JsonToXml {
 					}
 					if (J_NULL.equals(name)) {
 						return JNull.JNULL;
-					} else if (J_STRING.equals(name)
+					}
+					if (J_STRING.equals(name)
 						|| J_NUMBER.equals(name)
 						|| J_BOOLEAN.equals(name)) {
 						/*xx*/
