@@ -14,7 +14,7 @@ public class XDParseJNumber extends XSParseDouble {
 		super();
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		if (p.getCurrentChar() == '+') {
@@ -24,7 +24,7 @@ public class XDParseJNumber extends XSParseDouble {
 		}
 		int pos = p.getIndex();
 		if (p.isSignedFloat() || p.isSignedInteger()) {
-			p.setParsedValue(new DefDecimal(p.getBufferPart(pos, p.getIndex())));
+			p.setParsedValue(new DefDecimal(p.getBufferPart(pos,p.getIndex())));
 		} else {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());

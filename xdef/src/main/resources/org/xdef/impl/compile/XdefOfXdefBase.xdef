@@ -60,7 +60,10 @@
 /* Declaration of BNF grammar for X-Script                                    */
 /******************************************************************************/
 
-  <xd:BNFGrammar name = "XDScript"><![CDATA[
+  <xd:BNFGrammar name = "XDScript">
+
+<![CDATA[
+
 /******************************************************************************/
 /* x-Script BNF grammar rules                                                          */
 /*                                                                            */
@@ -669,13 +672,16 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
 XCLink ::= "%link" S ("*" | XPosition)
 
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
+
 ]]>
+
   </xd:BNFGrammar>
 
 /******************************************************************************/
 /* Declaration of BNF grammar for JSON                                        */
 /******************************************************************************/
   <xd:BNFGrammar name = "XDJson">
+
 <![CDATA[
 /******************************************************************************/
 /* JSON BNF grammar rules                                                     */
@@ -685,7 +691,7 @@ WhiteSpace ::= [#9#10#13 ]
 
 Comment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
 
-S ::= (WhiteSpace | Comment)+ /* Optional sequence of whitespaces or comments */
+S ::= (WhiteSpace | Comment)+ /* sequence of whitespaces or comments */
 
 boolean ::= "true" | "false"
 
@@ -705,21 +711,25 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-xdscript ::= S? ( ("$script" S? ":" S? string)
+jscript ::= S? ( ("$script" S? ":" S? string)
   | ( "$oneOf" (S? ":" S? string)? ) ) (S? ",")?
 
-object ::= "{" xdscript? (members)* S? "}"
+object ::= "{" jscript? (members)* S? "}"
 
 members ::= S? pair (S? "," S? pair)*
 
 pair ::= string S? ":" S? value
 
-array ::= "[" xdscript? S? list? S? "]"
+array ::= "[" jscript? S? list? S? "]"
 
 list ::= value (S? "," S? value )*
 
 value ::= S? (pair | "null" | boolean | number | string | array | object) S?
 
-json ::= S? (array | object)
-]]></xd:BNFGrammar>
+json ::= S? (array | object | string)
+
+]]>
+
+  </xd:BNFGrammar>
+
 </xd:def>

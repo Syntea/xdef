@@ -539,8 +539,12 @@ public class XJson extends JsonToXml {
 			e = genJsonMap((JMap) json, parent);
 		} else if (json instanceof JArray) {
 			e = genJsonArray((JArray) json, parent);
-		} else {
+		} else if (json instanceof JValue
+			&& ((JValue) json).getValue() instanceof String) {
 			e = genJsonValue((JValue) json, parent);
+		} else {
+			error(JSON.JSON011); //Not JSON object&{0}
+			return parent;
 		}
 		parent.addChildNode(e);
 		return e;
@@ -573,7 +577,9 @@ public class XJson extends JsonToXml {
 		jx.setSourceBuffer(p._value);
 		jx._basePos = p._xpathPos + "/text()";
 		Object json = jx.parse();
-		if (json != null && (json instanceof JMap || json instanceof JArray)) {
+		if (json != null && (json instanceof JMap
+			|| json instanceof JArray
+			|| json instanceof JValue)) {
 			jx.genJsonModel(json, p);
 		} else {
 			jx.error(JSON.JSON011); //Not JSON object&{0}

@@ -49,10 +49,9 @@ public class XDParseJString extends XDParseAn {
 						return false;
 					}
 					if (p.isChar('"')) { // quote
-						if (p.eos()) {
-							p.setParsedValue(p.getParsedString());
-							return true;
-						}
+						String s = p.getParsedString();
+						p.setParsedValue(s.substring(1, s.length()-1));
+						return true;
 					} else {
 						if (p.isChar('\\')) {
 							if (p.isOneOfChars("\\\"tnrf") == SParser.NOCHAR) {

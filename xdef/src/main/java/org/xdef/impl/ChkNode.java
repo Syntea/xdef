@@ -317,33 +317,41 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Set JSON data as context for create mode.
+	 * @param data the JSON data. It can be either String with pathname or URL.
+	 * @throws SRuntimeException if data is incorrect or if model is not found.
+	 */
+	public final void setJSONContext(final String data)
+		throws SRuntimeException {
+		setJSONContext(JsonUtil.parse(data));
+	}
+
+	@Override
+	/** Set JSON data as context for create mode.
 	 * @param data the JSON data. It can be either JSON object or
-	 * String with pathname, File, URL or InputStream with JSON data
-	 * or XDResultSet.
+	 * File, URL or InputStream with JSON data* or XDResultSet
 	 * or XML data to be converted to JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public final void setJSONContext(final Object data) {
+	public final void setJSONContext(final Object data)
+		throws SRuntimeException {
 		Element e = null;
-		if (data != null) {
-			if (data instanceof Map || data instanceof List) {
-				e = JsonUtil.jsonToXml(data);
-			} else if (data instanceof String) {
-				e = JsonUtil.jsonToXml(JsonUtil.parse((String) data));
-			} else if (data instanceof File) {
-				e = JsonUtil.jsonToXml(JsonUtil.parse((File) data));
-			} else if (data instanceof URL) {
-				e = JsonUtil.jsonToXml(JsonUtil.parse((URL) data));
-			} else if (data instanceof InputStream) {
-				e = JsonUtil.jsonToXml(JsonUtil.parse((InputStream) data));
-			} else if (data instanceof Document) {
-				e = ((Document) data).getDocumentElement();
-			} else if (data instanceof Element){
-				e = (Element) data;
-			} else if (data instanceof XDResultSet) {
-				_iterator = (XDResultSet) data;
-				return;
-			}
+		if (data == null || data instanceof Map || data instanceof List
+			|| data instanceof String || data instanceof Number
+			|| data instanceof Boolean) {
+			e = JsonUtil.jsonToXml(data);
+		} else if (data instanceof File) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((File) data));
+		} else if (data instanceof URL) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((URL) data));
+		} else if (data instanceof InputStream) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((InputStream) data));
+		} else if (data instanceof Document) {
+			e = ((Document) data).getDocumentElement();
+		} else if (data instanceof Element){
+			e = (Element) data;
+		} else if (data instanceof XDResultSet) {
+			_iterator = (XDResultSet) data;
+			return;
 		}
 		if (e != null) {
 			setXDContext(e);

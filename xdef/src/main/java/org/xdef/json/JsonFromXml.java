@@ -21,12 +21,12 @@ import org.w3c.dom.NodeList;
 /** Conversion of XML to JSON (both versions - W3C and XDEF)
  * @author Vaclav Trojan
  */
-class XmlToJson extends JsonToXml {
+class JsonFromXml extends JsonToXml {
 	/** Document used to create X-definition. */
 	private boolean _isW3C;
 
 	/** Prepare instance of JX. */
-	XmlToJson() {super();}
+	JsonFromXml() {super();}
 
 	/** Create JSON Map with attributes from element.
 	 * @param e element with attributes.
@@ -241,9 +241,12 @@ class XmlToJson extends JsonToXml {
 			}
 			if (J_MAP.equals(e.getLocalName())) {
 				return createMap(e);
+			} else {
+				Object o = createItem(e);
+				return o != null && o instanceof JNull ? null : o;
 			}
-			//Incorrect XML node name with JSON namespace &{0}{: }
-			throw new SRuntimeException(JSON.JSON013, e.getNodeName());
+//			//Incorrect XML node name with JSON namespace &{0}{: }
+//			throw new SRuntimeException(JSON.JSON013, e.getNodeName());
 		}
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		String key = toJsonName(e.getNodeName());
