@@ -10,6 +10,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
+import org.xdef.XDContainer;
+import org.xdef.XDParseResult;
+import org.xdef.XDValue;
 import org.xdef.json.JsonUtil;
 
 /** Utilities used with XComponents.
@@ -289,5 +292,55 @@ public class XComponentUtil {
 	 */
 	public static final void updateXPos(final XComponent xc) {
 		updateXPos(xc, "", 0);
+	}
+
+	/** Convert parsed value to string of text node.
+	 * @param parsedValue parsed value.
+	 * @return the string with parsed value converted to string
+	 */
+	public static final String jlinkToString(final XDParseResult parsedValue) {
+		if (parsedValue == null) {
+			return "null";
+		}
+		XDValue x = parsedValue.getParsedValue();
+		if (x instanceof XDContainer) {
+			XDContainer c = (XDContainer) x;
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < c.getXDItemsNumber(); i++) {
+				if (sb.length() > 0) {
+					sb.append(' ');
+				}
+				XDValue y = c.getXDItem(i);
+				if (y == null || y.isNull()) {
+					sb.append("null");
+				} else {
+					String s = y.toString();
+					if (y.getItemId() == XDValue.XD_STRING) {
+						if (s.isEmpty()) {
+							sb.append("\"\"");
+							continue;
+						}
+						if (!s.startsWith("\"")) {
+							if ("true".equals(s)
+								|| "false".equals(s)
+								|| "null".equals(s)) {
+								sb.append('"').append(s).append('"');
+								continue;
+							}
+						}
+						if (s.indexOf(' ') >= 0
+							|| s.indexOf('\n') >= 0	|| s.indexOf('\r') >= 0
+							|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0) {
+							sb.append('"').append(s).append('"');
+							continue;
+						}
+					}
+					sb.append(s);
+				}
+			}
+			return sb.toString();
+		} else {
+		  return x.toString();
+		}
 	}
 }

@@ -281,8 +281,12 @@ class XCGeneratorBase {
 	 * @return getter of ParsedResult.
 	 */
 	final static String getParsedResultGetter(final XMData xdata) {
-		String result = "parseResult.";
 		String parserName = xdata.getParserName();
+		if ("jlist".equals(parserName)) {
+			return "org.xdef.component.XComponentUtil.jlinkToString("
+				+ "parseResult)";
+		}
+		String result = "parseResult.";
 		if ("byte".equals(parserName)) {
 			return result + "getParsedValue().byteValue()";
 		} else if ("short".equals(parserName)) {
@@ -327,6 +331,8 @@ class XCGeneratorBase {
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
 				return result + "getParsedString()";
+//			case XDValueID.XD_CONTAINER:
+//				return result + "getParsedString()";
 		}
 		result += "getParsedValue().toString()";
 		String enumType = checkEnumType(xdata);

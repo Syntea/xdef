@@ -797,7 +797,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_scp.setStdErr(new DefOutStream(reporter));
 			Node node = (Node) data;
 			Element el = node.getNodeType() == Node.ELEMENT_NODE
-				? (Element) node : node.getNodeType() == node.DOCUMENT_NODE
+				? (Element) node : node.getNodeType() == Node.DOCUMENT_NODE
 				? ((Document) node).getDocumentElement()
 				: node.getOwnerDocument().getDocumentElement();
 			ChkDOMParser parser = new ChkDOMParser(
@@ -845,8 +845,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse and process JSON data and return processed JSON object.
-	 * @param data JSON data. It may be either JSON object or XML document
-	 * with JSON data or pathname, or File or URL or InputStream.
+	 * @param data JSON object, of either File, URL, InputStream with JSON data.
+	 *  or XML node wit JSON data.
 	 * @param reporter report writer or <tt>null</tt>. If this argument is
 	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
@@ -855,22 +855,20 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final Object data,
 		final ReportWriter reporter) throws SRuntimeException {
 		Element e = null;
-		if (data != null) {
-			if (data instanceof Map || data instanceof List) {
-				e = JsonUtil.jsonToXml(data);
-			} else if (data instanceof String) {
-				e = JsonUtil.jsonToXml((String) data);
-			} else if (data instanceof File) {
-				e = JsonUtil.jsonToXml((File) data);
-			} else if (data instanceof URL) {
-				e = JsonUtil.jsonToXml((URL) data);
-			} else	if (data instanceof InputStream) {
-				e = JsonUtil.jsonToXml((InputStream) data);
-			} else if (data instanceof Document) {
-				e = ((Document) data).getDocumentElement();
-			} else if (data instanceof Element){
-				e = (Element) data;
-			}
+		if (data == null || data instanceof Map || data instanceof List
+			|| data instanceof String || data instanceof Number
+			|| data instanceof Boolean) {
+			e = JsonUtil.jsonToXml(data);
+		} else if (data instanceof Document) {
+			e = ((Document) data).getDocumentElement();
+		} else if (data instanceof Element){
+			e = (Element) data;
+		} else if (data instanceof File) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((File) data));
+		} else if (data instanceof URL) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((URL) data));
+		} else if (data instanceof InputStream) {
+			e = JsonUtil.jsonToXml(JsonUtil.parse((InputStream) data));
 		}
 		if (e == null) {
 			throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
@@ -909,6 +907,58 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		//JSON root model&{0}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param data JSON data or pathname
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public Object jparse(String data, ReportWriter reporter)
+		throws SRuntimeException {
+		return jparse(JsonUtil.parse(data), reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param data File with JSON data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public Object jparse(File data, ReportWriter reporter)
+		throws SRuntimeException {
+		return jparse(JsonUtil.parse(data), reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param data URL pointing to JSON data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public Object jparse(URL data, ReportWriter reporter)
+		throws SRuntimeException {
+		return jparse(JsonUtil.parse(data), reporter);
+	}
+
+	@Override
+	/** Parse and process JSON data and return processed JSON object.
+	 * @param data InputStream with JSON data.
+	 * @param reporter report writer or <tt>null</tt>. If this argument is
+	 * <tt>null</tt> and error reports occurs then SRuntimeException is thrown.
+	 * @return JSON object with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public Object jparse(InputStream data, ReportWriter reporter)
+		throws SRuntimeException {
+		return jparse(JsonUtil.parse(data), reporter);
 	}
 
 	@Override

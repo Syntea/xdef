@@ -46,47 +46,35 @@ public final class DefParseResult extends XDValueAbstract
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of XDParseResult interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final void replaceParsedBufferFrom(final int from, final String s) {
 		_source = _source.substring(0, from) + s + _source.substring(_srcIndex);
 		_srcIndex = from + s.length();
 	}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public final short getItemId() {return XD_PARSERESULT;}
-
 	@Override
 	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
-
 	@Override
 	public final String toString() {return _value==null ? "" : _source;}
-
 	@Override
 	public final void clearReports() {_ar = null;}
-
 	@Override
 	public final boolean isNull() { return _value == null && _source == null; }
-
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of SimpleParser interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final String getSourceBuffer() {return _source;}
-
 	@Override
 	public final void setSourceBuffer(final String source) {_source = source;}
-
 	@Override
 	public final void setParsedValue(final String s) {_value = s;}
-
 	@Override
 	public final void setParsedValue(final XDValue obj) {_value = obj;}
-
 	@Override
 	public final XDValue getParsedValue() {
 		return errors() ? (XDValue) (_value = null) :
@@ -94,10 +82,8 @@ public final class DefParseResult extends XDValueAbstract
 			_value instanceof String ?
 			(XDValue)(_value=new DefString((String) _value)) : (XDValue)_value;
 	}
-
 	@Override
 	public String getParsedString() {return _source.substring(0, _srcIndex);}
-
 	@Override
 	public final String getUnparsedBufferPart() {
 		if (_source != null && _srcIndex < _source.length()) {
@@ -107,29 +93,23 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return null;
 	}
-
 	@Override
 	public final String getParsedBufferPartFrom(final int pos) {
 		return (pos < _srcIndex && _source != null
 			&& _srcIndex <= _source.length()) ?
 			_source.substring(pos, _srcIndex) : "";
 	}
-
 	@Override
 	public final String getBufferPart(final int from, final int to) {
 		return (_source != null && from < _srcIndex
 			&& _srcIndex<=_source.length()) ? _source.substring(from, to): null;
 	}
-
 	@Override
 	public final ArrayReporter getReporter() {return _ar;}
-
 	@Override
 	public final int getIndex() {return _srcIndex;}
-
 	@Override
 	public final void setBufIndex(final int index) {_srcIndex = index;}
-
 	@Override
 	public final boolean isSpace() {
 		char ch;
@@ -141,7 +121,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return false;
 	}
-
 	@Override
 	public final boolean isSpaces() {
 		char ch;
@@ -158,7 +137,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return false;
 	}
-
 	@Override
 	public final boolean isChar(final char ch) {
 		if (_srcIndex >= _source.length() || ch != _source.charAt(_srcIndex)) {
@@ -167,7 +145,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return true;
 	}
-
 	@Override
 	public final char notChar(final char ch) {
 		char c;
@@ -177,7 +154,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c;
 	}
-
 	@Override
 	public final char isOneOfChars(String chars) {
 		if (_srcIndex >= _source.length()
@@ -186,7 +162,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return _source.charAt(_srcIndex++);
 	}
-
 	@Override
 	public final char isUpperCaseLetter() {
 		char ch;
@@ -199,7 +174,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return NOCHAR;
 	}
-
 	@Override
 	public final char isLowerCaseLetter() {
 		char ch;
@@ -212,7 +186,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return NOCHAR;
 	}
-
 	@Override
 	public final char isInInterval(final char minCh, final char maxCh) {
 		char c;
@@ -223,7 +196,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c;
 	}
-
 	@Override
 	public final char notInInterval(final char minCh, final char maxCh) {
 		char c;
@@ -234,7 +206,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c;
 	}
-
 	@Override
 	public final int isDigit() {
 		char c;
@@ -245,7 +216,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c - '0';
 	}
-
 	@Override
 	public final boolean isInteger() {
 		if (isDigit() == -1) {
@@ -254,7 +224,6 @@ public final class DefParseResult extends XDValueAbstract
 		while(isDigit() != -1) {}
 		return true;
 	}
-
 	@Override
 	public final boolean isSignedInteger() {
 		int pos = _srcIndex;
@@ -265,7 +234,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return true;
 	}
-
 	@Override
 	public final boolean isFloat() {
 //(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?
@@ -292,7 +260,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return true;
 	}
-
 	@Override
 	public final boolean isSignedFloat() {
 		int pos = _srcIndex;
@@ -305,7 +272,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return true;
 	}
-
 	@Override
 	public final char isLetter() {
 		char c;
@@ -316,7 +282,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c;
 	}
-
 	@Override
 	public final char isLetterOrDigit() {
 		char c;
@@ -327,24 +292,20 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex++;
 		return c;
 	}
-
 	@Override
 	public final char peekChar() {
 		return _srcIndex >= _source.length()
 			? NOCHAR : _source.charAt(_srcIndex++);
 	}
-
 	@Override
 	public final char getCurrentChar() {
 		return _srcIndex < _source.length() ? _source.charAt(_srcIndex): NOCHAR;
 	}
-
 	@Override
 	public final char nextChar() {
 		return _srcIndex < _source.length()
 			? _source.charAt(_srcIndex++) : NOCHAR;
 	}
-
 	@Override
 	public final boolean isToken(final String s) {
 		if (_srcIndex >= _source.length() || !_source.startsWith(s, _srcIndex)){
@@ -353,7 +314,6 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex += s.length();
 		return true;
 	}
-
 	@Override
 	public final int isOneOfTokens(final String... tokens) {
 		int result = -1, len = -1;
@@ -370,7 +330,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return result;
 	}
-
 	@Override
 	public final int isOneOfTokensIgnoreCase(final String... tokens) {
 		int result = -1, len = -1;
@@ -391,7 +350,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return result;
 	}
-
 	@Override
 	public final boolean isTokenIgnoreCase(String token) {
 		int len = token.length();
@@ -403,7 +361,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return false;
 	}
-
 	@Override
 	public final String nextToken() {
 		if (_srcIndex >= _source.length()) {
@@ -422,7 +379,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return _source.substring(start, _srcIndex);
 	}
-
 	@Override
 	public final boolean findChar(final char ch) {
 		if (_srcIndex < _source.length() && _source.charAt(_srcIndex) == ch) {
@@ -435,7 +391,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return false;
 	}
-
 	@Override
 	public final char findOneOfChars(final String chars) {
 		while (_srcIndex < _source.length()) {
@@ -447,7 +402,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return NOCHAR;
 	}
-
 	@Override
 	public final boolean findToken(final String token) {
 		int len = token.length();
@@ -471,18 +425,14 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex = endPos;
 		return false;
 	}
-
 	@Override
 	public final boolean eos() {
 		return _source == null ? true : _srcIndex >=_source.length();
 	}
-
 	@Override
 	public final void setEos() {_srcIndex=_source==null ? -1: _source.length();}
-
 	@Override
 	public final boolean errors() {return !matches();}
-
 	@Override
 	public final boolean matches() {
 		if (_source != null && (_ar == null || !_ar.errors())) {
@@ -493,7 +443,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		return false;
 	}
-
 	@Override
 	public final void error(final String id,
 		final String msg,
@@ -503,7 +452,6 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		_ar.error(id, msg, mod);
 	}
-
 	@Override
 	public final void error(final long registeredID, final Object... mod) {
 		if (_ar == null) {
@@ -552,7 +500,6 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final boolean booleanValue() {
-//		return _source != null && (_ar == null || !_ar.errors());
 		return _value == null ? false : ((XDValue)_value).booleanValue();
 	}
 	@Override

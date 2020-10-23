@@ -25,6 +25,7 @@ public class XDParseAn extends XSAbstractParseToken {
 			return;
 		}
 		String s = p.getBufferPart(pos, p.getIndex());
+		p.setParsedValue(s);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);

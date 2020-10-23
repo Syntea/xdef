@@ -36,45 +36,38 @@ public final class DefDecimal extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
 	public Object getObject() {return _value;}
-
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
 	public short getItemId() {return XD_DECIMAL;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return XDValueType.DECIMAL;}
-
 	@Override
 	/** Check if the object is <tt>null</tt>.
 	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
 	 * <tt>false</tt>.
 	 */
 	public boolean isNull() {return _value == null;}
-
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
 	public String toString() {return _value==null ?"": String.valueOf(_value);}
-
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
 	public String stringValue() {return toString();}
-
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
@@ -83,10 +76,8 @@ public final class DefDecimal extends XDValueAbstract {
 		return _value == null ? new DefDecimal() :
 			new DefDecimal(new BigDecimal(_value.toString()));
 	}
-
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
-
 	@Override
 	public boolean equals(final Object arg) {
 		if (arg instanceof XDValue) {
@@ -94,7 +85,6 @@ public final class DefDecimal extends XDValueAbstract {
 		}
 		return false;
 	}
-
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
@@ -110,7 +100,6 @@ public final class DefDecimal extends XDValueAbstract {
 		}
 		return _value.equals(arg.decimalValue());
 	}
-
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
@@ -122,7 +111,6 @@ public final class DefDecimal extends XDValueAbstract {
 	public int compareTo(XDValue arg) throws SIllegalArgumentException {
 		return _value.compareTo(arg.decimalValue());
 	}
-
 	@Override
 	public byte byteValue() {return _value==null ? 0 : _value.byteValue();}
 	@Override

@@ -1102,6 +1102,17 @@ public abstract class XDTester extends STester {
 
 	final public Object jparse(final XDPool xp,
 		final String defName,
+		final String json,
+		final ReportWriter reporter) {
+		if (reporter != null) {
+			reporter.clear();
+		}
+		XDDocument xd = xp.createXDDocument(defName);
+		xd.setProperties(_props);
+		return xd.jparse(json, reporter);
+	}
+	final public Object jparse(final XDPool xp,
+		final String defName,
 		final Object json,
 		final ReportWriter reporter) {
 		if (reporter != null) {
@@ -1116,18 +1127,6 @@ public abstract class XDTester extends STester {
 		final Object json,
 		final ReportWriter reporter) {
 		return jparse(compile(xdef), defName, json, reporter);
-	}
-	final public Object jparse(final XDPool xp,
-		final String defName,
-		final Object json) {
-		XDDocument xd = xp.createXDDocument(defName);
-		xd.setProperties(_props);
-		return xd.jparse(json, null);
-	}
-	final public Object jparse(final String xdef,
-		final String defName,
-		final Object json) {
-		return jparse(compile(xdef), defName, json);
 	}
 	final public Object jparse(final XDPool xp,
 		final String defName,
@@ -1164,6 +1163,11 @@ public abstract class XDTester extends STester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 		}
 		return jparse(xd, json, reporter, strw, input, obj);
+	}
+	final public Object jparse(final XDDocument xd,
+		final String json,
+		final ArrayReporter reporter) {
+		return jparse(xd, json, reporter, null, null, null);
 	}
 	final public Object jparse(final XDDocument xd,
 		final Object json,
@@ -1208,7 +1212,9 @@ public abstract class XDTester extends STester {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Object result = xd.jparse(json, reporter);
+		Object o = json == null ? null
+			: json instanceof String ? xd.jparse((String) json, reporter)
+			: xd.jparse((String) json, reporter);
 		if (strw != null) {
 			try {
 				strw.close();
@@ -1216,7 +1222,7 @@ public abstract class XDTester extends STester {
 				throw new RuntimeException(ex);
 			}
 		}
-		return result;
+		return o;
 	}
 	final public Object jparse(final String xdef,
 		final String defName,
