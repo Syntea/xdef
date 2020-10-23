@@ -15,7 +15,7 @@ import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
-/** Create XML from JSON.
+/** Conversion of JSON to XML (X-definition form,or W3C form).
  * @author Vaclav Trojan
  */
 class TestJson_ToXml extends TestJson_Util{
