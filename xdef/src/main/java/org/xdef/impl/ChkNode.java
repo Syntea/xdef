@@ -336,7 +336,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		throws SRuntimeException {
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
-			|| data instanceof String || data instanceof Number 
+			|| data instanceof String || data instanceof Number
 			|| data instanceof Boolean) {
 			e = JsonUtil.jsonToXml(data);
 		} else if (data instanceof File) {
