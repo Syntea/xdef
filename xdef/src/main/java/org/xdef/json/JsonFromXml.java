@@ -337,16 +337,17 @@ class JsonFromXml extends JsonToXml {
 	 * @param node XML element or document.
 	 * @return JSON object.
 	 */
-	final Object toJson(final Node node) {
+	final static Object toJson(final Node node) {
 		Element e = node instanceof Document
 			? ((Document) node).getDocumentElement() : (Element) node;
+		JsonFromXml x = new JsonFromXml();
 		if (XDConstants.JSON_NS_URI_W3C.equals(e.getNamespaceURI())) {
-			_jsNamespace = XDConstants.JSON_NS_URI_W3C;
-			_isW3C = true;
+			x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
+			x._isW3C = true;
 		} else {
-			_jsNamespace = XDConstants.JSON_NS_URI_XD;
-			_isW3C = false;
+			x._jsNamespace = XDConstants.JSON_NS_URI_XD;
+			x._isW3C = false;
 		}
-		return getJsonObject(e);
+		return x.getJsonObject(e);
 	}
 }

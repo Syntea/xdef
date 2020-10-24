@@ -19,8 +19,11 @@ public interface XConstants {
 	/** XML version 1.1. */
 	public static final byte XML11 = 11;
 
-	/** JSON mode. */
-	public static byte JSON_MODE = 1;
+	/** JSON mode W3C format. */
+	public static byte JSON_MODE_W3C = 1;
+	/** JSON mode X-definition format. */
+	public static byte JSON_MODE_XD = 2;
+
 	/** JSON root element. */
 	public static byte JSON_ROOT = 4;
 

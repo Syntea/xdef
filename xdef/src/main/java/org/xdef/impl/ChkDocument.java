@@ -1038,11 +1038,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				Element e;
 				try {
-					byte jVersion = (Byte) xClass.getDeclaredField("JSON").get(null);
-					e = jVersion == XConstants.JSON_MODE ?
-						JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXdef(json);
+					byte jsonVer = // version of JSON to XML transormation
+						(Byte) xClass.getDeclaredField("JSON").get(null);
+					e = jsonVer == XConstants.JSON_MODE_W3C ?
+						JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXD(json);
 				} catch (Exception ex) {
-					e = JsonUtil.jsonToXml(json);
+					e = JsonUtil.jsonToXml(json); // X-definition transormation
 				}
 				return parseXComponent(e, xClass, reporter);
 			}

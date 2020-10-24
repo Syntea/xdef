@@ -56,7 +56,7 @@ public class TestJsonUtil extends STester {
 		}
 		try {
 			// test jsonToXmlXdef (XDEF)
-			el = JsonUtil.jsonToXmlXdef(o1);
+			el = JsonUtil.jsonToXmlXD(o1);
 		} catch (Exception ex) {
 			_errors++;
 			return "Error jsonToXmlXD: Test" + id + ".json\n"

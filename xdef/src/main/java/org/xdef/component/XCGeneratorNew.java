@@ -405,7 +405,7 @@ final class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
 						choiceStack.push(max);
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
-					if (xe1._json == XConstants.JSON_MODE) {
+					if (xe1._json == XConstants.JSON_MODE_W3C) {
 						XData keyAttr = (XData)xe1.getAttr(JsonToXml.J_KEYATTR);
 						String jname;
 						if (keyAttr != null) {

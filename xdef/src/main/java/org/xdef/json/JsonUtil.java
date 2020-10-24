@@ -41,7 +41,7 @@ public class JsonUtil extends StringParser {
 	/** Position of processed item.`*/
 	private SPosition _sPosition;
 
-	/** Create instance of JsonUtil. */
+	/** Create instance of TestJson_Util. */
 	JsonUtil() {
 		_acceptComments = false;
 		_genJObjects = false;
@@ -433,10 +433,10 @@ public class JsonUtil extends StringParser {
 	public Object parse() throws SRuntimeException {
 		isSpacesOrComments();
 		char c = getCurrentChar();
-//		if (c != '{' && c != '[' ) {
-//			error(JSON.JSON009); // JSON object or array expected"
-//			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
-//		}
+		if (c != '{' && c != '[' ) {
+			error(JSON.JSON009); // JSON object or array expected"
+			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
+		}
 		Object result = readValue();
 		isSpacesOrComments();
 		_sPosition = getPosition();
@@ -469,10 +469,10 @@ public class JsonUtil extends StringParser {
 			URL url = SUtils.getExtendedURL(source);
 			in = url.openStream();
 			sysId = url.toExternalForm();
-			result = JsonUtil.parse(in, sysId);
+			result = parse(in, sysId);
 		} catch (Exception ex) {
 			try {
-				result = JsonUtil.parse(new File(source));
+				result = parse(new File(source));
 			} catch (Exception x) {
 				//IO error detected on &{0}&{1}{, reason: }
 				throw new SRuntimeException(SYS.SYS034, source, x);
@@ -498,7 +498,7 @@ public class JsonUtil extends StringParser {
 		throws SRuntimeException {
 		try {
 			FileInputStream in = new FileInputStream(f);
-			return JsonUtil.parse(in, f.getCanonicalPath());
+			return parse(in, f.getCanonicalPath());
 		} catch (Exception ex) {
 			//IO error detected on &{0}&{1}{, reason: }
 			throw new SRuntimeException(SYS.SYS034, f, ex);
@@ -512,7 +512,7 @@ public class JsonUtil extends StringParser {
 	 */
 	public static final Object parse(final InputStream in)
 		throws SRuntimeException {
-		Object result = JsonUtil.parse(in, null);
+		Object result = parse(in, null);
 		try {
 			in.close();
 		} catch (IOException ex) {}
@@ -592,7 +592,7 @@ public class JsonUtil extends StringParser {
 			URLConnection u = in.openConnection();
 			InputStream is = u.getInputStream();
 			try {
-				return JsonUtil.parse(is, in.toExternalForm());
+				return parse(is, in.toExternalForm());
 			} finally {
 				is.close();
 			}
@@ -730,7 +730,7 @@ public class JsonUtil extends StringParser {
 			Map<String, Object> x = (Map) obj;
 			mapToJsonString(x, indent, sb);
 		} else {
-			objToJsonString(obj, indent, sb);
+			throw new SRuntimeException(JSON.JSON011, obj);//Not JSON object&{0}
 		}
 	}
 
@@ -805,7 +805,7 @@ public class JsonUtil extends StringParser {
 	 * @return string with JSON source format.
 	 */
 	public final static String toJsonString(final Object obj) {
-		return JsonUtil.toJsonString(obj, false);
+		return toJsonString(obj, false);
 	}
 
 	/** Create JSON string from object. Indentation depends on argument.
@@ -821,10 +821,7 @@ public class JsonUtil extends StringParser {
 			arrayToJsonString((List<Object>) obj, indt, sb);
 		} else if (obj instanceof Map) {
 			mapToJsonString((Map<String, Object>) obj, indt, sb);
-		} else if (obj == null) {
-			return "null";
-		} else if (obj instanceof String) {
-
+		} else {
 			//Not JSON object &{0}{: }
 			throw new SRuntimeException(JSON.JSON011, obj);
 		}
@@ -972,7 +969,7 @@ public class JsonUtil extends StringParser {
 	 * @return JSON object.
 	 */
 	public static final Object xmlToJson(final Node node) {
-		return new JsonFromXml().toJson(node);
+		return JsonFromXml.toJson(node);
 	}
 
 	/** Convert XML document to JSON object.
@@ -1008,82 +1005,83 @@ public class JsonUtil extends StringParser {
 	}
 
 	/** Create XML from JSON object in W3C mode.
-	 * @param json object with JSON data.
-	 * @return XML element created from JSON data.
-	 */
-	public static final Element jsonToXml(final Object json) {
-		return new JsonToXml().toXmlW3C(json);
-	}
-
-	/** Create XML from JSON object in W3C mode.
-	 * @param json path or string with JSON data.
+	 * @param json path to JSON source data.
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final String json) {
-		return new JsonToXml().toXmlW3C(parse(json));
+		return JsonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
-	 * @param file file with JSON data.
+	 * @param json file with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXml(final File file) {
-		return new JsonToXml().toXmlW3C(parse(file));
+	public static final Element jsonToXml(final File json) {
+		return JsonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
-	 * @param url URL with JSON data.
+	 * @param json URL where is JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXml(final URL url) {
-		return new JsonToXml().toXmlW3C(parse(url));
+	public static final Element jsonToXml(final URL json) {
+		return JsonToXml.toXmlW3C(parse(json));
 	}
+
 	/** Create XML from JSON object in W3C mode.
-	 * @param in InputStream with JSON data.
+	 * @param json Input stream where is JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXml(final InputStream in) {
-		return new JsonToXml().toXmlW3C(parse(in));
+	public static final Element jsonToXml(final InputStream json) {
+		return JsonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
-	 * @param json object with JSON data.
+	 * @param json JSON object.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final Object json) {
-		return new JsonToXml().toXmlXD(json);
+	public static final Element jsonToXml(final Object json) {
+		return JsonToXml.toXmlW3C(json);
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
-	 * @param json path or string with JSON data.
+	 * @param json path to JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final String json) {
-		return new JsonToXml().toXmlXD(parse(json));
+	public static final Element jsonToXmlXD(final String json) {
+		return JsonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
-	 * @param file file JSON data.
+	 * @param json File with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final File file) {
-		return new JsonToXml().toXmlXD(parse(file));
+	public static final Element jsonToXmlXD(final File json) {
+		return JsonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
-	 * @param url URL with JSON data.
+	 * @param json URL with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final URL url) {
-		return new JsonToXml().toXmlXD(parse(url));
+	public static final Element jsonToXmlXD(final URL json) {
+		return JsonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
-	 * @param in InputStream with JSON data.
+	 * @param json InputStream with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXDef(final InputStream in) {
-		return new JsonToXml().toXmlXD(parse(in));
+	public static final Element jsonToXmlXD(final InputStream json) {
+		return JsonToXml.toXmlXD(parse(json));
+	}
+
+	/** Create XML from JSON object in X-Definition mode.
+	 * @param json JSON object.
+	 * @return XML element created from JSON data.
+	 */
+	public static final Element jsonToXmlXD(final Object json) {
+		return JsonToXml.toXmlXD(json);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

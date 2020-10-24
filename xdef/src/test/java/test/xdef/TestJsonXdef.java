@@ -87,12 +87,12 @@ public class TestJsonXdef extends XDTester {
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 					if (!JsonUtil.jsonEqual(JsonUtil.xmlToJson(el),
-						JsonUtil.xmlToJson(JsonUtil.jsonToXmlXdef(json)))) {
+						JsonUtil.xmlToJson(JsonUtil.jsonToXmlXD(json)))) {
 						throw new RuntimeException(rName +
 							" xml transformation to JSON differs:\n" +
 							KXmlUtils.nodeToString(JsonUtil.jsonToXml(json),
 								true) + "\n" +
-							KXmlUtils.nodeToString(JsonUtil.jsonToXmlXdef(json),
+							KXmlUtils.nodeToString(JsonUtil.jsonToXmlXD(json),
 								true) + "\n");
 					}
 				}
