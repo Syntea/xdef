@@ -11,6 +11,8 @@ import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import org.w3c.dom.Element;
 import test.XDTester;
 import java.util.List;
@@ -21,6 +23,7 @@ import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
 import static test.XDTester.getValueFromGetter;
 import static test.XDTester.setValueToSetter;
+import static test.xdef.TestCompose.xx;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -715,6 +718,55 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));
 			assertEq("axb", strw.toString());
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" >\n" +
+"  <xd:json xd:name='root'>\n"+
+"     \"jvalue();\"\n"+
+"  </xd:json>\n"+
+"</xd:def>" +
+"";
+			xp = compile(xdef);
+			j = 123;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = -0L;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = -123.45e-1;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = -123.45e-1D;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = new BigInteger("123456789012345678901234567890");
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = new BigDecimal("-123456789012345678901234567890e-2");
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = true;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "";
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "abc";
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "ab\nc";
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = " ab tc ";
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "ab\n\tc";
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = null;
+			assertTrue(JsonUtil.jsonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
 /*xx*/
 	}
