@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2020-10-16
+# Version 40.1.2, release-date 2020-10-24
 * corrected bug in the X-script method `s.contains(s)`.
 * corrected bug in the construction node of JSON.
 * corrected bug in JSON parser: duplicated name in object not reported.
