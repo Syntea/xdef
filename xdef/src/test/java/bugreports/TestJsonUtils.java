@@ -21,14 +21,14 @@ public class TestJsonUtils extends XDTester {
 	}
 
 	private static String jtestObj(Object json) {
-		Element el = TestJson_Util.jsonToXmlXdef(json); // new XD XML
+		Element el = TestJson_Util.jsonToXmlXD(json); // new XD XML
 		Object json1 = TestJson_Util.xmlToJson(el);
 		if (!JsonUtil.jsonEqual(json, json1)) {
 			return "Error new xd:\n"
 				+ KXmlUtils.nodeToString(el, true) + '\n'
 				+ json+'\n' + JsonUtil.toJsonString(json1,true);
 		}
-		el = JsonUtil.jsonToXmlXdef(json); // old XD XML
+		el = JsonUtil.jsonToXmlXD(json); // old XD XML
 		json1 = TestJson_Util.xmlToJson(el);
 		if (!JsonUtil.jsonEqual(json, json1)) {
 			return "Error old XD:\n"
@@ -168,10 +168,10 @@ public class TestJsonUtils extends XDTester {
 "</xd:def>\n" +
 "";
 			xp = compile(xdef);
-//			o = 123;
-//			assertEq(o, jparse(xp, "", (Object) o, reporter));
-			o = null;
+			o = 123;
 			assertEq(o, jparse(xp, "", (Object) o, reporter));
+			o = null;
+			assertNull(jparse(xp, "", (Object) o, reporter));
 		} catch (Exception ex) {fail(ex);}
 	}
 

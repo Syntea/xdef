@@ -333,7 +333,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> varNames) {
 		String name = null;
 		XData keyAttr = (XData) xe.getAttr(JsonToXml.J_KEYATTR);
-		if (xe._json==XConstants.JSON_MODE && xe._match>=0 && keyAttr!=null
+		if (xe._json==XConstants.JSON_MODE_W3C && xe._match>=0 && keyAttr!=null
 			&& keyAttr._check >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = keyAttr._check; i < code.length; i++) {

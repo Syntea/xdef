@@ -32,7 +32,7 @@ public class MyTest_2 extends XDTester {
 	 * @return reporter with reported errors and warnings.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	private static final ArrayReporter genXComponent(final XDPool xp,
+	private static ArrayReporter genXComponent(final XDPool xp,
 		final String tempDir) {
 		File fdir = new File(tempDir);
 		if (fdir.exists()) { // ensure the src directory exists.
@@ -823,7 +823,7 @@ if(T){return;}
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.xmlToJson(JsonUtil.jsonToXml(xc.toJson())));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				JsonUtil.xmlToJson(JsonUtil.jsonToXmlXdef(xc.toJson())));
+				JsonUtil.xmlToJson(JsonUtil.jsonToXmlXD(xc.toJson())));
 			json = "[123]";
 			j = xp.createXDDocument("X").jparse(json, reporter);
 			assertNoErrors(reporter);

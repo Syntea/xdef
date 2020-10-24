@@ -1484,7 +1484,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
 					return;
 				}
-				byte jsonMode =  XConstants.JSON_MODE; //W3C mode is default
+				byte jsonMode =  XConstants.JSON_MODE_W3C; //W3C mode is default
 				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
 				PAttr pa =  _precomp.getXdefAttr(pnode, "name", false, true);
 				sval = pa == null ? null : pa._value;

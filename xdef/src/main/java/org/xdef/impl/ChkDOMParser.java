@@ -83,7 +83,6 @@ class ChkDOMParser extends SReporter {
 			int maxAttr = atrs.getLength();
 			String elementName = sourceElem.getNodeName();
 			String xdefInstancePrefix = "";
-			String xdefInstanceNSAttr = "";
 			ChkElement chkEl;
 			if (parentNode == null) {
 				for (int i=0; i < maxAttr; i++) {
@@ -91,10 +90,8 @@ class ChkDOMParser extends SReporter {
 					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
 						if (XDConstants.XDEF_INSTANCE_NS_URI.equals(val)
-							|| ChkParser.XDEF31_INSTANCE_NS_URI.equals(val)
-							|| ChkParser.XDEF20_INSTANCE_NS_URI.equals(val)) {
+							|| ChkParser.XDEF31_INSTANCE_NS_URI.equals(val)) {
 							xdefInstancePrefix = name.substring(6);
-							xdefInstanceNSAttr = name;
 							break;
 						}
 					}
@@ -113,16 +110,14 @@ class ChkDOMParser extends SReporter {
 								//Whitespace expected after '&{0}'
 								error(XML.XML014, "PUBLIC");
 							}
-							String pubidLiteral;
-							if ((pubidLiteral = ChkParser.readString(p)) !=
-								null) {
+							if (ChkParser.readString(p) != null) {
 								if (!p.isSpaces()) {
 									//Whitespace expected after '&{0}'
 									error(XML.XML014, "PUBLIC");
 									return;
 								}
-								if ((systemLiteral = ChkParser.readString(p)) ==
-									null) {
+								if ((systemLiteral = ChkParser.readString(p))
+									== null) {
 									//Quoted string declaration expected"
 									error(XDEF.XDEF504);
 									return;

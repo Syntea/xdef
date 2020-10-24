@@ -470,10 +470,10 @@ public class TestJson_Util extends StringParser {
 			URL url = SUtils.getExtendedURL(source);
 			in = url.openStream();
 			sysId = url.toExternalForm();
-			result = TestJson_Util.parse(in, sysId);
+			result = parse(in, sysId);
 		} catch (Exception ex) {
 			try {
-				result = TestJson_Util.parse(new File(source));
+				result = parse(new File(source));
 			} catch (Exception x) {
 				//IO error detected on &{0}&{1}{, reason: }
 				throw new SRuntimeException(SYS.SYS034, source, x);
@@ -499,7 +499,7 @@ public class TestJson_Util extends StringParser {
 		throws SRuntimeException {
 		try {
 			FileInputStream in = new FileInputStream(f);
-			return TestJson_Util.parse(in, f.getCanonicalPath());
+			return parse(in, f.getCanonicalPath());
 		} catch (Exception ex) {
 			//IO error detected on &{0}&{1}{, reason: }
 			throw new SRuntimeException(SYS.SYS034, f, ex);
@@ -513,7 +513,7 @@ public class TestJson_Util extends StringParser {
 	 */
 	public static final Object parse(final InputStream in)
 		throws SRuntimeException {
-		Object result = TestJson_Util.parse(in, null);
+		Object result = parse(in, null);
 		try {
 			in.close();
 		} catch (IOException ex) {}
@@ -593,7 +593,7 @@ public class TestJson_Util extends StringParser {
 			URLConnection u = in.openConnection();
 			InputStream is = u.getInputStream();
 			try {
-				return TestJson_Util.parse(is, in.toExternalForm());
+				return parse(is, in.toExternalForm());
 			} finally {
 				is.close();
 			}
@@ -806,7 +806,7 @@ public class TestJson_Util extends StringParser {
 	 * @return string with JSON source format.
 	 */
 	public final static String toJsonString(final Object obj) {
-		return TestJson_Util.toJsonString(obj, false);
+		return toJsonString(obj, false);
 	}
 
 	/** Create JSON string from object. Indentation depends on argument.
@@ -1010,7 +1010,7 @@ public class TestJson_Util extends StringParser {
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final String json) {
-		return new TestJson_ToXml().toXmlW3C(parse(json));
+		return TestJson_ToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -1018,7 +1018,7 @@ public class TestJson_Util extends StringParser {
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final File json) {
-		return new TestJson_ToXml().toXmlW3C(parse(json));
+		return TestJson_ToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -1026,7 +1026,7 @@ public class TestJson_Util extends StringParser {
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final URL json) {
-		return new TestJson_ToXml().toXmlW3C(parse(json));
+		return TestJson_ToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -1034,7 +1034,7 @@ public class TestJson_Util extends StringParser {
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final InputStream json) {
-		return new TestJson_ToXml().toXmlW3C(parse(json));
+		return TestJson_ToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -1042,47 +1042,47 @@ public class TestJson_Util extends StringParser {
 	 * @return XML element created from JSON data.
 	 */
 	public static final Element jsonToXml(final Object json) {
-		return new TestJson_ToXml().toXmlW3C(json);
+		return TestJson_ToXml.toXmlW3C(json);
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
 	 * @param json path to JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final String json) {
-		return new TestJson_ToXml().toXmlXD(parse(json));
+	public static final Element jsonToXmlXD(final String json) {
+		return TestJson_ToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
 	 * @param json File with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final File json) {
-		return new TestJson_ToXml().toXmlXD(parse(json));
+	public static final Element jsonToXmlXD(final File json) {
+		return TestJson_ToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
 	 * @param json URL with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final URL json) {
-		return new TestJson_ToXml().toXmlXD(parse(json));
+	public static final Element jsonToXmlXD(final URL json) {
+		return TestJson_ToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
 	 * @param json InputStream with JSON source data.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final InputStream json) {
-		return new TestJson_ToXml().toXmlXD(parse(json));
+	public static final Element jsonToXmlXD(final InputStream json) {
+		return TestJson_ToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
 	 * @param json JSON object.
 	 * @return XML element created from JSON data.
 	 */
-	public static final Element jsonToXmlXdef(final Object json) {
-		return new TestJson_ToXml().toXmlXD(json);
+	public static final Element jsonToXmlXD(final Object json) {
+		return TestJson_ToXml.toXmlXD(json);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

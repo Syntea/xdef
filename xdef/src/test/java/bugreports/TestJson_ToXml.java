@@ -363,20 +363,21 @@ class TestJson_ToXml extends TestJson_Util{
 	 * @param json object with JSON data.
 	 * @return XML element.
 	 */
-	final Element toXmlXD(final Object json) {
+	final static Element toXmlXD(final Object json) {
 		if (isJsonObject(json)) {
-			_jsNamespace = XDConstants.JSON_NS_URI_XD;
-			_jsPrefix = "js";
-			_doc = KXmlUtils.newDocument();
+			TestJson_ToXml x = new TestJson_ToXml();
+			x._jsNamespace = XDConstants.JSON_NS_URI_XD;
+			x._jsPrefix = "js";
+			x._doc = KXmlUtils.newDocument();
 			if (json == null || json instanceof String || json instanceof Boolean
 				|| json instanceof Number) {
-				genValueW3C(json, _doc); // same as W3C, but with XD namespace!
+				x.genValueW3C(json, x._doc); // same as W3C, but with XD namespace!
 			} else if (json instanceof Map) {
-				mapToXmlXD((Map) json, _doc);
+				x.mapToXmlXD((Map) json, x._doc);
 			} else if (json instanceof List) {
-				arrayToNodeXD((List) json, _doc, true);
+				x.arrayToNodeXD((List) json, x._doc, true);
 			}
-			return _doc.getDocumentElement();
+			return x._doc.getDocumentElement();
 		}
 		throw new SRuntimeException(JSON.JSON011, json);//Not JSON object&{0}
 	}
@@ -458,12 +459,12 @@ class TestJson_ToXml extends TestJson_Util{
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	final Element toXmlW3C(final Object json) {
+	final static Element toXmlW3C(final Object json) {
 		if (isJsonObject(json)) {
-			_jsNamespace = XDConstants.JSON_NS_URI_W3C;
-			_jsPrefix = "";
-			_doc = KXmlUtils.newDocument();
-			return genValueW3C(json, _doc);
+			TestJson_ToXml x = new TestJson_ToXml();
+			x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
+			x._jsPrefix = "";
+			return x.genValueW3C(json, x._doc = KXmlUtils.newDocument());
 		}
 		throw new SRuntimeException(JSON.JSON011, json);//Not JSON object&{0}
 	}

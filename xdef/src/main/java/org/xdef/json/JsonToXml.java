@@ -362,10 +362,10 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element.
 	 */
-	final Element toXmlXD(final Object json) {
-		_doc = KXmlUtils.newDocument();
-		jsonToXmlXD(json, _doc);
-		return _doc.getDocumentElement();
+	final static Element toXmlXD(final Object json) {
+		JsonToXml x = new JsonToXml();
+		x.jsonToXmlXD(json, x._doc = KXmlUtils.newDocument());
+		return x._doc.getDocumentElement();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -414,10 +414,10 @@ public class JsonToXml extends JsonUtil {
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.
 	 */
-	final Element toXmlW3C(final Object json) {
-		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
-		_jsPrefix = "";
-		_doc = KXmlUtils.newDocument();
-		return genValueW3C(json, _doc);
+	final static Element toXmlW3C(final Object json) {
+		JsonToXml x = new JsonToXml();
+		x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
+		x._jsPrefix = "";
+		return x.genValueW3C(json, x._doc = KXmlUtils.newDocument());
 	}
 }
