@@ -1,6 +1,6 @@
 package org.xdef.json;
 
-import org.xdef.impl.compile.XJson;
+import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SPosition;
@@ -133,7 +133,7 @@ public class JsonUtil extends StringParser {
 	private Object readValue() throws SRuntimeException {
 		if (eos()) {
 			fatal(JSON.JSON007); //unexpected eof
-			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
 		}
 		if (_genJObjects) {
 			_sPosition = getPosition();
@@ -141,7 +141,7 @@ public class JsonUtil extends StringParser {
 		if (isChar('{')) { // Map
 			Map<String, Object> result;
 			if (_genJObjects) {
-				result = new XJson.JMap(_sPosition);
+				result = new CompileJsonXdef.JMap(_sPosition);
 			} else {
 				result = new LinkedHashMap<String,Object>();
 			}
@@ -152,8 +152,7 @@ public class JsonUtil extends StringParser {
 			boolean wasScript = false;
 			while(!eos()) {
 				int i;
-				if (!wasScript && _jdef && (i = isOneOfTokens(
-					XJson.SCRIPT_NAME, XJson.ONEOF_NAME)) >= 0) {
+				if (!wasScript && _jdef && (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME, CompileJsonXdef.ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					SPosition spos = getPosition();
 					isSpacesOrComments();
@@ -164,20 +163,20 @@ public class JsonUtil extends StringParser {
 							spos.setIndex(spos.getIndex() - 1);
 							isSpacesOrComments();
 							o = readValue();
-							if (o instanceof XJson.JValue
-								&& ((XJson.JValue)o).getValue()
+							if (o instanceof CompileJsonXdef.JValue
+								&& ((CompileJsonXdef.JValue)o).getValue()
 								instanceof String) {
-								s = XJson.ONEOF_KEY +
-									((XJson.JValue)o).getValue();
+								s = CompileJsonXdef.ONEOF_KEY +
+									((CompileJsonXdef.JValue)o).getValue();
 							} else {
 								//Value of $script must be string with X-script
 								error(JSON.JSON018);
-								s = XJson.ONEOF_KEY;
+								s = CompileJsonXdef.ONEOF_KEY;
 							}
 						} else {
-							s = XJson.ONEOF_KEY;
+							s = CompileJsonXdef.ONEOF_KEY;
 						}
-						o = new XJson.JValue(spos, s);
+						o = new CompileJsonXdef.JValue(spos, s);
 					} else {
 						if (!isChar(':') && i != 1) {
 							//"&{0}"&{1}{ or "}{"} expected
@@ -186,13 +185,13 @@ public class JsonUtil extends StringParser {
 						isSpacesOrComments();
 						o = readValue();
 					}
-					if (o != null && o instanceof XJson.JValue
-						&& ((XJson.JValue)o).getValue() instanceof String) {
-						if (result.containsKey(XJson.SCRIPT_KEY)) {
+					if (o != null && o instanceof CompileJsonXdef.JValue
+						&& ((CompileJsonXdef.JValue)o).getValue() instanceof String) {
+						if (result.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
 							//Value pair &{0} already exists
-							error(JSON.JSON022, XJson.SCRIPT_KEY);
+							error(JSON.JSON022, CompileJsonXdef.SCRIPT_KEY);
 						} else {
-							result.put(XJson.SCRIPT_KEY, o);
+							result.put(CompileJsonXdef.SCRIPT_KEY, o);
 						}
 					} else {
 						//Value of $script must be string with X-script
@@ -201,8 +200,8 @@ public class JsonUtil extends StringParser {
 				} else {
 					Object o = readValue();
 					if (o != null && (o instanceof String ||
-						(_genJObjects && o instanceof XJson.JValue)
-						&& ((XJson.JValue) o).getValue() instanceof String)) {
+						(_genJObjects && o instanceof CompileJsonXdef.JValue)
+						&& ((CompileJsonXdef.JValue) o).getValue() instanceof String)) {
 						 // parse JSON named pair
 						String name = _genJObjects ? o.toString() : (String) o;
 						isSpacesOrComments();
@@ -259,7 +258,7 @@ public class JsonUtil extends StringParser {
 		} else if (isChar('[')) {
 			List<Object> result;
 			if (_genJObjects) {
-				result = new XJson.JArray(_sPosition);
+				result = new CompileJsonXdef.JArray(_sPosition);
 			} else {
 				result = new ArrayList<Object>();
 			}
@@ -272,22 +271,22 @@ public class JsonUtil extends StringParser {
 			while(!eos()) {
 				int i;
 				if (!wasScript &&_jdef
-					&& (i = isOneOfTokens(XJson.SCRIPT_NAME,
-						XJson.ONEOF_NAME)) >= 0) {
+					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
+						CompileJsonXdef.ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					if (isChar(':')) {
 						isSpacesOrComments();
 						Object o = readValue();
-						if (o instanceof XJson.JValue
-							&& ((XJson.JValue)o).getValue() instanceof String){
-							XJson.JValue jv = (XJson.JValue) o;
+						if (o instanceof CompileJsonXdef.JValue
+							&& ((CompileJsonXdef.JValue)o).getValue() instanceof String){
+							CompileJsonXdef.JValue jv = (CompileJsonXdef.JValue) o;
 							if (i == 1) {
 								SPosition spos = jv.getPosition();
 								spos.setIndex(spos.getIndex() - 1);
-								String s = XJson.ONEOF_KEY + jv.getValue();
-								jv = new XJson.JValue(spos, s);
+								String s = CompileJsonXdef.ONEOF_KEY + jv.getValue();
+								jv = new CompileJsonXdef.JValue(spos, s);
 							}
-							result.add(new XJson.JValue(null, jv));
+							result.add(new CompileJsonXdef.JValue(null, jv));
 						} else {
 							//Value of $script must be string with X-script
 							error(JSON.JSON018);
@@ -299,8 +298,8 @@ public class JsonUtil extends StringParser {
 						} else {
 							SPosition spos = getPosition();
 							spos.setIndex(spos.getIndex() - 1);
-							result.add(new XJson.JValue(null,
-								new XJson.JValue(spos, XJson.ONEOF_KEY)));
+							result.add(new CompileJsonXdef.JValue(null,
+								new CompileJsonXdef.JValue(spos, CompileJsonXdef.ONEOF_KEY)));
 						}
 					}
 				} else {
@@ -338,7 +337,7 @@ public class JsonUtil extends StringParser {
 			while (!eos()) {
 				if (isChar('"')) {
 					return _genJObjects
-						? new XJson.JValue(_sPosition, sb.toString())
+						? new CompileJsonXdef.JValue(_sPosition, sb.toString())
 						: sb.toString();
 				} else if (isChar('\\')) {
 					char c = peekChar();
@@ -349,7 +348,7 @@ public class JsonUtil extends StringParser {
 							if (y < 0) {
 								error(JSON.JSON005);//hexadecimal digit expected
 								return _genJObjects
-									? new XJson.JValue(_sPosition,sb.toString())
+									? new CompileJsonXdef.JValue(_sPosition,sb.toString())
 									: sb.toString();
 							}
 							x = (x << 4) + y;
@@ -370,28 +369,28 @@ public class JsonUtil extends StringParser {
 			}
 			fatal(JSON.JSON001); // end of string ('"') is missing
 			return _genJObjects
-				? new XJson.JValue(_sPosition, sb.toString()) : sb.toString();
+				? new CompileJsonXdef.JValue(_sPosition, sb.toString()) : sb.toString();
 		} else if (isToken("null")) {
-			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
 		} else if (isToken("true")) {
-			return _genJObjects ? new XJson.JValue(_sPosition, true) : true;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, true) : true;
 		} else if (isToken("false")) {
-			return _genJObjects ? new XJson.JValue(_sPosition, false) : false;
-		} else if (_jdef && isToken(XJson.ANY_NAME)) {
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, false) : false;
+		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
 			isSpacesOrComments();
 			if (isChar(':')) {
 				isSpacesOrComments();
 				Object val = readValue();
-				if (!(val instanceof XJson.JValue)
-					|| (((XJson.JValue) val).getValue() instanceof String)) {
+				if (!(val instanceof CompileJsonXdef.JValue)
+					|| (((CompileJsonXdef.JValue) val).getValue() instanceof String)) {
 					//After ":" in the command $any must follow a string value
 					error(JSON.JSON021);
 				} else {
-					return new XJson.JAny(
-						_sPosition, ((XJson.JValue) val).getSBuffer());
+					return new CompileJsonXdef.JAny(
+						_sPosition, ((CompileJsonXdef.JValue) val).getSBuffer());
 				}
 			}
-			return new XJson.JAny(_sPosition, null);
+			return new CompileJsonXdef.JAny(_sPosition, null);
 		} else {
 			boolean minus = isChar('-');
 			boolean plus = !minus && isChar('+');
@@ -416,13 +415,13 @@ public class JsonUtil extends StringParser {
 				if (pos == getIndex()) {
 					findOneOfChars(",[]{}"); // skip to next item
 				}
-				return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
+				return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
 				Character.isDigit(s.charAt(1))) {
 					warning(JSON.JSON014); // Illegal leading zero in number
 			}
-			return _genJObjects ? new XJson.JValue(_sPosition,number) : number;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition,number) : number;
 		}
 	}
 

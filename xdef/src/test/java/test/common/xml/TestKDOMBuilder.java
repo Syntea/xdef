@@ -4,7 +4,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.net.URL;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -150,6 +149,10 @@ public class TestKDOMBuilder extends XDTester {
 			selem.appendChild(selem1);
 			Element el = doc.getElementById("2");
 			assertEq("b", el.getTagName());
+			el.setAttribute("x", " ' a\r\n\tb ' ");
+			assertEq(" ' a\r\n\tb ' ", el.getAttribute("x"));
+			assertEq("<b att=\"2\" x=\" ' a&#13;&#10;&#9;b ' \"/>",
+				KXmlUtils.nodeToString(el));
 		} catch (Exception ex) {fail(ex);}
 		KDOMBuilder builder;
 		DOMImplementation di;
