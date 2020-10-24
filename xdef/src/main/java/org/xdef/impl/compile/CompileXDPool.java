@@ -1503,7 +1503,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				XJson.genXdef(pnode, jsonMode, sval, _precomp.getReportWriter());
+				CompileJsonXdef.genXdef(pnode, jsonMode, sval, _precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {

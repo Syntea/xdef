@@ -1,7 +1,7 @@
 package org.xdef.json;
 
 import org.xdef.XDConstants;
-import org.xdef.impl.compile.XJson.JValue;
+import org.xdef.impl.compile.CompileJsonXdef.JValue;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;

@@ -8,7 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
-import org.xdef.impl.compile.XJson;
+import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.json.JNull;
 import org.xdef.msg.JSON;
@@ -96,8 +96,8 @@ class TestJson_ToXml extends TestJson_Util{
 	private static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof XJson.JValue
-			&& ((o=((XJson.JValue) val).getValue()) == null || o instanceof Number
+			|| val instanceof String || val instanceof CompileJsonXdef.JValue
+			&& ((o=((CompileJsonXdef.JValue) val).getValue()) == null || o instanceof Number
 				|| o instanceof Boolean || o instanceof String);
 	}
 
