@@ -432,11 +432,6 @@ public class JsonUtil extends StringParser {
 	 */
 	public Object parse() throws SRuntimeException {
 		isSpacesOrComments();
-		char c = getCurrentChar();
-		if (c != '{' && c != '[' ) {
-			error(JSON.JSON009); // JSON object or array expected"
-			return _genJObjects ? new XJson.JValue(_sPosition, null) : null;
-		}
 		Object result = readValue();
 		isSpacesOrComments();
 		_sPosition = getPosition();
