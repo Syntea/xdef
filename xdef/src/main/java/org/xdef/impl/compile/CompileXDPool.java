@@ -1484,8 +1484,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
 					return;
 				}
-				byte jsonMode =  XConstants.JSON_MODE_W3C; //W3C mode is default
-				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
 				PAttr pa =  _precomp.getXdefAttr(pnode, "name", false, true);
 				sval = pa == null ? null : pa._value;
 				if (sval == null) {
@@ -1499,6 +1497,19 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sval, XDEF.XDEF316, s);
 					}
 				}
+				byte jsonMode =  XConstants.JSON_MODE_W3C; //W3C mode is default
+				pa =  _precomp.getXdefAttr(pnode, "mode", false, true);
+				if (pa != null) {
+					if ("xdef".equalsIgnoreCase(pa._value.getString())) {
+						jsonMode =  XConstants.JSON_MODE_XD; //X-definition mode
+					} else if (!"w3c".equalsIgnoreCase(pa._value.getString())) {
+						//Incorrect attribute "mode" in JSON model: &{0} (must be
+						// "xd" or "w3c")&{#SYS000}
+						error(pa._value, XDEF.XDEF215,
+							sval == null ? "" : sval.getString());
+					}
+				}
+				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
 				for (PAttr pattr:  pnode.getAttrs()) {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
