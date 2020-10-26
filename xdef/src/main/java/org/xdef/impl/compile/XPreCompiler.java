@@ -78,8 +78,6 @@ public class XPreCompiler implements PreCompiler {
 		new LinkedHashMap<String, XScriptMacro>();
 	/** Reader of X-definitions in the form of XML. */
 	private final PreReaderXML _xmlReader;
-	/** Reader of X-definitions in the form of JSON. */
-	private final PreReaderJSON _jsonReader;
 	/** Reporter used for error messages. */
 	private ReportWriter _reporter;
 
@@ -115,7 +113,6 @@ public class XPreCompiler implements PreCompiler {
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);
-		_jsonReader = new PreReaderJSON(this);
 	}
 
 	/** Get "name" (or "prefix:name") of node.
@@ -423,15 +420,10 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void parseString(final String source, final String srcName) {
 		File f = new File(source);
-		if (source.length() > 0 && !f.exists()
-			&& (source.charAt(0) == '[' || source.charAt(0) == '{')) {
+		if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
+			&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
 			ByteArrayInputStream baos = new ByteArrayInputStream(
-				source.getBytes(Charset.forName("UTF-8")));
-			_jsonReader.parseStream(baos, srcName);
-		} else if (source.length() > 0 && !f.exists()
-			&& source.charAt(0) == '<') {
-			ByteArrayInputStream baos = new ByteArrayInputStream(
-				source.getBytes(Charset.forName("UTF-8")));
+				source.trim().getBytes(Charset.forName("UTF-8")));
 			_xmlReader.parseStream(baos, srcName);
 		} else {
 			parseFile(f);
@@ -489,12 +481,8 @@ public class XPreCompiler implements PreCompiler {
 			XInputStream myInputStream = new XInputStream(in);
 			byte[] buf = myInputStream.getparsedBytes();
 			for (byte x: buf) {
-				if (x != 0) {
-					if ('[' == (char) x || '{' == (char) x) {
-						_jsonReader.parseStream(myInputStream, srcName);
-					} else {
-						_xmlReader.parseStream(myInputStream, srcName);
-					}
+				if (x != 0) { //skip zeroes
+					_xmlReader.parseStream(myInputStream, srcName);
 				}
 			}
 			in.close();
