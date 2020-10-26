@@ -852,8 +852,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public final Object jparse(final Object data,
-		final ReportWriter reporter) throws SRuntimeException {
+	public final Object jparse(final Object data, final ReportWriter reporter)
+		throws SRuntimeException {
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
@@ -917,7 +917,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public Object jparse(String data, ReportWriter reporter)
+	public final Object jparse(final String data, final ReportWriter reporter)
 		throws SRuntimeException {
 		return jparse(JsonUtil.parse(data), reporter);
 	}
@@ -930,7 +930,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public Object jparse(File data, ReportWriter reporter)
+	public final Object jparse(final File data, final ReportWriter reporter)
 		throws SRuntimeException {
 		return jparse(JsonUtil.parse(data), reporter);
 	}
@@ -943,7 +943,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public Object jparse(URL data, ReportWriter reporter)
+	public final Object jparse(final URL data, final ReportWriter reporter)
 		throws SRuntimeException {
 		return jparse(JsonUtil.parse(data), reporter);
 	}
@@ -956,8 +956,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public Object jparse(InputStream data, ReportWriter reporter)
-		throws SRuntimeException {
+	public final Object jparse(final InputStream data,
+		final ReportWriter reporter) throws SRuntimeException {
 		return jparse(JsonUtil.parse(data), reporter);
 	}
 
@@ -972,9 +972,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent jparseXComponent(Object json,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException {
+	public final XComponent jparseXComponent(final Object json,
+		final Class<?> xClass,
+		final ReportWriter reporter) throws SRuntimeException {
 		return jparseXComponent(json, xClass, null, reporter);
 	}
 
@@ -990,63 +990,64 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <tt>null</tt> and an error
 	 * was reported.
 	 */
-	public XComponent jparseXComponent(Object json,
-		Class<?> xClass,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException {
-		if (json != null) {
-			if (json instanceof String) {
-				return jparseXComponent(
-					JsonUtil.parse((String) json), xClass, reporter);
-			} else if (json instanceof File) {
-				return jparseXComponent(
-					JsonUtil.parse((File) json), xClass, reporter);
-			} else if (json instanceof URL) {
-				return jparseXComponent(
-					JsonUtil.parse((URL) json), xClass, reporter);
-			} else if (json instanceof InputStream) {
-				return jparseXComponent(
-					(InputStream) json, xClass, sourceId, reporter);
-			} else if (json instanceof Node) {
-				Element e;
-				if (json instanceof Document) {
-					e = ((Document) json).getDocumentElement();
-				} else {
-					e = (Element) json;
-				}
-				return jparseXComponent(JsonUtil.xmlToJson(e),xClass,reporter);
-			} else if (json instanceof Map || json instanceof List) {
-				if (xClass == null) {
-					for (String s: getXDPool().getXComponents().keySet()) {
-						String className = getXDPool().getXComponents().get(s);
-						try {
-							xClass = Class.forName(className);
-							String jmodel =
-								(String) xClass.getDeclaredField("XD_NAME").get(null);
-							byte jVersion =
-								(Byte) xClass.getDeclaredField("JSON").get(null);
-							if (jVersion > 0) {
-								XElement xe = selectRoot(jmodel,
-									XDConstants.JSON_NS_URI_W3C, -1);
-								if (xe != null && xe._json != 0) {
-									break;
-								}
+	public final XComponent jparseXComponent(final Object json,
+		final Class<?> xClass,
+		final String sourceId,
+		final ReportWriter reporter) throws SRuntimeException {
+		Class<?> yClass  = xClass;
+		if (json == null || json instanceof Map
+			|| json instanceof List || json instanceof Number
+			|| json instanceof Boolean) {
+			if (yClass == null) {
+				for (String s: getXDPool().getXComponents().keySet()) {
+					String className = getXDPool().getXComponents().get(s);
+					try {
+						yClass = Class.forName(className);
+						String jmodel =
+							(String) yClass.getDeclaredField("XD_NAME").get(null);
+						byte jVersion =
+							(Byte) yClass.getDeclaredField("JSON").get(null);
+						if (jVersion > 0) {
+							XElement xe = selectRoot(jmodel,
+								XDConstants.JSON_NS_URI_W3C, -1);
+							if (xe != null && xe._json != 0) {
+								break;
 							}
-						} catch (Exception ex) {}
-						xClass = null;
-					}
+						}
+					} catch (Exception ex) {}
+					yClass = null;
 				}
-				Element e;
-				try {
-					byte jsonVer = // version of JSON to XML transormation
-						(Byte) xClass.getDeclaredField("JSON").get(null);
-					e = jsonVer == XConstants.JSON_MODE_W3C ?
-						JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXD(json);
-				} catch (Exception ex) {
-					e = JsonUtil.jsonToXml(json); // X-definition transormation
-				}
-				return parseXComponent(e, xClass, reporter);
 			}
+			Element e;
+			try {
+				byte jsonVer = // version of JSON to XML transormation
+					(Byte) yClass.getDeclaredField("JSON").get(null);
+				e = jsonVer == XConstants.JSON_MODE_W3C ?
+					JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXD(json);
+			} catch (Exception ex) {
+				e = JsonUtil.jsonToXml(json); // X-definition transormation
+			}
+			return parseXComponent(e, yClass, reporter);
+		} else if (json instanceof String) {
+			return jparseXComponent(JsonUtil.parse((String) json),
+				yClass, reporter);
+		} else if (json instanceof File) {
+			return jparseXComponent(JsonUtil.parse((File) json),
+				yClass, reporter);
+		} else if (json instanceof URL) {
+			return jparseXComponent(JsonUtil.parse((URL) json),
+				yClass, reporter);
+		} else if (json instanceof InputStream) {
+			return jparseXComponent((InputStream) json,
+				yClass, sourceId, reporter);
+		} else if (json instanceof Node) {
+			Element e;
+			if (json instanceof Document) {
+				e = ((Document) json).getDocumentElement();
+			} else {
+				e = (Element) json;
+			}
+			return jparseXComponent(JsonUtil.xmlToJson(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
 	}
