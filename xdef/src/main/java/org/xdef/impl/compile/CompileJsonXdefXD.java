@@ -244,7 +244,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 			}
 		}
 		_jsPrefix = s;
-		_jsNamespace = XDConstants.JSON_NS_URI_XD;
+		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		PNode e;
 		if (json instanceof JMap) {
 			e = genJsonMap((JMap) json, parent);

@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -16,18 +17,22 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XDParseJList extends XSAbstractParser {
+	/** Name of parser. */
 	private static final String ROOTBASENAME = "jlist";
-	private static final String ESCCHARS_SRC = "u/\\\"bfnt";
+
+	/** accepted escape characters. */
 	private static final String ESCCHARS = "u/\\\"bfnt";
+	/** Hexadecimal digits. */
+	private static final String HEXDIGITS = "0123456789abcdefABCDEF";
 
 	long _minLength;
 	long _maxLength;
-	XDParser[] _itemTypes;
+	XDParser _itemType;
 	XDValue[] _enumeration;
 
 	public XDParseJList() {
 		super();
-		_whiteSpace = WS_PEESERVE; //preserve!
+		_whiteSpace = WS_COLLAPSE; //collapse
 		_minLength = _maxLength = -1;
 	}
 
@@ -35,15 +40,15 @@ public class XDParseJList extends XSAbstractParser {
 	public void initParams() {
 		_patterns = null;
 		_enumeration = null;
-		_itemTypes = null;
-		_whiteSpace = WS_PEESERVE; //preserve!
+		_itemType = null;
+		_whiteSpace = WS_COLLAPSE; //collapse
 		_minLength = _maxLength = -1;
 	}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
 			ENUMERATION +
-//			WHITESPACE + //fixed to preserve
+			WHITESPACE + //fixed to collapse
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +
@@ -56,24 +61,22 @@ public class XDParseJList extends XSAbstractParser {
 //			NORMALIZE +
 //			SEPARATOR +
 			ITEM +
-//			BASE +
+			BASE +
 			0;
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal){
 		DefContainer results = new DefContainer();
-		String source = p.getSourceBuffer().trim();
+		String source = p.getSourceBuffer();
 		p.setSourceBuffer(source);
 		ArrayReporter reporter = new ArrayReporter();
 		int count = 0;
-		while (count < _maxLength && !p.eos()) {
-			for(int i = 0; i < _itemTypes.length; i++) {
-				XDParser parser = _itemTypes[i];
-				p.isSpaces();
-				if (p.eos()) {
-					break;
-				}
+		int max = _maxLength == -1 ? Integer.MAX_VALUE : (int) _maxLength;
+		p.isSpaces();
+		if (p.isChar('[')) {
+			p.isSpaces();
+			while (!p.isChar(']') && !p.eos()) {
 				int start, end;
 				start = p.getIndex();
 				if (p.isChar('"')) {
@@ -88,12 +91,11 @@ public class XDParseJList extends XSAbstractParser {
 							break;
 						}
 						if (ch == '\\') {
-							int c = ESCCHARS_SRC.indexOf(p.nextChar());
-							if (c == 0) { // \\u => UTF Character
+							int escCharNdx = ESCCHARS.indexOf(p.nextChar());
+							if (escCharNdx == 0) { // \\u => UTF Character
 								int x = 0;
 								for (int j = 1; j < 4; j++) {
-									int y = "0123456789abcdefABCDEF".indexOf(
-										p.nextChar());
+									int y = HEXDIGITS.indexOf(p.nextChar());
 									if (y > 16) {
 										y -= 6;
 									}
@@ -104,8 +106,8 @@ public class XDParseJList extends XSAbstractParser {
 									x = (x << 4) + y;
 								}
 								sb.append((char) x);
-							} else if (c >= 1){
-								sb.append(ESCCHARS.charAt(i));
+							} else if (escCharNdx >= 1){
+								sb.append(ESCCHARS.charAt(escCharNdx));
 							} else {
 								// Incorrect escape character in string
 								reporter.error(JSON.JSON006);
@@ -115,43 +117,45 @@ public class XDParseJList extends XSAbstractParser {
 						}
 					}
 					end = p.getIndex();
-					if (parser.parserName().charAt(0) == 'j') {
-//						end++;
+					if (_itemType.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));
 					} else {
 						p.setSourceBuffer(
 							p.getBufferPart(0,start) + sb.toString());
 					}
+				} else if (p.isChar('[')) {
+					DefParseResult q = new DefParseResult(source);
+					q.setBufIndex(start);
+					_itemType.parseObject(xnode, q);
+					results.addXDItem(q.getParsedValue());
+					p.setBufIndex(q.getIndex());
+					p.isSpaces();
+					count++;
+					continue;
 				} else {
-					while (!p.eos() && p.getCurrentChar() > ' ') {
+					char ch = 0;
+					while (!p.eos() && (ch = p.getCurrentChar()) > ' ') {
 						p.nextChar();
 					}
 					end = p.getIndex();
 					p.setSourceBuffer(p.getBufferPart(0, end));
 				}
 				p.setBufIndex(start);
-				parser.parseObject(xnode, p);
+				_itemType.parseObject(xnode, p);
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;
 				}
 				XDValue result = p.getParsedValue();
 				if (result != null) {
-//					if (result.getItemId() == XD_CONTAINER) {
-//						XDContainer c = (XDContainer) result;
-//						for (XDValue x: c.getXDItems()) {
-//							results.addXDItem(x);
-//						}
-//					} else {
-						results.addXDItem(p.getParsedValue());
-//					}
+					results.addXDItem(p.getParsedValue());
 				}
 				p.setSourceBuffer(source);
 				p.setBufIndex(end);
+				count++;
+				p.isSpaces();
 			}
-			count++;
 		}
 		p.setParsedValue(results);
-//		p.isSpaces();
 		if (_minLength != -1 && count < _minLength) {
 			//Length of value of '&{0}' is too short&{0}'&{1}
 			p.errorWithString(XDEF.XDEF814, parserName());
@@ -174,41 +178,28 @@ public class XDParseJList extends XSAbstractParser {
 		checkPatterns(p);
 	}
 	@Override
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+	@Override
+	public boolean addTypeParser(XDParser x) {
+		_itemType = x;
+		return true;
+	}
+	@Override
+	public void addNamedParams(XDContainer map) {
+		if (_itemType != null) {
+			map.setXDNamedItem("item", _itemType);
+		}
+	}
+	@Override
 	public void setItem(XDValue item) {
 		if (item.getItemId() == XD_PARSER) {
-			addTypeParser((XDParser) item);
-		} else if (item.getItemId() == XD_CONTAINER) {
-			DefContainer c = (DefContainer) item;
-			for (int i = 0; i < c.getXDItemsNumber(); i++) {
-				XDValue v = c.getXDItem(i);
-				if (v instanceof XDParser) {
-					addTypeParser((XDParser) v);
-				} else {
-					addTypeParser((XDParser) v);
-				}
-			}
+			_itemType = (XDParser) item;
 		} else {
 			//Value of type '&amp;{0}' expected
 			throw new SRuntimeException(XDEF.XDEF423, "Parser");
 		}
 	}
-	@Override
-	public boolean addTypeParser(XDParser x) {
-		if (_itemTypes == null) {
-			_itemTypes = new XDParser[1];
-			_itemTypes[0] = x;
-			return true;
-		}
-		XDParser[] old = _itemTypes;
-		_itemTypes = new XDParser[old.length + 1];
-		System.arraycopy(old, 0, _itemTypes, 0, old.length);
-		_itemTypes[old.length] = x;
-		return true;
-	}
-	@Override
-	public void addNamedParams(XDContainer map) {
-		map.setXDNamedItem("item", new DefContainer(_itemTypes));
-	}
+
 	@Override
 	public void setLength(long x) { _minLength = _maxLength = x; }
 	@Override
@@ -238,48 +229,22 @@ public class XDParseJList extends XSAbstractParser {
 		_maxLength = "*".equals(par2) ? -1 : Long.parseLong(par2.toString());
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
-	@Override
 	public short parsedType() {return XD_CONTAINER;}
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		parse(xnode, p, false);
 	}
 	@Override
-	public XDValue[] getEnumeration() {return _enumeration;}
-	@Override
-	public void setEnumeration(Object[] o) {
-		if (o == null || o.length == 0) {
-			return;
-		}
-		XDValue[] e = new XDValue[o.length];
-		for (int i = 0; i < o.length; i++) {
-			e[i] = iObject(null, o[i]);
-		}
-		_enumeration = e;
-	}
-	@Override
 	public boolean equals(final XDValue o) {
-		if (!super.equals(o) || !(o instanceof XDParseJList)) {
+		if (!super.equals(o) || !(o instanceof XSParseList)) {
 			return false;
 		}
 		XDParseJList x = (XDParseJList) o;
-		if (_itemTypes == null) {
-			if (x._itemTypes != null) {
-				return false;
-			}
+		if (_itemType == null) {
+			return false;
 		} else {
-			if (x._itemTypes == null ||
-				_itemTypes.length != x._itemTypes.length) {
-				return false;
-			}
-			for (int i = 0; i < _itemTypes.length; i++) {
-				if (!_itemTypes[i].equals(x._itemTypes[i])) {
-					return false;
-				}
-			}
+			return _itemType.equals(x._itemType);
 		}
-		return true;
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

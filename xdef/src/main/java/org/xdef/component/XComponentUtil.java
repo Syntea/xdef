@@ -294,53 +294,47 @@ public class XComponentUtil {
 		updateXPos(xc, "", 0);
 	}
 
-	/** Convert parsed value to string of text node.
-	 * @param parsedValue parsed value.
-	 * @return the string with parsed value converted to string
+	/** Convert XDContainer (i.e. value parsed by jlist) to string.
+	 * @param c XDContainer to be converted.
+	 * @return string with values of the container from argument.
 	 */
-	public static final String jlinkToString(final XDParseResult parsedValue) {
+	private static String containerToString(final XDContainer c) {
+		int len = c.getXDItemsNumber();
+		if (len == 0) {
+			return "[ ]";
+		}
+		StringBuilder sb = new StringBuilder("[");
+		for (int i = 0; i < len; i++) {
+			sb.append(' ');
+			XDValue y = c.getXDItem(i);
+			if (y == null || y.isNull()) {
+				sb.append("null");
+			} else {
+				if (y.getItemId() == XDValue.XD_STRING) {
+					sb.append(y.toString());
+				} else if (y.getItemId() == XDValue.XD_CONTAINER) {
+					sb.append(containerToString((XDContainer) y));
+				} else {
+					sb.append(y.toString());
+				}
+			}
+		}
+		return sb.append(" ]").toString();
+	}
+
+	/** Convert parsed value jlist to the string (text mode of an XML element).
+	 * @param parsedValue parsed value of jlist.
+	 * @return the string with parsed value converted to the string
+	 */
+	public static final String jlistToString(final XDParseResult parsedValue) {
 		if (parsedValue == null) {
 			return "null";
 		}
 		XDValue x = parsedValue.getParsedValue();
-		if (x instanceof XDContainer) {
-			XDContainer c = (XDContainer) x;
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < c.getXDItemsNumber(); i++) {
-				if (sb.length() > 0) {
-					sb.append(' ');
-				}
-				XDValue y = c.getXDItem(i);
-				if (y == null || y.isNull()) {
-					sb.append("null");
-				} else {
-					String s = y.toString();
-					if (y.getItemId() == XDValue.XD_STRING) {
-						if (s.isEmpty()) {
-							sb.append("\"\"");
-							continue;
-						}
-						if (!s.startsWith("\"")) {
-							if ("true".equals(s)
-								|| "false".equals(s)
-								|| "null".equals(s)) {
-								sb.append('"').append(s).append('"');
-								continue;
-							}
-						}
-						if (s.indexOf(' ') >= 0
-							|| s.indexOf('\n') >= 0	|| s.indexOf('\r') >= 0
-							|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0) {
-							sb.append('"').append(s).append('"');
-							continue;
-						}
-					}
-					sb.append(s);
-				}
-			}
-			return sb.toString();
+		if (x.getItemId() == XDValue.XD_CONTAINER) {
+			return containerToString((XDContainer) x);
 		} else {
-		  return x.toString();
+			return x.toString();
 		}
 	}
 }

@@ -465,6 +465,13 @@ public class JsonUtil extends StringParser {
 			sysId = url.toExternalForm();
 			result = parse(in, sysId);
 		} catch (Exception ex) {
+			if (!new File(source).exists()) {
+				JsonUtil jx = new JsonUtil();
+				jx.setSourceBuffer(source);
+				result = jx.parse();
+				jx.getReportWriter().checkAndThrowErrors();
+				return result;
+			}
 			try {
 				result = parse(new File(source));
 			} catch (Exception x) {
@@ -816,8 +823,7 @@ public class JsonUtil extends StringParser {
 		} else if (obj instanceof Map) {
 			mapToJsonString((Map<String, Object>) obj, indt, sb);
 		} else {
-			//Not JSON object &{0}{: }
-			throw new SRuntimeException(JSON.JSON011, obj);
+			return jvalueToString(obj);
 		}
 		return sb.toString();
 	}

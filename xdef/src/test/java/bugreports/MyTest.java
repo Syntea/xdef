@@ -7,12 +7,14 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
-import org.xdef.component.GenXComponent;
+import org.xdef.component.XComponent;
+import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
+import static test.XDTester.genXComponent;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -61,69 +63,126 @@ public class MyTest extends XDTester {
 		XDOutput xout;
 		StringWriter strw;
 		Report rep;
+		Object j;
+		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
+"<xd:json name='y' mode='xdef'>\n"+
+"  \"int();\"\n"+
+"</xd:json>\n"+
+"<xd:json name='y1' mode='w3c'>\n"+
+"  {\"a\":\"int();\"}\n"+
+"</xd:json>\n"+
+"<xd:json name='y2' mode='w3c'>\n"+
+"  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n"+
+"</xd:json>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
-"    jlist(1,999, %item=[jvalue()])\n"+
+"    jlist(%item=jvalue())\n"+
 "  </a>\n"+
 "  <b xd:script='*'>\n"+
-"    jlist(1,999, %item=[union(%item=[jnull,boolean()])])\n"+
+"    jlist(%item=union(%item=[jnull,boolean()]))\n"+
 "  </b>\n"+
 "  <c xd:script='*'>\n"+
-"    jlist(1, 999, %item=[jnumber()])\n"+
+"    jlist(%item=jnumber())\n"+
 "  </c>\n"+
 "  <d xd:script='*'>\n"+
-"    jlist(1,999, %item=[int()])\n"+
+"    jlist(%item=int())\n"+
 "  </d>\n"+
 "  <e xd:script='*'>\n"+
-"    jlist(1,999, %item=[jstring(), jnumber()])\n"+
+"    jlist(2, %item=jlist(2, %item=union(%item=[jnull,int()])))\n"+
 "  </e>\n"+
 "</x>\n"+
-"<xd:component>%class bugreports.MyTestX %link x</xd:component>\n"+
+"<xd:component>\n"+
+"  %class bugreports.MyTestX %link x;\n"+
+"  %class bugreports.MyTestY %link y;\n"+
+"  %class bugreports.MyTestY1 %link y1;\n"+
+"  %class bugreports.MyTestY2 %link y2;\n"+
+"     %bind js$xxx %link #y2/js:array/js:item[2];\n"+
+"     %bind js$yyy %link #y2/js:array/js:item[3];\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			String components = new File(getSourceDir()).getParent();
-			GenXComponent.genXComponent(xp, components, "UTF-8");
+			genXComponent(xp, new File(tempDir));
 //if(true)return;
 			xml =
 "<x>\n"+
-"  <a>123 null false</a>\n"+
-"  <a>\"false\"</a>\n"+
-"  <a>123</a>\n"+
-"  <a>3.14E+3</a>\n"+
-"  <a>false</a>\n"+
-"  <a>abc</a>\n"+
-"  <a>1 abc</a>\n"+
-"  <a>1 false abc</a>\n"+
-"  <a>null 123 1 false</a>\n"+
-"  <a>null 123 false abc \"\"</a>\n"+
-"  <b>null</b>\n"+
-"  <b>true</b>\n"+
-"  <b>true null</b>\n"+
-"  <b>null true</b>\n"+
-"  <b>null true false null</b>\n"+
-"  <c>0</c>\n"+
-"  <c>123.45</c>\n"+
-"  <c>1 -2 3</c>\n"+
-"  <c>-0.99</c>\n"+
-"  <c>-0.99E+3</c>\n"+
-"  <d>1 -2 3</d>\n"+
-"  <e>abc -2</e>\n"+
-"  <e>abc -2</e>\n"+
-"  <e>abc -2 \"\" 3.14E+3 x 1.5 y -0.99</e>\n"+
+"  <a>[ \"false\" ]</a>\n"+
+"  <a>[ 123 null false ]</a>\n"+
+"  <a>[ 123 ]</a>\n"+
+"  <a>[ 3.14E+3 ]</a>\n"+
+"  <a>[ false ]</a>\n"+
+"  <a>[ \"abc\" ]</a>\n"+
+"  <a>[ 1 \"a\\\"\\nbc\" ]</a>\n"+
+"  <a>[ 1 false \"abc\" ]</a>\n"+
+"  <a>[ null 123 1 false ]</a>\n"+
+"  <a>[ null 123 false \"abc\" \"\" ]</a>\n"+
+"  <a>[ ]</a>\n"+
+"  <b>[ null ]</b>\n"+
+"  <b>[ true ]</b>\n"+
+"  <b>[ true null ]</b>\n"+
+"  <b>[ null true ]</b>\n"+
+"  <b>[ null true false null ]</b>\n"+
+"  <c>[ 0 ]</c>\n"+
+"  <c>[ 123.45 ]</c>\n"+
+"  <c>[ 1 -2 3 ]</c>\n"+
+"  <c>[ -0.99 ]</c>\n"+
+"  <d>[ 1 -2 3 ]</d>\n"+
+"  <e>[ [ 1 -2 ] [ null 99 ] ]</e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-//			bugreports.MyTestX p =
-//				(bugreports.MyTestX) parseXC(xp,"", xml , null, reporter);
-////			System.out.println(p.get$a());
-//			assertNoErrorwarnings(reporter);
-//			assertEq(xml, p.toXml());
+			xc = parseXC(xp,
+				"", xml , Class.forName("bugreports.MyTestX"), reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+
+			xd = xp.createXDDocument("");
+			s = "123";
+			j = JsonUtil.parse(s);
+			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			xc = xd.jparseXComponent(s,
+				Class.forName("bugreports.MyTestY"), reporter);
+			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+
+			xd = xp.createXDDocument("");
+			s = "{\"a\": 123}";
+			j = JsonUtil.parse(s);
+			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			xc = xd.jparseXComponent(s,
+				Class.forName("bugreports.MyTestY1"), reporter);
+			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+
+			xd = xp.createXDDocument("");
+			s = "[123, 123]";
+			j = JsonUtil.parse(s);
+			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			xc = xd.jparseXComponent(s,
+				Class.forName("bugreports.MyTestY2"), reporter);
+			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			xd = xp.createXDDocument("");
+			s = "[123, 123, -1.23e3]";
+			j = JsonUtil.parse(s);
+			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+				xc = xd.jparseXComponent(s,
+				Class.forName("bugreports.MyTestY2"), reporter);
+			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
+			xd = xp.createXDDocument("");
+			s = "[123, 123, -1.23e3, \"abc\"]";
+			j = JsonUtil.parse(s);
+			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			xc = xd.jparseXComponent(s,
+				Class.forName("bugreports.MyTestY2"), reporter);
+			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
+				JsonUtil.toJsonString(xc.toJson(), true));
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {

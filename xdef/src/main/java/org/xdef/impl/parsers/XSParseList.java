@@ -22,12 +22,12 @@ public class XSParseList extends XSAbstractParser {
 
 	public XSParseList() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_minLength = _maxLength = -1;
 	}
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_itemType = null;
@@ -54,7 +54,7 @@ public class XSParseList extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public boolean addTypeParser(XDParser x) {
 		_itemType = x;
