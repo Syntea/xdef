@@ -112,27 +112,23 @@ public class MyTest extends XDTester {
 			xml =
 "<x>\n"+
 "  <a>[ \"false\" ]</a>\n"+
-"  <a>[ 123 null false ]</a>\n"+
+"  <a>[ 123, null, false ]</a>\n"+
 "  <a>[ 123 ]</a>\n"+
 "  <a>[ 3.14E+3 ]</a>\n"+
 "  <a>[ false ]</a>\n"+
 "  <a>[ \"abc\" ]</a>\n"+
-"  <a>[ 1 \"a\\\"\\nbc\" ]</a>\n"+
-"  <a>[ 1 false \"abc\" ]</a>\n"+
-"  <a>[ null 123 1 false ]</a>\n"+
-"  <a>[ null 123 false \"abc\" \"\" ]</a>\n"+
+"  <a>[ 1, \"a\\\"\\nbc\" ]</a>\n"+
+"  <a>[ 1, false, \"abc\" ]</a>\n"+
+"  <a>[ null, 123, 1, false ]</a>\n"+
+"  <a>[ null, 123, false, \"abc\" ]</a>\n"+
+"  <a>[ null, 123, false, \"abc\", \"\" ]</a>\n"+
 "  <a>[ ]</a>\n"+
 "  <b>[ null ]</b>\n"+
 "  <b>[ true ]</b>\n"+
-"  <b>[ true null ]</b>\n"+
-"  <b>[ null true ]</b>\n"+
-"  <b>[ null true false null ]</b>\n"+
-"  <c>[ 0 ]</c>\n"+
-"  <c>[ 123.45 ]</c>\n"+
-"  <c>[ 1 -2 3 ]</c>\n"+
-"  <c>[ -0.99 ]</c>\n"+
-"  <d>[ 1 -2 3 ]</d>\n"+
-"  <e>[ [ 1 -2 ] [ null 99 ] ]</e>\n"+
+"  <b>[ true, null ]</b>\n"+
+"  <b>[ null, true ]</b>\n"+
+"  <b>[ null, true, false, null ]</b>\n"+
+"  <e>[ [ 1, -2 ], [ null, 99 ] ]</e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);

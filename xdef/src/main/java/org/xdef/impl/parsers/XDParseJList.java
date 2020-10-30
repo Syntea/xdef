@@ -75,8 +75,16 @@ public class XDParseJList extends XSAbstractParser {
 		int max = _maxLength == -1 ? Integer.MAX_VALUE : (int) _maxLength;
 		p.isSpaces();
 		if (p.isChar('[')) {
-			p.isSpaces();
-			while (!p.isChar(']') && !p.eos()) {
+			for (;;) {
+				p.isSpaces();
+				if (p.eos()) {
+					//Incorrect value of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF809, parserName());
+					break; //error
+				}
+				if (p.isChar(']')) {
+					break;
+				}
 				int start, end;
 				start = p.getIndex();
 				if (p.isChar('"')) {
@@ -123,25 +131,25 @@ public class XDParseJList extends XSAbstractParser {
 						p.setSourceBuffer(
 							p.getBufferPart(0,start) + sb.toString());
 					}
+					p.setBufIndex(start);
+					_itemType.parseObject(xnode, p);
 				} else if (p.isChar('[')) {
 					DefParseResult q = new DefParseResult(source);
 					q.setBufIndex(start);
 					_itemType.parseObject(xnode, q);
-					results.addXDItem(q.getParsedValue());
-					p.setBufIndex(q.getIndex());
-					p.isSpaces();
-					count++;
-					continue;
+					p.addReports(q.getReporter());
+					p.setParsedValue(q.getParsedValue());
+					end = q.getIndex();
 				} else {
 					char ch = 0;
-					while (!p.eos() && (ch = p.getCurrentChar()) > ' ') {
+					while (!p.eos() && (ch=p.getCurrentChar())>' ' && ch!=',') {
 						p.nextChar();
 					}
 					end = p.getIndex();
 					p.setSourceBuffer(p.getBufferPart(0, end));
+					p.setBufIndex(start);
+					_itemType.parseObject(xnode, p);
 				}
-				p.setBufIndex(start);
-				_itemType.parseObject(xnode, p);
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;
 				}
@@ -153,6 +161,14 @@ public class XDParseJList extends XSAbstractParser {
 				p.setBufIndex(end);
 				count++;
 				p.isSpaces();
+				if (!p.isChar(',')) {
+					if (!p.isChar(']')) {
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
+					} else {
+					}
+					break;
+				}
 			}
 		}
 		p.setParsedValue(results);

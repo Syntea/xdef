@@ -294,17 +294,20 @@ public class XComponentUtil {
 		updateXPos(xc, "", 0);
 	}
 
-	/** Convert XDContainer (i.e. value parsed by jlist) to string.
+	/** Convert XDContainer to jlist string.
 	 * @param c XDContainer to be converted.
 	 * @return string with values of the container from argument.
 	 */
-	private static String containerToString(final XDContainer c) {
+	private static String containerJlist(final XDContainer c) {
 		int len = c.getXDItemsNumber();
 		if (len == 0) {
 			return "[ ]";
 		}
 		StringBuilder sb = new StringBuilder("[");
 		for (int i = 0; i < len; i++) {
+			if (i > 0) {
+				sb.append(',');
+			}
 			sb.append(' ');
 			XDValue y = c.getXDItem(i);
 			if (y == null || y.isNull()) {
@@ -313,7 +316,7 @@ public class XComponentUtil {
 				if (y.getItemId() == XDValue.XD_STRING) {
 					sb.append(y.toString());
 				} else if (y.getItemId() == XDValue.XD_CONTAINER) {
-					sb.append(containerToString((XDContainer) y));
+					sb.append(containerJlist((XDContainer) y));
 				} else {
 					sb.append(y.toString());
 				}
@@ -322,9 +325,9 @@ public class XComponentUtil {
 		return sb.append(" ]").toString();
 	}
 
-	/** Convert parsed value jlist to the string (text mode of an XML element).
+	/** Convert parsed value jlist to the jlist string (text of an XML element).
 	 * @param parsedValue parsed value of jlist.
-	 * @return the string with parsed value converted to the string
+	 * @return the string with parsed value converted to string in jlist form.
 	 */
 	public static final String jlistToString(final XDParseResult parsedValue) {
 		if (parsedValue == null) {
@@ -332,7 +335,7 @@ public class XComponentUtil {
 		}
 		XDValue x = parsedValue.getParsedValue();
 		if (x.getItemId() == XDValue.XD_CONTAINER) {
-			return containerToString((XDContainer) x);
+			return containerJlist((XDContainer) x);
 		} else {
 			return x.toString();
 		}
