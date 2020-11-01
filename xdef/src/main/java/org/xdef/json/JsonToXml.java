@@ -73,10 +73,6 @@ public class JsonToXml extends JsonUtil {
 				|| o instanceof Boolean || o instanceof String);
 	}
 
-	/** create element with JSON namespace.
-	 * @param name local name of element
-	 * @return created element.
-	 */
 	private Element genJElement(final String name) {
 		if (_jsPrefix.isEmpty()) {
 			return _doc.createElementNS(_jsNamespace, name);
@@ -197,74 +193,16 @@ public class JsonToXml extends JsonUtil {
 		_ns.popContext();
 	}
 
-	/** Check if all items of array are simple values or arrays with
-	 * simple values (i.e. if array can be converted to jlist format).
-	 * @param array array to be checked.
-	 * @return true array can be converted to jlist format.
-	 */
-	private boolean jlistConvertible(final List array) {
-		if (array == null || array.isEmpty()) {
-			return true;
-		}
-		for (Object x: array) {
-			if (x != null && (x instanceof Map
-				|| x instanceof List && !jlistConvertible((List) x))){
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/** Create string with array in jlist format.
-	 * @param array array to be converted to jlist string.
-	 * @return jlist form of array.
-	 */
-	private String genJList(final List array) {
-		StringBuilder sb = new StringBuilder("[");
-		boolean isFirst = true;
-		for (Object y: array) {
-			if (isFirst) {
-				isFirst = false;
-			} else {
-				sb.append(',');
-			}
-			sb.append(' ');
-			if (y == null) {
-				sb.append("null");
-			} else if (y instanceof String) {
-				String s = (String) y;
-				sb.append('"').append(s).append('"');
-			} else if (y instanceof List){
-				sb.append(genJList((List) y));
-			} else {
-				sb.append(y.toString());
-			}
-		}
-		return sb.append(" ]").toString();
-	}
-
 	/** Append array of JSON values to node.
 	 * @param array list with array of values.
 	 * @param parent node where to append array.
 	 */
 	private void arrayToNodeXD(final List array, final Node parent) {
-		if (array.size() == 2 && array.get(0) instanceof Map) {
-			Object o = array.get(1);
-			if (isSimpleValue(o)) { // map and value
-				Element e = mapToXmlXD((Map) array.get(0), parent);
-				addValueAsText(e, array.get(1));
-				return;
-			} else if (o instanceof List && jlistConvertible((List)o)) {
-				Element e = mapToXmlXD((Map) array.get(0), parent);
-				e.appendChild(_doc.createTextNode(genJList(array)));
-				return;
-			}
-		}
-		if (parent.getNodeType() == Node.ELEMENT_NODE) {
-			if (jlistConvertible(array)) {
-				parent.appendChild(_doc.createTextNode(genJList(array)));
-				return;
-			}
+		if (array.size() == 2 && array.get(0) instanceof Map
+			&& isSimpleValue(array.get(1))) { // map and value
+			Element e = mapToXmlXD((Map) array.get(0), parent);
+			addValueAsText(e, array.get(1));
+			return;
 		}
 		Element e = appendJSONElem(parent, J_ARRAY);
 		for (Object x: array) {
