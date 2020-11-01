@@ -283,7 +283,7 @@ class XCGeneratorBase {
 	final static String getParsedResultGetter(final XMData xdata) {
 		String parserName = xdata.getParserName();
 		if ("jlist".equals(parserName)) {
-			return "org.xdef.component.XComponentUtil.jlinkToString("
+			return "org.xdef.component.XComponentUtil.jlistToString("
 				+ "parseResult)";
 		}
 		String result = "parseResult.";

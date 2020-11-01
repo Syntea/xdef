@@ -381,14 +381,15 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XSParseUnion.class,
 			"union", "?xs:union");
 
-		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_CONTAINER,
-			keyParam("item", XD_PARSER, true, -1,false),
+		im = genParserMetnod(0, 2,
+			new short[] {XD_ANY, XD_ANY, XD_PARSER}, XD_CONTAINER,
+			keyParam("item", XD_PARSER, false, 2,false),
 			keyParam("length", XD_INT, false, -1,false),
 			keyParam("maxLength", XD_INT, false, 1,false),
 			keyParam("minLength", XD_INT, false, 0,false),
 			keyParam("enumeration", XD_ANY, true, -1,false),
 			keyParam("pattern", XD_STRING, true, -1,false));
-		parser(im,org.xdef.impl.parsers.XDParseJList.class,
+		parser(im, org.xdef.impl.parsers.XDParseJList.class,
 			"jlist");
 
 		im = genParserMetnod(0, 2, new short[] {XD_INT, XD_INT}, XD_STRING,
