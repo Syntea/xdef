@@ -408,16 +408,16 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS012, "").toString("sk");
 			assertTrue(s.indexOf("sa vyskytli chyby") >= 0, s);
 			s = Report.text(XML.XML_LANGUAGE).toString();
-			assertTrue(s.indexOf("esky") > 0, s);
+			assertTrue("česky".equals(s), s); // Czech
 			s = Report.getReportText(XML.XML_LANGUAGE, "eng");
-			assertEq("English", s);
+			assertEq("English", s); //English
 			s = Report.getReportText(XML.XML_LANGUAGE, null);
-			assertTrue(s.indexOf("esky") > 0, s);
+			assertTrue("česky".equals(s), s); // Czech
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "en");
 			s = Report.getReportText(XML.XML_LANGUAGE, null);
-			assertEq("English", s);
-			Properties props = readProperties(new StringReader(
-				"_language=deu\n_prefix=SYS\nSYS013=Fehler"));
+			assertEq("English", s); // English
+			Properties props = readProperties(
+				new StringReader("_language=deu\n_prefix=SYS\nSYS013=Fehler"));
 			SManager.addReports(props);
 			s = Report.text(SYS.SYS012).toString("deu");
 			assertEq("Errors detected", s);
@@ -427,7 +427,7 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS013).toString("deu");
 			assertEq("Too many errors", s);
 		} catch (Exception ex) {fail(ex);}
-		try {// test report references in parameters
+		try {// test reference parameters ("&{#"report id"}")
 			SManager.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng");
 			r = Report.error(SYS.SYS076, "&{#SYS072}", "&{#SYS091}");
 			assertEq("E SYS076: URL Data error error: ; Read after EOF",

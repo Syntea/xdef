@@ -31,7 +31,7 @@ import org.xdef.xml.KXmlUtils;
  * }
  * </b></code></pre>
  *
- * @author Vaclav Trojan &lt;vaclav.trojan@syntea.cz&gt;
+ * @author Vaclav Trojan
  */
 public final class SManager implements XDConstants {
 	/** The unique instance of SManager. */

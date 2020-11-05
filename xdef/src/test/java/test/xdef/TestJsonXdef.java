@@ -19,11 +19,6 @@ import java.util.List;
 import org.xdef.json.JsonToXml;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SRuntimeException;
-import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
-import static test.XDTester.getValueFromGetter;
-import static test.XDTester.setValueToSetter;
-import static test.xdef.TestCompose.xx;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan

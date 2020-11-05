@@ -18,7 +18,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
 
 /** Abstract class as the base for all test value parsers.
- * @author Vaclav Trojan &lt;vaclav.trojan@syntea.cz&gt;
+ * @author Vaclav Trojan
  */
 public abstract class XSAbstractParser extends XDParserAbstract
 	implements XDParser, XDValue {

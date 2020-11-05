@@ -137,7 +137,7 @@ public class RegisterReportTables {
 		}
 
 		@Override
-		public String getReportText(final String reportID) {
+		public final String getReportText(final String reportID) {
 			return _msgs.getProperty(reportID);
 		}
 
@@ -147,7 +147,7 @@ public class RegisterReportTables {
 		 * @param registeredID report registered ID.
 		 * @return The text of report or null.
 		 */
-		public String getReportText(final long registeredID) {
+		public final String getReportText(final long registeredID) {
 			int index = getRegisteredReportId(registeredID);
 			return getReportText(getPrefix() + _ids[index]);
 		}
@@ -157,7 +157,7 @@ public class RegisterReportTables {
 		 * @param registeredID registered report ID.
 		 * @return string with report ID or <tt>null</tt>.
 		 */
-		public String getReportID(final long registeredID) {
+		public final String getReportID(final long registeredID) {
 			int index = getRegisteredReportId(registeredID);
 			if (_ids == null) return null;
 			return getPrefix() + _ids[index];
@@ -180,7 +180,8 @@ public class RegisterReportTables {
 	 * {@link org.xdef.sys.RegisterReportTables}) or it can be created
 	 * from the class of registered report table.
 	 */
-	abstract static class ReportTable implements Comparable<ReportTable> {
+	protected abstract static class ReportTable
+		implements Comparable<ReportTable> {
 		/** Minimal length of prefix of registered report. */
 		private static final int PREFIX_MINLENGTH = 2;
 		/** Maximal length of prefix of registered report. */
@@ -209,29 +210,29 @@ public class RegisterReportTables {
 		/** Check if this table is registered.
 		 * @return <tt>true</tt> if and only if the table is registered.
 		 */
-		abstract public boolean isRegistered();
+		abstract protected boolean isRegistered();
 
 		/** Get report text (with resolved references).
 		 * If the identifier doesn't exist the returned value is <i>null</i>.
 		 * @param reportID report ID.
 		 * @return The text of report or null.
 		 */
-		abstract public String getReportText(final String reportID);
+		abstract protected String getReportText(final String reportID);
 
 		/** Get report text (with resolved references).
 		 * If the identifier doesn't exist the returned value is <i>null</i>.
 		 * @param registeredID report registered ID.
 		 * @return The text of report or null.
 		 */
-		abstract public String getReportText(final long registeredID);
+		abstract protected String getReportText(final long registeredID);
 
 		/** Get string of reportID from registered report ID.
 		 * @param registeredID registered report ID.
 		 * @return string created from registered report ID or <tt>null</tt>.
 		 */
-		abstract public String getReportID(final long registeredID);
+		abstract protected String getReportID(final long registeredID);
 
-		public ReportTable(final Class<?> baseClass,
+		protected ReportTable(final Class<?> baseClass,
 			final Class<?> localizedClass) {
 			String className = localizedClass.getName();
 			int i = className.lastIndexOf('_');
@@ -270,10 +271,10 @@ public class RegisterReportTables {
 		 * @param language language of this table (code ISO-639 or ISO-639-2).
 		 * @param defaultLanguage default language (code ISO-639 or ISO-639-2).
 		 */
-		public ReportTable(final String prefix,
+		protected ReportTable(final String prefix,
 			final String language,
 			final String defaultLanguage) {
-			String lang = getISO3Language(language);//three letters
+			String lang = getISO639_2_ID(language);//three letters
 				_tableName = prefix + '_' + lang;
 				long regId;
 				if ((regId = prefix.charAt(0) - '@') <= 0 || regId >= 27) {
@@ -290,21 +291,21 @@ public class RegisterReportTables {
 		/** Get language of this table.
 		 * @return language of this table.
 		 */
-		public final String getLanguage() {return _language;}
+		protected final String getLanguage() {return _language;}
 
 		/** Get language codes of all supported languages (three letters
 		 * ISO-639-2 Language Codes).
 		 * @return array with language codes if table is registered or the empty
 		 * array.
 		 */
-		public final String[] getLanguages() {return _languages;}
+		protected final String[] getLanguages() {return _languages;}
 
 		/** Add language code to list of supported languages.
 		 * @param language language code to be added (three letters ISO-639-2
 		 * Language Code).
 		 */
-		public final void addLanguage(final String language) {
-			String lang = getISO3Language(language);//three letters
+		protected final void addLanguage(final String language) {
+			String lang = getISO639_2_ID(language);//three letters
 			for (String x: _languages) {
 				if (x.equals(lang)) {
 					return;
@@ -317,29 +318,29 @@ public class RegisterReportTables {
 			Arrays.sort(_languages);
 		}
 
-		public final String getDefaultLanguage() {return _defaultLanguage;}
+		protected final String getDefaultLanguage() {return _defaultLanguage;}
 
-		public final void setDefaultLanguage(final String s) {
-			_defaultLanguage = (s != null) ? getISO3Language(s) : null;
+		protected final void setDefaultLanguage(final String s) {
+			_defaultLanguage = (s != null) ? getISO639_2_ID(s) : null;
 		}
 
-		public final String getPrefix() {return _prefix;}
+		protected final String getPrefix() {return _prefix;}
 
 		/** Get table name.
 		 * @return string table name.
 		 */
-		public final String getTableName() {return _tableName;}
+		protected final String getTableName() {return _tableName;}
 
 		/** Get id of registered table including.
 		 * @return id of registered table.
 		 */
-		public final long getRegisteredTableID() {return _tableID;}
+		protected final long getRegisteredTableID() {return _tableID;}
 
 		/** Get sorted array of all parameter names of report.
 		 * @param reportID The report id.
 		 * @return The array of parameter names.
 		 */
-		public final String[] getReportParamNames(final String reportID) {
+		protected final String[] getReportParamNames(final String reportID) {
 			return getParams(getReportText(reportID));
 		}
 
@@ -347,24 +348,21 @@ public class RegisterReportTables {
 		 * @param registeredID report registered ID.
 		 * @return The array of parameter names.
 		 */
-		public final String[] getReportParamNames(final long registeredID) {
+		protected final String[] getReportParamNames(final long registeredID) {
 			return getParams(getReportText(registeredID));
 		}
 
 		@Override
 		public String toString() {return "ReportTable: " + _tableName;}
-
 		@Override
 		public final int hashCode() {
 			return (int) (_tableID >>> 32) ^ (int) _tableID;
 		}
-
 		@Override
 		public final boolean equals(final Object o) {
 			return (o instanceof ReportTable)
 				&& _tableID == ((ReportTable) o).getRegisteredTableID();
 		}
-
 		@Override
 		public final int compareTo(final ReportTable table) {
 			long id = table.getRegisteredTableID();
@@ -372,13 +370,13 @@ public class RegisterReportTables {
 		}
 
 	////////////////////////////////////////////////////////////////////////////
-		/** Get ISO 639-2 3 letters language ID.
-		 * @param language The language code (ISO 639 2 letters) or
-		 * (ISO 639-2 3 letters).
-		 * @return the ISO 639-2 language ID (three letters).
+		/** Get ISO 639-2 (3 letters) language ID.
+		 * @param language language ID (ISO 639-1, 2 letters) or
+		 * (ISO 639-2, 3 letters).
+		 * @return ISO 639-2 language ID (three letters).
 		 * @throws RuntimeException if language code is not found.
 		 */
-		static final String getISO3Language(final String language)
+		private static String getISO639_2_ID(final String language)
 			throws RuntimeException {
 			String result;
 			if (language.length() == 3) {
@@ -407,7 +405,7 @@ public class RegisterReportTables {
 		 * empty array if no parameters are present or  <tt>null</tt> if
 		 * an error occurs.
 		 */
-		static final String[] getParams(final String text) {
+		private static String[] getParams(final String text) {
 			int pos;
 			if (text == null || (pos = text.indexOf("&{")) < 0) {
 				return new String[0]; //no params
@@ -432,7 +430,7 @@ public class RegisterReportTables {
 		 * @param language string with language ISO-639 ID.
 		 * @return registered localized table ID.
 		 */
-		static final long getTableID(final String prefix,
+		private static long getTableID(final String prefix,
 			final String language) {
 			return getPrefixID(prefix) | getLanguageID(language);
 		}
@@ -441,7 +439,7 @@ public class RegisterReportTables {
 		 * @param prefix string with the prefix of table.
 		 * @return registered table ID.
 		 */
-		static final long getPrefixID(final String prefix) {
+		private static long getPrefixID(final String prefix) {
 			long regId = prefix.charAt(0) - '@';
 			int len = prefix.length();
 			for (int i = 1; i < len; i++) {
@@ -455,8 +453,8 @@ public class RegisterReportTables {
 		 * @param language string with language ISO-639 ID.
 		 * @return registered language ID.
 		 */
-		static final int getLanguageID(final String language) {
-			String s = language == null ? "eng" : getISO3Language(language);
+		protected final static int getLanguageID(final String language) {
+			String s = language == null ? "eng":getISO639_2_ID(language);
 			int lngid = (s.charAt(0) - (char)('a' - 1));
 			lngid = lngid*27 + s.charAt(1) - (char) ('a' - 1);
 			return lngid*27 + s.charAt(2) - (char) ('a' - 1);
@@ -466,7 +464,7 @@ public class RegisterReportTables {
 		 * @param reportID string with report ID.
 		 * @return prefix extracted from report ID or <tt>null</tt>
 		 */
-		protected static final String getPrefixFromID(final String reportID) {
+		protected final static String getPrefixFromID(final String reportID) {
 			for (int i = 0; i < reportID.length(); i++) {
 				char c;
 				if ((c = reportID.charAt(i)) < 'A' || c > 'Z') {
@@ -481,7 +479,7 @@ public class RegisterReportTables {
 		 * @param fileName pathname to file with properties/
 		 * @return Properties object.
 		 */
-		final static Properties readProperties(final String fileName) {
+		protected final static Properties readProperties(final String fileName){
 			FileInputStream in = null;
 			Properties props = null;
 			try {
@@ -499,7 +497,8 @@ public class RegisterReportTables {
 		 * @param inStream input stream with properties.
 		 * @return Properties object.
 		 */
-		final static Properties readProperties(final InputStream inStream) {
+		protected final static Properties readProperties(
+			final InputStream inStream) {
 			try {
 				InputStreamReader in = new InputStreamReader(inStream,
 					Charset.forName("UTF-8"));
@@ -521,16 +520,19 @@ public class RegisterReportTables {
 		 * @param index message index.
 		 * @return registered report ID.
 		 */
-		final static long getRegisteredReportId(final ReportTable table,
+		protected final static long getRegisteredReportId(
+			final ReportTable table,
 			int index) {
 			return table.getRegisteredTableID()
 				& ReportTable.REGTABIDMASK | index;
 		}
 
 		/** Get index from registered report ID.
+		 * @param registeredID report registered ID.
 		 * @return registered report ID.
 		 */
-		final static int getRegisteredReportId(final long registeredID) {
+		protected final static int getRegisteredReportId(
+			final long registeredID) {
 			return (int) registeredID & IDMASK;
 		}
 	}
@@ -576,7 +578,8 @@ public class RegisterReportTables {
 			out.write(
 "// This file was generated automatically, DO NOT modify it!"+LN+
 "package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+LN+LN+
-"/** Registered identifiers of reports with the prefix " + prefix + ". */"+LN+
+"/** Registered identifiers of reports with the prefix " + prefix + "."+LN+
+" * Default language ISO639-2 id: "+table.getLanguage()+". */"+LN+
 "public interface " + prefix + " {"+LN);
 			for (int i = 0; i < table._ids.length; i++) {
 				String id = prefix + table._ids[i];
@@ -595,9 +598,10 @@ public class RegisterReportTables {
 "\tpublic static final long " + id + " = " + regID + "L;"+LN);
 			}
 			// identifier which is equal to the prefix contans default language
-			out.write(LN+"\t/** Default language. */"+LN+
-"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+LN+
-'}');
+//			out.write(
+//"\t/** Default ISO639-2 language id: \""+table.getLanguage()+"\". */"+LN+
+//"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+LN);
+			out.write("}");
 			out.close();
 		} catch (Exception ex) {
 			reporter.fatal(SYS.SYS036, ex); //Program exception &{0}
@@ -701,7 +705,7 @@ public class RegisterReportTables {
 		}
 	}
 
-	static final boolean chkReportID(final String s) {
+	private static boolean chkReportID(final String s) {
 		if (s == null || s.isEmpty()) {
 			return false;
 		}
@@ -753,142 +757,11 @@ public class RegisterReportTables {
 		throw new SRuntimeException(SYS.SYS051); //Actual path isn't accessible
 	}
 
-	/** Create report table from properties.
-	 * @param reportTable properties wit reports.
-	 * @return created ReportTable.
-	 * @throws RuntimeException if an error occurs.
-	 */
-	static ReportTableImpl genReportTable(final Properties reportTable) {
-		String prefix = reportTable.getProperty("_prefix");
-		if (prefix == null || prefix.length() < 3) {
-			//SYS214 Message prefix is incorrect or not specified: &{0}
-			throw new SRuntimeException(SYS.SYS214, prefix);
-		}
-		int prefixLen = prefix.length();
-		for (Object o: reportTable.keySet()) {
-			String key = (String) o;
-			if ("_prefix".equals(key) || "_language".equals(key)
-				|| "_defaultLanguage".equals(key)) {
-				continue;
-			}
-			String id;
-			if (!key.startsWith(prefix)
-				|| !chkReportID(id = key.substring(prefixLen))) {
-				//Incorrect message key: &{0}
-				throw new SRuntimeException(SYS.SYS216, key);
-			}
-			String text = reportTable.getProperty(key);
-			if (text != null) {
-				int j = text.indexOf("&{");
-				while (j >= 0) {
-					int k = text.indexOf('}', j + 2);
-					if (k < 0) {
-						//Unclosed parameter in the modification of report &{0}
-						throw new SRuntimeException(SYS.SYS218, prefix+id);
-					}
-					if (text.charAt(j + 2) == '#') {//report reference
-						if (j + 6 >= k) {
-							//Incorrect parameter reference on position: &{0}
-							//(report ID: &{1});
-							throw new SRuntimeException(SYS.SYS219, j, key);
-						}
-						String refid = text.substring(j + 3, k);
-						String refPrefix = ReportTable.getPrefixFromID(refid);
-						if (refPrefix == null || refPrefix.length() < 3) {
-							//Incorrect parameter reference on position: &{0}
-							//(report ID: &{1});
-							throw new SRuntimeException(SYS.SYS219, j, key);
-						}
-					}
-					j = text.indexOf("&{", k + 1);
-				}
-			}
-		}
-		String language = reportTable.getProperty("_language");
-		if (language == null || language.length() < 3) {
-			//Message language is incorrect or not specified: &{0}
-			throw new SRuntimeException(SYS.SYS215, language);
-		}
-		String defaultLanguage = reportTable.getProperty("_defaultLanguage");
-		ReportTableImpl result =
-			new ReportTableImpl(prefix, language, defaultLanguage, reportTable);
-		if (defaultLanguage != null) {
-			result.setDefaultLanguage(defaultLanguage);
-		}
-		return result;
-	}
-
-	/** Generate report table from property file.
-	 * @param file file name of properties.
-	 * @return ReportTable created from properties.
-	 */
-	static final ReportTable readReporTable(final String file) {
-		return genReportTable(ReportTable.readProperties(file));
-	}
-
-	/** Generate report tables from property files.
-	 * @param files array of name of source files.
-	 * @return array with ReportTable objects created from properties.
-	 */
-	static final ReportTable[] readReporTables(final String[] files,
-		ReportWriter reporter) {
-		ReportTableImpl[] msgTables = null;
-		for (int i = 0; i < files.length; i++) {
-			String s = files[i].replace('\\', '/');
-			try {
-				ReportTableImpl x = (ReportTableImpl) readReporTable(s);
-				if (msgTables == null) {
-					msgTables = new ReportTableImpl[] {x};
-				} else {
-					ReportTable[] old = msgTables;
-					int oldLen = old.length;
-					msgTables = new ReportTableImpl[oldLen + 1];
-					System.arraycopy(old, 0, msgTables, 0, oldLen);
-					msgTables[oldLen] = x;
-				}
-			} catch (Exception ex) {
-				if (ex instanceof RuntimeException) {
-					throw (RuntimeException) ex;
-				}
-				String msg = ex.getMessage();
-				if (msg == null) {
-					throw new RuntimeException("Program exception", ex);
-				} else {
-					throw new RuntimeException(msg, ex);
-				}
-			}
-		}
-		String defaultLanguage = null;
-		for (ReportTableImpl x: msgTables) {
-			String s = x.getDefaultLanguage();
-			if (s != null) {
-				if (defaultLanguage == null) {
-					defaultLanguage = s;
-				} else if (!defaultLanguage.equals(s)) {
-					//Ambiguous default language of reports" &{0}
-					//in the table &{1}, set &{2}
-					reporter.warning(SYS.SYS213,
-						x.getLanguage(), defaultLanguage);
-
-				}
-			}
-		}
-		if (defaultLanguage == null) {
-			defaultLanguage = "eng";
-		}
-
-		// get three letters language code
-		defaultLanguage = ReportTable.getISO3Language(defaultLanguage);
-		for (ReportTableImpl x: msgTables) {
-			x.setDefaultLanguage(defaultLanguage);
-		}
-		return msgTables;
-	}
 	/** Compute registered localized table ID.
 	 * @param tableName table name.
 	 * @return registered localized table ID.
 	 */
-	final static long getTableID(final String tableName) {
+	protected final static long getTableID(final String tableName) {
 		int i = tableName.indexOf('_');
 		return ReportTable.getPrefixID(tableName.substring(0, i))
 			| ReportTable.getLanguageID(tableName.substring(i + 1));
@@ -903,7 +776,7 @@ public class RegisterReportTables {
 	 * @param pckg package name of generated classes. If null the package
 	 * name will be org.common.msg.
 	 */
-	private static void genRegisteredJavaTables(
+	public final static void genRegisteredJavaTables(
 		final ReportTableImpl[] msgTables,
 		final File outDir,
 		final String encoding,
@@ -964,6 +837,139 @@ public class RegisterReportTables {
 			// only warnings or information
 			System.out.println(reporter.printToString());
 		}
+	}
+
+	/** Generate report table from property file.
+	 * @param file file name of properties.
+	 * @return ReportTable created from properties.
+	 */
+	public final static ReportTable readReporTable(final String file) {
+		return genReportTable(ReportTable.readProperties(file));
+	}
+
+	/** Generate report tables from property files.
+	 * @param files array of name of source files.
+	 * @return array with ReportTable objects created from properties.
+	 */
+	public final static ReportTable[] readReporTables(final String[] files,
+		ReportWriter reporter) {
+		ReportTableImpl[] msgTables = null;
+		for (int i = 0; i < files.length; i++) {
+			String s = files[i].replace('\\', '/');
+			try {
+				ReportTableImpl x = (ReportTableImpl) readReporTable(s);
+				if (msgTables == null) {
+					msgTables = new ReportTableImpl[] {x};
+				} else {
+					ReportTable[] old = msgTables;
+					int oldLen = old.length;
+					msgTables = new ReportTableImpl[oldLen + 1];
+					System.arraycopy(old, 0, msgTables, 0, oldLen);
+					msgTables[oldLen] = x;
+				}
+			} catch (Exception ex) {
+				if (ex instanceof RuntimeException) {
+					throw (RuntimeException) ex;
+				}
+				String msg = ex.getMessage();
+				if (msg == null) {
+					throw new RuntimeException("Program exception", ex);
+				} else {
+					throw new RuntimeException(msg, ex);
+				}
+			}
+		}
+		String defaultLanguage = null;
+		for (ReportTableImpl x: msgTables) {
+			String s = x.getDefaultLanguage();
+			if (s != null) {
+				if (defaultLanguage == null) {
+					defaultLanguage = s;
+				} else if (!defaultLanguage.equals(s)) {
+					//Ambiguous default language of reports" &{0}
+					//in the table &{1}, set &{2}
+					reporter.warning(SYS.SYS213,
+						x.getLanguage(), defaultLanguage);
+
+				}
+			}
+		}
+		if (defaultLanguage == null) {
+			defaultLanguage = "eng";
+		}
+
+		// get three letters language code
+		defaultLanguage = ReportTable.getISO639_2_ID(defaultLanguage);
+		for (ReportTableImpl x: msgTables) {
+			x.setDefaultLanguage(defaultLanguage);
+		}
+		return msgTables;
+	}
+
+	/** Create report table from properties.
+	 * @param reportTable properties wit reports.
+	 * @return created ReportTable.
+	 * @throws RuntimeException if an error occurs.
+	 */
+	public final static ReportTable genReportTable(
+		final Properties reportTable) {
+		String prefix = reportTable.getProperty("_prefix");
+		if (prefix == null || prefix.length() < 3) {
+			//SYS214 Message prefix is incorrect or not specified: &{0}
+			throw new SRuntimeException(SYS.SYS214, prefix);
+		}
+		int prefixLen = prefix.length();
+		for (Object o: reportTable.keySet()) {
+			String key = (String) o;
+			if ("_prefix".equals(key) || "_language".equals(key)
+				|| "_defaultLanguage".equals(key)) {
+				continue;
+			}
+			String id;
+			if (!key.startsWith(prefix)
+				|| !chkReportID(id = key.substring(prefixLen))) {
+				//Incorrect message key: &{0}
+				throw new SRuntimeException(SYS.SYS216, key);
+			}
+			String text = reportTable.getProperty(key);
+			if (text != null) {
+				int j = text.indexOf("&{");
+				while (j >= 0) {
+					int k = text.indexOf('}', j + 2);
+					if (k < 0) {
+						//Unclosed parameter in the modification of report &{0}
+						throw new SRuntimeException(SYS.SYS218, prefix+id);
+					}
+					if (text.charAt(j + 2) == '#') {//report reference
+						if (j + 6 >= k) {
+							//Incorrect parameter reference on position: &{0}
+							//(report ID: &{1});
+							throw new SRuntimeException(SYS.SYS219, j, key);
+						}
+						String refid = text.substring(j + 3, k);
+						String refPrefix = ReportTable.getPrefixFromID(refid);
+						if (refPrefix == null || refPrefix.length() < 3) {
+							//Incorrect parameter reference on position: &{0}
+							//(report ID: &{1});
+							throw new SRuntimeException(SYS.SYS219, j, key);
+						}
+					}
+					j = text.indexOf("&{", k + 1);
+				}
+			}
+		}
+		String language = reportTable.getProperty("_language");
+		if (language == null || language.length() < 3) {
+			//Message language is incorrect or not specified: &{0}
+			throw new SRuntimeException(SYS.SYS215, language);
+		}
+		String defaultLanguage = reportTable.getProperty("_defaultLanguage");
+		ReportTableImpl result =
+			new ReportTableImpl(prefix, language, defaultLanguage, reportTable);
+		if (defaultLanguage != null) {
+			result.setDefaultLanguage(defaultLanguage);
+		}
+		return result;
 	}
 
 	/** Create Java source class with registered reports from XML source file.

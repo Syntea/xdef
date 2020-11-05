@@ -1391,7 +1391,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Prepare character from the next position.
-	 * @return next character or ENDCHAR if the position is at
+	 * @return next character or NOCHAR if the position is at
 	 * the end of source.
 	 */
 	public final char nextChar() {
@@ -1403,9 +1403,9 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Get character at the current position and set position to the next
 	 * character in the source. If the position is at the end of source
-	 * return ENDCHAR.
+	 * return NOCHAR.
 	 * @return character at the current position or if the position is at
-	 * the end of source return ENDCHAR.
+	 * the end of source return NOCHAR.
 	 */
 	public final char peekChar() {
 		char result;
@@ -1418,7 +1418,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Get the character on actual position.
-	 * @return character on actual position or ENDCHAR.
+	 * @return character on actual position or NOCHAR.
 	 */
 	public final char getCurrentChar() {return _ch;}
 
@@ -1551,7 +1551,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>ENDCHAR</tt>.
+	 * otherwise return <tt>NOCHAR</tt>.
 	 */
 	public final char isInInterval(final char minCh, final char maxCh) {
 		if (_ch < minCh || _ch > maxCh) {
@@ -1572,7 +1572,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>ENDCHAR</tt>.
+	 * otherwise return <tt>NOCHAR</tt>.
 	 */
 	public final char notInInterval(final char minCh, final char maxCh) {
 		if (_ch >= minCh && _ch <= maxCh) {
@@ -1604,10 +1604,10 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** If character on actual position is not character specified by
 	 * argument the method returns the actual character and sets
-	 * position to next character. Otherwise it returns ENDCHAR and actual
+	 * position to next character. Otherwise it returns NOCHAR and actual
 	 * position remains unchanged.
 	 * @param ch Character to be checked.
-	 * @return character on actual position or ENDCHAR.
+	 * @return character on actual position or NOCHAR.
 	 */
 	public final char notChar(final char ch) {
 		if (_ch == ch) {
@@ -1657,8 +1657,8 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to upper case letter. Set the source
 	 * position to the next character if letter was recognized and return the
-	 * character otherwise return ENDCHAR and source position remains unchanged.
-	 * @return character or ENDCHAR.
+	 * character otherwise return NOCHAR and source position remains unchanged.
+	 * @return character or NOCHAR.
 	 */
 	public final char isUpperCaseLetter() {
 		if (Character.isLetter(_ch) && _ch == Character.toUpperCase(_ch)) {
@@ -1672,8 +1672,8 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to lower case letter. Set the source
 	 * position to the next character if letter was recognized and return the
-	 * character otherwise return ENDCHAR and source position remains unchanged.
-	 * @return character or ENDCHAR.
+	 * character otherwise return NOCHAR and source position remains unchanged.
+	 * @return character or NOCHAR.
 	 */
 	public final char isLowerCaseLetter() {
 		if (Character.isLetter(_ch) && _ch == Character.toLowerCase(_ch)) {
@@ -1899,10 +1899,10 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Skip to first occurrence of one of specified character set. The position
 	 * is set <b>to</b> the found character.Return the character from the list
-	 * of characters if the character was found, otherwise return ENDCHAR and
+	 * of characters if the character was found, otherwise return NOCHAR and
 	 *  set the position to the end of source.
 	 * @param chars String with set of characters.
-	 * @return found character or ENDCHAR.
+	 * @return found character or NOCHAR.
 	 */
 	public final char findOneOfChars(final String chars) {
 		while (getIndex() < _endPos || readNextBuffer()) {
@@ -2280,9 +2280,9 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** If actual character is one of characters specified in given string the
 	 * method returns this character and sets position to the next
-	 * character. Otherwise it returns ENDCHAR.
+	 * character. Otherwise it returns NOCHAR.
 	 * @param chars String with characters to be checked.
-	 * @return the actual character or ENDCHAR.
+	 * @return the actual character or NOCHAR.
 	 */
 	public final char isOneOfChars(final String chars) {
 		if (chars.indexOf(_ch) < 0) {
@@ -2315,8 +2315,8 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to letter. Set the source position
 	 * to the next character if letter was recognized and return the character
-	 * otherwise return ENDCHAR and source position remains unchanged.
-	 * @return character or ENDCHAR.
+	 * otherwise return NOCHAR and source position remains unchanged.
+	 * @return character or NOCHAR.
 	 */
 	public final char isLetter() {
 		if (Character.isLetter(_ch)) {
@@ -2330,9 +2330,9 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to letter or digit. Set the source
 	 *  position to the next character if letter was recognized and return
-	 * the character otherwise return ENDCHAR and source position remains
+	 * the character otherwise return NOCHAR and source position remains
 	 * unchanged.
-	 * @return character or ENDCHAR.
+	 * @return character or NOCHAR.
 	 */
 	public final char isLetterOrDigit() {
 		if (Character.isLetterOrDigit(_ch)) {
@@ -4145,7 +4145,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse valid XML character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
 	 * (see org.xdef.impl.XConstants,XMLxx).
-	 * @return parsed character or ENDCHAR.
+	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) == 0) {
@@ -4157,7 +4157,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML whitespace character.
-	 * @return parsed character or ENDCHAR.
+	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLWhitespaceChar() {
 		if ( XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
@@ -4174,7 +4174,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse XML name start character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
 	 * (see org.xdef.impl.XConstants,XMLxx).
-	 * @return parsed character or ENDCHAR.
+	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNamestartChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START) {
@@ -4188,7 +4188,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse XML name extension character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
 	 * (see org.xdef.impl.XConstants,XMLxx).
-	 * @return parsed character or ENDCHAR.
+	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNameExtensionChar(final byte xmlVersion) {
 		if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_EXT) {

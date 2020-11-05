@@ -1,12 +1,13 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
-import org.xdef.sys.SParser;
+import org.xdef.json.JsonUtil;
 
 /** Parser of X-Script "jstring" (JSON string) type.
  * @author Vaclav Trojan
  */
 public class XDParseJString extends XDParseAn {
+
 	private static final String ROOTBASENAME = "jstring";
 	public XDParseJString() {
 		super();
@@ -43,29 +44,15 @@ public class XDParseJString extends XDParseAn {
 	boolean parse(final XDParseResult p) {
 		int pos = p.getIndex();
 		if (p.isChar('"')) { // quoted string
-			if (!p.eos()) { // not separate quote mark; must end with quote mark
-				for (;;) {
-					if (p.eos()) {
-						return false;
-					}
-					if (p.isChar('"')) { // quote
-						String s = p.getParsedString();
-						p.setParsedValue(s.substring(1, s.length()-1));
-						return true;
-					} else {
-						if (p.isChar('\\')) {
-							if (p.isOneOfChars("\\\"tnrf") == SParser.NOCHAR) {
-								return false;
-							}
-						} else {
-							p.nextChar();
-						}
-					}
-				}
+			String s = JsonUtil.readString(p);
+			if (s != null && !p.errors()) {
+				p.setParsedValue(s);
+				return true;
 			}
+			return false;
 		} else {//not quoted string
-			if (p.eos() || (p.isSignedFloat() || p.isToken("false")
-				|| p.isToken("true") || p.isToken("null")) && p.eos()) {
+			if (p.eos() || ((p.isSignedFloat() || p.isToken("false")
+				|| p.isToken("true") || p.isToken("null")) && p.eos())) {
 				return false;
 			}
 			while (!p.eos()) {
