@@ -1,7 +1,8 @@
 // This file was generated automatically, DO NOT modify it!
 package org.xdef.msg;
 
-/** Registered identifiers of reports with the prefix JSON. */
+/** Registered identifiers of reports with the prefix JSON.
+ * Default language ISO639-2 id: eng. */
 public interface JSON {
 	/** End of string is missing&amp;{#SYS000} */
 	public static final long JSON001 = 13834649600L;
@@ -51,7 +52,4 @@ public interface JSON {
 	public static final long JSON_DESCRIPTION = 13834649622L;
 	/** English */
 	public static final long JSON_LANGUAGE = 13834649623L;
-
-	/** Default language. */
-	public static final String JSON = "eng";
 }

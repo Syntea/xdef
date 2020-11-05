@@ -1,7 +1,8 @@
 // This file was generated automatically, DO NOT modify it!
 package org.xdef.msg;
 
-/** Registered identifiers of reports with the prefix XDEF. */
+/** Registered identifiers of reports with the prefix XDEF.
+ * Default language ISO639-2 id: eng. */
 public interface XDEF {
 	/** Can't create root element */
 	public static final long XDEF103 = 31159025664L;
@@ -245,15 +246,15 @@ public interface XDEF {
 	public static final long XDEF382 = 31159025783L;
 	/** Class name &amp;{0} is used in other command&amp;{#SYS000} */
 	public static final long XDEF383 = 31159025784L;
-	/** '//' comment is not allowed in the script &amp;{#SYS000} */
+	/** '//' comment is not allowed in the script&amp;{#SYS000} */
 	public static final long XDEF400 = 31159025785L;
-	/** Unclosed comment in the script &amp;{#SYS000} */
+	/** Unclosed comment in the script&amp;{#SYS000} */
 	public static final long XDEF401 = 31159025786L;
 	/** Name of attribute expected&amp;{#SYS000} */
 	public static final long XDEF402 = 31159025787L;
 	/** Unclosed string specification&amp;{#SYS000} */
 	public static final long XDEF403 = 31159025788L;
-	/** Illegal UNICODE escape character in literal&amp;{#SYS000} */
+	/** Incorrect UNICODE declared character&amp;{#SYS000} */
 	public static final long XDEF404 = 31159025789L;
 	/** Illegal escape character in literal&amp;{#SYS000} */
 	public static final long XDEF405 = 31159025790L;
@@ -674,7 +675,4 @@ public interface XDEF {
 	public static final long XDEF_DESCRIPTION = 31159025996L;
 	/** English */
 	public static final long XDEF_LANGUAGE = 31159025997L;
-
-	/** Default language. */
-	public static final String XDEF = "eng";
 }

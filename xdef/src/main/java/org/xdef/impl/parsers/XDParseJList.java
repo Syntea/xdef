@@ -6,11 +6,10 @@ import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.msg.JSON;
+import org.xdef.json.JsonUtil;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SParser;
 import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "jlist" type.
@@ -19,11 +18,6 @@ import org.xdef.sys.SRuntimeException;
 public class XDParseJList extends XSAbstractParser {
 	/** Name of parser. */
 	private static final String ROOTBASENAME = "jlist";
-
-	/** accepted escape characters. */
-	private static final String ESCCHARS = "u/\\\"bfnt";
-	/** Hexadecimal digits. */
-	private static final String HEXDIGITS = "0123456789abcdefABCDEF";
 
 	long _minLength;
 	long _maxLength;
@@ -72,7 +66,6 @@ public class XDParseJList extends XSAbstractParser {
 		p.setSourceBuffer(source);
 		ArrayReporter reporter = new ArrayReporter();
 		int count = 0;
-		int max = _maxLength == -1 ? Integer.MAX_VALUE : (int) _maxLength;
 		p.isSpaces();
 		if (p.isChar('[')) {
 			for (;;) {
@@ -88,48 +81,15 @@ public class XDParseJList extends XSAbstractParser {
 				int start, end;
 				start = p.getIndex();
 				if (p.isChar('"')) {
-					StringBuilder sb = new StringBuilder();
-					for(;;) {
-						char ch = p.nextChar();
-						if (ch == SParser.NOCHAR) {
-							// end of string ('"') is missing
-							reporter.error(JSON.JSON001);
-							break;
-						} else if (ch == '"') {
-							break;
-						}
-						if (ch == '\\') {
-							int escCharNdx = ESCCHARS.indexOf(p.nextChar());
-							if (escCharNdx == 0) { // \\u => UTF Character
-								int x = 0;
-								for (int j = 1; j < 4; j++) {
-									int y = HEXDIGITS.indexOf(p.nextChar());
-									if (y > 16) {
-										y -= 6;
-									}
-									if (y < 0) {
-										//hexadecimal digit expected
-										reporter.error(JSON.JSON005);
-									}
-									x = (x << 4) + y;
-								}
-								sb.append((char) x);
-							} else if (escCharNdx >= 1){
-								sb.append(ESCCHARS.charAt(escCharNdx));
-							} else {
-								// Incorrect escape character in string
-								reporter.error(JSON.JSON006);
-							}
-						} else {
-							sb.append(ch);
-						}
-					}
+					String s = JsonUtil.readString(p);
 					end = p.getIndex();
 					if (_itemType.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));
 					} else {
-						p.setSourceBuffer(
-							p.getBufferPart(0,start) + sb.toString());
+						if (s == null) {
+							s = "";
+						}
+						p.setSourceBuffer(p.getBufferPart(0,start) + s);
 					}
 					p.setBufIndex(start);
 					_itemType.parseObject(xnode, p);

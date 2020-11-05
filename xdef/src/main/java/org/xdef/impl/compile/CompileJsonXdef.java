@@ -25,8 +25,6 @@ public class CompileJsonXdef extends JsonToXml {
 	public static final String ONEOF_NAME = "$oneOf";
 	/** This keyword used for $any specification in X-definition. */
 	public static final String ANY_NAME = "$any";
-	/** This is the special character used for the $any specification. */
-	public static final String ANY_KEY = ")";
 	/** Prefix of X-definition namespace. */
 	String _xdPrefix;
 	/** Index of X-definition namespace. */

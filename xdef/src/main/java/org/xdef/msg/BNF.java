@@ -1,7 +1,8 @@
 // This file was generated automatically, DO NOT modify it!
 package org.xdef.msg;
 
-/** Registered identifiers of reports with the prefix BNF. */
+/** Registered identifiers of reports with the prefix BNF.
+ * Default language ISO639-2 id: eng. */
 public interface BNF {
 	/** BNF grammar not exists&amp;{#SYS000} */
 	public static final long BNF001 = 120717312L;
@@ -83,7 +84,4 @@ public interface BNF {
 	public static final long BNF_DESCRIPTION = 120717350L;
 	/** English */
 	public static final long BNF_LANGUAGE = 120717351L;
-
-	/** Default language. */
-	public static final String BNF = "eng";
 }

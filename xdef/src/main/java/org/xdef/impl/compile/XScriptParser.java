@@ -22,13 +22,16 @@ import java.util.Map;
  */
 public class XScriptParser extends StringParser
 	implements org.xdef.XDValueID {
-	/** Maximal number of nested macros. */
-	private static final int MAX_NESTED_MACRO = 100;
-	/** Decimal digits and "_" (used in readNumber method). */
-	private final static String DEC_DIGITS = "0123456789_";
 	/** Hexadecimal digits and "_" (used in readNumber method). */
 	private final static String HEX_DIGITS = "0123456789abcdefABCDEF_";
-	// basic alphabet
+	/** Decimal digits and "_" (used in readNumber method). */
+	private final static String DEC_DIGITS = "0123456789_";
+	/** Accepted escape characters. */
+	private final static String ESC_CHARS = "nrt'\"\\u";
+	/** Converted escape characters. */
+	private final static String ESC_CHAR_RESULTS = "\n\r\t'\"\\";
+
+	// Basic alphabet
 	public static final char UNDEF_SYM = 1000;
 	public static final char ASSGN_SYM = '=';
 	public static final char EQ_SYM = 1001; // "=="
@@ -830,7 +833,7 @@ public class XScriptParser extends StringParser
 			incBufIndex();
 			if (c == 'd' || c == 'D') { // Decimal
 				if ((c = getCurrentChar()) >= '0' && c <= '9') {
-					while ((DEC_DIGITS.indexOf(c = getCurrentChar())) >= 0){
+					while ((DEC_DIGITS.indexOf(c = getCurrentChar())) >= 0) {
 						incBufIndex();
 					}
 					if (c == '.') {
@@ -851,7 +854,7 @@ public class XScriptParser extends StringParser
 						}
 					}
 					String s =  getParsedBufferPartFrom(startNumber + 1);
-					s = SUtils.modifyString(s, "_", "");
+					s = SUtils.modifyString(s, "_", ""); // delete all "_"
 					if (_unaryMinus) {
 						s = '-' + s;
 					}
@@ -862,7 +865,7 @@ public class XScriptParser extends StringParser
 					} catch (Exception ex) {}
 				}
 				error(XDEF.XDEF409); //Decimal number error
-				_parsedValue = new DefDecimal(0);
+				_parsedValue = new DefDecimal();
 				return;
 			}
 			long j = 0L;
@@ -873,9 +876,9 @@ public class XScriptParser extends StringParser
 				incBufIndex();
 				if (i > 15) {
 					if (i == 22) {
-						continue;
+						continue; // skip "_"
 					}
-					i -= 6;
+					i -= 6; // capital letters ABCDEF
 				}
 				wasdigit = true;
 				if ((j & 0xf000000000000000L) != 0 && !errorreported) {
@@ -1035,46 +1038,26 @@ public class XScriptParser extends StringParser
 					_parsedValue = new DefString("");
 					break;
 				}
-				switch (c = getCharAtPos(getIndex())) {
-					case 'n':   // linefeed LF (0x000a)
-						c = '\n';
-						incBufIndex();
-						break;
-					case 'r':   // carriage return CR (0x000d)
-						c = '\r';
-						incBufIndex();
-						break;
-					case 't':   // horizontal tab HT (0x0009)
-						c = '\t';
-						incBufIndex();
-						break;
-					case '\'':  // apostroph
-					case '"':   // quote
-					case '\\':  // backslash
-						incBufIndex();
-						break;
-					case 'u': { // unicode escapes
-						incBufIndex();
-						int j, k = 0;
-						for (int i = 0; i < 4; i++) {
-							if (eos() ||
-								(j = "0123456789abcdefABCDEF".indexOf(
-								getCurrentChar())) < 0) {
-								//Illegal unicode escape char
-								error(XDEF.XDEF404);
-								break;
-							}
-							incBufIndex();
-							if (j > 15) {
-								i -= 6; //capital letters
-							}
-							k = k * 16 + j;
+				int i = ESC_CHARS.indexOf(getCharAtPos(getIndex()));
+				incBufIndex();
+				if (i < 0) {
+					error(XDEF.XDEF405); //Illegal escape character
+					c = '?';
+				} else if (i == 6) { // 'u'
+					int j, k = 0;
+					for (int n = 0; n < 4; n++) {
+						if ((j=HEX_DIGITS.indexOf(getCurrentChar())) < 0
+							|| j == 22) { // "_" not allowed here
+							//Incorrect UNICODE declared character
+							error(XDEF.XDEF404);
+							break;
 						}
-						c = (char) k;
-						break;
+						incBufIndex();
+						k = k * 16 + (j > 15 ? j - 6 : j);
 					}
-					default:
-						error(XDEF.XDEF405); //Illegal escape character
+					c = (char) k;
+				} else {
+					c = ESC_CHAR_RESULTS.charAt(i);
 				}
 				sb.append(c);
 				pos = getIndex();

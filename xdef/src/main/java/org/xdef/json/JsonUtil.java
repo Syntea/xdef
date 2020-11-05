@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.sys.SParser;
 import org.xdef.sys.SUtils;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
@@ -98,9 +99,9 @@ public class JsonUtil extends StringParser {
 	 * @return hexadecimal digit as an integer number 0..15
 	 * or return -1 if the argument is not hexadecimal digit.
 	 */
-	final static int hexDigit(final char ch) {
+	public final static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
-		return i >= 16 ? i - 6 : i;
+		return i > 15 ? i - 6 : i;
 	}
 
 	/** Check if on the position given by index in a string it is the
@@ -126,6 +127,46 @@ public class JsonUtil extends StringParser {
 		return false;
 	}
 
+	/** Read value of JSON string.
+	 * @param p parser where the string is on the actual position.
+	 * @return the parsed string.
+	 */
+	public static final String readString(final SParser p) {
+		StringBuilder sb = new StringBuilder();
+		while (!p.eos()) {
+			if (p.isChar('"')) {
+				return sb.toString();
+			} else if (p.isChar('\\')) {
+				char c = p.peekChar();
+				if (c == 'u') {
+					int x = 0;
+					for (int j = 1; j < 4; j++) {
+						int y = hexDigit(p.peekChar());
+						if (y < 0) {
+							p.error(JSON.JSON005);//hexadecimal digit expected
+							break;
+						}
+						x = (x << 4) + y;
+					}
+					sb.append((char) x);
+				} else {
+					int i = "\"\\/bfnrt".indexOf(c);
+					if (i >= 0) {
+						sb.append("\"\\/\b\f\n\r\t".charAt(i));
+					} else {
+						 // Incorrect escape character in string
+						p.error(JSON.JSON006);
+						return null;
+					}
+				}
+			} else {
+				sb.append(p.peekChar());
+			}
+		}
+		p.error(JSON.JSON001); // end of string ('"') is missing
+		return null;
+	}
+
 	/** Read JSON value.
 	 * @return parsed value: List, Map, String, Number, Boolean or null.
 	 * @throws SRuntimeException is an error occurs.
@@ -133,26 +174,26 @@ public class JsonUtil extends StringParser {
 	private Object readValue() throws SRuntimeException {
 		if (eos()) {
 			fatal(JSON.JSON007); //unexpected eof
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
+			return _genJObjects
+				? new CompileJsonXdef.JValue(_sPosition, null) : null;
 		}
 		if (_genJObjects) {
 			_sPosition = getPosition();
 		}
 		if (isChar('{')) { // Map
 			Map<String, Object> result;
-			if (_genJObjects) {
-				result = new CompileJsonXdef.JMap(_sPosition);
-			} else {
-				result = new LinkedHashMap<String,Object>();
-			}
+			result = _genJObjects ? new CompileJsonXdef.JMap(_sPosition)
+				: new LinkedHashMap<String,Object>();
 			isSpacesOrComments();
-			if (isChar('}')) {
+			if (isChar('}')) { // empty map
 				return result;
 			}
 			boolean wasScript = false;
 			while(!eos()) {
 				int i;
-				if (!wasScript && _jdef && (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME, CompileJsonXdef.ONEOF_NAME)) >= 0) {
+				if (!wasScript && _jdef
+					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
+						CompileJsonXdef.ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					SPosition spos = getPosition();
 					isSpacesOrComments();
@@ -186,7 +227,8 @@ public class JsonUtil extends StringParser {
 						o = readValue();
 					}
 					if (o != null && o instanceof CompileJsonXdef.JValue
-						&& ((CompileJsonXdef.JValue)o).getValue() instanceof String) {
+						&& ((CompileJsonXdef.JValue)o).getValue()
+							instanceof String) {
 						if (result.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
 							//Value pair &{0} already exists
 							error(JSON.JSON022, CompileJsonXdef.SCRIPT_KEY);
@@ -201,7 +243,8 @@ public class JsonUtil extends StringParser {
 					Object o = readValue();
 					if (o != null && (o instanceof String ||
 						(_genJObjects && o instanceof CompileJsonXdef.JValue)
-						&& ((CompileJsonXdef.JValue) o).getValue() instanceof String)) {
+						&& ((CompileJsonXdef.JValue) o).getValue()
+							instanceof String)) {
 						 // parse JSON named pair
 						String name = _genJObjects ? o.toString() : (String) o;
 						isSpacesOrComments();
@@ -257,13 +300,10 @@ public class JsonUtil extends StringParser {
 			return result;
 		} else if (isChar('[')) {
 			List<Object> result;
-			if (_genJObjects) {
-				result = new CompileJsonXdef.JArray(_sPosition);
-			} else {
-				result = new ArrayList<Object>();
-			}
+			result = _genJObjects ? new CompileJsonXdef.JArray(_sPosition)
+				: new ArrayList<Object>();
 			isSpacesOrComments();
-			if (isChar(']')) {
+			if (isChar(']')) { // empty array
 				return result;
 			}
 			boolean wasScript = false;
@@ -278,12 +318,15 @@ public class JsonUtil extends StringParser {
 						isSpacesOrComments();
 						Object o = readValue();
 						if (o instanceof CompileJsonXdef.JValue
-							&& ((CompileJsonXdef.JValue)o).getValue() instanceof String){
-							CompileJsonXdef.JValue jv = (CompileJsonXdef.JValue) o;
+							&& ((CompileJsonXdef.JValue)o).getValue()
+							instanceof String){
+							CompileJsonXdef.JValue jv =
+								(CompileJsonXdef.JValue) o;
 							if (i == 1) {
 								SPosition spos = jv.getPosition();
 								spos.setIndex(spos.getIndex() - 1);
-								String s = CompileJsonXdef.ONEOF_KEY + jv.getValue();
+								String s =
+									CompileJsonXdef.ONEOF_KEY + jv.getValue();
 								jv = new CompileJsonXdef.JValue(spos, s);
 							}
 							result.add(new CompileJsonXdef.JValue(null, jv));
@@ -299,7 +342,8 @@ public class JsonUtil extends StringParser {
 							SPosition spos = getPosition();
 							spos.setIndex(spos.getIndex() - 1);
 							result.add(new CompileJsonXdef.JValue(null,
-								new CompileJsonXdef.JValue(spos, CompileJsonXdef.ONEOF_KEY)));
+								new CompileJsonXdef.JValue(spos,
+									CompileJsonXdef.ONEOF_KEY)));
 						}
 					}
 				} else {
@@ -333,61 +377,30 @@ public class JsonUtil extends StringParser {
 			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
 			return result;
 		} else if (isChar('"')) { // string
-			StringBuilder sb = new StringBuilder();
-			while (!eos()) {
-				if (isChar('"')) {
-					return _genJObjects
-						? new CompileJsonXdef.JValue(_sPosition, sb.toString())
-						: sb.toString();
-				} else if (isChar('\\')) {
-					char c = peekChar();
-					if (c == 'u') {
-						int x = 0;
-						for (int j = 1; j < 4; j++) {
-							int y = hexDigit(peekChar());
-							if (y < 0) {
-								error(JSON.JSON005);//hexadecimal digit expected
-								return _genJObjects
-									? new CompileJsonXdef.JValue(_sPosition,sb.toString())
-									: sb.toString();
-							}
-							x = (x << 4) + y;
-						}
-						sb.append((char) x);
-					} else {
-						int i = "\"\\/bfnrt".indexOf(c);
-						if (i >= 0) {
-							sb.append("\"\\/\b\f\n\r\t".charAt(i));
-						} else {
-							 // Incorrect escape character in string
-							error(JSON.JSON006);
-						}
-					}
-				} else {
-					sb.append(peekChar());
-				}
-			}
-			fatal(JSON.JSON001); // end of string ('"') is missing
-			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition, sb.toString()) : sb.toString();
+			String s = readString(this);
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, s) : s;
 		} else if (isToken("null")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null)
+				: null;
 		} else if (isToken("true")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, true) : true;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, true)
+				: true;
 		} else if (isToken("false")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, false) : false;
+			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, false)
+				: false;
 		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
 			isSpacesOrComments();
 			if (isChar(':')) {
 				isSpacesOrComments();
 				Object val = readValue();
 				if (!(val instanceof CompileJsonXdef.JValue)
-					|| (((CompileJsonXdef.JValue) val).getValue() instanceof String)) {
+					|| (((CompileJsonXdef.JValue) val).getValue()
+						instanceof String)) {
 					//After ":" in the command $any must follow a string value
 					error(JSON.JSON021);
 				} else {
 					return new CompileJsonXdef.JAny(
-						_sPosition, ((CompileJsonXdef.JValue) val).getSBuffer());
+						_sPosition,((CompileJsonXdef.JValue) val).getSBuffer());
 				}
 			}
 			return new CompileJsonXdef.JAny(_sPosition, null);
@@ -415,13 +428,15 @@ public class JsonUtil extends StringParser {
 				if (pos == getIndex()) {
 					findOneOfChars(",[]{}"); // skip to next item
 				}
-				return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null) : null;
+				return _genJObjects
+					? new CompileJsonXdef.JValue(_sPosition, null) : null;
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
 				Character.isDigit(s.charAt(1))) {
 					warning(JSON.JSON014); // Illegal leading zero in number
 			}
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition,number) : number;
+			return _genJObjects
+				? new CompileJsonXdef.JValue(_sPosition,number) : number;
 		}
 	}
 
@@ -531,9 +546,9 @@ public class JsonUtil extends StringParser {
 		try {
 			int i = in.read(); //1st byte from input stream
 			int j = in.read(); //2nd byte from input stream
-			if (j < 0) {//EOF
-				// JSON object or array expected"
-				throw new SRuntimeException(JSON.JSON009, "&{line}1&{column}1");
+			if (i < 0 || i == 0 && j < 0) {//EOF
+				//Unexpected eof&{#SYS000}
+				throw new SRuntimeException(JSON.JSON007, "&{line}1&{column}1");
 			}
 			String s;
 			Reader reader;
@@ -545,12 +560,12 @@ public class JsonUtil extends StringParser {
 				int k = in.read();
 				int l = in.read();
 				if (l < 0) {//EOF
-					// JSON object or array expected"
-					throw new SRuntimeException(JSON.JSON009,
+					//Unexpected eof&{#SYS000}
+					throw new SRuntimeException(JSON.JSON007,
 						"&{line}1&{column}1");
 				}
 				if (i == 0 && j == 0 && k == 0) {
-					if (l == 0) {//EOF
+					if (l == 0) {// not a character
 						// JSON object or array expected"
 						throw new SRuntimeException(JSON.JSON009,
 							"&{line}1&{column}1");
@@ -577,9 +592,8 @@ public class JsonUtil extends StringParser {
 			Object result = jx.parse();
 			jx.getReportWriter().checkAndThrowErrors();
 			return result;
-		} catch (Exception ex) { // never happens
-			ex.printStackTrace(System.err);
-			return null;
+		} catch (Exception ex) { // never should happen
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
 		}
 	}
 

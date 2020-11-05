@@ -1,7 +1,8 @@
 // This file was generated automatically, DO NOT modify it!
 package org.xdef.msg;
 
-/** Registered identifiers of reports with the prefix XML. */
+/** Registered identifiers of reports with the prefix XML.
+ * Default language ISO639-2 id: eng. */
 public interface XML {
 	/** Unexpected end of source&amp;{#SYS000} */
 	public static final long XML005 = 1170407424L;
@@ -57,7 +58,4 @@ public interface XML {
 	public static final long XML_DESCRIPTION = 1170407449L;
 	/** English */
 	public static final long XML_LANGUAGE = 1170407450L;
-
-	/** Default language. */
-	public static final String XML = "eng";
 }
