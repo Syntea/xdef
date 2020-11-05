@@ -769,27 +769,27 @@ public class RegisterReportTables {
 
 	/** Generation of Java sources of "registered" message tables from
 	 * files with properties.
-	 * @param msgTables files with properties.
+	 * @param tables array with message tables.
 	 * @param outDir directory where to generate.
 	 * @param encoding required code table name for generated Java code.
 	 * If null the actual code of system is used.
 	 * @param pckg package name of generated classes. If null the package
 	 * name will be org.common.msg.
+	 * @param reporter ArrqayReporter where to put error messages.
 	 */
-	public final static void genRegisteredJavaTables(
-		final ReportTableImpl[] msgTables,
+	private static void genRegisteredJavaTables(final ReportTableImpl[] tables,
 		final File outDir,
 		final String encoding,
 		final String pckg,
 		ArrayReporter reporter) {
 		//gen default tables
-		for (int j = 0; j < msgTables.length; j++) {
-			ReportTableImpl table = msgTables[j]; //default table
+		for (int j = 0; j < tables.length; j++) {
+			ReportTableImpl table = tables[j]; //default table
 			if (table.getDefaultLanguage().equals(table.getLanguage())) {
 				//set all languages to default table
-				for (int k = 0; k <  msgTables.length; k++) {
+				for (int k = 0; k <  tables.length; k++) {
 					if (k != j) {
-						ReportTable t = msgTables[k];
+						ReportTable t = tables[k];
 						if (table.getPrefix().equals(t.getPrefix())) {
 							table.addLanguage(t.getLanguage());
 						}
@@ -798,13 +798,13 @@ public class RegisterReportTables {
 				genJavaSource(table, outDir, pckg, encoding, table, reporter);
 			}
 		}
-		for (int j = 0; j < msgTables.length; j++) {
-			ReportTable table = msgTables[j];
+		for (int j = 0; j < tables.length; j++) {
+			ReportTable table = tables[j];
 			if (table.getDefaultLanguage().equals(table.getLanguage())) {
 				//set all languages from default table
-				for (int k = 0; k <  msgTables.length; k++) {
+				for (int k = 0; k <  tables.length; k++) {
 					if (k != j) {
-						ReportTable t = msgTables[k];
+						ReportTable t = tables[k];
 						if (table.getPrefix().equals(t.getPrefix())) {
 							String[] languages = table.getLanguages();
 							for (int m = 0; m < languages.length; m++) {
@@ -816,15 +816,15 @@ public class RegisterReportTables {
 			}
 		}
 		//gen tables for other localizations
-		for (int j = 0; j < msgTables.length; j++) {
-			ReportTableImpl table = msgTables[j];
+		for (int j = 0; j < tables.length; j++) {
+			ReportTableImpl table = tables[j];
 			if (table.getDefaultLanguage().equals(table.getLanguage())) {
 				continue; //already generated
 			}
 			ReportTableImpl table1 = null;
 			//find default table
-			for (int k = 0; k < msgTables.length; k++) {
-				ReportTableImpl t = msgTables[k];
+			for (int k = 0; k < tables.length; k++) {
+				ReportTableImpl t = tables[k];
 				if (table.getPrefix().equals(t.getPrefix())
 					&& table.getDefaultLanguage().equals(t.getLanguage())) {
 					table1 = t;
