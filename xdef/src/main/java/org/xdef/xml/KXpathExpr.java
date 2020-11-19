@@ -365,10 +365,8 @@ public class KXpathExpr {
 			return _nc!=null ? _nc.getPrefix(namespaceURI) : null;
 		}
 		@Override
-		@SuppressWarnings("unchecked")
-		public final Iterator<String> getPrefixes(final String namespaceURI) {
+		public final Iterator getPrefixes(final String namespaceURI) {
 			return _nc!=null ? _nc.getPrefixes(namespaceURI) : null;
 		}
 	}
-
 }
