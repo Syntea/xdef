@@ -342,15 +342,16 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	}
 
 	public void checkPatterns(final XDParseResult p) {
-		if (_patterns != null && p.matches()) {
-			for (int i = 0; i < _patterns.length; i++) {
-				if (_patterns[i].matches(p.getSourceBuffer())) {
-					return;
-				}
-			}
-			//Doesn't fit any pattern from list for '&{0}'
-			p.errorWithString(XDEF.XDEF811, parserName());
+		if (_patterns == null || !p.matches()) {
+			return;
 		}
+		for (int i = 0; i < _patterns.length; i++) {
+			if (_patterns[i].matches(p.getSourceBuffer())) {
+				return; // found pattern; OK
+			}
+		}
+		//Doesn't fit any pattern from list for '&{0}'
+		p.errorWithString(XDEF.XDEF811, parserName());
 	}
 	@Override
 	public XDContainer getNamedParams() {

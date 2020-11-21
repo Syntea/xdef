@@ -34,12 +34,6 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
-		if (!d.chkDatetime()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
-		}
-		checkPatterns(p);
 		checkDate(xnode, p);
 	}
 	@Override

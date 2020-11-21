@@ -66,19 +66,13 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.addReports((ArrayReporter) parser.getReportWriter());
 		p.setBufIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
-		if (!d.chkDatetime()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
-		}
 		p.isSpaces();
+		p.setParsedValue(new DefDate(d));
+		checkDate(xnode, p);
 		if (_outFormat != null) {
 			s = d.formatDate(_outFormat);
 		}
 		p.replaceParsedBufferFrom(pos0, s);
-		p.setParsedValue(new DefDate(d));
-		checkPatterns(p);
-		checkDate(xnode, p);
 	}
 
 	@Override

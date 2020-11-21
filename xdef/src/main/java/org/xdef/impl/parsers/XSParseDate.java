@@ -56,12 +56,6 @@ public class XSParseDate extends XSAbstractParseComparable {
 		p.replaceParsedBufferFrom(pos0, s);
 		p.setParsedValue(new DefDate(d));
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
-		if (!d.chkDatetime()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
-		}
-		checkPatterns(p);
 		checkDate(xnode, p);
 	}
 	boolean parse(final StringParser parser) {return parser.isXMLDate();}
