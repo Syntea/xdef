@@ -8,13 +8,9 @@ import org.xdef.sys.StringParser;
 public class XSParseGYear extends XSParseDate {
 	private static final String ROOTBASENAME = "gYear";
 
-	public XSParseGYear() {
-		super();
-	}
+	public XSParseGYear() {super();}
 	@Override
-	boolean parse(final StringParser parser) {
-		return parser.isXMLYear();
-	}
+	boolean parse(final StringParser parser) {return parser.isXMLYear();}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

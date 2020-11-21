@@ -46,8 +46,6 @@ public class XSParseDouble extends XSAbstractParseComparable {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
-	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();

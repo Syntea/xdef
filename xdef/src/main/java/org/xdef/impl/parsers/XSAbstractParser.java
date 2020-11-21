@@ -64,7 +64,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		XDParseResult p = new DefParseResult(x.toString());
 		parseObject(xnode, p);
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		if (!p.eos()) {
@@ -96,7 +96,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		parseObject(xnode, p);
 		if (p.matches()) {
-			if (_whiteSpace == 'c') {
+			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
 			if (!p.eos()) {
@@ -131,21 +131,21 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public void setWhiteSpace(final String s) {
 		byte old = _whiteSpace;
 		if ("collapse".equals(s)) {
-			_whiteSpace = 'c';
+			_whiteSpace = WS_COLLAPSE;
 		} else if ("replace".equals(s)) {
-			_whiteSpace = 'r';
+			_whiteSpace = WS_REPLACE;
 		} else if ("preserve".equals(s)) {
-			_whiteSpace = 0;
+			_whiteSpace = WS_PRESERVE;
 		} else {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812,
 				"whiteSpace","collapse, replace, preserve", parserName());
 		}
-		if (old == 'c' && _whiteSpace != 'c' ||
-			old == 'p' && _whiteSpace == 0) {
+		if (old == WS_COLLAPSE && _whiteSpace != WS_COLLAPSE ||
+			old == WS_PRESERVE && _whiteSpace == 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812, "whiteSpace&",
-				(old == 'c' ? "collapse" : "collapse, replace"),
+				(old == WS_COLLAPSE ? "collapse" : "collapse, replace"),
 				parserName());
 		}
 	}
@@ -394,13 +394,13 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		if (getDefaultWhiteSpace() != getWhiteSpace()) {
 			switch (getWhiteSpace()) {
-				case 'c':
+				case WS_COLLAPSE:
 					map.setXDNamedItem("whiteSpace", new DefString("collapse"));
 					break;
-				case 'r':
+				case WS_REPLACE:
 					map.setXDNamedItem("whiteSpace", new DefString("replace"));
 					break;
-				case 0:
+				case WS_PRESERVE:
 					map.setXDNamedItem("whiteSpace", new DefString("preserve"));
 					break;
 			}

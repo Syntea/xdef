@@ -16,7 +16,7 @@ public class XSParseToken extends XSAbstractParseToken {
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		String s = p.nextToken();
@@ -31,7 +31,7 @@ public class XSParseToken extends XSAbstractParseToken {
 			s += ' ' + token;
 			p.isSpaces();
 		}
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		p.replaceParsedBufferFrom(pos0, s);

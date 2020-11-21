@@ -13,10 +13,10 @@ public class XSParseBoolean extends XSAbstractParser {
 
 	public XSParseBoolean() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 	@Override
-	public void initParams() {_whiteSpace = 'c';}
+	public void initParams() {_whiteSpace = WS_COLLAPSE;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -38,7 +38,7 @@ public class XSParseBoolean extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

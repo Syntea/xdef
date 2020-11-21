@@ -42,7 +42,7 @@ public class XSParseString extends XSAbstractParseString {
 	}
 
 	@Override
-	public byte getDefaultWhiteSpace() {return 0;}
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	/** Get name of value.
 	 * @return The name.

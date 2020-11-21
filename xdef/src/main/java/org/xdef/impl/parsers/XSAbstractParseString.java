@@ -121,7 +121,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		String s;
@@ -131,10 +131,10 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				return;
 			}
 			s = p.getParsedValue().toString();
-			if (_whiteSpace == 'c') {
+			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
-		} else if (_whiteSpace == 'c') {//collapse
+		} else if (_whiteSpace == WS_COLLAPSE) {//collapse
 			StringBuilder sb = new StringBuilder();
 			while((s = p.nextToken()) != null) {
 				sb.append(s);
@@ -149,7 +149,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				}
 			}
 			s = sb.toString();
-			if (_whiteSpace == 'c') {
+			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
 		} else {//preserve or replace
@@ -157,7 +157,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			if (s == null) {
 				s = "";
 			}
-			if (_whiteSpace == 'r') { //replace
+			if (_whiteSpace == WS_REPLACE) { //replace
 				s = s.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ');
 			}
 		}
@@ -186,7 +186,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		if (p.matches()) {
 			boolean found = false;
 			int i = 0;
-			if (_whiteSpace == 'c') {//collapse
+			if (_whiteSpace == WS_COLLAPSE) {//collapse
 				int start = p.getIndex();
 				loop:
 				for (; i < _enumeration.length; i++) {

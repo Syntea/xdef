@@ -84,7 +84,7 @@ public class XData extends XCodeDescriptor
 		throws IOException {
 		String name = xr.readString();
 		String uri = xr.readString();
-		XData x = new XData(name, uri, xd.getDefPool(), kind);
+		XData x = new XData(name, uri, xd.getXDPool(), kind);
 		x.readXCodeDescriptor(xr);
 		x._valueType = xr.readShort();
 		x._valueTypeName = xr.readString();

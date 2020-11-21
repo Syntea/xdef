@@ -80,7 +80,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 	private void checkParams(XDParseResult p, int pos0, int pos) {
 		if (p.matches()) {
 			String s = p.getBufferPart(pos, p.getIndex());
-			if (_whiteSpace == 'c') {
+			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 				p.replaceParsedBufferFrom(pos0, s);
 			} else {
@@ -90,7 +90,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 					p.errorWithString(XDEF.XDEF809, parserName());
 					return;
 				}
-				if (_whiteSpace == 'r') { //replace
+				if (_whiteSpace == WS_REPLACE) { //replace
 					s = s.replace('\t',' ').replace('\n',' ').replace('\r',' ');
 				}
 			}

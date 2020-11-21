@@ -35,8 +35,6 @@ public class XSParseDate extends XSAbstractParseComparable {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
-	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
@@ -62,18 +60,11 @@ public class XSParseDate extends XSAbstractParseComparable {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
-		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
-			//Range of values of year of date must be from &{0} to &{1}'
-			p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
-				xnode.getXDDocument().getMaxYear());
-			return;
 		}
 		checkPatterns(p);
-		checkComparable(p);
+		checkDate(xnode, p);
 	}
-	boolean parse(final StringParser parser) {
-		return parser.isXMLDate();
-	}
+	boolean parse(final StringParser parser) {return parser.isXMLDate();}
 	@Override
 	public short parsedType() {return XD_DATETIME;}
 	@Override

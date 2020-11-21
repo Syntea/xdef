@@ -61,8 +61,8 @@ public final class XElement extends XCodeDescriptor
 	public XElement(final String name,
 		final String nsURI,
 		final XDefinition xdef) {
-		super(name, nsURI, xdef.getDefPool(), XNode.XMELEMENT);
-		_sqId = ((XPool)xdef.getDefPool()).getSqId();
+		super(name, nsURI, xdef.getXDPool(), XNode.XMELEMENT);
+		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
 		_attrs = new LinkedHashMap<String, XData>();
 		_childNodes = new XNode[0];
@@ -77,7 +77,7 @@ public final class XElement extends XCodeDescriptor
 		super(x);
 		_attrs = x._attrs;
 		_childNodes = new XNode[x._childNodes.length];
-		_sqId = ((XPool)x.getDefPool()).getSqId();
+		_sqId = ((XPool)x.getXDPool()).getSqId();
 		System.arraycopy(x._childNodes, 0, _childNodes, 0, _childNodes.length);
 		_definition = x._definition;
 		_forget = x._forget;

@@ -13,7 +13,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 
 	public XSParseNormalizedString() {
 		super();
-		_whiteSpace = 'r';
+		_whiteSpace = WS_REPLACE;
 		_minLength = _maxLength = -1;
 	}
 	@Override
@@ -41,7 +41,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
-		_whiteSpace = 'r';
+		_whiteSpace = WS_REPLACE;
 	}
 /*
 The lexical space of xsd:normalizedString is unconstrained (any valid XML
@@ -94,7 +94,7 @@ by spaces, if the title element is a type xsd:normalizedString.
 		p.setBufIndex(pos0);
 		s = p.getParsedBufferPartFrom(0) + s;
 		p.setSourceBuffer(s);
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		if (_enumeration != null) {
@@ -104,10 +104,10 @@ by spaces, if the title element is a type xsd:normalizedString.
 				return;
 			}
 			s = p.getParsedValue().toString();
-			if (_whiteSpace == 'c') {//collapse
+			if (_whiteSpace == WS_COLLAPSE) {//collapse
 				p.isSpaces();
 			}
-		} else if (_whiteSpace == 'c') {//collapse
+		} else if (_whiteSpace == WS_COLLAPSE) {//collapse
 			StringBuilder sb = new StringBuilder();
 			while((s = p.nextToken()) != null) {
 				sb.append(s);
@@ -121,7 +121,7 @@ by spaces, if the title element is a type xsd:normalizedString.
 				}
 			}
 			s = sb.toString();
-			if (_whiteSpace == 'c') {
+			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
 		} else {
@@ -137,7 +137,7 @@ by spaces, if the title element is a type xsd:normalizedString.
 		checkLength(p);
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'r';}
+	public byte getDefaultWhiteSpace() {return WS_REPLACE;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

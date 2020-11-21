@@ -8,13 +8,9 @@ import org.xdef.sys.StringParser;
 public class XSParseDatetime extends XSParseDate {
 	private static final String ROOTBASENAME = "dateTime";
 
-	public XSParseDatetime() {
-		super();
-	}
+	public XSParseDatetime() {super();}
 	@Override
-	boolean parse(final StringParser parser) {
-		return parser.isXMLDatetime();
-	}
+	boolean parse(final StringParser parser) {return parser.isXMLDatetime();}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

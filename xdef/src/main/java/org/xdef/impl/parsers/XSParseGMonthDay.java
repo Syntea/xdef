@@ -8,13 +8,9 @@ import org.xdef.sys.StringParser;
 public class XSParseGMonthDay extends XSParseDate {
 	private static final String ROOTBASENAME = "gMonthDay";
 
-	public XSParseGMonthDay() {
-		super();
-	}
+	public XSParseGMonthDay() {super();}
 	@Override
-	boolean parse(final StringParser parser) {
-		return parser.isXMLMonthDay();
-	}
+	boolean parse(final StringParser parser) {return parser.isXMLMonthDay();}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 

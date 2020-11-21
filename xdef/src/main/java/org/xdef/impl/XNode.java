@@ -117,11 +117,6 @@ public abstract class XNode implements XMNode {
 		return new QName(_nsURI, _name);
 	}
 
-	/** Get defPool.
-	 * @return The defPool.
-	 */
-	final XDPool getDefPool() {return _xp;}
-
 	/** Set position to source X-definition.
 	 * @param spos position to source X-definition.
 	 */
@@ -216,7 +211,7 @@ public abstract class XNode implements XMNode {
 	/** Get XDPool.
 	 * @return XDPool to which this XMDefinition belongs.
 	 */
-	public final XDPool getXDPool() {return getDefPool();}
+	public final XDPool getXDPool() {return _xp;}
 
 ////////////////////////////////////////////////////////////////////////////////
 //implemetation of the interface XMOccurrence

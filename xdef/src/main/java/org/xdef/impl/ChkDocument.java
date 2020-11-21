@@ -41,6 +41,7 @@ import org.w3c.dom.Node;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
+import org.xdef.XDPool;
 import org.xdef.json.JsonUtil;
 import org.xdef.proc.XDLexicon;
 
@@ -113,6 +114,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public ChkDocument(final XDefinition xd) {
 		super("$root", null);
 		SReporter reporter = new SReporter();
+		setDateRestrictions(xd.getXDPool());
 		init(xd, null, reporter, null, null);
 		_scp = new XCodeProcessor(xd, reporter, null, null);
 	}
@@ -132,6 +134,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		XDefinition xd = new XDefinition("#",
 			xp, XDConstants.XDEF40_NS_URI, null, XConstants.XD40);
 		xp._xdefs.put("#", xd);
+		setDateRestrictions(xd.getXDPool());
 		//create dummy X-definition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);
 		_scp = new XCodeProcessor(xd, new SReporter(), null, null);
@@ -144,6 +147,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	ChkDocument(final XDefinition xd, final ChkElement chkel) {
 		super("#root", null);
+		setDateRestrictions(xd.getXDPool());
 		init(xd, chkel._rootChkDocument._doc,
 			chkel._rootChkDocument._reporter,
 			chkel._scp.getProperties(), //Properties props,
@@ -152,21 +156,26 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_scp = new XCodeProcessor(xd, chkel);
 	}
 
+	/** Set date restrictions from XDPool.
+	 * @param xd the XCDPool.
+	 */
+	private void setDateRestrictions(final XDPool xp) {
+		_minYear = xp.getMinYear();
+		_maxYear = xp.getMaxYear();
+		_specialDates = xp.getSpecialDates();
+	}
+
 	/** Initialize object. */
 	final void init(final XDefinition xd,
 		final Document doc,
 		final SReporter reporter,
 		final Properties props,
 		final Object userObj) {
-//		_refNum = 0; _xElement = null; //Java makes it!
 		setXPos("");
 		if ((_xdef = xd) == null) {
 			//The X-definition&{0}{ '}{'} is missing
 			throw new SRuntimeException(XDEF.XDEF602);
 		}
-		_minYear = _xdef.getXDPool().getMinYear();
-		_maxYear = _xdef.getXDPool().getMaxYear();
-		_specialDates = _xdef.getXDPool().getSpecialDates();
 		_doc = doc == null ? KXmlUtils.newDocument() : doc;
 		_reporter = reporter;
 		_userObject = userObj;
