@@ -1,24 +1,24 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 40.1.2, release-date 2020-11-21
-* corrected bug in the X-script method `s.contains(s)`.
-* corrected bug in the construction node of JSON.
-* corrected bug in JSON parser: duplicated name in object not reported.
-* to `org.xdef.XDDocument`  is implemented the new method
+* corrected the bug in the X-script method `s.contains(s)`.
+* corrected the bug in the construction node of JSON.
+* corrected the bug in JSON parser: duplicated name in object not reported.
+* to `org.xdef.XDDocument` it is implemented the new method
     `Object jcreate(String name, ReportWriter reporter)`
   This method allows to construct JSON data acccording to JSON model with given
   name. The method returns constructed JSON object.
-* to `org.xdef.proc.XXNode` is implemented the new method
+* to `org.xdef.proc.XXNode` it is implemented the new method
     `public void setJSONContext(Object data)`
   This method sets the context with JSON data used in the construction mode.
-* to BNF grammar implemented new inline function `$skipToNextLine`.
-* to BNF grammar implemented new inline function `$UTFChar`.
-* to BNF grammar implemented possibility to specify case insensitive terminal
-  symbols (when the terminal symbol specification follows percentage character).
-* if in date and datetime types is specified any of  constraining facets
-  `%minInclusive`, `%maxInclusive`, `%minExclusive` or `%maxExclusive`, then
-  it is now skipped test of date legitimity (which is set by properties or
-  by methods `setMinDate` or `setMaxDate`).
+* to the BNF grammar implemented new inline functions `$skipToNextLine`,
+  `$UTFChar`, and it is implemented the possibility to specify case insensitive
+  terminal symbols (when the terminal symbol specification follows percentage
+  character).
+* if in the date and datetime validation method is specified any of constraining
+  facets `%minInclusive`, `%maxInclusive`, `%minExclusive` or `%maxExclusive`,
+  then it is now skipped the test of date validity (which can be set
+  by properties or by methods `setMinDate` or `setMaxDate`).
 
 # Version 40.1.1, release-date 2020-09-17
 * corrected bugs in BNF syntax of X-definitions
