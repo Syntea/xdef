@@ -5,6 +5,8 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDParseResult;
 import org.xdef.XDValue;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 
 /** Abstract parser of comparable values.
@@ -19,63 +21,29 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 
 	protected XSAbstractParseComparable() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 
-	@Override
-	public  void initParams() {
-		_whiteSpace = 'c';
-		_patterns = null;
-		_enumeration = null;
-		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
-	}
-	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
-	@Override
-	public XDValue getMinExclusive() { return _minExcl; }
-	@Override
-	public XDValue getMaxExclusive() { return _maxExcl; }
-	@Override
-	public XDValue getMinInclusive() { return _minIncl; }
-	@Override
-	public XDValue getMaxInclusive() {return _maxIncl;}
-	@Override
-	public XDValue[] getEnumeration() {return _enumeration;}
 	/** Check value of range specification (override if necessary).
 	 * @param x value of range specification.
 	 * @throws SRuntimeException if value is incorrect.
 	 */
-	public void checkValue(final XDValue x) {}
+	protected void checkValue(final XDValue x) {}
+
 	@Override
-	public void setMinExclusive(XDValue x) {
-		checkValue(_minExcl = iObject(null, x));
-	}
-	@Override
-	public void setMaxExclusive(XDValue x) {
-		checkValue(_maxExcl = iObject(null, x));
-	}
-	@Override
-	public void setMinInclusive(XDValue x) {
-		checkValue(_minIncl = iObject(null, x));
-	}
-	@Override
-	public void setMaxInclusive(XDValue x) {
-		checkValue(_maxIncl = iObject(null, x));
-	}
-	@Override
-	public void setEnumeration(Object[] o) {
+	/** Initialize parser  (override if necessary). */
+	public void initParams() {
+		_whiteSpace = WS_COLLAPSE;
+		_patterns = null;
 		_enumeration = null;
-		if (o == null || o.length == 0) {
-			return;
-		}
-		XDValue[] e = new XDValue[o.length];
-		for (int i = 0; i < o.length; i++) {
-			e[i] = iObject(null, o[i]);
-		}
-		_enumeration = e;
+		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
 	}
 
-	protected void checkComparable(XDParseResult p) {
+////////////////////////////////////////////////////////////////////////////////
+// final methods
+////////////////////////////////////////////////////////////////////////////////
+
+	protected final void checkComparable(final XDParseResult p) {
 		if (p.matches()) {
 			XDValue val = p.getParsedValue();
 			try {
@@ -116,5 +84,71 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 			}
 			checkEnumeration(p);
 		}
+	}
+
+	/** Check if the date is legal and fits
+	 * @param xnode actual XXNode object.
+	 * @param p String parser with source and parsed object.
+	 */
+	protected final void checkDate(final XXNode xnode, final XDParseResult p) {
+		if (_minIncl==null&&_minExcl==null&&_maxIncl==null&&_maxExcl==null) {
+			if (xnode!=null) { // no min, max and xnode != null
+				SDatetime d = (SDatetime) p.getParsedValue().getObject();
+				if (!xnode.getXDDocument().isLegalDate(d)) {
+					//Range of values of year of date must be from &{0} to &{1}'
+					p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
+						xnode.getXDDocument().getMaxYear());
+					return;
+				}
+			}
+			checkEnumeration(p);
+		} else {
+			checkComparable(p);
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of final methods from XSAbstractParser
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public final byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+	@Override
+	public final XDValue getMinExclusive() { return _minExcl; }
+	@Override
+	public final XDValue getMaxExclusive() { return _maxExcl; }
+	@Override
+	public final XDValue getMinInclusive() { return _minIncl; }
+	@Override
+	public final XDValue getMaxInclusive() {return _maxIncl;}
+	@Override
+	public XDValue[] getEnumeration() {return _enumeration;}
+	@Override
+	public final void setMinExclusive(final XDValue x) {
+		checkValue(_minExcl = iObject(null, x));
+	}
+	@Override
+	public final void setMaxExclusive(final XDValue x) {
+		checkValue(_maxExcl = iObject(null, x));
+	}
+	@Override
+	public final void setMinInclusive(final XDValue x) {
+		checkValue(_minIncl = iObject(null, x));
+	}
+	@Override
+	public final void setMaxInclusive(final XDValue x) {
+		checkValue(_maxIncl = iObject(null, x));
+	}
+	@Override
+	public final void setEnumeration(final Object[] o) {
+		_enumeration = null;
+		if (o == null || o.length == 0) {
+			return;
+		}
+		XDValue[] e = new XDValue[o.length];
+		for (int i = 0; i < o.length; i++) {
+			e[i] = iObject(null, o[i]);
+		}
+		_enumeration = e;
 	}
 }

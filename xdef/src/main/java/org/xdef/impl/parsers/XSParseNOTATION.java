@@ -25,18 +25,18 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
-		_whiteSpace = 'r';
+		_whiteSpace = WS_REPLACE;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'r';}
+	public byte getDefaultWhiteSpace() {return WS_REPLACE;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		if (_enumeration != null) {
 			checkEnumeration(p, xnode);
-		} else if (_whiteSpace == 'c') {//collapse
+		} else if (_whiteSpace == WS_COLLAPSE) {//collapse
 			StringBuilder sb = new StringBuilder();
 			int pos = p.getIndex();
 			StringParser parser = new StringParser(p.getSourceBuffer(), pos);
@@ -64,7 +64,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			}
 		} else {//preserve or replace
 			String s = p.getUnparsedBufferPart().trim();
-			if (_whiteSpace == 'r') { //replace
+			if (_whiteSpace == WS_REPLACE) { //replace
 				s = s.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ');
 			}
 			p.setSourceBuffer(s);

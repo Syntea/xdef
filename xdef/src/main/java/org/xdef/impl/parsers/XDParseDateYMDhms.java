@@ -14,9 +14,8 @@ import org.xdef.impl.code.DefDate;
 public class XDParseDateYMDhms extends XSParseDatetime {
 	private static final String ROOTBASENAME = "dateYMDhms";
 
-	public XDParseDateYMDhms() {
-		super();
-	}
+	public XDParseDateYMDhms() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -39,14 +38,9 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
-		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
-			//Range of values of year of date must be from &{0} to &{1}'
-			p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
-				xnode.getXDDocument().getMaxYear());
-			return;
 		}
 		checkPatterns(p);
-		checkComparable(p);
+		checkDate(xnode, p);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

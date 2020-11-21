@@ -1142,7 +1142,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					return xn;
 				} else if ((xn=_xElement.getDefAttr("$textcontent",-1))!=null) {
 					return new XData( //dummy, just process string()
-						"$text", null, xn.getDefPool(), XNode.XMTEXT);
+						"$text", null, xn.getXDPool(), XNode.XMTEXT);
 				}
 			}
 		} else if (_actDefIndex >= 0
@@ -3001,7 +3001,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					return true;
 				}
 				xtxt = xtxt1 = new XData(// dummy text
-					"$text", null, _xElement.getDefPool(), XNode.XMTEXT);
+					"$text", null, _xElement.getXDPool(), XNode.XMTEXT);
 				if (_xElement.hasDefAttr("$textcontent")) { //copy option cdata!
 					xtxt1._cdata =
 						_xElement.getDefAttr("$textcontent", -1)._cdata;

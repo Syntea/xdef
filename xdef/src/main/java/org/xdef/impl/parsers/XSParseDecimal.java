@@ -15,7 +15,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 
 	public XSParseDecimal() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_totalDigits = _fractionDigits = -1;
 	}
 	@Override
@@ -40,14 +40,12 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 	}
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
 		_fractionDigits = _totalDigits = -1;
 	}
-	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

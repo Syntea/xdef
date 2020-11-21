@@ -43,7 +43,7 @@ public class XComment extends XData implements XMNode {
 		throws IOException {
 //		xr.readString(); // NS URI
 //		xr.readString(); // name
-		XComment x = new XComment(xd.getDefPool());
+		XComment x = new XComment(xd.getXDPool());
 		x.readXCodeDescriptor(xr);
 		return x;
 	}

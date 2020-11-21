@@ -11,7 +11,7 @@ public class XDParseSHA1 extends XSParseHexBinary {
 	}
 	@Override
 	public void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = 20;

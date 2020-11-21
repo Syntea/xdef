@@ -19,11 +19,8 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	private String _format;
 	private String _outFormat;
 
-	public XDParseXDatetime() {
-		super();
-//		_format = null;
-//		_outFormat = null;
-	}
+	public XDParseXDatetime() {super();}
+
 	@Override
 	public void initParams() {
 		super.initParams();
@@ -73,11 +70,6 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
-		} else if (xnode != null && !xnode.getXDDocument().isLegalDate(d)) {
-			//Range of values of year of date must be from &{0} to &{1}'
-			p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
-				xnode.getXDDocument().getMaxYear());
-			return;
 		}
 		p.isSpaces();
 		if (_outFormat != null) {
@@ -86,7 +78,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.replaceParsedBufferFrom(pos0, s);
 		p.setParsedValue(new DefDate(d));
 		checkPatterns(p);
-		checkComparable(p);
+		checkDate(xnode, p);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class XDParseDec extends XSParseDecimal {
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		int pos = p.getIndex();
@@ -75,7 +75,7 @@ public class XDParseDec extends XSParseDecimal {
 				return;
 			}
 		}
-		if (_whiteSpace == 'c') {
+		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		p.replaceParsedBufferFrom(pos0, s);

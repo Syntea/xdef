@@ -19,7 +19,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 	}
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
@@ -45,8 +45,6 @@ public class XSParseInteger extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
-	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
 	@Override
 	public void setTotalDigits(long x) { _totalDigits = x; }
 	@Override

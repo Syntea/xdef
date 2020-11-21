@@ -13,10 +13,10 @@ public class XDParseJBoolean extends XSParseBoolean {
 
 	public XDParseJBoolean() {
 		super();
-		_whiteSpace = WS_PEESERVE;
+		_whiteSpace = WS_PRESERVE;
 	}
 	@Override
-	public void initParams() {_whiteSpace = WS_PEESERVE;}
+	public void initParams() {_whiteSpace = WS_PRESERVE;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -55,7 +55,7 @@ public class XDParseJBoolean extends XSParseBoolean {
 		}
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

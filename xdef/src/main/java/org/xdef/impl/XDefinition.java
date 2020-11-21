@@ -226,7 +226,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return XVariable object or null if it is not found.
 	 */
 	public XVariable findVariable(final String name) {
-		XPool xp = (XPool) getDefPool();
+		XPool xp = (XPool) getXDPool();
 		for (String s: _importLocal) {
 			// first look to the list of local declarations
 			XVariable xv = xp.getVariable(s + name);

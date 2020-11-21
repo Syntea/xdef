@@ -15,7 +15,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 
 	public XSParseENTITIES() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 	@Override
 	public int getLegalKeys() {
@@ -39,13 +39,13 @@ public class XSParseENTITIES extends XSAbstractParseString {
 	}
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, true);

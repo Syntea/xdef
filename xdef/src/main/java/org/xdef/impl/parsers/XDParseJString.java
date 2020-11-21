@@ -11,11 +11,11 @@ public class XDParseJString extends XDParseAn {
 	private static final String ROOTBASENAME = "jstring";
 	public XDParseJString() {
 		super();
-		_whiteSpace = WS_PEESERVE;
+		_whiteSpace = WS_PRESERVE;
 	}
 	@Override
 	public void initParams() {
-		_whiteSpace = WS_PEESERVE;
+		_whiteSpace = WS_PRESERVE;
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
@@ -63,7 +63,7 @@ public class XDParseJString extends XDParseAn {
 		return true;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return WS_PEESERVE;}
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

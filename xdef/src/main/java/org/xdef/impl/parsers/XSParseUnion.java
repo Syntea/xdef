@@ -45,7 +45,7 @@ public class XSParseUnion extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 0;}
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	public boolean addTypeParser(XDParser x) {
 		if (_itemTypes == null) {
@@ -100,7 +100,7 @@ public class XSParseUnion extends XSAbstractParser {
 		final boolean isFinal){
 		int pos = p.getIndex();
 		String source = p.getSourceBuffer();
-		_whiteSpace = 0;
+		_whiteSpace = WS_PRESERVE;
 		for (int i = 0; i < _itemTypes.length; i++) {
 			if (isFinal) {
 				_itemTypes[i].check(xnode, p);
@@ -133,7 +133,7 @@ public class XSParseUnion extends XSAbstractParser {
 			}
 			if (isFinal) {
 				_whiteSpace = _itemTypes[i].getWhiteSpaceParam();
-				if (_whiteSpace == 'c') {
+				if (_whiteSpace == WS_COLLAPSE) {
 					p.isSpaces();
 				}
 				if (!p.eos()) {

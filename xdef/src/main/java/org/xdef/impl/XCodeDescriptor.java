@@ -125,7 +125,7 @@ public abstract class XCodeDescriptor extends XNode {
 		final String nsURI,
 		final short kind,
 		XCodeDescriptor x) {
-		super(nsURI, name, x.getDefPool(), kind);
+		super(nsURI, name, x.getXDPool(), kind);
 		_varsize = x._varsize;
 		_vartable = x._vartable == null ? null : x._vartable.cloneTable();
 		setOccurrence(x);

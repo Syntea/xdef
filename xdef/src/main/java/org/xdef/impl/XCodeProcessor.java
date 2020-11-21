@@ -592,7 +592,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	final void initscript() {
 		if (!_initialized2) { //not initialized.
 			XVariableTable vt =
-				(XVariableTable) _xd.getDefPool().getVariableTable();
+				(XVariableTable) _xd.getXDPool().getVariableTable();
 			for (int i = 0; i < vt.size(); i++) {
 				//set DefNull(type) to all not initialized global variables.
 				XVariable xv = vt.getXVariable(i);
@@ -675,7 +675,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case LD_GLOBAL: { // load global variable
 					XDValue val = _globalVariables[item.getParam()];
 					if (val == null) {
-						XVariable xv = ((XVariableTable)_xd.getDefPool().
+						XVariable xv = ((XVariableTable)_xd.getXDPool().
 							getVariableTable()).getXVariable(item.getParam());
 						if (xv != null && xv.isExternal()) {
 							//Null value of &{0}

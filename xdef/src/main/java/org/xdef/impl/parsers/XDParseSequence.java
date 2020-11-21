@@ -55,7 +55,7 @@ public class XDParseSequence extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 0;}
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	public boolean addTypeParser(final XDParser x) {
 		if (_itemTypes == null) {

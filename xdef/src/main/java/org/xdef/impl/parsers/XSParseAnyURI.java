@@ -14,14 +14,14 @@ public class XSParseAnyURI extends XSAbstractParseString {
 
 	public XSParseAnyURI() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 	@Override
 	public void initParams() {
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 	@Override
 	public int getLegalKeys() {
@@ -44,7 +44,7 @@ public class XSParseAnyURI extends XSAbstractParseString {
 			0;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
+	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

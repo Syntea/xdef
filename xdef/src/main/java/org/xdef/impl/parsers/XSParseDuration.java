@@ -14,12 +14,12 @@ public class XSParseDuration extends XSAbstractParseComparable {
 
 	public XSParseDuration() {
 		super();
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 	}
 
 	@Override
 	public  void initParams() {
-		_whiteSpace = 'c';
+		_whiteSpace = WS_COLLAPSE;
 		_patterns = null;
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
@@ -44,8 +44,6 @@ public class XSParseDuration extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
-	@Override
-	public byte getDefaultWhiteSpace() {return 'c';}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
