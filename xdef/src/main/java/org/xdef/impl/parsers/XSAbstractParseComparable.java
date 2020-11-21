@@ -91,9 +91,18 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 	 * @param p String parser with source and parsed object.
 	 */
 	protected final void checkDate(final XXNode xnode, final XDParseResult p) {
+		checkPatterns(p);
+		if (!p.matches()) {
+			return;
+		}
+		SDatetime d = (SDatetime) p.getParsedValue().getObject();
+		if (!d.chkDatetime()) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
+			return;
+		}
 		if (_minIncl==null&&_minExcl==null&&_maxIncl==null&&_maxExcl==null) {
 			if (xnode!=null) { // no min, max and xnode != null
-				SDatetime d = (SDatetime) p.getParsedValue().getObject();
 				if (!xnode.getXDDocument().isLegalDate(d)) {
 					//Range of values of year of date must be from &{0} to &{1}'
 					p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
