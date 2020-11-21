@@ -13,8 +13,12 @@
   This method sets the context with JSON data used in the construction mode.
 * to BNF grammar implemented new inline function `$skipToNextLine`.
 * to BNF grammar implemented new inline function `$UTFChar`.
-* to BNF grammar implemented possibility to specify case insensitive termilal
+* to BNF grammar implemented possibility to specify case insensitive terminal
   symbols (when the terminal symbol specification follows percentage character).
+* if in date and datetime types is specified any of  constraining facets
+  `%minInclusive`, `%maxInclusive`, `%minExclusive` or `%maxExclusive`, then
+  it is now skipped test of date legitimity (which is set by properties or
+  by methods `setMinDate` or `setMaxDate`).
 
 # Version 40.1.1, release-date 2020-09-17
 * corrected bugs in BNF syntax of X-definitions
