@@ -198,12 +198,6 @@ public class JsonToXml extends JsonUtil {
 	 * @param parent node where to append array.
 	 */
 	private void arrayToNodeXD(final List array, final Node parent) {
-		if (array.size() == 2 && array.get(0) instanceof Map
-			&& isSimpleValue(array.get(1))) { // map and value
-			Element e = mapToXmlXD((Map) array.get(0), parent);
-			addValueAsText(e, array.get(1));
-			return;
-		}
 		Element e = appendJSONElem(parent, J_ARRAY);
 		for (Object x: array) {
 			if (x == null) {
