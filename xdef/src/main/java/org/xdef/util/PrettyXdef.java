@@ -324,9 +324,10 @@ public class PrettyXdef extends XReader {
 	 */
 	public static void main(String... args) throws IOException {
 		final String info =
-"PrettyXdef - Formating of source files with X-definitions.\n"+
-"Usage: [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
-"where:\n"+
+"Formating of source files with X-definitions.\n"+
+"Command line arguments:\n"+
+"    [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
+"Where:\n"+
 "-o outFile  Output file or out directory. If this parameter is not\n"+
 "            specified then input file is replaced by the formated version.\n"+
 "-d outDir   Output directory. If this parameter is not specified the\n"+
@@ -336,8 +337,7 @@ public class PrettyXdef extends XReader {
 "            If n is equal to 0 no indentation is provided.\n"+
 "-e encoding Name of character set. If this parameter is not specified\n"+
 "            it will be used the original character set.\n"+
-"file        The file with source X-definition.\n"+
-"(c)2007 Syntea Software Group";
+"file        The file with source X-definition.";
 		HashMap<String, File> xdefs = new HashMap<String, File>();
 		File outDir = null;
 		String fileName = null;

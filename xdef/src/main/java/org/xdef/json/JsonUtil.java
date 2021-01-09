@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.impl.XConstants;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SUtils;
 
@@ -32,6 +33,24 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class JsonUtil extends StringParser {
+	/** JSON map. */
+	public static final String J_MAP = "map";
+	/** JSON array. */
+	public static final String J_ARRAY = "array";
+	/** JSON string item. */
+	public static final String J_STRING = "string";
+	/** JSON number item. */
+	public static final String J_NUMBER = "number";
+	/** JSON boolean item. */
+	public static final String J_BOOLEAN = "boolean";
+	/** JSON null item. */
+	public static final String J_NULL = "null";
+	/** JSON map key attribute name. */
+	public static final String J_KEYATTR = "key";
+	/** JSON any item with JSON value (XDEF mode), */
+	public static final String J_ITEM = "item";
+	/** JSON value attribute name. */
+	public static final String J_VALUEATTR = "value";
 
 	/** Flag to accept comments in JSON. */
 	private boolean _acceptComments; // default value = false
@@ -47,6 +66,272 @@ public class JsonUtil extends StringParser {
 		_acceptComments = false;
 		_genJObjects = false;
 		_jdef = false;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Common public mtethods
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Convert character to representation used in XML names.
+	 * @param c character to be converted.
+	 * @return string with converted character.
+	 */
+	public final static String genXmlHexChar(final char c) {
+		return "_x" + Integer.toHexString(c) + '_';
+	}
+
+	/** Create string from JSON string.
+	 * @param s JSON string.
+	 * @return string created from JSON string.
+	 */
+	public final static String jstringToSource(final String s) {
+		StringBuilder sb = new StringBuilder();
+		char[] chars = s.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			char ch = chars[i];
+			switch (ch) {
+				case '\\':
+					sb.append("\\\\");
+					continue;
+				case '"':
+					sb.append("\\\"");
+					continue;
+				case '\b':
+					sb.append("\\b");
+					continue;
+				case '\f':
+					sb.append("\\f");
+					continue;
+				case '\n':
+					sb.append("\\n");
+					continue;
+				case '\r':
+					sb.append("\\r");
+					continue;
+				case '\t':
+					sb.append("\\t");
+					continue;
+				default:
+					if (ch >= ' ' && Character.isDefined(ch)) {
+						sb.append(ch);
+					} else { // create \\uxxxx
+						sb.append("\\u");
+						for (int x = 12; x >= 0; x -=4) {
+							sb.append("0123456789abcdef"
+								.charAt((ch >> x) & 0xf));
+						}
+					}
+			}
+		}
+		return sb.toString();
+	}
+
+	/** Replace colon in XML name with "_x3a_".
+	 * @param s raw XML name.
+	 * @return name with colon replaced by "_x3a_".
+	 */
+	public final static String replaceColonInXMLName(final String s) {
+		int i = s.indexOf(':');
+		return i >= 0 ? s.substring(0, i) + "_x3a_" + s.substring(i + 1) : s;
+	}
+
+	/** Get prefix of XML name.
+	 * @param s XML name.
+	 * @return prefix of XML name.
+	 */
+	public final static String getNamePrefix(final String s) {
+		int i = s.indexOf(':');
+		return (i >= 0) ? s.substring(0, i) : "";
+	}
+	
+	/** Create JSON string to XML from JSON source data.
+	 * @param s JSON form of string.
+	 * @param isAttr if true then it is used in attribute, otherwise it will be
+	 * used in a text node.
+	 * @return XML string converted to JSON string.
+	 */
+	public final static String jstringToXML(final String s,
+		final boolean isAttr) {
+		if (s.isEmpty() || "null".equals(s)
+			|| "true".equals(s) || "false".equals(s)) {
+			return '"' + s + '"';
+		}
+		boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
+			|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
+			|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0
+			|| s.indexOf('\\') >= 0 || s.indexOf('"') >= 0;
+		if (!addQuot) {
+			char ch = s.charAt(0);
+			if (ch == '-' || ch >= '0' && ch <= '9') {
+				StringParser p = new StringParser(s);
+				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
+					return '"' + s + '"'; // value is number
+				}
+			}
+		}
+		if (addQuot) {
+			if (isAttr && s.equals(s.trim())) {
+				// For attributes it is not necessary to add quotes if the data
+				// does not contain leading or trailing white spaces,
+				return s;
+			} else {
+				return '"' + jstringToSource(s) + '"';
+			}
+		} else {
+			return s;
+		}
+	}
+
+	/** Generate XML form of string,
+	 * @param x Object with value.
+	 * @param isAttr if true the value is generated for attribute, otherwise
+	 * it is generated for text node value.
+	 * @return XML form of string from the argument val,
+	 */
+	public final static String genSimpleValueToXml(final Object x,
+		final boolean isAttr){
+		return x == null ? "null"
+			: x instanceof String ? jstringToXML((String) x, isAttr)
+			: x.toString();
+	}
+
+	/** Check if on the position given by index in a string it is the
+	 * form of hexadecimal character representation.
+	 * @param s inspected string.
+	 * @param index index where to start inspection.
+	 * @return true if index position represents hexadecimal form of character.
+	 */
+	final static boolean isJChar(final String s, final int index) {
+		if (index + 3 > s.length() ||
+			s.charAt(index) != '_' || s.charAt(index+1) != 'x' ||
+			hexDigit(s.charAt(index+2)) < 0) {
+			return false;
+		}
+		// parse hexdigits
+		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (hexDigit(ch) < 0) {
+				// not hexadecimal digit.
+				return ch == '_'; //if '_' return true otherwise return false
+			}
+		}
+		return false;
+	}
+	
+	/** Get XML name created from JSOM pair name.
+	 * @param s JSOM pair name.
+	 * @return XML name.
+	 */
+	public final static String toXmlName(final String s) {
+		if (s.isEmpty()) {
+			return "_x00_"; // empty string 
+		} else if (("_x00_").equals(s)) {
+			return "_x5f_x00_";
+		}
+		StringBuilder sb = new StringBuilder();
+		char ch = s.charAt(0);
+		sb.append(ch == ':' || isJChar(s, 0)
+			|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+			 != StringParser.XML_CHAR_NAME_START
+			? genXmlHexChar(ch) : ch);
+		byte firstcolon = 0;
+		for (int i = 1; i < s.length(); i++) {
+			ch = s.charAt(i);
+			if (isJChar(s, i)) {
+				sb.append(genXmlHexChar(ch));
+			} else if (ch == ':' && firstcolon == 0) {
+				firstcolon = 1;
+				sb.append(':');
+				if (i + 1 < s.length()) {
+					ch=s.charAt(++i);
+					sb.append(isJChar(s,i)
+						|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+							< StringParser.XML_CHAR_COLON
+					? genXmlHexChar(ch) : ch);
+				} else {
+					i--;
+				}
+			} else {
+				sb.append(isJChar(s,i)
+					|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+					< StringParser.XML_CHAR_COLON ? genXmlHexChar(ch) : ch);
+			}
+		}
+		return sb.toString();
+	}
+
+	/** Get JSON value from source string.
+	 * @param source string with JSON simple value
+	 * @return object with JSOM value
+	 */
+	public static Object getJValue(final String source) {
+		if (source == null) {
+			return null;
+		}
+		String src = source.trim();
+		if (src.isEmpty()) {
+			return "";
+		} else if ("null".equals(src = source.trim())) {
+			return JNull.JNULL;
+		} else if ("true".equals(src)) {
+			return Boolean.TRUE;
+		} else if ("false".equals(src)) {
+			return Boolean.FALSE;
+		}
+		switch (src.charAt(0)) {
+			case '-':
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				try {
+					if (src.indexOf('.') > 0
+						|| src.indexOf('e') > 0 || src.indexOf('E') > 0) {
+						return new BigDecimal(src);
+					} else {
+						try {
+							return Long.parseLong(src);
+						} catch (Exception ex) {
+							return new BigInteger(src);
+						}
+					}
+				} catch (Exception ex) {
+					return src; // error; so return raw value ???
+				}
+		}
+		return jstringFromSource(src); // JSON String
+	}
+
+	/** Create JSON string from source string.
+	 * @param src XML form of string.
+	 * @return XML form of string converted to JSON.
+	 */
+	public static final String jstringFromSource(final String src) {
+		if (src == null || src.isEmpty()) {
+			return src;
+		}
+		// remove starting and ending '"'
+		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
+			&& src.charAt(src.length() - 1) != '\\')
+			? src.substring(1, src.length() - 1) : src;
+		return sourceToJstring(s);
+	}
+
+	/** Create JSON string to XML from JSON source data.
+	 * @param obj JSON object.
+	 * @param isAttr if true then it is used in attribute, otherwise it will be
+	 * used in a text node.
+	 * @return XML string converted to JSON string.
+	 */
+	public static final String jvalueToXML(final Object obj,
+		final boolean isAttr) {
+		return jstringToXML(jvalueToString(obj), isAttr);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,29 +387,6 @@ public class JsonUtil extends StringParser {
 	public final static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
 		return i > 15 ? i - 6 : i;
-	}
-
-	/** Check if on the position given by index in a string it is the
-	 * form of hexadecimal character representation.
-	 * @param s inspected string.
-	 * @param index index where to start inspection.
-	 * @return true if index position represents hexadecimal form of character.
-	 */
-	final static boolean isJChar(final String s, final int index) {
-		if (index + 3 > s.length() ||
-			s.charAt(index) != '_' || s.charAt(index+1) != 'x' ||
-			hexDigit(s.charAt(index+2)) < 0) {
-			return false;
-		}
-		// parse hexdigits
-		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (hexDigit(ch) < 0) {
-				// not hexadecimal digit.
-				return ch == '_'; //if '_' return true otherwise return false
-			}
-		}
-		return false;
 	}
 
 	/** Read value of JSON string.
@@ -671,48 +933,6 @@ public class JsonUtil extends StringParser {
 		return sb.toString();
 	}
 
-	public static String jstringToSource(final String str) {
-		StringBuilder sb = new StringBuilder();
-		char[] chars = str.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			char ch = chars[i];
-			switch (ch) {
-				case '\\':
-					sb.append("\\\\");
-					continue;
-				case '"':
-					sb.append("\\\"");
-					continue;
-				case '\b':
-					sb.append("\\b");
-					continue;
-				case '\f':
-					sb.append("\\f");
-					continue;
-				case '\n':
-					sb.append("\\n");
-					continue;
-				case '\r':
-					sb.append("\\r");
-					continue;
-				case '\t':
-					sb.append("\\t");
-					continue;
-				default:
-					if (ch >= ' ' && Character.isDefined(ch)) {
-						sb.append(ch);
-					} else { // create \\uxxxx
-						sb.append("\\u");
-						for (int x = 12; x >= 0; x -=4) {
-							sb.append("0123456789abcdef"
-								.charAt((ch >> x) & 0xf));
-						}
-					}
-			}
-		}
-		return sb.toString();
-	}
-
 	/** Add the string created from JSON jvalue object to StringBuilder.
 	 * @param obj JSON object to be created to String.
 	 * @return sb created string.
@@ -851,8 +1071,7 @@ public class JsonUtil extends StringParser {
 	 * @param a2 second array.
 	 * @return true if and only if both arrays are equal.
 	 */
-	private static boolean equalArray(final List<Object> a1,
-		final List<Object> a2) {
+	private static boolean equalArray(final List a1, final List a2) {
 		if (a1.size() == a2.size()) {
 			for (int i = 0; i < a1.size(); i++) {
 				if (!equalValue(a1.get(i), a2.get(i))) {
@@ -869,8 +1088,7 @@ public class JsonUtil extends StringParser {
 	 * @param m2 second map.
 	 * @return true if and only if both maps are equal.
 	 */
-	private static boolean equalMap(final Map<String, Object> m1,
-		final Map<String, Object>m2) {
+	private static boolean equalMap(final Map m1, final Map m2) {
 		if (m1.size() != m2.size()) {
 			return false;
 		}
@@ -941,7 +1159,6 @@ public class JsonUtil extends StringParser {
 	 * @return true if and only if both values are equal.
 	 * @throws SRuntimeException if objects are incomparable
 	 */
-	@SuppressWarnings({"unchecked", "unchecked"})
 	private static boolean equalValue(final Object o1, final Object o2) {
 		if (o1 == null || o2 instanceof JNull) {
 			return o2 == null || o2 instanceof JNull;
@@ -974,7 +1191,7 @@ public class JsonUtil extends StringParser {
 	 * @param j2 second object with JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
-	public static final boolean jsonEqual(final Object j1, final Object j2) {
+	public final static boolean jsonEqual(final Object j1, final Object j2) {
 		return (j1 == null && j2 == null)
 			|| (j1 != null && j2 != null && equalValue(j1,j2));
 	}
@@ -1099,191 +1316,5 @@ public class JsonUtil extends StringParser {
 	 */
 	public static final Element jsonToXmlXD(final Object json) {
 		return JsonToXml.toXmlXD(json);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Get JSON value from source string.
-	 * @param source string with JSON simple value
-	 * @return object with JSOM value
-	 */
-	public static Object getJValue(final String source) {
-		if (source == null) {
-			return null;
-		}
-		String src = source.trim();
-		if (src.isEmpty()) {
-			return "";
-		} else if ("null".equals(src = source.trim())) {
-			return JNull.JNULL;
-		} else if ("true".equals(src)) {
-			return Boolean.TRUE;
-		} else if ("false".equals(src)) {
-			return Boolean.FALSE;
-		}
-		switch (src.charAt(0)) {
-			case '-':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				try {
-					if (src.indexOf('.') > 0
-						|| src.indexOf('e') > 0 || src.indexOf('E') > 0) {
-						return new BigDecimal(src);
-					} else {
-						try {
-							return Long.parseLong(src);
-						} catch (Exception ex) {
-							return new BigInteger(src);
-						}
-					}
-				} catch (Exception ex) {
-					return src; // error; so return raw value ???
-				}
-		}
-		return jstringFromSource(src); // JSON String
-	}
-
-	/** Create JSON string from source string.
-	 * @param src XML form of string.
-	 * @return XML form of string converted to JSON.
-	 */
-	public static final String jstringFromSource(final String src) {
-		if (src == null || src.isEmpty()) {
-			return src;
-		}
-		// remove starting and ending '"'
-		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"'
-			&& src.charAt(src.length() - 1) != '\\')
-			? src.substring(1, src.length() - 1) : src;
-		return sourceToJstring(s);
-	}
-
-	/** Create JSON string to XML from JSON source data.
-	 * @param obj JSON object.
-	 * @param isAttr if true then it is used in attribute, otherwise it will be
-	 * used in a text node.
-	 * @return XML string converted to JSON string.
-	 */
-	public static final String jvalueToXML(final Object obj,
-		final boolean isAttr) {
-		return jstringToXML(jvalueToString(obj), isAttr);
-	}
-
-	/** Create JSON string to XML from JSON source data.
-	 * @param source JSON form of string.
-	 * @param isAttr if true then it is used in attribute, otherwise it will be
-	 * used in a text node.
-	 * @return XML string converted to JSON string.
-	 */
-	public static final String jstringToXML(final String source,
-		final boolean isAttr) {
-		if (source.isEmpty() || "null".equals(source)
-			|| "true".equals(source) || "false".equals(source)) {
-			return '"' + source + '"';
-		}
-		boolean addQuot = source.indexOf(' ') >= 0 || source.indexOf('\t') >= 0
-			|| source.indexOf('\n') >= 0 || source.indexOf('\r') >= 0
-			|| source.indexOf('\f') >= 0 || source.indexOf('\b') >= 0
-			|| source.indexOf('\\') >= 0 || source.indexOf('"') >= 0;
-		if (!addQuot) {
-			char ch = source.charAt(0);
-			if (ch == '-' || ch >= '0' && ch <= '9') {
-				StringParser p = new StringParser(source);
-				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-					return '"' + source + '"'; // value is number
-				}
-			}
-		}
-		if (addQuot) {
-			String s = jstringToSource(source);
-			if (isAttr && s.equals(s.trim())) {
-				// For attributes it is not necessary to add quotes if the data
-				// does not contain leading or trailing white spaces,
-				return s;
-			} else {
-				return '"' + s + '"';
-			}
-		} else {
-			return source;
-		}
-	}
-
-	/** Get XML name created from JSOM pair name.
-	 * @param s JSOM pair name.
-	 * @return XML name.
-	 */
-	public final static String toXmlName(final String s) {
-		if (s.isEmpty()) {
-			return "_"; // empty string
-		} else if (("_").equals(s)) {
-			return "_x5f_";
-		}
-		StringBuilder sb = new StringBuilder();
-		char ch = s.charAt(0);
-		sb.append(isJChar(s, 0) || !Character.isJavaIdentifierStart(ch)
-			? genXmlHexChar(ch) : ch);
-//			|| StringParser.getXmlCharType(ch, XConstants.XML10)
-//				!= StringParser.XML_CHAR_NAME_START ? genXmlHexChar(ch) : ch);
-		byte firstcolon = 0;
-		for (int i = 1; i < s.length(); i++) {
-			ch = s.charAt(i);
-			if (isJChar(s, i)) {
-				sb.append(genXmlHexChar(ch));
-			} else if (ch == ':' && firstcolon == 0) {
-				firstcolon = 1;
-				sb.append(':');
-				if (i + 1 < s.length()) {
-					ch=s.charAt(++i);
-					sb.append(isJChar(s,i)||!Character.isJavaIdentifierStart(ch)
-					? genXmlHexChar(ch) : ch);
-				} else {
-					i--;
-				}
-			} else {
-				sb.append(Character.isJavaIdentifierPart(ch)
-					? ch : genXmlHexChar(ch));
-			}
-		}
-		return sb.toString();
-	}
-
-	/** Convert character to representation used in XML names. */
-	private static String genXmlHexChar(final char c) {
-		return "_x" + Integer.toHexString(c) + '_';
-	}
-
-	/** Create JSON name from XML name.
-	 * @param name XML name.
-	 * @return JSON name.
-	 */
-	public static String toJsonName(final String name) {
-		if ("_".equals(name)) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < name.length(); i++) {
-			char ch = name.charAt(i);
-			if (ch == '_' && i + 2 < name.length()) {
-				if (isJChar(name, i)) {
-					int ndx = name.indexOf('_', i+1);
-					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
-					sb.append((char) x);
-					i = ndx;
-				} else {
-					sb.append('_');
-				}
-			} else {
-				sb.append(ch);
-			}
-		}
-		return sb.toString();
 	}
 }

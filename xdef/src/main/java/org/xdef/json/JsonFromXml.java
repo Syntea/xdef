@@ -18,6 +18,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
 /** Conversion of XML to JSON (both versions - W3C and XDEF)
  * @author Vaclav Trojan
  */
@@ -27,6 +28,34 @@ class JsonFromXml extends JsonToXml {
 
 	/** Prepare instance of JX. */
 	JsonFromXml() {super();}
+
+	/** Create JSON named value from XML name.
+	 * @param name XML name.
+	 * @return JSON name.
+	 */
+	private static String toJsonName(final String name) {
+		if ("_x00_".equals(name)) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		int len = name.length();
+		for (int i = 0; i < len; i++) {
+			char ch = name.charAt(i);
+			if (ch == '_' && i + 2 < len) {
+				if (isJChar(name, i)) {
+					int ndx = name.indexOf('_', i+1);
+					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
+					sb.append((char) x);
+					i = ndx;
+				} else {
+					sb.append('_');
+				}
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
 
 	/** Create JSON Map with attributes from element.
 	 * @param e element with attributes.

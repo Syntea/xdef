@@ -25,17 +25,17 @@ public interface XDParseResult extends XDValue, SParser {
 
 	/** Get text until current position and the first occurrence of a white
 	 * space or the end of source. Set current position after the token.
-	 * @return found token or <tt>null</tt>.
+	 * @return found token or null.
 	 */
 	public String nextToken();
 
 	/** Check if given data matches parser (result is same as !errors()).
-	 * @return <tt>true</tt> if and only if the data were parsed without error.
+	 * @return true if and only if the data were parsed without error.
 	 */
 	public boolean matches();
 
 	/** Get reporter from parsing.
-	 * @return ArrayReporter containing parsing errors or <tt>null</tt>.
+	 * @return ArrayReporter containing parsing errors or null.
 	 */
 	public ArrayReporter getReporter();
 

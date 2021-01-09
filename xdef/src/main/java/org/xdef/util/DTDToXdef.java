@@ -102,7 +102,8 @@ public class DTDToXdef {
 	 */
 	public static void main(String... args) {
 		final String info =
-"XsdToXdef parameters:\n" +
+"Convertor of DTD to X-definition.\n"+			
+"Command line arguments:\n"+
 "  -in, --input <PATH> input schema file location\n" +
 "  -out, --output <PATH> output file or directory name\n" +
 "  -r, --root <ROOT> name of root element \n" +

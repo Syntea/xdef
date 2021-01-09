@@ -1,0 +1,60 @@
+<js:map Title="Music Library" xmlns:js="http://www.xdef.org/json/4.0">
+  <Artists>
+    <js:array>
+      <js:map Name="Queen">
+        <Albums>
+          <js:array>
+            <js:map Label="EMI / Hollywood Records"
+              Name="A Night at the Opera"
+              ReleaseDate="1975-11-21">
+              <Genre>
+                <js:array>
+                  <js:item>
+                    Rock
+                  </js:item>
+                </js:array>
+              </Genre>
+              <Tracks>
+                <js:array>
+                  <js:map Duration="03:43"
+                    Title="Death on Two Legs"
+                    Writer="Freddie Mercury"/>
+                  <js:map Duration="01:08"
+                    Title="Sunday Afternoon"
+                    Writer="Freddie Mercury"/>
+                </js:array>
+              </Tracks>
+            </js:map>
+            <js:map Label="EMI, Parlophone / Elektra, Hollywood"
+              Name="A Day at the Races"
+              ReleaseDate="1976-12-10">
+              <Genre>
+                <js:array>
+                  <js:item>
+                    Rock
+                  </js:item>
+                  <js:item>
+                    Pop
+                  </js:item>
+                </js:array>
+              </Genre>
+              <Tracks>
+                <js:array>
+                  <js:map Duration="04:48"
+                    Title="Tie Your Mother Down"
+                    Writer="Brian May"/>
+                  <js:map Duration="05:09"
+                    Title="You Take My Breath Away"
+                    Writer="Freddie Mercury"/>
+                </js:array>
+              </Tracks>
+            </js:map>
+          </js:array>
+        </Albums>
+      </js:map>
+      <Name>
+        "Tina Turner"
+      </Name>
+    </js:array>
+  </Artists>
+</js:map>

@@ -9,17 +9,17 @@ import org.xdef.sys.SRuntimeException;
  */
 public interface XDResultSet extends XDValue {
 
-	/** Get next item of this iterator or <tt>null</tt>. If the object
+	/** Get next item of this iterator or null. If the object
 	 * has to be closed then if no more values are available the close() method
 	 * must be invoked.
 	 * @param xnode XXnode from which this method was called (may be null).
-	 * @return the next value of this iterator or return <tt>null</tt>.
+	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
 	 */
 	public XDValue nextXDItem(XXNode xnode) throws SRuntimeException;
 
-	/** Get the item returned by last nextItem method or return <tt>null</tt>.
-	 * @return item returned by last nextItem method or return <tt>null</tt>.
+	/** Get the item returned by last nextItem method or return null.
+	 * @return item returned by last nextItem method or return null.
 	 */
 	public XDValue lastXDItem();
 
@@ -44,29 +44,29 @@ public interface XDResultSet extends XDValue {
 	public int getCount();
 
 	/** Return value of iterated object as string if it has a string value
-	 * (text of element); otherwise return <tt>null</tt>.
-	 * @return value of iterated object as string or return <tt>null</tt>.
+	 * (text of element); otherwise return null.
+	 * @return value of iterated object as string or return null.
 	 */
 	public String itemAsString();
 
 	/** If the iterated object is a context then return relevant item value
-	 * as string; otherwise return <tt>null</tt>.
+	 * as string; otherwise return null.
 	 * @param index the index of item.
-	 * @return value of the specified item as a string or return <tt>null</tt>.
+	 * @return value of the specified item as a string or return null.
 	 */
 	public String itemAsString(int index);
 
 	/** If the iterated object has named items then return relevant item value
-	 * as string; otherwise return <tt>null</tt>.
+	 * as string; otherwise return null.
 	 * @param name name of map item.
-	 * @return value of map item as a string or return <tt>null</tt>.
+	 * @return value of map item as a string or return null.
 	 */
 	public String itemAsString(String name);
 
-	/** If the iterated object has named items, then return <tt>true</tt> if
+	/** If the iterated object has named items, then return true if
 	 * the specified item exists.
 	 * @param name name item.
-	 * @return <tt>true</tt> if and only if the specified item exists.
+	 * @return true if and only if the specified item exists.
 	 */
 	public boolean hasItem(String name);
 

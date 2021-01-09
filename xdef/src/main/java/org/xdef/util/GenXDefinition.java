@@ -87,12 +87,14 @@ public class GenXDefinition {
 	 */
 	public static final void main(String... args) {
 		final String info =
-"GenXDefinition - generate X-definitions from given XML.\n" +
-"Usage: -i input_file -o output file [-e encoding]\n"+
+"Generate X-definition from XML.\n" +
+"\n"+
+"Command line arguments:\n"+
+"   -i input_file -o output file [-e encoding]\n"+
+"Where:\n"+
 "  -i input    file intput file\n" +
 "  -o output   file\n" +
-"  -e encoding name of character set encoding\n"+
-"\n(c)2008 Syntea Software group\n";
+"  -e encoding name of character set encoding";
 		if (args.length < 2) {
 			if (args.length == 1
 				&& ("-h".equals(args[0]) || "/h".equals(args[0]))) {

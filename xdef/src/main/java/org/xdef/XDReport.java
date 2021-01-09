@@ -8,7 +8,7 @@ import org.xdef.sys.Report;
 public interface XDReport extends XDValue {
 
 	/** Return the value of DefReport object.
-	 * @return the org.xdef.xdef.sys.Report value of the object.
+	 * @return the org.xdef.sys.Report value of the object.
 	 */
 	public Report reportValue();
 
@@ -23,7 +23,7 @@ public interface XDReport extends XDValue {
 
 	/** Get value of parameter from modification string.
 	 * @param name parameter name.
-	 * @return value of the parameter or <tt>null</tt>.
+	 * @return value of the parameter or null.
 	 */
 	public String getParameter(final String name);
 
@@ -34,12 +34,12 @@ public interface XDReport extends XDValue {
 	public String toString(String language);
 
 	/** Get report ID.
-	 * @return report ID or <tt>null</tt>.
+	 * @return report ID or null.
 	 */
 	public String getMsgID();
 
 	/** Get primary text.
-	 * @return the primary text or of the report <tt>null</tt>.
+	 * @return the primary text or of the report null.
 	 */
 	public String getText();
 

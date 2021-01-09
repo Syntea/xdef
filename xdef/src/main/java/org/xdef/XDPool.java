@@ -43,7 +43,7 @@ public interface XDPool extends Serializable {
 	public boolean chkCompatibility(final String version);
 
 	/** Create new XDDocument.
-	 * @param name name of X-definition (or <tt>null</tt>) or path to model.
+	 * @param name name of X-definition (or null) or path to model.
 	 * @return Created XDDocument.
 	 */
 	public XDDocument createXDDocument(String name);
@@ -54,8 +54,8 @@ public interface XDPool extends Serializable {
 	public XDDocument createXDDocument();
 
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or <tt>null</tt>) if
-	 * X-definition without name is checked.
+	 * @param name the name of X-definition (or either null or empty string
+	 * if X-definition without name is checked).
 	 * @return true if and only if the X-definition of given name exists in
 	 * the XDPool.
 	 */
