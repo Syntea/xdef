@@ -12,7 +12,7 @@
       "Albums": [
         {$script: "occurs 1..*",
           "Name": "string()",
-          "Genre": [$oneOf,
+          "Genre": [ $oneOf,
                "genre()",
                ["occurs 1..*; genre()"]
            ],

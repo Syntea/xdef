@@ -1,6 +1,5 @@
 package org.xdef.impl.xml;
 
-import org.xdef.msg.SYS;
 import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import java.util.ArrayList;
@@ -9,6 +8,9 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
 /** Implementation of interface javax.xml.namespace.NamespaceContext.
+ * There are implemented more methods pushContext(), popContext(),
+ * getRecentPrefixes(), setPrefix(String), getAllNamespaceURIs(),
+ * getAllPrefixes() and clearContext().
  * @author Vaclav Trojan
  */
 public class KNamespace implements NamespaceContext {
@@ -16,7 +18,6 @@ public class KNamespace implements NamespaceContext {
 	private final int STEP = 4;
 	/** Next steps of stack size (must be >= STEP).*/
 	private final int STEP2 = 8;
-
 	/** Actual number of prefixes.*/
 	private int _size;
 	/** Stack of sizes of namespace context.*/
@@ -32,63 +33,6 @@ public class KNamespace implements NamespaceContext {
 	 * for prefixes "xml" and "xmlns".
 	 */
 	public KNamespace() {}
-
-	private void init() {
-		//allocate arrays
-		_stack = new int[STEP];
-		_prefixes = new String[STEP];
-		_uris = new String[STEP];
-		//set prefixes "xml" and "xmlns"
-		_prefixes[0] = XMLConstants.XML_NS_PREFIX;
-		_uris[0] = XMLConstants.XML_NS_URI;
-		_prefixes[1] = XMLConstants.XMLNS_ATTRIBUTE;
-		_uris[1] = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-		//pushContext
-		_stack[0] = _size = 2;
-		_stackTop = 1;
-	}
-
-	/** Creates a new instance of KNamespaceImpl with default items
-	 * for prefixes "xml" and "xmlns" and one prefix and nsUri.
-	 * @param prefix String with prefix (may be empty string).
-	 * @param uri namespace URI assigned to this prefix.
-	 */
-	public KNamespace(final String prefix, final String uri) {
-		init();
-		setPrefix(prefix, uri);
-	}
-
-	/** Creates a new instance of KNamespaceImpl with default items
-	 * for prefixes "xml" and "xmlns" and prefixes and uris from arguments.
-	 * Size of both arguments must be equal.
-	 * @param prefix array of strings with prefixes.
-	 * @param uri array of strings with namespace URIa assigned to prefixes.
-	 */
-	public KNamespace(final String[] prefix, final String[] uri) {
-		init();
-		if (prefix.length != uri.length) {
-			throw new SRuntimeException(SYS.SYS080); //Index out of array
-		}
-		for (int i = 0; i < prefix.length; i++) {
-			setPrefix(prefix[i], uri[i]);
-		}
-	}
-
-	/** Creates a new instance of KNamespaceImpl as clone of given context.
-	 * @param ns Context from which new instance will be created.
-	 */
-	public KNamespace(KNamespace ns) {
-		if (ns != null && ns._size > 0) {
-			_stack = new int[ns._stack.length];
-			System.arraycopy(ns._stack, 0, _stack, 0, _stack.length);
-			_stackTop = ns._stackTop;
-			_prefixes = new String[ns._prefixes.length];
-			System.arraycopy(ns._prefixes, 0, _prefixes, 0, _prefixes.length);
-			_uris = new String[ns._uris.length];
-			System.arraycopy(ns._uris, 0, _uris, 0, _uris.length);
-			_size = ns._size;
-		}
-	}
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of methods from interface NamespaceContext.
@@ -151,6 +95,21 @@ public class KNamespace implements NamespaceContext {
 // Methods of KNamespace.
 ////////////////////////////////////////////////////////////////////////////////
 
+	private void init() {
+		//allocate arrays
+		_stack = new int[STEP];
+		_prefixes = new String[STEP];
+		_uris = new String[STEP];
+		//set prefixes "xml" and "xmlns"
+		_prefixes[0] = XMLConstants.XML_NS_PREFIX;
+		_uris[0] = XMLConstants.XML_NS_URI;
+		_prefixes[1] = XMLConstants.XMLNS_ATTRIBUTE;
+		_uris[1] = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+		//pushContext
+		_stack[0] = _size = 2;
+		_stackTop = 1;
+	}
+
 	/** Push new namespace context space. */
 	public final void pushContext() {
 		if (_size == 0) {
@@ -170,8 +129,9 @@ public class KNamespace implements NamespaceContext {
 		if (_stackTop <= 0) {
 			return;
 		}
+		_stackTop--;
 		int prevSize;
-		if (_size > (prevSize = _stack[--_stackTop])) {
+		if (_size > (prevSize = _stack[_stackTop])) {
 			if (prevSize + STEP2 <= _uris.length) {
 				String[] w = _prefixes;
 				_prefixes = new String[prevSize + STEP];
@@ -223,11 +183,19 @@ public class KNamespace implements NamespaceContext {
 			init();
 		}
 		String s = prefix == null
-			? XMLConstants.DEFAULT_NS_PREFIX : prefix.trim().intern();
+			? XMLConstants.DEFAULT_NS_PREFIX : prefix.trim();
 		if (s.startsWith("xml")) {
 			throw new SRuntimeException(XML.XML802, s); //Cant set prefix &{0}
 		}
+		String myUri = uri==null || uri.trim().equals(XMLConstants.NULL_NS_URI)
+			? null : uri.trim();
 		int ndx = _size;
+		for (int i = 0; i < _size; i++) {
+			if (_prefixes[i].equals(prefix)) {
+				_uris[ndx] = myUri;
+				return;
+			}
+		}
 		if (++_size >= _prefixes.length) {
 			String[] w = _prefixes;
 			_prefixes = new String[ndx + STEP];
@@ -237,8 +205,7 @@ public class KNamespace implements NamespaceContext {
 			System.arraycopy(w, 0, _uris, 0, ndx);
 		}
 		_prefixes[ndx] = s;
-		_uris[ndx] = uri == null || uri.trim().equals(XMLConstants.NULL_NS_URI)
-			? null : uri.trim().intern();
+		_uris[ndx] = myUri;
 	}
 
 	/** Get array with all available namespace URIs.
@@ -277,5 +244,15 @@ public class KNamespace implements NamespaceContext {
 		if (_size > 0) {
 			init();
 		}
+	}
+
+	@Override
+	public final String toString() {
+		StringBuilder result = new StringBuilder();
+		for(String prefix: getAllPrefixes()) {
+			result.append("\n\"").append(prefix).append("\": \"")
+				.append(getNamespaceURI(prefix)).append('"');
+		}
+		return "Level=" + _stackTop + result;
 	}
 }

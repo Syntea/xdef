@@ -6,7 +6,7 @@ package org.xdef;
 public interface XDRegexResult extends XDValue {
 
 	/** Check if given data matches the regular expression.
-	 * @return <tt>true</tt> if and only if the data matches regular expression.
+	 * @return true if and only if the data matches regular expression.
 	 */
 	public boolean matches();
 

@@ -18,24 +18,6 @@ import org.w3c.dom.Node;
  * @author Vaclav Trojan
  */
 public class JsonToXml extends JsonUtil {
-	/** JSON map. */
-	public static final String J_MAP = "map";
-	/** JSON array. */
-	public static final String J_ARRAY = "array";
-	/** JSON string item. */
-	public static final String J_STRING = "string";
-	/** JSON number item. */
-	public static final String J_NUMBER = "number";
-	/** JSON boolean item. */
-	public static final String J_BOOLEAN = "boolean";
-	/** JSON null item. */
-	public static final String J_NULL = "null";
-	/** JSON map key attribute name. */
-	public static final String J_KEYATTR = "key";
-	/** JSON any item with JSON value (XDEF mode), */
-	public static final String J_ITEM = "item";
-	/** JSON value attribute name. */
-	public static final String J_VALUEATTR = "value";
 
 	/** Prefix of JSON namespace. */
 	public String _jsPrefix = XDConstants.JSON_NS_PREFIX;
@@ -51,15 +33,6 @@ public class JsonToXml extends JsonUtil {
 	/** Create instance of JsonToXml. */
 	public JsonToXml() {super();}
 
-	/** Get prefix of XML name.
-	 * @param s XML name.
-	 * @return prefix of XML name.
-	 */
-	public final static String getNamePrefix(final String s) {
-		int i = s.indexOf(':');
-		return (i >= 0) ? s.substring(0, i) : "";
-	}
-
 	/** Check if the argument is a simple value. Simple value is null,
 	 * number, boolean, string or JValue with object which is simple value.
 	 * @param val Object to be tested.
@@ -71,23 +44,6 @@ public class JsonToXml extends JsonUtil {
 			|| val instanceof String || val instanceof JValue
 			&& ((o=((JValue) val).getValue()) == null || o instanceof Number
 				|| o instanceof Boolean || o instanceof String);
-	}
-
-	private Element genJElement(final String name) {
-		if (_jsPrefix.isEmpty()) {
-			return _doc.createElementNS(_jsNamespace, name);
-		} else {
-			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
-		}
-	}
-
-	/** Replace colon in XML name with "_x3a_".
-	 * @param s raw XML name.
-	 * @return name with colon replaced by "_x3a_".
-	 */
-	private static String replaceColonInXMLName(final String s) {
-		int i = s.indexOf(':');
-		return i >= 0 ? s.substring(0, i) + "_x3a_" + s.substring(i + 1) : s;
 	}
 
 	/** Create and append new element and push context.
@@ -168,17 +124,6 @@ public class JsonToXml extends JsonUtil {
 		}
 	}
 
-	/** Generate XML form of string,
-	 * @param val Object with value.
-	 * @return XML form of string from the argument val,
-	 */
-	private static String genSimpleValueToXml(final Object val,
-		final boolean isAttr) {
-		return val == null ? "null"
-			: val instanceof String ? jstringToXML((String) val, isAttr)
-			: val.toString();
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to XML {XDEF version}
 ////////////////////////////////////////////////////////////////////////////////
@@ -198,12 +143,6 @@ public class JsonToXml extends JsonUtil {
 	 * @param parent node where to append array.
 	 */
 	private void arrayToNodeXD(final List array, final Node parent) {
-		if (array.size() == 2 && array.get(0) instanceof Map
-			&& isSimpleValue(array.get(1))) { // map and value
-			Element e = mapToXmlXD((Map) array.get(0), parent);
-			addValueAsText(e, array.get(1));
-			return;
-		}
 		Element e = appendJSONElem(parent, J_ARRAY);
 		for (Object x: array) {
 			if (x == null) {
@@ -372,10 +311,18 @@ public class JsonToXml extends JsonUtil {
 // JSON to XML (version W3C)
 ////////////////////////////////////////////////////////////////////////////////
 
+	private Element genJElementW3C(final String name) {
+		if (_jsPrefix.isEmpty()) {
+			return _doc.createElementNS(_jsNamespace, name);
+		} else {
+			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
+		}
+	}
+
 	private Element genValueW3C(final Object val, final Node parent) {
 		Element e;
 		if (val == null) {
-			e = genJElement(J_ITEM);
+			e = genJElementW3C(J_ITEM);
 			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
 		} else if (val instanceof Map) {
 			Map m = (Map) val;
@@ -383,7 +330,7 @@ public class JsonToXml extends JsonUtil {
 		} else if (val instanceof List) {
 			e = genArrayW3C((List) val);
 		} else {
-			e = genJElement(J_ITEM);
+			e = genJElementW3C(J_ITEM);
 			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
 		}
 		parent.appendChild(e);
@@ -391,7 +338,7 @@ public class JsonToXml extends JsonUtil {
 	}
 
 	private Element genArrayW3C(final List array) {
-		Element e = genJElement(J_ARRAY);
+		Element e = genJElementW3C(J_ARRAY);
 		for (Object val: array) {
 			genValueW3C(val, e);
 		}
@@ -399,7 +346,7 @@ public class JsonToXml extends JsonUtil {
 	}
 
 	private Element genMapW3C(final Map map) {
-		Element e = genJElement(J_MAP);
+		Element e = genJElementW3C(J_MAP);
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();

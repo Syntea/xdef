@@ -13,7 +13,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-/** Represents XML Schema to X-definition convertor.
+/** Conversion of XML Schema to X-definition.
  * (see {@link org.xdef.util.XsdToXdef#main(String[])})
  * @author Alexandrov
  */
@@ -246,13 +246,15 @@ public class XsdToXdef {
 	 */
 	public static final void main(final String... args) {
 		String info =
-"Using XsdToXdef: \n"
-+ "-in, --input <PATH> input main schema location\n"
-+ "-out, --output <PATH> output file or directory name\n"
-+ "-s, --separated every schema to standalone xdefinition file\n"
-+ "-p, --xdefPrefix <PREFIX> prefix of X-Definition namespace\n"
-+ "-l, --logFile <PATH> log file name\n"
-+ "-h, --help help";
+"Conversion of XML Schema to X-definition.\n" +
+"\n"+
+"Command line arguments:\n"+
+"-in, --input <PATH> input main schema location\n"+
+"-out, --output <PATH> output file or directory name\n"+
+"-s, --separated every schema to standalone xdefinition file\n"+
+"-p, --xdefPrefix <PREFIX> prefix of X-Definition namespace\n"+
+"-l, --logFile <PATH> log file name\n"+
+"-h, --help help";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Parameters missing!\n" + info);
 		}

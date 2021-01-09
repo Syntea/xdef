@@ -64,8 +64,7 @@ public final class XDFactory {
 	}
 
 	/** Creates instance of XDBuilder with properties.
-	 * @param props Properties or <tt>null</tt> -
-	 * see {@link org.xdef.XDConstants}.
+	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
 	public static XDBuilder getXDBuilder(final Properties props) {
@@ -74,8 +73,7 @@ public final class XDFactory {
 
 	/** Creates instance of XDBuilder with properties.
 	 * @param reporter the ReportWriter to be used for error reporting.
-	 * @param props Properties or <tt>null</tt> -
-	 * see {@link org.xdef.XDConstants}.
+	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
 	public static XDBuilder getXDBuilder(final ReportWriter reporter,
@@ -202,7 +200,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from sources.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of strings with X-definition file names.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -215,7 +213,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from URLs.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of URLs with X-definition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -228,7 +226,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from files.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of files with X-definition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -241,7 +239,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from InputStreams.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of files with X-definition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -254,7 +252,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from sources and assign the sourceId to each source.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param sources array with source data with X-definitions source data.
 	 * (The type of items can only be either the InputStreams or the String
 	 * containing an XML document).
@@ -272,7 +270,7 @@ public final class XDFactory {
 	}
 
 	/** Compile XDPool from source.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of sources, source pairs or external classes.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -284,7 +282,7 @@ public final class XDFactory {
 
 	/** Compile XDPool from source.
 	 * @param reporter the ReportWriter to be used for error reporting.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param params list of sources, source pairs or external classes.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
@@ -302,7 +300,7 @@ public final class XDFactory {
 
 	/** Parse XML with X-definition declared in source input stream.
 	 * @param source where to read XML.
-	 * @param reporter used for error messages or <tt>null</tt>.
+	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -313,7 +311,7 @@ public final class XDFactory {
 
 	/** Parse XML with X-definition declared in source.
 	 * @param source URL, pathname direct to XML or direct XML.
-	 * @param reporter used for error messages or <tt>null</tt>.
+	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -324,7 +322,7 @@ public final class XDFactory {
 
 	/** Creates XDInput from InputStream.
 	 * @param value the stream.
-	 * @param xmlFormat if <tt>true</tt> the input data are in XML format,
+	 * @param xmlFormat if true the input data are in XML format,
 	 * otherwise in string format.
 	 * @return the XDInput object.
 	 */
@@ -335,7 +333,7 @@ public final class XDFactory {
 
 	/** Creates XDInput from InputStream.
 	 * @param value the stream.
-	 * @param xmlFormat if <tt>true</tt> the input data are in XML format,
+	 * @param xmlFormat if true the input data are in XML format,
 	 * otherwise in string format.
 	 * @return the XDInput object.
 	 */
@@ -362,7 +360,7 @@ public final class XDFactory {
 
 	/** Creates XDOutput from Writer.
 	 * @param value Writer object.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if true the output will be in XML format,
 	 * otherwise in string format.
 	 * @return the XDOutput object.
 	 */
@@ -458,7 +456,7 @@ public final class XDFactory {
 	/** Creates XDXmlStream writer object from java.io.Writer.
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 */
@@ -472,7 +470,7 @@ public final class XDFactory {
 	/** Creates XDXmlStream writer object from java.io.Writer.
 	 * @param filename where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 * @throws IOException if an error occurs.

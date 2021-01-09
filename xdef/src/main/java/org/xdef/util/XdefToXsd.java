@@ -20,9 +20,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
-import org.xdef.impl.XPool;
 
-/** Convertor of X-definition to XML Schema.
+/**Conversion of X-definition to XML Schema.
  * (see {@link org.xdef.util.XdefToXsd#main(String[])})
  * @author Ilia Alexandrov
  */
@@ -235,13 +234,15 @@ public final class XdefToXsd {
 		String schemaFileExt = null;
 		PrintStream out = System.out;
 		final String info =
-"Using XdefToXsd: \n"
-+ "-i  <PATH> list of input sources with X-definitions\n"
-+ "-o  <PATH> output directory\n"
-+ "-m  name of root model (optional)\n"
-+ "-x  name of X-definition (optional)\n"
-+ "-sp prefix of XML schema namespace (optional, default is \"xs\")\n"
-+ "-se extension of schema file (optional, default is \"xsd\")";
+"Conversion of X-definition to XML Schema\n"+
+"\n"+
+"Command line arguments:\n"+
+"-i  <PATH> list of input sources with X-definitions\n" +
+"-o  <PATH> output directory\n" +
+"-m  name of root model (optional)\n" +
+"-x  name of X-definition (optional)\n" +
+"-sp prefix of XML schema namespace (optional, default is \"xs\")\n" +
+"-se extension of schema file (optional, default is \"xsd\")";
 		final String info1 = info + "\n-h  help";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Parameters missing!\n" + info1);

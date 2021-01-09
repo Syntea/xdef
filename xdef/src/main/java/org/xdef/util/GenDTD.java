@@ -498,14 +498,13 @@ public class GenDTD {
 	 */
 	public static void main(final String... args) {
 		final String info =
-"Generation of DTD from X-definition.\n"+
-"Usage:\n" +
+"Generate DTD from X-definition.\n"+
+"Command line arguments:\n"+
 "  definition_name#root_element_name\n" +
 "  output_file_name\n" +
 "  [-e encoding]   (default is \"UTF-8\")\n" +
 "  file_xdef1 [file_xdef2] [...]\n" +
-"NOTE: wildcard chars '*' or '?' are possible for xdef files.\n"+
-"(c)2007 Syntea Software group";
+"NOTE: wildcard chars '*' or '?' are possible for xdef files.";
 		if (args.length < 3) {
 			throw new RuntimeException("Missing parameters\n" + info);
 		}

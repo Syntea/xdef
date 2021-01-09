@@ -10,7 +10,7 @@ public interface XDContainer extends XDValue {
 
 	/** Get the item from sequence at given index.
 	 * @param index index of item.
-	 * @return item at given index or return <tt>null</tt>.
+	 * @return item at given index or return null.
 	 */
 	public XDValue getXDItem(int index);
 
@@ -62,7 +62,7 @@ public interface XDContainer extends XDValue {
 
 	/** Set named item to the table of named items.
 	 * @param item the named item.
-	 * @return if the named item not exists then return <tt>null</tt> or return
+	 * @return if the named item not exists then return null or return
 	 * the named item value which was replaced in the table of named items.
 	 */
 	public XDValue setXDNamedItem(XDNamedValue item);
@@ -71,40 +71,40 @@ public interface XDContainer extends XDValue {
 	 * @param name the name of item.
 	 * @param value the value of item.
 	 * @return if the named item not exists in the table of named items then
-	 * return <tt>null</tt> or return the value which was replaced.
+	 * return null or return the value which was replaced.
 	 */
 	public XDValue setXDNamedItem(String name, XDValue value);
 
 	/** Check if named item exists in the table of named items.
 	 * @param name the name of named item.
-	 * @return <tt>true</tt> if and only if named item exists in the table.
+	 * @return true if and only if named item exists in the table.
 	 */
 	public boolean hasXDNamedItem(String name);
 
 	/** Get named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return if item not exists in table return <tt>null</tt> or
+	 * @return if item not exists in table return null or
 	 * return the named item from the table of named items.
 	 */
 	public XDNamedValue getXDNamedItem(String name);
 
 	/** Get value of named item from the table of named items as string.
 	 * @param name the name of named item.
-	 * @return if item not exists in table return <tt>null</tt> or
+	 * @return if item not exists in table return null or
 	 * return the value of named item as string.
 	 */
 	public String getXDNamedItemAsString(String name);
 
 	/** Get value of named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return if item not exists the return <tt>null</tt> or
+	 * @return if item not exists the return null or
 	 * return the named item.
 	 */
 	public XDValue getXDNamedItemValue(String name);
 
 	/** Remove named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return the removed named item or <tt>null</tt>.
+	 * @return the removed named item or null.
 	 */
 	public XDValue removeXDNamedItem(final String name);
 
@@ -168,8 +168,7 @@ public interface XDContainer extends XDValue {
 	public String getXDTextItem(int n);
 
 	/** Check if the object is empty.
-	 * @return <tt>true</tt> if the object is empty; otherwise returns
-	 * <tt>false</tt>.
+	 * @return true if the object is empty; otherwise returns false.
 	 */
 	public boolean isEmpty();
 

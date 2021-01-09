@@ -71,27 +71,27 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	public double doubleValue();
 
 	/** Get BigDecimal value of this object.
-	 * @return BigDecimal value of this object or return  <tt>null</tt>.
+	 * @return BigDecimal value of this object or return  null.
 	 */
 	public BigDecimal decimalValue();
 
 	/** Get BigInteger value of this object.
-	 * @return BigInteger value of this object or return  <tt>null</tt>.
+	 * @return BigInteger value of this object or return  null.
 	 */
 	public BigInteger integerValue();
 
 	/** Get boolean value of this object.
-	 * @return boolean value of this object or <tt>false</tt>.
+	 * @return boolean value of this object or false.
 	 */
 	public boolean booleanValue();
 
 	/** Get SDatetime value.
-	 * @return SDatetime value of this object or <tt>null</tt>.
+	 * @return SDatetime value of this object or null.
 	 */
 	public SDatetime datetimeValue();
 
 	/** Get SDuration value.
-	 * @return SDuration value of this object or return <tt>null</tt>.
+	 * @return SDuration value of this object or return null.
 	 */
 	public SDuration durationValue();
 
@@ -101,37 +101,37 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	public byte[] getBytes();
 
 	/** Get XDContainer value.
-	 * @return XDContainer value of this object or return <tt>null</tt>.
+	 * @return XDContainer value of this object or return null.
 	 */
 	public XDContainer contextValue();
 
 	/** Get XDService value.
-	 * @return XDService value of this object or return <tt>null</tt>.
+	 * @return XDService value of this object or return null.
 	 */
 	public XDService serviceValue();
 
 	/** Get XDStatement value.
-	 * @return XDStatement value of this object or return <tt>null</tt>.
+	 * @return XDStatement value of this object or return null.
 	 */
 	public XDStatement statementValue();
 
 	/** Get XDResultSet value.
-	 * @return XDResultSet value of this object or return <tt>null</tt>.
+	 * @return XDResultSet value of this object or return null.
 	 */
 	public XDResultSet resultSetValue();
 
 	/** Get XDParseResult value.
-	 * @return XDParseResult value of this object or return <tt>null</tt>.
+	 * @return XDParseResult value of this object or return null.
 	 */
 	public XDParseResult parseResultValue();
 
 	/** Get associated XML node.
-	 * @return the associated XML node or return <tt>null</tt>.
+	 * @return the associated XML node or return null.
 	 */
 	public Node getXMLNode();
 
 	/** Get associated XML element.
-	 * @return the associated XML element or return <tt>null</tt>.
+	 * @return the associated XML element or return null.
 	 */
 	public Element getElement();
 
@@ -157,9 +157,8 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 */
 	public int compareTo(XDValue arg) throws IllegalArgumentException;
 
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
 	 */
 	public boolean isNull();
 
