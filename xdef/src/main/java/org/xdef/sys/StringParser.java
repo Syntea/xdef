@@ -1589,7 +1589,7 @@ public class StringParser extends SReporter implements SParser {
 	 * the actual position to the next character if given character was
 	 * not in specified interval.
 	 * @param ch Character to be checked.
-	 * @return true< if character was present at actual position,
+	 * @return true if character was present at actual position,
 	 * otherwise return false.
 	 */
 	public final boolean isCharIgnoreCase(final char ch) {
