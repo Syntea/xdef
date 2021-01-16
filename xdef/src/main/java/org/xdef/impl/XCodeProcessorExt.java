@@ -63,8 +63,6 @@ import org.xdef.impl.code.DefLocale;
  */
 final class XCodeProcessorExt implements CodeTable, XDValueID {
 
-	private XCodeProcessorExt() {}
-
 	static final XDValue perform1v(final XDValue item, final XDValue p) {
 		switch (item.getCode()) {
 			case GET_TYPEID: //get type of a value (as integer type id)

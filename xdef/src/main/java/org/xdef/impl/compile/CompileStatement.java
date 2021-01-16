@@ -207,7 +207,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (readParam()) {
 			XDValue item =_g.removeLastCodeItem();
 			if (plist != null) {
-				plist.addKeyPar(name, item.getItemId(), item);
+				if (!plist.addKeyPar(name, item.getItemId(), item)) {
+					error(XDEF.XDEF420, name); //Parameter redefinition of &{0}
+				}
 			}
 			_g.replaceLastCodeItem(new DefNamedValue(name,item));
 			_g._tstack[--_g._sp] = XD_NAMEDVALUE;
@@ -215,7 +217,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		} else {
 			if (sp + 1 == _g._sp) {
 				if (plist != null) {
-					plist.addKeyPar(name, _g._tstack[_g._sp], null);
+					if (!plist.addKeyPar(name, _g._tstack[_g._sp], null)) {
+						error(XDEF.XDEF420, name);//Parameter redefinition &{0}
+					}
 				}
 				_g.addCode(new CodeOp(XD_NAMEDVALUE, NEW_NAMEDVALUE), -1);
 			}
@@ -319,10 +323,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * method ::= methodName (s? parameterList)?
 	 * parameterList ::= "(" s? ( expression ( s? "," s? expression )* )? s? ")"
 	 * @param name Name of method
-	 * @param spos source position where the method was declared.
 	 * @return true if method was parsed.
 	 */
-	private boolean method(final String name, final SPosition spos) {
+	private boolean method(final String name) {
 		if (_sym != LPAR_SYM) {
 			return false;
 		}
@@ -699,9 +702,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			case IDENTIFIER_SYM: {
 				separateMethodNameFromIdentifier();
 				String name = _idName;
-				SPosition spos = getLastPosition();
 				if (LPAR_SYM == nextSymbol()) { // '(' => method
-					method(name, spos);
+					method(name);
 				} else if (_sym == INC_SYM || _sym == DEC_SYM) { // "++" | "--"
 					genInc(_sym, name, 2);
 					nextSymbol();
@@ -2187,7 +2189,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @return true if the statement was compiled.
 	 */
 	private boolean simpleStatement(final String name) {
-		SPosition spos = getLastPosition();
 		boolean wasVariable;
 		switch (_sym) {
 			case DOT_SYM: {
@@ -2269,7 +2270,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			case LPAR_SYM: {
 				int sp = _g._sp;
-				method(name, spos);
+				method(name);
 				while (sp < _g._sp) {
 					_g.genPop();
 				}
@@ -4257,24 +4258,25 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		 * @param name name of parameter.
 		 * @param type type ID of parameter.
 		 * @param value value of parameter.
-		 * @return
+		 * @return true if parameter was added or if the same parameter already
+		 * exists. Return false if parameter exists with different parameters.
 		 */
 		private boolean addKeyPar(final String name,
 			final short type, final XDValue value) {
 			int len = _keyParams.length;
-			KeyPar keypar = new KeyPar(name, type, value);
+			KeyPar keyPar = new KeyPar(name, type, value);
 			if (len == 0) {
-				_keyParams = new KeyPar[]{keypar};
+				_keyParams = new KeyPar[]{keyPar};
 			}
 			for (KeyPar k: _keyParams) {
 				if (name.equals(k._name)) {
-					return false; // not found
+					return keyPar.eq(k);
 				}
 			}
 			KeyPar[] oldParams = _keyParams;
 			_keyParams = new KeyPar[len + 1];
 			System.arraycopy(oldParams, 0, _keyParams, 0, len);
-			_keyParams[len] = keypar;
+			_keyParams[len] = keyPar;
 			return true;
 		}
 
@@ -4283,13 +4285,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			private final String _name;
 			private final short _type;
 			private final XDValue _value;
-
+			/** Create instance of KeyPar. */
 			private KeyPar(final String name,
 				final short type,
-				final XDValue value) {
-				_name = name;
-				_type = type;
-				_value = value;
+				final XDValue value) {_name=name; _type=type; _value=value;}
+			/** Return true if the argument is same as this KeyPar instance. */
+			private boolean eq(KeyPar k) {
+				return _name.equals(k._name) && _type == k._type
+					&& (_value != null && _value.equals(k._value)
+						|| _value == k._value);
 			}
 		}
 	}

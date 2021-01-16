@@ -143,7 +143,7 @@ public class JsonUtil extends StringParser {
 		int i = s.indexOf(':');
 		return (i >= 0) ? s.substring(0, i) : "";
 	}
-	
+
 	/** Create JSON string to XML from JSON source data.
 	 * @param s JSON form of string.
 	 * @param isAttr if true then it is used in attribute, otherwise it will be
@@ -217,21 +217,21 @@ public class JsonUtil extends StringParser {
 		}
 		return false;
 	}
-	
+
 	/** Get XML name created from JSOM pair name.
 	 * @param s JSOM pair name.
 	 * @return XML name.
 	 */
 	public final static String toXmlName(final String s) {
 		if (s.isEmpty()) {
-			return "_x00_"; // empty string 
+			return "_x00_"; // empty string
 		} else if (("_x00_").equals(s)) {
 			return "_x5f_x00_";
 		}
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
 		sb.append(ch == ':' || isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+			|| StringParser.getXmlCharType(ch, XConstants.XML10)
 			 != StringParser.XML_CHAR_NAME_START
 			? genXmlHexChar(ch) : ch);
 		byte firstcolon = 0;
@@ -245,7 +245,7 @@ public class JsonUtil extends StringParser {
 				if (i + 1 < s.length()) {
 					ch=s.charAt(++i);
 					sb.append(isJChar(s,i)
-						|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+						|| StringParser.getXmlCharType(ch, XConstants.XML10)
 							< StringParser.XML_CHAR_COLON
 					? genXmlHexChar(ch) : ch);
 				} else {
@@ -253,7 +253,7 @@ public class JsonUtil extends StringParser {
 				}
 			} else {
 				sb.append(isJChar(s,i)
-					|| StringParser.getXmlCharType(ch, XConstants.XML10) 
+					|| StringParser.getXmlCharType(ch, XConstants.XML10)
 					< StringParser.XML_CHAR_COLON ? genXmlHexChar(ch) : ch);
 			}
 		}

@@ -24,16 +24,14 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	implements XDParser, XDValue {
 
 	/** WhiteSpace handling mode. Capital letter means fixed value.
-	 * <ul>
-	 * <li>'p' (preserve)<p> No normalization is done, the value is not
+	 * <br>'p' (preserve)<p> No normalization is done, the value is not
 	 * changed (this is the behavior required by [XML 1.0 (Second Edition)]
-	 * for element content)</p></li>
-	 * <li>'r' (replace)<p>All occurrences of #x9 (tab), #xA (line feed) and
-	 * #xD (carriage return) are replaced with #x20 (space)</p></li>
-	 * <li>'c' (collapse)<p> After the processing implied by replace, contiguous
+	 * for element content)
+	 * <br>'r' (replace)<p>All occurrences of #x9 (tab), #xA (line feed) and
+	 * #xD (carriage return) are replaced with #x20 (space)
+	 * <br>'c' (collapse)<p> After the processing implied by replace, contiguous
 	 * sequences of #x20's are collapsed to a single #x20, and leading and
-	 * trailing #x20's are removed.</p></li>
-	 * </ul>
+	 * trailing #x20's are removed.
 	 */
 	protected byte _whiteSpace; //r replace, c collapse, 0 preserve
 	protected DefRegex[] _patterns;
@@ -64,7 +62,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		XDParseResult p = new DefParseResult(x.toString());
 		parseObject(xnode, p);
-		if (_whiteSpace == WS_COLLAPSE) {
+		if (_whiteSpace == 'c') {
 			p.isSpaces();
 		}
 		if (!p.eos()) {
@@ -96,7 +94,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		parseObject(xnode, p);
 		if (p.matches()) {
-			if (_whiteSpace == WS_COLLAPSE) {
+			if (_whiteSpace == 'c') {
 				p.isSpaces();
 			}
 			if (!p.eos()) {
@@ -131,21 +129,21 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public void setWhiteSpace(final String s) {
 		byte old = _whiteSpace;
 		if ("collapse".equals(s)) {
-			_whiteSpace = WS_COLLAPSE;
+			_whiteSpace = 'c';
 		} else if ("replace".equals(s)) {
-			_whiteSpace = WS_REPLACE;
+			_whiteSpace = 'r';
 		} else if ("preserve".equals(s)) {
-			_whiteSpace = WS_PRESERVE;
+			_whiteSpace = 0;
 		} else {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812,
 				"whiteSpace","collapse, replace, preserve", parserName());
 		}
-		if (old == WS_COLLAPSE && _whiteSpace != WS_COLLAPSE ||
-			old == WS_PRESERVE && _whiteSpace == 0) {
+		if (old == 'c' && _whiteSpace != 'c' ||
+			old == 'p' && _whiteSpace == 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812, "whiteSpace&",
-				(old == WS_COLLAPSE ? "collapse" : "collapse, replace"),
+				(old == 'c' ? "collapse" : "collapse, replace"),
 				parserName());
 		}
 	}
@@ -177,8 +175,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		return null;
 	}
 
-	private void setNamedParams(final XXNode xnode, final XDValue[] params)
-		throws SException {
+	private void setNamedParams(final XDValue[] params)	throws SException {
 		initParams();
 		int len;
 		if (params == null || (len = params.length*2) == 0) {
@@ -325,7 +322,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			x[i*2] = new DefString(name);
 			x[i*2 + 1] = params.getXDNamedItemValue(name);
 		}
-		setNamedParams(xnode, x);
+		setNamedParams(x);
 	}
 
 	public void setEnumeration(final Object[] o) {}
@@ -395,13 +392,13 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		if (getDefaultWhiteSpace() != getWhiteSpace()) {
 			switch (getWhiteSpace()) {
-				case WS_COLLAPSE:
+				case 'c':
 					map.setXDNamedItem("whiteSpace", new DefString("collapse"));
 					break;
-				case WS_REPLACE:
+				case 'r':
 					map.setXDNamedItem("whiteSpace", new DefString("replace"));
 					break;
-				case WS_PRESERVE:
+				case 0:
 					map.setXDNamedItem("whiteSpace", new DefString("preserve"));
 					break;
 			}

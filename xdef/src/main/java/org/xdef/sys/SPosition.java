@@ -391,7 +391,7 @@ public class SPosition {
 	 * is thrown the SRuntimeException created from the report.
 	 * @param pos The source buffer position.
 	 * @param report Report to be sent to reporter or thrown.
-	 * @param reportWriter Report writer or <tt>null</tt>.
+	 * @param reportWriter Report writer or null.
 	 * @throws SRuntimeException if report writer is null and report type
 	 * is ERROR or FATAL.
 	 */
@@ -417,7 +417,7 @@ public class SPosition {
 	 * If report writer is null and report type is ERROR or FATAL
 	 * is thrown the SRuntimeException created from the report.
 	 * @param report Report to be sent to reporter or thrown.
-	 * @param reportWriter Report writer or <tt>null</tt>.
+	 * @param reportWriter Report writer or null.
 	 * @throws SRuntimeException if report writer is null and report type
 	 * is ERROR or FATAL.
 	 */
@@ -440,8 +440,8 @@ public class SPosition {
 	@Override
 	/** Check if some object is equal to this position.
 	 * @param obj Object to be compared.
-	 * @return <tt>true</tt> if the argument is considered as the same
-	 * position as this one position; otherwise return <tt>false</tt>.
+	 * @return true if the argument is considered as the same
+	 * position as this one position; otherwise return false.
 	 */
 	public final boolean equals(final Object obj) {
 		if (obj == null || !(obj instanceof SPosition)) {
@@ -468,15 +468,13 @@ public class SPosition {
 	/** Compares this position with the specified object for order. Returns a
 	 * negative integer, zero, or a positive integer as this position is less
 	 * than, equal to, or greater than the specified object.<p>
-	 * The compare algorithm checks
-	 * <ul>
-	 * <li>1. source name</li>
-	 * <li>2. line</li>
-	 * <li>2. column</li>
-	 * </ul>
-	 * This helps to sort messages according to source position.
+	 * <br>The compare algorithm checks:
+	 * <br>1. source name
+	 * <br>2. line
+	 * <br>2. column
+	 * <br>This helps to sort messages according to source position.
 	 * @param pos the SPosition to be compared.
-	 * @return  <tt>-1</tt>, zero, or <tt>+1</tt> as this position
+	 * @return -1, zero, or +1 as this position
 	 * is less than, equal to, or greater than the specified object.
 	 * @throws ClassCastException if the specified object's type prevents it
 	 * from being compared to this Object.

@@ -50,7 +50,8 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (!p.isSignedFloat()) {
+		if (!p.isSignedFloat() && p.isOneOfTokens(new String[]
+			{"NaN", "INF", "-INF", "+INF"})	< 0) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
