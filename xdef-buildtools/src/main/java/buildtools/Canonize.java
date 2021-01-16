@@ -27,17 +27,17 @@ public class Canonize {
 	 * @param filename The name of file (wildcards are possible).
 	 * @param dirTree If <tt>true<tt> then dirTree process in child
 	 * subdirectories.
-	 * @param hdr If <tt>true</tt> then leading standard copyright information
+	 * @param hdr If true then leading standard copyright information
 	 * is inserted before the first line of Java source or it replaces the
 	 * existing one. The template for the copyright information is taken from
 	 * the file <tt>hdrinfo.txt</tt>the root directory <tt>java</tt> (under
-	 * which are projects).If the argument's value is <tt>false</tt> then
+	 * which are projects).If the argument's value is false then
 	 * the top of source remains unchanged.
-	 * @param tail If <tt>true</tt> then log information is added after the last
+	 * @param tail If true then log information is added after the last
 	 * line of Java source or it replaces the existing one.The template used for
 	 * the log information is taken from the file <tt>tailinfo.txt</tt> in the
 	 * root directory <tt>java</tt> (under which are projects). If the value
-	 * of this argument is <tt>false</tt> then the end source remains unchanged.
+	 * of this argument is false then the end source remains unchanged.
 	 */
 	private static void doSources(final String filename,
 		final boolean dirTree) {
