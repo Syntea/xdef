@@ -11,7 +11,7 @@ import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 
-/** DefParseResult contains information about parsing.
+/** DefParseResult contains the source and results of parsing.
  * @author Vaclav Trojan
  */
 public final class DefParseResult extends XDValueAbstract
@@ -52,20 +52,7 @@ public final class DefParseResult extends XDValueAbstract
 		_srcIndex = from + s.length();
 	}
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDValue interface
-////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public final short getItemId() {return XD_PARSERESULT;}
-	@Override
-	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
-	@Override
-	public final String toString() {return _value==null ? "" : _source;}
-	@Override
-	public final void clearReports() {_ar = null;}
-	@Override
-	public final boolean isNull() { return _value == null && _source == null; }
-////////////////////////////////////////////////////////////////////////////////
-//  Implementation of SimpleParser interface
+//  Implementation of SParser interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public final String getSourceBuffer() {return _source;}
@@ -236,17 +223,10 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final boolean isFloat() {
-//(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?
-//|(\+|-)?INF|NaN
-		if (isToken("INF") || isToken("NaN")) {
-			return true;
-		}
+		//(\+|-)?([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee](\+|-)?[0-9]+)?
 		int pos = _srcIndex;
-		if (!isInteger()) {
-			char c;
-			if (eos() || ((c=_source.charAt(pos)) != '.' && c!='e' && c!='E')) {
-				return false;
-			}
+		if (!isInteger() && (eos() || getCurrentChar() != '.')) {
+			return false;
 		}
 		if (isChar('.')) {
 			isInteger();
@@ -263,14 +243,11 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isSignedFloat() {
 		int pos = _srcIndex;
-		isOneOfChars("+-");
-		String s;
-		if (!isFloat() || "+NaN".equals(s = getParsedBufferPartFrom(pos))
-			|| "-NaN".equals(s) || "+INF".equals(s)) {
-			_srcIndex = pos;
-			return false;
+		if (isOneOfChars("+-") != 2 && isFloat()) {
+			return true;
 		}
-		return true;
+		_srcIndex = pos;
+		return false;
 	}
 	@Override
 	public final char isLetter() {
@@ -542,4 +519,17 @@ public final class DefParseResult extends XDValueAbstract
 	public SDuration durationValue() {
 		return _value == null ? null : ((XDValue)_value).durationValue();
 	}
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XDValue interface
+////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public final short getItemId() {return XD_PARSERESULT;}
+	@Override
+	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
+	@Override
+	public final String toString() {return _value==null ? "" : _source;}
+	@Override
+	public final void clearReports() {_ar = null;}
+	@Override
+	public final boolean isNull() { return _value == null && _source == null; }
 }

@@ -211,7 +211,7 @@ public class JavaPreprocessor {
 	/** Process input stream and create modified result.
 	 * @param is input stream.
 	 * @param fname name of input file (information for messages).
-	 * @return <tt>true</tt> if and only if the modified result was created.
+	 * @return true if and only if the modified result was created.
 	 */
 	public boolean processStream(final InputStream is, final String fname) {
 		_errors = 0;
@@ -243,13 +243,13 @@ public class JavaPreprocessor {
 	 * @return number of recognized errors or 0.
 	 */
 	public int getErrorCount() { return _errors; }
-	/** Return <tt>true</tt> if modified source was created.
-	 * @return <tt>true</tt> if and only if modified source was created.
+	/** Return true if modified source was created.
+	 * @return true if and only if modified source was created.
 	 */
 	public boolean isModified() { return _modified; }
 
 	/** Get name of character set.
-	 * @return the name of character set or <tt>null</tt>.
+	 * @return the name of character set or null.
 	 */
 	public String getCharset() { return _charset; }
 
@@ -807,8 +807,8 @@ public class JavaPreprocessor {
 	/** Check if actual position points to given character. Set the actual
 	 * position to the next character if given character was recognized.
 	 * @param ch Character to be checked.
-	 * @return <tt>true</tt> if character was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if character was present at actual position,
+	 * otherwise return false.
 	 */
 	private boolean isChar(final char ch) {
 		if (_pos < _endPos && _line.charAt(_pos) == ch) {
@@ -1057,7 +1057,7 @@ public class JavaPreprocessor {
 
 	/** Print error message.
 	 * @param msg The default text of message.
-	 * @param position if <tt>true</tt> the position information is generated.
+	 * @param position if true the position information is generated.
 	 */
 	private void error(final String msg, final boolean position) {
 		_out.flush();
@@ -1245,20 +1245,20 @@ public class JavaPreprocessor {
 	 * @param input The string with specification of the input file(s) or the
 	 * directory.
 	 * @param outDir The directory where put the changed files. If this argument
-	 * is <tt>null</tt> the changed file will replace the input file.
+	 * is null the changed file will replace the input file.
 	 * @param keys The array with switches used for preprocessing.
-	 * @param dirTree If the value of this argument is <tt>true</tt> the
+	 * @param dirTree If the value of this argument is true the
 	 * preprocessor will scan also subdirectories..
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
-	 * @param verbose If the value of this argument is <tt>true</tt> the
+	 * @param verbose If the value of this argument is true the
 	 * preprocessor will print detailed information to <tt>out</tt>.
-	 * @param extract If the value of this argument is <tt>true</tt> the
+	 * @param extract If the value of this argument is true the
 	 * preprocessor will extract all preprocessor commands.
-	 * @param cutTrailingSpaces If the value of this argument is <tt>true</tt>
+	 * @param cutTrailingSpaces If the value of this argument is true
 	 * the preprocessor will cut all whiteSpaces at the end of lines.
 	 * @return string with error message if the program can't work due to
-	 * parameter error or return <tt>null</tt>.
+	 * parameter error or return null.
 	 */
 	private static String proc(final String input,
 		final String outDir,
@@ -1355,7 +1355,7 @@ public class JavaPreprocessor {
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
 	 * @return string with error message if the program can't work due to
-	 * parameter error or return <tt>null</tt>.
+	 * parameter error or return null.
 	 */
 	public static String proc(final String[] args,
 		final PrintStream out,

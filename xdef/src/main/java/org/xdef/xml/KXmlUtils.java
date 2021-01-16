@@ -1320,7 +1320,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final Element elem_B) {
 		return compareElements(elem_A, elem_B, null);
 	}
-	
+
 	/** Compare XML elements. If the method errors() on the resulting reporter
 	 * gives false no differences were recognized.
 	 * @param elem_A the first element.
