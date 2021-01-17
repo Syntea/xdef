@@ -9,7 +9,6 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.json.JsonUtil;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
-import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "jlist" type.
@@ -26,7 +25,7 @@ public class XDParseJList extends XSAbstractParser {
 
 	public XDParseJList() {
 		super();
-		_whiteSpace = WS_COLLAPSE; //collapse
+		_whiteSpace = WS_COLLAPSE;
 		_minLength = _maxLength = -1;
 	}
 
@@ -35,7 +34,7 @@ public class XDParseJList extends XSAbstractParser {
 		_patterns = null;
 		_enumeration = null;
 		_itemType = null;
-		_whiteSpace = WS_COLLAPSE; //collapse
+		_whiteSpace = WS_COLLAPSE;
 		_minLength = _maxLength = -1;
 	}
 	@Override
@@ -64,7 +63,6 @@ public class XDParseJList extends XSAbstractParser {
 		DefContainer results = new DefContainer();
 		String source = p.getSourceBuffer();
 		p.setSourceBuffer(source);
-		ArrayReporter reporter = new ArrayReporter();
 		int count = 0;
 		p.isSpaces();
 		if (p.isChar('[')) {
@@ -91,24 +89,37 @@ public class XDParseJList extends XSAbstractParser {
 						}
 						p.setSourceBuffer(p.getBufferPart(0,start) + s);
 					}
-					p.setBufIndex(start);
+					p.setIndex(start);
 					_itemType.parseObject(xnode, p);
-				} else if (p.isChar('[')) {
+				} else if (p.getCurrentChar() == '[') {
 					DefParseResult q = new DefParseResult(source);
-					q.setBufIndex(start);
-					_itemType.parseObject(xnode, q);
+					q.setIndex(p.getIndex());
+					parse(xnode, q, isFinal);
 					p.addReports(q.getReporter());
 					p.setParsedValue(q.getParsedValue());
 					end = q.getIndex();
 				} else {
 					char ch = 0;
-					while (!p.eos() && (ch=p.getCurrentChar())>' ' && ch!=',') {
+					while (!p.eos() && (ch=p.getCurrentChar())>' ' && ch!=','
+						&& ch!='[' && ch!=']'){
 						p.nextChar();
 					}
 					end = p.getIndex();
-					p.setSourceBuffer(p.getBufferPart(0, end));
-					p.setBufIndex(start);
-					_itemType.parseObject(xnode, p);
+					if (p.getCurrentChar() == '[') { // array in array
+						DefParseResult q = new DefParseResult(source);
+						q.setIndex(start);
+						parse(xnode, q, isFinal);
+						p.addReports(q.getReporter());
+						p.setParsedValue(q.getParsedValue());
+						end = q.getIndex();
+					} else if (p.getCurrentChar() == '"') {
+//					} else {
+//						DefParseResult q =
+//							new DefParseResult(p.getBufferPart(start, end));
+//						_itemType.parseObject(xnode, q);
+//						p.addReports(q.getReporter());
+//						p.setParsedValue(q.getParsedValue());
+					}
 				}
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;
@@ -118,14 +129,13 @@ public class XDParseJList extends XSAbstractParser {
 					results.addXDItem(p.getParsedValue());
 				}
 				p.setSourceBuffer(source);
-				p.setBufIndex(end);
+				p.setIndex(end);
 				count++;
 				p.isSpaces();
 				if (!p.isChar(',')) {
 					if (!p.isChar(']')) {
 						//Incorrect value of '&{0}'&{1}{: }
 						p.errorWithString(XDEF.XDEF809, parserName());
-					} else {
 					}
 					break;
 				}

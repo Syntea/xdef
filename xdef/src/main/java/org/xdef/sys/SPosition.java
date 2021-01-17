@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * @author  Vaclav Trojan
  */
 public class SPosition {
-
 	/** Actual buffer position to source buffer. */
 	private int _bufIndex;
 	/** Line number. */
@@ -113,6 +112,7 @@ public class SPosition {
 		_startLine = spos._startLine;
 		cloneModificationInfo(spos);
 	}
+
 	/** Clone ModificationInfo.
 	 * @return a clone of ModificationInfo.
 	 */
@@ -134,10 +134,10 @@ public class SPosition {
 	 */
 	public final int getIndex() {return _bufIndex;}
 
-	/** Set buffer index.
+	/** Set buffer index. Note it can not be final - in StringParser override.
 	 * @param pos buffer index.
 	 */
-	public final void setIndex(final int pos) {_bufIndex = pos;}
+	public void setIndex(final int pos) {_bufIndex = pos;}
 
 	/** Increase buffer index.
 	 * @return increased index.

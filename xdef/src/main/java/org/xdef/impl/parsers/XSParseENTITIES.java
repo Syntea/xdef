@@ -79,7 +79,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 				sb.append(' ').append(token);
 				val.addXDItem(new DefString(token));
 			} else {
-				p.setBufIndex(pos);
+				p.setIndex(pos);
 				break;
 			}
 		}

@@ -96,7 +96,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final int getIndex() {return _srcIndex;}
 	@Override
-	public final void setBufIndex(final int index) {_srcIndex = index;}
+	public final void setIndex(final int index) {_srcIndex = index;}
 	@Override
 	public final boolean isSpace() {
 		char ch;

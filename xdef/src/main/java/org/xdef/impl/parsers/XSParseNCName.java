@@ -27,7 +27,7 @@ public class XSParseNCName extends XSAbstractParseToken {
 			return;
 		}
 		String s = parser.getParsedString();
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		p.setParsedValue(s);

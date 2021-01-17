@@ -12,13 +12,10 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDConstants;
-import org.xdef.XDInput;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.net.URL;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -41,7 +38,6 @@ class ChkDOMParser extends SReporter {
 	private ChkDocument _chkDoc;
 	/** Element to be processed. */
 	private Element _elem;
-	private boolean _locationDetails;
 
 	/** This prevents the user to create instance of ChkDOMParser. */
 	private ChkDOMParser() {}
@@ -63,6 +59,9 @@ class ChkDOMParser extends SReporter {
 		private StringBuilder _text;
 		/** Root document. */
 		private  Document _doc;
+
+		/** Creates a new empty instance of DOMValidate. */
+		private DOMValidate() {}
 
 		/** This method adds cumulated text nodes to the result. */
 		private void addText(final ChkElement actNode) {
@@ -322,52 +321,6 @@ class ChkDOMParser extends SReporter {
 			processElement(null, elem);
 		}
 
-		/** Creates a new empty instance of ChkDOMParser. */
-		private DOMValidate() {}
-
-		/** Creates a new instance of ChkDOMParser.
-		 * @param root The root element of source data to be validated.
-		 * @param xdef XDefinition.
-		 * @param reportWriter The report writer.
-		 * @param stdOut The standard output.
-		 * @param stdIn The standard input.
-		 * @param userObj The user object connected to parser.
-		 * @param outDebug debug output stream.
-		 * @param inDebug debug input stream.
-		 */
-		private DOMValidate(final Element root,
-			final XDefinition xdef,
-			final ReportWriter reportWriter,
-			final XDOutput stdOut,
-			final XDInput stdIn,
-			final Object userObj,
-			final PrintStream outDebug,
-			final InputStream inDebug) {
-			super(reportWriter, null);
-			setIndex(-1);
-			setLineNumber(-1);
-			_text = new StringBuilder();
-			if (xdef != null) {
-				_chkDoc = new ChkDocument(xdef);
-				_chkDoc._reporter.setReportWriter(getReportWriter());
-				if (stdOut != null) {
-					_chkDoc.setStdOut(stdOut);
-				}
-				if (stdIn != null) {
-					_chkDoc.setStdIn(stdIn);
-				}
-				if (userObj != null) {
-					_chkDoc.setUserObject(userObj);
-				}
-				_doc = _chkDoc._doc;
-				_chkDoc.getDebugger().setOutDebug(outDebug);
-				_chkDoc.getDebugger().setInDebug(inDebug);
-			} else {
-				_chkDoc = null;
-				_doc = null;
-			}
-			processElement(null, root);
-		}
 		@Override
 		public final void warning(final String id,
 			final String msg,

@@ -19,13 +19,13 @@ import java.util.LinkedHashMap;
  * BNFGrammar object you can create by the static method compile
  * see:
  * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, String,
-		ReportWriter)}</p> or
+		ReportWriter)} or
  * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, File,
-		ReportWriter)}</p> or
+		ReportWriter)} or
  * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, URL,
-		ReportWriter)}</p>.
+		ReportWriter)}<.
  * <p>With the created BNFGrammar object you can parse data by method
- * {@link org.xdef.sys.BNFGrammar#parse(StringParser, String)}</p>
+ * {@link org.xdef.sys.BNFGrammar#parse(StringParser, String)}
  * @author Vaclav Trojan
  */
 public final class BNFGrammar {
@@ -179,7 +179,7 @@ public final class BNFGrammar {
 	public final boolean isEOS() {return _p.eos();}
 
 	/** Get array with parsed objects.
-	 * @return array with parsed objects or <tt>null</tt>.
+	 * @return array with parsed objects or null.
 	 */
 	public final Object[] getParsedObjects() {return  _parsedObjects;}
 
@@ -263,7 +263,7 @@ public final class BNFGrammar {
 
 	/** Get rule from grammar with given index.
 	 * @param index index of rule.
-	 * @return rule from grammar with given index or <tt>null</tt>.
+	 * @return rule from grammar with given index or null.
 	 */
 	public final BNFRule getRule(final int index) {
 		return index < 0 || index >= _rules.size() ? null : _rules.get(index);
@@ -271,7 +271,7 @@ public final class BNFGrammar {
 
 	/** Get rule from grammar with given name.
 	 * @param name name of rule.
-	 * @return rule from grammar with given name or <tt>null</tt>.
+	 * @return rule from grammar with given name or null.
 	 */
 	public final BNFRule getRule(final String name) {
 		for (BNFRule r: _rules) {
@@ -285,7 +285,7 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source String with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final String source)
@@ -300,13 +300,13 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or null.
 	 * @param source String with BNF grammar.
 	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is <tt>null</tt> then there is thrown an exception with
+	 * argument is null then there is thrown an exception with
 	 * error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final BNFGrammar grammar,
@@ -328,13 +328,13 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or null.
 	 * @param source SBuffer with BNF grammar.
 	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is <tt>null</tt> then there is thrown an exception with
+	 * argument is null then there is thrown an exception with
 	 * error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final BNFGrammar grammar,
@@ -360,7 +360,7 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source The file with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final File source)
@@ -369,13 +369,13 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or null.
 	 * @param source file with BNF grammar.
 	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is <tt>null</tt> then there is thrown an exception with
+	 * argument is null then there is thrown an exception with
 	 * error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final BNFGrammar grammar,
@@ -399,13 +399,13 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or null.
 	 * @param source URL pointing to BNF grammar.
 	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is <tt>null</tt> then there is thrown an exception with
+	 * argument is null then there is thrown an exception with
 	 * error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(final BNFGrammar grammar,
@@ -426,7 +426,7 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source The reader with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is <tt>null</tt> and
+	 * @throws SRuntimeException if the reporter argument is null and
 	 * an error occurs.
 	 */
 	public static BNFGrammar compile(Reader source) throws SRuntimeException {
@@ -463,7 +463,7 @@ public final class BNFGrammar {
 	}
 
 	/** Remove the last object from array of objects and return it.
-	 * @return last object or <tt>null</tt>.
+	 * @return last object or null.
 	 */
 	public final Object popObject() {
 		if (_parsedObjects == null) {
@@ -2083,7 +2083,7 @@ public final class BNFGrammar {
 			increaseBuffer();
 			if (isChar('x') || isChar('X')) { //hexadecimal
 				if ((c = isOneOfChars("0123456789ABCDEFabcdef")) == NOCHAR) {
-					setBufIndex(getIndex() - 1);
+					setIndex(getIndex() - 1);
 					return -1;
 				}
 				i = "0123456789ABCDEF".indexOf(Character.toUpperCase(c));
@@ -2108,7 +2108,7 @@ public final class BNFGrammar {
 
 		/** Check repeating quantifier of an item.
 		 * @param item where set quantifier.
-		 * @return <tt>true</tt> if quantifier was parsed.
+		 * @return true if quantifier was parsed.
 		 */
 		private boolean checkQuantifier(final BNFItem item) {
 			skipSeparators();
@@ -2588,7 +2588,7 @@ public final class BNFGrammar {
 
 		/** Parse BNF item.
 		 * @return BNFItem if an BNF item was recognized and parsed otherwise
-		 * return <tt>null</tt>.
+		 * return null.
 		 */
 		private BNFItem isItem() {
 			BNFItem item;
@@ -2624,7 +2624,7 @@ public final class BNFGrammar {
 
 		/** Parse constraint.
 		 * @return BNFItem if an constraint was recognized and parsed otherwise
-		 * return <tt>null</tt>.
+		 * return null.
 		 */
 		private BNFItem isConstraint() {
 			BNFItem item;
@@ -2649,7 +2649,7 @@ public final class BNFGrammar {
 
 		/** Parse sequence.
 		 * @return BNFItem if an sequence was recognized and parsed otherwise
-		 * return <tt>null</tt>.
+		 * return null.
 		 */
 		private BNFItem isSequence() {
 			BNFItem item;
@@ -2672,7 +2672,7 @@ public final class BNFGrammar {
 
 		/** Parse union.
 		 * @return BNFItem if an union was recognized and parsed otherwise
-		 * return <tt>null</tt>.
+		 * return null.
 		 */
 		private BNFItem isUnion() {
 			BNFItem item;
@@ -2695,8 +2695,8 @@ public final class BNFGrammar {
 			return item;
 		}
 
-		/** Resolve unresolved references (stored in <tt>_unresolvedRefs</tt>).
-		 * @return <tt>true</tt> if all references were resolved.
+		/** Resolve unresolved references (stored in _unresolvedRefs).
+		 * @return true if all references were resolved.
 		 */
 		private boolean resolveReferences() {
 			boolean result = true;

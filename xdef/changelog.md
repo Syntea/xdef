@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2021-01-16
+# Version 40.1.2, release-date 2021-01-17
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
 * corrected the bug in JSON parser: duplicated name in object not reported.
@@ -19,6 +19,8 @@
   facets `%minInclusive`, `%maxInclusive`, `%minExclusive` or `%maxExclusive`,
   then it is now skipped the test of date validity (which can be set
   by properties or by methods `setMinDate` or `setMaxDate`).
+* method `setBufIndex(int)` in the class org.xdef.sys.StringParser was renamed
+  to `setIndex(int)`.
 
 # Version 40.1.1, release-date 2020-09-17
 * corrected bugs in BNF syntax of X-definitions

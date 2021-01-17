@@ -61,7 +61,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			p.error(XDEF.XDEF546); //QName expected
 			return;
 		}
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		if (XExtUtils.getQnameNSUri(s, el).length() == 0) {

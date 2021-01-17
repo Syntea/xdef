@@ -938,7 +938,7 @@ public final class XdefValueTypeParser {
 					StringParser p = new StringParser(sym._value);
 					isNumber = p.isFloat() && p.eos();
 					if (!isNumber) {
-						p.setBufIndex(0);
+						p.setIndex(0);
 						isNumber = p.isInteger() && p.eos();
 					}
 				}

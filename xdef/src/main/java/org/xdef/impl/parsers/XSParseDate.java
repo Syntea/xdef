@@ -45,7 +45,7 @@ public class XSParseDate extends XSAbstractParseComparable {
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		SDatetime d = parser.getParsedSDatetime();
 //		if (d.getTZ() == null && (d.getYear() >= 0 || d.getMonth() >= 0

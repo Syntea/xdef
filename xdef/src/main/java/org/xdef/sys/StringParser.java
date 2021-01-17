@@ -830,7 +830,7 @@ public class StringParser extends SReporter implements SParser {
 		// all fields are set to null by Java VM
 		setLineNumber(1L);
 		_endPos = (_source = source).length();
-		setBufIndex(pos);
+		setIndex(pos);
 	}
 
 	/** Creates a new instance of StringParser.
@@ -1063,7 +1063,7 @@ public class StringParser extends SReporter implements SParser {
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		}
-		setBufIndex(0);
+		setIndex(0);
 		if (_endPos == 0) {
 			nextChar();
 		}
@@ -1167,7 +1167,7 @@ public class StringParser extends SReporter implements SParser {
 					new String(_cbuf) :	new String(_cbuf, 0, len));
 			}
 			setFilePos(getFilePos() + getIndex());
-			setBufIndex(0);
+			setIndex(0);
 			return true;
 		} catch (Exception ex) {
 			//this should never happen
@@ -1257,7 +1257,7 @@ public class StringParser extends SReporter implements SParser {
 			setStartLine(parser.getStartLine());
 			setLineNumber(parser.getLineNumber());
 			setBuffer(parser.getBuffer());
-			setBufIndex(parser.getIndex());
+			setIndex(parser.getIndex());
 			setSysId(parser.getSysId());
 			copyModificationInfo(parser);
 			setLineInfoFlag(parser.isLineInfoFlag());
@@ -1286,7 +1286,7 @@ public class StringParser extends SReporter implements SParser {
 		parser.setStartLine(getStartLine());
 		parser.setLineNumber(getLineNumber());
 		parser.setBuffer(getBuffer());
-		parser.setBufIndex(getIndex());
+		parser.setIndex(getIndex());
 
 		parser.setSysId(getSysId());
 		parser.copyModificationInfo(this);
@@ -1300,7 +1300,7 @@ public class StringParser extends SReporter implements SParser {
 		setFilePos(0L);
 		setSysId(null);
 		setBuffer("");
-		setBufIndex(0);
+		setIndex(0);
 		clearModificationInfo();
 		_reader = null;
 //		_cbuf = null;
@@ -1331,7 +1331,7 @@ public class StringParser extends SReporter implements SParser {
 		setFilePos(pos);
 		setSysId(sourceName);
 		setBuffer(source);
-		setBufIndex(0);
+		setIndex(0);
 	}
 
 	/** Save old parser and set new source buffer.
@@ -1433,7 +1433,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Set source buffer position.
 	 * @param pos position of the source to be set.
 	 */
-	public final void setBufIndex(final int index) {
+	public final void setIndex(final int index) {
 		if (index >= _endPos) {
 			_ch = NOCHAR;
 			super.setIndex(_endPos);
@@ -1473,7 +1473,7 @@ public class StringParser extends SReporter implements SParser {
 		setLineNumber(pos.getLineNumber());
 		setStartLine(pos.getStartLine());
 		copyModificationInfo(pos);
-		setBufIndex(x);
+		setIndex(x);
 	}
 
 	/** Set switch if reader should be closed.
@@ -1962,7 +1962,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 					}
 					ensureBuffer(len+1);
-					setBufIndex(j);
+					setIndex(j);
 					return true;
 				}
 				if (_ch == '\n') {
@@ -2121,7 +2121,7 @@ public class StringParser extends SReporter implements SParser {
 			_endPos = (_source = new StringBuilder(_source)
 				.replace(pos, pos + length, replacement).toString()).length();
 		}
-		setBufIndex(pos);
+		setIndex(pos);
 	}
 
 	/** Get value of parsed integer.
@@ -2357,7 +2357,7 @@ public class StringParser extends SReporter implements SParser {
 					return false;
 				}
 				ensureBuffer(len+1);
-				setBufIndex(getIndex() + len);
+				setIndex(getIndex() + len);
 				return true;
 			}
 		}
@@ -2433,7 +2433,7 @@ public class StringParser extends SReporter implements SParser {
 			isOneOfChars("+-");
 			if (isDigit() < 0) {
 				if (wasDecPoint) {
-					setBufIndex(x);
+					setIndex(x);
 					return true;
 				}
 				//missing number after exponent
@@ -2613,7 +2613,7 @@ public class StringParser extends SReporter implements SParser {
 			char pat;
 			if (failVariant) {
 				if (myDate._chain != null) {
-					setBufIndex(myDate._startPos);
+					setIndex(myDate._startPos);
 					//(year,month,date,hour,minute,second)
 					myDate = myDate._chain;
 					while (fpos < flen) {
@@ -2634,7 +2634,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 					}
 				} else {
-					setBufIndex(startPos); //reset position
+					setIndex(startPos); //reset position
 					while (fpos < flen) {
 						if ((pat = mask.charAt(fpos++)) == '|') {// reset
 							myDate.reset(startPos);
@@ -2685,7 +2685,7 @@ public class StringParser extends SReporter implements SParser {
 					md._endPos = getIndex();
 					_variants.add(md);
 					myDate.reset(startPos);
-					setBufIndex(myDate._startPos);
+					setIndex(myDate._startPos);
 					continue;
 				case '{': //initialize part
 					myDate.reset(startPos); //???
@@ -3089,7 +3089,7 @@ public class StringParser extends SReporter implements SParser {
 				}
 			}
 			myDate = x;
-			setBufIndex(myDate._endPos);
+			setIndex(myDate._endPos);
 		}
 		_parsedString = _source.substring(startPos, getIndex());
 		if (ampm == 1 && (hourKind == 'h' || hourKind == 'K')) {
@@ -3228,7 +3228,7 @@ public class StringParser extends SReporter implements SParser {
 				return null; //?????
 			}
 			// parsed OK
-			setBufIndex(newPos);
+			setIndex(newPos);
 			if (!zoneOffsetSpec) {
 				return tz;
 			}//after UTC or GMT we still try to read offset!
@@ -3314,7 +3314,7 @@ public class StringParser extends SReporter implements SParser {
 				return true;
 			}
 		} catch (SRuntimeException ex) {}
-		setBufIndex(startPos);
+		setIndex(startPos);
 		freeBuffer();
 		return false;
 	}
@@ -3965,7 +3965,7 @@ public class StringParser extends SReporter implements SParser {
 			String s = _parsedString;
 			while(ensureBuffer(2) && isChar('.')) {
 				if (!isJavaName()) {
-					setBufIndex(getIndex() - 1);
+					setIndex(getIndex() - 1);
 					break;
 				}
 				s += "." + _parsedString;
@@ -4113,7 +4113,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 		}
 		setPosition(spos);
-		setBufIndex(pos1);
+		setIndex(pos1);
 		_parsedString = _source.substring(pos, pos1);
 		if (getIndex() >= _endPos) {
 			super.setIndex(_endPos);
@@ -4207,7 +4207,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 		} catch (SRuntimeException ex) {}
 		freeBuffer();
-		setBufIndex(startPos);
+		setIndex(startPos);
 		return false;
 	}
 
@@ -4227,17 +4227,17 @@ public class StringParser extends SReporter implements SParser {
 			return false;
 		}
 		if (_parsedDatetime._tz != null) { //zone can't be here
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!isChar('T')) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!readXMLTime()) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
@@ -4258,7 +4258,7 @@ public class StringParser extends SReporter implements SParser {
 		int pos1 = getIndex();
 		int i;
 		if (!isInteger() || getIndex() - pos1 != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			_parsedDatetime._tz = null;
 			return false;
 		}
@@ -4272,7 +4272,7 @@ public class StringParser extends SReporter implements SParser {
 		pos1 = getIndex();
 		if (isChar(':') && isInteger()) {
 			if (getIndex() - pos1 != 3) {
-				setBufIndex(start);
+				setIndex(start);
 				return false;
 			}
 			int j = getParsedInt();
@@ -4287,7 +4287,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 			offset += j * 60000;
 		} else {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == '-') {
@@ -4303,27 +4303,27 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex(); //migt be start + 1
 		char firstdigit = getCurrentChar();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == 1 && getIndex() - pos < 4) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == 1 && firstdigit == '0' && getIndex() - pos > 4) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * sign;
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();
@@ -4355,25 +4355,25 @@ public class StringParser extends SReporter implements SParser {
 	public final boolean readXMLTime() {
 		int start = getIndex();
 		if (!isInteger() || getIndex() - start != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._hour = getParsedInt();
 		int pos = getIndex();
 		if (!isChar(':') || !isInteger() || getIndex() - pos != 3) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._minute = getParsedInt();
 		 pos = getIndex();
 		if (!isChar(':') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		} else {
 			_parsedDatetime._second = getParsedInt();
 			if (isChar('.')) {
 				if (!isInteger()) {
-					setBufIndex(start);
+					setIndex(start);
 					return false;
 				}
 				_parsedDatetime._fraction =
@@ -4403,7 +4403,7 @@ public class StringParser extends SReporter implements SParser {
 		int start = getIndex();
 		boolean negative = isChar('-');
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
@@ -4444,24 +4444,24 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex();
 		char firstdigit = getCurrentChar();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!negative && getIndex() - pos < 4) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!negative && firstdigit == '0' && getIndex() - pos > 4) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
@@ -4478,11 +4478,11 @@ public class StringParser extends SReporter implements SParser {
 		}
 		int pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
@@ -4527,26 +4527,26 @@ public class StringParser extends SReporter implements SParser {
 		}
 		int pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
 		if (!isChar('-')) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();
@@ -4571,11 +4571,11 @@ public class StringParser extends SReporter implements SParser {
 		int start = getIndex();
 		int pos = start;
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();

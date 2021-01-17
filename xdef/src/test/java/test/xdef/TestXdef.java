@@ -3421,7 +3421,7 @@ public final class TestXdef extends XDTester {
 					p.setParsedValue(new DefLong(x));
 				}
 				parser.skipSpaces();
-				p.setBufIndex(parser.getIndex());
+				p.setIndex(parser.getIndex());
 			} else {
 				p.error(XDEF.XDEF515); // Value error
 			}

@@ -73,7 +73,7 @@ public class XSParseDuration extends XSAbstractParseComparable {
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.setParsedValue(new DefDuration(parser.getParsedSDuration()));
 		p.isSpaces();

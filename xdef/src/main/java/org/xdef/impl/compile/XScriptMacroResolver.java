@@ -47,7 +47,7 @@ public class XScriptMacroResolver extends StringParser {
 				if (p.getXmlCharType(_xmlVersion)
 					!= StringParser.XML_CHAR_NAME_START) {
 					// must follow name, ignore ':'
-					p.setBufIndex(p.getIndex() - 1);
+					p.setIndex(p.getIndex() - 1);
 					break;
 				}
 				sb.append(':');
@@ -247,7 +247,7 @@ public class XScriptMacroResolver extends StringParser {
 		//Expand macro references (backward from the end of buffer).
 		try {
 			do {
-				setBufIndex(ndx + 2);
+				setIndex(ndx + 2);
 				// Parse macro
 				String replacement = parseMacro(0, this);
 				if (replacement == null) {
@@ -262,7 +262,7 @@ public class XScriptMacroResolver extends StringParser {
 					// A new nested macro occurred after this replacement
 					// Set parser positinon at the macro
 					if (ndx + 2 < getEndBufferIndex()) {
-						setBufIndex(ndx + 2);
+						setIndex(ndx + 2);
 					} else {
 						setEos();
 					}
@@ -286,7 +286,7 @@ public class XScriptMacroResolver extends StringParser {
 		setLineNumber(savedLine);
 		setStartLine(savedStartLine);
 		setFilePos(savedFilePos);
-		setBufIndex(savedPos);
+		setIndex(savedPos);
 		sb.setPosition(this);
 		sb.setString(getSourceBuffer());
 	}

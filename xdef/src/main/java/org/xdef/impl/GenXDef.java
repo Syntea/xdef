@@ -517,7 +517,7 @@ public class GenXDef implements XDConstants {
 			return "printableDate()";
 		}
 		final StringParser p = new StringParser(data);
-		p.setBufIndex(0);
+		p.setIndex(0);
 		String mask;
 		if (p.isDatetime("d-M-yyyy")) {
 			mask = "d-M-yyyy";
@@ -527,7 +527,7 @@ public class GenXDef implements XDConstants {
 			mask = "d/M/yyyy";
 		} else {
 			mask = "";
-			p.setBufIndex(0);
+			p.setIndex(0);
 		}
 		if (!mask.isEmpty()) {
 			if (p.eos()) {
