@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
  * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, File,
 		ReportWriter)} or
  * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, URL,
-		ReportWriter)}<.
+		ReportWriter)}.
  * <p>With the created BNFGrammar object you can parse data by method
  * {@link org.xdef.sys.BNFGrammar#parse(StringParser, String)}
  * @author Vaclav Trojan
