@@ -197,7 +197,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 						while (p.isToken(s)) {
 							if (t.hasMoreTokens()) {
 								if (!p.isSpaces()) {
-									p.setBufIndex(start);
+									p.setIndex(start);
 									break;
 								}
 								s = t.nextToken();

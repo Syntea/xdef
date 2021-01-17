@@ -109,7 +109,7 @@ public class XSParseUnion extends XSAbstractParser {
 			}
 			if (p.errors()) {
 				p.setSourceBuffer(source);
-				p.setBufIndex(pos);
+				p.setIndex(pos);
 				p.clearReports();
 				continue;
 			}
@@ -139,14 +139,14 @@ public class XSParseUnion extends XSAbstractParser {
 				if (!p.eos()) {
 					//After the item '&{0}' follows an illegal character&{1}{: }
 					p.errorWithString(XDEF.XDEF804, parserName());
-					p.setBufIndex(pos);
+					p.setIndex(pos);
 					continue;
 				}
 			}
 			checkPatterns(p);
 			return;
 		}
-		p.setBufIndex(pos);
+		p.setIndex(pos);
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName());
 	}

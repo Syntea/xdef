@@ -364,7 +364,7 @@ wildcardEsc     ::=  '.'
 				return true;
 			}
 		}
-		setBufIndex(pos);
+		setIndex(pos);
 		return false;
 	}
 
@@ -522,7 +522,7 @@ wildcardEsc     ::=  '.'
 				return true;
 			}
 		}
-		setBufIndex(pos);
+		setIndex(pos);
 		return false;
 	}
 

@@ -2236,7 +2236,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							// Change the parser to the remembered state:
 							// (set the position on the dot (.) between the
 							// method name and the path to the method's class)
-							setBufIndex(lastPos);
+							setIndex(lastPos);
 							// set the last symbol (dot) and idName
 							_sym = DOT_SYM;
 							_idName = lastIdName;

@@ -150,7 +150,7 @@ public class XSParseList extends XSAbstractParser {
 				p.isSpaces();
 				t = p.nextToken();
 				if (t == null) {
-					p.setBufIndex(pos1);
+					p.setIndex(pos1);
 					break;
 				}
 			}

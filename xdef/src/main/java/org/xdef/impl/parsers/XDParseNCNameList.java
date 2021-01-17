@@ -71,26 +71,26 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 			char separator;
 			if (_separator != null) {
 				if ((separator = parser.isOneOfChars(_separator)) == 0) {
-					parser.setBufIndex(pos1);
+					parser.setIndex(pos1);
 					break;
 				}
 				while(parser.isOneOfChars(_separator) != 0) {}
 			} else if (parser.isSpaces()) {
 				separator = ' ';
 			} else {
-				parser.setBufIndex(pos1);
+				parser.setIndex(pos1);
 				break;
 			}
 			int pos2 = parser.getIndex();
 			if ((val = parse(xnode, parser)) == null) {
-				parser.setBufIndex(pos1);
+				parser.setIndex(pos1);
 				break;
 			}
 			sb.append(separator);
 			sb.append(parser.getParsedBufferPartFrom(pos2));
 			results.addXDItem(val);
 		}
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, sb.toString());
 		p.setParsedValue(results);
