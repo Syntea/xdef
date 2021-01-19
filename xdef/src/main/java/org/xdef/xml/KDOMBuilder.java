@@ -34,7 +34,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	private boolean _namespaceAware;
 	private boolean _ignoreComments;
 	private boolean _expandEntityReferences;
-	/** If this flag is <tt>true</tt> DTD validation is provided. */
+	/** If this flag is true DTD validation is provided. */
 	private boolean _validate;
 	private boolean _ignoreElementContentWhitespace;
 	/** If true the parser will resolve XInclude nodes. By default the value of
@@ -97,7 +97,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	}
 
 	/** Get internal reporter.
-	 * @return internal reporter or <tt>null</tt>.
+	 * @return internal reporter or null.
 	 */
 	public final ArrayReporter getReporter() {
 		if (_reporter == null) {
@@ -214,12 +214,12 @@ public class KDOMBuilder extends DocumentBuilder {
 		return _xBuilder.newDocument();
 	}
 
-	/** Creates an XML <tt>Document</tt> object with empty root element
+	/** Creates an XML Document object with empty root element
 	 * created by document builder (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
 	 * @param docType DocumentType object or null.
-	 * @return new <tt>Document</tt> object with empty root element.
+	 * @return new Document object with empty root element.
 	 */
 	public final Document newDocument(final String nsURI,
 		final String qname,

@@ -77,7 +77,7 @@ public class KXqueryExpr implements KXquery {
 
 	@Override
 	/** Get array with QNames of external variables
-	 * @return array with QNames of external variables or <tt>null</tt>.
+	 * @return array with QNames of external variables or null.
 	 */
 	public QName[] getAllExternalVariables() {
 		return (_impl != null) ? _impl.getAllExternalVariables() : null;
@@ -85,7 +85,7 @@ public class KXqueryExpr implements KXquery {
 
 	@Override
 	/** Get array with QNames of unbound external variables
-	 * @return array with QNames of unbound external variables or <tt>null</tt>.
+	 * @return array with QNames of unbound external variables or null.
 	 */
 	public QName[] getAllUnboundExternalVariables() {
 		return (_impl != null) ? _impl.getAllUnboundExternalVariables() : null;
@@ -106,7 +106,7 @@ public class KXqueryExpr implements KXquery {
 
 	@Override
 	/** Execute precompiled XQuery expression and return result.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -116,7 +116,7 @@ public class KXqueryExpr implements KXquery {
 
 	@Override
 	/** Execute XQuery expression and return result.
-	/* If result type is <tt>null</tt> then result types are checked in
+	/* If result type is null then result types are checked in
 	 * following sequence:
 	 * @return object with result of XQuery expression.
 	 */
@@ -130,7 +130,7 @@ public class KXqueryExpr implements KXquery {
 	public String getSourceExpr() {return _source;}
 
 	/** Execute XQuery expression with context node and return result.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @param expr String with XQuery expression.
 	 * @return the result of evaluation as XQResultSequence object.
 	 * @throws SRuntimeException if an error occurs.

@@ -23,12 +23,12 @@ public interface KXquery {
 	public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException;
 
 	/** Get array with QNames of external variables
-	 * @return array with QNames of external variables or <tt>null</tt>.
+	 * @return array with QNames of external variables or null.
 	 */
 	public QName[] getAllExternalVariables();
 
 	/** Get array with QNames of unbound external variables
-	 * @return array with QNames of unbound external variables or <tt>null</tt>.
+	 * @return array with QNames of unbound external variables or null.
 	 */
 	public QName[] getAllUnboundExternalVariables();
 
@@ -40,14 +40,14 @@ public interface KXquery {
 	public void bindValue(final QName qname, final Object value);
 
 	/** Execute precompiled XQuery expression and return result.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public Object evaluate(final Node node) throws SRuntimeException;
 
 	/** Execute XQuery expression and return result.
-	/* If result type is <tt>null</tt> then result types are checked in
+	/* If result type is null then result types are checked in
 	 * following sequence:
 	 * @return object with result of XQuery expression.
 	 */

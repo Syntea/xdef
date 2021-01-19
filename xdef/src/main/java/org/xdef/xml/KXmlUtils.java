@@ -450,7 +450,7 @@ public final class KXmlUtils extends KDOMUtils {
 							aindent = startLine + "  ";
 						}
 						if (numAttrs == 2 &&
-							(startLine == null || alen + s.length() < 71)) {
+							(startLine == null || alen + s.length() < 79)) {
 							out.write(' ');
 						} else {
 							out.write(aindent);
@@ -484,7 +484,7 @@ public final class KXmlUtils extends KDOMUtils {
 					String value = e.getValue();
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
-					if (first && numAttrs <= 1 && alen + s.length() < 71) {
+					if (first && numAttrs <= 1 && alen + s.length() < 79) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -753,7 +753,7 @@ public final class KXmlUtils extends KDOMUtils {
 				case '\n':
 				case ' ':
 					if (removeIgnorableWhiteSpaces) {
-						if (indent != null && pos > 71 && j + 1 < len) {
+						if (indent != null && pos >= 79 && j + 1 < len) {
 							//wrap line
 							out.write(indent);
 							pos = indent.length();

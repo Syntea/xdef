@@ -57,7 +57,7 @@ public class KXpathExpr {
 
 	/** Creates a new instance of KXpathExpr
 	 * @param expr String with XPath expression.
-	 * @param nc NameSpace context or <tt>null</tt>.
+	 * @param nc NameSpace context or null.
 	 */
 	public KXpathExpr(final String expr, final NamespaceContext nc) {
 		this(expr, nc, null, null);
@@ -65,9 +65,9 @@ public class KXpathExpr {
 
 	/** Creates a new instance of KXpathExpr
 	 * @param expr String with XPath expression.
-	 * @param nc NameSpace context or <tt>null</tt>.
-	 * @param fr Function resolver or <tt>null</tt>.
-	 * @param vr Variable resolver or <tt>null</tt>.
+	 * @param nc NameSpace context or null.
+	 * @param fr Function resolver or null.
+	 * @param vr Variable resolver or null.
 	 */
 	public KXpathExpr(final String expr,
 		final NamespaceContext nc,
@@ -142,10 +142,10 @@ public class KXpathExpr {
 	public void setVariableResolver(final XPathVariableResolver vr) {_vr = vr;}
 
 	/** Execute XPath expression and return result.
-	 * If result type is <tt>null</tt> then result types are checked in
+	 * If result type is null then result types are checked in
 	 * following sequence:
 	 * 1) NODESET, 2) STRING, 3) NODE.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @param type QName with result type.
 	 * @return object with result of XPath expression.
 	 */
@@ -284,15 +284,15 @@ public class KXpathExpr {
 	}
 
 	/** Execute XPath expression and return result.
-	/* If result type is <tt>null</tt> then result types are checked in
+	/* If result type is null then result types are checked in
 	 * following sequence:
 	 * 1) NODESET, 2) STRING, 3) NODE.
-	 * @param node node or <tt>null</tt>.
-	 * @param type QName with result type or <tt>null</tt>.
+	 * @param node node or null.
+	 * @param type QName with result type or null.
 	 * @param expr String with XPath expression.
 	 * @param nc NameSpace context.
-	 * @param fr Function resolver or <tt>null</tt>.
-	 * @param vr Variable resolver or <tt>null</tt>.
+	 * @param fr Function resolver or null.
+	 * @param vr Variable resolver or null.
 	 * @return object with result of XPath expression.
 	 */
 	public static Object evaluate(final Node node,
@@ -308,7 +308,7 @@ public class KXpathExpr {
 	 * no functions) and return result.
 	 * Result types are checked in following sequence:
 	 * 1) NODESET, 2) STRING, 3) NODE.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @param expr String with XPath expression.
 	 * @return object with result of XPath expression.
 	 */
@@ -320,7 +320,7 @@ public class KXpathExpr {
 	 * no functions) and return result.
 	 * Result types are checked in following sequence:
 	 * 1) NODESET, 2) STRING, 3) NODE.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @param expr String with XPath expression.
 	 * @param nc NameSpace context.
 	 * @return object with result of XPath expression.
