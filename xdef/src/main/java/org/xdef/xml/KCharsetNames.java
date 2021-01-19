@@ -85,7 +85,7 @@ public final class KCharsetNames {
 	 * unknown. The argument can be either a XML encoding name or character set
 	 * name.
 	 * @param name the XML encoding name or the character set name.
-	 * @return canonized XML encoding name or <tt>null</tt>.
+	 * @return canonized XML encoding name or null.
 	 */
 	public static String getXmlEncodingName(final String name) {
 		String result = JAVA_TO_IANA.get(name.toUpperCase(Locale.ENGLISH));
@@ -96,7 +96,7 @@ public final class KCharsetNames {
 	 * a XML encoding name or a character set name. Returns null if the
 	 * character set name is unknown.
 	 * @param name The name of character set.
-	 * @return canonized character set name or <tt>null</tt>.
+	 * @return canonized character set name or null.
 	 */
 	public static String getJavaCharsetName(final String name) {
 		String result = IANA_TO_JAVA.get(name.toUpperCase(Locale.ENGLISH));

@@ -260,7 +260,7 @@ public class KDOMUtils {
 	 * @param localName required local name of Element.
 	 * @param node node which child nodes are inspected for occurrence of
 	 * Element with URI and local name equal to arguments above
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final NodeList getChildElementsNS(final Node node,
 		final String ns,
@@ -292,7 +292,7 @@ public class KDOMUtils {
 	 * to one of names from the list from the argument tagnameList.
 	 * @param node node which children are inspected.
 	 * @param tagnameList array with list of required tag names.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final NodeList getChildElements(final Node node,
 		final String[] tagnameList) {
@@ -324,7 +324,7 @@ public class KDOMUtils {
 	 * @param localnameList array with list of local names.
 	 * @param node children of this node are inspected for occurrence of
 	 * an Element requiring to arguments.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final NodeList getChildElementsNS(final Node node,
 		String ns,
@@ -359,7 +359,7 @@ public class KDOMUtils {
 
 	/** Get the first child node which is an Element.
 	 * @param node node which child nodes are inspected for Element occurrence.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChild(final Node node) {
 		final NodeList nl = node.getChildNodes();
@@ -381,7 +381,7 @@ public class KDOMUtils {
 	 * @param node a node of which child nodes are inspected for the first
 	 * occurrence of an Element with with name equal to argument.
 	 * @param tagName required tag name.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChild(final Node node,
 		final String tagName) {
@@ -404,7 +404,7 @@ public class KDOMUtils {
 	 * @param node children of this node are inspected for first occurrence of
 	 * an Element requiring to argument.
 	 * @param tagnameList array with list of tag names
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChild(final Node node,
 		final String[] tagnameList) {
@@ -433,7 +433,7 @@ public class KDOMUtils {
 	 * @param node a node of which child nodes are inspected for the first
 	 * occurrence of an Element with URI from argument.
 	 * @param ns required NameSpace URI.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChildNS(final Node node,
 		final String ns){
@@ -462,7 +462,7 @@ public class KDOMUtils {
 	 * local name.
 	 * @param ns required NameSpace URI.
 	 * @param localName required local name.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChildNS(final Node node,
 		final String ns,
@@ -505,7 +505,7 @@ public class KDOMUtils {
 	 * @param localnameList array with list of local names.
 	 * @param node children of this node are inspected for first occurrence of
 	 * an Element requiring to arguments.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element firstElementChildNS(final Node node,
 		final String ns,
@@ -539,7 +539,7 @@ public class KDOMUtils {
 
 	/** Get the first next node which is an Element.
 	 * @param node actual node of wnich next sibling Element is returned.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static Element nextElementSibling(final Node node) {
 		if (node == null) {
@@ -555,7 +555,7 @@ public class KDOMUtils {
 	 * URI frm the argument ns.
 	 * @param node actual node of which next sibling Element is returned.
 	 * @param ns namespace of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element nextElementSiblingNS(final Node node,
 		final String ns) {
@@ -578,7 +578,7 @@ public class KDOMUtils {
 	/** Return the first next node which is an Element type with given name.
 	 * @param node actual node of wnich next Element is returned.
 	 * @param tagName tag name of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element nextElementSibling(final Node node,
 		final String tagName) {
@@ -596,7 +596,7 @@ public class KDOMUtils {
 	 * @param node actual node of which next Element is returned.
 	 * @param localname local name of Element to be found.
 	 * @param ns namespace of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element nextElementSiblingNS(final Node node,
 		final String ns,
@@ -621,7 +621,7 @@ public class KDOMUtils {
 	 * equal to one of names from the argument tagnameList.
 	 * @param node actual node of which next Element is returned.
 	 * @param tagnameList array with tag names.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element nextElementSibling(final Node node,
 		final String[] tagnameList) {
@@ -647,7 +647,7 @@ public class KDOMUtils {
 	 * @param node actual node of which next Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @param nameList array with local names.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element nextElementSiblingNS(final Node node,
 		final String ns,
@@ -676,7 +676,7 @@ public class KDOMUtils {
 
 	/** Get the last child node which is an Element.
 	 * @param node actual node of which last Element is returned.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element lastElementChild(final Node node) {
 		final NodeList nl = node.getChildNodes();
@@ -697,7 +697,7 @@ public class KDOMUtils {
 	 * the argument tagName.
 	 * @param node actual node of which last Element is returned.
 	 * @param tagName tag name of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element lastElementChild(final Node node,
 		final String tagName) {
@@ -720,7 +720,7 @@ public class KDOMUtils {
 	 * equal to the argument ns.
 	 * @param node actual node of which last Element is returned.
 	 * @param ns namespace of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static Element lastElementChildNS(final Node node,
 		final String ns) {
@@ -747,7 +747,7 @@ public class KDOMUtils {
 	 * @param node actual node of which last Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @param lname local name of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static Element lastElementChildNS(final Node node,
 		final String ns,
@@ -778,7 +778,7 @@ public class KDOMUtils {
 	 * to one of names from the argument tagnameList.
 	 * @param tagnameList array with list of names.
 	 * @param node actual node of which last Element is returned.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static Element lastElementChild(final Node node,
 		final String[] tagnameList) {
@@ -808,7 +808,7 @@ public class KDOMUtils {
 	 * @param ns namespace of Element to be found.
 	 * @param nameList array with list of local names.
 	 * @param node actual node of which last Element is returned.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element lastElementChildNS(final Node node,
 		final String ns,
@@ -842,7 +842,7 @@ public class KDOMUtils {
 
 	/** Get the first previous node which is an Element.
 	 * @param node actual node from which previous Element is returned.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSibling(final Node node) {
 		if (node == null) {
@@ -858,7 +858,7 @@ public class KDOMUtils {
 	 * NameSpace URI from the qrument ns.
 	 * @param node actual node from which previous Element is returned.
 	 * @param ns namespace of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSiblingNS(final Node node,
 		final String ns) {
@@ -881,7 +881,7 @@ public class KDOMUtils {
 	/** Return the first previous node which is an Element type with given name.
 	 * @param node actual node from which previous Element is returned.
 	 * @param tagName tag name of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSibling(final Node node,
 		final String tagName) {
@@ -899,7 +899,7 @@ public class KDOMUtils {
 	 * @param node actual node from which previous Element is returned.
 	 * @param localname local name of Element to be found.
 	 * @param ns namespace of Element to be found.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSiblingNS(final Node node,
 		final String ns,
@@ -924,7 +924,7 @@ public class KDOMUtils {
 	 * equal to one of names from the list.
 	 * @param node actual node from which previous Element is returned.
 	 * @param tagnameList array with tag names.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSibling(final Node node,
 		final String[] tagnameList) {
@@ -949,7 +949,7 @@ public class KDOMUtils {
 	 * @param node actual node from which previous Element is returned.
 	 * @param ns NameSpace of Element to be found.
 	 * @param nameList array with local names.
-	 * @return Element found or <tt>null</tt>.
+	 * @return Element found or null.
 	 */
 	public static final Element previousElementSiblingNS(final Node node,
 		final String ns,
@@ -1320,11 +1320,9 @@ public class KDOMUtils {
 
 	/** Get text nodes from all textual child nodes of node from argument.
 	 * As textual nodes are considered nodes of type:
-	 * <ul>
-	 * <li>org.w3c.dom.CDATASection</li>
-	 * <li>org.w3c.dom.Text</li>
-	 * <li>org.w3c.dom.EntityReference</li>
-	 * </ul>
+	 * <br> - org.w3c.dom.CDATASection
+	 * <br> - org.w3c.dom.Text
+	 * <br> - org.w3c.dom.EntityReference
 	 * @param node actual node; it's children are inspected.
 	 * @param coalesce if true text nodes are coalesced.
 	 * @return NodeList with text nodes.
@@ -1369,13 +1367,11 @@ public class KDOMUtils {
 
 	/** Get coalesced text nodes from all textual child nodes of a node.
 	 * As textual nodes are considered nodes of type:
-	 * <ul>
-	 * <li>org.w3c.dom.CDATASection</li>
-	 * <li>org.w3c.dom.Text</li>
-	 * <li>org.w3c.dom.EntityReference</li>
-	 * </ul>
+	 * <br> - org.w3c.dom.CDATASection
+	 * <br> - org.w3c.dom.Text
+	 * <br> - org.w3c.dom.EntityReference
 	 * All node items in the returned NodeList object are created as new
-	 * Text nodes, i.e. consequently their parents are <tt>null</tt>.
+	 * Text nodes, i.e. consequently their parents are null.
 	 * @param node it's children are inspected.
 	 * @return NodeList with text nodes.
 	 */
@@ -1422,7 +1418,7 @@ public class KDOMUtils {
 
 	/** Get text concatenated from all direct child nodes.
 	 * @param node actual node; it's children are inspected.
-	 * @return String with text value or <tt>null</tt>.
+	 * @return String with text value or null.
 	 */
 	public static final String getTextValue(final Node node) {
 		if (node == null) {
@@ -1553,7 +1549,7 @@ public class KDOMUtils {
 	}
 
 	/** Return NameSpace URI of prefix in context of given element.
-	 * @param prefix prefix of NameSpace or <tt>null</tt>.
+	 * @param prefix prefix of NameSpace or null.
 	 * @param elem element in which context an URI is searched.
 	 * @return URI or empty string.
 	 */
@@ -1577,11 +1573,11 @@ public class KDOMUtils {
 
 	/** Create copy of node in given Document. This method is similar to
 	 * org.w3c.dom.Node.cloneNode(deep). However, if document of given node
-	 * is not equal to document from argument <tt>doc</tt> then the new copy
+	 * is not equal to document from argument doc then the new copy
 	 * of node is created in the document from argument.
 	 * @param doc document where clone of node is created.
 	 * @param node object which to be cloned/copied.
-	 * @param deep if <tt>true</tt> child nodes are created, otherwise ignored.
+	 * @param deep if true child nodes are created, otherwise ignored.
 	 * @return copy of node from argument created in given document.
 	 * @throws SRuntimeException XML201 if an error occurs.
 	 */

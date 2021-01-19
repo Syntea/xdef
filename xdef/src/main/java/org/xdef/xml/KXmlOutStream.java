@@ -37,7 +37,7 @@ public class KXmlOutStream {
 	/** Creates new instance of DefXmlOutStream with java.io.Writer
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 */
 	public KXmlOutStream(final Writer writer,
@@ -52,7 +52,7 @@ public class KXmlOutStream {
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
@@ -71,7 +71,7 @@ public class KXmlOutStream {
 	 * only if something was written.
 	 * @param filename the name of file where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
@@ -102,7 +102,7 @@ public class KXmlOutStream {
 	}
 
 	/** Set output will be indented.
-	 * @param indent if <tt>true</tt> then the output will be indented.
+	 * @param indent if true then the output will be indented.
 	 */
 	public void setIndenting(boolean indent) {
 		_indent = indent ? "\n" : null;
