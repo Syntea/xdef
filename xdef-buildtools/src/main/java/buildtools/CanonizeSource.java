@@ -33,7 +33,7 @@ import java.util.Date;
  * be used to specify group of files. The parameter is obligatory.
  * <br> -r process directory tree. The parameter is optional and forces to
  * process all subdirectories of the directory where process started.
- * <<br> -o outputDirectory: The directory where output files are stored. The
+ * <br> -o outputDirectory: The directory where output files are stored. The
  * parameter is optional. If it is not specified the source file is
  * overwritten.
  * <br> -t spaces are replaced by tabs The parameter is optional.
