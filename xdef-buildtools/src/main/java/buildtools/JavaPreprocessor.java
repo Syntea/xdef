@@ -1521,12 +1521,6 @@ public class JavaPreprocessor {
 		/** Creates new instance of MyStringList. */
 		private MyStringList() { _strings = new String[0]; }
 
-		/** Creates new instance of MyStringList from other MyStringList. */
-		private MyStringList(final MyStringList list) {
-			_strings = new String[list._strings.length];
-			System.arraycopy(list._strings, 0, _strings, 0, list.size());
-		}
-
 		/** Add string to list*/
 		private void add(final String s) {
 			String[] strings = _strings;
