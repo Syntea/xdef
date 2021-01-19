@@ -98,6 +98,9 @@ public class Canonize {
 		}
 	}
 
+	/** Update release date in the file changelog.md.
+	 * @param date actual date.
+	 */
 	private static void updateDateInChangeLog(final String date) {
 		try {
 			File f = new File("../xdef/changelog.md");
@@ -172,6 +175,9 @@ public class Canonize {
 		return -1;
 	}
 
+	/** Update release date in the file pom.xml.
+	 * @param date actual date.
+	 */
 	private static void updateDateInPomXml(final String date) {
 		try {
 			File f = new File("../pom.xml");
@@ -227,7 +233,8 @@ public class Canonize {
 		// register report messages
 		GenReportTables.main();
 
-		String date = String.format("%tF", new Date());
+		// update date in files changelof.md and in pom.xml
+		String date = String.format("%tF", new Date()); // actual date
 		updateDateInChangeLog(date);
 		updateDateInPomXml(date);
 	}
