@@ -26,23 +26,21 @@ import java.util.Date;
  * feed characters (LF - 0x0a) are replaced by line feed characters. If the
  * switch "-CR" is specified, the couple of both characters is generated.
  * The program may be invoked from command line with following parameters:
- * <p><tt>-i input [-r] [-o outputDirectory] (-t |-s) [-n indent] [-h]</tt></p>
- * <p>where:</p>
- * <ul>
- * <li> -i input Input may be specified as the file with input source or as the
+ * <br>-i input [-r] [-o outputDirectory] (-t |-s) [-n indent] [-h]
+ * <br>where:
+ * <br> -i input Input may be specified as the file with input source or as the
  * directory. If the parameter is not directory, also wildcards '*' or '?' may
- * be used to specify group of files. The parameter is obligatory.</li>
- * <li> -r process directory tree. The parameter is optional and forces to
- * process all subdirectories of the directory where process started.</li>
- * <li> -o outputDirectory: The directory where output files are stored. The
+ * be used to specify group of files. The parameter is obligatory.
+ * <br> -r process directory tree. The parameter is optional and forces to
+ * process all subdirectories of the directory where process started.
+ * <<br> -o outputDirectory: The directory where output files are stored. The
  * parameter is optional. If it is not specified the source file is
- * overwritten.</li>
- * <li> -t spaces are replaced by tabs The parameter is optional.</li>
- * <li> -s tabs are replaced by spaces The parameter is optional.</li>
- * <li> -cr lines are separated by the couple of CR and LF The parameter
- * is optional.</li>
- * <li> -h The parameter displays help text.</li>
- * </ul>
+ * overwritten.
+ * <br> -t spaces are replaced by tabs The parameter is optional.
+ * <br> -s tabs are replaced by spaces The parameter is optional.
+ * <br> -cr lines are separated by the couple of CR and LF The parameter
+ * is optional.
+ * <br> -h The parameter displays help text.
  * <i>Switches -t and  -s are exclusive. If none of them is specified the -s is
  * set as the default value.</i>
  *
@@ -79,7 +77,7 @@ public class CanonizeSource {
 	int _lastCommentLine;
 	int _firstCommentStart;
 	int _firstCommentEnd;
-	int _lines = 0;
+	public int _lines = 0;
 
 	/** Creates new instance of ToNewPrepoc - just prevent the user to do it.*/
 	private CanonizeSource() {}
