@@ -1,11 +1,20 @@
 package buildtools;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.Date;
 
 /** Canonize sources.
  * <p>1. Remove all white spaces after last non-blank character
- * at the end of line and replace leading spaces by tabs.</p>
- * <p>2. Check and generate message report classes.</p>
+ * at the end of line and replace leading spaces by tabs.
+ * <p>2. Check and generate message report classes.
  * @author  Vaclav Trojan
  */
 public class Canonize {
@@ -89,6 +98,108 @@ public class Canonize {
 		}
 	}
 
+	private static void updateDateInChangeLog(final String date) {
+		try {
+			File f = new File("../xdef/changelog.md");
+			Reader fr = new InputStreamReader(new FileInputStream(f),
+				Charset.forName("UTF-8"));
+			BufferedReader bufrdr = new BufferedReader(fr);
+			StringBuilder sb = new StringBuilder();
+			String line;
+			boolean wasVer = false;
+			boolean changed = false;
+			while ((line = bufrdr.readLine()) != null) {
+				int ndx;
+				if (!wasVer && line.indexOf('$') < 0
+					&& line.startsWith("# Version ")
+					&& (ndx = line.indexOf(" release-date")) > 0) {
+					String s =
+						line.substring(0, ndx) + " release-date " + date;
+					changed = !s.equals(line);
+					line = s;
+					wasVer = true;
+				}
+				sb.append(line).append('\n');
+			}
+			bufrdr.close();
+			if (changed) {
+				Writer wr = new OutputStreamWriter(new FileOutputStream(f),
+					Charset.forName("UTF-8"));
+				wr.write(sb.toString());
+				wr.close();
+				System.out.println("Updated date in changelog.md");
+			} else {
+				System.out.println("Date in changelog.md not changed");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	/** Find first element with given name.
+	 * @param s string with XML data
+	 * @param name name of element to be found.
+	 * @return index to the element.
+	 */
+	private static int findElement(final String s, final String name) {
+		int ndx;
+		int ndx0 = 0;
+		while ((ndx = s.indexOf('<', ndx0)) >= 0) {
+			if (s.startsWith("<!--", ndx)) {
+				ndx0 = s.indexOf("-->", ndx + 4);
+				if (ndx0 < 0) {
+					return -1;
+				}
+				ndx0 += 3;
+			} else if (s.startsWith('<' + name, ndx)) {
+				ndx0 += name.length() + 1;
+				ndx = s.indexOf(">", ndx0);
+				if (ndx < 0) {
+					return -1;
+				}
+				if (s.charAt(ndx - 1) == '/') {
+					return -1;
+				}
+				return ndx + 1;
+			} else {
+				ndx0 = s.indexOf('>', ndx);
+				if (ndx0 < 0) {
+					return -1;
+				}
+				ndx0++;
+			}
+		}
+		return -1;
+	}
+
+	private static void updateDateInPomXml(final String date) {
+		try {
+			File f = new File("../pom.xml");
+			Reader fr = new InputStreamReader(new FileInputStream(f),
+				Charset.forName("UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			int i;
+			while ((i = fr.read()) >= 0) {
+				sb.append((char) i);
+			}
+			fr.close();
+			String s = sb.toString();
+			int ndx = findElement(s, "release.date");
+			int ndx1 = ndx > 0 ? s.indexOf("</release.date") : -1;
+			if (ndx1 > 0 &&
+				!s.equals(s = s.substring(0, ndx) + date + s.substring(ndx1))) {
+				Writer wr = new OutputStreamWriter(new FileOutputStream(f),
+					Charset.forName("UTF-8"));
+				wr.write(s);
+				wr.close();
+				System.out.println("Updated <release.date> in pom.xml");
+			} else {
+				System.out.println("<release.date> in pom.xml not changed");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	/** Canonize sources.
 	 * @param args array with command line parameters (no parameters used).
 	 */
@@ -98,7 +209,6 @@ public class Canonize {
 		String projectBase;
 		try {
 			projectBase = new File(".").getCanonicalPath().replace('\\', '/');
-
 		} catch (Exception ex) {
 			throw new RuntimeException("Can't find project base directory");
 		}
@@ -116,5 +226,9 @@ public class Canonize {
 
 		// register report messages
 		GenReportTables.main();
+
+		String date = String.format("%tF", new Date());
+		updateDateInChangeLog(date);
+		updateDateInPomXml(date);
 	}
 }
