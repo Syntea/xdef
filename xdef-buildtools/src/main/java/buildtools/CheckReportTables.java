@@ -123,6 +123,7 @@ public class CheckReportTables {
 
 	/** Run checking reports in org.xdef.
 	 * @param args the command line arguments
+	 * @throws Exception if an error occurs.
 	 */
 	public static void main(String... args) throws Exception {
 		String dir = new File("..").getCanonicalPath().replace('\\', '/');
