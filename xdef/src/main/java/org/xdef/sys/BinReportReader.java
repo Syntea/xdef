@@ -17,8 +17,7 @@ public class BinReportReader implements ReportReader {
 		try {
 			return Report.readObj(_in);
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return null;
+			throw new RuntimeException(ex);
 		}
 	}
 

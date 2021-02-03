@@ -1,35 +1,33 @@
 package test.xdef;
 
+import java.io.File;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.List;
+import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
+import org.xdef.json.JsonToXml;
 import org.xdef.json.JsonUtil;
+import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import org.w3c.dom.Element;
 import test.XDTester;
-import java.util.List;
-import org.xdef.json.JsonToXml;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SRuntimeException;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
  */
 public class TestJsonXdef extends XDTester {
-
-	public TestJsonXdef() {super();}
-
 	private String _dataDir; // dirsctory with test data
 	private File[] _jfiles; // array with jdef files
 	private String _tempDir; // directory where to generate files
+
+	public TestJsonXdef() {super();}
 
 	/** Get ID number of a test from the file name.
 	 * @param f file name
@@ -223,12 +221,8 @@ public class TestJsonXdef extends XDTester {
 					}
 				}
 			} catch (Exception ex) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
-				result += (result.isEmpty() ? "" : "\n")
-					+ "Error " + name + "\n" + sw;
+				result += (result.isEmpty() ? "" : "\n") +
+					"Error " + name + "\n" + printThrowable(ex);
 			}
 			// parse with jparse
 			try {
@@ -240,6 +234,7 @@ public class TestJsonXdef extends XDTester {
 						+ JsonUtil.toJsonString(o) + "\n";
 				}
 			} catch (Exception ex) {
+				fail(ex);
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Incorrect jparse Test"+id+".json";
 				continue;
@@ -254,16 +249,13 @@ public class TestJsonXdef extends XDTester {
 				if (reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component " + name + "\n"
-						+ reporter.printToString()
+						+ KXmlUtils.nodeToString(
+							KXmlUtils.parseXml(f).getDocumentElement(), true)
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
 			} catch (Exception ex) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component " + name + "\n" + sw;
+					+ "Error X-component " + name + "\n" + printThrowable(ex);
 			}
 			// Test X-component.
 			try {
@@ -280,19 +272,15 @@ public class TestJsonXdef extends XDTester {
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
 				Object o = xc.toJson();
-				if (!JsonUtil.jsonEqual(json, o)) {
+				if (!JsonUtil.jsonEqual(json, o)) { ///S
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + "\n"
 						+ JsonUtil.toJsonString(json) + "\n"
 						+ JsonUtil.toJsonString(o) + "\n";
 				}
 			} catch (Exception ex) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error X-component " + id + "\n" + sw;
+					+ "Error X-component " + id + "\n" + printThrowable(ex);
 			}
 		}
 		// Test error reporting
@@ -305,12 +293,8 @@ public class TestJsonXdef extends XDTester {
 						+ "Error not reported: "+f.getName();
 				}
 			} catch (Exception ex) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
 				result += (result.isEmpty() ? "" : "\n")
-					+ "Error jerr: " + f.getName() + "\n" + sw;
+					+ "Error jerr: " + f.getName() + "\n" + printThrowable(ex);
 			}
 		}
 		return result;
@@ -334,6 +318,7 @@ public class TestJsonXdef extends XDTester {
 		}
 	}
 
+
 	@Override
 	/** Run test and print error information. */
 	public void test() {
@@ -347,7 +332,7 @@ public class TestJsonXdef extends XDTester {
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
-//			xp = genAll("Test017");
+//			xp = genAll("Test028");
 		} catch (Exception ex) {
 			fail(new RuntimeException(ex));
 			return;
@@ -359,7 +344,8 @@ public class TestJsonXdef extends XDTester {
 				assertTrue(s.isEmpty(), s);
 			}
 		} catch (Exception ex) {fail(ex);} // should not happen!!!
-/*xx*/
+//		if(true)return;
+		// Test X-components
 		try {
 			String test;
 			XComponent xc;
@@ -449,7 +435,6 @@ public class TestJsonXdef extends XDTester {
 			j = ((List) j).get(1);
 			assertEq(13, getValueFromGetter(j,"get" + JsonToXml.J_VALUEATTR));
 		} catch (Exception ex) {fail(ex);}
-
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
@@ -460,44 +445,42 @@ public class TestJsonXdef extends XDTester {
 			}
 		}
 
-		////////////////////////////////////////////////////////////////////////
 		// Other tests
-		////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Osoba' root='Osoba'>\n"+
-"<xd:json name=\"Osoba\">\n"+
-"{ \"Osoba\": { \"Jmeno\": \"string(1, 50);\",\n" +
-"    \"Plat\": \"int(1000, 99999);\",\n" +
-"    \"Nar.\": \"date();\"\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
+"<xd:json name=\"Person\">\n"+
+"{ \"Person\": { \"Name\": \"string(1, 50);\",\n" +
+"    \"Pay\": \"int(1000, 99999);\",\n" +
+"    \"Birth date.\": \"date();\"\n" +
 "  }\n" +
 "}\n" +
 "</xd:json>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			json =
-"{ \"Osoba\": {\n" +
-"    \"Jmeno\":\"Václav Novák\",\n" +
-"    \"Plat\":12345,\n" +
-"    \"Nar.\":\"1980-11-07\"\n" +
+"{ \"Person\": {\n" +
+"    \"Name\":\"Václav Novák\",\n" +
+"    \"Pay\":12345,\n" +
+"    \"Birth date.\":\"1980-11-07\"\n" +
 "  }\n" +
 "}";
-			xd = xp.createXDDocument("Osoba");
+			xd = xp.createXDDocument("Person");
 			j = jparse(xd, json, reporter);
 			assertNoErrors(reporter);
-			xd = xp.createXDDocument("Osoba");
+			xd = xp.createXDDocument("Person");
 			xd.setJSONContext(j);
-			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Osoba", reporter)));
+			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Person", reporter)));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Seznam_osob'>\n"+
-"<xd:json name=\"Seznam_osob\">\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:json name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
 "    { $script: \"occurs 1..*;\",\n"+
-"      \"Osoba\": { \"Jmeno\": \"string(1, 50)\",\n" +
-"         \"Plat\": \"int(1000, 99999)\",\n" +
-"         \"Nar.\": \"date()\"\n" +
+"      \"Person\": { \"Name\": \"string(1, 50)\",\n" +
+"         \"Pay\": \"int(1000, 99999)\",\n" +
+"         \"Birth date.\": \"date()\"\n" +
 "      }\n" +
  "   }\n"+
 "  ]\n"+
@@ -509,22 +492,22 @@ public class TestJsonXdef extends XDTester {
 			json =
 "{\"Seznam\":\n"+
 " [\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Václav Novák\",\n" +
-"        \"Plat\":12345,\n" +
-"        \"Nar.\":\"1980-11-07\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Václav Novák\",\n" +
+"        \"Pay\":12345,\n" +
+"        \"Birth date.\":\"1980-11-07\"\n" +
 "      }\n" +
 "    },\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Ivan Bílý\",\n" +
-"        \"Plat\":23450,\n" +
-"        \"Nar.\":\"1977-01-17\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Ivan Bílý\",\n" +
+"        \"Pay\":23450,\n" +
+"        \"Birth date.\":\"1977-01-17\"\n" +
 "      }\n" +
 "    },\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Karel Kuchta\",\n" +
-"        \"Plat\":1340,\n" +
-"        \"Nar.\":\"1995-10-06\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Karel Kuchta\",\n" +
+"        \"Pay\":1340,\n" +
+"        \"Birth date.\":\"1995-10-06\"\n" +
 "      }\n" +
 "    }\n" +
 "  ]\n" +
@@ -534,21 +517,21 @@ public class TestJsonXdef extends XDTester {
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
 			assertTrue(JsonUtil.jsonEqual(j,
-				jcreate(xd, "Seznam_osob", reporter)));
+				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Seznam_osob'>\n"+
-"<xd:json name=\"Seznam_osob\">\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:json name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
-"    { $script: \"occurs 1..*; ref Osoba\" }\n"+
+"    { $script: \"occurs 1..*; ref Person\" }\n"+
 "  ]\n"+
 "}\n"+
 "</xd:json>\n"+
-"<xd:json name=\"Osoba\">\n"+
-"{ \"Osoba\": { \"Jmeno\": \"string(1, 50)\",\n" +
-"    \"Plat\": \"int(1000, 99999)\",\n" +
-"    \"Nar.\": \"date()\"\n" +
+"<xd:json name=\"Person\">\n"+
+"{ \"Person\": { \"Name\": \"string(1, 50)\",\n" +
+"    \"Pay\": \"int(1000, 99999)\",\n" +
+"    \"Birth date.\": \"date()\"\n" +
 "  }\n" +
 "}\n" +
 "</xd:json>\n"+
@@ -558,22 +541,22 @@ public class TestJsonXdef extends XDTester {
 			json =
 "{\"Seznam\":\n"+
 " [\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Václav Novák\",\n" +
-"        \"Plat\":12345,\n" +
-"        \"Nar.\":\"1980-11-07\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Václav Novák\",\n" +
+"        \"Pay\":12345,\n" +
+"        \"Birth date.\":\"1980-11-07\"\n" +
 "      }\n" +
 "    },\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Ivan Bílý\",\n" +
-"        \"Plat\":23450,\n" +
-"        \"Nar.\":\"1977-01-17\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Ivan Bílý\",\n" +
+"        \"Pay\":23450,\n" +
+"        \"Birth date.\":\"1977-01-17\"\n" +
 "      }\n" +
 "    },\n" +
-"    { \"Osoba\":{\n" +
-"        \"Jmeno\":\"Karel Kuchta\",\n" +
-"        \"Plat\":1340,\n" +
-"        \"Nar.\":\"1995-10-06\"\n" +
+"    { \"Person\":{\n" +
+"        \"Name\":\"Karel Kuchta\",\n" +
+"        \"Pay\":1340,\n" +
+"        \"Birth date.\":\"1995-10-06\"\n" +
 "      }\n" +
 "    }\n" +
 "  ]\n" +
@@ -583,11 +566,11 @@ public class TestJsonXdef extends XDTester {
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
 			assertTrue(JsonUtil.jsonEqual(j,
-				jcreate(xd, "Seznam_osob", reporter)));
+				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Matice'>\n"+
-"<xd:json name=\"Matice\">\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
+"<xd:json name=\"Matrix\">\n"+
 "  [\n" +
 "    [ $script: \"occurs 3;\",\n" +
 "      \"occurs 3; float()\"\n" +
@@ -607,7 +590,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
-			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Matice", reporter)));
+			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Matrix", reporter)));
 			assertNoErrors(reporter);
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
@@ -615,8 +598,8 @@ public class TestJsonXdef extends XDTester {
 "<xd:json name=\"Skladby\">\n"+
 "  [\n" +
 "    { $script: \"occurs 1..*;\",\n" +
-"       \"Název\": \"string()\",\n" +
-"       \"Styl\": [ $oneOf,\n" +
+"       \"Name\": \"string()\",\n" +
+"       \"Style\": [ $oneOf,\n" +
 "         \"string()\",\n" +
 "         [ \"occurs 2..* string()\" ]\n" +
 "       ]\n" +
@@ -628,11 +611,11 @@ public class TestJsonXdef extends XDTester {
 			xd = xp.createXDDocument("");
 			json =
 "[\n" +
-"  { \"Název\": \"Beethoven, Symfonie No 5\",\n" +
-"    \"Styl\": \"Klasika\"\n" +
+"  { \"Name\": \"Beethoven, Symfonie No 5\",\n" +
+"    \"Style\": \"Classic\"\n" +
 "  },\n" +
-"  { \"Název\": \"A Day at the Races\",\n" +
-"    \"Styl\": [\"jazz\", \"pop\" ]\n" +
+"  { \"Name\": \"A Day at the Races\",\n" +
+"    \"Style\": [\"jazz\", \"pop\" ]\n" +
 "  }\n" +
 "]";
 			j = jparse(xd, json, reporter);

@@ -34,8 +34,7 @@ public final class TestXdefOfXdef extends XDTester {
 				false);
 			return KXmlUtils.nodeToString(el, true);
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "";
+			throw new RuntimeException(ex);
 		}
 	}
 

@@ -919,8 +919,7 @@ public class GUIEditor extends GUIScreen {
 				displayResult = "true";
 				debug = "true";
 			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
-				return;
+				throw new RuntimeException(ex);
 			}
 		} else {
 			System.err.println("Incorrect parameter: " + arg + "\n" + info);

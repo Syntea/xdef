@@ -368,7 +368,9 @@ public class GUIBase {
 			String s = String.format("%3d\n", n);
 			try {
 				sdoc.insertString(offset, s, style);
-			} catch (Exception ex) {ex.printStackTrace(System.err);}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
 			offset += s.length();
 		}
 		_lineNumberArea.setStyledDocument(sdoc);

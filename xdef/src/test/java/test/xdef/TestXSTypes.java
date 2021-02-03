@@ -553,11 +553,7 @@ public final class TestXSTypes extends XDTester {
 				_msg += "\n";
 			}
 			if (ex.getMessage() == null) {
-				java.io.StringWriter sw = new java.io.StringWriter();
-				java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
-				_msg += "XDEF exception:\n"+ sw.toString();
+				_msg += "XDEF exception:\n"+ printThrowable(ex);
 			} else {
 				_msg += "XDEF: " + ex.getMessage();
 			}
