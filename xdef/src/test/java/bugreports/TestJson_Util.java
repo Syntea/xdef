@@ -577,8 +577,7 @@ public class TestJson_Util extends StringParser {
 			jx.getReportWriter().checkAndThrowErrors();
 			return result;
 		} catch (Exception ex) { // never happens
-			ex.printStackTrace(System.err);
-			return null;
+			throw new RuntimeException(ex);
 		}
 	}
 

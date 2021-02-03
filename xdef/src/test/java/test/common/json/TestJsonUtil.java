@@ -54,65 +54,32 @@ public class TestJsonUtil extends STester {
 			return "JSON error " + id + "\n" + ex;
 		}
 		try {
-			// test jsonToXmlXD (XD version)
+			// test JSON to XML and XML to JSON (W3C format) JSON
 			el = JsonUtil.jsonToXmlXD(o1);
+			o2 = JsonUtil.xmlToJson(el);
+			if (!JsonUtil.jsonEqual(o1, o2)) {
+				_errors++;
+				return "JSON xmlToJson (W33) error " + id
+					+ KXmlUtils.nodeToString(el);
+			}
 		} catch (Exception ex) {
 			_errors++;
 			return "Error jsonToXml (XD): Test" + id + ".json\n"
 				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
 		try {
-			// test XmlToJson
-			o2 = JsonUtil.xmlToJson(el);
-		} catch (Exception ex) {
-			_errors++;
-			return "Error XmlToJson (XD): Test" + id + ".json\n"
-				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
-		}
-		String result;
-		if (!JsonUtil.jsonEqual(o1, o2)) {
-			_errors++;
-			result = "Error XmlToJson (XD): Test" + id + ".json\n"
-				+ JsonUtil.toJsonString(o1, true) + "\n"
-				+ JsonUtil.toJsonString(o2, true) + "\n" +
-				KXmlUtils.nodeToString(el, true);
-		} else {
-			result = "";
-		}
-		try {
-			// test jsonToXMl (W3C version)
+			// test JSON to XML and XML to JSON (W3C format) JSON
 			el = JsonUtil.jsonToXml(o1);
+			o2 = JsonUtil.xmlToJson(el);
+			if (!JsonUtil.jsonEqual(o1, o2)) {
+				_errors++;
+				return "JSON xmlToJson (W3C) error " + id
+					+ KXmlUtils.nodeToString(el);
+			}
 		} catch (Exception ex) {
 			_errors++;
-			return (result.isEmpty() ? "" : "\n")
-				+ "Error jsonToXml (W3C): Test" + id + ".json\n"
+			return "Error XmlToJson (W3C): Test" + id + ".json\n"
 				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
-		}
-		o2 = JsonUtil.xmlToJson(el);
-		if (!JsonUtil.jsonEqual(o1, o2)) {
-			_errors++;
-			result += (result.isEmpty() ? "" : "\n")
-				+ "Error XmlToJson (W3C): Test" + id + ".json\n"
-				+ JsonUtil.toJsonString(o1, true) + "\n"
-				+ JsonUtil.toJsonString(o2, true) + "\n" +
-				KXmlUtils.nodeToString(el, true);
-		}
-		return result;
-	}
-
-	/** Test conversion of XML / JSON.
-	 * @param xml XML source.
-	 * @param json JSON source (expected result)
-	 * @return empty string or error message.
-	 */
-	private String checkXmlToJson(File xml, File json) {
-		Object o1 = JsonUtil.xmlToJson(xml);
-		Object o2 = JsonUtil.parse(json);
-		if (!JsonUtil.jsonEqual(o1, o2)) {
-			_errors++;
-			return "Error in check XML and JSON:\n"
-				+ xml.getName() + ", " + json.getName() + "\n"
-				+ JsonUtil.toJsonString(o1) + "\n" + JsonUtil.toJsonString(o2);
 		}
 		return "";
 	}
@@ -128,14 +95,6 @@ public class TestJsonUtil extends STester {
 			String s = testJParse(json);
 			if (!s.isEmpty()) {
 				fail(s);
-			}
-			File xml = new File(json.getParent(), "Test" + id + ".xml");
-			if (xml.exists()) {
-				// check JSON created from an XML
-				s = checkXmlToJson(xml, json);
-				if (!s.isEmpty()) {
-					fail(s);
-				}
 			}
 		}
 	}

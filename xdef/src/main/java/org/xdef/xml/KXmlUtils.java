@@ -1212,8 +1212,8 @@ public final class KXmlUtils extends KDOMUtils {
 		reporter.error(XML.XML075, p); //Can't parse &{0}
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
@@ -1223,8 +1223,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1253,8 +1253,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, r);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @return report writer with results of comparing.
@@ -1264,8 +1264,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, false, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then all text values are rimmed before comparing.
@@ -1277,8 +1277,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, trimText, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then text values are trimmed before comparing
@@ -1310,8 +1310,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, trimText, r);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @return report writer with results of comparing.
@@ -1321,8 +1321,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, null);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing
@@ -1335,8 +1335,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, trimText, null);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing
@@ -1377,8 +1377,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(a, b, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1405,8 +1405,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return r;
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1422,8 +1422,8 @@ public final class KXmlUtils extends KDOMUtils {
 			elem_B, trimText, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1437,8 +1437,8 @@ public final class KXmlUtils extends KDOMUtils {
 			elem_B, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @return report writer with results of comparing.
@@ -1448,8 +1448,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(parseXml(A).getDocumentElement(), elem_B);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1465,8 +1465,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement(), trimText, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1480,8 +1480,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement(),reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result with reporter contains error messages
+	 * with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @return report writer with results of comparing.
@@ -1492,8 +1492,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement());
 	}
 
-	/** Compare two elements. Write differences to the reporter
-	 * if differences are recognized.
+	/** Compare two elements. Write error messages with differences to the
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer.
@@ -1524,7 +1524,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Compare list of attributes of two elements. Write differences to the
-	 * reporter if differences are recognized.
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter The report writer.
@@ -1595,7 +1595,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Compare list of child nodes of two elements. Write differences to the
-	 * reporter if differences are recognized.
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer.

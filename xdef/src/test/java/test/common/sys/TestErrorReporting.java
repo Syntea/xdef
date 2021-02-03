@@ -50,7 +50,6 @@ public class TestErrorReporting extends STester {
 		try {
 			test1();
 		} catch (Error ex) {
-			ex.printStackTrace(System.err);
 			fail(ex);
 		}
 	}

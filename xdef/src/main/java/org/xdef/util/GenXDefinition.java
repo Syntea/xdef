@@ -175,7 +175,7 @@ public class GenXDefinition {
 		try {
 			 genXdef(inFile, outFile, encoding);
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
+			throw new RuntimeException(ex);
 		}
 	}
 }

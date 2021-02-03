@@ -106,8 +106,7 @@ public class CheckXdef {
 				System.out.println("OK");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			System.exit(1);
+			throw new RuntimeException(ex);
 		}
 	}
 }

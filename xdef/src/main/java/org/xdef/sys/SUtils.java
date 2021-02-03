@@ -66,9 +66,6 @@ public class SUtils extends FUtils {
 		JAVA_RUNTIME_BUILD = s;
 	}
 
-	/** Don't allow user to instantiate this class. */
-	private SUtils() {}
-
 	/** length of line of encoded hex format and base64 format. */
 	private static final int ENCODED_LINE_LENGTH = 72;
 	/** length of input buffer in the line of hexadecimal encoded data. */
@@ -233,10 +230,8 @@ public class SUtils extends FUtils {
 	 * @param fi InputStream with hexadecimal digits.
 	 * @param fo decoded byte stream.
 	 * @throws SException
-	 * <ul>
-	 * <li>SYS036 Program exception {msg}.</li>
-	 * <li>SYS047 HEX format error.</li>
-	 * </ul>
+	 * <br>SYS036 Program exception {msg}.
+	 * <br>SYS047 HEX format error.
 	 */
 	public static final void decodeHex(final InputStream fi,
 		final OutputStream fo) throws SException {
@@ -278,10 +273,8 @@ public class SUtils extends FUtils {
 	 * @param fi Reader with hexadecimal digits.
 	 * @param fo decoded byte stream.
 	 * @throws SException
-	 * <ul>
-	 * <li>SYS036 Program exception </li>
-	 * <li>SYS047 HEX format error.</li>
-	 * </ul>
+	 * <br>SYS036 Program exception
+	 * <br>SYS047 HEX format error
 	 */
 	public static final void decodeHex(final Reader fi,
 		final OutputStream fo) throws SException {
@@ -489,7 +482,7 @@ public class SUtils extends FUtils {
 	 * <b>fo</b> in the form of MIME/BASE64.
 	 * @param fi InputStream with binary origin bytes.
 	 * @param out OutputStream for encoded Base64 result.
-	 * @param lines if <tt>true</tt> the output is break to lines (72 bytes).
+	 * @param lines if true the output is break to lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
 	public static final void encodeBase64(final InputStream fi,
@@ -528,14 +521,14 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Encodes binary input byte stream <b>fi</b> to the output stream
+	/** Encodes binary input byte stream <b>in</b> to the output stream
 	 * <b>fo</b> in the form of MIME/BASE64.
-	 * @param fi InputStream with binary origin bytes.
+	 * @param in InputStream with binary origin bytes.
 	 * @param fo Writer for encoded Base64 resulting character stream.
-	 * @param lines if <tt>true</tt> the output is breaked to lines (72 bytes).
+	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeBase64(final InputStream fi,
+	public static final void encodeBase64(final InputStream in,
 		final Writer fo,
 		final boolean lines) throws SException {
 		byte[] ibuf = new byte[INPUT_B64BUFFER_LENGTH];
@@ -548,10 +541,10 @@ public class SUtils extends FUtils {
 		}
 		int len;
 		try {
-			if ((len = fi.read(ibuf)) == INPUT_B64BUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == INPUT_B64BUFFER_LENGTH) {
 				for (;;) {
 					encodeBase64(obuf, 0, ibuf, 0, INPUT_B64BUFFER_LENGTH);
-					if ((len = fi.read(ibuf)) > 0) {
+					if ((len = in.read(ibuf)) > 0) {
 						fo.write(obuf);
 						if (len < INPUT_B64BUFFER_LENGTH) {
 							break;
@@ -574,7 +567,7 @@ public class SUtils extends FUtils {
 	/** Encodes binary input byte array to the output array in the form
 	 * of MIME/BASE64.
 	 * @param bytes array of bytes to be encoded.
-	 * @param lines if <tt>true</tt> the output is break to lines (72 bytes).
+	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @return string with encoded Base64.
 	 */
 	public static final byte[] encodeBase64(final byte[] bytes,
@@ -598,7 +591,7 @@ public class SUtils extends FUtils {
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param len maximum number of bytes to read from the buffer.
-	 * @param lines if <tt>true</tt> the output is break to lines (72 bytes).
+	 * @param lines if true the output is break to lines (72 bytes).
 	 * @return string with encoded Base64.
 	 */
 	public static final byte[] encodeBase64(final byte[] bytes,
@@ -681,10 +674,8 @@ public class SUtils extends FUtils {
 	 * @param fi java.io.Reader with Base64 character stream.
 	 * @param fo Writer for decoded byte stream.
 	 * @throws SException
-	 * <ul>
-	 * <li>SYS036 .. Program exception: {msg}.</li>
-	 * <li>SYS048 .. Base64 format error.</li>
-	 * </ul>
+	 * <br>SYS036 .. Program exception: {msg}.
+	 * <br>SYS048 .. Base64 format error.
 	 */
 	public static final void decodeBase64(final InputStream fi,
 		final OutputStream fo) throws SException {
@@ -760,10 +751,8 @@ public class SUtils extends FUtils {
 	 * @param fi java.io.Reader with Base64 character stream.
 	 * @param fo OutputStream for decoded byte stream.
 	 * @throws SException
-	 * <ul>
-	 * <li>SYS036 .. Program exception {msg}.</li>
-	 * <li>SYS048 .. Base64 format error.</li>
-	 * </ul>
+	 * <br>SYS036 .. Program exception {msg}.
+	 * <br>SYS048 .. Base64 format error.
 	 */
 	public static final void decodeBase64(final Reader fi,
 		final OutputStream fo) throws SException {
@@ -893,43 +882,42 @@ public class SUtils extends FUtils {
 	/** Replace the first occurrence of the key in the string by the value.
 	 * @param source string source.
 	 * @param key string to be replaced.
-	 * @param value string which replaces key occurrence.
+	 * @param replacement string which replaces the first key occurrence.
 	 * @return modified string.
 	 */
 	public static final String modifyFirst(final String source,
 		final String key,
-		final String value) {
+		final String replacement) {
 		int ndx, keylen;
 		if (source == null ||
 			(keylen = key.length()) == 0 ||
 			(ndx = source.indexOf(key)) < 0) {
 			return source;
 		}
-		return ndx == 0 ?
-			value + source.substring(keylen) :
-			source.substring(0,ndx) + value + source.substring(ndx + keylen);
+		return ndx == 0 ? replacement + source.substring(keylen)
+			: source.substring(0,ndx)+replacement+source.substring(ndx+keylen);
 	}
 
 	/** Replace all occurrences of the key in the source by the value.
 	 * @param source string source.
 	 * @param key string to be replaced.
-	 * @param rep string which replaces all key occurrences in the source.
+	 * @param replacement replaces all key occurrences in the source.
 	 * @return modified string.
 	 */
 	public static final String modifyString(final String source,
 		final String key,
-		final String rep) {
+		final String replacement) {
 		int pos, keylen, strlen;
 		if (source == null || (strlen = source.length()) == 0 ||
 			(keylen = key.length()) == 0 ||
 			(pos = source.indexOf(key)) < 0) {
 			return source;
 		}
-		StringBuilder result = pos == 0 ? new StringBuilder(rep) :
-			new StringBuilder(source.substring(0, pos)).append(rep);
+		StringBuilder result = pos == 0 ? new StringBuilder(replacement) :
+			new StringBuilder(source.substring(0, pos)).append(replacement);
 		int lastpos = pos += keylen;
 		while (lastpos < strlen && (pos = source.indexOf(key, lastpos)) > 0) {
-			result.append(source.substring(lastpos, pos)).append(rep);
+			result.append(source.substring(lastpos, pos)).append(replacement);
 			lastpos = pos += keylen;
 		}
 		if (lastpos < strlen) {
@@ -940,56 +928,56 @@ public class SUtils extends FUtils {
 
 	/** Replace all occurrences of the argument "key" in the StringBuffer
 	 * by value from the argument "rep".
-	 * @param source StringBuffer with source data.
+	 * @param s StringBuffer with source data.
 	 * @param key string to be replaced.
-	 * @param rep string which replaces all key occurrences in the source.
+	 * @param replacement replaces all key occurrences in the source.
 	 */
-	public static final void modifyStringBuffer(final StringBuffer source,
+	public static final void modifyStringBuffer(final StringBuffer s,
 		final String key,
-		final String rep) {
+		final String replacement) {
 		int keylen;
 		if ((keylen = key.length()) == 0) {
 			return;
 		}
-		int replen = rep.length();
-		int ndx = source.indexOf(key); //java 1.4 and higher
+		int replen = replacement.length();
+		int ndx = s.indexOf(key); //java 1.4 and higher
 		if (ndx < 0) {
 			return;
 		}
 		do {
-			source.replace(ndx, ndx + keylen, rep);
-		} while ((ndx = source.indexOf(key, ndx + replen)) >= 0); //java 1.4, ...
+			s.replace(ndx, ndx + keylen, replacement);
+		} while ((ndx = s.indexOf(key, ndx + replen)) >= 0); //java 1.4, ...
 	}
 
-	/** Replace all occurrences of the argument "key" in the StringBuilder
+	/** Replace all occurrences of the argument "key" in the StringBuilder "s"
 	 * by value from the argument "rep".
-	 * @param source StringBuilder with source data.
+	 * @param s StringBuilder with source data.
 	 * @param key string to be replaced.
-	 * @param rep string which replaces all key occurrences in the source.
+	 * @param replacement replaces all key occurrences in the source.
 	 */
-	public static final void modifyStringBuilder(final StringBuilder source,
+	public static final void modifyStringBuilder(final StringBuilder s,
 		final String key,
-		final String rep) {
+		final String replacement) {
 		int keylen;
 		if ((keylen = key.length()) == 0) {
 			return;
 		}
-		int replen = rep.length();
-		int ndx = source.indexOf(key); //java 1.4 and higher
+		int replen = replacement.length();
+		int ndx = s.indexOf(key); //java 1.4 and higher
 		if (ndx < 0) {
 			return;
 		}
 		do {
-			source.replace(ndx, ndx + keylen, rep);
-		} while ((ndx = source.indexOf(key, ndx + replen)) >= 0);
+			s.replace(ndx, ndx + keylen, replacement);
+		} while ((ndx = s.indexOf(key, ndx + replen)) >= 0);
 	}
 
 	/**	Replace in the string from argument s all occurrences of characters in
 	 * the argument p by the character on the same position in the argument q.
 	 * If no character is on the position of q then this character is removed.
-	 * <p>Examples:</p>
-	 * <p>translate(“bcr”,“abc”,”ABa”) returns “Bar”.</p>
-	 * <p>translate("-abc-","ab-","BA") returns "BAc".</p>
+	 * <p>Examples:
+	 * <br>translate(“bcr”,“abc”,”ABa”) returns “Bar”.
+	 * <br>translate("-abc-","ab-","BA") returns "BAc".
 	 * @param s source string.
 	 * @param p string with characters to be replaced.
 	 * @param q string with characters which will be in the result.
@@ -1061,7 +1049,7 @@ public class SUtils extends FUtils {
 
 	/** Check if given argument is supported country code.
 	 * @param country 2-letter country code defined in ISO 3166.
-	 * @return <tt>true</tt> if  country code is supported.
+	 * @return true if  country code is supported.
 	 */
 	public static final boolean isCountryCode(final String country) {
 		for (String x: Locale.getISOCountries()) {
@@ -1181,7 +1169,7 @@ public class SUtils extends FUtils {
 				}
 				_in.close();
 			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
+				throw new RuntimeException(ex);
 			}
 		}
 	}
@@ -1206,19 +1194,19 @@ public class SUtils extends FUtils {
 	 * is written to given stream err.
 	 * If stdIn is null the input stream passed to program is empty, otherwise
 	 * it is passed from the stream from the parameter.
-	 * If waitFlag is <tt>true</tt> the current thread waits until the executed
+	 * If waitFlag is true the current thread waits until the executed
 	 * process has been terminated.
 	 * @param cmdArray array containing the command to call and its arguments.
 	 * @param envVars array of strings, each element of which has environment
 	 * variable settings in format name=value.
 	 * @param actDir the working directory of the subprocess, or null if the
 	 * subprocess should inherit the working directory of the current process.
-	 * @param stdOut output stream for standard output stream or <tt>null</tt>.
-	 * @param stdErr output stream for standard error stream or <tt>null</tt>.
-	 * @param stdIn input stream with standard input data or <tt>null</tt>.
-	 * @param waitFlag if <tt>true</tt> the current thread waits until
+	 * @param stdOut output stream for standard output stream or null.
+	 * @param stdErr output stream for standard error stream or null.
+	 * @param stdIn input stream with standard input data or null.
+	 * @param waitFlag if true the current thread waits until
 	 * the executed process has been terminated.
-	 * @return a <tt>Process</tt> object for managing the executed subprocess.
+	 * @return Process object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
 	public static final Process execute(final String [] cmdArray,
@@ -1249,7 +1237,7 @@ public class SUtils extends FUtils {
 
 	/** Executes a separate process with arguments.
 	 * @param cmdarray array of strings with command line arguments.
-	 * @return a <tt>Process</tt> object for managing the executed subprocess.
+	 * @return Process object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
 	public static final Process execute(final String... cmdarray)

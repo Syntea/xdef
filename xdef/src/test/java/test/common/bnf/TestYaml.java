@@ -27,8 +27,7 @@ public class TestYaml extends STester {
 					"eos" : p.getPosition().toString()) + "; ";
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "Exception " + ex;
+			return printThrowable(ex);
 		}
 	}
 

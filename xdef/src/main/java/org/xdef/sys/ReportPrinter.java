@@ -218,9 +218,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		try {
 			in = new java.io.InputStreamReader(url.openStream());
 		} catch (Exception ex) {
-			out.println("Can't read the source");
-			ex.printStackTrace(out);
-			return;
+			throw new RuntimeException(ex);
 		}
 		printListing(new OutputStreamWriter(out), in, reports, lineNumbers);
 		try {in.close();} catch (Exception ex) {}
@@ -240,9 +238,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		try {
 			in = new FileReader(file);
 		} catch (Exception ex) {
-			out.println("Can't read the source");
-			ex.printStackTrace(out);
-			return;
+			throw new RuntimeException(ex);
 		}
 		printListing(out, in, reports, null, lineNumbers);
 		try {in.close();} catch (Exception ex) {}

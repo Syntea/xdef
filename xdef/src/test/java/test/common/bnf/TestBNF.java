@@ -45,8 +45,7 @@ public class TestBNF extends STester {
 					"eos" : p.getPosition().toString()) + "; ";
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "Exception " + ex;
+			return printThrowable(ex);
 		}
 	}
 
@@ -70,8 +69,7 @@ public class TestBNF extends STester {
 					grammar.getParser().getPosition().toString()) + "; ";
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "Exception " + ex;
+			return printThrowable(ex);
 		}
 	}
 

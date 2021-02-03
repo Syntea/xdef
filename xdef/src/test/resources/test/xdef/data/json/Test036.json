@@ -6,9 +6,7 @@
          "Albums": [
             {
                "Name": "A Night at the Opera",
-               "Genre": [
-                  "Rock"
-               ],
+               "Genre": [ "Rock" ],
                "ReleaseDate": "1975-11-21",
                "Label": "EMI / Hollywood Records",
                "Tracks": [
@@ -76,10 +74,7 @@
             },
             {
                "Name": "A Day at the Races",
-               "Genre": [
-                  "Rock",
-                  "Pop"
-               ],
+               "Genre": [ "Rock", "Pop" ],
                "ReleaseDate": "1976-12-10",
                "Label": "EMI, Parlophone / Elektra, Hollywood",
                "Tracks": [
@@ -142,12 +137,7 @@
          "Albums": [
             {
                "Name": "Break Every Rule",
-               "Genre": [
-                  "Rock",
-                  "Pop",
-                  "Country",
-                  "R&B"
-               ],
+               "Genre": [ "Rock", "Pop", "Country", "R&B" ],
                "ReleaseDate": "1986-09-23",
                "Label": "Capitol Records",
                "Tracks": [
@@ -268,10 +258,7 @@
          "Albums": [
             {
                "Name": "Amarican Idiot",
-               "Genre": [
-                  "Pop punk",
-                  "Punk rock"
-               ],
+               "Genre": [ "Pop punk", "Punk rock" ],
                "ReleaseDate": "2004-09-20",
                "Label": "Reprise",
                "Tracks": [
