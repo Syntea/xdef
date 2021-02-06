@@ -876,7 +876,8 @@ final class ChkParser extends DomBaseHandler {
 						value = parsedElem.getParsedName();
 					}
 					if (xdp != null) {
-						XDefinition def = xdp.getDefinition(value);
+						XDefinition def =
+							(XDefinition) xdp.getXMDefinition(value);
 						if (def != null) {
 							XDOutput stdOut = null;
 							//xdi:stdOut
