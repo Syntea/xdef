@@ -1,50 +1,37 @@
 package org.xdef.json;
 
 import org.xdef.XDConstants;
-import org.xdef.impl.compile.CompileJsonXdef.JValue;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.impl.compile.CompileJsonXdef;
 
-/** Conversion of JSON to XML (X-definition form,or W3C form).
+/** Test X-definition transformation JSON -> XML
  * @author Vaclav Trojan
  */
-public class JsonToXml extends JsonUtil {
-
+class JsonToXml extends JsonUtil {
 	/** Prefix of JSON namespace. */
-	public String _jsPrefix = XDConstants.JSON_NS_PREFIX;
+	private String _jsPrefix;
 	/** JSON namespace. */
-	public String _jsNamespace = XDConstants.JSON_NS_URI_XD;
-
-	/** Document used to create X-definition. */
-	private Document _doc;
-
+	private String _jsNamespace;
 	/** Stack of namespace URI. */
-	private final KNamespace _ns = new KNamespace();
+	KNamespace _ns;
+	/** Document used to create X-definition. */
+	Document _doc;
 
-	/** Create instance of JsonToXml. */
-	public JsonToXml() {super();}
+	private JsonToXml() {super();}
 
-	/** Check if the argument is a simple value. Simple value is null,
-	 * number, boolean, string or JValue with object which is simple value.
-	 * @param val Object to be tested.
-	 * @return true if the argument is a simple value.
-	 */
-	public final static boolean isSimpleValue(final Object val) {
-		Object o;
-		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof JValue
-			&& ((o=((JValue) val).getValue()) == null || o instanceof Number
-				|| o instanceof Boolean || o instanceof String);
-	}
+////////////////////////////////////////////////////////////////////////////////
+// JSON to XML (X-detinition format)
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
@@ -52,30 +39,14 @@ public class JsonToXml extends JsonUtil {
 	 * @param tagname tag name of element.
 	 * @return created element.
 	 */
-	private Element appendElem(final Node n,
+	private Element addElem(final Node n,
 		final String namespace,
 		final String tagname) {
-		Element e = createElement(namespace, tagname);
+		Element e = namespace != null
+			? _doc.createElementNS(namespace, tagname)
+			: _doc.createElement(replaceColonInXMLName(tagname));
 		_ns.pushContext();
 		n.appendChild(e);
-		return e;
-	}
-
-	/** Create and append new element and push context.
-	 * @param namespace name space URI.
-	 * @param tagname tag name of element.
-	 * @return created element.
-	 */
-	private Element createElement(final String namespace,
-		final String tagname) {
-		String u;
-		String prefix = getNamePrefix(tagname);
-		u = namespace == null ?	_ns.getNamespaceURI(prefix) : namespace;
-		Element e = u != null ? _doc.createElementNS(u, tagname)
-			: _doc.createElement(replaceColonInXMLName(tagname));
-		if (u != null && _ns.getNamespaceURI(prefix) == null) {
-			_ns.setPrefix(prefix, u);
-		}
 		return e;
 	}
 
@@ -84,8 +55,36 @@ public class JsonToXml extends JsonUtil {
 	 * @param name local name of element.
 	 * @return created element.
 	 */
-	private Element appendJSONElem(final Node n, final String name) {
-		return appendElem(n, _jsNamespace, _jsPrefix + ":" + name);
+	private Element addJSONElem(final Node n, final String name) {
+		Element e = _doc.createElementNS(_jsNamespace, _jsPrefix + ":" + name);
+		_ns.pushContext();
+		_ns.setPrefix(_jsPrefix, _jsNamespace);
+		n.appendChild(e);
+		return e;
+	}
+
+	/** Set attribute to element,
+	 * @param e element where to set attribute.
+	 * @param name name of attribute {if there is colon and namespace is null
+	 * then replace colon with "_x3a_"}
+	 * @param s string with value of attribute.
+	 */
+	private void setAttr(final Element e,
+		final String name,
+		final Object v) {
+		String u;
+		String s;
+		if (name.startsWith("xmlns")) {
+			s = v == null ?
+				XMLConstants.NULL_NS_URI : jstringToXML(v, 1);
+			_ns.setPrefix("xmlns".equals(name) ? "" : name.substring(6), s);
+			u = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+		} else {
+			s = jstringToXML(v, 1);
+			u = getNamePrefix(name);
+			u = u.isEmpty() ? null : _ns.getNamespaceURI(u);
+		}
+		e.setAttributeNS(u, name, s);
 	}
 
 	/** Append text with a value to element.
@@ -93,156 +92,375 @@ public class JsonToXml extends JsonUtil {
 	 * @param val value to be added as text.
 	 */
 	private void addValueAsText(final Element e, final Object val) {
-		String s = genSimpleValueToXml(val, false);
-		e.appendChild(_doc.createTextNode(s));
+		e.appendChild(_doc.createTextNode(jstringToXML(val, 0)));
 	}
 
-	/** Set attribute to element,
-	 * @param e element where to set attribute.
-	 * @param namespace namespace URI of attribute.
-	 * @param name name of attribute {if there is colon and namespace is null
-	 * then replace colon with "_x3a_"}
-	 * @param val string with value of attribute.
+	/** Check if the argument is a simple value. Simple value is null,
+	 * Number, Boolean, String or JValue with object which is simple value.
+	 * @param val Object to be tested.
+	 * @return true if the argument is a simple value.
 	 */
-	private static void setAttr(final Element e,
-		final String namespace,
-		final String name,
-		final String val) {
-		if (namespace == null) {
-			e.setAttribute(replaceColonInXMLName(name), val);
-		} else {
-			e.setAttributeNS(namespace, name, val);
-		}
+	public final static boolean isSimpleValue(final Object val) {
+		Object o;
+		return val == null || val instanceof Number || val instanceof Boolean
+			|| val instanceof String || val instanceof CompileJsonXdef.JValue
+			&& ((o=((CompileJsonXdef.JValue) val).getValue()) == null
+				|| o instanceof Number || o instanceof Boolean
+				|| o instanceof String);
 	}
 
-	private void setAttrs(final Element e, final Map<String, String> attrs) {
-		for (Map.Entry<String, String> entry: attrs.entrySet()) {
-			String n = entry.getKey();
-			String v = entry.getValue();
-			String u = _ns.getNamespaceURI(getNamePrefix(n));
-			e.setAttributeNS(u, n, v);
-		}
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// JSON to XML {XDEF version}
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create child element with text value to node.
-	 * @param node node where to create element.
-	 * @param val value which will be represented as value of created element.
+	/** Add items from array to element starting with given position.
+	 * @param node the element where to add items.
+	 * @param array the array
+	 * @param pos starting position.
 	 */
-	private void addValueToNodeXD(final Node node, final Object val) {
-		Element e = appendJSONElem(node, J_ITEM);
-		addValueAsText(e, val);
-		_ns.popContext();
-	}
-
-	/** Append array of JSON values to node.
-	 * @param array list with array of values.
-	 * @param parent node where to append array.
-	 */
-	private void arrayToNodeXD(final List array, final Node parent) {
-		Element e = appendJSONElem(parent, J_ARRAY);
-		for (Object x: array) {
-			if (x == null) {
-				addValueToNodeXD(e, null);
-			} else if (x instanceof Map) {
-				mapToXmlXD((Map) x, e);
+	private void addArrayItems(final Node node,
+		final List array,
+		final int pos) {
+		int len = array.size();
+		for (int i = pos; i < len; i++) {
+			Object x = array.get(i);
+			if (x instanceof Map) {
+				Map m = (Map) x;
+				Map.Entry en;
+				if (m.size() == 1
+					&& isSimpleValue((en=(Map.Entry) m.entrySet()
+						.iterator().next()).getValue())) {
+					Element e = addJSONElem(node, J_MAP);
+					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
+					_ns.popContext();
+				} else {
+					addMapToXmlXD(m, node, false);
+				}
 			} else if (x instanceof List) {
-				arrayToNodeXD((List)x,  e);
-			} else {
-				addValueToNodeXD(e, x);
+				List list = (List) x;
+				Element ee = addJSONElem(node, J_ARRAY);
+				addArrayItems(ee, list, 0);
+				_ns.popContext();
+			} else { // simpleValue
+				if (i + 1 == len) { // last item
+					addValueAsText((Element) node, x);
+				} else if (!isSimpleValue(array.get(i+1))) {
+					addValueAsText((Element) node, x);
+				} else {
+					String s;
+					if (i+1 >= len || !isSimpleValue(array.get(i+1))) {
+						addValueAsText((Element) node, x);
+					} else {
+						StringBuilder sb = new StringBuilder("[ ");
+						Object val = array.get(i);
+						for (;;) {
+							if (sb.length() > 2) {
+								sb.append(", "); // separator
+							}
+							if (val == null) {
+								sb.append("null");
+							} else if (val instanceof String) {
+								sb.append(jstringToXML(val, 2));
+							} else {
+								sb.append(val.toString());
+							}
+							if (i + 1 >= len
+								|| (val = array.get(i+1)) instanceof Map
+								|| val instanceof List) {
+								break;
+							}
+							i++;
+						}
+						s = sb.append(" ]").toString();
+						node.appendChild(_doc.createTextNode(s));
+					}
+				}
 			}
 		}
-		_ns.popContext();
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Check if it is array of simple arrays.
+	 * @param array array to checked.
+	 * @return true if it is array of simple arrays.
+	 */
+	private boolean arrayOfArrays(final List array) {
+		if (array.isEmpty()) {
+			return true;
+		}
+		if (array.size() != 1) {
+			for (Object x: array) {
+				if (!isSimpleValue(x)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		if (array.get(0) instanceof List) {
+			return arrayOfArrays((List) array.get(0));
+		}
+		return false;
+	}
+
+	/** Add the element created from an array.
+	 * @param array array from which element will be created.
+	 * @param elem element to be added.
+	 */
+	private void addElementFromArray(final List array, final Element elem) {
+		Element e;
+		if (array.isEmpty()) {
+			elem.appendChild(_doc.createTextNode("[]")); // empty array
+			return;
+		}
+		int len = array.size();
+		if (array.get(0) instanceof Map) {
+			Map m = (Map) array.get(0);
+			if (len == 1) {
+				if (m.isEmpty()) {
+					//this is special case: the map is not interporeted as attrs
+					// so it will be an empty element
+					return;
+				}
+				e = addJSONElem(elem, J_ARRAY);
+				addArrayItems(e, array, 0);
+				_ns.popContext();
+				return;
+			}
+			Map mm = null;
+			if (len > 1 && array.get(1) instanceof Map) {
+				if ((mm = (Map) array.get(1)).size() != 1) {
+					addArrayItems(elem, array, 0);
+					return;
+				}
+				if (len == 2) {
+					Object x = mm.values().iterator().next();
+					if (isSimpleValue(x)) {
+						addMapToXmlXD(m, elem, false);
+						addMapToXmlXD(mm, elem, true);
+						return;
+					}
+					if (x instanceof List) {
+						Map y = null;
+						if (!((List) x).isEmpty()
+							&& ((List) x).get(0) instanceof Map
+							&& (y = (Map) ((List) x).get(0)).size() != 1) {
+							if (!y.isEmpty()) {
+								boolean allSimple = true;
+								for (Object z: y.values()) {
+									if (!isSimpleValue(z)) {
+										allSimple = false;
+									}
+								}
+								if (allSimple) {
+									addArrayItems(elem, array, 0);
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
+			boolean genMap = false;
+			for (Object x: m.entrySet()) {
+				Map.Entry xe = (Map.Entry) x;
+				String key = (String) xe.getKey();
+				Object val = xe.getValue();
+				if (isSimpleValue(val)) {
+					String ns;
+					String s;
+					if ("xmlns".equals(key)||key.startsWith("xmlns:")) {
+						ns = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+						s = val == null ? XMLConstants.NULL_NS_URI
+							: jstringToXML(val, 1);
+						_ns.setPrefix("xmlns".equals(key)
+							? "" : key.substring(6), s);
+						elem.setAttributeNS(ns, key, s);
+					} else {
+						key = toXmlName(key);
+						s = jstringToXML(val, 1);
+						if (getNamePrefix(key).isEmpty()) {
+							elem.setAttribute(key, s);
+						} else {
+							String namespace =
+							   _ns.getNamespaceURI(getNamePrefix(key));
+							ns = getElementNamespace(m, key, namespace);
+							elem.setAttributeNS(ns, key, s);
+						}
+					}
+				} else {
+					genMap = true;
+				}
+			}
+			Element ee = elem;
+			// if in the map are not simple items, so generate the map element
+			// with those items
+			if (genMap) {
+				if (m.size() != 1) {
+					ee = addJSONElem(elem, J_MAP);
+				}
+				for (Object x: m.entrySet()) {
+					Map.Entry xe = (Map.Entry) x;
+					String key = (String) xe.getKey();
+					Object val = xe.getValue();
+					if (!isSimpleValue(val)) {
+						namedItemToXmlXD(toXmlName(key), val, ee);
+					}
+				}
+			}
+			if (ee != elem) {
+				_ns.popContext();
+			}
+			if (len == 1) {
+				return;
+			}
+			if (array.size() >= 1 && (array.get(1) instanceof Map)) {
+				mm = (Map) array.get(1);
+				if (mm.size() == 1) { // it is element
+					if (array.size() == 1) { // no oter items of array
+						// create element and return
+						Map.Entry entry =
+							(Map.Entry) m.entrySet().iterator().next();
+						String name = toXmlName((String) entry.getKey());
+						String namespace =
+							_ns.getNamespaceURI(getNamePrefix(name));
+						e = addElem(elem, namespace, name);
+						_ns.popContext();
+						return;
+					} else {
+						//add to element this map and remaining items from array
+						addArrayItems(elem, array, 1);
+					}
+				} else {
+					if (m.isEmpty()) {
+						// if map is empty nothing was generated yet, so add map
+						addJSONElem(elem, J_MAP);
+						_ns.popContext();
+					}
+					for (Object x: mm.entrySet()) {
+						Map.Entry xe = (Map.Entry) x;
+						String key = (String) xe.getKey();
+						Object val = xe.getValue();
+						namedItemToXmlXD(key, val, elem);
+					}
+					if (len > 1) {
+						// add remaining items
+						addArrayItems(elem, array, 1);
+					}
+					return;
+				}
+				return;
+			} else {
+				addArrayItems(elem, array, 1);
+				return;
+			}
+		}
+		if (array.size() <= 1 && arrayOfArrays(array)) {
+			e = addJSONElem(elem, J_ARRAY);
+		} else {
+			e = elem;
+		}
+		addArrayItems(e, array, 0);
+		if (e != elem) {
+			_ns.popContext();
+		}
+	}
+
+	/** Get namespace of element which will be created.
+	 * @param map the map with attributes.
+	 * @param name name of element
+	 * @param namespace actual namespace from namespace context.
+	 * @return the actual namespace.
+	 */
+	private String getElementNamespace(final Map map,
+		final String name,
+		final String namespace) {
+		String prefix = getNamePrefix(name);
+		String uri =
+			(String) map.get(prefix.length() > 0 ? "xmlns:" + prefix : "xmlns");
+		return (uri == null) ? namespace : uri;
 	}
 
 	/** Create named item,
-	 * @param rawName raw name (JSON string).
+	 * @param name name (JSON string converted to XML name).
 	 * @param val Object to be created as named item.
 	 * @param parent parent node where the item will be appended.
 	 * @return created element.
 	 */
-	private Element namedItemToXmlXD(final String rawName,
+	private Element namedItemToXmlXD(final String name,
 		final Object val,
 		final Node parent) {
-		String name = toXmlName(rawName);
 		String namespace = _ns.getNamespaceURI(getNamePrefix(name));
-		if (val == null) {
-			Element e = appendElem(parent, namespace, name);
-			_ns.popContext();
-			return e;
-		} else if (val instanceof Map) {
+		Element e;
+		if (val instanceof Map) {
 			Map map = (Map) val;
 			if (map.isEmpty()) {
-				Element e = appendElem(parent, namespace, name);
-				appendJSONElem(e, J_MAP);
+				e = addElem(parent, namespace, name);
+				addJSONElem(e, J_MAP);
 				_ns.popContext();
 				_ns.popContext(); // appended element js:map
 				return e;
 			}
-			String prefix = getNamePrefix(name);
-			String uri = (String) map.get(
-				prefix.length() > 0 ? "xmlns:" + prefix : "xmlns");
-			if (uri == null) {
-				uri = namespace;
-			}
-			Map<String, String> attrs = new LinkedHashMap<String, String>();
-			Map<String, Object> items = new LinkedHashMap<String, Object>();
-			for (Object key: map.keySet()) {
-				Object o = map.get(key);
-				String name1 = toXmlName((String) key);
-				if (o == null) {
-					attrs.put(name1, "null");
-				} else if (isSimpleValue(o)) {
-					String s;
-					if ("xmlns".equals(name1)) {
-						_ns.setPrefix("", s = o.toString());
-					} else if (name1.startsWith("xmlns:")) {
-						_ns.setPrefix(name1.substring(6), s = o.toString());
-					} else {
-						s = genSimpleValueToXml(o, true);
+			namespace = getElementNamespace(map, name, namespace);
+			e = addElem(parent, namespace, name);
+			int numAttrs = 0;
+			// first set xmlns attributes with namespaces
+			for (Object x: map.entrySet()) {
+				Map.Entry entry = (Map.Entry) x;
+				String key = (String) entry.getKey();
+				Object o = entry.getValue();
+				if (isSimpleValue(o)) {
+					numAttrs++;
+					if (key.startsWith("xmlns")) {
+						setAttr(e, key, o);
 					}
-					attrs.put(name1, s);
-				} else {
-					items.put(name1, o);
 				}
 			}
-			Element e;
-			if (items.isEmpty()) {
-				e = appendElem(parent, uri, name);
-				setAttrs(e, attrs);
-			} else {
-				Iterator<Map.Entry<String,Object>> it = items.entrySet().iterator();
-				e = appendElem(parent, uri, name);
-				setAttrs(e, attrs);
-				if (items.size() == 1) {
-					Map.Entry<String, Object> entry = it.next();
-					String n = entry.getKey();
-					Object o = entry.getValue();
-					namedItemToXmlXD(n, o, e);
-				} else {
-					Element ee = appendJSONElem(e, J_MAP);
-					while (it.hasNext()) {
-						Map.Entry<String, Object> entry = it.next();
-						String n = entry.getKey();
-						Object o = entry.getValue();
-						namedItemToXmlXD(n, o, ee);
+			if (numAttrs > 0) { // set attrs
+				// set other attributes
+				for (Object x: map.entrySet()) {
+					Map.Entry entry = (Map.Entry) x;
+					String key = (String) entry.getKey();
+					Object v = entry.getValue();
+					if (!key.startsWith("xmlns") && isSimpleValue(v)) {
+						setAttr(e, toXmlName(key), v);
 					}
+				}
+			}
+			if (numAttrs < map.size()) {
+				Element ee = (map.size() - numAttrs > 1)
+					? addJSONElem(e, J_MAP) : e;
+				for (Object x: map.entrySet()) {
+					Map.Entry entry = (Map.Entry) x;
+					String key = (String) entry.getKey();
+					Object o = entry.getValue();
+					if (!isSimpleValue(o)) {
+						namedItemToXmlXD(toXmlName(key), o, ee);
+					}
+				}
+				if (e != ee) {
 					_ns.popContext();
 				}
 			}
 			_ns.popContext();
 			return e;
 		} else if (val instanceof List) {
-			Element e = appendElem(parent, namespace, name);
-			arrayToNodeXD((List) val, e);
+			List array = (List) val;
+			namespace = _ns.getNamespaceURI(getNamePrefix(name));
+			if (!array.isEmpty() && array.get(0) instanceof Map) {
+				// if the first item is map and there is xmlns item
+				// in the map set this namespace for the element
+				namespace =
+					getElementNamespace((Map) array.get(0), name, namespace);
+			}
+			e = addElem(parent, namespace, name);
+			if (val instanceof List && ((List) val).size() == 1
+				&& isSimpleValue(((List) val).get(0))) {
+				addValueAsText(e, ((List) val).get(0));
+			} else {
+				addElementFromArray(array, e);
+			}
 			_ns.popContext();
 			return e;
 		} else {
-			Element e = appendElem(parent, namespace, name);
-			addValueAsText(e, val);
+			e = addJSONElem(parent, J_MAP);
+			setAttr(e, name, val);
 			_ns.popContext();
 			return e;
 		}
@@ -250,27 +468,49 @@ public class JsonToXml extends JsonUtil {
 
 	/** Append map with JSON tuples to node.
 	 * @param map map with JSON tuples.
+	 * @param forceMap if true the Map element is generated.
 	 * @param parent node where to append map.
 	 */
-	private Element mapToXmlXD(final Map map, final Node parent) {
+	private Element addMapToXmlXD(final Map map,
+		final Node parent,
+		final boolean forceMap) {
 		int size = map.size();
 		if (size == 0) {
-			Element e = appendJSONElem(parent, J_MAP);
+			Element e = addJSONElem(parent, J_MAP);
 			_ns.popContext();
 			return e;
-		} else if (size == 1) {
+		} else if (!forceMap && size == 1) {
 			String key = (String) map.keySet().iterator().next();
-			return namedItemToXmlXD(key, map.get(key), parent);
+			Object o = map.get(key);
+			if (!key.startsWith("xmlns") || !isSimpleValue(o)) {
+				key = toXmlName(key);
+			}
+			return namedItemToXmlXD(key, o, parent);
 		} else {
-			Element e = appendJSONElem(parent, J_MAP);
-			for (Object key: map.keySet()) {
-				Object val = map.get(key);
-				if (isSimpleValue(val)) {
-					String name = toXmlName((String) key);
-					String namespace = _ns.getNamespaceURI(getNamePrefix(name));
-					setAttr(e, namespace, name, genSimpleValueToXml(val, true));
+			Element e = addJSONElem(parent, J_MAP);
+			boolean allXmlns = true;
+			for (Object x: map.entrySet()) {
+				Map.Entry entry = (Map.Entry) x;
+				String name = (String) entry.getKey();
+				Object y = entry.getValue();
+				if (isSimpleValue(y) && name.startsWith("xmlns")) {
+					setAttr(e, name, y);
 				} else {
-					namedItemToXmlXD((String) key, val, e);
+					allXmlns = false;
+				}
+			}
+			if (!allXmlns) {
+				for (Object x: map.entrySet()) {
+					Map.Entry entry = (Map.Entry) x;
+					Object y = entry.getValue();
+					String name = (String) entry.getKey();
+					if (isSimpleValue(y)) {
+						if (!name.startsWith("xmlns")) {
+							setAttr(e, toXmlName(name), y);
+						}
+					} else {
+						namedItemToXmlXD(toXmlName(name), y, e);
+					}
 				}
 			}
 			_ns.popContext();
@@ -278,39 +518,46 @@ public class JsonToXml extends JsonUtil {
 		}
 	}
 
-	/** Create child nodes with JSON object to node.
+	/** Create element created from JSON (X-definition mode).
 	 * @param json JSON object.
-	 * @param parent where to create child nodes.
+	 * @return created element.
 	 */
-	private void jsonToXmlXD(final Object json, final Node parent) {
-		if (json == null || json instanceof String || json instanceof Boolean
-			|| json instanceof Number) {
-			genValueW3C(json, _doc); // same as W3C, but with XD namespace!
-			return;
-		} else if (json instanceof Map) {
-			mapToXmlXD((Map) json, parent);
-			return;
-		} else if (json instanceof List) {
-			arrayToNodeXD((List) json, parent);
-			return;
-		}
-		throw new SRuntimeException(JSON.JSON011, json); //Not JSON object&{0}
-	}
-
-	/** Convert object with JSON data to XML element.
-	 * @param json object with JSON data.
-	 * @return XML element.
-	 */
-	final static Element toXmlXD(final Object json) {
+	final static Element toXmlXD(final Object o) {
 		JsonToXml x = new JsonToXml();
-		x.jsonToXmlXD(json, x._doc = KXmlUtils.newDocument());
+		x._jsPrefix = XDConstants.JSON_NS_PREFIX;
+		x._jsNamespace = XDConstants.JSON_NS_URI_XD;
+		x._doc = KXmlUtils.newDocument();
+		x._ns = new KNamespace();
+		if (o instanceof Map) {
+			Map map = (Map) o;
+			boolean forceMap = false;
+			if (map.size() == 1) {
+				Object y = map.values().iterator().next();
+				forceMap = isSimpleValue(y);
+			}
+			x.addMapToXmlXD((Map) o, x._doc, forceMap);
+		} else if (o instanceof List) {
+			Element elem = x.addJSONElem(x._doc, J_ARRAY);
+			x.addArrayItems(elem, (List) o, 0);
+			x._ns.popContext();
+		} else if (isSimpleValue(o)) {
+			Element e = x.addJSONElem(x._doc, J_ITEM);
+			x.addValueAsText(e, o);
+			x._ns.popContext();
+		} else {
+			throw new SRuntimeException(JSON.JSON011, o); //Not JSON object&{0}
+		}
 		return x._doc.getDocumentElement();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON to XML (version W3C)
+// JSON to XML (W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Create W3C JSON element with given name.
+	 * @param name name of JSON element.
+	 * @return JSON element with given name.
+	 */
 	private Element genJElementW3C(final String name) {
 		if (_jsPrefix.isEmpty()) {
 			return _doc.createElementNS(_jsNamespace, name);
@@ -319,24 +566,34 @@ public class JsonToXml extends JsonUtil {
 		}
 	}
 
+	/** Create W3C JSON element with value.
+	 * @param val value of JSON element.
+	 * @param parent parent node where to add created element.
+	 * @return JSON element with value.
+	 */
 	private Element genValueW3C(final Object val, final Node parent) {
 		Element e;
 		if (val == null) {
 			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
+			e.setAttribute(J_VALUEATTR, "null");
 		} else if (val instanceof Map) {
-			Map m = (Map) val;
 			e = genMapW3C((Map) val);
 		} else if (val instanceof List) {
 			e = genArrayW3C((List) val);
 		} else {
 			e = genJElementW3C(J_ITEM);
+			e = genJElementW3C(J_ITEM);
 			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
+//			e.setAttribute(J_VALUEATTR, jstringToXML(val, 1));
 		}
 		parent.appendChild(e);
 		return e;
 	}
 
+	/** Create element with W3C JSON array.
+	 * @param array array to be created.
+	 * @return element with W3C JSON array.
+	 */
 	private Element genArrayW3C(final List array) {
 		Element e = genJElementW3C(J_ARRAY);
 		for (Object val: array) {
@@ -345,6 +602,10 @@ public class JsonToXml extends JsonUtil {
 		return e;
 	}
 
+	/** Create element with W3C JSON map.
+	 * @param map map to be created.
+	 * @return element with W3C JSON map.
+	 */
 	private Element genMapW3C(final Map map) {
 		Element e = genJElementW3C(J_MAP);
 		Iterator it = map.entrySet().iterator();
@@ -356,7 +617,6 @@ public class JsonToXml extends JsonUtil {
 		}
 		return e;
 	}
-
 	/** Create XML from JSON object according to W3C recommendation.
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.

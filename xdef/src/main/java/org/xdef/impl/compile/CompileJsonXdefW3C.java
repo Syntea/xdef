@@ -13,6 +13,8 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class CompileJsonXdefW3C extends CompileJsonXdef {
+	private String _jsPrefix = "js";
+	private String _jsNamespace = XDConstants.JSON_NS_URI_W3C;
 
 	/** Prepare instance of XJSON. */
 	private CompileJsonXdefW3C() {super();}
@@ -157,7 +159,8 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
+				if (J_ITEM.equals(ee._localName)
+					&&_jsNamespace.equals(ee._nsURI)
 					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;

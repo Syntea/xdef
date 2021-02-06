@@ -228,9 +228,9 @@ public class XComponentUtil {
 	public static final void addText(final XComponent parent,
 		final String xdPos,
 		final List<XComponent> xc,
-		final String txt,
+		final Object txt,
 		final int index) {
-		if (txt != null && txt.length() > 0) {
+		if (txt != null && txt instanceof String && ((String)txt).length() > 0){
 			int xp = 1;
 			for (XComponent c : xc) {
 				if ("$text".equals(c.xGetNodeName())) {
@@ -238,7 +238,7 @@ public class XComponentUtil {
 				}
 			}
 			final String xpos = parent.xGetXPos() + "/$text[" + xp + "]";
-			addXC(xc, new XCTextComponent(txt, xdPos, xpos, index));
+			addXC(xc, new XCTextComponent(txt.toString(), xdPos, xpos, index));
 		}
 	}
 
