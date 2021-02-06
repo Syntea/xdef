@@ -110,11 +110,11 @@ class JsonToXml extends JsonUtil {
 	}
 
 	/** Add items from array to element starting with given position.
-	 * @param node the element where to add items.
+	 * @param elem the element where to add items.
 	 * @param array the array
 	 * @param pos starting position.
 	 */
-	private void addArrayItems(final Node node,
+	private void addArrayItems(final Element elem,
 		final List array,
 		final int pos) {
 		int len = array.size();
@@ -126,26 +126,26 @@ class JsonToXml extends JsonUtil {
 				if (m.size() == 1
 					&& isSimpleValue((en=(Map.Entry) m.entrySet()
 						.iterator().next()).getValue())) {
-					Element e = addJSONElem(node, J_MAP);
+					Element e = addJSONElem(elem, J_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
 					_ns.popContext();
 				} else {
-					addMapToXmlXD(m, node, false);
+					addMapToXmlXD(m, elem, false);
 				}
 			} else if (x instanceof List) {
 				List list = (List) x;
-				Element ee = addJSONElem(node, J_ARRAY);
+				Element ee = addJSONElem(elem, J_ARRAY);
 				addArrayItems(ee, list, 0);
 				_ns.popContext();
 			} else { // simpleValue
 				if (i + 1 == len) { // last item
-					addValueAsText((Element) node, x);
+					addValueAsText((Element) elem, x);
 				} else if (!isSimpleValue(array.get(i+1))) {
-					addValueAsText((Element) node, x);
+					addValueAsText((Element) elem, x);
 				} else {
 					String s;
 					if (i+1 >= len || !isSimpleValue(array.get(i+1))) {
-						addValueAsText((Element) node, x);
+						addValueAsText((Element) elem, x);
 					} else {
 						StringBuilder sb = new StringBuilder("[ ");
 						Object val = array.get(i);
@@ -168,7 +168,7 @@ class JsonToXml extends JsonUtil {
 							i++;
 						}
 						s = sb.append(" ]").toString();
-						node.appendChild(_doc.createTextNode(s));
+						elem.appendChild(_doc.createTextNode(s));
 					}
 				}
 			}
