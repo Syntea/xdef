@@ -9,7 +9,6 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XPool;
 import org.xdef.impl.code.CodeTable;
-import org.xdef.json.JsonToXml;
 import org.xdef.json.JsonUtil;
 import org.xdef.model.XMData;
 import org.xdef.msg.SYS;
@@ -21,6 +20,11 @@ import org.xdef.sys.SRuntimeException;
  */
 class XCGeneratorJSON extends XCGeneratorBase1 {
 
+	/** Create instance of the class XCGeneratorJSON.
+	 * @param xp XDPool from which to generate X-components.
+	 * @param reporter Reporter where to write error and warning messages.
+	 * @param genJavadoc if true generate Javadoc to X-definition source.
+	 */
 	XCGeneratorJSON(final XDPool xp,
 		final ArrayReporter reporter,
 		final boolean genJavadoc) {
@@ -332,7 +336,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		String name = null;
-		XData keyAttr = (XData) xe.getAttr(JsonToXml.J_KEYATTR);
+		XData keyAttr = (XData) xe.getAttr(JsonUtil.J_KEYATTR);
 		if (xe._json==XConstants.JSON_MODE_W3C && xe._match>=0 && keyAttr!=null
 			&& keyAttr._check >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
@@ -359,7 +363,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			name = name.substring(4);
 		}
 		String typ =
-			getJavaObjectTypeName((XData) xe.getAttr(JsonToXml.J_VALUEATTR));
+			getJavaObjectTypeName((XData) xe.getAttr(JsonUtil.J_VALUEATTR));
 		boolean isNull = false;
 		String template;
 		// has only a text child
@@ -397,7 +401,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			}
 			// setter
 			jSet = "String".equals(typ) && xe.getJsonMode() != 0 ?
-				"org.xdef.json.JsonUtil.jstringToXML(x,false)" : "x";
+				"org.xdef.json.JsonUtil.toJsonString(x,false)" : "x";
 			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void add&{name}(&{typ} x)";
@@ -505,7 +509,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 				}
 			}
 			jSet = "String".equals(typ) && xe.getJsonMode() != 0
-				? "org.xdef.json.JsonUtil.jstringToXML(x,false)":"x";
+				? "org.xdef.json.JsonUtil.toJsonString(x,false)":"x";
 			// setter
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+

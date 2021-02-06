@@ -13,6 +13,7 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class CompileJsonXdefXD extends CompileJsonXdef {
+	private String _jsNamespace = XDConstants.JSON_NS_URI_XD;
 
 	/** Prepare instance of XJSON. */
 	private CompileJsonXdefXD() {super();}
@@ -243,7 +244,6 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 				s = XDConstants.JSON_NS_PREFIX + i; // change prefix
 			}
 		}
-		_jsPrefix = s;
 		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		PNode e;
 		if (json instanceof JMap) {

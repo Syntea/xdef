@@ -1,14 +1,10 @@
 package org.xdef.json;
 
 import org.xdef.XDConstants;
-import org.xdef.msg.JSON;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,24 +12,174 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
-/** Conversion of XML to JSON (both versions - W3C and XDEF)
+/** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
  */
-class JsonFromXml extends JsonToXml {
-	/** Document used to create X-definition. */
-	private boolean _isW3C;
+class JsonFromXml extends JsonUtil {
 
-	/** Prepare instance of JX. */
-	JsonFromXml() {super();}
+	private JsonFromXml() {super();}
+
+	/** Parse JList (the string which begins with '[').
+	 * @param ar the array where results are stored.
+	 * @param p String parser with the string.
+	 */
+	private static void parseJList(final List<Object> ar, final StringParser p){
+		for (;;) {
+			p.skipSpaces();
+			if (p.isChar('[')) {
+				List<Object> ar1 = new ArrayList<Object>();
+				parseJList(ar1, p);
+				ar.add(ar1);
+				continue;
+			}
+			if (p.isChar(']')) {
+				break;
+			}
+			int pos = p.getIndex();
+			char ch;
+			int i;
+			if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
+				&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+					|| ch == ']' || ch == ',')) {
+					ar.add(i == 0 ? null : i==1);
+			} else {
+				p.setIndex(pos);
+				if (p.isSignedInteger()
+					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+					|| ch == ']' || ch == ',')) {
+					try {
+						ar.add(Long.parseLong(
+							p.getBufferPart(pos, p.getIndex())));
+					} catch (Exception ex) {
+						ar.add(new BigDecimal(
+							p.getBufferPart(pos, p.getIndex())));
+					}
+				} else {
+					p.setIndex(pos);
+					if (p.isSignedFloat()
+						&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+						|| ch == ']' || ch == ',')) {
+						String s = p.getBufferPart(pos, p.getIndex());
+						if (s.indexOf('.') > 0 || s.indexOf('e') > 0
+							|| s.indexOf('E') > 0) {
+							ar.add(new BigDecimal(
+								p.getBufferPart(pos, p.getIndex())));
+						} else {
+							try {
+								ar.add(Long.parseLong(s));
+							} catch (Exception ex) {
+								ar.add(new BigInteger(
+									p.getBufferPart(pos, p.getIndex())));
+							}
+						}
+					} else {
+						p.setIndex(pos);
+						if (p.isChar('"')) {
+							for(;;) {
+								if (p.isChar('\\')) {
+									if (p.eos()) {
+										throw new RuntimeException("JList err");
+									}
+									p.nextChar();
+								} else if (p.isChar('"')) {
+									String s = p.getBufferPart(pos+1,
+										p.getIndex() - 1);
+									ar.add(sourceToJstring(s));
+									break;
+								} else {
+									p.nextChar();
+								}
+								if (p.eos()) {
+									throw new RuntimeException("JList err");
+								}
+							}
+						} else {
+							for(;;) {
+								if (p.isChar('\\')) {
+									if (p.eos()) {
+										throw new RuntimeException("JList err");
+									}
+									p.nextChar();
+								} else if ((ch = p.getCurrentChar()) == ' '
+									|| ch == ',' || ch == ']' || ch == '[') {
+									String s =
+										p.getBufferPart(pos, p.getIndex());
+									ar.add(xmlToJValue(s));
+									break;
+								}
+								if (p.eos()) {
+									throw new RuntimeException("JList err");
+								}
+								p.nextChar();
+							}
+						}
+					}
+				}
+			}
+			p.skipSpaces();
+			if (p.isChar(']')) {
+				break;
+			}
+			if (!p.isChar(',')) {
+				throw new RuntimeException("JList err:\n"
+					+ p.getParsedBufferPart() + "..."
+					+ p.getUnparsedBufferPart());
+			}
+		}
+	}
+
+	/** Get JSON value from string in XML.
+	 * @param s string with JSON simple value source
+	 * @return object with JSOM value
+	 */
+	private static Object xmlToJValue(final String s) {
+		if (s.isEmpty()) {
+			return "";
+		} else if (s.charAt(0) == '[') {
+			ArrayList<Object> ar = new ArrayList<Object>();
+			StringParser p = new StringParser(s);
+			p.setIndex(1);
+			parseJList(ar, p);
+			return ar;
+		} else if ("null".equals(s)) {
+			return null;
+		} else if ("true".equals(s)) {
+			return Boolean.TRUE;
+		} else if ("false".equals(s)) {
+			return Boolean.FALSE;
+		}
+		int len = s.length();
+		char ch = s.charAt(0);
+		if (ch == '"' && s.charAt(len-1) == '"') {
+			return (len == 1) ? "\"" : sourceToJstring(s.substring(1, len-1));
+		}
+		int i = 0;
+		if (ch == '-' && len > 0) {
+			ch = s.charAt(1);
+			i = 1;
+		}
+		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0'
+			&& s.charAt(i+1) <= '9') {
+			return s; //redundant leading zero, => JSON string
+		}
+		if (ch >= '0' && ch <= '9') { // not redundant leading zero
+			try {
+				return Long.parseLong(s);
+			} catch (Exception ex) {}
+			try {
+				return new BigDecimal(s);
+			} catch (Exception ex) {}
+		}
+		return s; // JSON String
+	}
 
 	/** Create JSON named value from XML name.
 	 * @param name XML name.
 	 * @return JSON name.
 	 */
-	private static String toJsonName(final String name) {
+	private static String xmlToJsonName(final String name) {
 		if ("_x00_".equals(name)) {
 			return "";
 		}
@@ -57,326 +203,336 @@ class JsonFromXml extends JsonToXml {
 		return sb.toString();
 	}
 
-	/** Create JSON Map with attributes from element.
-	 * @param e element with attributes.
-	 * @return JSON Map with attributes.
+	/** Create list of elements and texts from child nodes of element.
+	 * @param el element from which the list is created.
+	 * @return list elements and texts created from child nodes of element.
 	 */
-	private Map<String, Object> genAttrs(final Element e) {
-		if (e.hasAttributes()) {
-			Map<String,Object> attrs = new LinkedHashMap<String,Object>();
-			NamedNodeMap nnm = e.getAttributes();
-			for (int i = nnm.getLength() - 1; i >= 0; i--) {
-				Node n = nnm.item(i);
-				if (!_isW3C && !_jsNamespace.equals(n.getNamespaceURI())) {
-					attrs.put(toJsonName(n.getNodeName()),
-						getJValue(n.getNodeValue()));
-				}
-			}
-			return attrs;
-		}
-		return null;
-	}
-
-	/** Add JSON value to the JSON array.
-	 * @param array JSON array.
-	 * @param s trimmed string with JSON value.
-	 */
-	private static void valueToArray(final List<Object> array,
-		final String s){
-		if (s.isEmpty() || s.charAt(0) == '"') {
-			array.add(JsonUtil.getJValue(s));
-		} else if ("null".equals(s)) {
-			array.add(JNull.JNULL);
-		} else if ("false".equals(s)) {
-			array.add(Boolean.FALSE);
-		} else if ("true".equals(s)) {
-			array.add(Boolean.TRUE);
-		} else {
-			StringParser p = new StringParser(s);
-			if (p.isSignedFloat() && p.eos()) {
-				array.add(new BigDecimal(p.getParsedString()));
-			} else if (p.isSignedInteger() && p.eos()) {
-				array.add(new BigInteger(p.getParsedString()));
-			} else { //not quoted string ???
-				array.add(s);
-			}
-		}
-	}
-
-	/** Create JSON array from element.
-	 * @param e element from which the array will be created.
-	 * @return JSON array with values created from argument.
-	 */
-	private List<Object> createArray(final Element e) {
-		NodeList nl = e.getChildNodes();
-		List<Object> list = new ArrayList<Object>();
-		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
-			if (n.getNodeType() == Node.TEXT_NODE
+	private static List<Object> getElementChildList(final Element el) {
+		List<Object> result = new ArrayList<Object>();
+		Node n = el.getFirstChild();
+		while (n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				result.add(n);
+				n = n.getNextSibling();
+			} else if (n.getNodeType() == Node.TEXT_NODE
 				|| n.getNodeType() == Node.CDATA_SECTION_NODE) {
-				String s = n.getNodeValue();
-				if (s == null) {
-					s = "";
+				StringBuilder sb = new StringBuilder();
+				String s;
+				for (;;) {
+					s = n.getNodeValue();
+					if (s != null) {
+						sb.append(s);
+					}
+					while ((n = n.getNextSibling()) != null
+						&& n.getNodeType() != Node.TEXT_NODE
+						&& n.getNodeType() != Node.TEXT_NODE
+						&& n.getNodeType() == Node.CDATA_SECTION_NODE) {}
+					if (n == null || n.getNodeType() == Node.ELEMENT_NODE) {
+						break;
+					}
 				}
-				while (i+1 < nl.getLength()
-					&& ((n = nl.item(i+1)).getNodeType() == Node.TEXT_NODE
-					|| n.getNodeType() == Node.CDATA_SECTION_NODE)) {
-					s += n.getNodeValue();
-					i++;
+				if (!(s = sb.toString().trim()).isEmpty()) {
+					result.add(s);
 				}
-				if (!(s = s.trim()).isEmpty()) {
-					valueToArray(list, s);
-				}
-			} else if (n.getNodeType() == Node.ELEMENT_NODE) {
-				list.add(createItem(n));
 			}
 		}
-		return list;
+		return result;
 	}
 
-	/** Create JSON map from element.
-	 * @param e element from which the map will be created.
-	 * @return JSON map created from NodeList.
+	/** Read attributes of element to map.
+	 * @param el element with attributes.
+	 * @return created map from attributes of element.
 	 */
-	private Map<String,Object> createMap(final Element e) {
-		Map<String,Object> map = new LinkedHashMap<String,Object>();
-		// process attributes
-		NamedNodeMap nnm = e.getAttributes();
+	private Map<String, Object> getElementAttributes(final Element el) {
+		String name = el.getTagName();
+		int ndx = name.indexOf(':');
+		String prefix = ndx > 0 ? ':' + name.substring(0, ndx) : "";
+		String xmlnsName = "xmlns" + prefix;
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
 			Node n = nnm.item(i);
-			String u = n.getNamespaceURI();
-			String name = n.getNodeName();
-			if (!_isW3C && !_jsNamespace.equals(u)
-				&& !((name.startsWith("xmlns:") || "xmlns".equals(name))
-				&& _jsNamespace.equals(n.getNodeValue()))) {
-				map.put(toJsonName(name), getJValue(n.getNodeValue()));
+			name = n.getNodeName();
+			if (!(xmlnsName.equals(name = n.getNodeName())
+				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
+				String attName = xmlToJsonName(name);
+				Object val = xmlToJValue(n.getNodeValue());
+				result.put(attName, val);
 			}
 		}
-		// process child nodes
-		NodeList nl = e.getChildNodes();
-		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
+		return result;
+	}
+
+	/** Create JSON object (array, map, or primitive value).
+	 * @param elem element from XDConstants.JSON_NS_URI_XD name space with
+	 * JSON array, map, or primitive value
+	 * @return JSON array, map, or primitive value.
+	 */
+	private Object fromXmlW3C(final Element elem) {
+		String localName = elem.getLocalName();
+		if (J_ARRAY.equals(localName)) {
+			return createArrayW3C(elem);
+		} else if (J_MAP.equals(localName)) {
+			return createMapW3C(elem);
+		} else if (J_ITEM.equals(elem.getLocalName())) {
+			if (elem.hasAttribute(J_VALUEATTR)) {
+				return xmlToJValue(elem.getAttribute(J_VALUEATTR));
+			}
+			return xmlToJValue(((Element) elem).getTextContent());
+		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
+			return ("true".equals(elem.getTextContent().trim()));
+		} else if (J_NULL.equals(elem.getLocalName())) {
+			return null;
+		} else if (J_NUMBER.equals(elem.getLocalName())) {
+			return new BigDecimal(elem.getTextContent().trim());
+		} else if (J_STRING.equals(elem.getLocalName())) {
+			return xmlToJValue(elem.getTextContent());
+		}
+		throw new RuntimeException(
+			"Unsupported JSON W3C element: " + elem.getLocalName());
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create JSON array from array element.
+	 * @param elem array element from XDConstants.JSON_NS_URI_XD name space.
+	 * @return created JSON array.
+	 */
+	private List<Object> createArrayW3C(final Element elem) {
+		List<Object> result = new ArrayList<Object>();
+		Node n = elem.getFirstChild();
+		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				Element ee = (Element) n;
-				Object o = createItem(ee);
-				if (_isW3C) {
-					String key = ee.getAttribute(J_KEYATTR);
-					map.put(sourceToJstring(key), o);
-					continue;
+				result.add(fromXmlW3C((Element) n));
+			}
+			n = n.getNextSibling();
+		}
+		return result;
+	}
+
+	/** Create JSON object (map) from map element.
+	 * @param elem map element from XDConstants.JSON_NS_URI_XD name space.
+	 * @return created JSON object (map).
+	 */
+	private Map<String, Object> createMapW3C(final Element elem) {
+		Map<String,Object> result = new LinkedHashMap<String,Object>();
+		Node n = elem.getFirstChild();
+		while(n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) n;
+				result.put((String) sourceToJstring(e.getAttribute(J_KEYATTR)),
+					fromXmlW3C(e));
+			}
+			n = n.getNextSibling();
+		}
+		return result;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Add string with a simple value or with the list of simple values.
+	 * to the array from the argument.
+	 * <UL>
+	 * <li> [] -> empty array.</li>
+	 * <li> [ x ... ,x] -> empty with simple values.
+	 * <li> other -> simple values
+	 * </UL>
+	 * @param array array where to add items.
+	 * @param s string with values.
+	 */
+	private void addSimpleValue(final List<Object> array, String s) {
+		Object o = xmlToJValue(s);
+		if (o instanceof List) {
+			for (Object x: (List) o) {
+				array.add(x);
+			}
+		} else {
+			array.add(o);
+		}
+	}
+
+	/** Create JSON object form element (XD form).
+	 * @param elem the element form which object will be created.
+	 * @return created JSON object.
+	 */
+	private Object fromXmlXD(final Element elem) {
+		String name = xmlToJsonName(elem.getNodeName());
+		Map<String, Object> attrs = getElementAttributes(elem);
+		List<Object> childNodes = getElementChildList(elem);
+		// result object
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		List<Object> array = new ArrayList<Object>();
+		if (XDConstants.JSON_NS_URI_XD.equals(elem.getNamespaceURI())) {
+			if (J_ITEM.equals(elem.getLocalName())) {
+				if (elem.hasAttribute(J_VALUEATTR)) {
+					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
 				}
-				if (o instanceof Map) { // map created from element
-					String k = toJsonName(ee.getNodeName());
-					map.put(k, ((Map) o).get(k));
-				} else if (o instanceof List && ((List) o).size() >= 1 &&
-					((List) o).get(0) instanceof Map) {
-					Iterator<?> x =
-						((Map)((List)o).get(0)).entrySet().iterator();
-					while (x.hasNext()) {
-						Map.Entry<?, ?> y = (Map.Entry) x.next();
-						List<?> list = (List) o;
-						if (list.size() == 1) {
-							map.put(y.getKey().toString(), y.getValue());
-						} else {
-							List<Object> z= new ArrayList<Object>();
-							for (int k = 1; k <  list.size(); k++) {
-								z.add(list.get(k));
+				String s = elem.getTextContent();
+				if (s != null) {
+					s = s.trim();
+				}
+				return xmlToJValue(s);
+			} else if (J_MAP.equals(elem.getLocalName())) {
+				map.putAll(attrs);
+				for (Object o: childNodes) {
+					if (o instanceof Element) {
+						Element el = (Element) o;
+						name = xmlToJsonName(el.getNodeName());
+						o = fromXmlXD(el);
+						if (o instanceof Map) {
+							Map m = (Map) o;
+							if (m.size() == 1) {
+								Map.Entry e = (Map.Entry)
+									m.entrySet().iterator().next();
+								Object val = e.getValue();
+								if (val instanceof List || val instanceof Map) {
+									map.put(name, val);
+								} else {
+									map.put((String) e.getKey(), val);
+								}
+							} else {
+								map.put(name, o);
 							}
-							map.put(y.getKey().toString(), z);
+						} else if (o instanceof List) {
+							map.put(name, o);
+						} else {
+							map.put(name, o);
+						}
+					} else {
+						String s = (String) o;
+						if (!s.isEmpty() // if not comment
+							|| !s.startsWith("/*") || !s.endsWith("*/")) {
+							map.put(name, xmlToJValue(s));
+							throw new RuntimeException(
+								"Text is not allowed in JSON map element: "+s);
 						}
 					}
-				} else {
-					map.put(toJsonName(n.getNodeName()), o);
 				}
-			} else if (n.getNodeType() == Node.TEXT_NODE
-				&& n.getNodeValue() != null
-				&& !n.getNodeValue().trim().isEmpty()) {
-				//Test node not allowed in this XML representation of JSOM map.
-				throw new SRuntimeException(JSON.JSON016);
+				return map;
+			} else if (J_ARRAY.equals(elem.getLocalName())) {
+				if (!attrs.isEmpty()) {
+					array.add(attrs);
+				}
+				for (Object o: childNodes) {
+					if (o instanceof Element) {
+						array.add(fromXmlXD((Element) o));
+					} else {
+						addSimpleValue(array, (String) o);
+					}
+				}
+				return array;
+			} else if (J_NULL.equals(elem.getLocalName())) {
+				return null;
+			} else if (J_STRING.equals(elem.getLocalName())
+				|| J_NUMBER.equals(elem.getLocalName())
+				|| J_BOOLEAN.equals(elem.getLocalName())) {
+				if (elem.hasAttribute(J_VALUEATTR)) {
+					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
+				}
+				String s = elem.getTextContent();
+				return xmlToJValue(s);
+			}
+			throw new RuntimeException(
+				"Unknown element from JSON namespace: " + name);
+		}
+		if (childNodes.isEmpty()) {
+			if (attrs.isEmpty()) {
+				array.add(attrs);
+				map.put(name, array);
+			} else {
+				map.put(name, attrs);
+			}
+			return map;
+		}
+		int len = childNodes.size();
+		if (len == 1) {
+			Object o = childNodes.get(0);
+			if (o instanceof String) {
+				String s = (String) o;
+				if (!attrs.isEmpty()) {
+					array.add(attrs);
+				}
+				addSimpleValue(array, s);
+				map.put(name, array);
+				return map;
+			} else {
+				o = fromXmlXD((Element) o);
+				if (o instanceof Map) {
+					Map m = (Map) o;
+					Map<String, Object> mm = null;
+					for (Object x: m.entrySet()) {
+						Map.Entry entry = (Map.Entry) x;
+						Object val = entry.getValue();
+						String key = (String) entry.getKey();
+						if (m.size() == 1 && val instanceof Map) {
+							attrs.put(key, val);
+							map.put(name, attrs);
+							return map;
+						}
+						if (val instanceof List
+							&&((List) val).size() == 1
+							&&((List) val).get(0) instanceof Map
+							&&((Map)((List)val).get(0)).isEmpty()){
+							mm = new LinkedHashMap<String, Object>();
+							List<Object> empty = new ArrayList<Object>();
+							empty.add(new LinkedHashMap<String, Object>());
+							mm.put(key, empty);
+							array.add(attrs);
+							array.add(mm);
+							map.put(name, array);
+							return map;
+						} else {
+							if (attrs.containsKey(key)) {
+								if (mm == null) {
+									mm = new LinkedHashMap<String, Object>();
+								}
+								mm.put(key, val);
+							} else {
+								attrs.put(key, val);
+							}
+						}
+					}
+					if (mm == null) {
+						map.put(name, attrs);
+					} else {
+						array.add(attrs);
+						array.add(mm);
+						map.put(name, array);
+					}
+					return map;
+				} else if (o instanceof List) {
+					map.put(name, o);
+					return map;
+				}
 			}
 		}
+		for (int i = 0; i < len; i++) {
+			Object o = childNodes.get(i);
+			if (o instanceof String) {
+				addSimpleValue(array, (String) o);
+			} else {
+				o = fromXmlXD((Element) o);
+				array.add(o);
+			}
+		}
+		if (!attrs.isEmpty()) {
+			array.add(0, attrs);
+		}
+		map.put(name, array);
 		return map;
 	}
 
-	/** Create JSON item from XML node.
-	 * @param n XML node.
-	 * @return JSON item
-	 */
-	private Object createItem(final Node n) {
-		switch (n.getNodeType()) {
-			case Node.ELEMENT_NODE: {
-				Element e = (Element) n;
-				if (_jsNamespace.equals(e.getNamespaceURI())) {
-					String name = e.getLocalName();
-					if (J_ARRAY.equals(name)) {
-						return createArray(e);
-					}
-					if (J_MAP.equals(name)) {
-						return createMap(e);
-					}
-					if (J_NULL.equals(name)) {
-						return JNull.JNULL;
-					}
-					if (J_STRING.equals(name)
-						|| J_NUMBER.equals(name)
-						|| J_BOOLEAN.equals(name)) {
-						/*xx*/
-						if (e.hasAttribute(J_VALUEATTR)) {
-							return getJValue(e.getAttribute(J_VALUEATTR));
-						}
-						/*xx*/
-						String s = ((Element) n).getTextContent();
-						return getJValue(s);
-					} else if (J_ITEM.equals(name)) {
-						/*xx*/
-						if (e.hasAttribute(J_VALUEATTR)) {
-							return getJValue(e.getAttribute(J_VALUEATTR));
-						}
-						/*xx*/
-						String s = ((Element) n).getTextContent();
-						return getJValue(s);
-						/*xx*/
-					}
-					// Illegal JSON XML model &{0}
-					throw new SRuntimeException(XDEF.XDEF313, n.getNodeName());
-				} else {
-					return getJsonObject((Element) n);
-				}
-			}
-			case Node.TEXT_NODE:
-			case Node.CDATA_SECTION_NODE:
-				List<Object> list = new ArrayList<Object>();
-				String s = n.getNodeValue();
-				if (s == null) {
-					s = "";
-				}
-				valueToArray(list, s.trim());
-				if (list.size() == 1) {
-					return list.get(0);
-				}
-				return list;
-		}
-		// Illegal JSON XML model &{0}
-		throw new SRuntimeException(XDEF.XDEF313, n.getNodeName());
-	}
-
-	/** Convert XML element to object with JSON data.
-	 * @param e XML element.
-	 * @return object with JSON data.
-	 */
-	final Object getJsonObject(final Element e) {
-		if (_jsNamespace.equals(e.getNamespaceURI())) {
-			if (J_ARRAY.equals(e.getLocalName())) {
-				return createArray(e);
-			}
-			if (J_MAP.equals(e.getLocalName())) {
-				return createMap(e);
-			} else {
-				Object o = createItem(e);
-				return o != null && o instanceof JNull ? null : o;
-			}
-//			//Incorrect XML node name with JSON namespace &{0}{: }
-//			throw new SRuntimeException(JSON.JSON013, e.getNodeName());
-		}
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		String key = toJsonName(e.getNodeName());
-		int numOfItems = 0;
-		NodeList nl = e.getChildNodes();
-		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
-			if (n.getNodeType() == Node.TEXT_NODE) {
-				if (n.getNodeValue().trim().isEmpty()) {
-					continue;
-				}
-				numOfItems++;
-			} else if (n.getNodeType() == Node.ELEMENT_NODE) {
-				numOfItems++;
-			}
-		}
-		Map<String, Object> attrs = genAttrs(e);
-		if (numOfItems == 0) {
-			map.put(key, attrs);
-			return map;
-		} else {
-			if (attrs != null) {
-				map.put(key, attrs);
-			}
-			List<Object> list = new ArrayList<Object>();
-			int i = 0;
-			int len = nl.getLength();
-			for (; i < len; i++) {
-				Element ee;
-				Node n = nl.item(i);
-				if (n.getNodeType() == Node.TEXT_NODE
-					|| n.getNodeType() == Node.CDATA_SECTION_NODE) {
-					String s = n.getNodeValue();
-					if (s == null) {
-						s = "";
-					}
-					while (i+1 < nl.getLength()
-						&& ((n = nl.item(i+1)).getNodeType() == Node.TEXT_NODE
-						|| n.getNodeType() == Node.CDATA_SECTION_NODE)) {
-						s += n.getNodeValue();
-						i++;
-					}
-					if (!(s = s.trim()).isEmpty()) {
-						valueToArray(list, s);
-					}
-				} else if (n.getNodeType() == Node.ELEMENT_NODE) {
-					ee = (Element) n;
-					if (_jsNamespace.equals(ee.getNamespaceURI())) {
-						Object o = getJsonObject(ee);
-						map.put(key, o);
-					} else {
-						String key1 = toJsonName(ee.getNodeName());
-						Object o = getJsonObject(ee);
-						if (o instanceof Map) {
-							Map m = (Map) o;
-							if (attrs == null) {
-								attrs = map;
-								map.put(key, o);
-							} else {
-								for (Object x: m.entrySet()){
-									Map.Entry entry = (Map.Entry) x;
-									attrs.put((String) entry.getKey(),
-										entry.getValue());
-								}
-							}
-						} else if (o instanceof List) {
-							map.put(key1, o);
-						}
-					}
-				}
-			}
-			if (len == 1 && i == 1 && !map.containsKey(key)) {
-				// no js:array and no child nodes (just an element)
-				if (list.size() == 1) {
-					map.put(key, list.get(0));
-				} else {
-					map.put(key, list);
-				}
-			} else if (list.size() > 0) {
-				list.add(0, map);
-				return list;
-			}
-			return map;
-		}
-	}
-
-	/** Convert XML element to JSON object.
-	 * @param node XML element or document.
-	 * @return JSON object.
+	/** Create JSON object (map, array or primitive value) from element.
+	 * @param node XML node with JSON data.
+	 * @return created JSON object (map, array or primitive value).
 	 */
 	final static Object toJson(final Node node) {
-		Element e = node instanceof Document
+		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		JsonFromXml x = new JsonFromXml();
-		if (XDConstants.JSON_NS_URI_W3C.equals(e.getNamespaceURI())) {
-			x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
-			x._isW3C = true;
-		} else {
-			x._jsNamespace = XDConstants.JSON_NS_URI_XD;
-			x._isW3C = false;
+		JsonFromXml x =new JsonFromXml();
+		if (XDConstants.JSON_NS_URI_W3C.equals(elem.getNamespaceURI())) {
+			return x.fromXmlW3C(elem); // W3C form
 		}
-		return x.getJsonObject(e);
+		return x.fromXmlXD(elem);
 	}
 }
