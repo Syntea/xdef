@@ -604,14 +604,6 @@ public final class XPool implements XDPool, Serializable {
 
 	final Class<?>[] getExtObjects() {return _extClasses;}
 
-	/** Get default X-definition (no named) from the pool.
-	 * @return X-definition or <tt>null</tt> if definition doesn't exist.
-	 */
-	private XDefinition getDefinition() {
-		return _xdefs.size() == 1 ?
-			_xdefs.values().iterator().next() : _xdefs.get("");
-	}
-
 	/** Set list of XComponent binds.
 	 * @param p list of XComponents binds.
 	 */
@@ -701,15 +693,6 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final XVariable getVariable(final String name) {
 		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
-	}
-
-	/** Get X-definition of given name from the pool or nameless X-definition
-	 * if argument is the empty string.
-	 * @param key name of definition or empty string.
-	 * @return X-definition or <tt>null</tt> if definition doesn't exist.
-	 */
-	final XDefinition getDefinition(final String key) {
-		return (key==null || key.length()==0) ? getDefinition():_xdefs.get(key);
 	}
 
 	private static void checkModel(ArrayList<XElement> reflist,
@@ -827,15 +810,6 @@ public final class XPool implements XDPool, Serializable {
 	}
 
 	@Override
-	/** Get X-definition from this XDPool.
-	 * @param name the name of X-definition.
-	 * @return specified X-definition from this XDPool.
-	 */
-	public final XMDefinition getXMDefinition(final String name) {
-		return _xdefs.get(name);
-	}
-
-	@Override
 	/** Find XModel in XDPool.
 	 * @param xdpos position of XModel in XDPool.
 	 * @return XMNode representing model or null if model was nod found.
@@ -931,7 +905,19 @@ public final class XPool implements XDPool, Serializable {
 	/** Get nameless X-definition from this XDPool.
 	 * @return nameless X-definition from this XDPool.
 	 */
-	public final XMDefinition getXMDefinition() {return getDefinition();}
+	public final XMDefinition getXMDefinition() {
+		return _xdefs.size() == 1 ?
+			_xdefs.values().iterator().next() : _xdefs.get("");
+	}
+
+	@Override
+	/** Get X-definition from this XDPool.
+	 * @param name the name of X-definition.
+	 * @return specified X-definition from this XDPool.
+	 */
+	public final XMDefinition getXMDefinition(final String name) {
+		return _xdefs.get(name);
+	}
 
 	@Override
 	/** Check if debug mode is set on.
@@ -993,7 +979,8 @@ public final class XPool implements XDPool, Serializable {
 		CodeDisplay.displayCode(_code, out);
 		Set<XNode> processed = new HashSet<XNode>();
 		for (String x: _xdefs.keySet()) {
-			CodeDisplay.displayDefNode(getDefinition(x), out, processed);
+			CodeDisplay.displayDefNode(
+				((XDefinition) getXMDefinition(x)), out, processed);
 		}
 	}
 
@@ -1028,7 +1015,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return the XDDocument object.
 	 */
 	public final XDDocument createXDDocument() {
-		return new ChkDocument(getDefinition());
+		return new ChkDocument((XDefinition) getXMDefinition());
 	}
 
 	@Override
@@ -1043,12 +1030,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 		int ndx = id.indexOf('#');
 		if (ndx < 0) {
-			XDefinition xd = getDefinition(id);
+			XDefinition xd = (XDefinition) getXMDefinition(id);
 			if (xd == null) {
 				//The X-definition&{0}{ '}{'} is missing
 				throw new SRuntimeException(XDEF.XDEF602, id);
 			}
-			return new ChkDocument(getDefinition(id));
+			return new ChkDocument((XDefinition) getXMDefinition(id));
 		} else {
 			XMNode xn = findModel(id);
 			if (xn != null  && xn.getKind() == XMNode.XMELEMENT) {
@@ -1258,12 +1245,12 @@ public final class XPool implements XDPool, Serializable {
 		ArrayList<XNode> list = new ArrayList<XNode>();
 		for(String name: _xdefs.keySet()) {
 			xw.writeString(name);
-			getDefinition(name).writeXNode(xw, list);
+			((XDefinition) getXMDefinition(name)).writeXNode(xw, list);
 		}
 		//we must write root selections after X-definitions are processed!
 		for(String name: _xdefs.keySet()) {
 			xw.writeString(name);
-			XDefinition xd = getDefinition(name);
+			XDefinition xd = (XDefinition) getXMDefinition(name);
 			len = xd._rootSelection.size();
 			xw.writeLength(len);
 			//here are references to models, so we write names and XPositions!
@@ -1413,7 +1400,7 @@ public final class XPool implements XDPool, Serializable {
 		//resolve root selections - references to models!
 		for (int i = 0; i < len; i++) {
 			String name = xr.readString();
-			XDefinition xd = getDefinition(name);
+			XDefinition xd = (XDefinition) getXMDefinition(name);
 			int len1 = xr.readLength();
 			for (int j = 0; j < len1; j++) {
 				String key = xr.readString();
@@ -1427,9 +1414,10 @@ public final class XPool implements XDPool, Serializable {
 					ref = xe;
 				} else {
 					String refDefName = xr.readString();
-					XDefinition refXd = getDefinition(refDefName);
+					XDefinition refxd =
+						(XDefinition) getXMDefinition(refDefName);
 					String refName = xr.readString();
-					ref = (XNode) refXd.getXDPool().findModel(refName);
+					ref = (XNode) refxd.getXDPool().findModel(refName);
 				}
 				xd._rootSelection.put(key, ref);
 			}
