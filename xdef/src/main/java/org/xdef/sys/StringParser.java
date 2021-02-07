@@ -2396,10 +2396,8 @@ public class StringParser extends SReporter implements SParser {
 		keepBuffer();
 		int startToken = x;
 		if (!isInteger()) {
-			if (_ch != '.' && _ch != 'e' && _ch != 'E') {
-				freeBuffer();
-				return false;
-			}
+			freeBuffer();
+			return false;
 		}
 		if (isFloatPart()) {
 			_parsedString = _source.substring(startToken, getIndex());
@@ -2424,6 +2422,9 @@ public class StringParser extends SReporter implements SParser {
 		int x = getIndex();
 		boolean wasDecPoint;
 		if (wasDecPoint = isChar('.')) {
+			if (isDigit() < 0) {
+				return false;
+			}
 			while (isDigit() >= 0) {}
 			x = getIndex();
 			_ch = x < _endPos || readNextBuffer()
