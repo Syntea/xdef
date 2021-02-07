@@ -669,7 +669,7 @@ public class JsonUtil extends StringParser {
 					if (isChar('}')) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-						warning(JSON.JSON020); //redundant comma
+						error(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 						return result;
 					}
@@ -748,7 +748,7 @@ public class JsonUtil extends StringParser {
 					if (isChar(']')) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-						warning(JSON.JSON020); //redundant comma
+						error(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 						return result;
 					}
@@ -822,7 +822,7 @@ public class JsonUtil extends StringParser {
 			}
 			if (s.charAt(0) == '0' && s.length() > 1 &&
 				Character.isDigit(s.charAt(1))) {
-					warning(JSON.JSON014); // Illegal leading zero in number
+					error(JSON.JSON014); // Illegal leading zero in number
 			}
 			return _genJObjects
 				? new CompileJsonXdef.JValue(_sPosition,number) : number;
