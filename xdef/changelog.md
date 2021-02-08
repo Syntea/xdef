@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2021-02-07
+# Version 40.1.2, release-date 2021-02-08
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
 * corrected the bug in JSON parser: duplicated name in object not reported.
@@ -21,6 +21,7 @@
   by properties or by methods `setMinDate` or `setMaxDate`).
 * method `setBufIndex(int)` in the class org.xdef.sys.StringParser was renamed
   to `setIndex(int)`.
+* corrected bug in parsing of JSON float numbers.
 * new version of transformation of XML to JSON and of JSON to XML.
 
 # Version 40.1.1, release-date 2020-09-17

@@ -1665,6 +1665,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("-16777216E1"), _msg);
 		assertTrue(parse("+1E104"), _msg);
 		assertTrue(parse("1E-149"), _msg);
+		assertTrue(parse(".5"), _msg);
+		assertTrue(parse(".5e+3"), _msg);
+		assertTrue(parse("5."), _msg);
+		assertTrue(parse("5.e+3"), _msg);
 		assertTrue(parse("NaN"), _msg);
 		assertTrue(parse("INF"), _msg);
 		assertTrue(parse("-INF"), _msg);
@@ -1799,6 +1803,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("+0.0"), _msg);
 		assertTrue(parse("-0"), _msg);
 		assertTrue(parse("0.0E0"), _msg);
+		assertTrue(parse(".5"), _msg);
+		assertTrue(parse(".5e+3"), _msg);
+		assertTrue(parse("5."), _msg);
+		assertTrue(parse("5.e+3"), _msg);
 
 		// testing errors
 		assertTrue(parseFail("1E1.12"), _msg);
