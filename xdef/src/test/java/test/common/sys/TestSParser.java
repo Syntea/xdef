@@ -337,6 +337,14 @@ public class TestSParser extends STester {
 				" -12e3\n" + //float
 				" 120e-1\n" + //float
 				" 12.50e+1\n" + //float
+				" .5\n" + //float
+				" .5e1\n" + //float
+				" -.5\n" + //float
+				" -.5e1\n" + //float
+				" 5.\n" + //float
+				" 5.e1\n" + //float
+				" -5.\n" + //float
+				" -5.e1\n" + //float
 				" 29.2.2000\n" + //date
 				" 13:23\n" + //time
 				" 13:23:59.987\n" + //time
@@ -375,6 +383,30 @@ public class TestSParser extends STester {
 			p.skipSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12.50e+1),
 				"d) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5),
+				"e) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5e1),
+				"f) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5),
+				"g) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5e1),
+				"h) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.),
+				"i) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.e1),
+				"j) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.),
+				"k) isFloat() fails: " + p.getParsedFloat());
+			p.skipSpaces();
+			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.e1),
+				"l) isFloat() fails: " + p.getParsedFloat());
 			p.skipSpaces();
 			if (p.isDatetime("d.M.yyyy")) {
 				c = p.getParsedCalendar();

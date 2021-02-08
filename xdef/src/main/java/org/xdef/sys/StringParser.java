@@ -2294,15 +2294,14 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to digit as defined in UNICODE (see
-	 * <a href = "http://www.unicode.org">http://www.unicode.org</a>).
+	/** Check if actual position points to digit ('0' .. '9').
 	 * Set actual position to the next character if digit was recognized and
-	 * return numeric value of digit, otherwise return -1.
-	 * @return number representing digit or -1.
+	 * return integer value of digit, otherwise return -1.
+	 * @return integer representing digit or -1.
 	 */
 	public final int isDigit() {
-		if (Character.isDigit(_ch)) {
-			int i = Character.getNumericValue(_ch);
+		if (_ch >= '0' && _ch <= '9') {
+			int i = _ch - '0';
 			nextChar();
 			return i;
 		}
@@ -2378,7 +2377,7 @@ public class StringParser extends SReporter implements SParser {
 		while (isDigit() >= 0) {}
 		int x = getIndex();
 		_parsedString = _source.substring(startToken, x);
-		_ch = x <_endPos || readNextBuffer() ? _source.charAt(getIndex()):NOCHAR;
+		_ch = x < _endPos || readNextBuffer()?_source.charAt(getIndex()):NOCHAR;
 		freeBuffer();
 		return true;
 	}
@@ -2396,8 +2395,10 @@ public class StringParser extends SReporter implements SParser {
 		keepBuffer();
 		int startToken = x;
 		if (!isInteger()) {
-			freeBuffer();
-			return false;
+			if (_ch != '.' && _ch != 'e' && _ch != 'E') {
+				freeBuffer();
+				return false;
+			}
 		}
 		if (isFloatPart()) {
 			_parsedString = _source.substring(startToken, getIndex());
@@ -2422,9 +2423,6 @@ public class StringParser extends SReporter implements SParser {
 		int x = getIndex();
 		boolean wasDecPoint;
 		if (wasDecPoint = isChar('.')) {
-			if (isDigit() < 0) {
-				return false;
-			}
 			while (isDigit() >= 0) {}
 			x = getIndex();
 			_ch = x < _endPos || readNextBuffer()

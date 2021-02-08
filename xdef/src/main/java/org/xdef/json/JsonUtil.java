@@ -794,38 +794,49 @@ public class JsonUtil extends StringParser {
 			}
 			return new CompileJsonXdef.JAny(_sPosition, null);
 		} else {
-			boolean minus = isChar('-');
-			boolean plus = !minus && isChar('+');
-			Number number;
-			String s;
-			int pos = getIndex();
-			if (isFloat()) {
-				s = getParsedString();
-				number = new BigDecimal((minus ? "-" : "") + s);
-			} else if (isInteger()) {
-				s = getParsedString();
-				number = new BigInteger((minus ? "-" : "") + s);
+			int pos;
+			boolean wasError = false;
+			if (isChar('+')) {
+				error(JSON.JSON017, "+");//Not allowed character '&{0}'
+				wasError = true;
+				pos = getIndex();
 			} else {
-				if (minus) {
-					error(JSON.JSON003); // number expected
-				} else {
-					error(JSON.JSON010); //JSON value expected
+				pos = getIndex();
+				isChar('-');
+			}
+			int pos1 = getIndex() - pos;
+			if (isInteger()) {
+				Number number;
+				boolean isfloat = false;
+				if (isChar('.')) { // decimal point
+					isfloat = true;
+					if (!isInteger()) {
+						error(JSON.JSON017, ".");//Not allowed character '&{0}'
+						wasError = true;
+					}
 				}
-				if (plus) {
-					error(JSON.JSON017, "+");//Not allowed character '&{0}'
+				char ch = getCurrentChar();
+				if (isChar('e') || isChar('E')) {//exponent
+					isfloat = true;
+					if (!isSignedInteger()) {
+						error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
+						wasError = true;
+					}
 				}
-				if (pos == getIndex()) {
-					findOneOfChars(",[]{}"); // skip to next item
+				String s = getBufferPart(pos, getIndex());
+				if (s.charAt(pos1) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(pos1 + 1))) {
+						error(JSON.JSON014); // Illegal leading zero in number
 				}
+				number = wasError ? 0
+					: isfloat ? new BigDecimal(s) : new BigInteger(s);
 				return _genJObjects
-					? new CompileJsonXdef.JValue(_sPosition, null) : null;
+					? new CompileJsonXdef.JValue(_sPosition,number) : number;
 			}
-			if (s.charAt(0) == '0' && s.length() > 1 &&
-				Character.isDigit(s.charAt(1))) {
-					error(JSON.JSON014); // Illegal leading zero in number
-			}
+			error(JSON.JSON010); //JSON value expected
+			findOneOfChars(",[]{}"); // skip to next item
 			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition,number) : number;
+				? new CompileJsonXdef.JValue(_sPosition, null) : null;
 		}
 	}
 
