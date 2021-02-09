@@ -49,7 +49,7 @@
     <eq_1>abcde</eq_1>
     <eqi_1>ABCDE</eqi_1>
     <file>c://file.txt</file>
-    <float>123E12</float>
+    <float>1.23E+14</float>
     <float_1>0.123</float_1>
     <float_2>0</float_2>
     <float_2>100</float_2>

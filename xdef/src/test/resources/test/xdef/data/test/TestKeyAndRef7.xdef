@@ -75,7 +75,7 @@
     <sea xd:script="*"
       id="sea.ID;"
       country="? country.IDREFS;"
-      bordering="? list(%item=QName); " >
+      bordering="? list(%item=QName);" >
       <name> string; </name>
       <located xd:script="*"
         country="country.IDREF;"
