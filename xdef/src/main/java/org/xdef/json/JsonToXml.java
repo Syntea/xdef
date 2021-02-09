@@ -617,6 +617,7 @@ class JsonToXml extends JsonUtil {
 		}
 		return e;
 	}
+
 	/** Create XML from JSON object according to W3C recommendation.
 	 * @param json object with JSON data.
 	 * @return XML element created from JSON data.

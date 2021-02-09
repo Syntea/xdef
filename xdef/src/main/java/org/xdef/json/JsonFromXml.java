@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
  */
@@ -362,8 +361,10 @@ class JsonFromXml extends JsonUtil {
 		// result object
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		List<Object> array = new ArrayList<Object>();
-		if (XDConstants.JSON_NS_URI_XD.equals(elem.getNamespaceURI())) {
-			if (J_ITEM.equals(elem.getLocalName())) {
+		String nsURI = elem.getNamespaceURI(); // nasmespace URI of element
+		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
+		if (XDConstants.JSON_NS_URI_XD.equals(nsURI)) {
+			if (J_ITEM.equals(localName)) {
 				if (elem.hasAttribute(J_VALUEATTR)) {
 					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
 				}
@@ -372,7 +373,7 @@ class JsonFromXml extends JsonUtil {
 					s = s.trim();
 				}
 				return xmlToJValue(s);
-			} else if (J_MAP.equals(elem.getLocalName())) {
+			} else if (J_MAP.equals(localName)) {
 				map.putAll(attrs);
 				for (Object o: childNodes) {
 					if (o instanceof Element) {
@@ -409,7 +410,7 @@ class JsonFromXml extends JsonUtil {
 					}
 				}
 				return map;
-			} else if (J_ARRAY.equals(elem.getLocalName())) {
+			} else if (J_ARRAY.equals(localName)) {
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
@@ -421,11 +422,11 @@ class JsonFromXml extends JsonUtil {
 					}
 				}
 				return array;
-			} else if (J_NULL.equals(elem.getLocalName())) {
+			} else if (J_NULL.equals(localName)) {
 				return null;
-			} else if (J_STRING.equals(elem.getLocalName())
-				|| J_NUMBER.equals(elem.getLocalName())
-				|| J_BOOLEAN.equals(elem.getLocalName())) {
+			} else if (J_STRING.equals(localName)
+				|| J_NUMBER.equals(localName)
+				|| J_BOOLEAN.equals(localName)) {
 				if (elem.hasAttribute(J_VALUEATTR)) {
 					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
 				}
@@ -452,7 +453,12 @@ class JsonFromXml extends JsonUtil {
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
-				addSimpleValue(array, s);
+				if (XDConstants.XDEF40_NS_URI.equals(nsURI)
+					&& "json".equals(localName)) {
+					array.add(s);
+				} else {
+					addSimpleValue(array, s);
+				}
 				map.put(name, array);
 				return map;
 			} else {

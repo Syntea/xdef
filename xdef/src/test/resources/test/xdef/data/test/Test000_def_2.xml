@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
 <xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
-          xd:root="d2#Davka | d2#zz | *"
-          xd:name="d2">
+        xd:root="d2#Davka | d2#zz | *"
+        xd:name="d2">
 <Davka Verze="fixed '2.0'"
        Kanal="required"
        Seq="required int()"
@@ -18,8 +17,8 @@
          xd:script="occurs 1.." >
        <xd:mixed>
        <CheckSum Type="required enum('MD5','CRC')"
-                Value="required string()"
-                xd:script="occurs 1">
+                 Value="required string()"
+                 xd:script="occurs 1">
          <xd:text>optional</xd:text>
        </CheckSum>
        <x xd:script="ref empty.node; occurs 1..5" />

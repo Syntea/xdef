@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="windows-1250"?>
 
-<DefSystemStatistics System="Provozní informační systém ČKP" KodSystemu="PIS" KodPartnera="9999" Verze="2.5.1.0" ZeDne="25.01.2007" >
+<DefSystemStatistics System="Provozní informační systém ČKP"
+                     KodSystemu="PIS" KodPartnera="9999"
+                     Verze="2.5.1.0"
+                     ZeDne="25.01.2007" >
 
   <Macros>
     <Macro Name="Osoba">Karel</Macro>
