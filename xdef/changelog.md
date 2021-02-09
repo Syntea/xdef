@@ -23,7 +23,6 @@
   by properties or by methods `setMinDate` or `setMaxDate`).
 * method `setBufIndex(int)` in the class org.xdef.sys.StringParser was renamed
   to `setIndex(int)`.
-* corrected bug in parsing of JSON float numbers.
 * new version of transformation of XML to JSON and of JSON to XML.
 
 # Version 40.1.1, release-date 2020-09-17
