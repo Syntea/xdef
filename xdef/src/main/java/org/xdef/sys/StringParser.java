@@ -1501,19 +1501,16 @@ public class StringParser extends SReporter implements SParser {
 	/** Get SDatetime object with value of parsed date.
 	 * @return SDatetime object with parsed values or null.
 	 */
-	public final SDatetime getParsedSDatetime() {return _parsedDatetime;}
+	public final SDatetime getParsedSDatetime() {
+		return _parsedDatetime == null ? null : new SDatetime(_parsedDatetime);
+	}
 
 	/** Get value of parsed date. Returns instance of Calendar with parsed
 	 * values. Values which were not parsed are set to zero.
-	 * @return Calendar with parsed values.
-	 * @throws SRuntimeException SYS072 Data error
+	 * @return Calendar with parsed values or null.
 	 */
 	public final Calendar getParsedCalendar() {
-		if (_parsedDatetime == null) {
-			//Data error&{0}{: }
-			throw new SRuntimeException(SYS.SYS072, "Datetime");
-		}
-		return _parsedDatetime.getCalendar();
+		return _parsedDatetime == null ? null : _parsedDatetime.getCalendar();
 	}
 
 	/** Skip white spaces.
