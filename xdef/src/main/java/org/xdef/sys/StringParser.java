@@ -1431,7 +1431,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Set source buffer position.
-	 * @param pos position of the source to be set.
+	 * @param index position to be set.
 	 */
 	public final void setIndex(final int index) {
 		if (index >= _endPos) {
@@ -2294,10 +2294,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to digit ('0' .. '9').
-	 * Set actual position to the next character if digit was recognized and
-	 * return integer value of digit, otherwise return -1.
-	 * @return integer representing digit or -1.
+	/** Check if at the current position is a digit.
+	 * @return digital value of digit or -1;
 	 */
 	public final int isDigit() {
 		if (_ch >= '0' && _ch <= '9') {
@@ -2374,7 +2372,9 @@ public class StringParser extends SReporter implements SParser {
 		}
 		keepBuffer();
 		int startToken = getIndex();
-		while (isDigit() >= 0) {}
+		while(_ch >= '0' && _ch <= '9') {
+			nextChar();
+		}
 		int x = getIndex();
 		_parsedString = _source.substring(startToken, x);
 		_ch = x < _endPos || readNextBuffer()?_source.charAt(getIndex()):NOCHAR;
@@ -2423,23 +2423,22 @@ public class StringParser extends SReporter implements SParser {
 		int x = getIndex();
 		boolean wasDecPoint;
 		if (wasDecPoint = isChar('.')) {
-			while (isDigit() >= 0) {}
+			while(_ch >= '0' && _ch <= '9') {
+				nextChar();
+			}
 			x = getIndex();
 			_ch = x < _endPos || readNextBuffer()
 				? _source.charAt(x = getIndex()) : NOCHAR;
 		}
 		if (isOneOfChars("eE") > 0) {//exponent
 			isOneOfChars("+-");
-			if (isDigit() < 0) {
-				if (wasDecPoint) {
-					setIndex(x);
-					return true;
-				}
-				//missing number after exponent
-				_ch = _source.charAt(x);
+			if (_ch < '0' || _ch > '9') {
+				setIndex(x); //missing number after exponent; reset position x
 				return wasDecPoint;
 			}
-			while (isDigit() >= 0){}
+			while(_ch >= '0' && _ch <= '9') {
+				nextChar();
+			}
 			return true;
 		}
 		return wasDecPoint;
@@ -2778,23 +2777,25 @@ public class StringParser extends SReporter implements SParser {
 					myDate._second = i;
 					continue;
 				case 'S': {//millisecond
-					i = isDigit();
-					if (i < 0) {
+					if (_ch < '0' || _ch > '9') {
 						failVariant = true;
 						continue;
 					}
+					i = _ch - '0';
+					nextChar();
 					double fraction =  i / 10.0;
 					double exp = 10.0;
 					int j = 0;
 					while (n == 0 || ++j < n) {
-						int k = isDigit();
-						if (k < 0) {
+						if (_ch < '0' || _ch > '9') {
 							if (n != 0 ) {
 								failVariant = true;
 								continue loop;
 							}
 							break;
 						}
+						int k = _ch - '0';;
+						nextChar();
 						fraction += k / (exp *= 10.0);
 					}
 					myDate._fraction = fraction;
@@ -3539,10 +3540,11 @@ public class StringParser extends SReporter implements SParser {
 							_parsedDuration.setSeconds(getParsedInt());
 							double fraction =  0.0;
 							double exp = 1.0;
-							int i;
-							while((i=isDigit()) >= 0) {
-								fraction += i/(exp *= 10.0);
-							}	if (fraction != 0.0) {
+							while(_ch >= '0' && _ch <= '9') {
+								fraction += (_ch - '0')/(exp *= 10.0);
+								nextChar();
+							}
+							if (fraction != 0.0) {
 								_parsedDuration.setFraction(fraction);
 							}	if (exp == 1.0) {//no digits after '.'
 								//Icorrect format of time period
@@ -3996,7 +3998,7 @@ public class StringParser extends SReporter implements SParser {
 	 * <br>XML_CHAR_NAME_START .. first character of XML name (8)
 	 * <br>XML_CHAR_NAME_EXT .. character of XML name (16)
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
@@ -4009,7 +4011,7 @@ public class StringParser extends SReporter implements SParser {
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if rule passed.
 	 */
 	public final boolean isNMToken(final byte xmlVersion) {
@@ -4043,7 +4045,7 @@ public class StringParser extends SReporter implements SParser {
 	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
 	 *     | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if NCNname was recognized.
 	 */
 	public final boolean isNCName(final byte xmlVersion) {
@@ -4074,7 +4076,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name and save result to _parsedString.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if XMLName was parsed.
 	 */
 	public final boolean isXMLName(final byte xmlVersion) {
@@ -4123,7 +4125,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse valid XML character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLChar(final byte xmlVersion) {
@@ -4152,7 +4154,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name start character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNamestartChar(final byte xmlVersion) {
@@ -4166,7 +4168,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name extension character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNameExtensionChar(final byte xmlVersion) {
@@ -4600,7 +4602,7 @@ public class StringParser extends SReporter implements SParser {
 	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public static final byte getXmlCharType(final char ch,
@@ -4612,7 +4614,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NCName according to XML specification.
 	 */
 	public static final boolean chkNCName(final String name,
@@ -4631,7 +4633,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is XML name according to XML specification..
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
@@ -4653,7 +4655,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */

@@ -130,7 +130,7 @@ public interface SParser {
 	 */
 	public char isOneOfChars(String chars);
 
-	/** Check if at the current source position is digit.
+	/** Check if at the current position is a digit.
 	 * @return digital value of digit or -1;
 	 */
 	public int isDigit();
