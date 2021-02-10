@@ -205,10 +205,13 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final boolean isInteger() {
-		if (isDigit() == -1) {
+		char c;
+		if (_srcIndex >= _source.length()
+			|| (c=_source.charAt(_srcIndex))<'0' || c>'9') {
 			return false;
 		}
-		while(isDigit() != -1) {}
+		while (++_srcIndex < _source.length()
+			&& (c=_source.charAt(_srcIndex)) >= '0' && c <= '9') {}
 		return true;
 	}
 	@Override
