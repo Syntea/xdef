@@ -1,9 +1,7 @@
 package org.xdef.json;
 
-import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
-import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
@@ -13,13 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -32,8 +25,7 @@ import org.xdef.sys.SUtils;
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
  */
-public class JsonUtil extends StringParser {
-
+public class JsonUtil {
 	/** JSON map local name. */
 	public final static String J_MAP = "map";
 	/** JSON array local name. */
@@ -53,21 +45,6 @@ public class JsonUtil extends StringParser {
 	/** JSON value attribute name. */
 	public final static String J_VALUEATTR = "value";
 
-	/** Flag to accept comments in JSON. */
-	private boolean _acceptComments; // default value = false
-	/** Flag to generate SPositions when parsing JSON. */
-	private boolean _genJObjects; // default value = false
-	/** Flag if the parsed data are in X-definition. */
-	private boolean _jdef; // default value = false
-	/** Position of processed item.`*/
-	private SPosition _sPosition;
-
-	/** Create instance of A_util. */
-	public JsonUtil() {
-		_acceptComments = false;
-		_genJObjects = false;
-		_jdef = false;
-	}
 ////////////////////////////////////////////////////////////////////////////////
 // Common public mtethods
 ////////////////////////////////////////////////////////////////////////////////
@@ -80,245 +57,7 @@ public class JsonUtil extends StringParser {
 		return "_x" + Integer.toHexString(c) + '_';
 	}
 
-	/** Generate XML form of string,
-	 * @param val Object with value.
-	 * @param isAttr if true the value is generated for attribute, otherwise
-	 * it is generated for text node value.
-	 * @return XML form of string from the argument val,
-	 */
-	final static String genSimpleValueToXml(final Object x,
-		final boolean isAttr){
-		if (x == null) {
-			return "null";
-		} else if (x instanceof String) {// JSON string to XML form
-			String s = (String) x;
-			if (s.isEmpty() || "null".equals(s)
-				|| "true".equals(s) || "false".equals(s)) {
-				return '"' + s + '"';
-			}
-			boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
-				|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
-				|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0
-				|| s.indexOf('\\') >= 0 || s.indexOf('"') >= 0;
-			if (!addQuot) {
-				char ch = s.charAt(0);
-				if (ch == '-' || ch >= '0' && ch <= '9') {
-					StringParser p = new StringParser(s);
-					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-						return '"' + s + '"'; // value is number, must be quoted
-					}
-				}
-			}
-			if (addQuot) {
-				char ch = s.charAt(0);
-				if (isAttr && s.equals(s.trim()) && ch != '"' && ch != '[') {
-					// For attributes it is not necessary to add quotes if the data
-					// does not contain leading or trailing white spaces,
-					return s;
-				} else {
-					return '"' + jstringToSource(s) + '"';
-				}
-			} else {
-				return s;
-			}
-		}
-		return x.toString();
-	}
-
-	/** Generate XML form from JSON string value.
-	 * @param val Object with value.
-	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
-	 * @return XML form of string from the argument val,
-	 */
-	final static String jstringToXML(final Object val, final int mode) {
-		if (val == null) {
-			return "null";
-		}
-		if (val instanceof String) {
-			String s = (String) val;
-			if (s.isEmpty()) {
-				return mode == 1 ? "" : "\"\"";
-			}
-			if ("true".equals(s) || "false".equals(s) || "null".equals(s)) {
-				return '"' + s + '"';
-			}
-			char ch = s.charAt(0);
-			int len = s.length();
-			boolean addQuot = mode == 2 || mode == 1 && (ch == '[' || ch == '"')
-				|| mode == 0 && (ch <= ' ' || s.charAt(len-1) <= ' ');
-			if (!addQuot) {
-				int i = 0;
-				if (ch == '-' && len > 1) {
-					i = 1;
-					ch = s.charAt(1);
-				}
-				if (ch >= '0' && ch <= '9') { //if it is a number => qoute
-					if (i + 1 == len) {
-						return '"' + s + '"';
-					}
-					if (ch!='0'||(ch=s.charAt(i+1))=='.'||ch=='E'||ch=='e') {
-						// number without redundant leading zeroes
-						StringParser p = new StringParser(s);
-						if ((p.isFloat() || p.isInteger()) && p.eos()) {
-							return '"' + s + '"';
-						}
-					}
-				}
-			}
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < len; i++) {
-				switch (ch = s.charAt(i)) {
-					case '\t':
-						if (mode == 1 || addQuot) { // force quote attributes
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\t");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '\n':
-						if (mode == 1 || addQuot) {  // force quote attributes
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\n");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '\r':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\r");
-						break;
-					case '\f':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\f");
-						break;
-					case '\b':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\b");
-						break;
-					case '\\':
-						if (mode == 2 || addQuot) { // force quote array items
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\\\");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '"':
-						if (mode == 2 || addQuot) { // force quote array items
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\\"");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					default:
-						if (ch < ' '
-							|| StringParser.getXmlCharType(ch,XConstants.XML10)
-								== XML_CHAR_ILLEGAL) {
-							if (!addQuot) { // force quote
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\u");
-							for (int x = 12; x >= 0; x -=4) {
-								sb.append("0123456789abcdef"
-									.charAt((ch >> x) & 0xf));
-							}
-						} else {
-							sb.append(ch);
-						}
-				}
-			}
-			if (!addQuot) {
-				return s;
-			}
-			return '"' + sb.toString() + '"';
-		} else {// Number or Boolean
-			return val.toString();
-		}
-	}
-
-	final static String sourceToJstring(final String s)  {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0;  i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (ch == '\\') { // escaped characters
-				if (++i >= s.length()) {
-					return s; // missing escape char (error)
-				}
-				switch (ch = s.charAt(i)) {
-					case '"':
-						ch = '"';
-						break;
-					case '\\':
-						ch = '\\';
-						break;
-					case '/':
-						ch = '/';
-						break;
-					case 'b':
-						ch = '\b';
-						break;
-					case 'f':
-						ch = '\f';
-						break;
-					case 'n':
-						ch = '\n';
-						break;
-					case 'r':
-						ch = '\r';
-						break;
-					case 't':
-						ch = '\t';
-						break;
-					case 'u':
-						try {
-							ch = (char) Short.parseShort(
-								s.substring(i+1, i+5), 16);
-							i += 4;
-							break;
-						} catch (Exception ex) {
-							return s; // incorrect UTF-8 char (error)
-						}
-					default: return s; // illegal escape char (error)
-				}
-			}
-			sb.append(ch);
-		}
-		return sb.toString();
-	}
-
-	/** Create string from JSON string.
+	/** Create string from JSON source string.
 	 * @param s JSON string.
 	 * @return string created from JSON string.
 	 */
@@ -373,15 +112,6 @@ public class JsonUtil extends StringParser {
 		return i >= 0 ? s.substring(0, i) + "_x3a_" + s.substring(i + 1) : s;
 	}
 
-	/** Get prefix of XML name.
-	 * @param s XML name.
-	 * @return prefix of XML name.
-	 */
-	public final static String getNamePrefix(final String s) {
-		int i = s.indexOf(':');
-		return (i >= 0) ? s.substring(0, i) : "";
-	}
-
 	/** Get XML name created from JSOM pair name.
 	 * @param s JSOM pair name.
 	 * @return XML name.
@@ -433,54 +163,8 @@ public class JsonUtil extends StringParser {
 		}
 		// remove starting and ending '"'
 		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"')
-//			&& src.charAt(src.length() - 1) != '\\')
 			? src.substring(1, src.length() - 1) : src;
 		return jstringToSource(s);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// JSON parser
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Set genJObjects flag (and the _acceptComments flag is also set). */
-	public final void setGenJObjects() {
-		_genJObjects = true;
-		_acceptComments = true;
-	}
-
-	/** Set mode that JSON is parsed in X-definition compiler. */
-	public final void setXJsonMode() {
-		setGenJObjects();
-		_jdef = true;
-	}
-
-	/** Create modification string with source position.
-	 * @return modification string with source position.
-	 */
-	public final String genPosMod() {
-		return "&{line}" + getLineNumber()
-			+ "&{column}" + getColumnNumber()
-			+ "&{sysId}" + getSysId();
-	}
-
-	/** Skip white space separators (and comments if accepted).
-	 * @return true if a space or comment was found.
-	 */
-	public final boolean isSpacesOrComments() {
-		boolean result = isSpaces();
-		while(isToken("/*")) {
-			result = true;
-			if (!_acceptComments) { // omments not allowed
-				warning(JSON.JSON019);  //Comments are not allowed here
-			}
-			if (!findTokenAndSkip("*/")) {
-				error(JSON.JSON015); //Unclosed comment
-				setEos();
-				return result;
-			}
-			isSpaces();
-		}
-		return result;
 	}
 
 	/** Check and get hexadecimal digit as integer.
@@ -520,7 +204,7 @@ public class JsonUtil extends StringParser {
 	 * @param p parser where the string is on the actual position.
 	 * @return the parsed string.
 	 */
-	public final static String readString(final SParser p) {
+	public final static String readJSONString(final SParser p) {
 		StringBuilder sb = new StringBuilder();
 		while (!p.eos()) {
 			if (p.isChar('"')) {
@@ -556,304 +240,9 @@ public class JsonUtil extends StringParser {
 		return null;
 	}
 
-	/** Read JSON value.
-	 * @return parsed value: List, Map, String, Number, Boolean or null.
-	 * @throws SRuntimeException is an error occurs.
-	 */
-	private Object readValue() throws SRuntimeException {
-		if (eos()) {
-			fatal(JSON.JSON007); //unexpected eof
-			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition, null) : null;
-		}
-		if (_genJObjects) {
-			_sPosition = getPosition();
-		}
-		if (isChar('{')) { // Map
-			Map<String, Object> result;
-			result = _genJObjects ? new CompileJsonXdef.JMap(_sPosition)
-				: new LinkedHashMap<String,Object>();
-			isSpacesOrComments();
-			if (isChar('}')) { // empty map
-				return result;
-			}
-			boolean wasScript = false;
-			while(!eos()) {
-				int i;
-				if (!wasScript && _jdef
-					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
-						CompileJsonXdef.ONEOF_NAME)) >= 0) {
-					wasScript = true;
-					SPosition spos = getPosition();
-					isSpacesOrComments();
-					Object o;
-					if (i == 1) {
-						String s;
-						if (isChar(':')) {
-							spos.setIndex(spos.getIndex() - 1);
-							isSpacesOrComments();
-							o = readValue();
-							if (o instanceof CompileJsonXdef.JValue
-								&& ((CompileJsonXdef.JValue)o).getValue()
-								instanceof String) {
-								s = CompileJsonXdef.ONEOF_KEY +
-									((CompileJsonXdef.JValue)o).getValue();
-							} else {
-								//Value of $script must be string with X-script
-								error(JSON.JSON018);
-								s = CompileJsonXdef.ONEOF_KEY;
-							}
-						} else {
-							s = CompileJsonXdef.ONEOF_KEY;
-						}
-						o = new CompileJsonXdef.JValue(spos, s);
-					} else {
-						if (!isChar(':') && i != 1) {
-							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
-						}
-						isSpacesOrComments();
-						o = readValue();
-					}
-					if (o != null && o instanceof CompileJsonXdef.JValue
-						&& ((CompileJsonXdef.JValue)o).getValue()
-							instanceof String) {
-						if (result.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
-							//Value pair &{0} already exists
-							error(JSON.JSON022, CompileJsonXdef.SCRIPT_KEY);
-						} else {
-							result.put(CompileJsonXdef.SCRIPT_KEY, o);
-						}
-					} else {
-						//Value of $script must be string with X-script
-						error(JSON.JSON018);
-					}
-				} else {
-					Object o = readValue();
-					if (o != null && (o instanceof String ||
-						(_genJObjects && o instanceof CompileJsonXdef.JValue)
-						&& ((CompileJsonXdef.JValue) o).getValue()
-							instanceof String)) {
-						 // parse JSON named pair
-						String name = _genJObjects ? o.toString() : (String) o;
-						isSpacesOrComments();
-						if (!isChar(':')) {
-							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
-						}
-						isSpacesOrComments();
-						o = readValue();
-						if (result.containsKey(name)) {
-							String s = jstringToSource(name);
-							if (!s.startsWith("\"") || !s.endsWith("\"")) {
-								s = '"' + s + '"';
-							}
-							//Value pair &{0} already exists
-							error(JSON.JSON022, s);
-						} else {
-							result.put(name, o);
-						}
-					} else {
-						fatal(JSON.JSON004); //String with name of item expected
-						return result;
-					}
-				}
-				isSpacesOrComments();
-				if (isChar('}')) {
-					isSpacesOrComments();
-					return result;
-				}
-				if (isChar(',')) {
-					SPosition spos = getPosition();
-					isSpacesOrComments();
-					if (isChar('}')) {
-						SPosition spos1 = getPosition();
-						setPosition(spos);
-						error(JSON.JSON020); //redundant comma
-						setPosition(spos1);
-						return result;
-					}
-				} else {
-					if (eos()) {
-						break;
-					}
-					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, ",", "}");
-					if (getCurrentChar() != '"') {
-						break;
-					}
-				}
-			}
-			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-			fatal(JSON.JSON002, "}");
-			return result;
-		} else if (isChar('[')) {
-			List<Object> result;
-			result = _genJObjects ? new CompileJsonXdef.JArray(_sPosition)
-				: new ArrayList<Object>();
-			isSpacesOrComments();
-			if (isChar(']')) { // empty array
-				return result;
-			}
-			boolean wasScript = false;
-			boolean wasErrorReported = false;
-			while(!eos()) {
-				int i;
-				if (!wasScript &&_jdef
-					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
-						CompileJsonXdef.ONEOF_NAME)) >= 0) {
-					wasScript = true;
-					if (isChar(':')) {
-						isSpacesOrComments();
-						Object o = readValue();
-						if (o instanceof CompileJsonXdef.JValue
-							&& ((CompileJsonXdef.JValue)o).getValue()
-							instanceof String){
-							CompileJsonXdef.JValue jv =
-								(CompileJsonXdef.JValue) o;
-							if (i == 1) {
-								SPosition spos = jv.getPosition();
-								spos.setIndex(spos.getIndex() - 1);
-								String s =
-									CompileJsonXdef.ONEOF_KEY + jv.getValue();
-								jv = new CompileJsonXdef.JValue(spos, s);
-							}
-							result.add(new CompileJsonXdef.JValue(null, jv));
-						} else {
-							//Value of $script must be string with X-script
-							error(JSON.JSON018);
-						}
-					} else {
-						if (i == 0) {
-							//"&{0}"&{1}{ or "}{"} expected
-						   error(JSON.JSON002, ":");
-						} else {
-							SPosition spos = getPosition();
-							spos.setIndex(spos.getIndex() - 1);
-							result.add(new CompileJsonXdef.JValue(null,
-								new CompileJsonXdef.JValue(spos,
-									CompileJsonXdef.ONEOF_KEY)));
-						}
-					}
-				} else {
-					result.add(readValue());
-				}
-				isSpacesOrComments();
-				if (isChar(']')) {
-					return result;
-				}
-				if (isChar(',')) {
-					SPosition spos = getPosition();
-					isSpacesOrComments();
-					if (isChar(']')) {
-						SPosition spos1 = getPosition();
-						setPosition(spos);
-						error(JSON.JSON020); //redundant comma
-						setPosition(spos1);
-						return result;
-					}
-				} else {
-					if (wasErrorReported) {
-						break;
-					}
-					error(JSON.JSON002,",","]"); //"&{0}"&{1}{ or "}{"} expected
-					if (eos()) {
-						break;
-					}
-					wasErrorReported = true;
-				}
-			}
-			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
-			return result;
-		} else if (isChar('"')) { // string
-			String s = readString(this);
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, s) : s;
-		} else if (isToken("null")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null)
-				: null;
-		} else if (isToken("true")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, true)
-				: true;
-		} else if (isToken("false")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, false)
-				: false;
-		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
-			isSpacesOrComments();
-			if (isChar(':')) {
-				isSpacesOrComments();
-				Object val = readValue();
-				if (!(val instanceof CompileJsonXdef.JValue)
-					|| (((CompileJsonXdef.JValue) val).getValue()
-						instanceof String)) {
-					//After ":" in the command $any must follow a string value
-					error(JSON.JSON021);
-				} else {
-					return new CompileJsonXdef.JAny(
-						_sPosition,((CompileJsonXdef.JValue) val).getSBuffer());
-				}
-			}
-			return new CompileJsonXdef.JAny(_sPosition, null);
-		} else {
-			int pos;
-			boolean wasError = false;
-			if (isChar('+')) {
-				error(JSON.JSON017, "+");//Not allowed character '&{0}'
-				wasError = true;
-				pos = getIndex();
-			} else {
-				pos = getIndex();
-				isChar('-');
-			}
-			int pos1 = getIndex() - pos;
-			if (isInteger()) {
-				Number number;
-				boolean isfloat = false;
-				if (isChar('.')) { // decimal point
-					isfloat = true;
-					if (!isInteger()) {
-						error(JSON.JSON017, ".");//Not allowed character '&{0}'
-						wasError = true;
-					}
-				}
-				char ch = getCurrentChar();
-				if (isChar('e') || isChar('E')) {//exponent
-					isfloat = true;
-					if (!isSignedInteger()) {
-						error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
-						wasError = true;
-					}
-				}
-				String s = getBufferPart(pos, getIndex());
-				if (s.charAt(pos1) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(pos1 + 1))) {
-						error(JSON.JSON014); // Illegal leading zero in number
-				}
-				number = wasError ? 0
-					: isfloat ? new BigDecimal(s) : new BigInteger(s);
-				return _genJObjects
-					? new CompileJsonXdef.JValue(_sPosition,number) : number;
-			}
-			error(JSON.JSON010); //JSON value expected
-			findOneOfChars(",[]{}"); // skip to next item
-			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition, null) : null;
-		}
-	}
-
-	/** Parse JSON source data.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final Object parse() throws SRuntimeException {
-		isSpacesOrComments();
-		Object result = readValue();
-		isSpacesOrComments();
-		_sPosition = getPosition();
-		if (!eos()) {
-			error(JSON.JSON008, genPosMod()); //Text after JSON not allowed
-		}
-		return result;
-	}
+////////////////////////////////////////////////////////////////////////////////
+// JSON parser
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse JSON document from input source data.
 	 * The source data may be either file pathname or URL or JSON source.
@@ -866,7 +255,7 @@ public class JsonUtil extends StringParser {
 		Object result;
 		if (source.charAt(0) == '{' && source.endsWith("}")
 			|| (source.charAt(0) == '[' && source.endsWith("]"))) {
-			JsonUtil jx = new JsonUtil();
+			JsonParser jx = new JsonParser();
 			jx.setSourceBuffer(source);
 			result = jx.parse();
 			jx.getReportWriter().checkAndThrowErrors();
@@ -881,7 +270,7 @@ public class JsonUtil extends StringParser {
 			result = parse(in, sysId);
 		} catch (Exception ex) {
 			if (!new File(source).exists()) {
-				JsonUtil jx = new JsonUtil();
+				JsonParser jx = new JsonParser();
 				jx.setSourceBuffer(source);
 				result = jx.parse();
 				jx.getReportWriter().checkAndThrowErrors();
@@ -990,7 +379,7 @@ public class JsonUtil extends StringParser {
 					reader = new InputStreamReader(in, "UTF-32LE");
 				}
 			}
-			JsonUtil jx = new JsonUtil();
+			JsonParser jx = new JsonParser();
 			jx.setSourceReader(reader, 0L, s);
 			if (sysid != null && !sysid.isEmpty()) {
 				jx.setSysId(sysid);
@@ -1013,8 +402,7 @@ public class JsonUtil extends StringParser {
 	 */
 	public final static Object parse(final URL in) throws SRuntimeException{
 		try {
-			URLConnection u = in.openConnection();
-			InputStream is = u.getInputStream();
+			InputStream is = in.openConnection().getInputStream();
 			try {
 				return parse(is, in.toExternalForm());
 			} finally {
@@ -1024,132 +412,6 @@ public class JsonUtil extends StringParser {
 			//URL &{0} error: &{1}{; }
 			throw new SRuntimeException(SYS.SYS076,in.toExternalForm(), ex);
 		}
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// JSON to string
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Add the string created from JSON jvalue object to StringBuilder.
-	 * @param obj JSON object to be created to String.
-	 * @return sb created string.
-	 */
-	private static String jvalueToString(final Object obj){
-		if (obj == null) {
-			return "null";
-		} else if (obj instanceof String) {
-			return '"' + jstringToSource((String) obj) + '"';
-		}
-		return obj.toString();
-	}
-
-	/** Add the string created from JSON object to StringBuilder.
-	 * @param obj JSON object to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
-	 */
-	private static void objToJsonString(final Object obj,
-		final String indent,
-		final StringBuilder sb) {
-		if (obj instanceof List) {
-			List x = (List) obj;
-			arrayToJsonString(x, indent, sb);
-		} else if (obj instanceof Map) {
-			Map x = (Map) obj;
-			mapToJsonString(x, indent, sb);
-		} else {
-			sb.append(jvalueToString(obj));
-		}
-	}
-
-	/** Add the string created from JSON array to StringBuilder.
-	 * @param array JSON array to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
-	 */
-	private static void arrayToJsonString(final List array,
-		final String indent,
-		final StringBuilder sb) {
-		if (array.isEmpty()) {
-			sb.append("[]");
-			return;
-		}
-		if (indent != null && indent.length() > 0 && array.size() == 1) {
-			Object o = array.get(0);
-			if (!(o instanceof Map) && !(o instanceof List)) {
-				String s = jvalueToString(o);
-				if (s.length() + indent.length() < 72) {
-					sb.append('[').append(s).append(']');
-					return;
-				}
-			}
-		}
-		int lastValuePosition = sb.length();
-		sb.append('[');
-		String ind = (indent != null) ? indent + "  " : null;
-		boolean first = true;
-		for (Object o: array) {
-			if (first) {
-				first = false;
-				if (ind != null && array.size() > 1) {
-					sb.append(ind);
-				}
-			} else {
-				sb.append(',');
-				if (ind != null) {
-					sb.append(ind);
-				}
-			}
-			objToJsonString(o, ind, sb);
-		}
-		if (ind != null
-			&&  (array.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)){
-			sb.append(indent);
-		}
-		sb.append(']');
-	}
-
-	/** Add the string created from JSON map to StringBuilder.
-	 * @param map JSON map to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
-	 */
-	private static void mapToJsonString(final Map map,
-		final String indent,
-		final StringBuilder sb) {
-		sb.append('{');
-		if (map.isEmpty()) {
-			sb.append('}');
-			return;
-		}
-		String ind = (indent != null) ? indent + "  " : null;
-		boolean first = true;
-		int lastValuePosition = sb.length();
-		for (Object x: map.entrySet()) {
-			Map.Entry e = (Map.Entry) x;
-			if (first) {
-				first = false;
-				if (map.size() > 1) {
-					sb.append(' ');
-				}
-				objToJsonString(e.getKey(), "", sb);
-			} else {
-				lastValuePosition = sb.length();
-				sb.append(',');
-				if (ind != null) {
-					sb.append(ind);
-				}
-				objToJsonString(e.getKey(), ind, sb);
-			}
-			lastValuePosition = sb.length();
-			sb.append(':');
-			objToJsonString(e.getValue(), ind, sb);
-		}
-		if (ind != null
-			&&  (map.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)) {
-			sb.append(indent);
-		}
-		sb.append('}');
 	}
 
 	/** Create JSON string from object (no indentation).
@@ -1169,11 +431,11 @@ public class JsonUtil extends StringParser {
 		StringBuilder sb = new StringBuilder();
 		String indt = indent ? "\n" : null;
 		if (obj instanceof List) {
-			arrayToJsonString((List) obj, indt, sb);
+			JsonToString.arrayToJsonString((List) obj, indt, sb);
 		} else if (obj instanceof Map) {
-			mapToJsonString((Map) obj, indt, sb);
+			JsonToString.mapToJsonString((Map) obj, indt, sb);
 		} else {
-			return jvalueToString(obj);
+			return JsonToString.jvalueToString(obj);
 		}
 		return sb.toString();
 	}
@@ -1182,134 +444,14 @@ public class JsonUtil extends StringParser {
 // Compare two JSON objects.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Check if JSON arrays from arguments are equal.
-	 * @param a1 first array.
-	 * @param a2 second array.
-	 * @return true if and only if both arrays are equal.
-	 */
-	private static boolean equalArray(final List a1, final List a2) {
-		if (a1.size() == a2.size()) {
-			for (int i = 0; i < a1.size(); i++) {
-				if (!equalValue(a1.get(i), a2.get(i))) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/** Check if JSON maps from arguments are equal.
-	 * @param m1 first map.
-	 * @param m2 second map.
-	 * @return true if and only if both maps are equal.
-	 */
-	private static boolean equalMap(final Map m1, final Map m2) {
-		if (m1.size() != m2.size()) {
-			return false;
-		}
-		for (Object k: m1.keySet()) {
-			if (!m2.containsKey(k)) {
-				return false;
-			}
-			if (!equalValue(m1.get(k), m2.get(k))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/** Check if JSON numbers from arguments are equal.
-	 * @param n1 first number.
-	 * @param n2 second number.
-	 * @return true if and only if both numbers are equal.
-	 * @throws SRuntimeException if objects are incomparable
-	 */
-	private static boolean equalNumber(final Number n1, final Number n2) {
-		if (n1 instanceof BigDecimal) {
-			if (n2 instanceof BigDecimal) {
-				return ((BigDecimal) n1).compareTo((BigDecimal) n2) == 0;
-			} else if (n2 instanceof BigInteger) {
-				return equalNumber(n1, new BigDecimal((BigInteger) n2));
-			} else if (n2 instanceof Long || n2 instanceof Integer
-				|| n2 instanceof Short || n2 instanceof Byte) {
-				return equalNumber(n1, new BigDecimal(n2.longValue()));
-			} else if (n2 instanceof Double || n2 instanceof Float) {
-				//this is real equality, decimal can't be exactly converted!
-				return n1.doubleValue() == n2.doubleValue();
-			}
-		} else if (n1 instanceof BigInteger) {
-			if (n2 instanceof BigInteger) {
-				return ((BigInteger) n1).compareTo((BigInteger) n2) == 0;
-			} else if (n2 instanceof BigDecimal || n2 instanceof BigInteger) {
-				return equalNumber(new BigDecimal((BigInteger)n1), n2);
-			} else if (n2 instanceof Long || n2 instanceof Integer
-				|| n2 instanceof Short || n2 instanceof Byte) {
-				return equalNumber(n1, new BigInteger(n2.toString()));
-			} else if (n2 instanceof Double || n2 instanceof Float) {
-				return equalNumber(new BigDecimal((BigInteger)n1), n2);
-			}
-		} else if (n1 instanceof Long || n1 instanceof Integer
-			|| n1 instanceof Short || n1 instanceof Byte) {
-			if (n2 instanceof Long || n2 instanceof Integer
-				|| n2 instanceof Short || n2 instanceof Byte) {
-				return n1.longValue() == n2.longValue();
-			} else if (n2 instanceof Double || n2 instanceof Float
-				|| n2 instanceof BigInteger || n2 instanceof BigDecimal) {
-				return equalNumber(n2, n1);
-			}
-		} else if (n1 instanceof Double || n1 instanceof Float) {
-			if (n2 instanceof BigInteger || n2 instanceof BigDecimal) {
-				return equalNumber(n2, n1);
-			}
-			return n1.doubleValue() == n2.doubleValue();
-		}
-		//Incomparable objects &{0} and &{1}
-		throw new SRuntimeException(JSON.JSON012,
-			n1.getClass().getName(), n2.getClass().getName());
-	}
-
-	/** Check if JSON values from arguments are equal.
-	 * @param o1 first value.
-	 * @param o2 second value.
-	 * @return true if and only if both values are equal.
-	 * @throws SRuntimeException if objects are incomparable
-	 */
-	private static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null || o2 instanceof JNull) {
-			return o2 == null || o2 instanceof JNull;
-		} else if (o2 == null || o1 instanceof JNull) {
-			return o1 == null || o1 instanceof JNull;
-		}
-		if (o1 instanceof Map) {
-			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
-		}
-		if (o1 instanceof List) {
-			return o2 instanceof List ? equalArray((List) o1, (List) o2) :false;
-		}
-		if (o1 instanceof String) {
-			return ((String) o1).equals(o2);
-		}
-		if (o1 instanceof Number) {
-			return (o2 instanceof Number)
-				? equalNumber((Number) o1, (Number) o2) : false;
-		}
-		if (o1 instanceof Boolean) {
-			return ((Boolean) o1).equals(o2);
-		}
-		// Incomparable objects &{0} and &{1}
-		throw new SRuntimeException(JSON.JSON012,
-			o1.getClass().getName(), o2.getClass().getName());
-	}
-
 	/** Compare two JSON objects.
 	 * @param j1 first object with JSON data.
 	 * @param j2 second object with JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
 	public final static boolean jsonEqual(final Object j1, final Object j2) {
-		return (j1 == null && j2 == null)
-			|| (j1 != null && j2 != null && equalValue(j1,j2));
+		return (j1 == null && j2 == null) ||
+			(j1 != null && j2 != null && JsonCompare.equalValue(j1,j2));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
