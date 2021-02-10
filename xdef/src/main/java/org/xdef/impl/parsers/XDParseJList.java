@@ -79,7 +79,7 @@ public class XDParseJList extends XSAbstractParser {
 				int start, end;
 				start = p.getIndex();
 				if (p.isChar('"')) {
-					String s = JsonUtil.readString(p);
+					String s = JsonUtil.readJSONString(p);
 					end = p.getIndex();
 					if (_itemType.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));

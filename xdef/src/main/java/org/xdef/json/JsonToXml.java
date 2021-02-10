@@ -12,7 +12,10 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.CompileJsonXdef;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 
 /** Test X-definition transformation JSON -> XML
  * @author Vaclav Trojan
@@ -61,6 +64,158 @@ class JsonToXml extends JsonUtil {
 		_ns.setPrefix(_jsPrefix, _jsNamespace);
 		n.appendChild(e);
 		return e;
+	}
+
+	/** Generate XML form from JSON string value.
+	 * @param val Object with value.
+	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
+	 * @return XML form of string from the argument val,
+	 */
+	private static String jstringToXML(final Object val, final int mode) {
+		if (val == null) {
+			return "null";
+		}
+		if (val instanceof String) {
+			String s = (String) val;
+			if (s.isEmpty()) {
+				return mode == 1 ? "" : "\"\"";
+			}
+			if ("true".equals(s) || "false".equals(s) || "null".equals(s)) {
+				return '"' + s + '"';
+			}
+			char ch = s.charAt(0);
+			int len = s.length();
+			boolean addQuot = mode == 2 || mode == 1 && (ch == '[' || ch == '"')
+				|| mode == 0 && (ch <= ' ' || s.charAt(len-1) <= ' ');
+			if (!addQuot) {
+				int i = 0;
+				if (ch == '-' && len > 1) {
+					i = 1;
+					ch = s.charAt(1);
+				}
+				if (ch >= '0' && ch <= '9') { //if it is a number => qoute
+					if (i + 1 == len) {
+						return '"' + s + '"';
+					}
+					if (ch!='0'||(ch=s.charAt(i+1))=='.'||ch=='E'||ch=='e') {
+						// number without redundant leading zeroes
+						StringParser p = new StringParser(s);
+						if ((p.isFloat() || p.isInteger()) && p.eos()) {
+							return '"' + s + '"';
+						}
+					}
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < len; i++) {
+				switch (ch = s.charAt(i)) {
+					case '\t':
+						if (mode == 1 || addQuot) { // force quote attributes
+							if (!addQuot) {
+								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+								addQuot = true;
+							}
+							sb.append("\\t");
+						} else {
+							sb.append(ch);
+						}
+						break;
+					case '\n':
+						if (mode == 1 || addQuot) {  // force quote attributes
+							if (!addQuot) {
+								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+								addQuot = true;
+							}
+							sb.append("\\n");
+						} else {
+							sb.append(ch);
+						}
+						break;
+					case '\r':
+						if (!addQuot) { // force quote
+							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+							addQuot = true;
+						}
+						sb.append("\\r");
+						break;
+					case '\f':
+						if (!addQuot) { // force quote
+							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+							addQuot = true;
+						}
+						sb.append("\\f");
+						break;
+					case '\b':
+						if (!addQuot) { // force quote
+							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+							addQuot = true;
+						}
+						sb.append("\\b");
+						break;
+					case '\\':
+						if (mode == 2 || addQuot) { // force quote array items
+							if (!addQuot) {
+								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+								addQuot = true;
+							}
+							sb.append("\\\\");
+						} else {
+							sb.append(ch);
+						}
+						break;
+					case '"':
+						if (mode == 2 || addQuot) { // force quote array items
+							if (!addQuot) {
+								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+								addQuot = true;
+							}
+							sb.append("\\\"");
+						} else {
+							sb.append(ch);
+						}
+						break;
+					default:
+						if (ch < ' '
+							|| StringParser.getXmlCharType(ch,XConstants.XML10)
+								== StringParser.XML_CHAR_ILLEGAL) {
+							if (!addQuot) { // force quote
+								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
+								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+								addQuot = true;
+							}
+							sb.append("\\u");
+							for (int x = 12; x >= 0; x -=4) {
+								sb.append("0123456789abcdef"
+									.charAt((ch >> x) & 0xf));
+							}
+						} else {
+							sb.append(ch);
+						}
+				}
+			}
+			if (!addQuot) {
+				return s;
+			}
+			return '"' + sb.toString() + '"';
+		} else {// Number or Boolean
+			return val.toString();
+		}
+	}
+
+	/** Get prefix of XML name.
+	 * @param s XML name.
+	 * @return prefix of XML name.
+	 */
+	private static String getNamePrefix(final String s) {
+		int i = s.indexOf(':');
+		return (i >= 0) ? s.substring(0, i) : "";
 	}
 
 	/** Set attribute to element,
@@ -566,6 +721,50 @@ class JsonToXml extends JsonUtil {
 		}
 	}
 
+	/** Generate XML form of string,
+	 * @param val Object with value.
+	 * @param attr if true the value is generated for attribute, otherwise
+	 * it is generated for text node value.
+	 * @return XML form of string from the argument val,
+	 */
+	private String genSimpleValueToXml(final Object x) {
+		if (x == null) {
+			return "null";
+		} else if (x instanceof String) {// JSON string to XML form
+			String s = (String) x;
+			if (s.isEmpty() || "null".equals(s)
+				|| "true".equals(s) || "false".equals(s)) {
+				return '"' + s + '"';
+			}
+			boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
+				|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
+				|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0
+				|| s.indexOf('\\') >= 0 || s.indexOf('"') >= 0;
+			if (!addQuot) {
+				char ch = s.charAt(0);
+				if (ch == '-' || ch >= '0' && ch <= '9') {
+					StringParser p = new StringParser(s);
+					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
+						return '"' + s + '"'; // value is number, must be quoted
+					}
+				}
+			}
+			if (addQuot) {
+				char ch = s.charAt(0);
+				if (s.equals(s.trim()) && ch != '"' && ch != '[') {
+					// For attributes it is not necessary to add quotes if the data
+					// does not contain leading or trailing white spaces,
+					return s;
+				} else {
+					return '"' + jstringToSource(s) + '"';
+				}
+			} else {
+				return s;
+			}
+		}
+		return x.toString();
+	}
+
 	/** Create W3C JSON element with value.
 	 * @param val value of JSON element.
 	 * @param parent parent node where to add created element.
@@ -583,7 +782,7 @@ class JsonToXml extends JsonUtil {
 		} else {
 			e = genJElementW3C(J_ITEM);
 			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val, true));
+			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val));
 //			e.setAttribute(J_VALUEATTR, jstringToXML(val, 1));
 		}
 		parent.appendChild(e);
