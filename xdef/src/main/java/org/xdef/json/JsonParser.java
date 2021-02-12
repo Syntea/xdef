@@ -124,7 +124,7 @@ public class JsonParser extends StringParser {
 					} else {
 						if (!isChar(':') && i != 1) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
+							error(JSON.JSON002, ":");
 						}
 						isSpacesOrComments();
 						o = readValue();
@@ -153,7 +153,7 @@ public class JsonParser extends StringParser {
 						isSpacesOrComments();
 						if (!isChar(':')) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
+							error(JSON.JSON002, ":");
 						}
 						isSpacesOrComments();
 						o = readValue();
